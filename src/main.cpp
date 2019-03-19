@@ -2,6 +2,8 @@
 #include <QQmlApplicationEngine>
 #include <QQuickStyle>
 
+#include "wallet.h"
+
 int main(int argc, char *argv[])
 {
     QCoreApplication::setApplicationName("Green");
@@ -11,6 +13,8 @@ int main(int argc, char *argv[])
     QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 
     QQuickStyle::setStyle("Material");
+
+    qmlRegisterType<Wallet>("Blockstream.Green", 0, 1, "Wallet");
 
     QGuiApplication app(argc, argv);
 

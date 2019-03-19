@@ -1,3 +1,4 @@
+import Blockstream.Green 0.1
 import QtQuick 2.12
 import QtQuick.Window 2.12
 import QtQuick.Controls 2.5
@@ -9,5 +10,16 @@ ApplicationWindow {
     height: 480
     title: 'Blockstream Green'
 
+
     Material.theme: Material.Dark
+
+    Wallet {
+        id: wallet
+        Component.onCompleted: connect()
+    }
+
+    BusyIndicator {
+        anchors.centerIn: parent
+        running: !wallet.connected
+    }
 }
