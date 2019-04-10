@@ -1,0 +1,4 @@
+[submodule "qzxing"]
+	path = qzxing
+	url = git@github.com:promag/qzxing.git
+        branch = green

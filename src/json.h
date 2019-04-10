@@ -1,0 +1,18 @@
+#ifndef GREEN_JSON_H
+#define GREEN_JSON_H
+
+#include <QJsonArray>
+#include <QJsonObject>
+
+struct GA_json;
+
+namespace Json {
+
+QJsonArray toArray(const GA_json* json);
+QJsonObject toObject(const GA_json* json);
+
+GA_json* fromObject(const QJsonObject& object);
+
+} // namespace Json
+
+#endif // GREEN_JSON_H

@@ -1,13 +1,16 @@
-TARGET = green
+TARGET = Green
 
-QT += quick quickcontrols2
-CONFIG += c++11 qtquickcompiler
+QT += qml quick quickcontrols2 svg #widgets bluetooth
+
+CONFIG += c++11 qtquickcompiler qzxing_qml qzxing_multimedia
+
+include($$PWD/qzxing/src/QZXing.pri)
 
 # The following define makes your compiler emit warnings if you use
 # any Qt feature that has been marked deprecated (the exact warnings
 # depend on your compiler). Refer to the documentation for the
 # deprecated API to know how to port your code away from it.
-DEFINES += QT_DEPRECATED_WARNINGS
+DEFINES += QT_DEPRECATED_WARNINGS QZXING_QML
 
 # You can also make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -15,16 +18,57 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    src/controllers/accountcontroller.cpp \
+    src/controllers/controller.cpp \
+    src/controllers/createaccountcontroller.cpp \
+    src/controllers/renameaccountcontroller.cpp \
+    src/controllers/sendtransactioncontroller.cpp \
+    src/devices/abstractdevice.cpp \
+    src/devices/ledgernanoxdevice.cpp \
+    src/account.cpp \
+    src/devicemanager.cpp \
+    src/ga.cpp \
     src/main.cpp \
-    src/wallet.cpp
+    src/twofactorcontroller.cpp \
+    src/wallet.cpp \
+    src/json.cpp \
+    src/walletmanager.cpp
+
 
 HEADERS += \
-    src/wallet.h
+    src/controllers/accountcontroller.h \
+    src/controllers/controller.h \
+    src/controllers/createaccountcontroller.h \
+    src/controllers/renameaccountcontroller.h \
+    src/controllers/sendtransactioncontroller.h \
+    src/devices/abstractdevice.h \
+    src/devices/ledgernanoxdevice.h \
+    src/account.h \
+    src/devicemanager.h \
+    src/devicemanagermacos.h \
+    src/ga.h \
+    src/twofactorcontroller.h \
+    src/wallet.h \
+    src/json.h \
+    src/walletmanager.h
 
 RESOURCES += src/qml.qrc
 
 INCLUDEPATH += $$PWD/../gdk/include
-LIBS += -L../gdk/build-clang/src/ -lgreenaddress
+
+macos {
+    SOURCES += \
+        src/devicemanagermacos.cpp \
+        src/mac.mm
+
+    LIBS += -L../gdk/build-clang/src/ -lgreenaddress
+    LIBS += -framework Foundation -framework Cocoa
+}
+
+unix:!macos:!android {
+    LIBS += -L../gdk/build-gcc/src/ -lgreenaddress
+}
+
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
@@ -36,3 +80,6 @@ QML_DESIGNER_IMPORT_PATH =
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+DISTFILES += \
+    src/qtquickcontrols2.conf

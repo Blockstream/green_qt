@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.2 (67145) - http://www.bohemiancoding.com/sketch -->
+    <title>network_selector@1x</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <radialGradient cx="55.154389%" cy="58.4751527%" fx="55.154389%" fy="58.4751527%" r="33.1100601%" gradientTransform="translate(0.551544,0.584752),scale(1.000000,0.999870),rotate(180.000000),translate(-0.551544,-0.584752)" id="radialGradient-1">
+            <stop stop-color="#00C673" offset="0%"></stop>
+            <stop stop-color="#00B76A" stop-opacity="0.92" offset="5%"></stop>
+            <stop stop-color="#00804A" stop-opacity="0.65" offset="23%"></stop>
+            <stop stop-color="#005230" stop-opacity="0.41" offset="41%"></stop>
+            <stop stop-color="#002E1B" stop-opacity="0.23" offset="58%"></stop>
+            <stop stop-color="#00150C" stop-opacity="0.11" offset="74%"></stop>
+            <stop stop-color="#000503" stop-opacity="0.03" offset="88%"></stop>
+            <stop stop-color="#000000" stop-opacity="0" offset="100%"></stop>
+        </radialGradient>
+    </defs>
+    <g id="iPhone" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group-6" transform="translate(-31.000000, -65.000000)" fill="url(#radialGradient-1)" fill-rule="nonzero">
+            <path d="M23.03482,2.90868799 C42.1379737,-5.07436025 64.0957703,3.93925817 72.0803756,23.0417611 C80.0649809,42.1442641 71.0531523,64.1027952 51.9513002,72.0889576 C32.8494482,80.0751199 10.8901825,71.0650811 2.90246322,51.9638801 C-0.934208754,42.7891658 -0.968468867,32.4659934 2.80722195,23.2660155 C6.58291276,14.0660375 13.8591678,6.74311637 23.03482,2.90868799 Z" id="Shape" style="mix-blend-mode: color-dodge;"></path>
+        </g>
+        <polygon id="Shape" fill="#2A3540" fill-rule="nonzero" transform="translate(10.093400, 10.095000) rotate(-90.000000) translate(-10.093400, -10.095000) " points="16.1868 4 4 16.19 16.1868 16.19"></polygon>
+    </g>
+</svg>
