@@ -1,6 +1,11 @@
 TARGET = Green
 
-QT += qml quick quickcontrols2 svg #widgets bluetooth
+QMAKE_CXXFLAGS_RELEASE += -flto
+QMAKE_LDFLAGS_RELEASE += -flto
+
+QT += qml quick quickcontrols2 svg widgets
+
+QTPLUGIN += qminimal qlinuxfb
 
 CONFIG += c++11 qtquickcompiler qzxing_qml qzxing_multimedia
 
@@ -54,19 +59,18 @@ HEADERS += \
 
 RESOURCES += src/qml.qrc
 
-INCLUDEPATH += $$PWD/../gdk/include
+INCLUDEPATH += $$PWD/gdk/include
 
 macos {
     SOURCES += \
         src/devicemanagermacos.cpp \
         src/mac.mm
-
-    LIBS += -L../gdk/build-clang/src/ -lgreenaddress
     LIBS += -framework Foundation -framework Cocoa
+    LIBS += -L../gdk/build-clang/src/ -lgreenaddress
 }
 
 unix:!macos:!android {
-    LIBS += -L../gdk/build-gcc/src/ -lgreenaddress
+    LIBS += $$(BUILDROOT)/gdk-$$(GDKVERSION)/src/build-gcc/src/libgreenaddress_full.a
 }
 
 

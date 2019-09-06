@@ -1,3 +1,2 @@
-depends
-build
-qzxing
+*
+!tools/buster_deps.sh

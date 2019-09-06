@@ -1,0 +1,26 @@
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+
+image: greenaddress/ci@sha256:b78f1865dac20f5a8f3237c7383f6a9cf88a612cda0129b3c8ee544262120c3e
+
+buster_release:
+  tags:
+    - ga
+  script:
+    - cd $CI_PROJECT_DIR
+    - ./tools/buster_deps.sh
+    - ./tools/builddeps.sh
+  cache:
+    key: build-cache
+    paths:
+    - build-*/gdk-*/src/include/gdk.h
+    - build-*/gdk-*/build.done
+    - build-*/gdk-*/src/build-*/src/libgreenaddress_full.a
+    - build-*/qt-release*
+  artifacts:
+    expire_in: 1 day
+    when: always
+    paths:
+    - build-*/qt-release*/build.log
+    - build-*/gdk-*/build.log
+    - build-*/Green

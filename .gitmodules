@@ -1,4 +1,8 @@
 [submodule "qzxing"]
 	path = qzxing
-	url = git@github.com:promag/qzxing.git
+	url = https://github.com/promag/qzxing
         branch = green
+[submodule "gdk"]
+	path = gdk
+	url = https://github.com/Blockstream/gdk
+        branch = master
