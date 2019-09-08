@@ -23,8 +23,8 @@ QT_PATH=$BUILDROOT/qt-release-$QTVERSION
 
 export PATH=$QT_PATH/bin:$PATH
 
-$QT_PATH/bin/qmake ../green.pro CONFIG+=release CONFIG+=x86_64 CONFIG+=qml_release CONFIG+=static || true
-NUM_JOBS=$(cat /proc/cpuinfo | grep ^processor | wc -l) || true
-make -j${NUM_JOBS} || true
+$QT_PATH/bin/qmake ../green.pro CONFIG+=release CONFIG+=x86_64 CONFIG+=qml_release CONFIG+=static
+NUM_JOBS=$(cat /proc/cpuinfo | grep ^processor | wc -l)
+make -j${NUM_JOBS}
 
-strip $BUILDROOT/Green || true
+strip $BUILDROOT/Green
