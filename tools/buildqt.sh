@@ -40,7 +40,7 @@ cd ${QTSRCDIR}
     -no-cups -no-dbus -no-gif -no-feature-xml -no-feature-testlib \
     -skip qt3d -skip qtactiveqt -skip qtandroidextras -skip qtcanvas3d -skip qtcharts -skip qtconnectivity -skip qtdatavis3d -skip qtdoc -skip qtgamepad  \
     -skip qtlocation -skip qtmacextras -skip qtnetworkauth -skip qtpurchasing -skip qtremoteobjects -skip qtscript -skip qtscxml -skip qtsensors -skip qtserialbus -skip qtserialport \
-    -skip qtspeech -skip qttools -skip qttranslations -skip qtvirtualkeyboard -skip qtwayland -skip qtwebchannel -skip qtwebsockets -skip qtwebview -skip qtwinextras -skip qtx11extras -skip qtwebengine > ${QTBUILD}/build.log 2>&1
+    -skip qtspeech -skip qttools -skip qttranslations -skip qtvirtualkeyboard -skip qtwebchannel -skip qtwebsockets -skip qtwebview -skip qtwinextras -skip qtx11extras -skip qtwebengine > ${QTBUILD}/build.log 2>&1
 
 make -j${NUM_JOBS} >> ${QTBUILD}/build.log 2>&1
 make install >> ${QTBUILD}/build.log 2>&1

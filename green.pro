@@ -5,8 +5,6 @@ QMAKE_LDFLAGS_RELEASE += -flto
 
 QT += qml quick quickcontrols2 svg widgets
 
-QTPLUGIN += qminimal qlinuxfb
-
 CONFIG += c++11 qtquickcompiler qzxing_qml qzxing_multimedia
 
 include($$PWD/qzxing/src/QZXing.pri)
