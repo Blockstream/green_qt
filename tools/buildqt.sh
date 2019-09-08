@@ -1,13 +1,12 @@
 #!/bin/bash
 set -eo pipefail
 
-QTBUILD=${BUILDROOT}/qt-release-${QTVERSION}
+QTBUILD=${BUILDROOT}/qt-release-${QTBLDID}
 
 if [ ! -d ${BUILDROOT} ]; then
     echo "BUILDROOT needs to be set to a valid directory"
     exit 1
 fi
-
 
 if [ -f ${QTBUILD}/build.done ]; then
     exit 0
@@ -32,10 +31,16 @@ NUM_JOBS=$(cat /proc/cpuinfo | grep ^processor | wc -l)
 echo "Qt: building..."
 mkdir ${QTBUILD}
 cd ${QTSRCDIR}
+
+if [ "${GREENPLATFORM}" = "linux" ]; then
+    QTOPTIONS="-reduce-relocations -ltcg -qt-xcb"
+elif [ "${GREENPLATFORM}" = "windows" ]; then
+    QTOPTIONS="-xplatform win32-g++ -device-option CROSS_COMPILE=/usr/bin/x86_64-w64-mingw32- -skip qtwayland -opengl desktop"
+fi
+
 ./configure --recheck-all -opensource -confirm-license \
-    -release -static -prefix ${QTBUILD} -nomake tests -nomake examples -no-compile-examples \
-    -reduce-relocations -ltcg \
-    -qt-xcb -no-zlib -qt-libpng -qt-libjpeg -no-openssl \
+    ${QTOPTIONS} -release -static -prefix ${QTBUILD} -nomake tests -nomake examples -no-compile-examples \
+    -no-zlib -qt-libpng -qt-libjpeg -no-openssl \
     -no-sql-db2 -no-sql-ibase -no-sql-mysql -no-sql-oci -no-sql-odbc -no-sql-psql -no-sql-sqlite -no-sql-sqlite2 -no-sql-tds \
     -no-cups -no-dbus -no-gif -no-feature-xml -no-feature-testlib \
     -skip qt3d -skip qtactiveqt -skip qtandroidextras -skip qtcanvas3d -skip qtcharts -skip qtconnectivity -skip qtdatavis3d -skip qtdoc -skip qtgamepad  \

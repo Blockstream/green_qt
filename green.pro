@@ -1,8 +1,5 @@
 TARGET = Green
 
-QMAKE_CXXFLAGS_RELEASE += -flto
-QMAKE_LDFLAGS_RELEASE += -flto
-
 QT += qml quick quickcontrols2 svg widgets
 
 CONFIG += c++11 qtquickcompiler qzxing_qml qzxing_multimedia
@@ -68,9 +65,14 @@ macos {
 }
 
 unix:!macos:!android {
-    LIBS += $$(BUILDROOT)/gdk-$$(GDKVERSION)/src/build-gcc/src/libgreenaddress_full.a
+    LIBS += $$(BUILDROOT)/gdk-$$(GDKBLDID)/src/build-gcc/src/libgreenaddress_full.a
+    SOURCES += src/glibc_compat.cpp
 }
 
+win32 {
+    LIBS += -Wl,-Bstatic,--whole-archive -lwinpthread -Wl,--no-whole-archive
+    LIBS += $$(BUILDROOT)/gdk-$$(GDKBLDID)/src/build-windows-mingw-w64/src/libgreenaddress_full.a -lcrypt32 -lbcrypt -lws2_32 -liphlpapi -lssp -static-libgcc -static-libstdc++ -lwsock32
+}
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =

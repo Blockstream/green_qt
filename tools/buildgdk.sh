@@ -1,7 +1,7 @@
 #!/bin/bash
 set -eo pipefail
 
-GDKBUILD=${BUILDROOT}/gdk-${GDKVERSION}
+GDKBUILD=${BUILDROOT}/gdk-${GDKBLDID}
 GDKVENV=${GDKBUILD}/venv
 
 if [ ! -d ${BUILDROOT} ]; then
@@ -29,5 +29,11 @@ if [ ! -f ${GDKVENV}/build.done ]; then
 fi
 
 source ${GDKVENV}/bin/activate >> ${GDKBUILD}/build.log 2>&1
-tools/build.sh --gcc --lto=true >> ${GDKBUILD}/build.log 2>&1
+if [ "$GREENPLATFORM" = "linux" ]; then
+    tools/build.sh --gcc --lto=true >> ${GDKBUILD}/build.log 2>&1
+elif [ "$GREENPLATFORM" = "windows" ]; then
+    tools/build.sh --mingw-w64 --lto=false >> ${GDKBUILD}/build.log 2>&1
+else
+    exit 1
+fi
 touch ${GDKBUILD}/build.done

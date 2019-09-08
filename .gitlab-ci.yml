@@ -13,14 +13,37 @@ buster_release:
   cache:
     key: build-cache
     paths:
-    - build-*/gdk-*/src/include/gdk.h
-    - build-*/gdk-*/build.done
-    - build-*/gdk-*/src/build-*/src/libgreenaddress_full.a
-    - build-*/qt-release*
+    - build-linux-gcc/gdk-*/src/include/gdk.h
+    - build-linux-gcc/gdk-*/build.done
+    - build-linux-gcc/gdk-*/src/build-*/src/libgreenaddress_full.a
+    - build-linux-gcc/qt-release*
   artifacts:
     expire_in: 1 day
     when: always
     paths:
-    - build-*/qt-release*/build.log
-    - build-*/gdk-*/build.log
-    - build-*/Green
+    - build-linux-gcc/qt-release*/build.log
+    - build-linux-gcc/gdk-*/build.log
+    - build-linux-gcc/Green
+
+windows_release:
+  tags:
+    - ga
+  script:
+    - cd $CI_PROJECT_DIR
+    - ./tools/buster_deps.sh
+    - ./tools/builddeps.sh windows
+  cache:
+    key: build-cache
+    paths:
+    - build-mingw-w64/gdk-*/src/include/gdk.h
+    - build-mingw-w64/gdk-*/build.done
+    - build-mingw-w64/gdk-*/src/build-*/src/libgreenaddress_full.a
+    - build-mingw-w64/qt-release*
+  artifacts:
+    expire_in: 1 day
+    when: always
+    paths:
+    - build-mingw-w64/qt-release*/build.log
+    - build-mingw-w64/gdk-*/build.log
+    - build-mingw-w64/release/Green.exe
+    - build-mingw-w64/debug/Green.exe
