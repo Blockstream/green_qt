@@ -2,6 +2,7 @@ import QtQuick 2.12
 import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.12
 import Blockstream.Green 0.1
+import './views'
 
 ColumnLayout {
     id: root
@@ -61,41 +62,52 @@ ColumnLayout {
             property bool valid: accepted
         }
 
-        Pane {
+        Page {
+            property bool valid: true
+
+            title: qsTr('SAVE MNEMONIC')
 
             MnemonicView {
                 anchors.centerIn: parent
-                property string title: qsTr('SAVE MNEMONIC')
-                property bool valid: true
                 mnemonic: root.mnemonic
             }
         }
 
-        FocusScope {
-            enabled: SwipeView.isCurrentItem
-            property string title: qsTr('SET PIN')
+        Page {
             property alias valid: pin_view.valid
 
-            //SwipeView.onIsCurrentItemChanged: if (SwipeView.isCurrentItem) forceActiveFocus(); else pin_view.clear()
+            enabled: SwipeView.isCurrentItem
+            title: qsTr('SET PIN')
             activeFocusOnTab: false
-            PinField {
-                focus: true
-                anchors.fill: parent
+
+            PinView {
                 id: pin_view
+                focus: true
+                anchors.centerIn: parent
                 //onPinChanged: if (valid) next()
             }
         }
 
-        PinField {
-            id: confirm_pin_view
+
+        Page {
+            property alias valid: pin_view.valid
+
             enabled: SwipeView.isCurrentItem
-            property string title: qsTr('CONFIRM PIN')
-            //valid: pin_view.pin === confirm_pin_view.pin
+            title: qsTr('CONFIRM PIN')
+            activeFocusOnTab: false
+
+            PinView {
+                id: confirm_pin_view
+                focus: true
+                anchors.centerIn: parent
+            }
         }
 
-        Pane {
-            property string title: qsTr('FINISH')
+        Page {
             property bool valid: true
+
+            title: qsTr('FINISH')
+
             Wallet {
                 id: wallet
             }

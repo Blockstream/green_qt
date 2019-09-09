@@ -36,6 +36,7 @@
         <file>dialogs/CreateAccountDialog.qml</file>
         <file>dialogs/RenameAccountDialog.qml</file>
         <file>views/DevicesSidebarItem.qml</file>
+        <file>views/PinView.qml</file>
         <file>views/SidebarItem.qml</file>
         <file>views/TransactionListView.qml</file>
         <file>views/WalletsSidebarItem.qml</file>
