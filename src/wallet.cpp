@@ -100,24 +100,22 @@ void Wallet::login(const QByteArray& pin)
     QMetaObject::invokeMethod(m_context, [this, pin] {
         GA_json* pin_data;
         int err = GA_convert_string_to_json(m_pin_data.constData(), &pin_data);
-        qDebug() << "CONVERT STRING TO JSON:" << err << m_pin_data << pin;
         err = GA_login_with_pin(m_session, pin.constData(), pin_data);
-        GA_destroy_json(pin_data);
+        qDebug() << "GA_login_with_pin" << err;
         m_logged = err == GA_OK;
-        qDebug("ADASD");
-        qDebug() << err;
+        GA_destroy_json(pin_data);
+
+        m_authenticating = false;
+        emit isAuthenticatingChanged(m_authenticating);
         emit isLoggedChanged();
+
+        if (!m_logged) return;
 
         char* mnemonic = nullptr;
         err = GA_get_mnemonic_passphrase(m_session, "", &mnemonic);
         qDebug() << "MNEMONIC: " << err << mnemonic;
         m_mnemonic = QString(mnemonic).split(' ');
         GA_destroy_string(mnemonic);
-
-        QMetaObject::invokeMethod(this, [this] {
-            m_authenticating = false;
-            emit isAuthenticatingChanged(m_authenticating);
-        });
 
         GA_json* config;
         GA_get_twofactor_config(m_session, &config);
