@@ -28,7 +28,7 @@ FocusScope {
             text: qsTr(`ENTER PIN FOR WALLET ${wallet.name}`)
         }
 
-        PinView {
+        PinField {
             id: pin_view
             focus: true
             onPinChanged: {

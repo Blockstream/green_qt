@@ -78,7 +78,7 @@ ColumnLayout {
 
             //SwipeView.onIsCurrentItemChanged: if (SwipeView.isCurrentItem) forceActiveFocus(); else pin_view.clear()
             activeFocusOnTab: false
-            PinView {
+            PinField {
                 focus: true
                 anchors.fill: parent
                 id: pin_view
@@ -86,7 +86,7 @@ ColumnLayout {
             }
         }
 
-        PinView {
+        PinField {
             id: confirm_pin_view
             enabled: SwipeView.isCurrentItem
             property string title: qsTr('CONFIRM PIN')

@@ -17,7 +17,7 @@
         <file>LoginView.qml</file>
         <file>SignupView.qml</file>
         <file>ServiceTermsView.qml</file>
-        <file>PinView.qml</file>
+        <file>PinField.qml</file>
         <file>OnboardingView.qml</file>
         <file>MnemonicView.qml</file>
         <file>DebugActiveFocus.qml</file>

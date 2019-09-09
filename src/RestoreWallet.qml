@@ -11,7 +11,7 @@ Page {
             id: name_field
         }
 
-        PinView {
+        PinField {
             id: pin
         }
 
