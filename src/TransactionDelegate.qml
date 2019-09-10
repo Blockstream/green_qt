@@ -1,5 +1,4 @@
 import Blockstream.Green 0.1
-import QtGraphicalEffects 1.13
 import QtQuick 2.12
 import QtQuick.Window 2.12
 import QtQuick.Controls 2.5

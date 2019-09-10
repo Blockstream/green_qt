@@ -1,4 +1,3 @@
-import QtGraphicalEffects 1.13
 import QtQuick 2.13
 import QtQuick.Controls 2.13
 
@@ -6,14 +5,7 @@ Item {
     Image {
         id: logo
         anchors.centerIn: parent
-        visible: false
         source: 'assets/assets/svg/logo_big.svg'
-    }
-
-    Desaturate {
-        anchors.fill: logo
-        source: logo
-        desaturation: 0.9
         opacity: 0.2
     }
 
