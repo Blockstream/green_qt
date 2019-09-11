@@ -16,9 +16,7 @@
         <file>TransactionDelegate.qml</file>
         <file>LoginView.qml</file>
         <file>SignupView.qml</file>
-        <file>ServiceTermsView.qml</file>
         <file>PinField.qml</file>
-        <file>OnboardingView.qml</file>
         <file>MnemonicView.qml</file>
         <file>DebugActiveFocus.qml</file>
         <file>WalletFoo.qml</file>
@@ -41,6 +39,9 @@
         <file>views/TransactionListView.qml</file>
         <file>views/WalletsSidebarItem.qml</file>
         <file>dialogs/WalletSettingsDialog.qml</file>
+        <file>views/onboarding/OnboardingPage.qml</file>
+        <file>views/onboarding/ServiceTermsPage.qml</file>
+        <file>views/onboarding/WelcomePage.qml</file>
     </qresource>
     <qresource prefix="/icons">
         <file>ic_home.png</file>

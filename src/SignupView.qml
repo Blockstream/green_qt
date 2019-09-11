@@ -3,68 +3,87 @@ import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.12
 import Blockstream.Green 0.1
 import './views'
+import './views/onboarding'
 
-ColumnLayout {
-    id: root
-
+Page {
+    property var mnemonic: wallet.generateMnemonic()
     signal canceled()
 
-    function back() {
-        if (swipe_view.currentIndex > 0) {
-            swipe_view.currentIndex = swipe_view.currentIndex - 1
+    id: root
+    title: qsTr('CREATE WALLET')
+
+    footer: RowLayout {
+        PageIndicator {
+            Layout.fillWidth: true
+            currentIndex: swipe_view.currentIndex
+            count: swipe_view.count
+        }
+
+        FlatButton {
+            action: cancel_action
+        }
+
+        FlatButton {
+            action: back_action
+        }
+
+        FlatButton {
+            action: next_action
+            visible: swipe_view.currentIndex + 1 < swipe_view.count
+        }
+
+        FlatButton {
+            action: create_action
+            visible: swipe_view.currentIndex + 1 === swipe_view.count
         }
     }
 
-    function next() {
-        if (swipe_view.currentIndex + 1 < swipe_view.count) {
-            swipe_view.currentIndex = swipe_view.currentIndex + 1
-        }
-    }
-
-    property var mnemonic: wallet.generateMnemonic()
-
-    Label {
-        Layout.fillWidth: true
+    header: Label {
         text: swipe_view.currentItem.title
     }
 
-
-    property string title: qsTr('Create Wallet')
-
     Action {
         id: cancel_action
+        text: qsTr('CANCEL')
         shortcut: StandardKey.Cancel
         onTriggered: root.canceled()
     }
 
+    Action {
+        id: back_action
+        text: qsTr('BACK')
+        enabled: swipe_view.currentIndex > 0
+        onTriggered: swipe_view.currentIndex = swipe_view.currentIndex - 1
+    }
+
+    Action {
+        id: next_action
+        text: qsTr('NEXT')
+        enabled: swipe_view.currentIndex + 1 < swipe_view.count && swipe_view.currentItem.valid
+        onTriggered: swipe_view.currentIndex = swipe_view.currentIndex + 1
+    }
+
+    Action {
+        id: create_action
+        text: qsTr('CREATE')
+        enabled: swipe_view.currentIndex + 1 === swipe_view.count && swipe_view.currentItem.valid
+        onTriggered: wallet.signup(name_field.text, mnemonic, pin_view.pin)
+    }
+
     SwipeView {
         id: swipe_view
-
+        activeFocusOnTab: false
         clip: true
         focus: true
-        activeFocusOnTab: false
-        Layout.fillWidth: true
-        Layout.fillHeight: true
-
         interactive: false
 
-        OnboardingView {
-            enabled: SwipeView.isCurrentItem
-            property string title: qsTr('WELCOME')
-            property bool valid: true
-        }
+        anchors.fill: parent
 
-        ServiceTermsView {
-            id: xx
-            focus: true
-            enabled: SwipeView.isCurrentItem
-            property string title: qsTr('TERM OF SERVICE')
-            property bool valid: accepted
-        }
+        WelcomePage {}
 
-        Page {
-            property bool valid: true
+        ServiceTermsPage {}
 
+        OnboardingPage {
             title: qsTr('SAVE MNEMONIC')
 
             MnemonicView {
@@ -73,28 +92,23 @@ ColumnLayout {
             }
         }
 
-        Page {
-            property alias valid: pin_view.valid
-
-            enabled: SwipeView.isCurrentItem
+        OnboardingPage {
             title: qsTr('SET PIN')
-            activeFocusOnTab: false
+            valid: pin_view.valid
 
             PinView {
                 id: pin_view
                 focus: true
                 anchors.centerIn: parent
-                //onPinChanged: if (valid) next()
             }
         }
 
-
-        Page {
-            property alias valid: pin_view.valid
-
-            enabled: SwipeView.isCurrentItem
-            title: qsTr('CONFIRM PIN')
+        OnboardingPage {
             activeFocusOnTab: false
+            title: qsTr('CONFIRM PIN')
+            valid: confirm_pin_view.valid && pin_view.pin === confirm_pin_view.pin
+
+            onValidChanged: if (valid && next_action.enabled) next_action.trigger()
 
             PinView {
                 id: confirm_pin_view
@@ -103,47 +117,18 @@ ColumnLayout {
             }
         }
 
-        Page {
-            property bool valid: true
-
+        OnboardingPage {
             title: qsTr('FINISH')
+            valid: name_field.text.length > 0
 
             Wallet {
                 id: wallet
             }
 
-            Column {
-                TextField {
-                    id: name_field
-                }
-
-                Button {
-                    text: "CREATE"
-                    onClicked: wallet.signup(name_field.text, mnemonic, pin_view.pin)
-                }
+            TextField {
+                id: name_field
+                anchors.centerIn: parent
             }
-        }
-    }
-
-    RowLayout {
-        PageIndicator {
-            Layout.fillWidth: true
-            currentIndex: swipe_view.currentIndex
-            count: swipe_view.count
-        }
-        FlatButton {
-            text: qsTr("CANCEL")
-            action: cancel_action
-        }
-        FlatButton {
-            text: qsTr("BACK")
-            enabled: swipe_view.currentIndex > 0
-            onClicked: back()
-        }
-        FlatButton {
-            text: qsTr("NEXT")
-            enabled: swipe_view.currentIndex + 1 < swipe_view.count && swipe_view.currentItem.valid
-            onClicked: next()
         }
     }
 }

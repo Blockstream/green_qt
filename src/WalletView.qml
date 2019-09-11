@@ -70,7 +70,7 @@ Page {
                 text: qsTr('SEND')
 
                 onClicked: {
-                    tab_bar.currentIndex = 1
+                    tab_bar.currentIndex = 2
                 }
             }
         }
