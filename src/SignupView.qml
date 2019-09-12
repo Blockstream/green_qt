@@ -67,7 +67,7 @@ Page {
         id: create_action
         text: qsTr('CREATE')
         enabled: swipe_view.currentIndex + 1 === swipe_view.count && swipe_view.currentItem.valid
-        onTriggered: wallet.signup(name_field.text, mnemonic, pin_view.pin)
+        onTriggered: WalletManager.signup(name_field.text, mnemonic, pin_view.pin)
     }
 
     SwipeView {
@@ -120,10 +120,6 @@ Page {
         OnboardingPage {
             title: qsTr('FINISH')
             valid: name_field.text.length > 0
-
-            Wallet {
-                id: wallet
-            }
 
             TextField {
                 id: name_field

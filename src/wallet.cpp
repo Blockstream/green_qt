@@ -192,22 +192,23 @@ void Wallet::signup(const QString& name, const QStringList& mnemonic, const QByt
 
         qDebug() << "PIN SET! " << mnemonic << pin;
 
-        if (true) {
-            char* str;
-            GA_convert_json_to_string(pin_data, &str);
-            QSettings settings;
-            int index = settings.beginReadArray("wallets");
-            settings.endArray();
-            settings.beginWriteArray("wallets");
-            settings.setArrayIndex(index);
-            settings.setValue("pin_data", QByteArray(str));
-            settings.setValue("name", name);
-            settings.endArray();
-            GA_destroy_string(str);
-        }
-
+        char* str;
+        GA_convert_json_to_string(pin_data, &str);
+        GA_destroy_string(str);
         GA_destroy_json(pin_data);
-    });
+
+        m_name = name;
+        m_pin_data = QByteArray(str);
+
+        QSettings settings;
+        int index = settings.beginReadArray("wallets");
+        settings.endArray();
+        settings.beginWriteArray("wallets");
+        settings.setArrayIndex(index);
+        settings.setValue("pin_data", m_pin_data);
+        settings.setValue("name", name);
+        settings.endArray();
+    }, Qt::BlockingQueuedConnection);
 }
 
 
