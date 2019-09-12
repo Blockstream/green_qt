@@ -46,4 +46,24 @@ windows_release:
     - build-mingw-w64/qt-release*/build.log
     - build-mingw-w64/gdk-*/build.log
     - build-mingw-w64/release/Green.exe
-    - build-mingw-w64/debug/Green.exe
+
+osx_release:
+  tags:
+    - osx
+  script:
+    - cd $CI_PROJECT_DIR
+    - ./tools/builddeps.sh osx
+  cache:
+    key: build-cache
+    paths:
+    - build-osx-clang/gdk-*/src/include/gdk.h
+    - build-osx-clang/gdk-*/build.done
+    - build-osx-clang/gdk-*/src/build-*/src/libgreenaddress_full.a
+    - build-osx-clang/qt-release*
+  artifacts:
+    expire_in: 1 day
+    when: always
+    paths:
+    - build-osx-clang/qt-release*/build.log
+    - build-osx-clang/gdk-*/build.log
+    - build-osx-clang/Green.app

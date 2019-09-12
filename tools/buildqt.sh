@@ -18,15 +18,13 @@ if [ ! -d ${QTSRCDIR} ]; then
    if [ ! -d ${BUILDROOT}/qt-everywhere-src-${QTVERSION} ]; then
        echo "Qt: Downloading..."
        curl -sL -o ${BUILDROOT}/qt-everywhere-src-${QTVERSION}.tar.xz https://download.qt.io/archive/qt/${QTMAJOR}/${QTVERSION}/single/qt-everywhere-src-${QTVERSION}.tar.xz
-       echo "adf00266dc38352a166a9739f1a24a1e36f1be9c04bf72e16e142a256436974e ${BUILDROOT}/qt-everywhere-src-${QTVERSION}.tar.xz" | sha256sum --check --strict
+       echo "adf00266dc38352a166a9739f1a24a1e36f1be9c04bf72e16e142a256436974e  ${BUILDROOT}/qt-everywhere-src-${QTVERSION}.tar.xz" | shasum -a 256 --check
        $(cd ${BUILDROOT} && \
        tar xf qt-everywhere-src-${QTVERSION}.tar.xz && \
        rm qt-everywhere-src-${QTVERSION}.tar.xz)
    fi
    QTSRCDIR=${BUILDROOT}/qt-everywhere-src-${QTVERSION}
 fi
-
-NUM_JOBS=$(cat /proc/cpuinfo | grep ^processor | wc -l)
 
 echo "Qt: building..."
 mkdir ${QTBUILD}
@@ -36,6 +34,8 @@ if [ "${GREENPLATFORM}" = "linux" ]; then
     QTOPTIONS="-reduce-relocations -ltcg -qt-xcb"
 elif [ "${GREENPLATFORM}" = "windows" ]; then
     QTOPTIONS="-xplatform win32-g++ -device-option CROSS_COMPILE=/usr/bin/x86_64-w64-mingw32- -skip qtwayland -opengl desktop"
+elif [ "${GREENPLATFORM}" = "osx" ]; then
+    QTOPTIONS="-skip qtwayland"
 fi
 
 ./configure --recheck-all -opensource -confirm-license \
@@ -49,5 +49,10 @@ fi
 
 make -j${NUM_JOBS} >> ${QTBUILD}/build.log 2>&1
 make install >> ${QTBUILD}/build.log 2>&1
+
+
+if [ "${GREENPLATFORM}" = "osx" ]; then
+    rm -rf ${QTBUILD}/qml/Qt/labs/lottieqt
+fi
 
 touch ${QTBUILD}/build.done

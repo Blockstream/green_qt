@@ -61,7 +61,7 @@ macos {
         src/devicemanagermacos.cpp \
         src/mac.mm
     LIBS += -framework Foundation -framework Cocoa
-    LIBS += -L../gdk/build-clang/src/ -lgreenaddress
+    LIBS += $$(BUILDROOT)/gdk-$$(GDKBLDID)/src/build-clang/src/libgreenaddress.a
 }
 
 unix:!macos:!android {
