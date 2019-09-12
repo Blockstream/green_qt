@@ -21,6 +21,7 @@ signals:
     void walletsChanged();
 
 public slots:
+    QStringList generateMnemonic() const;
     QJsonObject parseUrl(const QString &url);
 
 private:

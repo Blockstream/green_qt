@@ -291,15 +291,6 @@ void Wallet::reload()
     });
 }
 
-QStringList Wallet::generateMnemonic() const
-{
-    char* mnemonic;
-    GA_generate_mnemonic(&mnemonic);
-    auto result = QString(mnemonic).split(' ');
-    GA_destroy_string(mnemonic);
-    return result;
-}
-
 void Wallet::setup2F()
 {
 

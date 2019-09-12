@@ -47,7 +47,6 @@ public slots:
     void signup(const QString& name, const QStringList &mnemonic, const QByteArray& pin);
     void recover(const QString& name, const QStringList& mnemonic, const QByteArray& pin);
     void reload();
-    QStringList generateMnemonic() const;
     void setup2F();
 
 signals:

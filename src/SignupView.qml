@@ -6,7 +6,7 @@ import './views'
 import './views/onboarding'
 
 Page {
-    property var mnemonic: wallet.generateMnemonic()
+    property var mnemonic: WalletManager.generateMnemonic()
     signal canceled()
 
     id: root

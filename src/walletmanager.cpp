@@ -1,3 +1,4 @@
+#include "ga.h"
 #include "walletmanager.h"
 
 #include <QDebug>
@@ -45,6 +46,16 @@ QQmlListProperty<Wallet> WalletManager::wallets()
     return QQmlListProperty<Wallet>(this, &m_wallets,
         [](QQmlListProperty<Wallet>* property) { return static_cast<QVector<Wallet*>*>(property->data)->size(); },
     [](QQmlListProperty<Wallet>* property, int index) { return static_cast<QVector<Wallet*>*>(property->data)->at(index); });
+}
+
+QStringList WalletManager::generateMnemonic() const
+{
+    char* mnemonic;
+    int err = GA_generate_mnemonic(&mnemonic);
+    Q_ASSERT(err == GA_OK);
+    auto result = QString(mnemonic).split(' ');
+    GA_destroy_string(mnemonic);
+    return result;
 }
 
 #include <QUrl>
