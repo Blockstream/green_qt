@@ -136,5 +136,52 @@ Pane {
             }
             Layout.rightMargin: 16
         }
+
+        TextField {
+            id: txhash_field
+            visible: false
+            text: tx.txhash
+        }
+
+        ToolButton {
+            text: qsTr('⋮')
+            onClicked: menu.open()
+
+            Menu {
+                id: menu
+
+                MenuItem {
+                    text: qsTr('VIEW IN EXPLORER')
+                    onTriggered: Qt.openUrlExternally(`https://blockstream.info/testnet/tx/${tx.txhash}`)
+                }
+
+                MenuItem {
+                    enabled: false
+                    text: qsTr('INCREASE FEE')
+                }
+
+                MenuSeparator { }
+
+                MenuItem {
+                    text: qsTr('COPY TXID')
+                    onTriggered: {
+                        // TODO: should have a slot somewhere to copy
+                        // and remove the auxiliary txhash_field above
+                        txhash_field.selectAll()
+                        txhash_field.copy()
+                    }
+                }
+
+                MenuItem {
+                    enabled: false
+                    text: qsTr('COPY DETAILS')
+                }
+
+                MenuItem {
+                    enabled: false
+                    text: qsTr('COPY RAW')
+                }
+            }
+        }
     }
 }
