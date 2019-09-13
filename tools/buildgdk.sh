@@ -34,7 +34,7 @@ if [ "$GREENPLATFORM" = "linux" ]; then
 elif [ "$GREENPLATFORM" = "windows" ]; then
     tools/build.sh --mingw-w64 --lto=false >> ${GDKBUILD}/build.log 2>&1
 elif [ "$GREENPLATFORM" = "osx" ]; then
-    tools/build.sh --clang >> ${GDKBUILD}/build.log 2>&1
+    tools/build.sh --clang --lto=true >> ${GDKBUILD}/build.log 2>&1
 else
     exit 1
 fi
