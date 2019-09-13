@@ -2,7 +2,11 @@
 
 Build status: [![Build Status](https://travis-ci.org/Blockstream/green_qt.png?branch=master)](https://travis-ci.org/Blockstream/green_qt)
 
+## Before you build
 
+```
+cd green_qt && git submodule update --init --recursive
+```
 ## Build on macOS
 
 ```
@@ -19,5 +23,4 @@ Build status: [![Build Status](https://travis-ci.org/Blockstream/green_qt.png?br
 ```
 ./tools/buster_deps.sh
 ./tools/builddeps.sh
-
 ```
