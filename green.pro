@@ -67,6 +67,7 @@ macos {
 unix:!macos:!android {
     LIBS += $$(BUILDROOT)/gdk-$$(GDKBLDID)/src/build-gcc/src/libgreenaddress_full.a
     SOURCES += src/glibc_compat.cpp
+    LIBS += -Wl,--wrap=__divmoddi4 -Wl,--wrap=log2f
 }
 
 win32 {
