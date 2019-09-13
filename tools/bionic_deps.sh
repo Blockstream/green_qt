@@ -2,9 +2,9 @@
 set -eo pipefail
 
 if [ -f /.dockerenv ]; then
-    if [ -f /buster_hash ]; then
-        buster_deps_sha256=$(< /buster_hash)
-        echo "${buster_deps_sha256} tools/buster_deps.sh" | sha256sum --check --strict --status && exit 0 || true
+    if [ -f /bionic_hash ]; then
+        bionic_deps_sha256=$(< /bionic_hash)
+        echo "${bionic_deps_sha256} tools/bionic_deps.sh" | sha256sum --check --strict --status && exit 0 || true
     fi
 fi
 
@@ -23,7 +23,7 @@ if [ ! -d /qt-everywhere-src-5.13.1 ]; then
 fi
 
 if [ -f /.dockerenv ]; then
-    sha256sum /buster_deps.sh | cut -d" " -f1 > /buster_hash
+    sha256sum /bionic_deps.sh | cut -d" " -f1 > /bionic_hash
     apt -yqq autoremove
     apt -yqq clean
     rm -rf /var/lib/apt/lists/* /var/cache/* /tmp/* /usr/share/locale/* /usr/share/man /usr/share/doc /lib/xtables/libip6* /root/.cache

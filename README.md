@@ -15,12 +15,12 @@ cd green_qt && git submodule update --init --recursive
 ## Build on Windows
 
 ```
-./tools/buster_deps.sh
+./tools/bionic_deps.sh
 ./tools/builddeps.sh windows
 ```
 ## Build on Linux
 
 ```
-./tools/buster_deps.sh
+./tools/bionic_deps.sh
 ./tools/builddeps.sh
 ```
