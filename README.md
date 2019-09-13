@@ -1,5 +1,6 @@
 # Blockstream Green
 
+Build status: [![Build Status](https://travis-ci.org/Blockstream/green_qt.png?branch=master)](https://travis-ci.org/Blockstream/green_qt)
 
 
 ## Build on macOS
