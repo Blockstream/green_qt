@@ -4,4 +4,4 @@ matrix:
   include:
     - services:
         - docker
-      script: docker run -v $PWD:/ga greenaddress/ci@sha256:b78f1865dac20f5a8f3237c7383f6a9cf88a612cda0129b3c8ee544262120c3e /bin/sh -c "cd /ga && tools/buster_deps.sh && ./tools/builddeps.sh"
+      script: travis_wait 30 docker run -v $PWD:/ga greenaddress/ci@sha256:b78f1865dac20f5a8f3237c7383f6a9cf88a612cda0129b3c8ee544262120c3e /bin/sh -c "cd /ga && tools/buster_deps.sh && ./tools/builddeps.sh"
