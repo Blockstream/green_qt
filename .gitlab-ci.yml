@@ -67,3 +67,29 @@ osx_release:
     - build-osx-clang/qt-release*/build.log
     - build-osx-clang/gdk-*/build.log
     - build-osx-clang/Green.app
+
+package_release:
+  tags:
+    - garelease
+  stage: deploy
+  variables:
+    GIT_STRATEGY: none
+  artifacts:
+    expire_in: 14 days
+    paths:
+    - $CI_PROJECT_DIR/green_qt_dist
+    when: on_success
+  script:
+    - cd $CI_PROJECT_DIR
+    - rm -fr green_qt_dist
+    - mkdir green_qt_dist
+    - zip -j green_qt_dist/GreenQt_Windows_x86_64.zip build-mingw-w64/release/Green.exe
+    - zip -rj green_qt_dist/GreenQt_MacOSX_x86_64.zip build-osx-clang/Green.app
+    - chmod +x build-linux-gcc/Green
+    - tar czf green_qt_dist/GreenQt_Linux_x86_64.tar.gz -C build-linux-gcc Green
+    - cd green_qt_dist
+    - /opt/process_release
+  dependencies:
+    - bionic_release
+    - osx_release
+    - windows_release
