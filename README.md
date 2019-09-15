@@ -7,20 +7,23 @@ Build status: [![Build Status](https://travis-ci.org/Blockstream/green_qt.png?br
 ```
 cd green_qt && git submodule update --init --recursive
 ```
+
 ## Build on macOS
 
 ```
 ./tools/builddeps.sh osx
 ```
-## Build on Windows
 
-```
-./tools/bionic_deps.sh
-./tools/builddeps.sh windows
-```
 ## Build on Linux
 
 ```
-./tools/bionic_deps.sh
+sudo ./tools/bionic_deps.sh
 ./tools/builddeps.sh
+```
+
+## Build on Linux for Windows
+
+```
+sudo ./tools/bionic_deps.sh
+./tools/builddeps.sh windows
 ```
