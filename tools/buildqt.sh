@@ -42,10 +42,10 @@ fi
     ${QTOPTIONS} -release -static -prefix ${QTBUILD} -nomake tests -nomake examples -no-compile-examples \
     -no-zlib -qt-libpng -qt-libjpeg -no-openssl \
     -no-sql-db2 -no-sql-ibase -no-sql-mysql -no-sql-oci -no-sql-odbc -no-sql-psql -no-sql-sqlite -no-sql-sqlite2 -no-sql-tds \
-    -no-cups -no-dbus -no-gif -no-feature-xml -no-feature-testlib \
+    -no-cups -no-dbus -no-gif -no-feature-testlib \
     -skip qt3d -skip qtactiveqt -skip qtandroidextras -skip qtcanvas3d -skip qtcharts -skip qtconnectivity -skip qtdatavis3d -skip qtdoc -skip qtgamepad  \
     -skip qtlocation -skip qtmacextras -skip qtnetworkauth -skip qtpurchasing -skip qtremoteobjects -skip qtscript -skip qtscxml -skip qtsensors -skip qtserialbus -skip qtserialport \
-    -skip qtspeech -skip qttools -skip qttranslations -skip qtvirtualkeyboard -skip qtwebchannel -skip qtwebsockets -skip qtwebview -skip qtwinextras -skip qtx11extras -skip qtwebengine > ${QTBUILD}/build.log 2>&1
+    -skip qtspeech -skip qttranslations -skip qtvirtualkeyboard -skip qtwebchannel -skip qtwebsockets -skip qtwebview -skip qtwinextras -skip qtx11extras -skip qtwebengine > ${QTBUILD}/build.log 2>&1
 
 make -j${NUM_JOBS} >> ${QTBUILD}/build.log 2>&1
 make install >> ${QTBUILD}/build.log 2>&1
