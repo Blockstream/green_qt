@@ -1,4 +1,5 @@
 #include "ga.h"
+#include "json.h"
 #include "walletmanager.h"
 
 #include <QDebug>
@@ -59,6 +60,16 @@ void WalletManager::signup(const QString& network, const QString& name, const QS
     wallet->signup(name, mnemonic, pin);
     m_wallets.append(wallet);
     emit walletsChanged();
+}
+
+QJsonObject WalletManager::networks()
+{
+    GA_json* output;
+    int err = GA_get_networks(&output);
+    Q_ASSERT(err == GA_OK);
+    auto networks = Json::toObject(output);
+    GA_destroy_json(output);
+    return networks;
 }
 
 QStringList WalletManager::generateMnemonic() const

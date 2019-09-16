@@ -1,6 +1,7 @@
 #ifndef WALLETMANAGER_H
 #define WALLETMANAGER_H
 
+#include <QJsonObject>
 #include <QObject>
 #include <QQmlListProperty>
 #include <QVector>
@@ -24,6 +25,7 @@ public slots:
     QStringList generateMnemonic() const;
     QJsonObject parseUrl(const QString &url);
     void signup(const QString& network, const QString& name, const QStringList &mnemonic, const QByteArray& pin);
+    QJsonObject networks();
 private:
     QVector<Wallet*> m_wallets;
 };
