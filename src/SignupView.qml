@@ -84,6 +84,39 @@ Page {
         ServiceTermsPage {}
 
         OnboardingPage {
+            title: qsTr('CHOOSE NETWORK')
+
+            valid: network_group.checkedButton
+
+            Column {
+                anchors.centerIn: parent
+
+                ButtonGroup {
+                    id: network_group
+                    exclusive: true
+                }
+
+                Repeater {
+                    model: {
+                        const result = []
+                        const networks = WalletManager.networks()
+                        for (const id of networks.all_networks) {
+                            const network = networks[id]
+                            if (!network.development) result.push(network)
+                        }
+                        return result
+                    }
+
+                    RadioButton {
+                        property var network: modelData
+                        text: network.name.toUpperCase()
+                        ButtonGroup.group: network_group
+                    }
+                }
+            }
+        }
+
+        OnboardingPage {
             title: qsTr('SAVE MNEMONIC')
 
             MnemonicView {
