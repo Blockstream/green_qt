@@ -74,6 +74,7 @@ Page {
         id: swipe_view
         activeFocusOnTab: false
         clip: true
+        currentIndex: 2
         focus: true
         interactive: false
 
