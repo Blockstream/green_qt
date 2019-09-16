@@ -15,10 +15,13 @@ WalletManager::WalletManager(QObject *parent) : QObject(parent)
 
         auto pin_data = settings.value("pin_data").toByteArray();
         auto name = settings.value("name").toString();
+        auto network = settings.value("network", "testnet").toString();
 
         Wallet* wallet = new Wallet(this);
         wallet->m_pin_data = pin_data;
         wallet->m_name = name;
+        wallet->m_network = network;
+        wallet->connect();
 
         m_wallets.append(wallet);
     }
@@ -48,9 +51,11 @@ QQmlListProperty<Wallet> WalletManager::wallets()
     [](QQmlListProperty<Wallet>* property, int index) { return static_cast<QVector<Wallet*>*>(property->data)->at(index); });
 }
 
-void WalletManager::signup(const QString& name, const QStringList& mnemonic, const QByteArray& pin)
+void WalletManager::signup(const QString& network, const QString& name, const QStringList& mnemonic, const QByteArray& pin)
 {
-    Wallet* wallet = new Wallet();
+    Wallet* wallet = new Wallet(this);
+    wallet->m_network = network;
+    wallet->connect();
     wallet->signup(name, mnemonic, pin);
     m_wallets.append(wallet);
     emit walletsChanged();

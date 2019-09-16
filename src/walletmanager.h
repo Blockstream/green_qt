@@ -23,8 +23,7 @@ signals:
 public slots:
     QStringList generateMnemonic() const;
     QJsonObject parseUrl(const QString &url);
-    void signup(const QString& name, const QStringList &mnemonic, const QByteArray& pin);
-
+    void signup(const QString& network, const QString& name, const QStringList &mnemonic, const QByteArray& pin);
 private:
     QVector<Wallet*> m_wallets;
 };

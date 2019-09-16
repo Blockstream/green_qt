@@ -17,6 +17,10 @@ static void notification_handler(void* context, const GA_json* details)
 
 Wallet::Wallet(QObject *parent) : QObject(parent)
 {
+}
+
+void Wallet::connect()
+{
     GA_json* config;
     GA_convert_string_to_json("{}", &config);
     GA_init(config);
@@ -32,7 +36,7 @@ Wallet::Wallet(QObject *parent) : QObject(parent)
         GA_set_notification_handler(m_session, notification_handler, this);
 
         res = GA::connect(m_session, {
-           { "name", "testnet" },
+           { "name", m_network },
            { "log_level", "info" },
         });
 

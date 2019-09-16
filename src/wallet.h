@@ -79,6 +79,8 @@ public:
     {
         return m_name;
     }
+    QString m_network;
+    void connect();
 };
 
 class AmountConverter : public QObject
