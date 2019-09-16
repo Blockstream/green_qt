@@ -54,7 +54,7 @@ Wallet::~Wallet()
         res = GA_destroy_session(m_session);
         Q_ASSERT(res == GA_OK);
         emit isOnlineChanged();
-    });
+    }, Qt::BlockingQueuedConnection);
 }
 
 QList<QObject*> Wallet::accounts() const
