@@ -152,7 +152,6 @@ void Wallet::test()
 
         GA_auth_handler* call;
         int err = GA_register_user(m_session, hw_device, "", &call);
-        qDebug() << "AFTER REGISTER user" << err;
         Q_ASSERT(err == GA_OK);
         GA::process_auth(call);
         GA_destroy_auth_handler(call);
@@ -169,12 +168,9 @@ void Wallet::signup(const QString& name, const QStringList& mnemonic, const QByt
 
         GA_auth_handler* call;
         int err = GA_register_user(m_session, hw_device, raw_mnemonic.constData(), &call);
-        qDebug() << "AFTER REGISTER user" << err;
         Q_ASSERT(err == GA_OK);
         GA::process_auth(call);
         GA_destroy_auth_handler(call);
-
-            qDebug() << mnemonic << pin;
 
         err = GA_login(m_session, hw_device, raw_mnemonic.constData(), "", &call);
         Q_ASSERT(err == GA_OK);
@@ -189,8 +185,6 @@ void Wallet::signup(const QString& name, const QStringList& mnemonic, const QByt
 
         GA_json* pin_data;
         GA_set_pin(m_session, raw_mnemonic.constData(), pin.constData(), "test", &pin_data);
-
-        qDebug() << "PIN SET! " << mnemonic << pin;
 
         char* str;
         GA_convert_json_to_string(pin_data, &str);
