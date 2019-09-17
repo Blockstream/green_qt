@@ -54,6 +54,10 @@ HEADERS += \
 
 RESOURCES += src/qml.qrc
 
+CONFIG += lrelease embed_translations
+
+EXTRA_TRANSLATIONS = $$files($$PWD/src/i18n/*.ts)
+
 INCLUDEPATH += $$PWD/gdk/include
 
 macos {

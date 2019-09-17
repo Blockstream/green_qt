@@ -2,6 +2,7 @@
 #include <QQmlApplicationEngine>
 #include <QQuickStyle>
 #include <QStyleHints>
+#include <QTranslator>
 #include <QWindow>
 
 #include "account.h"
@@ -32,6 +33,18 @@ Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin);
 Q_IMPORT_PLUGIN(QCocoaIntegrationPlugin);
 #endif
 
+class Translator : public QTranslator
+{
+public:
+    virtual QString translate(const char *context, const char *sourceText, const char *disambiguation, int n) const;
+};
+
+QString Translator::translate(const char *context, const char *sourceText, const char *disambiguation, int n) const
+{
+    Q_UNUSED(context);
+    return QTranslator::translate("green", sourceText, disambiguation, n);
+}
+
 int main(int argc, char *argv[])
 {
     QCoreApplication::setApplicationName("Green");
@@ -43,6 +56,18 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
 
     app.styleHints()->setTabFocusBehavior(Qt::TabFocusAllControls);
+
+    const QLocale locale = QLocale::system();
+    const QString language = locale.name().split('_').first();
+
+    Translator language_translator;
+    language_translator.load(QString(":/i18n/green_%1.qm").arg(language));
+
+    Translator locale_translator;
+    locale_translator.load(QString(":/i18n/green_%1.qm").arg(locale.name()));
+
+    app.installTranslator(&language_translator);
+    app.installTranslator(&locale_translator);
 
     QQuickStyle::setStyle("Material");
 
