@@ -16,8 +16,6 @@ ApplicationWindow {
     Material.accent: Material.Green
     Material.theme: Material.Dark
 
-    flags: Qt.WindowFullscreenButtonHint
-
     Action {
         id: create_wallet_action
         onTriggered: stack_view.currentIndex = 1 //push(signup_view)
