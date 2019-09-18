@@ -1,4 +1,4 @@
-#include <QGuiApplication>
+#include <QApplication>
 #include <QQmlApplicationEngine>
 #include <QQuickStyle>
 #include <QStyleHints>
@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 
-    QGuiApplication app(argc, argv);
+    QApplication app(argc, argv);
 
     app.styleHints()->setTabFocusBehavior(Qt::TabFocusAllControls);
 
