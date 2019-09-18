@@ -1,7 +1,6 @@
 #!/bin/bash
 set -eo pipefail
 
-QTBUILD=${BUILDROOT}/qt-release-${QTBLDID}
 
 if [ ! -d ${BUILDROOT} ]; then
     echo "BUILDROOT needs to be set to a valid directory"

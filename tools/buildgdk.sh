@@ -1,7 +1,6 @@
 #!/bin/bash
 set -eo pipefail
 
-GDKBUILD=${BUILDROOT}/gdk-${GDKBLDID}
 GDKVENV=${GDKBUILD}/venv
 
 if [ ! -d ${BUILDROOT} ]; then
