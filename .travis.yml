@@ -12,8 +12,8 @@ script:
     - set -o errexit; source ./tools/buildenvs.sh
     - ./tools/travisdotter.sh
     - mkdir -p ${BUILDDIR}
-    - ./tools/buildqt.sh || (cat ${QTBUILD}/build.log && false)
-    - ./tools/buildgdk.sh || (cat ${GDKBUILD}/build.log && false)
+    - source ./tools/buildqt.sh || (cat ${QTBUILD}/build.log && false)
+    - source ./tools/buildgdk.sh || (cat ${GDKBUILD}/build.log && false)
     - ${QT_PATH}/bin/qmake ../green.pro CONFIG+=release CONFIG+=x86_64 CONFIG+=qml_release CONFIG+=static QMAKE_CXXFLAGS_RELEASE+=-flto QMAKE_LDFLAGS_RELEASE+=-flto
     - make -j${NUM_JOBS}
     - python ../tools/symbol-check.py < ${BUILDROOT}/Green
