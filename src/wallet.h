@@ -42,6 +42,7 @@ public:
     QStringList mnemonic() const;
 
 public slots:
+    void connect();
     void test();
     void login(const QByteArray& pin);
     void signup(const QString& name, const QStringList &mnemonic, const QByteArray& pin);
@@ -61,8 +62,8 @@ signals:
     void nameChanged(QString name);
 
 public:
-    QThread* m_thread{new QThread};
-    QObject* m_context{new QObject};
+    QThread* m_thread{nullptr};
+    QObject* m_context{nullptr};
     GA_session* m_session{nullptr};
     bool m_online{false};
     bool m_logged{false};
@@ -80,7 +81,6 @@ public:
         return m_name;
     }
     QString m_network;
-    void connect();
 };
 
 class AmountConverter : public QObject

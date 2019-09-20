@@ -15,12 +15,18 @@ static void notification_handler(void* context, const GA_json* details)
 }
 
 
-Wallet::Wallet(QObject *parent) : QObject(parent)
+Wallet::Wallet(QObject *parent)
+    : QObject(parent)
 {
 }
 
 void Wallet::connect()
 {
+    if (m_thread) return;
+
+    m_thread = new QThread(this);
+    m_context = new QObject;
+
     m_context->moveToThread(m_thread);
     m_thread->start();
 
@@ -42,14 +48,21 @@ void Wallet::connect()
 
 Wallet::~Wallet()
 {
-    QMetaObject::invokeMethod(m_context, [this] {
-        int res = GA_disconnect(m_session);
-        Q_ASSERT(res == GA_OK);
+    if (m_session) {
+        QMetaObject::invokeMethod(m_context, [this] {
+            int res = GA_disconnect(m_session);
+            Q_ASSERT(res == GA_OK);
 
-        res = GA_destroy_session(m_session);
-        Q_ASSERT(res == GA_OK);
-        emit isOnlineChanged();
-    }, Qt::BlockingQueuedConnection);
+            res = GA_destroy_session(m_session);
+            Q_ASSERT(res == GA_OK);
+            emit isOnlineChanged();
+        }, Qt::BlockingQueuedConnection);
+    }
+    if (m_thread) {
+        m_context->deleteLater();
+        m_thread->quit();
+        m_thread->wait();
+    }
 }
 
 QList<QObject*> Wallet::accounts() const

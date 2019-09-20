@@ -27,7 +27,6 @@ WalletManager::WalletManager(QObject *parent) : QObject(parent)
         wallet->m_pin_data = pin_data;
         wallet->m_name = name;
         wallet->m_network = network;
-        wallet->connect();
 
         m_wallets.append(wallet);
     }

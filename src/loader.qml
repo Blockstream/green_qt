@@ -8,6 +8,8 @@ import QtQuick.Window 2.13
 ApplicationWindow {
     property Wallet currentWallet
 
+    onCurrentWalletChanged: currentWallet.connect()
+
     visible: true
     width: 1024
     height: 680
