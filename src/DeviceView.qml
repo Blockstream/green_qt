@@ -13,7 +13,7 @@ Item {
             Image {
                 sourceSize.width: 64
                 sourceSize.height: 64
-                source: 'assets/assets/svg/ledger.svg'
+                source: 'assets/svg/ledger.svg'
             }
             Label {
                 text: `LEDGER NANO X - ${device.objectName}`

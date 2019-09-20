@@ -6,6 +6,7 @@
 #include <QWindow>
 
 #include "account.h"
+#include "applicationengine.h"
 #include "wallet.h"
 #include "devicemanagermacos.h"
 #include "walletmanager.h"
@@ -71,7 +72,7 @@ int main(int argc, char *argv[])
 
     QQuickStyle::setStyle("Material");
 
-    QQmlApplicationEngine engine;
+    ApplicationEngine engine;
 
     QZXing::registerQMLTypes();
     QZXing::registerQMLImageProvider(engine);
@@ -92,7 +93,7 @@ int main(int argc, char *argv[])
     qmlRegisterSingletonType<DeviceManager>("Blockstream.Green", 0, 1, "DeviceManager", [](QQmlEngine*, QJSEngine*) -> QObject* { return new DeviceManagerMacos; });
 #endif
 
-    engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
+    engine.load(QUrl(QStringLiteral("loader.qml")));
     if (engine.rootObjects().isEmpty())
         return -1;
 

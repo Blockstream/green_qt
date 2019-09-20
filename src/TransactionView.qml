@@ -16,7 +16,7 @@ Page {
         spacing: 16
 
         ToolButton {
-            icon.source: 'assets/assets/svg/arrow_left.svg'
+            icon.source: 'assets/svg/arrow_left.svg'
             icon.height: 16
             icon.width: 16
             onClicked: stack_view.pop()
@@ -43,7 +43,7 @@ Page {
 
                 Image {
                     Layout.leftMargin: 8
-                    source: transaction.type === 'outgoing' ? 'assets/assets/svg/sent.svg' : 'assets/assets/svg/received.svg'
+                    source: transaction.type === 'outgoing' ? 'assets/svg/sent.svg' : 'assets/svg/received.svg'
                 }
 
                 Label {

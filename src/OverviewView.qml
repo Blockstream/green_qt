@@ -30,7 +30,7 @@ Page {
             }
 
             ToolButton {
-                icon.source: 'assets/assets/svg/cancel.svg'
+                icon.source: 'assets/svg/cancel.svg'
                 icon.width: 8
                 icon.height: 8
             }

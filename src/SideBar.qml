@@ -15,7 +15,7 @@ Page {
         Image {
             mipmap: true
             smooth: false
-            source: 'assets/assets/svg/logo_big.svg'
+            source: 'assets/svg/logo_big.svg'
             sourceSize.height: 32
 
             Layout.alignment: Qt.AlignRight

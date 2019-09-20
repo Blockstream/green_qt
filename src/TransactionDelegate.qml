@@ -83,7 +83,7 @@ Pane {
 
         Image {
             Layout.leftMargin: 8
-            source: tx.type === 'outgoing' ? 'assets/assets/svg/sent.svg' : 'assets/assets/svg/received.svg'
+            source: tx.type === 'outgoing' ? 'assets/svg/sent.svg' : 'assets/svg/received.svg'
         }
 
         ColumnLayout {

@@ -5,16 +5,8 @@ import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.12
 import QtQuick.Window 2.12
 
-ApplicationWindow {
-    visible: true
-    width: 1024
-    height: 480
-
-    minimumWidth: 800
-    minimumHeight: 480
-
-    Material.accent: Material.Green
-    Material.theme: Material.Dark
+SplitView {
+    id: split_view
 
     Action {
         id: create_wallet_action
@@ -43,51 +35,48 @@ ApplicationWindow {
         currentWallet = wallet
     }
 
-    SplitView {
-        id: split_view
+    spacing: 0
+    anchors.fill: parent
 
-        spacing: 0
-        anchors.fill: parent
+    focus: true
 
+    handle: Rectangle {
+        implicitWidth: 4
+        color: Qt.rgba(0, 0, 0, 0.2)
+    }
+
+    SideBar { // rename to Sidebar
+        id: sidebar
+        SplitView.minimumWidth: 200
+        SplitView.maximumWidth: 400
+        SplitView.fillHeight: true
+    }
+
+    StackLayout {
+        id: stack_view
+
+        clip: true
         focus: true
 
-        handle: Rectangle {
-            implicitWidth: 4
-            color: Qt.rgba(0, 0, 0, 0.2)
+        //onCurrentItemChanged: currentItem.forceActiveFocus()
+
+        //            initialItem: Intro {}
+
+        Intro {}
+
+        SignupView {
+
         }
 
-        SideBar { // rename to Sidebar
-            id: sidebar
-            SplitView.minimumWidth: 200
-            SplitView.maximumWidth: 400
-            SplitView.fillHeight: true
+        Repeater {
+            model: WalletManager.wallets
+            WalletFoo {
+                id: foo
+                property bool current: currentWallet === modelData
+                onCurrentChanged: if (current) stack_view.currentIndex = index + 2
+                wallet: modelData
+            }
         }
-
-        StackLayout {
-            id: stack_view
-
-            clip: true
-            focus: true
-
-            //onCurrentItemChanged: currentItem.forceActiveFocus()
-
-            //            initialItem: Intro {}
-
-            Intro {}
-
-            SignupView {
-
-            }
-
-            Repeater {
-                model: WalletManager.wallets
-                WalletFoo {
-                    id: foo
-                    property bool current: currentWallet === modelData
-                    onCurrentChanged: if (current) stack_view.currentIndex = index + 2
-                    wallet: modelData
-                }
-            }
 
 
 //            RestoreWallet {
@@ -101,26 +90,11 @@ ApplicationWindow {
 //            DeviceView {
 //            }
 
-            SplitView.fillWidth: true
-            SplitView.fillHeight: true
-            SplitView.minimumWidth: implicitWidth
-        }
+        SplitView.fillWidth: true
+        SplitView.fillHeight: true
+        SplitView.minimumWidth: implicitWidth
     }
 
-/*
-    Component {
-        id: signup_view
-        SignupView {
-            onCanceled: stack_view.pop()
-        }
-    }
-    Component {
-        id: restore_view
-        RestoreWallet {
-            //onCanceled: stack_view.pop()
-        }
-    }
-*/
     Component {
         id: wallet_foo
         WalletFoo {}
@@ -139,4 +113,20 @@ ApplicationWindow {
         anchors.top: parent.top
         anchors.margins: 8
     }
+
 }
+
+/*
+    Component {
+        id: signup_view
+        SignupView {
+            onCanceled: stack_view.pop()
+        }
+    }
+    Component {
+        id: restore_view
+        RestoreWallet {
+            //onCanceled: stack_view.pop()
+        }
+    }
+*/

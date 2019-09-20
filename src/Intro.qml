@@ -5,12 +5,12 @@ Item {
     Image {
         id: logo
         anchors.centerIn: parent
-        source: 'assets/assets/svg/logo_big.svg'
+        source: 'assets/svg/logo_big.svg'
         opacity: 0.2
     }
 
     FlatButton {
-        icon.source: '/assets/assets/svg/add_wallet.svg'
+        icon.source: 'assets/svg/add_wallet.svg'
         icon.width: 16
         icon.height: 16
         text: qsTr('CREATE NEW WALLET')

@@ -42,11 +42,7 @@
         <file>views/onboarding/OnboardingPage.qml</file>
         <file>views/onboarding/ServiceTermsPage.qml</file>
         <file>views/onboarding/WelcomePage.qml</file>
-    </qresource>
-    <qresource prefix="/icons">
-        <file>ic_home.png</file>
-    </qresource>
-    <qresource prefix="/assets">
+        <file>loader.qml</file>
         <file>assets/svg/2fa_call.svg</file>
         <file>assets/svg/2fa_email.svg</file>
         <file>assets/svg/2fa_google.svg</file>

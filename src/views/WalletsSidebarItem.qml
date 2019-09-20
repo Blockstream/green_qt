@@ -10,7 +10,7 @@ SidebarItem {
         model: WalletManager.wallets
 
         ItemDelegate {
-            icon.source: '/assets/assets/svg/btc_testnet.svg'
+            icon.source: '../assets/svg/btc_testnet.svg'
             icon.width: 32
             icon.height: 32
             text: modelData.name + (modelData.logged ? ' [ON]' : '')
@@ -22,7 +22,7 @@ SidebarItem {
                 visible: modelData === currentWallet
                 sourceSize.width: 16
                 sourceSize.height: 16
-                source: '/assets/assets/svg/arrow_right.svg'
+                source: '../assets/svg/arrow_right.svg'
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.right: parent.right
                 anchors.rightMargin: 16

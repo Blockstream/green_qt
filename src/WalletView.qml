@@ -64,7 +64,7 @@ Page {
 
 
             FlatButton {
-                icon.source: 'assets/assets/svg/send.svg'
+                icon.source: 'assets/svg/send.svg'
                 icon.width: 16
                 icon.height: 16
                 text: qsTr('SEND')
@@ -90,7 +90,7 @@ Page {
             anchors.margins: 0
 
             Image {
-                source: 'assets/assets/svg/btc_testnet.svg'
+                source: 'assets/svg/btc_testnet.svg'
                 sourceSize.width: 32
                 sourceSize.height: 32
             }
@@ -100,7 +100,7 @@ Page {
             }
 
             Image {
-                source: 'assets/assets/svg/arrow_right.svg'
+                source: 'assets/svg/arrow_right.svg'
                 sourceSize.width: 16
                 sourceSize.height: 16
             }
@@ -139,7 +139,7 @@ Page {
             }
 
             ToolButton {
-                icon.source: 'assets/assets/svg/stack_wallets.svg'
+                icon.source: 'assets/svg/stack_wallets.svg'
                 icon.width: 16
                 icon.height: 16
 
@@ -158,7 +158,7 @@ Page {
             }
 
             ToolButton {
-                icon.source: 'assets/assets/svg/settings.svg'
+                icon.source: 'assets/svg/settings.svg'
                 icon.width: 16
                 icon.height: 16
 
@@ -166,7 +166,7 @@ Page {
             }
 
             ToolButton {
-                icon.source: 'assets/assets/svg/notifications.svg'
+                icon.source: 'assets/svg/notifications.svg'
                 icon.width: 16
                 icon.height: 16
                 onClicked: drawer.open()
@@ -201,13 +201,13 @@ Page {
 
                 TabButton {
                     text: qsTr('SEND')
-                    icon.source: 'assets/assets/svg/send.svg'
+                    icon.source: 'assets/svg/send.svg'
                     icon.width: 16
                     icon.height: 16
                 }
                 TabButton {
                     text: qsTr('RECEIVE')
-                    icon.source: 'assets/assets/svg/receive.svg'
+                    icon.source: 'assets/svg/receive.svg'
                     icon.width: 16
                     icon.height: 16
                 }

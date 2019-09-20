@@ -5,6 +5,6 @@ OnboardingPage {
 
     Image {
         anchors.centerIn: parent
-        source: '/assets/assets/svg/onboarding_illustration.svg'
+        source: '../../assets/svg/onboarding_illustration.svg'
     }
 }

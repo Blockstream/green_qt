@@ -25,19 +25,19 @@ Dialog {
 
             Panel {
                 title: qsTr('NETWORK')
-                icon: 'assets/assets/svg/network.svg'
+                icon: 'assets/svg/network.svg'
                 width: scroll_view.width - 16
             }
 /*
             Panel {
                 title: qsTr('ACCOUNT')
-                icon: 'assets/assets/svg/account.svg'
+                icon: 'assets/svg/account.svg'
                 width: scroll_view.width
             }
 
             Panel {
                 title: qsTr('TWO FACTOR')
-                icon: 'assets/assets/svg/twofactor.svg'
+                icon: 'assets/svg/twofactor.svg'
                 width: scroll_view.width
             }
             */
@@ -49,7 +49,7 @@ Dialog {
             Panel {
                 width: scroll_view.width - 16
                 title : qsTr('ADVANCED')
-                icon: 'assets/assets/svg/advanced.svg'
+                icon: 'assets/svg/advanced.svg'
             }
         }
 

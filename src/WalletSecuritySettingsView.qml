@@ -6,7 +6,7 @@ import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.12
 
 Panel {
-    icon: 'assets/assets/svg/security.svg'
+    icon: 'assets/svg/security.svg'
     title: qsTr('SECUTIRY')
 
     property Wallet foo: wallet
