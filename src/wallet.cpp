@@ -21,11 +21,6 @@ Wallet::Wallet(QObject *parent) : QObject(parent)
 
 void Wallet::connect()
 {
-    GA_json* config;
-    GA_convert_string_to_json("{}", &config);
-    GA_init(config);
-    GA_destroy_json(config);
-
     m_context->moveToThread(m_thread);
     m_thread->start();
 

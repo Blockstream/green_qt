@@ -7,6 +7,11 @@
 
 WalletManager::WalletManager(QObject *parent) : QObject(parent)
 {
+    GA_json* config;
+    GA_convert_string_to_json("{}", &config);
+    GA_init(config);
+    GA_destroy_json(config);
+
     QSettings settings;
 
     int count = settings.beginReadArray("wallets");
