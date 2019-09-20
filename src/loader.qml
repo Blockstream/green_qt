@@ -35,4 +35,11 @@ ApplicationWindow {
         shortcut: 'CTRL+R'
         onTriggered: loader.reload()
     }
+
+    DebugActiveFocus {
+        visible: engine.debug
+        anchors.right: parent.right
+        anchors.top: parent.top
+        anchors.margins: 8
+    }
 }

@@ -71,11 +71,4 @@ SplitView {
 
         DeviceView { }
     }
-
-    DebugActiveFocus {
-        visible: false
-        anchors.right: parent.right
-        anchors.top: parent.top
-        anchors.margins: 8
-    }
 }
