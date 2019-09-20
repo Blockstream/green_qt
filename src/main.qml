@@ -31,7 +31,7 @@ SplitView {
         color: Qt.rgba(0, 0, 0, 0.2)
     }
 
-    SideBar { // rename to Sidebar
+    Sidebar {
         id: sidebar
         SplitView.minimumWidth: 200
         SplitView.maximumWidth: 400

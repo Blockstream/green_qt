@@ -23,7 +23,7 @@
         <file>qtquickcontrols2.conf</file>
         <file>Intro.qml</file>
         <file>MainMenuBar.qml</file>
-        <file>SideBar.qml</file>
+        <file>Sidebar.qml</file>
         <file>RestoreWallet.qml</file>
         <file>AccountCard.qml</file>
         <file>DeviceView.qml</file>
