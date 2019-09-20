@@ -16,7 +16,7 @@ SidebarItem {
             text: modelData.name + (modelData.logged ? ' [ON]' : '')
             width: parent.width
 
-            onClicked: openWallet(modelData)
+            onClicked: currentWallet = modelData
 
             Image {
                 visible: modelData === currentWallet

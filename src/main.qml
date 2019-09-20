@@ -18,21 +18,7 @@ SplitView {
         onTriggered: stack_view.push(restore_view)
     }
 
-    property Wallet currentWallet
-
     MainMenuBar {
-    }
-
-    function openWallet(wallet) {
-        /*
-        var foo = stack_view.find((item, index) => item.wallet === wallet)
-        if (stack_view.currentItem === foo) return
-        if (foo) {
-            stack_view.push(foo)
-        } else {
-            stack_view.push(wallet_foo, { wallet })
-        }*/
-        currentWallet = wallet
     }
 
     spacing: 0

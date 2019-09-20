@@ -1,9 +1,13 @@
+import Blockstream.Green 0.1
 import QtQuick 2.13
 import QtQuick.Controls 2.13
 import QtQuick.Controls.Material 2.3
 import QtQuick.Window 2.13
 
+
 ApplicationWindow {
+    property Wallet currentWallet
+
     visible: true
     width: 1024
     height: 680
