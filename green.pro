@@ -18,6 +18,7 @@ DEFINES += QT_DEPRECATED_WARNINGS QZXING_QML
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    src/applicationengine.cpp \
     src/controllers/accountcontroller.cpp \
     src/controllers/controller.cpp \
     src/controllers/createaccountcontroller.cpp \
@@ -36,6 +37,7 @@ SOURCES += \
 
 
 HEADERS += \
+    src/applicationengine.h \
     src/controllers/accountcontroller.h \
     src/controllers/controller.h \
     src/controllers/createaccountcontroller.h \
@@ -78,6 +80,8 @@ win32 {
     LIBS += -Wl,-Bstatic,--whole-archive -lwinpthread -Wl,--no-whole-archive
     LIBS += $$(BUILDROOT)/gdk-$$(GDKBLDID)/src/build-windows-mingw-w64/src/libgreenaddress_full.a -lcrypt32 -lbcrypt -lws2_32 -liphlpapi -lssp -static-libgcc -static-libstdc++ -lwsock32
 }
+
+DEFINES += __PWD__=\\\"$$PWD\\\"
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
