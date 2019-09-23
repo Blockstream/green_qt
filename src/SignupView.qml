@@ -67,7 +67,7 @@ Page {
         id: create_action
         text: qsTr('CREATE')
         enabled: swipe_view.currentIndex + 1 === swipe_view.count && swipe_view.currentItem.valid
-        onTriggered: WalletManager.signup(name_field.text, mnemonic, pin_view.pin)
+        onTriggered: WalletManager.signup(network_group.checkedButton.network.network, name_field.text, mnemonic, pin_view.pin)
     }
 
     SwipeView {

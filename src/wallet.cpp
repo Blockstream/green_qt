@@ -196,21 +196,21 @@ void Wallet::signup(const QString& name, const QStringList& mnemonic, const QByt
         GA_destroy_json(hw_device);
 
         GA_json* pin_data;
-        GA_set_pin(m_session, raw_mnemonic.constData(), pin.constData(), "test", &pin_data);
-
+        err = GA_set_pin(m_session, raw_mnemonic.constData(), pin.constData(), "test", &pin_data);
         char* str;
         GA_convert_json_to_string(pin_data, &str);
-        GA_destroy_string(str);
+        m_pin_data = QByteArray(str);
         GA_destroy_json(pin_data);
+        GA_destroy_string(str);
 
         m_name = name;
-        m_pin_data = QByteArray(str);
 
         QSettings settings;
         int index = settings.beginReadArray("wallets");
         settings.endArray();
         settings.beginWriteArray("wallets");
         settings.setArrayIndex(index);
+        settings.setValue("network", m_network);
         settings.setValue("pin_data", m_pin_data);
         settings.setValue("name", name);
         settings.endArray();
