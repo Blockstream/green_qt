@@ -45,7 +45,7 @@ public slots:
     void connect();
     void test();
     void login(const QByteArray& pin);
-    void signup(const QString& name, const QStringList &mnemonic, const QByteArray& pin);
+    void signup(const QStringList &mnemonic, const QByteArray& pin);
     void recover(const QString& name, const QStringList& mnemonic, const QByteArray& pin);
     void reload();
     void setup2F();

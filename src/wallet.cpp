@@ -170,9 +170,9 @@ void Wallet::test()
     });
 }
 
-void Wallet::signup(const QString& name, const QStringList& mnemonic, const QByteArray& pin)
+void Wallet::signup(const QStringList& mnemonic, const QByteArray& pin)
 {
-    QMetaObject::invokeMethod(m_context, [this, name, pin, mnemonic] {
+    QMetaObject::invokeMethod(m_context, [this, pin, mnemonic] {
         QByteArray raw_mnemonic = mnemonic.join(' ').toLatin1();
 
         GA_json* hw_device;
@@ -203,8 +203,6 @@ void Wallet::signup(const QString& name, const QStringList& mnemonic, const QByt
         GA_destroy_json(pin_data);
         GA_destroy_string(str);
 
-        m_name = name;
-
         QSettings settings;
         int index = settings.beginReadArray("wallets");
         settings.endArray();
@@ -212,9 +210,9 @@ void Wallet::signup(const QString& name, const QStringList& mnemonic, const QByt
         settings.setArrayIndex(index);
         settings.setValue("network", m_network);
         settings.setValue("pin_data", m_pin_data);
-        settings.setValue("name", name);
+        settings.setValue("name", m_name);
         settings.endArray();
-    }, Qt::BlockingQueuedConnection);
+    }); //, Qt::BlockingQueuedConnection);
 }
 
 

@@ -56,14 +56,16 @@ QQmlListProperty<Wallet> WalletManager::wallets()
     [](QQmlListProperty<Wallet>* property, int index) { return static_cast<QVector<Wallet*>*>(property->data)->at(index); });
 }
 
-void WalletManager::signup(const QString& network, const QString& name, const QStringList& mnemonic, const QByteArray& pin)
+Wallet* WalletManager::signup(const QString& network, const QString& name, const QStringList& mnemonic, const QByteArray& pin)
 {
     Wallet* wallet = new Wallet(this);
     wallet->m_network = network;
+    wallet->m_name = name;
     wallet->connect();
-    wallet->signup(name, mnemonic, pin);
+    wallet->signup(mnemonic, pin);
     m_wallets.append(wallet);
     emit walletsChanged();
+    return wallet;
 }
 
 QJsonObject WalletManager::networks()
