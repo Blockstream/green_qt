@@ -25,7 +25,7 @@ Dialog {
 
             Panel {
                 title: qsTr('NETWORK')
-                icon: 'assets/svg/network.svg'
+                icon: '../assets/svg/network.svg'
                 width: scroll_view.width - 16
             }
 /*
@@ -49,7 +49,7 @@ Dialog {
             Panel {
                 width: scroll_view.width - 16
                 title : qsTr('ADVANCED')
-                icon: 'assets/svg/advanced.svg'
+                icon: '../assets/svg/advanced.svg'
             }
         }
 
