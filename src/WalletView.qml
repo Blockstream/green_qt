@@ -110,7 +110,7 @@ Page {
                 model: wallet.accounts
                 Layout.fillWidth: true
                 //textRole: 'name'
-                displayText: `${account.name}   [${account.json.type}]`
+                displayText: account ? `${account.name}   [${account.json.type}]` : ''
                 flat: true
                 delegate: ItemDelegate {
                     property Account account: modelData
@@ -132,8 +132,8 @@ Page {
                 MenuSeparator {}
 
                 MenuItem {
-                    text: qsTr(`RENAME ${account.name}`)
-                    enabled: !account.mainAccount
+                    text: qsTr('RENAME %1').arg(account ? account.name : '')
+                    enabled: account ? !account.mainAccount : false
                     onClicked: rename_account_dialog.open()
                 }
             }

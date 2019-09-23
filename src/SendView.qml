@@ -20,7 +20,7 @@ ColumnLayout {
         id: controller
         address: address_field.address
         amount: parseInt(100000000*amount_field.amount)
-        account: _account
+        account: _account ? _account : null
 
         onCodeRequested: {
             methods = result.methods
@@ -87,7 +87,7 @@ ColumnLayout {
                 property string title: qsTr('SEND')
 
                 Label {
-                    text: _result.txhash || '...'
+                    text: _result ? _result.txhash : '...'
                 }
             }
         }

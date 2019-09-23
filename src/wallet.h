@@ -22,7 +22,7 @@ class Wallet : public QObject
     Q_PROPERTY(bool authenticating READ isAuthenticating NOTIFY isAuthenticatingChanged)
     Q_PROPERTY(QList<QObject*> accounts READ accounts NOTIFY accountsChanged)
     Q_PROPERTY(QJsonObject events READ events NOTIFY eventsChanged)
-    Q_PROPERTY(QStringList mnemonic READ mnemonic)
+    Q_PROPERTY(QStringList mnemonic READ mnemonic CONSTANT)
 
 public:
     explicit Wallet(QObject *parent = nullptr);

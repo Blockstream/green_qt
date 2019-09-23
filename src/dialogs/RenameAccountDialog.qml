@@ -35,7 +35,7 @@ Dialog {
 
             TextField {
                 id: name_field
-                text: account.name
+                text: account ? account.name : ''
 
                 Layout.fillWidth: true
             }
