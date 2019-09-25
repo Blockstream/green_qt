@@ -5,31 +5,21 @@ import QtQuick.Controls 2.13
 import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.12
 
-StackLayout {
-    id: root
-
+FocusScope {
     property Wallet wallet
 
-    property string title: `${wallet.name}`
+    StackLayout {
+        currentIndex: wallet.logged ? 1 : 0
+        anchors.fill: parent
 
-//    Connections {
-//        target: wallet
-//        onLoggedChanged: {
-//            if (wallet.logged) {
-//                root.replace(wallet_view)
-//                //sidebar.push(xpto)
-//            }
-//        }
-//    }
+        LoginView {
+            focus: !wallet.logged
+        }
 
-    currentIndex: wallet.logged ? 1 : 0
-
-    LoginView { }
-
-    Loader {
-        active: wallet.logged
-        sourceComponent: WalletView { }
+        Loader {
+            active: wallet.logged
+            focus: wallet.logged
+            sourceComponent: WalletView { }
+        }
     }
-
-
 }

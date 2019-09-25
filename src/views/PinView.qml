@@ -9,6 +9,10 @@ Column {
     property alias pin: field.pin
     property alias valid: field.valid
 
+    function clear() {
+        field.clear()
+    }
+
     PinField {
         id: field
         focus: true
@@ -18,7 +22,6 @@ Column {
         columns: 3
         anchors.horizontalCenter: parent.horizontalCenter
 
-        Keys.forwardTo: field
         Layout.alignment: Qt.AlignHCenter
 
         Repeater {

@@ -134,6 +134,7 @@ Page {
                 id: pin_view
                 focus: true
                 anchors.centerIn: parent
+                onPinChanged: if (valid) next_action.trigger()
             }
         }
 
@@ -148,6 +149,10 @@ Page {
                 id: confirm_pin_view
                 focus: true
                 anchors.centerIn: parent
+                onPinChanged: if (valid) {
+                    if (pin_view.pin === pin) next_action.trigger()
+                    else confirm_pin_view.clear()
+                }
             }
         }
 

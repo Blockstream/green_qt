@@ -7,9 +7,6 @@ import QtQuick.Layouts 1.12
 import './views'
 
 FocusScope {
-    activeFocusOnTab: false
-    focus: false
-
     enabled: wallet.online && !wallet.authenticating
 
     ColumnLayout {
@@ -31,12 +28,16 @@ FocusScope {
 
         PinView {
             id: pin_view
-            focus: true
             onPinChanged: if (valid) {
                 wallet.login(pin)
                 wallet.reload()
             }
         }
+    }
+
+    Connections {
+        target: wallet
+        onAuthenticatingChanged: if (!authenticating) pin_view.clear()
     }
 
     BusyIndicator {

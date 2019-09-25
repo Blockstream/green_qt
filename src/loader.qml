@@ -23,6 +23,7 @@ ApplicationWindow {
         id: loader
         anchors.fill: parent
         source: 'main.qml'
+        focus: true
 
         function reload() {
             const src = source

@@ -4,7 +4,7 @@ import QtQuick.Controls 2.5
 import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.12
 
-FocusScope {
+Item {
     id: root
 
     property string buffer: ''
@@ -17,22 +17,29 @@ FocusScope {
         if (digit < 0 && digit > 9) return
         if (buffer.length === 6) return
         buffer = buffer + digit
+        root.forceActiveFocus()
     }
 
     function removeDigit() {
         if (buffer.length === 0) return
         buffer = buffer.slice(0, -1)
+        root.forceActiveFocus()
     }
 
     function clear() {
         buffer = ''
+        root.forceActiveFocus()
     }
 
-    activeFocusOnTab: true
     width: row_layout.width
     height: row_layout.height
     implicitWidth: row_layout.implicitWidth
     implicitHeight: row_layout.implicitHeight
+
+    Action {
+        shortcut: 'ESC'
+        onTriggered: clear()
+    }
 
     Keys.onPressed: {
         if (event.key === Qt.Key_0) return addDigit(0)
@@ -46,7 +53,6 @@ FocusScope {
         if (event.key === Qt.Key_8) return addDigit(8)
         if (event.key === Qt.Key_9) return addDigit(9)
         if (event.key === Qt.Key_Backspace) removeDigit()
-        if (event.key === Qt.Key_Escape) clear()
     }
 
     MouseArea {

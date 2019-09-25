@@ -8,7 +8,6 @@ import QtQuick.Window 2.12
 SplitView {
     id: split_view
     spacing: 0
-    focus: true
     anchors.fill: parent
 
     handle: Rectangle {
@@ -38,7 +37,6 @@ SplitView {
     StackLayout {
         id: stack_view
         clip: true
-        focus: true
 
         SplitView.fillWidth: true
         SplitView.fillHeight: true
@@ -53,8 +51,10 @@ SplitView {
 
             WalletFoo {
                 property bool current: currentWallet === modelData
+                focus: current
 
                 onCurrentChanged: if (current) stack_view.currentIndex = index + 2
+
                 wallet: modelData
             }
         }
