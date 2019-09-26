@@ -22,11 +22,14 @@ WalletManager::WalletManager(QObject *parent) : QObject(parent)
         auto pin_data = settings.value("pin_data").toByteArray();
         auto name = settings.value("name").toString();
         auto network = settings.value("network", "testnet").toString();
+        int login_attempts_remaining = settings.value("login_attempts_remaining").toInt();
 
         Wallet* wallet = new Wallet(this);
+        wallet->m_index = index;
         wallet->m_pin_data = pin_data;
         wallet->m_name = name;
         wallet->m_network = network;
+        wallet->m_login_attempts_remaining = login_attempts_remaining;
 
         m_wallets.append(wallet);
     }

@@ -12,6 +12,7 @@ FocusScope {
     ColumnLayout {
         spacing: 16
         anchors.centerIn: parent
+        width: parent.width
 
         opacity: wallet.authenticating ? 0.5 : 1
 
@@ -22,12 +23,31 @@ FocusScope {
         }
 
         Label {
+            font.capitalization: Font.AllUppercase
+            text: qsTr('id_enter_pin')
             Layout.alignment: Qt.AlignHCenter
-            text: qsTr(`ENTER PIN FOR WALLET ${wallet.name}`)
+        }
+
+        Label {
+            font.capitalization: Font.AllUppercase
+            horizontalAlignment: Text.AlignHCenter
+            wrapMode: Text.WordWrap
+
+            visible: wallet.loginAttemptsRemaining < 3
+            text: switch (wallet.loginAttemptsRemaining) {
+                case 0: return qsTr('id_no_attempts_remaining')
+                case 1: return qsTr('id_last_attempt_if_failed_you_will')
+                default: return qsTr('id_attempts_remaining_d').arg(wallet.loginAttemptsRemaining)
+            }
+            Layout.alignment: Qt.AlignHCenter
+            Layout.fillWidth: true
         }
 
         PinView {
             id: pin_view
+            enabled: wallet.loginAttemptsRemaining > 0
+            Layout.alignment: Qt.AlignHCenter
+
             onPinChanged: if (valid) {
                 wallet.login(pin)
                 wallet.reload()

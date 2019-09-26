@@ -104,6 +104,8 @@ QStringList Wallet::mnemonic() const
 
 void Wallet::login(const QByteArray& pin)
 {
+    Q_ASSERT(m_login_attempts_remaining > 0);
+
     if (m_pin_data.isEmpty()) return;
 
     m_authenticating = true;
@@ -114,12 +116,33 @@ void Wallet::login(const QByteArray& pin)
         int err = GA_convert_string_to_json(m_pin_data.constData(), &pin_data);
         err = GA_login_with_pin(m_session, pin.constData(), pin_data);
         qDebug() << "GA_login_with_pin" << err;
-        m_logged = err == GA_OK;
         GA_destroy_json(pin_data);
 
+        m_logged = err == GA_OK;
         m_authenticating = false;
         emit isAuthenticatingChanged(m_authenticating);
         emit isLoggedChanged();
+
+        int login_attempts_remaining = m_login_attempts_remaining;
+        if (err == GA_NOT_AUTHORIZED) {
+            login_attempts_remaining --;
+        } else if (m_login_attempts_remaining < 3) {
+            login_attempts_remaining = 3;
+        }
+
+        if (m_login_attempts_remaining != login_attempts_remaining) {
+            m_login_attempts_remaining = login_attempts_remaining;
+
+            QMetaObject::invokeMethod(this, [this] {
+                QSettings settings;
+                settings.beginWriteArray("wallets");
+                settings.setArrayIndex(m_index);
+                settings.setValue("login_attempts_remaining", m_login_attempts_remaining);
+                settings.endArray();
+
+                emit loginAttemptsRemainingChanged(m_login_attempts_remaining);
+            }, Qt::QueuedConnection);
+        }
 
         if (!m_logged) return;
 
@@ -204,13 +227,14 @@ void Wallet::signup(const QStringList& mnemonic, const QByteArray& pin)
         GA_destroy_string(str);
 
         QSettings settings;
-        int index = settings.beginReadArray("wallets");
+        m_index = settings.beginReadArray("wallets");
         settings.endArray();
         settings.beginWriteArray("wallets");
-        settings.setArrayIndex(index);
+        settings.setArrayIndex(m_index);
         settings.setValue("network", m_network);
         settings.setValue("pin_data", m_pin_data);
         settings.setValue("name", m_name);
+        settings.setValue("login_attempts_remaining", m_login_attempts_remaining);
         settings.endArray();
     }); //, Qt::BlockingQueuedConnection);
 }

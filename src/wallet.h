@@ -23,6 +23,7 @@ class Wallet : public QObject
     Q_PROPERTY(QList<QObject*> accounts READ accounts NOTIFY accountsChanged)
     Q_PROPERTY(QJsonObject events READ events NOTIFY eventsChanged)
     Q_PROPERTY(QStringList mnemonic READ mnemonic CONSTANT)
+    Q_PROPERTY(int loginAttemptsRemaining READ loginAttemptsRemaining NOTIFY loginAttemptsRemainingChanged)
 
 public:
     explicit Wallet(QObject *parent = nullptr);
@@ -40,6 +41,8 @@ public:
     QJsonObject events() const;
 
     QStringList mnemonic() const;
+
+    int loginAttemptsRemaining() const { return m_login_attempts_remaining; }
 
 public slots:
     void connect();
@@ -61,7 +64,10 @@ signals:
 
     void nameChanged(QString name);
 
+    void loginAttemptsRemainingChanged(int loginAttemptsRemaining);
+
 public:
+    int m_index{0};
     QThread* m_thread{nullptr};
     QObject* m_context{nullptr};
     GA_session* m_session{nullptr};
@@ -81,6 +87,7 @@ public:
         return m_name;
     }
     QString m_network;
+    int m_login_attempts_remaining{3};
 };
 
 class AmountConverter : public QObject
