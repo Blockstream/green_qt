@@ -30,6 +30,7 @@ Page {
         FlatButton {
             action: next_action
             visible: swipe_view.currentIndex + 1 < swipe_view.count
+            enabled: swipe_view.currentItem.next
         }
 
         FlatButton {
@@ -52,21 +53,18 @@ Page {
     Action {
         id: back_action
         text: qsTr('BACK')
-        enabled: swipe_view.currentIndex > 0
         onTriggered: swipe_view.currentIndex = swipe_view.currentIndex - 1
     }
 
     Action {
         id: next_action
         text: qsTr('NEXT')
-        enabled: swipe_view.currentIndex + 1 < swipe_view.count && swipe_view.currentItem.valid
         onTriggered: swipe_view.currentIndex = swipe_view.currentIndex + 1
     }
 
     Action {
         id: create_action
         text: qsTr('CREATE')
-        enabled: swipe_view.currentIndex + 1 === swipe_view.count && swipe_view.currentItem.valid
         onTriggered: currentWallet = WalletManager.signup(network_group.checkedButton.network.network, name_field.text, mnemonic, pin_view.pin)
     }
 
@@ -87,7 +85,7 @@ Page {
         OnboardingPage {
             title: qsTr('CHOOSE NETWORK')
 
-            valid: network_group.checkedButton
+            next: false
 
             Column {
                 anchors.centerIn: parent
@@ -95,6 +93,7 @@ Page {
                 ButtonGroup {
                     id: network_group
                     exclusive: true
+                    onCheckedButtonChanged: next_action.trigger()
                 }
 
                 Repeater {
@@ -128,7 +127,7 @@ Page {
 
         OnboardingPage {
             title: qsTr('SET PIN')
-            valid: pin_view.valid
+            next: false
 
             PinView {
                 id: pin_view
@@ -141,9 +140,7 @@ Page {
         OnboardingPage {
             activeFocusOnTab: false
             title: qsTr('CONFIRM PIN')
-            valid: confirm_pin_view.valid && pin_view.pin === confirm_pin_view.pin
-
-            onValidChanged: if (valid && next_action.enabled) next_action.trigger()
+            next: false
 
             PinView {
                 id: confirm_pin_view
@@ -158,7 +155,7 @@ Page {
 
         OnboardingPage {
             title: qsTr('FINISH')
-            valid: name_field.text.length > 0
+            next: false
 
             TextField {
                 id: name_field
