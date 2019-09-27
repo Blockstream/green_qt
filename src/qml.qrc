@@ -92,5 +92,6 @@
         <file>assets/svg/stack_wallets.svg</file>
         <file>assets/svg/trezor.svg</file>
         <file>assets/svg/twofactor.svg</file>
+        <file>assets/svg/liquid/liquid_with_string.svg</file>
     </qresource>
 </RCC>
