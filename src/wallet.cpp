@@ -226,16 +226,18 @@ void Wallet::signup(const QStringList& mnemonic, const QByteArray& pin)
         GA_destroy_json(pin_data);
         GA_destroy_string(str);
 
-        QSettings settings;
-        m_index = settings.beginReadArray("wallets");
-        settings.endArray();
-        settings.beginWriteArray("wallets");
-        settings.setArrayIndex(m_index);
-        settings.setValue("network", m_network);
-        settings.setValue("pin_data", m_pin_data);
-        settings.setValue("name", m_name);
-        settings.setValue("login_attempts_remaining", m_login_attempts_remaining);
-        settings.endArray();
+        QMetaObject::invokeMethod(this, [this]{
+            QSettings settings;
+            m_index = settings.beginReadArray("wallets");
+            settings.endArray();
+            settings.beginWriteArray("wallets");
+            settings.setArrayIndex(m_index);
+            settings.setValue("network", m_network);
+            settings.setValue("pin_data", m_pin_data);
+            settings.setValue("name", m_name);
+            settings.setValue("login_attempts_remaining", m_login_attempts_remaining);
+            settings.endArray();
+        }, Qt::BlockingQueuedConnection);
 
         reload();
     });
