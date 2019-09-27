@@ -236,7 +236,9 @@ void Wallet::signup(const QStringList& mnemonic, const QByteArray& pin)
         settings.setValue("name", m_name);
         settings.setValue("login_attempts_remaining", m_login_attempts_remaining);
         settings.endArray();
-    }); //, Qt::BlockingQueuedConnection);
+
+        reload();
+    });
 }
 
 
