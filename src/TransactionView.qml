@@ -7,110 +7,125 @@ import QtQuick.Layouts 1.12
 
 Page {
     property var transaction
+    property string statusLabel
 
     function viewInExplorer() {
         Qt.openUrlExternally(`https://blockstream.info/testnet/tx/${transaction.txhash}`)
     }
 
-    header: RowLayout {
-        spacing: 16
-
-        ToolButton {
-            icon.source: 'assets/svg/arrow_left.svg'
-            icon.height: 16
-            icon.width: 16
-            onClicked: stack_view.pop()
+    header: Pane {
+        background: Rectangle {
+            color: Qt.rgba(1, 1, 1, 0.01)
+            border.width: 1
+            border.color: Qt.rgba(1, 1, 1, 0.05)
         }
 
-        Label {
-            text: transaction.txhash
-            Layout.fillWidth: true
-        }
+        RowLayout {
+            spacing: 16
+            anchors.fill: parent
 
-        FlatButton {
-            text: qsTr('VIEW IN EXPLORER')
-            onClicked: viewInExplorer()
+            ToolButton {
+                icon.source: 'assets/svg/arrow_left.svg'
+                icon.height: 16
+                icon.width: 16
+                onClicked: stack_view.pop()
+            }
+
+            Image {
+                source: transaction.type === 'outgoing' ? 'assets/svg/sent.svg' : 'assets/svg/received.svg'
+            }
+
+            Column {
+                Layout.fillWidth: true
+
+                Label {
+                    text: qsTr('id_transaction_details')
+                }
+
+                Label {
+                    text: statusLabel
+                }
+            }
         }
     }
 
-    SplitView {
-
+    ScrollView {
+        clip: true
         anchors.fill: parent
+        anchors.leftMargin: 64
 
-        Pane {
-            Layout.fillWidth: true
-            ColumnLayout {
+        Column {
+            y: 32
+            width: parent.width
+            spacing: 32
 
-                Image {
-                    Layout.leftMargin: 8
-                    source: transaction.type === 'outgoing' ? 'assets/svg/sent.svg' : 'assets/svg/received.svg'
+            Column {
+                spacing: 8
+
+                Label {
+                    text: qsTr('id_received_on')
+                    color: 'gray'
                 }
 
                 Label {
-                    text: transaction.type + ' ' + transaction.created_at
+                    text: transaction.created_at
+                }
+            }
+
+            Column {
+                spacing: 8
+
+                Label {
+                    text: qsTr('id_amount')
+                    color: 'gray'
                 }
 
                 Label {
-                    text: qsTr('AMOUNT')
+                    color: transaction.type === 'incoming' ? 'green' : 'white'
+                    text: `${transaction.type === 'incoming' ? '+' : '-'}${transaction.satoshi.btc / 100000000} BTC`
                 }
+            }
+
+            Column {
+                spacing: 8
 
                 Label {
-                    text: transaction.satoshi.btc
-                }
-
-                Label {
-                    text: 'FEE AMOUNT, SIZE, FEE RATE'
-                }
-                RowLayout {
-                    Label {
-                        text: transaction.fee
-                    }
-
-                    Label {
-                        text: transaction.transaction_size
-                    }
-
-                    Label {
-                        text: transaction.fee_rate
-                    }
-                }
-
-                Label {
-                    text: qsTr('MY NOTES')
+                    text: qsTr('id_my_notes')
+                    color: 'gray'
                 }
 
                 TextArea {
+                    placeholderText: qsTr('id_add_a_note_only_you_can_see_it')
                     text: transaction.memo
                 }
             }
-        }
 
-        ScrollView {
+            Column {
+                spacing: 8
+
+                Label {
+                    text: qsTr('id_transaction_id')
+                    color: 'gray'
+                }
+
+                TextField {
+                    readOnly: true
+                    selectByMouse: true
+                    text: transaction.txhash
+                    width: contentWidth
+                }
+            }
+
+            Button {
+                text: qsTr('VIEW IN EXPLORER')
+                onClicked: viewInExplorer()
+            }
+
             TextArea {
-                Layout.fillWidth: true
+                visible: engine.debug
+                width: parent.width
                 text: JSON.stringify(transaction, null, '    ')
             }
         }
-
     }
 }
-/*
-
-SHARE?
-
-DATA
-(ELAPSED ?))
-
- OUTGOING/INCOMING
-
-RECIPIENT (JUST FOR OUTGOING)
-
-AMOUNT
-
-BTC / USD
-
-FEE AMOUNT, SIZE, FEE RATE
-
-
-
-*/

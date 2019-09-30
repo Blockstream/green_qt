@@ -8,7 +8,12 @@ import QtQuick.Layouts 1.12
 Pane {
     property var tx
     property bool first
-    property alias wallet: amount_converter.wallet
+    property int confirmations: tx.block_height === 0 ? 0 : 1 + wallet.events.block.block_height - tx.block_height
+    property string statusLabel: {
+        if (confirmations === 0) return qsTr('id_unconfirmed')
+        if (confirmations < 6) return qsTr('id_d6_confirmations').arg(confirmations)
+        return qsTr('id_completed')
+    }
 
     function pretty(d) {
         if (d < 10) return qsTr('JUST NOW')
@@ -52,14 +57,9 @@ Pane {
             hoverEnabled: true
             anchors.fill: parent
 
-            onClicked: stack_view.push(transaction_view_component, { transaction: tx })
+            onClicked: stack_view.push(transaction_view_component, { statusLabel: statusLabel, transaction: tx })
         }
         color: secs < 60 ? Qt.rgba(0.5, 1, 0.5, ma.containsMouse ? 0.2 : 0.1) : Qt.rgba(1, 1, 1, ma.containsMouse ? 0.1 : 0)
-    }
-
-    AmountConverter {
-        id: amount_converter
-        input: ({ btc: '' + (tx.satoshi.btc / 100000000) })
     }
 
     function address(tx) {
@@ -90,7 +90,6 @@ Pane {
             Layout.fillWidth: true
             Label {
                 Layout.fillWidth: true
-                //font.pixelSize: 20
                 text: pretty(secs)
                 opacity: 0.8
             }
@@ -101,40 +100,18 @@ Pane {
             }
         }
 
-        /*
+        Column {
             Label {
-                font.pixelSize: 10
-                text: qsTr('FEE ') + (tx.fee / 100000000).toFixed(8) + ' BTC'
+                anchors.right: parent.right
+                color: tx.type === 'incoming' ? 'green' : 'white'
+                text: `${tx.type === 'incoming' ? '+' : '-'}${tx.satoshi.btc / 100000000} BTC`
             }
+
             Label {
-                font.pixelSize: 10
-                wrapMode: Text.Wrap
-                text: JSON.stringify(tx, null, '    ')
+                anchors.right: parent.right
+                color: confirmations === 0 ? 'red' : 'white'
+                text: statusLabel
             }
-        }*/
-
-        ColumnLayout {
-            Layout.fillWidth: false
-
-            Layout.alignment: Qt.AlignRight
-
-            Amount {
-                Layout.alignment: Qt.AlignRight
-                pixelSize: 14
-
-                amount: (tx.type === 'incoming' ? '' : '-') + amount_converter.input.btc
-                currency: 'BTC'
-                currencyBorder: false
-            }
-
-            Amount {
-                Layout.alignment: Qt.AlignRight
-
-                amount: amount_converter.valid ? (tx.type === 'incoming' ? '' : '-') + amount_converter.output.fiat : ''
-                currency: amount_converter.valid ? amount_converter.output.fiat_currency : ''
-                currencyBorder: false
-            }
-            Layout.rightMargin: 16
         }
 
         TextField {

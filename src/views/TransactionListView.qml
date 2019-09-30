@@ -7,19 +7,15 @@ import QtQuick.Layouts 1.12
 import '..'
 
 ListView {
-    id: transactions_view
-
     clip: true
 
     model: {
-        account
-        // TODO: temporary filter redeposit transactions (change outputs?)
         var txs = []
-        if (account) {
-            for (const tx of account.txs) {
-                if (tx.type === 'redeposit') continue
-                txs.push(tx)
-            }
+        if (!account) return []
+        // TODO: temporary filter redeposit transactions (change outputs?)
+        for (const tx of account.txs) {
+            if (tx.type === 'redeposit') continue
+            txs.push(tx)
         }
         return txs;
     }
@@ -28,7 +24,6 @@ ListView {
         width: parent.width
         tx: modelData
         first: index === 0
-        wallet: account.wallet
     }
 
     spacing: 0
