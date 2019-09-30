@@ -58,7 +58,7 @@ ColumnLayout {
             id: swipe_view
             clip: true
             Column {
-                property string title: qsTr('SELECT TWO FACTOR METHOD')
+                property string title: qsTr('id_choose_twofactor_authentication')
                 //anchors.centerIn: parent
                 Repeater {
                     model: methods
@@ -71,20 +71,20 @@ ColumnLayout {
 
             Column {
                 //anchors.centerIn: parent
-                property string title: qsTr('ENTER CODE')
+                property string title: qsTr('id_please_provide_your_1s_code').arg("email") // TODO: use methods
 
                 TextField {
                     id: code_field
                 }
                 FlatButton {
-                    text: qsTr('VERIFY')
+                    text: qsTr('id_next')
                     onClicked: controller.resolveCode(code_field.text)
                 }
             }
 
             Column {
                 //anchors.centerIn: parent
-                property string title: qsTr('SEND')
+                property string title: qsTr('id_send')
 
                 Label {
                     text: _result ? _result.txhash : '...'
@@ -108,7 +108,7 @@ ColumnLayout {
             AddressField {
                 id: address_field
                 Layout.fillWidth: true
-                label: qsTr("RECIPIENT")
+                label: qsTr("id_recipient")
                 address: '2NAXwN5t3Qm3s2ETaAwuYkg4GfQkKGH2J9d'
             }
             FlatButton {
@@ -121,7 +121,7 @@ ColumnLayout {
                     id: amount_field
                     Layout.fillWidth: true
                     currency: 'BTC'
-                    label: qsTr('AMOUNT')
+                    label: qsTr('id_amount')
                     amount: '0.00001000'
                 }
 
@@ -155,7 +155,7 @@ ColumnLayout {
 
         ColumnLayout {
             Label {
-                text: qsTr('MINER FEE')
+                text: qsTr('id_network_fee')
             }
 
             RadioButton {
@@ -174,7 +174,7 @@ ColumnLayout {
     }
 
     FlatButton {
-        text: qsTr('SEND')
+        text: qsTr('id_send')
         enabled: !!account
         onClicked: controller.send()
     }

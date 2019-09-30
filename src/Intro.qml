@@ -13,7 +13,7 @@ Item {
         icon.source: 'assets/svg/add_wallet.svg'
         icon.width: 16
         icon.height: 16
-        text: qsTr('CREATE NEW WALLET')
+        text: qsTr('id_create_new_wallet')
         anchors.horizontalCenter: logo.horizontalCenter
         anchors.top: logo.bottom
         anchors.margins: 16

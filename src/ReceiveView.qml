@@ -35,7 +35,7 @@ ColumnLayout {
         spacing: 8
 
         FlatButton {
-            text: qsTr('NEW')
+            text: qsTr('id_generate_new_address')
             enabled: !receive_address.generating
             onClicked: receive_address.generate()
         }
@@ -50,7 +50,7 @@ ColumnLayout {
         }
 
         FlatButton {
-            text: qsTr('COPY')
+            text: qsTr('id_copy_to_clipboard')
             onClicked: {
                 address_field.selectAll()
                 address_field.copy()
@@ -98,7 +98,7 @@ ColumnLayout {
             id: amount_field
             Layout.fillWidth: true
             currency: 'BTC'
-            label: qsTr('AMOUNT')
+            label: qsTr('id_amount')
         }
 
         Item {

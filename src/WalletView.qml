@@ -67,7 +67,7 @@ Page {
                 icon.source: 'assets/svg/send.svg'
                 icon.width: 16
                 icon.height: 16
-                text: qsTr('SEND')
+                text: qsTr('id_send')
 
                 onClicked: {
                     tab_bar.currentIndex = 2
@@ -124,7 +124,7 @@ Page {
                 id: foo_menu
 
                 MenuItem {
-                    text: qsTr('NEW ACCOUNT')
+                    text: qsTr('id_add_new_account')
 
                     onClicked: create_account_dialog.open()
                 }
@@ -192,21 +192,21 @@ Page {
                 currentIndex: 1
 
                 TabButton {
-                    text: qsTr('OVERVIEW')
+                    text: qsTr('OVERVIEW') // TODO: add string
                 }
 
                 TabButton {
-                    text: qsTr('TRANSACTIONS')
+                    text: qsTr('id_transactions')
                 }
 
                 TabButton {
-                    text: qsTr('SEND')
+                    text: qsTr('id_send')
                     icon.source: 'assets/svg/send.svg'
                     icon.width: 16
                     icon.height: 16
                 }
                 TabButton {
-                    text: qsTr('RECEIVE')
+                    text: qsTr('id_receive')
                     icon.source: 'assets/svg/receive.svg'
                     icon.width: 16
                     icon.height: 16

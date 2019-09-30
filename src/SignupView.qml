@@ -10,7 +10,7 @@ Page {
     signal canceled()
 
     id: root
-    title: qsTr('CREATE WALLET')
+    title: qsTr('id_create_new_wallet')
 
     footer: RowLayout {
         PageIndicator {
@@ -45,26 +45,26 @@ Page {
 
     Action {
         id: cancel_action
-        text: qsTr('CANCEL')
+        text: qsTr('id_cancel')
         shortcut: StandardKey.Cancel
         onTriggered: root.canceled()
     }
 
     Action {
         id: back_action
-        text: qsTr('BACK')
+        text: qsTr('BACK') // TODO: add string
         onTriggered: swipe_view.currentIndex = swipe_view.currentIndex - 1
     }
 
     Action {
         id: next_action
-        text: qsTr('NEXT')
+        text: qsTr('id_next')
         onTriggered: swipe_view.currentIndex = swipe_view.currentIndex + 1
     }
 
     Action {
         id: create_action
-        text: qsTr('CREATE')
+        text: qsTr('id_create')
         onTriggered: currentWallet = WalletManager.signup(network_group.checkedButton.network.network, name_field.text, mnemonic, pin_view.pin)
     }
 
@@ -83,7 +83,7 @@ Page {
         ServiceTermsPage {}
 
         OnboardingPage {
-            title: qsTr('CHOOSE NETWORK')
+            title: qsTr('id_choose_your_network')
 
             next: false
 
@@ -117,7 +117,7 @@ Page {
         }
 
         OnboardingPage {
-            title: qsTr('SAVE MNEMONIC')
+            title: qsTr('id_save_your_mnemonic')
 
             MnemonicView {
                 anchors.centerIn: parent
@@ -126,7 +126,7 @@ Page {
         }
 
         OnboardingPage {
-            title: qsTr('SET PIN')
+            title: qsTr('id_create_a_pin_to_access_your')
             next: false
 
             PinView {
@@ -139,7 +139,7 @@ Page {
 
         OnboardingPage {
             activeFocusOnTab: false
-            title: qsTr('CONFIRM PIN')
+            title: qsTr('id_verify_your_pin')
             next: false
 
             PinView {
@@ -154,7 +154,7 @@ Page {
         }
 
         OnboardingPage {
-            title: qsTr('FINISH')
+            title: qsTr('id_done')
             next: false
 
             TextField {
