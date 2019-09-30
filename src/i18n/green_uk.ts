@@ -198,6 +198,10 @@
         <translation>BTChip не налаштовано. Для налаштування, будь ласка, встановіть програму за допомогою десктоп-клієнта.</translation>
     </message>
     <message>
+        <source>id_by_proceeding_to_the_next_steps</source>
+        <translation>By proceeding to the next steps you agree to the %1</translation>
+    </message>
+    <message>
         <source>id_call</source>
         <translation>Дзвінок</translation>
     </message>
@@ -294,8 +298,20 @@
         <translation>Продовжити</translation>
     </message>
     <message>
+        <source>id_copy_details</source>
+        <translation>Copy details</translation>
+    </message>
+    <message>
+        <source>id_copy_raw_transaction</source>
+        <translation>Copy raw transaction</translation>
+    </message>
+    <message>
         <source>id_copy_to_clipboard</source>
         <translation>Скопіювати в буфер обміну</translation>
+    </message>
+    <message>
+        <source>id_copy_transaction_id</source>
+        <translation>Copy transaction ID</translation>
     </message>
     <message>
         <source>id_create</source>
@@ -1298,6 +1314,10 @@
         <translation>Комісія занадто низька</translation>
     </message>
     <message>
+        <source>id_reset</source>
+        <translation>Reset</translation>
+    </message>
+    <message>
         <source>id_reset_spv</source>
         <translation>Скинути SPV</translation>
     </message>
@@ -1426,6 +1446,10 @@
         <translation>Встановити новий PIN-код</translation>
     </message>
     <message>
+        <source>id_set_an_email_for_recovery</source>
+        <translation>Set an email for recovery</translation>
+    </message>
+    <message>
         <source>id_set_custom_fee_rate</source>
         <translation>Встановити розмір комісії</translation>
     </message>
@@ -1514,6 +1538,12 @@
         <translation>СМС</translation>
     </message>
     <message>
+        <source>id_snnreset_this_setting_and_then</source>
+        <translation>%1.
+
+Reset this setting and then re-activate it.</translation>
+    </message>
+    <message>
         <source>id_socks5_hostname</source>
         <translation>Ім&apos;я хоста Socks5</translation>
     </message>
@@ -1576,6 +1606,13 @@
     <message>
         <source>id_synchronize_spv_on_mobile</source>
         <translation>Синхронізуйте SPV на мобільному телефоні</translation>
+    </message>
+    <message>
+        <source>id_syou_need_ton1_reset_greens</source>
+        <translation>%1.You need to:
+1. Reset Green&apos;s Face/TouchID login,
+2. Log in with PIN,
+3. Re-activate Face/TouchID from Green Settings.</translation>
     </message>
     <message>
         <source>id_system_message</source>
@@ -1708,6 +1745,10 @@
     <message>
         <source>id_transaction_sent</source>
         <translation>Транзакцію здійснено</translation>
+    </message>
+    <message>
+        <source>id_transactions</source>
+        <translation>Transactions</translation>
     </message>
     <message>
         <source>id_try_now</source>

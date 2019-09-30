@@ -198,6 +198,10 @@
         <translation>BTChip non è impostato. Per favore  impostalo usando l&apos;applicazione desktop per riuscire ad usarlo.</translation>
     </message>
     <message>
+        <source>id_by_proceeding_to_the_next_steps</source>
+        <translation>Procedendo al passaggio successivo accetti i %1</translation>
+    </message>
+    <message>
         <source>id_call</source>
         <translation>Telefonata</translation>
     </message>
@@ -294,8 +298,20 @@
         <translation>Continua</translation>
     </message>
     <message>
+        <source>id_copy_details</source>
+        <translation>Copia i dettagli</translation>
+    </message>
+    <message>
+        <source>id_copy_raw_transaction</source>
+        <translation>Copia raw transaction</translation>
+    </message>
+    <message>
         <source>id_copy_to_clipboard</source>
         <translation>Copia in Clipboard</translation>
+    </message>
+    <message>
+        <source>id_copy_transaction_id</source>
+        <translation>Copia ID di transazione</translation>
     </message>
     <message>
         <source>id_create</source>
@@ -1298,6 +1314,10 @@
         <translation>Tasso di commissione richiesto troppo basso</translation>
     </message>
     <message>
+        <source>id_reset</source>
+        <translation>Reset</translation>
+    </message>
+    <message>
         <source>id_reset_spv</source>
         <translation>Riavvia SPV</translation>
     </message>
@@ -1426,6 +1446,10 @@
         <translation>Imposta un nuovo PIN</translation>
     </message>
     <message>
+        <source>id_set_an_email_for_recovery</source>
+        <translation>Imposta email per il recupero</translation>
+    </message>
+    <message>
         <source>id_set_custom_fee_rate</source>
         <translation>Imposta commissione personalizzata</translation>
     </message>
@@ -1514,6 +1538,12 @@
         <translation>SMS</translation>
     </message>
     <message>
+        <source>id_snnreset_this_setting_and_then</source>
+        <translation>%1.
+
+Reset questa impostazione e successivamente riattivala.</translation>
+    </message>
+    <message>
         <source>id_socks5_hostname</source>
         <translation>Socks5 Hostname</translation>
     </message>
@@ -1576,6 +1606,13 @@
     <message>
         <source>id_synchronize_spv_on_mobile</source>
         <translation>Abilita Sincronizzazione SPV mobile</translation>
+    </message>
+    <message>
+        <source>id_syou_need_ton1_reset_greens</source>
+        <translation>%1.Devi:
+1. Effettuare il Reset del login con Face/TouchID di Green,
+2. Effettuare Log in col PIN,
+3. Riattivare il login con Face/TouchID dalle impostazioni di Green.</translation>
     </message>
     <message>
         <source>id_system_message</source>
@@ -1708,6 +1745,10 @@
     <message>
         <source>id_transaction_sent</source>
         <translation>Transazione Inviata</translation>
+    </message>
+    <message>
+        <source>id_transactions</source>
+        <translation>Transazioni</translation>
     </message>
     <message>
         <source>id_try_now</source>
