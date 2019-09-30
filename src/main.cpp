@@ -7,6 +7,7 @@
 
 #include "account.h"
 #include "applicationengine.h"
+#include "transaction.h"
 #include "wallet.h"
 #include "devicemanagermacos.h"
 #include "walletmanager.h"
@@ -79,6 +80,7 @@ int main(int argc, char *argv[])
 
     qmlRegisterType<Device>("Blockstream.Green", 0, 1, "Device");
     qmlRegisterType<Wallet>("Blockstream.Green", 0, 1, "Wallet");
+    qmlRegisterUncreatableType<Transaction>("Blockstream.Green", 0, 1, "Transaction", "Transactions are created by accounts");
 
     qmlRegisterType<AmountConverter>("Blockstream.Green", 0, 1, "AmountConverter");
     qmlRegisterType<ReceiveAddress>("Blockstream.Green", 0, 1, "ReceiveAddress");

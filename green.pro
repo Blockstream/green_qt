@@ -30,6 +30,7 @@ SOURCES += \
     src/devicemanager.cpp \
     src/ga.cpp \
     src/main.cpp \
+    src/transaction.cpp \
     src/twofactorcontroller.cpp \
     src/wallet.cpp \
     src/json.cpp \
@@ -49,6 +50,7 @@ HEADERS += \
     src/devicemanager.h \
     src/devicemanagermacos.h \
     src/ga.h \
+    src/transaction.h \
     src/twofactorcontroller.h \
     src/wallet.h \
     src/json.h \

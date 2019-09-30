@@ -1,6 +1,7 @@
 #include "account.h"
 #include "ga.h"
 #include "json.h"
+#include "transaction.h"
 #include "wallet.h"
 
 #include <QTimer>
@@ -25,9 +26,11 @@ QJsonObject Account::json() const
     return m_json;
 }
 
-QJsonArray Account::txs() const
+QQmlListProperty<Transaction> Account::transactions()
 {
-    return m_txs;
+    return QQmlListProperty<Transaction>(this, &m_transactions,
+        [](QQmlListProperty<Transaction>* property) { return static_cast<QVector<Transaction*>*>(property->data)->size(); },
+    [](QQmlListProperty<Transaction>* property, int index) { return static_cast<QVector<Transaction*>*>(property->data)->at(index); });
 }
 
 void Account::update(const QJsonObject& json)
@@ -46,18 +49,32 @@ void Account::handleNotification(const QJsonObject &notification)
 void Account::reload()
 {
     QMetaObject::invokeMethod(m_wallet->m_context, [this] {
-        GA_json* details = Json::fromObject({{ "subaccount", m_pointer }, { "first", 0 }, { "count", 30 }});
+        GA_json* details = Json::fromObject({
+            { "subaccount", m_pointer },
+            { "first", 0 },
+            { "count", 30 }
+        });
 
         GA_json* txs;
 
         int err = GA_get_transactions(m_wallet->m_session, details, &txs);
         Q_ASSERT(err == GA_OK);
-
-        m_txs = Json::toArray(txs);
         GA_destroy_json(details);
+
+        QMetaObject::invokeMethod(this, [this, txs] {
+            for (auto tx : Json::toArray(txs)) {
+                auto hash = tx.toObject().value("txhash").toString();
+                if (m_transactions_by_hash.contains(hash)) continue;
+                Transaction* transaction = new Transaction(this);
+                transaction->updateFromData(tx.toObject());
+                m_transactions_by_hash.insert(hash, transaction);
+                m_transactions.append(transaction);
+            }
+        }, Qt::BlockingQueuedConnection);
+
         GA_destroy_json(txs);
 
-        QMetaObject::invokeMethod(this, [this] { emit txsChanged(); });
+        emit transactionsChanged();
     });
 }
 

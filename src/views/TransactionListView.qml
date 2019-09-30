@@ -8,25 +8,15 @@ import '..'
 
 ListView {
     clip: true
+    spacing: 0
 
-    model: {
-        var txs = []
-        if (!account) return []
-        // TODO: temporary filter redeposit transactions (change outputs?)
-        for (const tx of account.txs) {
-            if (tx.type === 'redeposit') continue
-            txs.push(tx)
-        }
-        return txs;
-    }
+    model: if (account) account.transactions
 
     delegate: TransactionDelegate {
         width: parent.width
-        tx: modelData
+        transaction: modelData
         first: index === 0
     }
-
-    spacing: 0
 
     ScrollBar.vertical: ScrollBar { }
 }

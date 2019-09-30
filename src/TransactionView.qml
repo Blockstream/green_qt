@@ -6,11 +6,11 @@ import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.12
 
 Page {
-    property var transaction
+    property Transaction transaction
     property string statusLabel
 
     function viewInExplorer() {
-        Qt.openUrlExternally(`https://blockstream.info/testnet/tx/${transaction.txhash}`)
+        Qt.openUrlExternally(`https://blockstream.info/testnet/tx/${transaction.data.txhash}`)
     }
 
     header: Pane {
@@ -32,7 +32,7 @@ Page {
             }
 
             Image {
-                source: transaction.type === 'outgoing' ? 'assets/svg/sent.svg' : 'assets/svg/received.svg'
+                source: transaction.data.type === 'outgoing' ? 'assets/svg/sent.svg' : 'assets/svg/received.svg'
             }
 
             Column {
@@ -50,13 +50,16 @@ Page {
     }
 
     ScrollView {
+        id: scroll_view
         clip: true
         anchors.fill: parent
         anchors.leftMargin: 64
+        anchors.rightMargin: 64
+
 
         Column {
             y: 32
-            width: parent.width
+            width: scroll_view.width
             spacing: 32
 
             Column {
@@ -68,7 +71,7 @@ Page {
                 }
 
                 Label {
-                    text: transaction.created_at
+                    text: transaction.data.created_at
                 }
             }
 
@@ -81,22 +84,32 @@ Page {
                 }
 
                 Label {
-                    color: transaction.type === 'incoming' ? 'green' : 'white'
-                    text: `${transaction.type === 'incoming' ? '+' : '-'}${transaction.satoshi.btc / 100000000} BTC`
+                    color: transaction.data.type === 'incoming' ? 'green' : 'white'
+                    text: `${transaction.data.type === 'incoming' ? '+' : '-'}${transaction.data.satoshi.btc / 100000000} BTC`
                 }
             }
 
             Column {
                 spacing: 8
+                width: parent.width
 
                 Label {
                     text: qsTr('id_my_notes')
                     color: 'gray'
                 }
 
-                TextArea {
-                    placeholderText: qsTr('id_add_a_note_only_you_can_see_it')
-                    text: transaction.memo
+                Row {
+                    TextArea {
+                        id: memo_edit
+                        placeholderText: qsTr('id_add_a_note_only_you_can_see_it')
+                        text: transaction.data.memo
+                    }
+
+                    FlatButton {
+                        text: qsTr('id_save')
+                        visible: memo_edit.text !== transaction.data.memo
+                        onClicked: transaction.updateMemo(memo_edit.text)
+                    }
                 }
             }
 
@@ -111,8 +124,7 @@ Page {
                 TextField {
                     readOnly: true
                     selectByMouse: true
-                    text: transaction.txhash
-                    width: contentWidth
+                    text: transaction.data.txhash
                 }
             }
 
@@ -124,7 +136,7 @@ Page {
             TextArea {
                 visible: engine.debug
                 width: parent.width
-                text: JSON.stringify(transaction, null, '    ')
+                text: JSON.stringify(transaction.data, null, '    ')
             }
         }
     }

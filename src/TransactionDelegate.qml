@@ -6,7 +6,8 @@ import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.12
 
 Pane {
-    property var tx
+    property Transaction transaction
+    property var tx: transaction.data
     property bool first
     property int confirmations: tx.block_height === 0 ? 0 : 1 + wallet.events.block.block_height - tx.block_height
     property string statusLabel: {
@@ -57,7 +58,7 @@ Pane {
             hoverEnabled: true
             anchors.fill: parent
 
-            onClicked: stack_view.push(transaction_view_component, { statusLabel: statusLabel, transaction: tx })
+            onClicked: stack_view.push(transaction_view_component, { statusLabel: statusLabel, transaction: transaction })
         }
         color: secs < 60 ? Qt.rgba(0.5, 1, 0.5, ma.containsMouse ? 0.2 : 0.1) : Qt.rgba(1, 1, 1, ma.containsMouse ? 0.1 : 0)
     }
