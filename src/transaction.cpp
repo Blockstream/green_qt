@@ -4,6 +4,9 @@
 #include "wallet.h"
 #include <gdk.h>
 
+#include <QClipboard>
+#include <QGuiApplication>
+
 Transaction::Transaction(Account* account)
     : QObject(account)
     , m_account(account)
@@ -30,6 +33,11 @@ void Transaction::updateFromData(const QJsonObject &data)
 {
     m_data = data;
     emit dataChanged(data);
+}
+
+void Transaction::copyTxhashToClipboard() const
+{
+    QGuiApplication::clipboard()->setText(m_data.value("txhash").toString());
 }
 
 void Transaction::updateMemo(const QString &memo)

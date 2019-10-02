@@ -115,12 +115,6 @@ Pane {
             }
         }
 
-        TextField {
-            id: txhash_field
-            visible: false
-            text: tx.txhash
-        }
-
         ToolButton {
             text: qsTr('⋮')
             onClicked: menu.open()
@@ -142,12 +136,7 @@ Pane {
 
                 MenuItem {
                     text: qsTr('id_copy_transaction_id')
-                    onTriggered: {
-                        // TODO: should have a slot somewhere to copy
-                        // and remove the auxiliary txhash_field above
-                        txhash_field.selectAll()
-                        txhash_field.copy()
-                    }
+                    onTriggered: transaction.copyTxhashToClipboard()
                 }
 
                 MenuItem {

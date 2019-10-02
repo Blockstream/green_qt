@@ -121,10 +121,13 @@ Page {
                     color: 'gray'
                 }
 
-                TextField {
-                    readOnly: true
-                    selectByMouse: true
+                Label {
                     text: transaction.data.txhash
+                }
+
+                FlatButton {
+                    text: qsTr('id_copy_transaction_id')
+                    onClicked: transaction.copyTxhashToClipboard()
                 }
             }
 

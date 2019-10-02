@@ -23,6 +23,7 @@ public:
     void updateFromData(const QJsonObject& data);
 
 public slots:
+    void copyTxhashToClipboard() const;
     void updateMemo(const QString& memo);
 
 signals:
