@@ -1,7 +1,7 @@
 [submodule "qzxing"]
 	path = qzxing
-	url = https://github.com/promag/qzxing
-        branch = green
+	url = https://github.com/ftylitak/qzxing
+        branch = master
 [submodule "gdk"]
 	path = gdk
 	url = https://github.com/Blockstream/gdk

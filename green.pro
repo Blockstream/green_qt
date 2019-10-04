@@ -2,9 +2,11 @@ TARGET = Green
 
 QT += qml quick quickcontrols2 svg widgets
 
-CONFIG += c++11 qtquickcompiler qzxing_qml qzxing_multimedia
+CONFIG += c++11 qtquickcompiler
 
-include($$PWD/qzxing/src/QZXing.pri)
+CONFIG += qzxing_qml qzxing_multimedia enable_decoder_qr_code enable_encoder_qr_code
+
+include($$PWD/qzxing/src/QZXing-components.pri)
 
 # The following define makes your compiler emit warnings if you use
 # any Qt feature that has been marked deprecated (the exact warnings
