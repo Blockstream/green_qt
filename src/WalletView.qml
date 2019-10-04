@@ -12,18 +12,6 @@ Page {
 
     property var account: xpto.currentItem < 0 ? null : wallet.accounts[xpto.currentIndex]
 
-    Drawer {
-        id: drawer
-        edge: Qt.RightEdge
-        //parent: ApplicationWindow.window
-        width: 200
-        height: parent.height
-        Text {
-            anchors.fill: parent
-            text: JSON.stringify(wallet.events)
-        }
-    }
-
     footer: Pane {
         background: Rectangle {
             color: 'white'
@@ -169,7 +157,6 @@ Page {
                 icon.source: 'assets/svg/notifications.svg'
                 icon.width: 16
                 icon.height: 16
-                onClicked: drawer.open()
             }
         }
     }
