@@ -93,5 +93,7 @@
         <file>assets/svg/trezor.svg</file>
         <file>assets/svg/twofactor.svg</file>
         <file>assets/svg/liquid/liquid_with_string.svg</file>
+        <file>dialogs/SendDialog.qml</file>
+        <file>dialogs/ReceiveDialog.qml</file>
     </qresource>
 </RCC>
