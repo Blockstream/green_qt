@@ -11,6 +11,7 @@ FocusScope {
     StackLayout {
         currentIndex: wallet.logged ? 1 : 0
         anchors.fill: parent
+        anchors.margins: 16
 
         LoginView {
             focus: !wallet.logged

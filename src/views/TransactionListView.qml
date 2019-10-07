@@ -8,7 +8,7 @@ import '..'
 
 ListView {
     clip: true
-    spacing: 0
+    spacing: 32
 
     model: if (account) account.transactions
 
