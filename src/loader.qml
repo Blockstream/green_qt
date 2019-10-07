@@ -8,6 +8,11 @@ import QtQuick.Window 2.13
 ApplicationWindow {
     property Wallet currentWallet
 
+    FontLoader {
+        id: dinpro;
+        source: "assets/fonts/DINPro/DINPro-Regular.otf"
+    }
+
     onCurrentWalletChanged: currentWallet.connect()
 
     visible: true
@@ -40,7 +45,7 @@ ApplicationWindow {
     }
 
     DebugActiveFocus {
-        visible: engine.debug
+        visible: false && engine.debug
         anchors.right: parent.right
         anchors.top: parent.top
         anchors.margins: 8

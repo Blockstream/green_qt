@@ -93,6 +93,11 @@
         <file>assets/svg/trezor.svg</file>
         <file>assets/svg/twofactor.svg</file>
         <file>assets/svg/liquid/liquid_with_string.svg</file>
+        <file>assets/fonts/DINPro/DINPro-Medium.otf</file>
+        <file>assets/fonts/DINPro/DINPro-Bold.otf</file>
+        <file>assets/fonts/DINPro/DINPro-Black.otf</file>
+        <file>assets/fonts/DINPro/DINPro-Regular.otf</file>
+        <file>assets/fonts/DINPro/DINPro-Light.otf</file>
         <file>dialogs/SendDialog.qml</file>
         <file>dialogs/ReceiveDialog.qml</file>
     </qresource>
