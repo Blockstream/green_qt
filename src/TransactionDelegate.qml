@@ -40,27 +40,11 @@ Pane {
     property var secs: Math.ceil((timer.now - (new Date(tx.created_at)).getTime()) / 1000) - 3600
 
     spacing: 8
+    padding: 0
 
-    background: Rectangle {
-        Rectangle {
-            id: separator
-            visible: !first
-            height: 1
-            width: parent.width
-            border.width: 1
-            color: 'transparent'
-            border.color: Qt.rgba(0, 0, 0, 0.05)
-
-        }
-
-        MouseArea {
-            id: ma
-            hoverEnabled: true
-            anchors.fill: parent
-
-            onClicked: stack_view.push(transaction_view_component, { statusLabel: statusLabel, transaction: transaction })
-        }
-        color: secs < 60 ? Qt.rgba(0.5, 1, 0.5, ma.containsMouse ? 0.2 : 0.1) : Qt.rgba(1, 1, 1, ma.containsMouse ? 0.1 : 0)
+    background: MouseArea {
+        anchors.fill: parent
+        onClicked: stack_view.push(transaction_view_component, { statusLabel: statusLabel, transaction: transaction })
     }
 
     function address(tx) {
@@ -79,11 +63,10 @@ Pane {
     }
 
     RowLayout {
+        spacing: 16
         anchors.fill: parent
-        spacing: 8
 
         Image {
-            Layout.leftMargin: 8
             source: tx.type === 'outgoing' ? 'assets/svg/sent.svg' : 'assets/svg/received.svg'
         }
 
