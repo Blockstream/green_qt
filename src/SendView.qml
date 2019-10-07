@@ -10,7 +10,7 @@ ColumnLayout {
 
     property alias amount: amount_field.amount
 
-    spacing: 16
+    spacing: 8
     property var _account: account
 
     property var _result
@@ -94,54 +94,36 @@ ColumnLayout {
 
     }
 
-    Pane {
+    AmountConverter {
+        id: converter
+        wallet: account ? account.wallet : null
+        input: ({ btc: amount ? amount : '0' })
+    }
+
+    AddressField {
+        id: address_field
         Layout.fillWidth: true
+        label: qsTr("id_recipient")
+        address: '2NAXwN5t3Qm3s2ETaAwuYkg4GfQkKGH2J9d'
+    }
 
-        ColumnLayout {
-            anchors.fill: parent
-            AmountConverter {
-                id: converter
-                wallet: account ? account.wallet : null
-                input: ({ btc: amount ? amount : '0' })
-            }
+    FlatButton {
+        text: 'QRCODE'
+        onClicked: dialog.open()
+    }
 
-            AddressField {
-                id: address_field
-                Layout.fillWidth: true
-                label: qsTr("id_recipient")
-                address: '2NAXwN5t3Qm3s2ETaAwuYkg4GfQkKGH2J9d'
-            }
-            FlatButton {
-                text: 'QRCODE'
-                onClicked: dialog.open()
-            }
+    RowLayout {
+        AmountField {
+            id: amount_field
+            Layout.fillWidth: true
+            currency: 'BTC'
+            label: qsTr('id_amount')
+            amount: '0.00001000'
+        }
 
-            RowLayout {
-                AmountField {
-                    id: amount_field
-                    Layout.fillWidth: true
-                    currency: 'BTC'
-                    label: qsTr('id_amount')
-                    amount: '0.00001000'
-                }
-
-                FlatButton {
-                    text: "SEND ALL"
-                    onClicked: amount_field.amount = account.json.balance.btc.btc
-                }
-
-                Item {
-                    Layout.minimumWidth: 16
-                }
-
-                AmountField {
-                    Layout.fillWidth: true
-                    Layout.maximumWidth: 150
-                    readOnly: true
-                    amount: converter.valid ? converter.output.fiat : ''
-                    currency: converter.valid ? converter.output.fiat_currency : ''
-                }
-            }
+        FlatButton {
+            text: qsTr('id_send_all_funds')
+            onClicked: amount_field.amount = account.json.balance.btc.btc
         }
     }
 
@@ -150,27 +132,21 @@ ColumnLayout {
         return qsTr(label) + ' ~ ' + qsTr(duration) + ' (' + Math.round(account.wallet.events.fees[blocks] / 10 + 0.5) / 100 + ' SATOSHI/VBYTE)'
     }
 
-    Pane {
-        Layout.fillWidth: true
+    Label {
+        text: qsTr('id_network_fee')
+    }
 
-        ColumnLayout {
-            Label {
-                text: qsTr('id_network_fee')
-            }
+    RadioButton {
+        checked: true
+        text: fee(account, 'FAST', '30 MINUTES', 3)
+    }
 
-            RadioButton {
-                checked: true
-                text: fee(account, 'FAST', '30 MINUTES', 3)
-            }
+    RadioButton {
+        text: fee(account, 'MEDIUM', '2 HOURS', 12)
+    }
 
-            RadioButton {
-                text: fee(account, 'MEDIUM', '2 HOURS', 12)
-            }
-
-            RadioButton {
-                text: fee(account, 'SLOW', '4 HOURS', 24)
-            }
-        }
+    RadioButton {
+        text: fee(account, 'SLOW', '4 HOURS', 24)
     }
 
     FlatButton {
@@ -178,7 +154,6 @@ ColumnLayout {
         enabled: !!account
         onClicked: controller.send()
     }
-
 
     Dialog {
         id: dialog
