@@ -5,15 +5,17 @@ import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.13
 import QtQuick.Window 2.12
 
-SplitView {
+Item {
     id: split_view
-    spacing: 0
-    anchors.fill: parent
 
-    handle: Rectangle {
-        implicitWidth: 4
-        color: Qt.rgba(0, 0, 0, 0.2)
+    property Wallet currentWallet
+
+    onCurrentWalletChanged: {
+        drawer.close()
+        currentWallet.connect()
     }
+
+    anchors.fill: parent
 
     Action {
         id: create_wallet_action
@@ -27,20 +29,31 @@ SplitView {
 
     MainMenuBar { }
 
-    Sidebar {
-        id: sidebar
-        SplitView.minimumWidth: 200
-        SplitView.maximumWidth: 400
-        SplitView.fillHeight: true
+    Drawer {
+        id: drawer
+        Action {
+            shortcut: 'CTRL+I'
+            onTriggered: drawer.open()
+        }
+
+        width: 200
+        height: parent.height
+
+        Sidebar {
+            id: sidebar
+            anchors.fill: parent
+            anchors.topMargin: 50
+        }
+
+        Overlay.modal: Rectangle {
+            color: "#70000000"
+        }
     }
 
     StackLayout {
         id: stack_view
+        anchors.fill: parent
         clip: true
-
-        SplitView.fillWidth: true
-        SplitView.fillHeight: true
-        SplitView.minimumWidth: implicitWidth
 
         Intro { }
 

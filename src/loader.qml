@@ -6,14 +6,10 @@ import QtQuick.Window 2.13
 
 
 ApplicationWindow {
-    property Wallet currentWallet
-
     FontLoader {
         id: dinpro;
         source: "assets/fonts/DINPro/DINPro-Regular.otf"
     }
-
-    onCurrentWalletChanged: currentWallet.connect()
 
     visible: true
     width: 1024
