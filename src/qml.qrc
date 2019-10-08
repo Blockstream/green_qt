@@ -100,5 +100,6 @@
         <file>assets/fonts/DINPro/DINPro-Light.otf</file>
         <file>dialogs/SendDialog.qml</file>
         <file>dialogs/ReceiveDialog.qml</file>
+        <file>dialogs/AboutDialog.qml</file>
     </qresource>
 </RCC>

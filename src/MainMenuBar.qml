@@ -1,5 +1,6 @@
 import Qt.labs.platform 1.1 as Labs
 import QtQuick 2.12
+import './dialogs'
 
 Labs.MenuBar {
     Labs.Menu {
@@ -8,6 +9,10 @@ Labs.MenuBar {
             text: qsTr('&New Wallet')
             shortcut: StandardKey.New
             onTriggered: create_wallet_action.trigger()
+        }
+        Labs.MenuItem {
+            text: qsTr('&Exit')
+            onTriggered: window.close()
         }
     }
 
@@ -30,5 +35,22 @@ Labs.MenuBar {
         Labs.MenuSeparator {
         }
         Labs.MenuItem { text: qsTr('&Add Account') }
+    }
+
+    Labs.Menu {
+        title: qsTr('&Help')
+
+        Labs.MenuItem {
+            text: qsTr('&About')
+            onTriggered: about_dialog.open()
+        }
+
+        Labs.MenuItem {
+            text: qsTr('&Support')
+            onTriggered: {
+                Qt.openUrlExternally("https://docs.blockstream.com/green/support.html")
+            }
+            shortcut: StandardKey.HelpContents
+        }
     }
 }

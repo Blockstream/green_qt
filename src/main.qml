@@ -4,6 +4,7 @@ import QtQuick.Controls 2.13
 import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.13
 import QtQuick.Window 2.12
+import './dialogs'
 
 Item {
     id: split_view
@@ -28,6 +29,10 @@ Item {
     }
 
     MainMenuBar { }
+
+    AboutDialog {
+        id: about_dialog
+    }
 
     Drawer {
         id: drawer
