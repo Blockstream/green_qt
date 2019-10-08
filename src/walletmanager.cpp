@@ -1,18 +1,20 @@
 #include "ga.h"
 #include "json.h"
+#include "util.h"
 #include "walletmanager.h"
 
 #include <QDebug>
 #include <QSettings>
+#include <QStandardPaths>
+#include <QDir>
 
 WalletManager::WalletManager(QObject *parent) : QObject(parent)
 {
-    GA_json* config;
-    GA_convert_string_to_json("{}", &config);
+    auto config = Json::fromObject({{ "datadir", GetDataDir("gdk") }});
     GA_init(config);
     GA_destroy_json(config);
 
-    QSettings settings;
+    QSettings settings(GetDataFile("app", "wallets.ini"), QSettings::IniFormat);
 
     int count = settings.beginReadArray("wallets");
 
@@ -25,6 +27,8 @@ WalletManager::WalletManager(QObject *parent) : QObject(parent)
         int login_attempts_remaining = settings.value("login_attempts_remaining").toInt();
 
         Wallet* wallet = new Wallet(this);
+        wallet->m_proxy = settings.value("proxy", "").toString();
+        wallet->m_use_tor = settings.value("use_tor", false).toBool();
         wallet->m_index = index;
         wallet->m_pin_data = pin_data;
         wallet->m_name = name;
@@ -59,9 +63,11 @@ QQmlListProperty<Wallet> WalletManager::wallets()
     [](QQmlListProperty<Wallet>* property, int index) { return static_cast<QVector<Wallet*>*>(property->data)->at(index); });
 }
 
-Wallet* WalletManager::signup(const QString& network, const QString& name, const QStringList& mnemonic, const QByteArray& pin)
+Wallet* WalletManager::signup(const QString& proxy, bool use_tor, const QString& network, const QString& name, const QStringList& mnemonic, const QByteArray& pin)
 {
     Wallet* wallet = new Wallet(this);
+    wallet->m_proxy = proxy;
+    wallet->m_use_tor = use_tor;
     wallet->m_network = network;
     wallet->m_name = name;
     wallet->connect();

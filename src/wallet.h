@@ -88,6 +88,8 @@ public:
     }
     QString m_network;
     int m_login_attempts_remaining{3};
+    QString m_proxy;
+    bool m_use_tor{false};
 };
 
 class AmountConverter : public QObject

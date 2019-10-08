@@ -18,9 +18,6 @@ QJsonObject auth_handler_get_result(GA_auth_handler* call)
 {
     GA_json* output;
     GA_auth_handler_get_status(call, &output);
-    char * xpto;
-    GA_convert_json_to_string(output, &xpto);
-    qDebug() << "GOT: " << xpto;
     auto result = Json::toObject(output);
     GA_destroy_json(output);
     return result;

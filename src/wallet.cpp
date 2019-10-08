@@ -1,6 +1,7 @@
 #include "account.h"
 #include "ga.h"
 #include "json.h"
+#include "util.h"
 #include "wallet.h"
 
 #include <QDebug>
@@ -36,10 +37,17 @@ void Wallet::connect()
 
         GA_set_notification_handler(m_session, notification_handler, this);
 
-        res = GA::connect(m_session, {
-           { "name", m_network },
-           { "log_level", "info" },
-        });
+        QJsonObject params{
+            { "name", m_network },
+            { "log_level", "info" },
+            { "use_tor", m_use_tor }
+        };
+
+        if (!m_proxy.isEmpty()) {
+            params.insert("proxy", m_proxy);
+        }
+
+        res = GA::connect(m_session, params);
 
         m_online = res == GA_OK;
         emit isOnlineChanged();
@@ -227,11 +235,13 @@ void Wallet::signup(const QStringList& mnemonic, const QByteArray& pin)
         GA_destroy_string(str);
 
         QMetaObject::invokeMethod(this, [this]{
-            QSettings settings;
+            QSettings settings(GetDataFile("app", "wallets.ini"), QSettings::IniFormat);
             m_index = settings.beginReadArray("wallets");
             settings.endArray();
             settings.beginWriteArray("wallets");
             settings.setArrayIndex(m_index);
+            settings.setValue("proxy", m_proxy);
+            settings.setValue("use_tor", m_use_tor);
             settings.setValue("network", m_network);
             settings.setValue("pin_data", m_pin_data);
             settings.setValue("name", m_name);

@@ -65,14 +65,14 @@ Page {
     Action {
         id: create_action
         text: qsTr('id_create')
-        onTriggered: currentWallet = WalletManager.signup(network_group.checkedButton.network.network, name_field.text, mnemonic, pin_view.pin)
+        onTriggered: currentWallet = WalletManager.signup(proxy_checkbox.checked ? proxy_field.text : '', tor_checkbox.checked, network_group.checkedButton.network.network, name_field.text, mnemonic, pin_view.pin)
     }
 
     SwipeView {
         id: swipe_view
         activeFocusOnTab: false
         clip: true
-        currentIndex: 2
+        currentIndex: 0
         focus: true
         interactive: false
 
@@ -81,6 +81,27 @@ Page {
         WelcomePage {}
 
         ServiceTermsPage {}
+
+        Page {
+            property bool next: true
+            Column {
+                anchors.centerIn: parent
+                CheckBox {
+                    id: proxy_checkbox
+                    text: qsTr('id_connect_through_a_proxy')
+                }
+                TextField {
+                    id: proxy_field
+                    x: 48
+                    enabled: proxy_checkbox.checked
+                    placeholderText: 'host:address'
+                }
+                CheckBox {
+                    id: tor_checkbox
+                    text: qsTr('id_connect_with_tor')
+                }
+            }
+        }
 
         OnboardingPage {
             title: qsTr('id_choose_your_network')
