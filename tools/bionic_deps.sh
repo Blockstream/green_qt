@@ -14,6 +14,10 @@ apt install --no-install-recommends -yqq clang curl ca-certificates unzip git au
 
 update-alternatives --set x86_64-w64-mingw32-g++ /usr/bin/x86_64-w64-mingw32-g++-posix
 
+curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain 1.38.0
+source /root/.cargo/env
+rustup target add x86_64-pc-windows-gnu
+
 
 if [ ! -d /qt-everywhere-src-5.13.1 ]; then
    curl -sL -o qt-everywhere-src-5.13.1.tar.xz https://download.qt.io/archive/qt/5.13/5.13.1/single/qt-everywhere-src-5.13.1.tar.xz
