@@ -24,6 +24,14 @@ FocusScope {
 
         Label {
             font.capitalization: Font.AllUppercase
+            font.family: dinpro.name
+            font.pixelSize: 30
+            text: wallet.name
+            Layout.alignment: Qt.AlignHCenter
+        }
+
+        Label {
+            font.capitalization: Font.AllUppercase
             text: qsTr('id_enter_pin')
             Layout.alignment: Qt.AlignHCenter
         }
