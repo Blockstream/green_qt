@@ -11,10 +11,7 @@ Item {
 
     property Wallet currentWallet
 
-    onCurrentWalletChanged: {
-        drawer.close()
-        currentWallet.connect()
-    }
+    onCurrentWalletChanged: drawer.close()
 
     anchors.fill: parent
 

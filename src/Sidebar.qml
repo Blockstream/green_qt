@@ -11,7 +11,12 @@ ScrollView {
     anchors.fill: parent
     anchors.leftMargin: 8
 
-    WalletsSidebarItem {
-        width: scroll_view.width
+    Column {
+        WalletsSidebarItem {
+            width: scroll_view.width
+        }
+        DevicesSidebarItem {
+            width: scroll_view.width
+        }
     }
 }

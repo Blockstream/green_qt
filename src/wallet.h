@@ -16,10 +16,25 @@ struct GA_json;
 class Wallet : public QObject
 {
     Q_OBJECT
+
+public:
+    enum StatusFlag {
+        Disconnected    = 0x01,
+        Connecting      = 0x02,
+        Connected       = 0x04,
+        Authenticating  = 0x10,
+        Authenticated   = 0x20,
+
+        Unauthenticated = Disconnected | Connecting | Connected,
+        Working         = Connecting | Authenticating,
+        Ready           = Connected | Authenticated
+    };
+    Q_DECLARE_FLAGS(Status, StatusFlag)
+    Q_FLAG(Status)
+
+private:
     Q_PROPERTY(QString name READ name NOTIFY nameChanged)
-    Q_PROPERTY(bool online READ isOnline NOTIFY isOnlineChanged)
-    Q_PROPERTY(bool logged READ isLogged NOTIFY isLoggedChanged)
-    Q_PROPERTY(bool authenticating READ isAuthenticating NOTIFY isAuthenticatingChanged)
+    Q_PROPERTY(Status status READ status NOTIFY statusChanged)
     Q_PROPERTY(QList<QObject*> accounts READ accounts NOTIFY accountsChanged)
     Q_PROPERTY(QJsonObject events READ events NOTIFY eventsChanged)
     Q_PROPERTY(QStringList mnemonic READ mnemonic CONSTANT)
@@ -29,12 +44,9 @@ public:
     explicit Wallet(QObject *parent = nullptr);
     virtual ~Wallet();
 
-    bool isOnline() const { return m_online; }
-    bool isLogged() const { return m_logged; }
+    Status status() const { return m_status; }
 
     QList<QObject*> accounts() const;
-
-    bool isAuthenticating() const;
 
     void handleNotification(const QJsonObject& notification);
 
@@ -54,6 +66,7 @@ public slots:
     void setup2F();
 
 signals:
+    void statusChanged();
     void isOnlineChanged();
     void isLoggedChanged();
     void accountsChanged();
@@ -66,14 +79,15 @@ signals:
 
     void loginAttemptsRemainingChanged(int loginAttemptsRemaining);
 
+private:
+    void setStatus(Status status);
+
 public:
     int m_index{0};
     QThread* m_thread{nullptr};
     QObject* m_context{nullptr};
     GA_session* m_session{nullptr};
-    bool m_online{false};
-    bool m_logged{false};
-    bool m_authenticating{false};
+    Status m_status{Disconnected};
     QList<QObject*> m_accounts;
     QMap<int, Account*> m_accounts_by_pointer;
     QJsonObject m_events;
@@ -127,5 +141,7 @@ private:
 
     void update();
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(Wallet::Status)
 
 #endif // GREEN_WALLET_H

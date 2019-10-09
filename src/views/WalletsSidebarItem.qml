@@ -10,10 +10,12 @@ SidebarItem {
         model: WalletManager.wallets
 
         ItemDelegate {
+            property Wallet wallet: modelData
+
             icon.source: '../assets/svg/btc_testnet.svg'
             icon.width: 32
             icon.height: 32
-            text: modelData.name + (modelData.logged ? ' [ON]' : '')
+            text: wallet.name
             width: parent.width
 
             onClicked: currentWallet = modelData

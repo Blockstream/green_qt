@@ -31,6 +31,8 @@ void Wallet::connect()
     m_context->moveToThread(m_thread);
     m_thread->start();
 
+    setStatus(Connecting);
+
     QMetaObject::invokeMethod(m_context, [this] {
         int res = GA_create_session(&m_session);
         Q_ASSERT(res == GA_OK);
@@ -48,9 +50,9 @@ void Wallet::connect()
         }
 
         res = GA::connect(m_session, params);
+        Q_ASSERT(res == GA_OK);
 
-        m_online = res == GA_OK;
-        emit isOnlineChanged();
+        setStatus(Connected);
     });
 }
 
@@ -76,11 +78,6 @@ Wallet::~Wallet()
 QList<QObject*> Wallet::accounts() const
 {
     return m_accounts;
-}
-
-bool Wallet::isAuthenticating() const
-{
-    return m_authenticating;
 }
 
 void Wallet::handleNotification(const QJsonObject &notification)
@@ -116,8 +113,7 @@ void Wallet::login(const QByteArray& pin)
 
     if (m_pin_data.isEmpty()) return;
 
-    m_authenticating = true;
-    emit isAuthenticatingChanged(m_authenticating);
+    setStatus(Connected | Authenticating);
 
     QMetaObject::invokeMethod(m_context, [this, pin] {
         GA_json* pin_data;
@@ -126,10 +122,7 @@ void Wallet::login(const QByteArray& pin)
         qDebug() << "GA_login_with_pin" << err;
         GA_destroy_json(pin_data);
 
-        m_logged = err == GA_OK;
-        m_authenticating = false;
-        emit isAuthenticatingChanged(m_authenticating);
-        emit isLoggedChanged();
+        const bool authenticated = err == GA_OK;
 
         int login_attempts_remaining = m_login_attempts_remaining;
         if (err == GA_NOT_AUTHORIZED) {
@@ -152,7 +145,10 @@ void Wallet::login(const QByteArray& pin)
             }, Qt::QueuedConnection);
         }
 
-        if (!m_logged) return;
+        if (!authenticated) {
+            setStatus(Connected);
+            return;
+        }
 
         char* mnemonic = nullptr;
         err = GA_get_mnemonic_passphrase(m_session, "", &mnemonic);
@@ -174,6 +170,10 @@ void Wallet::login(const QByteArray& pin)
         GA_get_available_currencies(m_session, &currencies);
         qDebug() << "CURRENCIES:" << Json::toObject(currencies);
         GA_destroy_json(currencies);
+
+        reload();
+
+        setStatus(Connected | Authenticated);
     });
 }
 
@@ -203,6 +203,8 @@ void Wallet::test()
 
 void Wallet::signup(const QStringList& mnemonic, const QByteArray& pin)
 {
+    setStatus(Connected | Authenticating);
+
     QMetaObject::invokeMethod(m_context, [this, pin, mnemonic] {
         QByteArray raw_mnemonic = mnemonic.join(' ').toLatin1();
 
@@ -217,9 +219,6 @@ void Wallet::signup(const QStringList& mnemonic, const QByteArray& pin)
 
         err = GA_login(m_session, hw_device, raw_mnemonic.constData(), "", &call);
         Q_ASSERT(err == GA_OK);
-
-        m_logged = true;
-        emit isLoggedChanged();
 
         GA::process_auth(call);
         GA_destroy_auth_handler(call);
@@ -250,6 +249,8 @@ void Wallet::signup(const QStringList& mnemonic, const QByteArray& pin)
         }, Qt::BlockingQueuedConnection);
 
         reload();
+
+        setStatus(Connected | Authenticated);
     });
 }
 
@@ -268,9 +269,6 @@ void Wallet::recover(const QString& name, const QStringList& mnemonic, const QBy
         qDebug() << name << mnemonic << pin;
         int err = GA_login(m_session, hw_device, raw_mnemonic.constData(), "", &call);
         Q_ASSERT(err == GA_OK);
-
-        m_logged = true;
-        emit isLoggedChanged();
 
         GA::process_auth(call);
         GA_destroy_auth_handler(call);
@@ -303,8 +301,6 @@ void Wallet::recover(const QString& name, const QStringList& mnemonic, const QBy
 
 void Wallet::reload()
 {
-    Q_ASSERT(m_online);
-
     QMetaObject::invokeMethod(m_context, [this] {
         QJsonArray accounts = GA::get_subaccounts(m_session);
 
@@ -337,6 +333,14 @@ void Wallet::reload()
 void Wallet::setup2F()
 {
 
+}
+
+void Wallet::setStatus(Status status)
+{
+    if (m_status == status) return;
+    qDebug() << "status change" << m_status << " -> " << status;
+    m_status = status;
+    emit statusChanged();
 }
 
 AmountConverter::AmountConverter(QObject *parent) : QObject(parent)
