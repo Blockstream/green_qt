@@ -90,7 +90,7 @@ GridLayout {
             visible: stack_view.depth === 1
 
             Label {
-                text: qsTr('id_transactions') + ' - ' + account.name
+                text: qsTr('id_transactions') + (account ? ' - ' + account.name : '')
                 font.family: dinpro.name
                 font.pixelSize: 14
                 font.capitalization: Font.AllUppercase
