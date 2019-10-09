@@ -34,6 +34,7 @@ SOURCES += \
     src/main.cpp \
     src/transaction.cpp \
     src/twofactorcontroller.cpp \
+    src/util.cpp \
     src/wallet.cpp \
     src/json.cpp \
     src/walletmanager.cpp
@@ -54,6 +55,7 @@ HEADERS += \
     src/ga.h \
     src/transaction.h \
     src/twofactorcontroller.h \
+    src/util.h \
     src/wallet.h \
     src/json.h \
     src/walletmanager.h
