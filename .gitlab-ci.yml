@@ -9,7 +9,7 @@ bionic_release:
   script:
     - cd $CI_PROJECT_DIR
     - ./tools/bionic_deps.sh
-    - ./tools/builddeps.sh
+    - ./tools/builddeps.sh linux
   cache:
     key: build-cache
     paths:
@@ -33,7 +33,7 @@ windows_release:
     - ./tools/bionic_deps.sh
     - ./tools/builddeps.sh windows
   cache:
-    key: build-cache
+    key: build-cache-windows
     paths:
     - build-mingw-w64/gdk-*/src/include/gdk.h
     - build-mingw-w64/gdk-*/build.done
@@ -54,7 +54,7 @@ osx_release:
     - cd $CI_PROJECT_DIR
     - ./tools/builddeps.sh osx
   cache:
-    key: build-cache
+    key: build-cache-osx
     paths:
     - build-osx-clang/gdk-*/src/include/gdk.h
     - build-osx-clang/gdk-*/build.done
@@ -67,6 +67,29 @@ osx_release:
     - build-osx-clang/qt-release*/build.log
     - build-osx-clang/gdk-*/build.log
     - build-osx-clang/Green.app
+
+bionic_allsymbolsunstripped_manual:
+  extends: bionic_release
+  when: manual
+  script:
+    - cd $CI_PROJECT_DIR
+    - ./tools/bionic_deps.sh
+    - ./tools/builddeps.sh linux allsymbolsunstripped
+
+osx_allsymbolsunstripped_manual:
+  extends: osx_release
+  when: manual
+  script:
+    - cd $CI_PROJECT_DIR
+    - ./tools/builddeps.sh osx allsymbolsunstripped
+
+windows_allsymbolsunstripped_manual:
+  extends: windows_release
+  when: manual
+  script:
+    - cd $CI_PROJECT_DIR
+    - ./tools/bionic_deps.sh
+    - ./tools/builddeps.sh windows allsymbolsunstripped
 
 package_release:
   tags:

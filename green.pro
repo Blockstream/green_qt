@@ -71,16 +71,19 @@ macos {
         src/devicemanagermacos.cpp \
         src/mac.mm
     LIBS += -framework Foundation -framework Cocoa
+}
+
+macos:static {
     LIBS += $$(BUILDROOT)/gdk-$$(GDKBLDID)/src/build-clang/src/libgreenaddress.a
 }
 
-unix:!macos:!android {
+unix:!macos:!android:static {
     LIBS += $$(BUILDROOT)/gdk-$$(GDKBLDID)/src/build-gcc/src/libgreenaddress_full.a
     SOURCES += src/glibc_compat.cpp
     LIBS += -Wl,--wrap=__divmoddi4 -Wl,--wrap=log2f
 }
 
-win32 {
+win32:static {
     LIBS += -Wl,-Bstatic,--whole-archive -lwinpthread -Wl,--no-whole-archive
     LIBS += $$(BUILDROOT)/gdk-$$(GDKBLDID)/src/build-windows-mingw-w64/src/libgreenaddress_full.a -lcrypt32 -lbcrypt -lws2_32 -liphlpapi -lssp -static-libgcc -static-libstdc++ -lwsock32
 }
