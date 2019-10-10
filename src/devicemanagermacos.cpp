@@ -2,6 +2,9 @@
 
 #include <QDebug>
 #include <QTimer>
+#include <QThread>
+#include <QDataStream>
+#include <QStringList>
 
 CFMutableDictionaryRef createMatchingDictionary(int32_t vendor_id, int32_t product_id, uint32_t usage_page)
 {
@@ -32,7 +35,6 @@ static int32_t DeviceGetPropertyInt32(IOHIDDeviceRef device, CFStringRef key)
     return value;
 }
 
-#include <QStringList>
 static QString DeviceGetId(IOHIDDeviceRef handle)
 {
     io_string_t path;
@@ -78,11 +80,6 @@ static void hid_report_callback(void *context, IOReturn result, void *sender,
                          uint8_t *report, CFIndex report_length);
 
 static uint8_t buf[64];
-QByteArray xxx{QByteArray::fromHex("01010500000005b00100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000")};
-
-#include <QDataStream>
-
-
 void ParseGetApplicationResponse(QByteArray& buf)
 {
     QDataStream stream(&buf, QIODevice::ReadOnly);
@@ -131,7 +128,7 @@ static void DeviceMatchingCallback(void* context, IOReturn /* result */, void* /
          auto id = DeviceGetId(handle);
 
         //DeviceDumpProperties(handle);
-
+#if 0
         DeviceMacOs* device = static_cast<DeviceMacOs*>(manager->findDevice(id));
         if (!device) {
             device = new DeviceMacOs;
@@ -192,7 +189,7 @@ static void DeviceMatchingCallback(void* context, IOReturn /* result */, void* /
 #endif
 
         device->propertiesChanged();
-
+#endif
         return;
     }
 
@@ -210,7 +207,7 @@ static void DeviceRemovalCallback(void* context, IOReturn /* result */, void* /*
     if (DeviceMatchesVendorAndProduct(handle, 0x2C97, 0x0004)) {
         int32_t usage_page = DeviceGetPropertyInt32(handle, CFSTR(kIOHIDPrimaryUsagePageKey));
         qDebug() << "REMOVE" << usage_page;
-
+#if 0
         DeviceMacOs* device = manager->deviceWithHandle(usage_page, handle);
         if (!device) return;
 
@@ -238,32 +235,16 @@ static void DeviceRemovalCallback(void* context, IOReturn /* result */, void* /*
             device->m_properties.insert("app", false);
         }
         device->propertiesChanged();
+#endif
     }
-}
-
-void __deviceValueCallback (void * context, IOReturn result, void * sender, IOHIDValueRef value)
-{
-    IOHIDElementRef element = IOHIDValueGetElement(value);
-
-    qDebug("IOHIDDeviceRef[%p]: value=%p timestamp=%lld cookie=%d usagePage=%d usage=%d intValue=%d", sender, value, IOHIDValueGetTimeStamp(value), IOHIDElementGetCookie(element), IOHIDElementGetUsagePage(element), IOHIDElementGetUsage(element), IOHIDValueGetIntegerValue(value));
 }
 
 DeviceManagerMacos::DeviceManagerMacos(QObject* parent)
     : DeviceManager(parent)
 {
     m_manager = IOHIDManagerCreate(kCFAllocatorDefault, kIOHIDManagerOptionNone);
-
-    CFMutableDictionaryRef dict;
     CFMutableArrayRef multiple = CFArrayCreateMutable(kCFAllocatorDefault, 0, &kCFTypeArrayCallBacks);
-    dict = createMatchingDictionary(0x2C97, 0x0004, 0xFFA0);
-    if (dict)
-    {
-        CFArrayAppendValue(multiple, dict);
-        CFRelease(dict);
-    }
-    dict = createMatchingDictionary(0x2C97, 0x0004, 0xF1D0);
-    if (dict)
-    {
+    if (CFMutableDictionaryRef dict = createMatchingDictionary(0x2C97, 0x0004, 0xFFA0)) {
         CFArrayAppendValue(multiple, dict);
         CFRelease(dict);
     }
@@ -278,15 +259,14 @@ DeviceManagerMacos::DeviceManagerMacos(QObject* parent)
 
 DeviceMacOs* DeviceManagerMacos::deviceWithHandle(int32_t usage_page, IOHIDDeviceRef handle) const
 {
-    for (auto dev : m_devices) {
-        auto device = static_cast<DeviceMacOs*>(dev);
-        if (device->m_handles.value(usage_page) == handle) {
-            return device;
-        }
-    }
+//    for (auto dev : m_devices) {
+//        auto device = static_cast<DeviceMacOs*>(dev);
+//        if (device->m_handles.value(usage_page) == handle) {
+//            return device;
+//        }
+//    }
     return nullptr;
 }
-
 
 void DeviceManagerMacos::addDevice(Device* device)
 {
@@ -301,8 +281,6 @@ void DeviceManagerMacos::removeDevice(Device* device)
 }
 
 
-#include <QThread>
-#include <QDataStream>
 static void hid_report_callback(void *context, IOReturn result, void *sender,
                          IOHIDReportType report_type, uint32_t report_id,
                          uint8_t *report, CFIndex report_length)
@@ -317,10 +295,9 @@ static void hid_report_callback(void *context, IOReturn result, void *sender,
     ParseGetApplicationResponse(buf);
 }
 
-//QByteArray xxx{QByteArray::fromHex("01010500000005e0c400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000")};
+QByteArray xxx{QByteArray::fromHex("01010500000005b00100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000")};
 static void AskApplicationId(IOHIDDeviceRef handle)
 {
-    //qDebug() << "ASK APP ID: CURRENT THREAD" << QThread::currentThread();
     qDebug() << "IOHIDDeviceSetReport BEFORE";
     IOReturn ret = IOHIDDeviceSetReport(handle, kIOHIDReportTypeOutput, 0, (const uint8_t*) xxx.constData(), xxx.size());
     qDebug() << "IOHIDDeviceSetReport AFTER     SUCCESS =" << (ret == kIOReturnSuccess) ;

@@ -1,6 +1,6 @@
 #include "ledgernanoxdevice.h"
 
-LedgerNanoXDevice::LedgerNanoXDevice()
+LedgerNanoXDevice::LedgerNanoXDevice() : Device("")
 {
     setVendorName("Ledger");
     setProductName("Nano X");

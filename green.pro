@@ -26,7 +26,7 @@ SOURCES += \
     src/controllers/createaccountcontroller.cpp \
     src/controllers/renameaccountcontroller.cpp \
     src/controllers/sendtransactioncontroller.cpp \
-    src/devices/abstractdevice.cpp \
+    src/devices/device.cpp \
     src/devices/ledgernanoxdevice.cpp \
     src/account.cpp \
     src/devicemanager.cpp \
@@ -47,11 +47,10 @@ HEADERS += \
     src/controllers/createaccountcontroller.h \
     src/controllers/renameaccountcontroller.h \
     src/controllers/sendtransactioncontroller.h \
-    src/devices/abstractdevice.h \
+    src/devices/device.h \
     src/devices/ledgernanoxdevice.h \
     src/account.h \
     src/devicemanager.h \
-    src/devicemanagermacos.h \
     src/ga.h \
     src/transaction.h \
     src/twofactorcontroller.h \
@@ -69,6 +68,8 @@ EXTRA_TRANSLATIONS = $$files($$PWD/src/i18n/*.ts)
 INCLUDEPATH += $$PWD/gdk/include
 
 macos {
+    HEADERS += \
+        src/devicemanagermacos.h
     SOURCES += \
         src/devicemanagermacos.cpp \
         src/mac.mm

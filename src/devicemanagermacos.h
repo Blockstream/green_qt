@@ -1,9 +1,7 @@
-#ifndef DEVICEMANAGERMACOS_H
-#define DEVICEMANAGERMACOS_H
+#ifndef GREEN_DEVICEMANAGERMACOS_H
+#define GREEN_DEVICEMANAGERMACOS_H
 
 #include "devicemanager.h"
-
-#if defined(Q_OS_MAC)
 
 #include <QMap>
 
@@ -12,9 +10,8 @@
 #include <IOKit/hid/IOHIDDevice.h>
 #include <IOKit/hid/IOHIDManager.h>
 
-class DeviceMacOs : public Device
+class DeviceMacOs
 {
-    Q_OBJECT
 public:
     QMap<int32_t, IOHIDDeviceRef> m_handles;
 };
@@ -36,6 +33,4 @@ private:
     IOHIDManagerRef m_manager;
 };
 
-#endif // defined(Q_OS_MAC)
-
-#endif // DEVICEMANAGERMACOS_H
+#endif // GREEN_DEVICEMANAGERMACOS_H

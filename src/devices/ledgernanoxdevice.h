@@ -1,16 +1,9 @@
 #ifndef GREEN_LEDGERNANOXDEVICE_H
 #define GREEN_LEDGERNANOXDEVICE_H
 
-#include "abstractdevice.h"
+#include "device.h"
 
-
-class GetApplicationMessage
-{
-
-};
-
-
-class LedgerNanoXDevice : public AbstractDevice
+class LedgerNanoXDevice : public Device
 {
 public:
     explicit LedgerNanoXDevice();

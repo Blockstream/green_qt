@@ -7,9 +7,9 @@
 
 #include "account.h"
 #include "applicationengine.h"
+#include "devices/device.h"
 #include "transaction.h"
 #include "wallet.h"
-#include "devicemanagermacos.h"
 #include "walletmanager.h"
 #include "twofactorcontroller.h"
 #include "controllers/createaccountcontroller.h"
@@ -17,6 +17,8 @@
 #include "controllers/renameaccountcontroller.h"
 
 #if defined(Q_OS_MAC)
+#include "devicemanagermacos.h"
+
 void removeTitlebarFromWindow(QWindow* window);
 #endif
 
@@ -78,7 +80,7 @@ int main(int argc, char *argv[])
     QZXing::registerQMLTypes();
     QZXing::registerQMLImageProvider(engine);
 
-    qmlRegisterType<Device>("Blockstream.Green", 0, 1, "Device");
+    qmlRegisterUncreatableType<Device>("Blockstream.Green", 0, 1, "Device", "Devices are instantiated automatically");
     qmlRegisterType<Wallet>("Blockstream.Green", 0, 1, "Wallet");
     qmlRegisterUncreatableType<Transaction>("Blockstream.Green", 0, 1, "Transaction", "Transactions are created by accounts");
 
