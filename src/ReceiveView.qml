@@ -26,12 +26,6 @@ ColumnLayout {
         }
     }
 
-    AmountConverter {
-        id: converter
-        wallet: account ? account.wallet : null
-        input: ({ btc: amount ? amount : '0' })
-    }
-
     Label {
         text: 'SCAN TO SEND HERE'
         Layout.alignment: Qt.AlignHCenter

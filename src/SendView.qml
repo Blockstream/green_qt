@@ -94,12 +94,6 @@ ColumnLayout {
 
     }
 
-    AmountConverter {
-        id: converter
-        wallet: account ? account.wallet : null
-        input: ({ btc: amount ? amount : '0' })
-    }
-
     AddressField {
         id: address_field
         Layout.fillWidth: true
