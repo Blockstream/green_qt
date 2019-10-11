@@ -21,7 +21,7 @@ Dialog {
         header: RowLayout {
             Image {
                 Layout.margins: 16
-                source: "../ic_home.png"
+                source: "../assets/png/ic_home.png"
             }
         }
         // FIXME fix copyright, maybe add platform? (32 bit/64 bit)

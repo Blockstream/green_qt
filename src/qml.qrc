@@ -43,61 +43,6 @@
         <file>views/onboarding/ServiceTermsPage.qml</file>
         <file>views/onboarding/WelcomePage.qml</file>
         <file>loader.qml</file>
-        <file>assets/svg/2fa_call.svg</file>
-        <file>assets/svg/2fa_email.svg</file>
-        <file>assets/svg/2fa_google.svg</file>
-        <file>assets/svg/2fa_sms.svg</file>
-        <file>assets/svg/about.svg</file>
-        <file>assets/svg/account.svg</file>
-        <file>assets/svg/add_wallet_1.svg</file>
-        <file>assets/svg/add_wallet.svg</file>
-        <file>assets/svg/advanced.svg</file>
-        <file>assets/svg/arrow_left.svg</file>
-        <file>assets/svg/arrow_right.svg</file>
-        <file>assets/svg/back_wallet.svg</file>
-        <file>assets/svg/btc_testnet.svg</file>
-        <file>assets/svg/btc.svg</file>
-        <file>assets/svg/cancel.svg</file>
-        <file>assets/svg/check.svg</file>
-        <file>assets/svg/copy.svg</file>
-        <file>assets/svg/erase.svg</file>
-        <file>assets/svg/home.svg</file>
-        <file>assets/svg/ic_done.svg</file>
-        <file>assets/svg/ledger.svg</file>
-        <file>assets/svg/logo_big.svg</file>
-        <file>assets/svg/network_selector_active.svg</file>
-        <file>assets/svg/network_selector.svg</file>
-        <file>assets/svg/network.svg</file>
-        <file>assets/svg/new.svg</file>
-        <file>assets/svg/next.svg</file>
-        <file>assets/svg/notifications_2.svg</file>
-        <file>assets/svg/notifications_clicked_2.svg</file>
-        <file>assets/svg/notifications_clicked.svg</file>
-        <file>assets/svg/notifications.svg</file>
-        <file>assets/svg/onboarding_illustration.svg</file>
-        <file>assets/svg/onboarding_noonline.svg</file>
-        <file>assets/svg/onboarding_noscrshot.svg</file>
-        <file>assets/svg/onboarding_write.svg</file>
-        <file>assets/svg/qr_bg.svg</file>
-        <file>assets/svg/qr_sweep.svg</file>
-        <file>assets/svg/qr.svg</file>
-        <file>assets/svg/receive.svg</file>
-        <file>assets/svg/received.svg</file>
-        <file>assets/svg/refresh.svg</file>
-        <file>assets/svg/security.svg</file>
-        <file>assets/svg/send.svg</file>
-        <file>assets/svg/sent.svg</file>
-        <file>assets/svg/settings_clicked.svg</file>
-        <file>assets/svg/settings.svg</file>
-        <file>assets/svg/stack_wallets.svg</file>
-        <file>assets/svg/trezor.svg</file>
-        <file>assets/svg/twofactor.svg</file>
-        <file>assets/svg/liquid/liquid_with_string.svg</file>
-        <file>assets/fonts/DINPro/DINPro-Medium.otf</file>
-        <file>assets/fonts/DINPro/DINPro-Bold.otf</file>
-        <file>assets/fonts/DINPro/DINPro-Black.otf</file>
-        <file>assets/fonts/DINPro/DINPro-Regular.otf</file>
-        <file>assets/fonts/DINPro/DINPro-Light.otf</file>
         <file>dialogs/SendDialog.qml</file>
         <file>dialogs/ReceiveDialog.qml</file>
         <file>dialogs/AboutDialog.qml</file>

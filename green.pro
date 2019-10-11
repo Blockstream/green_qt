@@ -60,7 +60,7 @@ HEADERS += \
     src/json.h \
     src/walletmanager.h
 
-RESOURCES += src/qml.qrc
+RESOURCES += src/qml.qrc src/assets/assets.qrc
 
 CONFIG += lrelease embed_translations
 
