@@ -25,7 +25,6 @@
         <file>MainMenuBar.qml</file>
         <file>Sidebar.qml</file>
         <file>RestoreWallet.qml</file>
-        <file>AccountCard.qml</file>
         <file>DeviceView.qml</file>
         <file>TransactionView.qml</file>
         <file>OverviewView.qml</file>
