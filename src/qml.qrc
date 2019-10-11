@@ -26,7 +26,6 @@
         <file>RestoreWallet.qml</file>
         <file>DeviceView.qml</file>
         <file>TransactionView.qml</file>
-        <file>OverviewView.qml</file>
         <file>WalletSecuritySettingsView.qml</file>
         <file>Panel.qml</file>
         <file>dialogs/CreateAccountDialog.qml</file>
