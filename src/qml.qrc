@@ -2,7 +2,6 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>WalletView.qml</file>
-        <file>AccountDelegate.qml</file>
         <file>ConnectingView.qml</file>
         <file>QRCode.qml</file>
         <file>ReceiveView.qml</file>
