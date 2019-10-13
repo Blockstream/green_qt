@@ -50,7 +50,7 @@ GridLayout {
                 }
 
                 Label {
-                    text: '1.35867016 BTC'
+                    text: wallet.balance.btc.btc
                     font.pixelSize: 30
                     font.family: dinpro.name
                 }

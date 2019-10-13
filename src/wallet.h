@@ -39,6 +39,7 @@ private:
     Q_PROPERTY(QJsonObject events READ events NOTIFY eventsChanged)
     Q_PROPERTY(QStringList mnemonic READ mnemonic CONSTANT)
     Q_PROPERTY(int loginAttemptsRemaining READ loginAttemptsRemaining NOTIFY loginAttemptsRemainingChanged)
+    Q_PROPERTY(QJsonObject balance READ balance NOTIFY balanceChanged)
 
 public:
     explicit Wallet(QObject *parent = nullptr);
@@ -56,6 +57,7 @@ public:
 
     int loginAttemptsRemaining() const { return m_login_attempts_remaining; }
 
+    QJsonObject balance() const { return m_balance; }
 public slots:
     void connect();
     void test();
@@ -79,8 +81,11 @@ signals:
 
     void loginAttemptsRemainingChanged(int loginAttemptsRemaining);
 
+    void balanceChanged(const QJsonObject& balance);
+
 private:
     void setStatus(Status status);
+    void setBalance(const QJsonObject& balance);
 
 public:
     int m_index{0};
@@ -104,6 +109,7 @@ public:
     int m_login_attempts_remaining{3};
     QString m_proxy;
     bool m_use_tor{false};
+    QJsonObject m_balance;
 };
 
 class AmountConverter : public QObject

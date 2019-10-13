@@ -299,15 +299,42 @@ void Wallet::recover(const QString& name, const QStringList& mnemonic, const QBy
     });
 }
 
+// Used to sum two balances
+static QJsonObject AddBalances(const QJsonObject& a, const QJsonObject& b)
+{
+    QJsonObject r;
+    QStringList keys = a.keys() + b.keys();
+    keys.removeDuplicates();
+
+    for (const QString& key : keys) {
+        if (key.startsWith("fiat_")) continue;
+
+        QJsonValue va = a.value(key);
+        QJsonValue vb = b.value(key);
+
+        if (va.isObject() || vb.isObject()) {
+            r.insert(key, AddBalances(va.toObject(), vb.toObject()));
+        } else if (va.isString() || vb.isString()) {
+            r.insert(key, QString::number(va.toString().toDouble() + vb.toString().toDouble()));
+        } else if (va.isDouble() || vb.isDouble()) {
+            r.insert(key, va.toDouble() + vb.toDouble());
+        }
+    }
+
+    return r;
+}
+
+
 void Wallet::reload()
 {
     QMetaObject::invokeMethod(m_context, [this] {
         QJsonArray accounts = GA::get_subaccounts(m_session);
 
         QMetaObject::invokeMethod(this, [this, accounts] {
+            QJsonObject balance;
+
             QMap<int, Account*> accounts_by_pointer = m_accounts_by_pointer;
 
-            bool changed = false;
             for (QJsonValue data : accounts) {
                 QJsonObject json = data.toObject();
                 int pointer = json.value("pointer").toInt();
@@ -316,16 +343,18 @@ void Wallet::reload()
                     account = new Account(this);
                     m_accounts.append(account);
                     m_accounts_by_pointer.insert(pointer, account);
-                    changed = true;
                 }
                 account->update(data.toObject());
                 account->reload();
+
+                balance = AddBalances(balance, json.value("balance").toObject());
             }
 
             Q_ASSERT(accounts_by_pointer.isEmpty());
 
-            //if (changed)
             emit accountsChanged();
+
+            setBalance(balance);
         });
     });
 }
@@ -341,6 +370,13 @@ void Wallet::setStatus(Status status)
     qDebug() << "status change" << m_status << " -> " << status;
     m_status = status;
     emit statusChanged();
+}
+
+void Wallet::setBalance(const QJsonObject& balance)
+{
+    if (m_balance == balance) return;
+    m_balance = balance;
+    emit balanceChanged(m_balance);
 }
 
 AmountConverter::AmountConverter(QObject *parent) : QObject(parent)
