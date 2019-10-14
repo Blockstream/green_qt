@@ -47,14 +47,21 @@ Page {
 
     Action {
         id: back_action
-        text: qsTr('BACK') // TODO: add string
+        text: qsTr('id_back')
         onTriggered: swipe_view.currentIndex = swipe_view.currentIndex - 1
     }
 
     Action {
         id: next_action
         text: qsTr('id_next')
-        onTriggered: swipe_view.currentIndex = swipe_view.currentIndex + 1
+
+        onTriggered: {
+            swipe_view.currentIndex = swipe_view.currentIndex + 1
+            if (swipe_view.currentIndex === 5) {
+                // refresh quiz every we get to MnemonicQuizView
+                mnemonic_quiz_view.reset()
+            }
+        }
     }
 
     Action {
@@ -112,6 +119,17 @@ Page {
             MnemonicView {
                 anchors.centerIn: parent
                 mnemonic: root.mnemonic
+            }
+        }
+
+        WizardPage {
+            title: 'TEST'
+            next: false
+
+            MnemonicQuizView {
+                id: mnemonic_quiz_view
+                anchors.centerIn: parent
+                onCompleteChanged: if (complete) next_action.trigger()
             }
         }
 

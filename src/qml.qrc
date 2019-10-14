@@ -17,6 +17,7 @@
         <file>SignupView.qml</file>
         <file>PinField.qml</file>
         <file>MnemonicView.qml</file>
+        <file>MnemonicQuizView.qml</file>
         <file>DebugActiveFocus.qml</file>
         <file>WalletContainerView.qml</file>
         <file>qtquickcontrols2.conf</file>
