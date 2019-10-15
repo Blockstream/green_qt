@@ -38,7 +38,8 @@ SOURCES += \
     src/util.cpp \
     src/wallet.cpp \
     src/json.cpp \
-    src/walletmanager.cpp
+    src/walletmanager.cpp \
+    src/wally.cpp
 
 
 HEADERS += \
@@ -59,7 +60,8 @@ HEADERS += \
     src/util.h \
     src/wallet.h \
     src/json.h \
-    src/walletmanager.h
+    src/walletmanager.h \
+    src/wally.h
 
 RESOURCES += src/qml.qrc src/assets/assets.qrc
 

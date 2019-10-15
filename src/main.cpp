@@ -12,6 +12,7 @@
 #include "transaction.h"
 #include "wallet.h"
 #include "walletmanager.h"
+#include "wally.h"
 #include "twofactorcontroller.h"
 #include "controllers/createaccountcontroller.h"
 #include "controllers/sendtransactioncontroller.h"
@@ -90,10 +91,12 @@ int main(int argc, char *argv[])
     qmlRegisterType<TwoFactorController>("Blockstream.Green", 0, 1, "TwoFactorController");
     qmlRegisterType<CreateAccountController>("Blockstream.Green", 0, 1, "CreateAccountController");
     qmlRegisterType<RenameAccountController>("Blockstream.Green", 0, 1, "RenameAccountController");
+    qmlRegisterType<WordValidator>("Blockstream.Green", 0, 1, "WordValidator");
     qmlRegisterType<SendTransactionController>("Blockstream.Green", 0, 1, "SendTransactionController");
     qmlRegisterUncreatableType<Account>("Blockstream.Green", 0, 1, "Account", "Accounts are created by the wallet");
 
     qmlRegisterSingletonType<WalletManager>("Blockstream.Green", 0, 1, "WalletManager", [](QQmlEngine*, QJSEngine*) -> QObject* { return new WalletManager; });
+    qmlRegisterSingletonType<Wally>("Blockstream.Green", 0, 1, "Wally", [](QQmlEngine*, QJSEngine*) -> QObject* { return new Wally; });
 #if defined(Q_OS_MAC)
     qmlRegisterSingletonType<DeviceManager>("Blockstream.Green", 0, 1, "DeviceManager", [](QQmlEngine*, QJSEngine*) -> QObject* { return new DeviceManagerMacos; });
 #endif
