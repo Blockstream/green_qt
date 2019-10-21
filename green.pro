@@ -31,6 +31,7 @@ SOURCES += \
     src/account.cpp \
     src/devicemanager.cpp \
     src/ga.cpp \
+    src/gui.cpp \
     src/main.cpp \
     src/transaction.cpp \
     src/twofactorcontroller.cpp \
@@ -52,6 +53,7 @@ HEADERS += \
     src/account.h \
     src/devicemanager.h \
     src/ga.h \
+    src/gui.h \
     src/transaction.h \
     src/twofactorcontroller.h \
     src/util.h \

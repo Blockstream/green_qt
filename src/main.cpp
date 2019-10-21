@@ -8,6 +8,7 @@
 #include "account.h"
 #include "applicationengine.h"
 #include "devices/device.h"
+#include "gui.h"
 #include "transaction.h"
 #include "wallet.h"
 #include "walletmanager.h"
