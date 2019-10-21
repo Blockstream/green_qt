@@ -1,56 +1,45 @@
-import Qt.labs.platform 1.1 as Labs
-import QtQuick 2.12
-import './dialogs'
+import Blockstream.Green.Gui 0.1
 
-Labs.MenuBar {
-    Labs.Menu {
+MenuBar {
+    window: main_window
+
+    Menu {
         title: qsTr('&File')
-        Labs.MenuItem {
+
+        Action {
             text: qsTr('&New Wallet')
-            shortcut: StandardKey.New
             onTriggered: create_wallet_action.trigger()
         }
-        Labs.MenuItem {
+        Action {
+            text: "Restore Wallet"
+        }
+        Separator { }
+        Action {
+            text: "Create Wallet"
+        }
+        Action {
+            text: "Restore Wallet"
+        }
+        Separator { }
+        Action {
             text: qsTr('&Exit')
             onTriggered: window.close()
         }
     }
 
-    Labs.Menu {
-        Labs.MenuItemGroup {
-            id: accounts_group
-            exclusive: true
-        }
-        title: qsTr('&Account')
-//            Labs.Action { text: qsTr('&Signup') }
-        Labs.MenuItem {
-            text: 'Account 1'
-            group: accounts_group
-            checked: true
-        }
-        Labs.MenuItem {
-            text: 'Account 2'
-            group: accounts_group
-        }
-        Labs.MenuSeparator {
-        }
-        Labs.MenuItem { text: qsTr('&Add Account') }
-    }
-
-    Labs.Menu {
+    Menu {
         title: qsTr('&Help')
 
-        Labs.MenuItem {
+        Action {
             text: qsTr('&About')
             onTriggered: about_dialog.open()
         }
 
-        Labs.MenuItem {
+        Action {
             text: qsTr('&Support')
             onTriggered: {
                 Qt.openUrlExternally("https://docs.blockstream.com/green/support.html")
             }
-            shortcut: StandardKey.HelpContents
         }
     }
 }

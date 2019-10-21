@@ -104,6 +104,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<Separator>("Blockstream.Green.Gui", 0, 1, "Separator");
 
     QMainWindow main_window;
+    engine.rootContext()->setContextProperty("main_window", &main_window);
 
     engine.load(QUrl(QStringLiteral("loader.qml")));
     if (engine.rootObjects().isEmpty())
