@@ -19,7 +19,7 @@
 #if defined(Q_OS_MAC)
 #include "devicemanagermacos.h"
 
-void removeTitlebarFromWindow(QWindow* window);
+void removeTitlebarFromWindow(QWidget* window);
 #endif
 
 #include <QZXing.h>
@@ -97,12 +97,25 @@ int main(int argc, char *argv[])
     qmlRegisterSingletonType<DeviceManager>("Blockstream.Green", 0, 1, "DeviceManager", [](QQmlEngine*, QJSEngine*) -> QObject* { return new DeviceManagerMacos; });
 #endif
 
+    qmlRegisterType<Action>("Blockstream.Green.Gui", 0, 1, "Action");
+    qmlRegisterType<Menu>("Blockstream.Green.Gui", 0, 1, "Menu");
+    qmlRegisterType<MenuBar>("Blockstream.Green.Gui", 0, 1, "MenuBar");
+    qmlRegisterType<Separator>("Blockstream.Green.Gui", 0, 1, "Separator");
+
+    QMainWindow main_window;
+
     engine.load(QUrl(QStringLiteral("loader.qml")));
     if (engine.rootObjects().isEmpty())
         return -1;
 
+    QWindow* window = static_cast<QWindow*>(engine.rootObjects().first());
+
+    main_window.setCentralWidget(QWidget::createWindowContainer(window));
+    main_window.setMinimumSize(QSize(800, 600));
+    main_window.show();
+
 #if defined(Q_OS_MAC)
-    removeTitlebarFromWindow(static_cast<QWindow*>(engine.rootObjects().first()));
+    removeTitlebarFromWindow(&main_window);
 #endif
     return app.exec();
 }

@@ -11,12 +11,6 @@ ApplicationWindow {
         source: "assets/fonts/DINPro/DINPro-Regular.otf"
     }
 
-    visible: true
-    width: 1024
-    height: 680
-    minimumWidth: 800
-    minimumHeight: 480
-
     Material.accent: Material.Green
     Material.theme: Material.Dark
 

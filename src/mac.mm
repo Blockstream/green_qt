@@ -1,8 +1,8 @@
 #include <Cocoa/Cocoa.h>
 
-#include <QWindow>
+#include <QWidget>
 
-void removeTitlebarFromWindow(QWindow* window)
+void removeTitlebarFromWindow(QWidget* window)
 {
     NSView *nativeView = reinterpret_cast<NSView *>(window->winId());
     NSWindow* nativeWindow = [nativeView window];
