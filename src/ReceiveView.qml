@@ -5,13 +5,11 @@ import QtQuick.Layouts 1.12
 
 ColumnLayout {
     property alias address: receive_address.address
-    property alias amount: amount_field.amount
-    property alias message: message_field.text
+    property alias amount: amount_field.text
 
-    function url(address, amount, message) {
+    function url(address, amount) {
         var parts = []
         if (amount && amount > 0) parts.push('amount=' + amount)
-        if (message) parts.push('message=' + message)
         if (parts.length === 0) return address
         return 'bitcoin:' + address + '?' + parts.join('&')
     }
@@ -42,7 +40,7 @@ ColumnLayout {
         QRCode {
             id: qrcode
             anchors.fill: parent
-            text: url(address, amount, message)
+            text: url(address, amount)
             opacity: receive_address.generating ? 0 : 1.0
 
             Behavior on opacity {
@@ -99,9 +97,4 @@ ColumnLayout {
         label: qsTr('id_amount')
     }
 
-    TextField {
-        id: message_field
-        Layout.fillWidth: true
-        placeholderText: qsTr('id_memo')
-    }
 }
