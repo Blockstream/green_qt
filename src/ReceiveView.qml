@@ -69,29 +69,28 @@ ColumnLayout {
         }
     }
 
-    Label {
-        text: qsTr('id_address')
-    }
-
-    RowLayout {
-        TextField {
-            id: address_field
-            Layout.fillWidth: true
-            text: address
-            readOnly: true
-            horizontalAlignment: Label.AlignHCenter
-            verticalAlignment: Label.AlignVCenter
-            MouseArea {
-                anchors.fill: parent
-                onClicked: receive_address.copyToClipboard()
+    Page {
+        header: Label {
+            text: qsTr('id_address')
+        }
+        background: MouseArea {
+            onClicked: {
+                receive_address.copyToClipboard()
+                ToolTip.show(qsTr('id_address_copied_to_clipboard'), 1000)
             }
         }
-
-        Image {
-            source: 'assets/svg/copy_to_clipboard.svg'
-            MouseArea {
-                anchors.fill: parent
-                onClicked: receive_address.copyToClipboard()
+        Layout.fillWidth: true
+        RowLayout {
+            TextField {
+                id: address_field
+                Layout.fillWidth: true
+                text: address
+                readOnly: true
+                horizontalAlignment: Label.AlignHCenter
+                verticalAlignment: Label.AlignVCenter
+            }
+            Image {
+                source: 'assets/svg/copy_to_clipboard.svg'
             }
         }
     }
