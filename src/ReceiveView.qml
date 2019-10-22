@@ -25,9 +25,8 @@ ColumnLayout {
     }
 
     Label {
-        text: 'SCAN TO SEND HERE'
+        text: qsTr('id_scan_to_send_here')
         Layout.alignment: Qt.AlignHCenter
-
     }
 
     Item {
@@ -95,6 +94,10 @@ ColumnLayout {
                 onClicked: receive_address.copyToClipboard()
             }
         }
+    }
+
+    Label {
+        text: qsTr('id_add_amount_optional')
     }
 
     RowLayout {
