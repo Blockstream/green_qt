@@ -97,28 +97,33 @@ ScrollView {
             }
         }
 
-        Column {
-            spacing: 8
-
-            Label {
+        Page {
+            header: Label {
                 text: qsTr('id_transaction_id')
                 color: 'gray'
             }
-
-            Label {
-                text: transaction.data.txhash
+            background: MouseArea {
+                onClicked: {
+                    transaction.copyTxhashToClipboard()
+                    ToolTip.show(qsTr('id_txhash_copied_to_clipboard'), 1000)
+                }
             }
-
-            FlatButton {
-                text: qsTr('id_copy_transaction_id')
-                onClicked: transaction.copyTxhashToClipboard()
+            ColumnLayout {
+                RowLayout {
+                    Label {
+                        text: transaction.data.txhash
+                    }
+                    Image {
+                        source: 'assets/svg/copy_to_clipboard.svg'
+                    }
+                }
+                Button {
+                    text: qsTr('id_view_in_explorer')
+                    onClicked: viewInExplorer()
+                }
             }
         }
 
-        Button {
-            text: qsTr('VIEW IN EXPLORER')
-            onClicked: viewInExplorer()
-        }
 
         TextArea {
             visible: engine.debug
