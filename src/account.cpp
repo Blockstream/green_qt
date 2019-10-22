@@ -4,6 +4,8 @@
 #include "transaction.h"
 #include "wallet.h"
 
+#include <QClipboard>
+#include <QGuiApplication>
 #include <QTimer>
 
 #include <gdk.h>
@@ -150,4 +152,9 @@ void ReceiveAddress::generate()
         emit generatingChanged(true);
         emit addressChanged(m_address);
     });
+}
+
+void ReceiveAddress::copyToClipboard()
+{
+    QGuiApplication::clipboard()->setText(m_address);
 }

@@ -68,6 +68,7 @@ public:
 
 public slots:
     void generate();
+    void copyToClipboard();
 
 signals:
     void accountChanged(Account* account);
