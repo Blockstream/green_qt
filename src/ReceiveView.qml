@@ -50,7 +50,7 @@ ColumnLayout {
             MouseArea {
                 enabled: !receive_address.generating
                 anchors.fill: parent
-                onClicked: receive_address.generate()
+                onClicked: receive_address.copyToClipboard()
             }
 
             Rectangle {
@@ -74,18 +74,25 @@ ColumnLayout {
         text: qsTr('id_address')
     }
 
-    TextField {
-        id: address_field
-        Layout.fillWidth: true
-        text: address
-        readOnly: true
-        horizontalAlignment: Label.AlignHCenter
-        verticalAlignment: Label.AlignVCenter
-        MouseArea {
-            anchors.fill: parent
-            onClicked: {
-                address_field.selectAll()
-                address_field.copy()
+    RowLayout {
+        TextField {
+            id: address_field
+            Layout.fillWidth: true
+            text: address
+            readOnly: true
+            horizontalAlignment: Label.AlignHCenter
+            verticalAlignment: Label.AlignVCenter
+            MouseArea {
+                anchors.fill: parent
+                onClicked: receive_address.copyToClipboard()
+            }
+        }
+
+        Image {
+            source: 'assets/svg/copy_to_clipboard.svg'
+            MouseArea {
+                anchors.fill: parent
+                onClicked: receive_address.copyToClipboard()
             }
         }
     }
