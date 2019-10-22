@@ -12,8 +12,8 @@ Image {
     mipmap: false
     cache: false
 
-    sourceSize.width: 320
-    sourceSize.height: 320
+    sourceSize.width: 120
+    sourceSize.height: 120
 
     states: State {
         when: text.length > 0

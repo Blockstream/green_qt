@@ -14,7 +14,13 @@ ColumnLayout {
         return 'bitcoin:' + address + '?' + parts.join('&')
     }
 
-    spacing: 8
+    function copyAddress() {
+        if (receive_address.generating) return
+        receive_address.copyToClipboard()
+        address_field.ToolTip.show(qsTr('id_address_copied_to_clipboard'), 1000)
+    }
+
+    spacing: 16
 
     ReceiveAddress {
         id: receive_address
@@ -24,48 +30,41 @@ ColumnLayout {
         }
     }
 
-    Label {
-        text: qsTr('id_scan_to_send_here')
-        Layout.alignment: Qt.AlignHCenter
-    }
-
-    Item {
-        Layout.minimumHeight: 128
-        Layout.maximumHeight: 128
-        Layout.minimumWidth: 384
+    Page {
+        header: RowLayout {
+            Label {
+                text: qsTr('id_scan_to_send_here')
+                Layout.fillWidth: true
+            }
+            ToolButton {
+                icon.source: 'assets/svg/refresh.svg'
+                icon.width: 16
+                icon.height: 16
+                onClicked: receive_address.generate()
+            }
+        }
+        background: MouseArea {
+            onClicked: copyAddress()
+        }
+        padding: 20
         Layout.fillWidth: true
-        Layout.fillHeight: true
-
         QRCode {
             id: qrcode
-            anchors.fill: parent
-            text: url(address, amount)
+            anchors.horizontalCenter: parent.horizontalCenter
             opacity: receive_address.generating ? 0 : 1.0
-
+            text: url(address, amount)
             Behavior on opacity {
                 OpacityAnimator { duration: 200 }
             }
-
-            MouseArea {
-                enabled: !receive_address.generating
-                anchors.fill: parent
-                onClicked: receive_address.copyToClipboard()
-            }
-
             Rectangle {
-                border.width: 1
-                border.color: 'green'
-                color: 'transparent'
                 anchors.centerIn: parent
-                width: parent.height + 8
+                border.width: 1
+                border.color: '#00B45E'
+                color: '#1000B45E'
+                width: parent.height + 20
                 height: width
+                z: -1
             }
-
-        }
-
-        BusyIndicator {
-            anchors.centerIn: parent
-            visible: receive_address.generating
         }
     }
 
@@ -74,39 +73,43 @@ ColumnLayout {
             text: qsTr('id_address')
         }
         background: MouseArea {
-            onClicked: {
-                receive_address.copyToClipboard()
-                ToolTip.show(qsTr('id_address_copied_to_clipboard'), 1000)
-            }
+            onClicked: copyAddress()
         }
         Layout.fillWidth: true
         RowLayout {
-            TextField {
+            anchors.fill: parent
+            Label {
                 id: address_field
-                Layout.fillWidth: true
-                text: address
-                readOnly: true
+                text: receive_address.address
                 horizontalAlignment: Label.AlignHCenter
                 verticalAlignment: Label.AlignVCenter
+                Layout.fillWidth: true
             }
-            Image {
-                source: 'assets/svg/copy_to_clipboard.svg'
+            ToolButton {
+                icon.source: 'assets/svg/copy_to_clipboard.svg'
+                icon.width: 16
+                icon.height: 16
+                onClicked: copyAddress()
             }
         }
     }
 
-    Label {
-        text: qsTr('id_add_amount_optional')
-    }
-
-    RowLayout {
-        TextField {
-            id: amount_field
-            Layout.fillWidth: true
+    Page {
+        header: Label {
+            text: qsTr('id_add_amount_optional')
         }
-
-        Button {
-            text: 'BTC'
+        background: Item {}
+        Layout.fillWidth: true
+        RowLayout {
+            anchors.fill: parent
+            TextField {
+                id: amount_field
+                Layout.fillWidth: true
+            }
+            Button {
+                flat: true
+                text: 'BTC'
+            }
         }
     }
 }
