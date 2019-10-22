@@ -97,11 +97,14 @@ ColumnLayout {
         }
     }
 
-    AmountField {
-        id: amount_field
-        Layout.fillWidth: true
-        currency: 'BTC'
-        label: qsTr('id_amount')
-    }
+    RowLayout {
+        TextField {
+            id: amount_field
+            Layout.fillWidth: true
+        }
 
+        Button {
+            text: 'BTC'
+        }
+    }
 }
