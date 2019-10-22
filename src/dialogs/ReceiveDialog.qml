@@ -4,7 +4,7 @@ import '..'
 
 Dialog {
     title: qsTr('id_receive')
-    horizontalPadding: 150
+    horizontalPadding: 50
     anchors.centerIn: parent
     modal: true
 

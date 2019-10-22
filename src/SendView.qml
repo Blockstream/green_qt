@@ -10,7 +10,7 @@ ColumnLayout {
 
     property alias amount: amount_field.amount
 
-    spacing: 8
+    spacing: 16
     property var _account: account
 
     property var _result

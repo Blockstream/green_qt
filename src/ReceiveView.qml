@@ -14,7 +14,7 @@ ColumnLayout {
         return 'bitcoin:' + address + '?' + parts.join('&')
     }
 
-    spacing: 16
+    spacing: 8
 
     ReceiveAddress {
         id: receive_address
@@ -33,7 +33,7 @@ ColumnLayout {
     Item {
         Layout.minimumHeight: 128
         Layout.maximumHeight: 128
-        Layout.minimumWidth: 256
+        Layout.minimumWidth: 384
         Layout.fillWidth: true
         Layout.fillHeight: true
 
@@ -54,11 +54,11 @@ ColumnLayout {
             }
 
             Rectangle {
-                border.width: 2
+                border.width: 1
                 border.color: 'green'
                 color: 'transparent'
                 anchors.centerIn: parent
-                width: parent.height + 6
+                width: parent.height + 8
                 height: width
             }
 
