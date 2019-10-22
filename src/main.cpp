@@ -113,7 +113,7 @@ int main(int argc, char *argv[])
     QWindow* window = static_cast<QWindow*>(engine.rootObjects().first());
 
     main_window.setCentralWidget(QWidget::createWindowContainer(window));
-    main_window.setMinimumSize(QSize(800, 600));
+    main_window.setMinimumSize(QSize(1024, 600));
     main_window.show();
 
 #if defined(Q_OS_MAC)

@@ -198,6 +198,7 @@ GridLayout {
         clip: true
         Layout.fillWidth: true
         Layout.fillHeight: true
+        Layout.rowSpan: 2
 
         initialItem: TransactionListView {
         }
