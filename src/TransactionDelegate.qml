@@ -58,7 +58,9 @@ Pane {
         if (tx.type === 'outgoing') {
             return tx.addressees[0]
         }
-
+        if (tx.type === 'redeposit') {
+            return qsTr("id_redeposited")
+        }
         return JSON.stringify(tx, null, '\t')
     }
 
@@ -67,7 +69,7 @@ Pane {
         anchors.fill: parent
 
         Image {
-            source: tx.type === 'outgoing' ? 'assets/svg/sent.svg' : 'assets/svg/received.svg'
+            source: tx.type === 'incoming' ? 'assets/svg/received.svg' : 'assets/svg/sent.svg'
         }
 
         ColumnLayout {
