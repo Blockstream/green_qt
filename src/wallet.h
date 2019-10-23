@@ -36,6 +36,7 @@ private:
     Q_PROPERTY(QString name READ name NOTIFY nameChanged)
     Q_PROPERTY(Status status READ status NOTIFY statusChanged)
     Q_PROPERTY(QJsonObject settings READ settings NOTIFY settingsChanged)
+    Q_PROPERTY(QJsonObject currencies READ currencies CONSTANT)
     Q_PROPERTY(QList<QObject*> accounts READ accounts NOTIFY accountsChanged)
     Q_PROPERTY(QJsonObject events READ events NOTIFY eventsChanged)
     Q_PROPERTY(QStringList mnemonic READ mnemonic CONSTANT)
@@ -49,6 +50,7 @@ public:
     Status status() const { return m_status; }
 
     QJsonObject settings() const;
+    QJsonObject currencies() const;
 
     QList<QObject*> accounts() const;
 
@@ -99,6 +101,7 @@ public:
     GA_session* m_session{nullptr};
     Status m_status{Disconnected};
     QJsonObject m_settings;
+    QJsonObject m_currencies;
     QList<QObject*> m_accounts;
     QMap<int, Account*> m_accounts_by_pointer;
     QJsonObject m_events;

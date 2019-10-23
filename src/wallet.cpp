@@ -80,6 +80,11 @@ QJsonObject Wallet::settings() const
     return m_settings;
 }
 
+QJsonObject Wallet::currencies() const
+{
+    return m_currencies;
+}
+
 QList<QObject*> Wallet::accounts() const
 {
     return m_accounts;
@@ -173,8 +178,9 @@ void Wallet::login(const QByteArray& pin)
         GA_destroy_json(settings);
 
         GA_json* currencies;
-        GA_get_available_currencies(m_session, &currencies);
-        qDebug() << "CURRENCIES:" << Json::toObject(currencies);
+        err = GA_get_available_currencies(m_session, &currencies);
+        Q_ASSERT(err == GA_OK);
+        m_currencies = Json::toObject(currencies);
         GA_destroy_json(currencies);
 
         reload();
