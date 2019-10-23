@@ -35,6 +35,7 @@ public:
 private:
     Q_PROPERTY(QString name READ name NOTIFY nameChanged)
     Q_PROPERTY(Status status READ status NOTIFY statusChanged)
+    Q_PROPERTY(QJsonObject settings READ settings NOTIFY settingsChanged)
     Q_PROPERTY(QList<QObject*> accounts READ accounts NOTIFY accountsChanged)
     Q_PROPERTY(QJsonObject events READ events NOTIFY eventsChanged)
     Q_PROPERTY(QStringList mnemonic READ mnemonic CONSTANT)
@@ -46,6 +47,8 @@ public:
     virtual ~Wallet();
 
     Status status() const { return m_status; }
+
+    QJsonObject settings() const;
 
     QList<QObject*> accounts() const;
 
@@ -83,6 +86,8 @@ signals:
 
     void balanceChanged(const QJsonObject& balance);
 
+    void settingsChanged();
+
 private:
     void setStatus(Status status);
     void setBalance(const QJsonObject& balance);
@@ -93,6 +98,7 @@ public:
     QObject* m_context{nullptr};
     GA_session* m_session{nullptr};
     Status m_status{Disconnected};
+    QJsonObject m_settings;
     QList<QObject*> m_accounts;
     QMap<int, Account*> m_accounts_by_pointer;
     QJsonObject m_events;
