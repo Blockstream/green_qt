@@ -44,5 +44,6 @@
         <file>dialogs/ReceiveDialog.qml</file>
         <file>dialogs/AboutDialog.qml</file>
         <file>views/MnemonicEditor.qml</file>
+        <file>views/NetworkPage.qml</file>
     </qresource>
 </RCC>
