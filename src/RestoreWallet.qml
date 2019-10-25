@@ -8,6 +8,12 @@ import QtQuick.Layouts 1.12
 import './views'
 
 Item {
+
+    Action {
+        id: next_action
+        onTriggered: stack_view.push(mnemonic_view)
+    }
+
     StackView {
         id: stack_view
         anchors.centerIn: parent
@@ -15,17 +21,19 @@ Item {
         implicitWidth: currentItem.implicitWidth
         implicitHeight: currentItem.implicitHeight
 
-        initialItem: RowLayout {
-            FlatButton {
-                text: 'GO'
-                onClicked: stack_view.push(mnemonic_view)
-            }
+        initialItem: NetworkPage {
+            id: network_page
         }
     }
 
     Component {
         id: mnemonic_view
 
-        MnemonicEditor { }
+        MnemonicEditor {
+            accept: Action {
+                text: qsTr('id_next')
+                onTriggered: WalletManager.signup('', false, network_page.network, 'recover', mnemonic, '111111');
+            }
+        }
     }
 }

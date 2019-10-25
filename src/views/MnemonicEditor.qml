@@ -5,6 +5,8 @@ import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.12
 
 ColumnLayout {
+    property Action accept
+
     readonly property var mnemonic: {
         const words = []
         for (let i = 0; i < repeater.count; i++) {
@@ -42,10 +44,6 @@ ColumnLayout {
         for (let i = 0; i < repeater.count; i++) {
             repeater.itemAt(i).editText = ''
         }
-    }
-
-    function restore() {
-        WalletManager.signup('', false, 'testnet', 'recover', mnemonic, '111111');
     }
 
     spacing: 32
@@ -91,10 +89,9 @@ ColumnLayout {
             Layout.fillWidth: true
         }
         Button {
+            action: accept
             enabled: mnemonic.length === 24
             flat: true
-            text: qsTr('id_next')
-            onClicked: restore()
         }
     }
 }
