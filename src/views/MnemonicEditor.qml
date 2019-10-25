@@ -26,9 +26,7 @@ ColumnLayout {
                 if (word.startsWith(match) && word !== text) result.push(word)
             }
         }
-        if (result.length !== 1) {
-            result.unshift(text)
-        }
+        result.unshift(text)
         return result
     }
 
@@ -63,7 +61,6 @@ ColumnLayout {
                 leftPadding: height / 2
                 model: filter(editText)
                 validator: WordValidator {}
-                onActivated: nextItemInFocusChain().nextItemInFocusChain().forceActiveFocus()
                 onEditTextChanged: detectPaste(editText)
 
                 Label {
