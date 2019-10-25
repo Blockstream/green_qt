@@ -5,30 +5,27 @@ import QtQuick.Controls 2.13
 import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.12
 
-Page {
-    header: RowLayout {
-        TextField {
-            id: name_field
-        }
+import './views'
 
-        PinField {
-            id: pin
-        }
+Item {
+    StackView {
+        id: stack_view
+        anchors.centerIn: parent
+        clip: true
+        implicitWidth: currentItem.implicitWidth
+        implicitHeight: currentItem.implicitHeight
 
-        FlatButton {
-            text: "GO"
-            onClicked: wallet.recover(name_field.text, text_area.text, pin.pin)
-            enabled: wallet.online && pin.valid && name_field.text.length > 0
+        initialItem: RowLayout {
+            FlatButton {
+                text: 'GO'
+                onClicked: stack_view.push(mnemonic_view)
+            }
         }
     }
 
-    Wallet {
-        id: wallet
-    }
+    Component {
+        id: mnemonic_view
 
-    TextArea {
-        id: text_area
-        anchors.fill: parent
-        text: "south crack marine tourist rain estate young camp permit soccer wink romance claw critic govern execute fiber brass nose lobster give pig energy shield"
+        MnemonicEditor { }
     }
 }

@@ -11,7 +11,8 @@ MenuBar {
             onTriggered: create_wallet_action.trigger()
         }
         Action {
-            text: "Restore Wallet"
+            text: qsTr('&Restore Wallet')
+            onTriggered: restore_wallet_action.trigger()
         }
         Separator { }
         Action {

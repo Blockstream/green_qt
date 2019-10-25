@@ -43,5 +43,6 @@
         <file>dialogs/SendDialog.qml</file>
         <file>dialogs/ReceiveDialog.qml</file>
         <file>dialogs/AboutDialog.qml</file>
+        <file>views/MnemonicEditor.qml</file>
     </qresource>
 </RCC>

@@ -22,7 +22,7 @@ Item {
 
     Action {
         id: restore_wallet_action
-        onTriggered: stack_view.push(restore_view)
+        onTriggered: stack_view.currentIndex = 2
     }
 
     MainMenuBar { }
@@ -61,6 +61,10 @@ Item {
 
         SignupView { }
 
+        RestoreWallet {
+
+        }
+
         Repeater {
             model: WalletManager.wallets
 
@@ -68,7 +72,7 @@ Item {
                 property bool current: currentWallet === modelData
                 focus: current
 
-                onCurrentChanged: if (current) stack_view.currentIndex = index + 2
+                onCurrentChanged: if (current) stack_view.currentIndex = index + 3
 
                 wallet: modelData
             }
