@@ -105,6 +105,7 @@ Page {
 
         NetworkPage {
             id: network_page
+            accept: next_action
         }
 
         WizardPage {

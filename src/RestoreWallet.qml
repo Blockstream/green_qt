@@ -8,12 +8,6 @@ import QtQuick.Layouts 1.12
 import './views'
 
 Item {
-
-    Action {
-        id: next_action
-        onTriggered: stack_view.push(mnemonic_view)
-    }
-
     StackView {
         id: stack_view
         anchors.centerIn: parent
@@ -23,6 +17,9 @@ Item {
 
         initialItem: NetworkPage {
             id: network_page
+            accept: Action {
+                onTriggered: stack_view.push(mnemonic_view)
+            }
         }
     }
 
