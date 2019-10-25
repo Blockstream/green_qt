@@ -122,5 +122,17 @@ int main(int argc, char *argv[])
 #if defined(Q_OS_MAC)
     removeTitlebarFromWindow(&main_window);
 #endif
+
+#if defined(Q_OS_MAC) || defined(Q_OS_UNIX)
+    // Workaround due to https://bugreports.qt.io/browse/QTBUG-34414
+    QObject::connect(&app, &QGuiApplication::focusWindowChanged, [&](QWindow* focusWindow) {
+        if (focusWindow == main_window.windowHandle()) {
+            main_window.centralWidget()->activateWindow();
+            window->requestActivate();
+        }
+    });
+#endif
+    window->requestActivate();
+
     return app.exec();
 }
