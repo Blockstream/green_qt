@@ -103,7 +103,7 @@ Page {
             }
         }
 
-        OnboardingPage {
+        WizardPage {
             title: qsTr('id_choose_your_network')
 
             next: false
@@ -179,7 +179,7 @@ Page {
             }
         }
 
-        OnboardingPage {
+        WizardPage {
             title: qsTr('id_save_your_mnemonic')
 
             MnemonicView {
@@ -188,7 +188,7 @@ Page {
             }
         }
 
-        OnboardingPage {
+        WizardPage {
             title: qsTr('id_create_a_pin_to_access_your')
             next: false
 
@@ -200,7 +200,7 @@ Page {
             }
         }
 
-        OnboardingPage {
+        WizardPage {
             activeFocusOnTab: false
             title: qsTr('id_verify_your_pin')
             next: false
@@ -216,7 +216,7 @@ Page {
             }
         }
 
-        OnboardingPage {
+        WizardPage {
             title: qsTr('id_done')
             next: false
 
