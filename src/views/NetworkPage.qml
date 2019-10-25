@@ -4,7 +4,6 @@ import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.12
 
 WizardPage {
-    property Action accept
     property string network: network_group.checkedButton ? network_group.checkedButton.network.network : null
 
     title: qsTr('id_choose_your_network')

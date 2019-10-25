@@ -4,9 +4,7 @@ import QtQuick.Controls 2.13
 import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.12
 
-ColumnLayout {
-    property Action accept
-
+WizardPage {
     readonly property var mnemonic: {
         const words = []
         for (let i = 0; i < repeater.count; i++) {
@@ -44,51 +42,54 @@ ColumnLayout {
         }
     }
 
-    spacing: 32
+    ColumnLayout {
+        anchors.centerIn: parent
+        spacing: 32
 
-    GridLayout {
-        columns: 4
+        GridLayout {
+            columns: 4
 
-        Repeater {
-            id: repeater
-            model: 24
+            Repeater {
+                id: repeater
+                model: 24
 
-            ComboBox {
-                id: combo_box
-                editable: true
-                enabled: index === 0 || repeater.itemAt(index - 1).acceptableInput && repeater.itemAt(index - 1).enabled
-                displayText: `${index} - ${currentText}`
-                leftPadding: height / 2
-                model: filter(editText)
-                validator: WordValidator {}
-                onEditTextChanged: detectPaste(editText)
+                ComboBox {
+                    id: combo_box
+                    editable: true
+                    enabled: index === 0 || repeater.itemAt(index - 1).acceptableInput && repeater.itemAt(index - 1).enabled
+                    displayText: `${index} - ${currentText}`
+                    leftPadding: height / 2
+                    model: filter(editText)
+                    validator: WordValidator {}
+                    onEditTextChanged: detectPaste(editText)
 
-                Label {
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: index
+                    Label {
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: index
+                    }
                 }
             }
         }
-    }
 
-    RowLayout {
-        Button {
-            enabled: mnemonic.length > 0
-            flat: true
-            text: qsTr('id_clear')
-            onClicked: clear()
-        }
-        ProgressBar {
-            from: 0
-            to: 24
-            value: mnemonic.length
-            Behavior on value { NumberAnimation { duration: 300; easing.type: Easing.OutCubic } }
-            Layout.fillWidth: true
-        }
-        Button {
-            action: accept
-            enabled: mnemonic.length === 24
-            flat: true
+        RowLayout {
+            Button {
+                enabled: mnemonic.length > 0
+                flat: true
+                text: qsTr('id_clear')
+                onClicked: clear()
+            }
+            ProgressBar {
+                from: 0
+                to: 24
+                value: mnemonic.length
+                Behavior on value { NumberAnimation { duration: 300; easing.type: Easing.OutCubic } }
+                Layout.fillWidth: true
+            }
+            Button {
+                action: accept
+                enabled: mnemonic.length === 24
+                flat: true
+            }
         }
     }
 }
