@@ -18,19 +18,15 @@ Item {
         initialItem: NetworkPage {
             id: network_page
             accept: Action {
-                onTriggered: stack_view.push(mnemonic_view)
+                onTriggered: stack_view.push(mnemonic_editor)
             }
         }
     }
 
-    Component {
-        id: mnemonic_view
-
-        MnemonicEditor {
-            accept: Action {
-                text: qsTr('id_next')
-                onTriggered: WalletManager.signup('', false, network_page.network, 'recover', mnemonic, '111111');
-            }
+    property Item mnemonic_editor: MnemonicEditor {
+        accept: Action {
+            text: qsTr('id_next')
+            onTriggered: WalletManager.signup('', false, network_page.network, 'recover', mnemonic, '111111');
         }
     }
 }
