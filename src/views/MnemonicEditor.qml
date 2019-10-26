@@ -29,7 +29,7 @@ WizardPage {
     }
 
     function detectPaste(text) {
-        const ws = text.trim().split(' ')
+        const ws = text.trim().split(/\s+/)
         if (ws.length !== 24) return
         for (let i = 0; i < 24; ++i) {
             repeater.itemAt(i).editText = ws[i]
