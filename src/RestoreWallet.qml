@@ -15,18 +15,28 @@ Item {
         implicitWidth: currentItem.implicitWidth
         implicitHeight: currentItem.implicitHeight
 
-        initialItem: NetworkPage {
-            id: network_page
-            accept: Action {
-                onTriggered: stack_view.push(mnemonic_editor)
-            }
-        }
+        initialItem: network_page
     }
 
-    property Item mnemonic_editor: MnemonicEditor {
-        accept: Action {
-            text: qsTr('id_next')
-            onTriggered: WalletManager.signup('', false, network_page.network, 'recover', mnemonic, '111111');
+    property Item network_page: NetworkPage {
+        id: network_page
+        accept.onTriggered: stack_view.push(mnemonic_page)
+    }
+
+    property Item mnemonic_page: MnemonicEditor {
+        accept.text: qsTr('id_next')
+        accept.onTriggered: stack_view.push(name_page)
+    }
+
+    property Item name_page: WizardPage {
+        title: qsTr('id_done')
+
+        TextField {
+            id: name_field
+            anchors.centerIn: parent
+            onAccepted: {
+                currentWallet = WalletManager.signup('', false, network_page.network, name_field.text, mnemonic_page.mnemonic, '111111');
+            }
         }
     }
 }
