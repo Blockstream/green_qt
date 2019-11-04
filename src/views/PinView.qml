@@ -10,7 +10,7 @@ Column {
     property alias valid: field.valid
 
     function clear() {
-        //field.clear()
+        field.clear()
     }
 
     PinField {

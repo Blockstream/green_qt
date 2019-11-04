@@ -25,7 +25,25 @@ Item {
 
     property Item mnemonic_page: MnemonicEditor {
         accept.text: qsTr('id_next')
-        accept.onTriggered: stack_view.push(name_page)
+        accept.onTriggered: stack_view.push(pin_page)
+    }
+
+    property Item pin_page: WizardPage {
+        PinView {
+            id: pin_view
+            anchors.centerIn: parent
+            onValidChanged: if (valid) stack_view.push(pin_verify_page)
+        }
+    }
+
+    property Item pin_verify_page: WizardPage {
+        PinView {
+            anchors.centerIn: parent
+            onPinChanged: {
+                if (pin === pin_view.pin) stack_view.push(name_page)
+                else clear()
+            }
+        }
     }
 
     property Item name_page: WizardPage {
@@ -35,7 +53,7 @@ Item {
             id: name_field
             anchors.centerIn: parent
             onAccepted: {
-                currentWallet = WalletManager.signup('', false, network_page.network, name_field.text, mnemonic_page.mnemonic, '111111');
+                currentWallet = WalletManager.signup('', false, network_page.network, name_field.text, mnemonic_page.mnemonic, pin_view.pin);
             }
         }
     }
