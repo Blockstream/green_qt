@@ -42,6 +42,10 @@
         <translation>방금 지갑에 새로운 거래가 인식되었습니다.</translation>
     </message>
     <message>
+        <source>id_a_screen_lock_must_be_enabled</source>
+        <translation>A screen lock must be enabled from Android settings</translation>
+    </message>
+    <message>
         <source>id_a_wallet_is_detected_on_this</source>
         <translation>지갑이 인식되었습니다:</translation>
     </message>
@@ -54,8 +58,24 @@
         <translation>수락</translation>
     </message>
     <message>
+        <source>id_access</source>
+        <translation>Access</translation>
+    </message>
+    <message>
         <source>id_account</source>
         <translation>계좌</translation>
+    </message>
+    <message>
+        <source>id_account_id</source>
+        <translation>Account ID</translation>
+    </message>
+    <message>
+        <source>id_account_name</source>
+        <translation>Account Name</translation>
+    </message>
+    <message>
+        <source>id_account_type</source>
+        <translation>Account Type</translation>
     </message>
     <message>
         <source>id_action_canceled</source>
@@ -66,8 +86,16 @@
         <translation>Add a note (only you can see it).</translation>
     </message>
     <message>
+        <source>id_add_a_pgp_public_key_to_receive</source>
+        <translation>Add a PGP public key to receive encrypted email and keep your privacy</translation>
+    </message>
+    <message>
         <source>id_add_amount</source>
         <translation>금액 추가</translation>
+    </message>
+    <message>
+        <source>id_add_amount_optional</source>
+        <translation>Add amount (optional)</translation>
     </message>
     <message>
         <source>id_add_custom_network_by_qr_code</source>
@@ -80,10 +108,6 @@
     <message>
         <source>id_add_new_account</source>
         <translation>새로운 계좌 만들기</translation>
-    </message>
-    <message>
-        <source>id_add_simple_account</source>
-        <translation>Add Simple Account</translation>
     </message>
     <message>
         <source>id_add_wallet</source>
@@ -122,6 +146,10 @@
         <translation>잔액을 확인, 또는 돈을 받거나 종이 지갑을 sweep 할 수 있습니다. 감시모드에서는 송금은 할 수 없습니다.</translation>
     </message>
     <message>
+        <source>id_allows_you_to_receive_and_send</source>
+        <translation>Allows you to receive and send assets that require authorization from the issuer to be transferred. Authorized Assets may be restricted from transfer to other account types.</translation>
+    </message>
+    <message>
         <source>id_always</source>
         <translation>항상</translation>
     </message>
@@ -152,6 +180,18 @@
     <message>
         <source>id_attempts_remaining_d</source>
         <translation>남은 시도: %1</translation>
+    </message>
+    <message>
+        <source>id_authorized_assets</source>
+        <translation>Authorized Assets</translation>
+    </message>
+    <message>
+        <source>id_authorized_assets_account</source>
+        <translation>Authorized Assets Account</translation>
+    </message>
+    <message>
+        <source>id_authorized_assets_account_is</source>
+        <translation>Authorized assets account is only available on Liquid.</translation>
     </message>
     <message>
         <source>id_auto_logout_timeout</source>
@@ -192,6 +232,10 @@
     <message>
         <source>id_blocks_confirmed</source>
         <translation>컨펌된 블록</translation>
+    </message>
+    <message>
+        <source>id_blockstream_does_not_have</source>
+        <translation>Blockstream does not have access to your wallet backup and will not be able to help you in case you lose it</translation>
     </message>
     <message>
         <source>id_btchip_is_not_set_up_please_set</source>
@@ -294,8 +338,16 @@
         <translation>Tor (.onion)에 연결하면 최고의 보안과 프라이버시를 가능케 합니다. 계속하시려면 &quot;확인&quot;을 눌러주세요.</translation>
     </message>
     <message>
+        <source>id_contact_support_at_s_or_visit_s</source>
+        <translation>Contact support at %1 or visit %2</translation>
+    </message>
+    <message>
         <source>id_continue</source>
         <translation>계속</translation>
+    </message>
+    <message>
+        <source>id_copied_to_clipboard</source>
+        <translation>Copied to clipboard</translation>
     </message>
     <message>
         <source>id_copy_details</source>
@@ -478,6 +530,10 @@
         <translation>Face ID 활성화</translation>
     </message>
     <message>
+        <source>id_enable_or_change_your_pin_to</source>
+        <translation>Enable or change your PIN to quickly access your wallet</translation>
+    </message>
+    <message>
         <source>id_enable_spv</source>
         <translation>SPV 활성화</translation>
     </message>
@@ -488,6 +544,10 @@
     <message>
         <source>id_enable_touch_id</source>
         <translation>Touch ID 활성화</translation>
+    </message>
+    <message>
+        <source>id_enable_twofactor_authentication</source>
+        <translation>Enable Two-Factor Authentication to protect your wallet from unauthorized transactions or changes to critical security settings</translation>
     </message>
     <message>
         <source>id_enabled</source>
@@ -634,6 +694,18 @@
         <translation>수수료: %1 / %2 </translation>
     </message>
     <message>
+        <source>id_for_long_term_storage</source>
+        <translation>For long term storage</translation>
+    </message>
+    <message>
+        <source>id_for_most_users</source>
+        <translation>For most users</translation>
+    </message>
+    <message>
+        <source>id_for_securities_investors</source>
+        <translation>For securities investors</translation>
+    </message>
+    <message>
         <source>id_from</source>
         <translation>보낸이</translation>
     </message>
@@ -648,6 +720,10 @@
     <message>
         <source>id_get_code</source>
         <translation>코드 받기</translation>
+    </message>
+    <message>
+        <source>id_go_to_account</source>
+        <translation>Go to Account</translation>
     </message>
     <message>
         <source>id_go_to_wallet</source>
@@ -846,6 +922,10 @@
         <translation>이후</translation>
     </message>
     <message>
+        <source>id_learn_more_about_s</source>
+        <translation>Learn more about %1.</translation>
+    </message>
+    <message>
         <source>id_ledger_dashboard_detected</source>
         <translation>Ledger 대시 보드가 감지되었습니다. 올바른 앱을 열어 사용하세요.</translation>
     </message>
@@ -952,6 +1032,10 @@
     <message>
         <source>id_name</source>
         <translation>이름</translation>
+    </message>
+    <message>
+        <source>id_need_help</source>
+        <translation>Need help?</translation>
     </message>
     <message>
         <source>id_network</source>
@@ -1072,6 +1156,10 @@
     <message>
         <source>id_one_network_must_be_selected</source>
         <translation>하나의 네트워크만 선택해야 합니다. 기존값대로 비트코인을 선택합니다.</translation>
+    </message>
+    <message>
+        <source>id_onion_addresses_require_tor</source>
+        <translation>Onion addresses require Tor connectivity. Enable it in the network settings.</translation>
     </message>
     <message>
         <source>id_only_connect_to_trusted_nodes</source>
@@ -1218,6 +1306,10 @@
         <translation>키 %1에 문제있음</translation>
     </message>
     <message>
+        <source>id_provide_this_id_to_an_asset</source>
+        <translation>Provide this ID to an asset issuer to get authorization to receive and send Authorized Assets.</translation>
+    </message>
+    <message>
         <source>id_providing_an_email_enables</source>
         <translation>이메일을 제공하시면 알람과 거래 복구를 가능케 합니다.</translation>
     </message>
@@ -1232,6 +1324,10 @@
     <message>
         <source>id_receive</source>
         <translation>받기</translation>
+    </message>
+    <message>
+        <source>id_receive_email_notifications_for</source>
+        <translation>Receive email notifications for sent and received transactions</translation>
     </message>
     <message>
         <source>id_received</source>
@@ -1338,12 +1434,12 @@
         <translation>Restore temporary wallet</translation>
     </message>
     <message>
-        <source>id_reuse_androids_authentication</source>
-        <translation>안드로이드 인증 재사용하기</translation>
-    </message>
-    <message>
         <source>id_review</source>
         <translation>검토</translation>
+    </message>
+    <message>
+        <source>id_review_account_information</source>
+        <translation>Review account information</translation>
     </message>
     <message>
         <source>id_s_blocks_left</source>
@@ -1374,6 +1470,10 @@
         <translation>구글 OTP에서 QR 코드를 스캔하십시오:</translation>
     </message>
     <message>
+        <source>id_scan_to_send_here</source>
+        <translation>Scan to send here</translation>
+    </message>
+    <message>
         <source>id_screen_lock</source>
         <translation>화면 잠금</translation>
     </message>
@@ -1394,12 +1494,24 @@
         <translation>보안</translation>
     </message>
     <message>
+        <source>id_see_our_privacy_policy_s</source>
+        <translation>See our privacy policy %1</translation>
+    </message>
+    <message>
+        <source>id_see_our_terms_of_service_s</source>
+        <translation>See our Terms of Service %1</translation>
+    </message>
+    <message>
         <source>id_select_account</source>
         <translation>계정 선택</translation>
     </message>
     <message>
         <source>id_select_asset</source>
         <translation>자산 선택</translation>
+    </message>
+    <message>
+        <source>id_select_duration_of_twofactor</source>
+        <translation>Select duration of Two-Factor Authentication protection for your coins. The new option applies to newly received coins.</translation>
     </message>
     <message>
         <source>id_select_network</source>
@@ -1442,8 +1554,20 @@
         <translation>수령인</translation>
     </message>
     <message>
+        <source>id_set_a_limit_to_spend_without</source>
+        <translation>Set a limit to spend without two-factor authentication</translation>
+    </message>
+    <message>
         <source>id_set_a_new_pin</source>
         <translation>새로운 비밀번호 설정</translation>
+    </message>
+    <message>
+        <source>id_set_a_timeout_to_logout_after</source>
+        <translation>Set a timeout to logout after prolonged inactivity</translation>
+    </message>
+    <message>
+        <source>id_set_an_email_address_to_receive</source>
+        <translation>Set an email address to receive transaction notifications</translation>
     </message>
     <message>
         <source>id_set_an_email_for_recovery</source>
@@ -1460,6 +1584,14 @@
     <message>
         <source>id_set_up_a_passcode_for_your_ios</source>
         <translation>Set up a passcode for your iOS device to set a PIN for Blockstream Green</translation>
+    </message>
+    <message>
+        <source>id_set_up_a_screen_lock_for_your</source>
+        <translation>Set up a screen lock for your Android device to unlock your wallet using Android screen lock</translation>
+    </message>
+    <message>
+        <source>id_set_up_credentials_to_access_in</source>
+        <translation>Set up credentials to access in watch-only mode to receive coins without putting your private keys at risk. Access from any device using a Blockstream Green app</translation>
     </message>
     <message>
         <source>id_set_up_pgp_key_for</source>
@@ -1502,16 +1634,24 @@
         <translation>주소 내보내기</translation>
     </message>
     <message>
+        <source>id_show_bitcoin_amounts_in</source>
+        <translation>Show bitcoin amounts in</translation>
+    </message>
+    <message>
+        <source>id_show_coins_with_expiring</source>
+        <translation>Show coins with expiring Two-Factor authentication protection.</translation>
+    </message>
+    <message>
         <source>id_show_fiat</source>
         <translation>명목화폐 보기</translation>
     </message>
     <message>
-        <source>id_signup_in_progress</source>
-        <translation>회원가입 진행 중</translation>
+        <source>id_show_my_wallet_backup</source>
+        <translation>Show my wallet backup</translation>
     </message>
     <message>
-        <source>id_simple_accounts_allow_you_to</source>
-        <translation>Simple accounts allow you to separate your funds. Each account will have its own receiving addresses, and moving funds across accounts requires a transaction.</translation>
+        <source>id_signup_in_progress</source>
+        <translation>회원가입 진행 중</translation>
     </message>
     <message>
         <source>id_simplified_payment_verification</source>
@@ -1588,6 +1728,18 @@ Reset this setting and then re-activate it.</translation>
         <translation>SPV 검증되지 않음</translation>
     </message>
     <message>
+        <source>id_standard_account</source>
+        <translation>Standard Account</translation>
+    </message>
+    <message>
+        <source>id_standard_accounts_allow_you_to</source>
+        <translation>Standard accounts allow you to separate your funds. Each account will have its own receiving addresses, and moving funds across accounts requires a transaction.</translation>
+    </message>
+    <message>
+        <source>id_start_a_2fa_reset_process_if</source>
+        <translation>Start a 2FA reset process if you lost access to all your two-factor authentication methods.</translation>
+    </message>
+    <message>
         <source>id_sweep</source>
         <translation>Sweep</translation>
     </message>
@@ -1643,6 +1795,10 @@ Reset this setting and then re-activate it.</translation>
         <translation>Green을 다운로드 해주셔서 감사합니다! 시간 되시면 리뷰를 남겨주세요.</translation>
     </message>
     <message>
+        <source>id_the_asset_registry_is_currently</source>
+        <translation>The asset registry is currently unavailable: proceed carefully since asset amounts might be shown with a decimal precision different from what intended by the issuers.</translation>
+    </message>
+    <message>
         <source>id_the_camera_has_a_problem_you</source>
         <translation>카메라에 문제가 있습니다. 기기를 다시 시작하셔야 될 것 같습니다.</translation>
     </message>
@@ -1691,6 +1847,10 @@ Reset this setting and then re-activate it.</translation>
         <translation>받는 분</translation>
     </message>
     <message>
+        <source>id_to_keep_you_in_control_of_your</source>
+        <translation>To keep you in control of your funds, Two-Factor Authentication protection expires after roughly %1 days since your last payment. You will be prompted to make a Two-Factor Reactivation transaction, if you don&apos;t move funds often enough.</translation>
+    </message>
+    <message>
         <source>id_tor_connectivity_disabled</source>
         <translation>Tor 연결이 비활성화됐습니다!</translation>
     </message>
@@ -1735,6 +1895,10 @@ Reset this setting and then re-activate it.</translation>
         <translation>거래 이미 컨펌됨</translation>
     </message>
     <message>
+        <source>id_transaction_copied_to_clipboard</source>
+        <translation>Transaction copied to clipboard</translation>
+    </message>
+    <message>
         <source>id_transaction_details</source>
         <translation>상세 거래 내역</translation>
     </message>
@@ -1765,6 +1929,14 @@ Reset this setting and then re-activate it.</translation>
     <message>
         <source>id_twofactor_authentication</source>
         <translation>2FA</translation>
+    </message>
+    <message>
+        <source>id_twofactor_authentication_expiry</source>
+        <translation>Two-Factor authentication expiry</translation>
+    </message>
+    <message>
+        <source>id_twofactor_protection_does_not</source>
+        <translation>Two-Factor protection does not expire on this account, therefore resetting a lost Two-Factor authentication will require 12 months. Enabling 2 separate Two-Factor methods is highly suggested.</translation>
     </message>
     <message>
         <source>id_twofactor_reset_in_progress</source>
@@ -1807,6 +1979,10 @@ Reset this setting and then re-activate it.</translation>
         <translation>업데이트됨</translation>
     </message>
     <message>
+        <source>id_use_android_screen_lock_to_log</source>
+        <translation>Use Android screen lock to log in</translation>
+    </message>
+    <message>
         <source>id_user_not_found_or_invalid</source>
         <translation>잘못된 비밀번호 또는 사용자 찾지 못함</translation>
     </message>
@@ -1841,6 +2017,10 @@ Reset this setting and then re-activate it.</translation>
     <message>
         <source>id_waiting_for_transaction</source>
         <translation>거래 기다리는중...</translation>
+    </message>
+    <message>
+        <source>id_wallet_backup</source>
+        <translation>Wallet Backup</translation>
     </message>
     <message>
         <source>id_wallet_creation_failed</source>
@@ -1919,6 +2099,14 @@ Reset this setting and then re-activate it.</translation>
         <translation>환영합니다</translation>
     </message>
     <message>
+        <source>id_what_type_of_account_would_you</source>
+        <translation>What type of account would you like to add?</translation>
+    </message>
+    <message>
+        <source>id_whats_new</source>
+        <translation>What&apos;s new?</translation>
+    </message>
+    <message>
         <source>id_where_would_you_like_to</source>
         <translation>Where would you like to transfer the funds?</translation>
     </message>
@@ -1987,6 +2175,10 @@ Reset this setting and then re-activate it.</translation>
         <translation>2FA 설정을 한 가지만 하였습니다.</translation>
     </message>
     <message>
+        <source>id_you_will_find_the_account_id_in</source>
+        <translation>You will find the Account ID in the receive screen.</translation>
+    </message>
+    <message>
         <source>id_you_will_need_to_reenter_your</source>
         <translation>비밀번호를 설정하지 않으시면 니모닉(복원 코드)을 사용하여 로그인 하여야 합니다. 계속하시려면 &quot;확인&quot;을 눌러주세요.</translation>
     </message>
@@ -2017,6 +2209,10 @@ Reset this setting and then re-activate it.</translation>
     <message>
         <source>id_your_twofactor_threshold_is_s</source>
         <translation>지갑의 2FA 한도는 %1입니다.</translation>
+    </message>
+    <message>
+        <source>id_your_wallet_backup_is_made_of</source>
+        <translation>Your wallet backup is made of 24 words, also known as your mnemonic. Make sure you have a backup and keep it safe. Anyone who finds it can steal your money. You can use it to restore your Blockstream Green wallet on another device in case yours is lost, damaged or stolen.</translation>
     </message>
     <message>
         <source>id_your_wallet_is_not_yet_fully</source>
