@@ -8,7 +8,7 @@ WizardPage {
     readonly property var mnemonic: {
         const words = []
         for (let i = 0; i < repeater.count; i++) {
-            const item = repeater.itemAt(i)
+            const item = combo(i)
             if (item.acceptableInput) {
                 words.push(item.editText)
             }
@@ -32,14 +32,18 @@ WizardPage {
         const ws = text.trim().split(/\s+/)
         if (ws.length !== 24) return
         for (let i = 0; i < 24; ++i) {
-            repeater.itemAt(i).editText = ws[i]
+            combo(i).editText = ws[i]
         }
     }
 
     function clear() {
         for (let i = 0; i < repeater.count; i++) {
-            repeater.itemAt(i).editText = ''
+            combo(i).editText = ''
         }
+    }
+
+    function combo(index) {
+        return repeater.itemAt(index)
     }
 
     ColumnLayout {
@@ -56,7 +60,7 @@ WizardPage {
                 ComboBox {
                     id: combo_box
                     editable: true
-                    enabled: index === 0 || repeater.itemAt(index - 1).acceptableInput && repeater.itemAt(index - 1).enabled
+                    enabled: index === 0 || combo(index - 1).acceptableInput && combo(index - 1).enabled
                     displayText: `${index} - ${currentText}`
                     leftPadding: height / 2
                     model: filter(editText)
