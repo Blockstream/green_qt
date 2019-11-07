@@ -7,14 +7,17 @@ import QtQuick.Layouts 1.12
 WizardPage {
     readonly property var mnemonic: {
         const words = []
-        for (let i = 0; i < repeater.count; i++) {
+        for (let i = 0; i < passwordProtected ? 27 : 24; i++) {
             const item = combo(i)
+            if (!item) break
             if (item.acceptableInput) {
                 words.push(item.editText)
             }
         }
         return words
     }
+
+    readonly property bool passwordProtected: password_protected_switch.checked
 
     function filter(text) {
         const result = []
@@ -30,10 +33,11 @@ WizardPage {
 
     function detectPaste(text) {
         const ws = text.trim().split(/\s+/)
-        if (ws.length !== 24) return
-        for (let i = 0; i < 24; ++i) {
+        if (ws.length !== 24 && ws.length !== 27) return
+        for (let i = 0; i < ws.length; ++i) {
             combo(i).editText = ws[i]
         }
+        password_protected_switch.checked = ws.length === 27
     }
 
     function clear() {
@@ -43,7 +47,10 @@ WizardPage {
     }
 
     function combo(index) {
-        return repeater.itemAt(index)
+        if (index < 0) return null
+        if (repeater.count + checksum.count !== 27) return null
+        if (index < 24) return repeater.itemAt(index)
+        return checksum.itemAt(index - 24)
     }
 
     ColumnLayout {
@@ -57,19 +64,35 @@ WizardPage {
                 id: repeater
                 model: 24
 
-                ComboBox {
-                    id: combo_box
-                    editable: true
-                    enabled: index === 0 || combo(index - 1).acceptableInput && combo(index - 1).enabled
-                    displayText: `${index} - ${currentText}`
-                    leftPadding: height / 2
-                    model: filter(editText)
-                    validator: WordValidator {}
-                    onEditTextChanged: detectPaste(editText)
+                MnemonicWordComboBox {
+                    wordIndex: index + 1
+                    previous: combo(index - 1)
+                }
+            }
+        }
 
-                    Label {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: index
+        Page {
+            Layout.alignment: Qt.AlignHCenter
+            header: Switch  {
+                id: password_protected_switch
+                text: qsTr('id_password_protected')
+                onCheckedChanged: if (!checked) {
+                    combo(24).editText = ''
+                    combo(25).editText = ''
+                    combo(26).editText = ''
+                }
+            }
+
+            RowLayout {
+                visible: passwordProtected
+
+                Repeater {
+                    id: checksum
+                    model: 3
+
+                    MnemonicWordComboBox {
+                        wordIndex: 24 + index + 1
+                        previous: combo(24 + index - 1)
                     }
                 }
             }
@@ -82,16 +105,22 @@ WizardPage {
                 text: qsTr('id_clear')
                 onClicked: clear()
             }
+            Item {
+                Layout.fillWidth: true
+            }
             ProgressBar {
                 from: 0
-                to: 24
+                to: passwordProtected ? 27 : 24
                 value: mnemonic.length
                 Behavior on value { NumberAnimation { duration: 300; easing.type: Easing.OutCubic } }
                 Layout.fillWidth: true
             }
+            Item {
+                Layout.fillWidth: true
+            }
             Button {
                 action: accept
-                enabled: mnemonic.length === 24
+                enabled: mnemonic.length === (passwordProtected ? 27 : 24)
                 flat: true
             }
         }

@@ -45,5 +45,6 @@
         <file>dialogs/AboutDialog.qml</file>
         <file>views/MnemonicEditor.qml</file>
         <file>views/NetworkPage.qml</file>
+        <file>views/MnemonicWordComboBox.qml</file>
     </qresource>
 </RCC>
