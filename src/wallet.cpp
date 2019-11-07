@@ -213,11 +213,11 @@ void Wallet::test()
     });
 }
 
-void Wallet::signup(const QStringList& mnemonic, const QByteArray& pin)
+void Wallet::signup(const QStringList& mnemonic, const QString& password, const QByteArray& pin)
 {
     setStatus(Connected | Authenticating);
 
-    QMetaObject::invokeMethod(m_context, [this, pin, mnemonic] {
+    QMetaObject::invokeMethod(m_context, [this, pin, mnemonic, password] {
         QByteArray raw_mnemonic = mnemonic.join(' ').toLatin1();
 
         GA_json* hw_device;
@@ -229,7 +229,7 @@ void Wallet::signup(const QStringList& mnemonic, const QByteArray& pin)
         GA::process_auth(call);
         GA_destroy_auth_handler(call);
 
-        err = GA_login(m_session, hw_device, raw_mnemonic.constData(), "", &call);
+        err = GA_login(m_session, hw_device, raw_mnemonic.constData(), password.toLatin1().constData(), &call);
         Q_ASSERT(err == GA_OK);
 
         GA::process_auth(call);

@@ -25,7 +25,16 @@ Item {
 
     property Item mnemonic_page: MnemonicEditor {
         accept.text: qsTr('id_next')
-        accept.onTriggered: stack_view.push(pin_page)
+        accept.onTriggered: stack_view.push(passwordProtected ? password_page : pin_page)
+    }
+
+    property Item password_page: WizardPage {
+        TextField {
+            id: password_field
+            anchors.centerIn: parent
+            echoMode: TextField.Password
+            onAccepted: stack_view.push(pin_page)
+        }
     }
 
     property Item pin_page: WizardPage {
@@ -53,7 +62,7 @@ Item {
             id: name_field
             anchors.centerIn: parent
             onAccepted: {
-                currentWallet = WalletManager.signup('', false, network_page.network, name_field.text, mnemonic_page.mnemonic, pin_view.pin);
+                currentWallet = WalletManager.signup('', false, network_page.network, name_field.text, mnemonic_page.mnemonic, password_field.text, pin_view.pin);
             }
         }
     }

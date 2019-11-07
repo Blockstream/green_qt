@@ -17,7 +17,7 @@ WizardPage {
         return words
     }
 
-    readonly property bool passwordProtected: password_protected_switch.checked
+    readonly property bool passwordProtected: password_protected_checkbox.checked
 
     function filter(text) {
         const result = []
@@ -37,13 +37,14 @@ WizardPage {
         for (let i = 0; i < ws.length; ++i) {
             combo(i).editText = ws[i]
         }
-        password_protected_switch.checked = ws.length === 27
+        password_protected_checkbox.checked = ws.length === 27
     }
 
     function clear() {
-        for (let i = 0; i < repeater.count; i++) {
+        for (let i = 0; i < 27; i++) {
             combo(i).editText = ''
         }
+        password_protected_checkbox.checked = false
     }
 
     function combo(index) {
@@ -73,8 +74,8 @@ WizardPage {
 
         Page {
             Layout.alignment: Qt.AlignHCenter
-            header: Switch  {
-                id: password_protected_switch
+            header: CheckBox  {
+                id: password_protected_checkbox
                 text: qsTr('id_password_protected')
                 onCheckedChanged: if (!checked) {
                     combo(24).editText = ''

@@ -63,15 +63,16 @@ QQmlListProperty<Wallet> WalletManager::wallets()
     [](QQmlListProperty<Wallet>* property, int index) { return static_cast<QVector<Wallet*>*>(property->data)->at(index); });
 }
 
-Wallet* WalletManager::signup(const QString& proxy, bool use_tor, const QString& network, const QString& name, const QStringList& mnemonic, const QByteArray& pin)
+Wallet* WalletManager::signup(const QString& proxy, bool use_tor, const QString& network, const QString& name, const QStringList& mnemonic, const QString& password, const QByteArray& pin)
 {
+    Q_ASSERT(mnemonic.size() == 24 || mnemonic.size() == 27);
     Wallet* wallet = new Wallet(this);
     wallet->m_proxy = proxy;
     wallet->m_use_tor = use_tor;
     wallet->m_network = network;
     wallet->m_name = name;
     wallet->connect();
-    wallet->signup(mnemonic, pin);
+    wallet->signup(mnemonic, password, pin);
     m_wallets.append(wallet);
     emit walletsChanged();
     return wallet;
