@@ -81,7 +81,7 @@ macos {
 }
 
 macos:static {
-    LIBS += $$(BUILDROOT)/gdk-$$(GDKBLDID)/src/build-clang/src/libgreenaddress.a
+    LIBS += $$(BUILDROOT)/gdk-$$(GDKBLDID)/src/build-clang/src/libgreenaddress_full.a
 }
 
 unix:!macos:!android:static {
