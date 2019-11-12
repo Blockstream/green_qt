@@ -95,13 +95,16 @@ void Wallet::handleNotification(const QJsonObject &notification)
     qDebug() << "GOT NOTIFICATION" << notification;
 
     QString event = notification.value("event").toString();
-    if (!event.isEmpty() && notification.contains(event)) {
-        m_events.insert(event, notification.value(event));
-        emit eventsChanged(m_events);
-    }
+    Q_ASSERT(!event.isEmpty());
+    Q_ASSERT(notification.contains(event));
 
-    if (notification.value("event").toString() == "transaction") {
-        for (auto pointer : notification.value("transaction").toObject().value("subaccounts").toArray()) {
+    QJsonObject data = notification.value(event).toObject();
+
+    m_events.insert(event, data);
+    emit eventsChanged(m_events);
+
+    if (event == "transaction") {
+        for (auto pointer : data.value("subaccounts").toArray()) {
             m_accounts_by_pointer.value(pointer.toInt())->handleNotification(notification);
         }
     }
