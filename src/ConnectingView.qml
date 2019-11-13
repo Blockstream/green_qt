@@ -1,17 +1,32 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.5
 
-Item {
-    Column {
-        anchors.centerIn: parent
-        spacing: 32
+Column {
+    spacing: 16
 
-        BusyIndicator {
-            anchors.horizontalCenter: parent.horizontalCenter
-            running: true
+    Label {
+        anchors.horizontalCenter: parent.horizontalCenter
+        font.family: dinpro.name
+        font.pixelSize: 16
+        opacity: wallet.events.tor !== undefined && wallet.events.tor.progress > 0 && wallet.events.tor.progress < 100 ? 1 : 0
+        text: wallet.events.tor ? wallet.events.tor.summary : ''
+
+        Behavior on opacity {
+            SmoothedAnimation { }
         }
-        Label {
-            text: 'CONNECTING'
+    }
+
+    ProgressBar {
+        property var tor: wallet.events.tor
+
+        anchors.horizontalCenter: parent.horizontalCenter
+        from: 0
+        indeterminate: !(tor && tor.progress >= 0 && tor.progress < 100)
+        to: 100
+        value: wallet.events.tor ? wallet.events.tor.progress : 0
+
+        Behavior on value {
+            SmoothedAnimation {  }
         }
     }
 }
