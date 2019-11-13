@@ -9,17 +9,11 @@ import './views'
 Column {
     spacing: 16
 
-    opacity: wallet.status & Wallet.Authenticating ? 0.5 : 1
-
     function login() {
         console.log('login: ', wallet.status, pin_view.valid)
 
         if (pin_view.valid && wallet.status === Wallet.Connected) {
             wallet.login(pin_view.pin)
-        }
-
-        if (wallet.status === Wallet.Ready) {
-            wallet_stack_view.push(wallet_view)
         }
     }
 
@@ -83,9 +77,5 @@ Column {
                 easing.type: Easing.OutCubic
             }
         }
-    }
-    Connections {
-        target: wallet
-        onStatusChanged: if (status !== 'authenticating') pin_view.clear()
     }
 }
