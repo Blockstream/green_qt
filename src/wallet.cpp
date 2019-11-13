@@ -5,9 +5,9 @@
 #include "wallet.h"
 
 #include <QDebug>
-#include <QSettings>
-
 #include <QJsonObject>
+#include <QSettings>
+#include <QTimer>
 
 static void notification_handler(void* context, const GA_json* details)
 {
@@ -19,26 +19,20 @@ static void notification_handler(void* context, const GA_json* details)
 Wallet::Wallet(QObject *parent)
     : QObject(parent)
 {
-}
-
-void Wallet::connect()
-{
-    if (m_thread) return;
-
     m_thread = new QThread(this);
     m_context = new QObject;
 
     m_context->moveToThread(m_thread);
     m_thread->start();
+}
+
+void Wallet::connect()
+{
+    Q_ASSERT(!(m_status & Connected));
 
     setStatus(Connecting);
 
     QMetaObject::invokeMethod(m_context, [this] {
-        int res = GA_create_session(&m_session);
-        Q_ASSERT(res == GA_OK);
-
-        GA_set_notification_handler(m_session, notification_handler, this);
-
         QJsonObject params{
             { "name", m_network },
             { "log_level", "info" },
@@ -49,10 +43,49 @@ void Wallet::connect()
             params.insert("proxy", m_proxy);
         }
 
-        res = GA::connect(m_session, params);
-        Q_ASSERT(res == GA_OK);
+        int res;
 
-        setStatus(Connected);
+        if (!m_session) {
+            res = GA_create_session(&m_session);
+            Q_ASSERT(res == GA_OK);
+
+            res = GA_set_notification_handler(m_session, notification_handler, this);
+            Q_ASSERT(res == GA_OK);
+
+            res = GA::reconnect_hint(m_session, {{ "hint", "now" }});
+            Q_ASSERT(res == GA_OK);
+        }
+
+        res = GA::connect(m_session, params);
+
+        if (res == GA_OK) {
+            qDebug("NOW CONNECTED");
+            setStatus(Connected);
+            return;
+        }
+
+        if (res == GA_RECONNECT) {
+            res = GA_disconnect(m_session);
+            Q_ASSERT(res == GA_OK);
+
+            QTimer::singleShot(1000, this, [this] { connect(); });
+            return;
+        }
+
+        setStatus(Disconnected);
+
+//        GA_destroy_session(m_session);
+//        m_session = nullptr;
+
+//        if (res == GA_RECONNECT) {
+
+//            res = GA::reconnect_hint(m_session, {{ "hint", "now" }});
+//            Q_ASSERT(res == GA_OK);
+
+//            QTimer::singleShot(1000, this, [this] { connect(); });
+//            return;
+//        }
+
     });
 }
 
@@ -103,10 +136,22 @@ void Wallet::handleNotification(const QJsonObject &notification)
     m_events.insert(event, data);
     emit eventsChanged(m_events);
 
+    if (event == "network") {
+        if (!data.value("connected").toBool()) {
+            setStatus(Connecting);
+        } else if (data.value("login_required").toBool()) {
+            setStatus(Connected);
+        } else {
+            setStatus(Authenticated);
+        }
+        return;
+    }
+
     if (event == "transaction") {
         for (auto pointer : data.value("subaccounts").toArray()) {
             m_accounts_by_pointer.value(pointer.toInt())->handleNotification(notification);
         }
+
     }
 }
 
@@ -126,7 +171,7 @@ void Wallet::login(const QByteArray& pin)
 
     if (m_pin_data.isEmpty()) return;
 
-    setStatus(Connected | Authenticating);
+    setStatus(Authenticating);
 
     QMetaObject::invokeMethod(m_context, [this, pin] {
         GA_json* pin_data;
@@ -159,6 +204,7 @@ void Wallet::login(const QByteArray& pin)
         }
 
         if (!authenticated) {
+            qDebug("AUTH FAILED");
             setStatus(Connected);
             return;
         }
@@ -188,7 +234,7 @@ void Wallet::login(const QByteArray& pin)
 
         reload();
 
-        setStatus(Connected | Authenticated);
+        setStatus(Authenticated);
     });
 }
 
@@ -218,7 +264,7 @@ void Wallet::test()
 
 void Wallet::signup(const QStringList& mnemonic, const QString& password, const QByteArray& pin)
 {
-    setStatus(Connected | Authenticating);
+    setStatus(Authenticating);
 
     QMetaObject::invokeMethod(m_context, [this, pin, mnemonic, password] {
         QByteArray raw_mnemonic = mnemonic.join(' ').toLatin1();
@@ -265,7 +311,7 @@ void Wallet::signup(const QStringList& mnemonic, const QString& password, const 
 
         reload();
 
-        setStatus(Connected | Authenticated);
+        setStatus(Authenticated);
     });
 }
 

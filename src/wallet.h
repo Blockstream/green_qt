@@ -22,12 +22,11 @@ public:
         Disconnected    = 0x01,
         Connecting      = 0x02,
         Connected       = 0x04,
-        Authenticating  = 0x10,
-        Authenticated   = 0x20,
+        Authenticating  = 0x14,
+        Authenticated   = 0x24,
 
         Unauthenticated = Disconnected | Connecting | Connected,
-        Working         = Connecting | Authenticating,
-        Ready           = Connected | Authenticated
+        Working         = Connecting | Authenticating
     };
     Q_DECLARE_FLAGS(Status, StatusFlag)
     Q_FLAG(Status)
