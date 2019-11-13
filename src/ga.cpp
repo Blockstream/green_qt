@@ -6,6 +6,14 @@
 
 namespace GA {
 
+int reconnect_hint(GA_session* session, const QJsonObject& data)
+{
+    GA_json* hint = Json::fromObject(data);
+    int err = GA_reconnect_hint(session, hint);
+    GA_destroy_json(hint);
+    return err;
+}
+
 int connect(GA_session* session, const QJsonObject& data)
 {
     GA_json* net_params = Json::fromObject(data);
