@@ -46,5 +46,6 @@
         <file>views/MnemonicEditor.qml</file>
         <file>views/NetworkPage.qml</file>
         <file>views/MnemonicWordComboBox.qml</file>
+        <file>StackViewPushAction.qml</file>
     </qresource>
 </RCC>
