@@ -18,7 +18,7 @@
         <file>PinField.qml</file>
         <file>MnemonicView.qml</file>
         <file>DebugActiveFocus.qml</file>
-        <file>WalletFoo.qml</file>
+        <file>WalletContainerView.qml</file>
         <file>qtquickcontrols2.conf</file>
         <file>Intro.qml</file>
         <file>MainMenuBar.qml</file>

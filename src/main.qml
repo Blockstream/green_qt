@@ -68,7 +68,7 @@ Item {
         Repeater {
             model: WalletManager.wallets
 
-            WalletFoo {
+            WalletContainerView {
                 property bool current: currentWallet === modelData
                 focus: current
 
@@ -82,7 +82,7 @@ Item {
     Component {
         id: wallet_foo
 
-        WalletFoo { }
+        WalletContainerView { }
     }
 
     Component {
