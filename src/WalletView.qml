@@ -50,7 +50,7 @@ GridLayout {
                 }
 
                 Label {
-                    text: wallet.balance.btc.btc
+                    text: wallet.balance
                     font.pixelSize: 30
                     font.family: dinpro.name
                 }
@@ -162,7 +162,7 @@ GridLayout {
 
 
                 Label {
-                    text: `${account.json.balance.btc.btc} BTC`
+                    text: `${account.json.satoshi.btc} sats`
                     font.pixelSize: 20
                     font.family: dinpro.name
                 }

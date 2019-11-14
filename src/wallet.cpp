@@ -312,7 +312,7 @@ void Wallet::recover(const QString& name, const QStringList& mnemonic, const QBy
 }
 
 // Used to sum two balances
-static QJsonObject AddBalances(const QJsonObject& a, const QJsonObject& b)
+/*static QJsonObject AddBalances(const QJsonObject& a, const QJsonObject& b)
 {
     QJsonObject r;
     QStringList keys = a.keys() + b.keys();
@@ -334,7 +334,7 @@ static QJsonObject AddBalances(const QJsonObject& a, const QJsonObject& b)
     }
 
     return r;
-}
+}*/
 
 
 void Wallet::reload()
@@ -343,7 +343,7 @@ void Wallet::reload()
         QJsonArray accounts = GA::get_subaccounts(m_session);
 
         QMetaObject::invokeMethod(this, [this, accounts] {
-            QJsonObject balance;
+            quint64 balance  = 0;
 
             QMap<int, Account*> accounts_by_pointer = m_accounts_by_pointer;
 
@@ -359,7 +359,7 @@ void Wallet::reload()
                 account->update(data.toObject());
                 account->reload();
 
-                balance = AddBalances(balance, json.value("balance").toObject());
+                balance += static_cast<quint64>(json.value("satoshi").toObject().value("btc").toInt());
             }
 
             Q_ASSERT(accounts_by_pointer.isEmpty());
@@ -384,7 +384,7 @@ void Wallet::setStatus(Status status)
     emit statusChanged();
 }
 
-void Wallet::setBalance(const QJsonObject& balance)
+void Wallet::setBalance(const quint64 balance)
 {
     if (m_balance == balance) return;
     m_balance = balance;
