@@ -13,7 +13,10 @@
 static void notification_handler(void* context, const GA_json* details)
 {
     Wallet* wallet = static_cast<Wallet*>(context);
-    wallet->handleNotification(Json::toObject(details));
+    auto notification = Json::toObject(details);
+    QMetaObject::invokeMethod(wallet, [wallet, notification] {
+        wallet->handleNotification(notification);
+    });
 }
 
 
