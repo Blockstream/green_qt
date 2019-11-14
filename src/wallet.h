@@ -64,6 +64,7 @@ public:
     quint64 balance() const { return m_balance; }
 public slots:
     void connect();
+    void disconnect();
     void test();
     void login(const QByteArray& pin);
     void signup(const QStringList &mnemonic, const QString& password, const QByteArray& pin);
@@ -92,6 +93,7 @@ signals:
 private:
     void setStatus(Status status);
     void setBalance(const quint64);
+    void connectNow();
 
 public:
     int m_index{0};

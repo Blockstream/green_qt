@@ -32,6 +32,14 @@ void Wallet::connect()
 
     setStatus(Connecting);
 
+    connectNow();
+}
+
+
+void Wallet::connectNow()
+{
+    if (m_status == Disconnected) return;
+
     QMetaObject::invokeMethod(m_context, [this] {
         QJsonObject params{
             { "name", m_network },
@@ -51,12 +59,12 @@ void Wallet::connect()
 
             res = GA_set_notification_handler(m_session, notification_handler, this);
             Q_ASSERT(res == GA_OK);
-
-            res = GA::reconnect_hint(m_session, {{ "hint", "now" }});
-            Q_ASSERT(res == GA_OK);
+//            res = GA::reconnect_hint(m_session, {{ "hint", "now" }});
+//            Q_ASSERT(res == GA_OK);
         }
 
         res = GA::connect(m_session, params);
+        qDebug() << "connect result" << res;
 
         if (res == GA_OK) {
             qDebug("NOW CONNECTED");
@@ -68,7 +76,7 @@ void Wallet::connect()
             res = GA_disconnect(m_session);
             Q_ASSERT(res == GA_OK);
 
-            QTimer::singleShot(1000, this, [this] { connect(); });
+            QTimer::singleShot(1000, this, [this] { connectNow(); });
             return;
         }
 
@@ -87,6 +95,12 @@ void Wallet::connect()
 //        }
 
     });
+}
+
+void Wallet::disconnect()
+{
+    Q_ASSERT(m_status != Disconnected);
+    setStatus(Disconnected);
 }
 
 Wallet::~Wallet()

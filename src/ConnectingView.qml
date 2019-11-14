@@ -1,3 +1,4 @@
+import Blockstream.Green 0.1
 import QtQuick 2.0
 import QtQuick.Controls 2.5
 
@@ -29,4 +30,11 @@ Column {
             SmoothedAnimation {  }
         }
     }
+
+    FlatButton {
+        anchors.horizontalCenter: parent.horizontalCenter
+        text: qsTr('id_cancel')
+        onClicked: wallet.disconnect()
+    }
+
 }
