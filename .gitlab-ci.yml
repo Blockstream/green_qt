@@ -7,7 +7,6 @@ bionic_release:
   tags:
     - ga
   script:
-    - cd $CI_PROJECT_DIR
     - ./tools/bionic_deps.sh
     - ./tools/builddeps.sh linux
   cache:
@@ -29,7 +28,6 @@ windows_release:
   tags:
     - ga
   script:
-    - cd $CI_PROJECT_DIR
     - ./tools/bionic_deps.sh
     - ./tools/builddeps.sh windows
   cache:
@@ -72,7 +70,6 @@ bionic_allsymbolsunstripped_manual:
   extends: bionic_release
   when: manual
   script:
-    - cd $CI_PROJECT_DIR
     - ./tools/bionic_deps.sh
     - ./tools/builddeps.sh linux allsymbolsunstripped
 
@@ -87,7 +84,6 @@ windows_allsymbolsunstripped_manual:
   extends: windows_release
   when: manual
   script:
-    - cd $CI_PROJECT_DIR
     - ./tools/bionic_deps.sh
     - ./tools/builddeps.sh windows allsymbolsunstripped
 
