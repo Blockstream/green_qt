@@ -14,16 +14,16 @@ apt install --no-install-recommends -yqq clang curl ca-certificates unzip git au
 
 update-alternatives --set x86_64-w64-mingw32-g++ /usr/bin/x86_64-w64-mingw32-g++-posix
 
-curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain 1.38.0
+curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain 1.39.0
 source /root/.cargo/env
 rustup target add x86_64-pc-windows-gnu
 
 
-if [ ! -d /qt-everywhere-src-5.13.1 ]; then
-   curl -sL -o qt-everywhere-src-5.13.1.tar.xz https://download.qt.io/archive/qt/5.13/5.13.1/single/qt-everywhere-src-5.13.1.tar.xz
-   echo "adf00266dc38352a166a9739f1a24a1e36f1be9c04bf72e16e142a256436974e qt-everywhere-src-5.13.1.tar.xz" | sha256sum --check --strict
-   tar xf qt-everywhere-src-5.13.1.tar.xz
-   rm qt-everywhere-src-5.13.1.tar.xz
+if [ ! -d /qt-everywhere-src-5.13.2 ]; then
+   curl -sL -o qt-everywhere-src-5.13.2.tar.xz https://download.qt.io/archive/qt/5.13/5.13.2/single/qt-everywhere-src-5.13.2.tar.xz
+   echo "55e8273536be41f4f63064a79e552a22133848bb419400b6fa8e9fc0dc05de08 qt-everywhere-src-5.13.2.tar.xz" | sha256sum --check --strict
+   tar xf qt-everywhere-src-5.13.2.tar.xz
+   rm qt-everywhere-src-5.13.2.tar.xz
 fi
 
 if [ -f /.dockerenv ]; then

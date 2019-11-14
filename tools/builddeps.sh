@@ -24,7 +24,7 @@ DEPS=$(shasum -a 256 ./tools/bionic_deps.sh | cut -d" " -f1)
 DEPS="$DEPS $(shasum -a 256 Dockerfile | cut -d" " -f1)"
 export GDKBLDID=$(echo $(cd gdk && git rev-parse HEAD) $(shasum -a 256 ./tools/buildgdk.sh | cut -d" " -f1) ${DEPS} | shasum -a 256 | cut -d" " -f1)
 export QTMAJOR=5.13
-export QTVERSION=${QTMAJOR}.1
+export QTVERSION=${QTMAJOR}.2
 export QTBLDID=$(echo ${QTVERSION} ${DEPS} $(shasum -a 256 ./tools/buildqt.sh | cut -d" " -f1) | shasum -a 256 | cut -d" " -f1)
 
 mkdir -p ${BUILDDIR}
