@@ -13,23 +13,23 @@ Page {
 
     states: [
         State {
-            when: wallet.status === Wallet.Disconnected
+            when: wallet.connection === Wallet.Disconnected
             name: 'DISCONNECTED'
         },
         State {
-            when: wallet.status === Wallet.Connecting
+            when: wallet.connection === Wallet.Connecting
             name: 'CONNECTING'
         },
         State {
-            when: wallet.status === Wallet.Connected
+            when: wallet.connection === Wallet.Connected && wallet.authentication === Wallet.Unauthenticated
             name: 'LOGIN'
         },
         State {
-            when: wallet.status === Wallet.Authenticating
+            when: wallet.connection === Wallet.Connected && wallet.authentication === Wallet.Authenticating
             name: 'LOGING'
         },
         State {
-            when: wallet.status === Wallet.Authenticated
+            when: wallet.connection === Wallet.Connected && wallet.authentication === Wallet.Authenticated
             name: 'LOGGED'
         }
     ]

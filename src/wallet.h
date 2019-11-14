@@ -18,22 +18,24 @@ class Wallet : public QObject
     Q_OBJECT
 
 public:
-    enum StatusFlag {
-        Disconnected    = 0x01,
-        Connecting      = 0x02,
-        Connected       = 0x04,
-        Authenticating  = 0x14,
-        Authenticated   = 0x24,
-
-        Unauthenticated = Disconnected | Connecting | Connected,
-        Working         = Connecting | Authenticating
+    enum ConnectionStatus {
+        Disconnected,
+        Connecting,
+        Connected
     };
-    Q_DECLARE_FLAGS(Status, StatusFlag)
-    Q_FLAG(Status)
+    Q_ENUM(ConnectionStatus)
+
+    enum AuthenticationStatus {
+        Unauthenticated,
+        Authenticating,
+        Authenticated
+    };
+    Q_ENUM(AuthenticationStatus)
 
 private:
     Q_PROPERTY(QString name READ name NOTIFY nameChanged)
-    Q_PROPERTY(Status status READ status NOTIFY statusChanged)
+    Q_PROPERTY(ConnectionStatus connection READ connection NOTIFY connectionChanged)
+    Q_PROPERTY(AuthenticationStatus authentication READ authentication NOTIFY authenticationChanged)
     Q_PROPERTY(QJsonObject settings READ settings NOTIFY settingsChanged)
     Q_PROPERTY(QJsonObject currencies READ currencies CONSTANT)
     Q_PROPERTY(QList<QObject*> accounts READ accounts NOTIFY accountsChanged)
@@ -46,7 +48,8 @@ public:
     explicit Wallet(QObject *parent = nullptr);
     virtual ~Wallet();
 
-    Status status() const { return m_status; }
+    ConnectionStatus connection() const { return m_connection; }
+    AuthenticationStatus authentication() const { return m_authentication; }
 
     QJsonObject settings() const;
     QJsonObject currencies() const;
@@ -73,12 +76,10 @@ public slots:
     void setup2F();
 
 signals:
-    void statusChanged();
-    void isOnlineChanged();
-    void isLoggedChanged();
-    void accountsChanged();
+    void connectionChanged();
+    void authenticationChanged();
 
-    void isAuthenticatingChanged(bool authenticating);
+    void accountsChanged();
 
     void eventsChanged(QJsonObject events);
 
@@ -91,7 +92,8 @@ signals:
     void settingsChanged();
 
 private:
-    void setStatus(Status status);
+    void setConnection(ConnectionStatus connection);
+    void setAuthentication(AuthenticationStatus authentication);
     void setBalance(const quint64);
     void connectNow();
 
@@ -100,7 +102,8 @@ public:
     QThread* m_thread{nullptr};
     QObject* m_context{nullptr};
     GA_session* m_session{nullptr};
-    Status m_status{Disconnected};
+    ConnectionStatus m_connection{Disconnected};
+    AuthenticationStatus m_authentication{Unauthenticated};
     QJsonObject m_settings;
     QJsonObject m_currencies;
     QList<QObject*> m_accounts;
@@ -157,7 +160,5 @@ private:
 
     void update();
 };
-
-Q_DECLARE_OPERATORS_FOR_FLAGS(Wallet::Status)
 
 #endif // GREEN_WALLET_H

@@ -10,16 +10,9 @@ Column {
     spacing: 16
 
     function login() {
-        console.log('login: ', wallet.status, pin_view.valid)
-
-        if (pin_view.valid && wallet.status === Wallet.Connected) {
+        if (pin_view.valid && wallet.connection === Wallet.Connected) {
             wallet.login(pin_view.pin)
         }
-    }
-
-    Connections {
-        target: wallet
-        onStatusChanged: login()
     }
 
     FlatButton {
@@ -69,7 +62,7 @@ Column {
             onPinChanged: login()
         }
 
-        height: wallet.status & Wallet.Unauthenticated && !pin_view.valid ? implicitHeight : 1
+        height: wallet.authentication === Wallet.Unauthenticated && !pin_view.valid ? implicitHeight : 1
         width: pin_view.implicitWidth
 
         Behavior on height {

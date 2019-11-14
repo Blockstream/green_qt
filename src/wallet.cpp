@@ -8,6 +8,7 @@
 #include <QJsonObject>
 #include <QSettings>
 #include <QTimer>
+#include <QNetworkConfigurationManager>
 
 static void notification_handler(void* context, const GA_json* details)
 {
@@ -28,22 +29,19 @@ Wallet::Wallet(QObject *parent)
 
 void Wallet::connect()
 {
-    Q_ASSERT(!(m_status & Connected));
-
-    setStatus(Connecting);
-
+    Q_ASSERT(m_connection == Disconnected);
+    setConnection(Connecting);
     connectNow();
 }
 
-
 void Wallet::connectNow()
 {
-    if (m_status == Disconnected) return;
+    if (m_connection == Disconnected) return;
 
     QMetaObject::invokeMethod(m_context, [this] {
         QJsonObject params{
             { "name", m_network },
-            { "log_level", "info" },
+            { "log_level", "debug" },
             { "use_tor", m_use_tor }
         };
 
@@ -64,11 +62,11 @@ void Wallet::connectNow()
         }
 
         res = GA::connect(m_session, params);
-        qDebug() << "connect result" << res;
+        qDebug() << "connect result" << res << params;
 
         if (res == GA_OK) {
             qDebug("NOW CONNECTED");
-            setStatus(Connected);
+            setConnection(Connected);
             return;
         }
 
@@ -80,7 +78,7 @@ void Wallet::connectNow()
             return;
         }
 
-        setStatus(Disconnected);
+        setConnection(Disconnected);
 
 //        GA_destroy_session(m_session);
 //        m_session = nullptr;
@@ -99,8 +97,8 @@ void Wallet::connectNow()
 
 void Wallet::disconnect()
 {
-    Q_ASSERT(m_status != Disconnected);
-    setStatus(Disconnected);
+    Q_ASSERT(m_connection != Disconnected);
+    setConnection(Disconnected);
 }
 
 Wallet::~Wallet()
@@ -112,7 +110,6 @@ Wallet::~Wallet()
 
             res = GA_destroy_session(m_session);
             Q_ASSERT(res == GA_OK);
-            emit isOnlineChanged();
         }, Qt::BlockingQueuedConnection);
     }
     if (m_thread) {
@@ -152,11 +149,15 @@ void Wallet::handleNotification(const QJsonObject &notification)
 
     if (event == "network") {
         if (!data.value("connected").toBool()) {
-            setStatus(Connecting);
-        } else if (data.value("login_required").toBool()) {
-            setStatus(Connected);
+            setConnection(Connecting);
+            return;
+        }
+
+        setConnection(Connected);
+        if (data.value("login_required").toBool()) {
+            setAuthentication(Unauthenticated);
         } else {
-            setStatus(Authenticated);
+            setAuthentication(Authenticated);
         }
         return;
     }
@@ -185,7 +186,7 @@ void Wallet::login(const QByteArray& pin)
 
     if (m_pin_data.isEmpty()) return;
 
-    setStatus(Authenticating);
+    setAuthentication(Authenticating);
 
     QMetaObject::invokeMethod(m_context, [this, pin] {
         GA_json* pin_data;
@@ -219,9 +220,16 @@ void Wallet::login(const QByteArray& pin)
 
         if (!authenticated) {
             qDebug("AUTH FAILED");
-            setStatus(Connected);
+            setAuthentication(Unauthenticated);
             return;
         }
+
+        GA_json* currencies;
+        err = GA_get_available_currencies(m_session, &currencies);
+        qDebug() << "GA_get_available_currencies result: " << err;
+        Q_ASSERT(err == GA_OK);
+        m_currencies = Json::toObject(currencies);
+        GA_destroy_json(currencies);
 
         char* mnemonic = nullptr;
         err = GA_get_mnemonic_passphrase(m_session, "", &mnemonic);
@@ -240,15 +248,9 @@ void Wallet::login(const QByteArray& pin)
         m_settings = Json::toObject(settings);
         GA_destroy_json(settings);
 
-        GA_json* currencies;
-        err = GA_get_available_currencies(m_session, &currencies);
-        Q_ASSERT(err == GA_OK);
-        m_currencies = Json::toObject(currencies);
-        GA_destroy_json(currencies);
-
         reload();
 
-        setStatus(Authenticated);
+        setAuthentication(Authenticated);
     });
 }
 
@@ -278,7 +280,7 @@ void Wallet::test()
 
 void Wallet::signup(const QStringList& mnemonic, const QString& password, const QByteArray& pin)
 {
-    setStatus(Authenticating);
+    setAuthentication(Authenticating);
 
     QMetaObject::invokeMethod(m_context, [this, pin, mnemonic, password] {
         QByteArray raw_mnemonic = mnemonic.join(' ').toLatin1();
@@ -325,7 +327,7 @@ void Wallet::signup(const QStringList& mnemonic, const QString& password, const 
 
         reload();
 
-        setStatus(Authenticated);
+        setAuthentication(Authenticated);
     });
 }
 
@@ -439,12 +441,20 @@ void Wallet::setup2F()
 
 }
 
-void Wallet::setStatus(Status status)
+void Wallet::setConnection(ConnectionStatus connection)
 {
-    if (m_status == status) return;
-    qDebug() << "status change" << m_status << " -> " << status;
-    m_status = status;
-    emit statusChanged();
+    if (m_connection == connection) return;
+    qDebug() << "connection change" << m_connection << " -> " << connection;
+    m_connection = connection;
+    emit connectionChanged();
+}
+
+void Wallet::setAuthentication(AuthenticationStatus authentication)
+{
+    if (m_authentication == authentication) return;
+    qDebug() << "authentication change" << m_authentication << " -> " << authentication;
+    m_authentication = authentication;
+    emit authenticationChanged();
 }
 
 void Wallet::setBalance(const quint64 balance)
