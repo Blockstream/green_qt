@@ -145,19 +145,20 @@ void Wallet::handleNotification(const QJsonObject &notification)
     Q_ASSERT(!event.isEmpty());
     Q_ASSERT(notification.contains(event));
 
-    QJsonObject data = notification.value(event).toObject();
+    QJsonValue data = notification.value(event);
 
     m_events.insert(event, data);
     emit eventsChanged(m_events);
 
     if (event == "network") {
-        if (!data.value("connected").toBool()) {
+        QJsonObject network = data.toObject();
+        if (!network.value("connected").toBool()) {
             setConnection(Connecting);
             return;
         }
 
         setConnection(Connected);
-        if (data.value("login_required").toBool()) {
+        if (network.value("login_required").toBool()) {
             setAuthentication(Unauthenticated);
         } else {
             setAuthentication(Authenticated);
@@ -166,7 +167,8 @@ void Wallet::handleNotification(const QJsonObject &notification)
     }
 
     if (event == "transaction") {
-        for (auto pointer : data.value("subaccounts").toArray()) {
+        QJsonObject transaction = data.toObject();
+        for (auto pointer : transaction.value("subaccounts").toArray()) {
             m_accounts_by_pointer.value(pointer.toInt())->handleNotification(notification);
         }
 
