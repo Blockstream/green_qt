@@ -74,6 +74,20 @@ ScrollView {
         }
 
         Column {
+            visible: transaction.data.type === 'outgoing'
+            spacing: 8
+
+            Label {
+                text: qsTr('id_fee')
+                color: 'gray'
+            }
+
+            Label {
+                text: `${transaction.data.fee / 100000000} BTC (${Math.round(transaction.data.fee_rate / 1000)} sat/vB)`
+            }
+        }
+
+        Column {
             spacing: 8
             width: parent.width
 
