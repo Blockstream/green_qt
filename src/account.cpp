@@ -48,35 +48,44 @@ void Account::handleNotification(const QJsonObject &notification)
     reload();
 }
 
+static QJsonArray get_transactions(GA_session* session, int subaccount, int first, int count)
+{
+    GA_json* details = Json::fromObject({
+        { "subaccount", subaccount },
+        { "first", first },
+        { "count", count }
+    });
+    GA_json* txs;
+    int err = GA_get_transactions(session, details, &txs);
+    Q_ASSERT(err == GA_OK);
+    err = GA_destroy_json(details);
+    Q_ASSERT(err == GA_OK);
+    QJsonArray transactions = Json::toArray(txs);
+    err = GA_destroy_json(txs);
+    Q_ASSERT(err == GA_OK);
+    return transactions;
+}
+
 void Account::reload()
 {
     QMetaObject::invokeMethod(m_wallet->m_context, [this] {
-        GA_json* details = Json::fromObject({
-            { "subaccount", m_pointer },
-            { "first", 0 },
-            { "count", 30 }
-        });
+        auto transactions = get_transactions(m_wallet->m_session, m_pointer, 0, 30);
 
-        GA_json* txs;
-
-        int err = GA_get_transactions(m_wallet->m_session, details, &txs);
-        Q_ASSERT(err == GA_OK);
-        GA_destroy_json(details);
-
-        QMetaObject::invokeMethod(this, [this, txs] {
-            for (auto tx : Json::toArray(txs)) {
-                auto hash = tx.toObject().value("txhash").toString();
-                if (m_transactions_by_hash.contains(hash)) continue;
-                Transaction* transaction = new Transaction(this);
-                transaction->updateFromData(tx.toObject());
-                m_transactions_by_hash.insert(hash, transaction);
+        QMetaObject::invokeMethod(this, [this, transactions] {
+            m_transactions.clear();
+            for (auto value : transactions) {
+                QJsonObject data = value.toObject();
+                auto hash = data.value("txhash").toString();
+                auto transaction = m_transactions_by_hash.value(hash);
+                if (!transaction) {
+                    transaction = new Transaction(this);
+                    m_transactions_by_hash.insert(hash, transaction);
+                }
+                transaction->updateFromData(data);
                 m_transactions.append(transaction);
             }
+            emit transactionsChanged();
         }, Qt::BlockingQueuedConnection);
-
-        GA_destroy_json(txs);
-
-        emit transactionsChanged();
     });
 }
 
