@@ -167,11 +167,39 @@ void Wallet::handleNotification(const QJsonObject &notification)
     }
 
     if (event == "transaction") {
+        // This set contains all accounts that have to be updated due
+        // to the received transaction event.
+        QSet<Account*> accounts;
+
         QJsonObject transaction = data.toObject();
         for (auto pointer : transaction.value("subaccounts").toArray()) {
-            m_accounts_by_pointer.value(pointer.toInt())->handleNotification(notification);
+            auto account = m_accounts_by_pointer.value(pointer.toInt());
+            account->handleNotification(notification);
+            accounts.insert(account);
         }
 
+        QMetaObject::invokeMethod(m_context, [this, accounts] {
+            // First get balance for each account.
+            for (auto account : accounts) {
+                GA_json* details = Json::fromObject({
+                    { "subaccount", account->m_pointer },
+                    { "num_confs", 0 }
+                });
+
+                GA_json* balance;
+                int err = GA_get_balance(m_session, details, &balance);
+                GA_destroy_json(details);
+                Q_ASSERT(err == GA_OK);
+
+                // TODO: handle m_json concurrency
+                account->m_json.insert("satoshi", Json::toObject(balance));
+                GA_destroy_json(balance);
+            }
+            // Now update all account balances at once.
+            for (auto account : accounts) {
+                emit account->jsonChanged();
+            }
+        });
     }
 }
 
