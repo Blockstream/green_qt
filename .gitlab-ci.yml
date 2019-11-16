@@ -56,7 +56,7 @@ osx_release:
     paths:
     - build-osx-clang/gdk-*/src/include/gdk.h
     - build-osx-clang/gdk-*/build.done
-    - build-osx-clang/gdk-*/src/build-*/src/libgreenaddress.a
+    - build-osx-clang/gdk-*/src/build-*/src/libgreenaddress_full.a
     - build-osx-clang/qt-release*
   artifacts:
     expire_in: 1 day
