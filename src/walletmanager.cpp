@@ -64,16 +64,6 @@ Wallet* WalletManager::signup(const QString& proxy, bool use_tor, Network* netwo
     return wallet;
 }
 
-QJsonObject WalletManager::networks()
-{
-    GA_json* output;
-    int err = GA_get_networks(&output);
-    Q_ASSERT(err == GA_OK);
-    auto networks = Json::toObject(output);
-    GA_destroy_json(output);
-    return networks;
-}
-
 QStringList WalletManager::generateMnemonic() const
 {
     char* mnemonic;
