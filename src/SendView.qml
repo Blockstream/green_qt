@@ -19,7 +19,7 @@ ColumnLayout {
     SendTransactionController {
         id: controller
         address: address_field.address
-        amount: parseInt(100000000*amount_field.amount)
+        amount: amount_field.amount
         account: _account ? _account : null
 
         onCodeRequested: {

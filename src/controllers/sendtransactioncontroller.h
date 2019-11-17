@@ -7,7 +7,7 @@ class SendTransactionController : public AccountController
 {
     Q_OBJECT
     Q_PROPERTY(QString address READ address WRITE setAddress NOTIFY addressChanged)
-    Q_PROPERTY(qint64 amount READ amount WRITE setAmount NOTIFY amountChanged)
+    Q_PROPERTY(QString amount READ amount WRITE setAmount NOTIFY amountChanged)
 
 public:
     explicit SendTransactionController(QObject* parent = nullptr);
@@ -15,19 +15,19 @@ public:
     QString address() const;
     void setAddress(const QString& address);
 
-    qint64 amount() const;
-    void setAmount(qint64 amount);
+    QString amount() const;
+    void setAmount(const QString& amount);
 
 public slots:
     void send();
 
 signals:
     void addressChanged(const QString& address);
-    void amountChanged(qint64 amount);
+    void amountChanged(const QString& amount);
 
 protected:
     QString m_address;
-    qint64 m_amount;
+    QString m_amount;
 };
 
 #endif // GREEN_SENDTRANSACTIONCONTROLLER_H

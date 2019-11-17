@@ -24,12 +24,12 @@ void SendTransactionController::setAddress(const QString &address)
     emit addressChanged(m_address);
 }
 
-qint64 SendTransactionController::amount() const
+QString SendTransactionController::amount() const
 {
     return m_amount;
 }
 
-void SendTransactionController::setAmount(qint64 amount)
+void SendTransactionController::setAmount(const QString& amount)
 {
     if (m_amount == amount)
         return;
@@ -40,17 +40,15 @@ void SendTransactionController::setAmount(qint64 amount)
 
 void SendTransactionController::send()
 {
-    qDebug("SENDING 1");
-    qDebug() << m_wallet;
-    qDebug() << m_account;
-    qDebug() << m_wallet->m_context;
     QMetaObject::invokeMethod(m_wallet->m_context, [this] {
+        QLocale locale;
+        qint64 amount = static_cast<qint64>(locale.toDouble(m_amount) * 100000000);
         auto details = Json::fromObject({
             { "subaccount", static_cast<qint64>(m_account->m_pointer) },
             { "addressees", QJsonArray{
                 QJsonObject{
                     { "address", m_address },
-                    { "satoshi", m_amount }
+                    { "satoshi", amount }
                 }
             }}
         });
