@@ -39,22 +39,7 @@ WalletManager::WalletManager(QObject *parent) : QObject(parent)
     }
 
     settings.endArray();
-
-    /*
-    if (settings.contains("wallet/pin_data")) {
-        qDebug("DEFAULT WALLET");
-        Wallet* wallet = new Wallet(this);
-        qDebug() << settings.value("wallet/pin_data").toByteArray();
-        wallet->m_pin_data = settings.value("wallet/pin_data").toByteArray();
-        wallet->m_name = settings.value("wallet/name", "DEFAULT").toString();
-        m_wallets.append(wallet);
-    }
-    */
-    // return settings.value("wallet/pin_data").toByteArray();
 }
-
-//static int count(void *d) { return static_cast<QVector<Wallet*>*>(d)->size(); }
-//static int at(void *d, int index) { return static_cast<QVector<Wallet*>*>(d)->size(); }
 
 QQmlListProperty<Wallet> WalletManager::wallets()
 {
