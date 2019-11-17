@@ -4,8 +4,8 @@ import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.12
 
 WizardPage {
-    property string network: network_group.checkedButton ? network_group.checkedButton.network.network : null
-
+    property Network network: network_group.checkedButton ? network_group.checkedButton.network : null
+    onNetworkChanged: console.log(network.name, network.network)
     title: qsTr('id_choose_your_network')
 
     next: false
@@ -38,15 +38,7 @@ WizardPage {
             }
 
             Repeater {
-                model: {
-                    const result = []
-                    const networks = WalletManager.networks()
-                    for (const id of networks.all_networks) {
-                        const network = networks[id]
-                        if (!network.development) result.push(network)
-                    }
-                    return result
-                }
+                model: NetworkManager.networks
 
                 Button {
                     property var network: modelData

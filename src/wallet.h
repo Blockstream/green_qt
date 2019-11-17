@@ -8,6 +8,7 @@
 #include <QJsonObject>
 
 class Account;
+class Network;
 
 struct GA_session;
 struct GA_auth_handler;
@@ -118,7 +119,7 @@ public:
     {
         return m_name;
     }
-    QString m_network;
+    Network* m_network{nullptr};
     int m_login_attempts_remaining{3};
     QString m_proxy;
     bool m_use_tor{false};

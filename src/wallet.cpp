@@ -1,6 +1,7 @@
 #include "account.h"
 #include "ga.h"
 #include "json.h"
+#include "network.h"
 #include "util.h"
 #include "wallet.h"
 
@@ -43,7 +44,7 @@ void Wallet::connectNow()
 
     QMetaObject::invokeMethod(m_context, [this] {
         QJsonObject params{
-            { "name", m_network },
+            { "name", m_network->id() },
             { "log_level", "debug" },
             { "use_tor", m_use_tor }
         };
@@ -351,7 +352,7 @@ void Wallet::signup(const QStringList& mnemonic, const QString& password, const 
             settings.setArrayIndex(m_index);
             settings.setValue("proxy", m_proxy);
             settings.setValue("use_tor", m_use_tor);
-            settings.setValue("network", m_network);
+            settings.setValue("network", m_network->id());
             settings.setValue("pin_data", m_pin_data);
             settings.setValue("name", m_name);
             settings.setValue("login_attempts_remaining", m_login_attempts_remaining);

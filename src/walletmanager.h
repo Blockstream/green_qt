@@ -8,6 +8,8 @@
 
 #include "wallet.h"
 
+class Network;
+
 class WalletManager : public QObject
 {
     Q_OBJECT
@@ -24,8 +26,9 @@ signals:
 public slots:
     QStringList generateMnemonic() const;
     QJsonObject parseUrl(const QString &url);
-    Wallet* signup(const QString& proxy, bool use_tor, const QString& network, const QString& name, const QStringList &mnemonic, const QString& password, const QByteArray& pin);
+    Wallet* signup(const QString& proxy, bool use_tor, Network* network, const QString& name, const QStringList &mnemonic, const QString& password, const QByteArray& pin);
     QJsonObject networks();
+
 private:
     QVector<Wallet*> m_wallets;
 };

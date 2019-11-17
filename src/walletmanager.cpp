@@ -1,5 +1,6 @@
 #include "ga.h"
 #include "json.h"
+#include "network.h"
 #include "util.h"
 #include "walletmanager.h"
 
@@ -32,7 +33,7 @@ WalletManager::WalletManager(QObject *parent) : QObject(parent)
         wallet->m_index = index;
         wallet->m_pin_data = pin_data;
         wallet->m_name = name;
-        wallet->m_network = network;
+        wallet->m_network = NetworkManager::instance()->network(network);
         wallet->m_login_attempts_remaining = login_attempts_remaining;
 
         m_wallets.append(wallet);
@@ -48,7 +49,7 @@ QQmlListProperty<Wallet> WalletManager::wallets()
     [](QQmlListProperty<Wallet>* property, int index) { return static_cast<QVector<Wallet*>*>(property->data)->at(index); });
 }
 
-Wallet* WalletManager::signup(const QString& proxy, bool use_tor, const QString& network, const QString& name, const QStringList& mnemonic, const QString& password, const QByteArray& pin)
+Wallet* WalletManager::signup(const QString& proxy, bool use_tor, Network* network, const QString& name, const QStringList& mnemonic, const QString& password, const QByteArray& pin)
 {
     Q_ASSERT(mnemonic.size() == 24 || mnemonic.size() == 27);
     Wallet* wallet = new Wallet(this);
