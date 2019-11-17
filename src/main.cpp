@@ -9,6 +9,7 @@
 #include "applicationengine.h"
 #include "devices/device.h"
 #include "gui.h"
+#include "network.h"
 #include "transaction.h"
 #include "wallet.h"
 #include "walletmanager.h"
@@ -83,6 +84,7 @@ int main(int argc, char *argv[])
     QZXing::registerQMLImageProvider(engine);
 
     qmlRegisterUncreatableType<Device>("Blockstream.Green", 0, 1, "Device", "Devices are instantiated automatically");
+    qmlRegisterUncreatableType<Network>("Blockstream.Green", 0, 1, "Network", "Networks are created by NetworkManager");
     qmlRegisterType<Wallet>("Blockstream.Green", 0, 1, "Wallet");
     qmlRegisterUncreatableType<Transaction>("Blockstream.Green", 0, 1, "Transaction", "Transactions are created by accounts");
 
@@ -95,6 +97,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<SendTransactionController>("Blockstream.Green", 0, 1, "SendTransactionController");
     qmlRegisterUncreatableType<Account>("Blockstream.Green", 0, 1, "Account", "Accounts are created by the wallet");
 
+    qmlRegisterSingletonType<NetworkManager>("Blockstream.Green", 0, 1, "NetworkManager", [](QQmlEngine*, QJSEngine*) -> QObject* { return NetworkManager::instance(); });
     qmlRegisterSingletonType<WalletManager>("Blockstream.Green", 0, 1, "WalletManager", [](QQmlEngine*, QJSEngine*) -> QObject* { return new WalletManager; });
     qmlRegisterSingletonType<Wally>("Blockstream.Green", 0, 1, "Wally", [](QQmlEngine*, QJSEngine*) -> QObject* { return new Wally; });
 #if defined(Q_OS_MAC)
