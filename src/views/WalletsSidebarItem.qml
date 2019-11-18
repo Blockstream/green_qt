@@ -12,7 +12,8 @@ SidebarItem {
         ItemDelegate {
             property Wallet wallet: modelData
 
-            icon.source: '../assets/svg/btc_testnet.svg'
+            icon.color: 'transparent'
+            icon.source: '../' + icons[wallet.network.id]
             icon.width: 32
             icon.height: 32
             text: wallet.name
