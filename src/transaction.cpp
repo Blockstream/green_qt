@@ -1,5 +1,6 @@
 #include "account.h"
 #include "json.h"
+#include "network.h"
 #include "transaction.h"
 #include "wallet.h"
 #include <gdk.h>
@@ -38,6 +39,11 @@ void Transaction::updateFromData(const QJsonObject &data)
 void Transaction::copyTxhashToClipboard() const
 {
     QGuiApplication::clipboard()->setText(m_data.value("txhash").toString());
+}
+
+void Transaction::openInExplorer() const
+{
+    m_account->wallet()->network()->openTransactionInExplorer(m_data.value("txhash").toString());
 }
 
 void Transaction::updateMemo(const QString &memo)
