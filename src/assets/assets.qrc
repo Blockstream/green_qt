@@ -56,6 +56,7 @@
         <file>svg/stack_wallets.svg</file>
         <file>svg/trezor.svg</file>
         <file>svg/twofactor.svg</file>
+        <file>svg/liquid/liquid_no_string.svg</file>
         <file>svg/liquid/liquid_with_string.svg</file>
     </qresource>
 </RCC>
