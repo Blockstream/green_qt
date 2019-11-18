@@ -109,7 +109,7 @@ Pane {
 
                 MenuItem {
                     text: qsTr('id_view_in_explorer')
-                    onTriggered: Qt.openUrlExternally(`https://blockstream.info/testnet/tx/${tx.txhash}`)
+                    onTriggered: transaction.openInExplorer()
                 }
 
                 MenuItem {
