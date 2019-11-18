@@ -9,10 +9,6 @@ ScrollView {
     property Transaction transaction
     property string statusLabel
 
-    function viewInExplorer() {
-        Qt.openUrlExternally(`https://blockstream.info/testnet/tx/${transaction.data.txhash}`)
-    }
-
     property Component test: Row {
         ToolButton {
             icon.source: 'assets/svg/arrow_left.svg'
@@ -133,7 +129,7 @@ ScrollView {
                 }
                 Button {
                     text: qsTr('id_view_in_explorer')
-                    onClicked: viewInExplorer()
+                    onClicked: transaction.openInExplorer()
                 }
             }
         }
