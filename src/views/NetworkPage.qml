@@ -42,11 +42,6 @@ WizardPage {
 
                 Button {
                     property var network: modelData
-                    property var icons: ({
-                        'Bitcoin': '../assets/svg/btc.svg',
-                        'Liquid': '../assets/svg/liquid/liquid_with_string.svg',
-                        'Testnet': '../assets/svg/btc_testnet.svg'
-                    })
 
                     width: 180
                     height: 80
@@ -58,12 +53,12 @@ WizardPage {
                         anchors.centerIn: parent
 
                         Image {
-                            source: icons[network.name]
+                            source:  '../' + logos[network.id]
                         }
 
                         Label {
                             text: network.name
-                            visible: network.name !== 'Liquid'
+                            visible: network.id !== 'liquid'
                             anchors.verticalCenter: parent.verticalCenter
                         }
                     }
