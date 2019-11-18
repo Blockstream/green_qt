@@ -14,6 +14,9 @@ ApplicationWindow {
     Material.accent: Material.Green
     Material.theme: Material.Dark
 
+    id: window
+    property Wallet currentWallet
+
     Loader {
         id: loader
         anchors.fill: parent

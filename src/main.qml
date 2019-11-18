@@ -7,11 +7,6 @@ import QtQuick.Window 2.12
 import './dialogs'
 
 Item {
-    id: split_view
-
-    property Wallet currentWallet
-
-    onCurrentWalletChanged: drawer.close()
     property var icons: ({
         'liquid': 'assets/svg/liquid/liquid_no_string.svg',
         'mainnet': 'assets/svg/btc.svg',
@@ -23,6 +18,11 @@ Item {
         'mainnet': 'assets/svg/btc.svg',
         'testnet': 'assets/svg/btc_testnet.svg'
     })
+
+    Connections {
+        target: window
+        onCurrentWalletChanged: drawer.close()
+    }
 
     anchors.fill: parent
 
