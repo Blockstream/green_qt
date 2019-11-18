@@ -38,6 +38,8 @@ public:
     QString id() const { return m_id; }
     QString name() const { return m_name; }
 
+    void openTransactionInExplorer(const QString& hash);
+
 private:
     QJsonObject m_data;
     QString m_id;

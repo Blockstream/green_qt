@@ -2,6 +2,9 @@
 #include "ga.h"
 #include "json.h"
 
+#include <QDesktopServices>
+#include <QUrl>
+
 static QJsonObject get_networks()
 {
     GA_json* output;
@@ -54,4 +57,12 @@ Network::Network(const QJsonObject &data, NetworkManager *manager)
     Q_ASSERT(data.contains("name"));
     m_id = data.value("network").toString();
     m_name = data.value("name").toString();
+}
+
+void Network::openTransactionInExplorer(const QString& hash)
+{
+    Q_ASSERT(m_data.contains("tx_explorer_url"));
+    auto tx_explorer_url = m_data.value("tx_explorer_url").toString();
+    Q_ASSERT(tx_explorer_url.endsWith("/"));
+    QDesktopServices::openUrl(QUrl(tx_explorer_url + hash));
 }
