@@ -12,6 +12,17 @@ Item {
     property Wallet currentWallet
 
     onCurrentWalletChanged: drawer.close()
+    property var icons: ({
+        'liquid': 'assets/svg/liquid/liquid_no_string.svg',
+        'mainnet': 'assets/svg/btc.svg',
+        'testnet': 'assets/svg/btc_testnet.svg'
+    })
+
+    property var logos: ({
+        'liquid': 'assets/svg/liquid/liquid_with_string.svg',
+        'mainnet': 'assets/svg/btc.svg',
+        'testnet': 'assets/svg/btc_testnet.svg'
+    })
 
     anchors.fill: parent
 
