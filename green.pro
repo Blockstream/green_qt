@@ -82,19 +82,21 @@ macos {
     LIBS += -framework Foundation -framework Cocoa
 }
 
+GDK_BUILD_DIR = $${PWD}/$$(BUILDROOT)/gdk-$$(GDKBLDID)/src
+
 macos:static {
-    LIBS += $$(BUILDROOT)/gdk-$$(GDKBLDID)/src/build-clang/src/libgreenaddress_full.a
+    LIBS += $$GDK_BUILD_DIR/build-clang/src/libgreenaddress_full.a
 }
 
 unix:!macos:!android:static {
-    LIBS += $$(BUILDROOT)/gdk-$$(GDKBLDID)/src/build-gcc/src/libgreenaddress_full.a
+    LIBS += $$GDK_BUILD_DIR/build-gcc/src/libgreenaddress_full.a
     SOURCES += src/glibc_compat.cpp
     LIBS += -Wl,--wrap=__divmoddi4 -Wl,--wrap=log2f
 }
 
 win32:static {
     LIBS += -Wl,-Bstatic,--whole-archive -lwinpthread -Wl,--no-whole-archive
-    LIBS += $$(BUILDROOT)/gdk-$$(GDKBLDID)/src/build-windows-mingw-w64/src/libgreenaddress_full.a -lcrypt32 -lbcrypt -lws2_32 -liphlpapi -lssp -static-libgcc -static-libstdc++ -lwsock32
+    LIBS += $$GDK_BUILD_DIR/build-windows-mingw-w64/src/libgreenaddress_full.a -lcrypt32 -lbcrypt -lws2_32 -liphlpapi -lssp -static-libgcc -static-libstdc++ -lwsock32
 }
 
 DEFINES += __PWD__=\\\"$$PWD\\\"
