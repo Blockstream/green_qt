@@ -41,3 +41,16 @@ sudo ./tools/bionic_deps.sh
 sudo ./tools/bionic_deps.sh
 ./tools/builddeps.sh windows
 ```
+
+## Development in QtCreator
+
+Building with QtCreator and dynamically linking with Qt and GDK is possible. For
+now Qt is not built with -shared so one must be configured in QtCreator (see
+Manage Kits dialog).
+Just open the project green.pro and configure it with the kit of choice. Then
+define the build environments BUILDROOT and GDKBLDID according the build done
+from the previous steps. For instance, in macos these would look like:
+```
+BUILDROOT=build-osx-clang
+GDKBLDID=0f8cef9fdf5f08fa8a33736a2e70d8e87b5260f19b46aa2f1a157bb8956b6280
+```
