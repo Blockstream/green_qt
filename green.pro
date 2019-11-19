@@ -84,8 +84,12 @@ macos {
 
 GDK_BUILD_DIR = $$absolute_path($$(BUILDROOT)/gdk-$$(GDKBLDID)/src, $${PWD})
 
-macos:static {
-    LIBS += $$GDK_BUILD_DIR/build-clang/src/libgreenaddress_full.a
+macos {
+    static {
+        LIBS += $$GDK_BUILD_DIR/build-clang/src/libgreenaddress_full.a
+    } else {
+        LIBS += -L$$GDK_BUILD_DIR/build-clang/src/ -lgreenaddress
+    }
 }
 
 unix:!macos:!android:static {
