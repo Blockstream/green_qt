@@ -41,11 +41,18 @@ void Account::update(const QJsonObject& json)
     m_pointer = m_json.value("pointer").toInt();
     qDebug() << "ACCOUNT UPDATE DATA:" << json;
     emit jsonChanged();
+    emit balanceChanged();
 }
 
 void Account::handleNotification(const QJsonObject &notification)
 {
     reload();
+}
+
+QString Account::balance() const
+{
+    QLocale locale;
+    return locale.toString(m_json.value("satoshi").toObject().value("btc").toDouble() / 100000000);
 }
 
 static QJsonArray get_transactions(GA_session* session, int subaccount, int first, int count)

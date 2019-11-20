@@ -199,6 +199,7 @@ void Wallet::handleNotification(const QJsonObject &notification)
             // Now update all account balances at once.
             for (auto account : accounts) {
                 emit account->jsonChanged();
+                emit account->balanceChanged();
             }
         });
     }
