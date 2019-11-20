@@ -171,14 +171,14 @@ GridLayout {
                         icon.width: 24
                         icon.height: 24
                         text: qsTr('id_send')
-                        onClicked: send_dialog.open()
+                        onClicked: send_dialog.createObject(stack_view).open()
                     }
                     FlatButton {
                         icon.source: 'assets/svg/receive.svg'
                         icon.width: 24
                         icon.height: 24
                         text: qsTr('id_receive')
-                        onClicked: receive_dialog.open()
+                        onClicked: receive_dialog.createObject(stack_view).open()
                     }
                 }
             }
@@ -197,12 +197,14 @@ GridLayout {
         initialItem: TransactionListView {
         }
 
-        SendDialog {
+        Component {
             id: send_dialog
+            SendDialog {}
         }
 
-        ReceiveDialog {
+        Component {
             id: receive_dialog
+            ReceiveDialog { }
         }
     }
 
