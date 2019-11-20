@@ -92,10 +92,14 @@ macos {
     }
 }
 
-unix:!macos:!android:static {
-    LIBS += $$GDK_BUILD_DIR/build-gcc/src/libgreenaddress_full.a
-    SOURCES += src/glibc_compat.cpp
-    LIBS += -Wl,--wrap=__divmoddi4 -Wl,--wrap=log2f
+unix:!macos:!android {
+    static {
+        LIBS += $$GDK_BUILD_DIR/build-gcc/src/libgreenaddress_full.a
+        SOURCES += src/glibc_compat.cpp
+        LIBS += -Wl,--wrap=__divmoddi4 -Wl,--wrap=log2f
+    } else {
+        LIBS += -L$$GDK_BUILD_DIR/build-gcc/src -lgreenaddress
+    }
 }
 
 win32:static {
