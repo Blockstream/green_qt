@@ -11,7 +11,7 @@ echo "GDK: building with ${NUM_JOBS} cores in ${GDK_PATH}"
 
 mkdir -p ${GDK_PATH}
 
-git clone --quiet --depth 1 $PWD/gdk ${GDK_PATH}/src > ${GDK_PATH}/build.log 2>&1
+git clone --quiet --depth 1 file://$PWD/gdk ${GDK_PATH}/src > ${GDK_PATH}/build.log 2>&1
 
 cd ${GDK_PATH}/src
 
