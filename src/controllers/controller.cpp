@@ -90,3 +90,20 @@ void Controller::resolveCode(const QByteArray& code)
         process(nullptr);
     });
 }
+
+void Controller::incrementBusy()
+{
+    m_busy ++;
+    if (m_busy == 1) {
+        emit busyChanged(true);
+    }
+}
+
+void Controller::decrementBusy()
+{
+    Q_ASSERT(m_busy > 0);
+    m_busy --;
+    if (m_busy == 0) {
+        emit busyChanged(false);
+    }
+}

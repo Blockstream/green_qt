@@ -12,6 +12,7 @@ class Account;
 class Controller : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(bool busy READ isBusy NOTIFY busyChanged)
     Q_PROPERTY(Wallet* wallet READ wallet WRITE setWallet NOTIFY walletChanged)
 
 public:
@@ -22,6 +23,8 @@ public:
 
     void process(GA_json** output);
 
+    bool isBusy() const { return m_busy > 0; }
+
 public slots:
     virtual void reset();
 
@@ -29,6 +32,7 @@ public slots:
     void resolveCode(const QByteArray& code);
 
 signals:
+    void busyChanged(bool busy);
     void walletChanged(Wallet* wallet);
     void statusChanged(const QString& status);
 
@@ -39,6 +43,10 @@ signals:
 protected:
     Wallet* m_wallet{nullptr};
     GA_auth_handler* m_auth_handler{nullptr};
+    int m_busy{0};
+
+    void incrementBusy();
+    void decrementBusy();
 };
 
 #endif // GREEN_CONTROLLER_H
