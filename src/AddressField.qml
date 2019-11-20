@@ -9,24 +9,38 @@ Item {
     property alias readOnly: field.readOnly
 
     clip: true
+    height: 70
 
-    height: amount_field.height
+    Column {
+        spacing: 5
 
-    Label {
-        id: label
-        anchors.left: parent.left
-        anchors.baseline: field.baseline
-        anchors.margins: 4
-        visible: text.length > 0
-    }
+        Label {
+            id: label
+            visible: text.length > 0
+        }
 
-    TextField {
-        id: field
-        anchors.left: label.right
-        anchors.leftMargin: 16
-        anchors.right: parent.right
-        focus: true
-        horizontalAlignment: TextField.AlignHCenter
-        placeholderText: ''
+        Row {
+            id: address_row
+            spacing: 5
+            anchors.left: label.left
+
+            TextField {
+                id: field
+                width: 240
+                focus: true
+                horizontalAlignment: TextField.AlignHCenter
+                placeholderText: 'Insert a bitcoin address'
+            }
+
+            Button {
+                height: field.height
+                width: field.height
+                highlighted: false
+                flat: true
+                icon.source: "./assets/svg/qr.svg"
+                onClicked: dialog.open()
+            }
+
+        }
     }
 }
