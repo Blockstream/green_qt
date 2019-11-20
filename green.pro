@@ -82,7 +82,7 @@ macos {
     LIBS += -framework Foundation -framework Cocoa
 }
 
-GDK_BUILD_DIR = $${PWD}/$$(BUILDROOT)/gdk-$$(GDKBLDID)/src
+GDK_BUILD_DIR = $$absolute_path($$(BUILDROOT)/gdk-$$(GDKBLDID)/src, $${PWD})
 
 macos:static {
     LIBS += $$GDK_BUILD_DIR/build-clang/src/libgreenaddress_full.a
