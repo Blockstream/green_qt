@@ -7,6 +7,7 @@ import QZXing 2.3
 
 ColumnLayout {
     property alias amount: amount_field.amount
+    property var size: controller.transaction.transaction_vsize
 
     spacing: 16
     property var _account: account
@@ -19,6 +20,7 @@ ColumnLayout {
         address: address_field.address
         amount: amount_field.amount
         account: _account ? _account : null
+        sendAll: send_all_button.checked
 
         onCodeRequested: {
             methods = result.methods
@@ -90,58 +92,57 @@ ColumnLayout {
 
     }
 
+    Label {
+        text: controller.transaction.error
+    }
+
     AddressField {
         id: address_field
         Layout.fillWidth: true
         label: qsTr("id_recipient")
-        address: '2NAXwN5t3Qm3s2ETaAwuYkg4GfQkKGH2J9d'
     }
 
-    FlatButton {
-        text: 'QRCODE'
-        onClicked: dialog.open()
-    }
+    AmountField {
+        id: amount_field
+        Layout.fillWidth: true
+        currency: 'BTC'
+        label: qsTr('id_amount')
+        enabled: !send_all_button.checked
 
-    RowLayout {
-        AmountField {
-            id: amount_field
-            Layout.fillWidth: true
-            currency: 'BTC'
-            label: qsTr('id_amount')
-            amount: '0.00001000'
-        }
-
-        FlatButton {
-            text: qsTr('id_send_all_funds')
-            onClicked: amount_field.amount = account.json.balance.btc.btc
+        Binding on amount {
+            when: send_all_button.checked
+            value: account.balance
         }
     }
 
-    function fee(account, label, duration, blocks) {
-        if (!account) return ''
-        return qsTr(label) + ' ~ ' + qsTr(duration) + ' (' + Math.round(account.wallet.events.fees[blocks] / 10 + 0.5) / 100 + ' SATOSHI/VBYTE)'
+    FlatButton {        
+        id: send_all_button
+        checkable: true
+        text: qsTr('id_send_all_funds')
     }
 
     Label {
         text: qsTr('id_network_fee')
     }
 
-    RadioButton {
-        checked: true
-        text: fee(account, 'FAST', '30 MINUTES', 3)
-    }
+    FeeComboBox {
+        Layout.fillWidth: true
+        property var indexes: [3, 12, 24]
 
-    RadioButton {
-        text: fee(account, 'MEDIUM', '2 HOURS', 12)
-    }
+        Component.onCompleted: {
+            currentIndex = indexes.indexOf(account.wallet.settings.required_num_blocks)
+            controller.feeRate = account.wallet.events.fees[blocks]
+        }
 
-    RadioButton {
-        text: fee(account, 'SLOW', '4 HOURS', 24)
+        onBlocksChanged: {
+            console.log('blocks: ', blocks)
+            controller.feeRate = account.wallet.events.fees[blocks]
+        }
     }
 
     FlatButton {
         text: qsTr('id_send')
-        enabled: !!account
+        enabled: !!account && !controller.busy && controller.transaction.error === ''
         onClicked: controller.send()
     }
 

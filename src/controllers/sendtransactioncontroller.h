@@ -3,11 +3,16 @@
 
 #include "accountcontroller.h"
 
+#include <QJsonObject>
+
 class SendTransactionController : public AccountController
 {
     Q_OBJECT
     Q_PROPERTY(QString address READ address WRITE setAddress NOTIFY addressChanged)
+    Q_PROPERTY(bool sendAll READ sendAll WRITE setSendAll NOTIFY sendAllChanged)
     Q_PROPERTY(QString amount READ amount WRITE setAmount NOTIFY amountChanged)
+    Q_PROPERTY(int feeRate READ feeRate WRITE setFeeRate NOTIFY feeRateChanged)
+    Q_PROPERTY(QJsonObject transaction READ transaction NOTIFY transactionChanged)
 
 public:
     explicit SendTransactionController(QObject* parent = nullptr);
@@ -15,19 +20,36 @@ public:
     QString address() const;
     void setAddress(const QString& address);
 
+    bool sendAll() const;
+    void setSendAll(bool send_all);
+
     QString amount() const;
     void setAmount(const QString& amount);
+
+    qint64 feeRate() const;
+    void setFeeRate(qint64 fee_rate);
+
+    QJsonObject transaction() const;
 
 public slots:
     void send();
 
 signals:
     void addressChanged(const QString& address);
-    void amountChanged(const QString& amount);
+    void sendAllChanged(bool send_all);
+    void amountChanged(QString amount);
+    void feeRateChanged(qint64 fee_rate);
+    void transactionChanged();
+
+private:
+    void create();
 
 protected:
     QString m_address;
+    bool m_send_all{false};
     QString m_amount;
+    qint64 m_fee_rate{0};
+    QJsonObject m_transaction{{ "transaction_vsize", 0 }};
 };
 
 #endif // GREEN_SENDTRANSACTIONCONTROLLER_H
