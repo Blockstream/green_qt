@@ -48,5 +48,6 @@
         <file>views/MnemonicWordComboBox.qml</file>
         <file>StackViewPushAction.qml</file>
         <file>ConnectView.qml</file>
+        <file>FeeComboBox.qml</file>
     </qresource>
 </RCC>
