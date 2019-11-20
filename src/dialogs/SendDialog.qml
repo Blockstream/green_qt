@@ -3,6 +3,7 @@ import QtQuick.Controls 2.13
 import '..'
 
 Dialog {
+    property alias account: send_view.account
     title: qsTr('id_send')
     font.family: dinpro.name
     width: 420
@@ -11,6 +12,7 @@ Dialog {
     modal: true
 
     SendView {
+        id: send_view
         width: parent.width
     }
 }

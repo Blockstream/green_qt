@@ -10,7 +10,8 @@ ColumnLayout {
     property var size: controller.transaction.transaction_vsize
 
     spacing: 16
-    property var _account: account
+
+    property alias account: controller.account
 
     property var _result
     property var methods
@@ -19,7 +20,6 @@ ColumnLayout {
         id: controller
         address: address_field.address
         amount: amount_field.amount
-        account: _account ? _account : null
         sendAll: send_all_button.checked
 
         onCodeRequested: {

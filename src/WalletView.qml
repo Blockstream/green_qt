@@ -171,7 +171,7 @@ GridLayout {
                         icon.width: 24
                         icon.height: 24
                         text: qsTr('id_send')
-                        onClicked: send_dialog.createObject(stack_view).open()
+                        onClicked: send_dialog.createObject(stack_view, { account }).open()
                     }
                     FlatButton {
                         icon.source: 'assets/svg/receive.svg'
