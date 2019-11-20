@@ -156,7 +156,7 @@ GridLayout {
 
 
                 Label {
-                    text: `${account.json.satoshi.btc} sats`
+                    text: `${account.balance} BTC`
                     font.pixelSize: 20
                     font.family: dinpro.name
                 }
