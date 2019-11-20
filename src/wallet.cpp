@@ -411,32 +411,6 @@ void Wallet::recover(const QString& name, const QStringList& mnemonic, const QBy
     });
 }
 
-// Used to sum two balances
-/*static QJsonObject AddBalances(const QJsonObject& a, const QJsonObject& b)
-{
-    QJsonObject r;
-    QStringList keys = a.keys() + b.keys();
-    keys.removeDuplicates();
-
-    for (const QString& key : keys) {
-        if (key.startsWith("fiat_")) continue;
-
-        QJsonValue va = a.value(key);
-        QJsonValue vb = b.value(key);
-
-        if (va.isObject() || vb.isObject()) {
-            r.insert(key, AddBalances(va.toObject(), vb.toObject()));
-        } else if (va.isString() || vb.isString()) {
-            r.insert(key, QString::number(va.toString().toDouble() + vb.toString().toDouble()));
-        } else if (va.isDouble() || vb.isDouble()) {
-            r.insert(key, va.toDouble() + vb.toDouble());
-        }
-    }
-
-    return r;
-}*/
-
-
 void Wallet::reload()
 {
     QMetaObject::invokeMethod(m_context, [this] {

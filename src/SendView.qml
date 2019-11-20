@@ -6,8 +6,6 @@ import QtMultimedia 5.13
 import QZXing 2.3
 
 ColumnLayout {
-    //property var account
-
     property alias amount: amount_field.amount
 
     spacing: 16
@@ -70,7 +68,6 @@ ColumnLayout {
             }
 
             Column {
-                //anchors.centerIn: parent
                 property string title: qsTr('id_please_provide_your_1s_code').arg("email") // TODO: use methods
 
                 TextField {
@@ -83,7 +80,6 @@ ColumnLayout {
             }
 
             Column {
-                //anchors.centerIn: parent
                 property string title: qsTr('id_send')
 
                 Label {
