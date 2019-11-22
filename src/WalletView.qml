@@ -40,18 +40,28 @@ GridLayout {
 
             width: parent.width
 
-            Column {
+            Row {
                 Layout.alignment: Qt.AlignBottom
                 padding: 0
+                spacing: 8
+
+                Image {
+                    source: '../' + icons[wallet.network.id]
+                    width: 28
+                    height: 28
+                    anchors.verticalCenter: total_balance_label.verticalCenter
+                }
 
                 Label {
-                    text: qsTr('id_total_balance')
+                    id: total_balance_label
+                    text: qsTr('id_total_balance') + ':'
+                    font.pixelSize: 24
                     font.family: dinpro.name
                 }
 
                 Label {
                     text: wallet.balance
-                    font.pixelSize: 30
+                    font.pixelSize: 24
                     font.family: dinpro.name
                 }
             }
@@ -86,27 +96,11 @@ GridLayout {
     RowLayout {
         Layout.minimumHeight: 30
 
-        Row {
-            visible: stack_view.depth === 1
-
-            Label {
-                text: qsTr('id_transactions') + (account ? ' - ' + account.name : '')
-                font.family: dinpro.name
-                font.pixelSize: 14
-                font.capitalization: Font.AllUppercase
-            }
-
-            ToolButton {
-                icon.source: 'assets/svg/arrow_left.svg'
-                icon.height: 16
-                icon.width: 16
-            }
-
-            ToolButton {
-                text: '..' //qsTr('RENAME %1').arg(account ? account.name : '')
-                enabled: account ? !account.mainAccount : false
-                onClicked: rename_account_dialog.open()
-            }
+        Label {
+            text: qsTr('id_transactions') + (account ? ' - ' + account.name : '')
+            font.family: dinpro.name
+            font.pixelSize: 14
+            font.capitalization: Font.AllUppercase
         }
 
         Loader {
