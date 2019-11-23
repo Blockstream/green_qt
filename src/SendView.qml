@@ -7,7 +7,6 @@ import QZXing 2.3
 
 ColumnLayout {
     property alias amount: amount_field.amount
-    property var size: controller.transaction.transaction_vsize
 
     spacing: 16
 
