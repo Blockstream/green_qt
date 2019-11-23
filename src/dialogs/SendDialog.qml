@@ -8,6 +8,7 @@ Dialog {
     title: qsTr('id_send')
     font.family: dinpro.name
     width: 420
+    height: 400
     horizontalPadding: 50
     anchors.centerIn: parent
     modal: true
@@ -31,14 +32,17 @@ Dialog {
         }
     }
 
-    SendView {
-        id: send_view
-        width: parent.width
+    StackView {
+        id: stack_view
+        anchors.fill: parent
+        initialItem: SendView {
+            id: send_view
+        }
     }
 
     footer: DialogButtonBox {
         Button {
-            action: send_view.acceptAction
+            action: stack_view.currentItem.acceptAction
             flat: true
         }
     }
