@@ -6,7 +6,9 @@ import QtMultimedia 5.13
 import QZXing 2.3
 
 ColumnLayout {
+    property alias address: address_field.address
     property alias amount: amount_field.amount
+    property alias sendAll: send_all_button.checked
 
     spacing: 16
 
