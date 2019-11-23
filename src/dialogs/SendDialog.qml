@@ -15,4 +15,11 @@ Dialog {
         id: send_view
         width: parent.width
     }
+
+    footer: DialogButtonBox {
+        Button {
+            action: send_view.acceptAction
+            flat: true
+        }
+    }
 }

@@ -16,6 +16,12 @@ ColumnLayout {
     property var _result
     property var methods
 
+    property Action acceptAction: Action {
+        text: qsTr('id_send')
+        enabled: !!account && !controller.busy && controller.transaction.error === ''
+        onTriggered: controller.send()
+    }
+
     SendTransactionController {
         id: controller
         address: address_field.address
@@ -138,12 +144,6 @@ ColumnLayout {
             console.log('blocks: ', blocks)
             controller.feeRate = account.wallet.events.fees[blocks]
         }
-    }
-
-    FlatButton {
-        text: qsTr('id_send')
-        enabled: !!account && !controller.busy && controller.transaction.error === ''
-        onClicked: controller.send()
     }
 
     Dialog {
