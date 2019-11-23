@@ -100,7 +100,7 @@ ColumnLayout {
     }
 
     Label {
-        text: controller.transaction.error
+        text: controller.transaction.error || ''
     }
 
     AddressField {
