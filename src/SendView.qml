@@ -12,8 +12,6 @@ ColumnLayout {
 
     spacing: 16
 
-    property alias account: controller.account
-
     property var _result
     property var methods
 
@@ -21,25 +19,6 @@ ColumnLayout {
         text: qsTr('id_send')
         enabled: !!account && !controller.busy && controller.transaction.error === ''
         onTriggered: controller.send()
-    }
-
-    SendTransactionController {
-        id: controller
-        address: address_field.address
-        amount: amount_field.amount
-        sendAll: send_all_button.checked
-
-        onCodeRequested: {
-            methods = result.methods
-            methods_dialog.open()
-        }
-
-        onEnterResolveCode: swipe_view.currentIndex = 1
-
-        onEnterDone: if (result.action === 'send_raw_tx') {
-            _result = result.result
-            swipe_view.currentIndex = 2
-        }
     }
 
     Dialog {
