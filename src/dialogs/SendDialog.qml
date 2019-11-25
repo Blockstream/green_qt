@@ -8,7 +8,7 @@ Dialog {
     title: qsTr('id_send')
     font.family: dinpro.name
     width: 420
-    height: 400
+    height: 500
     horizontalPadding: 50
     anchors.centerIn: parent
     modal: true
