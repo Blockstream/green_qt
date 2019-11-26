@@ -49,5 +49,6 @@
         <file>StackViewPushAction.qml</file>
         <file>ConnectView.qml</file>
         <file>FeeComboBox.qml</file>
+        <file>ScannerView.qml</file>
     </qresource>
 </RCC>
