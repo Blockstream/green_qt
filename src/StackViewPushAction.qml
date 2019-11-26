@@ -4,8 +4,5 @@ import QtQuick.Controls 2.13
 ScriptAction {
     property StackView stackView
     default property Item item
-    script: {
-        stackView.clear()
-        stackView.replace(item)
-    }
+    script: stackView.push(item)
 }
