@@ -21,6 +21,8 @@ ColumnLayout {
         onTriggered: controller.send()
     }
 
+    property var actions: [acceptAction]
+
     Dialog {
         title: swipe_view.currentItem.title
         parent: Overlay.overlay

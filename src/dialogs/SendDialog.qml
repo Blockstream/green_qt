@@ -1,4 +1,5 @@
 import Blockstream.Green 0.1
+import QtQuick 2.13
 import QtQuick.Controls 2.13
 import '..'
 
@@ -11,6 +12,9 @@ Dialog {
     horizontalPadding: 50
     anchors.centerIn: parent
     modal: true
+    clip: true
+
+    onRejected: send_view.state = ''
 
     SendTransactionController {
         id: controller
@@ -40,9 +44,12 @@ Dialog {
     }
 
     footer: DialogButtonBox {
-        Button {
-            action: stack_view.currentItem.acceptAction
-            flat: true
+        Repeater {
+            model: stack_view.currentItem.actions || []
+            Button {
+                flat: true
+                action: modelData
+            }
         }
     }
 }
