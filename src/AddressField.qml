@@ -8,6 +8,8 @@ Item {
     property alias label: label.text
     property alias readOnly: field.readOnly
 
+    signal openScanner
+
     clip: true
     height: 70
 
@@ -38,7 +40,7 @@ Item {
                 highlighted: false
                 flat: true
                 icon.source: "./assets/svg/qr.svg"
-                onClicked: dialog.open()
+                onClicked: openScanner()
             }
 
         }

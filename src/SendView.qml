@@ -1,11 +1,11 @@
 import Blockstream.Green 0.1
+import QtMultimedia 5.13
 import QtQuick 2.12
 import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.12
-import QtMultimedia 5.13
-import QZXing 2.3
 
 ColumnLayout {
+    id: send_view
     property alias address: address_field.address
     property alias amount: amount_field.amount
     property alias sendAll: send_all_button.checked
@@ -22,6 +22,50 @@ ColumnLayout {
     }
 
     property var actions: [acceptAction]
+
+    states: [
+        State {
+            name: 'SCAN_QR_CODE'
+            PropertyChanges {
+                target: camera
+                cameraState: Camera.ActiveState
+            }
+        }
+    ]
+
+    property Camera camera: Camera {
+        cameraState: Camera.LoadedState
+        focus {
+            focusMode: CameraFocus.FocusContinuous
+            focusPointMode: CameraFocus.FocusPointAuto
+        }
+    }
+
+    transitions: [
+        Transition {
+            to: 'SCAN_QR_CODE'
+            StackViewPushAction {
+                stackView: stack_view
+
+                ScannerView {
+                    cancelAction.onTriggered: send_view.state = ''
+                    source: camera
+
+                    onCodeScanned: {
+                        address_field.address = WalletManager.parseUrl(code).address
+                        send_view.state = ''
+                    }
+                }
+            }
+        },
+        Transition {
+            from: 'SCAN_QR_CODE'
+            ScriptAction {
+                script: stack_view.pop()
+            }
+        }
+
+    ]
 
     Dialog {
         title: swipe_view.currentItem.title
@@ -88,6 +132,8 @@ ColumnLayout {
         id: address_field
         Layout.fillWidth: true
         label: qsTr("id_recipient")
+
+        onOpenScanner: send_view.state = 'SCAN_QR_CODE'
     }
 
     AmountField {
@@ -125,93 +171,6 @@ ColumnLayout {
         onBlocksChanged: {
             console.log('blocks: ', blocks)
             controller.feeRate = account.wallet.events.fees[blocks]
-        }
-    }
-
-    Dialog {
-        id: dialog
-        modal: true
-        standardButtons: Dialog.Ok | Dialog.Cancel
-
-        anchors.centerIn: Overlay.overlay
-
-        property var decoded
-
-        onAccepted: {
-            amount_field.amount = decoded.amount
-            address_field.address = decoded.address
-        }
-
-        header: RowLayout {
-            Label {
-                text: dialog.decoded ? dialog.decoded.address : '...'
-            }
-
-            Label {
-                text: dialog.decoded && dialog.decoded.amount.length > 0 ? dialog.decoded.amount : ''
-            }
-        }
-
-        ColumnLayout {
-
-            VideoOutput {
-                Layout.maximumWidth: 400
-                Layout.maximumHeight: Layout.maximumWidth / videoOutput.sourceRect.width * videoOutput.sourceRect.height
-
-                id: videoOutput
-
-                autoOrientation: true
-
-                fillMode: VideoOutput.PreserveAspectFit
-                source: Camera {
-                    cameraState: dialog.visible ? Camera.ActiveState : Camera.UnloadedState
-                    focus {
-                        focusMode: CameraFocus.FocusContinuous
-                        focusPointMode: CameraFocus.FocusPointAuto
-                    }
-                }
-
-                focus : visible // to receive focus and capture key events when visible
-
-                filters: QZXingFilter {
-                    captureRect: {
-                        // setup bindings
-                        videoOutput.contentRect;
-                        videoOutput.sourceRect;
-                        return videoOutput.mapRectToSource(videoOutput.mapNormalizedRectToItem(Qt.rect(
-                            0, 0, 1, 1
-                            //0.25, 0.25, 0.5, 0.5
-                        )));
-                    }
-
-                    decoder {
-                        enabledDecoders: QZXing.DecoderFormat_QR_CODE
-                        onTagFound: dialog.decoded = WalletManager.parseUrl(tag)
-                    }
-                }
-
-                clip: true
-                property var size: Math.min(videoOutput.width, videoOutput.height) * 0.8
-
-                Rectangle {
-                    visible: false
-                    anchors.centerIn: parent
-                    color: 'transparent'
-                    width: Math.max(videoOutput.width, videoOutput.height)
-                    height: Math.max(videoOutput.width, videoOutput.height)
-                    border.width: (Math.max(videoOutput.width, videoOutput.height) - videoOutput.size) / 2
-                    border.color: Qt.rgba(0, 0, 0, 0.5)
-                }
-                Rectangle {
-                    visible: false
-                    anchors.centerIn: parent
-                    color: 'transparent'
-                    width: videoOutput.size
-                    height: videoOutput.size
-                    border.width: 1
-                    border.color: Qt.rgba(1, 1, 1, 0.5)
-                }
-            }
         }
     }
 }
