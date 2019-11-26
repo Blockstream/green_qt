@@ -46,7 +46,7 @@ GridLayout {
                 spacing: 8
 
                 Image {
-                    source: '../' + icons[wallet.network.id]
+                    source: icons[wallet.network.id]
                     width: 28
                     height: 28
                     anchors.verticalCenter: total_balance_label.verticalCenter
