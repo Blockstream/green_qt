@@ -9,8 +9,6 @@ Panel {
     icon: 'assets/svg/security.svg'
     title: qsTr('SECUTIRY')
 
-    property Wallet foo: wallet
-
     TextField {
         id: code
         placeholderText: 'SMS CODE'
@@ -27,8 +25,6 @@ Panel {
         text: 'ENABLE 2F SMS'
         TwoFactorController {
             id: ctrl
-            wallet: foo
-            onPromptCode: code.visible = true
         }
         onClicked: ctrl.go()
     }

@@ -2,6 +2,8 @@
 #include "../json.h"
 #include "../wallet.h"
 #include <QDebug>
+#include <QQmlContext>
+#include <QQmlEngine>
 
 Controller::Controller(QObject* parent)
     : QObject(parent)
@@ -22,7 +24,10 @@ void Controller::setState(const QString &state)
 
 Wallet *Controller::wallet() const
 {
-    return m_wallet;
+    if (m_wallet) return m_wallet;
+    auto context = qmlContext(this);
+    if (!context) return nullptr;
+    return qobject_cast<Wallet*>(context->contextProperty("wallet").value<QObject*>());
 }
 
 void Controller::setWallet(Wallet *wallet)
@@ -97,7 +102,7 @@ void Controller::requestCode(const QByteArray& method)
 
 void Controller::resolveCode(const QByteArray& code)
 {
-    QMetaObject::invokeMethod(m_wallet->m_context, [this, code] {
+    QMetaObject::invokeMethod(wallet()->m_context, [this, code] {
         int res = GA_auth_handler_resolve_code(m_auth_handler, code.data());
         Q_ASSERT(res == GA_OK);
         process(nullptr);
