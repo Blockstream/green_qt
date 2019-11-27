@@ -12,6 +12,7 @@ class Account;
 class Controller : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(QJsonObject result READ result NOTIFY resultChanged)
     Q_PROPERTY(QString state READ state NOTIFY stateChanged)
     Q_PROPERTY(bool busy READ isBusy NOTIFY busyChanged)
     Q_PROPERTY(Wallet* wallet READ wallet WRITE setWallet NOTIFY walletChanged)
@@ -19,6 +20,7 @@ class Controller : public QObject
 public:
     explicit Controller(QObject* parent = nullptr);
 
+    QJsonObject result() const { return m_result; }
     QString state() const;
 
     Wallet* wallet() const;
@@ -35,6 +37,7 @@ public slots:
     void resolveCode(const QByteArray& code);
 
 signals:
+    void resultChanged(const QJsonObject& result);
     void stateChanged(const QString& state);
     void busyChanged(bool busy);
     void walletChanged(Wallet* wallet);
@@ -48,6 +51,7 @@ protected:
     Wallet* m_wallet{nullptr};
     QString m_state;
     GA_auth_handler* m_auth_handler{nullptr};
+    QJsonObject m_result;
     int m_busy{0};
 
     void setState(const QString& state);

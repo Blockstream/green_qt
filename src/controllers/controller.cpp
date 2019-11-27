@@ -38,13 +38,14 @@ void Controller::setWallet(Wallet *wallet)
 void Controller::process(GA_json** output)
 {
     while (true) {
-        QJsonObject result = GA::auth_handler_get_result(m_auth_handler);
+        m_result = GA::auth_handler_get_result(m_auth_handler);
+        emit resultChanged(m_result);
 
-        QString status = result.value("status").toString();
+        QString status = m_result.value("status").toString();
 
         if (status == "done") {
-            emit enterDone(result);
-            if (output) *output = Json::fromObject(result.value("result").toObject());
+            emit enterDone(m_result);
+            if (output) *output = Json::fromObject(m_result.value("result").toObject());
             break;
         }
 
