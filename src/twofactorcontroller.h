@@ -1,38 +1,29 @@
-#ifndef TWOFACTORCONTROLLER_H
-#define TWOFACTORCONTROLLER_H
+#ifndef GREEN_TWOFACTORCONTROLLER_H
+#define GREEN_TWOFACTORCONTROLLER_H
 
-#include <QObject>
-#include "ga.h"
+#include "controllers/controller.h"
 
-class Wallet;
+#include <QByteArray>
 
-class TwoFactorController : public QObject
+class TwoFactorController : public Controller
 {
     Q_OBJECT
-    Q_PROPERTY(Wallet* wallet READ wallet WRITE setWallet NOTIFY walletChanged)
+    Q_PROPERTY(QByteArray method READ method WRITE setMethod NOTIFY methodChanged)
 
 public:
     explicit TwoFactorController(QObject *parent = nullptr);
 
-    Wallet* wallet() const;
-    void setWallet(Wallet* wallet);
+    QByteArray method() const;
+    void setMethod(const QByteArray& method);
 
-private:
-    void call();
+    Q_INVOKABLE void enable(const QByteArray& number);
+    Q_INVOKABLE void disable();
 
 signals:
-    void walletChanged(Wallet* wallet);
-    void promptCode();
-
-public slots:
-    void go();
-    void disable();
-    void resolveCode(const QByteArray &code);
-    void enableEmail();
+    void methodChanged(const QByteArray& method);
 
 private:
-    Wallet* m_wallet{nullptr};
-    GA_auth_handler* m_call{nullptr};
+    QByteArray m_method;
 };
 
-#endif // TWOFACTORCONTROLLER_H
+#endif // GREEN_TWOFACTORCONTROLLER_H

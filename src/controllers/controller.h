@@ -26,7 +26,7 @@ public:
     Wallet* wallet() const;
     void setWallet(Wallet* wallet);
 
-    void process(GA_json** output);
+    void process(GA_json** output = nullptr);
 
     bool isBusy() const { return m_busy > 0; }
 
