@@ -32,6 +32,7 @@ public:
 
 public slots:
     virtual void reset();
+    void cancel();
 
     void requestCode(const QByteArray& method);
     void resolveCode(const QByteArray& code);
