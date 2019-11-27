@@ -48,6 +48,8 @@ void Controller::process(GA_json** output)
 
         QString status = m_result.value("status").toString();
 
+        setState(status.toUpper());
+
         if (status == "done") {
             emit enterDone(m_result);
             if (output) *output = Json::fromObject(m_result.value("result").toObject());
