@@ -60,18 +60,18 @@ void Controller::process(GA_json** output)
         }
 
         if (status == "request_code") {
-            emit codeRequested(result);
-//            QJsonArray methods = result.value("methods").toArray();
-
-//            Q_ASSERT(methods.size() > 0);
-
-//            emit requestCode(result);
-//            if (methods.size() == 1) {
-
-//            } else for (auto method : methods) {
+            emit codeRequested(m_result);
+            QJsonArray methods = m_result.value("methods").toArray();
+            Q_ASSERT(methods.size() > 0);
+            if (methods.size() == 1) {
+                int err = GA_auth_handler_request_code(m_auth_handler, methods.first().toString().toLatin1().constData());
+                Q_ASSERT(err == GA_OK);
+                continue;
+            } else {
+//                emit requestCode(result);
 //                qDebug() << "METHODS: " << method.toString();
-//            }
-            break;
+                break;
+            }
         }
 
         if (status == "resolve_code") {
