@@ -96,6 +96,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<WordValidator>("Blockstream.Green", 0, 1, "WordValidator");
     qmlRegisterType<SendTransactionController>("Blockstream.Green", 0, 1, "SendTransactionController");
     qmlRegisterUncreatableType<Account>("Blockstream.Green", 0, 1, "Account", "Accounts are created by the wallet");
+    qmlRegisterUncreatableType<Controller>("Blockstream.Green", 0, 1, "Controller", "Controller is an abstract type");
 
     qmlRegisterSingletonType<NetworkManager>("Blockstream.Green", 0, 1, "NetworkManager", [](QQmlEngine*, QJSEngine*) -> QObject* { return NetworkManager::instance(); });
     qmlRegisterSingletonType<WalletManager>("Blockstream.Green", 0, 1, "WalletManager", [](QQmlEngine*, QJSEngine*) -> QObject* { return new WalletManager; });
