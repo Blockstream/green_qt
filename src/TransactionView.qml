@@ -8,29 +8,35 @@ import QtQuick.Layouts 1.12
 ScrollView {
     property Transaction transaction
     property string statusLabel
+    font.family: dinpro.name
+
+    function tx_direction(type) {
+        switch (type) {
+            case 'incoming':
+                return qsTr('id_incoming')
+            case 'outgoing':
+                return qsTr('id_outgoing')
+            case 'redeposit':
+                return qsTr('id_redeposited')
+
+        }
+    }
 
     property Component test: Row {
         ToolButton {
+            id: back_arrow_button
             icon.source: 'assets/svg/arrow_left.svg'
             icon.height: 16
             icon.width: 16
             onClicked: stack_view.pop()
         }
 
-        Image {
-            source: transaction.data.type === 'outgoing' ? 'assets/svg/sent.svg' : 'assets/svg/received.svg'
-        }
-
-        Column {
-            Layout.fillWidth: true
-
-            Label {
-                text: qsTr('id_transaction_details')
-            }
-
-            Label {
-                text: statusLabel
-            }
+        Label {
+            anchors.verticalCenter: back_arrow_button.verticalCenter
+            text: qsTr('id_transaction_details') + ' - ' + tx_direction(transaction.data.type)
+            font.family: dinpro.name
+            font.pixelSize: 14
+            font.capitalization: Font.AllUppercase
         }
     }
 
@@ -40,18 +46,34 @@ ScrollView {
     Column {
         y: 32
         width: scroll_view.width
-        spacing: 32
+        spacing: 26
+
+        Column {
+            spacing: 8
+            Label {
+                text: 'Transaction Status' // TODO: add to translations
+                font.pixelSize: 14
+                color: 'gray'
+            }
+
+            Label {
+                text: statusLabel
+                font.pixelSize: 18
+            }
+        }
 
         Column {
             spacing: 8
 
             Label {
                 text: qsTr('id_received_on')
+                font.pixelSize: 14
                 color: 'gray'
             }
 
             Label {
                 text: transaction.data.created_at
+                font.pixelSize: 18
             }
         }
 
@@ -60,12 +82,14 @@ ScrollView {
 
             Label {
                 text: qsTr('id_amount')
+                font.pixelSize: 14
                 color: 'gray'
             }
 
             Label {
                 color: transaction.data.type === 'incoming' ? 'green' : 'white'
                 text: `${transaction.data.type === 'incoming' ? '+' : '-'}${transaction.data.satoshi.btc / 100000000} BTC`
+                font.pixelSize: 18
             }
         }
 
@@ -76,10 +100,12 @@ ScrollView {
             Label {
                 text: qsTr('id_fee')
                 color: 'gray'
+                font.pixelSize: 14
             }
 
             Label {
                 text: `${transaction.data.fee / 100000000} BTC (${Math.round(transaction.data.fee_rate / 1000)} sat/vB)`
+                font.pixelSize: 18
             }
         }
 
@@ -90,6 +116,7 @@ ScrollView {
             Label {
                 text: qsTr('id_my_notes')
                 color: 'gray'
+                font.pixelSize: 14
             }
 
             Row {
@@ -111,6 +138,7 @@ ScrollView {
             header: Label {
                 text: qsTr('id_transaction_id')
                 color: 'gray'
+                font.pixelSize: 14
             }
             background: MouseArea {
                 onClicked: {
@@ -119,9 +147,12 @@ ScrollView {
                 }
             }
             ColumnLayout {
+                spacing: 8
                 RowLayout {
+                    spacing: 5
                     Label {
                         text: transaction.data.txhash
+                        font.pixelSize: 14
                     }
                     Image {
                         source: 'assets/svg/copy_to_clipboard.svg'
