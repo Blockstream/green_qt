@@ -97,6 +97,7 @@ GridLayout {
         Layout.minimumHeight: 30
 
         Label {
+            visible: stack_view.depth === 1
             text: qsTr('id_transactions') + (account ? ' - ' + account.name : '')
             font.family: dinpro.name
             font.pixelSize: 14
