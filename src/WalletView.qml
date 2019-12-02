@@ -70,11 +70,6 @@ GridLayout {
             }
 
             ToolButton {
-                Rectangle {
-                    radius: width/2
-                    opacity: 0.05
-                    anchors.fill: parent
-                }
                 Layout.alignment: Qt.AlignBottom
                 icon.source: 'assets/svg/settings.svg'
                 icon.width: 24
