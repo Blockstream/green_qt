@@ -28,19 +28,6 @@ Dialog {
                 icon: '../assets/svg/network.svg'
                 width: scroll_view.width - 16
             }
-/*
-            Panel {
-                title: qsTr('ACCOUNT')
-                icon: 'assets/svg/account.svg'
-                width: scroll_view.width
-            }
-
-            Panel {
-                title: qsTr('TWO FACTOR')
-                icon: 'assets/svg/twofactor.svg'
-                width: scroll_view.width
-            }
-            */
 
             WalletSecuritySettingsView {
                 width: scroll_view.width - 16
@@ -52,28 +39,5 @@ Dialog {
                 icon: '../assets/svg/advanced.svg'
             }
         }
-
-        // NETWORK
-            // PIN
-            // WATCH ONLY LOGIN
-            // LOGOUT
-            // SWITCH NET ?
-
-
-        // ACCOUNT
-            // DENOMINATION
-            // REFERENCE EXCHANGE RATE
-            // DEFAULT TRANSACTION PRIORITY
-            // DEFAULT CUSTOM FEE RATE
-
-
-        // TWO FACTOR
-            // TWO FACTOR AUTHENTUCATION SETUP
-
-        // SECURITY
-            // MNEMONIC
-            // AUTO LOGOUT TIMEOUT
-
-        //
     }
 }
