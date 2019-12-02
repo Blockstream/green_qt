@@ -8,7 +8,6 @@ import QtQuick.Layouts 1.12
 ScrollView {
     property Transaction transaction
     property string statusLabel
-    font.family: dinpro.name
 
     function tx_direction(type) {
         switch (type) {
@@ -34,7 +33,6 @@ ScrollView {
         Label {
             anchors.verticalCenter: back_arrow_button.verticalCenter
             text: qsTr('id_transaction_details') + ' - ' + tx_direction(transaction.data.type)
-            font.family: dinpro.name
             font.pixelSize: 14
             font.capitalization: Font.AllUppercase
         }

@@ -24,7 +24,6 @@ Column {
     Label {
         visible: false
         font.capitalization: Font.AllUppercase
-        font.family: dinpro.name
         font.pixelSize: 30
         text: wallet.name
         Layout.alignment: Qt.AlignHCenter

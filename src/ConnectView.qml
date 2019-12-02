@@ -11,7 +11,6 @@ Column {
     Label {
         anchors.horizontalCenter: parent.horizontalCenter
         text: wallet.name
-        font.family: dinpro.name
         font.pixelSize: 32
     }
 

@@ -56,13 +56,11 @@ GridLayout {
                     id: total_balance_label
                     text: qsTr('id_total_balance') + ':'
                     font.pixelSize: 24
-                    font.family: dinpro.name
                 }
 
                 Label {
                     text: wallet.balance
                     font.pixelSize: 24
-                    font.family: dinpro.name
                 }
             }
 
@@ -99,7 +97,6 @@ GridLayout {
         Label {
             visible: stack_view.depth === 1
             text: qsTr('id_transactions') + (account ? ' - ' + account.name : '')
-            font.family: dinpro.name
             font.pixelSize: 14
             font.capitalization: Font.AllUppercase
         }
@@ -150,7 +147,6 @@ GridLayout {
 
                 Label {
                     color: isCurrentItem ? 'green' : 'gray'
-                    font.family: dinpro.name
                     font.pixelSize: 16
                     text: account.name
                 }
@@ -159,7 +155,6 @@ GridLayout {
                 Label {
                     text: `${account.balance} BTC`
                     font.pixelSize: 20
-                    font.family: dinpro.name
                 }
 
                 Row {
@@ -237,4 +232,3 @@ GridLayout {
         id: create_account_dialog
     }
 }
-

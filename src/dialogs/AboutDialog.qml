@@ -28,7 +28,6 @@ Dialog {
         // FIXME add version (probably in green.pro?) since Qt.application.version is not working
         // FIXME add localized string
         Label {
-            font.family: dinpro.name
             anchors.fill: parent
             anchors.margins: 16
             wrapMode: Text.WordWrap

@@ -7,7 +7,6 @@ Column {
 
     Label {
         anchors.horizontalCenter: parent.horizontalCenter
-        font.family: dinpro.name
         font.pixelSize: 16
         opacity: wallet.events.tor !== undefined && wallet.events.tor.progress > 0 && wallet.events.tor.progress < 100 ? 1 : 0
         text: wallet.events.tor ? wallet.events.tor.summary : ''

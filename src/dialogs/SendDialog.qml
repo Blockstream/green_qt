@@ -6,7 +6,6 @@ Dialog {
     property alias account: controller.account
 
     title: qsTr('id_send')
-    font.family: dinpro.name
     width: 420
     height: 500
     horizontalPadding: 50
