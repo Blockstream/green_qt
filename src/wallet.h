@@ -44,7 +44,7 @@ private:
     Q_PROPERTY(QJsonObject events READ events NOTIFY eventsChanged)
     Q_PROPERTY(QStringList mnemonic READ mnemonic CONSTANT)
     Q_PROPERTY(int loginAttemptsRemaining READ loginAttemptsRemaining NOTIFY loginAttemptsRemainingChanged)
-    Q_PROPERTY(quint64 balance READ balance NOTIFY balanceChanged)
+    Q_PROPERTY(QString balance READ balance NOTIFY balanceChanged)
 
 public:
     explicit Wallet(QObject *parent = nullptr);
@@ -68,7 +68,8 @@ public:
 
     int loginAttemptsRemaining() const { return m_login_attempts_remaining; }
 
-    quint64 balance() const { return m_balance; }
+    QString balance() const;
+
 public slots:
     void connect();
     void disconnect();
@@ -91,7 +92,7 @@ signals:
 
     void loginAttemptsRemainingChanged(int loginAttemptsRemaining);
 
-    void balanceChanged(const quint64);
+    void balanceChanged();
 
     void settingsChanged();
 

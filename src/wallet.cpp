@@ -215,6 +215,11 @@ QStringList Wallet::mnemonic() const
     return m_mnemonic;
 }
 
+QString Wallet::balance() const {
+    QLocale locale;
+    return locale.toString(static_cast<double>(m_balance) / 100000000);
+}
+
 void Wallet::login(const QByteArray& pin)
 {
     Q_ASSERT(m_login_attempts_remaining > 0);
@@ -470,7 +475,7 @@ void Wallet::setBalance(const quint64 balance)
 {
     if (m_balance == balance) return;
     m_balance = balance;
-    emit balanceChanged(m_balance);
+    emit balanceChanged();
 }
 
 AmountConverter::AmountConverter(QObject *parent) : QObject(parent)
