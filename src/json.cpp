@@ -29,6 +29,13 @@ QJsonObject toObject(const GA_json *json)
     return doc(json).object();
 }
 
+GA_json* fromArray(const QJsonArray& array)
+{
+    GA_json* json;
+    GA_convert_string_to_json(QJsonDocument(array).toJson().constData(), &json);
+    return json;
+}
+
 GA_json* fromObject(const QJsonObject& object)
 {
     GA_json* json;

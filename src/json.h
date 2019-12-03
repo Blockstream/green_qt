@@ -11,6 +11,7 @@ namespace Json {
 QJsonArray toArray(const GA_json* json);
 QJsonObject toObject(const GA_json* json);
 
+GA_json* fromArray(const QJsonArray& array);
 GA_json* fromObject(const QJsonObject& object);
 
 } // namespace Json
