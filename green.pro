@@ -85,6 +85,8 @@ macos {
 GDK_BUILD_DIR = $$absolute_path($$(BUILDROOT)/gdk-$$(GDKBLDID)/src, $${PWD})
 
 macos {
+    QMAKE_POST_LINK += plutil -replace NSCameraUsageDescription -string \"We use the camera to scan QR codes\" $$OUT_PWD/$${TARGET}.app/Contents/Info.plist
+
     static {
         LIBS += $$GDK_BUILD_DIR/build-clang/src/libgreenaddress_full.a
     } else {
