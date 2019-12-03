@@ -202,6 +202,12 @@ void Wallet::handleNotification(const QJsonObject &notification)
                 emit account->jsonChanged();
                 emit account->balanceChanged();
             }
+
+            quint64 balance = 0;
+            for (auto account : m_accounts) {
+                balance += static_cast<quint64>(qobject_cast<Account*>(account)->m_json.value("satoshi").toObject().value("btc").toInt());
+            }
+            setBalance(balance);
         });
     }
 }
