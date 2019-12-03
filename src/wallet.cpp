@@ -182,19 +182,19 @@ void Wallet::handleNotification(const QJsonObject &notification)
         QMetaObject::invokeMethod(m_context, [this, accounts] {
             // First get balance for each account.
             for (auto account : accounts) {
-                GA_json* details = Json::fromObject({
-                    { "subaccount", account->m_pointer },
-                    { "num_confs", 0 }
-                });
+                auto balance = GA::process_auth([=] (GA_auth_handler** call) {
+                    GA_json* details = Json::fromObject({
+                        { "subaccount", account->m_pointer },
+                        { "num_confs", 0 }
+                    });
 
-                GA_json* balance;
-                int err = GA_get_balance(m_session, details, &balance);
-                GA_destroy_json(details);
-                Q_ASSERT(err == GA_OK);
+                    int err = GA_get_balance(m_session, details, call);
+                    Q_ASSERT(err == GA_OK);
+                    GA_destroy_json(details);
+                }).value("balance").toObject();
 
                 // TODO: handle m_json concurrency
-                account->m_json.insert("satoshi", Json::toObject(balance));
-                GA_destroy_json(balance);
+                account->m_json.insert("satoshi", balance);
             }
             // Now update all account balances at once.
             for (auto account : accounts) {
@@ -299,22 +299,23 @@ void Wallet::login(const QByteArray& pin)
 void Wallet::test()
 {
     QMetaObject::invokeMethod(m_context, [this] {
-        GA_json* hw_device;
-        GA_convert_string_to_json(
-            "{"
-            "   \"device\": {"
-            "      \"name\": \"Ledger\","
-            "      \"supports_arbitrary_scripts\": true,"
-            "      \"supports_low_r\": false"
-            "   }"
-            "}",
-            &hw_device);
+        GA::process_auth([this] (GA_auth_handler** call) {
+            GA_json* hw_device;
+            GA_convert_string_to_json(
+                "{"
+                "   \"device\": {"
+                "      \"name\": \"Ledger\","
+                "      \"supports_arbitrary_scripts\": true,"
+                "      \"supports_low_r\": false"
+                "   }"
+                "}",
+                &hw_device);
 
-        GA_auth_handler* call;
-        int err = GA_register_user(m_session, hw_device, "", &call);
-        Q_ASSERT(err == GA_OK);
-        GA::process_auth(call);
-        GA_destroy_auth_handler(call);
+            int err = GA_register_user(m_session, hw_device, "", call);
+            Q_ASSERT(err == GA_OK);
+
+            GA_destroy_json(hw_device);
+        });
     });
 }
 
@@ -328,22 +329,20 @@ void Wallet::signup(const QStringList& mnemonic, const QString& password, const 
         GA_json* hw_device;
         GA_convert_string_to_json("{}", &hw_device);
 
-        GA_auth_handler* call;
-        int err = GA_register_user(m_session, hw_device, raw_mnemonic.constData(), &call);
-        Q_ASSERT(err == GA_OK);
-        GA::process_auth(call);
-        GA_destroy_auth_handler(call);
+        GA::process_auth([&] (GA_auth_handler** call) {
+            int err = GA_register_user(m_session, hw_device, raw_mnemonic.constData(), call);
+            Q_ASSERT(err == GA_OK);
+        });
 
-        err = GA_login(m_session, hw_device, raw_mnemonic.constData(), password.toLatin1().constData(), &call);
-        Q_ASSERT(err == GA_OK);
-
-        GA::process_auth(call);
-        GA_destroy_auth_handler(call);
+        GA::process_auth([&] (GA_auth_handler** call) {
+            int err = GA_login(m_session, hw_device, raw_mnemonic.constData(), password.toLatin1().constData(), call);
+            Q_ASSERT(err == GA_OK);
+        });
 
         GA_destroy_json(hw_device);
 
         GA_json* pin_data;
-        err = GA_set_pin(m_session, raw_mnemonic.constData(), pin.constData(), "test", &pin_data);
+        int err = GA_set_pin(m_session, raw_mnemonic.constData(), pin.constData(), "test", &pin_data);
         char* str;
         GA_convert_json_to_string(pin_data, &str);
         m_pin_data = QByteArray(str);
@@ -378,20 +377,15 @@ void Wallet::recover(const QString& name, const QStringList& mnemonic, const QBy
     QMetaObject::invokeMethod(m_context, [this, name, pin, mnemonic] {
         QByteArray raw_mnemonic = mnemonic.join(' ').toLatin1();
 
-        GA_json* hw_device;
-        GA_convert_string_to_json("{}", &hw_device);
+        GA::process_auth([&] (GA_auth_handler** call) {
+            GA_json* hw_device;
+            GA_convert_string_to_json("{}", &hw_device);
 
-        GA_auth_handler* call;
+            int err = GA_login(m_session, hw_device, raw_mnemonic.constData(), "", call);
+            Q_ASSERT(err == GA_OK);
 
-        qDebug() << name << mnemonic << pin;
-        int err = GA_login(m_session, hw_device, raw_mnemonic.constData(), "", &call);
-        Q_ASSERT(err == GA_OK);
-
-        GA::process_auth(call);
-        GA_destroy_auth_handler(call);
-
-        qDebug() << name << mnemonic << pin;
-        GA_destroy_json(hw_device);
+            GA_destroy_json(hw_device);
+        });
 
         GA_json* pin_data;
         GA_set_pin(m_session, raw_mnemonic.constData(), pin.constData(), "test", &pin_data);

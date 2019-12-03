@@ -33,11 +33,10 @@ QJsonObject auth_handler_get_result(GA_auth_handler* call)
 
 QJsonArray get_subaccounts(GA_session* session)
 {
-    GA_json* data;
-    GA_get_subaccounts(session, &data);
-    QJsonArray subaccounts = Json::toArray(data);
-    GA_destroy_json(data);
-    return subaccounts;
+    return process_auth([&] (GA_auth_handler** call) {
+        int err = GA_get_subaccounts(session, call);
+        Q_ASSERT(err == GA_OK);
+    }).value("subaccounts").toArray();
 }
 
 QJsonObject convert_amount(GA_session* session, const QJsonObject& input)
@@ -52,16 +51,14 @@ QJsonObject convert_amount(GA_session* session, const QJsonObject& input)
     return value;
 }
 
-void process_auth(GA_auth_handler* call, GA_json** output)
+QJsonObject process_auth2(GA_auth_handler* call)
 {
     while (true) {
         QJsonObject result = GA::auth_handler_get_result(call);
-        qDebug() << result;
         QString status = result.value("status").toString();
 
         if (status == "done") {
-            if (output) *output = Json::fromObject(result.value("result").toObject());
-            break;
+            return result.value("result").toObject();
         }
 
         if (status == "error") {
@@ -83,9 +80,8 @@ void process_auth(GA_auth_handler* call, GA_json** output)
             GA_auth_handler_call(call);
         }
     }
+
+    return {};
 }
 
 } // namespace GA
-
-
-

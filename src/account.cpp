@@ -57,20 +57,19 @@ QString Account::balance() const
 
 static QJsonArray get_transactions(GA_session* session, int subaccount, int first, int count)
 {
-    GA_json* details = Json::fromObject({
-        { "subaccount", subaccount },
-        { "first", first },
-        { "count", count }
-    });
-    GA_json* txs;
-    int err = GA_get_transactions(session, details, &txs);
-    Q_ASSERT(err == GA_OK);
-    err = GA_destroy_json(details);
-    Q_ASSERT(err == GA_OK);
-    QJsonArray transactions = Json::toArray(txs);
-    err = GA_destroy_json(txs);
-    Q_ASSERT(err == GA_OK);
-    return transactions;
+    return GA::process_auth([&] (GA_auth_handler** call) {
+        GA_json* details = Json::fromObject({
+            { "subaccount", subaccount },
+            { "first", first },
+            { "count", count }
+        });
+
+        int err = GA_get_transactions(session, details, call);
+        Q_ASSERT(err == GA_OK);
+
+        err = GA_destroy_json(details);
+        Q_ASSERT(err == GA_OK);
+    }).value("transactions").toArray();
 }
 
 void Account::reload()
@@ -151,18 +150,17 @@ void ReceiveAddress::generate()
     emit generatingChanged(true);
 
     QMetaObject::invokeMethod(m_account->m_wallet->m_context, [this] {
-        auto address_details = Json::fromObject({
-            { "subaccount", static_cast<qint64>(m_account->m_pointer) },
-        });
+        m_address = GA::process_auth([&] (GA_auth_handler** call) {
+            auto address_details = Json::fromObject({
+                { "subaccount", static_cast<qint64>(m_account->m_pointer) },
+            });
 
-        GA_json* address{nullptr};
-        int err = GA_get_receive_address(m_account->m_wallet->m_session, address_details, &address);
-        GA_destroy_json(address_details);
+            int err = GA_get_receive_address(m_account->m_wallet->m_session, address_details, call);
+            Q_ASSERT(err == GA_OK);
 
-        if (err != GA_OK) return;
-
-        m_address = Json::toObject(address).value("address").toString();
-        GA_destroy_json(address);
+            err = GA_destroy_json(address_details);
+            Q_ASSERT(err == GA_OK);
+        }).value("address").toString();
 
         m_generating = false;
         emit generatingChanged(true);
