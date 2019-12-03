@@ -191,7 +191,8 @@ void Wallet::handleNotification(const QJsonObject &notification)
                     int err = GA_get_balance(m_session, details, call);
                     Q_ASSERT(err == GA_OK);
                     GA_destroy_json(details);
-                }).value("balance").toObject();
+                });
+
 
                 // TODO: handle m_json concurrency
                 account->m_json.insert("satoshi", balance);
