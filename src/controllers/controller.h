@@ -44,10 +44,6 @@ signals:
     void walletChanged(Wallet* wallet);
     void statusChanged(const QString& status);
 
-    void enterDone(const QJsonObject& result);
-    void codeRequested(const QJsonObject& result);
-    void enterResolveCode();
-
 protected:
     Wallet* m_wallet{nullptr};
     QString m_state;

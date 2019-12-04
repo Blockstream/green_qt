@@ -51,18 +51,15 @@ void Controller::process(GA_json** output)
         setState(status.toUpper());
 
         if (status == "done") {
-            emit enterDone(m_result);
             if (output) *output = Json::fromObject(m_result.value("result").toObject());
             break;
         }
 
         if (status == "error") {
-            qDebug("see error above");
             break;
         }
 
         if (status == "request_code") {
-            emit codeRequested(m_result);
             QJsonArray methods = m_result.value("methods").toArray();
             Q_ASSERT(methods.size() > 0);
             if (methods.size() == 1) {
@@ -77,14 +74,18 @@ void Controller::process(GA_json** output)
         }
 
         if (status == "resolve_code") {
-            emit enterResolveCode();
             qDebug("should call prompt code and send with GA_auth_handler_resolve_code");
             break;
         }
 
         if (status == "call") {
             GA_auth_handler_call(m_auth_handler);
+            continue;
         }
+
+
+        qDebug() << "UNHANDLED STATUS" << m_result;
+        break;
     }
 }
 
