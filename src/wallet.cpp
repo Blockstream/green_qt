@@ -286,8 +286,9 @@ void Wallet::login(const QByteArray& pin)
 
         GA_json* config;
         GA_get_twofactor_config(m_session, &config);
-        qDebug() << "CONFIG;" <<  Json::toObject(config);
+        m_config = Json::toObject(config);
         GA_destroy_json(config);
+        emit configChanged();
 
         GA_json* settings;
         err = GA_get_settings(m_session, &settings);
