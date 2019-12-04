@@ -35,7 +35,7 @@
         <file>views/SidebarItem.qml</file>
         <file>views/TransactionListView.qml</file>
         <file>views/WalletsSidebarItem.qml</file>
-        <file>dialogs/WalletSettingsDialog.qml</file>
+        <file>views/WalletSettingsView.qml</file>
         <file>views/WizardPage.qml</file>
         <file>views/onboarding/ServiceTermsPage.qml</file>
         <file>views/onboarding/WelcomePage.qml</file>

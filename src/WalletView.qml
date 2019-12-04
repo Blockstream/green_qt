@@ -33,7 +33,7 @@ GridLayout {
             to: 'VIEW_SETTINGS'
             StackViewPushAction {
                 stackView: stack_view
-                WalletSettingsDialog {
+                WalletSettingsView {
 
                 }
             }
