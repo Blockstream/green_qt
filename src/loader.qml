@@ -15,6 +15,8 @@ ApplicationWindow {
     Material.theme: Material.Dark
 
     id: window
+    property string location: '/'
+
     property Wallet currentWallet
 
     Loader {

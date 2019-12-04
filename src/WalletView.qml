@@ -8,16 +8,61 @@ import './dialogs'
 import './views'
 
 GridLayout {
-    columnSpacing: 80
+    id: wallet_view
+
+    property string title: qsTr('id_total_balance') + ': ' + wallet.balance + ' BTC'
     rowSpacing: 10
 
     property var account: accounts_list.currentItem ? accounts_list.currentItem.account : undefined
 
+    states: State {
+        when: window.location === '/settings'
+        name: 'VIEW_SETTINGS'
+        PropertyChanges {
+            target: wallet_view
+            title: qsTr('id_settings')
+        }
+        PropertyChanges {
+            target: settings_tool_button
+            icon.source: 'assets/svg/arrow_left.svg'
+        }
+    }
+
+    transitions: [
+        Transition {
+            to: 'VIEW_SETTINGS'
+            StackViewPushAction {
+                stackView: stack_view
+                WalletSettingsDialog {
+
+                }
+            }
+        },
+        Transition {
+            from: 'VIEW_SETTINGS'
+            to: ''
+            ScriptAction {
+                script: stack_view.pop()
+            }
+        }
+    ]
+
     columns: 2
 
-    Item {
-        width: 1
-        height: 1
+    Row {
+        Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
+        Layout.rightMargin: 10
+        Image {
+            anchors.verticalCenter: parent.verticalCenter
+            source: icons[wallet.network.id]
+            width: 28
+            height: 28
+        }
+        Label {
+            anchors.verticalCenter: parent.verticalCenter
+            font.pixelSize: 24
+            text: wallet.name
+        }
     }
 
     Item {
@@ -29,7 +74,7 @@ GridLayout {
             color: 'black'
             opacity: 0.2
             anchors.fill: parent
-            anchors.leftMargin: -40
+            anchors.leftMargin: 0
             anchors.bottomMargin: -10000
             anchors.rightMargin: -10000
             anchors.topMargin: -10000
@@ -37,31 +82,12 @@ GridLayout {
 
         RowLayout {
             id: layout
+            x: 20
+            width: parent.width - 40
 
-            width: parent.width
-
-            Row {
-                Layout.alignment: Qt.AlignBottom
-                padding: 0
-                spacing: 8
-
-                Image {
-                    source: icons[wallet.network.id]
-                    width: 28
-                    height: 28
-                    anchors.verticalCenter: total_balance_label.verticalCenter
-                }
-
-                Label {
-                    id: total_balance_label
-                    text: qsTr('id_total_balance') + ':'
-                    font.pixelSize: 24
-                }
-
-                Label {
-                    text: wallet.balance
-                    font.pixelSize: 24
-                }
+            Label {
+                text: title
+                font.pixelSize: 24
             }
 
             Item {
@@ -70,35 +96,15 @@ GridLayout {
             }
 
             ToolButton {
+                id: settings_tool_button
+                checked: window.location === '/settings'
+                checkable: true
                 Layout.alignment: Qt.AlignBottom
                 icon.source: 'assets/svg/settings.svg'
                 icon.width: 24
                 icon.height: 24
-
-                onClicked: wallet_settings_dialog.open()
+                onToggled: window.location = checked ? '/settings' : '/transactions'
             }
-        }
-    }
-
-
-    Item {
-        width: 1
-        height: 1
-    }
-
-    RowLayout {
-        Layout.minimumHeight: 30
-
-        Label {
-            visible: stack_view.depth === 1
-            text: qsTr('id_transactions') + (account ? ' - ' + account.name : '')
-            font.pixelSize: 14
-            font.capitalization: Font.AllUppercase
-        }
-
-        Loader {
-            visible: stack_view.depth > 1
-            sourceComponent: stack_view.currentItem.test
         }
     }
 
@@ -123,7 +129,7 @@ GridLayout {
                     z: -2
                     color: Qt.rgba(0, 0, 0, isCurrentItem ? 0.1 : 0)
                     anchors.fill: parent
-                    anchors.rightMargin: -40
+                    anchors.rightMargin: -5
                     anchors.topMargin: -1
 
                     Rectangle {
@@ -145,7 +151,6 @@ GridLayout {
                     font.pixelSize: 16
                     text: account.name
                 }
-
 
                 Label {
                     text: `${account.balance} BTC`
@@ -215,15 +220,22 @@ GridLayout {
         }
     }
 
-    WalletSettingsDialog {
-        id: wallet_settings_dialog
-    }
-
     RenameAccountDialog {
         id: rename_account_dialog
     }
 
     CreateAccountDialog {
         id: create_account_dialog
+    }
+
+
+    Component {
+        id: two_factor_sms_enable_dialog
+        EnableSmsTwoFactorDialog {}
+    }
+
+    Component {
+        id: two_factor_sms_disable_dialog
+        TwoFactorSmsDisableDialog {}
     }
 }
