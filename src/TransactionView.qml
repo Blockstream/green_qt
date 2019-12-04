@@ -33,7 +33,6 @@ Page {
         }
 
         Label {
-            anchors.verticalCenter: back_arrow_button.verticalCenter
             text: qsTr('id_transaction_details') + ' - ' + tx_direction(transaction.data.type)
             font.pixelSize: 14
             font.capitalization: Font.AllUppercase
