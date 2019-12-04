@@ -26,7 +26,6 @@
         <file>RestoreWallet.qml</file>
         <file>DeviceView.qml</file>
         <file>TransactionView.qml</file>
-        <file>WalletSecuritySettingsView.qml</file>
         <file>Panel.qml</file>
         <file>dialogs/CreateAccountDialog.qml</file>
         <file>dialogs/RenameAccountDialog.qml</file>
@@ -50,6 +49,13 @@
         <file>ConnectView.qml</file>
         <file>FeeComboBox.qml</file>
         <file>ScannerView.qml</file>
+        <file>views/WalletAdvancedSettingsView.qml</file>
+        <file>views/WalletGeneralSettingsView.qml</file>
+        <file>views/WalletSecuritySettingsView.qml</file>
+        <file>SettingsBox.qml</file>
+        <file>EnableSmsTwoFactorDialog.qml</file>
+        <file>TwoFactorSmsDisableDialog.qml</file>
+        <file>WizardButtonBox.qml</file>
         <file>ControllerDialog.qml</file>
     </qresource>
 </RCC>
