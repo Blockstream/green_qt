@@ -31,6 +31,11 @@ ApplicationWindow {
         }
     }
 
+    Connections {
+        target: engine
+        onSourceChanged: loader.reload()
+    }
+
     Action {
         enabled: engine.debug
         shortcut: 'CTRL+R'

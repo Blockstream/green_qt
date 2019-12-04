@@ -14,6 +14,8 @@ public:
     bool isDebug() const;
 
     Q_INVOKABLE void clearCache();
+signals:
+    void sourceChanged();
 };
 
 #endif // GREEN_APPLICATIONENGINE_H
