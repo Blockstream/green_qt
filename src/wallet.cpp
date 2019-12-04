@@ -133,9 +133,9 @@ QJsonObject Wallet::currencies() const
     return m_currencies;
 }
 
-QList<QObject*> Wallet::accounts() const
+QQmlListProperty<Account> Wallet::accounts()
 {
-    return m_accounts;
+    return QQmlListProperty<Account>(this, m_accounts);
 }
 
 void Wallet::handleNotification(const QJsonObject &notification)
@@ -205,7 +205,7 @@ void Wallet::handleNotification(const QJsonObject &notification)
 
             quint64 balance = 0;
             for (auto account : m_accounts) {
-                balance += static_cast<quint64>(qobject_cast<Account*>(account)->m_json.value("satoshi").toObject().value("btc").toInt());
+                balance += static_cast<quint64>(account->m_json.value("satoshi").toObject().value("btc").toInt());
             }
             setBalance(balance);
         });
