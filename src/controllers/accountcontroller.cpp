@@ -1,5 +1,7 @@
 #include "accountcontroller.h"
 #include "../account.h"
+#include <QQmlEngine>
+#include <QQmlContext>
 
 AccountController::AccountController(QObject *parent)
     : Controller(parent)
@@ -9,7 +11,10 @@ AccountController::AccountController(QObject *parent)
 
 Account *AccountController::account() const
 {
-    return m_account;
+    if (m_account) return m_account;
+    auto context = qmlContext(this);
+    if (!context) return nullptr;
+    return qobject_cast<Account*>(context->contextProperty("account").value<QObject*>());
 }
 
 void AccountController::setAccount(Account *account)
@@ -23,4 +28,11 @@ void AccountController::setAccount(Account *account)
     if (account) {
         setWallet(account->wallet());
     }
+}
+
+Wallet *AccountController::wallet() const
+{
+    auto self = account();
+    if (self) return self->wallet();
+    return Controller::wallet();
 }

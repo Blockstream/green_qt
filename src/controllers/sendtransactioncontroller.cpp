@@ -74,7 +74,7 @@ void SendTransactionController::create()
     if (m_address == nullptr) return;
 
     if (!m_fee_rate) {
-        m_fee_rate = static_cast<qint64>(m_wallet->settings().value("required_num_blocks").toInt());
+        m_fee_rate = static_cast<qint64>(wallet()->settings().value("required_num_blocks").toInt());
     }
 
     QLocale locale;
@@ -84,21 +84,21 @@ void SendTransactionController::create()
 
     incrementBusy();
 
-    QMetaObject::invokeMethod(m_account->m_wallet->m_context, [this, amount] {
+    QMetaObject::invokeMethod(wallet()->m_context, [this, amount] {
         QJsonObject address{
             { "address", m_address },
             { "satoshi", amount }
         };
 
         auto details = Json::fromObject({
-            { "subaccount", static_cast<qint64>(m_account->m_pointer) },
+            { "subaccount", static_cast<qint64>(account()->m_pointer) },
             { "fee_rate", m_fee_rate },
             { "send_all", m_send_all },
             { "addressees", QJsonArray{address}}
         });
 
         m_transaction = GA::process_auth([&] (GA_auth_handler** call) {
-            int err = GA_create_transaction(m_account->m_wallet->m_session, details, call);
+            int err = GA_create_transaction(wallet()->m_session, details, call);
             Q_ASSERT(err == GA_OK);
         });
 
@@ -113,11 +113,11 @@ void SendTransactionController::create()
 
 void SendTransactionController::send()
 {
-    QMetaObject::invokeMethod(m_account->m_wallet->m_context, [this] {
+    QMetaObject::invokeMethod(wallet()->m_context, [this] {
         auto transaction = GA::process_auth([&] (GA_auth_handler** call) {
             GA_json* details = Json::fromObject(m_transaction);
 
-            int err = GA_sign_transaction(m_account->m_wallet->m_session, details, call);
+            int err = GA_sign_transaction(wallet()->m_session, details, call);
             Q_ASSERT(err == GA_OK);
 
             err = GA_destroy_json(details);
@@ -127,7 +127,7 @@ void SendTransactionController::send()
         GA::process_auth([&] (GA_auth_handler** call) {
             GA_json* details = Json::fromObject(transaction);
 
-            int err = GA_send_transaction(m_account->m_wallet->m_session, details, call);
+            int err = GA_send_transaction(wallet()->m_session, details, call);
             Q_ASSERT(err == GA_OK);
 
             err = GA_destroy_json(details);

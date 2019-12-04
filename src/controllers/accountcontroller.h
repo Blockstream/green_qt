@@ -14,6 +14,8 @@ public:
     Account* account() const;
     void setAccount(Account* account);
 
+    Wallet* wallet() const override;
+
 signals:
     void accountChanged(Account* account);
 

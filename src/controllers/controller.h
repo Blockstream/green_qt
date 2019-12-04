@@ -23,7 +23,7 @@ public:
     QJsonObject result() const { return m_result; }
     QString state() const;
 
-    Wallet* wallet() const;
+    virtual Wallet* wallet() const;
     void setWallet(Wallet* wallet);
 
     void process(GA_json** output = nullptr);
