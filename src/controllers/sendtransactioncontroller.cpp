@@ -10,6 +10,18 @@ SendTransactionController::SendTransactionController(QObject* parent)
 
 }
 
+bool SendTransactionController::isValid() const
+{
+    return m_valid;
+}
+
+void SendTransactionController::setValid(bool valid)
+{
+    if (m_valid == valid) return;
+    m_valid = valid;
+    emit validChanged(m_valid);
+}
+
 QString SendTransactionController::address() const
 {
     return m_address;

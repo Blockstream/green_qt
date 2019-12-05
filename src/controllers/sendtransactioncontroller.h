@@ -8,6 +8,7 @@
 class SendTransactionController : public AccountController
 {
     Q_OBJECT
+    Q_PROPERTY(bool valid READ isValid NOTIFY validChanged)
     Q_PROPERTY(QString address READ address WRITE setAddress NOTIFY addressChanged)
     Q_PROPERTY(bool sendAll READ sendAll WRITE setSendAll NOTIFY sendAllChanged)
     Q_PROPERTY(QString amount READ amount WRITE setAmount NOTIFY amountChanged)
@@ -16,6 +17,8 @@ class SendTransactionController : public AccountController
 
 public:
     explicit SendTransactionController(QObject* parent = nullptr);
+
+    bool isValid() const;
 
     QString address() const;
     void setAddress(const QString& address);
@@ -35,6 +38,7 @@ public slots:
     void send();
 
 signals:
+    void validChanged(bool valid);
     void addressChanged(const QString& address);
     void sendAllChanged(bool send_all);
     void amountChanged(QString amount);
@@ -45,11 +49,16 @@ private:
     void create();
 
 protected:
+    bool m_valid{false};
+    int m_creating{0};
     QString m_address;
     bool m_send_all{false};
     QString m_amount;
     qint64 m_fee_rate{0};
     QJsonObject m_transaction{{ "transaction_vsize", 0 }};
+
+    void setValid(bool valid);
+    void update(const QJsonObject& result) override;
 };
 
 #endif // GREEN_SENDTRANSACTIONCONTROLLER_H
