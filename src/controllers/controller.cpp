@@ -10,6 +10,16 @@ Controller::Controller(QObject* parent)
 {
 }
 
+QObject* Controller::context() const
+{
+    return wallet()->m_context;
+}
+
+GA_session* Controller::session() const
+{
+    return wallet()->m_session;
+}
+
 QString Controller::state() const
 {
     return m_state;

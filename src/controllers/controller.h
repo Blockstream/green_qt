@@ -20,6 +20,9 @@ class Controller : public QObject
 public:
     explicit Controller(QObject* parent = nullptr);
 
+    QObject* context() const;
+    GA_session* session() const;
+
     QJsonObject result() const { return m_result; }
     QString state() const;
 
