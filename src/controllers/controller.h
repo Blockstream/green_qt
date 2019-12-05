@@ -57,6 +57,15 @@ protected:
     void setState(const QString& state);
     void incrementBusy();
     void decrementBusy();
+    template <typename F>
+    void dispatch(F&& f) {
+        QMetaObject::invokeMethod(context(), [this, f] {
+            Q_ASSERT(m_auth_handler == nullptr);
+            f(session(), &m_auth_handler);
+            Q_ASSERT(m_auth_handler != nullptr);
+            process();
+        });
+    }
 };
 
 #endif // GREEN_CONTROLLER_H
