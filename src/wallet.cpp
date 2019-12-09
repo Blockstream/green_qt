@@ -227,6 +227,32 @@ QString Wallet::balance() const {
     return locale.toString(static_cast<double>(m_balance) / 100000000);
 }
 
+void Wallet::changePin(const QByteArray& pin)
+{
+    char* mnemonic;
+    int err = GA_get_mnemonic_passphrase(m_session, "", &mnemonic);
+    Q_ASSERT(err == GA_OK);
+    GA_json* pin_data;
+    err = GA_set_pin(m_session, mnemonic, pin.constData(), "test", &pin_data);
+    Q_ASSERT(err == GA_OK);
+    GA_destroy_string(mnemonic);
+
+    char* str;
+    err = GA_convert_json_to_string(pin_data, &str);
+    Q_ASSERT(err == GA_OK);
+    m_pin_data = QByteArray(str);
+    GA_destroy_json(pin_data);
+    GA_destroy_string(str);
+
+    QSettings settings(GetDataFile("app", "wallets.ini"), QSettings::IniFormat);
+    const int count = settings.beginReadArray("wallets");
+    settings.endArray();
+    settings.beginWriteArray("wallets", count);
+    settings.setArrayIndex(m_index);
+    settings.setValue("pin_data", m_pin_data);
+    settings.endArray();
+}
+
 void Wallet::login(const QByteArray& pin)
 {
     Q_ASSERT(m_login_attempts_remaining > 0);

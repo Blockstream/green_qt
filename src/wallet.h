@@ -72,6 +72,8 @@ public:
     QString balance() const;
     QJsonObject config() const { return m_config; }
 
+    Q_INVOKABLE void changePin(const QByteArray& pin);
+
 public slots:
     void connect();
     void disconnect();
