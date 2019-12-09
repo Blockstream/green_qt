@@ -25,6 +25,9 @@ ColumnLayout {
             horizontalAlignment: TextField.AlignHCenter
             placeholderText: 'Insert amount'
             Layout.fillWidth: true
+            validator: DoubleValidator {
+                notation: DoubleValidator.StandardNotation
+            }
         }
     }
 }
