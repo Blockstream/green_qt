@@ -58,5 +58,6 @@
         <file>TwoFactorEnableDialog.qml</file>
         <file>TwoFactorDisableDialog.qml</file>
         <file>ControllerResult.qml</file>
+        <file>dialogs/ChangePinDialog.qml</file>
     </qresource>
 </RCC>

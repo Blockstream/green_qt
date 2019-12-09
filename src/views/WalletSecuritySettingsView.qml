@@ -5,6 +5,7 @@ import QtQuick.Controls 2.5
 import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.12
 import '..'
+import '../dialogs'
 
 ColumnLayout {
     spacing: 30
@@ -16,7 +17,16 @@ ColumnLayout {
         subtitle: 'Enable a PIN to quickly access your wallet for this device'
 
         FlatButton {
+            Component {
+                id: change_pin_dialog
+                ChangePinDialog {
+                    modal: true
+                    anchors.centerIn: parent
+                }
+            }
+
             text: qsTr('Change PIN')
+            onClicked: change_pin_dialog.createObject(Window.window).open()
         }
 
     }
