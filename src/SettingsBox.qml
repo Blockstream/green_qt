@@ -7,7 +7,7 @@ Page {
     default property alias children: column_layout.children
     font.family: dinpro.name
     font.pixelSize: 15
-
+    Layout.fillWidth: true
     header: Label {
         color: '#808080'
         font.capitalization: Font.AllUppercase
@@ -17,6 +17,7 @@ Page {
     background: Item {}
 
     RowLayout {
+        anchors.fill: parent
         spacing: 30
 
         Label {

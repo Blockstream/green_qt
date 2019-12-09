@@ -369,6 +369,7 @@ void Wallet::signup(const QStringList& mnemonic, const QString& password, const 
         }, Qt::BlockingQueuedConnection);
 
         reload();
+        updateConfig();
 
         setAuthentication(Authenticated);
     });

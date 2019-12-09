@@ -1,7 +1,6 @@
 #include "controller.h"
 #include "../json.h"
 #include "../wallet.h"
-#include <QDebug>
 #include <QQmlContext>
 #include <QQmlEngine>
 
@@ -20,16 +19,11 @@ GA_session* Controller::session() const
     return wallet()->m_session;
 }
 
-QString Controller::state() const
+void Controller::setResult(const QJsonObject &result)
 {
-    return m_state;
-}
-
-void Controller::setState(const QString &state)
-{
-    if (m_state == state) return;
-    m_state = state;
-    emit stateChanged(state);
+    if (m_result == result) return;
+    m_result = result;
+    emit resultChanged(m_result);
 }
 
 Wallet *Controller::wallet() const
@@ -50,53 +44,62 @@ void Controller::setWallet(Wallet *wallet)
 }
 
 
-void Controller::process(GA_json** output)
+void Controller::process()
 {
-    while (true) {
-        m_result = GA::auth_handler_get_result(m_auth_handler);
-        emit resultChanged(m_result);
+    Q_ASSERT(m_auth_handler != nullptr);
+    const auto result = GA::auth_handler_get_result(m_auth_handler);
+    const auto status = result.value("status").toString();
 
-        QString status = m_result.value("status").toString();
-
-        setState(status.toUpper());
-
-        if (status == "done") {
-            if (output) *output = Json::fromObject(m_result.value("result").toObject());
-            break;
-        }
-
-        if (status == "error") {
-            break;
-        }
-
-        if (status == "request_code") {
-            QJsonArray methods = m_result.value("methods").toArray();
-            Q_ASSERT(methods.size() > 0);
-            if (methods.size() == 1) {
-                int err = GA_auth_handler_request_code(m_auth_handler, methods.first().toString().toLatin1().constData());
-                Q_ASSERT(err == GA_OK);
-                continue;
-            } else {
-//                emit requestCode(result);
-//                qDebug() << "METHODS: " << method.toString();
-                break;
-            }
-        }
-
-        if (status == "resolve_code") {
-            qDebug("should call prompt code and send with GA_auth_handler_resolve_code");
-            break;
-        }
-
-        if (status == "call") {
-            GA_auth_handler_call(m_auth_handler);
-            continue;
-        }
-
-
-        qDebug() << "UNHANDLED STATUS" << m_result;
-        break;
+    if (result.value("status").toString() == "done") {
+        int err = GA_destroy_auth_handler(m_auth_handler);
+        Q_ASSERT(err == GA_OK);
+        m_auth_handler = nullptr;
     }
+
+    // Update the controller with the new result
+    if (update(result)) {
+        setResult(result);
+    }
+}
+
+bool Controller::update(const QJsonObject& result)
+{
+    auto status = result.value("status").toString();
+
+    if (status == "done") {
+        return true;
+    }
+
+    if (status == "error") {
+        return true;
+    }
+
+    if (status == "call") {
+        int err = GA_auth_handler_call(m_auth_handler);
+        Q_ASSERT(err == GA_OK);
+        process();
+        return false;
+    }
+
+    if (status == "resolve_code") {
+        return true;
+    }
+
+    if (status == "request_code") {
+        QJsonArray methods = result.value("methods").toArray();
+        Q_ASSERT(methods.size() > 0);
+
+        if (methods.size() == 1) {
+            int err = GA_auth_handler_request_code(m_auth_handler, methods.first().toString().toLatin1().constData());
+            Q_ASSERT(err == GA_OK);
+            process();
+            return false;
+        }
+
+        return true;
+    }
+
+    Q_UNREACHABLE();
 }
 
 void Controller::reset()
@@ -110,14 +113,13 @@ void Controller::cancel()
     int err = GA_destroy_auth_handler(m_auth_handler);
     Q_ASSERT(err == GA_OK);
     m_auth_handler = nullptr;
-    setState({});
 }
 
 void Controller::requestCode(const QByteArray& method)
 {
-    QMetaObject::invokeMethod(m_wallet->m_context, [this, method] {
+    QMetaObject::invokeMethod(wallet()->m_context, [this, method] {
         int res = GA_auth_handler_request_code(m_auth_handler, method.data());
-        process(nullptr);
+        process();
     });
     //QJsonObject result = GA::auth_handler_get_result(auth_handler);
 }
@@ -127,7 +129,7 @@ void Controller::resolveCode(const QByteArray& code)
     QMetaObject::invokeMethod(wallet()->m_context, [this, code] {
         int res = GA_auth_handler_resolve_code(m_auth_handler, code.data());
         Q_ASSERT(res == GA_OK);
-        process(nullptr);
+        process();
     });
 }
 

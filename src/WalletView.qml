@@ -227,15 +227,4 @@ GridLayout {
     CreateAccountDialog {
         id: create_account_dialog
     }
-
-
-    Component {
-        id: two_factor_sms_enable_dialog
-        EnableSmsTwoFactorDialog {}
-    }
-
-    Component {
-        id: two_factor_sms_disable_dialog
-        TwoFactorSmsDisableDialog {}
-    }
 }

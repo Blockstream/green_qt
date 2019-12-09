@@ -50,7 +50,7 @@ private:
 
 protected:
     bool m_valid{false};
-    int m_creating{0};
+    quint64 m_count{0};
     QString m_address;
     bool m_send_all{false};
     QString m_amount;
@@ -58,7 +58,7 @@ protected:
     QJsonObject m_transaction{{ "transaction_vsize", 0 }};
 
     void setValid(bool valid);
-    void update(const QJsonObject& result) override;
+    bool update(const QJsonObject& result) override;
 };
 
 #endif // GREEN_SENDTRANSACTIONCONTROLLER_H

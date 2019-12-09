@@ -3,6 +3,6 @@ import QtQuick.Controls 2.13
 
 ScriptAction {
     property StackView stackView
-    default property Item item
-    script: stackView.push(item)
+    default property Component component
+    script: stackView.push(component)
 }

@@ -61,7 +61,7 @@ StackView {
 
         property list<Action> actions: [Action{
                text: qsTr('id_send')
-               enabled: !!account && !controller.busy && controller.transaction.error === ''
+               enabled: controller.valid && !controller.transaction.error
                onTriggered: controller.send()
            }]
 

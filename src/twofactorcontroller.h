@@ -19,6 +19,8 @@ public:
     Q_INVOKABLE void enable(const QByteArray& number);
     Q_INVOKABLE void disable();
 
+    bool update(const QJsonObject& result) override;
+
 signals:
     void methodChanged(const QByteArray& method);
 

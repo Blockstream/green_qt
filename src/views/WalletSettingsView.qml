@@ -26,30 +26,30 @@ Page {
         }
     }
 
-    SwipeView {
+    StackLayout {
+        id: stack_layout
         clip: true
         anchors.fill: parent
         anchors.leftMargin: 20
         anchors.topMargin: 10
 
-        interactive: false;
         currentIndex: tab_bar.currentIndex
 
         ScrollView {
             WalletGeneralSettingsView {
-                width: parent.width
+                width: stack_layout.width - 20
             }
         }
 
         ScrollView {
             WalletSecuritySettingsView {
-                width: parent.width
+                width: stack_layout.width - 20
             }
         }
 
         ScrollView {
             WalletAdvancedSettingsView {
-                width: parent.width
+                width: stack_layout.width - 20
             }
         }
     }

@@ -53,9 +53,10 @@
         <file>views/WalletGeneralSettingsView.qml</file>
         <file>views/WalletSecuritySettingsView.qml</file>
         <file>SettingsBox.qml</file>
-        <file>EnableSmsTwoFactorDialog.qml</file>
-        <file>TwoFactorSmsDisableDialog.qml</file>
         <file>WizardButtonBox.qml</file>
         <file>ControllerDialog.qml</file>
+        <file>TwoFactorEnableDialog.qml</file>
+        <file>TwoFactorDisableDialog.qml</file>
+        <file>ControllerResult.qml</file>
     </qresource>
 </RCC>

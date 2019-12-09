@@ -51,3 +51,12 @@ void TwoFactorController::disable()
         });
     });
 }
+
+bool TwoFactorController::update(const QJsonObject& result)
+{
+    if (result.value("status").toString() == "done") {
+        // Two factor configuration has changed, update it.
+        wallet()->updateConfig();
+    }
+    return Controller::update(result);
+}

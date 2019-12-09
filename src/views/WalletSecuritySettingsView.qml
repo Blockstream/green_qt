@@ -10,6 +10,8 @@ ColumnLayout {
     spacing: 30
 
     SettingsBox {
+        Layout.fillWidth: true
+
         title: 'Quick login'
         subtitle: 'Enable a PIN to quickly access your wallet for this device'
 
@@ -100,35 +102,41 @@ ColumnLayout {
         title: 'Two factor auth'
         subtitle: 'Set any or all two factor: you can choose which one when needed! Enable two or back up the given code when applicable'
 
-        GridLayout {
-            columns: 2
-            Label {
-                text: 'sms'
+        ColumnLayout {
+            Component {
+                id: enable_dialog
+                TwoFactorEnableDialog { }
             }
-            Switch {
-                onCheckedChanged: {
-                    if (checked) {
-                        two_factor_sms_enable_dialog.createObject(stack_view).open()
-                    } else {
-                        two_factor_sms_disable_dialog.createObject(stack_view).open()
+            Component {
+                id: disable_dialog
+                TwoFactorDisableDialog { }
+            }
+            Repeater {
+                model: ['sms', 'phone', 'email', 'gauth']
+                RowLayout {
+                    property string method: modelData
+                    Image {
+                        source: `../assets/svg/2fa_${method}.svg`
+                        sourceSize.height: 32
+                    }
+                    Label {
+                        text: method.toUpperCase()
+                        Layout.fillWidth: true
+                    }
+                    Button {
+                        flat: true
+                        text: qsTr('id_enable')
+                        visible: !wallet.config[method].enabled
+                        onClicked: enable_dialog.createObject(stack_view, { method }).open()
+                    }
+                    Button {
+                        flat: true
+                        text: qsTr('id_disable')
+                        visible: wallet.config[method].enabled
+                        onClicked: disable_dialog.createObject(stack_view, { method }).open()
                     }
                 }
             }
-
-            Label {
-                text: 'call'
-            }
-            Switch { }
-
-            Label {
-                text: 'Gauth'
-            }
-            Switch { }
-
-            Label {
-                text: 'email'
-            }
-            Switch { }
         }
     }
 
@@ -183,7 +191,6 @@ ColumnLayout {
         }
     }
 
-
     SettingsBox {
         title: 'Email'
         subtitle: 'Set your email address for transactions notifications, two factor authentication and nLocktime transaction'
@@ -192,40 +199,6 @@ ColumnLayout {
             placeholderText: 'blabla@gmail.com'
         }
     }
-
-    /*
-
-    TextField {
-            id: code
-            placeholderText: 'SMS CODE'
-            visible: false
-        }
-
-        FlatButton {
-            visible: code.visible
-            text: 'VERIFY CODE'
-            onClicked: ctrl.resolveCode(code.text)
-        }
-
-        FlatButton {
-            text: 'ENABLE 2F SMS'
-            TwoFactorController {
-                id: ctrl
-                wallet: foo
-                onPromptCode: code.visible = true
-            }
-            onClicked: ctrl.go()
-        }
-        FlatButton {
-            text: 'ENABLE 2F EMAIL'
-            onClicked: ctrl.enableEmail()
-        }
-
-        FlatButton {
-            text: 'DISABLE 2F SMS'
-            onClicked: ctrl.disable();
-        }
-    */
 
     SettingsBox {
         title: 'Reset 2FA'

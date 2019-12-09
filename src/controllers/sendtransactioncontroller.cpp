@@ -2,12 +2,10 @@
 #include "../account.h"
 #include "../wallet.h"
 #include "../json.h"
-#include <QDebug>
 
 SendTransactionController::SendTransactionController(QObject* parent)
     : AccountController(parent)
 {
-
 }
 
 bool SendTransactionController::isValid() const
@@ -27,11 +25,9 @@ QString SendTransactionController::address() const
     return m_address;
 }
 
-void SendTransactionController::setAddress(const QString &address)
+void SendTransactionController::setAddress(const QString& address)
 {
-    if (m_address == address)
-        return;
-
+    if (m_address == address) return;
     m_address = address;
     emit addressChanged(m_address);
     create();
@@ -83,67 +79,86 @@ QJsonObject SendTransactionController::transaction() const
 
 void SendTransactionController::create()
 {
-    if (m_address == nullptr) return;
+    setValid(false);
+
+    QLocale locale;
+    const qint64 amount = static_cast<qint64>(locale.toDouble(m_amount) * 100000000);
 
     if (!m_fee_rate) {
         m_fee_rate = static_cast<qint64>(wallet()->settings().value("required_num_blocks").toInt());
     }
 
-    QLocale locale;
-    bool ok;
-    qint64 amount = static_cast<qint64>(locale.toDouble(m_amount, &ok) * 100000000);
-    if (!ok) return;
+    QJsonObject address{
+        { "address", m_address },
+        { "satoshi", amount }
+    };
+    QJsonObject data{
+        { "subaccount", static_cast<qint64>(account()->m_pointer) },
+        { "fee_rate", m_fee_rate },
+        { "send_all", m_send_all },
+        { "addressees", QJsonArray{address}}
+    };
 
-    incrementBusy();
+    const quint64 count = ++m_count;
+    QMetaObject::invokeMethod(context(), [this, count, data] {
+        // Check if meanwhile create() was called again, if so avoid
+        // calling GA_create_transaction
+        bool run;
+        QMetaObject::invokeMethod(this, [this, count] () -> bool {
+            return m_count == count;
+        }, Qt::BlockingQueuedConnection, &run);
+        if (!run) return;
 
-    QMetaObject::invokeMethod(wallet()->m_context, [this, amount] {
-        QJsonObject address{
-            { "address", m_address },
-            { "satoshi", amount }
-        };
-
-        auto details = Json::fromObject({
-            { "subaccount", static_cast<qint64>(account()->m_pointer) },
-            { "fee_rate", m_fee_rate },
-            { "send_all", m_send_all },
-            { "addressees", QJsonArray{address}}
-        });
-
-        m_transaction = GA::process_auth([&] (GA_auth_handler** call) {
-            int err = GA_create_transaction(wallet()->m_session, details, call);
+        m_transaction = GA::process_auth([this, data] (GA_auth_handler** call) {
+            auto details = Json::fromObject(data);
+            int err = GA_create_transaction(session(), details, call);
+            Q_ASSERT(err == GA_OK);
+            err = GA_destroy_json(details);
             Q_ASSERT(err == GA_OK);
         });
 
-        int err = GA_destroy_json(details);
-        Q_ASSERT(err == GA_OK);
-
-        emit transactionChanged();
-
-        decrementBusy();
+        // Check if the m_transaction isn't outdated and emit respective
+        // signal, otherwise there's already another create enqueued.
+        QMetaObject::invokeMethod(this, [this, count] {
+            if (m_count == count) {
+                m_count = 0;
+                emit transactionChanged();
+                setValid(true);
+            }
+        }, Qt::BlockingQueuedConnection);
     });
 }
 
 void SendTransactionController::send()
 {
-    QMetaObject::invokeMethod(wallet()->m_context, [this] {
-        auto transaction = GA::process_auth([&] (GA_auth_handler** call) {
-            GA_json* details = Json::fromObject(m_transaction);
-
-            int err = GA_sign_transaction(wallet()->m_session, details, call);
-            Q_ASSERT(err == GA_OK);
-
-            err = GA_destroy_json(details);
-            Q_ASSERT(err == GA_OK);
-        });
-
-        GA::process_auth([&] (GA_auth_handler** call) {
-            GA_json* details = Json::fromObject(transaction);
-
-            int err = GA_send_transaction(wallet()->m_session, details, call);
-            Q_ASSERT(err == GA_OK);
-
-            err = GA_destroy_json(details);
-            Q_ASSERT(err == GA_OK);
-        });
+    dispatch([this] (GA_session* session, GA_auth_handler** call) {
+        GA_json* details = Json::fromObject(m_transaction);
+        int err = GA_sign_transaction(session, details, call);
+        Q_ASSERT(err == GA_OK);
+        err = GA_destroy_json(details);
+        Q_ASSERT(err == GA_OK);
     });
+}
+
+bool SendTransactionController::update(const QJsonObject& result)
+{
+    auto status = result.value("status").toString();
+    auto action = result.value("action").toString();
+
+    if (status == "done" && action == "sign_tx") {
+        dispatch([result] (GA_session* session, GA_auth_handler** call) {
+            GA_json* details = Json::fromObject(result.value("result").toObject());
+            int err = GA_send_transaction(session, details, call);
+            Q_ASSERT(err == GA_OK);
+            err = GA_destroy_json(details);
+            Q_ASSERT(err == GA_OK);
+        });
+        return false;
+    }
+
+    if (status == "done" && action == "send_raw_tx") {
+        return true;
+    }
+
+    return AccountController::update(result);
 }

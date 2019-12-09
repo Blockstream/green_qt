@@ -40,7 +40,7 @@ void CreateAccountController::create()
 
         GA_destroy_json(details);
 
-        process(nullptr);
+        process();
 
         m_wallet->reload();
     });

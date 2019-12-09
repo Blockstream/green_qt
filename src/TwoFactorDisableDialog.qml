@@ -4,8 +4,11 @@ import QtQuick.Controls 2.5
 import './views'
 
 ControllerDialog {
+    id: controller_dialog
+    property string method
+
     controller: TwoFactorController {
-        method: 'sms'
+        method: controller_dialog.method
     }
 
     modal: true
