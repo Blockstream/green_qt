@@ -6,9 +6,9 @@
         <file>fonts/DINPro/DINPro-Regular.otf</file>
         <file>fonts/DINPro/DINPro-Light.otf</file>
         <file>png/ic_home.png</file>
-        <file>svg/2fa_call.svg</file>
+        <file>svg/2fa_phone.svg</file>
         <file>svg/2fa_email.svg</file>
-        <file>svg/2fa_google.svg</file>
+        <file>svg/2fa_gauth.svg</file>
         <file>svg/2fa_sms.svg</file>
         <file>svg/about.svg</file>
         <file>svg/account.svg</file>
