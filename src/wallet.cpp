@@ -284,11 +284,7 @@ void Wallet::login(const QByteArray& pin)
         m_mnemonic = QString(mnemonic).split(' ');
         GA_destroy_string(mnemonic);
 
-        GA_json* config;
-        GA_get_twofactor_config(m_session, &config);
-        m_config = Json::toObject(config);
-        GA_destroy_json(config);
-        emit configChanged();
+        updateConfig();
 
         GA_json* settings;
         err = GA_get_settings(m_session, &settings);
@@ -450,6 +446,15 @@ void Wallet::reload()
             setBalance(balance);
         });
     });
+}
+
+void Wallet::updateConfig()
+{
+    GA_json* config;
+    GA_get_twofactor_config(m_session, &config);
+    m_config = Json::toObject(config);
+    GA_destroy_json(config);
+    emit configChanged();
 }
 
 void Wallet::setup2F()

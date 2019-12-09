@@ -82,6 +82,8 @@ public slots:
     void reload();
     void setup2F();
 
+    void updateConfig();
+
 signals:
     void connectionChanged();
     void authenticationChanged();
