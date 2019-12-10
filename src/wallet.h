@@ -85,6 +85,7 @@ public slots:
     void setup2F();
 
     void updateConfig();
+    void updateSettings();
 
 signals:
     void connectionChanged();

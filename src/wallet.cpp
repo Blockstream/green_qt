@@ -311,12 +311,7 @@ void Wallet::login(const QByteArray& pin)
         GA_destroy_string(mnemonic);
 
         updateConfig();
-
-        GA_json* settings;
-        err = GA_get_settings(m_session, &settings);
-        Q_ASSERT(err == GA_OK);
-        m_settings = Json::toObject(settings);
-        GA_destroy_json(settings);
+        updateSettings();
 
         reload();
 
@@ -482,6 +477,15 @@ void Wallet::updateConfig()
     m_config = Json::toObject(config);
     GA_destroy_json(config);
     emit configChanged();
+}
+
+void Wallet::updateSettings()
+{
+    GA_json* settings;
+    int err = GA_get_settings(m_session, &settings);
+    Q_ASSERT(err == GA_OK);
+    m_settings = Json::toObject(settings);
+    GA_destroy_json(settings);
 }
 
 void Wallet::setup2F()
