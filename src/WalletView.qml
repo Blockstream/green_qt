@@ -123,6 +123,8 @@ GridLayout {
             width: ListView.view.width
 
             background: MouseArea {
+                id: mouse_area
+                hoverEnabled: true
                 onClicked: accounts_list.currentIndex = index
 
                 Rectangle {
@@ -148,8 +150,12 @@ GridLayout {
 
                 Label {
                     color: isCurrentItem ? 'green' : 'gray'
+                    elide: Text.ElideRight
                     font.pixelSize: 16
                     text: account.name
+                    width: parent.width
+                    ToolTip.text: account.name
+                    ToolTip.visible: truncated && mouse_area.containsMouse
                 }
 
                 Label {
