@@ -10,6 +10,10 @@ import '../dialogs'
 ColumnLayout {
     spacing: 30
 
+    SettingsController {
+        id: controller
+    }
+
     SettingsBox {
         Layout.fillWidth: true
 
@@ -35,16 +39,23 @@ ColumnLayout {
         title: 'Autologout'
         subtitle: 'Configure autologout after some inactivity'
 
-        RowLayout {
-            TextField {
-                placeholderText: wallet.settings.altimeout
-                padding: 10
+        ComboBox {
+            model: [1, 2, 5, 10, 60]
+            delegate: ItemDelegate {
+                width: parent.width
+                text: qsTr('id_1d_minutes').arg(modelData)
             }
-
-            Label {
-                text: qsTr('Minutes')
-                padding: 5
+            displayText: qsTr('id_1d_minutes').arg(currentText)
+            onCurrentTextChanged: controller.changeALTimeout(currentText)
+            currentIndex: {
+                for (let index = 0; index < model.length; index++) {
+                    if (model[index] === wallet.settings.altimeout) {
+                        return index
+                    }
+                }
+                return 0
             }
+            Layout.fillWidth: true
         }
     }
 
