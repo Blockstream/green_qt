@@ -7,7 +7,6 @@
 #include "../ga.h"
 
 class Wallet;
-class Account;
 
 class Controller : public QObject
 {

@@ -3,6 +3,8 @@
 
 #include "controller.h"
 
+class Account;
+
 class AccountController : public Controller
 {
     Q_OBJECT

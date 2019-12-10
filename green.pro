@@ -34,6 +34,7 @@ SOURCES += \
     src/gui.cpp \
     src/main.cpp \
     src/network.cpp \
+    src/settingscontroller.cpp \
     src/transaction.cpp \
     src/twofactorcontroller.cpp \
     src/util.cpp \
@@ -57,6 +58,7 @@ HEADERS += \
     src/ga.h \
     src/gui.h \
     src/network.h \
+    src/settingscontroller.h \
     src/transaction.h \
     src/twofactorcontroller.h \
     src/util.h \
