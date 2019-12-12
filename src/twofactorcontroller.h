@@ -19,6 +19,8 @@ public:
     Q_INVOKABLE void enable(const QByteArray& number);
     Q_INVOKABLE void disable();
 
+    Q_INVOKABLE void changeLimit(bool is_fiat, const QString &limit);
+
     bool update(const QJsonObject& result) override;
 
 signals:

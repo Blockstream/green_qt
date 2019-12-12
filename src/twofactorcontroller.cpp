@@ -52,6 +52,20 @@ void TwoFactorController::disable()
     });
 }
 
+void TwoFactorController::changeLimit(bool is_fiat, const QString& limit)
+{
+    dispatch([is_fiat, limit] (GA_session* session, GA_auth_handler** call) {
+        auto details = Json::fromObject({
+            { "is_fiat", is_fiat },
+            { is_fiat ? "fiat" : "btc", limit }
+        });
+        int err = GA_twofactor_change_limits(session, details, call);
+        Q_ASSERT(err == GA_OK);
+        err = GA_destroy_json(details);
+        Q_ASSERT(err == GA_OK);
+    });
+}
+
 bool TwoFactorController::update(const QJsonObject& result)
 {
     if (result.value("status").toString() == "done") {
