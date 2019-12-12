@@ -195,19 +195,17 @@ ColumnLayout {
     SettingsBox {
         title: 'Limit currency'
         subtitle: 'Set some limits for which you won\'t be asked for 2FA'
-        RowLayout {
-            Label {
-                text: qsTr('Total')
-                padding: 10
-            }
 
-            TextField {
-                text: qsTr('0')
-                padding: 10
+        RowLayout {
+            Item {
+                Layout.fillWidth: true
             }
-            Label {
-                text: qsTr('BTC')
-                padding: 10
+            Button {
+                property Component dialog: TwoFactorLimitDialog {}
+                flat: true
+                text: qsTr('id_set_twofactor_threshold')
+                onClicked: dialog.createObject(stack_view).open()
+                Layout.alignment: Qt.AlignRight
             }
         }
     }
