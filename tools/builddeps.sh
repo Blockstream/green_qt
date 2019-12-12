@@ -23,8 +23,8 @@ fi
 DEPS=$(shasum -a 256 ./tools/bionic_deps.sh | cut -d" " -f1)
 DEPS="$DEPS $(shasum -a 256 Dockerfile | cut -d" " -f1)"
 export GDKBLDID=$(echo $(cd gdk && git rev-parse HEAD) $(shasum -a 256 ./tools/buildgdk.sh | cut -d" " -f1) ${DEPS} | shasum -a 256 | cut -d" " -f1)
-export QTMAJOR=5.13
-export QTVERSION=${QTMAJOR}.2
+export QTMAJOR=5.14
+export QTVERSION=${QTMAJOR}.0
 export QTBLDID=$(echo ${QTVERSION} ${DEPS} $(shasum -a 256 ./tools/buildqt.sh | cut -d" " -f1) | shasum -a 256 | cut -d" " -f1)
 
 mkdir -p ${BUILDDIR}
@@ -73,7 +73,7 @@ if [ "${GREENSYMBOLS}" = "" ]; then
        python ../tools/symbol-check.py < ${BUILDROOT}/Green
        strip ${BUILDROOT}/Green
    elif [ "${GREENPLATFORM}" = "windows" ]; then
-       x86_64-w64-mingw32-strip ${BUILDROOT}/release/Green.exe
+       x86_64-w64-mingw32-strip ${BUILDROOT}/Green.exe
    elif [ "${GREENPLATFORM}" = "osx" ]; then
        strip ${BUILDROOT}/Green.app/Contents/MacOS/Green
    fi
