@@ -17,7 +17,8 @@ Page {
     background: Item {}
 
     RowLayout {
-        anchors.fill: parent
+        anchors.left: parent.left
+        anchors.right: parent.right
         spacing: 30
 
         Label {
