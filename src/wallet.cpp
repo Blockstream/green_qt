@@ -486,6 +486,7 @@ void Wallet::updateSettings()
     Q_ASSERT(err == GA_OK);
     m_settings = Json::toObject(settings);
     GA_destroy_json(settings);
+    emit settingsChanged();
 }
 
 void Wallet::setup2F()
