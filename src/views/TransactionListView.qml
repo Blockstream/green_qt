@@ -10,13 +10,12 @@ Page {
     background: Item {}
     header: Label {
         padding: 20
-        text: qsTr('id_transactions') + (account ? ' - ' + account.name : '')
+        text: qsTr('id_transactions')
         font.capitalization: Font.AllUppercase
     }
 
     ListView {
         anchors.leftMargin: 20
-        //anchors.rightMargin: 20
         anchors.fill: parent
         clip: true
         spacing: 32

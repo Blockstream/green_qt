@@ -50,10 +50,17 @@ GridLayout {
         return `${amount} ${unit}`
     }
 
-    property string title: qsTr('id_total_balance') + ': ' + formatAmount(wallet.balance)
-    rowSpacing: 10
+    function convert(sats) {
+        wallet.settings.pricing
+        const { fiat, fiat_currency } = wallet.convert(sats)
+        return `${fiat} ${fiat_currency}`
+    }
 
+    property string title: account.name// 'Transactions' //qsTr('id_total_balance') + ': ' + formatAmount(wallet.balance) + ' ' + convert(wallet.balance)
     property var account: accounts_list.currentItem ? accounts_list.currentItem.account : undefined
+
+    rowSpacing: 0
+    columns: 2
 
     states: State {
         when: window.location === '/settings'
@@ -87,21 +94,19 @@ GridLayout {
         }
     ]
 
-    columns: 2
-
     Row {
-        Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
+        Layout.leftMargin: 10
         Layout.rightMargin: 10
-        Image {
+        spacing: 10
+        Label {
+            id: wallet_balance_label
             anchors.verticalCenter: parent.verticalCenter
-            source: icons[wallet.network.id]
-            width: 28
-            height: 28
+            font.pixelSize: 20
+            text: formatAmount(wallet.balance)
         }
         Label {
-            anchors.verticalCenter: parent.verticalCenter
-            font.pixelSize: 24
-            text: wallet.name
+            text: convert(wallet.balance)
+            anchors.baseline: wallet_balance_label.baseline
         }
     }
 
@@ -114,7 +119,7 @@ GridLayout {
             color: 'black'
             opacity: 0.2
             anchors.fill: parent
-            anchors.leftMargin: 0
+            anchors.leftMargin: -5
             anchors.bottomMargin: -10000
             anchors.rightMargin: -10000
             anchors.topMargin: -10000
@@ -125,9 +130,28 @@ GridLayout {
             x: 20
             width: parent.width - 40
 
+            Image {
+                source: icons[wallet.network.id]
+                sourceSize.width: 32
+                sourceSize.height: 32
+                Layout.alignment: Qt.AlignVCenter
+            }
             Label {
+                text: wallet.name
+                font.pixelSize: 16
+                Layout.alignment: Qt.AlignVCenter
+            }
+            Image {
+                visible: modelData === currentWallet
+                sourceSize.width: 16
+                sourceSize.height: 16
+                source: 'assets/svg/arrow_right.svg'
+                Layout.alignment: Qt.AlignVCenter
+            }
+            Label {
+                font.pixelSize: 16
                 text: title
-                font.pixelSize: 24
+                Layout.alignment: Qt.AlignVCenter
             }
 
             Item {
@@ -152,6 +176,7 @@ GridLayout {
         id: accounts_list
         Layout.fillHeight: true
         Layout.preferredWidth: 300
+        clip: true
         spacing: 0
         topMargin: 1
         model: wallet.accounts
@@ -177,7 +202,7 @@ GridLayout {
                     Rectangle {
                         visible: isCurrentItem
                         color: 'green'
-                        width: 4
+                        width: 2
                         height: parent.height
                     }
                 }
@@ -198,9 +223,16 @@ GridLayout {
                     ToolTip.visible: truncated && mouse_area.containsMouse
                 }
 
-                Label {
-                    text: formatAmount(account.balance)
-                    font.pixelSize: 20
+                Row {
+                    spacing: 10
+                    Label {
+                        text: formatAmount(account.balance)
+                        font.pixelSize: 16
+                    }
+                    Label {
+                        anchors.bottom: parent.bottom
+                        text: convert(account.balance)
+                    }
                 }
 
                 Row {

@@ -9,6 +9,7 @@ Page {
     StackView {
         id: stack_view
         anchors.fill: parent
+        anchors.topMargin: 20
     }
 
     states: [
