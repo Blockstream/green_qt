@@ -15,7 +15,7 @@ class Account : public QObject
     Q_PROPERTY(QJsonObject json READ json NOTIFY jsonChanged)
     Q_PROPERTY(QString name READ name NOTIFY jsonChanged)
     Q_PROPERTY(QQmlListProperty<Transaction> transactions READ transactions NOTIFY transactionsChanged)
-    Q_PROPERTY(QString balance READ balance NOTIFY balanceChanged)
+    Q_PROPERTY(qint64 balance READ balance NOTIFY balanceChanged)
 
 public:
     explicit Account(Wallet* wallet);
@@ -33,7 +33,7 @@ public:
 
     void handleNotification(const QJsonObject &notification);
 
-    QString balance() const;
+    qint64 balance() const;
 
 signals:
     void walletChanged();

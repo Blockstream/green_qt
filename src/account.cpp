@@ -49,10 +49,9 @@ void Account::handleNotification(const QJsonObject &notification)
     reload();
 }
 
-QString Account::balance() const
+qint64 Account::balance() const
 {
-    QLocale locale;
-    return locale.toString(m_json.value("satoshi").toObject().value("btc").toDouble() / 100000000);
+    return m_json.value("satoshi").toObject().value("btc").toDouble();
 }
 
 static QJsonArray get_transactions(GA_session* session, int subaccount, int first, int count)
