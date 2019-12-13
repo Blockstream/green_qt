@@ -73,6 +73,7 @@ public:
     QJsonObject config() const { return m_config; }
 
     Q_INVOKABLE void changePin(const QByteArray& pin);
+    Q_INVOKABLE QJsonObject convert(qint64 sats);
 
 public slots:
     void connect();

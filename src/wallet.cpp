@@ -516,3 +516,16 @@ void Wallet::setBalance(const quint64 balance)
     m_balance = balance;
     emit balanceChanged();
 }
+
+QJsonObject Wallet::convert(qint64 sats)
+{
+    auto details = Json::fromObject({{ "satoshi", sats }});
+    GA_json* balance;
+    int err = GA_convert_amount(m_session, details, &balance);
+    Q_ASSERT(err == GA_OK);
+    GA_destroy_json(details);
+    QJsonObject result = Json::toObject(balance);
+    GA_destroy_json(balance);
+
+    return result;
+}
