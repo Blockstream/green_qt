@@ -10,6 +10,7 @@ public:
     SettingsController(QObject* parent = nullptr);
 
     Q_INVOKABLE void changeALTimeout(int al_timeout);
+    Q_INVOKABLE void change(const QJsonObject& data);
 
     bool update(const QJsonObject& result) override;
 };

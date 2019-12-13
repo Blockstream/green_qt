@@ -24,7 +24,7 @@ Page {
             Layout.alignment: Qt.AlignTop
             wrapMode: Text.WordWrap
             text: subtitle
-            Layout.preferredWidth: 300
+            Layout.preferredWidth: 200
         }
 
         ColumnLayout {

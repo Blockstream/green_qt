@@ -17,6 +17,24 @@ ColumnLayout {
         return 0;
     }
 
+    SettingsController {
+        id: controller
+    }
+
+    property var per_currency: {
+        const result = {}
+        for (const [exchange, currencies] of Object.entries(wallet.currencies.per_exchange)) {
+            for (const currency of currencies) {
+                if (currency in result) {
+                    result[currency].push(exchange)
+                } else {
+                    result[currency] = [exchange]
+                }
+            }
+        }
+        return result
+    }
+
     SettingsBox {
         title: 'Currency'
         subtitle: 'Select your currency and pricing source'
@@ -25,24 +43,37 @@ ColumnLayout {
             columns: 2
 
             Label {
-                text: 'Pricing source to use'
+                text: qsTr('id_reference_exchange_rate')
             }
 
-            ComboBox {
-                currentIndex: getCurrentIndex("%1 from %2".arg(wallet.settings.pricing.currency).arg(wallet.settings.pricing.exchange), sourceModel, "text")
-                textRole: 'text'
-                model: ListModel {
-                    id: sourceModel
-                    Component.onCompleted: {
-                        for(var exchange in wallet.currencies.per_exchange) {
-                            for(var currency of wallet.currencies.per_exchange[exchange]) {
-                                append({"text": "%1 from %2".arg(currency).arg(exchange)})
-                            }
-                        }
+            RowLayout {
+                Layout.fillWidth: true
+                ComboBox {
+                    id: currency_combo
+                    flat: true
+                    model: Object.keys(per_currency).sort()
+                    currentIndex: model.indexOf(wallet.settings.pricing.currency)
+                    onCurrentTextChanged: {
+                        if (currentText === '') return
+                        if (currentText === wallet.settings.pricing.currency) return
+                        if (per_currency[currentText].indexOf(wallet.settings.pricing.exchange) < 0) return
+                        controller.change({ pricing: { currency: currentText } })
                     }
+
+                    Layout.fillWidth: true
                 }
-                width: 200
-                padding: 10
+
+                ComboBox {
+                    flat: true
+                    model: per_currency[currency_combo.currentText].sort()
+                    currentIndex: Math.max(0, model.indexOf(wallet.settings.pricing.exchange))
+                    onCurrentTextChanged: {
+                        if (currentText === '') return
+                        if (currentText === wallet.settings.pricing.exchange) return
+                        controller.change({ pricing: { currency: currency_combo.currentText, exchange: currentText } })
+                    }
+                    Layout.minimumWidth: 150
+                }
             }
 
             Label {
@@ -50,6 +81,7 @@ ColumnLayout {
             }
 
             ComboBox {
+                flat: true
                 currentIndex: getCurrentIndex(wallet.settings.unit, unitModel, "text")
                 textRole: 'text'
                 model: ListModel {
@@ -75,8 +107,7 @@ ColumnLayout {
                         value: 1
                     }
                 }
-                width: 200
-                padding: 10
+                Layout.fillWidth: true
             }
         }
     }
