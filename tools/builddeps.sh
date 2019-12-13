@@ -48,10 +48,7 @@ echo "GDK: OK"
 cd ${BUILDROOT}
 
 export PATH=${QT_PATH}/bin:${PATH}
-GREEN_QMAKE_CONFIG="CONFIG+=release CONFIG+=qml_release CONFIG+=static"
-if [ "${GREENPLATFORM}" != "windows" ]; then
-    GREEN_QMAKE_CONFIG+=" QMAKE_CXXFLAGS_RELEASE+=-flto QMAKE_LDFLAGS_RELEASE+=-flto"
-fi
+GREEN_QMAKE_CONFIG="CONFIG+=release CONFIG+=qml_release CONFIG+=static QMAKE_CXXFLAGS_RELEASE+=-flto QMAKE_LDFLAGS_RELEASE+=-flto"
 
 if [ "${GREENSYMBOLS}" != "" ]; then
     GREEN_QMAKE_CONFIG+=" QMAKE_CXXFLAGS+=-g"
