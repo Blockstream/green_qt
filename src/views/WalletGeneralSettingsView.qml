@@ -9,14 +9,6 @@ import '..'
 ColumnLayout {
     spacing: 30
 
-    function getCurrentIndex(blocks, model, prop) {
-        for(var i = 0; i < model.count; i++) {
-            if(blocks === model.get(i)[prop])
-                return i;
-        }
-        return 0;
-    }
-
     SettingsController {
         id: controller
     }
