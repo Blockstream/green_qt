@@ -5,7 +5,7 @@ import QtQuick.Layouts 1.12
 
 ColumnLayout {
     property alias address: receive_address.address
-    property alias amount: amount_field.text
+    property var amount: parseAmount(amount_field.text)
 
     function url(address, amount) {
         var parts = []
@@ -52,7 +52,7 @@ ColumnLayout {
             id: qrcode
             anchors.horizontalCenter: parent.horizontalCenter
             opacity: receive_address.generating ? 0 : 1.0
-            text: url(address, amount)
+            text: url(address, parseAmount(amount_field.text) / 100000000)
             Behavior on opacity {
                 OpacityAnimator { duration: 200 }
             }
@@ -106,9 +106,8 @@ ColumnLayout {
                 id: amount_field
                 Layout.fillWidth: true
             }
-            Button {
-                flat: true
-                text: 'BTC'
+            Label {
+                text: wallet.settings.unit
             }
         }
     }
