@@ -10,6 +10,26 @@ import './views'
 GridLayout {
     id: wallet_view
 
+    function parseAmount(amount) {
+        const unit = wallet.settings.unit
+        try {
+            amount = Number.fromLocaleString(Qt.locale(), amount)
+        } catch (e) {
+            amount = Number(amount)
+        }
+
+        if (unit === 'BTC') {
+            amount = amount * 100000000
+        }
+        if (unit === 'mBTC') {
+            amount = amount * 100000
+        }
+        if (unit === 'bits' || unit === '\u00B5BTC') {
+            amount = amount * 100
+        }
+        return amount
+    }
+
     function formatAmount(sats) {
         const unit = wallet.settings.unit
         let amount = sats
