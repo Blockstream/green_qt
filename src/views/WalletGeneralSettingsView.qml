@@ -82,30 +82,12 @@ ColumnLayout {
 
             ComboBox {
                 flat: true
-                currentIndex: getCurrentIndex(wallet.settings.unit, unitModel, "text")
-                textRole: 'text'
-                model: ListModel {
-                    id: unitModel
-
-                    ListElement {
-                        text: "BTC"
-                        value: 100000000
-                    }
-
-                    ListElement {
-                        text: "mBTC"
-                        value: 100000
-                    }
-
-                    ListElement {
-                        text: "μBTC"
-                        value: 100
-                    }
-
-                    ListElement {
-                        text: "sats"
-                        value: 1
-                    }
+                model: ['BTC', 'mBTC', '\u00B5BTC', 'bits', 'sats']
+                currentIndex: model.indexOf(wallet.settings.unit)
+                onCurrentTextChanged: {
+                    if (currentText === '') return
+                    if (currentText === wallet.settings.unit) return
+                    controller.change({ unit: currentText })
                 }
                 Layout.fillWidth: true
             }
