@@ -222,9 +222,9 @@ QStringList Wallet::mnemonic() const
     return m_mnemonic;
 }
 
-QString Wallet::balance() const {
-    QLocale locale;
-    return locale.toString(static_cast<double>(m_balance) / 100000000);
+qint64 Wallet::balance() const
+{
+    return m_balance;
 }
 
 void Wallet::changePin(const QByteArray& pin)

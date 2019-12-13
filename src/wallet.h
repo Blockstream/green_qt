@@ -44,7 +44,7 @@ private:
     Q_PROPERTY(QJsonObject events READ events NOTIFY eventsChanged)
     Q_PROPERTY(QStringList mnemonic READ mnemonic CONSTANT)
     Q_PROPERTY(int loginAttemptsRemaining READ loginAttemptsRemaining NOTIFY loginAttemptsRemainingChanged)
-    Q_PROPERTY(QString balance READ balance NOTIFY balanceChanged)
+    Q_PROPERTY(qint64 balance READ balance NOTIFY balanceChanged)
     Q_PROPERTY(QJsonObject config READ config NOTIFY configChanged)
 
 public:
@@ -69,7 +69,7 @@ public:
 
     int loginAttemptsRemaining() const { return m_login_attempts_remaining; }
 
-    QString balance() const;
+    qint64 balance() const;
     QJsonObject config() const { return m_config; }
 
     Q_INVOKABLE void changePin(const QByteArray& pin);
