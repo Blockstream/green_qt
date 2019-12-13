@@ -47,14 +47,7 @@ ColumnLayout {
             }
             displayText: qsTr('id_1d_minutes').arg(currentText)
             onCurrentTextChanged: controller.change({ altimeout: model[currentIndex] })
-            currentIndex: {
-                for (let index = 0; index < model.length; index++) {
-                    if (model[index] === wallet.settings.altimeout) {
-                        return index
-                    }
-                }
-                return 0
-            }
+            currentIndex: model.indexOf(wallet.settings.altimeout)
             Layout.fillWidth: true
         }
     }
