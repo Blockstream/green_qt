@@ -140,8 +140,6 @@ QQmlListProperty<Account> Wallet::accounts()
 
 void Wallet::handleNotification(const QJsonObject &notification)
 {
-    qDebug() << "GOT NOTIFICATION" << notification;
-
     QString event = notification.value("event").toString();
     Q_ASSERT(!event.isEmpty());
     Q_ASSERT(notification.contains(event));
@@ -209,7 +207,32 @@ void Wallet::handleNotification(const QJsonObject &notification)
             }
             setBalance(balance);
         });
+
+        return;
     }
+
+    if (event == "settings") {
+        m_settings = data.toObject();
+        emit settingsChanged();
+        return;
+    }
+
+    if (event == "twofactor_reset") {
+        Q_ASSERT(!data.toObject().value("is_active").toBool());
+        return;
+    }
+
+    if (event == "fees") {
+        // TODO: fees are being used in QML as `event.fees`.
+        return;
+    }
+
+    if (event == "block") {
+        // TODO: data contains block_hash, block_height and initial_timestamp
+        return;
+    }
+
+    qDebug() << "UNHANDLED NOTIFICATION" << notification;
 }
 
 QJsonObject Wallet::events() const
