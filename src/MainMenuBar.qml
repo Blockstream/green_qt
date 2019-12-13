@@ -14,14 +14,6 @@ MenuBar {
             text: qsTr('&Restore Wallet')
             onTriggered: restore_wallet_action.trigger()
         }
-        Separator { }
-        Action {
-            text: "Create Wallet"
-        }
-        Action {
-            text: "Restore Wallet"
-        }
-        Separator { }
         Action {
             text: qsTr('&Exit')
             onTriggered: window.close()
