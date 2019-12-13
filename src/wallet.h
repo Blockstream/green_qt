@@ -139,40 +139,4 @@ public:
     QJsonObject m_config;
 };
 
-class AmountConverter : public QObject
-{
-    Q_OBJECT
-    Q_PROPERTY(Wallet* wallet READ wallet WRITE setWallet NOTIFY walletChanged)
-    Q_PROPERTY(bool valid READ valid NOTIFY validChanged)
-    Q_PROPERTY(QJsonObject input READ input WRITE setInput NOTIFY inputChanged)
-    Q_PROPERTY(QJsonObject output READ output NOTIFY outputChanged)
-
-public:
-    explicit AmountConverter(QObject* parent = nullptr);
-
-    Wallet* wallet() const;
-    QJsonObject input() const;
-    QJsonObject output() const;
-
-    void setWallet(Wallet* wallet);
-    void setInput(const QJsonObject& input);
-
-    bool valid() const;
-
-signals:
-    void walletChanged(Wallet* wallet);
-    void inputChanged(QJsonObject input);
-    void outputChanged(QJsonObject output);
-
-    void validChanged(bool valid);
-
-private:
-    Wallet* m_wallet{nullptr};
-    QJsonObject m_input;
-    QJsonObject m_output;
-    bool m_valid{false};
-
-    void update();
-};
-
 #endif // GREEN_WALLET_H

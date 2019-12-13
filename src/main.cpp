@@ -89,7 +89,6 @@ int main(int argc, char *argv[])
     qmlRegisterType<Wallet>("Blockstream.Green", 0, 1, "Wallet");
     qmlRegisterUncreatableType<Transaction>("Blockstream.Green", 0, 1, "Transaction", "Transactions are created by accounts");
 
-    qmlRegisterType<AmountConverter>("Blockstream.Green", 0, 1, "AmountConverter");
     qmlRegisterType<ReceiveAddress>("Blockstream.Green", 0, 1, "ReceiveAddress");
     qmlRegisterType<TwoFactorController>("Blockstream.Green", 0, 1, "TwoFactorController");
     qmlRegisterType<CreateAccountController>("Blockstream.Green", 0, 1, "CreateAccountController");
