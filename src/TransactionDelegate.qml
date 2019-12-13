@@ -90,7 +90,7 @@ Pane {
             Label {
                 anchors.right: parent.right
                 color: tx.type === 'incoming' ? 'green' : 'white'
-                text: `${tx.type === 'incoming' ? '+' : '-'}${tx.satoshi.btc / 100000000} BTC`
+                text: `${tx.type === 'incoming' ? '+' : '-'}${formatAmount(tx.satoshi.btc)}`
             }
 
             Label {

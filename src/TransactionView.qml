@@ -96,7 +96,7 @@ Page {
 
                 Label {
                     color: transaction.data.type === 'incoming' ? 'green' : 'white'
-                    text: `${transaction.data.type === 'incoming' ? '+' : '-'}${transaction.data.satoshi.btc / 100000000} BTC`
+                    text: `${transaction.data.type === 'incoming' ? '+' : '-'}${formatAmount(transaction.data.satoshi.btc)}`
                 }
             }
 
