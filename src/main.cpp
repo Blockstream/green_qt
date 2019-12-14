@@ -99,11 +99,11 @@ int main(int argc, char *argv[])
     qmlRegisterUncreatableType<Account>("Blockstream.Green", 0, 1, "Account", "Accounts are created by the wallet");
     qmlRegisterUncreatableType<Controller>("Blockstream.Green", 0, 1, "Controller", "Controller is an abstract type");
 
-    qmlRegisterSingletonType<NetworkManager>("Blockstream.Green", 0, 1, "NetworkManager", [](QQmlEngine*, QJSEngine*) -> QObject* { return NetworkManager::instance(); });
-    qmlRegisterSingletonType<WalletManager>("Blockstream.Green", 0, 1, "WalletManager", [](QQmlEngine*, QJSEngine*) -> QObject* { return new WalletManager; });
-    qmlRegisterSingletonType<Wally>("Blockstream.Green", 0, 1, "Wally", [](QQmlEngine*, QJSEngine*) -> QObject* { return new Wally; });
+    qmlRegisterSingletonInstance("Blockstream.Green", 0, 1, "NetworkManager", NetworkManager::instance());
+    qmlRegisterSingletonInstance("Blockstream.Green", 0, 1, "WalletManager", new WalletManager);
+    qmlRegisterSingletonInstance("Blockstream.Green", 0, 1, "Wally", new Wally);
 #if defined(Q_OS_MAC)
-    qmlRegisterSingletonType<DeviceManager>("Blockstream.Green", 0, 1, "DeviceManager", [](QQmlEngine*, QJSEngine*) -> QObject* { return new DeviceManagerMacos; });
+    qmlRegisterSingletonInstance("Blockstream.Green", 0, 1, "DeviceManager", new DeviceManagerMacos);
 #endif
 
     qmlRegisterType<Action>("Blockstream.Green.Gui", 0, 1, "Action");
