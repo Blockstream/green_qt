@@ -60,5 +60,6 @@
         <file>ControllerResult.qml</file>
         <file>dialogs/ChangePinDialog.qml</file>
         <file>dialogs/TwoFactorLimitDialog.qml</file>
+        <file>dialogs/MnemonicDialog.qml</file>
     </qresource>
 </RCC>
