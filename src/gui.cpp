@@ -58,15 +58,17 @@ QMainWindow *MenuBar::window() const
 
 void MenuBar::setWindow(QMainWindow *window)
 {
-    Q_ASSERT(!m_window && window);
+    if (m_window == window) return;
     m_window = window;
 #ifndef Q_OS_MAC
-    m_menu_bar = m_window->menuBar();
-    for (Menu* menu : m_menus) {
-        // first move menu ownership to menu bar
-        static_cast<QObject*>(menu)->setParent(m_menu_bar);
-        // then add the menu to the menu bar
-        m_menu_bar->addMenu(menu);
+    if (m_window) {
+        m_menu_bar = m_window->menuBar();
+        for (Menu* menu : m_menus) {
+            // first move menu ownership to menu bar
+            static_cast<QObject*>(menu)->setParent(m_menu_bar);
+            // then add the menu to the menu bar
+            m_menu_bar->addMenu(menu);
+        }
     }
 #endif
     emit windowChanged(m_window);
