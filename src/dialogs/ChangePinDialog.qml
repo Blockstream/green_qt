@@ -44,7 +44,7 @@ Dialog {
         Button {
             flat: true
             text: qsTr('id_cancel')
-            DialogButtonBox.buttonRole: DialogButtonBox.DestructiveRole
+            onClicked: close()
         }
     }
 
