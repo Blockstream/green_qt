@@ -83,32 +83,19 @@ ColumnLayout {
     SettingsBox {
         title: 'Show mnemonic'
         subtitle: 'Display your mnemonic'
+
         RowLayout {
-            FlatButton {
-                id: ddd
-                checkable: true
-                text: qsTr('SHOW MNEMONIC')
-            }
-            ProgressBar {
-                visible: ddd.checked
-                NumberAnimation on value {
-                    id: caralho
-                    duration: 15000
-                    from: 1
-                    to: 0
-                    loops: 1
-                    running: ddd.checked
-                    onFinished: ddd.checked = false
+            Component {
+                id: mnemonic_dialog
+                MnemonicDialog {
+                    anchors.centerIn: parent
                 }
             }
-        }
-
-        MnemonicView {
-            Layout.fillWidth: true
-            Layout.minimumHeight: 300
-
-            visible: ddd.checked
-            mnemonic: wallet.mnemonic
+            FlatButton {
+                flat: true
+                text: qsTr('id_mnemonic')
+                onClicked: mnemonic_dialog.createObject(stack_view).open()
+            }
         }
     }
 
