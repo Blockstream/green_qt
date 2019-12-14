@@ -3,29 +3,33 @@ import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.12
 
 GridLayout {
-    property alias mnemonic: repeater.model
-    flow: GridLayout.LeftToRight
+    property var mnemonic
+
     columns: 6
+    flow: GridLayout.LeftToRight
 
     Repeater {
-        id: repeater
+        model: mnemonic
 
         Item {
             width: 80
             height: 25
 
             Row {
-                spacing: 3
+                spacing: 5
 
                 Label {
                     text: `${index + 1}`
                     textFormat: Text.RichText
-                    font.pixelSize : 10
+                    font.pixelSize : 12
                     color: 'green'
-                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.baseline: word.baseline
+                    horizontalAlignment: Label.AlignRight
+                    width: 10
                 }
 
                 Label {
+                    id: word
                     text: `${modelData}`
                     textFormat: Text.RichText
                     font.pixelSize : 15
