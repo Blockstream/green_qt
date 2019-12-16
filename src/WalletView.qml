@@ -58,6 +58,10 @@ GridLayout {
 
     property string title: account.name// 'Transactions' //qsTr('id_total_balance') + ': ' + formatAmount(wallet.balance) + ' ' + convert(wallet.balance)
     property var account: accounts_list.currentItem ? accounts_list.currentItem.account : undefined
+    onAccountChanged: {
+        location = '/transactions'
+        stack_view.pop()
+    }
 
     rowSpacing: 0
     columns: 2
