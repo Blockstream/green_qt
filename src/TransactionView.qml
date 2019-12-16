@@ -57,7 +57,7 @@ Page {
         clip: true
 
         Column {
-            width: scroll_view.width
+            width: scroll_view.width - 20
             spacing: 32
 
             Column {
@@ -123,16 +123,23 @@ Page {
                     color: 'gray'
                 }
 
-                Row {
-                    TextArea {
-                        id: memo_edit
-                        placeholderText: qsTr('id_add_a_note_only_you_can_see_it')
-                        text: transaction.data.memo
-                    }
+                TextArea {
+                    id: memo_edit
+                    placeholderText: qsTr('id_add_a_note_only_you_can_see_it')
+                    width: parent.width
+                    text: transaction.data.memo
+                }
 
+                Row {
+                    anchors.right: parent.right
+                    FlatButton {
+                        text: qsTr('id_cancel')
+                        enabled: memo_edit.text !== transaction.data.memo
+                        onClicked: memo_edit.text = transaction.data.memo
+                    }
                     FlatButton {
                         text: qsTr('id_save')
-                        visible: memo_edit.text !== transaction.data.memo
+                        enabled: memo_edit.text !== transaction.data.memo
                         onClicked: transaction.updateMemo(memo_edit.text)
                     }
                 }
