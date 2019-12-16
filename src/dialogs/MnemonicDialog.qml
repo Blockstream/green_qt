@@ -1,5 +1,6 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12
+import QtQuick.Layouts 1.12
 import '..'
 
 Dialog {
@@ -7,12 +8,20 @@ Dialog {
     title: qsTr('id_mnemonic')
 
     Item {
-        implicitWidth: view.implicitWidth
-        implicitHeight: view.implicitHeight
-        MnemonicView {
-            id: view
-            anchors.fill: parent
-            mnemonic: wallet.mnemonic
+        implicitWidth: layout.implicitWidth
+        implicitHeight: layout.implicitHeight
+        StackLayout {
+            id: layout
+            currentIndex: qrcode_switch.checked ? 1 : 0
+            MnemonicView {
+                mnemonic: wallet.mnemonic
+            }
+            QRCode {
+                id: qrcode
+                sourceSize.width: 240
+                sourceSize.height: 240
+                text: wallet.mnemonic.join(' ')
+            }
         }
         MouseArea {
             id: mouse_area
@@ -20,14 +29,26 @@ Dialog {
             hoverEnabled: true
         }
     }
-    footer: ProgressBar {
-        NumberAnimation on value {
-            paused: mouse_area.containsMouse
-            duration: 10000
-            from: 1
-            to: 0
-            loops: 1
-            onFinished: close()
+
+    footer: RowLayout {
+        spacing: 60
+        ProgressBar {
+            Layout.fillWidth: true
+            Layout.margins: 20
+            NumberAnimation on value {
+                paused: mouse_area.containsMouse
+                duration: 10000
+                from: 1
+                to: 0
+                loops: 1
+                onFinished: close()
+            }
+        }
+        Switch {
+            id: qrcode_switch
+            checked: false
+            Layout.margins: 20
+            text: qsTr('id_show_qrcode')
         }
     }
 
