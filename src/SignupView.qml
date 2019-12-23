@@ -10,7 +10,6 @@ Page {
     signal canceled()
 
     id: root
-    title: qsTr('id_create_new_wallet')
 
     footer: RowLayout {
         PageIndicator {
@@ -37,10 +36,6 @@ Page {
             action: create_action
             visible: swipe_view.currentIndex + 1 === swipe_view.count
         }
-    }
-
-    header: Label {
-        text: swipe_view.currentItem.title
     }
 
     Action {
