@@ -63,6 +63,7 @@ Item {
             anchors.centerIn: parent
             onAccepted: {
                 currentWallet = WalletManager.signup('', false, network_page.network, name_field.text, mnemonic_page.mnemonic, password_field.text, pin_view.pin);
+                stack_view.pop()
             }
         }
     }

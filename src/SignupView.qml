@@ -47,7 +47,7 @@ Page {
         id: cancel_action
         text: qsTr('id_cancel')
         shortcut: StandardKey.Cancel
-        onTriggered: root.canceled()
+        onTriggered: stack_view.pop()
     }
 
     Action {
@@ -65,7 +65,10 @@ Page {
     Action {
         id: create_action
         text: qsTr('id_create')
-        onTriggered: currentWallet = WalletManager.signup(proxy_checkbox.checked ? proxy_field.text : '', tor_checkbox.checked, network_page.network, name_field.text, mnemonic, '', pin_view.pin)
+        onTriggered: {
+            currentWallet = WalletManager.signup(proxy_checkbox.checked ? proxy_field.text : '', tor_checkbox.checked, network_page.network, name_field.text, mnemonic, '', pin_view.pin)
+            stack_view.pop()
+        }
     }
 
     SwipeView {

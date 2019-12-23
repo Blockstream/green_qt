@@ -28,12 +28,12 @@ Item {
 
     Action {
         id: create_wallet_action
-        onTriggered: stack_view.currentIndex = 1
+        onTriggered: stack_view.push(signup_view)
     }
 
     Action {
         id: restore_wallet_action
-        onTriggered: stack_view.currentIndex = 2
+        onTriggered: stack_view.push(restore_view)
     }
 
     MainMenuBar { }
@@ -63,31 +63,39 @@ Item {
         }
     }
 
-    StackLayout {
+    StackView {
         id: stack_view
         anchors.fill: parent
-        clip: true
 
-        Intro { }
+        initialItem: StackLayout {
+            id: stack_layout
+            clip: true
 
-        SignupView { }
+            Intro { }
 
-        RestoreWallet {
+            Repeater {
+                model: WalletManager.wallets
 
-        }
+                WalletContainerView {
+                    property bool current: currentWallet === modelData
+                    focus: current
 
-        Repeater {
-            model: WalletManager.wallets
+                    onCurrentChanged: if (current) stack_layout.currentIndex = index + 1
 
-            WalletContainerView {
-                property bool current: currentWallet === modelData
-                focus: current
-
-                onCurrentChanged: if (current) stack_view.currentIndex = index + 3
-
-                wallet: modelData
+                    wallet: modelData
+                }
             }
         }
+    }
+
+    Component {
+        id: signup_view
+        SignupView { }
+    }
+
+    Component {
+        id: restore_view
+        RestoreWallet { }
     }
 
     Component {
