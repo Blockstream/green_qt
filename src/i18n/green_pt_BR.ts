@@ -51,7 +51,7 @@
     </message>
     <message>
         <source>id_about</source>
-        <translation>SOBRE</translation>
+        <translation>About</translation>
     </message>
     <message>
         <source>id_accept</source>
@@ -146,10 +146,6 @@
         <translation>Permite que você rapidamente verifique seu saldo, receba fundos ou varra uma carteira de papel. Não é possível enviar fundos no modo somente leitura.</translation>
     </message>
     <message>
-        <source>id_allows_you_to_receive_and_send</source>
-        <translation>Permite a você receber e enviar ativos que requerem autorização do emissor para serem transferidos. Poderá haver restrição de transferência de Ativos Autorizados para outros tipos de contas.</translation>
-    </message>
-    <message>
         <source>id_always</source>
         <translation>Sempre</translation>
     </message>
@@ -182,24 +178,16 @@
         <translation>Tentativas restantes: %1</translation>
     </message>
     <message>
-        <source>id_authorized_assets</source>
-        <translation>Ativos Autorizados</translation>
-    </message>
-    <message>
-        <source>id_authorized_assets_account</source>
-        <translation>Conta de Ativos Autorizados</translation>
-    </message>
-    <message>
-        <source>id_authorized_assets_account_is</source>
-        <translation>Conta de ativos autorizados está disponível somente na rede Liquid.</translation>
-    </message>
-    <message>
         <source>id_auto_logout_timeout</source>
         <translation>Tempo de espera para encerrar a sessão automaticamente</translation>
     </message>
     <message>
         <source>id_autolock_after</source>
         <translation>Bloquear depois de</translation>
+    </message>
+    <message>
+        <source>id_back</source>
+        <translation>Back</translation>
     </message>
     <message>
         <source>id_be_aware_other_apps_can_read_or</source>
@@ -274,6 +262,10 @@
         <translation>ALTERAR</translation>
     </message>
     <message>
+        <source>id_change_pin</source>
+        <translation>Change PIN</translation>
+    </message>
+    <message>
         <source>id_choose</source>
         <translation>Escolha</translation>
     </message>
@@ -310,6 +302,10 @@
         <translation>Confirmar senha</translation>
     </message>
     <message>
+        <source>id_confirm_transaction_details_on</source>
+        <translation>Confirm transaction details on your harware wallet</translation>
+    </message>
+    <message>
         <source>id_confirmation_in_d_blocks</source>
         <translation>Confirmação em%1 blocos</translation>
     </message>
@@ -327,7 +323,7 @@
     </message>
     <message>
         <source>id_connecting_to_a_trusted_node</source>
-        <translation>Connecting to a trusted node through Tor requires enabling proxy settings in the app before logging in and a Socks5 proxy (Orbot app for Android)</translation>
+        <translation>Para conectar por meio da rede Tor, é necessário, antes de fazer o login, habilitar as configurações de proxy na Green e ter um servidor proxy SOCKS5 (Orbot para Android) ligado.</translation>
     </message>
     <message>
         <source>id_connecting_to_peers</source>
@@ -372,6 +368,10 @@
     <message>
         <source>id_create_a_pin_to_access_your</source>
         <translation>Criar um PIN para acessar sua carteira</translation>
+    </message>
+    <message>
+        <source>id_create_a_wallet_for_bitcoin</source>
+        <translation>Create a wallet for Bitcoin, Liquid or Testnet</translation>
     </message>
     <message>
         <source>id_create_new_wallet</source>
@@ -478,6 +478,10 @@
         <translation>Disputado</translation>
     </message>
     <message>
+        <source>id_distributed_under_the_s_see</source>
+        <translation>Distributed under the %1, see LICENSE for more information or visit %2</translation>
+    </message>
+    <message>
         <source>id_domain</source>
         <translation>Domínio</translation>
     </message>
@@ -547,7 +551,7 @@
     </message>
     <message>
         <source>id_enable_twofactor_authentication</source>
-        <translation>Enable Two-Factor Authentication to protect your wallet from unauthorized transactions or changes to critical security settings</translation>
+        <translation>Habilite a autenticação de dois fatores para proteger sua carteira de transações não autorizadas ou alterações nas configurações críticas de segurança</translation>
     </message>
     <message>
         <source>id_enabled</source>
@@ -675,7 +679,7 @@
     </message>
     <message>
         <source>id_fee_rate_is_above_maximum</source>
-        <translation>Fee rate is above maximum accepted fee rate.</translation>
+        <translation>A taxa está acima da máxima aceita.</translation>
     </message>
     <message>
         <source>id_fee_rate_is_below_minimum</source>
@@ -714,6 +718,10 @@
         <translation>Fundos recebidos nesta transação não são confidenciais.</translation>
     </message>
     <message>
+        <source>id_general</source>
+        <translation>General</translation>
+    </message>
+    <message>
         <source>id_generate_new_address</source>
         <translation>Gerar Novo Endereço</translation>
     </message>
@@ -724,6 +732,10 @@
     <message>
         <source>id_go_to_account</source>
         <translation>Ir para Conta</translation>
+    </message>
+    <message>
+        <source>id_go_to_receive_to_get_your</source>
+        <translation>Go to Receive to get your Account ID.</translation>
     </message>
     <message>
         <source>id_go_to_wallet</source>
@@ -776,6 +788,14 @@
     <message>
         <source>id_hash</source>
         <translation>Hash</translation>
+    </message>
+    <message>
+        <source>id_help</source>
+        <translation>Help</translation>
+    </message>
+    <message>
+        <source>id_here</source>
+        <translation>aqui</translation>
     </message>
     <message>
         <source>id_hex</source>
@@ -911,7 +931,7 @@
     </message>
     <message>
         <source>id_last_attempt_if_failed_you_will</source>
-        <translation>Last attempt: if failed, you will have to restore your wallet using the 24-words mnemonic.</translation>
+        <translation>Última tentativa: se falhar, você terá que restaurar a carteira usando a sequência de 24 palavras.</translation>
     </message>
     <message>
         <source>id_last_ping_1d_ms</source>
@@ -926,12 +946,32 @@
         <translation>Aprenda mais sobre %1.</translation>
     </message>
     <message>
+        <source>id_ledger_currently_supports_a</source>
+        <translation>Ledger currently supports a limited set of assets: check with the vendor before receiving assets other than L-BTC</translation>
+    </message>
+    <message>
         <source>id_ledger_dashboard_detected</source>
         <translation>Ledger Dashboard detectada, por favor, abra o aplicativo correto para acessar.</translation>
     </message>
     <message>
         <source>id_lets_get_you_set_up</source>
         <translation>Vamos preparar sua carteira.</translation>
+    </message>
+    <message>
+        <source>id_liquid_securities</source>
+        <translation>Liquid Securities</translation>
+    </message>
+    <message>
+        <source>id_liquid_securities_account</source>
+        <translation>Liquid Securities Account</translation>
+    </message>
+    <message>
+        <source>id_liquid_securities_account_is</source>
+        <translation>Liquid securities account is only available on Liquid.</translation>
+    </message>
+    <message>
+        <source>id_liquid_securities_accounts_are</source>
+        <translation>Liquid securities accounts are only available on Liquid wallets. You will be required to get authorization from the issuer to receive them.</translation>
     </message>
     <message>
         <source>id_loading_transactions</source>
@@ -971,7 +1011,7 @@
     </message>
     <message>
         <source>id_logout_and_switch</source>
-        <translation>Logout and Switch</translation>
+        <translation>Sair e alternar rede</translation>
     </message>
     <message>
         <source>id_look_at_the_device_for_the</source>
@@ -1159,7 +1199,7 @@
     </message>
     <message>
         <source>id_onion_addresses_require_tor</source>
-        <translation>Onion addresses require Tor connectivity. Enable it in the network settings.</translation>
+        <translation>Endereços Onion requerem conexão com a rede Tor. Habilite nas configurações de rede.</translation>
     </message>
     <message>
         <source>id_only_connect_to_trusted_nodes</source>
@@ -1188,6 +1228,10 @@
     <message>
         <source>id_or</source>
         <translation>OU</translation>
+    </message>
+    <message>
+        <source>id_our_support_page</source>
+        <translation>nossa página de suporte</translation>
     </message>
     <message>
         <source>id_outdated_hardware_wallet</source>
@@ -1234,12 +1278,16 @@
         <translation>Os PINs não coincidem, por favor, tente novamente.</translation>
     </message>
     <message>
+        <source>id_please_contribute_if_you_find</source>
+        <translation>Please contribute if you find Blockstream Green useful</translation>
+    </message>
+    <message>
         <source>id_please_disable_biometric</source>
         <translation>Por favor, desabilite a autenticação biométrica antes de remover o PIN</translation>
     </message>
     <message>
         <source>id_please_disconnect_your_ledger</source>
-        <translation>Please disconnect your Ledger Nano X, power it off by long-pressing both buttons, then reconnect it and enter its PIN</translation>
+        <translation>Por favor desconecte sua Ledger Nano X, desligue-a pressionando os dois botões por um certo período de tempo, depois reconecte e insira o PIN</translation>
     </message>
     <message>
         <source>id_please_enable_another</source>
@@ -1306,8 +1354,8 @@
         <translation>Problema com a chave %1</translation>
     </message>
     <message>
-        <source>id_provide_this_id_to_an_asset</source>
-        <translation>Provide this ID to an asset issuer to get authorization to receive and send Authorized Assets.</translation>
+        <source>id_provide_this_id_to_the_issuer</source>
+        <translation>Provide this ID to the issuer to get authorization to receive Liquid Securities.</translation>
     </message>
     <message>
         <source>id_providing_an_email_enables</source>
@@ -1431,7 +1479,7 @@
     </message>
     <message>
         <source>id_restore_temporary_wallet</source>
-        <translation>Restore temporary wallet</translation>
+        <translation>Restaurar carteira temporária</translation>
     </message>
     <message>
         <source>id_review</source>
@@ -1511,7 +1559,7 @@
     </message>
     <message>
         <source>id_select_duration_of_twofactor</source>
-        <translation>Select duration of Two-Factor Authentication protection for your coins. The new option applies to newly received coins.</translation>
+        <translation>Selecione um intervalo de tempo em que suas moedas estarão protegidas com a Autenticação de Dois Fatores. A nova opção se aplica às moedas recém-recebidas.</translation>
     </message>
     <message>
         <source>id_select_network</source>
@@ -1563,7 +1611,7 @@
     </message>
     <message>
         <source>id_set_a_timeout_to_logout_after</source>
-        <translation>Set a timeout to logout after prolonged inactivity</translation>
+        <translation>Defina um tempo para automaticamente desconectar por inatividade</translation>
     </message>
     <message>
         <source>id_set_an_email_address_to_receive</source>
@@ -1583,15 +1631,15 @@
     </message>
     <message>
         <source>id_set_up_a_passcode_for_your_ios</source>
-        <translation>Set up a passcode for your iOS device to set a PIN for Blockstream Green</translation>
+        <translation>Configure uma senha para o seu aparelho iOS para definir um PIN para o aplicativo Blockstream Green</translation>
     </message>
     <message>
         <source>id_set_up_a_screen_lock_for_your</source>
-        <translation>Set up a screen lock for your Android device to unlock your wallet using Android screen lock</translation>
+        <translation>Configure o bloqueio de tela do seu aparelho Android para acessar sua carteira usando essa função</translation>
     </message>
     <message>
         <source>id_set_up_credentials_to_access_in</source>
-        <translation>Set up credentials to access in watch-only mode to receive coins without putting your private keys at risk. Access from any device using a Blockstream Green app</translation>
+        <translation>Crie usuários para acessar sua carteira no modo somente leitura, possibilitando receber dinheiro sem colocar suas chaves privadas em risco. Acesse de qualquer dispositivo usando o aplicativo Blockstream Green</translation>
     </message>
     <message>
         <source>id_set_up_pgp_key_for</source>
@@ -1635,11 +1683,11 @@
     </message>
     <message>
         <source>id_show_bitcoin_amounts_in</source>
-        <translation>Show bitcoin amounts in</translation>
+        <translation>Mostrar unidade de bitcoin em</translation>
     </message>
     <message>
         <source>id_show_coins_with_expiring</source>
-        <translation>Show coins with expiring Two-Factor authentication protection.</translation>
+        <translation>Mostrar moedas com proteção de autenticação de dois fatores perto de expirar.</translation>
     </message>
     <message>
         <source>id_show_fiat</source>
@@ -1679,9 +1727,9 @@
     </message>
     <message>
         <source>id_snnreset_this_setting_and_then</source>
-        <translation>%1.
+        <translation>%1
 
-Reset this setting and then re-activate it.</translation>
+Redefina essa configuração e depois a reative.</translation>
     </message>
     <message>
         <source>id_socks5_hostname</source>
@@ -1693,7 +1741,7 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_socks5_proxy_and_port_must_be</source>
-        <translation>SOCKS5 proxy and port must be set</translation>
+        <translation>É necessário definir o SOCKS5 proxy e a porta</translation>
     </message>
     <message>
         <source>id_something_went_wrong</source>
@@ -1740,6 +1788,10 @@ Reset this setting and then re-activate it.</translation>
         <translation>Comece o processo para resetar o 2FA caso você tenha perdido o acesso a todos os seus métodos se autenticação de dois fatores.</translation>
     </message>
     <message>
+        <source>id_support</source>
+        <translation>Support</translation>
+    </message>
+    <message>
         <source>id_sweep</source>
         <translation>Varrer</translation>
     </message>
@@ -1749,7 +1801,7 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_sweep_into_s</source>
-        <translation>Sweep into %1</translation>
+        <translation>Resgatar para%1</translation>
     </message>
     <message>
         <source>id_switch_network</source>
@@ -1812,7 +1864,7 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_the_network_selected_on_the</source>
-        <translation>The network selected on the Green app is different from the one selected on the hardware wallet. Select the same network on both devices.</translation>
+        <translation>A rede selecionada no aplicativo Green é diferente da rede selecionada na carteira física. Selecione a mesma carteira em ambos aparelhos.</translation>
     </message>
     <message>
         <source>id_the_password_cant_be_empty</source>
@@ -1821,6 +1873,10 @@ Reset this setting and then re-activate it.</translation>
     <message>
         <source>id_the_recovery_key_below_will_not</source>
         <translation>A chave de recuperação abaixo não será mostrada novamente. Por favor mantenha uma cópia segura agora para se certificar de que você sempre terá acesso aos seus fundos.</translation>
+    </message>
+    <message>
+        <source>id_the_source_code_is_available_at</source>
+        <translation>The source code is available at %1</translation>
     </message>
     <message>
         <source>id_the_transaction_contains</source>
@@ -1911,6 +1967,10 @@ Reset this setting and then re-activate it.</translation>
         <translation>Transação Enviada</translation>
     </message>
     <message>
+        <source>id_transaction_status</source>
+        <translation>Transaction status</translation>
+    </message>
+    <message>
         <source>id_transactions</source>
         <translation>Transações</translation>
     </message>
@@ -1936,7 +1996,7 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_twofactor_protection_does_not</source>
-        <translation>Two-Factor protection does not expire on this account, therefore resetting a lost Two-Factor authentication will require 12 months. Enabling 2 separate Two-Factor methods is highly suggested.</translation>
+        <translation>Two-Factor protection does not expire on this account, enable 2 separate Two-Factor methods as backup in case you lose access to one.</translation>
     </message>
     <message>
         <source>id_twofactor_reset_in_progress</source>
@@ -2013,6 +2073,10 @@ Reset this setting and then re-activate it.</translation>
     <message>
         <source>id_view_in_explorer</source>
         <translation>Ver no Explorador</translation>
+    </message>
+    <message>
+        <source>id_visit_s_for_further_information</source>
+        <translation>Visit %1 for further information about the software</translation>
     </message>
     <message>
         <source>id_waiting_for_transaction</source>
@@ -2108,7 +2172,7 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_where_would_you_like_to</source>
-        <translation>Onde você gostaria de transferir os fundos?</translation>
+        <translation>Para qual conta você gostaria de transferir os fundos?</translation>
     </message>
     <message>
         <source>id_word_d_of_d</source>
@@ -2175,10 +2239,6 @@ Reset this setting and then re-activate it.</translation>
         <translation>Você tem apenas um método de autenticação de dois fatores ativado</translation>
     </message>
     <message>
-        <source>id_you_will_find_the_account_id_in</source>
-        <translation>Você pode encontrar o ID da Conta na tela receber.</translation>
-    </message>
-    <message>
         <source>id_you_will_need_to_reenter_your</source>
         <translation>Você precisará redigitar seu mnemônico para entrar novamente se não configurar um PIN. Pressione &quot;OK&quot; para continuar.</translation>
     </message>
@@ -2221,7 +2281,7 @@ Por favor, ative a autenticação de dois fatores.</translation>
     </message>
     <message>
         <source>id_your_watchonly_username_and</source>
-        <translation>Your watch-only username and password will be stored un-encrypted on this device. If your device is compromised third parties can get access to your transaction history. Press &quot;OK&quot; to continue.</translation>
+        <translation>Seu nome de usuário e senha serão gravados de forma não criptografada neste aparelho. Se seu aparelho estiver exposto, terceiros podem obter acesso ao seu histórico de transações. Pressione &quot;OK&quot; para continuar.</translation>
     </message>
 </context>
 </TS>

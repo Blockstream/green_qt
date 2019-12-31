@@ -51,7 +51,7 @@
     </message>
     <message>
         <source>id_about</source>
-        <translation>À PROPOS</translation>
+        <translation>About</translation>
     </message>
     <message>
         <source>id_accept</source>
@@ -146,10 +146,6 @@
         <translation>Vous permet de consulter rapidement votre solde, de recevoir des fonds ou de balayer un paperwallet. Vous ne pouvez pas envoyer de fonds en mode watch-only.</translation>
     </message>
     <message>
-        <source>id_allows_you_to_receive_and_send</source>
-        <translation>Allows you to receive and send assets that require authorization from the issuer to be transferred. Authorized Assets may be restricted from transfer to other account types.</translation>
-    </message>
-    <message>
         <source>id_always</source>
         <translation>Toujours</translation>
     </message>
@@ -182,24 +178,16 @@
         <translation>Tentatives restantes : %1</translation>
     </message>
     <message>
-        <source>id_authorized_assets</source>
-        <translation>Authorized Assets</translation>
-    </message>
-    <message>
-        <source>id_authorized_assets_account</source>
-        <translation>Authorized Assets Account</translation>
-    </message>
-    <message>
-        <source>id_authorized_assets_account_is</source>
-        <translation>Authorized assets account is only available on Liquid.</translation>
-    </message>
-    <message>
         <source>id_auto_logout_timeout</source>
         <translation>Déconnexion automatique si inactif</translation>
     </message>
     <message>
         <source>id_autolock_after</source>
         <translation>Verrouiller automatiquement après</translation>
+    </message>
+    <message>
+        <source>id_back</source>
+        <translation>Back</translation>
     </message>
     <message>
         <source>id_be_aware_other_apps_can_read_or</source>
@@ -274,6 +262,10 @@
         <translation>MONNAIE</translation>
     </message>
     <message>
+        <source>id_change_pin</source>
+        <translation>Change PIN</translation>
+    </message>
+    <message>
         <source>id_choose</source>
         <translation>Choisissez</translation>
     </message>
@@ -308,6 +300,10 @@
     <message>
         <source>id_confirm_passphrase</source>
         <translation>Confirmez le mot de passe</translation>
+    </message>
+    <message>
+        <source>id_confirm_transaction_details_on</source>
+        <translation>Confirm transaction details on your harware wallet</translation>
     </message>
     <message>
         <source>id_confirmation_in_d_blocks</source>
@@ -372,6 +368,10 @@
     <message>
         <source>id_create_a_pin_to_access_your</source>
         <translation>Créez un code PIN pour accéder à votre portefeuille</translation>
+    </message>
+    <message>
+        <source>id_create_a_wallet_for_bitcoin</source>
+        <translation>Create a wallet for Bitcoin, Liquid or Testnet</translation>
     </message>
     <message>
         <source>id_create_new_wallet</source>
@@ -476,6 +476,10 @@
     <message>
         <source>id_disputed</source>
         <translation>Contesté</translation>
+    </message>
+    <message>
+        <source>id_distributed_under_the_s_see</source>
+        <translation>Distributed under the %1, see LICENSE for more information or visit %2</translation>
     </message>
     <message>
         <source>id_domain</source>
@@ -714,6 +718,10 @@
         <translation>Les fonds issus de cette transaction ne sont pas confidentiels.</translation>
     </message>
     <message>
+        <source>id_general</source>
+        <translation>General</translation>
+    </message>
+    <message>
         <source>id_generate_new_address</source>
         <translation>Générer une nouvelle adresse</translation>
     </message>
@@ -724,6 +732,10 @@
     <message>
         <source>id_go_to_account</source>
         <translation>Go to Account</translation>
+    </message>
+    <message>
+        <source>id_go_to_receive_to_get_your</source>
+        <translation>Go to Receive to get your Account ID.</translation>
     </message>
     <message>
         <source>id_go_to_wallet</source>
@@ -776,6 +788,14 @@
     <message>
         <source>id_hash</source>
         <translation>Hash</translation>
+    </message>
+    <message>
+        <source>id_help</source>
+        <translation>Help</translation>
+    </message>
+    <message>
+        <source>id_here</source>
+        <translation>here</translation>
     </message>
     <message>
         <source>id_hex</source>
@@ -926,12 +946,32 @@
         <translation>Learn more about %1.</translation>
     </message>
     <message>
+        <source>id_ledger_currently_supports_a</source>
+        <translation>Ledger currently supports a limited set of assets: check with the vendor before receiving assets other than L-BTC</translation>
+    </message>
+    <message>
         <source>id_ledger_dashboard_detected</source>
         <translation>Ledger Dashboard détecté, merci d&apos;ouvrir l&apos;application appropriée pour y accéder.</translation>
     </message>
     <message>
         <source>id_lets_get_you_set_up</source>
         <translation>Préparons votre installation.</translation>
+    </message>
+    <message>
+        <source>id_liquid_securities</source>
+        <translation>Liquid Securities</translation>
+    </message>
+    <message>
+        <source>id_liquid_securities_account</source>
+        <translation>Liquid Securities Account</translation>
+    </message>
+    <message>
+        <source>id_liquid_securities_account_is</source>
+        <translation>Liquid securities account is only available on Liquid.</translation>
+    </message>
+    <message>
+        <source>id_liquid_securities_accounts_are</source>
+        <translation>Liquid securities accounts are only available on Liquid wallets. You will be required to get authorization from the issuer to receive them.</translation>
     </message>
     <message>
         <source>id_loading_transactions</source>
@@ -1190,6 +1230,10 @@
         <translation>OU</translation>
     </message>
     <message>
+        <source>id_our_support_page</source>
+        <translation>our support page</translation>
+    </message>
+    <message>
         <source>id_outdated_hardware_wallet</source>
         <translation>Le firmware du hardware wallet n&apos;est pas à jour. Mettez-le à jour depuis votre ordinateur.</translation>
     </message>
@@ -1232,6 +1276,10 @@
     <message>
         <source>id_pins_do_not_match_please_try</source>
         <translation>Les PIN ne correspondent pas, essayez à nouveau.</translation>
+    </message>
+    <message>
+        <source>id_please_contribute_if_you_find</source>
+        <translation>Please contribute if you find Blockstream Green useful</translation>
     </message>
     <message>
         <source>id_please_disable_biometric</source>
@@ -1306,8 +1354,8 @@
         <translation>Problème avec la clé %1</translation>
     </message>
     <message>
-        <source>id_provide_this_id_to_an_asset</source>
-        <translation>Provide this ID to an asset issuer to get authorization to receive and send Authorized Assets.</translation>
+        <source>id_provide_this_id_to_the_issuer</source>
+        <translation>Provide this ID to the issuer to get authorization to receive Liquid Securities.</translation>
     </message>
     <message>
         <source>id_providing_an_email_enables</source>
@@ -1742,6 +1790,10 @@ Reset this setting and then re-activate it.</translation>
         <translation>Start a 2FA reset process if you lost access to all your two-factor authentication methods.</translation>
     </message>
     <message>
+        <source>id_support</source>
+        <translation>Support</translation>
+    </message>
+    <message>
         <source>id_sweep</source>
         <translation>Balayer</translation>
     </message>
@@ -1824,6 +1876,10 @@ Reset this setting and then re-activate it.</translation>
     <message>
         <source>id_the_recovery_key_below_will_not</source>
         <translation>La clé de récupération ci-dessous ne sera plus affichée. Veuillez en faire une copie de sauvegarde dès maintenant pour garantir l&apos;accès permanent à vos fonds.</translation>
+    </message>
+    <message>
+        <source>id_the_source_code_is_available_at</source>
+        <translation>The source code is available at %1</translation>
     </message>
     <message>
         <source>id_the_transaction_contains</source>
@@ -1916,6 +1972,10 @@ Reset this setting and then re-activate it.</translation>
         <translation>Transaction envoyée</translation>
     </message>
     <message>
+        <source>id_transaction_status</source>
+        <translation>Transaction status</translation>
+    </message>
+    <message>
         <source>id_transactions</source>
         <translation>Transactions</translation>
     </message>
@@ -1941,7 +2001,7 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_twofactor_protection_does_not</source>
-        <translation>Two-Factor protection does not expire on this account, therefore resetting a lost Two-Factor authentication will require 12 months. Enabling 2 separate Two-Factor methods is highly suggested.</translation>
+        <translation>Two-Factor protection does not expire on this account, enable 2 separate Two-Factor methods as backup in case you lose access to one.</translation>
     </message>
     <message>
         <source>id_twofactor_reset_in_progress</source>
@@ -2018,6 +2078,10 @@ Reset this setting and then re-activate it.</translation>
     <message>
         <source>id_view_in_explorer</source>
         <translation>Voir dans l&apos;explorateur</translation>
+    </message>
+    <message>
+        <source>id_visit_s_for_further_information</source>
+        <translation>Visit %1 for further information about the software</translation>
     </message>
     <message>
         <source>id_waiting_for_transaction</source>
@@ -2180,10 +2244,6 @@ Reset this setting and then re-activate it.</translation>
     <message>
         <source>id_you_only_have_one_twofactor</source>
         <translation>Vous n&apos;avez activé qu&apos;une seule méthode d&apos;authentification à double facteurs</translation>
-    </message>
-    <message>
-        <source>id_you_will_find_the_account_id_in</source>
-        <translation>You will find the Account ID in the receive screen.</translation>
     </message>
     <message>
         <source>id_you_will_need_to_reenter_your</source>
