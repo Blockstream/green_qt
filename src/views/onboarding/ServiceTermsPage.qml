@@ -6,13 +6,13 @@ import '..'
 WizardPage {
     property alias valid: accept_checkbox.checked
 
-    title: qsTr('TERM OF SERVICE')
+    title: qsTr('id_terms_of_service')
     activeFocusOnTab: false
 
     CheckBox {
         id: accept_checkbox
         anchors.centerIn: parent
         focus: true
-        text: qsTr("I ACCEPT!")
+        text: qsTr("id_accept")
     }
 }

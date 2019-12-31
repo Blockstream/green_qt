@@ -17,8 +17,8 @@ ColumnLayout {
     SettingsBox {
         Layout.fillWidth: true
 
-        title: 'Quick login'
-        subtitle: 'Enable a PIN to quickly access your wallet for this device'
+        title: qsTr('id_access')
+        subtitle: qsTr('id_enable_or_change_your_pin_to')
 
         FlatButton {
             Component {
@@ -29,15 +29,15 @@ ColumnLayout {
                 }
             }
 
-            text: qsTr('Change PIN')
+            text: qsTr('id_change_pin')
             onClicked: change_pin_dialog.createObject(Window.window).open()
         }
 
     }
 
     SettingsBox {
-        title: 'Autologout'
-        subtitle: 'Configure autologout after some inactivity'
+        title: qsTr('id_auto_logout_timeout')
+        subtitle: qsTr('id_set_a_timeout_to_logout_after')
 
         ComboBox {
             model: [1, 2, 5, 10, 60]
@@ -54,8 +54,8 @@ ColumnLayout {
 
 
     SettingsBox {
-        title: 'Enable watch-only login'
-        subtitle: 'Allow watch-only login to your wallet'
+        title: qsTr('id_watchonly_login')
+        subtitle: qsTr('id_set_up_watchonly_credentials')
 
         RowLayout {
             Switch {
@@ -68,12 +68,12 @@ ColumnLayout {
                 visible: false
 
                 TextField {
-                    placeholderText: qsTr('Username')
+                    placeholderText: qsTr('id_username')
                     padding: 10
                 }
 
                 TextField {
-                    placeholderText: qsTr('Password')
+                    placeholderText: qsTr('id_password')
                     padding: 10
                 }
             }
@@ -81,8 +81,8 @@ ColumnLayout {
     }
 
     SettingsBox {
-        title: 'Show mnemonic'
-        subtitle: 'Display your mnemonic'
+        title: qsTr('id_wallet_backup')
+        subtitle: qsTr('id_your_wallet_backup_is_made_of')
 
         RowLayout {
             Component {
@@ -100,8 +100,8 @@ ColumnLayout {
     }
 
     SettingsBox {
-        title: 'Two factor auth'
-        subtitle: 'Set any or all two factor: you can choose which one when needed! Enable two or back up the given code when applicable'
+        title: qsTr('id_twofactor_authentication')
+        subtitle: qsTr('id_enable_twofactor_authentication')
 
         ColumnLayout {
             Component {
@@ -142,22 +142,22 @@ ColumnLayout {
     }
 
     SettingsBox {
-        title: 'nLockTime'
+        title: 'nLockTime' // TODO: move to own recovery tab
         subtitle: 'nLockTime'
         ColumnLayout {
             FlatButton {
-                text: qsTr('Show outputs expiring soon')
+                text: qsTr('Show outputs expiring soon') // TODO: update
             }
 
             FlatButton {
-                text: qsTr('Send all nLockTime transactions by email')
+                text: qsTr('id_request_recovery_transactions')
             }
         }
     }
 
     SettingsBox {
-        title: 'CSV value'
-        subtitle: 'CSV value'
+        title: qsTr('id_twofactor_authentication_expiry')
+        subtitle: qsTr('id_select_duration_of_twofactor')
         ComboBox {
             currentIndex: 1
             model: ListModel {
@@ -173,8 +173,8 @@ ColumnLayout {
     }
 
     SettingsBox {
-        title: 'Limit currency'
-        subtitle: 'Set some limits for which you won\'t be asked for 2FA'
+        title: qsTr('id_set_twofactor_threshold')
+        subtitle: qsTr('id_set_a_limit_to_spend_without')
 
         RowLayout {
             Item {
@@ -191,8 +191,8 @@ ColumnLayout {
     }
 
     SettingsBox {
-        title: 'Email'
-        subtitle: 'Set your email address for transactions notifications, two factor authentication and nLocktime transaction'
+        title: qsTr('id_set_an_email_for_recovery')
+        subtitle: qsTr('id_providing_an_email_enables')
 
         TextField {
             placeholderText: 'blabla@gmail.com'
@@ -200,17 +200,17 @@ ColumnLayout {
     }
 
     SettingsBox {
-        title: 'Reset 2FA'
-        subtitle: 'If you have lost access to your 2FA mechanisms you can start the 2FA recovery process. WARNING: Starting the reset process will lock your wallet'
+        title: qsTr('id_request_twofactor_reset')
+        subtitle: qsTr('id_start_a_2fa_reset_process_if')
 
         RowLayout {
             TextField {
-                placeholderText: qsTr('Recovery email')
+                placeholderText: qsTr('id_enter_new_email')
                 padding: 10
             }
 
             FlatButton {
-                text: qsTr('Request 2FA reset')
+                text: qsTr('id_reset')
                 padding: 10
             }
         }

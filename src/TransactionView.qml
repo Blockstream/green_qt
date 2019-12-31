@@ -38,10 +38,6 @@ Page {
             font.capitalization: Font.AllUppercase
         }
 
-        Label {
-            text: transaction.data.type === 'outgoing' ? 'SENT' : 'RECEIVED' //qsTr('id_transaction_details')
-            Layout.fillWidth: true
-        }
         Button {
             Layout.rightMargin: 32
             flat: true

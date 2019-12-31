@@ -31,7 +31,7 @@ Dialog {
             columns: 2
 
             Label {
-                text: qsTr('NAME')
+                text: qsTr('id_account_name')
 
                 Layout.alignment: Qt.AlignRight
             }
@@ -43,14 +43,14 @@ Dialog {
             }
 
             Label {
-                text: qsTr('TYPE')
+                text: qsTr('id_account_type')
 
                 Layout.alignment: Qt.AlignRight
             }
 
             ComboBox {
                 flat: true
-                model: ['2 OF 2']
+                model: [qsTr('id_standard_account')]
 
                 Layout.fillWidth: true
             }

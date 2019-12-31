@@ -23,7 +23,7 @@ ColumnLayout {
             width: 250
             focus: true
             horizontalAlignment: TextField.AlignHCenter
-            placeholderText: 'Insert amount'
+            placeholderText: qsTr('id_add_amount')
             Layout.fillWidth: true
             validator: DoubleValidator {
                 notation: DoubleValidator.StandardNotation

@@ -19,11 +19,11 @@ ControllerDialog {
 
     initialItem: WizardPage {
         actions: Action {
-            text: 'NEXT'
+            text: qsTr('id_next')
             onTriggered: controller.disable()
         }
         Label {
-            text: 'ARE YOU SURE?'
+            text: 'ARE YOU SURE?' // TODO: update
         }
     }
 }

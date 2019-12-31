@@ -11,10 +11,10 @@ ColumnLayout {
 
     SettingsBox {
         title: 'PGP'
-        subtitle: 'Set your PGP key for improved privacy'
+        subtitle: qsTr('id_add_a_pgp_public_key_to_receive')
 
         FlatButton {
-            text: qsTr('Add PGP key')
+            text: qsTr('id_pgp_key')
         }
     }
 }

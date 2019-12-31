@@ -24,7 +24,7 @@ WizardPage {
             }
 
            Label {
-                text: qsTr('Create a wallet for Bitcoin, Liquid or Testnet')
+                text: qsTr('id_create_a_wallet_for_bitcoin')
                 font.pixelSize : 14
             }
         }

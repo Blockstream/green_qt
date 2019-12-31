@@ -2,7 +2,7 @@ import QtQuick 2.13
 import '..'
 
 WizardPage {
-    title: qsTr('WELCOME')
+    title: qsTr('id_welcome')
 
     Image {
         anchors.centerIn: parent

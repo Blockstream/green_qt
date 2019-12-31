@@ -10,7 +10,7 @@ Dialog {
     modal: true
     parent: Overlay.overlay
     standardButtons: Dialog.Ok | Dialog.Cancel
-    title: qsTr('RENAME ACCOUNT')
+    title: qsTr('id_account_name')
 
     onAccepted: controller.rename()
     onRejected: controller.reset()
@@ -28,7 +28,7 @@ Dialog {
             columns: 2
 
             Label {
-                text: qsTr('NAME')
+                text: qsTr('id_name')
 
                 Layout.alignment: Qt.AlignRight
             }

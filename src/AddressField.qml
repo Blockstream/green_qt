@@ -26,7 +26,7 @@ ColumnLayout {
             Layout.fillWidth: true
             focus: true
             horizontalAlignment: TextField.AlignHCenter
-            placeholderText: 'Insert a bitcoin address'
+            placeholderText: qsTr('id_enter_an_address')
         }
 
         Button {

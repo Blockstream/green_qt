@@ -4,15 +4,15 @@ ComboBox {
     property int blocks: model[currentIndex].blocks
 
     function fee(label, duration, blocks) {
-        const text = qsTr(label) + ' ~ ' + qsTr(duration) + ' ( '+ Math.round(wallet.events.fees[blocks] / 10 + 0.5) / 100 + ' satoshi/vbyte)'
+        const text = qsTr(label) + ' ' + qsTr(duration) + ' ( '+ Math.round(wallet.events.fees[blocks] / 10 + 0.5) / 100 + ' satoshi/vbyte)'
         return { label, duration, blocks, text }
     }
 
     flat: true
     model: [
-        fee('Fast', '10 Minutes', 3),
-        fee('Medium', '2 Hours', 12),
-        fee('Slow', '4 Hours', 24)
+        fee(qsTr('id_fast'), qsTr('id_1030_minutes'), 3),
+        fee(qsTr('id_medium'), qsTr('id_2_hours'), 12),
+        fee(qsTr('id_slow'), qsTr('id_4_hours'), 24)
     ]
     textRole: 'text'
 }

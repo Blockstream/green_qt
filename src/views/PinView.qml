@@ -36,7 +36,7 @@ Column {
 
         FlatButton {
             enabled: !field.empty
-            text: qsTr("ERASE")
+            text: qsTr("id_cancel")
             onClicked: field.removeDigit()
         }
 
@@ -48,7 +48,7 @@ Column {
 
         FlatButton {
             enabled: !field.empty
-            text: qsTr("CLEAR")
+            text: qsTr("id_clear")
             onClicked: field.clear()
         }
 

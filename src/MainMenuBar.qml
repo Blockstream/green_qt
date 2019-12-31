@@ -7,11 +7,11 @@ MenuBar {
         title: qsTr('&File')
 
         Action {
-            text: qsTr('&New Wallet')
+            text: qsTr('id_create_new_wallet')
             onTriggered: create_wallet_action.trigger()
         }
         Action {
-            text: qsTr('&Restore Wallet')
+            text: qsTr('id_restore_green_wallet')
             onTriggered: restore_wallet_action.trigger()
         }
         Action {
@@ -21,15 +21,15 @@ MenuBar {
     }
 
     Menu {
-        title: qsTr('&Help')
+        title: qsTr('id_help')
 
         Action {
-            text: qsTr('&About')
+            text: qsTr('id_about')
             onTriggered: about_dialog.open()
         }
 
         Action {
-            text: qsTr('&Support')
+            text: qsTr('id_support')
             onTriggered: {
                 Qt.openUrlExternally("https://docs.blockstream.com/green/support.html")
             }

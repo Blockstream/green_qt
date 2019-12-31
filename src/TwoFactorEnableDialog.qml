@@ -8,7 +8,7 @@ ControllerDialog {
     property string method
 
     id: controller_dialog
-    title: `ENABLE TWO FACTOR ${method.toUpperCase()}`
+    title: qsTr('id_set_up_twofactor_authentication') + '\n' + qsTr('id_please_provide_your_1s_code').arg(method)
     icon: `assets/svg/2fa_${method}.svg`
     height: 300
     horizontalPadding: 50

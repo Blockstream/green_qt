@@ -28,7 +28,7 @@ ColumnLayout {
     }
 
     SettingsBox {
-        title: 'Currency'
+        title: qsTr('id_currency')
         subtitle: 'Select your currency and pricing source'
 
         GridLayout {
@@ -69,7 +69,7 @@ ColumnLayout {
             }
 
             Label {
-                text: 'Show amounts in'
+                text: qsTr('id_show_bitcoin_amounts_in')
             }
 
             ComboBox {
@@ -88,11 +88,11 @@ ColumnLayout {
 
     SettingsBox {
         title: 'Notifications'
-        subtitle: 'Notifications allow for improved security when configured for outgoing and for most up to date information when configuring for incoming'
+        subtitle: qsTr('id_receive_email_notifications_for')
         GridLayout {
             columns: 2
             Label {
-                text: 'Incoming transactions'
+                text: qsTr('id_received')
             }
 
             Switch {
@@ -100,7 +100,7 @@ ColumnLayout {
             }
 
             Label {
-                text: 'Outgoing transactions'
+                text: qsTr('id_sent')
             }
 
             Switch {
