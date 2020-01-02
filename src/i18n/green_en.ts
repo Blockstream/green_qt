@@ -1390,6 +1390,10 @@
         <translation>Recipient</translation>
     </message>
     <message>
+        <source>id_recovery</source>
+        <translation>Recovery</translation>
+    </message>
+    <message>
         <source>id_recovery_and_notifications</source>
         <translation>Recovery and Notifications</translation>
     </message>
@@ -1548,6 +1552,10 @@
     <message>
         <source>id_see_our_terms_of_service_s</source>
         <translation>See our Terms of Service %1</translation>
+    </message>
+    <message>
+        <source>id_select_a_fiat_currency_and</source>
+        <translation>Select a fiat currency and bitcoin denomination to show amounts in your wallet</translation>
     </message>
     <message>
         <source>id_select_account</source>

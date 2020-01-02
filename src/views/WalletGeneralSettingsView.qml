@@ -29,10 +29,11 @@ ColumnLayout {
 
     SettingsBox {
         title: qsTr('id_currency')
-        subtitle: 'Select your currency and pricing source'
+        description: qsTr('id_select_a_fiat_currency_and')
 
         GridLayout {
             columns: 2
+            Layout.alignment: Qt.AlignRight
 
             Label {
                 text: qsTr('id_reference_exchange_rate')
@@ -43,6 +44,7 @@ ColumnLayout {
                 ComboBox {
                     id: currency_combo
                     flat: true
+                    width: 200
                     model: Object.keys(per_currency).sort()
                     currentIndex: model.indexOf(wallet.settings.pricing.currency)
                     onCurrentTextChanged: {
@@ -52,11 +54,12 @@ ColumnLayout {
                         controller.change({ pricing: { currency: currentText } })
                     }
 
-                    Layout.fillWidth: true
+                    //Layout.fillWidth: true
                 }
 
                 ComboBox {
                     flat: true
+                    width: 200
                     model: per_currency[currency_combo.currentText].sort()
                     currentIndex: Math.max(0, model.indexOf(wallet.settings.pricing.exchange))
                     onCurrentTextChanged: {
@@ -74,6 +77,7 @@ ColumnLayout {
 
             ComboBox {
                 flat: true
+                width: 200
                 model: ['BTC', 'mBTC', '\u00B5BTC', 'bits', 'sats']
                 currentIndex: model.indexOf(wallet.settings.unit)
                 onCurrentTextChanged: {
@@ -81,14 +85,15 @@ ColumnLayout {
                     if (currentText === wallet.settings.unit) return
                     controller.change({ unit: currentText })
                 }
-                Layout.fillWidth: true
             }
         }
     }
 
     SettingsBox {
         title: 'Notifications'
-        subtitle: qsTr('id_receive_email_notifications_for')
+        description: qsTr('id_receive_email_notifications_for')
+
+
         GridLayout {
             columns: 2
             Label {

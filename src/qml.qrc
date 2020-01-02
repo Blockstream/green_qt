@@ -51,6 +51,7 @@
         <file>ScannerView.qml</file>
         <file>views/WalletAdvancedSettingsView.qml</file>
         <file>views/WalletGeneralSettingsView.qml</file>
+        <file>views/WalletRecoverySettingsView.qml</file>
         <file>views/WalletSecuritySettingsView.qml</file>
         <file>SettingsBox.qml</file>
         <file>WizardButtonBox.qml</file>

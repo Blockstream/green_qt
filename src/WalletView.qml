@@ -75,7 +75,7 @@ GridLayout {
         }
         PropertyChanges {
             target: settings_tool_button
-            icon.source: 'assets/svg/arrow_left.svg'
+            icon.source: 'assets/svg/cancel.svg'
         }
     }
 

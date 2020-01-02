@@ -11,9 +11,10 @@ ColumnLayout {
 
     SettingsBox {
         title: 'PGP'
-        subtitle: qsTr('id_add_a_pgp_public_key_to_receive')
+        description: qsTr('id_add_a_pgp_public_key_to_receive')
 
         FlatButton {
+            Layout.alignment: Qt.AlignRight
             text: qsTr('id_pgp_key')
         }
     }

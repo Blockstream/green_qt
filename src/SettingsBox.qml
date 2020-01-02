@@ -3,33 +3,41 @@ import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.13
 
 Page {
-    property string subtitle
+    property string description
     default property alias children: column_layout.children
     font.family: dinpro.name
     font.pixelSize: 15
     Layout.fillWidth: true
-    header: Label {
-        color: '#808080'
-        font.capitalization: Font.AllUppercase
-        text: title
-    }
-
     background: Item {}
 
     RowLayout {
-        anchors.left: parent.left
-        anchors.right: parent.right
-        spacing: 30
+        anchors.fill: parent
 
-        Label {
+        ColumnLayout {
             Layout.alignment: Qt.AlignTop
-            wrapMode: Text.WordWrap
-            text: subtitle
-            Layout.preferredWidth: 200
+            Layout.fillWidth: true
+            spacing: 15
+
+            Label {
+                Layout.alignment: Qt.AlignTop
+                Layout.fillWidth: true
+                wrapMode: Text.WordWrap
+                text: title
+                font.pixelSize : 18
+            }
+
+            Label {
+                Layout.alignment: Qt.AlignTop
+                Layout.fillWidth: true
+                wrapMode: Label.WordWrap
+                text: description
+            }
         }
 
         ColumnLayout {
             id: column_layout
+            Layout.fillWidth: true
+            Layout.alignment: Qt.AlignTop
         }
     }
 }

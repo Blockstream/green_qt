@@ -12,17 +12,25 @@ Page {
     background: Item { }
 
     header: TabBar {
+        padding: 20
+
         background: Item {}
         id: tab_bar
-        Layout.fillWidth: true
         TabButton {
             text: qsTr('id_general')
+            width: 120
         }
         TabButton {
             text: qsTr('id_security')
+            width: 120
         }
         TabButton {
             text: qsTr('id_advanced')
+            width: 120
+        }
+        TabButton {
+            text: qsTr('id_recovery')
+            width: 120
         }
     }
 
@@ -31,25 +39,35 @@ Page {
         clip: true
         anchors.fill: parent
         anchors.leftMargin: 20
-        anchors.topMargin: 10
+        anchors.rightMargin: 20
 
         currentIndex: tab_bar.currentIndex
 
         ScrollView {
+            contentWidth: width
             WalletGeneralSettingsView {
-                width: stack_layout.width - 20
+                width: stack_layout.width
             }
         }
 
         ScrollView {
+            contentWidth: width
             WalletSecuritySettingsView {
-                width: stack_layout.width - 20
+                width: stack_layout.width
             }
         }
 
         ScrollView {
+            contentWidth: width
             WalletAdvancedSettingsView {
-                width: stack_layout.width - 20
+                width: stack_layout.width
+            }
+        }
+
+        ScrollView {
+          contentWidth: width
+            WalletRecoverySettingsView {
+                width: stack_layout.width
             }
         }
     }
