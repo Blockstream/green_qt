@@ -20,6 +20,11 @@ Transaction::~Transaction()
 
 }
 
+bool Transaction::isUnconfirmed() const
+{
+    return m_data.value("block_height").toInt(0) == 0;
+}
+
 Account *Transaction::account() const
 {
     return m_account;

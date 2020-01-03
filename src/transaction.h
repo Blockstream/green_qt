@@ -16,6 +16,8 @@ public:
     explicit Transaction(Account* account);
     virtual ~Transaction();
 
+    bool isUnconfirmed() const;
+
     Account* account() const;
 
     QJsonObject data() const;
