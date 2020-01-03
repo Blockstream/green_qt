@@ -247,7 +247,15 @@ QJsonObject Wallet::events() const
 
 QStringList Wallet::mnemonic() const
 {
-    return m_mnemonic;
+    QStringList result;
+    QMetaObject::invokeMethod(m_context, [this, &result] {
+        char* mnemonic = nullptr;
+        int err = GA_get_mnemonic_passphrase(m_session, "", &mnemonic);
+        Q_ASSERT(err == GA_OK);
+        result = QString(mnemonic).split(' ');
+        GA_destroy_string(mnemonic);
+    }, Qt::BlockingQueuedConnection);
+    return result;
 }
 
 qint64 Wallet::balance() const
@@ -332,13 +340,6 @@ void Wallet::login(const QByteArray& pin)
         m_currencies = Json::toObject(currencies);
         GA_destroy_json(currencies);
 
-        char* mnemonic = nullptr;
-        err = GA_get_mnemonic_passphrase(m_session, "", &mnemonic);
-        qDebug() << "MNEMONIC: " << err << mnemonic;
-        m_mnemonic = QString(mnemonic).split(' ');
-        GA_destroy_string(mnemonic);
-
-        updateConfig();
         updateSettings();
 
         reload();

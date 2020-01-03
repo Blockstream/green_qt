@@ -123,7 +123,6 @@ public:
     QList<Account*> m_accounts;
     QMap<int, Account*> m_accounts_by_pointer;
     QJsonObject m_events;
-    QStringList m_mnemonic;
 
     QByteArray getPinData() const;
     QByteArray m_pin_data;
