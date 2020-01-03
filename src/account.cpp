@@ -88,6 +88,7 @@ void Account::reload()
 
         QMetaObject::invokeMethod(this, [this, transactions] {
             m_transactions.clear();
+            m_have_unconfirmed = false;
             for (auto value : transactions) {
                 QJsonObject data = value.toObject();
                 auto hash = data.value("txhash").toString();
@@ -98,6 +99,7 @@ void Account::reload()
                 }
                 transaction->updateFromData(data);
                 m_transactions.append(transaction);
+                if (transaction->isUnconfirmed()) m_have_unconfirmed = true;
             }
             emit transactionsChanged();
         }, Qt::BlockingQueuedConnection);

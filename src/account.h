@@ -48,6 +48,7 @@ public:
     Wallet* const m_wallet;
     QVector<Transaction*> m_transactions;
     QMap<QString, Transaction*> m_transactions_by_hash;
+    bool m_have_unconfirmed{false};
     QJsonObject m_json;
     int m_pointer;
 };
