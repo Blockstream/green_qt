@@ -19,6 +19,10 @@ Item {
         'testnet': 'assets/svg/btc_testnet.svg'
     })
 
+    function formatDateTime(date_time) {
+        return new Date(date_time).toLocaleString(locale.dateTimeFormat(Locale.LongFormat))
+    }
+
     Connections {
         target: window
         onCurrentWalletChanged: drawer.close()

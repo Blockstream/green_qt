@@ -16,29 +16,6 @@ Pane {
         return qsTr('id_completed')
     }
 
-    function pretty(d) {
-        if (d < 10) return qsTr('id_now')
-        if (d < 60) return qsTr('LAST MINUTE')
-        if (d < 600) return qsTr(`LAST ${Math.ceil(d / 60)} MINUTES`)
-
-        d = Math.ceil(d / 3600)
-        if (d < 2) return qsTr('LAST HOUR')
-        if (d < 24) return qsTr('TODAY')
-
-        d = Math.ceil(d / 24)
-        return qsTr(`${d} DAYS AGO`)
-    }
-
-
-    Timer {
-        id: timer
-        interval: 1000; running: true; repeat: true
-        onTriggered: now = (new Date()).getTime()
-        property var now: (new Date()).getTime()
-    }
-
-    property var secs: Math.ceil((timer.now - (new Date(tx.created_at)).getTime()) / 1000) - 3600
-
     spacing: 8
     padding: 0
 
@@ -76,7 +53,7 @@ Pane {
             Layout.fillWidth: true
             Label {
                 Layout.fillWidth: true
-                text: pretty(secs)
+                text: formatDateTime(tx.created_at)
                 opacity: 0.8
             }
             Label {

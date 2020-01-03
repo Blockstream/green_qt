@@ -65,7 +65,7 @@ Page {
                 }
 
                 Label {
-                    text: transaction.data.created_at
+                    text: formatDateTime(transaction.data.created_at)
                 }
             }
 
