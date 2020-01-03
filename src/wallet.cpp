@@ -228,7 +228,12 @@ void Wallet::handleNotification(const QJsonObject &notification)
     }
 
     if (event == "block") {
-        // TODO: data contains block_hash, block_height and initial_timestamp
+        for (auto account : m_accounts) {
+            if (account->m_have_unconfirmed) {
+                // reloading all transactions if at least one transaction is unconfirmed.
+                account->reload();
+            }
+        }
         return;
     }
 
