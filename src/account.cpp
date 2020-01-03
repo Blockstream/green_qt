@@ -74,7 +74,17 @@ static QJsonArray get_transactions(GA_session* session, int subaccount, int firs
 void Account::reload()
 {
     QMetaObject::invokeMethod(m_wallet->m_context, [this] {
-        auto transactions = get_transactions(m_wallet->m_session, m_pointer, 0, 30);
+        QJsonArray transactions;
+        int first = 0;
+        int count = 30;
+        while (true) {
+            auto values = get_transactions(m_wallet->m_session, m_pointer, first, count);
+            for (auto value : values) {
+                transactions.append(value);
+            }
+            if (values.size() < count) break;
+            break;
+        }
 
         QMetaObject::invokeMethod(this, [this, transactions] {
             m_transactions.clear();
