@@ -42,6 +42,17 @@ WalletManager::WalletManager(QObject *parent) : QObject(parent)
     settings.endArray();
 }
 
+Wallet* WalletManager::createWallet()
+{
+    return new Wallet(this);
+}
+
+void WalletManager::insertWallet(Wallet* wallet)
+{
+    m_wallets.append(wallet);
+    emit walletsChanged();
+}
+
 QQmlListProperty<Wallet> WalletManager::wallets()
 {
     return QQmlListProperty<Wallet>(this, &m_wallets,
@@ -49,7 +60,7 @@ QQmlListProperty<Wallet> WalletManager::wallets()
     [](QQmlListProperty<Wallet>* property, int index) { return static_cast<QVector<Wallet*>*>(property->data)->at(index); });
 }
 
-Wallet* WalletManager::signup(const QString& proxy, bool use_tor, Network* network, const QString& name, const QStringList& mnemonic, const QString& password, const QByteArray& pin)
+Wallet* WalletManager::signup(const QString& proxy, bool use_tor, Network* network, const QString& name, const QStringList& mnemonic, const QByteArray& pin)
 {
     Q_ASSERT(mnemonic.size() == 24 || mnemonic.size() == 27);
     Wallet* wallet = new Wallet(this);
@@ -58,7 +69,7 @@ Wallet* WalletManager::signup(const QString& proxy, bool use_tor, Network* netwo
     wallet->m_network = network;
     wallet->m_name = name;
     wallet->connect();
-    wallet->signup(mnemonic, password, pin);
+    wallet->signup(mnemonic, pin);
     m_wallets.append(wallet);
     emit walletsChanged();
     return wallet;

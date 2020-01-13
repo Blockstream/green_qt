@@ -8,8 +8,12 @@ import QtQuick.Layouts 1.12
 import './views'
 
 Page {
+    property Wallet wallet
+
     property Action cancel: Action {
         text: qsTr('id_cancel')
+    }
+    property Action accept: Action {
     }
 
     StackView {
@@ -32,7 +36,11 @@ Page {
 
     property Item network_page: NetworkPage {
         id: network_page
-        accept.onTriggered: stack_view.push(mnemonic_page)
+        accept.onTriggered: {
+            wallet.network = network_page.network;
+            wallet.connect();
+            stack_view.push(mnemonic_page)
+        }
     }
 
     property Item mnemonic_page: MnemonicEditor {
@@ -74,8 +82,13 @@ Page {
             id: name_field
             anchors.centerIn: parent
             onAccepted: {
-                currentWallet = WalletManager.signup('', false, network_page.network, name_field.text, mnemonic_page.mnemonic, password_field.text, pin_view.pin);
-                stack_view.pop()
+                wallet.name = name_field.text;
+                wallet.restore(mnemonic_page.mnemonic, password_field.text, pin_view.pin);
+                if (wallet.authentication !== Wallet.Authenticated) {
+                    // TODO show error view
+                } else {
+                    accept.trigger()
+                }
             }
         }
     }

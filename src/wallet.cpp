@@ -392,11 +392,13 @@ void Wallet::test()
     });
 }
 
-void Wallet::signup(const QStringList& mnemonic, const QString& password, const QByteArray& pin)
+void Wallet::signup(const QStringList& mnemonic, const QByteArray& pin)
 {
+    Q_ASSERT(mnemonic.size() == 24);
+
     setAuthentication(Authenticating);
 
-    QMetaObject::invokeMethod(m_context, [this, pin, mnemonic, password] {
+    QMetaObject::invokeMethod(m_context, [this, pin, mnemonic] {
         QByteArray raw_mnemonic = mnemonic.join(' ').toLatin1();
 
         GA_json* hw_device;
@@ -447,43 +449,54 @@ void Wallet::signup(const QStringList& mnemonic, const QString& password, const 
 }
 
 
-void Wallet::recover(const QString& name, const QStringList& mnemonic, const QByteArray& pin)
+void Wallet::restore(const QStringList& mnemonic, const QString& password, const QByteArray& pin)
 {
-    qDebug() << name << mnemonic << pin;
-    QMetaObject::invokeMethod(m_context, [this, name, pin, mnemonic] {
+    setAuthentication(Authenticating);
+
+    QMetaObject::invokeMethod(m_context, [this, mnemonic, password, pin] {
         QByteArray raw_mnemonic = mnemonic.join(' ').toLatin1();
 
-        GA::process_auth([&] (GA_auth_handler** call) {
-            GA_json* hw_device;
-            GA_convert_string_to_json("{}", &hw_device);
+        GA_json* hw_device;
+        GA_convert_string_to_json("{}", &hw_device);
 
-            int err = GA_login(m_session, hw_device, raw_mnemonic.constData(), "", call);
+        auto result = GA::process_auth([&] (GA_auth_handler** call) {
+            int err = GA_login(m_session, hw_device, raw_mnemonic.constData(), password.toLatin1().constData(), call);
             Q_ASSERT(err == GA_OK);
-
-            GA_destroy_json(hw_device);
         });
 
+        GA_destroy_json(hw_device);
+
+        if (result.value("status") != "done") return setAuthentication(Unauthenticated);
+
         GA_json* pin_data;
-        GA_set_pin(m_session, raw_mnemonic.constData(), pin.constData(), "test", &pin_data);
+        int err = GA_set_pin(m_session, raw_mnemonic.constData(), pin.constData(), "test", &pin_data);
+        Q_ASSERT(err == GA_OK);
+        char* str;
+        GA_convert_json_to_string(pin_data, &str);
+        m_pin_data = QByteArray(str);
+        GA_destroy_json(pin_data);
+        GA_destroy_string(str);
 
-        qDebug() << "PIN SET! " << mnemonic << pin;
-
-        if (true) {
-            char* str;
-            GA_convert_json_to_string(pin_data, &str);
-            QSettings settings;
-            int index = settings.beginReadArray("wallets");
+        //QMetaObject::invokeMethod(this, [this]{
+            QSettings settings(GetDataFile("app", "wallets.ini"), QSettings::IniFormat);
+            m_index = settings.beginReadArray("wallets");
             settings.endArray();
             settings.beginWriteArray("wallets");
-            settings.setArrayIndex(index);
-            settings.setValue("pin_data", QByteArray(str));
-            settings.setValue("name", name);
+            settings.setArrayIndex(m_index);
+            settings.setValue("proxy", m_proxy);
+            settings.setValue("use_tor", m_use_tor);
+            settings.setValue("network", m_network->id());
+            settings.setValue("pin_data", m_pin_data);
+            settings.setValue("name", m_name);
+            settings.setValue("login_attempts_remaining", m_login_attempts_remaining);
             settings.endArray();
-            GA_destroy_string(str);
-        }
+        //}, Qt::BlockingQueuedConnection);
 
-        GA_destroy_json(pin_data);
-    });
+        reload();
+        updateConfig();
+
+        setAuthentication(Authenticated);
+    }, Qt::BlockingQueuedConnection);
 }
 
 void Wallet::reload()

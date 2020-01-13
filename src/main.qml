@@ -37,7 +37,7 @@ Item {
 
     Action {
         id: restore_wallet_action
-        onTriggered: stack_view.push(restore_view)
+        onTriggered: stack_view.push(restore_view, { wallet: WalletManager.createWallet() })
     }
 
     MainMenuBar { }
@@ -101,6 +101,11 @@ Item {
         id: restore_view
         RestoreWallet {
           cancel.onTriggered: stack_view.pop()
+          accept.onTriggered: {
+              WalletManager.insertWallet(wallet)
+              currentWallet = wallet;
+              stack_view.pop()
+          }
         }
     }
 
