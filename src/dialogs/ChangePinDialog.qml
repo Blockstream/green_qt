@@ -14,7 +14,7 @@ Dialog {
         id: confirm_pin_view
         PinView {
             property bool accept: valid && pin === pin_view.pin
-            property string title: qsTr('id_confirm_pin')
+            property string title: qsTr('id_verify_your_pin')
         }
     }
 
@@ -25,7 +25,7 @@ Dialog {
         initialItem: PinView {
             id: pin_view
             property bool accept: false
-            property string title: qsTr('id_enter_new_pin')
+            property string title: qsTr('id_set_a_new_pin')
             onValidChanged: {
                 if (valid) {
                     stack_view.push(confirm_pin_view)
