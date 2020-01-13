@@ -34,8 +34,8 @@ public:
     Q_ENUM(AuthenticationStatus)
 
 private:
-    Q_PROPERTY(Network* network READ network CONSTANT)
-    Q_PROPERTY(QString name READ name NOTIFY nameChanged)
+    Q_PROPERTY(Network* network READ network WRITE setNetwork NOTIFY networkChanged)
+    Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(ConnectionStatus connection READ connection NOTIFY connectionChanged)
     Q_PROPERTY(AuthenticationStatus authentication READ authentication NOTIFY authenticationChanged)
     Q_PROPERTY(QJsonObject settings READ settings NOTIFY settingsChanged)
@@ -52,6 +52,10 @@ public:
     virtual ~Wallet();
 
     Network* network() const { return m_network; }
+    void setNetwork(Network* network);
+
+    QString name() const { return m_name; }
+    void setName(const QString& name);
 
     ConnectionStatus connection() const { return m_connection; }
     AuthenticationStatus authentication() const { return m_authentication; }
@@ -89,6 +93,7 @@ public slots:
     void updateSettings();
 
 signals:
+    void networkChanged(Network* network);
     void connectionChanged();
     void authenticationChanged();
 
@@ -127,10 +132,6 @@ public:
     QByteArray getPinData() const;
     QByteArray m_pin_data;
     QString m_name;
-    QString name() const
-    {
-        return m_name;
-    }
     Network* m_network{nullptr};
     int m_login_attempts_remaining{3};
     QString m_proxy;

@@ -40,6 +40,8 @@ void Wallet::connect()
 
 void Wallet::connectNow()
 {
+    Q_ASSERT(m_network);
+
     if (m_connection == Disconnected) return;
 
     QMetaObject::invokeMethod(m_context, [this] {
@@ -121,6 +123,20 @@ Wallet::~Wallet()
         m_thread->quit();
         m_thread->wait();
     }
+}
+
+void Wallet::setNetwork(Network* network)
+{
+    Q_ASSERT(!m_network);
+    m_network = network;
+    emit networkChanged(m_network);
+}
+
+void Wallet::setName(const QString& name)
+{
+    Q_ASSERT(m_name.isEmpty());
+    m_name = name;
+    emit nameChanged(m_name);
 }
 
 QJsonObject Wallet::settings() const
