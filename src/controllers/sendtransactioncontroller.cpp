@@ -109,13 +109,15 @@ void SendTransactionController::create()
         }, Qt::BlockingQueuedConnection, &run);
         if (!run) return;
 
-        m_transaction = GA::process_auth([this, data] (GA_auth_handler** call) {
+        auto result = GA::process_auth([this, data] (GA_auth_handler** call) {
             auto details = Json::fromObject(data);
             int err = GA_create_transaction(session(), details, call);
             Q_ASSERT(err == GA_OK);
             err = GA_destroy_json(details);
             Q_ASSERT(err == GA_OK);
         });
+        Q_ASSERT(result.value("status").toString() == "done");
+        m_transaction = result.value("result").toObject();
 
         // Check if the m_transaction isn't outdated and emit respective
         // signal, otherwise there's already another create enqueued.

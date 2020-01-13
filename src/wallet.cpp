@@ -196,7 +196,7 @@ void Wallet::handleNotification(const QJsonObject &notification)
         QMetaObject::invokeMethod(m_context, [this, accounts] {
             // First get balance for each account.
             for (auto account : accounts) {
-                auto balance = GA::process_auth([=] (GA_auth_handler** call) {
+                auto result = GA::process_auth([=] (GA_auth_handler** call) {
                     GA_json* details = Json::fromObject({
                         { "subaccount", account->m_pointer },
                         { "num_confs", 0 }
@@ -207,6 +207,8 @@ void Wallet::handleNotification(const QJsonObject &notification)
                     GA_destroy_json(details);
                 });
 
+                Q_ASSERT(result.value("status").toString() == "done");
+                auto balance = result.value("result").toObject();
 
                 // TODO: handle m_json concurrency
                 account->m_json.insert("satoshi", balance);
@@ -369,7 +371,7 @@ void Wallet::login(const QByteArray& pin)
 void Wallet::test()
 {
     QMetaObject::invokeMethod(m_context, [this] {
-        GA::process_auth([this] (GA_auth_handler** call) {
+        auto result = GA::process_auth([this] (GA_auth_handler** call) {
             GA_json* hw_device;
             GA_convert_string_to_json(
                 "{"
@@ -386,6 +388,7 @@ void Wallet::test()
 
             GA_destroy_json(hw_device);
         });
+        Q_ASSERT(result.value("status").toString() == "done");
     });
 }
 
@@ -399,15 +402,17 @@ void Wallet::signup(const QStringList& mnemonic, const QString& password, const 
         GA_json* hw_device;
         GA_convert_string_to_json("{}", &hw_device);
 
-        GA::process_auth([&] (GA_auth_handler** call) {
+        auto result = GA::process_auth([&] (GA_auth_handler** call) {
             int err = GA_register_user(m_session, hw_device, raw_mnemonic.constData(), call);
             Q_ASSERT(err == GA_OK);
         });
+        Q_ASSERT(result.value("status").toString() == "done");
 
-        GA::process_auth([&] (GA_auth_handler** call) {
-            int err = GA_login(m_session, hw_device, raw_mnemonic.constData(), password.toLatin1().constData(), call);
+        result = GA::process_auth([&] (GA_auth_handler** call) {
+            int err = GA_login(m_session, hw_device, raw_mnemonic.constData(), "", call);
             Q_ASSERT(err == GA_OK);
         });
+        Q_ASSERT(result.value("status").toString() == "done");
 
         GA_destroy_json(hw_device);
 

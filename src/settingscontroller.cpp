@@ -11,13 +11,14 @@ SettingsController::SettingsController(QObject* parent)
 
 void SettingsController::change(const QJsonObject& data)
 {
-    GA::process_auth([this, data] (GA_auth_handler** call) {
+    auto result = GA::process_auth([this, data] (GA_auth_handler** call) {
         auto settings = Json::fromObject(data);
         int err = GA_change_settings(session(), settings, call);
         Q_ASSERT(err == GA_OK);
         err = GA_destroy_json(settings);
         Q_ASSERT(err == GA_OK);
     });
+    Q_ASSERT(result.value("status").toString() == "done");
     wallet()->updateSettings();
 }
 

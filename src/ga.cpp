@@ -33,10 +33,12 @@ QJsonObject auth_handler_get_result(GA_auth_handler* call)
 
 QJsonArray get_subaccounts(GA_session* session)
 {
-    return process_auth([&] (GA_auth_handler** call) {
+    auto result = process_auth([&] (GA_auth_handler** call) {
         int err = GA_get_subaccounts(session, call);
         Q_ASSERT(err == GA_OK);
-    }).value("subaccounts").toArray();
+    });
+    Q_ASSERT(result.value("status").toString() == "done");
+    return result.value("result").toObject().value("subaccounts").toArray();
 }
 
 QJsonObject convert_amount(GA_session* session, const QJsonObject& input)
@@ -58,30 +60,26 @@ QJsonObject process_auth2(GA_auth_handler* call)
         QString status = result.value("status").toString();
 
         if (status == "done") {
-            return result.value("result").toObject();
+            return result;
         }
 
         if (status == "error") {
-            qDebug("see error above");
-            break;
+            return result;
         }
 
         if (status == "request_code") {
-            qDebug("see methods above");
-            break;
+            Q_UNREACHABLE();
         }
 
         if (status == "resolve_code") {
-            qDebug("should call prompt code and send with GA_auth_handler_resolve_code");
-            break;
+            Q_UNREACHABLE();
         }
 
         if (status == "call") {
             GA_auth_handler_call(call);
         }
     }
-
-    return {};
+    Q_UNREACHABLE();
 }
 
 } // namespace GA
