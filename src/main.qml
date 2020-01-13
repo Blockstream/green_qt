@@ -99,7 +99,9 @@ Item {
 
     Component {
         id: restore_view
-        RestoreWallet { }
+        RestoreWallet {
+          cancel.onTriggered: stack_view.pop()
+        }
     }
 
     Component {

@@ -7,7 +7,11 @@ import QtQuick.Layouts 1.12
 
 import './views'
 
-Item {
+Page {
+    property Action cancel: Action {
+        text: qsTr('id_cancel')
+    }
+
     StackView {
         id: stack_view
         anchors.centerIn: parent
@@ -16,6 +20,14 @@ Item {
         implicitHeight: currentItem.implicitHeight
 
         initialItem: network_page
+    }
+
+    footer: RowLayout {
+        Button {
+            Layout.alignment: Qt.AlignRight
+            flat: true
+            action: cancel
+        }
     }
 
     property Item network_page: NetworkPage {
