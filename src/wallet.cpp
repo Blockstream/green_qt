@@ -587,3 +587,18 @@ QJsonObject Wallet::convert(qint64 sats)
 
     return result;
 }
+
+qint64 Wallet::amountToSats(const QString& amount) const
+{
+    if (amount.isEmpty()) return 0;
+    auto unit = m_settings.value("unit").toString().toLower();
+    auto details = Json::fromObject({{ unit, amount }});
+    GA_json* balance;
+    int err = GA_convert_amount(m_session, details, &balance);
+    Q_ASSERT(err == GA_OK);
+    GA_destroy_json(details);
+    QJsonObject result = Json::toObject(balance);
+    GA_destroy_json(balance);
+    return result.value("sats").toString().toLongLong();
+}
+
