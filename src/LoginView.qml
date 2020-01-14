@@ -11,7 +11,7 @@ Column {
 
     function login() {
         if (pin_view.valid && wallet.connection === Wallet.Connected) {
-            wallet.login(pin_view.pin)
+            wallet.loginWithPin(pin_view.pin)
         }
     }
 

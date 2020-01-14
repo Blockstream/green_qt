@@ -307,7 +307,7 @@ void Wallet::changePin(const QByteArray& pin)
     settings.endArray();
 }
 
-void Wallet::login(const QByteArray& pin)
+void Wallet::loginWithPin(const QByteArray& pin)
 {
     Q_ASSERT(m_login_attempts_remaining > 0);
 
