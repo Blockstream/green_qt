@@ -76,6 +76,9 @@ public:
     qint64 balance() const;
     QJsonObject config() const { return m_config; }
 
+    Q_INVOKABLE void login(const QStringList& mnemonic, const QString& password = QString());
+    Q_INVOKABLE void setPin(const QStringList& mnemonic, const QByteArray& pin);
+
     Q_INVOKABLE void loginWithPin(const QByteArray& pin);
     Q_INVOKABLE void changePin(const QByteArray& pin);
     Q_INVOKABLE QJsonObject convert(qint64 sats);
@@ -85,7 +88,6 @@ public slots:
     void disconnect();
     void test();
     void signup(const QStringList &mnemonic, const QByteArray& pin);
-    void restore(const QStringList& mnemonic, const QString& password, const QByteArray& pin);
     void reload();
     void setup2F();
 

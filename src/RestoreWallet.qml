@@ -16,6 +16,16 @@ Page {
     property Action accept: Action {
     }
 
+    Connections {
+        target: wallet
+        onAuthenticationChanged: {
+            // TODO show error message
+            if (wallet.authentication === Wallet.Authenticated) {
+                stack_view.push(pin_page)
+            }
+        }
+    }
+
     StackView {
         id: stack_view
         anchors.centerIn: parent
@@ -45,7 +55,14 @@ Page {
 
     property Item mnemonic_page: MnemonicEditor {
         accept.text: qsTr('id_next')
-        accept.onTriggered: stack_view.push(passwordProtected ? password_page : pin_page)
+        accept.enabled: wallet.authentication === Wallet.Unauthenticated
+        accept.onTriggered: {
+            if (passwordProtected) {
+                stack_view.push(password_page)
+            } else {
+                wallet.login(mnemonic_page.mnemonic)
+            }
+        }
     }
 
     property Item password_page: WizardPage {
@@ -53,7 +70,7 @@ Page {
             id: password_field
             anchors.centerIn: parent
             echoMode: TextField.Password
-            onAccepted: stack_view.push(pin_page)
+            onAccepted: wallet.login(mnemonic_page.mnemonic, password_field.text)
         }
     }
 
@@ -69,8 +86,12 @@ Page {
         PinView {
             anchors.centerIn: parent
             onPinChanged: {
-                if (pin === pin_view.pin) stack_view.push(name_page)
-                else clear()
+                if (pin !== pin_view.pin) {
+                    clear();
+                } else {
+                    wallet.setPin(mnemonic_page.mnemonic, pin_view.pin);
+                    stack_view.push(name_page);
+                }
             }
         }
     }
@@ -82,13 +103,9 @@ Page {
             id: name_field
             anchors.centerIn: parent
             onAccepted: {
+                // TODO should validate name
                 wallet.name = name_field.text;
-                wallet.restore(mnemonic_page.mnemonic, password_field.text, pin_view.pin);
-                if (wallet.authentication !== Wallet.Authenticated) {
-                    // TODO show error view
-                } else {
-                    accept.trigger()
-                }
+                accept.trigger()
             }
         }
     }

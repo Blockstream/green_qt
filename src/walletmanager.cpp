@@ -50,6 +50,20 @@ Wallet* WalletManager::createWallet()
 void WalletManager::insertWallet(Wallet* wallet)
 {
     m_wallets.append(wallet);
+
+    QSettings settings(GetDataFile("app", "wallets.ini"), QSettings::IniFormat);
+    wallet->m_index = settings.beginReadArray("wallets");
+    settings.endArray();
+    settings.beginWriteArray("wallets");
+    settings.setArrayIndex(wallet->m_index);
+    settings.setValue("proxy", wallet->m_proxy);
+    settings.setValue("use_tor", wallet->m_use_tor);
+    settings.setValue("network", wallet->m_network->id());
+    settings.setValue("pin_data", wallet->m_pin_data);
+    settings.setValue("name", wallet->m_name);
+    settings.setValue("login_attempts_remaining", wallet->m_login_attempts_remaining);
+    settings.endArray();
+
     emit walletsChanged();
 }
 
