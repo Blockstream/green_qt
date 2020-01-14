@@ -93,7 +93,7 @@ StackView {
             }
         }
 
-        FlatButton {
+        Switch {
             id: send_all_button
             checkable: true
             text: qsTr('id_send_all_funds')
