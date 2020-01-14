@@ -43,6 +43,16 @@ GA_json* fromObject(const QJsonObject& object)
     return json;
 }
 
+QByteArray toByteArray(const GA_json* json)
+{
+    char* str;
+    int err = GA_convert_json_to_string(json, &str);
+    Q_ASSERT(err == GA_OK);
+    QByteArray bytearray(str);
+    GA_destroy_string(str);
+    return bytearray;
+}
+
 
 } // namespace Json
 
