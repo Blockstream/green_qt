@@ -145,25 +145,6 @@ ColumnLayout {
         }
     }
 
-
-    SettingsBox {
-        title: qsTr('id_twofactor_authentication_expiry')
-        description: qsTr('id_select_duration_of_twofactor')
-        ComboBox {
-            Layout.alignment: Qt.AlignRight
-            currentIndex: 1
-            model: ListModel {
-                id: csvComboBox
-                ListElement { text: "4320" }
-                ListElement { text: "25920" }
-                ListElement { text: "51840" }
-                ListElement { text: "65535" }
-            }
-            width: 200
-            //padding: 10
-        }
-    }
-
     SettingsBox {
         title: qsTr('id_set_twofactor_threshold')
         description: qsTr('id_set_a_limit_to_spend_without')
