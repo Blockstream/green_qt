@@ -16,15 +16,10 @@ ColumnLayout {
 
     SettingsBox {
         title: 'nLockTime' // TODO: move to own recovery tab
-        ColumnLayout {
-            Layout.alignment: Qt.AlignRight
-            FlatButton {
-                text: qsTr('Show outputs expiring soon') // TODO: update
-            }
-
-            FlatButton {
-                text: qsTr('id_request_recovery_transactions')
-            }
+        FlatButton {
+            text: qsTr('id_request_recovery_transactions')
+            enabled: wallet.config['email'].confirmed
+            onClicked: controller.sendRecoveryTransactions()
         }
     }
 
