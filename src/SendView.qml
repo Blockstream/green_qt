@@ -89,7 +89,7 @@ StackView {
 
             Binding on amount {
                 when: send_all_button.checked
-                value: account.balance
+                value: convertToWalletUnit(account.balance)
             }
         }
 

@@ -30,24 +30,18 @@ GridLayout {
         return amount
     }
 
+    function convertToUnit(sats, unit) {
+        return wallet.convert(sats)[unit.toLowerCase()];
+    }
+
+    function convertToWalletUnit(sats) {
+        return convertToUnit(sats, wallet.settings.unit);
+    }
+
     function formatAmount(sats) {
-        const unit = wallet.settings.unit
-        let amount = sats
-        let precision = 0
-        if (unit === 'BTC') {
-            amount = amount / 100000000
-            precision = 8
-        }
-        if (unit === 'mBTC') {
-            amount = amount / 100000
-            precision = 5
-        }
-        if (unit === 'bits' || unit === '\u00B5BTC') {
-            amount = amount / 100
-            precision = 2
-        }
-        amount = amount.toLocaleString(Qt.locale(), 'f', precision).replace(/[\.,]?0+$/, '')
-        return `${amount} ${unit}`
+        const unit = wallet.settings.unit;
+        const amount = convertToUnit(sats, unit);
+        return `${amount} ${unit}`;
     }
 
     function convert(sats) {
