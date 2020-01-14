@@ -82,7 +82,7 @@ void SendTransactionController::create()
     setValid(false);
 
     QLocale locale;
-    const qint64 amount = static_cast<qint64>(locale.toDouble(m_amount) * 100000000);
+    const qint64 amount = wallet()->amountToSats(m_amount);
 
     if (!m_fee_rate) {
         m_fee_rate = static_cast<qint64>(wallet()->settings().value("required_num_blocks").toInt());
