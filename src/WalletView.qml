@@ -41,7 +41,7 @@ GridLayout {
     function formatAmount(sats) {
         const unit = wallet.settings.unit;
         const amount = convertToUnit(sats, unit);
-        return `${amount} ${unit}`;
+        return wallet.network.liquid ? `${amount} L-${unit}` : `${amount} ${unit}`
     }
 
     function convert(sats) {
