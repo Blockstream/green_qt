@@ -159,6 +159,7 @@ bool SendTransactionController::update(const QJsonObject& result)
     }
 
     if (status == "done" && action == "send_raw_tx") {
+        wallet()->updateConfig();
         return true;
     }
 
