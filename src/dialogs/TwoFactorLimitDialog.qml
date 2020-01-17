@@ -37,7 +37,7 @@ ControllerDialog {
             ComboBox {
                 property bool fiat: model[currentIndex].is_fiat
                 id: currency_combo
-                currentIndex: wallet.config.limits.fiat ? 1 : 0
+                currentIndex: wallet.config.limits.is_fiat ? 1 : 0
                 flat: true
                 model: currencies
                 textRole: 'text'

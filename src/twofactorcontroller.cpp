@@ -54,10 +54,11 @@ void TwoFactorController::disable()
 
 void TwoFactorController::changeLimit(bool is_fiat, const QString& limit)
 {
-    dispatch([is_fiat, limit] (GA_session* session, GA_auth_handler** call) {
+    auto unit = wallet()->settings().value("unit").toString().toLower();
+    dispatch([unit, is_fiat, limit] (GA_session* session, GA_auth_handler** call) {
         auto details = Json::fromObject({
             { "is_fiat", is_fiat },
-            { is_fiat ? "fiat" : "btc", limit }
+            { is_fiat ? "fiat" : unit, limit }
         });
         int err = GA_twofactor_change_limits(session, details, call);
         Q_ASSERT(err == GA_OK);
