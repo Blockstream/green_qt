@@ -78,12 +78,18 @@ ColumnLayout {
             ComboBox {
                 flat: true
                 width: 200
-                model: ['BTC', 'mBTC', '\u00B5BTC', 'bits', 'sats']
-                currentIndex: model.indexOf(wallet.settings.unit)
-                onCurrentTextChanged: {
-                    if (currentText === '') return
-                    if (currentText === wallet.settings.unit) return
-                    controller.change({ unit: currentText })
+                property var units: ['BTC', 'mBTC', '\u00B5BTC', 'bits', 'sats']
+                model: units.map(unit => ({
+                    text: wallet.network.liquid ? `L-${unit}` : unit,
+                    value: unit
+                }))
+                textRole: 'text'
+                valueRole: 'value'
+                currentIndex: units.indexOf(wallet.settings.unit)
+                onCurrentValueChanged: {
+                    if (currentValue === '') return
+                    if (currentValue === wallet.settings.unit) return
+                    controller.change({ unit: currentValue })
                 }
             }
         }
