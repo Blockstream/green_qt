@@ -361,6 +361,7 @@ void Wallet::loginWithPin(const QByteArray& pin)
         updateSettings();
 
         reload();
+        updateConfig();
 
         setAuthentication(Authenticated);
     });
@@ -531,7 +532,8 @@ void Wallet::reload()
 void Wallet::updateConfig()
 {
     GA_json* config;
-    GA_get_twofactor_config(m_session, &config);
+    int err = GA_get_twofactor_config(m_session, &config);
+    Q_ASSERT(err == GA_OK);
     m_config = Json::toObject(config);
     GA_destroy_json(config);
     emit configChanged();
