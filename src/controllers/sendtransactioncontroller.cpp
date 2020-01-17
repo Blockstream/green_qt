@@ -81,7 +81,14 @@ void SendTransactionController::create()
 {
     setValid(false);
 
-    QLocale locale;
+    // Skip transaction creation if m_address and m_amount are empty.
+    // Also clears m_transaction so that no error is shown.
+    if (m_amount.isEmpty() && m_address.isEmpty()) {
+        m_transaction = {};
+        emit transactionChanged();
+        return;
+    }
+
     const qint64 amount = wallet()->amountToSats(m_amount);
 
     if (!m_fee_rate) {

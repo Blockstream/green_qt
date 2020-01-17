@@ -55,7 +55,7 @@ protected:
     bool m_send_all{false};
     QString m_amount;
     qint64 m_fee_rate{0};
-    QJsonObject m_transaction{{ "transaction_vsize", 0 }};
+    QJsonObject m_transaction;
 
     void setValid(bool valid);
     bool update(const QJsonObject& result) override;
