@@ -59,6 +59,11 @@ Network::Network(const QJsonObject &data, NetworkManager *manager)
     m_name = data.value("name").toString();
 }
 
+bool Network::isLiquid() const
+{
+    return m_data.value("liquid").toBool();
+}
+
 void Network::openTransactionInExplorer(const QString& hash)
 {
     Q_ASSERT(m_data.contains("tx_explorer_url"));

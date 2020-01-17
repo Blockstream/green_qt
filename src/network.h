@@ -31,12 +31,14 @@ class Network : public QObject
     Q_OBJECT
     Q_PROPERTY(QString id READ id CONSTANT)
     Q_PROPERTY(QString name READ name CONSTANT)
+    Q_PROPERTY(bool liquid READ isLiquid CONSTANT)
 
 public:
     Network(const QJsonObject& data, NetworkManager* manager);
 
     QString id() const { return m_id; }
     QString name() const { return m_name; }
+    bool isLiquid() const;
 
     void openTransactionInExplorer(const QString& hash);
 
