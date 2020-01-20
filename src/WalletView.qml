@@ -60,18 +60,20 @@ GridLayout {
     rowSpacing: 0
     columns: 2
 
-    states: State {
-        when: window.location === '/settings'
-        name: 'VIEW_SETTINGS'
-        PropertyChanges {
-            target: wallet_view
-            title: qsTr('id_settings')
+    states: [
+        State {
+            when: window.location === '/settings'
+            name: 'VIEW_SETTINGS'
+            PropertyChanges {
+                target: wallet_view
+                title: qsTr('id_settings')
+            }
+            PropertyChanges {
+                target: settings_tool_button
+                icon.source: 'assets/svg/cancel.svg'
+            }
         }
-        PropertyChanges {
-            target: settings_tool_button
-            icon.source: 'assets/svg/cancel.svg'
-        }
-    }
+    ]
 
     transitions: [
         Transition {
