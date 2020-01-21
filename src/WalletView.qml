@@ -92,19 +92,41 @@ GridLayout {
         }
     ]
 
-    Row {
-        Layout.leftMargin: 10
+    RowLayout {
+        Layout.alignment: Qt.AlignRight
+        Layout.leftMargin: 30
         Layout.rightMargin: 10
+        Layout.bottomMargin: 10
         spacing: 10
-        Label {
-            id: wallet_balance_label
-            anchors.verticalCenter: parent.verticalCenter
-            font.pixelSize: 20
-            text: formatAmount(wallet.balance)
+        Image {
+            source: icons[wallet.network.id]
+            sourceSize.width: 32
+            sourceSize.height: 32
         }
         Label {
-            text: convert(wallet.balance)
-            anchors.baseline: wallet_balance_label.baseline
+            text: wallet.name
+            font.pixelSize: 16
+            Layout.alignment: Qt.AlignVCenter
+        }
+        ToolButton {
+            text: qsTr('⋮')
+            font.pixelSize: 16
+            Layout.alignment: Qt.AlignVCenter
+            onClicked: menu.open()
+
+            Menu {
+                id: menu
+
+                MenuItem {
+                    text: qsTr('id_wallets')
+                    onTriggered: drawer.open()
+                }
+
+                MenuItem {
+                    enabled: false
+                    text: qsTr('id_logout')
+                }
+            }
         }
     }
 
@@ -128,24 +150,6 @@ GridLayout {
             x: 20
             width: parent.width - 40
 
-            Image {
-                source: icons[wallet.network.id]
-                sourceSize.width: 32
-                sourceSize.height: 32
-                Layout.alignment: Qt.AlignVCenter
-            }
-            Label {
-                text: wallet.name
-                font.pixelSize: 16
-                Layout.alignment: Qt.AlignVCenter
-            }
-            Image {
-                visible: modelData === currentWallet
-                sourceSize.width: 16
-                sourceSize.height: 16
-                source: 'assets/svg/arrow_right.svg'
-                Layout.alignment: Qt.AlignVCenter
-            }
             Label {
                 font.pixelSize: 16
                 text: title
