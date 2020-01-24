@@ -15,8 +15,5 @@ ScrollView {
         WalletsSidebarItem {
             width: scroll_view.width
         }
-        DevicesSidebarItem {
-            width: scroll_view.width
-        }
     }
 }
