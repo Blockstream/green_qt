@@ -286,6 +286,11 @@ GridLayout {
                         width: 120
                     }
 
+                    TabButton {
+                        visible: wallet.network.liquid
+                        text: qsTr('id_assets')
+                        width: 120
+                    }
                 }
             }
 
@@ -299,6 +304,9 @@ GridLayout {
                 currentIndex: tab_bar.currentIndex
 
                 TransactionListView {
+                }
+
+                AssetListView {
                 }
             }
         }
