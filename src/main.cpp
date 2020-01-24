@@ -7,6 +7,7 @@
 
 #include "account.h"
 #include "applicationengine.h"
+#include "asset.h"
 #include "devices/device.h"
 #include "gui.h"
 #include "network.h"
@@ -84,6 +85,7 @@ int main(int argc, char *argv[])
     QZXing::registerQMLTypes();
     QZXing::registerQMLImageProvider(engine);
 
+    qmlRegisterUncreatableType<Asset>("Blockstream.Green", 0, 1, "Asset", "Assets are instantiated automatically");
     qmlRegisterUncreatableType<Device>("Blockstream.Green", 0, 1, "Device", "Devices are instantiated automatically");
     qmlRegisterUncreatableType<Network>("Blockstream.Green", 0, 1, "Network", "Networks are created by NetworkManager");
     qmlRegisterType<Wallet>("Blockstream.Green", 0, 1, "Wallet");

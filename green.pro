@@ -21,6 +21,7 @@ DEFINES += QT_DEPRECATED_WARNINGS QZXING_QML
 
 SOURCES += \
     src/applicationengine.cpp \
+    src/asset.cpp \
     src/controllers/accountcontroller.cpp \
     src/controllers/controller.cpp \
     src/controllers/createaccountcontroller.cpp \
@@ -46,6 +47,7 @@ SOURCES += \
 
 HEADERS += \
     src/applicationengine.h \
+    src/asset.h \
     src/controllers/accountcontroller.h \
     src/controllers/controller.h \
     src/controllers/createaccountcontroller.h \
