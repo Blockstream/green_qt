@@ -62,5 +62,8 @@
         <file>dialogs/ChangePinDialog.qml</file>
         <file>dialogs/TwoFactorLimitDialog.qml</file>
         <file>dialogs/MnemonicDialog.qml</file>
+        <file>AssetDelegate.qml</file>
+        <file>AssetListView.qml</file>
+        <file>BalanceItem.qml</file>
     </qresource>
 </RCC>
