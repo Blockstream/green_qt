@@ -58,5 +58,6 @@
         <file>svg/twofactor.svg</file>
         <file>svg/liquid/liquid_no_string.svg</file>
         <file>svg/liquid/liquid_with_string.svg</file>
+        <file>svg/generic_icon_30p.svg</file>
     </qresource>
 </RCC>
