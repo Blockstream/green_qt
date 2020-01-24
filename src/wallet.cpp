@@ -214,17 +214,20 @@ void Wallet::handleNotification(const QJsonObject &notification)
                 // TODO: handle m_json concurrency
                 account->m_json.insert("satoshi", balance);
             }
-            // Now update all account balances at once.
-            for (auto account : accounts) {
-                emit account->jsonChanged();
-                account->updateBalance();
-            }
 
-            quint64 balance = 0;
-            for (auto account : m_accounts) {
-                balance += static_cast<quint64>(account->m_json.value("satoshi").toObject().value("btc").toInt());
-            }
-            setBalance(balance);
+            QMetaObject::invokeMethod(this, [=] {
+                // Now update all account balances at once.
+                for (auto account : accounts) {
+                    emit account->jsonChanged();
+                    account->updateBalance();
+                }
+
+                quint64 balance = 0;
+                for (auto account : m_accounts) {
+                    balance += static_cast<quint64>(account->m_json.value("satoshi").toObject().value("btc").toInt());
+                }
+                setBalance(balance);
+            }, Qt::QueuedConnection);
         });
 
         return;
