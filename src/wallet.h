@@ -8,6 +8,7 @@
 #include <QJsonObject>
 
 class Account;
+class Asset;
 class Network;
 
 struct GA_session;
@@ -86,6 +87,8 @@ public:
     qint64 amountToSats(const QString& amount) const;
     QString formatAmount(qint64 amount) const;
 
+    Asset* getOrCreateAsset(const QString& id);
+
 public slots:
     void connect();
     void disconnect();
@@ -95,6 +98,8 @@ public slots:
 
     void updateConfig();
     void updateSettings();
+
+    void refreshAssets();
 
 signals:
     void networkChanged(Network* network);
@@ -129,6 +134,7 @@ public:
     AuthenticationStatus m_authentication{Unauthenticated};
     QJsonObject m_settings;
     QJsonObject m_currencies;
+    QMap<QString, Asset*> m_assets;
     QList<Account*> m_accounts;
     QMap<int, Account*> m_accounts_by_pointer;
     QJsonObject m_events;

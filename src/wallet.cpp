@@ -1,4 +1,5 @@
 #include "account.h"
+#include "asset.h"
 #include "ga.h"
 #include "json.h"
 #include "network.h"
@@ -526,7 +527,40 @@ void Wallet::reload()
 
             setBalance(balance);
         });
+
+        if (m_network->isLiquid()) {
+            refreshAssets();
+        }
     });
+}
+
+void Wallet::refreshAssets()
+{
+    Q_ASSERT(m_network->isLiquid());
+
+    auto params = Json::fromObject({
+        { "assets", true },
+        { "icons", true },
+        { "refresh", true }
+    });
+    GA_json* output;
+    int err = GA_refresh_assets(m_session, params, &output);
+    Q_ASSERT(err == GA_OK);
+    GA_destroy_json(params);
+
+    auto assets = Json::toObject(output);
+    auto icons = assets.value("icons").toObject();
+
+    for (auto&& ref : assets.value("assets").toObject()) {
+        QString id = ref.toObject().value("asset_id").toString();
+        Asset* asset = getOrCreateAsset(id);
+        asset->setData(ref.toObject());
+        if (icons.contains(id)) {
+            asset->setIcon("data:image/png;base64," + icons.value(id).toString());
+        }
+    }
+
+    GA_destroy_json(output);
 }
 
 void Wallet::updateConfig()
@@ -607,3 +641,15 @@ qint64 Wallet::amountToSats(const QString& amount) const
     return result.value("sats").toString().toLongLong();
 }
 
+Asset* Wallet::getOrCreateAsset(const QString& id)
+{
+    Q_ASSERT(m_network && m_network->isLiquid());
+    QString key = id == "btc" ? "6f0279e9ed041c3d710a9f57d0c02928416460c4b722ae3457a11eec381c526d" : id;
+
+    Asset* asset = m_assets.value(key);
+    if (!asset) {
+        asset = new Asset(key, this);
+        m_assets.insert(key, asset);
+    }
+    return asset;
+}
