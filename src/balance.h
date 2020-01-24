@@ -11,8 +11,9 @@ class Balance : public QObject
     Q_OBJECT
     Q_PROPERTY(Account* account READ account CONSTANT)
     Q_PROPERTY(Asset* asset READ asset NOTIFY assetChanged)
-    Q_PROPERTY(qint64 amount READ amount NOTIFY amountChanged)
-    Q_PROPERTY(QString displayAmount READ displayAmount NOTIFY displayAmountChanged)
+    Q_PROPERTY(qint64 amount READ amount NOTIFY changed)
+    Q_PROPERTY(QString displayAmount READ displayAmount NOTIFY changed)
+    Q_PROPERTY(QString inputAmount READ inputAmount NOTIFY changed)
 
 public:
     explicit Balance(Account* account);
@@ -26,11 +27,11 @@ public:
     void setAmount(qint64 amount);
 
     QString displayAmount() const;
+    QString inputAmount() const;
 
 signals:
     void assetChanged(Asset* asset);
-    void amountChanged(qint64 amount);
-    void displayAmountChanged();
+    void changed();
 
 private:
     Account* const m_account;

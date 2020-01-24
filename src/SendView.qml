@@ -77,7 +77,8 @@ StackView {
             active: wallet.network.liquid
             Layout.fillWidth: true
             sourceComponent: ComboBox {
-                property Asset asset: account.balances[asset_field.currentIndex].asset
+                property Balance balance: account.balances[asset_field.currentIndex]
+                property Asset asset: balance.asset
                 id: asset_field
                 flat: true
                 model: account.balances
@@ -110,7 +111,12 @@ StackView {
             enabled: !send_all_button.checked
 
             Binding on amount {
-                when: send_all_button.checked
+                when: send_all_button.checked && wallet.network.liquid
+                value: asset_field_loader.item.balance.inputAmount
+            }
+
+            Binding on amount {
+                when: send_all_button.checked && !wallet.network.liquid
                 value: convertToWalletUnit(account.balance)
             }
         }
