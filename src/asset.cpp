@@ -34,7 +34,9 @@ void Asset::setData(const QJsonObject &data)
 
 qint64 Asset::parseAmount(const QString& amount) const
 {
-    if (m_data.value("name").toString() == "btc") return wallet()->amountToSats(amount);
+    if (m_data.value("name").toString() == "btc") {
+        return wallet()->amountToSats(amount);
+    }
 
     auto precision = m_data.value("precision").toInt(0);
     bool ok;
@@ -44,15 +46,19 @@ qint64 Asset::parseAmount(const QString& amount) const
     return result;
 }
 
-QString Asset::formatAmount(qint64 amount) const
+QString Asset::formatAmount(qint64 amount, bool include_ticker) const
 {
-    if (m_data.value("name").toString() == "btc") return wallet()->formatAmount(amount);
+    if (m_data.value("name").toString() == "btc") {
+        return wallet()->formatAmount(amount, include_ticker);
+    }
 
     auto precision = m_data.value("precision").toInt(0);
     auto str = QString::number(static_cast<qreal>(amount) / qPow(10, precision), 'f', precision);
 
-    auto ticker = m_data.value("ticker").toString();
-    if (ticker.isEmpty()) return str;
+    if (include_ticker) {
+        auto ticker = m_data.value("ticker").toString();
+        if (!ticker.isEmpty()) str += " " + ticker;
+    }
 
-    return str + " " + ticker;
+    return str;
 }

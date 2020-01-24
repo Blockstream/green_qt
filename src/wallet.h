@@ -85,7 +85,7 @@ public:
     Q_INVOKABLE QJsonObject convert(qint64 sats) const;
 
     qint64 amountToSats(const QString& amount) const;
-    QString formatAmount(qint64 amount) const;
+    QString formatAmount(qint64 amount, bool include_ticker) const;
 
     Asset* getOrCreateAsset(const QString& id);
 

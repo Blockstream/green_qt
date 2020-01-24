@@ -38,5 +38,5 @@ void Balance::setAmount(qint64 amount)
 QString Balance::displayAmount() const
 {
     Q_ASSERT(m_asset);
-    return m_asset->formatAmount(m_amount);
+    return m_asset->formatAmount(m_amount, /* include_ticker = */ true);
 }

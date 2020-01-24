@@ -33,7 +33,7 @@ public:
     void setData(const QJsonObject& data);
 
     qint64 parseAmount(const QString& amount) const;
-    QString formatAmount(qint64 amount) const;
+    QString formatAmount(qint64 amount, bool include_ticker) const;
 
 signals:
     void iconChanged();

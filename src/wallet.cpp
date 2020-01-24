@@ -619,19 +619,22 @@ QJsonObject Wallet::convert(qint64 sats) const
     return result;
 }
 
-QString Wallet::formatAmount(qint64 amount) const
+QString Wallet::formatAmount(qint64 amount, bool include_ticker) const
 {
     Q_ASSERT(m_network);
     auto unit = m_settings.value("unit").toString();
-    auto str = convert(amount).value(unit.toLower()).toString();
-    return str + (m_network->isLiquid() ? " L-" : " ") + unit;
+    auto str = convert(amount).value(unit == "\u00B5BTC" ? "ubtc" : unit.toLower()).toString();
+    if (include_ticker) {
+        str += (m_network->isLiquid() ? " L-" : " ") + unit;
+    }
+    return str;
 }
 
 qint64 Wallet::amountToSats(const QString& amount) const
 {
     if (amount.isEmpty()) return 0;
-    auto unit = m_settings.value("unit").toString().toLower();
-    auto details = Json::fromObject({{ unit, amount }});
+    auto unit = m_settings.value("unit").toString();
+    auto details = Json::fromObject({{ unit == "\u00B5BTC" ? "ubtc" : unit.toLower(), amount }});
     GA_json* balance;
     int err = GA_convert_amount(m_session, details, &balance);
     Q_ASSERT(err == GA_OK);

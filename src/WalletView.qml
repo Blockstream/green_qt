@@ -8,6 +8,8 @@ import './dialogs'
 import './views'
 
 GridLayout {
+    property var account: accounts_list.currentItem ? accounts_list.currentItem.account : undefined
+
     id: wallet_view
 
     function parseAmount(amount) {
@@ -31,7 +33,7 @@ GridLayout {
     }
 
     function convertToUnit(sats, unit) {
-        return wallet.convert(sats)[unit.toLowerCase()];
+        return wallet.convert(sats)[unit === '\u00B5BTC' ? 'ubtc' : unit.toLowerCase()];
     }
 
     function convertToWalletUnit(sats) {
@@ -50,8 +52,6 @@ GridLayout {
         return `${fiat} ${fiat_currency}`
     }
 
-    property string title: account.name// 'Transactions' //qsTr('id_total_balance') + ': ' + formatAmount(wallet.balance) + ' ' + convert(wallet.balance)
-    property var account: accounts_list.currentItem ? accounts_list.currentItem.account : undefined
     onAccountChanged: {
         location = '/transactions'
         stack_view.pop()
@@ -65,8 +65,8 @@ GridLayout {
             when: window.location === '/settings'
             name: 'VIEW_SETTINGS'
             PropertyChanges {
-                target: wallet_view
-                title: qsTr('id_settings')
+                target: title_label
+                text: qsTr('id_settings')
             }
             PropertyChanges {
                 target: settings_tool_button
@@ -153,8 +153,9 @@ GridLayout {
             width: parent.width - 40
 
             Label {
+                id: title_label
                 font.pixelSize: 16
-                text: title
+                text: account.name
                 Layout.alignment: Qt.AlignVCenter
             }
 
