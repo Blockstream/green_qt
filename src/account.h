@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QtQml>
 
+class Balance;
 class Transaction;
 class Wallet;
 
@@ -16,6 +17,7 @@ class Account : public QObject
     Q_PROPERTY(QString name READ name NOTIFY jsonChanged)
     Q_PROPERTY(QQmlListProperty<Transaction> transactions READ transactions NOTIFY transactionsChanged)
     Q_PROPERTY(qint64 balance READ balance NOTIFY balanceChanged)
+    Q_PROPERTY(QQmlListProperty<Balance> balances READ balances NOTIFY balancesChanged)
 
 public:
     explicit Account(Wallet* wallet);
@@ -35,11 +37,17 @@ public:
 
     qint64 balance() const;
 
+    QQmlListProperty<Balance> balances();
+
+    void updateBalance();
+
 signals:
     void walletChanged();
     void jsonChanged();
     void transactionsChanged();
     void balanceChanged();
+
+    void balancesChanged();
 
 public slots:
     void reload();
@@ -48,6 +56,8 @@ public:
     Wallet* const m_wallet;
     QVector<Transaction*> m_transactions;
     QMap<QString, Transaction*> m_transactions_by_hash;
+    QList<Balance*> m_balances;
+    QMap<QString, Balance*> m_balance_by_id;
     bool m_have_unconfirmed{false};
     QJsonObject m_json;
     int m_pointer;

@@ -1,6 +1,8 @@
 #include "account.h"
+#include "balance.h"
 #include "ga.h"
 #include "json.h"
+#include "network.h"
 #include "transaction.h"
 #include "wallet.h"
 
@@ -39,8 +41,30 @@ void Account::update(const QJsonObject& json)
 {
     m_json = json;
     m_pointer = m_json.value("pointer").toInt();
-    qDebug() << "ACCOUNT UPDATE DATA:" << json;
     emit jsonChanged();
+
+    updateBalance();
+}
+
+void Account::updateBalance()
+{
+    if (wallet()->network()->isLiquid()) {
+        auto satoshi = m_json.value("satoshi").toObject();
+        auto balance_by_id = m_balance_by_id;
+        m_balance_by_id.clear();
+        m_balances.clear();
+        for (auto i = satoshi.constBegin(); i != satoshi.constEnd(); ++i) {
+            Balance* balance = balance_by_id.take(i.key());
+            if (!balance) balance = new Balance(this);
+            m_balance_by_id.insert(i.key(), balance);
+            balance->setAsset(wallet()->getOrCreateAsset(i.key()));
+            balance->setAmount(i.value().toDouble());
+            m_balances.append(balance);
+        }
+        emit balancesChanged();
+        qDeleteAll(balance_by_id.values());
+    }
+
     emit balanceChanged();
 }
 
@@ -53,6 +77,11 @@ void Account::handleNotification(const QJsonObject &notification)
 qint64 Account::balance() const
 {
     return m_json.value("satoshi").toObject().value("btc").toDouble();
+}
+
+QQmlListProperty<Balance> Account::balances()
+{
+    return QQmlListProperty<Balance>(this, m_balances);
 }
 
 static QJsonArray get_transactions(GA_session* session, int subaccount, int first, int count)
