@@ -5,10 +5,13 @@
 
 #include <QJsonObject>
 
+class Asset;
+
 class SendTransactionController : public AccountController
 {
     Q_OBJECT
     Q_PROPERTY(bool valid READ isValid NOTIFY validChanged)
+    Q_PROPERTY(Asset* asset READ asset WRITE setAsset NOTIFY assetChanged)
     Q_PROPERTY(QString address READ address WRITE setAddress NOTIFY addressChanged)
     Q_PROPERTY(bool sendAll READ sendAll WRITE setSendAll NOTIFY sendAllChanged)
     Q_PROPERTY(QString amount READ amount WRITE setAmount NOTIFY amountChanged)
@@ -19,6 +22,9 @@ public:
     explicit SendTransactionController(QObject* parent = nullptr);
 
     bool isValid() const;
+
+    Asset* asset() const;
+    void setAsset(Asset* asset);
 
     QString address() const;
     void setAddress(const QString& address);
@@ -39,6 +45,7 @@ public slots:
 
 signals:
     void validChanged(bool valid);
+    void assetChanged(Asset* asset);
     void addressChanged(const QString& address);
     void sendAllChanged(bool send_all);
     void amountChanged(QString amount);
@@ -51,6 +58,7 @@ private:
 protected:
     bool m_valid{false};
     quint64 m_count{0};
+    Asset* m_asset{nullptr};
     QString m_address;
     bool m_send_all{false};
     QString m_amount;

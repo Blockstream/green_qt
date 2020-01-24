@@ -1,7 +1,9 @@
 #include "sendtransactioncontroller.h"
 #include "../account.h"
-#include "../wallet.h"
+#include "../asset.h"
 #include "../json.h"
+#include "../network.h"
+#include "../wallet.h"
 
 SendTransactionController::SendTransactionController(QObject* parent)
     : AccountController(parent)
@@ -11,6 +13,19 @@ SendTransactionController::SendTransactionController(QObject* parent)
 bool SendTransactionController::isValid() const
 {
     return m_valid;
+}
+
+Asset* SendTransactionController::asset() const
+{
+    return m_asset;
+}
+
+void SendTransactionController::setAsset(Asset* asset)
+{
+    if (m_asset == asset) return;
+    m_asset = asset;
+    emit assetChanged(m_asset);
+    create();
 }
 
 void SendTransactionController::setValid(bool valid)
@@ -79,26 +94,36 @@ QJsonObject SendTransactionController::transaction() const
 
 void SendTransactionController::create()
 {
+    if (!wallet()->network()->isLiquid()) {
+        Q_ASSERT(!m_asset);
+    }
+
     setValid(false);
 
-    // Skip transaction creation if m_address and m_amount are empty.
+    // Skip transaction creation if m_address and m_amount are empty
+    // or if asset is need but not defined
     // Also clears m_transaction so that no error is shown.
-    if (m_amount.isEmpty() && m_address.isEmpty()) {
+    if ((m_amount.isEmpty() && m_address.isEmpty()) ||
+        (wallet()->network()->isLiquid() && !m_asset)) {
         m_transaction = {};
         emit transactionChanged();
         return;
     }
 
-    const qint64 amount = wallet()->amountToSats(m_amount);
 
     if (!m_fee_rate) {
         m_fee_rate = static_cast<qint64>(wallet()->settings().value("required_num_blocks").toInt());
     }
 
-    QJsonObject address{
-        { "address", m_address },
-        { "satoshi", amount }
-    };
+    QJsonObject address{{ "address", m_address }};
+
+    if (wallet()->network()->isLiquid()) {
+        address.insert("asset_tag", m_asset->id());
+        address.insert("satoshi", m_asset->parseAmount(m_amount));
+    } else {
+        const qint64 amount = wallet()->amountToSats(m_amount);
+        address.insert("satoshi", amount);
+    }
     QJsonObject data{
         { "subaccount", static_cast<qint64>(account()->m_pointer) },
         { "fee_rate", m_fee_rate },
