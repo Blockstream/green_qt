@@ -272,7 +272,35 @@ GridLayout {
         Layout.fillHeight: true
         Layout.rowSpan: 2
 
-        initialItem: TransactionListView {
+        initialItem: Page {
+            background: Item { }
+
+            header: RowLayout {
+                TabBar {
+                    padding: 20
+                    background: Item {}
+                    id: tab_bar
+
+                    TabButton {
+                        text: qsTr('id_transactions')
+                        width: 120
+                    }
+
+                }
+            }
+
+            StackLayout {
+                id: stack_layout
+                clip: true
+                anchors.fill: parent
+                anchors.leftMargin: 20
+                anchors.rightMargin: 20
+
+                currentIndex: tab_bar.currentIndex
+
+                TransactionListView {
+                }
+            }
         }
 
         Component {

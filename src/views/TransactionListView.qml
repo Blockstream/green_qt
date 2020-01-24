@@ -6,28 +6,17 @@ import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.12
 import '..'
 
-Page {
-    background: Item {}
-    header: Label {
-        padding: 20
-        text: qsTr('id_transactions')
-        font.capitalization: Font.AllUppercase
+ListView {
+    clip: true
+    spacing: 32
+
+    model: if (account) account.transactions
+
+    delegate: TransactionDelegate {
+        width: parent.width
+        transaction: modelData
+        first: index === 0
     }
 
-    ListView {
-        anchors.leftMargin: 20
-        anchors.fill: parent
-        clip: true
-        spacing: 32
-
-        model: if (account) account.transactions
-
-        delegate: TransactionDelegate {
-            width: parent.width
-            transaction: modelData
-            first: index === 0
-        }
-
-        ScrollBar.vertical: ScrollBar { }
-    }
+    ScrollBar.vertical: ScrollBar { }
 }
