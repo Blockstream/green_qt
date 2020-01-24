@@ -572,7 +572,7 @@ void Wallet::setBalance(const quint64 balance)
     emit balanceChanged();
 }
 
-QJsonObject Wallet::convert(qint64 sats)
+QJsonObject Wallet::convert(qint64 sats) const
 {
     auto details = Json::fromObject({{ "satoshi", sats }});
     GA_json* balance;
@@ -583,6 +583,14 @@ QJsonObject Wallet::convert(qint64 sats)
     GA_destroy_json(balance);
 
     return result;
+}
+
+QString Wallet::formatAmount(qint64 amount) const
+{
+    Q_ASSERT(m_network);
+    auto unit = m_settings.value("unit").toString();
+    auto str = convert(amount).value(unit.toLower()).toString();
+    return str + (m_network->isLiquid() ? " L-" : " ") + unit;
 }
 
 qint64 Wallet::amountToSats(const QString& amount) const

@@ -81,9 +81,10 @@ public:
 
     Q_INVOKABLE void loginWithPin(const QByteArray& pin);
     Q_INVOKABLE void changePin(const QByteArray& pin);
-    Q_INVOKABLE QJsonObject convert(qint64 sats);
+    Q_INVOKABLE QJsonObject convert(qint64 sats) const;
 
     qint64 amountToSats(const QString& amount) const;
+    QString formatAmount(qint64 amount) const;
 
 public slots:
     void connect();
