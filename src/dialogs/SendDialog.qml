@@ -7,6 +7,7 @@ ControllerDialog {
     title: qsTr('id_send')
 
     controller: SendTransactionController {
+        asset: send_view.asset
         address: send_view.address
         amount: send_view.amount
         sendAll: send_view.sendAll

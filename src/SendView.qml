@@ -8,6 +8,7 @@ import './views'
 StackView {
     id: stack_view
     property alias address: address_field.address
+    property Asset asset: asset_field_loader.item.asset
     property alias amount: amount_field.amount
     property alias sendAll: send_all_button.checked
 
@@ -65,11 +66,32 @@ StackView {
                onTriggered: controller.send()
            }]
 
-        spacing: 16
-        //anchors.fill: parent
+        spacing: 8
 
         Label {
             text: controller.transaction.error || ''
+        }
+
+        Loader {
+            id: asset_field_loader
+            active: wallet.network.liquid
+            Layout.fillWidth: true
+            sourceComponent: ComboBox {
+                property Asset asset: account.balances[asset_field.currentIndex].asset
+                id: asset_field
+                flat: true
+                model: account.balances
+                delegate: AssetDelegate {
+                    highlighted: index === asset_field.currentIndex
+                    balance: modelData
+                    showIndicator: false
+                    width: parent.width
+                }
+
+                contentItem: BalanceItem {
+                    balance: account.balances[asset_field.currentIndex]
+                }
+            }
         }
 
         AddressField {
