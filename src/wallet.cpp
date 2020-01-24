@@ -549,11 +549,6 @@ void Wallet::updateSettings()
     emit settingsChanged();
 }
 
-void Wallet::setup2F()
-{
-
-}
-
 void Wallet::setConnection(ConnectionStatus connection)
 {
     if (m_connection == connection) return;

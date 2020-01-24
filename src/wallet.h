@@ -91,7 +91,6 @@ public slots:
     void test();
     void signup(const QStringList &mnemonic, const QByteArray& pin);
     void reload();
-    void setup2F();
 
     void updateConfig();
     void updateSettings();
