@@ -307,6 +307,7 @@ GridLayout {
                 }
 
                 AssetListView {
+                    onClicked: stack_view.push(asset_view_component, { balance })
                 }
             }
         }
@@ -336,6 +337,11 @@ GridLayout {
         TransactionView {
 
         }
+    }
+
+    Component {
+        id: asset_view_component
+        AssetView {}
     }
 
     RenameAccountDialog {

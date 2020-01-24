@@ -65,5 +65,6 @@
         <file>AssetDelegate.qml</file>
         <file>AssetListView.qml</file>
         <file>BalanceItem.qml</file>
+        <file>AssetView.qml</file>
     </qresource>
 </RCC>
