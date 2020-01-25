@@ -23,10 +23,10 @@ GridLayout {
         return wallet.formatAmount(amount || 0, include_ticker, unit);
     }
 
-    function convert(sats) {
-        wallet.settings.pricing
-        const { fiat, fiat_currency } = wallet.convert(sats)
-        return `${fiat} ${fiat_currency}`
+    function formatFiat(sats) {
+        const pricing = wallet.settings.pricing;
+        const { fiat, fiat_currency } = wallet.convert(sats);
+        return fiat + ' ' + fiat_currency;
     }
 
     onAccountChanged: {
@@ -213,7 +213,7 @@ GridLayout {
                     }
                     Label {
                         anchors.bottom: parent.bottom
-                        text: convert(account.balance)
+                        text: formatFiat(account.balance)
                     }
                 }
 
