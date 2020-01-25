@@ -86,6 +86,7 @@ public:
 
     qint64 amountToSats(const QString& amount) const;
     QString formatAmount(qint64 amount, bool include_ticker) const;
+    Q_INVOKABLE QString formatAmount(qint64 amount, bool include_ticker, const QString& unit) const;
 
     Asset* getOrCreateAsset(const QString& id);
 

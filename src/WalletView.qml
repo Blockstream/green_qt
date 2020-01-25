@@ -32,18 +32,10 @@ GridLayout {
         return amount
     }
 
-    function convertToUnit(sats, unit) {
-        return wallet.convert(sats)[unit === '\u00B5BTC' ? 'ubtc' : unit.toLowerCase()];
-    }
-
-    function convertToWalletUnit(sats) {
-        return convertToUnit(sats, wallet.settings.unit);
-    }
-
-    function formatAmount(sats) {
+    function formatAmount(amount) {
+        const include_ticker = true;
         const unit = wallet.settings.unit;
-        const amount = convertToUnit(sats, unit);
-        return wallet.network.liquid ? `${amount} L-${unit}` : `${amount} ${unit}`
+        return wallet.formatAmount(amount || 0, include_ticker, unit);
     }
 
     function convert(sats) {

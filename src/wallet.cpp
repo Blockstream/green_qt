@@ -624,8 +624,12 @@ QJsonObject Wallet::convert(qint64 sats) const
 
 QString Wallet::formatAmount(qint64 amount, bool include_ticker) const
 {
+    return formatAmount(amount, include_ticker, m_settings.value("unit").toString());
+}
+
+QString Wallet::formatAmount(qint64 amount, bool include_ticker, const QString& unit) const
+{
     Q_ASSERT(m_network);
-    auto unit = m_settings.value("unit").toString();
     auto str = convert(amount).value(unit == "\u00B5BTC" ? "ubtc" : unit.toLower()).toString();
     if (include_ticker) {
         str += (m_network->isLiquid() ? " L-" : " ") + unit;
