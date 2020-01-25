@@ -639,8 +639,12 @@ QString Wallet::formatAmount(qint64 amount, bool include_ticker, const QString& 
 
 qint64 Wallet::amountToSats(const QString& amount) const
 {
+    return parseAmount(amount, m_settings.value("unit").toString());
+}
+
+qint64 Wallet::parseAmount(const QString& amount, const QString& unit) const
+{
     if (amount.isEmpty()) return 0;
-    auto unit = m_settings.value("unit").toString();
     auto details = Json::fromObject({{ unit == "\u00B5BTC" ? "ubtc" : unit.toLower(), amount }});
     GA_json* balance;
     int err = GA_convert_amount(m_session, details, &balance);

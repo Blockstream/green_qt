@@ -13,23 +13,8 @@ GridLayout {
     id: wallet_view
 
     function parseAmount(amount) {
-        const unit = wallet.settings.unit
-        try {
-            amount = Number.fromLocaleString(Qt.locale(), amount)
-        } catch (e) {
-            amount = Number(amount)
-        }
-
-        if (unit === 'BTC') {
-            amount = amount * 100000000
-        }
-        if (unit === 'mBTC') {
-            amount = amount * 100000
-        }
-        if (unit === 'bits' || unit === '\u00B5BTC') {
-            amount = amount * 100
-        }
-        return amount
+        const unit = wallet.settings.unit;
+        return wallet.parseAmount(amount, unit);
     }
 
     function formatAmount(amount) {

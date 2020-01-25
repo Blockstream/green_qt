@@ -85,6 +85,8 @@ public:
     Q_INVOKABLE QJsonObject convert(qint64 sats) const;
 
     qint64 amountToSats(const QString& amount) const;
+    Q_INVOKABLE qint64 parseAmount(const QString& amount, const QString& unit) const;
+
     QString formatAmount(qint64 amount, bool include_ticker) const;
     Q_INVOKABLE QString formatAmount(qint64 amount, bool include_ticker, const QString& unit) const;
 
