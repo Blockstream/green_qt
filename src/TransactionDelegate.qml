@@ -8,7 +8,6 @@ import QtQuick.Layouts 1.12
 Pane {
     property Transaction transaction
     property var tx: transaction.data
-    property bool first
     property int confirmations: tx.block_height === 0 ? 0 : 1 + wallet.events.block.block_height - tx.block_height
     property string statusLabel: {
         if (confirmations === 0) return qsTr('id_unconfirmed')

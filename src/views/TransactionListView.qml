@@ -10,12 +10,11 @@ ListView {
     clip: true
     spacing: 32
 
-    model: if (account) account.transactions
+    model: account.transactions
 
     delegate: TransactionDelegate {
         width: parent.width
         transaction: modelData
-        first: index === 0
     }
 
     ScrollBar.vertical: ScrollBar { }
