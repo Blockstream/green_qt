@@ -8,13 +8,14 @@ import '..'
 
 ListView {
     clip: true
-    spacing: 32
+    spacing: 8
 
     model: account.transactions
 
     delegate: TransactionDelegate {
         width: parent.width
         transaction: modelData
+        onClicked: stack_view.push(transaction_view_component, { statusLabel, transaction })
     }
 
     ScrollBar.vertical: ScrollBar { }

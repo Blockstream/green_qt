@@ -10,6 +10,7 @@ ListView {
     signal clicked(Balance balance)
 
     model: account.balances
+    spacing: 8
 
     delegate: AssetDelegate {
         balance: modelData
