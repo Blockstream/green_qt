@@ -8,12 +8,6 @@ import QtQuick.Layouts 1.12
 ItemDelegate {
     property Transaction transaction
     property var tx: transaction.data
-    property int confirmations: tx.block_height === 0 ? 0 : 1 + wallet.events.block.block_height - tx.block_height
-    property string statusLabel: {
-        if (confirmations === 0) return qsTr('id_unconfirmed')
-        if (confirmations < 6) return qsTr('id_d6_confirmations').arg(confirmations)
-        return qsTr('id_completed')
-    }
 
     spacing: 8
 
@@ -64,8 +58,8 @@ ItemDelegate {
 
             Label {
                 Layout.alignment: Qt.AlignRight
-                color: confirmations === 0 ? 'red' : 'white'
-                text: statusLabel
+                color: transactionConfirmations(transaction) === 0 ? 'red' : 'white'
+                text: transactionStatus(transaction)
             }
         }
 

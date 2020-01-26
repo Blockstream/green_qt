@@ -15,7 +15,7 @@ ListView {
     delegate: TransactionDelegate {
         width: parent.width
         transaction: modelData
-        onClicked: stack_view.push(transaction_view_component, { statusLabel, transaction })
+        onClicked: stack_view.push(transaction_view_component, { transaction })
     }
 
     ScrollBar.vertical: ScrollBar { }

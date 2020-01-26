@@ -7,7 +7,6 @@ import QtQuick.Layouts 1.12
 
 Page {
     property Transaction transaction
-    property string statusLabel
 
     function tx_direction(type) {
         switch (type) {
@@ -78,7 +77,7 @@ Page {
                 }
 
                 Label {
-                    text: statusLabel
+                    text: transactionStatus(transaction)
                 }
             }
 

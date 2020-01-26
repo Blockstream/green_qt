@@ -29,6 +29,18 @@ GridLayout {
         return fiat + ' ' + fiat_currency;
     }
 
+    function transactionConfirmations(transaction) {
+        if (transaction.data.block_height === 0) return 0;
+        return 1 + transaction.account.wallet.events.block.block_height - transaction.data.block_height;
+    }
+
+    function transactionStatus(transaction) {
+        const confirmations = transactionConfirmations(transaction);
+        if (confirmations === 0) return qsTr('id_unconfirmed');
+        if (confirmations < 6) return qsTr('id_d6_confirmations').arg(confirmations);
+        return qsTr('id_completed');
+    }
+
     onAccountChanged: {
         location = '/transactions'
         stack_view.pop()
