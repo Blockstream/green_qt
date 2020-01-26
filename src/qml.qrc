@@ -66,5 +66,6 @@
         <file>AssetListView.qml</file>
         <file>BalanceItem.qml</file>
         <file>AssetView.qml</file>
+        <file>AccountListView.qml</file>
     </qresource>
 </RCC>

@@ -166,93 +166,12 @@ GridLayout {
         }
     }
 
-    ListView {
+    AccountListView {
         id: accounts_list
         Layout.fillHeight: true
         Layout.preferredWidth: 300
         clip: true
-        spacing: 0
         topMargin: 1
-        model: wallet.accounts
-        delegate: Pane {
-            property bool isCurrentItem: ListView.isCurrentItem
-            property Account account: modelData
-
-            padding: 16
-            width: ListView.view.width
-
-            background: MouseArea {
-                id: mouse_area
-                hoverEnabled: true
-                onClicked: accounts_list.currentIndex = index
-
-                Rectangle {
-                    z: -2
-                    color: Qt.rgba(0, 0, 0, isCurrentItem ? 0.1 : 0)
-                    anchors.fill: parent
-                    anchors.rightMargin: -5
-                    anchors.topMargin: -1
-
-                    Rectangle {
-                        visible: isCurrentItem
-                        color: 'green'
-                        width: 2
-                        height: parent.height
-                    }
-                }
-
-            }
-
-            Column {
-                spacing: 8
-                width: parent.width
-
-                Label {
-                    color: isCurrentItem ? 'green' : 'gray'
-                    elide: Text.ElideRight
-                    font.pixelSize: 16
-                    text: account.name
-                    width: parent.width
-                    ToolTip.text: account.name
-                    ToolTip.visible: truncated && mouse_area.containsMouse
-                }
-
-                Row {
-                    spacing: 10
-                    Label {
-                        text: formatAmount(account.balance)
-                        font.pixelSize: 16
-                    }
-                    Label {
-                        anchors.bottom: parent.bottom
-                        text: formatFiat(account.balance)
-                    }
-                }
-
-                Row {
-                    spacing: 8
-                    visible: isCurrentItem
-
-                    anchors.right: parent.right
-                    FlatButton {
-                        icon.source: 'assets/svg/send.svg'
-                        icon.width: 24
-                        icon.height: 24
-                        text: qsTr('id_send')
-                        onClicked: send_dialog.createObject(stack_view, { account }).open()
-                    }
-                    FlatButton {
-                        icon.source: 'assets/svg/receive.svg'
-                        icon.width: 24
-                        icon.height: 24
-                        text: qsTr('id_receive')
-                        onClicked: receive_dialog.createObject(stack_view).open()
-                    }
-                }
-            }
-        }
-
-        ScrollIndicator.vertical: ScrollIndicator { }
     }
 
     StackView {
