@@ -118,6 +118,13 @@ GridLayout {
                     enabled: false
                     text: qsTr('id_logout')
                 }
+
+                MenuSeparator { }
+
+                MenuItem {
+                    text: qsTr('id_add_new_account')
+                    onClicked: create_account_dialog.open()
+                }
             }
         }
     }
@@ -179,7 +186,6 @@ GridLayout {
         clip: true
         Layout.fillWidth: true
         Layout.fillHeight: true
-        Layout.rowSpan: 2
 
         initialItem: Page {
             background: Item { }
@@ -226,14 +232,6 @@ GridLayout {
         Component {
             id: receive_dialog
             ReceiveDialog { }
-        }
-    }
-
-    Row {
-        Layout.alignment: Qt.AlignRight
-        FlatButton {
-            text: 'ADD ACCOUNT'
-            onClicked: create_account_dialog.open()
         }
     }
 
