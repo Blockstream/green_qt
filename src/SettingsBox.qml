@@ -2,42 +2,33 @@ import QtQuick 2.13
 import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.13
 
-Page {
+GridLayout {
+    property string title
     property string description
     default property alias children: column_layout.children
-    font.family: dinpro.name
-    font.pixelSize: 15
-    Layout.fillWidth: true
-    background: Item {}
 
-    RowLayout {
-        anchors.fill: parent
+    Layout.topMargin: 16
+    columns: 2
+    columnSpacing: 32
 
-        ColumnLayout {
-            Layout.alignment: Qt.AlignTop
-            Layout.fillWidth: true
-            spacing: 15
+    Label {
+        Layout.fillWidth: true
+        wrapMode: Text.WordWrap
+        text: title
+        color: 'gray'
+        font.pixelSize : 18
+        Layout.columnSpan: 2
+    }
 
-            Label {
-                Layout.alignment: Qt.AlignTop
-                Layout.fillWidth: true
-                wrapMode: Text.WordWrap
-                text: title
-                font.pixelSize : 18
-            }
+    Label {
+        Layout.fillWidth: true
+        wrapMode: Label.WordWrap
+        text: description
+        font.pixelSize: 15
+    }
 
-            Label {
-                Layout.alignment: Qt.AlignTop
-                Layout.fillWidth: true
-                wrapMode: Label.WordWrap
-                text: description
-            }
-        }
-
-        ColumnLayout {
-            id: column_layout
-            Layout.fillWidth: true
-            Layout.alignment: Qt.AlignTop
-        }
+    ColumnLayout {
+        id: column_layout
+        //Layout.alignment: Qt.AlignTop
     }
 }

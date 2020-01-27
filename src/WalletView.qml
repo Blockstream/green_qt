@@ -47,6 +47,7 @@ GridLayout {
     }
 
     rowSpacing: 0
+    columnSpacing: 0
     columns: 2
 
     states: [
@@ -130,7 +131,6 @@ GridLayout {
             color: 'black'
             opacity: 0.2
             anchors.fill: parent
-            anchors.leftMargin: -5
             anchors.bottomMargin: -10000
             anchors.rightMargin: -10000
             anchors.topMargin: -10000
@@ -138,8 +138,8 @@ GridLayout {
 
         RowLayout {
             id: layout
-            x: 20
-            width: parent.width - 40
+            x: 16
+            width: parent.width - 32
 
             Label {
                 id: title_label
@@ -169,7 +169,7 @@ GridLayout {
     AccountListView {
         id: accounts_list
         Layout.fillHeight: true
-        Layout.preferredWidth: 300
+        Layout.preferredWidth: 320
         clip: true
         topMargin: 1
     }
@@ -186,19 +186,19 @@ GridLayout {
 
             header: RowLayout {
                 TabBar {
-                    padding: 20
+                    leftPadding: 8
                     background: Item {}
                     id: tab_bar
 
                     TabButton {
                         text: qsTr('id_transactions')
-                        width: 120
+                        width: 160
                     }
 
                     TabButton {
                         visible: wallet.network.liquid
                         text: qsTr('id_assets')
-                        width: 120
+                        width: 160
                     }
                 }
             }
@@ -207,9 +207,6 @@ GridLayout {
                 id: stack_layout
                 clip: true
                 anchors.fill: parent
-                anchors.leftMargin: 20
-                anchors.rightMargin: 20
-
                 currentIndex: tab_bar.currentIndex
 
                 TransactionListView {

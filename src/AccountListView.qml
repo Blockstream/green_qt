@@ -11,7 +11,8 @@ ListView {
         property Account account: modelData
 
         onClicked: ListView.view.currentIndex = index
-        padding: 8
+        leftPadding: 16
+        rightPadding: 8
         width: ListView.view.width
 
         highlighted: ListView.isCurrentItem
