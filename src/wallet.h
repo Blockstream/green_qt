@@ -136,11 +136,12 @@ public:
     ConnectionStatus m_connection{Disconnected};
     AuthenticationStatus m_authentication{Unauthenticated};
     QJsonObject m_settings;
+    QJsonObject m_config;
     QJsonObject m_currencies;
+    QJsonObject m_events;
     QMap<QString, Asset*> m_assets;
     QList<Account*> m_accounts;
     QMap<int, Account*> m_accounts_by_pointer;
-    QJsonObject m_events;
 
     QByteArray getPinData() const;
     QByteArray m_pin_data;
@@ -150,7 +151,6 @@ public:
     QString m_proxy;
     bool m_use_tor{false};
     quint64 m_balance;
-    QJsonObject m_config;
 };
 
 #endif // GREEN_WALLET_H
