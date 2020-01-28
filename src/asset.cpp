@@ -4,7 +4,7 @@
 #include <QtMath>
 
 Asset::Asset(const QString& id, Wallet* wallet)
-    : QObject(nullptr)
+    : QObject(wallet)
     , m_wallet(wallet)
     , m_id(id)
 {

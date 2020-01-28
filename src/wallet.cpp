@@ -25,6 +25,7 @@ static void notification_handler(void* context, const GA_json* details)
 Wallet::Wallet(QObject *parent)
     : QObject(parent)
 {
+    // TODO: instantiate only if needed
     m_thread = new QThread(this);
     m_context = new QObject;
 
@@ -541,29 +542,35 @@ void Wallet::refreshAssets()
 {
     Q_ASSERT(m_network->isLiquid());
 
-    auto params = Json::fromObject({
-        { "assets", true },
-        { "icons", true },
-        { "refresh", true }
+    QMetaObject::invokeMethod(m_context, [this] {
+        auto params = Json::fromObject({
+            { "assets", true },
+            { "icons", true },
+            { "refresh", true }
+        });
+        GA_json* output;
+        int err = GA_refresh_assets(m_session, params, &output);
+        Q_ASSERT(err == GA_OK);
+        err = GA_destroy_json(params);
+        Q_ASSERT(err == GA_OK);
+
+        auto assets = Json::toObject(output);
+        err = GA_destroy_json(output);
+        Q_ASSERT(err == GA_OK);
+
+        QMetaObject::invokeMethod(this, [this, assets] {
+            auto icons = assets.value("icons").toObject();
+
+            for (auto&& ref : assets.value("assets").toObject()) {
+                QString id = ref.toObject().value("asset_id").toString();
+                Asset* asset = getOrCreateAsset(id);
+                asset->setData(ref.toObject());
+                if (icons.contains(id)) {
+                    asset->setIcon("data:image/png;base64," + icons.value(id).toString());
+                }
+            }
+        });
     });
-    GA_json* output;
-    int err = GA_refresh_assets(m_session, params, &output);
-    Q_ASSERT(err == GA_OK);
-    GA_destroy_json(params);
-
-    auto assets = Json::toObject(output);
-    auto icons = assets.value("icons").toObject();
-
-    for (auto&& ref : assets.value("assets").toObject()) {
-        QString id = ref.toObject().value("asset_id").toString();
-        Asset* asset = getOrCreateAsset(id);
-        asset->setData(ref.toObject());
-        if (icons.contains(id)) {
-            asset->setIcon("data:image/png;base64," + icons.value(id).toString());
-        }
-    }
-
-    GA_destroy_json(output);
 }
 
 void Wallet::updateConfig()
