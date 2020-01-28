@@ -106,7 +106,31 @@ void Wallet::connectNow()
 void Wallet::disconnect()
 {
     Q_ASSERT(m_connection != Disconnected);
+    Q_ASSERT(m_authentication == Authenticated);
+
+    auto accounts = m_accounts;
+    m_accounts.clear();
+    m_accounts_by_pointer.clear();
+    emit accountsChanged();
+
+    m_settings = {};
+    m_config = {};
+    m_currencies = {};
+    m_events = {};
+    m_balance = 0;
+
     setConnection(Disconnected);
+    setAuthentication(Unauthenticated);
+
+    QMetaObject::invokeMethod(m_context, [this] {
+        int err = GA_destroy_session(m_session);
+        Q_ASSERT(err == GA_OK);
+        m_session = nullptr;
+    }, Qt::BlockingQueuedConnection);
+
+    qDeleteAll(accounts);
+    qDeleteAll(m_assets.values());
+    m_assets.clear();
 }
 
 Wallet::~Wallet()

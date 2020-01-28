@@ -115,8 +115,8 @@ GridLayout {
                 }
 
                 MenuItem {
-                    enabled: false
                     text: qsTr('id_logout')
+                    onTriggered: wallet.disconnect()
                 }
 
                 MenuSeparator { }
