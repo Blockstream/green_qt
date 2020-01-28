@@ -12,6 +12,8 @@ ItemDelegate {
 
     id: balance_delegate
 
+    background.opacity: 0.4
+
     contentItem: BalanceItem {
         balance: balance_delegate.balance
         Item {

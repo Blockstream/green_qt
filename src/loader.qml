@@ -11,12 +11,9 @@ ApplicationWindow {
         source: "assets/fonts/DINPro/DINPro-Regular.otf"
     }
 
-    Material.accent: Material.Green
-    Material.theme: Material.Dark
-
     id: window
-    property string location: '/'
 
+    property string location: '/'
     property Wallet currentWallet
 
     Loader {

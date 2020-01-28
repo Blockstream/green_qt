@@ -11,11 +11,11 @@ ListView {
         property Account account: modelData
 
         onClicked: ListView.view.currentIndex = index
+        background.opacity: 0.4
+        highlighted: ListView.isCurrentItem
         leftPadding: 16
         rightPadding: 8
         width: ListView.view.width
-
-        highlighted: ListView.isCurrentItem
 
         contentItem: Column {
             spacing: 8

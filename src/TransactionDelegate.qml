@@ -9,6 +9,7 @@ ItemDelegate {
     property Transaction transaction
     property var tx: transaction.data
 
+    background.opacity: 0.4
     spacing: 8
 
     function address(tx) {
