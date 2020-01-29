@@ -175,6 +175,10 @@
         <translation>Nombre del activo</translation>
     </message>
     <message>
+        <source>id_assets</source>
+        <translation>Assets</translation>
+    </message>
+    <message>
         <source>id_attempts_remaining_d</source>
         <translation>Intentos restantes: %1</translation>
     </message>
@@ -247,6 +251,10 @@
         <translation>Cancelar</translation>
     </message>
     <message>
+        <source>id_cancel_a_reset_to_unlock_your</source>
+        <translation>Cancel a reset to unlock your wallet if you recovered access to an old Two-Factor Authentication method.</translation>
+    </message>
+    <message>
         <source>id_cancel_twofactor_reset</source>
         <translation>Cancelar el restablecimiento de los dos factores</translation>
     </message>
@@ -271,6 +279,10 @@
         <translation>Seleccionar</translation>
     </message>
     <message>
+        <source>id_choose_a_name_for_your_new</source>
+        <translation>Choose a name for your new Blockstream Green wallet.</translation>
+    </message>
+    <message>
         <source>id_choose_method_to_authorize_the</source>
         <translation>Seleccionar método para autorizar la acción</translation>
     </message>
@@ -285,6 +297,14 @@
     <message>
         <source>id_clear</source>
         <translation>BORRAR</translation>
+    </message>
+    <message>
+        <source>id_click_to_receive_an_email_with</source>
+        <translation>Click to receive an email with your encrypted recovery data.</translation>
+    </message>
+    <message>
+        <source>id_communication_timed_out_make</source>
+        <translation>Communication timed out. Make sure the device is powered on and try again.</translation>
     </message>
     <message>
         <source>id_completed</source>
@@ -315,6 +335,10 @@
         <translation>¡Felicidades!</translation>
     </message>
     <message>
+        <source>id_connect_hardware_wallet</source>
+        <translation>Connect hardware wallet</translation>
+    </message>
+    <message>
         <source>id_connect_through_a_proxy</source>
         <translation>Conectarse a través de un proxy</translation>
     </message>
@@ -333,6 +357,14 @@
     <message>
         <source>id_connecting_to_tor_onion_nodes</source>
         <translation>Conectarse a los nodos de Tor (.onion) garantiza máxima privacidad y seguridad. Pulsa &quot;Aceptar&quot; para continuar.</translation>
+    </message>
+    <message>
+        <source>id_connection_failed</source>
+        <translation>Connection failed</translation>
+    </message>
+    <message>
+        <source>id_connection_to_device_failed</source>
+        <translation>Connection to device failed! Move closer to the device and try again.</translation>
     </message>
     <message>
         <source>id_contact_support_at_s_or_visit_s</source>
@@ -779,6 +811,14 @@
         <translation>Green utiliza la autenticación biométrica para simplificar el acceso a la cartera</translation>
     </message>
     <message>
+        <source>id_green_uses_bluetooth_for</source>
+        <translation>Green uses Bluetooth for communication with hardware wallets</translation>
+    </message>
+    <message>
+        <source>id_green_uses_bluetooth_to_connect</source>
+        <translation>Green uses Bluetooth to connect to hardware wallets</translation>
+    </message>
+    <message>
         <source>id_green_uses_multisig_with_one</source>
         <translation>Green utiliza las multifirmas con una firma generada por tu dispositivo y otra generada por los servidores de Blockstream. Establecer una autenticación de dos factores añade un nivel de seguridad adicional para la firma originada en el servidor.</translation>
     </message>
@@ -883,6 +923,10 @@
         <translation>Configuración de red inválida</translation>
     </message>
     <message>
+        <source>id_invalid_payment_request_assetid</source>
+        <translation>Invalid payment request, AssetID has to be specified</translation>
+    </message>
+    <message>
         <source>id_invalid_pgp_key</source>
         <translation>Clave PGP inválida</translation>
     </message>
@@ -909,6 +953,10 @@
     <message>
         <source>id_invalid_replacement_fee_rate</source>
         <translation>Comisión por vbyte de reemplazo inválida</translation>
+    </message>
+    <message>
+        <source>id_invalid_status_check_that_your</source>
+        <translation>Invalid status. Check that your device is unlocked and try again.</translation>
     </message>
     <message>
         <source>id_invalid_twofactor_code</source>
@@ -947,12 +995,12 @@
         <translation>Learn more about %1.</translation>
     </message>
     <message>
-        <source>id_ledger_currently_supports_a</source>
-        <translation>Ledger currently supports a limited set of assets: check with the vendor before receiving assets other than L-BTC</translation>
-    </message>
-    <message>
         <source>id_ledger_dashboard_detected</source>
         <translation>Ledger Dashboard detectado. Abre la app correcta para acceder.</translation>
+    </message>
+    <message>
+        <source>id_ledger_supports_a_limited_set</source>
+        <translation>Ledger supports a limited set of assets: check our documentation before receiving assets other than L-BTC or USDt.</translation>
     </message>
     <message>
         <source>id_lets_get_you_set_up</source>
@@ -972,7 +1020,7 @@
     </message>
     <message>
         <source>id_liquid_securities_accounts_are</source>
-        <translation>Liquid securities accounts are only available on Liquid wallets. You will be required to get authorization from the issuer to receive them.</translation>
+        <translation>Liquid securities accounts are only available on Liquid wallets. You will be required to get authorization from the issuer to receive a Liquid Security.</translation>
     </message>
     <message>
         <source>id_loading_transactions</source>
@@ -1356,11 +1404,7 @@
     </message>
     <message>
         <source>id_provide_this_id_to_the_issuer</source>
-        <translation>Provide this ID to the issuer to get authorization to receive Liquid Securities.</translation>
-    </message>
-    <message>
-        <source>id_providing_an_email_enables</source>
-        <translation>Proporcionar un correo electrónico habilita las notificaciones y la recuperación de transacciones.</translation>
+        <translation>Provide this ID to the issuer to get authorization to receive a Liquid Security.</translation>
     </message>
     <message>
         <source>id_proxy_settings</source>
@@ -1391,6 +1435,10 @@
         <translation>Receptor</translation>
     </message>
     <message>
+        <source>id_recovery</source>
+        <translation>Recovery</translation>
+    </message>
+    <message>
         <source>id_recovery_and_notifications</source>
         <translation>Recuperación y notificaciones</translation>
     </message>
@@ -1409,6 +1457,10 @@
     <message>
         <source>id_recovery_words</source>
         <translation>Palabras de recuperación</translation>
+    </message>
+    <message>
+        <source>id_redeem_your_deposited_funds</source>
+        <translation>Redeem your deposited funds without Blockstream Green signature after a pre-defined period of time.</translation>
     </message>
     <message>
         <source>id_redeposited</source>
@@ -1473,6 +1525,10 @@
     <message>
         <source>id_restore</source>
         <translation>Restablecer</translation>
+    </message>
+    <message>
+        <source>id_restore_a_blockstream_green</source>
+        <translation>Restore a Blockstream Green wallet using your 24 words mnemonic backup. You can find it in the settings of any Blockstream Green app.</translation>
     </message>
     <message>
         <source>id_restore_green_wallet</source>
@@ -1551,6 +1607,10 @@
         <translation>See our Terms of Service %1</translation>
     </message>
     <message>
+        <source>id_select_a_fiat_currency_and</source>
+        <translation>Select a fiat currency and bitcoin denomination to show amounts in your wallet</translation>
+    </message>
+    <message>
         <source>id_select_account</source>
         <translation>Seleccionar cuenta</translation>
     </message>
@@ -1565,6 +1625,10 @@
     <message>
         <source>id_select_network</source>
         <translation>Seleccionar red</translation>
+    </message>
+    <message>
+        <source>id_select_the_s_app_on_your_ledger</source>
+        <translation>Select the %1 app on your Ledger and retry.</translation>
     </message>
     <message>
         <source>id_select_word_number_d</source>
@@ -1627,6 +1691,10 @@
         <translation>Establecer comisión por vbyte personalizada</translation>
     </message>
     <message>
+        <source>id_set_locktime</source>
+        <translation>Set Locktime</translation>
+    </message>
+    <message>
         <source>id_set_twofactor_threshold</source>
         <translation>Configurar el umbral de dos factores</translation>
     </message>
@@ -1637,6 +1705,10 @@
     <message>
         <source>id_set_up_a_screen_lock_for_your</source>
         <translation>Set up a screen lock for your Android device to unlock your wallet using Android screen lock</translation>
+    </message>
+    <message>
+        <source>id_set_up_an_email_to_get</source>
+        <translation>Set up an email to get pre-signed transactions for recovery. Email notifications contain your encrypted recovery data.</translation>
     </message>
     <message>
         <source>id_set_up_credentials_to_access_in</source>
@@ -1657,6 +1729,10 @@
     <message>
         <source>id_set_up_watchonly_credentials</source>
         <translation>Configurar las credenciales para el modo de solo lectura para esta cartera</translation>
+    </message>
+    <message>
+        <source>id_set_wallet_name</source>
+        <translation>Set wallet name</translation>
     </message>
     <message>
         <source>id_setting_updated</source>
@@ -1856,6 +1932,10 @@ Reset this setting and then re-activate it.</translation>
         <translation>La cámara tiene algún problema. Es probable que tengas que reiniciar tu dispositivo.</translation>
     </message>
     <message>
+        <source>id_the_default_value_is_90_days_if</source>
+        <translation>The default value is 90 days. If you set an email, you will receive an updated copy of your recovery data.</translation>
+    </message>
+    <message>
         <source>id_the_easier_safer_and_faster</source>
         <translation>la cartera más sencilla, segura y rápida</translation>
     </message>
@@ -1866,6 +1946,10 @@ Reset this setting and then re-activate it.</translation>
     <message>
         <source>id_the_network_selected_on_the</source>
         <translation>La red seleccionada en la app de Green es diferente de la red seleccionada en la hardware wallet. Selecciona la misma red en ambos dispositivos.</translation>
+    </message>
+    <message>
+        <source>id_the_new_email_will_be_used_for</source>
+        <translation>The new email will be used for Two-Factor Authentication when the reset is complete. The reset takes 12 months plus any remaining timelock.</translation>
     </message>
     <message>
         <source>id_the_password_cant_be_empty</source>
@@ -1978,6 +2062,10 @@ Reset this setting and then re-activate it.</translation>
     <message>
         <source>id_try_now</source>
         <translation>Intenta ahora</translation>
+    </message>
+    <message>
+        <source>id_turn_on_bluetooth_to_connect</source>
+        <translation>Turn on bluetooth to connect your hardware wallet.</translation>
     </message>
     <message>
         <source>id_two_factor_authentication</source>
@@ -2120,10 +2208,6 @@ Reset this setting and then re-activate it.</translation>
         <translation>ADVERTENCIA: cartera bloqueada por disputa de dos factores. Contacta a soporte técnico para obtener más información.</translation>
     </message>
     <message>
-        <source>id_warning_wallet_locked_for</source>
-        <translation>ADVERTENCIA: cartera bloqueada por restablecimiento de dos factores en %1 días. Contacta a soporte técnico para obtener más información.</translation>
-    </message>
-    <message>
         <source>id_warning_watchonly_credentials</source>
         <translation>Warning: Watch-only credentials will be saved on your device</translation>
     </message>
@@ -2208,10 +2292,6 @@ Reset this setting and then re-activate it.</translation>
         <translation>No estás conectado. Espera.</translation>
     </message>
     <message>
-        <source>id_you_are_not_connected_to_the</source>
-        <translation>No estás conectado a Internet. Conéctate y reintenta.</translation>
-    </message>
-    <message>
         <source>id_you_are_now_connected</source>
         <translation>Ahora estás conectado</translation>
     </message>
@@ -2274,6 +2354,10 @@ Reset this setting and then re-activate it.</translation>
     <message>
         <source>id_your_wallet_backup_is_made_of</source>
         <translation>Your wallet backup is made of 24 words, also known as your mnemonic. Make sure you have a backup and keep it safe. Anyone who finds it can steal your money. You can use it to restore your Blockstream Green wallet on another device in case yours is lost, damaged or stolen.</translation>
+    </message>
+    <message>
+        <source>id_your_wallet_is_locked_for_a</source>
+        <translation>Your wallet is locked for a Two-Factor Authentication reset. The reset will be completed in %1 days.</translation>
     </message>
     <message>
         <source>id_your_wallet_is_not_yet_fully</source>

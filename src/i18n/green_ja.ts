@@ -174,6 +174,10 @@
         <translation>Asset Name</translation>
     </message>
     <message>
+        <source>id_assets</source>
+        <translation>Assets</translation>
+    </message>
+    <message>
         <source>id_attempts_remaining_d</source>
         <translation>残り: %1 回</translation>
     </message>
@@ -246,6 +250,10 @@
         <translation>キャンセル</translation>
     </message>
     <message>
+        <source>id_cancel_a_reset_to_unlock_your</source>
+        <translation>Cancel a reset to unlock your wallet if you recovered access to an old Two-Factor Authentication method.</translation>
+    </message>
+    <message>
         <source>id_cancel_twofactor_reset</source>
         <translation>2段階認証の解除</translation>
     </message>
@@ -270,6 +278,10 @@
         <translation>選択</translation>
     </message>
     <message>
+        <source>id_choose_a_name_for_your_new</source>
+        <translation>Choose a name for your new Blockstream Green wallet.</translation>
+    </message>
+    <message>
         <source>id_choose_method_to_authorize_the</source>
         <translation>認可方法を選択する</translation>
     </message>
@@ -284,6 +296,14 @@
     <message>
         <source>id_clear</source>
         <translation>クリア</translation>
+    </message>
+    <message>
+        <source>id_click_to_receive_an_email_with</source>
+        <translation>Click to receive an email with your encrypted recovery data.</translation>
+    </message>
+    <message>
+        <source>id_communication_timed_out_make</source>
+        <translation>Communication timed out. Make sure the device is powered on and try again.</translation>
     </message>
     <message>
         <source>id_completed</source>
@@ -314,6 +334,10 @@
         <translation>おめでとうございます。</translation>
     </message>
     <message>
+        <source>id_connect_hardware_wallet</source>
+        <translation>Connect hardware wallet</translation>
+    </message>
+    <message>
         <source>id_connect_through_a_proxy</source>
         <translation>プロキシを使って接続する</translation>
     </message>
@@ -332,6 +356,14 @@
     <message>
         <source>id_connecting_to_tor_onion_nodes</source>
         <translation>Tor(.onion)ノードに接続することで最高のセキュリティとプライバシーを保証します。このまま進めるには &quot;OK&quot; を押してください。</translation>
+    </message>
+    <message>
+        <source>id_connection_failed</source>
+        <translation>Connection failed</translation>
+    </message>
+    <message>
+        <source>id_connection_to_device_failed</source>
+        <translation>Connection to device failed! Move closer to the device and try again.</translation>
     </message>
     <message>
         <source>id_contact_support_at_s_or_visit_s</source>
@@ -778,6 +810,14 @@
         <translation>Greenはウォレットへの簡単なアクセスの為に生体認証技術を使用します。</translation>
     </message>
     <message>
+        <source>id_green_uses_bluetooth_for</source>
+        <translation>Green uses Bluetooth for communication with hardware wallets</translation>
+    </message>
+    <message>
+        <source>id_green_uses_bluetooth_to_connect</source>
+        <translation>Green uses Bluetooth to connect to hardware wallets</translation>
+    </message>
+    <message>
         <source>id_green_uses_multisig_with_one</source>
         <translation>GreenはBlockstreamのサーバーと貴方のデバイスで生成された署名の二つを活用しマルチ署名を利用します。2段階認証を設定する場合、サーバー側の署名のセキュリティにもう一段層加えることになります。</translation>
     </message>
@@ -882,6 +922,10 @@
         <translation>無効なネットワーク設定</translation>
     </message>
     <message>
+        <source>id_invalid_payment_request_assetid</source>
+        <translation>Invalid payment request, AssetID has to be specified</translation>
+    </message>
+    <message>
         <source>id_invalid_pgp_key</source>
         <translation>無効なPGPキー</translation>
     </message>
@@ -908,6 +952,10 @@
     <message>
         <source>id_invalid_replacement_fee_rate</source>
         <translation>無効の手数料率</translation>
+    </message>
+    <message>
+        <source>id_invalid_status_check_that_your</source>
+        <translation>Invalid status. Check that your device is unlocked and try again.</translation>
     </message>
     <message>
         <source>id_invalid_twofactor_code</source>
@@ -946,12 +994,12 @@
         <translation>Learn more about %1.</translation>
     </message>
     <message>
-        <source>id_ledger_currently_supports_a</source>
-        <translation>Ledger currently supports a limited set of assets: check with the vendor before receiving assets other than L-BTC</translation>
-    </message>
-    <message>
         <source>id_ledger_dashboard_detected</source>
         <translation>Ledgerダッシュボードを検知しました。正しいアプリを使ってアクセスして下さい。</translation>
+    </message>
+    <message>
+        <source>id_ledger_supports_a_limited_set</source>
+        <translation>Ledger supports a limited set of assets: check our documentation before receiving assets other than L-BTC or USDt.</translation>
     </message>
     <message>
         <source>id_lets_get_you_set_up</source>
@@ -971,7 +1019,7 @@
     </message>
     <message>
         <source>id_liquid_securities_accounts_are</source>
-        <translation>Liquid securities accounts are only available on Liquid wallets. You will be required to get authorization from the issuer to receive them.</translation>
+        <translation>Liquid securities accounts are only available on Liquid wallets. You will be required to get authorization from the issuer to receive a Liquid Security.</translation>
     </message>
     <message>
         <source>id_loading_transactions</source>
@@ -1355,11 +1403,7 @@
     </message>
     <message>
         <source>id_provide_this_id_to_the_issuer</source>
-        <translation>Provide this ID to the issuer to get authorization to receive Liquid Securities.</translation>
-    </message>
-    <message>
-        <source>id_providing_an_email_enables</source>
-        <translation>Eメールを入力すると告知事項を受け取ることができ、また、トランザクション・リカバリーもできます。</translation>
+        <translation>Provide this ID to the issuer to get authorization to receive a Liquid Security.</translation>
     </message>
     <message>
         <source>id_proxy_settings</source>
@@ -1390,6 +1434,10 @@
         <translation>受信者</translation>
     </message>
     <message>
+        <source>id_recovery</source>
+        <translation>Recovery</translation>
+    </message>
+    <message>
         <source>id_recovery_and_notifications</source>
         <translation>リカバリーと告知</translation>
     </message>
@@ -1408,6 +1456,10 @@
     <message>
         <source>id_recovery_words</source>
         <translation>リカバリー単語</translation>
+    </message>
+    <message>
+        <source>id_redeem_your_deposited_funds</source>
+        <translation>Redeem your deposited funds without Blockstream Green signature after a pre-defined period of time.</translation>
     </message>
     <message>
         <source>id_redeposited</source>
@@ -1472,6 +1524,10 @@
     <message>
         <source>id_restore</source>
         <translation>修復</translation>
+    </message>
+    <message>
+        <source>id_restore_a_blockstream_green</source>
+        <translation>Restore a Blockstream Green wallet using your 24 words mnemonic backup. You can find it in the settings of any Blockstream Green app.</translation>
     </message>
     <message>
         <source>id_restore_green_wallet</source>
@@ -1550,6 +1606,10 @@
         <translation>See our Terms of Service %1</translation>
     </message>
     <message>
+        <source>id_select_a_fiat_currency_and</source>
+        <translation>Select a fiat currency and bitcoin denomination to show amounts in your wallet</translation>
+    </message>
+    <message>
         <source>id_select_account</source>
         <translation>Select Account</translation>
     </message>
@@ -1564,6 +1624,10 @@
     <message>
         <source>id_select_network</source>
         <translation>ネットワーク選択</translation>
+    </message>
+    <message>
+        <source>id_select_the_s_app_on_your_ledger</source>
+        <translation>Select the %1 app on your Ledger and retry.</translation>
     </message>
     <message>
         <source>id_select_word_number_d</source>
@@ -1626,6 +1690,10 @@
         <translation>カスタム手数料の設定</translation>
     </message>
     <message>
+        <source>id_set_locktime</source>
+        <translation>Set Locktime</translation>
+    </message>
+    <message>
         <source>id_set_twofactor_threshold</source>
         <translation>Set Two-Factor threshold</translation>
     </message>
@@ -1636,6 +1704,10 @@
     <message>
         <source>id_set_up_a_screen_lock_for_your</source>
         <translation>Set up a screen lock for your Android device to unlock your wallet using Android screen lock</translation>
+    </message>
+    <message>
+        <source>id_set_up_an_email_to_get</source>
+        <translation>Set up an email to get pre-signed transactions for recovery. Email notifications contain your encrypted recovery data.</translation>
     </message>
     <message>
         <source>id_set_up_credentials_to_access_in</source>
@@ -1656,6 +1728,10 @@
     <message>
         <source>id_set_up_watchonly_credentials</source>
         <translation>このウォレットの監視-Only証明書を設定する</translation>
+    </message>
+    <message>
+        <source>id_set_wallet_name</source>
+        <translation>Set wallet name</translation>
     </message>
     <message>
         <source>id_setting_updated</source>
@@ -1855,6 +1931,10 @@ Reset this setting and then re-activate it.</translation>
         <translation>カメラに問題が発生しました。デバイスの再起動をお願いします。</translation>
     </message>
     <message>
+        <source>id_the_default_value_is_90_days_if</source>
+        <translation>The default value is 90 days. If you set an email, you will receive an updated copy of your recovery data.</translation>
+    </message>
+    <message>
         <source>id_the_easier_safer_and_faster</source>
         <translation>より簡単、安全で早いウォレット</translation>
     </message>
@@ -1865,6 +1945,10 @@ Reset this setting and then re-activate it.</translation>
     <message>
         <source>id_the_network_selected_on_the</source>
         <translation>The network selected on the Green app is different from the one selected on the hardware wallet. Select the same network on both devices.</translation>
+    </message>
+    <message>
+        <source>id_the_new_email_will_be_used_for</source>
+        <translation>The new email will be used for Two-Factor Authentication when the reset is complete. The reset takes 12 months plus any remaining timelock.</translation>
     </message>
     <message>
         <source>id_the_password_cant_be_empty</source>
@@ -1977,6 +2061,10 @@ Reset this setting and then re-activate it.</translation>
     <message>
         <source>id_try_now</source>
         <translation>試す</translation>
+    </message>
+    <message>
+        <source>id_turn_on_bluetooth_to_connect</source>
+        <translation>Turn on bluetooth to connect your hardware wallet.</translation>
     </message>
     <message>
         <source>id_two_factor_authentication</source>
@@ -2119,10 +2207,6 @@ Reset this setting and then re-activate it.</translation>
         <translation>注意: ウォレットが2段階認証の紛争中です。サポートにお問い合わせして下さい。</translation>
     </message>
     <message>
-        <source>id_warning_wallet_locked_for</source>
-        <translation>注意: ウォレットが2段階認証の再設定の為、%1 日後ロックされます。より詳しい情報はカスタマーサポートにお問い合わせ下さい。</translation>
-    </message>
-    <message>
         <source>id_warning_watchonly_credentials</source>
         <translation>Warning: Watch-only credentials will be saved on your device</translation>
     </message>
@@ -2207,10 +2291,6 @@ Reset this setting and then re-activate it.</translation>
         <translation>接続できません。しばらくお待ちください。</translation>
     </message>
     <message>
-        <source>id_you_are_not_connected_to_the</source>
-        <translation>インターネットに接続されていません。接続後お試しください。</translation>
-    </message>
-    <message>
         <source>id_you_are_now_connected</source>
         <translation>接続しました。</translation>
     </message>
@@ -2273,6 +2353,10 @@ Reset this setting and then re-activate it.</translation>
     <message>
         <source>id_your_wallet_backup_is_made_of</source>
         <translation>Your wallet backup is made of 24 words, also known as your mnemonic. Make sure you have a backup and keep it safe. Anyone who finds it can steal your money. You can use it to restore your Blockstream Green wallet on another device in case yours is lost, damaged or stolen.</translation>
+    </message>
+    <message>
+        <source>id_your_wallet_is_locked_for_a</source>
+        <translation>Your wallet is locked for a Two-Factor Authentication reset. The reset will be completed in %1 days.</translation>
     </message>
     <message>
         <source>id_your_wallet_is_not_yet_fully</source>

@@ -174,6 +174,10 @@
         <translation>Asset Name</translation>
     </message>
     <message>
+        <source>id_assets</source>
+        <translation>Assets</translation>
+    </message>
+    <message>
         <source>id_attempts_remaining_d</source>
         <translation>Залишилося спроб: %1</translation>
     </message>
@@ -246,6 +250,10 @@
         <translation>Відмінити</translation>
     </message>
     <message>
+        <source>id_cancel_a_reset_to_unlock_your</source>
+        <translation>Cancel a reset to unlock your wallet if you recovered access to an old Two-Factor Authentication method.</translation>
+    </message>
+    <message>
         <source>id_cancel_twofactor_reset</source>
         <translation>Відмінити двофакторне відновлення</translation>
     </message>
@@ -270,6 +278,10 @@
         <translation>Обрати</translation>
     </message>
     <message>
+        <source>id_choose_a_name_for_your_new</source>
+        <translation>Choose a name for your new Blockstream Green wallet.</translation>
+    </message>
+    <message>
         <source>id_choose_method_to_authorize_the</source>
         <translation>Оберіть метод для авторизації дії</translation>
     </message>
@@ -284,6 +296,14 @@
     <message>
         <source>id_clear</source>
         <translation>ОЧИСТИТИ</translation>
+    </message>
+    <message>
+        <source>id_click_to_receive_an_email_with</source>
+        <translation>Click to receive an email with your encrypted recovery data.</translation>
+    </message>
+    <message>
+        <source>id_communication_timed_out_make</source>
+        <translation>Communication timed out. Make sure the device is powered on and try again.</translation>
     </message>
     <message>
         <source>id_completed</source>
@@ -314,6 +334,10 @@
         <translation>Вітаємо!</translation>
     </message>
     <message>
+        <source>id_connect_hardware_wallet</source>
+        <translation>Connect hardware wallet</translation>
+    </message>
+    <message>
         <source>id_connect_through_a_proxy</source>
         <translation>Встановити з’єднання через проксі-сервер</translation>
     </message>
@@ -332,6 +356,14 @@
     <message>
         <source>id_connecting_to_tor_onion_nodes</source>
         <translation>Підключення до Tor (.onion) вузлів забезпечує максимальну конфіденційність і безпеку. Натисніть &quot;OK&quot;, щоб продовжити.</translation>
+    </message>
+    <message>
+        <source>id_connection_failed</source>
+        <translation>Connection failed</translation>
+    </message>
+    <message>
+        <source>id_connection_to_device_failed</source>
+        <translation>Connection to device failed! Move closer to the device and try again.</translation>
     </message>
     <message>
         <source>id_contact_support_at_s_or_visit_s</source>
@@ -778,6 +810,14 @@
         <translation>Green використовує біометричну аутентифікацію для того, щоб забезпечити легкий доступ до гаманця </translation>
     </message>
     <message>
+        <source>id_green_uses_bluetooth_for</source>
+        <translation>Green uses Bluetooth for communication with hardware wallets</translation>
+    </message>
+    <message>
+        <source>id_green_uses_bluetooth_to_connect</source>
+        <translation>Green uses Bluetooth to connect to hardware wallets</translation>
+    </message>
+    <message>
         <source>id_green_uses_multisig_with_one</source>
         <translation>Green використовує мультипідпис з підписом, створеним вашим пристроєм, та підписом, згенерованим за допомогою серверів Blockstream. Налаштування двофакторної аутентифікації дає змогу отримати додатковий рівень безпеки для підпису на сервері.</translation>
     </message>
@@ -882,6 +922,10 @@
         <translation>Неправильна конфігурація мережі</translation>
     </message>
     <message>
+        <source>id_invalid_payment_request_assetid</source>
+        <translation>Invalid payment request, AssetID has to be specified</translation>
+    </message>
+    <message>
         <source>id_invalid_pgp_key</source>
         <translation>Неправильний PGP-ключ</translation>
     </message>
@@ -908,6 +952,10 @@
     <message>
         <source>id_invalid_replacement_fee_rate</source>
         <translation>Неправильна заміна комісії</translation>
+    </message>
+    <message>
+        <source>id_invalid_status_check_that_your</source>
+        <translation>Invalid status. Check that your device is unlocked and try again.</translation>
     </message>
     <message>
         <source>id_invalid_twofactor_code</source>
@@ -946,12 +994,12 @@
         <translation>Learn more about %1.</translation>
     </message>
     <message>
-        <source>id_ledger_currently_supports_a</source>
-        <translation>Ledger currently supports a limited set of assets: check with the vendor before receiving assets other than L-BTC</translation>
-    </message>
-    <message>
         <source>id_ledger_dashboard_detected</source>
         <translation>Знайдена панель Ledger, будь ласка, відкрийте правильний додаток для доступу.</translation>
+    </message>
+    <message>
+        <source>id_ledger_supports_a_limited_set</source>
+        <translation>Ledger supports a limited set of assets: check our documentation before receiving assets other than L-BTC or USDt.</translation>
     </message>
     <message>
         <source>id_lets_get_you_set_up</source>
@@ -971,7 +1019,7 @@
     </message>
     <message>
         <source>id_liquid_securities_accounts_are</source>
-        <translation>Liquid securities accounts are only available on Liquid wallets. You will be required to get authorization from the issuer to receive them.</translation>
+        <translation>Liquid securities accounts are only available on Liquid wallets. You will be required to get authorization from the issuer to receive a Liquid Security.</translation>
     </message>
     <message>
         <source>id_loading_transactions</source>
@@ -1355,11 +1403,7 @@
     </message>
     <message>
         <source>id_provide_this_id_to_the_issuer</source>
-        <translation>Provide this ID to the issuer to get authorization to receive Liquid Securities.</translation>
-    </message>
-    <message>
-        <source>id_providing_an_email_enables</source>
-        <translation>Надання електронної адреси дозволяє отримувати повідомлення і відновлювати транзакції.</translation>
+        <translation>Provide this ID to the issuer to get authorization to receive a Liquid Security.</translation>
     </message>
     <message>
         <source>id_proxy_settings</source>
@@ -1390,6 +1434,10 @@
         <translation>Отримувач</translation>
     </message>
     <message>
+        <source>id_recovery</source>
+        <translation>Recovery</translation>
+    </message>
+    <message>
         <source>id_recovery_and_notifications</source>
         <translation>Відновлення і повідомлення</translation>
     </message>
@@ -1408,6 +1456,10 @@
     <message>
         <source>id_recovery_words</source>
         <translation>Слова відновлення</translation>
+    </message>
+    <message>
+        <source>id_redeem_your_deposited_funds</source>
+        <translation>Redeem your deposited funds without Blockstream Green signature after a pre-defined period of time.</translation>
     </message>
     <message>
         <source>id_redeposited</source>
@@ -1472,6 +1524,10 @@
     <message>
         <source>id_restore</source>
         <translation>Відновити</translation>
+    </message>
+    <message>
+        <source>id_restore_a_blockstream_green</source>
+        <translation>Restore a Blockstream Green wallet using your 24 words mnemonic backup. You can find it in the settings of any Blockstream Green app.</translation>
     </message>
     <message>
         <source>id_restore_green_wallet</source>
@@ -1550,6 +1606,10 @@
         <translation>See our Terms of Service %1</translation>
     </message>
     <message>
+        <source>id_select_a_fiat_currency_and</source>
+        <translation>Select a fiat currency and bitcoin denomination to show amounts in your wallet</translation>
+    </message>
+    <message>
         <source>id_select_account</source>
         <translation>Select Account</translation>
     </message>
@@ -1564,6 +1624,10 @@
     <message>
         <source>id_select_network</source>
         <translation>Оберіть мережу</translation>
+    </message>
+    <message>
+        <source>id_select_the_s_app_on_your_ledger</source>
+        <translation>Select the %1 app on your Ledger and retry.</translation>
     </message>
     <message>
         <source>id_select_word_number_d</source>
@@ -1626,6 +1690,10 @@
         <translation>Встановити розмір комісії</translation>
     </message>
     <message>
+        <source>id_set_locktime</source>
+        <translation>Set Locktime</translation>
+    </message>
+    <message>
         <source>id_set_twofactor_threshold</source>
         <translation>Встановити двофакторний поріг</translation>
     </message>
@@ -1636,6 +1704,10 @@
     <message>
         <source>id_set_up_a_screen_lock_for_your</source>
         <translation>Set up a screen lock for your Android device to unlock your wallet using Android screen lock</translation>
+    </message>
+    <message>
+        <source>id_set_up_an_email_to_get</source>
+        <translation>Set up an email to get pre-signed transactions for recovery. Email notifications contain your encrypted recovery data.</translation>
     </message>
     <message>
         <source>id_set_up_credentials_to_access_in</source>
@@ -1656,6 +1728,10 @@
     <message>
         <source>id_set_up_watchonly_credentials</source>
         <translation>Встановити параметри холодного гаманця</translation>
+    </message>
+    <message>
+        <source>id_set_wallet_name</source>
+        <translation>Set wallet name</translation>
     </message>
     <message>
         <source>id_setting_updated</source>
@@ -1855,6 +1931,10 @@ Reset this setting and then re-activate it.</translation>
         <translation>Проблеми з камерою. Можливо, вам потрібно перезавантажити пристрій.</translation>
     </message>
     <message>
+        <source>id_the_default_value_is_90_days_if</source>
+        <translation>The default value is 90 days. If you set an email, you will receive an updated copy of your recovery data.</translation>
+    </message>
+    <message>
         <source>id_the_easier_safer_and_faster</source>
         <translation>простіший, безпечніший та більш швидкий гаманець</translation>
     </message>
@@ -1865,6 +1945,10 @@ Reset this setting and then re-activate it.</translation>
     <message>
         <source>id_the_network_selected_on_the</source>
         <translation>The network selected on the Green app is different from the one selected on the hardware wallet. Select the same network on both devices.</translation>
+    </message>
+    <message>
+        <source>id_the_new_email_will_be_used_for</source>
+        <translation>The new email will be used for Two-Factor Authentication when the reset is complete. The reset takes 12 months plus any remaining timelock.</translation>
     </message>
     <message>
         <source>id_the_password_cant_be_empty</source>
@@ -1977,6 +2061,10 @@ Reset this setting and then re-activate it.</translation>
     <message>
         <source>id_try_now</source>
         <translation>Спробувати зараз</translation>
+    </message>
+    <message>
+        <source>id_turn_on_bluetooth_to_connect</source>
+        <translation>Turn on bluetooth to connect your hardware wallet.</translation>
     </message>
     <message>
         <source>id_two_factor_authentication</source>
@@ -2119,10 +2207,6 @@ Reset this setting and then re-activate it.</translation>
         <translation>УВАГА: Гаманець заблоковано через двофакторне оскарження. Зверніться до служби підтримки за додатковою інформацією.</translation>
     </message>
     <message>
-        <source>id_warning_wallet_locked_for</source>
-        <translation>УВАГА: Гаманець заблоковано для двофакторного скидання через %1 днів. Зверніться до служби підтримки за додатковою інформацією.</translation>
-    </message>
-    <message>
         <source>id_warning_watchonly_credentials</source>
         <translation>Warning: Watch-only credentials will be saved on your device</translation>
     </message>
@@ -2207,10 +2291,6 @@ Reset this setting and then re-activate it.</translation>
         <translation>Ви не підключені, будь ласка, зачекайте</translation>
     </message>
     <message>
-        <source>id_you_are_not_connected_to_the</source>
-        <translation>Ви не підключені до мережі Інтернет. Підключіться і повторіть спробу.</translation>
-    </message>
-    <message>
         <source>id_you_are_now_connected</source>
         <translation>З&apos;єднання є</translation>
     </message>
@@ -2273,6 +2353,10 @@ Reset this setting and then re-activate it.</translation>
     <message>
         <source>id_your_wallet_backup_is_made_of</source>
         <translation>Your wallet backup is made of 24 words, also known as your mnemonic. Make sure you have a backup and keep it safe. Anyone who finds it can steal your money. You can use it to restore your Blockstream Green wallet on another device in case yours is lost, damaged or stolen.</translation>
+    </message>
+    <message>
+        <source>id_your_wallet_is_locked_for_a</source>
+        <translation>Your wallet is locked for a Two-Factor Authentication reset. The reset will be completed in %1 days.</translation>
     </message>
     <message>
         <source>id_your_wallet_is_not_yet_fully</source>
