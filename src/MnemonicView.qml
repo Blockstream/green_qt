@@ -1,5 +1,6 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.5
+import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.12
 
 GridLayout {
@@ -22,7 +23,7 @@ GridLayout {
                     text: `${index + 1}`
                     textFormat: Text.RichText
                     font.pixelSize : 12
-                    color: 'green'
+                    color: Material.accentColor
                     anchors.baseline: word.baseline
                     horizontalAlignment: Label.AlignRight
                     width: 10
