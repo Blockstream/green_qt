@@ -8,6 +8,9 @@ Balance::Balance(Account* account)
     , m_account(account)
 {
     Q_ASSERT(account);
+
+    // Display/input amount might change if settings are updated
+    connect(m_account->wallet(), &Wallet::settingsChanged, this, &Balance::changed);
 }
 
 void Balance::setAsset(Asset* asset)
@@ -18,12 +21,8 @@ void Balance::setAsset(Asset* asset)
     emit assetChanged(m_asset);
     emit changed();
 
+    // Asset might not be loaded
     connect(m_asset, &Asset::dataChanged, this, &Balance::changed);
-
-    // Display amount changes when wallet unit changes if asset is "btc"
-    if (m_asset->data().value("name") == "btc") {
-        connect(m_account->wallet(), &Wallet::settingsChanged, this, &Balance::changed);
-    }
 }
 
 void Balance::setAmount(qint64 amount)
