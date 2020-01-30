@@ -109,7 +109,19 @@ ColumnLayout {
         ColumnLayout {
             Component {
                 id: enable_dialog
-                TwoFactorEnableDialog { }
+                TwoFactorEnableDialog {
+                    description: switch(method) {
+                                case 'sms':
+                                    return qsTr('id_enter_phone_number')
+                                case 'gauth':
+                                    return qsTr('id_scan_the_qr_code_in_google')
+                                case 'email':
+                                    return qsTr('id_enter_your_email_address')
+                                case 'phone':
+                                    return qsTr('id_enter_phone_number')
+
+                            }
+                }
             }
             Component {
                 id: disable_dialog

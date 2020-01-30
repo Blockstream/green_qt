@@ -10,6 +10,10 @@ Dialog {
     property alias initialItem: stack_view.initialItem
     property alias goo: stack_view
     property string icon
+    property string description
+    property string placeholder
+    property string initialText
+    property string doneText
 
     anchors.centerIn: parent
     clip: true
@@ -102,7 +106,7 @@ Dialog {
                 onTriggered: controller_dialog.accept()
             }
             Label {
-                text: 'DONE!'
+                text: doneText
             }
         }
     }

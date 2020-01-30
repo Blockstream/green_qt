@@ -6,6 +6,8 @@ import './views'
 ControllerDialog {
     id: controller_dialog
     property string method
+    initialText: 'Disable %1 Two-Factor Authentication'.arg(method) // TODO:translate
+    doneText: qsTr('id_disabled')
 
     controller: TwoFactorController {
         method: controller_dialog.method
@@ -23,7 +25,7 @@ ControllerDialog {
             onTriggered: controller.disable()
         }
         Label {
-            text: 'ARE YOU SURE?' // TODO: update
+            text: initialText
         }
     }
 }

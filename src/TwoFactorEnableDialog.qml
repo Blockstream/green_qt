@@ -8,12 +8,13 @@ ControllerDialog {
     property string method
 
     id: controller_dialog
-    title: qsTr('id_set_up_twofactor_authentication') + '\n' + qsTr('id_please_provide_your_1s_code').arg(method)
+    title: qsTr('id_set_up_twofactor_authentication')
     icon: `assets/svg/2fa_${method}.svg`
     height: 300
     horizontalPadding: 50
     modal: true
     width: 400
+    doneText: qsTr('id_enabled')
 
     controller: TwoFactorController {
         method: controller_dialog.method
@@ -30,10 +31,17 @@ ControllerDialog {
             }
             ColumnLayout {
                 anchors.fill: parent
+
+                Label {
+                    Layout.fillWidth: true
+                    text: description
+                    wrapMode: Text.WordWrap
+                }
+
                 TextField {
                     id: data_field
                     Layout.fillWidth: true
-                    placeholderText: method
+                    placeholderText: placeholder
                 }
             }
             Item {
@@ -53,13 +61,19 @@ ControllerDialog {
             ColumnLayout {
                 anchors.fill: parent
                 Label {
-                    Layout.alignment: Qt.AlignHCenter
-                    text: wallet.config[method].data.split('=')[1]
+                    Layout.fillWidth: true
+                    text: qsTr('id_scan_the_qr_code_in_google')
+                    wrapMode: Text.WordWrap
                 }
                 QRCode {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     text: wallet.config[method].data
+                }
+                Label {
+                    Layout.alignment: Qt.AlignHCenter
+                    text: wallet.config[method].data.split('=')[1]
+                    color: 'green'
                 }
                 Item {
                     Layout.fillHeight: true

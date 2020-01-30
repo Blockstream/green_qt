@@ -13,6 +13,8 @@ ControllerDialog {
         sendAll: send_view.sendAll
     }
 
+    doneText: qsTr('id_transaction_sent')
+
     initialItem: SendView {
         id: send_view
     }
