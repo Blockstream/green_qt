@@ -20,11 +20,8 @@ Page {
             onClicked: stack_view.pop()
         }
 
-        Image {
-            sourceSize.width: 32
-            sourceSize.height: 32
-            source: balance.asset.icon || 'assets/svg/generic_icon_30p.svg'
-            width: 32
+        AssetIcon {
+            asset: balance.asset
         }
 
         Label {

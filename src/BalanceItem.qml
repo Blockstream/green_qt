@@ -8,11 +8,8 @@ RowLayout {
 
     spacing: 16
 
-    Image {
-        sourceSize.width: 32
-        sourceSize.height: 32
-        source: balance.asset.icon || 'assets/svg/generic_icon_30p.svg'
-        width: 32
+    AssetIcon {
+        asset: balance.asset
     }
 
     ColumnLayout {
