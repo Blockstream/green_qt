@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QJsonObject>
+#include <QtQml>
 
 class Account;
 class Asset;
@@ -38,6 +39,7 @@ class Transaction : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(Account* account READ account CONSTANT)
+    Q_PROPERTY(QQmlListProperty<TransactionAmount> amounts READ amounts NOTIFY amountsChanged)
     Q_PROPERTY(QJsonObject data READ data NOTIFY dataChanged)
 
 public:
@@ -47,6 +49,8 @@ public:
     bool isUnconfirmed() const;
 
     Account* account() const;
+
+    QQmlListProperty<TransactionAmount> amounts();
 
     QJsonObject data() const;
 
@@ -58,10 +62,12 @@ public slots:
     void updateMemo(const QString& memo);
 
 signals:
+    void amountsChanged();
     void dataChanged(const QJsonObject& data);
 
 private:
     Account* const m_account;
+    QList<TransactionAmount*> m_amounts;
     QJsonObject m_data;
 };
 

@@ -162,12 +162,6 @@ Page {
                     }
                 }
             }
-
-            TextArea {
-                visible: engine.debug
-                width: parent.width
-                text: JSON.stringify(transaction.data, null, '    ')
-            }
         }
     }
 }

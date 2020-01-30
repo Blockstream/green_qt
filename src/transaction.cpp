@@ -61,15 +61,70 @@ Account *Transaction::account() const
     return m_account;
 }
 
+QQmlListProperty<TransactionAmount> Transaction::amounts()
+{
+    return { this, m_amounts };
+}
+
 QJsonObject Transaction::data() const
 {
     return m_data;
 }
 
-void Transaction::updateFromData(const QJsonObject &data)
+void Transaction::updateFromData(const QJsonObject& data)
 {
+    if (m_data == data) return;
     m_data = data;
-    emit dataChanged(data);
+    emit dataChanged(m_data);
+
+    // Amounts are one time set
+    if (m_amounts.empty()) {
+        Wallet* wallet = m_account->wallet();
+        const auto satoshi = m_data.value("satoshi").toObject();
+        const int count = satoshi.keys().length();
+
+        if (wallet->network()->isLiquid()) {
+            const QString type = data.value("type").toString();
+
+            if (type == "redeposit") {
+                Q_ASSERT(satoshi.contains("btc"));
+                qint64 amount = satoshi.value("btc").toDouble();
+                m_amounts.append(new TransactionAmount(this, amount));
+            } else if (type == "incoming") {
+                for (auto i = satoshi.constBegin(); i != satoshi.constEnd(); ++i) {
+                    Asset* asset = wallet->getOrCreateAsset(i.key());
+                    qint64 amount = i.value().toDouble();
+                    m_amounts.append(new TransactionAmount(this, asset, amount));
+                }
+            } else if (type == "outgoing") {
+                if (count == 1) {
+                    Q_ASSERT(satoshi.contains("btc"));
+                    auto asset = wallet->getOrCreateAsset("btc");
+                    qint64 amount = satoshi.value("btc").toDouble();
+                    m_amounts.append(new TransactionAmount(this, asset, amount));
+                } else {
+                    for (auto i = satoshi.constBegin(); i != satoshi.constEnd(); ++i) {
+                        qint64 amount = i.value().toDouble();
+                        if (i.key() == "btc") {
+                            qint64 fee = data.value("fee").toDouble();
+                            Q_ASSERT(fee <= amount);
+                            amount -= fee;
+                            if (amount == 0) continue; // just fee
+                        }
+                        Asset* asset = wallet->getOrCreateAsset(i.key());
+                        m_amounts.append(new TransactionAmount(this, asset, amount));
+                    }
+                }
+            } else {
+                Q_UNREACHABLE();
+            }
+        } else {
+            qint64 amount = satoshi.value("btc").toDouble();
+            m_amounts.append(new TransactionAmount(this, amount));
+        }
+
+        emit amountsChanged();
+    }
 }
 
 void Transaction::copyTxhashToClipboard() const
