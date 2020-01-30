@@ -5,6 +5,34 @@
 #include <QJsonObject>
 
 class Account;
+class Asset;
+class Transaction;
+
+class TransactionAmount : public QObject
+{
+    Q_OBJECT
+    Q_PROPERTY(Transaction* transaction READ transaction CONSTANT)
+    Q_PROPERTY(Asset* asset READ asset CONSTANT)
+    Q_PROPERTY(qint64 amount READ amount CONSTANT)
+
+public:
+    explicit TransactionAmount(Transaction* transaction, qint64 amount);
+    explicit TransactionAmount(Transaction* transaction, Asset* asset, qint64 amount);
+    virtual ~TransactionAmount();
+
+    Transaction* transaction() const { return m_transaction; }
+
+    Asset* asset() const { return m_asset; }
+
+    qint64 amount() const { return m_amount; }
+
+    Q_INVOKABLE QString formatAmount() const;
+
+private:
+    Transaction* const m_transaction;
+    Asset* const m_asset;
+    qint64 const m_amount;
+};
 
 class Transaction : public QObject
 {

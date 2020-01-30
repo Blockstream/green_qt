@@ -1,4 +1,5 @@
 #include "account.h"
+#include "asset.h"
 #include "json.h"
 #include "network.h"
 #include "transaction.h"
@@ -7,6 +8,36 @@
 
 #include <QClipboard>
 #include <QGuiApplication>
+
+TransactionAmount::TransactionAmount(Transaction *transaction, qint64 amount)
+    : TransactionAmount(transaction, nullptr, amount)
+{
+}
+
+TransactionAmount::TransactionAmount(Transaction* transaction, Asset* asset, qint64 amount)
+    : QObject(transaction)
+    , m_transaction(transaction)
+    , m_asset(asset)
+    , m_amount(amount)
+{
+    Q_ASSERT(m_transaction);
+    Q_ASSERT(!m_asset || m_asset->wallet() == transaction->account()->wallet());
+    Q_ASSERT(m_amount > 0);
+}
+
+TransactionAmount::~TransactionAmount()
+{
+}
+
+QString TransactionAmount::formatAmount() const
+{
+    QString prefix = m_transaction->data().value("type").toString() != "incoming" ? "-" : "";
+    if (m_asset) {
+        return prefix + m_asset->formatAmount(m_amount, true);
+    } else {
+        return prefix + m_transaction->account()->wallet()->formatAmount(m_amount, true);
+    }
+}
 
 Transaction::Transaction(Account* account)
     : QObject(account)

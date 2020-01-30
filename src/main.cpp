@@ -92,6 +92,7 @@ int main(int argc, char *argv[])
     qmlRegisterUncreatableType<Network>("Blockstream.Green", 0, 1, "Network", "Networks are created by NetworkManager");
     qmlRegisterType<Wallet>("Blockstream.Green", 0, 1, "Wallet");
     qmlRegisterUncreatableType<Transaction>("Blockstream.Green", 0, 1, "Transaction", "Transactions are created by accounts");
+    qmlRegisterUncreatableType<TransactionAmount>("Blockstream.Green", 0, 1, "TransactionAmount", "Instantiated automatically");
 
     qmlRegisterType<ReceiveAddress>("Blockstream.Green", 0, 1, "ReceiveAddress");
     qmlRegisterType<TwoFactorController>("Blockstream.Green", 0, 1, "TwoFactorController");
