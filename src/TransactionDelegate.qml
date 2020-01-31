@@ -52,9 +52,9 @@ ItemDelegate {
 
         ColumnLayout {
             Label {
+                color: tx.type === 'incoming' ? Material.accentColor : Material.foreground
                 Layout.alignment: Qt.AlignRight
-                color: tx.type === 'incoming' ? 'green' : 'white'
-                text: `${tx.type === 'incoming' ? '+' : '-'}${formatAmount(tx.satoshi.btc)}`
+                text: transaction.amounts.length > 1 ? qsTr('id_multiple_assets') : transaction.amounts[0].formatAmount(wallet.settings.unit)
             }
 
             Label {

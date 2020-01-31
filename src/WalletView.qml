@@ -37,7 +37,7 @@ GridLayout {
     function transactionStatus(transaction) {
         const confirmations = transactionConfirmations(transaction);
         if (confirmations === 0) return qsTr('id_unconfirmed');
-        if (confirmations < 6) return qsTr('id_d6_confirmations').arg(confirmations);
+        if (!wallet.liquid && confirmations < 6) return qsTr('id_d6_confirmations').arg(confirmations);
         return qsTr('id_completed');
     }
 
