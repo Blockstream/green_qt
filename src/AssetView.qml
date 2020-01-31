@@ -34,7 +34,7 @@ Page {
             Layout.rightMargin: 32
             flat: true
             text: qsTr('id_view_in_explorer')
-            onClicked: Qt.openUrlExternally(`https://blockstream.info/liquid/asset/${balance.asset.id}`)
+            onClicked: balance.asset.openInExplorer()
         }
     }
 

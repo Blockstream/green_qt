@@ -1,6 +1,8 @@
 #include "asset.h"
 #include "wallet.h"
 
+#include <QDesktopServices>
+#include <QUrl>
 #include <QtMath>
 
 Asset::Asset(const QString& id, Wallet* wallet)
@@ -61,4 +63,9 @@ QString Asset::formatAmount(qint64 amount, bool include_ticker) const
     }
 
     return str;
+}
+
+void Asset::openInExplorer() const
+{
+    QDesktopServices::openUrl({ "https://blockstream.info/liquid/asset/" + m_id });
 }

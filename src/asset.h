@@ -35,6 +35,9 @@ public:
     qint64 parseAmount(const QString& amount) const;
     QString formatAmount(qint64 amount, bool include_ticker) const;
 
+public slots:
+    void openInExplorer() const;
+
 signals:
     void iconChanged();
     void dataChanged();
