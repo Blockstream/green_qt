@@ -84,6 +84,11 @@ GridLayout {
         }
     ]
 
+    Action {
+        shortcut: 'CTRL+,'
+        onTriggered: window.location = '/settings'
+    }
+
     RowLayout {
         Layout.alignment: Qt.AlignRight
         Layout.leftMargin: 30
