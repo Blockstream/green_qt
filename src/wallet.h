@@ -122,9 +122,15 @@ signals:
     void settingsChanged();
 
     void configChanged();
+
+protected:
+    bool eventFilter(QObject* object, QEvent* event) override;
+    void timerEvent(QTimerEvent* event) override;
+
 private:
     void setConnection(ConnectionStatus connection);
     void setAuthentication(AuthenticationStatus authentication);
+    void setSettings(const QJsonObject& settings);
     void setBalance(const quint64);
     void connectNow();
 
@@ -151,6 +157,7 @@ public:
     QString m_proxy;
     bool m_use_tor{false};
     quint64 m_balance;
+    int m_logout_timer{-1};
 };
 
 #endif // GREEN_WALLET_H

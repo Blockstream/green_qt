@@ -259,8 +259,7 @@ void Wallet::handleNotification(const QJsonObject &notification)
     }
 
     if (event == "settings") {
-        m_settings = data.toObject();
-        emit settingsChanged();
+        setSettings(data.toObject());
         return;
     }
 
@@ -612,9 +611,9 @@ void Wallet::updateSettings()
     GA_json* settings;
     int err = GA_get_settings(m_session, &settings);
     Q_ASSERT(err == GA_OK);
-    m_settings = Json::toObject(settings);
+    auto data = Json::toObject(settings);
     GA_destroy_json(settings);
-    emit settingsChanged();
+    setSettings(data);
 }
 
 void Wallet::setConnection(ConnectionStatus connection)
@@ -699,4 +698,41 @@ Asset* Wallet::getOrCreateAsset(const QString& id)
         m_assets.insert(key, asset);
     }
     return asset;
+}
+
+void Wallet::setSettings(const QJsonObject& settings)
+{
+    if (m_settings == settings) return;
+    m_settings = settings;
+    emit settingsChanged();
+
+    if (m_logout_timer != -1 ) killTimer(m_logout_timer);
+    int altimeout = m_settings.value("altimeout").toInt();
+    if (altimeout > 0) {
+        m_logout_timer = startTimer(altimeout * 60 * 1000);
+        qApp->installEventFilter(this);
+    } else {
+        qApp->removeEventFilter(this);
+    }
+}
+
+bool Wallet::eventFilter(QObject* object, QEvent* event)
+{
+    if (event->type() == QEvent::KeyPress || event->type() == QEvent::MouseMove) {
+        Q_ASSERT(m_logout_timer != -1);
+        killTimer(m_logout_timer);
+        int altimeout = m_settings.value("altimeout").toInt();
+        m_logout_timer = startTimer(altimeout * 60 * 1000);
+    }
+    return QObject::eventFilter(object, event);
+}
+
+void Wallet::timerEvent(QTimerEvent* event)
+{
+    if (event->timerId() == m_logout_timer) {
+        killTimer(m_logout_timer);
+        m_logout_timer = -1;
+        qApp->removeEventFilter(this);
+        disconnect();
+    }
 }
