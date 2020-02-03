@@ -20,6 +20,53 @@ Page {
         }
     }
 
+    Component {
+        id: liquid_amount_delegate
+        RowLayout {
+            property TransactionAmount amount: modelData
+
+            spacing: 16
+
+
+            AssetIcon {
+                asset: amount.asset
+            }
+
+            ColumnLayout {
+                Label {
+                    Layout.fillWidth: true
+                    text: amount.asset.name
+                    font.pixelSize: 14
+                    elide: Label.ElideRight
+                }
+
+                Label {
+                    visible: 'entity' in amount.asset.data
+                    Layout.fillWidth: true
+                    opacity: 0.5
+                    text: amount.asset.data.entity ? amount.asset.data.entity.domain : ''
+                    elide: Label.ElideRight
+                }
+            }
+
+            Label {
+                text: amount.formatAmount(wallet.settings.unit)
+            }
+        }
+    }
+
+    Component {
+        id: bitcoin_amount_delegate
+        RowLayout {
+            property TransactionAmount amount: modelData
+
+            spacing: 16
+
+            Label {
+                text: amount.formatAmount(wallet.settings.unit)
+            }
+        }
+    }
     background: Item {}
 
     header: RowLayout {
@@ -89,9 +136,9 @@ Page {
                     color: 'gray'
                 }
 
-                Label {
-                    color: transaction.data.type === 'incoming' ? 'green' : 'white'
-                    text: `${transaction.data.type === 'incoming' ? '+' : '-'}${formatAmount(transaction.data.satoshi.btc)}`
+                Repeater {
+                    model: transaction.amounts
+                    delegate: wallet.network.liquid ? liquid_amount_delegate : bitcoin_amount_delegate
                 }
             }
 
