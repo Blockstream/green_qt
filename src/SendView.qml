@@ -117,7 +117,7 @@ StackView {
 
             Binding on amount {
                 when: send_all_button.checked && !wallet.network.liquid
-                value: convertToWalletUnit(account.balance)
+                value: wallet.formatAmount(account.balance, false, wallet.settings.unit)
             }
         }
 
