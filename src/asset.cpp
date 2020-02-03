@@ -40,9 +40,11 @@ qint64 Asset::parseAmount(const QString& amount) const
         return wallet()->amountToSats(amount);
     }
 
+    QString sanitized_amount = amount;
+    sanitized_amount.replace(',', '.');
     auto precision = m_data.value("precision").toInt(0);
     bool ok;
-    double result = amount.toDouble(&ok);
+    double result = sanitized_amount.toDouble(&ok);
     if (!ok) return 0;
     result *= qPow(10, precision);
     return result;

@@ -676,10 +676,12 @@ qint64 Wallet::amountToSats(const QString& amount) const
 qint64 Wallet::parseAmount(const QString& amount, const QString& unit) const
 {
     if (amount.isEmpty()) return 0;
-    auto details = Json::fromObject({{ unit == "\u00B5BTC" ? "ubtc" : unit.toLower(), amount }});
+    QString sanitized_amount = amount;
+    sanitized_amount.replace(',', '.');
+    auto details = Json::fromObject({{ unit == "\u00B5BTC" ? "ubtc" : unit.toLower(), sanitized_amount }});
     GA_json* balance;
     int err = GA_convert_amount(m_session, details, &balance);
-    Q_ASSERT(err == GA_OK);
+    if (err != GA_OK) return 0;
     GA_destroy_json(details);
     QJsonObject result = Json::toObject(balance);
     GA_destroy_json(balance);
