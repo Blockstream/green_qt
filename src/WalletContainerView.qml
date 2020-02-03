@@ -6,10 +6,33 @@ import QtQuick.Layouts 1.12
 Page {
     property Wallet wallet
 
+    background: Item {}
+
+    header: Item {
+        id: header_item
+        height: column.implicitHeight
+        ColumnLayout {
+            id: column
+            width: parent.width
+            anchors.bottom: parent.bottom
+
+            Image {
+                Layout.alignment: Qt.AlignHCenter
+                Layout.topMargin: 128
+                source: icons[wallet.network.id]
+            }
+            Label {
+                Layout.alignment: Qt.AlignHCenter
+                Layout.bottomMargin: 32
+                text: wallet.name
+                font.pixelSize: 32
+            }
+        }
+    }
+
     StackView {
         id: stack_view
         anchors.fill: parent
-        anchors.topMargin: 20
     }
 
     states: [
@@ -32,6 +55,10 @@ Page {
         State {
             when: wallet.connection === Wallet.Connected && wallet.authentication === Wallet.Authenticated
             name: 'LOGGED'
+            PropertyChanges {
+                target: header_item
+                height: 0
+            }
         }
     ]
 
@@ -40,35 +67,42 @@ Page {
             to: 'DISCONNECTED'
             StackViewPushAction {
                 stackView: stack_view
-                Item { ConnectView { anchors.centerIn: parent } }
+                Item { ConnectView { anchors.horizontalCenter: parent.horizontalCenter } }
             }
         },
         Transition {
             to: "CONNECTING"
             StackViewPushAction {
                 stackView: stack_view
-                Item { ConnectingView { anchors.centerIn: parent } }
+                Item { ConnectingView { anchors.horizontalCenter: parent.horizontalCenter } }
             }
         },
         Transition {
             to: 'LOGIN'
             StackViewPushAction {
                 stackView: stack_view
-                Item { LoginView { anchors.centerIn: parent } }
+                Item { LoginView { anchors.horizontalCenter: parent.horizontalCenter } }
             }
         },
         Transition {
             to: 'LOGING'
             StackViewPushAction {
                 stackView: stack_view
-                Item { ConnectingView { anchors.centerIn: parent } }
+                Item { ConnectingView { anchors.horizontalCenter: parent.horizontalCenter } }
             }
         },
         Transition {
             to: 'LOGGED'
-            StackViewPushAction {
-                stackView: stack_view
-                WalletView { }
+            SequentialAnimation {
+                SmoothedAnimation {
+                    target: header_item
+                    duration: 256
+                    property: 'height'
+                }
+                StackViewPushAction {
+                    stackView: stack_view
+                    WalletView { }
+                }
             }
         }
     ]

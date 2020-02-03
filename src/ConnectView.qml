@@ -3,17 +3,6 @@ import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.12
 
 Column {
-    Image {
-        anchors.horizontalCenter: parent.horizontalCenter
-        source: icons[wallet.network.id]
-    }
-
-    Label {
-        anchors.horizontalCenter: parent.horizontalCenter
-        text: wallet.name
-        font.pixelSize: 32
-    }
-
     FlatButton {
         anchors.horizontalCenter: parent.horizontalCenter
         text: qsTr('id_log_in')

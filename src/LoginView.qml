@@ -15,20 +15,6 @@ Column {
         }
     }
 
-    FlatButton {
-        visible: false
-        text: "TEST"
-        onClicked: wallet.test()
-    }
-
-    Label {
-        visible: false
-        font.capitalization: Font.AllUppercase
-        font.pixelSize: 30
-        text: wallet.name
-        Layout.alignment: Qt.AlignHCenter
-    }
-
     Label {
         font.capitalization: Font.AllUppercase
         horizontalAlignment: Text.AlignHCenter
