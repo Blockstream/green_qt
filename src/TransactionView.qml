@@ -67,6 +67,7 @@ Page {
             }
         }
     }
+
     background: Item {}
 
     header: RowLayout {
@@ -82,10 +83,11 @@ Page {
             text: qsTr('id_transaction_details') + ' - ' + tx_direction(transaction.data.type)
             font.pixelSize: 14
             font.capitalization: Font.AllUppercase
+            Layout.fillWidth: true
         }
 
         Button {
-            Layout.rightMargin: 32
+            Layout.rightMargin: 16
             flat: true
             text: qsTr('id_view_in_explorer')
             onClicked: transaction.openInExplorer()
@@ -95,12 +97,12 @@ Page {
     ScrollView {
         id: scroll_view
         anchors.fill: parent
-        anchors.leftMargin: 20
+        anchors.leftMargin: 16
         clip: true
 
-        Column {
-            width: scroll_view.width - 20
-            spacing: 32
+        ColumnLayout {
+            width: scroll_view.width - 16
+            spacing: 16
 
             Column {
                 spacing: 8
@@ -128,7 +130,7 @@ Page {
                 }
             }
 
-            Column {
+            ColumnLayout {
                 spacing: 8
 
                 Label {
