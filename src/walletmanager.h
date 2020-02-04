@@ -16,7 +16,7 @@ class WalletManager : public QObject
     Q_PROPERTY(QQmlListProperty<Wallet> wallets READ wallets NOTIFY walletsChanged)
 
 public:
-    explicit WalletManager(QObject *parent = nullptr);
+    static WalletManager* instance();
 
     Q_INVOKABLE Wallet* createWallet();
 
@@ -33,6 +33,8 @@ public slots:
     Wallet* signup(const QString& proxy, bool use_tor, Network* network, const QString& name, const QStringList &mnemonic, const QByteArray& pin);
 
 private:
+    explicit WalletManager();
+
     QVector<Wallet*> m_wallets;
 };
 

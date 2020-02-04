@@ -1,10 +1,7 @@
 #include "devicemanager.h"
 #include "devices/device.h"
 
-DeviceManager::DeviceManager(QObject *parent) : QObject(parent)
-{
-
-}
+DeviceManager::DeviceManager() {}
 
 QQmlListProperty<Device> DeviceManager::devices()
 {

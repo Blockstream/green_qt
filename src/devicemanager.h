@@ -14,7 +14,7 @@ class DeviceManager : public QObject
     Q_PROPERTY(QQmlListProperty<Device> devices READ devices NOTIFY devicesChanged)
 
 public:
-    explicit DeviceManager(QObject *parent = nullptr);
+    static DeviceManager* instance();
 
     QQmlListProperty<Device> devices();
 
@@ -26,6 +26,7 @@ signals:
 public slots:
 
 protected:
+    explicit DeviceManager();
     QVector<Device*> m_devices;
 };
 

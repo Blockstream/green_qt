@@ -32,8 +32,12 @@ QSet<QString> g_wordset{QSet<QString>::fromList(g_wordlist)};
 
 } // namespace
 
-Wally::Wally(QObject* parent) : QObject(parent) {}
-Wally::~Wally() {}
+Wally *Wally::instance()
+{
+    static Wally wally;
+    return &wally;
+}
+
 QStringList Wally::wordlist() const { return g_wordlist; }
 
 WordValidator::WordValidator(QObject *parent) : QValidator(parent) {}

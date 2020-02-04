@@ -55,6 +55,76 @@ QString Translator::translate(const char *context, const char *sourceText, const
     return QTranslator::translate("green", sourceText, disambiguation, n);
 }
 
+namespace Green {
+
+    namespace {
+
+        const char* uri = "Blockstream.Green";
+        const int version_major = 0;
+        const int version_minor = 1;
+
+        template <typename T>
+        void registerUncreatableType(const char* qml_name)
+        {
+            qmlRegisterUncreatableType<T>(uri, version_major, version_minor, qml_name, QLatin1String("Trying to create uncreatable: %1").arg(qml_name));
+        }
+
+        template <typename T>
+        void registerType(const char* qml_name)
+        {
+            qmlRegisterType<T>(uri, version_major, version_minor, qml_name);
+        }
+
+        template <typename T>
+        void registerType(const char* uri, const char* qml_name)
+        {
+            qmlRegisterType<T>(uri, version_major, version_minor, qml_name);
+        }
+
+
+        template<typename T>
+        void registerSingletonInstance(const char* qml_name)
+        {
+            qmlRegisterSingletonInstance(uri, version_major, version_minor, qml_name, T::instance());
+        }
+
+    } // namespace
+
+    void registerTypes()
+    {
+        registerUncreatableType<Account>("Account");
+        registerUncreatableType<Asset>("Asset");
+        registerUncreatableType<Balance>("Balance");
+        registerUncreatableType<Controller>("Controller");
+        registerUncreatableType<Device>("Device");
+        registerUncreatableType<Network>("Network");
+        registerUncreatableType<Transaction>("Transaction");
+        registerUncreatableType<TransactionAmount>("TransactionAmount");
+        registerUncreatableType<Wallet>("Wallet");
+
+        registerType<CreateAccountController>("CreateAccountController");
+        registerType<ReceiveAddress>("ReceiveAddress");
+        registerType<RenameAccountController>("RenameAccountController");
+        registerType<SendTransactionController>("SendTransactionController");
+        registerType<SettingsController>("SettingsController");
+        registerType<TwoFactorController>("TwoFactorController");
+        registerType<WordValidator>("WordValidator");
+
+        registerSingletonInstance<NetworkManager>("NetworkManager");
+        registerSingletonInstance<WalletManager>("WalletManager");
+        registerSingletonInstance<Wally>("Wally");
+    #if defined(Q_OS_MAC)
+        registerSingletonInstance<DeviceManagerMacos>("DeviceManager");
+    #endif
+
+        registerType<Action>("Blockstream.Green.Gui", "Action");
+        registerType<Menu>("Blockstream.Green.Gui", "Menu");
+        registerType<MenuBar>("Blockstream.Green.Gui", "MenuBar");
+        registerType<Separator>("Blockstream.Green.Gui", "Separator");
+    }
+
+} // namespace Green
+
 int main(int argc, char *argv[])
 {
     QCoreApplication::setApplicationName("Green");
@@ -90,35 +160,7 @@ int main(int argc, char *argv[])
     QZXing::registerQMLTypes();
     QZXing::registerQMLImageProvider(engine);
 
-    qmlRegisterUncreatableType<Asset>("Blockstream.Green", 0, 1, "Asset", "Assets are instantiated automatically");
-    qmlRegisterUncreatableType<Balance>("Blockstream.Green", 0, 1, "Balance", "Balances are instantiated automatically");
-    qmlRegisterUncreatableType<Device>("Blockstream.Green", 0, 1, "Device", "Devices are instantiated automatically");
-    qmlRegisterUncreatableType<Network>("Blockstream.Green", 0, 1, "Network", "Networks are created by NetworkManager");
-    qmlRegisterType<Wallet>("Blockstream.Green", 0, 1, "Wallet");
-    qmlRegisterUncreatableType<Transaction>("Blockstream.Green", 0, 1, "Transaction", "Transactions are created by accounts");
-    qmlRegisterUncreatableType<TransactionAmount>("Blockstream.Green", 0, 1, "TransactionAmount", "Instantiated automatically");
-
-    qmlRegisterType<ReceiveAddress>("Blockstream.Green", 0, 1, "ReceiveAddress");
-    qmlRegisterType<TwoFactorController>("Blockstream.Green", 0, 1, "TwoFactorController");
-    qmlRegisterType<CreateAccountController>("Blockstream.Green", 0, 1, "CreateAccountController");
-    qmlRegisterType<RenameAccountController>("Blockstream.Green", 0, 1, "RenameAccountController");
-    qmlRegisterType<WordValidator>("Blockstream.Green", 0, 1, "WordValidator");
-    qmlRegisterType<SendTransactionController>("Blockstream.Green", 0, 1, "SendTransactionController");
-    qmlRegisterType<SettingsController>("Blockstream.Green", 0, 1, "SettingsController");
-    qmlRegisterUncreatableType<Account>("Blockstream.Green", 0, 1, "Account", "Accounts are created by the wallet");
-    qmlRegisterUncreatableType<Controller>("Blockstream.Green", 0, 1, "Controller", "Controller is an abstract type");
-
-    qmlRegisterSingletonInstance("Blockstream.Green", 0, 1, "NetworkManager", NetworkManager::instance());
-    qmlRegisterSingletonInstance("Blockstream.Green", 0, 1, "WalletManager", new WalletManager);
-    qmlRegisterSingletonInstance("Blockstream.Green", 0, 1, "Wally", new Wally);
-#if defined(Q_OS_MAC)
-    qmlRegisterSingletonInstance("Blockstream.Green", 0, 1, "DeviceManager", new DeviceManagerMacos);
-#endif
-
-    qmlRegisterType<Action>("Blockstream.Green.Gui", 0, 1, "Action");
-    qmlRegisterType<Menu>("Blockstream.Green.Gui", 0, 1, "Menu");
-    qmlRegisterType<MenuBar>("Blockstream.Green.Gui", 0, 1, "MenuBar");
-    qmlRegisterType<Separator>("Blockstream.Green.Gui", 0, 1, "Separator");
+    Green::registerTypes();
 
     QMainWindow main_window;
     engine.rootContext()->setContextProperty("main_window", &main_window);

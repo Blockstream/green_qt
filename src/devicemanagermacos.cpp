@@ -239,8 +239,13 @@ static void DeviceRemovalCallback(void* context, IOReturn /* result */, void* /*
     }
 }
 
-DeviceManagerMacos::DeviceManagerMacos(QObject* parent)
-    : DeviceManager(parent)
+DeviceManager* DeviceManager::instance()
+{
+    static DeviceManagerMacos device_manager;
+    return &device_manager;
+}
+
+DeviceManagerMacos::DeviceManagerMacos()
 {
     m_manager = IOHIDManagerCreate(kCFAllocatorDefault, kIOHIDManagerOptionNone);
     CFMutableArrayRef multiple = CFArrayCreateMutable(kCFAllocatorDefault, 0, &kCFTypeArrayCallBacks);

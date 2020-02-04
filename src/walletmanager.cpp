@@ -9,7 +9,7 @@
 #include <QStandardPaths>
 #include <QDir>
 
-WalletManager::WalletManager(QObject *parent) : QObject(parent)
+WalletManager::WalletManager()
 {
     auto config = Json::fromObject({{ "datadir", GetDataDir("gdk") }});
     GA_init(config);
@@ -40,6 +40,12 @@ WalletManager::WalletManager(QObject *parent) : QObject(parent)
     }
 
     settings.endArray();
+}
+
+WalletManager *WalletManager::instance()
+{
+    static WalletManager wallet_manager;
+    return &wallet_manager;
 }
 
 Wallet* WalletManager::createWallet()

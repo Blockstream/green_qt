@@ -11,8 +11,8 @@ class Wally : public QObject
     Q_PROPERTY(QStringList wordlist READ wordlist CONSTANT)
 
 public:
-    Wally(QObject* parent = nullptr);
-    virtual ~Wally();
+    static Wally* instance();
+
     QStringList wordlist() const;
 };
 

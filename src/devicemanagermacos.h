@@ -22,7 +22,7 @@ class DeviceManagerMacos : public DeviceManager
     Q_OBJECT
 
 public:
-    explicit DeviceManagerMacos(QObject *parent = nullptr);
+    explicit DeviceManagerMacos();
 
     DeviceMacOs* deviceWithHandle(int32_t usage_page, IOHIDDeviceRef handle) const;
 
