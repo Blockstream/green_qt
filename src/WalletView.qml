@@ -26,7 +26,7 @@ GridLayout {
     function formatFiat(sats) {
         const pricing = wallet.settings.pricing;
         const { fiat, fiat_currency } = wallet.convert(sats);
-        return fiat + ' ' + fiat_currency;
+        return Number(fiat).toLocaleString(Qt.locale(), 'f', 2) + ' ' + fiat_currency;
     }
 
     function transactionConfirmations(transaction) {

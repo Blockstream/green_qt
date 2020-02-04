@@ -2,6 +2,7 @@
 #include "wallet.h"
 
 #include <QDesktopServices>
+#include <QLocale>
 #include <QUrl>
 #include <QtMath>
 
@@ -57,7 +58,7 @@ QString Asset::formatAmount(qint64 amount, bool include_ticker) const
     }
 
     auto precision = m_data.value("precision").toInt(0);
-    auto str = QString::number(static_cast<qreal>(amount) / qPow(10, precision), 'f', precision);
+    auto str = QLocale::system().toString(static_cast<double>(amount) / qPow(10, precision), 'f', precision);
 
     if (include_ticker) {
         auto ticker = m_data.value("ticker").toString();
