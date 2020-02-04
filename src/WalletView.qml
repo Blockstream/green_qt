@@ -92,46 +92,49 @@ GridLayout {
         onTriggered: window.location = '/settings'
     }
 
-    RowLayout {
-        Layout.alignment: Qt.AlignRight
-        Layout.leftMargin: 30
-        Layout.rightMargin: 10
-        Layout.bottomMargin: 10
-        spacing: 10
-        Image {
-            source: icons[wallet.network.id]
-            sourceSize.width: 32
-            sourceSize.height: 32
-        }
-        Label {
-            text: wallet.name
-            font.pixelSize: 16
-            Layout.alignment: Qt.AlignVCenter
-        }
-        ToolButton {
-            text: qsTr('⋮')
-            font.pixelSize: 16
-            Layout.alignment: Qt.AlignVCenter
-            onClicked: menu.open()
+    ItemDelegate {
+        Layout.preferredWidth: accounts_list.width
+        topPadding: 16
+        width: parent.width
 
-            Menu {
-                id: menu
+        onClicked: drawer.open()
+        contentItem: RowLayout {
+            Image {
+                source: icons[wallet.network.id]
+                sourceSize.width: 32
+                sourceSize.height: 32
+            }
 
-                MenuItem {
-                    text: qsTr('id_wallets')
-                    onTriggered: drawer.open()
-                }
+            Label {
+                text: wallet.name
+                font.pixelSize: 16
+                Layout.alignment: Qt.AlignVCenter
+                Layout.fillWidth: true
+            }
 
-                MenuItem {
-                    text: qsTr('id_logout')
-                    onTriggered: wallet.disconnect()
-                }
+            ToolButton {
+                text: '⋮'
+                onClicked: menu.open()
 
-                MenuSeparator { }
+                Menu {
+                    id: menu
 
-                MenuItem {
-                    text: qsTr('id_add_new_account')
-                    onClicked: create_account_dialog.open()
+                    MenuItem {
+                        text: qsTr('id_wallets')
+                        onTriggered: drawer.open()
+                    }
+
+                    MenuSeparator { }
+
+                    MenuItem {
+                        text: qsTr('id_add_new_account')
+                        onClicked: create_account_dialog.open()
+                    }
+
+                    MenuItem {
+                        text: qsTr('id_logout')
+                        onTriggered: wallet.disconnect()
+                    }
                 }
             }
         }
