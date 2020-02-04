@@ -56,10 +56,20 @@ Item {
         width: 300
         height: parent.height
 
+        ToolButton {
+            onClicked: drawer.close()
+            icon.source: 'assets/svg/cancel.svg'
+            icon.width: 16
+            icon.height: 16
+            anchors.right: parent.right
+            anchors.margins: 16
+            anchors.top: parent.top
+        }
+
         Sidebar {
             id: sidebar
             anchors.fill: parent
-            anchors.topMargin: 50
+            anchors.topMargin: 64
         }
 
         Overlay.modal: Rectangle {
