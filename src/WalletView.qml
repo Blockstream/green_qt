@@ -7,7 +7,7 @@ import QtQuick.Layouts 1.12
 import './dialogs'
 import './views'
 
-GridLayout {
+Item {
     property var account: accounts_list.currentItem ? accounts_list.currentItem.account : undefined
 
     id: wallet_view
@@ -45,10 +45,6 @@ GridLayout {
         location = '/transactions'
         stack_view.pop()
     }
-
-    rowSpacing: 0
-    columnSpacing: 0
-    columns: 2
 
     states: [
         State {
@@ -92,178 +88,199 @@ GridLayout {
         onTriggered: window.location = '/settings'
     }
 
-    ItemDelegate {
-        Layout.preferredWidth: accounts_list.width
-        topPadding: 16
-        width: parent.width
-
-        onClicked: drawer.open()
-        contentItem: RowLayout {
-            Image {
-                source: icons[wallet.network.id]
-                sourceSize.width: 32
-                sourceSize.height: 32
-            }
-
-            Label {
-                text: wallet.name
-                font.pixelSize: 16
-                Layout.alignment: Qt.AlignVCenter
-                Layout.fillWidth: true
-            }
-
-            ToolButton {
-                text: '⋮'
-                onClicked: menu.open()
-
-                Menu {
-                    id: menu
-
-                    MenuItem {
-                        text: qsTr('id_wallets')
-                        onTriggered: drawer.open()
-                    }
-
-                    MenuSeparator { }
-
-                    MenuItem {
-                        text: qsTr('id_add_new_account')
-                        onClicked: create_account_dialog.open()
-                    }
-
-                    MenuItem {
-                        text: qsTr('id_logout')
-                        onTriggered: wallet.disconnect()
-                    }
-                }
-            }
-        }
-    }
-
-    Item {
-        Layout.fillWidth: true
-        height: layout.height
+    Rectangle {
+        x: account_header.x
+        y: 0
+        color: 'black'
+        width: parent.width - x
+        height: parent.height
+        opacity: 0.1
 
         Rectangle {
-            z: -1
-            color: 'black'
-            opacity: 0.2
-            anchors.fill: parent
-            anchors.bottomMargin: -10000
-            anchors.rightMargin: -10000
-            anchors.topMargin: -10000
-        }
-
-        RowLayout {
-            id: layout
-            x: 16
-            width: parent.width - 32
-
-            Label {
-                id: title_label
-                font.pixelSize: 16
-                text: account.name
-                Layout.alignment: Qt.AlignVCenter
-            }
-
-            Item {
-                Layout.fillWidth: true
-                height: 1
-            }
-
-            ToolButton {
-                id: settings_tool_button
-                checked: window.location === '/settings'
-                checkable: true
-                Layout.alignment: Qt.AlignBottom
-                icon.source: 'assets/svg/settings.svg'
-                icon.width: 24
-                icon.height: 24
-                onToggled: window.location = checked ? '/settings' : '/transactions'
+            width: parent.height
+            height: 32
+            x: 32
+            opacity: 1
+            transformOrigin: Item.TopLeft
+            rotation: 90
+            gradient: Gradient {
+                GradientStop { position: 1.0; color: '#ff000000' }
+                GradientStop { position: 0.0; color: '#00000000' }
             }
         }
     }
 
-    AccountListView {
-        id: accounts_list
-        Layout.fillHeight: true
-        Layout.preferredWidth: 320
-        clip: true
-        topMargin: 1
-    }
+    GridLayout {
+        anchors.fill: parent
+        rowSpacing: 0
+        columnSpacing: 0
+        columns: 2
 
-    StackView {
-        id: stack_view
-        clip: true
-        Layout.fillWidth: true
-        Layout.fillHeight: true
+        ItemDelegate {
+            Layout.preferredWidth: accounts_list.width
+            topPadding: 16
+            width: parent.width
 
-        initialItem: Page {
-            background: Item { }
+            onClicked: drawer.open()
+            contentItem: RowLayout {
+                Image {
+                    source: icons[wallet.network.id]
+                    sourceSize.width: 32
+                    sourceSize.height: 32
+                }
 
-            header: RowLayout {
-                TabBar {
-                    leftPadding: 8
-                    background: Item {}
-                    id: tab_bar
+                Label {
+                    text: wallet.name
+                    font.pixelSize: 16
+                    Layout.alignment: Qt.AlignVCenter
+                    Layout.fillWidth: true
+                }
 
-                    TabButton {
-                        text: qsTr('id_transactions')
-                        width: 160
+                ToolButton {
+                    text: '⋮'
+                    onClicked: menu.open()
+
+                    Menu {
+                        id: menu
+
+                        MenuItem {
+                            text: qsTr('id_wallets')
+                            onTriggered: drawer.open()
+                        }
+
+                        MenuSeparator { }
+
+                        MenuItem {
+                            text: qsTr('id_add_new_account')
+                            onClicked: create_account_dialog.open()
+                        }
+
+                        MenuItem {
+                            text: qsTr('id_logout')
+                            onTriggered: wallet.disconnect()
+                        }
+                    }
+                }
+            }
+        }
+
+        Item {
+            id: account_header
+            Layout.fillWidth: true
+            height: layout.height + 16
+
+            RowLayout {
+                id: layout
+                x: 16
+                y: 12
+                width: parent.width - 32
+
+                Label {
+                    id: title_label
+                    font.pixelSize: 16
+                    text: account.name
+                    Layout.alignment: Qt.AlignVCenter
+                }
+
+                Item {
+                    Layout.fillWidth: true
+                    height: 1
+                }
+
+                ToolButton {
+                    id: settings_tool_button
+                    checked: window.location === '/settings'
+                    checkable: true
+                    Layout.alignment: Qt.AlignBottom
+                    icon.source: 'assets/svg/settings.svg'
+                    icon.width: 24
+                    icon.height: 24
+                    onToggled: window.location = checked ? '/settings' : '/transactions'
+                }
+            }
+        }
+
+        AccountListView {
+            id: accounts_list
+            Layout.fillHeight: true
+            Layout.preferredWidth: 320
+            clip: true
+            topMargin: 1
+        }
+
+        StackView {
+            id: stack_view
+            clip: true
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+
+            initialItem: Page {
+                background: Item { }
+
+                header: RowLayout {
+                    TabBar {
+                        leftPadding: 8
+                        background: Item {}
+                        id: tab_bar
+
+                        TabButton {
+                            text: qsTr('id_transactions')
+                            width: 160
+                        }
+
+                        TabButton {
+                            visible: wallet.network.liquid
+                            text: qsTr('id_assets')
+                            width: 160
+                        }
+                    }
+                }
+
+                StackLayout {
+                    id: stack_layout
+                    clip: true
+                    anchors.fill: parent
+                    currentIndex: tab_bar.currentIndex
+
+                    TransactionListView {
                     }
 
-                    TabButton {
-                        visible: wallet.network.liquid
-                        text: qsTr('id_assets')
-                        width: 160
+                    AssetListView {
+                        onClicked: stack_view.push(asset_view_component, { balance })
                     }
                 }
             }
 
-            StackLayout {
-                id: stack_layout
-                clip: true
-                anchors.fill: parent
-                currentIndex: tab_bar.currentIndex
+            Component {
+                id: send_dialog
+                SendDialog {}
+            }
 
-                TransactionListView {
-                }
-
-                AssetListView {
-                    onClicked: stack_view.push(asset_view_component, { balance })
-                }
+            Component {
+                id: receive_dialog
+                ReceiveDialog { }
             }
         }
 
         Component {
-            id: send_dialog
-            SendDialog {}
+            id: transaction_view_component
+
+            TransactionView {
+
+            }
         }
 
         Component {
-            id: receive_dialog
-            ReceiveDialog { }
+            id: asset_view_component
+            AssetView {}
         }
-    }
 
-    Component {
-        id: transaction_view_component
-
-        TransactionView {
-
+        RenameAccountDialog {
+            id: rename_account_dialog
         }
-    }
 
-    Component {
-        id: asset_view_component
-        AssetView {}
-    }
-
-    RenameAccountDialog {
-        id: rename_account_dialog
-    }
-
-    CreateAccountDialog {
-        id: create_account_dialog
+        CreateAccountDialog {
+            id: create_account_dialog
+        }
     }
 }
