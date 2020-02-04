@@ -30,6 +30,34 @@ ApplicationWindow {
         }
     }
 
+    function alpha(index) {
+        if (index % 4 === 0) return 1
+        if (index % 2 === 0) return 0.5
+        return 0.25
+    }
+
+    Item {
+        id: grid
+        visible: false
+        property int size: 8
+        anchors.fill: parent
+        opacity: 0.1
+        Repeater {
+            model: Math.ceil(grid.height / grid.size)
+            Rectangle { y: index * grid.size; width: grid.width; height: 1; color: 'white'; opacity: alpha(index) }
+        }
+        Repeater {
+            model: Math.ceil(grid.width / grid.size)
+            Rectangle { x: index * grid.size; height: grid.height; width: 1; color: 'white'; opacity: alpha(index) }
+        }
+    }
+
+    Action {
+        enabled: engine.debug
+        shortcut: 'CTRL+G'
+        onTriggered: grid.visible = !grid.visible
+    }
+
     Connections {
         target: engine
         onSourceChanged: loader.reload()
