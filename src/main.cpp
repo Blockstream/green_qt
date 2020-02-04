@@ -65,6 +65,10 @@ int main(int argc, char *argv[])
 
     QApplication app(argc, argv);
 
+    // Reset the locale that is used for number formatting, see:
+    // https://doc.qt.io/qt-5/qcoreapplication.html#locale-settings
+    setlocale(LC_NUMERIC, "C");
+
     app.styleHints()->setTabFocusBehavior(Qt::TabFocusAllControls);
 
     const QLocale locale = QLocale::system();
