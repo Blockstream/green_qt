@@ -17,7 +17,7 @@ ControllerDialog {
     }]
 
     title: qsTr('id_set_twofactor_threshold')
-    width: 300
+    width: 400
     height: 250
     controller: TwoFactorController { }
     initialItem: WizardPage {
