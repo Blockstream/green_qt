@@ -19,4 +19,6 @@ ListView {
     }
 
     ScrollBar.vertical: ScrollBar { }
+
+    ScrollShadow {}
 }

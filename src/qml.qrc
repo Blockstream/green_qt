@@ -68,5 +68,6 @@
         <file>AssetView.qml</file>
         <file>AccountListView.qml</file>
         <file>AssetIcon.qml</file>
+        <file>ScrollShadow.qml</file>
     </qresource>
 </RCC>
