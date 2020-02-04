@@ -8,8 +8,6 @@ import './views'
 ScrollView {
     id: scroll_view
     clip: true
-    anchors.fill: parent
-    anchors.leftMargin: 8
 
     Column {
         WalletsSidebarItem {

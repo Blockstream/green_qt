@@ -70,6 +70,7 @@ Item {
             id: sidebar
             anchors.fill: parent
             anchors.topMargin: 64
+            anchors.leftMargin: 8
         }
 
         Overlay.modal: Rectangle {
