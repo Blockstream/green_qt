@@ -117,12 +117,28 @@ Item {
         columns: 2
 
         ItemDelegate {
+            id: account_title
             Layout.preferredWidth: accounts_list.width
             topPadding: 16
             width: parent.width
 
             onClicked: drawer.open()
             contentItem: RowLayout {
+                Item {
+                    clip: true
+                    implicitWidth: account_title.hovered ? 32 : 0
+                    implicitHeight: 32
+                    Behavior on implicitWidth { SmoothedAnimation {} }
+                    ToolButton {
+                        enabled: false
+                        anchors.centerIn: parent
+                        icon.source:'assets/svg/arrow_left.svg'
+                        icon.width: 16
+                        icon.height: 16
+                        icon.color: 'white'
+                    }
+                }
+
                 Image {
                     source: icons[wallet.network.id]
                     sourceSize.width: 32
