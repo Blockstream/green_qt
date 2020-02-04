@@ -61,6 +61,9 @@ GridLayout {
             PropertyChanges {
                 target: settings_tool_button
                 icon.source: 'assets/svg/cancel.svg'
+                icon.width: 16
+                icon.height: 16
+                icon.color: 'transparent'
             }
         }
     ]
