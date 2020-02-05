@@ -34,8 +34,7 @@ Item {
         return 1 + transaction.account.wallet.events.block.block_height - transaction.data.block_height;
     }
 
-    function transactionStatus(transaction) {
-        const confirmations = transactionConfirmations(transaction);
+    function transactionStatus(confirmations) {
         if (confirmations === 0) return qsTr('id_unconfirmed');
         if (!wallet.liquid && confirmations < 6) return qsTr('id_d6_confirmations').arg(confirmations);
         return qsTr('id_completed');

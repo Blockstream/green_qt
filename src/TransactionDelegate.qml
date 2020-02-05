@@ -8,6 +8,7 @@ import QtQuick.Layouts 1.12
 ItemDelegate {
     property Transaction transaction
     property var tx: transaction.data
+    property int confirmations: transactionConfirmations(transaction)
 
     background.opacity: 0.4
     spacing: 8
@@ -59,8 +60,8 @@ ItemDelegate {
 
             Label {
                 Layout.alignment: Qt.AlignRight
-                color: transactionConfirmations(transaction) === 0 ? 'red' : 'white'
-                text: transactionStatus(transaction)
+                color: confirmations === 0 ? 'red' : 'white'
+                text: transactionStatus(confirmations)
             }
         }
 
