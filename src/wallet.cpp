@@ -381,13 +381,7 @@ void Wallet::loginWithPin(const QByteArray& pin)
             return;
         }
 
-        GA_json* currencies;
-        err = GA_get_available_currencies(m_session, &currencies);
-        qDebug() << "GA_get_available_currencies result: " << err;
-        Q_ASSERT(err == GA_OK);
-        m_currencies = Json::toObject(currencies);
-        GA_destroy_json(currencies);
-
+        updateCurrencies();
         updateSettings();
 
         reload();
@@ -473,6 +467,7 @@ void Wallet::signup(const QStringList& mnemonic, const QByteArray& pin)
             settings.endArray();
         }, Qt::BlockingQueuedConnection);
 
+        updateCurrencies();
         reload();
         updateConfig();
 
@@ -501,6 +496,7 @@ void Wallet::login(const QStringList& mnemonic, const QString& password)
 
         if (result.value("status") != "done") return setAuthentication(Unauthenticated);
 
+        updateCurrencies();
         reload();
         updateConfig();
 
@@ -616,6 +612,15 @@ void Wallet::updateSettings()
     auto data = Json::toObject(settings);
     GA_destroy_json(settings);
     setSettings(data);
+}
+
+void Wallet::updateCurrencies()
+{
+    GA_json* currencies;
+    int err = GA_get_available_currencies(m_session, &currencies);
+    Q_ASSERT(err == GA_OK);
+    m_currencies = Json::toObject(currencies);
+    GA_destroy_json(currencies);
 }
 
 void Wallet::setConnection(ConnectionStatus connection)

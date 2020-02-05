@@ -133,6 +133,7 @@ private:
     void setSettings(const QJsonObject& settings);
     void setBalance(const quint64);
     void connectNow();
+    void updateCurrencies();
 
 public:
     int m_index{0};
