@@ -36,7 +36,7 @@ Item {
 
     function transactionStatus(confirmations) {
         if (confirmations === 0) return qsTr('id_unconfirmed');
-        if (!wallet.liquid && confirmations < 6) return qsTr('id_d6_confirmations').arg(confirmations);
+        if (!wallet.network.liquid && confirmations < 6) return qsTr('id_d6_confirmations').arg(confirmations);
         return qsTr('id_completed');
     }
 
