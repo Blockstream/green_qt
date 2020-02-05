@@ -83,6 +83,7 @@ void Wallet::connectNow()
             res = GA_disconnect(m_session);
             Q_ASSERT(res == GA_OK);
 
+            m_session = nullptr;
             QTimer::singleShot(1000, this, [this] { connectNow(); });
             return;
         }
