@@ -39,6 +39,7 @@ private:
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(ConnectionStatus connection READ connection NOTIFY connectionChanged)
     Q_PROPERTY(AuthenticationStatus authentication READ authentication NOTIFY authenticationChanged)
+    Q_PROPERTY(bool locked READ isLocked NOTIFY lockedChanged)
     Q_PROPERTY(QJsonObject settings READ settings NOTIFY settingsChanged)
     Q_PROPERTY(QJsonObject currencies READ currencies CONSTANT)
     Q_PROPERTY(QQmlListProperty<Account> accounts READ accounts NOTIFY accountsChanged)
@@ -60,6 +61,9 @@ public:
 
     ConnectionStatus connection() const { return m_connection; }
     AuthenticationStatus authentication() const { return m_authentication; }
+
+    bool isLocked() const { return m_locked; }
+    void setLocked(bool locked);
 
     QJsonObject settings() const;
     QJsonObject currencies() const;
@@ -108,6 +112,7 @@ signals:
     void networkChanged(Network* network);
     void connectionChanged();
     void authenticationChanged();
+    void lockedChanged(bool locked);
 
     void accountsChanged();
 
@@ -142,6 +147,7 @@ public:
     GA_session* m_session{nullptr};
     ConnectionStatus m_connection{Disconnected};
     AuthenticationStatus m_authentication{Unauthenticated};
+    bool m_locked{true};
     QJsonObject m_settings;
     QJsonObject m_config;
     QJsonObject m_currencies;

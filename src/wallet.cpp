@@ -602,6 +602,8 @@ void Wallet::updateConfig()
     m_config = Json::toObject(config);
     GA_destroy_json(config);
     emit configChanged();
+
+    setLocked(m_config.value("twofactor_reset").toObject().value("is_active").toBool());
 }
 
 void Wallet::updateSettings()
@@ -743,4 +745,11 @@ void Wallet::timerEvent(QTimerEvent* event)
         qApp->removeEventFilter(this);
         disconnect();
     }
+}
+
+void Wallet::setLocked(bool locked)
+{
+    if (m_locked == locked) return;
+    m_locked = locked;
+    emit lockedChanged(m_locked);
 }
