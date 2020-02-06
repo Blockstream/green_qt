@@ -118,7 +118,6 @@ Item {
         ItemDelegate {
             id: account_title
             Layout.preferredWidth: accounts_list.width
-            topPadding: 16
             width: parent.width
 
             onClicked: drawer.open()
@@ -182,12 +181,11 @@ Item {
         Item {
             id: account_header
             Layout.fillWidth: true
-            height: layout.height + 16
+            height: layout.height
 
             RowLayout {
                 id: layout
                 x: 16
-                y: 12
                 width: parent.width - 32
 
                 Label {

@@ -83,8 +83,7 @@ macos {
     HEADERS += \
         src/devicemanagermacos.h
     SOURCES += \
-        src/devicemanagermacos.cpp \
-        src/mac.mm
+        src/devicemanagermacos.cpp
     LIBS += -framework Foundation -framework Cocoa
 }
 
