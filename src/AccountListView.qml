@@ -48,6 +48,7 @@ ListView {
                 anchors.right: parent.right
 
                 FlatButton {
+                    enabled: !wallet.locked
                     icon.source: 'assets/svg/send.svg'
                     icon.width: 24
                     icon.height: 24
@@ -56,6 +57,7 @@ ListView {
                 }
 
                 FlatButton {
+                    enabled: !wallet.locked
                     icon.source: 'assets/svg/receive.svg'
                     icon.width: 24
                     icon.height: 24
