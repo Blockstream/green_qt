@@ -181,6 +181,8 @@ bool ReceiveAddress::generating() const
 
 void ReceiveAddress::generate()
 {
+    if (m_account->m_wallet->isLocked()) return;
+
     if (!m_account && !m_address.isEmpty()) {
         m_address.clear();
         emit addressChanged(m_address);
