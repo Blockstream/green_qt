@@ -20,7 +20,6 @@
         <file>MnemonicQuizView.qml</file>
         <file>DebugActiveFocus.qml</file>
         <file>WalletContainerView.qml</file>
-        <file>qtquickcontrols2.conf</file>
         <file>Intro.qml</file>
         <file>MainMenuBar.qml</file>
         <file>Sidebar.qml</file>

@@ -6,11 +6,6 @@ import QtQuick.Window 2.13
 
 
 ApplicationWindow {
-    FontLoader {
-        id: dinpro;
-        source: "assets/fonts/DINPro/DINPro-Regular.otf"
-    }
-
     id: window
 
     property string location: '/'

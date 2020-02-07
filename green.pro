@@ -72,6 +72,11 @@ HEADERS += \
     src/wally.h
 
 RESOURCES += src/qml.qrc src/assets/assets.qrc
+win32 {
+    RESOURCES += src/win.qrc
+} else {
+    RESOURCES += src/linux.qrc
+}
 
 CONFIG += lrelease embed_translations
 
