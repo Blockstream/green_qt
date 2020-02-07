@@ -15,6 +15,10 @@ MenuBar {
             onTriggered: restore_wallet_action.trigger()
         }
         Action {
+            text: qsTr('id_wallets')
+            onTriggered: drawer.open()
+        }
+        Action {
             text: qsTr('&Exit')
             onTriggered: window.close()
         }
