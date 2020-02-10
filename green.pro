@@ -118,6 +118,8 @@ unix:!macos:!android {
 }
 
 win32:static {
+    RC_ICONS = Green.ico
+
     LIBS += -Wl,-Bstatic,--whole-archive -lwinpthread -Wl,--no-whole-archive
     LIBS += $$GDK_BUILD_DIR/build-windows-mingw-w64/src/libgreenaddress_full.a -lcrypt32 -lbcrypt -lws2_32 -liphlpapi -lssp -static-libgcc -static-libstdc++ -lwsock32
 }
