@@ -106,7 +106,7 @@ package_release:
     - cd $CI_PROJECT_DIR
     - rm -fr green_qt_dist
     - mkdir green_qt_dist
-    - zip -j green_qt_dist/GreenQt_Windows_x86_64.zip build-mingw-w64/release/Green.exe
+    - zip -j green_qt_dist/GreenQt_Windows_x86_64.zip build-mingw-w64/Green.exe
     - zip -rj green_qt_dist/GreenQt_MacOSX_x86_64.zip build-osx-clang/Green.app
     - chmod +x build-linux-gcc/Green
     - tar czf green_qt_dist/GreenQt_Linux_x86_64.tar.gz -C build-linux-gcc Green
