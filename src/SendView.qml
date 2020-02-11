@@ -69,7 +69,8 @@ StackView {
         spacing: 8
 
         Label {
-            text: controller.transaction.error || ''
+            text: qsTr(controller.transaction.error) || ''
+            color: 'red'
         }
 
         Loader {
