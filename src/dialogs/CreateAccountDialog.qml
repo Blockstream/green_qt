@@ -10,7 +10,8 @@ Dialog {
     modal: true
     parent: Overlay.overlay
     standardButtons: Dialog.Ok | Dialog.Cancel
-    title: qsTr('CREATE ACCOUNT')
+    title: qsTr('id_add_new_account')
+    width: 400
 
     onAccepted: controller.create()
     onClosed: controller.reset()
