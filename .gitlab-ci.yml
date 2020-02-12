@@ -1,7 +1,7 @@
 variables:
   GIT_SUBMODULE_STRATEGY: recursive
 
-image: greenaddress/ci@sha256:79c44e086bb9f38381c273a5da5cb50643dfb445a254784d6ad468f7664fb15b
+image: greenaddress/ci@sha256:6618b0559b68febbe4affeb17db7e0ab78c3d0f17f954921e5c7d90f993111f0
 
 bionic_release:
   tags:
