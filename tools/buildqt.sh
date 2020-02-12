@@ -11,7 +11,7 @@ if [ ! -d ${QTSRCDIR} ]; then
    if [ ! -d ${BUILDROOT}/qt-everywhere-src-${QTVERSION} ]; then
        echo "Qt: Downloading..."
        curl -sL -o ${BUILDROOT}/qt-everywhere-src-${QTVERSION}.tar.xz https://download.qt.io/archive/qt/${QTMAJOR}/${QTVERSION}/single/qt-everywhere-src-${QTVERSION}.tar.xz
-       echo "be9a77cd4e1f9d70b58621d0753be19ea498e6b0da0398753e5038426f76a8ba  ${BUILDROOT}/qt-everywhere-src-${QTVERSION}.tar.xz" | shasum -a 256 --check
+       echo "6f17f488f512b39c2feb57d83a5e0a13dcef32999bea2e2a8f832f54a29badb8  ${BUILDROOT}/qt-everywhere-src-${QTVERSION}.tar.xz" | shasum -a 256 --check
        $(cd ${BUILDROOT} && \
        tar xf qt-everywhere-src-${QTVERSION}.tar.xz && \
        rm qt-everywhere-src-${QTVERSION}.tar.xz)
