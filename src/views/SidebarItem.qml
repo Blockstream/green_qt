@@ -6,7 +6,7 @@ Page {
     default property alias children: column.children;
 
     header: Label {
-        padding: 4
+        padding: 16
         opacity: 0.4
         text: title
     }

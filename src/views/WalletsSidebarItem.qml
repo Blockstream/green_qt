@@ -4,7 +4,7 @@ import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.13
 
 SidebarItem {
-    title: qsTr('WALLETS')
+    title: qsTr('id_wallets')
 
     Repeater {
         model: WalletManager.wallets
@@ -12,6 +12,7 @@ SidebarItem {
         ItemDelegate {
             property Wallet wallet: modelData
 
+            leftPadding: 16
             icon.color: 'transparent'
             icon.source: '../' + icons[wallet.network.id]
             icon.width: 32
@@ -21,15 +22,7 @@ SidebarItem {
 
             onClicked: currentWallet = modelData
 
-            Image {
-                visible: modelData === currentWallet
-                sourceSize.width: 16
-                sourceSize.height: 16
-                source: '../assets/svg/arrow_right.svg'
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.right: parent.right
-                anchors.rightMargin: 16
-            }
+            highlighted: modelData === currentWallet
         }
     }
 }
