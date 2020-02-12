@@ -13,29 +13,26 @@ ItemDelegate {
     background.opacity: 0.4
     spacing: 8
 
-    function address(tx) {
+    function txType(tx) {
+        var separator = tx.memo === '' ? '' : ' - '
         if (tx.type === 'incoming') {
             for (const o of tx.outputs) {
                 if (o.is_relevant) {
-                    return o.address
+                    return qsTr('id_received') + separator + tx.memo
                 }
             }
         }
         if (tx.type === 'outgoing') {
-            return tx.addressees[0]
+            return qsTr('id_sent') + separator + tx.memo
         }
         if (tx.type === 'redeposit') {
-            return qsTr("id_redeposited")
+            return qsTr("id_redeposited") + separator + tx.memo
         }
         return JSON.stringify(tx, null, '\t')
     }
 
     contentItem: RowLayout {
         spacing: 16
-
-        Image {
-            source: tx.type === 'incoming' ? 'assets/svg/received.svg' : 'assets/svg/sent.svg'
-        }
 
         ColumnLayout {
             Label {
@@ -47,7 +44,7 @@ ItemDelegate {
             Label {
                 Layout.fillWidth: true
                 font.pixelSize: 14
-                text: address(tx)
+                text: txType(tx)
             }
         }
 
