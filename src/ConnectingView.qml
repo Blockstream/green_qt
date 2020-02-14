@@ -29,11 +29,4 @@ Column {
             SmoothedAnimation {  }
         }
     }
-
-    FlatButton {
-        anchors.horizontalCenter: parent.horizontalCenter
-        text: qsTr('id_cancel')
-        onClicked: wallet.disconnect()
-    }
-
 }
