@@ -100,17 +100,19 @@ Item {
             id: stack_layout
             clip: true
 
+            currentIndex: {
+                for (let i = 0; i < WalletManager.wallets.length; i++) {
+                    if (WalletManager.wallets[i] === currentWallet) return i + 1;
+                }
+                return 0;
+            }
+
             Intro { }
 
             Repeater {
                 model: WalletManager.wallets
 
                 WalletContainerView {
-                    property bool current: currentWallet === modelData
-                    focus: current
-
-                    onCurrentChanged: if (current) stack_layout.currentIndex = index + 1
-
                     wallet: modelData
                 }
             }
