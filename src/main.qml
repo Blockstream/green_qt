@@ -58,14 +58,27 @@ Item {
         width: 300
         height: parent.height
 
-        ToolButton {
-            onClicked: drawer.close()
-            icon.source: 'assets/svg/cancel.svg'
-            icon.width: 16
-            icon.height: 16
+        Row {
             anchors.right: parent.right
             anchors.margins: 16
             anchors.top: parent.top
+            ToolButton {
+                onClicked: {
+                    currentWallet = null
+                    drawer.close()
+                }
+                icon.source: 'assets/svg/home.svg'
+                icon.color: 'transparent'
+                icon.width: 16
+                icon.height: 16
+            }
+
+            ToolButton {
+                onClicked: drawer.close()
+                icon.source: 'assets/svg/cancel.svg'
+                icon.width: 16
+                icon.height: 16
+            }
         }
 
         Sidebar {
