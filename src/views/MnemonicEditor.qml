@@ -5,6 +5,8 @@ import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.12
 
 WizardPage {
+    readonly property bool complete: mnemonic.length === (passwordProtected ? 27 : 24)
+
     readonly property var mnemonic: {
         const words = []
         for (let i = 0; i < passwordProtected ? 27 : 24; i++) {
@@ -59,7 +61,7 @@ WizardPage {
         spacing: 32
 
         GridLayout {
-            columns: 4
+            columns: 6
 
             Repeater {
                 id: repeater
@@ -115,14 +117,6 @@ WizardPage {
                 value: mnemonic.length
                 Behavior on value { NumberAnimation { duration: 300; easing.type: Easing.OutCubic } }
                 Layout.fillWidth: true
-            }
-            Item {
-                Layout.fillWidth: true
-            }
-            Button {
-                action: accept
-                enabled: mnemonic.length === (passwordProtected ? 27 : 24)
-                flat: true
             }
         }
     }

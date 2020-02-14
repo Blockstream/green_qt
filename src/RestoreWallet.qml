@@ -10,11 +10,9 @@ import './views'
 Page {
     property Wallet wallet
 
-    property Action cancel: Action {
-        text: qsTr('id_cancel')
-    }
-    property Action accept: Action {
-    }
+    property Action cancel: Action {}
+
+    signal finished()
 
     Connections {
         target: wallet
@@ -36,33 +34,112 @@ Page {
         initialItem: network_page
     }
 
-    footer: RowLayout {
-        Button {
-            Layout.alignment: Qt.AlignRight
-            flat: true
-            action: cancel
+    background: Item {}
+
+    footer: Item {
+        height: 64
+
+        BusyIndicator {
+            visible: running
+            running: wallet.authentication === Wallet.Authenticating
+            anchors.left: parent.left
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.margins: 16
+            scale: 0.5
+        }
+
+        Row {
+            anchors.right: parent.right
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.margins: 16
+            Repeater {
+                model: stack_view.currentItem.actions
+                Button {
+                    action: modelData
+                    flat: true
+                    Layout.rightMargin: 16
+                    Layout.bottomMargin: 16
+                    Layout.topMargin: 16
+                    Layout.minimumWidth: 128
+                }
+            }
+        }
+    }
+
+    header: Item {
+        height: 64
+
+        Row {
+            visible: !!network_page.network
+            anchors.margins: 16
+            anchors.left: parent.left
+            anchors.verticalCenter: parent.verticalCenter
+            spacing: 16
+            Image {
+                anchors.verticalCenter: parent.verticalCenter
+                source: network_page.network ? icons[network_page.network.id] : ''
+                sourceSize.height: 32
+                sourceSize.width: 32
+            }
+            Label {
+                anchors.verticalCenter: parent.verticalCenter
+                font.pixelSize: 24
+                text: network_page.network ? network_page.network.name : ''
+            }
+        }
+
+        Label {
+            anchors.centerIn: parent
+            font.pixelSize: 24
+            text: qsTrId('Restore Wallet') + ' - ' + stack_view.currentItem.title
+        }
+
+        Row {
+            anchors.margins: 16
+            anchors.right: parent.right
+            anchors.verticalCenter: parent.verticalCenter
+            ToolButton {
+                onClicked: settings_drawer.open()
+                icon.source: 'assets/svg/settings.svg'
+            }
+
+            ToolButton {
+                action: cancel
+                icon.source: 'assets/svg/cancel.svg'
+                icon.width: 16
+                icon.height: 16
+            }
         }
     }
 
     property Item network_page: NetworkPage {
+        property string title: qsTrId('id_choose_your_network')
+
         id: network_page
-        accept.onTriggered: {
-            wallet.network = network_page.network;
-            wallet.connect();
-            stack_view.push(mnemonic_page)
+        onNetworkChanged: {
+            if (network) {
+                wallet.network = network_page.network;
+                wallet.connect();
+                stack_view.push(mnemonic_page);
+            }
         }
     }
 
     property Item mnemonic_page: MnemonicEditor {
-        accept.text: qsTr('id_next')
-        accept.enabled: wallet.authentication === Wallet.Unauthenticated
-        accept.onTriggered: {
-            if (passwordProtected) {
-                stack_view.push(password_page)
-            } else {
-                wallet.login(mnemonic_page.mnemonic)
+        title: qsTrId('Insert your green mnemonic')
+        actions: [
+            Action {
+                text: qsTrId('id_continue')
+                enabled: mnemonic_page.complete && wallet.authentication === Wallet.Unauthenticated
+                onTriggered: {
+                    if (mnemonic_page.passwordProtected) {
+                        stack_view.push(password_page)
+                    } else {
+                        wallet.login(mnemonic_page.mnemonic)
+                    }
+                }
             }
-        }
+        ]
     }
 
     property Item password_page: WizardPage {
@@ -75,6 +152,7 @@ Page {
     }
 
     property Item pin_page: WizardPage {
+        title: qsTrId('Set a new PIN')
         PinView {
             id: pin_view
             anchors.centerIn: parent
@@ -83,6 +161,7 @@ Page {
     }
 
     property Item pin_verify_page: WizardPage {
+        title: qsTrId('Confirm PIN')
         PinView {
             anchors.centerIn: parent
             onPinChanged: {
@@ -96,17 +175,24 @@ Page {
         }
     }
 
-    property Item name_page: WizardPage {
-        title: qsTr('id_done')
+    property Item name_page: ColumnLayout {
+        property string title: qsTrId('Set wallet name')
+        property list<Action> actions: [
+            Action {
+                enabled: name_field.text.trim().length > 0
+                text: qsTr('id_create')
+                onTriggered: {
+                    wallet.name = name_field.text;
+                    finished()
+                }
+            }
+        ]
 
         TextField {
             id: name_field
-            anchors.centerIn: parent
-            onAccepted: {
-                // TODO should validate name
-                wallet.name = name_field.text;
-                accept.trigger()
-            }
+            Layout.minimumWidth: 300
+            font.pixelSize: 16
+            placeholderText: qsTrId('My %1 Wallet').arg(network_page.network ? network_page.network.name : '')
         }
     }
 }

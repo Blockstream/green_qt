@@ -3,64 +3,43 @@ import QtQuick 2.12
 import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.12
 
-WizardPage {
-    property Network network: network_group.checkedButton ? network_group.checkedButton.network : null
-    onNetworkChanged: console.log(network.name, network.network)
-    title: qsTr('id_choose_your_network')
+RowLayout {
+    property Network network
 
-    next: false
+    spacing: 30
+    anchors.centerIn: parent
 
-    RowLayout {
-        spacing: 30
-        anchors.centerIn: parent
+    Column {
+        spacing: 15
+        width: 150
 
-        Column {
-            spacing: 15
-            width: 150
-
-            Label {
-                text: qsTr('id_choose_your_network')
-                font.pixelSize: 24
-            }
-
-           Label {
-                text: qsTr('id_create_a_wallet_for_bitcoin')
-                font.pixelSize : 14
-            }
+        Label {
+            text: qsTr('id_create_a_wallet_for_bitcoin')
+            font.pixelSize : 14
         }
+    }
 
-        Column {
+    Column {
+        Repeater {
+            model: NetworkManager.networks
 
-            ButtonGroup {
-                id: network_group
-                exclusive: true
-                onClicked: accept.trigger()
-            }
+            Button {
+                width: 180
+                height: 80
 
-            Repeater {
-                model: NetworkManager.networks
+                onClicked: network = modelData
 
-                Button {
-                    property var network: modelData
+                Row {
+                    anchors.centerIn: parent
 
-                    width: 180
-                    height: 80
+                    Image {
+                        source:  '../' + logos[modelData.id]
+                    }
 
-                    ButtonGroup.group: network_group
-                    onClicked: checked = true
-
-                    Row {
-                        anchors.centerIn: parent
-
-                        Image {
-                            source:  '../' + logos[network.id]
-                        }
-
-                        Label {
-                            text: network.name
-                            visible: network.id !== 'liquid'
-                            anchors.verticalCenter: parent.verticalCenter
-                        }
+                    Label {
+                        text: modelData.name
+                        visible: modelData.id !== 'liquid'
+                        anchors.verticalCenter: parent.verticalCenter
                     }
                 }
             }

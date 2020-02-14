@@ -7,114 +7,205 @@ import './views/onboarding'
 
 Page {
     property var mnemonic: WalletManager.generateMnemonic()
-    signal canceled()
 
     id: root
 
-    footer: RowLayout {
+    background: Item {}
+
+    header: Item {
+        height: 64
+
+        Row {
+            visible: !!network_page.network
+            anchors.margins: 16
+            anchors.left: parent.left
+            anchors.verticalCenter: parent.verticalCenter
+            spacing: 16
+            Image {
+                anchors.verticalCenter: parent.verticalCenter
+                source: network_page.network ? icons[network_page.network.id] : ''
+                sourceSize.height: 32
+                sourceSize.width: 32
+            }
+            Label {
+                anchors.verticalCenter: parent.verticalCenter
+                font.pixelSize: 24
+                text: network_page.network ? network_page.network.name : ''
+            }
+        }
+
+        Label {
+            anchors.centerIn: parent
+            font.pixelSize: 24
+            text: stack_layout.currentItem.title
+        }
+
+        Row {
+            anchors.margins: 16
+            anchors.right: parent.right
+            anchors.verticalCenter: parent.verticalCenter
+            ToolButton {
+                onClicked: settings_drawer.open()
+                icon.source: 'assets/svg/settings.svg'
+            }
+
+            ToolButton {
+                action: cancel_action
+                icon.source: 'assets/svg/cancel.svg'
+                icon.width: 16
+                icon.height: 16
+            }
+        }
+    }
+
+    footer: Item {
+        height: 64
+
         PageIndicator {
+            anchors.centerIn: parent
+            count: stack_layout.count
+            currentIndex: stack_layout.currentIndex
+            width: 128
             Layout.fillWidth: true
-            currentIndex: swipe_view.currentIndex
-            count: swipe_view.count
+            Layout.margins: 16
         }
 
-        FlatButton {
-            action: cancel_action
+        Row {
+            anchors.right: parent.right
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.margins: 16
+            Repeater {
+                model: stack_layout.currentItem.actions
+                Button {
+                    action: modelData
+                    flat: true
+                    Layout.rightMargin: 16
+                    Layout.bottomMargin: 16
+                    Layout.topMargin: 16
+                    Layout.minimumWidth: 128
+                }
+            }
+        }
+    }
+
+    Drawer {
+        id: settings_drawer
+        edge: Qt.RightEdge
+        height: parent.height
+        width: 300
+
+        Overlay.modal: Rectangle {
+            color: "#70000000"
         }
 
-        FlatButton {
-            action: back_action
-        }
+        ColumnLayout {
+            anchors.fill: parent
+            anchors.margins: 16
+            Label {
+                text: 'Connection Settings'
+                font.pixelSize: 18
+                Layout.margins: 16
+            }
 
-        FlatButton {
-            action: next_action
-            visible: swipe_view.currentIndex + 1 < swipe_view.count
-            enabled: swipe_view.currentItem.next
-        }
-
-        FlatButton {
-            action: create_action
-            visible: swipe_view.currentIndex + 1 === swipe_view.count
+            CheckBox {
+                id: proxy_checkbox
+                text: qsTr('id_connect_through_a_proxy')
+            }
+            TextField {
+                id: proxy_field
+                Layout.leftMargin: 32
+                Layout.fillWidth: true
+                enabled: proxy_checkbox.checked
+                placeholderText: 'host:address'
+            }
+            CheckBox {
+                id: tor_checkbox
+                text: qsTr('id_connect_with_tor')
+            }
+            Item {
+               Layout.fillWidth: true
+               Layout.fillHeight: true
+            }
         }
     }
 
     Action {
         id: cancel_action
-        text: qsTr('id_cancel')
         shortcut: StandardKey.Cancel
         onTriggered: stack_view.pop()
     }
 
     Action {
         id: back_action
-        text: qsTr('id_back')
-        onTriggered: swipe_view.currentIndex = swipe_view.currentIndex - 1
+        enabled: stack_layout.currentIndex > 0
+        onTriggered: stack_layout.currentIndex = stack_layout.currentIndex - 1
     }
 
     Action {
         id: next_action
-        text: qsTr('id_next')
-
-        onTriggered: {
-            swipe_view.currentIndex = swipe_view.currentIndex + 1
-            if (swipe_view.currentIndex === 5) {
-                // refresh quiz every we get to MnemonicQuizView
-                mnemonic_quiz_view.reset()
-            }
-        }
+        enabled: stack_layout.currentIndex < stack_layout.count - 1
+        onTriggered: stack_layout.currentIndex = stack_layout.currentIndex + 1
     }
 
-    Action {
-        id: create_action
-        text: qsTr('id_create')
-        onTriggered: {
-            currentWallet = WalletManager.signup(proxy_checkbox.checked ? proxy_field.text : '', tor_checkbox.checked, network_page.network, name_field.text, mnemonic, pin_view.pin)
-            stack_view.pop()
-        }
-    }
-
-    SwipeView {
-        id: swipe_view
-        activeFocusOnTab: false
-        clip: true
+    StackLayout {
+        id: stack_layout
+        property Item currentItem: children[currentIndex]
         currentIndex: 0
         focus: true
-        interactive: false
 
         anchors.fill: parent
+        anchors.margins: 32
 
-        WelcomePage {}
-
-        ServiceTermsPage {}
-
-        Page {
-            property bool next: true
-            Column {
-                anchors.centerIn: parent
-                CheckBox {
-                    id: proxy_checkbox
-                    text: qsTr('id_connect_through_a_proxy')
+        Item {
+            property string title: qsTrId('Welcoming to Creation Process')
+            property list<Action> actions: [
+                Action {
+                    text: qsTrId('id_continue')
+                    enabled: welcome_page.agreeWithTermsOfService
+                    onTriggered: next_action.trigger()
                 }
-                TextField {
-                    id: proxy_field
-                    x: 48
-                    enabled: proxy_checkbox.checked
-                    placeholderText: 'host:address'
+            ]
+
+            WelcomePage {
+                id: welcome_page
+            }
+        }
+
+        Item {
+            property string title: qsTrId('id_choose_your_network')
+            property list<Action> actions: [
+                Action {
+                    text: qsTrId('id_back')
+                    onTriggered: back_action.trigger()
                 }
-                CheckBox {
-                    id: tor_checkbox
-                    text: qsTr('id_connect_with_tor')
+            ]
+
+            NetworkPage {
+                id: network_page
+                onNetworkChanged: {
+                    if (network) next_action.trigger();
                 }
             }
         }
 
-        NetworkPage {
-            id: network_page
-            accept: next_action
-        }
-
-        WizardPage {
-            title: qsTr('id_save_your_mnemonic')
+        Item {
+            property string title: qsTrId('id_save_your_mnemonic')
+            property list<Action> actions: [
+                Action {
+                    text: qsTrId('id_back')
+                    onTriggered: {
+                        back_action.trigger();
+                        network_page.network = null;
+                    }
+                },
+                Action {
+                    text: qsTrId('id_continue')
+                    onTriggered: {
+                        mnemonic_quiz_view.reset();
+                        next_action.trigger();
+                    }
+                }
+            ]
 
             MnemonicView {
                 anchors.centerIn: parent
@@ -122,20 +213,30 @@ Page {
             }
         }
 
-        WizardPage {
-            title: 'TEST'
-            next: false
+        Item {
+            property string title: qsTrId('Check your backup')
+            property list<Action> actions: [
+                Action {
+                    text: qsTrId('id_back')
+                    onTriggered: back_action.trigger()
+                }
+            ]
 
             MnemonicQuizView {
                 id: mnemonic_quiz_view
                 anchors.centerIn: parent
-                onCompleteChanged: if (complete) next_action.trigger()
+                onCompleteChanged: {
+                    if (complete) {
+                        next_action.trigger();
+                    }
+                }
             }
         }
 
-        WizardPage {
+        Page {
             title: qsTr('id_create_a_pin_to_access_your')
-            next: false
+
+            property list<Action> actions
 
             PinView {
                 id: pin_view
@@ -145,29 +246,41 @@ Page {
             }
         }
 
-        WizardPage {
+        Page {
             activeFocusOnTab: false
             title: qsTr('id_verify_your_pin')
-            next: false
+            property list<Action> actions
 
             PinView {
-                id: confirm_pin_view
                 focus: true
                 anchors.centerIn: parent
                 onPinChanged: if (valid) {
                     if (pin_view.pin === pin) next_action.trigger()
-                    else confirm_pin_view.clear()
+                    else clear()
                 }
             }
         }
 
-        WizardPage {
-            title: qsTr('id_done')
-            next: false
+        Page {
+            title: qsTrId('Set wallet name')
+
+            property list<Action> actions: [
+                Action {
+                    enabled: name_field.text.trim().length > 0
+                    text: qsTr('id_create')
+                    onTriggered: {
+                        currentWallet = WalletManager.signup(proxy_checkbox.checked ? proxy_field.text : '', tor_checkbox.checked, network_page.network, name_field.text, mnemonic, pin_view.pin)
+                        stack_view.pop()
+                    }
+                }
+            ]
 
             TextField {
-                id: name_field
                 anchors.centerIn: parent
+                id: name_field
+                width: 300
+                font.pixelSize: 16
+                placeholderText: qsTrId('My %1 Wallet').arg(network_page.network ? network_page.network.name : '')
             }
         }
     }

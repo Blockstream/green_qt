@@ -94,11 +94,6 @@ Page {
         Transition {
             to: 'LOGGED'
             SequentialAnimation {
-                SmoothedAnimation {
-                    target: header_item
-                    duration: 256
-                    property: 'height'
-                }
                 StackViewPushAction {
                     stackView: stack_view
                     WalletView { }

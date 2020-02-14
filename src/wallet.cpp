@@ -357,7 +357,7 @@ void Wallet::loginWithPin(const QByteArray& pin)
         int login_attempts_remaining = m_login_attempts_remaining;
         if (err == GA_NOT_AUTHORIZED) {
             login_attempts_remaining --;
-        } else if (m_login_attempts_remaining < 3) {
+        } else if (login_attempts_remaining < 3) {
             login_attempts_remaining = 3;
         }
 
@@ -365,14 +365,14 @@ void Wallet::loginWithPin(const QByteArray& pin)
             m_login_attempts_remaining = login_attempts_remaining;
 
             QMetaObject::invokeMethod(this, [this] {
-                QSettings settings;
+                QSettings settings(GetDataFile("app", "wallets.ini"), QSettings::IniFormat);
                 settings.beginWriteArray("wallets");
                 settings.setArrayIndex(m_index);
                 settings.setValue("login_attempts_remaining", m_login_attempts_remaining);
                 settings.endArray();
 
                 emit loginAttemptsRemainingChanged(m_login_attempts_remaining);
-            }, Qt::QueuedConnection);
+            }, Qt::BlockingQueuedConnection);
         }
 
         if (!authenticated) {

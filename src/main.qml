@@ -128,7 +128,7 @@ Item {
         id: restore_view
         RestoreWallet {
           cancel.onTriggered: stack_view.pop()
-          accept.onTriggered: {
+          onFinished: {
               WalletManager.insertWallet(wallet)
               currentWallet = wallet;
               stack_view.pop()

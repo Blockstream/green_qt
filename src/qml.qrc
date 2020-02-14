@@ -36,7 +36,6 @@
         <file>views/WalletsSidebarItem.qml</file>
         <file>views/WalletSettingsView.qml</file>
         <file>views/WizardPage.qml</file>
-        <file>views/onboarding/ServiceTermsPage.qml</file>
         <file>views/onboarding/WelcomePage.qml</file>
         <file>loader.qml</file>
         <file>dialogs/SendDialog.qml</file>

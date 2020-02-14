@@ -33,11 +33,6 @@ RowLayout {
         width: 150
 
         Label {
-            text: qsTr('Check your backup')
-            font.pixelSize: 24
-        }
-
-        Label {
             text: qsTr('Let\'s check if you made a proper backup of your mnemonic')
             font.pixelSize : 14
         }
