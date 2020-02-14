@@ -32,11 +32,13 @@ Item {
 
     Action {
         id: create_wallet_action
+        text: qsTr('id_create_new_wallet')
         onTriggered: stack_view.push(signup_view)
     }
 
     Action {
         id: restore_wallet_action
+        text: qsTrId('id_restore_wallet')
         onTriggered: stack_view.push(restore_view, { wallet: WalletManager.createWallet() })
     }
 
