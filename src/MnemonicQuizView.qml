@@ -3,17 +3,20 @@ import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.12
 
 RowLayout {
+    property int count: 4
+
     property bool complete: {
-        for (let i = 0; i < repeater.count; i++) {
-            if (!repeater.itemAt(i).matching) return false
+        let i = 0;
+        for (; i < repeater.count; i++) {
+            if (!repeater.itemAt(i).matching) break;
         }
-        return true
+        return i === count
     }
 
     function reset() {
         const indexes = [...Array(24).keys()]
         const result = []
-        while (result.length < 4) {
+        while (result.length < count) {
             const remove = indexes.length * Math.random()
             const [index] = indexes.splice(remove, 1)
             indexes.splice(Math.max(0, remove - 2), 4)
