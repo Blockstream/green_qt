@@ -39,6 +39,7 @@ private:
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(ConnectionStatus connection READ connection NOTIFY connectionChanged)
     Q_PROPERTY(AuthenticationStatus authentication READ authentication NOTIFY authenticationChanged)
+    Q_PROPERTY(bool useTor READ useTor CONSTANT)
     Q_PROPERTY(bool locked READ isLocked NOTIFY lockedChanged)
     Q_PROPERTY(QJsonObject settings READ settings NOTIFY settingsChanged)
     Q_PROPERTY(QJsonObject currencies READ currencies CONSTANT)
@@ -62,6 +63,7 @@ public:
     ConnectionStatus connection() const { return m_connection; }
     AuthenticationStatus authentication() const { return m_authentication; }
 
+    bool useTor() const { return m_use_tor; }
     bool isLocked() const { return m_locked; }
     void setLocked(bool locked);
 
@@ -97,7 +99,7 @@ public:
     Asset* getOrCreateAsset(const QString& id);
 
 public slots:
-    void connect();
+    void connect(bool use_tor);
     void disconnect();
     void test();
     void signup(const QStringList &mnemonic, const QByteArray& pin);
@@ -137,7 +139,7 @@ private:
     void setAuthentication(AuthenticationStatus authentication);
     void setSettings(const QJsonObject& settings);
     void setBalance(const quint64);
-    void connectNow();
+    void connectNow(bool use_tor);
     void updateCurrencies();
 
 public:

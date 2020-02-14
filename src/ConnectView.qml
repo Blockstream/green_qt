@@ -6,7 +6,7 @@ Column {
     FlatButton {
         anchors.horizontalCenter: parent.horizontalCenter
         text: qsTr('id_log_in')
-        onClicked: wallet.connect()
+        onClicked: wallet.connect(use_tor_checkbox.checked)
     }
 
     Column {
@@ -40,9 +40,9 @@ Column {
         }
 
         CheckBox {
-            id: tor_checkbox
+            id: use_tor_checkbox
             text: qsTr('id_connect_with_tor')
-            checked: true
+            checked: wallet.useTor
         }
     }
 }

@@ -88,7 +88,7 @@ Wallet* WalletManager::signup(const QString& proxy, bool use_tor, Network* netwo
     wallet->m_use_tor = use_tor;
     wallet->m_network = network;
     wallet->m_name = name;
-    wallet->connect();
+    wallet->connect(use_tor);
     wallet->signup(mnemonic, pin);
     m_wallets.append(wallet);
     emit walletsChanged();

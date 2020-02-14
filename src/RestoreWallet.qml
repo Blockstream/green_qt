@@ -119,7 +119,7 @@ Page {
         onNetworkChanged: {
             if (network) {
                 wallet.network = network_page.network;
-                wallet.connect();
+                wallet.connect(/* use_tor = */ false);
                 stack_view.push(mnemonic_page);
             }
         }
