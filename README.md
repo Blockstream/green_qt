@@ -1,56 +1,41 @@
-# Blockstream Green
+# Blockstream Green Desktop App
 
 Build status: [![Build Status](https://travis-ci.org/Blockstream/green_qt.png?branch=master)](https://travis-ci.org/Blockstream/green_qt)
 
-## Before you build
+Blockstream Green is a non-custodial Bitcoin wallet - it allows you to safely store, send, and receive your Bitcoin.
 
-### This README.md file assumes you are building for Windows and Linux on Ubuntu 18.04 and for OSX on latest OSX
-### A 'Dockerfile' file is provided to build Linux and Windows binaries
+It is also available for [Android](https://github.com/Blockstream/green_android) and [iOS](https://github.com/Blockstream/green_ios), and it is based on [gdk](https://github.com/blockstream/gdk), our cross-platform wallet library.
 
-```
-cd green_qt && git submodule update --init --recursive
-```
+You can read more about Blockstream Green [here](https://docs.blockstream.com/green/getting-started/intro.html).
 
-## Build all symbols unstripped
+## Build
 
-### Note: change 'linux' to 'osx' or 'windows' to build a full symbols build for OSX or Windows
+For instructions on how to build Blockstream Green please refer to [BUILD.md](BUILD.md)
 
-### Note: skip the 'bionic_deps.sh' step for OSX
+## Application data directory
 
-```
-sudo ./tools/bionic_deps.sh
-./tools/builddeps.sh linux allsymbolsunstripped
-```
+Ubuntu:
 
-## Build static release on macOS
+`$HOME/.local/share/Blockstream/Green`
 
-```
-./tools/builddeps.sh osx
-```
+Mac OS:
 
-## Build static release on Linux
+`$HOME/Library/Application Support/Blockstream/Green`
 
-```
-sudo ./tools/bionic_deps.sh
-./tools/builddeps.sh linux
-```
+Windows 10:
 
-## Build static release on Linux for Windows
+`C:/Users/<USER>/AppData/Local/Blockstream/Green`
 
-```
-sudo ./tools/bionic_deps.sh
-./tools/builddeps.sh windows
-```
+## Translations
 
-## Development in QtCreator
+You can help translating this app [here](https://www.transifex.com/blockstream/blockstream-green/)
 
-Building with QtCreator and dynamically linking with Qt and GDK is possible. For
-now Qt is not built with -shared so one must be configured in QtCreator (see
-Manage Kits dialog).
-Just open the project green.pro and configure it with the kit of choice. Then
-define the build environments BUILDROOT and GDKBLDID according the build done
-from the previous steps. For instance, in macos these would look like:
-```
-BUILDROOT=build-osx-clang
-GDKBLDID=0f8cef9fdf5f08fa8a33736a2e70d8e87b5260f19b46aa2f1a157bb8956b6280
-```
+## Support
+
+Need help?
+
+Read [our FAQ](https://greenaddress.it/en/faq.html) or contact us at [info@greenaddress.it](mailto:info@greenaddress.it).
+
+## License
+
+Blockstream Green is released under the terms of the GNU General Public License. See [LICENSE](LICENSE) for more information or see https://opensource.org/licenses/GPL-3.0
