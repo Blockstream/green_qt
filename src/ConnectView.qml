@@ -6,7 +6,10 @@ Column {
     FlatButton {
         anchors.horizontalCenter: parent.horizontalCenter
         text: qsTr('id_log_in')
-        onClicked: wallet.connect(use_tor_checkbox.checked)
+        onClicked: {
+            const proxy = proxy_checkbox.checked ? proxy_host_field.text+':'+proxy_port_field.text : '';
+            wallet.connect(proxy, use_tor_checkbox.checked);
+        }
     }
 
     Column {
@@ -15,6 +18,7 @@ Column {
         CheckBox {
             id: proxy_checkbox
             text: qsTr('id_connect_through_a_proxy')
+            checked: wallet.proxy.length > 0
         }
 
         ColumnLayout {
@@ -30,12 +34,14 @@ Column {
                 id: proxy_host_field
                 enabled: proxy_checkbox.checked
                 placeholderText: qsTr('id_socks5_hostname')
+                text: wallet.proxy.length > 0 ? wallet.proxy.split(':')[0] : ''
             }
 
             TextField {
                 id: proxy_port_field
                 enabled: proxy_checkbox.checked
                 placeholderText: qsTr('id_socks5_port')
+                text: wallet.proxy.length > 0 ? wallet.proxy.split(':')[1] : ''
             }
         }
 

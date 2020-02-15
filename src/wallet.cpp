@@ -34,28 +34,28 @@ Wallet::Wallet(QObject *parent)
     m_thread->start();
 }
 
-void Wallet::connect(bool use_tor)
+void Wallet::connect(const QString& proxy, bool use_tor)
 {
     Q_ASSERT(m_connection == Disconnected);
     setConnection(Connecting);
-    connectNow(use_tor);
+    connectNow(proxy, use_tor);
 }
 
-void Wallet::connectNow(bool use_tor)
+void Wallet::connectNow(const QString& proxy, bool use_tor)
 {
     Q_ASSERT(m_network);
 
     if (m_connection == Disconnected) return;
 
-    QMetaObject::invokeMethod(m_context, [this, use_tor] {
+    QMetaObject::invokeMethod(m_context, [this, proxy, use_tor] {
         QJsonObject params{
             { "name", m_network->id() },
             { "log_level", "debug" },
             { "use_tor", use_tor }
         };
 
-        if (!m_proxy.isEmpty()) {
-            params.insert("proxy", m_proxy);
+        if (!proxy.isEmpty()) {
+            params.insert("proxy", proxy);
         }
 
         int res;
@@ -84,8 +84,8 @@ void Wallet::connectNow(bool use_tor)
             Q_ASSERT(res == GA_OK);
 
             m_session = nullptr;
-            QTimer::singleShot(1000, this, [this, use_tor] {
-                connectNow(use_tor);
+            QTimer::singleShot(1000, this, [this, proxy, use_tor] {
+                connectNow(proxy, use_tor);
             });
             return;
         }
