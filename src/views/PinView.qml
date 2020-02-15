@@ -13,6 +13,8 @@ Column {
         field.clear()
     }
 
+    spacing: 8
+
     PinField {
         id: field
         focus: true
@@ -20,37 +22,43 @@ Column {
 
     GridLayout {
         columns: 3
+        columnSpacing: 16
+        rowSpacing: 8
         anchors.horizontalCenter: parent.horizontalCenter
-
-        Layout.alignment: Qt.AlignHCenter
 
         Repeater {
             model: 9
 
-            FlatButton {
+            Button {
                 enabled: !field.valid
+                flat: true
                 text: modelData + 1
                 onClicked: field.addDigit(modelData + 1)
             }
         }
 
-        FlatButton {
+        Button {
             enabled: !field.empty
-            text: qsTr("id_cancel")
+            flat: true
+            icon.source: '../assets/svg/cancel.svg'
+            width: 32
+            icon.width: 16
             onClicked: field.removeDigit()
         }
 
-        FlatButton {
+        Button {
             enabled: !field.valid
+            flat: true
             text: qsTr("0")
             onClicked: field.addDigit(0)
         }
 
-        FlatButton {
+        Button {
             enabled: !field.empty
-            text: qsTr("id_clear")
+            flat: true
+            icon.source: '../assets/svg/arrow_left.svg'
+            icon.height: 24
             onClicked: field.clear()
         }
-
     }
 }
