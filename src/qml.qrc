@@ -68,5 +68,7 @@
         <file>AccountListView.qml</file>
         <file>AssetIcon.qml</file>
         <file>ScrollShadow.qml</file>
+        <file>MnemonicPage.qml</file>
+        <file>MnemonicQuizPage.qml</file>
     </qresource>
 </RCC>

@@ -4,9 +4,16 @@ import QtQuick.Layouts 1.12
 import '..'
 
 ColumnLayout {
+    property string title: qsTrId('Welcoming to Creation Process')
+    property list<Action> actions: [
+        Action {
+            text: qsTrId('id_continue')
+            enabled: agreeWithTermsOfService
+            onTriggered: next()
+        }
+    ]
     property bool agreeWithTermsOfService: checkbox.checked
-
-    anchors.fill: parent
+    signal next()
 
     Image {
         fillMode: Image.PreserveAspectFit

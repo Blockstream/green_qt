@@ -113,15 +113,11 @@ Page {
     }
 
     property Item network_page: NetworkPage {
-        property string title: qsTrId('id_choose_your_network')
-
-        id: network_page
-        onNetworkChanged: {
-            if (network) {
-                wallet.network = network_page.network;
-                wallet.connect(/* proxy = */ '', /* use_tor = */ false);
-                stack_view.push(mnemonic_page);
-            }
+        actions: []
+        onNext: {
+            wallet.network = network_page.network;
+            wallet.connect(/* proxy = */ '', /* use_tor = */ false);
+            stack_view.push(mnemonic_page);
         }
     }
 

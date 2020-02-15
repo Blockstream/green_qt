@@ -7,6 +7,7 @@ import './views/onboarding'
 
 Page {
     property var mnemonic: WalletManager.generateMnemonic()
+    signal close()
 
     id: root
 
@@ -16,11 +17,12 @@ Page {
         height: 64
 
         Row {
-            visible: !!network_page.network
             anchors.margins: 16
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
+            opacity: !!network_page.network ? 1 : 0
             spacing: 16
+            Behavior on opacity { OpacityAnimator { } }
             Image {
                 anchors.verticalCenter: parent.verticalCenter
                 source: network_page.network ? icons[network_page.network.id] : ''
@@ -37,7 +39,7 @@ Page {
         Label {
             anchors.centerIn: parent
             font.pixelSize: 24
-            text: stack_layout.currentItem.title
+            text: stack_view.currentItem.title
         }
 
         Row {
@@ -50,7 +52,7 @@ Page {
             }
 
             ToolButton {
-                action: cancel_action
+                onClicked: close()
                 icon.source: 'assets/svg/cancel.svg'
                 icon.width: 16
                 icon.height: 16
@@ -63,8 +65,8 @@ Page {
 
         PageIndicator {
             anchors.centerIn: parent
-            count: stack_layout.count
-            currentIndex: stack_layout.currentIndex
+            count: 7
+            currentIndex: stack_view.depth - 1
             width: 128
             Layout.fillWidth: true
             Layout.margins: 16
@@ -75,7 +77,7 @@ Page {
             anchors.verticalCenter: parent.verticalCenter
             anchors.margins: 16
             Repeater {
-                model: stack_layout.currentItem.actions
+                model: stack_view.currentItem.actions
                 Button {
                     action: modelData
                     flat: true
@@ -129,159 +131,107 @@ Page {
         }
     }
 
-    Action {
-        id: cancel_action
-        shortcut: StandardKey.Cancel
-        onTriggered: stack_view.pop()
-    }
-
-    Action {
-        id: back_action
-        enabled: stack_layout.currentIndex > 0
-        onTriggered: stack_layout.currentIndex = stack_layout.currentIndex - 1
-    }
-
-    Action {
-        id: next_action
-        enabled: stack_layout.currentIndex < stack_layout.count - 1
-        onTriggered: stack_layout.currentIndex = stack_layout.currentIndex + 1
-    }
-
-    StackLayout {
-        id: stack_layout
-        property Item currentItem: children[currentIndex]
-        currentIndex: 0
+    StackView {
+        id: stack_view
         focus: true
+        clip: true
+        anchors.centerIn: parent
+        implicitWidth: currentItem.implicitWidth
+        implicitHeight: currentItem.implicitHeight
+        initialItem: welcome_page
+    }
 
-        anchors.fill: parent
-        anchors.margins: 32
+    property Item welcome_page: WelcomePage {
+        onNext: stack_view.push(network_page)
+    }
 
-        Item {
-            property string title: qsTrId('Welcoming to Creation Process')
-            property list<Action> actions: [
-                Action {
-                    text: qsTrId('id_continue')
-                    enabled: welcome_page.agreeWithTermsOfService
-                    onTriggered: next_action.trigger()
-                }
-            ]
+    property Item network_page: NetworkPage {
+        onBack: stack_view.pop()
+        onNext: stack_view.push(mnemonic_page)
+    }
 
-            WelcomePage {
-                id: welcome_page
-            }
+    property Item mnemonic_page: MnemonicPage {
+        onBack: {
+            network_page.network = null;
+            stack_view.pop();
         }
-
-        Item {
-            property string title: qsTrId('id_choose_your_network')
-            property list<Action> actions: [
-                Action {
-                    text: qsTrId('id_back')
-                    onTriggered: back_action.trigger()
-                }
-            ]
-
-            NetworkPage {
-                id: network_page
-                onNetworkChanged: {
-                    if (network) next_action.trigger();
-                }
-            }
+        onNext: {
+            quiz_page.reset()
+            stack_view.push(quiz_page);
         }
+    }
 
-        Item {
-            property string title: qsTrId('id_save_your_mnemonic')
-            property list<Action> actions: [
-                Action {
-                    text: qsTrId('id_back')
-                    onTriggered: {
-                        back_action.trigger();
-                        network_page.network = null;
-                    }
-                },
-                Action {
-                    text: qsTrId('id_continue')
-                    onTriggered: {
-                        mnemonic_quiz_view.reset();
-                        next_action.trigger();
-                    }
-                }
-            ]
+    property Item quiz_page: MnemonicQuizPage {
+        onBack: stack_view.pop()
+        onNext: stack_view.push(set_pin_page)
+    }
 
-            MnemonicView {
-                anchors.centerIn: parent
-                mnemonic: root.mnemonic
-            }
-        }
+    property Item set_pin_page: Item {
+        property string title: qsTr('id_create_a_pin_to_access_your')
+        property list<Action> actions
 
-        Item {
-            property string title: qsTrId('Check your backup')
-            property list<Action> actions: [
-                Action {
-                    text: qsTrId('id_back')
-                    onTriggered: back_action.trigger()
-                }
-            ]
+        implicitWidth: pin_view.implicitWidth
+        implicitHeight: pin_view.implicitHeight
 
-            MnemonicQuizView {
-                id: mnemonic_quiz_view
-                anchors.centerIn: parent
-                onCompleteChanged: {
-                    if (complete) {
-                        next_action.trigger();
-                    }
+        PinView {
+            id: pin_view
+            focus: true
+            anchors.centerIn: parent
+            onPinChanged: {
+                if (valid) {
+                    stack_view.push(verify_pin_page);
                 }
             }
         }
+    }
 
-        Page {
-            title: qsTr('id_create_a_pin_to_access_your')
+    property Item verify_pin_page: Item {
+        property string title: qsTr('id_verify_your_pin')
+        property list<Action> actions
 
-            property list<Action> actions
+        activeFocusOnTab: false
+        implicitWidth: verify_pin_view.implicitWidth
+        implicitHeight: verify_pin_view.implicitHeight
 
-            PinView {
-                id: pin_view
-                focus: true
-                anchors.centerIn: parent
-                onPinChanged: if (valid) next_action.trigger()
+        PinView {
+            id: verify_pin_view
+            focus: true
+            anchors.centerIn: parent
+            onPinChanged: {
+                if (!valid) return;
+                if (pin_view.pin !== pin) return clear();
+                stack_view.push(name_page);
             }
         }
+    }
 
-        Page {
-            activeFocusOnTab: false
-            title: qsTr('id_verify_your_pin')
-            property list<Action> actions
-
-            PinView {
-                focus: true
-                anchors.centerIn: parent
-                onPinChanged: if (valid) {
-                    if (pin_view.pin === pin) next_action.trigger()
-                    else clear()
+    property Item name_page: Item {
+        property string title: qsTrId('Set wallet name')
+        property list<Action> actions: [
+            Action {
+                enabled: name_field.text.trim().length > 0
+                text: qsTr('id_create')
+                onTriggered: {
+                    const proxy = proxy_checkbox.checked ? proxy_field.text : '';
+                    const use_tor = tor_checkbox.checked;
+                    const network = network_page.network;
+                    const name = name_field.text;
+                    const pin = pin_view.pin;
+                    currentWallet = WalletManager.signup(proxy, use_tor, network, name, mnemonic, pin);
+                    close();
                 }
             }
-        }
+        ]
 
-        Page {
-            title: qsTrId('Set wallet name')
+        implicitWidth: name_field.width
+        implicitHeight: name_field.implicitHeight
 
-            property list<Action> actions: [
-                Action {
-                    enabled: name_field.text.trim().length > 0
-                    text: qsTr('id_create')
-                    onTriggered: {
-                        currentWallet = WalletManager.signup(proxy_checkbox.checked ? proxy_field.text : '', tor_checkbox.checked, network_page.network, name_field.text, mnemonic, pin_view.pin)
-                        stack_view.pop()
-                    }
-                }
-            ]
-
-            TextField {
-                anchors.centerIn: parent
-                id: name_field
-                width: 300
-                font.pixelSize: 16
-                placeholderText: qsTrId('My %1 Wallet').arg(network_page.network ? network_page.network.name : '')
-            }
+        TextField {
+            anchors.centerIn: parent
+            id: name_field
+            width: 300
+            font.pixelSize: 16
+            placeholderText: qsTrId('My %1 Wallet').arg(network_page.network ? network_page.network.name : '')
         }
     }
 }

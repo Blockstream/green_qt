@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 2.12
 import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.12
 
@@ -10,32 +10,24 @@ RowLayout {
         for (; i < repeater.count; i++) {
             if (!repeater.itemAt(i).matching) break;
         }
-        return i === count
+        return i === count;
     }
 
     function reset() {
-        const indexes = [...Array(24).keys()]
-        const result = []
+        const indexes = [...Array(24).keys()];
+        const result = [];
         while (result.length < count) {
-            const remove = indexes.length * Math.random()
-            const [index] = indexes.splice(remove, 1)
-            indexes.splice(Math.max(0, remove - 2), 4)
-            result.push(index)
+            const remove = indexes.length * Math.random();
+            const [index] = indexes.splice(remove, 1);
+            indexes.splice(Math.max(0, remove - 2), 4);
+            result.push(index);
         }
-        repeater.model = result.sort((a, b) => a - b).map(index => ({ index, word: mnemonic[index] }))
+        repeater.model = result.sort((a, b) => a - b).map(index => ({ index, word: mnemonic[index] }));
     }
 
-    spacing: 64
-    anchors.centerIn: parent
-
-    Column {
-        spacing: 15
-        width: 150
-
-        Label {
-            text: qsTr('Let\'s check if you made a proper backup of your mnemonic')
-            font.pixelSize : 14
-        }
+    Label {
+        text: qsTr('Let\'s check if you made a proper backup of your mnemonic')
+        font.pixelSize: 14
     }
 
     Column {
@@ -52,6 +44,7 @@ RowLayout {
                 Label {
                     width: 80
                     text: modelData.index + 1
+                    enabled: word_field.enabled
                     horizontalAlignment: Label.AlignRight
                     anchors.baseline: word_field.baseline
                 }
@@ -62,8 +55,16 @@ RowLayout {
                     enabled: (index === 0 || repeater.itemAt(index - 1).matching) && !matching
                     onEnabledChanged: if (enabled) word_field.forceActiveFocus()
                 }
+
+                Image {
+                    anchors.verticalCenter: word_field.verticalCenter
+                    source: 'assets/svg/check.svg'
+                    sourceSize.width: 32
+                    sourceSize.height: 32
+                    opacity: matching ? 1 : 0
+                    Behavior on opacity { OpacityAnimator { } }
+                }
             }
         }
     }
-
 }

@@ -121,7 +121,9 @@ Item {
 
     Component {
         id: signup_view
-        SignupView { }
+        SignupView {
+            onClose: stack_view.pop()
+        }
     }
 
     Component {
