@@ -34,6 +34,47 @@ Page {
         initialItem: network_page
     }
 
+    Drawer {
+        id: settings_drawer
+        edge: Qt.RightEdge
+        height: parent.height
+        width: 300
+
+        Overlay.modal: Rectangle {
+            color: "#70000000"
+        }
+
+        ColumnLayout {
+            anchors.fill: parent
+            anchors.margins: 16
+            Label {
+                text: 'Connection Settings'
+                font.pixelSize: 18
+                Layout.margins: 16
+            }
+
+            CheckBox {
+                id: proxy_checkbox
+                text: qsTr('id_connect_through_a_proxy')
+            }
+            TextField {
+                id: proxy_field
+                Layout.leftMargin: 32
+                Layout.fillWidth: true
+                enabled: proxy_checkbox.checked
+                placeholderText: 'host:address'
+            }
+            CheckBox {
+                id: tor_checkbox
+                text: qsTr('id_connect_with_tor')
+            }
+            Item {
+               Layout.fillWidth: true
+               Layout.fillHeight: true
+            }
+        }
+    }
+
     background: Item {}
 
     footer: Item {
@@ -115,8 +156,11 @@ Page {
     property Item network_page: NetworkPage {
         actions: []
         onNext: {
+            const proxy = proxy_checkbox.checked ? proxy_field.text : '';
+            const use_tor = tor_checkbox.checked;
             wallet.network = network_page.network;
-            wallet.connect(/* proxy = */ '', /* use_tor = */ false);
+            wallet.connect(proxy, use_tor);
+            settings_drawer.enabled = false;
             stack_view.push(mnemonic_page);
         }
     }
