@@ -107,6 +107,12 @@ void Wallet::disconnect()
     Q_ASSERT(m_connection != Disconnected);
     Q_ASSERT(m_authentication == Authenticated);
 
+    if (m_logout_timer != -1 ) {
+        killTimer(m_logout_timer);
+        m_logout_timer = -1;
+        qApp->removeEventFilter(this);
+    }
+
     auto accounts = m_accounts;
     m_accounts.clear();
     m_accounts_by_pointer.clear();
@@ -713,7 +719,10 @@ void Wallet::setSettings(const QJsonObject& settings)
     m_settings = settings;
     emit settingsChanged();
 
-    if (m_logout_timer != -1 ) killTimer(m_logout_timer);
+    if (m_logout_timer != -1 ) {
+        killTimer(m_logout_timer);
+        m_logout_timer = -1;
+    }
     int altimeout = m_settings.value("altimeout").toInt();
     if (altimeout > 0) {
         m_logout_timer = startTimer(altimeout * 60 * 1000);
@@ -737,9 +746,6 @@ bool Wallet::eventFilter(QObject* object, QEvent* event)
 void Wallet::timerEvent(QTimerEvent* event)
 {
     if (event->timerId() == m_logout_timer) {
-        killTimer(m_logout_timer);
-        m_logout_timer = -1;
-        qApp->removeEventFilter(this);
         disconnect();
     }
 }
