@@ -39,8 +39,14 @@ void Wallet::connect(const QString& proxy, bool use_tor)
     Q_ASSERT(m_connection == Disconnected);
     setConnection(Connecting);
 
-    m_proxy = proxy;
-    m_use_tor = use_tor;
+    if (m_proxy != proxy) {
+        m_proxy = proxy;
+        emit proxyChanged(m_proxy);
+    }
+    if (m_use_tor != use_tor) {
+        m_use_tor = use_tor;
+        emit useTorChanged(m_use_tor);
+    }
 
     connectNow();
 }

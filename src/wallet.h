@@ -39,8 +39,8 @@ private:
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(ConnectionStatus connection READ connection NOTIFY connectionChanged)
     Q_PROPERTY(AuthenticationStatus authentication READ authentication NOTIFY authenticationChanged)
-    Q_PROPERTY(QString proxy READ proxy CONSTANT)
-    Q_PROPERTY(bool useTor READ useTor CONSTANT)
+    Q_PROPERTY(QString proxy READ proxy NOTIFY proxyChanged)
+    Q_PROPERTY(bool useTor READ useTor NOTIFY useTorChanged)
     Q_PROPERTY(bool locked READ isLocked NOTIFY lockedChanged)
     Q_PROPERTY(QJsonObject settings READ settings NOTIFY settingsChanged)
     Q_PROPERTY(QJsonObject currencies READ currencies CONSTANT)
@@ -116,6 +116,8 @@ signals:
     void networkChanged(Network* network);
     void connectionChanged();
     void authenticationChanged();
+    void proxyChanged(const QString& proxy);
+    void useTorChanged(bool use_tor);
     void lockedChanged(bool locked);
 
     void accountsChanged();
