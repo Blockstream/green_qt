@@ -117,7 +117,7 @@ void SendTransactionController::create()
 
     QJsonObject address{{ "address", m_address }};
 
-    if (wallet()->network()->isLiquid()) {
+    if (wallet()->network()->isLiquid() && m_asset->data().value("name").toString() != "btc") {
         address.insert("asset_tag", m_asset->id());
         address.insert("satoshi", m_asset->parseAmount(m_amount));
     } else {
