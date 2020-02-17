@@ -220,7 +220,7 @@ Page {
         property list<Action> actions: [
             Action {
                 enabled: name_field.text.trim().length > 0
-                text: qsTr('id_create')
+                text: qsTr('id_restore')
                 onTriggered: {
                     wallet.name = name_field.text;
                     finished()
