@@ -38,24 +38,28 @@ void Wallet::connect(const QString& proxy, bool use_tor)
 {
     Q_ASSERT(m_connection == Disconnected);
     setConnection(Connecting);
-    connectNow(proxy, use_tor);
+
+    m_proxy = proxy;
+    m_use_tor = use_tor;
+
+    connectNow();
 }
 
-void Wallet::connectNow(const QString& proxy, bool use_tor)
+void Wallet::connectNow()
 {
     Q_ASSERT(m_network);
 
     if (m_connection == Disconnected) return;
 
-    QMetaObject::invokeMethod(m_context, [this, proxy, use_tor] {
+    QMetaObject::invokeMethod(m_context, [this] {
         QJsonObject params{
             { "name", m_network->id() },
             { "log_level", "debug" },
-            { "use_tor", use_tor }
+            { "use_tor", m_use_tor }
         };
 
-        if (!proxy.isEmpty()) {
-            params.insert("proxy", proxy);
+        if (!m_proxy.isEmpty()) {
+            params.insert("proxy", m_proxy);
         }
 
         int res;
@@ -66,8 +70,6 @@ void Wallet::connectNow(const QString& proxy, bool use_tor)
 
             res = GA_set_notification_handler(m_session, notification_handler, this);
             Q_ASSERT(res == GA_OK);
-//            res = GA::reconnect_hint(m_session, {{ "hint", "now" }});
-//            Q_ASSERT(res == GA_OK);
         }
 
         res = GA::connect(m_session, params);
@@ -84,26 +86,13 @@ void Wallet::connectNow(const QString& proxy, bool use_tor)
             Q_ASSERT(res == GA_OK);
 
             m_session = nullptr;
-            QTimer::singleShot(1000, this, [this, proxy, use_tor] {
-                connectNow(proxy, use_tor);
+            QTimer::singleShot(1000, this, [this] {
+                connectNow();
             });
             return;
         }
 
         setConnection(Disconnected);
-
-//        GA_destroy_session(m_session);
-//        m_session = nullptr;
-
-//        if (res == GA_RECONNECT) {
-
-//            res = GA::reconnect_hint(m_session, {{ "hint", "now" }});
-//            Q_ASSERT(res == GA_OK);
-
-//            QTimer::singleShot(1000, this, [this] { connect(); });
-//            return;
-//        }
-
     });
 }
 

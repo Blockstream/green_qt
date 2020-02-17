@@ -141,7 +141,7 @@ private:
     void setAuthentication(AuthenticationStatus authentication);
     void setSettings(const QJsonObject& settings);
     void setBalance(const quint64);
-    void connectNow(const QString& proxy, bool use_tor);
+    void connectNow();
     void updateCurrencies();
 
 public:
