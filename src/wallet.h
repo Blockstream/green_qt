@@ -103,7 +103,6 @@ public:
 public slots:
     void connect(const QString& proxy, bool use_tor);
     void disconnect();
-    void test();
     void signup(const QStringList &mnemonic, const QByteArray& pin);
     void reload();
 

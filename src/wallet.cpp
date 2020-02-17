@@ -394,32 +394,6 @@ void Wallet::loginWithPin(const QByteArray& pin)
     });
 }
 
-
-
-void Wallet::test()
-{
-    QMetaObject::invokeMethod(m_context, [this] {
-        auto result = GA::process_auth([this] (GA_auth_handler** call) {
-            GA_json* hw_device;
-            GA_convert_string_to_json(
-                "{"
-                "   \"device\": {"
-                "      \"name\": \"Ledger\","
-                "      \"supports_arbitrary_scripts\": true,"
-                "      \"supports_low_r\": false"
-                "   }"
-                "}",
-                &hw_device);
-
-            int err = GA_register_user(m_session, hw_device, "", call);
-            Q_ASSERT(err == GA_OK);
-
-            GA_destroy_json(hw_device);
-        });
-        Q_ASSERT(result.value("status").toString() == "done");
-    });
-}
-
 void Wallet::signup(const QStringList& mnemonic, const QByteArray& pin)
 {
     Q_ASSERT(mnemonic.size() == 24);
