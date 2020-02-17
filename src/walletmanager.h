@@ -1,14 +1,13 @@
-#ifndef WALLETMANAGER_H
-#define WALLETMANAGER_H
+#ifndef GREEN_WALLETMANAGER_H
+#define GREEN_WALLETMANAGER_H
 
 #include <QJsonObject>
 #include <QObject>
 #include <QQmlListProperty>
 #include <QVector>
 
-#include "wallet.h"
-
 class Network;
+class Wallet;
 
 class WalletManager : public QObject
 {
@@ -38,4 +37,4 @@ private:
     QVector<Wallet*> m_wallets;
 };
 
-#endif // WALLETMANAGER_H
+#endif // GREEN_WALLETMANAGER_H

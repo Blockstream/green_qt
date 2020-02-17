@@ -2,12 +2,14 @@
 #include "json.h"
 #include "network.h"
 #include "util.h"
+#include "wallet.h"
 #include "walletmanager.h"
 
-#include <QDebug>
+#include <QDir>
 #include <QSettings>
 #include <QStandardPaths>
-#include <QDir>
+#include <QUrl>
+#include <QUrlQuery>
 
 WalletManager::WalletManager()
 {
@@ -105,18 +107,11 @@ QStringList WalletManager::generateMnemonic() const
     return result;
 }
 
-#include <QUrl>
-#include <QUrlQuery>
 QJsonObject WalletManager::parseUrl(const QString &url)
 {
     QJsonObject r;
     QUrl res(url);
-    qDebug() << "SCHEMA" << res.scheme();
-    qDebug() << "PATH" << res.path();
-    qDebug() << "QUERY" << res.query();
     QUrlQuery q(res);
-    qDebug() << "QUERY" << q.queryItemValue("amount");
-    qDebug() << "LABEL" << q.queryItemValue("label");
 
     r.insert("address", res.path());
     r.insert("amount", q.queryItemValue("amount"));
