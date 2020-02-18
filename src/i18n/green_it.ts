@@ -274,6 +274,10 @@
         <translation>Cambia il PIN</translation>
     </message>
     <message>
+        <source>id_check_your_backup</source>
+        <translation>Controlla il tuo backup</translation>
+    </message>
+    <message>
         <source>id_choose</source>
         <translation>Scegli</translation>
     </message>
@@ -492,6 +496,10 @@
     <message>
         <source>id_disable</source>
         <translation>Disabilita</translation>
+    </message>
+    <message>
+        <source>id_disable_s_for_twofactor</source>
+        <translation>Disattiva  l&apos; Autenticazione a Due Fattori via %1</translation>
     </message>
     <message>
         <source>id_disabled</source>
@@ -1022,6 +1030,10 @@
         <translation>Liquid securities account sono disponibili solo nei wallet Liquid. Sarà necessario ottenere l&apos;autorizzazione dell&apos;emittente per ricevere un titolo Liquid Security.</translation>
     </message>
     <message>
+        <source>id_liquid_watchmen_via_pegin_tap</source>
+        <translation>Watchmen di liquid via peg-in. Tocca qui per saperne di più su Liquid</translation>
+    </message>
+    <message>
         <source>id_loading_transactions</source>
         <translation>Caricamento transazioni...</translation>
     </message>
@@ -1072,6 +1084,10 @@
     <message>
         <source>id_main_account</source>
         <translation>Account principale</translation>
+    </message>
+    <message>
+        <source>id_make_sure_you_made_a_proper</source>
+        <translation>Assicurati di aver fatto un backup corretto della tua mnemonica.</translation>
     </message>
     <message>
         <source>id_malleated</source>
@@ -1772,6 +1788,10 @@
     <message>
         <source>id_show_my_wallet_backup</source>
         <translation>Mostrami il backup del mio wallet</translation>
+    </message>
+    <message>
+        <source>id_show_qr_code</source>
+        <translation>Mostra il QR code</translation>
     </message>
     <message>
         <source>id_signup_in_progress</source>
