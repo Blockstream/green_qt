@@ -4,7 +4,7 @@ import QtQuick.Layouts 1.12
 import '..'
 
 Column {
-    property string title: qsTrId('Welcoming to Creation Process')
+    property string title: qsTrId('id_welcome_to') + ' ' + qsTr('Blockstream Green')
     property list<Action> actions: [
         Action {
             text: qsTrId('id_continue')

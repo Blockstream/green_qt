@@ -127,7 +127,7 @@ Page {
             anchors.fill: parent
             anchors.margins: 16
             Label {
-                text: 'Connection Settings'
+                text: qsTr('id_advanced_network_settings')
                 font.pixelSize: 18
                 Layout.margins: 16
             }
@@ -141,7 +141,7 @@ Page {
                 Layout.leftMargin: 32
                 Layout.fillWidth: true
                 enabled: proxy_checkbox.checked
-                placeholderText: 'host:address'
+                placeholderText: 'host:port'
             }
             CheckBox {
                 id: tor_checkbox
@@ -229,7 +229,7 @@ Page {
     }
 
     property Item name_page: Item {
-        property string title: qsTrId('Set wallet name')
+        property string title: qsTrId('id_set_wallet_name')
         property list<Action> actions: [
             Action {
                 enabled: name_field.text.trim().length > 0

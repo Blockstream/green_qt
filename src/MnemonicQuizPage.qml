@@ -5,7 +5,7 @@ import QtQuick.Layouts 1.12
 import './views'
 
 Item {
-    property string title: qsTrId('Check your backup')
+    property string title: qsTrId('id_check_your_backup')
     property list<Action> actions: [
         Action {
             text: qsTrId('id_back')

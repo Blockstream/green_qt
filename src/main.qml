@@ -38,7 +38,7 @@ Item {
 
     Action {
         id: restore_wallet_action
-        text: qsTrId('id_restore_wallet')
+        text: qsTrId('id_restore_green_wallet')
         onTriggered: stack_view.push(restore_view, { wallet: WalletManager.createWallet() })
     }
 

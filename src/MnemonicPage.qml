@@ -4,7 +4,7 @@ import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.12
 
 Item {
-    property string title: qsTrId('id_save_your_mnemonic')
+    property string title: qsTrId('id_write_down_your_mnemonic_on')
     property list<Action> actions: [
         Action {
             text: qsTrId('id_back')

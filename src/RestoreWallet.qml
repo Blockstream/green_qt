@@ -182,16 +182,18 @@ Page {
     }
 
     property Item password_page: WizardPage {
+        title: qsTrId('id_please_provide_your_passphrase')
         TextField {
             id: password_field
             anchors.centerIn: parent
             echoMode: TextField.Password
             onAccepted: wallet.login(mnemonic_page.mnemonic, password_field.text)
+            placeholderText: qsTr('id_encryption_passphrase')
         }
     }
 
     property Item pin_page: WizardPage {
-        title: qsTrId('Set a new PIN')
+        title: qsTrId('id_set_a_new_pin')
         PinView {
             id: pin_view
             anchors.centerIn: parent
@@ -200,7 +202,7 @@ Page {
     }
 
     property Item pin_verify_page: WizardPage {
-        title: qsTrId('Confirm PIN')
+        title: qsTrId('id_verify_your_pin')
         PinView {
             anchors.centerIn: parent
             onPinChanged: {
@@ -215,7 +217,7 @@ Page {
     }
 
     property Item name_page: ColumnLayout {
-        property string title: qsTrId('Set wallet name')
+        property string title: qsTrId('id_set_wallet_name')
         property list<Action> actions: [
             Action {
                 enabled: name_field.text.trim().length > 0

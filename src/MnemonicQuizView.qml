@@ -26,7 +26,7 @@ RowLayout {
     }
 
     Label {
-        text: qsTr('Let\'s check if you made a proper backup of your mnemonic')
+        text: qsTr('id_make_sure_you_made_a_proper')
         font.pixelSize: 14
     }
 

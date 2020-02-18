@@ -170,7 +170,7 @@ Item {
                         }
 
                         MenuItem {
-                            text: qsTr('id_logout')
+                            text: qsTr('id_log_out')
                             onTriggered: wallet.disconnect()
                         }
                     }

@@ -48,7 +48,7 @@ Dialog {
             id: qrcode_switch
             checked: false
             Layout.margins: 20
-            text: qsTr('id_show_qrcode')
+            text: qsTr('id_show_qr_code')
         }
     }
 
