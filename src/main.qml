@@ -42,6 +42,13 @@ Item {
         onTriggered: stack_view.push(restore_view, { wallet: WalletManager.createWallet() })
     }
 
+    Component.onCompleted: {
+        // Auto select wallet if just one wallet
+        if (WalletManager.wallets.length === 1) {
+            currentWallet = WalletManager.wallets[0];
+        }
+    }
+
     MainMenuBar { }
 
     AboutDialog {
