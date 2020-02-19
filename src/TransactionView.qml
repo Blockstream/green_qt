@@ -174,6 +174,11 @@ Page {
                     text: transaction.data.memo
                     selectByMouse: true
                     wrapMode: TextEdit.Wrap
+                    onTextChanged: {
+                        if (text.length > 1024) {
+                            memo_edit.text = text.slice(0, 1024);
+                        }
+                    }
                 }
 
                 Row {

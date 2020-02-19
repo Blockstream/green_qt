@@ -141,6 +141,8 @@ void Transaction::updateMemo(const QString &memo)
 {
     if (memo == m_data.value("memo").toString()) return;
 
+    Q_ASSERT(memo.length() <= 1024);
+
     QMetaObject::invokeMethod(m_account->m_wallet->m_context, [this, memo] {
         auto txhash = m_data.value("txhash").toString().toLocal8Bit();
         int err = GA_set_transaction_memo(m_account->m_wallet->m_session, txhash.constData(), memo.toLocal8Bit().constData(), GA_MEMO_USER);
