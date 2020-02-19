@@ -67,7 +67,7 @@ Page {
             anchors.right: parent.right 
             anchors.rightMargin: 16 - (1 - opacity) * 64
             anchors.verticalCenter: parent.verticalCenter
-            opacity: anim(2000, 500, 0, 1)
+            opacity: anim(500, 500, 0, 1)
 
             ToolButton {
                 onClicked: settings_drawer.open()

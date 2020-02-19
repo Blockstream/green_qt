@@ -30,7 +30,7 @@ Column {
         CheckBox {
             id: checkbox
             focus: true
-            opacity: anim(4000, 500, 0, 1)
+            opacity: anim(1000, 500, 0, 1)
             anchors.verticalCenter: parent.verticalCenter
         }
         Label {
