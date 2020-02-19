@@ -3,6 +3,8 @@ import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.13
 
 GridLayout {
+    id: box
+
     property string title
     property string description
     default property alias children: column_layout.children
@@ -20,15 +22,31 @@ GridLayout {
         Layout.columnSpan: 2
     }
 
-    Label {
+    Item {
         Layout.fillWidth: true
-        wrapMode: Label.WordWrap
-        text: description
-        font.pixelSize: 15
+        implicitHeight: description_label.implicitHeight
+        implicitWidth: description_label.implicitWidth
+        Label {
+            id: description_label
+            horizontalAlignment: Text.AlignJustify
+            wrapMode: Label.WordWrap
+            width: Math.min(parent.width, box.width * 2 / 3 - box.columnSpacing)
+            text: description
+            font.pixelSize: 15
+        }
     }
 
     ColumnLayout {
+        Layout.fillWidth: true
         id: column_layout
-        //Layout.alignment: Qt.AlignTop
+    }
+
+    Rectangle {
+        color: 'gray'
+        opacity: 0.2
+        implicitHeight: 1
+        Layout.topMargin: 16
+        Layout.columnSpan: 2
+        Layout.fillWidth: true
     }
 }

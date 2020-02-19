@@ -143,9 +143,11 @@ ColumnLayout {
                     }
                     Label {
                         text: method.toUpperCase()
+                        Layout.minimumWidth: 64
                     }
                     Button {
                         flat: true
+                        Layout.minimumWidth: 128
                         text: wallet.config[method].enabled ? qsTr('id_disable') : qsTr('id_enable')
                         onClicked: {
                             if (!wallet.config[method].enabled)
