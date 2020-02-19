@@ -199,7 +199,7 @@ Page {
                 background: MouseArea {
                     onClicked: {
                         transaction.copyTxhashToClipboard()
-                        ToolTip.show(qsTr('id_txhash_copied_to_clipboard'), 1000)
+                        ToolTip.show(qsTrId('id_copied_to_clipboard'), 1000)
                     }
                 }
                 ColumnLayout {
