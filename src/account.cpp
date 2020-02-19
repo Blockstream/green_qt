@@ -134,7 +134,7 @@ void Account::reload()
                 if (transaction->isUnconfirmed()) m_have_unconfirmed = true;
             }
             emit transactionsChanged();
-        }, Qt::BlockingQueuedConnection);
+        }, Qt::QueuedConnection);
     });
 }
 
