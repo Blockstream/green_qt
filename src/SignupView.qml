@@ -254,7 +254,7 @@ Page {
             id: name_field
             width: 300
             font.pixelSize: 16
-            placeholderText: qsTrId('My %1 Wallet').arg(network_page.network ? network_page.network.name : '')
+            text: qsTrId('My %1 Wallet').arg(network_page.network ? network_page.network.name : '')
         }
     }
 }
