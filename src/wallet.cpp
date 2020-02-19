@@ -369,7 +369,9 @@ void Wallet::loginWithPin(const QByteArray& pin)
 
             QMetaObject::invokeMethod(this, [this] {
                 QSettings settings(GetDataFile("app", "wallets.ini"), QSettings::IniFormat);
-                settings.beginWriteArray("wallets");
+                const int count = settings.beginReadArray("wallets");
+                settings.endArray();
+                settings.beginWriteArray("wallets", count);
                 settings.setArrayIndex(m_index);
                 settings.setValue("login_attempts_remaining", m_login_attempts_remaining);
                 settings.endArray();
