@@ -131,6 +131,7 @@ int main(int argc, char *argv[])
     QCoreApplication::setOrganizationDomain("blockstream.com");
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+    QCoreApplication::setApplicationVersion(QT_STRINGIFY(VERSION));
 
     QApplication app(argc, argv);
 

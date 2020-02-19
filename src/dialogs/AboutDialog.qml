@@ -25,11 +25,12 @@ Dialog {
 
 
     // FIXME fix copyright, maybe add platform? (32 bit/64 bit)
-    // FIXME add version (probably in green.pro?) since Qt.application.version is not working
     Label {
         anchors.fill: parent
         wrapMode: Text.WordWrap
-        text: qsTr("Copyright (C)") + "\n\n" + qsTr('id_please_contribute_if_you_find') + ". " + qsTr('id_visit_s_for_further_information').arg('https://github.com/Blockstream/green_qt') + ".\n\n"
+        text: qsTr("Copyright (C)") + "\n\n" +
+              qsTrId('id_version') + ' ' + Qt.application.version + '\n\n' +
+              qsTr('id_please_contribute_if_you_find') + ". " + qsTr('id_visit_s_for_further_information').arg('https://github.com/Blockstream/green_qt') + ".\n\n"
               + qsTr('id_distributed_under_the_s_see').arg('GNU General Public License v3.0').arg('https://opensource.org/licenses/GPL-3.0')
         color: 'white'
     }
