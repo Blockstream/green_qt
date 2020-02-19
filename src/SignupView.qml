@@ -7,7 +7,25 @@ import './views/onboarding'
 
 Page {
     property var mnemonic: WalletManager.generateMnemonic()
+
+    property real enter: 0
+    Behavior on enter {
+        NumberAnimation {
+            duration: 5000
+            easing.type: Easing.Linear
+        }
+    }
+    Component.onCompleted: enter = 5000
+
     signal close()
+
+    function anim(start, duration, from, to) {
+        if (enter <= start) return from;
+        if (enter >= start + duration) return to;
+        let t = (enter - start) / duration;
+        t = t * t * t;
+        return from + t * (to - from);
+    }
 
     id: root
 
@@ -38,14 +56,19 @@ Page {
 
         Label {
             anchors.centerIn: parent
+            anchors.verticalCenterOffset: anim(500, 500, -32, 0)
+            opacity: anim(500, 500, 0, 1)
             font.pixelSize: 24
             text: stack_view.currentItem.title
         }
 
         Row {
             anchors.margins: 16
-            anchors.right: parent.right
+            anchors.right: parent.right 
+            anchors.rightMargin: 16 - (1 - opacity) * 64
             anchors.verticalCenter: parent.verticalCenter
+            opacity: anim(2000, 500, 0, 1)
+
             ToolButton {
                 onClicked: settings_drawer.open()
                 icon.source: 'assets/svg/settings.svg'

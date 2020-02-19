@@ -191,7 +191,7 @@ Item {
                 Label {
                     id: title_label
                     font.pixelSize: 16
-                    text: account.name
+                    text: account ? account.name : ''
                     Layout.alignment: Qt.AlignVCenter
                 }
 
@@ -255,11 +255,16 @@ Item {
                     anchors.fill: parent
                     currentIndex: tab_bar.currentIndex
 
-                    TransactionListView {
+                    Loader {
+                        active: !!account
+                        sourceComponent: TransactionListView {}
                     }
 
-                    AssetListView {
-                        onClicked: stack_view.push(asset_view_component, { balance })
+                    Loader {
+                        active: !!account
+                        sourceComponent: AssetListView {
+                            onClicked: stack_view.push(asset_view_component, { balance })
+                        }
                     }
                 }
             }

@@ -64,7 +64,6 @@ Item {
         id: row_layout
 
         anchors.centerIn: parent
-        Layout.alignment: Qt.AlignCenter
 
         spacing: 8
 

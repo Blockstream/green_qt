@@ -18,9 +18,11 @@ Column {
     PinField {
         id: field
         focus: true
+        anchors.horizontalCenter: parent.horizontalCenter
     }
 
     GridLayout {
+        id: grid_layout
         columns: 3
         columnSpacing: 16
         rowSpacing: 8
@@ -30,7 +32,6 @@ Column {
             model: 9
 
             Button {
-                enabled: !field.valid
                 flat: true
                 text: modelData + 1
                 onClicked: field.addDigit(modelData + 1)
@@ -40,9 +41,9 @@ Column {
         Button {
             enabled: !field.empty
             flat: true
-            icon.source: '../assets/svg/cancel.svg'
             width: 32
-            icon.width: 16
+            icon.source: '../assets/svg/arrow_left.svg'
+            icon.width: 24
             onClicked: field.removeDigit()
         }
 
@@ -56,8 +57,8 @@ Column {
         Button {
             enabled: !field.empty
             flat: true
-            icon.source: '../assets/svg/arrow_left.svg'
-            icon.height: 24
+            icon.source: '../assets/svg/cancel.svg'
+            icon.height: 16
             onClicked: field.clear()
         }
     }

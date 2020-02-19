@@ -3,7 +3,7 @@ import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.12
 import '..'
 
-ColumnLayout {
+Column {
     property string title: qsTrId('Welcoming to Creation Process')
     property list<Action> actions: [
         Action {
@@ -20,19 +20,22 @@ ColumnLayout {
         source: '../../assets/svg/onboarding_illustration.svg'
         horizontalAlignment: Qt.AlignHCenter
         verticalAlignment: Qt.AlignVCenter
-        Layout.alignment: Qt.AlignHCenter
-        Layout.fillHeight: true
+        opacity: anim(500, 500, 0, 1)
+        anchors.horizontalCenter: parent.horizontalCenter
     }
 
-    RowLayout {
-        Layout.alignment: Qt.AlignHCenter
+    Row {
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.horizontalCenterOffset: -checkbox.width * (1 - checkbox.opacity)
         CheckBox {
             id: checkbox
             focus: true
-            text: qsTrId('id_i_agree_to_the')
+            opacity: anim(4000, 500, 0, 1)
+            anchors.verticalCenter: parent.verticalCenter
         }
         Label {
-            text: '<a href="https://blockstream.com/green/terms/">' + qsTrId('id_terms_of_service') + '</a>'
+            anchors.verticalCenter: parent.verticalCenter
+            text: qsTrId('id_i_agree_to_the') + ' ' + '<a href="https://blockstream.com/green/terms/">' + qsTrId('id_terms_of_service') + '</a>'
             onLinkActivated: Qt.openUrlExternally(link)
             MouseArea {
                 anchors.fill: parent

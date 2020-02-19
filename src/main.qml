@@ -67,7 +67,7 @@ Item {
                     currentWallet = null
                     drawer.close()
                 }
-                icon.source: 'assets/svg/home.svg'
+                icon.source: 'assets/png/ic_home.png'
                 icon.color: 'transparent'
                 icon.width: 16
                 icon.height: 16
@@ -113,6 +113,9 @@ Item {
                 model: WalletManager.wallets
 
                 WalletContainerView {
+                    onCanceled2: {
+                        currentWallet = null
+                    }
                     wallet: modelData
                 }
             }
@@ -129,19 +132,13 @@ Item {
     Component {
         id: restore_view
         RestoreWallet {
-          cancel.onTriggered: stack_view.pop()
+          onCanceled2: stack_view.pop()
           onFinished: {
               WalletManager.insertWallet(wallet)
               currentWallet = wallet;
               stack_view.pop()
           }
         }
-    }
-
-    Component {
-        id: wallet_foo
-
-        WalletContainerView { }
     }
 
     Component {

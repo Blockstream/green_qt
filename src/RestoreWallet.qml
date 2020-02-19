@@ -10,8 +10,7 @@ import './views'
 Page {
     property Wallet wallet
 
-    property Action cancel: Action {}
-
+    signal canceled2()
     signal finished()
 
     Connections {
@@ -145,10 +144,10 @@ Page {
             }
 
             ToolButton {
-                action: cancel
                 icon.source: 'assets/svg/cancel.svg'
                 icon.width: 16
                 icon.height: 16
+                onClicked: canceled2()
             }
         }
     }

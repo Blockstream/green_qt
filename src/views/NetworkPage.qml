@@ -1,6 +1,7 @@
 import Blockstream.Green 0.1
 import QtQuick 2.12
 import QtQuick.Controls 2.5
+import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.12
 
 Item {
@@ -30,16 +31,25 @@ Item {
         }
 
         Column {
+            spacing: 16
             Repeater {
                 model: NetworkManager.networks
 
                 Button {
+                    flat: true
                     width: 180
                     height: 80
 
                     onClicked: {
                         network = modelData;
                         next();
+                    }
+
+                    Rectangle {
+                        border.color: down ? Material.accentColor : hovered ? Material.foreground : 'gray'
+                        border.width: 1
+                        color: 'transparent'
+                        anchors.fill: background
                     }
 
                     Row {
