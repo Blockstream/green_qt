@@ -232,7 +232,7 @@ Item {
 
                 header: RowLayout {
                     TabBar {
-                        leftPadding: 8
+                        leftPadding: 16
                         background: Item {}
                         id: tab_bar
 

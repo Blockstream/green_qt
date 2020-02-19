@@ -161,7 +161,6 @@ Page {
 
             Column {
                 spacing: 8
-                width: parent.width
 
                 Label {
                     text: qsTr('id_my_notes')
@@ -171,8 +170,10 @@ Page {
                 TextArea {
                     id: memo_edit
                     placeholderText: qsTr('id_add_a_note_only_you_can_see_it')
-                    width: parent.width
+                    width: scroll_view.width - 16
                     text: transaction.data.memo
+                    selectByMouse: true
+                    wrapMode: TextEdit.Wrap
                 }
 
                 Row {

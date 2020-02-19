@@ -14,19 +14,20 @@ ItemDelegate {
     spacing: 8
 
     function txType(tx) {
-        var separator = tx.memo === '' ? '' : ' - '
+        const memo = tx.memo.trim().replace(/\n/g, ' ')
+        const separator = memo === '' ? '' : ' - '
         if (tx.type === 'incoming') {
             for (const o of tx.outputs) {
                 if (o.is_relevant) {
-                    return qsTr('id_received') + separator + tx.memo
+                    return qsTr('id_received') + separator + memo
                 }
             }
         }
         if (tx.type === 'outgoing') {
-            return qsTr('id_sent') + separator + tx.memo
+            return qsTr('id_sent') + separator + memo
         }
         if (tx.type === 'redeposit') {
-            return qsTr("id_redeposited") + separator + tx.memo
+            return qsTr("id_redeposited") + separator + memo
         }
         return JSON.stringify(tx, null, '\t')
     }
@@ -45,6 +46,7 @@ ItemDelegate {
                 Layout.fillWidth: true
                 font.pixelSize: 14
                 text: txType(tx)
+                elide: Label.ElideRight
             }
         }
 
