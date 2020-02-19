@@ -13,60 +13,42 @@ Page {
 
     header: TabBar {
         id: tab_bar
-        leftPadding: 8
+        leftPadding: 16
         background: Item {}
-        TabButton {
-            text: qsTr('id_general')
-            width: 160
-        }
-        TabButton {
-            text: qsTr('id_security')
-            width: 160
-        }
-        TabButton {
-            text: qsTr('id_advanced')
-            width: 160
-        }
-        TabButton {
-            text: qsTr('id_recovery')
-            width: 160
+        Repeater {
+            model: stack_layout.children
+
+            TabButton {
+                text: modelData.title
+                width: 160
+            }
         }
     }
 
     StackLayout {
+        id: stack_layout
         anchors.fill: parent
         clip: true
         currentIndex: tab_bar.currentIndex
 
-        ScrollView {
-            contentWidth: width - 8 - 16
-            WalletGeneralSettingsView {
-                x: 8
-                width: contentWidth
-            }
-        }
+        Repeater {
+            property list<Component> views: [
+                Component { WalletGeneralSettingsView {} },
+                Component { WalletSecuritySettingsView {} },
+                Component { WalletAdvancedSettingsView {} },
+                Component { WalletRecoverySettingsView {} }
+            ]
+            model: views
 
-        ScrollView {
-            contentWidth: width - 8 - 16
-            WalletSecuritySettingsView {
-                x: 8
-                width: contentWidth
-            }
-        }
-
-        ScrollView {
-            contentWidth: width - 8 - 16
-            WalletAdvancedSettingsView {
-                x: 8
-                width: contentWidth
-            }
-        }
-
-        ScrollView {
-            contentWidth: width - 8 - 16
-            WalletRecoverySettingsView {
-                x: 8
-                width: contentWidth
+            ScrollView {
+                property string title: loader.item.title
+                contentWidth: width - 32
+                Loader {
+                    id: loader
+                    x: 16
+                    width: contentWidth
+                    sourceComponent: modelData
+                }
             }
         }
     }

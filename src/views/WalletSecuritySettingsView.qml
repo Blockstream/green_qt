@@ -8,6 +8,8 @@ import '..'
 import '../dialogs'
 
 ColumnLayout {
+    property string title: qsTrId('id_security')
+
     spacing: 30
 
     SettingsController {

@@ -7,6 +7,8 @@ import QtQuick.Layouts 1.12
 import '..'
 
 ColumnLayout {
+    property string title: qsTrId('id_advanced')
+
     spacing: 30
 
     SettingsBox {
