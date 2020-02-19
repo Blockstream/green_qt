@@ -36,8 +36,11 @@ Wallet::Wallet(QObject *parent)
 
 void Wallet::connect(const QString& proxy, bool use_tor)
 {
-    Q_ASSERT(m_connection == Disconnected);
-    setConnection(Connecting);
+    if (m_connection == Connected) {
+        Q_ASSERT(m_proxy == proxy && m_use_tor == use_tor);
+    } else {
+        setConnection(Connecting);
+    }
 
     if (m_proxy != proxy) {
         m_proxy = proxy;
