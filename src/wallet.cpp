@@ -63,7 +63,11 @@ void Wallet::connectNow()
     QMetaObject::invokeMethod(m_context, [this] {
         QJsonObject params{
             { "name", m_network->id() },
+#ifdef QT_DEBUG
             { "log_level", "debug" },
+#else
+            { "log_level", "info" },
+#endif
             { "use_tor", m_use_tor }
         };
 
