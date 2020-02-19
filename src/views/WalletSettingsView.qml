@@ -16,22 +16,22 @@ Page {
         leftPadding: 16
         background: Item {}
         Repeater {
-            model: stack_layout.children
+            model: repeater.count
 
             TabButton {
-                text: modelData.title
+                text: repeater.itemAt(index).title
                 width: 160
             }
         }
     }
 
     StackLayout {
-        id: stack_layout
         anchors.fill: parent
         clip: true
         currentIndex: tab_bar.currentIndex
 
         Repeater {
+            id: repeater
             property list<Component> views: [
                 Component { WalletGeneralSettingsView {} },
                 Component { WalletSecuritySettingsView {} },
