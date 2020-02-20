@@ -62,7 +62,7 @@ void WalletManager::insertWallet(Wallet* wallet)
     QSettings settings(GetDataFile("app", "wallets.ini"), QSettings::IniFormat);
     wallet->m_index = settings.beginReadArray("wallets");
     settings.endArray();
-    settings.beginWriteArray("wallets");
+    settings.beginWriteArray("wallets", wallet->m_index + 1);
     settings.setArrayIndex(wallet->m_index);
     settings.setValue("proxy", wallet->m_proxy);
     settings.setValue("use_tor", wallet->m_use_tor);
