@@ -656,7 +656,13 @@ QString Wallet::formatAmount(qint64 amount, bool include_ticker, const QString& 
 {
     Q_ASSERT(m_network);
     auto str = convert(amount).value(unit == "\u00B5BTC" ? "ubtc" : unit.toLower()).toString();
-    str = QLocale::system().toString(str.toDouble());
+    auto val = str.toDouble();
+    if (val == ((int64_t) val)) {
+        str = QLocale::system().toString(val, 'f', 0);
+    } else {
+        str = QLocale::system().toString(val, 'f', 8);
+        str.remove(QRegExp("\\.?0+$"));
+    }
     if (include_ticker) {
         str += (m_network->isLiquid() ? " L-" : " ") + unit;
     }
