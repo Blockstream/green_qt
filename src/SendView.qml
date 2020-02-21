@@ -8,7 +8,7 @@ import './views'
 StackView {
     id: stack_view
     property alias address: address_field.address
-    property Asset asset: asset_field_loader.item.asset
+    property Asset asset: asset_field_loader.item ? asset_field_loader.item.asset : null
     property alias amount: amount_field.amount
     property alias sendAll: send_all_button.checked
 
@@ -46,7 +46,7 @@ StackView {
         spacing: 8
 
         Label {
-            text: qsTr(controller.transaction.error) || ''
+            text: qsTrId(controller.transaction.error || '')
             color: 'red'
         }
 
@@ -93,7 +93,7 @@ StackView {
 
             Binding on amount {
                 when: send_all_button.checked && wallet.network.liquid
-                value: asset_field_loader.item.balance.inputAmount
+                value: asset_field_loader.item ? asset_field_loader.item.balance.inputAmount : 0
             }
 
             Binding on amount {
