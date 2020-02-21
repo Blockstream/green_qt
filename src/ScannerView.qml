@@ -4,6 +4,14 @@ import QtQuick.Controls 2.5
 import QZXing 2.3
 
 VideoOutput {
+    property list<Action> actions: [
+        Action {
+            text: qsTr('id_back')
+            onTriggered: cancel()
+        }
+    ]
+
+    signal cancel()
     signal codeScanned(string code)
 
     autoOrientation: true

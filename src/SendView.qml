@@ -14,41 +14,18 @@ StackView {
 
     property var actions: currentItem.actions
 
-    states: State {
-        name: 'SCAN_QR_CODE'
-        PropertyChanges {
-            target: camera
-            cameraState: Camera.ActiveState
+    property Item scanner_view: ScannerView {
+        source: camera
+        onCancel: {
+            stack_view.pop();
+            camera.stop();
+        }
+        onCodeScanned: {
+            camera.stop();
+            address_field.address = WalletManager.parseUrl(code).address;
+            stack_view.pop();
         }
     }
-
-    transitions: [
-        Transition {
-            to: 'SCAN_QR_CODE'
-            StackViewPushAction {
-                stackView: stack_view
-                ScannerView {
-                    property list<Action> actions: [Action{
-                            text: qsTr('id_cancel')
-                            onTriggered: stack_view.state = ''
-                       }]
-
-                    source: camera
-
-                    onCodeScanned: {
-                        address_field.address = WalletManager.parseUrl(code).address
-                        stack_view.state = ''
-                    }
-                }
-            }
-        },
-        Transition {
-            from: 'SCAN_QR_CODE'
-            ScriptAction {
-                script: stack_view.pop()
-            }
-        }
-    ]
 
     property Camera camera: Camera {
         cameraState: Camera.LoadedState
@@ -101,7 +78,10 @@ StackView {
             Layout.fillWidth: true
             label: qsTr("id_recipient")
 
-            onOpenScanner: send_view.state = 'SCAN_QR_CODE'
+            onOpenScanner: {
+                camera.start()
+                stack_view.push(scanner_view)
+            }
         }
 
         AmountField {
