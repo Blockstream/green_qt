@@ -55,11 +55,11 @@ StackView {
             active: wallet.network.liquid
             Layout.fillWidth: true
             sourceComponent: ComboBox {
-                property Balance balance: account.balances[asset_field.currentIndex]
+                property Balance balance: controller.account.balances[asset_field.currentIndex]
                 property Asset asset: balance.asset
                 id: asset_field
                 flat: true
-                model: account.balances
+                model: controller.account.balances
                 delegate: AssetDelegate {
                     highlighted: index === asset_field.currentIndex
                     balance: modelData
@@ -68,7 +68,7 @@ StackView {
                 }
 
                 contentItem: BalanceItem {
-                    balance: account.balances[asset_field.currentIndex]
+                    balance: controller.account.balances[asset_field.currentIndex]
                 }
             }
         }
@@ -105,7 +105,7 @@ StackView {
 
             Binding on text {
                 when: send_all_button.checked && !wallet.network.liquid
-                value: wallet.formatAmount(account.balance, false, wallet.settings.unit)
+                value: wallet.formatAmount(controller.account.balance, false, wallet.settings.unit)
             }
         }
 
@@ -124,13 +124,12 @@ StackView {
             property var indexes: [3, 12, 24]
 
             Component.onCompleted: {
-                currentIndex = indexes.indexOf(account.wallet.settings.required_num_blocks)
-                controller.feeRate = account.wallet.events.fees[blocks]
+                currentIndex = indexes.indexOf(controller.account.wallet.settings.required_num_blocks)
+                controller.feeRate = controller.account.wallet.events.fees[blocks]
             }
 
             onBlocksChanged: {
-                console.log('blocks: ', blocks)
-                controller.feeRate = account.wallet.events.fees[blocks]
+                controller.feeRate = controller.account.wallet.events.fees[blocks]
             }
         }
     }
