@@ -22,7 +22,7 @@ ColumnLayout {
         title: qsTr('id_access')
         description: qsTr('id_enable_or_change_your_pin_to')
 
-        FlatButton {
+        Button {
             Component {
                 id: change_pin_dialog
                 ChangePinDialog {
@@ -30,7 +30,7 @@ ColumnLayout {
                     anchors.centerIn: parent
                 }
             }
-
+            flat: true
             text: qsTr('id_change_pin')
             onClicked: change_pin_dialog.createObject(Window.window).open()
         }
@@ -95,7 +95,7 @@ ColumnLayout {
                     anchors.centerIn: parent
                 }
             }
-            FlatButton {
+            Button {
                 Layout.alignment: Qt.AlignRight
                 flat: true
                 text: qsTr('id_show_my_wallet_backup')

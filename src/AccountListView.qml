@@ -47,7 +47,8 @@ ListView {
                 visible: highlighted
                 anchors.right: parent.right
 
-                FlatButton {
+                Button {
+                    flat: true
                     enabled: !wallet.locked
                     icon.source: 'assets/svg/send.svg'
                     icon.width: 24
@@ -56,7 +57,8 @@ ListView {
                     onClicked: send_dialog.createObject(stack_view, { account }).open()
                 }
 
-                FlatButton {
+                Button {
+                    flat: true
                     enabled: !wallet.locked
                     icon.source: 'assets/svg/receive.svg'
                     icon.width: 24

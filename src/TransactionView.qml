@@ -183,12 +183,14 @@ Page {
 
                 Row {
                     anchors.right: parent.right
-                    FlatButton {
+                    Button {
+                        flat: true
                         text: qsTr('id_cancel')
                         enabled: memo_edit.text !== transaction.data.memo
                         onClicked: memo_edit.text = transaction.data.memo
                     }
-                    FlatButton {
+                    Button {
+                        flat: true
                         text: qsTr('id_save')
                         enabled: memo_edit.text !== transaction.data.memo
                         onClicked: transaction.updateMemo(memo_edit.text)

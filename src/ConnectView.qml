@@ -3,7 +3,8 @@ import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.12
 
 Column {
-    FlatButton {
+    Button {
+        flat: true
         anchors.horizontalCenter: parent.horizontalCenter
         text: qsTr('id_log_in')
         onClicked: {

@@ -18,7 +18,8 @@ ColumnLayout {
 
     SettingsBox {
         title: 'nLockTime' // TODO: move to own recovery tab
-        FlatButton {
+        Button {
+            flat: true
             text: qsTr('id_request_recovery_transactions')
             enabled: wallet.config['email'].confirmed
             onClicked: controller.sendRecoveryTransactions()
@@ -44,7 +45,8 @@ ColumnLayout {
                 padding: 10
             }
 
-            FlatButton {
+            Button {
+                flat: true
                 text: qsTr('id_reset')
                 padding: 10
             }

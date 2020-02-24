@@ -6,7 +6,6 @@
         <file>QRCode.qml</file>
         <file>ReceiveView.qml</file>
         <file>DebugRectangle.qml</file>
-        <file>FlatButton.qml</file>
         <file>SendView.qml</file>
         <file>AmountField.qml</file>
         <file>AddressField.qml</file>
