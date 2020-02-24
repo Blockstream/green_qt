@@ -130,7 +130,7 @@ ColumnLayout {
                 TwoFactorDisableDialog { }
             }
             Repeater {
-                model: ['sms', 'phone', 'email', 'gauth']
+                model: wallet.config.all_methods || []
 
                 RowLayout {
                     Layout.fillWidth: true
@@ -145,15 +145,18 @@ ColumnLayout {
                         text: method.toUpperCase()
                         Layout.minimumWidth: 64
                     }
-                    Button {
-                        flat: true
-                        Layout.minimumWidth: 128
-                        text: wallet.config[method].enabled ? qsTr('id_disable') : qsTr('id_enable')
+                    Switch {
+                        Binding on checked {
+                            value: wallet.config[method].enabled
+                        }
+
                         onClicked: {
-                            if (!wallet.config[method].enabled)
-                                enable_dialog.createObject(stack_view, { method }).open()
-                            else
-                                disable_dialog.createObject(stack_view, { method }).open()
+                            checked = wallet.config[modelData].enabled;
+                            if (!wallet.config[method].enabled) {
+                                enable_dialog.createObject(stack_view, { method }).open();
+                            } else {
+                                disable_dialog.createObject(stack_view, { method }).open();
+                            }
                         }
                     }
                 }
