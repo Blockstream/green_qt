@@ -16,7 +16,7 @@ public:
     QByteArray method() const;
     void setMethod(const QByteArray& method);
 
-    Q_INVOKABLE void enable(const QByteArray& number);
+    Q_INVOKABLE void enable(const QByteArray& data);
     Q_INVOKABLE void disable();
 
     Q_INVOKABLE void changeLimit(bool is_fiat, const QString &limit);

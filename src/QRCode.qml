@@ -1,25 +1,25 @@
 import QtQuick 2.3
 
-Image {
-    id: self
-
+Item {
     property string text
 
-    fillMode: Image.PreserveAspectFit
-    horizontalAlignment: Image.AlignHCenter
-    verticalAlignment: Image.AlignVCenter
-    smooth: false
-    mipmap: false
-    cache: false
+    implicitHeight: 120
+    implicitWidth: 120
 
-    sourceSize.width: 120
-    sourceSize.height: 120
+    Image {
+        fillMode: Image.PreserveAspectFit
+        horizontalAlignment: Image.AlignHCenter
+        verticalAlignment: Image.AlignVCenter
+        smooth: false
+        mipmap: false
+        cache: false
+        anchors.centerIn: parent
+        sourceSize.width: parent.implicitWidth
+        sourceSize.height: parent.implicitHeight
 
-    states: State {
-        when: text.length > 0
-        PropertyChanges {
-            target: self
-            source: `image://QZXing/encode/${text}?format=qrcode&border=true&transparent=true`
+        Binding on source {
+            when: text.length > 0
+            value: `image://QZXing/encode/${text}?format=qrcode&border=true&transparent=true`
         }
     }
 }

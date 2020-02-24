@@ -5,18 +5,22 @@
 
 #include <QJsonObject>
 
-class Asset;
+class Balance;
 
 class SendTransactionController : public AccountController
 {
     Q_OBJECT
-    Q_PROPERTY(bool valid READ isValid NOTIFY validChanged)
-    Q_PROPERTY(Asset* asset READ asset WRITE setAsset NOTIFY assetChanged)
-    Q_PROPERTY(QString address READ address WRITE setAddress NOTIFY addressChanged)
-    Q_PROPERTY(bool sendAll READ sendAll WRITE setSendAll NOTIFY sendAllChanged)
-    Q_PROPERTY(QString amount READ amount WRITE setAmount NOTIFY amountChanged)
-    Q_PROPERTY(QString memo READ memo WRITE setMemo NOTIFY memoChanged)
-    Q_PROPERTY(int feeRate READ feeRate WRITE setFeeRate NOTIFY feeRateChanged)
+    Q_PROPERTY(bool valid READ isValid NOTIFY changed)
+    Q_PROPERTY(Balance* balance READ balance WRITE setBalance NOTIFY changed)
+    Q_PROPERTY(QString address READ address WRITE setAddress NOTIFY changed)
+    Q_PROPERTY(bool sendAll READ sendAll WRITE setSendAll NOTIFY changed)
+    Q_PROPERTY(QString amount READ amount WRITE setAmount NOTIFY changed)
+    Q_PROPERTY(QString effectiveAmount READ effectiveAmount NOTIFY changed)
+    Q_PROPERTY(QString fiatAmount READ fiatAmount WRITE setFiatAmount NOTIFY changed)
+    Q_PROPERTY(QString effectiveFiatAmount READ effectiveFiatAmount NOTIFY changed)
+    Q_PROPERTY(QString memo READ memo WRITE setMemo NOTIFY changed)
+    Q_PROPERTY(int feeRate READ feeRate WRITE setFeeRate NOTIFY changed)
+    Q_PROPERTY(bool hasFiatRate READ hasFiatRate NOTIFY changed)
     Q_PROPERTY(QJsonObject transaction READ transaction NOTIFY transactionChanged)
 
 public:
@@ -24,8 +28,8 @@ public:
 
     bool isValid() const;
 
-    Asset* asset() const;
-    void setAsset(Asset* asset);
+    Balance* balance() const;
+    void setBalance(Balance* balance);
 
     QString address() const;
     void setAddress(const QString& address);
@@ -33,8 +37,15 @@ public:
     bool sendAll() const;
     void setSendAll(bool send_all);
 
-    QString amount() const;
+    QString amount() const { return m_amount; }
     void setAmount(const QString& amount);
+
+    QString effectiveAmount() const { return m_effective_amount; }
+
+    QString fiatAmount() const { return m_fiat_amount; }
+    void setFiatAmount(const QString& fiatAmount);
+
+    QString effectiveFiatAmount() const { return m_effective_fiat_amount; }
 
     QString memo() const;
     void setMemo(const QString& memo);
@@ -42,31 +53,29 @@ public:
     qint64 feeRate() const;
     void setFeeRate(qint64 fee_rate);
 
+    bool hasFiatRate() const;
+
     QJsonObject transaction() const;
 
 public slots:
     void send();
 
 signals:
-    void validChanged(bool valid);
-    void assetChanged(Asset* asset);
-    void addressChanged(const QString& address);
-    void sendAllChanged(bool send_all);
-    void amountChanged(QString amount);
-    void memoChanged(const QString& memo);
-    void feeRateChanged(qint64 fee_rate);
+    void changed();
     void transactionChanged();
 
 private:
+    void update();
     void create();
 
 protected:
     bool m_valid{false};
     quint64 m_count{0};
-    Asset* m_asset{nullptr};
+    Balance* m_balance{nullptr};
     QString m_address;
     bool m_send_all{false};
-    QString m_amount;
+    QString m_amount, m_effective_amount;
+    QString m_fiat_amount, m_effective_fiat_amount;
     QString m_memo;
     qint64 m_fee_rate{0};
     QJsonObject m_transaction;

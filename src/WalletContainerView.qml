@@ -10,9 +10,9 @@ StackView {
 
     signal canceled2()
 
-    initialItem: foo
+    initialItem: login_view
 
-    property Item foo: Page {
+    property Item login_view: Page {
 
         background: Item {}
 
@@ -133,14 +133,26 @@ StackView {
             }
         }
 
-        LoginView {
+        Collapsible {
             anchors.centerIn: parent
+            collapsed: wallet.authenticated
             enabled: wallet.loginAttemptsRemaining > 0 && wallet.authentication === Wallet.Unauthenticated
-            onLogin: {
-                const proxy = proxy_checkbox.checked ? proxy_field.text : '';
-                const use_tor = tor_checkbox.checked;
-                wallet.connect(proxy, use_tor);
-                wallet.loginWithPin(pin);
+
+            LoginView {
+                onLogin: {
+                    const proxy = proxy_checkbox.checked ? proxy_field.text : '';
+                    const use_tor = tor_checkbox.checked;
+                    wallet.connect(proxy, use_tor);
+                    wallet.loginWithPin(pin);
+                }
+            }
+        }
+
+        BusyIndicator {
+            anchors.centerIn: parent
+            opacity: wallet.authenticated ? 1 : 0
+            Behavior on opacity {
+                NumberAnimation { duration: 300 }
             }
         }
     }
@@ -149,10 +161,12 @@ StackView {
 
     Connections {
         target: wallet
+        onLoginWithPinFinished: {
+            stack_view.push(wallet_view);
+        }
+
         onAuthenticationChanged: {
-            if (authentication === Wallet.Authenticated) {
-                stack_view.push(wallet_view);
-            } else if (stack_view.depth > 1) {
+            if (authentication !== Wallet.Authenticated && stack_view.depth > 1) {
                 stack_view.pop()
             }
         }

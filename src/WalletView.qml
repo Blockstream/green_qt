@@ -195,6 +195,7 @@ Item {
                 Label {
                     id: title_label
                     font.pixelSize: 16
+                    font.capitalization: Font.AllUppercase
                     text: account ? account.name : ''
                     Layout.alignment: Qt.AlignVCenter
                 }
@@ -275,7 +276,9 @@ Item {
 
             Component {
                 id: send_dialog
-                SendDialog {}
+                SendDialog {
+                    account: account
+                }
             }
 
             Component {

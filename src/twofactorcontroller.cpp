@@ -20,15 +20,17 @@ void TwoFactorController::setMethod(const QByteArray& method)
     emit methodChanged(m_method);
 }
 
-void TwoFactorController::enable(const QByteArray& number)
+void TwoFactorController::enable(const QByteArray& data)
 {
-    QMetaObject::invokeMethod(wallet()->m_context, [this, number] {
+    QMetaObject::invokeMethod(wallet()->m_context, [this, data] {
         auto details = Json::fromObject({
-            { "data", QString(number) },
+            { "data", QString(data) },
             { "enabled", true }
         });
         int res = GA_change_settings_twofactor(wallet()->m_session, m_method.constData(), details, &m_auth_handler);
         Q_ASSERT(res == GA_OK);
+
+        GA_destroy_json(details);
 
         QMetaObject::invokeMethod(this, [this] {
             process();

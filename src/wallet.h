@@ -39,6 +39,7 @@ private:
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(ConnectionStatus connection READ connection NOTIFY connectionChanged)
     Q_PROPERTY(AuthenticationStatus authentication READ authentication NOTIFY authenticationChanged)
+    Q_PROPERTY(bool authenticated READ isAuthenticated NOTIFY authenticationChanged)
     Q_PROPERTY(QString proxy READ proxy NOTIFY proxyChanged)
     Q_PROPERTY(bool useTor READ useTor NOTIFY useTorChanged)
     Q_PROPERTY(bool locked READ isLocked NOTIFY lockedChanged)
@@ -63,6 +64,7 @@ public:
 
     ConnectionStatus connection() const { return m_connection; }
     AuthenticationStatus authentication() const { return m_authentication; }
+    bool isAuthenticated() const { return m_authentication == Authenticated; }
 
     QString proxy() const { return m_proxy; }
     bool useTor() const { return m_use_tor; }
@@ -98,7 +100,7 @@ public:
     QString formatAmount(qint64 amount, bool include_ticker) const;
     Q_INVOKABLE QString formatAmount(qint64 amount, bool include_ticker, const QString& unit) const;
 
-    Asset* getOrCreateAsset(const QString& id);
+    Q_INVOKABLE Asset* getOrCreateAsset(const QString& id);
 
 public slots:
     void connect(const QString& proxy, bool use_tor);
@@ -132,6 +134,8 @@ signals:
     void settingsChanged();
 
     void configChanged();
+
+    void loginWithPinFinished();
 
 protected:
     bool eventFilter(QObject* object, QEvent* event) override;

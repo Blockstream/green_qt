@@ -106,32 +106,32 @@ static QJsonArray get_transactions(GA_session* session, int subaccount, int firs
 void Account::reload()
 {
     QMetaObject::invokeMethod(m_wallet->m_context, [this] {
-        QJsonArray transactions;
+        QList<QJsonArray> transactions;
         int first = 0;
         int count = 30;
         while (true) {
             auto values = get_transactions(m_wallet->m_session, m_pointer, first, count);
-            for (auto value : values) {
-                transactions.append(value);
-            }
+            transactions.push_back(values);
             if (values.size() < count) break;
-            break;
+            first += count;
         }
 
         QMetaObject::invokeMethod(this, [this, transactions] {
             m_transactions.clear();
             m_have_unconfirmed = false;
-            for (auto value : transactions) {
-                QJsonObject data = value.toObject();
-                auto hash = data.value("txhash").toString();
-                auto transaction = m_transactions_by_hash.value(hash);
-                if (!transaction) {
-                    transaction = new Transaction(this);
-                    m_transactions_by_hash.insert(hash, transaction);
+            for (auto list : transactions) {
+                for (auto value : list) {
+                    QJsonObject data = value.toObject();
+                    auto hash = data.value("txhash").toString();
+                    auto transaction = m_transactions_by_hash.value(hash);
+                    if (!transaction) {
+                        transaction = new Transaction(this);
+                        m_transactions_by_hash.insert(hash, transaction);
+                    }
+                    transaction->updateFromData(data);
+                    m_transactions.append(transaction);
+                    if (transaction->isUnconfirmed()) m_have_unconfirmed = true;
                 }
-                transaction->updateFromData(data);
-                m_transactions.append(transaction);
-                if (transaction->isUnconfirmed()) m_have_unconfirmed = true;
             }
             emit transactionsChanged();
         }, Qt::QueuedConnection);

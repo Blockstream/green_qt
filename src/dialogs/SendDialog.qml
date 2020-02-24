@@ -1,19 +1,23 @@
 import Blockstream.Green 0.1
 import QtQuick 2.13
 import QtQuick.Controls 2.13
+import QtQuick.Layouts 1.12
 import '..'
 
 ControllerDialog {
     title: qsTr('id_send')
 
+    property alias account: ctrl.account
     controller: SendTransactionController {
-        asset: send_view.asset
+        id: ctrl
+        balance: send_view.balance
         address: send_view.address
-        amount: send_view.amount
         sendAll: send_view.sendAll
     }
 
     doneText: qsTr('id_transaction_sent')
+    minimumWidth: 500
+    minimumHeight: 300
 
     initialItem: SendView {
         id: send_view

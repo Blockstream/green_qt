@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file alias="qtquickcontrols2.conf">qtquickcontrols2_linux.conf</file>
+        <file>Collapsible.qml</file>
     </qresource>
 </RCC>

@@ -1,31 +1,34 @@
 import Blockstream.Green 0.1
 import QtQuick 2.13
 import QtQuick.Controls 2.5
+import QtQuick.Layouts 1.12
 import './views'
 
 ControllerDialog {
     id: controller_dialog
     property string method
-    initialText: qsTr('id_disable_s_for_twofactor').arg(method)
-    doneText: qsTr('id_disabled')
+    title: qsTrId('id_set_up_twofactor_authentication')
+    doneText: qsTrId('id_disabled')
 
     controller: TwoFactorController {
         method: controller_dialog.method
     }
 
-    modal: true
-    width: 400
-    height: 300
+    initialItem: RowLayout {
+        property list<Action> actions: [
+            Action {
+                text: qsTr('id_next')
+                onTriggered: controller.disable()
+            }
+        ]
 
-    anchors.centerIn: parent
-
-    initialItem: WizardPage {
-        actions: Action {
-            text: qsTr('id_next')
-            onTriggered: controller.disable()
+        Image {
+            source: `assets/svg/2fa_${method}.svg`
+            sourceSize.width: 32
+            sourceSize.height: 32
         }
         Label {
-            text: initialText
+            text: qsTrId('id_disable_s_for_twofactor').arg(method)
         }
     }
 }

@@ -18,18 +18,16 @@ ListView {
         width: ListView.view.width
 
         contentItem: Column {
-            spacing: 8
+            spacing: 0
 
-            Label {
-                color: 'gray'
+            SectionLabel {
                 elide: Text.ElideRight
-                font.pixelSize: 16
                 text: account.name
                 width: parent.width
                 ToolTip.text: account.name
                 ToolTip.visible: truncated && hovered
             }
-
+            Item { height: 8; width: 1 }
             Row {
                 spacing: 10
                 Label {
@@ -38,33 +36,34 @@ ListView {
                 }
                 Label {
                     anchors.bottom: parent.bottom
-                    text: formatFiat(account.balance)
+                    text: '≈ ' + formatFiat(account.balance)
                 }
             }
-
-            Row {
-                spacing: 8
-                visible: highlighted
+            Item { height: 8; width: 1 }
+            Collapsible {
+                collapsed: !highlighted
                 anchors.right: parent.right
+                Row {
+                    spacing: 8
+                    Button {
+                        flat: true
+                        enabled: !wallet.locked
+                        icon.source: 'assets/svg/send.svg'
+                        icon.width: 24
+                        icon.height: 24
+                        text: qsTr('id_send')
+                        onClicked: send_dialog.createObject(stack_view, { account }).open()
+                    }
 
-                Button {
-                    flat: true
-                    enabled: !wallet.locked
-                    icon.source: 'assets/svg/send.svg'
-                    icon.width: 24
-                    icon.height: 24
-                    text: qsTr('id_send')
-                    onClicked: send_dialog.createObject(stack_view, { account }).open()
-                }
-
-                Button {
-                    flat: true
-                    enabled: !wallet.locked
-                    icon.source: 'assets/svg/receive.svg'
-                    icon.width: 24
-                    icon.height: 24
-                    text: qsTr('id_receive')
-                    onClicked: receive_dialog.createObject(stack_view).open()
+                    Button {
+                        flat: true
+                        enabled: !wallet.locked
+                        icon.source: 'assets/svg/receive.svg'
+                        icon.width: 24
+                        icon.height: 24
+                        text: qsTr('id_receive')
+                        onClicked: receive_dialog.createObject(stack_view).open()
+                    }
                 }
             }
         }

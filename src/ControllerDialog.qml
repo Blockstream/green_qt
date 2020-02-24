@@ -8,37 +8,52 @@ Dialog {
     id: controller_dialog
     property Controller controller
     property alias initialItem: stack_view.initialItem
-    property alias goo: stack_view
-    property string icon
     property string description
     property string placeholder
-    property string initialText
     property string doneText
+
+    property real minimumHeight: 0
+    property real minimumWidth: 0
+
+    Behavior on implicitWidth {
+        NumberAnimation { duration: 300; easing.type: Easing.OutCubic }
+    }
+    Behavior on implicitHeight {
+        NumberAnimation { duration: 300; easing.type: Easing.OutCubic }
+    }
 
     anchors.centerIn: parent
     clip: true
-    height: 500
     horizontalPadding: 16
+    verticalPadding: 0
     modal: true
-    width: 700
 
-    header: RowLayout {
+    header: Item {
+        implicitHeight: 48
+        implicitWidth: title_label.implicitWidth + reject_button.implicitWidth + 32
         Label {
+            id: title_label
             text: title
-            font.pixelSize: 18
-            Layout.fillWidth: true
-            Layout.margins: 16
+            anchors.left: parent.left
+            anchors.margins: 16
+            anchors.verticalCenter: parent.verticalCenter
+            font.pixelSize: 16
+            font.capitalization: Font.AllUppercase
         }
-        Image {
-            visible: icon.length > 0
-            source: icon
-            sourceSize.height: 32
-            Layout.margins: 16
+        ToolButton {
+            id: reject_button
+            anchors.right: parent.right
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.margins: 8
+            icon.source: 'assets/svg/cancel.svg'
+            icon.width: 16
+            icon.height: 16
+            onClicked: reject()
         }
     }
 
     footer: Item {
-        height: 64
+        implicitHeight: 48
         Row {
             anchors.margins: 16
             anchors.verticalCenter: parent.verticalCenter
@@ -80,12 +95,12 @@ Dialog {
         WizardPage {
             actions: [
                 Action {
-                    text: qsTr('id_next')
-                    onTriggered: controller.resolveCode(code_field.text)
-                },
-                Action {
                     text: qsTr('id_back')
                     onTriggered: controller.cancel()
+                },
+                Action {
+                    text: qsTr('id_next')
+                    onTriggered: controller.resolveCode(code_field.text)
                 }
             ]
             Column {
@@ -129,6 +144,7 @@ Dialog {
 
     StackView {
         id: stack_view
-        anchors.fill: parent
+        implicitHeight: Math.max(currentItem.implicitHeight, minimumHeight)
+        implicitWidth: Math.max(currentItem.implicitWidth, minimumWidth)
     }
 }

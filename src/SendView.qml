@@ -8,13 +8,15 @@ import './views'
 StackView {
     id: stack_view
     property alias address: address_field.text
-    property Asset asset: asset_field_loader.item ? asset_field_loader.item.asset : null
-    property alias amount: amount_field.text
+    property Balance balance: asset_field_loader.item ? asset_field_loader.item.balance : null
     property alias sendAll: send_all_button.checked
 
     property var actions: currentItem.actions
 
     property Item scanner_view: ScannerView {
+        implicitHeight: Math.max(setup_view.implicitHeight, 300)
+        implicitWidth: Math.max(setup_view.implicitWidth, 300)
+
         source: camera
         onCancel: {
             stack_view.pop();
@@ -27,6 +29,14 @@ StackView {
         }
     }
 
+    implicitHeight: currentItem.implicitHeight
+    implicitWidth: currentItem.implicitWidth
+
+    Component {
+        id: review_view
+        ReviewView {}
+    }
+
     property Camera camera: Camera {
         cameraState: Camera.LoadedState
         focus {
@@ -36,20 +46,38 @@ StackView {
     }
 
     initialItem: ColumnLayout {
+        id: setup_view
+        property list<Action> actions: [
+            Action {
+                text: controller.transaction.error ? qsTrId(controller.transaction.error || '') : qsTrId('id_review')
+                enabled: controller.valid && !controller.transaction.error
+                onTriggered: stack_view.push(review_view)
+            }
+        ]
 
-        property list<Action> actions: [Action{
-               text: qsTr('id_send')
-               enabled: controller.valid && !controller.transaction.error
-               onTriggered: controller.send()
-           }]
+        spacing: 0
 
-        spacing: 8
+        SectionLabel { text: qsTrId('id_address') }
 
-        Label {
-            text: qsTrId(controller.transaction.error || '')
-            color: 'red'
+        RowLayout {
+            TextField {
+                id: address_field
+                Layout.fillWidth: true
+                horizontalAlignment: TextField.AlignHCenter
+                placeholderText: qsTr('id_enter_an_address')
+                font.pixelSize: 12
+            }
+            ToolButton {
+                icon.source: './assets/svg/qr.svg'
+                icon.width: 16
+                icon.height: 16
+                onClicked: {
+                    camera.start()
+                    stack_view.push(scanner_view)
+                }
+            }
         }
-
+        SectionLabel { text: qsTrId('id_asset'); visible: wallet.network.liquid }
         Loader {
             id: asset_field_loader
             active: wallet.network.liquid
@@ -76,53 +104,63 @@ StackView {
                 }
             }
         }
-
+        SectionLabel { text: qsTrId('id_amount') }
         RowLayout {
+            spacing: 16
+            Switch {
+                id: send_all_button
+                text: qsTr('id_send_all_funds')
+            }
             TextField {
-                id: address_field
+                id: amount_field
                 Layout.fillWidth: true
-                horizontalAlignment: TextField.AlignHCenter
-                placeholderText: qsTr('id_enter_an_address')
-            }
+                enabled: !send_all_button.checked
+                horizontalAlignment: TextField.AlignRight
 
-            Button {
-                highlighted: false
-                flat: true
-                icon.source: './assets/svg/qr.svg'
-                onClicked: {
-                    camera.start()
-                    stack_view.push(scanner_view)
+                placeholderText: controller.effectiveAmount
+                text: controller.amount
+                onTextChanged: {
+                    if (!activeFocus) return;
+                    controller.amount = text;
                 }
-            }
-        }
-        TextField {
-            id: amount_field
-            Layout.fillWidth: true
-            enabled: !send_all_button.checked
-            horizontalAlignment: TextField.AlignHCenter
-            placeholderText: qsTr('id_add_amount')
 
-            Binding on text {
-                when: send_all_button.checked && wallet.network.liquid
-                value: asset_field_loader.item ? asset_field_loader.item.balance.inputAmount : 0
+                Label {
+                    id: unit
+                    anchors.right: parent.right
+                    anchors.baseline: parent.baseline
+                    text: wallet.network.liquid ? (balance.asset.data.name === 'btc' ? 'L-'+wallet.settings.unit : (balance.asset.data.ticker || '')) : wallet.settings.unit
+                }
+                rightPadding: unit.width + 8
             }
 
-            Binding on text {
-                when: send_all_button.checked && !wallet.network.liquid
-                value: wallet.formatAmount(controller.account.balance, false, wallet.settings.unit)
+            Label {
+                enabled: controller.hasFiatRate
+                text: '≈'
+            }
+
+            TextField {
+                id: fiat_field
+                Layout.fillWidth: true
+                enabled: !send_all_button.checked && controller.hasFiatRate
+                horizontalAlignment: TextField.AlignRight
+                placeholderText: controller.effectiveFiatAmount
+                text: controller.fiatAmount
+
+                onTextChanged: {
+                    if (!activeFocus) return;
+                    controller.fiatAmount = text
+                }
+
+                Label {
+                    id: currency
+                    anchors.right: parent.right
+                    anchors.baseline: parent.baseline
+                    text: wallet.settings.pricing.currency
+                }
+                rightPadding: currency.width + 8
             }
         }
-
-        Switch {
-            id: send_all_button
-            checkable: true
-            text: qsTr('id_send_all_funds')
-        }
-
-        Label {
-            text: qsTr('id_network_fee')
-        }
-
+        SectionLabel { text: qsTrId('id_network_fee') }
         FeeComboBox {
             Layout.fillWidth: true
             property var indexes: [3, 12, 24]

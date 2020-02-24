@@ -4,12 +4,12 @@ import QtQuick.Controls 2.5
 import './views'
 
 Column {
-    spacing: 16
-
     signal login(string pin)
 
+    spacing: 16
+
     Label {
-        opacity: wallet.authentication === Wallet.Unuthenticated > 0 ? 0 : 1
+        opacity: wallet.authentication === Wallet.Unauthenticated ? 1 : 0
         anchors.horizontalCenter: parent.horizontalCenter
         horizontalAlignment: Text.AlignHCenter
         wrapMode: Text.WordWrap

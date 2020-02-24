@@ -1,9 +1,11 @@
 import QtMultimedia 5.13
 import QtQuick 2.0
 import QtQuick.Controls 2.5
+import QtQuick.Controls.Material 2.12
 import QZXing 2.3
 
-VideoOutput {
+Item {
+    property alias source: video_output.source
     property list<Action> actions: [
         Action {
             text: qsTr('id_back')
@@ -14,17 +16,44 @@ VideoOutput {
     signal cancel()
     signal codeScanned(string code)
 
-    autoOrientation: true
-    fillMode: VideoOutput.PreserveAspectCrop
-    filters: QZXingFilter {
-        captureRect: {
-            contentRect; sourceRect
-            return mapRectToSource(mapNormalizedRectToItem(Qt.rect(0, 0, 1, 1)))
-        }
+    BusyIndicator {
+        anchors.centerIn: parent
+    }
 
-        decoder {
-            enabledDecoders: QZXing.DecoderFormat_QR_CODE
-            onTagFound: codeScanned(tag)
+    VideoOutput {
+        id: video_output
+        anchors.fill: parent
+        autoOrientation: true
+        fillMode: VideoOutput.PreserveAspectCrop
+        filters: QZXingFilter {
+            captureRect: {
+                video_output.width;
+                video_output.height;
+                video_output.contentRect;
+                video_output.sourceRect;
+                return video_output.mapRectToSource(video_output.mapNormalizedRectToItem(Qt.rect(0, 0, 1, 1)));
+            }
+
+            decoder {
+                enabledDecoders: QZXing.DecoderFormat_QR_CODE
+                onTagFound: codeScanned(tag)
+            }
+        }
+    }
+
+    Rectangle {
+        border.width: 1
+        border.color: Material.accent
+        color: 'transparent'
+        width: Math.min(parent.width, parent.height) - 128
+        height: width
+        anchors.centerIn: parent
+
+        Rectangle {
+            color: Material.accent
+            anchors.fill: parent
+            anchors.margins: 8
+            opacity: 0.1
         }
     }
 }

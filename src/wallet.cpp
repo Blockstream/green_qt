@@ -64,7 +64,7 @@ void Wallet::connectNow()
         QJsonObject params{
             { "name", m_network->id() },
 #ifdef QT_DEBUG
-            { "log_level", "debug" },
+            { "log_level", "info" },
 #else
             { "log_level", "info" },
 #endif
@@ -388,10 +388,11 @@ void Wallet::loginWithPin(const QByteArray& pin)
         }
 
         if (!authenticated) {
-            qDebug("AUTH FAILED");
             setAuthentication(Unauthenticated);
             return;
         }
+
+        setAuthentication(Authenticated);
 
         updateCurrencies();
         updateSettings();
@@ -399,7 +400,7 @@ void Wallet::loginWithPin(const QByteArray& pin)
         reload();
         updateConfig();
 
-        setAuthentication(Authenticated);
+        QTimer::singleShot(1000, this, [this]{ emit loginWithPinFinished(); });
     });
 }
 

@@ -67,5 +67,7 @@
         <file>ScrollShadow.qml</file>
         <file>MnemonicPage.qml</file>
         <file>MnemonicQuizPage.qml</file>
+        <file>ReviewView.qml</file>
+        <file>SectionLabel.qml</file>
     </qresource>
 </RCC>

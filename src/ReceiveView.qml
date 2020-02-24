@@ -30,84 +30,74 @@ ColumnLayout {
         }
     }
 
-    Page {
-        header: RowLayout {
-            Label {
-                text: qsTr('id_scan_to_send_here')
-                Layout.fillWidth: true
-            }
-            ToolButton {
-                icon.source: 'assets/svg/refresh.svg'
-                icon.width: 16
-                icon.height: 16
-                onClicked: receive_address.generate()
-            }
+    RowLayout {
+        SectionLabel {
+            text: qsTrId('id_scan_to_send_here')
+            Layout.fillWidth: true
         }
-        background: MouseArea {
-            onClicked: copyAddress()
-        }
-        padding: 20
-        Layout.fillWidth: true
-        QRCode {
-            id: qrcode
-            anchors.horizontalCenter: parent.horizontalCenter
-            opacity: receive_address.generating ? 0 : 1.0
-            text: url(address, parseAmount(amount_field.text) / 100000000)
-            Behavior on opacity {
-                OpacityAnimator { duration: 200 }
-            }
-            Rectangle {
-                anchors.centerIn: parent
-                border.width: 1
-                border.color: '#00B45E'
-                color: '#1000B45E'
-                width: parent.height + 20
-                height: width
-                z: -1
-            }
+        ToolButton {
+            icon.source: 'assets/svg/refresh.svg'
+            icon.width: 16
+            icon.height: 16
+            onClicked: receive_address.generate()
         }
     }
 
-    Page {
-        header: Label {
-            text: qsTr('id_address')
+    QRCode {
+        id: qrcode
+        opacity: receive_address.generating ? 0 : 1.0
+        text: url(address, parseAmount(amount_field.text) / 100000000)
+        Layout.alignment: Qt.AlignHCenter
+        Behavior on opacity {
+            OpacityAnimator { duration: 200 }
         }
-        background: MouseArea {
-            onClicked: copyAddress()
-        }
-        Layout.fillWidth: true
-        RowLayout {
-            anchors.fill: parent
-            Label {
-                id: address_field
-                text: receive_address.address
-                horizontalAlignment: Label.AlignHCenter
-                verticalAlignment: Label.AlignVCenter
-                Layout.fillWidth: true
-            }
-            ToolButton {
-                icon.source: 'assets/svg/copy_to_clipboard.svg'
-                icon.width: 16
-                icon.height: 16
-                onClicked: copyAddress()
-            }
+        Rectangle {
+            anchors.centerIn: parent
+            border.width: 1
+            border.color: '#00B45E'
+            color: '#1000B45E'
+            width: parent.height + 16
+            height: width
+            z: -1
         }
     }
 
-    Page {
-        header: Label {
-            text: qsTr('id_add_amount_optional')
+    SectionLabel {
+        text: qsTrId('id_address')
+    }
+
+    RowLayout {
+        Label {
+            id: address_field
+            text: receive_address.address
+            horizontalAlignment: Label.AlignHCenter
+            verticalAlignment: Label.AlignVCenter
+            Layout.fillWidth: true
+            Layout.minimumWidth: 400
         }
-        background: Item {}
-        Layout.fillWidth: true
-        RowLayout {
-            anchors.fill: parent
-            TextField {
-                id: amount_field
-                Layout.fillWidth: true
-            }
+        ToolButton {
+            icon.source: 'assets/svg/copy_to_clipboard.svg'
+            icon.width: 16
+            icon.height: 16
+            onClicked: copyAddress()
+        }
+    }
+
+    SectionLabel {
+        text: qsTrId('id_add_amount_optional')
+    }
+    RowLayout {
+        TextField {
+            id: amount_field
+            horizontalAlignment: TextField.AlignRight
+            rightPadding: unit.width + 8
+            Layout.fillWidth: true
             Label {
-                text: wallet.settings.unit
+                id: unit
+                anchors.right: parent.right
+                anchors.baseline: parent.baseline
+                text: (wallet.network.liquid ? 'L-'+wallet.settings.unit : wallet.settings.unit) +
+                      ' ≈ ' + formatFiat(parseAmount(amount_field.text))
             }
         }
     }
