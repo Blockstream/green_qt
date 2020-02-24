@@ -7,7 +7,6 @@
         <file>ReceiveView.qml</file>
         <file>DebugRectangle.qml</file>
         <file>SendView.qml</file>
-        <file>AddressField.qml</file>
         <file>Amount.qml</file>
         <file>AccountBalanceGraph.qml</file>
         <file>TransactionDelegate.qml</file>

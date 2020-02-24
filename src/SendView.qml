@@ -7,7 +7,7 @@ import './views'
 
 StackView {
     id: stack_view
-    property alias address: address_field.address
+    property alias address: address_field.text
     property Asset asset: asset_field_loader.item ? asset_field_loader.item.asset : null
     property alias amount: amount_field.text
     property alias sendAll: send_all_button.checked
@@ -22,7 +22,7 @@ StackView {
         }
         onCodeScanned: {
             camera.stop();
-            address_field.address = WalletManager.parseUrl(code).address;
+            address_field.text = WalletManager.parseUrl(code).address;
             stack_view.pop();
         }
     }
@@ -73,14 +73,22 @@ StackView {
             }
         }
 
-        AddressField {
-            id: address_field
-            Layout.fillWidth: true
-            label: qsTr("id_recipient")
+        RowLayout {
+            TextField {
+                id: address_field
+                Layout.fillWidth: true
+                horizontalAlignment: TextField.AlignHCenter
+                placeholderText: qsTr('id_enter_an_address')
+            }
 
-            onOpenScanner: {
-                camera.start()
-                stack_view.push(scanner_view)
+            Button {
+                highlighted: false
+                flat: true
+                icon.source: './assets/svg/qr.svg'
+                onClicked: {
+                    camera.start()
+                    stack_view.push(scanner_view)
+                }
             }
         }
         TextField {
