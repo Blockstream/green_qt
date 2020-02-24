@@ -32,6 +32,7 @@ Column {
             model: 9
 
             Button {
+                hoverEnabled: false
                 flat: true
                 text: modelData + 1
                 onClicked: field.addDigit(modelData + 1)
@@ -39,6 +40,7 @@ Column {
         }
 
         Button {
+            hoverEnabled: false
             enabled: !field.empty
             flat: true
             width: 32
@@ -48,13 +50,15 @@ Column {
         }
 
         Button {
+            hoverEnabled: false
             enabled: !field.valid
             flat: true
-            text: qsTr("0")
+            text: '0'
             onClicked: field.addDigit(0)
         }
 
         Button {
+            hoverEnabled: false
             enabled: !field.empty
             flat: true
             icon.source: '../assets/svg/cancel.svg'
