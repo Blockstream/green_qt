@@ -18,13 +18,14 @@ Dialog {
     anchors.centerIn: parent
     clip: true
     height: 500
-    horizontalPadding: 50
+    horizontalPadding: 16
     modal: true
-    width: 600
+    width: 700
 
     header: RowLayout {
         Label {
             text: title
+            font.pixelSize: 18
             Layout.fillWidth: true
             Layout.margins: 16
         }

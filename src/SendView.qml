@@ -67,6 +67,10 @@ StackView {
                     width: parent.width
                 }
 
+                leftPadding: 8
+                topPadding: 12
+                bottomPadding: 12
+
                 contentItem: BalanceItem {
                     balance: controller.account.balances[asset_field.currentIndex]
                 }
