@@ -9,7 +9,7 @@ StackView {
     id: stack_view
     property alias address: address_field.address
     property Asset asset: asset_field_loader.item ? asset_field_loader.item.asset : null
-    property alias amount: amount_field.amount
+    property alias amount: amount_field.text
     property alias sendAll: send_all_button.checked
 
     property var actions: currentItem.actions
@@ -83,20 +83,19 @@ StackView {
                 stack_view.push(scanner_view)
             }
         }
-
-        AmountField {
+        TextField {
             id: amount_field
             Layout.fillWidth: true
-            currency: 'BTC'
-            label: qsTr('id_amount')
             enabled: !send_all_button.checked
+            horizontalAlignment: TextField.AlignHCenter
+            placeholderText: qsTr('id_add_amount')
 
-            Binding on amount {
+            Binding on text {
                 when: send_all_button.checked && wallet.network.liquid
                 value: asset_field_loader.item ? asset_field_loader.item.balance.inputAmount : 0
             }
 
-            Binding on amount {
+            Binding on text {
                 when: send_all_button.checked && !wallet.network.liquid
                 value: wallet.formatAmount(account.balance, false, wallet.settings.unit)
             }
