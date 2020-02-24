@@ -15,6 +15,7 @@ class SendTransactionController : public AccountController
     Q_PROPERTY(QString address READ address WRITE setAddress NOTIFY addressChanged)
     Q_PROPERTY(bool sendAll READ sendAll WRITE setSendAll NOTIFY sendAllChanged)
     Q_PROPERTY(QString amount READ amount WRITE setAmount NOTIFY amountChanged)
+    Q_PROPERTY(QString memo READ memo WRITE setMemo NOTIFY memoChanged)
     Q_PROPERTY(int feeRate READ feeRate WRITE setFeeRate NOTIFY feeRateChanged)
     Q_PROPERTY(QJsonObject transaction READ transaction NOTIFY transactionChanged)
 
@@ -35,6 +36,9 @@ public:
     QString amount() const;
     void setAmount(const QString& amount);
 
+    QString memo() const;
+    void setMemo(const QString& memo);
+
     qint64 feeRate() const;
     void setFeeRate(qint64 fee_rate);
 
@@ -49,6 +53,7 @@ signals:
     void addressChanged(const QString& address);
     void sendAllChanged(bool send_all);
     void amountChanged(QString amount);
+    void memoChanged(const QString& memo);
     void feeRateChanged(qint64 fee_rate);
     void transactionChanged();
 
@@ -62,6 +67,7 @@ protected:
     QString m_address;
     bool m_send_all{false};
     QString m_amount;
+    QString m_memo;
     qint64 m_fee_rate{0};
     QJsonObject m_transaction;
 

@@ -74,6 +74,19 @@ void SendTransactionController::setAmount(const QString& amount)
     create();
 }
 
+QString SendTransactionController::memo() const
+{
+    return m_memo;
+}
+
+void SendTransactionController::setMemo(const QString &memo)
+{
+    if (m_memo == memo) return;
+    Q_ASSERT(memo.length() <= 1024);
+    m_memo = memo;
+    emit memoChanged(m_memo);
+}
+
 qint64 SendTransactionController::feeRate() const
 {
     return m_fee_rate;
@@ -180,8 +193,10 @@ bool SendTransactionController::update(const QJsonObject& result)
     auto action = result.value("action").toString();
 
     if (status == "done" && action == "sign_tx") {
-        dispatch([result] (GA_session* session, GA_auth_handler** call) {
-            GA_json* details = Json::fromObject(result.value("result").toObject());
+        dispatch([this, result] (GA_session* session, GA_auth_handler** call) {
+            auto tx = result.value("result").toObject();
+            tx["memo"] = m_memo;
+            GA_json* details = Json::fromObject(tx);
             int err = GA_send_transaction(session, details, call);
             Q_ASSERT(err == GA_OK);
             err = GA_destroy_json(details);
