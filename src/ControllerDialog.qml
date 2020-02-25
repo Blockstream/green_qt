@@ -37,12 +37,18 @@ Dialog {
         }
     }
 
-    footer: DialogButtonBox {
-        Repeater {
-            model: stack_view.currentItem ? stack_view.currentItem.actions : []
-            Button {
-                flat: true
-                action: modelData
+    footer: Item {
+        height: 64
+        Row {
+            anchors.margins: 16
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.right: parent.right
+            Repeater {
+                model: stack_view.currentItem ? stack_view.currentItem.actions : []
+                Button {
+                    flat: true
+                    action: modelData
+                }
             }
         }
     }
