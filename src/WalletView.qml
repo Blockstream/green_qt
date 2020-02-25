@@ -17,16 +17,20 @@ Item {
         return wallet.parseAmount(amount, unit);
     }
 
-    function formatAmount(amount) {
-        const include_ticker = true;
+    function formatAmount(amount, include_ticker = true) {
         const unit = wallet.settings.unit;
         return wallet.formatAmount(amount || 0, include_ticker, unit);
     }
 
-    function formatFiat(sats) {
+    function formatFiat(sats, include_ticker = true) {
         const pricing = wallet.settings.pricing;
-        const { fiat, fiat_currency } = wallet.convert(sats);
-        return Number(fiat).toLocaleString(Qt.locale(), 'f', 2) + ' ' + fiat_currency;
+        const { fiat, fiat_currency } = wallet.convert({ satoshi: sats });
+        return Number(fiat).toLocaleString(Qt.locale(), 'f', 2) + (include_ticker ? ' ' + fiat_currency : '');
+    }
+
+    function parseFiat(fiat) {
+        fiat = fiat.trim().replace(/,/, '.');
+        return fiat === '' ? 0 : wallet.convert({ fiat }).satoshi;
     }
 
     function transactionConfirmations(transaction) {

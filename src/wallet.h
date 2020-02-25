@@ -90,7 +90,7 @@ public:
 
     Q_INVOKABLE void loginWithPin(const QByteArray& pin);
     Q_INVOKABLE void changePin(const QByteArray& pin);
-    Q_INVOKABLE QJsonObject convert(qint64 sats) const;
+    Q_INVOKABLE QJsonObject convert(const QJsonObject& value) const;
 
     qint64 amountToSats(const QString& amount) const;
     Q_INVOKABLE qint64 parseAmount(const QString& amount, const QString& unit) const;

@@ -634,9 +634,9 @@ void Wallet::setBalance(const quint64 balance)
     emit balanceChanged();
 }
 
-QJsonObject Wallet::convert(qint64 sats) const
+QJsonObject Wallet::convert(const QJsonObject& value) const
 {
-    auto details = Json::fromObject({{ "satoshi", sats }});
+    auto details = Json::fromObject(value);
     GA_json* balance;
     int err = GA_convert_amount(m_session, details, &balance);
     GA_destroy_json(details);
@@ -654,7 +654,7 @@ QString Wallet::formatAmount(qint64 amount, bool include_ticker) const
 QString Wallet::formatAmount(qint64 amount, bool include_ticker, const QString& unit) const
 {
     Q_ASSERT(m_network);
-    auto str = convert(amount).value(unit == "\u00B5BTC" ? "ubtc" : unit.toLower()).toString();
+    auto str = convert({{ "satoshi", amount }}).value(unit == "\u00B5BTC" ? "ubtc" : unit.toLower()).toString();
     auto val = str.toDouble();
     if (val == ((int64_t) val)) {
         str = QLocale::system().toString(val, 'f', 0);
