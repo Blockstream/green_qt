@@ -639,11 +639,10 @@ QJsonObject Wallet::convert(qint64 sats) const
     auto details = Json::fromObject({{ "satoshi", sats }});
     GA_json* balance;
     int err = GA_convert_amount(m_session, details, &balance);
-    Q_ASSERT(err == GA_OK);
     GA_destroy_json(details);
+    if (err != GA_OK) return {};
     QJsonObject result = Json::toObject(balance);
     GA_destroy_json(balance);
-
     return result;
 }
 
