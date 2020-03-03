@@ -36,6 +36,7 @@ class Network : public QObject
 public:
     Network(const QJsonObject& data, NetworkManager* manager);
 
+    QJsonObject data() const { return m_data; }
     QString id() const { return m_id; }
     QString name() const { return m_name; }
     bool isLiquid() const;
@@ -43,7 +44,7 @@ public:
     void openTransactionInExplorer(const QString& hash);
 
 private:
-    QJsonObject m_data;
+    const QJsonObject m_data;
     QString m_id;
     QString m_name;
 };
