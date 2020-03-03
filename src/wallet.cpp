@@ -571,6 +571,7 @@ void Wallet::refreshAssets()
 
             for (auto&& ref : assets.value("assets").toObject()) {
                 QString id = ref.toObject().value("asset_id").toString();
+                if (id.isEmpty()) continue;
                 Asset* asset = getOrCreateAsset(id);
                 asset->setData(ref.toObject());
                 if (icons.contains(id)) {
