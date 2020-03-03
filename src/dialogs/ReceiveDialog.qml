@@ -18,6 +18,9 @@ Dialog {
     Behavior on implicitHeight {
         NumberAnimation { duration: 300; easing.type: Easing.OutCubic }
     }
+    Overlay.modal: Rectangle {
+        color: "#70000000"
+    }
 
     header: Item {
         implicitHeight: 48

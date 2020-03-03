@@ -6,6 +6,9 @@ import '..'
 Dialog {
     modal: true
     title: qsTr('id_mnemonic')
+    Overlay.modal: Rectangle {
+        color: "#70000000"
+    }
 
     Item {
         implicitWidth: layout.implicitWidth
