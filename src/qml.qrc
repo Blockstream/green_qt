@@ -69,5 +69,6 @@
         <file>MnemonicQuizPage.qml</file>
         <file>ReviewView.qml</file>
         <file>SectionLabel.qml</file>
+        <file>Collapsible.qml</file>
     </qresource>
 </RCC>
