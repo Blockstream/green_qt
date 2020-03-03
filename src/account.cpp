@@ -169,14 +169,52 @@ void ReceiveAddress::setAccount(Account *account)
     generate();
 }
 
+QString ReceiveAddress::amount() const
+{
+    return m_amount;
+}
+
+void ReceiveAddress::setAmount(const QString& amount)
+{
+    if (m_amount == amount) return;
+    m_amount = amount;
+    emit changed();
+}
+
 QString ReceiveAddress::address() const
 {
     return m_address;
 }
 
+QString ReceiveAddress::uri() const
+{
+    if (!m_account || m_generating) return {};
+    const auto wallet = m_account->wallet();
+    auto unit = wallet->settings().value("unit").toString();
+    unit = unit == "\u00B5BTC" ? "ubtc" : unit.toLower();
+    auto amount = m_amount;
+    amount.replace(',', '.');
+    amount = wallet->convert({{ unit, amount }}).value("btc").toString();
+    if (amount.toDouble() > 0) {
+        return QString("%1:%2?amount=%3")
+                .arg(wallet->network()->data().value("bip21_prefix").toString())
+                .arg(m_address)
+                .arg(amount);
+    } else {
+        return m_address;
+    }
+}
+
 bool ReceiveAddress::generating() const
 {
     return m_generating;
+}
+
+void ReceiveAddress::setGenerating(bool generating)
+{
+    if (m_generating == generating) return;
+    m_generating = generating;
+    emit generatingChanged(m_generating);
 }
 
 void ReceiveAddress::generate()
@@ -185,14 +223,13 @@ void ReceiveAddress::generate()
 
     if (!m_account && !m_address.isEmpty()) {
         m_address.clear();
-        emit addressChanged(m_address);
+        emit changed();
         return;
     }
 
     if (m_generating) return;
 
-    m_generating = true;
-    emit generatingChanged(true);
+    setGenerating(true);
 
     QMetaObject::invokeMethod(m_account->m_wallet->m_context, [this] {
         auto result = GA::process_auth([&] (GA_auth_handler** call) {
@@ -208,13 +245,17 @@ void ReceiveAddress::generate()
         });
         Q_ASSERT(result.value("status").toString() == "done");
         m_address = result.value("result").toObject().value("address").toString();
-        m_generating = false;
-        emit generatingChanged(true);
-        emit addressChanged(m_address);
+        setGenerating(false);
+        emit changed();
     });
 }
 
 void ReceiveAddress::copyToClipboard()
 {
     QGuiApplication::clipboard()->setText(m_address);
+}
+
+void ReceiveAddress::copyUriToClipboard() const
+{
+    QGuiApplication::clipboard()->setText(uri());
 }

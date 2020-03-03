@@ -69,29 +69,40 @@ class ReceiveAddress : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(Account* account READ account WRITE setAccount NOTIFY accountChanged)
-    Q_PROPERTY(QString address READ address NOTIFY addressChanged)
+    Q_PROPERTY(QString amount READ amount WRITE setAmount NOTIFY changed)
+    Q_PROPERTY(QString address READ address NOTIFY changed)
+    Q_PROPERTY(QString uri READ uri NOTIFY changed)
     Q_PROPERTY(bool generating READ generating NOTIFY generatingChanged)
 
 public:
     explicit ReceiveAddress(QObject* parent = nullptr);
 
     Account* account() const;
-    QString address() const;
-    bool generating() const;
-
     void setAccount(Account* account);
+
+    QString amount() const;
+    void setAmount(const QString& amount);
+
+    QString address() const;
+
+    QString uri() const;
+
+    bool generating() const;
+    void setGenerating(bool generating);
 
 public slots:
     void generate();
     void copyToClipboard();
+    void copyUriToClipboard() const;
 
 signals:
     void accountChanged(Account* account);
-    void addressChanged(QString address);
+    void changed();
     void generatingChanged(bool generating);
 
 public:
     Account* m_account{nullptr};
+    QString m_amount;
     QString m_address;
     bool m_generating{false};
 };

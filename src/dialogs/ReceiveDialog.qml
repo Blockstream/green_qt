@@ -42,6 +42,5 @@ Dialog {
             onClicked: reject()
         }
     }
-
     ReceiveView { }
 }

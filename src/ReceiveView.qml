@@ -4,29 +4,43 @@ import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.12
 
 ColumnLayout {
-    property alias address: receive_address.address
-    property var amount: parseAmount(amount_field.text)
-
-    function url(address, amount) {
-        var parts = []
-        if (amount && amount > 0) parts.push('amount=' + amount)
-        if (parts.length === 0) return address
-        return 'bitcoin:' + address + '?' + parts.join('&')
-    }
-
-    function copyAddress() {
-        if (receive_address.generating) return
-        receive_address.copyToClipboard()
-        address_field.ToolTip.show(qsTr('id_address_copied_to_clipboard'), 1000)
-    }
-
     spacing: 16
 
     ReceiveAddress {
         id: receive_address
+        amount: amount_field.text
 
         Binding on account {
             value: account
+        }
+    }
+
+    Action {
+        id: refresh_action
+        icon.source: 'assets/svg/refresh.svg'
+        icon.width: 16
+        icon.height: 16
+        onTriggered: receive_address.generate()
+    }
+
+    Action {
+        id: copy_address_action
+        text: qsTrId('id_copy_address')
+        onTriggered: {
+            if (receive_address.generating) return;
+            receive_address.copyToClipboard();
+            qrcode.ToolTip.show(qsTr('id_address_copied_to_clipboard'), 1000);
+        }
+    }
+
+    Action {
+        id: copy_uri_action
+        enabled: !wallet.network.liquid
+        text: qsTrId('id_copy_uri')
+        onTriggered: {
+            if (receive_address.generating) return;
+            receive_address.copyUriToClipboard();
+            qrcode.ToolTip.show(qsTr('id_copied_to_clipboard'), 1000);
         }
     }
 
@@ -36,17 +50,14 @@ ColumnLayout {
             Layout.fillWidth: true
         }
         ToolButton {
-            icon.source: 'assets/svg/refresh.svg'
-            icon.width: 16
-            icon.height: 16
-            onClicked: receive_address.generate()
+            action: refresh_action
         }
     }
 
     QRCode {
         id: qrcode
         opacity: receive_address.generating ? 0 : 1.0
-        text: url(address, parseAmount(amount_field.text) / 100000000)
+        text: receive_address.uri
         Layout.alignment: Qt.AlignHCenter
         Behavior on opacity {
             OpacityAnimator { duration: 200 }
@@ -68,7 +79,6 @@ ColumnLayout {
 
     RowLayout {
         Label {
-            id: address_field
             text: receive_address.address
             horizontalAlignment: Label.AlignHCenter
             verticalAlignment: Label.AlignVCenter
@@ -76,13 +86,22 @@ ColumnLayout {
             Layout.minimumWidth: 400
         }
         ToolButton {
+            enabled: !receive_address.generating
             icon.source: 'assets/svg/copy_to_clipboard.svg'
             icon.width: 16
             icon.height: 16
-            onClicked: copyAddress()
+            onClicked: copy_menu.open()
+            Menu {
+                id: copy_menu
+                MenuItem {
+                    action: copy_address_action
+                }
+                MenuItem {
+                    action: copy_uri_action
+                }
+            }
         }
     }
-
     SectionLabel {
         text: qsTrId('id_add_amount_optional')
     }
