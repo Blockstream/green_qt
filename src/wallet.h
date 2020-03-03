@@ -51,6 +51,7 @@ private:
     Q_PROPERTY(int loginAttemptsRemaining READ loginAttemptsRemaining NOTIFY loginAttemptsRemainingChanged)
     Q_PROPERTY(qint64 balance READ balance NOTIFY balanceChanged)
     Q_PROPERTY(QJsonObject config READ config NOTIFY configChanged)
+    Q_PROPERTY(bool busy READ isBusy NOTIFY busyChanged)
 
 public:
     explicit Wallet(QObject *parent = nullptr);
@@ -102,6 +103,9 @@ public:
 
     Q_INVOKABLE Asset* getOrCreateAsset(const QString& id);
 
+    bool isBusy() const { return m_busy; }
+    void setBusy(bool busy);
+
 public slots:
     void connect(const QString& proxy, bool use_tor);
     void disconnect();
@@ -136,6 +140,7 @@ signals:
     void configChanged();
 
     void loginWithPinFinished();
+    void busyChanged(bool busy);
 
 protected:
     bool eventFilter(QObject* object, QEvent* event) override;
@@ -174,6 +179,7 @@ public:
     bool m_use_tor{false};
     quint64 m_balance;
     int m_logout_timer{-1};
+    bool m_busy{false};
 };
 
 #endif // GREEN_WALLET_H

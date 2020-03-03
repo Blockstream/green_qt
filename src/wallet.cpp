@@ -703,6 +703,13 @@ Asset* Wallet::getOrCreateAsset(const QString& id)
     return asset;
 }
 
+void Wallet::setBusy(bool busy)
+{
+    if (m_busy == busy) return;
+    m_busy = busy;
+    emit busyChanged(m_busy);
+}
+
 void Wallet::setSettings(const QJsonObject& settings)
 {
     if (m_settings == settings) return;

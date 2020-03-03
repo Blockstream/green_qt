@@ -308,4 +308,16 @@ Item {
             id: create_account_dialog
         }
     }
+
+    ProgressBar {
+        width: parent.width
+        indeterminate: true
+        opacity: wallet.busy ? 0.5 : 0
+        Behavior on opacity {
+            SmoothedAnimation {
+                duration: 500
+                velocity: -1
+            }
+        }
+    }
 }
