@@ -415,8 +415,6 @@ void Wallet::loginWithPin(const QByteArray& pin)
 
         reload();
         updateConfig();
-
-        QTimer::singleShot(1000, this, [this]{ emit loginWithPinFinished(); });
     });
 }
 

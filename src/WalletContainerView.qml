@@ -147,27 +147,17 @@ StackView {
                 }
             }
         }
-
-        BusyIndicator {
-            anchors.centerIn: parent
-            opacity: wallet.authenticated ? 1 : 0
-            Behavior on opacity {
-                NumberAnimation { duration: 300 }
-            }
-        }
     }
 
     property Item wallet_view: WalletView { }
 
     Connections {
         target: wallet
-        onLoginWithPinFinished: {
-            stack_view.push(wallet_view);
-        }
-
         onAuthenticationChanged: {
-            if (authentication !== Wallet.Authenticated && stack_view.depth > 1) {
-                stack_view.pop()
+            if (authentication === Wallet.Authenticated) {
+                stack_view.push(wallet_view);
+            } else if (stack_view.depth > 1) {
+                stack_view.pop();
             }
         }
     }

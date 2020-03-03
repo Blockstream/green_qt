@@ -140,7 +140,6 @@ signals:
 
     void configChanged();
 
-    void loginWithPinFinished();
     void busyChanged(bool busy);
 
 protected:
