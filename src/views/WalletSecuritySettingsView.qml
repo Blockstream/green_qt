@@ -42,6 +42,7 @@ ColumnLayout {
         description: qsTr('id_set_a_timeout_to_logout_after')
 
         ComboBox {
+            flat: true
             model: [1, 2, 5, 10, 60]
             width: 200
             delegate: ItemDelegate {
