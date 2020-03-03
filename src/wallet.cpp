@@ -6,6 +6,7 @@
 #include "util.h"
 #include "wallet.h"
 
+#include <QDateTime>
 #include <QDebug>
 #include <QJsonObject>
 #include <QLocale>
@@ -32,6 +33,21 @@ Wallet::Wallet(QObject *parent)
 
     m_context->moveToThread(m_thread);
     m_thread->start();
+
+    QMetaObject::invokeMethod(m_context, [this] {
+        auto timer = new QTimer;
+        timer->start(100);
+        QObject::connect(timer, &QTimer::timeout, [this] {
+            m_last_timestamp = QDateTime::currentMSecsSinceEpoch();
+        });
+    });
+
+    auto timer = new QTimer(this);
+    timer->start(100);
+    QObject::connect(timer, &QTimer::timeout, [this] {
+        qint64 timestamp = QDateTime::currentMSecsSinceEpoch();
+        setBusy(timestamp - m_last_timestamp > 300);
+    });
 }
 
 void Wallet::connect(const QString& proxy, bool use_tor)

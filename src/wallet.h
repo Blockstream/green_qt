@@ -1,6 +1,7 @@
 #ifndef GREEN_WALLET_H
 #define GREEN_WALLET_H
 
+#include <QAtomicInteger>
 #include <QList>
 #include <QObject>
 #include <QQmlListProperty>
@@ -158,6 +159,7 @@ public:
     int m_index{0};
     QThread* m_thread{nullptr};
     QObject* m_context{nullptr};
+    QAtomicInteger<qint64> m_last_timestamp;
     GA_session* m_session{nullptr};
     ConnectionStatus m_connection{Disconnected};
     AuthenticationStatus m_authentication{Unauthenticated};
