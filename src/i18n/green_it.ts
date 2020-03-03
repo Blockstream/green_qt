@@ -382,6 +382,10 @@
         <translation>Copiato in clipboard</translation>
     </message>
     <message>
+        <source>id_copy_address</source>
+        <translation>Copia indirizzo</translation>
+    </message>
+    <message>
         <source>id_copy_details</source>
         <translation>Copia i dettagli</translation>
     </message>
@@ -396,6 +400,10 @@
     <message>
         <source>id_copy_transaction_id</source>
         <translation>Copia ID di transazione</translation>
+    </message>
+    <message>
+        <source>id_copy_uri</source>
+        <translation>Copia URI</translation>
     </message>
     <message>
         <source>id_create</source>
@@ -1406,6 +1414,10 @@
         <translation>Please tap card</translation>
     </message>
     <message>
+        <source>id_please_verify_that_the_address</source>
+        <translation>Assicurati che l&apos;indirizzo mostrato sul tuo hardware wallet coincida con quello sul tuo telefono.</translation>
+    </message>
+    <message>
         <source>id_precision</source>
         <translation>Precisione</translation>
     </message>
@@ -1428,6 +1440,10 @@
     <message>
         <source>id_qr_scanner</source>
         <translation>QR Scanner</translation>
+    </message>
+    <message>
+        <source>id_read_more_at_our_s</source>
+        <translation>Leggi di più presso la nostra %1</translation>
     </message>
     <message>
         <source>id_receive</source>
@@ -1884,8 +1900,16 @@ Reset questa impostazione e successivamente riattivala.</translation>
         <translation>Inizia il processo di reset dei 2FA solo se hai perso accesso a tutti i tuoi metodi d&apos;Autenticazione a Due Fattori.</translation>
     </message>
     <message>
+        <source>id_start_receiving_funds_and_set</source>
+        <translation>Inizia a ricevere fondi e imposta una email per ricevere i dati per il recupero del tuo wallet</translation>
+    </message>
+    <message>
         <source>id_support</source>
         <translation>Supporto</translation>
+    </message>
+    <message>
+        <source>id_support_page</source>
+        <translation>Pagina di Supporto</translation>
     </message>
     <message>
         <source>id_sweep</source>
@@ -1943,6 +1967,14 @@ Reset questa impostazione e successivamente riattivala.</translation>
         <translation>Grazie di aver scaricato Green! Lasciaci una recensione quando hai un momento</translation>
     </message>
     <message>
+        <source>id_the_address_is_valid</source>
+        <translation>L&apos;indirizzo è valido.</translation>
+    </message>
+    <message>
+        <source>id_the_addresses_dont_match</source>
+        <translation>Gli indirizzi non coincidono.</translation>
+    </message>
+    <message>
         <source>id_the_asset_registry_is_currently</source>
         <translation>Il registro degli asset è momentaneamente non disponibile: procedi con cautela poichè gli ammontare mostrati potrebbere aver un numero di cifre decimali diverso da quello stabilito dagli emittenti.</translation>
     </message>
@@ -1957,6 +1989,10 @@ Reset questa impostazione e successivamente riattivala.</translation>
     <message>
         <source>id_the_easier_safer_and_faster</source>
         <translation>il wallet più semplice, sicuro e veloce</translation>
+    </message>
+    <message>
+        <source>id_the_email_will_also_be_used_to</source>
+        <translation>L&apos;email verrà utilizzata anche per la ricezione di dati per il recupero del wallet e notifiche di transazioni</translation>
     </message>
     <message>
         <source>id_the_hardware_wallet_you_are</source>
@@ -2341,6 +2377,10 @@ Reset questa impostazione e successivamente riattivala.</translation>
     <message>
         <source>id_you_will_need_to_reenter_your</source>
         <translation>Se non imposti un PIN dovrai utilizzare la mnemonica per accedere. Premi &quot;OK&quot; per continuare.</translation>
+    </message>
+    <message>
+        <source>id_your_favourite_exchange_rate_is</source>
+        <translation>Il tuo tasso di cambio preferito non è disponibile al momento. Puoi cambiarlo dalle impostazioni.</translation>
     </message>
     <message>
         <source>id_your_green_wallet_is_now_ready</source>

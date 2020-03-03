@@ -382,6 +382,10 @@
         <translation>Copiado para a área de transferência</translation>
     </message>
     <message>
+        <source>id_copy_address</source>
+        <translation>Copy address</translation>
+    </message>
+    <message>
         <source>id_copy_details</source>
         <translation>Copiar detalhes</translation>
     </message>
@@ -396,6 +400,10 @@
     <message>
         <source>id_copy_transaction_id</source>
         <translation>Copiar ID da transação</translation>
+    </message>
+    <message>
+        <source>id_copy_uri</source>
+        <translation>Copy URI</translation>
     </message>
     <message>
         <source>id_create</source>
@@ -1406,6 +1414,10 @@
         <translation>Por favor, encoste o cartão</translation>
     </message>
     <message>
+        <source>id_please_verify_that_the_address</source>
+        <translation>Please verify that the address shown on your hardware wallet matches the one on your phone.</translation>
+    </message>
+    <message>
         <source>id_precision</source>
         <translation>Precisão</translation>
     </message>
@@ -1428,6 +1440,10 @@
     <message>
         <source>id_qr_scanner</source>
         <translation>Escâner de QR</translation>
+    </message>
+    <message>
+        <source>id_read_more_at_our_s</source>
+        <translation>Read more at our %1</translation>
     </message>
     <message>
         <source>id_receive</source>
@@ -1884,8 +1900,16 @@ Redefina essa configuração e depois a reative.</translation>
         <translation>Comece o processo para resetar o 2FA caso você tenha perdido o acesso a todos os seus métodos se autenticação de dois fatores.</translation>
     </message>
     <message>
+        <source>id_start_receiving_funds_and_set</source>
+        <translation>Start receiving funds and set an email to receive recovery data for your wallet</translation>
+    </message>
+    <message>
         <source>id_support</source>
         <translation>Suporte</translation>
+    </message>
+    <message>
+        <source>id_support_page</source>
+        <translation>Support Page</translation>
     </message>
     <message>
         <source>id_sweep</source>
@@ -1943,6 +1967,14 @@ Redefina essa configuração e depois a reative.</translation>
         <translation>Obrigado por baixar a Green! Por favor, deixe um review quando puder.</translation>
     </message>
     <message>
+        <source>id_the_address_is_valid</source>
+        <translation>The address is valid.</translation>
+    </message>
+    <message>
+        <source>id_the_addresses_dont_match</source>
+        <translation>The addresses don&apos;t match.</translation>
+    </message>
+    <message>
         <source>id_the_asset_registry_is_currently</source>
         <translation>The asset registry is currently unavailable: proceed carefully since asset amounts might be shown with a decimal precision different from what intended by the issuers.</translation>
     </message>
@@ -1957,6 +1989,10 @@ Redefina essa configuração e depois a reative.</translation>
     <message>
         <source>id_the_easier_safer_and_faster</source>
         <translation>a carteira mais fácil, segura e rápida</translation>
+    </message>
+    <message>
+        <source>id_the_email_will_also_be_used_to</source>
+        <translation>The email will also be used to receive recovery data and transaction notifications</translation>
     </message>
     <message>
         <source>id_the_hardware_wallet_you_are</source>
@@ -2341,6 +2377,10 @@ Redefina essa configuração e depois a reative.</translation>
     <message>
         <source>id_you_will_need_to_reenter_your</source>
         <translation>Você precisará redigitar seu mnemônico para entrar novamente se não configurar um PIN. Pressione &quot;OK&quot; para continuar.</translation>
+    </message>
+    <message>
+        <source>id_your_favourite_exchange_rate_is</source>
+        <translation>Your favourite exchange rate is not available at the moment. You can change it from settings.</translation>
     </message>
     <message>
         <source>id_your_green_wallet_is_now_ready</source>

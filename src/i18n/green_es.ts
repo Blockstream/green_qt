@@ -383,6 +383,10 @@
         <translation>Copied to clipboard</translation>
     </message>
     <message>
+        <source>id_copy_address</source>
+        <translation>Copy address</translation>
+    </message>
+    <message>
         <source>id_copy_details</source>
         <translation>Copy details</translation>
     </message>
@@ -397,6 +401,10 @@
     <message>
         <source>id_copy_transaction_id</source>
         <translation>Copy transaction ID</translation>
+    </message>
+    <message>
+        <source>id_copy_uri</source>
+        <translation>Copy URI</translation>
     </message>
     <message>
         <source>id_create</source>
@@ -1407,6 +1415,10 @@
         <translation>Toca con tu tarjeta</translation>
     </message>
     <message>
+        <source>id_please_verify_that_the_address</source>
+        <translation>Please verify that the address shown on your hardware wallet matches the one on your phone.</translation>
+    </message>
+    <message>
         <source>id_precision</source>
         <translation>Precisión</translation>
     </message>
@@ -1429,6 +1441,10 @@
     <message>
         <source>id_qr_scanner</source>
         <translation>Escáner QR</translation>
+    </message>
+    <message>
+        <source>id_read_more_at_our_s</source>
+        <translation>Read more at our %1</translation>
     </message>
     <message>
         <source>id_receive</source>
@@ -1885,8 +1901,16 @@ Reset this setting and then re-activate it.</translation>
         <translation>Start a 2FA reset process if you lost access to all your two-factor authentication methods.</translation>
     </message>
     <message>
+        <source>id_start_receiving_funds_and_set</source>
+        <translation>Start receiving funds and set an email to receive recovery data for your wallet</translation>
+    </message>
+    <message>
         <source>id_support</source>
         <translation>Support</translation>
+    </message>
+    <message>
+        <source>id_support_page</source>
+        <translation>Support Page</translation>
     </message>
     <message>
         <source>id_sweep</source>
@@ -1944,6 +1968,14 @@ Reset this setting and then re-activate it.</translation>
         <translation>¡Gracias por descargar Green! Cuando tengas tiempo, déjanos una reseña</translation>
     </message>
     <message>
+        <source>id_the_address_is_valid</source>
+        <translation>The address is valid.</translation>
+    </message>
+    <message>
+        <source>id_the_addresses_dont_match</source>
+        <translation>The addresses don&apos;t match.</translation>
+    </message>
+    <message>
         <source>id_the_asset_registry_is_currently</source>
         <translation>The asset registry is currently unavailable: proceed carefully since asset amounts might be shown with a decimal precision different from what intended by the issuers.</translation>
     </message>
@@ -1958,6 +1990,10 @@ Reset this setting and then re-activate it.</translation>
     <message>
         <source>id_the_easier_safer_and_faster</source>
         <translation>la cartera más sencilla, segura y rápida</translation>
+    </message>
+    <message>
+        <source>id_the_email_will_also_be_used_to</source>
+        <translation>The email will also be used to receive recovery data and transaction notifications</translation>
     </message>
     <message>
         <source>id_the_hardware_wallet_you_are</source>
@@ -2342,6 +2378,10 @@ Reset this setting and then re-activate it.</translation>
     <message>
         <source>id_you_will_need_to_reenter_your</source>
         <translation>Tendrás que volver a ingresar tu Frase de Recuperación para iniciar sesión si no estableces un PIN. Presiona &quot;OK&quot; para continuar.</translation>
+    </message>
+    <message>
+        <source>id_your_favourite_exchange_rate_is</source>
+        <translation>Your favourite exchange rate is not available at the moment. You can change it from settings.</translation>
     </message>
     <message>
         <source>id_your_green_wallet_is_now_ready</source>
