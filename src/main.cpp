@@ -135,6 +135,8 @@ int main(int argc, char *argv[])
 
     QApplication app(argc, argv);
 
+    QApplication::setWindowIcon(QIcon(":/assets/png/icon_1024x1024.png"));
+
     // Reset the locale that is used for number formatting, see:
     // https://doc.qt.io/qt-5/qcoreapplication.html#locale-settings
     setlocale(LC_NUMERIC, "C");

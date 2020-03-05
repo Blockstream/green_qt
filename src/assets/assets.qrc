@@ -5,6 +5,7 @@
         <file>fonts/DINPro/DINPro-Black.otf</file>
         <file>fonts/DINPro/DINPro-Regular.otf</file>
         <file>fonts/DINPro/DINPro-Light.otf</file>
+        <file>png/icon_1024x1024.png</file>
         <file>png/ic_home.png</file>
         <file>svg/2fa_phone.svg</file>
         <file>svg/2fa_email.svg</file>
