@@ -63,6 +63,7 @@ Column {
             flat: true
             icon.source: '../assets/svg/cancel.svg'
             icon.height: 16
+            icon.width: 16
             onClicked: field.clear()
         }
     }
