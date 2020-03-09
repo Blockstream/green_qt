@@ -292,7 +292,7 @@ void Wallet::handleNotification(const QJsonObject &notification)
     }
 
     if (event == "twofactor_reset") {
-        Q_ASSERT(!data.toObject().value("is_active").toBool());
+        setLocked(data.toObject().value("is_active").toBool());
         return;
     }
 
