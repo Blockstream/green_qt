@@ -24,7 +24,7 @@ mkdir ${QT_PATH}
 cd ${QTSRCDIR}
 
 if [ "${GREENPLATFORM}" = "linux" ]; then
-    QTOPTIONS="-reduce-relocations -ltcg -qt-xcb"
+    QTOPTIONS="-reduce-relocations -ltcg -qt-xcb -gstreamer"
 elif [ "${GREENPLATFORM}" = "windows" ]; then
     QTOPTIONS="-xplatform win32-g++ -device-option CROSS_COMPILE=/usr/bin/x86_64-w64-mingw32- -skip qtwayland -opengl desktop"
 elif [ "${GREENPLATFORM}" = "osx" ]; then
