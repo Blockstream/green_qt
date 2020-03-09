@@ -113,6 +113,45 @@ Item {
         }
     }
 
+    Drawer {
+        id: notifications_drawer
+        height: parent.height
+        width: 320
+        edge: Qt.RightEdge
+        Overlay.modal: Rectangle {
+            color: "#70000000"
+        }
+        ColumnLayout {
+            anchors.fill: parent
+            spacing: 8
+            Label {
+                padding: 8
+                leftPadding: 40
+                wrapMode: Label.WordWrap
+                Layout.fillWidth: true
+                Binding on text {
+                    when: wallet.events.twofactor_reset
+                    value: qsTrId('id_your_wallet_is_locked_for_a').arg(wallet.events.twofactor_reset.days_remaining)
+                }
+                Image {
+                    y: 8
+                    x: 8
+                    source: 'assets/svg/twofactor.svg'
+                }
+                Rectangle {
+                    anchors.fill: parent
+                    color: 'white'
+                    opacity: 0.05
+                    z: -1
+                }
+            }
+            Item {
+                Layout.fillHeight: true
+                width: 1
+            }
+        }
+    }
+
     GridLayout {
         anchors.fill: parent
         rowSpacing: 0
@@ -203,6 +242,16 @@ Item {
                 Item {
                     Layout.fillWidth: true
                     height: 1
+                }
+
+                ToolButton {
+                    visible: wallet.events && wallet.events.twofactor_reset && wallet.events.twofactor_reset.is_active
+                    Layout.alignment: Qt.AlignBottom
+                    icon.source: 'assets/svg/notifications_2.svg'
+                    icon.color: 'transparent'
+                    icon.width: 24
+                    icon.height: 24
+                    onClicked: notifications_drawer.open()
                 }
 
                 ToolButton {
