@@ -16,7 +16,11 @@ ControllerDialog {
         text: wallet.settings.pricing.currency
     }]
 
+    property string threshold: wallet.config.limits.is_fiat ? wallet.config.limits.fiat : wallet.config.limits[wallet.settings.unit.toLowerCase()]
+    property string ticker: wallet.config.limits.is_fiat ? wallet.settings.pricing.currency : wallet.settings.unit
+
     title: qsTr('id_set_twofactor_threshold')
+    doneText: qsTr('id_your_twofactor_threshold_is_s').arg(threshold + ' ' +  ticker)
     width: 400
     height: 250
     controller: TwoFactorController { }
@@ -50,7 +54,7 @@ ControllerDialog {
 
             TextField {
                 id: amount_field
-                text: wallet.config.limits.is_fiat ? wallet.config.limits.fiat : wallet.config.limits[wallet.settings.unit.toLowerCase()]
+                text: threshold
                 padding: 10
                 Layout.fillWidth: true
             }
