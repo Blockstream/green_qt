@@ -1,7 +1,9 @@
 import Blockstream.Green 0.1
 import QtQuick 2.13
 import QtQuick.Controls 2.5
+import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.12
+
 import './views'
 
 Dialog {
@@ -76,18 +78,23 @@ Dialog {
     ControllerResult {
         status: 'request_code'
         stackView: stack_view
-        WizardPage {
-            ColumnLayout {
-                anchors.centerIn: parent
-                Repeater {
-                    model: controller.result.methods
-                    Button {
-                        property string method: modelData
-                        icon.source: `assets/svg/2fa_${method}.svg`
-                        icon.color: 'transparent'
-                        flat: true
-                        text: method
-                        onClicked: controller.requestCode(method)
+        ColumnLayout {
+            Repeater {
+                model: controller.result.methods
+                Button {
+                    property string method: modelData
+                    icon.source: `assets/svg/2fa_${method}.svg`
+                    icon.color: 'transparent'
+                    flat: true
+                    text: method
+                    Layout.fillWidth: true
+                    onClicked: controller.requestCode(method)
+
+                    Rectangle {
+                        border.color: down ? Material.accentColor : hovered ? Material.foreground : 'gray'
+                        border.width: 1
+                        color: 'transparent'
+                        anchors.fill: background
                     }
                 }
             }
@@ -149,6 +156,7 @@ Dialog {
 
     StackView {
         id: stack_view
+        anchors.centerIn: parent
         implicitHeight: Math.max(currentItem.implicitHeight, minimumHeight)
         implicitWidth: Math.max(currentItem.implicitWidth, minimumWidth)
     }
