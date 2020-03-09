@@ -31,6 +31,8 @@ Dialog {
     verticalPadding: 0
     modal: true
 
+    onRejected: destroy()
+
     header: Item {
         implicitHeight: 48
         implicitWidth: title_label.implicitWidth + reject_button.implicitWidth + 32

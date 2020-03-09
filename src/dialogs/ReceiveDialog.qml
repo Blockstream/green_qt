@@ -22,6 +22,8 @@ Dialog {
         color: "#70000000"
     }
 
+    onRejected: destroy()
+
     header: Item {
         implicitHeight: 48
         Label {
