@@ -33,7 +33,7 @@ Dialog {
     verticalPadding: 0
     modal: true
 
-    onRejected: destroy()
+    onClosed: destroy()
 
     header: Item {
         implicitHeight: 48
