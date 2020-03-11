@@ -17,8 +17,6 @@ ColumnLayout {
     }
 
     SettingsBox {
-        Layout.fillWidth: true
-
         title: qsTr('id_access')
         description: qsTr('id_enable_or_change_your_pin_to')
 
@@ -40,6 +38,7 @@ ColumnLayout {
     SettingsBox {
         title: qsTr('id_auto_logout_timeout')
         description: qsTr('id_set_a_timeout_to_logout_after')
+        enabled: !wallet.locked
 
         ComboBox {
             flat: true
@@ -108,6 +107,7 @@ ColumnLayout {
     SettingsBox {
         title: qsTr('id_twofactor_authentication')
         description: qsTr('id_enable_twofactor_authentication')
+        enabled: !wallet.locked
 
         ColumnLayout {
             Component {
@@ -168,6 +168,7 @@ ColumnLayout {
     SettingsBox {
         title: qsTr('id_set_twofactor_threshold')
         description: qsTr('id_set_a_limit_to_spend_without')
+        enabled: !wallet.locked
 
         RowLayout {
             Layout.alignment: Qt.AlignRight

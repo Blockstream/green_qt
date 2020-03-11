@@ -32,6 +32,7 @@ ColumnLayout {
     SettingsBox {
         title: qsTr('id_currency')
         description: qsTr('id_select_a_fiat_currency_and')
+        enabled: !wallet.locked
 
         GridLayout {
             columns: 2
@@ -100,7 +101,7 @@ ColumnLayout {
     SettingsBox {
         title: 'Notifications'
         description: qsTr('id_receive_email_notifications_for')
-
+        enabled: !wallet.locked
 
         GridLayout {
             columns: 2
