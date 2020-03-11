@@ -21,8 +21,8 @@ Dialog {
             }
             QRCode {
                 id: qrcode
-//                implicitWidth: 240
-//                implicitHeight: 240
+                implicitHeight: 200
+                implicitWidth: 200
                 text: wallet.mnemonic.join(' ')
             }
         }
