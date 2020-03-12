@@ -10,6 +10,7 @@ public:
     SettingsController(QObject* parent = nullptr);
 
     Q_INVOKABLE void change(const QJsonObject& data);
+    Q_INVOKABLE void sendRecoveryTransactions();
 
     bool update(const QJsonObject& result) override;
 };

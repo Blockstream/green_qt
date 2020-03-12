@@ -36,6 +36,14 @@ void SettingsController::change(const QJsonObject& data)
     wallet()->updateSettings();
 }
 
+void SettingsController::sendRecoveryTransactions()
+{
+    int err = GA_send_nlocktimes(session());
+    // Can't Q_ASSERT(err == GA_OK) because err != GA_OK
+    // if no utxos found (e.g. new wallet)
+    Q_UNUSED(err);
+}
+
 bool SettingsController::update(const QJsonObject& result)
 {
     if (result.value("status").toString() == "done") {
