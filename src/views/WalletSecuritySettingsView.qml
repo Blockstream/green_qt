@@ -169,6 +169,7 @@ ColumnLayout {
         title: qsTr('id_set_twofactor_threshold')
         description: qsTr('id_set_a_limit_to_spend_without')
         enabled: !wallet.locked
+        visible: !wallet.network.liquid
 
         RowLayout {
             Layout.alignment: Qt.AlignRight
