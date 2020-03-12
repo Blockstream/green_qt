@@ -40,4 +40,14 @@ public:
     bool update(const QJsonObject& result) override;
 };
 
+class CancelTwoFactorResetController : public Controller
+{
+    Q_OBJECT
+
+public:
+    explicit CancelTwoFactorResetController(QObject* parent = nullptr);
+    Q_INVOKABLE void execute();
+    bool update(const QJsonObject& result) override;
+};
+
 #endif // GREEN_TWOFACTORCONTROLLER_H
