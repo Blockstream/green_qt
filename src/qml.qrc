@@ -70,5 +70,6 @@
         <file>ReviewView.qml</file>
         <file>SectionLabel.qml</file>
         <file>Collapsible.qml</file>
+        <file>RequestTwoFactorResetDialog.qml</file>
     </qresource>
 </RCC>
