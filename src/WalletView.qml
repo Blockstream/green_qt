@@ -130,8 +130,8 @@ Item {
                 wrapMode: Label.WordWrap
                 Layout.fillWidth: true
                 Binding on text {
-                    when: wallet.events.twofactor_reset
-                    value: qsTrId('id_your_wallet_is_locked_for_a').arg(wallet.events.twofactor_reset.days_remaining)
+                    when: !!wallet.events.twofactor_reset
+                    value: qsTrId('id_your_wallet_is_locked_for_a').arg(wallet.events.twofactor_reset ? wallet.events.twofactor_reset.days_remaining : 0)
                 }
                 Image {
                     y: 8
@@ -245,7 +245,7 @@ Item {
                 }
 
                 ToolButton {
-                    visible: wallet.events && wallet.events.twofactor_reset && wallet.events.twofactor_reset.is_active
+                    visible: wallet.events && !!wallet.events.twofactor_reset && wallet.events.twofactor_reset.is_active
                     Layout.alignment: Qt.AlignBottom
                     icon.source: 'assets/svg/notifications_2.svg'
                     icon.color: 'transparent'
