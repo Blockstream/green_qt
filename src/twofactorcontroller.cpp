@@ -77,3 +77,30 @@ bool TwoFactorController::update(const QJsonObject& result)
     }
     return Controller::update(result);
 }
+
+RequestTwoFactorResetController::RequestTwoFactorResetController(QObject* parent)
+    : Controller(parent)
+{
+}
+
+void RequestTwoFactorResetController::execute(const QByteArray& email)
+{
+    dispatch([email](GA_session* session, GA_auth_handler** auth_handler) {
+        int res = GA_twofactor_reset(session, email.data(), false, auth_handler);
+        Q_ASSERT(res == GA_OK);
+    });
+}
+
+
+bool RequestTwoFactorResetController::update(const QJsonObject& result)
+{
+    qDebug() << "RequestTwoFactorResetController::update" << result;
+    if (result.value("status").toString() == "done") {
+        wallet()->updateConfig();
+        // TODO: updateConfig doesn't update 2f reset data,
+        // it's only updated after authentication in GDK,
+        // so force wallet lock for now.
+        wallet()->setLocked(true);
+    }
+    return Controller::update(result);
+}

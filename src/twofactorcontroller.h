@@ -30,4 +30,14 @@ private:
     QByteArray m_method;
 };
 
+class RequestTwoFactorResetController : public Controller
+{
+    Q_OBJECT
+
+public:
+    explicit RequestTwoFactorResetController(QObject* parent = nullptr);
+    Q_INVOKABLE void execute(const QByteArray& email);
+    bool update(const QJsonObject& result) override;
+};
+
 #endif // GREEN_TWOFACTORCONTROLLER_H

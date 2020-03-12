@@ -107,6 +107,7 @@ namespace Green {
         registerType<SendTransactionController>("SendTransactionController");
         registerType<SettingsController>("SettingsController");
         registerType<TwoFactorController>("TwoFactorController");
+        registerType<RequestTwoFactorResetController>("RequestTwoFactorResetController");
         registerType<WordValidator>("WordValidator");
 
         registerSingletonInstance<NetworkManager>("NetworkManager");
