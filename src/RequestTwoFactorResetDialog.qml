@@ -17,7 +17,7 @@ ControllerDialog {
         Label {
             text: qsTrId('id_the_new_email_will_be_used_for')
             wrapMode: Text.Wrap
-            Layout.maximumWidth: 300
+            Layout.maximumWidth: 400
             Layout.fillWidth: true
             Layout.fillHeight: true
         }

@@ -12,7 +12,7 @@ Dialog {
     property alias initialItem: stack_view.initialItem
     property string description
     property string placeholder
-    property string doneText
+    property string doneText: qsTrId('id_done')
 
     property real minimumHeight: 0
     property real minimumWidth: 0
