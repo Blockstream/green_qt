@@ -21,7 +21,7 @@ ColumnLayout {
         Button {
             flat: true
             text: qsTr('id_request_recovery_transactions')
-            enabled: wallet.config['email'].confirmed
+            enabled: !wallet.locked && wallet.config.email && wallet.config.email.confirmed
             onClicked: controller.sendRecoveryTransactions()
         }
     }
@@ -37,18 +37,31 @@ ColumnLayout {
 
     SettingsBox {
         title: qsTr('id_request_twofactor_reset')
-        description: qsTr('id_start_a_2fa_reset_process_if')
+        //TODO: use translations
+        description: wallet.locked ? qsTr('wallet locked for %1 days').arg(wallet.config.twofactor_reset.days_remaining) : qsTrId('id_start_a_2fa_reset_process_if')
 
         RowLayout {
-            TextField {
-                placeholderText: qsTr('id_enter_new_email')
-                padding: 10
-            }
-
             Button {
                 flat: true
-                text: qsTr('id_reset')
+                enabled: wallet.config.any_enabled || false
+                text: wallet.locked ? qsTrId('id_cancel_twofactor_reset') : qsTrId('id_reset')
                 padding: 10
+                Component {
+                    id: cancel_dialog
+                    CancelTwoFactorResetDialog { }
+                }
+
+                Component {
+                    id: request_dialog
+                    RequestTwoFactorResetDialog { }
+                }
+                onClicked: {
+                    if (wallet.locked) {
+                        cancel_dialog.createObject(stack_view).open()
+                    } else {
+                        request_dialog.createObject(stack_view).open()
+                    }
+                }
             }
         }
     }

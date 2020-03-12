@@ -34,7 +34,8 @@ Page {
             id: repeater
             property list<Component> views: [
                 Component { WalletGeneralSettingsView {} },
-                Component { WalletSecuritySettingsView {} }
+                Component { WalletSecuritySettingsView {} },
+                Component { WalletRecoverySettingsView {} }
             ]
             model: views
 
