@@ -220,11 +220,12 @@ Page {
         property string title: qsTrId('id_set_wallet_name')
         property list<Action> actions: [
             Action {
-                enabled: name_field.text.trim().length > 0
                 text: qsTr('id_restore')
                 onTriggered: {
-                    wallet.name = name_field.text;
-                    finished()
+                    let name = name_field.text.trim();
+                    if (name === '') name = name_field.placeholderText;
+                    wallet.name = name;
+                    finished();
                 }
             }
         ]
@@ -233,7 +234,7 @@ Page {
             id: name_field
             Layout.minimumWidth: 300
             font.pixelSize: 16
-            text: qsTrId('My %1 Wallet').arg(network_page.network ? network_page.network.name : '')
+            placeholderText: WalletManager.newWalletName(network_page.network)
         }
     }
 }

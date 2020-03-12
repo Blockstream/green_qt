@@ -232,13 +232,13 @@ Page {
         property string title: qsTrId('id_set_wallet_name')
         property list<Action> actions: [
             Action {
-                enabled: name_field.text.trim().length > 0
                 text: qsTr('id_create')
                 onTriggered: {
+                    let name = name_field.text.trim();
+                    if (name === '') name = name_field.placeholderText;
                     const proxy = proxy_checkbox.checked ? proxy_field.text : '';
                     const use_tor = tor_checkbox.checked;
                     const network = network_page.network;
-                    const name = name_field.text;
                     const pin = pin_view.pin;
                     currentWallet = WalletManager.signup(proxy, use_tor, network, name, mnemonic, pin);
                     close();
@@ -254,7 +254,7 @@ Page {
             id: name_field
             width: 300
             font.pixelSize: 16
-            text: qsTrId('My %1 Wallet').arg(network_page.network ? network_page.network.name : '')
+            placeholderText: WalletManager.newWalletName(network_page.network)
         }
     }
 }

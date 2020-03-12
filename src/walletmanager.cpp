@@ -6,6 +6,7 @@
 #include "walletmanager.h"
 
 #include <QDir>
+#include <QSet>
 #include <QSettings>
 #include <QStandardPaths>
 #include <QUrl>
@@ -83,6 +84,21 @@ QQmlListProperty<Wallet> WalletManager::wallets()
     return QQmlListProperty<Wallet>(this, &m_wallets,
         [](QQmlListProperty<Wallet>* property) { return static_cast<QVector<Wallet*>*>(property->data)->size(); },
     [](QQmlListProperty<Wallet>* property, int index) { return static_cast<QVector<Wallet*>*>(property->data)->at(index); });
+}
+
+QString WalletManager::newWalletName(Network* network) const
+{
+    if (!network) return {};
+    QSet<QString> names;
+    for (Wallet* wallet : m_wallets) {
+        if (wallet->network() == network) names.insert(wallet->name());
+    }
+    int n = 0;
+    QString name = QString("My %1 Wallet").arg(network->name());
+    while (names.contains(name)) {
+        name = QString("My %1 Wallet %2").arg(network->name()).arg(++n);
+    }
+    return name;
 }
 
 Wallet* WalletManager::signup(const QString& proxy, bool use_tor, Network* network, const QString& name, const QStringList& mnemonic, const QByteArray& pin)
