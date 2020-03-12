@@ -71,5 +71,6 @@
         <file>SectionLabel.qml</file>
         <file>Collapsible.qml</file>
         <file>RequestTwoFactorResetDialog.qml</file>
+        <file>CancelTwoFactorResetDialog.qml</file>
     </qresource>
 </RCC>
