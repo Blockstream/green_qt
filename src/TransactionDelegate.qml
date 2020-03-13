@@ -61,7 +61,7 @@ ItemDelegate {
                 Layout.alignment: Qt.AlignRight
                 color: confirmations === 0 ? 'red' : 'white'
                 text: transactionStatus(confirmations)
-                visible: confirmations < (wallet.liquid ? 1 : 6)
+                visible: confirmations < (wallet.network.liquid ? 1 : 6)
             }
         }
 

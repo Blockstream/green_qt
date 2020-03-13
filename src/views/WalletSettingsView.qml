@@ -32,12 +32,16 @@ Page {
 
         Repeater {
             id: repeater
-            property list<Component> views: [
+            property list<Component> liquid_views: [
+                Component { WalletGeneralSettingsView {} },
+                Component { WalletSecuritySettingsView {} }
+            ]
+            property list<Component> bitcoin_views: [
                 Component { WalletGeneralSettingsView {} },
                 Component { WalletSecuritySettingsView {} },
                 Component { WalletRecoverySettingsView {} }
             ]
-            model: views
+            model: wallet.network.liquid ? liquid_views : bitcoin_views
 
             ScrollView {
                 property string title: loader.item.title
