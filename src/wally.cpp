@@ -28,7 +28,7 @@ QStringList GetWordlist()
 }
 
 QStringList g_wordlist{GetWordlist()};
-QSet<QString> g_wordset{QSet<QString>::fromList(g_wordlist)};
+QSet<QString> g_wordset{g_wordlist.begin(), g_wordlist.end()};
 
 } // namespace
 
@@ -40,8 +40,3 @@ Wally *Wally::instance()
 
 QStringList Wally::wordlist() const { return g_wordlist; }
 
-WordValidator::WordValidator(QObject *parent) : QValidator(parent) {}
-WordValidator::State WordValidator::validate(QString &input, int &) const
-{
-    return g_wordset.contains(input) ? Acceptable : Intermediate;
-}
