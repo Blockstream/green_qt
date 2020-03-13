@@ -76,6 +76,7 @@ class ReceiveAddress : public QObject
 
 public:
     explicit ReceiveAddress(QObject* parent = nullptr);
+    virtual ~ReceiveAddress();
 
     Account* account() const;
     void setAccount(Account* account);

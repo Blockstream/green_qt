@@ -154,6 +154,11 @@ ReceiveAddress::ReceiveAddress(QObject *parent) : QObject(parent)
 
 }
 
+ReceiveAddress::~ReceiveAddress()
+{
+    QMetaObject::invokeMethod(m_account->m_wallet->m_context, [] {}, Qt::BlockingQueuedConnection);
+}
+
 Account *ReceiveAddress::account() const
 {
     return m_account;
