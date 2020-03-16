@@ -17,25 +17,6 @@ ColumnLayout {
     }
 
     SettingsBox {
-        title: 'nLockTime' // TODO: move to own recovery tab
-        Button {
-            flat: true
-            text: qsTr('id_request_recovery_transactions')
-            enabled: !wallet.locked && wallet.config.email && wallet.config.email.confirmed
-            onClicked: controller.sendRecoveryTransactions()
-        }
-    }
-
-    SettingsBox {
-        title: qsTr('id_set_an_email_for_recovery')
-        description: qsTr('id_providing_an_email_enables')
-
-        TextField {
-            placeholderText: 'blabla@gmail.com'
-        }
-    }
-
-    SettingsBox {
         title: qsTr('id_request_twofactor_reset')
         //TODO: use translations
         description: wallet.locked ? qsTr('wallet locked for %1 days').arg(wallet.config.twofactor_reset.days_remaining) : qsTrId('id_start_a_2fa_reset_process_if')
