@@ -25,6 +25,13 @@ Item {
         anchors.fill: parent
         autoOrientation: true
         fillMode: VideoOutput.PreserveAspectCrop
+        source: Camera {
+            focus {
+                focusMode: CameraFocus.FocusContinuous
+                focusPointMode: CameraFocus.FocusPointAuto
+            }
+        }
+
         filters: QZXingFilter {
             captureRect: {
                 video_output.width;

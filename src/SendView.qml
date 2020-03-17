@@ -13,19 +13,16 @@ StackView {
 
     property var actions: currentItem.actions
 
-    property Item scanner_view: ScannerView {
-        implicitHeight: Math.max(setup_view.implicitHeight, 300)
-        implicitWidth: Math.max(setup_view.implicitWidth, 300)
-
-        source: camera
-        onCancel: {
-            stack_view.pop();
-            camera.stop();
-        }
-        onCodeScanned: {
-            camera.stop();
-            address_field.text = WalletManager.parseUrl(code).address;
-            stack_view.pop();
+    Component {
+        id: scanner_view
+        ScannerView {
+            implicitHeight: Math.max(setup_view.implicitHeight, 300)
+            implicitWidth: Math.max(setup_view.implicitWidth, 300)
+            onCancel: stack_view.pop();
+            onCodeScanned: {
+                address_field.text = WalletManager.parseUrl(code).address;
+                stack_view.pop();
+            }
         }
     }
 
@@ -35,14 +32,6 @@ StackView {
     Component {
         id: review_view
         ReviewView {}
-    }
-
-    property Camera camera: Camera {
-        cameraState: Camera.LoadedState
-        focus {
-            focusMode: CameraFocus.FocusContinuous
-            focusPointMode: CameraFocus.FocusPointAuto
-        }
     }
 
     initialItem: ColumnLayout {
@@ -68,13 +57,11 @@ StackView {
                 font.pixelSize: 12
             }
             ToolButton {
+                enabled: QtMultimedia.availableCameras.length > 0
                 icon.source: './assets/svg/qr.svg'
                 icon.width: 16
                 icon.height: 16
-                onClicked: {
-                    camera.start()
-                    stack_view.push(scanner_view)
-                }
+                onClicked: stack_view.push(scanner_view)
             }
         }
         SectionLabel { text: qsTrId('id_asset'); visible: wallet.network.liquid }
