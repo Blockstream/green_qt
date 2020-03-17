@@ -95,6 +95,7 @@ Page {
             Repeater {
                 model: stack_view.currentItem.actions
                 Button {
+                    focus: modelData.focus || false
                     action: modelData
                     flat: true
                     Layout.rightMargin: 16
@@ -168,10 +169,11 @@ Page {
         title: qsTrId('Insert your green mnemonic')
         actions: [
             Action {
+                property bool focus: mnemonic_page.valid
                 text: qsTrId('id_continue')
-                enabled: mnemonic_page.complete && wallet.authentication === Wallet.Unauthenticated
+                enabled: mnemonic_page.valid && wallet.authentication === Wallet.Unauthenticated
                 onTriggered: {
-                    if (mnemonic_page.passwordProtected) {
+                    if (mnemonic_page.password) {
                         stack_view.push(password_page)
                     } else {
                         wallet.login(mnemonic_page.mnemonic)
@@ -183,11 +185,20 @@ Page {
 
     property Item password_page: WizardPage {
         title: qsTrId('id_please_provide_your_passphrase')
+        actions: [
+            Action {
+                id: passphrase_next_action
+                text: qsTrId('id_continue')
+                enabled: wallet.authentication === Wallet.Unauthenticated && password_field.text.trim().length > 0
+                onTriggered: wallet.login(mnemonic_page.mnemonic, password_field.text.trim())
+            }
+        ]
         TextField {
             id: password_field
             anchors.centerIn: parent
+            implicitWidth: 400
             echoMode: TextField.Password
-            onAccepted: wallet.login(mnemonic_page.mnemonic, password_field.text)
+            onAccepted: passphrase_next_action.trigger()
             placeholderText: qsTr('id_encryption_passphrase')
         }
     }

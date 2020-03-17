@@ -101,6 +101,9 @@ namespace Green {
         registerUncreatableType<TransactionAmount>("TransactionAmount");
         registerUncreatableType<Wallet>("Wallet");
 
+        registerUncreatableType<Word>("Word");
+        registerType<MnemonicEditorController>("MnemonicEditorController");
+
         registerType<CreateAccountController>("CreateAccountController");
         registerType<ReceiveAddress>("ReceiveAddress");
         registerType<RenameAccountController>("RenameAccountController");
