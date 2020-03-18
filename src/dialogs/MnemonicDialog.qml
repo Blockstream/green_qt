@@ -3,7 +3,7 @@ import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
 import '..'
 
-Dialog {
+WalletDialog {
     modal: true
     title: qsTr('id_mnemonic')
     Overlay.modal: Rectangle {

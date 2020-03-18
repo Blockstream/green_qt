@@ -6,7 +6,7 @@ import QtQuick.Layouts 1.12
 
 import './views'
 
-Dialog {
+WalletDialog {
     id: controller_dialog
     property Controller controller
     property alias initialItem: stack_view.initialItem

@@ -3,8 +3,9 @@ import QtQuick.Controls 2.13
 import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.13
 import '../views'
+import '..'
 
-Dialog {
+WalletDialog {
     title: stack_view.currentItem.title
     width: 320
     height: 400

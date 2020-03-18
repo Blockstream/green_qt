@@ -72,5 +72,6 @@
         <file>Collapsible.qml</file>
         <file>RequestTwoFactorResetDialog.qml</file>
         <file>CancelTwoFactorResetDialog.qml</file>
+        <file>WalletDialog.qml</file>
     </qresource>
 </RCC>
