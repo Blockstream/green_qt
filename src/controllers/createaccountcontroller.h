@@ -3,6 +3,8 @@
 
 #include "controller.h"
 
+class Account;
+
 class CreateAccountController : public Controller
 {
     Q_OBJECT
@@ -21,10 +23,14 @@ public:
 signals:
     void nameChanged(const QString& name);
     void typeChanged(const QString& type);
+    void accountCreated(Account* account);
 
 public slots:
-    void reset();
+    void reset() override;
     void create();
+
+protected:
+    bool update(const QJsonObject& result) override;
 
 private:
     QString m_name;

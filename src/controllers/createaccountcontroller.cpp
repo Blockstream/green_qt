@@ -29,21 +29,27 @@ void CreateAccountController::reset()
 
 void CreateAccountController::create()
 {
-    QMetaObject::invokeMethod(m_wallet->m_context, [this] {
+    dispatch([this](GA_session* session, GA_auth_handler** auth_handler) {
         GA_json* details = Json::fromObject({
             { "name", m_name.toLocal8Bit().constData() },
             { "type", m_type.toLocal8Bit().constData() }
         });
-
-        int res = GA_create_subaccount(m_wallet->m_session, details, &m_auth_handler);
+        int res = GA_create_subaccount(session, details, auth_handler);
         Q_ASSERT(res == GA_OK);
-
         GA_destroy_json(details);
-
-        process();
-
-        m_wallet->reload();
     });
+}
+
+bool CreateAccountController::update(const QJsonObject &result)
+{
+    auto status = result.value("status").toString();
+    if (status == "done") {
+        int pointer = result.value("result").toObject().value("pointer").toInt();
+        auto account = wallet()->getOrCreateAccount(pointer);
+        emit accountCreated(account);
+        wallet()->reload();
+    }
+    return Controller::update(result);
 }
 
 void CreateAccountController::setType(const QString& type)
