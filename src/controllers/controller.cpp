@@ -56,10 +56,12 @@ void Controller::process()
         m_auth_handler = nullptr;
     }
 
-    // Update the controller with the new result
-    if (update(result)) {
-        setResult(result);
-    }
+    QMetaObject::invokeMethod(this, [this, result] {
+        // Update the controller with the new result
+        if (update(result)) {
+            setResult(result);
+        }
+    });
 }
 
 bool Controller::update(const QJsonObject& result)
