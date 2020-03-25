@@ -530,24 +530,15 @@ void Wallet::reload()
         QMetaObject::invokeMethod(this, [this, accounts] {
             quint64 balance  = 0;
 
-            QMap<int, Account*> accounts_by_pointer = m_accounts_by_pointer;
-
             for (QJsonValue data : accounts) {
                 QJsonObject json = data.toObject();
                 int pointer = json.value("pointer").toInt();
-                Account* account = accounts_by_pointer.take(pointer);
-                if (!account) {
-                    account = new Account(this);
-                    m_accounts.append(account);
-                    m_accounts_by_pointer.insert(pointer, account);
-                }
+                Account* account = getOrCreateAccount(pointer);
                 account->update(data.toObject());
                 account->reload();
 
                 balance += static_cast<quint64>(json.value("satoshi").toObject().value("btc").toInt());
             }
-
-            Q_ASSERT(accounts_by_pointer.isEmpty());
 
             emit accountsChanged();
 
@@ -722,6 +713,17 @@ void Wallet::setBusy(bool busy)
     if (m_busy == busy) return;
     m_busy = busy;
     emit busyChanged(m_busy);
+}
+
+Account* Wallet::getOrCreateAccount(int pointer)
+{
+    Account* account = m_accounts_by_pointer.value(pointer);
+    if (!account) {
+        account = new Account(this);
+        m_accounts.append(account);
+        m_accounts_by_pointer.insert(pointer, account);
+    }
+    return account;
 }
 
 void Wallet::setSettings(const QJsonObject& settings)

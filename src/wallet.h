@@ -107,6 +107,8 @@ public:
     bool isBusy() const { return m_busy; }
     void setBusy(bool busy);
 
+    Account* getOrCreateAccount(int pointer);
+
 public slots:
     void connect(const QString& proxy, bool use_tor);
     void disconnect();
