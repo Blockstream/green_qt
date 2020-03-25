@@ -73,5 +73,6 @@
         <file>RequestTwoFactorResetDialog.qml</file>
         <file>CancelTwoFactorResetDialog.qml</file>
         <file>WalletDialog.qml</file>
+        <file>SetRecoveryEmailDialog.qml</file>
     </qresource>
 </RCC>
