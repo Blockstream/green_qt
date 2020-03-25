@@ -210,7 +210,7 @@ Item {
 
                         MenuItem {
                             text: qsTr('id_add_new_account')
-                            onClicked: create_account_dialog.open()
+                            onClicked: create_account_dialog.createObject(wallet_view).open()
                         }
 
                         MenuItem {
@@ -353,8 +353,9 @@ Item {
             id: rename_account_dialog
         }
 
-        CreateAccountDialog {
+        Component {
             id: create_account_dialog
+            CreateAccountDialog {}
         }
     }
 
