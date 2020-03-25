@@ -1,4 +1,5 @@
 #include "twofactorcontroller.h"
+#include "settingscontroller.h"
 #include "wallet.h"
 #include "json.h"
 #include "ga.h"
@@ -127,6 +128,46 @@ bool CancelTwoFactorResetController::update(const QJsonObject& result)
         // it's only updated after authentication in GDK,
         // so force wallet unlock for now.
         wallet()->setLocked(false);
+    }
+    return Controller::update(result);
+}
+
+SetRecoveryEmailController::SetRecoveryEmailController(QObject* parent)
+    : Controller(parent)
+{
+}
+
+void SetRecoveryEmailController::execute(const QByteArray& email)
+{
+    dispatch([email](GA_session* session, GA_auth_handler** auth_handler) {
+        auto details = Json::fromObject({
+            { "data", email.data() },
+            { "confirmed", true },
+            { "enabled", false }
+        });
+
+        int res = GA_change_settings_twofactor(session, "email", details, auth_handler);
+        Q_ASSERT(res == GA_OK);
+        GA_destroy_json(details);
+    });
+}
+
+bool SetRecoveryEmailController::update(const QJsonObject& result)
+{
+    if (result.value("status").toString() == "done") {
+        auto wallet = this->wallet();
+        QMetaObject::invokeMethod(wallet, [wallet] {
+            wallet->updateConfig();
+            // enable email notifications to receive copy of recovery data
+            auto notifications = new SettingsController(wallet);
+            notifications->setWallet(wallet);
+            notifications->change({
+                { "notifications" , QJsonValue({
+                    { "email_incoming", true },
+                    { "email_outgoing", true }})
+                }
+            });
+        });
     }
     return Controller::update(result);
 }

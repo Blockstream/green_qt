@@ -50,4 +50,13 @@ public:
     bool update(const QJsonObject& result) override;
 };
 
+class SetRecoveryEmailController : public Controller
+{
+    Q_OBJECT
+public:
+    explicit SetRecoveryEmailController(QObject* parent = nullptr);
+    Q_INVOKABLE void execute(const QByteArray& email);
+    bool update(const QJsonObject& result) override;
+};
+
 #endif // GREEN_TWOFACTORCONTROLLER_H

@@ -112,6 +112,7 @@ namespace Green {
         registerType<TwoFactorController>("TwoFactorController");
         registerType<RequestTwoFactorResetController>("RequestTwoFactorResetController");
         registerType<CancelTwoFactorResetController>("CancelTwoFactorResetController");
+        registerType<SetRecoveryEmailController>("SetRecoveryEmailController");
 
         registerSingletonInstance<NetworkManager>("NetworkManager");
         registerSingletonInstance<WalletManager>("WalletManager");
