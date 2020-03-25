@@ -234,7 +234,6 @@ Item {
                 Label {
                     id: title_label
                     font.pixelSize: 16
-                    font.capitalization: Font.AllUppercase
                     text: account ? account.name : ''
                     Layout.alignment: Qt.AlignVCenter
                 }

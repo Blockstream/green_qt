@@ -22,6 +22,7 @@ ListView {
 
             SectionLabel {
                 elide: Text.ElideRight
+                font.capitalization: Font.MixedCase
                 text: account.name
                 width: parent.width
                 ToolTip.text: account.name

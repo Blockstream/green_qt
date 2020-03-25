@@ -22,7 +22,7 @@ QString Account::name() const
 {
     QString name = m_json.value("name").toString();
     if (name.isEmpty()) name = "Main Account";
-    return name.toUpper();
+    return name;
 }
 
 QJsonObject Account::json() const
