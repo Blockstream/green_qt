@@ -32,7 +32,7 @@ void CreateAccountController::create()
     QMetaObject::invokeMethod(m_wallet->m_context, [this] {
         GA_json* details = Json::fromObject({
             { "name", m_name.toLocal8Bit().constData() },
-            { "type", "2of2" }
+            { "type", m_type.toLocal8Bit().constData() }
         });
 
         int res = GA_create_subaccount(m_wallet->m_session, details, &m_auth_handler);
@@ -44,4 +44,11 @@ void CreateAccountController::create()
 
         m_wallet->reload();
     });
+}
+
+void CreateAccountController::setType(const QString& type)
+{
+    if (m_type == type) return;
+    m_type = type;
+    emit typeChanged(m_type);
 }
