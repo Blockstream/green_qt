@@ -10,9 +10,9 @@ ListView {
     delegate: ItemDelegate {
         property Account account: modelData
 
-        onClicked: ListView.view.currentIndex = index
+        onClicked: wallet_view.currentAccount = account
         background.opacity: 0.4
-        highlighted: ListView.isCurrentItem
+        highlighted: wallet_view.account === account
         leftPadding: 16
         rightPadding: 8
         width: ListView.view.width

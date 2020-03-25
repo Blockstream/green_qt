@@ -8,7 +8,8 @@ import './dialogs'
 import './views'
 
 Item {
-    property var account: accounts_list.currentItem ? accounts_list.currentItem.account : undefined
+    property Account currentAccount
+    readonly property Account account: currentAccount || wallet.accounts[0] || null
 
     id: wallet_view
 
