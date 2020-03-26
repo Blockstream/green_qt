@@ -51,6 +51,7 @@ signals:
 
 public slots:
     void reload();
+    void copyAccountIdToClipboard();
 
 public:
     Wallet* const m_wallet;

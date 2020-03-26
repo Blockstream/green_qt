@@ -138,6 +138,10 @@ void Account::reload()
     });
 }
 
+void Account::copyAccountIdToClipboard()
+{
+    QGuiApplication::clipboard()->setText(m_json.value("receiving_id").toString());
+}
 
 Wallet *Account::wallet() const
 {
