@@ -74,5 +74,6 @@
         <file>CancelTwoFactorResetDialog.qml</file>
         <file>WalletDialog.qml</file>
         <file>SetRecoveryEmailDialog.qml</file>
+        <file>AccountIdBadge.qml</file>
     </qresource>
 </RCC>
