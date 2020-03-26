@@ -243,7 +243,10 @@ Item {
                     Layout.fillWidth: true
                     height: 1
                 }
-
+                Loader {
+                    active: account && account.json.type === '2of2_no_recovery'
+                    sourceComponent: AccountIdBadge { }
+                }
                 ToolButton {
                     visible: wallet.events && !!wallet.events.twofactor_reset && wallet.events.twofactor_reset.is_active
                     Layout.alignment: Qt.AlignBottom
