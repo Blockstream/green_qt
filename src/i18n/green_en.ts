@@ -30,12 +30,20 @@
         <translation>~ 2 Hours</translation>
     </message>
     <message>
+        <source>id_2of3_account</source>
+        <translation>2of3 Account</translation>
+    </message>
+    <message>
         <source>id_4_hours</source>
         <translation>~ 4 Hours</translation>
     </message>
     <message>
         <source>id_5_seconds_minimum</source>
         <translation>5 seconds minimum</translation>
+    </message>
+    <message>
+        <source>id_a_2of3_account_requires_two_out</source>
+        <translation>A 2of3 account requires two out of three signatures to spend coins. The third signature is from a backup key known only to you. This gives you the security benefits of a standard account, while still allowing you to move your coins independently at any point in time.</translation>
     </message>
     <message>
         <source>id_a_new_transaction_has_just</source>
@@ -192,6 +200,10 @@
     <message>
         <source>id_back</source>
         <translation>Back</translation>
+    </message>
+    <message>
+        <source>id_backup_the_recovery_mnemonic</source>
+        <translation>Backup the recovery mnemonic and recovery xpub to recover funds from your 2of3 account.</translation>
     </message>
     <message>
         <source>id_be_aware_other_apps_can_read_or</source>
@@ -406,6 +418,10 @@
         <translation>Copy URI</translation>
     </message>
     <message>
+        <source>id_copy_xpub</source>
+        <translation>Copy xpub</translation>
+    </message>
+    <message>
         <source>id_create</source>
         <translation>Create</translation>
     </message>
@@ -506,8 +522,8 @@
         <translation>Disable</translation>
     </message>
     <message>
-        <source>id_disable_s_for_twofactor</source>
-        <translation>Disable %1 for Two-Factor Authentication</translation>
+        <source>id_disable_s_twofactor</source>
+        <translation>Disable %1 Two-Factor Authentication</translation>
     </message>
     <message>
         <source>id_disabled</source>
@@ -1006,6 +1022,10 @@
         <translation>LATER</translation>
     </message>
     <message>
+        <source>id_lbtc_has_no_issuer_and_is</source>
+        <translation>L-BTC has no issuer and is instead created on the network via a peg-in.</translation>
+    </message>
+    <message>
         <source>id_learn_more_about_s</source>
         <translation>Learn more about %1.</translation>
     </message>
@@ -1036,10 +1056,6 @@
     <message>
         <source>id_liquid_securities_accounts_are</source>
         <translation>Liquid securities accounts are only available on Liquid wallets. You will be required to get authorization from the issuer to receive a Liquid Security.</translation>
-    </message>
-    <message>
-        <source>id_liquid_watchmen_via_pegin_tap</source>
-        <translation>Liquid watchmen via peg-in. Tap here to read more about Liquid</translation>
     </message>
     <message>
         <source>id_loading_transactions</source>
@@ -1418,6 +1434,10 @@
         <translation>Please verify that the address shown on your hardware wallet matches the one on your phone.</translation>
     </message>
     <message>
+        <source>id_please_wait_while_your_ledger</source>
+        <translation>Please wait while your Ledger validates your address and shows it on the screen.</translation>
+    </message>
+    <message>
         <source>id_precision</source>
         <translation>Precision</translation>
     </message>
@@ -1474,6 +1494,10 @@
         <translation>Recovery and Notifications</translation>
     </message>
     <message>
+        <source>id_recovery_mnemonic</source>
+        <translation>Recovery mnemonic</translation>
+    </message>
+    <message>
         <source>id_recovery_transaction_emails</source>
         <translation>Recovery transaction emails</translation>
     </message>
@@ -1488,6 +1512,10 @@
     <message>
         <source>id_recovery_words</source>
         <translation>Recovery words</translation>
+    </message>
+    <message>
+        <source>id_recovery_xpub</source>
+        <translation>Recovery xpub</translation>
     </message>
     <message>
         <source>id_redeem_your_deposited_funds</source>

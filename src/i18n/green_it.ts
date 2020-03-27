@@ -506,8 +506,8 @@
         <translation>Disabilita</translation>
     </message>
     <message>
-        <source>id_disable_s_for_twofactor</source>
-        <translation>Disattiva  l&apos; Autenticazione a Due Fattori via %1</translation>
+        <source>id_disable_s_twofactor</source>
+        <translation>Disable %1 Two-Factor Authentication</translation>
     </message>
     <message>
         <source>id_disabled</source>
@@ -1006,6 +1006,10 @@
         <translation>PIÙ TARDI</translation>
     </message>
     <message>
+        <source>id_lbtc_has_no_issuer_and_is</source>
+        <translation>L-BTC has no issuer and is instead created on the network via a peg-in.</translation>
+    </message>
+    <message>
         <source>id_learn_more_about_s</source>
         <translation>Scopri di più su %1.</translation>
     </message>
@@ -1036,10 +1040,6 @@
     <message>
         <source>id_liquid_securities_accounts_are</source>
         <translation>Liquid securities account sono disponibili solo nei wallet Liquid. Sarà necessario ottenere l&apos;autorizzazione dell&apos;emittente per ricevere un titolo Liquid Security.</translation>
-    </message>
-    <message>
-        <source>id_liquid_watchmen_via_pegin_tap</source>
-        <translation>Watchmen di liquid via peg-in. Tocca qui per saperne di più su Liquid</translation>
     </message>
     <message>
         <source>id_loading_transactions</source>
@@ -1418,6 +1418,10 @@
         <translation>Assicurati che l&apos;indirizzo mostrato sul tuo hardware wallet coincida con quello sul tuo telefono.</translation>
     </message>
     <message>
+        <source>id_please_wait_while_your_ledger</source>
+        <translation>Attendi mentre Ledger valida il tuo indirizzo e lo mostra sullo schermo.</translation>
+    </message>
+    <message>
         <source>id_precision</source>
         <translation>Precisione</translation>
     </message>
@@ -1431,7 +1435,7 @@
     </message>
     <message>
         <source>id_provide_this_id_to_the_issuer</source>
-        <translation>Fornisci questo ID all&apos;emittente per ottenere un titolo Liquid Security.</translation>
+        <translation>Fornisci questo ID all&apos;emittente per ottenere l&apos;autorizzazione a ricevere una loro Liquid Security.</translation>
     </message>
     <message>
         <source>id_proxy_settings</source>

@@ -28,7 +28,7 @@ ControllerDialog {
             sourceSize.height: 32
         }
         Label {
-            text: qsTrId('id_disable_s_for_twofactor').arg(method)
+            text: qsTrId('id_disable_s_twofactor').arg(method)
         }
     }
 }

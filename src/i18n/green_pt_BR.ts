@@ -175,7 +175,7 @@
     </message>
     <message>
         <source>id_assets</source>
-        <translation>Assets</translation>
+        <translation>Ativos</translation>
     </message>
     <message>
         <source>id_attempts_remaining_d</source>
@@ -275,7 +275,7 @@
     </message>
     <message>
         <source>id_check_your_backup</source>
-        <translation>Check your backup</translation>
+        <translation>Verifique seu backup</translation>
     </message>
     <message>
         <source>id_choose</source>
@@ -283,7 +283,7 @@
     </message>
     <message>
         <source>id_choose_a_name_for_your_new</source>
-        <translation>Choose a name for your new Blockstream Green wallet.</translation>
+        <translation>Escolha um nome para sua nova carteira Blockstream Green.</translation>
     </message>
     <message>
         <source>id_choose_method_to_authorize_the</source>
@@ -303,7 +303,7 @@
     </message>
     <message>
         <source>id_click_to_receive_an_email_with</source>
-        <translation>Click to receive an email with your encrypted recovery data.</translation>
+        <translation>Clique para receber um email com seus dados de recuperação criptografados.</translation>
     </message>
     <message>
         <source>id_communication_timed_out_make</source>
@@ -363,7 +363,7 @@
     </message>
     <message>
         <source>id_connection_failed</source>
-        <translation>Connection failed</translation>
+        <translation>Conexão falhou</translation>
     </message>
     <message>
         <source>id_connection_to_device_failed</source>
@@ -383,7 +383,7 @@
     </message>
     <message>
         <source>id_copy_address</source>
-        <translation>Copy address</translation>
+        <translation>Copiar endereço</translation>
     </message>
     <message>
         <source>id_copy_details</source>
@@ -403,7 +403,7 @@
     </message>
     <message>
         <source>id_copy_uri</source>
-        <translation>Copy URI</translation>
+        <translation>Copiar URI</translation>
     </message>
     <message>
         <source>id_create</source>
@@ -506,8 +506,8 @@
         <translation>Desabilitar</translation>
     </message>
     <message>
-        <source>id_disable_s_for_twofactor</source>
-        <translation>Disable %1 for Two-Factor Authentication</translation>
+        <source>id_disable_s_twofactor</source>
+        <translation>Disable %1 Two-Factor Authentication</translation>
     </message>
     <message>
         <source>id_disabled</source>
@@ -767,7 +767,7 @@
     </message>
     <message>
         <source>id_general</source>
-        <translation>General</translation>
+        <translation>Geral</translation>
     </message>
     <message>
         <source>id_generate_new_address</source>
@@ -1006,6 +1006,10 @@
         <translation>MAIS TARDE</translation>
     </message>
     <message>
+        <source>id_lbtc_has_no_issuer_and_is</source>
+        <translation>L-BTC has no issuer and is instead created on the network via a peg-in.</translation>
+    </message>
+    <message>
         <source>id_learn_more_about_s</source>
         <translation>Aprenda mais sobre %1.</translation>
     </message>
@@ -1036,10 +1040,6 @@
     <message>
         <source>id_liquid_securities_accounts_are</source>
         <translation>Liquid securities accounts are only available on Liquid wallets. You will be required to get authorization from the issuer to receive a Liquid Security.</translation>
-    </message>
-    <message>
-        <source>id_liquid_watchmen_via_pegin_tap</source>
-        <translation>Liquid watchmen via peg-in. Tap here to read more about Liquid</translation>
     </message>
     <message>
         <source>id_loading_transactions</source>
@@ -1418,6 +1418,10 @@
         <translation>Please verify that the address shown on your hardware wallet matches the one on your phone.</translation>
     </message>
     <message>
+        <source>id_please_wait_while_your_ledger</source>
+        <translation>Please wait while your Ledger validates your address and shows it on the screen.</translation>
+    </message>
+    <message>
         <source>id_precision</source>
         <translation>Precisão</translation>
     </message>
@@ -1443,7 +1447,7 @@
     </message>
     <message>
         <source>id_read_more_at_our_s</source>
-        <translation>Read more at our %1</translation>
+        <translation>Saiba mais em nossa%1</translation>
     </message>
     <message>
         <source>id_receive</source>
@@ -1643,7 +1647,7 @@
     </message>
     <message>
         <source>id_select_account</source>
-        <translation>Selecionar ´Conta</translation>
+        <translation>Selecionar ´conta</translation>
     </message>
     <message>
         <source>id_select_asset</source>
@@ -1763,7 +1767,7 @@
     </message>
     <message>
         <source>id_set_wallet_name</source>
-        <translation>Set wallet name</translation>
+        <translation>Definir nome da carteira</translation>
     </message>
     <message>
         <source>id_setting_updated</source>
@@ -1807,7 +1811,7 @@
     </message>
     <message>
         <source>id_show_qr_code</source>
-        <translation>Show QR code</translation>
+        <translation>Mostrar código QR</translation>
     </message>
     <message>
         <source>id_signup_in_progress</source>
@@ -1909,7 +1913,7 @@ Redefina essa configuração e depois a reative.</translation>
     </message>
     <message>
         <source>id_support_page</source>
-        <translation>Support Page</translation>
+        <translation>Suporte</translation>
     </message>
     <message>
         <source>id_sweep</source>
@@ -1968,7 +1972,7 @@ Redefina essa configuração e depois a reative.</translation>
     </message>
     <message>
         <source>id_the_address_is_valid</source>
-        <translation>The address is valid.</translation>
+        <translation>O endereço é válido.</translation>
     </message>
     <message>
         <source>id_the_addresses_dont_match</source>
@@ -2408,7 +2412,7 @@ Redefina essa configuração e depois a reative.</translation>
     </message>
     <message>
         <source>id_your_twofactor_threshold_is_s</source>
-        <translation>Seu patamar da autenticação de dois fatores é %1.</translation>
+        <translation>A quantidade exigida de autenticações extras é %1.</translation>
     </message>
     <message>
         <source>id_your_wallet_backup_is_made_of</source>

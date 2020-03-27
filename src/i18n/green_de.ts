@@ -383,7 +383,7 @@
     </message>
     <message>
         <source>id_copy_address</source>
-        <translation>Copy address</translation>
+        <translation>Adresse kopieren</translation>
     </message>
     <message>
         <source>id_copy_details</source>
@@ -403,7 +403,7 @@
     </message>
     <message>
         <source>id_copy_uri</source>
-        <translation>Copy URI</translation>
+        <translation>URI kopieren</translation>
     </message>
     <message>
         <source>id_create</source>
@@ -506,8 +506,8 @@
         <translation>Deaktivieren</translation>
     </message>
     <message>
-        <source>id_disable_s_for_twofactor</source>
-        <translation>%1 für die Zwei-Faktor-Authentifizierung deaktivieren</translation>
+        <source>id_disable_s_twofactor</source>
+        <translation>Disable %1 Two-Factor Authentication</translation>
     </message>
     <message>
         <source>id_disabled</source>
@@ -1006,6 +1006,10 @@
         <translation>SPÄTER</translation>
     </message>
     <message>
+        <source>id_lbtc_has_no_issuer_and_is</source>
+        <translation>L-BTC has no issuer and is instead created on the network via a peg-in.</translation>
+    </message>
+    <message>
         <source>id_learn_more_about_s</source>
         <translation>Erfahre mehr über %1.</translation>
     </message>
@@ -1036,10 +1040,6 @@
     <message>
         <source>id_liquid_securities_accounts_are</source>
         <translation>Liquid-Wertpapier-Konten sind nur in Liquid-Wallets verfügbar. Für den Erhalt eines Liquid-Wertpapiers musst du eine Autorisierung des Herausgebers des Tokens einholen.</translation>
-    </message>
-    <message>
-        <source>id_liquid_watchmen_via_pegin_tap</source>
-        <translation>Liquid Watchmen via Peg-in. Tippe hier, um mehr über Liquid zu erfahren.</translation>
     </message>
     <message>
         <source>id_loading_transactions</source>
@@ -1415,7 +1415,11 @@
     </message>
     <message>
         <source>id_please_verify_that_the_address</source>
-        <translation>Please verify that the address shown on your hardware wallet matches the one on your phone.</translation>
+        <translation>Bitte kontrolliere, dass die Adresse auf deiner Hardware-Wallet mit der Adresse auf deinem Smartphone übereinstimmt.</translation>
+    </message>
+    <message>
+        <source>id_please_wait_while_your_ledger</source>
+        <translation>Please wait while your Ledger validates your address and shows it on the screen.</translation>
     </message>
     <message>
         <source>id_precision</source>
@@ -1901,7 +1905,7 @@ Einstellung zurücksetzen und dann reaktivieren.</translation>
     </message>
     <message>
         <source>id_start_receiving_funds_and_set</source>
-        <translation>Start receiving funds and set an email to receive recovery data for your wallet</translation>
+        <translation>Starte mit dem Empfang von Geldern und gib eine E-Mail Adresse an, um Wiederherstellungsdaten für deine Wallet zu erhalten</translation>
     </message>
     <message>
         <source>id_support</source>
@@ -1909,7 +1913,7 @@ Einstellung zurücksetzen und dann reaktivieren.</translation>
     </message>
     <message>
         <source>id_support_page</source>
-        <translation>Support Page</translation>
+        <translation>Support-Seite</translation>
     </message>
     <message>
         <source>id_sweep</source>
@@ -1968,11 +1972,11 @@ Einstellung zurücksetzen und dann reaktivieren.</translation>
     </message>
     <message>
         <source>id_the_address_is_valid</source>
-        <translation>The address is valid.</translation>
+        <translation>Die Adresse ist gültig.</translation>
     </message>
     <message>
         <source>id_the_addresses_dont_match</source>
-        <translation>The addresses don&apos;t match.</translation>
+        <translation>Die Adressen stimmen nicht überein.</translation>
     </message>
     <message>
         <source>id_the_asset_registry_is_currently</source>
@@ -1992,7 +1996,7 @@ Einstellung zurücksetzen und dann reaktivieren.</translation>
     </message>
     <message>
         <source>id_the_email_will_also_be_used_to</source>
-        <translation>The email will also be used to receive recovery data and transaction notifications</translation>
+        <translation>Die E-Mail wird auch dazu verwendet, Wiederherstellungsdaten und Transaktionsbenachrichtigungen zu erhalten</translation>
     </message>
     <message>
         <source>id_the_hardware_wallet_you_are</source>
@@ -2380,7 +2384,7 @@ Einstellung zurücksetzen und dann reaktivieren.</translation>
     </message>
     <message>
         <source>id_your_favourite_exchange_rate_is</source>
-        <translation>Your favourite exchange rate is not available at the moment. You can change it from settings.</translation>
+        <translation>Dein bevorzugter Wechselkursanbieter ist im Moment nicht verfügbar. Du kannst ihn über die Einstellungen ändern.</translation>
     </message>
     <message>
         <source>id_your_green_wallet_is_now_ready</source>
