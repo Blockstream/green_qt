@@ -33,7 +33,7 @@ WalletDialog {
     verticalPadding: 0
     modal: true
 
-    onClosed: destroy()
+    //onClosed: destroy()
 
     header: Item {
         implicitHeight: 48
@@ -131,18 +131,20 @@ WalletDialog {
         }
     }
 
+    property Component doneComponent: WizardPage {
+        actions: Action {
+            text: 'OK'
+            onTriggered: controller_dialog.accept()
+        }
+        Label {
+            text: doneText
+        }
+    }
+
     ControllerResult {
         status: 'done'
         stackView: stack_view
-        WizardPage {
-            actions: Action {
-                text: 'OK'
-                onTriggered: controller_dialog.accept()
-            }
-            Label {
-                text: doneText
-            }
-        }
+        component: doneComponent
     }
 
     ControllerResult {
