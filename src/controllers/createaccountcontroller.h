@@ -28,6 +28,7 @@ signals:
 public slots:
     void reset() override;
     void create();
+    void copyRecoveryXPubToClipboard();
 
 protected:
     bool update(const QJsonObject& result) override;

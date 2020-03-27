@@ -2,6 +2,9 @@
 #include "../wallet.h"
 #include "../json.h"
 
+#include <QClipboard>
+#include <QGuiApplication>
+
 CreateAccountController::CreateAccountController(QObject *parent) : Controller(parent)
 {
 
@@ -38,6 +41,11 @@ void CreateAccountController::create()
         Q_ASSERT(res == GA_OK);
         GA_destroy_json(details);
     });
+}
+
+void CreateAccountController::copyRecoveryXPubToClipboard()
+{
+    QGuiApplication::clipboard()->setText(m_result.value("result").toObject().value("recovery_xpub").toString());
 }
 
 bool CreateAccountController::update(const QJsonObject &result)
