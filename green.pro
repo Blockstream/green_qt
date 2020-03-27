@@ -13,7 +13,7 @@ DEFINES += "VERSION_MAJOR=$$VERSION_MAJOR"\
        "VERSION_PRERELEASE=\"$$VERSION_PRERELEASE\"" \
        "VERSION=\"$${VERSION_MAJOR}.$${VERSION_MINOR}.$${VERSION_PATCH}-$${VERSION_PRERELEASE}\""
 
-QT += qml quick quickcontrols2 svg widgets
+QT += qml quick quickcontrols2 svg
 
 CONFIG += c++11 qtquickcompiler
 
@@ -46,7 +46,6 @@ SOURCES += \
     src/account.cpp \
     src/devicemanager.cpp \
     src/ga.cpp \
-    src/gui.cpp \
     src/main.cpp \
     src/network.cpp \
     src/settingscontroller.cpp \
@@ -73,7 +72,6 @@ HEADERS += \
     src/account.h \
     src/devicemanager.h \
     src/ga.h \
-    src/gui.h \
     src/network.h \
     src/settingscontroller.h \
     src/transaction.h \

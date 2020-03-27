@@ -8,8 +8,15 @@ import QtQuick.Window 2.13
 ApplicationWindow {
     id: window
 
+    width: 1024
+    height: 600
+    visible: true
+    title: 'Blockstream Green'
+
     property string location: '/'
     property Wallet currentWallet
+
+    menuBar: loader.item.menuBar || null
 
     Loader {
         id: loader

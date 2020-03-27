@@ -1,17 +1,16 @@
 #include <QApplication>
 #include <QFontDatabase>
+#include <QIcon>
 #include <QQmlApplicationEngine>
 #include <QQuickStyle>
 #include <QStyleHints>
 #include <QTranslator>
-#include <QWindow>
 
 #include "account.h"
 #include "applicationengine.h"
 #include "asset.h"
 #include "balance.h"
 #include "devices/device.h"
-#include "gui.h"
 #include "network.h"
 #include "transaction.h"
 #include "wallet.h"
@@ -120,11 +119,6 @@ namespace Green {
     #if defined(Q_OS_MAC)
         registerSingletonInstance<DeviceManagerMacos>("DeviceManager");
     #endif
-
-        registerType<Action>("Blockstream.Green.Gui", "Action");
-        registerType<Menu>("Blockstream.Green.Gui", "Menu");
-        registerType<MenuBar>("Blockstream.Green.Gui", "MenuBar");
-        registerType<Separator>("Blockstream.Green.Gui", "Separator");
     }
 
 } // namespace Green
@@ -172,29 +166,9 @@ int main(int argc, char *argv[])
 
     Green::registerTypes();
 
-    QMainWindow main_window;
-    engine.rootContext()->setContextProperty("main_window", &main_window);
-
     engine.load(QUrl(QStringLiteral("loader.qml")));
     if (engine.rootObjects().isEmpty())
         return -1;
-
-    QWindow* window = static_cast<QWindow*>(engine.rootObjects().first());
-
-    main_window.setWindowTitle("Blockstream Green");
-    main_window.setCentralWidget(QWidget::createWindowContainer(window));
-    main_window.setMinimumSize(QSize(1024, 600));
-    main_window.show();
-
-#if defined(Q_OS_MAC) || defined(Q_OS_UNIX)
-    // Workaround due to https://bugreports.qt.io/browse/QTBUG-34414
-    QObject::connect(&app, &QGuiApplication::focusWindowChanged, [&](QWindow* focusWindow) {
-        if (focusWindow == main_window.windowHandle()) {
-            main_window.centralWidget()->activateWindow();
-            window->requestActivate();
-        }
-    });
-#endif
 
     return app.exec();
 }
