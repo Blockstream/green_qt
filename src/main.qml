@@ -135,28 +135,31 @@ Item {
     StackView {
         id: stack_view
         anchors.fill: parent
+        focus: true
 
-        initialItem: StackLayout {
-            id: stack_layout
-            clip: true
-
-            currentIndex: {
-                for (let i = 0; i < WalletManager.wallets.length; i++) {
-                    if (WalletManager.wallets[i] === currentWallet) return i + 1;
-                }
-                return 0;
-            }
-
-            Intro { }
-
-            Repeater {
-                model: WalletManager.wallets
-
-                WalletContainerView {
-                    onCanceled2: {
-                        currentWallet = null
+        initialItem: FocusScope {
+            StackLayout {
+                id: stack_layout
+                anchors.fill: parent
+                clip: true
+                currentIndex: {
+                    for (let i = 0; i < WalletManager.wallets.length; i++) {
+                        if (WalletManager.wallets[i] === currentWallet) return i + 1;
                     }
-                    wallet: modelData
+                    return 0;
+                }
+                Intro {
+                    focus: stack_layout.currentIndex === 0
+                }
+                Repeater {
+                    model: WalletManager.wallets
+                    WalletContainerView {
+                        focus: currentWallet === wallet
+                        onCanceled2: {
+                            currentWallet = null
+                        }
+                        wallet: modelData
+                    }
                 }
             }
         }
