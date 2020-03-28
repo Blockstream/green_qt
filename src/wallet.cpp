@@ -58,15 +58,27 @@ void Wallet::connect(const QString& proxy, bool use_tor)
         setConnection(Connecting);
     }
 
+    bool update_settings = false;
     if (m_proxy != proxy) {
         m_proxy = proxy;
         emit proxyChanged(m_proxy);
+        update_settings = true;
     }
     if (m_use_tor != use_tor) {
         m_use_tor = use_tor;
         emit useTorChanged(m_use_tor);
+        update_settings = true;
     }
-
+    if (update_settings) {
+        QSettings settings(GetDataFile("app", "wallets.ini"), QSettings::IniFormat);
+        const int count = settings.beginReadArray("wallets");
+        settings.endArray();
+        settings.beginWriteArray("wallets", count);
+        settings.setArrayIndex(m_index);
+        settings.setValue("proxy", m_proxy);
+        settings.setValue("use_tor", m_use_tor);
+        settings.endArray();
+    }
     connectNow();
 }
 
