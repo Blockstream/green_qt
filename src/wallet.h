@@ -90,7 +90,7 @@ public:
     QJsonObject config() const { return m_config; }
 
     Q_INVOKABLE void login(const QStringList& mnemonic, const QString& password = QString());
-    Q_INVOKABLE void setPin(const QStringList& mnemonic, const QByteArray& pin);
+    Q_INVOKABLE void setPin(const QByteArray& pin);
 
     Q_INVOKABLE void loginWithPin(const QByteArray& pin);
     Q_INVOKABLE void changePin(const QByteArray& pin);

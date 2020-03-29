@@ -220,7 +220,7 @@ Page {
                 if (pin !== pin_view.pin) {
                     clear();
                 } else {
-                    wallet.setPin(mnemonic_page.mnemonic, pin_view.pin);
+                    wallet.setPin(pin_view.pin);
                     stack_view.push(name_page);
                 }
             }

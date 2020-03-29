@@ -517,18 +517,20 @@ void Wallet::login(const QStringList& mnemonic, const QString& password)
     });
 }
 
-void Wallet::setPin(const QStringList& mnemonic, const QByteArray& pin)
+void Wallet::setPin(const QByteArray& pin)
 {
     Q_ASSERT(m_authentication == Authenticated);
     Q_ASSERT(m_name.isEmpty());
     Q_ASSERT(m_pin_data.isEmpty());
 
-    QMetaObject::invokeMethod(m_context, [this, mnemonic, pin] {
-        QByteArray raw_mnemonic = mnemonic.join(' ').toLatin1();
-
-        GA_json* pin_data;
-        int err = GA_set_pin(m_session, raw_mnemonic.constData(), pin.constData(), "test", &pin_data);
+    QMetaObject::invokeMethod(m_context, [this, pin] {
+        char* mnemonic;
+        int err = GA_get_mnemonic_passphrase(m_session, "", &mnemonic);
         Q_ASSERT(err == GA_OK);
+        GA_json* pin_data;
+        err = GA_set_pin(m_session, mnemonic, pin.constData(), "test", &pin_data);
+        Q_ASSERT(err == GA_OK);
+        GA_destroy_string(mnemonic);
         m_pin_data = Json::toByteArray(pin_data);
         GA_destroy_json(pin_data);
     });
