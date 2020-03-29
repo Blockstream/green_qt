@@ -18,7 +18,10 @@ ApplicationWindow {
     property string location: '/'
     property Wallet currentWallet
 
-    menuBar: loader.item.menuBar || null
+    Binding on menuBar {
+        when: loader.item
+        value: loader.item.menuBar
+    }
 
     Loader {
         id: loader
