@@ -9,7 +9,6 @@ WalletDialog {
 
     clip: true
     horizontalPadding: 16
-    anchors.centerIn: parent
     modal: true
 
     Behavior on implicitWidth {

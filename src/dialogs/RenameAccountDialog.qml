@@ -7,9 +7,7 @@ import QtQuick.Layouts 1.12
 import '..'
 
 WalletDialog {
-    anchors.centerIn: Overlay.overlay
     modal: true
-    parent: Overlay.overlay
     standardButtons: Dialog.Ok | Dialog.Cancel
     title: qsTr('id_account_name')
 

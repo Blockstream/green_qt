@@ -27,7 +27,6 @@ WalletDialog {
         color: "#70000000"
     }
 
-    anchors.centerIn: parent
     clip: true
     horizontalPadding: 16
     verticalPadding: 0
