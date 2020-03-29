@@ -212,7 +212,11 @@ Item {
                             text: qsTr('id_add_new_account')
                             onClicked: create_account_dialog.createObject(wallet_view).open()
                         }
-
+                        MenuItem {
+                            text: qsTr('id_rename_account')
+                            enabled: account && account.json.type !== '2of2_no_recovery'
+                            onClicked: rename_account_dialog.createObject(wallet_view, { account }).open()
+                        }
                         MenuItem {
                             text: qsTr('id_log_out')
                             onTriggered: wallet.disconnect()
@@ -352,8 +356,9 @@ Item {
             AssetView {}
         }
 
-        RenameAccountDialog {
+        Component {
             id: rename_account_dialog
+            RenameAccountDialog {}
         }
 
         Component {

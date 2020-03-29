@@ -7,38 +7,26 @@ import QtQuick.Layouts 1.12
 import '..'
 
 WalletDialog {
+    property alias account: controller.account
     modal: true
     standardButtons: Dialog.Ok | Dialog.Cancel
-    title: qsTr('id_account_name')
+    title: qsTr('id_rename_account')
 
-    onAccepted: controller.rename()
+    onAccepted: controller.rename(name_field.text);
     onClosed: destroy()
 
     RenameAccountController {
         id: controller
-        property alias name: name_field.text
     }
 
-    SwipeView {
-        anchors.fill: parent
-        interactive: false
-
-        GridLayout {
-            columns: 2
-
-            Label {
-                text: qsTr('id_name')
-
-                Layout.alignment: Qt.AlignRight
-            }
-
-            TextField {
-                id: name_field
-                text: account ? account.name : ''
-
-                Layout.fillWidth: true
-            }
+    ColumnLayout {
+        SectionLabel {
+            text: qsTr('id_name')
+        }
+        TextField {
+            id: name_field
+            text: account.name
+            Layout.fillWidth: true
         }
     }
-
 }
