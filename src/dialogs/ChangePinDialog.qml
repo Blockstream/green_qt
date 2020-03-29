@@ -50,4 +50,5 @@ WalletDialog {
     }
 
     onAccepted: wallet.changePin(pin_view.pin)
+    onClosed: destroy()
 }

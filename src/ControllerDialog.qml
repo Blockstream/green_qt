@@ -32,7 +32,7 @@ WalletDialog {
     verticalPadding: 0
     modal: true
 
-    //onClosed: destroy()
+    onClosed: destroy()
 
     header: Item {
         implicitHeight: 48

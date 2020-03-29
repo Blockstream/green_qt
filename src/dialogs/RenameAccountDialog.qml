@@ -12,7 +12,7 @@ WalletDialog {
     title: qsTr('id_account_name')
 
     onAccepted: controller.rename()
-    onRejected: controller.reset()
+    onClosed: destroy()
 
     RenameAccountController {
         id: controller

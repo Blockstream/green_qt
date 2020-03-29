@@ -21,7 +21,7 @@ WalletDialog {
         color: "#70000000"
     }
 
-    onRejected: destroy()
+    onClosed: destroy()
 
     header: Item {
         implicitHeight: 48
