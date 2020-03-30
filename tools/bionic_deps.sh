@@ -20,7 +20,7 @@ apt-get install --no-install-recommends -yqq g++-mingw-w64-x86-64
 
 update-alternatives --set x86_64-w64-mingw32-g++ /usr/bin/x86_64-w64-mingw32-g++-posix
 
-curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain 1.39.0
+curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain 1.42.0
 source /root/.cargo/env
 rustup target add x86_64-pc-windows-gnu
 
