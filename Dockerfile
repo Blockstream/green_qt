@@ -1,3 +1,3 @@
-FROM ubuntu:18.04@sha256:8d31dad0c58f552e890d68bbfb735588b6b820a46e459672d96e585871acc110
+FROM ubuntu:18.04@sha256:bec5a2727be7fff3d308193cfde3491f8fba1a2ba392b7546b43a051853a341d
 COPY tools/bionic_deps.sh /
 RUN /bionic_deps.sh
