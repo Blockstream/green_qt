@@ -1,8 +1,10 @@
 [submodule "qzxing"]
 	path = qzxing
 	url = https://github.com/ftylitak/qzxing
+	depth = 1
         branch = master
 [submodule "gdk"]
 	path = gdk
 	url = https://github.com/Blockstream/gdk
         branch = master
+	depth = 1
