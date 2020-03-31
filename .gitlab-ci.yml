@@ -1,11 +1,17 @@
 variables:
   GIT_SUBMODULE_STRATEGY: recursive
 
-image: greenaddress/ci@sha256:f070972a69bc0fab985a0b91dd9f5df1d12471e5805b5a361f634c01c0e1ce59
+image: greenaddress/ci@sha256:5e3222e2110423aa2c39f5af9bd76e067fbf96a74b4cbd43bcdb6dd03f46b4e6
+
+stages:
+  - build
+  - signosx
+  - deploy
 
 bionic_release:
   tags:
     - ga
+  stage: build
   script:
     - ./tools/bionic_deps.sh
     - ./tools/builddeps.sh linux
@@ -28,6 +34,7 @@ bionic_release:
 windows_release:
   tags:
     - ga
+  stage: build
   script:
     - ./tools/bionic_deps.sh
     - ./tools/builddeps.sh windows
@@ -50,6 +57,7 @@ windows_release:
 osx_release:
   tags:
     - osx
+  stage: build
   script:
     - cd $CI_PROJECT_DIR
     - ./tools/builddeps.sh osx
@@ -71,6 +79,7 @@ osx_release:
 
 bionic_allsymbolsunstripped_manual:
   extends: bionic_release
+  stage: build
   when: manual
   script:
     - ./tools/bionic_deps.sh
@@ -78,6 +87,7 @@ bionic_allsymbolsunstripped_manual:
 
 osx_allsymbolsunstripped_manual:
   extends: osx_release
+  stage: build
   when: manual
   script:
     - cd $CI_PROJECT_DIR
@@ -85,10 +95,29 @@ osx_allsymbolsunstripped_manual:
 
 windows_allsymbolsunstripped_manual:
   extends: windows_release
+  stage: build
   when: manual
   script:
     - ./tools/bionic_deps.sh
     - ./tools/builddeps.sh windows allsymbolsunstripped
+
+osx_sign:
+  tags:
+    - osxsigner
+  stage: signosx
+  variables:
+    GIT_STRATEGY: none
+  artifacts:
+    name: "$CI_PROJECT_NAME-$CI_JOB_NAME-$CI_COMMIT_SHORT_SHA"
+    expire_in: 1 day
+    when: always
+    paths:
+    - build-osx-clang/Green.app
+  dependencies:
+    - osx_release
+  script:
+    - cd $CI_PROJECT_DIR
+    - ./tools/osxsign.sh
 
 package_release:
   tags:
@@ -114,5 +143,5 @@ package_release:
     - /opt/process_release
   dependencies:
     - bionic_release
-    - osx_release
+    - osx_sign
     - windows_release

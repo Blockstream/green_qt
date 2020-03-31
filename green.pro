@@ -96,6 +96,8 @@ EXTRA_TRANSLATIONS = $$files($$PWD/src/i18n/*.ts)
 INCLUDEPATH += $$PWD/gdk/include
 
 macos {
+    QMAKE_TARGET_BUNDLE_PREFIX = com.blockstream
+
     HEADERS += \
         src/devicemanagermacos.h
     SOURCES += \
@@ -109,7 +111,10 @@ GDK_BUILD_DIR = $$absolute_path($$(BUILDROOT)/gdk-$$(GDKBLDID)/src, $${PWD})
 macos {
     ICON = Green.icns
 
-    QMAKE_POST_LINK += plutil -replace NSCameraUsageDescription -string \"We use the camera to scan QR codes\" $$OUT_PWD/$${TARGET}.app/Contents/Info.plist
+    QMAKE_POST_LINK += \
+        plutil -insert CFBundleDisplayName -string \"Blockstream Green\" $$OUT_PWD/$${TARGET}.app/Contents/Info.plist && \
+        plutil -replace NSCameraUsageDescription -string \"We use the camera to scan QR codes\" $$OUT_PWD/$${TARGET}.app/Contents/Info.plist && \
+        plutil -remove NOTE $$OUT_PWD/$${TARGET}.app/Contents/Info.plist
 
     static {
         LIBS += $$GDK_BUILD_DIR/build-clang/src/libgreenaddress_full.a

@@ -1,6 +1,7 @@
 #!/bin/bash
 set -eo pipefail
 
+. /qtversion.env
 if [ -f /.dockerenv ]; then
     if [ -f /bionic_hash ]; then
         bionic_deps_sha256=$(< /bionic_hash)
@@ -25,16 +26,16 @@ source /root/.cargo/env
 rustup target add x86_64-pc-windows-gnu
 
 
-if [ ! -d /qt-everywhere-src-5.14.2 ]; then
-   curl -sL -o qt-everywhere-src-5.14.2.tar.xz https://download.qt.io/archive/qt/5.14/5.14.2/single/qt-everywhere-src-5.14.2.tar.xz
-   echo "c6fcd53c744df89e7d3223c02838a33309bd1c291fcb6f9341505fe99f7f19fa qt-everywhere-src-5.14.2.tar.xz" | sha256sum --check --strict
-   tar xf qt-everywhere-src-5.14.2.tar.xz
-   rm qt-everywhere-src-5.14.2.tar.xz
+if [ ! -d /qt-everywhere-src-${QTVERSION} ]; then
+   curl -sL -o qt-everywhere-src-${QTVERSION}.tar.xz https://download.qt.io/archive/qt/${QTMAJOR}/${QTVERSION}/single/qt-everywhere-src-${QTVERSION}.tar.xz
+   echo "${QTHASH} qt-everywhere-src-${QTVERSION}.tar.xz" | sha256sum --check --strict
+   tar xf qt-everywhere-src-${QTVERSION}.tar.xz
+   rm qt-everywhere-src-${QTVERSION}.tar.xz
 fi
 
 if [ -f /.dockerenv ]; then
     sha256sum /bionic_deps.sh | cut -d" " -f1 > /bionic_hash
     apt -yqq autoremove
     apt -yqq clean
-    rm -rf /var/lib/apt/lists/* /var/cache/* /tmp/* /usr/share/locale/* /usr/share/man /usr/share/doc /lib/xtables/libip6* /root/.cache
+    rm -rf /var/lib/apt/lists/* /var/cache/* /tmp/* /usr/share/locale/* /usr/share/man /usr/share/doc /lib/xtables/libip6* /root/.cache /bionic_deps.sh
 fi
