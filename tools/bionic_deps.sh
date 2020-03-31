@@ -25,11 +25,11 @@ source /root/.cargo/env
 rustup target add x86_64-pc-windows-gnu
 
 
-if [ ! -d /qt-everywhere-src-5.14.1 ]; then
-   curl -sL -o qt-everywhere-src-5.14.1.tar.xz https://download.qt.io/archive/qt/5.14/5.14.1/single/qt-everywhere-src-5.14.1.tar.xz
-   echo "6f17f488f512b39c2feb57d83a5e0a13dcef32999bea2e2a8f832f54a29badb8 qt-everywhere-src-5.14.1.tar.xz" | sha256sum --check --strict
-   tar xf qt-everywhere-src-5.14.1.tar.xz
-   rm qt-everywhere-src-5.14.1.tar.xz
+if [ ! -d /qt-everywhere-src-5.14.2 ]; then
+   curl -sL -o qt-everywhere-src-5.14.2.tar.xz https://download.qt.io/archive/qt/5.14/5.14.2/single/qt-everywhere-src-5.14.2.tar.xz
+   echo "c6fcd53c744df89e7d3223c02838a33309bd1c291fcb6f9341505fe99f7f19fa qt-everywhere-src-5.14.2.tar.xz" | sha256sum --check --strict
+   tar xf qt-everywhere-src-5.14.2.tar.xz
+   rm qt-everywhere-src-5.14.2.tar.xz
 fi
 
 if [ -f /.dockerenv ]; then
