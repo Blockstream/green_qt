@@ -160,7 +160,9 @@ ReceiveAddress::ReceiveAddress(QObject *parent) : QObject(parent)
 
 ReceiveAddress::~ReceiveAddress()
 {
-    QMetaObject::invokeMethod(m_account->m_wallet->m_context, [] {}, Qt::BlockingQueuedConnection);
+    if (m_account) {
+        QMetaObject::invokeMethod(m_account->m_wallet->m_context, [] {}, Qt::BlockingQueuedConnection);
+    }
 }
 
 Account *ReceiveAddress::account() const
@@ -228,9 +230,9 @@ void ReceiveAddress::setGenerating(bool generating)
 
 void ReceiveAddress::generate()
 {
-    if (m_account->m_wallet->isLocked()) return;
+    if (!m_account || m_account->m_wallet->isLocked()) return;
 
-    if (!m_account && !m_address.isEmpty()) {
+    if (!m_address.isEmpty()) {
         m_address.clear();
         emit changed();
         return;
