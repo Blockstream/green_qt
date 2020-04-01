@@ -70,7 +70,7 @@ if [ "${GREENSYMBOLS}" = "" ]; then
        python ../tools/symbol-check.py < ${BUILDROOT}/Green
        strip ${BUILDROOT}/Green
    elif [ "${GREENPLATFORM}" = "windows" ]; then
-       x86_64-w64-mingw32-strip ${BUILDROOT}/Green.exe
+       x86_64-w64-mingw32-strip ${BUILDROOT}/release/Green.exe
    elif [ "${GREENPLATFORM}" = "osx" ]; then
        strip ${BUILDROOT}/Green.app/Contents/MacOS/Green
    fi
