@@ -15,6 +15,23 @@ ColumnLayout {
     }
 
     SettingsBox {
+        title: qsTrId('id_set_locktime')
+        description: qsTrId('id_redeem_your_deposited_funds') + '\n\n' + qsTrId('id_enable_email_notifications_to')
+        enabled: wallet.settings.notifications &&
+                 wallet.settings.notifications.email_incoming &&
+                 wallet.settings.notifications.email_outgoing
+        Button {
+            Component {
+                id: nlocktime_dialog
+                NLockTimeDialog {}
+            }
+            flat: true
+            text: qsTrId('id_set_locktime')
+            onClicked: nlocktime_dialog.createObject(stack_view).open()
+        }
+    }
+
+    SettingsBox {
         title: qsTrId('id_set_an_email_for_recovery')
 
         Button {

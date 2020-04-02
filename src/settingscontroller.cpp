@@ -25,15 +25,13 @@ void SettingsController::change(const QJsonObject& data)
     // Check if wallet is undergoing reset
     if (wallet()->isLocked()) return;
 
-    auto result = GA::process_auth([this, data] (GA_auth_handler** call) {
+    dispatch([data] (GA_session* session, GA_auth_handler** call) {
         auto settings = Json::fromObject(data);
-        int err = GA_change_settings(session(), settings, call);
+        int err = GA_change_settings(session, settings, call);
         Q_ASSERT(err == GA_OK);
         err = GA_destroy_json(settings);
         Q_ASSERT(err == GA_OK);
     });
-    Q_ASSERT(result.value("status").toString() == "done");
-    wallet()->updateSettings();
 }
 
 void SettingsController::sendRecoveryTransactions()

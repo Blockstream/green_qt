@@ -77,5 +77,6 @@
         <file>BumpFeeDialog.qml</file>
         <file>DescriptiveRadioButton.qml</file>
         <file>AbstractDialog.qml</file>
+        <file>NLockTimeDialog.qml</file>
     </qresource>
 </RCC>
