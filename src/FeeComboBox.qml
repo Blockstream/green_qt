@@ -9,10 +9,11 @@ ComboBox {
     }
 
     flat: true
-    model: [
-        fee(qsTr('id_fast'), qsTr('id_1030_minutes'), 3),
-        fee(qsTr('id_medium'), qsTr('id_2_hours'), 12),
-        fee(qsTr('id_slow'), qsTr('id_4_hours'), 24)
+    // TODO: update when Liquid develops a block space market
+    model: wallet.network.liquid ? [fee('id_fast', '~1' + ' ' + qsTr('id_minute'), 3)] : [
+        fee('id_fast', 'id_1030_minutes', 3),
+        fee('id_medium', 'id_2_hours', 12),
+        fee('id_slow', 'id_4_hours', 24)
     ]
     textRole: 'text'
 }

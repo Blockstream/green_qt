@@ -153,7 +153,7 @@ StackView {
             property var indexes: [3, 12, 24]
 
             Component.onCompleted: {
-                currentIndex = indexes.indexOf(controller.account.wallet.settings.required_num_blocks)
+                currentIndex = wallet.network.liquid ? 0 : indexes.indexOf(controller.account.wallet.settings.required_num_blocks)
                 controller.feeRate = controller.account.wallet.events.fees[blocks]
             }
 
