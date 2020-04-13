@@ -7,10 +7,8 @@
 #include <QTranslator>
 
 #include "account.h"
-#include "applicationengine.h"
 #include "asset.h"
 #include "balance.h"
-#include "devices/device.h"
 #include "network.h"
 #include "transaction.h"
 #include "wallet.h"
@@ -18,16 +16,11 @@
 #include "wally.h"
 #include "twofactorcontroller.h"
 #include "settingscontroller.h"
-#include "controllers/createaccountcontroller.h"
-#include "controllers/sendtransactioncontroller.h"
-#include "controllers/renameaccountcontroller.h"
-
-#if defined(Q_OS_MAC)
-#include "devicemanagermacos.h"
-#endif
+#include "createaccountcontroller.h"
+#include "sendtransactioncontroller.h"
+#include "renameaccountcontroller.h"
 
 #include <QZXing.h>
-
 
 #include <QtPlugin>
 #if defined(QT_QPA_PLATFORM_MINIMAL)
@@ -44,14 +37,12 @@ Q_IMPORT_PLUGIN(QCocoaIntegrationPlugin);
 class Translator : public QTranslator
 {
 public:
-    virtual QString translate(const char *context, const char *sourceText, const char *disambiguation, int n) const;
+    QString translate(const char *context, const char *sourceText, const char *disambiguation, int n) const override
+    {
+        Q_UNUSED(context);
+        return QTranslator::translate("green", sourceText, disambiguation, n);
+    }
 };
-
-QString Translator::translate(const char *context, const char *sourceText, const char *disambiguation, int n) const
-{
-    Q_UNUSED(context);
-    return QTranslator::translate("green", sourceText, disambiguation, n);
-}
 
 namespace Green {
 
@@ -94,7 +85,6 @@ namespace Green {
         registerUncreatableType<Asset>("Asset");
         registerUncreatableType<Balance>("Balance");
         registerUncreatableType<Controller>("Controller");
-        registerUncreatableType<Device>("Device");
         registerUncreatableType<Network>("Network");
         registerUncreatableType<Transaction>("Transaction");
         registerUncreatableType<TransactionAmount>("TransactionAmount");
@@ -107,6 +97,7 @@ namespace Green {
         registerType<ReceiveAddress>("ReceiveAddress");
         registerType<RenameAccountController>("RenameAccountController");
         registerType<SendTransactionController>("SendTransactionController");
+        registerType<BumpFeeController>("BumpFeeController");
         registerType<SettingsController>("SettingsController");
         registerType<TwoFactorController>("TwoFactorController");
         registerType<RequestTwoFactorResetController>("RequestTwoFactorResetController");
@@ -116,9 +107,6 @@ namespace Green {
         registerSingletonInstance<NetworkManager>("NetworkManager");
         registerSingletonInstance<WalletManager>("WalletManager");
         registerSingletonInstance<Wally>("Wally");
-    #if defined(Q_OS_MAC)
-        registerSingletonInstance<DeviceManagerMacos>("DeviceManager");
-    #endif
     }
 
 } // namespace Green
@@ -134,13 +122,13 @@ int main(int argc, char *argv[])
 
     QApplication app(argc, argv);
 
-    QApplication::setWindowIcon(QIcon(":/assets/png/icon_1024x1024.png"));
+    QApplication::setWindowIcon(QIcon(":/png/icon_1024x1024.png"));
 
     // Reset the locale that is used for number formatting, see:
     // https://doc.qt.io/qt-5/qcoreapplication.html#locale-settings
     setlocale(LC_NUMERIC, "C");
 
-    const auto id = QFontDatabase::addApplicationFont(":/assets/fonts/DINPro/DINPro-Regular.otf");
+    const auto id = QFontDatabase::addApplicationFont(":/fonts/DINPro/DINPro-Regular.otf");
     Q_ASSERT(id >= 0);
 
     app.styleHints()->setTabFocusBehavior(Qt::TabFocusAllControls);
@@ -159,14 +147,15 @@ int main(int argc, char *argv[])
 
     QQuickStyle::setStyle("Material");
 
-    ApplicationEngine engine;
+    QQmlApplicationEngine engine;
+    engine.setBaseUrl(QUrl("qrc:/"));
 
     QZXing::registerQMLTypes();
     QZXing::registerQMLImageProvider(engine);
 
     Green::registerTypes();
 
-    engine.load(QUrl(QStringLiteral("loader.qml")));
+    engine.load(QUrl(QStringLiteral("main.qml")));
     if (engine.rootObjects().isEmpty())
         return -1;
 

@@ -1,7 +1,7 @@
 #ifndef GREEN_SETTINGSCONTROLLER_H
 #define GREEN_SETTINGSCONTROLLER_H
 
-#include "controllers/controller.h"
+#include "controller.h"
 
 class SettingsController : public Controller
 {

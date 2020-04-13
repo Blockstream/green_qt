@@ -1,7 +1,7 @@
 #ifndef GREEN_TWOFACTORCONTROLLER_H
 #define GREEN_TWOFACTORCONTROLLER_H
 
-#include "controllers/controller.h"
+#include "controller.h"
 
 #include <QByteArray>
 

@@ -32,57 +32,10 @@ DEFINES += QT_DEPRECATED_WARNINGS QZXING_QML
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
-SOURCES += \
-    src/applicationengine.cpp \
-    src/asset.cpp \
-    src/balance.cpp \
-    src/controllers/accountcontroller.cpp \
-    src/controllers/controller.cpp \
-    src/controllers/createaccountcontroller.cpp \
-    src/controllers/renameaccountcontroller.cpp \
-    src/controllers/sendtransactioncontroller.cpp \
-    src/devices/device.cpp \
-    src/devices/ledgernanoxdevice.cpp \
-    src/account.cpp \
-    src/devicemanager.cpp \
-    src/ga.cpp \
-    src/main.cpp \
-    src/network.cpp \
-    src/settingscontroller.cpp \
-    src/transaction.cpp \
-    src/twofactorcontroller.cpp \
-    src/util.cpp \
-    src/wallet.cpp \
-    src/json.cpp \
-    src/walletmanager.cpp \
-    src/wally.cpp
-
-
-HEADERS += \
-    src/applicationengine.h \
-    src/asset.h \
-    src/balance.h \
-    src/controllers/accountcontroller.h \
-    src/controllers/controller.h \
-    src/controllers/createaccountcontroller.h \
-    src/controllers/renameaccountcontroller.h \
-    src/controllers/sendtransactioncontroller.h \
-    src/devices/device.h \
-    src/devices/ledgernanoxdevice.h \
-    src/account.h \
-    src/devicemanager.h \
-    src/ga.h \
-    src/network.h \
-    src/settingscontroller.h \
-    src/transaction.h \
-    src/twofactorcontroller.h \
-    src/util.h \
-    src/wallet.h \
-    src/json.h \
-    src/walletmanager.h \
-    src/wally.h
-
-RESOURCES += src/qml.qrc src/assets/assets.qrc
+SOURCES += $$files(src/*.cpp)
+HEADERS += $$files(src/*.h)
+RESOURCES += qml/qml.qrc
+RESOURCES += assets/assets.qrc
 win32 {
     RESOURCES += src/win.qrc
 } else {
@@ -91,17 +44,12 @@ win32 {
 
 CONFIG += lrelease embed_translations
 
-EXTRA_TRANSLATIONS = $$files($$PWD/src/i18n/*.ts)
+EXTRA_TRANSLATIONS = $$files($$PWD/i18n/*.ts)
 
 INCLUDEPATH += $$PWD/gdk/include
 
 macos {
     QMAKE_TARGET_BUNDLE_PREFIX = com.blockstream
-
-    HEADERS += \
-        src/devicemanagermacos.h
-    SOURCES += \
-        src/devicemanagermacos.cpp
     LIBS += -framework Foundation -framework Cocoa
 }
 
@@ -112,9 +60,7 @@ macos {
     ICON = Green.icns
 
     QMAKE_POST_LINK += \
-        plutil -insert CFBundleDisplayName -string \"Blockstream Green\" $$OUT_PWD/$${TARGET}.app/Contents/Info.plist && \
-        plutil -replace NSCameraUsageDescription -string \"We use the camera to scan QR codes\" $$OUT_PWD/$${TARGET}.app/Contents/Info.plist && \
-        plutil -remove NOTE $$OUT_PWD/$${TARGET}.app/Contents/Info.plist
+        plutil -replace NSCameraUsageDescription -string \"We use the camera to scan QR codes\" $$OUT_PWD/$${TARGET}.app/Contents/Info.plist
 
     static {
         LIBS += $$GDK_BUILD_DIR/build-clang/src/libgreenaddress_full.a

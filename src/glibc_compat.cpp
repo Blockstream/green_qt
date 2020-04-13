@@ -2,6 +2,10 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
+#include <QtGlobal>
+
+#if 0 //defined(Q_OS_DARWIN) //&& !defined(Q_OS_ANDROID)
+
 #include <cstddef>
 #include <cstdint>
 
@@ -68,3 +72,5 @@ extern "C" float __wrap_log2f(float x)
 {
     return log2f_old(x);
 }
+
+#endif // !defined(Q_OS_MACOS) && !defined(Q_OS_ANDROID)

@@ -1,0 +1,164 @@
+import Blockstream.Green 0.1
+import QtMultimedia 5.13
+import QtQuick 2.12
+import QtQuick.Controls 2.5
+import QtQuick.Layouts 1.12
+
+StackView {
+    id: stack_view
+    property alias address: address_field.text
+    property Balance balance: asset_field_loader.item ? asset_field_loader.item.balance : null
+    property alias sendAll: send_all_button.checked
+
+    property var actions: currentItem.actions
+
+    Component {
+        id: scanner_view
+        ScannerView {
+            implicitHeight: Math.max(setup_view.implicitHeight, 300)
+            implicitWidth: Math.max(setup_view.implicitWidth, 300)
+            onCancel: stack_view.pop();
+            onCodeScanned: {
+                address_field.text = WalletManager.parseUrl(code).address;
+                stack_view.pop();
+            }
+        }
+    }
+
+    implicitHeight: currentItem.implicitHeight
+    implicitWidth: currentItem.implicitWidth
+
+    Component {
+        id: review_view
+        ReviewView {}
+    }
+
+    initialItem: ColumnLayout {
+        id: setup_view
+        property list<Action> actions: [
+            Action {
+                text: controller.transaction.error ? qsTrId(controller.transaction.error || '') : qsTrId('id_review')
+                enabled: controller.valid && !controller.transaction.error
+                onTriggered: stack_view.push(review_view)
+            }
+        ]
+
+        spacing: 0
+
+        SectionLabel { text: qsTrId('id_address') }
+
+        RowLayout {
+            TextField {
+                id: address_field
+                Layout.fillWidth: true
+                horizontalAlignment: TextField.AlignHCenter
+                placeholderText: qsTr('id_enter_an_address')
+                font.pixelSize: 12
+            }
+            ToolButton {
+                enabled: QtMultimedia.availableCameras.length > 0
+                icon.source: 'svg/qr.svg'
+                icon.width: 16
+                icon.height: 16
+                onClicked: stack_view.push(scanner_view)
+            }
+        }
+        SectionLabel { text: qsTrId('id_asset'); visible: wallet.network.liquid }
+        Loader {
+            id: asset_field_loader
+            active: wallet.network.liquid
+            Layout.fillWidth: true
+            sourceComponent: ComboBox {
+                property Balance balance: account.balances[asset_field.currentIndex]
+                property Asset asset: balance.asset
+                id: asset_field
+                flat: true
+                model: account.balances
+                delegate: AssetDelegate {
+                    highlighted: index === asset_field.currentIndex
+                    balance: modelData
+                    showIndicator: false
+                    width: parent.width
+                }
+
+                leftPadding: 8
+                topPadding: 12
+                bottomPadding: 12
+
+                contentItem: BalanceItem {
+                    balance: account.balances[asset_field.currentIndex]
+                }
+            }
+        }
+        SectionLabel { text: qsTrId('id_amount') }
+        RowLayout {
+            spacing: 16
+            Switch {
+                id: send_all_button
+                text: qsTr('id_send_all_funds')
+            }
+            TextField {
+                id: amount_field
+                Layout.fillWidth: true
+                enabled: !send_all_button.checked
+                horizontalAlignment: TextField.AlignRight
+
+                placeholderText: controller.effectiveAmount
+                text: controller.amount
+                onTextChanged: {
+                    if (!activeFocus) return;
+                    controller.amount = text;
+                }
+
+                Label {
+                    id: unit
+                    anchors.right: parent.right
+                    anchors.baseline: parent.baseline
+                    text: wallet.network.liquid ? (balance.asset.data.name === 'btc' ? 'L-'+wallet.settings.unit : (balance.asset.data.ticker || '')) : wallet.settings.unit
+                }
+                rightPadding: unit.width + 8
+            }
+
+            Label {
+                enabled: controller.hasFiatRate
+                text: '≈'
+            }
+
+            TextField {
+                id: fiat_field
+                Layout.fillWidth: true
+                enabled: !send_all_button.checked && controller.hasFiatRate
+                horizontalAlignment: TextField.AlignRight
+                placeholderText: controller.effectiveFiatAmount
+                text: controller.fiatAmount
+
+                onTextChanged: {
+                    if (!activeFocus) return;
+                    controller.fiatAmount = text
+                }
+
+                Label {
+                    id: currency
+                    anchors.right: parent.right
+                    anchors.baseline: parent.baseline
+                    text: wallet.settings.pricing.currency
+                }
+                rightPadding: currency.width + 8
+            }
+        }
+        SectionLabel { text: qsTrId('id_network_fee') }
+        FeeComboBox {
+            Layout.fillWidth: true
+            property var indexes: [3, 12, 24]
+
+            Component.onCompleted: {
+                currentIndex = wallet.network.liquid ? 0 : indexes.indexOf(wallet.settings.required_num_blocks)
+                controller.feeRate = wallet.events.fees[blocks]
+            }
+
+            onBlocksChanged: {
+                controller.feeRate = wallet.events.fees[blocks]
+            }
+        }
+    }
+}
