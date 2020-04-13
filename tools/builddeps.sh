@@ -43,3 +43,7 @@ if [ "${GREENSYMBOLS}" = "" ]; then
        strip ${BUILDROOT}/Green.app/Contents/MacOS/Green
    fi
 fi
+
+if [ "${GREENPLATFORM}" = "linux" ]; then
+   ../tools/appimage.sh
+fi
