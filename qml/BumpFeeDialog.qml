@@ -4,7 +4,7 @@ import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.12
 
 ControllerDialog {
-    title: qsTr('id_bump_fee')
+    title: qsTr('id_increase_fee')
     property Transaction transaction
 
     controller: BumpFeeController { }
@@ -14,7 +14,7 @@ ControllerDialog {
     initialItem: FocusScope {
         property list<Action> actions: [
             Action {
-                text: controller.tx.error !== '' ? qsTrId(controller.tx.error) : qsTrId('id_bump')
+                text: controller.tx.error !== '' ? qsTrId(controller.tx.error) : qsTrId('id_next')
                 enabled: controller.tx && controller.tx.error === ''
                 onTriggered: controller.bumpFee()
             }
@@ -25,25 +25,31 @@ ControllerDialog {
             id: layout
             anchors.fill: parent
             SectionLabel {
-                text: qsTrId('id_current_fee')
+                text: qsTrId('id_previous_fee')
             }
             Label {
-                text: formatAmount(transaction.data.fee) + ' ≈ ' +
-                      formatFiat(transaction.data.fee) + ' ' +
-                      '(' + Math.round(transaction.data.fee_rate / 10 + 0.5) / 100 + ' sat/vB)'
+                text: qsTr('id_fee') + ': ' + formatAmount(transaction.data.fee) + ' ≈ ' +
+                      formatFiat(transaction.data.fee)
             }
+            Label {
+                text: qsTr('id_fee_rate') + ': ' + Math.round(transaction.data.fee_rate / 10 + 0.5) / 100 + ' sat/vB'
+            }
+
             SectionLabel {
                 text: qsTrId('id_new_fee')
             }
             Label {
-                text: formatAmount(controller.tx.fee) + ' ≈ ' +
-                      formatFiat(controller.tx.fee) + ' ' +
-                      '(' + Math.round(controller.tx.fee_rate / 10 + 0.5) / 100 + ' sat/vB)'
+                text: qsTr('id_fee') + ': '  + formatAmount(controller.tx.fee) + ' ≈ ' +
+                      formatFiat(controller.tx.fee)
             }
+            Label {
+                text: qsTr('id_fee_rate') + ': ' + Math.round(controller.tx.fee_rate / 10 + 0.5) / 100 + ' sat/vB'
+            }
+
             FeeComboBox {
                 id: fee_combo
                 Layout.fillWidth: true
-                extra: [{ text: qsTrId('id_custom_fee_rate') }]
+                extra: [{ text: qsTrId('id_custom') }]
                 onFeeRateChanged: {
                     if (feeRate) {
                         controller.feeRate = feeRate
