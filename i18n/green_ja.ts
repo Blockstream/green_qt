@@ -30,12 +30,20 @@
         <translation>~ 2時間</translation>
     </message>
     <message>
+        <source>id_2of3_account</source>
+        <translation>2of3 Account</translation>
+    </message>
+    <message>
         <source>id_4_hours</source>
         <translation>~ 4時間</translation>
     </message>
     <message>
         <source>id_5_seconds_minimum</source>
         <translation>最低5秒</translation>
+    </message>
+    <message>
+        <source>id_a_2of3_account_requires_two_out</source>
+        <translation>A 2of3 account requires two out of three signatures to spend coins. The third signature is from a backup key known only to you. This gives you the security benefits of a standard account, while still allowing you to move your coins independently at any point in time.</translation>
     </message>
     <message>
         <source>id_a_new_transaction_has_just</source>
@@ -192,6 +200,10 @@
     <message>
         <source>id_back</source>
         <translation>Back</translation>
+    </message>
+    <message>
+        <source>id_backup_the_recovery_mnemonic</source>
+        <translation>Backup the recovery mnemonic and recovery xpub to recover funds from your 2of3 account.</translation>
     </message>
     <message>
         <source>id_be_aware_other_apps_can_read_or</source>
@@ -404,6 +416,10 @@
     <message>
         <source>id_copy_uri</source>
         <translation>Copy URI</translation>
+    </message>
+    <message>
+        <source>id_copy_xpub</source>
+        <translation>Copy xpub</translation>
     </message>
     <message>
         <source>id_create</source>
@@ -744,6 +760,10 @@
     <message>
         <source>id_fee_s__s</source>
         <translation>手数料: %1 / %2</translation>
+    </message>
+    <message>
+        <source>id_fees_are_too_low</source>
+        <translation>Fees are too low</translation>
     </message>
     <message>
         <source>id_for_long_term_storage</source>
@@ -1170,6 +1190,10 @@
         <translation>アカウントの新規機能が搭載される予定です</translation>
     </message>
     <message>
+        <source>id_new_fee</source>
+        <translation>New fee</translation>
+    </message>
+    <message>
         <source>id_new_incoming_transaction_in</source>
         <translation>アカウント%1は新しいトランザクションを受信しています。(%2)。</translation>
     </message>
@@ -1382,6 +1406,10 @@
         <translation>ハードウェア・ウォレット内の指示に従って下さい。</translation>
     </message>
     <message>
+        <source>id_please_hold_on_while_your</source>
+        <translation>Please hold on while your address is being generated</translation>
+    </message>
+    <message>
         <source>id_please_provide_your_1s</source>
         <translation>%1 を入力して下さい。</translation>
     </message>
@@ -1424,6 +1452,10 @@
     <message>
         <source>id_precision</source>
         <translation>Precision</translation>
+    </message>
+    <message>
+        <source>id_previous_fee</source>
+        <translation>Previous fee</translation>
     </message>
     <message>
         <source>id_privacy_policy</source>
@@ -1478,6 +1510,10 @@
         <translation>リカバリーと告知</translation>
     </message>
     <message>
+        <source>id_recovery_mnemonic</source>
+        <translation>Recovery mnemonic</translation>
+    </message>
+    <message>
         <source>id_recovery_transaction_emails</source>
         <translation>復元トランザクションEメール</translation>
     </message>
@@ -1492,6 +1528,10 @@
     <message>
         <source>id_recovery_words</source>
         <translation>リカバリー単語</translation>
+    </message>
+    <message>
+        <source>id_recovery_xpub</source>
+        <translation>Recovery xpub</translation>
     </message>
     <message>
         <source>id_redeem_your_deposited_funds</source>
@@ -1516,6 +1556,10 @@
     <message>
         <source>id_remove_custom_network</source>
         <translation>カスタム・ネットワークを削除</translation>
+    </message>
+    <message>
+        <source>id_rename_account</source>
+        <translation>Rename account</translation>
     </message>
     <message>
         <source>id_replaceable</source>

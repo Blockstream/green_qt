@@ -762,6 +762,10 @@
         <translation>Fee: %1 / %2</translation>
     </message>
     <message>
+        <source>id_fees_are_too_low</source>
+        <translation>Fees are too low</translation>
+    </message>
+    <message>
         <source>id_for_long_term_storage</source>
         <translation>For long term storage</translation>
     </message>
@@ -1186,6 +1190,10 @@
         <translation>New accounts functionality coming soon!</translation>
     </message>
     <message>
+        <source>id_new_fee</source>
+        <translation>New fee</translation>
+    </message>
+    <message>
         <source>id_new_incoming_transaction_in</source>
         <translation>New incoming transaction in account %1 (%2).</translation>
     </message>
@@ -1398,6 +1406,10 @@
         <translation>Please follow the instructions on your hardware wallet</translation>
     </message>
     <message>
+        <source>id_please_hold_on_while_your</source>
+        <translation>Please hold on while your address is being generated</translation>
+    </message>
+    <message>
         <source>id_please_provide_your_1s</source>
         <translation>Please provide your %1.</translation>
     </message>
@@ -1440,6 +1452,10 @@
     <message>
         <source>id_precision</source>
         <translation>Precision</translation>
+    </message>
+    <message>
+        <source>id_previous_fee</source>
+        <translation>Previous fee</translation>
     </message>
     <message>
         <source>id_privacy_policy</source>
@@ -1540,6 +1556,10 @@
     <message>
         <source>id_remove_custom_network</source>
         <translation>Remove custom network</translation>
+    </message>
+    <message>
+        <source>id_rename_account</source>
+        <translation>Rename account</translation>
     </message>
     <message>
         <source>id_replaceable</source>
