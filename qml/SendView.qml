@@ -62,6 +62,21 @@ StackView {
                 icon.width: 16
                 icon.height: 16
                 onClicked: stack_view.push(scanner_view)
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.text: qsTrId('id_qr_scanner')
+                ToolTip.visible: hovered
+            }
+            ToolButton {
+                icon.source: 'svg/paste.svg'
+                icon.width: 16
+                icon.height: 16
+                onClicked: {
+                    address_field.clear();
+                    address_field.paste();
+                }
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.text: qsTrId('id_paste')
+                ToolTip.visible: hovered
             }
         }
         SectionLabel { text: qsTrId('id_asset'); visible: wallet.network.liquid }
