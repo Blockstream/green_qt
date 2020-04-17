@@ -62,7 +62,7 @@ ColumnLayout {
                 ComboBox {
                     flat: true
                     width: 200
-                    model: per_currency[currency_combo.currentText].sort()
+                    model: currency_combo.currentText ? per_currency[currency_combo.currentText].sort() : []
                     currentIndex: Math.max(0, model.indexOf(wallet.settings.pricing.exchange))
                     onCurrentTextChanged: {
                         if (currentText === '') return

@@ -8,7 +8,6 @@ WalletDialog {
     width: 320
     height: 400
 
-    clip: true
     Component {
         id: confirm_pin_view
         PinView {

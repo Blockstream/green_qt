@@ -7,7 +7,6 @@ import QtQuick.Layouts 1.12
 
 WalletDialog {
     property Account account
-    modal: true
     standardButtons: Dialog.Ok | Dialog.Cancel
     title: qsTr('id_rename_account')
 

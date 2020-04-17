@@ -5,21 +5,6 @@ import QtQuick.Layouts 1.12
 
 WalletDialog {
     title: qsTr('id_receive')
-
-    clip: true
-    horizontalPadding: 16
-    modal: true
-
-    Behavior on implicitWidth {
-        NumberAnimation { duration: 300; easing.type: Easing.OutCubic }
-    }
-    Behavior on implicitHeight {
-        NumberAnimation { duration: 300; easing.type: Easing.OutCubic }
-    }
-    Overlay.modal: Rectangle {
-        color: "#70000000"
-    }
-
     onClosed: destroy()
 
     header: Item {

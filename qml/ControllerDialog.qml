@@ -15,21 +15,6 @@ WalletDialog {
     property real minimumHeight: 0
     property real minimumWidth: 0
 
-    Behavior on implicitWidth {
-        NumberAnimation { duration: 300; easing.type: Easing.OutCubic }
-    }
-    Behavior on implicitHeight {
-        NumberAnimation { duration: 300; easing.type: Easing.OutCubic }
-    }
-    Overlay.modal: Rectangle {
-        color: "#70000000"
-    }
-
-    clip: true
-    horizontalPadding: 16
-    verticalPadding: 0
-    modal: true
-
     onClosed: destroy()
 
     header: Item {
@@ -113,16 +98,29 @@ WalletDialog {
                 }
             ]
             Column {
-                Label {
-                    text: `Enter the code you received by ${controller.result.method}`
+                spacing: 10
+                anchors.horizontalCenter: parent.horizontalCenter
+                Image {
+                    anchors.horizontalCenter: enterCodeText.horizontalCenter
+                    source: `svg/2fa_${controller.result.method}.svg`
+                    sourceSize.width: 64
+                    sourceSize.height: 64
+                    opacity: matching ? 1 : 0
+                    Behavior on opacity { OpacityAnimator { } }
                 }
                 Label {
-                    visible: !!controller.result.attempts_remaining
-                    text: `${controller.result.attempts_remaining} attempts remaining`
+                    id: enterCodeText
+                    text: qsTr('id_please_provide_your_1s_code').arg(controller.result.method)
                 }
                 TextField {
                     id: code_field
-                    placeholderText: 'code'
+                    anchors.horizontalCenter: enterCodeText.horizontalCenter
+                }
+                Label {
+                    visible: !!controller.result.attempts_remaining
+                    anchors.horizontalCenter: enterCodeText.horizontalCenter
+                    text: qsTr('id_attempts_remaining_d').arg(controller.result.attempts_remaining)
+                    font.pixelSize: 10
                 }
             }
         }
@@ -133,8 +131,24 @@ WalletDialog {
             text: 'OK'
             onTriggered: controller_dialog.accept()
         }
-        Label {
-            text: doneText
+        Column {
+            spacing: 10
+            anchors.horizontalCenter: parent.horizontalCenter
+            Image {
+                anchors.horizontalCenter: doneLabel.horizontalCenter
+                source: '/svg/check.svg'
+                sourceSize.width: 64
+                sourceSize.height: 64
+                opacity: matching ? 1 : 0
+                Behavior on opacity { OpacityAnimator { } }
+            }
+            Label {
+                id: doneLabel
+                text: doneText
+                font.pixelSize: 20
+
+            }
+
         }
     }
 

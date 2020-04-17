@@ -8,7 +8,6 @@ ControllerDialog {
 
     id: controller_dialog
     title: qsTr('id_set_up_twofactor_authentication')
-    horizontalPadding: 50
     modal: true
     doneText: qsTr('id_enabled')
 
@@ -23,29 +22,35 @@ ControllerDialog {
         ColumnLayout {
             property list<Action> actions: [
                 Action {
-                    text: qsTr('id_next')
+                    text: qsTrId('id_next')
+                    enabled: data_field.text !== ''
                     onTriggered: controller.enable(data_field.text)
                 }
             ]
-
-            RowLayout {
-                Image {
-                    source: `svg/2fa_${method}.svg`
-                    sourceSize.width: 32
-                    sourceSize.height: 32
-                }
-                Label {
-                    text: description
-                    wrapMode: Text.WordWrap
-                }
+            Image {
+                source: `svg/2fa_${method}.svg`
+                sourceSize.width: 64
+                sourceSize.height: 64
+                opacity: matching ? 1 : 0
+                Behavior on opacity { OpacityAnimator { } }
+                Layout.alignment: Qt.AlignHCenter
             }
-
+            Label {
+                id: description_text
+                text: description
+                wrapMode: Text.WordWrap
+                Layout.alignment: Qt.AlignHCenter
+            }
             TextField {
                 id: data_field
-                Layout.fillWidth: true
                 placeholderText: placeholder
+                selectByMouse: true
+                Layout.fillWidth: true
+                Layout.minimumWidth: 300
+                Layout.alignment: Qt.AlignHCenter
             }
         }
+
     }
 
     Component {
