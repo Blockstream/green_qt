@@ -75,5 +75,6 @@
         <file>SetRecoveryEmailDialog.qml</file>
         <file>AccountIdBadge.qml</file>
         <file>BumpFeeDialog.qml</file>
+        <file>DescriptiveRadioButton.qml</file>
     </qresource>
 </RCC>

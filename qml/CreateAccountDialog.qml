@@ -101,6 +101,7 @@ ControllerDialog {
         implicitWidth: currentItem.implicitWidth
 
         initialItem: ColumnLayout {
+            spacing: 50
             property list<Action> actions: [
                 Action {
                     text: qsTrId('id_next')
@@ -114,39 +115,31 @@ ControllerDialog {
             ButtonGroup {
                 id: type_button_group
             }
-            SectionLabel {
-                text: qsTrId('id_account_type')
-            }
-            RadioButton {
-                property string type: '2of2'
-                checked: true
+            DescriptiveRadioButton {
+                readonly property string type: '2of2'
                 text: qsTrId('id_standard_account')
+                description: qsTrId('id_standard_accounts_allow_you_to')
+                checked: true
+                enabled: true
                 ButtonGroup.group: type_button_group
-                ToolTip.text: qsTrId('id_standard_accounts_allow_you_to')
-                ToolTip.visible: hovered
+                Layout.fillWidth: true
             }
-            RadioButton {
-                property string type: '2of2_no_recovery'
-                enabled: {
-                    if (!wallet.network.liquid) return false;
-                    for (let i = 0; i < wallet.accounts.length; i++) {
-                        const type = wallet.accounts[i].json.type;
-                        if (type === '2of2_no_recovery') return false;
-                    }
-                    return true;
-                }
+            DescriptiveRadioButton {
+                readonly property string type: '2of2_no_recovery'
                 text: qsTrId('id_liquid_securities_account')
+                description: qsTrId('id_liquid_securities_accounts_are')
+                enabled: wallet.network.liquid && !wallet.hasLiquidSecurities
                 ButtonGroup.group: type_button_group
-                ToolTip.text: qsTrId('id_liquid_securities_accounts_are')
-                ToolTip.visible: hovered
+                Layout.fillWidth: true
             }
-            RadioButton {
-                property string type: '2of3'
-                visible: !wallet.network.liquid
+            DescriptiveRadioButton {
+                readonly property string type: '2of3'
                 text: qsTrId('id_2of3_account')
+                description: qsTrId('id_a_2of3_account_requires_two_out')
+                enabled: !wallet.network.liquid
                 ButtonGroup.group: type_button_group
-                ToolTip.text: qsTrId('id_a_2of3_account_requires_two_out')
-                ToolTip.visible: hovered
+                Layout.fillWidth: true
+                Layout.maximumWidth: 400
             }
         }
     }

@@ -53,6 +53,9 @@ private:
     Q_PROPERTY(qint64 balance READ balance NOTIFY balanceChanged)
     Q_PROPERTY(QJsonObject config READ config NOTIFY configChanged)
     Q_PROPERTY(bool busy READ isBusy NOTIFY busyChanged)
+    // Check if this wallet can create a liquid securities account
+    // (only 1 per liquid wallet)
+    Q_PROPERTY(bool hasLiquidSecurities READ hasLiquidSecurities NOTIFY hasLiquidSecuritiesChanged)
 
 public:
     explicit Wallet(QObject *parent = nullptr);
@@ -107,6 +110,8 @@ public:
     bool isBusy() const { return m_busy; }
     void setBusy(bool busy);
 
+    bool hasLiquidSecurities() const { return m_has_liquid_securities; }
+
     Account* getOrCreateAccount(int pointer);
 
 public slots:
@@ -127,22 +132,15 @@ signals:
     void proxyChanged(const QString& proxy);
     void useTorChanged(bool use_tor);
     void lockedChanged(bool locked);
-
     void accountsChanged();
-
     void eventsChanged(QJsonObject events);
-
     void nameChanged(QString name);
-
     void loginAttemptsRemainingChanged(int loginAttemptsRemaining);
-
     void balanceChanged();
-
     void settingsChanged();
-
     void configChanged();
-
     void busyChanged(bool busy);
+    void hasLiquidSecuritiesChanged(bool hasLiquidSecurities);
 
 protected:
     bool eventFilter(QObject* object, QEvent* event) override;
@@ -183,6 +181,7 @@ public:
     quint64 m_balance;
     int m_logout_timer{-1};
     bool m_busy{false};
+    bool m_has_liquid_securities{false};
 };
 
 #endif // GREEN_WALLET_H

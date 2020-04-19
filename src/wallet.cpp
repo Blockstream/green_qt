@@ -544,6 +544,8 @@ void Wallet::reload()
         QMetaObject::invokeMethod(this, [this, accounts] {
             quint64 balance  = 0;
 
+            bool has_liquid_securities = false;
+
             for (QJsonValue data : accounts) {
                 QJsonObject json = data.toObject();
                 int pointer = json.value("pointer").toInt();
@@ -552,11 +554,19 @@ void Wallet::reload()
                 account->reload();
 
                 balance += static_cast<quint64>(json.value("satoshi").toObject().value("btc").toInt());
+                if (!has_liquid_securities && account->json().value("type").toString() == "2of2_no_recovery") {
+                    has_liquid_securities = true;
+                }
             }
 
             emit accountsChanged();
-
             setBalance(balance);
+            if (m_has_liquid_securities != has_liquid_securities) {
+                Q_ASSERT(!m_has_liquid_securities);
+                Q_ASSERT(has_liquid_securities);
+                m_has_liquid_securities = true;
+                emit hasLiquidSecuritiesChanged(true);
+            }
         });
 
         if (m_network->isLiquid()) {
