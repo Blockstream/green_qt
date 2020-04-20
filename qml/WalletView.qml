@@ -24,7 +24,7 @@ Item {
     function formatFiat(sats, include_ticker = true) {
         const pricing = wallet.settings.pricing;
         const { fiat, fiat_currency } = wallet.convert({ satoshi: sats });
-        return Number(fiat).toLocaleString(Qt.locale(), 'f', 2) + (include_ticker ? ' ' + fiat_currency : '');
+        return (fiat === null ? 'n/a' : Number(fiat).toLocaleString(Qt.locale(), 'f', 2)) + (include_ticker ? ' ' + fiat_currency : '');
     }
 
     function parseFiat(fiat) {
@@ -42,6 +42,8 @@ Item {
         if (!wallet.network.liquid && confirmations < 6) return qsTrId('id_d6_confirmations').arg(confirmations);
         return qsTrId('id_completed');
     }
+
+    readonly property bool fiatRateAvailable: formatFiat(0, false) !== 'n/a'
 
     onAccountChanged: {
         location = '/transactions'
@@ -124,6 +126,21 @@ Item {
             anchors.fill: parent
             spacing: 8
             Label {
+                visible: fiatRateAvailable
+                text: qsTrId('id_your_favourite_exchange_rate_is')
+                padding: 8
+                leftPadding: 40
+                wrapMode: Label.WordWrap
+                Layout.fillWidth: true
+                Rectangle {
+                    anchors.fill: parent
+                    color: 'white'
+                    opacity: 0.05
+                    z: -1
+                }
+            }
+            Label {
+                visible: wallet.events && !!wallet.events.twofactor_reset && wallet.events.twofactor_reset.is_active
                 padding: 8
                 leftPadding: 40
                 wrapMode: Label.WordWrap
@@ -250,7 +267,7 @@ Item {
                     sourceComponent: AccountIdBadge { }
                 }
                 ToolButton {
-                    visible: wallet.events && !!wallet.events.twofactor_reset && wallet.events.twofactor_reset.is_active
+                    visible: (wallet.events && !!wallet.events.twofactor_reset && wallet.events.twofactor_reset.is_active) || !fiatRateAvailable
                     Layout.alignment: Qt.AlignBottom
                     icon.source: '/svg/notifications_2.svg'
                     icon.color: 'transparent'

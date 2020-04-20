@@ -154,7 +154,7 @@ void SendTransactionController::update()
 
         const auto res = wallet()->convert(convert);
         m_effective_amount = res.value(unit).toString();
-        m_effective_fiat_amount = res.value("fiat").toString();
+        m_effective_fiat_amount = res.value("fiat").isNull() ? "n/a" : res.value("fiat").toString();
     } else {
         Q_ASSERT(is_liquid);
         if (m_send_all) {

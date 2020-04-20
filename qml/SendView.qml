@@ -143,7 +143,7 @@ StackView {
             TextField {
                 id: fiat_field
                 Layout.fillWidth: true
-                enabled: !send_all_button.checked && controller.hasFiatRate
+                enabled: !send_all_button.checked && controller.hasFiatRate && fiatRateAvailable
                 horizontalAlignment: TextField.AlignRight
                 placeholderText: controller.effectiveFiatAmount
                 text: controller.fiatAmount
