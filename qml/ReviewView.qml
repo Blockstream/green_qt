@@ -33,16 +33,23 @@ ScrollView {
             delegate: wallet.network.liquid ? liquid_address : bitcoin_address
         }
         SectionLabel { text: qsTrId('id_my_notes') }
-        TextArea {
-            id: memo_edit
+        ScrollView {
             Layout.fillWidth: true
-            selectByMouse: true
-            wrapMode: TextEdit.Wrap
-            onTextChanged: {
-                if (text.length > 1024) {
-                    text = text.slice(0, 1024);
+            Layout.maximumHeight: 64
+            ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
+            ScrollBar.vertical.policy: ScrollBar.AsNeeded
+            ScrollBar.vertical.interactive: hovered
+            TextArea {
+                id: memo_edit
+                Layout.fillWidth: true
+                selectByMouse: true
+                wrapMode: TextEdit.Wrap
+                onTextChanged: {
+                    if (text.length > 1024) {
+                        text = text.slice(0, 1024);
+                    }
+                    controller.memo = memo_edit.text;
                 }
-                controller.memo = memo_edit.text;
             }
         }
     }
