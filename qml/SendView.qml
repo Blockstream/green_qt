@@ -54,6 +54,7 @@ StackView {
                 horizontalAlignment: TextField.AlignHCenter
                 placeholderText: qsTr('id_enter_an_address')
                 font.pixelSize: 12
+                onTextChanged: text = text.trim()
             }
             ToolButton {
                 enabled: QtMultimedia.availableCameras.length > 0
