@@ -361,6 +361,10 @@ Item {
             id: create_account_dialog
             CreateAccountDialog {}
         }
+        Component {
+            id: bump_fee_dialog
+            BumpFeeDialog { }
+        }
     }
 
     ProgressBar {
