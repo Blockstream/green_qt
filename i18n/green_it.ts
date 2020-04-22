@@ -1,6 +1,5 @@
 <TS version="2.1" language="it">
 <context>
-    <name>green</name>
     <message>
         <source>id_1030_minutes</source>
         <translation>~ 10-30 Minuti</translation>
