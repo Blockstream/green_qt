@@ -89,11 +89,11 @@ WalletDialog {
         WizardPage {
             actions: [
                 Action {
-                    text: qsTr('id_back')
+                    text: qsTrId('id_back')
                     onTriggered: controller.cancel()
                 },
                 Action {
-                    text: qsTr('id_next')
+                    text: qsTrId('id_next')
                     onTriggered: controller.resolveCode(code_field.text)
                 }
             ]
@@ -110,7 +110,7 @@ WalletDialog {
                 }
                 Label {
                     id: enterCodeText
-                    text: qsTr('id_please_provide_your_1s_code').arg(controller.result.method)
+                    text: qsTrId('id_please_provide_your_1s_code').arg(controller.result.method)
                 }
                 TextField {
                     id: code_field
@@ -119,7 +119,7 @@ WalletDialog {
                 Label {
                     visible: !!controller.result.attempts_remaining
                     anchors.horizontalCenter: enterCodeText.horizontalCenter
-                    text: qsTr('id_attempts_remaining_d').arg(controller.result.attempts_remaining)
+                    text: qsTrId('id_attempts_remaining_d').arg(controller.result.attempts_remaining)
                     font.pixelSize: 10
                 }
             }

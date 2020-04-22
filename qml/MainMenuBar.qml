@@ -4,36 +4,36 @@ MenuBar {
     window: main_window
 
     Menu {
-        title: qsTr('&File')
+        title: qsTrId('&File')
 
         Action {
-            text: qsTr('id_create_new_wallet')
+            text: qsTrId('id_create_new_wallet')
             onTriggered: create_wallet_action.trigger()
         }
         Action {
-            text: qsTr('id_restore_green_wallet')
+            text: qsTrId('id_restore_green_wallet')
             onTriggered: restore_wallet_action.trigger()
         }
         Action {
-            text: qsTr('id_wallets')
+            text: qsTrId('id_wallets')
             onTriggered: drawer.open()
         }
         Action {
-            text: qsTr('&Exit')
+            text: qsTrId('&Exit')
             onTriggered: window.close()
         }
     }
 
     Menu {
-        title: qsTr('id_help')
+        title: qsTrId('id_help')
 
         Action {
-            text: qsTr('id_about')
+            text: qsTrId('id_about')
             onTriggered: about_dialog.open()
         }
 
         Action {
-            text: qsTr('id_support')
+            text: qsTrId('id_support')
             onTriggered: {
                 Qt.openUrlExternally("https://docs.blockstream.com/green/support.html")
             }

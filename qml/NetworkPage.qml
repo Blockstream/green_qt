@@ -26,7 +26,7 @@ Item {
 
         Label {
             anchors.verticalCenter: parent.verticalCenter
-            text: qsTr('id_create_a_wallet_for_bitcoin')
+            text: qsTrId('id_create_a_wallet_for_bitcoin')
             font.pixelSize : 14
         }
 

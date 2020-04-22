@@ -33,7 +33,7 @@ Page {
         Button {
             Layout.rightMargin: 32
             flat: true
-            text: qsTr('id_view_in_explorer')
+            text: qsTrId('id_view_in_explorer')
             onClicked: balance.asset.openInExplorer()
         }
     }
@@ -51,7 +51,7 @@ Page {
             Column {
                 Label {
                     opacity: 0.5
-                    text: qsTr('id_asset_id')
+                    text: qsTrId('id_asset_id')
                     font.pixelSize: 14
                 }
                 Label {
@@ -63,7 +63,7 @@ Page {
             Column {
                 Label {
                     opacity: 0.5
-                    text: qsTr('id_total_balance')
+                    text: qsTrId('id_total_balance')
                     font.pixelSize: 14
                 }
                 Label {
@@ -75,7 +75,7 @@ Page {
             Column {
                 Label {
                     opacity: 0.5
-                    text: qsTr('id_precision')
+                    text: qsTrId('id_precision')
                     font.pixelSize: 14
                 }
                 Label {
@@ -87,7 +87,7 @@ Page {
             Column {
                 Label {
                     opacity: 0.5
-                    text: qsTr('id_ticker')
+                    text: qsTrId('id_ticker')
                     font.pixelSize: 14
                 }
                 Label {
@@ -99,7 +99,7 @@ Page {
             Column {
                 Label {
                     opacity: 0.5
-                    text: qsTr('id_issuer')
+                    text: qsTrId('id_issuer')
                     font.pixelSize: 14
                 }
 

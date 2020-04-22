@@ -29,8 +29,8 @@ ColumnLayout {
     }
 
     SettingsBox {
-        title: qsTr('id_currency')
-        description: qsTr('id_select_a_fiat_currency_and')
+        title: qsTrId('id_currency')
+        description: qsTrId('id_select_a_fiat_currency_and')
         enabled: !wallet.locked
 
         GridLayout {
@@ -38,7 +38,7 @@ ColumnLayout {
             Layout.alignment: Qt.AlignRight
 
             Label {
-                text: qsTr('id_reference_exchange_rate')
+                text: qsTrId('id_reference_exchange_rate')
             }
 
             RowLayout {
@@ -74,7 +74,7 @@ ColumnLayout {
             }
 
             Label {
-                text: qsTr('id_show_bitcoin_amounts_in')
+                text: qsTrId('id_show_bitcoin_amounts_in')
             }
 
             ComboBox {
@@ -99,13 +99,13 @@ ColumnLayout {
 
     SettingsBox {
         title: 'Notifications'
-        description: qsTr('id_receive_email_notifications_for')
+        description: qsTrId('id_receive_email_notifications_for')
         enabled: !wallet.locked && wallet.config.email.confirmed
 
         GridLayout {
             columns: 2
             Label {
-                text: qsTr('id_received')
+                text: qsTrId('id_received')
             }
 
             Switch {
@@ -124,7 +124,7 @@ ColumnLayout {
             }
 
             Label {
-                text: qsTr('id_sent')
+                text: qsTrId('id_sent')
             }
 
             Switch {

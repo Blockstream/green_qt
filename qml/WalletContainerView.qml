@@ -78,7 +78,7 @@ StackView {
 
                 CheckBox {
                     id: proxy_checkbox
-                    text: qsTr('id_connect_through_a_proxy')
+                    text: qsTrId('id_connect_through_a_proxy')
                     checked: wallet.proxy.length > 0
                 }
                 TextField {
@@ -91,7 +91,7 @@ StackView {
                 }
                 CheckBox {
                     id: tor_checkbox
-                    text: qsTr('id_connect_with_tor')
+                    text: qsTrId('id_connect_with_tor')
                     checked: wallet.useTor
                 }
                 Item {

@@ -4,7 +4,7 @@ import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.12
 
 ControllerDialog {
-    title: qsTr('id_send')
+    title: qsTrId('id_send')
 
     controller: SendTransactionController {
         balance: send_view.balance
@@ -12,7 +12,7 @@ ControllerDialog {
         sendAll: send_view.sendAll
     }
 
-    doneText: qsTr('id_transaction_sent')
+    doneText: qsTrId('id_transaction_sent')
     minimumWidth: 500
     minimumHeight: 300
 

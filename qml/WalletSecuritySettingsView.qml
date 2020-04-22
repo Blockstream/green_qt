@@ -15,8 +15,8 @@ ColumnLayout {
     }
 
     SettingsBox {
-        title: qsTr('id_access')
-        description: qsTr('id_enable_or_change_your_pin_to')
+        title: qsTrId('id_access')
+        description: qsTrId('id_enable_or_change_your_pin_to')
 
         Button {
             Component {
@@ -27,15 +27,15 @@ ColumnLayout {
                 }
             }
             flat: true
-            text: qsTr('id_change_pin')
+            text: qsTrId('id_change_pin')
             onClicked: change_pin_dialog.createObject(Window.window).open()
         }
 
     }
 
     SettingsBox {
-        title: qsTr('id_auto_logout_timeout')
-        description: qsTr('id_set_a_timeout_to_logout_after')
+        title: qsTrId('id_auto_logout_timeout')
+        description: qsTrId('id_set_a_timeout_to_logout_after')
         enabled: !wallet.locked
 
         ComboBox {
@@ -44,9 +44,9 @@ ColumnLayout {
             width: 200
             delegate: ItemDelegate {
                 width: parent.width
-                text: qsTr('id_1d_minutes').arg(modelData)
+                text: qsTrId('id_1d_minutes').arg(modelData)
             }
-            displayText: qsTr('id_1d_minutes').arg(currentText)
+            displayText: qsTrId('id_1d_minutes').arg(currentText)
             onCurrentTextChanged: controller.change({ altimeout: model[currentIndex] })
             currentIndex: model.indexOf(wallet.settings.altimeout)
         }
@@ -54,8 +54,8 @@ ColumnLayout {
 
 
     /*SettingsBox {
-        title: qsTr('id_watchonly_login')
-        description: qsTr('id_set_up_credentials_to_access_in')
+        title: qsTrId('id_watchonly_login')
+        description: qsTrId('id_set_up_credentials_to_access_in')
 
         RowLayout {
             Switch {
@@ -68,12 +68,12 @@ ColumnLayout {
                 visible: false
 
                 TextField {
-                    placeholderText: qsTr('id_username')
+                    placeholderText: qsTrId('id_username')
                     padding: 10
                 }
 
                 TextField {
-                    placeholderText: qsTr('id_password')
+                    placeholderText: qsTrId('id_password')
                     padding: 10
                 }
             }
@@ -81,8 +81,8 @@ ColumnLayout {
     }*/
 
     SettingsBox {
-        title: qsTr('id_wallet_backup')
-        description: qsTr('id_your_wallet_backup_is_made_of') + "\n" + qsTr('id_blockstream_does_not_have')
+        title: qsTrId('id_wallet_backup')
+        description: qsTrId('id_your_wallet_backup_is_made_of') + "\n" + qsTrId('id_blockstream_does_not_have')
 
         RowLayout {
             Layout.fillWidth: true
@@ -96,15 +96,15 @@ ColumnLayout {
             Button {
                 Layout.alignment: Qt.AlignRight
                 flat: true
-                text: qsTr('id_show_my_wallet_backup')
+                text: qsTrId('id_show_my_wallet_backup')
                 onClicked: mnemonic_dialog.createObject(stack_view).open()
             }
         }
     }
 
     SettingsBox {
-        title: qsTr('id_twofactor_authentication')
-        description: qsTr('id_enable_twofactor_authentication')
+        title: qsTrId('id_twofactor_authentication')
+        description: qsTrId('id_enable_twofactor_authentication')
         enabled: !wallet.locked
 
         ColumnLayout {
@@ -113,13 +113,13 @@ ColumnLayout {
                 TwoFactorEnableDialog {
                     description: switch(method) {
                                 case 'sms':
-                                    return qsTr('id_enter_phone_number')
+                                    return qsTrId('id_enter_phone_number')
                                 case 'gauth':
-                                    return qsTr('id_scan_the_qr_code_in_google')
+                                    return qsTrId('id_scan_the_qr_code_in_google')
                                 case 'email':
-                                    return qsTr('id_enter_your_email_address')
+                                    return qsTrId('id_enter_your_email_address')
                                 case 'phone':
-                                    return qsTr('id_enter_phone_number')
+                                    return qsTrId('id_enter_phone_number')
 
                             }
                 }
@@ -164,8 +164,8 @@ ColumnLayout {
     }
 
     SettingsBox {
-        title: qsTr('id_set_twofactor_threshold')
-        description: qsTr('id_set_a_limit_to_spend_without')
+        title: qsTrId('id_set_twofactor_threshold')
+        description: qsTrId('id_set_a_limit_to_spend_without')
         enabled: !wallet.locked
         visible: !wallet.network.liquid
 
@@ -177,7 +177,7 @@ ColumnLayout {
             Button {
                 property Component dialog: TwoFactorLimitDialog {}
                 flat: true
-                text: qsTr('id_set_twofactor_threshold')
+                text: qsTrId('id_set_twofactor_threshold')
                 onClicked: dialog.createObject(stack_view).open()
                 Layout.alignment: Qt.AlignRight
             }

@@ -3,7 +3,7 @@ import QtQuick 2.12
 import QtQuick.Controls 2.13
 
 SidebarItem {
-    title: qsTr('DEVICES')
+    title: qsTrId('DEVICES')
 
     Repeater {
         model: DeviceManager.devices

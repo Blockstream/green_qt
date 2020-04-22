@@ -120,7 +120,7 @@ ApplicationWindow {
 
     Action {
         id: create_wallet_action
-        text: qsTr('id_create_new_wallet')
+        text: qsTrId('id_create_new_wallet')
         onTriggered: stack_view.push(signup_view)
     }
 

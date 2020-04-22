@@ -15,7 +15,7 @@ ColumnLayout {
     }
 
     SettingsBox {
-        title: qsTr('id_set_an_email_for_recovery')
+        title: qsTrId('id_set_an_email_for_recovery')
 
         Button {
             Component {
@@ -25,15 +25,15 @@ ColumnLayout {
 
             flat: true
             enabled: !wallet.config['email'].confirmed
-            text: qsTr('id_enable')
+            text: qsTrId('id_enable')
             onClicked: enable_dialog.createObject(stack_view).open()
         }
     }
 
     SettingsBox {
-        title: qsTr('id_request_twofactor_reset')
+        title: qsTrId('id_request_twofactor_reset')
         //TODO: use translations
-        description: wallet.locked ? qsTr('wallet locked for %1 days').arg(wallet.config.twofactor_reset.days_remaining) : qsTrId('id_start_a_2fa_reset_process_if')
+        description: wallet.locked ? qsTrId('wallet locked for %1 days').arg(wallet.config.twofactor_reset.days_remaining) : qsTrId('id_start_a_2fa_reset_process_if')
 
         RowLayout {
             Button {

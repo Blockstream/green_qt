@@ -35,7 +35,7 @@ WizardPage {
             Layout.alignment: Qt.AlignHCenter
             header: CheckBox {
                 checked: controller.password
-                text: qsTr('id_password_protected')
+                text: qsTrId('id_password_protected')
                 onCheckedChanged: controller.password = checked
             }
 
@@ -54,7 +54,7 @@ WizardPage {
         RowLayout {
             Button {
                 flat: true
-                text: qsTr('id_clear')
+                text: qsTrId('id_clear')
                 onClicked: controller.clear()
             }
             Item {

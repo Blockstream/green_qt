@@ -12,7 +12,7 @@ WalletDialog {
         id: confirm_pin_view
         PinView {
             property bool accept: valid && pin === pin_view.pin
-            property string title: qsTr('id_verify_your_pin')
+            property string title: qsTrId('id_verify_your_pin')
         }
     }
 
@@ -23,7 +23,7 @@ WalletDialog {
         initialItem: PinView {
             id: pin_view
             property bool accept: false
-            property string title: qsTr('id_set_a_new_pin')
+            property string title: qsTrId('id_set_a_new_pin')
             onValidChanged: {
                 if (valid) {
                     stack_view.push(confirm_pin_view)
@@ -36,12 +36,12 @@ WalletDialog {
         Button {
             enabled: stack_view.currentItem.accept
             flat: true
-            text: qsTr('id_ok')
+            text: qsTrId('id_ok')
             DialogButtonBox.buttonRole: DialogButtonBox.AcceptRole
         }
         Button {
             flat: true
-            text: qsTr('id_cancel')
+            text: qsTrId('id_cancel')
             onClicked: close()
         }
     }

@@ -52,7 +52,7 @@ ListView {
                         icon.source: '/svg/send.svg'
                         icon.width: 24
                         icon.height: 24
-                        text: qsTr('id_send')
+                        text: qsTrId('id_send')
                         onClicked: send_dialog.createObject(stack_view, { account }).open()
                     }
 
@@ -62,7 +62,7 @@ ListView {
                         icon.source: '/svg/receive.svg'
                         icon.width: 24
                         icon.height: 24
-                        text: qsTr('id_receive')
+                        text: qsTrId('id_receive')
                         onClicked: receive_dialog.createObject(stack_view).open()
                     }
                 }

@@ -38,9 +38,9 @@ Item {
     }
 
     function transactionStatus(confirmations) {
-        if (confirmations === 0) return qsTr('id_unconfirmed');
-        if (!wallet.network.liquid && confirmations < 6) return qsTr('id_d6_confirmations').arg(confirmations);
-        return qsTr('id_completed');
+        if (confirmations === 0) return qsTrId('id_unconfirmed');
+        if (!wallet.network.liquid && confirmations < 6) return qsTrId('id_d6_confirmations').arg(confirmations);
+        return qsTrId('id_completed');
     }
 
     onAccountChanged: {
@@ -54,7 +54,7 @@ Item {
             name: 'VIEW_SETTINGS'
             PropertyChanges {
                 target: title_label
-                text: qsTr('id_settings')
+                text: qsTrId('id_settings')
             }
             PropertyChanges {
                 target: settings_tool_button
@@ -200,23 +200,23 @@ Item {
                         id: menu
 
                         MenuItem {
-                            text: qsTr('id_wallets')
+                            text: qsTrId('id_wallets')
                             onTriggered: drawer.open()
                         }
 
                         MenuSeparator { }
 
                         MenuItem {
-                            text: qsTr('id_add_new_account')
+                            text: qsTrId('id_add_new_account')
                             onClicked: create_account_dialog.createObject(wallet_view).open()
                         }
                         MenuItem {
-                            text: qsTr('id_rename_account')
+                            text: qsTrId('id_rename_account')
                             enabled: account && account.json.type !== '2of2_no_recovery'
                             onClicked: rename_account_dialog.createObject(wallet_view, { account }).open()
                         }
                         MenuItem {
-                            text: qsTr('id_log_out')
+                            text: qsTrId('id_log_out')
                             onTriggered: wallet.disconnect()
                         }
                     }
@@ -296,13 +296,13 @@ Item {
                         id: tab_bar
 
                         TabButton {
-                            text: qsTr('id_transactions')
+                            text: qsTrId('id_transactions')
                             width: 160
                         }
 
                         TabButton {
                             visible: wallet.network.liquid
-                            text: qsTr('id_assets')
+                            text: qsTrId('id_assets')
                             width: 160
                         }
                     }

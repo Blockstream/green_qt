@@ -29,7 +29,7 @@ ColumnLayout {
         onTriggered: {
             if (receive_address.generating) return;
             receive_address.copyToClipboard();
-            qrcode.ToolTip.show(qsTr('id_address_copied_to_clipboard'), 1000);
+            qrcode.ToolTip.show(qsTrId('id_address_copied_to_clipboard'), 1000);
         }
     }
 
@@ -40,7 +40,7 @@ ColumnLayout {
         onTriggered: {
             if (receive_address.generating) return;
             receive_address.copyUriToClipboard();
-            qrcode.ToolTip.show(qsTr('id_copied_to_clipboard'), 1000);
+            qrcode.ToolTip.show(qsTrId('id_copied_to_clipboard'), 1000);
         }
     }
 

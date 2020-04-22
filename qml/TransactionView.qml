@@ -12,11 +12,11 @@ Page {
     function tx_direction(type) {
         switch (type) {
             case 'incoming':
-                return qsTr('id_incoming')
+                return qsTrId('id_incoming')
             case 'outgoing':
-                return qsTr('id_outgoing')
+                return qsTrId('id_outgoing')
             case 'redeposit':
-                return qsTr('id_redeposited')
+                return qsTrId('id_redeposited')
 
         }
     }
@@ -81,7 +81,7 @@ Page {
         }
 
         Label {
-            text: qsTr('id_transaction_details') + ' - ' + tx_direction(transaction.data.type)
+            text: qsTrId('id_transaction_details') + ' - ' + tx_direction(transaction.data.type)
             font.pixelSize: 14
             font.capitalization: Font.AllUppercase
             Layout.fillWidth: true
@@ -90,7 +90,7 @@ Page {
         Button {
             Layout.rightMargin: 16
             flat: true
-            text: qsTr('id_view_in_explorer')
+            text: qsTrId('id_view_in_explorer')
             onClicked: transaction.openInExplorer()
         }
     }
@@ -109,7 +109,7 @@ Page {
                 spacing: 8
 
                 Label {
-                    text: qsTr('id_received_on')
+                    text: qsTrId('id_received_on')
                     color: 'gray'
                 }
 
@@ -122,7 +122,7 @@ Page {
                 spacing: 8
 
                 Label {
-                    text: qsTr('id_transaction_status')
+                    text: qsTrId('id_transaction_status')
                     color: 'gray'
                 }
 
@@ -135,7 +135,7 @@ Page {
                 spacing: 8
 
                 Label {
-                    text: qsTr('id_amount')
+                    text: qsTrId('id_amount')
                     color: 'gray'
                 }
 
@@ -150,7 +150,7 @@ Page {
                 spacing: 8
 
                 Label {
-                    text: qsTr('id_fee')
+                    text: qsTrId('id_fee')
                     color: 'gray'
                 }
 
@@ -163,13 +163,13 @@ Page {
                 spacing: 8
 
                 Label {
-                    text: qsTr('id_my_notes')
+                    text: qsTrId('id_my_notes')
                     color: 'gray'
                 }
 
                 TextArea {
                     id: memo_edit
-                    placeholderText: qsTr('id_add_a_note_only_you_can_see_it')
+                    placeholderText: qsTrId('id_add_a_note_only_you_can_see_it')
                     width: scroll_view.width - 16
                     text: transaction.data.memo
                     selectByMouse: true
@@ -185,13 +185,13 @@ Page {
                     anchors.right: parent.right
                     Button {
                         flat: true
-                        text: qsTr('id_cancel')
+                        text: qsTrId('id_cancel')
                         enabled: memo_edit.text !== transaction.data.memo
                         onClicked: memo_edit.text = transaction.data.memo
                     }
                     Button {
                         flat: true
-                        text: qsTr('id_save')
+                        text: qsTrId('id_save')
                         enabled: memo_edit.text !== transaction.data.memo
                         onClicked: transaction.updateMemo(memo_edit.text)
                     }
@@ -200,7 +200,7 @@ Page {
 
             Page {
                 header: Label {
-                    text: qsTr('id_transaction_id')
+                    text: qsTrId('id_transaction_id')
                     color: 'gray'
                 }
                 background: MouseArea {

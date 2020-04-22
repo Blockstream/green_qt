@@ -125,14 +125,14 @@ Page {
             anchors.fill: parent
             anchors.margins: 16
             Label {
-                text: qsTr('id_advanced_network_settings')
+                text: qsTrId('id_advanced_network_settings')
                 font.pixelSize: 18
                 Layout.margins: 16
             }
 
             CheckBox {
                 id: proxy_checkbox
-                text: qsTr('id_connect_through_a_proxy')
+                text: qsTrId('id_connect_through_a_proxy')
             }
             TextField {
                 id: proxy_field
@@ -143,7 +143,7 @@ Page {
             }
             CheckBox {
                 id: tor_checkbox
-                text: qsTr('id_connect_with_tor')
+                text: qsTrId('id_connect_with_tor')
             }
             Item {
                Layout.fillWidth: true
@@ -188,7 +188,7 @@ Page {
     }
 
     property Item set_pin_page: Item {
-        property string title: qsTr('id_create_a_pin_to_access_your')
+        property string title: qsTrId('id_create_a_pin_to_access_your')
         property list<Action> actions
 
         implicitWidth: pin_view.implicitWidth
@@ -207,7 +207,7 @@ Page {
     }
 
     property Item verify_pin_page: Item {
-        property string title: qsTr('id_verify_your_pin')
+        property string title: qsTrId('id_verify_your_pin')
         property list<Action> actions
 
         activeFocusOnTab: false
@@ -230,7 +230,7 @@ Page {
         property string title: qsTrId('id_set_wallet_name')
         property list<Action> actions: [
             Action {
-                text: qsTr('id_create')
+                text: qsTrId('id_create')
                 onTriggered: {
                     let name = name_field.text.trim();
                     if (name === '') name = name_field.placeholderText;

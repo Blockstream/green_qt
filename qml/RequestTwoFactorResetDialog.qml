@@ -4,13 +4,13 @@ import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.12
 
 ControllerDialog {
-    title: qsTr('id_request_twofactor_reset')
+    title: qsTrId('id_request_twofactor_reset')
     controller: RequestTwoFactorResetController { }
     initialItem: ColumnLayout {
         property list<Action> actions: [
             Action {
                 enabled: data_field.text.trim() !== ''
-                text: qsTr('id_next')
+                text: qsTrId('id_next')
                 onTriggered: controller.execute(email_field.text)
             }
         ]        
@@ -24,7 +24,7 @@ ControllerDialog {
         TextField {
             id: email_field
             Layout.fillWidth: true
-            placeholderText: qsTr('id_enter_new_email')
+            placeholderText: qsTrId('id_enter_new_email')
         }
     }
 }

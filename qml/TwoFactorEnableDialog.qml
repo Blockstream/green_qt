@@ -7,9 +7,9 @@ ControllerDialog {
     property string method
 
     id: controller_dialog
-    title: qsTr('id_set_up_twofactor_authentication')
+    title: qsTrId('id_set_up_twofactor_authentication')
     modal: true
-    doneText: qsTr('id_enabled')
+    doneText: qsTrId('id_enabled')
 
     controller: TwoFactorController {
         method: controller_dialog.method
@@ -58,7 +58,7 @@ ControllerDialog {
         ColumnLayout {
             property list<Action> actions: [
                 Action {
-                    text: qsTr('id_next')
+                    text: qsTrId('id_next')
                     onTriggered: controller.enable(wallet.config[method].data)
                 }
             ]
@@ -70,7 +70,7 @@ ControllerDialog {
                 }
                 Label {
                     Layout.fillWidth: true
-                    text: qsTr('id_scan_the_qr_code_in_google')
+                    text: qsTrId('id_scan_the_qr_code_in_google')
                     wrapMode: Text.WordWrap
                 }
             }

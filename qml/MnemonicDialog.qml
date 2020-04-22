@@ -3,7 +3,7 @@ import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
 
 WalletDialog {
-    title: qsTr('id_mnemonic')
+    title: qsTrId('id_mnemonic')
     Item {
         implicitWidth: layout.implicitWidth
         implicitHeight: layout.implicitHeight
@@ -45,7 +45,7 @@ WalletDialog {
             id: qrcode_switch
             checked: false
             Layout.margins: 20
-            text: qsTr('id_show_qr_code')
+            text: qsTrId('id_show_qr_code')
         }
     }
 

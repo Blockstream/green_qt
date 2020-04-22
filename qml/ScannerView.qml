@@ -10,7 +10,7 @@ Item {
     property alias source: video_output.source
     property list<Action> actions: [
         Action {
-            text: qsTr('id_back')
+            text: qsTrId('id_back')
             onTriggered: cancel()
         }
     ]

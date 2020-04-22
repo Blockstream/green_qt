@@ -52,7 +52,7 @@ StackView {
                 id: address_field
                 Layout.fillWidth: true
                 horizontalAlignment: TextField.AlignHCenter
-                placeholderText: qsTr('id_enter_an_address')
+                placeholderText: qsTrId('id_enter_an_address')
                 font.pixelSize: 12
                 onTextChanged: text = text.trim()
             }
@@ -111,7 +111,7 @@ StackView {
             spacing: 16
             Switch {
                 id: send_all_button
-                text: qsTr('id_send_all_funds')
+                text: qsTrId('id_send_all_funds')
             }
             TextField {
                 id: amount_field

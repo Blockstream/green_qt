@@ -16,7 +16,7 @@ ControllerDialog {
     initialItem: RowLayout {
         property list<Action> actions: [
             Action {
-                text: qsTr('id_next')
+                text: qsTrId('id_next')
                 onTriggered: controller.disable()
             }
         ]

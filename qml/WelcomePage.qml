@@ -3,7 +3,7 @@ import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.12
 
 Column {
-    property string title: qsTrId('id_welcome_to') + ' ' + qsTr('Blockstream Green')
+    property string title: qsTrId('id_welcome_to') + ' ' + qsTrId('Blockstream Green')
     property list<Action> actions: [
         Action {
             text: qsTrId('id_continue')

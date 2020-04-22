@@ -7,7 +7,7 @@ import QtQuick.Layouts 1.12
 
 ControllerDialog {
     id: dialog
-    title: qsTr('id_add_new_account')
+    title: qsTrId('id_add_new_account')
     minimumWidth: 200
     controller: CreateAccountController {
         id: create_account_controller

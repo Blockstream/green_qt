@@ -53,7 +53,7 @@ GridLayout {
         Layout.leftMargin: 16
         Button {
             flat: true
-            text: qsTr('id_create_new_wallet')
+            text: qsTrId('id_create_new_wallet')
             action: create_wallet_action
         }
         Button {

@@ -17,14 +17,14 @@ ControllerDialog {
     property string threshold: wallet.config.limits.is_fiat ? wallet.config.limits.fiat : wallet.config.limits[wallet.settings.unit.toLowerCase()]
     property string ticker: wallet.config.limits.is_fiat ? wallet.settings.pricing.currency : wallet.settings.unit
 
-    title: qsTr('id_set_twofactor_threshold')
-    doneText: qsTr('id_your_twofactor_threshold_is_s').arg(threshold + ' ' +  ticker)
+    title: qsTrId('id_set_twofactor_threshold')
+    doneText: qsTrId('id_your_twofactor_threshold_is_s').arg(threshold + ' ' +  ticker)
     width: 400
     height: 250
     controller: TwoFactorController { }
     initialItem: WizardPage {
         actions: Action {
-            text: qsTr('id_next')
+            text: qsTrId('id_next')
             onTriggered: controller.changeLimit(currency_combo.fiat, amount_field.text)
         }
 
@@ -33,7 +33,7 @@ ControllerDialog {
             anchors.fill: parent
 
             Label {
-                text: qsTr('id_currency')
+                text: qsTrId('id_currency')
             }
 
             ComboBox {
@@ -47,7 +47,7 @@ ControllerDialog {
             }
 
             Label {
-                text: qsTr('id_amount')
+                text: qsTrId('id_amount')
             }
 
             TextField {

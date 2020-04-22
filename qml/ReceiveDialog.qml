@@ -4,7 +4,7 @@ import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.12
 
 WalletDialog {
-    title: qsTr('id_receive')
+    title: qsTrId('id_receive')
     onClosed: destroy()
 
     header: Item {

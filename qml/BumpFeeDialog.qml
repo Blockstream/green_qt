@@ -4,12 +4,12 @@ import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.12
 
 ControllerDialog {
-    title: qsTr('id_increase_fee')
+    title: qsTrId('id_increase_fee')
     property Transaction transaction
 
     controller: BumpFeeController { }
 
-    doneText: qsTr('id_transaction_sent')
+    doneText: qsTrId('id_transaction_sent')
     minimumWidth: 300
     initialItem: FocusScope {
         property list<Action> actions: [
@@ -28,22 +28,22 @@ ControllerDialog {
                 text: qsTrId('id_previous_fee')
             }
             Label {
-                text: qsTr('id_fee') + ': ' + formatAmount(transaction.data.fee) + ' ≈ ' +
+                text: qsTrId('id_fee') + ': ' + formatAmount(transaction.data.fee) + ' ≈ ' +
                       formatFiat(transaction.data.fee)
             }
             Label {
-                text: qsTr('id_fee_rate') + ': ' + Math.round(transaction.data.fee_rate / 10 + 0.5) / 100 + ' sat/vB'
+                text: qsTrId('id_fee_rate') + ': ' + Math.round(transaction.data.fee_rate / 10 + 0.5) / 100 + ' sat/vB'
             }
 
             SectionLabel {
                 text: qsTrId('id_new_fee')
             }
             Label {
-                text: qsTr('id_fee') + ': '  + formatAmount(controller.tx.fee) + ' ≈ ' +
+                text: qsTrId('id_fee') + ': '  + formatAmount(controller.tx.fee) + ' ≈ ' +
                       formatFiat(controller.tx.fee)
             }
             Label {
-                text: qsTr('id_fee_rate') + ': ' + Math.round(controller.tx.fee_rate / 10 + 0.5) / 100 + ' sat/vB'
+                text: qsTrId('id_fee_rate') + ': ' + Math.round(controller.tx.fee_rate / 10 + 0.5) / 100 + ' sat/vB'
             }
 
             FeeComboBox {

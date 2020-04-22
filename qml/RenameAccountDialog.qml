@@ -8,7 +8,7 @@ import QtQuick.Layouts 1.12
 WalletDialog {
     property Account account
     standardButtons: Dialog.Ok | Dialog.Cancel
-    title: qsTr('id_rename_account')
+    title: qsTrId('id_rename_account')
 
     onAccepted: controller.rename(name_field.text);
     onClosed: destroy()
@@ -19,7 +19,7 @@ WalletDialog {
 
     ColumnLayout {
         SectionLabel {
-            text: qsTr('id_name')
+            text: qsTrId('id_name')
         }
         TextField {
             id: name_field

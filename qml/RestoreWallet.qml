@@ -52,7 +52,7 @@ Page {
 
             CheckBox {
                 id: proxy_checkbox
-                text: qsTr('id_connect_through_a_proxy')
+                text: qsTrId('id_connect_through_a_proxy')
             }
             TextField {
                 id: proxy_field
@@ -63,7 +63,7 @@ Page {
             }
             CheckBox {
                 id: tor_checkbox
-                text: qsTr('id_connect_with_tor')
+                text: qsTrId('id_connect_with_tor')
             }
             Item {
                Layout.fillWidth: true
@@ -197,7 +197,7 @@ Page {
             implicitWidth: 400
             echoMode: TextField.Password
             onAccepted: passphrase_next_action.trigger()
-            placeholderText: qsTr('id_encryption_passphrase')
+            placeholderText: qsTrId('id_encryption_passphrase')
         }
     }
 
@@ -229,7 +229,7 @@ Page {
         property string title: qsTrId('id_set_wallet_name')
         property list<Action> actions: [
             Action {
-                text: qsTr('id_restore')
+                text: qsTrId('id_restore')
                 onTriggered: {
                     let name = name_field.text.trim();
                     if (name === '') name = name_field.placeholderText;

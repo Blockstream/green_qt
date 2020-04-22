@@ -19,15 +19,15 @@ ItemDelegate {
         if (tx.type === 'incoming') {
             for (const o of tx.outputs) {
                 if (o.is_relevant) {
-                    return qsTr('id_received') + separator + memo
+                    return qsTrId('id_received') + separator + memo
                 }
             }
         }
         if (tx.type === 'outgoing') {
-            return qsTr('id_sent') + separator + memo
+            return qsTrId('id_sent') + separator + memo
         }
         if (tx.type === 'redeposit') {
-            return qsTr("id_redeposited") + separator + memo
+            return qsTrId("id_redeposited") + separator + memo
         }
         return JSON.stringify(tx, null, '\t')
     }
@@ -54,7 +54,7 @@ ItemDelegate {
             Label {
                 color: tx.type === 'incoming' ? Material.accentColor : Material.foreground
                 Layout.alignment: Qt.AlignRight
-                text: transaction.amounts.length > 1 ? qsTr('id_multiple_assets') : transaction.amounts[0].formatAmount(wallet.settings.unit)
+                text: transaction.amounts.length > 1 ? qsTrId('id_multiple_assets') : transaction.amounts[0].formatAmount(wallet.settings.unit)
             }
 
             Label {
@@ -66,38 +66,38 @@ ItemDelegate {
         }
 
         ToolButton {
-            text: qsTr('⋮')
+            text: qsTrId('⋮')
             onClicked: menu.open()
 
             Menu {
                 id: menu
 
                 MenuItem {
-                    text: qsTr('id_view_in_explorer')
+                    text: qsTrId('id_view_in_explorer')
                     onTriggered: transaction.openInExplorer()
                 }
 
                 MenuItem {
                     enabled: transaction.data.can_rbf
-                    text: qsTr('id_increase_fee')
+                    text: qsTrId('id_increase_fee')
                     onTriggered: bump_fee_dialog.createObject(wallet_view, { transaction }).open()
                 }
 
                 MenuSeparator { }
 
                 MenuItem {
-                    text: qsTr('id_copy_transaction_id')
+                    text: qsTrId('id_copy_transaction_id')
                     onTriggered: transaction.copyTxhashToClipboard()
                 }
 
                 MenuItem {
                     enabled: false
-                    text: qsTr('id_copy_details')
+                    text: qsTrId('id_copy_details')
                 }
 
                 MenuItem {
                     enabled: false
-                    text: qsTr('id_copy_raw_transaction')
+                    text: qsTrId('id_copy_raw_transaction')
                 }
             }
         }

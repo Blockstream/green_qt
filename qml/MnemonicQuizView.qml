@@ -26,7 +26,7 @@ RowLayout {
     }
 
     Label {
-        text: qsTr('id_make_sure_you_made_a_proper')
+        text: qsTrId('id_make_sure_you_made_a_proper')
         font.pixelSize: 14
     }
 

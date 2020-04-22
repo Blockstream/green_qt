@@ -4,7 +4,7 @@ import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.13
 
 SidebarItem {
-    title: qsTr('id_wallets')
+    title: qsTrId('id_wallets')
 
     Repeater {
         model: WalletManager.wallets
