@@ -96,7 +96,6 @@ namespace Green {
 
         registerSingletonInstance<NetworkManager>("NetworkManager");
         registerSingletonInstance<WalletManager>("WalletManager");
-        registerSingletonInstance<Wally>("Wally");
     }
 
 } // namespace Green

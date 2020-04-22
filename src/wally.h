@@ -5,17 +5,6 @@
 #include <QStringList>
 #include <QQmlListProperty>
 
-class Wally : public QObject
-{
-    Q_OBJECT
-    Q_PROPERTY(QStringList wordlist READ wordlist CONSTANT)
-
-public:
-    static Wally* instance();
-
-    QStringList wordlist() const;
-};
-
 class MnemonicEditorController;
 class Word : public QObject
 {

@@ -32,15 +32,6 @@ QSet<QString> g_wordset{g_wordlist.begin(), g_wordlist.end()};
 
 } // namespace
 
-Wally *Wally::instance()
-{
-    static Wally wally;
-    return &wally;
-}
-
-QStringList Wally::wordlist() const { return g_wordlist; }
-
-
 MnemonicEditorController::MnemonicEditorController(QObject *parent) : QObject(parent) {
     for (int i = 0; i < 27; i++) {
         m_words.append(new Word(this, i));
