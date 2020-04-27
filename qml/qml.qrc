@@ -76,5 +76,6 @@
         <file>AccountIdBadge.qml</file>
         <file>BumpFeeDialog.qml</file>
         <file>DescriptiveRadioButton.qml</file>
+        <file>AbstractDialog.qml</file>
     </qresource>
 </RCC>
