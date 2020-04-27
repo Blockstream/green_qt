@@ -87,7 +87,7 @@ ColumnLayout {
         }
         ToolButton {
             enabled: !receive_address.generating
-            icon.source: '/svg/copy_to_clipboard.svg'
+            icon.source: '/svg/copy.svg'
             icon.width: 16
             icon.height: 16
             onClicked: copy_menu.open()

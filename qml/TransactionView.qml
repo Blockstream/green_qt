@@ -215,7 +215,7 @@ Page {
                             text: transaction.data.txhash
                         }
                         Image {
-                            source: '/svg/copy_to_clipboard.svg'
+                            source: '/svg/copy.svg'
                         }
                     }
                 }

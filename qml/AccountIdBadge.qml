@@ -40,7 +40,7 @@ Label {
         }
     }
     Image {
-        source: '/svg/copy_to_clipboard.svg'
+        source: '/svg/copy.svg'
         sourceSize.width: 12
         sourceSize.height: 12
         anchors.right: parent.right
