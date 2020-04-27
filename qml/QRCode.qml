@@ -19,7 +19,7 @@ Item {
 
         Binding on source {
             when: text.length > 0
-            value: `image://QZXing/encode/${text}?format=qrcode&border=true&transparent=true`
+            value: `image://QZXing/encode/${escape(text)}?format=qrcode&border=true&transparent=true`
         }
     }
 }
