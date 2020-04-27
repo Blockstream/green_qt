@@ -62,6 +62,23 @@ ControllerDialog {
                     onTriggered: controller.enable(wallet.config[method].data)
                 }
             ]
+            SectionLabel {
+                text: 'Secret'
+            }
+            RowLayout {
+                Label {
+                    id: secret_label
+                    Layout.alignment: Qt.AlignHCenter
+                    text: wallet.config[method].data.split('=')[1]
+                }
+                ToolButton {
+                    icon.source: '/svg/copy.svg'
+                    onClicked: {
+                        Clipboard.copy(secret_label.text);
+                        secret_label.ToolTip.show(qsTrId('id_copied_to_clipboard'), 1000);
+                    }
+                }
+            }
             RowLayout {
                 Image {
                     source: `svg/2fa_${method}.svg`
@@ -77,16 +94,7 @@ ControllerDialog {
             QRCode {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                text: wallet.config[method].data
-            }
-            Label {
-                Layout.alignment: Qt.AlignHCenter
-                text: wallet.config[method].data.split('=')[1]
-                color: 'green'
-            }
-            Item {
-                Layout.fillHeight: true
-                Layout.fillWidth: true
+                text: 'otpauth://totp/' + escape(wallet.name) + '?secret=' + wallet.config[method].data.split('=')[1]
             }
         }
     }
