@@ -217,6 +217,7 @@ Page {
             onPinChanged: {
                 if (pin !== pin_view.pin) {
                     clear();
+                    ToolTip.show(qsTrId('id_pins_do_not_match_please_try'), 1000);
                 } else {
                     wallet.setPin(pin_view.pin);
                     stack_view.push(name_page);

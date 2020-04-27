@@ -11,6 +11,12 @@ WalletDialog {
     Component {
         id: confirm_pin_view
         PinView {
+            onPinChanged: {
+                if (valid && pin !== pin_view.pin) {
+                    clear();
+                    ToolTip.show(qsTrId('id_pins_do_not_match_please_try'), 1000);
+                }
+            }
             property bool accept: valid && pin === pin_view.pin
             property string title: qsTrId('id_verify_your_pin')
         }
