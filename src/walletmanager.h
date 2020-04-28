@@ -12,21 +12,21 @@ class Wallet;
 class WalletManager : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QQmlListProperty<Wallet> wallets READ wallets NOTIFY walletsChanged)
-
+    Q_PROPERTY(QQmlListProperty<Wallet> wallets READ wallets NOTIFY changed)
 public:
     static WalletManager* instance();
 
     Q_INVOKABLE Wallet* createWallet();
 
     Q_INVOKABLE void insertWallet(Wallet* wallet);
+    Q_INVOKABLE void removeWallet(Wallet* wallet);
 
     QQmlListProperty<Wallet> wallets();
 
     Q_INVOKABLE QString newWalletName(Network* network) const;
 
 signals:
-    void walletsChanged();
+    void changed();
 
 public slots:
     QStringList generateMnemonic() const;
@@ -35,6 +35,7 @@ public slots:
 
 private:
     explicit WalletManager();
+    void addWallet(Wallet *wallet);
 
     QVector<Wallet*> m_wallets;
 };

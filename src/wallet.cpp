@@ -12,7 +12,7 @@
 #include <QLocale>
 #include <QSettings>
 #include <QTimer>
-#include <QNetworkConfigurationManager>
+#include <QUuid>
 
 static void notification_handler(void* context, const GA_json* details)
 {
@@ -58,26 +58,19 @@ void Wallet::connect(const QString& proxy, bool use_tor)
         setConnection(Connecting);
     }
 
-    bool update_settings = false;
+    bool needs_save = false;
     if (m_proxy != proxy) {
         m_proxy = proxy;
         emit proxyChanged(m_proxy);
-        update_settings = true;
+        needs_save = true;
     }
     if (m_use_tor != use_tor) {
         m_use_tor = use_tor;
         emit useTorChanged(m_use_tor);
-        update_settings = true;
+        needs_save = true;
     }
-    if (update_settings) {
-        QSettings settings(GetDataFile("app", "wallets.ini"), QSettings::IniFormat);
-        const int count = settings.beginReadArray("wallets");
-        settings.endArray();
-        settings.beginWriteArray("wallets", count);
-        settings.setArrayIndex(m_index);
-        settings.setValue("proxy", m_proxy);
-        settings.setValue("use_tor", m_use_tor);
-        settings.endArray();
+    if (needs_save) {
+        save();
     }
     connectNow();
 }
@@ -365,13 +358,7 @@ void Wallet::changePin(const QByteArray& pin)
     GA_destroy_json(pin_data);
     GA_destroy_string(str);
 
-    QSettings settings(GetDataFile("app", "wallets.ini"), QSettings::IniFormat);
-    const int count = settings.beginReadArray("wallets");
-    settings.endArray();
-    settings.beginWriteArray("wallets", count);
-    settings.setArrayIndex(m_index);
-    settings.setValue("pin_data", m_pin_data);
-    settings.endArray();
+    save();
 }
 
 void Wallet::loginWithPin(const QByteArray& pin)
@@ -402,14 +389,7 @@ void Wallet::loginWithPin(const QByteArray& pin)
             m_login_attempts_remaining = login_attempts_remaining;
 
             QMetaObject::invokeMethod(this, [this] {
-                QSettings settings(GetDataFile("app", "wallets.ini"), QSettings::IniFormat);
-                const int count = settings.beginReadArray("wallets");
-                settings.endArray();
-                settings.beginWriteArray("wallets", count);
-                settings.setArrayIndex(m_index);
-                settings.setValue("login_attempts_remaining", m_login_attempts_remaining);
-                settings.endArray();
-
+                save();
                 emit loginAttemptsRemainingChanged(m_login_attempts_remaining);
             }, Qt::BlockingQueuedConnection);
         }
@@ -461,22 +441,12 @@ void Wallet::signup(const QStringList& mnemonic, const QByteArray& pin)
         char* str;
         GA_convert_json_to_string(pin_data, &str);
         m_pin_data = QByteArray(str);
+        m_id = QUuid::createUuid().toString(QUuid::WithoutBraces);
         GA_destroy_json(pin_data);
         GA_destroy_string(str);
 
         QMetaObject::invokeMethod(this, [this]{
-            QSettings settings(GetDataFile("app", "wallets.ini"), QSettings::IniFormat);
-            m_index = settings.beginReadArray("wallets");
-            settings.endArray();
-            settings.beginWriteArray("wallets");
-            settings.setArrayIndex(m_index);
-            settings.setValue("proxy", m_proxy);
-            settings.setValue("use_tor", m_use_tor);
-            settings.setValue("network", m_network->id());
-            settings.setValue("pin_data", m_pin_data);
-            settings.setValue("name", m_name);
-            settings.setValue("login_attempts_remaining", m_login_attempts_remaining);
-            settings.endArray();
+            save();
         }, Qt::BlockingQueuedConnection);
 
         updateCurrencies();
@@ -653,6 +623,25 @@ void Wallet::updateCurrencies()
     Q_ASSERT(err == GA_OK);
     m_currencies = Json::toObject(currencies);
     GA_destroy_json(currencies);
+}
+
+void Wallet::save()
+{
+    QJsonDocument doc({
+        { "version", 1 },
+        { "name", m_name },
+        { "network", m_network->id() },
+        { "login_attempts_remaining", m_login_attempts_remaining },
+        { "pin_data", QString::fromLocal8Bit(m_pin_data.toBase64()) },
+        { "proxy", m_proxy },
+        { "use_tor", m_use_tor }
+    });
+    QFile file(GetDataFile("wallets", m_id));
+    bool result = file.open(QFile::ReadWrite);
+    Q_ASSERT(result);
+    file.write(doc.toJson());
+    result = file.flush();
+    Q_ASSERT(result);
 }
 
 void Wallet::setConnection(ConnectionStatus connection)

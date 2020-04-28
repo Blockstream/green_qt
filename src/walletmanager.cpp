@@ -6,11 +6,14 @@
 #include "walletmanager.h"
 
 #include <QDir>
+#include <QJsonDocument>
 #include <QSet>
 #include <QSettings>
 #include <QStandardPaths>
 #include <QUrl>
 #include <QUrlQuery>
+#include <QDirIterator>
+#include <QUuid>
 
 WalletManager::WalletManager()
 {
@@ -18,37 +21,76 @@ WalletManager::WalletManager()
     GA_init(config);
     GA_destroy_json(config);
 
-    QSettings settings(GetDataFile("app", "wallets.ini"), QSettings::IniFormat);
+    // Migrate wallets up to before beta8
+    {
+        QSettings settings(GetDataFile("app", "wallets.ini"), QSettings::IniFormat);
+        int count = settings.beginReadArray("wallets");
+        for (int index = 0; index < count; ++index) {
+            settings.setArrayIndex(index);
+            auto pin_data = settings.value("pin_data").toByteArray();
+            auto name = settings.value("name").toString();
+            auto network = settings.value("network", "testnet").toString();
+            auto login_attempts_remaining = settings.value("login_attempts_remaining").toInt();
+            auto proxy = settings.value("proxy", "").toString();
+            auto use_tor = settings.value("use_tor", false).toBool();
+            const QString id{QUuid::createUuid().toString(QUuid::WithoutBraces)};
+            QJsonDocument doc({
+                { "version", 1 },
+                { "name", name },
+                { "network", network },
+                { "login_attempts_remaining", login_attempts_remaining },
+                { "pin_data", QString::fromLocal8Bit(pin_data.toBase64()) },
+                { "proxy", proxy },
+                { "use_tor", use_tor }
+            });
+            QFile file(GetDataFile("wallets", id));
+            assert(!file.exists());
+            bool result = file.open(QFile::ReadWrite);
+            Q_ASSERT(result);
+            file.write(doc.toJson());
+            result = file.flush();
+            Q_ASSERT(result);
+        }
+        settings.endArray();
 
-    int count = settings.beginReadArray("wallets");
-
-    for (int index = 0; index < count; ++index) {
-        settings.setArrayIndex(index);
-
-        auto pin_data = settings.value("pin_data").toByteArray();
-        auto name = settings.value("name").toString();
-        auto network = settings.value("network", "testnet").toString();
-        int login_attempts_remaining = settings.value("login_attempts_remaining").toInt();
-
-        Wallet* wallet = new Wallet(this);
-        wallet->m_proxy = settings.value("proxy", "").toString();
-        wallet->m_use_tor = settings.value("use_tor", false).toBool();
-        wallet->m_index = index;
-        wallet->m_pin_data = pin_data;
-        wallet->m_name = name;
-        wallet->m_network = NetworkManager::instance()->network(network);
-        wallet->m_login_attempts_remaining = login_attempts_remaining;
-
-        m_wallets.append(wallet);
+        QFile::remove(GetDataFile("app", "wallets.ini"));
     }
 
-    settings.endArray();
+    QDirIterator it(GetDataDir("wallets"));
+    while (it.hasNext()) {
+        QFile file(it.next());
+        if (!file.open(QFile::ReadOnly)) continue;
+        QJsonParseError parser_error;
+        auto doc = QJsonDocument::fromJson(file.readAll(), &parser_error);
+        if (parser_error.error != QJsonParseError::NoError) continue;
+        if (!doc.isObject()) continue;
+        auto data = doc.object();
+        Wallet* wallet = new Wallet(this);
+        wallet->m_id = QFileInfo(file).baseName();
+        wallet->m_proxy = data.value("proxy").toString("");
+        wallet->m_use_tor = data.value("use_tor").toBool(false);
+        wallet->m_pin_data = QByteArray::fromBase64(data.value("pin_data").toString().toLocal8Bit());
+        wallet->m_name = data.value("name").toString();
+        wallet->m_network = NetworkManager::instance()->network(data.value("network").toString());
+        wallet->m_login_attempts_remaining = data.value("login_attempts_remaining").toInt();
+        addWallet(wallet);
+    }
 }
 
 WalletManager *WalletManager::instance()
 {
     static WalletManager wallet_manager;
     return &wallet_manager;
+}
+
+void WalletManager::addWallet(Wallet* wallet)
+{
+    m_wallets.append(wallet);
+    emit changed();
+    connect(wallet, &Wallet::loginAttemptsRemainingChanged, [this, wallet]() {
+        if (wallet->loginAttemptsRemaining() == 0) {
+        }
+    });
 }
 
 Wallet* WalletManager::createWallet()
@@ -58,23 +100,29 @@ Wallet* WalletManager::createWallet()
 
 void WalletManager::insertWallet(Wallet* wallet)
 {
-    m_wallets.append(wallet);
-    emit walletsChanged();
+    Q_ASSERT(wallet->m_id.isEmpty() && !wallet->m_pin_data.isEmpty());
+    wallet->m_id = QUuid::createUuid().toString(QUuid::WithoutBraces);
+    QFile file(GetDataFile("wallets", wallet->m_id));
+    Q_ASSERT(!file.exists());
+    addWallet(wallet);
 
     QMetaObject::invokeMethod(wallet->m_context, [wallet] {
         QMetaObject::invokeMethod(wallet, [wallet] {
-            QSettings settings(GetDataFile("app", "wallets.ini"), QSettings::IniFormat);
-            wallet->m_index = settings.beginReadArray("wallets");
-            settings.endArray();
-            settings.beginWriteArray("wallets", wallet->m_index + 1);
-            settings.setArrayIndex(wallet->m_index);
-            settings.setValue("proxy", wallet->m_proxy);
-            settings.setValue("use_tor", wallet->m_use_tor);
-            settings.setValue("network", wallet->m_network->id());
-            settings.setValue("pin_data", wallet->m_pin_data);
-            settings.setValue("name", wallet->m_name);
-            settings.setValue("login_attempts_remaining", wallet->m_login_attempts_remaining);
-            settings.endArray();
+            wallet->save();
+        });
+    });
+}
+
+void WalletManager::removeWallet(Wallet* wallet)
+{
+    Q_ASSERT(wallet->connection() == Wallet::Disconnected);
+    m_wallets.removeOne(wallet);
+    updateFilteredWallets();
+    emit changed();
+    QMetaObject::invokeMethod(wallet->m_context, [wallet] {
+        QMetaObject::invokeMethod(wallet, [wallet] {
+            bool result = QFile::remove(GetDataFile("wallets", wallet->m_id));
+            Q_ASSERT(result);
         });
     });
 }
@@ -111,8 +159,7 @@ Wallet* WalletManager::signup(const QString& proxy, bool use_tor, Network* netwo
     wallet->m_name = name;
     wallet->connect(proxy, use_tor);
     wallet->signup(mnemonic, pin);
-    m_wallets.append(wallet);
-    emit walletsChanged();
+    addWallet(wallet);
     return wallet;
 }
 

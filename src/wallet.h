@@ -158,7 +158,7 @@ private:
 
     Account* m_current_account{nullptr};
 public:
-    int m_index{0};
+    QString m_id;
     QThread* m_thread{nullptr};
     QObject* m_context{nullptr};
     QAtomicInteger<qint64> m_last_timestamp;
@@ -185,6 +185,8 @@ public:
     int m_logout_timer{-1};
     bool m_busy{false};
     bool m_has_liquid_securities{false};
+
+    void save();
     Account* currentAccount() const { return m_current_account; }
     void setCurrentAccount(Account* account);
 };
