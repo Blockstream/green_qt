@@ -57,6 +57,7 @@ private:
     // Check if this wallet can create a liquid securities account
     // (only 1 per liquid wallet)
     Q_PROPERTY(bool hasLiquidSecurities READ hasLiquidSecurities NOTIFY hasLiquidSecuritiesChanged)
+    Q_PROPERTY(QString networkName READ networkName NOTIFY networkChanged)
 
 public:
     explicit Wallet(QObject *parent = nullptr);
@@ -157,6 +158,8 @@ private:
     void updateCurrencies();
 
     Account* m_current_account{nullptr};
+    QString m_networkName;
+
 public:
     QString m_id;
     QThread* m_thread{nullptr};
@@ -189,6 +192,7 @@ public:
     void save();
     Account* currentAccount() const { return m_current_account; }
     void setCurrentAccount(Account* account);
+    QString networkName() const;
 };
 
 #endif // GREEN_WALLET_H
