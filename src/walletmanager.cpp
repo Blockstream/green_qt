@@ -86,11 +86,28 @@ WalletManager *WalletManager::instance()
 void WalletManager::addWallet(Wallet* wallet)
 {
     m_wallets.append(wallet);
+    updateFilteredWallets();
     emit changed();
     connect(wallet, &Wallet::loginAttemptsRemainingChanged, [this, wallet]() {
         if (wallet->loginAttemptsRemaining() == 0) {
         }
     });
+}
+
+void WalletManager::updateFilteredWallets()
+{
+    QMap<QString, QMultiMap<QString, Wallet*>> result;
+    for (Wallet* wallet : m_wallets) {
+        if (wallet->m_name.contains(m_filter)) {
+            result[wallet->networkName()].insert(wallet->name(), wallet);
+        }
+    }
+    m_filtered_wallets.clear();
+    for (auto wallets : result.values()) {
+        for (auto wallet : wallets.values()) {
+           m_filtered_wallets.append(wallet);
+        }
+    }
 }
 
 Wallet* WalletManager::createWallet()
@@ -134,6 +151,13 @@ QQmlListProperty<Wallet> WalletManager::wallets()
     [](QQmlListProperty<Wallet>* property, int index) { return static_cast<QVector<Wallet*>*>(property->data)->at(index); });
 }
 
+QQmlListProperty<Wallet> WalletManager::filteredWallets()
+{
+    return QQmlListProperty<Wallet>(this, &m_filtered_wallets,
+        [](QQmlListProperty<Wallet>* property) { return static_cast<QVector<Wallet*>*>(property->data)->size(); },
+    [](QQmlListProperty<Wallet>* property, int index) { return static_cast<QVector<Wallet*>*>(property->data)->at(index); });
+}
+
 QString WalletManager::newWalletName(Network* network) const
 {
     if (!network) return {};
@@ -161,6 +185,14 @@ Wallet* WalletManager::signup(const QString& proxy, bool use_tor, Network* netwo
     wallet->signup(mnemonic, pin);
     addWallet(wallet);
     return wallet;
+}
+
+void WalletManager::setFilter(const QString& filter)
+{
+    if (m_filter == filter) return;
+    m_filter = filter;
+    updateFilteredWallets();
+    emit changed();
 }
 
 QStringList WalletManager::generateMnemonic() const
