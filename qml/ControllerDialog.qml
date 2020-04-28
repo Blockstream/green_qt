@@ -101,8 +101,6 @@ WalletDialog {
                     source: `svg/2fa_${controller.result.method}.svg`
                     sourceSize.width: 64
                     sourceSize.height: 64
-                    opacity: matching ? 1 : 0
-                    Behavior on opacity { OpacityAnimator { } }
                 }
                 Label {
                     id: enterCodeText
@@ -135,8 +133,6 @@ WalletDialog {
                 source: '/svg/check.svg'
                 sourceSize.width: 64
                 sourceSize.height: 64
-                opacity: matching ? 1 : 0
-                Behavior on opacity { OpacityAnimator { } }
             }
             Label {
                 id: doneLabel

@@ -31,8 +31,6 @@ ControllerDialog {
                 source: `svg/2fa_${method}.svg`
                 sourceSize.width: 64
                 sourceSize.height: 64
-                opacity: matching ? 1 : 0
-                Behavior on opacity { OpacityAnimator { } }
                 Layout.alignment: Qt.AlignHCenter
             }
             Label {
@@ -69,7 +67,7 @@ ControllerDialog {
                 Label {
                     id: secret_label
                     Layout.alignment: Qt.AlignHCenter
-                    text: wallet.config[method].data.split('=')[1]
+                    text: wallet.config[method].data.split('=')[1] || ''
                 }
                 ToolButton {
                     icon.source: '/svg/copy.svg'

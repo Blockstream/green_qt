@@ -12,6 +12,7 @@ StackView {
 
     initialItem: login_view
 
+    property Component toolbar: currentItem.toolbar || null
     property Item login_view: Page {
 
         background: Item {}

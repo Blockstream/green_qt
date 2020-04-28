@@ -16,10 +16,6 @@ Item {
         anchors.centerIn: parent
         sourceSize.width: parent.implicitWidth
         sourceSize.height: parent.implicitHeight
-
-        Binding on source {
-            when: text.length > 0
-            value: `image://QZXing/encode/${escape(text)}?format=qrcode&border=true&transparent=true`
-        }
+        source: `image://QZXing/encode/${escape(text || '')}?format=qrcode&border=true&transparent=true`
     }
 }

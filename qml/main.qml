@@ -42,40 +42,92 @@ ApplicationWindow {
     minimumWidth: 800
     minimumHeight: 480
     visible: true
-    title: 'Blockstream Green'
-
-    menuBar: MenuBar {
-        Menu {
-            title: qsTrId('&File')
-            Action {
-                text: qsTrId('id_create_new_wallet')
-                onTriggered: create_wallet_action.trigger()
-            }
-            Action {
-                text: qsTrId('id_restore_green_wallet')
-                onTriggered: restore_wallet_action.trigger()
-            }
-            Action {
-                text: qsTrId('id_wallets')
-                onTriggered: drawer.open()
-            }
-            Action {
-                text: qsTrId('&Exit')
-                onTriggered: window.close()
-            }
+    title: {
+        const wallet = currentWallet
+        const parts = []
+        if (wallet) {
+            parts.push(wallet.name);
+            const account = currentWallet.currentAccount;
+            if (account) parts.push(account.name);
         }
-        Menu {
-            title: qsTrId('id_help')
-            Action {
-                text: qsTrId('id_about')
-                onTriggered: about_dialog.open()
-            }
-            Action {
-                text: qsTrId('id_support')
-                onTriggered: {
-                    Qt.openUrlExternally("https://docs.blockstream.com/green/support.html")
+        parts.push('Blockstream Green');
+        return parts.join(' - ');
+    }
+
+    header: RowLayout {
+        Image {
+            Layout.leftMargin: 16
+            id: logo
+            source: '/svg/logo_big.svg'
+            sourceSize.height: 24
+        }
+        ToolButton {
+            text: '\u2630'
+            onClicked: drawer.open()
+        }
+        MenuBar {
+            Menu {
+                title: qsTrId('File')
+                Action {
+                    text: qsTrId('id_create_new_wallet')
+                    onTriggered: create_wallet_action.trigger()
+                }
+                Action {
+                    text: qsTrId('id_restore_green_wallet')
+                    onTriggered: restore_wallet_action.trigger()
+                }
+                Action {
+                    text: qsTrId('&Exit')
+                    onTriggered: window.close()
                 }
             }
+            Menu {
+                title: qsTrId('Wallet')
+                MenuItem {
+                    text: qsTrId('id_settings')
+                    enabled: currentWallet && currentWallet.authentication === Wallet.Authenticated
+                    onClicked: location = '/settings'
+                }
+                MenuItem {
+                    enabled: currentWallet && currentWallet.connection !== Wallet.Disconnected
+                    text: qsTrId('id_log_out')
+                    onClicked: currentWallet.disconnect()
+                }
+                MenuSeparator { }
+                MenuItem {
+                    text: qsTrId('id_add_new_account')
+                    onClicked: create_account_dialog.createObject(window).open()
+                    enabled: currentWallet && currentWallet.authentication === Wallet.Authenticated
+                }
+                MenuItem {
+                    text: qsTrId('id_rename_account')
+                    enabled: currentWallet && currentWallet.authentication === Wallet.Authenticated && currentAccount && currentAccount.json.type !== '2of2_no_recovery'
+                    onClicked: rename_account_dialog.createObject(window, { account: currentAccount }).open()
+                }
+            }
+            Menu {
+                title: qsTrId('id_help')
+                Action {
+                    text: qsTrId('id_about')
+                    onTriggered: about_dialog.open()
+                }
+                Action {
+                    text: qsTrId('id_support')
+                    onTriggered: {
+                        Qt.openUrlExternally("https://docs.blockstream.com/green/support.html")
+                    }
+                }
+            }
+        }
+        Item {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+        }
+        Loader {
+            Layout.leftMargin: 16
+            Layout.rightMargin: 16
+            Layout.alignment: Qt.AlignBottom
+            sourceComponent: stack_view.currentItem.toolbar
         }
     }
 
@@ -85,6 +137,7 @@ ApplicationWindow {
         focus: true
 
         initialItem: FocusScope {
+            property Component toolbar: stack_layout.children[stack_layout.currentIndex].toolbar
             StackLayout {
                 id: stack_layout
                 anchors.fill: parent
@@ -96,11 +149,26 @@ ApplicationWindow {
                     return 0;
                 }
                 Intro {
+                    property Component toolbar: TextField {
+                        visible: stack_view.depth === 1 && !currentWallet
+                        width: 256
+                        onTextChanged: WalletManager.filter = text.trim()
+                        placeholderText: qsTrId('id_search')
+                    }
                     focus: stack_layout.currentIndex === 0
                 }
                 Repeater {
                     model: WalletManager.wallets
                     WalletContainerView {
+                        Connections {
+                            target: modelData
+                            onLoginAttemptsRemainingChanged: {
+                                if (loginAttemptsRemaining === 0) {
+                                    currentWallet = null;
+                                }
+                            }
+                        }
+
                         focus: currentWallet === wallet
                         onCanceled2: {
                             currentWallet = null
@@ -150,14 +218,11 @@ ApplicationWindow {
             anchors.margins: 16
             anchors.top: parent.top
             ToolButton {
+                text: '\u2302'
                 onClicked: {
                     currentWallet = null
                     drawer.close()
                 }
-                icon.source: '/png/ic_home.png'
-                icon.color: 'transparent'
-                icon.width: 16
-                icon.height: 16
             }
 
             ToolButton {
@@ -182,7 +247,7 @@ ApplicationWindow {
     Label {
         anchors.bottom: parent.bottom
         anchors.right: parent.right
-        anchors.margins: 4
+        anchors.margins: 8
         font.pixelSize: 10
         opacity: 0.5
         text: `${qsTrId('id_version')} ${Qt.application.version}`
@@ -205,6 +270,18 @@ ApplicationWindow {
               currentWallet = wallet;
               stack_view.pop()
           }
+        }
+    }
+
+    Component {
+        id: rename_account_dialog
+        RenameAccountDialog {}
+    }
+
+    Component {
+        id: create_account_dialog
+        CreateAccountDialog {
+            wallet: currentWallet
         }
     }
 }

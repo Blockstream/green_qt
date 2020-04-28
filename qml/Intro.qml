@@ -3,77 +3,109 @@ import QtQuick 2.13
 import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.12
 
-GridLayout {
-
-    function filter(network) {
-        const search = search_field.text.trim().toLowerCase();
-        const result = [];
-        for (let i = 0; i < WalletManager.wallets.length; i++) {
-            const wallet = WalletManager.wallets[i];
-            if (network && wallet.network.id !== network) continue;
-            if (search.length > 0 && wallet.name.toLowerCase().indexOf(search) < 0) continue;
-            result.push(wallet);
-        }
-        return result.sort((a, b) => a.name.localeCompare(b.name));
-    }
-
-    columns: 2
-
-    Image {
-        id: logo
-        source: '/svg/logo_big.svg'
-        scale: 0.5
-    }
-
-    RowLayout {
-        Layout.fillWidth: true
-        spacing: 256
-        TabBar {
-            id: networks_tab_bar
-            Layout.alignment: Qt.AlignBottom
-            TabButton {
-                property var model: filter()
-                width: 128
-                text: qsTrId('id_wallets')
+ColumnLayout {
+    Component {
+        id: remove_wallet_dialog
+        AbstractDialog {
+            title: qsTrId('id_remove_wallet')
+            property Wallet wallet
+            anchors.centerIn: parent
+            modal: true
+            onAccepted: {
+                WalletManager.removeWallet(wallet)
             }
-        }
-        TextField {
-            id: search_field
-            Layout.fillWidth: true
-            Layout.leftMargin: 16
-            Layout.rightMargin: 16
-            Layout.alignment: Qt.AlignBottom
-            placeholderText: qsTrId('id_search')
-        }
-    }
+            ColumnLayout {
+                spacing: 8
+                SectionLabel {
+                    text: qsTrId('id_name')
+                }
+                Label {
+                    text: wallet.name
+                }
+                SectionLabel {
+                    text: qsTrId('id_network')
+                }
+                Row {
+                    Image {
+                        sourceSize.width: 16
+                        sourceSize.height: 16
+                        source: icons[wallet.network.id]
+                    }
+                    Label {
+                        text: wallet.network.name
+                    }
+                }
 
-    ColumnLayout {
-        Layout.alignment: Qt.AlignTop
-        Layout.minimumWidth: 256
-        Layout.leftMargin: 16
-        Button {
-            flat: true
-            text: qsTrId('id_create_new_wallet')
-            action: create_wallet_action
-        }
-        Button {
-            flat: true
-            action: restore_wallet_action
+                SectionLabel {
+                    text: qsTrId('id_confirm')
+                }
+                TextField {
+                    Layout.minimumWidth: 300
+                    id: confirm_field
+                    placeholderText: 'type the wallet name to proceed'
+                }
+            }
+            footer: DialogButtonBox {
+                Button {
+                    text: qsTrId('id_remove')
+                    DialogButtonBox.buttonRole: DialogButtonBox.AcceptRole
+                    enabled: confirm_field.text === wallet.name
+                }
+            }
         }
     }
 
     RowLayout {
         ListView {
-            spacing: 8
             clip: true
-            model: networks_tab_bar.currentItem.model
+            model: WalletManager.filteredWallets
+            section.property: 'networkName'
+            section.criteria: ViewSection.FullString
+            section.delegate: SectionLabel {
+                padding: 16
+                text: section
+            }
+
             delegate: ItemDelegate {
+                id: delegate
                 width: parent.width
                 icon.source: icons[modelData.network.id]
                 icon.color: 'transparent'
                 text: modelData.name
-                onClicked: currentWallet = modelData
+                property bool valid: modelData.loginAttemptsRemaining > 0
+                onClicked: if (valid) currentWallet = modelData
                 highlighted: modelData.connection !== Wallet.Disconnected
+                Row {
+                    visible: !valid || parent.hovered
+                    anchors.right: parent.right
+                    anchors.rightMargin: 32
+                    Menu {
+                        id: wallet_menu
+                        MenuItem {
+                            enabled: modelData.connection !== Wallet.Disconnected
+                            text: qsTrId('id_log_out')
+                            onTriggered: modelData.disconnect()
+                        }
+                        MenuItem {
+                            enabled: modelData.connection === Wallet.Disconnected
+                            text: qsTrId('id_remove_wallet')
+                            onClicked: remove_wallet_dialog.createObject(window, { wallet: modelData }).open()
+                        }
+                    }
+                    Label {
+                        visible: modelData.loginAttemptsRemaining === 0
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: '\u26A0'
+                        font.pixelSize: 18
+                        ToolTip.text: qsTrId('id_no_attempts_remaining')
+                        ToolTip.visible: !valid && delegate.hovered
+                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                    }
+                    ToolButton {
+                        text: '\u22EF'
+                        onClicked: wallet_menu.open()
+                    }
+                }
             }
 
             Layout.fillWidth: true

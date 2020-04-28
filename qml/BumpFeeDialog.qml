@@ -6,6 +6,7 @@ import QtQuick.Layouts 1.12
 ControllerDialog {
     title: qsTrId('id_increase_fee')
     property Transaction transaction
+    readonly property Account account: transaction.account
 
     controller: BumpFeeController { }
 

@@ -243,11 +243,6 @@ void ReceiveAddress::generate()
 {
     if (!m_account || m_account->m_wallet->isLocked()) return;
 
-    if (!m_address.isEmpty()) {
-        m_address.clear();
-        emit changed();
-        return;
-    }
 
     if (m_generating) return;
 
