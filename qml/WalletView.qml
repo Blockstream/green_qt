@@ -6,9 +6,6 @@ import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.12
 
 Item {
-    property Account currentAccount
-    readonly property Account account: currentAccount || wallet.accounts[0] || null
-
     id: wallet_view
 
     function parseAmount(amount) {

@@ -1,7 +1,9 @@
+import Blockstream.Green 0.1
 import QtQuick 2.12
 import QtQuick.Controls 2.5
 
 ListView {
+    property Account account
     clip: true
     model: account.transactions
     delegate: TransactionDelegate {

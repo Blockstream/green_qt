@@ -7,6 +7,7 @@ import QtQuick.Layouts 1.12
 
 ListView {
     id: list_view
+    property Account account
     signal clicked(Balance balance)
 
     model: account.balances

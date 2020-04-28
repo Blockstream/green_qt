@@ -4,15 +4,12 @@ import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.12
 
 ColumnLayout {
+    property alias account: receive_address.account
     spacing: 16
 
     ReceiveAddress {
         id: receive_address
         amount: amount_field.text
-
-        Binding on account {
-            value: account
-        }
     }
 
     Action {

@@ -146,6 +146,7 @@ void Wallet::disconnect()
         qApp->removeEventFilter(this);
     }
 
+    setCurrentAccount(nullptr);
     auto accounts = m_accounts;
     m_accounts.clear();
     m_accounts_by_pointer.clear();
@@ -558,6 +559,9 @@ void Wallet::reload()
             }
 
             emit accountsChanged();
+            if (!m_current_account) {
+                setCurrentAccount(m_accounts.first());
+            }
             setBalance(balance);
             if (m_has_liquid_securities != has_liquid_securities) {
                 Q_ASSERT(!m_has_liquid_securities);
@@ -610,6 +614,14 @@ void Wallet::refreshAssets()
             }
         });
     });
+}
+
+void Wallet::setCurrentAccount(Account *currentAccount)
+{
+    Q_ASSERT(!currentAccount || currentAccount->wallet() == this);
+    if (m_current_account == currentAccount) return;
+    m_current_account = currentAccount;
+    emit currentAccountChanged(m_current_account);
 }
 
 void Wallet::updateConfig()

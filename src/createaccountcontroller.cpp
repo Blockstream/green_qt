@@ -42,6 +42,7 @@ bool CreateAccountController::update(const QJsonObject &result)
         auto account = wallet()->getOrCreateAccount(pointer);
         emit accountCreated(account);
         wallet()->reload();
+        wallet()->setCurrentAccount(account);
     }
     return Controller::update(result);
 }

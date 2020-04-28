@@ -3,6 +3,7 @@ import QtQuick 2.0
 import QtQuick.Controls 2.5
 
 Label {
+    property Account account
     leftPadding: 8
     rightPadding: 32
     text: qsTrId('id_account_id') + '    ' + account.json.receiving_id

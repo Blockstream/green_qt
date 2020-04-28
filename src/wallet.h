@@ -53,6 +53,7 @@ private:
     Q_PROPERTY(qint64 balance READ balance NOTIFY balanceChanged)
     Q_PROPERTY(QJsonObject config READ config NOTIFY configChanged)
     Q_PROPERTY(bool busy READ isBusy NOTIFY busyChanged)
+    Q_PROPERTY(Account* currentAccount READ currentAccount WRITE setCurrentAccount NOTIFY currentAccountChanged)
     // Check if this wallet can create a liquid securities account
     // (only 1 per liquid wallet)
     Q_PROPERTY(bool hasLiquidSecurities READ hasLiquidSecurities NOTIFY hasLiquidSecuritiesChanged)
@@ -141,6 +142,7 @@ signals:
     void configChanged();
     void busyChanged(bool busy);
     void hasLiquidSecuritiesChanged(bool hasLiquidSecurities);
+    void currentAccountChanged(Account* account);
 
 protected:
     bool eventFilter(QObject* object, QEvent* event) override;
@@ -154,6 +156,7 @@ private:
     void connectNow();
     void updateCurrencies();
 
+    Account* m_current_account{nullptr};
 public:
     int m_index{0};
     QThread* m_thread{nullptr};
@@ -182,6 +185,8 @@ public:
     int m_logout_timer{-1};
     bool m_busy{false};
     bool m_has_liquid_securities{false};
+    Account* currentAccount() const { return m_current_account; }
+    void setCurrentAccount(Account* account);
 };
 
 #endif // GREEN_WALLET_H

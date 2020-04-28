@@ -10,6 +10,7 @@ ApplicationWindow {
 
     property string location: '/'
     property Wallet currentWallet
+    property Account currentAccount: currentWallet ? currentWallet.currentAccount : null
 
     property var icons: ({
         'liquid': '/svg/liquid/liquid_no_string.svg',

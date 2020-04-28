@@ -27,5 +27,7 @@ WalletDialog {
             onClicked: reject()
         }
     }
-    ReceiveView { }
+    ReceiveView {
+        account: currentAccount
+    }
 }

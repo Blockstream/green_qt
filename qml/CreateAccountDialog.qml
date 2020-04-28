@@ -7,11 +7,11 @@ import QtQuick.Layouts 1.12
 
 ControllerDialog {
     id: dialog
+    property Wallet wallet
     title: qsTrId('id_add_new_account')
     minimumWidth: 200
     controller: CreateAccountController {
         id: create_account_controller
-        onAccountCreated: wallet_view.currentAccount = account
     }
     Binding on closePolicy {
         when: (create_account_controller.type === '2of3' && create_account_controller.result.result) || true
@@ -101,7 +101,7 @@ ControllerDialog {
         implicitWidth: currentItem.implicitWidth
 
         initialItem: ColumnLayout {
-            spacing: 50
+            spacing: 16
             property list<Action> actions: [
                 Action {
                     text: qsTrId('id_next')
@@ -159,6 +159,13 @@ ControllerDialog {
                     }
                 }
             ]
+            spacing: 16
+            SectionLabel {
+                text: qsTrId('id_account_type')
+            }
+            Label {
+                text: type_button_group.checkedButton.text
+            }
             SectionLabel {
                 text: qsTrId('id_account_name')
             }
