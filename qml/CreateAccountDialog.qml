@@ -23,7 +23,7 @@ ControllerDialog {
                 Action {
                     text: qsTrId('id_copy_xpub')
                     onTriggered: {
-                        create_account_controller.copyRecoveryXPubToClipboard();
+                        Clipboard.copy(create_account_controller.result.result.recovery_xpub);
                         recovery_xpub_label.ToolTip.show(qsTrId('id_copied_to_clipboard'), 1000);
                     }
                 },
