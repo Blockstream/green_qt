@@ -93,7 +93,6 @@ public:
 
 public slots:
     void generate();
-    void copyToClipboard();
     void copyUriToClipboard() const;
 
 signals:

@@ -28,7 +28,7 @@ ColumnLayout {
         text: qsTrId('id_copy_address')
         onTriggered: {
             if (receive_address.generating) return;
-            receive_address.copyToClipboard();
+            Clipboard.copy(receive_address.address)
             qrcode.ToolTip.show(qsTrId('id_address_copied_to_clipboard'), 1000);
         }
     }

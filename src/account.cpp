@@ -274,11 +274,6 @@ void ReceiveAddress::generate()
     });
 }
 
-void ReceiveAddress::copyToClipboard()
-{
-    QGuiApplication::clipboard()->setText(m_address);
-}
-
 void ReceiveAddress::copyUriToClipboard() const
 {
     QGuiApplication::clipboard()->setText(uri());
