@@ -1,3 +1,4 @@
+import Blockstream.Green 0.1
 import QtQuick 2.0
 import QtQuick.Controls 2.5
 
@@ -14,7 +15,7 @@ Label {
         anchors.margins: -16
         hoverEnabled: true
         onClicked: {
-            account.copyAccountIdToClipboard();
+            Clipboard.copy(account.json.receiving_id);
             ToolTip.show(qsTrId('id_copied_to_clipboard'), 1000);
         }
     }
