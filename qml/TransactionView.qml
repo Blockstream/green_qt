@@ -105,118 +105,78 @@ Page {
             width: scroll_view.width - 16
             spacing: 16
 
-            Column {
-                spacing: 8
-
-                Label {
-                    text: qsTrId('id_received_on')
-                    color: 'gray'
-                }
-
-                Label {
-                    text: formatDateTime(transaction.data.created_at)
-                }
+            SectionLabel {
+                text: qsTrId('id_received_on')
             }
-
-            Column {
-                spacing: 8
-
-                Label {
-                    text: qsTrId('id_transaction_status')
-                    color: 'gray'
-                }
-
-                Label {
-                    text: transactionStatus(confirmations)
-                }
+            Label {
+                text: formatDateTime(transaction.data.created_at)
             }
-
-            ColumnLayout {
-                spacing: 8
-
-                Label {
-                    text: qsTrId('id_amount')
-                    color: 'gray'
-                }
-
-                Repeater {
-                    model: transaction.amounts
-                    delegate: wallet.network.liquid ? liquid_amount_delegate : bitcoin_amount_delegate
-                }
+            SectionLabel {
+                text: qsTrId('id_transaction_status')
             }
-
-            Column {
+            Label {
+                text: transactionStatus(confirmations)
+            }
+            SectionLabel {
+                text: qsTrId('id_amount')
+            }
+            Repeater {
+                model: transaction.amounts
+                delegate: wallet.network.liquid ? liquid_amount_delegate : bitcoin_amount_delegate
+            }
+            Label {
                 visible: transaction.data.type === 'outgoing'
-                spacing: 8
-
-                Label {
-                    text: qsTrId('id_fee')
-                    color: 'gray'
-                }
-
-                Label {
-                    text: `${transaction.data.fee / 100000000} BTC (${Math.round(transaction.data.fee_rate / 1000)} sat/vB)`
-                }
+                text: qsTrId('id_fee')
             }
-
-            Column {
-                spacing: 8
-
-                Label {
-                    text: qsTrId('id_my_notes')
-                    color: 'gray'
-                }
-
-                TextArea {
-                    id: memo_edit
-                    placeholderText: qsTrId('id_add_a_note_only_you_can_see_it')
-                    width: scroll_view.width - 16
-                    text: transaction.data.memo
-                    selectByMouse: true
-                    wrapMode: TextEdit.Wrap
-                    onTextChanged: {
-                        if (text.length > 1024) {
-                            memo_edit.text = text.slice(0, 1024);
-                        }
-                    }
-                }
-
-                Row {
-                    anchors.right: parent.right
-                    Button {
-                        flat: true
-                        text: qsTrId('id_cancel')
-                        enabled: memo_edit.text !== transaction.data.memo
-                        onClicked: memo_edit.text = transaction.data.memo
-                    }
-                    Button {
-                        flat: true
-                        text: qsTrId('id_save')
-                        enabled: memo_edit.text !== transaction.data.memo
-                        onClicked: transaction.updateMemo(memo_edit.text)
+            Label {
+                visible: transaction.data.type === 'outgoing'
+                text: `${transaction.data.fee / 100000000} BTC (${Math.round(transaction.data.fee_rate / 1000)} sat/vB)`
+            }
+            SectionLabel {
+                text: qsTrId('id_my_notes')
+            }
+            TextArea {
+                id: memo_edit
+                placeholderText: qsTrId('id_add_a_note_only_you_can_see_it')
+                width: scroll_view.width - 16
+                text: transaction.data.memo
+                selectByMouse: true
+                wrapMode: TextEdit.Wrap
+                onTextChanged: {
+                    if (text.length > 1024) {
+                        memo_edit.text = text.slice(0, 1024);
                     }
                 }
             }
 
-            Page {
-                header: Label {
-                    text: qsTrId('id_transaction_id')
-                    color: 'gray'
+            Row {
+                anchors.right: parent.right
+                Button {
+                    flat: true
+                    text: qsTrId('id_cancel')
+                    enabled: memo_edit.text !== transaction.data.memo
+                    onClicked: memo_edit.text = transaction.data.memo
                 }
-                background: MouseArea {
+                Button {
+                    flat: true
+                    text: qsTrId('id_save')
+                    enabled: memo_edit.text !== transaction.data.memo
+                    onClicked: transaction.updateMemo(memo_edit.text)
+                }
+            }
+            SectionLabel {
+                text: qsTrId('id_transaction_id')
+            }
+            RowLayout {
+                Label {
+                    id: txhash_label
+                    text: transaction.data.txhash
+                }
+                ToolButton {
+                    icon.source: '/svg/copy.svg'
                     onClicked: {
-                        transaction.copyTxhashToClipboard()
-                        ToolTip.show(qsTrId('id_copied_to_clipboard'), 1000)
-                    }
-                }
-                ColumnLayout {
-                    RowLayout {
-                        Label {
-                            text: transaction.data.txhash
-                        }
-                        Image {
-                            source: '/svg/copy.svg'
-                        }
+                        Clipboard.copy(transaction.data.txhash);
+                        txhash_label.ToolTip.show(qsTrId('id_copied_to_clipboard'), 1000);
                     }
                 }
             }

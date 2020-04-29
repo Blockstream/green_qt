@@ -87,7 +87,7 @@ ItemDelegate {
 
                 MenuItem {
                     text: qsTrId('id_copy_transaction_id')
-                    onTriggered: transaction.copyTxhashToClipboard()
+                    onTriggered: Clipboard.copy(transaction.data.txhash)
                 }
 
                 MenuItem {

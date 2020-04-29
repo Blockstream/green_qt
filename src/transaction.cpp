@@ -6,9 +6,6 @@
 #include "wallet.h"
 #include <gdk.h>
 
-#include <QClipboard>
-#include <QGuiApplication>
-
 TransactionAmount::TransactionAmount(Transaction *transaction, qint64 amount)
     : TransactionAmount(transaction, nullptr, amount)
 {
@@ -125,11 +122,6 @@ void Transaction::updateFromData(const QJsonObject& data)
 
         emit amountsChanged();
     }
-}
-
-void Transaction::copyTxhashToClipboard() const
-{
-    QGuiApplication::clipboard()->setText(m_data.value("txhash").toString());
 }
 
 void Transaction::openInExplorer() const
