@@ -9,6 +9,7 @@
 #include "account.h"
 #include "asset.h"
 #include "balance.h"
+#include "clipboard.h"
 #include "network.h"
 #include "transaction.h"
 #include "wallet.h"
@@ -94,6 +95,7 @@ namespace Green {
         registerType<CancelTwoFactorResetController>("CancelTwoFactorResetController");
         registerType<SetRecoveryEmailController>("SetRecoveryEmailController");
 
+        registerSingletonInstance<Clipboard>("Clipboard");
         registerSingletonInstance<NetworkManager>("NetworkManager");
         registerSingletonInstance<WalletManager>("WalletManager");
     }
