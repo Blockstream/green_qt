@@ -104,19 +104,6 @@ bool Controller::update(const QJsonObject& result)
     Q_UNREACHABLE();
 }
 
-void Controller::reset()
-{
-
-}
-
-void Controller::cancel()
-{
-    Q_ASSERT(m_auth_handler);
-    int err = GA_destroy_auth_handler(m_auth_handler);
-    Q_ASSERT(err == GA_OK);
-    m_auth_handler = nullptr;
-}
-
 void Controller::requestCode(const QByteArray& method)
 {
     if (!context()) return;

@@ -89,10 +89,6 @@ WalletDialog {
         WizardPage {
             actions: [
                 Action {
-                    text: qsTrId('id_back')
-                    onTriggered: controller.cancel()
-                },
-                Action {
                     text: qsTrId('id_next')
                     onTriggered: controller.resolveCode(code_field.text)
                 }

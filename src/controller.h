@@ -30,9 +30,6 @@ public:
     bool isBusy() const { return m_busy > 0; }
 
 public slots:
-    virtual void reset();
-    void cancel();
-
     void requestCode(const QByteArray& method);
     void resolveCode(const QByteArray& code);
 

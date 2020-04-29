@@ -24,12 +24,6 @@ void CreateAccountController::setName(const QString &name)
     emit nameChanged(m_name);
 }
 
-void CreateAccountController::reset()
-{
-    Controller::reset();
-    m_name.clear();
-}
-
 void CreateAccountController::create()
 {
     dispatch([this](GA_session* session, GA_auth_handler** auth_handler) {

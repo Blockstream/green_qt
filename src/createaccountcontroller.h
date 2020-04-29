@@ -26,7 +26,6 @@ signals:
     void accountCreated(Account* account);
 
 public slots:
-    void reset() override;
     void create();
     void copyRecoveryXPubToClipboard();
 
