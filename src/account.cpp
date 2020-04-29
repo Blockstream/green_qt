@@ -1,4 +1,5 @@
 #include "account.h"
+#include "asset.h"
 #include "balance.h"
 #include "ga.h"
 #include "json.h"
@@ -61,6 +62,23 @@ void Account::updateBalance()
             balance->setAmount(i.value().toDouble());
             m_balances.append(balance);
         }
+        std::sort(m_balances.begin(), m_balances.end(), [](const Balance* b1, const Balance* b2) {
+            Asset* a1 = b1->asset();
+            Asset* a2 = b2->asset();
+
+            if (a1->isLBTC()) return true;
+            if (a2->isLBTC()) return false;
+
+            if (a1->hasIcon() && !a2->hasIcon()) return true;
+            if (a2->hasIcon() && !a1->hasIcon()) return false;
+            if (a1->hasIcon() && a2->hasIcon()) return a1->name() < a2->name();
+
+            if (a1->hasData() && !a2->hasData()) return true;
+            if (a2->hasData() && !a1->hasData()) return false;
+            if (a1->hasData() && a2->hasData()) return a1->name() < a2->name();
+
+            return a1->name() < a2->name();
+        });
         emit balancesChanged();
         qDeleteAll(balance_by_id.values());
     }

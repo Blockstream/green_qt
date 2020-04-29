@@ -607,6 +607,9 @@ void Wallet::refreshAssets()
                     asset->setIcon("data:image/png;base64," + icons.value(id).toString());
                 }
             }
+            for (auto account : m_accounts) {
+                account->updateBalance();
+            }
         });
     });
 }

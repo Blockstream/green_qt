@@ -17,6 +17,7 @@ void Balance::setAsset(Asset* asset)
 {
     // Either it's the first call or asset can't change
     Q_ASSERT(!m_asset || m_asset == asset);
+    if (m_asset == asset) return;
     m_asset = asset;
     emit assetChanged(m_asset);
     emit changed();

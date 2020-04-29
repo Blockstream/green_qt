@@ -23,6 +23,9 @@ public:
     Wallet* wallet() const { return m_wallet; }
     QString id() const { return m_id; }
 
+    bool isLBTC() const { return m_data.value("name").toString() == "btc"; }
+
+    bool hasIcon() const { return !m_icon.isEmpty(); }
     QString icon() const { return m_icon; }
     void setIcon(const QString& icon);
 
