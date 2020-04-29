@@ -39,7 +39,7 @@ ColumnLayout {
         text: qsTrId('id_copy_uri')
         onTriggered: {
             if (receive_address.generating) return;
-            receive_address.copyUriToClipboard();
+            Clipboard.copy(receive_address.uri)
             qrcode.ToolTip.show(qsTrId('id_copied_to_clipboard'), 1000);
         }
     }

@@ -7,8 +7,6 @@
 #include "transaction.h"
 #include "wallet.h"
 
-#include <QClipboard>
-#include <QGuiApplication>
 #include <QTimer>
 
 #include <gdk.h>
@@ -272,9 +270,4 @@ void ReceiveAddress::generate()
         setGenerating(false);
         emit changed();
     });
-}
-
-void ReceiveAddress::copyUriToClipboard() const
-{
-    QGuiApplication::clipboard()->setText(uri());
 }
