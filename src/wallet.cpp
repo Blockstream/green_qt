@@ -114,10 +114,8 @@ void Wallet::connectNow()
         }
 
         res = GA::connect(m_session, params);
-        qDebug() << "connect result" << res << params;
 
         if (res == GA_OK) {
-            qDebug("NOW CONNECTED");
             setConnection(Connected);
             return;
         }

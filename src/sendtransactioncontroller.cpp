@@ -136,9 +136,9 @@ void SendTransactionController::update()
                     convert.insert("sats", QString::number(m_balance->amount()));
                 }
             } else {
-                auto x = account()->json().value("satoshi").toObject();
-                qDebug() << x;
-                convert.insert("sats", QString::number(x.value("btc").toDouble()));
+                auto satoshi = account()->json().value("satoshi").toObject();
+                Q_ASSERT(satoshi.contains("btc"));
+                convert.insert("sats", QString::number(satoshi.value("btc").toDouble()));
             }
         } else if (!m_amount.isEmpty()) {
             Q_ASSERT(m_fiat_amount.isEmpty());
@@ -371,7 +371,6 @@ void BumpFeeController::create()
             if (m_req != req) return;
             m_tx = r.value("result").toObject();
             emit txChanged(m_tx);
-            qDebug() << "CREATE" << m_fee_rate;
         }, Qt::BlockingQueuedConnection);
     });
 }

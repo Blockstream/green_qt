@@ -95,7 +95,6 @@ void RequestTwoFactorResetController::execute(const QByteArray& email)
 
 bool RequestTwoFactorResetController::update(const QJsonObject& result)
 {
-    qDebug() << "RequestTwoFactorResetController::update" << result;
     if (result.value("status").toString() == "done") {
         wallet()->updateConfig();
         // TODO: updateConfig doesn't update 2f reset data,
