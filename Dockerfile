@@ -1,4 +1,4 @@
-FROM ubuntu:18.04@sha256:bec5a2727be7fff3d308193cfde3491f8fba1a2ba392b7546b43a051853a341d
+FROM ubuntu:18.04@sha256:3235326357dfb65f1781dbc4df3b834546d8bf914e82cce58e6e6b676e23ce8f
 COPY tools/qtversion.env /
 COPY tools/bionic_deps.sh /
 RUN /bionic_deps.sh
