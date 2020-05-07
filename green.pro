@@ -60,7 +60,9 @@ macos {
     ICON = Green.icns
 
     QMAKE_POST_LINK += \
-        plutil -replace NSCameraUsageDescription -string \"We use the camera to scan QR codes\" $$OUT_PWD/$${TARGET}.app/Contents/Info.plist
+        plutil -replace CFBundleDisplayName -string \"Blockstream Green\" $$OUT_PWD/$${TARGET}.app/Contents/Info.plist && \
+        plutil -replace NSCameraUsageDescription -string \"We use the camera to scan QR codes\" $$OUT_PWD/$${TARGET}.app/Contents/Info.plist && \
+        plutil -remove NOTE $$OUT_PWD/$${TARGET}.app/Contents/Info.plist || true
 
     static {
         LIBS += $$GDK_BUILD_DIR/build-clang/src/libgreenaddress_full.a
