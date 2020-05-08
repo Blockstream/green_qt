@@ -49,6 +49,7 @@ Item {
             }
 
             decoder {
+                tryHarder: true
                 enabledDecoders: QZXing.DecoderFormat_QR_CODE
                 onTagFound: codeScanned(tag)
             }
