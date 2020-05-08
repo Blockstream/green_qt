@@ -102,44 +102,18 @@ ColumnLayout {
         description: qsTrId('id_receive_email_notifications_for')
         enabled: !wallet.locked && wallet.config.email.confirmed
 
-        GridLayout {
-            columns: 2
-            Label {
-                text: qsTrId('id_received')
+        Switch {
+            Binding on checked {
+                value: wallet.settings.notifications ? (wallet.settings.notifications.email_outgoing && wallet.settings.notifications.email_outgoing) : false
             }
-
-            Switch {
-                Binding on checked {
-                    value:  wallet.settings.notifications ? wallet.settings.notifications.email_incoming : false
-                }
-                onClicked: {
-                    checked = wallet.settings.notifications.email_incoming;
-                    controller.change({
-                        notifications: {
-                            email_incoming: !checked,
-                            email_outgoing: wallet.settings.notifications.email_outgoing
-                        }
-                    });
-                }
-            }
-
-            Label {
-                text: qsTrId('id_sent')
-            }
-
-            Switch {
-                Binding on checked {
-                    value: wallet.settings.notifications ? wallet.settings.notifications.email_outgoing : false
-                }
-                onClicked: {
-                    checked = wallet.settings.notifications.email_outgoing;
-                    controller.change({
-                        notifications: {
-                            email_incoming: wallet.settings.notifications.email_incoming,
-                            email_outgoing: !checked
-                        }
-                    });
-                }
+            onClicked: {
+                checked = wallet.settings.notifications.email_outgoing;
+                controller.change({
+                    notifications: {
+                        email_incoming: !checked,
+                        email_outgoing: !checked
+                    }
+                });
             }
         }
     }
