@@ -61,7 +61,7 @@ ControllerDialog {
                 }
             ]
             SectionLabel {
-                text: 'Secret'
+                text: qsTrId('id_google_authenticator_secret_key')
             }
             RowLayout {
                 Label {
