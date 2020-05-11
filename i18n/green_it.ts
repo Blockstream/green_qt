@@ -418,7 +418,7 @@
     </message>
     <message>
         <source>id_copy_xpub</source>
-        <translation>Copy xpub</translation>
+        <translation>Copia xpub</translation>
     </message>
     <message>
         <source>id_create</source>
@@ -522,7 +522,7 @@
     </message>
     <message>
         <source>id_disable_s_twofactor</source>
-        <translation>Disable %1 Two-Factor Authentication</translation>
+        <translation>Disabilita %1 per l&apos; Autenticazione a Due Fattori</translation>
     </message>
     <message>
         <source>id_disabled</source>
@@ -591,6 +591,10 @@
     <message>
         <source>id_enable_custom_networks_debug</source>
         <translation>Abilita le opzioni custom di network debug</translation>
+    </message>
+    <message>
+        <source>id_enable_email_notifications_to</source>
+        <translation>Abilita le notifiche via email per modificare nlocktime</translation>
     </message>
     <message>
         <source>id_enable_face_id</source>
@@ -821,6 +825,10 @@
         <translation>QR Code Google Authenticator:</translation>
     </message>
     <message>
+        <source>id_google_authenticator_secret_key</source>
+        <translation>Chiave Google Authenticator</translation>
+    </message>
+    <message>
         <source>id_green_is_a_noncustodial_wallet</source>
         <translation>Green non è in custodia del tuo wallet</translation>
     </message>
@@ -1026,7 +1034,7 @@
     </message>
     <message>
         <source>id_lbtc_has_no_issuer_and_is</source>
-        <translation>L-BTC has no issuer and is instead created on the network via a peg-in.</translation>
+        <translation>L-BTC non ha emittenti e viene creato attraverso un peg-in.</translation>
     </message>
     <message>
         <source>id_learn_more_about_s</source>
@@ -1038,7 +1046,7 @@
     </message>
     <message>
         <source>id_ledger_supports_a_limited_set</source>
-        <translation>Ledger supporta un set limitato di asset: verifica sulla nostra documentazione prima di ricevere asset diversi da L-BTC e USDt</translation>
+        <translation>Ledger supporta un numero limitato di asset: clicca qui per consultare la lista.</translation>
     </message>
     <message>
         <source>id_lets_get_you_set_up</source>
@@ -1406,7 +1414,7 @@
     </message>
     <message>
         <source>id_please_hold_on_while_your</source>
-        <translation>Please hold on while your address is being generated</translation>
+        <translation>Attendere generazione dell&apos; indirizzo</translation>
     </message>
     <message>
         <source>id_please_provide_your_1s</source>
@@ -1445,8 +1453,8 @@
         <translation>Assicurati che l&apos;indirizzo mostrato sul tuo hardware wallet coincida con quello sul tuo telefono.</translation>
     </message>
     <message>
-        <source>id_please_wait_while_your_ledger</source>
-        <translation>Attendi mentre Ledger valida il tuo indirizzo e lo mostra sullo schermo.</translation>
+        <source>id_please_wait_until_your_ledger</source>
+        <translation>Attendi fino a che il tuo Ledger mostra l&apos;indirizzo per poterlo validare. Può impiegare fino a 20 secondi.</translation>
     </message>
     <message>
         <source>id_precision</source>
@@ -1510,7 +1518,7 @@
     </message>
     <message>
         <source>id_recovery_mnemonic</source>
-        <translation>Recovery mnemonic</translation>
+        <translation>Mnemonica per recovery 2of3</translation>
     </message>
     <message>
         <source>id_recovery_transaction_emails</source>
@@ -1530,7 +1538,7 @@
     </message>
     <message>
         <source>id_recovery_xpub</source>
-        <translation>Recovery xpub</translation>
+        <translation>Xpub per recovery 2of3</translation>
     </message>
     <message>
         <source>id_redeem_your_deposited_funds</source>
@@ -1555,6 +1563,10 @@
     <message>
         <source>id_remove_custom_network</source>
         <translation>Rimuovi il network custom</translation>
+    </message>
+    <message>
+        <source>id_remove_wallet</source>
+        <translation>Rimuovi wallet</translation>
     </message>
     <message>
         <source>id_rename_account</source>
@@ -2244,6 +2256,10 @@ Reset questa impostazione e successivamente riattivala.</translation>
     <message>
         <source>id_username_not_available</source>
         <translation>Username non disponibile</translation>
+    </message>
+    <message>
+        <source>id_value_must_be_between_144_and</source>
+        <translation>Il valore deve essere compreso tra 144 e 200000</translation>
     </message>
     <message>
         <source>id_verify_your_pin</source>

@@ -593,6 +593,10 @@
         <translation>Benutzerdefinierte Netzwerk-Debugger-Optionen aktivieren</translation>
     </message>
     <message>
+        <source>id_enable_email_notifications_to</source>
+        <translation>Enable email notifications to change nlocktime</translation>
+    </message>
+    <message>
         <source>id_enable_face_id</source>
         <translation>Face ID aktivieren</translation>
     </message>
@@ -821,6 +825,10 @@
         <translation>Google Authenticator QR Code:</translation>
     </message>
     <message>
+        <source>id_google_authenticator_secret_key</source>
+        <translation>Google Authenticator secret key</translation>
+    </message>
+    <message>
         <source>id_green_is_a_noncustodial_wallet</source>
         <translation>Green ist eine selbstverwahrende Wallet (non-custodial)</translation>
     </message>
@@ -1038,7 +1046,7 @@
     </message>
     <message>
         <source>id_ledger_supports_a_limited_set</source>
-        <translation>Ledger unterstützt nur eine begrenzte Anzahl an Assets: Bitte lies unsere Dokumentation, bevor du andere Assets als L-BTC oder USDt empfangen willst.</translation>
+        <translation>Ledger supports a limited set of assets: tap here to check the list.</translation>
     </message>
     <message>
         <source>id_lets_get_you_set_up</source>
@@ -1445,8 +1453,8 @@
         <translation>Bitte kontrolliere, dass die Adresse auf deiner Hardware-Wallet mit der Adresse auf deinem Smartphone übereinstimmt.</translation>
     </message>
     <message>
-        <source>id_please_wait_while_your_ledger</source>
-        <translation>Please wait while your Ledger validates your address and shows it on the screen.</translation>
+        <source>id_please_wait_until_your_ledger</source>
+        <translation>Please wait until your Ledger displays the address to validate it. This could take up to 20 seconds.</translation>
     </message>
     <message>
         <source>id_precision</source>
@@ -1555,6 +1563,10 @@
     <message>
         <source>id_remove_custom_network</source>
         <translation>Eigenes Netzwerk entfernen</translation>
+    </message>
+    <message>
+        <source>id_remove_wallet</source>
+        <translation>Remove wallet</translation>
     </message>
     <message>
         <source>id_rename_account</source>
@@ -2244,6 +2256,10 @@ Einstellung zurücksetzen und dann reaktivieren.</translation>
     <message>
         <source>id_username_not_available</source>
         <translation>Benutzername nicht verfügbar</translation>
+    </message>
+    <message>
+        <source>id_value_must_be_between_144_and</source>
+        <translation>Value must be between 144 and 200000</translation>
     </message>
     <message>
         <source>id_verify_your_pin</source>

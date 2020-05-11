@@ -593,6 +593,10 @@
         <translation>启用自定义网络debug选项</translation>
     </message>
     <message>
+        <source>id_enable_email_notifications_to</source>
+        <translation>Enable email notifications to change nlocktime</translation>
+    </message>
+    <message>
         <source>id_enable_face_id</source>
         <translation>启用Face ID</translation>
     </message>
@@ -821,6 +825,10 @@
         <translation>谷歌身份验证器二维码：</translation>
     </message>
     <message>
+        <source>id_google_authenticator_secret_key</source>
+        <translation>Google Authenticator secret key</translation>
+    </message>
+    <message>
         <source>id_green_is_a_noncustodial_wallet</source>
         <translation>Green是一个非第三方托管的钱包</translation>
     </message>
@@ -1038,7 +1046,7 @@
     </message>
     <message>
         <source>id_ledger_supports_a_limited_set</source>
-        <translation>Ledger支持的资产种类是有限的：接收除了L-BTC和USDt以外的资产前请先查看我们的文档。</translation>
+        <translation>Ledger supports a limited set of assets: tap here to check the list.</translation>
     </message>
     <message>
         <source>id_lets_get_you_set_up</source>
@@ -1445,8 +1453,8 @@
         <translation>请确认硬件钱包上的地址和你手机上的地址是一致的。</translation>
     </message>
     <message>
-        <source>id_please_wait_while_your_ledger</source>
-        <translation>请稍等，你的Ledger正在验证你的地址，之后会将地址显示在屏幕上。</translation>
+        <source>id_please_wait_until_your_ledger</source>
+        <translation>Please wait until your Ledger displays the address to validate it. This could take up to 20 seconds.</translation>
     </message>
     <message>
         <source>id_precision</source>
@@ -1555,6 +1563,10 @@
     <message>
         <source>id_remove_custom_network</source>
         <translation>删除自定义网络</translation>
+    </message>
+    <message>
+        <source>id_remove_wallet</source>
+        <translation>Remove wallet</translation>
     </message>
     <message>
         <source>id_rename_account</source>
@@ -2244,6 +2256,10 @@
     <message>
         <source>id_username_not_available</source>
         <translation>用户名不可用</translation>
+    </message>
+    <message>
+        <source>id_value_must_be_between_144_and</source>
+        <translation>Value must be between 144 and 200000</translation>
     </message>
     <message>
         <source>id_verify_your_pin</source>
