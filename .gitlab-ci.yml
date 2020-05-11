@@ -1,7 +1,7 @@
 variables:
   GIT_SUBMODULE_STRATEGY: recursive
 
-image: greenaddress/ci@sha256:ed3188d0d681460f37bfd3f52b3df4c4727c0aba0a90d4545de8cef17c9eef39
+image: greenaddress/ci@sha256:99517015c58201ecc351b503870dd3c5dc0e6e83e8e1e21ca9f84912d14de5b5
 
 stages:
   - build
