@@ -20,16 +20,13 @@ Page {
             onClicked: stack_view.pop()
         }
 
-        AssetIcon {
-            asset: balance.asset
-        }
-
         Label {
-            text: balance.asset.name
+            text: qsTrId("id_asset_details")
             font.pixelSize: 16
             font.capitalization: Font.AllUppercase
             Layout.fillWidth: true
         }
+
         Button {
             Layout.rightMargin: 32
             flat: true
@@ -49,38 +46,24 @@ Page {
             spacing: 16
 
             Column {
+                spacing: 10
                 Label {
                     opacity: 0.5
-                    text: qsTrId('id_asset_id')
+                    text: qsTrId('id_name')
                     font.pixelSize: 14
                 }
-                Label {
-                    text: balance.asset.id
-                    font.pixelSize: 16
-                }
-            }
 
-            Column {
-                Label {
-                    opacity: 0.5
-                    text: qsTrId('id_total_balance')
-                    font.pixelSize: 14
-                }
-                Label {
-                    text: balance.displayAmount
-                    font.pixelSize: 16
-                }
-            }
-
-            Column {
-                Label {
-                    opacity: 0.5
-                    text: qsTrId('id_precision')
-                    font.pixelSize: 14
-                }
-                Label {
-                    text: balance.asset.data.precision
-                    font.pixelSize: 16
+                Row {
+                    spacing: 10
+                    AssetIcon {
+                        id: icon
+                        asset: balance.asset
+                    }
+                    Label {
+                        text: balance.asset.name
+                        font.pixelSize: 16
+                        anchors.verticalCenter: icon.verticalCenter
+                    }
                 }
             }
 
@@ -105,6 +88,42 @@ Page {
 
                 Label {
                     text: balance.asset.data.entity.domain
+                    font.pixelSize: 16
+                }
+            }
+
+            Column {
+                Label {
+                    opacity: 0.5
+                    text: qsTrId('id_total_balance')
+                    font.pixelSize: 14
+                }
+                Label {
+                    text: balance.displayAmount
+                    font.pixelSize: 16
+                }
+            }
+
+            Column {
+                Label {
+                    opacity: 0.5
+                    text: qsTrId('id_asset_id')
+                    font.pixelSize: 14
+                }
+                Label {
+                    text: balance.asset.id
+                    font.pixelSize: 16
+                }
+            }
+
+            Column {
+                Label {
+                    opacity: 0.5
+                    text: qsTrId('id_precision')
+                    font.pixelSize: 14
+                }
+                Label {
+                    text: balance.asset.data.precision
                     font.pixelSize: 16
                 }
             }
