@@ -127,12 +127,16 @@ int main(int argc, char *argv[])
     const QLocale locale = QLocale::system();
     const QString language = locale.name().split('_').first();
 
+    QTranslator english_translator;
+    english_translator.load(":/i18n/green_en.qm");
+
     QTranslator language_translator;
     language_translator.load(QString(":/i18n/green_%1.qm").arg(language));
 
     QTranslator locale_translator;
     locale_translator.load(QString(":/i18n/green_%1.qm").arg(locale.name()));
 
+    app.installTranslator(&english_translator);
     app.installTranslator(&language_translator);
     app.installTranslator(&locale_translator);
 
