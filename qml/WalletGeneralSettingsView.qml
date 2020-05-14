@@ -29,8 +29,32 @@ ColumnLayout {
     }
 
     SettingsBox {
+        title: qsTrId('id_bitcoin_denomination')
+        description: qsTrId('id_show_bitcoin_amounts_in')
+        enabled: !wallet.locked
+
+        ComboBox {
+            flat: true
+            width: 200
+            property var units: ['BTC', 'mBTC', '\u00B5BTC', 'bits', 'sats']
+            model: units.map(unit => ({
+                text: wallet.network.liquid ? `L-${unit}` : unit,
+                value: unit
+            }))
+            textRole: 'text'
+            valueRole: 'value'
+            currentIndex: units.indexOf(wallet.settings.unit)
+            onCurrentValueChanged: {
+                if (currentValue === '') return
+                if (currentValue === wallet.settings.unit) return
+                controller.change({ unit: currentValue })
+            }
+        }
+    }
+
+    SettingsBox {
         title: qsTrId('id_currency')
-        description: qsTrId('id_select_a_fiat_currency_and')
+        description: qsTrId('id_select_a_fiat_currency_and') // TODO: update string
         enabled: !wallet.locked
 
         GridLayout {
@@ -70,28 +94,6 @@ ColumnLayout {
                         controller.change({ pricing: { currency: currency_combo.currentText, exchange: currentText } })
                     }
                     Layout.minimumWidth: 150
-                }
-            }
-
-            Label {
-                text: qsTrId('id_show_bitcoin_amounts_in')
-            }
-
-            ComboBox {
-                flat: true
-                width: 200
-                property var units: ['BTC', 'mBTC', '\u00B5BTC', 'bits', 'sats']
-                model: units.map(unit => ({
-                    text: wallet.network.liquid ? `L-${unit}` : unit,
-                    value: unit
-                }))
-                textRole: 'text'
-                valueRole: 'value'
-                currentIndex: units.indexOf(wallet.settings.unit)
-                onCurrentValueChanged: {
-                    if (currentValue === '') return
-                    if (currentValue === wallet.settings.unit) return
-                    controller.change({ unit: currentValue })
                 }
             }
         }
