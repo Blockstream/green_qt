@@ -87,10 +87,10 @@ unix:!macos:!android {
 }
 
 win32:static {
+    # FIXME: the following script appends -lwinpthread at the end so that green .rsrc entries are used instead
+    QMAKE_LINK=$${PWD}/link.sh
     RC_ICONS = Green.ico
-
-    LIBS += -Wl,-Bstatic,--whole-archive -lwinpthread -Wl,--no-whole-archive
-    LIBS += $$GDK_BUILD_DIR/build-windows-mingw-w64/src/libgreenaddress_full.a -lcrypt32 -lbcrypt -lws2_32 -liphlpapi -lssp -static-libgcc -static-libstdc++ -lwsock32
+    LIBS += $$GDK_BUILD_DIR/build-windows-mingw-w64/src/libgreenaddress_full.a
 }
 
 DEFINES += __PWD__=\\\"$$PWD\\\"
