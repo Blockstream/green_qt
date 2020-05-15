@@ -5,7 +5,7 @@ image: greenaddress/ci@sha256:99517015c58201ecc351b503870dd3c5dc0e6e83e8e1e21ca9
 
 stages:
   - build
-  - signosx
+  - signartifacts
   - deploy
 
 bionic_release:
@@ -105,7 +105,7 @@ windows_allsymbolsunstripped_manual:
 osx_sign:
   tags:
     - osxsigner
-  stage: signosx
+  stage: signartifacts
   variables:
     GIT_STRATEGY: none
   artifacts:
@@ -114,11 +114,29 @@ osx_sign:
     when: always
     paths:
     - build-osx-clang/Green.app
-  dependencies:
+  needs:
     - osx_release
   script:
     - cd $CI_PROJECT_DIR
     - ./tools/osxsign.sh
+
+windows_sign:
+  tags:
+    - garelease
+  stage: signartifacts
+  variables:
+    GIT_STRATEGY: none
+  artifacts:
+    name: "$CI_PROJECT_NAME-$CI_JOB_NAME-$CI_COMMIT_SHORT_SHA"
+    expire_in: 1 day
+    when: always
+    paths:
+    - build-mingw-w64/release/GreenSigned.exe
+  needs:
+    - windows_release
+  script:
+    - cd $CI_PROJECT_DIR/build-mingw-w64/release
+    - /opt/process_release_windows
 
 package_release:
   tags:
@@ -136,14 +154,15 @@ package_release:
     - cd $CI_PROJECT_DIR
     - rm -fr green_qt_dist
     - mkdir green_qt_dist
-    - zip -j green_qt_dist/GreenQt_Windows_x86_64.zip build-mingw-w64/release/Green.exe
+    - mv build-mingw-w64/release/GreenSigned.exe Green.exe
+    - zip -j green_qt_dist/GreenQt_Windows_x86_64.zip Green.exe
     - (cd build-osx-clang; zip -r ../green_qt_dist/GreenQt_MacOSX_x86_64.zip Green.app)
     - chmod +x build-linux-gcc/Green
     - tar czf green_qt_dist/GreenQt_Linux_x86_64.tar.gz -C build-linux-gcc Green
     - tar czf green_qt_dist/GreenQt_AppImage_x86_64.tar.gz -C build-linux-gcc Green-x86_64.AppImage
     - cd green_qt_dist
     - /opt/process_release
-  dependencies:
+  needs:
     - bionic_release
     - osx_sign
-    - windows_release
+    - windows_sign
