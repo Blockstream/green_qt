@@ -51,7 +51,7 @@ CONFIG += lrelease embed_translations
 
 EXTRA_TRANSLATIONS = $$files($$PWD/i18n/*.ts)
 
-INCLUDEPATH += $$PWD/gdk/include
+INCLUDEPATH += $$(BUILDROOT)/gdk/src/include
 
 macos {
     QMAKE_TARGET_BUNDLE_PREFIX = com.blockstream
