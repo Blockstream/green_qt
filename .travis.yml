@@ -4,4 +4,7 @@ matrix:
   include:
     - services:
         - docker
-      script: travis_wait 30 docker run -v $PWD:/ga greenaddress/ci@sha256:99517015c58201ecc351b503870dd3c5dc0e6e83e8e1e21ca9f84912d14de5b5 /bin/sh -c "cd /ga && tools/bionic_deps.sh && ./tools/builddeps.sh"
+      script: docker run -v $PWD:/ga greenaddress/ci@sha256:d0484f3fe4d0acdc83ba17f8799b957502be90996dbd386900db5851f964e92b /bin/sh -c "cd /ga && ./tools/buildgreen.sh linux"
+    - services:
+        - docker
+      script: docker run -v $PWD:/ga greenaddress/ci@sha256:d0484f3fe4d0acdc83ba17f8799b957502be90996dbd386900db5851f964e92b /bin/sh -c "cd /ga && ./tools/buildgreen.sh windows"

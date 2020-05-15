@@ -1,3 +1,8 @@
 *
 !tools/bionic_deps.sh
 !tools/qtversion.env
+!tools/builddeps.sh
+!tools/envs.env
+!tools/buildgdk.sh
+!tools/buildqt.sh
+!Dockerfile

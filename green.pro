@@ -51,15 +51,13 @@ CONFIG += lrelease embed_translations
 
 EXTRA_TRANSLATIONS = $$files($$PWD/i18n/*.ts)
 
-INCLUDEPATH += $$(BUILDROOT)/gdk/src/include
+GDK_BUILD_DIR = $$absolute_path($$(GDK_PATH), $${PWD})
+INCLUDEPATH += $${GDK_BUILD_DIR}
 
 macos {
     QMAKE_TARGET_BUNDLE_PREFIX = com.blockstream
     LIBS += -framework Foundation -framework Cocoa
 }
-
-GDK_BUILD_DIR = $$absolute_path($$(BUILDROOT)/gdk-$$(GDKBLDID)/src, $${PWD})
-
 
 macos {
     ICON = Green.icns
@@ -70,7 +68,7 @@ macos {
         plutil -remove NOTE $$OUT_PWD/$${TARGET}.app/Contents/Info.plist || true
 
     static {
-        LIBS += $$GDK_BUILD_DIR/build-clang/src/libgreenaddress_full.a
+        LIBS += $$GDK_BUILD_DIR/libgreenaddress_full.a
     } else {
         LIBS += -L$$GDK_BUILD_DIR/build-clang/src/ -lgreenaddress
     }
@@ -78,7 +76,7 @@ macos {
 
 unix:!macos:!android {
     static {
-        LIBS += $$GDK_BUILD_DIR/build-gcc/src/libgreenaddress_full.a
+        LIBS += $$GDK_BUILD_DIR/libgreenaddress_full.a
         SOURCES += src/glibc_compat.cpp
         LIBS += -Wl,--wrap=__divmoddi4 -Wl,--wrap=log2f
     } else {
@@ -90,7 +88,7 @@ win32:static {
     # FIXME: the following script appends -lwinpthread at the end so that green .rsrc entries are used instead
     QMAKE_LINK=$${PWD}/link.sh
     RC_ICONS = Green.ico
-    LIBS += $$GDK_BUILD_DIR/build-windows-mingw-w64/src/libgreenaddress_full.a
+    LIBS += $$GDK_BUILD_DIR/libgreenaddress_full.a
 }
 
 DEFINES += __PWD__=\\\"$$PWD\\\"

@@ -6,5 +6,5 @@ curl -sL -o appimagetool-x86_64.AppImage https://github.com/AppImage/AppImageKit
 chmod +x linuxdeploy-x86_64.AppImage
 chmod +x appimagetool-x86_64.AppImage
 
-env TARGET_APPIMAGE=linuxdeploy-x86_64.AppImage APPIMAGE_EXTRACT_AND_RUN=1 ./linuxdeploy-x86_64.AppImage --desktop-file=../Green.desktop --appdir=Green.AppDir --executable=Green --icon-file=../Green.png
+env TARGET_APPIMAGE=linuxdeploy-x86_64.AppImage APPIMAGE_EXTRACT_AND_RUN=1 ./linuxdeploy-x86_64.AppImage --desktop-file=$1/Green.desktop --appdir=Green.AppDir --executable=Green --icon-file=$1/Green.png
 env TARGET_APPIMAGE=appimagetool-x86_64.AppImage APPIMAGE_EXTRACT_AND_RUN=1 ./appimagetool-x86_64.AppImage --no-appstream Green.AppDir Green-x86_64.AppImage

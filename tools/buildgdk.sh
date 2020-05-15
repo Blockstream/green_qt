@@ -11,7 +11,9 @@ echo "GDK: building with ${NUM_JOBS} cores in ${GDK_PATH}"
 
 mkdir -p ${GDK_PATH}
 
-git clone --quiet --depth 1 --branch $GDKTAG --single-branch https://github.com/Blockstream/gdk.git ${GDK_PATH}/src > ${GDK_PATH}/build.log 2>&1
+if [ ! -d "${GDK_PATH}/src" ]; then
+    git clone --quiet --depth 1 --branch ${GDKTAG} --single-branch https://github.com/Blockstream/gdk.git ${GDK_PATH}/src > ${GDK_PATH}/build.log 2>&1
+fi
 
 cd ${GDK_PATH}/src
 
@@ -32,4 +34,10 @@ elif [ "$GREENPLATFORM" = "osx" ]; then
 else
     exit 1
 fi
+
+mv ${GDK_PATH}/src/build-*/src/libgreenaddress_full.a ${GDK_PATH}/libgreenaddress_full.a
+mv ${GDK_PATH}/src/include/gdk.h ${GDK_PATH}/gdk.h
+
+rm -fr ${GDK_PATH}/src ${GDKVENV}
+
 touch ${GDK_PATH}/build.done

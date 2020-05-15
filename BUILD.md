@@ -6,11 +6,11 @@ This BUILD.md file assumes you are building for Windows and Linux on Ubuntu 18.0
 
 A 'Dockerfile' file is provided to build Linux and Windows binaries.
 
-## Clone the repo and its submodules
+## Clone the repo
 
 ```
 git clone https://github.com/Blockstream/green_qt.git
-cd green_qt && git submodule update --init --recursive
+cd green_qt
 ```
 
 ## Debug builds with symbols
@@ -21,27 +21,27 @@ Note: skip the 'bionic_deps.sh' step for OSX
 
 ```
 sudo ./tools/bionic_deps.sh
-./tools/builddeps.sh linux allsymbolsunstripped
+./tools/buildgreen.sh linux allsymbolsunstripped
 ```
 
 ## Build static release on macOS
 
 ```
-./tools/builddeps.sh osx
+./tools/buildgreen.sh osx
 ```
 
 ## Build static release on Linux
 
 ```
 sudo ./tools/bionic_deps.sh
-./tools/builddeps.sh linux
+./tools/buildgreen.sh linux
 ```
 
 ## Build static release on Linux for Windows
 
 ```
 sudo ./tools/bionic_deps.sh
-./tools/builddeps.sh windows
+./tools/buildgreen.sh windows
 ```
 
 ## Development in QtCreator

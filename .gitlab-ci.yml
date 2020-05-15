@@ -1,7 +1,4 @@
-variables:
-  GIT_SUBMODULE_STRATEGY: recursive
-
-image: greenaddress/ci@sha256:99517015c58201ecc351b503870dd3c5dc0e6e83e8e1e21ca9f84912d14de5b5
+image: greenaddress/ci@sha256:d0484f3fe4d0acdc83ba17f8799b957502be90996dbd386900db5851f964e92b
 
 stages:
   - build
@@ -13,22 +10,15 @@ bionic_release:
     - ga
   stage: build
   script:
-    - ./tools/bionic_deps.sh
-    - ./tools/builddeps.sh linux
-  cache:
-    key: build-cache
-    paths:
-    - build-linux-gcc/gdk-*/src/include/gdk.h
-    - build-linux-gcc/gdk-*/build.done
-    - build-linux-gcc/gdk-*/src/build-*/src/libgreenaddress_full.a
-    - build-linux-gcc/qt-release*
+    - ./tools/buildgreen.sh linux
+    - mkdir build-linux-gcc
+    - cp /docker_bld_root/*/Green build-linux-gcc/
+    - cp /docker_bld_root/*/Green-x86_64.AppImage build-linux-gcc/
   artifacts:
     name: "$CI_PROJECT_NAME-$CI_JOB_NAME-$CI_COMMIT_SHORT_SHA"
     expire_in: 1 day
     when: always
     paths:
-    - build-linux-gcc/qt-release*/build.log
-    - build-linux-gcc/gdk-*/build.log
     - build-linux-gcc/Green
     - build-linux-gcc/Green-x86_64.AppImage
 
@@ -37,22 +27,14 @@ windows_release:
     - ga
   stage: build
   script:
-    - ./tools/bionic_deps.sh
-    - ./tools/builddeps.sh windows
-  cache:
-    key: build-cache-windows
-    paths:
-    - build-mingw-w64/gdk-*/src/include/gdk.h
-    - build-mingw-w64/gdk-*/build.done
-    - build-mingw-w64/gdk-*/src/build-*/src/libgreenaddress_full.a
-    - build-mingw-w64/qt-release*
+    - ./tools/buildgreen.sh windows
+    - mkdir -p build-mingw-w64/release
+    - cp /docker_bld_root/*/release/Green.exe build-mingw-w64/release/
   artifacts:
     name: "$CI_PROJECT_NAME-$CI_JOB_NAME-$CI_COMMIT_SHORT_SHA"
     expire_in: 1 day
     when: always
     paths:
-    - build-mingw-w64/qt-release*/build.log
-    - build-mingw-w64/gdk-*/build.log
     - build-mingw-w64/release/Green.exe
 
 osx_release:
@@ -61,7 +43,7 @@ osx_release:
   stage: build
   script:
     - cd $CI_PROJECT_DIR
-    - ./tools/builddeps.sh osx
+    - ./tools/buildgreen.sh osx
   cache:
     key: build-cache-osx
     paths:
@@ -74,8 +56,6 @@ osx_release:
     expire_in: 1 day
     when: always
     paths:
-    - build-osx-clang/qt-release*/build.log
-    - build-osx-clang/gdk-*/build.log
     - build-osx-clang/Green.app
 
 bionic_allsymbolsunstripped_manual:
@@ -84,7 +64,7 @@ bionic_allsymbolsunstripped_manual:
   when: manual
   script:
     - ./tools/bionic_deps.sh
-    - ./tools/builddeps.sh linux allsymbolsunstripped
+    - ./tools/buildgreen.sh linux allsymbolsunstripped
 
 osx_allsymbolsunstripped_manual:
   extends: osx_release
@@ -92,7 +72,7 @@ osx_allsymbolsunstripped_manual:
   when: manual
   script:
     - cd $CI_PROJECT_DIR
-    - ./tools/builddeps.sh osx allsymbolsunstripped
+    - ./tools/buildgreen.sh osx allsymbolsunstripped
 
 windows_allsymbolsunstripped_manual:
   extends: windows_release
@@ -100,7 +80,7 @@ windows_allsymbolsunstripped_manual:
   when: manual
   script:
     - ./tools/bionic_deps.sh
-    - ./tools/builddeps.sh windows allsymbolsunstripped
+    - ./tools/buildgreen.sh windows allsymbolsunstripped
 
 osx_sign:
   tags:
