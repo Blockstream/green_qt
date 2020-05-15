@@ -10,12 +10,18 @@ fi
 
 mkdir -p ${BUILDDIR}
 
+QZXING_COMMIT=8bed4366748d995011e7e8b25671b37d4feb783f
+QZXING_BRANCH=mirror
+
+git clone --quiet --single-branch ${QZXING_BRANCH} https://github.com/Blockstream/qzxing.git ${BUILDDIR}/qzxing &&(cd ${BUILDDIR}/qzxing && git checkout ${QZXING_COMMIT})
+
 ./tools/buildqt.sh || (cat ${QT_PATH}/build.log && false)
 echo "Qt: OK"
 ./tools/buildgdk.sh || (cat ${GDK_PATH}/build.log && false)
 echo "GDK: OK"
 
 cd ${BUILDROOT}
+
 
 GREEN_QMAKE_CONFIG="CONFIG+=release CONFIG+=qml_release CONFIG+=static QMAKE_CXXFLAGS_RELEASE+=-flto QMAKE_LDFLAGS_RELEASE+=-flto"
 

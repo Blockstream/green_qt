@@ -24,7 +24,7 @@ CONFIG += c++11 qtquickcompiler
 
 CONFIG += qzxing_qml qzxing_multimedia enable_decoder_qr_code enable_encoder_qr_code
 
-include($$PWD/qzxing/src/QZXing-components.pri)
+include($$(BUILDROOT)/qzxing/src/QZXing-components.pri)
 
 # The following define makes your compiler emit warnings if you use
 # any Qt feature that has been marked deprecated (the exact warnings

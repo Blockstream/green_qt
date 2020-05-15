@@ -1,5 +1,0 @@
-[submodule "qzxing"]
-	path = qzxing
-	url = https://github.com/Blockstream/qzxing
-	depth = 1
-        branch = mirror
