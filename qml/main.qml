@@ -244,16 +244,6 @@ ApplicationWindow {
         }
     }
 
-    Label {
-        anchors.bottom: parent.bottom
-        anchors.right: parent.right
-        anchors.margins: 8
-        font.pixelSize: 10
-        opacity: 0.5
-        text: `${qsTrId('id_version')} ${Qt.application.version}`
-        visible: text.indexOf('-') !== -1
-    }
-
     Component {
         id: signup_view
         SignupView {
