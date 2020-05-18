@@ -3,7 +3,9 @@ import QtQuick 2.13
 import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.12
 
-ColumnLayout {
+StackLayout {
+    currentIndex: WalletManager.wallets.length > 0 ? 0 : 1
+
     Component {
         id: remove_wallet_dialog
         AbstractDialog {
@@ -55,65 +57,83 @@ ColumnLayout {
         }
     }
 
-    RowLayout {
-        ListView {
-            clip: true
-            model: WalletManager.filteredWallets
-            section.property: 'networkName'
-            section.criteria: ViewSection.FullString
-            section.delegate: SectionLabel {
-                padding: 16
-                text: section
-            }
+    ListView {
+        clip: true
+        model: WalletManager.filteredWallets
+        section.property: 'networkName'
+        section.criteria: ViewSection.FullString
+        section.delegate: SectionLabel {
+            padding: 16
+            text: section
+        }
 
-            delegate: ItemDelegate {
-                id: delegate
-                width: parent.width
-                icon.source: icons[modelData.network.id]
-                icon.color: 'transparent'
-                text: modelData.name
-                property bool valid: modelData.loginAttemptsRemaining > 0
-                onClicked: if (valid) currentWallet = modelData
-                highlighted: modelData.connection !== Wallet.Disconnected
-                Row {
-                    visible: !valid || parent.hovered
-                    anchors.right: parent.right
-                    anchors.rightMargin: 32
-                    Menu {
-                        id: wallet_menu
-                        MenuItem {
-                            enabled: modelData.connection !== Wallet.Disconnected
-                            text: qsTrId('id_log_out')
-                            onTriggered: modelData.disconnect()
-                        }
-                        MenuItem {
-                            enabled: modelData.connection === Wallet.Disconnected
-                            text: qsTrId('id_remove_wallet')
-                            onClicked: remove_wallet_dialog.createObject(window, { wallet: modelData }).open()
-                        }
+        delegate: ItemDelegate {
+            id: delegate
+            width: parent.width
+            icon.source: icons[modelData.network.id]
+            icon.color: 'transparent'
+            text: modelData.name
+            property bool valid: modelData.loginAttemptsRemaining > 0
+            onClicked: if (valid) currentWallet = modelData
+            highlighted: modelData.connection !== Wallet.Disconnected
+            Row {
+                visible: !valid || parent.hovered
+                anchors.right: parent.right
+                anchors.rightMargin: 32
+                Menu {
+                    id: wallet_menu
+                    MenuItem {
+                        enabled: modelData.connection !== Wallet.Disconnected
+                        text: qsTrId('id_log_out')
+                        onTriggered: modelData.disconnect()
                     }
-                    Label {
-                        visible: modelData.loginAttemptsRemaining === 0
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: '\u26A0'
-                        font.pixelSize: 18
-                        ToolTip.text: qsTrId('id_no_attempts_remaining')
-                        ToolTip.visible: !valid && delegate.hovered
-                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                    }
-                    ToolButton {
-                        text: '\u22EF'
-                        onClicked: wallet_menu.open()
+                    MenuItem {
+                        enabled: modelData.connection === Wallet.Disconnected
+                        text: qsTrId('id_remove_wallet')
+                        onClicked: remove_wallet_dialog.createObject(window, { wallet: modelData }).open()
                     }
                 }
+                Label {
+                    visible: modelData.loginAttemptsRemaining === 0
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: '\u26A0'
+                    font.pixelSize: 18
+                    ToolTip.text: qsTrId('id_no_attempts_remaining')
+                    ToolTip.visible: !valid && delegate.hovered
+                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                }
+                ToolButton {
+                    text: '\u22EF'
+                    onClicked: wallet_menu.open()
+                }
             }
+        }
 
-            Layout.fillWidth: true
-            Layout.fillHeight: true
+        Layout.fillWidth: true
+        Layout.fillHeight: true
 
-            ScrollBar.vertical: ScrollBar { }
+        ScrollBar.vertical: ScrollBar { }
 
-            ScrollShadow {}
+        ScrollShadow {}
+    }
+
+    Item {
+        ColumnLayout {
+            anchors.centerIn: parent
+            spacing: 16
+            Image {
+                Layout.alignment: Qt.AlignHCenter
+                source: '/svg/logo_big.svg'
+                sourceSize.height: 64
+            }
+            Button {
+                Layout.fillWidth: true
+                action: create_wallet_action
+            }
+            Button {
+                Layout.fillWidth: true
+                action: restore_wallet_action
+            }
         }
     }
 }
