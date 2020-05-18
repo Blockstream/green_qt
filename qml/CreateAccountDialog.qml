@@ -79,20 +79,8 @@ ControllerDialog {
         }
 
 
-    doneComponent: create_account_controller.type === '2of3' ? xpub_done_component : done_component
-
-    Component {
-        id: done_component
-        WizardPage {
-            actions: Action {
-                text: 'OK'
-                onTriggered: dialog.accept()
-            }
-            Label {
-                text: doneText
-            }
-        }
-    }
+    doneComponent: create_account_controller.type === '2of3' ? xpub_done_component : ControllerDialog.doneComponent
+    doneText: qsTrId("New account created")
 
     initialItem: StackView {
         id: stack_view
