@@ -63,7 +63,7 @@ StackView {
                 icon.height: 16
                 onClicked: stack_view.push(scanner_view)
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                ToolTip.text: qsTrId('id_qr_scanner')
+                ToolTip.text: qsTrId('id_scan_qr_code')
                 ToolTip.visible: hovered
             }
             ToolButton {

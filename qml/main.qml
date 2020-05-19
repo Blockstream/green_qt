@@ -71,7 +71,7 @@ ApplicationWindow {
                     onTriggered: restore_wallet_action.trigger()
                 }
                 Menu {
-                    title: 'Export to CSV'
+                    title: qsTrId('id_export_transactions_to_csv_file')
                     enabled: currentWallet && currentWallet.authentication === Wallet.Authenticated
                     Repeater {
                         model: currentWallet ? currentWallet.accounts : null

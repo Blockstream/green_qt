@@ -37,8 +37,8 @@ ColumnLayout {
     }
 
     SettingsBox {
-        title: qsTrId('id_accounts_recovery_data')
-        description: ''
+        title: qsTrId('id_accounts_summary')
+        description: qsTrId('id_save_a_summary_of_your_accounts')
         Button {
             text: qsTrId('id_copy_to_clipboard')
             flat: true
@@ -76,6 +76,7 @@ ColumnLayout {
 
     SettingsBox {
         title: qsTrId('id_set_an_email_for_recovery')
+        description: qsTrId('id_set_up_an_email_to_get')
         visible: !wallet.network.liquid
         Button {
             Component {

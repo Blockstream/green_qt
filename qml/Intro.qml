@@ -18,6 +18,9 @@ StackLayout {
             }
             ColumnLayout {
                 spacing: 8
+                Label {
+                    text: qsTrId('id_backup_your_mnemonic_before')
+                }
                 SectionLabel {
                     text: qsTrId('id_name')
                 }
@@ -39,16 +42,16 @@ StackLayout {
                 }
 
                 SectionLabel {
-                    text: qsTrId('id_confirm')
+                    text: qsTrId('id_confirm_action')
                 }
                 TextField {
                     Layout.minimumWidth: 300
                     id: confirm_field
-                    placeholderText: 'type the wallet name to proceed'
+                    placeholderText: qsTrId('id_confirm_by_typing_the_wallet')
                 }
             }
             footer: DialogButtonBox {
-                Button {
+                    Button {
                     text: qsTrId('id_remove')
                     DialogButtonBox.buttonRole: DialogButtonBox.AcceptRole
                     enabled: confirm_field.text === wallet.name
