@@ -37,6 +37,26 @@ ColumnLayout {
     }
 
     SettingsBox {
+        title: qsTrId('id_accounts_recovery_data')
+        description: ''
+        Button {
+            text: qsTrId('id_copy_to_clipboard')
+            flat: true
+            onClicked: {
+                const subaccounts = [];
+                for (let i = 0; i < wallet.accounts.length; i++) {
+                    const data = wallet.accounts[i].json;
+                    const subaccount = { type: data.type, pointer: data.pointer };
+                    if (data.type === '2of3') subaccount.recovery_pub_key = data.recovery_pub_key;
+                    subaccounts.push(subaccount)
+                }
+                Clipboard.copy(JSON.stringify({ subaccounts }, null, '  '))
+                ToolTip.show(qsTrId('id_copied_to_clipboard'), 1000);
+            }
+        }
+    }
+
+    SettingsBox {
         title: qsTrId('id_set_locktime')
         description: qsTrId('id_redeem_your_deposited_funds') + '\n\n' + qsTrId('id_enable_email_notifications_to')
         visible: !wallet.network.liquid
@@ -99,5 +119,4 @@ ColumnLayout {
             }
         }
     }
-
 }
