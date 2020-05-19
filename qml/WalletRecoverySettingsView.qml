@@ -15,8 +15,31 @@ ColumnLayout {
     }
 
     SettingsBox {
+        title: qsTrId('id_wallet_backup')
+        description: qsTrId('id_your_wallet_backup_is_made_of') + "\n" + qsTrId('id_blockstream_does_not_have')
+
+        RowLayout {
+            Layout.fillWidth: true
+
+            Component {
+                id: mnemonic_dialog
+                MnemonicDialog {
+                    anchors.centerIn: parent
+                }
+            }
+            Button {
+                Layout.alignment: Qt.AlignRight
+                flat: true
+                text: qsTrId('id_show_my_wallet_backup')
+                onClicked: mnemonic_dialog.createObject(stack_view).open()
+            }
+        }
+    }
+
+    SettingsBox {
         title: qsTrId('id_set_locktime')
         description: qsTrId('id_redeem_your_deposited_funds') + '\n\n' + qsTrId('id_enable_email_notifications_to')
+        visible: !wallet.network.liquid
         enabled: wallet.settings.notifications &&
                  wallet.settings.notifications.email_incoming &&
                  wallet.settings.notifications.email_outgoing
@@ -33,7 +56,7 @@ ColumnLayout {
 
     SettingsBox {
         title: qsTrId('id_set_an_email_for_recovery')
-
+        visible: !wallet.network.liquid
         Button {
             Component {
                 id: enable_dialog
@@ -49,9 +72,8 @@ ColumnLayout {
 
     SettingsBox {
         title: qsTrId('id_request_twofactor_reset')
-        //TODO: use translations
         description: wallet.locked ? qsTrId('wallet locked for %1 days').arg(wallet.config.twofactor_reset.days_remaining) : qsTrId('id_start_a_2fa_reset_process_if')
-
+        visible: !wallet.network.liquid
         RowLayout {
             Button {
                 flat: true

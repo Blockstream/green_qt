@@ -81,28 +81,6 @@ ColumnLayout {
     }*/
 
     SettingsBox {
-        title: qsTrId('id_wallet_backup')
-        description: qsTrId('id_your_wallet_backup_is_made_of') + "\n" + qsTrId('id_blockstream_does_not_have')
-
-        RowLayout {
-            Layout.fillWidth: true
-
-            Component {
-                id: mnemonic_dialog
-                MnemonicDialog {
-                    anchors.centerIn: parent
-                }
-            }
-            Button {
-                Layout.alignment: Qt.AlignRight
-                flat: true
-                text: qsTrId('id_show_my_wallet_backup')
-                onClicked: mnemonic_dialog.createObject(stack_view).open()
-            }
-        }
-    }
-
-    SettingsBox {
         title: qsTrId('id_twofactor_authentication')
         description: qsTrId('id_enable_twofactor_authentication')
         enabled: !wallet.locked
