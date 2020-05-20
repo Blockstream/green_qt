@@ -70,6 +70,17 @@ ApplicationWindow {
                     text: qsTrId('id_restore_green_wallet')
                     onTriggered: restore_wallet_action.trigger()
                 }
+                Menu {
+                    title: 'Export to CSV'
+                    enabled: currentWallet && currentWallet.authentication === Wallet.Authenticated
+                    Repeater {
+                        model: currentWallet ? currentWallet.accounts : null
+                        MenuItem {
+                            text: modelData.name
+                            onTriggered: modelData.exportCSV()
+                        }
+                    }
+                }
                 Action {
                     text: qsTrId('&Exit')
                     onTriggered: window.close()

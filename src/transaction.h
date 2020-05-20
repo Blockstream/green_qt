@@ -64,7 +64,7 @@ signals:
     void amountsChanged();
     void dataChanged(const QJsonObject& data);
 
-private:
+public:
     Account* const m_account;
     QList<TransactionAmount*> m_amounts;
     QJsonObject m_data;

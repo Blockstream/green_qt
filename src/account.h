@@ -51,6 +51,7 @@ signals:
 
 public slots:
     void reload();
+    void exportCSV();
 
 public:
     Wallet* const m_wallet;
