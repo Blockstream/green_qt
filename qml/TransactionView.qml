@@ -124,13 +124,13 @@ Page {
                 model: transaction.amounts
                 delegate: wallet.network.liquid ? liquid_amount_delegate : bitcoin_amount_delegate
             }
-            Label {
+            SectionLabel {
                 visible: transaction.data.type === 'outgoing'
                 text: qsTrId('id_fee')
             }
             Label {
                 visible: transaction.data.type === 'outgoing'
-                text: `${transaction.data.fee / 100000000} BTC (${Math.round(transaction.data.fee_rate / 1000)} sat/vB)`
+                text: `${transaction.data.fee / 100000000} ${wallet.network.liquid ? 'L-BTC' : 'BTC'} (${Math.round(transaction.data.fee_rate / 1000)} sat/vB)`
             }
             SectionLabel {
                 text: qsTrId('id_my_notes')
