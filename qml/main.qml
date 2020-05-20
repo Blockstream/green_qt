@@ -55,12 +55,6 @@ ApplicationWindow {
     }
 
     header: RowLayout {
-        Image {
-            Layout.leftMargin: 16
-            id: logo
-            source: '/svg/logo_big.svg'
-            sourceSize.height: 24
-        }
         ToolButton {
             text: '\u2630'
             onClicked: drawer.open()
