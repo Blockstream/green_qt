@@ -47,9 +47,9 @@ osx_release:
   cache:
     key: build-cache-osx
     paths:
-    - build-osx-clang/gdk-*/src/include/gdk.h
+    - build-osx-clang/gdk-*/gdk.h
     - build-osx-clang/gdk-*/build.done
-    - build-osx-clang/gdk-*/src/build-*/src/libgreenaddress_full.a
+    - build-osx-clang/gdk-*/libgreenaddress_full.a
     - build-osx-clang/qt-release*
   artifacts:
     name: "$CI_PROJECT_NAME-$CI_JOB_NAME-$CI_COMMIT_SHORT_SHA"
