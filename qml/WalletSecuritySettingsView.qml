@@ -53,33 +53,6 @@ ColumnLayout {
     }
 
 
-    /*SettingsBox {
-        title: qsTrId('id_watchonly_login')
-        description: qsTrId('id_set_up_credentials_to_access_in')
-
-        RowLayout {
-            Switch {
-                onCheckedChanged: credentials.visible = checked
-            }
-
-            ColumnLayout {
-
-                id: credentials
-                visible: false
-
-                TextField {
-                    placeholderText: qsTrId('id_username')
-                    padding: 10
-                }
-
-                TextField {
-                    placeholderText: qsTrId('id_password')
-                    padding: 10
-                }
-            }
-        }
-    }*/
-
     SettingsBox {
         title: qsTrId('id_twofactor_authentication')
         description: qsTrId('id_enable_twofactor_authentication')
