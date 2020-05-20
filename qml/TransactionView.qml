@@ -51,7 +51,7 @@ Page {
             }
 
             Label {
-                text: amount.formatAmount(wallet.settings.unit)
+                text: amount.formatAmount(wallet.settings.unit) // TODO: drop unit here?
             }
         }
     }

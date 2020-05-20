@@ -27,7 +27,7 @@ public:
 
     qint64 amount() const { return m_amount; }
 
-    Q_INVOKABLE QString formatAmount() const;
+    Q_INVOKABLE QString formatAmount(bool include_ticker = true) const;
 
 private:
     Transaction* const m_transaction;

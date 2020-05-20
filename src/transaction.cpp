@@ -26,13 +26,13 @@ TransactionAmount::~TransactionAmount()
 {
 }
 
-QString TransactionAmount::formatAmount() const
+QString TransactionAmount::formatAmount(bool include_ticker) const
 {
     QString prefix = m_transaction->data().value("type").toString() != "incoming" ? "-" : "";
     if (m_asset) {
-        return prefix + m_asset->formatAmount(m_amount, true);
+        return prefix + m_asset->formatAmount(m_amount, include_ticker);
     } else {
-        return prefix + m_transaction->account()->wallet()->formatAmount(m_amount, true);
+        return prefix + m_transaction->account()->wallet()->formatAmount(m_amount, include_ticker);
     }
 }
 
