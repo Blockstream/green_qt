@@ -85,6 +85,10 @@
         <translation>Tipo di Account</translation>
     </message>
     <message>
+        <source>id_accounts_summary</source>
+        <translation>Riepilogo account</translation>
+    </message>
+    <message>
         <source>id_action_canceled</source>
         <translation>Azione annullata</translation>
     </message>
@@ -203,6 +207,10 @@
     <message>
         <source>id_backup_the_recovery_mnemonic</source>
         <translation>Backup the recovery mnemonic and recovery xpub to recover funds from your 2of3 account.</translation>
+    </message>
+    <message>
+        <source>id_backup_your_mnemonic_before</source>
+        <translation>Fai un backup della tua mnemonica prima di rimuovere il wallet da questo dispositivo.</translation>
     </message>
     <message>
         <source>id_be_aware_other_apps_can_read_or</source>
@@ -327,6 +335,14 @@
     <message>
         <source>id_confidential</source>
         <translation>Confidenziale</translation>
+    </message>
+    <message>
+        <source>id_confirm_action</source>
+        <translation>Conferma azione</translation>
+    </message>
+    <message>
+        <source>id_confirm_by_typing_the_wallet</source>
+        <translation>Conferma digitando il nome del wallet</translation>
     </message>
     <message>
         <source>id_confirm_code</source>
@@ -723,6 +739,10 @@
     <message>
         <source>id_example_89014283334011612858333</source>
         <translation>Es.: 8.90.14.2:8333,40.116.12.85:8333</translation>
+    </message>
+    <message>
+        <source>id_export_transactions_to_csv_file</source>
+        <translation>Esporta transazioni su file CSV</translation>
     </message>
     <message>
         <source>id_face_id</source>
@@ -1561,6 +1581,10 @@
         <translation>Ricordati di me</translation>
     </message>
     <message>
+        <source>id_remove</source>
+        <translation>Rimuovi</translation>
+    </message>
+    <message>
         <source>id_remove_custom_network</source>
         <translation>Rimuovi il network custom</translation>
     </message>
@@ -1653,12 +1677,20 @@
         <translation>Salva</translation>
     </message>
     <message>
+        <source>id_save_a_summary_of_your_accounts</source>
+        <translation>Save a summary of your accounts to speed up recovery in case you need to use our recovery tool.</translation>
+    </message>
+    <message>
         <source>id_save_your_mnemonic</source>
         <translation>Conserva la tua mnemonica</translation>
     </message>
     <message>
         <source>id_scan_a_qr_code_for_spv_pairing</source>
         <translation>Scansiona un QR code per SPV pairing</translation>
+    </message>
+    <message>
+        <source>id_scan_qr_code</source>
+        <translation>Scansiona QR code</translation>
     </message>
     <message>
         <source>id_scan_the_qr_code_in_google</source>
