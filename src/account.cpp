@@ -7,6 +7,10 @@
 #include "transaction.h"
 #include "wallet.h"
 
+#include <QFileDialog>
+#include <QFile>
+#include <QTextStream>
+#include <QStandardPaths>
 #include <QTimer>
 
 #include <gdk.h>
@@ -164,16 +168,13 @@ bool Account::isMainAccount() const
     return m_json.value("name").toString() == "";
 }
 
-#include <QFileDialog>
-#include <QFile>
-#include <QTextStream>
-#include <QStandardPaths>
 void Account::exportCSV()
 {
-    QString suggestion =
+    const auto now = QDateTime::currentDateTime();
+    const QString suggestion =
             QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + QDir::separator() +
             wallet()->name() + " - " + name() + " - " +
-            QDateTime::currentDateTime().toString("yyyyMMddhhmmss") + ".csv";
+            now.toString("yyyyMMddhhmmss") + ".csv";
     const QString name = QFileDialog::getSaveFileName(nullptr, "Export to CSV", suggestion);
     if (name.isEmpty()) return;
 
@@ -181,8 +182,10 @@ void Account::exportCSV()
     bool result = file.open(QFile::WriteOnly);
     Q_ASSERT(result);
 
+    const auto pricing = wallet()->settings().value("pricing").toObject();
+
     const QString fee_field = QString("fee (%1)").arg(wallet()->network()->isLiquid() ? "L-" + wallet()->settings().value("unit").toString() : wallet()->settings().value("unit").toString());
-    const QString fiat_field = QString("fiat (%1)").arg(wallet()->settings().value("pricing").toObject().value("currency").toString());
+    const QString fiat_field = QString("fiat (%1 %2 %3)").arg(pricing.value("currency").toString()).arg(pricing.value("exchange").toString(), now.toString(Qt::ISODate));
     const bool header = true;
     const QString separator = ",";
     const QStringList fields{"time", "description", "amount", "unit", fee_field, fiat_field, "txhash", "memo"};
