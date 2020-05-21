@@ -53,6 +53,7 @@ StackView {
                 Layout.fillWidth: true
                 horizontalAlignment: TextField.AlignHCenter
                 placeholderText: qsTrId('id_enter_an_address')
+                Layout.minimumWidth: contentWidth + 2 * padding
                 font.pixelSize: 12
                 onTextChanged: text = text.trim()
             }
