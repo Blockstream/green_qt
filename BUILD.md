@@ -15,13 +15,10 @@ cd green_qt
 
 ## Debug builds with symbols
 
-Note: change 'linux' to 'osx' or 'windows' to build a full symbols build for OSX or Windows
-
-Note: skip the 'bionic_deps.sh' step for OSX
+Note: change 'linux' to 'windows' to build a full symbols build for Windows
 
 ```
-sudo ./tools/bionic_deps.sh
-./tools/buildgreen.sh linux allsymbolsunstripped
+docker run -v $PWD:/ga greenaddress/ci@sha256:d0484f3fe4d0acdc83ba17f8799b957502be90996dbd386900db5851f964e92b /bin/sh -c "cd /ga && ./tools/buildgreen.sh linux allsymbolsunstripped && cp /docker_bld_root/build-linux-gcc/Green /ga/Green"
 ```
 
 ## Build static release on macOS
@@ -33,15 +30,13 @@ sudo ./tools/bionic_deps.sh
 ## Build static release on Linux
 
 ```
-sudo ./tools/bionic_deps.sh
-./tools/buildgreen.sh linux
+docker run -v $PWD:/ga greenaddress/ci@sha256:d0484f3fe4d0acdc83ba17f8799b957502be90996dbd386900db5851f964e92b /bin/sh -c "cd /ga && ./tools/buildgreen.sh linux && cp /docker_bld_root/build-linux-gcc/Green /ga/Green"
 ```
 
 ## Build static release on Linux for Windows
 
 ```
-sudo ./tools/bionic_deps.sh
-./tools/buildgreen.sh windows
+docker run -v $PWD:/ga greenaddress/ci@sha256:d0484f3fe4d0acdc83ba17f8799b957502be90996dbd386900db5851f964e92b /bin/sh -c "cd /ga && ./tools/buildgreen.sh Windows && cp build-mingw-w64/release/Green.exe /ga/Green.exe"
 ```
 
 ## Development in QtCreator
