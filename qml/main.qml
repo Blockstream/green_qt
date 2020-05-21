@@ -28,6 +28,17 @@ ApplicationWindow {
         return new Date(date_time).toLocaleString(locale.dateTimeFormat(Locale.LongFormat))
     }
 
+    function fitMenuWidth(menu) {
+        let result = 0;
+        let padding = 0;
+        for (let i = 0; i < menu.count; ++i) {
+            const item = menu.itemAt(i);
+            result = Math.max(item.contentItem.implicitWidth, result);
+            padding = Math.max(item.padding, padding);
+        }
+        return result + padding * 2;
+    }
+
     onCurrentWalletChanged: drawer.close()
 
     Component.onCompleted: {
@@ -62,6 +73,7 @@ ApplicationWindow {
         MenuBar {
             Menu {
                 title: qsTrId('File')
+                width: fitMenuWidth(this)
                 Action {
                     text: qsTrId('id_create_new_wallet')
                     onTriggered: create_wallet_action.trigger()
@@ -88,6 +100,7 @@ ApplicationWindow {
             }
             Menu {
                 title: qsTrId('Wallet')
+                width: fitMenuWidth(this)
                 MenuItem {
                     text: qsTrId('id_settings')
                     enabled: currentWallet && currentWallet.authentication === Wallet.Authenticated
@@ -112,6 +125,7 @@ ApplicationWindow {
             }
             Menu {
                 title: qsTrId('id_help')
+                width: fitMenuWidth(this)
                 Action {
                     text: qsTrId('id_about')
                     onTriggered: about_dialog.open()
