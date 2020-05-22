@@ -164,17 +164,43 @@ StackView {
             }
         }
         SectionLabel { text: qsTrId('id_network_fee') }
-        FeeComboBox {
-            Layout.fillWidth: true
-            property var indexes: [3, 12, 24]
-
-            Component.onCompleted: {
-                currentIndex = wallet.network.liquid ? 0 : indexes.indexOf(wallet.settings.required_num_blocks)
-                controller.feeRate = wallet.events.fees[blocks]
+        RowLayout {
+            FeeComboBox {
+                id: fee_combo
+                Layout.fillWidth: true
+                property var indexes: [3, 12, 24]
+                extra: wallet.network.liquid ? [] : [{ text: qsTrId('id_custom') }]
+                Component.onCompleted: {
+                    currentIndex = wallet.network.liquid ? 0 : indexes.indexOf(wallet.settings.required_num_blocks)
+                    controller.feeRate = wallet.events.fees[blocks]
+                }
+                onFeeRateChanged: {
+                    if (feeRate) {
+                        controller.feeRate = feeRate
+                    }
+                }
+                onCurrentIndexChanged: {
+                    if (currentIndex === 3) {
+                        custom_fee_field.text = Math.round(controller.feeRate / 10 + 0.5) / 100
+                    }
+                }
             }
-
-            onBlocksChanged: {
-                controller.feeRate = wallet.events.fees[blocks]
+            TextField {
+                id: custom_fee_field
+                visible: fee_combo.currentIndex === 3
+                onTextChanged: {
+                    if (fee_combo.currentIndex === 3) {
+                        controller.feeRate = Number(text) * 1000
+                    }
+                }
+                horizontalAlignment: TextField.AlignRight
+                Label {
+                    id: fee_unit
+                    anchors.right: parent.right
+                    anchors.baseline: parent.baseline
+                    text: 'sat/vB'
+                }
+                rightPadding: fee_unit.width + 8
             }
         }
     }
