@@ -93,12 +93,14 @@ osx_sign:
     expire_in: 1 day
     when: always
     paths:
-    - build-osx-clang/Green.app
+    - build-osx-clang/GreenQt_MacOSX_x86_64.zip
   needs:
     - osx_release
   script:
     - cd $CI_PROJECT_DIR
     - ./tools/osxsign.sh
+    - cd build-osx-clang
+    - ../tools/osxstaple.sh
 
 windows_sign:
   tags:
@@ -136,7 +138,7 @@ package_release:
     - mkdir green_qt_dist
     - mv build-mingw-w64/release/GreenSigned.exe Green.exe
     - zip -j green_qt_dist/GreenQt_Windows_x86_64.zip Green.exe
-    - (cd build-osx-clang; zip -r ../green_qt_dist/GreenQt_MacOSX_x86_64.zip Green.app)
+    - (cd build-osx-clang; mv GreenQt_MacOSX_x86_64.zip ../green_qt_dist)
     - chmod +x build-linux-gcc/Green
     - tar czf green_qt_dist/GreenQt_Linux_x86_64.tar.gz -C build-linux-gcc Green
     - tar czf green_qt_dist/GreenQt_AppImage_x86_64.tar.gz -C build-linux-gcc Green-x86_64.AppImage
