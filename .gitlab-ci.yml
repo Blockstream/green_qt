@@ -85,6 +85,8 @@ windows_allsymbolsunstripped_manual:
 osx_sign:
   tags:
     - osxsigner
+  only:
+    - /^release_.*/
   stage: signartifacts
   variables:
     GIT_STRATEGY: none
@@ -105,6 +107,8 @@ osx_sign:
 windows_sign:
   tags:
     - garelease
+  only:
+    - /^release_.*/
   stage: signartifacts
   variables:
     GIT_STRATEGY: none
@@ -123,6 +127,8 @@ windows_sign:
 package_release:
   tags:
     - garelease
+  only:
+    - /^release_.*/
   stage: deploy
   variables:
     GIT_STRATEGY: none
