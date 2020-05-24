@@ -88,10 +88,6 @@ void WalletManager::addWallet(Wallet* wallet)
     m_wallets.append(wallet);
     updateFilteredWallets();
     emit changed();
-    connect(wallet, &Wallet::loginAttemptsRemainingChanged, [this, wallet]() {
-        if (wallet->loginAttemptsRemaining() == 0) {
-        }
-    });
 }
 
 void WalletManager::updateFilteredWallets()
