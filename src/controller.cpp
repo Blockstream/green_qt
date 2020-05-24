@@ -84,6 +84,9 @@ bool Controller::update(const QJsonObject& result)
     }
 
     if (status == "resolve_code") {
+        if (m_result.value("status") == "resolve_code") {
+            emit invalidCode();
+        }
         return true;
     }
 

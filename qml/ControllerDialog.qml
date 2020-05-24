@@ -93,6 +93,14 @@ WalletDialog {
                     onTriggered: controller.resolveCode(code_field.text)
                 }
             ]
+            Connections {
+                target: controller
+                onInvalidCode: {
+                    code_field.clear()
+                    code_field.ToolTip.show(qsTrId('id_invalid_twofactor_code'), 1000);
+                    code_field.forceActiveFocus()
+                }
+            }
             Column {
                 spacing: 10
                 anchors.horizontalCenter: parent.horizontalCenter

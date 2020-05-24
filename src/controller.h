@@ -39,6 +39,7 @@ signals:
     void busyChanged(bool busy);
     void walletChanged(Wallet* wallet);
     void statusChanged(const QString& status);
+    void invalidCode();
 
 protected:
     Wallet* m_wallet{nullptr};
