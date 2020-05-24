@@ -459,7 +459,7 @@ void Wallet::signup(const QStringList& mnemonic, const QByteArray& pin)
 
 void Wallet::login(const QStringList& mnemonic, const QString& password)
 {
-    Q_ASSERT(mnemonic.size() == 24 || mnemonic.size() == 27 && !password.isEmpty());
+    Q_ASSERT(mnemonic.size() == 24 || (mnemonic.size() == 27 && !password.isEmpty()));
 
     setAuthentication(Authenticating);
 
