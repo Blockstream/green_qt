@@ -57,6 +57,13 @@ WalletDialog {
         }
     }
 
+    property var method_label: ({
+        email: 'id_email',
+        gauth: 'id_google_auth',
+        phone: 'id_phone_call',
+        sms: 'id_sms'
+    })
+
     ControllerResult {
         targetStatus: 'request_code'
         stackView: stack_view
@@ -68,17 +75,14 @@ WalletDialog {
                     icon.source: `svg/2fa_${method}.svg`
                     icon.color: 'transparent'
                     flat: true
-                    text: method
                     Layout.fillWidth: true
+                    text: qsTrId(method_label[method])
                     onClicked: controller.requestCode(method)
-
-                    Rectangle {
-                        border.color: down ? Material.accentColor : hovered ? Material.foreground : 'gray'
-                        border.width: 1
-                        color: 'transparent'
-                        anchors.fill: background
-                    }
                 }
+            }
+            Item {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
             }
         }
     }
