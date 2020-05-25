@@ -4,8 +4,8 @@ import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.13
 
 Column {
-    property alias pin: field.pin
-    property alias valid: field.valid
+    readonly property string pin: field.pin
+    readonly property bool valid: field.valid
 
     function clear() {
         field.clear()
