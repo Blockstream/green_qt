@@ -315,15 +315,10 @@ void BumpFeeController::bumpFee()
 
 bool BumpFeeController::update(const QJsonObject &result)
 {
-    bool res = AccountController::update(result);
-    if (result.value("status").toString() != "done") {
-        return res;
-    }
-    auto action = result.value("action").toString();
-//    if (action == "create_transaction") {
-//        tx = result.value("result").toObject();
-//        return false;
-//    }
+    const bool res = AccountController::update(result);
+    const auto status = result.value("status").toString();
+    if (status != "done") return res;
+    const auto action = result.value("action").toString();
     if (action == "sign_tx") {
         dispatch([result] (GA_session* session, GA_auth_handler** call) {
             GA_json* details = Json::fromObject(result.value("result").toObject());
@@ -333,8 +328,12 @@ bool BumpFeeController::update(const QJsonObject &result)
             Q_ASSERT(err == GA_OK);
         });
         return true;
-    } else if (action == "send_raw_tx") {
+    }
+    if (action == "send_raw_tx") {
         wallet()->updateConfig();
+        return true;
+    }
+    if (action == "bump_fee") {
         return true;
     }
     Q_UNREACHABLE();
