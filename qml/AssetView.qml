@@ -38,94 +38,57 @@ Page {
     ScrollView {
         id: scroll_view
         anchors.fill: parent
-        anchors.leftMargin: 20
+        anchors.leftMargin: 16
         clip: true
 
-        Column {
-            width: scroll_view.width - 20
+        ColumnLayout {
+            width: scroll_view.width - 16
             spacing: 16
 
-            Column {
-                spacing: 10
-                Label {
-                    opacity: 0.5
-                    text: qsTrId('id_name')
-                    font.pixelSize: 14
+            SectionLabel {
+                text: qsTrId('id_name')
+            }
+            Row {
+                spacing: 16
+                AssetIcon {
+                    id: icon
+                    asset: balance.asset
                 }
-
-                Row {
-                    spacing: 10
-                    AssetIcon {
-                        id: icon
-                        asset: balance.asset
-                    }
-                    Label {
-                        text: balance.asset.name
-                        font.pixelSize: 16
-                        anchors.verticalCenter: icon.verticalCenter
-                    }
+                Label {
+                    text: balance.asset.name
+                    font.pixelSize: 16
+                    anchors.verticalCenter: icon.verticalCenter
                 }
             }
-
-            Column {
-                Label {
-                    opacity: 0.5
+            SectionLabel {
                     text: qsTrId('id_ticker')
-                    font.pixelSize: 14
-                }
-                Label {
-                    text: balance.asset.data.ticker
-                    font.pixelSize: 16
-                }
             }
-
-            Column {
-                Label {
-                    opacity: 0.5
-                    text: qsTrId('id_issuer')
-                    font.pixelSize: 14
-                }
-
-                Label {
-                    text: balance.asset.data.entity.domain
-                    font.pixelSize: 16
-                }
+            Label {
+                text: balance.asset.data.ticker
             }
-
-            Column {
-                Label {
-                    opacity: 0.5
-                    text: qsTrId('id_total_balance')
-                    font.pixelSize: 14
-                }
-                Label {
-                    text: balance.displayAmount
-                    font.pixelSize: 16
-                }
+            SectionLabel {
+                text: qsTrId('id_issuer')
             }
-
-            Column {
-                Label {
-                    opacity: 0.5
+            Label {
+                text: balance.asset.data.entity.domain
+            }
+            SectionLabel {
+                text: qsTrId('id_total_balance')
+            }
+            Label {
+                text: balance.displayAmount
+            }
+            SectionLabel {
                     text: qsTrId('id_asset_id')
-                    font.pixelSize: 14
-                }
-                Label {
-                    text: balance.asset.id
-                    font.pixelSize: 16
-                }
             }
-
-            Column {
-                Label {
-                    opacity: 0.5
-                    text: qsTrId('id_precision')
-                    font.pixelSize: 14
-                }
-                Label {
-                    text: balance.asset.data.precision
-                    font.pixelSize: 16
-                }
+            Label {
+                text: balance.asset.id
+            }
+            SectionLabel {
+                text: qsTrId('id_precision')
+            }
+            Label {
+                text: balance.asset.data.precision
             }
         }
     }
