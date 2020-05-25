@@ -3,11 +3,11 @@ import QtQuick.Controls 2.5
 
 Connections {
     default property Component component
-    property string status
+    property string targetStatus
     property StackView stackView
     target: controller
-    onResultChanged: {
-        if (result.status === status) {
+    onStatusChanged: {
+        if (status === targetStatus) {
             stackView.push(component)
         }
     }

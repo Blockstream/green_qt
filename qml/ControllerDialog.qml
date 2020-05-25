@@ -58,7 +58,7 @@ WalletDialog {
     }
 
     ControllerResult {
-        status: 'request_code'
+        targetStatus: 'request_code'
         stackView: stack_view
         ColumnLayout {
             Repeater {
@@ -84,7 +84,7 @@ WalletDialog {
     }
 
     ControllerResult {
-        status: 'resolve_code'
+        targetStatus: 'resolve_code'
         stackView: stack_view
         WizardPage {
             actions: [
@@ -153,13 +153,13 @@ WalletDialog {
     }
 
     ControllerResult {
-        status: 'done'
+        targetStatus: 'done'
         stackView: stack_view
         component: doneComponent
     }
 
     ControllerResult {
-        status: 'error'
+        targetStatus: 'error'
         stackView: stack_view
         Label {
             text: controller.result.error
