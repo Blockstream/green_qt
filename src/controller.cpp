@@ -22,11 +22,19 @@ GA_session* Controller::session() const
     return w ? w->m_session : nullptr;
 }
 
+void Controller::setStatus(const QString &status)
+{
+    if (m_status == status) return;
+    m_status = status;
+    emit statusChanged(m_status);
+}
+
 void Controller::setResult(const QJsonObject &result)
 {
     if (m_result == result) return;
     m_result = result;
     emit resultChanged(m_result);
+    setStatus(m_result.value("status").toString());
 }
 
 Wallet *Controller::wallet() const
