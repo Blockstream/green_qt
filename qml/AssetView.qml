@@ -14,7 +14,7 @@ Page {
         spacing: 16
         ToolButton {
             id: back_arrow_button
-            icon.source: '/svg/arrow_left.svg'
+            icon.source: 'qrc:/svg/arrow_left.svg'
             icon.height: 16
             icon.width: 16
             onClicked: stack_view.pop()

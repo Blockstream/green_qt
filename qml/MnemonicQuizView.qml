@@ -58,7 +58,7 @@ RowLayout {
 
                 Image {
                     anchors.verticalCenter: word_field.verticalCenter
-                    source: '/svg/check.svg'
+                    source: 'qrc:/svg/check.svg'
                     sourceSize.width: 32
                     sourceSize.height: 32
                     opacity: matching ? 1 : 0

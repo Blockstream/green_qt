@@ -69,12 +69,12 @@ Page {
 
             ToolButton {
                 onClicked: settings_drawer.open()
-                icon.source: '/svg/settings.svg'
+                icon.source: 'qrc:/svg/settings.svg'
             }
 
             ToolButton {
                 onClicked: close()
-                icon.source: '/svg/cancel.svg'
+                icon.source: 'qrc:/svg/cancel.svg'
                 icon.width: 16
                 icon.height: 16
             }

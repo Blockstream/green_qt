@@ -51,7 +51,7 @@ Item {
         }
         ToolButton {
             visible: (wallet.events && !!wallet.events.twofactor_reset && wallet.events.twofactor_reset.is_active) || !fiatRateAvailable
-            icon.source: '/svg/notifications_2.svg'
+            icon.source: 'qrc:/svg/notifications_2.svg'
             icon.color: 'transparent'
             icon.width: 24
             icon.height: 24
@@ -62,7 +62,7 @@ Item {
             checked: window.location === '/settings'
             checkable: true
             //Layout.alignment: Qt.AlignBottom
-            icon.source: '/svg/settings.svg'
+            icon.source: 'qrc:/svg/settings.svg'
             icon.width: 24
             icon.height: 24
             onToggled: window.location = checked ? '/settings' : '/transactions'
@@ -87,7 +87,7 @@ Item {
             }
             PropertyChanges {
                 target: settings_tool_button
-                icon.source: '/svg/cancel.svg'
+                icon.source: 'qrc:/svg/cancel.svg'
                 icon.width: 16
                 icon.height: 16
                 icon.color: 'transparent'
@@ -178,7 +178,7 @@ Item {
                 Image {
                     y: 8
                     x: 8
-                    source: '/svg/twofactor.svg'
+                    source: 'qrc:/svg/twofactor.svg'
                 }
                 Rectangle {
                     anchors.fill: parent

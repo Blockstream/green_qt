@@ -16,7 +16,7 @@ Dialog {
     header: RowLayout {
         Image {
             Layout.margins: 16
-            source: '/png/ic_home.png'
+            source: 'qrc:/png/ic_home.png'
             sourceSize.height: 64
             fillMode: Image.PreserveAspectFit
             horizontalAlignment: Image.AlignLeft

@@ -34,7 +34,7 @@ WalletDialog {
             anchors.right: parent.right
             anchors.verticalCenter: parent.verticalCenter
             anchors.margins: 8
-            icon.source: '/svg/cancel.svg'
+            icon.source: 'qrc:/svg/cancel.svg'
             icon.width: 16
             icon.height: 16
             onClicked: reject()
@@ -72,7 +72,7 @@ WalletDialog {
                 model: controller.result.methods
                 Button {
                     property string method: modelData
-                    icon.source: `svg/2fa_${method}.svg`
+                    icon.source: `qrc:/svg/2fa_${method}.svg`
                     icon.color: 'transparent'
                     flat: true
                     Layout.fillWidth: true
@@ -110,7 +110,7 @@ WalletDialog {
                 anchors.horizontalCenter: parent.horizontalCenter
                 Image {
                     anchors.horizontalCenter: enterCodeText.horizontalCenter
-                    source: `svg/2fa_${controller.result.method}.svg`
+                    source: `qrc:/svg/2fa_${controller.result.method}.svg`
                     sourceSize.width: 64
                     sourceSize.height: 64
                 }
@@ -142,7 +142,7 @@ WalletDialog {
             anchors.horizontalCenter: parent.horizontalCenter
             Image {
                 anchors.horizontalCenter: doneLabel.horizontalCenter
-                source: '/svg/check.svg'
+                source: 'qrc:/svg/check.svg'
                 sourceSize.width: 64
                 sourceSize.height: 64
             }

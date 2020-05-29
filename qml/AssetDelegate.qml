@@ -27,7 +27,7 @@ ItemDelegate {
                 anchors.centerIn: parent
                 sourceSize.width: 16
                 sourceSize.height: 16
-                source: '/svg/arrow_right.svg'
+                source: 'qrc:/svg/arrow_right.svg'
             }
         }
     }

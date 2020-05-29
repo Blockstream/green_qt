@@ -59,7 +59,7 @@ StackView {
             }
             ToolButton {
                 enabled: QtMultimedia.availableCameras.length > 0
-                icon.source: 'svg/qr.svg'
+                icon.source: 'qrc:/svg/qr.svg'
                 icon.width: 16
                 icon.height: 16
                 onClicked: stack_view.push(scanner_view)
@@ -68,7 +68,7 @@ StackView {
                 ToolTip.visible: hovered
             }
             ToolButton {
-                icon.source: 'svg/paste.svg'
+                icon.source: 'qrc:/svg/paste.svg'
                 icon.width: 16
                 icon.height: 16
                 onClicked: {

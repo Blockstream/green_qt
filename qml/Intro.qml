@@ -126,7 +126,7 @@ StackLayout {
             spacing: 16
             Image {
                 Layout.alignment: Qt.AlignHCenter
-                source: '/svg/logo_big.svg'
+                source: 'qrc:/svg/logo_big.svg'
                 sourceSize.height: 64
             }
             Button {

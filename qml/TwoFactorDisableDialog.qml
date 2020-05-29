@@ -22,7 +22,7 @@ ControllerDialog {
         ]
 
         Image {
-            source: `svg/2fa_${method}.svg`
+            source: `qrc:/svg/2fa_${method}.svg`
             sourceSize.width: 32
             sourceSize.height: 32
         }

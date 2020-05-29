@@ -88,7 +88,7 @@ ColumnLayout {
                     property string method: modelData
 
                     Image {
-                        source: `svg/2fa_${method}.svg`
+                        source: `qrc:/svg/2fa_${method}.svg`
                         sourceSize.height: 32
                     }
                     Label {

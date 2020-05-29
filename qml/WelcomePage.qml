@@ -16,7 +16,7 @@ Column {
 
     Image {
         fillMode: Image.PreserveAspectFit
-        source: 'svg/onboarding_illustration.svg'
+        source: 'qrc:/svg/onboarding_illustration.svg'
         horizontalAlignment: Qt.AlignHCenter
         verticalAlignment: Qt.AlignVCenter
         opacity: anim(500, 500, 0, 1)

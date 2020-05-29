@@ -21,7 +21,7 @@ WalletDialog {
             anchors.right: parent.right
             anchors.verticalCenter: parent.verticalCenter
             anchors.margins: 8
-            icon.source: 'svg/cancel.svg'
+            icon.source: 'qrc:/svg/cancel.svg'
             icon.width: 16
             icon.height: 16
             onClicked: reject()

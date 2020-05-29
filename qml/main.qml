@@ -13,15 +13,15 @@ ApplicationWindow {
     property Account currentAccount: currentWallet ? currentWallet.currentAccount : null
 
     property var icons: ({
-        'liquid': '/svg/liquid/liquid_no_string.svg',
-        'mainnet': '/svg/btc.svg',
-        'testnet': '/svg/btc_testnet.svg'
+        'liquid': 'qrc:/svg/liquid/liquid_no_string.svg',
+        'mainnet': 'qrc:/svg/btc.svg',
+        'testnet': 'qrc:/svg/btc_testnet.svg'
     })
 
     property var logos: ({
-        'liquid': '/svg/liquid/liquid_with_string.svg',
-        'mainnet': '/svg/btc.svg',
-        'testnet': '/svg/btc_testnet.svg'
+        'liquid': 'qrc:/svg/liquid/liquid_with_string.svg',
+        'mainnet': 'qrc:/svg/btc.svg',
+        'testnet': 'qrc:/svg/btc_testnet.svg'
     })
 
     function formatDateTime(date_time) {
@@ -246,7 +246,7 @@ ApplicationWindow {
 
             ToolButton {
                 onClicked: drawer.close()
-                icon.source: '/svg/cancel.svg'
+                icon.source: 'qrc:/svg/cancel.svg'
                 icon.width: 16
                 icon.height: 16
             }

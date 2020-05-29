@@ -14,7 +14,7 @@ SidebarItem {
 
             leftPadding: 16
             icon.color: 'transparent'
-            icon.source: '../' + icons[wallet.network.id]
+            icon.source: icons[wallet.network.id]
             icon.width: 32
             icon.height: 32
             text: wallet.name

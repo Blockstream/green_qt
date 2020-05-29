@@ -49,7 +49,7 @@ ListView {
                     Button {
                         flat: true
                         enabled: !wallet.locked
-                        icon.source: '/svg/send.svg'
+                        icon.source: 'qrc:/svg/send.svg'
                         icon.width: 24
                         icon.height: 24
                         text: qsTrId('id_send')
@@ -59,7 +59,7 @@ ListView {
                     Button {
                         flat: true
                         enabled: !wallet.locked
-                        icon.source: '/svg/receive.svg'
+                        icon.source: 'qrc:/svg/receive.svg'
                         icon.width: 24
                         icon.height: 24
                         text: qsTrId('id_receive')

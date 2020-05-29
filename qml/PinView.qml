@@ -42,7 +42,7 @@ Column {
             enabled: !field.empty
             flat: true
             width: 32
-            icon.source: 'svg/arrow_left.svg'
+            icon.source: 'qrc:/svg/arrow_left.svg'
             icon.width: 24
             onClicked: field.removeDigit()
         }
@@ -59,7 +59,7 @@ Column {
             hoverEnabled: false
             enabled: !field.empty
             flat: true
-            icon.source: 'svg/cancel.svg'
+            icon.source: 'qrc:/svg/cancel.svg'
             icon.height: 16
             icon.width: 16
             onClicked: field.clear()

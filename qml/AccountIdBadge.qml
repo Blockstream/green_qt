@@ -42,7 +42,7 @@ Label {
         }
     }
     Image {
-        source: '/svg/copy.svg'
+        source: 'qrc:/svg/copy.svg'
         sourceSize.width: 12
         sourceSize.height: 12
         anchors.right: parent.right

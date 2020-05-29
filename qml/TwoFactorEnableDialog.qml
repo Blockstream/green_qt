@@ -28,7 +28,7 @@ ControllerDialog {
                 }
             ]
             Image {
-                source: `svg/2fa_${method}.svg`
+                source: `qrc:/svg/2fa_${method}.svg`
                 sourceSize.width: 64
                 sourceSize.height: 64
                 Layout.alignment: Qt.AlignHCenter
@@ -70,7 +70,7 @@ ControllerDialog {
                     text: wallet.config[method].data.split('=')[1] || ''
                 }
                 ToolButton {
-                    icon.source: '/svg/copy.svg'
+                    icon.source: 'qrc:/svg/copy.svg'
                     onClicked: {
                         Clipboard.copy(secret_label.text);
                         secret_label.ToolTip.show(qsTrId('id_copied_to_clipboard'), 1000);
@@ -79,7 +79,7 @@ ControllerDialog {
             }
             RowLayout {
                 Image {
-                    source: `svg/2fa_${method}.svg`
+                    source: `qrc:/svg/2fa_${method}.svg`
                     sourceSize.width: 32
                     sourceSize.height: 32
                 }

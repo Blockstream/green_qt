@@ -74,7 +74,7 @@ Page {
     header: RowLayout {
         ToolButton {
             id: back_arrow_button
-            icon.source: '/svg/arrow_left.svg'
+            icon.source: 'qrc:/svg/arrow_left.svg'
             icon.height: 16
             icon.width: 16
             onClicked: stack_view.pop()
@@ -173,7 +173,7 @@ Page {
                     text: transaction.data.txhash
                 }
                 ToolButton {
-                    icon.source: '/svg/copy.svg'
+                    icon.source: 'qrc:/svg/copy.svg'
                     onClicked: {
                         Clipboard.copy(transaction.data.txhash);
                         txhash_label.ToolTip.show(qsTrId('id_copied_to_clipboard'), 1000);
