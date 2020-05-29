@@ -5,6 +5,8 @@
 #include <QQmlContext>
 #include <QQmlEngine>
 
+#include <gdk.h>
+
 Controller::Controller(QObject* parent)
     : QObject(parent)
 {

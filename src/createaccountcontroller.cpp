@@ -2,6 +2,8 @@
 #include "json.h"
 #include "wallet.h"
 
+#include <gdk.h>
+
 CreateAccountController::CreateAccountController(QObject *parent) : Controller(parent)
 {
 

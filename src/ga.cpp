@@ -31,6 +31,12 @@ QJsonObject auth_handler_get_result(GA_auth_handler* call)
     return result;
 }
 
+void destroy_auth_handler(GA_auth_handler* call)
+{
+    int err = GA_destroy_auth_handler(call);
+    Q_ASSERT(err == GA_OK);
+}
+
 QJsonArray get_subaccounts(GA_session* session)
 {
     auto result = process_auth([&] (GA_auth_handler** call) {

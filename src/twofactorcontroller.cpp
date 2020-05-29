@@ -4,6 +4,8 @@
 #include "json.h"
 #include "ga.h"
 
+#include <gdk.h>
+
 TwoFactorController::TwoFactorController(QObject *parent)
     : Controller(parent)
 {

@@ -14,6 +14,8 @@
 #include <QTimer>
 #include <QUuid>
 
+#include <gdk.h>
+
 static void notification_handler(void* context, const GA_json* details)
 {
     Wallet* wallet = static_cast<Wallet*>(context);

@@ -15,6 +15,8 @@
 #include <QDirIterator>
 #include <QUuid>
 
+#include <gdk.h>
+
 WalletManager::WalletManager()
 {
     auto config = Json::fromObject({{ "datadir", GetDataDir("gdk") }});

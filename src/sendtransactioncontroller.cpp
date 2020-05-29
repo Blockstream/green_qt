@@ -7,6 +7,8 @@
 #include "transaction.h"
 #include "wallet.h"
 
+#include <gdk.h>
+
 SendTransactionController::SendTransactionController(QObject* parent)
     : AccountController(parent)
 {

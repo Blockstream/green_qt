@@ -2,6 +2,8 @@
 #include "ga.h"
 #include "json.h"
 
+#include <gdk.h>
+
 #include <QDesktopServices>
 #include <QUrl>
 

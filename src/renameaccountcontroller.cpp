@@ -3,6 +3,8 @@
 #include "json.h"
 #include "wallet.h"
 
+#include <gdk.h>
+
 RenameAccountController::RenameAccountController(QObject* parent)
     : AccountController(parent)
 {
