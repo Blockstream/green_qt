@@ -10,6 +10,7 @@ namespace {
 
 QJsonDocument doc(const GA_json* json)
 {
+    Q_ASSERT(json);
     char* string;
     GA_convert_json_to_string(json, &string);
     auto document = QJsonDocument::fromJson(string);

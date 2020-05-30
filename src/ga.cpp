@@ -25,7 +25,8 @@ int connect(GA_session* session, const QJsonObject& data)
 QJsonObject auth_handler_get_result(GA_auth_handler* call)
 {
     GA_json* output;
-    GA_auth_handler_get_status(call, &output);
+    int err = GA_auth_handler_get_status(call, &output);
+    Q_ASSERT(err == GA_OK);
     auto result = Json::toObject(output);
     GA_destroy_json(output);
     return result;
@@ -39,6 +40,7 @@ void destroy_auth_handler(GA_auth_handler* call)
 
 QJsonArray get_subaccounts(GA_session* session)
 {
+    Q_ASSERT(session);
     auto result = process_auth([&] (GA_auth_handler** call) {
         int err = GA_get_subaccounts(session, call);
         Q_ASSERT(err == GA_OK);

@@ -36,7 +36,6 @@ void Controller::setResult(const QJsonObject &result)
     if (m_result == result) return;
     m_result = result;
     emit resultChanged(m_result);
-    setStatus(m_result.value("status").toString());
 }
 
 Wallet *Controller::wallet() const
@@ -56,26 +55,26 @@ void Controller::setWallet(Wallet *wallet)
 
 void Controller::process()
 {
+    Q_ASSERT(thread() == QThread::currentThread());
     Q_ASSERT(m_auth_handler != nullptr);
     const auto result = GA::auth_handler_get_result(m_auth_handler);
     const auto status = result.value("status").toString();
 
-    if (result.value("status").toString() == "done") {
+    if (status == "done") {
         int err = GA_destroy_auth_handler(m_auth_handler);
         Q_ASSERT(err == GA_OK);
         m_auth_handler = nullptr;
     }
 
-    QMetaObject::invokeMethod(this, [this, result] {
-        // Update the controller with the new result
-        if (update(result)) {
-            setResult(result);
-        }
-    });
+    // Update the controller with the new result
+    const bool update_result = update(result);
+    setStatus(status);
+    if (update_result) setResult(result);
 }
 
 bool Controller::update(const QJsonObject& result)
 {
+    Q_ASSERT(thread() == QThread::currentThread());
     auto status = result.value("status").toString();
 
     if (status == "done") {
@@ -86,15 +85,18 @@ bool Controller::update(const QJsonObject& result)
         return true;
     }
 
+    Q_ASSERT(m_auth_handler);
+
     if (status == "call") {
         int err = GA_auth_handler_call(m_auth_handler);
         Q_ASSERT(err == GA_OK);
-        process();
+        QMetaObject::invokeMethod(this, [this] { process(); }, Qt::QueuedConnection);
+        //process();
         return false;
     }
 
     if (status == "resolve_code") {
-        if (m_result.value("status") == "resolve_code") {
+        if (m_status == status) {
             emit invalidCode();
         }
         return true;
@@ -107,7 +109,7 @@ bool Controller::update(const QJsonObject& result)
         if (methods.size() == 1) {
             int err = GA_auth_handler_request_code(m_auth_handler, methods.first().toString().toLatin1().constData());
             Q_ASSERT(err == GA_OK);
-            process();
+            QMetaObject::invokeMethod(this, [this] { process(); }, Qt::QueuedConnection);
             return false;
         }
 
@@ -120,21 +122,17 @@ bool Controller::update(const QJsonObject& result)
 void Controller::requestCode(const QByteArray& method)
 {
     if (!context()) return;
-    QMetaObject::invokeMethod(context(), [this, method] {
-        int res = GA_auth_handler_request_code(m_auth_handler, method.data());
-        Q_ASSERT(res == GA_OK);
-        process();
-    });
+    int res = GA_auth_handler_request_code(m_auth_handler, method.data());
+    Q_ASSERT(res == GA_OK);
+    process();
 }
 
 void Controller::resolveCode(const QByteArray& code)
 {
     if (!context()) return;
-    QMetaObject::invokeMethod(context(), [this, code] {
-        int res = GA_auth_handler_resolve_code(m_auth_handler, code.data());
-        Q_ASSERT(res == GA_OK);
-        process();
-    });
+    int res = GA_auth_handler_resolve_code(m_auth_handler, code.data());
+    Q_ASSERT(res == GA_OK);
+    process();
 }
 
 void Controller::incrementBusy()
