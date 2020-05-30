@@ -85,7 +85,7 @@ ColumnLayout {
             }
 
             flat: true
-            enabled: !wallet.config['email'].confirmed
+            enabled: !!wallet.config.email && !wallet.config.email.confirmed
             text: qsTrId('id_enable')
             onClicked: enable_dialog.createObject(stack_view).open()
         }

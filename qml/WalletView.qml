@@ -82,10 +82,6 @@ Item {
             when: window.location === '/settings'
             name: 'VIEW_SETTINGS'
             PropertyChanges {
-                target: title_label
-                text: qsTrId('id_settings')
-            }
-            PropertyChanges {
                 target: settings_tool_button
                 icon.source: 'qrc:/svg/cancel.svg'
                 icon.width: 16
