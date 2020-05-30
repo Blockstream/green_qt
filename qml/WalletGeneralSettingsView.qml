@@ -84,11 +84,13 @@ ColumnLayout {
                 }
 
                 ComboBox {
+                    id: exchange_combo
                     flat: true
                     width: 200
                     model: currency_combo.currentText ? per_currency[currency_combo.currentText].sort() : []
                     currentIndex: Math.max(0, model.indexOf(wallet.settings.pricing.exchange))
                     onCurrentTextChanged: {
+                        if (!focus) return
                         if (currentText === '') return
                         if (currentText === wallet.settings.pricing.exchange) return
                         controller.change({ pricing: { currency: currency_combo.currentText, exchange: currentText } })
