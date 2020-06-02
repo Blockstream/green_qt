@@ -94,6 +94,7 @@ WalletDialog {
             actions: [
                 Action {
                     text: qsTrId('id_next')
+                    enabled: code_field.acceptableInput
                     onTriggered: controller.resolveCode(code_field.text)
                 }
             ]
@@ -120,6 +121,10 @@ WalletDialog {
                 }
                 TextField {
                     id: code_field
+                    horizontalAlignment: Qt.AlignHCenter
+                    validator: RegExpValidator {
+                        regExp: /[0-9]{6}/
+                    }
                     anchors.horizontalCenter: enterCodeText.horizontalCenter
                 }
                 Label {
