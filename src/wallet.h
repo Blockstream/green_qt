@@ -50,7 +50,6 @@ private:
     Q_PROPERTY(QJsonObject events READ events NOTIFY eventsChanged)
     Q_PROPERTY(QStringList mnemonic READ mnemonic CONSTANT)
     Q_PROPERTY(int loginAttemptsRemaining READ loginAttemptsRemaining NOTIFY loginAttemptsRemainingChanged)
-    Q_PROPERTY(qint64 balance READ balance NOTIFY balanceChanged)
     Q_PROPERTY(QJsonObject config READ config NOTIFY configChanged)
     Q_PROPERTY(bool busy READ isBusy NOTIFY busyChanged)
     Q_PROPERTY(Account* currentAccount READ currentAccount WRITE setCurrentAccount NOTIFY currentAccountChanged)
@@ -91,7 +90,6 @@ public:
 
     int loginAttemptsRemaining() const { return m_login_attempts_remaining; }
 
-    qint64 balance() const;
     QJsonObject config() const { return m_config; }
 
     Q_INVOKABLE void login(const QStringList& mnemonic, const QString& password = QString());
@@ -138,7 +136,6 @@ signals:
     void eventsChanged(QJsonObject events);
     void nameChanged(QString name);
     void loginAttemptsRemainingChanged(int loginAttemptsRemaining);
-    void balanceChanged();
     void settingsChanged();
     void configChanged();
     void busyChanged(bool busy);
@@ -153,7 +150,6 @@ private:
     void setConnection(ConnectionStatus connection);
     void setAuthentication(AuthenticationStatus authentication);
     void setSettings(const QJsonObject& settings);
-    void setBalance(const quint64);
     void connectNow();
     void updateCurrencies();
 
@@ -184,7 +180,6 @@ public:
     int m_login_attempts_remaining{3};
     QString m_proxy;
     bool m_use_tor{false};
-    quint64 m_balance;
     int m_logout_timer{-1};
     bool m_busy{false};
     bool m_has_liquid_securities{false};

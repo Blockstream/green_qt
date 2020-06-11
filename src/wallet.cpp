@@ -151,7 +151,6 @@ void Wallet::disconnect()
     m_config = {};
     m_currencies = {};
     m_events = {};
-    m_balance = 0;
 
     setConnection(Disconnected);
     setAuthentication(Unauthenticated);
@@ -280,12 +279,6 @@ void Wallet::handleNotification(const QJsonObject &notification)
                     emit account->jsonChanged();
                     account->updateBalance();
                 }
-
-                quint64 balance = 0;
-                for (auto account : m_accounts) {
-                    balance += static_cast<quint64>(account->m_json.value("satoshi").toObject().value("btc").toInt());
-                }
-                setBalance(balance);
             }, Qt::QueuedConnection);
         });
 
@@ -336,11 +329,6 @@ QStringList Wallet::mnemonic() const
         GA_destroy_string(mnemonic);
     }, Qt::BlockingQueuedConnection);
     return result;
-}
-
-qint64 Wallet::balance() const
-{
-    return m_balance;
 }
 
 void Wallet::changePin(const QByteArray& pin)
@@ -534,7 +522,6 @@ void Wallet::reload()
             if (!m_current_account) {
                 setCurrentAccount(m_accounts.first());
             }
-            setBalance(balance);
             if (m_has_liquid_securities != has_liquid_securities) {
                 Q_ASSERT(!m_has_liquid_securities);
                 Q_ASSERT(has_liquid_securities);
@@ -660,13 +647,6 @@ void Wallet::setAuthentication(AuthenticationStatus authentication)
     qDebug() << "authentication change" << m_authentication << " -> " << authentication;
     m_authentication = authentication;
     emit authenticationChanged();
-}
-
-void Wallet::setBalance(const quint64 balance)
-{
-    if (m_balance == balance) return;
-    m_balance = balance;
-    emit balanceChanged();
 }
 
 QJsonObject Wallet::convert(const QJsonObject& value) const
