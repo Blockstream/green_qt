@@ -36,8 +36,49 @@ DEFINES += QT_DEPRECATED_WARNINGS QZXING_QML
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
-SOURCES += $$files(src/*.cpp)
-HEADERS += $$files(src/*.h)
+SOURCES += \
+    src/accountcontroller.cpp \
+    src/account.cpp \
+    src/asset.cpp \
+    src/balance.cpp \
+    src/clipboard.cpp \
+    src/controller.cpp \
+    src/createaccountcontroller.cpp \
+    src/ga.cpp \
+    src/json.cpp \
+    src/main.cpp \
+    src/network.cpp \
+    src/renameaccountcontroller.cpp \
+    src/sendtransactioncontroller.cpp \
+    src/settingscontroller.cpp \
+    src/transaction.cpp \
+    src/twofactorcontroller.cpp \
+    src/util.cpp \
+    src/wallet.cpp \
+    src/walletmanager.cpp \
+    src/wally.cpp
+
+HEADERS += \
+    src/accountcontroller.h \
+    src/account.h \
+    src/asset.h \
+    src/balance.h \
+    src/clipboard.h \
+    src/controller.h \
+    src/createaccountcontroller.h \
+    src/ga.h \
+    src/json.h \
+    src/network.h \
+    src/renameaccountcontroller.h \
+    src/sendtransactioncontroller.h \
+    src/settingscontroller.h \
+    src/transaction.h \
+    src/twofactorcontroller.h \
+    src/util.h \
+    src/wallet.h \
+    src/walletmanager.h \
+    src/wally.h
+
 RESOURCES += qml/qml.qrc
 RESOURCES += assets/assets.qrc
 win32 {
@@ -89,8 +130,6 @@ win32:static {
     RC_ICONS = Green.ico
     LIBS += $$GDK_BUILD_DIR/libgreenaddress_full.a
 }
-
-DEFINES += __PWD__=\\\"$$PWD\\\"
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =

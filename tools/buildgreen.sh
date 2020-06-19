@@ -9,12 +9,11 @@ CURRENTDIR=${PWD}
 
 cd ${BUILDROOT}
 
-GREEN_QMAKE_CONFIG="CONFIG+=release CONFIG+=qml_release CONFIG+=static QMAKE_CXXFLAGS_RELEASE+=-flto QMAKE_LDFLAGS_RELEASE+=-flto"
+GREEN_QMAKE_CONFIG="CONFIG+=release CONFIG+=qml_release CONFIG+=static"
 
 if [ "${GREENSYMBOLS}" != "" ]; then
     GREEN_QMAKE_CONFIG+=" QMAKE_CXXFLAGS+=-g"
 fi
-
 
 if [ "${GREENPLATFORM}" = "linux" ]; then
     ${QT_PATH}/bin/qmake ${CURRENTDIR}/green.pro CONFIG+=x86_64 ${GREEN_QMAKE_CONFIG}
