@@ -23,7 +23,10 @@ CONFIG += c++11 qtquickcompiler
 
 CONFIG += qzxing_qml qzxing_multimedia enable_decoder_qr_code enable_encoder_qr_code
 
-include($$(BUILDROOT)/qzxing/src/QZXing-components.pri)
+!defined(GDK_PATH, var): error(Run qmake with GDK_PATH set. See BUILD.md for more details.)
+!defined(QZXING_PATH, var): error(Run qmake with QZXING_PATH set. See BUILD.md for more details.)
+
+include($${QZXING_PATH}/src/QZXing-components.pri)
 
 # The following define makes your compiler emit warnings if you use
 # any Qt feature that has been marked deprecated (the exact warnings
@@ -91,8 +94,7 @@ CONFIG += lrelease embed_translations
 
 EXTRA_TRANSLATIONS = $$files($$PWD/i18n/*.ts)
 
-GDK_BUILD_DIR = $$absolute_path($$(GDK_PATH), $${PWD})
-INCLUDEPATH += $${GDK_BUILD_DIR}
+INCLUDEPATH += $${GDK_PATH}
 
 macos {
     QMAKE_TARGET_BUNDLE_PREFIX = com.blockstream
@@ -108,19 +110,19 @@ macos {
         plutil -remove NOTE $$OUT_PWD/$${TARGET}.app/Contents/Info.plist || true
 
     static {
-        LIBS += $$GDK_BUILD_DIR/libgreenaddress_full.a
+        LIBS += $${GDK_PATH}/libgreenaddress_full.a
     } else {
-        LIBS += -L$$GDK_BUILD_DIR/build-clang/src/ -lgreenaddress
+        LIBS += -L$${GDK_PATH} -lgreenaddress
     }
 }
 
 unix:!macos:!android {
     static {
-        LIBS += $$GDK_BUILD_DIR/libgreenaddress_full.a
+        LIBS += $${GDK_PATH}/libgreenaddress_full.a
         SOURCES += src/glibc_compat.cpp
         LIBS += -Wl,--wrap=__divmoddi4 -Wl,--wrap=log2f
     } else {
-        LIBS += -L$$GDK_BUILD_DIR/build-gcc/src -lgreenaddress
+        LIBS += -L$${GDK_PATH} -lgreenaddress
     }
 }
 
@@ -128,7 +130,7 @@ win32:static {
     # FIXME: the following script appends -lwinpthread at the end so that green .rsrc entries are used instead
     QMAKE_LINK=$${PWD}/link.sh
     RC_ICONS = Green.ico
-    LIBS += $$GDK_BUILD_DIR/libgreenaddress_full.a
+    LIBS += $${GDK_PATH}/libgreenaddress_full.a
 }
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
