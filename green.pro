@@ -99,9 +99,6 @@ INCLUDEPATH += $${GDK_PATH}
 macos {
     QMAKE_TARGET_BUNDLE_PREFIX = com.blockstream
     LIBS += -framework Foundation -framework Cocoa
-}
-
-macos {
     ICON = Green.icns
 
     QMAKE_POST_LINK += \
@@ -132,17 +129,6 @@ win32:static {
     RC_ICONS = Green.ico
     LIBS += $${GDK_PATH}/libgreenaddress_full.a
 }
-
-# Additional import path used to resolve QML modules in Qt Creator's code model
-QML_IMPORT_PATH =
-
-# Additional import path used to resolve QML modules just for Qt Quick Designer
-QML_DESIGNER_IMPORT_PATH =
-
-# Default rules for deployment.
-qnx: target.path = /tmp/$${TARGET}/bin
-else: unix:!android: target.path = /opt/$${TARGET}/bin
-!isEmpty(target.path): INSTALLS += target
 
 DISTFILES += \
     src/qtquickcontrols2.conf
