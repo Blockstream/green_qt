@@ -50,6 +50,7 @@ StackView {
         RowLayout {
             TextField {
                 id: address_field
+                selectByMouse: true
                 Layout.fillWidth: true
                 horizontalAlignment: TextField.AlignHCenter
                 placeholderText: qsTrId('id_enter_an_address')
@@ -119,6 +120,7 @@ StackView {
                 Layout.fillWidth: true
                 enabled: !send_all_button.checked
                 horizontalAlignment: TextField.AlignRight
+                selectByMouse: true
 
                 placeholderText: controller.effectiveAmount
                 text: controller.amount
@@ -148,6 +150,7 @@ StackView {
                 horizontalAlignment: TextField.AlignRight
                 placeholderText: controller.effectiveFiatAmount
                 text: controller.fiatAmount
+                selectByMouse: true
 
                 onTextChanged: {
                     if (!activeFocus) return;
@@ -201,6 +204,7 @@ StackView {
                     text: 'sat/vB'
                 }
                 rightPadding: fee_unit.width + 8
+                selectByMouse: true
             }
         }
     }
