@@ -38,7 +38,7 @@ NetworkManager *NetworkManager::instance()
 
 QQmlListProperty<Network> NetworkManager::networks()
 {
-    return QQmlListProperty<Network>(this, m_networks);
+    return { this, &m_networks };
 }
 
 Network *NetworkManager::network(const QString &id) const

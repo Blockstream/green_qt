@@ -40,6 +40,10 @@ MnemonicEditorController::MnemonicEditorController(QObject *parent) : QObject(pa
     m_words.at(0)->setFocus(true);
 }
 
+QQmlListProperty<Word> MnemonicEditorController::words() {
+    return { this, &m_words };
+}
+
 void MnemonicEditorController::setPassword(bool password)
 {
     if (m_password == password) return;

@@ -60,7 +60,7 @@ Account *Transaction::account() const
 
 QQmlListProperty<TransactionAmount> Transaction::amounts()
 {
-    return { this, m_amounts };
+    return { this, &m_amounts };
 }
 
 QJsonObject Transaction::data() const

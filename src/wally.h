@@ -57,9 +57,7 @@ class MnemonicEditorController : public QObject
     bool m_password{false};
 public:
     MnemonicEditorController(QObject* parent = nullptr);
-    QQmlListProperty<Word> words() {
-        return QQmlListProperty<Word>(this, m_words);
-    }
+    QQmlListProperty<Word> words();
     bool password() const { return m_password; }
     void setPassword(bool password);
     QString updateWord(int index, const QString& text);

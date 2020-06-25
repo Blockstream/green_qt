@@ -210,7 +210,7 @@ QJsonObject Wallet::currencies() const
 
 QQmlListProperty<Account> Wallet::accounts()
 {
-    return QQmlListProperty<Account>(this, m_accounts);
+    return { this, &m_accounts };
 }
 
 void Wallet::handleNotification(const QJsonObject &notification)

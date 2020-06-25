@@ -101,7 +101,7 @@ qint64 Account::balance() const
 
 QQmlListProperty<Balance> Account::balances()
 {
-    return QQmlListProperty<Balance>(this, m_balances);
+    return { this, &m_balances };
 }
 
 static QJsonArray get_transactions(GA_session* session, int subaccount, int first, int count)
