@@ -33,6 +33,7 @@ Page {
 
     Drawer {
         id: settings_drawer
+        interactive: position > 0
         edge: Qt.RightEdge
         height: parent.height
         width: 300

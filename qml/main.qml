@@ -229,6 +229,7 @@ ApplicationWindow {
             onTriggered: drawer.open()
         }
 
+        interactive: position > 0
         width: 300
         height: parent.height
 

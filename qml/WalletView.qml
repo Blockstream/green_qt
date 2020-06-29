@@ -138,6 +138,7 @@ Item {
 
     Drawer {
         id: notifications_drawer
+        interactive: position > 0
         height: parent.height
         width: 320
         edge: Qt.RightEdge
