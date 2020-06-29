@@ -146,7 +146,7 @@ Item {
             color: "#70000000"
         }
         ColumnLayout {
-            width: parent.width
+            width: 320
             spacing: 8
             Label {
                 visible: fiatRateAvailable
@@ -183,10 +183,6 @@ Item {
                     opacity: 0.05
                     z: -1
                 }
-            }
-            Item {
-                Layout.fillHeight: true
-                width: 1
             }
         }
     }
