@@ -5,7 +5,7 @@ import QtQuick.Controls 2.14
 AbstractDialog {
     Connections {
         target: wallet
-        onConnectionChanged: {
+        function onConnectionChanged(connection) {
             if (connection === Wallet.Disconnected) {
                 reject();
             }

@@ -100,7 +100,7 @@ WalletDialog {
             ]
             Connections {
                 target: controller
-                onInvalidCode: {
+                function onInvalidCode() {
                     code_field.clear()
                     code_field.ToolTip.show(qsTrId('id_invalid_twofactor_code'), 1000);
                     code_field.forceActiveFocus()

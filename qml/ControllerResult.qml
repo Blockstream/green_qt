@@ -6,7 +6,7 @@ Connections {
     property string targetStatus
     property StackView stackView
     target: controller
-    onStatusChanged: {
+    function onStatusChanged(status) {
         if (status === targetStatus) {
             stackView.push(component)
         }

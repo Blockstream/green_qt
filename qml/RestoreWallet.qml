@@ -13,7 +13,7 @@ Page {
 
     Connections {
         target: wallet
-        onAuthenticationChanged: {
+        function onAuthenticationChanged() {
             // TODO show error message
             if (wallet.authentication === Wallet.Authenticated) {
                 stack_view.push(pin_page)

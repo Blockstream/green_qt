@@ -71,7 +71,7 @@ Item {
 
     Connections {
         target: currentWallet
-        onCurrentAccountChanged: {
+        function onCurrentAccountChanged() {
             location = '/transactions'
             stack_view.pop()
         }
@@ -145,7 +145,7 @@ Item {
             color: "#70000000"
         }
         ColumnLayout {
-            anchors.fill: parent
+            width: parent.width
             spacing: 8
             Label {
                 visible: fiatRateAvailable

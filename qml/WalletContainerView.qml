@@ -154,8 +154,8 @@ StackView {
 
     Connections {
         target: wallet
-        onAuthenticationChanged: {
-            if (authentication === Wallet.Authenticated) {
+        function onAuthenticationChanged(authentication) {
+            if (wallet.authentication === Wallet.Authenticated) {
                 stack_view.push(wallet_view);
             } else if (stack_view.depth > 1) {
                 stack_view.pop();

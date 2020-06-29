@@ -181,7 +181,7 @@ ApplicationWindow {
                     WalletContainerView {
                         Connections {
                             target: modelData
-                            onLoginAttemptsRemainingChanged: {
+                            function onLoginAttemptsRemainingChanged(loginAttemptsRemaining) {
                                 if (loginAttemptsRemaining === 0) {
                                     currentWallet = null;
                                 }
