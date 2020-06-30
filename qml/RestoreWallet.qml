@@ -73,6 +73,19 @@ Page {
         }
     }
 
+    property Item toolbar: RowLayout {
+        ToolButton {
+            onClicked: settings_drawer.open()
+            icon.source: 'qrc:/svg/settings.svg'
+        }
+        ToolButton {
+            icon.source: 'qrc:/svg/cancel.svg'
+            icon.width: 16
+            icon.height: 16
+            onClicked: canceled2()
+        }
+    }
+
     background: Item {}
 
     footer: Item {
@@ -132,23 +145,6 @@ Page {
             anchors.centerIn: parent
             font.pixelSize: 24
             text: qsTrId('Restore Wallet') + ' - ' + stack_view.currentItem.title
-        }
-
-        Row {
-            anchors.margins: 16
-            anchors.right: parent.right
-            anchors.verticalCenter: parent.verticalCenter
-            ToolButton {
-                onClicked: settings_drawer.open()
-                icon.source: 'qrc:/svg/settings.svg'
-            }
-
-            ToolButton {
-                icon.source: 'qrc:/svg/cancel.svg'
-                icon.width: 16
-                icon.height: 16
-                onClicked: canceled2()
-            }
         }
     }
 

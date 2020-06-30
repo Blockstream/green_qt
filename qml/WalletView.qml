@@ -42,7 +42,7 @@ Item {
 
     readonly property bool fiatRateAvailable: formatFiat(0, false) !== 'n/a'
 
-    property Component toolbar: RowLayout {
+    property Item toolbar: RowLayout {
         Loader {
             active: currentAccount && currentAccount.json.type === '2of2_no_recovery'
             sourceComponent: AccountIdBadge {
@@ -70,7 +70,7 @@ Item {
     }
 
     Connections {
-        target: currentWallet
+        target: wallet
         function onCurrentAccountChanged() {
             location = '/transactions'
             stack_view.pop()

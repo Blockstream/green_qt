@@ -150,7 +150,7 @@ Page {
             }
 
             Row {
-                anchors.right: parent.right
+                Layout.alignment: Qt.AlignRight
                 Button {
                     flat: true
                     text: qsTrId('id_cancel')

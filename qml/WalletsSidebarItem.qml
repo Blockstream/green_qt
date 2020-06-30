@@ -7,11 +7,9 @@ SidebarItem {
     title: qsTrId('id_wallets')
 
     Repeater {
-        model: WalletManager.wallets
+        model: WalletListModel {}
 
         ItemDelegate {
-            property Wallet wallet: modelData
-
             leftPadding: 16
             icon.color: 'transparent'
             icon.source: icons[wallet.network.id]
@@ -19,10 +17,8 @@ SidebarItem {
             icon.height: 32
             text: wallet.name
             width: parent.width
-
-            onClicked: currentWallet = modelData
-
-            highlighted: modelData === currentWallet
+            highlighted: wallet === currentWallet
+            onClicked: switchToWallet(wallet)
         }
     }
 }

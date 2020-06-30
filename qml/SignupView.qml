@@ -27,6 +27,19 @@ Page {
 
     id: root
 
+    property Item toolbar: RowLayout {
+        ToolButton {
+            onClicked: settings_drawer.open()
+            icon.source: 'qrc:/svg/settings.svg'
+        }
+        ToolButton {
+            onClicked: close()
+            icon.source: 'qrc:/svg/cancel.svg'
+            icon.width: 16
+            icon.height: 16
+        }
+    }
+
     background: Item {}
 
     header: Item {
@@ -58,26 +71,6 @@ Page {
             opacity: anim(500, 500, 0, 1)
             font.pixelSize: 24
             text: stack_view.currentItem.title
-        }
-
-        Row {
-            anchors.margins: 16
-            anchors.right: parent.right 
-            anchors.rightMargin: 16 - (1 - opacity) * 64
-            anchors.verticalCenter: parent.verticalCenter
-            opacity: anim(500, 500, 0, 1)
-
-            ToolButton {
-                onClicked: settings_drawer.open()
-                icon.source: 'qrc:/svg/settings.svg'
-            }
-
-            ToolButton {
-                onClicked: close()
-                icon.source: 'qrc:/svg/cancel.svg'
-                icon.width: 16
-                icon.height: 16
-            }
         }
     }
 
@@ -239,7 +232,8 @@ Page {
                     const use_tor = tor_checkbox.checked;
                     const network = network_page.network;
                     const pin = pin_view.pin;
-                    currentWallet = WalletManager.signup(proxy, use_tor, network, name, mnemonic, pin);
+                    wallet = WalletManager.signup(proxy, use_tor, network, name, mnemonic, pin);
+                    switchToWallet(wallet);
                     close();
                 }
             }

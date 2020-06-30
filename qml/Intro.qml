@@ -4,6 +4,12 @@ import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.12
 
 StackLayout {
+    property Item toolbar: TextField {
+        id: search_field
+        placeholderText: qsTrId('id_search')
+        Layout.minimumWidth: 256
+    }
+
     currentIndex: WalletManager.wallets.length > 0 ? 0 : 1
 
     Component {
@@ -61,9 +67,12 @@ StackLayout {
     }
 
     ListView {
+        id: wallet_list_view
         clip: true
-        model: WalletManager.filteredWallets
-        section.property: 'networkName'
+        model: WalletListModel {
+            filterRegExp: new RegExp(search_field.text.trim(), 'i')
+        }
+        section.property: 'wallet.networkName'
         section.criteria: ViewSection.FullString
         section.delegate: SectionLabel {
             padding: 16
@@ -72,13 +81,13 @@ StackLayout {
 
         delegate: ItemDelegate {
             id: delegate
-            width: parent.width
-            icon.source: icons[modelData.network.id]
+            width: wallet_list_view.width
+            icon.source: icons[wallet.network.id]
             icon.color: 'transparent'
-            text: modelData.name
-            property bool valid: modelData.loginAttemptsRemaining > 0
-            onClicked: if (valid) currentWallet = modelData
-            highlighted: modelData.connection !== Wallet.Disconnected
+            text: wallet.name
+            property bool valid: wallet.loginAttemptsRemaining > 0
+            onClicked: if (valid) switchToWallet(wallet)
+            highlighted: wallet.connection !== Wallet.Disconnected
             Row {
                 visible: !valid || parent.hovered
                 anchors.right: parent.right
@@ -86,18 +95,18 @@ StackLayout {
                 Menu {
                     id: wallet_menu
                     MenuItem {
-                        enabled: modelData.connection !== Wallet.Disconnected
+                        enabled: wallet.connection !== Wallet.Disconnected
                         text: qsTrId('id_log_out')
-                        onTriggered: modelData.disconnect()
+                        onTriggered: wallet.disconnect()
                     }
                     MenuItem {
-                        enabled: modelData.connection === Wallet.Disconnected
+                        enabled: wallet.connection === Wallet.Disconnected
                         text: qsTrId('id_remove_wallet')
-                        onClicked: remove_wallet_dialog.createObject(window, { wallet: modelData }).open()
+                        onClicked: remove_wallet_dialog.createObject(window, { wallet }).open()
                     }
                 }
                 Label {
-                    visible: modelData.loginAttemptsRemaining === 0
+                    visible: wallet.loginAttemptsRemaining === 0
                     anchors.verticalCenter: parent.verticalCenter
                     text: '\u26A0'
                     font.pixelSize: 18

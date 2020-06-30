@@ -8,12 +8,35 @@ StackView {
 
     property Wallet wallet
 
+    Connections {
+        target: wallet
+        function onLoginAttemptsRemainingChanged(loginAttemptsRemaining) {
+            if (loginAttemptsRemaining === 0) {
+                switchToWallet(null)
+            }
+        }
+    }
+
     signal canceled2()
 
     initialItem: login_view
 
-    property Component toolbar: currentItem.toolbar || null
+    property Item toolbar: currentItem.toolbar || null
     property Item login_view: Page {
+        property Item toolbar:  RowLayout {
+            ToolButton {
+                onClicked: settings_drawer.open()
+                icon.source: 'qrc:/svg/settings.svg'
+            }
+            ToolButton {
+                icon.source: 'qrc:/svg/cancel.svg'
+                icon.width: 16
+                icon.height: 16
+                onClicked: {
+                    canceled2()
+                }
+            }
+        }
 
         background: Item {}
 
@@ -34,26 +57,6 @@ StackView {
                     Layout.bottomMargin: 32
                     text: wallet.name
                     font.pixelSize: 32
-                }
-            }
-
-            Row {
-                anchors.margins: 16
-                anchors.right: parent.right
-                anchors.verticalCenter: parent.verticalCenter
-                ToolButton {
-                    onClicked: settings_drawer.open()
-                    icon.source: 'qrc:/svg/settings.svg'
-                }
-
-                ToolButton {
-                    icon.source: 'qrc:/svg/cancel.svg'
-                    icon.width: 16
-                    icon.height: 16
-                    onClicked: {
-                        console.log('cancel..')
-                        canceled2()
-                    }
                 }
             }
         }

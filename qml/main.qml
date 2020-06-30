@@ -9,8 +9,32 @@ ApplicationWindow {
     id: window
 
     property string location: '/'
-    property Wallet currentWallet
-    property Account currentAccount: currentWallet ? currentWallet.currentAccount : null
+    readonly property Wallet currentWallet: stack_view.currentItem.wallet || null
+    readonly property Account currentAccount: currentWallet ? currentWallet.currentAccount : null
+
+    Component {
+        id: container_component
+        WalletContainerView {
+            onCanceled2: {
+                switchToWallet(null)
+            }
+        }
+    }
+
+    property var wallet_views: ({})
+    function switchToWallet(wallet) {
+        if (wallet) {
+            let container = wallet_views[wallet]
+            if (!container) {
+                container = container_component.createObject(null, { wallet })
+                wallet_views[wallet] = container
+            }
+            stack_view.replace(container)
+        } else {
+            stack_view.replace(stack_view.initialItem)
+        }
+        drawer.close()
+    }
 
     property var icons: ({
         'liquid': 'qrc:/svg/liquid/liquid_no_string.svg',
@@ -39,12 +63,10 @@ ApplicationWindow {
         return result + padding * 2;
     }
 
-    onCurrentWalletChanged: drawer.close()
-
     Component.onCompleted: {
         // Auto select wallet if just one wallet
         if (WalletManager.wallets.length === 1) {
-            currentWallet = WalletManager.wallets[0];
+            switchToWallet(WalletManager.wallets[0]);
         }
     }
 
@@ -58,7 +80,7 @@ ApplicationWindow {
         const parts = []
         if (wallet) {
             parts.push(wallet.name);
-            const account = currentWallet.currentAccount;
+            const account = wallet.currentAccount;
             if (account) parts.push(account.name);
         }
         parts.push('Blockstream Green');
@@ -142,11 +164,11 @@ ApplicationWindow {
             Layout.fillWidth: true
             Layout.fillHeight: true
         }
-        Loader {
+        RowLayout {
+            children: stack_view.currentItem.toolbar || null
             Layout.leftMargin: 16
             Layout.rightMargin: 16
             Layout.alignment: Qt.AlignBottom
-            sourceComponent: stack_view.currentItem.toolbar
         }
     }
 
@@ -154,56 +176,7 @@ ApplicationWindow {
         id: stack_view
         anchors.fill: parent
         focus: true
-
-        initialItem: FocusScope {
-            property Component toolbar: stack_layout.children[stack_layout.currentIndex].toolbar
-            StackLayout {
-                id: stack_layout
-                anchors.fill: parent
-                clip: true
-                currentIndex: {
-                    for (let i = 0; i < WalletManager.wallets.length; i++) {
-                        if (WalletManager.wallets[i] === currentWallet) return i + 1;
-                    }
-                    return 0;
-                }
-                Intro {
-                    property Component toolbar: TextField {
-                        visible: stack_view.depth === 1 && !currentWallet
-                        width: 256
-                        onTextChanged: WalletManager.filter = text.trim()
-                        placeholderText: qsTrId('id_search')
-                    }
-                    focus: stack_layout.currentIndex === 0
-                }
-                Repeater {
-                    model: WalletManager.wallets
-                    WalletContainerView {
-                        Connections {
-                            target: modelData
-                            function onLoginAttemptsRemainingChanged(loginAttemptsRemaining) {
-                                if (loginAttemptsRemaining === 0) {
-                                    currentWallet = null;
-                                }
-                            }
-                        }
-
-                        focus: currentWallet === wallet
-                        onCanceled2: {
-                            currentWallet = null
-                        }
-                        wallet: modelData
-                    }
-                }
-            }
-        }
-    }
-
-    DebugActiveFocus {
-        visible: false && engine.debug
-        anchors.right: parent.right
-        anchors.top: parent.top
-        anchors.margins: 8
+        initialItem: Intro { }
     }
 
     Action {
@@ -240,7 +213,7 @@ ApplicationWindow {
             ToolButton {
                 text: '\u2302'
                 onClicked: {
-                    currentWallet = null
+                    switchToWallet(currentWallet)
                     drawer.close()
                 }
             }
@@ -277,7 +250,7 @@ ApplicationWindow {
           onCanceled2: stack_view.pop()
           onFinished: {
               WalletManager.insertWallet(wallet)
-              currentWallet = wallet;
+              switchToWallet(wallet);
               stack_view.pop()
           }
         }
