@@ -58,6 +58,7 @@ SOURCES += \
     src/twofactorcontroller.cpp \
     src/util.cpp \
     src/wallet.cpp \
+    src/walletlistmodel.cpp \
     src/walletmanager.cpp \
     src/wally.cpp
 
@@ -79,6 +80,7 @@ HEADERS += \
     src/twofactorcontroller.h \
     src/util.h \
     src/wallet.h \
+    src/walletlistmodel.h \
     src/walletmanager.h \
     src/wally.h
 

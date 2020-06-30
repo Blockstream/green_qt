@@ -42,6 +42,7 @@ private:
     explicit WalletManager();
     void addWallet(Wallet *wallet);
 
+public:
     QVector<Wallet*> m_wallets;
     QVector<Wallet*> m_filtered_wallets;
     QString m_filter;

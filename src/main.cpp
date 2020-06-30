@@ -13,6 +13,7 @@
 #include "network.h"
 #include "transaction.h"
 #include "wallet.h"
+#include "walletlistmodel.h"
 #include "walletmanager.h"
 #include "wally.h"
 #include "twofactorcontroller.h"
@@ -94,6 +95,8 @@ namespace Green {
         registerType<RequestTwoFactorResetController>("RequestTwoFactorResetController");
         registerType<CancelTwoFactorResetController>("CancelTwoFactorResetController");
         registerType<SetRecoveryEmailController>("SetRecoveryEmailController");
+
+        registerType<WalletListModel>("WalletListModel");
 
         registerSingletonInstance<Clipboard>("Clipboard");
         registerSingletonInstance<NetworkManager>("NetworkManager");
