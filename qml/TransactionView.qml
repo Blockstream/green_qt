@@ -130,7 +130,7 @@ Page {
             }
             Label {
                 visible: transaction.data.type === 'outgoing'
-                text: `${transaction.data.fee / 100000000} ${wallet.network.liquid ? 'L-BTC' : 'BTC'} (${Math.round(transaction.data.fee_rate / 1000)} sat/vB)`
+                text: `${transaction.data.fee / 100000000} ${wallet.network.liquid ? 'Liquid Bitcoin' : 'BTC'} (${Math.round(transaction.data.fee_rate / 1000)} sat/vB)`
             }
             SectionLabel {
                 text: qsTrId('id_my_notes')

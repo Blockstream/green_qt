@@ -24,7 +24,7 @@ QString Asset::name() const
 {
     auto name = m_data.value("name").toString();
     if (name.isEmpty()) return m_id;
-    if (name == "btc") return "L-BTC";
+    if (name == "btc") return "Liquid Bitcoin";
     return name;
 }
 
