@@ -1,6 +1,7 @@
 #include "ga.h"
 #include "json.h"
 #include "network.h"
+#include "networkmanager.h"
 #include "util.h"
 #include "wallet.h"
 #include "walletmanager.h"

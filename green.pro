@@ -58,6 +58,7 @@ SOURCES += \
     src/json.cpp \
     src/main.cpp \
     src/network.cpp \
+    src/networkmanager.cpp \
     src/renameaccountcontroller.cpp \
     src/sendtransactioncontroller.cpp \
     src/settingscontroller.cpp \
@@ -83,6 +84,7 @@ HEADERS += \
     src/ga.h \
     src/json.h \
     src/network.h \
+    src/networkmanager.h \
     src/renameaccountcontroller.h \
     src/sendtransactioncontroller.h \
     src/settingscontroller.h \

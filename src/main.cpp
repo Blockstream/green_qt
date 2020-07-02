@@ -8,7 +8,7 @@
 
 #include "clipboard.h"
 #include "devicemanager.h"
-#include "network.h"
+#include "networkmanager.h"
 #include "walletmanager.h"
 
 #include <QZXing.h>

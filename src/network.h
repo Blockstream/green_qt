@@ -4,25 +4,6 @@
 #include <QtQml>
 #include <QJsonObject>
 #include <QObject>
-#include <QQmlListProperty>
-
-class Network;
-
-class NetworkManager : public QObject
-{
-    Q_OBJECT
-    Q_PROPERTY(QQmlListProperty<Network> networks READ networks CONSTANT)
-public:
-    static NetworkManager* instance();
-
-    QQmlListProperty<Network> networks();
-
-    Network* network(const QString& id) const;
-
-private:
-    explicit NetworkManager();
-    QList<Network*> m_networks;
-};
 
 class Network : public QObject
 {
@@ -33,7 +14,7 @@ class Network : public QObject
     QML_ELEMENT
     QML_UNCREATABLE("Network is instanced by NetworkManager.")
 public:
-    Network(const QJsonObject& data, NetworkManager* manager);
+    Network(const QJsonObject& data, QObject* parent = nullptr);
 
     QJsonObject data() const { return m_data; }
     QString id() const { return m_id; }
