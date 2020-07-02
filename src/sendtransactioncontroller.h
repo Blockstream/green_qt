@@ -3,6 +3,7 @@
 
 #include "accountcontroller.h"
 
+#include <QtQml>
 #include <QJsonObject>
 
 class Balance;
@@ -23,7 +24,7 @@ class SendTransactionController : public AccountController
     Q_PROPERTY(int feeRate READ feeRate WRITE setFeeRate NOTIFY changed)
     Q_PROPERTY(bool hasFiatRate READ hasFiatRate NOTIFY changed)
     Q_PROPERTY(QJsonObject transaction READ transaction NOTIFY transactionChanged)
-
+    QML_ELEMENT
 public:
     explicit SendTransactionController(QObject* parent = nullptr);
 
@@ -90,6 +91,7 @@ class BumpFeeController : public AccountController
     Q_OBJECT
     Q_PROPERTY(int feeRate READ feeRate WRITE setFeeRate NOTIFY changed)
     Q_PROPERTY(QJsonObject tx READ tx NOTIFY txChanged)
+    QML_ELEMENT
     QJsonObject m_tx;
     int m_fee_rate{0};
     int m_req{0};

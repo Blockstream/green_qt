@@ -1,6 +1,7 @@
 #ifndef GREEN_WALLET_H
 #define GREEN_WALLET_H
 
+#include <QtQml>
 #include <QAtomicInteger>
 #include <QList>
 #include <QObject>
@@ -19,7 +20,7 @@ struct GA_json;
 class Wallet : public QObject
 {
     Q_OBJECT
-
+    QML_ELEMENT
 public:
     enum ConnectionStatus {
         Disconnected,

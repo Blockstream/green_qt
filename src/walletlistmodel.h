@@ -1,6 +1,7 @@
 #ifndef GREEN_WALLETLISTMODEL_H
 #define GREEN_WALLETLISTMODEL_H
 
+#include <QtQml>
 #include <QMap>
 #include <QSortFilterProxyModel>
 #include <QStandardItem>
@@ -10,6 +11,8 @@ class Wallet;
 
 class WalletListModel : public QSortFilterProxyModel
 {
+    Q_OBJECT
+    QML_ELEMENT
 public:
     WalletListModel(QObject* parent = nullptr);
 private slots:

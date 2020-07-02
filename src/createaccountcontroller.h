@@ -3,6 +3,8 @@
 
 #include "controller.h"
 
+#include <QtQml>
+
 class Account;
 
 class CreateAccountController : public Controller
@@ -10,7 +12,7 @@ class CreateAccountController : public Controller
     Q_OBJECT
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(QString type READ type WRITE setType NOTIFY typeChanged)
-
+    QML_ELEMENT
 public:
     explicit CreateAccountController(QObject *parent = nullptr);
 

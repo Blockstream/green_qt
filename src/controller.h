@@ -1,7 +1,7 @@
 #ifndef GREEN_CONTROLLER_H
 #define GREEN_CONTROLLER_H
 
-#include <QDebug>
+#include <QtQml>
 #include <QObject>
 
 #include "ga.h"
@@ -14,7 +14,8 @@ class Controller : public QObject
     Q_PROPERTY(QString status READ status NOTIFY statusChanged);
     Q_PROPERTY(QJsonObject result READ result NOTIFY resultChanged)
     Q_PROPERTY(bool busy READ isBusy NOTIFY busyChanged)
-
+    QML_ELEMENT
+    QML_UNCREATABLE("Controller is an abstract base class.")
 public:
     explicit Controller(QObject* parent = nullptr);
 

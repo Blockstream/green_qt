@@ -9,7 +9,7 @@ class TwoFactorController : public Controller
 {
     Q_OBJECT
     Q_PROPERTY(QByteArray method READ method WRITE setMethod NOTIFY methodChanged)
-
+    QML_ELEMENT
 public:
     explicit TwoFactorController(QObject *parent = nullptr);
 
@@ -33,7 +33,7 @@ private:
 class RequestTwoFactorResetController : public Controller
 {
     Q_OBJECT
-
+    QML_ELEMENT
 public:
     explicit RequestTwoFactorResetController(QObject* parent = nullptr);
     Q_INVOKABLE void execute(const QByteArray& email);
@@ -43,7 +43,7 @@ public:
 class CancelTwoFactorResetController : public Controller
 {
     Q_OBJECT
-
+    QML_ELEMENT
 public:
     explicit CancelTwoFactorResetController(QObject* parent = nullptr);
     Q_INVOKABLE void execute();
@@ -53,6 +53,7 @@ public:
 class SetRecoveryEmailController : public Controller
 {
     Q_OBJECT
+    QML_ELEMENT
 public:
     explicit SetRecoveryEmailController(QObject* parent = nullptr);
     Q_INVOKABLE void execute(const QByteArray& email);

@@ -1,4 +1,5 @@
 import Blockstream.Green 0.1
+import Blockstream.Green.Core 0.1
 import QtMultimedia 5.13
 import QtQuick 2.12
 import QtQuick.Controls 2.5

@@ -1,6 +1,7 @@
 #ifndef GREEN_WALLY_H
 #define GREEN_WALLY_H
 
+#include <QtQml>
 #include <QObject>
 #include <QStringList>
 #include <QQmlListProperty>
@@ -15,6 +16,8 @@ class Word : public QObject
     Q_PROPERTY(QStringList suggestions READ suggestions NOTIFY suggestionsChanged)
     Q_PROPERTY(bool enabled READ enabled NOTIFY enabledChanged)
     Q_PROPERTY(bool focus READ focus WRITE setFocus NOTIFY focusChanged)
+    QML_ELEMENT
+    QML_UNCREATABLE("Word is instanced by MnemonicEditorController.")
     MnemonicEditorController* const m_controller;
     const int m_index;
     QString m_text;
@@ -52,6 +55,7 @@ class MnemonicEditorController : public QObject
     Q_PROPERTY(QStringList mnemonic READ mnemonic NOTIFY mnemonicChanged)
     Q_PROPERTY(bool valid READ valid NOTIFY mnemonicChanged)
     Q_PROPERTY(float progress READ progress NOTIFY mnemonicChanged)
+    QML_ELEMENT
     QList<Word*> m_words;
     bool m_valid{false};
     bool m_password{false};

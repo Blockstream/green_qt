@@ -1,19 +1,17 @@
 #ifndef GREEN_NETWORK_H
 #define GREEN_NETWORK_H
 
+#include <QtQml>
 #include <QJsonObject>
 #include <QObject>
 #include <QQmlListProperty>
 
 class Network;
-class NetworkManager;
-
 
 class NetworkManager : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QQmlListProperty<Network> networks READ networks CONSTANT)
-
 public:
     static NetworkManager* instance();
 
@@ -32,7 +30,8 @@ class Network : public QObject
     Q_PROPERTY(QString id READ id CONSTANT)
     Q_PROPERTY(QString name READ name CONSTANT)
     Q_PROPERTY(bool liquid READ isLiquid CONSTANT)
-
+    QML_ELEMENT
+    QML_UNCREATABLE("Network is instanced by NetworkManager.")
 public:
     Network(const QJsonObject& data, NetworkManager* manager);
 

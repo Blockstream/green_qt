@@ -17,9 +17,13 @@ DEFINES += "VERSION_MAJOR=$$VERSION_MAJOR"\
        "VERSION_PRERELEASE=\"$$VERSION_PRERELEASE\"" \
        "VERSION=\"$${VERSION_MAJOR}.$${VERSION_MINOR}.$${VERSION_PATCH}\""
 
+QML_IMPORT_NAME = Blockstream.Green
+QML_IMPORT_MAJOR_VERSION = 0
+QML_IMPORT_MINOR_VERSION = 1
+
 QT += qml quick quickcontrols2 svg
 
-CONFIG += c++11 qtquickcompiler
+CONFIG += c++11 metatypes qmltypes qtquickcompiler
 
 CONFIG += qzxing_qml qzxing_multimedia enable_decoder_qr_code enable_encoder_qr_code
 
@@ -102,7 +106,7 @@ CONFIG += lrelease embed_translations
 
 EXTRA_TRANSLATIONS = $$files($$PWD/i18n/*.ts)
 
-INCLUDEPATH += $${GDK_PATH}
+INCLUDEPATH += src/ $${GDK_PATH}
 
 macos {
     QMAKE_TARGET_BUNDLE_PREFIX = com.blockstream

@@ -1,6 +1,7 @@
 #ifndef GREEN_BALANCE_H
 #define GREEN_BALANCE_H
 
+#include <QtQml>
 #include <QObject>
 
 class Account;
@@ -14,7 +15,8 @@ class Balance : public QObject
     Q_PROPERTY(qint64 amount READ amount NOTIFY changed)
     Q_PROPERTY(QString displayAmount READ displayAmount NOTIFY changed)
     Q_PROPERTY(QString inputAmount READ inputAmount NOTIFY changed)
-
+    QML_ELEMENT
+    QML_UNCREATABLE("Balance is instanced by Account.")
 public:
     explicit Balance(Account* account);
 

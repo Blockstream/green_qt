@@ -1,8 +1,8 @@
 #ifndef GREEN_ACCOUNT_H
 #define GREEN_ACCOUNT_H
 
-#include <QObject>
 #include <QtQml>
+#include <QObject>
 
 class Balance;
 class Transaction;
@@ -18,7 +18,7 @@ class Account : public QObject
     Q_PROPERTY(QQmlListProperty<Transaction> transactions READ transactions NOTIFY transactionsChanged)
     Q_PROPERTY(qint64 balance READ balance NOTIFY balanceChanged)
     Q_PROPERTY(QQmlListProperty<Balance> balances READ balances NOTIFY balancesChanged)
-
+    QML_ELEMENT
 public:
     explicit Account(Wallet* wallet);
 
@@ -74,7 +74,7 @@ class ReceiveAddress : public QObject
     Q_PROPERTY(QString address READ address NOTIFY changed)
     Q_PROPERTY(QString uri READ uri NOTIFY changed)
     Q_PROPERTY(bool generating READ generating NOTIFY generatingChanged)
-
+    QML_ELEMENT
 public:
     explicit ReceiveAddress(QObject* parent = nullptr);
     virtual ~ReceiveAddress();

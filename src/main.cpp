@@ -6,21 +6,10 @@
 #include <QStyleHints>
 #include <QTranslator>
 
-#include "account.h"
-#include "asset.h"
-#include "balance.h"
 #include "clipboard.h"
+#include "devicemanager.h"
 #include "network.h"
-#include "transaction.h"
-#include "wallet.h"
-#include "walletlistmodel.h"
 #include "walletmanager.h"
-#include "wally.h"
-#include "twofactorcontroller.h"
-#include "settingscontroller.h"
-#include "createaccountcontroller.h"
-#include "sendtransactioncontroller.h"
-#include "renameaccountcontroller.h"
 
 #include <QZXing.h>
 
@@ -35,75 +24,6 @@ Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin);
 #elif defined(QT_QPA_PLATFORM_COCOA)
 Q_IMPORT_PLUGIN(QCocoaIntegrationPlugin);
 #endif
-
-namespace Green {
-
-    namespace {
-
-        const char* uri = "Blockstream.Green";
-        const int version_major = 0;
-        const int version_minor = 1;
-
-        template <typename T>
-        void registerUncreatableType(const char* qml_name)
-        {
-            qmlRegisterUncreatableType<T>(uri, version_major, version_minor, qml_name, QLatin1String("Trying to create uncreatable: %1").arg(qml_name));
-        }
-
-        template <typename T>
-        void registerType(const char* qml_name)
-        {
-            qmlRegisterType<T>(uri, version_major, version_minor, qml_name);
-        }
-
-        template <typename T>
-        void registerType(const char* uri, const char* qml_name)
-        {
-            qmlRegisterType<T>(uri, version_major, version_minor, qml_name);
-        }
-
-
-        template<typename T>
-        void registerSingletonInstance(const char* qml_name)
-        {
-            qmlRegisterSingletonInstance(uri, version_major, version_minor, qml_name, T::instance());
-        }
-
-    } // namespace
-
-    void registerTypes()
-    {
-        registerUncreatableType<Account>("Account");
-        registerUncreatableType<Asset>("Asset");
-        registerUncreatableType<Balance>("Balance");
-        registerUncreatableType<Controller>("Controller");
-        registerUncreatableType<Network>("Network");
-        registerUncreatableType<Transaction>("Transaction");
-        registerUncreatableType<TransactionAmount>("TransactionAmount");
-        registerUncreatableType<Wallet>("Wallet");
-
-        registerUncreatableType<Word>("Word");
-        registerType<MnemonicEditorController>("MnemonicEditorController");
-
-        registerType<CreateAccountController>("CreateAccountController");
-        registerType<ReceiveAddress>("ReceiveAddress");
-        registerType<RenameAccountController>("RenameAccountController");
-        registerType<SendTransactionController>("SendTransactionController");
-        registerType<BumpFeeController>("BumpFeeController");
-        registerType<SettingsController>("SettingsController");
-        registerType<TwoFactorController>("TwoFactorController");
-        registerType<RequestTwoFactorResetController>("RequestTwoFactorResetController");
-        registerType<CancelTwoFactorResetController>("CancelTwoFactorResetController");
-        registerType<SetRecoveryEmailController>("SetRecoveryEmailController");
-
-        registerType<WalletListModel>("WalletListModel");
-
-        registerSingletonInstance<Clipboard>("Clipboard");
-        registerSingletonInstance<NetworkManager>("NetworkManager");
-        registerSingletonInstance<WalletManager>("WalletManager");
-    }
-
-} // namespace Green
 
 int main(int argc, char *argv[])
 {
@@ -145,13 +65,16 @@ int main(int argc, char *argv[])
 
     QQuickStyle::setStyle("Material");
 
+    qmlRegisterSingletonInstance<Clipboard>("Blockstream.Green.Core", 0, 1, "Clipboard", Clipboard::instance());
+    qmlRegisterSingletonInstance<DeviceManager>("Blockstream.Green.Core", 0, 1, "DeviceManager", DeviceManager::instance());
+    qmlRegisterSingletonInstance<NetworkManager>("Blockstream.Green.Core", 0, 1, "NetworkManager", NetworkManager::instance());
+    qmlRegisterSingletonInstance<WalletManager>("Blockstream.Green.Core", 0, 1, "WalletManager", WalletManager::instance());
+
     QQmlApplicationEngine engine;
     engine.setBaseUrl(QUrl("qrc:/"));
 
     QZXing::registerQMLTypes();
     QZXing::registerQMLImageProvider(engine);
-
-    Green::registerTypes();
 
     engine.load(QUrl(QStringLiteral("main.qml")));
     if (engine.rootObjects().isEmpty())

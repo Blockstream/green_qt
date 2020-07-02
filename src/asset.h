@@ -1,6 +1,7 @@
 #ifndef GREEN_ASSET_H
 #define GREEN_ASSET_H
 
+#include <QtQml>
 #include <QJsonObject>
 #include <QObject>
 #include <QString>
@@ -16,7 +17,8 @@ class Asset : public QObject
     Q_PROPERTY(QString name READ name NOTIFY dataChanged)
     Q_PROPERTY(bool hasData READ hasData NOTIFY dataChanged)
     Q_PROPERTY(QJsonObject data READ data NOTIFY dataChanged)
-
+    QML_ELEMENT
+    QML_UNCREATABLE("Asset is instanced by Wallet.")
 public:
     explicit Asset(const QString& id, Wallet* wallet);
 

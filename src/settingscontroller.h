@@ -1,11 +1,14 @@
 #ifndef GREEN_SETTINGSCONTROLLER_H
 #define GREEN_SETTINGSCONTROLLER_H
 
+#include <QtQml>
+
 #include "controller.h"
 
 class SettingsController : public Controller
 {
     Q_OBJECT
+    QML_ELEMENT
 public:
     SettingsController(QObject* parent = nullptr);
 

@@ -7,10 +7,10 @@ Clipboard::Clipboard(QObject* parent) : QObject(parent)
 {
 }
 
-Clipboard *Clipboard::instance()
+Clipboard* Clipboard::instance()
 {
-    static Clipboard clipboard;
-    return &clipboard;
+    static Clipboard instance;
+    return &instance;
 }
 
 void Clipboard::copy(const QString& data)

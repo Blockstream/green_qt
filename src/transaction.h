@@ -1,9 +1,9 @@
 #ifndef GREEN_TRANSACTION_H
 #define GREEN_TRANSACTION_H
 
+#include <QtQml>
 #include <QObject>
 #include <QJsonObject>
-#include <QtQml>
 
 class Account;
 class Asset;
@@ -15,7 +15,8 @@ class TransactionAmount : public QObject
     Q_PROPERTY(Transaction* transaction READ transaction CONSTANT)
     Q_PROPERTY(Asset* asset READ asset CONSTANT)
     Q_PROPERTY(qint64 amount READ amount CONSTANT)
-
+    QML_ELEMENT
+    QML_UNCREATABLE("TransactionAmount is instanced by Transaction.")
 public:
     explicit TransactionAmount(Transaction* transaction, qint64 amount);
     explicit TransactionAmount(Transaction* transaction, Asset* asset, qint64 amount);
@@ -41,7 +42,8 @@ class Transaction : public QObject
     Q_PROPERTY(Account* account READ account CONSTANT)
     Q_PROPERTY(QQmlListProperty<TransactionAmount> amounts READ amounts NOTIFY amountsChanged)
     Q_PROPERTY(QJsonObject data READ data NOTIFY dataChanged)
-
+    QML_ELEMENT
+    QML_UNCREATABLE("Transaction is instanced by Wallet.")
 public:
     explicit Transaction(Account* account);
     virtual ~Transaction();
