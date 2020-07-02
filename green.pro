@@ -47,6 +47,9 @@ SOURCES += \
     src/clipboard.cpp \
     src/controller.cpp \
     src/createaccountcontroller.cpp \
+    src/device.cpp \
+    src/devicelistmodel.cpp \
+    src/devicemanager.cpp \
     src/ga.cpp \
     src/json.cpp \
     src/main.cpp \
@@ -70,6 +73,9 @@ HEADERS += \
     src/clipboard.h \
     src/controller.h \
     src/createaccountcontroller.h \
+    src/device.h \
+    src/devicelistmodel.h \
+    src/devicemanager.h \
     src/ga.h \
     src/json.h \
     src/network.h \
