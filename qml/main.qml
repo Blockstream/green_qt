@@ -189,7 +189,7 @@ ApplicationWindow {
     Action {
         id: restore_wallet_action
         text: qsTrId('id_restore_green_wallet')
-        onTriggered: stack_view.push(restore_view, { wallet: WalletManager.createWallet() })
+        onTriggered: stack_view.push(restore_view)
     }
 
     AboutDialog {
@@ -248,12 +248,7 @@ ApplicationWindow {
     Component {
         id: restore_view
         RestoreWallet {
-          onCanceled2: stack_view.pop()
-          onFinished: {
-              WalletManager.insertWallet(wallet)
-              switchToWallet(wallet);
-              stack_view.pop()
-          }
+          onFinished: stack_view.pop()
         }
     }
 

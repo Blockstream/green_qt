@@ -7,16 +7,17 @@ import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.12
 
 Page {
-    property Wallet wallet
+    RestoreController {
+        id: controller
+    }
 
-    signal canceled2()
     signal finished()
 
     Connections {
-        target: wallet
+        target: controller.wallet
         function onAuthenticationChanged() {
             // TODO show error message
-            if (wallet.authentication === Wallet.Authenticated) {
+            if (controller.wallet.authentication === Wallet.Authenticated) {
                 stack_view.push(pin_page)
             }
         }
@@ -83,7 +84,7 @@ Page {
             icon.source: 'qrc:/svg/cancel.svg'
             icon.width: 16
             icon.height: 16
-            onClicked: canceled2()
+            onClicked: finished()
         }
     }
 
@@ -94,7 +95,7 @@ Page {
 
         BusyIndicator {
             visible: running
-            running: wallet.authentication === Wallet.Authenticating
+            running: controller.wallet && controller.wallet.authentication === Wallet.Authenticating
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
             anchors.margins: 16
@@ -154,8 +155,8 @@ Page {
         onNext: {
             const proxy = proxy_checkbox.checked ? proxy_field.text : '';
             const use_tor = tor_checkbox.checked;
-            wallet.network = network_page.network;
-            wallet.connect(proxy, use_tor);
+            controller.network = network_page.network;
+            controller.wallet.connect(proxy, use_tor);
             settings_drawer.enabled = false;
             stack_view.push(mnemonic_page);
         }
@@ -167,12 +168,12 @@ Page {
             Action {
                 property bool focus: mnemonic_page.valid
                 text: qsTrId('id_continue')
-                enabled: mnemonic_page.valid && wallet.authentication === Wallet.Unauthenticated
+                enabled: mnemonic_page.valid && controller.wallet.authentication === Wallet.Unauthenticated
                 onTriggered: {
                     if (mnemonic_page.password) {
                         stack_view.push(password_page)
                     } else {
-                        wallet.login(mnemonic_page.mnemonic)
+                        controller.wallet.login(mnemonic_page.mnemonic)
                     }
                 }
             }
@@ -185,8 +186,8 @@ Page {
             Action {
                 id: passphrase_next_action
                 text: qsTrId('id_continue')
-                enabled: wallet.authentication === Wallet.Unauthenticated && password_field.text.trim().length > 0
-                onTriggered: wallet.login(mnemonic_page.mnemonic, password_field.text.trim())
+                enabled: controller.wallet && controller.wallet.authentication === Wallet.Unauthenticated && password_field.text.trim().length > 0
+                onTriggered: controller.wallet.login(mnemonic_page.mnemonic, password_field.text.trim())
             }
         ]
         TextField {
@@ -217,7 +218,7 @@ Page {
                     clear();
                     ToolTip.show(qsTrId('id_pins_do_not_match_please_try'), 1000);
                 } else {
-                    wallet.setPin(pin_view.pin);
+                    controller.wallet.setPin(pin_view.pin);
                     stack_view.push(name_page);
                 }
             }
@@ -230,10 +231,10 @@ Page {
             Action {
                 text: qsTrId('id_restore')
                 onTriggered: {
-                    let name = name_field.text.trim();
-                    if (name === '') name = name_field.placeholderText;
-                    wallet.name = name;
+                    controller.name = name_field.text.trim();
+                    controller.restore()
                     finished();
+                    switchToWallet(controller.wallet);
                 }
             }
         ]
@@ -242,7 +243,7 @@ Page {
             id: name_field
             Layout.minimumWidth: 300
             font.pixelSize: 16
-            placeholderText: WalletManager.newWalletName(network_page.network)
+            placeholderText: controller.defaultName
         }
     }
 }
