@@ -163,12 +163,7 @@ Wallet* WalletManager::signup(const QString& proxy, bool use_tor, Network* netwo
 
 QStringList WalletManager::generateMnemonic() const
 {
-    char* mnemonic;
-    int err = GA_generate_mnemonic(&mnemonic);
-    Q_ASSERT(err == GA_OK);
-    auto result = QString(mnemonic).split(' ');
-    GA_destroy_string(mnemonic);
-    return result;
+    return GA::generate_mnemonic();
 }
 
 QJsonObject WalletManager::parseUrl(const QString &url)

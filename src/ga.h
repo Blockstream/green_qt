@@ -16,6 +16,7 @@ void destroy_auth_handler(GA_auth_handler* call);
 QJsonArray get_subaccounts(GA_session* session);
 QJsonObject convert_amount(GA_session* session, const QJsonObject& input);
 QJsonObject process_auth2(GA_auth_handler* call);
+QStringList generate_mnemonic();
 
 template <typename F>
 QJsonObject process_auth(F f)

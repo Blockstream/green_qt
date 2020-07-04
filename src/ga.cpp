@@ -90,4 +90,14 @@ QJsonObject process_auth2(GA_auth_handler* call)
     Q_UNREACHABLE();
 }
 
+QStringList generate_mnemonic()
+{
+    char* mnemonic;
+    int err = GA_generate_mnemonic(&mnemonic);
+    Q_ASSERT(err == GA_OK);
+    auto result = QString(mnemonic).split(' ');
+    GA_destroy_string(mnemonic);
+    return result;
+}
+
 } // namespace GA
