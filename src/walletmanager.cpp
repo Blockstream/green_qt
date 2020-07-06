@@ -161,11 +161,6 @@ Wallet* WalletManager::signup(const QString& proxy, bool use_tor, Network* netwo
     return wallet;
 }
 
-QStringList WalletManager::generateMnemonic() const
-{
-    return GA::generate_mnemonic();
-}
-
 QJsonObject WalletManager::parseUrl(const QString &url)
 {
     QJsonObject r;

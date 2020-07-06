@@ -29,7 +29,6 @@ signals:
     void changed();
 
 public slots:
-    QStringList generateMnemonic() const;
     QJsonObject parseUrl(const QString &url);
     Wallet* signup(const QString& proxy, bool use_tor, Network* network, const QString& name, const QStringList &mnemonic, const QByteArray& pin);
 
