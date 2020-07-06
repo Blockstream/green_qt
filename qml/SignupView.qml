@@ -5,26 +5,12 @@ import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.12
 
 Page {
-    property var mnemonic: WalletManager.generateMnemonic()
-
-    property real enter: 0
-    Behavior on enter {
-        NumberAnimation {
-            duration: 5000
-            easing.type: Easing.Linear
-        }
+    SignupController {
+        id: controller
+        network: network_page.network
     }
-    Component.onCompleted: enter = 5000
 
     signal close()
-
-    function anim(start, duration, from, to) {
-        if (enter <= start) return from;
-        if (enter >= start + duration) return to;
-        let t = (enter - start) / duration;
-        t = t * t * t;
-        return from + t * (to - from);
-    }
 
     id: root
 
@@ -68,8 +54,6 @@ Page {
 
         Label {
             anchors.centerIn: parent
-            anchors.verticalCenterOffset: anim(500, 500, -32, 0)
-            opacity: anim(500, 500, 0, 1)
             font.pixelSize: 24
             text: stack_view.currentItem.title
         }
@@ -167,6 +151,7 @@ Page {
     }
 
     property Item mnemonic_page: MnemonicPage {
+        mnemonic: controller.mnemonic
         onBack: {
             network_page.network = null;
             stack_view.pop();
@@ -178,6 +163,7 @@ Page {
     }
 
     property Item quiz_page: MnemonicQuizPage {
+        mnemonic: controller.mnemonic
         onBack: stack_view.pop()
         onNext: stack_view.push(set_pin_page)
     }
@@ -227,15 +213,13 @@ Page {
             Action {
                 text: qsTrId('id_create')
                 onTriggered: {
-                    let name = name_field.text.trim();
-                    if (name === '') name = name_field.placeholderText;
+                    controller.name = name_field.text.trim()
                     const proxy = proxy_checkbox.checked ? proxy_field.text : '';
                     const use_tor = tor_checkbox.checked;
-                    const network = network_page.network;
                     const pin = pin_view.pin;
-                    wallet = WalletManager.signup(proxy, use_tor, network, name, mnemonic, pin);
-                    switchToWallet(wallet);
+                    const wallet = controller.signup(proxy, use_tor, pin);
                     close();
+                    switchToWallet(wallet);
                 }
             }
         ]
@@ -248,7 +232,7 @@ Page {
             id: name_field
             width: 300
             font.pixelSize: 16
-            placeholderText: WalletManager.newWalletName(network_page.network)
+            placeholderText: controller.defaultName
         }
     }
 }

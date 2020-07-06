@@ -5,6 +5,7 @@ import QtQuick.Layouts 1.12
 
 Item {
     property string title: qsTrId('id_write_down_your_mnemonic_on')
+    property alias mnemonic: view.mnemonic
     property list<Action> actions: [
         Action {
             text: qsTrId('id_back')
@@ -24,6 +25,5 @@ Item {
     MnemonicView {
         id: view
         anchors.centerIn: parent
-        mnemonic: root.mnemonic
     }
 }

@@ -3,6 +3,7 @@ import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.12
 
 RowLayout {
+    property var mnemonic
     property int count: 4
 
     property bool complete: {

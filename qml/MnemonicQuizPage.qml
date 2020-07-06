@@ -4,6 +4,7 @@ import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.12
 
 Item {
+    property alias mnemonic: view.mnemonic
     property string title: qsTrId('id_check_your_backup')
     property list<Action> actions: [
         Action {

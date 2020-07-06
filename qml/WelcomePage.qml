@@ -19,7 +19,6 @@ Column {
         source: 'qrc:/svg/onboarding_illustration.svg'
         horizontalAlignment: Qt.AlignHCenter
         verticalAlignment: Qt.AlignVCenter
-        opacity: anim(500, 500, 0, 1)
         anchors.horizontalCenter: parent.horizontalCenter
     }
 
@@ -29,7 +28,6 @@ Column {
         CheckBox {
             id: checkbox
             focus: true
-            opacity: anim(1000, 500, 0, 1)
             anchors.verticalCenter: parent.verticalCenter
         }
         Label {
