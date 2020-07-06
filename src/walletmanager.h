@@ -23,7 +23,7 @@ public:
 
     QQmlListProperty<Wallet> wallets();
 
-    Q_INVOKABLE QString newWalletName(Network* network) const;
+    QString newWalletName(Network* network) const;
 
 signals:
     void changed();
