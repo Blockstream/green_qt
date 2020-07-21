@@ -139,6 +139,7 @@ unix:!macos:!android {
     } else {
         LIBS += -L$${GDK_PATH} -lgreenaddress
     }
+    LIBS += -ludev
 }
 
 win32:static {
