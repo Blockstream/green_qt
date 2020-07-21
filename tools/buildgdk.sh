@@ -35,7 +35,7 @@ else
     exit 1
 fi
 
-mv ${GDK_PATH}/src/build-*/src/libgreenaddress_full.a ${GDK_PATH}/libgreenaddress_full.a
+mv ${GDK_PATH}/src/build-*/src/libgreenaddress* ${GDK_PATH}
 mv ${GDK_PATH}/src/include/gdk.h ${GDK_PATH}/gdk.h
 
 rm -fr ${GDK_PATH}/src ${GDKVENV}
