@@ -48,7 +48,7 @@ ListView {
                     spacing: 8
                     Button {
                         flat: true
-                        enabled: !wallet.locked
+                        enabled: !wallet.locked && account.balance > 0
                         icon.source: 'qrc:/svg/send.svg'
                         icon.width: 24
                         icon.height: 24
