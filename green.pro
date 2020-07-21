@@ -146,7 +146,7 @@ win32:static {
     # FIXME: the following script appends -lwinpthread at the end so that green .rsrc entries are used instead
     QMAKE_LINK=$${PWD}/link.sh
     RC_ICONS = Green.ico
-    LIBS += $${GDK_PATH}/libgreenaddress_full.a
+    LIBS += $${GDK_PATH}/libgreenaddress_full.a /usr/x86_64-w64-mingw32/lib/libhid.a /usr/x86_64-w64-mingw32/lib/libsetupapi.a
 }
 
 DISTFILES += \
