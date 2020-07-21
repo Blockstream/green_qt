@@ -28,6 +28,23 @@ ListView {
                 ToolTip.text: account.name
                 ToolTip.visible: truncated && hovered
             }
+            SectionLabel {
+                text: qsTrId('id_2of3_account')
+                visible: account.json.type === '2of3'
+                anchors.right: parent.right
+                anchors.rightMargin: 8
+                font.pixelSize: 10
+                Rectangle {
+                    anchors.fill: parent
+                    anchors.margins: -2
+                    anchors.rightMargin: -8
+                    anchors.leftMargin: -8
+                    color: 'white'
+                    opacity: 0.2
+                    radius: height / 2
+                    z: -1
+                }
+            }
             Item { height: 8; width: 1 }
             Row {
                 spacing: 10
