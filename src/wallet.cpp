@@ -361,18 +361,20 @@ void Wallet::loginWithPin(const QByteArray& pin)
 
     QMetaObject::invokeMethod(m_context, [this, pin] {
         GA_json* pin_data;
-        int err = GA_convert_string_to_json(m_pin_data.constData(), &pin_data);
-        err = GA_login_with_pin(m_session, pin.constData(), pin_data);
-        qDebug() << "GA_login_with_pin" << err;
-        GA_destroy_json(pin_data);
-
-        const bool authenticated = err == GA_OK;
+        auto result = GA::process_auth([&] (GA_auth_handler** call) {
+            int err = GA_convert_string_to_json(m_pin_data.constData(), &pin_data);
+            Q_ASSERT(err == GA_OK);
+            err = GA_login_with_pin(m_session, pin.constData(), pin_data, call);
+            GA_destroy_json(pin_data);
+            Q_ASSERT(err == GA_OK);
+        });
+        const bool authenticated = result.value("status").toString() == "done";
 
         int login_attempts_remaining = m_login_attempts_remaining;
-        if (err == GA_NOT_AUTHORIZED) {
-            login_attempts_remaining --;
-        } else if (login_attempts_remaining < 3) {
+        if (authenticated) {
             login_attempts_remaining = 3;
+        } else {
+            login_attempts_remaining --;
         }
 
         if (m_login_attempts_remaining != login_attempts_remaining) {
