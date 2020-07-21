@@ -146,6 +146,7 @@ Page {
     }
 
     property Item network_page: NetworkPage {
+        subtitle: qsTrId('id_create_a_wallet_for_bitcoin')
         onBack: stack_view.pop()
         onNext: stack_view.push(mnemonic_page)
     }

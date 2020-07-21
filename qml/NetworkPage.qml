@@ -7,6 +7,7 @@ import QtQuick.Layouts 1.12
 
 Item {
     property string title: qsTrId('id_choose_your_network')
+    property string subtitle
     property list<Action> actions: [
         Action {
             text: qsTrId('id_back')
@@ -27,7 +28,7 @@ Item {
 
         Label {
             anchors.verticalCenter: parent.verticalCenter
-            text: qsTrId('id_create_a_wallet_for_bitcoin')
+            text: subtitle
             font.pixelSize : 14
         }
 

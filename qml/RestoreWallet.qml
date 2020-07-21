@@ -151,6 +151,7 @@ Page {
     }
 
     property Item network_page: NetworkPage {
+        subtitle: qsTrId('id_restore_a_wallet_for_bitcoin')
         actions: []
         onNext: {
             const proxy = proxy_checkbox.checked ? proxy_field.text : '';
