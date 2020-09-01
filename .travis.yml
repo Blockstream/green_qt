@@ -4,7 +4,7 @@ matrix:
   include:
     - services:
         - docker
-      script: docker run -v $PWD:/ga greenaddress/ci@sha256:49d6de2ff7d12d7672d929f10e7e8b2b772fc2b5d1fddcc94c3b39ec82197901 /bin/sh -c "cd /ga && ./tools/buildgreen.sh linux"
+      script: docker run -v $PWD:/ga greenaddress/ci@sha256:a1369e0a93d521c49eeb9d8f2b8013ac63ed4d5bc7a026cbacc77ac717408e75 /bin/sh -c "cd /ga && ./tools/buildgreen.sh linux"
     - services:
         - docker
-      script: docker run -v $PWD:/ga greenaddress/ci@sha256:49d6de2ff7d12d7672d929f10e7e8b2b772fc2b5d1fddcc94c3b39ec82197901 /bin/sh -c "cd /ga && ./tools/buildgreen.sh windows"
+      script: docker run -v $PWD:/ga greenaddress/ci@sha256:a1369e0a93d521c49eeb9d8f2b8013ac63ed4d5bc7a026cbacc77ac717408e75 /bin/sh -c "cd /ga && ./tools/buildgreen.sh windows"
