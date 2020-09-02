@@ -10,7 +10,7 @@ ColumnLayout {
 
     spacing: 30
 
-    SettingsController {
+    Controller {
         id: controller
     }
 
@@ -47,7 +47,7 @@ ColumnLayout {
                 text: qsTrId('id_1d_minutes').arg(modelData)
             }
             displayText: qsTrId('id_1d_minutes').arg(currentText)
-            onCurrentTextChanged: controller.change({ altimeout: model[currentIndex] })
+            onCurrentTextChanged: controller.changeSettings({ altimeout: model[currentIndex] })
             currentIndex: model.indexOf(wallet.settings.altimeout)
         }
     }

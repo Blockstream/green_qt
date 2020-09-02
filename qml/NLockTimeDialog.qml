@@ -5,14 +5,14 @@ import QtQuick.Layouts 1.12
 
 ControllerDialog {
     title: qsTrId('id_set_locktime')
-    controller: SettingsController {}
+    controller: Controller {}
 
     initialItem: ColumnLayout {
         property list<Action> actions: [
             Action {
                 text: qsTrId('id_ok')
                 enabled: nlocktime_blocks.acceptableInput
-                onTriggered: controller.change({ nlocktime: Number.parseInt(nlocktime_blocks.text) })
+                onTriggered: controller.changeSettings({ nlocktime: Number.parseInt(nlocktime_blocks.text) })
             }
         ]
         Label {

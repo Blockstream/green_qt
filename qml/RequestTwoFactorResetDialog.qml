@@ -5,13 +5,13 @@ import QtQuick.Layouts 1.12
 
 ControllerDialog {
     title: qsTrId('id_request_twofactor_reset')
-    controller: RequestTwoFactorResetController { }
+    controller: Controller { }
     initialItem: ColumnLayout {
         property list<Action> actions: [
             Action {
                 enabled: data_field.text.trim() !== ''
                 text: qsTrId('id_next')
-                onTriggered: controller.execute(email_field.text)
+                onTriggered: controller.requestTwoFactorReset(email_field.text)
             }
         ]        
         Label {

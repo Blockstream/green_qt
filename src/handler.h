@@ -7,7 +7,6 @@
 struct GA_session;
 struct GA_auth_handler;
 
-class Controller;
 class Handler : public QObject
 {
     Q_OBJECT
@@ -16,36 +15,27 @@ class Handler : public QObject
     QML_UNCREATABLE("Handler is an abstract base class.")
     Q_ENUMS(Status)
 public:
-    enum class Status { INVALID, DONE, ERROR, CALL, RESOLVE_CODE, REQUEST_CODE };
-    enum class Action { INVALID, CREATE_TRANSACTION, ENABLE_2FA, ENABLE_EMAIL, CHANGE_TX_LIMITS, GET_XPUBS, SIGN_MESSAGE, SIGN_TX, SEND_RAW_TX, };
-    Handler(Controller* controller);
+    Handler(QObject* parent);
     virtual ~Handler();
-    virtual void init() = 0;
+    virtual void init(GA_session* session) = 0;
     void exec();
-    Status status() const { return m_status; }
-    Action action() const { Q_ASSERT(m_status == Status::RESOLVE_CODE); return m_action; }
-    const QJsonObject& result() const { Q_ASSERT(m_status != Status::INVALID); return m_result; }
+    const QJsonObject& result() const { Q_ASSERT(!m_result.empty()); return m_result; }
 public slots:
     void request(const QByteArray& method);
     void resolve(const QJsonObject& data);
     void resolve(const QByteArray& data);
 signals:
+    void resultChanged(const QJsonObject& result);
     void done();
     void error();
     void requestCode();
     void resolveCode();
-    void statusChanged(Status status);
-    void resultChanged(const QJsonObject& result);
+    void invalidCode();
 private:
-    void setStatus(Status status);
-    void setAction(Action action);
+    void setResult(const QJsonObject &result);
 protected:
-    Controller* const m_controller;
-    GA_session* const m_session;
     GA_auth_handler* m_handler{nullptr};
     QJsonObject m_result;
-    Status m_status{Status::INVALID};
-    Action m_action{Action::INVALID};
 public:
     QList<QVector<uint32_t>> m_paths;
     QJsonArray m_xpubs;

@@ -5,13 +5,13 @@ import QtQuick.Layouts 1.12
 
 ControllerDialog {
     title: qsTrId('id_set_an_email_for_recovery')
-    controller: SetRecoveryEmailController { }
+    controller: Controller { }
     initialItem: ColumnLayout {
         property list<Action> actions: [
             Action {
                 enabled: email_field.text.trim() !== ''
                 text: qsTrId('id_next')
-                onTriggered: controller.execute(email_field.text)
+                onTriggered: controller.setRecoveryEmail(email_field.text)
             }
         ]
         Label {

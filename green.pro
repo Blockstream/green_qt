@@ -63,7 +63,6 @@ SOURCES += \
     src/renameaccountcontroller.cpp \
     src/restorecontroller.cpp \
     src/sendtransactioncontroller.cpp \
-    src/settingscontroller.cpp \
     src/signupcontroller.cpp \
     src/transaction.cpp \
     src/twofactorcontroller.cpp \
@@ -92,7 +91,6 @@ HEADERS += \
     src/renameaccountcontroller.h \
     src/restorecontroller.h \
     src/sendtransactioncontroller.h \
-    src/settingscontroller.h \
     src/signupcontroller.h \
     src/transaction.h \
     src/twofactorcontroller.h \

@@ -11,10 +11,6 @@ ColumnLayout {
 
     spacing: 30
 
-    SettingsController {
-        id: controller
-    }
-
     SettingsBox {
         title: qsTrId('id_wallet_backup')
         description: qsTrId('id_your_wallet_backup_is_made_of') + "\n" + qsTrId('id_blockstream_does_not_have')

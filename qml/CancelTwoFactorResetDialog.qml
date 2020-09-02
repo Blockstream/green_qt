@@ -5,12 +5,12 @@ import QtQuick.Layouts 1.12
 
 ControllerDialog {
     title: qsTrId('id_cancel_twofactor_reset')
-    controller: CancelTwoFactorResetController { }
+    controller: Controller { }
     initialItem: ColumnLayout {
         property list<Action> actions: [
             Action {
                 text: qsTrId('id_next')
-                onTriggered: controller.execute()
+                onTriggered: controller.cancelTwoFactorReset()
             }
         ]
         Label {

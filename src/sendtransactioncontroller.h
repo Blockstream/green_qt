@@ -9,6 +9,7 @@
 class Balance;
 class Transaction;
 
+
 class SendTransactionController : public AccountController
 {
     Q_OBJECT
@@ -60,7 +61,7 @@ public:
     QJsonObject transaction() const;
 
 public slots:
-    void send();
+    void signAndSend();
 
 signals:
     void changed();
@@ -81,9 +82,8 @@ protected:
     QString m_memo;
     qint64 m_fee_rate{0};
     QJsonObject m_transaction;
-
     void setValid(bool valid);
-    bool update(const QJsonObject& result) override;
+    Handler* m_create_handler{nullptr};
 };
 
 class BumpFeeController : public AccountController
@@ -95,13 +95,13 @@ class BumpFeeController : public AccountController
     QJsonObject m_tx;
     int m_fee_rate{0};
     int m_req{0};
+    Handler* m_create_handler{nullptr};
 public:
     BumpFeeController(QObject* parent = nullptr);
     int feeRate() const { return m_fee_rate; }
     void setFeeRate(int feeRate);
     Transaction* transaction();
     Q_INVOKABLE void bumpFee();
-    bool update(const QJsonObject& result) override;
     QJsonObject tx() const { return m_tx; }
 
 private slots:

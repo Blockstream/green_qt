@@ -30,6 +30,7 @@ signals:
     void defaultNameChanged(const QString& name);
     void nameChanged(const QString& name);
     void walletChanged(Wallet* wallet);
+    void finished();
 private:
     Network* m_network{nullptr};
     QString m_name;

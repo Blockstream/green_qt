@@ -12,7 +12,7 @@ ScrollView {
         },
         Action {
             text: qsTrId('id_send')
-            onTriggered: controller.send()
+            onTriggered: controller.signAndSend()
         }
     ]
 

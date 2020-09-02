@@ -1,52 +1,37 @@
 #include "createaccountcontroller.h"
+#include "handler.h"
 #include "json.h"
 #include "wallet.h"
 
 #include <gdk.h>
 
-CreateAccountController::CreateAccountController(QObject *parent) : Controller(parent)
+class CreateAccountHandler : public Handler
 {
-
-}
-
-QString CreateAccountController::name() const
-{
-    return m_name;
-}
-
-void CreateAccountController::setName(const QString &name)
-{
-    if (m_name == name)
-        return;
-
-    m_name = name;
-    emit nameChanged(m_name);
-}
-
-void CreateAccountController::create()
-{
-    dispatch([this](GA_session* session, GA_auth_handler** auth_handler) {
-        GA_json* details = Json::fromObject({
-            { "name", m_name.toLocal8Bit().constData() },
-            { "type", m_type.toLocal8Bit().constData() }
-        });
-        int res = GA_create_subaccount(session, details, auth_handler);
+    QJsonObject m_details;
+public:
+    CreateAccountHandler(const QJsonObject& details, Controller* controller)
+        : Handler(controller)
+        , m_details(details) { }
+    void init(GA_session* session) override {
+        auto details = Json::fromObject(m_details);
+        int res = GA_create_subaccount(session, details, &m_handler);
         Q_ASSERT(res == GA_OK);
         GA_destroy_json(details);
-    });
-}
-
-bool CreateAccountController::update(const QJsonObject &result)
-{
-    auto status = result.value("status").toString();
-    if (status == "done") {
-        int pointer = result.value("result").toObject().value("pointer").toInt();
-        auto account = wallet()->getOrCreateAccount(pointer);
-        emit accountCreated(account);
-        wallet()->reload();
-        wallet()->setCurrentAccount(account);
     }
-    return Controller::update(result);
+    int pointer() const {
+        Q_ASSERT(m_result.value("status").toString() == "done");
+        return m_result.value("result").toObject().value("pointer").toInt();
+    }
+};
+
+CreateAccountController::CreateAccountController(QObject *parent)
+    : Controller(parent) { }
+
+void CreateAccountController::setName(const QString& name)
+{
+    if (m_name == name) return;
+    m_name = name;
+    emit nameChanged(m_name);
 }
 
 void CreateAccountController::setType(const QString& type)
@@ -54,4 +39,21 @@ void CreateAccountController::setType(const QString& type)
     if (m_type == type) return;
     m_type = type;
     emit typeChanged(m_type);
+}
+
+void CreateAccountController::create()
+{
+    auto details = QJsonObject{
+        { "name", m_name },
+        { "type", m_type }
+    };
+    auto handler = new CreateAccountHandler(details, this);
+    connect(handler, &Handler::done, [this, handler] {
+        auto account = wallet()->getOrCreateAccount(handler->pointer());
+        wallet()->reload();
+        wallet()->setCurrentAccount(account);
+        handler->deleteLater();
+        emit finished();
+    });
+    exec(handler);
 }

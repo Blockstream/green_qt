@@ -7,14 +7,11 @@ import QtQuick.Layouts 1.12
 ControllerDialog {
     property string method
 
-    id: controller_dialog
     title: qsTrId('id_set_up_twofactor_authentication')
     modal: true
     doneText: qsTrId('id_enabled')
 
-    controller: TwoFactorController {
-        method: controller_dialog.method
-    }
+    controller: Controller { }
 
     initialItem: method === 'gauth' ? gauth_component : generic_component
 
@@ -25,7 +22,7 @@ ControllerDialog {
                 Action {
                     text: qsTrId('id_next')
                     enabled: data_field.text !== ''
-                    onTriggered: controller.enable(data_field.text)
+                    onTriggered: controller.enableTwoFactor(method, data_field.text)
                 }
             ]
             Image {
@@ -58,7 +55,7 @@ ControllerDialog {
             property list<Action> actions: [
                 Action {
                     text: qsTrId('id_next')
-                    onTriggered: controller.enable(wallet.config[method].data)
+                    onTriggered: controller.enableTwoFactor(method, wallet.config[method].data)
                 }
             ]
             SectionLabel {

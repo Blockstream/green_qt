@@ -1,35 +1,10 @@
 #include "ga.h"
 #include "handler.h"
-#include "controller.h"
 
 #include <gdk.h>
 
-namespace {
-    const QMap<QString, Handler::Status> STATUS{
-        { "done", Handler::Status::DONE },
-        { "error", Handler::Status::ERROR },
-        { "call", Handler::Status::CALL },
-        { "request_code", Handler::Status::REQUEST_CODE },
-        { "resolve_code", Handler::Status::RESOLVE_CODE },
-    };
-    const QMap<QString, Handler::Action> ACTION{
-        { "create_transaction", Handler::Action::CREATE_TRANSACTION },
-        { "get_xpubs", Handler::Action::GET_XPUBS },
-        { "sign_tx", Handler::Action::SIGN_TX },
-        { "sign_message", Handler::Action::SIGN_MESSAGE },
-        { "enable_2fa", Handler::Action::ENABLE_2FA },
-        { "enable_email", Handler::Action::ENABLE_EMAIL },
-        { "change_tx_limits", Handler::Action::CHANGE_TX_LIMITS },
-        { "send_raw_tx", Handler::Action::SEND_RAW_TX },
-    };
-}
-
-Handler::Handler(Controller *controller)
-    : QObject(controller)
-    , m_controller(controller)
-    , m_session(controller->session())
-{
-}
+// TODO ditch controller, receive parent and session?
+Handler::Handler(QObject* parent) : QObject(parent) { }
 
 Handler::~Handler()
 {
@@ -40,25 +15,27 @@ void Handler::exec()
 {
     Q_ASSERT(m_handler);
     for (;;) {
-        m_result = GA::auth_handler_get_result(m_handler);
-        emit resultChanged(m_result);
+        const auto result = GA::auth_handler_get_result(m_handler);
+        const auto status = result.value("status").toString();
 
-        setStatus(STATUS.value(m_result.value("status").toString(), Status::INVALID));
-        setAction(ACTION.value(m_result.value("action").toString(), Action::INVALID));
-
-        if (m_status == Status::DONE) {
-            return emit done();
-        }
-        if (m_status == Status::ERROR) {
-            return emit error();
-        }
-        if (m_status == Status::CALL) {
+        if (status == "call") {
             int res = GA_auth_handler_call(m_handler);
             Q_ASSERT(res == GA_OK);
             continue;
         }
-        if (m_status == Status::REQUEST_CODE) {
-            QJsonArray methods = m_result.value("methods").toArray();
+
+        if (status == "done") {
+            setResult(result);
+            return emit done();
+        }
+
+        if (status == "error") {
+            setResult(result);
+            return emit error();
+        }
+
+        if (status == "request_code") {
+            const auto methods = result.value("methods").toArray();
             Q_ASSERT(methods.size() > 0);
             if (methods.size() == 1) {
                 const auto method = methods.first().toString();
@@ -66,24 +43,41 @@ void Handler::exec()
                 Q_ASSERT(err == GA_OK);
                 continue;
             } else {
-                emit requestCode();
-                return;
+                setResult(result);
+                return emit requestCode();
             }
         }
-        if (m_status == Status::RESOLVE_CODE) {
-            if (m_action == Action::GET_XPUBS) {
+
+        if (status == "resolve_code") {
+            const auto action = result.value("action").toString();
+            if (action == "get_xpubs") {
                 Q_ASSERT(m_paths.empty());
-                for (auto path : m_result.value("required_data").toObject().value("paths").toArray()) {
+                for (auto path : result.value("required_data").toObject().value("paths").toArray()) {
                     QVector<uint32_t> p;
                     for (auto x : path.toArray()) {
                         p.append(x.toDouble());
                     }
                     m_paths.append(p);
                 }
+
+                setResult(result);
+                return emit resolveCode();
             }
-            emit resolveCode();
-            return;
+
+            // if (action == "enable_2fa" || action == "enable_sms" || action == "disable_2fa")
+            {
+                const auto current_method = result.value("method").toString();
+                const auto previous_method = m_result.value("method").toString();
+                setResult(result);
+                if (previous_method == current_method) {
+                    return emit invalidCode();
+                } else {
+                    return emit resolveCode();
+                }
+            }
         }
+
+        qDebug() << result;
         Q_UNREACHABLE();
     }
 }
@@ -91,7 +85,7 @@ void Handler::exec()
 void Handler::request(const QByteArray& method)
 {
     Q_ASSERT(m_handler);
-    Q_ASSERT(m_status == Status::REQUEST_CODE);
+    Q_ASSERT(m_result.value("status").toString() == "request_code");
     int res = GA_auth_handler_request_code(m_handler, method.data());
     Q_ASSERT(res == GA_OK);
     exec();
@@ -105,22 +99,14 @@ void Handler::resolve(const QJsonObject& data)
 void Handler::resolve(const QByteArray& data)
 {
     Q_ASSERT(m_handler);
-    Q_ASSERT(m_status == Status::RESOLVE_CODE);
+    Q_ASSERT(m_result.value("status").toString() == "resolve_code");
     int res = GA_auth_handler_resolve_code(m_handler, data.constData());
     Q_ASSERT(res == GA_OK);
     exec();
 }
 
-void Handler::setStatus(Handler::Status status)
+void Handler::setResult(const QJsonObject& result)
 {
-    Q_ASSERT(status != Status::INVALID);
-    if (m_status == status) return;
-    m_status = status;
-    emit statusChanged(m_status);
-}
-
-void Handler::setAction(Handler::Action action)
-{
-    Q_ASSERT(action != Action::INVALID);
-    m_action = action;
+    m_result = result;
+    emit resultChanged(m_result);
 }

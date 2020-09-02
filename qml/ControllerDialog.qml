@@ -64,75 +64,89 @@ WalletDialog {
         sms: 'id_sms'
     })
 
-    ControllerResult {
-        targetStatus: 'request_code'
-        stackView: stack_view
-        ColumnLayout {
-            Repeater {
-                model: controller.result.methods
-                Button {
-                    property string method: modelData
-                    icon.source: `qrc:/svg/2fa_${method}.svg`
-                    icon.color: 'transparent'
-                    flat: true
-                    Layout.fillWidth: true
-                    text: qsTrId(method_label[method])
-                    onClicked: controller.requestCode(method)
-                }
-            }
-            Item {
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-            }
+    Connections {
+        target: controller
+        function onFinished() {
+            stack_view.push(doneComponent)
         }
     }
 
-    ControllerResult {
-        targetStatus: 'resolve_code'
-        stackView: stack_view
-        WizardPage {
-            actions: [
-                Action {
-                    text: qsTrId('id_next')
-                    enabled: code_field.acceptableInput
-                    onTriggered: controller.resolveCode(code_field.text)
-                }
-            ]
-            Connections {
-                target: controller
-                function onInvalidCode() {
-                    code_field.clear()
-                    code_field.ToolTip.show(qsTrId('id_invalid_twofactor_code'), 1000);
-                    code_field.forceActiveFocus()
-                }
+    Connections {
+        target: controller
+        function onFinished() { push(handler, finishComponent) }
+        //function onDone(handler) { push(handler, doneComponent) }
+        function onError(handler) { push(handler, errorComponent) }
+        function onRequestCode(handler) { console.log('req code!', handler); push(handler, requestCodeComponent) }
+        function onResolveCode(handler) { push(handler, resolveCodeComponent) }
+    }
+
+    function push(handler, component) {
+        stack_view.push(component, { handler }) //, StackView.ReplaceTransition)
+    }
+
+    property Component requestCodeComponent: ColumnLayout {
+        property Handler handler
+        Repeater {
+            model: handler.result.methods
+            Button {
+                property string method: modelData
+                icon.source: `qrc:/svg/2fa_${method}.svg`
+                icon.color: 'transparent'
+                flat: true
+                Layout.fillWidth: true
+                text: qsTrId(method_label[method])
+                onClicked: handler.request(method)
             }
-            Column {
-                spacing: 10
-                anchors.horizontalCenter: parent.horizontalCenter
-                Image {
-                    anchors.horizontalCenter: enterCodeText.horizontalCenter
-                    source: `qrc:/svg/2fa_${controller.result.method}.svg`
-                    sourceSize.width: 64
-                    sourceSize.height: 64
+        }
+        Item {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+        }
+    }
+
+    property Component resolveCodeComponent: WizardPage {
+        property Handler handler
+        actions: [
+            Action {
+                text: qsTrId('id_next')
+                enabled: code_field.acceptableInput
+                onTriggered: handler.resolve(code_field.text)
+            }
+        ]
+        Connections {
+            target: handler
+            function onInvalidCode() {
+                code_field.clear()
+                code_field.ToolTip.show(qsTrId('id_invalid_twofactor_code'), 1000);
+                code_field.forceActiveFocus()
+            }
+        }
+        Column {
+            spacing: 10
+            anchors.horizontalCenter: parent.horizontalCenter
+            Image {
+                anchors.horizontalCenter: enterCodeText.horizontalCenter
+                source: `qrc:/svg/2fa_${handler.result.method}.svg`
+                sourceSize.width: 64
+                sourceSize.height: 64
+            }
+            Label {
+                id: enterCodeText
+                text: qsTrId('id_please_provide_your_1s_code').arg(handler.result.method)
+            }
+            TextField {
+                id: code_field
+                horizontalAlignment: Qt.AlignHCenter
+                validator: RegExpValidator {
+                    regExp: /[0-9]{6}/
                 }
-                Label {
-                    id: enterCodeText
-                    text: qsTrId('id_please_provide_your_1s_code').arg(controller.result.method)
-                }
-                TextField {
-                    id: code_field
-                    horizontalAlignment: Qt.AlignHCenter
-                    validator: RegExpValidator {
-                        regExp: /[0-9]{6}/
-                    }
-                    anchors.horizontalCenter: enterCodeText.horizontalCenter
-                }
-                Label {
-                    visible: !!controller.result.attempts_remaining
-                    anchors.horizontalCenter: enterCodeText.horizontalCenter
-                    text: qsTrId('id_attempts_remaining_d').arg(controller.result.attempts_remaining)
-                    font.pixelSize: 10
-                }
+                anchors.horizontalCenter: enterCodeText.horizontalCenter
+            }
+            Label {
+                visible: !!handler.result.attempts_remaining
+                anchors.horizontalCenter: enterCodeText.horizontalCenter
+                text: qsTrId('id_attempts_remaining_d').arg(handler.result.attempts_remaining)
+                font.pixelSize: 10
             }
         }
     }
@@ -157,23 +171,13 @@ WalletDialog {
                 font.pixelSize: 20
 
             }
-
         }
     }
 
-    ControllerResult {
-        targetStatus: 'done'
-        stackView: stack_view
-        component: doneComponent
-    }
-
-    ControllerResult {
-        targetStatus: 'error'
-        stackView: stack_view
-        Label {
-            text: controller.result.error
-            property list<Action> actions
-        }
+    property Component errorComponent: Label {
+        property Handler handler
+        property list<Action> actions
+        text: 'ERROR:' + handler.result.error
     }
 
     StackView {

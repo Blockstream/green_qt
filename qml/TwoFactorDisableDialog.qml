@@ -4,20 +4,17 @@ import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.12
 
 ControllerDialog {
-    id: controller_dialog
     property string method
     title: qsTrId('id_set_up_twofactor_authentication')
     doneText: qsTrId('id_disabled')
 
-    controller: TwoFactorController {
-        method: controller_dialog.method
-    }
+    controller: Controller {}
 
     initialItem: RowLayout {
         property list<Action> actions: [
             Action {
                 text: qsTrId('id_next')
-                onTriggered: controller.disable()
+                onTriggered: controller.disableTwoFactor(method)
             }
         ]
 

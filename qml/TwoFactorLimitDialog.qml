@@ -21,11 +21,11 @@ ControllerDialog {
     doneText: qsTrId('id_your_twofactor_threshold_is_s').arg(threshold + ' ' +  ticker)
     minimumWidth: 400
     height: 250
-    controller: TwoFactorController { }
+    controller: Controller { }
     initialItem: WizardPage {
         actions: Action {
             text: qsTrId('id_next')
-            onTriggered: controller.changeLimit(currency_combo.fiat, amount_field.text)
+            onTriggered: controller.changeTwoFactorLimit(currency_combo.fiat, amount_field.text)
         }
 
         GridLayout {

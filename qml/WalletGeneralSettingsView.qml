@@ -10,7 +10,7 @@ ColumnLayout {
 
     spacing: 30
 
-    SettingsController {
+    Controller {
         id: controller
     }
 
@@ -47,7 +47,7 @@ ColumnLayout {
             onCurrentValueChanged: {
                 if (currentValue === '') return
                 if (currentValue === wallet.settings.unit) return
-                controller.change({ unit: currentValue })
+                controller.changeSettings({ unit: currentValue })
             }
         }
     }
@@ -77,7 +77,7 @@ ColumnLayout {
                         if (currentText === '') return
                         if (currentText === wallet.settings.pricing.currency) return
                         if (per_currency[currentText].indexOf(wallet.settings.pricing.exchange) < 0) return
-                        controller.change({ pricing: { currency: currentText } })
+                        controller.changeSettings({ pricing: { currency: currentText } })
                     }
 
                     //Layout.fillWidth: true
@@ -93,7 +93,7 @@ ColumnLayout {
                         if (!focus) return
                         if (currentText === '') return
                         if (currentText === wallet.settings.pricing.exchange) return
-                        controller.change({ pricing: { currency: currency_combo.currentText, exchange: currentText } })
+                        controller.changeSettings({ pricing: { currency: currency_combo.currentText, exchange: currentText } })
                     }
                     Layout.minimumWidth: 150
                 }
@@ -112,7 +112,7 @@ ColumnLayout {
             }
             onClicked: {
                 checked = wallet.settings.notifications.email_outgoing;
-                controller.change({
+                controller.changeSettings({
                     notifications: {
                         email_incoming: !checked,
                         email_outgoing: !checked

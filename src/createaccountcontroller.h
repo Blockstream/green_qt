@@ -5,8 +5,6 @@
 
 #include <QtQml>
 
-class Account;
-
 class CreateAccountController : public Controller
 {
     Q_OBJECT
@@ -16,7 +14,7 @@ class CreateAccountController : public Controller
 public:
     explicit CreateAccountController(QObject *parent = nullptr);
 
-    QString name() const;
+    QString name() const { return m_name; }
     void setName(const QString& name);
 
     QString type() const { return m_type; }
@@ -25,13 +23,9 @@ public:
 signals:
     void nameChanged(const QString& name);
     void typeChanged(const QString& type);
-    void accountCreated(Account* account);
 
 public slots:
     void create();
-
-protected:
-    bool update(const QJsonObject& result) override;
 
 private:
     QString m_name;

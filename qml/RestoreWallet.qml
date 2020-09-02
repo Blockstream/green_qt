@@ -9,6 +9,11 @@ import QtQuick.Layouts 1.12
 Page {
     RestoreController {
         id: controller
+
+        onFinished: {
+            parent.finished();
+            switchToWallet(controller.wallet);
+        }
     }
 
     signal finished()
@@ -52,7 +57,6 @@ Page {
                 font.pixelSize: 18
                 Layout.margins: 16
             }
-
             CheckBox {
                 id: proxy_checkbox
                 text: qsTrId('id_connect_through_a_proxy')
@@ -234,8 +238,6 @@ Page {
                 onTriggered: {
                     controller.name = name_field.text.trim();
                     controller.restore()
-                    finished();
-                    switchToWallet(controller.wallet);
                 }
             }
         ]
