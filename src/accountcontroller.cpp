@@ -15,9 +15,8 @@ Account *AccountController::account() const
     if (m_account) return m_account;
     auto context = qmlContext(this);
     if (!context) return nullptr;
-    auto xxx = context->contextProperty("account");
-    auto yyy = xxx.value<QObject*>();
-    return qobject_cast<Account*>(yyy);
+    auto account = context->contextProperty("account").value<QObject*>();
+    return qobject_cast<Account*>(account);
 }
 
 Wallet *AccountController::wallet() const
