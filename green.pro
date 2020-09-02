@@ -55,6 +55,7 @@ SOURCES += \
     src/devicelistmodel.cpp \
     src/devicemanager.cpp \
     src/ga.cpp \
+    src/handler.cpp \
     src/json.cpp \
     src/main.cpp \
     src/network.cpp \
@@ -84,6 +85,7 @@ HEADERS += \
     src/devicelistmodel.h \
     src/devicemanager.h \
     src/ga.h \
+    src/handler.h \
     src/json.h \
     src/network.h \
     src/networkmanager.h \
