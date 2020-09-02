@@ -41,7 +41,7 @@ void destroy_auth_handler(GA_auth_handler* call)
 QJsonArray get_subaccounts(GA_session* session)
 {
     Q_ASSERT(session);
-    auto result = process_auth([&] (GA_auth_handler** call) {
+    auto result = process_auth([session] (GA_auth_handler** call) {
         int err = GA_get_subaccounts(session, call);
         Q_ASSERT(err == GA_OK);
     });

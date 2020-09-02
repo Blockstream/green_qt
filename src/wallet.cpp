@@ -360,8 +360,8 @@ void Wallet::loginWithPin(const QByteArray& pin)
     setAuthentication(Authenticating);
 
     QMetaObject::invokeMethod(m_context, [this, pin] {
-        GA_json* pin_data;
-        auto result = GA::process_auth([&] (GA_auth_handler** call) {
+        auto result = GA::process_auth([this, pin] (GA_auth_handler** call) {
+            GA_json* pin_data;
             int err = GA_convert_string_to_json(m_pin_data.constData(), &pin_data);
             Q_ASSERT(err == GA_OK);
             err = GA_login_with_pin(m_session, pin.constData(), pin_data, call);
@@ -413,13 +413,13 @@ void Wallet::signup(const QStringList& mnemonic, const QByteArray& pin)
         GA_json* hw_device;
         GA_convert_string_to_json("{}", &hw_device);
 
-        auto result = GA::process_auth([&] (GA_auth_handler** call) {
+        auto result = GA::process_auth([this, hw_device, raw_mnemonic] (GA_auth_handler** call) {
             int err = GA_register_user(m_session, hw_device, raw_mnemonic.constData(), call);
             Q_ASSERT(err == GA_OK);
         });
         Q_ASSERT(result.value("status").toString() == "done");
 
-        result = GA::process_auth([&] (GA_auth_handler** call) {
+        result = GA::process_auth([this, hw_device, raw_mnemonic] (GA_auth_handler** call) {
             int err = GA_login(m_session, hw_device, raw_mnemonic.constData(), "", call);
             Q_ASSERT(err == GA_OK);
         });
@@ -461,7 +461,7 @@ void Wallet::login(const QStringList& mnemonic, const QString& password)
         GA_json* hw_device;
         GA_convert_string_to_json("{}", &hw_device);
 
-        auto result = GA::process_auth([&] (GA_auth_handler** call) {
+        auto result = GA::process_auth([this, hw_device, raw_mnemonic, password] (GA_auth_handler** call) {
             int err = GA_login(m_session, hw_device, raw_mnemonic.constData(), password.toLatin1().constData(), call);
             Q_ASSERT(err == GA_OK);
         });

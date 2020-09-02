@@ -106,7 +106,7 @@ QQmlListProperty<Balance> Account::balances()
 
 static QJsonArray get_transactions(GA_session* session, int subaccount, int first, int count)
 {
-    auto result = GA::process_auth([&] (GA_auth_handler** call) {
+    auto result = GA::process_auth([session, subaccount, first, count] (GA_auth_handler** call) {
         GA_json* details = Json::fromObject({
             { "subaccount", subaccount },
             { "first", first },
@@ -329,7 +329,7 @@ void ReceiveAddress::generate()
     setGenerating(true);
 
     QMetaObject::invokeMethod(m_account->m_wallet->m_context, [this] {
-        auto result = GA::process_auth([&] (GA_auth_handler** call) {
+        auto result = GA::process_auth([this] (GA_auth_handler** call) {
             auto address_details = Json::fromObject({
                 { "subaccount", static_cast<qint64>(m_account->m_pointer) },
             });
