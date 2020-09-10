@@ -74,13 +74,16 @@ ColumnLayout {
                     model: Object.keys(per_currency).sort()
                     currentIndex: model.indexOf(wallet.settings.pricing.currency)
                     onCurrentTextChanged: {
-                        if (currentText === '') return
-                        if (currentText === wallet.settings.pricing.currency) return
-                        if (per_currency[currentText].indexOf(wallet.settings.pricing.exchange) < 0) return
-                        controller.changeSettings({ pricing: { currency: currentText } })
+                        if (!focus) return
+                        const currency = currentText
+                        if (currency === '') return
+                        if (currency === wallet.settings.pricing.currency) return
+                        const pricing = { currency }
+                        if (per_currency[currency].indexOf(wallet.settings.pricing.exchange) < 0) {
+                            pricing.exchange = per_currency[currentText][0]
+                        }
+                        controller.changeSettings({ pricing })
                     }
-
-                    //Layout.fillWidth: true
                 }
 
                 ComboBox {
@@ -91,9 +94,10 @@ ColumnLayout {
                     currentIndex: Math.max(0, model.indexOf(wallet.settings.pricing.exchange))
                     onCurrentTextChanged: {
                         if (!focus) return
-                        if (currentText === '') return
-                        if (currentText === wallet.settings.pricing.exchange) return
-                        controller.changeSettings({ pricing: { currency: currency_combo.currentText, exchange: currentText } })
+                        const exchange = currentText
+                        if (exchange === '') return
+                        if (exchange === wallet.settings.pricing.exchange) return
+                        controller.changeSettings({ pricing: { exchange } })
                     }
                     Layout.minimumWidth: 150
                 }
