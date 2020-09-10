@@ -54,7 +54,7 @@ Page {
                     id: icon
                     asset: balance.asset
                 }
-                Label {
+                CopyableLabel {
                     text: balance.asset.name
                     font.pixelSize: 16
                     anchors.verticalCenter: icon.verticalCenter
@@ -63,31 +63,31 @@ Page {
             SectionLabel {
                     text: qsTrId('id_ticker')
             }
-            Label {
+            CopyableLabel {
                 text: balance.asset.data.ticker
             }
             SectionLabel {
                 text: qsTrId('id_issuer')
             }
-            Label {
+            CopyableLabel {
                 text: balance.asset.data.entity.domain
             }
             SectionLabel {
                 text: qsTrId('id_total_balance')
             }
-            Label {
+            CopyableLabel {
                 text: balance.displayAmount
             }
             SectionLabel {
                     text: qsTrId('id_asset_id')
             }
-            Label {
+            CopyableLabel {
                 text: balance.asset.id
             }
             SectionLabel {
                 text: qsTrId('id_precision')
             }
-            Label {
+            CopyableLabel {
                 text: balance.asset.data.precision
             }
         }

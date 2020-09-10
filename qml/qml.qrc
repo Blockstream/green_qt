@@ -77,5 +77,6 @@
         <file>DescriptiveRadioButton.qml</file>
         <file>AbstractDialog.qml</file>
         <file>NLockTimeDialog.qml</file>
+        <file>CopyableLabel.qml</file>
     </qresource>
 </RCC>

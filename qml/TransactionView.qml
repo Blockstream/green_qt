@@ -109,7 +109,7 @@ Page {
             SectionLabel {
                 text: qsTrId('id_received_on')
             }
-            Label {
+            CopyableLabel {
                 text: formatDateTime(transaction.data.created_at)
             }
             SectionLabel {
@@ -129,7 +129,7 @@ Page {
                 visible: transaction.data.type === 'outgoing'
                 text: qsTrId('id_fee')
             }
-            Label {
+            CopyableLabel {
                 visible: transaction.data.type === 'outgoing'
                 text: `${transaction.data.fee / 100000000} ${wallet.network.liquid ? 'Liquid Bitcoin' : 'BTC'} (${Math.round(transaction.data.fee_rate / 1000)} sat/vB)`
             }
@@ -168,18 +168,9 @@ Page {
             SectionLabel {
                 text: qsTrId('id_transaction_id')
             }
-            RowLayout {
-                Label {
-                    id: txhash_label
-                    text: transaction.data.txhash
-                }
-                ToolButton {
-                    icon.source: 'qrc:/svg/copy.svg'
-                    onClicked: {
-                        Clipboard.copy(transaction.data.txhash);
-                        txhash_label.ToolTip.show(qsTrId('id_copied_to_clipboard'), 1000);
-                    }
-                }
+            CopyableLabel {
+                text: transaction.data.txhash
+                Layout.bottomMargin: 32
             }
         }
     }
