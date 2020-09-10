@@ -217,7 +217,6 @@ void Wallet::handleNotification(const QJsonObject &notification)
 {
     QString event = notification.value("event").toString();
     Q_ASSERT(!event.isEmpty());
-    Q_ASSERT(notification.contains(event));
 
     QJsonValue data = notification.value(event);
 
@@ -368,36 +367,41 @@ void Wallet::loginWithPin(const QByteArray& pin)
             GA_destroy_json(pin_data);
             Q_ASSERT(err == GA_OK);
         });
-        const bool authenticated = result.value("status").toString() == "done";
 
-        int login_attempts_remaining = m_login_attempts_remaining;
-        if (authenticated) {
-            login_attempts_remaining = 3;
-        } else {
-            login_attempts_remaining --;
+        const auto status = result.value("status").toString();
+        if (status == "error") {
+            const auto error = result.value("error").toString();
+            if (error.contains("exception:login failed")) {
+                QMetaObject::invokeMethod(this, [this] {
+                    Q_ASSERT(m_login_attempts_remaining > 0);
+                    setAuthentication(Unauthenticated);
+                    --m_login_attempts_remaining;
+                    save();
+                    emit loginAttemptsRemainingChanged(m_login_attempts_remaining);
+                }, Qt::BlockingQueuedConnection);
+                return;
+            }
+            if (error.contains("exception:reconnect required")) {
+                QMetaObject::invokeMethod(this, [this] {
+                    setAuthentication(Unauthenticated);
+                }, Qt::BlockingQueuedConnection);
+                return;
+            }
+            Q_UNREACHABLE();
         }
-
-        if (m_login_attempts_remaining != login_attempts_remaining) {
-            m_login_attempts_remaining = login_attempts_remaining;
-
-            QMetaObject::invokeMethod(this, [this] {
+        Q_ASSERT(status == "done");
+        QMetaObject::invokeMethod(this, [this] {
+            if (m_login_attempts_remaining < 3) {
+                m_login_attempts_remaining = 3;
                 save();
                 emit loginAttemptsRemainingChanged(m_login_attempts_remaining);
-            }, Qt::BlockingQueuedConnection);
-        }
-
-        if (!authenticated) {
-            setAuthentication(Unauthenticated);
-            return;
-        }
-
-        setAuthentication(Authenticated);
-
-        updateCurrencies();
-        updateSettings();
-
-        reload();
-        updateConfig();
+            }
+            setAuthentication(Authenticated);
+            updateCurrencies();
+            updateSettings();
+            reload();
+            updateConfig();
+        }, Qt::BlockingQueuedConnection);
     });
 }
 
