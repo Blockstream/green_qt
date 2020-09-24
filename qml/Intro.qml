@@ -5,13 +5,7 @@ import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.12
 
 StackLayout {
-    property Item toolbar: TextField {
-        id: search_field
-        placeholderText: qsTrId('id_search')
-        Layout.minimumWidth: 256
-    }
-
-    currentIndex: WalletManager.wallets.length > 0 ? 0 : 1
+    currentIndex: 1
 
     Component {
         id: remove_wallet_dialog
@@ -71,7 +65,6 @@ StackLayout {
         id: wallet_list_view
         clip: true
         model: WalletListModel {
-            filterRegExp: new RegExp(search_field.text.trim(), 'i')
         }
         section.property: 'wallet.networkName'
         section.criteria: ViewSection.FullString
@@ -141,10 +134,12 @@ StackLayout {
             }
             Button {
                 Layout.fillWidth: true
+                flat: true
                 action: create_wallet_action
             }
             Button {
                 Layout.fillWidth: true
+                flat: true
                 action: restore_wallet_action
             }
         }
