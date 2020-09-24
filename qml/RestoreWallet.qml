@@ -7,16 +7,15 @@ import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.12
 
 Page {
+    id: view
+
+    signal restored(Wallet wallet)
+    signal canceled()
+
     RestoreController {
         id: controller
-
-        onFinished: {
-            parent.finished();
-            switchToWallet(controller.wallet);
-        }
+        onFinished: view.restored(wallet);
     }
-
-    signal finished()
 
     Connections {
         target: controller.wallet
@@ -80,6 +79,18 @@ Page {
     }
 
     property Item toolbar: RowLayout {
+        ProgressBar {
+            Layout.maximumWidth: 64
+            indeterminate: true
+            opacity: controller.wallet && controller.wallet.authentication === Wallet.Authenticating ? 0.5 : 0
+            visible: opacity > 0
+            Behavior on opacity {
+                SmoothedAnimation {
+                    duration: 500
+                    velocity: -1
+                }
+            }
+        }
         ToolButton {
             onClicked: settings_drawer.open()
             icon.source: 'qrc:/svg/settings.svg'
@@ -88,7 +99,7 @@ Page {
             icon.source: 'qrc:/svg/cancel.svg'
             icon.width: 16
             icon.height: 16
-            onClicked: finished()
+            onClicked: view.canceled()
         }
     }
 
@@ -96,15 +107,6 @@ Page {
 
     footer: Item {
         height: 64
-
-        BusyIndicator {
-            visible: running
-            running: controller.wallet && controller.wallet.authentication === Wallet.Authenticating
-            anchors.left: parent.left
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.margins: 16
-            scale: 0.5
-        }
 
         Row {
             anchors.right: parent.right

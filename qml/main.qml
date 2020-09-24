@@ -248,7 +248,8 @@ ApplicationWindow {
     Component {
         id: restore_view
         RestoreWallet {
-          onFinished: stack_view.pop()
+            onRestored: switchToWallet(wallet)
+            onCanceled: stack_view.pop()
         }
     }
 

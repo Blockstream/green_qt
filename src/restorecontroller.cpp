@@ -67,4 +67,5 @@ void RestoreController::restore()
         setName(m_default_name);
     }
     WalletManager::instance()->insertWallet(m_wallet);
+    emit finished();
 }
