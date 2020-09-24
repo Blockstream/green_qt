@@ -194,28 +194,12 @@ Item {
             implicitWidth: 4
             implicitHeight: 4
         }
-        ColumnLayout {
+        AccountListView {
+            id: accounts_list
+            Layout.fillHeight: true
+            Layout.fillWidth: true
             SplitView.minimumWidth: Math.max(implicitWidth, 300)
-            RowLayout {
-                Layout.margins: 8
-                Layout.leftMargin: 16
-                Image {
-                    source: icons[wallet.network.id]
-                    sourceSize.width: 32
-                    sourceSize.height: 32
-                }
-                Label {
-                    text: wallet.name
-                    font.pixelSize: 16
-                    Layout.alignment: Qt.AlignVCenter
-                }
-            }
-            AccountListView {
-                id: accounts_list
-                Layout.fillHeight: true
-                Layout.fillWidth: true
-                clip: true
-            }
+            clip: true
         }
         StackView {
             SplitView.fillWidth: true
