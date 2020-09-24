@@ -49,10 +49,11 @@ ApplicationWindow {
                 wallet_views[wallet] = container
             }
             stack_view.replace(container)
+            tool_button.checked = false
         } else {
             stack_view.replace(stack_view.initialItem)
+            tool_button.checked = true
         }
-        drawer.close()
     }
 
     property var icons: ({
@@ -111,12 +112,23 @@ ApplicationWindow {
         return parts.join(' - ');
     }
 
+    DeviceListModel {
+        id: device_list_model
+    }
+
+    property real left_margin: device_list_model.rowCount > 0 ? 16 : 0
+    Behavior on left_margin { SmoothedAnimation {} }
+
     header: RowLayout {
         ToolButton {
+            id: tool_button
             text: '\u2630'
-            onClicked: drawer.open()
+            checkable: true
+            checked: true
+            Layout.leftMargin: 8 + left_margin
         }
         MenuBar {
+            background: Item {}
             Menu {
                 title: qsTrId('File')
                 width: fitMenuWidth(this)
@@ -196,11 +208,96 @@ ApplicationWindow {
         }
     }
 
-    StackView {
-        id: stack_view
+
+    SplitView {
         anchors.fill: parent
-        focus: true
-        initialItem: Intro { }
+        handle: Item {
+            implicitWidth: 4
+            implicitHeight: 4
+        }
+
+        Item {
+            id: wallets_sidebar_item
+            clip: true
+
+            SplitView.minimumWidth: tool_button.checked ? 300 : 64 + left_margin
+            SplitView.maximumWidth: SplitView.minimumWidth
+            Behavior on SplitView.minimumWidth {
+                SmoothedAnimation {
+                    velocity: 1000
+                }
+            }
+            ListView {
+                id: wallet_list_view
+                clip: true
+                height: wallets_sidebar_item.height
+                width: Math.max(300, parent.width)
+                model: WalletListModel {}
+                delegate: ItemDelegate {
+                    id: delegate
+                    text: wallet.device ? `${wallet.device.vendor} ${wallet.device.product}` : wallet.name
+                    leftPadding: 16 + left_margin
+                    icon.color: 'transparent'
+                    icon.source: icons[wallet.network.id]
+                    icon.width: 32
+                    icon.height: 32
+                    width: wallet_list_view.width
+                    highlighted: wallet === currentWallet
+                    property bool valid: wallet.loginAttemptsRemaining > 0
+                    onPressed: if (valid) switchToWallet(wallet)
+                    Row {
+                        visible: !valid || parent.hovered
+                        anchors.right: parent.right
+                        Menu {
+                            id: wallet_menu
+                            MenuItem {
+                                enabled: wallet.connection !== Wallet.Disconnected
+                                text: qsTrId('id_log_out')
+                                onTriggered: wallet.disconnect()
+                            }
+                            MenuItem {
+                                enabled: wallet.connection === Wallet.Disconnected
+                                text: qsTrId('id_remove_wallet')
+                                onClicked: remove_wallet_dialog.createObject(window, { wallet }).open()
+                            }
+                        }
+                        Label {
+                            visible: wallet.loginAttemptsRemaining === 0
+                            anchors.verticalCenter: parent.verticalCenter
+                            text: '\u26A0'
+                            font.pixelSize: 18
+                            ToolTip.text: qsTrId('id_no_attempts_remaining')
+                            ToolTip.visible: !valid && delegate.hovered
+                            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                        }
+                        ToolButton {
+                            text: '\u22EF'
+                            onClicked: wallet_menu.open()
+                        }
+                    }
+                    Image {
+                        visible: wallet.device
+                        width: 24
+                        height: 24
+                        z: 10
+                        x: 8
+                        anchors.verticalCenter: parent.verticalCenter
+                        source: 'qrc:/svg/usbAlt.svg'
+                    }
+                }
+                ScrollIndicator.vertical: ScrollIndicator {}
+                ScrollShadow {}
+            }
+
+        }
+
+        StackView {
+            id: stack_view
+            SplitView.fillWidth: true
+            focus: true
+            clip: true
+            initialItem: Intro {}
+        }
     }
 
     Action {
@@ -212,53 +309,14 @@ ApplicationWindow {
     Action {
         id: restore_wallet_action
         text: qsTrId('id_restore_green_wallet')
-        onTriggered: stack_view.push(restore_view)
+        onTriggered: {
+            stack_view.push(restore_view)
+            tool_button.checked = false
+        }
     }
 
     AboutDialog {
         id: about_dialog
-    }
-
-    Drawer {
-        id: drawer
-        Action {
-            shortcut: 'CTRL+I'
-            onTriggered: drawer.open()
-        }
-
-        interactive: position > 0
-        width: 300
-        height: parent.height
-
-        Row {
-            anchors.right: parent.right
-            anchors.margins: 16
-            anchors.top: parent.top
-            ToolButton {
-                text: '\u2302'
-                onClicked: {
-                    switchToWallet(currentWallet)
-                    drawer.close()
-                }
-            }
-
-            ToolButton {
-                onClicked: drawer.close()
-                icon.source: 'qrc:/svg/cancel.svg'
-                icon.width: 16
-                icon.height: 16
-            }
-        }
-
-        Sidebar {
-            id: sidebar
-            anchors.fill: parent
-            anchors.topMargin: 64
-        }
-
-        Overlay.modal: Rectangle {
-            color: "#70000000"
-        }
     }
 
     Component {
@@ -285,6 +343,60 @@ ApplicationWindow {
         id: create_account_dialog
         CreateAccountDialog {
             wallet: currentWallet
+        }
+    }
+
+    Component {
+        id: remove_wallet_dialog
+        AbstractDialog {
+            title: qsTrId('id_remove_wallet')
+            property Wallet wallet
+            anchors.centerIn: parent
+            modal: true
+            onAccepted: {
+                WalletManager.removeWallet(wallet)
+            }
+            ColumnLayout {
+                spacing: 8
+                Label {
+                    text: qsTrId('id_backup_your_mnemonic_before')
+                }
+                SectionLabel {
+                    text: qsTrId('id_name')
+                }
+                Label {
+                    text: wallet.name
+                }
+                SectionLabel {
+                    text: qsTrId('id_network')
+                }
+                Row {
+                    Image {
+                        sourceSize.width: 16
+                        sourceSize.height: 16
+                        source: icons[wallet.network.id]
+                    }
+                    Label {
+                        text: wallet.network.name
+                    }
+                }
+
+                SectionLabel {
+                    text: qsTrId('id_confirm_action')
+                }
+                TextField {
+                    Layout.minimumWidth: 300
+                    id: confirm_field
+                    placeholderText: qsTrId('id_confirm_by_typing_the_wallet')
+                }
+            }
+            footer: DialogButtonBox {
+                    Button {
+                    text: qsTrId('id_remove')
+                    DialogButtonBox.buttonRole: DialogButtonBox.AcceptRole
+                    enabled: confirm_field.text === wallet.name
+                }
+            }
         }
     }
 }

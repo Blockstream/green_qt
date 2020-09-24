@@ -4,14 +4,12 @@ import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.12
 
 ListView {
-    spacing: 8
     model: wallet.accounts
 
     delegate: ItemDelegate {
         property Account account: modelData
 
         onClicked: wallet.currentAccount = account
-        background.opacity: 0.4
         highlighted: wallet.currentAccount === account
         leftPadding: 16
         rightPadding: 8
