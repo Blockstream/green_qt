@@ -33,7 +33,7 @@ Column {
                 hoverEnabled: false
                 flat: true
                 text: modelData + 1
-                onClicked: field.addDigit(modelData + 1)
+                onPressed: field.addDigit(modelData + 1)
             }
         }
 
@@ -44,7 +44,7 @@ Column {
             width: 32
             icon.source: 'qrc:/svg/arrow_left.svg'
             icon.width: 24
-            onClicked: field.removeDigit()
+            onPressed: field.removeDigit()
         }
 
         Button {
@@ -52,7 +52,7 @@ Column {
             enabled: !field.valid
             flat: true
             text: '0'
-            onClicked: field.addDigit(0)
+            onPressed: field.addDigit(0)
         }
 
         Button {
@@ -62,7 +62,7 @@ Column {
             icon.source: 'qrc:/svg/cancel.svg'
             icon.height: 16
             icon.width: 16
-            onClicked: field.clear()
+            onPressed: field.clear()
         }
     }
 }
