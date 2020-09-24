@@ -43,6 +43,18 @@ Item {
     readonly property bool fiatRateAvailable: formatFiat(0, false) !== 'n/a'
 
     property Item toolbar: RowLayout {
+        ProgressBar {
+            Layout.maximumWidth: 64
+            indeterminate: true
+            opacity: wallet.busy ? 0.5 : 0
+            visible: opacity > 0
+            Behavior on opacity {
+                SmoothedAnimation {
+                    duration: 500
+                    velocity: -1
+                }
+            }
+        }
         Loader {
             active: currentAccount && currentAccount.json.type === '2of2_no_recovery'
             sourceComponent: AccountIdBadge {
@@ -273,18 +285,5 @@ Item {
     Component {
         id: receive_dialog
         ReceiveDialog { }
-    }
-
-    ProgressBar {
-        width: parent.width
-        height: 2
-        indeterminate: true
-        opacity: wallet.busy ? 0.5 : 0
-        Behavior on opacity {
-            SmoothedAnimation {
-                duration: 500
-                velocity: -1
-            }
-        }
     }
 }
