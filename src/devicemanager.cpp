@@ -10,10 +10,25 @@ DeviceManager::~DeviceManager()
 
 DeviceManager* DeviceManager::instance()
 {
-    return nullptr;
+    static DeviceManager instance;
+    return &instance;
 }
 
-QList<Device*> DeviceManager::devices() const
+QSet<Device*> DeviceManager::devices() const
 {
-    return {};
+    return m_devices;
+}
+
+void DeviceManager::addDevice(Device* device)
+{
+    Q_ASSERT(!m_devices.contains(device));
+    m_devices.insert(device);
+    emit deviceAdded(device);
+}
+
+void DeviceManager::removeDevice(Device* device)
+{
+    if (!m_devices.contains(device)) return;
+    m_devices.remove(device);
+    emit deviceRemoved(device);
 }

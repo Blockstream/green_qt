@@ -52,6 +52,10 @@ SOURCES += \
     src/controller.cpp \
     src/createaccountcontroller.cpp \
     src/device.cpp \
+    src/devicediscoveryagent.cpp \
+    src/devicediscoveryagent_linux.cpp \
+    src/devicediscoveryagent_macos.cpp \
+    src/devicediscoveryagent_win.cpp \
     src/devicelistmodel.cpp \
     src/devicemanager.cpp \
     src/ga.cpp \
@@ -81,6 +85,11 @@ HEADERS += \
     src/controller.h \
     src/createaccountcontroller.h \
     src/device.h \
+    src/device_p.h \
+    src/devicediscoveryagent.h \
+    src/devicediscoveryagent_linux.h \
+    src/devicediscoveryagent_macos.h \
+    src/devicediscoveryagent_win.h \
     src/devicelistmodel.h \
     src/devicemanager.h \
     src/ga.h \

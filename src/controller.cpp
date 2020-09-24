@@ -117,6 +117,39 @@ void Controller::exec(Handler* handler)
             handler->exec();
         }, Qt::QueuedConnection);
     }, Qt::QueuedConnection);
+
+
+    connect(handler, &Handler::resolveCode, [this, handler] {
+        const auto action = handler->result().value("action").toString();
+        if (action == "get_xpubs") {
+            for (auto path : handler->m_paths) {
+                auto cmd = new GetWalletPublicKeyCommand(wallet()->network(), path);
+                connect(cmd, &Command::finished, [cmd, handler] {
+                    handler->m_xpubs.append(cmd->m_xpub);
+                    if (handler->m_xpubs.size() == handler->m_paths.size()) {
+                        handler->resolve({{ "xpubs", handler->m_xpubs }});
+                    }
+                });
+                wallet()->m_device->exchange(cmd);
+            }
+            return;
+        }
+
+        if (action == "sign_tx") {
+            Q_ASSERT(wallet()->m_device);
+
+            auto required_data = handler->result().value("required_data").toObject();
+            auto command = wallet()->m_device->signTransaction(required_data);
+            connect(command, &Command::finished, [command, handler] {
+                QJsonArray signatures;
+                for (const auto& signature : command->signatures) {
+                    qDebug() << signature.toHex();
+                    signatures.append(QString::fromLocal8Bit(signature.toHex()));
+                }
+                handler->resolve({{ "signatures", signatures }});
+            });
+        }
+    });
 }
 
 QObject* Controller::context() const

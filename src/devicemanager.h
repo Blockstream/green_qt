@@ -14,15 +14,16 @@ class DeviceManager : public QObject
 public:
     virtual ~DeviceManager();
     static DeviceManager* instance();
-
-    virtual QList<Device*> devices() const;
-
+    QSet<Device*> devices() const;
+public slots:
+    void addDevice(Device* device);
+    void removeDevice(Device* device);
 signals:
     void deviceAdded(Device* device);
     void deviceRemoved(Device* device);
-
-protected:
+private:
     explicit DeviceManager(QObject* parent = nullptr);
+    QSet<Device*> m_devices;
 };
 
 #endif // GREEN_DEVICEMANAGER_H

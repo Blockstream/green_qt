@@ -18,6 +18,8 @@ public:
 
     Q_INVOKABLE Wallet* createWallet();
 
+    void addWallet(Wallet *wallet);
+
     Q_INVOKABLE void insertWallet(Wallet* wallet);
     Q_INVOKABLE void removeWallet(Wallet* wallet);
 
@@ -27,6 +29,8 @@ public:
 
 signals:
     void changed();
+    void walletAdded(Wallet* wallet);
+    void aboutToRemove(Wallet* wallet);
 
 public slots:
     QJsonObject parseUrl(const QString &url);
@@ -34,7 +38,6 @@ public slots:
 
 private:
     explicit WalletManager();
-    void addWallet(Wallet *wallet);
 
 public:
     QVector<Wallet*> m_wallets;

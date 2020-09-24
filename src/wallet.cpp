@@ -100,13 +100,7 @@ void Wallet::connectNow()
 
         int res;
 
-        if (!m_session) {
-            res = GA_create_session(&m_session);
-            Q_ASSERT(res == GA_OK);
-
-            res = GA_set_notification_handler(m_session, notification_handler, this);
-            Q_ASSERT(res == GA_OK);
-        }
+        if (!m_session) createSession();
 
         res = GA::connect(m_session, params);
 
@@ -222,6 +216,12 @@ void Wallet::handleNotification(const QJsonObject &notification)
 
     m_events.insert(event, data);
     emit eventsChanged(m_events);
+
+    if (event == "session") {
+        bool connected = data.toObject().value("connected").toBool();
+        setConnection(connected ? Connected : Connecting);
+        return;
+    }
 
     if (event == "network") {
         QJsonObject network = data.toObject();
@@ -622,6 +622,7 @@ void Wallet::updateCurrencies()
 
 void Wallet::save()
 {
+    if (m_id.isEmpty()) return;
     QJsonDocument doc({
         { "version", 1 },
         { "name", m_name },
@@ -738,6 +739,27 @@ Account* Wallet::getOrCreateAccount(int pointer)
         m_accounts_by_pointer.insert(pointer, account);
     }
     return account;
+}
+
+void Wallet::createSession()
+{
+    Q_ASSERT(!m_session);
+
+    int res = GA_create_session(&m_session);
+    Q_ASSERT(res == GA_OK);
+
+    res = GA_set_notification_handler(m_session, notification_handler, this);
+    Q_ASSERT(res == GA_OK);
+}
+
+void Wallet::setSession()
+{
+    setConnection(Connected);
+    setAuthentication(Authenticated);
+    updateSettings();
+    updateCurrencies();
+    reload();
+    updateConfig();
 }
 
 void Wallet::setSettings(const QJsonObject& settings)

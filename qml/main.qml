@@ -13,6 +13,24 @@ ApplicationWindow {
     readonly property Wallet currentWallet: stack_view.currentItem.wallet || null
     readonly property Account currentAccount: currentWallet ? currentWallet.currentAccount : null
 
+    DeviceDiscoveryAgent {
+    }
+
+    Connections {
+        target: WalletManager
+        function onWalletAdded(wallet) {
+            if (wallet.device) {
+                switchToWallet(wallet)
+            }
+        }
+        function onAboutToRemove(wallet) {
+            if (currentWallet === wallet) {
+                stack_view.replace(stack_view.initialItem)
+            }
+            delete wallet_views[wallet]
+        }
+    }
+
     Component {
         id: container_component
         WalletContainerView {
@@ -80,7 +98,12 @@ ApplicationWindow {
         const wallet = currentWallet
         const parts = []
         if (wallet) {
-            parts.push(wallet.name);
+            if (wallet.device) {
+                parts.push(wallet.device.vendor);
+                parts.push(wallet.device.product);
+            } else {
+                parts.push(wallet.name);
+            }
             const account = wallet.currentAccount;
             if (account) parts.push(account.name);
         }

@@ -11,6 +11,7 @@
 
 class Account;
 class Asset;
+class Device;
 class Network;
 
 struct GA_session;
@@ -58,6 +59,7 @@ private:
     // (only 1 per liquid wallet)
     Q_PROPERTY(bool hasLiquidSecurities READ hasLiquidSecurities NOTIFY hasLiquidSecuritiesChanged)
     Q_PROPERTY(QString networkName READ networkName NOTIFY networkChanged)
+    Q_PROPERTY(Device* device READ device CONSTANT)
 
 public:
     explicit Wallet(QObject *parent = nullptr);
@@ -115,6 +117,10 @@ public:
 
     Account* getOrCreateAccount(int pointer);
 
+    void createSession();
+    void setSession();
+
+    Device* device() const { return m_device; }
 public slots:
     void connect(const QString& proxy, bool use_tor);
     void disconnect();
@@ -189,6 +195,7 @@ public:
     Account* currentAccount() const { return m_current_account; }
     void setCurrentAccount(Account* account);
     QString networkName() const;
+    Device* m_device{nullptr};
 };
 
 #endif // GREEN_WALLET_H

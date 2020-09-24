@@ -5,6 +5,9 @@
 DeviceListModel::DeviceListModel(QObject* parent)
     : QSortFilterProxyModel(parent)
 {
+    connect(this, &QSortFilterProxyModel::rowsInserted, this, &DeviceListModel::rowCountChanged);
+    connect(this, &QSortFilterProxyModel::rowsRemoved, this, &DeviceListModel::rowCountChanged);
+
     connect(DeviceManager::instance(), &DeviceManager::deviceAdded, this, &DeviceListModel::addDevice);
     connect(DeviceManager::instance(), &DeviceManager::deviceRemoved, this, &DeviceListModel::removeDevice);
 

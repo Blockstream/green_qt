@@ -90,6 +90,7 @@ void WalletManager::addWallet(Wallet* wallet)
 {
     m_wallets.append(wallet);
     emit changed();
+    emit walletAdded(wallet);
 }
 
 Wallet* WalletManager::createWallet()
@@ -114,15 +115,18 @@ void WalletManager::insertWallet(Wallet* wallet)
 
 void WalletManager::removeWallet(Wallet* wallet)
 {
-    Q_ASSERT(wallet->connection() == Wallet::Disconnected);
+    emit aboutToRemove(wallet);
+    // Q_ASSERT(wallet->connection() == Wallet::Disconnected);
     m_wallets.removeOne(wallet);
     emit changed();
-    QMetaObject::invokeMethod(wallet->m_context, [wallet] {
-        QMetaObject::invokeMethod(wallet, [wallet] {
-            bool result = QFile::remove(GetDataFile("wallets", wallet->m_id));
-            Q_ASSERT(result);
+    if (!wallet->m_id.isEmpty()) {
+        QMetaObject::invokeMethod(wallet->m_context, [wallet] {
+            QMetaObject::invokeMethod(wallet, [wallet] {
+                bool result = QFile::remove(GetDataFile("wallets", wallet->m_id));
+                Q_ASSERT(result);
+            });
         });
-    });
+    }
 }
 
 QQmlListProperty<Wallet> WalletManager::wallets()
