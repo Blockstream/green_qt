@@ -4,11 +4,15 @@ import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.12
 
 ControllerDialog {
+    id: dialog
+    required property Wallet wallet
     property string method
     title: qsTrId('id_set_up_twofactor_authentication')
     doneText: qsTrId('id_disabled')
 
-    controller: Controller {}
+    controller: Controller {
+        wallet: dialog.wallet
+    }
 
     initialItem: RowLayout {
         property list<Action> actions: [

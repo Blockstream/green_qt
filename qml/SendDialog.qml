@@ -6,9 +6,11 @@ import QtQuick.Layouts 1.12
 ControllerDialog {
     title: qsTrId('id_send')
 
-    property Account account
+    id: send_dialog
+    required property Account account
 
     controller: SendTransactionController {
+        account: send_dialog.account
         balance: send_view.balance
         address: send_view.address
         sendAll: send_view.sendAll

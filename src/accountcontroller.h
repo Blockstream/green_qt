@@ -8,10 +8,11 @@ class Account;
 class AccountController : public Controller
 {
     Q_OBJECT
+    Q_PROPERTY(Account* account READ account WRITE setAccount NOTIFY accountChanged)
 public:
     explicit AccountController(QObject* parent = nullptr);
     Account* account() const;
-    Wallet* wallet() const override;
+    void setAccount(Account* account);
 signals:
     void accountChanged(Account* account);
 protected:

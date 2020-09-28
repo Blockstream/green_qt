@@ -8,11 +8,12 @@ import QtQuick.Layouts 1.12
 
 ControllerDialog {
     id: dialog
-    property Wallet wallet
+    required property Wallet wallet
     title: qsTrId('id_add_new_account')
     minimumWidth: 200
     controller: CreateAccountController {
         id: create_account_controller
+        wallet: dialog.wallet
     }
     Binding on closePolicy {
         when: (create_account_controller.type === '2of3' && create_account_controller.result.result) || true

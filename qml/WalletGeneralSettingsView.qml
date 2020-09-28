@@ -6,12 +6,15 @@ import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.12
 
 ColumnLayout {
+    id: view
+    required property Wallet wallet
     property string title: qsTrId('id_general')
 
     spacing: 30
 
     Controller {
         id: controller
+        wallet: view.wallet
     }
 
     property var per_currency: {

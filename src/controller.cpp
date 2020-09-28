@@ -4,9 +4,6 @@
 #include "json.h"
 #include "wallet.h"
 
-#include <QQmlContext>
-#include <QQmlEngine>
-
 #include <gdk.h>
 
 class ChangeSettingsHandler : public Handler
@@ -164,12 +161,9 @@ GA_session* Controller::session() const
     return w ? w->m_session : nullptr;
 }
 
-Wallet *Controller::wallet() const
+Wallet* Controller::wallet() const
 {
-    if (m_wallet) return m_wallet;
-    auto context = qmlContext(this);
-    if (!context) return nullptr;
-    return qobject_cast<Wallet*>(context->contextProperty("wallet").value<QObject*>());
+    return m_wallet;
 }
 
 void Controller::setWallet(Wallet *wallet)

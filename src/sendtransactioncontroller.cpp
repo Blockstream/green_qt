@@ -134,6 +134,7 @@ void SendTransactionController::setFeeRate(qint64 fee_rate)
 
 bool SendTransactionController::hasFiatRate() const
 {
+    if (!wallet()) return false;
     if (!wallet()->network()->isLiquid()) return true;
     if (m_balance && m_balance->asset()->data().value("name").toString() == "btc") return true;
     return false;
@@ -146,6 +147,7 @@ QJsonObject SendTransactionController::transaction() const
 
 void SendTransactionController::update()
 {
+    if (!wallet()) return;
     const bool is_liquid = wallet()->network()->isLiquid();
     if (hasFiatRate()) {
         auto unit = wallet()->settings().value("unit").toString();
@@ -194,6 +196,8 @@ void SendTransactionController::update()
 
 void SendTransactionController::create()
 {
+    if (!wallet()) return;
+
     const quint64 count = ++m_count;
     if (m_create_handler) return;
 

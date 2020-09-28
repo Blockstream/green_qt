@@ -8,6 +8,8 @@ import QtQuick.Layouts 1.12
 Item {
     id: wallet_view
 
+    required property Wallet wallet
+
     function parseAmount(amount) {
         const unit = wallet.settings.unit;
         return wallet.parseAmount(amount, unit);
@@ -109,7 +111,7 @@ Item {
             StackViewPushAction {
                 stackView: stack_view
                 WalletSettingsView {
-
+                    wallet: wallet_view.wallet
                 }
             }
         },

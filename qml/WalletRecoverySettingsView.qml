@@ -7,6 +7,7 @@ import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.12
 
 ColumnLayout {
+    required property Wallet wallet
     property string title: qsTrId('id_recovery')
 
     spacing: 30
@@ -109,9 +110,9 @@ ColumnLayout {
                 }
                 onClicked: {
                     if (wallet.locked) {
-                        cancel_dialog.createObject(stack_view).open()
+                        cancel_dialog.createObject(stack_view, { wallet }).open()
                     } else {
-                        request_dialog.createObject(stack_view).open()
+                        request_dialog.createObject(stack_view, { wallet }).open()
                     }
                 }
             }

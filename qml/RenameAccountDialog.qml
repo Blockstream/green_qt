@@ -6,6 +6,7 @@ import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.12
 
 WalletDialog {
+    id: dialog
     property Account account
     standardButtons: Dialog.Ok | Dialog.Cancel
     title: qsTrId('id_rename_account')
@@ -15,6 +16,7 @@ WalletDialog {
 
     RenameAccountController {
         id: controller
+        account: dialog.account
     }
 
     ColumnLayout {

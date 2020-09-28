@@ -6,7 +6,7 @@ import QtQuick.Layouts 1.12
 StackView {
     id: stack_view
 
-    property Wallet wallet
+    required property Wallet wallet
 
     Connections {
         target: wallet
@@ -154,7 +154,9 @@ StackView {
         }
     }
 
-    property Item wallet_view: WalletView { }
+    property Item wallet_view: WalletView {
+        wallet: stack_view.wallet
+    }
 
     Connections {
         target: wallet

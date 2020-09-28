@@ -4,11 +4,14 @@ import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.12
 
 ControllerDialog {
-    title: qsTrId('id_increase_fee')
-    property Transaction transaction
+    id: dialog
+    required property Transaction transaction
     readonly property Account account: transaction.account
+    title: qsTrId('id_increase_fee')
 
-    controller: BumpFeeController { }
+    controller: BumpFeeController {
+        account: dialog.account
+    }
 
     doneText: qsTrId('id_transaction_sent')
     minimumWidth: 300

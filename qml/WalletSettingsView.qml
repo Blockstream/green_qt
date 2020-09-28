@@ -6,6 +6,8 @@ import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.12
 
 Page {
+    id: view
+    required property Wallet wallet
     background: Item { }
 
     header: TabBar {
@@ -30,9 +32,9 @@ Page {
         Repeater {
             id: repeater
             property list<Component> views: [
-                Component { WalletGeneralSettingsView {} },
-                Component { WalletSecuritySettingsView {} },
-                Component { WalletRecoverySettingsView {} }
+                Component { WalletGeneralSettingsView { wallet: view.wallet } },
+                Component { WalletSecuritySettingsView { wallet: view.wallet } },
+                Component { WalletRecoverySettingsView { wallet: view.wallet } }
             ]
             model: views
 

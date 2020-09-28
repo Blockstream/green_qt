@@ -6,6 +6,9 @@ import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.12
 
 ControllerDialog {
+    id: dialog
+    required property Wallet wallet
+
     property var currencies: [{
         is_fiat: false,
         text: wallet.settings.unit
@@ -21,7 +24,9 @@ ControllerDialog {
     doneText: qsTrId('id_your_twofactor_threshold_is_s').arg(threshold + ' ' +  ticker)
     minimumWidth: 400
     height: 250
-    controller: Controller { }
+    controller: Controller {
+        wallet: dialog.wallet
+    }
     initialItem: WizardPage {
         actions: Action {
             text: qsTrId('id_next')

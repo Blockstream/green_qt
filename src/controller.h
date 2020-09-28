@@ -12,6 +12,7 @@ class Wallet;
 class Controller : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(Wallet* wallet READ wallet WRITE setWallet NOTIFY walletChanged)
     QML_ELEMENT
 public:
     explicit Controller(QObject* parent = nullptr);
@@ -21,7 +22,7 @@ public:
     QObject* context() const;
     GA_session* session() const;
 
-    virtual Wallet* wallet() const;
+    Wallet* wallet() const;
     void setWallet(Wallet* wallet);
 
 public slots:

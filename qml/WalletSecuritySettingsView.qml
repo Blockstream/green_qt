@@ -6,12 +6,15 @@ import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.12
 
 ColumnLayout {
+    id: view
+    required property Wallet wallet
     property string title: qsTrId('id_security')
 
     spacing: 30
 
     Controller {
         id: controller
+        wallet: view.wallet
     }
 
     SettingsBox {
@@ -62,6 +65,7 @@ ColumnLayout {
             Component {
                 id: enable_dialog
                 TwoFactorEnableDialog {
+                    wallet: view.wallet
                     description: switch(method) {
                                 case 'sms':
                                     return qsTrId('id_enter_phone_number')
@@ -77,7 +81,9 @@ ColumnLayout {
             }
             Component {
                 id: disable_dialog
-                TwoFactorDisableDialog { }
+                TwoFactorDisableDialog {
+                    wallet: view.wallet
+                }
             }
             Repeater {
                 model: wallet.config.all_methods || []
@@ -126,7 +132,9 @@ ColumnLayout {
                 Layout.fillWidth: true
             }
             Button {
-                property Component dialog: TwoFactorLimitDialog {}
+                property Component dialog: TwoFactorLimitDialog {
+                    wallet: view.wallet
+                }
                 flat: true
                 text: qsTrId('id_set_twofactor_threshold')
                 onClicked: dialog.createObject(stack_view).open()

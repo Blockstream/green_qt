@@ -5,13 +5,17 @@ import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.12
 
 ControllerDialog {
-    property string method
+    id: dialog
+    required property Wallet wallet
+    required property string method
 
     title: qsTrId('id_set_up_twofactor_authentication')
     modal: true
     doneText: qsTrId('id_enabled')
 
-    controller: Controller { }
+    controller: Controller {
+        wallet: dialog.wallet
+    }
 
     initialItem: method === 'gauth' ? gauth_component : generic_component
 
