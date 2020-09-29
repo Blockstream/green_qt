@@ -23,6 +23,7 @@ public:
 signals:
     void nameChanged(const QString& name);
     void typeChanged(const QString& type);
+    void created(Handler* handler);
 
 public slots:
     void create();

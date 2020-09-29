@@ -52,8 +52,7 @@ void CreateAccountController::create()
         auto account = wallet()->getOrCreateAccount(handler->pointer());
         wallet()->reload();
         wallet()->setCurrentAccount(account);
-        handler->deleteLater();
-        emit finished();
+        emit created(handler);
     });
     exec(handler);
 }

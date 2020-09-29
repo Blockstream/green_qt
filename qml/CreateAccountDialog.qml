@@ -14,74 +14,77 @@ ControllerDialog {
     controller: CreateAccountController {
         id: create_account_controller
         wallet: dialog.wallet
-    }
-    Binding on closePolicy {
-        when: (create_account_controller.type === '2of3' && create_account_controller.result.result) || true
-        value: Popup.NoAutoClose
-    }
-    property Component xpub_done_component:
-        ColumnLayout {
-            property list<Action> actions: [
-                Action {
-                    text: qsTrId('id_copy_xpub')
-                    onTriggered: {
-                        Clipboard.copy(create_account_controller.result.result.recovery_xpub);
-                        recovery_xpub_label.ToolTip.show(qsTrId('id_copied_to_clipboard'), 1000);
-                    }
-                },
-                Action {
-                    text: qsTrId('id_ok')
-                    onTriggered: accept()
-                }
-            ]
-            SectionLabel { text: qsTrId('id_recovery_mnemonic') }
-            RowLayout {
-                Layout.fillWidth: true
-                MnemonicView {
-                    Layout.fillHeight: false
-                    Layout.alignment: Qt.AlignTop
-                    Layout.fillWidth: true
-                    mnemonic: controller.result.result.recovery_mnemonic.split(' ')
-                }
-                Item {
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-                }
-                QRCode {
-                    Layout.fillWidth: false
-                    Layout.alignment: Qt.AlignCenter
-                    id: qrcode
-                    implicitHeight: 128
-                    implicitWidth: 128
-                    text: controller.result.result.recovery_mnemonic
-                }
-            }
-            SectionLabel { text: qsTrId('id_recovery_xpub') }
-            Label {
-                id: recovery_xpub_label
-                Layout.fillWidth: true
-                Layout.preferredWidth: 0
-                wrapMode: Label.WrapAnywhere
-                text: controller.result.result.recovery_xpub
-            }
-            Label {
-                Layout.alignment: Qt.AlignHCenter
-                horizontalAlignment: Qt.AlignHCenter
-                Layout.margins: 16
-                wrapMode: Label.WordWrap
-                text: qsTrId('id_backup_the_recovery_mnemonic')
-                Rectangle {
-                    color: 'red'
-                    radius: height/2
-                    opacity: 0.2
-                    anchors.fill: parent
-                    anchors.margins: -8
-                }
+        onCreated: {
+            if (type === '2of3') {
+                dialog.push(handler, xpub_done_component)
+                closePolicy = Popup.NoAutoClose
+            } else {
+                dialog.push(handler, doneComponent)
             }
         }
+    }
 
+    property Component xpub_done_component: ColumnLayout {
+        property Handler handler
+        property list<Action> actions: [
+            Action {
+                text: qsTrId('id_copy_xpub')
+                onTriggered: {
+                    Clipboard.copy(handler.result.result.recovery_xpub);
+                    recovery_xpub_label.ToolTip.show(qsTrId('id_copied_to_clipboard'), 1000);
+                }
+            },
+            Action {
+                text: qsTrId('id_ok')
+                onTriggered: accept()
+            }
+        ]
+        SectionLabel { text: qsTrId('id_recovery_mnemonic') }
+        RowLayout {
+            Layout.fillWidth: true
+            MnemonicView {
+                Layout.fillHeight: false
+                Layout.alignment: Qt.AlignTop
+                Layout.fillWidth: true
+                mnemonic: handler.result.result.recovery_mnemonic.split(' ')
+            }
+            Item {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+            }
+            QRCode {
+                Layout.fillWidth: false
+                Layout.alignment: Qt.AlignCenter
+                id: qrcode
+                implicitHeight: 128
+                implicitWidth: 128
+                text: handler.result.result.recovery_mnemonic
+            }
+        }
+        SectionLabel { text: qsTrId('id_recovery_xpub') }
+        Label {
+            id: recovery_xpub_label
+            Layout.fillWidth: true
+            Layout.preferredWidth: 0
+            wrapMode: Label.WrapAnywhere
+            text: handler.result.result.recovery_xpub
+        }
+        Label {
+            Layout.alignment: Qt.AlignHCenter
+            horizontalAlignment: Qt.AlignHCenter
+            Layout.margins: 16
+            wrapMode: Label.WordWrap
+            text: qsTrId('id_backup_the_recovery_mnemonic')
+            Rectangle {
+                color: 'red'
+                radius: height/2
+                opacity: 0.2
+                anchors.fill: parent
+                anchors.margins: -8
+            }
+        }
+    }
 
-    doneComponent: create_account_controller.type === '2of3' ? xpub_done_component : ControllerDialog.doneComponent
     doneText: qsTrId("New account created")
 
     initialItem: StackView {

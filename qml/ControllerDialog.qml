@@ -66,22 +66,14 @@ WalletDialog {
 
     Connections {
         target: controller
-        function onFinished() {
-            stack_view.push(doneComponent)
-        }
-    }
-
-    Connections {
-        target: controller
-        function onFinished() { push(handler, finishComponent) }
-        //function onDone(handler) { push(handler, doneComponent) }
+        function onFinished() { stack_view.push(doneComponent) }
         function onError(handler) { push(handler, errorComponent) }
-        function onRequestCode(handler) { console.log('req code!', handler); push(handler, requestCodeComponent) }
+        function onRequestCode(handler) { push(handler, requestCodeComponent) }
         function onResolveCode(handler) { push(handler, resolveCodeComponent) }
     }
 
     function push(handler, component) {
-        stack_view.push(component, { handler }) //, StackView.ReplaceTransition)
+        stack_view.push(component, { handler })
     }
 
     property Component requestCodeComponent: ColumnLayout {
