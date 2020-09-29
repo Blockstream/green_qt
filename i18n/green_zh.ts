@@ -30,7 +30,7 @@
     </message>
     <message>
         <source>id_2of3_account</source>
-        <translation>2of3 Account</translation>
+        <translation>2of3账户</translation>
     </message>
     <message>
         <source>id_4_hours</source>
@@ -42,7 +42,7 @@
     </message>
     <message>
         <source>id_a_2of3_account_requires_two_out</source>
-        <translation>A 2of3 account requires two out of three signatures to spend coins. The third signature is from a backup key known only to you. This gives you the security benefits of a standard account, while still allowing you to move your coins independently at any point in time.</translation>
+        <translation>一个2of3账户需要三个签名中的两个来花费代币。第三个签名来自只有你知道的备用秘钥。这保证了标准账户的安全性，同时又能允许你独自使用这些代币。</translation>
     </message>
     <message>
         <source>id_a_new_transaction_has_just</source>
@@ -86,7 +86,7 @@
     </message>
     <message>
         <source>id_accounts_summary</source>
-        <translation>Accounts summary</translation>
+        <translation>账户概览</translation>
     </message>
     <message>
         <source>id_action_canceled</source>
@@ -206,11 +206,11 @@
     </message>
     <message>
         <source>id_backup_the_recovery_mnemonic</source>
-        <translation>Backup the recovery mnemonic and recovery xpub to recover funds from your 2of3 account.</translation>
+        <translation>备份助记词和xpub格式公钥来从你的2of3账户中恢复资金。</translation>
     </message>
     <message>
         <source>id_backup_your_mnemonic_before</source>
-        <translation>Backup your mnemonic before removing the wallet from this device.</translation>
+        <translation>删除此钱包之前请先备份。</translation>
     </message>
     <message>
         <source>id_be_aware_other_apps_can_read_or</source>
@@ -338,11 +338,11 @@
     </message>
     <message>
         <source>id_confirm_action</source>
-        <translation>Confirm action</translation>
+        <translation>确认操作</translation>
     </message>
     <message>
         <source>id_confirm_by_typing_the_wallet</source>
-        <translation>Confirm by typing the wallet name</translation>
+        <translation>输入钱包名称以确认</translation>
     </message>
     <message>
         <source>id_confirm_code</source>
@@ -434,7 +434,7 @@
     </message>
     <message>
         <source>id_copy_xpub</source>
-        <translation>Copy xpub</translation>
+        <translation>复制xpub格式公钥</translation>
     </message>
     <message>
         <source>id_create</source>
@@ -610,7 +610,7 @@
     </message>
     <message>
         <source>id_enable_email_notifications_to</source>
-        <translation>Enable email notifications to change nlocktime</translation>
+        <translation>启用邮件提醒以改变nlocktime</translation>
     </message>
     <message>
         <source>id_enable_face_id</source>
@@ -742,7 +742,7 @@
     </message>
     <message>
         <source>id_export_transactions_to_csv_file</source>
-        <translation>Export transactions to CSV file</translation>
+        <translation>导出转账历史为CSV文件</translation>
     </message>
     <message>
         <source>id_face_id</source>
@@ -786,7 +786,7 @@
     </message>
     <message>
         <source>id_fees_are_too_low</source>
-        <translation>Fees are too low</translation>
+        <translation>手续费太低</translation>
     </message>
     <message>
         <source>id_for_long_term_storage</source>
@@ -846,7 +846,7 @@
     </message>
     <message>
         <source>id_google_authenticator_secret_key</source>
-        <translation>Google Authenticator secret key</translation>
+        <translation>谷歌验证码</translation>
     </message>
     <message>
         <source>id_green_is_a_noncustodial_wallet</source>
@@ -1066,7 +1066,7 @@
     </message>
     <message>
         <source>id_ledger_supports_a_limited_set</source>
-        <translation>Ledger supports a limited set of assets: tap here to check the list.</translation>
+        <translation>Ledger支持有限的几种资产：点击这里查看完整列表。</translation>
     </message>
     <message>
         <source>id_lets_get_you_set_up</source>
@@ -1218,7 +1218,7 @@
     </message>
     <message>
         <source>id_new_fee</source>
-        <translation>New fee</translation>
+        <translation>新的手续费</translation>
     </message>
     <message>
         <source>id_new_incoming_transaction_in</source>
@@ -1434,7 +1434,7 @@
     </message>
     <message>
         <source>id_please_hold_on_while_your</source>
-        <translation>Please hold on while your address is being generated</translation>
+        <translation>地址正在生成，请等待</translation>
     </message>
     <message>
         <source>id_please_provide_your_1s</source>
@@ -1474,7 +1474,7 @@
     </message>
     <message>
         <source>id_please_wait_until_your_ledger</source>
-        <translation>Please wait until your Ledger displays the address to validate it. This could take up to 20 seconds.</translation>
+        <translation>请等待Ledger显示并验证地址。可能需要20秒钟的时间。</translation>
     </message>
     <message>
         <source>id_precision</source>
@@ -1482,7 +1482,7 @@
     </message>
     <message>
         <source>id_previous_fee</source>
-        <translation>Previous fee</translation>
+        <translation>之前的手续费</translation>
     </message>
     <message>
         <source>id_privacy_policy</source>
@@ -1538,7 +1538,7 @@
     </message>
     <message>
         <source>id_recovery_mnemonic</source>
-        <translation>Recovery mnemonic</translation>
+        <translation>助记词</translation>
     </message>
     <message>
         <source>id_recovery_transaction_emails</source>
@@ -1558,7 +1558,7 @@
     </message>
     <message>
         <source>id_recovery_xpub</source>
-        <translation>Recovery xpub</translation>
+        <translation>xpub格式公钥</translation>
     </message>
     <message>
         <source>id_redeem_your_deposited_funds</source>
@@ -1582,7 +1582,7 @@
     </message>
     <message>
         <source>id_remove</source>
-        <translation>Remove</translation>
+        <translation>移除</translation>
     </message>
     <message>
         <source>id_remove_custom_network</source>
@@ -1590,11 +1590,11 @@
     </message>
     <message>
         <source>id_remove_wallet</source>
-        <translation>Remove wallet</translation>
+        <translation>移除钱包</translation>
     </message>
     <message>
         <source>id_rename_account</source>
-        <translation>Rename account</translation>
+        <translation>重命名账户</translation>
     </message>
     <message>
         <source>id_replaceable</source>
@@ -1678,7 +1678,7 @@
     </message>
     <message>
         <source>id_save_a_summary_of_your_accounts</source>
-        <translation>Save a summary of your accounts to speed up recovery in case you need to use our recovery tool.</translation>
+        <translation>保存一份账户概览来加速恢复以防万一你需要用到恢复工具。</translation>
     </message>
     <message>
         <source>id_save_your_mnemonic</source>
@@ -1690,7 +1690,7 @@
     </message>
     <message>
         <source>id_scan_qr_code</source>
-        <translation>Scan QR code</translation>
+        <translation>扫描二维码</translation>
     </message>
     <message>
         <source>id_scan_the_qr_code_in_google</source>
@@ -2291,7 +2291,7 @@
     </message>
     <message>
         <source>id_value_must_be_between_144_and</source>
-        <translation>Value must be between 144 and 200000</translation>
+        <translation>该值必须在144到200000之间</translation>
     </message>
     <message>
         <source>id_verify_your_pin</source>
@@ -2511,7 +2511,7 @@
     </message>
     <message>
         <source>id_your_wallet_is_locked_for_a</source>
-        <translation>你的钱包已经因为重置双重验证被锁定。本次重置将在%1天内完成。</translation>
+        <translation>你的账户因重置双重验证被锁定。重置将在%1天后完成。</translation>
     </message>
     <message>
         <source>id_your_wallet_is_not_yet_fully</source>

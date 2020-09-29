@@ -1042,7 +1042,7 @@
     </message>
     <message>
         <source>id_last_attempt_if_failed_you_will</source>
-        <translation>Ultimo tentativo: in caso di fallimento dovrai rigenerare il tuo wallet utilizzando la mnemonica di 24 parole.</translation>
+        <translation>Ultimo tentativo: in caso di fallimento dovrai ripristinare il tuo wallet utilizzando la mnemonica di 24 parole.</translation>
     </message>
     <message>
         <source>id_last_ping_1d_ms</source>
@@ -1446,7 +1446,7 @@
     </message>
     <message>
         <source>id_please_provide_your_passphrase</source>
-        <translation>Inserisi la tua passphrase:</translation>
+        <translation>Inserisci la tua passphrase:</translation>
     </message>
     <message>
         <source>id_please_reconnect_your_hardware</source>
@@ -2511,7 +2511,7 @@ Reset questa impostazione e successivamente riattivala.</translation>
     </message>
     <message>
         <source>id_your_wallet_is_locked_for_a</source>
-        <translation>Il tuo wallet è bloccato per un reset dell&apos; Autenticazione a due Fattori. Il reset sarà completato in %1 giorni.</translation>
+        <translation>Wallet bloccato per reset dell&apos; Autenticazione a due fattori. Il reset sarà completato in %1 giorni.</translation>
     </message>
     <message>
         <source>id_your_wallet_is_not_yet_fully</source>

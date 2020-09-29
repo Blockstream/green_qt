@@ -22,7 +22,7 @@
     </message>
     <message>
         <source>id_1s_twofactor_set_up</source>
-        <translation>%1 configuração das autenticações extras</translation>
+        <translation>%1 Configuração de Dois Fatores</translation>
     </message>
     <message>
         <source>id_2_hours</source>
@@ -30,7 +30,7 @@
     </message>
     <message>
         <source>id_2of3_account</source>
-        <translation>2of3 Account</translation>
+        <translation>Conta 2de3</translation>
     </message>
     <message>
         <source>id_4_hours</source>
@@ -42,15 +42,15 @@
     </message>
     <message>
         <source>id_a_2of3_account_requires_two_out</source>
-        <translation>A 2of3 account requires two out of three signatures to spend coins. The third signature is from a backup key known only to you. This gives you the security benefits of a standard account, while still allowing you to move your coins independently at any point in time.</translation>
+        <translation>Uma conta 2de3 exige ao menos duas assinaturas para que seja possível gastar as moedas. A terceira assinatura é de uma chave de backup que somente você possui acesso. Isso oferece os benefícios e segurança de uma conta padrão e ainda permite que você transfira suas moedas de forma independente, a qualquer hora e sem a necessidade de permissão de terceiros.</translation>
     </message>
     <message>
         <source>id_a_new_transaction_has_just</source>
-        <translation>Sua carteira acabou de receber uma nova transação.</translation>
+        <translation>Você acabou de receber uma nova transação.</translation>
     </message>
     <message>
         <source>id_a_screen_lock_must_be_enabled</source>
-        <translation>O bloqueio de tela deve ser habilitado nas configurações do Android</translation>
+        <translation>O bloqueio de tela precisa ser habilitado nas configurações do Android</translation>
     </message>
     <message>
         <source>id_a_wallet_is_detected_on_this</source>
@@ -74,11 +74,11 @@
     </message>
     <message>
         <source>id_account_id</source>
-        <translation>ID da Conta</translation>
+        <translation>ID da conta</translation>
     </message>
     <message>
         <source>id_account_name</source>
-        <translation>Nome da Conta</translation>
+        <translation>Nome da conta</translation>
     </message>
     <message>
         <source>id_account_type</source>
@@ -86,7 +86,7 @@
     </message>
     <message>
         <source>id_accounts_summary</source>
-        <translation>Accounts summary</translation>
+        <translation>Resumo da conta</translation>
     </message>
     <message>
         <source>id_action_canceled</source>
@@ -98,15 +98,15 @@
     </message>
     <message>
         <source>id_add_a_pgp_public_key_to_receive</source>
-        <translation>Adicionar uma chave pública PGP para receber emails criptografados</translation>
+        <translation>Adicione uma chave pública PGP para receber emails criptografados e manter sua privacidade</translation>
     </message>
     <message>
         <source>id_add_amount</source>
-        <translation>Inserir Quantidade</translation>
+        <translation>Especificar quantidade</translation>
     </message>
     <message>
         <source>id_add_amount_optional</source>
-        <translation>Definir valor (opcional)</translation>
+        <translation>Especificar quantidade (opcional)</translation>
     </message>
     <message>
         <source>id_add_custom_network_by_qr_code</source>
@@ -118,15 +118,15 @@
     </message>
     <message>
         <source>id_add_new_account</source>
-        <translation>Adicionar Nova Conta</translation>
+        <translation>Adicionar conta</translation>
     </message>
     <message>
         <source>id_add_wallet</source>
-        <translation>Adicionar Carteira</translation>
+        <translation>Adicionar carteira</translation>
     </message>
     <message>
         <source>id_additional_security</source>
-        <translation>Segurança Adicional</translation>
+        <translation>Segurança extra</translation>
     </message>
     <message>
         <source>id_address</source>
@@ -154,7 +154,7 @@
     </message>
     <message>
         <source>id_allows_you_to_quickly_check</source>
-        <translation>Permite que você rapidamente verifique seu saldo, receba fundos ou varra uma carteira de papel. Não é possível enviar fundos no modo somente leitura.</translation>
+        <translation>Permite que você verifique seu saldo, receba fundos ou resgate bitcoins de uma carteira de papel. Não é possível enviar fundos no modo somente leitura. </translation>
     </message>
     <message>
         <source>id_always</source>
@@ -166,7 +166,7 @@
     </message>
     <message>
         <source>id_are_you_sure_you_want_to_view</source>
-        <translation>Tem certeza que deseja visualizar a transação usando %1?</translation>
+        <translation>Tem certeza de que deseja visualizar a transação usando %1?</translation>
     </message>
     <message>
         <source>id_asset</source>
@@ -174,15 +174,15 @@
     </message>
     <message>
         <source>id_asset_details</source>
-        <translation>Detalhes do Ativo</translation>
+        <translation>Detalhes do ativo</translation>
     </message>
     <message>
         <source>id_asset_id</source>
-        <translation>ID do Ativo</translation>
+        <translation>ID do ativo</translation>
     </message>
     <message>
         <source>id_asset_name</source>
-        <translation>Nome do Ativo</translation>
+        <translation>Nome do ativo</translation>
     </message>
     <message>
         <source>id_assets</source>
@@ -198,7 +198,7 @@
     </message>
     <message>
         <source>id_autolock_after</source>
-        <translation>Bloquear depois de</translation>
+        <translation>Bloquear após</translation>
     </message>
     <message>
         <source>id_back</source>
@@ -206,15 +206,15 @@
     </message>
     <message>
         <source>id_backup_the_recovery_mnemonic</source>
-        <translation>Backup the recovery mnemonic and recovery xpub to recover funds from your 2of3 account.</translation>
+        <translation>Faça o backup do mnemônico e do xpub para recuperar os fundos da sua conta 2de3.</translation>
     </message>
     <message>
         <source>id_backup_your_mnemonic_before</source>
-        <translation>Backup your mnemonic before removing the wallet from this device.</translation>
+        <translation>Faça o backup do seu mnemônico antes de remover a carteira deste dispositivo.</translation>
     </message>
     <message>
         <source>id_be_aware_other_apps_can_read_or</source>
-        <translation>Cuidado, outros aplicativos podem ler ou alterar a área de transferência</translation>
+        <translation>Cuidado, outros aplicativos podem ler ou alterar as informações copiadas para a área de transferência</translation>
     </message>
     <message>
         <source>id_bitcoin_denomination</source>
@@ -222,7 +222,7 @@
     </message>
     <message>
         <source>id_bitcoin_wallet</source>
-        <translation>Carteira de Bitcoin.</translation>
+        <translation>Carteira Bitcoin.</translation>
     </message>
     <message>
         <source>id_block</source>
@@ -274,7 +274,7 @@
     </message>
     <message>
         <source>id_cancel_twofactor_reset</source>
-        <translation>Cancelar reset da autenticação de dois fatores</translation>
+        <translation>Cancelar processo de redefinição da Autenticação de Dois Fatores</translation>
     </message>
     <message>
         <source>id_cannot_remove_enabled_network</source>
@@ -294,7 +294,7 @@
     </message>
     <message>
         <source>id_check_your_backup</source>
-        <translation>Confira seu backup</translation>
+        <translation>Verifique seu backup</translation>
     </message>
     <message>
         <source>id_choose</source>
@@ -310,7 +310,7 @@
     </message>
     <message>
         <source>id_choose_twofactor_authentication</source>
-        <translation>Escolha o método de autenticação de dois fatores</translation>
+        <translation>Escolha o método de Autenticação de Dois Fatores</translation>
     </message>
     <message>
         <source>id_choose_your_network</source>
@@ -322,7 +322,7 @@
     </message>
     <message>
         <source>id_click_to_receive_an_email_with</source>
-        <translation>Clique para receber um email com seu pacote de recuperação criptografado.</translation>
+        <translation>Clique para receber um email com seu pacote de recuperação em formato criptografado.</translation>
     </message>
     <message>
         <source>id_communication_timed_out_make</source>
@@ -330,7 +330,7 @@
     </message>
     <message>
         <source>id_completed</source>
-        <translation>Completo</translation>
+        <translation>Concluída</translation>
     </message>
     <message>
         <source>id_confidential</source>
@@ -338,15 +338,15 @@
     </message>
     <message>
         <source>id_confirm_action</source>
-        <translation>Confirm action</translation>
+        <translation>Confirmar ação</translation>
     </message>
     <message>
         <source>id_confirm_by_typing_the_wallet</source>
-        <translation>Confirm by typing the wallet name</translation>
+        <translation>Confirme digitando o nome da carteira</translation>
     </message>
     <message>
         <source>id_confirm_code</source>
-        <translation>Confirme o código</translation>
+        <translation>Confirmar código</translation>
     </message>
     <message>
         <source>id_confirm_passphrase</source>
@@ -354,7 +354,7 @@
     </message>
     <message>
         <source>id_confirm_transaction_details_on</source>
-        <translation>Confirmar detalhes da transação em carteira física</translation>
+        <translation>Confirme os detalhes da transação na sua carteira física</translation>
     </message>
     <message>
         <source>id_confirmation_in_d_blocks</source>
@@ -374,19 +374,19 @@
     </message>
     <message>
         <source>id_connect_with_tor</source>
-        <translation>Conectar-se com Tor</translation>
+        <translation>Conectar usando Tor</translation>
     </message>
     <message>
         <source>id_connecting_to_a_trusted_node</source>
-        <translation>Para se conectar usando Tor é necessário habilitar as configurações de proxy e instalar um aplicativo SOCKS5 (Orbot para Android)</translation>
+        <translation>Para se conectar a um nó confiável através da Tor é necessário habilitar as configurações de proxy e instalar um aplicativo SOCKS5 (Orbot para Android)</translation>
     </message>
     <message>
         <source>id_connecting_to_peers</source>
-        <translation>Conectando-se à rede...</translation>
+        <translation>Conectando aos pares...</translation>
     </message>
     <message>
         <source>id_connecting_to_tor_onion_nodes</source>
-        <translation>Conectar-se a nodes Tor (.onion) garante máxima privacidade e segurança. Pressione &quot;OK&quot; para continuar.</translation>
+        <translation>Conectar através da rede Tor (.onion) garante máxima privacidade e segurança. Pressione &quot;OK&quot; para continuar.</translation>
     </message>
     <message>
         <source>id_connection_failed</source>
@@ -418,11 +418,11 @@
     </message>
     <message>
         <source>id_copy_raw_transaction</source>
-        <translation>Copiar transação completa</translation>
+        <translation>Copiar transação raw</translation>
     </message>
     <message>
         <source>id_copy_to_clipboard</source>
-        <translation>Copiar para a área de transferênca</translation>
+        <translation>Copiar para a Área de Transferência</translation>
     </message>
     <message>
         <source>id_copy_transaction_id</source>
@@ -434,7 +434,7 @@
     </message>
     <message>
         <source>id_copy_xpub</source>
-        <translation>Copy xpub</translation>
+        <translation>Copiar xpub</translation>
     </message>
     <message>
         <source>id_create</source>
@@ -450,7 +450,7 @@
     </message>
     <message>
         <source>id_create_new_wallet</source>
-        <translation>Criar Nova Carteira</translation>
+        <translation>Criar carteira</translation>
     </message>
     <message>
         <source>id_create_temporary_wallet</source>
@@ -518,11 +518,11 @@
     </message>
     <message>
         <source>id_delete_s_twofactor</source>
-        <translation>Remover autenticação de dois fatores %1</translation>
+        <translation>Remover Autenticação de Dois Fatores %1</translation>
     </message>
     <message>
         <source>id_deleting_your_pin_will_remove</source>
-        <translation>Apagar o seu PIN removerá o acesso à sua carteira permanentemente a não ser que você tenha seu mnemômico disponível. Pressione &quot;OK&quot; para continuar.</translation>
+        <translation>Remover o seu PIN impossibilitará o acesso a sua carteira permanentemente a não ser que você tenha acesso ao seu mnemômico. Pressione &quot;OK&quot; para continuar.</translation>
     </message>
     <message>
         <source>id_denomination</source>
@@ -534,7 +534,7 @@
     </message>
     <message>
         <source>id_disable</source>
-        <translation>Desabilitar</translation>
+        <translation>Desativar</translation>
     </message>
     <message>
         <source>id_disable_s_twofactor</source>
@@ -542,15 +542,15 @@
     </message>
     <message>
         <source>id_disabled</source>
-        <translation>Desabilitado</translation>
+        <translation>Desativado</translation>
     </message>
     <message>
         <source>id_displays_the_progress_of_spv</source>
-        <translation>Mostra o progresso da sincronização SPV</translation>
+        <translation>Mostra o andamento da sincronização SPV</translation>
     </message>
     <message>
         <source>id_dispute_twofactor_reset</source>
-        <translation>Disputar reset da autenticação de dois fatores</translation>
+        <translation>Disputar redefinição da Autenticação de Dois Fatores</translation>
     </message>
     <message>
         <source>id_disputed</source>
@@ -566,7 +566,7 @@
     </message>
     <message>
         <source>id_done</source>
-        <translation>Feito</translation>
+        <translation>Pronto</translation>
     </message>
     <message>
         <source>id_dont_ask_me_again</source>
@@ -574,11 +574,11 @@
     </message>
     <message>
         <source>id_dont_store_your_mnemonic_on</source>
-        <translation>Não armazene seu mnemônico em seu celular, computador, ou qualquer serviço online.</translation>
+        <translation>Não armazene seu mnemônico no celular, computador, ou qualquer serviço online.</translation>
     </message>
     <message>
         <source>id_dont_take_screenshots_of_your</source>
-        <translation>Não tire capturas de tela do seu mnemônico!</translation>
+        <translation>Não faça capturas de tela mostrando seu mnemônico!</translation>
     </message>
     <message>
         <source>id_double_spend</source>
@@ -610,7 +610,7 @@
     </message>
     <message>
         <source>id_enable_email_notifications_to</source>
-        <translation>Enable email notifications to change nlocktime</translation>
+        <translation>Ative as notificações por email para alterar o nlocktime</translation>
     </message>
     <message>
         <source>id_enable_face_id</source>
@@ -618,7 +618,7 @@
     </message>
     <message>
         <source>id_enable_or_change_your_pin_to</source>
-        <translation>Habilite ou mude seu PIN para ter acesso rápido a sua carteira</translation>
+        <translation>Ative ou altere seu PIN para facilitar o acesso a sua carteira</translation>
     </message>
     <message>
         <source>id_enable_spv</source>
@@ -634,7 +634,7 @@
     </message>
     <message>
         <source>id_enable_twofactor_authentication</source>
-        <translation>Habilite a autenticação de dois fatores para proteger sua carteira de transações não autorizadas ou alterações nas configurações críticas de segurança</translation>
+        <translation>Ative a Autenticação de Dois Fatores para proteger sua carteira de transações não autorizadas ou alterações nas configurações críticas de segurança</translation>
     </message>
     <message>
         <source>id_enabled</source>
@@ -650,63 +650,63 @@
     </message>
     <message>
         <source>id_enter</source>
-        <translation>Digitar</translation>
+        <translation>Inserir</translation>
     </message>
     <message>
         <source>id_enter_a_pgp_public_key_to_have</source>
-        <translation>Digite uma chave pública PGP para ter emails encriptados para uma melhor privacidade.</translation>
+        <translation>Insira uma chave pública PGP para que os emails sejam criptografados e melhorar a privacidade.</translation>
     </message>
     <message>
         <source>id_enter_a_private_key_to_sweep</source>
-        <translation>Insira uma chave privada para importar seus bitcoins</translation>
+        <translation>Insira uma chave privada para resgatar seus bitcoins</translation>
     </message>
     <message>
         <source>id_enter_a_valid_onion_or_ip</source>
-        <translation>Digite um endereço .onion válido ou um endereço IP (.onion de preferência)</translation>
+        <translation>Insira um endereço .onion válido ou um endereço IP (.onion de preferência)</translation>
     </message>
     <message>
         <source>id_enter_a_valid_username</source>
-        <translation>Digite um nome de usuário válido</translation>
+        <translation>Insira um nome de usuário válido</translation>
     </message>
     <message>
         <source>id_enter_an_address</source>
-        <translation>Digite um endereço</translation>
+        <translation>Insira um endereço</translation>
     </message>
     <message>
         <source>id_enter_an_address_or_sweep_paper</source>
-        <translation>Digite um endereço ou varra uma carteira de papel</translation>
+        <translation>Insira um endereço ou resgate uma carteira de papel</translation>
     </message>
     <message>
         <source>id_enter_new_email</source>
-        <translation>Digite novo email</translation>
+        <translation>Insira o novo email</translation>
     </message>
     <message>
         <source>id_enter_phone_number</source>
-        <translation>Digite número de telefone</translation>
+        <translation>Insira o número de telefone</translation>
     </message>
     <message>
         <source>id_enter_pin</source>
-        <translation>Digite o PIN</translation>
+        <translation>Insira o PIN</translation>
     </message>
     <message>
         <source>id_enter_the_matching_words</source>
-        <translation>Digite as palavras correspondentes</translation>
+        <translation>Insira as palavras correspondentes</translation>
     </message>
     <message>
         <source>id_enter_the_pin_for_your_hardware</source>
-        <translation>Digite o PIN para sua carteira de hardware</translation>
+        <translation>Insira o PIN da sua carteira física</translation>
     </message>
     <message>
         <source>id_enter_your_email_address</source>
-        <translation>Digite seu endereço de email</translation>
+        <translation>Insira seu endereço de email</translation>
     </message>
     <message>
         <source>id_enter_your_s_wallet_mnemonic</source>
-        <translation>Digite seu %1 mnemônico de carteira</translation>
+        <translation>Insira o mnemônico da sua carteira %1</translation>
     </message>
     <message>
         <source>id_enter_your_wallet_mnemonic</source>
-        <translation>Digite o mnemônico de sua carteira</translation>
+        <translation>Insira o mnemônico da sua carteira</translation>
     </message>
     <message>
         <source>id_entity</source>
@@ -718,7 +718,7 @@
     </message>
     <message>
         <source>id_error_logging_in_with_hardware</source>
-        <translation>Erro durante o login com sua carteira de hardware</translation>
+        <translation>Erro ao fazer login com sua Carteira Física</translation>
     </message>
     <message>
         <source>id_error_nfc_tag_not_writable</source>
@@ -730,7 +730,7 @@
     </message>
     <message>
         <source>id_error_passphrases_do_not_match</source>
-        <translation>Erro: as frases secretas não coincidem</translation>
+        <translation>Erro: as frases secretas não conferem</translation>
     </message>
     <message>
         <source>id_estimated_blocks_until</source>
@@ -742,7 +742,7 @@
     </message>
     <message>
         <source>id_export_transactions_to_csv_file</source>
-        <translation>Export transactions to CSV file</translation>
+        <translation>Exportar transações para arquivo CSV</translation>
     </message>
     <message>
         <source>id_face_id</source>
@@ -754,11 +754,11 @@
     </message>
     <message>
         <source>id_fee</source>
-        <translation>Taxa de transação</translation>
+        <translation>Taxa</translation>
     </message>
     <message>
         <source>id_fee_amount_size_fee_rate</source>
-        <translation>Taxa total, Tamanho, Taxa de transação</translation>
+        <translation>Valor da Taxa, Tamanho, Taxa de transação</translation>
     </message>
     <message>
         <source>id_fee_rate</source>
@@ -770,7 +770,7 @@
     </message>
     <message>
         <source>id_fee_rate_is_below_minimum</source>
-        <translation>A taxa de transação é menor que a mínima aceita</translation>
+        <translation>A taxa de transação é menor que o valor mínimo aceito</translation>
     </message>
     <message>
         <source>id_fee_rate_must_be_at_least_s</source>
@@ -786,7 +786,7 @@
     </message>
     <message>
         <source>id_fees_are_too_low</source>
-        <translation>Fees are too low</translation>
+        <translation>Taxa muito baixa</translation>
     </message>
     <message>
         <source>id_for_long_term_storage</source>
@@ -814,23 +814,23 @@
     </message>
     <message>
         <source>id_generate_new_address</source>
-        <translation>Gerar Novo Endereço</translation>
+        <translation>Gerar novo endereço</translation>
     </message>
     <message>
         <source>id_get_code</source>
-        <translation>Obter Código</translation>
+        <translation>Obter código</translation>
     </message>
     <message>
         <source>id_go_to_account</source>
-        <translation>Ir para Conta</translation>
+        <translation>Ir para conta</translation>
     </message>
     <message>
         <source>id_go_to_receive_to_get_your</source>
-        <translation>Ir em Receber para acessar seu ID da conta.</translation>
+        <translation>Ir em receber para acessar seu ID da conta.</translation>
     </message>
     <message>
         <source>id_go_to_wallet</source>
-        <translation>Ir para a Carteira</translation>
+        <translation>Ir para a carteira</translation>
     </message>
     <message>
         <source>id_google_auth</source>
@@ -838,19 +838,19 @@
     </message>
     <message>
         <source>id_google_authenticator</source>
-        <translation>Google Authenticator</translation>
+        <translation>Autenticador do Google</translation>
     </message>
     <message>
         <source>id_google_authenticator_qr_code</source>
-        <translation>Código QR do Google Authenticator:</translation>
+        <translation>Código QR do Autenticador do Google:</translation>
     </message>
     <message>
         <source>id_google_authenticator_secret_key</source>
-        <translation>Google Authenticator secret key</translation>
+        <translation>Chave secreta do Autenticador do Google</translation>
     </message>
     <message>
         <source>id_green_is_a_noncustodial_wallet</source>
-        <translation>Green é uma carteira não-custodial</translation>
+        <translation>A Green é uma carteira não-custodial</translation>
     </message>
     <message>
         <source>id_green_logo</source>
@@ -858,19 +858,19 @@
     </message>
     <message>
         <source>id_green_mnemonic_qr_code</source>
-        <translation>Código QR do mnemônico da Green</translation>
+        <translation>Código QR do Mnemônico da Green</translation>
     </message>
     <message>
         <source>id_green_only_supports_one_pin_for</source>
-        <translation>Green suporta apenas um PIN para cada rede. Novas carteiras precisarão de um mnemônico toda vez que você entrar.</translation>
+        <translation>A Green suporta apenas um PIN por rede. Novas carteiras precisarão de um mnemônico toda vez que você entrar.</translation>
     </message>
     <message>
         <source>id_green_only_supports_one_pin_per</source>
-        <translation>O aplicativo Green suporta somente um PIN por rede. Para configurar um PIN  para esta carteira, desabilite o PIN da carteira original.</translation>
+        <translation>A Green suporta somente um PIN por rede. Para configurar um PIN  para esta carteira, primeiro desative o PIN da carteira original.</translation>
     </message>
     <message>
         <source>id_green_uses_biometric</source>
-        <translation>Green usa autenticação biométrica para permitir fácil acesso à carteira</translation>
+        <translation>A Green usa autenticação biométrica para facilitar o acesso à carteira</translation>
     </message>
     <message>
         <source>id_green_uses_bluetooth_for</source>
@@ -882,7 +882,7 @@
     </message>
     <message>
         <source>id_green_uses_multisig_with_one</source>
-        <translation>Green usa multisig com uma assinatura gerada por seu dispositivo, e uma pelos servidores da Blockstream. Configurar a autenticação de dois fatores ativa uma camada extra de segurança para a assinatura do servidor.</translation>
+        <translation>A Green usa multisig sendo uma assinatura gerada pelo seu dispositivo e a outra pelos servidores da Blockstream. Configurar a Autenticação de Dois Fatores fornece uma camada extra de segurança para a assinatura do servidor.</translation>
     </message>
     <message>
         <source>id_hardware_wallet_support_for</source>
@@ -910,7 +910,7 @@
     </message>
     <message>
         <source>id_hold_your_nfc_tag_close_to_the</source>
-        <translation>Segure sua tag NFC próxima do dispositivo</translation>
+        <translation>Mantenha sua tag NFC próxima do dispositivo</translation>
     </message>
     <message>
         <source>id_hour</source>
@@ -922,23 +922,23 @@
     </message>
     <message>
         <source>id_i_agree_to_the</source>
-        <translation>Aceito os</translation>
+        <translation>Eu concordo com os</translation>
     </message>
     <message>
         <source>id_i_confirm_i_have_read_and</source>
-        <translation>Confirmo que li e entendi a mensagem acima</translation>
+        <translation>Eu confirmo que li e entendi a mensagem acima</translation>
     </message>
     <message>
         <source>id_i_forgot_my_password</source>
-        <translation>Esqueci minha senha</translation>
+        <translation>Eu esqueci minha senha</translation>
     </message>
     <message>
         <source>id_i_secured_the_mnemonic_and_i</source>
-        <translation>Protegi meu mnemônico e li os Termos de Serviço</translation>
+        <translation>Eu protegi meu mnemônico e li os Termos de Serviço</translation>
     </message>
     <message>
         <source>id_incoming</source>
-        <translation>Chegando</translation>
+        <translation>Recebida</translation>
     </message>
     <message>
         <source>id_inconsistent_data_provided_for</source>
@@ -986,7 +986,7 @@
     </message>
     <message>
         <source>id_invalid_payment_request_assetid</source>
-        <translation>Solicitação de pagamento inválida, AssetID deve ser especificado</translation>
+        <translation>Solicitação de pagamento inválida, é necessário especificar o AssetID</translation>
     </message>
     <message>
         <source>id_invalid_pgp_key</source>
@@ -1022,7 +1022,7 @@
     </message>
     <message>
         <source>id_invalid_twofactor_code</source>
-        <translation>Código de autenticação inválido</translation>
+        <translation>Código de Autenticação de Dois Fatores inválido</translation>
     </message>
     <message>
         <source>id_invalid_url</source>
@@ -1042,7 +1042,7 @@
     </message>
     <message>
         <source>id_last_attempt_if_failed_you_will</source>
-        <translation>Última tentativa: se falhar, você terá que restaurar a carteira usando a sequência de 24 palavras.</translation>
+        <translation>Última tentativa: se falhar, você terá que restaurar sua carteira usando a sequência de 24 palavras, seu mnemônico.</translation>
     </message>
     <message>
         <source>id_last_ping_1d_ms</source>
@@ -1054,7 +1054,7 @@
     </message>
     <message>
         <source>id_lbtc_has_no_issuer_and_is</source>
-        <translation>L-BTC não possui emissor e, em vez disso, é criado na rede por meio de um procedimento chamado peg-in.</translation>
+        <translation>L-BTC não possui emissor, é criado na rede por meio de um procedimento chamado peg-in.</translation>
     </message>
     <message>
         <source>id_learn_more_about_s</source>
@@ -1066,11 +1066,11 @@
     </message>
     <message>
         <source>id_ledger_supports_a_limited_set</source>
-        <translation>Ledger supports a limited set of assets: tap here to check the list.</translation>
+        <translation>A Ledger suporta uma quantidade limitada de ativos: clique aqui para verificar a lista.</translation>
     </message>
     <message>
         <source>id_lets_get_you_set_up</source>
-        <translation>Vamos preparar sua carteira.</translation>
+        <translation>Vamos lá então preparar sua carteira.</translation>
     </message>
     <message>
         <source>id_liquid_securities</source>
@@ -1098,15 +1098,15 @@
     </message>
     <message>
         <source>id_log_in_into_your_s_wallet</source>
-        <translation>Acessar sua %1carteira</translation>
+        <translation>Acessar sua carteira %1</translation>
     </message>
     <message>
         <source>id_log_in_using_mnemonic</source>
-        <translation>Entrar usando mnemônico</translation>
+        <translation>Entrar usando o mnemônico</translation>
     </message>
     <message>
         <source>id_log_in_via_watchonly_to_receive</source>
-        <translation>Entrar em modo somente leitura para receber fundos e verificar o saldo.</translation>
+        <translation>Entrar no modo Somente Leitura para receber fundos ou verificar o seu saldo.</translation>
     </message>
     <message>
         <source>id_log_out</source>
@@ -1122,7 +1122,7 @@
     </message>
     <message>
         <source>id_login_options</source>
-        <translation>Opções de entrada</translation>
+        <translation>Opções de Login</translation>
     </message>
     <message>
         <source>id_logout_and_switch</source>
@@ -1130,7 +1130,7 @@
     </message>
     <message>
         <source>id_look_at_the_device_for_the</source>
-        <translation>Olhe no dispositivo para a posição dos números</translation>
+        <translation>Verifique o dispositivo para ver a posição dos números</translation>
     </message>
     <message>
         <source>id_low</source>
@@ -1138,11 +1138,11 @@
     </message>
     <message>
         <source>id_main_account</source>
-        <translation>Conta Principal</translation>
+        <translation>Conta principal</translation>
     </message>
     <message>
         <source>id_make_sure_you_made_a_proper</source>
-        <translation>Verifique se você realizou o backup do mnemônico da sua carteira.</translation>
+        <translation>Verifique se você realizou devidamente o backup do mnemônico da sua carteira.</translation>
     </message>
     <message>
         <source>id_malleated</source>
@@ -1182,11 +1182,11 @@
     </message>
     <message>
         <source>id_multiple_assets</source>
-        <translation>Vários Ativos</translation>
+        <translation>Vários ativos</translation>
     </message>
     <message>
         <source>id_my_notes</source>
-        <translation>MINHAS NOTAS</translation>
+        <translation>MINHAS ANOTAÇÕES</translation>
     </message>
     <message>
         <source>id_name</source>
@@ -1214,23 +1214,23 @@
     </message>
     <message>
         <source>id_new_accounts_functionality</source>
-        <translation>Funcionalidade &quot;novas contas&quot; em breve!</translation>
+        <translation>A funcionalidade &quot;Novas contas&quot; estará disponível em breve!</translation>
     </message>
     <message>
         <source>id_new_fee</source>
-        <translation>New fee</translation>
+        <translation>Taxa atual</translation>
     </message>
     <message>
         <source>id_new_incoming_transaction_in</source>
-        <translation>Nova transação chegando na conta %1 (%2).</translation>
+        <translation>Nova transação recebida na conta %1 (%2).</translation>
     </message>
     <message>
         <source>id_new_outgoing_transaction_from</source>
-        <translation>Nova transação saindo da conta %1 (%2).</translation>
+        <translation>Nova transação enviada saindo da conta %1 (%2).</translation>
     </message>
     <message>
         <source>id_new_s_transaction_of_s_in</source>
-        <translation>Nova %1 transação de %2 na conta %3.</translation>
+        <translation>Nova transação de %1 no valor de %2 na conta %3.</translation>
     </message>
     <message>
         <source>id_new_transaction</source>
@@ -1262,7 +1262,7 @@
     </message>
     <message>
         <source>id_no_peers_connected</source>
-        <translation>Sem peers conectados</translation>
+        <translation>Sem pares conectados</translation>
     </message>
     <message>
         <source>id_no_pin_provided_exiting</source>
@@ -1318,15 +1318,15 @@
     </message>
     <message>
         <source>id_one_network_must_be_selected</source>
-        <translation>Uma rede deve ser selecionada. Selecionando Bitcoin por padrão</translation>
+        <translation>Uma rede precisa ser selecionada. Bitcoin selecionada por padrão</translation>
     </message>
     <message>
         <source>id_onion_addresses_require_tor</source>
-        <translation>Endereços Onion requerem conexão com a rede Tor. Habilite nas configurações de rede.</translation>
+        <translation>Endereços Onion requerem conexão com a rede Tor. Ative-os nas configurações de rede.</translation>
     </message>
     <message>
         <source>id_only_connect_to_trusted_nodes</source>
-        <translation>Conecte-se apenas a node(s) confiáveis para SPV</translation>
+        <translation>Conecte-se apenas a nó(s) confiáveis para SPV</translation>
     </message>
     <message>
         <source>id_only_this_time</source>
@@ -1358,11 +1358,11 @@
     </message>
     <message>
         <source>id_outdated_hardware_wallet</source>
-        <translation>O firmware da carteira de hardware está desatualizado. Por favor, atualize-a para o firmware mais recente através do seu computador.</translation>
+        <translation>O firmware da carteira física está desatualizado. Por favor, atualize-o para a versão mais recente por meio do seu computador.</translation>
     </message>
     <message>
         <source>id_outgoing</source>
-        <translation>Saindo</translation>
+        <translation>Enviada</translation>
     </message>
     <message>
         <source>id_password</source>
@@ -1398,7 +1398,7 @@
     </message>
     <message>
         <source>id_pins_do_not_match_please_try</source>
-        <translation>Os PINs não coincidem, por favor, tente novamente.</translation>
+        <translation>Os PINs não conferem, por favor tente novamente.</translation>
     </message>
     <message>
         <source>id_please_contribute_if_you_find</source>
@@ -1406,7 +1406,7 @@
     </message>
     <message>
         <source>id_please_disable_biometric</source>
-        <translation>Por favor, desabilite a autenticação biométrica antes de remover o PIN</translation>
+        <translation>Por favor, desative a autenticação biométrica antes de remover o PIN</translation>
     </message>
     <message>
         <source>id_please_disconnect_your_ledger</source>
@@ -1414,7 +1414,7 @@
     </message>
     <message>
         <source>id_please_enable_another</source>
-        <translation>Por favor, habilite outro método de autenticação para evitar perder acesso aos seus fundos.</translation>
+        <translation>Por favor, ative outro método de autenticação para evitar perder o acesso aos seus fundos.</translation>
     </message>
     <message>
         <source>id_please_enable_camera</source>
@@ -1426,15 +1426,15 @@
     </message>
     <message>
         <source>id_please_enter_the_passphrase_for</source>
-        <translation>Por favor, digite a senha para sua carteira de hardware.</translation>
+        <translation>Por favor, insira a senha da sua carteira física.</translation>
     </message>
     <message>
         <source>id_please_follow_the_instructions</source>
-        <translation>Por favor, siga as instruções em sua carteira de hardware.</translation>
+        <translation>Por favor, siga as instruções na sua carteira física.</translation>
     </message>
     <message>
         <source>id_please_hold_on_while_your</source>
-        <translation>Please hold on while your address is being generated</translation>
+        <translation>Aguarde enquanto seu endereço está sendo gerado</translation>
     </message>
     <message>
         <source>id_please_provide_your_1s</source>
@@ -1442,7 +1442,7 @@
     </message>
     <message>
         <source>id_please_provide_your_1s_code</source>
-        <translation>Por favor, forneça seu código do %1.</translation>
+        <translation>Por favor, insira o código enviado para o seu %1.</translation>
     </message>
     <message>
         <source>id_please_provide_your_passphrase</source>
@@ -1450,7 +1450,7 @@
     </message>
     <message>
         <source>id_please_reconnect_your_hardware</source>
-        <translation>Por favor, reconecte sua carteira de hardware antes de tentar novamente.</translation>
+        <translation>Por favor, reconecte sua carteira física antes de tentar novamente.</translation>
     </message>
     <message>
         <source>id_please_secure_your_mnemonic_and</source>
@@ -1458,23 +1458,23 @@
     </message>
     <message>
         <source>id_please_select_the_checkbox</source>
-        <translation>Por favor, marque a caixa de marcação</translation>
+        <translation>Por favor, faça a marcação</translation>
     </message>
     <message>
         <source>id_please_set_and_enable_socks5</source>
-        <translation>Defina e habilite o proxy SOCKS5 e a porta para usar o Tor</translation>
+        <translation>Defina e ative o proxy SOCKS5 e a porta para usar o Tor</translation>
     </message>
     <message>
         <source>id_please_tap_card</source>
-        <translation>Por favor, encoste o cartão</translation>
+        <translation>Por favor, clique no cartão</translation>
     </message>
     <message>
         <source>id_please_verify_that_the_address</source>
-        <translation>Verifique se o endereço mostrado na sua carteira física corresponde ao endereço do seu telefone.</translation>
+        <translation>Verifique se o endereço que aparece na sua carteira física é igual ao endereço do seu telefone.</translation>
     </message>
     <message>
         <source>id_please_wait_until_your_ledger</source>
-        <translation>Please wait until your Ledger displays the address to validate it. This could take up to 20 seconds.</translation>
+        <translation>Aguarde até que sua Ledger exiba o endereço para validá-lo. Isso pode levar até 20 segundos.</translation>
     </message>
     <message>
         <source>id_precision</source>
@@ -1482,7 +1482,7 @@
     </message>
     <message>
         <source>id_previous_fee</source>
-        <translation>Previous fee</translation>
+        <translation>Taxa anterior</translation>
     </message>
     <message>
         <source>id_privacy_policy</source>
@@ -1502,7 +1502,7 @@
     </message>
     <message>
         <source>id_qr_scanner</source>
-        <translation>Escâner de QR</translation>
+        <translation>Leitor de código QR</translation>
     </message>
     <message>
         <source>id_read_more_at_our_s</source>
@@ -1518,11 +1518,11 @@
     </message>
     <message>
         <source>id_received</source>
-        <translation>Recebido</translation>
+        <translation>Recebida</translation>
     </message>
     <message>
         <source>id_received_on</source>
-        <translation>Recebido em</translation>
+        <translation>Recebida em</translation>
     </message>
     <message>
         <source>id_recipient</source>
@@ -1538,7 +1538,7 @@
     </message>
     <message>
         <source>id_recovery_mnemonic</source>
-        <translation>Recovery mnemonic</translation>
+        <translation>Recuperar mnemônico</translation>
     </message>
     <message>
         <source>id_recovery_transaction_emails</source>
@@ -1558,11 +1558,11 @@
     </message>
     <message>
         <source>id_recovery_xpub</source>
-        <translation>Recovery xpub</translation>
+        <translation>Recuperar xpub</translation>
     </message>
     <message>
         <source>id_redeem_your_deposited_funds</source>
-        <translation>Resgate seus fundos sem a necessidade da assinatura da Blockstream Green após um período de tempo predefinido.</translation>
+        <translation>Resgate seus fundos sem precisar da assinatura da Blockstream Green após um período de tempo predefinido.</translation>
     </message>
     <message>
         <source>id_redeposited</source>
@@ -1582,7 +1582,7 @@
     </message>
     <message>
         <source>id_remove</source>
-        <translation>Remove</translation>
+        <translation>Remover</translation>
     </message>
     <message>
         <source>id_remove_custom_network</source>
@@ -1590,11 +1590,11 @@
     </message>
     <message>
         <source>id_remove_wallet</source>
-        <translation>Remove wallet</translation>
+        <translation>Remover carteira</translation>
     </message>
     <message>
         <source>id_rename_account</source>
-        <translation>Rename account</translation>
+        <translation>Renomear conta</translation>
     </message>
     <message>
         <source>id_replaceable</source>
@@ -1602,11 +1602,11 @@
     </message>
     <message>
         <source>id_request_amount</source>
-        <translation>SOLICITAR MONTANTE</translation>
+        <translation>SOLICITAR QUANTIDADE</translation>
     </message>
     <message>
         <source>id_request_failed</source>
-        <translation>Falha de Solicitação</translation>
+        <translation>Falha de solicitação</translation>
     </message>
     <message>
         <source>id_request_recovery_transactions</source>
@@ -1614,11 +1614,11 @@
     </message>
     <message>
         <source>id_request_sent</source>
-        <translation>Solicitação Enviada</translation>
+        <translation>Solicitação enviada</translation>
     </message>
     <message>
         <source>id_request_twofactor_reset</source>
-        <translation>Solicitar reset da autenticação de dois fatores</translation>
+        <translation>Solicitar redefinição da Autenticação de Dois Fatores</translation>
     </message>
     <message>
         <source>id_requested_fee_rate_too_low</source>
@@ -1626,15 +1626,15 @@
     </message>
     <message>
         <source>id_reset</source>
-        <translation>Resetar</translation>
+        <translation>Redefinir</translation>
     </message>
     <message>
         <source>id_reset_spv</source>
-        <translation>Resetar SPV</translation>
+        <translation>Redefinir SPV</translation>
     </message>
     <message>
         <source>id_resetting_your_twofactor_takes</source>
-        <translation>Resetar sua autenticação de dois fatores leva no mínimo 12 meses. Se você tem certeza que perdeu sua autenticação de dois fatores, por favor, forneça um novo endereço de email abaixo para receber o reset.</translation>
+        <translation>Redefinir seu Fator Duplo de Autenticação leva no mínimo 12 meses. Se você tem certeza de que não tem mais acesso ao 2FA, por favor, forneça um novo endereço de email abaixo para iniciar o processo de redefinição.</translation>
     </message>
     <message>
         <source>id_restore</source>
@@ -1674,11 +1674,11 @@
     </message>
     <message>
         <source>id_save</source>
-        <translation>Guardar</translation>
+        <translation>Salvar</translation>
     </message>
     <message>
         <source>id_save_a_summary_of_your_accounts</source>
-        <translation>Save a summary of your accounts to speed up recovery in case you need to use our recovery tool.</translation>
+        <translation>Copie o resumo dos dados das suas contas para acelerar a recuperação, caso precise usar nossa ferramenta de recuperação.</translation>
     </message>
     <message>
         <source>id_save_your_mnemonic</source>
@@ -1686,19 +1686,19 @@
     </message>
     <message>
         <source>id_scan_a_qr_code_for_spv_pairing</source>
-        <translation>Escanear o código QR para parear o SPV</translation>
+        <translation>Ler um código QR para parear o SPV</translation>
     </message>
     <message>
         <source>id_scan_qr_code</source>
-        <translation>Scan QR code</translation>
+        <translation>Ler código QR</translation>
     </message>
     <message>
         <source>id_scan_the_qr_code_in_google</source>
-        <translation>Escaneie o código QR com o Google Authenticator:</translation>
+        <translation>Leia o código QR com o Autenticador do Google:</translation>
     </message>
     <message>
         <source>id_scan_to_send_here</source>
-        <translation>Escaneie para enviar aqui</translation>
+        <translation>Leia este código QR ou envie para o endereço abaixo</translation>
     </message>
     <message>
         <source>id_screen_lock</source>
@@ -1726,7 +1726,7 @@
     </message>
     <message>
         <source>id_see_our_terms_of_service_s</source>
-        <translation>Veja nosso Termos de Serviço %1</translation>
+        <translation>Veja nossos Termos de Serviço %1</translation>
     </message>
     <message>
         <source>id_select_a_fiat_currency_and</source>
@@ -1734,7 +1734,7 @@
     </message>
     <message>
         <source>id_select_account</source>
-        <translation>Selecionar ´conta</translation>
+        <translation>Selecionar conta</translation>
     </message>
     <message>
         <source>id_select_asset</source>
@@ -1762,15 +1762,15 @@
     </message>
     <message>
         <source>id_send_all_funds</source>
-        <translation>Enviar Todos os Fundos</translation>
+        <translation>Enviar tudo</translation>
     </message>
     <message>
         <source>id_send_all_requires_a_single</source>
-        <translation>&quot;Enviar Tudo&quot; requer apenas um destinatário</translation>
+        <translation>&quot;Enviar tudo&quot; requer apenas um destinatário</translation>
     </message>
     <message>
         <source>id_send_to</source>
-        <translation>Enviar Para</translation>
+        <translation>Enviar para</translation>
     </message>
     <message>
         <source>id_sending</source>
@@ -1778,7 +1778,7 @@
     </message>
     <message>
         <source>id_sending_request</source>
-        <translation>Enviando Solicitação…</translation>
+        <translation>Enviando solicitação…</translation>
     </message>
     <message>
         <source>id_sent</source>
@@ -1790,15 +1790,15 @@
     </message>
     <message>
         <source>id_set_a_limit_to_spend_without</source>
-        <translation>Defina um limite para gastar sem autenticação de dois fatores</translation>
+        <translation>Defina um valor limite que pode ser gasto sem precisar usar a autenticação de dois fatores</translation>
     </message>
     <message>
         <source>id_set_a_new_pin</source>
-        <translation>Configurar novo PIN</translation>
+        <translation>Insira o novo PIN</translation>
     </message>
     <message>
         <source>id_set_a_timeout_to_logout_after</source>
-        <translation>Defina um tempo para desconexão automática por inatividade</translation>
+        <translation>Desconectar automaticamente após um período de inatividade de</translation>
     </message>
     <message>
         <source>id_set_an_email_address_to_receive</source>
@@ -1806,11 +1806,11 @@
     </message>
     <message>
         <source>id_set_an_email_for_recovery</source>
-        <translation>Defina um e-mail para recuperação </translation>
+        <translation>Definir um e-mail de recuperação </translation>
     </message>
     <message>
         <source>id_set_custom_fee_rate</source>
-        <translation>Configurar taxa personalizada</translation>
+        <translation>Ajustar taxa</translation>
     </message>
     <message>
         <source>id_set_locktime</source>
@@ -1818,7 +1818,7 @@
     </message>
     <message>
         <source>id_set_twofactor_threshold</source>
-        <translation>Configurar patamar da autenticação de dois fatores</translation>
+        <translation>Definir valor máximo que pode ser gasto sem necessidade de 2FA</translation>
     </message>
     <message>
         <source>id_set_up_a_passcode_for_your_ios</source>
@@ -1830,7 +1830,7 @@
     </message>
     <message>
         <source>id_set_up_an_email_to_get</source>
-        <translation>Set up an email to get pre-signed transactions for recovery. Email notifications contain your encrypted recovery data.</translation>
+        <translation>Insira um endereço de email para receber o pacote de recuperação. Esse pacote é criptografado e servirá para recuperar seus bitcoins caso a Blockstream Green deixe de existir. Este botão estará inativo se você já tiver selecionado a opção de receber notificações de transações na aba GERAL.</translation>
     </message>
     <message>
         <source>id_set_up_credentials_to_access_in</source>
@@ -1842,15 +1842,15 @@
     </message>
     <message>
         <source>id_set_up_twofactor_authentication</source>
-        <translation>Configurar autenticação de dois fatores</translation>
+        <translation>Configurar Autenticação de Dois Fatores</translation>
     </message>
     <message>
         <source>id_set_up_watchonly</source>
-        <translation>Configurar modo somente leitura</translation>
+        <translation>Configurar acesso ao modo somente leitura</translation>
     </message>
     <message>
         <source>id_set_up_watchonly_credentials</source>
-        <translation>Configurar credenciais de modo somente leitura para esta carteira</translation>
+        <translation>Configurar acesso ao modo somente leitura para esta carteira</translation>
     </message>
     <message>
         <source>id_set_wallet_name</source>
@@ -1878,7 +1878,7 @@
     </message>
     <message>
         <source>id_share_address</source>
-        <translation>Compartilhar Endereço</translation>
+        <translation>Compartilhar endereço</translation>
     </message>
     <message>
         <source>id_show_bitcoin_amounts_in</source>
@@ -1886,7 +1886,7 @@
     </message>
     <message>
         <source>id_show_coins_with_expiring</source>
-        <translation>Mostrar moedas com proteção de autenticação de dois fatores perto de expirar.</translation>
+        <translation>Mostrar moedas com proteção de Autenticação de Dois Fatores próximas de expirar.</translation>
     </message>
     <message>
         <source>id_show_fiat</source>
@@ -1902,11 +1902,11 @@
     </message>
     <message>
         <source>id_signup_in_progress</source>
-        <translation>Registro em progresso</translation>
+        <translation>A conta está sendo criada</translation>
     </message>
     <message>
         <source>id_simplified_payment_verification</source>
-        <translation>A Verificação Simplificada de Pagamentos (SPV) verifica suas transações e balanço usando a rede Bitcoin, fora dos servidores da Green. Ativar aumenta os requisitos de banda e processamento.</translation>
+        <translation>A Verificação Simplificada de Pagamentos SPV verifica suas transações e saldo usando a rede Bitcoin, fora dos servidores da Green. Ativar esse recurso aumenta os requisitos de banda e processamento.</translation>
     </message>
     <message>
         <source>id_skip</source>
@@ -1952,11 +1952,11 @@ Redefina essa configuração e depois a reative.</translation>
     </message>
     <message>
         <source>id_spv_is_always_synchronized_on</source>
-        <translation>SPV sempre sincroniza em redes não-móveis como WiFi e Ethernet. Esta configuração ativa a sincronização usando dados móveis. Isso pode ser caro dependendo do seu plano de dados, portanto, cuidado ao habilitá-la.</translation>
+        <translation>SPV sempre sincroniza em redes não-móveis como WiFi e Ethernet. Esta configuração ativa a sincronização também quando estiver usando dados móveis. Isso pode ser caro dependendo do seu plano de dados, portanto, cuidado ao ativar.</translation>
     </message>
     <message>
         <source>id_spv_not_fully_synced</source>
-        <translation>SPV não completamente sincronizada</translation>
+        <translation>A sincronização SPV não está totalmente concluída.</translation>
     </message>
     <message>
         <source>id_spv_notifications</source>
@@ -1964,7 +1964,7 @@ Redefina essa configuração e depois a reative.</translation>
     </message>
     <message>
         <source>id_spv_reset_and_restarted</source>
-        <translation>SPV resetado e reiniciado</translation>
+        <translation>SPV redefinido e reiniciado</translation>
     </message>
     <message>
         <source>id_spv_synchronization</source>
@@ -1972,7 +1972,7 @@ Redefina essa configuração e depois a reative.</translation>
     </message>
     <message>
         <source>id_spv_synchronization_using_tor</source>
-        <translation>SPV synchronization using Tor requires a trusted node onion URL</translation>
+        <translation>A sincronização SPV usando Tor requer um nó confiável onion URL</translation>
     </message>
     <message>
         <source>id_spv_unverified</source>
@@ -1984,15 +1984,15 @@ Redefina essa configuração e depois a reative.</translation>
     </message>
     <message>
         <source>id_standard_accounts_allow_you_to</source>
-        <translation>Contas lhe permitem você separar os fundos. Cada conta terá endereços independentes, e para mover fundos entre contas diferentes é necessária uma transação.</translation>
+        <translation>Contas Padrão permitem que você possa separar os seus fundos. Cada conta terá endereços independentes, e para mover fundos entre diferentes contas é necessário realizar uma transação.</translation>
     </message>
     <message>
         <source>id_start_a_2fa_reset_process_if</source>
-        <translation>Comece o processo para resetar o 2FA caso você tenha perdido o acesso a todos os seus métodos de autenticação de dois fatores.</translation>
+        <translation>Inicie o processo para redefinir o 2FA caso você tenha perdido o acesso a todos os seus métodos de autenticação de dois fatores.</translation>
     </message>
     <message>
         <source>id_start_receiving_funds_and_set</source>
-        <translation>Start receiving funds and set an email to receive recovery data for your wallet</translation>
+        <translation>Comece a receber fundos e defina um email para receber o pacote de recuperação da sua carteira</translation>
     </message>
     <message>
         <source>id_support</source>
@@ -2000,7 +2000,7 @@ Redefina essa configuração e depois a reative.</translation>
     </message>
     <message>
         <source>id_support_page</source>
-        <translation>Suporte</translation>
+        <translation>Página de suporte</translation>
     </message>
     <message>
         <source>id_sweep</source>
@@ -2008,7 +2008,7 @@ Redefina essa configuração e depois a reative.</translation>
     </message>
     <message>
         <source>id_sweep_from_paper_wallet</source>
-        <translation>Resgatar Fundos de Uma Carteira de Papel</translation>
+        <translation>Resgatar fundos de uma Carteira de Papel</translation>
     </message>
     <message>
         <source>id_sweep_into_s</source>
@@ -2016,7 +2016,7 @@ Redefina essa configuração e depois a reative.</translation>
     </message>
     <message>
         <source>id_switch_network</source>
-        <translation>Mudar Rede</translation>
+        <translation>Trocar de rede</translation>
     </message>
     <message>
         <source>id_synchronize_spv_on_mobile</source>
@@ -2024,10 +2024,10 @@ Redefina essa configuração e depois a reative.</translation>
     </message>
     <message>
         <source>id_syou_need_ton1_reset_greens</source>
-        <translation>%1.You need to:
-1. Reset Green&apos;s Face/TouchID login,
-2. Log in with PIN,
-3. Re-activate Face/TouchID from Green Settings.</translation>
+        <translation>%1.Você precisa:
+1. Redefinir o login Face/TouchID da Green,
+2. Entrar usando PIN,
+3. Reativar o Face/TouchID nas Configurações da Green.</translation>
     </message>
     <message>
         <source>id_system_message</source>
@@ -2035,7 +2035,7 @@ Redefina essa configuração e depois a reative.</translation>
     </message>
     <message>
         <source>id_tap_on_the_card_to_view</source>
-        <translation>Encoste o cartão para ver transações.</translation>
+        <translation>Toque no cartão para ver as transações. </translation>
     </message>
     <message>
         <source>id_tap_to_restart_the_simplified</source>
@@ -2043,7 +2043,7 @@ Redefina essa configuração e depois a reative.</translation>
     </message>
     <message>
         <source>id_tap_to_scan_a_qr_code_and</source>
-        <translation>Tap to scan a QR code and connect to a node for SPV</translation>
+        <translation>Toque para ler um código QR e conectar-se a um nó para SPV</translation>
     </message>
     <message>
         <source>id_terms_of_service</source>
@@ -2063,11 +2063,11 @@ Redefina essa configuração e depois a reative.</translation>
     </message>
     <message>
         <source>id_the_addresses_dont_match</source>
-        <translation>Os endereços não correspondem.</translation>
+        <translation>Os endereços não conferem.</translation>
     </message>
     <message>
         <source>id_the_asset_registry_is_currently</source>
-        <translation>The asset registry is currently unavailable: proceed carefully since asset amounts might be shown with a decimal precision different from what intended by the issuers.</translation>
+        <translation>O registro de ativos não está disponível no momento: prossiga com cuidado, pois os valores dos ativos podem ser mostrados com uma precisão decimal diferente da pretendida pelos emissores.</translation>
     </message>
     <message>
         <source>id_the_camera_has_a_problem_you</source>
@@ -2075,7 +2075,7 @@ Redefina essa configuração e depois a reative.</translation>
     </message>
     <message>
         <source>id_the_default_value_is_90_days_if</source>
-        <translation>The default value is 90 days. If you set an email, you will receive an updated copy of your recovery data.</translation>
+        <translation>O valor padrão é 90 dias. Se você definir um email, receberá uma cópia atualizada do pacote de recuperação.</translation>
     </message>
     <message>
         <source>id_the_easier_safer_and_faster</source>
@@ -2083,19 +2083,19 @@ Redefina essa configuração e depois a reative.</translation>
     </message>
     <message>
         <source>id_the_email_will_also_be_used_to</source>
-        <translation>O email também será usado para receber dados de recuperação e notificações de transação</translation>
+        <translation>O email também será usado para receber o pacote de recuperação e notificações de transação</translation>
     </message>
     <message>
         <source>id_the_hardware_wallet_you_are</source>
-        <translation>A carteira de hardware que você está utilizando ainda não é suportada</translation>
+        <translation>A carteira física que você está utilizando ainda não é suportada</translation>
     </message>
     <message>
         <source>id_the_network_selected_on_the</source>
-        <translation>A rede selecionada no aplicativo Green é diferente da rede selecionada na carteira física. Selecione a mesma nos dois aparelhos.</translation>
+        <translation>A rede selecionada no aplicativo Green é diferente da rede selecionada na carteira física. Selecione a mesma rede nos dois aparelhos.</translation>
     </message>
     <message>
         <source>id_the_new_email_will_be_used_for</source>
-        <translation>The new email will be used for Two-Factor Authentication when the reset is complete. The reset takes 12 months plus any remaining timelock.</translation>
+        <translation>O novo email será usado para a Autenticação de Dois Fatores quando a redefinição for concluída. A redefinição leva 12 meses mais o período restante do timelock. </translation>
     </message>
     <message>
         <source>id_the_password_cant_be_empty</source>
@@ -2115,7 +2115,7 @@ Redefina essa configuração e depois a reative.</translation>
     </message>
     <message>
         <source>id_there_is_already_a_pin_set_for</source>
-        <translation>Já há um PIN configurado para a carteira %1. Preceder não permitirá a configuração de um novo PIN e será necessário o mnemônico de 24 palavras para entrar. Você pode desabilitar o PIN nas configurações ou com 3 tentativas falhas.</translation>
+        <translation>Já existe um PIN configurado para a carteira %1. Mesmo prosseguindo não será possível configurar um novo PIN e para entrar será necessário utilizar o mnemônico de 24 palavras. Você pode desabilitar o PIN nas configurações ou realizando 3 tentativas de login inválidas.</translation>
     </message>
     <message>
         <source>id_this_transaction_spent</source>
@@ -2135,15 +2135,15 @@ Redefina essa configuração e depois a reative.</translation>
     </message>
     <message>
         <source>id_to_keep_you_in_control_of_your</source>
-        <translation>To keep you in control of your funds, Two-Factor Authentication protection expires after roughly %1 days since your last payment. You will be prompted to make a Two-Factor Reactivation transaction, if you don&apos;t move funds often enough.</translation>
+        <translation>Para garantir que você tenha o controle dos fundos, a proteção de Autenticação de Dois Fatores expira após um período aproximado de %1 após seu último pagamento. Se você não realizar transações com frequência, será solicitado que você faça uma transação de reativação de Fator Duplo.</translation>
     </message>
     <message>
         <source>id_tor_connectivity_disabled</source>
-        <translation>Conectividade Tor Desabilitada!</translation>
+        <translation>Conectividade Tor Desativada!</translation>
     </message>
     <message>
         <source>id_tor_is_connected</source>
-        <translation>A rede Tor está conectada</translation>
+        <translation>Conectado a rede Tor</translation>
     </message>
     <message>
         <source>id_tor_status</source>
@@ -2155,15 +2155,15 @@ Redefina essa configuração e depois a reative.</translation>
     </message>
     <message>
         <source>id_total_assets</source>
-        <translation>Ativos Totais</translation>
+        <translation>Total em ativos</translation>
     </message>
     <message>
         <source>id_total_balance</source>
-        <translation>Saldo Total</translation>
+        <translation>Saldo total</translation>
     </message>
     <message>
         <source>id_total_with_fee</source>
-        <translation>Total com Taxa</translation>
+        <translation>Total incluindo Taxa</translation>
     </message>
     <message>
         <source>id_touch_id</source>
@@ -2171,7 +2171,7 @@ Redefina essa configuração e depois a reative.</translation>
     </message>
     <message>
         <source>id_touch_to_display</source>
-        <translation>Toque para mostrar</translation>
+        <translation>Clique para mostrar</translation>
     </message>
     <message>
         <source>id_touchface_id_not_available</source>
@@ -2219,23 +2219,23 @@ Redefina essa configuração e depois a reative.</translation>
     </message>
     <message>
         <source>id_twofactor</source>
-        <translation>AUTENTICAÇÕES EXTRAS</translation>
+        <translation>DUPLO-FATOR</translation>
     </message>
     <message>
         <source>id_twofactor_authentication</source>
-        <translation>Autenticações Extras</translation>
+        <translation>Autenticação de Dois Fatores</translation>
     </message>
     <message>
         <source>id_twofactor_authentication_expiry</source>
-        <translation>Vencimento das autenticações extras</translation>
+        <translation>Prazo que expira a Autenticação de Dois Fatores</translation>
     </message>
     <message>
         <source>id_twofactor_protection_does_not</source>
-        <translation>A proteção de Fator Duplo não expira nesta conta; ative ao menos 2 como garantia para casos em que você perca o acesso a um.</translation>
+        <translation>A proteção de Dois Fatores não expira nesta conta, ative ao menos 2 métodos como garantia caso você perca o acesso a um deles.</translation>
     </message>
     <message>
         <source>id_twofactor_reset_in_progress</source>
-        <translation>Reset da autenticação de dois fatores em progresso, sua carteira está atualmente bloqueada.</translation>
+        <translation>A redefinição do Fator Duplo de Autenticação está em andamento, sua carteira está bloqueada no momento.</translation>
     </message>
     <message>
         <source>id_twofactor_settings</source>
@@ -2243,7 +2243,7 @@ Redefina essa configuração e depois a reative.</translation>
     </message>
     <message>
         <source>id_twofactor_threshold</source>
-        <translation>Patamar da autenticação de dois fatores</translation>
+        <translation>Patamar da Autenticação de Dois Fatores</translation>
     </message>
     <message>
         <source>id_txid</source>
@@ -2275,7 +2275,7 @@ Redefina essa configuração e depois a reative.</translation>
     </message>
     <message>
         <source>id_use_android_screen_lock_to_log</source>
-        <translation>Usar bloqueio de tela do Android para logar</translation>
+        <translation>Usar bloqueio de tela do Android para entrar</translation>
     </message>
     <message>
         <source>id_user_not_found_or_invalid</source>
@@ -2291,7 +2291,7 @@ Redefina essa configuração e depois a reative.</translation>
     </message>
     <message>
         <source>id_value_must_be_between_144_and</source>
-        <translation>Value must be between 144 and 200000</translation>
+        <translation>O valor precisa ser entre 144 e 200000</translation>
     </message>
     <message>
         <source>id_verify_your_pin</source>
@@ -2311,7 +2311,7 @@ Redefina essa configuração e depois a reative.</translation>
     </message>
     <message>
         <source>id_view_in_explorer</source>
-        <translation>Ver no Explorador</translation>
+        <translation>Ver no Explorer</translation>
     </message>
     <message>
         <source>id_visit_s_for_further_information</source>
@@ -2323,7 +2323,7 @@ Redefina essa configuração e depois a reative.</translation>
     </message>
     <message>
         <source>id_wallet_backup</source>
-        <translation>Backup da Carteira</translation>
+        <translation>Backup da carteira</translation>
     </message>
     <message>
         <source>id_wallet_creation_failed</source>
@@ -2347,15 +2347,15 @@ Redefina essa configuração e depois a reative.</translation>
     </message>
     <message>
         <source>id_warning_resetting_twofactor</source>
-        <translation>AVISO: Resetar a autenticação de dois fatores bloqueará sua carteira.</translation>
+        <translation>AVISO: Redefinir a Autenticação de Dois Fatores bloqueará sua carteira.</translation>
     </message>
     <message>
         <source>id_warning_there_is_already_a</source>
-        <translation>AVISO: Já há um pedido para resetar a autenticação de dois fatores para sua carteira. Se você pedir novamente agora com um novo endereço de email, sua carteira entrará em modo &quot;disputada&quot; e provavelmente ficará indisponível para você.</translation>
+        <translation>AVISO: Já há um pedido para redefinir a Autenticação de Dois Fatores para essa carteira. Se você fizer um novo pedido usando um outro endereço de email, sua carteira entrará em modo &quot;disputada&quot; e provavelmente ficará permanentemente indisponível para você.</translation>
     </message>
     <message>
         <source>id_warning_wallet_locked_by</source>
-        <translation>AVISO: Carteira bloqueada por disputa da autenticação de dois fatores. Contate o suporte para mais informações.</translation>
+        <translation>AVISO: Carteira bloqueada por disputa na Autenticação de Dois Fatores. Contate o suporte para mais informações.</translation>
     </message>
     <message>
         <source>id_warning_watchonly_credentials</source>
@@ -2363,7 +2363,7 @@ Redefina essa configuração e depois a reative.</translation>
     </message>
     <message>
         <source>id_warning_you_need_a_positive</source>
-        <translation>Cuidado! Você precisa de um saldo positivo de L-BTC para enviar transações.</translation>
+        <translation>Cuidado! Você precisa ter saldo positivo de L-BTC para enviar transações.</translation>
     </message>
     <message>
         <source>id_watchonly</source>
@@ -2371,23 +2371,23 @@ Redefina essa configuração e depois a reative.</translation>
     </message>
     <message>
         <source>id_watchonly_disabled</source>
-        <translation>Modo somente leitura desabilitado</translation>
+        <translation>Modo somente leitura desativado</translation>
     </message>
     <message>
         <source>id_watchonly_login</source>
-        <translation>Entrar em modo somente leitura</translation>
+        <translation>Entrar no modo somente leitura</translation>
     </message>
     <message>
         <source>id_watchonly_mode_can_be_activated</source>
-        <translation>O modo somente leitura pode ser ativado nas configurações após entrar com seu PIN, mnemônico, ou carteira de hardware.</translation>
+        <translation>O modo Somente Leitura pode ser ativado nas configurações após entrar usando seu PIN, mnemônico, ou carteira física.</translation>
     </message>
     <message>
         <source>id_watchonly_mode_cannot_be</source>
-        <translation>Modo Leitura não pode ser ativado na Liquid pois os saldos são totalmente confidenciais.</translation>
+        <translation>Modo Somente Leitura não pode ser ativado na Liquid pois os saldos são totalmente confidenciais.</translation>
     </message>
     <message>
         <source>id_we_use_the_camera_to_scan_qr</source>
-        <translation>Usamos a câmera para escanear códigos QR</translation>
+        <translation>Usamos a câmera para ler códigos QR</translation>
     </message>
     <message>
         <source>id_welcome</source>
@@ -2443,7 +2443,7 @@ Redefina essa configuração e depois a reative.</translation>
     </message>
     <message>
         <source>id_you_are_now_connected</source>
-        <translation>Você está conectado agora</translation>
+        <translation>Agora você está conectado</translation>
     </message>
     <message>
         <source>id_you_cannot_create_or_restore_a</source>
@@ -2459,7 +2459,7 @@ Redefina essa configuração e depois a reative.</translation>
     </message>
     <message>
         <source>id_you_must_first_log_out_before</source>
-        <translation>Você precisa sair antes de entrar.</translation>
+        <translation>Você primeiro precisa sair antes de entrar.</translation>
     </message>
     <message>
         <source>id_you_must_save_this_mnemonic_now</source>
@@ -2467,19 +2467,19 @@ Redefina essa configuração e depois a reative.</translation>
     </message>
     <message>
         <source>id_you_only_have_one_twofactor</source>
-        <translation>Você tem apenas um método de autenticação de dois fatores ativado</translation>
+        <translation>Você tem apenas um método de Autenticação de Dois Fatores ativado</translation>
     </message>
     <message>
         <source>id_you_will_need_to_reenter_your</source>
-        <translation>Você precisará redigitar seu mnemônico para entrar novamente se não configurar um PIN. Pressione &quot;OK&quot; para continuar.</translation>
+        <translation>Caso você não configure um PIN, toda vez que for acessar a carteira será necessário reinserir seu mnemônico. Pressione &quot;OK&quot; para continuar.</translation>
     </message>
     <message>
         <source>id_your_favourite_exchange_rate_is</source>
-        <translation>Your favourite exchange rate is not available at the moment. You can change it from settings.</translation>
+        <translation>Seu câmbio de referência favorito não está disponível no momento. Você pode alterá-lo nas configurações.</translation>
     </message>
     <message>
         <source>id_your_green_wallet_is_now_ready</source>
-        <translation>Sua carteira Green está pronta para uso agora.</translation>
+        <translation>Sua carteira Green está pronta para uso.</translation>
     </message>
     <message>
         <source>id_your_ios_device_might_not_be</source>
@@ -2503,20 +2503,20 @@ Redefina essa configuração e depois a reative.</translation>
     </message>
     <message>
         <source>id_your_twofactor_threshold_is_s</source>
-        <translation>A quantidade exigida de autenticações extras é %1.</translation>
+        <translation>O valor máximo que você definiu para ser gasto sem 2FA é de %1.</translation>
     </message>
     <message>
         <source>id_your_wallet_backup_is_made_of</source>
-        <translation>Seu backup da carteira é composto por 24 palavras, é a sua frase mnemônica. Confira se você o tem guardado e mantenha-o seguro, pois se alguém o encontrar poderá roubar seu dinheiro. O backup também pode ser usado para restaurar a sua carteira Blockstream Green em outro aparelho em caso de perda, dano ou furto do atual.  </translation>
+        <translation>O backup da sua carteira é uma frase composta por 24 palavras, também conhecido como mnemônico ou seed. Mantenha e guarde ela em um local seguro, pois se alguém encontra-lá poderá roubar seu dinheiro. O backup também pode ser usado para restaurar a sua carteira Blockstream Green, por exemplo em caso de perda, dano ou furto do seu aparelho atual.  </translation>
     </message>
     <message>
         <source>id_your_wallet_is_locked_for_a</source>
-        <translation>Sua carteira está bloqueada aguardando a redefinição da Autenticação de Dois Fatores. A redefinição será concluída em %1 dias.</translation>
+        <translation>Sua carteira está bloqueada até que seja finalizado o processo de redefinição da Autenticação de Dois Fatores. A redefinição será concluída em %1 dias.</translation>
     </message>
     <message>
         <source>id_your_wallet_is_not_yet_fully</source>
         <translation>Sua carteira não está completamente segura.
-Por favor, ative a autenticação de dois fatores.</translation>
+Por favor, ative a Autenticação de Dois Fatores.</translation>
     </message>
     <message>
         <source>id_your_watchonly_username_and</source>

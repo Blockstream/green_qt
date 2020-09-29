@@ -30,7 +30,7 @@
     </message>
     <message>
         <source>id_2of3_account</source>
-        <translation>2of3 Account</translation>
+        <translation>2von3-Account</translation>
     </message>
     <message>
         <source>id_4_hours</source>
@@ -42,7 +42,7 @@
     </message>
     <message>
         <source>id_a_2of3_account_requires_two_out</source>
-        <translation>A 2of3 account requires two out of three signatures to spend coins. The third signature is from a backup key known only to you. This gives you the security benefits of a standard account, while still allowing you to move your coins independently at any point in time.</translation>
+        <translation>Ein 2of3-Account benötigt zwei von drei Signaturen, um Coins auszugeben. Die dritte Signatur stammt von einem Backup-Schlüssel, den nur du kennst. Dies gibt dir die Sicherheitsvorteile eines Standardkontos, erlaubt dir aber trotzdem, deine Coins jederzeit unabhängig zu bewegen.</translation>
     </message>
     <message>
         <source>id_a_new_transaction_has_just</source>
@@ -86,7 +86,7 @@
     </message>
     <message>
         <source>id_accounts_summary</source>
-        <translation>Accounts summary</translation>
+        <translation>Kontenübersicht</translation>
     </message>
     <message>
         <source>id_action_canceled</source>
@@ -206,11 +206,11 @@
     </message>
     <message>
         <source>id_backup_the_recovery_mnemonic</source>
-        <translation>Backup the recovery mnemonic and recovery xpub to recover funds from your 2of3 account.</translation>
+        <translation>Sichere den Merksatz und deinen Wiederhesrtellungs-xpub um deine Gelder von deinem 2von3-Account wiederherstellen zu können. </translation>
     </message>
     <message>
         <source>id_backup_your_mnemonic_before</source>
-        <translation>Backup your mnemonic before removing the wallet from this device.</translation>
+        <translation>Erstelle eine Sicherungskopie von deinem Merksatz, bevor du die Wallet von deinem Gerät entfernst.</translation>
     </message>
     <message>
         <source>id_be_aware_other_apps_can_read_or</source>
@@ -338,11 +338,11 @@
     </message>
     <message>
         <source>id_confirm_action</source>
-        <translation>Confirm action</translation>
+        <translation>Aktion bestätigen</translation>
     </message>
     <message>
         <source>id_confirm_by_typing_the_wallet</source>
-        <translation>Confirm by typing the wallet name</translation>
+        <translation>Besätige in dem du den Wallet-Namen eingibst</translation>
     </message>
     <message>
         <source>id_confirm_code</source>
@@ -434,7 +434,7 @@
     </message>
     <message>
         <source>id_copy_xpub</source>
-        <translation>Copy xpub</translation>
+        <translation>xpub kopieren</translation>
     </message>
     <message>
         <source>id_create</source>
@@ -538,7 +538,7 @@
     </message>
     <message>
         <source>id_disable_s_twofactor</source>
-        <translation>Disable %1 Two-Factor Authentication</translation>
+        <translation>%1 Zwei-Faktor-Authentifizierung deaktivieren</translation>
     </message>
     <message>
         <source>id_disabled</source>
@@ -610,7 +610,7 @@
     </message>
     <message>
         <source>id_enable_email_notifications_to</source>
-        <translation>Enable email notifications to change nlocktime</translation>
+        <translation>E-Mail-Benachrichtigungen aktivieren um die nlocktime zu ändern</translation>
     </message>
     <message>
         <source>id_enable_face_id</source>
@@ -702,7 +702,7 @@
     </message>
     <message>
         <source>id_enter_your_s_wallet_mnemonic</source>
-        <translation>Gib dein %1 Merkwort ein</translation>
+        <translation>Gib deinen %1 Wallet-Merksatz ein</translation>
     </message>
     <message>
         <source>id_enter_your_wallet_mnemonic</source>
@@ -742,7 +742,7 @@
     </message>
     <message>
         <source>id_export_transactions_to_csv_file</source>
-        <translation>Export transactions to CSV file</translation>
+        <translation>Transaktionen als CSV-File exportieren</translation>
     </message>
     <message>
         <source>id_face_id</source>
@@ -786,7 +786,7 @@
     </message>
     <message>
         <source>id_fees_are_too_low</source>
-        <translation>Fees are too low</translation>
+        <translation>Die Gebühren sind zu niedrig</translation>
     </message>
     <message>
         <source>id_for_long_term_storage</source>
@@ -846,7 +846,7 @@
     </message>
     <message>
         <source>id_google_authenticator_secret_key</source>
-        <translation>Google Authenticator secret key</translation>
+        <translation>Geheimer Schlüssel von Google Authenticator</translation>
     </message>
     <message>
         <source>id_green_is_a_noncustodial_wallet</source>
@@ -1054,7 +1054,7 @@
     </message>
     <message>
         <source>id_lbtc_has_no_issuer_and_is</source>
-        <translation>L-BTC has no issuer and is instead created on the network via a peg-in.</translation>
+        <translation>L-BTC hat keinen Emittenten und wird stattdessen über einen Peg-In im Netzwerk erstellt.</translation>
     </message>
     <message>
         <source>id_learn_more_about_s</source>
@@ -1066,7 +1066,7 @@
     </message>
     <message>
         <source>id_ledger_supports_a_limited_set</source>
-        <translation>Ledger supports a limited set of assets: tap here to check the list.</translation>
+        <translation>Ledger unterstützt eine begrenzte Anzahl von Assets: Tippe hier, um die Liste zu sehen.</translation>
     </message>
     <message>
         <source>id_lets_get_you_set_up</source>
@@ -1218,7 +1218,7 @@
     </message>
     <message>
         <source>id_new_fee</source>
-        <translation>New fee</translation>
+        <translation>Neue Gebühr</translation>
     </message>
     <message>
         <source>id_new_incoming_transaction_in</source>
@@ -1434,7 +1434,7 @@
     </message>
     <message>
         <source>id_please_hold_on_while_your</source>
-        <translation>Please hold on while your address is being generated</translation>
+        <translation>Bitte bleib dran, während deine Adresse generiert wird</translation>
     </message>
     <message>
         <source>id_please_provide_your_1s</source>
@@ -1474,7 +1474,7 @@
     </message>
     <message>
         <source>id_please_wait_until_your_ledger</source>
-        <translation>Please wait until your Ledger displays the address to validate it. This could take up to 20 seconds.</translation>
+        <translation>Bitte warte, bis dein Ledger die Adresse anzeigt, um sie zu bestätigen. Dies kann bis zu 20 Sekunden dauern.</translation>
     </message>
     <message>
         <source>id_precision</source>
@@ -1482,7 +1482,7 @@
     </message>
     <message>
         <source>id_previous_fee</source>
-        <translation>Previous fee</translation>
+        <translation>Vorherige Gebühr</translation>
     </message>
     <message>
         <source>id_privacy_policy</source>
@@ -1538,7 +1538,7 @@
     </message>
     <message>
         <source>id_recovery_mnemonic</source>
-        <translation>Recovery mnemonic</translation>
+        <translation>Wiederherstellungs-Merksatz</translation>
     </message>
     <message>
         <source>id_recovery_transaction_emails</source>
@@ -1558,7 +1558,7 @@
     </message>
     <message>
         <source>id_recovery_xpub</source>
-        <translation>Recovery xpub</translation>
+        <translation>Wiederherstellungs-xpub</translation>
     </message>
     <message>
         <source>id_redeem_your_deposited_funds</source>
@@ -1582,7 +1582,7 @@
     </message>
     <message>
         <source>id_remove</source>
-        <translation>Remove</translation>
+        <translation>Entfernen</translation>
     </message>
     <message>
         <source>id_remove_custom_network</source>
@@ -1590,11 +1590,11 @@
     </message>
     <message>
         <source>id_remove_wallet</source>
-        <translation>Remove wallet</translation>
+        <translation>Wallet entfernen</translation>
     </message>
     <message>
         <source>id_rename_account</source>
-        <translation>Rename account</translation>
+        <translation>Konto umbenennen</translation>
     </message>
     <message>
         <source>id_replaceable</source>
@@ -1678,7 +1678,7 @@
     </message>
     <message>
         <source>id_save_a_summary_of_your_accounts</source>
-        <translation>Save a summary of your accounts to speed up recovery in case you need to use our recovery tool.</translation>
+        <translation>Speichere eine Zusammenfassung deiner Accounts um die Wiederherstellung zu beschleunigen, solltest du unser Recovery-Tool einmal brauchen.</translation>
     </message>
     <message>
         <source>id_save_your_mnemonic</source>
@@ -1690,7 +1690,7 @@
     </message>
     <message>
         <source>id_scan_qr_code</source>
-        <translation>Scan QR code</translation>
+        <translation>QR-Code scannen</translation>
     </message>
     <message>
         <source>id_scan_the_qr_code_in_google</source>
@@ -2291,7 +2291,7 @@ Einstellung zurücksetzen und dann reaktivieren.</translation>
     </message>
     <message>
         <source>id_value_must_be_between_144_and</source>
-        <translation>Value must be between 144 and 200000</translation>
+        <translation>Der Wert muss zwischen 144 und 200000 sein</translation>
     </message>
     <message>
         <source>id_verify_your_pin</source>
@@ -2511,7 +2511,7 @@ Einstellung zurücksetzen und dann reaktivieren.</translation>
     </message>
     <message>
         <source>id_your_wallet_is_locked_for_a</source>
-        <translation>Deine Wallet ist für eine Zurücksetzung der Zwei-Faktor-Authentifizierung gesperrt. Die Zurücksetzung wird in %1 Tagen abgeschlossen.</translation>
+        <translation>Deine Wallet ist gesperrt wegen des zurücksetzens der Zwei-Faktor-Authentifizierung. Das Zurücksetzen wird in %1 Tagen abgeschlossen sein.</translation>
     </message>
     <message>
         <source>id_your_wallet_is_not_yet_fully</source>
