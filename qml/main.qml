@@ -243,6 +243,8 @@ ApplicationWindow {
                     icon.height: 32
                     width: wallet_list_view.width
                     highlighted: wallet === currentWallet
+                    opacity: highlighted || hovered || tool_button.checked ? 1 : 0.25
+                    Behavior on opacity { OpacityAnimator {} }
                     property bool valid: wallet.loginAttemptsRemaining > 0
                     onPressed: if (valid) switchToWallet(wallet)
                     Row {
