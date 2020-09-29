@@ -219,7 +219,7 @@ void Wallet::handleNotification(const QJsonObject &notification)
 
     if (event == "session") {
         bool connected = data.toObject().value("connected").toBool();
-        setConnection(connected ? Connected : Connecting);
+        setConnection(connected ? Connected : m_connection);
         return;
     }
 

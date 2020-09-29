@@ -23,7 +23,24 @@ StackView {
 
     property Item toolbar: currentItem.toolbar || null
     property Item login_view: Page {
-        property Item toolbar:  RowLayout {
+        property Item toolbar: RowLayout {
+            Label {
+                visible: wallet.authentication === Wallet.Authenticating || wallet.connection === Wallet.Connecting
+                opacity: wallet.events.tor !== undefined && wallet.events.tor.progress > 0 && wallet.events.tor.progress < 100 ? 0.5 : 0
+                text: wallet.events.tor ? wallet.events.tor.summary : ''
+                Behavior on opacity { OpacityAnimator {} }
+            }
+            ProgressBar {
+                property var tor: wallet.events.tor
+                Layout.maximumWidth: 64
+                opacity: wallet.authentication === Wallet.Authenticating || wallet.connection === Wallet.Connecting ? 0.5 : 0
+                from: 0
+                indeterminate: !(tor && tor.progress >= 0 && tor.progress < 100)
+                to: 100
+                value: wallet.events.tor ? wallet.events.tor.progress : 0
+                Behavior on opacity { OpacityAnimator {} }
+                Behavior on value { SmoothedAnimation {} }
+            }
             ToolButton {
                 onClicked: settings_drawer.open()
                 icon.source: 'qrc:/svg/settings.svg'
@@ -102,38 +119,6 @@ StackView {
                 Item {
                    Layout.fillWidth: true
                    Layout.fillHeight: true
-                }
-            }
-        }
-
-        footer: Item {
-            height: 64
-
-            Row {
-                visible: wallet.authentication === Wallet.Authenticating || wallet.connection === Wallet.Connecting
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.left: parent.left
-                anchors.margins: 16
-                spacing: 16
-
-                ProgressBar {
-                    property var tor: wallet.events.tor
-
-                    anchors.verticalCenter: parent.verticalCenter
-                    from: 0
-                    indeterminate: !(tor && tor.progress >= 0 && tor.progress < 100)
-                    to: 100
-                    value: wallet.events.tor ? wallet.events.tor.progress : 0
-
-                    Behavior on value { SmoothedAnimation {  } }
-                }
-                Label {
-                    anchors.verticalCenter: parent.verticalCenter
-                    font.pixelSize: 16
-                    opacity: wallet.events.tor !== undefined && wallet.events.tor.progress > 0 && wallet.events.tor.progress < 100 ? 1 : 0
-                    text: wallet.events.tor ? wallet.events.tor.summary : ''
-
-                    Behavior on opacity { OpacityAnimator {} }
                 }
             }
         }
