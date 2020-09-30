@@ -191,7 +191,6 @@ void DevicePrivateImpl::exchange(Command* command)
             auto res = IOHIDDeviceSetReport(handle, kIOHIDReportTypeOutput, 0, (const uint8_t*) packet.constData(), packet.size());
             if (res != kIOReturnSuccess) {
                 qDebug() << "FAILED";
-                delete command;
                 return;
             }
         }
