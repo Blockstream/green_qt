@@ -20,6 +20,7 @@ ColumnLayout {
     SettingsBox {
         title: qsTrId('id_access')
         description: qsTrId('id_enable_or_change_your_pin_to')
+        visible: !wallet.device
 
         Button {
             Component {
