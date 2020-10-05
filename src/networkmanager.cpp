@@ -24,6 +24,8 @@ NetworkManager::NetworkManager() : QObject(nullptr)
         auto data = networks.value(key.toString()).toObject();
         // Don't include development networks
         if (data.value("development").toBool()) continue;
+        // Don't include electrum networks
+        if (data.contains("server_type") && data.value("server_type").toString() == "electrum") continue;
         m_networks.append(new Network(data, this));
     }
 }
