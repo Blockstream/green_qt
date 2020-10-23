@@ -8,7 +8,6 @@
         <file>DebugRectangle.qml</file>
         <file>SendView.qml</file>
         <file>Amount.qml</file>
-        <file>AccountBalanceGraph.qml</file>
         <file>TransactionDelegate.qml</file>
         <file>LoginView.qml</file>
         <file>SignupView.qml</file>
@@ -19,18 +18,14 @@
         <file>WalletContainerView.qml</file>
         <file>Intro.qml</file>
         <file>MainMenuBar.qml</file>
-        <file>Sidebar.qml</file>
         <file>RestoreWallet.qml</file>
         <file>DeviceView.qml</file>
         <file>TransactionView.qml</file>
         <file>Panel.qml</file>
         <file>CreateAccountDialog.qml</file>
         <file>RenameAccountDialog.qml</file>
-        <file>DevicesSidebarItem.qml</file>
         <file>PinView.qml</file>
-        <file>SidebarItem.qml</file>
         <file>TransactionListView.qml</file>
-        <file>WalletsSidebarItem.qml</file>
         <file>WalletSettingsView.qml</file>
         <file>WizardPage.qml</file>
         <file>WelcomePage.qml</file>
