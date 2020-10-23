@@ -453,6 +453,7 @@ void Wallet::signup(const QStringList& mnemonic, const QByteArray& pin)
     });
 }
 
+// TODO: move to a LoginHandler/MnemonicLoginHandler
 void Wallet::login(const QStringList& mnemonic, const QString& password)
 {
     Q_ASSERT(mnemonic.size() == 24 || (mnemonic.size() == 27 && !password.isEmpty()));
@@ -472,7 +473,10 @@ void Wallet::login(const QStringList& mnemonic, const QString& password)
 
         GA_destroy_json(hw_device);
 
-        if (result.value("status") != "done") return setAuthentication(Unauthenticated);
+        if (result.value("status") != "done") {
+            emit loginError();
+            return setAuthentication(Unauthenticated);
+        }
 
         updateCurrencies();
         reload();

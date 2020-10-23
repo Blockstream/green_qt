@@ -19,8 +19,10 @@ Page {
 
     Connections {
         target: controller.wallet
-        function onAuthenticationChanged() {
-            // TODO show error message
+        function onLoginError() {
+            footer_buttons_row.ToolTip.show(qsTrId('id_invalid_mnemonic'), 2000);
+        }
+        function onAuthenticationChanged(authentication) {
             if (controller.wallet.authentication === Wallet.Authenticated) {
                 stack_view.push(pin_page)
             }
@@ -109,6 +111,7 @@ Page {
         height: 64
 
         Row {
+            id: footer_buttons_row
             anchors.right: parent.right
             anchors.verticalCenter: parent.verticalCenter
             anchors.margins: 16
