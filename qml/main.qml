@@ -57,13 +57,7 @@ ApplicationWindow {
     }
 
     property var icons: ({
-        'liquid': 'qrc:/svg/liquid/liquid_no_string.svg',
-        'mainnet': 'qrc:/svg/btc.svg',
-        'testnet': 'qrc:/svg/btc_testnet.svg'
-    })
-
-    property var logos: ({
-        'liquid': 'qrc:/svg/liquid/liquid_with_string.svg',
+        'liquid': 'qrc:/svg/liquid.svg',
         'mainnet': 'qrc:/svg/btc.svg',
         'testnet': 'qrc:/svg/btc_testnet.svg'
     })

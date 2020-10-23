@@ -28,7 +28,7 @@
         <file>svg/home.svg</file>
         <file>svg/ic_done.svg</file>
         <file>svg/ledger.svg</file>
-        <file>svg/logo_big.svg</file>
+        <file>svg/liquid.svg</file>
         <file>svg/network_selector_active.svg</file>
         <file>svg/network_selector.svg</file>
         <file>svg/network.svg</file>
@@ -57,8 +57,6 @@
         <file>svg/stack_wallets.svg</file>
         <file>svg/trezor.svg</file>
         <file>svg/twofactor.svg</file>
-        <file>svg/liquid/liquid_no_string.svg</file>
-        <file>svg/liquid/liquid_with_string.svg</file>
         <file>svg/generic_icon_30p.svg</file>
     </qresource>
 </RCC>

@@ -65,13 +65,11 @@ StackView {
                 anchors.verticalCenter: parent.verticalCenter
                 spacing: 16
                 Image {
-                    Layout.alignment: Qt.AlignHCenter
-                    Layout.topMargin: 128
+                    anchors.verticalCenter: parent.verticalCenter
                     source: icons[wallet.network.id]
                 }
                 Label {
-                    Layout.alignment: Qt.AlignHCenter
-                    Layout.bottomMargin: 32
+                    anchors.verticalCenter: parent.verticalCenter
                     text: wallet.name
                     font.pixelSize: 32
                 }

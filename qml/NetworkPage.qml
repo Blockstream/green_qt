@@ -58,12 +58,11 @@ Item {
                         anchors.centerIn: parent
 
                         Image {
-                            source: logos[modelData.id]
+                            source: icons[modelData.id]
                         }
 
                         Label {
                             text: modelData.name
-                            visible: modelData.id !== 'liquid'
                             anchors.verticalCenter: parent.verticalCenter
                         }
                     }

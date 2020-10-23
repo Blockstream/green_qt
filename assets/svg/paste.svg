@@ -1,82 +1,10 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   id="Layer_1"
-   data-name="Layer 1"
-   viewBox="0 0 48 48"
-   version="1.1"
-   sodipodi:docname="paste.svg"
-   inkscape:version="0.92.2 5c3e80d, 2017-08-06">
-  <metadata
-     id="metadata4022">
-    <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
-  <sodipodi:namedview
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1"
-     objecttolerance="10"
-     gridtolerance="10"
-     guidetolerance="10"
-     inkscape:pageopacity="0"
-     inkscape:pageshadow="2"
-     inkscape:window-width="1629"
-     inkscape:window-height="1057"
-     id="namedview4020"
-     showgrid="false"
-     inkscape:zoom="16.625"
-     inkscape:cx="24"
-     inkscape:cy="24"
-     inkscape:window-x="0"
-     inkscape:window-y="0"
-     inkscape:window-maximized="0"
-     inkscape:current-layer="Layer_1" />
-  <defs
-     id="defs4013">
-    <style
-       id="style4002">.cls-1{fill:none;}.cls-2{clip-path:url(#clip-path);}.cls-3{clip-path:url(#clip-path-2);}.cls-4{fill:#00b45a;}.cls-5{clip-path:url(#clip-path-3);}</style>
-    <clipPath
-       id="clip-path">
-      <polygon
-         class="cls-1"
-         points="-29.47 72.81 -31.63 72.81 -31.63 80.3 -39.11 80.3 -39.11 82.45 -31.63 82.45 -31.63 89.94 -29.47 89.94 -29.47 82.45 -21.99 82.45 -21.99 80.3 -29.47 80.3 -29.47 72.81"
-         id="polygon4004" />
-    </clipPath>
-    <clipPath
-       id="clip-path-2">
-      <path
-         class="cls-1"
-         d="M-30.55,98.26A16.88,16.88,0,0,1-47.43,81.38,16.88,16.88,0,0,1-30.55,64.5,16.88,16.88,0,0,1-13.67,81.38,16.88,16.88,0,0,1-30.55,98.26Zm0-35.88a19,19,0,0,0-19,19,19,19,0,0,0,19,19,19,19,0,0,0,19-19A19,19,0,0,0-30.55,62.38Z"
-         id="path4007" />
-    </clipPath>
-    <clipPath
-       id="clip-path-3">
-      <path
-         class="cls-1"
-         d="M34,98.42a4.6,4.6,0,1,1,4.61-4.6A4.61,4.61,0,0,1,34,98.42ZM13,86a4.61,4.61,0,1,1,4.6-4.61A4.63,4.63,0,0,1,13,86Zm21-21.6A4.61,4.61,0,1,1,29.43,69,4.62,4.62,0,0,1,34,64.44ZM34,87a6.68,6.68,0,0,0-5.17,2.39l-9.66-5a6.62,6.62,0,0,0,.68-3,7.55,7.55,0,0,0-.68-3l9.66-5A6.77,6.77,0,0,0,34,75.75,6.88,6.88,0,1,0,34,62a7,7,0,0,0-6.87,7,7.34,7.34,0,0,0,.45,2.5l-9.83,5.05a6.77,6.77,0,0,0-4.83-2A6.88,6.88,0,0,0,13,88.31a6.79,6.79,0,0,0,4.83-2l9.83,5.06a7.3,7.3,0,0,0-.45,2.5A6.88,6.88,0,1,0,34,87Z"
-         id="path4010" />
-    </clipPath>
-  </defs>
-  <title
-     id="title4015">copy</title>
-  <path
-     class="cls-4"
-     d="M 39.24,7.05 H 17.49 c -0.94873,0.016038 -1.713962,0.7812701 -1.73,1.73 v 7 h -7 C 7.8146721,15.779252 7.037598,16.52542 7,17.47 v 21.75 c -0.011135,0.979822 0.7801145,1.780063 1.76,1.78 h 21.75 c 0.94873,-0.01604 1.713962,-0.78127 1.73,-1.73 v -7 h 7 c 0.979886,6.3e-5 1.771135,-0.800178 1.76,-1.78 V 8.74 C 40.97278,7.7907859 40.189537,7.0386948 39.24,7.05 Z m -9.35,31.5 H 9.43 V 18.09 h 6.33 v 12.4 c 0.01604,0.94873 0.78127,1.713962 1.73,1.73 h 12.4 z"
-     id="path4017"
-     inkscape:connector-curvature="0"
-     style="fill:#00b45a"
-     sodipodi:nodetypes="ccccccccccccccccccccccc" />
+<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60">
+    <g fill="none" fill-rule="evenodd">
+        <g>
+            <g>
+                <path fill="#D8D8D8" fill-opacity="0" d="M0 0H60V60H0z" transform="translate(-1625 -543) translate(1625 543)"/>
+                <path fill="#FFF" d="M38 9v5h7v35H15V14h7V9h16zM22 21v-4h-4v29h24V17h-4v4H22zm13-9.074H25V18h10v-6.074z" transform="translate(-1625 -543) translate(1625 543)"/>
+            </g>
+        </g>
+    </g>
 </svg>

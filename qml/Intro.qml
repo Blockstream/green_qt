@@ -10,7 +10,7 @@ Item {
         spacing: 16
         Image {
             Layout.alignment: Qt.AlignHCenter
-            source: 'qrc:/svg/logo_big.svg'
+            source: 'qrc:/svg/green_logo.svg'
             sourceSize.height: 64
         }
         Button {
