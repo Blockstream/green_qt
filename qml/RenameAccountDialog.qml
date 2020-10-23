@@ -24,6 +24,7 @@ WalletDialog {
             text: qsTrId('id_name')
         }
         TextField {
+            Layout.minimumWidth: 400
             id: name_field
             text: account.name
             Layout.fillWidth: true

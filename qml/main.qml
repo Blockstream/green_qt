@@ -177,7 +177,7 @@ ApplicationWindow {
                 }
                 MenuItem {
                     text: qsTrId('id_rename_account')
-                    enabled: currentWallet && currentWallet.authentication === Wallet.Authenticated && currentAccount && currentAccount.json.type !== '2of2_no_recovery'
+                    enabled: currentWallet && currentWallet.authentication === Wallet.Authenticated && currentAccount
                     onClicked: rename_account_dialog.createObject(window, { account: currentAccount }).open()
                 }
             }
