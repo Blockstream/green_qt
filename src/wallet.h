@@ -55,9 +55,6 @@ private:
     Q_PROPERTY(QJsonObject config READ config NOTIFY configChanged)
     Q_PROPERTY(bool busy READ isBusy NOTIFY busyChanged)
     Q_PROPERTY(Account* currentAccount READ currentAccount WRITE setCurrentAccount NOTIFY currentAccountChanged)
-    // Check if this wallet can create a liquid securities account
-    // (only 1 per liquid wallet)
-    Q_PROPERTY(bool hasLiquidSecurities READ hasLiquidSecurities NOTIFY hasLiquidSecuritiesChanged)
     Q_PROPERTY(QString networkName READ networkName NOTIFY networkChanged)
     Q_PROPERTY(Device* device READ device CONSTANT)
 
@@ -112,8 +109,6 @@ public:
 
     bool isBusy() const { return m_busy; }
     void setBusy(bool busy);
-
-    bool hasLiquidSecurities() const { return m_has_liquid_securities; }
 
     Account* getOrCreateAccount(int pointer);
 
@@ -190,7 +185,6 @@ public:
     bool m_use_tor{false};
     int m_logout_timer{-1};
     bool m_busy{false};
-    bool m_has_liquid_securities{false};
 
     void save();
     Account* currentAccount() const { return m_current_account; }
