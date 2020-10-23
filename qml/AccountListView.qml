@@ -27,16 +27,31 @@ ListView {
                 ToolTip.visible: truncated && hovered
             }
             SectionLabel {
+                text: 'Managed Assets Account'
+                visible: account.json.type === '2of2_no_recovery'
+                anchors.right: parent.right
+                anchors.rightMargin: 8
+                font.pixelSize: 10
+                padding: 8
+                Rectangle {
+                    anchors.fill: parent
+                    anchors.margins: 4
+                    color: '#2CCCBF'
+                    opacity: 1
+                    radius: height / 2
+                    z: -1
+                }
+            }
+            SectionLabel {
                 text: qsTrId('id_2of3_account')
                 visible: account.json.type === '2of3'
                 anchors.right: parent.right
                 anchors.rightMargin: 8
                 font.pixelSize: 10
+                padding: 8
                 Rectangle {
                     anchors.fill: parent
-                    anchors.margins: -2
-                    anchors.rightMargin: -8
-                    anchors.leftMargin: -8
+                    anchors.margins: 4
                     color: 'white'
                     opacity: 0.2
                     radius: height / 2
