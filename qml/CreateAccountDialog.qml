@@ -121,7 +121,7 @@ ControllerDialog {
                 readonly property string type: '2of2_no_recovery'
                 text: qsTrId('id_liquid_securities_account')
                 description: qsTrId('id_liquid_securities_accounts_are')
-                enabled: wallet.network.liquid && !wallet.hasLiquidSecurities
+                enabled: wallet.network.liquid
                 ButtonGroup.group: type_button_group
                 Layout.fillWidth: true
             }
@@ -164,8 +164,7 @@ ControllerDialog {
             }
             TextField {
                 id: name_field
-                enabled: create_account_controller.type !== '2of2_no_recovery'
-                text: enabled ? '' : qsTrId('id_liquid_securities_account')
+                text: create_account_controller.type === '2of2_no_recovery' ? qsTrId('id_liquid_securities_account') : ''
                 Layout.fillWidth: true
             }
         }
