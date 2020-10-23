@@ -32,29 +32,33 @@ Page {
     header: Item {
         height: 64
 
-        Row {
+        Label {
+            id: network_label
+            background: Item {
+                Image {
+                    anchors.verticalCenter: parent.verticalCenter
+                    source: network_page.network ? icons[network_page.network.id] : ''
+                    sourceSize.height: 32
+                    sourceSize.width: 32
+                }
+            }
+            leftPadding: 40
             anchors.margins: 16
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
+            font.pixelSize: 24
+            text: network_page.network ? network_page.network.name : ''
             opacity: !!network_page.network ? 1 : 0
-            spacing: 16
             Behavior on opacity { OpacityAnimator { } }
-            Image {
-                anchors.verticalCenter: parent.verticalCenter
-                source: network_page.network ? icons[network_page.network.id] : ''
-                sourceSize.height: 32
-                sourceSize.width: 32
-            }
-            Label {
-                anchors.verticalCenter: parent.verticalCenter
-                font.pixelSize: 24
-                text: network_page.network ? network_page.network.name : ''
-            }
         }
 
         Label {
-            anchors.centerIn: parent
+            anchors.baseline: network_label.baseline
+            anchors.horizontalCenter: parent.horizontalCenter
+            width: parent.width - network_label.width * 2 - 64
             font.pixelSize: 24
+            wrapMode: Text.WordWrap
+            horizontalAlignment: Label.AlignHCenter
             text: stack_view.currentItem.title
         }
     }
