@@ -83,14 +83,13 @@ void Wallet::connectNow()
 
     if (m_connection == Disconnected) return;
 
-    QMetaObject::invokeMethod(m_context, [this] {
+    auto log_level = QString::fromLocal8Bit(qgetenv("GREEN_GDK_LOG_LEVEL"));
+    if (log_level.isEmpty()) log_level = "info";
+
+    QMetaObject::invokeMethod(m_context, [this, log_level] {
         QJsonObject params{
             { "name", m_network->id() },
-#ifdef QT_DEBUG
-            { "log_level", "info" },
-#else
-            { "log_level", "info" },
-#endif
+            { "log_level", log_level },
             { "use_tor", m_use_tor }
         };
 
