@@ -177,6 +177,12 @@ Wallet::~Wallet()
     }
 }
 
+QString Wallet::id() const
+{
+    Q_ASSERT(!m_id.isEmpty() || m_device);
+    return m_id;
+}
+
 void Wallet::setNetwork(Network* network)
 {
     Q_ASSERT(!m_network);

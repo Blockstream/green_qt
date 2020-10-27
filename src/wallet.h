@@ -38,6 +38,7 @@ public:
     Q_ENUM(AuthenticationStatus)
 
 private:
+    Q_PROPERTY(QString id READ id CONSTANT)
     Q_PROPERTY(Network* network READ network WRITE setNetwork NOTIFY networkChanged)
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(ConnectionStatus connection READ connection NOTIFY connectionChanged)
@@ -61,6 +62,8 @@ private:
 public:
     explicit Wallet(QObject *parent = nullptr);
     virtual ~Wallet();
+
+    QString id() const;
 
     Network* network() const { return m_network; }
     void setNetwork(Network* network);
