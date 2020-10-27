@@ -164,7 +164,6 @@ ControllerDialog {
             }
             TextField {
                 id: name_field
-                text: create_account_controller.type === '2of2_no_recovery' ? qsTrId('id_liquid_securities_account') : ''
                 Layout.fillWidth: true
             }
         }
