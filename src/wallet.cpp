@@ -5,6 +5,8 @@
 #include "network.h"
 #include "util.h"
 #include "wallet.h"
+#include "resolver.h"
+#include "handler.h"
 
 #include <QDateTime>
 #include <QDebug>
@@ -15,6 +17,20 @@
 #include <QUuid>
 
 #include <gdk.h>
+
+class GetSubAccountsHandler : public Handler
+{
+    void init(GA_session* session) override
+    {
+        int res = GA_get_subaccounts(session, &m_handler);
+        Q_ASSERT(res == GA_OK);
+    }
+public:
+    GetSubAccountsHandler(Wallet* wallet)
+        : Handler(wallet)
+    {
+    }
+};
 
 static void notification_handler(void* context, const GA_json* details)
 {
@@ -512,32 +528,32 @@ void Wallet::setPin(const QByteArray& pin)
 
 void Wallet::reload()
 {
-    QMetaObject::invokeMethod(m_context, [this] {
-        QJsonArray accounts = GA::get_subaccounts(m_session);
+    auto handler = new GetSubAccountsHandler(this);
+    QObject::connect(handler, &Handler::done, this, [this, handler] {
+        QJsonArray accounts = handler->result().value("result").toObject().value("subaccounts").toArray();
 
-        QMetaObject::invokeMethod(this, [this, accounts] {
-            quint64 balance  = 0;
+        for (QJsonValue data : accounts) {
+            QJsonObject json = data.toObject();
+            int pointer = json.value("pointer").toInt();
+            Account* account = getOrCreateAccount(pointer);
+            account->update(data.toObject());
+            account->reload();
+        }
 
-            for (QJsonValue data : accounts) {
-                QJsonObject json = data.toObject();
-                int pointer = json.value("pointer").toInt();
-                Account* account = getOrCreateAccount(pointer);
-                account->update(data.toObject());
-                account->reload();
+        emit accountsChanged();
 
-                balance += static_cast<quint64>(json.value("satoshi").toObject().value("btc").toInt());
-            }
-
-            emit accountsChanged();
-            if (!m_current_account) {
-                setCurrentAccount(m_accounts.first());
-            }
-        });
+        if (!m_current_account) {
+            setCurrentAccount(m_accounts.first());
+        }
 
         if (m_network->isLiquid()) {
             refreshAssets();
         }
     });
+    QObject::connect(handler, &Handler::resolver, [](Resolver* resolver) {
+        resolver->resolve();
+    });
+    handler->exec();
 }
 
 void Wallet::refreshAssets()
