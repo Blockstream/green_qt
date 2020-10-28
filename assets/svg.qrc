@@ -4,5 +4,9 @@
         <file>svg/abstract_background.svg</file>
         <file>svg/down.svg</file>
         <file>svg/usbAlt.svg</file>
+        <file>svg/ledger_nano_s.svg</file>
+        <file>svg/transactions.svg</file>
+        <file>svg/recovery.svg</file>
+        <file>svg/leftbar.svg</file>
     </qresource>
 </RCC>
