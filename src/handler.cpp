@@ -91,8 +91,20 @@ Resolver* Handler::createResolver(const QJsonObject& result)
     if (action == "get_xpubs") {
         return new GetXPubsResolver(this, result);
     }
+    if (action == "create_transaction") {
+        return new BlindingKeysResolver(this, result);
+    }
+    if (action == "get_receive_address") {
+        return new BlindingKeyResolver(this, result);
+    }
+
+    if (action == "get_subaccounts" || action == "get_transactions") {
+        return new BlindingNoncesResolver(this, result);
+    }
+
     if (action =="sign_tx") {
         if (m_wallet->network()->isLiquid()) {
+            return new SignLiquidTransactionResolver(this, result);
         } else {
             return new SignTransactionResolver(this, result);
         }
