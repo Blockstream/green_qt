@@ -8,7 +8,7 @@ Label {
     leftPadding: 8
     rightPadding: 32
     text: qsTrId('id_account_id') + '    ' + account.json.receiving_id
-    ToolTip.text: qsTrId('id_provide_this_id_to_the_issuer')
+    ToolTip.text: qsTrId('id_provide_this_id_to_the_asset')
     ToolTip.delay: 500
     ToolTip.visible: mouse_area.containsMouse
     MouseArea {

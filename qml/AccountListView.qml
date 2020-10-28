@@ -27,7 +27,7 @@ ListView {
                 ToolTip.visible: truncated && hovered
             }
             SectionLabel {
-                text: 'Managed Assets Account'
+                text: qsTrId('id_managed_assets')
                 visible: account.json.type === '2of2_no_recovery'
                 anchors.right: parent.right
                 anchors.rightMargin: 8

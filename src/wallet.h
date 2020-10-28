@@ -143,7 +143,6 @@ signals:
     void settingsChanged();
     void configChanged();
     void busyChanged(bool busy);
-    void hasLiquidSecuritiesChanged(bool hasLiquidSecurities);
     void currentAccountChanged(Account* account);
     void loginError(const QString& error);
 
