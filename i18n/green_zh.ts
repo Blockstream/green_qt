@@ -289,6 +289,10 @@
         <translation>改变</translation>
     </message>
     <message>
+        <source>id_change_address</source>
+        <translation>Change address</translation>
+    </message>
+    <message>
         <source>id_change_pin</source>
         <translation>修改PIN</translation>
     </message>
@@ -319,6 +323,10 @@
     <message>
         <source>id_clear</source>
         <translation>清除</translation>
+    </message>
+    <message>
+        <source>id_click_to_copy</source>
+        <translation>Click to copy</translation>
     </message>
     <message>
         <source>id_click_to_receive_an_email_with</source>
@@ -353,6 +361,10 @@
         <translation>确认密语</translation>
     </message>
     <message>
+        <source>id_confirm_transaction</source>
+        <translation>Confirm transaction</translation>
+    </message>
+    <message>
         <source>id_confirm_transaction_details_on</source>
         <translation>请在硬件钱包上确认转账细节</translation>
     </message>
@@ -375,6 +387,10 @@
     <message>
         <source>id_connect_with_tor</source>
         <translation>连接Tor</translation>
+    </message>
+    <message>
+        <source>id_connect_your_ledger_to_use_it</source>
+        <translation>Connect your Ledger to use it in Green</translation>
     </message>
     <message>
         <source>id_connecting_to_a_trusted_node</source>
@@ -789,16 +805,16 @@
         <translation>手续费太低</translation>
     </message>
     <message>
+        <source>id_for_investors</source>
+        <translation>For investors</translation>
+    </message>
+    <message>
         <source>id_for_long_term_storage</source>
         <translation>用于长期存储</translation>
     </message>
     <message>
         <source>id_for_most_users</source>
         <translation>对于大部分用户</translation>
-    </message>
-    <message>
-        <source>id_for_securities_investors</source>
-        <translation>对于证券投资者</translation>
     </message>
     <message>
         <source>id_from</source>
@@ -1077,18 +1093,6 @@
         <translation>Liquid证券型资产</translation>
     </message>
     <message>
-        <source>id_liquid_securities_account</source>
-        <translation>Liquid证券账户</translation>
-    </message>
-    <message>
-        <source>id_liquid_securities_account_is</source>
-        <translation>Liquid证券账户仅在Liquid上可用。</translation>
-    </message>
-    <message>
-        <source>id_liquid_securities_accounts_are</source>
-        <translation>Liquid证券账户仅在Liquid钱包中可用。你需要从发行方得到授权来接收Liquid证券。</translation>
-    </message>
-    <message>
         <source>id_loading_transactions</source>
         <translation>正在加载转账…</translation>
     </message>
@@ -1147,6 +1151,18 @@
     <message>
         <source>id_malleated</source>
         <translation>已延展</translation>
+    </message>
+    <message>
+        <source>id_managed_assets</source>
+        <translation>Managed Assets</translation>
+    </message>
+    <message>
+        <source>id_managed_assets_account</source>
+        <translation>Managed Assets Account</translation>
+    </message>
+    <message>
+        <source>id_managed_assets_accounts_are</source>
+        <translation>Managed assets accounts are only available on Liquid wallets. You may be required to provide your account ID to issuers to receive a Managed Asset.</translation>
     </message>
     <message>
         <source>id_medium</source>
@@ -1291,6 +1307,14 @@
     <message>
         <source>id_normal</source>
         <translation>正常</translation>
+    </message>
+    <message>
+        <source>id_not_a_valid_email_address</source>
+        <translation>Not a valid email address</translation>
+    </message>
+    <message>
+        <source>id_not_a_valid_phone_number</source>
+        <translation>Not a valid phone number</translation>
     </message>
     <message>
         <source>id_not_connected_connecting_in_ds_</source>
@@ -1493,8 +1517,8 @@
         <translation>密钥%1出现了问题</translation>
     </message>
     <message>
-        <source>id_provide_this_id_to_the_issuer</source>
-        <translation>将这个ID提供给Liquid证券的发行方以获得授权。</translation>
+        <source>id_provide_this_id_to_the_asset</source>
+        <translation>Provide this ID to the asset issuer if requested.</translation>
     </message>
     <message>
         <source>id_proxy_settings</source>
@@ -1527,6 +1551,10 @@
     <message>
         <source>id_recipient</source>
         <translation>接收方</translation>
+    </message>
+    <message>
+        <source>id_recipient_address</source>
+        <translation>Recipient address</translation>
     </message>
     <message>
         <source>id_recovery</source>
@@ -1661,6 +1689,10 @@
         <translation>检查账户信息</translation>
     </message>
     <message>
+        <source>id_review_output_s</source>
+        <translation>Review output %1</translation>
+    </message>
+    <message>
         <source>id_s_blocks_left</source>
         <translation>剩余%1个区块</translation>
     </message>
@@ -1735,6 +1767,10 @@
     <message>
         <source>id_select_account</source>
         <translation>选择账户</translation>
+    </message>
+    <message>
+        <source>id_select_an_app_on_s</source>
+        <translation>Select an app on %1</translation>
     </message>
     <message>
         <source>id_select_asset</source>

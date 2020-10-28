@@ -289,6 +289,10 @@
         <translation>VRÁCENÉ DROBNÉ</translation>
     </message>
     <message>
+        <source>id_change_address</source>
+        <translation>Change address</translation>
+    </message>
+    <message>
         <source>id_change_pin</source>
         <translation>Změnit PIN</translation>
     </message>
@@ -319,6 +323,10 @@
     <message>
         <source>id_clear</source>
         <translation>VYMAZAT</translation>
+    </message>
+    <message>
+        <source>id_click_to_copy</source>
+        <translation>Click to copy</translation>
     </message>
     <message>
         <source>id_click_to_receive_an_email_with</source>
@@ -353,6 +361,10 @@
         <translation>Potvrďte přístupovou frázi (passphrase)</translation>
     </message>
     <message>
+        <source>id_confirm_transaction</source>
+        <translation>Confirm transaction</translation>
+    </message>
+    <message>
         <source>id_confirm_transaction_details_on</source>
         <translation>Potvrďte podrobnosti transakce na vaší hardwarové peněžence</translation>
     </message>
@@ -375,6 +387,10 @@
     <message>
         <source>id_connect_with_tor</source>
         <translation>Připojit se přes Tor</translation>
+    </message>
+    <message>
+        <source>id_connect_your_ledger_to_use_it</source>
+        <translation>Connect your Ledger to use it in Green</translation>
     </message>
     <message>
         <source>id_connecting_to_a_trusted_node</source>
@@ -789,16 +805,16 @@
         <translation>Poplatky jsou příliš nízké</translation>
     </message>
     <message>
+        <source>id_for_investors</source>
+        <translation>Pro investory</translation>
+    </message>
+    <message>
         <source>id_for_long_term_storage</source>
         <translation>Pro dlouhodobou úschovu</translation>
     </message>
     <message>
         <source>id_for_most_users</source>
         <translation>Pro většinu uživatelů</translation>
-    </message>
-    <message>
-        <source>id_for_securities_investors</source>
-        <translation>Pro investory s cennými papíry</translation>
     </message>
     <message>
         <source>id_from</source>
@@ -1077,18 +1093,6 @@
         <translation>Liquid Securities</translation>
     </message>
     <message>
-        <source>id_liquid_securities_account</source>
-        <translation>Účet Liquid Securities</translation>
-    </message>
-    <message>
-        <source>id_liquid_securities_account_is</source>
-        <translation>Účet Liquid securities je k dispozici pouze na Liquid.</translation>
-    </message>
-    <message>
-        <source>id_liquid_securities_accounts_are</source>
-        <translation>Účty Liquid securities jsou k dispozici pouze v Liquid peněženkách. Budete muset získat oprávnění od vydavatel k získání Liquid Security.</translation>
-    </message>
-    <message>
         <source>id_loading_transactions</source>
         <translation>Načítání transakcí...</translation>
     </message>
@@ -1147,6 +1151,18 @@
     <message>
         <source>id_malleated</source>
         <translation>malleated</translation>
+    </message>
+    <message>
+        <source>id_managed_assets</source>
+        <translation>Spravovaná aktiva</translation>
+    </message>
+    <message>
+        <source>id_managed_assets_account</source>
+        <translation>Účet spravovaných aktiv</translation>
+    </message>
+    <message>
+        <source>id_managed_assets_accounts_are</source>
+        <translation>Účty spravovaných aktiv jsou k dispozici pouze v peněženkách Liquid. Může se od vás vyžadovat, abyste emitentům poskytli ID svého účtu, abyste obdrželi spravované aktivum.</translation>
     </message>
     <message>
         <source>id_medium</source>
@@ -1291,6 +1307,14 @@
     <message>
         <source>id_normal</source>
         <translation>Normální</translation>
+    </message>
+    <message>
+        <source>id_not_a_valid_email_address</source>
+        <translation>Neplatná e-mailová adresa</translation>
+    </message>
+    <message>
+        <source>id_not_a_valid_phone_number</source>
+        <translation>Neplatné telefonní číslo</translation>
     </message>
     <message>
         <source>id_not_connected_connecting_in_ds_</source>
@@ -1493,8 +1517,8 @@
         <translation>Problém s klíčem %1</translation>
     </message>
     <message>
-        <source>id_provide_this_id_to_the_issuer</source>
-        <translation>Poskytněte toto ID vydavateli, aby získal oprávnění k přijímání Liquid Security.</translation>
+        <source>id_provide_this_id_to_the_asset</source>
+        <translation>Na požádání poskytněte toto ID emitentovi aktiv.</translation>
     </message>
     <message>
         <source>id_proxy_settings</source>
@@ -1527,6 +1551,10 @@
     <message>
         <source>id_recipient</source>
         <translation>Příjemce</translation>
+    </message>
+    <message>
+        <source>id_recipient_address</source>
+        <translation>Recipient address</translation>
     </message>
     <message>
         <source>id_recovery</source>
@@ -1661,6 +1689,10 @@
         <translation>Zkontrolovat informace o účtu</translation>
     </message>
     <message>
+        <source>id_review_output_s</source>
+        <translation>Review output %1</translation>
+    </message>
+    <message>
         <source>id_s_blocks_left</source>
         <translation>%1 bloky(ů) zbývá</translation>
     </message>
@@ -1735,6 +1767,10 @@
     <message>
         <source>id_select_account</source>
         <translation>Vybrat účet</translation>
+    </message>
+    <message>
+        <source>id_select_an_app_on_s</source>
+        <translation>Select an app on %1</translation>
     </message>
     <message>
         <source>id_select_asset</source>

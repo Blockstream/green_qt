@@ -289,6 +289,10 @@
         <translation>ÄNDERN</translation>
     </message>
     <message>
+        <source>id_change_address</source>
+        <translation>Change address</translation>
+    </message>
+    <message>
         <source>id_change_pin</source>
         <translation>PIN ändern</translation>
     </message>
@@ -319,6 +323,10 @@
     <message>
         <source>id_clear</source>
         <translation>LEEREN</translation>
+    </message>
+    <message>
+        <source>id_click_to_copy</source>
+        <translation>Click to copy</translation>
     </message>
     <message>
         <source>id_click_to_receive_an_email_with</source>
@@ -353,6 +361,10 @@
         <translation>Passphrase bestätigen</translation>
     </message>
     <message>
+        <source>id_confirm_transaction</source>
+        <translation>Confirm transaction</translation>
+    </message>
+    <message>
         <source>id_confirm_transaction_details_on</source>
         <translation>Bestätige die Transaktionsdetails auf deiner Hardware-Wallet</translation>
     </message>
@@ -375,6 +387,10 @@
     <message>
         <source>id_connect_with_tor</source>
         <translation>Mit Tor verbinden</translation>
+    </message>
+    <message>
+        <source>id_connect_your_ledger_to_use_it</source>
+        <translation>Connect your Ledger to use it in Green</translation>
     </message>
     <message>
         <source>id_connecting_to_a_trusted_node</source>
@@ -789,16 +805,16 @@
         <translation>Die Gebühren sind zu niedrig</translation>
     </message>
     <message>
+        <source>id_for_investors</source>
+        <translation>For investors</translation>
+    </message>
+    <message>
         <source>id_for_long_term_storage</source>
         <translation>Zur langfristigen Aufbewahrung</translation>
     </message>
     <message>
         <source>id_for_most_users</source>
         <translation>Für die meisten Nutzer</translation>
-    </message>
-    <message>
-        <source>id_for_securities_investors</source>
-        <translation>Für Anleger und Investoren</translation>
     </message>
     <message>
         <source>id_from</source>
@@ -1077,18 +1093,6 @@
         <translation>Liquid-Wertpapiere</translation>
     </message>
     <message>
-        <source>id_liquid_securities_account</source>
-        <translation>Liquid-Wertpapier-Konto</translation>
-    </message>
-    <message>
-        <source>id_liquid_securities_account_is</source>
-        <translation>Das Liquid-Wertpapier-Konto ist nur auf Liquid verfügbar.</translation>
-    </message>
-    <message>
-        <source>id_liquid_securities_accounts_are</source>
-        <translation>Liquid-Wertpapier-Konten sind nur in Liquid-Wallets verfügbar. Für den Erhalt eines Liquid-Wertpapiers musst du eine Autorisierung des Herausgebers des Tokens einholen.</translation>
-    </message>
-    <message>
         <source>id_loading_transactions</source>
         <translation>Transaktionen werden geladen...</translation>
     </message>
@@ -1147,6 +1151,18 @@
     <message>
         <source>id_malleated</source>
         <translation>verformt</translation>
+    </message>
+    <message>
+        <source>id_managed_assets</source>
+        <translation>Managed Assets</translation>
+    </message>
+    <message>
+        <source>id_managed_assets_account</source>
+        <translation>Managed Assets Account</translation>
+    </message>
+    <message>
+        <source>id_managed_assets_accounts_are</source>
+        <translation>Managed assets accounts are only available on Liquid wallets. You may be required to provide your account ID to issuers to receive a Managed Asset.</translation>
     </message>
     <message>
         <source>id_medium</source>
@@ -1291,6 +1307,14 @@
     <message>
         <source>id_normal</source>
         <translation>Normal</translation>
+    </message>
+    <message>
+        <source>id_not_a_valid_email_address</source>
+        <translation>Not a valid email address</translation>
+    </message>
+    <message>
+        <source>id_not_a_valid_phone_number</source>
+        <translation>Not a valid phone number</translation>
     </message>
     <message>
         <source>id_not_connected_connecting_in_ds_</source>
@@ -1493,8 +1517,8 @@
         <translation>Problem mit Schlüssel %1</translation>
     </message>
     <message>
-        <source>id_provide_this_id_to_the_issuer</source>
-        <translation>Gib diese ID an den Herausgeber weiter, um die Genehmigung zum Erhalt eines Liquid-Wertpapiers zu erlangen.</translation>
+        <source>id_provide_this_id_to_the_asset</source>
+        <translation>Provide this ID to the asset issuer if requested.</translation>
     </message>
     <message>
         <source>id_proxy_settings</source>
@@ -1527,6 +1551,10 @@
     <message>
         <source>id_recipient</source>
         <translation>Empfänger</translation>
+    </message>
+    <message>
+        <source>id_recipient_address</source>
+        <translation>Recipient address</translation>
     </message>
     <message>
         <source>id_recovery</source>
@@ -1661,6 +1689,10 @@
         <translation>Kontoinformationen überprüfen</translation>
     </message>
     <message>
+        <source>id_review_output_s</source>
+        <translation>Review output %1</translation>
+    </message>
+    <message>
         <source>id_s_blocks_left</source>
         <translation>%1 Blöcke übrig</translation>
     </message>
@@ -1735,6 +1767,10 @@
     <message>
         <source>id_select_account</source>
         <translation>Wähle Konto</translation>
+    </message>
+    <message>
+        <source>id_select_an_app_on_s</source>
+        <translation>Select an app on %1</translation>
     </message>
     <message>
         <source>id_select_asset</source>
