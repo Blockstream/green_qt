@@ -123,6 +123,7 @@ void Device::setAppName(const QString& app_name)
     QString id;
     if (app_name == "Bitcoin") id = "mainnet";
     if (app_name == "Bitcoin Test") id = "testnet";
+    if (app_name == "Liquid") id = "liquid";
     auto network = NetworkManager::instance()->network(id);
     if (!network) return;
     auto controller = new LedgerLoginController(this, network);
@@ -780,7 +781,8 @@ LedgerLoginController::LedgerLoginController(Device* device, Network* network)
         "device", QJsonObject({
             { "name", "Ledger" },
             { "supports_arbitrary_scripts", true },
-            { "supports_low_r", false }
+            { "supports_low_r", false },
+            { "supports_liquid", 1 }
         })
     }});
 
