@@ -1,9 +1,12 @@
+import Blockstream.Green 0.1
+import Blockstream.Green.Core 0.1
 import QtQuick 2.12
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
 
 WalletDialog {
     title: qsTrId('id_mnemonic')
+    required property Wallet wallet
     Item {
         implicitWidth: layout.implicitWidth
         implicitHeight: layout.implicitHeight

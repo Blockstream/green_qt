@@ -7,6 +7,7 @@ import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.12
 
 ColumnLayout {
+    id: recovery_settings_view
     required property Wallet wallet
     property string title: qsTrId('id_recovery')
 
@@ -24,6 +25,7 @@ ColumnLayout {
                 id: mnemonic_dialog
                 MnemonicDialog {
                     anchors.centerIn: parent
+                    wallet: recovery_settings_view.wallet
                 }
             }
             Button {
@@ -65,7 +67,9 @@ ColumnLayout {
         Button {
             Component {
                 id: nlocktime_dialog
-                NLockTimeDialog {}
+                NLockTimeDialog {
+                    wallet: recovery_settings_view.wallet
+                }
             }
             flat: true
             text: qsTrId('id_set_locktime')
@@ -80,7 +84,9 @@ ColumnLayout {
         Button {
             Component {
                 id: enable_dialog
-                SetRecoveryEmailDialog { }
+                SetRecoveryEmailDialog {
+                    wallet: recovery_settings_view.wallet
+                }
             }
 
             flat: true
