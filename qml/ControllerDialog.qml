@@ -72,6 +72,9 @@ WalletDialog {
         function onResolver(resolver) {
             if (resolver instanceof TwoFactorResolver) {
                 stack_view.push(resolveCodeComponent, { resolver })
+            } else if (resolver instanceof SignLiquidTransactionResolver) {
+                stack_view.push(signLiquidTransactionViewComponent, { resolver })
+                resolver.resolve()
             } else {
                 // automatically resolve
                 resolver.resolve()
@@ -81,6 +84,30 @@ WalletDialog {
 
     function push(handler, component) {
         stack_view.push(component, { handler })
+    }
+
+    property Component signLiquidTransactionViewComponent: Item {
+        property SignLiquidTransactionResolver resolver
+        Column {
+            id: info
+            anchors.centerIn: parent
+            spacing: 32
+            Image {
+                source: 'qrc:/svg/ledger_nano_s.svg'
+                anchors.horizontalCenter: parent.horizontalCenter
+            }
+            ProgressBar {
+                value: resolver.progress
+                Behavior on value { NumberAnimation { duration: 300; easing.type: Easing.OutCubic } }
+                anchors.horizontalCenter: parent.horizontalCenter
+            }
+        }
+        Label {
+            text: resolver.message
+            anchors.horizontalCenter: info.horizontalCenter
+            anchors.top: info.bottom
+            anchors.margins: 16
+        }
     }
 
     property Component requestCodeComponent: ColumnLayout {
