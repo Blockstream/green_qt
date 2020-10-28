@@ -92,10 +92,10 @@ static void DeviceMatchingCallback(void* context, IOReturn /* result */, void* /
     d->setInterface("USB");
 
     QTimer::singleShot(200, d, [=] {
-        //manager->exchange(handle, new GetFirmwareCommand);
-        auto cmd = new GetAppNameCommand;
+        auto cmd = new GetAppNameCommand(d);
         device->exchange(cmd);
-        QObject::connect(cmd, &Command::finished, [agent, handle, d] {
+        QObject::connect(cmd, &Command::finished, [agent, handle, cmd, d] {
+            d->setAppName(cmd->m_name);
             if (d->appName().startsWith("OLOS")) {
                 agent->m_devices.remove(handle);
                 d->deleteLater();
@@ -109,6 +109,7 @@ static void DeviceMatchingCallback(void* context, IOReturn /* result */, void* /
 
 static void DeviceRemovalCallback(void* context, IOReturn /* result */, void* /* sender */, IOHIDDeviceRef handle)
 {
+    qDebug() << "DEVICE REMOVED";
     auto agent = static_cast<DeviceDiscoveryAgentPrivate*>(context);
     auto device = agent->m_devices.take(handle);
     if (!device) return;
@@ -180,7 +181,7 @@ QList<QByteArray> transport(const QByteArray& data) {
     return packets;
 }
 
-void DevicePrivateImpl::exchange(Command* command)
+void DevicePrivateImpl::exchange(DeviceCommand* command)
 {
     const bool send = queue.empty();
     if (send) {

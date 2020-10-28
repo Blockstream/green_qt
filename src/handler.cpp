@@ -1,10 +1,13 @@
+#include "network.h"
+#include "device.h"
 #include "ga.h"
 #include "handler.h"
+#include "resolver.h"
+#include "wallet.h"
 
 #include <gdk.h>
 
-// TODO ditch controller, receive parent and session?
-Handler::Handler(QObject* parent) : QObject(parent) { }
+Handler::Handler(Wallet *wallet) : QObject(wallet), m_wallet(wallet) { }
 
 Handler::~Handler()
 {
@@ -12,6 +15,16 @@ Handler::~Handler()
 }
 
 void Handler::exec()
+{
+    Q_ASSERT(!m_handler);
+    QMetaObject::invokeMethod(m_wallet->m_context, [this] {
+        init(m_wallet->m_session);
+        Q_ASSERT(m_handler);
+        step();
+    }, Qt::QueuedConnection);
+}
+
+void Handler::step()
 {
     Q_ASSERT(m_handler);
     for (;;) {
@@ -49,32 +62,11 @@ void Handler::exec()
         }
 
         if (status == "resolve_code") {
-            const auto action = result.value("action").toString();
-            if (action == "get_xpubs") {
-                Q_ASSERT(m_paths.empty());
-                for (auto path : result.value("required_data").toObject().value("paths").toArray()) {
-                    QVector<uint32_t> p;
-                    for (auto x : path.toArray()) {
-                        p.append(x.toDouble());
-                    }
-                    m_paths.append(p);
-                }
-
-                setResult(result);
-                return emit resolveCode();
-            }
-
-            // if (action == "enable_2fa" || action == "enable_sms" || action == "disable_2fa")
-            {
-                const auto current_method = result.value("method").toString();
-                const auto previous_method = m_result.value("method").toString();
-                setResult(result);
-                if (previous_method == current_method) {
-                    return emit invalidCode();
-                } else {
-                    return emit resolveCode();
-                }
-            }
+            QMetaObject::invokeMethod(this, [this, result] {
+                auto instance = createResolver(result);
+                if (instance) emit resolver(instance);
+            }, Qt::QueuedConnection);
+            return;
         }
 
         qDebug() << result;
@@ -88,7 +80,36 @@ void Handler::request(const QByteArray& method)
     Q_ASSERT(m_result.value("status").toString() == "request_code");
     int res = GA_auth_handler_request_code(m_handler, method.data());
     Q_ASSERT(res == GA_OK);
-    exec();
+    QMetaObject::invokeMethod(m_wallet->m_context, [this] {
+        step();
+    });
+}
+
+Resolver* Handler::createResolver(const QJsonObject& result)
+{
+    const auto action = result.value("action").toString();
+    if (action == "get_xpubs") {
+        return new GetXPubsResolver(this, result);
+    }
+    if (action =="sign_tx") {
+        if (m_wallet->network()->isLiquid()) {
+        } else {
+            return new SignTransactionResolver(this, result);
+        }
+    }
+    const auto method = result.value("method");
+    if (method == "email" || method == "sms" || method == "phone" || method == "gauth") {
+        if (m_two_factor_resolver) {
+            if (m_two_factor_resolver->method() == result.value("method").toString()) {
+                m_two_factor_resolver->retry(result);
+                return nullptr;
+            }
+        }
+        m_two_factor_resolver = new TwoFactorResolver(this, result);
+        return m_two_factor_resolver;
+    }
+
+    Q_UNREACHABLE();
 }
 
 void Handler::resolve(const QJsonObject& data)
@@ -99,10 +120,11 @@ void Handler::resolve(const QJsonObject& data)
 void Handler::resolve(const QByteArray& data)
 {
     Q_ASSERT(m_handler);
-    Q_ASSERT(m_result.value("status").toString() == "resolve_code");
     int res = GA_auth_handler_resolve_code(m_handler, data.constData());
     Q_ASSERT(res == GA_OK);
-    exec();
+    QMetaObject::invokeMethod(m_wallet->m_context, [this] {
+        step();
+    });
 }
 
 void Handler::setResult(const QJsonObject& result)

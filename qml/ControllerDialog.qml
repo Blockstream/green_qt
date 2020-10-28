@@ -69,7 +69,14 @@ WalletDialog {
         function onFinished() { stack_view.push(doneComponent) }
         function onError(handler) { push(handler, errorComponent) }
         function onRequestCode(handler) { push(handler, requestCodeComponent) }
-        function onResolveCode(handler) { push(handler, resolveCodeComponent) }
+        function onResolver(resolver) {
+            if (resolver instanceof TwoFactorResolver) {
+                stack_view.push(resolveCodeComponent, { resolver })
+            } else {
+                // automatically resolve
+                resolver.resolve()
+            }
+        }
     }
 
     function push(handler, component) {
@@ -97,16 +104,19 @@ WalletDialog {
     }
 
     property Component resolveCodeComponent: WizardPage {
-        property Handler handler
+        property TwoFactorResolver resolver
         actions: [
             Action {
                 text: qsTrId('id_next')
                 enabled: code_field.acceptableInput
-                onTriggered: handler.resolve(code_field.text)
+                onTriggered: {
+                    resolver.code = code_field.text
+                    resolver.resolve()
+                }
             }
         ]
         Connections {
-            target: handler
+            target: resolver
             function onInvalidCode() {
                 code_field.clear()
                 code_field.ToolTip.show(qsTrId('id_invalid_twofactor_code'), 1000);
@@ -118,13 +128,13 @@ WalletDialog {
             anchors.horizontalCenter: parent.horizontalCenter
             Image {
                 anchors.horizontalCenter: enterCodeText.horizontalCenter
-                source: `qrc:/svg/2fa_${handler.result.method}.svg`
+                source: `qrc:/svg/2fa_${resolver.method}.svg`
                 sourceSize.width: 64
                 sourceSize.height: 64
             }
             Label {
                 id: enterCodeText
-                text: qsTrId('id_please_provide_your_1s_code').arg(handler.result.method)
+                text: qsTrId('id_please_provide_your_1s_code').arg(resolver.method)
             }
             TextField {
                 id: code_field
@@ -135,9 +145,9 @@ WalletDialog {
                 anchors.horizontalCenter: enterCodeText.horizontalCenter
             }
             Label {
-                visible: !!handler.result.attempts_remaining
+                visible: resolver.attemptsRemaining < 3 && resolver.method !== 'gauth'
                 anchors.horizontalCenter: enterCodeText.horizontalCenter
-                text: qsTrId('id_attempts_remaining_d').arg(handler.result.attempts_remaining)
+                text: qsTrId('id_attempts_remaining_d').arg(resolver.attemptsRemaining)
                 font.pixelSize: 10
             }
         }

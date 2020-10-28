@@ -65,6 +65,7 @@ SOURCES += \
     src/network.cpp \
     src/networkmanager.cpp \
     src/renameaccountcontroller.cpp \
+    src/resolver.cpp \
     src/restorecontroller.cpp \
     src/sendtransactioncontroller.cpp \
     src/signupcontroller.cpp \
@@ -98,6 +99,7 @@ HEADERS += \
     src/network.h \
     src/networkmanager.h \
     src/renameaccountcontroller.h \
+    src/resolver.h \
     src/restorecontroller.h \
     src/sendtransactioncontroller.h \
     src/signupcontroller.h \

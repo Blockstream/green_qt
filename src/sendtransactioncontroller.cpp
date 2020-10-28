@@ -15,10 +15,6 @@
 class CreateTransactionHandler : public Handler
 {
     const QJsonObject m_details;
-public:
-    CreateTransactionHandler(QJsonObject& details, Controller* controller)
-        : Handler(controller)
-        , m_details(details) { }
     void init(GA_session* session) override {
         qDebug() << "create transaction" << m_details;
         auto details = Json::fromObject(m_details);
@@ -26,6 +22,12 @@ public:
         Q_ASSERT(err == GA_OK);
         err = GA_destroy_json(details);
         Q_ASSERT(err == GA_OK);
+    }
+public:
+    CreateTransactionHandler(QJsonObject& details, Wallet* wallet)
+        : Handler(wallet)
+        , m_details(details)
+    {
     }
 };
 
@@ -237,8 +239,8 @@ void SendTransactionController::create()
         { "addressees", QJsonArray{address}}
     };
 
-    m_create_handler = new CreateTransactionHandler(data, this);
-    connect(m_create_handler, &Handler::done, [this, count] {
+    m_create_handler = new CreateTransactionHandler(data, wallet());
+    connect(m_create_handler, &Handler::done, this, [this, count] {
         if (m_count == count) {
             m_transaction = m_create_handler->result().value("result").toObject();
             emit transactionChanged();
@@ -256,10 +258,6 @@ void SendTransactionController::create()
 class SignTransactionHandler : public Handler
 {
     const QJsonObject m_details;
-public:
-    SignTransactionHandler(const QJsonObject& details, QObject* parent)
-        : Handler(parent)
-        , m_details(details) { }
     void init(GA_session* session) override {
         GA_json* details = Json::fromObject(m_details);
         int err = GA_sign_transaction(session, details, &m_handler);
@@ -267,15 +265,17 @@ public:
         err = GA_destroy_json(details);
         Q_ASSERT(err == GA_OK);
     }
+public:
+    SignTransactionHandler(const QJsonObject& details, Wallet *wallet)
+        : Handler(wallet)
+        , m_details(details)
+    {
+    }
 };
 
 class SendTransactionHandler : public Handler
 {
     const QJsonObject m_details;
-public:
-    SendTransactionHandler(const QJsonObject& details, QObject* parent)
-        : Handler(parent)
-        , m_details(details) { }
     void init(GA_session* session) override {
         GA_json* details = Json::fromObject(m_details);
         int err = GA_send_transaction(session, details, &m_handler);
@@ -283,17 +283,23 @@ public:
         err = GA_destroy_json(details);
         Q_ASSERT(err == GA_OK);
     }
+public:
+    SendTransactionHandler(const QJsonObject& details, Wallet* wallet)
+        : Handler(wallet)
+        , m_details(details)
+    {
+    }
 };
 
 void SendTransactionController::signAndSend()
 {
-    auto sign = new SignTransactionHandler(m_transaction, this);
-    connect(sign, &Handler::done, [this, sign] {
+    auto sign = new SignTransactionHandler(m_transaction, wallet());
+    connect(sign, &Handler::done, this, [this, sign] {
         // sign->deleteLater();
         auto details = sign->result().value("result").toObject();
         details["memo"] = m_memo;
-        auto send = new SendTransactionHandler(details, this);
-        connect(send, &Handler::done, [this, send] {
+        auto send = new SendTransactionHandler(details, wallet());
+        connect(send, &Handler::done, this, [this, send] {
            send->deleteLater();
            wallet()->updateConfig();
            emit finished();
@@ -329,11 +335,11 @@ void BumpFeeController::bumpFee()
 {
     Q_ASSERT(!m_tx.isEmpty());
     Q_ASSERT(m_tx.value("error").toString().isEmpty());
-    auto sign = new SignTransactionHandler(m_tx, this);
-    connect(sign, &Handler::done, [this, sign] {
+    auto sign = new SignTransactionHandler(m_tx, wallet());
+    connect(sign, &Handler::done, this, [this, sign] {
         auto details = sign->result().value("result").toObject();
-        auto send = new SendTransactionHandler(details, this);
-        connect(send, &Handler::done, [this, send] {
+        auto send = new SendTransactionHandler(details, wallet());
+        connect(send, &Handler::done, this, [this, send] {
            send->deleteLater();
            wallet()->updateConfig();
            emit finished();
@@ -359,8 +365,8 @@ void BumpFeeController::create()
         { "previous_transaction", t->data() }
     };
 
-    m_create_handler = new CreateTransactionHandler(details, this);
-    connect(m_create_handler, &Handler::done, [this, req] {
+    m_create_handler = new CreateTransactionHandler(details, wallet());
+    connect(m_create_handler, &Handler::done, this, [this, req] {
         if (m_req == req) {
             m_tx = m_create_handler->result().value("result").toObject();
             emit txChanged(m_tx);

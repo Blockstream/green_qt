@@ -191,10 +191,14 @@ void DeviceDiscoveryAgentPrivate::addDevice(const QString& id, HANDLE handle)
         impl->inputReport(QByteArray::fromRawData(impl->buf + 1, 64));
     });
 
-    QTimer::singleShot(200, d, [this, d, id, t] {
+    QTimer::singleShot(200, d, [this, impl, d, id, t] {
         //manager->exchange(handle, new GetFirmwareCommand);
-        auto cmd = new GetAppNameCommand;
-        QObject::connect(cmd, &Command::finished, [this, d, id] {
+        // TODO:
+        // device->setAppName(QString::fromLocal8Bit(name, name_length));
+        auto cmd = new GetAppNameCommand(d);
+        impl->exchange(cmd);
+        QObject::connect(cmd, &Command::finished, [this, impl, cmd, d, id] {
+            d->setAppName(cmd->m_name);
             if (d->appName().startsWith("OLOS")) {
                 m_devices.remove(id);
                 d->deleteLater();
@@ -202,7 +206,6 @@ void DeviceDiscoveryAgentPrivate::addDevice(const QString& id, HANDLE handle)
                 DeviceManager::instance()->addDevice(d);
             }
         });
-        d->exchange(cmd);
         t->start(10);
     });
 }
@@ -238,7 +241,8 @@ void _write(HANDLE handle, const QByteArray& report)
   GetOverlappedResult(handle, &ol, &bytes_written, TRUE/*wait*/);
   qDebug() << "    - packet:" << report.toHex() << bytes_written;
 }
-void DevicePrivateImpl::exchange(Command* command)
+
+void DevicePrivateImpl::exchange(DeviceCommand *command)
 {
     qDebug() << "EXCHANGE" << queue.empty();
     const bool send = queue.empty();

@@ -15,7 +15,7 @@ class DevicePrivateImpl : public DevicePrivate
 {
 public:
     IOHIDDeviceRef handle;
-    void exchange(Command* command) override;
+    void exchange(DeviceCommand *command) override;
     void inputReport(const QByteArray& data);
 };
 

@@ -14,7 +14,7 @@ class DevicePrivateImpl : public DevicePrivate
 public:
     udev_device* handle;
     int fd;
-    void exchange(Command* command) override;
+    void exchange(DeviceCommand* command) override;
     void inputReport(const QByteArray& data);
 };
 

@@ -7,6 +7,7 @@
 #include "ga.h"
 
 class Handler;
+class Resolver;
 class Wallet;
 
 class Controller : public QObject
@@ -44,8 +45,9 @@ signals:
     void done(Handler* handler);
     void error(Handler* handler);
     void requestCode(Handler* handler);
-    void resolveCode(Handler* handler);
     void invalidCode(Handler* handler);
+
+    void resolver(Resolver* resolver);
 
 protected:
     Wallet* m_wallet{nullptr};

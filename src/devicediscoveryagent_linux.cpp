@@ -95,6 +95,7 @@ void DeviceDiscoveryAgentPrivate::addDevice(udev_device* handle)
     if (strcmp(udev_device_get_sysattr_value(hid_dev, "idProduct"), "0001") != 0 && strcmp(udev_device_get_sysattr_value(hid_dev, "idProduct"), "0004") != 0) return;
 
     int fd = open(udev_device_get_devnode(handle), O_RDWR); //|O_NONBLOCK);
+    if (fd < 0) return;
 
 #if 1
     /* Get the report descriptor */
@@ -135,9 +136,7 @@ void DeviceDiscoveryAgentPrivate::addDevice(udev_device* handle)
     impl->handle = handle;
     impl->fd = fd;
     impl->type = Device::LedgerNanoX;
-    m_devices.insert(devpath, impl);
     auto device = new Device(impl);
-    DeviceManager::instance()->addDevice(device);
 
     auto notifier = new QSocketNotifier(fd, QSocketNotifier::Read);
     notifier->setEnabled(true);
@@ -148,9 +147,18 @@ void DeviceDiscoveryAgentPrivate::addDevice(udev_device* handle)
         else notifier->deleteLater();
     });
 
-    QTimer::singleShot(200, device, [device] {
-        //manager->exchange(handle, new GetFirmwareCommand);
-        device->exchange(new GetAppNameCommand);
+    QTimer::singleShot(200, device, [this, device, impl, devpath] {
+        auto cmd = new GetAppNameCommand(device);
+        device->exchange(cmd);
+        QObject::connect(cmd, &Command::finished, [this, device, impl, devpath, cmd] {
+            device->setAppName(cmd->m_name);
+            if (device->appName().startsWith("OLOS")) {
+                device->deleteLater();
+            } else {
+                m_devices.insert(devpath, impl);
+                DeviceManager::instance()->addDevice(device);
+            }
+        });
     });
     // udev_device_unref(handle);
 }
@@ -185,7 +193,7 @@ QList<QByteArray> transport(const QByteArray& data) {
     return packets;
 }
 
-void DevicePrivateImpl::exchange(Command* command)
+void DevicePrivateImpl::exchange(DeviceCommand* command)
 {
     const bool send = queue.empty();
     if (send) {

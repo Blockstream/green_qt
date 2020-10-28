@@ -5,10 +5,54 @@
 #include "json.h"
 #include "network.h"
 #include "networkmanager.h"
+#include "util.h"
 #include "wallet.h"
 #include "walletmanager.h"
 
 
+#define BTCHIP_CLA              0xe0
+#define BTCHIP_CLA_COMMON_SDK   0xb0
+
+#define BTCHIP_INS_GET_APP_NAME_AND_VERSION         0x01
+#define BTCHIP_INS_GET_LIQUID_BLINDING_KEY          0xe2
+#define BTCHIP_INS_HASH_INPUT_START                 0x44
+#define BTCHIP_INS_HASH_INPUT_FINALIZE_FULL         0x4a
+#define BTCHIP_INS_HASH_SIGN                        0x48
+#define BTCHIP_INS_GET_WALLET_PUBLIC_KEY            0x40
+#define BTCHIP_INS_GET_LIQUID_BLINDING_KEY          0xe2
+#define BTCHIP_INS_GET_LIQUID_NONCE                 0xe4
+#define BTCHIP_INS_GET_LIQUID_COMMITMENTS           0xe0
+#define BTCHIP_INS_GET_LIQUID_BLINDING_FACTOR       0xe8
+#define BTCHIP_INS_GET_LIQUID_ISSUANCE_INFORMATION  0xe6
+#define BTCHIP_INS_GET_FIRMWARE_VERSION             0xc4
+#define BTCHIP_INS_SIGN_MESSAGE                     0x4e
+
+
+extern "C" {
+struct words;
+struct ext_key;
+int bip32_key_free(const struct ext_key *hdkey);
+int bip32_key_init_alloc(uint32_t version,
+                         uint32_t depth,
+                         uint32_t child_num,
+                         const unsigned char *chain_code,
+                         size_t chain_code_len,
+                         const unsigned char *pub_key,
+                         size_t pub_key_len,
+                         const unsigned char *priv_key,
+                         size_t priv_key_len,
+                         const unsigned char *hash160,
+                         size_t hash160_len,
+                         const unsigned char *parent160,
+                         size_t parent160_len,
+                         struct ext_key **output);
+int bip32_key_to_base58(const struct ext_key *hdkey, uint32_t flags, char **output);
+int wally_free_string(char *str);
+
+// From wally_core.h
+#define WALLY_OK      0
+
+}
 
 template <typename T> struct Varint { T v; };
 template <typename T> Varint<T> varint(T v) { return {v}; }
@@ -72,14 +116,21 @@ void Device::setAppName(const QString& app_name)
     controller->login();
 }
 
-void Device::exchange(Command* command)
+void Device::exchange(DeviceCommand* command)
 {
     d->exchange(command);
 }
 
-Command* Device::exchange(const QByteArray& data) {
-    auto command = new GenericCommand(data);
-    d->exchange(command);
+DeviceCommand* Device::exchange(const QByteArray& data) {
+    auto command = new GenericCommand(this, data);
+    command->exec();
+    return command;
+}
+
+GetWalletPublicKeyCommand *Device::getWalletPublicKey(Network *network, const QVector<uint32_t> &path)
+{
+    auto command = new GetWalletPublicKeyCommand(this, network, path);
+    command->exec();
     return command;
 }
 
@@ -89,7 +140,7 @@ QByteArray inputBytes(const QJsonObject& input, bool is_segwit)
     QDataStream stream(&data, QIODevice::WriteOnly);
     stream.setByteOrder(QDataStream::LittleEndian);
 
-    QByteArray txhash_hex = QByteArray::fromHex(input["txhash"].toString().toLocal8Bit());
+    QByteArray txhash_hex = ParseByteArray(input.value("txhash"));
     for (int i = txhash_hex.size() - 1; i >= 0; --i) {
         stream << uint8_t(txhash_hex.at(i));
     }
@@ -97,7 +148,7 @@ QByteArray inputBytes(const QJsonObject& input, bool is_segwit)
     stream << pt_idx;
     if (is_segwit) {
         // TODO ensure "satoshi" is double, not an object
-        const quint64 satoshi = input.value("satoshi").toDouble();
+        const quint64 satoshi = ParseSatoshi(input.value("satoshi"));
         stream << satoshi;
     }
     return data;
@@ -129,6 +180,17 @@ void varInt(QDataStream& stream, int64_t i)
     }
 }
 
+QByteArray pathToData(const QVector<uint32_t>& path)
+{
+    Q_ASSERT(path.size() <= 10);
+    QByteArray data;
+    QDataStream stream(&data, QIODevice::WriteOnly);
+    stream.setByteOrder(QDataStream::BigEndian);
+    stream << uint8_t(path.size());
+    for (int32_t p : path) stream << uint32_t(p);
+    return data;
+}
+
 QByteArray outputBytes(const QJsonArray outputs)
 {
     QByteArray data;
@@ -137,8 +199,8 @@ QByteArray outputBytes(const QJsonArray outputs)
     varInt(stream, outputs.size());
     for (const auto& out : outputs) {
         // TODO ensure "satoshi" is double, not an object
-        const quint64 satoshi = out["satoshi"].toDouble();
-        const QByteArray script = QByteArray::fromHex(out["script"].toString().toLocal8Bit());
+        const quint64 satoshi = ParseSatoshi(out["satoshi"]);
+        const QByteArray script = ParseByteArray(out["script"]);
         stream << satoshi;
         varInt(stream, script.size());
         stream.writeRawData(script.data(), script.size());
@@ -149,14 +211,11 @@ QByteArray outputBytes(const QJsonArray outputs)
 SignTransactionCommand* Device::signTransaction(const QJsonObject& required_data)
 {
     Q_ASSERT(required_data.value("action").toString() == "sign_tx");
-    Q_ASSERT(required_data.contains("device"));
 
     auto transaction = required_data.value("transaction").toObject();
     auto inputs = required_data.value("signing_inputs").toArray();
     auto outputs = required_data.value("transaction_outputs").toArray();
     // these are unused
-    auto signing_address_types = required_data.value("signing_address_types").toArray();
-    auto signing_transactions = required_data.value("signing_transactions").toObject();
     uint32_t version = transaction.value("transaction_version").toInt();
     uint32_t locktime = transaction.value("transaction_locktime").toInt();
 
@@ -167,7 +226,7 @@ SignTransactionCommand* Device::signTransaction(const QJsonObject& required_data
     for (auto i : inputs) {
         auto input = i.toObject();
         Input in;
-        uint32_t sequence = input.value("sequence").toDouble();
+        uint32_t sequence = ParseSequence(input.value("sequence"));
         QDataStream stream(&in.sequence, QIODevice::WriteOnly);
         stream.setByteOrder(QDataStream::LittleEndian);
         stream << sequence;
@@ -177,9 +236,9 @@ SignTransactionCommand* Device::signTransaction(const QJsonObject& required_data
         used_inputs.append(in);
     }
     Q_ASSERT(inputs.size() > 0 && inputs.first().toObject().contains("prevout_script"));
-    const auto redeem_script = QByteArray::fromHex(inputs.first().toObject().value("prevout_script").toString().toLocal8Bit());
+    const auto redeem_script = ParseByteArray(inputs.first().toObject().value("prevout_script"));
 
-    auto command = new SignTransactionCommand;
+    auto command = new SignTransactionCommand(this);
 
     startUntrustedTransaction(version, new_transaction, input_index, used_inputs, redeem_script, true);
     auto bytes = outputBytes(outputs);
@@ -206,9 +265,8 @@ void Device::finalizeInputFull(const QByteArray& data)
     for (int i = 0; i < datas.size(); ++i) {
         uint8_t p1 = i == 0 ? 0xff : (i == datas.size() - 1 ? 0x80 : 0x00);
         qDebug() << "  " << i << p1 << data.toHex();
-        auto c1 = exchange(apdu(0xe0, 0x4a, p1, 0x00, datas.at(i)));
-        connect(c1, &Command::finished, [i, datas](QByteArray result) {
-           qDebug() << "!!!!!! FINALIZE INPUT FULL" << i << datas.size() << result;
+        auto c1 = exchange(apdu(BTCHIP_CLA, BTCHIP_INS_HASH_INPUT_FINALIZE_FULL, p1, 0x00, datas.at(i)));
+        connect(c1, &Command::finished, [i, c1, datas] {
         });
     }
         /*
@@ -253,31 +311,15 @@ void Device::signSWInputs(SignTransactionCommand* command, const QList<Input>& h
 
 void Device::signSWInput(SignTransactionCommand* command, const Input& hwInput, const QJsonObject& input, uint32_t version, uint32_t locktime)
 {
-    auto script = QByteArray::fromHex(input.value("prevout_script").toString().toLocal8Bit());
+    auto script = ParseByteArray(input.value("prevout_script"));
     startUntrustedTransaction(version, false, 0, {hwInput}, script, true);
-    QList<uint32_t> user_path;
-    for (auto v : input.value("user_path").toArray()) {
-        uint32_t p = v.toDouble();
-        user_path.append(p);
-    }
+    QVector<uint32_t> user_path = ParsePath(input.value("user_path"));
     uint8_t SIGHASH_ALL = 1;
     untrustedHashSign(command, user_path, "0", locktime, SIGHASH_ALL);
 }
 
 
-QByteArray pathToData(const QList<uint32_t>& path)
-{
-    Q_ASSERT(path.size() <= 10);
-    QByteArray data;
-    QDataStream stream(&data, QIODevice::WriteOnly);
-    stream.setByteOrder(QDataStream::BigEndian);
-    stream << uint8_t(path.size());
-    //stream.setByteOrder(QDataStream::LittleEndian);
-    for (int32_t p : path) stream << uint32_t(p);
-    return data;
-}
-
-void Device::untrustedHashSign(SignTransactionCommand* command, const QList<uint32_t>& private_key_path, QString pin, uint32_t locktime, uint8_t sig_hash_type)
+void Device::untrustedHashSign(SignTransactionCommand* command, const QVector<uint32_t>& private_key_path, QString pin, uint32_t locktime, uint8_t sig_hash_type)
 {
     auto path = pathToData(private_key_path);
     auto _pin = pin.toUtf8();
@@ -289,15 +331,15 @@ void Device::untrustedHashSign(SignTransactionCommand* command, const QList<uint
     stream.writeRawData(_pin.data(), _pin.size());
     stream << uint32_t(locktime) << sig_hash_type;
     qDebug("untrustedHashSign EXCHANGE");
-    auto c1 = exchange(apdu(0xe0, 0x48, 0, 0, data));
+    auto c1 = exchange(apdu(BTCHIP_CLA, BTCHIP_INS_HASH_SIGN, 0, 0, data));
     connect(c1, &Command::error, [] {
        qDebug("untrustedHashSign FAILED!!!!!!!!!");
     });
-    connect(c1, &Command::finished, [command](QByteArray x) {
+    connect(c1, &Command::finished, [command, c1] {
        qDebug("untrustedHashSign FINISHED!!");
        QByteArray signature;
        signature.append(0x30);
-       signature.append(x.mid(1));
+       signature.append(c1->m_response.mid(1));
        //signature = x;
        command->signatures.append(signature);
        if (command->signatures.size() == command->count) {
@@ -316,7 +358,7 @@ void Device::startUntrustedTransaction(uint32_t tx_version, bool new_transaction
     // Start building a fake transaction with the passed inputs
     stream << tx_version << varint<uint32_t>(used_input.size());
     const uint8_t p2 = new_transaction ? (segwit ? 0x02 : 0x00) : 0x80;
-    auto c = exchange(apdu(0xe0, 0x44, 0x00, p2, data));
+    auto c = exchange(apdu(BTCHIP_CLA, BTCHIP_INS_HASH_INPUT_START, 0x00, p2, data));
     connect(c, &Command::finished, [] {
         qDebug("startUntrustedTransaction OK");
     });
@@ -344,7 +386,7 @@ void Device::hashInput(const Input& input, const QByteArray& script)
     stream.writeRawData(input.value.data(), input.value.size());
     stream << varint<uint32_t>(script.size());
 
-    auto c1 = exchange(apdu(0xe0, 0x44, 0x80, 0x00, data));
+    auto c1 = exchange(apdu(BTCHIP_CLA, BTCHIP_INS_HASH_INPUT_START, 0x80, 0x00, data));
     auto seq = input.sequence;
     connect(c1, &Command::finished, [this, script, seq] {
         qDebug("HASH INPUT 1ST FINISHED");
@@ -353,7 +395,7 @@ void Device::hashInput(const Input& input, const QByteArray& script)
 //        stream.setByteOrder(QDataStream::LittleEndian);
 
     });
-    auto c2 = exchange(apdu(0xe0, 0x44, 0x80, 0x00, script + seq));
+    auto c2 = exchange(apdu(BTCHIP_CLA, BTCHIP_INS_HASH_INPUT_START, 0x80, 0x00, script + seq));
     connect(c2, &Command::finished, [] {
         qDebug("HASH INPUT 2ND FINISHED!");
     });
@@ -404,54 +446,30 @@ void LedgerLoginController::login()
 
     m_paths = result.value("required_data").toObject().value("paths").toArray();
 
+    auto batch = new CommandBatch;
     for (auto path : m_paths) {
-        qDebug() << " - " << path;
-        qDebug() << " - " << path.toArray();
-        QVector<uint32_t> p;
-        for (auto x : path.toArray()) {
-            qDebug() << "  -- " << x;
-            p.append(x.toDouble());
-        }
-        qDebug() << "get pubkey" << p;
-        auto cmd = new GetWalletPublicKeyCommand(m_network, p);
+        auto cmd = new GetWalletPublicKeyCommand(m_device, m_network, ParsePath(path));
         connect(cmd, &Command::finished, [this, cmd] {
-            qDebug() << "FINICHED GET PUBKEY" << cmd->m_xpub;
-
             m_xpubs.append(cmd->m_xpub);
-
-            if (m_xpubs.size() == m_paths.size()) {
-                QJsonObject code= {{ "xpubs", m_xpubs }};
-                auto _code = QJsonDocument(code).toJson();
-                qDebug() << "RESOLVE CODE" << _code.constData();
-                GA_auth_handler_resolve_code(m_register_handler, _code.constData());
-                qDebug() << GA::auth_handler_get_result(m_register_handler);
-                GA_auth_handler_call(m_register_handler);
-                qDebug() << GA::auth_handler_get_result(m_register_handler);
-
-                m_paths = QJsonArray();
-                m_xpubs = QJsonArray();
-
-
-                login2();
-            }
         });
-        m_device->exchange(cmd);
+        batch->add(cmd);
     }
-#if 0
-    result = GA::process_auth([&] (GA_auth_handler** call) {
-        int err = GA_login(m_session, hw_device, "", "", call);
-        Q_ASSERT(err == GA_OK);
+    connect(batch, &Command::finished, [this] {
+        Q_ASSERT(m_xpubs.size() == m_paths.size());
+        QJsonObject code= {{ "xpubs", m_xpubs }};
+        qDebug() << "THIS IS IT" << code << m_paths;
+        auto _code = QJsonDocument(code).toJson();
+        GA_auth_handler_resolve_code(m_register_handler, _code.constData());
+        GA_auth_handler_call(m_register_handler);
+
+
+        m_paths = QJsonArray();
+        m_xpubs = QJsonArray();
+
+        login2();
     });
+    batch->exec();
 
-    //QVector<uint32_t> path;
-    //exchange(new GetWalletPublicKeyCommand({0}));
-
-
-    qDebug() << "login result = " << result;
-    Q_ASSERT(result.value("status").toString() == "done");
-
-    GA_destroy_json(hw_device);
-#endif
 //    updateCurrencies();
 //    reload();
 //    updateConfig();
@@ -470,15 +488,7 @@ void LedgerLoginController::login2()
     m_paths = result.value("required_data").toObject().value("paths").toArray();
 
     for (auto path : m_paths) {
-        qDebug() << " - " << path;
-        qDebug() << " - " << path.toArray();
-        QVector<uint32_t> p;
-        for (auto x : path.toArray()) {
-            qDebug() << "  -- " << x;
-            p.append(x.toDouble());
-        }
-        qDebug() << "get pubkey 2" << p;
-        auto cmd = new GetWalletPublicKeyCommand(m_network, p);
+        auto cmd = new GetWalletPublicKeyCommand(m_device, m_network, ParsePath(path));
         connect(cmd, &Command::finished, [this, cmd] {
             qDebug() << "FINICHED GET PUBKEY" << cmd->m_xpub;
 
@@ -495,13 +505,10 @@ void LedgerLoginController::login2()
                 qDebug() << "LOGIN RESULT AFTER CALL" << result;
                 auto required_data = result.value("required_data").toObject();
                 QByteArray message = required_data.value("message").toString().toLocal8Bit();
-                QVector<uint32_t> path;
-                for (auto v : required_data.value("path").toArray()) {
-                    path.append(v.toDouble());
-                }
-                auto prepare = new SignMessageCommand(path, message);
+                QVector<uint32_t> path = ParsePath(required_data.value("path"));
+                auto prepare = new SignMessageCommand(m_device, path, message);
                 connect(prepare, &Command::finished, [this] {
-                    auto sign = new SignMessageCommand();
+                    auto sign = new SignMessageCommand(m_device);
                     connect(sign, &Command::finished, [this, sign] {
                         QJsonObject code = {{ "signature", QString::fromLocal8Bit(sign->signature.toHex()) }};
 
@@ -520,15 +527,7 @@ void LedgerLoginController::login2()
                         m_xpubs = QJsonArray();
 
                         for (auto path : m_paths) {
-                            qDebug() << " - " << path;
-                            qDebug() << " - " << path.toArray();
-                            QVector<uint32_t> p;
-                            for (auto x : path.toArray()) {
-                                qDebug() << "  -- " << x;
-                                p.append(x.toDouble());
-                            }
-                            qDebug() << "get pubkey" << p;
-                            auto cmd = new GetWalletPublicKeyCommand(m_network, p);
+                            auto cmd = new GetWalletPublicKeyCommand(m_device, m_network, ParsePath(path));
                             connect(cmd, &Command::finished, [this, cmd] {
                                 qDebug() << "FINICHED GET PUBKEY" << cmd->m_xpub;
 
@@ -543,8 +542,8 @@ void LedgerLoginController::login2()
                                     GA_auth_handler_call(m_login_handler);
                                     qDebug() << GA::auth_handler_get_result(m_login_handler);
 
-                                    m_wallet->setSession();
                                     m_wallet->m_device = m_device;
+                                    m_wallet->setSession();
                                     WalletManager::instance()->addWallet(m_wallet);
 
                                     auto w = m_wallet;
@@ -554,15 +553,15 @@ void LedgerLoginController::login2()
                                     });
                                 }
                             });
-                            m_device->exchange(cmd);
+                            cmd->exec();
                         }
                     });
-                    m_device->exchange(sign);
+                    sign->exec();
                 });
-                m_device->exchange(prepare);
+                prepare->exec();
             }
         });
-        m_device->exchange(cmd);
+        cmd->exec();
     }
 }
 
@@ -574,10 +573,10 @@ Device::Type Device::typefromVendorAndProduct(uint32_t vendor_id, uint32_t produ
 
 QByteArray GetFirmwareCommand::payload() const
 {
-    return apdu(0xe0, 0xc4, 0x00, 0x00);
+    return apdu(BTCHIP_CLA, BTCHIP_INS_GET_FIRMWARE_VERSION, 0x00, 0x00);
 }
 
-bool GetFirmwareCommand::parse(Device* device, QDataStream &stream)
+bool GetFirmwareCommand::parse(QDataStream &stream)
 {
     uint8_t features, arch, fw_major, fw_minor, fw_patch, loader_major, loader_minor;
     stream >> features >> arch >> fw_major >> fw_minor >> fw_patch >> loader_major >> loader_minor;
@@ -592,13 +591,12 @@ bool GetFirmwareCommand::parse(Device* device, QDataStream &stream)
     return true;
 }
 
-bool Command::readAPDUResponse(Device* device, int length, QDataStream &stream)
+bool DeviceCommand::readAPDUResponse(Device* device, int length, QDataStream &stream)
 {
     QByteArray response;
     if (length > 0) {
         response.resize(length - 2);
         stream.readRawData(response.data(), length - 2);
-        qDebug() << __PRETTY_FUNCTION__ << response.mid(2).toHex();
     }
     uint16_t sw;
     stream >> sw;
@@ -607,9 +605,23 @@ bool Command::readAPDUResponse(Device* device, int length, QDataStream &stream)
         emit error();
         return false;
     }
-    bool result = parse(device, response);
-    if (result) emit finished(response);
+    bool result = parse(response);
+    if (result) {
+        m_response = response;
+        emit finished();
+    }
     return result;
+}
+
+void DeviceCommand::exec()
+{
+    m_device->exchange(this);
+}
+
+Command::Command(CommandBatch* batch)
+    : QObject(batch)
+{
+    if (batch) batch->add(this);
 }
 
 Command::~Command()
@@ -617,13 +629,13 @@ Command::~Command()
 
 }
 
-bool Command::parse(Device* device, const QByteArray& data)
+bool DeviceCommand::parse(const QByteArray& data)
 {
     QDataStream stream(data);
-    return parse(device, stream);
+    return parse(stream);
 }
 
-int Command::readHIDReport(Device* device, QDataStream& stream)
+int DeviceCommand::readHIDReport(Device* device, QDataStream& stream)
 {
     // General transport
     uint16_t channel_id;
@@ -660,10 +672,10 @@ int Command::readHIDReport(Device* device, QDataStream& stream)
 
 QByteArray GetAppNameCommand::payload() const
 {
-    return apdu(0xb0, 0x01, 0x00, 0x00);
+    return apdu(BTCHIP_CLA_COMMON_SDK, BTCHIP_INS_GET_APP_NAME_AND_VERSION, 0x00, 0x00);
 }
 
-bool GetAppNameCommand::parse(Device* device, QDataStream& stream)
+bool GetAppNameCommand::parse(QDataStream& stream)
 {
     uint8_t format;
     stream >> format;
@@ -678,44 +690,20 @@ bool GetAppNameCommand::parse(Device* device, QDataStream& stream)
     stream >> version_length;
     stream.readRawData(version, version_length);
 
-    qDebug() << QString::fromLocal8Bit(name, name_length) << QString::fromLocal8Bit(version, version_length);
-    device->setAppName(QString::fromLocal8Bit(name, name_length));
+    m_name = QString::fromLocal8Bit(name, name_length);
+    m_version = QString::fromLocal8Bit(version, version_length);
     return true;
 }
 
 QByteArray GetWalletPublicKeyCommand::payload() const
 {
-    //s << uint8_t(1) << uint32_t(0);
-    //s << uint8_t(2) << uint32_t(0) << uint32_t(2147501889);
-    //s << uint8_t(2) << uint32_t(0) << uint32_t(1195487518);
     QByteArray path;
     QDataStream s(&path, QIODevice::WriteOnly);
     s << uint8_t(m_path.size());
     for (auto p : m_path) s << uint32_t(p);
-    return apdu(0xe0, 0x40, 0x0, 0, path);
+    return apdu(BTCHIP_CLA, BTCHIP_INS_GET_WALLET_PUBLIC_KEY, 0x0, 0, path);
 }
 
-extern "C" {
-struct words;
-struct ext_key;
-int bip32_key_free(const struct ext_key *hdkey);
-int bip32_key_init_alloc(uint32_t version,
-                         uint32_t depth,
-                         uint32_t child_num,
-                         const unsigned char *chain_code,
-                         size_t chain_code_len,
-                         const unsigned char *pub_key,
-                         size_t pub_key_len,
-                         const unsigned char *priv_key,
-                         size_t priv_key_len,
-                         const unsigned char *hash160,
-                         size_t hash160_len,
-                         const unsigned char *parent160,
-                         size_t parent160_len,
-                         struct ext_key **output);
-int bip32_key_to_base58(const struct ext_key *hdkey, uint32_t flags, char **output);
-int wally_free_string(char *str);
-}
 
 QByteArray compressPublicKey(const QByteArray& pubkey)
 {
@@ -743,9 +731,9 @@ QByteArray compressPublicKey(const QByteArray& pubkey)
 /** Indicate that we want to derive a public key in `bip32_key_from_parent` */
 #define BIP32_FLAG_KEY_PUBLIC  0x1
 
-bool GetWalletPublicKeyCommand::parse(Device* device, QDataStream& stream)
+bool GetWalletPublicKeyCommand::parse(QDataStream& stream)
 {
-    uint32_t version = m_network->id() == "mainnet" ? BIP32_VER_MAIN_PUBLIC : BIP32_VER_TEST_PUBLIC;
+    uint32_t version = m_network->data().value("mainnet").toBool() ? BIP32_VER_MAIN_PUBLIC : BIP32_VER_TEST_PUBLIC;
 
     uint8_t pubkey_len, address_len;
     stream >> pubkey_len;
@@ -756,20 +744,16 @@ bool GetWalletPublicKeyCommand::parse(Device* device, QDataStream& stream)
     stream.readRawData(address.data(), address_len);
     QByteArray chain_code(32, 0);
 
-    qDebug() << pubkey.toHex() << address.toHex() << address;
     stream.readRawData(chain_code.data(), 33);
 
-    qDebug() << pubkey.toHex();
     pubkey = compressPublicKey(pubkey);
-    qDebug() << pubkey.toHex();
-    qDebug() << pubkey.size();
-
     ext_key* k;
     int x = bip32_key_init_alloc(version, 1, 0, (const unsigned char *) chain_code.data(), chain_code.length(), (const unsigned char *) pubkey.constData(), pubkey.length(), nullptr, 0, nullptr, 0, nullptr, 0, &k);
-    qDebug() << x;
+    Q_ASSERT(x == 0);
 
     char* base58;
-    bip32_key_to_base58(k, BIP32_FLAG_KEY_PUBLIC, &base58);
+    x = bip32_key_to_base58(k, BIP32_FLAG_KEY_PUBLIC, &base58);
+    Q_ASSERT(x == 0);
     bip32_key_free(k);
 
     qDebug() << base58;
@@ -789,24 +773,21 @@ QByteArray SignMessageCommand::payload() const
         s << uint8_t(m_path.size());
         for (auto p : m_path) s << uint32_t(p);
         s << uint8_t(0) << uint8_t(m_message.length());
-        qDebug() << "SIGN" << data.toHex();
-        qDebug() << "MSG " << m_message.toHex();
         s.writeRawData(m_message.constData(), m_message.size());
-        qDebug() << "SIGN" << data.toHex();
         //qDebug() << "SIGN MESSAGE" << m_path << m_message;
         //qDebug() << "SIGN MESSAGE" << m_path << data.toHex();
         //qDebug() << "SIGN MESSAGE" << m_message.toHex();
-        return apdu(0xe0, 0x4e, 0x0, 1, data);
+        return apdu(BTCHIP_CLA, BTCHIP_INS_SIGN_MESSAGE, 0x0, 1, data);
     }
     Q_ASSERT(m_message.isEmpty() && m_path.isEmpty());
     QByteArray data;
     QDataStream s(&data, QIODevice::WriteOnly);
     s << uint8_t(1) << uint8_t(0);
-    return apdu(0xe0, 0x4e, 0x80, 1, data);
+    return apdu(BTCHIP_CLA, BTCHIP_INS_SIGN_MESSAGE, 0x80, 1, data);
 
 }
 
-bool SignMessageCommand::parse(Device *device, QDataStream &stream)
+bool SignMessageCommand::parse(QDataStream &stream)
 {
     if (m_message.isEmpty() && m_path.isEmpty()) {
         uint8_t b;
