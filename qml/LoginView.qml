@@ -27,7 +27,7 @@ Column {
         onPinChanged: {
             if (valid) {
                 login(pin);
-                clear();
+                Qt.callLater(clear);
             }
         }
     }

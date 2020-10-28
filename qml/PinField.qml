@@ -27,7 +27,7 @@ Item {
     }
 
     function clear() {
-        buffer = ''
+        if (buffer !== '') buffer = ''
         root.forceActiveFocus()
     }
 
