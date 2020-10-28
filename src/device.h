@@ -160,6 +160,77 @@ public:
     QList<QByteArray> signatures;
 };
 
+class GetBlindingKeyCommand : public DeviceCommand
+{
+    const QString m_script;
+public:
+    GetBlindingKeyCommand(Device* device, const QString& script, CommandBatch* batch = nullptr)
+        : DeviceCommand(device, batch)
+        , m_script(script)
+    {}
+    QByteArray payload() const override;
+    bool parse(const QByteArray& data) override;
+    QByteArray m_pubkey;
+};
+
+class GetBlindingNonceCommand : public DeviceCommand
+{
+    QByteArray m_pubkey;
+    QByteArray m_script;
+public:
+    GetBlindingNonceCommand(Device* device, const QByteArray& pubkey, const QByteArray& script, CommandBatch* batch = nullptr)
+        : DeviceCommand(device, batch)
+        , m_pubkey(pubkey), m_script(script)
+    {}
+    QByteArray payload() const override;
+    bool parse(const QByteArray& data) override;
+    QByteArray m_nonce;
+};
+
+// TODO: this and SignTransactionCommands don't really write/read from the device
+// should improve/clarify what commands are
+class SignLiquidTransactionCommand : public DeviceCommand
+{
+    Q_OBJECT
+public:
+    // TODO these should be removed
+    virtual QByteArray payload() const override { return {}; };
+
+    SignLiquidTransactionCommand(Device* device, const QJsonObject& required_data, CommandBatch* batch = nullptr);
+
+    void exec() override;
+    void getLiquidCommitment(int output_index);
+
+    DeviceCommand* exchange(const QByteArray& data);
+    QJsonObject m_required_data;
+    QJsonObject m_transaction;
+    int64_t m_version;
+    QList<quint64> m_values;
+    QList<QByteArray> m_abfs;
+    QList<QByteArray> m_vbfs;
+    QJsonArray m_inputs;
+    QJsonArray m_outputs;
+    QList<QByteArray> m_hw_inputs;
+    QList<QByteArray> m_hw_sequences;
+
+    QList<QByteArray> m_commitments;
+
+    QList<QByteArray> m_sigs;
+    QList<QByteArray> m_asset_commitments;
+    QList<QByteArray> m_value_commitments;
+
+    QList<QPair<QString, QByteArray>> m_output_liquid_bytes;
+
+    int count{0};
+    void startUntrustedTransaction(bool new_transaction, int input_index, const QList<QByteArray> &inputs, const QList<QByteArray> &sequences, const QByteArray &redeem_script);
+    void finalizeLiquidInputFull();
+    QList<QPair<QString,QByteArray>> outputLiquidBytes();
+    int exchange_count{0};
+    int exchange_total{0};
+signals:
+    void progressChanged(int progress, int total);
+    void message(const QString& message);
+};
 
 class DevicePrivate;
 class Device : public QObject
@@ -205,6 +276,9 @@ public:
     void signSWInputs(SignTransactionCommand* command, const QList<Input>& hwInputs, const QJsonArray& inputs, uint32_t version, uint32_t locktime);
     void signSWInput(SignTransactionCommand* command, const Input& hwInput, const QJsonObject& input, uint32_t version, uint32_t locktime);
     void untrustedHashSign(SignTransactionCommand* command, const QVector<uint32_t> &private_key_path, QString pin, uint32_t locktime, uint8_t sig_hash_type);
+
+    GetBlindingKeyCommand *getBlindingKey(const QString &script);
+    GetBlindingNonceCommand *getBlindingNonce(const QByteArray& pubkey, const QByteArray& script);
 
     QString interface() const { return m_interface; }
     QString vendor() const { return m_vendor; }
