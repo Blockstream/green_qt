@@ -94,7 +94,12 @@ ControllerDialog {
             QRCode {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                text: 'otpauth://totp/' + escape(wallet.name) + '?secret=' + wallet.config[method].data.split('=')[1]
+                text: {
+                    const name = wallet.device ? wallet.device.vendor + ' ' + wallet.device.product : wallet.name
+                    const label = name.includes(' ') ? name + ' @ Green' : name + '@Green'
+                    const secret = wallet.config[method].data.split('=')[1]
+                    return 'otpauth://totp/' + escape(label) + '?secret=' + secret
+                }
             }
         }
     }
