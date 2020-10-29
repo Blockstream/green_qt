@@ -2,8 +2,10 @@
 #include "asset.h"
 #include "balance.h"
 #include "ga.h"
+#include "handler.h"
 #include "json.h"
 #include "network.h"
+#include "resolver.h"
 #include "transaction.h"
 #include "wallet.h"
 
@@ -14,6 +16,36 @@
 #include <QTimer>
 
 #include <gdk.h>
+
+
+class GetTransactionsHandler : public Handler
+{
+    int m_subaccount;
+    int m_first;
+    int m_count;
+    void init(GA_session* session) override
+    {
+        GA_json* details = Json::fromObject({
+            { "subaccount", m_subaccount },
+            { "first", m_first },
+            { "count", m_count }
+        });
+
+        int err = GA_get_transactions(session, details, &m_handler);
+        Q_ASSERT(err == GA_OK);
+
+        err = GA_destroy_json(details);
+        Q_ASSERT(err == GA_OK);
+    }
+public:
+    GetTransactionsHandler(int subaccount, int first, int count, Wallet *wallet)
+        : Handler(wallet)
+        , m_subaccount(subaccount)
+        , m_first(first)
+        , m_count(count)
+    {
+    }
+};
 
 Account::Account(Wallet* wallet)
     : QObject(wallet)
@@ -125,37 +157,40 @@ static QJsonArray get_transactions(GA_session* session, int subaccount, int firs
 
 void Account::reload()
 {
-    QMetaObject::invokeMethod(m_wallet->m_context, [this] {
-        QList<QJsonArray> transactions;
-        int first = 0;
-        int count = 30;
-        while (true) {
-            auto values = get_transactions(m_wallet->m_session, m_pointer, first, count);
-            transactions.push_back(values);
-            if (values.size() < count) break;
-            first += count;
-        }
+    m_transactions_data = {};
+    loadNextPage();
+}
 
-        QMetaObject::invokeMethod(this, [this, transactions] {
+void Account::loadNextPage()
+{
+    auto handler = new GetTransactionsHandler(m_pointer, m_transactions_data.size(), 30, wallet());
+    QObject::connect(handler, &Handler::done, this, [this, handler] {
+        auto transactions = handler->result().value("result").toObject().value("transactions").toArray();
+        for (auto data : transactions) m_transactions_data.append(data);
+        if (transactions.size() < 30) {
             m_transactions.clear();
             m_have_unconfirmed = false;
-            for (auto list : transactions) {
-                for (auto value : list) {
-                    QJsonObject data = value.toObject();
-                    auto hash = data.value("txhash").toString();
-                    auto transaction = m_transactions_by_hash.value(hash);
-                    if (!transaction) {
-                        transaction = new Transaction(this);
-                        m_transactions_by_hash.insert(hash, transaction);
-                    }
-                    transaction->updateFromData(data);
-                    m_transactions.append(transaction);
-                    if (transaction->isUnconfirmed()) m_have_unconfirmed = true;
+            for (auto value : m_transactions_data) {
+                QJsonObject data = value.toObject();
+                auto hash = data.value("txhash").toString();
+                auto transaction = m_transactions_by_hash.value(hash);
+                if (!transaction) {
+                    transaction = new Transaction(this);
+                    m_transactions_by_hash.insert(hash, transaction);
                 }
+                transaction->updateFromData(data);
+                m_transactions.append(transaction);
+                if (transaction->isUnconfirmed()) m_have_unconfirmed = true;
             }
             emit transactionsChanged();
-        }, Qt::QueuedConnection);
+        } else {
+            loadNextPage();
+        }
     });
+    QObject::connect(handler, &Handler::resolver, [](Resolver* resolver) {
+        resolver->resolve();
+    });
+    handler->exec();
 }
 
 Wallet *Account::wallet() const

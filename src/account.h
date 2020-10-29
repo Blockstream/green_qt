@@ -62,6 +62,9 @@ public:
     bool m_have_unconfirmed{false};
     QJsonObject m_json;
     int m_pointer;
+
+    QJsonArray m_transactions_data;
+    void loadNextPage();
 };
 
 QML_DECLARE_TYPE(Account*);
