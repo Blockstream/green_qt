@@ -792,9 +792,12 @@ LedgerLoginController::LedgerLoginController(Device* device, Network* network)
 
 void LedgerLoginController::login()
 {
+    auto log_level = QString::fromLocal8Bit(qgetenv("GREEN_GDK_LOG_LEVEL"));
+    if (log_level.isEmpty()) log_level = "info";
+
     QJsonObject params{
         { "name", m_network->id() },
-        { "log_level", "debug" },
+        { "log_level", log_level },
         { "use_tor", false },
     };
 
