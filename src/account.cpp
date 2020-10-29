@@ -159,25 +159,6 @@ QQmlListProperty<Balance> Account::balances()
     return { this, &m_balances };
 }
 
-static QJsonArray get_transactions(GA_session* session, int subaccount, int first, int count)
-{
-    auto result = GA::process_auth([session, subaccount, first, count] (GA_auth_handler** call) {
-        GA_json* details = Json::fromObject({
-            { "subaccount", subaccount },
-            { "first", first },
-            { "count", count }
-        });
-
-        int err = GA_get_transactions(session, details, call);
-        Q_ASSERT(err == GA_OK);
-
-        err = GA_destroy_json(details);
-        Q_ASSERT(err == GA_OK);
-    });
-    Q_ASSERT(result.value("status").toString() == "done");
-    return result.value("result").toObject().value("transactions").toArray();
-}
-
 void Account::reload()
 {
     m_transactions_data = {};

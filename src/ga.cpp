@@ -38,17 +38,6 @@ void destroy_auth_handler(GA_auth_handler* call)
     Q_ASSERT(err == GA_OK);
 }
 
-QJsonArray get_subaccounts(GA_session* session)
-{
-    Q_ASSERT(session);
-    auto result = process_auth([session] (GA_auth_handler** call) {
-        int err = GA_get_subaccounts(session, call);
-        Q_ASSERT(err == GA_OK);
-    });
-    Q_ASSERT(result.value("status").toString() == "done");
-    return result.value("result").toObject().value("subaccounts").toArray();
-}
-
 QJsonObject convert_amount(GA_session* session, const QJsonObject& input)
 {
     GA_json* value_details = Json::fromObject(input);
