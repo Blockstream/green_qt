@@ -86,27 +86,80 @@ WalletDialog {
         stack_view.push(component, { handler })
     }
 
-    property Component signLiquidTransactionViewComponent: Item {
+    property Component signLiquidTransactionViewComponent: Column {
         property SignLiquidTransactionResolver resolver
-        Column {
-            id: info
-            anchors.centerIn: parent
-            spacing: 32
-            Image {
-                source: 'qrc:/svg/ledger_nano_s.svg'
-                anchors.horizontalCenter: parent.horizontalCenter
-            }
-            ProgressBar {
-                value: resolver.progress
-                Behavior on value { NumberAnimation { duration: 300; easing.type: Easing.OutCubic } }
-                anchors.horizontalCenter: parent.horizontalCenter
+        spacing: 16
+        Image {
+            source: 'qrc:/svg/ledger_nano_s.svg'
+            anchors.horizontalCenter: parent.horizontalCenter
+            horizontalAlignment: Image.AlignHCenter
+            height: 32
+            fillMode: Image.PreserveAspectFit
+        }
+        ProgressBar {
+            value: resolver.progress
+            Behavior on value { NumberAnimation { duration: 300; easing.type: Easing.OutCubic } }
+            anchors.horizontalCenter: parent.horizontalCenter
+        }
+        Loader {
+            visible: active
+            active: 'output' in resolver.message && !resolver.message.output.is_fee
+            sourceComponent: Column {
+                id: output_view
+                readonly property var output: resolver.message.output
+                readonly property Asset asset: wallet.getOrCreateAsset(output.asset_id || 'btc')
+                spacing: 16
+                Row {
+                    spacing: 16
+                    AssetIcon {
+                        asset: output_view.asset
+                    }
+                    Column {
+                        Label {
+                            Layout.fillWidth: true
+                            text: output_view.asset.name
+                            font.pixelSize: 14
+                            elide: Label.ElideRight
+                        }
+
+                        Label {
+                            visible: 'entity' in output_view.asset.data
+                            Layout.fillWidth: true
+                            opacity: 0.5
+                            text: output_view.asset.data.entity ? output_view.asset.data.entity.domain : ''
+                            elide: Label.ElideRight
+                        }
+                    }
+                }
+                SectionLabel {
+                    text: 'Review output #' + (resolver.message.index + 1)
+                }
+                SectionLabel { text: resolver.message.output.is_change ? 'Change address' : 'Recipient Address' }
+                Label {
+                    text: resolver.message.output.address
+                }
+                SectionLabel { text: qsTrId('id_amount') }
+                Label {
+                    text: output_view.asset.formatAmount(output.satoshi, true, 'BTC')
+                }
             }
         }
-        Label {
-            text: resolver.message
-            anchors.horizontalCenter: info.horizontalCenter
-            anchors.top: info.bottom
-            anchors.margins: 16
+        Loader {
+            visible: active
+            active: 'output' in resolver.message && resolver.message.output.is_fee
+            sourceComponent: Column {
+                id: fee_view
+                readonly property var output: resolver.message.output
+                readonly property Asset asset: wallet.getOrCreateAsset(output.asset_id || 'btc')
+                spacing: 16
+                SectionLabel {
+                    text: 'Confirm transaction'
+                }
+                SectionLabel { text: qsTrId('id_fee') }
+                Label {
+                    text: fee_view.asset.formatAmount(output.satoshi, true, 'BTC')
+                }
+            }
         }
     }
 

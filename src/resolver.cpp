@@ -207,10 +207,10 @@ void SignLiquidTransactionResolver::resolve()
        m_progress = qreal(count) / qreal(total);
        emit progressChanged(m_progress);
     });
-    connect(command, &SignLiquidTransactionCommand::message, [this](const QString& message) {
-       if (m_message == message) return;
-       m_message = message;
-       emit messageChanged(m_message);
+    connect(command, &SignLiquidTransactionCommand::message, [this](const QJsonObject& message) {
+        if (m_message == message) return;
+        m_message = message;
+        emit messageChanged(m_message);
     });
     connect(command, &Command::finished, [this, command] {
         QJsonArray signatures;

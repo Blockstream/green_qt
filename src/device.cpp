@@ -414,15 +414,15 @@ DeviceCommand *SignLiquidTransactionCommand::exchange(const QByteArray &data)
     return command;
 }
 
-QList<QPair<QString,QByteArray>> SignLiquidTransactionCommand::outputLiquidBytes()
+QList<QPair<QJsonObject, QByteArray>> SignLiquidTransactionCommand::outputLiquidBytes()
 {
-    QList<QPair<QString,QByteArray>> res;
+    QList<QPair<QJsonObject,QByteArray>> res;
     {
         QByteArray data;
         QDataStream stream(&data, QIODevice::WriteOnly);
         stream.setByteOrder(QDataStream::LittleEndian);
         stream << varint<uint32_t>(m_outputs.size());
-        res.append({"", data});
+        res.append({{}, data});
     }
 
     for (int i = 0; i < m_outputs.size(); ++i) {
@@ -440,20 +440,20 @@ QList<QPair<QString,QByteArray>> SignLiquidTransactionCommand::outputLiquidBytes
                 stream << uint8_t(asset_id.at(j));
             }
             stream << uint8_t(0x01) << ParseSatoshi(output.value("satoshi"));
-            res.append({"", data});
+            res.append({{}, data});
         } else {
-            res.append({"", m_commitments.at(i).mid(64, 143)});
+            res.append({{}, m_commitments.at(i).mid(64, 143)});
         }
 
         if (output.contains("public_key")) {
             const auto eph_keypair_pub = ParseByteArray(output.value("eph_keypair_pub"));
             const auto public_key = ParseByteArray(output.value("public_key"));
-            res.append({"", eph_keypair_pub});
-            res.append({"", public_key});
+            res.append({{}, eph_keypair_pub});
+            res.append({{}, public_key});
         } else {
             QByteArray nonce(1, 0);
-            res.append({"", nonce});
-            res.append({"", nonce});
+            res.append({{}, nonce});
+            res.append({{}, nonce});
         }
 
         {
@@ -466,7 +466,12 @@ QList<QPair<QString,QByteArray>> SignLiquidTransactionCommand::outputLiquidBytes
                 stream << varint<uint32_t>(script.size());
                 stream.writeRawData(script.data(), script.size());
             }
-            res.append({i + 1 < m_outputs.size() ? QString("Accept ") + output.value("address").toString().left(8) + "..." : "Accept and send", data});
+
+            QJsonObject message = {
+                { "index", i },
+                { "output", output },
+            };
+            res.append({message, data});
         }
     }
     return res;
@@ -479,15 +484,15 @@ void SignLiquidTransactionCommand::finalizeLiquidInputFull()
     m_output_liquid_bytes = outputLiquidBytes();
     for (const auto& data : m_output_liquid_bytes) {
         auto c = exchange(apdu(BTCHIP_CLA, BTCHIP_INS_HASH_INPUT_FINALIZE_FULL, i == m_output_liquid_bytes.size()-1 ? 0x80 : 0x00, 0x00, data.second));
-        connect(c, &Command::finished, [this, c, i] {
+        connect(c, &Command::finished, [this, i] {
             if (i + 1 < m_output_liquid_bytes.size()) {
                 emit message(m_output_liquid_bytes.at(i + 1).first);
             } else {
-                emit message("");
+                emit message({});
             }
             // qDebug() << "RECEIVE BTCHIP_INS_HASH_INPUT_FINALIZE_FULL" << i << c->m_response.toHex();
         });
-        connect(c, &Command::error, [i] {
+        connect(c, &Command::error, [] {
             // qDebug() << "RECEIVE BTCHIP_INS_HASH_INPUT_FINALIZE_FULL" << i << "!!!!! ERROR !!!!!";
         });
 

@@ -219,17 +219,17 @@ public:
     QList<QByteArray> m_asset_commitments;
     QList<QByteArray> m_value_commitments;
 
-    QList<QPair<QString, QByteArray>> m_output_liquid_bytes;
+    QList<QPair<QJsonObject, QByteArray>> m_output_liquid_bytes;
 
     int count{0};
     void startUntrustedTransaction(bool new_transaction, int input_index, const QList<QByteArray> &inputs, const QList<QByteArray> &sequences, const QByteArray &redeem_script);
     void finalizeLiquidInputFull();
-    QList<QPair<QString,QByteArray>> outputLiquidBytes();
+    QList<QPair<QJsonObject, QByteArray>> outputLiquidBytes();
     int exchange_count{0};
     int exchange_total{0};
 signals:
     void progressChanged(int progress, int total);
-    void message(const QString& message);
+    void message(const QJsonObject& message);
 };
 
 class DevicePrivate;

@@ -127,19 +127,19 @@ class SignLiquidTransactionResolver : public DeviceResolver
 {
     Q_OBJECT
     Q_PROPERTY(qreal progress READ progress NOTIFY progressChanged)
-    Q_PROPERTY(QString message READ message NOTIFY messageChanged)
+    Q_PROPERTY(QJsonObject message READ message NOTIFY messageChanged)
     QML_ELEMENT
 public:
     SignLiquidTransactionResolver(Handler* handler, const QJsonObject& result);
     qreal progress() const { return m_progress; };
-    QString message() const { return m_message; };
+    QJsonObject message() const { return m_message; };
     void resolve() override;
 signals:
     void progressChanged(qreal progress);
-    void messageChanged(const QString& message);
+    void messageChanged(const QJsonObject& message);
 protected:
     qreal m_progress{0};
-    QString m_message;
+    QJsonObject m_message;
 };
 
 #endif // GREEN_RESOLVER_H
