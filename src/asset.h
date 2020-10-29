@@ -38,7 +38,7 @@ public:
     void setData(const QJsonObject& data);
 
     Q_INVOKABLE qint64 parseAmount(const QString& amount) const;
-    Q_INVOKABLE QString formatAmount(qint64 amount, bool include_ticker) const;
+    Q_INVOKABLE QString formatAmount(qint64 amount, bool include_ticker, const QString& unit = {}) const;
 
 public slots:
     void openInExplorer() const;

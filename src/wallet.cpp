@@ -661,6 +661,7 @@ QString Wallet::formatAmount(qint64 amount, bool include_ticker) const
 QString Wallet::formatAmount(qint64 amount, bool include_ticker, const QString& unit) const
 {
     Q_ASSERT(m_network);
+    if (unit.isEmpty()) return {};
     auto str = convert({{ "satoshi", amount }}).value(unit == "\u00B5BTC" ? "ubtc" : unit.toLower()).toString();
     auto val = str.toDouble();
     if (val == ((int64_t) val)) {

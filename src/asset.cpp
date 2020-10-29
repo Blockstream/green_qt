@@ -51,10 +51,10 @@ qint64 Asset::parseAmount(const QString& amount) const
     return result;
 }
 
-QString Asset::formatAmount(qint64 amount, bool include_ticker) const
+QString Asset::formatAmount(qint64 amount, bool include_ticker, const QString& unit) const
 {
     if (m_data.value("name").toString() == "btc") {
-        return wallet()->formatAmount(amount, include_ticker);
+        return wallet()->formatAmount(amount, include_ticker, unit);
     }
 
     auto precision = m_data.value("precision").toInt(0);
