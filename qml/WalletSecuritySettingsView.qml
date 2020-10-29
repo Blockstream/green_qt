@@ -41,6 +41,7 @@ ColumnLayout {
         title: qsTrId('id_auto_logout_timeout')
         description: qsTrId('id_set_a_timeout_to_logout_after')
         enabled: !wallet.locked
+        visible: !wallet.device
 
         ComboBox {
             flat: true

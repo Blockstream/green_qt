@@ -780,6 +780,7 @@ bool Wallet::eventFilter(QObject* object, QEvent* event)
 void Wallet::timerEvent(QTimerEvent* event)
 {
     if (event->timerId() == m_logout_timer) {
+        if (m_device) return;
         disconnect();
     }
 }
