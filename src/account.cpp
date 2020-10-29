@@ -17,6 +17,29 @@
 
 #include <gdk.h>
 
+class GetBalanceHandler : public Handler
+{
+    Account* const m_account;
+    void init(GA_session* session) override
+    {
+        GA_json* details = Json::fromObject({
+            { "subaccount", m_account->m_pointer },
+            { "num_confs", 0 }
+        });
+
+        int err = GA_get_balance(session, details, &m_handler);
+        Q_ASSERT(err == GA_OK);
+
+        err = GA_destroy_json(details);
+        Q_ASSERT(err == GA_OK);
+    }
+public:
+    GetBalanceHandler(Account* account)
+        : Handler(account->wallet())
+        , m_account(account)
+    {
+    }
+};
 
 class GetTransactionsHandler : public Handler
 {
@@ -161,8 +184,19 @@ QQmlListProperty<Balance> Account::balances()
 
 void Account::reload()
 {
-    m_transactions_data = {};
-    loadNextPage();
+    auto handler = new GetBalanceHandler(this);
+    connect(handler, &Handler::done, this, [this, handler] {
+        auto balance = handler->result().value("result").toObject();
+        m_json.insert("satoshi", balance);
+        emit jsonChanged();
+        updateBalance();
+        m_transactions_data = {};
+        loadNextPage();
+    });
+    QObject::connect(handler, &Handler::resolver, [](Resolver* resolver) {
+        resolver->resolve();
+    });
+    handler->exec();
 }
 
 void Account::loadNextPage()
