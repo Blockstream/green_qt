@@ -402,7 +402,7 @@ void ReceiveAddress::generate()
     setGenerating(true);
 
     auto handler = new GetReceiveAddressHandler(m_account);
-    connect(handler, &Handler::done, [this, handler] {
+    connect(handler, &Handler::done, this, [this, handler] {
         m_address = handler->result().value("result").toObject().value("address").toString();
         setGenerating(false);
         emit changed();

@@ -116,10 +116,10 @@ Controller::Controller(QObject* parent)
 void Controller::exec(Handler* handler)
 {
     // TODO get xpubs should be delegated
-    connect(handler, &Handler::done, [this, handler] { emit done(handler); });
-    connect(handler, &Handler::error, [this, handler] { emit error(handler); });
-    connect(handler, &Handler::requestCode, [this, handler] { emit requestCode(handler); });
-    connect(handler, &Handler::invalidCode, [this, handler] { emit invalidCode(handler); });
+    connect(handler, &Handler::done, this, [this, handler] { emit done(handler); });
+    connect(handler, &Handler::error, this, [this, handler] { emit error(handler); });
+    connect(handler, &Handler::requestCode, this, [this, handler] { emit requestCode(handler); });
+    connect(handler, &Handler::invalidCode, this, [this, handler] { emit invalidCode(handler); });
     connect(handler, &Handler::resolver, this, &Controller::resolver);
     QMetaObject::invokeMethod(context(), [this, handler] {
         QMetaObject::invokeMethod(this, [handler] {
@@ -169,7 +169,7 @@ void Controller::changeSettings(const QJsonObject& data)
     if (wallet()->isLocked()) return;
 
     auto handler = new ChangeSettingsHandler(data, wallet());
-    connect(handler, &Handler::done, [this, handler] {
+    connect(handler, &Handler::done, this, [this, handler] {
         wallet()->updateSettings();
         handler->deleteLater();
         emit finished();
@@ -180,7 +180,7 @@ void Controller::changeSettings(const QJsonObject& data)
 void Controller::sendRecoveryTransactions()
 {
     auto handler = new SendNLocktimesHandler(wallet());
-    connect(handler, &Handler::done, [this, handler] {
+    connect(handler, &Handler::done, this, [this, handler] {
         wallet()->updateSettings();
         handler->deleteLater();
         emit finished();
@@ -195,7 +195,7 @@ void Controller::enableTwoFactor(const QString& method, const QString& data)
         { "enabled", true }
     };
     auto handler = new ChangeSettingsTwoFactorHandler(method.toLatin1(), details, wallet());
-    connect(handler, &Handler::done, [this, handler] {
+    connect(handler, &Handler::done, this, [this, handler] {
         // Two factor configuration has changed, update it.
         wallet()->updateConfig();
         handler->deleteLater();
@@ -210,7 +210,7 @@ void Controller::disableTwoFactor(const QString& method)
         { "enabled", false }
     };
     auto handler = new ChangeSettingsTwoFactorHandler(method.toLatin1(), details, wallet());
-    connect(handler, &Handler::done, [this, handler] {
+    connect(handler, &Handler::done, this, [this, handler] {
         // Two factor configuration has changed, update it.
         wallet()->updateConfig();
         handler->deleteLater();
@@ -227,7 +227,7 @@ void Controller::changeTwoFactorLimit(bool is_fiat, const QString& limit)
         { is_fiat ? "fiat" : unit, limit }
     };
     auto handler = new TwoFactorChangeLimitsHandler(details, wallet());
-    connect(handler, &Handler::done, [this, handler] {
+    connect(handler, &Handler::done, this, [this, handler] {
         // Two factor configuration has changed, update it.
         wallet()->updateConfig();
         handler->deleteLater();
@@ -239,7 +239,7 @@ void Controller::changeTwoFactorLimit(bool is_fiat, const QString& limit)
 void Controller::requestTwoFactorReset(const QString& email)
 {
     auto handler = new TwoFactorResetHandler(email.toLatin1(), wallet());
-    connect(handler, &Handler::done, [this, handler] {
+    connect(handler, &Handler::done, this, [this, handler] {
         wallet()->updateConfig();
         // TODO: updateConfig doesn't update 2f reset data,
         // it's only updated after authentication in GDK,
@@ -254,7 +254,7 @@ void Controller::requestTwoFactorReset(const QString& email)
 void Controller::cancelTwoFactorReset()
 {
     auto handler = new TwoFactorCancelResetHandler(wallet());
-    connect(handler, &Handler::done, [this, handler] {
+    connect(handler, &Handler::done, this, [this, handler] {
         wallet()->updateConfig();
         // TODO: updateConfig doesn't update 2f reset data,
         // it's only updated after authentication in GDK,
@@ -275,11 +275,11 @@ void Controller::setRecoveryEmail(const QString& email)
         { "enabled", false }
     };
     auto handler = new ChangeSettingsTwoFactorHandler(method, details, wallet());
-    connect(handler, &Handler::done, [this, handler] {
+    connect(handler, &Handler::done, this, [this, handler] {
         handler->deleteLater();
         wallet()->updateConfig();
     });
-    connect(handler, &Handler::done, [this] {
+    connect(handler, &Handler::done, this, [this] {
         auto details = QJsonObject{
             { "notifications" , QJsonValue({
                 { "email_incoming", true },
@@ -287,7 +287,7 @@ void Controller::setRecoveryEmail(const QString& email)
             }
         };
         auto handler = new ChangeSettingsHandler(details, wallet());
-        connect(handler, &Handler::done, [this, handler] {
+        connect(handler, &Handler::done, this, [this, handler] {
             handler->deleteLater();
             emit finished();
         });
