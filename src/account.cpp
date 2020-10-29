@@ -47,6 +47,29 @@ public:
     }
 };
 
+class GetReceiveAddressHandler : public Handler
+{
+    Account* const m_account;
+    void init(GA_session* session) override
+    {
+        auto address_details = Json::fromObject({
+            { "subaccount", static_cast<qint64>(m_account->m_pointer) },
+        });
+
+        int err = GA_get_receive_address(session, address_details, &m_handler);
+        Q_ASSERT(err == GA_OK);
+
+        err = GA_destroy_json(address_details);
+        Q_ASSERT(err == GA_OK);
+    }
+public:
+    GetReceiveAddressHandler(Account* account)
+        : Handler(account->wallet())
+        , m_account(account)
+    {
+    }
+};
+
 Account::Account(Wallet* wallet)
     : QObject(wallet)
     , m_wallet(wallet)
@@ -363,21 +386,14 @@ void ReceiveAddress::generate()
 
     setGenerating(true);
 
-    QMetaObject::invokeMethod(m_account->m_wallet->m_context, [this] {
-        auto result = GA::process_auth([this] (GA_auth_handler** call) {
-            auto address_details = Json::fromObject({
-                { "subaccount", static_cast<qint64>(m_account->m_pointer) },
-            });
-
-            int err = GA_get_receive_address(m_account->m_wallet->m_session, address_details, call);
-            Q_ASSERT(err == GA_OK);
-
-            err = GA_destroy_json(address_details);
-            Q_ASSERT(err == GA_OK);
-        });
-        Q_ASSERT(result.value("status").toString() == "done");
-        m_address = result.value("result").toObject().value("address").toString();
+    auto handler = new GetReceiveAddressHandler(m_account);
+    connect(handler, &Handler::done, [this, handler] {
+        m_address = handler->result().value("result").toObject().value("address").toString();
         setGenerating(false);
         emit changed();
     });
+    connect(handler, &Handler::resolver, [](Resolver* resolver) {
+        resolver->resolve();
+    });
+    handler->exec();
 }
