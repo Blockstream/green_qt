@@ -130,14 +130,12 @@ void Controller::exec(Handler* handler)
 
 QObject* Controller::context() const
 {
-    Wallet* w = wallet();
-    return w ? w->m_context : nullptr;
+    return m_wallet ? m_wallet->m_context : nullptr;
 }
 
 GA_session* Controller::session() const
 {
-    Wallet* w = wallet();
-    return w ? w->m_session : nullptr;
+    return m_wallet ? m_wallet->m_session : nullptr;
 }
 
 Wallet* Controller::wallet() const
@@ -154,9 +152,11 @@ void Controller::setWallet(Wallet *wallet)
 
 void Controller::changeSettings(const QJsonObject& data)
 {
+    if (!m_wallet) return;
+
     // Avoid unnecessary calls to GA_change_settings
     bool updated = true;
-    auto settings = wallet()->settings();
+    auto settings = m_wallet->settings();
     for (auto i = data.begin(); i != data.end(); ++i) {
         if (settings.value(i.key()) != i.value()) {
             updated = false;
@@ -166,11 +166,11 @@ void Controller::changeSettings(const QJsonObject& data)
     if (updated) return;
 
     // Check if wallet is undergoing reset
-    if (wallet()->isLocked()) return;
+    if (m_wallet->isLocked()) return;
 
-    auto handler = new ChangeSettingsHandler(data, wallet());
+    auto handler = new ChangeSettingsHandler(data, m_wallet);
     connect(handler, &Handler::done, this, [this, handler] {
-        wallet()->updateSettings();
+        m_wallet->updateSettings();
         handler->deleteLater();
         emit finished();
     });
@@ -179,9 +179,10 @@ void Controller::changeSettings(const QJsonObject& data)
 
 void Controller::sendRecoveryTransactions()
 {
-    auto handler = new SendNLocktimesHandler(wallet());
+    if (!m_wallet) return;
+    auto handler = new SendNLocktimesHandler(m_wallet);
     connect(handler, &Handler::done, this, [this, handler] {
-        wallet()->updateSettings();
+        m_wallet->updateSettings();
         handler->deleteLater();
         emit finished();
     });
@@ -190,14 +191,15 @@ void Controller::sendRecoveryTransactions()
 
 void Controller::enableTwoFactor(const QString& method, const QString& data)
 {
+    if (!m_wallet) return;
     auto details = QJsonObject{
         { "data", data },
         { "enabled", true }
     };
-    auto handler = new ChangeSettingsTwoFactorHandler(method.toLatin1(), details, wallet());
+    auto handler = new ChangeSettingsTwoFactorHandler(method.toLatin1(), details, m_wallet);
     connect(handler, &Handler::done, this, [this, handler] {
         // Two factor configuration has changed, update it.
-        wallet()->updateConfig();
+        m_wallet->updateConfig();
         handler->deleteLater();
         emit finished();
     });
@@ -206,13 +208,14 @@ void Controller::enableTwoFactor(const QString& method, const QString& data)
 
 void Controller::disableTwoFactor(const QString& method)
 {
+    if (!m_wallet) return;
     auto details = QJsonObject{
         { "enabled", false }
     };
-    auto handler = new ChangeSettingsTwoFactorHandler(method.toLatin1(), details, wallet());
+    auto handler = new ChangeSettingsTwoFactorHandler(method.toLatin1(), details, m_wallet);
     connect(handler, &Handler::done, this, [this, handler] {
         // Two factor configuration has changed, update it.
-        wallet()->updateConfig();
+        m_wallet->updateConfig();
         handler->deleteLater();
         emit finished();
     });
@@ -221,15 +224,16 @@ void Controller::disableTwoFactor(const QString& method)
 
 void Controller::changeTwoFactorLimit(bool is_fiat, const QString& limit)
 {
-    auto unit = wallet()->settings().value("unit").toString().toLower();
+    if (!m_wallet) return;
+    auto unit = m_wallet->settings().value("unit").toString().toLower();
     auto details = QJsonObject{
         { "is_fiat", is_fiat },
         { is_fiat ? "fiat" : unit, limit }
     };
-    auto handler = new TwoFactorChangeLimitsHandler(details, wallet());
+    auto handler = new TwoFactorChangeLimitsHandler(details, m_wallet);
     connect(handler, &Handler::done, this, [this, handler] {
         // Two factor configuration has changed, update it.
-        wallet()->updateConfig();
+        m_wallet->updateConfig();
         handler->deleteLater();
         emit finished();
     });
@@ -238,13 +242,14 @@ void Controller::changeTwoFactorLimit(bool is_fiat, const QString& limit)
 
 void Controller::requestTwoFactorReset(const QString& email)
 {
-    auto handler = new TwoFactorResetHandler(email.toLatin1(), wallet());
+    if (!m_wallet) return;
+    auto handler = new TwoFactorResetHandler(email.toLatin1(), m_wallet);
     connect(handler, &Handler::done, this, [this, handler] {
-        wallet()->updateConfig();
+        m_wallet->updateConfig();
         // TODO: updateConfig doesn't update 2f reset data,
         // it's only updated after authentication in GDK,
         // so force wallet lock for now.
-        wallet()->setLocked(true);
+        m_wallet->setLocked(true);
         handler->deleteLater();
         emit finished();
     });
@@ -253,13 +258,14 @@ void Controller::requestTwoFactorReset(const QString& email)
 
 void Controller::cancelTwoFactorReset()
 {
-    auto handler = new TwoFactorCancelResetHandler(wallet());
+    if (!m_wallet) return;
+    auto handler = new TwoFactorCancelResetHandler(m_wallet);
     connect(handler, &Handler::done, this, [this, handler] {
-        wallet()->updateConfig();
+        m_wallet->updateConfig();
         // TODO: updateConfig doesn't update 2f reset data,
         // it's only updated after authentication in GDK,
         // so force wallet unlock for now.
-        wallet()->setLocked(false);
+        m_wallet->setLocked(false);
         handler->deleteLater();
         emit finished();
     });
@@ -268,16 +274,17 @@ void Controller::cancelTwoFactorReset()
 
 void Controller::setRecoveryEmail(const QString& email)
 {
+    if (!m_wallet) return;
     const auto method = QByteArray{"email"};
     const auto details = QJsonObject{
         { "data", email.toLatin1().data() },
         { "confirmed", true },
         { "enabled", false }
     };
-    auto handler = new ChangeSettingsTwoFactorHandler(method, details, wallet());
+    auto handler = new ChangeSettingsTwoFactorHandler(method, details, m_wallet);
     connect(handler, &Handler::done, this, [this, handler] {
         handler->deleteLater();
-        wallet()->updateConfig();
+        m_wallet->updateConfig();
     });
     connect(handler, &Handler::done, this, [this] {
         auto details = QJsonObject{
@@ -286,7 +293,7 @@ void Controller::setRecoveryEmail(const QString& email)
                 { "email_outgoing", true }})
             }
         };
-        auto handler = new ChangeSettingsHandler(details, wallet());
+        auto handler = new ChangeSettingsHandler(details, m_wallet);
         connect(handler, &Handler::done, this, [this, handler] {
             handler->deleteLater();
             emit finished();
