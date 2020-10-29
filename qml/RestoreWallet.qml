@@ -19,8 +19,14 @@ Page {
 
     Connections {
         target: controller.wallet
-        function onLoginError() {
-            footer_buttons_row.ToolTip.show(qsTrId('id_invalid_mnemonic'), 2000);
+        function onLoginError(error) {
+            if (error.includes('id_login_failed') || error.includes('bip39_mnemonic_to_seed')) {
+                footer_buttons_row.ToolTip.show(qsTrId('id_invalid_mnemonic'), 2000);
+            } else if (error.includes('reconnect required')) {
+                footer_buttons_row.ToolTip.show(qsTrId('id_unable_to_contact_the_green'), 2000);
+            } else {
+                footer_buttons_row.ToolTip.show(error, 2000);
+            }
         }
         function onAuthenticationChanged(authentication) {
             if (controller.wallet.authentication === Wallet.Authenticated) {

@@ -458,10 +458,17 @@ void Wallet::login(const QStringList& mnemonic, const QString& password)
 
         GA_destroy_json(hw_device);
 
-        if (result.value("status") != "done") {
-            emit loginError();
+        const auto status = result.value("status").toString();
+        if (status == "error") {
+            // TODO: these are examples of errors
+            // these sould be handled in Handler class, see TODO above
+            // {"action":"get_xpubs","device":{},"error":"get_xpubs exception:login failed:id_login_failed","status":"error"}
+            // {"action":"get_xpubs","device":{},"error":"get_xpubs exception:reconnect required","status":"error"}
+            emit loginError(result.value("error").toString());
             return setAuthentication(Unauthenticated);
         }
+
+        Q_ASSERT(status == "done");
 
         updateCurrencies();
         reload();

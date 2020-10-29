@@ -146,7 +146,7 @@ signals:
     void busyChanged(bool busy);
     void hasLiquidSecuritiesChanged(bool hasLiquidSecurities);
     void currentAccountChanged(Account* account);
-    void loginError();
+    void loginError(const QString& error);
 
 protected:
     bool eventFilter(QObject* object, QEvent* event) override;
