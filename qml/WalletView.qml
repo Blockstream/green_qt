@@ -163,7 +163,7 @@ Item {
             width: 320
             spacing: 8
             Label {
-                visible: fiatRateAvailable
+                visible: !fiatRateAvailable
                 text: qsTrId('id_your_favourite_exchange_rate_is')
                 padding: 8
                 leftPadding: 40
