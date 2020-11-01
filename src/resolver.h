@@ -22,11 +22,17 @@ public:
     Handler* handler() const { return m_handler; }
     Wallet* wallet() const;
     Network* network() const;
+    bool failed() const { return m_failed; }
 public slots:
     virtual void resolve() = 0;
+signals:
+    void failedChanged(bool failed);
 protected:
+    void setFailed(bool failed);
     Handler* const m_handler;
     QJsonObject const m_result;
+private:
+    bool m_failed{false};
 };
 
 class TwoFactorResolver : public Resolver

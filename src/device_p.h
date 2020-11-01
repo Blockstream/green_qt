@@ -9,7 +9,9 @@ public:
     virtual ~DevicePrivate() {};
     virtual void exchange(DeviceCommand* command) = 0;
     Device* q{nullptr};
-    Device::Type type;
+    Device::Transport m_transport;
+    Device::Type m_type;
+    int32_t m_unique_id;
     QString app_name;
     QQueue<DeviceCommand*> queue;
 };

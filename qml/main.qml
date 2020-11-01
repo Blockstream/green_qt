@@ -14,6 +14,9 @@ ApplicationWindow {
     readonly property Account currentAccount: currentWallet ? currentWallet.currentAccount : null
 
     DeviceDiscoveryAgent {
+        onDeviceConnected: {
+            console.log('device connected', device.type)
+        }
     }
 
     Connections {
@@ -94,8 +97,7 @@ ApplicationWindow {
         const parts = []
         if (wallet) {
             if (wallet.device) {
-                parts.push(wallet.device.vendor);
-                parts.push(wallet.device.product);
+                parts.push(wallet.device.name);
             } else {
                 parts.push(wallet.name);
             }
@@ -229,7 +231,7 @@ ApplicationWindow {
                 model: WalletListModel {}
                 delegate: ItemDelegate {
                     id: delegate
-                    text: wallet.device ? `${wallet.device.vendor} ${wallet.device.product}` : wallet.name
+                    text: wallet.device ? wallet.device.name : wallet.name
                     leftPadding: 16 + left_margin
                     icon.color: 'transparent'
                     icon.source: icons[wallet.network.id]
@@ -391,6 +393,58 @@ ApplicationWindow {
                     text: qsTrId('id_remove')
                     DialogButtonBox.buttonRole: DialogButtonBox.AcceptRole
                     enabled: confirm_field.text === wallet.name
+                }
+            }
+        }
+    }
+
+    Column {
+        spacing: 16
+        anchors.margins: 16
+        anchors.bottom: parent.bottom
+        anchors.right: parent.right
+        Repeater {
+            model: device_list_model
+            delegate: ledger_delegate
+        }
+    }
+
+    Component {
+        id: ledger_delegate
+        Pane {
+            id: delegate
+            required property Device device
+            anchors.right: parent.right
+            visible: controller.progress < 2
+            LedgerLoginController {
+                id: controller
+                device: delegate.device
+            }
+            background: Rectangle {
+                color: 'white'
+                opacity: 0.1
+                radius: 8
+            }
+            contentItem: Column {
+                spacing: 8
+                DeviceImage {
+                    device: delegate.device
+                    height: 16
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
+                Label {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    text: delegate.device.name
+                }
+//                Label {
+//                    visible: controller.progress === 0
+//                    anchors.horizontalCenter: parent.horizontalCenter
+//                    text: 'SELECT APP ON DEVICE'
+//                }
+                ProgressBar {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    indeterminate: true
+                    visible: controller.progress > 0
                 }
             }
         }

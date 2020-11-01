@@ -9,6 +9,8 @@
 #include <QSocketNotifier>
 #include <libudev.h>
 
+class DeviceDiscoveryAgent;
+
 class DevicePrivateImpl : public DevicePrivate
 {
 public:
@@ -21,13 +23,14 @@ public:
 class DeviceDiscoveryAgentPrivate
 {
 public:
-    DeviceDiscoveryAgentPrivate();
+    DeviceDiscoveryAgentPrivate(DeviceDiscoveryAgent* q);
     ~DeviceDiscoveryAgentPrivate();
 
     void addDevice(udev_device* handle);
     void removeDevice(udev_device* handle);
 
 private:
+    DeviceDiscoveryAgent* const q;
     udev* m_udev{nullptr};
     udev_monitor* m_monitor{nullptr};
     QSocketNotifier* m_notifier{nullptr};

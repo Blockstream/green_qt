@@ -15,7 +15,8 @@
 #include <linux/hidraw.h>
 #include <unistd.h>
 
-DeviceDiscoveryAgentPrivate::DeviceDiscoveryAgentPrivate()
+DeviceDiscoveryAgentPrivate::DeviceDiscoveryAgentPrivate(DeviceDiscoveryAgent *q)
+    : q(q)
 {
     m_udev = udev_new();
     Q_ASSERT(m_udev);
@@ -91,52 +92,57 @@ void DeviceDiscoveryAgentPrivate::addDevice(udev_device* handle)
     auto hid_dev = udev_device_get_parent_with_subsystem_devtype(handle, "usb", "usb_device");
     if (!hid_dev) return;
 
-    if (strcmp(udev_device_get_sysattr_value(hid_dev, "idVendor"), "2c97") != 0) return;
-    if (strcmp(udev_device_get_sysattr_value(hid_dev, "idProduct"), "0001") != 0 && strcmp(udev_device_get_sysattr_value(hid_dev, "idProduct"), "0004") != 0) return;
+
+    uint32_t vendor_id = QString::fromLocal8Bit(udev_device_get_sysattr_value(hid_dev, "idVendor")).toUInt(nullptr, 16);
+    uint32_t product_id = QString::fromLocal8Bit(udev_device_get_sysattr_value(hid_dev, "idProduct")).toUInt(nullptr, 16);
+
+    Device::Type device_type = Device::typefromVendorAndProduct(vendor_id, product_id);
+    if (device_type == Device::Unknown) return;
 
     int fd = open(udev_device_get_devnode(handle), O_RDWR); //|O_NONBLOCK);
     if (fd < 0) return;
 
 #if 1
     /* Get the report descriptor */
-            int res, desc_size = 0;
-            /* Get Report Descriptor Size */
-            res = ioctl(fd, HIDIOCGRDESCSIZE, &desc_size);
-            if (res < 0) {
-                perror("HIDIOCGRDESCSIZE");
-             }
+    int res, desc_size = 0;
+    /* Get Report Descriptor Size */
+    res = ioctl(fd, HIDIOCGRDESCSIZE, &desc_size);
+    if (res < 0) {
+        perror("HIDIOCGRDESCSIZE");
+     }
 
-            struct hidraw_report_descriptor rpt_desc;
+    struct hidraw_report_descriptor rpt_desc;
 
-            memset(&rpt_desc, 0x0, sizeof(rpt_desc));
-            /* Get Report Descriptor */
-            rpt_desc.size = desc_size;
-            res = ioctl(fd, HIDIOCGRDESC, &rpt_desc);
-            if (res < 0) {
-                perror("HIDIOCGRDESC");
-            } else {
-                auto bb = QByteArray::fromRawData((const char*) rpt_desc.value, rpt_desc.size);
-                qDebug() << "B1=" << uint8_t(bb.at(1)) << "B2=" << uint8_t(bb.at(2)) << uint8_t(0xfa) << uint8_t(0xff);
-                if (uint8_t(bb.at(1)) != uint8_t(0xa0) || uint8_t(bb.at(2)) != uint8_t(0xff)) return;
+    memset(&rpt_desc, 0x0, sizeof(rpt_desc));
+    /* Get Report Descriptor */
+    rpt_desc.size = desc_size;
+    res = ioctl(fd, HIDIOCGRDESC, &rpt_desc);
+    if (res < 0) {
+        perror("HIDIOCGRDESC");
+    } else {
+        auto bb = QByteArray::fromRawData((const char*) rpt_desc.value, rpt_desc.size);
+        qDebug() << "B1=" << uint8_t(bb.at(1)) << "B2=" << uint8_t(bb.at(2)) << uint8_t(0xfa) << uint8_t(0xff);
+        if (uint8_t(bb.at(1)) != uint8_t(0xa0) || uint8_t(bb.at(2)) != uint8_t(0xff)) return;
 
-                qDebug() << "REPORT DESCRIPTOR = " << bb.toHex();
-                /* Determine if this device uses numbered reports. */
+        qDebug() << "REPORT DESCRIPTOR = " << bb.toHex();
+        /* Determine if this device uses numbered reports. */
 //                dev->uses_numbered_reports =
 //                    uses_numbered_reports(rpt_desc.value,
 //                                          rpt_desc.size);
-            }
+    }
 
 #endif
-            QString devpath;
-            if (!GetDevPath(handle, devpath)) return;
-
-            qDebug() << "ADD DEVICE!" << handle << devpath;
+    QString devpath;
+    if (!GetDevPath(handle, devpath)) return;
 
     auto impl = new DevicePrivateImpl;
     impl->handle = handle;
     impl->fd = fd;
-    impl->type = Device::LedgerNanoX;
+    impl->m_type = device_type;
     auto device = new Device(impl);
+
+    m_devices.insert(devpath, impl);
+    DeviceManager::instance()->addDevice(device);
 
     auto notifier = new QSocketNotifier(fd, QSocketNotifier::Read);
     notifier->setEnabled(true);
@@ -145,20 +151,6 @@ void DeviceDiscoveryAgentPrivate::addDevice(udev_device* handle)
         auto x = read(fd, (void*) b, 64);
         if (x == 64) impl->inputReport(QByteArray::fromRawData(b, 64));
         else notifier->deleteLater();
-    });
-
-    QTimer::singleShot(200, device, [this, device, impl, devpath] {
-        auto cmd = new GetAppNameCommand(device);
-        device->exchange(cmd);
-        QObject::connect(cmd, &Command::finished, [this, device, impl, devpath, cmd] {
-            device->setAppName(cmd->m_name);
-            if (device->appName().startsWith("OLOS")) {
-                device->deleteLater();
-            } else {
-                m_devices.insert(devpath, impl);
-                DeviceManager::instance()->addDevice(device);
-            }
-        });
     });
     // udev_device_unref(handle);
 }

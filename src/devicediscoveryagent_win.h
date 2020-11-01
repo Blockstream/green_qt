@@ -14,6 +14,7 @@ extern "C" {
 #include <windows.h>
 }
 
+class DeviceDiscoveryAgent;
 class DevicePrivateImpl : public DevicePrivate
 {
 public:
@@ -31,7 +32,7 @@ public:
 class DeviceDiscoveryAgentPrivate : public QAbstractNativeEventFilter
 {
 public:
-    DeviceDiscoveryAgentPrivate();
+    DeviceDiscoveryAgentPrivate(DeviceDiscoveryAgent* q);
     bool nativeEventFilter(const QByteArray& eventType, void* message, long* /* result */) override;
     bool filter(const QString& id);
     void searchDevices();
@@ -39,6 +40,7 @@ public:
     void addDevice(const QString& id, HANDLE handle);
 
 private:
+    DeviceDiscoveryAgent* const q;
     GUID hid_class_guid;
     HDEVNOTIFY m_dev_notify;
     QMap<QString, DevicePrivateImpl*> m_devices;

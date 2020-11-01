@@ -7,7 +7,7 @@
 
 DeviceDiscoveryAgent::DeviceDiscoveryAgent(QObject *parent)
     : QObject(parent)
-    , d(new DeviceDiscoveryAgentPrivate)
+    , d(new DeviceDiscoveryAgentPrivate(this))
 {
 }
 

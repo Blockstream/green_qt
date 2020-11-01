@@ -4,7 +4,8 @@
 #include <QtQml>
 #include <QObject>
 
-class DeviceDiscoveryAgentPrivate;
+QT_FORWARD_DECLARE_CLASS(Device)
+QT_FORWARD_DECLARE_CLASS(DeviceDiscoveryAgentPrivate)
 
 class DeviceDiscoveryAgent : public QObject
 {
@@ -27,6 +28,9 @@ public:
 public:
     QMap<IOHIDDeviceRef, QQueue<Command*>> m_queues;
 */
+signals:
+    void deviceConnected(Device* device);
+
 private:
     DeviceDiscoveryAgentPrivate * const d;
 };

@@ -101,7 +101,21 @@ Device::~Device()
 
 Device::Type Device::type() const
 {
-    return d->type;
+    return d->m_type;
+}
+
+Device::Transport Device::transport() const
+{
+    return d->m_transport;
+}
+
+QString Device::name() const
+{
+    switch (d->m_type) {
+    case LedgerNanoS: return "Ledger Nano S";
+    case LedgerNanoX: return "Ledger Nano X";
+    default: Q_UNREACHABLE();
+    }
 }
 
 bool Device::isBusy() const
@@ -119,15 +133,6 @@ void Device::setAppName(const QString& app_name)
     if (d->app_name == app_name) return;
     d->app_name = app_name;
     emit appNameChanged();
-
-    QString id;
-    if (app_name == "Bitcoin") id = "mainnet";
-    if (app_name == "Bitcoin Test") id = "testnet";
-    if (app_name == "Liquid") id = "liquid";
-    auto network = NetworkManager::instance()->network(id);
-    if (!network) return;
-    auto controller = new LedgerLoginController(this, network);
-    controller->login();
 }
 
 void Device::exchange(DeviceCommand* command)
@@ -225,7 +230,9 @@ QByteArray outputBytes(const QJsonArray outputs)
 SignLiquidTransactionCommand::SignLiquidTransactionCommand(Device* device, const QJsonObject& required_data, CommandBatch* batch)
     : DeviceCommand(device, batch)
     , m_required_data(required_data)
+    , m_batch(new CommandBatch)
 {
+    connect(m_batch, &Command::error, this, &Command::error);
 }
 
 QByteArray inputLiquidBytes(const QJsonObject& input)
@@ -284,6 +291,8 @@ void SignLiquidTransactionCommand::exec()
     }
 
     getLiquidCommitment(0);
+
+    m_batch->exec();
 }
 
 void SignLiquidTransactionCommand::startUntrustedTransaction(bool new_transaction, int input_index, const QList<QByteArray>& inputs, const QList<QByteArray>& sequences, const QByteArray& redeem_script)
@@ -294,10 +303,7 @@ void SignLiquidTransactionCommand::startUntrustedTransaction(bool new_transactio
         QDataStream stream(&data, QIODevice::WriteOnly);
         stream.setByteOrder(QDataStream::LittleEndian);
         stream << uint32_t(m_version) << varint<uint32_t>(inputs.size());
-        auto c = exchange(apdu(BTCHIP_CLA, BTCHIP_INS_HASH_INPUT_START, 0x00, new_transaction ? 0x06 : 0x80, data));
-        connect(c, &Command::finished, [] {
-            qDebug() << "finished BTCHIP_INS_HASH_INPUT_START header";
-        });
+        exchange(apdu(BTCHIP_CLA, BTCHIP_INS_HASH_INPUT_START, 0x00, new_transaction ? 0x06 : 0x80, data));
     }
     for (int i = 0; i < inputs.size(); ++i) {
         QByteArray script = i == input_index ? redeem_script : QByteArray();
@@ -309,15 +315,8 @@ void SignLiquidTransactionCommand::startUntrustedTransaction(bool new_transactio
         stream.writeRawData(inputs.at(i).data(), inputs.at(i).size());
         stream << varint<uint32_t>(script.size());
 
-        auto c = exchange(apdu(BTCHIP_CLA, BTCHIP_INS_HASH_INPUT_START, 0x80, 0x00, data));
-        connect(c, &Command::finished, [] {
-            qDebug() << "finished BTCHIP_INS_HASH_INPUT_START data ";
-        });
-
-        c = exchange(apdu(BTCHIP_CLA, BTCHIP_INS_HASH_INPUT_START, 0x80, 0x00, script + sequences.at(i)));
-        connect(c, &Command::finished, [] {
-            qDebug() << "finished BTCHIP_INS_HASH_INPUT_START script + seq";
-        });
+        exchange(apdu(BTCHIP_CLA, BTCHIP_INS_HASH_INPUT_START, 0x80, 0x00, data));
+        exchange(apdu(BTCHIP_CLA, BTCHIP_INS_HASH_INPUT_START, 0x80, 0x00, script + sequences.at(i)));
     }
 }
 
@@ -404,13 +403,14 @@ void SignLiquidTransactionCommand::getLiquidCommitment(int output_index)
     }
 }
 
-DeviceCommand *SignLiquidTransactionCommand::exchange(const QByteArray &data)
+DeviceCommand *SignLiquidTransactionCommand::exchange(const QByteArray& data)
 {
-    auto command = m_device->exchange(data);
+    auto command = new GenericCommand(m_device, data);
     connect(command, &Command::finished, [this] {
        exchange_count ++;
        emit progressChanged(exchange_count, exchange_total);
     });
+    m_batch->add(command);
     return command;
 }
 
@@ -777,26 +777,70 @@ GetBlindingNonceCommand *Device::getBlindingNonce(const QByteArray& pubkey, cons
     return command;
 }
 
-LedgerLoginController::LedgerLoginController(Device* device, Network* network)
-    : QObject(device)
-    , m_device(device)
-    , m_network(network)
+LedgerLoginController::LedgerLoginController(QObject* parent) //Device* device, Network* network)
+    : QObject(parent)
+//    , m_device(device)
+//    , m_network(network)
 {
-    hw_device = Json::fromObject({{
-        "device", QJsonObject({
-            { "name", "Ledger" },
-            { "supports_arbitrary_scripts", true },
-            { "supports_low_r", false },
-            { "supports_liquid", 1 }
-        })
-    }});
+}
 
-    m_wallet = new Wallet();
-    m_wallet->setNetwork(m_network);
+void LedgerLoginController::setDevice(Device *device)
+{
+    if (m_device == device) return;
+    m_device = device;
+    emit deviceChanged(m_device);
+
+    if (m_device) {
+        QTimer::singleShot(1000, this, &LedgerLoginController::initialize);
+    }
+}
+
+Network* LedgerLoginController::networkFromAppName(const QString& app_name)
+{
+    QString id;
+    if (app_name == "Bitcoin") id = "mainnet";
+    if (app_name == "Bitcoin Test") id = "testnet";
+    if (app_name == "Liquid") id = "liquid";
+    return id.isEmpty() ? nullptr : NetworkManager::instance()->network(id);
+}
+
+void LedgerLoginController::initialize()
+{
+    auto cmd = new GetAppNameCommand(m_device);
+    connect(cmd, &Command::finished, [this, cmd] {
+        m_network = LedgerLoginController::networkFromAppName(cmd->m_name);
+        if (!m_network) {
+            Q_ASSERT(cmd->m_name.indexOf("OLOS") >= 0);
+            QTimer::singleShot(1000, this, &LedgerLoginController::initialize);
+            return;
+        }
+
+        const auto name = m_device->name().toLocal8Bit();
+        hw_device = Json::fromObject({{
+            "device", QJsonObject({
+                { "name", name.constData() },
+                { "supports_arbitrary_scripts", true },
+                { "supports_low_r", false },
+                { "supports_liquid", 1 }
+            })
+        }});
+
+        m_wallet = new Wallet();
+        m_wallet->setNetwork(m_network);
+
+        login();
+    });
+    connect(cmd, &Command::error, [this] {
+        QTimer::singleShot(1000, this, &LedgerLoginController::initialize);
+    });
+    cmd->exec();
 }
 
 void LedgerLoginController::login()
 {
+    m_progress = 1;
+    emit progressChanged(m_progress);
+
     auto log_level = QString::fromLocal8Bit(qgetenv("GREEN_GDK_LOG_LEVEL"));
     if (log_level.isEmpty()) log_level = "info";
 
@@ -924,6 +968,9 @@ void LedgerLoginController::login2()
                                     m_wallet->setSession();
                                     WalletManager::instance()->addWallet(m_wallet);
 
+                                    m_progress = 2;
+                                    emit progressChanged(m_progress);
+
                                     auto w = m_wallet;
                                     connect(m_device, &QObject::destroyed, [w] {
                                         WalletManager::instance()->removeWallet(w);
@@ -945,7 +992,15 @@ void LedgerLoginController::login2()
 
 Device::Type Device::typefromVendorAndProduct(uint32_t vendor_id, uint32_t product_id)
 {
-    return Unknown;
+    if (vendor_id == LEDGER_VENDOR_ID) {
+        if (product_id == 0x0001 || product_id & 0x1000) {
+            return Device::LedgerNanoS;
+        }
+        if (product_id == 0x0004 || product_id & 0x4000) {
+            return Device::LedgerNanoX;
+        }
+    }
+    return Device::Unknown;
 }
 
 

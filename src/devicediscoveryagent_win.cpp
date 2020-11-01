@@ -3,6 +3,7 @@
 #ifdef Q_OS_WIN
 
 #include "device.h"
+#include "devicediscoveryagent.h"
 #include "devicemanager.h"
 
 #include <QDebug>
@@ -21,7 +22,9 @@ extern "C" {
 #include <winusb.h>
 }
 
-DeviceDiscoveryAgentPrivate::DeviceDiscoveryAgentPrivate() {
+DeviceDiscoveryAgentPrivate::DeviceDiscoveryAgentPrivate(DeviceDiscoveryAgent* q)
+    : q(q)
+{
     QCoreApplication::instance()->installNativeEventFilter(this);
 
     HWND wnd = (HWND) QGuiApplication::topLevelWindows().at(0)->winId();
@@ -134,7 +137,9 @@ void DeviceDiscoveryAgentPrivate::addDevice(const QString& id, HANDLE handle)
     HIDD_ATTRIBUTES attrib;
     attrib.Size = sizeof(HIDD_ATTRIBUTES);
     if (!HidD_GetAttributes(handle, &attrib)) return;
-    if (attrib.VendorID != 0x2C97 && (attrib.ProductID != 0x0001 || attrib.ProductID != 0x0004)) return;
+
+    Device::Type device_type = Device::typefromVendorAndProduct(attrib.VendorID, attrib.ProductID);
+    if (device_type == Device::Unknown) return;
 
     PHIDP_PREPARSED_DATA preparsed_data;
     if (!HidD_GetPreparsedData(handle, &preparsed_data)) return;
@@ -150,12 +155,12 @@ void DeviceDiscoveryAgentPrivate::addDevice(const QString& id, HANDLE handle)
     DevicePrivateImpl* impl = new DevicePrivateImpl;
     impl->id = id;
     impl->handle = handle;
+    impl->m_type = device_type;
     memset(&impl->ol, 0, sizeof(impl->ol));
     impl->ol.hEvent = CreateEvent(NULL, FALSE, FALSE /*initial state f=nonsignaled*/, NULL);
 
     m_devices.insert(id, impl);
-    //device->setObjectName(id);
-    auto d = new Device(impl);
+    auto d = new Device(impl, q);
 
     auto t = new QTimer(d);
     QObject::connect(t, &QTimer::timeout, [impl, t] {
@@ -190,24 +195,9 @@ void DeviceDiscoveryAgentPrivate::addDevice(const QString& id, HANDLE handle)
         Q_ASSERT(bytes_read == 65);
         impl->inputReport(QByteArray::fromRawData(impl->buf + 1, 64));
     });
+    t->start(10);
 
-    QTimer::singleShot(200, d, [this, impl, d, id, t] {
-        //manager->exchange(handle, new GetFirmwareCommand);
-        // TODO:
-        // device->setAppName(QString::fromLocal8Bit(name, name_length));
-        auto cmd = new GetAppNameCommand(d);
-        impl->exchange(cmd);
-        QObject::connect(cmd, &Command::finished, [this, impl, cmd, d, id] {
-            d->setAppName(cmd->m_name);
-            if (d->appName().startsWith("OLOS")) {
-                m_devices.remove(id);
-                d->deleteLater();
-            } else {
-                DeviceManager::instance()->addDevice(d);
-            }
-        });
-        t->start(10);
-    });
+    DeviceManager::instance()->addDevice(d);
 }
 
 QList<QByteArray> transport(const QByteArray& data) {

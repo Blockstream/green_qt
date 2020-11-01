@@ -1,3 +1,4 @@
+#include "devicediscoveryagent.h"
 #include "devicediscoveryagent_macos.h"
 
 #ifdef Q_OS_MAC
@@ -48,18 +49,29 @@ static QString DeviceGetPropertyString(IOHIDDeviceRef handle, CFStringRef key)
 
 static void DeviceMatchingCallback(void* context, IOReturn /* result */, void* /* sender */, IOHIDDeviceRef handle)
 {
+    auto agent = static_cast<DeviceDiscoveryAgentPrivate*>(context);
+    agent->deviceMaching(handle);
+}
+
+void DeviceDiscoveryAgentPrivate::deviceMaching(IOHIDDeviceRef handle)
+{
+    // Check if device is already registered
+    // Ledger Nano S happens to be enumerated twice with same kIOHIDUniqueIDKey property
+    const int32_t unique_id = DeviceGetPropertyInt32(handle, CFSTR(kIOHIDUniqueIDKey));
+    if (m_device_unique_ids.contains(unique_id)) return;
+    m_device_unique_ids.insert(unique_id);
+
+
     auto vendor_id = DeviceGetPropertyInt32(handle, CFSTR(kIOHIDVendorIDKey));
     auto product_id = DeviceGetPropertyInt32(handle, CFSTR(kIOHIDProductIDKey));
-    //auto usage_page = DeviceGetPropertyInt32(handle, CFSTR(kIOHIDDeviceUsagePageKey));
+    Device::Type device_type = Device::typefromVendorAndProduct(vendor_id, product_id);
+    if (device_type == Device::Unknown) return;
 
-    qDebug() << vendor_id << product_id;
+    auto primary_usage_page = DeviceGetPropertyInt32(handle, CFSTR(kIOHIDPrimaryUsagePageKey));
+    if (primary_usage_page != 0xFFA0) return;
 
-    //CFSTR(kIOHIDVendorIDKey), CFSTR(kIOHIDVendorIDSourceKey), CFSTR(kIOHIDProductIDKey)
-    //IOHIDDeviceGetProperty(handle, CFSTR(kIOHIDVendorIDKey));
-    //((QString::fromCFString()
-
-    //CFNumberGetValue(static_cast<CFNumberRef>(ref), kCFNumberSInt32Type, &value);
-/*
+#if 0
+    // Inspect device properties
     for (auto key : { CFSTR(kIOHIDTransportKey), CFSTR(kIOHIDVendorIDKey), CFSTR(kIOHIDVendorIDSourceKey), CFSTR(kIOHIDProductIDKey), CFSTR(kIOHIDVersionNumberKey), CFSTR(kIOHIDManufacturerKey), CFSTR(kIOHIDProductKey), CFSTR(kIOHIDSerialNumberKey), CFSTR(kIOHIDCountryCodeKey), CFSTR(kIOHIDStandardTypeKey), CFSTR(kIOHIDLocationIDKey), CFSTR(kIOHIDDeviceUsageKey), CFSTR(kIOHIDDeviceUsagePageKey), CFSTR(kIOHIDDeviceUsagePairsKey), CFSTR(kIOHIDPrimaryUsageKey), CFSTR(kIOHIDPrimaryUsagePageKey), CFSTR(kIOHIDMaxInputReportSizeKey), CFSTR(kIOHIDMaxOutputReportSizeKey), CFSTR(kIOHIDMaxFeatureReportSizeKey), CFSTR(kIOHIDReportIntervalKey), CFSTR(kIOHIDSampleIntervalKey), CFSTR(kIOHIDBatchIntervalKey), CFSTR(kIOHIDRequestTimeoutKey), CFSTR(kIOHIDReportDescriptorKey), CFSTR(kIOHIDResetKey), CFSTR(kIOHIDKeyboardLanguageKey), CFSTR(kIOHIDAltHandlerIdKey), CFSTR(kIOHIDBuiltInKey), CFSTR(kIOHIDDisplayIntegratedKey), CFSTR(kIOHIDProductIDMaskKey), CFSTR(kIOHIDProductIDArrayKey), CFSTR(kIOHIDPowerOnDelayNSKey), CFSTR(kIOHIDCategoryKey), CFSTR(kIOHIDMaxResponseLatencyKey), CFSTR(kIOHIDUniqueIDKey), CFSTR(kIOHIDPhysicalDeviceUniqueIDKey), CFSTR(kIOHIDModelNumberKey) }) {
         CFTypeRef ref = IOHIDDeviceGetProperty(handle, key);
         if (!ref) {
@@ -77,42 +89,38 @@ static void DeviceMatchingCallback(void* context, IOReturn /* result */, void* /
             CFShow(ref);
         }
     }
-    */
+#endif
 
     auto device = new DevicePrivateImpl;
+    device->m_transport = Device::USB;
+    device->m_type = device_type;
+    device->m_unique_id = unique_id;
     device->handle = handle;
-    device->type = Device::LedgerNanoX;
-    auto d = new Device(device);
-
-    auto agent = static_cast<DeviceDiscoveryAgentPrivate*>(context);
-    agent->m_devices.insert(handle, device);
-
-    d->setVendor("Ledger");
-    d->setProduct("Nano X");
-    d->setInterface("USB");
-
-    QTimer::singleShot(200, d, [=] {
-        auto cmd = new GetAppNameCommand(d);
-        device->exchange(cmd);
-        QObject::connect(cmd, &Command::finished, [agent, handle, cmd, d] {
-            d->setAppName(cmd->m_name);
-            if (d->appName().startsWith("OLOS")) {
-                agent->m_devices.remove(handle);
-                d->deleteLater();
-            } else {
-                DeviceManager::instance()->addDevice(d);
-            }
-        });
+    m_devices.insert(handle, device);
+    QMetaObject::invokeMethod(q, [this, device] {
+        DeviceManager::instance()->addDevice(new Device(device, q));
     });
+//
+//        emit q->deviceConnected(new Device(device, q));
+//    }, Qt::QueuedConnection);
 }
 
+/*
+
+    QMetaObject::invokeMethod(q, [this, d] {
+        emit q->deviceConnected(d);
+    }, Qt::QueuedConnection);
+
+}
+*/
 
 static void DeviceRemovalCallback(void* context, IOReturn /* result */, void* /* sender */, IOHIDDeviceRef handle)
 {
-    qDebug() << "DEVICE REMOVED";
     auto agent = static_cast<DeviceDiscoveryAgentPrivate*>(context);
     auto device = agent->m_devices.take(handle);
     if (!device) return;
+    qDebug() << "DEVICE REMOVED";
+    agent->m_device_unique_ids.remove(device->m_unique_id);
     DeviceManager::instance()->removeDevice(device->q);
     device->q->deleteLater();
 }
@@ -132,7 +140,9 @@ static void hid_report_callback(void *context, IOReturn result, void *sender, IO
     }
 }
 
-DeviceDiscoveryAgentPrivate::DeviceDiscoveryAgentPrivate() {
+DeviceDiscoveryAgentPrivate::DeviceDiscoveryAgentPrivate(DeviceDiscoveryAgent* q)
+    : q(q)
+{
     CFMutableArrayRef multiple = CFArrayCreateMutable(kCFAllocatorDefault, 0, &kCFTypeArrayCallBacks);
     CFMutableDictionaryRef dict;
     dict = createMatchingDictionary(LEDGER_VENDOR_ID, LEDGER_NANOS_ID, 0xFFA0);
@@ -141,14 +151,11 @@ DeviceDiscoveryAgentPrivate::DeviceDiscoveryAgentPrivate() {
     dict = createMatchingDictionary(LEDGER_VENDOR_ID, LEDGER_NANOX_ID, 0xFFA0);
     CFArrayAppendValue(multiple, dict);
     CFRelease(dict);
-    dict = createMatchingDictionary(LEDGER_VENDOR_ID, LEDGER_NANOS_ID, 0xFFA0);
-    CFArrayAppendValue(multiple, dict);
-    CFRelease(dict);
 
     m_manager = IOHIDManagerCreate(kCFAllocatorDefault, kIOHIDManagerOptionNone);
     IOHIDManagerSetDeviceMatching(m_manager, NULL);
     IOHIDManagerScheduleWithRunLoop(m_manager, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
-    IOHIDManagerSetDeviceMatchingMultiple(m_manager, multiple);
+    //IOHIDManagerSetDeviceMatchingMultiple(m_manager, multiple);
     IOHIDManagerRegisterDeviceMatchingCallback(m_manager, DeviceMatchingCallback, this);
     IOHIDManagerRegisterDeviceRemovalCallback(m_manager, DeviceRemovalCallback, this);
     IOHIDManagerRegisterInputReportCallback(m_manager, hid_report_callback, this);
@@ -191,7 +198,7 @@ void DevicePrivateImpl::exchange(DeviceCommand* command)
             //qDebug() << "send packet " << packet.toHex();
             auto res = IOHIDDeviceSetReport(handle, kIOHIDReportTypeOutput, 0, (const uint8_t*) packet.constData(), packet.size());
             if (res != kIOReturnSuccess) {
-                qDebug() << "FAILED";
+                qDebug() << __PRETTY_FUNCTION__ << "FAILED";
                 return;
             }
         }
@@ -220,7 +227,7 @@ void DevicePrivateImpl::inputReport(const QByteArray& data)
             //qDebug() << "send packet " << packet.toHex();
             auto res = IOHIDDeviceSetReport(handle, kIOHIDReportTypeOutput, 0, (const uint8_t*) packet.constData(), packet.size());
             if (res != kIOReturnSuccess) {
-                qDebug() << "FAILED";
+                qDebug() << __PRETTY_FUNCTION__ << "FAILED";
                 delete command;
                 return;
             }

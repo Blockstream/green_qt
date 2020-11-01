@@ -33,6 +33,13 @@ Network *Resolver::network() const
     return wallet()->network();
 }
 
+void Resolver::setFailed(bool failed)
+{
+    if (m_failed == failed) return;
+    m_failed = failed;
+    emit failedChanged(m_failed);
+}
+
 TwoFactorResolver::TwoFactorResolver(Handler* handler, const QJsonObject& result)
     : Resolver(handler, result)
     , m_method(result.value("method").toString())
@@ -256,6 +263,9 @@ void SignLiquidTransactionResolver::resolve()
             { "abfs", abfs },
             { "vbfs", vbfs }
         });
+    });
+    connect(command, &Command::error, [this] {
+        setFailed(true);
     });
     command->exec();
 }

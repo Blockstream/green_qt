@@ -61,7 +61,7 @@ public:
     void exec() override {
         if (m_commands.isEmpty()) return emit finished();
         auto next = m_commands.takeFirst();
-        connect(next, &Command::finished, this, &Command::exec);
+        connect(next, &Command::finished, this, &Command::exec, Qt::QueuedConnection);
         connect(next, &Command::error, this, &Command::error);
         next->exec();
     }
@@ -227,6 +227,7 @@ public:
     QList<QPair<QJsonObject, QByteArray>> outputLiquidBytes();
     int exchange_count{0};
     int exchange_total{0};
+    CommandBatch* m_batch;
 signals:
     void progressChanged(int progress, int total);
     void message(const QJsonObject& message);
@@ -236,28 +237,31 @@ class DevicePrivate;
 class Device : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString interface READ interface NOTIFY interfaceChanged)
-    Q_PROPERTY(QString vendor READ vendor NOTIFY vendorChanged)
-    Q_PROPERTY(QString product READ product NOTIFY productChanged)
-    Q_PROPERTY(QString version READ version NOTIFY versionChanged)
-
+    Q_PROPERTY(Transport transport READ transport CONSTANT)
     Q_PROPERTY(Type type READ type CONSTANT)
+    Q_PROPERTY(QString name READ name CONSTANT)
     Q_PROPERTY(bool busy READ isBusy NOTIFY busyChanged)
     Q_PROPERTY(QString appName READ appName WRITE setAppName NOTIFY appNameChanged)
     QML_ELEMENT
     QML_UNCREATABLE("Devices are instanced by DeviceDiscoveryAgent.")
 public:
+    enum Transport {
+        USB,
+    };
     enum Type {
         Unknown,
         LedgerNanoS,
-        LedgerNanoX
+        LedgerNanoX,
     };
+    Q_ENUM(Transport)
     Q_ENUM(Type)
 
     explicit Device(DevicePrivate* d, QObject* parent = nullptr);
     ~Device();
     
+    Transport transport() const;
     Type type() const;
+    QString name() const;
     bool isBusy() const;
     QString appName() const;
     void setAppName(const QString& app_name);
@@ -280,50 +284,46 @@ public:
     GetBlindingKeyCommand *getBlindingKey(const QString &script);
     GetBlindingNonceCommand *getBlindingNonce(const QByteArray& pubkey, const QByteArray& script);
 
-    QString interface() const { return m_interface; }
-    QString vendor() const { return m_vendor; }
-    QString product() const { return m_product; }
-    QString version() const { return m_version; }
 
 signals:
     void appNameChanged();
     void busyChanged();
 
-    void interfaceChanged(const QString& interface);
-    void vendorChanged(const QString& vendor);
-    void productChanged(const QString& product);
-    void versionChanged(const QString& version);
-
-public:
-    void setInterface(const QString& interface) { if (m_interface == interface) return; m_interface = interface; emit interfaceChanged(m_interface); }
-    void setVendor(const QString& vendor) { if (m_vendor == vendor) return; m_vendor = vendor; emit vendorChanged(m_vendor); }
-    void setProduct(const QString& product) { if (m_product == product) return; m_product = product; emit productChanged(m_product); }
-    void setVersion(const QString& version) { if (m_version == version) return; m_version = version; emit versionChanged(m_version); }
-
 private:
     DevicePrivate* const d;
-    QString m_interface;
-    QString m_vendor;
-    QString m_product;
-    QString m_version;
 };
 
 class LedgerLoginController : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(Device* device READ device WRITE setDevice NOTIFY deviceChanged)
+    Q_PROPERTY(qreal progress READ progress NOTIFY progressChanged)
+    QML_ELEMENT
 public:
-    LedgerLoginController(Device* device, Network* network);
+    LedgerLoginController(QObject* parent = nullptr);
+    Device* device() const { return m_device; }
+    qreal progress() const { return m_progress; }
+    void setDevice(Device* device);
     void login();
     void login2();
+    static Network *networkFromAppName(const QString &app_name);
+private slots:
+    void initialize();
+signals:
+    void deviceChanged(Device* device);
+    void progressChanged(qreal progress);
 private:
-    Device* const m_device;
-    Network* const m_network;
+    Device* m_device{nullptr};
+    Network* m_network{nullptr};
     GA_json* hw_device;
     Wallet* m_wallet{nullptr};
     GA_auth_handler* m_register_handler;
     GA_auth_handler* m_login_handler;
     QJsonArray m_paths;
     QJsonArray m_xpubs;
+    qreal m_progress{0};
+
+    QTimer* m_timer{nullptr};
 };
 
 #endif // GREEN_DEVICE_H
