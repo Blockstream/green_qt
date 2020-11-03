@@ -1,4 +1,5 @@
 #include <QApplication>
+#include <QCommandLineParser>
 #include <QFontDatabase>
 #include <QIcon>
 #include <QQmlApplicationEngine>
@@ -25,6 +26,10 @@ Q_IMPORT_PLUGIN(QWindowsIntegrationPlugin);
 Q_IMPORT_PLUGIN(QCocoaIntegrationPlugin);
 #endif
 
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
 int main(int argc, char *argv[])
 {
     QCoreApplication::setApplicationName("Green");
@@ -35,6 +40,23 @@ int main(int argc, char *argv[])
     QCoreApplication::setApplicationVersion(QT_STRINGIFY(VERSION));
 
     QApplication app(argc, argv);
+
+    QCommandLineParser parser;
+    parser.addHelpOption();
+    parser.addVersionOption();
+    parser.addOption(QCommandLineOption("printtoconsole"));
+    parser.process(app);
+
+    if (parser.isSet("printtoconsole")) {
+#ifdef _WIN32
+        if (AttachConsole(ATTACH_PARENT_PROCESS)) {
+            freopen("CONOUT$", "w", stdout);
+            freopen("CONOUT$", "w", stderr);
+        }
+#else
+        Q_UNIMPLEMENTED();
+#endif
+    }
 
     QApplication::setWindowIcon(QIcon(":/png/icon-512-x-512-2-x.png"));
 
