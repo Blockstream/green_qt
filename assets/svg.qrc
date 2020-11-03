@@ -8,5 +8,6 @@
         <file>svg/transactions.svg</file>
         <file>svg/recovery.svg</file>
         <file>svg/leftbar.svg</file>
+        <file>svg/ledger_nano_x.svg</file>
     </qresource>
 </RCC>
