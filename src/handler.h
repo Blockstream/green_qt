@@ -14,6 +14,7 @@ class Wallet;
 class Handler : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(Wallet* wallet READ wallet CONSTANT)
     Q_PROPERTY(QJsonObject result READ result NOTIFY resultChanged)
     QML_ELEMENT
     QML_UNCREATABLE("Handler is an abstract base class.")
@@ -21,6 +22,7 @@ class Handler : public QObject
 public:
     Handler(Wallet* wallet);
     virtual ~Handler();
+    Wallet* wallet() const { return m_wallet; }
     void exec();
     const QJsonObject& result() const { Q_ASSERT(!m_result.empty()); return m_result; }
 public slots:

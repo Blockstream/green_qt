@@ -14,6 +14,8 @@ class Wallet;
 class Resolver : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(Handler* handler READ handler CONSTANT)
+    Q_PROPERTY(bool failed READ failed NOTIFY failedChanged)
     QML_ELEMENT
 public:
     Resolver(Handler* handler, const QJsonObject& result);
