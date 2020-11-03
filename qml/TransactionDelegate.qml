@@ -55,7 +55,7 @@ ItemDelegate {
             Label {
                 color: tx.type === 'incoming' ? Material.accentColor : Material.foreground
                 Layout.alignment: Qt.AlignRight
-                text: transaction.amounts.length > 1 ? qsTrId('id_multiple_assets') : transaction.amounts[0].formatAmount(wallet.settings.unit)
+                text: transaction.amounts.length > 1 ? qsTrId('id_multiple_assets') : transaction.amounts[0].formatAmount(true, wallet.settings.unit)
             }
 
             Label {

@@ -661,8 +661,11 @@ QString Wallet::formatAmount(qint64 amount, bool include_ticker) const
 QString Wallet::formatAmount(qint64 amount, bool include_ticker, const QString& unit) const
 {
     Q_ASSERT(m_network);
-    if (unit.isEmpty()) return {};
-    auto str = convert({{ "satoshi", amount }}).value(unit == "\u00B5BTC" ? "ubtc" : unit.toLower()).toString();
+    const auto effective_unit = unit.isEmpty() ? m_settings.value("unit").toString() : unit;
+    if (effective_unit.isEmpty()) {
+        return {};
+    }
+    auto str = convert({{ "satoshi", amount }}).value(effective_unit == "\u00B5BTC" ? "ubtc" : effective_unit.toLower()).toString();
     auto val = str.toDouble();
     if (val == ((int64_t) val)) {
         str = QLocale::system().toString(val, 'f', 0);
@@ -671,7 +674,7 @@ QString Wallet::formatAmount(qint64 amount, bool include_ticker, const QString& 
         str.remove(QRegExp("\\.?0+$"));
     }
     if (include_ticker) {
-        str += (m_network->isLiquid() ? " L-" : " ") + unit;
+        str += (m_network->isLiquid() ? " L-" : " ") + effective_unit;
     }
     return str;
 }
