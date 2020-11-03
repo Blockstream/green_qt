@@ -796,7 +796,3 @@ void Wallet::setLocked(bool locked)
     emit lockedChanged(m_locked);
 }
 
-QString Wallet::networkName() const
-{
-    return m_network ? m_network->name() : "";
-}

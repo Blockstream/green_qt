@@ -56,7 +56,6 @@ private:
     Q_PROPERTY(QJsonObject config READ config NOTIFY configChanged)
     Q_PROPERTY(bool busy READ isBusy NOTIFY busyChanged)
     Q_PROPERTY(Account* currentAccount READ currentAccount WRITE setCurrentAccount NOTIFY currentAccountChanged)
-    Q_PROPERTY(QString networkName READ networkName NOTIFY networkChanged)
     Q_PROPERTY(Device* device READ device CONSTANT)
 
 public:
@@ -160,7 +159,6 @@ private:
     void updateCurrencies();
 
     Account* m_current_account{nullptr};
-    QString m_networkName;
 
 public:
     QString m_id;
@@ -192,7 +190,6 @@ public:
     void save();
     Account* currentAccount() const { return m_current_account; }
     void setCurrentAccount(Account* account);
-    QString networkName() const;
     Device* m_device{nullptr};
 };
 
