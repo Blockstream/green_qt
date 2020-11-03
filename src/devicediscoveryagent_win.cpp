@@ -169,7 +169,6 @@ void DeviceDiscoveryAgentPrivate::addDevice(const QString& id, HANDLE handle)
             memset(impl->buf, 0, 65);
             ResetEvent(impl->ol.hEvent);
             DWORD bytes_read, bytes_read_1;
-            qDebug("reading");
             auto r = ReadFile(impl->handle, impl->buf, 65, &bytes_read_1, &impl->ol);
             if (!r && GetLastError() != ERROR_IO_PENDING) {
                 CancelIo(impl->handle);
@@ -179,19 +178,15 @@ void DeviceDiscoveryAgentPrivate::addDevice(const QString& id, HANDLE handle)
             }
         }
 
-        qDebug("before wait for single object");
         auto res = WaitForSingleObject(impl->ol.hEvent, 0);
     		if (res != WAIT_OBJECT_0) {
-            qDebug("nothing... see you soon");
             return;
         }
 
         impl->reading = false;
         DWORD bytes_read;
-        qDebug("before getoverlapped result");
         GetOverlappedResult(impl->handle, &impl->ol, &bytes_read, TRUE/*wait*/);
 
-        qDebug() << "read!";
         Q_ASSERT(bytes_read == 65);
         impl->inputReport(QByteArray::fromRawData(impl->buf + 1, 64));
     });
