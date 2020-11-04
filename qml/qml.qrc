@@ -74,5 +74,6 @@
         <file>NLockTimeDialog.qml</file>
         <file>CopyableLabel.qml</file>
         <file>DeviceImage.qml</file>
+        <file>SignLiquidTransactionResolverView.qml</file>
     </qresource>
 </RCC>
