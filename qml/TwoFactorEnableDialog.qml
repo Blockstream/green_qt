@@ -96,7 +96,7 @@ ControllerDialog {
                 Layout.fillHeight: true
                 text: {
                     const name = wallet.device ? wallet.device.name : wallet.name
-                    const label = name.includes(' ') ? name + ' @ Green' : name + '@Green'
+                    const label = name + ' @ Green ' + wallet.network.name
                     const secret = wallet.config[method].data.split('=')[1]
                     return 'otpauth://totp/' + escape(label) + '?secret=' + secret
                 }
