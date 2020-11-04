@@ -427,7 +427,7 @@ QList<QPair<QJsonObject, QByteArray>> SignLiquidTransactionCommand::outputLiquid
 
     for (int i = 0; i < m_outputs.size(); ++i) {
         const auto output = m_outputs.at(i).toObject();
-        qDebug() << output;
+//        qDebug() << output;
         const auto script = ParseByteArray(output.value("script"));
         if (script.size() == 0) {
             QByteArray data;
@@ -503,10 +503,10 @@ void SignLiquidTransactionCommand::finalizeLiquidInputFull()
         QByteArray data(m_inputs.size(), 0);
         auto c = exchange(apdu(BTCHIP_CLA, BTCHIP_INS_GET_LIQUID_ISSUANCE_INFORMATION, 0x80, 0x00, data));
         connect(c, &Command::finished, [c] {
-            qDebug() << "RECEIVE BTCHIP_INS_GET_LIQUID_ISSUANCE_INFORMATION" << c->m_response.toHex();
+//            qDebug() << "RECEIVE BTCHIP_INS_GET_LIQUID_ISSUANCE_INFORMATION" << c->m_response.toHex();
         });
         connect(c, &Command::error, [i] {
-            qDebug() << "RECEIVE BTCHIP_INS_GET_LIQUID_ISSUANCE_INFORMATION" << "!!!!! ERROR !!!!!";
+//            qDebug() << "RECEIVE BTCHIP_INS_GET_LIQUID_ISSUANCE_INFORMATION" << "!!!!! ERROR !!!!!";
         });
     }
 
@@ -610,7 +610,6 @@ SignTransactionCommand* Device::signTransaction(const QJsonObject& required_data
 
 void Device::finalizeInputFull(const QByteArray& data)
 {
-    qDebug() << "finalizeInputFull";
     QList<QByteArray> datas;
     QByteArray x;
     x.append(uint8_t(0));
@@ -624,7 +623,7 @@ void Device::finalizeInputFull(const QByteArray& data)
 
     for (int i = 0; i < datas.size(); ++i) {
         uint8_t p1 = i == 0 ? 0xff : (i == datas.size() - 1 ? 0x80 : 0x00);
-        qDebug() << "  " << i << p1 << data.toHex();
+//        qDebug() << "  " << i << p1 << data.toHex();
         auto c1 = exchange(apdu(BTCHIP_CLA, BTCHIP_INS_HASH_INPUT_FINALIZE_FULL, p1, 0x00, datas.at(i)));
         connect(c1, &Command::finished, [i, c1, datas] {
         });
@@ -877,7 +876,6 @@ void LedgerLoginController::login()
     connect(batch, &Command::finished, [this] {
         Q_ASSERT(m_xpubs.size() == m_paths.size());
         QJsonObject code= {{ "xpubs", m_xpubs }};
-        qDebug() << "THIS IS IT" << code << m_paths;
         auto _code = QJsonDocument(code).toJson();
         GA_auth_handler_resolve_code(m_register_handler, _code.constData());
         GA_auth_handler_call(m_register_handler);
@@ -916,7 +914,7 @@ void LedgerLoginController::login2()
                 QJsonObject code= {{ "xpubs", m_xpubs }};
                 auto _code = QJsonDocument(code).toJson();
                 GA_auth_handler_resolve_code(m_login_handler, _code.constData());
-                qDebug() << GA::auth_handler_get_result(m_login_handler);
+                GA::auth_handler_get_result(m_login_handler);
                 GA_auth_handler_call(m_login_handler);
                 auto result = GA::auth_handler_get_result(m_login_handler);
                 auto required_data = result.value("required_data").toObject();
@@ -1202,9 +1200,6 @@ QByteArray SignMessageCommand::payload() const
         for (auto p : m_path) s << uint32_t(p);
         s << uint8_t(0) << uint8_t(m_message.length());
         s.writeRawData(m_message.constData(), m_message.size());
-        //qDebug() << "SIGN MESSAGE" << m_path << m_message;
-        //qDebug() << "SIGN MESSAGE" << m_path << data.toHex();
-        //qDebug() << "SIGN MESSAGE" << m_message.toHex();
         return apdu(BTCHIP_CLA, BTCHIP_INS_SIGN_MESSAGE, 0x0, 1, data);
     }
     Q_ASSERT(m_message.isEmpty() && m_path.isEmpty());

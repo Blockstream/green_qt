@@ -54,7 +54,7 @@ bool DeviceDiscoveryAgentPrivate::nativeEventFilter(const QByteArray& eventType,
         if (QUuid(hid_class_guid) != QUuid(notification->dbcc_classguid)) return false;
         auto id = QString::fromWCharArray(notification->dbcc_name).toLower();
         if (filter(id)) return false;
-        qDebug() << "DBT_DEVICEARRIVAL ID=" << id;
+        // qDebug() << "DBT_DEVICEARRIVAL ID=" << id;
         addDevice(id);
     } else if (msg->wParam == DBT_DEVICEREMOVECOMPLETE) {
         PDEV_BROADCAST_HDR hdr = (PDEV_BROADCAST_HDR) msg->lParam;
@@ -63,7 +63,7 @@ bool DeviceDiscoveryAgentPrivate::nativeEventFilter(const QByteArray& eventType,
         auto id = QString::fromWCharArray(notification->dbcc_name).toLower();
         auto device = m_devices.take(id);
         if (!device) return false;
-        qDebug() << "DBT_DEVICEREMOVECOMPLETE ID=" << id;
+        // qDebug() << "DBT_DEVICEREMOVECOMPLETE ID=" << id;
         DeviceManager::instance()->removeDevice(device->q);
         device->q->deleteLater();
     }
@@ -124,7 +124,7 @@ void DeviceDiscoveryAgentPrivate::addDevice(const QString& id)
             FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
                 NULL, error, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
                 buf, (sizeof(buf) / sizeof(wchar_t)), NULL);
-            qDebug() << id << error << QString::fromWCharArray(buf);
+            // qDebug() << id << error << QString::fromWCharArray(buf);
         }
         return;
     }
@@ -149,8 +149,8 @@ void DeviceDiscoveryAgentPrivate::addDevice(const QString& id, HANDLE handle)
     if (status != HIDP_STATUS_SUCCESS) return;
     if (capabilities.UsagePage != 0xFFA0) return;
 
-    qDebug() << "OutputReportByteLength=" << capabilities.OutputReportByteLength;
-    qDebug() << "InputReportByteLength=" << capabilities.InputReportByteLength;
+    // qDebug() << "OutputReportByteLength=" << capabilities.OutputReportByteLength;
+    // qDebug() << "InputReportByteLength=" << capabilities.InputReportByteLength;
 
     DevicePrivateImpl* impl = new DevicePrivateImpl;
     impl->id = id;
@@ -221,19 +221,19 @@ void _write(HANDLE handle, const QByteArray& report)
 	BOOL res;
 	OVERLAPPED ol;
 	memset(&ol, 0, sizeof(ol));
-  qDebug() << "   packet:" << report.toHex();
+  // qDebug() << "   packet:" << report.toHex();
   WriteFile(handle, report.constData(), report.size(), NULL, &ol);
   GetOverlappedResult(handle, &ol, &bytes_written, TRUE/*wait*/);
-  qDebug() << "    - packet:" << report.toHex() << bytes_written;
+  // qDebug() << "    - packet:" << report.toHex() << bytes_written;
 }
 
 void DevicePrivateImpl::exchange(DeviceCommand *command)
 {
-    qDebug() << "EXCHANGE" << queue.empty();
+    // qDebug() << "EXCHANGE" << queue.empty();
     const bool send = queue.empty();
     if (send) {
         const auto payload = command->payload();
-        qDebug() << "send " << payload.toHex();
+        // qDebug() << "send " << payload.toHex();
         for (const auto& packet : transport(payload)) {
             QByteArray report;
             report.append(uint8_t(0));
@@ -252,7 +252,7 @@ void DevicePrivateImpl::inputReport(const QByteArray& data)
 {
     //qDebug() << "read hid" << data.toHex();
     if (queue.empty()) {
-        qDebug() << "READ UNKNOWN REPORT" << data.toHex();
+        // qDebug() << "READ UNKNOWN REPORT" << data.toHex();
         return;
     }
     Q_ASSERT(!queue.empty());
@@ -262,7 +262,7 @@ void DevicePrivateImpl::inputReport(const QByteArray& data)
     if (r == 2) return;
     if (r == 1) qWarning("command failed");
     queue.dequeue();
-    qDebug() << "input report done, queue size = " << queue.size();
+    // qDebug() << "input report done, queue size = " << queue.size();
     if (!queue.empty()) {
         //qDebug() << "sending next command";
         command = queue.head();
