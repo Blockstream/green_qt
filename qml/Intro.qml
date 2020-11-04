@@ -23,5 +23,16 @@ Item {
             flat: true
             action: restore_wallet_action
         }
+        Label {
+            visible: device_list_model.rowCount === 0
+            text: 'CONNECT YOUR LEDGER NANO DEVICE TO START USING IT'
+            padding: 16
+            background: Rectangle {
+                color: Qt.lighter('#141a21', 1.5)
+                border.width: 1
+                border.color: Qt.lighter('#141a21', 2)
+                radius: height / 2
+            }
+        }
     }
 }
