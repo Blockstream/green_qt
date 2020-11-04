@@ -747,8 +747,8 @@ void Wallet::setSession()
     setAuthentication(Authenticated);
     updateSettings();
     updateCurrencies();
-    reload();
     updateConfig();
+    reload();
 }
 
 void Wallet::setSettings(const QJsonObject& settings)
