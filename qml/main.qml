@@ -415,36 +415,50 @@ ApplicationWindow {
             id: delegate
             required property Device device
             anchors.right: parent.right
-            visible: controller.progress < 2
+            visible: controller.progress < 1
+            leftPadding: 16
+            rightPadding: 16
+            bottomPadding: 8
+            topPadding: 8
+            width: 360
+
             LedgerLoginController {
                 id: controller
                 device: delegate.device
             }
             background: Rectangle {
-                color: 'white'
-                opacity: 0.1
-                radius: 8
+                color: Qt.lighter('#141a21', delegate.hovered ? 2 : 1.5)
+                border.width: 1
+                border.color: Qt.lighter('#141a21', delegate.hovered ? 2.5 : 2)
+                radius: height / 2
             }
-            contentItem: Column {
-                spacing: 8
+            contentItem: RowLayout {
                 DeviceImage {
                     device: delegate.device
-                    height: 16
-                    anchors.horizontalCenter: parent.horizontalCenter
+                    height: 24
+                    Layout.maximumHeight: 24
                 }
                 Label {
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    text: delegate.device.name
+                    visible: !controller.network
+                    opacity: 0.5
+                    font.pixelSize: 12
+                    font.capitalization: Font.AllUppercase
+                    text: 'SELECT APP ON ' + controller.device.name
+                    horizontalAlignment: Label.AlignHCenter
+                    Layout.fillWidth: true
                 }
-//                Label {
-//                    visible: controller.progress === 0
-//                    anchors.horizontalCenter: parent.horizontalCenter
-//                    text: 'SELECT APP ON DEVICE'
-//                }
+                Image {
+                    visible: controller.network
+                    sourceSize.width: 24
+                    sourceSize.height: 24
+                    source: controller.network ? icons[controller.network.id] : ''
+                }
                 ProgressBar {
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    indeterminate: true
-                    visible: controller.progress > 0
+                    indeterminate: controller.indeterminate
+                    value: controller.progress
+                    visible: controller.network
+                    Layout.fillWidth: true
+                    Behavior on value { NumberAnimation { duration: 300; easing.type: Easing.OutCubic } }
                 }
             }
         }
