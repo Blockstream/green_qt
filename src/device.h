@@ -297,11 +297,15 @@ class LedgerLoginController : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(Device* device READ device WRITE setDevice NOTIFY deviceChanged)
+    Q_PROPERTY(Network* network READ network NOTIFY networkChanged)
+    Q_PROPERTY(bool indeterminate READ indeterminate NOTIFY progressChanged)
     Q_PROPERTY(qreal progress READ progress NOTIFY progressChanged)
     QML_ELEMENT
 public:
     LedgerLoginController(QObject* parent = nullptr);
     Device* device() const { return m_device; }
+    Network* network() const { return m_network; }
+    bool indeterminate() const { return m_progress == 0; }
     qreal progress() const { return m_progress; }
     void setDevice(Device* device);
     void login();
@@ -311,6 +315,7 @@ private slots:
     void initialize();
 signals:
     void deviceChanged(Device* device);
+    void networkChanged(Network* network);
     void progressChanged(qreal progress);
 private:
     Device* m_device{nullptr};

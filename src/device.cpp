@@ -809,6 +809,7 @@ void LedgerLoginController::initialize()
     auto cmd = new GetAppNameCommand(m_device);
     connect(cmd, &Command::finished, [this, cmd] {
         m_network = LedgerLoginController::networkFromAppName(cmd->m_name);
+        emit networkChanged(m_network);
         if (!m_network) {
             Q_ASSERT(cmd->m_name.indexOf("OLOS") >= 0);
             QTimer::singleShot(1000, this, &LedgerLoginController::initialize);
@@ -838,9 +839,6 @@ void LedgerLoginController::initialize()
 
 void LedgerLoginController::login()
 {
-    m_progress = 1;
-    emit progressChanged(m_progress);
-
     auto log_level = QString::fromLocal8Bit(qgetenv("GREEN_GDK_LOG_LEVEL"));
     if (log_level.isEmpty()) log_level = "info";
 
@@ -911,20 +909,16 @@ void LedgerLoginController::login2()
 
     for (auto path : m_paths) {
         auto cmd = new GetWalletPublicKeyCommand(m_device, m_network, ParsePath(path));
-        connect(cmd, &Command::finished, [this, cmd] {
-            qDebug() << "FINICHED GET PUBKEY" << cmd->m_xpub;
-
+        connect(cmd, &Command::finished, this, [this, cmd] {
             m_xpubs.append(cmd->m_xpub);
 
             if (m_xpubs.size() == m_paths.size()) {
                 QJsonObject code= {{ "xpubs", m_xpubs }};
                 auto _code = QJsonDocument(code).toJson();
-                qDebug() << "LOGIN RESOLVE CODE" << _code.constData();
                 GA_auth_handler_resolve_code(m_login_handler, _code.constData());
                 qDebug() << GA::auth_handler_get_result(m_login_handler);
                 GA_auth_handler_call(m_login_handler);
                 auto result = GA::auth_handler_get_result(m_login_handler);
-                qDebug() << "LOGIN RESULT AFTER CALL" << result;
                 auto required_data = result.value("required_data").toObject();
                 QByteArray message = required_data.value("message").toString().toLocal8Bit();
                 QVector<uint32_t> path = ParsePath(required_data.value("path"));
@@ -935,12 +929,10 @@ void LedgerLoginController::login2()
                         QJsonObject code = {{ "signature", QString::fromLocal8Bit(sign->signature.toHex()) }};
 
                         auto _code = QJsonDocument(code).toJson();
-                        qDebug() << "RESOLVE LOGIN CODE" << _code.constData();
-                        qDebug() << "GA_auth_handler_resolve_code" << GA_auth_handler_resolve_code(m_login_handler, _code.constData());
-                        qDebug() << "RESULT" << GA::auth_handler_get_result(m_login_handler);
-                        qDebug() << "GA_auth_handler_call" << GA_auth_handler_call(m_login_handler);
+                        GA_auth_handler_resolve_code(m_login_handler, _code.constData());
+                        GA::auth_handler_get_result(m_login_handler);
+                        GA_auth_handler_call(m_login_handler);
                         auto result = GA::auth_handler_get_result(m_login_handler);
-
 
                         Q_ASSERT(result.value("status").toString() == "resolve_code");
                         Q_ASSERT(result.value("action").toString() == "get_xpubs");
@@ -948,21 +940,24 @@ void LedgerLoginController::login2()
                         m_paths = result.value("required_data").toObject().value("paths").toArray();
                         m_xpubs = QJsonArray();
 
+                        m_progress = qreal(2) / qreal(m_paths.size() + 2);
+                        emit progressChanged(true);
+
                         for (auto path : m_paths) {
                             auto cmd = new GetWalletPublicKeyCommand(m_device, m_network, ParsePath(path));
                             connect(cmd, &Command::finished, [this, cmd] {
-                                qDebug() << "FINICHED GET PUBKEY" << cmd->m_xpub;
-
                                 m_xpubs.append(cmd->m_xpub);
+
+                                m_progress = qreal(m_xpubs.size() + 2) / qreal(m_paths.size() + 2);
+                                emit progressChanged(true);
 
                                 if (m_xpubs.size() == m_paths.size()) {
                                     QJsonObject code= {{ "xpubs", m_xpubs }};
                                     auto _code = QJsonDocument(code).toJson();
-                                    qDebug() << "RESOLVE CODE" << _code.constData();
                                     GA_auth_handler_resolve_code(m_login_handler, _code.constData());
-                                    qDebug() << GA::auth_handler_get_result(m_login_handler);
+                                    GA::auth_handler_get_result(m_login_handler);
                                     GA_auth_handler_call(m_login_handler);
-                                    qDebug() << GA::auth_handler_get_result(m_login_handler);
+                                    GA::auth_handler_get_result(m_login_handler);
 
                                     m_wallet->m_device = m_device;
                                     m_wallet->setSession();
