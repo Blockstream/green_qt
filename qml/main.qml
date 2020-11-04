@@ -161,7 +161,7 @@ ApplicationWindow {
                     onClicked: location = '/settings'
                 }
                 MenuItem {
-                    enabled: currentWallet && currentWallet.connection !== Wallet.Disconnected
+                    enabled: currentWallet && currentWallet.connection !== Wallet.Disconnected && !currentWallet.device
                     text: qsTrId('id_log_out')
                     onClicked: currentWallet.disconnect()
                 }
@@ -249,7 +249,7 @@ ApplicationWindow {
                         Menu {
                             id: wallet_menu
                             MenuItem {
-                                enabled: wallet.connection !== Wallet.Disconnected
+                                enabled: wallet.connection !== Wallet.Disconnected && !wallet.device
                                 text: qsTrId('id_log_out')
                                 onTriggered: wallet.disconnect()
                             }
