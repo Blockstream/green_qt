@@ -198,7 +198,7 @@ void DevicePrivateImpl::exchange(DeviceCommand* command)
             //qDebug() << "send packet " << packet.toHex();
             auto res = IOHIDDeviceSetReport(handle, kIOHIDReportTypeOutput, 0, (const uint8_t*) packet.constData(), packet.size());
             if (res != kIOReturnSuccess) {
-                qDebug() << __PRETTY_FUNCTION__ << "FAILED";
+                emit command->error();
                 return;
             }
         }
@@ -227,7 +227,7 @@ void DevicePrivateImpl::inputReport(const QByteArray& data)
             //qDebug() << "send packet " << packet.toHex();
             auto res = IOHIDDeviceSetReport(handle, kIOHIDReportTypeOutput, 0, (const uint8_t*) packet.constData(), packet.size());
             if (res != kIOReturnSuccess) {
-                qDebug() << __PRETTY_FUNCTION__ << "FAILED";
+                emit command->error();
                 delete command;
                 return;
             }
