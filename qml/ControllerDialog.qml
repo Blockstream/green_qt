@@ -163,7 +163,7 @@ WalletDialog {
 
     property Component doneComponent: WizardPage {
         actions: Action {
-            text: 'OK'
+            text: qsTrId('id_ok')
             onTriggered: controller_dialog.accept()
         }
         Column {

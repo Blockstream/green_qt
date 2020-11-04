@@ -31,7 +31,7 @@ Column {
         opacity: resolver.failed ? 1 : 0
         Behavior on opacity { OpacityAnimator {} }
         anchors.horizontalCenter: parent.horizontalCenter
-        text: 'REJECTED'
+        text: qsTrId('id_operation_failure')
     }
     Loader {
         visible: active
@@ -44,7 +44,7 @@ Column {
             readonly property Asset asset: resolver.handler.wallet.getOrCreateAsset(output.asset_id || 'btc')
             spacing: 16
             SectionLabel {
-                text: 'Review output #' + (resolver.message.index + 1)
+                text: qsTrId('id_review_output_s').arg(resolver.message.index + 1)
             }
             Row {
                 spacing: 16
@@ -69,7 +69,7 @@ Column {
                     }
                 }
             }
-            SectionLabel { text: resolver.message.output.is_change ? 'Change address' : 'Recipient Address' }
+            SectionLabel { text: resolver.message.output.is_change ? qsTrIt('id_change_address') : qsTrId('id_recipient_address') }
             Label {
                 text: resolver.message.output.address
             }
@@ -90,7 +90,7 @@ Column {
             readonly property Asset asset: resolver.handler.wallet.getOrCreateAsset(output.asset_id || 'btc')
             spacing: 16
             SectionLabel {
-                text: 'Confirm transaction'
+                text: qsTrId('id_confirm_transaction')
             }
             SectionLabel { text: qsTrId('id_fee') }
             Label {

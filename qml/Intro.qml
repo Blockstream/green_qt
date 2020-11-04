@@ -25,7 +25,7 @@ Item {
         }
         Label {
             visible: device_list_model.rowCount === 0
-            text: 'CONNECT YOUR LEDGER NANO DEVICE TO START USING IT'
+            text: qsTrId('id_connect_your_ledger_to_use_it')
             padding: 16
             background: Rectangle {
                 color: Qt.lighter('#141a21', 1.5)

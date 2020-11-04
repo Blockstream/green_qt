@@ -441,9 +441,8 @@ ApplicationWindow {
                 Label {
                     visible: !controller.network
                     opacity: 0.5
-                    font.pixelSize: 12
-                    font.capitalization: Font.AllUppercase
-                    text: 'SELECT APP ON ' + controller.device.name
+                    font.pixelSize: 11
+                    text: qsTrId('id_select_an_app_on_s').arg(controller.device.name)
                     horizontalAlignment: Label.AlignHCenter
                     Layout.fillWidth: true
                 }
