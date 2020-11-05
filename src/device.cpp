@@ -856,11 +856,6 @@ void LedgerLoginController::login()
     QJsonObject result = GA::auth_handler_get_result(m_register_handler);
     QString status = result.value("status").toString();
 
-//    auto result = GA::process_auth([&] (GA_auth_handler** call) {
-//        int err = GA_register_user(m_session, hw_device, "", call);
-//        Q_ASSERT(err == GA_OK);
-//    });
-
     Q_ASSERT(result.value("status").toString() == "resolve_code");
     Q_ASSERT(result.value("action").toString() == "get_xpubs");
 
@@ -881,17 +876,12 @@ void LedgerLoginController::login()
         GA_auth_handler_resolve_code(m_register_handler, _code.constData());
         GA_auth_handler_call(m_register_handler);
 
-
         m_paths = QJsonArray();
         m_xpubs = QJsonArray();
 
         login2();
     });
     batch->exec();
-
-//    updateCurrencies();
-//    reload();
-//    updateConfig();
 }
 
 void LedgerLoginController::login2()

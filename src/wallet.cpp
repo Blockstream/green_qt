@@ -80,22 +80,26 @@ public:
 class LoginHandler : public Handler
 {
     const QStringList m_mnemonic;
+    const QString m_password;
     void init(GA_session* session, GA_auth_handler** auth_handler) override
     {
         QByteArray mnemonic = m_mnemonic.join(' ').toLocal8Bit();
+        QByteArray password = m_password.toLocal8Bit();
         GA_json* device;
         int err = GA_convert_string_to_json("{}", &device);
         Q_ASSERT(err == GA_OK);
-        err = GA_login(session, device, mnemonic.constData(), "", auth_handler);
+        err = GA_login(session, device, mnemonic.constData(), password.constData(), auth_handler);
         Q_ASSERT(err == GA_OK);
         err = GA_destroy_json(device);
         Q_ASSERT(err == GA_OK);
     }
 public:
-    LoginHandler(Wallet* wallet, const QStringList& mnemonic)
+    LoginHandler(Wallet* wallet, const QStringList& mnemonic, const QString& password = {})
         : Handler(wallet)
         , m_mnemonic(mnemonic)
+        , m_password(password)
     {
+        Q_ASSERT(m_mnemonic.size() == 24 || (m_mnemonic.size() == 27 && !m_password.isEmpty()));
     }
 };
 
@@ -485,44 +489,29 @@ void Wallet::signup(const QStringList& mnemonic, const QByteArray& pin)
     register_user_handler->exec();
 }
 
-// TODO: Use LoginHandler
 void Wallet::login(const QStringList& mnemonic, const QString& password)
 {
-    Q_ASSERT(mnemonic.size() == 24 || (mnemonic.size() == 27 && !password.isEmpty()));
-
     setAuthentication(Authenticating);
 
-    QMetaObject::invokeMethod(m_context, [this, mnemonic, password] {
-        QByteArray raw_mnemonic = mnemonic.join(' ').toLatin1();
-
-        GA_json* hw_device;
-        GA_convert_string_to_json("{}", &hw_device);
-
-        auto result = GA::process_auth([this, hw_device, raw_mnemonic, password] (GA_auth_handler** call) {
-            int err = GA_login(m_session, hw_device, raw_mnemonic.constData(), password.toLatin1().constData(), call);
-            Q_ASSERT(err == GA_OK);
-        });
-
-        GA_destroy_json(hw_device);
-
-        const auto status = result.value("status").toString();
-        if (status == "error") {
-            // TODO: these are examples of errors
-            // these sould be handled in Handler class, see TODO above
-            // {"action":"get_xpubs","device":{},"error":"get_xpubs exception:login failed:id_login_failed","status":"error"}
-            // {"action":"get_xpubs","device":{},"error":"get_xpubs exception:reconnect required","status":"error"}
-            emit loginError(result.value("error").toString());
-            return setAuthentication(Unauthenticated);
-        }
-
-        Q_ASSERT(status == "done");
-
-        updateCurrencies();
-        reload();
-        updateConfig();
-
-        setAuthentication(Authenticated);
+    auto handler = new LoginHandler(this, mnemonic, password);
+    QObject::connect(handler, &Handler::done, this, [this, handler] {
+       handler->deleteLater();
+       updateCurrencies();
+       reload();
+       updateConfig();
+       setAuthentication(Authenticated);
     });
+    QObject::connect(handler, &Handler::error, this, [this, handler] {
+        handler->deleteLater();
+        const auto error = handler->result().value("error").toString();
+        // TODO: these are examples of errors
+        // these sould be handled in Handler class, see TODO above
+        // {"action":"get_xpubs","device":{},"error":"get_xpubs exception:login failed:id_login_failed","status":"error"}
+        // {"action":"get_xpubs","device":{},"error":"get_xpubs exception:reconnect required","status":"error"}
+        emit loginError(error);
+        return setAuthentication(Unauthenticated);
+    });
+    handler->exec();
 }
 
 void Wallet::setPin(const QByteArray& pin)
