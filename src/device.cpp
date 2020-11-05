@@ -850,6 +850,7 @@ void LedgerLoginController::login()
     m_wallet->createSession();
     GA_connect(m_wallet->m_session, Json::fromObject(params));
 
+    // TODO: use RegisterUserHandler
     GA_register_user(m_wallet->m_session, hw_device, "", &m_register_handler);
 
     QJsonObject result = GA::auth_handler_get_result(m_register_handler);

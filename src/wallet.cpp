@@ -55,6 +55,29 @@ public:
     }
 };
 
+class RegisterUserHandler : public Handler
+{
+    const QStringList m_mnemonic;
+    void init(GA_session* session, GA_auth_handler** auth_handler) override
+    {
+        QByteArray mnemonic = m_mnemonic.join(' ').toLocal8Bit();
+        GA_json* device;
+        int err = GA_convert_string_to_json("{}", &device);
+        Q_ASSERT(err == GA_OK);
+        err = GA_register_user(session, device, mnemonic.constData(), auth_handler);
+        Q_ASSERT(err == GA_OK);
+        err = GA_destroy_json(device);
+        Q_ASSERT(err == GA_OK);
+    }
+public:
+    RegisterUserHandler(Wallet* wallet, const QStringList& mnemonic)
+        : Handler(wallet)
+        , m_mnemonic(mnemonic)
+    {
+    }
+};
+
+
 static void notification_handler(void* context, const GA_json* details)
 {
     Wallet* wallet = static_cast<Wallet*>(context);
@@ -405,46 +428,46 @@ void Wallet::signup(const QStringList& mnemonic, const QByteArray& pin)
 
     setAuthentication(Authenticating);
 
-    QMetaObject::invokeMethod(m_context, [this, pin, mnemonic] {
-        QByteArray raw_mnemonic = mnemonic.join(' ').toLatin1();
+    auto register_user_handler = new RegisterUserHandler(this, mnemonic);
+    QObject::connect(register_user_handler, &Handler::done, this, [this, register_user_handler, mnemonic, pin] {
+        register_user_handler->deleteLater();
 
-        GA_json* hw_device;
-        GA_convert_string_to_json("{}", &hw_device);
-
-        auto result = GA::process_auth([this, hw_device, raw_mnemonic] (GA_auth_handler** call) {
-            int err = GA_register_user(m_session, hw_device, raw_mnemonic.constData(), call);
+        QMetaObject::invokeMethod(m_context, [this, pin, mnemonic] {
+            QByteArray raw_mnemonic = mnemonic.join(' ').toLocal8Bit();
+            GA_json* hw_device;
+            int err = GA_convert_string_to_json("{}", &hw_device);
             Q_ASSERT(err == GA_OK);
-        });
-        Q_ASSERT(result.value("status").toString() == "done");
 
-        result = GA::process_auth([this, hw_device, raw_mnemonic] (GA_auth_handler** call) {
-            int err = GA_login(m_session, hw_device, raw_mnemonic.constData(), "", call);
+            auto result = GA::process_auth([this, hw_device, raw_mnemonic] (GA_auth_handler** call) {
+                int err = GA_login(m_session, hw_device, raw_mnemonic.constData(), "", call);
+                Q_ASSERT(err == GA_OK);
+            });
+            Q_ASSERT(result.value("status").toString() == "done");
+
+            GA_destroy_json(hw_device);
+
+            GA_json* pin_data;
+            err = GA_set_pin(m_session, raw_mnemonic.constData(), pin.constData(), "test", &pin_data);
             Q_ASSERT(err == GA_OK);
+            char* str;
+            GA_convert_json_to_string(pin_data, &str);
+            m_pin_data = QByteArray(str);
+            m_id = QUuid::createUuid().toString(QUuid::WithoutBraces);
+            GA_destroy_json(pin_data);
+            GA_destroy_string(str);
+
+            QMetaObject::invokeMethod(this, [this]{
+                save();
+            }, Qt::BlockingQueuedConnection);
+
+            updateCurrencies();
+            reload();
+            updateConfig();
+
+            setAuthentication(Authenticated);
         });
-        Q_ASSERT(result.value("status").toString() == "done");
-
-        GA_destroy_json(hw_device);
-
-        GA_json* pin_data;
-        int err = GA_set_pin(m_session, raw_mnemonic.constData(), pin.constData(), "test", &pin_data);
-        Q_ASSERT(err == GA_OK);
-        char* str;
-        GA_convert_json_to_string(pin_data, &str);
-        m_pin_data = QByteArray(str);
-        m_id = QUuid::createUuid().toString(QUuid::WithoutBraces);
-        GA_destroy_json(pin_data);
-        GA_destroy_string(str);
-
-        QMetaObject::invokeMethod(this, [this]{
-            save();
-        }, Qt::BlockingQueuedConnection);
-
-        updateCurrencies();
-        reload();
-        updateConfig();
-
-        setAuthentication(Authenticated);
     });
+    register_user_handler->exec();
 }
 
 // TODO: move to a LoginHandler/MnemonicLoginHandler
