@@ -896,6 +896,7 @@ void LedgerLoginController::login()
 
 void LedgerLoginController::login2()
 {
+    // TODO: use LoginHandler
     int err = GA_login(m_wallet->m_session, hw_device, "", "", &m_login_handler);
     Q_ASSERT(err == GA_OK);
 
