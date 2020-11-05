@@ -20,14 +20,14 @@
 class GetBalanceHandler : public Handler
 {
     Account* const m_account;
-    void init(GA_session* session) override
+    void init(GA_session* session, GA_auth_handler** auth_handler) override
     {
         GA_json* details = Json::fromObject({
             { "subaccount", m_account->m_pointer },
             { "num_confs", 0 }
         });
 
-        int err = GA_get_balance(session, details, &m_handler);
+        int err = GA_get_balance(session, details, auth_handler);
         Q_ASSERT(err == GA_OK);
 
         err = GA_destroy_json(details);
@@ -46,7 +46,7 @@ class GetTransactionsHandler : public Handler
     int m_subaccount;
     int m_first;
     int m_count;
-    void init(GA_session* session) override
+    void init(GA_session* session, GA_auth_handler** auth_handler) override
     {
         GA_json* details = Json::fromObject({
             { "subaccount", m_subaccount },
@@ -54,7 +54,7 @@ class GetTransactionsHandler : public Handler
             { "count", m_count }
         });
 
-        int err = GA_get_transactions(session, details, &m_handler);
+        int err = GA_get_transactions(session, details, auth_handler);
         Q_ASSERT(err == GA_OK);
 
         err = GA_destroy_json(details);
@@ -73,13 +73,13 @@ public:
 class GetReceiveAddressHandler : public Handler
 {
     Account* const m_account;
-    void init(GA_session* session) override
+    void init(GA_session* session, GA_auth_handler** auth_handler) override
     {
         auto address_details = Json::fromObject({
             { "subaccount", static_cast<qint64>(m_account->m_pointer) },
         });
 
-        int err = GA_get_receive_address(session, address_details, &m_handler);
+        int err = GA_get_receive_address(session, address_details, auth_handler);
         Q_ASSERT(err == GA_OK);
 
         err = GA_destroy_json(address_details);

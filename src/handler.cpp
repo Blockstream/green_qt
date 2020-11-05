@@ -11,28 +11,28 @@ Handler::Handler(Wallet *wallet) : QObject(wallet), m_wallet(wallet) { }
 
 Handler::~Handler()
 {
-    if (m_handler) GA_destroy_auth_handler(m_handler);
+    if (m_auth_handler) GA_destroy_auth_handler(m_auth_handler);
 }
 
 void Handler::exec()
 {
-    Q_ASSERT(!m_handler);
+    Q_ASSERT(!m_auth_handler);
     QMetaObject::invokeMethod(m_wallet->m_context, [this] {
-        init(m_wallet->m_session);
-        Q_ASSERT(m_handler);
+        init(m_wallet->m_session, &m_auth_handler);
+        Q_ASSERT(m_auth_handler);
         step();
     }, Qt::QueuedConnection);
 }
 
 void Handler::step()
 {
-    Q_ASSERT(m_handler);
+    Q_ASSERT(m_auth_handler);
     for (;;) {
-        const auto result = GA::auth_handler_get_result(m_handler);
+        const auto result = GA::auth_handler_get_result(m_auth_handler);
         const auto status = result.value("status").toString();
 
         if (status == "call") {
-            int res = GA_auth_handler_call(m_handler);
+            int res = GA_auth_handler_call(m_auth_handler);
             Q_ASSERT(res == GA_OK);
             continue;
         }
@@ -52,7 +52,7 @@ void Handler::step()
             Q_ASSERT(methods.size() > 0);
             if (methods.size() == 1) {
                 const auto method = methods.first().toString();
-                int err = GA_auth_handler_request_code(m_handler, method.toLocal8Bit().constData());
+                int err = GA_auth_handler_request_code(m_auth_handler, method.toLocal8Bit().constData());
                 Q_ASSERT(err == GA_OK);
                 continue;
             } else {
@@ -76,9 +76,9 @@ void Handler::step()
 
 void Handler::request(const QByteArray& method)
 {
-    Q_ASSERT(m_handler);
+    Q_ASSERT(m_auth_handler);
     Q_ASSERT(m_result.value("status").toString() == "request_code");
-    int res = GA_auth_handler_request_code(m_handler, method.data());
+    int res = GA_auth_handler_request_code(m_auth_handler, method.data());
     Q_ASSERT(res == GA_OK);
     QMetaObject::invokeMethod(m_wallet->m_context, [this] {
         step();
@@ -131,8 +131,8 @@ void Handler::resolve(const QJsonObject& data)
 
 void Handler::resolve(const QByteArray& data)
 {
-    Q_ASSERT(m_handler);
-    int res = GA_auth_handler_resolve_code(m_handler, data.constData());
+    Q_ASSERT(m_auth_handler);
+    int res = GA_auth_handler_resolve_code(m_auth_handler, data.constData());
     Q_ASSERT(res == GA_OK);
     QMetaObject::invokeMethod(m_wallet->m_context, [this] {
         step();

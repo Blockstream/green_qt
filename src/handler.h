@@ -37,14 +37,14 @@ signals:
     void invalidCode();
     void resolver(Resolver* resolver);
 private:
-    virtual void init(GA_session* session) = 0;
+    virtual void init(GA_session* session, GA_auth_handler** auth_handler) = 0;
     void step();
     Resolver* createResolver(const QJsonObject& result);
     void setResult(const QJsonObject &result);
 protected:
-    GA_auth_handler* m_handler{nullptr};
     QJsonObject m_result;
 private:
+    GA_auth_handler* m_auth_handler{nullptr};
     TwoFactorResolver* m_two_factor_resolver{nullptr};
 public:
     Wallet* const m_wallet;

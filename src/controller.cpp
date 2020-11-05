@@ -10,9 +10,9 @@
 class ChangeSettingsHandler : public Handler
 {
     QJsonObject m_data;
-    void init(GA_session* session) override {
+    void init(GA_session* session, GA_auth_handler** auth_handler) override {
         auto data = Json::fromObject(m_data);
-        int err = GA_change_settings(session, data, &m_handler);
+        int err = GA_change_settings(session, data, auth_handler);
         Q_ASSERT(err == GA_OK);
         err = GA_destroy_json(data);
         Q_ASSERT(err == GA_OK);
@@ -28,7 +28,8 @@ public:
 
 class SendNLocktimesHandler : public Handler
 {
-    void init(GA_session* session) override {
+    void init(GA_session* session, GA_auth_handler** auth_handler) override {
+        Q_UNUSED(auth_handler);
         int err = GA_send_nlocktimes(session);
         // Can't Q_ASSERT(err == GA_OK) because err != GA_OK
         // if no utxos found (e.g. new wallet)
@@ -45,9 +46,9 @@ class ChangeSettingsTwoFactorHandler : public Handler
 {
     QByteArray m_method;
     QJsonObject m_details;
-    void init(GA_session* session) override {
+    void init(GA_session* session, GA_auth_handler** auth_handler) override {
         auto details = Json::fromObject(m_details);
-        int res = GA_change_settings_twofactor(session, m_method.data(), details, &m_handler);
+        int res = GA_change_settings_twofactor(session, m_method.data(), details, auth_handler);
         Q_ASSERT(res == GA_OK);
         res = GA_destroy_json(details);
         Q_ASSERT(res == GA_OK);
@@ -64,9 +65,9 @@ public:
 class TwoFactorChangeLimitsHandler : public Handler
 {
     QJsonObject m_details;
-    void init(GA_session* session) override {
+    void init(GA_session* session, GA_auth_handler** auth_handler) override {
         auto details = Json::fromObject(m_details);
-        int err = GA_twofactor_change_limits(session, details, &m_handler);
+        int err = GA_twofactor_change_limits(session, details, auth_handler);
         Q_ASSERT(err == GA_OK);
         err = GA_destroy_json(details);
         Q_ASSERT(err == GA_OK);
@@ -82,9 +83,9 @@ public:
 class TwoFactorResetHandler : public Handler
 {
     const QByteArray m_email;
-    void init(GA_session* session) override {
+    void init(GA_session* session, GA_auth_handler** auth_handler) override {
         const uint32_t is_dispute = GA_FALSE;
-        int res = GA_twofactor_reset(session, m_email.data(), is_dispute, &m_handler);
+        int res = GA_twofactor_reset(session, m_email.data(), is_dispute, auth_handler);
         Q_ASSERT(res == GA_OK);
     }
 public:
@@ -97,8 +98,8 @@ public:
 
 class TwoFactorCancelResetHandler : public Handler
 {
-    void init(GA_session* session) override {
-        int res = GA_twofactor_cancel_reset(session, &m_handler);
+    void init(GA_session* session, GA_auth_handler** auth_handler) override {
+        int res = GA_twofactor_cancel_reset(session, auth_handler);
         Q_ASSERT(res == GA_OK);
     }
 public:

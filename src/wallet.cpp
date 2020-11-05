@@ -20,9 +20,9 @@
 
 class GetSubAccountsHandler : public Handler
 {
-    void init(GA_session* session) override
+    void init(GA_session* session, GA_auth_handler** auth_handler) override
     {
-        int res = GA_get_subaccounts(session, &m_handler);
+        int res = GA_get_subaccounts(session, auth_handler);
         Q_ASSERT(res == GA_OK);
     }
 public:
@@ -36,12 +36,12 @@ class LoginWithPinHandler : public Handler
 {
     const QByteArray m_pin_data;
     const QByteArray m_pin;
-    void init(GA_session* session) override
+    void init(GA_session* session, GA_auth_handler** auth_handler) override
     {
         GA_json* pin_data;
         int err = GA_convert_string_to_json(m_pin_data.constData(), &pin_data);
         Q_ASSERT(err == GA_OK);
-        err = GA_login_with_pin(session, m_pin.constData(), pin_data, &m_handler);
+        err = GA_login_with_pin(session, m_pin.constData(), pin_data, auth_handler);
         Q_ASSERT(err == GA_OK);
         err = GA_destroy_json(pin_data);
         Q_ASSERT(err == GA_OK);
