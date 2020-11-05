@@ -7,11 +7,20 @@
 
 #include <gdk.h>
 
-Handler::Handler(Wallet *wallet) : QObject(wallet), m_wallet(wallet) { }
+Handler::Handler(Wallet* wallet)
+    : QObject(wallet)
+    , m_wallet(wallet)
+{
+}
 
 Handler::~Handler()
 {
     if (m_auth_handler) GA_destroy_auth_handler(m_auth_handler);
+}
+
+Wallet* Handler::wallet() const
+{
+    return m_wallet;
 }
 
 void Handler::exec()
@@ -25,6 +34,12 @@ void Handler::exec()
             emit done();
         }
     }, Qt::QueuedConnection);
+}
+
+const QJsonObject& Handler::result() const
+{
+    Q_ASSERT(!m_result.empty());
+    return m_result;
 }
 
 void Handler::step()

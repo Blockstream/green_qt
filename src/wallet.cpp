@@ -20,7 +20,7 @@
 
 class GetSubAccountsHandler : public Handler
 {
-    void init(GA_session* session, GA_auth_handler** auth_handler) override
+    void call(GA_session* session, GA_auth_handler** auth_handler) override
     {
         int res = GA_get_subaccounts(session, auth_handler);
         Q_ASSERT(res == GA_OK);
@@ -36,7 +36,7 @@ class LoginWithPinHandler : public Handler
 {
     const QByteArray m_pin_data;
     const QByteArray m_pin;
-    void init(GA_session* session, GA_auth_handler** auth_handler) override
+    void call(GA_session* session, GA_auth_handler** auth_handler) override
     {
         GA_json* pin_data;
         int err = GA_convert_string_to_json(m_pin_data.constData(), &pin_data);
@@ -58,7 +58,7 @@ public:
 class RegisterUserHandler : public Handler
 {
     const QStringList m_mnemonic;
-    void init(GA_session* session, GA_auth_handler** auth_handler) override
+    void call(GA_session* session, GA_auth_handler** auth_handler) override
     {
         QByteArray mnemonic = m_mnemonic.join(' ').toLocal8Bit();
         GA_json* device;
@@ -81,7 +81,7 @@ class LoginHandler : public Handler
 {
     const QStringList m_mnemonic;
     const QString m_password;
-    void init(GA_session* session, GA_auth_handler** auth_handler) override
+    void call(GA_session* session, GA_auth_handler** auth_handler) override
     {
         QByteArray mnemonic = m_mnemonic.join(' ').toLocal8Bit();
         QByteArray password = m_password.toLocal8Bit();
@@ -108,7 +108,7 @@ class SetPinHandler : public Handler
     const QStringList& m_mnemonic;
     const QByteArray m_pin;
     QByteArray m_pin_data;
-    void init(GA_session* session, GA_auth_handler** auth_handler) override
+    void call(GA_session* session, GA_auth_handler** auth_handler) override
     {
         Q_UNUSED(auth_handler);
         const QByteArray mnemonic = m_mnemonic.join(' ').toLocal8Bit();

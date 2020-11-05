@@ -20,7 +20,7 @@
 class GetBalanceHandler : public Handler
 {
     Account* const m_account;
-    void init(GA_session* session, GA_auth_handler** auth_handler) override
+    void call(GA_session* session, GA_auth_handler** auth_handler) override
     {
         GA_json* details = Json::fromObject({
             { "subaccount", m_account->m_pointer },
@@ -46,7 +46,7 @@ class GetTransactionsHandler : public Handler
     int m_subaccount;
     int m_first;
     int m_count;
-    void init(GA_session* session, GA_auth_handler** auth_handler) override
+    void call(GA_session* session, GA_auth_handler** auth_handler) override
     {
         GA_json* details = Json::fromObject({
             { "subaccount", m_subaccount },
@@ -73,7 +73,7 @@ public:
 class GetReceiveAddressHandler : public Handler
 {
     Account* const m_account;
-    void init(GA_session* session, GA_auth_handler** auth_handler) override
+    void call(GA_session* session, GA_auth_handler** auth_handler) override
     {
         auto address_details = Json::fromObject({
             { "subaccount", static_cast<qint64>(m_account->m_pointer) },

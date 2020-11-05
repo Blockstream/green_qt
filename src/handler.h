@@ -18,13 +18,12 @@ class Handler : public QObject
     Q_PROPERTY(QJsonObject result READ result NOTIFY resultChanged)
     QML_ELEMENT
     QML_UNCREATABLE("Handler is an abstract base class.")
-    Q_ENUMS(Status)
 public:
     Handler(Wallet* wallet);
     virtual ~Handler();
-    Wallet* wallet() const { return m_wallet; }
+    Wallet* wallet() const;
     void exec();
-    const QJsonObject& result() const { Q_ASSERT(!m_result.empty()); return m_result; }
+    const QJsonObject& result() const;
 public slots:
     void request(const QByteArray& method);
     void resolve(const QJsonObject& data);
@@ -37,17 +36,15 @@ signals:
     void invalidCode();
     void resolver(Resolver* resolver);
 private:
-    virtual void init(GA_session* session, GA_auth_handler** auth_handler) = 0;
+    virtual void call(GA_session* session, GA_auth_handler** auth_handler) = 0;
     void step();
     Resolver* createResolver(const QJsonObject& result);
     void setResult(const QJsonObject &result);
-protected:
-    QJsonObject m_result;
 private:
+    Wallet* const m_wallet;
     GA_auth_handler* m_auth_handler{nullptr};
     TwoFactorResolver* m_two_factor_resolver{nullptr};
-public:
-    Wallet* const m_wallet;
+    QJsonObject m_result;
 };
 
 #endif // GREEN_HANDLER_H

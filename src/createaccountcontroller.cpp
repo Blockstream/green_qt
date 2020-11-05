@@ -8,7 +8,7 @@
 class CreateAccountHandler : public Handler
 {
     QJsonObject m_details;
-    void init(GA_session* session, GA_auth_handler** auth_handler) override {
+    void call(GA_session* session, GA_auth_handler** auth_handler) override {
         auto details = Json::fromObject(m_details);
         int res = GA_create_subaccount(session, details, auth_handler);
         Q_ASSERT(res == GA_OK);
@@ -21,8 +21,8 @@ public:
     {
     }
     int pointer() const {
-        Q_ASSERT(m_result.value("status").toString() == "done");
-        return m_result.value("result").toObject().value("pointer").toInt();
+        Q_ASSERT(result().value("status").toString() == "done");
+        return result().value("result").toObject().value("pointer").toInt();
     }
 };
 

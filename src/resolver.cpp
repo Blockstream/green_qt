@@ -25,7 +25,7 @@ Resolver::Resolver(Handler *handler, const QJsonObject& result)
 
 Wallet *Resolver::wallet() const
 {
-    return m_handler->m_wallet;
+    return m_handler->wallet();
 }
 
 Network *Resolver::network() const
@@ -71,12 +71,11 @@ DeviceResolver::DeviceResolver(Handler* handler, const QJsonObject& result)
     , m_required_data(result.value("required_data").toObject())
 {
     Q_ASSERT(m_required_data.contains("device"));
-    Q_ASSERT(m_handler->m_wallet->m_device);
 }
 
 Device *DeviceResolver::device() const
 {
-    return m_handler->m_wallet->m_device;
+    return wallet()->m_device;
 }
 
 GetXPubsResolver::GetXPubsResolver(Handler* handler, const QJsonObject& result)
@@ -96,7 +95,7 @@ void GetXPubsResolver::resolve()
     if (m_paths.empty()) return emit m_handler->resolve({{ "xpubs", m_xpubs }});
 
     auto path = m_paths.takeFirst();
-    auto command = device()->getWalletPublicKey(m_handler->m_wallet->network(), path);
+    auto command = device()->getWalletPublicKey(wallet()->network(), path);
     connect(command, &Command::finished, [this, command] {
         m_xpubs.append(command->m_xpub);
         resolve();

@@ -15,7 +15,7 @@
 class CreateTransactionHandler : public Handler
 {
     const QJsonObject m_details;
-    void init(GA_session* session, GA_auth_handler** auth_handler) override {
+    void call(GA_session* session, GA_auth_handler** auth_handler) override {
         qDebug() << "create transaction" << m_details;
         auto details = Json::fromObject(m_details);
         int err = GA_create_transaction(session, details, auth_handler);
@@ -258,7 +258,7 @@ void SendTransactionController::create()
 class SignTransactionHandler : public Handler
 {
     const QJsonObject m_details;
-    void init(GA_session* session, GA_auth_handler** auth_handler) override {
+    void call(GA_session* session, GA_auth_handler** auth_handler) override {
         GA_json* details = Json::fromObject(m_details);
         int err = GA_sign_transaction(session, details, auth_handler);
         Q_ASSERT(err == GA_OK);
@@ -276,7 +276,7 @@ public:
 class SendTransactionHandler : public Handler
 {
     const QJsonObject m_details;
-    void init(GA_session* session, GA_auth_handler** auth_handler) override {
+    void call(GA_session* session, GA_auth_handler** auth_handler) override {
         GA_json* details = Json::fromObject(m_details);
         int err = GA_send_transaction(session, details, auth_handler);
         Q_ASSERT(err == GA_OK);
