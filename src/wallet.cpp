@@ -103,6 +103,40 @@ public:
     }
 };
 
+class SetPinHandler : public Handler
+{
+    const QStringList& m_mnemonic;
+    const QByteArray m_pin;
+    QByteArray m_pin_data;
+    void init(GA_session* session, GA_auth_handler** auth_handler) override
+    {
+        Q_UNUSED(auth_handler);
+        const QByteArray mnemonic = m_mnemonic.join(' ').toLocal8Bit();
+        GA_json* pin_data;
+        int err = GA_set_pin(session, mnemonic.constData(), m_pin.constData(), "greenqt", &pin_data);
+        Q_ASSERT(err == GA_OK);
+        char* str;
+        err = GA_convert_json_to_string(pin_data, &str);
+        Q_ASSERT(err == GA_OK);
+        m_pin_data = QByteArray(str);
+        err = GA_destroy_json(pin_data);
+        Q_ASSERT(err == GA_OK);
+        GA_destroy_string(str);
+    }
+public:
+    SetPinHandler(Wallet* wallet, const QStringList& mnemonic, const QByteArray& pin)
+        : Handler(wallet)
+        , m_mnemonic(mnemonic)
+        , m_pin(pin)
+    {
+    }
+    QByteArray pinData() const
+    {
+        Q_ASSERT(!m_pin_data.isEmpty());
+        return m_pin_data;
+    }
+};
+
 static void notification_handler(void* context, const GA_json* details)
 {
     Wallet* wallet = static_cast<Wallet*>(context);
@@ -388,6 +422,7 @@ QStringList Wallet::mnemonic() const
 
 void Wallet::changePin(const QByteArray& pin)
 {
+    // TODO: use SetPinHandler
     char* mnemonic;
     int err = GA_get_mnemonic_passphrase(m_session, "", &mnemonic);
     Q_ASSERT(err == GA_OK);
@@ -455,36 +490,25 @@ void Wallet::signup(const QStringList& mnemonic, const QByteArray& pin)
 
     auto register_user_handler = new RegisterUserHandler(this, mnemonic);
     auto login_handler = new LoginHandler(this, mnemonic);
+    auto set_pin_handler = new SetPinHandler(this, mnemonic, pin);
 
     QObject::connect(register_user_handler, &Handler::done, this, [register_user_handler, login_handler] {
         register_user_handler->deleteLater();
         login_handler->exec();
     });
-
-    QObject::connect(login_handler, &Handler::done, this, [this, login_handler, mnemonic, pin] {
+    QObject::connect(login_handler, &Handler::done, this, [login_handler, set_pin_handler] {
         login_handler->deleteLater();
-        QMetaObject::invokeMethod(m_context, [this, pin, mnemonic] {
-            auto raw_mnemonic = mnemonic.join(' ').toLocal8Bit();
-            GA_json* pin_data;
-            int err = GA_set_pin(m_session, raw_mnemonic.constData(), pin.constData(), "test", &pin_data);
-            Q_ASSERT(err == GA_OK);
-            char* str;
-            GA_convert_json_to_string(pin_data, &str);
-            m_pin_data = QByteArray(str);
-            m_id = QUuid::createUuid().toString(QUuid::WithoutBraces);
-            GA_destroy_json(pin_data);
-            GA_destroy_string(str);
-
-            QMetaObject::invokeMethod(this, [this]{
-                save();
-            }, Qt::BlockingQueuedConnection);
-
-            updateCurrencies();
-            reload();
-            updateConfig();
-
-            setAuthentication(Authenticated);
-        });
+        set_pin_handler->exec();
+    });
+    QObject::connect(set_pin_handler, &Handler::done, this, [this, set_pin_handler] {
+        set_pin_handler->deleteLater();
+        m_pin_data = set_pin_handler->pinData();
+        m_id = QUuid::createUuid().toString(QUuid::WithoutBraces);
+        save();
+        updateCurrencies();
+        reload();
+        updateConfig();
+        setAuthentication(Authenticated);
     });
     register_user_handler->exec();
 }
@@ -520,6 +544,7 @@ void Wallet::setPin(const QByteArray& pin)
     Q_ASSERT(m_name.isEmpty());
     Q_ASSERT(m_pin_data.isEmpty());
 
+    // TODO: use SetPinHandler
     QMetaObject::invokeMethod(m_context, [this, pin] {
         char* mnemonic;
         int err = GA_get_mnemonic_passphrase(m_session, "", &mnemonic);
