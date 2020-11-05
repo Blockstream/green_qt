@@ -32,6 +32,29 @@ public:
     }
 };
 
+class LoginWithPinHandler : public Handler
+{
+    const QByteArray m_pin_data;
+    const QByteArray m_pin;
+    void init(GA_session* session) override
+    {
+        GA_json* pin_data;
+        int err = GA_convert_string_to_json(m_pin_data.constData(), &pin_data);
+        Q_ASSERT(err == GA_OK);
+        err = GA_login_with_pin(session, m_pin.constData(), pin_data, &m_handler);
+        Q_ASSERT(err == GA_OK);
+        err = GA_destroy_json(pin_data);
+        Q_ASSERT(err == GA_OK);
+    }
+public:
+    LoginWithPinHandler(Wallet* wallet, const QByteArray& pin_data, const QByteArray& pin)
+        : Handler(wallet)
+        , m_pin_data(pin_data)
+        , m_pin(pin)
+    {
+    }
+};
+
 static void notification_handler(void* context, const GA_json* details)
 {
     Wallet* wallet = static_cast<Wallet*>(context);
@@ -343,51 +366,37 @@ void Wallet::loginWithPin(const QByteArray& pin)
 
     setAuthentication(Authenticating);
 
-    QMetaObject::invokeMethod(m_context, [this, pin] {
-        auto result = GA::process_auth([this, pin] (GA_auth_handler** call) {
-            GA_json* pin_data;
-            int err = GA_convert_string_to_json(m_pin_data.constData(), &pin_data);
-            Q_ASSERT(err == GA_OK);
-            err = GA_login_with_pin(m_session, pin.constData(), pin_data, call);
-            GA_destroy_json(pin_data);
-            Q_ASSERT(err == GA_OK);
-        });
-
-        const auto status = result.value("status").toString();
-        if (status == "error") {
-            const auto error = result.value("error").toString();
-            if (error.contains("exception:login failed")) {
-                QMetaObject::invokeMethod(this, [this] {
-                    Q_ASSERT(m_login_attempts_remaining > 0);
-                    setAuthentication(Unauthenticated);
-                    --m_login_attempts_remaining;
-                    save();
-                    emit loginAttemptsRemainingChanged(m_login_attempts_remaining);
-                }, Qt::BlockingQueuedConnection);
-                return;
-            }
-            if (error.contains("exception:reconnect required")) {
-                QMetaObject::invokeMethod(this, [this] {
-                    setAuthentication(Unauthenticated);
-                }, Qt::BlockingQueuedConnection);
-                return;
-            }
-            Q_UNREACHABLE();
+    auto handler = new LoginWithPinHandler(this, m_pin_data, pin);
+    handler->connect(handler, &Handler::done, this, [this, handler] {
+        handler->deleteLater();
+        if (m_login_attempts_remaining < 3) {
+            m_login_attempts_remaining = 3;
+            save();
+            emit loginAttemptsRemainingChanged(m_login_attempts_remaining);
         }
-        Q_ASSERT(status == "done");
-        QMetaObject::invokeMethod(this, [this] {
-            if (m_login_attempts_remaining < 3) {
-                m_login_attempts_remaining = 3;
-                save();
-                emit loginAttemptsRemainingChanged(m_login_attempts_remaining);
-            }
-            setAuthentication(Authenticated);
-            updateCurrencies();
-            updateSettings();
-            reload();
-            updateConfig();
-        }, Qt::BlockingQueuedConnection);
+        setAuthentication(Authenticated);
+        updateCurrencies();
+        updateSettings();
+        reload();
+        updateConfig();
     });
+    handler->connect(handler, &Handler::error, this, [this, handler] {
+        handler->deleteLater();
+        const auto error = handler->result().value("error").toString();
+        if (error.contains("exception:login failed")) {
+            Q_ASSERT(m_login_attempts_remaining > 0);
+            setAuthentication(Unauthenticated);
+            --m_login_attempts_remaining;
+            save();
+            emit loginAttemptsRemainingChanged(m_login_attempts_remaining);
+        }
+        if (error.contains("exception:reconnect required")) {
+            setAuthentication(Unauthenticated);
+            return;
+        }
+        qWarning() << "unhandled login_with_pin error";
+    });
+    handler->exec();
 }
 
 void Wallet::signup(const QStringList& mnemonic, const QByteArray& pin)
