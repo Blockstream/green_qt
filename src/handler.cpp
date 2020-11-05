@@ -18,9 +18,12 @@ void Handler::exec()
 {
     Q_ASSERT(!m_auth_handler);
     QMetaObject::invokeMethod(m_wallet->m_context, [this] {
-        init(m_wallet->m_session, &m_auth_handler);
-        Q_ASSERT(m_auth_handler);
-        step();
+        call(m_wallet->m_session, &m_auth_handler);
+        if (m_auth_handler) {
+            step();
+        } else {
+            emit done();
+        }
     }, Qt::QueuedConnection);
 }
 
