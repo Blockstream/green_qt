@@ -32,12 +32,6 @@ QJsonObject auth_handler_get_result(GA_auth_handler* call)
     return result;
 }
 
-void destroy_auth_handler(GA_auth_handler* call)
-{
-    int err = GA_destroy_auth_handler(call);
-    Q_ASSERT(err == GA_OK);
-}
-
 QJsonObject convert_amount(GA_session* session, const QJsonObject& input)
 {
     GA_json* value_details = Json::fromObject(input);
@@ -48,35 +42,6 @@ QJsonObject convert_amount(GA_session* session, const QJsonObject& input)
     auto value = Json::toObject(output);
     GA_destroy_json(output);
     return value;
-}
-
-QJsonObject process_auth2(GA_auth_handler* call)
-{
-    while (true) {
-        QJsonObject result = GA::auth_handler_get_result(call);
-        QString status = result.value("status").toString();
-
-        if (status == "done") {
-            return result;
-        }
-
-        if (status == "error") {
-            return result;
-        }
-
-        if (status == "request_code") {
-            Q_UNREACHABLE();
-        }
-
-        if (status == "resolve_code") {
-            Q_UNREACHABLE();
-        }
-
-        if (status == "call") {
-            GA_auth_handler_call(call);
-        }
-    }
-    Q_UNREACHABLE();
 }
 
 QStringList generate_mnemonic()
