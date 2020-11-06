@@ -8,6 +8,7 @@
 #include "resolver.h"
 #include "handler.h"
 #include "loginhandler.h"
+#include "registeruserhandler.h"
 
 #include <QDateTime>
 #include <QDebug>
@@ -56,27 +57,6 @@ public:
     }
 };
 
-class RegisterUserHandler : public Handler
-{
-    const QStringList m_mnemonic;
-    void call(GA_session* session, GA_auth_handler** auth_handler) override
-    {
-        QByteArray mnemonic = m_mnemonic.join(' ').toLocal8Bit();
-        GA_json* device;
-        int err = GA_convert_string_to_json("{}", &device);
-        Q_ASSERT(err == GA_OK);
-        err = GA_register_user(session, device, mnemonic.constData(), auth_handler);
-        Q_ASSERT(err == GA_OK);
-        err = GA_destroy_json(device);
-        Q_ASSERT(err == GA_OK);
-    }
-public:
-    RegisterUserHandler(Wallet* wallet, const QStringList& mnemonic)
-        : Handler(wallet)
-        , m_mnemonic(mnemonic)
-    {
-    }
-};
 
 class SetPinHandler : public Handler
 {
