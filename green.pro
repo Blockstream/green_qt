@@ -111,6 +111,8 @@ HEADERS += \
     src/walletmanager.h \
     src/wally.h
 
+include(src/controllers/controllers.pri)
+
 RESOURCES += assets/assets.qrc qml/qml.qrc assets/svg.qrc
 win32 {
     RESOURCES += src/win.qrc
