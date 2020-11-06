@@ -122,7 +122,7 @@ static void DeviceRemovalCallback(void* context, IOReturn /* result */, void* /*
     qDebug() << "DEVICE REMOVED";
     agent->m_device_unique_ids.remove(device->m_unique_id);
     DeviceManager::instance()->removeDevice(device->q);
-    device->q->deleteLater();
+    delete device->q;
 }
 
 static void hid_report_callback(void *context, IOReturn result, void *sender, IOHIDReportType report_type, uint32_t report_id, uint8_t *report, CFIndex report_length)

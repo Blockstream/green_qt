@@ -29,7 +29,6 @@ public:
     qreal progress() const { return m_progress; }
     void setDevice(Device* device);
     void login();
-    void login2();
     static Network *networkFromAppName(const QString& app_name);
 private slots:
     void initialize();
@@ -42,11 +41,7 @@ private:
     Network* m_network{nullptr};
     QJsonObject m_device_details;
     Wallet* m_wallet{nullptr};
-    GA_auth_handler* m_login_handler;
-    QJsonArray m_paths;
-    QJsonArray m_xpubs;
     qreal m_progress{0};
-
     QTimer* m_timer{nullptr};
 };
 
