@@ -4,10 +4,12 @@
 #include "ledgerdevicecontroller.h"
 #include "network.h"
 #include "networkmanager.h"
+#include "resolver.h"
 #include "util.h"
 #include "wallet.h"
 #include "walletmanager.h"
 
+#include "handlers/registeruserhandler.h"
 
 LedgerDeviceController::LedgerDeviceController(QObject* parent)
     : QObject(parent)
@@ -47,16 +49,17 @@ void LedgerDeviceController::initialize()
         }
 
         const auto name = m_device->name().toLocal8Bit();
-        hw_device = Json::fromObject({{
+        m_device_details = {{
             "device", QJsonObject({
                 { "name", name.constData() },
                 { "supports_arbitrary_scripts", true },
                 { "supports_low_r", false },
                 { "supports_liquid", 1 }
             })
-        }});
+        }};
 
         m_wallet = new Wallet();
+        m_wallet->m_device = m_device;
         m_wallet->setNetwork(m_network);
 
         login();
@@ -79,46 +82,25 @@ void LedgerDeviceController::login()
     };
 
     m_wallet->createSession();
+    // TODO: Add ConnectHandler
     GA_connect(m_wallet->m_session, Json::fromObject(params));
 
-    // TODO: use RegisterUserHandler
-    GA_register_user(m_wallet->m_session, hw_device, "", &m_register_handler);
-
-    QJsonObject result = GA::auth_handler_get_result(m_register_handler);
-    QString status = result.value("status").toString();
-
-    Q_ASSERT(result.value("status").toString() == "resolve_code");
-    Q_ASSERT(result.value("action").toString() == "get_xpubs");
-
-    m_paths = result.value("required_data").toObject().value("paths").toArray();
-
-    auto batch = new CommandBatch;
-    for (auto path : m_paths) {
-        auto cmd = new GetWalletPublicKeyCommand(m_device, m_network, ParsePath(path));
-        connect(cmd, &Command::finished, this, [this, cmd] {
-            m_xpubs.append(cmd->m_xpub);
-        });
-        batch->add(cmd);
-    }
-    connect(batch, &Command::finished, this, [this] {
-        Q_ASSERT(m_xpubs.size() == m_paths.size());
-        QJsonObject code= {{ "xpubs", m_xpubs }};
-        auto _code = QJsonDocument(code).toJson();
-        GA_auth_handler_resolve_code(m_register_handler, _code.constData());
-        GA_auth_handler_call(m_register_handler);
-
-        m_paths = QJsonArray();
-        m_xpubs = QJsonArray();
-
+    auto m_register_user_handler = new RegisterUserHandler(m_wallet, m_device_details);
+    connect(m_register_user_handler, &Handler::done, this, [this] {
         login2();
     });
-    batch->exec();
+    connect(m_register_user_handler, &Handler::resolver, this, [](Resolver* resolver) {
+        resolver->resolve();
+    });
+    m_register_user_handler->exec();
 }
 
 void LedgerDeviceController::login2()
 {
     // TODO: use LoginHandler
-    int err = GA_login(m_wallet->m_session, hw_device, "", "", &m_login_handler);
+    auto dev = Json::fromObject(m_device_details);
+    int err = GA_login(m_wallet->m_session, dev, "", "", &m_login_handler);
+    GA_destroy_json(dev);
     Q_ASSERT(err == GA_OK);
 
     auto result = GA::auth_handler_get_result(m_login_handler);
@@ -180,7 +162,6 @@ void LedgerDeviceController::login2()
                                     GA_auth_handler_call(m_login_handler);
                                     GA::auth_handler_get_result(m_login_handler);
 
-                                    m_wallet->m_device = m_device;
                                     m_wallet->setSession();
                                     WalletManager::instance()->addWallet(m_wallet);
 

@@ -40,9 +40,8 @@ signals:
 private:
     Device* m_device{nullptr};
     Network* m_network{nullptr};
-    GA_json* hw_device;
+    QJsonObject m_device_details;
     Wallet* m_wallet{nullptr};
-    GA_auth_handler* m_register_handler;
     GA_auth_handler* m_login_handler;
     QJsonArray m_paths;
     QJsonArray m_xpubs;

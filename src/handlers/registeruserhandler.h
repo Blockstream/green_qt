@@ -4,16 +4,19 @@
 #include "handler.h"
 
 #include <QStringList>
+#include <QJsonObject>
 
 class RegisterUserHandler : public Handler
 {
     Q_OBJECT
 public:
     RegisterUserHandler(Wallet* wallet, const QStringList& mnemonic);
-private:
-    const QStringList m_mnemonic;
+    RegisterUserHandler(Wallet* wallet, const QJsonObject& device_details);
 private:
     void call(GA_session* session, GA_auth_handler** auth_handler) override;
+private:
+    const QStringList m_mnemonic;
+    const QJsonObject m_device_details;
 };
 
 #endif // GREEN_REGISTERUSERHANDLER_H
