@@ -112,6 +112,7 @@ HEADERS += \
     src/wally.h
 
 include(src/controllers/controllers.pri)
+include(src/handlers/handlers.pri)
 
 RESOURCES += assets/assets.qrc qml/qml.qrc assets/svg.qrc
 win32 {
