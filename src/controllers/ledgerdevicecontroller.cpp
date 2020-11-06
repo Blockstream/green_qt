@@ -11,6 +11,27 @@
 
 #include "handlers/registeruserhandler.h"
 #include "handlers/loginhandler.h"
+namespace {
+    Network *network_from_app_name(const QString& app_name)
+    {
+        QString id;
+        if (app_name == "Bitcoin") id = "mainnet";
+        if (app_name == "Bitcoin Test") id = "testnet";
+        if (app_name == "Liquid") id = "liquid";
+        return id.isEmpty() ? nullptr : NetworkManager::instance()->network(id);
+    }
+    QJsonObject device_details_from_device(Device* device)
+    {
+        return {{
+            "device", QJsonObject({
+                { "name", device->name() },
+                { "supports_arbitrary_scripts", true },
+                { "supports_low_r", false },
+                { "supports_liquid", device->type() == Device::LedgerNanoS ? 1 : 0 }
+            })
+        }};
+    }
+} // namespace
 
 LedgerDeviceController::LedgerDeviceController(QObject* parent)
     : QObject(parent)
@@ -28,40 +49,25 @@ void LedgerDeviceController::setDevice(Device *device)
     }
 }
 
-Network* LedgerDeviceController::networkFromAppName(const QString& app_name)
-{
-    QString id;
-    if (app_name == "Bitcoin") id = "mainnet";
-    if (app_name == "Bitcoin Test") id = "testnet";
-    if (app_name == "Liquid") id = "liquid";
-    return id.isEmpty() ? nullptr : NetworkManager::instance()->network(id);
-}
-
 void LedgerDeviceController::initialize()
 {
     auto cmd = new GetAppNameCommand(m_device);
     connect(cmd, &Command::finished, this, [this, cmd] {
-        m_network = LedgerDeviceController::networkFromAppName(cmd->m_name);
+        m_network = network_from_app_name(cmd->m_name);
         emit networkChanged(m_network);
         if (!m_network) {
-            Q_ASSERT(cmd->m_name.indexOf("OLOS") >= 0);
+            // TODO: device can be in dashboard or in another applet
+            // either ignore or warn of that
+            // It is in dashboard if cmd->m_name.indexOf("OLOS") >= 0
             QTimer::singleShot(1000, this, &LedgerDeviceController::initialize);
             return;
         }
 
-        const auto name = m_device->name().toLocal8Bit();
-        m_device_details = {{
-            "device", QJsonObject({
-                { "name", name.constData() },
-                { "supports_arbitrary_scripts", true },
-                { "supports_low_r", false },
-                { "supports_liquid", 1 }
-            })
-        }};
-
+        m_device_details = device_details_from_device(m_device);
         m_wallet = new Wallet;
         m_wallet->m_device = m_device;
         m_wallet->setNetwork(m_network);
+        m_wallet->createSession();
 
         login();
     });
@@ -82,7 +88,6 @@ void LedgerDeviceController::login()
         { "use_tor", false },
     };
 
-    m_wallet->createSession();
     // TODO: Add ConnectHandler
     GA_connect(m_wallet->m_session, Json::fromObject(params));
 

@@ -29,7 +29,6 @@ public:
     qreal progress() const { return m_progress; }
     void setDevice(Device* device);
     void login();
-    static Network *networkFromAppName(const QString& app_name);
 private slots:
     void initialize();
 signals:
@@ -42,7 +41,6 @@ private:
     QJsonObject m_device_details;
     Wallet* m_wallet{nullptr};
     qreal m_progress{0};
-    QTimer* m_timer{nullptr};
 };
 
 #endif // GREEN_LEDGERDEVICECONTROLLER_H
