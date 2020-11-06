@@ -7,7 +7,8 @@
 #include "wallet.h"
 #include "resolver.h"
 #include "handler.h"
-#include "loginhandler.h"
+#include "handlers/connecthandler.h"
+#include "handlers/loginhandler.h"
 #include "registeruserhandler.h"
 
 #include <QDateTime>
@@ -153,50 +154,23 @@ void Wallet::connect(const QString& proxy, bool use_tor)
     connectNow();
 }
 
+// TODO: extract connection/login/... to WalletController
+// TODO: controllers should deal with failures so that UI can see them
 void Wallet::connectNow()
 {
     Q_ASSERT(m_network);
 
     if (m_connection == Disconnected) return;
 
-    auto log_level = QString::fromLocal8Bit(qgetenv("GREEN_GDK_LOG_LEVEL"));
-    if (log_level.isEmpty()) log_level = "info";
-
-    QMetaObject::invokeMethod(m_context, [this, log_level] {
-        QJsonObject params{
-            { "name", m_network->id() },
-            { "log_level", log_level },
-            { "use_tor", m_use_tor }
-        };
-
-        if (!m_proxy.isEmpty()) {
-            params.insert("proxy", m_proxy);
-        }
-
-        int res;
-
-        if (!m_session) createSession();
-
-        res = GA::connect(m_session, params);
-
-        if (res == GA_OK) {
-            setConnection(Connected);
-            return;
-        }
-
-        if (res == GA_RECONNECT) {
-            res = GA_disconnect(m_session);
-            Q_ASSERT(res == GA_OK);
-
-            m_session = nullptr;
-            QTimer::singleShot(1000, this, [this] {
-                connectNow();
-            });
-            return;
-        }
-
-        setConnection(Disconnected);
-    });
+    if (!m_session) {
+        createSession();
+        // TODO: handle reconnect
+        auto handler = new ConnectHandler(this, m_proxy, m_use_tor);
+        QObject::connect(handler, &Handler::done, this, [handler] {
+            handler->deleteLater();
+        });
+        handler->exec();
+    }
 }
 
 void Wallet::disconnect()
