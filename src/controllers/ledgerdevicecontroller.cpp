@@ -1,6 +1,9 @@
 #include "device.h"
 #include "ga.h"
 #include "json.h"
+#include "handlers/connecthandler.h"
+#include "handlers/loginhandler.h"
+#include "handlers/registeruserhandler.h"
 #include "ledgerdevicecontroller.h"
 #include "network.h"
 #include "networkmanager.h"
@@ -9,8 +12,6 @@
 #include "wallet.h"
 #include "walletmanager.h"
 
-#include "handlers/registeruserhandler.h"
-#include "handlers/loginhandler.h"
 namespace {
     Network *network_from_app_name(const QString& app_name)
     {
@@ -79,20 +80,12 @@ void LedgerDeviceController::initialize()
 
 void LedgerDeviceController::login()
 {
-    auto log_level = QString::fromLocal8Bit(qgetenv("GREEN_GDK_LOG_LEVEL"));
-    if (log_level.isEmpty()) log_level = "info";
-
-    QJsonObject params{
-        { "name", m_network->id() },
-        { "log_level", log_level },
-        { "use_tor", false },
-    };
-
-    // TODO: Add ConnectHandler
-    GA_connect(m_wallet->m_session, Json::fromObject(params));
-
+    auto connect_handler = new ConnectHandler(m_wallet);
     auto register_user_handler = new RegisterUserHandler(m_wallet, m_device_details);
     auto login_handler = new LoginHandler(m_wallet, m_device_details);
+    connect(connect_handler, &Handler::done, this, [register_user_handler] {
+        register_user_handler->exec();
+    });
     connect(register_user_handler, &Handler::done, this, [login_handler] {
         login_handler->exec();
     });
@@ -116,5 +109,5 @@ void LedgerDeviceController::login()
     connect(login_handler, &Handler::resolver, this, [](Resolver* resolver) {
         resolver->resolve();
     });
-    register_user_handler->exec();
+    connect_handler->exec();
 }
