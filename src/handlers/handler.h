@@ -2,14 +2,15 @@
 #define GREEN_HANDLER_H
 
 #include <QtQml>
+#include <QObject>
 #include <QJsonObject>
 
-struct GA_session;
-struct GA_auth_handler;
+QT_FORWARD_DECLARE_CLASS(Resolver)
+QT_FORWARD_DECLARE_CLASS(TwoFactorResolver)
+QT_FORWARD_DECLARE_CLASS(Wallet)
 
-class Resolver;
-class TwoFactorResolver;
-class Wallet;
+QT_FORWARD_DECLARE_STRUCT(GA_session)
+QT_FORWARD_DECLARE_STRUCT(GA_auth_handler)
 
 class Handler : public QObject
 {
