@@ -2,6 +2,7 @@
 #include "device.h"
 #include "ga.h"
 #include "handler.h"
+#include "json.h"
 #include "resolver.h"
 #include "resolvers/signmessageresolver.h"
 #include "wallet.h"
@@ -47,7 +48,13 @@ void Handler::step()
 {
     Q_ASSERT(m_auth_handler);
     for (;;) {
-        const auto result = GA::auth_handler_get_result(m_auth_handler);
+        GA_json* output;
+        int err = GA_auth_handler_get_status(m_auth_handler, &output);
+        Q_ASSERT(err == GA_OK);
+        const auto result = Json::toObject(output);
+        err = GA_destroy_json(output);
+        Q_ASSERT(err == GA_OK);
+
         const auto status = result.value("status").toString();
 
         if (status == "call") {
