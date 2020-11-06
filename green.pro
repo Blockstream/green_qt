@@ -111,6 +111,7 @@ HEADERS += \
 
 include(src/controllers/controllers.pri)
 include(src/handlers/handlers.pri)
+include(src/resolvers/resolvers.pri)
 
 RESOURCES += assets/assets.qrc qml/qml.qrc assets/svg.qrc
 win32 {

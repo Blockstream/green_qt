@@ -3,6 +3,7 @@
 #include "ga.h"
 #include "handler.h"
 #include "resolver.h"
+#include "resolvers/signmessageresolver.h"
 #include "wallet.h"
 
 #include <gdk.h>
@@ -127,6 +128,11 @@ Resolver* Handler::createResolver(const QJsonObject& result)
             return new SignTransactionResolver(this, result);
         }
     }
+
+    if (action == "sign_message") {
+        return new SignMessageResolver(this, result);
+    }
+
     const auto method = result.value("method");
     if (method == "email" || method == "sms" || method == "phone" || method == "gauth") {
         if (m_two_factor_resolver) {

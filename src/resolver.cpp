@@ -2,6 +2,7 @@
 #include "handler.h"
 #include "network.h"
 #include "resolver.h"
+#include "util.h"
 #include "wallet.h"
 
 
@@ -113,7 +114,6 @@ void SignTransactionResolver::resolve()
     auto command = device()->signTransaction(m_required_data);
     connect(command, &Command::finished, [this, command] {
         for (const auto& signature : command->signatures) {
-            qDebug() << signature.toHex();
             m_signatures.append(QString::fromLocal8Bit(signature.toHex()));
         }
         m_handler->resolve({{ "signatures", m_signatures }});
