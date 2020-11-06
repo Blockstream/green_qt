@@ -422,7 +422,7 @@ ApplicationWindow {
             topPadding: 8
             width: 360
 
-            LedgerLoginController {
+            LedgerDeviceController {
                 id: controller
                 device: delegate.device
             }

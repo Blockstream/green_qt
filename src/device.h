@@ -293,7 +293,7 @@ private:
     DevicePrivate* const d;
 };
 
-class LedgerLoginController : public QObject
+class LedgerDeviceController : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(Device* device READ device WRITE setDevice NOTIFY deviceChanged)
@@ -302,7 +302,7 @@ class LedgerLoginController : public QObject
     Q_PROPERTY(qreal progress READ progress NOTIFY progressChanged)
     QML_ELEMENT
 public:
-    LedgerLoginController(QObject* parent = nullptr);
+    LedgerDeviceController(QObject* parent = nullptr);
     Device* device() const { return m_device; }
     Network* network() const { return m_network; }
     bool indeterminate() const { return m_progress == 0; }

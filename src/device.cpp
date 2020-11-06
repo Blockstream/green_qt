@@ -776,25 +776,25 @@ GetBlindingNonceCommand *Device::getBlindingNonce(const QByteArray& pubkey, cons
     return command;
 }
 
-LedgerLoginController::LedgerLoginController(QObject* parent) //Device* device, Network* network)
+LedgerDeviceController::LedgerDeviceController(QObject* parent) //Device* device, Network* network)
     : QObject(parent)
 //    , m_device(device)
 //    , m_network(network)
 {
 }
 
-void LedgerLoginController::setDevice(Device *device)
+void LedgerDeviceController::setDevice(Device *device)
 {
     if (m_device == device) return;
     m_device = device;
     emit deviceChanged(m_device);
 
     if (m_device) {
-        QTimer::singleShot(1000, this, &LedgerLoginController::initialize);
+        QTimer::singleShot(1000, this, &LedgerDeviceController::initialize);
     }
 }
 
-Network* LedgerLoginController::networkFromAppName(const QString& app_name)
+Network* LedgerDeviceController::networkFromAppName(const QString& app_name)
 {
     QString id;
     if (app_name == "Bitcoin") id = "mainnet";
@@ -803,15 +803,15 @@ Network* LedgerLoginController::networkFromAppName(const QString& app_name)
     return id.isEmpty() ? nullptr : NetworkManager::instance()->network(id);
 }
 
-void LedgerLoginController::initialize()
+void LedgerDeviceController::initialize()
 {
     auto cmd = new GetAppNameCommand(m_device);
     connect(cmd, &Command::finished, [this, cmd] {
-        m_network = LedgerLoginController::networkFromAppName(cmd->m_name);
+        m_network = LedgerDeviceController::networkFromAppName(cmd->m_name);
         emit networkChanged(m_network);
         if (!m_network) {
             Q_ASSERT(cmd->m_name.indexOf("OLOS") >= 0);
-            QTimer::singleShot(1000, this, &LedgerLoginController::initialize);
+            QTimer::singleShot(1000, this, &LedgerDeviceController::initialize);
             return;
         }
 
@@ -831,12 +831,12 @@ void LedgerLoginController::initialize()
         login();
     });
     connect(cmd, &Command::error, [this] {
-        QTimer::singleShot(1000, this, &LedgerLoginController::initialize);
+        QTimer::singleShot(1000, this, &LedgerDeviceController::initialize);
     });
     cmd->exec();
 }
 
-void LedgerLoginController::login()
+void LedgerDeviceController::login()
 {
     auto log_level = QString::fromLocal8Bit(qgetenv("GREEN_GDK_LOG_LEVEL"));
     if (log_level.isEmpty()) log_level = "info";
@@ -884,7 +884,7 @@ void LedgerLoginController::login()
     batch->exec();
 }
 
-void LedgerLoginController::login2()
+void LedgerDeviceController::login2()
 {
     // TODO: use LoginHandler
     int err = GA_login(m_wallet->m_session, hw_device, "", "", &m_login_handler);
