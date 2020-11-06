@@ -76,14 +76,23 @@ ListView {
                 anchors.right: parent.right
                 Row {
                     spacing: 8
-                    Button {
-                        flat: true
-                        enabled: !wallet.locked && account.balance > 0
-                        icon.source: 'qrc:/svg/send.svg'
-                        icon.width: 24
-                        icon.height: 24
-                        text: qsTrId('id_send')
-                        onClicked: send_dialog.createObject(stack_view, { account }).open()
+                    MouseArea {
+                        hoverEnabled: account.wallet.network.liquid && account.balance === 0
+                        width: send_button.width
+                        height: send_button.height
+                        Button {
+                            id: send_button
+                            flat: true
+                            enabled: !wallet.locked && account.balance > 0
+                            icon.source: 'qrc:/svg/send.svg'
+                            icon.width: 24
+                            icon.height: 24
+                            text: qsTrId('id_send')
+                            onClicked: send_dialog.createObject(stack_view, { account }).open()
+                            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                            ToolTip.text: qsTrId('id_insufficient_lbtc_to_send_a')
+                            ToolTip.visible: parent.containsMouse
+                        }
                     }
 
                     Button {
