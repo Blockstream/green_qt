@@ -9,10 +9,8 @@
 #include "walletmanager.h"
 
 
-LedgerDeviceController::LedgerDeviceController(QObject* parent) //Device* device, Network* network)
+LedgerDeviceController::LedgerDeviceController(QObject* parent)
     : QObject(parent)
-//    , m_device(device)
-//    , m_network(network)
 {
 }
 
@@ -39,7 +37,7 @@ Network* LedgerDeviceController::networkFromAppName(const QString& app_name)
 void LedgerDeviceController::initialize()
 {
     auto cmd = new GetAppNameCommand(m_device);
-    connect(cmd, &Command::finished, [this, cmd] {
+    connect(cmd, &Command::finished, this, [this, cmd] {
         m_network = LedgerDeviceController::networkFromAppName(cmd->m_name);
         emit networkChanged(m_network);
         if (!m_network) {
@@ -63,7 +61,7 @@ void LedgerDeviceController::initialize()
 
         login();
     });
-    connect(cmd, &Command::error, [this] {
+    connect(cmd, &Command::error, this, [this] {
         QTimer::singleShot(1000, this, &LedgerDeviceController::initialize);
     });
     cmd->exec();
@@ -97,12 +95,12 @@ void LedgerDeviceController::login()
     auto batch = new CommandBatch;
     for (auto path : m_paths) {
         auto cmd = new GetWalletPublicKeyCommand(m_device, m_network, ParsePath(path));
-        connect(cmd, &Command::finished, [this, cmd] {
+        connect(cmd, &Command::finished, this, [this, cmd] {
             m_xpubs.append(cmd->m_xpub);
         });
         batch->add(cmd);
     }
-    connect(batch, &Command::finished, [this] {
+    connect(batch, &Command::finished, this, [this] {
         Q_ASSERT(m_xpubs.size() == m_paths.size());
         QJsonObject code= {{ "xpubs", m_xpubs }};
         auto _code = QJsonDocument(code).toJson();
@@ -146,9 +144,9 @@ void LedgerDeviceController::login2()
                 QByteArray message = required_data.value("message").toString().toLocal8Bit();
                 QVector<uint32_t> path = ParsePath(required_data.value("path"));
                 auto prepare = new SignMessageCommand(m_device, path, message);
-                connect(prepare, &Command::finished, [this] {
+                connect(prepare, &Command::finished, this, [this] {
                     auto sign = new SignMessageCommand(m_device);
-                    connect(sign, &Command::finished, [this, sign] {
+                    connect(sign, &Command::finished, this, [this, sign] {
                         QJsonObject code = {{ "signature", QString::fromLocal8Bit(sign->signature.toHex()) }};
 
                         auto _code = QJsonDocument(code).toJson();
@@ -168,7 +166,7 @@ void LedgerDeviceController::login2()
 
                         for (auto path : m_paths) {
                             auto cmd = new GetWalletPublicKeyCommand(m_device, m_network, ParsePath(path));
-                            connect(cmd, &Command::finished, [this, cmd] {
+                            connect(cmd, &Command::finished, this, [this, cmd] {
                                 m_xpubs.append(cmd->m_xpub);
 
                                 m_progress = qreal(m_xpubs.size() + 2) / qreal(m_paths.size() + 2);
@@ -190,7 +188,7 @@ void LedgerDeviceController::login2()
                                     emit progressChanged(m_progress);
 
                                     auto w = m_wallet;
-                                    connect(m_device, &QObject::destroyed, [w] {
+                                    connect(m_device, &QObject::destroyed, this, [w] {
                                         WalletManager::instance()->removeWallet(w);
                                         delete w;
                                     });

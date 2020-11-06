@@ -30,7 +30,7 @@ public:
     void setDevice(Device* device);
     void login();
     void login2();
-    static Network *networkFromAppName(const QString &app_name);
+    static Network *networkFromAppName(const QString& app_name);
 private slots:
     void initialize();
 signals:
