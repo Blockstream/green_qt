@@ -1,8 +1,8 @@
 #!/bin/bash
-set -eo pipefail
+set -eox pipefail
 
-app_name=Green.app
-zip_name=GreenQt_MacOSX_x86_64.zip
+app_name=green.app
+zip_name=green.zip
 
 zip -r ${zip_name} ${app_name}
 
@@ -19,5 +19,3 @@ do
 done
 
 xcrun stapler staple ${app_name}
-
-zip -r ${zip_name} ${app_name}

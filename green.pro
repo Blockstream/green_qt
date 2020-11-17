@@ -1,4 +1,4 @@
-TARGET = Green
+TARGET = green
 
 VERSION_MAJOR = 0
 VERSION_MINOR = 0
@@ -135,9 +135,10 @@ macos {
     ICON = assets/icons/green.icns
 
     QMAKE_POST_LINK += \
-        plutil -replace CFBundleDisplayName -string \"Blockstream Green\" $$OUT_PWD/$${TARGET}.app/Contents/Info.plist && \
-        plutil -replace NSCameraUsageDescription -string \"We use the camera to scan QR codes\" $$OUT_PWD/$${TARGET}.app/Contents/Info.plist && \
-        plutil -remove NOTE $$OUT_PWD/$${TARGET}.app/Contents/Info.plist || true
+        plutil -replace CFBundleName -string \"Blockstream Green\" \"$$OUT_PWD/$${TARGET}.app/Contents/Info.plist\" && \
+        plutil -replace CFBundleDisplayName -string \"Blockstream Green\" \"$$OUT_PWD/$${TARGET}.app/Contents/Info.plist\" && \
+        plutil -replace NSCameraUsageDescription -string \"We use the camera to scan QR codes\" \"$$OUT_PWD/$${TARGET}.app/Contents/Info.plist\" && \
+        plutil -remove NOTE \"$$OUT_PWD/$${TARGET}.app/Contents/Info.plist\" || true
 
     static {
         LIBS += $${GDK_PATH}/libgreenaddress_full.a

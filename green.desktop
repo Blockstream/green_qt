@@ -1,6 +1,8 @@
 [Desktop Entry]
-Categories=Office;Finance;
+Version=1.0
+Terminal=false
 Type=Application
 Icon=green
 Name=Blockstream Green
-Exec=Green
+Exec=green
+Categories=Office;Finance;

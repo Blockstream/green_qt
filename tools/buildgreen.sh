@@ -28,15 +28,15 @@ make -j${NUM_JOBS}
 
 if [ "${GREENSYMBOLS}" = "" ]; then
    if [ "${GREENPLATFORM}" = "linux" ]; then
-       python ${CURRENTDIR}/tools/symbol-check.py < ${BUILDROOT}/Green
-       strip ${BUILDROOT}/Green
+       python ${CURRENTDIR}/tools/symbol-check.py < ${BUILDROOT}/green
+       strip ${BUILDROOT}/green
    elif [ "${GREENPLATFORM}" = "windows" ]; then
-       x86_64-w64-mingw32-strip ${BUILDROOT}/release/Green.exe
+       x86_64-w64-mingw32-strip ${BUILDROOT}/release/green.exe
    elif [ "${GREENPLATFORM}" = "osx" ]; then
-       strip ${BUILDROOT}/Green.app/Contents/MacOS/Green
+       strip ${BUILDROOT}/green.app/Contents/MacOS/green
    fi
 fi
 
 if [ "${GREENPLATFORM}" = "linux" ]; then
-   ${CURRENTDIR}/tools/appimage.sh ${CURRENTDIR}
+    ${CURRENTDIR}/tools/appimage.sh ${CURRENTDIR}
 fi

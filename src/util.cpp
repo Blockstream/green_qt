@@ -1,11 +1,13 @@
 #include "util.h"
 
 #include <QDir>
-#include <QStandardPaths>
+
+QString g_data_location;
 
 QString GetDataDir(const QString& context)
 {
-    const QString path = QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QDir::separator() + context;
+    Q_ASSERT(!g_data_location.isEmpty());
+    const QString path = g_data_location + QDir::separator() + context;
     const QDir dir;
     const bool created = dir.mkpath(path);
     Q_ASSERT(created);

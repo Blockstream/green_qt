@@ -4,6 +4,7 @@
 #include <QIcon>
 #include <QQmlApplicationEngine>
 #include <QQuickStyle>
+#include <QStandardPaths>
 #include <QStyleHints>
 #include <QTranslator>
 
@@ -30,6 +31,8 @@ Q_IMPORT_PLUGIN(QCocoaIntegrationPlugin);
 #include <windows.h>
 #endif
 
+extern QString g_data_location;
+
 int main(int argc, char *argv[])
 {
     QCoreApplication::setApplicationName("Green");
@@ -38,6 +41,11 @@ int main(int argc, char *argv[])
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
     QCoreApplication::setApplicationVersion(QT_STRINGIFY(VERSION));
+
+    g_data_location = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+#ifdef Q_OS_LINUX
+    QCoreApplication::setApplicationName("Blockstream Green");
+#endif
 
     QApplication app(argc, argv);
 

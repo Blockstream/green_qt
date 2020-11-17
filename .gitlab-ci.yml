@@ -12,15 +12,15 @@ bionic_release:
   script:
     - ./tools/buildgreen.sh linux
     - mkdir build-linux-gcc
-    - cp /docker_bld_root/*/Green build-linux-gcc/
-    - cp /docker_bld_root/*/Green-x86_64.AppImage build-linux-gcc/
+    - cp /docker_bld_root/*/green build-linux-gcc/
+    - cp /docker_bld_root/*/BlockstreamGreen-x86_64.AppImage build-linux-gcc/
   artifacts:
     name: "$CI_PROJECT_NAME-$CI_JOB_NAME-$CI_COMMIT_SHORT_SHA"
     expire_in: 1 week
     when: always
     paths:
-    - build-linux-gcc/Green
-    - build-linux-gcc/Green-x86_64.AppImage
+    - build-linux-gcc/green
+    - build-linux-gcc/BlockstreamGreen-x86_64.AppImage
 
 windows_release:
   tags:
@@ -29,7 +29,7 @@ windows_release:
   script:
     - ./tools/buildgreen.sh windows
     - mkdir -p build-mingw-w64/release
-    - cp /docker_bld_root/*/release/Green.exe build-mingw-w64/release/
+    - cp /docker_bld_root/*/release/green.exe "build-mingw-w64/release/Green.exe"
   artifacts:
     name: "$CI_PROJECT_NAME-$CI_JOB_NAME-$CI_COMMIT_SHORT_SHA"
     expire_in: 1 week
@@ -56,7 +56,7 @@ osx_release:
     expire_in: 1 week
     when: always
     paths:
-    - build-osx-clang/Green.app
+    - build-osx-clang/green.app
 
 bionic_allsymbolsunstripped_manual:
   extends: bionic_release
@@ -95,7 +95,7 @@ osx_sign:
     expire_in: 1 week
     when: always
     paths:
-    - build-osx-clang/GreenQt_MacOSX_x86_64.zip
+    - build-osx-clang/green.app
   needs:
     - osx_release
   script:
@@ -142,12 +142,15 @@ package_release:
     - cd $CI_PROJECT_DIR
     - rm -fr green_qt_dist
     - mkdir green_qt_dist
-    - mv build-mingw-w64/release/GreenSigned.exe Green.exe
-    - zip -j green_qt_dist/GreenQt_Windows_x86_64.zip Green.exe
-    - (cd build-osx-clang; mv GreenQt_MacOSX_x86_64.zip ../green_qt_dist)
-    - chmod +x build-linux-gcc/Green
-    - tar czf green_qt_dist/GreenQt_Linux_x86_64.tar.gz -C build-linux-gcc Green
-    - tar czf green_qt_dist/GreenQt_AppImage_x86_64.tar.gz -C build-linux-gcc Green-x86_64.AppImage
+    - mv build-mingw-w64/release/GreenSigned.exe "Blockstream Green.exe"
+    - zip -j green_qt_dist/BlockstreamGreen_Windows_x86_64.zip "Blockstream Green.exe"
+    - rm -rf "build-osx-clang/Blockstream Green.app"
+    - mv build-osx-clang/green.app "build-osx-clang/Blockstream Green.app"
+    - (cd build-osx-clang; zip -r ../green_qt_dist/BlockstreamGreen_MacOS_x86_64.zip "Blockstream Green.app")
+    - chmod +x build-linux-gcc/green
+    - tar czf green_qt_dist/BlockstreamGreen_Linux_x86_64.tar.gz -C build-linux-gcc green
+    - cp build-linux-gcc/BlockstreamGreen-x86_64.AppImage green_qt_dist
+    - chmod +x green_qt_dist/BlockstreamGreen-x86_64.AppImage
     - cd green_qt_dist
     - /opt/process_release
   needs:
