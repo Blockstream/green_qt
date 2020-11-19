@@ -69,6 +69,7 @@ SOURCES += \
     src/sendtransactioncontroller.cpp \
     src/signupcontroller.cpp \
     src/transaction.cpp \
+    src/transactionlistmodel.cpp \
     src/twofactorcontroller.cpp \
     src/util.cpp \
     src/wallet.cpp \
@@ -102,6 +103,7 @@ HEADERS += \
     src/sendtransactioncontroller.h \
     src/signupcontroller.h \
     src/transaction.h \
+    src/transactionlistmodel.h \
     src/twofactorcontroller.h \
     src/util.h \
     src/wallet.h \
