@@ -41,35 +41,6 @@ public:
     }
 };
 
-class GetTransactionsHandler : public Handler
-{
-    int m_subaccount;
-    int m_first;
-    int m_count;
-    void call(GA_session* session, GA_auth_handler** auth_handler) override
-    {
-        GA_json* details = Json::fromObject({
-            { "subaccount", m_subaccount },
-            { "first", m_first },
-            { "count", m_count }
-        });
-
-        int err = GA_get_transactions(session, details, auth_handler);
-        Q_ASSERT(err == GA_OK);
-
-        err = GA_destroy_json(details);
-        Q_ASSERT(err == GA_OK);
-    }
-public:
-    GetTransactionsHandler(int subaccount, int first, int count, Wallet *wallet)
-        : Handler(wallet)
-        , m_subaccount(subaccount)
-        , m_first(first)
-        , m_count(count)
-    {
-    }
-};
-
 class GetReceiveAddressHandler : public Handler
 {
     Account* const m_account;
