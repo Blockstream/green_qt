@@ -15,7 +15,6 @@ class Account : public QObject
     Q_PROPERTY(bool mainAccount READ isMainAccount NOTIFY jsonChanged)
     Q_PROPERTY(QJsonObject json READ json NOTIFY jsonChanged)
     Q_PROPERTY(QString name READ name NOTIFY jsonChanged)
-    Q_PROPERTY(QQmlListProperty<Transaction> transactions READ transactions NOTIFY transactionsChanged)
     Q_PROPERTY(qint64 balance READ balance NOTIFY balanceChanged)
     Q_PROPERTY(QQmlListProperty<Balance> balances READ balances NOTIFY balancesChanged)
     QML_ELEMENT
@@ -28,8 +27,6 @@ public:
 
     QString name() const;
     QJsonObject json() const;
-
-    QQmlListProperty<Transaction> transactions();
 
     void update(const QJsonObject& json);
 
@@ -44,7 +41,6 @@ public:
 signals:
     void walletChanged();
     void jsonChanged();
-    void transactionsChanged();
     void balanceChanged();
 
     void balancesChanged();
@@ -55,7 +51,6 @@ public slots:
 
 public:
     Wallet* const m_wallet;
-    QVector<Transaction*> m_transactions;
     QMap<QString, Transaction*> m_transactions_by_hash;
     QList<Balance*> m_balances;
     QMap<QString, Balance*> m_balance_by_id;
@@ -64,7 +59,7 @@ public:
     int m_pointer;
 
     QJsonArray m_transactions_data;
-    void loadNextPage();
+    Transaction *getOrCreateTransaction(const QJsonObject &data);
 };
 
 QML_DECLARE_TYPE(Account*);

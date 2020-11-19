@@ -82,13 +82,6 @@ QJsonObject Account::json() const
     return m_json;
 }
 
-QQmlListProperty<Transaction> Account::transactions()
-{
-    return QQmlListProperty<Transaction>(this, &m_transactions,
-        [](QQmlListProperty<Transaction>* property) { return static_cast<QVector<Transaction*>*>(property->data)->size(); },
-    [](QQmlListProperty<Transaction>* property, int index) { return static_cast<QVector<Transaction*>*>(property->data)->at(index); });
-}
-
 void Account::update(const QJsonObject& json)
 {
     m_json = json;
@@ -162,7 +155,6 @@ void Account::reload()
         emit jsonChanged();
         updateBalance();
         m_transactions_data = {};
-        loadNextPage();
     });
     QObject::connect(handler, &Handler::resolver, [](Resolver* resolver) {
         resolver->resolve();
@@ -170,36 +162,16 @@ void Account::reload()
     handler->exec();
 }
 
-void Account::loadNextPage()
+Transaction* Account::getOrCreateTransaction(const QJsonObject& data)
 {
-    auto handler = new GetTransactionsHandler(m_pointer, m_transactions_data.size(), 30, wallet());
-    QObject::connect(handler, &Handler::done, this, [this, handler] {
-        auto transactions = handler->result().value("result").toObject().value("transactions").toArray();
-        for (auto data : transactions) m_transactions_data.append(data);
-        if (transactions.size() < 30) {
-            m_transactions.clear();
-            m_have_unconfirmed = false;
-            for (auto value : m_transactions_data) {
-                QJsonObject data = value.toObject();
-                auto hash = data.value("txhash").toString();
-                auto transaction = m_transactions_by_hash.value(hash);
-                if (!transaction) {
-                    transaction = new Transaction(this);
-                    m_transactions_by_hash.insert(hash, transaction);
-                }
-                transaction->updateFromData(data);
-                m_transactions.append(transaction);
-                if (transaction->isUnconfirmed()) m_have_unconfirmed = true;
-            }
-            emit transactionsChanged();
-        } else {
-            loadNextPage();
-        }
-    });
-    QObject::connect(handler, &Handler::resolver, [](Resolver* resolver) {
-        resolver->resolve();
-    });
-    handler->exec();
+    auto hash = data.value("txhash").toString();
+    auto transaction = m_transactions_by_hash.value(hash);
+    if (!transaction) {
+        transaction = new Transaction(this);
+        m_transactions_by_hash.insert(hash, transaction);
+    }
+    transaction->updateFromData(data);
+    return transaction;
 }
 
 Wallet *Account::wallet() const
@@ -214,6 +186,10 @@ bool Account::isMainAccount() const
 
 void Account::exportCSV()
 {
+    // TODO move to a dedicated controller where
+    // transactions are fetched with the GetTransactionsHandler, exported and ditched
+#if 0
+
     const auto now = QDateTime::currentDateTime();
     const QString suggestion =
             QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + QDir::separator() +
@@ -286,6 +262,7 @@ void Account::exportCSV()
 
     QTextStream stream(&file);
     stream << lines.join("\n");
+#endif
 }
 
 ReceiveAddress::ReceiveAddress(QObject *parent) : QObject(parent)
