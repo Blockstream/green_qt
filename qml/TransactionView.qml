@@ -78,7 +78,7 @@ Page {
             icon.source: 'qrc:/svg/arrow_left.svg'
             icon.height: 16
             icon.width: 16
-            onClicked: stack_view.pop()
+            onClicked: account_view.pop()
         }
 
         Label {

@@ -53,9 +53,9 @@ void CreateAccountController::create()
     };
     auto handler = new CreateAccountHandler(details, wallet());
     connect(handler, &Handler::done, this, [this, handler] {
+        // TODO switch to new account
         auto account = wallet()->getOrCreateAccount(handler->pointer());
         wallet()->reload();
-        wallet()->setCurrentAccount(account);
         emit created(handler);
     });
     exec(handler);

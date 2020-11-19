@@ -7,6 +7,7 @@ StackView {
     id: stack_view
 
     required property Wallet wallet
+    readonly property Account currentAccount: wallet_view.currentAccount
 
     Connections {
         target: wallet

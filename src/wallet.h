@@ -55,7 +55,6 @@ private:
     Q_PROPERTY(int loginAttemptsRemaining READ loginAttemptsRemaining NOTIFY loginAttemptsRemainingChanged)
     Q_PROPERTY(QJsonObject config READ config NOTIFY configChanged)
     Q_PROPERTY(bool busy READ isBusy NOTIFY busyChanged)
-    Q_PROPERTY(Account* currentAccount READ currentAccount WRITE setCurrentAccount NOTIFY currentAccountChanged)
     Q_PROPERTY(Device* device READ device CONSTANT)
 
 public:
@@ -143,7 +142,6 @@ signals:
     void settingsChanged();
     void configChanged();
     void busyChanged(bool busy);
-    void currentAccountChanged(Account* account);
     void loginError(const QString& error);
 
 protected:
@@ -156,8 +154,6 @@ private:
     void setSettings(const QJsonObject& settings);
     void connectNow();
     void updateCurrencies();
-
-    Account* m_current_account{nullptr};
 
 public:
     QString m_id;
@@ -187,8 +183,6 @@ public:
     bool m_busy{false};
 
     void save();
-    Account* currentAccount() const { return m_current_account; }
-    void setCurrentAccount(Account* account);
     Device* m_device{nullptr};
 };
 

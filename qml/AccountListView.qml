@@ -4,13 +4,18 @@ import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.12
 
 ListView {
+    id: account_list_view
     model: wallet.accounts
-
+    property Account currentAccount: currentItem ? currentItem.account : null
+    signal clicked(Account account)
     delegate: ItemDelegate {
         property Account account: modelData
 
-        onClicked: wallet.currentAccount = account
-        highlighted: wallet.currentAccount === account
+        onClicked: {
+            account_list_view.currentIndex = index
+            account_list_view.clicked(account)
+        }
+        highlighted: currentIndex === index
         leftPadding: 16
         rightPadding: 8
         width: ListView.view.width

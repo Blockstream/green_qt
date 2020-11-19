@@ -9,6 +9,7 @@ Item {
     id: wallet_view
 
     required property Wallet wallet
+    readonly property Account currentAccount: accounts_list.currentAccount
 
     function parseAmount(amount) {
         const unit = wallet.settings.unit;
@@ -73,56 +74,21 @@ Item {
         }
         ToolButton {
             id: settings_tool_button
-            checked: window.location === '/settings'
-            checkable: true
-            //Layout.alignment: Qt.AlignBottom
+            highlighted: stack_view.currentItem instanceof WalletSettingsView
             icon.source: 'qrc:/svg/settings.svg'
             icon.width: 24
             icon.height: 24
-            onToggled: window.location = checked ? '/settings' : '/transactions'
+            onClicked: toggleSettings()
         }
     }
 
-    Connections {
-        target: wallet
-        function onCurrentAccountChanged() {
-            location = '/transactions'
-            stack_view.pop()
-        }
+    property WalletSettingsView wallet_settings_view
+    Component {
+        id: wallet_settings_view_component
+        WalletSettingsView {
+           wallet: wallet_view.wallet
+       }
     }
-
-    states: [
-        State {
-            when: window.location === '/settings'
-            name: 'VIEW_SETTINGS'
-            PropertyChanges {
-                target: settings_tool_button
-                icon.source: 'qrc:/svg/cancel.svg'
-                icon.width: 16
-                icon.height: 16
-                icon.color: 'transparent'
-            }
-        }
-    ]
-
-    transitions: [
-        Transition {
-            to: 'VIEW_SETTINGS'
-            StackViewPushAction {
-                stackView: stack_view
-                WalletSettingsView {
-                    wallet: wallet_view.wallet
-                }
-            }
-        },
-        Transition {
-            from: 'VIEW_SETTINGS'
-            to: ''
-            ScriptAction {
-                script: stack_view.pop()
-            }
-        }
-    ]
 
     Action {
         shortcut: 'CTRL+,'
@@ -202,6 +168,39 @@ Item {
     }
 
 
+    Component {
+        id: account_view_component
+        AccountView {}
+    }
+
+    property var account_views: ({})
+    function switchToAccount(account) {
+        if (stack_view.currentItem instanceof WalletSettingsView) {
+            stack_view.pop()
+        }
+        if (account) {
+            let account_view = account_views[account]
+            if (!account_view) {
+                account_view = account_view_component.createObject(null, { account })
+                account_views[account] = account_view
+            }
+            stack_view.replace(account_view, StackView.Immediate)
+        } else {
+            stack_view.replace(stack_view.initialItem, StackView.Immediate)
+        }
+    }
+
+    function toggleSettings() {
+        if (stack_view.currentItem instanceof WalletSettingsView) {
+            stack_view.pop()
+        } else {
+            if (!wallet_settings_view) {
+                wallet_settings_view = wallet_settings_view_component.createObject(null);
+            }
+            stack_view.push(wallet_settings_view)
+        }
+    }
+
     SplitView {
         anchors.fill: parent
         handle: Item {
@@ -214,68 +213,18 @@ Item {
             Layout.fillWidth: true
             SplitView.minimumWidth: Math.max(implicitWidth, 300)
             clip: true
+            onClicked: switchToAccount(currentAccount)
+            onCurrentAccountChanged: switchToAccount(currentAccount)
         }
         StackView {
+            id: stack_view
             SplitView.fillWidth: true
             SplitView.minimumWidth: wallet_view.width / 2
-                id: stack_view
-                clip: true
-
-                initialItem: Page {
-                    background: Item { }
-
-                    header: RowLayout {
-                        TabBar {
-                            leftPadding: 16
-                            background: Item {}
-                            id: tab_bar
-
-                            TabButton {
-                                text: qsTrId('id_transactions')
-                                width: 160
-                            }
-
-                            TabButton {
-                                visible: wallet.network.liquid
-                                text: qsTrId('id_assets')
-                                width: 160
-                            }
-                        }
-                    }
-
-                    StackLayout {
-                        id: stack_layout
-                        clip: true
-                        anchors.fill: parent
-                        currentIndex: tab_bar.currentIndex
-
-                        Loader {
-                            active: !!currentAccount
-                            sourceComponent: TransactionListView {
-                                account: currentAccount
-                            }
-                        }
-
-                        Loader {
-                            active: !!currentAccount
-                            sourceComponent: AssetListView {
-                                account: currentAccount
-                                onClicked: stack_view.push(asset_view_component, { balance })
-                            }
-                        }
-                    }
-                }
+            initialItem: Item {}
+            clip: true
         }
     }
 
-    Component {
-        id: transaction_view_component
-        TransactionView { }
-    }
-    Component {
-        id: asset_view_component
-        AssetView { }
-    }
     Component {
         id: bump_fee_dialog
         BumpFeeDialog { }

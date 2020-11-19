@@ -74,5 +74,6 @@
         <file>CopyableLabel.qml</file>
         <file>DeviceImage.qml</file>
         <file>SignLiquidTransactionResolverView.qml</file>
+        <file>AccountView.qml</file>
     </qresource>
 </RCC>

@@ -9,9 +9,8 @@ import QtQuick.Window 2.12
 ApplicationWindow {
     id: window
 
-    property string location: '/'
     readonly property Wallet currentWallet: stack_view.currentItem.wallet || null
-    readonly property Account currentAccount: currentWallet ? currentWallet.currentAccount : null
+    readonly property Account currentAccount: stack_view.currentItem.currentAccount || null
 
     DeviceDiscoveryAgent {
         onDeviceConnected: {
@@ -51,11 +50,9 @@ ApplicationWindow {
                 container = container_component.createObject(null, { wallet })
                 wallet_views[wallet] = container
             }
-            stack_view.replace(container)
-            tool_button.checked = false
+            stack_view.replace(container, StackView.Immediate)
         } else {
-            stack_view.replace(stack_view.initialItem)
-            tool_button.checked = true
+            stack_view.replace(stack_view.initialItem, StackView.Immediate)
         }
     }
 
@@ -93,16 +90,14 @@ ApplicationWindow {
     minimumHeight: 480
     visible: true
     title: {
-        const wallet = currentWallet
         const parts = []
-        if (wallet) {
-            if (wallet.device) {
-                parts.push(wallet.device.name);
+        if (currentWallet) {
+            if (currentWallet.device) {
+                parts.push(currentWallet.device.name);
             } else {
-                parts.push(wallet.name);
+                parts.push(currentWallet.name);
             }
-            const account = wallet.currentAccount;
-            if (account) parts.push(account.name);
+            if (currentAccount) parts.push(currentAccount);
         }
         parts.push('Blockstream Green');
         return parts.join(' - ');
@@ -158,7 +153,7 @@ ApplicationWindow {
                 MenuItem {
                     text: qsTrId('id_settings')
                     enabled: currentWallet && currentWallet.authentication === Wallet.Authenticated
-                    onClicked: location = '/settings'
+                    onClicked: console.assert(true)
                 }
                 MenuItem {
                     enabled: currentWallet && currentWallet.connection !== Wallet.Disconnected && !currentWallet.device
@@ -173,7 +168,7 @@ ApplicationWindow {
                 }
                 MenuItem {
                     text: qsTrId('id_rename_account')
-                    enabled: currentWallet && currentWallet.authentication === Wallet.Authenticated && currentAccount
+                    enabled: currentWallet && currentWallet.authentication === Wallet.Authenticated && currentAccount && !currentAccount.mainAccount
                     onClicked: rename_account_dialog.createObject(window, { account: currentAccount }).open()
                 }
             }

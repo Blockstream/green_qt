@@ -7,7 +7,7 @@ import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.12
 
 ItemDelegate {
-    property Transaction transaction
+    required property Transaction transaction
     property var tx: transaction.data
     property int confirmations: transactionConfirmations(transaction)
 
@@ -55,14 +55,14 @@ ItemDelegate {
             Label {
                 color: tx.type === 'incoming' ? Material.accentColor : Material.foreground
                 Layout.alignment: Qt.AlignRight
-                text: transaction.amounts.length > 1 ? qsTrId('id_multiple_assets') : transaction.amounts[0].formatAmount(true, wallet.settings.unit)
+                text: transaction.amounts.length > 1 ? qsTrId('id_multiple_assets') : transaction.amounts[0].formatAmount(true, transaction.account.wallet.settings.unit)
             }
 
             Label {
                 Layout.alignment: Qt.AlignRight
                 color: confirmations === 0 ? 'red' : 'white'
                 text: transactionStatus(confirmations)
-                visible: confirmations < (wallet.network.liquid ? 1 : 6)
+                visible: confirmations < (transaction.account.wallet.network.liquid ? 1 : 6)
             }
         }
 

@@ -7,7 +7,7 @@ import QtQuick.Layouts 1.12
 
 Page {
     id: view
-    required property Wallet wallet
+    property Wallet wallet
     background: Item { }
 
     header: TabBar {
