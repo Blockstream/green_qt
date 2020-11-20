@@ -284,7 +284,6 @@ ApplicationWindow {
                     }
                 }
                 ScrollIndicator.vertical: ScrollIndicator {}
-                ScrollShadow {}
             }
 
         }

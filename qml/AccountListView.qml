@@ -110,6 +110,4 @@ ListView {
     }
 
     ScrollIndicator.vertical: ScrollIndicator { }
-
-    ScrollShadow {}
 }
