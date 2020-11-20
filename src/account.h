@@ -44,7 +44,7 @@ signals:
     void balanceChanged();
 
     void balancesChanged();
-
+    void notificationHandled(const QJsonObject &notification);
 public slots:
     void reload();
 

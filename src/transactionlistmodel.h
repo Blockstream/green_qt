@@ -35,6 +35,8 @@ public slots:
 signals:
     void accountChanged(Account* account);
     void fetchingChanged(bool fetching);
+private slots:
+    void handleNotification(const QJsonObject& notification);
 private:
     Account* m_account{nullptr};
     QVector<Transaction*> m_transactions;

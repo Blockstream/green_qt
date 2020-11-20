@@ -128,6 +128,7 @@ void Account::handleNotification(const QJsonObject &notification)
 {
     Q_UNUSED(notification);
     reload();
+    emit notificationHandled(notification);
 }
 
 qint64 Account::balance() const

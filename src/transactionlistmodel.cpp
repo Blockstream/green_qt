@@ -21,6 +21,7 @@ void TransactionListModel::setAccount(Account *account)
         beginResetModel();
         m_handler = nullptr;
         m_transactions.clear();
+        disconnect(m_account, &Account::notificationHandled, this, &TransactionListModel::handleNotification);
         m_account = nullptr;
         emit accountChanged(nullptr);
         endResetModel();
@@ -28,7 +29,22 @@ void TransactionListModel::setAccount(Account *account)
     if (!account) return;
     m_account = account;
     emit accountChanged(account);
-    fetchMore(QModelIndex());
+    if (m_account) {
+        connect(m_account, &Account::notificationHandled, this, &TransactionListModel::handleNotification);
+        fetchMore(QModelIndex());
+    }
+}
+
+void TransactionListModel::handleNotification(const QJsonObject& notification)
+{
+    QString event = notification.value("event").toString();
+    if (event == "transaction") {
+        beginResetModel();
+        m_handler = nullptr;
+        m_transactions.clear();
+        endResetModel();
+        return;
+    }
 }
 
 QHash<int, QByteArray> TransactionListModel::roleNames() const
