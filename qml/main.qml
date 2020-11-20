@@ -138,7 +138,10 @@ ApplicationWindow {
                         model: currentWallet ? currentWallet.accounts : null
                         MenuItem {
                             text: modelData.name
-                            onTriggered: modelData.exportCSV()
+                            onTriggered: {
+                                const popup = export_transactions_popup.createObject(window, { account: modelData })
+                                popup.open()
+                            }
                         }
                     }
                 }
@@ -455,5 +458,29 @@ ApplicationWindow {
                 }
             }
         }
+    }
+
+
+    Component {
+        id: export_transactions_popup
+        Popup {
+            required property Account account
+            id: dialog
+            anchors.centerIn: Overlay.overlay
+            closePolicy: Popup.NoAutoClose
+            modal: true
+            Overlay.modal: Rectangle {
+                color: "#70000000"
+            }
+            onClosed: destroy()
+            onOpened: controller.save()
+            ExportTransactionsController {
+                id: controller
+                account: dialog.account
+                onSaved: dialog.close()
+            }
+            BusyIndicator {}
+        }
+
     }
 }

@@ -21,7 +21,7 @@ StackView {
                 }
 
                 TabButton {
-                    visible: account.wallet.network.liquid
+                    visible: account && account.wallet.network.liquid
                     text: qsTrId('id_assets')
                     width: 160
                 }
@@ -35,7 +35,7 @@ StackView {
                 onClicked: account_view.push(transaction_view_component, { transaction })
             }
             Loader {
-                active: account.wallet.network.liquid
+                active: account && account.wallet.network.liquid
                 sourceComponent: AssetListView {
                     account: account_view.account
                     onClicked: account_view.push(asset_view_component, { balance })

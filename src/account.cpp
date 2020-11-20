@@ -9,12 +9,6 @@
 #include "transaction.h"
 #include "wallet.h"
 
-#include <QFileDialog>
-#include <QFile>
-#include <QTextStream>
-#include <QStandardPaths>
-#include <QTimer>
-
 #include <gdk.h>
 
 class GetBalanceHandler : public Handler
@@ -182,87 +176,6 @@ Wallet *Account::wallet() const
 bool Account::isMainAccount() const
 {
     return m_json.value("name").toString() == "";
-}
-
-void Account::exportCSV()
-{
-    // TODO move to a dedicated controller where
-    // transactions are fetched with the GetTransactionsHandler, exported and ditched
-#if 0
-
-    const auto now = QDateTime::currentDateTime();
-    const QString suggestion =
-            QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + QDir::separator() +
-            wallet()->name() + " - " + name() + " - " +
-            now.toString("yyyyMMddhhmmss") + ".csv";
-    const QString name = QFileDialog::getSaveFileName(nullptr, "Export to CSV", suggestion);
-    if (name.isEmpty()) return;
-
-    QFile file(name);
-    bool result = file.open(QFile::WriteOnly);
-    Q_ASSERT(result);
-
-    const auto pricing = wallet()->settings().value("pricing").toObject();
-
-    const QString fee_field = QString("fee (%1)").arg(wallet()->network()->isLiquid() ? "L-" + wallet()->settings().value("unit").toString() : wallet()->settings().value("unit").toString());
-    const QString fiat_field = QString("fiat (%1 %2 %3)").arg(pricing.value("currency").toString()).arg(pricing.value("exchange").toString(), now.toString(Qt::ISODate));
-    const bool header = true;
-    const QString separator = ",";
-    const QStringList fields{"time", "description", "amount", "unit", fee_field, fiat_field, "txhash", "memo"};
-
-    QStringList lines;
-    if (header) {
-        lines.append(fields.join(separator));
-    }
-    for (auto transaction : m_transactions) {
-        const auto data = transaction->data();
-        const auto block_height = data.value("block_height").toInt();
-        if (block_height == 0) continue;
-        for (auto amount : transaction->m_amounts) {
-            const auto asset = amount->asset();
-            QStringList values;
-            for (auto field : fields) {
-                if (field == "time") {
-                    values.append(data.value("created_at").toString());
-                } else if (field == "description") {
-                    values.append(data.value("type").toString());
-                } else if (field == "amount") {
-                    values.append(amount->formatAmount(false).replace(",", "."));
-                } else if (field == "unit") {
-                    if (asset && !asset->isLBTC()) {
-                        values.append(asset->data().value("ticker").toString());
-                    } else if (asset && asset->isLBTC()) {
-                        values.append("L-" + wallet()->settings().value("unit").toString());
-                    } else {
-                        values.append(wallet()->settings().value("unit").toString());
-                    }
-                } else if (field == fee_field) {
-                    if (data.value("type").toString() == "outgoing") {
-                        values.append(wallet()->formatAmount(data.value("fee").toInt(), false).replace(",", "."));
-                    } else {
-                        values.append("");
-                    }
-                } else if (field == fiat_field) {
-                    if (asset && !asset->isLBTC()) {
-                        values.append("");
-                    } else {
-                        values.append(wallet()->convert({{ "satoshi", amount->amount() }}).value("fiat").toString());
-                    }
-                } else if (field == "txhash") {
-                    values.append(data.value("txhash").toString());
-                } else if (field == "memo") {
-                    values.append(data.value("memo").toString().replace("\n", " ").replace(",", "-"));
-                } else {
-                    Q_UNREACHABLE();
-                }
-            }
-            lines.append(values.join(separator));
-        }
-    }
-
-    QTextStream stream(&file);
-    stream << lines.join("\n");
-#endif
 }
 
 ReceiveAddress::ReceiveAddress(QObject *parent) : QObject(parent)

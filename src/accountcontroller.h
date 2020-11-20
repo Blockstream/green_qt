@@ -3,7 +3,7 @@
 
 #include "controller.h"
 
-class Account;
+QT_FORWARD_DECLARE_CLASS(Account)
 
 class AccountController : public Controller
 {
