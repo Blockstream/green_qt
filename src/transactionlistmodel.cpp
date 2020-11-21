@@ -39,12 +39,49 @@ void TransactionListModel::handleNotification(const QJsonObject& notification)
 {
     QString event = notification.value("event").toString();
     if (event == "transaction") {
-        beginResetModel();
-        m_handler = nullptr;
-        m_transactions.clear();
-        endResetModel();
+        fetch(0, 2);
         return;
     }
+}
+
+void TransactionListModel::fetch(int offset, int count)
+{
+    auto handler = new GetTransactionsHandler(m_account->m_pointer, offset, count, m_account->wallet());
+
+    QObject::connect(handler, &Handler::done, this, [this, handler] {
+        // ignore handler result if no longer relevant
+        if (handler != m_handler) return;
+        QJsonArray transactions = handler->result().value("result").toObject().value("transactions").toArray();
+        QVector<Transaction*> txs;
+        int index = -1;
+        for (auto data : transactions) {
+            Transaction* transaction = m_account->getOrCreateTransaction(data.toObject());
+            index = m_transactions.indexOf(transaction);
+            if (index >= 0) break;
+            txs.append(transaction);
+        }
+        if (index < 0) {
+            beginInsertRows(QModelIndex(), m_transactions.size(), m_transactions.size() + txs.size() - 1);
+            m_transactions.append(txs);
+            endInsertRows();
+        } else {
+            beginInsertRows(QModelIndex(), index, index + txs.size() - 1);
+            while (!txs.empty()) {
+                m_transactions.insert(index++, txs.takeFirst());
+            }
+            endInsertRows();
+        }
+        m_handler = nullptr;
+        emit fetchingChanged(false);
+    });
+
+    connect(handler, &Handler::resolver, [](Resolver* resolver) {
+        resolver->resolve();
+    });
+
+    handler->exec();
+    m_handler = handler;
+    emit fetchingChanged(true);
 }
 
 QHash<int, QByteArray> TransactionListModel::roleNames() const
@@ -67,30 +104,7 @@ void TransactionListModel::fetchMore(const QModelIndex &parent)
     Q_ASSERT(!parent.parent().isValid());
     if (!m_account) return;
     if (m_handler) return;
-
-    auto handler = new GetTransactionsHandler(m_account->m_pointer, m_transactions.size(), 10, m_account->wallet());
-
-    QObject::connect(handler, &Handler::done, this, [this, handler] {
-        // ignore handler result if no longer relevant
-        if (handler != m_handler) return;
-        QJsonArray transactions = handler->result().value("result").toObject().value("transactions").toArray();
-        beginInsertRows(QModelIndex(), m_transactions.size(), m_transactions.size() + transactions.size() - 1);
-        for (auto data : transactions) {
-            Transaction* transaction = m_account->getOrCreateTransaction(data.toObject());
-            m_transactions.append(transaction);
-        }
-        endInsertRows();
-        m_handler = nullptr;
-        emit fetchingChanged(false);
-    });
-
-    connect(handler, &Handler::resolver, [](Resolver* resolver) {
-        resolver->resolve();
-    });
-
-    handler->exec();
-    m_handler = handler;
-    emit fetchingChanged(true);
+    fetch(m_transactions.size(), 10);
 }
 
 int TransactionListModel::rowCount(const QModelIndex &parent) const

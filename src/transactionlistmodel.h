@@ -38,6 +38,8 @@ signals:
 private slots:
     void handleNotification(const QJsonObject& notification);
 private:
+    void fetch(int offset, int count);
+private:
     Account* m_account{nullptr};
     QVector<Transaction*> m_transactions;
     Handler* m_handler{nullptr};
