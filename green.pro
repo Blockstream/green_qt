@@ -115,7 +115,8 @@ include(src/controllers/controllers.pri)
 include(src/handlers/handlers.pri)
 include(src/resolvers/resolvers.pri)
 
-RESOURCES += assets/assets.qrc qml/qml.qrc assets/svg.qrc
+RESOURCES += assets/assets.qrc assets/icons.qrc qml/qml.qrc assets/svg.qrc
+
 win32 {
     RESOURCES += src/win.qrc
 } else {
@@ -131,7 +132,7 @@ INCLUDEPATH += src/ $${GDK_PATH}
 macos {
     QMAKE_TARGET_BUNDLE_PREFIX = com.blockstream
     LIBS += -framework Foundation -framework Cocoa
-    ICON = Green.icns
+    ICON = assets/icons/green.icns
 
     QMAKE_POST_LINK += \
         plutil -replace CFBundleDisplayName -string \"Blockstream Green\" $$OUT_PWD/$${TARGET}.app/Contents/Info.plist && \
@@ -159,7 +160,7 @@ unix:!macos:!android {
 win32:static {
     # FIXME: the following script appends -lwinpthread at the end so that green .rsrc entries are used instead
     QMAKE_LINK=$${PWD}/link.sh
-    RC_ICONS = Green.ico
+    RC_ICONS = assets/icons/green.ico
     LIBS += $${GDK_PATH}/libgreenaddress_full.a /usr/x86_64-w64-mingw32/lib/libhid.a /usr/x86_64-w64-mingw32/lib/libsetupapi.a
 }
 

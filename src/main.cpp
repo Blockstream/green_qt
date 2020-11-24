@@ -58,7 +58,9 @@ int main(int argc, char *argv[])
 #endif
     }
 
-    QApplication::setWindowIcon(QIcon(":/png/icon-512-x-512-2-x.png"));
+#ifndef Q_OS_MACOS
+    QApplication::setWindowIcon(QIcon(":/icons/green.png"));
+#endif
 
     // Reset the locale that is used for number formatting, see:
     // https://doc.qt.io/qt-5/qcoreapplication.html#locale-settings
