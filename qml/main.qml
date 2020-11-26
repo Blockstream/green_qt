@@ -97,7 +97,7 @@ ApplicationWindow {
             } else {
                 parts.push(currentWallet.name);
             }
-            if (currentAccount) parts.push(currentAccount);
+            if (currentAccount) parts.push(currentAccount.name);
         }
         parts.push('Blockstream Green');
         return parts.join(' - ');
