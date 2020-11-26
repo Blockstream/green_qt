@@ -39,6 +39,7 @@ void Resolver::setFailed(bool failed)
     if (m_failed == failed) return;
     m_failed = failed;
     emit failedChanged(m_failed);
+    if (m_failed) emit m_handler->error();
 }
 
 TwoFactorResolver::TwoFactorResolver(Handler* handler, const QJsonObject& result)
@@ -97,9 +98,12 @@ void GetXPubsResolver::resolve()
 
     auto path = m_paths.takeFirst();
     auto command = device()->getWalletPublicKey(wallet()->network(), path);
-    connect(command, &Command::finished, [this, command] {
+    connect(command, &Command::finished, this, [this, command] {
         m_xpubs.append(command->m_xpub);
         resolve();
+    });
+    connect(command, &Command::error, this, [this] {
+        setFailed(true);
     });
 }
 

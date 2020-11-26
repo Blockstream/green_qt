@@ -216,7 +216,12 @@ void DevicePrivateImpl::inputReport(const QByteArray& data)
     auto command = queue.head();
     int r = command->readHIDReport(q, stream);
     if (r == 2) return;
-    if (r == 1) qWarning("command failed");
+    if (r == 1) {
+        qWarning("command failed");
+        qDebug() << command << command->objectName();
+        emit command->error();
+        delete command;
+    }
     queue.dequeue();
     if (!queue.empty()) {
         //qDebug() << "sending next command";
