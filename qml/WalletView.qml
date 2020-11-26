@@ -4,6 +4,7 @@ import QtQuick.Window 2.12
 import QtQuick.Controls 2.14
 import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.12
+import QtQml 2.15
 
 Item {
     id: wallet_view
@@ -149,6 +150,7 @@ Item {
                 wrapMode: Label.WordWrap
                 Layout.fillWidth: true
                 Binding on text {
+                    restoreMode: Binding.RestoreBinding
                     when: !!wallet.events.twofactor_reset
                     value: qsTrId('id_your_wallet_is_locked_for_a').arg(wallet.events.twofactor_reset ? wallet.events.twofactor_reset.days_remaining : 0)
                 }
