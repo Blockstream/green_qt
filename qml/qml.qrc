@@ -75,5 +75,6 @@
         <file>DeviceImage.qml</file>
         <file>SignLiquidTransactionResolverView.qml</file>
         <file>AccountView.qml</file>
+        <file>SystemMessageDialog.qml</file>
     </qresource>
 </RCC>

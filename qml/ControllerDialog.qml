@@ -15,7 +15,8 @@ WalletDialog {
     property real minimumHeight: 0
     property real minimumWidth: 0
 
-    onClosed: destroy()
+    property bool autoDestroy: false
+    onClosed: if (autoDestroy) destroy()
 
     header: Item {
         implicitHeight: 48
@@ -38,6 +39,7 @@ WalletDialog {
             icon.width: 16
             icon.height: 16
             onClicked: reject()
+            visible: controller_dialog.closePolicy !== Popup.NoAutoClose
         }
     }
 

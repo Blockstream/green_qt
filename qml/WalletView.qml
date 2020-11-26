@@ -239,4 +239,8 @@ Item {
         id: receive_dialog
         ReceiveDialog { }
     }
+
+    SystemMessageDialog {
+        wallet: wallet_view.wallet
+    }
 }
