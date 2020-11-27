@@ -1,6 +1,7 @@
 #include "account.h"
 #include "asset.h"
 #include "controllers/exporttransactionscontroller.h"
+#include "device.h"
 #include "handlers/gettransactionshandler.h"
 #include "resolver.h"
 #include "network.h"
@@ -32,9 +33,11 @@ void ExportTransactionsController::save()
     auto settings = wallet->settings();
 
     const auto now = QDateTime::currentDateTime();
+    const auto name = wallet->device() ? wallet->device()->name() : wallet->name();
+    const auto account_name = m_account->name().isEmpty() ? qtTrId("id_main_account") : m_account->name();
     const QString suggestion =
             QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + QDir::separator() +
-            wallet->name() + " - " + m_account->name() + " - " +
+            name  + " - " + account_name + " - " +
             now.toString("yyyyMMddhhmmss") + ".csv";
     m_file_name = QFileDialog::getSaveFileName(nullptr, "Export to CSV", suggestion);
     if (m_file_name.isEmpty()) {
