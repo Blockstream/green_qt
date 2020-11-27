@@ -66,6 +66,10 @@ ApplicationWindow {
         return new Date(date_time).toLocaleString(locale.dateTimeFormat(Locale.LongFormat))
     }
 
+    function accountName(account) {
+        return account ? (account.name === '' ? qsTrId('id_main_account') : account.name) : ''
+    }
+
     function fitMenuWidth(menu) {
         let result = 0;
         let padding = 0;
@@ -97,7 +101,7 @@ ApplicationWindow {
             } else {
                 parts.push(currentWallet.name);
             }
-            if (currentAccount) parts.push(currentAccount.name);
+            if (currentAccount) parts.push(accountName(currentAccount));
         }
         parts.push('Blockstream Green');
         return parts.join(' - ');
@@ -137,7 +141,7 @@ ApplicationWindow {
                     Repeater {
                         model: currentWallet ? currentWallet.accounts : null
                         MenuItem {
-                            text: modelData.name
+                            text: accountName(modelData)
                             onTriggered: {
                                 const popup = export_transactions_popup.createObject(window, { account: modelData })
                                 popup.open()

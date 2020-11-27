@@ -66,9 +66,7 @@ Account::Account(Wallet* wallet)
 
 QString Account::name() const
 {
-    QString name = m_json.value("name").toString();
-    if (name.isEmpty()) name = "Main Account";
-    return name;
+    return m_json.value("name").toString();
 }
 
 QJsonObject Account::json() const
