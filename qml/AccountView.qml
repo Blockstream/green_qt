@@ -1,4 +1,5 @@
 import Blockstream.Green 0.1
+import Blockstream.Green.Core 0.1
 import QtQuick 2.12
 import QtQuick.Window 2.12
 import QtQuick.Controls 2.14
@@ -8,6 +9,38 @@ import QtQuick.Layouts 1.12
 StackView {
     id: account_view
     required property Account account
+
+    function getUnblindingData(tx) {
+        return {
+            version: 0,
+            txid: tx.txhash,
+            type: tx.type,
+            inputs: tx.inputs
+                .filter(i => i.asset_id && i.satoshi && i.abf && i.vbf)
+                .map(i => ({
+                   vin: i.pt_idx,
+                   asset: i.asset_id,
+                   asset_blinder: i.abf,
+                   amount: i.satoshi,
+                   amount_blinder: i.vbf,
+                })),
+            outputs: tx.outputs
+                .filter(o => o.asset_id && o.satoshi && o.abf && o.vbf)
+                .map(o => ({
+                   vout: o.pt_idx,
+                   asset: o.asset_id,
+                   asset_blinder: o.abf,
+                   amount: o.satoshi,
+                   amount_blinder: o.vbf,
+                })),
+        }
+    }
+
+    function copyUnblindingData(item, tx) {
+        Clipboard.copy(JSON.stringify(getUnblindingData(tx), null, '  '))
+        item.ToolTip.show(qsTrId('id_copied_to_clipboard'), 2000);
+    }
+
     initialItem: Page {
         background: Item {}
         header: RowLayout {

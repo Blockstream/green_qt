@@ -21,7 +21,11 @@ Page {
 
         }
     }
-
+    Action {
+        id: copy_unblinding_data_action
+        text: qsTrId('Copy unblinding data')
+        onTriggered: copyUnblindingData(tool_button, transaction.data)
+    }
     Component {
         id: liquid_amount_delegate
         RowLayout {
@@ -88,11 +92,24 @@ Page {
             Layout.fillWidth: true
         }
 
-        Button {
+        ToolButton {
+            id: tool_button
+            text: qsTrId('⋮')
+            onClicked: menu.open()
             Layout.rightMargin: 16
-            flat: true
-            text: qsTrId('id_view_in_explorer')
-            onClicked: transaction.openInExplorer()
+            Menu {
+                id: menu
+                MenuItem {
+                    text: qsTrId('id_view_in_explorer')
+                    onTriggered: transaction.openInExplorer()
+                }
+                Repeater {
+                    model: transaction.account.wallet.network.liquid ? [copy_unblinding_data_action] : []
+                    MenuItem {
+                        action: modelData
+                    }
+                }
+            }
         }
     }
 

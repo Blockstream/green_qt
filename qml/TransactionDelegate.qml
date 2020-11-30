@@ -32,7 +32,11 @@ ItemDelegate {
         }
         return JSON.stringify(tx, null, '\t')
     }
-
+    Action {
+        id: copy_unblinding_data_action
+        text: qsTrId('Copy unblinding data')
+        onTriggered: copyUnblindingData(tool_button, tx)
+    }
     contentItem: RowLayout {
         spacing: 16
 
@@ -67,21 +71,26 @@ ItemDelegate {
         }
 
         ToolButton {
+            id: tool_button
             text: qsTrId('⋮')
             onClicked: menu.open()
 
             Menu {
                 id: menu
-
                 MenuItem {
                     text: qsTrId('id_view_in_explorer')
                     onTriggered: transaction.openInExplorer()
                 }
-
+                Repeater {
+                    model: transaction.account.wallet.network.liquid ? [copy_unblinding_data_action] : []
+                    MenuItem {
+                        action: modelData
+                    }
+                }
                 MenuItem {
                     enabled: transaction.data.can_rbf
                     text: qsTrId('id_increase_fee')
-                    onTriggered: bump_fee_dialog.createObject(wallet_view, { transaction }).open()
+                    onTriggered: bump_fee_dialog.createObject(tool_button, { transaction }).open()
                 }
 
                 MenuSeparator { }
