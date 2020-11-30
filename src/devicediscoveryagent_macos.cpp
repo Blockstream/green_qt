@@ -16,6 +16,15 @@
 static void DeviceMatchingCallback(void* context, IOReturn /* result */, void* /* sender */, IOHIDDeviceRef handle);
 static void DeviceRemovalCallback(void* context, IOReturn /* result */, void* /* sender */, IOHIDDeviceRef handle);
 
+static CFMutableDictionaryRef createMatchingVendorID(int32_t vendor_id)
+{
+    CFMutableDictionaryRef dict = CFDictionaryCreateMutable( kCFAllocatorDefault, 1, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+    CFNumberRef vendor_id_ref = CFNumberCreate( kCFAllocatorDefault, kCFNumberIntType, &vendor_id);
+    CFDictionarySetValue(dict, CFSTR(kIOHIDVendorIDKey), vendor_id_ref);
+    CFRelease(vendor_id_ref);
+    return dict;
+}
+
 static CFMutableDictionaryRef createMatchingDictionary(int32_t vendor_id, int32_t product_id, uint32_t usage_page)
 {
     CFMutableDictionaryRef dict = CFDictionaryCreateMutable( kCFAllocatorDefault, 1, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
@@ -145,17 +154,14 @@ DeviceDiscoveryAgentPrivate::DeviceDiscoveryAgentPrivate(DeviceDiscoveryAgent* q
 {
     CFMutableArrayRef multiple = CFArrayCreateMutable(kCFAllocatorDefault, 0, &kCFTypeArrayCallBacks);
     CFMutableDictionaryRef dict;
-    dict = createMatchingDictionary(LEDGER_VENDOR_ID, LEDGER_NANOS_ID, 0xFFA0);
-    CFArrayAppendValue(multiple, dict);
-    CFRelease(dict);
-    dict = createMatchingDictionary(LEDGER_VENDOR_ID, LEDGER_NANOX_ID, 0xFFA0);
+    dict = createMatchingVendorID(LEDGER_VENDOR_ID);
     CFArrayAppendValue(multiple, dict);
     CFRelease(dict);
 
     m_manager = IOHIDManagerCreate(kCFAllocatorDefault, kIOHIDManagerOptionNone);
     IOHIDManagerSetDeviceMatching(m_manager, NULL);
     IOHIDManagerScheduleWithRunLoop(m_manager, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
-    //IOHIDManagerSetDeviceMatchingMultiple(m_manager, multiple);
+    IOHIDManagerSetDeviceMatchingMultiple(m_manager, multiple);
     IOHIDManagerRegisterDeviceMatchingCallback(m_manager, DeviceMatchingCallback, this);
     IOHIDManagerRegisterDeviceRemovalCallback(m_manager, DeviceRemovalCallback, this);
     IOHIDManagerRegisterInputReportCallback(m_manager, hid_report_callback, this);
