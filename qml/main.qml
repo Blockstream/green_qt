@@ -160,7 +160,7 @@ ApplicationWindow {
                 MenuItem {
                     text: qsTrId('id_settings')
                     enabled: currentWallet && currentWallet.authentication === Wallet.Authenticated
-                    onClicked: console.assert(true)
+                    onClicked: stack_view.currentItem.wallet_view.toggleSettings()
                 }
                 MenuItem {
                     enabled: currentWallet && currentWallet.connection !== Wallet.Disconnected && !currentWallet.device
