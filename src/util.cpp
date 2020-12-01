@@ -52,3 +52,13 @@ QByteArray ParseByteArray(const QJsonValue &value)
 {
     return QByteArray::fromHex(value.toString().toLocal8Bit());
 }
+
+QByteArray ReverseByteArray(const QByteArray& byte_array)
+{
+    QByteArray result;
+    result.reserve(byte_array.size());
+    for (int i = byte_array.size() - 1; i >= 0; --i) {
+        result.append(byte_array[i]);
+    }
+    return result;
+}

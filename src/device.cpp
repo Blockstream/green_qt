@@ -286,8 +286,8 @@ void SignLiquidTransactionCommand::exec()
 
     for (const auto input : m_inputs) {
         m_values.append(ParseSatoshi(input.toObject().value("satoshi")));
-        m_abfs.append(ParseByteArray(input.toObject().value("abf")));
-        m_vbfs.append(ParseByteArray(input.toObject().value("vbf")));
+        m_abfs.append(ReverseByteArray(ParseByteArray(input.toObject().value("assetblinder"))));
+        m_vbfs.append(ReverseByteArray(ParseByteArray(input.toObject().value("amountblinder"))));
     }
 
     getLiquidCommitment(0);

@@ -17,4 +17,6 @@ quint64 ParseSatoshi(const QJsonValue& value);
 quint32 ParseSequence(const QJsonValue& value);
 QByteArray ParseByteArray(const QJsonValue& value);
 
+QByteArray ReverseByteArray(const QByteArray& byte_array);
+
 #endif // GREEN_UTIL_H

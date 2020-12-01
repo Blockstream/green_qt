@@ -249,22 +249,22 @@ void SignLiquidTransactionResolver::resolve()
             if (abf.isEmpty()) {
                 abfs.append(QJsonValue::Null);
             } else {
-                abfs.append(QString::fromLocal8Bit(abf.toHex()));
+                abfs.append(QString::fromLocal8Bit(ReverseByteArray(abf).toHex()));
             }
         }
         for (const auto& vbf : command->m_vbfs) {
             if (vbf.isEmpty()) {
                 vbfs.append(QJsonValue::Null);
             } else {
-                vbfs.append(QString::fromLocal8Bit(vbf.toHex()));
+                vbfs.append(QString::fromLocal8Bit(ReverseByteArray(vbf).toHex()));
             }
         }
         m_handler->resolve({
             { "signatures", signatures },
             { "asset_commitments", asset_commitments },
             { "value_commitments", value_commitments },
-            { "abfs", abfs },
-            { "vbfs", vbfs }
+            { "assetblinders", abfs },
+            { "amountblinders", vbfs }
         });
     });
     connect(command, &Command::error, [this] {
