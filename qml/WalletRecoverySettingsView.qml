@@ -15,18 +15,13 @@ ColumnLayout {
 
     SettingsBox {
         title: qsTrId('id_wallet_backup')
-        description: qsTrId('id_your_wallet_backup_is_made_of') + "\n" + qsTrId('id_blockstream_does_not_have')
         visible: !wallet.device
-
-        RowLayout {
-            Layout.fillWidth: true
-
-            Component {
-                id: mnemonic_dialog
-                MnemonicDialog {
-                    anchors.centerIn: parent
-                    wallet: recovery_settings_view.wallet
-                }
+        ColumnLayout {
+            anchors.fill: parent
+            Label {
+                Layout.fillWidth: true
+                text: qsTrId('id_your_wallet_backup_is_made_of') + "\n" + qsTrId('id_blockstream_does_not_have')
+                wrapMode: Label.WordWrap
             }
             Button {
                 Layout.alignment: Qt.AlignRight
@@ -39,70 +34,93 @@ ColumnLayout {
 
     SettingsBox {
         title: qsTrId('id_accounts_summary')
-        description: qsTrId('id_save_a_summary_of_your_accounts')
-        Button {
-            text: qsTrId('id_copy_to_clipboard')
-            flat: true
-            onClicked: {
-                const subaccounts = [];
-                for (let i = 0; i < wallet.accounts.length; i++) {
-                    const data = wallet.accounts[i].json;
-                    const subaccount = { type: data.type, pointer: data.pointer };
-                    if (data.type === '2of3') subaccount.recovery_pub_key = data.recovery_pub_key;
-                    subaccounts.push(subaccount)
+        ColumnLayout {
+            anchors.fill: parent
+            Label {
+                Layout.fillWidth: true
+                text: qsTrId('id_save_a_summary_of_your_accounts')
+                wrapMode: Label.WordWrap
+            }
+            Button {
+                Layout.alignment: Qt.AlignRight
+                text: qsTrId('id_copy_to_clipboard')
+                flat: true
+                onClicked: {
+                    const subaccounts = [];
+                    for (let i = 0; i < wallet.accounts.length; i++) {
+                        const data = wallet.accounts[i].json;
+                        const subaccount = { type: data.type, pointer: data.pointer };
+                        if (data.type === '2of3') subaccount.recovery_pub_key = data.recovery_pub_key;
+                        subaccounts.push(subaccount)
+                    }
+                    Clipboard.copy(JSON.stringify({ subaccounts }, null, '  '))
+                    ToolTip.show(qsTrId('id_copied_to_clipboard'), 1000);
                 }
-                Clipboard.copy(JSON.stringify({ subaccounts }, null, '  '))
-                ToolTip.show(qsTrId('id_copied_to_clipboard'), 1000);
             }
         }
     }
 
     SettingsBox {
         title: qsTrId('id_set_locktime')
-        description: qsTrId('id_redeem_your_deposited_funds') + '\n\n' + qsTrId('id_enable_email_notifications_to')
         visible: !wallet.network.liquid
         enabled: wallet.settings.notifications &&
                  wallet.settings.notifications.email_incoming &&
                  wallet.settings.notifications.email_outgoing
-        Button {
-            Component {
-                id: nlocktime_dialog
-                NLockTimeDialog {
-                    wallet: recovery_settings_view.wallet
-                }
+        ColumnLayout {
+            anchors.fill: parent
+            Label {
+                Layout.fillWidth: true
+                text: qsTrId('id_redeem_your_deposited_funds') + '\n\n' + qsTrId('id_enable_email_notifications_to')
+                wrapMode: Label.WordWrap
             }
-            flat: true
-            text: qsTrId('id_set_locktime')
-            onClicked: nlocktime_dialog.createObject(stack_view).open()
+            Button {
+                Layout.alignment: Qt.AlignRight
+                flat: true
+                text: qsTrId('id_set_locktime')
+                onClicked: nlocktime_dialog.createObject(stack_view).open()
+            }
         }
     }
 
     SettingsBox {
         title: qsTrId('id_set_an_email_for_recovery')
-        description: qsTrId('id_set_up_an_email_to_get')
         visible: !wallet.network.liquid
-        Button {
-            Component {
-                id: enable_dialog
-                SetRecoveryEmailDialog {
-                    wallet: recovery_settings_view.wallet
-                }
+        ColumnLayout {
+            anchors.fill: parent
+            Label {
+                Layout.fillWidth: true
+                text: qsTrId('id_set_up_an_email_to_get')
+                wrapMode: Label.WordWrap
             }
-
-            flat: true
-            enabled: !wallet.config.email || !wallet.config.email.confirmed
-            text: qsTrId('id_enable')
-            onClicked: enable_dialog.createObject(stack_view).open()
+            Button {
+                Layout.alignment: Qt.AlignRight
+                Component {
+                    id: enable_dialog
+                    SetRecoveryEmailDialog {
+                        wallet: recovery_settings_view.wallet
+                    }
+                }
+                flat: true
+                enabled: !wallet.config.email || !wallet.config.email.confirmed
+                text: qsTrId('id_enable')
+                onClicked: enable_dialog.createObject(stack_view).open()
+            }
         }
     }
 
     SettingsBox {
         title: qsTrId('id_request_twofactor_reset')
-        description: wallet.locked ? qsTrId('wallet locked for %1 days').arg(wallet.config.twofactor_reset.days_remaining) : qsTrId('id_start_a_2fa_reset_process_if')
         visible: !wallet.network.liquid
-        RowLayout {
+        ColumnLayout {
+            anchors.fill: parent
+            Label {
+                Layout.fillWidth: true
+                text: wallet.locked ? qsTrId('wallet locked for %1 days').arg(wallet.config.twofactor_reset.days_remaining) : qsTrId('id_start_a_2fa_reset_process_if')
+                wrapMode: Label.WordWrap
+            }
             Button {
                 flat: true
+                Layout.alignment: Qt.AlignRight
                 enabled: wallet.config.any_enabled || false
                 text: wallet.locked ? qsTrId('id_cancel_twofactor_reset') : qsTrId('id_reset')
                 padding: 10
@@ -123,6 +141,19 @@ ColumnLayout {
                     }
                 }
             }
+        }
+    }
+    Component {
+        id: mnemonic_dialog
+        MnemonicDialog {
+            anchors.centerIn: parent
+            wallet: recovery_settings_view.wallet
+        }
+    }
+    Component {
+        id: nlocktime_dialog
+        NLockTimeDialog {
+            wallet: recovery_settings_view.wallet
         }
     }
 }

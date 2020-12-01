@@ -19,73 +19,65 @@ ColumnLayout {
 
     SettingsBox {
         title: qsTrId('id_access')
-        description: qsTrId('id_enable_or_change_your_pin_to')
         visible: !wallet.device
-
-        Button {
-            Component {
-                id: change_pin_dialog
-                ChangePinDialog {
-                    modal: true
-                    anchors.centerIn: parent
-                }
+        RowLayout {
+            anchors.fill: parent
+            Label {
+                Layout.fillWidth: true
+                Layout.minimumWidth: contentWidth
+                text: qsTrId('id_enable_or_change_your_pin_to')
             }
-            flat: true
-            text: qsTrId('id_change_pin')
-            onClicked: change_pin_dialog.createObject(Window.window).open()
+            Button {
+                Component {
+                    id: change_pin_dialog
+                    ChangePinDialog {
+                        modal: true
+                        anchors.centerIn: parent
+                    }
+                }
+                flat: true
+                text: qsTrId('id_change_pin')
+                onClicked: change_pin_dialog.createObject(Window.window).open()
+            }
         }
-
     }
 
     SettingsBox {
         title: qsTrId('id_auto_logout_timeout')
-        description: qsTrId('id_set_a_timeout_to_logout_after')
         enabled: !wallet.locked
         visible: !wallet.device
-
-        ComboBox {
-            flat: true
-            model: [1, 2, 5, 10, 60]
-            width: 200
-            delegate: ItemDelegate {
-                width: parent.width
-                text: qsTrId('id_1d_minutes').arg(modelData)
+        RowLayout {
+            anchors.fill: parent
+            Label {
+                Layout.fillWidth: true
+                Layout.minimumWidth: contentWidth
+                text: qsTrId('id_set_a_timeout_to_logout_after')
             }
-            displayText: qsTrId('id_1d_minutes').arg(currentText)
-            onCurrentTextChanged: controller.changeSettings({ altimeout: model[currentIndex] })
-            currentIndex: model.indexOf(wallet.settings.altimeout)
+            ComboBox {
+                flat: true
+                model: [1, 2, 5, 10, 60]
+                width: 200
+                delegate: ItemDelegate {
+                    width: parent.width
+                    text: qsTrId('id_1d_minutes').arg(modelData)
+                }
+                displayText: qsTrId('id_1d_minutes').arg(currentText)
+                onCurrentTextChanged: controller.changeSettings({ altimeout: model[currentIndex] })
+                currentIndex: model.indexOf(wallet.settings.altimeout)
+            }
         }
     }
 
-
     SettingsBox {
         title: qsTrId('id_twofactor_authentication')
-        description: qsTrId('id_enable_twofactor_authentication')
         enabled: !wallet.locked
-
         ColumnLayout {
-            Component {
-                id: enable_dialog
-                TwoFactorEnableDialog {
-                    wallet: view.wallet
-                    description: switch(method) {
-                                case 'sms':
-                                    return qsTrId('id_enter_phone_number')
-                                case 'gauth':
-                                    return qsTrId('id_scan_the_qr_code_in_google')
-                                case 'email':
-                                    return qsTrId('id_enter_your_email_address')
-                                case 'phone':
-                                    return qsTrId('id_enter_phone_number')
-
-                            }
-                }
-            }
-            Component {
-                id: disable_dialog
-                TwoFactorDisableDialog {
-                    wallet: view.wallet
-                }
+            anchors.fill: parent
+            Label {
+                Layout.fillWidth: true
+                text: qsTrId('id_enable_twofactor_authentication')
+                horizontalAlignment: Text.AlignJustify
+                wrapMode: Label.WordWrap
             }
             Repeater {
                 model: wallet.config.all_methods || []
@@ -124,14 +116,14 @@ ColumnLayout {
 
     SettingsBox {
         title: qsTrId('id_set_twofactor_threshold')
-        description: qsTrId('id_set_a_limit_to_spend_without')
         enabled: !wallet.locked
         visible: !wallet.network.liquid
-
         RowLayout {
-            Layout.alignment: Qt.AlignRight
-            Item {
+            anchors.fill: parent
+            Label {
                 Layout.fillWidth: true
+                Layout.minimumWidth: contentWidth
+                text: qsTrId('id_set_a_limit_to_spend_without')
             }
             Button {
                 property Component dialog: TwoFactorLimitDialog {
@@ -144,6 +136,27 @@ ColumnLayout {
             }
         }
     }
+    Component {
+        id: enable_dialog
+        TwoFactorEnableDialog {
+            wallet: view.wallet
+            description: switch(method) {
+                        case 'sms':
+                            return qsTrId('id_enter_phone_number')
+                        case 'gauth':
+                            return qsTrId('id_scan_the_qr_code_in_google')
+                        case 'email':
+                            return qsTrId('id_enter_your_email_address')
+                        case 'phone':
+                            return qsTrId('id_enter_phone_number')
 
-
+                    }
+        }
+    }
+    Component {
+        id: disable_dialog
+        TwoFactorDisableDialog {
+            wallet: view.wallet
+        }
+    }
 }

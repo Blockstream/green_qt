@@ -14,39 +14,54 @@ Page {
         id: tab_bar
         leftPadding: 16
         background: Item {}
-        Repeater {
-            model: repeater.count
-
-            TabButton {
-                text: repeater.itemAt(index).title
-                width: 160
-            }
+        TabButton {
+            text: general_settings_view.title
+            width: 160
+        }
+        TabButton {
+            text: security_settings_view.title
+            width: 160
+        }
+        TabButton {
+            text: recovery_settings_view.title
+            width: 160
         }
     }
 
     StackLayout {
+        id: stack_layout
         anchors.fill: parent
         clip: true
         currentIndex: tab_bar.currentIndex
 
-        Repeater {
-            id: repeater
-            property list<Component> views: [
-                Component { WalletGeneralSettingsView { wallet: view.wallet } },
-                Component { WalletSecuritySettingsView { wallet: view.wallet } },
-                Component { WalletRecoverySettingsView { wallet: view.wallet } }
-            ]
-            model: views
-
-            ScrollView {
-                property string title: loader.item.title
-                contentWidth: width - 32
-                Loader {
-                    id: loader
-                    x: 16
-                    width: contentWidth
-                    sourceComponent: modelData
-                }
+        ScrollView {
+            ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
+            contentWidth: availableWidth
+            WalletGeneralSettingsView {
+                id: general_settings_view
+                wallet: view.wallet
+                x: 16
+                width: stack_layout.width - 32
+            }
+        }
+        ScrollView {
+            ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
+            contentWidth: availableWidth
+            WalletSecuritySettingsView {
+                id: security_settings_view
+                wallet: view.wallet
+                x: 16
+                width: stack_layout.width - 32
+            }
+        }
+        ScrollView {
+            ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
+            contentWidth: availableWidth
+            WalletRecoverySettingsView {
+                id: recovery_settings_view
+                wallet: view.wallet
+                x: 16
+                width: stack_layout.width - 32
             }
         }
     }

@@ -32,44 +32,52 @@ ColumnLayout {
     }
 
     SettingsBox {
+        Layout.fillWidth: true
         title: qsTrId('id_bitcoin_denomination')
-        description: qsTrId('id_show_bitcoin_amounts_in')
         enabled: !wallet.locked
-
-        ComboBox {
-            flat: true
-            width: 200
-            property var units: ['BTC', 'mBTC', '\u00B5BTC', 'bits', 'sats']
-            model: units.map(unit => ({
-                text: wallet.network.liquid ? `L-${unit}` : unit,
-                value: unit
-            }))
-            textRole: 'text'
-            valueRole: 'value'
-            currentIndex: units.indexOf(wallet.settings.unit)
-            onCurrentValueChanged: {
-                if (currentValue === '') return
-                if (currentValue === wallet.settings.unit) return
-                controller.changeSettings({ unit: currentValue })
+        RowLayout {
+            anchors.fill: parent
+            Label {
+                Layout.fillWidth: true
+                Layout.minimumWidth: contentWidth
+                text: qsTrId('id_show_bitcoin_amounts_in')
+            }
+            ComboBox {
+                flat: true
+                width: 200
+                property var units: ['BTC', 'mBTC', '\u00B5BTC', 'bits', 'sats']
+                model: units.map(unit => ({
+                    text: wallet.network.liquid ? `L-${unit}` : unit,
+                    value: unit
+                }))
+                textRole: 'text'
+                valueRole: 'value'
+                currentIndex: units.indexOf(wallet.settings.unit)
+                onCurrentValueChanged: {
+                    if (currentValue === '') return
+                    if (currentValue === wallet.settings.unit) return
+                    controller.changeSettings({ unit: currentValue })
+                }
             }
         }
     }
 
     SettingsBox {
         title: qsTrId('id_currency')
-        description: qsTrId('id_select_a_fiat_currency_and') // TODO: update string
         enabled: !wallet.locked
-
-        GridLayout {
-            columns: 2
-            Layout.alignment: Qt.AlignRight
-
+        ColumnLayout {
+            anchors.fill: parent
             Label {
-                text: qsTrId('id_reference_exchange_rate')
-            }
-
-            RowLayout {
                 Layout.fillWidth: true
+                text: qsTrId('id_select_a_fiat_currency_and') // TODO: update string
+                wrapMode: Label.WordWrap
+            }
+            RowLayout {
+                Label {
+                    Layout.fillWidth: true
+                    Layout.minimumWidth: contentWidth
+                    text: qsTrId('id_reference_exchange_rate')
+                }
                 ComboBox {
                     id: currency_combo
                     flat: true
@@ -88,7 +96,6 @@ ColumnLayout {
                         controller.changeSettings({ pricing })
                     }
                 }
-
                 ComboBox {
                     id: exchange_combo
                     flat: true
@@ -109,22 +116,28 @@ ColumnLayout {
     }
 
     SettingsBox {
-        title: 'Notifications'
-        description: qsTrId('id_receive_email_notifications_for')
+        title: qsTrId('id_notifications')
         enabled: !wallet.locked && wallet.config.email.confirmed
-
-        Switch {
-            Binding on checked {
-                value: wallet.settings.notifications ? (wallet.settings.notifications.email_outgoing && wallet.settings.notifications.email_outgoing) : false
+        RowLayout {
+            anchors.fill: parent
+            Label {
+                Layout.fillWidth: true
+                Layout.minimumWidth: contentWidth
+                text: qsTrId('id_receive_email_notifications_for')
             }
-            onClicked: {
-                checked = wallet.settings.notifications.email_outgoing;
-                controller.changeSettings({
-                    notifications: {
-                        email_incoming: !checked,
-                        email_outgoing: !checked
-                    }
-                });
+            Switch {
+                Binding on checked {
+                    value: wallet.settings.notifications ? (wallet.settings.notifications.email_outgoing && wallet.settings.notifications.email_outgoing) : false
+                }
+                onClicked: {
+                    checked = wallet.settings.notifications.email_outgoing;
+                    controller.changeSettings({
+                        notifications: {
+                            email_incoming: !checked,
+                            email_outgoing: !checked
+                        }
+                    });
+                }
             }
         }
     }
