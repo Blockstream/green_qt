@@ -445,6 +445,10 @@
         <translation>Copia ID di transazione</translation>
     </message>
     <message>
+        <source>id_copy_unblinding_data</source>
+        <translation>Copy unblinding data</translation>
+    </message>
+    <message>
         <source>id_copy_uri</source>
         <translation>Copia URI</translation>
     </message>
@@ -1853,6 +1857,10 @@
         <translation>Imposta il Locktime</translation>
     </message>
     <message>
+        <source>id_set_timelock</source>
+        <translation>Set timelock</translation>
+    </message>
+    <message>
         <source>id_set_twofactor_threshold</source>
         <translation>Imposta limite per autenticazione a due fattori</translation>
     </message>
@@ -1915,6 +1923,10 @@
     <message>
         <source>id_share_address</source>
         <translation>Condividi Indirizzo</translation>
+    </message>
+    <message>
+        <source>id_share_unblinding_data</source>
+        <translation>Share unblinding data</translation>
     </message>
     <message>
         <source>id_show_bitcoin_amounts_in</source>

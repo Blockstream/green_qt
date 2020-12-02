@@ -290,7 +290,7 @@
     </message>
     <message>
         <source>id_change_address</source>
-        <translation>Change address</translation>
+        <translation>Adresse ändern</translation>
     </message>
     <message>
         <source>id_change_pin</source>
@@ -326,7 +326,7 @@
     </message>
     <message>
         <source>id_click_to_copy</source>
-        <translation>Click to copy</translation>
+        <translation>zum kopieren anklicken</translation>
     </message>
     <message>
         <source>id_click_to_receive_an_email_with</source>
@@ -362,7 +362,7 @@
     </message>
     <message>
         <source>id_confirm_transaction</source>
-        <translation>Confirm transaction</translation>
+        <translation>Transaktion bestätigen</translation>
     </message>
     <message>
         <source>id_confirm_transaction_details_on</source>
@@ -390,7 +390,7 @@
     </message>
     <message>
         <source>id_connect_your_ledger_to_use_it</source>
-        <translation>Connect your Ledger to use it in Green</translation>
+        <translation>Verbinde deinen Ledger um ihn mit Green zu verwenden</translation>
     </message>
     <message>
         <source>id_connecting_to_a_trusted_node</source>
@@ -443,6 +443,10 @@
     <message>
         <source>id_copy_transaction_id</source>
         <translation>Transaktions-ID kopieren</translation>
+    </message>
+    <message>
+        <source>id_copy_unblinding_data</source>
+        <translation>Copy unblinding data</translation>
     </message>
     <message>
         <source>id_copy_uri</source>
@@ -806,7 +810,7 @@
     </message>
     <message>
         <source>id_for_investors</source>
-        <translation>For investors</translation>
+        <translation>Für Investoren</translation>
     </message>
     <message>
         <source>id_for_long_term_storage</source>
@@ -1158,11 +1162,11 @@
     </message>
     <message>
         <source>id_managed_assets_account</source>
-        <translation>Managed Assets Account</translation>
+        <translation>Konto für Managed Assets</translation>
     </message>
     <message>
         <source>id_managed_assets_accounts_are</source>
-        <translation>Managed assets accounts are only available on Liquid wallets. You may be required to provide your account ID to issuers to receive a Managed Asset.</translation>
+        <translation>Konten für verwalteten Vermögenswerte sind nur für Liquid Wallets verfügbar. Möglicherweise musst du deine Konto-ID dem Herausgeber angeben, um Managed Assets zu erhalten.</translation>
     </message>
     <message>
         <source>id_medium</source>
@@ -1310,11 +1314,11 @@
     </message>
     <message>
         <source>id_not_a_valid_email_address</source>
-        <translation>Not a valid email address</translation>
+        <translation>Keine gültige Email-Adresse</translation>
     </message>
     <message>
         <source>id_not_a_valid_phone_number</source>
-        <translation>Not a valid phone number</translation>
+        <translation>Keine gültige Telefonnummer</translation>
     </message>
     <message>
         <source>id_not_connected_connecting_in_ds_</source>
@@ -1518,7 +1522,7 @@
     </message>
     <message>
         <source>id_provide_this_id_to_the_asset</source>
-        <translation>Provide this ID to the asset issuer if requested.</translation>
+        <translation>Gib diese ID dem Asset-Herausgeber, falls erforderlich.</translation>
     </message>
     <message>
         <source>id_proxy_settings</source>
@@ -1554,7 +1558,7 @@
     </message>
     <message>
         <source>id_recipient_address</source>
-        <translation>Recipient address</translation>
+        <translation>Empfänger-Adresse</translation>
     </message>
     <message>
         <source>id_recovery</source>
@@ -1690,7 +1694,7 @@
     </message>
     <message>
         <source>id_review_output_s</source>
-        <translation>Review output %1</translation>
+        <translation>Ausgabe überprüfen %1</translation>
     </message>
     <message>
         <source>id_s_blocks_left</source>
@@ -1770,7 +1774,7 @@
     </message>
     <message>
         <source>id_select_an_app_on_s</source>
-        <translation>Select an app on %1</translation>
+        <translation>Wähle eine App auf %1</translation>
     </message>
     <message>
         <source>id_select_asset</source>
@@ -1853,6 +1857,10 @@
         <translation>Locktime festlegen</translation>
     </message>
     <message>
+        <source>id_set_timelock</source>
+        <translation>Set timelock</translation>
+    </message>
+    <message>
         <source>id_set_twofactor_threshold</source>
         <translation>Zwei-Faktor Limit setzen</translation>
     </message>
@@ -1915,6 +1923,10 @@
     <message>
         <source>id_share_address</source>
         <translation>Adresse teilen</translation>
+    </message>
+    <message>
+        <source>id_share_unblinding_data</source>
+        <translation>Share unblinding data</translation>
     </message>
     <message>
         <source>id_show_bitcoin_amounts_in</source>

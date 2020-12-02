@@ -290,7 +290,7 @@
     </message>
     <message>
         <source>id_change_address</source>
-        <translation>Change address</translation>
+        <translation>Změnit adresu</translation>
     </message>
     <message>
         <source>id_change_pin</source>
@@ -326,7 +326,7 @@
     </message>
     <message>
         <source>id_click_to_copy</source>
-        <translation>Click to copy</translation>
+        <translation>Kliknutím zkopírujte</translation>
     </message>
     <message>
         <source>id_click_to_receive_an_email_with</source>
@@ -362,7 +362,7 @@
     </message>
     <message>
         <source>id_confirm_transaction</source>
-        <translation>Confirm transaction</translation>
+        <translation>Potvrdit transakci</translation>
     </message>
     <message>
         <source>id_confirm_transaction_details_on</source>
@@ -390,7 +390,7 @@
     </message>
     <message>
         <source>id_connect_your_ledger_to_use_it</source>
-        <translation>Connect your Ledger to use it in Green</translation>
+        <translation>Připojte svůj Ledger a použijte ho s aplikací Green</translation>
     </message>
     <message>
         <source>id_connecting_to_a_trusted_node</source>
@@ -443,6 +443,10 @@
     <message>
         <source>id_copy_transaction_id</source>
         <translation>Kopírovat ID transakce</translation>
+    </message>
+    <message>
+        <source>id_copy_unblinding_data</source>
+        <translation>Copy unblinding data</translation>
     </message>
     <message>
         <source>id_copy_uri</source>
@@ -1554,7 +1558,7 @@
     </message>
     <message>
         <source>id_recipient_address</source>
-        <translation>Recipient address</translation>
+        <translation>Adresa příjemce</translation>
     </message>
     <message>
         <source>id_recovery</source>
@@ -1690,7 +1694,7 @@
     </message>
     <message>
         <source>id_review_output_s</source>
-        <translation>Review output %1</translation>
+        <translation>Zkontrolujte výstup %1</translation>
     </message>
     <message>
         <source>id_s_blocks_left</source>
@@ -1770,7 +1774,7 @@
     </message>
     <message>
         <source>id_select_an_app_on_s</source>
-        <translation>Select an app on %1</translation>
+        <translation>Vyberte aplikaci na %1</translation>
     </message>
     <message>
         <source>id_select_asset</source>
@@ -1853,6 +1857,10 @@
         <translation>Nastavit časový zámek</translation>
     </message>
     <message>
+        <source>id_set_timelock</source>
+        <translation>Set timelock</translation>
+    </message>
+    <message>
         <source>id_set_twofactor_threshold</source>
         <translation>Nastavit limit 2-Faktoru</translation>
     </message>
@@ -1915,6 +1923,10 @@
     <message>
         <source>id_share_address</source>
         <translation>Sdílet adresu</translation>
+    </message>
+    <message>
+        <source>id_share_unblinding_data</source>
+        <translation>Share unblinding data</translation>
     </message>
     <message>
         <source>id_show_bitcoin_amounts_in</source>

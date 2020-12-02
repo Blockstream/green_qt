@@ -445,6 +445,10 @@
         <translation>Copy transaction ID</translation>
     </message>
     <message>
+        <source>id_copy_unblinding_data</source>
+        <translation>Copy unblinding data</translation>
+    </message>
+    <message>
         <source>id_copy_uri</source>
         <translation>Copy URI</translation>
     </message>
@@ -1853,6 +1857,10 @@
         <translation>Set Locktime</translation>
     </message>
     <message>
+        <source>id_set_timelock</source>
+        <translation>Set timelock</translation>
+    </message>
+    <message>
         <source>id_set_twofactor_threshold</source>
         <translation>2FA 한도 정하기</translation>
     </message>
@@ -1915,6 +1923,10 @@
     <message>
         <source>id_share_address</source>
         <translation>주소 내보내기</translation>
+    </message>
+    <message>
+        <source>id_share_unblinding_data</source>
+        <translation>Share unblinding data</translation>
     </message>
     <message>
         <source>id_show_bitcoin_amounts_in</source>
