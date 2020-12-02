@@ -6,7 +6,7 @@ import QtQuick.Layouts 1.12
 ControllerDialog {
     id: dialog
     required property Wallet wallet
-    title: qsTrId('id_set_locktime')
+    title: qsTrId('id_set_timelock')
     controller: Controller {
         wallet: dialog.wallet
     }

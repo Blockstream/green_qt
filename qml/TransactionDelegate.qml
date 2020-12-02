@@ -34,7 +34,7 @@ ItemDelegate {
     }
     Action {
         id: copy_unblinding_data_action
-        text: qsTrId('Copy unblinding data')
+        text: qsTrId('id_copy_unblinding_data')
         onTriggered: copyUnblindingData(tool_button, tx)
     }
     contentItem: RowLayout {
