@@ -25,12 +25,7 @@ QT += qml quick quickcontrols2 svg
 
 CONFIG += c++11 metatypes qmltypes qtquickcompiler
 
-CONFIG += qzxing_qml qzxing_multimedia enable_decoder_qr_code enable_encoder_qr_code
-
 !defined(GDK_PATH, var): error(Run qmake with GDK_PATH set. See BUILD.md for more details.)
-!defined(QZXING_PATH, var): error(Run qmake with QZXING_PATH set. See BUILD.md for more details.)
-
-include($${QZXING_PATH}/src/QZXing-components.pri)
 
 # The following define makes your compiler emit warnings if you use
 # any Qt feature that has been marked deprecated (the exact warnings
@@ -43,6 +38,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
+include(qzxing.pri)
 include(src/src.pri)
 
 RESOURCES += assets/assets.qrc assets/icons.qrc qml/qml.qrc assets/svg.qrc
