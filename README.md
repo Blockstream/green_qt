@@ -36,6 +36,10 @@ Need help?
 
 Read [our FAQ](https://greenaddress.it/en/faq.html) or contact us at [info@greenaddress.it](mailto:info@greenaddress.it).
 
+## Verifying releases
+
+Read our article on how to [verify signatures for new software releases](https://help.blockstream.com/hc/en-us/articles/900002174043-How-do-I-verify-the-Blockstream-Green-binaries-).
+
 ## License
 
 Blockstream Green is released under the terms of the GNU General Public License. See [LICENSE](LICENSE) for more information or see https://opensource.org/licenses/GPL-3.0
