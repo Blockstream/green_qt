@@ -10,6 +10,7 @@ ListView {
     required property Account account
     signal clicked(Balance balance)
 
+    clip: true
     model: account.balances
     spacing: 8
 
