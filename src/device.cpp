@@ -976,8 +976,6 @@ bool GetWalletPublicKeyCommand::parse(QDataStream& stream)
     Q_ASSERT(x == 0);
     bip32_key_free(k);
 
-    qDebug() << base58;
-
     m_xpub = QString(base58);
 
     wally_free_string(base58);
