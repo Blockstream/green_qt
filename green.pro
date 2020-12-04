@@ -40,21 +40,15 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 include(qzxing.pri)
+include(assets/assets.pri)
+include(qml/qml.pri)
 include(src/src.pri)
-
-RESOURCES += assets/assets.qrc assets/icons.qrc qml/qml.qrc assets/svg.qrc
-
-win32 {
-    RESOURCES += src/win.qrc
-} else {
-    RESOURCES += src/linux.qrc
-}
 
 CONFIG += lrelease embed_translations
 
 EXTRA_TRANSLATIONS = $$files($$PWD/i18n/*.ts)
 
-INCLUDEPATH += src/ $${GDK_PATH}
+INCLUDEPATH += $${GDK_PATH}
 
 macos {
     QMAKE_TARGET_BUNDLE_PREFIX = com.blockstream

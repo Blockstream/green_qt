@@ -1,3 +1,5 @@
+INCLUDEPATH += $$PWD
+
 SOURCES += \
     $$PWD/accountcontroller.cpp \
     $$PWD/account.cpp \
@@ -69,3 +71,9 @@ HEADERS += \
 include(controllers/controllers.pri)
 include(handlers/handlers.pri)
 include(resolvers/resolvers.pri)
+
+win32 {
+    RESOURCES += $$PWD/win.qrc
+} else {
+    RESOURCES += $$PWD/linux.qrc
+}
