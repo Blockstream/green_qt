@@ -1,7 +1,7 @@
-INCLUDEPATH += src/resolvers
+INCLUDEPATH += $$PWD
 
 HEADERS += \
-    src/resolvers/signmessageresolver.h
+    $$PWD/signmessageresolver.h
 
 SOURCES += \
-    src/resolvers/signmessageresolver.cpp
+    $$PWD/signmessageresolver.cpp

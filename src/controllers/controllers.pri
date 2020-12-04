@@ -1,11 +1,11 @@
-INCLUDEPATH += src/controllers
+INCLUDEPATH += $$PWD
 
 HEADERS += \
-    src/controllers/exporttransactionscontroller.h \
-    src/controllers/ledgerdevicecontroller.h \
-    src/controllers/systemmessagecontroller.h
+    $$PWD/exporttransactionscontroller.h \
+    $$PWD/ledgerdevicecontroller.h \
+    $$PWD/systemmessagecontroller.h
 
 SOURCES += \
-    src/controllers/exporttransactionscontroller.cpp \
-    src/controllers/ledgerdevicecontroller.cpp \
-    src/controllers/systemmessagecontroller.cpp
+    $$PWD/exporttransactionscontroller.cpp \
+    $$PWD/ledgerdevicecontroller.cpp \
+    $$PWD/systemmessagecontroller.cpp

@@ -1,15 +1,15 @@
-INCLUDEPATH += src/handlers
+INCLUDEPATH += $$PWD
 
 HEADERS += \
-    src/handlers/connecthandler.h \
-    src/handlers/gettransactionshandler.h \
-    src/handlers/handler.h \
-    src/handlers/loginhandler.h \
-    src/handlers/registeruserhandler.h
+    $$PWD/connecthandler.h \
+    $$PWD/gettransactionshandler.h \
+    $$PWD/handler.h \
+    $$PWD/loginhandler.h \
+    $$PWD/registeruserhandler.h
 
 SOURCES += \
-    src/handlers/connecthandler.cpp \
-    src/handlers/gettransactionshandler.cpp \
-    src/handlers/handler.cpp \
-    src/handlers/loginhandler.cpp \
-    src/handlers/registeruserhandler.cpp
+    $$PWD/connecthandler.cpp \
+    $$PWD/gettransactionshandler.cpp \
+    $$PWD/handler.cpp \
+    $$PWD/loginhandler.cpp \
+    $$PWD/registeruserhandler.cpp
