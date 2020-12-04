@@ -1,4 +1,5 @@
 TARGET = green
+TARGET_NAME = Blockstream Green
 
 VERSION_MAJOR = 0
 VERSION_MINOR = 0
@@ -7,8 +8,8 @@ VERSION_PRERELEASE =
 VERSION = $${VERSION_MAJOR}.$${VERSION_MINOR}.$${VERSION_PATCH}
 
 QMAKE_TARGET_COMPANY = Blockstream Corporation Inc.
-QMAKE_TARGET_PRODUCT = Blockstream Green
-QMAKE_TARGET_DESCRIPTION = Blockstream Green
+QMAKE_TARGET_PRODUCT = $${TARGET_NAME}
+QMAKE_TARGET_DESCRIPTION = $${TARGET_NAME}
 QMAKE_TARGET_COPYRIGHT = Copyright 2020 Blockstream Corporation Inc. All rights reserved.
 
 DEFINES += "VERSION_MAJOR=$$VERSION_MAJOR"\
@@ -61,8 +62,8 @@ macos {
     ICON = assets/icons/green.icns
 
     QMAKE_POST_LINK += \
-        plutil -replace CFBundleName -string \"Blockstream Green\" \"$$OUT_PWD/$${TARGET}.app/Contents/Info.plist\" && \
-        plutil -replace CFBundleDisplayName -string \"Blockstream Green\" \"$$OUT_PWD/$${TARGET}.app/Contents/Info.plist\" && \
+        plutil -replace CFBundleName -string \"$${TARGET_NAME}\" \"$$OUT_PWD/$${TARGET}.app/Contents/Info.plist\" && \
+        plutil -replace CFBundleDisplayName -string \"$${TARGET_NAME}\" \"$$OUT_PWD/$${TARGET}.app/Contents/Info.plist\" && \
         plutil -replace NSCameraUsageDescription -string \"We use the camera to scan QR codes\" \"$$OUT_PWD/$${TARGET}.app/Contents/Info.plist\" && \
         plutil -remove NOTE \"$$OUT_PWD/$${TARGET}.app/Contents/Info.plist\" || true
 
