@@ -15,7 +15,7 @@ LoginHandler::LoginHandler(Wallet* wallet, const QStringList& mnemonic, const QS
     , m_mnemonic(mnemonic)
     , m_password(password)
 {
-    Q_ASSERT(m_mnemonic.size() == 27 && !m_password.isEmpty());
+    Q_ASSERT((m_mnemonic.size() == 24 && m_password.isEmpty()) || (m_mnemonic.size() == 27 && !m_password.isEmpty()));
 }
 
 LoginHandler::LoginHandler(Wallet* wallet, const QJsonObject& device_details)

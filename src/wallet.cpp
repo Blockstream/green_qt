@@ -288,8 +288,6 @@ void Wallet::handleNotification(const QJsonObject &notification)
         setConnection(Connected);
         if (network.value("login_required").toBool()) {
             setAuthentication(Unauthenticated);
-        } else {
-            setAuthentication(Authenticated);
         }
         return;
     }
@@ -304,6 +302,7 @@ void Wallet::handleNotification(const QJsonObject &notification)
     }
 
     if (event == "settings") {
+        setAuthentication(Authenticated);
         setSettings(data.toObject());
         return;
     }
