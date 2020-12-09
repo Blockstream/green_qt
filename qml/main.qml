@@ -214,9 +214,10 @@ ApplicationWindow {
             implicitHeight: 4
         }
 
-        Item {
+        Rectangle {
             id: wallets_sidebar_item
             clip: true
+            color: Qt.rgba(1, 1, 1, 0.01)
 
             SplitView.minimumWidth: tool_button.checked ? 300 : 64 + left_margin
             SplitView.maximumWidth: SplitView.minimumWidth
