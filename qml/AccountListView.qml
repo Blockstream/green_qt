@@ -93,7 +93,7 @@ ListView {
                             icon.width: 24
                             icon.height: 24
                             text: qsTrId('id_send')
-                            onClicked: send_dialog.createObject(stack_view, { account }).open()
+                            onClicked: send_dialog.createObject(window, { account }).open()
                             ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                             ToolTip.text: qsTrId('id_insufficient_lbtc_to_send_a')
                             ToolTip.visible: parent.containsMouse
@@ -107,7 +107,7 @@ ListView {
                         icon.width: 24
                         icon.height: 24
                         text: qsTrId('id_receive')
-                        onClicked: receive_dialog.createObject(stack_view).open()
+                        onClicked: receive_dialog.createObject(window).open()
                     }
                 }
             }
