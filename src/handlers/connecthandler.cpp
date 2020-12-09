@@ -35,12 +35,14 @@ void ConnectHandler::call(GA_session* session, GA_auth_handler** auth_handler)
 {
     Q_UNUSED(auth_handler)
     auto params = Json::fromObject(m_params);
-    auto hint = Json::fromObject({{ "hint", "now" }});
     int err = GA_connect(session, params);
-    Q_ASSERT(err == GA_OK);
+    GA_destroy_json(params);
+    if (err != GA_OK) {
+        emit error();
+        return;
+    }
+    auto hint = Json::fromObject({{ "hint", "now" }});
     err = GA_reconnect_hint(session, hint);
-    Q_ASSERT(err == GA_OK);
-    err = GA_destroy_json(params);
     Q_ASSERT(err == GA_OK);
     err = GA_destroy_json(hint);
     Q_ASSERT(err == GA_OK);

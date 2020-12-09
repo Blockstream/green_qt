@@ -167,6 +167,9 @@ void Wallet::connectNow()
         createSession();
         // TODO: handle reconnect
         auto handler = new ConnectHandler(this, m_proxy, m_use_tor);
+        QObject::connect(handler, &Handler::error, this, [this] {
+            connectNow();
+        });
         QObject::connect(handler, &Handler::done, this, [handler] {
             handler->deleteLater();
         });
