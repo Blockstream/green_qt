@@ -63,9 +63,9 @@ bool DeviceDiscoveryAgentPrivate::nativeEventFilter(const QByteArray& eventType,
         auto id = QString::fromWCharArray(notification->dbcc_name).toLower();
         auto device = m_devices.take(id);
         if (!device) return false;
-        // qDebug() << "DBT_DEVICEREMOVECOMPLETE ID=" << id;
         DeviceManager::instance()->removeDevice(device->q);
-        device->q->deleteLater();
+        CloseHandle(device->handle);
+        delete device->q;
     }
     return false;
 }
