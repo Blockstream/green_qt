@@ -54,8 +54,7 @@ bool DeviceDiscoveryAgentPrivate::nativeEventFilter(const QByteArray& eventType,
         if (QUuid(hid_class_guid) != QUuid(notification->dbcc_classguid)) return false;
         auto id = QString::fromWCharArray(notification->dbcc_name).toLower();
         if (filter(id)) return false;
-        // qDebug() << "DBT_DEVICEARRIVAL ID=" << id;
-        addDevice(id);
+        addDevice(id, 0);
     } else if (msg->wParam == DBT_DEVICEREMOVECOMPLETE) {
         PDEV_BROADCAST_HDR hdr = (PDEV_BROADCAST_HDR) msg->lParam;
         if (hdr->dbch_devicetype != DBT_DEVTYP_DEVICEINTERFACE) return false;
@@ -64,6 +63,7 @@ bool DeviceDiscoveryAgentPrivate::nativeEventFilter(const QByteArray& eventType,
         auto device = m_devices.take(id);
         if (!device) return false;
         DeviceManager::instance()->removeDevice(device->q);
+        CancelIo(device->handle);
         CloseHandle(device->handle);
         delete device->q;
     }
@@ -104,14 +104,14 @@ void DeviceDiscoveryAgentPrivate::searchDevices()
             SetupDiGetDeviceInterfaceDetail(device_info_set, &device_interface_data, device_interface_detail_data, required_length, NULL, NULL);
             auto id = QString::fromWCharArray(device_interface_detail_data->DevicePath).toLower();
             free(device_interface_detail_data);
-            addDevice(id);
+            addDevice(id, 0);
         }
     }
 
     if (device_info_set) SetupDiDestroyDeviceInfoList(device_info_set);
 }
 
-void DeviceDiscoveryAgentPrivate::addDevice(const QString& id)
+void DeviceDiscoveryAgentPrivate::addDevice(const QString& id, int attempts)
 {
     wchar_t path[id.size()+1];
     ZeroMemory(path, sizeof(wchar_t) * id.size() + 1);
@@ -124,30 +124,32 @@ void DeviceDiscoveryAgentPrivate::addDevice(const QString& id)
             FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
                 NULL, error, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
                 buf, (sizeof(buf) / sizeof(wchar_t)), NULL);
-            // qDebug() << id << error << QString::fromWCharArray(buf);
+            if (attempts < 10) QTimer::singleShot(2000, [this, id, attempts] { addDevice(id, attempts + 1); });
         }
         return;
     }
-    addDevice(id, handle);
-    //CloseHandle(handle);
+    if (!addDevice(id, handle)) {
+        CancelIo(handle);
+        CloseHandle(handle);
+    }
 }
 
-void DeviceDiscoveryAgentPrivate::addDevice(const QString& id, HANDLE handle)
+bool DeviceDiscoveryAgentPrivate::addDevice(const QString& id, HANDLE handle)
 {
     HIDD_ATTRIBUTES attrib;
     attrib.Size = sizeof(HIDD_ATTRIBUTES);
-    if (!HidD_GetAttributes(handle, &attrib)) return;
+    if (!HidD_GetAttributes(handle, &attrib)) return false;
 
     Device::Type device_type = Device::typefromVendorAndProduct(attrib.VendorID, attrib.ProductID);
-    if (device_type == Device::Unknown) return;
+    if (device_type == Device::Unknown) return false;
 
     PHIDP_PREPARSED_DATA preparsed_data;
-    if (!HidD_GetPreparsedData(handle, &preparsed_data)) return;
+    if (!HidD_GetPreparsedData(handle, &preparsed_data)) return false;
     HIDP_CAPS capabilities;
     NTSTATUS status = HidP_GetCaps(preparsed_data, &capabilities);
     HidD_FreePreparsedData(preparsed_data);
-    if (status != HIDP_STATUS_SUCCESS) return;
-    if (capabilities.UsagePage != 0xFFA0) return;
+    if (status != HIDP_STATUS_SUCCESS) return false;
+    if (capabilities.UsagePage != 0xFFA0) return false;
 
     // qDebug() << "OutputReportByteLength=" << capabilities.OutputReportByteLength;
     // qDebug() << "InputReportByteLength=" << capabilities.InputReportByteLength;
@@ -193,6 +195,7 @@ void DeviceDiscoveryAgentPrivate::addDevice(const QString& id, HANDLE handle)
     t->start(10);
 
     DeviceManager::instance()->addDevice(d);
+    return true;
 }
 
 QList<QByteArray> transport(const QByteArray& data) {

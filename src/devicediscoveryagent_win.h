@@ -36,8 +36,8 @@ public:
     bool nativeEventFilter(const QByteArray& eventType, void* message, long* /* result */) override;
     bool filter(const QString& id);
     void searchDevices();
-    void addDevice(const QString& id);
-    void addDevice(const QString& id, HANDLE handle);
+    void addDevice(const QString& id, int attempts);
+    bool addDevice(const QString& id, HANDLE handle);
 
 private:
     DeviceDiscoveryAgent* const q;
