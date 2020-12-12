@@ -19,6 +19,14 @@ Column {
         anchors.horizontalCenter: parent.horizontalCenter
     }
 
+    component PinButton: RoundButton {
+        signal tapped()
+        flat: true
+        TapHandler {
+            onTapped: parent.tapped()
+        }
+    }
+
     GridLayout {
         id: grid_layout
         columns: 3
@@ -28,41 +36,32 @@ Column {
 
         Repeater {
             model: 9
-
-            Button {
-                hoverEnabled: false
-                flat: true
+            PinButton {
                 text: modelData + 1
-                onPressed: field.addDigit(modelData + 1)
+                onTapped: field.addDigit(modelData + 1)
             }
         }
 
-        Button {
-            hoverEnabled: false
+        PinButton {
             enabled: !field.empty
-            flat: true
             width: 32
             icon.source: 'qrc:/svg/arrow_left.svg'
             icon.width: 24
-            onPressed: field.removeDigit()
+            onTapped: field.removeDigit()
         }
 
-        Button {
-            hoverEnabled: false
+        PinButton {
             enabled: !field.valid
-            flat: true
             text: '0'
-            onPressed: field.addDigit(0)
+            onTapped: field.addDigit(0)
         }
 
-        Button {
-            hoverEnabled: false
+        PinButton {
             enabled: !field.empty
-            flat: true
             icon.source: 'qrc:/svg/cancel.svg'
             icon.height: 16
             icon.width: 16
-            onPressed: field.clear()
+            onTapped: field.clear()
         }
     }
 }
