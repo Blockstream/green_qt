@@ -29,7 +29,9 @@ ApplicationWindow {
             if (currentWallet === wallet) {
                 stack_view.replace(stack_view.initialItem)
             }
+            const view = wallet_views[wallet]
             delete wallet_views[wallet]
+            view.destroy()
         }
     }
 
