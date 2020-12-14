@@ -198,7 +198,7 @@ void SendTransactionController::update()
 
 void SendTransactionController::create()
 {
-    if (!wallet()) return;
+    if (!wallet() || !account()) return;
 
     const quint64 count = ++m_count;
     if (m_create_handler) return;
