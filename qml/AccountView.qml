@@ -16,22 +16,22 @@ StackView {
             txid: tx.txhash,
             type: tx.type,
             inputs: tx.inputs
-                .filter(i => i.asset_id && i.satoshi && i.abf && i.vbf)
+                .filter(i => i.asset_id && i.satoshi && i.assetblinder && i.amountblinder)
                 .map(i => ({
                    vin: i.pt_idx,
-                   asset: i.asset_id,
-                   asset_blinder: i.abf,
-                   amount: i.satoshi,
-                   amount_blinder: i.vbf,
+                   asset_id: i.asset_id,
+                   assetblinder: i.assetblinder,
+                   satoshi: i.satoshi,
+                   amountblinder: i.amountblinder,
                 })),
             outputs: tx.outputs
-                .filter(o => o.asset_id && o.satoshi && o.abf && o.vbf)
+                .filter(o => o.asset_id && o.satoshi && o.assetblinder && o.amountblinder)
                 .map(o => ({
                    vout: o.pt_idx,
-                   asset: o.asset_id,
-                   asset_blinder: o.abf,
-                   amount: o.satoshi,
-                   amount_blinder: o.vbf,
+                   asset_id: o.asset_id,
+                   assetblinder: o.assetblinder,
+                   satoshi: o.satoshi,
+                   amountblinder: o.amountblinder,
                 })),
         }
     }
