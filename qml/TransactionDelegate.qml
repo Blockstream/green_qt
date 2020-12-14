@@ -92,22 +92,11 @@ ItemDelegate {
                     text: qsTrId('id_increase_fee')
                     onTriggered: bump_fee_dialog.createObject(tool_button, { transaction }).open()
                 }
-
-                MenuSeparator { }
-
+                MenuSeparator {
+                }
                 MenuItem {
                     text: qsTrId('id_copy_transaction_id')
                     onTriggered: Clipboard.copy(transaction.data.txhash)
-                }
-
-                MenuItem {
-                    enabled: false
-                    text: qsTrId('id_copy_details')
-                }
-
-                MenuItem {
-                    enabled: false
-                    text: qsTrId('id_copy_raw_transaction')
                 }
             }
         }
