@@ -186,6 +186,7 @@ Item {
                 account_view = account_view_component.createObject(null, { account })
                 account_views[account] = account_view
             }
+            if (stack_view.currentItem === account_view) return;
             stack_view.replace(account_view, StackView.Immediate)
         } else {
             stack_view.replace(stack_view.initialItem, StackView.Immediate)
