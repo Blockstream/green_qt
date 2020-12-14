@@ -6,7 +6,7 @@ AbstractDialog {
     Connections {
         target: wallet
         function onConnectionChanged(connection) {
-            if (connection === Wallet.Disconnected) {
+            if (wallet.connection === Wallet.Disconnected) {
                 reject();
             }
         }
