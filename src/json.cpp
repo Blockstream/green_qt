@@ -1,10 +1,17 @@
 #include "json.h"
 
+#include <memory>
 #include <gdk.h>
 
 #include <QJsonDocument>
 
 namespace Json {
+
+void Destructor::operator()(GA_json* json)
+{
+    int res = GA_destroy_json(json);
+    Q_ASSERT(res == GA_OK);
+}
 
 namespace {
 
@@ -30,18 +37,11 @@ QJsonObject toObject(const GA_json *json)
     return doc(json).object();
 }
 
-GA_json* fromArray(const QJsonArray& array)
-{
-    GA_json* json;
-    GA_convert_string_to_json(QJsonDocument(array).toJson().constData(), &json);
-    return json;
-}
-
-GA_json* fromObject(const QJsonObject& object)
+std::unique_ptr<GA_json, Destructor> fromObject(const QJsonObject& object)
 {
     GA_json* json;
     GA_convert_string_to_json(QJsonDocument(object).toJson().constData(), &json);
-    return json;
+    return std::unique_ptr<GA_json, Destructor>(json);
 }
 
 QByteArray toByteArray(const GA_json* json)

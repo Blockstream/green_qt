@@ -517,9 +517,7 @@ void Wallet::refreshAssets()
             { "refresh", true }
         });
         GA_json* output;
-        int err = GA_refresh_assets(m_session, params, &output);
-        Q_ASSERT(err == GA_OK);
-        err = GA_destroy_json(params);
+        int err = GA_refresh_assets(m_session, params.get(), &output);
         Q_ASSERT(err == GA_OK);
 
         auto assets = Json::toObject(output);
@@ -616,8 +614,7 @@ QJsonObject Wallet::convert(const QJsonObject& value) const
 {
     auto details = Json::fromObject(value);
     GA_json* balance;
-    int err = GA_convert_amount(m_session, details, &balance);
-    GA_destroy_json(details);
+    int err = GA_convert_amount(m_session, details.get(), &balance);
     if (err != GA_OK) return {};
     QJsonObject result = Json::toObject(balance);
     GA_destroy_json(balance);
@@ -662,9 +659,8 @@ qint64 Wallet::parseAmount(const QString& amount, const QString& unit) const
     sanitized_amount.replace(',', '.');
     auto details = Json::fromObject({{ unit == "\u00B5BTC" ? "ubtc" : unit.toLower(), sanitized_amount }});
     GA_json* balance;
-    int err = GA_convert_amount(m_session, details, &balance);
+    int err = GA_convert_amount(m_session, details.get(), &balance);
     if (err != GA_OK) return 0;
-    GA_destroy_json(details);
     QJsonObject result = Json::toObject(balance);
     GA_destroy_json(balance);
     return result.value("sats").toString().toLongLong();

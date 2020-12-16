@@ -12,9 +12,7 @@ class ChangeSettingsHandler : public Handler
     QJsonObject m_data;
     void call(GA_session* session, GA_auth_handler** auth_handler) override {
         auto data = Json::fromObject(m_data);
-        int err = GA_change_settings(session, data, auth_handler);
-        Q_ASSERT(err == GA_OK);
-        err = GA_destroy_json(data);
+        int err = GA_change_settings(session, data.get(), auth_handler);
         Q_ASSERT(err == GA_OK);
     }
 public:
@@ -48,9 +46,7 @@ class ChangeSettingsTwoFactorHandler : public Handler
     QJsonObject m_details;
     void call(GA_session* session, GA_auth_handler** auth_handler) override {
         auto details = Json::fromObject(m_details);
-        int res = GA_change_settings_twofactor(session, m_method.data(), details, auth_handler);
-        Q_ASSERT(res == GA_OK);
-        res = GA_destroy_json(details);
+        int res = GA_change_settings_twofactor(session, m_method.data(), details.get(), auth_handler);
         Q_ASSERT(res == GA_OK);
     }
 public:
@@ -67,9 +63,7 @@ class TwoFactorChangeLimitsHandler : public Handler
     QJsonObject m_details;
     void call(GA_session* session, GA_auth_handler** auth_handler) override {
         auto details = Json::fromObject(m_details);
-        int err = GA_twofactor_change_limits(session, details, auth_handler);
-        Q_ASSERT(err == GA_OK);
-        err = GA_destroy_json(details);
+        int err = GA_twofactor_change_limits(session, details.get(), auth_handler);
         Q_ASSERT(err == GA_OK);
     }
 public:

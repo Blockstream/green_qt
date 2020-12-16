@@ -16,15 +16,12 @@ class GetBalanceHandler : public Handler
     Account* const m_account;
     void call(GA_session* session, GA_auth_handler** auth_handler) override
     {
-        GA_json* details = Json::fromObject({
+        auto details = Json::fromObject({
             { "subaccount", m_account->m_pointer },
             { "num_confs", 0 }
         });
 
-        int err = GA_get_balance(session, details, auth_handler);
-        Q_ASSERT(err == GA_OK);
-
-        err = GA_destroy_json(details);
+        int err = GA_get_balance(session, details.get(), auth_handler);
         Q_ASSERT(err == GA_OK);
     }
 public:

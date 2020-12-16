@@ -8,10 +8,9 @@ namespace GA {
 
 QJsonObject convert_amount(GA_session* session, const QJsonObject& input)
 {
-    GA_json* value_details = Json::fromObject(input);
+    auto value_details = Json::fromObject(input);
     GA_json* output;
-    int err = GA_convert_amount(session, value_details, &output);
-    GA_destroy_json(value_details);
+    int err = GA_convert_amount(session, value_details.get(), &output);
     if (err != GA_OK) return {};
     auto value = Json::toObject(output);
     GA_destroy_json(output);

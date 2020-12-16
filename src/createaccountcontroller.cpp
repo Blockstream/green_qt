@@ -10,9 +10,8 @@ class CreateAccountHandler : public Handler
     QJsonObject m_details;
     void call(GA_session* session, GA_auth_handler** auth_handler) override {
         auto details = Json::fromObject(m_details);
-        int res = GA_create_subaccount(session, details, auth_handler);
+        int res = GA_create_subaccount(session, details.get(), auth_handler);
         Q_ASSERT(res == GA_OK);
-        GA_destroy_json(details);
     }
 public:
     CreateAccountHandler(const QJsonObject& details, Wallet* wallet)

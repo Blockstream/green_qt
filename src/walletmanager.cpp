@@ -21,8 +21,7 @@
 WalletManager::WalletManager()
 {
     auto config = Json::fromObject({{ "datadir", GetDataDir("gdk") }});
-    GA_init(config);
-    GA_destroy_json(config);
+    GA_init(config.get());
 
     // Migrate wallets up to before beta8
     {

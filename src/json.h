@@ -4,15 +4,19 @@
 #include <QJsonArray>
 #include <QJsonObject>
 
+#include <memory>
+
 struct GA_json;
 
 namespace Json {
 
+struct Destructor {
+    void operator()(GA_json* json);
+};
+
 QJsonArray toArray(const GA_json* json);
 QJsonObject toObject(const GA_json* json);
-
-GA_json* fromArray(const QJsonArray& array);
-GA_json* fromObject(const QJsonObject& object);
+std::unique_ptr<GA_json, Destructor> fromObject(const QJsonObject& object);
 
 QByteArray toByteArray(const GA_json* json);
 

@@ -17,10 +17,7 @@ class GetReceiveAddressHandler : public Handler
             { "subaccount", static_cast<qint64>(m_account->m_pointer) },
         });
 
-        int err = GA_get_receive_address(session, address_details, auth_handler);
-        Q_ASSERT(err == GA_OK);
-
-        err = GA_destroy_json(address_details);
+        int err = GA_get_receive_address(session, address_details.get(), auth_handler);
         Q_ASSERT(err == GA_OK);
     }
 public:

@@ -20,9 +20,7 @@ RegisterUserHandler::RegisterUserHandler(Wallet* wallet, const QJsonObject& devi
 void RegisterUserHandler::call(GA_session* session, GA_auth_handler** auth_handler)
 {
     QByteArray mnemonic = m_mnemonic.join(' ').toLocal8Bit();
-    GA_json* device_details = Json::fromObject(m_device_details);
-    int err = GA_register_user(session, device_details, mnemonic.constData(), auth_handler);
-    Q_ASSERT(err == GA_OK);
-    err = GA_destroy_json(device_details);
+    auto device_details = Json::fromObject(m_device_details);
+    int err = GA_register_user(session, device_details.get(), mnemonic.constData(), auth_handler);
     Q_ASSERT(err == GA_OK);
 }
