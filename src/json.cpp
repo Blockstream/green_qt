@@ -39,8 +39,13 @@ QJsonObject toObject(const GA_json *json)
 
 std::unique_ptr<GA_json, Destructor> fromObject(const QJsonObject& object)
 {
+    return stringToJson(QJsonDocument(object).toJson());
+}
+
+std::unique_ptr<GA_json, Destructor> stringToJson(const QByteArray& string)
+{
     GA_json* json;
-    GA_convert_string_to_json(QJsonDocument(object).toJson().constData(), &json);
+    GA_convert_string_to_json(string, &json);
     return std::unique_ptr<GA_json, Destructor>(json);
 }
 

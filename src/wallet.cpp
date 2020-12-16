@@ -41,12 +41,8 @@ class LoginWithPinHandler : public Handler
     const QByteArray m_pin;
     void call(GA_session* session, GA_auth_handler** auth_handler) override
     {
-        GA_json* pin_data;
-        int err = GA_convert_string_to_json(m_pin_data.constData(), &pin_data);
-        Q_ASSERT(err == GA_OK);
-        err = GA_login_with_pin(session, m_pin.constData(), pin_data, auth_handler);
-        Q_ASSERT(err == GA_OK);
-        err = GA_destroy_json(pin_data);
+        auto pin_data = Json::stringToJson(m_pin_data);
+        int err = GA_login_with_pin(session, m_pin.constData(), pin_data.get(), auth_handler);
         Q_ASSERT(err == GA_OK);
     }
 public:
