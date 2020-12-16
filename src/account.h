@@ -63,7 +63,7 @@ public:
 
 QML_DECLARE_TYPE(Account*);
 
-class ReceiveAddress : public QObject
+class ReceiveAddressController : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(Account* account READ account WRITE setAccount NOTIFY accountChanged)
@@ -73,8 +73,8 @@ class ReceiveAddress : public QObject
     Q_PROPERTY(bool generating READ generating NOTIFY generatingChanged)
     QML_ELEMENT
 public:
-    explicit ReceiveAddress(QObject* parent = nullptr);
-    virtual ~ReceiveAddress();
+    explicit ReceiveAddressController(QObject* parent = nullptr);
+    virtual ~ReceiveAddressController();
 
     Account* account() const;
     void setAccount(Account* account);

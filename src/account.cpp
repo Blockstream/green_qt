@@ -177,24 +177,24 @@ bool Account::isMainAccount() const
     return m_json.value("name").toString() == "";
 }
 
-ReceiveAddress::ReceiveAddress(QObject *parent) : QObject(parent)
+ReceiveAddressController::ReceiveAddressController(QObject *parent) : QObject(parent)
 {
 
 }
 
-ReceiveAddress::~ReceiveAddress()
+ReceiveAddressController::~ReceiveAddressController()
 {
     if (m_account) {
         QMetaObject::invokeMethod(m_account->m_wallet->m_context, [] {}, Qt::BlockingQueuedConnection);
     }
 }
 
-Account *ReceiveAddress::account() const
+Account *ReceiveAddressController::account() const
 {
     return m_account;
 }
 
-void ReceiveAddress::setAccount(Account *account)
+void ReceiveAddressController::setAccount(Account *account)
 {
     if (m_account == account) return;
 
@@ -204,24 +204,24 @@ void ReceiveAddress::setAccount(Account *account)
     generate();
 }
 
-QString ReceiveAddress::amount() const
+QString ReceiveAddressController::amount() const
 {
     return m_amount;
 }
 
-void ReceiveAddress::setAmount(const QString& amount)
+void ReceiveAddressController::setAmount(const QString& amount)
 {
     if (m_amount == amount) return;
     m_amount = amount;
     emit changed();
 }
 
-QString ReceiveAddress::address() const
+QString ReceiveAddressController::address() const
 {
     return m_address;
 }
 
-QString ReceiveAddress::uri() const
+QString ReceiveAddressController::uri() const
 {
     if (!m_account || m_generating) return {};
     const auto wallet = m_account->wallet();
@@ -240,19 +240,19 @@ QString ReceiveAddress::uri() const
     }
 }
 
-bool ReceiveAddress::generating() const
+bool ReceiveAddressController::generating() const
 {
     return m_generating;
 }
 
-void ReceiveAddress::setGenerating(bool generating)
+void ReceiveAddressController::setGenerating(bool generating)
 {
     if (m_generating == generating) return;
     m_generating = generating;
     emit generatingChanged(m_generating);
 }
 
-void ReceiveAddress::generate()
+void ReceiveAddressController::generate()
 {
     if (!m_account || m_account->m_wallet->isLocked()) return;
 

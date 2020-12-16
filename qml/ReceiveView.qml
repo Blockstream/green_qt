@@ -8,7 +8,7 @@ ColumnLayout {
     property alias account: receive_address.account
     spacing: 16
 
-    ReceiveAddress {
+    ReceiveAddressController {
         id: receive_address
         amount: amount_field.text
     }
