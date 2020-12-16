@@ -230,7 +230,7 @@ void SendTransactionController::create()
         address.insert("satoshi", amount);
     }
     QJsonObject data{
-        { "subaccount", static_cast<qint64>(account()->m_pointer) },
+        { "subaccount", static_cast<qint64>(account()->pointer()) },
         { "fee_rate", m_fee_rate },
         { "send_all", m_send_all },
         { "addressees", QJsonArray{address}}
@@ -353,7 +353,7 @@ void BumpFeeController::create()
     auto a = account();
 
     QJsonObject details{
-        { "subaccount", static_cast<qint64>(a->m_pointer) },
+        { "subaccount", static_cast<qint64>(a->pointer()) },
         { "fee_rate", m_fee_rate },
         { "previous_transaction", t->data() }
     };

@@ -14,7 +14,7 @@ class GetReceiveAddressHandler : public Handler
     void call(GA_session* session, GA_auth_handler** auth_handler) override
     {
         auto address_details = Json::fromObject({
-            { "subaccount", static_cast<qint64>(m_account->m_pointer) },
+            { "subaccount", static_cast<qint64>(m_account->pointer()) },
         });
 
         int err = GA_get_receive_address(session, address_details.get(), auth_handler);
@@ -36,7 +36,7 @@ ReceiveAddressController::ReceiveAddressController(QObject *parent) : QObject(pa
 ReceiveAddressController::~ReceiveAddressController()
 {
     if (m_account) {
-        QMetaObject::invokeMethod(m_account->m_wallet->m_context, [] {}, Qt::BlockingQueuedConnection);
+        QMetaObject::invokeMethod(m_account->wallet()->m_context, [] {}, Qt::BlockingQueuedConnection);
     }
 }
 
@@ -105,8 +105,7 @@ void ReceiveAddressController::setGenerating(bool generating)
 
 void ReceiveAddressController::generate()
 {
-    if (!m_account || m_account->m_wallet->isLocked()) return;
-
+    if (!m_account || m_account->wallet()->isLocked()) return;
 
     if (m_generating) return;
 

@@ -4,9 +4,9 @@
 #include <QtQml>
 #include <QObject>
 
-class Balance;
-class Transaction;
-class Wallet;
+QT_FORWARD_DECLARE_CLASS(Balance)
+QT_FORWARD_DECLARE_CLASS(Transaction)
+QT_FORWARD_DECLARE_CLASS(Wallet)
 
 class Account : public QObject
 {
@@ -21,8 +21,8 @@ class Account : public QObject
 public:
     explicit Account(Wallet* wallet);
 
-    Wallet* wallet() const;
-
+    Wallet* wallet() const { return m_wallet; }
+    int pointer() const { Q_ASSERT(m_pointer >= 0); return m_pointer; }
     bool isMainAccount() const;
 
     QString name() const;
@@ -30,35 +30,31 @@ public:
 
     void update(const QJsonObject& json);
 
-    void handleNotification(const QJsonObject &notification);
+    void handleNotification(const QJsonObject& notification);
 
     qint64 balance() const;
 
     QQmlListProperty<Balance> balances();
 
     void updateBalance();
-
+    Transaction *getOrCreateTransaction(const QJsonObject &data);
 signals:
     void walletChanged();
     void jsonChanged();
     void balanceChanged();
-
     void balancesChanged();
     void notificationHandled(const QJsonObject &notification);
 public slots:
     void reload();
-
-public:
+private:
     Wallet* const m_wallet;
+    int m_pointer{-1};
+    QJsonObject m_json;
     QMap<QString, Transaction*> m_transactions_by_hash;
     QList<Balance*> m_balances;
     QMap<QString, Balance*> m_balance_by_id;
     bool m_have_unconfirmed{false};
-    QJsonObject m_json;
-    int m_pointer;
-
-    QJsonArray m_transactions_data;
-    Transaction *getOrCreateTransaction(const QJsonObject &data);
+    friend class Wallet;
 };
 
 #endif // GREEN_ACCOUNT_H

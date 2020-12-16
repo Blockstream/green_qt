@@ -46,7 +46,7 @@ void TransactionListModel::handleNotification(const QJsonObject& notification)
 
 void TransactionListModel::fetch(int offset, int count)
 {
-    auto handler = new GetTransactionsHandler(m_account->m_pointer, offset, count, m_account->wallet());
+    auto handler = new GetTransactionsHandler(m_account->pointer(), offset, count, m_account->wallet());
 
     QObject::connect(handler, &Handler::done, this, [this, handler] {
         // ignore handler result if no longer relevant

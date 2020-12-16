@@ -100,7 +100,6 @@ void Account::reload()
         m_json.insert("satoshi", balance);
         emit jsonChanged();
         updateBalance();
-        m_transactions_data = {};
     });
     QObject::connect(handler, &Handler::resolver, [](Resolver* resolver) {
         resolver->resolve();
@@ -118,11 +117,6 @@ Transaction* Account::getOrCreateTransaction(const QJsonObject& data)
     }
     transaction->updateFromData(data);
     return transaction;
-}
-
-Wallet *Account::wallet() const
-{
-    return m_wallet;
 }
 
 bool Account::isMainAccount() const
