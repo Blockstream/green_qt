@@ -471,7 +471,7 @@ void Wallet::setPin(const QByteArray& pin)
         err = GA_set_pin(m_session, mnemonic, pin.constData(), "test", &pin_data);
         Q_ASSERT(err == GA_OK);
         GA_destroy_string(mnemonic);
-        m_pin_data = Json::toByteArray(pin_data);
+        m_pin_data = Json::jsonToString(pin_data);
         GA_destroy_json(pin_data);
     });
 }
