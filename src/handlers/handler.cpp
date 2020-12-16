@@ -44,17 +44,22 @@ const QJsonObject& Handler::result() const
     return m_result;
 }
 
+static QJsonObject getResult(GA_auth_handler* auth_handler)
+{
+    GA_json* output;
+    int err = GA_auth_handler_get_status(auth_handler, &output);
+    Q_ASSERT(err == GA_OK);
+    const auto result = Json::toObject(output);
+    err = GA_destroy_json(output);
+    Q_ASSERT(err == GA_OK);
+    return result;
+}
+
 void Handler::step()
 {
     Q_ASSERT(m_auth_handler);
     for (;;) {
-        GA_json* output;
-        int err = GA_auth_handler_get_status(m_auth_handler, &output);
-        Q_ASSERT(err == GA_OK);
-        const auto result = Json::toObject(output);
-        err = GA_destroy_json(output);
-        Q_ASSERT(err == GA_OK);
-
+        const auto result = getResult(m_auth_handler);
         const auto status = result.value("status").toString();
 
         if (status == "call") {
