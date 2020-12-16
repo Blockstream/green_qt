@@ -10,7 +10,7 @@ class Balance;
 class Transaction;
 
 
-class SendTransactionController : public AccountController
+class SendController : public AccountController
 {
     Q_OBJECT
     Q_PROPERTY(bool valid READ isValid NOTIFY changed)
@@ -27,7 +27,7 @@ class SendTransactionController : public AccountController
     Q_PROPERTY(QJsonObject transaction READ transaction NOTIFY transactionChanged)
     QML_ELEMENT
 public:
-    explicit SendTransactionController(QObject* parent = nullptr);
+    explicit SendController(QObject* parent = nullptr);
 
     bool isValid() const;
 

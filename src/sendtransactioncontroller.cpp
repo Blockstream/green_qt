@@ -12,24 +12,24 @@
 
 #include <QDebug>
 
-SendTransactionController::SendTransactionController(QObject* parent)
+SendController::SendController(QObject* parent)
     : AccountController(parent)
 {
-    connect(this, &SendTransactionController::accountChanged, this, &SendTransactionController::create);
-    connect(this, &SendTransactionController::walletChanged, this, &SendTransactionController::create);
+    connect(this, &SendController::accountChanged, this, &SendController::create);
+    connect(this, &SendController::walletChanged, this, &SendController::create);
 }
 
-bool SendTransactionController::isValid() const
+bool SendController::isValid() const
 {
     return m_valid;
 }
 
-Balance* SendTransactionController::balance() const
+Balance* SendController::balance() const
 {
     return m_balance;
 }
 
-void SendTransactionController::setBalance(Balance* balance)
+void SendController::setBalance(Balance* balance)
 {
     if (m_balance == balance) return;
     m_balance = balance;
@@ -38,19 +38,19 @@ void SendTransactionController::setBalance(Balance* balance)
     update();
 }
 
-void SendTransactionController::setValid(bool valid)
+void SendController::setValid(bool valid)
 {
     if (m_valid == valid) return;
     m_valid = valid;
     emit changed();
 }
 
-QString SendTransactionController::address() const
+QString SendController::address() const
 {
     return m_address;
 }
 
-void SendTransactionController::setAddress(const QString& address)
+void SendController::setAddress(const QString& address)
 {
     if (m_address == address) return;
     m_address = address;
@@ -58,12 +58,12 @@ void SendTransactionController::setAddress(const QString& address)
     create();
 }
 
-bool SendTransactionController::sendAll() const
+bool SendController::sendAll() const
 {
     return m_send_all;
 }
 
-void SendTransactionController::setSendAll(bool send_all)
+void SendController::setSendAll(bool send_all)
 {
     if (m_send_all == send_all) return;
     m_send_all = send_all;
@@ -72,7 +72,7 @@ void SendTransactionController::setSendAll(bool send_all)
     update();
 }
 
-void SendTransactionController::setAmount(const QString& amount)
+void SendController::setAmount(const QString& amount)
 {
     if (m_amount == amount) return;
     m_amount = amount;
@@ -80,7 +80,7 @@ void SendTransactionController::setAmount(const QString& amount)
     update();
 }
 
-void SendTransactionController::setFiatAmount(const QString& fiat_amount)
+void SendController::setFiatAmount(const QString& fiat_amount)
 {
     Q_ASSERT(hasFiatRate());
     if (m_fiat_amount == fiat_amount) return;
@@ -89,12 +89,12 @@ void SendTransactionController::setFiatAmount(const QString& fiat_amount)
     update();
 }
 
-QString SendTransactionController::memo() const
+QString SendController::memo() const
 {
     return m_memo;
 }
 
-void SendTransactionController::setMemo(const QString &memo)
+void SendController::setMemo(const QString &memo)
 {
     if (m_memo == memo) return;
     Q_ASSERT(memo.length() <= 1024);
@@ -102,12 +102,12 @@ void SendTransactionController::setMemo(const QString &memo)
     emit changed();
 }
 
-qint64 SendTransactionController::feeRate() const
+qint64 SendController::feeRate() const
 {
     return m_fee_rate;
 }
 
-void SendTransactionController::setFeeRate(qint64 fee_rate)
+void SendController::setFeeRate(qint64 fee_rate)
 {
     if (m_fee_rate == fee_rate) return;
     m_fee_rate = fee_rate;
@@ -115,7 +115,7 @@ void SendTransactionController::setFeeRate(qint64 fee_rate)
     create();
 }
 
-bool SendTransactionController::hasFiatRate() const
+bool SendController::hasFiatRate() const
 {
     if (!wallet()) return false;
     if (!wallet()->network()->isLiquid()) return true;
@@ -123,12 +123,12 @@ bool SendTransactionController::hasFiatRate() const
     return false;
 }
 
-QJsonObject SendTransactionController::transaction() const
+QJsonObject SendController::transaction() const
 {
     return m_transaction;
 }
 
-void SendTransactionController::update()
+void SendController::update()
 {
     if (!wallet()) return;
     const bool is_liquid = wallet()->network()->isLiquid();
@@ -177,7 +177,7 @@ void SendTransactionController::update()
     create();
 }
 
-void SendTransactionController::create()
+void SendController::create()
 {
     if (!wallet() || !account()) return;
 
@@ -220,7 +220,7 @@ void SendTransactionController::create()
         { "addressees", QJsonArray{address}}
     };
 
-    m_create_handler = new CreateTransactionHandler(data, wallet());
+    m_create_handler = new CreateTransactionHandler(wallet(), data);
     connect(m_create_handler, &Handler::done, this, [this, count] {
         if (m_count == count) {
             m_transaction = m_create_handler->result().value("result").toObject();
@@ -268,7 +268,7 @@ public:
     }
 };
 
-void SendTransactionController::signAndSend()
+void SendController::signAndSend()
 {
     auto sign = new SignTransactionHandler(m_transaction, wallet());
     connect(sign, &Handler::done, this, [this, sign] {
@@ -342,7 +342,7 @@ void BumpFeeController::create()
         { "previous_transaction", t->data() }
     };
 
-    m_create_handler = new CreateTransactionHandler(details, wallet());
+    m_create_handler = new CreateTransactionHandler(wallet(), details);
     connect(m_create_handler, &Handler::done, this, [this, req] {
         if (m_req == req) {
             m_tx = m_create_handler->result().value("result").toObject();

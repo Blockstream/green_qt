@@ -9,7 +9,7 @@ ControllerDialog {
     id: send_dialog
     required property Account account
 
-    controller: SendTransactionController {
+    controller: SendController {
         account: send_dialog.account
         balance: send_view.balance
         address: send_view.address
