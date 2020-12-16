@@ -2,6 +2,7 @@ INCLUDEPATH += $$PWD
 
 HEADERS += \
     $$PWD/connecthandler.h \
+    $$PWD/getbalancehandler.h \
     $$PWD/gettransactionshandler.h \
     $$PWD/handler.h \
     $$PWD/loginhandler.h \
@@ -9,6 +10,7 @@ HEADERS += \
 
 SOURCES += \
     $$PWD/connecthandler.cpp \
+    $$PWD/getbalancehandler.cpp \
     $$PWD/gettransactionshandler.cpp \
     $$PWD/handler.cpp \
     $$PWD/loginhandler.cpp \

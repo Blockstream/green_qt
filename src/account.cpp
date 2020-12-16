@@ -2,7 +2,7 @@
 #include "asset.h"
 #include "balance.h"
 #include "ga.h"
-#include "handler.h"
+#include "handlers/getbalancehandler.h"
 #include "json.h"
 #include "network.h"
 #include "resolver.h"
@@ -10,27 +10,6 @@
 #include "wallet.h"
 
 #include <gdk.h>
-
-class GetBalanceHandler : public Handler
-{
-    Account* const m_account;
-    void call(GA_session* session, GA_auth_handler** auth_handler) override
-    {
-        auto details = Json::fromObject({
-            { "subaccount", m_account->m_pointer },
-            { "num_confs", 0 }
-        });
-
-        int err = GA_get_balance(session, details.get(), auth_handler);
-        Q_ASSERT(err == GA_OK);
-    }
-public:
-    GetBalanceHandler(Account* account)
-        : Handler(account->wallet())
-        , m_account(account)
-    {
-    }
-};
 
 Account::Account(Wallet* wallet)
     : QObject(wallet)
