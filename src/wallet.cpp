@@ -54,6 +54,28 @@ public:
     }
 };
 
+namespace {
+QByteArray getMnemonicPassphrase(GA_session* session)
+{
+    char* data;
+    int err = GA_get_mnemonic_passphrase(session, "", &data);
+    Q_ASSERT(err == GA_OK);
+    QByteArray mnemonic(data);
+    GA_destroy_string(data);
+    return mnemonic;
+}
+QByteArray pinDataForNewPin(GA_session* session, const QByteArray& pin)
+{
+    const auto mnemonic = getMnemonicPassphrase(session);
+    GA_json* data;
+    int err = GA_set_pin(session, mnemonic.constData(), pin.constData(), "greenqt", &data);
+    Q_ASSERT(err == GA_OK);
+    auto pin_data = Json::jsonToString(data);
+    err = GA_destroy_json(data);
+    Q_ASSERT(err == GA_OK);
+    return pin_data;
+}
+} // namespace
 
 class SetPinHandler : public Handler
 {
@@ -62,20 +84,7 @@ class SetPinHandler : public Handler
     void call(GA_session* session, GA_auth_handler** auth_handler) override
     {
         Q_UNUSED(auth_handler);
-        char* mnemonic;
-        int err = GA_get_mnemonic_passphrase(session, "", &mnemonic);
-        Q_ASSERT(err == GA_OK);
-        GA_json* pin_data;
-        err = GA_set_pin(session, mnemonic, m_pin.constData(), "greenqt", &pin_data);
-        Q_ASSERT(err == GA_OK);
-        char* str;
-        err = GA_convert_json_to_string(pin_data, &str);
-        Q_ASSERT(err == GA_OK);
-        m_pin_data = QByteArray(str);
-        err = GA_destroy_json(pin_data);
-        Q_ASSERT(err == GA_OK);
-        GA_destroy_string(str);
-        GA_destroy_string(mnemonic);
+        m_pin_data = pinDataForNewPin(session, m_pin);
     }
 public:
     SetPinHandler(Wallet* wallet, const QByteArray& pin)
@@ -464,15 +473,8 @@ void Wallet::setPin(const QByteArray& pin)
 
     // TODO: use SetPinHandler
     QMetaObject::invokeMethod(m_context, [this, pin] {
-        char* mnemonic;
-        int err = GA_get_mnemonic_passphrase(m_session, "", &mnemonic);
-        Q_ASSERT(err == GA_OK);
-        GA_json* pin_data;
-        err = GA_set_pin(m_session, mnemonic, pin.constData(), "test", &pin_data);
-        Q_ASSERT(err == GA_OK);
-        GA_destroy_string(mnemonic);
-        m_pin_data = Json::jsonToString(pin_data);
-        GA_destroy_json(pin_data);
+        const auto mnemonic = getMnemonicPassphrase(m_session);
+        m_pin_data = pinDataForNewPin(m_session, pin);
     });
 }
 
