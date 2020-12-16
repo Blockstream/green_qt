@@ -11,6 +11,8 @@
 #include "handlers/loginhandler.h"
 #include "registeruserhandler.h"
 
+#include <type_traits>
+
 #include <QDateTime>
 #include <QDebug>
 #include <QJsonObject>
@@ -103,6 +105,8 @@ static void notification_handler(void* context, const GA_json* details)
 {
     Wallet* wallet = static_cast<Wallet*>(context);
     auto notification = Json::toObject(details);
+    static_assert(std::is_same<decltype(details), const GA_json*>::value, "remove the following const_cast");
+    GA_destroy_json(const_cast<GA_json*>(details));
     QMetaObject::invokeMethod(wallet, [wallet, notification] {
         wallet->handleNotification(notification);
     });
