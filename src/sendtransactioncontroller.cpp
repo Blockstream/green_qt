@@ -2,7 +2,7 @@
 #include "account.h"
 #include "asset.h"
 #include "balance.h"
-#include "handler.h"
+#include "handlers/createtransactionhandler.h"
 #include "json.h"
 #include "network.h"
 #include "transaction.h"
@@ -11,22 +11,6 @@
 #include <gdk.h>
 
 #include <QDebug>
-
-class CreateTransactionHandler : public Handler
-{
-    const QJsonObject m_details;
-    void call(GA_session* session, GA_auth_handler** auth_handler) override {
-        auto details = Json::fromObject(m_details);
-        int err = GA_create_transaction(session, details.get(), auth_handler);
-        Q_ASSERT(err == GA_OK);
-    }
-public:
-    CreateTransactionHandler(QJsonObject& details, Wallet* wallet)
-        : Handler(wallet)
-        , m_details(details)
-    {
-    }
-};
 
 SendTransactionController::SendTransactionController(QObject* parent)
     : AccountController(parent)
