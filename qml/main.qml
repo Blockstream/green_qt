@@ -13,9 +13,6 @@ ApplicationWindow {
     readonly property Account currentAccount: stack_view.currentItem.currentAccount || null
 
     DeviceDiscoveryAgent {
-        onDeviceConnected: {
-            console.log('device connected', device.type)
-        }
     }
 
     Connections {
@@ -113,16 +110,13 @@ ApplicationWindow {
         id: device_list_model
     }
 
-    property real left_margin: device_list_model.rowCount > 0 ? 16 : 0
-    Behavior on left_margin { SmoothedAnimation {} }
-
     header: RowLayout {
         ToolButton {
             id: tool_button
             text: '\u2630'
             checkable: true
             checked: true
-            Layout.leftMargin: 8 + left_margin
+            Layout.leftMargin: 8
         }
         MenuBar {
             background: Item {}
@@ -221,7 +215,7 @@ ApplicationWindow {
             clip: true
             color: Qt.rgba(1, 1, 1, 0.01)
 
-            SplitView.minimumWidth: tool_button.checked ? 300 : 64 + left_margin
+            SplitView.minimumWidth: tool_button.checked ? 300 : 64
             SplitView.maximumWidth: SplitView.minimumWidth
             Behavior on SplitView.minimumWidth {
                 SmoothedAnimation {
@@ -237,7 +231,7 @@ ApplicationWindow {
                 delegate: ItemDelegate {
                     id: delegate
                     text: wallet.device ? wallet.device.name : wallet.name
-                    leftPadding: 16 + left_margin
+                    leftPadding: 16
                     icon.color: 'transparent'
                     icon.source: icons[wallet.network.id]
                     icon.width: 32
@@ -277,15 +271,6 @@ ApplicationWindow {
                             text: '\u22EF'
                             onClicked: wallet_menu.open()
                         }
-                    }
-                    Image {
-                        visible: wallet.device
-                        width: 24
-                        height: 24
-                        z: 10
-                        x: 8
-                        anchors.verticalCenter: parent.verticalCenter
-                        source: 'qrc:/svg/usbAlt.svg'
                     }
                 }
                 ScrollIndicator.vertical: ScrollIndicator {}
