@@ -90,7 +90,7 @@ ItemDelegate {
                 MenuItem {
                     enabled: transaction.data.can_rbf
                     text: qsTrId('id_increase_fee')
-                    onTriggered: bump_fee_dialog.createObject(tool_button, { transaction }).open()
+                    onTriggered: bump_fee_dialog.createObject(window, { transaction }).open()
                 }
                 MenuSeparator {
                 }
