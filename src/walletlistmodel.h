@@ -15,6 +15,7 @@ class WalletListModel : public QSortFilterProxyModel
     QML_ELEMENT
 public:
     WalletListModel(QObject* parent = nullptr);
+    Q_INVOKABLE int indexOf(Wallet* wallet) const;
 private slots:
     void update();
 protected:

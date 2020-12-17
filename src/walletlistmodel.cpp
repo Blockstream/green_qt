@@ -15,6 +15,14 @@ WalletListModel::WalletListModel(QObject* parent)
     sort(0);
 }
 
+int WalletListModel::indexOf(Wallet *wallet) const
+{
+    for (int i = 0; i < rowCount(); ++i) {
+        if (data(index(i, 0), Qt::UserRole).value<Wallet*>() == wallet) return i;
+    }
+    return -1;
+}
+
 void WalletListModel::update()
 {
     auto items = m_items;
