@@ -27,6 +27,7 @@ public slots:
     virtual void resolve() = 0;
 signals:
     void failedChanged(bool failed);
+    void progress(int current, int total);
 protected:
     void setFailed(bool failed);
     Handler* const m_handler;

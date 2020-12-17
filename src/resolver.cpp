@@ -94,6 +94,7 @@ GetXPubsResolver::GetXPubsResolver(Handler* handler, const QJsonObject& result)
 
 void GetXPubsResolver::resolve()
 {
+    emit progress(m_xpubs.size(), m_xpubs.size() + m_paths.size());
     if (m_paths.empty()) return emit m_handler->resolve({{ "xpubs", m_xpubs }});
 
     auto path = m_paths.takeFirst();
