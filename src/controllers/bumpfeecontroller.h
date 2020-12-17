@@ -1,5 +1,5 @@
-#ifndef GREEN_SENDTRANSACTIONCONTROLLER_H
-#define GREEN_SENDTRANSACTIONCONTROLLER_H
+#ifndef GREEN_BUMPFEECONTROLLER_H
+#define GREEN_BUMPFEECONTROLLER_H
 
 #include "accountcontroller.h"
 
@@ -34,4 +34,4 @@ signals:
     void txChanged(const QJsonObject& tx);
 };
 
-#endif // GREEN_SENDTRANSACTIONCONTROLLER_H
+#endif // GREEN_BUMPFEECONTROLLER_H

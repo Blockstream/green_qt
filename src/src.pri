@@ -23,7 +23,6 @@ SOURCES += \
     $$PWD/renameaccountcontroller.cpp \
     $$PWD/resolver.cpp \
     $$PWD/restorecontroller.cpp \
-    $$PWD/sendtransactioncontroller.cpp \
     $$PWD/signupcontroller.cpp \
     $$PWD/transaction.cpp \
     $$PWD/transactionlistmodel.cpp \
@@ -57,7 +56,6 @@ HEADERS += \
     $$PWD/renameaccountcontroller.h \
     $$PWD/resolver.h \
     $$PWD/restorecontroller.h \
-    $$PWD/sendtransactioncontroller.h \
     $$PWD/signupcontroller.h \
     $$PWD/transaction.h \
     $$PWD/transactionlistmodel.h \

@@ -128,7 +128,6 @@ static void DeviceRemovalCallback(void* context, IOReturn /* result */, void* /*
     auto agent = static_cast<DeviceDiscoveryAgentPrivate*>(context);
     auto device = agent->m_devices.take(handle);
     if (!device) return;
-    qDebug() << "DEVICE REMOVED";
     agent->m_device_unique_ids.remove(device->m_unique_id);
     DeviceManager::instance()->removeDevice(device->q);
     delete device->q;
