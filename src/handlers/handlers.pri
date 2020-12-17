@@ -8,6 +8,7 @@ HEADERS += \
     $$PWD/handler.h \
     $$PWD/loginhandler.h \
     $$PWD/registeruserhandler.h \
+    $$PWD/sendtransactionhandler.h \
     $$PWD/signtransactionhandler.h
 
 SOURCES += \
@@ -18,4 +19,5 @@ SOURCES += \
     $$PWD/handler.cpp \
     $$PWD/loginhandler.cpp \
     $$PWD/registeruserhandler.cpp \
+    $$PWD/sendtransactionhandler.cpp \
     $$PWD/signtransactionhandler.cpp

@@ -3,6 +3,7 @@
 #include "asset.h"
 #include "balance.h"
 #include "handlers/createtransactionhandler.h"
+#include "handlers/sendtransactionhandler.h"
 #include "handlers/signtransactionhandler.h"
 #include "json.h"
 #include "network.h"
@@ -236,22 +237,6 @@ void SendController::create()
     });
     exec(m_create_handler);
 }
-
-class SendTransactionHandler : public Handler
-{
-    const QJsonObject m_details;
-    void call(GA_session* session, GA_auth_handler** auth_handler) override {
-        auto details = Json::fromObject(m_details);
-        int err = GA_send_transaction(session, details.get(), auth_handler);
-        Q_ASSERT(err == GA_OK);
-    }
-public:
-    SendTransactionHandler(const QJsonObject& details, Wallet* wallet)
-        : Handler(wallet)
-        , m_details(details)
-    {
-    }
-};
 
 void SendController::signAndSend()
 {
