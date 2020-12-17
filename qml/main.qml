@@ -50,8 +50,10 @@ ApplicationWindow {
                 wallet_views[wallet] = container
             }
             stack_view.replace(container, StackView.Immediate)
+            wallet_list_view.currentIndex = wallet_list_view.model.indexOf(wallet)
         } else {
             stack_view.replace(stack_view.initialItem, StackView.Immediate)
+            wallet_list_view.currentIndex = -1
         }
     }
 
@@ -227,6 +229,7 @@ ApplicationWindow {
                 clip: true
                 height: wallets_sidebar_item.height
                 width: Math.max(300, parent.width)
+                currentIndex: -1
                 model: WalletListModel {}
                 delegate: ItemDelegate {
                     id: delegate
@@ -237,7 +240,7 @@ ApplicationWindow {
                     icon.width: 32
                     icon.height: 32
                     width: wallet_list_view.width
-                    highlighted: wallet === currentWallet
+                    highlighted: ListView.isCurrentItem
                     opacity: highlighted || hovered || tool_button.checked ? 1 : 0.25
                     Behavior on opacity { OpacityAnimator {} }
                     property bool valid: wallet.loginAttemptsRemaining > 0
