@@ -11,6 +11,7 @@ class GetTransactionsHandler : public Handler
     void call(GA_session* session, GA_auth_handler** auth_handler) override;
 public:
     GetTransactionsHandler(int subaccount, int first, int count, Wallet *wallet);
+    QJsonArray transactions() const;
 };
 
 #endif // GREEN_GETTRANSACTIONHANDLER_H

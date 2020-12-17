@@ -39,7 +39,7 @@ void TransactionListModel::handleNotification(const QJsonObject& notification)
 {
     QString event = notification.value("event").toString();
     if (event == "transaction") {
-        fetch(0, 2);
+        reload();
         return;
     }
 }
@@ -49,26 +49,23 @@ void TransactionListModel::fetch(int offset, int count)
     auto handler = new GetTransactionsHandler(m_account->pointer(), offset, count, m_account->wallet());
 
     QObject::connect(handler, &Handler::done, this, [this, handler] {
-        // ignore handler result if no longer relevant
-        if (handler != m_handler) return;
-        QJsonArray transactions = handler->result().value("result").toObject().value("transactions").toArray();
-        QVector<Transaction*> txs;
-        int index = -1;
-        for (auto data : transactions) {
-            Transaction* transaction = m_account->getOrCreateTransaction(data.toObject());
-            index = m_transactions.indexOf(transaction);
-            if (index >= 0) break;
-            txs.append(transaction);
+        handler->deleteLater();
+        // instantiate missing transactions
+        QVector<Transaction*> transactions;
+        for (QJsonValue data : handler->transactions()) {
+            transactions.append(m_account->getOrCreateTransaction(data.toObject()));
         }
-        if (index < 0) {
-            beginInsertRows(QModelIndex(), m_transactions.size(), m_transactions.size() + txs.size() - 1);
-            m_transactions.append(txs);
-            endInsertRows();
+        if (m_needs_reset) {
+            // just swap rows instead of incremental update
+            // this happens after a bump fee for instance
+            m_needs_reset = false;
+            beginResetModel();
+            m_transactions = transactions;
+            endResetModel();
         } else {
-            beginInsertRows(QModelIndex(), index, index + txs.size() - 1);
-            while (!txs.empty()) {
-                m_transactions.insert(index++, txs.takeFirst());
-            }
+            // new page of transactions, just append to existing transaction
+            beginInsertRows(QModelIndex(), m_transactions.size(), m_transactions.size() + transactions.size() - 1);
+            m_transactions.append(transactions);
             endInsertRows();
         }
         m_handler = nullptr;
@@ -104,7 +101,7 @@ void TransactionListModel::fetchMore(const QModelIndex &parent)
     Q_ASSERT(!parent.parent().isValid());
     if (!m_account) return;
     if (m_handler) return;
-    fetch(m_transactions.size(), 10);
+    fetch(m_transactions.size(), 20);
 }
 
 int TransactionListModel::rowCount(const QModelIndex &parent) const
@@ -127,8 +124,8 @@ QVariant TransactionListModel::data(const QModelIndex &index, int role) const
 
 void TransactionListModel::reload()
 {
+    // TODO: cancel active handler
     m_handler = nullptr;
-    beginResetModel();
-    m_transactions.clear();
-    endResetModel();
+    m_needs_reset = true;
+    fetch(0, 20);
 }

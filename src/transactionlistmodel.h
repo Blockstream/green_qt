@@ -42,6 +42,7 @@ private:
 private:
     Account* m_account{nullptr};
     QVector<Transaction*> m_transactions;
+    bool m_needs_reset{false};
     Handler* m_handler{nullptr};
 };
 

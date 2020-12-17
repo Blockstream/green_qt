@@ -22,3 +22,8 @@ GetTransactionsHandler::GetTransactionsHandler(int subaccount, int first, int co
     , m_count(count)
 {
 }
+
+QJsonArray GetTransactionsHandler::transactions() const
+{
+    return result().value("result").toObject().value("transactions").toArray();
+}
