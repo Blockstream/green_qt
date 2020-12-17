@@ -24,7 +24,10 @@ Item {
             action: restore_wallet_action
         }
         Label {
-            visible: device_list_model.rowCount === 0
+            property real device_count: device_list_model.rowCount
+            Behavior on device_count { SmoothedAnimation { velocity: 0.5 } }
+            opacity: device_count > 0 ? 0 : 1
+            Behavior on opacity { OpacityAnimator {} }
             text: qsTrId('id_connect_your_ledger_to_use_it')
             padding: 16
             background: Rectangle {

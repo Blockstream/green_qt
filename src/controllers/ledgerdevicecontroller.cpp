@@ -80,6 +80,7 @@ void LedgerDeviceController::initialize()
 
 void LedgerDeviceController::login()
 {
+    setStatus("login");
     auto connect_handler = new ConnectHandler(m_wallet);
     auto register_user_handler = new RegisterUserHandler(m_wallet, m_device_details);
     auto login_handler = new LoginHandler(m_wallet, m_device_details);
