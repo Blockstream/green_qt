@@ -71,41 +71,44 @@ ColumnLayout {
     SettingsBox {
         title: qsTrId('id_twofactor_authentication')
         enabled: !wallet.locked
-        ColumnLayout {
+        RowLayout {
             anchors.fill: parent
+            spacing: 16
             Label {
+                Layout.alignment: Qt.AlignTop
                 Layout.fillWidth: true
                 text: qsTrId('id_enable_twofactor_authentication')
-                horizontalAlignment: Text.AlignJustify
                 wrapMode: Label.WordWrap
             }
-            Repeater {
-                model: wallet.config.all_methods || []
+            ColumnLayout {
+                Layout.fillWidth: false
+                Repeater {
+                    model: wallet.config.all_methods || []
 
-                RowLayout {
-                    Layout.fillWidth: true
-                    Layout.alignment: Qt.AlignRight
-                    property string method: modelData
+                    RowLayout {
+                        Layout.alignment: Qt.AlignRight
+                        property string method: modelData
 
-                    Image {
-                        source: `qrc:/svg/2fa_${method}.svg`
-                        sourceSize.height: 32
-                    }
-                    Label {
-                        text: method.toUpperCase()
-                        Layout.minimumWidth: 64
-                    }
-                    Switch {
-                        Binding on checked {
-                            value: wallet.config[method].enabled
+                        Image {
+                            source: `qrc:/svg/2fa_${method}.svg`
+                            sourceSize.height: 32
                         }
+                        Label {
+                            text: method.toUpperCase()
+                            Layout.minimumWidth: 64
+                        }
+                        Switch {
+                            Binding on checked {
+                                value: wallet.config[method].enabled
+                            }
 
-                        onClicked: {
-                            checked = wallet.config[modelData].enabled;
-                            if (!wallet.config[method].enabled) {
-                                enable_dialog.createObject(stack_view, { method }).open();
-                            } else {
-                                disable_dialog.createObject(stack_view, { method }).open();
+                            onClicked: {
+                                checked = wallet.config[modelData].enabled;
+                                if (!wallet.config[method].enabled) {
+                                    enable_dialog.createObject(stack_view, { method }).open();
+                                } else {
+                                    disable_dialog.createObject(stack_view, { method }).open();
+                                }
                             }
                         }
                     }
