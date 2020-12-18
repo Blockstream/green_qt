@@ -2,8 +2,8 @@ import QtQuick.Controls 2.13
 
 ComboBox {
     property var extra: []
-    property int feeRate: model[currentIndex].feeRate
-    property int blocks: model[currentIndex].blocks
+    property int feeRate: model[currentIndex].feeRate || 0
+    property int blocks: model[currentIndex].blocks || 0
 
     function fee(label, duration, blocks) {
         const feeRate = wallet.events.fees[blocks] ;
