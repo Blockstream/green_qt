@@ -96,7 +96,8 @@ WalletDialog {
     property Component requestCodeComponent: ColumnLayout {
         property Handler handler
         Repeater {
-            model: handler.result.methods
+            // TODO: handler is deleted while this view is on the stack view
+            model: handler ? handler.result.methods : null
             Button {
                 property string method: modelData
                 icon.source: `qrc:/svg/2fa_${method}.svg`
