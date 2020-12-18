@@ -78,6 +78,13 @@ void LedgerDeviceController::initialize()
     cmd->exec();
 }
 
+void LedgerDeviceController::setStatus(const QString& status)
+{
+    if (m_status == status) return;
+    m_status = status;
+    emit statusChanged(m_status);
+}
+
 void LedgerDeviceController::login()
 {
     setStatus("login");
@@ -92,6 +99,9 @@ void LedgerDeviceController::login()
     });
     connect(register_user_handler, &Handler::resolver, this, [](Resolver* resolver) {
         resolver->resolve();
+    });
+    connect(register_user_handler, &Handler::error, this, [this]() {
+        setStatus("locked");
     });
     connect(login_handler, &Handler::done, this, [this] {
         m_wallet->setSession();
@@ -113,6 +123,9 @@ void LedgerDeviceController::login()
             emit progressChanged(m_progress);
         });
         resolver->resolve();
+    });
+    connect(login_handler, &Handler::error, this, [this]() {
+        setStatus("locked");
     });
     connect_handler->exec();
 }

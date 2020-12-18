@@ -439,7 +439,7 @@ ApplicationWindow {
                     Layout.fillWidth: true
                 }
                 Image {
-                    visible: controller.network
+                    visible: controller.network && controller.status !== 'locked'
                     sourceSize.width: 24
                     sourceSize.height: 24
                     source: controller.network ? icons[controller.network.id] : ''
@@ -447,9 +447,17 @@ ApplicationWindow {
                 ProgressBar {
                     indeterminate: controller.indeterminate
                     value: controller.progress
-                    visible: controller.network
+                    visible: controller.status === 'login'
                     Layout.fillWidth: true
                     Behavior on value { NumberAnimation { duration: 300; easing.type: Easing.OutCubic } }
+                }
+                Label {
+                    visible: controller.status === 'locked'
+                    opacity: 0.5
+                    font.pixelSize: 11
+                    text: 'Unlock and select app'
+                    horizontalAlignment: Label.AlignHCenter
+                    Layout.fillWidth: true
                 }
             }
         }
