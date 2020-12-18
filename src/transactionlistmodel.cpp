@@ -7,7 +7,13 @@
 
 TransactionListModel::TransactionListModel(QObject* parent)
     : QAbstractListModel(parent)
-{    
+    , m_reload_timer(new QTimer(this))
+{
+    m_reload_timer->setSingleShot(true);
+    m_reload_timer->setInterval(200);
+    connect(m_reload_timer, &QTimer::timeout, [this] {
+       fetch(true, 0, 30);
+    });
 }
 
 TransactionListModel::~TransactionListModel()
@@ -44,21 +50,22 @@ void TransactionListModel::handleNotification(const QJsonObject& notification)
     }
 }
 
-void TransactionListModel::fetch(int offset, int count)
+void TransactionListModel::fetch(bool reset, int offset, int count)
 {
     auto handler = new GetTransactionsHandler(m_account->pointer(), offset, count, m_account->wallet());
 
-    QObject::connect(handler, &Handler::done, this, [this, handler] {
+    QObject::connect(handler, &Handler::done, this, [this, reset, handler] {
         handler->deleteLater();
+        m_handler = nullptr;
+        emit fetchingChanged(false);
         // instantiate missing transactions
         QVector<Transaction*> transactions;
         for (QJsonValue data : handler->transactions()) {
             transactions.append(m_account->getOrCreateTransaction(data.toObject()));
         }
-        if (m_needs_reset) {
+        if (reset) {
             // just swap rows instead of incremental update
             // this happens after a bump fee for instance
-            m_needs_reset = false;
             beginResetModel();
             m_transactions = transactions;
             endResetModel();
@@ -68,8 +75,6 @@ void TransactionListModel::fetch(int offset, int count)
             m_transactions.append(transactions);
             endInsertRows();
         }
-        m_handler = nullptr;
-        emit fetchingChanged(false);
     });
 
     connect(handler, &Handler::resolver, [](Resolver* resolver) {
@@ -101,7 +106,7 @@ void TransactionListModel::fetchMore(const QModelIndex &parent)
     Q_ASSERT(!parent.parent().isValid());
     if (!m_account) return;
     if (m_handler) return;
-    fetch(m_transactions.size(), 20);
+    fetch(false, m_transactions.size(), 30);
 }
 
 int TransactionListModel::rowCount(const QModelIndex &parent) const
@@ -124,8 +129,6 @@ QVariant TransactionListModel::data(const QModelIndex &index, int role) const
 
 void TransactionListModel::reload()
 {
-    // TODO: cancel active handler
-    m_handler = nullptr;
-    m_needs_reset = true;
-    fetch(0, 20);
+    if (!m_account) return;
+    m_reload_timer->start();
 }

@@ -38,12 +38,12 @@ signals:
 private slots:
     void handleNotification(const QJsonObject& notification);
 private:
-    void fetch(int offset, int count);
+    void fetch(bool reset, int offset, int count);
 private:
     Account* m_account{nullptr};
     QVector<Transaction*> m_transactions;
-    bool m_needs_reset{false};
     Handler* m_handler{nullptr};
+    QTimer* const m_reload_timer;
 };
 
 #endif // TRANSACTIONLISTMODEL_H
