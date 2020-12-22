@@ -1,4 +1,4 @@
-image: greenaddress/ci@sha256:a84885e6daa94222fa09a53c6a97132e5f03cb3f14facc77fce0a5df5481ae31
+image: greenaddress/ci@sha256:f70141a178a96d030ff793259fd7dd11a86adc8cd1f090c79e99df0fa955fbdf
 
 stages:
   - build
@@ -47,7 +47,8 @@ osx_release:
   cache:
     key: build-cache-osx
     paths:
-    - build-osx-clang/gdk-*/gdk.h
+    - build-osx-clang/gdk-*/*.h
+    - build-osx-clang/gdk-*/*.hpp
     - build-osx-clang/gdk-*/build.done
     - build-osx-clang/gdk-*/libgreenaddress_full.a
     - build-osx-clang/qt-release*

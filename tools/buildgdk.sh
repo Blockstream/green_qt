@@ -37,6 +37,7 @@ fi
 
 mv ${GDK_PATH}/src/build-*/src/libgreenaddress* ${GDK_PATH}
 mv ${GDK_PATH}/src/include/gdk.h ${GDK_PATH}/gdk.h
+mv ${GDK_PATH}/src/build-*/libwally-core/build/include/* ${GDK_PATH}
 
 rm -fr ${GDK_PATH}/src ${GDKVENV}
 

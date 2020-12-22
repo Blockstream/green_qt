@@ -5,17 +5,7 @@
 #include "util.h"
 #include "wallet.h"
 
-
-extern "C" {
-
-int wally_ec_public_key_decompress(
-    const unsigned char *pub_key,
-    size_t pub_key_len,
-    unsigned char *bytes_out,
-    size_t len);
-
-} // extern "C"
-
+#include <wally_crypto.h>
 
 Resolver::Resolver(Handler *handler, const QJsonObject& result)
     : QObject(handler)

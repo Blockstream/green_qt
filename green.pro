@@ -27,6 +27,7 @@ QT += qml quick quickcontrols2 svg
 CONFIG += c++11 metatypes qmltypes qtquickcompiler
 
 !defined(GDK_PATH, var): error(Run qmake with GDK_PATH set. See BUILD.md for more details.)
+DEFINES += BUILD_ELEMENTS
 
 # The following define makes your compiler emit warnings if you use
 # any Qt feature that has been marked deprecated (the exact warnings

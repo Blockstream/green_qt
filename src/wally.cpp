@@ -1,14 +1,7 @@
 #include "wally.h"
 
 #include <QSet>
-
-#define BIP39_WORDLIST_LEN 2048
-extern "C" {
-struct words;
-int bip39_get_wordlist(const char *lang, struct words **output);
-int bip39_get_word(const struct words *w, size_t index, char **output);
-int wally_free_string(char *str);
-}
+#include <wally_bip39.h>
 
 namespace {
 

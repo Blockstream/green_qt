@@ -27,45 +27,9 @@
 #define BTCHIP_INS_GET_FIRMWARE_VERSION             0xc4
 #define BTCHIP_INS_SIGN_MESSAGE                     0x4e
 
-
-extern "C" {
-struct words;
-struct ext_key;
-int bip32_key_free(const struct ext_key *hdkey);
-int bip32_key_init_alloc(uint32_t version,
-                         uint32_t depth,
-                         uint32_t child_num,
-                         const unsigned char *chain_code,
-                         size_t chain_code_len,
-                         const unsigned char *pub_key,
-                         size_t pub_key_len,
-                         const unsigned char *priv_key,
-                         size_t priv_key_len,
-                         const unsigned char *hash160,
-                         size_t hash160_len,
-                         const unsigned char *parent160,
-                         size_t parent160_len,
-                         struct ext_key **output);
-int bip32_key_to_base58(const struct ext_key *hdkey, uint32_t flags, char **output);
-int wally_free_string(char *str);
-
-// From wally_core.h
-#define WALLY_OK      0
-
-// From wally_elements.h
-#define BLINDING_FACTOR_LEN 32
-int wally_asset_final_vbf(
-    const quint64 *values,
-    size_t values_len,
-    size_t num_inputs,
-    const unsigned char *abf,
-    size_t abf_len,
-    const unsigned char *vbf,
-    size_t vbf_len,
-    unsigned char *bytes_out,
-    size_t len);
-
-}
+#include <wally_core.h>
+#include <wally_bip32.h>
+#include <wally_elements.h>
 
 template <typename T> struct Varint { T v; };
 template <typename T> Varint<T> varint(T v) { return {v}; }
@@ -369,7 +333,7 @@ void SignLiquidTransactionCommand::getLiquidCommitment(int output_index)
 
             char final_vbf[BLINDING_FACTOR_LEN];
             int ret = wally_asset_final_vbf(
-                        values.data(), values.size(),
+                        (const uint64_t*) values.data(), values.size(),
                         m_inputs.size(),
                         (const unsigned char*) abf.data(), abf.size(),
                         (const unsigned char*) vbf.data(), vbf.size(),
