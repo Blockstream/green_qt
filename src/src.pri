@@ -6,6 +6,7 @@ SOURCES += \
     $$PWD/asset.cpp \
     $$PWD/balance.cpp \
     $$PWD/clipboard.cpp \
+    $$PWD/command.cpp \
     $$PWD/controller.cpp \
     $$PWD/createaccountcontroller.cpp \
     $$PWD/device.cpp \
@@ -39,6 +40,7 @@ HEADERS += \
     $$PWD/asset.h \
     $$PWD/balance.h \
     $$PWD/clipboard.h \
+    $$PWD/command.h \
     $$PWD/controller.h \
     $$PWD/createaccountcontroller.h \
     $$PWD/device.h \
