@@ -104,75 +104,22 @@ public:
     bool parse(QDataStream& stream) override;
 };
 
-struct Input {
-    QByteArray value;
-    QByteArray sequence;
-    bool trusted;
-    bool segwit;
-};
-
-class SignTransactionCommand : public DeviceCommand
-{
-public:
-    SignTransactionCommand(Device* device, CommandBatch* batch = nullptr)
-        : DeviceCommand(device, batch) {}
-    virtual QByteArray payload() const override { return {}; };
-    virtual bool parse(QDataStream& stream) override { return true; };
-    int count{0};
-    QList<QByteArray> signatures;
-};
-
-// TODO: this and SignTransactionCommands don't really write/read from the device
-// should improve/clarify what commands are
-class SignLiquidTransactionCommand : public DeviceCommand
-{
-    Q_OBJECT
-public:
-    // TODO these should be removed
-    virtual QByteArray payload() const override { return {}; };
-
-    SignLiquidTransactionCommand(Device* device, const QJsonObject& required_data, CommandBatch* batch = nullptr);
-
-    void exec() override;
-    void getLiquidCommitment(int output_index);
-
-    DeviceCommand* exchange(const QByteArray& data);
-    QJsonObject m_required_data;
-    QJsonObject m_transaction;
-    int64_t m_version;
-    QList<quint64> m_values;
-    QList<QByteArray> m_abfs;
-    QList<QByteArray> m_vbfs;
-    QJsonArray m_inputs;
-    QJsonArray m_outputs;
-    QList<QByteArray> m_hw_inputs;
-    QList<QByteArray> m_hw_sequences;
-
-    QList<QByteArray> m_commitments;
-
-    QList<QByteArray> m_sigs;
-    QList<QByteArray> m_asset_commitments;
-    QList<QByteArray> m_value_commitments;
-
-    QList<QPair<QJsonObject, QByteArray>> m_output_liquid_bytes;
-
-    int count{0};
-    void startUntrustedTransaction(bool new_transaction, int input_index, const QList<QByteArray> &inputs, const QList<QByteArray> &sequences, const QByteArray &redeem_script);
-    void finalizeLiquidInputFull();
-    QList<QPair<QJsonObject, QByteArray>> outputLiquidBytes();
-    int exchange_count{0};
-    int exchange_total{0};
-    CommandBatch* m_batch;
-signals:
-    void progressChanged(int progress, int total);
-    void message(const QJsonObject& message);
-};
 
 using GetWalletPublicKeyActivity = Command2<QString>;
 using SignMessageActivity = Command2<QByteArray>;
 using SignTransactionActivity = Command2<QList<QByteArray>>;
 using GetBlindingKeyActivity = Command2<QByteArray>;
 using GetBlindingNonceActivity = Command2<QByteArray>;
+class SignLiquidTransactionActivity : public Activity
+{
+public:
+    SignLiquidTransactionActivity(Device* device) : Activity(device) {}
+    virtual QList<QByteArray> signatures() const = 0;
+    virtual QList<QByteArray> assetCommitments() const = 0;
+    virtual QList<QByteArray> valueCommitments() const = 0;
+    virtual QList<QByteArray> assetBlinders() const = 0;
+    virtual QList<QByteArray> amountBlinders() const = 0;
+};
 
 class AbstractDevice : public QObject
 {
@@ -200,6 +147,7 @@ public:
     virtual SignTransactionActivity* signTransaction(uint32_t version, const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs, uint32_t locktime) = 0;
     virtual GetBlindingKeyActivity* getBlindingKey(const QString& script) = 0;
     virtual GetBlindingNonceActivity* getBlindingNonce(const QByteArray& pubkey, const QByteArray& script) = 0;
+    virtual SignLiquidTransactionActivity* signLiquidTransaction(uint32_t version, const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs) = 0;
 };
 
 class DevicePrivate;
@@ -226,6 +174,7 @@ public:
     SignTransactionActivity* signTransaction(uint32_t version, const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs, uint32_t locktime) override;
     GetBlindingKeyActivity* getBlindingKey(const QString& script) override;
     GetBlindingNonceActivity* getBlindingNonce(const QByteArray& pubkey, const QByteArray& script) override;
+    SignLiquidTransactionActivity* signLiquidTransaction(uint32_t version, const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs) override;
 private:
     DevicePrivate* const d;
 };

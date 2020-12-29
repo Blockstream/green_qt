@@ -237,47 +237,54 @@ SignLiquidTransactionResolver::SignLiquidTransactionResolver(Handler* handler, c
 
 void SignLiquidTransactionResolver::resolve()
 {
-    auto command = new SignLiquidTransactionCommand(device(), m_required_data);
-    connect(command, &SignLiquidTransactionCommand::progressChanged, [this](int count, int total) {
-       m_progress = qreal(count) / qreal(total);
-       emit progressChanged(m_progress);
-    });
-    connect(command, &SignLiquidTransactionCommand::message, [this](const QJsonObject& message) {
-        if (m_message == message) return;
-        m_message = message;
-        emit messageChanged(m_message);
-    });
-    connect(command, &Command::finished, [this, command] {
+    const auto transaction = m_required_data.value("transaction").toObject();
+    const auto signing_inputs = m_required_data.value("signing_inputs").toArray();
+    const auto outputs = m_required_data.value("transaction_outputs").toArray();
+    uint32_t version = transaction.value("transaction_version").toDouble();
+
+    auto activity = device()->signLiquidTransaction(version, transaction, signing_inputs, outputs);
+
+//    connect(command, &SignLiquidTransactionCommand::progressChanged, [this](int count, int total) {
+//       m_progress = qreal(count) / qreal(total);
+//       emit progressChanged(m_progress);
+//    });
+//    connect(command, &SignLiquidTransactionCommand::message, [this](const QJsonObject& message) {
+//        if (m_message == message) return;
+//        m_message = message;
+//        emit messageChanged(m_message);
+//    });
+    connect(activity, &Activity::finished, [this, activity] {
+        activity->deleteLater();
         QJsonArray signatures;
         QJsonArray asset_commitments;
         QJsonArray value_commitments;
         QJsonArray abfs;
         QJsonArray vbfs;
-        for (const auto& signature : command->m_sigs) {
+        for (const auto& signature : activity->signatures()) {
             signatures.append(QString::fromLocal8Bit(signature.toHex()));
         }
-        for (const auto& commitment : command->m_asset_commitments) {
+        for (const auto& commitment : activity->assetCommitments()) {
             if (commitment.isEmpty()) {
                 asset_commitments.append(QJsonValue::Null);
             } else {
                 asset_commitments.append(QString::fromLocal8Bit(commitment.toHex()));
             }
         }
-        for (const auto& commitment : command->m_value_commitments) {
+        for (const auto& commitment : activity->valueCommitments()) {
             if (commitment.isEmpty()) {
                 value_commitments.append(QJsonValue::Null);
             } else {
                 value_commitments.append(QString::fromLocal8Bit(commitment.toHex()));
             }
         }
-        for (const auto& abf : command->m_abfs) {
+        for (const auto& abf : activity->assetBlinders()) {
             if (abf.isEmpty()) {
                 abfs.append(QJsonValue::Null);
             } else {
                 abfs.append(QString::fromLocal8Bit(ReverseByteArray(abf).toHex()));
             }
         }
-        for (const auto& vbf : command->m_vbfs) {
+        for (const auto& vbf : activity->amountBlinders()) {
             if (vbf.isEmpty()) {
                 vbfs.append(QJsonValue::Null);
             } else {
@@ -292,8 +299,8 @@ void SignLiquidTransactionResolver::resolve()
             { "amountblinders", vbfs }
         });
     });
-    connect(command, &Command::error, [this] {
+    connect(activity, &Activity::failed, [this] {
         setFailed(true);
     });
-    command->exec();
+    activity->exec();
 }

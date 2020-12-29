@@ -307,14 +307,6 @@ QByteArray pathToData(const QVector<uint32_t>& path)
     return data;
 }
 
-SignLiquidTransactionCommand::SignLiquidTransactionCommand(Device* device, const QJsonObject& required_data, CommandBatch* batch)
-    : DeviceCommand(device, batch)
-    , m_required_data(required_data)
-    , m_batch(new CommandBatch)
-{
-    connect(m_batch, &Command::error, this, &Command::error);
-}
-
 QByteArray inputLiquidBytes(const QJsonObject& input)
 {
     QByteArray data;
@@ -342,13 +334,72 @@ QByteArray sequenceBytes(const QJsonObject& input)
     return data;
 }
 
-void SignLiquidTransactionCommand::exec()
-{
-    m_transaction = m_required_data.value("transaction").toObject();
-    m_version = m_transaction.value("transaction_version").toDouble();
-    m_inputs = m_required_data.value("signing_inputs").toArray();
-    m_outputs = m_required_data.value("transaction_outputs").toArray();
 
+struct Input {
+    QByteArray value;
+    QByteArray sequence;
+    bool trusted;
+    bool segwit;
+};
+
+class LedgerSignLiquidTransactionActivity : public SignLiquidTransactionActivity
+{
+public:
+    LedgerSignLiquidTransactionActivity(uint32_t version, const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs, Device* device);
+
+    virtual QList<QByteArray> signatures() const override { return m_sigs; }
+    virtual QList<QByteArray> assetCommitments() const override { return m_asset_commitments; }
+    virtual QList<QByteArray> valueCommitments() const override { return m_value_commitments; }
+    virtual QList<QByteArray> assetBlinders() const override { return m_abfs; }
+    virtual QList<QByteArray> amountBlinders() const override { return m_vbfs; }
+
+    void exec() override;
+    void getLiquidCommitment(int output_index);
+
+    DeviceCommand* exchange(const QByteArray& data);
+    int64_t m_version;
+    QJsonObject m_transaction;
+    QList<quint64> m_values;
+    QList<QByteArray> m_abfs;
+    QList<QByteArray> m_vbfs;
+    QJsonArray m_inputs;
+    QJsonArray m_outputs;
+    QList<QByteArray> m_hw_inputs;
+    QList<QByteArray> m_hw_sequences;
+
+    QList<QByteArray> m_commitments;
+
+    QList<QByteArray> m_sigs;
+    QList<QByteArray> m_asset_commitments;
+    QList<QByteArray> m_value_commitments;
+
+    QList<QPair<QJsonObject, QByteArray>> m_output_liquid_bytes;
+
+    int count{0};
+    void startUntrustedTransaction(bool new_transaction, int input_index, const QList<QByteArray> &inputs, const QList<QByteArray> &sequences, const QByteArray &redeem_script);
+    void finalizeLiquidInputFull();
+    QList<QPair<QJsonObject, QByteArray>> outputLiquidBytes();
+    int exchange_count{0};
+    int exchange_total{0};
+    CommandBatch* m_batch;
+signals:
+    void progressChanged(int progress, int total) {}
+    void message(const QJsonObject& message) {}
+};
+
+LedgerSignLiquidTransactionActivity::LedgerSignLiquidTransactionActivity(uint32_t version, const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs, Device* device)
+    : SignLiquidTransactionActivity(device)
+    , m_version(version)
+    , m_transaction(transaction)
+    , m_inputs(signing_inputs)
+    , m_outputs(outputs)
+    , m_batch(new CommandBatch)
+{
+    connect(m_batch, &Command::error, this, [this] { fail(); });
+}
+
+void LedgerSignLiquidTransactionActivity::exec()
+{
     exchange_total = 3 + 6 * m_inputs.size() + 5 * m_outputs.size();
 
     for (int i = 0; i < m_inputs.size(); ++i) {
@@ -375,7 +426,7 @@ void SignLiquidTransactionCommand::exec()
     m_batch->exec();
 }
 
-void SignLiquidTransactionCommand::startUntrustedTransaction(bool new_transaction, int input_index, const QList<QByteArray>& inputs, const QList<QByteArray>& sequences, const QByteArray& redeem_script)
+void LedgerSignLiquidTransactionActivity::startUntrustedTransaction(bool new_transaction, int input_index, const QList<QByteArray>& inputs, const QList<QByteArray>& sequences, const QByteArray& redeem_script)
 {
     Q_ASSERT(inputs.size() == sequences.size());
     {
@@ -400,7 +451,7 @@ void SignLiquidTransactionCommand::startUntrustedTransaction(bool new_transactio
     }
 }
 
-void SignLiquidTransactionCommand::getLiquidCommitment(int output_index)
+void LedgerSignLiquidTransactionActivity::getLiquidCommitment(int output_index)
 {
     if (output_index == m_outputs.size()) {
         return finalizeLiquidInputFull();
@@ -483,9 +534,9 @@ void SignLiquidTransactionCommand::getLiquidCommitment(int output_index)
     }
 }
 
-DeviceCommand *SignLiquidTransactionCommand::exchange(const QByteArray& data)
+DeviceCommand *LedgerSignLiquidTransactionActivity::exchange(const QByteArray& data)
 {
-    auto command = new GenericCommand(m_device, data);
+    auto command = new GenericCommand(device(), data);
     connect(command, &Command::finished, [this] {
        exchange_count ++;
        emit progressChanged(exchange_count, exchange_total);
@@ -494,7 +545,7 @@ DeviceCommand *SignLiquidTransactionCommand::exchange(const QByteArray& data)
     return command;
 }
 
-QList<QPair<QJsonObject, QByteArray>> SignLiquidTransactionCommand::outputLiquidBytes()
+QList<QPair<QJsonObject, QByteArray>> LedgerSignLiquidTransactionActivity::outputLiquidBytes()
 {
     QList<QPair<QJsonObject,QByteArray>> res;
     {
@@ -558,7 +609,7 @@ QList<QPair<QJsonObject, QByteArray>> SignLiquidTransactionCommand::outputLiquid
 }
 
 
-void SignLiquidTransactionCommand::finalizeLiquidInputFull()
+void LedgerSignLiquidTransactionActivity::finalizeLiquidInputFull()
 {
     int i = 0;
     m_output_liquid_bytes = outputLiquidBytes();
@@ -641,7 +692,7 @@ void SignLiquidTransactionCommand::finalizeLiquidInputFull()
                 if (m_sigs.size() == m_hw_inputs.size()) {
                     m_abfs = m_abfs.mid(m_inputs.size());
                     m_vbfs = m_vbfs.mid(m_inputs.size());
-                    finished();
+                    finish();
                 }
             });
         }
@@ -891,6 +942,11 @@ public:
 GetBlindingNonceActivity* Device::getBlindingNonce(const QByteArray& pubkey, const QByteArray& script)
 {
     return new LedgerGetBlindingNonceActivity(pubkey, script, this);
+}
+
+SignLiquidTransactionActivity *Device::signLiquidTransaction(uint32_t version, const QJsonObject &transaction, const QJsonArray &signing_inputs, const QJsonArray &outputs)
+{
+    return new LedgerSignLiquidTransactionActivity(version, transaction, signing_inputs, outputs, this);
 }
 
 Device::Type Device::typefromVendorAndProduct(uint32_t vendor_id, uint32_t product_id)
