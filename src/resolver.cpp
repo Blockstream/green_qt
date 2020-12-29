@@ -89,13 +89,16 @@ void GetXPubsResolver::resolve()
 
     auto path = m_paths.takeFirst();
     auto command = device()->getWalletPublicKey(wallet()->network(), path);
-    connect(command, &Command::finished, this, [this, command] {
-        m_xpubs.append(command->m_xpub);
+    connect(command, &Command2<QString>::finished, this, [this, command] {
+        command->deleteLater();
+        m_xpubs.append(command->result());
         resolve();
     });
-    connect(command, &Command::error, this, [this] {
+    connect(command, &Command2<QString>::failed, this, [this, command] {
+        command->deleteLater();
         setFailed(true);
     });
+    command->exec();
 }
 
 SignTransactionResolver::SignTransactionResolver(Handler* handler, const QJsonObject& result)

@@ -110,11 +110,35 @@ DeviceCommand* Device::exchange(const QByteArray& data) {
     return command;
 }
 
-GetWalletPublicKeyCommand *Device::getWalletPublicKey(Network *network, const QVector<uint32_t> &path)
+class GetWalletPublicKeyCommand2 : public Command2<QString>
 {
-    auto command = new GetWalletPublicKeyCommand(this, network, path);
-    command->exec();
-    return command;
+public:
+    GetWalletPublicKeyCommand2(Network* network, const QVector<uint32_t>& path, Device* device)
+        : Command2<QString>(device)
+        , m_network(network)
+        , m_path(path)
+    {
+    }
+    void exec() override
+    {
+        auto command = new GetWalletPublicKeyCommand(device(), m_network, m_path);
+        connect(command, &Command::finished, this, [this, command] {
+            command->deleteLater();
+            setResult(command->m_xpub);
+        });
+        connect(command, &Command::error, this, [this, command] {
+            command->deleteLater();
+            fail();
+        });
+        command->exec();
+    }
+    Network* const m_network;
+    const QVector<uint32_t> m_path;
+};
+
+Command2<QString>* Device::getWalletPublicKey(Network* network, const QVector<uint32_t>& path)
+{
+    return new GetWalletPublicKeyCommand2(network, path, this);
 }
 
 class SignMessageCommand2 : public Command2<QByteArray>
