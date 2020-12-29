@@ -937,6 +937,7 @@ class LedgerGetBlindingNonceActivity : public GetBlindingNonceActivity
 {
     const QByteArray m_pubkey;
     const QByteArray m_script;
+    QByteArray m_nonce;
 public:
     LedgerGetBlindingNonceActivity(const QByteArray& pubkey, const QByteArray& script, Device* device)
         : GetBlindingNonceActivity(device)
@@ -944,14 +945,18 @@ public:
         , m_script(script)
     {
     }
+    QByteArray nonce() const
+    {
+        return m_nonce;
+    }
     void exec()
     {
         auto command = device()->exchange(apdu(BTCHIP_CLA, BTCHIP_INS_GET_LIQUID_NONCE, 0x00, 0x00, m_pubkey + m_script));
         connect(command, &Command::finished, [this, command] {
             command->deleteLater();
             Q_ASSERT(command->m_response.length() == 32);
-            const auto nonce = command->m_response;
-            setResult(nonce);
+            m_nonce = command->m_response;
+            finish();
         });
         connect(command, &Command::error, [this, command] {
             command->deleteLater();

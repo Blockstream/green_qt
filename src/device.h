@@ -45,7 +45,14 @@ public:
     GetBlindingKeyActivity(Device* device) : Activity(device) {}
     virtual QByteArray publicKey() const = 0;
 };
-using GetBlindingNonceActivity = Command2<QByteArray>;
+
+class GetBlindingNonceActivity : public Activity
+{
+public:
+    GetBlindingNonceActivity(Device* device) : Activity(device) {}
+    virtual QByteArray nonce() const = 0;
+};
+
 class SignLiquidTransactionActivity : public Activity
 {
 public:

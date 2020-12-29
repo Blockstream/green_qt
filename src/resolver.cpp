@@ -217,7 +217,7 @@ void BlindingNoncesResolver::resolve()
     auto activity = device()->getBlindingNonce(pubkey_uncompressed, script);
     connect(activity, &Activity::finished, [this, activity] {
         activity->deleteLater();
-        m_nonces.append(QString::fromLocal8Bit(activity->result().toHex()));
+        m_nonces.append(QString::fromLocal8Bit(activity->nonce().toHex()));
         resolve();
     });
     connect(activity, &Activity::failed, [this, activity] {
