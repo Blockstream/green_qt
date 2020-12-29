@@ -158,7 +158,7 @@ void BlindingKeysResolver::resolve()
     auto activity = device()->getBlindingKey(script);
     connect(activity, &Activity::finished, [this, activity, key] {
         activity->deleteLater();
-        m_blinding_keys.insert(key, QString::fromLocal8Bit(activity->result().toHex()));
+        m_blinding_keys.insert(key, QString::fromLocal8Bit(activity->publicKey().toHex()));
         resolve();
     });
     connect(activity, &Activity::failed, [this, activity] {
@@ -180,7 +180,7 @@ void BlindingKeyResolver::resolve()
     auto activity = device()->getBlindingKey(m_script);
     connect(activity, &Activity::finished, [this, activity] {
         activity->deleteLater();
-        const auto blinding_key = QString::fromLocal8Bit(activity->result().toHex());
+        const auto blinding_key = QString::fromLocal8Bit(activity->publicKey().toHex());
         m_handler->resolve({{ "blinding_key", blinding_key }});
     });
     connect(activity, &Activity::failed, [this, activity] {

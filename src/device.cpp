@@ -903,18 +903,23 @@ SignTransactionActivity* Device::signTransaction(uint32_t version, const QJsonOb
 class LedgerGetBlindingKeyActivity : public GetBlindingKeyActivity
 {
     const QString m_script;
+    QByteArray m_public_key;
 public:
     LedgerGetBlindingKeyActivity(const QString& script, Device* device)
         : GetBlindingKeyActivity(device)
         , m_script(script)
     {}
+    QByteArray publicKey() const override
+    {
+        return m_public_key;
+    }
     void exec() override
     {
         auto command = device()->exchange(apdu(BTCHIP_CLA, BTCHIP_INS_GET_LIQUID_BLINDING_KEY, 0x00, 0x00, ParseByteArray(m_script)));
         connect(command, &Command::finished, [this, command] {
             command->deleteLater();
-            const auto pubkey = compressPublicKey(command->m_response);
-            setResult(pubkey);
+            m_public_key = compressPublicKey(command->m_response);
+            finish();
         });
         connect(command, &Command::error, [this, command] {
             command->deleteLater();
