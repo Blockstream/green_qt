@@ -830,7 +830,7 @@ public:
     QList<QByteArray> signatures;
 };
 
-Command2<QList<QByteArray>>* Device::signTransaction(const QJsonObject& required_data)
+SignTransactionActivity* Device::signTransaction(const QJsonObject& required_data)
 {
     return new SignTransactionCommand2(required_data, this);
 }
