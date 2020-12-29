@@ -109,19 +109,7 @@ void DeviceDiscoveryAgentPrivate::deviceMaching(IOHIDDeviceRef handle)
     QMetaObject::invokeMethod(q, [this, device] {
         DeviceManager::instance()->addDevice(new Device(device, q));
     });
-//
-//        emit q->deviceConnected(new Device(device, q));
-//    }, Qt::QueuedConnection);
 }
-
-/*
-
-    QMetaObject::invokeMethod(q, [this, d] {
-        emit q->deviceConnected(d);
-    }, Qt::QueuedConnection);
-
-}
-*/
 
 static void DeviceRemovalCallback(void* context, IOReturn /* result */, void* /* sender */, IOHIDDeviceRef handle)
 {
