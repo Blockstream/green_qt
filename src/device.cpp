@@ -861,13 +861,37 @@ GetBlindingKeyActivity* Device::getBlindingKey(const QString& script)
     return new LedgerGetBlindingKeyActivity(script, this);
 }
 
-GetBlindingNonceCommand *Device::getBlindingNonce(const QByteArray& pubkey, const QByteArray& script)
+class LedgerGetBlindingNonceActivity : public GetBlindingNonceActivity
 {
-    auto command = new GetBlindingNonceCommand(this, pubkey, script);
-    command->exec();
-    return command;
-}
+    const QByteArray m_pubkey;
+    const QByteArray m_script;
+public:
+    LedgerGetBlindingNonceActivity(const QByteArray& pubkey, const QByteArray& script, Device* device)
+        : GetBlindingNonceActivity(device)
+        , m_pubkey(pubkey)
+        , m_script(script)
+    {
+    }
+    void exec()
+    {
+        auto command = device()->exchange(apdu(BTCHIP_CLA, BTCHIP_INS_GET_LIQUID_NONCE, 0x00, 0x00, m_pubkey + m_script));
+        connect(command, &Command::finished, [this, command] {
+            command->deleteLater();
+            Q_ASSERT(command->m_response.length() == 32);
+            const auto nonce = command->m_response;
+            setResult(nonce);
+        });
+        connect(command, &Command::error, [this, command] {
+            command->deleteLater();
+            fail();
+        });
+    }
+};
 
+GetBlindingNonceActivity* Device::getBlindingNonce(const QByteArray& pubkey, const QByteArray& script)
+{
+    return new LedgerGetBlindingNonceActivity(pubkey, script, this);
+}
 
 Device::Type Device::typefromVendorAndProduct(uint32_t vendor_id, uint32_t product_id)
 {
@@ -1004,17 +1028,5 @@ bool GetAppNameCommand::parse(QDataStream& stream)
 
     m_name = QString::fromLocal8Bit(name, name_length);
     m_version = QString::fromLocal8Bit(version, version_length);
-    return true;
-}
-
-QByteArray GetBlindingNonceCommand::payload() const
-{
-    return apdu(BTCHIP_CLA, BTCHIP_INS_GET_LIQUID_NONCE, 0x00, 0x00, m_pubkey + m_script);
-}
-
-bool GetBlindingNonceCommand::parse(const QByteArray& data)
-{
-    Q_ASSERT(data.length() == 32);
-    m_nonce = data;
     return true;
 }

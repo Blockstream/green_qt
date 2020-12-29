@@ -214,11 +214,17 @@ void BlindingNoncesResolver::resolve()
                 (const unsigned char*) pubkey.constData(), pubkey.size(),
                 (unsigned char*) pubkey_uncompressed.data(), pubkey_uncompressed.size());
 
-    auto command = device()->getBlindingNonce(pubkey_uncompressed, script);
-    connect(command, &Command::finished, [this, command] {
-        m_nonces.append(QString::fromLocal8Bit(command->m_nonce.toHex()));
+    auto activity = device()->getBlindingNonce(pubkey_uncompressed, script);
+    connect(activity, &Activity::finished, [this, activity] {
+        activity->deleteLater();
+        m_nonces.append(QString::fromLocal8Bit(activity->result().toHex()));
         resolve();
     });
+    connect(activity, &Activity::failed, [this, activity] {
+        activity->deleteLater();
+        m_handler->error();
+    });
+    activity->exec();
 }
 
 SignLiquidTransactionResolver::SignLiquidTransactionResolver(Handler* handler, const QJsonObject& result)

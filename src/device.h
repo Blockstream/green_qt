@@ -122,20 +122,6 @@ public:
     QList<QByteArray> signatures;
 };
 
-class GetBlindingNonceCommand : public DeviceCommand
-{
-    QByteArray m_pubkey;
-    QByteArray m_script;
-public:
-    GetBlindingNonceCommand(Device* device, const QByteArray& pubkey, const QByteArray& script, CommandBatch* batch = nullptr)
-        : DeviceCommand(device, batch)
-        , m_pubkey(pubkey), m_script(script)
-    {}
-    QByteArray payload() const override;
-    bool parse(const QByteArray& data) override;
-    QByteArray m_nonce;
-};
-
 // TODO: this and SignTransactionCommands don't really write/read from the device
 // should improve/clarify what commands are
 class SignLiquidTransactionCommand : public DeviceCommand
@@ -186,6 +172,7 @@ using GetWalletPublicKeyActivity = Command2<QString>;
 using SignMessageActivity = Command2<QByteArray>;
 using SignTransactionActivity = Command2<QList<QByteArray>>;
 using GetBlindingKeyActivity = Command2<QByteArray>;
+using GetBlindingNonceActivity = Command2<QByteArray>;
 
 class AbstractDevice : public QObject
 {
@@ -212,6 +199,7 @@ public:
     virtual SignMessageActivity* signMessage(const QString& message, const QVector<uint32_t>& path) = 0;
     virtual SignTransactionActivity* signTransaction(uint32_t version, const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs, uint32_t locktime) = 0;
     virtual GetBlindingKeyActivity* getBlindingKey(const QString& script) = 0;
+    virtual GetBlindingNonceActivity* getBlindingNonce(const QByteArray& pubkey, const QByteArray& script) = 0;
 };
 
 class DevicePrivate;
@@ -237,7 +225,7 @@ public:
     SignMessageActivity* signMessage(const QString& message, const QVector<uint32_t>& path) override;
     SignTransactionActivity* signTransaction(uint32_t version, const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs, uint32_t locktime) override;
     GetBlindingKeyActivity* getBlindingKey(const QString& script) override;
-    GetBlindingNonceCommand *getBlindingNonce(const QByteArray& pubkey, const QByteArray& script);
+    GetBlindingNonceActivity* getBlindingNonce(const QByteArray& pubkey, const QByteArray& script) override;
 private:
     DevicePrivate* const d;
 };
