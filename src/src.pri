@@ -68,6 +68,7 @@ HEADERS += \
     $$PWD/walletmanager.h \
     $$PWD/wally.h
 
+include(core/core.pri)
 include(controllers/controllers.pri)
 include(handlers/handlers.pri)
 include(resolvers/resolvers.pri)

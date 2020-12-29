@@ -4,8 +4,7 @@
 #include <QtQml>
 #include <QObject>
 
-#include <gdk.h>
-
+#include "activity.h"
 #include "command.h"
 
 #define LEDGER_VENDOR_ID 0x2c97
