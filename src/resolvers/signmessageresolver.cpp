@@ -12,13 +12,16 @@ SignMessageResolver::SignMessageResolver(Handler* handler, const QJsonObject& re
 
 void SignMessageResolver::resolve()
 {
-    auto batch = new CommandBatch;
-    auto prepare_command = new SignMessageCommand(device(), m_path, m_message.toLocal8Bit());
-    auto sign_command = new SignMessageCommand(device());
-    batch->add(prepare_command);
-    batch->add(sign_command);
-    connect(batch, &Command::finished, this, [this, sign_command] {
-        m_handler->resolve({{ "signature", QString::fromLocal8Bit(sign_command->signature.toHex()) }});
+    auto command = device()->signMessage(m_message, m_path);
+    connect(command, &Command2<QByteArray>::finished, this, [this, command] {
+        command->deleteLater();
+        handler()->resolve({
+            { "signature", QString::fromLocal8Bit(command->result().toHex()) }
+        });
     });
-    batch->exec();
+    connect(command, &Command2<QByteArray>::failed, this, [this, command] {
+        command->deleteLater();
+        setFailed(true);
+    });
+    command->exec();
 }

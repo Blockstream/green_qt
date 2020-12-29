@@ -117,6 +117,36 @@ GetWalletPublicKeyCommand *Device::getWalletPublicKey(Network *network, const QV
     return command;
 }
 
+class SignMessageCommand2 : public Command2<QByteArray>
+{
+public:
+    SignMessageCommand2(const QString& message, const QVector<uint32_t>& path, Device* device)
+        : Command2<QByteArray>(device)
+        , m_message(message)
+        , m_path(path)
+    {
+    }
+    virtual void exec() override
+    {
+        auto batch = new CommandBatch;
+        auto prepare_command = new SignMessageCommand(device(), m_path, m_message.toLocal8Bit());
+        auto sign_command = new SignMessageCommand(device());
+        batch->add(prepare_command);
+        batch->add(sign_command);
+        connect(batch, &Command::finished, this, [this, sign_command] {
+            setResult(sign_command->m_response);
+        });
+        batch->exec();
+    }
+    const QString m_message;
+    const QVector<uint32_t> m_path;
+};
+
+Command2<QByteArray>* Device::signMessage(const QString& message, const QVector<uint32_t>& path)
+{
+    return new SignMessageCommand2(message, path, this);
+}
+
 QByteArray inputBytes(const QJsonObject& input, bool is_segwit)
 {
     QByteArray data;
