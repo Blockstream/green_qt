@@ -212,7 +212,6 @@ void DevicePrivateImpl::inputReport(const QByteArray& data)
     if (r == 1) {
         qWarning("command failed");
         qDebug() << command << command->objectName();
-        emit command->error();
         delete command;
     }
     queue.dequeue();

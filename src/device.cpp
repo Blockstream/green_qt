@@ -586,44 +586,67 @@ void SignLiquidTransactionCommand::finalizeLiquidInputFull()
     }
 }
 
-SignTransactionCommand* Device::signTransaction(const QJsonObject& required_data)
+
+class SignTransactionCommand2 : public Command2<QList<QByteArray>>
 {
-    Q_ASSERT(required_data.value("action").toString() == "sign_tx");
-
-    auto transaction = required_data.value("transaction").toObject();
-    auto inputs = required_data.value("signing_inputs").toArray();
-    auto outputs = required_data.value("transaction_outputs").toArray();
-    // these are unused
-    uint32_t version = transaction.value("transaction_version").toInt();
-    uint32_t locktime = transaction.value("transaction_locktime").toInt();
-
-    bool new_transaction = true;
-    bool segwit = true;
-    int input_index = 0;
-    QList<Input> used_inputs;
-    for (auto i : inputs) {
-        auto input = i.toObject();
-        Input in;
-        uint32_t sequence = ParseSequence(input.value("sequence"));
-        QDataStream stream(&in.sequence, QIODevice::WriteOnly);
-        stream.setByteOrder(QDataStream::LittleEndian);
-        stream << sequence;
-        in.value = inputBytes(input, segwit);
-        in.trusted = false;
-        in.segwit = true;
-        used_inputs.append(in);
+public:
+    SignTransactionCommand2(const QJsonObject& required_data, Device* device)
+        : Command2<QList<QByteArray>>(device)
+        , m_required_data(required_data)
+    {
     }
-    Q_ASSERT(inputs.size() > 0 && inputs.first().toObject().contains("prevout_script"));
-    const auto redeem_script = ParseByteArray(inputs.first().toObject().value("prevout_script"));
+    void exec() override
+    {
+        Q_ASSERT(m_required_data.value("action").toString() == "sign_tx");
 
-    auto command = new SignTransactionCommand(this);
+        auto transaction = m_required_data.value("transaction").toObject();
+        auto inputs = m_required_data.value("signing_inputs").toArray();
+        auto outputs = m_required_data.value("transaction_outputs").toArray();
+        // these are unused
+        uint32_t version = transaction.value("transaction_version").toInt();
+        uint32_t locktime = transaction.value("transaction_locktime").toInt();
 
-    startUntrustedTransaction(version, new_transaction, input_index, used_inputs, redeem_script, true);
-    auto bytes = outputBytes(outputs);
-    finalizeInputFull(bytes);
-    signSWInputs(command, used_inputs, inputs, version, locktime);
+        bool new_transaction = true;
+        bool segwit = true;
+        int input_index = 0;
+        QList<Input> used_inputs;
+        for (auto i : inputs) {
+            auto input = i.toObject();
+            Input in;
+            uint32_t sequence = ParseSequence(input.value("sequence"));
+            QDataStream stream(&in.sequence, QIODevice::WriteOnly);
+            stream.setByteOrder(QDataStream::LittleEndian);
+            stream << sequence;
+            in.value = inputBytes(input, segwit);
+            in.trusted = false;
+            in.segwit = true;
+            used_inputs.append(in);
+        }
+        Q_ASSERT(inputs.size() > 0 && inputs.first().toObject().contains("prevout_script"));
+        const auto redeem_script = ParseByteArray(inputs.first().toObject().value("prevout_script"));
 
-    return command;
+        auto command = new SignTransactionCommand(device());
+
+        device()->startUntrustedTransaction(version, new_transaction, input_index, used_inputs, redeem_script, true);
+        auto bytes = outputBytes(outputs);
+        device()->finalizeInputFull(bytes);
+        device()->signSWInputs(command, used_inputs, inputs, version, locktime);
+        connect(command, &Command::finished, [this, command] {
+            command->deleteLater();
+            setResult(command->signatures);
+        });
+        connect(command, &Command::error, [this, command] {
+            command->deleteLater();
+            fail();
+        });
+        command->exec();
+    }
+    const QJsonObject m_required_data;
+};
+
+Command2<QList<QByteArray>>* Device::signTransaction(const QJsonObject& required_data)
+{
+    return new SignTransactionCommand2(required_data, this);
 }
 
 void Device::finalizeInputFull(const QByteArray& data)

@@ -275,7 +275,7 @@ public:
 
     Command2<QString>* getWalletPublicKey(Network* network, const QVector<uint32_t>& path);
     Command2<QByteArray>* signMessage(const QString& message, const QVector<uint32_t>& path);
-    SignTransactionCommand* signTransaction(const QJsonObject& required_data);
+    Command2<QList<QByteArray>>* signTransaction(const QJsonObject& required_data);
     void startUntrustedTransaction(uint32_t tx_version, bool new_transaction, int64_t input_index, const QList<Input>& used_input, const QByteArray& redeemScript, bool segwit);
     void hashInputs(const QList<Input>& used_inputs, int64_t input_index, const QByteArray& redeem_script);
     void hashInput(const Input& input, const QByteArray& script);
