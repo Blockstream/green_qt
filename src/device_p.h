@@ -8,7 +8,8 @@ class DevicePrivate
 public:
     virtual ~DevicePrivate() {};
     virtual void exchange(DeviceCommand* command) = 0;
-    Device* q{nullptr};
+    static DevicePrivate* get(LedgerDevice* device);
+    LedgerDevice* q{nullptr};
     Device::Transport m_transport;
     Device::Type m_type;
     int32_t m_unique_id;

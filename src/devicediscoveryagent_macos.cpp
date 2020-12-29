@@ -3,6 +3,7 @@
 
 #ifdef Q_OS_MAC
 
+#include "command.h"
 #include "device.h"
 #include "devicemanager.h"
 
@@ -107,7 +108,7 @@ void DeviceDiscoveryAgentPrivate::deviceMaching(IOHIDDeviceRef handle)
     device->handle = handle;
     m_devices.insert(handle, device);
     QMetaObject::invokeMethod(q, [this, device] {
-        DeviceManager::instance()->addDevice(new Device(device, q));
+        DeviceManager::instance()->addDevice(new LedgerDevice(device, q));
     });
 }
 

@@ -1,3 +1,4 @@
+#include "command.h"
 #include "device.h"
 #include "ga.h"
 #include "json.h"
@@ -52,9 +53,13 @@ void LedgerDeviceController::setDevice(Device *device)
 
 void LedgerDeviceController::initialize()
 {
-    auto cmd = new GetAppNameCommand(m_device);
-    connect(cmd, &Command::finished, this, [this, cmd] {
-        m_network = network_from_app_name(cmd->m_name);
+    LedgerDevice* device = qobject_cast<LedgerDevice*>(m_device);
+    if (!device) return;
+
+    auto activity = device->getApp();
+    connect(activity, &Activity::finished, this, [this, activity] {
+        activity->deleteLater();
+        m_network = network_from_app_name(activity->name());
         emit networkChanged(m_network);
         if (!m_network) {
             // TODO: device can be in dashboard or in another applet
@@ -72,10 +77,11 @@ void LedgerDeviceController::initialize()
 
         login();
     });
-    connect(cmd, &Command::error, this, [this] {
+    connect(activity, &Activity::failed, this, [this, activity] {
+        activity->deleteLater();
         QTimer::singleShot(1000, this, &LedgerDeviceController::initialize);
     });
-    cmd->exec();
+    activity->exec();
 }
 
 void LedgerDeviceController::setStatus(const QString& status)

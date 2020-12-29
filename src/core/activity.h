@@ -3,8 +3,6 @@
 
 #include <QObject>
 
-QT_FORWARD_DECLARE_CLASS(Device)
-
 class Activity : public QObject
 {
     Q_OBJECT
@@ -14,8 +12,7 @@ public:
         Finished,
         Failed,
     };
-    Activity(Device* device);
-    Device* device() const;
+    Activity(QObject* parent);
     virtual void exec() = 0;
 protected:
     Status status() const;
@@ -25,7 +22,6 @@ signals:
     void finished();
     void failed();
 private:
-    Device* const m_device;
     Status m_status{Status::Pending};
 };
 

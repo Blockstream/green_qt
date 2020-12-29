@@ -2,6 +2,7 @@
 
 #ifdef Q_OS_WIN
 
+#include "command.h"
 #include "device.h"
 #include "devicediscoveryagent.h"
 #include "devicemanager.h"
@@ -162,7 +163,7 @@ bool DeviceDiscoveryAgentPrivate::addDevice(const QString& id, HANDLE handle)
     impl->ol.hEvent = CreateEvent(NULL, FALSE, FALSE /*initial state f=nonsignaled*/, NULL);
 
     m_devices.insert(id, impl);
-    auto d = new Device(impl, q);
+    auto d = new LedgerDevice(impl, q);
 
     auto t = new QTimer(d);
     QObject::connect(t, &QTimer::timeout, [impl, t] {

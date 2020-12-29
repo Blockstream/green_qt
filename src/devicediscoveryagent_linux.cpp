@@ -2,6 +2,7 @@
 
 #ifdef Q_OS_LINUX
 
+#include "command.h"
 #include "device.h"
 #include "devicemanager.h"
 
@@ -139,7 +140,7 @@ void DeviceDiscoveryAgentPrivate::addDevice(udev_device* handle)
     impl->handle = handle;
     impl->fd = fd;
     impl->m_type = device_type;
-    auto device = new Device(impl);
+    auto device = new LedgerDevice(impl);
 
     m_devices.insert(devpath, impl);
     DeviceManager::instance()->addDevice(device);

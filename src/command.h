@@ -34,7 +34,6 @@ public:
     int readHIDReport(Device* device, QDataStream& stream);
     bool readAPDUResponse(Device* device, int length, QDataStream& stream);
 
-    virtual void exec() override;
     Device* const m_device;
     uint16_t length;
     uint16_t offset;
@@ -68,28 +67,5 @@ public:
     QByteArray payload() const override { return m_data; }
     virtual bool parse(QDataStream& stream) override { return true; };
 };
-
-class GetAppNameCommand : public DeviceCommand
-{
-public:
-    GetAppNameCommand(Device* device, CommandBatch* batch = nullptr)
-        : DeviceCommand(device, batch)
-    {}
-    QByteArray payload() const override;
-    bool parse(QDataStream& stream) override;
-    QString m_name;
-    QString m_version;
-};
-
-class GetFirmwareCommand : public DeviceCommand
-{
-public:
-    GetFirmwareCommand(Device* device, CommandBatch* batch = nullptr)
-        : DeviceCommand(device, batch)
-    {}
-    QByteArray payload() const override;
-    bool parse(QDataStream& stream) override;
-};
-
 
 #endif // GREEN_COMMAND_H

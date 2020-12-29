@@ -1,15 +1,8 @@
 #include "activity.h"
-#include "device.h"
 
-Activity::Activity(Device* device)
-    : QObject(device)
-    , m_device(device)
+Activity::Activity(QObject* parent)
+    : QObject(parent)
 {
-}
-
-Device *Activity::device() const
-{
-    return m_device;
 }
 
 Activity::Status Activity::status() const

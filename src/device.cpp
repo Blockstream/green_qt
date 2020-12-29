@@ -1,3 +1,4 @@
+#include "command.h"
 #include "device.h"
 #include "device_p.h"
 #include "ga.h"
@@ -67,35 +68,34 @@ QByteArray compressPublicKey(const QByteArray& pubkey)
     return pubkey.mid(1, 32).prepend(type);
 }
 
-
-AbstractDevice::AbstractDevice(QObject* parent)
+Device::Device(QObject* parent)
     : QObject(parent)
 {
 }
 
-Device::Device(DevicePrivate* d, QObject* parent)
-    : AbstractDevice(parent)
+LedgerDevice::LedgerDevice(DevicePrivate* d, QObject* parent)
+    : Device(parent)
     , d(d)
 {
     d->q = this;
 }
 
-Device::~Device()
+LedgerDevice::~LedgerDevice()
 {
     delete d;
 }
 
-Device::Type Device::type() const
+Device::Type LedgerDevice::type() const
 {
     return d->m_type;
 }
 
-Device::Transport Device::transport() const
+Device::Transport LedgerDevice::transport() const
 {
     return d->m_transport;
 }
 
-QString Device::name() const
+QString LedgerDevice::name() const
 {
     switch (d->m_type) {
     case LedgerNanoS: return "Ledger Nano S";
@@ -104,13 +104,23 @@ QString Device::name() const
     }
 }
 
-void Device::exchange(DeviceCommand* command)
+class LedgerGenericCommand : public GenericCommand
 {
-    d->exchange(command);
-}
+    LedgerDevice* const m_device;
+public:
+    LedgerGenericCommand(LedgerDevice* device, const QByteArray& data)
+        : GenericCommand(device, data)
+        , m_device(device)
+    {
+    }
+    void exec() override
+    {
+        DevicePrivate::get(m_device)->exchange(this);
+    }
+};
 
-DeviceCommand* Device::exchange(const QByteArray& data) {
-    auto command = new GenericCommand(this, data);
+DeviceCommand* LedgerDevice::exchange(const QByteArray& data) {
+    auto command = new LedgerGenericCommand(this, data);
     command->exec();
     return command;
 }
@@ -118,8 +128,9 @@ DeviceCommand* Device::exchange(const QByteArray& data) {
 class LedgerGetWalletPublicKeyActivity : public GetWalletPublicKeyActivity
 {
 public:
-    LedgerGetWalletPublicKeyActivity(Network* network, const QVector<uint32_t>& path, Device* device)
+    LedgerGetWalletPublicKeyActivity(Network* network, const QVector<uint32_t>& path, LedgerDevice* device)
         : GetWalletPublicKeyActivity(device)
+        , m_device(device)
         , m_network(network)
         , m_path(path)
     {
@@ -134,11 +145,11 @@ public:
         QDataStream s(&path, QIODevice::WriteOnly);
         s << uint8_t(m_path.size());
         for (auto p : m_path) s << uint32_t(p);
-        auto cmd = device()->exchange(apdu(BTCHIP_CLA, BTCHIP_INS_GET_WALLET_PUBLIC_KEY, 0x0, 0, path));
+        auto cmd = m_device->exchange(apdu(BTCHIP_CLA, BTCHIP_INS_GET_WALLET_PUBLIC_KEY, 0x0, 0, path));
         connect(cmd, &GenericCommand::finished, this, [this, cmd] {
             cmd->deleteLater();
             uint32_t version = m_network->data().value("mainnet").toBool() ? BIP32_VER_MAIN_PUBLIC : BIP32_VER_TEST_PUBLIC;
-            QDataStream stream(&cmd->m_response, QIODevice::ReadOnly);
+            QDataStream stream(cmd->m_response);
             uint8_t pubkey_len, address_len;
             stream >> pubkey_len;
             QByteArray pubkey(pubkey_len, 0);
@@ -170,66 +181,23 @@ public:
             fail();
         });
     }
+    LedgerDevice* const m_device;
     Network* const m_network;
     const QVector<uint32_t> m_path;
     QByteArray m_public_key;
 };
 
-GetWalletPublicKeyActivity *Device::getWalletPublicKey(Network* network, const QVector<uint32_t>& path)
+GetWalletPublicKeyActivity *LedgerDevice::getWalletPublicKey(Network* network, const QVector<uint32_t>& path)
 {
     return new LedgerGetWalletPublicKeyActivity(network, path, this);
 }
 
-class SignMessageCommand : public DeviceCommand
-{
-    const QVector<uint32_t> m_path;
-    const QByteArray m_message;
-public:
-    SignMessageCommand(Device* device) : DeviceCommand(device) {}
-    SignMessageCommand(Device* device, const QVector<uint32_t>& path, const QByteArray& message, CommandBatch* batch = nullptr)
-        : DeviceCommand(device, batch)
-        , m_path(path)
-        , m_message(message)
-    {}
-    QByteArray payload() const
-    {
-        if (!m_message.isEmpty() && !m_path.isEmpty()) {
-            QByteArray data;
-            QDataStream s(&data, QIODevice::WriteOnly);
-            s << uint8_t(m_path.size());
-            for (auto p : m_path) s << uint32_t(p);
-            s << uint8_t(0) << uint8_t(m_message.length());
-            s.writeRawData(m_message.constData(), m_message.size());
-            return apdu(BTCHIP_CLA, BTCHIP_INS_SIGN_MESSAGE, 0x0, 1, data);
-        } else {
-            QByteArray data;
-            QDataStream s(&data, QIODevice::WriteOnly);
-            s << uint8_t(1) << uint8_t(0);
-            return apdu(BTCHIP_CLA, BTCHIP_INS_SIGN_MESSAGE, 0x80, 1, data);
-        }
-    }
-    bool parse(QDataStream &stream)
-    {
-        if (m_message.isEmpty() && m_path.isEmpty()) {
-            uint8_t b;
-            stream >> b;
-            signature.append(0x30);
-            while (stream.readRawData((char*) &b, 1) == 1) {
-                signature.append(b);
-            }
-            return true;
-        }
-
-        return true;
-    }
-    QByteArray signature;
-};
-
 class LedgerSignMessageActivity : public SignMessageActivity
 {
 public:
-    LedgerSignMessageActivity(const QString& message, const QVector<uint32_t>& path, Device* device)
+    LedgerSignMessageActivity(const QString& message, const QVector<uint32_t>& path, LedgerDevice* device)
         : SignMessageActivity(device)
+        , m_device(device)
         , m_message(message)
         , m_path(path)
     {
@@ -240,24 +208,50 @@ public:
     }
     virtual void exec() override
     {
-        auto batch = new CommandBatch;
-        auto prepare_command = new SignMessageCommand(device(), m_path, m_message.toLocal8Bit());
-        auto sign_command = new SignMessageCommand(device());
-        batch->add(prepare_command);
-        batch->add(sign_command);
-        connect(batch, &Command::finished, this, [this, batch, sign_command] {
-            batch->deleteLater();
-            m_signature = sign_command->m_response;
+        prepare();
+    }
+    void prepare()
+    {
+        QByteArray data;
+        QDataStream s(&data, QIODevice::WriteOnly);
+        s << uint8_t(m_path.size());
+        for (auto p : m_path) s << uint32_t(p);
+        s << uint8_t(0) << uint8_t(m_message.size());
+        s.writeRawData(m_message.toLocal8Bit().constData(), m_message.size());
+        auto command = m_device->exchange(apdu(BTCHIP_CLA, BTCHIP_INS_SIGN_MESSAGE, 0x00, 0x01, data));
+        connect(command, &Command::finished, this, [this, command] {
+            command->deleteLater();
+            sign();
+        });
+        connect(command, &Command::error, this, [this, command] {
+            command->deleteLater();
+            fail();
+        });
+    }
+    void sign()
+    {
+        QByteArray data;
+        QDataStream s(&data, QIODevice::WriteOnly);
+        s << uint8_t(1) << uint8_t(0);
+        auto command = m_device->exchange(apdu(BTCHIP_CLA, BTCHIP_INS_SIGN_MESSAGE, 0x80, 0x01, data));
+        connect(command, &Command::finished, this, [this, command] {
+            command->deleteLater();
+            m_signature = command->m_response;
+            m_signature[0] = 0x30;
             finish();
         });
-        batch->exec();
+        connect(command, &Command::error, this, [this, command] {
+            command->deleteLater();
+            fail();
+        });
     }
+    LedgerDevice* const m_device;
     const QString m_message;
     const QVector<uint32_t> m_path;
     QByteArray m_signature;
 };
 
-SignMessageActivity* Device::signMessage(const QString& message, const QVector<uint32_t>& path)
+SignMessageActivity* LedgerDevice::signMessage(const QString& message, const QVector<uint32_t>& path)
 {
     return new LedgerSignMessageActivity(message, path, this);
 }
@@ -357,7 +351,7 @@ struct Input {
 class LedgerSignLiquidTransactionActivity : public SignLiquidTransactionActivity
 {
 public:
-    LedgerSignLiquidTransactionActivity(uint32_t version, const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs, Device* device);
+    LedgerSignLiquidTransactionActivity(uint32_t version, const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs, LedgerDevice* device);
 
     virtual QList<QByteArray> signatures() const override { return m_sigs; }
     virtual QList<QByteArray> assetCommitments() const override { return m_asset_commitments; }
@@ -369,6 +363,7 @@ public:
     void getLiquidCommitment(int output_index);
 
     DeviceCommand* exchange(const QByteArray& data);
+    LedgerDevice* const m_device;
     int64_t m_version;
     QJsonObject m_transaction;
     QList<quint64> m_values;
@@ -399,8 +394,9 @@ signals:
     void message(const QJsonObject& message) {}
 };
 
-LedgerSignLiquidTransactionActivity::LedgerSignLiquidTransactionActivity(uint32_t version, const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs, Device* device)
+LedgerSignLiquidTransactionActivity::LedgerSignLiquidTransactionActivity(uint32_t version, const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs, LedgerDevice* device)
     : SignLiquidTransactionActivity(device)
+    , m_device(device)
     , m_version(version)
     , m_transaction(transaction)
     , m_inputs(signing_inputs)
@@ -548,7 +544,7 @@ void LedgerSignLiquidTransactionActivity::getLiquidCommitment(int output_index)
 
 DeviceCommand *LedgerSignLiquidTransactionActivity::exchange(const QByteArray& data)
 {
-    auto command = new GenericCommand(device(), data);
+    auto command = new LedgerGenericCommand(m_device, data);
     connect(command, &Command::finished, [this] {
        exchange_count ++;
        emit progressChanged(exchange_count, exchange_total);
@@ -715,8 +711,9 @@ void LedgerSignLiquidTransactionActivity::finalizeLiquidInputFull()
 class LedgerSignTransactionActivity : public SignTransactionActivity
 {
 public:
-    LedgerSignTransactionActivity(uint32_t version, const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs, uint32_t locktime, Device* device)
+    LedgerSignTransactionActivity(uint32_t version, const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs, uint32_t locktime, LedgerDevice* device)
         : SignTransactionActivity(device)
+        , m_device(device)
         , m_version(version)
         , m_transaction(transaction)
         , m_signing_inputs(signing_inputs)
@@ -727,6 +724,10 @@ public:
     QList<QByteArray> signatures() const override
     {
         return m_signatures;
+    }
+    DeviceCommand* exchange(const QByteArray& data)
+    {
+        return m_device->exchange(data);
     }
     void exec() override
     {
@@ -779,7 +780,7 @@ public:
         // Start building a fake transaction with the passed inputs
         stream << m_version << varint<uint32_t>(used_input.size());
         const uint8_t p2 = new_transaction ? (segwit ? 0x02 : 0x00) : 0x80;
-        auto c = device()->exchange(apdu(BTCHIP_CLA, BTCHIP_INS_HASH_INPUT_START, 0x00, p2, data));
+        auto c = exchange(apdu(BTCHIP_CLA, BTCHIP_INS_HASH_INPUT_START, 0x00, p2, data));
         connect(c, &Command::finished, [] {
             qDebug("startUntrustedTransaction OK");
         });
@@ -807,7 +808,7 @@ public:
         stream.writeRawData(input.value.data(), input.value.size());
         stream << varint<uint32_t>(script.size());
 
-        auto c1 = device()->exchange(apdu(BTCHIP_CLA, BTCHIP_INS_HASH_INPUT_START, 0x80, 0x00, data));
+        auto c1 = exchange(apdu(BTCHIP_CLA, BTCHIP_INS_HASH_INPUT_START, 0x80, 0x00, data));
         auto seq = input.sequence;
         connect(c1, &Command::finished, [this, script, seq] {
             qDebug("HASH INPUT 1ST FINISHED");
@@ -816,7 +817,7 @@ public:
     //        stream.setByteOrder(QDataStream::LittleEndian);
 
         });
-        auto c2 = device()->exchange(apdu(BTCHIP_CLA, BTCHIP_INS_HASH_INPUT_START, 0x80, 0x00, script + seq));
+        auto c2 = exchange(apdu(BTCHIP_CLA, BTCHIP_INS_HASH_INPUT_START, 0x80, 0x00, script + seq));
         connect(c2, &Command::finished, [] {
             qDebug("HASH INPUT 2ND FINISHED!");
         });
@@ -850,7 +851,7 @@ public:
         stream.writeRawData(_pin.data(), _pin.size());
         stream << uint32_t(m_locktime) << sig_hash_type;
         qDebug("untrustedHashSign EXCHANGE");
-        auto c1 = device()->exchange(apdu(BTCHIP_CLA, BTCHIP_INS_HASH_SIGN, 0, 0, data));
+        auto c1 = exchange(apdu(BTCHIP_CLA, BTCHIP_INS_HASH_SIGN, 0, 0, data));
         connect(c1, &Command::error, [] {
            qDebug("untrustedHashSign FAILED!!!!!!!!!");
         });
@@ -881,11 +882,12 @@ public:
 
         for (int i = 0; i < datas.size(); ++i) {
             uint8_t p1 = i == 0 ? 0xff : (i == datas.size() - 1 ? 0x80 : 0x00);
-            auto c1 = device()->exchange(apdu(BTCHIP_CLA, BTCHIP_INS_HASH_INPUT_FINALIZE_FULL, p1, 0x00, datas.at(i)));
+            auto c1 = exchange(apdu(BTCHIP_CLA, BTCHIP_INS_HASH_INPUT_FINALIZE_FULL, p1, 0x00, datas.at(i)));
             connect(c1, &Command::finished, [i, c1, datas] {
             });
         }
     }
+    LedgerDevice* const m_device;
     const uint32_t m_version;
     const QJsonObject m_transaction;
     const QJsonArray m_signing_inputs;
@@ -895,18 +897,20 @@ public:
     QList<QByteArray> m_signatures;
 };
 
-SignTransactionActivity* Device::signTransaction(uint32_t version, const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs, uint32_t locktime)
+SignTransactionActivity* LedgerDevice::signTransaction(uint32_t version, const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs, uint32_t locktime)
 {
     return new LedgerSignTransactionActivity(version, transaction, signing_inputs, outputs, locktime, this);
 }
 
 class LedgerGetBlindingKeyActivity : public GetBlindingKeyActivity
 {
+    LedgerDevice* const m_device;
     const QString m_script;
     QByteArray m_public_key;
 public:
-    LedgerGetBlindingKeyActivity(const QString& script, Device* device)
+    LedgerGetBlindingKeyActivity(const QString& script, LedgerDevice* device)
         : GetBlindingKeyActivity(device)
+        , m_device(device)
         , m_script(script)
     {}
     QByteArray publicKey() const override
@@ -915,7 +919,7 @@ public:
     }
     void exec() override
     {
-        auto command = device()->exchange(apdu(BTCHIP_CLA, BTCHIP_INS_GET_LIQUID_BLINDING_KEY, 0x00, 0x00, ParseByteArray(m_script)));
+        auto command = m_device->exchange(apdu(BTCHIP_CLA, BTCHIP_INS_GET_LIQUID_BLINDING_KEY, 0x00, 0x00, ParseByteArray(m_script)));
         connect(command, &Command::finished, [this, command] {
             command->deleteLater();
             m_public_key = compressPublicKey(command->m_response);
@@ -928,19 +932,21 @@ public:
     }
 };
 
-GetBlindingKeyActivity* Device::getBlindingKey(const QString& script)
+GetBlindingKeyActivity* LedgerDevice::getBlindingKey(const QString& script)
 {
     return new LedgerGetBlindingKeyActivity(script, this);
 }
 
 class LedgerGetBlindingNonceActivity : public GetBlindingNonceActivity
 {
+    LedgerDevice* const m_device;
     const QByteArray m_pubkey;
     const QByteArray m_script;
     QByteArray m_nonce;
 public:
-    LedgerGetBlindingNonceActivity(const QByteArray& pubkey, const QByteArray& script, Device* device)
+    LedgerGetBlindingNonceActivity(const QByteArray& pubkey, const QByteArray& script, LedgerDevice* device)
         : GetBlindingNonceActivity(device)
+        , m_device(device)
         , m_pubkey(pubkey)
         , m_script(script)
     {
@@ -951,7 +957,7 @@ public:
     }
     void exec()
     {
-        auto command = device()->exchange(apdu(BTCHIP_CLA, BTCHIP_INS_GET_LIQUID_NONCE, 0x00, 0x00, m_pubkey + m_script));
+        auto command = m_device->exchange(apdu(BTCHIP_CLA, BTCHIP_INS_GET_LIQUID_NONCE, 0x00, 0x00, m_pubkey + m_script));
         connect(command, &Command::finished, [this, command] {
             command->deleteLater();
             Q_ASSERT(command->m_response.length() == 32);
@@ -965,12 +971,12 @@ public:
     }
 };
 
-GetBlindingNonceActivity* Device::getBlindingNonce(const QByteArray& pubkey, const QByteArray& script)
+GetBlindingNonceActivity* LedgerDevice::getBlindingNonce(const QByteArray& pubkey, const QByteArray& script)
 {
     return new LedgerGetBlindingNonceActivity(pubkey, script, this);
 }
 
-SignLiquidTransactionActivity *Device::signLiquidTransaction(uint32_t version, const QJsonObject &transaction, const QJsonArray &signing_inputs, const QJsonArray &outputs)
+SignLiquidTransactionActivity *LedgerDevice::signLiquidTransaction(uint32_t version, const QJsonObject &transaction, const QJsonArray &signing_inputs, const QJsonArray &outputs)
 {
     return new LedgerSignLiquidTransactionActivity(version, transaction, signing_inputs, outputs, this);
 }
@@ -986,27 +992,6 @@ Device::Type Device::typefromVendorAndProduct(uint32_t vendor_id, uint32_t produ
         }
     }
     return Device::Unknown;
-}
-
-
-QByteArray GetFirmwareCommand::payload() const
-{
-    return apdu(BTCHIP_CLA, BTCHIP_INS_GET_FIRMWARE_VERSION, 0x00, 0x00);
-}
-
-bool GetFirmwareCommand::parse(QDataStream &stream)
-{
-    uint8_t features, arch, fw_major, fw_minor, fw_patch, loader_major, loader_minor;
-    stream >> features >> arch >> fw_major >> fw_minor >> fw_patch >> loader_major >> loader_minor;
-    Q_ASSERT(arch == 0x30);
-    //    0x01 : public keys are compressed (otherwise not compressed)
-    //    0x02 : implementation running with screen + buttons handled by the Secure Element
-    //    0x04 : implementation running with screen + buttons handled externally
-    //    0x08 : NFC transport and payment extensions supported
-    //    0x10 : BLE transport and low power extensions supported
-    //    0x20 : implementation running on a Trusted Execution Environment
-    qDebug() << features << arch << fw_major << fw_minor << fw_patch << loader_major << loader_minor;
-    return true;
 }
 
 bool DeviceCommand::readAPDUResponse(Device* device, int length, QDataStream &stream)
@@ -1029,11 +1014,6 @@ bool DeviceCommand::readAPDUResponse(Device* device, int length, QDataStream &st
         emit finished();
     }
     return result;
-}
-
-void DeviceCommand::exec()
-{
-    m_device->exchange(this);
 }
 
 Command::Command(CommandBatch* batch)
@@ -1088,27 +1068,87 @@ int DeviceCommand::readHIDReport(Device* device, QDataStream& stream)
     return readAPDUResponse(device, buf.size(), s) ? 0 : 1;
 }
 
-QByteArray GetAppNameCommand::payload() const
+GetFirmwareActivity::GetFirmwareActivity(LedgerDevice* device)
+    : Activity(device)
+    , m_device(device)
 {
-    return apdu(BTCHIP_CLA_COMMON_SDK, BTCHIP_INS_GET_APP_NAME_AND_VERSION, 0x00, 0x00);
 }
 
-bool GetAppNameCommand::parse(QDataStream& stream)
+void GetFirmwareActivity::exec()
 {
-    uint8_t format;
-    stream >> format;
+    auto command = m_device->exchange(apdu(BTCHIP_CLA, BTCHIP_INS_GET_FIRMWARE_VERSION, 0x00, 0x00));
+    connect(command, &Command::finished, [this, command] {
+        command->deleteLater();
+        QDataStream stream(command->m_response);
+        stream >> m_features >> m_arch >> m_fw_major >> m_fw_minor >> m_fw_patch >> m_loader_major >> m_loader_minor;
+        Q_ASSERT(m_arch == 0x30);
+        //    0x01 : public keys are compressed (otherwise not compressed)
+        //    0x02 : implementation running with screen + buttons handled by the Secure Element
+        //    0x04 : implementation running with screen + buttons handled externally
+        //    0x08 : NFC transport and payment extensions supported
+        //    0x10 : BLE transport and low power extensions supported
+        //    0x20 : implementation running on a Trusted Execution Environment
+        qDebug() << m_features << m_arch << m_fw_major << m_fw_minor << m_fw_patch << m_loader_major << m_loader_minor;
+        finish();
+    });
+    connect(command, &Command::error, [this, command] {
+        command->deleteLater();
+        fail();
+    });
+}
 
-    char* name = new char[256];
-    char* version = new char[256];
+GetAppActivity::GetAppActivity(LedgerDevice* device)
+    : Activity(device)
+    , m_device(device)
+{
+}
 
-    uint8_t name_length, version_length;
+QString GetAppActivity::name() const
+{
+    return m_name;
+}
 
-    stream >> name_length;
-    stream.readRawData(name, name_length);
-    stream >> version_length;
-    stream.readRawData(version, version_length);
+QString GetAppActivity::version() const
+{
+    return m_version;
+}
 
-    m_name = QString::fromLocal8Bit(name, name_length);
-    m_version = QString::fromLocal8Bit(version, version_length);
-    return true;
+void GetAppActivity::exec()
+{
+    auto command = m_device->exchange(apdu(BTCHIP_CLA_COMMON_SDK, BTCHIP_INS_GET_APP_NAME_AND_VERSION, 0x00, 0x00));
+    connect(command, &Command::finished, [this, command] {
+        command->deleteLater();
+
+        QDataStream stream(command->m_response);
+        uint8_t format;
+        stream >> format;
+
+        char* name = new char[256];
+        char* version = new char[256];
+
+        uint8_t name_length, version_length;
+
+        stream >> name_length;
+        stream.readRawData(name, name_length);
+        stream >> version_length;
+        stream.readRawData(version, version_length);
+
+        m_name = QString::fromLocal8Bit(name, name_length);
+        m_version = QString::fromLocal8Bit(version, version_length);
+        finish();
+    });
+    connect(command, &Command::error, [this, command] {
+        command->deleteLater();
+        fail();
+    });
+}
+
+GetAppActivity* LedgerDevice::getApp()
+{
+    return new GetAppActivity(this);
+}
+
+DevicePrivate *DevicePrivate::get(LedgerDevice *device)
+{
+    return device->d;
 }
