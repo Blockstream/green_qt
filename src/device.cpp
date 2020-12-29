@@ -666,11 +666,11 @@ void SignLiquidTransactionCommand::finalizeLiquidInputFull()
 }
 
 
-class SignTransactionCommand2 : public Command2<QList<QByteArray>>
+class LedgerSignTransactionActivity : public SignTransactionActivity
 {
 public:
-    SignTransactionCommand2(const QJsonObject& required_data, Device* device)
-        : Command2<QList<QByteArray>>(device)
+    LedgerSignTransactionActivity(const QJsonObject& required_data, Device* device)
+        : SignTransactionActivity(device)
         , m_required_data(required_data)
     {
     }
@@ -832,7 +832,7 @@ public:
 
 SignTransactionActivity* Device::signTransaction(const QJsonObject& required_data)
 {
-    return new SignTransactionCommand2(required_data, this);
+    return new LedgerSignTransactionActivity(required_data, this);
 }
 
 GetBlindingKeyCommand *Device::getBlindingKey(const QString& script)
