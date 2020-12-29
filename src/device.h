@@ -18,7 +18,13 @@ class Handler;
 class Network;
 class Wallet;
 
-using GetWalletPublicKeyActivity = Command2<QString>;
+class GetWalletPublicKeyActivity : public Activity
+{
+public:
+    GetWalletPublicKeyActivity(Device* device) : Activity(device) {}
+    virtual QByteArray publicKey() const = 0;
+};
+
 using SignMessageActivity = Command2<QByteArray>;
 using SignTransactionActivity = Command2<QList<QByteArray>>;
 using GetBlindingKeyActivity = Command2<QByteArray>;

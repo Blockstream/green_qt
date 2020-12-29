@@ -88,17 +88,17 @@ void GetXPubsResolver::resolve()
     if (m_paths.empty()) return emit m_handler->resolve({{ "xpubs", m_xpubs }});
 
     auto path = m_paths.takeFirst();
-    auto command = device()->getWalletPublicKey(wallet()->network(), path);
-    connect(command, &GetWalletPublicKeyActivity::finished, this, [this, command] {
-        command->deleteLater();
-        m_xpubs.append(command->result());
+    auto activity = device()->getWalletPublicKey(wallet()->network(), path);
+    connect(activity, &Activity::finished, this, [this, activity] {
+        activity->deleteLater();
+        m_xpubs.append(QString::fromLocal8Bit(activity->publicKey()));
         resolve();
     });
-    connect(command, &GetWalletPublicKeyActivity::failed, this, [this, command] {
-        command->deleteLater();
+    connect(activity, &GetWalletPublicKeyActivity::failed, this, [this, activity] {
+        activity->deleteLater();
         setFailed(true);
     });
-    command->exec();
+    activity->exec();
 }
 
 SignTransactionResolver::SignTransactionResolver(Handler* handler, const QJsonObject& result)

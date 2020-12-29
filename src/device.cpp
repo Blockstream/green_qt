@@ -124,6 +124,10 @@ public:
         , m_path(path)
     {
     }
+    QByteArray publicKey() const override
+    {
+        return m_public_key;
+    }
     void exec() override
     {
         QByteArray path;
@@ -156,10 +160,10 @@ public:
             Q_ASSERT(x == 0);
             bip32_key_free(k);
 
-            QString xpub(base58);
+            m_public_key = QByteArray(base58);
 
             wally_free_string(base58);
-            setResult(xpub);
+            finish();
         });
         connect(cmd, &Command::error, this, [this, cmd] {
             cmd->deleteLater();
@@ -168,6 +172,7 @@ public:
     }
     Network* const m_network;
     const QVector<uint32_t> m_path;
+    QByteArray m_public_key;
 };
 
 GetWalletPublicKeyActivity *Device::getWalletPublicKey(Network* network, const QVector<uint32_t>& path)
