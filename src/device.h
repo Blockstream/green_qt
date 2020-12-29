@@ -222,7 +222,7 @@ public:
     virtual QString name() const = 0;
     virtual GetWalletPublicKeyActivity* getWalletPublicKey(Network* network, const QVector<uint32_t>& path) = 0;
     virtual SignMessageActivity* signMessage(const QString& message, const QVector<uint32_t>& path) = 0;
-    virtual SignTransactionActivity* signTransaction(const QJsonObject& required_data) = 0;
+    virtual SignTransactionActivity* signTransaction(uint32_t version, const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs, uint32_t locktime) = 0;
 };
 
 class DevicePrivate;
@@ -246,7 +246,7 @@ public:
 
     GetWalletPublicKeyActivity* getWalletPublicKey(Network* network, const QVector<uint32_t>& path) override;
     SignMessageActivity* signMessage(const QString& message, const QVector<uint32_t>& path) override;
-    SignTransactionActivity* signTransaction(const QJsonObject& required_data) override;
+    SignTransactionActivity* signTransaction(uint32_t version, const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs, uint32_t locktime) override;
     GetBlindingKeyCommand *getBlindingKey(const QString &script);
     GetBlindingNonceCommand *getBlindingNonce(const QByteArray& pubkey, const QByteArray& script);
 private:

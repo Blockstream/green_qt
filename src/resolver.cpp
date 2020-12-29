@@ -108,16 +108,23 @@ SignTransactionResolver::SignTransactionResolver(Handler* handler, const QJsonOb
 
 void SignTransactionResolver::resolve()
 {
-    // TODO signTransaction should not receive required_data
-    auto command = device()->signTransaction(m_required_data);
-    connect(command, &Command2<QList<QByteArray>>::finished, [this, command] {
+    Q_ASSERT(m_required_data.value("action").toString() == "sign_tx");
+
+    auto transaction = m_required_data.value("transaction").toObject();
+    auto signing_inputs = m_required_data.value("signing_inputs").toArray();
+    auto outputs = m_required_data.value("transaction_outputs").toArray();
+    uint32_t version = transaction.value("transaction_version").toInt();
+    uint32_t locktime = transaction.value("transaction_locktime").toInt();
+
+    auto command = device()->signTransaction(version, transaction, signing_inputs, outputs, locktime);
+    connect(command, &SignTransactionActivity::finished, [this, command] {
         command->deleteLater();
         for (const auto& signature : command->result()) {
             m_signatures.append(QString::fromLocal8Bit(signature.toHex()));
         }
         m_handler->resolve({{ "signatures", m_signatures }});
     });
-    connect(command, &Command2<QList<QByteArray>>::failed, [this, command] {
+    connect(command, &SignTransactionActivity::failed, [this, command] {
         command->deleteLater();
         m_handler->error();
     });
