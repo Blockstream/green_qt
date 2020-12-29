@@ -128,11 +128,11 @@ DeviceCommand* Device::exchange(const QByteArray& data) {
     return command;
 }
 
-class LedgerGetWalletPublicKeyActivity : public Command2<QString>
+class LedgerGetWalletPublicKeyActivity : public GetWalletPublicKeyActivity
 {
 public:
     LedgerGetWalletPublicKeyActivity(Network* network, const QVector<uint32_t>& path, Device* device)
-        : Command2<QString>(device)
+        : GetWalletPublicKeyActivity(device)
         , m_network(network)
         , m_path(path)
     {

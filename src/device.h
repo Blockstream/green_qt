@@ -212,6 +212,8 @@ signals:
     void message(const QJsonObject& message);
 };
 
+using GetWalletPublicKeyActivity = Command2<QString>;
+
 class DevicePrivate;
 class Device : public QObject
 {
@@ -250,7 +252,7 @@ public:
     void exchange(DeviceCommand* command);
     DeviceCommand* exchange(const QByteArray& data);
 
-    Command2<QString>* getWalletPublicKey(Network* network, const QVector<uint32_t>& path);
+    virtual GetWalletPublicKeyActivity* getWalletPublicKey(Network* network, const QVector<uint32_t>& path);
     Command2<QByteArray>* signMessage(const QString& message, const QVector<uint32_t>& path);
     Command2<QList<QByteArray>>* signTransaction(const QJsonObject& required_data);
     GetBlindingKeyCommand *getBlindingKey(const QString &script);
