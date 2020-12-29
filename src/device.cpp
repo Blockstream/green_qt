@@ -938,14 +938,6 @@ QByteArray compressPublicKey(const QByteArray& pubkey)
     return pubkey.mid(1, 32).prepend(type);
 }
 
-/** From wally_bip32.h */
-/** Version codes for extended keys */
-#define BIP32_VER_MAIN_PUBLIC  0x0488B21E
-#define BIP32_VER_TEST_PUBLIC  0x043587CF
-
-/** Indicate that we want to derive a public key in `bip32_key_from_parent` */
-#define BIP32_FLAG_KEY_PUBLIC  0x1
-
 bool GetWalletPublicKeyCommand::parse(QDataStream& stream)
 {
     uint32_t version = m_network->data().value("mainnet").toBool() ? BIP32_VER_MAIN_PUBLIC : BIP32_VER_TEST_PUBLIC;
