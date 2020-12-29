@@ -68,9 +68,13 @@ QByteArray compressPublicKey(const QByteArray& pubkey)
 }
 
 
+AbstractDevice::AbstractDevice(QObject* parent)
+    : QObject(parent)
+{
+}
 
 Device::Device(DevicePrivate* d, QObject* parent)
-    : QObject(parent)
+    : AbstractDevice(parent)
     , d(d)
 {
     d->q = this;
@@ -98,23 +102,6 @@ QString Device::name() const
     case LedgerNanoX: return "Ledger Nano X";
     default: Q_UNREACHABLE();
     }
-}
-
-bool Device::isBusy() const
-{
-    return !d->queue.empty();
-}
-
-QString Device::appName() const
-{
-    return d->app_name;
-}
-
-void Device::setAppName(const QString& app_name)
-{
-    if (d->app_name == app_name) return;
-    d->app_name = app_name;
-    emit appNameChanged();
 }
 
 void Device::exchange(DeviceCommand* command)

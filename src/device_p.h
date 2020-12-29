@@ -12,7 +12,6 @@ public:
     Device::Transport m_transport;
     Device::Type m_type;
     int32_t m_unique_id;
-    QString app_name;
     QQueue<DeviceCommand*> queue;
 };
 

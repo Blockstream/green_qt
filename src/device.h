@@ -198,17 +198,12 @@ signals:
 using GetWalletPublicKeyActivity = Command2<QString>;
 using SignMessageActivity = Command2<QByteArray>;
 
-class DevicePrivate;
-class Device : public QObject
+class AbstractDevice : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(Transport transport READ transport CONSTANT)
     Q_PROPERTY(Type type READ type CONSTANT)
     Q_PROPERTY(QString name READ name CONSTANT)
-    Q_PROPERTY(bool busy READ isBusy NOTIFY busyChanged)
-    Q_PROPERTY(QString appName READ appName WRITE setAppName NOTIFY appNameChanged)
-    QML_ELEMENT
-    QML_UNCREATABLE("Devices are instanced by DeviceDiscoveryAgent.")
 public:
     enum Transport {
         USB,
@@ -220,33 +215,38 @@ public:
     };
     Q_ENUM(Transport)
     Q_ENUM(Type)
+    AbstractDevice(QObject* parent = nullptr);
+    virtual Transport transport() const = 0;
+    virtual Type type() const = 0;
+    virtual QString name() const = 0;
+    virtual GetWalletPublicKeyActivity* getWalletPublicKey(Network* network, const QVector<uint32_t>& path) = 0;
+    virtual SignMessageActivity* signMessage(const QString& message, const QVector<uint32_t>& path) = 0;
+};
 
+class DevicePrivate;
+class Device : public AbstractDevice
+{
+    Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("Devices are instanced by DeviceDiscoveryAgent.")
+public:
     explicit Device(DevicePrivate* d, QObject* parent = nullptr);
     ~Device();
     
-    Transport transport() const;
-    Type type() const;
-    QString name() const;
-    bool isBusy() const;
-    QString appName() const;
-    void setAppName(const QString& app_name);
+    Transport transport() const override;
+    Type type() const override;
+    QString name() const override;
 
     static Type typefromVendorAndProduct(uint32_t vendor_id, uint32_t product_id);
 
     void exchange(DeviceCommand* command);
     DeviceCommand* exchange(const QByteArray& data);
 
-    virtual GetWalletPublicKeyActivity* getWalletPublicKey(Network* network, const QVector<uint32_t>& path);
-    virtual SignMessageActivity* signMessage(const QString& message, const QVector<uint32_t>& path);
+    GetWalletPublicKeyActivity* getWalletPublicKey(Network* network, const QVector<uint32_t>& path) override;
+    SignMessageActivity* signMessage(const QString& message, const QVector<uint32_t>& path) override;
     Command2<QList<QByteArray>>* signTransaction(const QJsonObject& required_data);
     GetBlindingKeyCommand *getBlindingKey(const QString &script);
     GetBlindingNonceCommand *getBlindingNonce(const QByteArray& pubkey, const QByteArray& script);
-
-
-signals:
-    void appNameChanged();
-    void busyChanged();
-
 private:
     DevicePrivate* const d;
 };

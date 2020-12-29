@@ -199,7 +199,6 @@ void DevicePrivateImpl::exchange(DeviceCommand* command)
         }
     }
     queue.enqueue(command);
-    if (send) q->busyChanged();
 }
 
 void DevicePrivateImpl::inputReport(const QByteArray& data)
@@ -229,8 +228,6 @@ void DevicePrivateImpl::inputReport(const QByteArray& data)
                 return;
             }
         }
-    } else {
-        q->busyChanged();
     }
 }
 
