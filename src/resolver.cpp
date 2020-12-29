@@ -116,19 +116,19 @@ void SignTransactionResolver::resolve()
     uint32_t version = transaction.value("transaction_version").toInt();
     uint32_t locktime = transaction.value("transaction_locktime").toInt();
 
-    auto command = device()->signTransaction(version, transaction, signing_inputs, outputs, locktime);
-    connect(command, &SignTransactionActivity::finished, [this, command] {
-        command->deleteLater();
-        for (const auto& signature : command->result()) {
+    auto activity = device()->signTransaction(version, transaction, signing_inputs, outputs, locktime);
+    connect(activity, &SignTransactionActivity::finished, [this, activity] {
+        activity->deleteLater();
+        for (const auto& signature : activity->signatures()) {
             m_signatures.append(QString::fromLocal8Bit(signature.toHex()));
         }
         m_handler->resolve({{ "signatures", m_signatures }});
     });
-    connect(command, &SignTransactionActivity::failed, [this, command] {
-        command->deleteLater();
+    connect(activity, &SignTransactionActivity::failed, [this, activity] {
+        activity->deleteLater();
         m_handler->error();
     });
-    command->exec();
+    activity->exec();
 }
 
 BlindingKeysResolver::BlindingKeysResolver(Handler* handler, const QJsonObject& result)

@@ -724,6 +724,10 @@ public:
         , m_locktime(locktime)
     {
     }
+    QList<QByteArray> signatures() const override
+    {
+        return m_signatures;
+    }
     void exec() override
     {
         bool new_transaction = true;
@@ -856,9 +860,9 @@ public:
            signature.append(0x30);
            signature.append(c1->m_response.mid(1));
            //signature = x;
-           signatures.append(signature);
-           if (signatures.size() == count) {
-               setResult(signatures);
+           m_signatures.append(signature);
+           if (m_signatures.size() == count) {
+               finish();
            }
         });
     }
@@ -888,7 +892,7 @@ public:
     const QJsonArray m_outputs;
     const uint32_t m_locktime;
     int count{0};
-    QList<QByteArray> signatures;
+    QList<QByteArray> m_signatures;
 };
 
 SignTransactionActivity* Device::signTransaction(uint32_t version, const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs, uint32_t locktime)
