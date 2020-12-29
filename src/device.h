@@ -104,23 +104,6 @@ public:
     bool parse(QDataStream& stream) override;
 };
 
-class SignMessageCommand : public DeviceCommand
-{
-    const QVector<uint32_t> m_path;
-    const QByteArray m_message;
-public:
-    SignMessageCommand(Device* device) : DeviceCommand(device) {}
-    SignMessageCommand(Device* device, const QVector<uint32_t>& path, const QByteArray& message, CommandBatch* batch = nullptr)
-        : DeviceCommand(device, batch)
-        , m_path(path)
-        , m_message(message)
-    {}
-    QByteArray payload() const override;
-    bool parse(QDataStream& stream) override;
-    QByteArray signature;
-};
-
-
 struct Input {
     QByteArray value;
     QByteArray sequence;

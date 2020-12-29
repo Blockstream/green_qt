@@ -188,6 +188,51 @@ GetWalletPublicKeyActivity *Device::getWalletPublicKey(Network* network, const Q
     return new LedgerGetWalletPublicKeyActivity(network, path, this);
 }
 
+class SignMessageCommand : public DeviceCommand
+{
+    const QVector<uint32_t> m_path;
+    const QByteArray m_message;
+public:
+    SignMessageCommand(Device* device) : DeviceCommand(device) {}
+    SignMessageCommand(Device* device, const QVector<uint32_t>& path, const QByteArray& message, CommandBatch* batch = nullptr)
+        : DeviceCommand(device, batch)
+        , m_path(path)
+        , m_message(message)
+    {}
+    QByteArray payload() const
+    {
+        if (!m_message.isEmpty() && !m_path.isEmpty()) {
+            QByteArray data;
+            QDataStream s(&data, QIODevice::WriteOnly);
+            s << uint8_t(m_path.size());
+            for (auto p : m_path) s << uint32_t(p);
+            s << uint8_t(0) << uint8_t(m_message.length());
+            s.writeRawData(m_message.constData(), m_message.size());
+            return apdu(BTCHIP_CLA, BTCHIP_INS_SIGN_MESSAGE, 0x0, 1, data);
+        } else {
+            QByteArray data;
+            QDataStream s(&data, QIODevice::WriteOnly);
+            s << uint8_t(1) << uint8_t(0);
+            return apdu(BTCHIP_CLA, BTCHIP_INS_SIGN_MESSAGE, 0x80, 1, data);
+        }
+    }
+    bool parse(QDataStream &stream)
+    {
+        if (m_message.isEmpty() && m_path.isEmpty()) {
+            uint8_t b;
+            stream >> b;
+            signature.append(0x30);
+            while (stream.readRawData((char*) &b, 1) == 1) {
+                signature.append(b);
+            }
+            return true;
+        }
+
+        return true;
+    }
+    QByteArray signature;
+};
+
 class SignMessageCommand2 : public SignMessageActivity
 {
 public:
@@ -954,42 +999,6 @@ bool GetAppNameCommand::parse(QDataStream& stream)
 
     m_name = QString::fromLocal8Bit(name, name_length);
     m_version = QString::fromLocal8Bit(version, version_length);
-    return true;
-}
-
-
-
-QByteArray SignMessageCommand::payload() const
-{
-    if (!m_message.isEmpty() && !m_path.isEmpty()) {
-        QByteArray data;
-        QDataStream s(&data, QIODevice::WriteOnly);
-        s << uint8_t(m_path.size());
-        for (auto p : m_path) s << uint32_t(p);
-        s << uint8_t(0) << uint8_t(m_message.length());
-        s.writeRawData(m_message.constData(), m_message.size());
-        return apdu(BTCHIP_CLA, BTCHIP_INS_SIGN_MESSAGE, 0x0, 1, data);
-    }
-    Q_ASSERT(m_message.isEmpty() && m_path.isEmpty());
-    QByteArray data;
-    QDataStream s(&data, QIODevice::WriteOnly);
-    s << uint8_t(1) << uint8_t(0);
-    return apdu(BTCHIP_CLA, BTCHIP_INS_SIGN_MESSAGE, 0x80, 1, data);
-
-}
-
-bool SignMessageCommand::parse(QDataStream &stream)
-{
-    if (m_message.isEmpty() && m_path.isEmpty()) {
-        uint8_t b;
-        stream >> b;
-        signature.append(0x30);
-        while (stream.readRawData((char*) &b, 1) == 1) {
-            signature.append(b);
-        }
-        return true;
-    }
-
     return true;
 }
 
