@@ -49,6 +49,24 @@ QByteArray apdu(uint8_t cla, uint8_t ins, uint8_t p1, uint8_t p2, const QByteArr
     return result + data;
 }
 
+QByteArray compressPublicKey(const QByteArray& pubkey)
+{
+    Q_ASSERT(pubkey.size() > 0);
+    switch (pubkey[0]) {
+    case 0x04:
+        Q_ASSERT(pubkey.size() == 65);
+        break;
+    case 0x02:
+    case 0x03:
+        Q_ASSERT(pubkey.size() == 33);
+        return pubkey;
+    default:
+        Q_UNREACHABLE();
+    }
+    auto type = pubkey[64] & 0x01 ? 0x03 : 0x02;
+    return pubkey.mid(1, 32).prepend(type);
+}
+
 
 
 Device::Device(DevicePrivate* d, QObject* parent)
@@ -121,16 +139,45 @@ public:
     }
     void exec() override
     {
-        auto command = new GetWalletPublicKeyCommand(device(), m_network, m_path);
-        connect(command, &Command::finished, this, [this, command] {
-            command->deleteLater();
-            setResult(command->m_xpub);
+        QByteArray path;
+        QDataStream s(&path, QIODevice::WriteOnly);
+        s << uint8_t(m_path.size());
+        for (auto p : m_path) s << uint32_t(p);
+        auto cmd = device()->exchange(apdu(BTCHIP_CLA, BTCHIP_INS_GET_WALLET_PUBLIC_KEY, 0x0, 0, path));
+        connect(cmd, &GenericCommand::finished, this, [this, cmd] {
+            cmd->deleteLater();
+            uint32_t version = m_network->data().value("mainnet").toBool() ? BIP32_VER_MAIN_PUBLIC : BIP32_VER_TEST_PUBLIC;
+            QDataStream stream(&cmd->m_response, QIODevice::ReadOnly);
+            uint8_t pubkey_len, address_len;
+            stream >> pubkey_len;
+            QByteArray pubkey(pubkey_len, 0);
+            stream.readRawData(pubkey.data(), pubkey_len);
+            stream >> address_len;
+            QByteArray address(address_len, 0);
+            stream.readRawData(address.data(), address_len);
+            QByteArray chain_code(32, 0);
+
+            stream.readRawData(chain_code.data(), 33);
+
+            pubkey = compressPublicKey(pubkey);
+            ext_key* k;
+            int x = bip32_key_init_alloc(version, 1, 0, (const unsigned char *) chain_code.data(), chain_code.length(), (const unsigned char *) pubkey.constData(), pubkey.length(), nullptr, 0, nullptr, 0, nullptr, 0, &k);
+            Q_ASSERT(x == 0);
+
+            char* base58;
+            x = bip32_key_to_base58(k, BIP32_FLAG_KEY_PUBLIC, &base58);
+            Q_ASSERT(x == 0);
+            bip32_key_free(k);
+
+            QString xpub(base58);
+
+            wally_free_string(base58);
+            setResult(xpub);
         });
-        connect(command, &Command::error, this, [this, command] {
-            command->deleteLater();
+        connect(cmd, &Command::error, this, [this, cmd] {
+            cmd->deleteLater();
             fail();
         });
-        command->exec();
     }
     Network* const m_network;
     const QVector<uint32_t> m_path;
@@ -910,65 +957,7 @@ bool GetAppNameCommand::parse(QDataStream& stream)
     return true;
 }
 
-QByteArray GetWalletPublicKeyCommand::payload() const
-{
-    QByteArray path;
-    QDataStream s(&path, QIODevice::WriteOnly);
-    s << uint8_t(m_path.size());
-    for (auto p : m_path) s << uint32_t(p);
-    return apdu(BTCHIP_CLA, BTCHIP_INS_GET_WALLET_PUBLIC_KEY, 0x0, 0, path);
-}
 
-
-QByteArray compressPublicKey(const QByteArray& pubkey)
-{
-    Q_ASSERT(pubkey.size() > 0);
-    switch (pubkey[0]) {
-    case 0x04:
-        Q_ASSERT(pubkey.size() == 65);
-        break;
-    case 0x02:
-    case 0x03:
-        Q_ASSERT(pubkey.size() == 33);
-        return pubkey;
-    default:
-        Q_UNREACHABLE();
-    }
-    auto type = pubkey[64] & 0x01 ? 0x03 : 0x02;
-    return pubkey.mid(1, 32).prepend(type);
-}
-
-bool GetWalletPublicKeyCommand::parse(QDataStream& stream)
-{
-    uint32_t version = m_network->data().value("mainnet").toBool() ? BIP32_VER_MAIN_PUBLIC : BIP32_VER_TEST_PUBLIC;
-
-    uint8_t pubkey_len, address_len;
-    stream >> pubkey_len;
-    QByteArray pubkey(pubkey_len, 0);
-    stream.readRawData(pubkey.data(), pubkey_len);
-    stream >> address_len;
-    QByteArray address(address_len, 0);
-    stream.readRawData(address.data(), address_len);
-    QByteArray chain_code(32, 0);
-
-    stream.readRawData(chain_code.data(), 33);
-
-    pubkey = compressPublicKey(pubkey);
-    ext_key* k;
-    int x = bip32_key_init_alloc(version, 1, 0, (const unsigned char *) chain_code.data(), chain_code.length(), (const unsigned char *) pubkey.constData(), pubkey.length(), nullptr, 0, nullptr, 0, nullptr, 0, &k);
-    Q_ASSERT(x == 0);
-
-    char* base58;
-    x = bip32_key_to_base58(k, BIP32_FLAG_KEY_PUBLIC, &base58);
-    Q_ASSERT(x == 0);
-    bip32_key_free(k);
-
-    m_xpub = QString(base58);
-
-    wally_free_string(base58);
-
-    return true;
-}
 
 QByteArray SignMessageCommand::payload() const
 {

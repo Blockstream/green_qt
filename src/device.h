@@ -104,29 +104,6 @@ public:
     bool parse(QDataStream& stream) override;
 };
 
-class GetWalletPublicKeyCommand : public DeviceCommand
-{
-    Network* const m_network;
-    const QVector<uint32_t> m_path;
-    const bool m_show_on_screen;
-    const bool m_segwit;
-    const bool m_segwit_native;
-    const bool m_cash_addr;
-public:
-    GetWalletPublicKeyCommand(Device* device, Network* network, const QVector<uint32_t>& path, bool show_on_screen = false, bool segwit = false, bool segwit_native = false, bool cash_addr = false, CommandBatch* batch = nullptr)
-        : DeviceCommand(device, batch)
-        , m_network(network)
-        , m_path(path)
-        , m_show_on_screen(show_on_screen)
-        , m_segwit(segwit)
-        , m_segwit_native(segwit_native)
-        , m_cash_addr(cash_addr)
-    {}
-    QByteArray payload() const override;
-    bool parse(QDataStream& stream) override;
-    QString m_xpub;
-};
-
 class SignMessageCommand : public DeviceCommand
 {
     const QVector<uint32_t> m_path;
