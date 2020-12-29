@@ -625,182 +625,136 @@ public:
         Q_ASSERT(inputs.size() > 0 && inputs.first().toObject().contains("prevout_script"));
         const auto redeem_script = ParseByteArray(inputs.first().toObject().value("prevout_script"));
 
-        auto command = new SignTransactionCommand(device());
-
-        device()->startUntrustedTransaction(version, new_transaction, input_index, used_inputs, redeem_script, true);
+        startUntrustedTransaction(version, new_transaction, input_index, used_inputs, redeem_script, true);
         auto bytes = outputBytes(outputs);
-        device()->finalizeInputFull(bytes);
-        device()->signSWInputs(command, used_inputs, inputs, version, locktime);
-        connect(command, &Command::finished, [this, command] {
-            command->deleteLater();
-            setResult(command->signatures);
+        finalizeInputFull(bytes);
+        signSWInputs(used_inputs, inputs, version, locktime);
+    }
+    void startUntrustedTransaction(uint32_t tx_version, bool new_transaction, int64_t input_index, const QList<Input>& used_input, const QByteArray& redeem_script, bool segwit)
+    {
+        QByteArray data;
+        QDataStream stream(&data, QIODevice::WriteOnly);
+        stream.setByteOrder(QDataStream::LittleEndian);
+
+        // Start building a fake transaction with the passed inputs
+        stream << tx_version << varint<uint32_t>(used_input.size());
+        const uint8_t p2 = new_transaction ? (segwit ? 0x02 : 0x00) : 0x80;
+        auto c = device()->exchange(apdu(BTCHIP_CLA, BTCHIP_INS_HASH_INPUT_START, 0x00, p2, data));
+        connect(c, &Command::finished, [] {
+            qDebug("startUntrustedTransaction OK");
         });
-        connect(command, &Command::error, [this, command] {
-            command->deleteLater();
-            fail();
+        hashInputs(used_input, input_index, redeem_script);
+    }
+
+    void hashInputs(const QList<Input>& used_inputs, int64_t input_index, const QByteArray& redeem_script)
+    {
+        for (int index = 0; index < used_inputs.size(); ++index) {
+            hashInput(used_inputs.at(index), index == input_index ? redeem_script : QByteArray());
+        }
+    }
+
+    void hashInput(const Input& input, const QByteArray& script)
+    {
+        const uint8_t first = input.segwit ? 0x02 : (input.trusted ? 0x01 : 0x00);
+        const QByteArray value = QByteArray::fromHex(input.value);
+
+        QByteArray data;
+        QDataStream stream(&data, QIODevice::WriteOnly);
+        stream.setByteOrder(QDataStream::LittleEndian);
+
+        stream << first;
+        if (input.trusted) stream << uint8_t(input.value.size());
+        stream.writeRawData(input.value.data(), input.value.size());
+        stream << varint<uint32_t>(script.size());
+
+        auto c1 = device()->exchange(apdu(BTCHIP_CLA, BTCHIP_INS_HASH_INPUT_START, 0x80, 0x00, data));
+        auto seq = input.sequence;
+        connect(c1, &Command::finished, [this, script, seq] {
+            qDebug("HASH INPUT 1ST FINISHED");
+    //        QByteArray data;
+    //        QDataStream stream(&data, QIODevice::WriteOnly);
+    //        stream.setByteOrder(QDataStream::LittleEndian);
+
         });
-        command->exec();
+        auto c2 = device()->exchange(apdu(BTCHIP_CLA, BTCHIP_INS_HASH_INPUT_START, 0x80, 0x00, script + seq));
+        connect(c2, &Command::finished, [] {
+            qDebug("HASH INPUT 2ND FINISHED!");
+        });
+    }
+    void signSWInputs(const QList<Input>& hwInputs, const QJsonArray& inputs, uint32_t version, uint32_t locktime)
+    {
+        count = hwInputs.size();
+        for (int i = 0; i < hwInputs.size(); ++i) {
+            const auto& input = hwInputs.at(i);
+            signSWInput(input, inputs.at(i).toObject(), version, locktime);
+        }
+    }
+
+    void signSWInput(const Input& hwInput, const QJsonObject& input, uint32_t version, uint32_t locktime)
+    {
+        auto script = ParseByteArray(input.value("prevout_script"));
+        startUntrustedTransaction(version, false, 0, {hwInput}, script, true);
+        QVector<uint32_t> user_path = ParsePath(input.value("user_path"));
+        uint8_t SIGHASH_ALL = 1;
+        untrustedHashSign(user_path, "0", locktime, SIGHASH_ALL);
+    }
+    void untrustedHashSign(const QVector<uint32_t>& private_key_path, QString pin, uint32_t locktime, uint8_t sig_hash_type)
+    {
+        auto path = pathToData(private_key_path);
+        auto _pin = pin.toUtf8();
+        QByteArray data;
+        QDataStream stream(&data, QIODevice::WriteOnly);
+        stream.writeRawData(path.data(), path.size());
+        stream.setByteOrder(QDataStream::BigEndian);
+        stream << uint8_t(pin.size());
+        stream.writeRawData(_pin.data(), _pin.size());
+        stream << uint32_t(locktime) << sig_hash_type;
+        qDebug("untrustedHashSign EXCHANGE");
+        auto c1 = device()->exchange(apdu(BTCHIP_CLA, BTCHIP_INS_HASH_SIGN, 0, 0, data));
+        connect(c1, &Command::error, [] {
+           qDebug("untrustedHashSign FAILED!!!!!!!!!");
+        });
+        connect(c1, &Command::finished, [this, c1] {
+           qDebug("untrustedHashSign FINISHED!!");
+           QByteArray signature;
+           signature.append(0x30);
+           signature.append(c1->m_response.mid(1));
+           //signature = x;
+           signatures.append(signature);
+           if (signatures.size() == count) {
+               setResult(signatures);
+           }
+        });
+    }
+    void finalizeInputFull(const QByteArray& data)
+    {
+        QList<QByteArray> datas;
+        QByteArray x;
+        x.append(uint8_t(0));
+        datas.append(x);
+        int offset = 0;
+        while (offset < data.size()) {
+            int blockLength = (data.size() - offset) > 255 ? 255 : data.size() - offset;
+            datas.append(data.mid(offset, blockLength));
+            offset += blockLength;
+        }
+
+        for (int i = 0; i < datas.size(); ++i) {
+            uint8_t p1 = i == 0 ? 0xff : (i == datas.size() - 1 ? 0x80 : 0x00);
+            auto c1 = device()->exchange(apdu(BTCHIP_CLA, BTCHIP_INS_HASH_INPUT_FINALIZE_FULL, p1, 0x00, datas.at(i)));
+            connect(c1, &Command::finished, [i, c1, datas] {
+            });
+        }
     }
     const QJsonObject m_required_data;
+    int count{0};
+    QList<QByteArray> signatures;
 };
 
 Command2<QList<QByteArray>>* Device::signTransaction(const QJsonObject& required_data)
 {
     return new SignTransactionCommand2(required_data, this);
 }
-
-void Device::finalizeInputFull(const QByteArray& data)
-{
-    QList<QByteArray> datas;
-    QByteArray x;
-    x.append(uint8_t(0));
-    datas.append(x);
-    int offset = 0;
-    while (offset < data.size()) {
-        int blockLength = (data.size() - offset) > 255 ? 255 : data.size() - offset;
-        datas.append(data.mid(offset, blockLength));
-        offset += blockLength;
-    }
-
-    for (int i = 0; i < datas.size(); ++i) {
-        uint8_t p1 = i == 0 ? 0xff : (i == datas.size() - 1 ? 0x80 : 0x00);
-//        qDebug() << "  " << i << p1 << data.toHex();
-        auto c1 = exchange(apdu(BTCHIP_CLA, BTCHIP_INS_HASH_INPUT_FINALIZE_FULL, p1, 0x00, datas.at(i)));
-        connect(c1, &Command::finished, [i, c1, datas] {
-        });
-    }
-        /*
-        let allObservables = datas
-        .enumerated()
-        .map { item -> Observable<Data> in
-            return Observable.just(item)
-                .flatMap { item -> Observable<Data> in
-                    let p1: UInt8 = item.offset == 0 ? 0xFF : item.offset == datas.count - 1 ? 0x80 : 0x00
-                    return self.exchangeAdpu(cla: self.CLA_BOLOS, ins: self.INS_HASH_INPUT_FINALIZE_FULL, p1: p1, p2: 0x00, data: item.element)
-                }
-                .asObservable()
-                .timeoutIfNoEvent(RxTimeInterval.seconds(TIMEOUT))
-                .take(1)
-        }
-    return Observable<Data>.concat(allObservables).reduce(Data(), accumulator: { _, element in
-        element
-    }).flatMap { buffer -> Observable<[String: Any]> in
-        return Observable.just(self.convertResponseToOutput(buffer))
-    }*/
-}
-
-void Device::signSWInputs(SignTransactionCommand* command, const QList<Input>& hwInputs, const QJsonArray& inputs, uint32_t version, uint32_t locktime)
-{
-    command->count = hwInputs.size();
-    for (int i = 0; i < hwInputs.size(); ++i) {
-        const auto& input = hwInputs.at(i);
-        signSWInput(command, input, inputs.at(i).toObject(), version, locktime);
-    }
-//    let allObservables = hwInputs
-//        .enumerated()
-//        .map { hwInput -> Observable<Data> in
-//            return Observable.just(hwInput.element)
-//                .flatMap { _ in self.signSWInput(hwInput: hwInput.element, input: inputs[hwInput.offset], version: version, locktime: locktime) }
-//                .asObservable()
-//                .take(1)
-//    }
-//    return Observable.concat(allObservables).reduce([], accumulator: { result, element in
-//        result + [element]
-//    })
-}
-
-void Device::signSWInput(SignTransactionCommand* command, const Input& hwInput, const QJsonObject& input, uint32_t version, uint32_t locktime)
-{
-    auto script = ParseByteArray(input.value("prevout_script"));
-    startUntrustedTransaction(version, false, 0, {hwInput}, script, true);
-    QVector<uint32_t> user_path = ParsePath(input.value("user_path"));
-    uint8_t SIGHASH_ALL = 1;
-    untrustedHashSign(command, user_path, "0", locktime, SIGHASH_ALL);
-}
-
-
-void Device::untrustedHashSign(SignTransactionCommand* command, const QVector<uint32_t>& private_key_path, QString pin, uint32_t locktime, uint8_t sig_hash_type)
-{
-    auto path = pathToData(private_key_path);
-    auto _pin = pin.toUtf8();
-    QByteArray data;
-    QDataStream stream(&data, QIODevice::WriteOnly);
-    stream.writeRawData(path.data(), path.size());
-    stream.setByteOrder(QDataStream::BigEndian);
-    stream << uint8_t(pin.size());
-    stream.writeRawData(_pin.data(), _pin.size());
-    stream << uint32_t(locktime) << sig_hash_type;
-    qDebug("untrustedHashSign EXCHANGE");
-    auto c1 = exchange(apdu(BTCHIP_CLA, BTCHIP_INS_HASH_SIGN, 0, 0, data));
-    connect(c1, &Command::error, [] {
-       qDebug("untrustedHashSign FAILED!!!!!!!!!");
-    });
-    connect(c1, &Command::finished, [command, c1] {
-       qDebug("untrustedHashSign FINISHED!!");
-       QByteArray signature;
-       signature.append(0x30);
-       signature.append(c1->m_response.mid(1));
-       //signature = x;
-       command->signatures.append(signature);
-       if (command->signatures.size() == command->count) {
-           emit command->finished();
-       }
-    });
-}
-
-
-void Device::startUntrustedTransaction(uint32_t tx_version, bool new_transaction, int64_t input_index, const QList<Input>& used_input, const QByteArray& redeem_script, bool segwit)
-{
-    QByteArray data;
-    QDataStream stream(&data, QIODevice::WriteOnly);
-    stream.setByteOrder(QDataStream::LittleEndian);
-
-    // Start building a fake transaction with the passed inputs
-    stream << tx_version << varint<uint32_t>(used_input.size());
-    const uint8_t p2 = new_transaction ? (segwit ? 0x02 : 0x00) : 0x80;
-    auto c = exchange(apdu(BTCHIP_CLA, BTCHIP_INS_HASH_INPUT_START, 0x00, p2, data));
-    connect(c, &Command::finished, [] {
-        qDebug("startUntrustedTransaction OK");
-    });
-    hashInputs(used_input, input_index, redeem_script);
-}
-
-void Device::hashInputs(const QList<Input>& used_inputs, int64_t input_index, const QByteArray& redeem_script)
-{
-    for (int index = 0; index < used_inputs.size(); ++index) {
-        hashInput(used_inputs.at(index), index == input_index ? redeem_script : QByteArray());
-    }
-}
-
-void Device::hashInput(const Input& input, const QByteArray& script)
-{
-    const uint8_t first = input.segwit ? 0x02 : (input.trusted ? 0x01 : 0x00);
-    const QByteArray value = QByteArray::fromHex(input.value);
-
-    QByteArray data;
-    QDataStream stream(&data, QIODevice::WriteOnly);
-    stream.setByteOrder(QDataStream::LittleEndian);
-
-    stream << first;
-    if (input.trusted) stream << uint8_t(input.value.size());
-    stream.writeRawData(input.value.data(), input.value.size());
-    stream << varint<uint32_t>(script.size());
-
-    auto c1 = exchange(apdu(BTCHIP_CLA, BTCHIP_INS_HASH_INPUT_START, 0x80, 0x00, data));
-    auto seq = input.sequence;
-    connect(c1, &Command::finished, [this, script, seq] {
-        qDebug("HASH INPUT 1ST FINISHED");
-//        QByteArray data;
-//        QDataStream stream(&data, QIODevice::WriteOnly);
-//        stream.setByteOrder(QDataStream::LittleEndian);
-
-    });
-    auto c2 = exchange(apdu(BTCHIP_CLA, BTCHIP_INS_HASH_INPUT_START, 0x80, 0x00, script + seq));
-    connect(c2, &Command::finished, [] {
-        qDebug("HASH INPUT 2ND FINISHED!");
-    });
-}
-
 
 GetBlindingKeyCommand *Device::getBlindingKey(const QString& script)
 {

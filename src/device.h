@@ -276,14 +276,6 @@ public:
     Command2<QString>* getWalletPublicKey(Network* network, const QVector<uint32_t>& path);
     Command2<QByteArray>* signMessage(const QString& message, const QVector<uint32_t>& path);
     Command2<QList<QByteArray>>* signTransaction(const QJsonObject& required_data);
-    void startUntrustedTransaction(uint32_t tx_version, bool new_transaction, int64_t input_index, const QList<Input>& used_input, const QByteArray& redeemScript, bool segwit);
-    void hashInputs(const QList<Input>& used_inputs, int64_t input_index, const QByteArray& redeem_script);
-    void hashInput(const Input& input, const QByteArray& script);
-    void finalizeInputFull(const QByteArray& data);
-    void signSWInputs(SignTransactionCommand* command, const QList<Input>& hwInputs, const QJsonArray& inputs, uint32_t version, uint32_t locktime);
-    void signSWInput(SignTransactionCommand* command, const Input& hwInput, const QJsonObject& input, uint32_t version, uint32_t locktime);
-    void untrustedHashSign(SignTransactionCommand* command, const QVector<uint32_t> &private_key_path, QString pin, uint32_t locktime, uint8_t sig_hash_type);
-
     GetBlindingKeyCommand *getBlindingKey(const QString &script);
     GetBlindingNonceCommand *getBlindingNonce(const QByteArray& pubkey, const QByteArray& script);
 
