@@ -188,7 +188,7 @@ GetWalletPublicKeyActivity *Device::getWalletPublicKey(Network* network, const Q
     return new LedgerGetWalletPublicKeyActivity(network, path, this);
 }
 
-class SignMessageCommand2 : public Command2<QByteArray>
+class SignMessageCommand2 : public SignMessageActivity
 {
 public:
     SignMessageCommand2(const QString& message, const QVector<uint32_t>& path, Device* device)
@@ -213,7 +213,7 @@ public:
     const QVector<uint32_t> m_path;
 };
 
-Command2<QByteArray>* Device::signMessage(const QString& message, const QVector<uint32_t>& path)
+SignMessageActivity* Device::signMessage(const QString& message, const QVector<uint32_t>& path)
 {
     return new SignMessageCommand2(message, path, this);
 }
