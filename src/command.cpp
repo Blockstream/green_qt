@@ -1,30 +1,30 @@
 #include "command.h"
 #include "device.h"
 
-CommandBase::CommandBase(Device* device)
+Activity::Activity(Device* device)
     : QObject(device)
     , m_device(device)
 {
 }
 
-Device *CommandBase::device() const
+Device *Activity::device() const
 {
     return m_device;
 }
 
-CommandBase::Status CommandBase::status() const
+Activity::Status Activity::status() const
 {
     return m_status;
 }
 
-void CommandBase::finish()
+void Activity::finish()
 {
     Q_ASSERT(m_status == Status::Pending);
     m_status = Status::Finished;
     emit finished();
 }
 
-void CommandBase::fail()
+void Activity::fail()
 {
     Q_ASSERT(m_status == Status::Pending);
     m_status = Status::Failed;

@@ -122,19 +122,6 @@ public:
     QList<QByteArray> signatures;
 };
 
-class GetBlindingKeyCommand : public DeviceCommand
-{
-    const QString m_script;
-public:
-    GetBlindingKeyCommand(Device* device, const QString& script, CommandBatch* batch = nullptr)
-        : DeviceCommand(device, batch)
-        , m_script(script)
-    {}
-    QByteArray payload() const override;
-    bool parse(const QByteArray& data) override;
-    QByteArray m_pubkey;
-};
-
 class GetBlindingNonceCommand : public DeviceCommand
 {
     QByteArray m_pubkey;
@@ -198,6 +185,7 @@ signals:
 using GetWalletPublicKeyActivity = Command2<QString>;
 using SignMessageActivity = Command2<QByteArray>;
 using SignTransactionActivity = Command2<QList<QByteArray>>;
+using GetBlindingKeyActivity = Command2<QByteArray>;
 
 class AbstractDevice : public QObject
 {
@@ -223,6 +211,7 @@ public:
     virtual GetWalletPublicKeyActivity* getWalletPublicKey(Network* network, const QVector<uint32_t>& path) = 0;
     virtual SignMessageActivity* signMessage(const QString& message, const QVector<uint32_t>& path) = 0;
     virtual SignTransactionActivity* signTransaction(uint32_t version, const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs, uint32_t locktime) = 0;
+    virtual GetBlindingKeyActivity* getBlindingKey(const QString& script) = 0;
 };
 
 class DevicePrivate;
@@ -247,7 +236,7 @@ public:
     GetWalletPublicKeyActivity* getWalletPublicKey(Network* network, const QVector<uint32_t>& path) override;
     SignMessageActivity* signMessage(const QString& message, const QVector<uint32_t>& path) override;
     SignTransactionActivity* signTransaction(uint32_t version, const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs, uint32_t locktime) override;
-    GetBlindingKeyCommand *getBlindingKey(const QString &script);
+    GetBlindingKeyActivity* getBlindingKey(const QString& script) override;
     GetBlindingNonceCommand *getBlindingNonce(const QByteArray& pubkey, const QByteArray& script);
 private:
     DevicePrivate* const d;

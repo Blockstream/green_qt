@@ -89,12 +89,12 @@ void GetXPubsResolver::resolve()
 
     auto path = m_paths.takeFirst();
     auto command = device()->getWalletPublicKey(wallet()->network(), path);
-    connect(command, &Command2<QString>::finished, this, [this, command] {
+    connect(command, &GetWalletPublicKeyActivity::finished, this, [this, command] {
         command->deleteLater();
         m_xpubs.append(command->result());
         resolve();
     });
-    connect(command, &Command2<QString>::failed, this, [this, command] {
+    connect(command, &GetWalletPublicKeyActivity::failed, this, [this, command] {
         command->deleteLater();
         setFailed(true);
     });
@@ -155,11 +155,17 @@ void BlindingKeysResolver::resolve()
 
     const auto key = m_keys.takeFirst();
     const auto script = m_scripts.takeFirst();
-    auto command = device()->getBlindingKey(script);
-    connect(command, &Command::finished, [this, command, key] {
-        m_blinding_keys.insert(key, QString::fromLocal8Bit(command->m_pubkey.toHex()));
+    auto activity = device()->getBlindingKey(script);
+    connect(activity, &Activity::finished, [this, activity, key] {
+        activity->deleteLater();
+        m_blinding_keys.insert(key, QString::fromLocal8Bit(activity->result().toHex()));
         resolve();
     });
+    connect(activity, &Activity::failed, [this, activity] {
+        activity->deleteLater();
+        m_handler->error();
+    });
+    activity->exec();
 }
 
 BlindingKeyResolver::BlindingKeyResolver(Handler* handler, const QJsonObject& result)
@@ -171,11 +177,17 @@ BlindingKeyResolver::BlindingKeyResolver(Handler* handler, const QJsonObject& re
 
 void BlindingKeyResolver::resolve()
 {
-    auto command = device()->getBlindingKey(m_script);
-    connect(command, &Command::finished, [this, command] {
-        const auto blinding_key = QString::fromLocal8Bit(command->m_pubkey.toHex());
+    auto activity = device()->getBlindingKey(m_script);
+    connect(activity, &Activity::finished, [this, activity] {
+        activity->deleteLater();
+        const auto blinding_key = QString::fromLocal8Bit(activity->result().toHex());
         m_handler->resolve({{ "blinding_key", blinding_key }});
     });
+    connect(activity, &Activity::failed, [this, activity] {
+        activity->deleteLater();
+        m_handler->error();
+    });
+    activity->exec();
 }
 
 

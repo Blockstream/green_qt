@@ -833,13 +833,33 @@ SignTransactionActivity* Device::signTransaction(uint32_t version, const QJsonOb
     return new LedgerSignTransactionActivity(version, transaction, signing_inputs, outputs, locktime, this);
 }
 
-GetBlindingKeyCommand *Device::getBlindingKey(const QString& script)
+class LedgerGetBlindingKeyActivity : public GetBlindingKeyActivity
 {
-    auto command = new GetBlindingKeyCommand(this, script);
-    command->exec();
-    return command;
-}
+    const QString m_script;
+public:
+    LedgerGetBlindingKeyActivity(const QString& script, Device* device)
+        : GetBlindingKeyActivity(device)
+        , m_script(script)
+    {}
+    void exec() override
+    {
+        auto command = device()->exchange(apdu(BTCHIP_CLA, BTCHIP_INS_GET_LIQUID_BLINDING_KEY, 0x00, 0x00, ParseByteArray(m_script)));
+        connect(command, &Command::finished, [this, command] {
+            command->deleteLater();
+            const auto pubkey = compressPublicKey(command->m_response);
+            setResult(pubkey);
+        });
+        connect(command, &Command::error, [this, command] {
+            command->deleteLater();
+            fail();
+        });
+    }
+};
 
+GetBlindingKeyActivity* Device::getBlindingKey(const QString& script)
+{
+    return new LedgerGetBlindingKeyActivity(script, this);
+}
 
 GetBlindingNonceCommand *Device::getBlindingNonce(const QByteArray& pubkey, const QByteArray& script)
 {
@@ -986,18 +1006,6 @@ bool GetAppNameCommand::parse(QDataStream& stream)
     m_version = QString::fromLocal8Bit(version, version_length);
     return true;
 }
-
-QByteArray GetBlindingKeyCommand::payload() const
-{
-    return apdu(BTCHIP_CLA, BTCHIP_INS_GET_LIQUID_BLINDING_KEY, 0x00, 0x00, ParseByteArray(m_script));
-}
-
-bool GetBlindingKeyCommand::parse(const QByteArray& data)
-{
-    m_pubkey = compressPublicKey(data);
-    return true;
-}
-
 
 QByteArray GetBlindingNonceCommand::payload() const
 {

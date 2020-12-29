@@ -5,7 +5,7 @@
 
 QT_FORWARD_DECLARE_CLASS(Device)
 
-class CommandBase : public QObject
+class Activity : public QObject
 {
     Q_OBJECT
 public:
@@ -14,7 +14,7 @@ public:
         Finished,
         Failed,
     };
-    CommandBase(Device* device);
+    Activity(Device* device);
     Device* device() const;
     virtual void exec() = 0;
 protected:
@@ -30,10 +30,10 @@ private:
 };
 
 template <typename T>
-class Command2 : public CommandBase
+class Command2 : public Activity
 {
 public:
-    Command2(Device* device) : CommandBase(device)
+    Command2(Device* device) : Activity(device)
     {
     }
     T result() const { return m_result; };
