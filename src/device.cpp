@@ -220,10 +220,10 @@ public:
     QByteArray signature;
 };
 
-class SignMessageCommand2 : public SignMessageActivity
+class LedgerSignMessageActivity : public SignMessageActivity
 {
 public:
-    SignMessageCommand2(const QString& message, const QVector<uint32_t>& path, Device* device)
+    LedgerSignMessageActivity(const QString& message, const QVector<uint32_t>& path, Device* device)
         : Command2<QByteArray>(device)
         , m_message(message)
         , m_path(path)
@@ -247,7 +247,7 @@ public:
 
 SignMessageActivity* Device::signMessage(const QString& message, const QVector<uint32_t>& path)
 {
-    return new SignMessageCommand2(message, path, this);
+    return new LedgerSignMessageActivity(message, path, this);
 }
 
 QByteArray inputBytes(const QJsonObject& input, bool is_segwit)
