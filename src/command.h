@@ -29,24 +29,6 @@ private:
     Status m_status{Status::Pending};
 };
 
-template <typename T>
-class Command2 : public Activity
-{
-public:
-    Command2(Device* device) : Activity(device)
-    {
-    }
-    T result() const { return m_result; };
-    void setResult(const T& result)
-    {
-        m_result = result;
-        finish();
-    }
-private:
-    T m_result;
-};
-
-
 class CommandBatch;
 
 class Command : public QObject

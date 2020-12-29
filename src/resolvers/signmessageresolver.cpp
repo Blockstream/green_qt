@@ -13,13 +13,13 @@ SignMessageResolver::SignMessageResolver(Handler* handler, const QJsonObject& re
 void SignMessageResolver::resolve()
 {
     auto activity = device()->signMessage(m_message, m_path);
-    connect(activity, &Command2<QByteArray>::finished, this, [this, activity] {
+    connect(activity, &Activity::finished, this, [this, activity] {
         activity->deleteLater();
         handler()->resolve({
             { "signature", QString::fromLocal8Bit(activity->signature().toHex()) }
         });
     });
-    connect(activity, &Command2<QByteArray>::failed, this, [this, activity] {
+    connect(activity, &Activity::failed, this, [this, activity] {
         activity->deleteLater();
         setFailed(true);
     });
