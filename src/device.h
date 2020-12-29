@@ -25,7 +25,13 @@ public:
     virtual QByteArray publicKey() const = 0;
 };
 
-using SignMessageActivity = Command2<QByteArray>;
+class SignMessageActivity : public Activity
+{
+public:
+    SignMessageActivity(Device* device) : Activity(device) {}
+    virtual QByteArray signature() const = 0;
+};
+
 using SignTransactionActivity = Command2<QList<QByteArray>>;
 using GetBlindingKeyActivity = Command2<QByteArray>;
 using GetBlindingNonceActivity = Command2<QByteArray>;

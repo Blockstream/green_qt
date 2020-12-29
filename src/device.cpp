@@ -229,10 +229,14 @@ class LedgerSignMessageActivity : public SignMessageActivity
 {
 public:
     LedgerSignMessageActivity(const QString& message, const QVector<uint32_t>& path, Device* device)
-        : Command2<QByteArray>(device)
+        : SignMessageActivity(device)
         , m_message(message)
         , m_path(path)
     {
+    }
+    QByteArray signature() const override
+    {
+        return m_signature;
     }
     virtual void exec() override
     {
@@ -241,13 +245,16 @@ public:
         auto sign_command = new SignMessageCommand(device());
         batch->add(prepare_command);
         batch->add(sign_command);
-        connect(batch, &Command::finished, this, [this, sign_command] {
-            setResult(sign_command->m_response);
+        connect(batch, &Command::finished, this, [this, batch, sign_command] {
+            batch->deleteLater();
+            m_signature = sign_command->m_response;
+            finish();
         });
         batch->exec();
     }
     const QString m_message;
     const QVector<uint32_t> m_path;
+    QByteArray m_signature;
 };
 
 SignMessageActivity* Device::signMessage(const QString& message, const QVector<uint32_t>& path)
