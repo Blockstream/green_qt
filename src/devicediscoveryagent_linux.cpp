@@ -3,8 +3,8 @@
 #ifdef Q_OS_LINUX
 
 #include "command.h"
-#include "device.h"
 #include "devicemanager.h"
+#include "ledgerdevice.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>

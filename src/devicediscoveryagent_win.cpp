@@ -3,9 +3,9 @@
 #ifdef Q_OS_WIN
 
 #include "command.h"
-#include "device.h"
 #include "devicediscoveryagent.h"
 #include "devicemanager.h"
+#include "ledgerdevice.h"
 
 #include <QDebug>
 #include <QGuiApplication>

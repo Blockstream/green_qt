@@ -4,7 +4,7 @@
 #ifdef Q_OS_MAC
 
 #include "command.h"
-#include "device.h"
+#include "ledgerdevice.h"
 #include "devicemanager.h"
 
 #include <QDebug>

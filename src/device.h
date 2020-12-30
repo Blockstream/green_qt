@@ -10,7 +10,6 @@
 #define LEDGER_NANOS_ID 0x0001
 #define LEDGER_NANOX_ID 0x0004
 
-QT_FORWARD_DECLARE_CLASS(Device);
 QT_FORWARD_DECLARE_CLASS(DeviceCommand);
 QT_FORWARD_DECLARE_CLASS(Network);
 
@@ -94,59 +93,5 @@ public:
 };
 
 QT_FORWARD_DECLARE_CLASS(LedgerDevice);
-
-class GetFirmwareActivity : public Activity
-{
-    LedgerDevice* const m_device;
-    uint8_t m_features;
-    uint8_t m_arch;
-    uint8_t m_fw_major;
-    uint8_t m_fw_minor;
-    uint8_t m_fw_patch;
-    uint8_t m_loader_major;
-    uint8_t m_loader_minor;
-public:
-    GetFirmwareActivity(LedgerDevice* device);
-    void exec() override;
-};
-
-class GetAppActivity : public Activity
-{
-    LedgerDevice* const m_device;
-    QString m_name;
-    QString m_version;
-public:
-    GetAppActivity(LedgerDevice* device);
-    QString name() const;
-    QString version() const;
-    void exec() override;
-};
-
-class DevicePrivate;
-class LedgerDevice : public Device
-{
-    Q_OBJECT
-public:
-    explicit LedgerDevice(DevicePrivate* d, QObject* parent = nullptr);
-    ~LedgerDevice();
-    
-    Transport transport() const override;
-    Type type() const override;
-    QString name() const override;
-
-    DeviceCommand* exchange(const QByteArray& data);
-
-    GetWalletPublicKeyActivity* getWalletPublicKey(Network* network, const QVector<uint32_t>& path) override;
-    SignMessageActivity* signMessage(const QString& message, const QVector<uint32_t>& path) override;
-    SignTransactionActivity* signTransaction(uint32_t version, const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs, uint32_t locktime) override;
-    GetBlindingKeyActivity* getBlindingKey(const QString& script) override;
-    GetBlindingNonceActivity* getBlindingNonce(const QByteArray& pubkey, const QByteArray& script) override;
-    SignLiquidTransactionActivity* signLiquidTransaction(uint32_t version, const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs) override;
-
-    GetAppActivity* getApp();
-private:
-    friend class DevicePrivate;
-    DevicePrivate* const d;
-};
 
 #endif // GREEN_DEVICE_H
