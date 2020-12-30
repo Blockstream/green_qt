@@ -1,22 +1,12 @@
 TARGET = green
 TARGET_NAME = Blockstream Green
 
-VERSION_MAJOR = 0
-VERSION_MINOR = 0
-VERSION_PATCH = 10
-VERSION_PRERELEASE =
-VERSION = $${VERSION_MAJOR}.$${VERSION_MINOR}.$${VERSION_PATCH}
 
 QMAKE_TARGET_COMPANY = Blockstream Corporation Inc.
 QMAKE_TARGET_PRODUCT = $${TARGET_NAME}
 QMAKE_TARGET_DESCRIPTION = $${TARGET_NAME}
 QMAKE_TARGET_COPYRIGHT = Copyright 2021 Blockstream Corporation Inc. All rights reserved.
 
-DEFINES += "VERSION_MAJOR=$$VERSION_MAJOR"\
-       "VERSION_MINOR=$$VERSION_MINOR"\
-       "VERSION_PATCH=$$VERSION_PATCH" \
-       "VERSION_PRERELEASE=\"$$VERSION_PRERELEASE\"" \
-       "VERSION=\"$${VERSION_MAJOR}.$${VERSION_MINOR}.$${VERSION_PATCH}\""
 
 QML_IMPORT_NAME = Blockstream.Green
 QML_IMPORT_MAJOR_VERSION = 0
@@ -40,6 +30,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
+include(release.pri)
 include(qzxing.pri)
 include(assets/assets.pri)
 include(qml/qml.pri)
