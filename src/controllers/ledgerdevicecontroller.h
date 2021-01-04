@@ -10,9 +10,6 @@ QT_FORWARD_DECLARE_CLASS(Device)
 QT_FORWARD_DECLARE_CLASS(Network)
 QT_FORWARD_DECLARE_CLASS(Wallet)
 
-QT_FORWARD_DECLARE_STRUCT(GA_json)
-QT_FORWARD_DECLARE_STRUCT(GA_auth_handler)
-
 class LedgerDeviceController : public QObject
 {
     Q_OBJECT
