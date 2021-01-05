@@ -730,12 +730,14 @@ void Wallet::setSettings(const QJsonObject& settings)
         killTimer(m_logout_timer);
         m_logout_timer = -1;
     }
-    int altimeout = m_settings.value("altimeout").toInt();
-    if (altimeout > 0) {
-        m_logout_timer = startTimer(altimeout * 60 * 1000);
-        qApp->installEventFilter(this);
-    } else {
-        qApp->removeEventFilter(this);
+    if (!m_device) {
+        int altimeout = m_settings.value("altimeout").toInt();
+        if (altimeout > 0) {
+            m_logout_timer = startTimer(altimeout * 60 * 1000);
+            qApp->installEventFilter(this);
+        } else {
+            qApp->removeEventFilter(this);
+        }
     }
 }
 
