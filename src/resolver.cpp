@@ -40,7 +40,7 @@ void Resolver::setFailed(bool failed)
     if (m_failed == failed) return;
     m_failed = failed;
     emit failedChanged(m_failed);
-    if (m_failed) emit m_handler->error();
+    if (m_failed) emit m_handler->fail();
 }
 
 TwoFactorResolver::TwoFactorResolver(Handler* handler, const QJsonObject& result)

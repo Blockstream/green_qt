@@ -24,6 +24,7 @@ public:
     virtual ~Handler();
     Wallet* wallet() const;
     void exec();
+    void fail();
     const QJsonObject& result() const;
 public slots:
     void request(const QByteArray& method);

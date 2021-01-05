@@ -38,6 +38,12 @@ void Handler::exec()
     }, Qt::QueuedConnection);
 }
 
+void Handler::fail()
+{
+    setResult({{ "status", "error" }});
+    emit error();
+}
+
 const QJsonObject& Handler::result() const
 {
     Q_ASSERT(!m_result.empty());
