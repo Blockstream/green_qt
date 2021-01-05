@@ -37,23 +37,35 @@ private:
 class Activity : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(Status status READ status NOTIFY statusChanged)
+    Q_PROPERTY(Progress* progress READ progress CONSTANT)
+    Q_PROPERTY(QJsonObject message READ message NOTIFY messageChanged)
+    QML_ELEMENT
 public:
     enum class Status {
         Pending,
         Finished,
         Failed,
     };
-    Activity(QObject* parent);
+    Q_ENUM(Status)
+    Activity(QObject* parent = nullptr);
+    Progress* progress() { return &m_progress; }
+    QJsonObject message() const { return m_message; }
     virtual void exec() = 0;
 protected:
     Status status() const;
     void finish();
     void fail();
+    void setMessage(const QJsonObject& message);
 signals:
+    void statusChanged(Status status);
     void finished();
     void failed();
+    void messageChanged(const QJsonObject& message);
 private:
     Status m_status{Status::Pending};
+    Progress m_progress;
+    QJsonObject m_message;
 };
 
 #endif // GREEN_ACTIVITY_H

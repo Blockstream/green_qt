@@ -56,3 +56,10 @@ void Activity::fail()
     m_status = Status::Failed;
     emit failed();
 }
+
+void Activity::setMessage(const QJsonObject& message)
+{
+    if (m_message == message) return;
+    m_message = message;
+    emit messageChanged(m_message);
+}
