@@ -5,16 +5,18 @@
 #include <QJsonObject>
 #include <QtQml>
 
-class Device;
-class Handler;
-class Network;
-class Wallet;
+QT_FORWARD_DECLARE_CLASS(Activity)
+QT_FORWARD_DECLARE_CLASS(Device)
+QT_FORWARD_DECLARE_CLASS(Handler)
+QT_FORWARD_DECLARE_CLASS(Network)
+QT_FORWARD_DECLARE_CLASS(Wallet)
 
 // TODO ensure Resolver::resolve isn't called incorrectly or more than possible
 class Resolver : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(Handler* handler READ handler CONSTANT)
+    Q_PROPERTY(Activity* activity READ activity NOTIFY activityChanged)
     Q_PROPERTY(bool failed READ failed NOTIFY failedChanged)
     QML_ELEMENT
 public:
@@ -22,18 +24,22 @@ public:
     Handler* handler() const { return m_handler; }
     Wallet* wallet() const;
     Network* network() const;
+    Activity* activity() const { return m_activity; }
     bool failed() const { return m_failed; }
 public slots:
     virtual void resolve() = 0;
 signals:
     void failedChanged(bool failed);
     void progress(int current, int total);
+    void activityChanged(Activity* activity);
 protected:
+    void pushActivity(Activity* activity);
     void setFailed(bool failed);
     Handler* const m_handler;
     QJsonObject const m_result;
 private:
     bool m_failed{false};
+    Activity* m_activity{nullptr};
 };
 
 class TwoFactorResolver : public Resolver

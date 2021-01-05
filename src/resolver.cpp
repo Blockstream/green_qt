@@ -24,6 +24,17 @@ Network *Resolver::network() const
     return wallet()->network();
 }
 
+void Resolver::pushActivity(Activity* activity)
+{
+    Q_ASSERT(!m_activity);
+    m_activity = activity;
+    connect(m_activity, &Activity::destroyed, this, [this] {
+        m_activity = nullptr;
+        emit activityChanged(m_activity);
+    });
+    emit activityChanged(m_activity);
+}
+
 void Resolver::setFailed(bool failed)
 {
     if (m_failed == failed) return;
@@ -303,4 +314,5 @@ void SignLiquidTransactionResolver::resolve()
         setFailed(true);
     });
     activity->exec();
+    pushActivity(activity);
 }
