@@ -47,9 +47,6 @@ public:
     int exchange_count{0};
     int exchange_total{0};
     CommandBatch* m_batch;
-signals:
-    void progressChanged(int progress, int total) {}
-    void message(const QJsonObject& message) {}
 };
 
 #endif // LEDGERSIGNLIQUIDTRANSACTIONACTIVITY_H

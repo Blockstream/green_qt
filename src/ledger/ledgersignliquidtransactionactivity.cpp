@@ -51,6 +51,8 @@ LedgerSignLiquidTransactionActivity::LedgerSignLiquidTransactionActivity(uint32_
 void LedgerSignLiquidTransactionActivity::exec()
 {
     exchange_total = 3 + 6 * m_inputs.size() + 5 * m_outputs.size();
+    progress()->setTo(exchange_total);
+    progress()->setIndeterminate(false);
 
     for (int i = 0; i < m_inputs.size(); ++i) {
         const auto input = m_inputs.at(i).toObject();
@@ -189,7 +191,7 @@ DeviceCommand *LedgerSignLiquidTransactionActivity::exchange(const QByteArray& d
     auto command = new LedgerGenericCommand(m_device, data);
     connect(command, &Command::finished, [this] {
        exchange_count ++;
-       emit progressChanged(exchange_count, exchange_total);
+       progress()->setValue(exchange_count);
     });
     m_batch->add(command);
     return command;
@@ -267,9 +269,9 @@ void LedgerSignLiquidTransactionActivity::finalizeLiquidInputFull()
         auto c = exchange(apdu(BTCHIP_CLA, BTCHIP_INS_HASH_INPUT_FINALIZE_FULL, i == m_output_liquid_bytes.size()-1 ? 0x80 : 0x00, 0x00, data.second));
         connect(c, &Command::finished, [this, i] {
             if (i + 1 < m_output_liquid_bytes.size()) {
-                emit message(m_output_liquid_bytes.at(i + 1).first);
+                setMessage(m_output_liquid_bytes.at(i + 1).first);
             } else {
-                emit message({});
+                setMessage({});
             }
             // qDebug() << "RECEIVE BTCHIP_INS_HASH_INPUT_FINALIZE_FULL" << i << c->m_response.toHex();
         });

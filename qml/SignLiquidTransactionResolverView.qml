@@ -10,6 +10,18 @@ Column {
 
     spacing: 16
 
+    Connections {
+        target: resolver.activity
+        function onMessageChanged({ index, output } = {}) {
+            if (output) {
+                const component = output.is_fee ? review_fee_component : review_output_component
+                stack_view.push(component, { index, output }, StackView.PushTransition)
+            } else {
+                stack_view.pop()
+            }
+        }
+    }
+
     Action {
         id: failed_action
         text: qsTrId('id_cancel')
@@ -20,11 +32,17 @@ Column {
         anchors.horizontalCenter: parent.horizontalCenter
         height: 32
     }
-    ProgressBar {
+    Loader {
+        active: resolver.activity
         anchors.horizontalCenter: parent.horizontalCenter
         opacity: resolver.failed ? 0 : 1
-        value: resolver.progress
-        Behavior on value { NumberAnimation { duration: 300; easing.type: Easing.OutCubic } }
+        sourceComponent: ProgressBar {
+            from: resolver.activity.progress.from
+            to: resolver.activity.progress.to
+            value: resolver.activity.progress.value
+            indeterminate: resolver.activity.progress.indeterminate
+            Behavior on value { NumberAnimation { duration: 300; easing.type: Easing.OutCubic } }
+        }
         Behavior on opacity { OpacityAnimator {} }
     }
     Label {
@@ -33,18 +51,23 @@ Column {
         anchors.horizontalCenter: parent.horizontalCenter
         text: qsTrId('id_operation_failure')
     }
-    Loader {
-        visible: active
-        active: 'output' in resolver.message && !resolver.message.output.is_fee
-        opacity: resolver.failed ? 0 : 1
-        Behavior on opacity { OpacityAnimator {} }
-        sourceComponent: Column {
+    StackView {
+        id: stack_view
+        implicitHeight: currentItem.implicitHeight
+        implicitWidth: currentItem.implicitWidth
+        initialItem: Item {
+        }
+    }
+    Component {
+        id: review_output_component
+        Column {
             id: output_view
-            readonly property var output: resolver.message.output
+            property var output
+            property int index
             readonly property Asset asset: resolver.handler.wallet.getOrCreateAsset(output.asset_id || 'btc')
             spacing: 16
             SectionLabel {
-                text: qsTrId('id_review_output_s').arg(resolver.message.index + 1)
+                text: qsTrId('id_review_output_s').arg('#' + (index + 1))
             }
             Row {
                 spacing: 16
@@ -69,24 +92,21 @@ Column {
                     }
                 }
             }
-            SectionLabel { text: resolver.message.output.is_change ? qsTrIt('id_change_address') : qsTrId('id_recipient_address') }
-            Label {
-                text: resolver.message.output.address
-            }
             SectionLabel { text: qsTrId('id_amount') }
             Label {
                 text: output_view.asset.formatAmount(output.satoshi, true, 'BTC')
             }
+            SectionLabel { text: output.is_change ? qsTrId('id_change_address') : qsTrId('id_recipient_address') }
+            Label {
+                text: output.address
+            }
         }
     }
-    Loader {
-        visible: active
-        active: 'output' in resolver.message && resolver.message.output.is_fee
-        opacity: resolver.failed ? 0 : 1
-        Behavior on opacity { OpacityAnimator {} }
-        sourceComponent: Column {
+    Component {
+        id: review_fee_component
+        Column {
             id: fee_view
-            readonly property var output: resolver.message.output
+            property var output
             readonly property Asset asset: resolver.handler.wallet.getOrCreateAsset(output.asset_id || 'btc')
             spacing: 16
             SectionLabel {
