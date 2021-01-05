@@ -91,6 +91,10 @@ public:
     SignLiquidTransactionActivity* signLiquidTransaction(uint32_t version, const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs) override;
 
     GetAppActivity* getApp();
+
+    QByteArray m_master_public_key;
+    QByteArray m_fingerprint;
+
 private:
     friend class DevicePrivate;
     DevicePrivate* const d;
