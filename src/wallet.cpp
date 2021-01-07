@@ -501,6 +501,7 @@ void Wallet::reload()
         if (m_network->isLiquid()) {
             refreshAssets();
         }
+        updateConfig();
     });
     QObject::connect(handler, &Handler::resolver, [](Resolver* resolver) {
         resolver->resolve();
