@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from argparse import ArgumentParser
+from datetime import date
 from git import Repo
 from semver import VersionInfo
 
@@ -27,6 +28,14 @@ if __name__ == '__main__':
         current_version = VersionInfo(major, minor, patch)
 
     assert current_version < next_version
+
+    with open('CHANGELOG.md') as file:
+        changelog = file.read().replace('## [Unreleased]', '## [Unreleased]\n### Added\n\n###Changed\n\n### Fixed\n\n## [{}] - {}'.format(current_version, date.today().strftime('%Y-%m-%d')))
+    with open('CHANGELOG.md', 'w') as file:
+        file.write(changelog)
+
+    repo.git.add('CHANGELOG.md')
+    repo.git.commit('-m', 'Close version {} in CHANGELOG.md'.format(current_version))
 
     tag = repo.create_tag('release_{}'.format(current_version), sign=args.sign)
     print('tag created', tag)
