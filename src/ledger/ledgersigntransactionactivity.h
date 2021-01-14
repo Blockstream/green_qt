@@ -1,6 +1,7 @@
 #ifndef GREEN_LEDGERSIGNTRANSACTIONACTIVITY_H
 #define GREEN_LEDGERSIGNTRANSACTIONACTIVITY_H
 
+#include "command.h"
 #include "device.h"
 
 
@@ -14,28 +15,30 @@ struct Input {
 class LedgerSignTransactionActivity : public SignTransactionActivity
 {
 public:
-    LedgerSignTransactionActivity(uint32_t version, const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs, uint32_t locktime, LedgerDevice* device);
+    LedgerSignTransactionActivity(const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& transaction_outputs, const QJsonObject& signing_transactions, const QJsonArray& signing_address_types, LedgerDevice* device);
     QList<QByteArray> signatures() const override;
-    DeviceCommand* exchange(const QByteArray& data);
     void exec() override;
+    Command *startUntrustedTransaction(uint32_t version, bool new_transaction, size_t index, const QList<Input> &used_inputs, const QByteArray &redeem_script, bool segwit);
+    Command *untrustedHashSign(const QVector<uint32_t> &private_key_path, QString pin, uint32_t locktime);
+private:
+    DeviceCommand* exchange(CommandBatch *batch, const QByteArray& data);
+    Command* signSW();
+    Command* signNonSW();
+
     QByteArray outputBytes();
-    void startUntrustedTransaction(bool new_transaction, int64_t input_index, const QList<Input>& used_input, const QByteArray& redeem_script, bool segwit);
 
-    void hashInputs(const QList<Input>& used_inputs, int64_t input_index, const QByteArray& redeem_script);
+    Command* getHwInputs(bool segwit);
+    Command* finalizeInputFull(const QByteArray &data);
+    Command* getTrustedInput(const QByteArray &raw, uint32_t index, uint32_t sequence, bool segwit);
 
-    void hashInput(const Input& input, const QByteArray& script);
-    void signSWInputs(const QList<Input>& hwInputs);
-
-    void signSWInput(const Input& hwInput, const QJsonObject& input);
-    void untrustedHashSign(const QVector<uint32_t>& private_key_path, QString pin, uint8_t sig_hash_type);
-    void finalizeInputFull(const QByteArray& data);
     LedgerDevice* const m_device;
-    const uint32_t m_version;
     const QJsonObject m_transaction;
     const QJsonArray m_signing_inputs;
-    const QJsonArray m_outputs;
-    const uint32_t m_locktime;
-    int count{0};
+    const QJsonArray m_transaction_outputs;
+    const QJsonObject m_signing_transactions;
+    const QJsonArray m_signing_address_types;
+
+    QList<Input> m_hw_inputs;
     QList<QByteArray> m_signatures;
 };
 

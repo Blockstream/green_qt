@@ -3,38 +3,16 @@
 #include "ledgersigntransactionactivity.h"
 #include "util.h"
 
-namespace {
+#include <wally_transaction.h>
 
-QByteArray inputBytes(const QJsonObject& input, bool is_segwit)
-{
-    QByteArray data;
-    QDataStream stream(&data, QIODevice::WriteOnly);
-    stream.setByteOrder(QDataStream::LittleEndian);
-
-    QByteArray txhash_hex = ParseByteArray(input.value("txhash"));
-    for (int i = txhash_hex.size() - 1; i >= 0; --i) {
-        stream << uint8_t(txhash_hex.at(i));
-    }
-    uint32_t pt_idx = input.value("pt_idx").toInt();
-    stream << pt_idx;
-    if (is_segwit) {
-        // TODO ensure "satoshi" is double, not an object
-        const quint64 satoshi = ParseSatoshi(input.value("satoshi"));
-        stream << satoshi;
-    }
-    return data;
-}
-
-} // namespace
-
-LedgerSignTransactionActivity::LedgerSignTransactionActivity(uint32_t version, const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs, uint32_t locktime, LedgerDevice* device)
+LedgerSignTransactionActivity::LedgerSignTransactionActivity(const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& transaction_outputs, const QJsonObject& signing_transactions, const QJsonArray& signing_address_types, LedgerDevice* device)
     : SignTransactionActivity(device)
     , m_device(device)
-    , m_version(version)
     , m_transaction(transaction)
     , m_signing_inputs(signing_inputs)
-    , m_outputs(outputs)
-    , m_locktime(locktime)
+    , m_transaction_outputs(transaction_outputs)
+    , m_signing_transactions(signing_transactions)
+    , m_signing_address_types(signing_address_types)
 {
 }
 
@@ -43,36 +21,36 @@ QList<QByteArray> LedgerSignTransactionActivity::signatures() const
     return m_signatures;
 }
 
-DeviceCommand *LedgerSignTransactionActivity::exchange(const QByteArray &data)
+DeviceCommand *LedgerSignTransactionActivity::exchange(CommandBatch* batch, const QByteArray& data)
 {
-    return m_device->exchange(data);
+    auto command = new LedgerGenericCommand(m_device, data);
+    batch->add(command);
+    return command;
 }
 
 void LedgerSignTransactionActivity::exec()
 {
-    bool new_transaction = true;
-    bool segwit = true;
-    int input_index = 0;
-    QList<Input> used_inputs;
-    for (auto i : m_signing_inputs) {
-        auto input = i.toObject();
-        Input in;
-        uint32_t sequence = ParseSequence(input.value("sequence"));
-        QDataStream stream(&in.sequence, QIODevice::WriteOnly);
-        stream.setByteOrder(QDataStream::LittleEndian);
-        stream << sequence;
-        in.value = inputBytes(input, segwit);
-        in.trusted = false;
-        in.segwit = true;
-        used_inputs.append(in);
-    }
-    Q_ASSERT(m_signing_inputs.size() > 0 && m_signing_inputs.first().toObject().contains("prevout_script"));
-    const auto redeem_script = ParseByteArray(m_signing_inputs.first().toObject().value("prevout_script"));
+    const bool sw = m_signing_address_types.contains("p2wsh") || m_signing_address_types.contains("csv");
+    const bool p2sh = m_signing_address_types.contains("p2sh");
 
-    startUntrustedTransaction(new_transaction, input_index, used_inputs, redeem_script, true);
-    auto bytes = outputBytes();
-    finalizeInputFull(bytes);
-    signSWInputs(used_inputs);
+    // Hardware Wallet cannot sign sweep inputs
+    Q_ASSERT(!m_signing_address_types.contains("p2pkh"));
+
+    auto batch = new CommandBatch;
+
+    if (sw) batch->add(signSW());
+    if (p2sh) batch->add(signNonSW());
+
+    connect(batch, &CommandBatch::finished, [this, batch] {
+        batch->deleteLater();
+        emit finished();
+    });
+    connect(batch, &CommandBatch::error, [this, batch] {
+        batch->deleteLater();
+        emit fail();
+    });
+
+    batch->exec();
 }
 
 QByteArray LedgerSignTransactionActivity::outputBytes()
@@ -80,8 +58,8 @@ QByteArray LedgerSignTransactionActivity::outputBytes()
     QByteArray data;
     QDataStream stream(&data, QIODevice::WriteOnly);
     stream.setByteOrder(QDataStream::LittleEndian);
-    varInt(stream, m_outputs.size());
-    for (const auto& out : m_outputs) {
+    varInt(stream, m_transaction_outputs.size());
+    for (const auto& out : m_transaction_outputs) {
         // TODO ensure "satoshi" is double, not an object
         const quint64 satoshi = ParseSatoshi(out["satoshi"]);
         const QByteArray script = ParseByteArray(out["script"]);
@@ -92,107 +70,9 @@ QByteArray LedgerSignTransactionActivity::outputBytes()
     return data;
 }
 
-void LedgerSignTransactionActivity::startUntrustedTransaction(bool new_transaction, int64_t input_index, const QList<Input> &used_input, const QByteArray &redeem_script, bool segwit)
+Command* LedgerSignTransactionActivity::finalizeInputFull(const QByteArray &data)
 {
-    QByteArray data;
-    QDataStream stream(&data, QIODevice::WriteOnly);
-    stream.setByteOrder(QDataStream::LittleEndian);
-
-    // Start building a fake transaction with the passed inputs
-    stream << m_version << varint<uint32_t>(used_input.size());
-    const uint8_t p2 = new_transaction ? (segwit ? 0x02 : 0x00) : 0x80;
-    auto c = exchange(apdu(BTCHIP_CLA, BTCHIP_INS_HASH_INPUT_START, 0x00, p2, data));
-    connect(c, &Command::finished, [] {
-        qDebug("startUntrustedTransaction OK");
-    });
-    hashInputs(used_input, input_index, redeem_script);
-}
-
-void LedgerSignTransactionActivity::hashInputs(const QList<Input> &used_inputs, int64_t input_index, const QByteArray &redeem_script)
-{
-    for (int index = 0; index < used_inputs.size(); ++index) {
-        hashInput(used_inputs.at(index), index == input_index ? redeem_script : QByteArray());
-    }
-}
-
-void LedgerSignTransactionActivity::hashInput(const Input &input, const QByteArray &script)
-{
-    const uint8_t first = input.segwit ? 0x02 : (input.trusted ? 0x01 : 0x00);
-    const QByteArray value = QByteArray::fromHex(input.value);
-
-    QByteArray data;
-    QDataStream stream(&data, QIODevice::WriteOnly);
-    stream.setByteOrder(QDataStream::LittleEndian);
-
-    stream << first;
-    if (input.trusted) stream << uint8_t(input.value.size());
-    stream.writeRawData(input.value.data(), input.value.size());
-    stream << varint<uint32_t>(script.size());
-
-    auto c1 = exchange(apdu(BTCHIP_CLA, BTCHIP_INS_HASH_INPUT_START, 0x80, 0x00, data));
-    auto seq = input.sequence;
-    connect(c1, &Command::finished, [this, script, seq] {
-        qDebug("HASH INPUT 1ST FINISHED");
-        //        QByteArray data;
-        //        QDataStream stream(&data, QIODevice::WriteOnly);
-        //        stream.setByteOrder(QDataStream::LittleEndian);
-
-    });
-    auto c2 = exchange(apdu(BTCHIP_CLA, BTCHIP_INS_HASH_INPUT_START, 0x80, 0x00, script + seq));
-    connect(c2, &Command::finished, [] {
-        qDebug("HASH INPUT 2ND FINISHED!");
-    });
-}
-
-void LedgerSignTransactionActivity::signSWInputs(const QList<Input> &hwInputs)
-{
-    count = hwInputs.size();
-    for (int i = 0; i < hwInputs.size(); ++i) {
-        const auto& input = hwInputs.at(i);
-        signSWInput(input, m_signing_inputs.at(i).toObject());
-    }
-}
-
-void LedgerSignTransactionActivity::signSWInput(const Input &hwInput, const QJsonObject &input)
-{
-    auto script = ParseByteArray(input.value("prevout_script"));
-    startUntrustedTransaction(false, 0, {hwInput}, script, true);
-    QVector<uint32_t> user_path = ParsePath(input.value("user_path"));
-    uint8_t SIGHASH_ALL = 1;
-    untrustedHashSign(user_path, "0", SIGHASH_ALL);
-}
-
-void LedgerSignTransactionActivity::untrustedHashSign(const QVector<uint32_t> &private_key_path, QString pin, uint8_t sig_hash_type)
-{
-    auto path = pathToData(private_key_path);
-    auto _pin = pin.toUtf8();
-    QByteArray data;
-    QDataStream stream(&data, QIODevice::WriteOnly);
-    stream.writeRawData(path.data(), path.size());
-    stream.setByteOrder(QDataStream::BigEndian);
-    stream << uint8_t(pin.size());
-    stream.writeRawData(_pin.data(), _pin.size());
-    stream << uint32_t(m_locktime) << sig_hash_type;
-    qDebug("untrustedHashSign EXCHANGE");
-    auto c1 = exchange(apdu(BTCHIP_CLA, BTCHIP_INS_HASH_SIGN, 0, 0, data));
-    connect(c1, &Command::error, [] {
-        qDebug("untrustedHashSign FAILED!!!!!!!!!");
-    });
-    connect(c1, &Command::finished, [this, c1] {
-        qDebug("untrustedHashSign FINISHED!!");
-        QByteArray signature;
-        signature.append(0x30);
-        signature.append(c1->m_response.mid(1));
-        //signature = x;
-        m_signatures.append(signature);
-        if (m_signatures.size() == count) {
-            finish();
-        }
-    });
-}
-
-void LedgerSignTransactionActivity::finalizeInputFull(const QByteArray &data)
-{
+    auto batch = new CommandBatch;
     QList<QByteArray> datas;
     QByteArray x;
     x.append(uint8_t(0));
@@ -206,8 +86,215 @@ void LedgerSignTransactionActivity::finalizeInputFull(const QByteArray &data)
 
     for (int i = 0; i < datas.size(); ++i) {
         uint8_t p1 = i == 0 ? 0xff : (i == datas.size() - 1 ? 0x80 : 0x00);
-        auto c1 = exchange(apdu(BTCHIP_CLA, BTCHIP_INS_HASH_INPUT_FINALIZE_FULL, p1, 0x00, datas.at(i)));
-        connect(c1, &Command::finished, [i, c1, datas] {
+        exchange(batch, apdu(BTCHIP_CLA, BTCHIP_INS_HASH_INPUT_FINALIZE_FULL, p1, 0x00, datas.at(i)));
+    }
+    return batch;
+}
+
+Command* LedgerSignTransactionActivity::untrustedHashSign(const QVector<uint32_t> &private_key_path, QString pin, uint32_t locktime)
+{
+    const uint8_t sig_hash_type = 1;
+    auto batch = new CommandBatch;
+
+    auto path = pathToData(private_key_path);
+    auto _pin = pin.toUtf8();
+    QByteArray data;
+    QDataStream stream(&data, QIODevice::WriteOnly);
+    stream.writeRawData(path.data(), path.size());
+    stream.setByteOrder(QDataStream::BigEndian);
+    stream << uint8_t(pin.size());
+    stream.writeRawData(_pin.data(), _pin.size());
+    stream << locktime << sig_hash_type;
+    auto cmd = exchange(batch, apdu(BTCHIP_CLA, BTCHIP_INS_HASH_SIGN, 0, 0, data));
+    connect(cmd, &Command::finished, [this, cmd] {
+        QByteArray signature;
+        signature.append(0x30);
+        signature.append(cmd->m_response.mid(1));
+        m_signatures.append(signature);
+    });
+    return batch;
+}
+
+Command* LedgerSignTransactionActivity::signSW()
+{
+    auto batch = new CommandBatch;
+    auto cmd = getHwInputs(true);
+    connect(cmd, &Command::finished, [this, batch] {
+        // Prepare the pseudo transaction
+        // Provide the first script instead of a null script to initialize the P2SH confirmation logic
+        const uint32_t version = m_transaction.value("transaction_version").toDouble();
+        const uint32_t locktime = m_transaction.value("transaction_locktime").toDouble();
+        const auto script0 = ParseByteArray(m_signing_inputs[0].toObject().value("prevout_script"));
+        batch->add(startUntrustedTransaction(version, true, 0, m_hw_inputs, script0, true));
+        batch->add(finalizeInputFull(outputBytes()));
+
+        for (int i = 0; i < m_hw_inputs.size(); i++) {
+            const auto input = m_signing_inputs[i].toObject();
+            const auto address_type = input.value("address_type").toString();
+            if (address_type == "p2sh") continue;
+            const auto script = ParseByteArray(input.value("prevout_script"));
+            const auto user_path = ParsePath(input.value("user_path"));
+
+            batch->add(startUntrustedTransaction(version, false, 0, m_hw_inputs.mid(i, 1), script, true));
+            batch->add(untrustedHashSign(user_path, "0", locktime));
+        }
+    });
+    batch->add(cmd);
+    return batch;
+}
+
+Command* LedgerSignTransactionActivity::signNonSW()
+{
+    Q_UNREACHABLE();
+}
+
+QByteArray sequenceBytes(const QJsonObject& in)
+{
+    const uint32_t sequence = in.value("sequence").toDouble();
+    QByteArray data;
+    QDataStream stream(&data, QIODevice::WriteOnly);
+    stream.setByteOrder(QDataStream::LittleEndian);
+    stream << sequence;
+    return data;
+}
+
+Command* LedgerSignTransactionActivity::getHwInputs(bool segwit)
+{
+    const bool shouldUseTrustedInputForSegwit = true;
+    const bool prefer_trusted_inputs = !segwit || shouldUseTrustedInputForSegwit;
+
+    auto batch = new CommandBatch;
+
+    if (prefer_trusted_inputs) {
+        for (const auto i : m_signing_inputs) {
+            const auto input = i.toObject();
+            const auto txhash = input.value("txhash").toString();
+            uint32_t index = input.value("pt_idx").toDouble();
+            uint32_t sequence = input.value("sequence").toDouble();
+            Q_ASSERT(m_signing_transactions.contains(txhash));
+            const auto raw = ParseByteArray(m_signing_transactions.value(txhash));
+            batch->add(getTrustedInput(raw, index, sequence, segwit));
+        }
+    } else {
+        Q_UNREACHABLE();
+    }
+
+    return batch;
+}
+
+Command* LedgerSignTransactionActivity::getTrustedInput(const QByteArray& raw, uint32_t index, uint32_t sequence, bool segwit)
+{
+    auto batch = new CommandBatch;
+
+    wally_tx* tx;
+    wally_tx_from_bytes((const unsigned char*) raw.constData(), raw.size(), WALLY_TX_FLAG_USE_WITNESS, &tx);
+
+    {
+        QByteArray data;
+        QDataStream stream(&data, QIODevice::WriteOnly);
+        stream.setByteOrder(QDataStream::BigEndian);
+        stream << index;
+        stream.setByteOrder(QDataStream::LittleEndian);
+        stream << tx->version;
+        stream << varint<uint32_t>(tx->num_inputs);
+        exchange(batch, apdu(BTCHIP_CLA, BTCHIP_INS_GET_TRUSTED_INPUT, 0x00, 0x00, data));
+    }
+    for (size_t i = 0; i < tx->num_inputs; ++i) {
+        const auto input = tx->inputs + i;
+        {
+            QByteArray data;
+            QDataStream stream(&data, QIODevice::WriteOnly);
+            stream.setByteOrder(QDataStream::LittleEndian);
+            stream.writeRawData((const char*) input->txhash, 32);
+            stream << input->index;
+            stream << varint<uint32_t>(input->script_len);
+            exchange(batch, apdu(BTCHIP_CLA, BTCHIP_INS_GET_TRUSTED_INPUT, 0x80, 0x00, data));
+        }
+        {
+            QByteArray data;
+            QDataStream stream(&data, QIODevice::WriteOnly);
+            stream.setByteOrder(QDataStream::LittleEndian);
+            stream.writeRawData((const char*) input->script, input->script_len);
+            stream << input->sequence;
+            exchange(batch, apdu(BTCHIP_CLA, BTCHIP_INS_GET_TRUSTED_INPUT, 0x80, 0x00, data));
+        }
+    }
+    {
+        QByteArray data;
+        QDataStream stream(&data, QIODevice::WriteOnly);
+        stream << varint<uint32_t>(tx->num_outputs);
+        exchange(batch, apdu(BTCHIP_CLA, BTCHIP_INS_GET_TRUSTED_INPUT, 0x80, 0x00, data));
+    }
+    for (size_t i = 0; i < tx->num_outputs; ++i) {
+        const auto output = tx->outputs + i;
+        {
+            QByteArray data;
+            QDataStream stream(&data, QIODevice::WriteOnly);
+            stream.setByteOrder(QDataStream::LittleEndian);
+            stream << quint64(output->satoshi) << varint<uint32_t>(output->script_len);
+            exchange(batch, apdu(BTCHIP_CLA, BTCHIP_INS_GET_TRUSTED_INPUT, 0x80, 0x00, data));
+        }
+        {
+            const auto data = QByteArray((const char*) output->script, output->script_len);
+            exchange(batch, apdu(BTCHIP_CLA, BTCHIP_INS_GET_TRUSTED_INPUT, 0x80, 0x00, data));
+        }
+    }
+
+    {
+        QByteArray data;
+        QDataStream stream(&data, QIODevice::WriteOnly);
+        stream.setByteOrder(QDataStream::LittleEndian);
+        stream << tx->locktime;
+
+        auto cmd = exchange(batch, apdu(BTCHIP_CLA, BTCHIP_INS_GET_TRUSTED_INPUT, 0x80, 0x00, data));
+        connect(cmd, &Command::finished, [this, cmd, sequence, segwit] {
+            Input input;
+            input.value = cmd->m_response;
+            input.segwit = segwit;
+            input.trusted = true;
+
+            QDataStream stream(&input.sequence, QIODevice::WriteOnly);
+            stream.setByteOrder(QDataStream::LittleEndian);
+            stream << sequence;
+
+            m_hw_inputs.append(input);
         });
     }
+
+    wally_tx_free(tx);
+
+    return batch;
+}
+
+Command* LedgerSignTransactionActivity::startUntrustedTransaction(uint32_t version, bool new_transaction, size_t index, const QList<Input>& used_inputs, const QByteArray& redeem_script, bool segwit)
+{
+    auto batch = new CommandBatch;
+
+    {
+        QByteArray data;
+        QDataStream stream(&data, QIODevice::WriteOnly);
+        stream.setByteOrder(QDataStream::LittleEndian);
+        stream << version << varint<uint32_t>(used_inputs.size());
+        exchange(batch, apdu(BTCHIP_CLA, BTCHIP_INS_HASH_INPUT_START, 0x00, new_transaction ? (segwit ? 0x02 : 0x00) : 0x80, data));
+    }
+
+    size_t current_index = 0;
+    for (auto input : used_inputs) {
+        const auto script = (current_index == index ? redeem_script : QByteArray());
+        {
+            QByteArray data;
+            QDataStream stream(&data, QIODevice::WriteOnly);
+            stream << uint8_t(input.trusted ? 0x01 : (input.segwit ? 0x02 : 0x00));
+            if (input.trusted) stream << uint8_t(input.value.size());
+            stream.writeRawData(input.value.data(), input.value.size());
+            stream << varint<uint32_t>(script.size());
+            exchange(batch, apdu(BTCHIP_CLA, BTCHIP_INS_HASH_INPUT_START, 0x80, 0x00, data));
+        }
+        {
+            const auto data = script + input.sequence;
+            exchange(batch, apdu(BTCHIP_CLA, BTCHIP_INS_HASH_INPUT_START, 0x80, 0x00, data));
+        }
+        current_index++;
+    }
+    return batch;
 }

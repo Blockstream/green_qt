@@ -121,13 +121,13 @@ void SignTransactionResolver::resolve()
 {
     Q_ASSERT(m_required_data.value("action").toString() == "sign_tx");
 
-    auto transaction = m_required_data.value("transaction").toObject();
-    auto signing_inputs = m_required_data.value("signing_inputs").toArray();
-    auto outputs = m_required_data.value("transaction_outputs").toArray();
-    uint32_t version = transaction.value("transaction_version").toInt();
-    uint32_t locktime = transaction.value("transaction_locktime").toInt();
+    const auto transaction = m_required_data.value("transaction").toObject();
+    const auto signing_inputs = m_required_data.value("signing_inputs").toArray();
+    const auto transaction_outputs = m_required_data.value("transaction_outputs").toArray();
+    const auto signing_transactions = m_required_data.value("signing_transactions").toObject();
+    const auto signing_address_types = m_required_data.value("signing_address_types").toArray();
 
-    auto activity = device()->signTransaction(version, transaction, signing_inputs, outputs, locktime);
+    auto activity = device()->signTransaction(transaction, signing_inputs, transaction_outputs, signing_transactions, signing_address_types);
     connect(activity, &SignTransactionActivity::finished, [this, activity] {
         activity->deleteLater();
         for (const auto& signature : activity->signatures()) {
@@ -137,7 +137,7 @@ void SignTransactionResolver::resolve()
     });
     connect(activity, &SignTransactionActivity::failed, [this, activity] {
         activity->deleteLater();
-        m_handler->error();
+        m_handler->fail();
     });
     activity->exec();
 }

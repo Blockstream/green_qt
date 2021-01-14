@@ -11,6 +11,7 @@ QT_FORWARD_DECLARE_CLASS(LedgerDevice);
 
 #define BTCHIP_INS_GET_APP_NAME_AND_VERSION         0x01
 #define BTCHIP_INS_GET_LIQUID_BLINDING_KEY          0xe2
+#define BTCHIP_INS_GET_TRUSTED_INPUT                0x42
 #define BTCHIP_INS_HASH_INPUT_START                 0x44
 #define BTCHIP_INS_HASH_INPUT_FINALIZE_FULL         0x4a
 #define BTCHIP_INS_HASH_SIGN                        0x48
@@ -85,7 +86,7 @@ public:
 
     GetWalletPublicKeyActivity* getWalletPublicKey(Network* network, const QVector<uint32_t>& path) override;
     SignMessageActivity* signMessage(const QString& message, const QVector<uint32_t>& path) override;
-    SignTransactionActivity* signTransaction(uint32_t version, const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs, uint32_t locktime) override;
+    SignTransactionActivity* signTransaction(const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& transaction_outputs, const QJsonObject& signing_transactions, const QJsonArray& signing_address_types) override;
     GetBlindingKeyActivity* getBlindingKey(const QString& script) override;
     GetBlindingNonceActivity* getBlindingNonce(const QByteArray& pubkey, const QByteArray& script) override;
     SignLiquidTransactionActivity* signLiquidTransaction(uint32_t version, const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs) override;

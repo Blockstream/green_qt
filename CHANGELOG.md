@@ -16,5 +16,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Switch to C++17.
 
 ### Fixed
-
+- Improve ledger signing to suppress unverified inputs warning.
 - Use latest Google Auth token when enabling Google Auth two factor.
