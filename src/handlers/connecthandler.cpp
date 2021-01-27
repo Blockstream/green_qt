@@ -13,6 +13,7 @@ namespace {
             { "name", wallet->network()->id() },
             { "log_level", log_level.isEmpty() ? "info" : log_level },
             { "use_tor", use_tor },
+            { "user_agent", QString("green_qt_%1").arg(QT_STRINGIFY(VERSION)) }
         };
         if (!proxy.isEmpty()) params.insert("proxy", proxy);
         return params;
