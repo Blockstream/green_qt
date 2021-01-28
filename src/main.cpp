@@ -1,5 +1,6 @@
 #include <QApplication>
 #include <QCommandLineParser>
+#include <QFontDatabase>
 #include <QIcon>
 #include <QQmlApplicationEngine>
 #include <QQuickStyle>
@@ -72,6 +73,19 @@ int main(int argc, char *argv[])
     // Reset the locale that is used for number formatting, see:
     // https://doc.qt.io/qt-5/qcoreapplication.html#locale-settings
     setlocale(LC_NUMERIC, "C");
+
+    QFontDatabase::addApplicationFont(":/fonts/Roboto/Roboto-Medium.ttf");
+    QFontDatabase::addApplicationFont(":/fonts/Roboto/Roboto-Light.ttf");
+    QFontDatabase::addApplicationFont(":/fonts/Roboto/Roboto-Regular.ttf");
+    QFontDatabase::addApplicationFont(":/fonts/Roboto/Roboto-MediumItalic.ttf");
+    QFontDatabase::addApplicationFont(":/fonts/Roboto/Roboto-ThinItalic.ttf");
+    QFontDatabase::addApplicationFont(":/fonts/Roboto/Roboto-BoldItalic.ttf");
+    QFontDatabase::addApplicationFont(":/fonts/Roboto/Roboto-LightItalic.ttf");
+    QFontDatabase::addApplicationFont(":/fonts/Roboto/Roboto-Italic.ttf");
+    QFontDatabase::addApplicationFont(":/fonts/Roboto/Roboto-BlackItalic.ttf");
+    QFontDatabase::addApplicationFont(":/fonts/Roboto/Roboto-Bold.ttf");
+    QFontDatabase::addApplicationFont(":/fonts/Roboto/Roboto-Thin.ttf");
+    QFontDatabase::addApplicationFont(":/fonts/Roboto/Roboto-Black.ttf");
 
     app.styleHints()->setTabFocusBehavior(Qt::TabFocusAllControls);
 
