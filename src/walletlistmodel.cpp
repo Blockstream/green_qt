@@ -23,6 +23,14 @@ int WalletListModel::indexOf(Wallet *wallet) const
     return -1;
 }
 
+void WalletListModel::setNetwork(const QString &network)
+{
+    if (m_network == network) return;
+    m_network = network;
+    emit networkChanged(m_network);
+    invalidateFilter();
+}
+
 void WalletListModel::update()
 {
     auto items = m_items;
@@ -33,6 +41,7 @@ void WalletListModel::update()
             item = new QStandardItem;
             item->setData(QVariant::fromValue(wallet), Qt::UserRole);
             m_source_model.appendRow(item);
+            connect(wallet, &Wallet::authenticationChanged, this, [this] { invalidateFilter(); });
         }
         m_items.insert(wallet, item);
     }
@@ -45,6 +54,8 @@ void WalletListModel::update()
 bool WalletListModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
 {
     auto wallet = m_source_model.index(source_row, 0, source_parent).data(Qt::UserRole).value<Wallet*>();
+    if (!m_network.isEmpty() && wallet->network()->id() != m_network) return false;
+    if (m_just_authenticated && wallet->authentication() != Wallet::Authenticated) return false;
     return filterRegExp().indexIn(wallet->name()) >= 0;
 }
 
@@ -58,4 +69,12 @@ bool WalletListModel::lessThan(const QModelIndex& source_left, const QModelIndex
         return QString::localeAwareCompare(wallet_left->name(), wallet_right->name()) < 0;
     }
     return QString::localeAwareCompare(network_left->name(), network_right->name()) < 0;
+}
+
+void WalletListModel::setJustAuthenticated(bool just_authenticated)
+{
+    if (m_just_authenticated == just_authenticated) return;
+    m_just_authenticated = just_authenticated;
+    emit justAuthenticatedChanged(m_just_authenticated);
+    invalidateFilter();
 }
