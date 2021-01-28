@@ -28,6 +28,7 @@ QByteArray pathToData(const QVector<uint32_t>& path)
 
 Device::Device(QObject* parent)
     : QObject(parent)
+    , m_uuid(QUuid::createUuid().toString(QUuid::WithoutBraces))
 {
 }
 

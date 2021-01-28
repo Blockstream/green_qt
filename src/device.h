@@ -62,6 +62,7 @@ public:
 class Device : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(QString uuid READ uuid CONSTANT)
     Q_PROPERTY(Vendor vendor READ vendor CONSTANT)
     Q_PROPERTY(Transport transport READ transport CONSTANT)
     Q_PROPERTY(Type type READ type CONSTANT)
@@ -85,6 +86,7 @@ public:
     Q_ENUM(Vendor)
     Q_ENUM(Type)
     Device(QObject* parent = nullptr);
+    QString uuid() const { return m_uuid; }
     virtual Transport transport() const = 0;
     virtual Vendor vendor() const = 0;
     virtual Type type() const = 0;
@@ -97,6 +99,8 @@ public:
     virtual SignLiquidTransactionActivity* signLiquidTransaction(uint32_t version, const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs) = 0;
 
     static Type typefromVendorAndProduct(uint32_t vendor_id, uint32_t product_id);
+private:
+    const QString m_uuid;
 };
 
 QT_FORWARD_DECLARE_CLASS(LedgerDevice);
