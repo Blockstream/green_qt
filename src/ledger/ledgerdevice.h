@@ -74,10 +74,11 @@ class DevicePrivate;
 class LedgerDevice : public Device
 {
     Q_OBJECT
+    QML_ELEMENT
 public:
     explicit LedgerDevice(DevicePrivate* d, QObject* parent = nullptr);
     ~LedgerDevice();
-
+    Vendor vendor() const override { return Device::Ledger; }
     Transport transport() const override;
     Type type() const override;
     QString name() const override;

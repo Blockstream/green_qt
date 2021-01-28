@@ -62,6 +62,7 @@ public:
 class Device : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(Vendor vendor READ vendor CONSTANT)
     Q_PROPERTY(Transport transport READ transport CONSTANT)
     Q_PROPERTY(Type type READ type CONSTANT)
     Q_PROPERTY(QString name READ name CONSTANT)
@@ -71,15 +72,21 @@ public:
     enum Transport {
         USB,
     };
+    enum Vendor {
+        NoVendor,
+        Ledger
+    };
     enum Type {
         Unknown,
         LedgerNanoS,
         LedgerNanoX,
     };
     Q_ENUM(Transport)
+    Q_ENUM(Vendor)
     Q_ENUM(Type)
     Device(QObject* parent = nullptr);
     virtual Transport transport() const = 0;
+    virtual Vendor vendor() const = 0;
     virtual Type type() const = 0;
     virtual QString name() const = 0;
     virtual GetWalletPublicKeyActivity* getWalletPublicKey(Network* network, const QVector<uint32_t>& path) = 0;
