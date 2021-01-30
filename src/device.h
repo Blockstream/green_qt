@@ -78,7 +78,7 @@ public:
         Ledger
     };
     enum Type {
-        Unknown,
+        NoType,
         LedgerNanoS,
         LedgerNanoX,
     };

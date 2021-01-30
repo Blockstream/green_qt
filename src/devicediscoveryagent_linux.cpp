@@ -98,7 +98,7 @@ void DeviceDiscoveryAgentPrivate::addDevice(udev_device* handle)
     uint32_t product_id = QString::fromLocal8Bit(udev_device_get_sysattr_value(hid_dev, "idProduct")).toUInt(nullptr, 16);
 
     Device::Type device_type = Device::typefromVendorAndProduct(vendor_id, product_id);
-    if (device_type == Device::Unknown) return;
+    if (device_type == Device::NoType) return;
 
     int fd = open(udev_device_get_devnode(handle), O_RDWR); //|O_NONBLOCK);
     if (fd < 0) return;

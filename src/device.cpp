@@ -42,7 +42,7 @@ Device::Type Device::typefromVendorAndProduct(uint32_t vendor_id, uint32_t produ
             return Device::LedgerNanoX;
         }
     }
-    return Device::Unknown;
+    return Device::NoType;
 }
 
 bool DeviceCommand::readAPDUResponse(Device* device, int length, QDataStream &stream)

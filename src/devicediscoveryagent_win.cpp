@@ -142,7 +142,7 @@ bool DeviceDiscoveryAgentPrivate::addDevice(const QString& id, HANDLE handle)
     if (!HidD_GetAttributes(handle, &attrib)) return false;
 
     Device::Type device_type = Device::typefromVendorAndProduct(attrib.VendorID, attrib.ProductID);
-    if (device_type == Device::Unknown) return false;
+    if (device_type == Device::NoType) return false;
 
     PHIDP_PREPARSED_DATA preparsed_data;
     if (!HidD_GetPreparsedData(handle, &preparsed_data)) return false;

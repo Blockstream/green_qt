@@ -75,7 +75,7 @@ void DeviceDiscoveryAgentPrivate::deviceMaching(IOHIDDeviceRef handle)
     auto vendor_id = DeviceGetPropertyInt32(handle, CFSTR(kIOHIDVendorIDKey));
     auto product_id = DeviceGetPropertyInt32(handle, CFSTR(kIOHIDProductIDKey));
     Device::Type device_type = Device::typefromVendorAndProduct(vendor_id, product_id);
-    if (device_type == Device::Unknown) return;
+    if (device_type == Device::NoType) return;
 
     auto primary_usage_page = DeviceGetPropertyInt32(handle, CFSTR(kIOHIDPrimaryUsagePageKey));
     if (primary_usage_page != 0xFFA0) return;
