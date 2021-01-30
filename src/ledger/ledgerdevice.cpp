@@ -55,8 +55,9 @@ SignMessageActivity* LedgerDevice::signMessage(const QString& message, const QVe
     return new LedgerSignMessageActivity(message, path, this);
 }
 
-SignTransactionActivity* LedgerDevice::signTransaction(const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& transaction_outputs, const QJsonObject& signing_transactions, const QJsonArray& signing_address_types)
+SignTransactionActivity* LedgerDevice::signTransaction(Network* network, const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& transaction_outputs, const QJsonObject& signing_transactions, const QJsonArray& signing_address_types)
 {
+    Q_UNUSED(network);
     return new LedgerSignTransactionActivity(transaction, signing_inputs, transaction_outputs, signing_transactions, signing_address_types, this);
 }
 

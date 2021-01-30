@@ -99,7 +99,7 @@ void GetXPubsResolver::resolve()
     if (m_paths.empty()) return emit m_handler->resolve({{ "xpubs", m_xpubs }});
 
     auto path = m_paths.takeFirst();
-    auto activity = device()->getWalletPublicKey(wallet()->network(), path);
+    auto activity = device()->getWalletPublicKey(network(), path);
     connect(activity, &Activity::finished, this, [this, activity] {
         activity->deleteLater();
         m_xpubs.append(QString::fromLocal8Bit(activity->publicKey()));
@@ -127,7 +127,7 @@ void SignTransactionResolver::resolve()
     const auto signing_transactions = m_required_data.value("signing_transactions").toObject();
     const auto signing_address_types = m_required_data.value("signing_address_types").toArray();
 
-    auto activity = device()->signTransaction(transaction, signing_inputs, transaction_outputs, signing_transactions, signing_address_types);
+    auto activity = device()->signTransaction(network(), transaction, signing_inputs, transaction_outputs, signing_transactions, signing_address_types);
     connect(activity, &SignTransactionActivity::finished, [this, activity] {
         activity->deleteLater();
         for (const auto& signature : activity->signatures()) {
