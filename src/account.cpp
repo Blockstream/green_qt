@@ -101,7 +101,7 @@ void Account::reload()
         emit jsonChanged();
         updateBalance();
     });
-    QObject::connect(handler, &Handler::resolver, [](Resolver* resolver) {
+    QObject::connect(handler, &Handler::resolver, this, [](Resolver* resolver) {
         resolver->resolve();
     });
     handler->exec();

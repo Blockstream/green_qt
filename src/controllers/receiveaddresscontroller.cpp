@@ -117,7 +117,7 @@ void ReceiveAddressController::generate()
         setGenerating(false);
         emit changed();
     });
-    connect(handler, &Handler::resolver, [](Resolver* resolver) {
+    connect(handler, &Handler::resolver, this, [](Resolver* resolver) {
         resolver->resolve();
     });
     handler->exec();

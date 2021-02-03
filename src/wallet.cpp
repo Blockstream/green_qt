@@ -503,7 +503,7 @@ void Wallet::reload()
         }
         updateConfig();
     });
-    QObject::connect(handler, &Handler::resolver, [](Resolver* resolver) {
+    QObject::connect(handler, &Handler::resolver, this, [](Resolver* resolver) {
         resolver->resolve();
     });
     handler->exec();

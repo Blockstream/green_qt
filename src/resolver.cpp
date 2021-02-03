@@ -167,12 +167,12 @@ void BlindingKeysResolver::resolve()
     const auto key = m_keys.takeFirst();
     const auto script = m_scripts.takeFirst();
     auto activity = device()->getBlindingKey(script);
-    connect(activity, &Activity::finished, [this, activity, key] {
+    connect(activity, &Activity::finished, this, [this, activity, key] {
         activity->deleteLater();
         m_blinding_keys.insert(key, QString::fromLocal8Bit(activity->publicKey().toHex()));
         resolve();
     });
-    connect(activity, &Activity::failed, [this, activity] {
+    connect(activity, &Activity::failed, this, [this, activity] {
         activity->deleteLater();
         m_handler->error();
     });
@@ -226,12 +226,12 @@ void BlindingNoncesResolver::resolve()
                 (unsigned char*) pubkey_uncompressed.data(), pubkey_uncompressed.size());
 
     auto activity = device()->getBlindingNonce(pubkey_uncompressed, script);
-    connect(activity, &Activity::finished, [this, activity] {
+    connect(activity, &Activity::finished, this, [this, activity] {
         activity->deleteLater();
         m_nonces.append(QString::fromLocal8Bit(activity->nonce().toHex()));
         resolve();
     });
-    connect(activity, &Activity::failed, [this, activity] {
+    connect(activity, &Activity::failed, this, [this, activity] {
         activity->deleteLater();
         m_handler->error();
     });

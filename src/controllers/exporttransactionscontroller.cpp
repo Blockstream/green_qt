@@ -125,7 +125,7 @@ void ExportTransactionsController::nextPage()
         }
     });
 
-    connect(handler, &Handler::resolver, [](Resolver* resolver) {
+    connect(handler, &Handler::resolver, this, [](Resolver* resolver) {
         resolver->resolve();
     });
 

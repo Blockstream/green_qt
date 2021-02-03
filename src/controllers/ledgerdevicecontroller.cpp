@@ -124,7 +124,7 @@ void LedgerDeviceController::login()
         });
     });
     connect(login_handler, &Handler::resolver, this, [this](Resolver* resolver) {
-        connect(resolver, &Resolver::progress, [this](int current, int total) {
+        connect(resolver, &Resolver::progress, this, [this](int current, int total) {
             m_progress = current == total ? 0 : qreal(current) / qreal(total);
             emit progressChanged(m_progress);
         });

@@ -18,13 +18,13 @@ QByteArray LedgerGetBlindingNonceActivity::nonce() const
 void LedgerGetBlindingNonceActivity::exec()
 {
     auto command = m_device->exchange(apdu(BTCHIP_CLA, BTCHIP_INS_GET_LIQUID_NONCE, 0x00, 0x00, m_pubkey + m_script));
-    connect(command, &Command::finished, [this, command] {
+    connect(command, &Command::finished, this, [this, command] {
         command->deleteLater();
         Q_ASSERT(command->m_response.length() == 32);
         m_nonce = command->m_response;
         finish();
     });
-    connect(command, &Command::error, [this, command] {
+    connect(command, &Command::error, this, [this, command] {
         command->deleteLater();
         fail();
     });

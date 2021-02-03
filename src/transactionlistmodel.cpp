@@ -77,7 +77,7 @@ void TransactionListModel::fetch(bool reset, int offset, int count)
         }
     });
 
-    connect(handler, &Handler::resolver, [](Resolver* resolver) {
+    connect(handler, &Handler::resolver, this, [](Resolver* resolver) {
         resolver->resolve();
     });
 
