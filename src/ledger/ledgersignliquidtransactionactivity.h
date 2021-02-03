@@ -9,7 +9,7 @@ QT_FORWARD_DECLARE_CLASS(LedgerDevice);
 class LedgerSignLiquidTransactionActivity : public SignLiquidTransactionActivity
 {
 public:
-    LedgerSignLiquidTransactionActivity(uint32_t version, const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs, LedgerDevice* device);
+    LedgerSignLiquidTransactionActivity(const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs, LedgerDevice* device);
 
     virtual QList<QByteArray> signatures() const override { return m_sigs; }
     virtual QList<QByteArray> assetCommitments() const override { return m_asset_commitments; }
@@ -22,7 +22,6 @@ public:
 
     DeviceCommand* exchange(const QByteArray& data);
     LedgerDevice* const m_device;
-    int64_t m_version;
     QJsonObject m_transaction;
     QList<quint64> m_values;
     QList<QByteArray> m_abfs;

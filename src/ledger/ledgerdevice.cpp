@@ -61,9 +61,9 @@ SignTransactionActivity* LedgerDevice::signTransaction(Network* network, const Q
     return new LedgerSignTransactionActivity(transaction, signing_inputs, transaction_outputs, signing_transactions, signing_address_types, this);
 }
 
-SignLiquidTransactionActivity *LedgerDevice::signLiquidTransaction(uint32_t version, const QJsonObject &transaction, const QJsonArray &signing_inputs, const QJsonArray &outputs)
+SignLiquidTransactionActivity *LedgerDevice::signLiquidTransaction(const QJsonObject &transaction, const QJsonArray &signing_inputs, const QJsonArray &outputs)
 {
-    return new LedgerSignLiquidTransactionActivity(version, transaction, signing_inputs, outputs, this);
+    return new LedgerSignLiquidTransactionActivity(transaction, signing_inputs, outputs, this);
 }
 
 GetBlindingKeyActivity* LedgerDevice::getBlindingKey(const QString& script)

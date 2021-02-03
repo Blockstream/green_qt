@@ -36,10 +36,9 @@ QByteArray sequenceBytes(const QJsonObject& input)
 
 } // namespace
 
-LedgerSignLiquidTransactionActivity::LedgerSignLiquidTransactionActivity(uint32_t version, const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs, LedgerDevice* device)
+LedgerSignLiquidTransactionActivity::LedgerSignLiquidTransactionActivity(const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs, LedgerDevice* device)
     : SignLiquidTransactionActivity(device)
     , m_device(device)
-    , m_version(version)
     , m_transaction(transaction)
     , m_inputs(signing_inputs)
     , m_outputs(outputs)
@@ -85,7 +84,8 @@ void LedgerSignLiquidTransactionActivity::startUntrustedTransaction(bool new_tra
         QByteArray data;
         QDataStream stream(&data, QIODevice::WriteOnly);
         stream.setByteOrder(QDataStream::LittleEndian);
-        stream << uint32_t(m_version) << varint<uint32_t>(inputs.size());
+        uint32_t version = m_transaction.value("transaction_version").toDouble();
+        stream << version << varint<uint32_t>(inputs.size());
         exchange(apdu(BTCHIP_CLA, BTCHIP_INS_HASH_INPUT_START, 0x00, new_transaction ? 0x06 : 0x80, data));
     }
     for (int i = 0; i < inputs.size(); ++i) {
