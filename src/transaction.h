@@ -60,6 +60,7 @@ public:
 
 public slots:
     void openInExplorer() const;
+    QString unblindedLink() const;
     void updateMemo(const QString& memo);
 
 signals:

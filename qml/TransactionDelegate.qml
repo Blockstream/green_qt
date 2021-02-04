@@ -86,6 +86,14 @@ ItemDelegate {
                     text: qsTrId('id_view_in_explorer')
                     onTriggered: transaction.openInExplorer()
                 }
+                MenuItem {
+                    enabled: transaction.account.wallet.network.liquid
+                    text: qsTrId('Copy unblinded link')
+                    onTriggered: {
+                        Clipboard.copy(transaction.unblindedLink())
+                        ToolTip.show(qsTrId('id_copied_to_clipboard'), 1000)
+                    }
+                }
                 Repeater {
                     model: transaction.account.wallet.network.liquid ? [copy_unblinding_data_action] : []
                     MenuItem {

@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Enable qtconnectivity and qtserialport to support jade
 - Cache ledger xpubs in memory only.
 - Add script to automate tag and version bump.
+- Add copy unblinded link to liquid transactions options
 - Add CHANGELOG.md.
 
 ### Changed

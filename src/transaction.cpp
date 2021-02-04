@@ -3,6 +3,7 @@
 #include "json.h"
 #include "network.h"
 #include "transaction.h"
+#include "util.h"
 #include "wallet.h"
 #include <gdk.h>
 
@@ -127,6 +128,36 @@ void Transaction::updateFromData(const QJsonObject& data)
 void Transaction::openInExplorer() const
 {
     m_account->wallet()->network()->openTransactionInExplorer(m_data.value("txhash").toString());
+}
+
+QString Transaction::unblindedLink() const
+{
+    Q_ASSERT(account()->wallet()->network()->isLiquid());
+
+    auto tx_explorer_url = m_account->wallet()->network()->explorerUrl();
+
+    const auto inputs = m_data.value("inputs").toArray();
+    const auto outputs = m_data.value("outputs").toArray();
+
+    QStringList args;
+
+    auto append_blinding_data = [&](const QJsonValue value) {
+        QJsonObject o = value.toObject();
+
+        if (!o.contains("satoshi") && o["satoshi"].toInt()==0) return;
+        if (!o.contains("assetblinder") && o["assetblinder"].toString()!="") return;
+        if (!o.contains("amountblinder") && o["amountblinder"].toString()!="") return;
+
+        args.append(QString::number(ParseSatoshi(o["satoshi"])));
+        args.append(o["asset_id"].toString());
+        args.append(o["amountblinder"].toString());
+        args.append(o["assetblinder"].toString());
+    };
+
+    for (const auto &v : inputs) append_blinding_data(v);
+    for (const auto &v : outputs) append_blinding_data(v);
+
+    return QString("%1%2#blinded=%3").arg(tx_explorer_url, m_data.value("txhash").toString(), args.join(','));
 }
 
 void Transaction::updateMemo(const QString &memo)

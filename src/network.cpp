@@ -17,6 +17,14 @@ Network::Network(const QJsonObject &data, QObject *parent)
     m_name = data.value("name").toString();
 }
 
+QString Network::explorerUrl() const
+{
+    Q_ASSERT(m_data.contains("tx_explorer_url"));
+    auto tx_explorer_url = m_data.value("tx_explorer_url").toString();
+    Q_ASSERT(tx_explorer_url.endsWith("/"));
+    return tx_explorer_url;
+}
+
 bool Network::isLiquid() const
 {
     return m_data.value("liquid").toBool();
@@ -24,8 +32,5 @@ bool Network::isLiquid() const
 
 void Network::openTransactionInExplorer(const QString& hash)
 {
-    Q_ASSERT(m_data.contains("tx_explorer_url"));
-    auto tx_explorer_url = m_data.value("tx_explorer_url").toString();
-    Q_ASSERT(tx_explorer_url.endsWith("/"));
-    QDesktopServices::openUrl(QUrl(tx_explorer_url + hash));
+    QDesktopServices::openUrl(QUrl(explorerUrl() + hash));
 }

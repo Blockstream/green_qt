@@ -19,6 +19,7 @@ public:
     QJsonObject data() const { return m_data; }
     QString id() const { return m_id; }
     QString name() const { return m_name; }
+    QString explorerUrl() const;
     bool isLiquid() const;
 
     void openTransactionInExplorer(const QString& hash);
