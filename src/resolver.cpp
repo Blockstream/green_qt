@@ -5,8 +5,6 @@
 #include "util.h"
 #include "wallet.h"
 
-#include <wally_crypto.h>
-
 Resolver::Resolver(Handler *handler, const QJsonObject& result)
     : QObject(handler)
     , m_handler(handler)
@@ -220,12 +218,7 @@ void BlindingNoncesResolver::resolve()
     const auto pubkey = QByteArray::fromHex(m_pubkeys.takeFirst().toLocal8Bit());
     const auto script = QByteArray::fromHex(m_scripts.takeFirst().toLocal8Bit());
 
-    QByteArray pubkey_uncompressed = QByteArray(65, 0);
-    wally_ec_public_key_decompress(
-                (const unsigned char*) pubkey.constData(), pubkey.size(),
-                (unsigned char*) pubkey_uncompressed.data(), pubkey_uncompressed.size());
-
-    auto activity = device()->getBlindingNonce(pubkey_uncompressed, script);
+    auto activity = device()->getBlindingNonce(pubkey, script);
     connect(activity, &Activity::finished, this, [this, activity] {
         activity->deleteLater();
         m_nonces.append(QString::fromLocal8Bit(activity->nonce().toHex()));
