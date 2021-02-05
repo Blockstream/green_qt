@@ -91,8 +91,8 @@ ApplicationWindow {
 
     width: 1024
     height: 600
-    minimumWidth: 800
-    minimumHeight: 480
+    minimumWidth: 900
+    minimumHeight: 540
     visible: true
     title: {
         const parts = []

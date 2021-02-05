@@ -13,7 +13,7 @@ GridLayout {
         model: mnemonic
 
         Item {
-            width: 80
+            width: childrenRect.width + 20
             height: 25
 
             Row {
@@ -26,7 +26,6 @@ GridLayout {
                     color: Material.accentColor
                     anchors.baseline: word.baseline
                     horizontalAlignment: Label.AlignRight
-                    width: 10
                 }
 
                 Label {
