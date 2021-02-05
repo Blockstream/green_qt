@@ -11,6 +11,7 @@
 #include "clipboard.h"
 #include "devicemanager.h"
 #include "networkmanager.h"
+#include "settings.h"
 #include "walletmanager.h"
 
 #include <QZXing.h>
@@ -110,6 +111,7 @@ int main(int argc, char *argv[])
     qmlRegisterSingletonInstance<Clipboard>("Blockstream.Green.Core", 0, 1, "Clipboard", Clipboard::instance());
     qmlRegisterSingletonInstance<DeviceManager>("Blockstream.Green.Core", 0, 1, "DeviceManager", DeviceManager::instance());
     qmlRegisterSingletonInstance<NetworkManager>("Blockstream.Green.Core", 0, 1, "NetworkManager", NetworkManager::instance());
+    qmlRegisterSingletonInstance<Settings>("Blockstream.Green.Core", 0, 1, "Settings", Settings::instance());
     qmlRegisterSingletonInstance<WalletManager>("Blockstream.Green.Core", 0, 1, "WalletManager", WalletManager::instance());
 
     QQmlApplicationEngine engine;

@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Add support for app/global settings.
 - Use Roboto font throughout
 - Enable qtconnectivity and qtserialport to support jade
 - Cache ledger xpubs in memory only.
