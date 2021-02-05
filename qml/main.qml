@@ -63,6 +63,8 @@ ApplicationWindow {
         'testnet': 'qrc:/svg/btc_testnet.svg'
     })
 
+    property Constants constants: Constants {}
+
     function formatDateTime(date_time) {
         return new Date(date_time).toLocaleString(locale.dateTimeFormat(Locale.LongFormat))
     }
@@ -94,6 +96,7 @@ ApplicationWindow {
     minimumWidth: 900
     minimumHeight: 540
     visible: true
+    color: constants.c900
     title: {
         const parts = []
         if (currentWallet) {
@@ -112,98 +115,103 @@ ApplicationWindow {
         id: device_list_model
     }
 
-    header: RowLayout {
-        ToolButton {
-            id: tool_button
-            text: '\u2630'
-            checkable: true
-            checked: true
-            Layout.leftMargin: 8
+    header: Pane {
+        padding: 0
+        background: Rectangle {
+            color: constants.c600
         }
-        MenuBar {
-            background: Item {}
-            Menu {
-                title: qsTrId('File')
-                width: fitMenuWidth(this)
-                Action {
-                    text: qsTrId('id_create_new_wallet')
-                    onTriggered: create_wallet_action.trigger()
-                }
-                Action {
-                    text: qsTrId('id_restore_green_wallet')
-                    onTriggered: restore_wallet_action.trigger()
-                }
+        contentItem: RowLayout {
+            ToolButton {
+                id: tool_button
+                text: '\u2630'
+                checkable: true
+                checked: true
+                Layout.leftMargin: 8
+            }
+            MenuBar {
+                background: Item {}
                 Menu {
-                    title: qsTrId('id_export_transactions_to_csv_file')
-                    enabled: currentWallet && currentWallet.authentication === Wallet.Authenticated
-                    Repeater {
-                        model: currentWallet ? currentWallet.accounts : null
-                        MenuItem {
-                            text: accountName(modelData)
-                            onTriggered: {
-                                const popup = export_transactions_popup.createObject(window, { account: modelData })
-                                popup.open()
+                    title: qsTrId('File')
+                    width: fitMenuWidth(this)
+                    Action {
+                        text: qsTrId('id_create_new_wallet')
+                        onTriggered: create_wallet_action.trigger()
+                    }
+                    Action {
+                        text: qsTrId('id_restore_green_wallet')
+                        onTriggered: restore_wallet_action.trigger()
+                    }
+                    Menu {
+                        title: qsTrId('id_export_transactions_to_csv_file')
+                        enabled: currentWallet && currentWallet.authentication === Wallet.Authenticated
+                        Repeater {
+                            model: currentWallet ? currentWallet.accounts : null
+                            MenuItem {
+                                text: accountName(modelData)
+                                onTriggered: {
+                                    const popup = export_transactions_popup.createObject(window, { account: modelData })
+                                    popup.open()
+                                }
                             }
                         }
                     }
+                    Action {
+                        text: qsTrId('&Exit')
+                        onTriggered: window.close()
+                    }
                 }
-                Action {
-                    text: qsTrId('&Exit')
-                    onTriggered: window.close()
+                Menu {
+                    title: qsTrId('Wallet')
+                    width: fitMenuWidth(this)
+                    MenuItem {
+                        text: qsTrId('id_settings')
+                        enabled: currentWallet && currentWallet.authentication === Wallet.Authenticated
+                        onClicked: stack_view.currentItem.wallet_view.toggleSettings()
+                    }
+                    MenuItem {
+                        enabled: currentWallet && currentWallet.connection !== Wallet.Disconnected && !currentWallet.device
+                        text: qsTrId('id_log_out')
+                        onClicked: currentWallet.disconnect()
+                    }
+                    MenuSeparator { }
+                    MenuItem {
+                        text: qsTrId('id_add_new_account')
+                        onClicked: create_account_dialog.createObject(window).open()
+                        enabled: currentWallet && currentWallet.authentication === Wallet.Authenticated
+                    }
+                    MenuItem {
+                        text: qsTrId('id_rename_account')
+                        enabled: currentWallet && currentWallet.authentication === Wallet.Authenticated && currentAccount && !currentAccount.mainAccount
+                        onClicked: rename_account_dialog.createObject(window, { account: currentAccount }).open()
+                    }
                 }
-            }
-            Menu {
-                title: qsTrId('Wallet')
-                width: fitMenuWidth(this)
-                MenuItem {
-                    text: qsTrId('id_settings')
-                    enabled: currentWallet && currentWallet.authentication === Wallet.Authenticated
-                    onClicked: stack_view.currentItem.wallet_view.toggleSettings()
-                }
-                MenuItem {
-                    enabled: currentWallet && currentWallet.connection !== Wallet.Disconnected && !currentWallet.device
-                    text: qsTrId('id_log_out')
-                    onClicked: currentWallet.disconnect()
-                }
-                MenuSeparator { }
-                MenuItem {
-                    text: qsTrId('id_add_new_account')
-                    onClicked: create_account_dialog.createObject(window).open()
-                    enabled: currentWallet && currentWallet.authentication === Wallet.Authenticated
-                }
-                MenuItem {
-                    text: qsTrId('id_rename_account')
-                    enabled: currentWallet && currentWallet.authentication === Wallet.Authenticated && currentAccount && !currentAccount.mainAccount
-                    onClicked: rename_account_dialog.createObject(window, { account: currentAccount }).open()
-                }
-            }
-            Menu {
-                title: qsTrId('id_help')
-                width: fitMenuWidth(this)
-                Action {
-                    text: qsTrId('id_about')
-                    onTriggered: about_dialog.open()
-                }
-                Action {
-                    text: qsTrId('id_support')
-                    onTriggered: {
-                        Qt.openUrlExternally("https://docs.blockstream.com/green/support.html")
+                Menu {
+                    title: qsTrId('id_help')
+                    width: fitMenuWidth(this)
+                    Action {
+                        text: qsTrId('id_about')
+                        onTriggered: about_dialog.open()
+                    }
+                    Action {
+                        text: qsTrId('id_support')
+                        onTriggered: {
+                            Qt.openUrlExternally("https://docs.blockstream.com/green/support.html")
+                        }
                     }
                 }
             }
-        }
-        Item {
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-        }
-        RowLayout {
-            children: stack_view.currentItem.toolbar || null
-            Layout.leftMargin: 16
-            Layout.rightMargin: 16
-            Layout.alignment: Qt.AlignBottom
+            Item {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+            }
+            RowLayout {
+                children: stack_view.currentItem.toolbar || null
+                Layout.leftMargin: 16
+                Layout.rightMargin: 16
+                Layout.alignment: Qt.AlignBottom
+            }
         }
     }
-
 
     SplitView {
         anchors.fill: parent
@@ -215,7 +223,7 @@ ApplicationWindow {
         Rectangle {
             id: wallets_sidebar_item
             clip: true
-            color: Qt.rgba(1, 1, 1, 0.01)
+            color: constants.c700
 
             SplitView.minimumWidth: tool_button.checked ? 300 : 64
             SplitView.maximumWidth: SplitView.minimumWidth
@@ -227,10 +235,13 @@ ApplicationWindow {
             ListView {
                 id: wallet_list_view
                 clip: true
+                x: 8
+                y: 8
                 height: wallets_sidebar_item.height
-                width: Math.max(300, parent.width)
+                width: Math.max(300, parent.width)-16
                 currentIndex: -1
                 model: WalletListModel {}
+                spacing: 8
                 delegate: ItemDelegate {
                     id: delegate
                     text: wallet.device ? wallet.device.name : wallet.name
@@ -245,6 +256,11 @@ ApplicationWindow {
                     Behavior on opacity { OpacityAnimator {} }
                     property bool valid: wallet.loginAttemptsRemaining > 0
                     onPressed: if (valid) switchToWallet(wallet)
+                    background: Rectangle {
+                        color: delegate.highlighted ? (delegate.hovered ? constants.c500 : constants.c600) : "transparent"
+                        radius: 4
+                    }
+
                     Row {
                         visible: !valid || parent.hovered
                         anchors.right: parent.right
@@ -278,7 +294,6 @@ ApplicationWindow {
                 }
                 ScrollIndicator.vertical: ScrollIndicator {}
             }
-
         }
 
         StackView {

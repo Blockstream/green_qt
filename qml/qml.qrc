@@ -76,5 +76,6 @@
         <file>SignLiquidTransactionResolverView.qml</file>
         <file>AccountView.qml</file>
         <file>SystemMessageDialog.qml</file>
+        <file>Constants.qml</file>
     </qresource>
 </RCC>
