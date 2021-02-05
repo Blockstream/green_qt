@@ -61,7 +61,7 @@ ColumnLayout {
     }
 
     SettingsBox {
-        title: qsTrId('id_set_locktime')
+        title: qsTrId('id_set_timelock')
         visible: !wallet.network.liquid
         enabled: wallet.settings.notifications &&
                  wallet.settings.notifications.email_incoming &&
@@ -76,7 +76,7 @@ ColumnLayout {
             Button {
                 Layout.alignment: Qt.AlignRight
                 flat: true
-                text: qsTrId('id_set_locktime')
+                text: qsTrId('id_set_timelock')
                 onClicked: nlocktime_dialog.createObject(stack_view).open()
             }
         }
