@@ -244,6 +244,10 @@ SignLiquidTransactionResolver::SignLiquidTransactionResolver(Handler* handler, c
     Q_ASSERT(network()->isLiquid());
     Q_ASSERT(m_required_data.value("action").toString() == "sign_tx");
 
+    const auto signing_address_type = m_required_data.value("signing_address_type").toArray();
+    for (const auto type : signing_address_type) {
+        Q_ASSERT(type.toString() != "p2pkh");
+    }
 }
 
 void SignLiquidTransactionResolver::resolve()
