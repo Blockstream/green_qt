@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Switch to C++17.
 
 ### Fixed
+- Update unconfirmed transactions when a block arrives.
 - Improve ledger signing to suppress unverified inputs warning.
 - Use latest Google Auth token when enabling Google Auth two factor.
 - Fix mnemonic editor layout.

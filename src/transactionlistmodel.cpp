@@ -12,7 +12,8 @@ TransactionListModel::TransactionListModel(QObject* parent)
     m_reload_timer->setSingleShot(true);
     m_reload_timer->setInterval(200);
     connect(m_reload_timer, &QTimer::timeout, [this] {
-       fetch(true, 0, 30);
+        m_has_unconfirmed = false;
+        fetch(true, 0, 30);
     });
 }
 
@@ -48,6 +49,11 @@ void TransactionListModel::handleNotification(const QJsonObject& notification)
         reload();
         return;
     }
+
+    if (event == "block" && m_has_unconfirmed) {
+        reload();
+        return;
+    }
 }
 
 void TransactionListModel::fetch(bool reset, int offset, int count)
@@ -61,7 +67,9 @@ void TransactionListModel::fetch(bool reset, int offset, int count)
         // instantiate missing transactions
         QVector<Transaction*> transactions;
         for (QJsonValue data : handler->transactions()) {
-            transactions.append(m_account->getOrCreateTransaction(data.toObject()));
+            auto transaction = m_account->getOrCreateTransaction(data.toObject());
+            transactions.append(transaction);
+            if (transaction->isUnconfirmed()) m_has_unconfirmed = true;
         }
         if (reset) {
             // just swap rows instead of incremental update

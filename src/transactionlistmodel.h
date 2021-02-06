@@ -42,6 +42,7 @@ private:
 private:
     Account* m_account{nullptr};
     QVector<Transaction*> m_transactions;
+    bool m_has_unconfirmed{false};
     Handler* m_handler{nullptr};
     QTimer* const m_reload_timer;
 };

@@ -43,7 +43,7 @@ signals:
     void jsonChanged();
     void balanceChanged();
     void balancesChanged();
-    void notificationHandled(const QJsonObject &notification);
+    void notificationHandled(const QJsonObject& notification);
 public slots:
     void reload();
 private:
@@ -53,7 +53,6 @@ private:
     QMap<QString, Transaction*> m_transactions_by_hash;
     QList<Balance*> m_balances;
     QMap<QString, Balance*> m_balance_by_id;
-    bool m_have_unconfirmed{false};
     friend class Wallet;
 };
 

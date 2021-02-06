@@ -75,11 +75,22 @@ void Account::updateBalance()
     emit balanceChanged();
 }
 
-void Account::handleNotification(const QJsonObject &notification)
+void Account::handleNotification(const QJsonObject& notification)
 {
-    Q_UNUSED(notification);
-    reload();
-    emit notificationHandled(notification);
+    const auto event = notification.value("event").toString();
+    if (event == "transaction") {
+        reload();
+        emit notificationHandled(notification);
+    } else if (event == "block") {
+        // FIXME: Until gdk notifies of chain reorgs, resync balance every
+        // 10 blocks in case a reorged tx is somehow evicted from the mempool
+        const auto block = notification.value("block").toObject();
+        uint32_t block_height = block.value("block_height").toDouble();
+        if (!wallet()->network()->isLiquid() || (block_height % 10) == 0) {
+            reload();
+        }
+        emit notificationHandled(notification);
+    }
 }
 
 qint64 Account::balance() const

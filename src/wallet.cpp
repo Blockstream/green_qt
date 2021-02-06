@@ -284,6 +284,8 @@ void Wallet::handleNotification(const QJsonObject &notification)
     m_events.insert(event, data);
     emit eventsChanged(m_events);
 
+    // TODO: add signal to emit notification
+
     if (event == "session") {
         bool connected = data.toObject().value("connected").toBool();
         setConnection(connected ? Connected : m_connection);
@@ -331,11 +333,7 @@ void Wallet::handleNotification(const QJsonObject &notification)
 
     if (event == "block") {
         for (auto account : m_accounts) {
-            if (account->m_have_unconfirmed) {
-                // TODO: m_have_unconfirmed is not updated atm
-                // reloading all transactions if at least one transaction is unconfirmed.
-                account->reload();
-            }
+            account->handleNotification(notification);
         }
         return;
     }
