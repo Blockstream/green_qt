@@ -91,8 +91,16 @@ ApplicationWindow {
         }
     }
 
-    width: 1024
-    height: 600
+    x: Settings.windowX
+    y: Settings.windowY
+    width: Settings.windowWidth
+    height: Settings.windowHeight
+
+    onXChanged: Settings.windowX = x
+    onYChanged: Settings.windowY = y
+    onWidthChanged: Settings.windowWidth = width
+    onHeightChanged: Settings.windowHeight = height
+
     minimumWidth: 900
     minimumHeight: 540
     visible: true
