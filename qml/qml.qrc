@@ -77,5 +77,6 @@
         <file>AccountView.qml</file>
         <file>SystemMessageDialog.qml</file>
         <file>Constants.qml</file>
+        <file>TwoFactorAuthExpiryDialog.qml</file>
     </qresource>
 </RCC>

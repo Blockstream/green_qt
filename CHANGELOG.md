@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Cache ledger xpubs in memory only.
 - Add script to automate tag and version bump.
 - Add copy unblinded link to liquid transactions options
+- Add ability to change 2FA expiry time under wallet recovery settings
 - Add CHANGELOG.md.
 
 ### Changed

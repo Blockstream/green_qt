@@ -10,6 +10,7 @@ class Network : public QObject
     Q_OBJECT
     Q_PROPERTY(QString id READ id CONSTANT)
     Q_PROPERTY(QString name READ name CONSTANT)
+    Q_PROPERTY(QJsonObject data READ data CONSTANT)
     Q_PROPERTY(bool liquid READ isLiquid CONSTANT)
     QML_ELEMENT
     QML_UNCREATABLE("Network is instanced by NetworkManager.")

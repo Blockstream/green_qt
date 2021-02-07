@@ -35,6 +35,7 @@ public slots:
     void requestTwoFactorReset(const QString& email);
     void cancelTwoFactorReset();
     void setRecoveryEmail(const QString& email);
+    void setCsvTime(int value);
 
 signals:
     void walletChanged(Wallet* wallet);

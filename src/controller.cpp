@@ -103,6 +103,22 @@ public:
     }
 };
 
+class SetCsvTimeHandler : public Handler
+{
+    const int m_value;
+    void call(GA_session* session, GA_auth_handler** auth_handler) override {
+        auto details = Json::fromObject({{ "value", m_value }});
+        int res = GA_set_csvtime(session, details.get(), auth_handler);
+        Q_ASSERT(res == GA_OK);
+    }
+public:
+    SetCsvTimeHandler(const int value, Wallet* wallet)
+        : Handler(wallet)
+        , m_value(value)
+    {
+    }
+};
+
 Controller::Controller(QObject* parent)
     : QObject(parent)
 {
@@ -294,6 +310,17 @@ void Controller::setRecoveryEmail(const QString& email)
             emit finished();
         });
         exec(handler);
+    });
+    exec(handler);
+}
+
+void Controller::setCsvTime(int value)
+{
+    const auto handler = new SetCsvTimeHandler(value, m_wallet);
+    connect(handler, &Handler::done, this, [this, handler] {
+        handler->deleteLater();
+        m_wallet->updateSettings();
+        emit finished();
     });
     exec(handler);
 }

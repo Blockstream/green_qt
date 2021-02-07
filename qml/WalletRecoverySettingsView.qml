@@ -61,6 +61,25 @@ ColumnLayout {
     }
 
     SettingsBox {
+        title: qsTrId('id_twofactor_authentication_expiry')
+        visible: !wallet.network.liquid
+        ColumnLayout {
+            anchors.fill: parent
+            Label {
+                Layout.fillWidth: true
+                text: qsTrId('id_customize_2fa_expiration_of')
+                wrapMode: Label.WordWrap
+            }
+            Button {
+                Layout.alignment: Qt.AlignRight
+                flat: true
+                text: qsTrId('id_set_2fa_expiry')
+                onClicked: two_factor_auth_expiry_dialog.createObject(stack_view).open()
+            }
+        }
+    }
+
+    SettingsBox {
         title: qsTrId('id_set_timelock')
         visible: !wallet.network.liquid
         enabled: wallet.settings.notifications &&
@@ -147,6 +166,12 @@ ColumnLayout {
         id: mnemonic_dialog
         MnemonicDialog {
             anchors.centerIn: parent
+            wallet: recovery_settings_view.wallet
+        }
+    }
+    Component {
+        id: two_factor_auth_expiry_dialog
+        TwoFactorAuthExpiryDialog {
             wallet: recovery_settings_view.wallet
         }
     }
