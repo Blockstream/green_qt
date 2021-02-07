@@ -9,5 +9,8 @@
         <file>svg/recovery.svg</file>
         <file>svg/leftbar.svg</file>
         <file>svg/ledger_nano_x.svg</file>
+        <file>svg/blockstream_jade.svg</file>
+        <file>svg/jade_emblem_on_transparent_rgb.svg</file>
+        <file>svg/jade_logo_white_on_transparent_rgb.svg</file>
     </qresource>
 </RCC>
