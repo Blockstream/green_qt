@@ -9,6 +9,7 @@ Image {
     horizontalAlignment: Image.AlignHCenter
     source: {
         switch (device.type) {
+        case Device.BlockstreamJade: return 'qrc:/svg/blockstream_jade.svg'
         case Device.LedgerNanoS: return 'qrc:/svg/ledger_nano_s.svg'
         case Device.LedgerNanoX: return 'qrc:/svg/ledger_nano_x.svg'
         }

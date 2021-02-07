@@ -75,10 +75,12 @@ public:
     };
     enum Vendor {
         NoVendor,
+        Blockstream,
         Ledger
     };
     enum Type {
         NoType,
+        BlockstreamJade,
         LedgerNanoS,
         LedgerNanoX,
     };
