@@ -1,28 +1,123 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60">
-    <defs>
-        <filter id="a201v9aa2a" width="161.9%" height="152%" x="-31%" y="-26%" filterUnits="objectBoundingBox">
-            <feOffset dy="1" in="SourceAlpha" result="shadowOffsetOuter1"/>
-            <feGaussianBlur in="shadowOffsetOuter1" result="shadowBlurOuter1" stdDeviation="1"/>
-            <feColorMatrix in="shadowBlurOuter1" result="shadowMatrixOuter1" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.243252841 0"/>
-            <feMerge>
-                <feMergeNode in="shadowMatrixOuter1"/>
-                <feMergeNode in="SourceGraphic"/>
-            </feMerge>
-        </filter>
-    </defs>
-    <g fill="none" fill-rule="evenodd">
-        <g>
-            <g>
-                <path fill="#D8D8D8" fill-opacity="0" d="M0 0H60V60H0z" transform="translate(-879 -213) translate(879 213)"/>
-                <g transform="translate(-879 -213) translate(879 213) translate(10 10)">
-                    <circle cx="19.886" cy="19.886" r="19.886" fill="#46BEAE"/>
-                    <g fill="#FFF" filter="url(#a201v9aa2a)" transform="translate(8 8)">
-                        <path d="M4.623 16.894c-.439 0-.856-.256-1.038-.683-.62-1.45-.935-2.99-.935-4.579C2.65 5.725 7.09.728 12.978.008c.62-.074 1.182.362 1.258.977.076.614-.364 1.174-.982 1.25-4.76.582-8.348 4.621-8.348 9.397 0 1.285.254 2.53.755 3.701.244.57-.024 1.23-.597 1.472-.144.06-.294.09-.44.09"/>
-                        <path d="M7.06 10.766c-.062 0-.127-.008-.19-.024-.41-.107-.657-.528-.552-.941.975-3.82 4.389-6.488 8.303-6.488 1.997 0 3.942.707 5.475 1.993.326.272.37.76.1 1.088-.27.328-.753.373-1.078.1-1.26-1.055-2.856-1.637-4.497-1.637-3.215 0-6.02 2.191-6.82 5.329-.088.349-.4.58-.74.58M14.06 19.856c-.911-.062-1.8-.266-2.64-.608-.397-.162-.591-.622-.433-1.027.159-.406.61-.604 1.007-.442.69.28 1.42.448 2.168.499 1.034.07 2.046-.083 3.006-.457.4-.155.848.05 1 .458.153.408-.048.865-.448 1.02-1.17.455-2.402.642-3.66.557M9.796 24.845c-.074 0-.15-.011-.224-.034C3.936 23.092 0 17.578 0 11.472c0-2.614.743-5.154 2.15-7.345.228-.357.703-.46 1.06-.231.358.229.462.705.232 1.062C2.196 6.9 1.537 9.153 1.537 11.472c0 5.436 3.488 10.346 8.483 11.869.406.124.635.553.51.96-.1.33-.404.544-.734.544"/>
-                        <path d="M14.5 22.857c-3.355 0-6.418-1.26-8.473-3.503-.328-.358-.302-.912.059-1.238.36-.325.919-.3 1.247.059 1.815 1.98 4.607 3.047 7.648 2.92.49-.023.899.356.919.84.02.482-.358.89-.846.911-.185.007-.37.011-.555.011"/>
-                    </g>
-                </g>
-            </g>
-        </g>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="39.771999"
+   height="39.771999"
+   viewBox="0 0 39.771999 39.771999"
+   version="1.1"
+   id="svg113"
+   sodipodi:docname="liquid.svg"
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
+  <metadata
+     id="metadata117">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1264"
+     inkscape:window-height="851"
+     id="namedview115"
+     showgrid="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:zoom="9.2289286"
+     inkscape:cx="32.620746"
+     inkscape:cy="18.43948"
+     inkscape:window-x="0"
+     inkscape:window-y="23"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg113" />
+  <defs
+     id="defs91">
+    <filter
+       id="a201v9aa2a"
+       width="1.619"
+       height="1.52"
+       x="-0.31"
+       y="-0.25999999"
+       filterUnits="objectBoundingBox">
+      <feOffset
+         dy="1"
+         in="SourceAlpha"
+         result="shadowOffsetOuter1"
+         id="feOffset78" />
+      <feGaussianBlur
+         in="shadowOffsetOuter1"
+         result="shadowBlurOuter1"
+         stdDeviation="1"
+         id="feGaussianBlur80" />
+      <feColorMatrix
+         in="shadowBlurOuter1"
+         result="shadowMatrixOuter1"
+         values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.243252841 0"
+         id="feColorMatrix82" />
+      <feMerge
+         id="feMerge88">
+        <feMergeNode
+           in="shadowMatrixOuter1"
+           id="feMergeNode84" />
+        <feMergeNode
+           in="SourceGraphic"
+           id="feMergeNode86" />
+      </feMerge>
+    </filter>
+  </defs>
+  <g
+     id="g107"
+     style="fill:none;fill-rule:evenodd"
+     transform="translate(-10,-10)">
+    <path
+       fill="#d8d8d8"
+       fill-opacity="0"
+       d="M 0,0 H 60 V 60 H 0 Z"
+       id="path93" />
+    <g
+       transform="translate(10,10)"
+       id="g105">
+      <circle
+         cx="19.886"
+         cy="19.886"
+         r="19.886"
+         fill="#46beae"
+         id="circle95" />
+      <g
+         fill="#ffffff"
+         filter="url(#a201v9aa2a)"
+         transform="translate(8,8)"
+         id="g103">
+        <path
+           d="m 4.623,16.894 c -0.439,0 -0.856,-0.256 -1.038,-0.683 -0.62,-1.45 -0.935,-2.99 -0.935,-4.579 0,-5.907 4.44,-10.904 10.328,-11.624 0.62,-0.074 1.182,0.362 1.258,0.977 0.076,0.614 -0.364,1.174 -0.982,1.25 -4.76,0.582 -8.348,4.621 -8.348,9.397 0,1.285 0.254,2.53 0.755,3.701 0.244,0.57 -0.024,1.23 -0.597,1.472 -0.144,0.06 -0.294,0.09 -0.44,0.09"
+           id="path97" />
+        <path
+           d="m 7.06,10.766 c -0.062,0 -0.127,-0.008 -0.19,-0.024 -0.41,-0.107 -0.657,-0.528 -0.552,-0.941 0.975,-3.82 4.389,-6.488 8.303,-6.488 1.997,0 3.942,0.707 5.475,1.993 0.326,0.272 0.37,0.76 0.1,1.088 -0.27,0.328 -0.753,0.373 -1.078,0.1 -1.26,-1.055 -2.856,-1.637 -4.497,-1.637 -3.215,0 -6.02,2.191 -6.82,5.329 -0.088,0.349 -0.4,0.58 -0.74,0.58 m 6.999,9.09 c -0.911,-0.062 -1.8,-0.266 -2.64,-0.608 -0.397,-0.162 -0.591,-0.622 -0.433,-1.027 0.159,-0.406 0.61,-0.604 1.007,-0.442 0.69,0.28 1.42,0.448 2.168,0.499 1.034,0.07 2.046,-0.083 3.006,-0.457 0.4,-0.155 0.848,0.05 1,0.458 0.153,0.408 -0.048,0.865 -0.448,1.02 -1.17,0.455 -2.402,0.642 -3.66,0.557 m -4.264,4.989 c -0.074,0 -0.15,-0.011 -0.224,-0.034 C 3.936,23.092 0,17.578 0,11.472 0,8.858 0.743,6.318 2.15,4.127 2.378,3.77 2.853,3.667 3.21,3.896 3.568,4.125 3.672,4.601 3.442,4.958 2.196,6.9 1.537,9.153 1.537,11.472 c 0,5.436 3.488,10.346 8.483,11.869 0.406,0.124 0.635,0.553 0.51,0.96 -0.1,0.33 -0.404,0.544 -0.734,0.544"
+           id="path99" />
+        <path
+           d="m 14.5,22.857 c -3.355,0 -6.418,-1.26 -8.473,-3.503 -0.328,-0.358 -0.302,-0.912 0.059,-1.238 0.36,-0.325 0.919,-0.3 1.247,0.059 1.815,1.98 4.607,3.047 7.648,2.92 0.49,-0.023 0.899,0.356 0.919,0.84 0.02,0.482 -0.358,0.89 -0.846,0.911 -0.185,0.007 -0.37,0.011 -0.555,0.011"
+           id="path101" />
+      </g>
     </g>
+  </g>
 </svg>
