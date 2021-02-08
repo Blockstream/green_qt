@@ -9,6 +9,14 @@
         <translation>1/2 potvrzení</translation>
     </message>
     <message>
+        <source>id_12_months_51840_blocks</source>
+        <translation>12 měsíců (51840 bloků)</translation>
+    </message>
+    <message>
+        <source>id_15_months_65535_blocks</source>
+        <translation>15 měsíců (65535 bloků)</translation>
+    </message>
+    <message>
         <source>id_1d_2s_ago</source>
         <translation>před %1 %2</translation>
     </message>
@@ -39,6 +47,10 @@
     <message>
         <source>id_5_seconds_minimum</source>
         <translation>5 sekund minimum</translation>
+    </message>
+    <message>
+        <source>id_6_months_25920_blocks</source>
+        <translation>6 měsíců (25920 bloků)</translation>
     </message>
     <message>
         <source>id_a_2of3_account_requires_two_out</source>
@@ -446,7 +458,7 @@
     </message>
     <message>
         <source>id_copy_unblinding_data</source>
-        <translation>Copy unblinding data</translation>
+        <translation>Kopírovat nezaslepená data</translation>
     </message>
     <message>
         <source>id_copy_uri</source>
@@ -495,6 +507,10 @@
     <message>
         <source>id_custom_network_with_this_name</source>
         <translation>Vlastní síť s tímto názvem již existuje</translation>
+    </message>
+    <message>
+        <source>id_customize_2fa_expiration_of</source>
+        <translation>Customize 2FA expiration of your coins</translation>
     </message>
     <message>
         <source>id_d6_confirmations</source>
@@ -1365,6 +1381,14 @@
         <translation>Operace selhala</translation>
     </message>
     <message>
+        <source>id_optimal_if_you_rarely_spend</source>
+        <translation>Optimal if you rarely spend coins. Wallet coins will require two-factor reactivation every 455 days to remain protected by two-factor authentication</translation>
+    </message>
+    <message>
+        <source>id_optimal_if_you_spend_coins</source>
+        <translation>Optimal if you spend coins every 6 months. Wallet coins will require two-factor reactivation every 6 months to remain protected by two-factor authentication.</translation>
+    </message>
+    <message>
         <source>id_optional</source>
         <translation>Volitelný</translation>
     </message>
@@ -1829,6 +1853,10 @@
         <translation>Odesláno na</translation>
     </message>
     <message>
+        <source>id_set_2fa_expiry</source>
+        <translation>Set 2FA expiry</translation>
+    </message>
+    <message>
         <source>id_set_a_limit_to_spend_without</source>
         <translation>Nastavte limit pro utrácení bez 2-Faktorové autentizace</translation>
     </message>
@@ -1858,7 +1886,7 @@
     </message>
     <message>
         <source>id_set_timelock</source>
-        <translation>Set timelock</translation>
+        <translation>Nastavit časový zámek</translation>
     </message>
     <message>
         <source>id_set_twofactor_threshold</source>
@@ -1925,8 +1953,12 @@
         <translation>Sdílet adresu</translation>
     </message>
     <message>
+        <source>id_share_nonconfidential</source>
+        <translation>Share non-confidential transaction</translation>
+    </message>
+    <message>
         <source>id_share_unblinding_data</source>
-        <translation>Share unblinding data</translation>
+        <translation>Sdílet nezaslepená data</translation>
     </message>
     <message>
         <source>id_show_bitcoin_amounts_in</source>
@@ -2278,6 +2310,10 @@ Obnovte toto nastavení a znovu jej aktivujte.</translation>
         <translation>Platnost 2-Faktorového potvrzení</translation>
     </message>
     <message>
+        <source>id_twofactor_expiration_period</source>
+        <translation>Two-Factor expiration period</translation>
+    </message>
+    <message>
         <source>id_twofactor_protection_does_not</source>
         <translation>2-Faktorová ochrana na tomto účtu nevyprší, v případě ztráty přístupu k jednomu z nich povolte 2 oddělené 2-Faktorové metody jako zálohu.</translation>
     </message>
@@ -2372,6 +2408,10 @@ Obnovte toto nastavení a znovu jej aktivujte.</translation>
     <message>
         <source>id_wallet_backup</source>
         <translation>Záloha peněženky</translation>
+    </message>
+    <message>
+        <source>id_wallet_coins_will_require</source>
+        <translation>Wallet coins will require two-factor reactivation once a year to remain protected by two-factor authentication.</translation>
     </message>
     <message>
         <source>id_wallet_creation_failed</source>

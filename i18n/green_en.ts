@@ -9,6 +9,14 @@
         <translation>1/2 confirmations</translation>
     </message>
     <message>
+        <source>id_12_months_51840_blocks</source>
+        <translation>12 months (51840 blocks)</translation>
+    </message>
+    <message>
+        <source>id_15_months_65535_blocks</source>
+        <translation>15 months (65535 blocks)</translation>
+    </message>
+    <message>
         <source>id_1d_2s_ago</source>
         <translation>%1 %2 ago</translation>
     </message>
@@ -39,6 +47,10 @@
     <message>
         <source>id_5_seconds_minimum</source>
         <translation>5 seconds minimum</translation>
+    </message>
+    <message>
+        <source>id_6_months_25920_blocks</source>
+        <translation>6 months (25920 blocks)</translation>
     </message>
     <message>
         <source>id_a_2of3_account_requires_two_out</source>
@@ -191,6 +203,18 @@
     <message>
         <source>id_attempts_remaining_d</source>
         <translation>Attempts remaining: %1</translation>
+    </message>
+    <message>
+        <source>id_authenticator_app</source>
+        <translation>Authenticator app</translation>
+    </message>
+    <message>
+        <source>id_authenticator_qr_code</source>
+        <translation>Authenticator QR Code</translation>
+    </message>
+    <message>
+        <source>id_authenticator_secret_key</source>
+        <translation>Authenticator secret key</translation>
     </message>
     <message>
         <source>id_auto_logout_timeout</source>
@@ -495,6 +519,10 @@
     <message>
         <source>id_custom_network_with_this_name</source>
         <translation>Custom network with this name already present</translation>
+    </message>
+    <message>
+        <source>id_customize_2fa_expiration_of</source>
+        <translation>Customize 2FA expiration of your coins</translation>
     </message>
     <message>
         <source>id_d6_confirmations</source>
@@ -853,22 +881,6 @@
         <translation>Go to Wallet</translation>
     </message>
     <message>
-        <source>id_google_auth</source>
-        <translation>Google Auth</translation>
-    </message>
-    <message>
-        <source>id_google_authenticator</source>
-        <translation>Google Authenticator</translation>
-    </message>
-    <message>
-        <source>id_google_authenticator_qr_code</source>
-        <translation>Google Authenticator QR Code:</translation>
-    </message>
-    <message>
-        <source>id_google_authenticator_secret_key</source>
-        <translation>Google Authenticator secret key</translation>
-    </message>
-    <message>
         <source>id_green_is_a_noncustodial_wallet</source>
         <translation>Green is a non-custodial wallet</translation>
     </message>
@@ -962,7 +974,7 @@
     </message>
     <message>
         <source>id_inconsistent_data_provided_for</source>
-        <translation>Inconsistent data provided for enabling gauth</translation>
+        <translation>Inconsistent data provided for enabling Authenticator 2FA</translation>
     </message>
     <message>
         <source>id_increase_fee</source>
@@ -971,6 +983,10 @@
     <message>
         <source>id_information_not_available</source>
         <translation>Information not available.</translation>
+    </message>
+    <message>
+        <source>id_install_version_s</source>
+        <translation>Install version: %1?</translation>
     </message>
     <message>
         <source>id_insufficient_funds</source>
@@ -1245,6 +1261,14 @@
         <translation>New incoming transaction in account %1 (%2).</translation>
     </message>
     <message>
+        <source>id_new_jade_firmware_available</source>
+        <translation>New Jade Firmware Available</translation>
+    </message>
+    <message>
+        <source>id_new_jade_firmware_required</source>
+        <translation>New Jade Firmware Required</translation>
+    </message>
+    <message>
         <source>id_new_outgoing_transaction_from</source>
         <translation>New outgoing transaction from account %1 (%2).</translation>
     </message>
@@ -1363,6 +1387,14 @@
     <message>
         <source>id_operation_failure</source>
         <translation>Operation failure</translation>
+    </message>
+    <message>
+        <source>id_optimal_if_you_rarely_spend</source>
+        <translation>Optimal if you rarely spend coins. Wallet coins will require two-factor reactivation every 455 days to remain protected by two-factor authentication</translation>
+    </message>
+    <message>
+        <source>id_optimal_if_you_spend_coins</source>
+        <translation>Optimal if you spend coins every 6 months. Wallet coins will require two-factor reactivation every 6 months to remain protected by two-factor authentication.</translation>
     </message>
     <message>
         <source>id_optional</source>
@@ -1729,8 +1761,8 @@
         <translation>Scan QR code</translation>
     </message>
     <message>
-        <source>id_scan_the_qr_code_in_google</source>
-        <translation>Scan the QR Code in Google Authenticator:</translation>
+        <source>id_scan_the_qr_code_with_an</source>
+        <translation>Scan the QR Code with an Authenticator app</translation>
     </message>
     <message>
         <source>id_scan_to_send_here</source>
@@ -1829,6 +1861,10 @@
         <translation>Sent to</translation>
     </message>
     <message>
+        <source>id_set_2fa_expiry</source>
+        <translation>Set 2FA expiry</translation>
+    </message>
+    <message>
         <source>id_set_a_limit_to_spend_without</source>
         <translation>Set a limit to spend without two-factor authentication</translation>
     </message>
@@ -1923,6 +1959,10 @@
     <message>
         <source>id_share_address</source>
         <translation>Share Address</translation>
+    </message>
+    <message>
+        <source>id_share_nonconfidential</source>
+        <translation>Share non-confidential transaction</translation>
     </message>
     <message>
         <source>id_share_unblinding_data</source>
@@ -2278,6 +2318,10 @@ Reset this setting and then re-activate it.</translation>
         <translation>Two-Factor authentication expiry</translation>
     </message>
     <message>
+        <source>id_twofactor_expiration_period</source>
+        <translation>Two-Factor expiration period</translation>
+    </message>
+    <message>
         <source>id_twofactor_protection_does_not</source>
         <translation>Two-Factor protection does not expire on this account, enable 2 separate Two-Factor methods as backup in case you lose access to one.</translation>
     </message>
@@ -2372,6 +2416,10 @@ Reset this setting and then re-activate it.</translation>
     <message>
         <source>id_wallet_backup</source>
         <translation>Wallet Backup</translation>
+    </message>
+    <message>
+        <source>id_wallet_coins_will_require</source>
+        <translation>Wallet coins will require two-factor reactivation once a year to remain protected by two-factor authentication.</translation>
     </message>
     <message>
         <source>id_wallet_creation_failed</source>

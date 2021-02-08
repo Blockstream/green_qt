@@ -9,6 +9,14 @@
         <translation>1/2 xác nhận</translation>
     </message>
     <message>
+        <source>id_12_months_51840_blocks</source>
+        <translation>12 months (51840 blocks)</translation>
+    </message>
+    <message>
+        <source>id_15_months_65535_blocks</source>
+        <translation>15 months (65535 blocks)</translation>
+    </message>
+    <message>
         <source>id_1d_2s_ago</source>
         <translation>%1%2 trước đây</translation>
     </message>
@@ -39,6 +47,10 @@
     <message>
         <source>id_5_seconds_minimum</source>
         <translation>ít nhất 5 giây</translation>
+    </message>
+    <message>
+        <source>id_6_months_25920_blocks</source>
+        <translation>6 months (25920 blocks)</translation>
     </message>
     <message>
         <source>id_a_2of3_account_requires_two_out</source>
@@ -495,6 +507,10 @@
     <message>
         <source>id_custom_network_with_this_name</source>
         <translation>Mạng tùy biến với tên này đã có</translation>
+    </message>
+    <message>
+        <source>id_customize_2fa_expiration_of</source>
+        <translation>Customize 2FA expiration of your coins</translation>
     </message>
     <message>
         <source>id_d6_confirmations</source>
@@ -1365,6 +1381,14 @@
         <translation>Lỗi hoạt động</translation>
     </message>
     <message>
+        <source>id_optimal_if_you_rarely_spend</source>
+        <translation>Optimal if you rarely spend coins. Wallet coins will require two-factor reactivation every 455 days to remain protected by two-factor authentication</translation>
+    </message>
+    <message>
+        <source>id_optimal_if_you_spend_coins</source>
+        <translation>Optimal if you spend coins every 6 months. Wallet coins will require two-factor reactivation every 6 months to remain protected by two-factor authentication.</translation>
+    </message>
+    <message>
         <source>id_optional</source>
         <translation>Tùy chọn không bắt buộc</translation>
     </message>
@@ -1829,6 +1853,10 @@
         <translation>Gửi đến</translation>
     </message>
     <message>
+        <source>id_set_2fa_expiry</source>
+        <translation>Set 2FA expiry</translation>
+    </message>
+    <message>
         <source>id_set_a_limit_to_spend_without</source>
         <translation>Set a limit to spend without two-factor authentication</translation>
     </message>
@@ -1923,6 +1951,10 @@
     <message>
         <source>id_share_address</source>
         <translation>Địa chỉ chia sẻ</translation>
+    </message>
+    <message>
+        <source>id_share_nonconfidential</source>
+        <translation>Share non-confidential transaction</translation>
     </message>
     <message>
         <source>id_share_unblinding_data</source>
@@ -2278,6 +2310,10 @@ Reset this setting and then re-activate it.</translation>
         <translation>Two-Factor authentication expiry</translation>
     </message>
     <message>
+        <source>id_twofactor_expiration_period</source>
+        <translation>Two-Factor expiration period</translation>
+    </message>
+    <message>
         <source>id_twofactor_protection_does_not</source>
         <translation>Two-Factor protection does not expire on this account, enable 2 separate Two-Factor methods as backup in case you lose access to one.</translation>
     </message>
@@ -2372,6 +2408,10 @@ Reset this setting and then re-activate it.</translation>
     <message>
         <source>id_wallet_backup</source>
         <translation>Wallet Backup</translation>
+    </message>
+    <message>
+        <source>id_wallet_coins_will_require</source>
+        <translation>Wallet coins will require two-factor reactivation once a year to remain protected by two-factor authentication.</translation>
     </message>
     <message>
         <source>id_wallet_creation_failed</source>
