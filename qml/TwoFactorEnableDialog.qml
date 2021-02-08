@@ -63,7 +63,7 @@ ControllerDialog {
                 }
             ]
             SectionLabel {
-                text: qsTrId('id_google_authenticator_secret_key')
+                text: qsTrId('id_authenticator_secret_key')
             }
             RowLayout {
                 Label {
@@ -87,7 +87,7 @@ ControllerDialog {
                 }
                 Label {
                     Layout.fillWidth: true
-                    text: qsTrId('id_scan_the_qr_code_in_google')
+                    text: qsTrId('id_scan_the_qr_code_with_an')
                     wrapMode: Text.WordWrap
                 }
             }

@@ -61,7 +61,7 @@ WalletDialog {
 
     property var method_label: ({
         email: 'id_email',
-        gauth: 'id_google_auth',
+        gauth: 'id_authenticator_app',
         phone: 'id_phone_call',
         sms: 'id_sms'
     })
