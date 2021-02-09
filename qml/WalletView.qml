@@ -6,7 +6,7 @@ import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.12
 import QtQml 2.15
 
-Item {
+MainPage {
     id: wallet_view
 
     required property Wallet wallet
@@ -46,40 +46,147 @@ Item {
 
     readonly property bool fiatRateAvailable: formatFiat(0, false) !== 'n/a'
 
-    property Item toolbar: RowLayout {
-        ProgressBar {
-            Layout.maximumWidth: 64
-            indeterminate: true
-            opacity: wallet.busy ? 0.5 : 0
-            visible: opacity > 0
-            Behavior on opacity {
-                SmoothedAnimation {
-                    duration: 500
-                    velocity: -1
+    component SettingsDrawer: AbstractDialog {
+        property Component sourceComponent
+        id: settings_drawer
+//        height: parent.height
+//        width: contentItem.implicitWidth
+//        leftPadding: 16
+//        topPadding: 16
+//        bottomPadding: 16
+//        rightPadding: 16
+//        background: Rectangle {
+//            color: constants.c700
+//        }
+        //parent: wallet_view
+        contentItem: Loader {
+            active: settings_drawer.visible
+            sourceComponent: settings_drawer.sourceComponent
+        }
+    }
+
+    SettingsDrawer {
+        id: general_settings_drawer
+        sourceComponent: WalletGeneralSettingsView {
+            wallet: wallet_view.wallet
+            Item {
+                width: 1
+                Layout.fillHeight: true
+            }
+        }
+    }
+    SettingsDrawer {
+        id: security_settings_drawer
+        sourceComponent: WalletSecuritySettingsView {
+            wallet: wallet_view.wallet
+            Item {
+                width: 1
+                Layout.fillHeight: true
+            }
+        }
+    }
+    SettingsDrawer {
+        id: recovery_settings_drawer
+        sourceComponent: WalletRecoverySettingsView {
+            wallet: wallet_view.wallet
+            Item {
+                width: 1
+                Layout.fillHeight: true
+            }
+        }
+    }
+    header: MainPage.Header {
+        contentItem: RowLayout {
+            spacing: 8
+
+            ColumnLayout {
+                RowLayout {
+                    Image {
+                        sourceSize.height: 16
+                        sourceSize.width: 16
+                        source: icons[wallet.network.id]
+                    }
+                    Label {
+                        text: wallet.network.name
+                        font.pixelSize: 12
+                        font.styleName: 'Regular'
+                    }
+                }
+                Label {
+                    text: wallet.device ? wallet.device.name : wallet.name
+                    font.pixelSize: 32
+                    font.styleName: 'Thin'
                 }
             }
-        }
-        Loader {
-            active: currentAccount && currentAccount.json.type === '2of2_no_recovery'
-            sourceComponent: AccountIdBadge {
-                account: currentAccount
+
+            DeviceImage {
+                visible: wallet.device
+                device: wallet.device
+                Layout.maximumWidth: 128
             }
-        }
-        ToolButton {
-            visible: (wallet.events && !!wallet.events.twofactor_reset && wallet.events.twofactor_reset.is_active) || !fiatRateAvailable
-            icon.source: 'qrc:/svg/notifications_2.svg'
-            icon.color: 'transparent'
-            icon.width: 24
-            icon.height: 24
-            onClicked: notifications_drawer.open()
-        }
-        ToolButton {
-            id: settings_tool_button
-            highlighted: stack_view.currentItem instanceof WalletSettingsView
-            icon.source: 'qrc:/svg/settings.svg'
-            icon.width: 24
-            icon.height: 24
-            onClicked: toggleSettings()
+            Item {
+                Layout.fillWidth: true
+                height: 1
+            }
+            ProgressBar {
+                Layout.maximumWidth: 64
+                indeterminate: true
+                opacity: wallet.busy ? 0.5 : 0
+                visible: opacity > 0
+                Behavior on opacity {
+                    SmoothedAnimation {
+                        duration: 500
+                        velocity: -1
+                    }
+                }
+            }
+            ToolButton {
+                visible: (wallet.events && !!wallet.events.twofactor_reset && wallet.events.twofactor_reset.is_active) || !fiatRateAvailable
+                icon.source: 'qrc:/svg/notifications_2.svg'
+                icon.color: 'transparent'
+                icon.width: 16
+                icon.height: 16
+                onClicked: notifications_drawer.open()
+            }
+            ToolButton {
+                icon.source: 'qrc:/svg/preferences.svg'
+                icon.width: 16
+                icon.height: 16
+                onClicked: general_settings_drawer.open()
+                enabled: !!wallet.settings && !!wallet.config
+            }
+            ToolButton {
+                icon.source: 'qrc:/svg/security.svg'
+                icon.width: 16
+                icon.height: 16
+                onClicked: security_settings_drawer.open()
+                enabled: !!wallet.settings && !!wallet.config
+            }
+            ToolButton {
+                icon.source: 'qrc:/svg/recovery.svg'
+                icon.width: 16
+                icon.height: 16
+                onClicked: recovery_settings_drawer.open()
+                enabled: !!wallet.settings && !!wallet.config
+            }
+            Item {
+                Layout.minimumWidth: 16
+                height: 1
+            }
+            ToolButton {
+                icon.source: 'qrc:/svg/logout.svg'
+                icon.width: 16
+                icon.height: 16
+                onClicked: wallet_view.wallet.disconnect()
+            }
+//            ToolButton {
+//                id: settings_tool_button
+//                highlighted: stack_view.currentItem instanceof WalletSettingsView
+//                icon.source: 'qrc:/svg/settings.svg'
+//                icon.width: 24
+//                icon.height: 24
+//                onClicked: toggleSettings()
+//            }
         }
     }
 
@@ -89,32 +196,6 @@ Item {
         WalletSettingsView {
            wallet: wallet_view.wallet
        }
-    }
-
-    Action {
-        shortcut: 'CTRL+,'
-        onTriggered: window.location = '/settings'
-    }
-
-    Rectangle {
-        parent: stack_view
-        anchors.fill: parent
-        anchors.leftMargin: -4
-        color: 'black'
-        opacity: 0.1
-
-        Rectangle {
-            width: parent.height
-            height: 32
-            x: 32
-            opacity: 1
-            transformOrigin: Item.TopLeft
-            rotation: 90
-            gradient: Gradient {
-                GradientStop { position: 1.0; color: '#ff000000' }
-                GradientStop { position: 0.0; color: '#00000000' }
-            }
-        }
     }
 
     Drawer {
@@ -204,11 +285,10 @@ Item {
         }
     }
 
-    SplitView {
-        anchors.fill: parent
+    contentItem: SplitView {
         handle: Item {
-            implicitWidth: 4
-            implicitHeight: 4
+            implicitWidth: 16
+            implicitHeight: parent.height
         }
         AccountListView {
             id: accounts_list
@@ -243,5 +323,6 @@ Item {
 
     SystemMessageDialog {
         wallet: wallet_view.wallet
+        visible: shouldOpen && wallet_view.match
     }
 }

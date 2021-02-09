@@ -6,45 +6,66 @@ import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.12
 
 ColumnLayout {
-    id: view
+    id: self
     required property Wallet wallet
     property string title: qsTrId('id_general')
 
-    spacing: 30
+    spacing: 8
 
     Controller {
         id: controller
-        wallet: view.wallet
+        wallet: self.wallet
     }
 
-    property var per_currency: {
+    readonly property var per_currency: {
         const result = {}
-        for (const [exchange, currencies] of Object.entries(wallet.currencies.per_exchange)) {
-            for (const currency of currencies) {
-                if (currency in result) {
-                    result[currency].push(exchange)
-                } else {
-                    result[currency] = [exchange]
+        if (self.wallet.currencies) {
+            for (const [exchange, currencies] of Object.entries(self.wallet.currencies.per_exchange)) {
+                for (const currency of currencies) {
+                    if (currency in result) {
+                        result[currency].push(exchange)
+                    } else {
+                        result[currency] = [exchange]
+                    }
                 }
             }
         }
         return result
     }
 
+    RowLayout {
+        Image {
+            source: 'qrc:/svg/preferences.svg'
+            sourceSize.height: 16
+        }
+        Label {
+            Layout.fillWidth: true
+            text: 'General'
+            font.pixelSize: 20
+            font.styleName: 'Light'
+        }
+        ToolButton {
+            flat: true
+            icon.source: 'qrc:/svg/cancel.svg'
+            icon.width: 16
+            icon.height: 16
+        }
+    }
     SettingsBox {
         Layout.fillWidth: true
         title: qsTrId('id_bitcoin_denomination')
         enabled: !wallet.locked
-        RowLayout {
-            anchors.fill: parent
+        contentItem: RowLayout {
             Label {
                 Layout.fillWidth: true
                 Layout.minimumWidth: contentWidth
                 text: qsTrId('id_show_bitcoin_amounts_in')
             }
             ComboBox {
+                //Layout.fillWidth: true
+                //Layout.mini
                 flat: true
-                width: 200
+//                width: 200
                 property var units: ['BTC', 'mBTC', '\u00B5BTC', 'bits', 'sats']
                 model: units.map(unit => ({
                     text: wallet.network.liquid ? `L-${unit}` : unit,
@@ -65,30 +86,30 @@ ColumnLayout {
     SettingsBox {
         title: qsTrId('id_currency')
         enabled: !wallet.locked
-        ColumnLayout {
-            anchors.fill: parent
+        contentItem: ColumnLayout {
             Label {
                 Layout.fillWidth: true
                 text: qsTrId('id_select_a_fiat_currency_and') // TODO: update string
                 wrapMode: Label.WordWrap
             }
+            Label {
+                Layout.fillWidth: true
+                Layout.minimumWidth: contentWidth
+                text: qsTrId('id_reference_exchange_rate')
+            }
             RowLayout {
-                Label {
-                    Layout.fillWidth: true
-                    Layout.minimumWidth: contentWidth
-                    text: qsTrId('id_reference_exchange_rate')
-                }
                 ComboBox {
                     id: currency_combo
+                    Layout.fillWidth: true
                     flat: true
                     width: 200
                     model: Object.keys(per_currency).sort()
-                    currentIndex: model.indexOf(wallet.settings.pricing.currency)
+                    currentIndex: model.indexOf(self.wallet.settings.pricing ? self.wallet.settings.pricing.currency : '')
                     onCurrentTextChanged: {
                         if (!focus) return
                         const currency = currentText
                         if (currency === '') return
-                        if (currency === wallet.settings.pricing.currency) return
+                        if (currency === self.wallet.settings.pricing.currency) return
                         const pricing = { currency }
                         if (per_currency[currency].indexOf(wallet.settings.pricing.exchange) < 0) {
                             pricing.exchange = per_currency[currentText][0]
@@ -98,10 +119,11 @@ ColumnLayout {
                 }
                 ComboBox {
                     id: exchange_combo
+                    Layout.fillWidth: true
                     flat: true
                     width: 200
                     model: currency_combo.currentText ? per_currency[currency_combo.currentText].sort() : []
-                    currentIndex: Math.max(0, model.indexOf(wallet.settings.pricing.exchange))
+                    currentIndex: Math.max(0, model.indexOf(self.wallet.settings.pricing.exchange))
                     onCurrentTextChanged: {
                         if (!focus) return
                         const exchange = currentText
@@ -118,8 +140,7 @@ ColumnLayout {
     SettingsBox {
         title: qsTrId('id_notifications')
         enabled: !wallet.locked && wallet.config.email.confirmed
-        RowLayout {
-            anchors.fill: parent
+        contentItem: RowLayout {
             Label {
                 Layout.fillWidth: true
                 Layout.minimumWidth: contentWidth

@@ -8,16 +8,6 @@ StackView {
 
     required property Wallet wallet
     readonly property Account currentAccount: wallet_view.currentAccount
-
-    Connections {
-        target: wallet
-        function onLoginAttemptsRemainingChanged(loginAttemptsRemaining) {
-            if (loginAttemptsRemaining === 0) {
-                switchToWallet(null)
-            }
-        }
-    }
-
     signal canceled2()
 
     initialItem: login_view
@@ -127,14 +117,6 @@ StackView {
             collapsed: wallet.authenticated
             enabled: wallet.loginAttemptsRemaining > 0 && wallet.authentication === Wallet.Unauthenticated
 
-            LoginView {
-                onLogin: {
-                    const proxy = proxy_checkbox.checked ? proxy_field.text : '';
-                    const use_tor = tor_checkbox.checked;
-                    wallet.connect(proxy, use_tor);
-                    wallet.loginWithPin(pin);
-                }
-            }
         }
     }
 

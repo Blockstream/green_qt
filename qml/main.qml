@@ -9,8 +9,9 @@ import QtQuick.Window 2.12
 ApplicationWindow {
     id: window
 
-    readonly property Wallet currentWallet: stack_view.currentItem.wallet || null
-    readonly property Account currentAccount: stack_view.currentItem.currentAccount || null
+    readonly property WalletView currentWalletView: stack_layout.currentWalletView
+    readonly property Wallet currentWallet: currentWalletView ? currentWalletView.wallet : null
+    readonly property Account currentAccount: currentWalletView ? currentWalletView.currentAccount : null
 
     DeviceDiscoveryAgent {
     }
@@ -39,6 +40,28 @@ ApplicationWindow {
                 switchToWallet(null)
             }
         }
+    }
+
+    readonly property string location: Settings.history.length > 0 ? Settings.history[Settings.history.length - 1] : '/home'
+    function matchesLocation(l) {
+        return location.startsWith(l)
+    }
+    function pushLocation(l) {
+        const count = Settings.history.length
+        if (count > 0 && Settings.history[count - 1] === l) return;
+        Settings.history = Settings.history.slice(-4).concat(l)
+    }
+    function popLocation() {
+        Settings.history = Settings.history.slice(0, -1)
+    }
+    function childIndexForLocation(stack_layout) {
+       for (let i = 0; i < stack_layout.children.length; ++i) {
+           const child = stack_layout.children[i]
+           if (!(child instanceof Item)) continue
+           const l = child.location
+           if (l && child.enabled && location.startsWith(l)) return i
+       }
+       return 0
     }
 
     property var wallet_views: ({})
@@ -84,13 +107,6 @@ ApplicationWindow {
         return result + padding * 2;
     }
 
-    Component.onCompleted: {
-        // Auto select wallet if just one wallet
-        if (WalletManager.wallets.length === 1) {
-            switchToWallet(WalletManager.wallets[0]);
-        }
-    }
-
     x: Settings.windowX
     y: Settings.windowY
     width: Settings.windowWidth
@@ -102,7 +118,7 @@ ApplicationWindow {
     onHeightChanged: Settings.windowHeight = height
 
     minimumWidth: 900
-    minimumHeight: 540
+    minimumHeight: main_layout.implicitHeight + header.implicitHeight
     visible: true
     color: constants.c900
     title: {
@@ -119,231 +135,276 @@ ApplicationWindow {
         return parts.join(' - ');
     }
 
-    DeviceListModel {
-        id: device_list_model
-    }
+    header: MenuBar {
+        component GMenuBarItem: MenuBarItem {
+            id: self
+            leftPadding: 16
+            rightPadding: 16
+            background: Item {
+                Rectangle {
+                    anchors.fill: parent
+                    visible: self.highlighted
+                    color: constants.c400
+                    anchors.margins: 4
+                    radius: 8
+                }
+            }
+        }
+        component GMenu: Menu {
+            id: self
+            width: fitMenuWidth(this)
+        }
 
-    header: Pane {
-        padding: 0
         background: Rectangle {
             color: constants.c600
-        }
-        contentItem: RowLayout {
-            ToolButton {
-                id: tool_button
-                text: '\u2630'
-                checkable: true
-                checked: true
-                Layout.leftMargin: 8
+            Rectangle {
+                width: parent.width
+                anchors.bottom: parent.bottom
+                height: 1
+                color: 'black'
+                opacity: 0.5
             }
-            MenuBar {
-                background: Item {}
+        }
+        GMenuBarItem {
+            menu: GMenu {
+                title: qsTrId('File')
+                Action {
+                    text: qsTrId('id_create_new_wallet')
+                    onTriggered: create_wallet_action.trigger()
+                }
+                Action {
+                    text: qsTrId('id_restore_green_wallet')
+                    onTriggered: restore_wallet_action.trigger()
+                }
                 Menu {
-                    title: qsTrId('File')
-                    width: fitMenuWidth(this)
-                    Action {
-                        text: qsTrId('id_create_new_wallet')
-                        onTriggered: create_wallet_action.trigger()
-                    }
-                    Action {
-                        text: qsTrId('id_restore_green_wallet')
-                        onTriggered: restore_wallet_action.trigger()
-                    }
-                    Menu {
-                        title: qsTrId('id_export_transactions_to_csv_file')
-                        enabled: currentWallet && currentWallet.authentication === Wallet.Authenticated
-                        Repeater {
-                            model: currentWallet ? currentWallet.accounts : null
-                            MenuItem {
-                                text: accountName(modelData)
-                                onTriggered: {
-                                    const popup = export_transactions_popup.createObject(window, { account: modelData })
-                                    popup.open()
-                                }
+                    title: qsTrId('id_export_transactions_to_csv_file')
+                    enabled: currentWallet && currentWallet.authentication === Wallet.Authenticated
+                    Repeater {
+                        model: currentWallet ? currentWallet.accounts : null
+                        MenuItem {
+                            text: accountName(modelData)
+                            onTriggered: {
+                                const popup = export_transactions_popup.createObject(window, { account: modelData })
+                                popup.open()
                             }
                         }
                     }
-                    Action {
-                        text: qsTrId('&Exit')
-                        onTriggered: window.close()
-                    }
                 }
-                Menu {
-                    title: qsTrId('Wallet')
-                    width: fitMenuWidth(this)
-                    MenuItem {
-                        text: qsTrId('id_settings')
-                        enabled: currentWallet && currentWallet.authentication === Wallet.Authenticated
-                        onClicked: stack_view.currentItem.wallet_view.toggleSettings()
-                    }
-                    MenuItem {
-                        enabled: currentWallet && currentWallet.connection !== Wallet.Disconnected && !currentWallet.device
-                        text: qsTrId('id_log_out')
-                        onClicked: currentWallet.disconnect()
-                    }
-                    MenuSeparator { }
-                    MenuItem {
-                        text: qsTrId('id_add_new_account')
-                        onClicked: create_account_dialog.createObject(window).open()
-                        enabled: currentWallet && currentWallet.authentication === Wallet.Authenticated
-                    }
-                    MenuItem {
-                        text: qsTrId('id_rename_account')
-                        enabled: currentWallet && currentWallet.authentication === Wallet.Authenticated && currentAccount && !currentAccount.mainAccount
-                        onClicked: rename_account_dialog.createObject(window, { account: currentAccount }).open()
-                    }
-                }
-                Menu {
-                    title: qsTrId('id_help')
-                    width: fitMenuWidth(this)
-                    Action {
-                        text: qsTrId('id_about')
-                        onTriggered: about_dialog.open()
-                    }
-                    Action {
-                        text: qsTrId('id_support')
-                        onTriggered: {
-                            Qt.openUrlExternally("https://docs.blockstream.com/green/support.html")
-                        }
-                    }
+                Action {
+                    text: qsTrId('&Exit')
+                    onTriggered: window.close()
                 }
             }
-            Item {
-                Layout.fillWidth: true
-                Layout.fillHeight: true
+        }
+        GMenuBarItem {
+            menu: Menu {
+                title: qsTrId('Wallet')
+                width: fitMenuWidth(this)
+                MenuItem {
+                    text: qsTrId('id_settings')
+                    enabled: currentWallet && currentWallet.authentication === Wallet.Authenticated
+                    onClicked: stack_view.currentItem.wallet_view.toggleSettings()
+                }
+                MenuItem {
+                    enabled: currentWallet && currentWallet.connection !== Wallet.Disconnected && !currentWallet.device
+                    text: qsTrId('id_log_out')
+                    onClicked: currentWallet.disconnect()
+                }
+                MenuSeparator { }
+                MenuItem {
+                    text: qsTrId('id_add_new_account')
+                    onClicked: create_account_dialog.createObject(window).open()
+                    enabled: currentWallet && currentWallet.authentication === Wallet.Authenticated
+                }
+                MenuItem {
+                    text: qsTrId('id_rename_account')
+                    enabled: currentWallet && currentWallet.authentication === Wallet.Authenticated && currentAccount && !currentAccount.mainAccount
+                    onClicked: rename_account_dialog.createObject(window, { account: currentAccount }).open()
+                }
             }
-            RowLayout {
-                children: stack_view.currentItem.toolbar || null
-                Layout.leftMargin: 16
-                Layout.rightMargin: 16
-                Layout.alignment: Qt.AlignBottom
+        }
+        GMenuBarItem {
+            menu: Menu {
+                title: qsTrId('id_help')
+                width: fitMenuWidth(this)
+                Action {
+                    text: qsTrId('id_about')
+                    onTriggered: pushLocation('/home')
+                }
+                Action {
+                    text: qsTrId('id_support')
+                    onTriggered: {
+                        Qt.openUrlExternally("https://docs.blockstream.com/green/support.html")
+                    }
+                }
             }
         }
     }
 
-    SplitView {
+    component WalletButton: SideButton {
+        required property Wallet wallet
+        location: `/${wallet.network.id}/${wallet.id}`
+        text: wallet.name
+        busy: wallet.busy
+        icon.width: 16
+        icon.height: 16
+        leftPadding: 32
+        icon.source: icons[wallet.network.id]
+        visible: !Settings.collapseSideBar
+        DeviceImage {
+            visible: wallet.device
+            device: wallet.device
+            anchors.fill: parent
+            anchors.margins: 8
+        }
+    }
+    component SideSeparator: Rectangle {
+        implicitHeight: 1
+        color: 'white'
+        opacity: 0.05
+        Layout.fillWidth: true
+    }
+    component SideLabel: SectionLabel {
+        topPadding: 16
+        leftPadding: 4
+        bottomPadding: 4
+        font.pixelSize: 10
+        font.styleName: 'Medium'
+    }
+
+    RowLayout {
+        id: main_layout
         anchors.fill: parent
-        handle: Item {
-            implicitWidth: 4
-            implicitHeight: 4
-        }
-
-        Rectangle {
-            id: wallets_sidebar_item
-            clip: true
-            color: constants.c700
-
-            SplitView.minimumWidth: tool_button.checked ? 300 : 64
-            SplitView.maximumWidth: SplitView.minimumWidth
-            Behavior on SplitView.minimumWidth {
-                SmoothedAnimation {
-                    velocity: 1000
+        spacing: 0
+        Page {
+            id: side_bar
+            Layout.fillHeight: true
+            topPadding: 8
+            bottomPadding: 8
+            leftPadding: 8
+            rightPadding: 8
+            background: Rectangle {
+                color: constants.c700
+                Rectangle {
+                    height: parent.height
+                    anchors.right: parent.right
+                    width: 1
+                    color: 'black'
+                    opacity: 0.5
                 }
             }
-            ListView {
-                id: wallet_list_view
-                clip: true
-                x: 8
-                y: 8
-                height: wallets_sidebar_item.height
-                width: Math.max(300, parent.width)-16
-                currentIndex: -1
-                model: WalletListModel {}
+
+            contentItem: ColumnLayout {
                 spacing: 8
-                delegate: ItemDelegate {
-                    id: delegate
-                    text: wallet.device ? wallet.device.name : wallet.name
-                    leftPadding: 16
-                    icon.color: 'transparent'
-                    icon.source: icons[wallet.network.id]
-                    icon.width: 32
-                    icon.height: 32
-                    width: wallet_list_view.width
-                    highlighted: ListView.isCurrentItem
-                    opacity: highlighted || hovered || tool_button.checked ? 1 : 0.25
-                    Behavior on opacity { OpacityAnimator {} }
-                    property bool valid: wallet.loginAttemptsRemaining > 0
-                    onPressed: if (valid) switchToWallet(wallet)
-                    background: Rectangle {
-                        color: delegate.highlighted ? (delegate.hovered ? constants.c500 : constants.c600) : "transparent"
-                        radius: 4
-                    }
-
-                    Row {
-                        visible: !valid || parent.hovered
-                        anchors.right: parent.right
-                        Menu {
-                            id: wallet_menu
-                            MenuItem {
-                                enabled: wallet.connection !== Wallet.Disconnected && !wallet.device
-                                text: qsTrId('id_log_out')
-                                onTriggered: wallet.disconnect()
+                SideButton {
+                    id: home_button
+                    icon.source: 'qrc:/svg/grid.svg'
+                    location: '/home'
+                    text: 'Home'
+                }
+                SideLabel {
+                    text: 'Wallets'
+                }
+                Flickable {
+                    id: flickable
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    clip: true
+                    flickableDirection: Flickable.VerticalFlick
+                    contentHeight: foo.height
+                    contentWidth: foo.width
+                    implicitWidth: foo.implicitWidth
+                    ScrollIndicator.vertical: ScrollIndicator { }
+                    ColumnLayout {
+                        id: foo
+                        width: Math.max(implicitWidth, flickable.width)
+                        spacing: 8
+                        SideButton {
+                            icon.source: icons.liquid
+                            location: '/liquid'
+                            text: 'Liquid'
+                        }
+                        Repeater {
+                            id: liquid_repeater
+                            model: WalletListModel {
+                                justAuthenticated: true
+                                network: 'liquid'
                             }
-                            MenuItem {
-                                enabled: wallet.connection === Wallet.Disconnected
-                                text: qsTrId('id_remove_wallet')
-                                onClicked: remove_wallet_dialog.createObject(window, { wallet }).open()
+                            WalletButton {
                             }
                         }
-                        Label {
-                            visible: wallet.loginAttemptsRemaining === 0
-                            anchors.verticalCenter: parent.verticalCenter
-                            text: '\u26A0'
-                            font.pixelSize: 18
-                            ToolTip.text: qsTrId('id_no_attempts_remaining')
-                            ToolTip.visible: !valid && delegate.hovered
-                            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                        SideButton {
+                            icon.source: icons.mainnet
+                            location: mainnet_view.location
+                            text: 'Bitcoin'
                         }
-                        ToolButton {
-                            text: '\u22EF'
-                            onClicked: wallet_menu.open()
+                        Repeater {
+                            id: mainnet_repeater
+                            model: WalletListModel {
+                                justAuthenticated: true
+                                network: 'mainnet'
+                            }
+                            WalletButton {
+                            }
+                        }
+                        SideButton {
+                            visible: Settings.enableTestnet
+                            icon.source: icons.testnet
+                            location: '/testnet'
+                            text: 'Testnet'
+                        }
+                        Repeater {
+                            id: testnet_repeater
+                            model: WalletListModel {
+                                justAuthenticated: true
+                                network: 'testnet'
+                            }
+                            WalletButton {
+                                visible: !Settings.collapseSideBar && Settings.enableTestnet
+                            }
                         }
                     }
                 }
-                ScrollIndicator.vertical: ScrollIndicator {}
+                SideButton {
+                    icon.source: 'qrc:/svg/settings.svg'
+                    location: '/preferences'
+                    text: 'Settings'
+                    icon.width: 24
+                    icon.height: 24
+                }
             }
         }
 
-        StackView {
-            id: stack_view
-            SplitView.fillWidth: true
-            focus: true
-            clip: true
-            initialItem: Intro {}
-        }
-    }
-
-    Action {
-        id: create_wallet_action
-        text: qsTrId('id_create_new_wallet')
-        onTriggered: stack_view.push(signup_view)
-    }
-
-    Action {
-        id: restore_wallet_action
-        text: qsTrId('id_restore_green_wallet')
-        onTriggered: {
-            stack_view.push(restore_view)
-            tool_button.checked = false
-        }
-    }
-
-    AboutDialog {
-        id: about_dialog
-    }
-
-    Component {
-        id: signup_view
-        SignupView {
-            onClose: stack_view.pop()
-        }
-    }
-
-    Component {
-        id: restore_view
-        RestoreWallet {
-            onRestored: switchToWallet(wallet)
-            onCanceled: stack_view.pop()
+        StackLayout {
+            id: stack_layout
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            readonly property WalletView currentWalletView: currentIndex < 0 ? null : (stack_layout.children[currentIndex].currentWalletView || null)
+            currentIndex: childIndexForLocation(stack_layout)
+            HomeView {
+                readonly property string location: '/home'
+            }
+            PreferencesView {
+                id: settings_view
+                readonly property string location: '/preferences'
+            }
+            NetworkView {
+                id: mainnet_view
+                readonly property string location: '/mainnet'
+                network: 'mainnet'
+                title: 'Bitcoin Wallets'
+            }
+            NetworkView {
+                readonly property string location: '/liquid'
+                network: 'liquid'
+                title: 'Liquid Wallets'
+            }
+            NetworkView {
+                enabled: Settings.enableTestnet
+                readonly property string location: '/testnet'
+                network: 'testnet'
+                title: 'Testnet Wallets'
+            }
         }
     }
 
@@ -412,80 +473,6 @@ ApplicationWindow {
             }
         }
     }
-
-    Column {
-        spacing: 16
-        anchors.margins: 16
-        anchors.bottom: parent.bottom
-        anchors.right: parent.right
-        Repeater {
-            model: device_list_model
-            delegate: ledger_delegate
-        }
-    }
-
-    Component {
-        id: ledger_delegate
-        Pane {
-            id: delegate
-            required property Device device
-            anchors.right: parent.right
-            visible: controller.progress < 1
-            leftPadding: 16
-            rightPadding: 16
-            bottomPadding: 8
-            topPadding: 8
-            width: 360
-
-            LedgerDeviceController {
-                id: controller
-                device: delegate.device
-            }
-            background: Rectangle {
-                color: Qt.lighter('#141a21', delegate.hovered ? 2 : 1.5)
-                border.width: 1
-                border.color: Qt.lighter('#141a21', delegate.hovered ? 2.5 : 2)
-                radius: height / 2
-            }
-            contentItem: RowLayout {
-                DeviceImage {
-                    device: delegate.device
-                    height: 24
-                    Layout.maximumHeight: 24
-                }
-                Label {
-                    visible: !controller.network
-                    opacity: 0.5
-                    font.pixelSize: 11
-                    text: qsTrId('id_select_an_app_on_s').arg(controller.device.name)
-                    horizontalAlignment: Label.AlignHCenter
-                    Layout.fillWidth: true
-                }
-                Image {
-                    visible: controller.network && controller.status !== 'locked'
-                    sourceSize.width: 24
-                    sourceSize.height: 24
-                    source: controller.network ? icons[controller.network.id] : ''
-                }
-                ProgressBar {
-                    indeterminate: controller.indeterminate
-                    value: controller.progress
-                    visible: controller.status === 'login'
-                    Layout.fillWidth: true
-                    Behavior on value { NumberAnimation { duration: 300; easing.type: Easing.OutCubic } }
-                }
-                Label {
-                    visible: controller.status === 'locked'
-                    opacity: 0.5
-                    font.pixelSize: 11
-                    text: 'Unlock and select app'
-                    horizontalAlignment: Label.AlignHCenter
-                    Layout.fillWidth: true
-                }
-            }
-        }
-    }
-
 
     Component {
         id: export_transactions_popup

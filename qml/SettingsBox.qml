@@ -3,19 +3,21 @@ import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.13
 
 Page {
+    topPadding: 8
+    bottomPadding: 8
+    leftPadding: 16
+    rightPadding: 16
     header: SectionLabel {
         text: title
+        topPadding: 8
         bottomPadding: 8
+        leftPadding: 16
+        rightPadding: 16
     }
-    background: Item {
-        Rectangle {
-            y: parent.height
-            width: parent.width
-            color: 'gray'
-            opacity: 0.2
-            height: 1
-        }
+    background: Rectangle {
+        radius: 8
+        color: constants.c600
+        opacity: 0.5
     }
     Layout.fillWidth: true
-    Layout.topMargin: 16
 }

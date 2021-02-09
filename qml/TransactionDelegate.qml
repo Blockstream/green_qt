@@ -7,11 +7,19 @@ import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.12
 
 ItemDelegate {
+    id: self
+
     required property Transaction transaction
     property var tx: transaction.data
     property int confirmations: transactionConfirmations(transaction)
 
-    background.opacity: 0.4
+    hoverEnabled: true
+    leftPadding: 0
+    rightPadding: 0
+    topPadding: 0
+    bottomPadding: 0
+    background: Item {}
+
     spacing: 8
 
     function txType(tx) {
@@ -40,19 +48,15 @@ ItemDelegate {
     contentItem: RowLayout {
         spacing: 16
 
-        ColumnLayout {
-            Label {
-                Layout.fillWidth: true
-                text: formatDateTime(tx.created_at)
-                opacity: 0.8
-            }
-
-            Label {
-                Layout.fillWidth: true
-                font.pixelSize: 14
-                text: txType(tx)
-                elide: Label.ElideRight
-            }
+        Label {
+            text: formatDateTime(tx.created_at)
+            opacity: 0.6
+        }
+        Label {
+            Layout.fillWidth: true
+            font.pixelSize: 14
+            text: txType(tx)
+            elide: Label.ElideRight
         }
 
         ColumnLayout {

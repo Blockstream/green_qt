@@ -8,6 +8,8 @@ ListView {
     signal clicked(Transaction transaction)
     clip: true
 
+    spacing: 8
+
     model: TransactionListModel {
         account: list_view.account
     }
@@ -18,12 +20,7 @@ ListView {
         onClicked: list_view.clicked(transaction)
     }
 
-    ScrollBar.vertical: ScrollBar { }
-
-    Component {
-        id: transaction_view_component
-        TransactionView { }
-    }
+    ScrollIndicator.vertical: ScrollIndicator { }
 
     BusyIndicator {
         width: 32

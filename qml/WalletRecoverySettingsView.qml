@@ -16,8 +16,7 @@ ColumnLayout {
     SettingsBox {
         title: qsTrId('id_wallet_backup')
         visible: !wallet.device
-        ColumnLayout {
-            anchors.fill: parent
+        contentItem: ColumnLayout {
             Label {
                 Layout.fillWidth: true
                 text: qsTrId('id_your_wallet_backup_is_made_of') + "\n" + qsTrId('id_blockstream_does_not_have')
@@ -34,8 +33,7 @@ ColumnLayout {
 
     SettingsBox {
         title: qsTrId('id_accounts_summary')
-        ColumnLayout {
-            anchors.fill: parent
+        contentItem: ColumnLayout {
             Label {
                 Layout.fillWidth: true
                 text: qsTrId('id_save_a_summary_of_your_accounts')
@@ -63,8 +61,7 @@ ColumnLayout {
     SettingsBox {
         title: qsTrId('id_twofactor_authentication_expiry')
         visible: !wallet.network.liquid
-        ColumnLayout {
-            anchors.fill: parent
+        contentItem: ColumnLayout {
             Label {
                 Layout.fillWidth: true
                 text: qsTrId('id_customize_2fa_expiration_of')
@@ -85,8 +82,7 @@ ColumnLayout {
         enabled: wallet.settings.notifications &&
                  wallet.settings.notifications.email_incoming &&
                  wallet.settings.notifications.email_outgoing
-        ColumnLayout {
-            anchors.fill: parent
+        contentItem: ColumnLayout {
             Label {
                 Layout.fillWidth: true
                 text: qsTrId('id_redeem_your_deposited_funds') + '\n\n' + qsTrId('id_enable_email_notifications_to')
@@ -104,8 +100,7 @@ ColumnLayout {
     SettingsBox {
         title: qsTrId('id_set_an_email_for_recovery')
         visible: !wallet.network.liquid
-        ColumnLayout {
-            anchors.fill: parent
+        contentItem: ColumnLayout {
             Label {
                 Layout.fillWidth: true
                 text: qsTrId('id_set_up_an_email_to_get')
@@ -130,8 +125,7 @@ ColumnLayout {
     SettingsBox {
         title: qsTrId('id_request_twofactor_reset')
         visible: !wallet.network.liquid
-        ColumnLayout {
-            anchors.fill: parent
+        contentItem: ColumnLayout {
             Label {
                 Layout.fillWidth: true
                 text: wallet.locked ? qsTrId('wallet locked for %1 days').arg(wallet.config.twofactor_reset.days_remaining) : qsTrId('id_start_a_2fa_reset_process_if')

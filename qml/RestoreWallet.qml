@@ -6,7 +6,7 @@ import QtQuick.Controls 2.13
 import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.12
 
-Page {
+AbstractDialog {
     id: view
 
     signal restored(Wallet wallet)
@@ -35,14 +35,15 @@ Page {
         }
     }
 
+    //contentItem:
     StackView {
         id: stack_view
-        anchors.centerIn: parent
+        //anchors.centerIn: parent
         clip: true
         implicitWidth: currentItem.implicitWidth
         implicitHeight: currentItem.implicitHeight
 
-        initialItem: network_page
+        initialItem: mnemonic_page //network_page
     }
 
     Drawer {
@@ -111,7 +112,7 @@ Page {
         }
     }
 
-    background: Item {}
+    //background: Item {}
 
     footer: Item {
         height: 64

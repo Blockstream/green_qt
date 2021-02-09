@@ -17,14 +17,13 @@ ColumnLayout {
         wallet: view.wallet
     }
 
+
+
     SettingsBox {
         title: qsTrId('id_access')
         visible: !wallet.device
-        RowLayout {
-            anchors.fill: parent
+        contentItem: RowLayout {
             Label {
-                Layout.fillWidth: true
-                Layout.minimumWidth: contentWidth
                 text: qsTrId('id_enable_or_change_your_pin_to')
             }
             Button {
@@ -46,11 +45,8 @@ ColumnLayout {
         title: qsTrId('id_auto_logout_timeout')
         enabled: !wallet.locked
         visible: !wallet.device
-        RowLayout {
-            anchors.fill: parent
+        contentItem: RowLayout {
             Label {
-                Layout.fillWidth: true
-                Layout.minimumWidth: contentWidth
                 text: qsTrId('id_set_a_timeout_to_logout_after')
             }
             ComboBox {
@@ -71,44 +67,41 @@ ColumnLayout {
     SettingsBox {
         title: qsTrId('id_twofactor_authentication')
         enabled: !wallet.locked
-        RowLayout {
-            anchors.fill: parent
-            spacing: 16
+        contentItem: ColumnLayout {
             Label {
                 Layout.alignment: Qt.AlignTop
                 Layout.fillWidth: true
+                Layout.maximumWidth: 300
                 text: qsTrId('id_enable_twofactor_authentication')
                 wrapMode: Label.WordWrap
+                Layout.minimumWidth: 0 //contentWidth
             }
-            ColumnLayout {
-                Layout.fillWidth: false
-                Repeater {
-                    model: wallet.config.all_methods || []
+            Repeater {
+                model: wallet.config.all_methods || []
 
-                    RowLayout {
-                        Layout.alignment: Qt.AlignRight
-                        property string method: modelData
+                RowLayout {
+                    Layout.alignment: Qt.AlignRight
+                    property string method: modelData
 
-                        Image {
-                            source: `qrc:/svg/2fa_${method}.svg`
-                            sourceSize.height: 32
+                    Image {
+                        source: `qrc:/svg/2fa_${method}.svg`
+                        sourceSize.height: 32
+                    }
+                    Label {
+                        text: method.toUpperCase()
+                        Layout.minimumWidth: 64
+                    }
+                    Switch {
+                        Binding on checked {
+                            value: wallet.config[method].enabled
                         }
-                        Label {
-                            text: method.toUpperCase()
-                            Layout.minimumWidth: 64
-                        }
-                        Switch {
-                            Binding on checked {
-                                value: wallet.config[method].enabled
-                            }
 
-                            onClicked: {
-                                checked = wallet.config[modelData].enabled;
-                                if (!wallet.config[method].enabled) {
-                                    enable_dialog.createObject(stack_view, { method }).open();
-                                } else {
-                                    disable_dialog.createObject(stack_view, { method }).open();
-                                }
+                        onClicked: {
+                            checked = wallet.config[modelData].enabled;
+                            if (!wallet.config[method].enabled) {
+                                enable_dialog.createObject(stack_view, { method }).open();
+                            } else {
+                                disable_dialog.createObject(stack_view, { method }).open();
                             }
                         }
                     }
@@ -121,11 +114,10 @@ ColumnLayout {
         title: qsTrId('id_set_twofactor_threshold')
         enabled: !wallet.locked
         visible: !wallet.network.liquid
-        RowLayout {
-            anchors.fill: parent
+        contentItem: RowLayout {
             Label {
                 Layout.fillWidth: true
-                Layout.minimumWidth: contentWidth
+                Layout.minimumWidth: 0 //contentWidth
                 text: qsTrId('id_set_a_limit_to_spend_without')
             }
             Button {

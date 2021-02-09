@@ -224,7 +224,7 @@ Page {
                     const pin = pin_view.pin;
                     const wallet = controller.signup(proxy, use_tor, pin);
                     close();
-                    switchToWallet(wallet);
+                    // switchToWallet(wallet);
                 }
             }
         ]

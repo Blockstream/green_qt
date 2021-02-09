@@ -7,6 +7,7 @@ ControllerDialog {
     id: dialog
     required property Wallet wallet
     property string method
+    property bool shouldOpen: false
     title: qsTrId('id_system_message')
     closePolicy: Popup.NoAutoClose
     autoDestroy: false
@@ -16,7 +17,7 @@ ControllerDialog {
         onMessage: {
             message_label.text = text
             confirm_checkbox.enabled = true
-            dialog.open()
+            shouldOpen = true //dialog.open()
         }
     }
     // TODO: push view for hw signing

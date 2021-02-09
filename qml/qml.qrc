@@ -9,7 +9,6 @@
         <file>SendView.qml</file>
         <file>Amount.qml</file>
         <file>TransactionDelegate.qml</file>
-        <file>LoginView.qml</file>
         <file>SignupView.qml</file>
         <file>PinField.qml</file>
         <file>MnemonicView.qml</file>
@@ -21,7 +20,6 @@
         <file>RestoreWallet.qml</file>
         <file>DeviceView.qml</file>
         <file>TransactionView.qml</file>
-        <file>Panel.qml</file>
         <file>CreateAccountDialog.qml</file>
         <file>RenameAccountDialog.qml</file>
         <file>PinView.qml</file>
@@ -80,7 +78,10 @@
         <file>Constants.qml</file>
         <file>TwoFactorAuthExpiryDialog.qml</file>
         <file>PreferencesView.qml</file>
+        <file>NetworkView.qml</file>
         <file>MainPage.qml</file>
+        <file>SideButton.qml</file>
         <file>HomeView.qml</file>
+        <file>LoginDialog.qml</file>
     </qresource>
 </RCC>

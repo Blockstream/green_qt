@@ -41,39 +41,97 @@ StackView {
         item.ToolTip.show(qsTrId('id_copied_to_clipboard'), 2000);
     }
 
-    initialItem: Page {
-        background: Item {}
-        header: RowLayout {
-            TabBar {
-                id: tab_bar
-                leftPadding: 16
+    initialItem: TransactionListView {
+        account: account_view.account
+        onClicked: account_view.push(transaction_view_component, { transaction })
+        header: Loader {
+            active: account_view.account.wallet.network.liquid
+            width: parent.width
+            sourceComponent: Pane {
+                property bool showAllAssets: false
                 background: Item {}
-                TabButton {
-                    text: qsTrId('id_transactions')
-                    width: 160
-                }
-
-                TabButton {
-                    visible: account && account.wallet.network.liquid
-                    text: qsTrId('id_assets')
-                    width: 160
+                padding: 0
+                contentItem: ColumnLayout {
+                    spacing: 16
+                    AccountIdBadge {
+                        visible: account_view.account.json.type === '2of2_no_recovery'
+                        account: account_view.account
+                        Layout.fillWidth: true
+                    }
+                    Repeater {
+                        model: {
+                            const balances = []
+                            for (let i = 0; i < account_view.account.balances.length; ++i) {
+                                if (!showAllAssets && i === 3) break
+                                balances.push(account_view.account.balances[i])
+                            }
+                            return balances
+                        }
+                        Pane {
+                            topPadding: 8
+                            bottomPadding: 8
+                            leftPadding: 16
+                            rightPadding: 16
+                            background: Rectangle {
+                                color: constants.c700
+                                radius: 8
+                            }
+                            Layout.fillWidth: true
+                            contentItem: RowLayout {
+                                spacing: 16
+                                AssetIcon {
+                                    asset: modelData.asset
+                                }
+                                ColumnLayout {
+                                    Layout.fillWidth: true
+                                    Label {
+                                        Layout.fillWidth: true
+                                        text: modelData.asset.name
+                                        font.pixelSize: 16
+                                        elide: Label.ElideRight
+                                    }
+                                    Label {
+                                        visible: 'entity' in modelData.asset.data
+                                        Layout.fillWidth: true
+                                        opacity: 0.5
+                                        text: modelData.asset.data.entity ? modelData.asset.data.entity.domain : ''
+                                        elide: Label.ElideRight
+                                    }
+                                }
+                                Label {
+                                    text: modelData.displayAmount
+                                }
+                            }
+//                            AssetDelegate {
+//                                balance: modelData
+//                                onClicked: if (hasDetails) list_view.clicked(balance)
+                        }
+                    }
+                    Button {
+                        enabled: account_view.account.balances.length > 3
+                        flat: true
+                        text: {
+                            const count = account_view.account.balances.length
+                            if (count <= 3) return 'No more assets'
+                            if (showAllAssets) return `Hide ${account_view.account.balances.length - 3} assets`
+                            return `Show remaining ${account_view.account.balances.length - 3} more assets`
+                        }
+                        Layout.alignment: Qt.AlignCenter
+                        onClicked: showAllAssets = !showAllAssets
+                    }
+                    Label {
+                        visible: account_view.account.wallet.network.liquid
+                        text: qsTrId('id_transactions')
+                        Layout.fillWidth: true
+                        font.pixelSize: 16
+                        font.styleName: 'Regular'
+                    }
                 }
             }
-        }
-        contentItem: StackLayout {
-            id: stack_layout
-            currentIndex: tab_bar.currentIndex
-            TransactionListView {
-                account: account_view.account
-                onClicked: account_view.push(transaction_view_component, { transaction })
-            }
-            Loader {
-                active: account && account.wallet.network.liquid
-                sourceComponent: AssetListView {
-                    account: account_view.account
-                    onClicked: account_view.push(asset_view_component, { balance })
-                }
-            }
+//            AssetListView {
+//                account: account_view.account
+//                onClicked: account_view.push(asset_view_component, { balance })
+//            }
         }
     }
     Component {

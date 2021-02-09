@@ -1,53 +1,49 @@
 import Blockstream.Green 0.1
 import Blockstream.Green.Core 0.1
-import QtQuick 2.0
+import QtQuick 2.13
 import QtQuick.Controls 2.5
+import QtQuick.Layouts 1.13
 
-Label {
-    property Account account
-    leftPadding: 8
-    rightPadding: 32
-    text: qsTrId('id_account_id') + '    ' + account.json.receiving_id
-    ToolTip.text: qsTrId('id_provide_this_id_to_the_asset')
-    ToolTip.delay: 500
-    ToolTip.visible: mouse_area.containsMouse
-    MouseArea {
-        id: mouse_area
-        anchors.fill: parent
-        anchors.margins: -16
-        hoverEnabled: true
-        onClicked: {
-            Clipboard.copy(account.json.receiving_id);
-            ToolTip.show(qsTrId('id_copied_to_clipboard'), 1000);
+Button {
+    required property Account account
+    leftInset: 0
+    rightInset: 0
+    topInset: 0
+    bottomInset: 0
+    leftPadding: 16
+    rightPadding: 16
+    topPadding: 16
+    bottomPadding: 16
+    background: Rectangle {
+        border.width: 1
+        border.color: constants.c500
+        radius: 8
+        color: 'transparent'
+    }
+    contentItem: RowLayout {
+        Label {
+            text: 'Managed Assets Account ID'
+            font.styleName: 'Regular'
+        }
+
+        Label {
+            text: qsTrId('id_provide_this_id_to_the_asset')
+            color: constants.c500
+            font.pixelSize: 12
+        }
+        Label {
+            Layout.fillWidth: true
+            horizontalAlignment: Label.AlignRight
+            text: account.json.receiving_id
+        }
+        Image {
+            source: 'qrc:/svg/copy.svg'
+            sourceSize.width: 16
+            sourceSize.height: 16
         }
     }
-    property real factor: mouse_area ? 1.3 : 1.5
-    Rectangle {
-        anchors.fill: parent
-        anchors.margins: -8
-        radius: height/2
-        z: -1
-        color: Qt.lighter('#141a21', factor + 0.4)
-        clip: true
-        Rectangle {
-            radius: height/2
-            height: parent.height
-            width: height
-            color: Qt.lighter('#141a21', factor)
-        }
-        Rectangle {
-            x: height/2
-            height: parent.height
-            width: 88-height/2
-            color: Qt.lighter('#141a21', factor)
-        }
-    }
-    Image {
-        source: 'qrc:/svg/copy.svg'
-        sourceSize.width: 12
-        sourceSize.height: 12
-        anchors.right: parent.right
-        anchors.rightMargin: 8
-        anchors.verticalCenter: parent.verticalCenter
+    onClicked: {
+        Clipboard.copy(account.json.receiving_id);
+        ToolTip.show(qsTrId('id_copied_to_clipboard'), 1000);
     }
 }
