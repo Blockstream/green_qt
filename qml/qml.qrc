@@ -73,6 +73,7 @@
         <file>NLockTimeDialog.qml</file>
         <file>CopyableLabel.qml</file>
         <file>DeviceImage.qml</file>
+        <file>SignTransactionResolverView.qml</file>
         <file>SignLiquidTransactionResolverView.qml</file>
         <file>AccountView.qml</file>
         <file>SystemMessageDialog.qml</file>
