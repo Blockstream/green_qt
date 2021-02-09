@@ -12,5 +12,9 @@
         <file>svg/blockstream_jade.svg</file>
         <file>svg/jade_emblem_on_transparent_rgb.svg</file>
         <file>svg/jade_logo_white_on_transparent_rgb.svg</file>
+        <file>svg/ledger-logo.svg</file>
+        <file>svg/grid.svg</file>
+        <file>svg/logout.svg</file>
+        <file>svg/preferences.svg</file>
     </qresource>
 </RCC>
