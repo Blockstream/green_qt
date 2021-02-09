@@ -50,6 +50,13 @@ void Settings::setWindowHeight(int window_height)
     emit windowHeightChanged(m_window_height);
 }
 
+void Settings::setHistory(const QStringList &history)
+{
+    if (m_history == history) return;
+    m_history = history;
+    emit historyChanged(m_history);
+}
+
 void Settings::setCollapseSideBar(bool collapse_side_bar)
 {
     if (m_collapse_side_bar == collapse_side_bar) return;
@@ -103,6 +110,7 @@ void Settings::load()
     LOAD(m_window_y);
     LOAD(m_window_width);
     LOAD(m_window_height);
+    LOAD(m_history);
     LOAD(m_collapse_side_bar);
     LOAD(m_enable_testnet);
     LOAD(m_use_proxy)
@@ -120,6 +128,7 @@ void Settings::save()
     SAVE(m_window_y);
     SAVE(m_window_width);
     SAVE(m_window_height);
+    SAVE(m_history);
     SAVE(m_collapse_side_bar);
     SAVE(m_enable_testnet);
     SAVE(m_use_proxy)

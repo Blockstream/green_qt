@@ -11,6 +11,7 @@ class Settings : public QObject
     Q_PROPERTY(int windowY READ windowY WRITE setWindowY NOTIFY windowYChanged)
     Q_PROPERTY(int windowWidth READ windowWidth WRITE setWindowWidth NOTIFY windowWidthChanged)
     Q_PROPERTY(int windowHeight READ windowHeight WRITE setWindowHeight NOTIFY windowHeightChanged)
+    Q_PROPERTY(QStringList history READ history WRITE setHistory NOTIFY historyChanged)
     Q_PROPERTY(bool collapseSideBar READ collapseSideBar WRITE setCollapseSideBar NOTIFY collapseSideBarChanged)
     Q_PROPERTY(bool enableTestnet READ enableTestnet WRITE setEnableTestnet NOTIFY enableTestnetChanged)
     Q_PROPERTY(bool useProxy READ useProxy WRITE setUseProxy NOTIFY useProxyChanged)
@@ -29,6 +30,8 @@ public:
     void setWindowWidth(int window_x);
     int windowHeight() const { return m_window_height; }
     void setWindowHeight(int window_height);
+    QStringList history() const { return m_history; }
+    void setHistory(const QStringList& history);
     bool collapseSideBar() const { return m_collapse_side_bar; }
     void setCollapseSideBar(bool collapse_side_bar);
     bool enableTestnet() const { return m_enable_testnet; }
@@ -46,6 +49,7 @@ signals:
     void windowYChanged(int window_y);
     void windowWidthChanged(int window_width);
     void windowHeightChanged(int window_height);
+    void historyChanged(const QStringList& history);
     void collapseSideBarChanged(bool collapse_side_bar);
     void enableTestnetChanged(bool enable_testnet);
     void useProxyChanged(bool use_proxy);
@@ -60,6 +64,7 @@ private:
     int m_window_y;
     int m_window_width;
     int m_window_height;
+    QStringList m_history;
     bool m_collapse_side_bar{false};
     bool m_enable_testnet{false};
     bool m_use_proxy{false};
