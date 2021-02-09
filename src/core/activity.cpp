@@ -33,6 +33,11 @@ void Progress::setIndeterminate(bool indeterminate)
     emit indeterminateChanged(m_indeterminate);
 }
 
+void Progress::incrementValue(int inc)
+{
+    setValue(value() + inc);
+}
+
 Activity::Activity(QObject* parent)
     : QObject(parent)
 {

@@ -74,6 +74,7 @@ include(core/core.pri)
 include(controllers/controllers.pri)
 include(handlers/handlers.pri)
 include(resolvers/resolvers.pri)
+include(jade/jade.pri)
 include(ledger/ledger.pri)
 
 win32 {

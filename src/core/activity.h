@@ -20,6 +20,7 @@ public:
     void setTo(qreal to);
     qreal value() const { return m_value; }
     void setValue(qreal value);
+    void incrementValue(int inc = 1);
     bool indeterminate() const { return m_indeterminate; }
     void setIndeterminate(bool indeterminate);
 signals:

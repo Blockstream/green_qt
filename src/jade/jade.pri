@@ -1,0 +1,23 @@
+INCLUDEPATH += $$PWD
+
+QT += bluetooth serialport
+
+HEADERS += \
+    $$PWD/jadeapi.h \
+    $$PWD/jadebleimpl.h \
+    $$PWD/jadeconnection.h \
+    $$PWD/jadedeviceserialportdiscoveryagent.h \
+    $$PWD/jadeserialimpl.h \
+    $$PWD/jadedevice.h \
+    $$PWD/deviceinfo.h \
+    $$PWD/serviceinfo.h
+
+SOURCES += \
+    $$PWD/jadeapi.cpp \
+    $$PWD/jadebleimpl.cpp \
+    $$PWD/jadeconnection.cpp \
+    $$PWD/jadedeviceserialportdiscoveryagent.cpp \
+    $$PWD/jadeserialimpl.cpp \
+    $$PWD/jadedevice.cpp \
+    $$PWD/deviceinfo.cpp \
+    $$PWD/serviceinfo.cpp
