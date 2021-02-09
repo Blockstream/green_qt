@@ -5,16 +5,14 @@ Dialog {
     clip: true
     modal: true
     horizontalPadding: 16
-    verticalPadding: 0
+    verticalPadding: 8
     anchors.centerIn: parent
+    parent: Overlay.overlay
     Overlay.modal: Rectangle {
-        color: "#70000000"
+        color: '#a0080B0E'
     }
-    Behavior on implicitWidth {
-        NumberAnimation { duration: 300; easing.type: Easing.OutCubic }
+    background: Rectangle {
+        radius: 8
+        color: constants.c700
     }
-    Behavior on implicitHeight {
-        NumberAnimation { duration: 300; easing.type: Easing.OutCubic }
-    }
-
 }
