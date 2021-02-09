@@ -79,5 +79,8 @@
         <file>SystemMessageDialog.qml</file>
         <file>Constants.qml</file>
         <file>TwoFactorAuthExpiryDialog.qml</file>
+        <file>PreferencesView.qml</file>
+        <file>MainPage.qml</file>
+        <file>HomeView.qml</file>
     </qresource>
 </RCC>
