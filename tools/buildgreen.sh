@@ -21,7 +21,7 @@ if [ "${GREENPLATFORM}" = "linux" ]; then
 elif [ "${GREENPLATFORM}" = "windows" ]; then
     ${QT_PATH}/bin/qmake -spec win32-g++ ${CURRENTDIR}/green.pro CONFIG+=x86_64 TARGET_BIT=m64 ${GREEN_QMAKE_CONFIG}
 elif [ "${GREENPLATFORM}" = "osx" ]; then
-    ${QT_PATH}/bin/qmake ${CURRENTDIR}/green.pro -spec macx-clang CONFIG+=x86_64 QMAKE_MACOSX_DEPLOYMENT_TARGET=10.14 ${GREEN_QMAKE_CONFIG}
+    ${QT_PATH}/bin/qmake ${CURRENTDIR}/green.pro -spec macx-clang CONFIG+=x86_64 QMAKE_MACOSX_DEPLOYMENT_TARGET=10.13 ${GREEN_QMAKE_CONFIG}
 fi
 
 make -j${NUM_JOBS}

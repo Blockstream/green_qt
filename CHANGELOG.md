@@ -26,3 +26,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improve ledger signing to suppress unverified inputs warning.
 - Use latest Google Auth token when enabling Google Auth two factor.
 - Fix mnemonic editor layout.
+- Fix compatibility with mac OS 10.13
