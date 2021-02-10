@@ -14,40 +14,31 @@ WizardPage {
         id: controller
     }
 
-    ColumnLayout {
-        anchors.centerIn: parent
-        spacing: 32
-
+    contentItem: ColumnLayout {
+        spacing: 16
         GridLayout {
             columns: 6
-
             Repeater {
                 id: repeater
                 model: 24
-
                 WordField {
                     word: controller.words[index]
                 }
             }
         }
-
-        Page {
+        RowLayout {
             Layout.alignment: Qt.AlignHCenter
-            header: CheckBox {
+            CheckBox {
                 checked: controller.password
                 text: qsTrId('id_password_protected')
                 onCheckedChanged: controller.password = checked
             }
-
-            RowLayout {
-                visible: controller.password
-
-                Repeater {
-                    id: checksum
-                    model: 3
-                    WordField {
-                        word: controller.words[index + 24]
-                    }
+            Repeater {
+                id: checksum
+                model: 3
+                WordField {
+                    enabled: controller.password
+                    word: controller.words[index + 24]
                 }
             }
         }
