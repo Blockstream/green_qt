@@ -63,9 +63,9 @@ MainPage {
                   qsTrId('id_version') + ' ' + Qt.application.version + '<br/><br/>' +
                   qsTrId('id_please_contribute_if_you_find') + ".<br/>" +
                   qsTrId('id_visit_s_for_further_information').arg(`<a href="${url}">${url}</a>`) + ".<br/><br/>" +
-                  qsTrId('id_distributed_under_the_s_see').arg('GNU General Public License v3.0').arg('https://opensource.org/licenses/GPL-3.0')
+                  qsTrId('id_distributed_under_the_s_see').arg('GNU General Public License v3.0').arg('<a href="https://opensource.org/licenses/GPL-3.0">https://opensource.org/licenses/GPL-3.0</a>')
             textFormat: Text.RichText
-            onLinkActivated: Qt.openUrlExternally(url)
+            onLinkActivated: Qt.openUrlExternally(link)
         }
         Item {
             width: 1
