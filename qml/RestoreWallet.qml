@@ -7,14 +7,18 @@ import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.12
 
 AbstractDialog {
-    id: view
-
-    signal restored(Wallet wallet)
-    signal canceled()
+    id: self
+    required property string network
 
     RestoreController {
         id: controller
-        onFinished: view.restored(wallet);
+        network: NetworkManager.network(self.network)
+        onFinished: pushLocation(`/${self.network}/${wallet.id}`)
+        Component.onCompleted: {
+            const proxy = Settings.useProxy ? Settings.proxyHost + ':' + Settings.proxyPort : ''
+            const use_tor = Settings.useTor
+            controller.wallet.connect(proxy, use_tor)
+        }
     }
 
     Connections {
@@ -35,59 +39,17 @@ AbstractDialog {
         }
     }
 
-    //contentItem:
-    StackView {
+    contentItem: StackView {
         id: stack_view
-        //anchors.centerIn: parent
         clip: true
         implicitWidth: currentItem.implicitWidth
         implicitHeight: currentItem.implicitHeight
-
-        initialItem: mnemonic_page //network_page
+        initialItem: mnemonic_page
     }
 
-    Drawer {
-        id: settings_drawer
-        interactive: position > 0
-        edge: Qt.RightEdge
-        height: parent.height
-        width: 300
-
-        Overlay.modal: Rectangle {
-            color: "#70000000"
-        }
-
-        ColumnLayout {
-            anchors.fill: parent
-            anchors.margins: 16
-            Label {
-                text: 'Connection Settings'
-                font.pixelSize: 18
-                Layout.margins: 16
-            }
-            CheckBox {
-                id: proxy_checkbox
-                text: qsTrId('id_connect_through_a_proxy')
-            }
-            TextField {
-                id: proxy_field
-                Layout.leftMargin: 32
-                Layout.fillWidth: true
-                enabled: proxy_checkbox.checked
-                placeholderText: 'host:address'
-            }
-            CheckBox {
-                id: tor_checkbox
-                text: qsTrId('id_connect_with_tor')
-            }
-            Item {
-               Layout.fillWidth: true
-               Layout.fillHeight: true
-            }
-        }
-    }
-
-    property Item toolbar: RowLayout {
+    footer: RowLayout {
+        id: footer_buttons_row
+        spacing: 8
         ProgressBar {
             Layout.maximumWidth: 64
             indeterminate: true
@@ -100,84 +62,22 @@ AbstractDialog {
                 }
             }
         }
-        ToolButton {
-            onClicked: settings_drawer.open()
-            icon.source: 'qrc:/svg/settings.svg'
+        Item {
+            Layout.fillWidth: true
+            height: 1
         }
-        ToolButton {
-            icon.source: 'qrc:/svg/cancel.svg'
-            icon.width: 16
-            icon.height: 16
-            onClicked: view.canceled()
-        }
-    }
-
-    //background: Item {}
-
-    footer: Item {
-        height: 64
-
-        Row {
-            id: footer_buttons_row
-            anchors.right: parent.right
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.margins: 16
-            Repeater {
-                model: stack_view.currentItem.actions
-                Button {
-                    focus: modelData.focus || false
-                    action: modelData
-                    flat: true
-                    Layout.rightMargin: 16
-                    Layout.bottomMargin: 16
-                    Layout.topMargin: 16
-                    Layout.minimumWidth: 128
-                }
+        Repeater {
+            model: stack_view.currentItem.actions
+            Button {
+                focus: modelData.focus || false
+                action: modelData
+                flat: true
             }
         }
     }
 
-    header: Item {
-        height: 64
-
-        Row {
-            visible: !!network_page.network
-            anchors.margins: 16
-            anchors.left: parent.left
-            anchors.verticalCenter: parent.verticalCenter
-            spacing: 16
-            Image {
-                anchors.verticalCenter: parent.verticalCenter
-                source: network_page.network ? icons[network_page.network.id] : ''
-                sourceSize.height: 32
-                sourceSize.width: 32
-            }
-            Label {
-                anchors.verticalCenter: parent.verticalCenter
-                font.pixelSize: 24
-                text: network_page.network ? network_page.network.name : ''
-            }
-        }
-
-        Label {
-            anchors.centerIn: parent
-            font.pixelSize: 24
-            text: qsTrId('Restore Wallet') + ' - ' + stack_view.currentItem.title
-        }
-    }
-
-    property Item network_page: NetworkPage {
-        subtitle: qsTrId('id_restore_green_wallet')
-        actions: []
-        onNext: {
-            const proxy = proxy_checkbox.checked ? proxy_field.text : '';
-            const use_tor = tor_checkbox.checked;
-            controller.network = network_page.network;
-            controller.wallet.connect(proxy, use_tor);
-            settings_drawer.enabled = false;
-            stack_view.push(mnemonic_page);
-        }
-    }
+    icon: icons[controller.network.id]
+    title: stack_view.currentItem.title
 
     property Item mnemonic_page: MnemonicEditor {
         title: qsTrId('Insert your green mnemonic')

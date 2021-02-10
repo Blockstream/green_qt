@@ -15,7 +15,7 @@ public:
 
     QQmlListProperty<Network> networks();
 
-    Network* network(const QString& id) const;
+    Q_INVOKABLE Network* network(const QString& id) const;
 
 private:
     explicit NetworkManager();

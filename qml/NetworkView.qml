@@ -59,12 +59,13 @@ Item {
                     Layout.fillWidth: true
                 }
                 Button {
-                    text: 'Signup'
+                    text: 'Create Wallet'
                     highlighted: true
                     onClicked: pushLocation(`/${network}/signup`)
                 }
                 Button {
-                    text: 'Restore'
+                    flat: true
+                    text: 'Restore Wallet'
                     onClicked: pushLocation(restore_dialog.location)
                 }
             }
@@ -219,16 +220,19 @@ Item {
 
     property var thumbs: ({})
 
-    RestoreWallet {
+    Loader {
         id: restore_dialog
         readonly property string location: `/${network}/restore`
-        visible: matchesLocation(location)
-        onAboutToHide: popLocation()
-        anchors.centerIn: parent
-        Overlay.modal: Rectangle {
-            color: "#70000000"
+        active: matchesLocation(location)
+        sourceComponent: RestoreWallet {
+            network: self.network
+            onAboutToHide: popLocation()
+            Overlay.modal: Rectangle {
+                color: "#70000000"
+            }
+            parent: Overlay.overlay
+            visible: restore_dialog.active
         }
-        parent: Overlay.overlay
     }
 
     component WalletDelegate: ItemDelegate {
