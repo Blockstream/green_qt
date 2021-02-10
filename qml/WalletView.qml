@@ -129,6 +129,9 @@ MainPage {
                 icon.height: 16
                 onClicked: general_settings_dialog.createObject(wallet_view).open()
                 enabled: !!wallet_view.wallet.settings.pricing && !!wallet_view.wallet.config.limits
+                ToolTip.text: qsTrId('id_general')
+                ToolTip.delay: 300
+                ToolTip.visible: hovered
             }
             ToolButton {
                 icon.source: 'qrc:/svg/security.svg'
@@ -136,6 +139,9 @@ MainPage {
                 icon.height: 16
                 onClicked: security_settings_dialog.createObject(wallet_view).open()
                 enabled: !!wallet_view.wallet.settings.pricing && !!wallet_view.wallet.config.limits
+                ToolTip.text: qsTrId('id_security')
+                ToolTip.delay: 300
+                ToolTip.visible: hovered
             }
             ToolButton {
                 icon.source: 'qrc:/svg/recovery.svg'
@@ -143,6 +149,9 @@ MainPage {
                 icon.height: 16
                 onClicked: recovery_settings_dialog.createObject(wallet_view).open()
                 enabled: !!wallet_view.wallet.settings.pricing && !!wallet_view.wallet.config.limits
+                ToolTip.text: qsTrId('id_recovery')
+                ToolTip.delay: 300
+                ToolTip.visible: hovered
             }
             Item {
                 Layout.minimumWidth: 16
@@ -153,6 +162,9 @@ MainPage {
                 icon.width: 16
                 icon.height: 16
                 onClicked: wallet_view.wallet.disconnect()
+                ToolTip.text: qsTrId('id_disconnect')
+                ToolTip.delay: 300
+                ToolTip.visible: hovered
             }
         }
     }
