@@ -5,7 +5,7 @@ import QtQuick.Layouts 1.12
 
 ControllerDialog {
     title: qsTrId('id_send')
-
+    icon: 'qrc:/svg/send.svg'
     id: send_dialog
     required property Account account
 

@@ -21,6 +21,7 @@ AbstractDialog {
             contentItem: ColumnLayout {
                 Label {
                     Layout.fillWidth: true
+                    Layout.maximumWidth: 400
                     text: qsTrId('id_your_wallet_backup_is_made_of') + "\n" + qsTrId('id_blockstream_does_not_have')
                     wrapMode: Label.WordWrap
                 }
@@ -38,6 +39,7 @@ AbstractDialog {
             contentItem: ColumnLayout {
                 Label {
                     Layout.fillWidth: true
+                    Layout.maximumWidth: 400
                     text: qsTrId('id_save_a_summary_of_your_accounts')
                     wrapMode: Label.WordWrap
                 }
@@ -105,6 +107,7 @@ AbstractDialog {
             contentItem: ColumnLayout {
                 Label {
                     Layout.fillWidth: true
+                    Layout.maximumWidth: 400
                     text: qsTrId('id_set_up_an_email_to_get')
                     wrapMode: Label.WordWrap
                 }

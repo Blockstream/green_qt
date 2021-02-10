@@ -128,21 +128,21 @@ MainPage {
                 icon.width: 16
                 icon.height: 16
                 onClicked: general_settings_dialog.createObject(wallet_view).open()
-                enabled: !!wallet.settings && !!wallet.config
+                enabled: !!wallet_view.wallet.settings.pricing && !!wallet_view.wallet.config.limits
             }
             ToolButton {
                 icon.source: 'qrc:/svg/security.svg'
                 icon.width: 16
                 icon.height: 16
                 onClicked: security_settings_dialog.createObject(wallet_view).open()
-                enabled: !!wallet.settings && !!wallet.config
+                enabled: !!wallet_view.wallet.settings.pricing && !!wallet_view.wallet.config.limits
             }
             ToolButton {
                 icon.source: 'qrc:/svg/recovery.svg'
                 icon.width: 16
                 icon.height: 16
                 onClicked: recovery_settings_dialog.createObject(wallet_view).open()
-                enabled: !!wallet.settings && !!wallet.config
+                enabled: !!wallet_view.wallet.settings.pricing && !!wallet_view.wallet.config.limits
             }
             Item {
                 Layout.minimumWidth: 16
