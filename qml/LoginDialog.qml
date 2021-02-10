@@ -11,6 +11,8 @@ AbstractDialog {
 
     title: wallet.name
 
+    focus: true
+
     Connections {
         target: self.wallet
         function onLoginAttemptsRemainingChanged(loginAttemptsRemaining) {
