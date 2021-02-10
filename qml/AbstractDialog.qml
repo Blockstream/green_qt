@@ -36,7 +36,7 @@ Dialog {
             icon.source: 'qrc:/svg/cancel.svg'
             icon.width: 16
             icon.height: 16
-            onClicked: self.close()
+            onClicked: self.reject()
         }
     }
     Overlay.modal: Rectangle {
