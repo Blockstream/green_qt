@@ -131,6 +131,62 @@ AbstractDialog {
                 }
             }
         }
+
+        SettingsBox {
+            title: qsTrId('id_twofactor_authentication_expiry')
+            visible: !wallet.network.liquid
+            contentItem: ColumnLayout {
+                Label {
+                    Layout.fillWidth: true
+                    Layout.maximumWidth: 800
+                    text: qsTrId('id_customize_2fa_expiration_of')
+                    wrapMode: Label.WordWrap
+                }
+                Button {
+                    Layout.alignment: Qt.AlignRight
+                    flat: true
+                    text: qsTrId('id_set_2fa_expiry')
+                    onClicked: two_factor_auth_expiry_dialog.createObject(stack_view).open()
+                }
+            }
+        }
+
+        SettingsBox {
+            title: qsTrId('id_request_twofactor_reset')
+            visible: !wallet.network.liquid
+            contentItem: ColumnLayout {
+                Label {
+                    Layout.fillWidth: true
+                    Layout.maximumWidth: 800
+                    text: wallet.locked ? qsTrId('wallet locked for %1 days').arg(wallet.config.twofactor_reset.days_remaining) : qsTrId('id_start_a_2fa_reset_process_if')
+                    wrapMode: Label.WordWrap
+                }
+                Button {
+                    flat: true
+                    Layout.alignment: Qt.AlignRight
+                    enabled: wallet.config.any_enabled || false
+                    text: wallet.locked ? qsTrId('id_cancel_twofactor_reset') : qsTrId('id_reset')
+                    padding: 10
+                    Component {
+                        id: cancel_dialog
+                        CancelTwoFactorResetDialog { }
+                    }
+
+                    Component {
+                        id: request_dialog
+                        RequestTwoFactorResetDialog { }
+                    }
+                    onClicked: {
+                        if (wallet.locked) {
+                            cancel_dialog.createObject(stack_view, { wallet }).open()
+                        } else {
+                            request_dialog.createObject(stack_view, { wallet }).open()
+                        }
+                    }
+                }
+            }
+        }
+
         Component {
             id: enable_dialog
             TwoFactorEnableDialog {
@@ -148,9 +204,17 @@ AbstractDialog {
                         }
             }
         }
+
         Component {
             id: disable_dialog
             TwoFactorDisableDialog {
+                wallet: self.wallet
+            }
+        }
+
+        Component {
+            id: two_factor_auth_expiry_dialog
+            TwoFactorAuthExpiryDialog {
                 wallet: self.wallet
             }
         }
