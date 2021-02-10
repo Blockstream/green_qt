@@ -46,55 +46,30 @@ MainPage {
 
     readonly property bool fiatRateAvailable: formatFiat(0, false) !== 'n/a'
 
-    component SettingsDrawer: AbstractDialog {
-        property Component sourceComponent
-        id: settings_drawer
-//        height: parent.height
-//        width: contentItem.implicitWidth
-//        leftPadding: 16
-//        topPadding: 16
-//        bottomPadding: 16
-//        rightPadding: 16
-//        background: Rectangle {
-//            color: constants.c700
-//        }
-        //parent: wallet_view
-        contentItem: Loader {
-            active: settings_drawer.visible
-            sourceComponent: settings_drawer.sourceComponent
+    Component {
+        id: general_settings_dialog
+        WalletGeneralSettingsView {
+            wallet: wallet_view.wallet
+            icon: "qrc:/svg/preferences.svg"
         }
     }
 
-    SettingsDrawer {
-        id: general_settings_drawer
-        sourceComponent: WalletGeneralSettingsView {
+    Component {
+        id: security_settings_dialog
+        WalletSecuritySettingsView {
             wallet: wallet_view.wallet
-            Item {
-                width: 1
-                Layout.fillHeight: true
-            }
+            icon: "qrc:/svg/security.svg"
         }
     }
-    SettingsDrawer {
-        id: security_settings_drawer
-        sourceComponent: WalletSecuritySettingsView {
+
+    Component {
+        id: recovery_settings_dialog
+        WalletRecoverySettingsView {
             wallet: wallet_view.wallet
-            Item {
-                width: 1
-                Layout.fillHeight: true
-            }
+            icon: "qrc:/svg/recovery.svg"
         }
     }
-    SettingsDrawer {
-        id: recovery_settings_drawer
-        sourceComponent: WalletRecoverySettingsView {
-            wallet: wallet_view.wallet
-            Item {
-                width: 1
-                Layout.fillHeight: true
-            }
-        }
-    }
+
     header: MainPage.Header {
         contentItem: RowLayout {
             spacing: 8
@@ -152,21 +127,21 @@ MainPage {
                 icon.source: 'qrc:/svg/preferences.svg'
                 icon.width: 16
                 icon.height: 16
-                onClicked: general_settings_drawer.open()
+                onClicked: general_settings_dialog.createObject(wallet_view).open()
                 enabled: !!wallet.settings && !!wallet.config
             }
             ToolButton {
                 icon.source: 'qrc:/svg/security.svg'
                 icon.width: 16
                 icon.height: 16
-                onClicked: security_settings_drawer.open()
+                onClicked: security_settings_dialog.createObject(wallet_view).open()
                 enabled: !!wallet.settings && !!wallet.config
             }
             ToolButton {
                 icon.source: 'qrc:/svg/recovery.svg'
                 icon.width: 16
                 icon.height: 16
-                onClicked: recovery_settings_drawer.open()
+                onClicked: recovery_settings_dialog.createObject(wallet_view).open()
                 enabled: !!wallet.settings && !!wallet.config
             }
             Item {
@@ -179,14 +154,6 @@ MainPage {
                 icon.height: 16
                 onClicked: wallet_view.wallet.disconnect()
             }
-//            ToolButton {
-//                id: settings_tool_button
-//                highlighted: stack_view.currentItem instanceof WalletSettingsView
-//                icon.source: 'qrc:/svg/settings.svg'
-//                icon.width: 24
-//                icon.height: 24
-//                onClicked: toggleSettings()
-//            }
         }
     }
 

@@ -1,22 +1,41 @@
 import QtQuick 2.14
-import QtQuick.Controls 2.14
+import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.13
 
 Dialog {
+    id: self
     clip: true
     modal: true
-    horizontalPadding: 16
-    verticalPadding: 8
+    padding: 20
     anchors.centerIn: parent
     parent: Overlay.overlay
-    header: RowLayout {
-        Label {
-            leftPadding: 16
-            rightPadding: 16
-            topPadding: 8
-            text: title
-            font.styleName: 'Light'
-            font.pixelSize: 20
+    header: Pane {
+        padding: 8
+        contentItem: RowLayout {
+            ToolButton {
+                enabled: false
+                icon.source: self.icon
+                icon.color: "white"
+                icon.width: 16
+                icon.height: 16
+            }
+            Label {
+                Layout.fillWidth: true
+                text: title
+                font.capitalization: Font.AllUppercase
+                font.pixelSize: 20
+                font.styleName: 'Light'
+            }
+            ToolButton {
+                flat: true
+                icon.source: 'qrc:/svg/cancel.svg'
+                icon.width: 16
+                icon.height: 16
+                onClicked: self.close()
+            }
+        }
+        background: Item {
+
         }
     }
     Overlay.modal: Rectangle {
@@ -26,4 +45,6 @@ Dialog {
         radius: 8
         color: constants.c700
     }
+
+    property string icon: ""
 }
