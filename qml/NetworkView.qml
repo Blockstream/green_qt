@@ -138,16 +138,6 @@ Item {
                                 radius: 4
                             }
                             contentItem: ColumnLayout {
-//                                Image {
-//                                    mipmap: true
-//                                    smooth: true
-//                                    source: wallet.id in thumbs ? thumbs[wallet.id].url : ''
-//                                    opacity: 1
-//                                    fillMode: Image.PreserveAspectCrop
-//                                    verticalAlignment: Image.AlignTop
-//                                    Layout.fillWidth: true
-//                                    Layout.fillHeight: true
-//                                }
                                 Rectangle {
                                     Layout.fillWidth: true
                                     Layout.fillHeight: true
@@ -205,11 +195,6 @@ Item {
                         anchors.margins: 16
                         currentIndex: -1
                         model: wallet_list_model
-    //                    header: Rectangle {
-    //                        implicitHeight: 20
-    //                        color: 'blue'
-    //                        width: parent.width
-    //                    }
                         delegate: WalletDelegate {}
                         ScrollIndicator.vertical: ScrollIndicator {}
                     }
@@ -218,7 +203,6 @@ Item {
         }
     }
 
-    property var thumbs: ({})
     Loader {
         id: signup_dialog
         readonly property string location: `/${network}/signup`
