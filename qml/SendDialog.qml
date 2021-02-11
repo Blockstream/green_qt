@@ -4,9 +4,10 @@ import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.12
 
 ControllerDialog {
+    id: send_dialog
     title: qsTrId('id_send')
     icon: 'qrc:/svg/send.svg'
-    id: send_dialog
+    autoDestroy: true
     required property Account account
 
     controller: SendController {
