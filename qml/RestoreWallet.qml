@@ -48,7 +48,7 @@ AbstractDialog {
     }
 
     footer: Pane {
-        padding: 16
+        padding: 0
         background: Item {
         }
         RowLayout {
@@ -84,6 +84,7 @@ AbstractDialog {
 
     icon: icons[controller.network.id]
     title: stack_view.currentItem.title
+    toolbar: stack_view.currentItem.toolbar || null
 
     property Item mnemonic_page: MnemonicEditor {
         id: mnemonicEditor
