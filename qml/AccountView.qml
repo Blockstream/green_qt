@@ -42,12 +42,14 @@ StackView {
     }
 
     initialItem: TransactionListView {
+        id: transaction_list_view
         account: account_view.account
         onClicked: account_view.push(transaction_view_component, { transaction })
         header: Loader {
             active: account_view.account.wallet.network.liquid
-            width: parent.width
             sourceComponent: Pane {
+                onHeightChanged: transaction_list_view.positionViewAtBeginning()
+                width: transaction_list_view.width
                 property bool showAllAssets: false
                 background: Item {}
                 padding: 0
