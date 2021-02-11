@@ -44,6 +44,9 @@ Dialog {
                 icon.width: 16
                 icon.height: 16
                 onClicked: self.reject()
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.text: qsTrId('id_cancel')
+                ToolTip.visible: hovered
             }
         }
     }
