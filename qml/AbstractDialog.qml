@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.13
 
 Dialog {
     id: self
+    property alias toolbar: toolbar_loader.sourceComponent
     clip: true
     modal: true
     padding: 16
@@ -33,6 +34,9 @@ Dialog {
                 font.capitalization: Font.AllUppercase
                 font.pixelSize: 20
                 font.styleName: 'Light'
+            }
+            Loader {
+                id: toolbar_loader
             }
             ToolButton {
                 flat: true
