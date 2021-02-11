@@ -18,7 +18,7 @@ WalletDialog {
     property bool autoDestroy: false
     onClosed: if (autoDestroy) destroy()
 
-
+    toolbar: stack_view.currentItem.toolbar
     footer: Item {
         implicitHeight: 48
         Row {
@@ -177,9 +177,8 @@ WalletDialog {
         text: 'ERROR:' + handler.result.error
     }
 
-    StackView {
+    contentItem: StackView {
         id: stack_view
-        anchors.centerIn: parent
         implicitHeight: Math.max(currentItem.implicitHeight, minimumHeight)
         implicitWidth: Math.max(currentItem.implicitWidth, minimumWidth)
     }
