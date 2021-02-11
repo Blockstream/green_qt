@@ -163,8 +163,8 @@ Item {
                                             }
                                         }
                                         mipmap: true
-                                        width: sourceItem.width * scale
-                                        height: sourceItem.height * scale
+                                        width: sourceItem ? sourceItem.width * scale : 0
+                                        height: sourceItem ? sourceItem.height * scale : 0
                                         sourceItem: {
                                             for (let i = 0; i < wallet_view_repeater.count; ++i) {
                                                 const item = wallet_view_repeater.itemAt(i)
