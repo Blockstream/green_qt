@@ -5,6 +5,7 @@ import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.13
 
 Button {
+    id: self
     required property Account account
     leftInset: 0
     rightInset: 0
@@ -16,25 +17,22 @@ Button {
     bottomPadding: 16
     background: Rectangle {
         border.width: 1
-        border.color: constants.c500
+        border.color: '#2CCCBF'
         radius: 8
-        color: 'transparent'
+        color: self.hovered ? '#502CCCBF' : 'transparent'
     }
     contentItem: RowLayout {
+        spacing: 8
         Label {
-            text: 'Managed Assets Account ID'
+            Layout.fillWidth: true
+            text: qsTrId('id_account_id')
             font.styleName: 'Regular'
-        }
-
-        Label {
-            text: qsTrId('id_provide_this_id_to_the_asset')
-            color: constants.c500
-            font.pixelSize: 12
         }
         Label {
             Layout.fillWidth: true
             horizontalAlignment: Label.AlignRight
             text: account.json.receiving_id
+            elide: Text.ElideRight
         }
         Image {
             source: 'qrc:/svg/copy.svg'
@@ -46,4 +44,7 @@ Button {
         Clipboard.copy(account.json.receiving_id);
         ToolTip.show(qsTrId('id_copied_to_clipboard'), 1000);
     }
+    ToolTip.delay: 300
+    ToolTip.visible: hovered
+    ToolTip.text: qsTrId('id_provide_this_id_to_the_asset')
 }
