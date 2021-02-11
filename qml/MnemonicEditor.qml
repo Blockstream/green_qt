@@ -10,6 +10,17 @@ WizardPage {
     property alias password: controller.password
     property alias mnemonic: controller.mnemonic
     property alias controller: controller
+    property Component toolbar: ProgressBar {
+        from: 0
+        to: 1
+        value: controller.progress
+        Behavior on value {
+            NumberAnimation {
+                duration: 300
+                easing.type: Easing.OutCubic
+            }
+        }
+    }
 
     MnemonicEditorController {
         id: controller
@@ -45,13 +56,6 @@ WizardPage {
                     word: controller.words[index + 24]
                 }
             }
-        }
-        ProgressBar {
-            from: 0
-            to: 1
-            value: controller.progress
-            Behavior on value { NumberAnimation { duration: 300; easing.type: Easing.OutCubic } }
-            Layout.fillWidth: true
         }
     }
 }
