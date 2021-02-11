@@ -27,7 +27,7 @@ public:
     int windowY() const { return m_window_y; }
     void setWindowY(int window_y);
     int windowWidth() const { return m_window_width; }
-    void setWindowWidth(int window_x);
+    void setWindowWidth(int window_width);
     int windowHeight() const { return m_window_height; }
     void setWindowHeight(int window_height);
     QStringList history() const { return m_history; }

@@ -38,7 +38,7 @@ void Settings::setWindowY(int window_y)
 
 void Settings::setWindowWidth(int window_width)
 {
-    if (m_window_x == window_width) return;
+    if (m_window_width == window_width) return;
     m_window_width = window_width;
     emit windowWidthChanged(m_window_width);
 }
