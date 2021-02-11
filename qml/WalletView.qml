@@ -240,7 +240,14 @@ MainPage {
     }
 
     SystemMessageDialog {
+        id: system_message_dialog
+        property bool alreadyOpened: false
         wallet: wallet_view.wallet
-        visible: shouldOpen && wallet_view.match
+        visible: shouldOpen && !alreadyOpened && wallet_view.match
+        onVisibleChanged: {
+            if (!visible) {
+                Qt.callLater(function () { system_message_dialog.alreadyOpened = true })
+            }
+        }
     }
 }
