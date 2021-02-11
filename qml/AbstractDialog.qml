@@ -5,6 +5,7 @@ import QtQuick.Layouts 1.13
 Dialog {
     id: self
     property alias toolbar: toolbar_loader.sourceComponent
+    property bool showRejectButton: true
     clip: true
     modal: true
     padding: 16
@@ -20,7 +21,7 @@ Dialog {
     header: Pane {
         leftPadding: self.leftPadding
         rightPadding: 0
-        topPadding: 0
+        topPadding: showRejectButton ? 0 : 16
         bottomPadding: 0
         background: Item {
         }
@@ -42,6 +43,7 @@ Dialog {
                 id: toolbar_loader
             }
             ToolButton {
+                visible: self.showRejectButton
                 flat: true
                 icon.source: 'qrc:/svg/cancel.svg'
                 icon.width: 16

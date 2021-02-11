@@ -11,6 +11,7 @@ ControllerDialog {
     title: qsTrId('id_system_message')
     closePolicy: Popup.NoAutoClose
     autoDestroy: false
+    showRejectButton: false
     controller: SystemMessageController {
         wallet: dialog.wallet
         onEmpty: dialog.close()
