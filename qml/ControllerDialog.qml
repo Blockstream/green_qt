@@ -18,30 +18,6 @@ WalletDialog {
     property bool autoDestroy: false
     onClosed: if (autoDestroy) destroy()
 
-    header: Item {
-        implicitHeight: 48
-        implicitWidth: title_label.implicitWidth + reject_button.implicitWidth + 32
-        Label {
-            id: title_label
-            text: title
-            anchors.left: parent.left
-            anchors.margins: 16
-            anchors.verticalCenter: parent.verticalCenter
-            font.pixelSize: 16
-            font.capitalization: Font.AllUppercase
-        }
-        ToolButton {
-            id: reject_button
-            anchors.right: parent.right
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.margins: 8
-            icon.source: 'qrc:/svg/cancel.svg'
-            icon.width: 16
-            icon.height: 16
-            onClicked: reject()
-            visible: controller_dialog.closePolicy !== Popup.NoAutoClose
-        }
-    }
 
     footer: Item {
         implicitHeight: 48
