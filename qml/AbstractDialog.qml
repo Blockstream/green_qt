@@ -18,11 +18,14 @@ Dialog {
     parent: Overlay.overlay
     spacing: 0
     header: Pane {
-        padding: self.padding
+        leftPadding: self.leftPadding
+        rightPadding: 0
+        topPadding: 0
+        bottomPadding: 0
         background: Item {
         }
         contentItem: RowLayout {
-            spacing: 8
+            spacing: 16
             Image {
                 source: self.icon
                 sourceSize.width: 24
