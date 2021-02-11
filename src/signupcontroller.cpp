@@ -1,5 +1,6 @@
 #include "ga.h"
 #include "signupcontroller.h"
+#include "wallet.h"
 #include "walletmanager.h"
 
 SignupController::SignupController(QObject *parent) : QObject(parent)
@@ -42,9 +43,17 @@ Wallet *SignupController::wallet() const
     return m_wallet;
 }
 
-Wallet* SignupController::signup(const QString &proxy, bool use_tor, const QByteArray& pin)
+void SignupController::signup(const QString &proxy, bool use_tor, const QByteArray& pin)
 {
-    return WalletManager::instance()->signup(proxy, use_tor, m_network, m_name.isEmpty() ? m_defaultName : m_name, m_mnemonic, pin);
+    Q_ASSERT(!m_wallet);
+    m_wallet = WalletManager::instance()->signup(proxy, use_tor, m_network, m_name.isEmpty() ? m_defaultName : m_name, m_mnemonic, pin);
+    emit walletChanged(m_wallet);
+
+    connect(m_wallet, &Wallet::authenticationChanged, this, [this] {
+        if (m_wallet->authentication() == Wallet::Authenticated) {
+            emit done();
+        }
+    });
 }
 
 void SignupController::setDefaultName(const QString &default_name)

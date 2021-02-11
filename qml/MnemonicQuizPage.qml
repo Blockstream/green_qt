@@ -4,7 +4,6 @@ import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.12
 
 Item {
-    property alias mnemonic: view.mnemonic
     property string title: qsTrId('id_check_your_backup')
     property list<Action> actions: [
         Action {
@@ -15,19 +14,72 @@ Item {
     signal back()
     signal next()
 
-    function reset() {
-        view.reset();
+    property var mnemonic
+    property int count: 4
+
+    property bool complete: {
+        let i = 0;
+        for (; i < repeater.count; i++) {
+            if (!repeater.itemAt(i).matching) break;
+        }
+        return i === count;
     }
 
-    implicitWidth: view.implicitWidth
-    implicitHeight: view.implicitHeight
+    onCompleteChanged: {
+        if (complete) {
+            next()
+        }
+    }
 
-    MnemonicQuizView {
-        id: view
+    function reset() {
+        const indexes = [...Array(24).keys()];
+        const result = [];
+        while (result.length < count) {
+            const remove = indexes.length * Math.random();
+            const [index] = indexes.splice(remove, 1);
+            indexes.splice(Math.max(0, remove - 2), 4);
+            result.push(index);
+        }
+        repeater.model = result.sort((a, b) => a - b).map(index => ({ index, word: mnemonic[index] }));
+    }
+
+    ColumnLayout {
+        spacing: 16
         anchors.centerIn: parent
-        onCompleteChanged: {
-            if (complete) {
-                next()
+        Label {
+            text: qsTrId('id_make_sure_you_made_a_proper')
+            font.pixelSize: 14
+        }
+        Repeater {
+            id: repeater
+            RowLayout {
+                Layout.fillWidth: false
+                Layout.alignment: Qt.AlignHCenter
+                property bool matching: modelData.word === word_field.text
+                spacing: 16
+                Label {
+                    width: 80
+                    text: modelData.index + 1
+                    enabled: word_field.enabled
+                    horizontalAlignment: Label.AlignRight
+                }
+                TextField {
+                    id: word_field
+                    width: 150
+                    enabled: (index === 0 || repeater.itemAt(index - 1).matching) && !matching
+                    onEnabledChanged: if (enabled) word_field.forceActiveFocus()
+                }
+                Image {
+                    source: 'qrc:/svg/check.svg'
+                    sourceSize.width: 32
+                    sourceSize.height: 32
+                    opacity: matching ? 1 : 0
+                    Behavior on opacity { OpacityAnimator { } }
+                }
+                Item {
+                    Layout.fillWidth: true
+                    height: 1
+                }
             }
         }
     }

@@ -433,7 +433,6 @@ void Wallet::signup(const QStringList& mnemonic, const QByteArray& pin)
     QObject::connect(set_pin_handler, &Handler::done, this, [this, set_pin_handler] {
         set_pin_handler->deleteLater();
         m_pin_data = set_pin_handler->pinData();
-        m_id = QUuid::createUuid().toString(QUuid::WithoutBraces);
         save();
         updateCurrencies();
         reload();

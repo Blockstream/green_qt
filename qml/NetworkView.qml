@@ -219,6 +219,20 @@ Item {
     }
 
     property var thumbs: ({})
+    Loader {
+        id: signup_dialog
+        readonly property string location: `/${network}/signup`
+        active: matchesLocation(location)
+        sourceComponent: SignupView {
+            network: self.network
+            onAboutToHide: popLocation()
+            Overlay.modal: Rectangle {
+                color: "#70000000"
+            }
+            parent: Overlay.overlay
+            visible: signup_dialog.active
+        }
+    }
 
     Loader {
         id: restore_dialog

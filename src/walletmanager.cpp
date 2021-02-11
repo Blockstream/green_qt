@@ -154,6 +154,7 @@ Wallet* WalletManager::signup(const QString& proxy, bool use_tor, Network* netwo
 {
     Q_ASSERT(mnemonic.size() == 24 || mnemonic.size() == 27);
     Wallet* wallet = new Wallet(this);
+    wallet->m_id = QUuid::createUuid().toString(QUuid::WithoutBraces);
     wallet->m_proxy = proxy;
     wallet->m_use_tor = use_tor;
     wallet->m_network = network;

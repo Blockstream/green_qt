@@ -19,9 +19,6 @@ Item {
     signal back();
     signal next();
 
-    implicitWidth: view.implicitWidth
-    implicitHeight: view.implicitHeight
-
     MnemonicView {
         id: view
         anchors.centerIn: parent

@@ -26,12 +26,13 @@ public:
     void setName(const QString& name);
     Wallet* wallet() const;
 public slots:
-    Wallet* signup(const QString& proxy, bool use_tor, const QByteArray& pin);
+    void signup(const QString& proxy, bool use_tor, const QByteArray& pin);
 signals:
     void networkChanged(Network* network);
     void defaultNameChanged(const QString& default_name);
     void nameChanged(const QString& name);
     void walletChanged(Wallet* wallet);
+    void done();
 private:
     void setDefaultName(const QString& default_name);
 private:
@@ -39,7 +40,7 @@ private:
     Network* m_network{nullptr};
     QString m_defaultName;
     QString m_name;
-    Wallet* m_wallet;
+    Wallet* m_wallet{nullptr};
 };
 
 #endif // GREEN_SIGNUPCONTROLLER_H
