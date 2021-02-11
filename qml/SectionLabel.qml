@@ -3,5 +3,5 @@ import QtQuick.Controls 2.13
 
 Label {
     font.capitalization: Font.AllUppercase
-    opacity: 0.5
+    color: constants.c300
 }

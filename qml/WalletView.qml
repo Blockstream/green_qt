@@ -47,26 +47,9 @@ MainPage {
     readonly property bool fiatRateAvailable: formatFiat(0, false) !== 'n/a'
 
     Component {
-        id: general_settings_dialog
-        WalletGeneralSettingsView {
+        id: settings_dialog
+        WalletSettingsDialog {
             wallet: wallet_view.wallet
-            icon: "qrc:/svg/preferences.svg"
-        }
-    }
-
-    Component {
-        id: security_settings_dialog
-        WalletSecuritySettingsView {
-            wallet: wallet_view.wallet
-            icon: "qrc:/svg/security.svg"
-        }
-    }
-
-    Component {
-        id: recovery_settings_dialog
-        WalletRecoverySettingsView {
-            wallet: wallet_view.wallet
-            icon: "qrc:/svg/recovery.svg"
         }
     }
 
@@ -124,57 +107,23 @@ MainPage {
                 onClicked: notifications_drawer.open()
             }
             ToolButton {
-                icon.source: 'qrc:/svg/preferences.svg'
-                icon.width: 16
-                icon.height: 16
-                onClicked: general_settings_dialog.createObject(wallet_view).open()
+                onClicked: openSettings()
+                icon.source: 'qrc:/svg/settings.svg'
+                flat: true
                 enabled: !!wallet_view.wallet.settings.pricing && !!wallet_view.wallet.config.limits
-                ToolTip.text: qsTrId('id_general')
+                ToolTip.text: qsTrId('id_settings')
                 ToolTip.delay: 300
                 ToolTip.visible: hovered
             }
             ToolButton {
-                icon.source: 'qrc:/svg/security.svg'
-                icon.width: 16
-                icon.height: 16
-                onClicked: security_settings_dialog.createObject(wallet_view).open()
-                enabled: !!wallet_view.wallet.settings.pricing && !!wallet_view.wallet.config.limits
-                ToolTip.text: qsTrId('id_security')
-                ToolTip.delay: 300
-                ToolTip.visible: hovered
-            }
-            ToolButton {
-                icon.source: 'qrc:/svg/recovery.svg'
-                icon.width: 16
-                icon.height: 16
-                onClicked: recovery_settings_dialog.createObject(wallet_view).open()
-                enabled: !!wallet_view.wallet.settings.pricing && !!wallet_view.wallet.config.limits
-                ToolTip.text: qsTrId('id_recovery')
-                ToolTip.delay: 300
-                ToolTip.visible: hovered
-            }
-            Item {
-                Layout.minimumWidth: 16
-                height: 1
-            }
-            ToolButton {
-                icon.source: 'qrc:/svg/logout.svg'
-                icon.width: 16
-                icon.height: 16
                 onClicked: wallet_view.wallet.disconnect()
-                ToolTip.text: qsTrId('id_disconnect')
+                icon.source: 'qrc:/svg/logout.svg'
+                flat: true
+                ToolTip.text: 'Logout'
                 ToolTip.delay: 300
                 ToolTip.visible: hovered
             }
         }
-    }
-
-    property WalletSettingsView wallet_settings_view
-    Component {
-        id: wallet_settings_view_component
-        WalletSettingsView {
-           wallet: wallet_view.wallet
-       }
     }
 
     Drawer {
@@ -237,9 +186,6 @@ MainPage {
 
     property var account_views: ({})
     function switchToAccount(account) {
-        if (stack_view.currentItem instanceof WalletSettingsView) {
-            stack_view.pop()
-        }
         if (account) {
             let account_view = account_views[account]
             if (!account_view) {
@@ -253,15 +199,8 @@ MainPage {
         }
     }
 
-    function toggleSettings() {
-        if (stack_view.currentItem instanceof WalletSettingsView) {
-            stack_view.pop()
-        } else {
-            if (!wallet_settings_view) {
-                wallet_settings_view = wallet_settings_view_component.createObject(null);
-            }
-            stack_view.push(wallet_settings_view)
-        }
+    function openSettings() {
+        settings_dialog.createObject(wallet_view).open()
     }
 
     contentItem: SplitView {

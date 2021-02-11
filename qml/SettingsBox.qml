@@ -16,8 +16,7 @@ Page {
     }
     background: Rectangle {
         radius: 8
-        color: constants.c600
-        opacity: 0.5
+        color: constants.c700
     }
     Layout.fillWidth: true
 }

@@ -7,7 +7,7 @@ Dialog {
     clip: true
     modal: true
     padding: 0
-    topPadding: 8
+    topPadding: 16
     bottomPadding: 16
     leftPadding: 16
     rightPadding: 16
@@ -43,7 +43,7 @@ Dialog {
         color: '#c0080B0E'
     }
     background: Rectangle {
-        radius: 8
+        radius: 16
         color: constants.c700
     }
 
