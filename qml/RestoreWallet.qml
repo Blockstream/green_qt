@@ -35,43 +35,49 @@ AbstractDialog {
         function onAuthenticationChanged(authentication) {
             if (controller.wallet.authentication === Wallet.Authenticated) {
                 stack_view.push(pin_page)
+                pin_page.forceActiveFocus()
             }
         }
     }
 
     contentItem: StackView {
         id: stack_view
-        clip: true
         implicitWidth: currentItem.implicitWidth
         implicitHeight: currentItem.implicitHeight
         initialItem: mnemonic_page
     }
 
-    footer: RowLayout {
-        id: footer_buttons_row
-        spacing: 8
-        ProgressBar {
-            Layout.maximumWidth: 64
-            indeterminate: true
-            opacity: controller.wallet && controller.wallet.authentication === Wallet.Authenticating ? 0.5 : 0
-            visible: opacity > 0
-            Behavior on opacity {
-                SmoothedAnimation {
-                    duration: 500
-                    velocity: -1
+    footer: Pane {
+        padding: 16
+        background: Item {
+        }
+        RowLayout {
+            id: footer_buttons_row
+            anchors.fill: parent
+            spacing: 8
+            ProgressBar {
+                Layout.maximumWidth: 64
+                indeterminate: true
+                opacity: controller.wallet && controller.wallet.authentication === Wallet.Authenticating ? 0.5 : 0
+                visible: opacity > 0
+                Behavior on opacity {
+                    SmoothedAnimation {
+                        duration: 500
+                        velocity: -1
+                    }
                 }
             }
-        }
-        Item {
-            Layout.fillWidth: true
-            height: 1
-        }
-        Repeater {
-            model: stack_view.currentItem.actions
-            Button {
-                focus: modelData.focus || false
-                action: modelData
-                flat: true
+            Item {
+                Layout.fillWidth: true
+                height: 1
+            }
+            Repeater {
+                model: stack_view.currentItem.actions
+                Button {
+                    focus: modelData.focus || false
+                    action: modelData
+                    flat: true
+                }
             }
         }
     }
@@ -80,8 +86,14 @@ AbstractDialog {
     title: stack_view.currentItem.title
 
     property Item mnemonic_page: MnemonicEditor {
+        id: mnemonicEditor
         title: qsTrId('Insert your green mnemonic')
         actions: [
+            Action {
+                property bool focus: mnemonic_page.valid
+                text: qsTrId('id_clear')
+                onTriggered: mnemonicEditor.controller.clear();
+            },
             Action {
                 property bool focus: mnemonic_page.valid
                 text: qsTrId('id_continue')
@@ -156,6 +168,7 @@ AbstractDialog {
 
         TextField {
             id: name_field
+            Layout.fillWidth: true
             Layout.minimumWidth: 300
             font.pixelSize: 16
             placeholderText: controller.defaultName

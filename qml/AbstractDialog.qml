@@ -6,7 +6,7 @@ Dialog {
     id: self
     clip: true
     modal: true
-    padding: 0
+    padding: 16
     topPadding: 16
     bottomPadding: 16
     leftPadding: 16
@@ -16,27 +16,31 @@ Dialog {
     anchors.centerIn: parent
     parent: Overlay.overlay
     spacing: 0
-    header: RowLayout {
-        ToolButton {
-            enabled: false
-            icon.source: self.icon
-            icon.color: "white"
-            icon.width: 16
-            icon.height: 16
+    header: Pane {
+        padding: self.padding
+        background: Item {
         }
-        Label {
-            Layout.fillWidth: true
-            text: title
-            font.capitalization: Font.AllUppercase
-            font.pixelSize: 20
-            font.styleName: 'Light'
-        }
-        ToolButton {
-            flat: true
-            icon.source: 'qrc:/svg/cancel.svg'
-            icon.width: 16
-            icon.height: 16
-            onClicked: self.reject()
+        contentItem: RowLayout {
+            spacing: 8
+            Image {
+                source: self.icon
+                sourceSize.width: 16
+                sourceSize.height: 16
+            }
+            Label {
+                Layout.fillWidth: true
+                text: title
+                font.capitalization: Font.AllUppercase
+                font.pixelSize: 20
+                font.styleName: 'Light'
+            }
+            ToolButton {
+                flat: true
+                icon.source: 'qrc:/svg/cancel.svg'
+                icon.width: 16
+                icon.height: 16
+                onClicked: self.reject()
+            }
         }
     }
     Overlay.modal: Rectangle {

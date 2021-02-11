@@ -9,6 +9,7 @@ WizardPage {
     property alias valid: controller.valid
     property alias password: controller.password
     property alias mnemonic: controller.mnemonic
+    property alias controller: controller
 
     MnemonicEditorController {
         id: controller
@@ -33,6 +34,9 @@ WizardPage {
                 text: qsTrId('id_password_protected')
                 onCheckedChanged: controller.password = checked
             }
+            Item {
+                Layout.fillWidth: true
+            }
             Repeater {
                 id: checksum
                 model: 3
@@ -42,22 +46,12 @@ WizardPage {
                 }
             }
         }
-        RowLayout {
-            Button {
-                flat: true
-                text: qsTrId('id_clear')
-                onClicked: controller.clear()
-            }
-            Item {
-                Layout.fillWidth: true
-            }
-            ProgressBar {
-                from: 0
-                to: 1
-                value: controller.progress
-                Behavior on value { NumberAnimation { duration: 300; easing.type: Easing.OutCubic } }
-                Layout.fillWidth: true
-            }
+        ProgressBar {
+            from: 0
+            to: 1
+            value: controller.progress
+            Behavior on value { NumberAnimation { duration: 300; easing.type: Easing.OutCubic } }
+            Layout.fillWidth: true
         }
     }
 }
