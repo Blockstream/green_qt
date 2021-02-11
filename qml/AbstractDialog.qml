@@ -24,8 +24,8 @@ Dialog {
             spacing: 8
             Image {
                 source: self.icon
-                sourceSize.width: 16
-                sourceSize.height: 16
+                sourceSize.width: 24
+                sourceSize.height: 24
             }
             Label {
                 Layout.fillWidth: true
