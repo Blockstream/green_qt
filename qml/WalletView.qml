@@ -7,7 +7,7 @@ import QtQuick.Layouts 1.12
 import QtQml 2.15
 
 MainPage {
-    id: wallet_view
+    id: self
 
     required property Wallet wallet
     readonly property Account currentAccount: accounts_list.currentAccount
@@ -46,13 +46,18 @@ MainPage {
 
     readonly property bool fiatRateAvailable: formatFiat(0, false) !== 'n/a'
 
-    Component {
+    property Action settingsAction: Action {
+        enabled: settings_dialog.active
+        onTriggered: settings_dialog.object.open()
+    }
+    Instantiator {
         id: settings_dialog
-        WalletSettingsDialog {
-            wallet: wallet_view.wallet
+        active: !!self.wallet.settings.pricing && !!self.wallet.config.limits
+        delegate: WalletSettingsDialog {
+            parent: window.Overlay.overlay
+            wallet: self.wallet
         }
     }
-
     header: MainPage.Header {
         contentItem: RowLayout {
             spacing: 8
@@ -107,16 +112,15 @@ MainPage {
                 onClicked: notifications_drawer.open()
             }
             ToolButton {
-                onClicked: openSettings()
                 icon.source: 'qrc:/svg/settings.svg'
                 flat: true
-                enabled: !!wallet_view.wallet.settings.pricing && !!wallet_view.wallet.config.limits
+                action: self.settingsAction
                 ToolTip.text: qsTrId('id_settings')
                 ToolTip.delay: 300
                 ToolTip.visible: hovered
             }
             ToolButton {
-                onClicked: wallet_view.wallet.disconnect()
+                onClicked: self.wallet.disconnect()
                 icon.source: 'qrc:/svg/logout.svg'
                 flat: true
                 ToolTip.text: 'Logout'
@@ -199,10 +203,6 @@ MainPage {
         }
     }
 
-    function openSettings() {
-        settings_dialog.createObject(wallet_view).open()
-    }
-
     contentItem: SplitView {
         handle: Item {
             implicitWidth: 16
@@ -220,7 +220,7 @@ MainPage {
         StackView {
             id: stack_view
             SplitView.fillWidth: true
-            SplitView.minimumWidth: wallet_view.width / 2
+            SplitView.minimumWidth: self.width / 2
             initialItem: Item {}
             clip: true
         }
@@ -242,8 +242,8 @@ MainPage {
     SystemMessageDialog {
         id: system_message_dialog
         property bool alreadyOpened: false
-        wallet: wallet_view.wallet
-        visible: shouldOpen && !alreadyOpened && wallet_view.match
+        wallet: self.wallet
+        visible: shouldOpen && !alreadyOpened && self.match
         onVisibleChanged: {
             if (!visible) {
                 Qt.callLater(function () { system_message_dialog.alreadyOpened = true })

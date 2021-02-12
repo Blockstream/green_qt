@@ -202,8 +202,8 @@ ApplicationWindow {
                 width: fitMenuWidth(this)
                 MenuItem {
                     text: qsTrId('id_settings')
-                    enabled: currentWallet && currentWallet.authentication === Wallet.Authenticated
-                    onClicked: currentWalletView.openSettings()
+                    action: currentWalletView ? currentWalletView.settingsAction : null
+                    enabled: !!currentWalletView
                 }
                 MenuItem {
                     enabled: currentWallet && currentWallet.connection !== Wallet.Disconnected && !currentWallet.device
