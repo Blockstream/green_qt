@@ -401,6 +401,7 @@ void Wallet::loginWithPin(const QByteArray& pin)
             --m_login_attempts_remaining;
             save();
             emit loginAttemptsRemainingChanged(m_login_attempts_remaining);
+            if (m_login_attempts_remaining == 0) setConnection(Disconnected);
         }
         if (error.contains("exception:reconnect required")) {
             setAuthentication(Unauthenticated);

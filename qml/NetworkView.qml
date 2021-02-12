@@ -270,7 +270,7 @@ Item {
                 Menu {
                     id: wallet_menu
                     MenuItem {
-                        enabled: wallet.connection !== Wallet.Disconnected && !wallet.device
+                        enabled: wallet.connection === Wallet.Connected && wallet.authentication === Wallet.Authenticated && !wallet.device
                         text: qsTrId('id_log_out')
                         onTriggered: wallet.disconnect()
                     }

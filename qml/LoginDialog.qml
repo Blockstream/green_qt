@@ -67,7 +67,7 @@ AbstractDialog {
         }
 
         PinView {
-            enabled: self.wallet.authentication === Wallet.Unauthenticated
+            enabled: self.wallet.authentication === Wallet.Unauthenticated && self.wallet.loginAttemptsRemaining > 0
             id: pin_view
             anchors.horizontalCenter: parent.horizontalCenter
             onPinChanged: {
