@@ -17,7 +17,6 @@ ColumnLayout {
         contentItem: ColumnLayout {
             Label {
                 Layout.fillWidth: true
-                Layout.maximumWidth: 800
                 text: qsTrId('id_your_wallet_backup_is_made_of') + "\n" + qsTrId('id_blockstream_does_not_have')
                 wrapMode: Label.WordWrap
             }
@@ -35,7 +34,6 @@ ColumnLayout {
         contentItem: ColumnLayout {
             Label {
                 Layout.fillWidth: true
-                Layout.maximumWidth: 800
                 text: qsTrId('id_save_a_summary_of_your_accounts')
                 wrapMode: Label.WordWrap
             }
@@ -61,13 +59,12 @@ ColumnLayout {
     SettingsBox {
         title: qsTrId('id_set_timelock')
         visible: !wallet.network.liquid
-        enabled: wallet.settings.notifications &&
-                 wallet.settings.notifications.email_incoming &&
-                 wallet.settings.notifications.email_outgoing
+        enabled: !!wallet.settings.notifications &&
+                 !!wallet.settings.notifications.email_incoming &&
+                 !!wallet.settings.notifications.email_outgoing
         contentItem: ColumnLayout {
             Label {
                 Layout.fillWidth: true
-                Layout.maximumWidth: 800
                 text: qsTrId('id_redeem_your_deposited_funds') + '\n\n' + qsTrId('id_enable_email_notifications_to')
                 wrapMode: Label.WordWrap
             }
@@ -86,7 +83,6 @@ ColumnLayout {
         contentItem: ColumnLayout {
             Label {
                 Layout.fillWidth: true
-                Layout.maximumWidth: 800
                 text: qsTrId('id_set_up_an_email_to_get')
                 wrapMode: Label.WordWrap
             }

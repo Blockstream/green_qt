@@ -6,7 +6,6 @@ import QtQuick.Layouts 1.12
 ControllerDialog {
     id: dialog
     required property Wallet wallet
-    property string method
     property bool shouldOpen: false
     title: qsTrId('id_system_message')
     closePolicy: Popup.NoAutoClose
@@ -14,7 +13,7 @@ ControllerDialog {
     showRejectButton: false
     controller: SystemMessageController {
         wallet: dialog.wallet
-        onEmpty: dialog.close()
+        onEmpty: dialog.accept()
         onMessage: {
             message_label.text = text
             confirm_checkbox.enabled = true
@@ -26,7 +25,7 @@ ControllerDialog {
         property list<Action> actions: [
             Action {
                 text: qsTrId('id_skip')
-                onTriggered: dialog.close()
+                onTriggered: dialog.reject()
             },
             Action {
                 enabled: confirm_checkbox.checked

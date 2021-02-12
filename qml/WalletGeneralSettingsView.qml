@@ -11,7 +11,7 @@ ColumnLayout {
     required property Wallet wallet
     readonly property var per_currency: {
         const result = {}
-        if (self.wallet.currencies) {
+        if (self.wallet.currencies && self.wallet.currencies.per_exchange) {
             for (const [exchange, currencies] of Object.entries(self.wallet.currencies.per_exchange)) {
                 for (const currency of currencies) {
                     if (currency in result) {
@@ -83,7 +83,7 @@ ColumnLayout {
                     Layout.fillWidth: true
                     flat: true
                     width: 200
-                    model: Object.keys(per_currency).sort()
+                    model: Object.keys(self.per_currency).sort()
                     currentIndex: model.indexOf(self.wallet.settings.pricing ? self.wallet.settings.pricing.currency : '')
                     onCurrentTextChanged: {
                         if (!focus) return
@@ -91,8 +91,8 @@ ColumnLayout {
                         if (currency === '') return
                         if (currency === self.wallet.settings.pricing.currency) return
                         const pricing = { currency }
-                        if (per_currency[currency].indexOf(wallet.settings.pricing.exchange) < 0) {
-                            pricing.exchange = per_currency[currentText][0]
+                        if (self.per_currency[currency].indexOf(wallet.settings.pricing.exchange) < 0) {
+                            pricing.exchange = self.per_currency[currentText][0]
                         }
                         controller.changeSettings({ pricing })
                     }
@@ -103,7 +103,7 @@ ColumnLayout {
                     flat: true
                     width: 200
                     model: currency_combo.currentText ? per_currency[currency_combo.currentText].sort() : []
-                    currentIndex: Math.max(0, model.indexOf(self.wallet.settings.pricing.exchange))
+                    currentIndex: self.wallet.settings.pricing ? Math.max(0, model.indexOf(self.wallet.settings.pricing.exchange)) : 0
                     onCurrentTextChanged: {
                         if (!focus) return
                         const exchange = currentText
@@ -119,7 +119,7 @@ ColumnLayout {
 
     SettingsBox {
         title: qsTrId('id_notifications')
-        enabled: !wallet.locked && wallet.config.email.confirmed
+        enabled: !wallet.locked && !!wallet.config.email && wallet.config.email.confirmed
         contentItem: RowLayout {
             Label {
                 Layout.fillWidth: true

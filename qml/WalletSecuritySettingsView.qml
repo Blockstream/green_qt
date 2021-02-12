@@ -72,7 +72,6 @@ ColumnLayout {
             Label {
                 Layout.alignment: Qt.AlignTop
                 Layout.fillWidth: true
-                Layout.maximumWidth: 300
                 text: qsTrId('id_enable_twofactor_authentication')
                 wrapMode: Label.WordWrap
                 Layout.minimumWidth: 0 //contentWidth
@@ -139,7 +138,6 @@ ColumnLayout {
         contentItem: ColumnLayout {
             Label {
                 Layout.fillWidth: true
-                Layout.maximumWidth: 800
                 text: qsTrId('id_customize_2fa_expiration_of')
                 wrapMode: Label.WordWrap
             }
@@ -158,8 +156,7 @@ ColumnLayout {
         contentItem: ColumnLayout {
             Label {
                 Layout.fillWidth: true
-                Layout.maximumWidth: 800
-                text: wallet.locked ? qsTrId('wallet locked for %1 days').arg(wallet.config.twofactor_reset.days_remaining) : qsTrId('id_start_a_2fa_reset_process_if')
+                text: wallet.locked ? qsTrId('wallet locked for %1 days').arg(wallet.config.twofactor_reset ? wallet.config.twofactor_reset.days_remaining : 0) : qsTrId('id_start_a_2fa_reset_process_if')
                 wrapMode: Label.WordWrap
             }
             Button {

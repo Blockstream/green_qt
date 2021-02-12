@@ -170,7 +170,7 @@ Item {
                                                 const item = wallet_view_repeater.itemAt(i)
                                                 if (item.wallet === wallet) return item.contentItem
                                             }
-                                            return undefined
+                                            return null
                                         }
                                     }
                                 }
