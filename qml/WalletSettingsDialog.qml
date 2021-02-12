@@ -78,7 +78,18 @@ WalletDialog {
             }
         }
     }
-
+    component F: Flickable {
+        id: flickagle
+        contentWidth: width
+        ScrollIndicator.vertical: ScrollIndicator {
+            parent: self.background
+            anchors.top: parent.top
+            anchors.topMargin: self.topPadding
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: self.bottomPadding
+        }
+    }
     contentItem: RowLayout {
         id: layout
         spacing: 8
@@ -114,35 +125,29 @@ WalletDialog {
             id: stack_layout
             Layout.fillWidth: true
             Layout.fillHeight: true
-            Flickable {
-                contentWidth: width
+            F {
                 contentHeight: general_view.height
                 WalletGeneralSettingsView {
                     id: general_view
                     width: parent.width
                     wallet: self.wallet
                 }
-                ScrollIndicator.vertical: ScrollIndicator { visible: true }
             }
-            Flickable {
-                contentWidth: width
+            F {
                 contentHeight: security_view.height
                 WalletSecuritySettingsView {
                     id: security_view
                     width: parent.width
                     wallet: self.wallet
                 }
-                ScrollIndicator.vertical: ScrollIndicator { }
             }
-            Flickable {
-                contentWidth: width
+            F {
                 contentHeight: recovery_view.height
                 WalletRecoverySettingsView {
                     id: recovery_view
                     width: parent.width
                     wallet: self.wallet
                 }
-                ScrollIndicator.vertical: ScrollIndicator { }
             }
         }
         ToolButton {
