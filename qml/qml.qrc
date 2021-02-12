@@ -33,7 +33,6 @@
         <file>NetworkPage.qml</file>
         <file>WordField.qml</file>
         <file>StackViewPushAction.qml</file>
-        <file>ConnectView.qml</file>
         <file>FeeComboBox.qml</file>
         <file>ScannerView.qml</file>
         <file>WalletAdvancedSettingsView.qml</file>
