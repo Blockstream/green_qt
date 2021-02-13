@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add CHANGELOG.md.
 
 ### Changed
+- Bump GDK to 0.0.40
 - Abstract Device and refactor Ledger support accordingly.
 - Use git if available for the app version, otherwise use CI env vars.
 - Switch to C++17.
