@@ -275,7 +275,6 @@ Item {
                         onTriggered: wallet.disconnect()
                     }
                     MenuItem {
-                        enabled: wallet.connection === Wallet.Disconnected
                         text: qsTrId('id_remove_wallet')
                         onClicked: remove_wallet_dialog.createObject(window, { wallet }).open()
                     }
