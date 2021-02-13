@@ -1,4 +1,5 @@
 import Blockstream.Green 0.1
+import Blockstream.Green.Core 0.1
 import QtQuick 2.13
 import QtQuick.Controls 2.13
 import QtQuick.Controls.Material 2.3
@@ -72,8 +73,8 @@ AbstractDialog {
             anchors.horizontalCenter: parent.horizontalCenter
             onPinChanged: {
                 if (valid) {
-                    const proxy = '' //proxy_checkbox.checked ? proxy_field.text : '';
-                    const use_tor = false //tor_checkbox.checked;
+                    const proxy = Settings.useProxy ? Settings.proxyHost + ':' + Settings.proxyPort : ''
+                    const use_tor = Settings.useTor
                     self.wallet.connect(proxy, use_tor);
                     self.wallet.loginWithPin(pin);
                 }

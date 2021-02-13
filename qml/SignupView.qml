@@ -219,8 +219,8 @@ Page {
                 text: qsTrId('id_create')
                 onTriggered: {
                     controller.name = name_field.text.trim()
-                    const proxy = proxy_checkbox.checked ? proxy_field.text : '';
-                    const use_tor = tor_checkbox.checked;
+                    const proxy = Settings.useProxy ? Settings.proxyHost + ':' + Settings.proxyPort : ''
+                    const use_tor = Settings.useTor
                     const pin = pin_view.pin;
                     const wallet = controller.signup(proxy, use_tor, pin);
                     close();
