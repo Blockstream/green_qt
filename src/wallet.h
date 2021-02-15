@@ -126,7 +126,7 @@ public slots:
     void updateConfig();
     void updateSettings();
 
-    void refreshAssets();
+    void refreshAssets(bool refresh);
 
 signals:
     void networkChanged(Network* network);

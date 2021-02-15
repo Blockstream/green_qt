@@ -483,6 +483,11 @@ void Wallet::setPin(const QByteArray& pin)
 
 void Wallet::reload()
 {
+    if (m_network->isLiquid()) {
+        // Load cached assets
+        refreshAssets(false);
+    }
+
     auto handler = new GetSubAccountsHandler(this);
     QObject::connect(handler, &Handler::done, this, [this, handler] {
         QJsonArray accounts = handler->result().value("result").toObject().value("subaccounts").toArray();
@@ -497,10 +502,12 @@ void Wallet::reload()
 
         emit accountsChanged();
 
-        if (m_network->isLiquid()) {
-            refreshAssets();
-        }
         updateConfig();
+
+        if (m_network->isLiquid()) {
+            // Update cached assets
+            refreshAssets(true);
+        }
     });
     QObject::connect(handler, &Handler::resolver, this, [](Resolver* resolver) {
         resolver->resolve();
@@ -508,15 +515,15 @@ void Wallet::reload()
     handler->exec();
 }
 
-void Wallet::refreshAssets()
+void Wallet::refreshAssets(bool refresh)
 {
     Q_ASSERT(m_network->isLiquid());
 
-    QMetaObject::invokeMethod(m_context, [this] {
+    QMetaObject::invokeMethod(m_context, [this, refresh] {
         auto params = Json::fromObject({
             { "assets", true },
             { "icons", true },
-            { "refresh", true }
+            { "refresh", refresh }
         });
         GA_json* output;
         int err = GA_refresh_assets(m_session, params.get(), &output);
