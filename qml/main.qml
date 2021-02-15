@@ -242,9 +242,10 @@ ApplicationWindow {
     }
 
     component WalletButton: SideButton {
+        id: self
         required property Wallet wallet
         location: `/${wallet.network.id}/${wallet.id}`
-        text: wallet.name
+        text: wallet.device ? wallet.device.name : wallet.name
         busy: wallet.busy
         icon.width: 16
         icon.height: 16
@@ -252,10 +253,11 @@ ApplicationWindow {
         icon.source: icons[wallet.network.id]
         visible: !Settings.collapseSideBar
         DeviceImage {
+            Layout.minimumWidth: paintedWidth
+            sourceSize.height: 24
+            parent: self.contentItem
             visible: wallet.device
             device: wallet.device
-            anchors.fill: parent
-            anchors.margins: 8
         }
     }
     component SideSeparator: Rectangle {
@@ -309,7 +311,7 @@ ApplicationWindow {
                     icon.source: 'qrc:/svg/jade_emblem_on_transparent_rgb.svg'
                     location: jade_view.location
                     count: jade_view.count
-                    text: 'Jade'
+                    text: 'Blockstream Jade'
                 }
                 SideLabel {
                     text: 'Wallets'

@@ -60,10 +60,11 @@ MainPage {
     }
     header: MainPageHeader {
         contentItem: RowLayout {
-            spacing: 8
+            spacing: 16
 
             ColumnLayout {
                 RowLayout {
+                    spacing: 8
                     Image {
                         sourceSize.height: 16
                         sourceSize.width: 16
@@ -75,17 +76,19 @@ MainPage {
                         font.styleName: 'Regular'
                     }
                 }
-                Label {
-                    text: wallet.device ? wallet.device.name : wallet.name
-                    font.pixelSize: 32
-                    font.styleName: 'Thin'
+                RowLayout {
+                    spacing: 16
+                    Label {
+                        text: wallet.device ? wallet.device.name : wallet.name
+                        font.pixelSize: 32
+                        font.styleName: 'Thin'
+                    }
+                    DeviceImage {
+                        visible: wallet.device
+                        device: wallet.device
+                        sourceSize.height: 32
+                    }
                 }
-            }
-
-            DeviceImage {
-                visible: wallet.device
-                device: wallet.device
-                Layout.maximumWidth: 128
             }
             Item {
                 Layout.fillWidth: true
