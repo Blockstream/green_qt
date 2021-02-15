@@ -1028,6 +1028,8 @@ void JadeDevice::setVersionInfo(const QVariantMap& version_info)
     // qDebug() << QJsonDocument(QJsonObject::fromVariantMap(data)).toJson(QJsonDocument::Indented).toStdString().c_str();
     m_version_info = version_info;
     emit versionInfoChanged();
+    m_name = QString("Jade %1").arg(version_info.value("EFUSEMAC").toString().mid(6));
+    emit nameChanged();
 }
 
 QVariantMap JadeDevice::versionInfo() const

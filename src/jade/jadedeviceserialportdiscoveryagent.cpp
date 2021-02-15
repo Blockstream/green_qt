@@ -56,7 +56,6 @@ JadeDeviceSerialPortDiscoveryAgent::JadeDeviceSerialPortDiscoveryAgent(QObject* 
                     device->m_jade->getVersionInfo([this, device](const QVariantMap& data) {
                         const auto result = data.value("result").toMap();
                         device->setVersionInfo(result);
-                        device->m_name = QString("Jade %1").arg(result.value("JADE_VERSION").toString());
                         DeviceManager::instance()->addDevice(device);
                     });
                 });

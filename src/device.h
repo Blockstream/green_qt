@@ -66,7 +66,7 @@ class Device : public QObject
     Q_PROPERTY(Vendor vendor READ vendor CONSTANT)
     Q_PROPERTY(Transport transport READ transport CONSTANT)
     Q_PROPERTY(Type type READ type CONSTANT)
-    Q_PROPERTY(QString name READ name CONSTANT)
+    Q_PROPERTY(QString name READ name NOTIFY nameChanged)
     QML_ELEMENT
     QML_UNCREATABLE("Devices are instanced by DeviceDiscoveryAgent.")
 public:
@@ -101,6 +101,8 @@ public:
     virtual SignLiquidTransactionActivity* signLiquidTransaction(const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs) = 0;
 
     static Type typefromVendorAndProduct(uint32_t vendor_id, uint32_t product_id);
+signals:
+    void nameChanged();
 private:
     const QString m_uuid;
 };
