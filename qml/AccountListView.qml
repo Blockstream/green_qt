@@ -9,6 +9,16 @@ ListView {
     property Account currentAccount: currentItem ? currentItem.account : null
     signal clicked(Account account)
     spacing: 8
+    BusyIndicator {
+        width: 32
+        height: 32
+        opacity: accounts_list.count === 0 ? 1 : 0
+        Behavior on opacity { OpacityAnimator {} }
+        running: accounts_list.count === 0
+        anchors.bottom: parent.bottom
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.margins: 8
+    }
     delegate: ItemDelegate {
         id: delegate
         property Account account: modelData
