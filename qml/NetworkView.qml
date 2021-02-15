@@ -43,7 +43,7 @@ Item {
     }
 
     component IndexView: MainPage {
-        header: MainPage.Header {
+        header: MainPageHeader {
             contentItem: RowLayout {
                 spacing: 16
                 Image {

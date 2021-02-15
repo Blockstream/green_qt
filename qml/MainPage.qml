@@ -7,11 +7,6 @@ Page {
     }
     leftPadding: 32
     rightPadding: 32
-    component Header: Pane {
-        leftPadding: 32
-        rightPadding: 32
-        background: Item {}
-    }
     component Section: Page {
         id: section
         padding: 16

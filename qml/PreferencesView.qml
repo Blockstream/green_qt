@@ -8,7 +8,7 @@ MainPage {
     id: self
     title: qsTrId('id_settings')
 
-    header: MainPage.Header {
+    header: MainPageHeader {
         contentItem: RowLayout {
             Label {
                 text: self.title

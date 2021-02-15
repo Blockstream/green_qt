@@ -58,7 +58,7 @@ MainPage {
             wallet: self.wallet
         }
     }
-    header: MainPage.Header {
+    header: MainPageHeader {
         contentItem: RowLayout {
             spacing: 8
 
