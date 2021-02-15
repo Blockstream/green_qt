@@ -3,6 +3,7 @@
 
 #include <QtQml/qqml.h>
 #include <QObject>
+#include <QSet>
 
 QT_FORWARD_DECLARE_CLASS(JadeDevice)
 QT_FORWARD_DECLARE_CLASS(Wallet)
@@ -15,6 +16,7 @@ public:
     explicit JadeDeviceSerialPortDiscoveryAgent(QObject* parent = nullptr);
 private:
     QMap<QString, JadeDevice*> m_devices;
+    QSet<QString> m_failed_locations;
 };
 
 class JadeController : public QObject

@@ -303,6 +303,15 @@ ApplicationWindow {
                     text: 'Home'
                 }
                 SideLabel {
+                    text: 'Devices'
+                }
+                SideButton {
+                    icon.source: 'qrc:/svg/jade_emblem_on_transparent_rgb.svg'
+                    location: jade_view.location
+                    count: jade_view.count
+                    text: 'Jade'
+                }
+                SideLabel {
                     text: 'Wallets'
                 }
                 Flickable {
@@ -387,6 +396,10 @@ ApplicationWindow {
             PreferencesView {
                 id: settings_view
                 readonly property string location: '/preferences'
+            }
+            JadeView {
+                id: jade_view
+                readonly property string location: '/jade'
             }
             NetworkView {
                 id: mainnet_view
