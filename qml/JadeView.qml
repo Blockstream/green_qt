@@ -14,12 +14,7 @@ MainPage {
         id: device_list_model
         type: Device.BlockstreamJade
     }
-    clip: true
-    leftPadding: 32
-    rightPadding: 32
     header: MainPageHeader {
-        padding: 16
-        background: Item { }
         contentItem: RowLayout {
             spacing: 16
             Image {

@@ -5,6 +5,7 @@ Page {
     background: Rectangle {
         color: constants.c800
     }
+    clip: true
     leftPadding: 32
     rightPadding: 32
     component Section: Page {
