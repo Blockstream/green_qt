@@ -97,14 +97,14 @@ static void defaultHttpRequestProxy(JadeAPI& jadeapi, const int id, const QJsonO
 JadeAPI::JadeAPI(const QSerialPortInfo& deviceInfo, QObject *parent)
     : JadeAPI(new JadeSerialImpl(deviceInfo, parent), parent) // temporary impl owership
 {
-    qDebug() << "JadeAPI::JadeAPI(serial)";
+    // qDebug() << "JadeAPI::JadeAPI(serial)";
 }
 
 // Create with BLE connection
 JadeAPI::JadeAPI(const QBluetoothDeviceInfo& deviceInfo, QObject *parent)
     : JadeAPI(new JadeBleImpl(deviceInfo, parent), parent) // temporary impl owership
 {
-    qDebug() << "JadeAPI::JadeAPI(ble)";
+    // qDebug() << "JadeAPI::JadeAPI(ble)";
 }
 
 // Private ctor
@@ -130,8 +130,6 @@ JadeAPI::JadeAPI(JadeConnection *connection, QObject *parent)
 
 JadeAPI::~JadeAPI()
 {
-    qDebug() << "JadeAPI::~JadeAPI()";
-
     // Disconnect the underlying connection's signals
     disconnect(m_jade, nullptr, this, nullptr);
 }
@@ -162,7 +160,7 @@ void JadeAPI::setHttpRequestProxy(const HttpRequestProxy &httpRequestProxy)
 // MUST be called when an http-request response is received.
 void JadeAPI::handleHttpResponse(const int id, const QJsonObject &httpRequest, const QJsonObject &httpResponse)
 {
-    qDebug() << "JadeAPI::handleHttpResponse() called for" << id << "with response data" << httpResponse;
+    // qDebug() << "JadeAPI::handleHttpResponse() called for" << id << "with response data" << httpResponse;
 
     Q_ASSERT(httpRequest.contains("on-reply"));
     Q_ASSERT(httpRequest["on-reply"].isString());
@@ -195,7 +193,7 @@ int JadeAPI::registerResponseHandler(const ResponseHandler &cb) {
     }
 
     // Insert the callback keyed by id
-    qDebug() << "JadeAPI::registerResponseHandler() - Registering response handler with id" << id;
+    // qDebug() << "JadeAPI::registerResponseHandler() - Registering response handler with id" << id;
     m_responseHandlers.insert(id, cb);
 
     // Return the new callback id
@@ -209,18 +207,18 @@ void JadeAPI::callResponseHandler(const QVariantMap &msg)
     Q_ASSERT(msg["id"].isValid() && msg["id"].toString().toInt() > 0);
     const int id = msg["id"].toString().toInt();
 
-    qDebug() << "JadeAPI::callResponseHandler() called for message id" << id;
+    // qDebug() << "JadeAPI::callResponseHandler() called for message id" << id;
 
     // Get (ie. remove) the response handler for that id from the map of registered handlers
     const ResponseHandler handler = m_responseHandlers.take(id);
     if (!handler)
     {
-        qWarning() << "JadeAPI::callResponseHandler() - Message ignored - no handler found for id" << msg;
+        // qWarning() << "JadeAPI::callResponseHandler() - Message ignored - no handler found for id" << msg;
         return;
     }
 
     // Call the handler, catching any exceptions
-    qDebug() << "JadeAPI::callResponseHandler() - calling/discarding located handler for id" << id;
+    // qDebug() << "JadeAPI::callResponseHandler() - calling/discarding located handler for id" << id;
     try {
         handler(msg);
     } catch(...) {
@@ -248,7 +246,7 @@ void JadeAPI::forwardToResponseHandler(const int targetId, const QVariantMap &ms
 // The callback function invoked when a (complete) cbor message is received over the wrapped connection
 void JadeAPI::processResponseMessage(const QCborMap &msg)
 {
-    qInfo() << "JadeAPI::processResponseMessage() received <-" << Qt::endl << msg;
+    // qInfo() << "JadeAPI::processResponseMessage() received <-" << Qt::endl << msg;
 
     // Ensure the message has an id
     if (!msg.contains(QCborValue("id")) || !msg["id"].isString() || msg["id"].toString().toInt() == 0) {
@@ -281,7 +279,7 @@ void JadeAPI::processResponseMessage(const QCborMap &msg)
 
 void JadeAPI::sendToJade(const QCborMap &msg)
 {
-    qInfo() << "JadeAPI::sendToJade() - Sending message ->" << Qt::endl << msg;
+    // qInfo() << "JadeAPI::sendToJade() - Sending message ->" << Qt::endl << msg;
     Q_ASSERT(m_jade);
     m_jade->send(msg);
 }

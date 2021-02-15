@@ -12,7 +12,6 @@ JadeConnection::JadeConnection(QObject *parent)
 
 JadeConnection::~JadeConnection()
 {
-    qDebug() << "JadeConnection::~JadeConnection()";
 }
 
 // Manage connection
@@ -34,7 +33,7 @@ void JadeConnection::disconnectDevice()
 // Send cbor message to Jade
 int JadeConnection::send(const QCborMap &msg)
 {
-    qDebug() << "JadeConnection::send() called for cbor object of" << msg.size() << "fields";
+    // qDebug() << "JadeConnection::send() called for cbor object of" << msg.size() << "fields";
 
     if (!isConnected()) {
         qWarning() << "JadeConnection::send() cannot send to disconnected device";
@@ -49,7 +48,7 @@ int JadeConnection::send(const QCborMap &msg)
 }
 
 void JadeConnection::onDataReceived(const QByteArray &data) {
-    qDebug() << "JadeConnection::onDataReceived() -" << data.length() << "bytes received";
+    // qDebug() << "JadeConnection::onDataReceived() -" << data.length() << "bytes received";
 
     try {
         // Collect data
@@ -59,7 +58,7 @@ void JadeConnection::onDataReceived(const QByteArray &data) {
         for(bool readNextObj = true; readNextObj; /*nothing - set in loop*/) {
             QCborParserError err;
             const QCborValue cbor = QCborValue::fromCbor(m_unparsed, &err);
-            qDebug() << "Read Type:" << cbor.type() << "and error: " << err.error;
+            // qDebug() << "Read Type:" << cbor.type() << "and error: " << err.error;
             readNextObj = false;  // In most cases we don't read another object
 
             if (err.error == QCborError::NoError && cbor.isMap()) {

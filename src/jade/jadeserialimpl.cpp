@@ -20,7 +20,6 @@ JadeSerialImpl::JadeSerialImpl(const QSerialPortInfo &deviceInfo,
 
 JadeSerialImpl::~JadeSerialImpl()
 {
-    qDebug() << "JadeSerialImpl::~JadeSerialImpl()";
     disconnectDevice();
 }
 
@@ -34,12 +33,12 @@ bool JadeSerialImpl::isConnectedImpl()
 void JadeSerialImpl::connectDeviceImpl()
 {
     Q_ASSERT(m_serial);
-    qDebug() << "JadeSerialImpl::connectDeviceImpl()";
+    // qDebug() << "JadeSerialImpl::connectDeviceImpl()";
 
     // Only try to connect if not already connected
     if (isConnected())
     {
-        qWarning() << "JadeSerialImpl::connectDeviceImpl() already connected - ignoring";
+        // qWarning() << "JadeSerialImpl::connectDeviceImpl() already connected - ignoring";
         return;
     }
 
@@ -57,7 +56,7 @@ void JadeSerialImpl::connectDeviceImpl()
     }
     else
     {
-        qWarning() << "JadeSerialImpl::connectDeviceImpl() error opening " << m_serial->portName();
+        // qWarning() << "JadeSerialImpl::connectDeviceImpl() error opening " << m_serial->portName();
         disconnectDevice();
     }
 }
@@ -74,7 +73,7 @@ void JadeSerialImpl::disconnectDeviceImpl()
     // Close port
     if (m_serial->isOpen())
     {
-        qDebug() << "JadeSerialImpl::disconnectDeviceImpl() - closing underlying serial port";
+        // qDebug() << "JadeSerialImpl::disconnectDeviceImpl() - closing underlying serial port";
         m_serial->close();
     }
 
@@ -88,7 +87,7 @@ int JadeSerialImpl::writeImpl(const QByteArray &data)
     Q_ASSERT(m_serial);
     Q_ASSERT(isConnected());
 
-    qDebug() << "JadeSerialImpl::writeImpl() sending" << data.length() << "bytes";
+    // qDebug() << "JadeSerialImpl::writeImpl() sending" << data.length() << "bytes";
 
     int written = 0;
     while (written != data.length()) {
@@ -102,7 +101,7 @@ int JadeSerialImpl::writeImpl(const QByteArray &data)
         }
     }
 
-    qDebug() << "JadeSerialImpl::writeImpl() sent" << written << "bytes";
+    // qDebug() << "JadeSerialImpl::writeImpl() sent" << written << "bytes";
     return written;
 }
 
@@ -113,7 +112,7 @@ void JadeSerialImpl::onSerialDataReady()
 
     // Fetch all available data from the serial port
     const QByteArray data = m_serial->readAll();
-    qDebug() << "JadeSerialImpl::onSerialDataReady() -" << data.length() << "bytes received";
+    // qDebug() << "JadeSerialImpl::onSerialDataReady() -" << data.length() << "bytes received";
 
      // Pass to base class
     JadeConnection::onDataReceived(data);
