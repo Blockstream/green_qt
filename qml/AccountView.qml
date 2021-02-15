@@ -69,7 +69,7 @@ StackView {
                             }
                             return balances
                         }
-                        Pane {
+                        ItemDelegate {
                             topPadding: 8
                             bottomPadding: 8
                             leftPadding: 16
@@ -104,9 +104,9 @@ StackView {
                                     text: modelData.displayAmount
                                 }
                             }
-//                            AssetDelegate {
-//                                balance: modelData
-//                                onClicked: if (hasDetails) list_view.clicked(balance)
+                            onClicked: {
+                                account_view.push(asset_view_component, { balance: modelData })
+                            }
                         }
                     }
                     Button {
@@ -130,10 +130,6 @@ StackView {
                     }
                 }
             }
-//            AssetListView {
-//                account: account_view.account
-//                onClicked: account_view.push(asset_view_component, { balance })
-//            }
         }
     }
     Component {
