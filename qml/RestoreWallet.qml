@@ -24,7 +24,9 @@ AbstractDialog {
     Connections {
         target: controller.wallet
         function onLoginError(error) {
-            if (error.includes('id_login_failed') || error.includes('bip39_mnemonic_to_seed')) {
+            if (error.includes('id_login_failed')) {
+                footer_buttons_row.ToolTip.show(qsTrId('id_login_failed'), 2000);
+            } else if (error.includes('bip39_mnemonic_to_seed')) {
                 footer_buttons_row.ToolTip.show(qsTrId('id_invalid_mnemonic'), 2000);
             } else if (error.includes('reconnect required')) {
                 footer_buttons_row.ToolTip.show(qsTrId('id_unable_to_contact_the_green'), 2000);
