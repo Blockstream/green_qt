@@ -13,9 +13,6 @@ ApplicationWindow {
     readonly property Wallet currentWallet: currentWalletView ? currentWalletView.wallet : null
     readonly property Account currentAccount: currentWalletView ? currentWalletView.currentAccount : null
 
-    DeviceDiscoveryAgent {
-    }
-
     Connections {
         target: WalletManager
         function onWalletAdded(wallet) {
@@ -313,6 +310,12 @@ ApplicationWindow {
                     count: jade_view.count
                     text: 'Blockstream Jade'
                 }
+                SideButton {
+                    icon.source: 'qrc:/svg/ledger-logo.svg'
+                    location: ledger_view.location
+                    count: ledger_view.count
+                    text: 'Ledger'
+                }
                 SideLabel {
                     text: 'Wallets'
                 }
@@ -402,6 +405,10 @@ ApplicationWindow {
             JadeView {
                 id: jade_view
                 readonly property string location: '/jade'
+            }
+            LedgerView {
+                id: ledger_view
+                readonly property string location: '/ledger'
             }
             NetworkView {
                 id: mainnet_view

@@ -82,5 +82,6 @@
         <file>LoginDialog.qml</file>
         <file>WalletSettingsDialog.qml</file>
         <file>MainPageHeader.qml</file>
+        <file>LedgerView.qml</file>
     </qresource>
 </RCC>
