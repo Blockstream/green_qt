@@ -7,10 +7,17 @@ import QtQuick.Layouts 1.12
 MainPage {
     id: self
     readonly property bool busy: {
+        for (let i = 0; i < devices_list_view.count; ++i) {
+            if (devices_list_view.itemAtIndex(i).busy) return true
+        }
         return false
     }
-    readonly property int count: 0
+    property alias count: devices_list_view.count
     DeviceDiscoveryAgent {
+    }
+    DeviceListModel {
+        id: device_list_model
+        vendor: Device.Ledger
     }
     header: MainPageHeader {
         padding: 16
@@ -81,7 +88,6 @@ MainPage {
                     onTriggered: flipable.flipped = !flipable.flipped
                 }
             }
-
             Pane {
                 Layout.topMargin: 40
                 Layout.alignment: Qt.AlignHCenter
@@ -107,14 +113,6 @@ MainPage {
                     }
                 }
             }
-            Label {
-                Layout.alignment: Qt.AlignHCenter
-                wrapMode: Text.WordWrap
-                text: `<a href="${url}">Learn more about Blockstream Jade in our help center</a>`
-                textFormat: Text.RichText
-                color: 'white'
-                onLinkActivated: Qt.openUrlExternally(url)
-            }
             Item {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
@@ -122,7 +120,83 @@ MainPage {
         }
         ColumnLayout {
             spacing: 16
+            ListView {
+                id: devices_list_view
+                ScrollIndicator.horizontal: ScrollIndicator { }
+                Layout.alignment: Qt.AlignCenter
+                implicitWidth: Math.min(contentWidth, parent.width)
+                height: 200
+                model: device_list_model
+                spacing: 16
+                orientation: ListView.Horizontal
+                currentIndex: {
+                    for (let i = 0; i < devices_list_view.count; ++i) {
+                        if (devices_list_view.itemAtIndex(i).location === window.location) {
+                            return i
+                        }
+                    }
+                    return -1
+                }
+                delegate: Pane {
+                    required property LedgerDevice device
+                    readonly property string location: '/ledger/' + device.uuid
+                    padding: 16
+                    background: Rectangle {
+                        radius: 8
+                        color: constants.c700
+                    }
+                    contentItem: ColumnLayout {
+                        spacing: 16
+                        Image {
+                            Layout.alignment: Qt.AlignCenter
+                            smooth: true
+                            mipmap: true
+                            fillMode: Image.PreserveAspectFit
+                            horizontalAlignment: Image.AlignHCenter
+                            verticalAlignment: Image.AlignVCenter
+                            sourceSize.height: 32
+                            source: switch(device.type) {
+                                case Device.LedgerNanoS: return 'qrc:/svg/ledger_nano_s.svg'
+                                case Device.LedgerNanoX: return 'qrc:/svg/ledger_nano_x.svg'
+                            }
+                        }
+                        GridLayout {
+                            columnSpacing: 16
+                            rowSpacing: 8
+                            columns: 2
+                            Label {
+                                text: 'Model'
+                            }
+                            Label {
+                                text: switch(device.type) {
+                                    case Device.LedgerNanoS: return 'Nano S'
+                                    case Device.LedgerNanoX: return 'Nano X'
+                                }
+                            }
+                            Label {
+                                text: 'Connection'
+                            }
+                            Label {
+                                text: 'USB'
+                            }
+                        }
+                    }
+                }
+            }
+            StackLayout {
+                currentIndex: devices_list_view.currentIndex
+                Repeater {
+                    model: device_list_model
+                    Pane {
+                        background: Item {
+                        }
+                        contentItem: Item {
+                        }
+                    }
+                }
+            }
             Item {
+                Layout.fillWidth: true
                 Layout.fillHeight: true
                 width: 1
             }
