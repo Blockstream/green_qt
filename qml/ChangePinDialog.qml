@@ -4,6 +4,7 @@ import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.13
 
 WalletDialog {
+    id: self
     title: stack_view.currentItem.title
     width: 320
     height: 400
@@ -38,17 +39,21 @@ WalletDialog {
         }
     }
 
-    footer: DialogButtonBox {
-        Button {
-            enabled: stack_view.currentItem.accept
-            flat: true
-            text: qsTrId('id_ok')
-            DialogButtonBox.buttonRole: DialogButtonBox.AcceptRole
+    footer: Pane {
+        rightPadding: 16
+        bottomPadding: 8
+        background: Item {
         }
-        Button {
-            flat: true
-            text: qsTrId('id_cancel')
-            onClicked: close()
+        contentItem: RowLayout {
+            Item {
+                Layout.fillWidth: true
+            }
+            Button {
+                enabled: stack_view.currentItem.accept
+                flat: true
+                text: qsTrId('id_change_pin')
+                onClicked: accept()
+            }
         }
     }
 
