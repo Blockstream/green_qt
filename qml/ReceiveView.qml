@@ -49,6 +49,9 @@ ColumnLayout {
         }
         ToolButton {
             action: refresh_action
+            ToolTip.text: qsTrId('id_generate_new_address')
+            ToolTip.delay: 300
+            ToolTip.visible: hovered
         }
     }
 
