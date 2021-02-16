@@ -34,55 +34,52 @@ MainPage {
     }
     contentItem: StackLayout {
         currentIndex: self.count === 0 ? 0 : 1
-        Item {
-            ColumnLayout {
-                anchors.centerIn: parent
-                spacing: 20
-
-                Image {
-                    Layout.alignment: Qt.AlignHCenter
-                    source: "qrc:/svg/blockstream_jade.svg"
-                }
-
-                Rectangle {
-                    Layout.topMargin: 40
-                    Layout.alignment: Qt.AlignHCenter
-                    Layout.preferredHeight: 60
-                    Layout.preferredWidth: childrenRect.width+40
+        ColumnLayout {
+            spacing: 16
+            Item {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+            }
+            Image {
+                Layout.alignment: Qt.AlignHCenter
+                source: 'qrc:/svg/blockstream_jade.svg'
+            }
+            Pane {
+                Layout.topMargin: 40
+                Layout.alignment: Qt.AlignHCenter
+                background: Rectangle {
                     radius: 8
                     border.width: 2
                     border.color: constants.c600
-                    color: "transparent"
-
-                    RowLayout {
-                        spacing: 10
-                        anchors.centerIn: parent
-
-                        Image {
-                            Layout.alignment: Qt.AlignVCenter
-                            sourceSize.width: 32
-                            sourceSize.height: 32
-                            fillMode: Image.PreserveAspectFit
-                            source: "qrc:/svg/usbAlt.svg"
-                            clip: true
-                        }
-
-                        Text {
-                            Layout.alignment: Qt.AlignVCenter
-                            text: "Connect your Jade hardware wallet to use it with Green"
-                            color: "white"
-                        }
+                    color: 'transparent'
+                }
+                contentItem: RowLayout {
+                    spacing: 16
+                    Image {
+                        Layout.alignment: Qt.AlignVCenter
+                        sourceSize.width: 32
+                        sourceSize.height: 32
+                        fillMode: Image.PreserveAspectFit
+                        source: 'qrc:/svg/usbAlt.svg'
+                        clip: true
+                    }
+                    Label {
+                        Layout.alignment: Qt.AlignVCenter
+                        text: 'Connect your Jade hardware wallet to use it with Green'
                     }
                 }
-
-                Label {
-                    Layout.alignment: Qt.AlignHCenter
-                    wrapMode: Text.WordWrap
-                    text: `<a href="${url}">Learn more about Blockstream Jade in our help center</a>`
-                    textFormat: Text.RichText
-                    color: 'white'
-                    onLinkActivated: Qt.openUrlExternally(url)
-                }
+            }
+            Label {
+                Layout.alignment: Qt.AlignHCenter
+                wrapMode: Text.WordWrap
+                text: `<a href="${url}">Learn more about Blockstream Jade in our help center</a>`
+                textFormat: Text.RichText
+                color: 'white'
+                onLinkActivated: Qt.openUrlExternally(url)
+            }
+            Item {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
             }
         }
 
