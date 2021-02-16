@@ -23,18 +23,6 @@ ColumnLayout {
 
     Action {
         id: copy_address_action
-        text: qsTrId('id_copy_address')
-        onTriggered: {
-            if (receive_address.generating) return;
-            Clipboard.copy(receive_address.address)
-            qrcode.ToolTip.show(qsTrId('id_address_copied_to_clipboard'), 1000);
-        }
-    }
-
-    Action {
-        id: copy_uri_action
-        enabled: !wallet.network.liquid
-        text: qsTrId('id_copy_uri')
         onTriggered: {
             if (receive_address.generating) return;
             Clipboard.copy(receive_address.uri)
@@ -80,27 +68,23 @@ ColumnLayout {
 
     RowLayout {
         Label {
-            text: receive_address.address
+            text: receive_address.uri
             horizontalAlignment: Label.AlignHCenter
             verticalAlignment: Label.AlignVCenter
             Layout.fillWidth: true
             Layout.minimumWidth: 400
+            Layout.maximumWidth: 400
+            wrapMode: Text.WrapAnywhere
         }
         ToolButton {
             enabled: !receive_address.generating
             icon.source: 'qrc:/svg/copy.svg'
             icon.width: 16
             icon.height: 16
-            onClicked: copy_menu.open()
-            Menu {
-                id: copy_menu
-                MenuItem {
-                    action: copy_address_action
-                }
-                MenuItem {
-                    action: copy_uri_action
-                }
-            }
+            action: copy_address_action
+            ToolTip.text: qsTrId('id_copy_to_clipboard')
+            ToolTip.delay: 300
+            ToolTip.visible: hovered
         }
     }
     SectionLabel {
