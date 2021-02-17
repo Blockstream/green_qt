@@ -46,6 +46,13 @@ MainPage {
 
     readonly property bool fiatRateAvailable: formatFiat(0, false) !== 'n/a'
 
+    property Action disconnectAction: Action {
+        onTriggered: {
+            pushLocation(`/${wallet.network.id}`)
+            self.wallet.disconnect()
+        }
+    }
+
     property Action settingsAction: Action {
         enabled: settings_dialog.active
         onTriggered: settings_dialog.object.open()
@@ -123,9 +130,9 @@ MainPage {
                 ToolTip.visible: hovered
             }
             ToolButton {
-                onClicked: self.wallet.disconnect()
                 icon.source: 'qrc:/svg/logout.svg'
                 flat: true
+                action: self.disconnectAction
                 ToolTip.text: 'Logout'
                 ToolTip.delay: 300
                 ToolTip.visible: hovered
