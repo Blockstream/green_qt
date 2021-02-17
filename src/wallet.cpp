@@ -281,6 +281,8 @@ void Wallet::handleNotification(const QJsonObject &notification)
 
     QJsonValue data = notification.value(event);
 
+    if (data.isObject()) emit this->notification(event, data.toObject());
+
     m_events.insert(event, data);
     emit eventsChanged(m_events);
 

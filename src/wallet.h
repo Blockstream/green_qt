@@ -135,6 +135,7 @@ signals:
     void proxyChanged(const QString& proxy);
     void useTorChanged(bool use_tor);
     void lockedChanged(bool locked);
+    void notification(const QString& type, const QJsonObject& data);
     void accountsChanged();
     void eventsChanged(QJsonObject events);
     void nameChanged(QString name);
