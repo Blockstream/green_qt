@@ -19,7 +19,7 @@ AbstractDialog {
         function onLoginAttemptsRemainingChanged(loginAttemptsRemaining) {
             pin_view.clear()
             if (loginAttemptsRemaining === 0) {
-                switchToWallet(null)
+                pushLocation(`/${wallet.network.id}`)
             }
         }
     }

@@ -13,32 +13,6 @@ ApplicationWindow {
     readonly property Wallet currentWallet: currentWalletView ? currentWalletView.wallet : null
     readonly property Account currentAccount: currentWalletView ? currentWalletView.currentAccount : null
 
-    Connections {
-        target: WalletManager
-        function onWalletAdded(wallet) {
-            if (wallet.device) {
-                switchToWallet(wallet)
-            }
-        }
-        function onAboutToRemove(wallet) {
-            if (currentWallet === wallet) {
-                stack_view.replace(stack_view.initialItem)
-            }
-            const view = wallet_views[wallet]
-            delete wallet_views[wallet]
-            view.destroy()
-        }
-    }
-
-    Component {
-        id: container_component
-        WalletContainerView {
-            onCanceled2: {
-                switchToWallet(null)
-            }
-        }
-    }
-
     readonly property string location: Settings.history.length > 0 ? Settings.history[Settings.history.length - 1] : '/home'
     function matchesLocation(l) {
         return location.startsWith(l)
@@ -59,22 +33,6 @@ ApplicationWindow {
            if (l && child.enabled && location.startsWith(l)) return i
        }
        return 0
-    }
-
-    property var wallet_views: ({})
-    function switchToWallet(wallet) {
-        if (wallet) {
-            let container = wallet_views[wallet]
-            if (!container) {
-                container = container_component.createObject(null, { wallet })
-                wallet_views[wallet] = container
-            }
-            stack_view.replace(container, StackView.Immediate)
-            wallet_list_view.currentIndex = wallet_list_view.model.indexOf(wallet)
-        } else {
-            stack_view.replace(stack_view.initialItem, StackView.Immediate)
-            wallet_list_view.currentIndex = -1
-        }
     }
 
     property var icons: ({
