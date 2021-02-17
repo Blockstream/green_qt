@@ -1,6 +1,7 @@
 import Blockstream.Green 0.1
 import QtQuick 2.12
 import QtQuick.Controls 2.5
+import QtQuick.Layouts 1.3
 
 ListView {
     id: list_view
@@ -22,14 +23,29 @@ ListView {
 
     ScrollIndicator.vertical: ScrollIndicator { }
 
-    BusyIndicator {
-        width: 32
-        height: 32
-        opacity: running ? 1 : 0
+    Rectangle {
+        anchors.fill: parent
+        color: constants.c800
+        visible: model.fetching
+        opacity: visible ? 0.5 : 0
         Behavior on opacity { OpacityAnimator {} }
-        running: model.fetching
-        anchors.bottom: parent.bottom
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.margins: 8
+    }
+
+    ColumnLayout {
+        opacity: model.fetching ? 1 : 0
+        Behavior on opacity { OpacityAnimator {} }
+        anchors.centerIn: parent
+        spacing: 16
+        BusyIndicator {
+            width: 32
+            height: 32
+            running: model.fetching
+            anchors.margins: 8
+            Layout.alignment: Qt.AlignHCenter
+        }
+        Label {
+            text: 'Loading transactions...'
+            Layout.alignment: Qt.AlignHCenter
+        }
     }
 }
