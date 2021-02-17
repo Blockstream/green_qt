@@ -46,6 +46,10 @@ JadeDeviceSerialPortDiscoveryAgent::JadeDeviceSerialPortDiscoveryAgent(QObject* 
             const auto system_location = info.systemLocation();
             if (m_failed_locations.contains(system_location)) continue;
 
+            // filter for Silicon Laboratories USB to UART
+            if (info.vendorIdentifier() != 0x10c4) continue;
+            if (info.productIdentifier() != 0xea60) continue;
+
             auto device = devices.take(system_location);
             if (!device) {
                 auto api = new JadeAPI(info);
