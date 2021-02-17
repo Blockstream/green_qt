@@ -69,7 +69,7 @@ ListView {
                         z: -1
                     }
                 }
-                SectionLabel {
+                Label {
                     text: qsTrId('id_2of3_account')
                     visible: account.json.type === '2of3'
                     font.pixelSize: 10
