@@ -528,7 +528,9 @@ void Wallet::refreshAssets(bool refresh)
         });
         GA_json* output;
         int err = GA_refresh_assets(m_session, params.get(), &output);
-        Q_ASSERT(err == GA_OK);
+        if (err != GA_OK) {
+            return;
+        }
 
         auto assets = Json::toObject(output);
         err = GA_destroy_json(output);
