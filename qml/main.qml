@@ -410,14 +410,9 @@ ApplicationWindow {
             property Wallet wallet
             anchors.centerIn: parent
             modal: true
-            onAccepted: {
-                WalletManager.removeWallet(wallet)
-            }
-            ColumnLayout {
-                spacing: 8
-                Label {
-                    text: qsTrId('id_backup_your_mnemonic_before')
-                }
+            onAccepted: WalletManager.removeWallet(wallet)
+            contentItem: ColumnLayout {
+                spacing: 16
                 SectionLabel {
                     text: qsTrId('id_name')
                 }
@@ -428,6 +423,7 @@ ApplicationWindow {
                     text: qsTrId('id_network')
                 }
                 Row {
+                    spacing: 8
                     Image {
                         sourceSize.width: 16
                         sourceSize.height: 16
@@ -437,7 +433,6 @@ ApplicationWindow {
                         text: wallet.network.name
                     }
                 }
-
                 SectionLabel {
                     text: qsTrId('id_confirm_action')
                 }
@@ -446,12 +441,25 @@ ApplicationWindow {
                     id: confirm_field
                     placeholderText: qsTrId('id_confirm_by_typing_the_wallet')
                 }
+                Label {
+                    text: qsTrId('id_backup_your_mnemonic_before')
+                }
             }
-            footer: DialogButtonBox {
+            footer: Pane {
+                rightPadding: 16
+                bottomPadding: 8
+                background: Item {
+                }
+                contentItem: RowLayout {
+                    Item {
+                        Layout.fillWidth: true
+                    }
                     Button {
-                    text: qsTrId('id_remove')
-                    DialogButtonBox.buttonRole: DialogButtonBox.AcceptRole
-                    enabled: confirm_field.text === wallet.name
+                        enabled: confirm_field.text === wallet.name
+                        flat: true
+                        text: qsTrId('id_remove')
+                        onClicked: accept()
+                    }
                 }
             }
         }
