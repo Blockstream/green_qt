@@ -60,9 +60,10 @@ JadeDeviceSerialPortDiscoveryAgent::JadeDeviceSerialPortDiscoveryAgent(QObject* 
                     });
                 });
                 connect(api, &JadeAPI::onDisconnected, this, [this, device] {
-                    m_failed_locations.insert(device->m_system_location);
-                    m_devices.take(device->m_system_location);
-                    delete device;
+                    if (m_devices.take(device->m_system_location)) {
+                        m_failed_locations.insert(device->m_system_location);
+                        delete device;
+                    }
                 });
                 m_devices.insert(system_location, device);
                 api->connectDevice();
