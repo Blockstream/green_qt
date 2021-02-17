@@ -99,6 +99,11 @@ void Settings::setProxyPort(int proxy_port)
     emit proxyPortChanged(m_proxy_port);
 }
 
+QString Settings::proxy() const
+{
+    return m_use_proxy ? QString("%1:%2").arg(m_proxy_host).arg(m_proxy_port) : "";
+}
+
 void Settings::load()
 {
     // By default position window in primary screen with a 200px margin

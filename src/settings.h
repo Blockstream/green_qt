@@ -42,6 +42,7 @@ public:
     void setProxyHost(const QString& proxy_host);
     int proxyPort() const { return m_proxy_port; }
     void setProxyPort(int proxy_port);
+    QString proxy() const;
     bool useTor() const { return m_use_tor; }
     void setUseTor(bool use_tor);
 signals:
