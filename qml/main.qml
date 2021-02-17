@@ -260,21 +260,6 @@ ApplicationWindow {
                     text: 'Home'
                 }
                 SideLabel {
-                    text: 'Devices'
-                }
-                SideButton {
-                    icon.source: 'qrc:/svg/jade_emblem_on_transparent_rgb.svg'
-                    location: jade_view.location
-                    count: jade_view.count
-                    text: 'Blockstream Jade'
-                }
-                SideButton {
-                    icon.source: 'qrc:/svg/ledger-logo.svg'
-                    location: ledger_view.location
-                    count: ledger_view.count
-                    text: 'Ledger'
-                }
-                SideLabel {
                     text: 'Wallets'
                 }
                 Flickable {
@@ -335,7 +320,25 @@ ApplicationWindow {
                                 visible: !Settings.collapseSideBar && Settings.enableTestnet
                             }
                         }
+                        SideLabel {
+                            text: 'Devices'
+                        }
+                        SideButton {
+                            icon.source: 'qrc:/svg/jade_emblem_on_transparent_rgb.svg'
+                            location: jade_view.location
+                            count: jade_view.count
+                            text: 'Blockstream Jade'
+                        }
+                        SideButton {
+                            icon.source: 'qrc:/svg/ledger-logo.svg'
+                            location: ledger_view.location
+                            count: ledger_view.count
+                            text: 'Ledger'
+                        }
                     }
+                }
+                Item {
+                    Layout.minimumHeight: 16
                 }
                 SideButton {
                     icon.source: 'qrc:/svg/settings.svg'
