@@ -60,6 +60,15 @@ Wallet* RestoreController::wallet() const
     return m_wallet;
 }
 
+void RestoreController::setPin(const QByteArray &pin)
+{
+    Q_ASSERT(m_wallet);
+
+    m_wallet->setPin(pin);
+
+    connect(m_wallet, &Wallet::pinSet, this, &RestoreController::pinSet);
+}
+
 void RestoreController::restore()
 {
     if (m_name.isEmpty()) {

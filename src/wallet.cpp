@@ -437,11 +437,13 @@ void Wallet::setPin(const QByteArray& pin)
     Q_ASSERT(m_name.isEmpty());
     Q_ASSERT(m_pin_data.isEmpty());
 
-    // TODO: use SetPinHandler
-    QMetaObject::invokeMethod(m_context, [this, pin] {
-        const auto mnemonic = getMnemonicPassphrase(m_session->m_session);
-        m_pin_data = pinDataForNewPin(m_session->m_session, pin);
+    auto handler = new SetPinHandler(this, pin);
+    QObject::connect(handler, &Handler::done, this, [this, handler] {
+        handler->deleteLater();
+        m_pin_data = handler->pinData();
+        emit pinSet();
     });
+    handler->exec();
 }
 
 void Wallet::reload()

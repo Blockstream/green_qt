@@ -148,6 +148,7 @@ signals:
     void configChanged();
     void busyChanged(bool busy);
     void loginError(const QString& error);
+    void pinSet();
 
 protected:
     bool eventFilter(QObject* object, QEvent* event) override;

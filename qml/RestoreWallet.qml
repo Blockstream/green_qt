@@ -19,6 +19,9 @@ AbstractDialog {
             const use_tor = Settings.useTor
             controller.wallet.connect(proxy, use_tor)
         }
+        onPinSet: {
+            stack_view.push(name_page)
+        }
     }
 
     Connections {
@@ -50,7 +53,8 @@ AbstractDialog {
     }
 
     footer: Pane {
-        padding: 0
+        rightPadding: 16
+        bottomPadding: 8
         background: Item {
         }
         RowLayout {
@@ -150,8 +154,7 @@ AbstractDialog {
                     clear();
                     ToolTip.show(qsTrId('id_pins_do_not_match_please_try'), 1000);
                 } else {
-                    controller.wallet.setPin(pin_view.pin);
-                    stack_view.push(name_page);
+                    controller.setPin(pin_view.pin);
                 }
             }
         }

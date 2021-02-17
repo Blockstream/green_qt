@@ -24,6 +24,7 @@ public:
     void setName(const QString& name);
     Wallet* wallet() const;
 public slots:
+    void setPin(const QByteArray& pin);
     void restore();
 signals:
     void networkChanged(Network* network);
@@ -31,6 +32,7 @@ signals:
     void nameChanged(const QString& name);
     void walletChanged(Wallet* wallet);
     void finished();
+    void pinSet();
 private:
     Network* m_network{nullptr};
     QString m_name;
