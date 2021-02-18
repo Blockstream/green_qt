@@ -91,6 +91,7 @@ void LedgerDeviceController::login()
 
     m_device_details = device_details_from_device(m_device);
     m_wallet = new Wallet;
+    m_wallet->setName(m_device->name());
     m_wallet->m_device = m_device;
     m_wallet->setNetwork(m_network);
     m_wallet->createSession();
