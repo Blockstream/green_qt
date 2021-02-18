@@ -18,9 +18,6 @@ AbstractDialog {
         target: self.wallet
         function onLoginAttemptsRemainingChanged(loginAttemptsRemaining) {
             pin_view.clear()
-            if (loginAttemptsRemaining === 0) {
-                pushLocation(`/${wallet.network.id}`)
-            }
         }
     }
 
@@ -51,26 +48,12 @@ AbstractDialog {
             }
         }
     }
-    contentItem: Column {
-        spacing: 16
-        Label {
-            opacity: self.wallet.authentication === Wallet.Unauthenticated ? 1 : 0
-            anchors.horizontalCenter: parent.horizontalCenter
-            horizontalAlignment: Text.AlignHCenter
-            wrapMode: Text.WordWrap
-            text: switch (self.wallet.loginAttemptsRemaining) {
-                case 0: return qsTrId('id_no_attempts_remaining')
-                case 1: return qsTrId('id_last_attempt_if_failed_you_will')
-                case 2: return qsTrId('id_attempts_remaining_d').arg(self.wallet.loginAttemptsRemaining)
-                default: return qsTrId('id_enter_pin')
-            }
-            Behavior on opacity { NumberAnimation {} }
-        }
-
+    contentItem: ColumnLayout {
+        spacing: 8
         PinView {
-            enabled: self.wallet.authentication === Wallet.Unauthenticated && self.wallet.loginAttemptsRemaining > 0
             id: pin_view
-            anchors.horizontalCenter: parent.horizontalCenter
+            Layout.alignment: Qt.AlignHCenter
+            enabled: self.wallet.authentication === Wallet.Unauthenticated && self.wallet.loginAttemptsRemaining > 0
             onPinChanged: {
                 if (valid) {
                     const proxy = Settings.useProxy ? Settings.proxyHost + ':' + Settings.proxyPort : ''
@@ -80,6 +63,30 @@ AbstractDialog {
                 }
             }
         }
+        Label {
+            Layout.topMargin: 8
+            Layout.maximumWidth: 250
+            Layout.minimumHeight: 25
+            Layout.alignment: Qt.AlignHCenter
+            opacity: self.wallet.authentication === Wallet.Unauthenticated ? 1 : 0
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            wrapMode: Text.WordWrap
+            text: switch (self.wallet.loginAttemptsRemaining) {
+                case 0: return qsTrId('id_no_attempts_remaining')
+                case 1: return qsTrId('id_last_attempt_if_failed_you_will')
+                case 2: return qsTrId('id_attempts_remaining_d').arg(self.wallet.loginAttemptsRemaining)
+                default: return qsTrId('id_enter_pin')
+            }
+            Behavior on opacity { NumberAnimation {} }
+        }
+        Button {
+            highlighted: true
+            Layout.minimumWidth: 250
+            Layout.minimumHeight: 25
+            visible: self.wallet.loginAttemptsRemaining === 0
+            text: 'Restore Wallet'
+            onClicked: pushLocation(restore_dialog.location)
+        }
     }
-
 }
