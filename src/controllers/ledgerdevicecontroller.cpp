@@ -9,6 +9,7 @@
 #include "network.h"
 #include "networkmanager.h"
 #include "resolver.h"
+#include "settings.h"
 #include "util.h"
 #include "wallet.h"
 #include "walletmanager.h"
@@ -96,8 +97,11 @@ void LedgerDeviceController::login()
     m_wallet->m_id = m_device->uuid();
     emit walletChanged(m_wallet);
 
+    const auto proxy = Settings::instance()->proxy();
+    const auto use_tor = Settings::instance()->useTor();
+
     setStatus("login");
-    auto connect_handler = new ConnectHandler(m_wallet);
+    auto connect_handler = new ConnectHandler(m_wallet, proxy, use_tor);
     auto register_user_handler = new RegisterUserHandler(m_wallet, m_device_details);
     auto login_handler = new LoginHandler(m_wallet, m_device_details);
     connect(connect_handler, &Handler::done, this, [register_user_handler] {
