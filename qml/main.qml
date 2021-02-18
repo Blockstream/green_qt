@@ -13,17 +13,18 @@ ApplicationWindow {
     readonly property Wallet currentWallet: currentWalletView ? currentWalletView.wallet : null
     readonly property Account currentAccount: currentWalletView ? currentWalletView.currentAccount : null
 
-    readonly property string location: Settings.history.length > 0 ? Settings.history[Settings.history.length - 1] : '/home'
+    property var history: []
+    readonly property string location: history.length > 0 ? history[history.length - 1] : '/home'
     function matchesLocation(l) {
         return location.startsWith(l)
     }
     function pushLocation(l) {
-        const count = Settings.history.length
-        if (count > 0 && Settings.history[count - 1] === l) return;
-        Settings.history = Settings.history.slice(-4).concat(l)
+        const count = history.length
+        if (count > 0 && history[count - 1] === l) return;
+        history = history.slice(-4).concat(l)
     }
     function popLocation() {
-        Settings.history = Settings.history.slice(0, -1)
+        history = history.slice(0, -1)
     }
     function childIndexForLocation(stack_layout) {
        for (let i = 0; i < stack_layout.children.length; ++i) {
