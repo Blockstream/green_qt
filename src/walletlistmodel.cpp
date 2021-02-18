@@ -56,6 +56,7 @@ bool WalletListModel::filterAcceptsRow(int source_row, const QModelIndex &source
     auto wallet = m_source_model.index(source_row, 0, source_parent).data(Qt::UserRole).value<Wallet*>();
     if (!m_network.isEmpty() && wallet->network()->id() != m_network) return false;
     if (m_just_authenticated && wallet->authentication() != Wallet::Authenticated) return false;
+    if (m_without_device && wallet->m_device) return false;
     return filterRegExp().indexIn(wallet->name()) >= 0;
 }
 
@@ -76,5 +77,13 @@ void WalletListModel::setJustAuthenticated(bool just_authenticated)
     if (m_just_authenticated == just_authenticated) return;
     m_just_authenticated = just_authenticated;
     emit justAuthenticatedChanged(m_just_authenticated);
+    invalidateFilter();
+}
+
+void WalletListModel::setWithoutDevice(bool without_device)
+{
+    if (m_without_device == without_device) return;
+    m_without_device = without_device;
+    emit withoutDeviceChanged(m_without_device);
     invalidateFilter();
 }

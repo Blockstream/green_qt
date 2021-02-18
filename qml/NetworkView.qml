@@ -17,11 +17,6 @@ Item {
         return null
     }
 
-    WalletListModel {
-        id: wallet_list_model
-        network: self.network
-    }
-
     Repeater {
         id: wallet_view_repeater
         model: WalletListModel {
@@ -187,14 +182,16 @@ Item {
                 Layout.fillWidth: true
                 title: 'All Wallets'
                 contentItem: Item {
-                    id: lisssss
                     clip: true
                     ListView {
                         id: wallet_list_view
                         anchors.fill: parent
                         anchors.margins: 16
                         currentIndex: -1
-                        model: wallet_list_model
+                        model: WalletListModel {
+                            withoutDevice: true
+                            network: self.network
+                        }
                         delegate: WalletDelegate {}
                         ScrollIndicator.vertical: ScrollIndicator {}
                     }
