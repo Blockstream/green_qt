@@ -68,14 +68,6 @@ void LedgerDeviceController::initialize()
             QTimer::singleShot(1000, this, &LedgerDeviceController::initialize);
             return;
         }
-
-        m_device_details = device_details_from_device(m_device);
-        m_wallet = new Wallet;
-        m_wallet->m_device = m_device;
-        m_wallet->setNetwork(m_network);
-        m_wallet->createSession();
-
-        login();
     });
     connect(activity, &Activity::failed, this, [this, activity] {
         activity->deleteLater();
@@ -93,6 +85,17 @@ void LedgerDeviceController::setStatus(const QString& status)
 
 void LedgerDeviceController::login()
 {
+    Q_ASSERT(m_network);
+    Q_ASSERT(!m_wallet);
+
+    m_device_details = device_details_from_device(m_device);
+    m_wallet = new Wallet;
+    m_wallet->m_device = m_device;
+    m_wallet->setNetwork(m_network);
+    m_wallet->createSession();
+    m_wallet->m_id = m_device->uuid();
+    emit walletChanged(m_wallet);
+
     setStatus("login");
     auto connect_handler = new ConnectHandler(m_wallet);
     auto register_user_handler = new RegisterUserHandler(m_wallet, m_device_details);
@@ -122,6 +125,7 @@ void LedgerDeviceController::login()
             WalletManager::instance()->removeWallet(w);
             delete w;
         });
+        setStatus("done");
     });
     connect(login_handler, &Handler::resolver, this, [this](Resolver* resolver) {
         connect(resolver, &Resolver::progress, this, [this](int current, int total) {
