@@ -11,6 +11,7 @@
 #include "networkmanager.h"
 
 #include "resolver.h"
+#include "settings.h"
 #include "handlers/connecthandler.h"
 #include "handlers/loginhandler.h"
 #include "handlers/registeruserhandler.h"
@@ -113,8 +114,11 @@ void JadeController::login()
 
     walletChanged(m_wallet);
 
+    const auto proxy = Settings::instance()->proxy();
+    const auto use_tor = Settings::instance()->useTor();
+
     auto device_details = device_details_from_device();
-    auto connect_handler = new ConnectHandler(m_wallet);
+    auto connect_handler = new ConnectHandler(m_wallet, proxy, use_tor);
     auto register_user_handler = new RegisterUserHandler(m_wallet, device_details);
     auto login_handler = new LoginHandler(m_wallet, device_details);
     connect(connect_handler, &Handler::done, this, [this, network, register_user_handler] {
