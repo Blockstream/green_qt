@@ -9,7 +9,7 @@ Button {
     id: self
     required property string location
     property int count: 0
-    readonly property bool isCurrent: Window.window.location === location
+    property bool isCurrent: Window.window.location === location
     property bool busy: false
     topPadding: 8
     bottomPadding: 8

@@ -130,23 +130,30 @@ MainPage {
                 spacing: 16
                 orientation: ListView.Horizontal
                 currentIndex: {
+                    if (devices_list_view.count === 0) return -1
                     for (let i = 0; i < devices_list_view.count; ++i) {
                         if (devices_list_view.itemAtIndex(i).location === window.location) {
                             return i
                         }
                     }
-                    return -1
+                    return 0
                 }
-                delegate: Pane {
+                delegate: ItemDelegate {
                     required property LedgerDevice device
                     readonly property string location: '/ledger/' + device.uuid
-                    padding: 16
+                    required property int index
+                    padding: 32
+                    leftPadding: 32
+                    rightPadding: 32
+                    topPadding: 32
+                    bottomPadding: 32
                     background: Rectangle {
                         radius: 8
-                        color: constants.c700
+                        color: ((window.location === '/ledger' && index === 0) || window.location === location) ? constants.c500 : hovered ? constants.c600 : constants.c700
                     }
+                    onClicked: pushLocation(location)
                     contentItem: ColumnLayout {
-                        spacing: 16
+                        spacing: 32
                         Image {
                             Layout.alignment: Qt.AlignCenter
                             smooth: true
@@ -154,7 +161,7 @@ MainPage {
                             fillMode: Image.PreserveAspectFit
                             horizontalAlignment: Image.AlignHCenter
                             verticalAlignment: Image.AlignVCenter
-                            sourceSize.height: 32
+                            sourceSize.height: 48
                             source: switch(device.type) {
                                 case Device.LedgerNanoS: return 'qrc:/svg/ledger_nano_s.svg'
                                 case Device.LedgerNanoX: return 'qrc:/svg/ledger_nano_x.svg'
@@ -187,18 +194,61 @@ MainPage {
                 currentIndex: devices_list_view.currentIndex
                 Repeater {
                     model: device_list_model
-                    Pane {
-                        background: Item {
-                        }
-                        contentItem: Item {
-                        }
+                    View {
                     }
                 }
+            }
+        }
+    }
+
+    component View: Pane {
+        id: self
+        required property LedgerDevice device
+        LedgerDeviceController {
+            id: controller
+            device: self.device
+        }
+        background: Item {
+        }
+        contentItem: ColumnLayout {
+            Label {
+                visible: !controller.network
+                text: qsTrId('id_select_an_app_on_s').arg(controller.device.name)
+                horizontalAlignment: Label.AlignHCenter
+                Layout.fillWidth: true
+            }
+            Label {
+                visible: controller.status === 'locked'
+                text: 'Unlock and select app'
+            }
+            RowLayout {
+                Button {
+                    enabled: controller.network && !controller.wallet
+                    icon.color: 'transparent'
+                    icon.source: controller.network ? icons[controller.network.id] : ''
+                    flat: true
+                    text: controller.network ? `Login on ${controller.network.name}` : 'Login'
+                    onClicked: controller.login()
+                }
+                Button {
+                    enabled: controller.status === 'done'
+                    text: 'View Wallet'
+                    flat: true
+                    onClicked: pushLocation(`/${controller.network.id}/${controller.wallet.id}`)
+                }
+                Item {
+                    Layout.fillWidth: true
+                }
+            }
+            ProgressBar {
+                indeterminate: controller.indeterminate
+                value: controller.progress
+                visible: controller.status === 'login'
+                Behavior on value { NumberAnimation { duration: 300; easing.type: Easing.OutCubic } }
             }
             Item {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                width: 1
             }
         }
     }

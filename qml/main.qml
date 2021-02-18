@@ -210,7 +210,7 @@ ApplicationWindow {
         visible: !Settings.collapseSideBar
         DeviceImage {
             Layout.minimumWidth: paintedWidth
-            sourceSize.height: 24
+            sourceSize.height: 16
             parent: self.contentItem
             visible: wallet.device
             device: wallet.device
@@ -334,6 +334,7 @@ ApplicationWindow {
                             icon.source: 'qrc:/svg/ledger-logo.svg'
                             location: ledger_view.location
                             count: ledger_view.count
+                            isCurrent: Window.window.location.startsWith(location)
                             text: 'Ledger'
                         }
                     }
