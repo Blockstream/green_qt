@@ -32,6 +32,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 include(release.pri)
 include(qzxing.pri)
+include(hidapi.pri)
 include(assets/assets.pri)
 include(qml/qml.pri)
 include(src/src.pri)

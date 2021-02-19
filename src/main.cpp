@@ -32,6 +32,8 @@ Q_IMPORT_PLUGIN(QCocoaIntegrationPlugin);
 #include <windows.h>
 #endif
 
+#include <hidapi/hidapi.h>
+
 extern QString g_data_location;
 
 int main(int argc, char *argv[])
@@ -124,5 +126,9 @@ int main(int argc, char *argv[])
     if (engine.rootObjects().isEmpty())
         return -1;
 
-    return app.exec();
+    int ret = hid_init();
+    if (ret != 0) return ret;
+    ret = app.exec();
+    hid_exit();
+    return ret;
 }
