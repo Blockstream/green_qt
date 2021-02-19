@@ -23,6 +23,8 @@ fi
 
 ./tools/buildlibusb.sh || (cat ${LIBUSB_PATH}/build.log && false)
 echo "LIBUSB: OK"
+./tools/buildhidapi.sh || (cat ${HIDAPI_PATH}/build.log && false)
+echo "HIDAPI: OK"
 ./tools/buildqt.sh || (cat ${QT_PATH}/build.log && false)
 echo "Qt: OK"
 ./tools/buildgdk.sh || (cat ${GDK_PATH}/build.log && false)
