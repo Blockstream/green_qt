@@ -13,6 +13,7 @@
 #include "networkmanager.h"
 #include "settings.h"
 #include "walletmanager.h"
+#include "kdsingleapplication.h"
 
 #include <QZXing.h>
 
@@ -51,6 +52,12 @@ int main(int argc, char *argv[])
 #endif
 
     QApplication app(argc, argv);
+    KDSingleApplication kdsa;
+
+    if (!kdsa.isPrimaryInstance()) {
+        qDebug() << QCoreApplication::applicationName() << "already running";
+        return 0;
+    }
 
     QCommandLineParser parser;
     parser.addHelpOption();

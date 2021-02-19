@@ -36,6 +36,7 @@ include(hidapi.pri)
 include(assets/assets.pri)
 include(qml/qml.pri)
 include(src/src.pri)
+include(sa/sa.pri)
 
 CONFIG += lrelease embed_translations
 
