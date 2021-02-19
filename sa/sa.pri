@@ -6,5 +6,4 @@ SOURCES += \
 
 HEADERS += \
     $$PWD/kdsingleapplication.h \
-    $$PWD/kdsingleapplication_lib.h \
     $$PWD/kdsingleapplication_localsocket_p.h
