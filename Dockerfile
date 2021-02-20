@@ -4,6 +4,8 @@ COPY tools/qtversion.env /
 COPY tools/bionic_deps.sh /
 
 COPY tools/builddeps.sh /tools/
+COPY tools/buildlibusb.sh /tools/
+COPY tools/buildhidapi.sh /tools/
 COPY tools/buildgdk.sh /tools/
 COPY tools/buildqt.sh /tools/
 COPY tools/envs.env /tools/

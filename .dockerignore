@@ -3,6 +3,8 @@
 !tools/qtversion.env
 !tools/builddeps.sh
 !tools/envs.env
+!tools/buildlibusb.sh
+!tools/buildhidapi.sh
 !tools/buildgdk.sh
 !tools/buildqt.sh
 !Dockerfile
