@@ -165,6 +165,10 @@
         <translation>All</translation>
     </message>
     <message>
+        <source>id_all_wallets</source>
+        <translation>All wallets</translation>
+    </message>
+    <message>
         <source>id_allows_you_to_quickly_check</source>
         <translation>Allows you to quickly check your balance, receive funds or sweep a paper wallet. You can&apos;t send funds in watch-only mode.</translation>
     </message>
@@ -249,6 +253,10 @@
         <translation>Bitcoin wallet.</translation>
     </message>
     <message>
+        <source>id_bitcoin_wallets</source>
+        <translation>Bitcoin wallets</translation>
+    </message>
+    <message>
         <source>id_block</source>
         <translation>block</translation>
     </message>
@@ -271,6 +279,10 @@
     <message>
         <source>id_blockstream_does_not_have</source>
         <translation>Blockstream does not have access to your wallet backup and will not be able to help you in case you lose it</translation>
+    </message>
+    <message>
+        <source>id_blockstream_store</source>
+        <translation>Blockstream Store</translation>
     </message>
     <message>
         <source>id_btchip_is_not_set_up_please_set</source>
@@ -413,6 +425,10 @@
         <translation>Connect with Tor</translation>
     </message>
     <message>
+        <source>id_connect_your_jade_to_use_it</source>
+        <translation>Connect your Jade to use it with Green</translation>
+    </message>
+    <message>
         <source>id_connect_your_ledger_to_use_it</source>
         <translation>Connect your Ledger to use it in Green</translation>
     </message>
@@ -427,6 +443,10 @@
     <message>
         <source>id_connecting_to_tor_onion_nodes</source>
         <translation>Connecting to Tor (.onion) nodes allows maximum privacy and security. Press &quot;OK&quot; to continue.</translation>
+    </message>
+    <message>
+        <source>id_connection</source>
+        <translation>Connection</translation>
     </message>
     <message>
         <source>id_connection_failed</source>
@@ -579,6 +599,10 @@
     <message>
         <source>id_deposit</source>
         <translation>Deposit</translation>
+    </message>
+    <message>
+        <source>id_devices</source>
+        <translation>Devices</translation>
     </message>
     <message>
         <source>id_disable</source>
@@ -737,6 +761,10 @@
         <translation>Enter PIN</translation>
     </message>
     <message>
+        <source>id_enter_pin_on_jade</source>
+        <translation>Enter PIN on Jade</translation>
+    </message>
+    <message>
         <source>id_enter_the_matching_words</source>
         <translation>Enter The Matching Words</translation>
     </message>
@@ -837,6 +865,10 @@
         <translation>Fees are too low</translation>
     </message>
     <message>
+        <source>id_firmware</source>
+        <translation>Firmware</translation>
+    </message>
+    <message>
         <source>id_for_investors</source>
         <translation>For investors</translation>
     </message>
@@ -867,6 +899,10 @@
     <message>
         <source>id_get_code</source>
         <translation>Get Code</translation>
+    </message>
+    <message>
+        <source>id_get_jade</source>
+        <translation>Get Jade</translation>
     </message>
     <message>
         <source>id_go_to_account</source>
@@ -937,6 +973,10 @@
         <translation>HEX</translation>
     </message>
     <message>
+        <source>id_hide_assets</source>
+        <translation>Hide assets</translation>
+    </message>
+    <message>
         <source>id_high</source>
         <translation>High</translation>
     </message>
@@ -969,6 +1009,10 @@
         <translation>I secured the mnemonic and I have read the ToS</translation>
     </message>
     <message>
+        <source>id_id</source>
+        <translation>ID</translation>
+    </message>
+    <message>
         <source>id_incoming</source>
         <translation>Incoming</translation>
     </message>
@@ -983,6 +1027,10 @@
     <message>
         <source>id_information_not_available</source>
         <translation>Information not available.</translation>
+    </message>
+    <message>
+        <source>id_initialized</source>
+        <translation>Initialized</translation>
     </message>
     <message>
         <source>id_install_version_s</source>
@@ -1033,6 +1081,10 @@
         <translation>Invalid phone number format</translation>
     </message>
     <message>
+        <source>id_invalid_pin</source>
+        <translation>Invalid PIN</translation>
+    </message>
+    <message>
         <source>id_invalid_pin_remaining_attempts</source>
         <translation>Invalid PIN. Remaining attempts: %1.</translation>
     </message>
@@ -1073,6 +1125,10 @@
         <translation>Issuer</translation>
     </message>
     <message>
+        <source>id_jade_unlocked</source>
+        <translation>Jade unlocked</translation>
+    </message>
+    <message>
         <source>id_label</source>
         <translation>LABEL</translation>
     </message>
@@ -1101,6 +1157,10 @@
         <translation>Ledger Dashboard detected, please open the correct app to access.</translation>
     </message>
     <message>
+        <source>id_ledger_devices</source>
+        <translation>Ledger devices</translation>
+    </message>
+    <message>
         <source>id_ledger_supports_a_limited_set</source>
         <translation>Ledger supports a limited set of assets: tap here to check the list.</translation>
     </message>
@@ -1111,6 +1171,10 @@
     <message>
         <source>id_liquid_securities</source>
         <translation>Liquid Securities</translation>
+    </message>
+    <message>
+        <source>id_liquid_wallets</source>
+        <translation>Liquid wallets</translation>
     </message>
     <message>
         <source>id_loading_transactions</source>
@@ -1137,8 +1201,16 @@
         <translation>Log out</translation>
     </message>
     <message>
+        <source>id_logged_in_wallets</source>
+        <translation>Logged in wallets</translation>
+    </message>
+    <message>
         <source>id_logging_in</source>
         <translation>Logging in…</translation>
+    </message>
+    <message>
+        <source>id_login</source>
+        <translation>Login</translation>
     </message>
     <message>
         <source>id_login_failed</source>
@@ -1147,6 +1219,10 @@
     <message>
         <source>id_login_options</source>
         <translation>Login options</translation>
+    </message>
+    <message>
+        <source>id_logout</source>
+        <translation>Logout</translation>
     </message>
     <message>
         <source>id_logout_and_switch</source>
@@ -1207,6 +1283,10 @@
     <message>
         <source>id_mnemonic_not_available</source>
         <translation>Mnemonic not available</translation>
+    </message>
+    <message>
+        <source>id_model</source>
+        <translation>Model</translation>
     </message>
     <message>
         <source>id_month</source>
@@ -1305,6 +1385,10 @@
         <translation>No attempts remaining</translation>
     </message>
     <message>
+        <source>id_no_more_assets</source>
+        <translation>No more assets.</translation>
+    </message>
+    <message>
         <source>id_no_peers_connected</source>
         <translation>No Peers Connected</translation>
     </message>
@@ -1347,6 +1431,10 @@
     <message>
         <source>id_not_connected_connecting_in_ds_</source>
         <translation>Not connected. Connecting in %1s …</translation>
+    </message>
+    <message>
+        <source>id_not_initialized</source>
+        <translation>Not initialized</translation>
     </message>
     <message>
         <source>id_notifications</source>
@@ -1945,6 +2033,10 @@
         <translation>Settings</translation>
     </message>
     <message>
+        <source>id_setup_jade</source>
+        <translation>Setup Jade</translation>
+    </message>
+    <message>
         <source>id_setup_pin</source>
         <translation>Setup PIN</translation>
     </message>
@@ -1967,6 +2059,10 @@
     <message>
         <source>id_share_unblinding_data</source>
         <translation>Share unblinding data</translation>
+    </message>
+    <message>
+        <source>id_show_all_assets</source>
+        <translation>Show all assets</translation>
     </message>
     <message>
         <source>id_show_bitcoin_amounts_in</source>
@@ -2083,6 +2179,10 @@ Reset this setting and then re-activate it.</translation>
         <translation>Start receiving funds and set an email to receive recovery data for your wallet</translation>
     </message>
     <message>
+        <source>id_status</source>
+        <translation>Status</translation>
+    </message>
+    <message>
         <source>id_support</source>
         <translation>Support</translation>
     </message>
@@ -2118,6 +2218,10 @@ Reset this setting and then re-activate it.</translation>
 3. Re-activate Face/TouchID from Green Settings.</translation>
     </message>
     <message>
+        <source>id_system_location</source>
+        <translation>System location</translation>
+    </message>
+    <message>
         <source>id_system_message</source>
         <translation>System Message</translation>
     </message>
@@ -2140,6 +2244,10 @@ Reset this setting and then re-activate it.</translation>
     <message>
         <source>id_terms_of_use</source>
         <translation>Terms of Use</translation>
+    </message>
+    <message>
+        <source>id_testnet_wallets</source>
+        <translation>Testnet wallets</translation>
     </message>
     <message>
         <source>id_thank_you_for_downloading_green</source>
@@ -2408,6 +2516,10 @@ Reset this setting and then re-activate it.</translation>
     <message>
         <source>id_visit_s_for_further_information</source>
         <translation>Visit %1 for further information about the software</translation>
+    </message>
+    <message>
+        <source>id_visit_the_blockstream_help</source>
+        <translation>Visit the Blockstream Help Center</translation>
     </message>
     <message>
         <source>id_waiting_for_transaction</source>

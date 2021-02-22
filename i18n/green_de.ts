@@ -165,6 +165,10 @@
         <translation>Alle</translation>
     </message>
     <message>
+        <source>id_all_wallets</source>
+        <translation>All wallets</translation>
+    </message>
+    <message>
         <source>id_allows_you_to_quickly_check</source>
         <translation>Erlaubt den Saldo schnell zu überprüfen, Mittel zu erhalten oder eine Paper Wallet einzuscannen. Sie können keine Beträge im Watch-Only Mode senden. </translation>
     </message>
@@ -205,6 +209,18 @@
         <translation>Verbleibende Versuche: %1</translation>
     </message>
     <message>
+        <source>id_authenticator_app</source>
+        <translation>Authenticator app</translation>
+    </message>
+    <message>
+        <source>id_authenticator_qr_code</source>
+        <translation>Authenticator QR Code</translation>
+    </message>
+    <message>
+        <source>id_authenticator_secret_key</source>
+        <translation>Authenticator secret key</translation>
+    </message>
+    <message>
         <source>id_auto_logout_timeout</source>
         <translation>Automatisch Ausloggen</translation>
     </message>
@@ -237,6 +253,10 @@
         <translation>Bitcoin Wallet.</translation>
     </message>
     <message>
+        <source>id_bitcoin_wallets</source>
+        <translation>Bitcoin wallets</translation>
+    </message>
+    <message>
         <source>id_block</source>
         <translation>Block</translation>
     </message>
@@ -259,6 +279,10 @@
     <message>
         <source>id_blockstream_does_not_have</source>
         <translation>Blockstream hat keinen Zugriff auf dein Wallet-Backup und kann dir nicht helfen, falls du es verlieren solltest</translation>
+    </message>
+    <message>
+        <source>id_blockstream_store</source>
+        <translation>Blockstream Store</translation>
     </message>
     <message>
         <source>id_btchip_is_not_set_up_please_set</source>
@@ -401,6 +425,10 @@
         <translation>Mit Tor verbinden</translation>
     </message>
     <message>
+        <source>id_connect_your_jade_to_use_it</source>
+        <translation>Connect your Jade to use it with Green</translation>
+    </message>
+    <message>
         <source>id_connect_your_ledger_to_use_it</source>
         <translation>Verbinde deinen Ledger um ihn mit Green zu verwenden</translation>
     </message>
@@ -415,6 +443,10 @@
     <message>
         <source>id_connecting_to_tor_onion_nodes</source>
         <translation>Das Verbinden mit Tor (.onion) Nodes ermöglicht maximale Privatsphäre und Sicherheit. Klicke &quot;OK&quot; um fortzufahren.</translation>
+    </message>
+    <message>
+        <source>id_connection</source>
+        <translation>Connection</translation>
     </message>
     <message>
         <source>id_connection_failed</source>
@@ -567,6 +599,10 @@
     <message>
         <source>id_deposit</source>
         <translation>Einzahlung</translation>
+    </message>
+    <message>
+        <source>id_devices</source>
+        <translation>Devices</translation>
     </message>
     <message>
         <source>id_disable</source>
@@ -725,6 +761,10 @@
         <translation>Gib den PIN ein</translation>
     </message>
     <message>
+        <source>id_enter_pin_on_jade</source>
+        <translation>Enter PIN on Jade</translation>
+    </message>
+    <message>
         <source>id_enter_the_matching_words</source>
         <translation>Gib die passenden Wörter ein</translation>
     </message>
@@ -825,6 +865,10 @@
         <translation>Die Gebühren sind zu niedrig</translation>
     </message>
     <message>
+        <source>id_firmware</source>
+        <translation>Firmware</translation>
+    </message>
+    <message>
         <source>id_for_investors</source>
         <translation>Für Investoren</translation>
     </message>
@@ -857,6 +901,10 @@
         <translation>Code erhalten</translation>
     </message>
     <message>
+        <source>id_get_jade</source>
+        <translation>Get Jade</translation>
+    </message>
+    <message>
         <source>id_go_to_account</source>
         <translation>Gehe zum Konto</translation>
     </message>
@@ -867,22 +915,6 @@
     <message>
         <source>id_go_to_wallet</source>
         <translation>Zur Wallet</translation>
-    </message>
-    <message>
-        <source>id_google_auth</source>
-        <translation>Google Auth</translation>
-    </message>
-    <message>
-        <source>id_google_authenticator</source>
-        <translation>Google Authenticator</translation>
-    </message>
-    <message>
-        <source>id_google_authenticator_qr_code</source>
-        <translation>Google Authenticator QR Code:</translation>
-    </message>
-    <message>
-        <source>id_google_authenticator_secret_key</source>
-        <translation>Geheimer Schlüssel von Google Authenticator</translation>
     </message>
     <message>
         <source>id_green_is_a_noncustodial_wallet</source>
@@ -941,6 +973,10 @@
         <translation>HEX</translation>
     </message>
     <message>
+        <source>id_hide_assets</source>
+        <translation>Hide assets</translation>
+    </message>
+    <message>
         <source>id_high</source>
         <translation>Hoch</translation>
     </message>
@@ -973,12 +1009,16 @@
         <translation>Ich habe meinen Merksatz gesichert und die AGB gelesen</translation>
     </message>
     <message>
+        <source>id_id</source>
+        <translation>ID</translation>
+    </message>
+    <message>
         <source>id_incoming</source>
         <translation>Eingang</translation>
     </message>
     <message>
         <source>id_inconsistent_data_provided_for</source>
-        <translation>Widersprüchliche Daten eingegeben, die die Aktivierung von Gauth verhindern</translation>
+        <translation>Inconsistent data provided for enabling Authenticator 2FA</translation>
     </message>
     <message>
         <source>id_increase_fee</source>
@@ -987,6 +1027,14 @@
     <message>
         <source>id_information_not_available</source>
         <translation>Keine Informationen verfügbar</translation>
+    </message>
+    <message>
+        <source>id_initialized</source>
+        <translation>Initialized</translation>
+    </message>
+    <message>
+        <source>id_install_version_s</source>
+        <translation>Install version: %1?</translation>
     </message>
     <message>
         <source>id_insufficient_funds</source>
@@ -1033,6 +1081,10 @@
         <translation>Ungültiges Format für Telefonnummer</translation>
     </message>
     <message>
+        <source>id_invalid_pin</source>
+        <translation>Invalid PIN</translation>
+    </message>
+    <message>
         <source>id_invalid_pin_remaining_attempts</source>
         <translation>Ungültige PIN. Verbleibende Versuche: %1</translation>
     </message>
@@ -1073,6 +1125,10 @@
         <translation>Ausgeber</translation>
     </message>
     <message>
+        <source>id_jade_unlocked</source>
+        <translation>Jade unlocked</translation>
+    </message>
+    <message>
         <source>id_label</source>
         <translation>LABEL</translation>
     </message>
@@ -1101,6 +1157,10 @@
         <translation>Ledger Dashboard erkannt, für Zugriff bitte die richtige App öffnen.</translation>
     </message>
     <message>
+        <source>id_ledger_devices</source>
+        <translation>Ledger devices</translation>
+    </message>
+    <message>
         <source>id_ledger_supports_a_limited_set</source>
         <translation>Ledger unterstützt eine begrenzte Anzahl von Assets: Tippe hier, um die Liste zu sehen.</translation>
     </message>
@@ -1111,6 +1171,10 @@
     <message>
         <source>id_liquid_securities</source>
         <translation>Liquid-Wertpapiere</translation>
+    </message>
+    <message>
+        <source>id_liquid_wallets</source>
+        <translation>Liquid wallets</translation>
     </message>
     <message>
         <source>id_loading_transactions</source>
@@ -1137,8 +1201,16 @@
         <translation>Ausloggen</translation>
     </message>
     <message>
+        <source>id_logged_in_wallets</source>
+        <translation>Logged in wallets</translation>
+    </message>
+    <message>
         <source>id_logging_in</source>
         <translation>Einloggen...</translation>
+    </message>
+    <message>
+        <source>id_login</source>
+        <translation>Login</translation>
     </message>
     <message>
         <source>id_login_failed</source>
@@ -1147,6 +1219,10 @@
     <message>
         <source>id_login_options</source>
         <translation>Login Optionen</translation>
+    </message>
+    <message>
+        <source>id_logout</source>
+        <translation>Logout</translation>
     </message>
     <message>
         <source>id_logout_and_switch</source>
@@ -1209,6 +1285,10 @@
         <translation>Merksatz nicht verfügbar</translation>
     </message>
     <message>
+        <source>id_model</source>
+        <translation>Model</translation>
+    </message>
+    <message>
         <source>id_month</source>
         <translation>Monat</translation>
     </message>
@@ -1261,6 +1341,14 @@
         <translation>Neue Transaktion eingegangen auf Konto %1 (%2).</translation>
     </message>
     <message>
+        <source>id_new_jade_firmware_available</source>
+        <translation>New Jade Firmware Available</translation>
+    </message>
+    <message>
+        <source>id_new_jade_firmware_required</source>
+        <translation>New Jade Firmware Required</translation>
+    </message>
+    <message>
         <source>id_new_outgoing_transaction_from</source>
         <translation>Neue ausgehende Transaktion von Konto %1 (%2).</translation>
     </message>
@@ -1295,6 +1383,10 @@
     <message>
         <source>id_no_attempts_remaining</source>
         <translation>Keine Versuche übrig</translation>
+    </message>
+    <message>
+        <source>id_no_more_assets</source>
+        <translation>No more assets.</translation>
     </message>
     <message>
         <source>id_no_peers_connected</source>
@@ -1339,6 +1431,10 @@
     <message>
         <source>id_not_connected_connecting_in_ds_</source>
         <translation>Nicht verbunden. Verbindung in %1 s...</translation>
+    </message>
+    <message>
+        <source>id_not_initialized</source>
+        <translation>Not initialized</translation>
     </message>
     <message>
         <source>id_notifications</source>
@@ -1753,8 +1849,8 @@
         <translation>QR-Code scannen</translation>
     </message>
     <message>
-        <source>id_scan_the_qr_code_in_google</source>
-        <translation>QR-Code im Google Authenticator einscannen:</translation>
+        <source>id_scan_the_qr_code_with_an</source>
+        <translation>Scan the QR Code with an Authenticator app</translation>
     </message>
     <message>
         <source>id_scan_to_send_here</source>
@@ -1937,6 +2033,10 @@
         <translation>Einstellungen</translation>
     </message>
     <message>
+        <source>id_setup_jade</source>
+        <translation>Setup Jade</translation>
+    </message>
+    <message>
         <source>id_setup_pin</source>
         <translation>PIN einrichten</translation>
     </message>
@@ -1959,6 +2059,10 @@
     <message>
         <source>id_share_unblinding_data</source>
         <translation>Share unblinding data</translation>
+    </message>
+    <message>
+        <source>id_show_all_assets</source>
+        <translation>Show all assets</translation>
     </message>
     <message>
         <source>id_show_bitcoin_amounts_in</source>
@@ -2075,6 +2179,10 @@ Einstellung zurücksetzen und dann reaktivieren.</translation>
         <translation>Starte mit dem Empfang von Geldern und gib eine E-Mail Adresse an, um Wiederherstellungsdaten für deine Wallet zu erhalten</translation>
     </message>
     <message>
+        <source>id_status</source>
+        <translation>Status</translation>
+    </message>
+    <message>
         <source>id_support</source>
         <translation>Support</translation>
     </message>
@@ -2110,6 +2218,10 @@ Einstellung zurücksetzen und dann reaktivieren.</translation>
 3. Face/TouchID in den Green-Einstellungen reaktivieren.</translation>
     </message>
     <message>
+        <source>id_system_location</source>
+        <translation>System location</translation>
+    </message>
+    <message>
         <source>id_system_message</source>
         <translation>Systemnachrichten</translation>
     </message>
@@ -2132,6 +2244,10 @@ Einstellung zurücksetzen und dann reaktivieren.</translation>
     <message>
         <source>id_terms_of_use</source>
         <translation>Nutzungsbedingungen</translation>
+    </message>
+    <message>
+        <source>id_testnet_wallets</source>
+        <translation>Testnet wallets</translation>
     </message>
     <message>
         <source>id_thank_you_for_downloading_green</source>
@@ -2400,6 +2516,10 @@ Einstellung zurücksetzen und dann reaktivieren.</translation>
     <message>
         <source>id_visit_s_for_further_information</source>
         <translation>Besuche %1 für weitere Informationen über die Software</translation>
+    </message>
+    <message>
+        <source>id_visit_the_blockstream_help</source>
+        <translation>Visit the Blockstream Help Center</translation>
     </message>
     <message>
         <source>id_waiting_for_transaction</source>

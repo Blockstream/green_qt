@@ -165,6 +165,10 @@
         <translation>Vše</translation>
     </message>
     <message>
+        <source>id_all_wallets</source>
+        <translation>All wallets</translation>
+    </message>
+    <message>
         <source>id_allows_you_to_quickly_check</source>
         <translation>Umožňuje rychle zkontrolovat váš zůstatek, přijmout finanční prostředky nebo vybrat prostředky (sweep) z papírové peněženky. V režimu pouze-pro-sledování nemůžete posílat finanční prostředky.</translation>
     </message>
@@ -205,6 +209,18 @@
         <translation>Zbývající pokusy: %1</translation>
     </message>
     <message>
+        <source>id_authenticator_app</source>
+        <translation>Authenticator app</translation>
+    </message>
+    <message>
+        <source>id_authenticator_qr_code</source>
+        <translation>Authenticator QR Code</translation>
+    </message>
+    <message>
+        <source>id_authenticator_secret_key</source>
+        <translation>Authenticator secret key</translation>
+    </message>
+    <message>
         <source>id_auto_logout_timeout</source>
         <translation>Časový limit automatického odhlášení</translation>
     </message>
@@ -237,6 +253,10 @@
         <translation>Bitcoin peněženka.</translation>
     </message>
     <message>
+        <source>id_bitcoin_wallets</source>
+        <translation>Bitcoin wallets</translation>
+    </message>
+    <message>
         <source>id_block</source>
         <translation>blok</translation>
     </message>
@@ -259,6 +279,10 @@
     <message>
         <source>id_blockstream_does_not_have</source>
         <translation>Blockstream nemá přístup k zálohám vaší peněženky a v případě ztráty vám nebude schopen pomoci</translation>
+    </message>
+    <message>
+        <source>id_blockstream_store</source>
+        <translation>Blockstream Store</translation>
     </message>
     <message>
         <source>id_btchip_is_not_set_up_please_set</source>
@@ -401,6 +425,10 @@
         <translation>Připojit se přes Tor</translation>
     </message>
     <message>
+        <source>id_connect_your_jade_to_use_it</source>
+        <translation>Connect your Jade to use it with Green</translation>
+    </message>
+    <message>
         <source>id_connect_your_ledger_to_use_it</source>
         <translation>Připojte svůj Ledger a použijte ho s aplikací Green</translation>
     </message>
@@ -415,6 +443,10 @@
     <message>
         <source>id_connecting_to_tor_onion_nodes</source>
         <translation>Připojení k uzlům Tor (.onion) umožňuje maximální soukromí a zabezpečení. Pokračujte stisknutím tlačítka „OK“.</translation>
+    </message>
+    <message>
+        <source>id_connection</source>
+        <translation>Connection</translation>
     </message>
     <message>
         <source>id_connection_failed</source>
@@ -510,7 +542,7 @@
     </message>
     <message>
         <source>id_customize_2fa_expiration_of</source>
-        <translation>Customize 2FA expiration of your coins</translation>
+        <translation>Přizpůsobte si vypršení platnosti 2FA u vašich mincí </translation>
     </message>
     <message>
         <source>id_d6_confirmations</source>
@@ -567,6 +599,10 @@
     <message>
         <source>id_deposit</source>
         <translation>Vklad</translation>
+    </message>
+    <message>
+        <source>id_devices</source>
+        <translation>Devices</translation>
     </message>
     <message>
         <source>id_disable</source>
@@ -725,6 +761,10 @@
         <translation>Zadejte PIN</translation>
     </message>
     <message>
+        <source>id_enter_pin_on_jade</source>
+        <translation>Enter PIN on Jade</translation>
+    </message>
+    <message>
         <source>id_enter_the_matching_words</source>
         <translation>Zadejte odpovídající slova</translation>
     </message>
@@ -825,6 +865,10 @@
         <translation>Poplatky jsou příliš nízké</translation>
     </message>
     <message>
+        <source>id_firmware</source>
+        <translation>Firmware</translation>
+    </message>
+    <message>
         <source>id_for_investors</source>
         <translation>Pro investory</translation>
     </message>
@@ -857,6 +901,10 @@
         <translation>Získat kód</translation>
     </message>
     <message>
+        <source>id_get_jade</source>
+        <translation>Get Jade</translation>
+    </message>
+    <message>
         <source>id_go_to_account</source>
         <translation>Přejít do účtu</translation>
     </message>
@@ -867,22 +915,6 @@
     <message>
         <source>id_go_to_wallet</source>
         <translation>Přejít do Peněženky</translation>
-    </message>
-    <message>
-        <source>id_google_auth</source>
-        <translation>Google Auth</translation>
-    </message>
-    <message>
-        <source>id_google_authenticator</source>
-        <translation>Google Authenticator</translation>
-    </message>
-    <message>
-        <source>id_google_authenticator_qr_code</source>
-        <translation>Google Authenticator QR kód:</translation>
-    </message>
-    <message>
-        <source>id_google_authenticator_secret_key</source>
-        <translation>Tajný klíč Google Authenticator</translation>
     </message>
     <message>
         <source>id_green_is_a_noncustodial_wallet</source>
@@ -941,6 +973,10 @@
         <translation>HEX</translation>
     </message>
     <message>
+        <source>id_hide_assets</source>
+        <translation>Hide assets</translation>
+    </message>
+    <message>
         <source>id_high</source>
         <translation>Vysoký</translation>
     </message>
@@ -973,12 +1009,16 @@
         <translation>Zabezpečil jsem mnemotechnickou frázi a přečetl jsem si Smluvní podmínky</translation>
     </message>
     <message>
+        <source>id_id</source>
+        <translation>ID</translation>
+    </message>
+    <message>
         <source>id_incoming</source>
         <translation>Příchozí</translation>
     </message>
     <message>
         <source>id_inconsistent_data_provided_for</source>
-        <translation>Pro povolení gauth byly poskytnuty nekonzistentní údaje</translation>
+        <translation>Inconsistent data provided for enabling Authenticator 2FA</translation>
     </message>
     <message>
         <source>id_increase_fee</source>
@@ -987,6 +1027,14 @@
     <message>
         <source>id_information_not_available</source>
         <translation>Informace nejsou k dispozici.</translation>
+    </message>
+    <message>
+        <source>id_initialized</source>
+        <translation>Initialized</translation>
+    </message>
+    <message>
+        <source>id_install_version_s</source>
+        <translation>Install version: %1?</translation>
     </message>
     <message>
         <source>id_insufficient_funds</source>
@@ -1033,6 +1081,10 @@
         <translation>Neplatný formát telefonního čísla</translation>
     </message>
     <message>
+        <source>id_invalid_pin</source>
+        <translation>Invalid PIN</translation>
+    </message>
+    <message>
         <source>id_invalid_pin_remaining_attempts</source>
         <translation>Neplatný PIN. Zbývajících pokusů: %1.</translation>
     </message>
@@ -1073,6 +1125,10 @@
         <translation>Vydavatel</translation>
     </message>
     <message>
+        <source>id_jade_unlocked</source>
+        <translation>Jade unlocked</translation>
+    </message>
+    <message>
         <source>id_label</source>
         <translation>ŠTÍTEK</translation>
     </message>
@@ -1101,6 +1157,10 @@
         <translation>Ledger Dashboard detekován, otevřete správnou aplikaci pro přístup.</translation>
     </message>
     <message>
+        <source>id_ledger_devices</source>
+        <translation>Ledger devices</translation>
+    </message>
+    <message>
         <source>id_ledger_supports_a_limited_set</source>
         <translation>Ledger podporuje omezenou sadu aktiv: klepnutím sem zkontrolujete seznam.</translation>
     </message>
@@ -1111,6 +1171,10 @@
     <message>
         <source>id_liquid_securities</source>
         <translation>Liquid Securities</translation>
+    </message>
+    <message>
+        <source>id_liquid_wallets</source>
+        <translation>Liquid wallets</translation>
     </message>
     <message>
         <source>id_loading_transactions</source>
@@ -1137,8 +1201,16 @@
         <translation>Odhlásit se</translation>
     </message>
     <message>
+        <source>id_logged_in_wallets</source>
+        <translation>Logged in wallets</translation>
+    </message>
+    <message>
         <source>id_logging_in</source>
         <translation>Přihlašování...</translation>
+    </message>
+    <message>
+        <source>id_login</source>
+        <translation>Login</translation>
     </message>
     <message>
         <source>id_login_failed</source>
@@ -1147,6 +1219,10 @@
     <message>
         <source>id_login_options</source>
         <translation>Možnosti přihlášení</translation>
+    </message>
+    <message>
+        <source>id_logout</source>
+        <translation>Logout</translation>
     </message>
     <message>
         <source>id_logout_and_switch</source>
@@ -1209,6 +1285,10 @@
         <translation>Mnemotechnická fráze není k dispozici</translation>
     </message>
     <message>
+        <source>id_model</source>
+        <translation>Model</translation>
+    </message>
+    <message>
         <source>id_month</source>
         <translation>měsíc</translation>
     </message>
@@ -1261,6 +1341,14 @@
         <translation>Nová příchozí transakce na účtu %1 (%2).</translation>
     </message>
     <message>
+        <source>id_new_jade_firmware_available</source>
+        <translation>New Jade Firmware Available</translation>
+    </message>
+    <message>
+        <source>id_new_jade_firmware_required</source>
+        <translation>New Jade Firmware Required</translation>
+    </message>
+    <message>
         <source>id_new_outgoing_transaction_from</source>
         <translation>Nová odchozí transakce z účtu %1 (%2).</translation>
     </message>
@@ -1295,6 +1383,10 @@
     <message>
         <source>id_no_attempts_remaining</source>
         <translation>Nezbývají žádné pokusy</translation>
+    </message>
+    <message>
+        <source>id_no_more_assets</source>
+        <translation>No more assets.</translation>
     </message>
     <message>
         <source>id_no_peers_connected</source>
@@ -1341,6 +1433,10 @@
         <translation>Nepřipojeno. Připojování za %1 s ...</translation>
     </message>
     <message>
+        <source>id_not_initialized</source>
+        <translation>Not initialized</translation>
+    </message>
+    <message>
         <source>id_notifications</source>
         <translation>Oznámení</translation>
     </message>
@@ -1382,11 +1478,11 @@
     </message>
     <message>
         <source>id_optimal_if_you_rarely_spend</source>
-        <translation>Optimal if you rarely spend coins. Wallet coins will require two-factor reactivation every 455 days to remain protected by two-factor authentication</translation>
+        <translation>Optimální, pokud zřídka utratíte mince. Mince peněženky budou vyžadovat dvoufaktorovou reaktivaci každých 455 dní, aby zůstaly chráněny dvoufaktorovou autentizací.</translation>
     </message>
     <message>
         <source>id_optimal_if_you_spend_coins</source>
-        <translation>Optimal if you spend coins every 6 months. Wallet coins will require two-factor reactivation every 6 months to remain protected by two-factor authentication.</translation>
+        <translation>Optimální, pokud utrácíte mince každých 6 měsíců. Mince peněženky budou vyžadovat dvoufaktorovou reaktivaci každých 6 měsíců, aby zůstaly chráněny dvoufaktorovou autentizací.</translation>
     </message>
     <message>
         <source>id_optional</source>
@@ -1753,8 +1849,8 @@
         <translation>Naskenovat QR kód</translation>
     </message>
     <message>
-        <source>id_scan_the_qr_code_in_google</source>
-        <translation>Naskenujte QR kód v Google Authenticator:</translation>
+        <source>id_scan_the_qr_code_with_an</source>
+        <translation>Scan the QR Code with an Authenticator app</translation>
     </message>
     <message>
         <source>id_scan_to_send_here</source>
@@ -1854,7 +1950,7 @@
     </message>
     <message>
         <source>id_set_2fa_expiry</source>
-        <translation>Set 2FA expiry</translation>
+        <translation>Nastavit vypršení platnosti 2FA</translation>
     </message>
     <message>
         <source>id_set_a_limit_to_spend_without</source>
@@ -1937,6 +2033,10 @@
         <translation>Nastavení</translation>
     </message>
     <message>
+        <source>id_setup_jade</source>
+        <translation>Setup Jade</translation>
+    </message>
+    <message>
         <source>id_setup_pin</source>
         <translation>Nastavit PIN</translation>
     </message>
@@ -1954,11 +2054,15 @@
     </message>
     <message>
         <source>id_share_nonconfidential</source>
-        <translation>Share non-confidential transaction</translation>
+        <translation>Sdílejte nedůvěrné transakce</translation>
     </message>
     <message>
         <source>id_share_unblinding_data</source>
         <translation>Sdílet nezaslepená data</translation>
+    </message>
+    <message>
+        <source>id_show_all_assets</source>
+        <translation>Show all assets</translation>
     </message>
     <message>
         <source>id_show_bitcoin_amounts_in</source>
@@ -2075,6 +2179,10 @@ Obnovte toto nastavení a znovu jej aktivujte.</translation>
         <translation>Začněte přijímat prostředky a nastavte e-mail pro příjem dat pro obnovení peněženky</translation>
     </message>
     <message>
+        <source>id_status</source>
+        <translation>Status</translation>
+    </message>
+    <message>
         <source>id_support</source>
         <translation>Podpora</translation>
     </message>
@@ -2110,6 +2218,10 @@ Obnovte toto nastavení a znovu jej aktivujte.</translation>
 3. Znovu aktivovat Face/TouchID z Green nastavení.</translation>
     </message>
     <message>
+        <source>id_system_location</source>
+        <translation>System location</translation>
+    </message>
+    <message>
         <source>id_system_message</source>
         <translation>Systémová zpráva</translation>
     </message>
@@ -2132,6 +2244,10 @@ Obnovte toto nastavení a znovu jej aktivujte.</translation>
     <message>
         <source>id_terms_of_use</source>
         <translation>Podmínky použití</translation>
+    </message>
+    <message>
+        <source>id_testnet_wallets</source>
+        <translation>Testnet wallets</translation>
     </message>
     <message>
         <source>id_thank_you_for_downloading_green</source>
@@ -2311,7 +2427,7 @@ Obnovte toto nastavení a znovu jej aktivujte.</translation>
     </message>
     <message>
         <source>id_twofactor_expiration_period</source>
-        <translation>Two-Factor expiration period</translation>
+        <translation>Období platnosti dvoufaktorové autentizace</translation>
     </message>
     <message>
         <source>id_twofactor_protection_does_not</source>
@@ -2402,6 +2518,10 @@ Obnovte toto nastavení a znovu jej aktivujte.</translation>
         <translation>Navštivte %1 pro další informace o softwaru</translation>
     </message>
     <message>
+        <source>id_visit_the_blockstream_help</source>
+        <translation>Visit the Blockstream Help Center</translation>
+    </message>
+    <message>
         <source>id_waiting_for_transaction</source>
         <translation>Čekání na transakci…</translation>
     </message>
@@ -2411,7 +2531,7 @@ Obnovte toto nastavení a znovu jej aktivujte.</translation>
     </message>
     <message>
         <source>id_wallet_coins_will_require</source>
-        <translation>Wallet coins will require two-factor reactivation once a year to remain protected by two-factor authentication.</translation>
+        <translation>Mince peněženky budou vyžadovat dvoufaktorovou reaktivaci jednou ročně, aby zůstaly chráněny dvoufaktorovou autentizací.</translation>
     </message>
     <message>
         <source>id_wallet_creation_failed</source>

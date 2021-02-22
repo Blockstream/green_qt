@@ -165,6 +165,10 @@
         <translation>全部</translation>
     </message>
     <message>
+        <source>id_all_wallets</source>
+        <translation>All wallets</translation>
+    </message>
+    <message>
         <source>id_allows_you_to_quickly_check</source>
         <translation>允许用户快速查看余额、收款或从纸钱包中提现。用户在watch-only模式下无法发起转账。</translation>
     </message>
@@ -205,6 +209,18 @@
         <translation>剩余尝试机会：%1</translation>
     </message>
     <message>
+        <source>id_authenticator_app</source>
+        <translation>Authenticator app</translation>
+    </message>
+    <message>
+        <source>id_authenticator_qr_code</source>
+        <translation>Authenticator QR Code</translation>
+    </message>
+    <message>
+        <source>id_authenticator_secret_key</source>
+        <translation>Authenticator secret key</translation>
+    </message>
+    <message>
         <source>id_auto_logout_timeout</source>
         <translation>超时自动退出登录</translation>
     </message>
@@ -237,6 +253,10 @@
         <translation>比特币钱包。</translation>
     </message>
     <message>
+        <source>id_bitcoin_wallets</source>
+        <translation>Bitcoin wallets</translation>
+    </message>
+    <message>
         <source>id_block</source>
         <translation>区块</translation>
     </message>
@@ -259,6 +279,10 @@
     <message>
         <source>id_blockstream_does_not_have</source>
         <translation>Blockstream没有权限接入你的钱包备份，所以如果你丢失备份，Blockstream无法提供帮助</translation>
+    </message>
+    <message>
+        <source>id_blockstream_store</source>
+        <translation>Blockstream Store</translation>
     </message>
     <message>
         <source>id_btchip_is_not_set_up_please_set</source>
@@ -401,6 +425,10 @@
         <translation>连接Tor</translation>
     </message>
     <message>
+        <source>id_connect_your_jade_to_use_it</source>
+        <translation>Connect your Jade to use it with Green</translation>
+    </message>
+    <message>
         <source>id_connect_your_ledger_to_use_it</source>
         <translation>Connect your Ledger to use it in Green</translation>
     </message>
@@ -415,6 +443,10 @@
     <message>
         <source>id_connecting_to_tor_onion_nodes</source>
         <translation>连接至Tor (.onion)节点将使得隐私及安全性能最大化。点击&quot;OK&quot;继续。</translation>
+    </message>
+    <message>
+        <source>id_connection</source>
+        <translation>Connection</translation>
     </message>
     <message>
         <source>id_connection_failed</source>
@@ -567,6 +599,10 @@
     <message>
         <source>id_deposit</source>
         <translation>充值</translation>
+    </message>
+    <message>
+        <source>id_devices</source>
+        <translation>Devices</translation>
     </message>
     <message>
         <source>id_disable</source>
@@ -725,6 +761,10 @@
         <translation>请输入PIN</translation>
     </message>
     <message>
+        <source>id_enter_pin_on_jade</source>
+        <translation>Enter PIN on Jade</translation>
+    </message>
+    <message>
         <source>id_enter_the_matching_words</source>
         <translation>请输入匹配的单词</translation>
     </message>
@@ -825,6 +865,10 @@
         <translation>手续费太低</translation>
     </message>
     <message>
+        <source>id_firmware</source>
+        <translation>Firmware</translation>
+    </message>
+    <message>
         <source>id_for_investors</source>
         <translation>For investors</translation>
     </message>
@@ -857,6 +901,10 @@
         <translation>获取代码</translation>
     </message>
     <message>
+        <source>id_get_jade</source>
+        <translation>Get Jade</translation>
+    </message>
+    <message>
         <source>id_go_to_account</source>
         <translation>前往账户</translation>
     </message>
@@ -867,22 +915,6 @@
     <message>
         <source>id_go_to_wallet</source>
         <translation>前往钱包</translation>
-    </message>
-    <message>
-        <source>id_google_auth</source>
-        <translation>谷歌身份验证器</translation>
-    </message>
-    <message>
-        <source>id_google_authenticator</source>
-        <translation>谷歌身份验证器</translation>
-    </message>
-    <message>
-        <source>id_google_authenticator_qr_code</source>
-        <translation>谷歌身份验证器二维码：</translation>
-    </message>
-    <message>
-        <source>id_google_authenticator_secret_key</source>
-        <translation>谷歌验证码</translation>
     </message>
     <message>
         <source>id_green_is_a_noncustodial_wallet</source>
@@ -941,6 +973,10 @@
         <translation>HEX</translation>
     </message>
     <message>
+        <source>id_hide_assets</source>
+        <translation>Hide assets</translation>
+    </message>
+    <message>
         <source>id_high</source>
         <translation>高</translation>
     </message>
@@ -973,12 +1009,16 @@
         <translation>我已确保助记词安全存储并阅读了服务协议</translation>
     </message>
     <message>
+        <source>id_id</source>
+        <translation>ID</translation>
+    </message>
+    <message>
         <source>id_incoming</source>
         <translation>输入</translation>
     </message>
     <message>
         <source>id_inconsistent_data_provided_for</source>
-        <translation>提供给谷歌身份验证器的数据不一致</translation>
+        <translation>Inconsistent data provided for enabling Authenticator 2FA</translation>
     </message>
     <message>
         <source>id_increase_fee</source>
@@ -987,6 +1027,14 @@
     <message>
         <source>id_information_not_available</source>
         <translation>信息不可用。</translation>
+    </message>
+    <message>
+        <source>id_initialized</source>
+        <translation>Initialized</translation>
+    </message>
+    <message>
+        <source>id_install_version_s</source>
+        <translation>Install version: %1?</translation>
     </message>
     <message>
         <source>id_insufficient_funds</source>
@@ -1033,6 +1081,10 @@
         <translation>手机号格式无效</translation>
     </message>
     <message>
+        <source>id_invalid_pin</source>
+        <translation>Invalid PIN</translation>
+    </message>
+    <message>
         <source>id_invalid_pin_remaining_attempts</source>
         <translation>无效的PIN。剩余尝试次数：%1.</translation>
     </message>
@@ -1073,6 +1125,10 @@
         <translation>发行者</translation>
     </message>
     <message>
+        <source>id_jade_unlocked</source>
+        <translation>Jade unlocked</translation>
+    </message>
+    <message>
         <source>id_label</source>
         <translation>标签</translation>
     </message>
@@ -1101,6 +1157,10 @@
         <translation>检测到Ledger Dashboard，请打开正确的应用来获取。</translation>
     </message>
     <message>
+        <source>id_ledger_devices</source>
+        <translation>Ledger devices</translation>
+    </message>
+    <message>
         <source>id_ledger_supports_a_limited_set</source>
         <translation>Ledger支持有限的几种资产：点击这里查看完整列表。</translation>
     </message>
@@ -1111,6 +1171,10 @@
     <message>
         <source>id_liquid_securities</source>
         <translation>Liquid证券型资产</translation>
+    </message>
+    <message>
+        <source>id_liquid_wallets</source>
+        <translation>Liquid wallets</translation>
     </message>
     <message>
         <source>id_loading_transactions</source>
@@ -1137,8 +1201,16 @@
         <translation>退出登录</translation>
     </message>
     <message>
+        <source>id_logged_in_wallets</source>
+        <translation>Logged in wallets</translation>
+    </message>
+    <message>
         <source>id_logging_in</source>
         <translation>正在登录...</translation>
+    </message>
+    <message>
+        <source>id_login</source>
+        <translation>Login</translation>
     </message>
     <message>
         <source>id_login_failed</source>
@@ -1147,6 +1219,10 @@
     <message>
         <source>id_login_options</source>
         <translation>登录选项</translation>
+    </message>
+    <message>
+        <source>id_logout</source>
+        <translation>Logout</translation>
     </message>
     <message>
         <source>id_logout_and_switch</source>
@@ -1209,6 +1285,10 @@
         <translation>助记词不可用</translation>
     </message>
     <message>
+        <source>id_model</source>
+        <translation>Model</translation>
+    </message>
+    <message>
         <source>id_month</source>
         <translation>月</translation>
     </message>
@@ -1261,6 +1341,14 @@
         <translation>账户%1正在接收新的转账（%2）。</translation>
     </message>
     <message>
+        <source>id_new_jade_firmware_available</source>
+        <translation>New Jade Firmware Available</translation>
+    </message>
+    <message>
+        <source>id_new_jade_firmware_required</source>
+        <translation>New Jade Firmware Required</translation>
+    </message>
+    <message>
         <source>id_new_outgoing_transaction_from</source>
         <translation>账户%1发起新的转账（%2）。</translation>
     </message>
@@ -1295,6 +1383,10 @@
     <message>
         <source>id_no_attempts_remaining</source>
         <translation>已无更多尝试机会</translation>
+    </message>
+    <message>
+        <source>id_no_more_assets</source>
+        <translation>No more assets.</translation>
     </message>
     <message>
         <source>id_no_peers_connected</source>
@@ -1339,6 +1431,10 @@
     <message>
         <source>id_not_connected_connecting_in_ds_</source>
         <translation>网络未连接。将在%1秒后重新连接...</translation>
+    </message>
+    <message>
+        <source>id_not_initialized</source>
+        <translation>Not initialized</translation>
     </message>
     <message>
         <source>id_notifications</source>
@@ -1753,8 +1849,8 @@
         <translation>扫描二维码</translation>
     </message>
     <message>
-        <source>id_scan_the_qr_code_in_google</source>
-        <translation>使用谷歌验证器扫描二维码：</translation>
+        <source>id_scan_the_qr_code_with_an</source>
+        <translation>Scan the QR Code with an Authenticator app</translation>
     </message>
     <message>
         <source>id_scan_to_send_here</source>
@@ -1937,6 +2033,10 @@
         <translation>设置</translation>
     </message>
     <message>
+        <source>id_setup_jade</source>
+        <translation>Setup Jade</translation>
+    </message>
+    <message>
         <source>id_setup_pin</source>
         <translation>设置PIN</translation>
     </message>
@@ -1959,6 +2059,10 @@
     <message>
         <source>id_share_unblinding_data</source>
         <translation>Share unblinding data</translation>
+    </message>
+    <message>
+        <source>id_show_all_assets</source>
+        <translation>Show all assets</translation>
     </message>
     <message>
         <source>id_show_bitcoin_amounts_in</source>
@@ -2075,6 +2179,10 @@
         <translation>开始接收资金并设置邮箱来接收恢复数据</translation>
     </message>
     <message>
+        <source>id_status</source>
+        <translation>Status</translation>
+    </message>
+    <message>
         <source>id_support</source>
         <translation>客服</translation>
     </message>
@@ -2110,6 +2218,10 @@
 3. 在Green设置里重新激活Face/TouchID识别。</translation>
     </message>
     <message>
+        <source>id_system_location</source>
+        <translation>System location</translation>
+    </message>
+    <message>
         <source>id_system_message</source>
         <translation>系统消息</translation>
     </message>
@@ -2132,6 +2244,10 @@
     <message>
         <source>id_terms_of_use</source>
         <translation>用户协议</translation>
+    </message>
+    <message>
+        <source>id_testnet_wallets</source>
+        <translation>Testnet wallets</translation>
     </message>
     <message>
         <source>id_thank_you_for_downloading_green</source>
@@ -2400,6 +2516,10 @@
     <message>
         <source>id_visit_s_for_further_information</source>
         <translation>访问%1查看更多关于软件的信息</translation>
+    </message>
+    <message>
+        <source>id_visit_the_blockstream_help</source>
+        <translation>Visit the Blockstream Help Center</translation>
     </message>
     <message>
         <source>id_waiting_for_transaction</source>
