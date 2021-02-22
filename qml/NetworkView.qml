@@ -54,13 +54,13 @@ Item {
                     Layout.fillWidth: true
                 }
                 Button {
-                    text: 'Create Wallet'
+                    text: qsTrId('id_create_new_wallet')
                     highlighted: true
                     onClicked: pushLocation(`/${network}/signup`)
                 }
                 Button {
                     flat: true
-                    text: 'Restore Wallet'
+                    text: qsTrId('id_restore_green_wallet')
                     onClicked: pushLocation(restore_dialog.location)
                 }
             }
@@ -69,7 +69,7 @@ Item {
             MainPageSection {
                 Layout.fillWidth: true
                 visible: grid_view.count > 0
-                title: 'Logged in Wallets'
+                title: qsTrId('id_logged_in_wallets')
                 contentItem: Item {
                     clip: true
                     implicitHeight: 232
@@ -180,7 +180,7 @@ Item {
             MainPageSection {
                 Layout.fillHeight: true
                 Layout.fillWidth: true
-                title: 'All Wallets'
+                title: qsTrId('id_all_wallets')
                 contentItem: Item {
                     clip: true
                     ListView {

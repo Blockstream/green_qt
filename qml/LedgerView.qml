@@ -29,7 +29,7 @@ MainPage {
                 sourceSize.height: 32
             }
             Label {
-                text: 'Ledger Devices'
+                text: qsTrId('id_ledger_devices')
                 font.pixelSize: 24
                 font.family: 'Roboto'
                 font.styleName: 'Thin'
@@ -39,7 +39,7 @@ MainPage {
                 height: 1
             }
             Button {
-                text: 'Store'
+                text: qsTrId('id_blockstream_store')
                 highlighted: true
                 onClicked: Qt.openUrlExternally('https://store.blockstream.com/product-category/physical_storage/')
             }
@@ -109,7 +109,7 @@ MainPage {
                     }
                     Label {
                         Layout.alignment: Qt.AlignVCenter
-                        text: `Connect your Ledger Nano ${flipable.flipped ? 'S' : 'X'} to use it with Green`
+                        text: qsTrId('id_connect_your_ledger_to_use_it')
                     }
                 }
             }
@@ -172,7 +172,7 @@ MainPage {
                             rowSpacing: 8
                             columns: 2
                             Label {
-                                text: 'Model'
+                                text: qsTrId('id_model')
                             }
                             Label {
                                 text: switch(device.type) {
@@ -181,7 +181,7 @@ MainPage {
                                 }
                             }
                             Label {
-                                text: 'Connection'
+                                text: qsTrId('id_connection')
                             }
                             Label {
                                 text: 'USB'
@@ -227,12 +227,12 @@ MainPage {
                     icon.color: 'transparent'
                     icon.source: controller.network ? icons[controller.network.id] : ''
                     flat: true
-                    text: controller.network ? `Login on ${controller.network.name}` : 'Login'
+                    text: qsTrId('id_login')
                     onClicked: controller.login()
                 }
                 Button {
                     visible: controller.status === 'done'
-                    text: 'View Wallet'
+                    text: qsTrId('id_go_to_wallet')
                     flat: true
                     onClicked: pushLocation(`/${controller.network.id}/${controller.wallet.id}`)
                 }

@@ -114,9 +114,9 @@ StackView {
                         flat: true
                         text: {
                             const count = account_view.account.balances.length
-                            if (count <= 3) return 'No more assets'
-                            if (showAllAssets) return `Hide ${account_view.account.balances.length - 3} assets`
-                            return `Show remaining ${account_view.account.balances.length - 3} more assets`
+                            if (count <= 3) return qsTrId('id_no_more_assets')
+                            if (showAllAssets) return qsTrId('id_hide_assets')
+                            return qsTrId('id_show_all_assets')
                         }
                         Layout.alignment: Qt.AlignCenter
                         onClicked: showAllAssets = !showAllAssets

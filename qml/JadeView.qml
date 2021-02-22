@@ -26,7 +26,7 @@ MainPage {
                 height: 1
             }
             Button {
-                text: 'Get Jade'
+                text: qsTrId('id_get_jade')
                 highlighted: true
                 onClicked: Qt.openUrlExternally('https://store.blockstream.com/product/blockstream-jade/')
             }
@@ -65,14 +65,13 @@ MainPage {
                     }
                     Label {
                         Layout.alignment: Qt.AlignVCenter
-                        text: 'Connect your Jade hardware wallet to use it with Green'
+                        text: qsTrId('id_connect_your_jade_to_use_it')
                     }
                 }
             }
             Label {
                 Layout.alignment: Qt.AlignHCenter
-                wrapMode: Text.WordWrap
-                text: `<a href="${url}">Learn more about Blockstream Jade in our help center</a>`
+                text: qsTrId('id_need_help') + ' ' + '<a href="${url}">' + qsTrId('id_visit_the_blockstream_help') + '</a>'
                 textFormat: Text.RichText
                 color: 'white'
                 onLinkActivated: Qt.openUrlExternally(url)
@@ -128,34 +127,34 @@ MainPage {
                             rowSpacing: 8
                             columns: 2
                             Label {
-                                text: 'Status'
+                                text: qsTrId('id_status')
                             }
                             Label {
                                 text: {
-                                    if (!device.versionInfo.JADE_HAS_PIN) return 'Not initialized'
-                                    return 'Initialized'
+                                    if (!device.versionInfo.JADE_HAS_PIN) return qsTrId('id_not_initialized')
+                                    return qsTrId('id_initialized')
                                 }
                             }
                             Label {
-                                text: 'ID'
+                                text: qsTrId('id_id')
                             }
                             Label {
                                 text: device.versionInfo.EFUSEMAC.slice(-6)
                             }
                             Label {
-                                text: 'Firmware'
+                                text: qsTrId('id_firmware')
                             }
                             Label {
                                 text: device.version
                             }
                             Label {
-                                text: 'Connection'
+                                text: qsTrId('id_connection')
                             }
                             Label {
                                 text: 'USB'
                             }
                             Label {
-                                text: 'System Location'
+                                text: qsTrId('id_system_location')
                             }
                             Label {
                                 text: device.systemLocation
@@ -213,12 +212,12 @@ MainPage {
             id: controller
             device: self.device
             network: self.network.id
-            onInvalidPin: self.ToolTip.show(qsTrId('Invalid PIN'), 2000);
+            onInvalidPin: self.ToolTip.show(qsTrId('id_invalid_pin'), 2000);
         }
         contentItem: RowLayout {
             Label {
                 visible: controller.wallet && controller.wallet.authentication !== Wallet.Authenticated
-                text: device.versionInfo.JADE_HAS_PIN ? 'Enter PIN on Jade' : 'Setup mnemonic on Jade'
+                text: device.versionInfo.JADE_HAS_PIN ? qsTrId('id_enter_pin_on_jade') : qsTrId('id_setup_jade')
             }
             BusyIndicator {
                 visible: controller.wallet && controller.wallet.authentication !== Wallet.Authenticated
@@ -226,13 +225,13 @@ MainPage {
             Button {
                 flat: true
                 visible: !controller.wallet
-                text: device.versionInfo.JADE_HAS_PIN ? 'Login' : 'Setup'
+                text: device.versionInfo.JADE_HAS_PIN ? qsTrId('id_login') : qsTrId('id_setup_jade')
                 onClicked: controller.login()
             }
             Button {
                 flat: true
                 visible: controller.wallet && controller.wallet.authentication === Wallet.Authenticated
-                text: 'Go to wallet'
+                text: qsTrId('id_go_to_wallet')
                 onClicked: pushLocation(`/${self.network.id}/${controller.wallet.id}`)
             }
         }

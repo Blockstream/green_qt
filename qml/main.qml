@@ -322,7 +322,7 @@ ApplicationWindow {
                             }
                         }
                         SideLabel {
-                            text: 'Devices'
+                            text: qsTrId('id_devices')
                         }
                         SideButton {
                             icon.source: 'qrc:/svg/jade_emblem_on_transparent_rgb.svg'
@@ -377,18 +377,18 @@ ApplicationWindow {
                 id: mainnet_view
                 readonly property string location: '/mainnet'
                 network: 'mainnet'
-                title: 'Bitcoin Wallets'
+                title: qsTrId('id_bitcoin_wallets')
             }
             NetworkView {
                 readonly property string location: '/liquid'
                 network: 'liquid'
-                title: 'Liquid Wallets'
+                title: qsTrId('id_liquid_wallets')
             }
             NetworkView {
                 enabled: Settings.enableTestnet
                 readonly property string location: '/testnet'
                 network: 'testnet'
-                title: 'Testnet Wallets'
+                title: qsTrId('id_testnet_wallets')
             }
         }
     }
