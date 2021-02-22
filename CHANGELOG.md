@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+
+### Changed
+
+### Fixed
+
+## [0.1.0] - 2021-02-22
+### Added
 - Add Jade and Ledger views for hardware wallets management
 - Add support for Blockstream Jade for both bitcoin and liquid wallets.
 - Add a top level view for each network

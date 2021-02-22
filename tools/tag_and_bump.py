@@ -30,7 +30,7 @@ if __name__ == '__main__':
     assert current_version < next_version
 
     with open('CHANGELOG.md') as file:
-        changelog = file.read().replace('## [Unreleased]', '## [Unreleased]\n### Added\n\n###Changed\n\n### Fixed\n\n## [{}] - {}'.format(current_version, date.today().strftime('%Y-%m-%d')))
+        changelog = file.read().replace('## [Unreleased]', '## [Unreleased]\n### Added\n\n### Changed\n\n### Fixed\n\n## [{}] - {}'.format(current_version, date.today().strftime('%Y-%m-%d')))
     with open('CHANGELOG.md', 'w') as file:
         file.write(changelog)
 
