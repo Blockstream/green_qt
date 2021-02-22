@@ -128,6 +128,15 @@ MainPage {
                             rowSpacing: 8
                             columns: 2
                             Label {
+                                text: 'Status'
+                            }
+                            Label {
+                                text: {
+                                    if (!device.versionInfo.JADE_HAS_PIN) return 'Not initialized'
+                                    return 'Initialized'
+                                }
+                            }
+                            Label {
                                 text: 'ID'
                             }
                             Label {
@@ -206,20 +215,23 @@ MainPage {
             network: self.network.id
         }
         contentItem: RowLayout {
-            ProgressBar {
-                indeterminate: true
+            Label {
+                visible: controller.wallet && controller.wallet.authentication !== Wallet.Authenticated
+                text: device.versionInfo.JADE_HAS_PIN ? 'Enter PIN on Jade' : 'Setup mnemonic on Jade'
+            }
+            BusyIndicator {
                 visible: controller.wallet && controller.wallet.authentication !== Wallet.Authenticated
             }
             Button {
                 flat: true
                 visible: !controller.wallet
-                text: 'LOGIN'
+                text: device.versionInfo.JADE_HAS_PIN ? 'Login' : 'Setup'
                 onClicked: controller.login()
             }
             Button {
                 flat: true
                 visible: controller.wallet && controller.wallet.authentication === Wallet.Authenticated
-                text: 'JUMP'
+                text: 'Go to wallet'
                 onClicked: pushLocation(`/${self.network.id}/${controller.wallet.id}`)
             }
         }
