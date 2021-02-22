@@ -83,5 +83,6 @@
         <file>WalletSettingsDialog.qml</file>
         <file>MainPageHeader.qml</file>
         <file>LedgerView.qml</file>
+        <file>MainPageSection.qml</file>
     </qresource>
 </RCC>

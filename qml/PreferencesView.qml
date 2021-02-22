@@ -33,7 +33,7 @@ MainPage {
         ColumnLayout {
             width: parent.width
             spacing: 16
-            MainPage.Section {
+            MainPageSection {
                 Layout.fillWidth: true
                 title: qsTrId('General')
                 contentItem: GridLayout {
@@ -61,7 +61,7 @@ MainPage {
                     }
                 }
             }
-            MainPage.Section {
+            MainPageSection {
                 Layout.fillWidth: true
                 title: qsTrId('id_network')
                 contentItem: GridLayout {

@@ -66,7 +66,7 @@ Item {
             }
         }
         contentItem: ColumnLayout {
-            MainPage.Section {
+            MainPageSection {
                 Layout.fillWidth: true
                 visible: grid_view.count > 0
                 title: 'Logged in Wallets'
@@ -177,7 +177,7 @@ Item {
                 }
                 }
             }
-            MainPage.Section {
+            MainPageSection {
                 Layout.fillHeight: true
                 Layout.fillWidth: true
                 title: 'All Wallets'
