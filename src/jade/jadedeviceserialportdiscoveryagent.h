@@ -39,6 +39,7 @@ signals:
     void deviceChanged(JadeDevice* device);
     void networkChanged(const QString& network);
     void walletChanged(Wallet* wallet);
+    void invalidPin();
 private:
     JadeDevice* m_device{nullptr};
     QString m_network;

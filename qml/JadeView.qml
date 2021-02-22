@@ -213,6 +213,7 @@ MainPage {
             id: controller
             device: self.device
             network: self.network.id
+            onInvalidPin: self.ToolTip.show(qsTrId('Invalid PIN'), 2000);
         }
         contentItem: RowLayout {
             Label {

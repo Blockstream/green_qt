@@ -130,9 +130,17 @@ void JadeController::login()
             GA_destroy_json(output);
             jade.handleHttpResponse(id, req, res.value("body").toObject());
         });
-        m_device->m_jade->authUser(network->id(), [register_user_handler](const QVariantMap& msg) {
-            Q_ASSERT(msg.contains("result") && msg["result"].toBool());
-            register_user_handler->exec();
+        m_device->m_jade->authUser(network->id(), [this, register_user_handler](const QVariantMap& msg) {
+            Q_ASSERT(msg.contains("result"));
+            if (msg["result"] == true) {
+                register_user_handler->exec();
+            } else {
+                m_wallet->deleteLater();
+                m_wallet = nullptr;
+                emit walletChanged(nullptr);
+                emit invalidPin();
+                return;
+            }
         });
     });
     connect(register_user_handler, &Handler::done, this, [login_handler] {
