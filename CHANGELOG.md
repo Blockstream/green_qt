@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Add Jade and Ledger views for hardware wallets management
+- Add support for Blockstream Jade for both bitcoin and liquid wallets.
+- Add a top level view for each network
 - Use same window geometry after restart.
 - Add support for app/global settings.
 - Use Roboto font throughout
@@ -17,12 +20,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add CHANGELOG.md.
 
 ### Changed
+- Overhaul sidebar with sections
+- Update docker images with libusb and hidapi
 - Bump GDK to 0.0.40
 - Abstract Device and refactor Ledger support accordingly.
 - Use git if available for the app version, otherwise use CI env vars.
 - Switch to C++17.
 
 ### Fixed
+- Allow login with tor or custom proxy when using hardware wallets.
+- Allow only one instance of Blockstream Green to run at the same time.
 - Update unconfirmed transactions when a block arrives.
 - Improve ledger signing to suppress unverified inputs warning.
 - Use latest Google Auth token when enabling Google Auth two factor.
