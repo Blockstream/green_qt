@@ -130,6 +130,7 @@ MainPage {
                 ToolTip.visible: hovered
             }
             ToolButton {
+                visible: !self.wallet.device
                 icon.source: 'qrc:/svg/logout.svg'
                 flat: true
                 action: self.disconnectAction
