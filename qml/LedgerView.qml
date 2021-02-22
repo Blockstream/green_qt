@@ -223,7 +223,7 @@ MainPage {
             }
             RowLayout {
                 Button {
-                    enabled: controller.network && !controller.wallet
+                    visible: controller.network && !controller.wallet
                     icon.color: 'transparent'
                     icon.source: controller.network ? icons[controller.network.id] : ''
                     flat: true
@@ -231,7 +231,7 @@ MainPage {
                     onClicked: controller.login()
                 }
                 Button {
-                    enabled: controller.status === 'done'
+                    visible: controller.status === 'done'
                     text: 'View Wallet'
                     flat: true
                     onClicked: pushLocation(`/${controller.network.id}/${controller.wallet.id}`)
