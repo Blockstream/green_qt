@@ -114,6 +114,15 @@ void JadeController::login()
 
     walletChanged(m_wallet);
 
+    connect(m_device, &QObject::destroyed, this, [this] {
+        if (auto wallet = m_wallet) {
+            m_wallet = nullptr;
+            emit walletChanged(nullptr);
+            WalletManager::instance()->removeWallet(wallet);
+            delete wallet;
+        }
+    });
+
     const auto proxy = Settings::instance()->proxy();
     const auto use_tor = Settings::instance()->useTor();
 
