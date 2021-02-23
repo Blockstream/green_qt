@@ -33,4 +33,16 @@ Session::~Session()
 void Session::handleNotification(const QJsonObject& notification)
 {
     emit notificationHandled(notification);
+
+    const auto event = notification.value("event").toString();
+    Q_ASSERT(!event.isEmpty());
+    const auto value = notification.value(event);
+
+    if (event == "session") {
+        auto data = value.toObject();
+        const bool connected = data.take("connected").toBool();
+        Q_ASSERT(data.empty());
+        emit sessionEvent(connected);
+        return;
+    }
 }

@@ -270,14 +270,6 @@ void Wallet::handleNotification(const QJsonObject &notification)
     m_events.insert(event, data);
     emit eventsChanged(m_events);
 
-    // TODO: add signal to emit notification
-
-    if (event == "session") {
-        bool connected = data.toObject().value("connected").toBool();
-        setConnection(connected ? Connected : m_connection);
-        return;
-    }
-
     if (event == "network") {
         QJsonObject network = data.toObject();
         if (!network.value("connected").toBool()) {
@@ -698,6 +690,10 @@ void Wallet::createSession()
     Q_ASSERT(!m_session);
     m_session = new Session(this);
     QObject::connect(m_session, &Session::notificationHandled, this, &Wallet::handleNotification);
+
+    QObject::connect(m_session, &Session::sessionEvent, [this](bool connected) {
+        setConnection(connected ? Connected : m_connection);
+    });
 }
 
 void Wallet::setSession()
