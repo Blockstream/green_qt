@@ -23,41 +23,6 @@ WalletManager::WalletManager()
     auto config = Json::fromObject({{ "datadir", GetDataDir("gdk") }});
     GA_init(config.get());
 
-    // Migrate wallets up to before beta8
-    {
-        QSettings settings(GetDataFile("app", "wallets.ini"), QSettings::IniFormat);
-        int count = settings.beginReadArray("wallets");
-        for (int index = 0; index < count; ++index) {
-            settings.setArrayIndex(index);
-            auto pin_data = settings.value("pin_data").toByteArray();
-            auto name = settings.value("name").toString();
-            auto network = settings.value("network", "testnet").toString();
-            auto login_attempts_remaining = settings.value("login_attempts_remaining").toInt();
-            auto proxy = settings.value("proxy", "").toString();
-            auto use_tor = settings.value("use_tor", false).toBool();
-            const QString id{QUuid::createUuid().toString(QUuid::WithoutBraces)};
-            QJsonDocument doc({
-                { "version", 1 },
-                { "name", name },
-                { "network", network },
-                { "login_attempts_remaining", login_attempts_remaining },
-                { "pin_data", QString::fromLocal8Bit(pin_data.toBase64()) },
-                { "proxy", proxy },
-                { "use_tor", use_tor }
-            });
-            QFile file(GetDataFile("wallets", id));
-            assert(!file.exists());
-            bool result = file.open(QFile::ReadWrite);
-            Q_ASSERT(result);
-            file.write(doc.toJson());
-            result = file.flush();
-            Q_ASSERT(result);
-        }
-        settings.endArray();
-
-        QFile::remove(GetDataFile("app", "wallets.ini"));
-    }
-
     QDirIterator it(GetDataDir("wallets"));
     while (it.hasNext()) {
         QFile file(it.next());
