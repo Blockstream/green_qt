@@ -13,6 +13,7 @@ class Account;
 class Asset;
 class Device;
 class Network;
+class Session;
 
 struct GA_session;
 struct GA_auth_handler;
@@ -161,7 +162,7 @@ public:
     QThread* m_thread{nullptr};
     QObject* m_context{nullptr};
     QAtomicInteger<qint64> m_last_timestamp;
-    GA_session* m_session{nullptr};
+    Session* m_session{nullptr};
     ConnectionStatus m_connection{Disconnected};
     AuthenticationStatus m_authentication{Unauthenticated};
     bool m_locked{true};

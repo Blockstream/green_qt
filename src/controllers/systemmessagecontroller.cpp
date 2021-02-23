@@ -47,7 +47,7 @@ void SystemMessageController::check()
     if (m_accepted.size() < m_pending.size()) return;
 
     char* raw;
-    int res = GA_get_system_message(m_wallet->m_session, &raw);
+    int res = GA_get_system_message(session(), &raw);
     if (res != GA_OK) return;
     QString text = QString::fromLocal8Bit(raw);
     GA_destroy_string(raw);

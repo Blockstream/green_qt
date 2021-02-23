@@ -2,6 +2,7 @@
 #include "asset.h"
 #include "json.h"
 #include "network.h"
+#include "session.h"
 #include "transaction.h"
 #include "util.h"
 #include "wallet.h"
@@ -168,7 +169,7 @@ void Transaction::updateMemo(const QString &memo)
 
     QMetaObject::invokeMethod(m_account->wallet()->m_context, [this, memo] {
         auto txhash = m_data.value("txhash").toString().toLocal8Bit();
-        int err = GA_set_transaction_memo(m_account->wallet()->m_session, txhash.constData(), memo.toLocal8Bit().constData(), 0);
+        int err = GA_set_transaction_memo(m_account->wallet()->m_session->m_session, txhash.constData(), memo.toLocal8Bit().constData(), 0);
         Q_ASSERT(err == GA_OK);
 
         m_data["memo"] = memo;

@@ -15,6 +15,7 @@
 #include "handlers/connecthandler.h"
 #include "handlers/loginhandler.h"
 #include "handlers/registeruserhandler.h"
+#include "session.h"
 
 #include <gdk.h>
 #include "json.h"
@@ -134,7 +135,7 @@ void JadeController::login()
         m_device->m_jade->setHttpRequestProxy([this](JadeAPI& jade, int id, const QJsonObject& req) {
             const auto params = Json::fromObject(req.value("params").toObject());
             GA_json* output;
-            GA_http_request(m_wallet->m_session, params.get(), &output);
+            GA_http_request(m_wallet->m_session->m_session, params.get(), &output);
             auto res = Json::toObject(output);
             GA_destroy_json(output);
             jade.handleHttpResponse(id, req, res.value("body").toObject());

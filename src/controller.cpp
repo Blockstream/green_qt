@@ -3,6 +3,7 @@
 #include "handler.h"
 #include "json.h"
 #include "resolver.h"
+#include "session.h"
 #include "wallet.h"
 
 #include <gdk.h>
@@ -146,7 +147,7 @@ QObject* Controller::context() const
 
 GA_session* Controller::session() const
 {
-    return m_wallet ? m_wallet->m_session : nullptr;
+    return m_wallet ? m_wallet->m_session->m_session : nullptr;
 }
 
 Wallet* Controller::wallet() const

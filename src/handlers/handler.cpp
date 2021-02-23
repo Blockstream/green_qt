@@ -5,6 +5,7 @@
 #include "json.h"
 #include "resolver.h"
 #include "resolvers/signmessageresolver.h"
+#include "session.h"
 #include "wallet.h"
 
 #include <gdk.h>
@@ -29,7 +30,7 @@ void Handler::exec()
 {
     Q_ASSERT(!m_auth_handler);
     QMetaObject::invokeMethod(m_wallet->m_context, [this] {
-        call(m_wallet->m_session, &m_auth_handler);
+        call(m_wallet->m_session->m_session, &m_auth_handler);
         if (m_auth_handler) {
             step();
         } else {

@@ -10,6 +10,7 @@
 #include "handlers/connecthandler.h"
 #include "handlers/loginhandler.h"
 #include "registeruserhandler.h"
+#include "session.h"
 
 #include <type_traits>
 
@@ -100,18 +101,6 @@ public:
         return m_pin_data;
     }
 };
-
-static void notification_handler(void* context, const GA_json* details)
-{
-    Wallet* wallet = static_cast<Wallet*>(context);
-    auto notification = Json::toObject(details);
-    static_assert(std::is_same<decltype(details), const GA_json*>::value, "remove the following const_cast");
-    GA_destroy_json(const_cast<GA_json*>(details));
-    QMetaObject::invokeMethod(wallet, [wallet, notification] {
-        wallet->handleNotification(notification);
-    });
-}
-
 
 Wallet::Wallet(QObject *parent)
     : QObject(parent)
@@ -211,8 +200,7 @@ void Wallet::disconnect()
     setAuthentication(Unauthenticated);
 
     QMetaObject::invokeMethod(m_context, [this] {
-        int err = GA_destroy_session(m_session);
-        Q_ASSERT(err == GA_OK);
+        delete m_session;
         m_session = nullptr;
     }, Qt::BlockingQueuedConnection);
 
@@ -225,11 +213,7 @@ Wallet::~Wallet()
 {
     if (m_session) {
         QMetaObject::invokeMethod(m_context, [this] {
-            int res = GA_disconnect(m_session);
-            Q_ASSERT(res == GA_OK);
-
-            res = GA_destroy_session(m_session);
-            Q_ASSERT(res == GA_OK);
+            delete m_session;
         }, Qt::BlockingQueuedConnection);
     }
     if (m_thread) {
@@ -353,7 +337,7 @@ QStringList Wallet::mnemonic() const
     QStringList result;
     QMetaObject::invokeMethod(m_context, [this, &result] {
         char* mnemonic = nullptr;
-        int err = GA_get_mnemonic_passphrase(m_session, "", &mnemonic);
+        int err = GA_get_mnemonic_passphrase(m_session->m_session, "", &mnemonic);
         Q_ASSERT(err == GA_OK);
         result = QString(mnemonic).split(' ');
         GA_destroy_string(mnemonic);
@@ -477,8 +461,8 @@ void Wallet::setPin(const QByteArray& pin)
 
     // TODO: use SetPinHandler
     QMetaObject::invokeMethod(m_context, [this, pin] {
-        const auto mnemonic = getMnemonicPassphrase(m_session);
-        m_pin_data = pinDataForNewPin(m_session, pin);
+        const auto mnemonic = getMnemonicPassphrase(m_session->m_session);
+        m_pin_data = pinDataForNewPin(m_session->m_session, pin);
     });
 }
 
@@ -527,7 +511,7 @@ void Wallet::refreshAssets(bool refresh)
             { "refresh", refresh }
         });
         GA_json* output;
-        int err = GA_refresh_assets(m_session, params.get(), &output);
+        int err = GA_refresh_assets(m_session->m_session, params.get(), &output);
         if (err != GA_OK) {
             return;
         }
@@ -558,7 +542,7 @@ void Wallet::refreshAssets(bool refresh)
 void Wallet::updateConfig()
 {
     GA_json* config;
-    int err = GA_get_twofactor_config(m_session, &config);
+    int err = GA_get_twofactor_config(m_session->m_session, &config);
     Q_ASSERT(err == GA_OK);
     m_config = Json::toObject(config);
     GA_destroy_json(config);
@@ -570,7 +554,7 @@ void Wallet::updateConfig()
 void Wallet::updateSettings()
 {
     GA_json* settings;
-    int err = GA_get_settings(m_session, &settings);
+    int err = GA_get_settings(m_session->m_session, &settings);
     Q_ASSERT(err == GA_OK);
     auto data = Json::toObject(settings);
     GA_destroy_json(settings);
@@ -580,7 +564,7 @@ void Wallet::updateSettings()
 void Wallet::updateCurrencies()
 {
     GA_json* currencies;
-    int err = GA_get_available_currencies(m_session, &currencies);
+    int err = GA_get_available_currencies(m_session->m_session, &currencies);
     Q_ASSERT(err == GA_OK);
     m_currencies = Json::toObject(currencies);
     GA_destroy_json(currencies);
@@ -626,7 +610,7 @@ QJsonObject Wallet::convert(const QJsonObject& value) const
 {
     auto details = Json::fromObject(value);
     GA_json* balance;
-    int err = GA_convert_amount(m_session, details.get(), &balance);
+    int err = GA_convert_amount(m_session->m_session, details.get(), &balance);
     if (err != GA_OK) return {};
     QJsonObject result = Json::toObject(balance);
     GA_destroy_json(balance);
@@ -671,7 +655,7 @@ qint64 Wallet::parseAmount(const QString& amount, const QString& unit) const
     sanitized_amount.replace(',', '.');
     auto details = Json::fromObject({{ unit == "\u00B5BTC" ? "ubtc" : unit.toLower(), sanitized_amount }});
     GA_json* balance;
-    int err = GA_convert_amount(m_session, details.get(), &balance);
+    int err = GA_convert_amount(m_session->m_session, details.get(), &balance);
     if (err != GA_OK) return 0;
     QJsonObject result = Json::toObject(balance);
     GA_destroy_json(balance);
@@ -712,12 +696,8 @@ Account* Wallet::getOrCreateAccount(int pointer)
 void Wallet::createSession()
 {
     Q_ASSERT(!m_session);
-
-    int res = GA_create_session(&m_session);
-    Q_ASSERT(res == GA_OK);
-
-    res = GA_set_notification_handler(m_session, notification_handler, this);
-    Q_ASSERT(res == GA_OK);
+    m_session = new Session(this);
+    QObject::connect(m_session, &Session::notificationHandled, this, &Wallet::handleNotification);
 }
 
 void Wallet::setSession()
