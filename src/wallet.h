@@ -39,6 +39,7 @@ public:
     Q_ENUM(AuthenticationStatus)
 
 private:
+    Q_PROPERTY(Session* session READ session NOTIFY sessionChanged)
     Q_PROPERTY(QString id READ id CONSTANT)
     Q_PROPERTY(Network* network READ network WRITE setNetwork NOTIFY networkChanged)
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
@@ -62,6 +63,7 @@ public:
     explicit Wallet(QObject *parent = nullptr);
     virtual ~Wallet();
 
+    Session* session() const { return m_session; }
     QString id() const;
 
     Network* network() const { return m_network; }
@@ -130,6 +132,7 @@ public slots:
     void refreshAssets(bool refresh);
 
 signals:
+    void sessionChanged(Session* session);
     void networkChanged(Network* network);
     void connectionChanged();
     void authenticationChanged();

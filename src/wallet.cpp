@@ -691,6 +691,7 @@ void Wallet::createSession()
             }
         }
     });
+    emit sessionChanged(m_session);
 }
 
 void Wallet::setSession()
