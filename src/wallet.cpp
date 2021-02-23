@@ -270,20 +270,6 @@ void Wallet::handleNotification(const QJsonObject &notification)
     m_events.insert(event, data);
     emit eventsChanged(m_events);
 
-    if (event == "network") {
-        QJsonObject network = data.toObject();
-        if (!network.value("connected").toBool()) {
-            setConnection(Connecting);
-            return;
-        }
-
-        setConnection(Connected);
-        if (network.value("login_required").toBool()) {
-            setAuthentication(Unauthenticated);
-        }
-        return;
-    }
-
     if (event == "transaction") {
         QJsonObject transaction = data.toObject();
         for (auto pointer : transaction.value("subaccounts").toArray()) {
@@ -693,6 +679,17 @@ void Wallet::createSession()
 
     QObject::connect(m_session, &Session::sessionEvent, [this](bool connected) {
         setConnection(connected ? Connected : m_connection);
+    });
+    QObject::connect(m_session, &Session::networkEvent, [this](bool connected, bool heartbeat_timeout, bool login_required) {
+        Q_UNUSED(heartbeat_timeout);
+        if (!connected) {
+            setConnection(Connecting);
+        } else {
+            setConnection(Connected);
+            if (login_required) {
+                setAuthentication(Unauthenticated);
+            }
+        }
     });
 }
 

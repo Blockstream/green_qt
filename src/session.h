@@ -15,6 +15,7 @@ public:
     virtual ~Session();
 signals:
     void notificationHandled(const QJsonObject& notification);
+    void networkEvent(bool connected, bool heartbeat_timeout, bool login_required);
     void sessionEvent(bool connected);
 private:
     void handleNotification(const QJsonObject& notification);

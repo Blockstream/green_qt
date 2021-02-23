@@ -45,4 +45,13 @@ void Session::handleNotification(const QJsonObject& notification)
         emit sessionEvent(connected);
         return;
     }
+    if (event == "network") {
+        auto data = value.toObject();
+        const bool connected = data.take("connected").toBool();
+        const bool heartbeat_timeout = data.take("heartbeat_timeout").toBool();
+        const bool login_required = data.take("login_required").toBool();
+        Q_ASSERT(data.empty());
+        emit networkEvent(connected, heartbeat_timeout, login_required);
+        return;
+    }
 }
