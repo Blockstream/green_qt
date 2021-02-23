@@ -21,7 +21,6 @@ AbstractDialog {
         }
     }
 
-    onClosed: pin_view.clear()
     header: Pane {
         leftPadding: 16
         rightPadding: 16

@@ -284,12 +284,15 @@ Item {
         onClicked: {
             pushLocation(login_dialog.location)
         }
-        LoginDialog {
-            id: login_dialog
-            wallet: delegate.wallet
+        Loader {
             readonly property string location: `/${network}/${wallet.id}`
-            visible: window.location === location && wallet.authentication !== Wallet.Authenticated
-            onRejected: popLocation()
+            id: login_dialog
+            active: window.location === location && wallet.authentication !== Wallet.Authenticated
+            sourceComponent: LoginDialog {
+                wallet: delegate.wallet
+                visible: true
+                onRejected: popLocation()
+            }
         }
     }
 }
