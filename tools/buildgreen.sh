@@ -33,7 +33,7 @@ if [ "${GREENSYMBOLS}" = "" ]; then
    elif [ "${GREENPLATFORM}" = "windows" ]; then
        x86_64-w64-mingw32-strip ${BUILDROOT}/release/green.exe
    elif [ "${GREENPLATFORM}" = "osx" ]; then
-       strip ${BUILDROOT}/green.app/Contents/MacOS/green
+       strip ${BUILDROOT}/Blockstream\ Green.app/Contents/MacOS/Blockstream\ Green
    fi
 fi
 

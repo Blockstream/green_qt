@@ -57,7 +57,7 @@ osx_release:
     expire_in: 1 week
     when: always
     paths:
-    - build-osx-clang/green.app
+    - "build-osx-clang/Blockstream Green.app"
 
 bionic_allsymbolsunstripped_manual:
   extends: bionic_release
@@ -88,6 +88,7 @@ osx_sign:
     - osxsigner
   only:
     - /^release_.*/
+    - /^protected_.*/
   stage: signartifacts
   variables:
     GIT_STRATEGY: none
@@ -96,13 +97,14 @@ osx_sign:
     expire_in: 1 week
     when: always
     paths:
-    - build-osx-clang/green.app
+    - "build-osx-clang/Blockstream Green.dmg"
   needs:
     - osx_release
   script:
     - cd $CI_PROJECT_DIR
-    - ./tools/osxsign.sh
     - cd build-osx-clang
+    - ../tools/osxsign.sh
+    - ../tools/packdmg.sh
     - ../tools/osxstaple.sh
 
 windows_sign:
@@ -145,9 +147,7 @@ package_release:
     - mkdir green_qt_dist
     - mv build-mingw-w64/release/GreenSigned.exe "Blockstream Green.exe"
     - zip -j green_qt_dist/BlockstreamGreen_Windows_x86_64.zip "Blockstream Green.exe"
-    - rm -rf "build-osx-clang/Blockstream Green.app"
-    - mv build-osx-clang/green.app "build-osx-clang/Blockstream Green.app"
-    - (cd build-osx-clang; zip -r ../green_qt_dist/BlockstreamGreen_MacOS_x86_64.zip "Blockstream Green.app")
+    - (cd build-osx-clang; zip -r ../green_qt_dist/BlockstreamGreen_MacOS_x86_64.zip "Blockstream Green.dmg")
     - chmod +x build-linux-gcc/green
     - tar czf green_qt_dist/BlockstreamGreen_Linux_x86_64.tar.gz -C build-linux-gcc green
     - cp build-linux-gcc/BlockstreamGreen-x86_64.AppImage green_qt_dist

@@ -1,10 +1,12 @@
 TARGET = green
-TARGET_NAME = Blockstream Green
 
+macos {
+    TARGET = "Blockstream Green"
+}
 
 QMAKE_TARGET_COMPANY = Blockstream Corporation Inc.
-QMAKE_TARGET_PRODUCT = $${TARGET_NAME}
-QMAKE_TARGET_DESCRIPTION = $${TARGET_NAME}
+QMAKE_TARGET_PRODUCT = $${TARGET}
+QMAKE_TARGET_DESCRIPTION = $${TARGET}
 QMAKE_TARGET_COPYRIGHT = Copyright 2021 Blockstream Corporation Inc. All rights reserved.
 
 
@@ -50,10 +52,9 @@ macos {
     ICON = assets/icons/green.icns
 
     QMAKE_POST_LINK += \
-        plutil -replace CFBundleName -string \"$${TARGET_NAME}\" \"$$OUT_PWD/$${TARGET}.app/Contents/Info.plist\" && \
-        plutil -replace CFBundleDisplayName -string \"$${TARGET_NAME}\" \"$$OUT_PWD/$${TARGET}.app/Contents/Info.plist\" && \
-        plutil -replace NSCameraUsageDescription -string \"We use the camera to scan QR codes\" \"$$OUT_PWD/$${TARGET}.app/Contents/Info.plist\" && \
-        plutil -remove NOTE \"$$OUT_PWD/$${TARGET}.app/Contents/Info.plist\" || true
+        plutil -replace CFBundleName -string \"$${TARGET}\" \"$$OUT_PWD/$${TARGET}.app/Contents/Info.plist\" && \
+        plutil -replace CFBundleDisplayName -string \"$${TARGET}\" \"$$OUT_PWD/$${TARGET}.app/Contents/Info.plist\" && \
+        plutil -replace NSCameraUsageDescription -string \"We use the camera to scan QR codes\" \"$$OUT_PWD/$${TARGET}.app/Contents/Info.plist\"
 
     static {
         LIBS += $${GDK_PATH}/libgreenaddress_full.a

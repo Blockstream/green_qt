@@ -1,10 +1,9 @@
 #!/bin/bash
 set -eox pipefail
 
-app_name=green.app
 zip_name=green.zip
 
-zip -r ${zip_name} ${app_name}
+zip -r ${zip_name} Blockstream\ Green.dmg
 
 xcrun altool --notarize-app \
                --username "${STAPLEEMAIL}" \
@@ -18,4 +17,4 @@ do
   xcrun altool --notarization-history 0 -u "${STAPLEEMAIL}" -p "${STAPLEPW}" | fgrep "in progress" || break
 done
 
-xcrun stapler staple ${app_name}
+xcrun stapler staple Blockstream\ Green.dmg
