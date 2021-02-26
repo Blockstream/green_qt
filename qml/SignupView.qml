@@ -14,6 +14,8 @@ AbstractDialog {
         onDone: pushLocation(`/${controller.network.id}/${controller.wallet.id}`)
     }
 
+    closePolicy: Popup.NoAutoClose
+
     width: 800
     height: 450
 

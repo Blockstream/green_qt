@@ -45,6 +45,8 @@ AbstractDialog {
         }
     }
 
+    closePolicy: Popup.NoAutoClose
+
     contentItem: StackView {
         id: stack_view
         implicitWidth: currentItem.implicitWidth
