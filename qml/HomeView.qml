@@ -7,56 +7,36 @@ import QtQuick.Layouts 1.12
 MainPage {
     readonly property string url: 'https://blockstream.com/green/'
     header: Pane {
-        padding: 32
+        padding: 24
         background: Item {}
         contentItem: RowLayout {
-            spacing: 16
-            Image {
-                source: 'qrc:/svg/green_logo.svg'
-                sourceSize.height: 48
+            Label {
+                text: 'Welcome back!'
+                font.pixelSize: 24
+                font.styleName: 'Medium'
             }
             Item {
                 Layout.fillWidth: true
                 height: 1
             }
-            Button {
-                id: support_button
-                readonly property string supportUrl: 'https://docs.blockstream.com/green/support.html'
-                flat: true
-                text: qsTrId('id_support')
-                onClicked: Qt.openUrlExternally(supportUrl)
-                ToolTip.text: supportUrl
-                ToolTip.visible: support_button.hovered
-            }
         }
     }
+    bottomPadding: 24
     contentItem: ColumnLayout {
-        SectionLabel {
-            visible: false
-            leftPadding: 16
-            text: 'Quick actions'
+        Item {
+            width: 1
+            Layout.fillHeight: true
         }
-        Row {
-            visible: false
-            padding: 16
-            spacing: 16
-            Button {
-                text: 'Liquid Signup'
-                onClicked: pushLocation('/liquid/signup')
-                flat: true
-            }
-            Button {
-                text: 'Liquid Restore'
-                onClicked: pushLocation('/liquid/restore')
-                flat: true
-            }
+        Image {
+            Layout.alignment: Qt.AlignHCenter
+            source: 'qrc:/svg/green_logo.svg'
+            sourceSize.height: 96
         }
-        SectionLabel {
-            text: 'About'
+        Item {
+            width: 1
+            Layout.fillHeight: true
         }
-        // FIXME fix copyright, maybe add platform? (32 bit/64 bit)
         Label {
-            //color: 'white'
             Layout.fillWidth: true
             wrapMode: Text.WordWrap
             text: qsTrId('Copyright (C)') + '<br/><br/>' +
@@ -71,10 +51,6 @@ MainPage {
                 acceptedButtons: Qt.NoButton
                 cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor
             }
-        }
-        Item {
-            width: 1
-            Layout.fillHeight: true
         }
     }
 }

@@ -259,7 +259,7 @@ ApplicationWindow {
                 spacing: 8
                 SideButton {
                     id: home_button
-                    icon.source: 'qrc:/svg/grid.svg'
+                    icon.source: 'qrc:/svg/home.svg'
                     location: '/home'
                     text: 'Home'
                 }
