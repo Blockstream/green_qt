@@ -87,6 +87,18 @@ ColumnLayout {
             ToolTip.visible: hovered
         }
     }
+    Label {
+        Layout.alignment: Qt.AlignCenter
+        visible: account.wallet.device instanceof JadeDevice
+        text: 'Verify address matches the one displayed on Jade'
+        font.capitalization: Font.AllUppercase
+        font.styleName: 'Medium'
+        padding: 8
+        background: Rectangle {
+            radius: 4
+            color: '#b74747'
+        }
+    }
     SectionLabel {
         text: qsTrId('id_add_amount_optional')
     }
