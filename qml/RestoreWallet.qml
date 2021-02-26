@@ -59,9 +59,8 @@ AbstractDialog {
         bottomPadding: 8
         background: Item {
         }
-        RowLayout {
+        contentItem: RowLayout {
             id: footer_buttons_row
-            anchors.fill: parent
             spacing: 8
             ProgressBar {
                 Layout.maximumWidth: 64

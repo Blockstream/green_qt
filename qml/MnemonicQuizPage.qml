@@ -4,7 +4,6 @@ import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.12
 
 ColumnLayout {
-    property string title: qsTrId('id_check_your_backup')
     property list<Action> actions: [
         Action {
             text: qsTrId('id_back')
@@ -42,11 +41,11 @@ ColumnLayout {
         }
         repeater.model = result.sort((a, b) => a - b).map(index => ({ index, word: mnemonic[index] }));
     }
-    spacing: 16
+    spacing: 20
     Label {
         Layout.alignment: Qt.AlignHCenter
-        text: qsTrId('id_make_sure_you_made_a_proper')
-        font.pixelSize: 14
+        text: qsTrId('id_check_your_backup')
+        font.pixelSize: 20
     }
     Repeater {
         id: repeater
@@ -74,10 +73,6 @@ ColumnLayout {
                 sourceSize.height: 32
                 opacity: matching ? 1 : 0
                 Behavior on opacity { OpacityAnimator { } }
-            }
-            Item {
-                Layout.fillWidth: true
-                height: 1
             }
         }
     }

@@ -54,7 +54,7 @@ StackView {
         id: liquid_header
         Pane {
             onHeightChanged: transaction_list_view.positionViewAtBeginning()
-            width: transaction_list_view.width
+            width: transaction_list_view.width-16
             property bool showAllAssets: false
             background: Item {}
             padding: 0

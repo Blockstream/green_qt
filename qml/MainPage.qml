@@ -6,6 +6,6 @@ Page {
         color: constants.c800
     }
     clip: true
-    leftPadding: 32
-    rightPadding: 32
+    leftPadding: 24
+    rightPadding: 24
 }

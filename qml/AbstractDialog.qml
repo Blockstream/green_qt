@@ -8,20 +8,20 @@ Dialog {
     property bool showRejectButton: true
     clip: true
     modal: true
-    padding: 16
-    topPadding: 16
-    bottomPadding: 16
-    leftPadding: 16
-    rightPadding: 16
+    padding: 32
+    topPadding: 32
+    bottomPadding: 32
+    leftPadding: 32
+    rightPadding: 32
     horizontalPadding: 0
-    verticalPadding: 8
+    verticalPadding: 16
     anchors.centerIn: parent
     parent: Overlay.overlay
     spacing: 0
     header: Pane {
         leftPadding: self.leftPadding
-        rightPadding: 0
-        topPadding: showRejectButton ? 0 : 16
+        rightPadding: 16
+        topPadding: showRejectButton ? 16 : 32
         bottomPadding: 0
         background: Item {
         }
@@ -29,8 +29,8 @@ Dialog {
             spacing: 16
             Image {
                 source: self.icon
-                sourceSize.width: 24
-                sourceSize.height: 24
+                sourceSize.width: 32
+                sourceSize.height: 32
             }
             Label {
                 Layout.fillWidth: true
@@ -61,6 +61,8 @@ Dialog {
     background: Rectangle {
         radius: 16
         color: constants.c700
+        border.width: 1
+        border.color: Qt.rgba(0, 0, 0, 0.2)
     }
 
     property string icon: ""

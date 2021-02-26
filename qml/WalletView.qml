@@ -222,7 +222,7 @@ MainPage {
 
     contentItem: SplitView {
         handle: Item {
-            implicitWidth: 16
+            implicitWidth: 20
             implicitHeight: parent.height
         }
         AccountListView {

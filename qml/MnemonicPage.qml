@@ -3,8 +3,7 @@ import QtQuick 2.12
 import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.12
 
-Item {
-    property string title: qsTrId('id_write_down_your_mnemonic_on')
+ColumnLayout {
     property alias mnemonic: view.mnemonic
     property list<Action> actions: [
         Action {
@@ -19,8 +18,14 @@ Item {
     signal back();
     signal next();
 
+    spacing: 20
+    Label {
+        Layout.alignment: Qt.AlignHCenter
+        text: qsTrId('id_write_down_your_mnemonic_on')
+        font.pixelSize: 20
+    }
     MnemonicView {
+        Layout.alignment: Qt.AlignHCenter
         id: view
-        anchors.centerIn: parent
     }
 }

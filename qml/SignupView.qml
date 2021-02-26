@@ -1,13 +1,14 @@
 import Blockstream.Green 0.1
 import Blockstream.Green.Core 0.1
-import QtQuick 2.12
-import QtQuick.Controls 2.5
+import QtQuick 2.13
+import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.12
 
 AbstractDialog {
     id: root
     required property string network
-    title: 'Signup'
+    icon: icons[network]
+    title: 'Create Wallet'
     SignupController {
         id: controller
         network: NetworkManager.network(root.network)
@@ -17,69 +18,32 @@ AbstractDialog {
     closePolicy: Popup.NoAutoClose
 
     width: 800
-    height: 450
+    height: 500
 
     signal close()
 
-//    header: Item {
-//        height: 64
-
-//        Label {
-//            id: network_label
-//            background: Item {
-//                Image {
-//                    anchors.verticalCenter: parent.verticalCenter
-//                    source: network_page.network ? icons[network_page.network.id] : ''
-//                    sourceSize.height: 32
-//                    sourceSize.width: 32
-//                }
-//            }
-//            leftPadding: 40
-//            anchors.margins: 16
-//            anchors.left: parent.left
-//            anchors.verticalCenter: parent.verticalCenter
-//            font.pixelSize: 24
-//            text: network_page.network ? network_page.network.name : ''
-//            opacity: !!network_page.network ? 1 : 0
-//            Behavior on opacity { OpacityAnimator { } }
-//        }
-
-//        Label {
-//            anchors.baseline: network_label.baseline
-//            anchors.horizontalCenter: parent.horizontalCenter
-//            width: parent.width - network_label.width * 2 - 64
-//            font.pixelSize: 24
-//            wrapMode: Text.WordWrap
-//            horizontalAlignment: Label.AlignHCenter
-//            text: stack_view.currentItem.title
-//        }
-//    }
-
-    footer: Item {
-        height: 64
-
-        PageIndicator {
-            anchors.centerIn: parent
-            count: 7
-            currentIndex: stack_view.depth - 1
-            width: 128
-            Layout.fillWidth: true
-            Layout.margins: 16
+    footer: Pane {
+        topPadding: 0
+        leftPadding: 32
+        rightPadding: 32
+        bottomPadding: 16
+        background: Item {
         }
-
-        Row {
-            anchors.right: parent.right
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.margins: 16
+        contentItem: RowLayout {
+            PageIndicator {
+                count: 7
+                currentIndex: stack_view.depth - 1
+                width: 128
+            }
+            Item {
+                Layout.fillWidth: true
+                height: 1
+            }
             Repeater {
                 model: stack_view.currentItem.actions
                 Button {
                     action: modelData
                     flat: true
-                    Layout.rightMargin: 16
-                    Layout.bottomMargin: 16
-                    Layout.topMargin: 16
-                    Layout.minimumWidth: 128
                 }
             }
         }
@@ -99,7 +63,6 @@ AbstractDialog {
     property Item mnemonic_page: MnemonicPage {
         mnemonic: controller.mnemonic
         onBack: {
-            network_page.network = null;
             stack_view.pop();
         }
         onNext: {
@@ -114,44 +77,57 @@ AbstractDialog {
         onNext: stack_view.push(set_pin_page)
     }
 
-    property Item set_pin_page: Item {
-        property string title: qsTrId('id_create_a_pin_to_access_your')
+    property Item set_pin_page: ColumnLayout {
         property list<Action> actions
 
         implicitWidth: pin_view.implicitWidth
         implicitHeight: pin_view.implicitHeight
-
+        spacing: 16
+        Label {
+            Layout.alignment: Qt.AlignHCenter
+            text: qsTrId('id_create_a_pin_to_access_your')
+            font.pixelSize: 20
+        }
         PinView {
+            Layout.alignment: Qt.AlignHCenter
             id: pin_view
             focus: true
-            anchors.centerIn: parent
             onPinChanged: {
                 if (valid) {
                     stack_view.push(verify_pin_page);
                 }
             }
         }
+        Item {
+            Layout.fillWidth: true
+            width: 1
+        }
     }
 
-    property Item verify_pin_page: Item {
-        property string title: qsTrId('id_verify_your_pin')
+    property Item verify_pin_page: ColumnLayout {
         property list<Action> actions
-
-        activeFocusOnTab: false
+        Label {
+            Layout.alignment: Qt.AlignHCenter
+            text: qsTrId('id_verify_your_pin')
+            font.pixelSize: 20
+        }
         PinView {
+            Layout.alignment: Qt.AlignHCenter
             id: verify_pin_view
             focus: true
-            anchors.centerIn: parent
             onPinChanged: {
                 if (!pin.valid) return;
                 if (pin_view.pin.value !== pin.value) return clear();
                 stack_view.push(name_page);
             }
         }
+        Item {
+            Layout.fillWidth: true
+            width: 1
+        }
     }
 
-    property Item name_page: Item {
-        property string title: qsTrId('id_set_wallet_name')
+    property Item name_page: ColumnLayout {
         property list<Action> actions: [
             Action {
                 text: qsTrId('id_create')
@@ -169,12 +145,21 @@ AbstractDialog {
         implicitWidth: name_field.width
         implicitHeight: name_field.implicitHeight
 
+        Label {
+            Layout.alignment: Qt.AlignHCenter
+            text: qsTrId('id_set_wallet_name')
+            font.pixelSize: 20
+        }
         TextField {
-            anchors.centerIn: parent
+            Layout.alignment: Qt.AlignHCenter
             id: name_field
             width: 300
             font.pixelSize: 16
             placeholderText: controller.defaultName
+        }
+        Item {
+            Layout.fillWidth: true
+            width: 1
         }
     }
 

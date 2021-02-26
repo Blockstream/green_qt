@@ -3,7 +3,6 @@ import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.12
 
 ColumnLayout {
-    property string title: qsTrId('id_welcome_to') + ' ' + qsTrId('Blockstream Green')
     property list<Action> actions: [
         Action {
             text: qsTrId('id_continue')
@@ -14,6 +13,12 @@ ColumnLayout {
     property bool agreeWithTermsOfService: checkbox.checked
     signal next()
 
+    spacing: 20
+    Label {
+        Layout.alignment: Qt.AlignHCenter
+        text: qsTrId('id_welcome_to') + ' ' + qsTrId('Blockstream Green')
+        font.pixelSize: 20
+    }
     Image {
         Layout.fillWidth: true
         Layout.fillHeight: true

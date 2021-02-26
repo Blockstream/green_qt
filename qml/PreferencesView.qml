@@ -19,6 +19,11 @@ MainPage {
                 Layout.fillWidth: true
                 height: 1
             }
+            Button {
+                text: 'id_support'
+                opacity: 0
+                flat: true
+            }
         }
     }
     component HSpacer: Item {

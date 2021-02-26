@@ -42,63 +42,66 @@ ListView {
         highlighted: currentIndex === index
         leftPadding: 16
         rightPadding: 16
-        topPadding: 8
-        bottomPadding: 8
+        topPadding: 16
+        bottomPadding: 16
 
-        width: ListView.view.width
+        width: ListView.view.width-16
 
         contentItem: ColumnLayout {
             spacing: 8
-            RowLayout {
-                Label {
-                    Layout.fillWidth: true
-                    font.styleName: 'Regular'
-                    font.pixelSize: 16
-                    elide: Text.ElideRight
-                    text: accountName(account)
-                    ToolTip.text: accountName(account)
-                    ToolTip.visible: truncated && hovered
+            Label {
+                text: qsTrId('id_managed_assets')
+                visible: account.json.type === '2of2_no_recovery'
+                font.pixelSize: 12
+                font.capitalization: Font.AllUppercase
+                leftPadding: 8
+                rightPadding: 8
+                topPadding: 4
+                bottomPadding: 4
+                opacity: 1
+                color: 'white'
+                background: Rectangle {
+                    color: '#080b0e'
+                    opacity: 0.2
+                    radius: 4
                 }
-                Label {
-                    font.capitalization: Font.AllUppercase
-                    text: qsTrId('id_managed_assets')
-                    visible: account.json.type === '2of2_no_recovery'
-                    font.pixelSize: 10
-                    padding: 8
-                    opacity: 1
-                    color: constants.c700
-                    Rectangle {
-                        anchors.fill: parent
-                        anchors.margins: 2
-                        color: '#2CCCBF'
-                        opacity: 1
-                        radius: height / 2
-                        z: -1
-                    }
+            }
+            Label {
+                text: qsTrId('id_2of3_account')
+                visible: account.json.type === '2of3'
+                font.pixelSize: 12
+                font.capitalization: Font.AllUppercase
+                leftPadding: 8
+                rightPadding: 8
+                topPadding: 4
+                bottomPadding: 4
+                color: 'white'
+                background: Rectangle {
+                    color: '#080b0e'
+                    opacity: 0.2
+                    radius: 4
                 }
-                Label {
-                    text: qsTrId('id_2of3_account')
-                    visible: account.json.type === '2of3'
-                    font.pixelSize: 10
-                    padding: 8
-                    Rectangle {
-                        anchors.fill: parent
-                        anchors.margins: 4
-                        color: 'white'
-                        opacity: 0.2
-                        radius: height / 2
-                        z: -1
-                    }
-                }
+            }
+            Label {
+                Layout.fillWidth: true
+                font.styleName: 'Medium'
+                font.pixelSize: 18
+                elide: Text.ElideRight
+                text: accountName(account)
+                ToolTip.text: accountName(account)
+                ToolTip.visible: truncated && hovered
             }
             RowLayout {
                 spacing: 10
                 Label {
                     text: formatAmount(account.balance)
-                    font.pixelSize: 16
+                    font.pixelSize: 18
+                    font.styleName: 'Regular'
                 }
                 Label {
+                    font.pixelSize: 18
                     text: '≈ ' + formatFiat(account.balance)
+                    font.styleName: 'Regular'
                 }
             }
             Collapsible {

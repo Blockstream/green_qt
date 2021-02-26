@@ -22,28 +22,23 @@ AbstractDialog {
     }
 
     header: Pane {
-        leftPadding: 16
-        rightPadding: 16
-        topPadding: 8
-        bottomPadding: 8
+        leftPadding: 32
+        rightPadding: 32
+        topPadding: 16
+        bottomPadding: 16
         background: Item {}
-        ColumnLayout {
-            RowLayout {
-                Image {
-                    sourceSize.height: 16
-                    sourceSize.width: 16
-                    source: icons[self.wallet.network.id]
-                }
-                Label {
-                    text: self.wallet.network.name
-                    font.pixelSize: 12
-                    font.styleName: 'Regular'
-                }
+        RowLayout {
+            spacing: 16
+            Image {
+                sourceSize.height: 32
+                sourceSize.width: 32
+                source: icons[self.wallet.network.id]
             }
             Label {
+                Layout.fillWidth: true
                 text: self.wallet.name
                 font.pixelSize: 20
-                font.styleName: 'Thin'
+                font.styleName: 'Medium'
             }
         }
     }
