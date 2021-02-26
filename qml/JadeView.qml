@@ -71,10 +71,15 @@ MainPage {
             }
             Label {
                 Layout.alignment: Qt.AlignHCenter
-                text: qsTrId('id_need_help') + ' ' + '<a href="${url}">' + qsTrId('id_visit_the_blockstream_help') + '</a>'
+                text: qsTrId('id_need_help') + ' ' + link(url, qsTrId('id_visit_the_blockstream_help'))
                 textFormat: Text.RichText
                 color: 'white'
                 onLinkActivated: Qt.openUrlExternally(url)
+                MouseArea {
+                    anchors.fill: parent
+                    acceptedButtons: Qt.NoButton
+                    cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor
+                }
             }
             Item {
                 Layout.fillWidth: true

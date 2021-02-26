@@ -35,6 +35,9 @@ ApplicationWindow {
        }
        return 0
     }
+    function link(url, text) {
+        return `<style>a:link { color: "#00B45A"; text-decoration: none; }</style><a href="${url}">${text || url}</a>`
+    }
 
     property var icons: ({
         'liquid': 'qrc:/svg/liquid.svg',

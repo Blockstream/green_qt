@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Drop wallet storage format from beta versions
 
 ### Fixed
+- Improve link appearance in all platforms and change hover cursor
 - Fix alert message when 2f reset is under dispute
 
 ## [0.1.0] - 2021-02-22
