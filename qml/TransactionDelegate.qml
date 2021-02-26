@@ -73,9 +73,18 @@ ItemDelegate {
 
             Label {
                 Layout.alignment: Qt.AlignRight
-                color: confirmations === 0 ? 'red' : 'white'
+                color: 'white'
                 text: transactionStatus(confirmations)
+                font.styleName: 'Medium'
                 visible: confirmations < (transaction.account.wallet.network.liquid ? 1 : 6)
+                topPadding: 4
+                bottomPadding: 4
+                leftPadding: 12
+                rightPadding: 12
+                background: Rectangle {
+                    radius: 0
+                    color: confirmations === 0 ? '#b74747' : '#474747'
+                }
             }
         }
 
