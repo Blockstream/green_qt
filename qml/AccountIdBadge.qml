@@ -17,7 +17,7 @@ Button {
     bottomPadding: 16
     background: Rectangle {
         border.width: 1
-        border.color: '#2CCCBF'
+        border.color: Qt.rgba(1, 1, 1, 0.12)
         radius: 8
         color: self.hovered ? '#502CCCBF' : 'transparent'
     }
