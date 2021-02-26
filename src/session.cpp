@@ -50,6 +50,12 @@ void Session::handleNotification(const QJsonObject& notification)
         const bool connected = data.take("connected").toBool();
         const bool heartbeat_timeout = data.take("heartbeat_timeout").toBool();
         const bool login_required = data.take("login_required").toBool();
+        const int elapsed = data.take("elapsed").toInt();
+        const int limit = data.take("limit").toInt();
+        const int waiting = data.take("waiting").toInt();
+        Q_UNUSED(elapsed);
+        Q_UNUSED(limit);
+        Q_UNUSED(waiting);
         Q_ASSERT(data.empty());
         emit networkEvent(connected, heartbeat_timeout, login_required);
         return;
