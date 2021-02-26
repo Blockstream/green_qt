@@ -50,44 +50,47 @@ ItemDelegate {
 
         Label {
             text: formatDateTime(tx.created_at)
+            font.pixelSize: 12
+            font.capitalization: Font.AllUppercase
+            font.styleName: 'Regular'
             opacity: 0.6
         }
         Label {
             Layout.fillWidth: true
-            font.pixelSize: 14
+            font.pixelSize: 16
+            font.styleName: 'Medium'
             text: txType(tx)
             elide: Label.ElideRight
         }
-
-        ColumnLayout {
-            Label {
-                color: tx.type === 'incoming' ? Material.accentColor : Material.foreground
-                Layout.alignment: Qt.AlignRight
-                text: {
-                    if (transaction.amounts.length > 1) return qsTrId('id_multiple_assets')
-                    const amount = transaction.amounts[0]
-                    if (amount.asset) return amount.formatAmount(true, transaction.account.wallet.settings.unit, amount.asset.data)
-                    return amount.formatAmount(true, transaction.account.wallet.settings.unit)
-                }
-            }
-
-            Label {
-                Layout.alignment: Qt.AlignRight
-                color: 'white'
-                text: transactionStatus(confirmations)
-                font.styleName: 'Medium'
-                visible: confirmations < (transaction.account.wallet.network.liquid ? 1 : 6)
-                topPadding: 4
-                bottomPadding: 4
-                leftPadding: 12
-                rightPadding: 12
-                background: Rectangle {
-                    radius: 0
-                    color: confirmations === 0 ? '#b74747' : '#474747'
-                }
+        Label {
+            Layout.alignment: Qt.AlignRight
+            color: 'white'
+            text: transactionStatus(confirmations)
+            font.pixelSize: 12
+            font.styleName: 'Medium'
+            font.capitalization: Font.AllUppercase
+            visible: confirmations < (transaction.account.wallet.network.liquid ? 1 : 6)
+            topPadding: 4
+            bottomPadding: 4
+            leftPadding: 12
+            rightPadding: 12
+            background: Rectangle {
+                radius: 4
+                color: confirmations === 0 ? '#b74747' : '#474747'
             }
         }
-
+        Label {
+            color: tx.type === 'incoming' ? '#00b45a' : 'white'
+            Layout.alignment: Qt.AlignRight
+            font.pixelSize: 16
+            font.styleName: 'Medium'
+            text: {
+                if (transaction.amounts.length > 1) return qsTrId('id_multiple_assets')
+                const amount = transaction.amounts[0]
+                if (amount.asset) return amount.formatAmount(true, transaction.account.wallet.settings.unit, amount.asset.data)
+                return amount.formatAmount(true, transaction.account.wallet.settings.unit)
+            }
+        }
         ToolButton {
             id: tool_button
             text: qsTrId('⋮')
