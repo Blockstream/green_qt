@@ -26,7 +26,6 @@
         <file>WelcomePage.qml</file>
         <file>SendDialog.qml</file>
         <file>ReceiveDialog.qml</file>
-        <file>AboutDialog.qml</file>
         <file>MnemonicEditor.qml</file>
         <file>NetworkPage.qml</file>
         <file>WordField.qml</file>
