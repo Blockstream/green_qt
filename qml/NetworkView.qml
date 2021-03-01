@@ -49,8 +49,7 @@ Item {
                 Label {
                     text: self.title
                     font.pixelSize: 24
-                    font.family: 'Roboto'
-                    font.styleName: 'Thin'
+                    font.styleName: 'Medium'
                     Layout.fillWidth: true
                 }
                 Button {
