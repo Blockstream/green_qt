@@ -20,19 +20,12 @@ MainPage {
         vendor: Device.Ledger
     }
     header: MainPageHeader {
-        padding: 16
-        background: Item { }
         contentItem: RowLayout {
             spacing: 16
-            Image {
-                source: 'qrc:/svg/ledger-logo.svg'
-                sourceSize.height: 32
-            }
             Label {
                 text: qsTrId('id_ledger_devices')
                 font.pixelSize: 24
-                font.family: 'Roboto'
-                font.styleName: 'Thin'
+                font.styleName: 'Medium'
             }
             Item {
                 Layout.fillWidth: true
@@ -42,6 +35,9 @@ MainPage {
                 text: qsTrId('id_blockstream_store')
                 highlighted: true
                 onClicked: Qt.openUrlExternally('https://store.blockstream.com/product-category/physical_storage/')
+                font.capitalization: Font.MixedCase
+                leftPadding: 18
+                rightPadding: 18
             }
         }
     }

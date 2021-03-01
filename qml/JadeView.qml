@@ -16,10 +16,25 @@ MainPage {
     }
     header: MainPageHeader {
         contentItem: RowLayout {
-            spacing: 16
-            Image {
-                source: 'qrc:/svg/jade_logo_white_on_transparent_rgb.svg'
-                sourceSize.height: 32
+            spacing: 12
+            Label {
+                text: qsTrId('Blockstream Devices')
+                font.pixelSize: 24
+                font.styleName: 'Medium'
+            }
+            Label {
+                visible: self.count > 0
+                text: self.count
+                color: constants.c800
+                font.pixelSize: 12
+                font.styleName: 'Medium'
+                horizontalAlignment: Label.AlignHCenter
+                leftPadding: 6
+                rightPadding: 6
+                background: Rectangle {
+                    color: 'white'
+                    radius: 4
+                }
             }
             Item {
                 Layout.fillWidth: true
