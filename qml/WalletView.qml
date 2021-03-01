@@ -173,10 +173,13 @@ MainPage {
                 leftPadding: 40
                 wrapMode: Label.WordWrap
                 Layout.fillWidth: true
-                Binding on text {
-                    restoreMode: Binding.RestoreBinding
-                    when: !!wallet.events.twofactor_reset
-                    value: qsTrId('id_your_wallet_is_locked_for_a').arg(wallet.events.twofactor_reset ? wallet.events.twofactor_reset.days_remaining : 0)
+                text: {
+                    const data = wallet.events.twofactor_reset
+                    if (!data) return ''
+                    if (data.is_disputed) return qsTrId('id_warning_wallet_locked_by')
+                    console.assert(data.is_active)
+                    console.assert(data.days_remaining > 0)
+                    return qsTrId('id_your_wallet_is_locked_for_a').arg(data.days_remaining)
                 }
                 Image {
                     y: 8
