@@ -5,7 +5,6 @@ import QtQuick.Layouts 1.13
 
 Column {
     property alias pin: field.pin
-    property alias valid: field.valid
 
     function clear() {
         field.clear()
@@ -43,7 +42,7 @@ Column {
         }
 
         PinButton {
-            enabled: !field.empty
+            enabled: !field.pin.empty
             width: 32
             icon.source: 'qrc:/svg/arrow_left.svg'
             icon.width: 24
@@ -51,13 +50,12 @@ Column {
         }
 
         PinButton {
-            enabled: !field.valid
             text: '0'
             onTapped: field.addDigit(0)
         }
 
         PinButton {
-            enabled: !field.empty
+            enabled: !field.pin.empty
             icon.source: 'qrc:/svg/cancel.svg'
             icon.height: 16
             icon.width: 16

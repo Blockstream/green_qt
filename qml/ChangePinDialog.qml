@@ -13,12 +13,12 @@ WalletDialog {
         id: confirm_pin_view
         PinView {
             onPinChanged: {
-                if (valid && pin !== pin_view.pin) {
+                if (pin.valid && pin.value !== pin_view.pin.value) {
                     clear();
                     ToolTip.show(qsTrId('id_pins_do_not_match_please_try'), 1000);
                 }
             }
-            property bool accept: valid && pin === pin_view.pin
+            property bool accept: pin.valid && pin.value === pin_view.pin.value
             property string title: qsTrId('id_verify_your_pin')
         }
     }
@@ -31,8 +31,8 @@ WalletDialog {
             id: pin_view
             property bool accept: false
             property string title: qsTrId('id_set_a_new_pin')
-            onValidChanged: {
-                if (valid) {
+            onPinChanged: {
+                if (pin.valid) {
                     stack_view.push(confirm_pin_view)
                 }
             }
@@ -57,6 +57,6 @@ WalletDialog {
         }
     }
 
-    onAccepted: wallet.changePin(pin_view.pin)
+    onAccepted: wallet.changePin(pin_view.pin.value)
     onClosed: destroy()
 }

@@ -143,8 +143,8 @@ AbstractDialog {
             focus: true
             anchors.centerIn: parent
             onPinChanged: {
-                if (!valid) return;
-                if (pin_view.pin !== pin) return clear();
+                if (!pin.valid) return;
+                if (pin_view.pin.value !== pin.value) return clear();
                 stack_view.push(name_page);
             }
         }
@@ -159,7 +159,7 @@ AbstractDialog {
                     controller.name = name_field.text.trim()
                     const proxy = Settings.useProxy ? Settings.proxyHost + ':' + Settings.proxyPort : ''
                     const use_tor = Settings.useTor
-                    const pin = pin_view.pin;
+                    const pin = pin_view.pin.value;
                     const wallet = controller.signup(proxy, use_tor, pin);
                     stack_view.push(creating_page)
                 }

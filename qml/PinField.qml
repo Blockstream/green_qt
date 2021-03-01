@@ -8,9 +8,7 @@ Item {
     id: root
 
     property string buffer: ''
-    readonly property string pin: buffer.length === 6 ? buffer : ''
-    readonly property bool empty: buffer.length === 0
-    readonly property bool valid: buffer.length === 6
+    readonly property var pin: buffer.length === 6 ? ({ value: buffer, valid: true, empty: false }) : ({ value: '', valid: false, empty: true })
 
     function addDigit(digit) {
         digit = parseInt(digit)

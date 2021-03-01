@@ -143,7 +143,7 @@ AbstractDialog {
         PinView {
             id: pin_view
             anchors.centerIn: parent
-            onValidChanged: if (valid) stack_view.push(pin_verify_page)
+            onPinChanged: if (pin.valid) stack_view.push(pin_verify_page)
         }
     }
 
@@ -152,11 +152,11 @@ AbstractDialog {
         PinView {
             anchors.centerIn: parent
             onPinChanged: {
-                if (pin !== pin_view.pin) {
+                if (pin.value !== pin_view.pin.value) {
                     clear();
                     ToolTip.show(qsTrId('id_pins_do_not_match_please_try'), 1000);
                 } else {
-                    controller.setPin(pin_view.pin);
+                    controller.setPin(pin_view.pin.value);
                 }
             }
         }

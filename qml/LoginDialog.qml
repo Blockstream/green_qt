@@ -54,11 +54,11 @@ AbstractDialog {
             Layout.alignment: Qt.AlignHCenter
             enabled: self.wallet.authentication === Wallet.Unauthenticated && self.wallet.loginAttemptsRemaining > 0
             onPinChanged: {
-                if (valid) {
+                if (pin.valid) {
                     const proxy = Settings.useProxy ? Settings.proxyHost + ':' + Settings.proxyPort : ''
                     const use_tor = Settings.useTor
                     self.wallet.connect(proxy, use_tor);
-                    self.wallet.loginWithPin(pin);
+                    self.wallet.loginWithPin(pin.value);
                 }
             }
         }
