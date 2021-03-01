@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 ### Changed
+- Removed precision from asset details view
 - Improve layout and look of transaction list
 - Update app settings title and icon
 - Prettify home view and change side button icon

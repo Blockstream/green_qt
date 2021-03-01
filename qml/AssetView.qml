@@ -84,12 +84,6 @@ Page {
             CopyableLabel {
                 text: balance.asset.id
             }
-            SectionLabel {
-                text: qsTrId('id_precision')
-            }
-            CopyableLabel {
-                text: balance.asset.data.precision
-            }
         }
     }
 }
