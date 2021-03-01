@@ -108,7 +108,7 @@ MainPage {
                 onClicked: notifications_drawer.open()
             }
             ToolButton {
-                icon.source: 'qrc:/svg/settings.svg'
+                icon.source: 'qrc:/svg/gearFill.svg'
                 flat: true
                 action: self.settingsAction
                 ToolTip.text: qsTrId('id_settings')
