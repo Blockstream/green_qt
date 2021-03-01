@@ -328,10 +328,10 @@ ApplicationWindow {
                             text: qsTrId('id_devices')
                         }
                         SideButton {
-                            icon.source: 'qrc:/svg/jade_emblem_on_transparent_rgb.svg'
+                            icon.source: 'qrc:/svg/blockstream-logo.svg'
                             location: jade_view.location
                             count: jade_view.count
-                            text: 'Blockstream Jade'
+                            text: 'Blockstream'
                         }
                         SideButton {
                             icon.source: 'qrc:/svg/ledger-logo.svg'

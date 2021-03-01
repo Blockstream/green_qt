@@ -16,6 +16,7 @@
         <file>svg/grid.svg</file>
         <file>svg/logout.svg</file>
         <file>svg/preferences.svg</file>
+        <file>svg/blockstream-logo.svg</file>
         <file>svg/appsettings.svg</file>
         <file>svg/gearFill.svg</file>
     </qresource>
