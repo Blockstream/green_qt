@@ -30,17 +30,17 @@ Button {
             anchors.fill: parent
             visible: self.isCurrent
             color: constants.c500
-            radius: 8
+            radius: 4
         }
         Rectangle {
             anchors.fill: parent
             visible: self.hovered
             color: constants.c600
-            radius: 8
+            radius: 4
         }
     }
     contentItem: RowLayout {
-        spacing: 16
+        spacing: 12
         Image {
             source: self.icon.source
             sourceSize.width: self.icon.width
@@ -61,19 +61,18 @@ Button {
             Layout.maximumWidth: 16
         }
         Label {
-            visible: count > 0 && !Settings.collapseSideBar
+            visible: !Settings.collapseSideBar
+            opacity: count > 0
             text: count
             color: '#444444'
             font.pixelSize: 12
             font.styleName: 'Medium'
             horizontalAlignment: Label.AlignHCenter
-            leftPadding: 8
-            rightPadding: 8
-            Rectangle {
-                z: -1
-                color: '#cccccc'
-                radius: height /  2
-                anchors.fill: parent
+            leftPadding: 6
+            rightPadding: 6
+            background: Rectangle {
+                color: 'white'
+                radius: 4
             }
         }
     }
