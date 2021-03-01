@@ -176,10 +176,14 @@ MainPage {
                 text: {
                     const data = wallet.events.twofactor_reset
                     if (!data) return ''
-                    if (data.is_disputed) return qsTrId('id_warning_wallet_locked_by')
-                    console.assert(data.is_active)
-                    console.assert(data.days_remaining > 0)
-                    return qsTrId('id_your_wallet_is_locked_for_a').arg(data.days_remaining)
+                    if (data.is_disputed) {
+                        return qsTrId('id_warning_wallet_locked_by')
+                    }
+                    if (data.is_active) {
+                        console.assert(data.days_remaining > 0)
+                        return qsTrId('id_your_wallet_is_locked_for_a').arg(data.days_remaining)
+                    }
+                    return ''
                 }
                 Image {
                     y: 8
