@@ -346,9 +346,9 @@ ApplicationWindow {
                     Layout.minimumHeight: 16
                 }
                 SideButton {
-                    icon.source: 'qrc:/svg/settings.svg'
+                    icon.source: 'qrc:/svg/appsettings.svg'
                     location: '/preferences'
-                    text: 'Settings'
+                    text: 'App Settings'
                     icon.width: 24
                     icon.height: 24
                 }

@@ -6,15 +6,14 @@ import QtQuick.Layouts 1.13
 
 MainPage {
     id: self
-    title: qsTrId('id_settings')
+    title: 'App Settings'
 
     header: MainPageHeader {
         contentItem: RowLayout {
             Label {
                 text: self.title
                 font.pixelSize: 24
-                font.family: 'Roboto'
-                font.styleName: 'Thin'
+                font.styleName: 'Medium'
             }
             Item {
                 Layout.fillWidth: true

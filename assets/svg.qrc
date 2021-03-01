@@ -16,5 +16,6 @@
         <file>svg/grid.svg</file>
         <file>svg/logout.svg</file>
         <file>svg/preferences.svg</file>
+        <file>svg/appsettings.svg</file>
     </qresource>
 </RCC>

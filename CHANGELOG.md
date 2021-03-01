@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 ### Changed
+- Update app settings title and icon
 - Prettify home view and change side button icon
 - Prevent rejecting signup and restore dialogs with outside click
 - Drop wallet storage format from beta versions
