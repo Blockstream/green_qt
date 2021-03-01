@@ -69,18 +69,19 @@ ColumnLayout {
         title: qsTrId('id_twofactor_authentication')
         enabled: !wallet.locked
         contentItem: ColumnLayout {
+            Layout.fillWidth: true
+            spacing: 8
             Label {
-                Layout.alignment: Qt.AlignTop
                 Layout.fillWidth: true
                 text: qsTrId('id_enable_twofactor_authentication')
                 wrapMode: Label.WordWrap
-                Layout.minimumWidth: 0 //contentWidth
             }
             Repeater {
                 model: wallet.config.all_methods || []
 
                 RowLayout {
-                    Layout.alignment: Qt.AlignRight
+                    Layout.fillWidth: true
+
                     property string method: modelData
 
                     Image {
@@ -88,8 +89,21 @@ ColumnLayout {
                         sourceSize.height: 32
                     }
                     Label {
-                        text: method.toUpperCase()
-                        Layout.minimumWidth: 64
+                        text: {
+                            switch(method) {
+                                case 'email':
+                                    return qsTrId('id_email')
+                                case 'sms':
+                                    return qsTrId('id_sms')
+                                case 'phone':
+                                    return qsTrId('id_phone_call')
+                                case 'gauth':
+                                    return qsTrId('id_authenticator_app')
+                            }
+                        }
+                    }
+                    Item {
+                        Layout.fillWidth: true
                     }
                     Switch {
                         Binding on checked {

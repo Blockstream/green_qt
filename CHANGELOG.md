@@ -14,7 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Improve link appearance in all platforms and change hover cursor
+- Improve 2FA icons and descriptions
 - Fix alert message when 2f reset is under dispute
+- Fix pin button enable state inconsistency when setting a new pin
 
 ## [0.1.0] - 2021-02-22
 ### Added
