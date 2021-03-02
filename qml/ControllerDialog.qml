@@ -100,16 +100,6 @@ WalletDialog {
 
     property Component resolveCodeComponent: WizardPage {
         property TwoFactorResolver resolver
-        actions: [
-            Action {
-                text: qsTrId('id_next')
-                enabled: code_field.acceptableInput
-                onTriggered: {
-                    resolver.code = code_field.text
-                    resolver.resolve()
-                }
-            }
-        ]
         Connections {
             target: resolver
             function onInvalidCode() {
@@ -134,6 +124,12 @@ WalletDialog {
             TextField {
                 id: code_field
                 horizontalAlignment: Qt.AlignHCenter
+                onTextChanged: {
+                    if (acceptableInput) {
+                        resolver.code = code_field.text
+                        resolver.resolve()
+                    }
+                }
                 validator: RegExpValidator {
                     regExp: /[0-9]{6}/
                 }
