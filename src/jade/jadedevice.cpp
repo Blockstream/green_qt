@@ -663,7 +663,7 @@ public:
         for (const auto value : m_signing_inputs) {
             const auto input = value.toObject();
             const bool sw_input = input.value("address_type") != "p2sh";
-            const auto script = sw_input ? ParseByteArray(input.value("prevout_script")) : QByteArray();
+            const auto script = ParseByteArray(input.value("prevout_script"));
 
             if (sw_input && m_signing_inputs.size() == 1) {
                 inputs.append(QVariantMap({
