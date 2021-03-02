@@ -15,14 +15,4 @@ Image {
         case Device.LedgerNanoX: return 'qrc:/svg/ledger_nano_x.svg'
         }
     }
-    MouseArea {
-        anchors.fill: parent
-        onClicked: {
-            if (device.type === Device.BlockstreamJade) {
-                pushLocation(`/jade/${device.uuid}`)
-            } else if (device.vendor === Device.Ledger) {
-                pushLocation(`/ledger/${device.uuid}`)
-            }
-        }
-    }
 }

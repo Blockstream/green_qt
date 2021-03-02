@@ -78,10 +78,23 @@ MainPage {
                 font.pixelSize: 24
                 font.styleName: 'Medium'
             }
-            DeviceImage {
+            Loader {
                 visible: wallet.device
-                device: wallet.device
-                sourceSize.height: 32
+                sourceComponent:  DeviceImage {
+                    device: wallet.device
+                    sourceSize.height: 32
+                    MouseArea {
+                        anchors.fill: parent
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: {
+                            if (wallet.device.type === Device.BlockstreamJade) {
+                                pushLocation(`/jade/${wallet.device.uuid}`)
+                            } else if (wallet.device.vendor === Device.Ledger) {
+                                pushLocation(`/ledger/${wallet.device.uuid}`)
+                            }
+                        }
+                    }
+                }
             }
             Item {
                 Layout.fillWidth: true
