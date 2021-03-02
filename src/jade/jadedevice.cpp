@@ -606,9 +606,9 @@ public:
     {
         m_device->m_jade->signMessage(m_path, m_message, [this](const QVariantMap& result) {
             Q_ASSERT(result.contains("result") && result["result"].type() == QVariant::String);
-            qDebug() << "MESSAGE" << result["result"].toString();
-            auto sig = QByteArray::fromBase64(result["result"].toString().toLocal8Bit()).mid(1);
-
+            auto sig = QByteArray::fromBase64(result["result"].toString().toLocal8Bit());
+            if (sig.size() == EC_SIGNATURE_RECOVERABLE_LEN) sig = sig.mid(1);
+            Q_ASSERT(sig.size() == EC_SIGNATURE_LEN);
             QByteArray xxx(EC_SIGNATURE_DER_MAX_LEN, 0);
             size_t yyy;
             wally_ec_sig_to_der((const unsigned char*) sig.constData(), sig.size(), (unsigned char*) xxx.data(), EC_SIGNATURE_DER_MAX_LEN, &yyy);
