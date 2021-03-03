@@ -142,7 +142,7 @@ void Controller::exec(Handler* handler)
 
 QObject* Controller::context() const
 {
-    return m_wallet ? m_wallet->m_context : nullptr;
+    return m_wallet ? m_wallet->m_session->m_context : nullptr;
 }
 
 GA_session* Controller::session() const

@@ -102,10 +102,10 @@ void LedgerDeviceController::login()
     const auto use_tor = Settings::instance()->useTor();
 
     setStatus("login");
-    auto connect_handler = new ConnectHandler(m_wallet, proxy, use_tor);
+    auto connect_handler = new ConnectHandler(m_wallet->m_session, m_wallet->m_network, proxy, use_tor);
     auto register_user_handler = new RegisterUserHandler(m_wallet, m_device_details);
     auto login_handler = new LoginHandler(m_wallet, m_device_details);
-    connect(connect_handler, &Handler::done, this, [register_user_handler] {
+    connect(connect_handler, &ConnectHandler::done, this, [register_user_handler] {
         register_user_handler->exec();
     });
     connect(register_user_handler, &Handler::done, this, [login_handler] {

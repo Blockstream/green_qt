@@ -29,7 +29,7 @@ Wallet* Handler::wallet() const
 void Handler::exec()
 {
     Q_ASSERT(!m_auth_handler);
-    QMetaObject::invokeMethod(m_wallet->m_context, [this] {
+    QMetaObject::invokeMethod(m_wallet->m_session->m_context, [this] {
         call(m_wallet->m_session->m_session, &m_auth_handler);
         if (m_auth_handler) {
             step();
@@ -118,7 +118,7 @@ void Handler::request(const QByteArray& method)
     Q_ASSERT(m_result.value("status").toString() == "request_code");
     int res = GA_auth_handler_request_code(m_auth_handler, method.data());
     Q_ASSERT(res == GA_OK);
-    QMetaObject::invokeMethod(m_wallet->m_context, [this] {
+    QMetaObject::invokeMethod(m_wallet->m_session->m_context, [this] {
         step();
     });
 }
@@ -177,7 +177,7 @@ void Handler::resolve(const QByteArray& data)
     Q_ASSERT(m_auth_handler);
     int res = GA_auth_handler_resolve_code(m_auth_handler, data.constData());
     Q_ASSERT(res == GA_OK);
-    QMetaObject::invokeMethod(m_wallet->m_context, [this] {
+    QMetaObject::invokeMethod(m_wallet->m_session->m_context, [this] {
         step();
     });
 }

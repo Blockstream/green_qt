@@ -20,8 +20,10 @@ signals:
 private:
     void handleNotification(const QJsonObject& notification);
 public:
+    QThread* m_thread{nullptr};
+    QObject* m_context{nullptr};
     // TODO: make m_session private
-    GA_session* m_session{nullptr};
+    GA_session* m_session{nullptr};    
 };
 
 #endif // GREEN_SESSION_H

@@ -163,8 +163,6 @@ private:
 
 public:
     QString m_id;
-    QThread* m_thread{nullptr};
-    QObject* m_context{nullptr};
     QAtomicInteger<qint64> m_last_timestamp;
     Session* m_session{nullptr};
     ConnectionStatus m_connection{Disconnected};

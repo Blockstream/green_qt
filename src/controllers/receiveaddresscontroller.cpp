@@ -4,6 +4,7 @@
 #include "json.h"
 #include "network.h"
 #include "resolver.h"
+#include "session.h"
 #include "wallet.h"
 
 #include <gdk.h>
@@ -36,7 +37,7 @@ ReceiveAddressController::ReceiveAddressController(QObject *parent) : QObject(pa
 ReceiveAddressController::~ReceiveAddressController()
 {
     if (m_account) {
-        QMetaObject::invokeMethod(m_account->wallet()->m_context, [] {}, Qt::BlockingQueuedConnection);
+        QMetaObject::invokeMethod(m_account->wallet()->m_session->m_context, [] {}, Qt::BlockingQueuedConnection);
     }
 }
 

@@ -19,10 +19,22 @@ Session::Session(QObject* parent)
         });
     }, this);
     Q_ASSERT(rc == GA_OK);
+
+    m_thread = new QThread(this);
+    m_context = new QObject;
+
+    m_context->moveToThread(m_thread);
+    m_thread->start();
 }
 
 Session::~Session()
 {
+    GA_set_notification_handler(m_session, nullptr, nullptr);
+
+    m_context->deleteLater();
+    m_thread->quit();
+    m_thread->wait();
+
     int rc = GA_disconnect(m_session);
     Q_ASSERT(rc == GA_OK);
 

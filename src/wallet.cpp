@@ -105,21 +105,6 @@ public:
 Wallet::Wallet(QObject *parent)
     : QObject(parent)
 {
-    // TODO: instantiate only if needed
-    m_thread = new QThread(this);
-    m_context = new QObject;
-
-    m_context->moveToThread(m_thread);
-    m_thread->start();
-
-    QMetaObject::invokeMethod(m_context, [this] {
-        auto timer = new QTimer;
-        timer->start(100);
-        QObject::connect(timer, &QTimer::timeout, [this] {
-            m_last_timestamp = QDateTime::currentMSecsSinceEpoch();
-        });
-    });
-
     auto timer = new QTimer(this);
     timer->start(100);
     QObject::connect(timer, &QTimer::timeout, [this] {
@@ -164,14 +149,22 @@ void Wallet::connectNow()
     if (!m_session) {
         createSession();
         // TODO: handle reconnect
-        auto handler = new ConnectHandler(this, m_proxy, m_use_tor);
-        QObject::connect(handler, &Handler::error, this, [this] {
+        auto handler = new ConnectHandler(m_session, m_network, m_proxy, m_use_tor);
+        QObject::connect(handler, &ConnectHandler::error, this, [this] {
             connectNow();
         });
-        QObject::connect(handler, &Handler::done, this, [handler] {
+        QObject::connect(handler, &ConnectHandler::done, this, [handler] {
             handler->deleteLater();
         });
         handler->exec();
+
+        QMetaObject::invokeMethod(m_session->m_context, [this] {
+            auto timer = new QTimer;
+            timer->start(100);
+            QObject::connect(timer, &QTimer::timeout, [this] {
+                m_last_timestamp = QDateTime::currentMSecsSinceEpoch();
+            });
+        });
     }
 }
 
@@ -199,10 +192,8 @@ void Wallet::disconnect()
     setConnection(Disconnected);
     setAuthentication(Unauthenticated);
 
-    QMetaObject::invokeMethod(m_context, [this] {
-        delete m_session;
-        m_session = nullptr;
-    }, Qt::BlockingQueuedConnection);
+    delete m_session;
+    m_session = nullptr;
 
     qDeleteAll(accounts);
     qDeleteAll(m_assets.values());
@@ -212,14 +203,7 @@ void Wallet::disconnect()
 Wallet::~Wallet()
 {
     if (m_session) {
-        QMetaObject::invokeMethod(m_context, [this] {
-            delete m_session;
-        }, Qt::BlockingQueuedConnection);
-    }
-    if (m_thread) {
-        m_context->deleteLater();
-        m_thread->quit();
-        m_thread->wait();
+        delete m_session;
     }
 }
 
@@ -313,7 +297,7 @@ QJsonObject Wallet::events() const
 QStringList Wallet::mnemonic() const
 {
     QStringList result;
-    QMetaObject::invokeMethod(m_context, [this, &result] {
+    QMetaObject::invokeMethod(m_session->m_context, [this, &result] {
         char* mnemonic = nullptr;
         int err = GA_get_mnemonic_passphrase(m_session->m_session, "", &mnemonic);
         Q_ASSERT(err == GA_OK);
@@ -484,7 +468,7 @@ void Wallet::refreshAssets(bool refresh)
 {
     Q_ASSERT(m_network->isLiquid());
 
-    QMetaObject::invokeMethod(m_context, [this, refresh] {
+    QMetaObject::invokeMethod(m_session->m_context, [this, refresh] {
         auto params = Json::fromObject({
             { "assets", true },
             { "icons", true },

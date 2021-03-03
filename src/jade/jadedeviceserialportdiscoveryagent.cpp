@@ -128,10 +128,10 @@ void JadeController::login()
     const auto use_tor = Settings::instance()->useTor();
 
     auto device_details = device_details_from_device();
-    auto connect_handler = new ConnectHandler(m_wallet, proxy, use_tor);
+    auto connect_handler = new ConnectHandler(m_wallet->m_session, m_wallet->m_network, proxy, use_tor);
     auto register_user_handler = new RegisterUserHandler(m_wallet, device_details);
     auto login_handler = new LoginHandler(m_wallet, device_details);
-    connect(connect_handler, &Handler::done, this, [this, network, register_user_handler] {
+    connect(connect_handler, &ConnectHandler::done, this, [this, network, register_user_handler] {
         m_device->m_jade->setHttpRequestProxy([this](JadeAPI& jade, int id, const QJsonObject& req) {
             const auto params = Json::fromObject(req.value("params").toObject());
             GA_json* output;

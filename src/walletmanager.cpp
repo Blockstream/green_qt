@@ -2,6 +2,7 @@
 #include "json.h"
 #include "network.h"
 #include "networkmanager.h"
+#include "session.h"
 #include "util.h"
 #include "wallet.h"
 #include "walletmanager.h"
@@ -70,7 +71,7 @@ void WalletManager::insertWallet(Wallet* wallet)
     Q_ASSERT(!file.exists());
     addWallet(wallet);
 
-    QMetaObject::invokeMethod(wallet->m_context, [wallet] {
+    QMetaObject::invokeMethod(wallet->m_session->m_context, [wallet] {
         QMetaObject::invokeMethod(wallet, [wallet] {
             wallet->save();
         });
@@ -84,7 +85,7 @@ void WalletManager::removeWallet(Wallet* wallet)
     m_wallets.removeOne(wallet);
     emit changed();
     if (!wallet->m_id.isEmpty()) {
-        QMetaObject::invokeMethod(wallet->m_context, [wallet] {
+        QMetaObject::invokeMethod(wallet->m_session->m_context, [wallet] {
             QMetaObject::invokeMethod(wallet, [wallet] {
                 bool result = QFile::remove(GetDataFile("wallets", wallet->m_id));
                 Q_ASSERT(result);
