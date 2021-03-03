@@ -19,18 +19,13 @@ WalletDialog {
     onClosed: if (autoDestroy) destroy()
 
     toolbar: stack_view.currentItem.toolbar
-    footer: Item {
-        implicitHeight: 48
-        Row {
-            anchors.margins: 16
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.right: parent.right
-            Repeater {
-                model: stack_view.currentItem ? stack_view.currentItem.actions : []
-                Button {
-                    flat: true
-                    action: modelData
-                }
+    footer: DialogFooter {
+        HSpacer {}
+        Repeater {
+            model: stack_view.currentItem ? stack_view.currentItem.actions : []
+            Button {
+                flat: true
+                action: modelData
             }
         }
     }
