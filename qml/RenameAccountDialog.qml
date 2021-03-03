@@ -7,19 +7,30 @@ import QtQuick.Layouts 1.12
 
 WalletDialog {
     id: dialog
-    property Account account
-    standardButtons: Dialog.Ok | Dialog.Cancel
+    required property Account account
     title: qsTrId('id_rename_account')
 
-    onAccepted: controller.rename(name_field.text);
+    onAccepted: controller.rename(name_field.text)
     onClosed: destroy()
 
     RenameAccountController {
         id: controller
         account: dialog.account
     }
-
-    ColumnLayout {
+    footer: DialogFooter {
+         HSpacer {}
+         Button {
+             flat: true
+             text: qsTrId('id_cancel')
+             onClicked: dialog.reject()
+         }
+         Button {
+             flat: true
+             text: qsTrId('id_ok')
+             onClicked: dialog.accept()
+         }
+    }
+    contentItem: ColumnLayout {
         SectionLabel {
             text: qsTrId('id_name')
         }
