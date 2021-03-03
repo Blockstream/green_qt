@@ -28,13 +28,13 @@ AbstractDialog {
         target: controller.wallet
         function onLoginError(error) {
             if (error.includes('id_login_failed')) {
-                footer_buttons_row.ToolTip.show(qsTrId('id_login_failed'), 2000);
+                self.footer.ToolTip.show(qsTrId('id_login_failed'), 2000);
             } else if (error.includes('bip39_mnemonic_to_seed')) {
-                footer_buttons_row.ToolTip.show(qsTrId('id_invalid_mnemonic'), 2000);
+                self.footer.ToolTip.show(qsTrId('id_invalid_mnemonic'), 2000);
             } else if (error.includes('reconnect required')) {
-                footer_buttons_row.ToolTip.show(qsTrId('id_unable_to_contact_the_green'), 2000);
+                self.footer.ToolTip.show(qsTrId('id_unable_to_contact_the_green'), 2000);
             } else {
-                footer_buttons_row.ToolTip.show(error, 2000);
+                self.footer.ToolTip.show(error, 2000);
             }
         }
         function onAuthenticationChanged(authentication) {
@@ -54,37 +54,26 @@ AbstractDialog {
         initialItem: mnemonic_page
     }
 
-    footer: Pane {
-        rightPadding: 16
-        bottomPadding: 8
-        background: Item {
+    footer: DialogFooter {
+        ProgressBar {
+            Layout.maximumWidth: 64
+            indeterminate: true
+            opacity: controller.wallet && controller.wallet.authentication === Wallet.Authenticating ? 0.5 : 0
+            visible: opacity > 0
+            Behavior on opacity {
+                SmoothedAnimation {
+                    duration: 500
+                    velocity: -1
+                }
+            }
         }
-        contentItem: RowLayout {
-            id: footer_buttons_row
-            spacing: 8
-            ProgressBar {
-                Layout.maximumWidth: 64
-                indeterminate: true
-                opacity: controller.wallet && controller.wallet.authentication === Wallet.Authenticating ? 0.5 : 0
-                visible: opacity > 0
-                Behavior on opacity {
-                    SmoothedAnimation {
-                        duration: 500
-                        velocity: -1
-                    }
-                }
-            }
-            Item {
-                Layout.fillWidth: true
-                height: 1
-            }
-            Repeater {
-                model: stack_view.currentItem.actions
-                Button {
-                    focus: modelData.focus || false
-                    action: modelData
-                    flat: true
-                }
+        HSpacer {}
+        Repeater {
+            model: stack_view.currentItem.actions
+            Button {
+                focus: modelData.focus || false
+                action: modelData
+                flat: true
             }
         }
     }
