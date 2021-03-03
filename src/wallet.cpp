@@ -105,12 +105,6 @@ public:
 Wallet::Wallet(QObject *parent)
     : QObject(parent)
 {
-    auto timer = new QTimer(this);
-    timer->start(100);
-    QObject::connect(timer, &QTimer::timeout, [this] {
-        qint64 timestamp = QDateTime::currentMSecsSinceEpoch();
-        setBusy(timestamp - m_last_timestamp > 300);
-    });
 }
 
 void Wallet::connect(const QString& proxy, bool use_tor)
@@ -157,14 +151,6 @@ void Wallet::connectNow()
             handler->deleteLater();
         });
         handler->exec();
-
-        QMetaObject::invokeMethod(m_session->m_context, [this] {
-            auto timer = new QTimer;
-            timer->start(100);
-            QObject::connect(timer, &QTimer::timeout, [this] {
-                m_last_timestamp = QDateTime::currentMSecsSinceEpoch();
-            });
-        });
     }
 }
 
@@ -266,6 +252,19 @@ void Wallet::handleNotification(const QJsonObject &notification)
     if (event == "settings") {
         setAuthentication(Authenticated);
         setSettings(data.toObject());
+        auto timer = new QTimer(this);
+        timer->start(100);
+        QObject::connect(timer, &QTimer::timeout, [this] {
+            qint64 timestamp = QDateTime::currentMSecsSinceEpoch();
+            setBusy(timestamp - m_last_timestamp > 300);
+        });
+        QMetaObject::invokeMethod(m_session->m_context, [this] {
+            auto timer = new QTimer(m_session->m_context);
+            timer->start(100);
+            QObject::connect(timer, &QTimer::timeout, [this] {
+                m_last_timestamp = QDateTime::currentMSecsSinceEpoch();
+            });
+        });
         return;
     }
 
