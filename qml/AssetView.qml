@@ -45,9 +45,6 @@ Page {
             width: scroll_view.width - 16
             spacing: 16
 
-            SectionLabel {
-                text: qsTrId('id_name')
-            }
             Row {
                 spacing: 16
                 AssetIcon {
@@ -56,21 +53,26 @@ Page {
                 }
                 CopyableLabel {
                     text: balance.asset.name
-                    font.pixelSize: 16
+                    font.pixelSize: 18
+                    font.styleName: 'Medium'
                     anchors.verticalCenter: icon.verticalCenter
                 }
             }
             SectionLabel {
-                    text: qsTrId('id_ticker')
+                text: qsTrId('id_ticker')
+                visible: 'ticker' in balance.asset.data
             }
             CopyableLabel {
                 text: balance.asset.data.ticker
+                visible: 'ticker' in balance.asset.data
             }
             SectionLabel {
                 text: qsTrId('id_issuer')
+                visible: 'entity' in balance.asset.data
             }
             CopyableLabel {
                 text: balance.asset.data.entity.domain
+                visible: 'entity' in balance.asset.data
             }
             SectionLabel {
                 text: qsTrId('id_total_balance')
