@@ -152,8 +152,8 @@ AbstractDialog {
         }
         TextField {
             Layout.alignment: Qt.AlignHCenter
+            Layout.minimumWidth: 300
             id: name_field
-            width: 300
             font.pixelSize: 16
             placeholderText: controller.defaultName
         }
