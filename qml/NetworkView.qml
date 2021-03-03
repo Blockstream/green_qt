@@ -203,7 +203,7 @@ Item {
         id: signup_dialog
         readonly property string location: `/${network}/signup`
         active: matchesLocation(location)
-        sourceComponent: SignupView {
+        sourceComponent: SignupDialog {
             network: self.network
             onAboutToHide: popLocation()
             Overlay.modal: Rectangle {

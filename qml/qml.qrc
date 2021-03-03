@@ -9,7 +9,7 @@
         <file>SendView.qml</file>
         <file>Amount.qml</file>
         <file>TransactionDelegate.qml</file>
-        <file>SignupView.qml</file>
+        <file>SignupDialog.qml</file>
         <file>PinField.qml</file>
         <file>MnemonicView.qml</file>
         <file>DebugActiveFocus.qml</file>
