@@ -93,7 +93,7 @@ AbstractDialog {
             id: pin_view
             focus: true
             onPinChanged: {
-                if (valid) {
+                if (pin.valid) {
                     stack_view.push(verify_pin_page);
                 }
             }
