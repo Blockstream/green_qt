@@ -35,9 +35,9 @@ Dialog {
             Label {
                 Layout.fillWidth: true
                 text: title
-                font.capitalization: Font.AllUppercase
-                font.pixelSize: 20
-                font.styleName: 'Light'
+                font.capitalization: Font.Capitalize
+                font.pixelSize: 18
+                font.styleName: 'Medium'
             }
             Loader {
                 id: toolbar_loader

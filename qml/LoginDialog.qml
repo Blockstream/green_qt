@@ -37,7 +37,8 @@ AbstractDialog {
             Label {
                 Layout.fillWidth: true
                 text: self.wallet.name
-                font.pixelSize: 20
+                font.capitalization: Font.Capitalize
+                font.pixelSize: 18
                 font.styleName: 'Medium'
             }
         }
