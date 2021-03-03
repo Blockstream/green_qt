@@ -93,14 +93,14 @@ JadeDeviceSerialPortDiscoveryAgent::JadeDeviceSerialPortDiscoveryAgent(QObject* 
     timer->start(2000);
 }
 
-void JadeController::setNetwork(const QString& network)
+void JadeLoginController::setNetwork(const QString& network)
 {
     if (m_network == network) return;
     m_network = network;
     emit networkChanged(m_network);
 }
 
-void JadeController::login()
+void JadeLoginController::login()
 {
     Q_ASSERT(m_device);
     auto network = NetworkManager::instance()->network(m_network);
@@ -179,13 +179,13 @@ void JadeController::login()
     connect_handler->exec();
 }
 
-JadeController::JadeController(QObject* parent)
+JadeLoginController::JadeLoginController(QObject* parent)
     : QObject(parent)
 {
 
 }
 
-void JadeController::setDevice(JadeDevice* device)
+void JadeLoginController::setDevice(JadeDevice* device)
 {
     if (m_device == device) return;
     m_device = device;

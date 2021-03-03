@@ -19,7 +19,7 @@ private:
     QSet<QString> m_failed_locations;
 };
 
-class JadeController : public QObject
+class JadeLoginController : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(JadeDevice* device READ device WRITE setDevice NOTIFY deviceChanged)
@@ -27,7 +27,7 @@ class JadeController : public QObject
     Q_PROPERTY(Wallet* wallet READ wallet NOTIFY walletChanged)
     QML_ELEMENT
 public:
-    JadeController(QObject* parent = nullptr);
+    JadeLoginController(QObject* parent = nullptr);
     JadeDevice* device() const { return m_device; }
     void setDevice(JadeDevice* device);
     QString network() const { return m_network; }

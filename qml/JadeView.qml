@@ -228,7 +228,7 @@ MainPage {
             radius: 16
             color: constants.c700
         }
-        JadeController {
+        JadeLoginController {
             id: controller
             device: self.device
             network: self.network.id
