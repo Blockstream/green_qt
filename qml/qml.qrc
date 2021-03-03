@@ -82,5 +82,6 @@
         <file>MainPageHeader.qml</file>
         <file>LedgerView.qml</file>
         <file>MainPageSection.qml</file>
+        <file>DialogFooter.qml</file>
     </qresource>
 </RCC>

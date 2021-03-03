@@ -12,4 +12,11 @@ QtObject {
     property string c700: "#19222C"
     property string c800: "#12171E"
     property string c900: "#080B0E"
+    // paddings
+    property int p0: 0
+    property int p1: 12
+    property int p2: 18
+    property int p3: 24
+    // spacings
+    property int s1: 12
 }
