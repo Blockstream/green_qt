@@ -22,29 +22,18 @@ AbstractDialog {
 
     signal close()
 
-    footer: Pane {
-        topPadding: 0
-        leftPadding: 32
-        rightPadding: 32
-        bottomPadding: 16
-        background: Item {
+    footer: DialogFooter {
+        PageIndicator {
+            count: 7
+            currentIndex: stack_view.depth - 1
+            width: 128
         }
-        contentItem: RowLayout {
-            PageIndicator {
-                count: 7
-                currentIndex: stack_view.depth - 1
-                width: 128
-            }
-            Item {
-                Layout.fillWidth: true
-                height: 1
-            }
-            Repeater {
-                model: stack_view.currentItem.actions
-                Button {
-                    action: modelData
-                    flat: true
-                }
+        HSpacer {}
+        Repeater {
+            model: stack_view.currentItem.actions
+            Button {
+                action: modelData
+                flat: true
             }
         }
     }

@@ -206,9 +206,6 @@ Item {
         sourceComponent: SignupDialog {
             network: self.network
             onAboutToHide: popLocation()
-            Overlay.modal: Rectangle {
-                color: "#70000000"
-            }
             parent: Overlay.overlay
             visible: signup_dialog.active
         }
