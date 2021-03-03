@@ -7,6 +7,7 @@ HEADERS += \
     $$PWD/jadebleimpl.h \
     $$PWD/jadeconnection.h \
     $$PWD/jadedeviceserialportdiscoveryagent.h \
+    $$PWD/jadelogincontroller.h \
     $$PWD/jadeserialimpl.h \
     $$PWD/jadedevice.h \
     $$PWD/deviceinfo.h \
@@ -17,6 +18,7 @@ SOURCES += \
     $$PWD/jadebleimpl.cpp \
     $$PWD/jadeconnection.cpp \
     $$PWD/jadedeviceserialportdiscoveryagent.cpp \
+    $$PWD/jadelogincontroller.cpp \
     $$PWD/jadeserialimpl.cpp \
     $$PWD/jadedevice.cpp \
     $$PWD/deviceinfo.cpp \
