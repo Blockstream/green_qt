@@ -8,6 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 ### Changed
+
+### Fixed
+
+## [0.1.1] - 2021-03-04
+### Added
+
+### Changed
 - Always send prevout when signing a transaction with Jade
 - 2FA auto-advance at last digit
 - Use Blockstream icon instead of Jade icon
