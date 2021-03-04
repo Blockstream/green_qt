@@ -10,8 +10,8 @@ AbstractDialog {
     id: self
     required property Wallet wallet
 
-    title: wallet.name
-
+    icon: icons[self.wallet.network.id]
+    title: self.wallet.name
     focus: true
 
     Connections {
@@ -21,28 +21,6 @@ AbstractDialog {
         }
     }
 
-    header: Pane {
-        leftPadding: 32
-        rightPadding: 32
-        topPadding: 16
-        bottomPadding: 16
-        background: Item {}
-        RowLayout {
-            spacing: 16
-            Image {
-                sourceSize.height: 32
-                sourceSize.width: 32
-                source: icons[self.wallet.network.id]
-            }
-            Label {
-                Layout.fillWidth: true
-                text: self.wallet.name
-                font.capitalization: Font.Capitalize
-                font.pixelSize: 18
-                font.styleName: 'Medium'
-            }
-        }
-    }
     contentItem: ColumnLayout {
         spacing: 8
         PinView {

@@ -18,41 +18,32 @@ Dialog {
     anchors.centerIn: parent
     parent: Overlay.overlay
     spacing: 0
-    header: Pane {
-        leftPadding: self.leftPadding
-        rightPadding: 16
-        topPadding: showRejectButton ? 16 : 32
-        bottomPadding: 0
-        background: Item {
+    header: DialogHeader {
+        Image {
+            source: self.icon
+            sourceSize.width: 32
+            sourceSize.height: 32
         }
-        contentItem: RowLayout {
-            spacing: 16
-            Image {
-                source: self.icon
-                sourceSize.width: 32
-                sourceSize.height: 32
-            }
-            Label {
-                Layout.fillWidth: true
-                text: title
-                font.capitalization: Font.Capitalize
-                font.pixelSize: 18
-                font.styleName: 'Medium'
-            }
-            Loader {
-                id: toolbar_loader
-            }
-            ToolButton {
-                visible: self.showRejectButton
-                flat: true
-                icon.source: 'qrc:/svg/cancel.svg'
-                icon.width: 16
-                icon.height: 16
-                onClicked: self.reject()
-                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                ToolTip.text: qsTrId('id_cancel')
-                ToolTip.visible: hovered
-            }
+        Label {
+            Layout.fillWidth: true
+            text: title
+            font.capitalization: Font.Capitalize
+            font.pixelSize: 18
+            font.styleName: 'Medium'
+        }
+        Loader {
+            id: toolbar_loader
+        }
+        ToolButton {
+            visible: self.showRejectButton
+            flat: true
+            icon.source: 'qrc:/svg/cancel.svg'
+            icon.width: 16
+            icon.height: 16
+            onClicked: self.reject()
+            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+            ToolTip.text: qsTrId('id_cancel')
+            ToolTip.visible: hovered
         }
     }
     Overlay.modal: Rectangle {

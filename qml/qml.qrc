@@ -89,5 +89,6 @@
         <file>SessionConnectToolButton.qml</file>
         <file>BlinkAnimation.qml</file>
         <file>SessionTorCircuitToolButton.qml</file>
+        <file>DialogHeader.qml</file>
     </qresource>
 </RCC>
