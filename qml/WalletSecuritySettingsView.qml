@@ -81,18 +81,26 @@ ColumnLayout {
                         source: `qrc:/svg/2fa_${method}.svg`
                         sourceSize.height: 32
                     }
-                    Label {
-                        text: {
-                            switch(method) {
-                                case 'email':
-                                    return qsTrId('id_email')
-                                case 'sms':
-                                    return qsTrId('id_sms')
-                                case 'phone':
-                                    return qsTrId('id_phone_call')
-                                case 'gauth':
-                                    return qsTrId('id_authenticator_app')
+                    ColumnLayout {
+                        Label {
+                            text: {
+                                switch(method) {
+                                    case 'email':
+                                        return qsTrId('id_email')
+                                    case 'sms':
+                                        return qsTrId('id_sms')
+                                    case 'phone':
+                                        return qsTrId('id_phone_call')
+                                    case 'gauth':
+                                        return qsTrId('id_authenticator_app')
+                                }
                             }
+                        }
+                        Label {
+                            visible: wallet.config[method].enabled
+                            text: method === 'gauth' ? qsTrId('id_enabled') : wallet.config[method].data
+                            color: constants.c100
+                            font.pixelSize: 10
                         }
                     }
                     Item {
