@@ -12,6 +12,12 @@ ApplicationWindow {
     readonly property WalletView currentWalletView: stack_layout.currentWalletView
     readonly property Wallet currentWallet: currentWalletView ? currentWalletView.wallet : null
     readonly property Account currentAccount: currentWalletView ? currentWalletView.currentAccount : null
+    readonly property string currentNetwork: {
+        if (location.startsWith('/mainnet')) return 'mainnet'
+        if (location.startsWith('/liquid')) return 'liquid'
+        if (location.startsWith('/testnet')) return 'testnet'
+        return undefined
+    }
 
     property var history: []
     readonly property string location: history.length > 0 ? history[history.length - 1] : '/home'
@@ -129,11 +135,13 @@ ApplicationWindow {
                 title: qsTrId('File')
                 Action {
                     text: qsTrId('id_create_new_wallet')
-                    onTriggered: create_wallet_action.trigger()
+                    enabled: currentNetwork
+                    onTriggered: pushLocation(`/${currentNetwork}/signup`)
                 }
                 Action {
                     text: qsTrId('id_restore_green_wallet')
-                    onTriggered: restore_wallet_action.trigger()
+                    enabled: currentNetwork
+                    onTriggered: pushLocation(`/${currentNetwork}/restore`)
                 }
                 Menu {
                     title: qsTrId('id_export_transactions_to_csv_file')
