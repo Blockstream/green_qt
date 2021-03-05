@@ -7,6 +7,7 @@
 #include <QStandardPaths>
 #include <QStyleHints>
 #include <QTranslator>
+#include <QWindow>
 
 #include "clipboard.h"
 #include "devicemanager.h"
@@ -55,9 +56,26 @@ int main(int argc, char *argv[])
     KDSingleApplication kdsa;
 
     if (!kdsa.isPrimaryInstance()) {
-        qDebug() << QCoreApplication::applicationName() << "already running";
+        kdsa.sendMessage("raise");
         return 0;
     }
+
+    #ifndef Q_OS_LINUX
+    app.connect(&kdsa, &KDSingleApplication::messageReceived, &app, [&app](const QByteArray &message ) {
+        if (message == "raise") {
+            for (QWindow* w : app.allWindows()) {
+                // windows: does not allow a window to be brought to front while the user has focus on another window
+                // instead, Windows flashes the taskbar button of the window to notify the user
+
+                // mac: if the primary window is minimized, it is restored. It is background, it is brough to foreground
+
+                w->showNormal();
+                w->requestActivate();
+                w->raise();
+            }
+        }
+    });
+    #endif
 
     QCommandLineParser parser;
     parser.addHelpOption();
@@ -144,9 +162,8 @@ int main(int argc, char *argv[])
     return ret;
 }
 
-#include <mutex>
-
 #ifdef Q_OS_WIN
+#include <mutex>
 #if defined(_GLIBCXX_HAS_GTHREADS) && defined(_GLIBCXX_USE_C99_STDINT_TR1)
 namespace
 {

@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 ### Changed
+- Bring primary window to front when attempting to launch another instance
 - Always send prevout when signing a transaction with Jade
 - 2FA auto-advance at last digit
 - Use Blockstream icon instead of Jade icon
