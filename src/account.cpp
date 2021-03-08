@@ -1,4 +1,5 @@
 #include "account.h"
+#include "address.h"
 #include "asset.h"
 #include "balance.h"
 #include "ga.h"
@@ -144,6 +145,18 @@ Transaction* Account::getOrCreateTransaction(const QJsonObject& data)
     }
     transaction->updateFromData(data);
     return transaction;
+}
+
+Address* Account::getOrCreateAddress(const QJsonObject& data)
+{
+    auto hash = data.value("address").toString();
+    auto address = m_address_by_hash.value(hash);
+    if (!address) {
+        address = new Address(this);
+        m_address_by_hash.insert(hash, address);
+    }
+    address->updateFromData(data);
+    return address;
 }
 
 bool Account::isMainAccount() const

@@ -96,5 +96,7 @@
         <file>MnemonicQuizView.qml</file>
         <file>SelectNetworkView.qml</file>
         <file>AnimLoader.qml</file>
+        <file>AddressesListView.qml</file>
+        <file>AddressDelegate.qml</file>
     </qresource>
 </RCC>

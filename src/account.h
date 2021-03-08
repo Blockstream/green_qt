@@ -6,6 +6,7 @@
 #include <QtQml>
 #include <QObject>
 
+QT_FORWARD_DECLARE_CLASS(Address)
 QT_FORWARD_DECLARE_CLASS(Balance)
 QT_FORWARD_DECLARE_CLASS(Transaction)
 QT_FORWARD_DECLARE_CLASS(Wallet)
@@ -40,6 +41,7 @@ public:
 
     void updateBalance();
     Transaction *getOrCreateTransaction(const QJsonObject &data);
+    Address *getOrCreateAddress(const QJsonObject &data);
 signals:
     void walletChanged();
     void jsonChanged();
@@ -54,6 +56,7 @@ private:
     int m_pointer{-1};
     QJsonObject m_json;
     QMap<QString, Transaction*> m_transactions_by_hash;
+    QMap<QString, Address*> m_address_by_hash;
     QList<Balance*> m_balances;
     QMap<QString, Balance*> m_balance_by_id;
     friend class Wallet;

@@ -146,6 +146,7 @@ ListView {
     }
 
     ScrollIndicator.vertical: ScrollIndicator { }
+
     MouseArea {
         anchors.fill: parent
         onClicked: parent.forceActiveFocus(Qt.MouseFocusReason)

@@ -3,6 +3,8 @@ INCLUDEPATH += $$PWD
 SOURCES += \
     $$PWD/accountcontroller.cpp \
     $$PWD/account.cpp \
+    $$PWD/address.cpp \
+    $$PWD/addresslistmodel.cpp \
     $$PWD/asset.cpp \
     $$PWD/balance.cpp \
     $$PWD/clipboard.cpp \
@@ -42,6 +44,8 @@ SOURCES += \
 HEADERS += \
     $$PWD/accountcontroller.h \
     $$PWD/account.h \
+    $$PWD/address.h \
+    $$PWD/addresslistmodel.h \
     $$PWD/asset.h \
     $$PWD/balance.h \
     $$PWD/clipboard.h \

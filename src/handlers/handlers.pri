@@ -6,6 +6,7 @@ HEADERS += \
     $$PWD/createtransactionhandler.h \
     $$PWD/getbalancehandler.h \
     $$PWD/gettransactionshandler.h \
+    $$PWD/getaddresseshandler.h \
     $$PWD/handler.h \
     $$PWD/loginhandler.h \
     $$PWD/registeruserhandler.h \
@@ -19,6 +20,7 @@ SOURCES += \
     $$PWD/createtransactionhandler.cpp \
     $$PWD/getbalancehandler.cpp \
     $$PWD/gettransactionshandler.cpp \
+    $$PWD/getaddresseshandler.cpp \
     $$PWD/handler.cpp \
     $$PWD/loginhandler.cpp \
     $$PWD/registeruserhandler.cpp \
