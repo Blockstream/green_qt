@@ -13,10 +13,10 @@ ApplicationWindow {
     readonly property Wallet currentWallet: currentWalletView ? currentWalletView.wallet : null
     readonly property Account currentAccount: currentWalletView ? currentWalletView.currentAccount : null
     readonly property string currentNetwork: {
-        if (location.startsWith('/mainnet')) return 'mainnet'
-        if (location.startsWith('/liquid')) return 'liquid'
-        if (location.startsWith('/testnet')) return 'testnet'
-        return undefined
+        console.assert(location.startsWith('/'))
+        const i = location.indexOf('/', 1)
+        const id = i < 0 ? location.slice(1) : location.slice(1, i)
+        return NetworkManager.network(id) ? id : null
     }
 
     property var history: []
