@@ -3,8 +3,10 @@ image: greenaddress/ci@sha256:b095cb41472a56210388c97fb39a7a007d5cf40966929ac39c
 stages:
   - build
   - signartifacts
+  - installer
+  - installer_sign
   - deploy
-
+  
 bionic_release:
   tags:
     - ga
@@ -127,6 +129,49 @@ windows_sign:
     - cd $CI_PROJECT_DIR/build-mingw-w64/release
     - /opt/process_release_windows
 
+windows_installer:
+  image:
+    name: amake/innosetup
+    entrypoint: [""]
+  only:
+    - /^release_.*/
+  stage: installer
+  tags:
+    - ga
+  artifacts:
+    name: "$CI_PROJECT_NAME-$CI_JOB_NAME-$CI_COMMIT_SHORT_SHA"
+    expire_in: 1 week
+    when: always
+    paths:
+    - build-mingw-w64/release/GreenSetup.exe
+  needs:
+    - windows_sign
+  script:
+    - cd $CI_PROJECT_DIR/build-mingw-w64/release
+    - mv GreenSigned.exe Green.exe
+    - ../../tools/buildwininstaller.sh
+
+windows_installer_sign:
+  tags:
+    - garelease
+  only:
+    - /^release_.*/
+  stage: installer_sign
+  variables:
+    GIT_STRATEGY: none
+  artifacts:
+    name: "$CI_PROJECT_NAME-$CI_JOB_NAME-$CI_COMMIT_SHORT_SHA"
+    expire_in: 1 week
+    when: always
+    paths:
+    - build-mingw-w64/release/GreenSigned.exe
+  needs:
+    - windows_installer
+  script:
+    - cd $CI_PROJECT_DIR/build-mingw-w64/release
+    - mv GreenSetup.exe Green.exe
+    - /opt/process_release_windows
+
 package_release:
   tags:
     - garelease
@@ -145,8 +190,8 @@ package_release:
     - cd $CI_PROJECT_DIR
     - rm -fr green_qt_dist
     - mkdir green_qt_dist
-    - mv build-mingw-w64/release/GreenSigned.exe "Blockstream Green.exe"
-    - zip -j green_qt_dist/BlockstreamGreen_Windows_x86_64.zip "Blockstream Green.exe"
+    - mv build-mingw-w64/release/GreenSigned.exe "BlockstreamGreenSetup.exe"
+    - zip -j green_qt_dist/BlockstreamGreen_Windows_x86_64.zip "BlockstreamGreenSetup.exe"
     - (cd build-osx-clang; zip -r ../green_qt_dist/BlockstreamGreen_MacOS_x86_64.zip "Blockstream Green.dmg")
     - chmod +x build-linux-gcc/green
     - tar czf green_qt_dist/BlockstreamGreen_Linux_x86_64.tar.gz -C build-linux-gcc green
@@ -157,4 +202,4 @@ package_release:
   needs:
     - bionic_release
     - osx_sign
-    - windows_sign
+    - windows_installer_sign
