@@ -143,3 +143,70 @@ int main(int argc, char *argv[])
     hid_exit();
     return ret;
 }
+
+#include <mutex>
+
+#ifdef Q_OS_WIN
+#if defined(_GLIBCXX_HAS_GTHREADS) && defined(_GLIBCXX_USE_C99_STDINT_TR1)
+namespace
+{
+  inline std::unique_lock<std::mutex>*&
+  __get_once_functor_lock_ptr()
+  {
+    static std::unique_lock<std::mutex>* __once_functor_lock_ptr = 0;
+    return __once_functor_lock_ptr;
+  }
+}
+
+namespace std _GLIBCXX_VISIBILITY(default)
+{
+_GLIBCXX_BEGIN_NAMESPACE_VERSION
+
+// Explicit instantiation due to -fno-implicit-instantiation.
+  template class function<void()>;
+  function<void()> __once_functor;
+
+  mutex&
+  __get_once_mutex()
+  {
+    static mutex once_mutex;
+    return once_mutex;
+  }
+
+  // code linked against ABI 3.4.12 and later uses this
+  void
+  __set_once_functor_lock_ptr(unique_lock<mutex>* __ptr)
+  {
+    __get_once_functor_lock_ptr() = __ptr;
+  }
+
+  // unsafe - retained for compatibility with ABI 3.4.11
+  unique_lock<mutex>&
+  __get_once_functor_lock()
+  {
+    static unique_lock<mutex> once_functor_lock(__get_once_mutex(), defer_lock);
+    return once_functor_lock;
+  }
+
+  extern "C"
+  {
+    void __once_proxy()
+    {
+      function<void()> __once_call = std::move(__once_functor);
+      if (unique_lock<mutex>* __lock = __get_once_functor_lock_ptr())
+      {
+        // caller is using new ABI and provided lock ptr
+        __get_once_functor_lock_ptr() = 0;
+        __lock->unlock();
+      }
+      else
+        __get_once_functor_lock().unlock();  // global lock
+      __once_call();
+    }
+  }
+
+_GLIBCXX_END_NAMESPACE_VERSION
+} // namespace std
+
+#endif // _GLIBCXX_HAS_GTHREADS && _GLIBCXX_USE_C99_STDINT_TR1
+#endif

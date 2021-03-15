@@ -78,7 +78,21 @@ win32:static {
     # FIXME: the following script appends -lwinpthread at the end so that green .rsrc entries are used instead
     QMAKE_LINK=$${PWD}/link.sh
     RC_ICONS = assets/icons/green.ico
-    LIBS += $${GDK_PATH}/libgreenaddress_full.a /usr/x86_64-w64-mingw32/lib/libhid.a /usr/x86_64-w64-mingw32/lib/libsetupapi.a
+
+    INCLUDEPATH += $${DEPS_PATH}/hidapi/include
+
+    LIBS += $${GDK_PATH}/libgreenaddress_full.a
+    LIBS += $${DEPS_PATH}/hidapi/lib/libhidapi.a
+    LIBS += /usr/x86_64-w64-mingw32/lib/libhid.a /usr/x86_64-w64-mingw32/lib/libsetupapi.a
+}
+
+win32:shared {
+    QMAKE_LINK=$${PWD}/link.bat
+
+    INCLUDEPATH += $${DEPS_PATH}/hidapi/include
+
+    LIBS += $${GDK_PATH}/libgreenaddress_full.a
+    LIBS += $${DEPS_PATH}/hidapi/lib/libhidapi.a
 }
 
 DISTFILES += \
