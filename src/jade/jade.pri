@@ -11,6 +11,7 @@ HEADERS += \
     $$PWD/jadeserialimpl.h \
     $$PWD/jadedevice.h \
     $$PWD/deviceinfo.h \
+    $$PWD/jadeupdatecontroller.h \
     $$PWD/serviceinfo.h
 
 SOURCES += \
@@ -22,4 +23,5 @@ SOURCES += \
     $$PWD/jadeserialimpl.cpp \
     $$PWD/jadedevice.cpp \
     $$PWD/deviceinfo.cpp \
+    $$PWD/jadeupdatecontroller.cpp \
     $$PWD/serviceinfo.cpp
