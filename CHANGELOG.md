@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Jade Over-The-Air Update support
 - Support shared build in windows
+- Add 'recently used wallets' and 'create wallet' sections to home view
 
 ### Changed
 

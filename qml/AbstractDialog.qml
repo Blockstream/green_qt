@@ -48,11 +48,11 @@ Dialog {
         }
     }
     Overlay.modal: Rectangle {
-        color: '#c0080B0E'
+        color: '#d0000000'
     }
     background: Rectangle {
         radius: 16
-        color: constants.c700
+        color: constants.c800
         border.width: 1
         border.color: Qt.rgba(0, 0, 0, 0.2)
     }
