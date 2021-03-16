@@ -19,5 +19,7 @@
         <file>svg/blockstream-logo.svg</file>
         <file>svg/appsettings.svg</file>
         <file>svg/gearFill.svg</file>
+        <file>svg/torV2.svg</file>
+        <file>svg/proxyV2.svg</file>
     </qresource>
 </RCC>
