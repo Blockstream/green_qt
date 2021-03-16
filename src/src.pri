@@ -17,6 +17,7 @@ SOURCES += \
     $$PWD/devicelistmodel.cpp \
     $$PWD/devicemanager.cpp \
     $$PWD/ga.cpp \
+    $$PWD/httprequestactivity.cpp \
     $$PWD/json.cpp \
     $$PWD/main.cpp \
     $$PWD/network.cpp \
@@ -54,6 +55,7 @@ HEADERS += \
     $$PWD/devicelistmodel.h \
     $$PWD/devicemanager.h \
     $$PWD/ga.h \
+    $$PWD/httprequestactivity.h \
     $$PWD/json.h \
     $$PWD/network.h \
     $$PWD/networkmanager.h \
