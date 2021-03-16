@@ -123,6 +123,7 @@ MainPage {
                 }
 
                 delegate: Pane {
+                    id: self
                     required property JadeDevice device
                     readonly property string location: '/jade/' + device.versionInfo.EFUSEMAC.slice(-6)
                     padding: 16
@@ -164,8 +165,15 @@ MainPage {
                             Label {
                                 text: qsTrId('id_firmware')
                             }
-                            Label {
-                                text: device.version
+                            RowLayout {
+                                Label {
+                                    text: device.version
+                                }
+                                Button {
+                                    flat: true
+                                    text: 'OTA Update'
+                                    onClicked: update_dialog.createObject(window, { device }).open()
+                                }
                             }
                             Label {
                                 text: qsTrId('id_connection')
@@ -278,6 +286,14 @@ MainPage {
         Item {
             Layout.fillHeight: true
             width: 1
+        }
+    }
+
+    Component {
+        id: update_dialog
+        JadeUpdateDialog {
+            Component.onCompleted: console.log('update dialog completed')
+            Component.onDestruction: console.log('update dialog destroyed')
         }
     }
 }

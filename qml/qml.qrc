@@ -85,6 +85,7 @@
         <file>DialogFooter.qml</file>
         <file>HSpacer.qml</file>
         <file>VSpacer.qml</file>
+        <file>JadeUpdateDialog.qml</file>
         <file>SessionConnectToolButton.qml</file>
         <file>BlinkAnimation.qml</file>
         <file>SessionTorCircuitToolButton.qml</file>
