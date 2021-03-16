@@ -142,3 +142,13 @@ QJsonObject WalletManager::parseUrl(const QString &url)
 
     return r;
 }
+
+Wallet* WalletManager::wallet(const QString& id) const
+{
+    for (auto wallet : m_wallets) {
+        if (wallet->id() == id) {
+            return wallet;
+        }
+    }
+    return nullptr;
+}

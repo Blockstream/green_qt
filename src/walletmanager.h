@@ -17,6 +17,7 @@ public:
     static WalletManager* instance();
 
     Q_INVOKABLE Wallet* createWallet();
+    Q_INVOKABLE Wallet* wallet(const QString& id) const;
 
     void addWallet(Wallet *wallet);
 
