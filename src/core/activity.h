@@ -30,7 +30,7 @@ signals:
     void indeterminateChanged(bool indeterminate);
 private:
     qreal m_from{0};
-    qreal m_to{0};
+    qreal m_to{1};
     qreal m_value{0};
     bool m_indeterminate{true};
 };
@@ -50,14 +50,13 @@ public:
     };
     Q_ENUM(Status)
     Activity(QObject* parent = nullptr);
+    Status status() const;
     Progress* progress() { return &m_progress; }
     QJsonObject message() const { return m_message; }
-    virtual void exec() = 0;
-protected:
-    Status status() const;
+    void setMessage(const QJsonObject& message);
     void finish();
     void fail();
-    void setMessage(const QJsonObject& message);
+    virtual void exec() = 0;
 signals:
     void statusChanged(Status status);
     void finished();
