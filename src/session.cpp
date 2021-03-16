@@ -73,3 +73,9 @@ void Session::handleNotification(const QJsonObject& notification)
         return;
     }
 }
+
+SessionActivity::SessionActivity(Session* session)
+    : Activity(session)
+    , m_session(session)
+{
+}
