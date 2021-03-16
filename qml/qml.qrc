@@ -84,6 +84,7 @@
         <file>MainPageSection.qml</file>
         <file>DialogFooter.qml</file>
         <file>HSpacer.qml</file>
+        <file>VSpacer.qml</file>
         <file>BlinkAnimation.qml</file>
     </qresource>
 </RCC>
