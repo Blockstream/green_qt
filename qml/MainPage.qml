@@ -3,7 +3,7 @@ import QtQuick.Controls 2.13
 
 Page {
     background: Rectangle {
-        color: constants.c800
+        color: constants.c900
     }
     clip: true
     leftPadding: 24
