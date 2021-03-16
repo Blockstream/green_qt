@@ -18,6 +18,7 @@ class Settings : public QObject
     Q_PROPERTY(QString proxyHost READ proxyHost WRITE setProxyHost NOTIFY proxyHostChanged)
     Q_PROPERTY(int proxyPort READ proxyPort WRITE setProxyPort NOTIFY proxyPortChanged)
     Q_PROPERTY(bool useTor READ useTor WRITE setUseTor NOTIFY useTorChanged)
+    Q_PROPERTY(QStringList recentWallets READ recentWallets NOTIFY recentWalletsChanged)
 public:
     Settings(QObject* parent = nullptr);
     virtual ~Settings();
@@ -45,6 +46,9 @@ public:
     QString proxy() const;
     bool useTor() const { return m_use_tor; }
     void setUseTor(bool use_tor);
+    QStringList recentWallets();
+public slots:
+    void updateRecentWallet(const QString& id);
 signals:
     void windowXChanged(int window_x);
     void windowYChanged(int window_y);
@@ -57,6 +61,7 @@ signals:
     void proxyHostChanged(const QString& proxy_host);
     void proxyPortChanged(int proxy_port);
     void useTorChanged(bool use_tor);
+    void recentWalletsChanged(const QStringList& recent_wallets);
 private:
     void load();
     void save();
@@ -72,6 +77,7 @@ private:
     QString m_proxy_host{};
     int m_proxy_port{9001};
     bool m_use_tor{false};
+    QStringList m_recent_wallets;
 };
 
 #endif // GREEN_SETTINGS_H

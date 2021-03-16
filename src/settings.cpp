@@ -85,6 +85,19 @@ void Settings::setUseTor(bool use_tor)
     emit useTorChanged(m_use_tor);
 }
 
+QStringList Settings::recentWallets()
+{
+    return m_recent_wallets;
+}
+
+void Settings::updateRecentWallet(const QString& id)
+{
+    m_recent_wallets.removeOne(id);
+    m_recent_wallets.prepend(id);
+    if (m_recent_wallets.size() > 3) m_recent_wallets.removeLast();
+    emit recentWalletsChanged(m_recent_wallets);
+}
+
 void Settings::setProxyHost(const QString &proxy_host)
 {
     if (m_proxy_host == proxy_host) return;
@@ -122,6 +135,7 @@ void Settings::load()
     LOAD(m_proxy_host)
     LOAD(m_proxy_port)
     LOAD(m_use_tor)
+    LOAD(m_recent_wallets)
 #undef LOAD
 }
 
@@ -140,5 +154,6 @@ void Settings::save()
     SAVE(m_proxy_host)
     SAVE(m_proxy_port)
     SAVE(m_use_tor)
+    SAVE(m_recent_wallets)
 #undef SAVE
 }

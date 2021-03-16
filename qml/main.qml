@@ -81,6 +81,11 @@ ApplicationWindow {
     onYChanged: Settings.windowY = y
     onWidthChanged: Settings.windowWidth = width
     onHeightChanged: Settings.windowHeight = height
+    onCurrentWalletChanged: {
+        if (currentWallet) {
+            Settings.updateRecentWallet(currentWallet.id)
+        }
+    }
 
     minimumWidth: 900
     minimumHeight: main_layout.implicitHeight + header.implicitHeight
