@@ -87,5 +87,6 @@
         <file>VSpacer.qml</file>
         <file>SessionConnectToolButton.qml</file>
         <file>BlinkAnimation.qml</file>
+        <file>SessionTorCircuitToolButton.qml</file>
     </qresource>
 </RCC>
