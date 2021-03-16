@@ -395,48 +395,6 @@ void JadeDeviceSerialPortDiscoveryAgent2::startOTA() {
         disconnectJade();
         return;
     }
-
-    const int chunkSize = m_version["JADE_OTA_MAX_CHUNK"].toInt();
-    Q_ASSERT(chunkSize > 0);
-
-    m_timer.start();
-    m_jade->otaUpdate(m_compressed_fw, m_uncompressed_fw_size, chunkSize,
-
-                      // Progress callback
-                      [this](const QVariantMap &progress)
-                      {
-                          Q_ASSERT(progress.contains("uploaded"));
-                          const int sent = progress["uploaded"].toInt();
-
-                          if (m_timer.elapsed() > 1000) {
-                              const qint64 bytespersec = sent / (m_timer.elapsed() / 1000);
-                              const float res = static_cast<float>(sent) / static_cast<float>(m_compressed_fw.size());
-                              const qint64 seconds = (m_compressed_fw.size() - sent) / bytespersec;
-                              // hack, it's only one service at any point change m_services
-                              for (auto d: qAsConst(m_services)) {
-                                  if (auto device = qobject_cast<ServiceInfo *>(d)) {
-                                      device->setName(m_fw_name);
-                                      device->setPercentage(static_cast<qint64>(res * 100));
-                                      device->setBytesSec(bytespersec);
-                                      device->setSecondsLeft(seconds);
-                                      device->setCurrentVersion(m_version["JADE_VERSION"].toString());
-                                      break;
-                                  }
-                              }
-                          }
-                      },
-
-                      // On-completion callback
-                      [this](const QVariantMap &rslt)
-                      {
-                          if (rslt.contains("result") && rslt["result"].toBool()) {
-                              qWarning() << "OTA completed successfully";
-                          } else {
-                              qWarning() << "OTA attempt failed" << rslt;
-                          }
-                          disconnectJade();
-                      }
-    );
 }
 
 void JadeDeviceSerialPortDiscoveryAgent2::resetJadePtr(JadeAPI *jade)
@@ -982,7 +940,6 @@ JadeDevice::JadeDevice(JadeAPI* jade, QObject* parent)
     : Device(parent)
     , m_jade(jade)
 {
-
 }
 
 GetWalletPublicKeyActivity *JadeDevice::getWalletPublicKey(Network *network, const QVector<uint32_t>& path)
@@ -1040,10 +997,4 @@ QVariantMap JadeDevice::versionInfo() const
 QString JadeDevice::version() const
 {
     return m_version_info.value("JADE_VERSION").toString();
-}
-
-JadeUpdateActivity *JadeDevice::update()
-{
-    //m_jade->otaUpdate()
-    return nullptr;
 }

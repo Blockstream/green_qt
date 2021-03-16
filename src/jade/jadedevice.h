@@ -140,14 +140,6 @@ private:
     JadeAPI *m_jade;
 };
 
-class JadeUpdateActivity : public Activity
-{
-    Q_OBJECT
-    QML_UNCREATABLE("JadeUpdateActivity is instanced by JadeDevice")
-public:
-    JadeUpdateActivity(QObject* parent = nullptr) : Activity(parent) {}
-};
-
 #include "device.h"
 class JadeDevice : public Device
 {
@@ -176,8 +168,6 @@ public:
     QVariantMap versionInfo() const;
     QString version() const;
     QString systemLocation() const { return m_system_location; }
-public slots:
-    JadeUpdateActivity* update();
 signals:
     void versionInfoChanged();
 private:
