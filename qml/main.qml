@@ -178,7 +178,7 @@ ApplicationWindow {
                     enabled: !!currentWalletView
                 }
                 MenuItem {
-                    enabled: currentWallet && currentWallet.connection !== Wallet.Disconnected && !currentWallet.device
+                    enabled: currentWallet && currentWallet.session && currentWallet.session && !currentWallet.device
                     text: qsTrId('id_log_out')
                     onClicked: currentWallet.disconnect()
                 }

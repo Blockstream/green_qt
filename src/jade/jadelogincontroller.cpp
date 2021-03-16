@@ -60,14 +60,14 @@ void JadeLoginController::login()
         }
     });
 
-    const auto proxy = Settings::instance()->proxy();
-    const auto use_tor = Settings::instance()->useTor();
-
     auto device_details = device_details_from_device();
-    auto connect_handler = new ConnectHandler(m_wallet->m_session, m_wallet->m_network, proxy, use_tor);
     auto register_user_handler = new RegisterUserHandler(m_wallet, device_details);
     auto login_handler = new LoginHandler(m_wallet, device_details);
-    connect(connect_handler, &ConnectHandler::done, this, [this, network, register_user_handler] {
+
+    connect(m_wallet->session(), &Session::connectedChanged, this, [this, network, register_user_handler] {
+        if (!m_wallet || !m_wallet->session()) return;
+        if (!m_wallet->session()->isActive() || !m_wallet->session()->isConnected()) return;
+
         m_device->m_jade->setHttpRequestProxy([this](JadeAPI& jade, int id, const QJsonObject& req) {
             const auto params = Json::fromObject(req.value("params").toObject());
             GA_json* output;
@@ -112,7 +112,7 @@ void JadeLoginController::login()
     connect(login_handler, &Handler::error, this, []() {
         //setStatus("locked");
     });
-    connect_handler->exec();
+    m_wallet->session()->setActive(true);
 }
 
 JadeLoginController::JadeLoginController(QObject* parent)

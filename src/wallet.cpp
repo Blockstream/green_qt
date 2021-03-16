@@ -142,15 +142,8 @@ void Wallet::connectNow()
 
     if (!m_session) {
         createSession();
-        // TODO: handle reconnect
-        auto handler = new ConnectHandler(m_session, m_network, m_proxy, m_use_tor);
-        QObject::connect(handler, &ConnectHandler::error, this, [this] {
-            connectNow();
-        });
-        QObject::connect(handler, &ConnectHandler::done, this, [handler] {
-            handler->deleteLater();
-        });
-        handler->exec();
+        m_session->setNetwork(m_network);
+        m_session->setActive(true);
     }
 }
 
@@ -189,7 +182,9 @@ void Wallet::disconnect()
 Wallet::~Wallet()
 {
     if (m_session) {
-        delete m_session;
+        auto session = m_session;
+        m_session = nullptr;
+        delete session;
     }
 }
 
@@ -660,13 +655,16 @@ void Wallet::createSession()
 {
     Q_ASSERT(!m_session);
     m_session = new Session(this);
+    m_session->setNetwork(m_network);
     QObject::connect(m_session, &Session::notificationHandled, this, &Wallet::handleNotification);
 
-    QObject::connect(m_session, &Session::sessionEvent, [this](bool connected) {
+    QObject::connect(m_session, &Session::sessionEvent, [this](const QJsonObject& event) {
+        const bool connected = event.value("connected").toBool();
         setConnection(connected ? Connected : m_connection);
     });
-    QObject::connect(m_session, &Session::networkEvent, [this](bool connected, bool heartbeat_timeout, bool login_required) {
-        Q_UNUSED(heartbeat_timeout);
+    QObject::connect(m_session, &Session::networkEvent, [this](const QJsonObject& event) {
+        const bool connected = event.value("connected").toBool();
+        const bool login_required = event.value("login_required").toBool();
         if (!connected) {
             setConnection(Connecting);
         } else {
