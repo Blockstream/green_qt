@@ -57,6 +57,7 @@ void JadeSerialImpl::connectDeviceImpl()
     else
     {
         // qWarning() << "JadeSerialImpl::connectDeviceImpl() error opening " << m_serial->portName();
+        emit onOpenError();
         disconnectDevice();
     }
 }

@@ -120,6 +120,7 @@ public:
     int signLiquidTxStart(const QString &network, const QByteArray &txn, int num_inputs, const QVariantList &commitments, const QVariantList &change, const ResponseHandler &cb);
     int signLiquidTxInput(const QVariantMap &input, const ResponseHandler &cb);
 signals:
+    void onOpenError();
     void onConnected();
     void onDisconnected();
 

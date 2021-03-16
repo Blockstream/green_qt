@@ -30,6 +30,7 @@ signals:
     void onNewMessageReceived(const QCborMap &msg);
 
     // Signals emitted when connection made, attempted, lost, disconnected etc.
+    void onOpenError();
     void onConnected();
     void onDisconnected();
 

@@ -122,6 +122,8 @@ JadeAPI::JadeAPI(JadeConnection *connection, QObject *parent)
             this, &JadeAPI::processResponseMessage);
 
     // Forward connection/disconnection signals from underlying connection
+    connect(m_jade, &JadeConnection::onOpenError,
+            this, &JadeAPI::onOpenError);
     connect(m_jade, &JadeConnection::onConnected,
             this, &JadeAPI::onConnected);
     connect(m_jade, &JadeConnection::onDisconnected,

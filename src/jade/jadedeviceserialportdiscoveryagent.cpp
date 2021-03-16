@@ -37,9 +37,12 @@ JadeDeviceSerialPortDiscoveryAgent::JadeDeviceSerialPortDiscoveryAgent(QObject* 
                         DeviceManager::instance()->addDevice(device);
                     });
                 });
+                connect(api, &JadeAPI::onOpenError, this, [this, device] {
+                    m_failed_locations.insert(device->m_system_location);
+                });
                 connect(api, &JadeAPI::onDisconnected, this, [this, device] {
                     if (m_devices.take(device->m_system_location)) {
-                        m_failed_locations.insert(device->m_system_location);
+                        DeviceManager::instance()->removeDevice(device);
                         delete device;
                     }
                 });
