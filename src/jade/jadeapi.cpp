@@ -7,8 +7,6 @@
 #include <QCborArray>
 #include <QVariant>
 
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
 #include <QThread>
 #include <QTimer>
 
@@ -35,64 +33,6 @@ static inline QCborMap getRequest(const int id, const QString& method, const QCb
     return req;
 }
 
-// The default http proxy request-call/response-handler.
-// Uses QNetworkAccessManager to make http call, then passes the response
-// to jadeapi.handleHttpResponse() after cleaning up.
-// User can override this basic http-request implementation if desired.
-// See: JadeAPI::setHttpRequestProxy() below.
-static void defaultHttpRequestProxy(JadeAPI& jadeapi, const int id, const QJsonObject &httpRequest)
-{
-    qDebug() << "JadeAPI defaultHttpRequestProxy() called for" << id << "with" << httpRequest;
-
-    // Assert httpRequest structure looks as exepcted
-    Q_ASSERT(httpRequest.contains("params"));
-    Q_ASSERT(httpRequest["params"].isObject());
-    Q_ASSERT(httpRequest["params"].toObject().contains("urls"));
-    Q_ASSERT(httpRequest["params"]["urls"].isArray());
-    Q_ASSERT(httpRequest.contains("on-reply"));
-    Q_ASSERT(httpRequest["on-reply"].isString());
-
-    // Get http-request parameters
-    const QJsonObject httpParams = httpRequest["params"].toObject();
-
-    // Get the url (for now use first in list)
-    const QJsonArray urls = httpParams["urls"].toArray();
-    QNetworkRequest networkRequest(urls[0].toString());
-    networkRequest.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-
-    // Only handle POST atm
-    Q_ASSERT(httpParams["method"] == "POST");
-
-    // Get any data payload
-    QByteArray data;
-    if (httpParams.contains("data") && httpParams["data"].isObject())
-    {
-        data = QJsonDocument(httpParams["data"].toObject()).toJson(QJsonDocument::Compact);
-    }
-
-    // Connect callback for handling http-response
-    QNetworkAccessManager *nam = new QNetworkAccessManager(&jadeapi);
-    QObject::connect(nam, &QNetworkAccessManager::finished,
-                     [nam, id, httpRequest, &jadeapi](QNetworkReply* response) {
-        // Callback to handle response
-        if (response->error() == QNetworkReply::NoError) {
-            const QByteArray strReply = response->readAll();
-            const QJsonObject httpResponse = QJsonDocument::fromJson(strReply).object();
-            jadeapi.handleHttpResponse(id, httpRequest, httpResponse);
-        }
-        else
-        {
-            qWarning() << "JadeAPI defaultHttpRequestProxy() error handling http-response:" << response;
-        }
-
-        response->deleteLater();
-        nam->deleteLater();
-    });
-
-    // Make http call
-    nam->post(networkRequest, data);
-}
-
 // Create with serial connection
 JadeAPI::JadeAPI(const QSerialPortInfo& deviceInfo, QObject *parent)
     : JadeAPI(new JadeSerialImpl(deviceInfo, parent), parent) // temporary impl owership
@@ -111,7 +51,6 @@ JadeAPI::JadeAPI(const QBluetoothDeviceInfo& deviceInfo, QObject *parent)
 JadeAPI::JadeAPI(JadeConnection *connection, QObject *parent)
     : QObject(parent),
       m_idgen(QRandomGenerator::securelySeeded()),
-      m_makeHttpRequest(defaultHttpRequestProxy),
       m_responseHandlers(),
       m_jade(connection)
 {
@@ -155,7 +94,7 @@ void JadeAPI::disconnectDevice()
 // Function to override the basic http-request implementation
 void JadeAPI::setHttpRequestProxy(const HttpRequestProxy &httpRequestProxy)
 {
-    m_makeHttpRequest = httpRequestProxy ? httpRequestProxy : defaultHttpRequestProxy;
+    m_makeHttpRequest = httpRequestProxy;
 }
 
 // Handle result of an http-request.
