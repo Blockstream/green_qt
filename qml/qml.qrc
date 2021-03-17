@@ -90,5 +90,6 @@
         <file>BlinkAnimation.qml</file>
         <file>SessionTorCircuitToolButton.qml</file>
         <file>DialogHeader.qml</file>
+        <file>DialogLoader.qml</file>
     </qresource>
 </RCC>

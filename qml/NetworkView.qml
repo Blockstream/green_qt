@@ -24,11 +24,10 @@ Item {
             network: self.network
         }
         WalletView {
-            anchors.fill: parent
-            id: foooo
             property string thumb
-            property string location: `/${network}/${wallet.id}`
-            property bool match: wallet.authentication === Wallet.Authenticated && Window.window.location === `/${network}/${wallet.id}`
+            property bool match: wallet.authentication === Wallet.Authenticated && window.location.startsWith(wallet_view.location)
+            id: wallet_view
+            anchors.fill: parent
             z: match ? 1 : -1
         }
     }
@@ -199,30 +198,23 @@ Item {
         }
     }
 
-    Loader {
-        id: signup_dialog
+    DialogLoader {
         readonly property string location: `/${network}/signup`
+        id: signup_dialog
         active: matchesLocation(location)
-        sourceComponent: SignupDialog {
+        dialog: SignupDialog {
             network: self.network
-            onAboutToHide: popLocation()
-            parent: Overlay.overlay
-            visible: signup_dialog.active
+            onRejected: popLocation()
         }
     }
 
-    Loader {
-        id: restore_dialog
+    DialogLoader {
         readonly property string location: `/${network}/restore`
+        id: restore_dialog
         active: matchesLocation(location)
-        sourceComponent: RestoreWallet {
+        dialog: RestoreWallet {
             network: self.network
-            onAboutToHide: popLocation()
-            Overlay.modal: Rectangle {
-                color: "#70000000"
-            }
-            parent: Overlay.overlay
-            visible: restore_dialog.active
+            onRejected: popLocation()
         }
     }
 
@@ -280,13 +272,12 @@ Item {
         onClicked: {
             pushLocation(login_dialog.location)
         }
-        Loader {
+        DialogLoader {
             readonly property string location: `/${network}/${wallet.id}`
             id: login_dialog
             active: window.location === location && wallet.authentication !== Wallet.Authenticated
-            sourceComponent: LoginDialog {
+            dialog: LoginDialog {
                 wallet: delegate.wallet
-                visible: true
                 onRejected: popLocation()
             }
         }

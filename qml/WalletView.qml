@@ -8,8 +8,8 @@ import QtQml 2.15
 
 MainPage {
     id: self
-
     required property Wallet wallet
+    readonly property string location: `/${wallet.network.id}/${wallet.id}`
     readonly property Account currentAccount: accounts_list.currentAccount
 
     function parseAmount(amount) {
@@ -54,15 +54,18 @@ MainPage {
     }
 
     property Action settingsAction: Action {
-        enabled: settings_dialog.active
-        onTriggered: settings_dialog.object.open()
+        enabled: settings_dialog.enabled
+        onTriggered: pushLocation(settings_dialog.location)
     }
-    Instantiator {
+    DialogLoader {
         id: settings_dialog
-        active: !!self.wallet.settings.pricing && !!self.wallet.config.limits
-        delegate: WalletSettingsDialog {
+        property string location: `${self.location}/settings`
+        property bool enabled: !!self.wallet.settings.pricing && !!self.wallet.config.limits
+        active: settings_dialog.enabled && window.location === settings_dialog.location
+        dialog: WalletSettingsDialog {
             parent: window.Overlay.overlay
             wallet: self.wallet
+            onRejected: popLocation()
         }
     }
     header: MainPageHeader {
