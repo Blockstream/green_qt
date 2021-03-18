@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add connection and tor feedback when logging in with pin, mnemonic and hardware wallets
 - Overhaul the threading model to improve handling of async operations
 - Add a command line flag to expose multiple update channels for Jade
+- Update translations
 
 ### Fixed
 - Fix hover events after opening a dialog

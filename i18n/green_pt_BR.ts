@@ -121,6 +121,10 @@
         <translation>Especificar quantidade (opcional)</translation>
     </message>
     <message>
+        <source>id_add_another_wallet</source>
+        <translation>Add another wallet</translation>
+    </message>
+    <message>
         <source>id_add_custom_network_by_qr_code</source>
         <translation>Adicionar rede personalizada por código QR</translation>
     </message>
@@ -249,6 +253,10 @@
         <translation>Unidade de Bitcoin</translation>
     </message>
     <message>
+        <source>id_bitcoin_is_the_worlds_leading</source>
+        <translation>Bitcoin is the world&apos;s leading P2P cryptocurrency network. Select to send and receive bitcoin.</translation>
+    </message>
+    <message>
         <source>id_bitcoin_wallet</source>
         <translation>Carteira Bitcoin.</translation>
     </message>
@@ -279,6 +287,10 @@
     <message>
         <source>id_blockstream_does_not_have</source>
         <translation>A Blockstream não tem acesso ao backup da sua carteira e não poderá ajudá-lo caso você o perca</translation>
+    </message>
+    <message>
+        <source>id_blockstream_green_supports_both</source>
+        <translation>Blockstream Green supports both Bitcoin and the Liquid Network. Don&apos;t worry, you can create another wallet for a different network at any time.</translation>
     </message>
     <message>
         <source>id_blockstream_store</source>
@@ -349,6 +361,14 @@
         <translation>Escolha um método para autorizar a ação</translation>
     </message>
     <message>
+        <source>id_choose_this_version_to_connect</source>
+        <translation>Choose this version to connect to your Blockstream Jade with both a usb cable and wireless</translation>
+    </message>
+    <message>
+        <source>id_choose_this_version_to_disable</source>
+        <translation>Choose this version to disable all radio connections on your Blockstream Jade. This will make your Blockstream Jade incompatible with iOS devices</translation>
+    </message>
+    <message>
         <source>id_choose_twofactor_authentication</source>
         <translation>Escolha o método de autenticação de dois fatores</translation>
     </message>
@@ -358,7 +378,7 @@
     </message>
     <message>
         <source>id_clear</source>
-        <translation>LIMPAR</translation>
+        <translation>Clear</translation>
     </message>
     <message>
         <source>id_click_to_copy</source>
@@ -405,6 +425,10 @@
         <translation>Confirme os detalhes da transação na sua carteira física</translation>
     </message>
     <message>
+        <source>id_confirm_update_on_your_jade</source>
+        <translation>Confirm update on your Jade</translation>
+    </message>
+    <message>
         <source>id_confirmation_in_d_blocks</source>
         <translation>Confirmação em %1 blocos</translation>
     </message>
@@ -431,6 +455,10 @@
     <message>
         <source>id_connect_your_ledger_to_use_it</source>
         <translation>Conecte seu Ledger para utilizá-lo no Green</translation>
+    </message>
+    <message>
+        <source>id_connected_to_jade</source>
+        <translation>Connected to Jade</translation>
     </message>
     <message>
         <source>id_connecting_to_a_trusted_node</source>
@@ -521,8 +549,20 @@
         <translation>Criar carteira temporária</translation>
     </message>
     <message>
+        <source>id_create_wallet</source>
+        <translation>Create Wallet</translation>
+    </message>
+    <message>
+        <source>id_creating_wallet</source>
+        <translation>Creating wallet…</translation>
+    </message>
+    <message>
         <source>id_currency</source>
         <translation>Moeda</translation>
+    </message>
+    <message>
+        <source>id_current_version</source>
+        <translation>Current version</translation>
     </message>
     <message>
         <source>id_custom</source>
@@ -809,6 +849,10 @@
         <translation>Erro: as frases secretas não conferem</translation>
     </message>
     <message>
+        <source>id_establishing_session</source>
+        <translation>Establishing session</translation>
+    </message>
+    <message>
         <source>id_estimated_blocks_until</source>
         <translation>Blocos estimados até a confirmação: %1</translation>
     </message>
@@ -865,8 +909,20 @@
         <translation>Taxa muito baixa</translation>
     </message>
     <message>
+        <source>id_fetching_new_firmware</source>
+        <translation>Fetching new firmware</translation>
+    </message>
+    <message>
         <source>id_firmware</source>
         <translation>Firmware</translation>
+    </message>
+    <message>
+        <source>id_firmware_update</source>
+        <translation>Firmware update</translation>
+    </message>
+    <message>
+        <source>id_firmware_update_completed</source>
+        <translation>Firmware update completed</translation>
     </message>
     <message>
         <source>id_for_investors</source>
@@ -1033,6 +1089,10 @@
         <translation>Initialized</translation>
     </message>
     <message>
+        <source>id_initializing_tor</source>
+        <translation>Initializing Tor…</translation>
+    </message>
+    <message>
         <source>id_install_version_s</source>
         <translation>Install version: %1?</translation>
     </message>
@@ -1177,8 +1237,24 @@
         <translation>Liquid wallets</translation>
     </message>
     <message>
+        <source>id_loading</source>
+        <translation>Loading</translation>
+    </message>
+    <message>
+        <source>id_loading_accounts</source>
+        <translation>Loading accounts…</translation>
+    </message>
+    <message>
+        <source>id_loading_assets</source>
+        <translation>Loading assets…</translation>
+    </message>
+    <message>
         <source>id_loading_transactions</source>
         <translation>Carregando transações…</translation>
+    </message>
+    <message>
+        <source>id_loading_wallet</source>
+        <translation>Loading wallet…</translation>
     </message>
     <message>
         <source>id_log_in</source>
@@ -1231,6 +1307,10 @@
     <message>
         <source>id_look_at_the_device_for_the</source>
         <translation>Verifique o dispositivo para ver a posição dos números</translation>
+    </message>
+    <message>
+        <source>id_looks_like_you_havent_used_a</source>
+        <translation>Looks like you haven&apos;t used a wallet yet. Try creating a new one.</translation>
     </message>
     <message>
         <source>id_low</source>
@@ -1365,6 +1445,10 @@
         <translation>Nova transação envolvendo as contas %1.</translation>
     </message>
     <message>
+        <source>id_new_version</source>
+        <translation>New version</translation>
+    </message>
+    <message>
         <source>id_next</source>
         <translation>Próximo</translation>
     </message>
@@ -1415,6 +1499,10 @@
     <message>
         <source>id_nonconfidential_addresses_not</source>
         <translation>Sem suporte para endereços Não Confidenciais</translation>
+    </message>
+    <message>
+        <source>id_noradio_firmware</source>
+        <translation>No-radio firmware</translation>
     </message>
     <message>
         <source>id_normal</source>
@@ -1653,6 +1741,10 @@
         <translation>Leitor de código QR</translation>
     </message>
     <message>
+        <source>id_radio_firmware</source>
+        <translation>Radio firmware</translation>
+    </message>
+    <message>
         <source>id_read_more_at_our_s</source>
         <translation>Saiba mais em nossa%1</translation>
     </message>
@@ -1671,6 +1763,10 @@
     <message>
         <source>id_received_on</source>
         <translation>Recebida em</translation>
+    </message>
+    <message>
+        <source>id_recently_used_wallets</source>
+        <translation>Recently used wallets</translation>
     </message>
     <message>
         <source>id_recipient</source>
@@ -1805,6 +1901,10 @@
         <translation>Restaurar carteira temporária</translation>
     </message>
     <message>
+        <source>id_restore_wallet</source>
+        <translation>Restore Wallet</translation>
+    </message>
+    <message>
         <source>id_review</source>
         <translation>Revisar</translation>
     </message>
@@ -1915,6 +2015,10 @@
     <message>
         <source>id_select_word_number_d</source>
         <translation>Selecionar palavra de número %1</translation>
+    </message>
+    <message>
+        <source>id_select_your_jade_to_login</source>
+        <translation>Select your Jade to login</translation>
     </message>
     <message>
         <source>id_send</source>
@@ -2083,6 +2187,10 @@
     <message>
         <source>id_show_qr_code</source>
         <translation>Mostrar código QR</translation>
+    </message>
+    <message>
+        <source>id_signature_validation_failed_if</source>
+        <translation>Signature validation failed. If this error is unexpected and has happened repeatedly, it is possible the hardware wallet is faulty or has been compromised. It could be leaking your keys, which could lead to loss of funds. Please consider replacing the hardware wallet.</translation>
     </message>
     <message>
         <source>id_signup_in_progress</source>
@@ -2286,6 +2394,10 @@ Redefina essa configuração e depois a reative.</translation>
         <translation>A carteira física que você está utilizando ainda não é suportada</translation>
     </message>
     <message>
+        <source>id_the_liquid_network_is_a_bitcoin</source>
+        <translation>The Liquid Network is a Bitcoin sidechain. Select to send and receive Liquid Bitcoin (L-BTC), Tether (USDt), and other Liquid assets.</translation>
+    </message>
+    <message>
         <source>id_the_network_selected_on_the</source>
         <translation>A rede selecionada no aplicativo Green é diferente da rede selecionada na carteira física. Selecione a mesma rede nos dois aparelhos.</translation>
     </message>
@@ -2470,8 +2582,24 @@ Redefina essa configuração e depois a reative.</translation>
         <translation>Desconhecido (Personalizado)</translation>
     </message>
     <message>
+        <source>id_unknown_firmware</source>
+        <translation>Unknown firmware</translation>
+    </message>
+    <message>
+        <source>id_unlock_jade_to_continue</source>
+        <translation>Unlock Jade to continue</translation>
+    </message>
+    <message>
+        <source>id_update</source>
+        <translation>Update</translation>
+    </message>
+    <message>
         <source>id_updated</source>
         <translation>atualizado</translation>
+    </message>
+    <message>
+        <source>id_uploading_firmware</source>
+        <translation>Uploading firmware</translation>
     </message>
     <message>
         <source>id_use_android_screen_lock_to_log</source>

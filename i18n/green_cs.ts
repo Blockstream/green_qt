@@ -121,6 +121,10 @@
         <translation>Přidat částku (volitelné)</translation>
     </message>
     <message>
+        <source>id_add_another_wallet</source>
+        <translation>Přidat další peněženku</translation>
+    </message>
+    <message>
         <source>id_add_custom_network_by_qr_code</source>
         <translation>Přidat vlastní síť pomocí QR kódu</translation>
     </message>
@@ -166,7 +170,7 @@
     </message>
     <message>
         <source>id_all_wallets</source>
-        <translation>All wallets</translation>
+        <translation>Všechny peněženky</translation>
     </message>
     <message>
         <source>id_allows_you_to_quickly_check</source>
@@ -210,15 +214,15 @@
     </message>
     <message>
         <source>id_authenticator_app</source>
-        <translation>Authenticator app</translation>
+        <translation>Autentikační aplikace</translation>
     </message>
     <message>
         <source>id_authenticator_qr_code</source>
-        <translation>Authenticator QR Code</translation>
+        <translation>QR kód autentikátoru</translation>
     </message>
     <message>
         <source>id_authenticator_secret_key</source>
-        <translation>Authenticator secret key</translation>
+        <translation>Tajný klíč autentikátoru</translation>
     </message>
     <message>
         <source>id_auto_logout_timeout</source>
@@ -249,12 +253,16 @@
         <translation>Bitcoin denominace</translation>
     </message>
     <message>
+        <source>id_bitcoin_is_the_worlds_leading</source>
+        <translation>Bitcoin je přední světová P2P kryptoměnová síť. Vyberte pro odesílání a přijímání bitcoinů.</translation>
+    </message>
+    <message>
         <source>id_bitcoin_wallet</source>
         <translation>Bitcoin peněženka.</translation>
     </message>
     <message>
         <source>id_bitcoin_wallets</source>
-        <translation>Bitcoin wallets</translation>
+        <translation>Bitcoinové peněženky</translation>
     </message>
     <message>
         <source>id_block</source>
@@ -281,8 +289,12 @@
         <translation>Blockstream nemá přístup k zálohám vaší peněženky a v případě ztráty vám nebude schopen pomoci</translation>
     </message>
     <message>
+        <source>id_blockstream_green_supports_both</source>
+        <translation>Blockstream Green podporuje bitcoin i Liquid Network. Nebojte se, můžete si kdykoli vytvořit další peněženku pro jinou síť.</translation>
+    </message>
+    <message>
         <source>id_blockstream_store</source>
-        <translation>Blockstream Store</translation>
+        <translation>Blockstream obchod</translation>
     </message>
     <message>
         <source>id_btchip_is_not_set_up_please_set</source>
@@ -349,6 +361,14 @@
         <translation>Vyberte metodu k autorizaci akce</translation>
     </message>
     <message>
+        <source>id_choose_this_version_to_connect</source>
+        <translation>Vyberte si tuto verzi pro připojení k vašemu Blockstream Jade pomocí kabelu USB i bezdrátového připojení</translation>
+    </message>
+    <message>
+        <source>id_choose_this_version_to_disable</source>
+        <translation>Zvolte tuto verzi a zakažte všechna rádiová připojení na vašem Blockstream Jade. Díky tomu bude váš Blockstream Jade nekompatibilní se zařízeními iOS</translation>
+    </message>
+    <message>
         <source>id_choose_twofactor_authentication</source>
         <translation>Zvolte metodu 2-Faktorové autentizace</translation>
     </message>
@@ -358,7 +378,7 @@
     </message>
     <message>
         <source>id_clear</source>
-        <translation>VYMAZAT</translation>
+        <translation>Clear</translation>
     </message>
     <message>
         <source>id_click_to_copy</source>
@@ -405,6 +425,10 @@
         <translation>Potvrďte podrobnosti transakce na vaší hardwarové peněžence</translation>
     </message>
     <message>
+        <source>id_confirm_update_on_your_jade</source>
+        <translation>Potvrďte aktualizaci svého Jade</translation>
+    </message>
+    <message>
         <source>id_confirmation_in_d_blocks</source>
         <translation>Potvrzení v %1 blocích</translation>
     </message>
@@ -426,11 +450,15 @@
     </message>
     <message>
         <source>id_connect_your_jade_to_use_it</source>
-        <translation>Connect your Jade to use it with Green</translation>
+        <translation>Připojte svůj Jade a použijte jej s Green peněženkou</translation>
     </message>
     <message>
         <source>id_connect_your_ledger_to_use_it</source>
         <translation>Připojte svůj Ledger a použijte ho s aplikací Green</translation>
+    </message>
+    <message>
+        <source>id_connected_to_jade</source>
+        <translation>Připojeno k Jade</translation>
     </message>
     <message>
         <source>id_connecting_to_a_trusted_node</source>
@@ -446,7 +474,7 @@
     </message>
     <message>
         <source>id_connection</source>
-        <translation>Connection</translation>
+        <translation>Připojení</translation>
     </message>
     <message>
         <source>id_connection_failed</source>
@@ -521,8 +549,20 @@
         <translation>Vytvořte dočasnou peněženku</translation>
     </message>
     <message>
+        <source>id_create_wallet</source>
+        <translation>Vytvořit peněženku</translation>
+    </message>
+    <message>
+        <source>id_creating_wallet</source>
+        <translation>Vytváření peněženky…</translation>
+    </message>
+    <message>
         <source>id_currency</source>
         <translation>Měna</translation>
+    </message>
+    <message>
+        <source>id_current_version</source>
+        <translation>Současná verze</translation>
     </message>
     <message>
         <source>id_custom</source>
@@ -602,7 +642,7 @@
     </message>
     <message>
         <source>id_devices</source>
-        <translation>Devices</translation>
+        <translation>Zařízení</translation>
     </message>
     <message>
         <source>id_disable</source>
@@ -762,7 +802,7 @@
     </message>
     <message>
         <source>id_enter_pin_on_jade</source>
-        <translation>Enter PIN on Jade</translation>
+        <translation>Zadejte PIN na Jade</translation>
     </message>
     <message>
         <source>id_enter_the_matching_words</source>
@@ -807,6 +847,10 @@
     <message>
         <source>id_error_passphrases_do_not_match</source>
         <translation>Chyba: přístupové fráze se neshodují</translation>
+    </message>
+    <message>
+        <source>id_establishing_session</source>
+        <translation>Probíhá relace</translation>
     </message>
     <message>
         <source>id_estimated_blocks_until</source>
@@ -865,8 +909,20 @@
         <translation>Poplatky jsou příliš nízké</translation>
     </message>
     <message>
+        <source>id_fetching_new_firmware</source>
+        <translation>Načítání nového firmwaru</translation>
+    </message>
+    <message>
         <source>id_firmware</source>
         <translation>Firmware</translation>
+    </message>
+    <message>
+        <source>id_firmware_update</source>
+        <translation>Aktualizace firmware</translation>
+    </message>
+    <message>
+        <source>id_firmware_update_completed</source>
+        <translation>Aktualizace firmwaru byla dokončena</translation>
     </message>
     <message>
         <source>id_for_investors</source>
@@ -902,7 +958,7 @@
     </message>
     <message>
         <source>id_get_jade</source>
-        <translation>Get Jade</translation>
+        <translation>Získejte Jade</translation>
     </message>
     <message>
         <source>id_go_to_account</source>
@@ -974,7 +1030,7 @@
     </message>
     <message>
         <source>id_hide_assets</source>
-        <translation>Hide assets</translation>
+        <translation>Skrýt aktiva</translation>
     </message>
     <message>
         <source>id_high</source>
@@ -1018,7 +1074,7 @@
     </message>
     <message>
         <source>id_inconsistent_data_provided_for</source>
-        <translation>Inconsistent data provided for enabling Authenticator 2FA</translation>
+        <translation>Pro povolení 2FA autentikátoru byly poskytnuty nekonzistentní údaje</translation>
     </message>
     <message>
         <source>id_increase_fee</source>
@@ -1030,11 +1086,15 @@
     </message>
     <message>
         <source>id_initialized</source>
-        <translation>Initialized</translation>
+        <translation>Inicializováno</translation>
+    </message>
+    <message>
+        <source>id_initializing_tor</source>
+        <translation>Inicializace Toru…</translation>
     </message>
     <message>
         <source>id_install_version_s</source>
-        <translation>Install version: %1?</translation>
+        <translation>Instalovat verzi: %1?</translation>
     </message>
     <message>
         <source>id_insufficient_funds</source>
@@ -1082,7 +1142,7 @@
     </message>
     <message>
         <source>id_invalid_pin</source>
-        <translation>Invalid PIN</translation>
+        <translation>Neplatný PIN</translation>
     </message>
     <message>
         <source>id_invalid_pin_remaining_attempts</source>
@@ -1126,7 +1186,7 @@
     </message>
     <message>
         <source>id_jade_unlocked</source>
-        <translation>Jade unlocked</translation>
+        <translation>Jade odemčen</translation>
     </message>
     <message>
         <source>id_label</source>
@@ -1158,7 +1218,7 @@
     </message>
     <message>
         <source>id_ledger_devices</source>
-        <translation>Ledger devices</translation>
+        <translation>Zařízení Ledger</translation>
     </message>
     <message>
         <source>id_ledger_supports_a_limited_set</source>
@@ -1174,11 +1234,27 @@
     </message>
     <message>
         <source>id_liquid_wallets</source>
-        <translation>Liquid wallets</translation>
+        <translation>Peněženky Liquid</translation>
+    </message>
+    <message>
+        <source>id_loading</source>
+        <translation>Načítání</translation>
+    </message>
+    <message>
+        <source>id_loading_accounts</source>
+        <translation>Načítání účtů…</translation>
+    </message>
+    <message>
+        <source>id_loading_assets</source>
+        <translation>Načítání aktiv…</translation>
     </message>
     <message>
         <source>id_loading_transactions</source>
         <translation>Načítání transakcí...</translation>
+    </message>
+    <message>
+        <source>id_loading_wallet</source>
+        <translation>Načítání peněženky…</translation>
     </message>
     <message>
         <source>id_log_in</source>
@@ -1202,7 +1278,7 @@
     </message>
     <message>
         <source>id_logged_in_wallets</source>
-        <translation>Logged in wallets</translation>
+        <translation>Přihlášeni v peněženkách</translation>
     </message>
     <message>
         <source>id_logging_in</source>
@@ -1210,7 +1286,7 @@
     </message>
     <message>
         <source>id_login</source>
-        <translation>Login</translation>
+        <translation>Přihlášní</translation>
     </message>
     <message>
         <source>id_login_failed</source>
@@ -1222,7 +1298,7 @@
     </message>
     <message>
         <source>id_logout</source>
-        <translation>Logout</translation>
+        <translation>Odhlásit se</translation>
     </message>
     <message>
         <source>id_logout_and_switch</source>
@@ -1231,6 +1307,10 @@
     <message>
         <source>id_look_at_the_device_for_the</source>
         <translation>Podívejte se na zařízení na pozice čísel</translation>
+    </message>
+    <message>
+        <source>id_looks_like_you_havent_used_a</source>
+        <translation>Vypadá to, že jste dosud nepoužili peněženku. Zkuste vytvořit novou.</translation>
     </message>
     <message>
         <source>id_low</source>
@@ -1342,11 +1422,11 @@
     </message>
     <message>
         <source>id_new_jade_firmware_available</source>
-        <translation>New Jade Firmware Available</translation>
+        <translation>K dispozici je nový Jade firmware</translation>
     </message>
     <message>
         <source>id_new_jade_firmware_required</source>
-        <translation>New Jade Firmware Required</translation>
+        <translation>Je vyžadován nový Jade firmware</translation>
     </message>
     <message>
         <source>id_new_outgoing_transaction_from</source>
@@ -1363,6 +1443,10 @@
     <message>
         <source>id_new_transaction_involving</source>
         <translation>Nová transakce zahrnující účty %1.</translation>
+    </message>
+    <message>
+        <source>id_new_version</source>
+        <translation>Nová verze</translation>
     </message>
     <message>
         <source>id_next</source>
@@ -1386,7 +1470,7 @@
     </message>
     <message>
         <source>id_no_more_assets</source>
-        <translation>No more assets.</translation>
+        <translation>Žádná další aktiva.</translation>
     </message>
     <message>
         <source>id_no_peers_connected</source>
@@ -1417,6 +1501,10 @@
         <translation>Nedůvěrné adresy nejsou podporovány</translation>
     </message>
     <message>
+        <source>id_noradio_firmware</source>
+        <translation>Ne-rádiový firmwaru</translation>
+    </message>
+    <message>
         <source>id_normal</source>
         <translation>Normální</translation>
     </message>
@@ -1434,7 +1522,7 @@
     </message>
     <message>
         <source>id_not_initialized</source>
-        <translation>Not initialized</translation>
+        <translation>Není inicializováno</translation>
     </message>
     <message>
         <source>id_notifications</source>
@@ -1653,6 +1741,10 @@
         <translation>QR čtečka</translation>
     </message>
     <message>
+        <source>id_radio_firmware</source>
+        <translation>Rádiový firmware</translation>
+    </message>
+    <message>
         <source>id_read_more_at_our_s</source>
         <translation>Přečtěte si více na našem %1</translation>
     </message>
@@ -1671,6 +1763,10 @@
     <message>
         <source>id_received_on</source>
         <translation>Přijato dne</translation>
+    </message>
+    <message>
+        <source>id_recently_used_wallets</source>
+        <translation>Nedávno použité peněženky</translation>
     </message>
     <message>
         <source>id_recipient</source>
@@ -1805,6 +1901,10 @@
         <translation>Obnovit dočasnou peněženku</translation>
     </message>
     <message>
+        <source>id_restore_wallet</source>
+        <translation>Obnovit peněženku</translation>
+    </message>
+    <message>
         <source>id_review</source>
         <translation>Přezkoumání</translation>
     </message>
@@ -1850,7 +1950,7 @@
     </message>
     <message>
         <source>id_scan_the_qr_code_with_an</source>
-        <translation>Scan the QR Code with an Authenticator app</translation>
+        <translation>Naskenujte QR kód pomocí autentikační aplikace</translation>
     </message>
     <message>
         <source>id_scan_to_send_here</source>
@@ -1915,6 +2015,10 @@
     <message>
         <source>id_select_word_number_d</source>
         <translation>Vyberte počet slov %1</translation>
+    </message>
+    <message>
+        <source>id_select_your_jade_to_login</source>
+        <translation>Vyberte svůj Jade pro přihlášení</translation>
     </message>
     <message>
         <source>id_send</source>
@@ -2034,7 +2138,7 @@
     </message>
     <message>
         <source>id_setup_jade</source>
-        <translation>Setup Jade</translation>
+        <translation>Nastavení Jade</translation>
     </message>
     <message>
         <source>id_setup_pin</source>
@@ -2062,7 +2166,7 @@
     </message>
     <message>
         <source>id_show_all_assets</source>
-        <translation>Show all assets</translation>
+        <translation>Zobrazit všechna aktiva</translation>
     </message>
     <message>
         <source>id_show_bitcoin_amounts_in</source>
@@ -2083,6 +2187,10 @@
     <message>
         <source>id_show_qr_code</source>
         <translation>Zobrazit QR kód</translation>
+    </message>
+    <message>
+        <source>id_signature_validation_failed_if</source>
+        <translation>Ověření podpisu se nezdařilo. Pokud je tato chyba neočekávaná a stala se opakovaně, je možné, že je hardwarová peněženka vadná nebo byla prolomena. Mohlo by dojít k úniku klíčů, což by mohlo vést ke ztrátě finančních prostředků. Zvažte prosím výměnu hardwarové peněženky.</translation>
     </message>
     <message>
         <source>id_signup_in_progress</source>
@@ -2180,7 +2288,7 @@ Obnovte toto nastavení a znovu jej aktivujte.</translation>
     </message>
     <message>
         <source>id_status</source>
-        <translation>Status</translation>
+        <translation>Stav</translation>
     </message>
     <message>
         <source>id_support</source>
@@ -2219,7 +2327,7 @@ Obnovte toto nastavení a znovu jej aktivujte.</translation>
     </message>
     <message>
         <source>id_system_location</source>
-        <translation>System location</translation>
+        <translation>Umístění systému</translation>
     </message>
     <message>
         <source>id_system_message</source>
@@ -2247,7 +2355,7 @@ Obnovte toto nastavení a znovu jej aktivujte.</translation>
     </message>
     <message>
         <source>id_testnet_wallets</source>
-        <translation>Testnet wallets</translation>
+        <translation>Testnet peněženky</translation>
     </message>
     <message>
         <source>id_thank_you_for_downloading_green</source>
@@ -2284,6 +2392,10 @@ Obnovte toto nastavení a znovu jej aktivujte.</translation>
     <message>
         <source>id_the_hardware_wallet_you_are</source>
         <translation>Hardwarová peněženka, kterou používáte, není zatím podporována</translation>
+    </message>
+    <message>
+        <source>id_the_liquid_network_is_a_bitcoin</source>
+        <translation>Liquid Network je bitcoinový postranní řetěz. Vyberte pro odesílání a přijímání Liquid Bitcoin (L-BTC), Tether (USDt) a další Liquid aktiva.</translation>
     </message>
     <message>
         <source>id_the_network_selected_on_the</source>
@@ -2470,8 +2582,24 @@ Obnovte toto nastavení a znovu jej aktivujte.</translation>
         <translation>Neznámý (vlastní)</translation>
     </message>
     <message>
+        <source>id_unknown_firmware</source>
+        <translation>Neznámý firmware</translation>
+    </message>
+    <message>
+        <source>id_unlock_jade_to_continue</source>
+        <translation>Chcete-li pokračovat, odemkněte Jade</translation>
+    </message>
+    <message>
+        <source>id_update</source>
+        <translation>Aktualizace</translation>
+    </message>
+    <message>
         <source>id_updated</source>
         <translation>aktualizováno</translation>
+    </message>
+    <message>
+        <source>id_uploading_firmware</source>
+        <translation>Nahrávání firmwaru</translation>
     </message>
     <message>
         <source>id_use_android_screen_lock_to_log</source>
@@ -2519,7 +2647,7 @@ Obnovte toto nastavení a znovu jej aktivujte.</translation>
     </message>
     <message>
         <source>id_visit_the_blockstream_help</source>
-        <translation>Visit the Blockstream Help Center</translation>
+        <translation>Navštivte centrum nápovědy Blockstream</translation>
     </message>
     <message>
         <source>id_waiting_for_transaction</source>
