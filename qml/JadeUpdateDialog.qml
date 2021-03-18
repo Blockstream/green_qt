@@ -63,7 +63,7 @@ AbstractDialog {
                 VSpacer {
                 }
                 Label {
-                    text: 'Unlock Jade to Update Firmware'
+                    text: qsTrId('id_unlock_jade_to_continue')
                     Layout.alignment: Qt.AlignCenter
                 }
                 DeviceImage {
@@ -109,13 +109,13 @@ AbstractDialog {
                     rowSpacing: 12
                     visible: self.activity.status === Activity.Pending
                     Label {
-                        text: 'Current:'
+                        text: qsTrId('id_current_version') + ':'
                     }
                     Label {
                         text: self.activity.device.version
                     }
                     Label {
-                        text: 'New:'
+                        text: qsTrId('id_new_version') + ':'
                     }
                     Label {
                         text: self.activity.firmware.version
@@ -123,8 +123,13 @@ AbstractDialog {
                 }
                 Label {
                     Layout.alignment: Qt.AlignCenter
+                    visible: self.activity.status === Activity.Finished
+                    text: qsTrId('id_firmware_update_completed')
+                }
+                Label {
+                    Layout.alignment: Qt.AlignCenter
                     visible: self.activity.status === Activity.Pending
-                    text: self.activity.progress.indeterminate ? 'Follow instructions on device' : 'Uploading firmware'
+                    text: self.activity.progress.indeterminate ? qsTrId('id_please_follow_the_instructions') : qsTrId('id_uploading_firmware')
                 }
                 ProgressBar {
                     Layout.alignment: Qt.AlignCenter
@@ -192,15 +197,15 @@ AbstractDialog {
             delegate: DescriptiveRadioButton {
                 property var firmware: modelData
                 property string name: {
-                    if (firmware.config === 'ble') return 'BLE Firmware ' + firmware.version
-                    if (firmware.config === 'noradio') return 'No-Radio Firmware ' + firmware.version
-                    return 'Unknown Firmware ' + firmware.config + firmware.version
+                    if (firmware.config === 'ble') return qsTrId('id_radio_firmware') + ' ' + firmware.version
+                    if (firmware.config === 'noradio') return qsTrId('id_noradio_firmware') + ' ' + firmware.version
+                    return qsTrId('id_unknown_firmware') + ' ' + firmware.config + firmware.version
                 }
                 text: name + (firmware.installed ? ' (INSTALLED)' : '')
                 description: {
-                    if (firmware.config === 'ble') return 'Choose this firmware if you want to connect to your Blockstream Jade also wireless via BLE.'
-                    if (firmware.config === 'noradio') return 'Choose this firmware if you want to disable all radio connections on your Blockstream Jade. This will make your Blockstream Jade incompatible with iOS devices.'
-                    return 'Unknown firmware version'
+                    if (firmware.config === 'ble') return qsTrId('id_choose_this_version_to_connect')
+                    if (firmware.config === 'noradio') return qsTrId('id_choose_this_version_to_disable')
+                    return qsTrId('id_unknown_firmware')
                 }
                 checked: false
                 enabled: !firmware.installed
@@ -220,7 +225,7 @@ AbstractDialog {
             }
             Label {
                 Layout.alignment: Qt.AlignCenter
-                text: controller.session && controller.session.connected ? 'Loading' : 'Establishing session'
+                text: controller.session && controller.session.connected ? qsTrId('id_loading') : qsTrId('id_establishing_session')
             }
             BusyIndicator {
                 Layout.alignment: Qt.AlignCenter

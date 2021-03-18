@@ -186,10 +186,10 @@ AbstractDialog {
                 if (count > 0) {
                     const activity = controller.wallet.activities[count - 1]
                     if (activity instanceof WalletRefreshAssets) {
-                        return 'Loading assets'
+                        return qsTrId('id_loading_assets')
                     }
                 }
-                return 'Creating wallet'
+                return qsTrId('id_creating_wallet')
             }
         }
         VSpacer {}

@@ -57,7 +57,7 @@ MainPage {
                 Label {
                     Layout.fillWidth: true
                     Layout.bottomMargin: 16
-                    text: "Recently Used Wallets"
+                    text: qsTrId('id_recently_used_wallets')
                     font.pixelSize: 18
                     font.bold: true
                 }
@@ -69,7 +69,7 @@ MainPage {
 
                         Text {
                             visible: self.recentWallets.length === 0
-                            text: "Looks like you haven't used a wallet yet."
+                            text: qsTrId('id_looks_like_you_havent_used_a')
                             color: 'white'
                             anchors.centerIn: parent
                         }
@@ -102,7 +102,7 @@ MainPage {
                 Layout.fillHeight: true
                 Label {
                     Layout.bottomMargin: 16
-                    text: "Add Another Wallet"
+                    text: qsTrId('id_add_another_wallet')
                     font.pixelSize: 18
                     font.bold: true
                 }
@@ -116,10 +116,10 @@ MainPage {
                         Button {
                             Layout.fillWidth: true
                             flat: true
-                            text: 'Create Wallet'
+                            text: qsTrId('id_create_wallet')
                             font.capitalization: Font.MixedCase
                             onClicked: {
-                                var obj = chooose_network.createObject(window, { title: 'Create Wallet' })
+                                var obj = chooose_network.createObject(window, { title: qsTrId('id_create_wallet') })
                                 obj.networkSelected.connect((network) => { pushLocation(`/${network}/signup`) })
                                 obj.open()
                             }
@@ -127,10 +127,10 @@ MainPage {
                         Button {
                             Layout.fillWidth: true
                             flat: true
-                            text: 'Restore Wallet'
+                            text: qsTrId('id_restore_wallet')
                             font.capitalization: Font.MixedCase
                             onClicked: {
-                                var obj = chooose_network.createObject(window, { title: 'Restore Wallet' })
+                                var obj = chooose_network.createObject(window, { title: qsTrId('id_restore_wallet') })
                                 obj.networkSelected.connect((network) => { pushLocation(`/${network}/restore`) })
                                 obj.open()
                             }

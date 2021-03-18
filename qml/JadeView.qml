@@ -171,7 +171,7 @@ MainPage {
                                 }
                                 Button {
                                     flat: true
-                                    text: 'OTA Update'
+                                    text: qsTrId('id_update')
                                     onClicked: update_dialog.createObject(window, { device }).open()
                                 }
                             }

@@ -26,14 +26,14 @@ AbstractDialog {
     contentItem: ColumnLayout {
         spacing: 40
         Label {
-            text: 'Choose your wallet network'
+            text: qsTrId('id_choose_your_network')
             font.bold: true
             font.pixelSize: 24
         }
         Label {
             Layout.topMargin: -30
             Layout.fillWidth: true
-            text: 'Blockstream Green supports both Bitcoin and Liquid Network.'
+            text: qsTrId('id_blockstream_green_supports_both')
             font.pixelSize: 12
             wrapMode: Label.WordWrap
         }
@@ -41,12 +41,12 @@ AbstractDialog {
             spacing: 20
             NetworkCard {
                 network: "mainnet"
-                text: "Bitcoin is the world's leading P2P cryptocurrenty network. Select to send and receive bitcoin."
+                text: qsTrId("id_bitcoin_is_the_worlds_leading")
             }
 
             NetworkCard {
                 network: "liquid"
-                text: "The Liquid Network is a Bitcoin sidechain. Select to send and receive Liquid Bitcoin (L-BTC), Tether (USDt), and other Liquid assets."
+                text: qsTrId("id_the_liquid_network_is_a_bitcoin")
             }
 
             Item {

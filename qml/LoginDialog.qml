@@ -130,16 +130,16 @@ AbstractDialog {
                 if (count > 0) {
                     const activity = self.wallet.activities[count - 1]
                     if (activity instanceof WalletUpdateAccountsActivity) {
-                        return 'Loading accounts'
+                        return qsTrId('id_loading_accounts')
                     }
                     if (activity instanceof WalletRefreshAssets) {
-                        return 'Loading assets'
+                        return qsTrId('id_loading_assets')
                     }
                     if (activity instanceof AccountGetTransactionsActivity) {
-                        return 'Loading transactions'
+                        return qsTrId('id_loading_transactions')
                     }
                 }
-                return 'Loading wallet'
+                return qsTrId('id_loading_wallet')
             }
         }
         VSpacer {}

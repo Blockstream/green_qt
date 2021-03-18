@@ -56,7 +56,7 @@ ToolButton {
             }
             Label {
                 visible: self.pending
-                text: self.activity.logs[0] || 'Initializing'
+                text: self.activity.logs[0] || qsTrId('id_initializing_tor')
             }
         }
     }
