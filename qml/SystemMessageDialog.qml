@@ -5,7 +5,6 @@ import QtQuick.Layouts 1.12
 
 ControllerDialog {
     id: dialog
-    required property Wallet wallet
     property bool shouldOpen: false
     title: qsTrId('id_system_message')
     closePolicy: Popup.NoAutoClose

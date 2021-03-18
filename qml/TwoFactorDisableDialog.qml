@@ -5,7 +5,6 @@ import QtQuick.Layouts 1.12
 
 ControllerDialog {
     id: dialog
-    required property Wallet wallet
     property string method
     title: qsTrId('id_set_up_twofactor_authentication')
     doneText: qsTrId('id_disabled')

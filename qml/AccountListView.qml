@@ -9,23 +9,6 @@ ListView {
     property Account currentAccount: currentItem ? currentItem.account : null
     signal clicked(Account account)
     spacing: 8
-    ColumnLayout {
-        opacity: accounts_list.count === 0 ? 1 : 0
-        anchors.centerIn: parent
-        spacing: 16
-        BusyIndicator {
-            width: 32
-            height: 32
-            running: accounts_list.count === 0
-            anchors.margins: 8
-            Layout.alignment: Qt.AlignHCenter
-        }
-        Label {
-            text: 'Loading accounts...'
-            Layout.alignment: Qt.AlignHCenter
-        }
-    }
-
     delegate: ItemDelegate {
         id: delegate
         property Account account: modelData
@@ -120,8 +103,9 @@ ListView {
                         icon.source: 'qrc:/svg/send.svg'
                         icon.width: 24
                         icon.height: 24
+                        hoverEnabled: true
                         text: qsTrId('id_send')
-                        onClicked: send_dialog.createObject(window, { account }).open()
+                        onClicked: send_dialog.createObject(window, { account: delegate.account }).open()
                         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                         ToolTip.text: qsTrId('id_insufficient_lbtc_to_send_a')
                         ToolTip.visible: hovered && !enabled
@@ -135,7 +119,7 @@ ListView {
                         icon.width: 24
                         icon.height: 24
                         text: qsTrId('id_receive')
-                        onClicked: receive_dialog.createObject(window).open()
+                        onClicked: receive_dialog.createObject(window, { account: delegate.account }).open()
                     }
                 }
             }

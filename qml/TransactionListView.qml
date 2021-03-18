@@ -23,29 +23,15 @@ ListView {
 
     ScrollIndicator.vertical: ScrollIndicator { }
 
-    Rectangle {
-        anchors.fill: parent
-        color: constants.c800
-        visible: model.fetching
-        opacity: visible ? 0.5 : 0
-        Behavior on opacity { OpacityAnimator {} }
-    }
-
-    ColumnLayout {
+    BusyIndicator {
+        width: 32
+        height: 32
+        running: model.fetching
+        anchors.margins: 8
+        Layout.alignment: Qt.AlignHCenter
         opacity: model.fetching ? 1 : 0
         Behavior on opacity { OpacityAnimator {} }
-        anchors.centerIn: parent
-        spacing: 16
-        BusyIndicator {
-            width: 32
-            height: 32
-            running: model.fetching
-            anchors.margins: 8
-            Layout.alignment: Qt.AlignHCenter
-        }
-        Label {
-            text: 'Loading transactions...'
-            Layout.alignment: Qt.AlignHCenter
-        }
+        anchors.bottom: parent.bottom
+        anchors.horizontalCenter: parent.horizontalCenter
     }
 }

@@ -6,7 +6,6 @@ import QtQuick.Layouts 1.12
 
 WalletDialog {
     title: qsTrId('id_mnemonic')
-    required property Wallet wallet
     Item {
         implicitWidth: layout.implicitWidth
         implicitHeight: layout.implicitHeight

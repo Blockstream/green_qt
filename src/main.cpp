@@ -64,6 +64,7 @@ int main(int argc, char *argv[])
     parser.addVersionOption();
     parser.addOption(QCommandLineOption("printtoconsole"));
     parser.addOption(QCommandLineOption("debugfocus"));
+    parser.addOption(QCommandLineOption("debugjade"));
     parser.process(app);
 
     if (parser.isSet("printtoconsole")) {
@@ -117,6 +118,8 @@ int main(int argc, char *argv[])
     app.installTranslator(&locale_translator);
 
     QQuickStyle::setStyle("Material");
+
+    WalletManager wallet_manager;
 
     qmlRegisterSingletonInstance<Clipboard>("Blockstream.Green.Core", 0, 1, "Clipboard", Clipboard::instance());
     qmlRegisterSingletonInstance<DeviceManager>("Blockstream.Green.Core", 0, 1, "DeviceManager", DeviceManager::instance());

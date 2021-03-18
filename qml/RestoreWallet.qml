@@ -7,20 +7,46 @@ import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.12
 
 AbstractDialog {
+    required property Network network
+
     id: self
-    required property string network
 
     RestoreController {
         id: controller
-        network: NetworkManager.network(self.network)
-        onFinished: pushLocation(`/${self.network}/${wallet.id}`)
-        Component.onCompleted: {
-            const proxy = Settings.useProxy ? Settings.proxyHost + ':' + Settings.proxyPort : ''
-            const use_tor = Settings.useTor
-            controller.wallet.connect(proxy, use_tor)
+        network: self.network
+        mnemonic: mnemonic_page.mnemonic
+        password: password_field.text
+        name: name_field.text
+        pin: pin_view.pin.value
+
+    }
+
+    Connections {
+        target: controller.wallet
+        function onActivityCreated(activity) {
+            if (activity instanceof CheckRestoreActivity) {
+                const view = check_view.createObject(activities_row, { activity })
+                activity.finished.connect(() => {
+                    view.destroy()
+                })
+            } else if (activity instanceof AcceptRestoreActivity) {
+                const view = accept_view.createObject(activities_row, { activity })
+                activity.finished.connect(() => {
+                    view.destroy()
+                    pushLocation(`/${self.network.id}/${controller.wallet.id}`)
+                })
+            }
         }
-        onPinSet: {
-            stack_view.push(name_page)
+    }
+
+    Connections {
+        target: controller.wallet ? controller.wallet.session : null
+        function onActivityCreated(activity) {
+            if (activity instanceof SessionTorCircuitActivity) {
+                session_tor_cirtcuit_view.createObject(activities_row, { activity })
+            } else if (activity instanceof SessionConnectActivity) {
+                session_connect_view.createObject(activities_row, { activity })
+            }
         }
     }
 
@@ -37,10 +63,9 @@ AbstractDialog {
                 self.footer.ToolTip.show(error, 2000);
             }
         }
-        function onAuthenticationChanged(authentication) {
-            if (controller.wallet.authentication === Wallet.Authenticated) {
+        function onAuthenticatedChanged() {
+            if (controller.wallet.authenticated) {
                 stack_view.push(pin_page)
-                pin_page.forceActiveFocus()
             }
         }
     }
@@ -49,22 +74,19 @@ AbstractDialog {
 
     contentItem: StackView {
         id: stack_view
+        onCurrentItemChanged: currentItem.forceActiveFocus()
         implicitWidth: currentItem.implicitWidth
         implicitHeight: currentItem.implicitHeight
         initialItem: mnemonic_page
     }
 
     footer: DialogFooter {
-        ProgressBar {
-            Layout.maximumWidth: 64
-            indeterminate: true
-            opacity: controller.wallet && controller.wallet.authentication === Wallet.Authenticating ? 0.5 : 0
-            visible: opacity > 0
-            Behavior on opacity {
-                SmoothedAnimation {
-                    duration: 500
-                    velocity: -1
-                }
+        Pane {
+            Layout.minimumHeight: 48
+            background: null
+            padding: 0
+            contentItem: RowLayout {
+                id: activities_row
             }
         }
         HSpacer {}
@@ -84,22 +106,25 @@ AbstractDialog {
 
     property Item mnemonic_page: MnemonicEditor {
         id: mnemonicEditor
+        enabled: !controller.active
         title: qsTrId('Insert your green mnemonic')
         actions: [
             Action {
                 property bool focus: mnemonic_page.valid
+                enabled: !controller.active
                 text: qsTrId('id_clear')
                 onTriggered: mnemonicEditor.controller.clear();
             },
             Action {
                 property bool focus: mnemonic_page.valid
                 text: qsTrId('id_continue')
-                enabled: mnemonic_page.valid && controller.wallet.authentication === Wallet.Unauthenticated
+                enabled: !controller.active && controller.valid || (mnemonic_page.valid && mnemonic_page.password)
                 onTriggered: {
                     if (mnemonic_page.password) {
                         stack_view.push(password_page)
                     } else {
-                        controller.wallet.login(mnemonic_page.mnemonic)
+                        controller.active = true
+                        // controller.wallet.login()
                     }
                 }
             }
@@ -112,8 +137,8 @@ AbstractDialog {
             Action {
                 id: passphrase_next_action
                 text: qsTrId('id_continue')
-                enabled: controller.wallet && controller.wallet.authentication === Wallet.Unauthenticated && password_field.text.trim().length > 0
-                onTriggered: controller.wallet.login(mnemonic_page.mnemonic, password_field.text.trim())
+                enabled: !controller.active && controller.valid
+                onTriggered: controller.active = true
             }
         ]
         TextField {
@@ -122,6 +147,7 @@ AbstractDialog {
             implicitWidth: 400
             echoMode: TextField.Password
             onAccepted: passphrase_next_action.trigger()
+            enabled: !controller.active
             placeholderText: qsTrId('id_encryption_passphrase')
         }
     }
@@ -140,13 +166,12 @@ AbstractDialog {
         PinView {
             anchors.centerIn: parent
             onPinChanged: {
-                if (pin.valid) {
-                    if (pin.value !== pin_view.pin.value) {
-                        clear();
-                        ToolTip.show(qsTrId('id_pins_do_not_match_please_try'), 1000);
-                    } else {
-                        controller.setPin(pin_view.pin.value);
-                    }
+                if (!pin.valid) return
+                if (pin.value !== pin_view.pin.value) {
+                    clear();
+                    ToolTip.show(qsTrId('id_pins_do_not_match_please_try'), 1000);
+                } else {
+                    stack_view.push(name_page)
                 }
             }
         }
@@ -157,10 +182,7 @@ AbstractDialog {
         property list<Action> actions: [
             Action {
                 text: qsTrId('id_restore')
-                onTriggered: {
-                    controller.name = name_field.text.trim();
-                    controller.restore()
-                }
+                onTriggered: controller.accept()
             }
         ]
 
@@ -170,6 +192,38 @@ AbstractDialog {
             Layout.minimumWidth: 300
             font.pixelSize: 16
             placeholderText: controller.defaultName
+        }
+    }
+
+    Component {
+        id: check_view
+        RowLayout {
+            required property CheckRestoreActivity activity
+            id: self
+            BusyIndicator {
+                Layout.preferredHeight: 32
+                Layout.alignment: Qt.AlignCenter
+            }
+            Label {
+                Layout.alignment: Qt.AlignCenter
+                text: 'Checking'
+            }
+        }
+    }
+
+    Component {
+        id: accept_view
+        RowLayout {
+            required property AcceptRestoreActivity activity
+            id: self
+            BusyIndicator {
+                Layout.preferredHeight: 32
+                Layout.alignment: Qt.AlignCenter
+            }
+            Label {
+                Layout.alignment: Qt.AlignCenter
+                text: 'Restoring'
+            }
         }
     }
 }

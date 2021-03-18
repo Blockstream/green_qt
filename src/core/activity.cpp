@@ -43,6 +43,11 @@ Activity::Activity(QObject* parent)
 {
 }
 
+QString Activity::type() const
+{
+    return metaObject()->className();
+}
+
 Activity::Status Activity::status() const
 {
     return m_status;

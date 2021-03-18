@@ -1,6 +1,10 @@
 #ifndef GREEN_WALLET_H
 #define GREEN_WALLET_H
 
+#include "activity.h"
+#include "connectable.h"
+#include "session.h"
+
 #include <QtQml>
 #include <QAtomicInteger>
 #include <QList>
@@ -19,18 +23,22 @@ struct GA_session;
 struct GA_auth_handler;
 struct GA_json;
 
-class Wallet : public QObject
+#include "handler.h"
+class SetPinHandler : public Handler
+{
+    const QByteArray m_pin;
+    QByteArray m_pin_data;
+    void call(GA_session* session, GA_auth_handler** auth_handler) override;
+public:
+    SetPinHandler(Wallet* wallet, const QByteArray& pin);
+    QByteArray pinData() const;
+};
+
+class Wallet : public Entity
 {
     Q_OBJECT
     QML_ELEMENT
 public:
-    enum ConnectionStatus {
-        Disconnected,
-        Connecting,
-        Connected
-    };
-    Q_ENUM(ConnectionStatus)
-
     enum AuthenticationStatus {
         Unauthenticated,
         Authenticating,
@@ -39,15 +47,14 @@ public:
     Q_ENUM(AuthenticationStatus)
 
 private:
-    Q_PROPERTY(Session* session READ session NOTIFY sessionChanged)
     Q_PROPERTY(QString id READ id CONSTANT)
+    Q_PROPERTY(Session* session READ session NOTIFY sessionChanged)
     Q_PROPERTY(Network* network READ network WRITE setNetwork NOTIFY networkChanged)
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
-    Q_PROPERTY(ConnectionStatus connection READ connection NOTIFY connectionChanged)
-    Q_PROPERTY(AuthenticationStatus authentication READ authentication NOTIFY authenticationChanged)
+//    Q_PROPERTY(bool authenticating READ isAuthenticating NOTIFY authenticating)
     Q_PROPERTY(bool authenticated READ isAuthenticated NOTIFY authenticationChanged)
-    Q_PROPERTY(QString proxy READ proxy NOTIFY proxyChanged)
-    Q_PROPERTY(bool useTor READ useTor NOTIFY useTorChanged)
+    Q_PROPERTY(AuthenticationStatus authentication READ authentication NOTIFY authenticationChanged)
+    Q_PROPERTY(bool ready READ ready NOTIFY readyChanged)
     Q_PROPERTY(bool locked READ isLocked NOTIFY lockedChanged)
     Q_PROPERTY(QJsonObject settings READ settings NOTIFY settingsChanged)
     Q_PROPERTY(QJsonObject currencies READ currencies CONSTANT)
@@ -56,28 +63,24 @@ private:
     Q_PROPERTY(QStringList mnemonic READ mnemonic CONSTANT)
     Q_PROPERTY(int loginAttemptsRemaining READ loginAttemptsRemaining NOTIFY loginAttemptsRemainingChanged)
     Q_PROPERTY(QJsonObject config READ config NOTIFY configChanged)
-    Q_PROPERTY(bool busy READ isBusy NOTIFY busyChanged)
     Q_PROPERTY(Device* device READ device CONSTANT)
 
 public:
     explicit Wallet(QObject *parent = nullptr);
     virtual ~Wallet();
-
-    Session* session() const { return m_session; }
     QString id() const;
-
+    Session* session() const { return m_session; }
+    void setSession(Session *session);
     Network* network() const { return m_network; }
     void setNetwork(Network* network);
-
     QString name() const { return m_name; }
     void setName(const QString& name);
 
-    ConnectionStatus connection() const { return m_connection; }
-    AuthenticationStatus authentication() const { return m_authentication; }
     bool isAuthenticated() const { return m_authentication == Authenticated; }
+    AuthenticationStatus authentication() const { return m_authentication; }
 
-    QString proxy() const { return m_proxy; }
-    bool useTor() const { return m_use_tor; }
+    bool ready() const { return m_ready; }
+
     bool isLocked() const { return m_locked; }
     void setLocked(bool locked);
 
@@ -96,10 +99,6 @@ public:
 
     QJsonObject config() const { return m_config; }
 
-    Q_INVOKABLE void login(const QStringList& mnemonic, const QString& password = QString());
-    Q_INVOKABLE void setPin(const QByteArray& pin);
-
-    Q_INVOKABLE void loginWithPin(const QByteArray& pin);
     Q_INVOKABLE void changePin(const QByteArray& pin);
     Q_INVOKABLE QJsonObject convert(const QJsonObject& value) const;
 
@@ -111,9 +110,6 @@ public:
 
     Q_INVOKABLE Asset* getOrCreateAsset(const QString& id);
 
-    bool isBusy() const { return m_busy; }
-    void setBusy(bool busy);
-
     Account* getOrCreateAccount(int pointer);
 
     void createSession();
@@ -121,7 +117,6 @@ public:
 
     Device* device() const { return m_device; }
 public slots:
-    void connect(const QString& proxy, bool use_tor);
     void disconnect();
     void signup(const QStringList &mnemonic, const QByteArray& pin);
     void reload();
@@ -130,14 +125,11 @@ public slots:
     void updateSettings();
 
     void refreshAssets(bool refresh);
-
 signals:
+    void readyChanged(bool ready);
     void sessionChanged(Session* session);
     void networkChanged(Network* network);
-    void connectionChanged();
     void authenticationChanged();
-    void proxyChanged(const QString& proxy);
-    void useTorChanged(bool use_tor);
     void lockedChanged(bool locked);
     void notification(const QString& type, const QJsonObject& data);
     void accountsChanged();
@@ -146,26 +138,24 @@ signals:
     void loginAttemptsRemainingChanged(int loginAttemptsRemaining);
     void settingsChanged();
     void configChanged();
-    void busyChanged(bool busy);
     void loginError(const QString& error);
     void pinSet();
+
 
 protected:
     bool eventFilter(QObject* object, QEvent* event) override;
     void timerEvent(QTimerEvent* event) override;
 
 private:
-    void setConnection(ConnectionStatus connection);
-    void setAuthentication(AuthenticationStatus authentication);
-    void setSettings(const QJsonObject& settings);
-    void connectNow();
-    void updateCurrencies();
+    bool m_ready{false};
 
 public:
+    void setAuthentication(AuthenticationStatus authentication);
+    void setSettings(const QJsonObject& settings);
+    void updateCurrencies();
+
     QString m_id;
-    QAtomicInteger<qint64> m_last_timestamp;
-    Session* m_session{nullptr};
-    ConnectionStatus m_connection{Disconnected};
+    Connectable<Session> m_session;
     AuthenticationStatus m_authentication{Unauthenticated};
     bool m_locked{true};
     QJsonObject m_settings;
@@ -181,13 +171,85 @@ public:
     QString m_name;
     Network* m_network{nullptr};
     int m_login_attempts_remaining{3};
-    QString m_proxy;
-    bool m_use_tor{false};
     int m_logout_timer{-1};
     bool m_busy{false};
 
     void save();
     Device* m_device{nullptr};
+protected slots:
+    void updateReady();
 };
+
+class WalletActivity : public Activity
+{
+    Q_OBJECT
+    Q_PROPERTY(Wallet* wallet READ wallet CONSTANT)
+    QML_ELEMENT
+public:
+    WalletActivity(Wallet* wallet, QObject* parent);
+    Wallet* wallet() const { return m_wallet; }
+private:
+    Wallet* const m_wallet;
+};
+
+class WalletAuthenticateActivity : public WalletActivity
+{
+    Q_OBJECT
+    QML_ELEMENT
+public:
+    WalletAuthenticateActivity(Wallet* wallet, QObject* parent);
+    void exec() override;
+};
+
+class WalletSignupActivity : public WalletActivity
+{
+    Q_OBJECT
+    QML_ELEMENT
+public:
+    WalletSignupActivity(Wallet* wallet, QObject* parent);
+    void exec() override;
+};
+
+class WalletUpdateAccountsActivity : public WalletActivity
+{
+    Q_OBJECT
+    QML_ELEMENT
+public:
+    WalletUpdateAccountsActivity(Wallet* wallet, QObject* parent);
+    void exec() override;
+};
+
+class WalletRefreshAssets : public WalletActivity
+{
+    Q_OBJECT
+    QML_ELEMENT
+public:
+    WalletRefreshAssets(Wallet* wallet, QObject* parent);
+    void exec() override;
+};
+
+class LoginWithPinController : public Entity
+{
+    Q_OBJECT
+    Q_PROPERTY(Wallet* wallet READ wallet WRITE setWallet NOTIFY walletChanged)
+    Q_PROPERTY(QByteArray pin READ pin WRITE setPin NOTIFY pinChanged)
+    QML_ELEMENT
+public:
+    LoginWithPinController(QObject* parent = nullptr);
+    Wallet* wallet() const { return m_wallet; }
+    void setWallet(Wallet* wallet);
+    QByteArray pin() const { return m_pin; }
+    void setPin(const QByteArray& pin);
+signals:
+    void walletChanged(Wallet* wallet);
+    void pinChanged(const QByteArray& pin);
+private slots:
+    void update();
+private:
+    Connectable<Wallet> m_wallet;
+    Connectable<Session> m_session;
+    QByteArray m_pin;
+};
+
 
 #endif // GREEN_WALLET_H

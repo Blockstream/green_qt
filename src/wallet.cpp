@@ -36,6 +36,9 @@ public:
         : Handler(wallet)
     {
     }
+    QJsonArray subAccounts() const {
+        return result().value("result").toObject().value("subaccounts").toArray();
+    }
 };
 
 class LoginWithPinHandler : public Handler
@@ -80,76 +83,15 @@ QByteArray pinDataForNewPin(GA_session* session, const QByteArray& pin)
 }
 } // namespace
 
-class SetPinHandler : public Handler
-{
-    const QByteArray m_pin;
-    QByteArray m_pin_data;
-    void call(GA_session* session, GA_auth_handler** auth_handler) override
-    {
-        Q_UNUSED(auth_handler);
-        m_pin_data = pinDataForNewPin(session, m_pin);
-    }
-public:
-    SetPinHandler(Wallet* wallet, const QByteArray& pin)
-        : Handler(wallet)
-        , m_pin(pin)
-    {
-    }
-    QByteArray pinData() const
-    {
-        Q_ASSERT(!m_pin_data.isEmpty());
-        return m_pin_data;
-    }
-};
-
 Wallet::Wallet(QObject *parent)
-    : QObject(parent)
+    : Entity(parent)
 {
-}
-
-void Wallet::connect(const QString& proxy, bool use_tor)
-{
-    if (m_connection == Connected) {
-        Q_ASSERT(m_proxy == proxy && m_use_tor == use_tor);
-    } else {
-        setConnection(Connecting);
-    }
-
-    bool needs_save = false;
-    if (m_proxy != proxy) {
-        m_proxy = proxy;
-        emit proxyChanged(m_proxy);
-        needs_save = true;
-    }
-    if (m_use_tor != use_tor) {
-        m_use_tor = use_tor;
-        emit useTorChanged(m_use_tor);
-        needs_save = true;
-    }
-    if (needs_save) {
-        save();
-    }
-    connectNow();
-}
-
-// TODO: extract connection/login/... to WalletController
-// TODO: controllers should deal with failures so that UI can see them
-void Wallet::connectNow()
-{
-    Q_ASSERT(m_network);
-
-    if (m_connection == Disconnected) return;
-
-    if (!m_session) {
-        createSession();
-        m_session->setNetwork(m_network);
-        m_session->setActive(true);
-    }
+    QObject::connect(this, &Wallet::activitiesChanged, this, &Wallet::updateReady);
+    QObject::connect(this, &Wallet::authenticationChanged, this, &Wallet::updateReady);
 }
 
 void Wallet::disconnect()
 {
-    Q_ASSERT(m_connection != Disconnected);
     Q_ASSERT(m_authentication == Authenticated);
 
     if (m_logout_timer != -1 ) {
@@ -168,11 +110,14 @@ void Wallet::disconnect()
     m_currencies = {};
     m_events = {};
 
-    setConnection(Disconnected);
     setAuthentication(Unauthenticated);
 
-    delete m_session;
-    m_session = nullptr;
+    if (m_session) {
+        auto session = m_session.get();
+        m_session = nullptr;
+        emit sessionChanged(nullptr);
+        delete session;
+    }
 
     qDeleteAll(accounts);
     qDeleteAll(m_assets.values());
@@ -182,8 +127,9 @@ void Wallet::disconnect()
 Wallet::~Wallet()
 {
     if (m_session) {
-        auto session = m_session;
+        auto session = m_session.get();
         m_session = nullptr;
+        emit sessionChanged(nullptr);
         delete session;
     }
 }
@@ -196,6 +142,7 @@ QString Wallet::id() const
 
 void Wallet::setNetwork(Network* network)
 {
+    // TODO: shouldn't change
     Q_ASSERT(!m_network);
     m_network = network;
     emit networkChanged(m_network);
@@ -206,6 +153,19 @@ void Wallet::setName(const QString& name)
     Q_ASSERT(m_name.isEmpty());
     m_name = name;
     emit nameChanged(m_name);
+}
+
+void Wallet::updateReady()
+{
+    if (m_ready) {
+        if (isAuthenticated()) return;
+        m_ready = false;
+    } else {
+        if (hasActivities()) return;
+        if (!isAuthenticated()) return;
+        m_ready = true;
+    }
+    emit readyChanged(m_ready);
 }
 
 QJsonObject Wallet::settings() const
@@ -245,21 +205,7 @@ void Wallet::handleNotification(const QJsonObject &notification)
     }
 
     if (event == "settings") {
-        setAuthentication(Authenticated);
         setSettings(data.toObject());
-        auto timer = new QTimer(this);
-        timer->start(100);
-        QObject::connect(timer, &QTimer::timeout, [this] {
-            qint64 timestamp = QDateTime::currentMSecsSinceEpoch();
-            setBusy(timestamp - m_last_timestamp > 300);
-        });
-        QMetaObject::invokeMethod(m_session->m_context, [this] {
-            auto timer = new QTimer(m_session->m_context);
-            timer->start(100);
-            QObject::connect(timer, &QTimer::timeout, [this] {
-                m_last_timestamp = QDateTime::currentMSecsSinceEpoch();
-            });
-        });
         return;
     }
 
@@ -279,8 +225,6 @@ void Wallet::handleNotification(const QJsonObject &notification)
         }
         return;
     }
-
-    qDebug() << "UNHANDLED NOTIFICATION" << notification;
 }
 
 QJsonObject Wallet::events() const
@@ -291,13 +235,11 @@ QJsonObject Wallet::events() const
 QStringList Wallet::mnemonic() const
 {
     QStringList result;
-    QMetaObject::invokeMethod(m_session->m_context, [this, &result] {
-        char* mnemonic = nullptr;
-        int err = GA_get_mnemonic_passphrase(m_session->m_session, "", &mnemonic);
-        Q_ASSERT(err == GA_OK);
-        result = QString(mnemonic).split(' ');
-        GA_destroy_string(mnemonic);
-    }, Qt::BlockingQueuedConnection);
+    char* mnemonic = nullptr;
+    int err = GA_get_mnemonic_passphrase(m_session->m_session, "", &mnemonic);
+    Q_ASSERT(err == GA_OK);
+    result = QString(mnemonic).split(' ');
+    GA_destroy_string(mnemonic);
     return result;
 }
 
@@ -312,53 +254,14 @@ void Wallet::changePin(const QByteArray& pin)
     handler->exec();
 }
 
-void Wallet::loginWithPin(const QByteArray& pin)
-{
-    Q_ASSERT(m_login_attempts_remaining > 0);
-
-    if (m_pin_data.isEmpty()) return;
-
-    setAuthentication(Authenticating);
-
-    auto handler = new LoginWithPinHandler(this, m_pin_data, pin);
-    handler->connect(handler, &Handler::done, this, [this, handler] {
-        handler->deleteLater();
-        if (m_login_attempts_remaining < 3) {
-            m_login_attempts_remaining = 3;
-            save();
-            emit loginAttemptsRemainingChanged(m_login_attempts_remaining);
-        }
-        setAuthentication(Authenticated);
-        updateCurrencies();
-        updateSettings();
-        reload();
-        updateConfig();
-    });
-    handler->connect(handler, &Handler::error, this, [this, handler] {
-        handler->deleteLater();
-        const auto error = handler->result().value("error").toString();
-        if (error.contains("exception:login failed")) {
-            Q_ASSERT(m_login_attempts_remaining > 0);
-            setAuthentication(Unauthenticated);
-            --m_login_attempts_remaining;
-            save();
-            emit loginAttemptsRemainingChanged(m_login_attempts_remaining);
-            if (m_login_attempts_remaining == 0) setConnection(Disconnected);
-        }
-        if (error.contains("exception:reconnect required")) {
-            setAuthentication(Unauthenticated);
-            return;
-        }
-        qWarning() << "unhandled login_with_pin error";
-    });
-    handler->exec();
-}
-
 void Wallet::signup(const QStringList& mnemonic, const QByteArray& pin)
 {
     Q_ASSERT(mnemonic.size() == 24);
 
     setAuthentication(Authenticating);
+
+    auto activity = new WalletSignupActivity(this, this);
+    pushActivity(activity);
 
     auto register_user_handler = new RegisterUserHandler(this, mnemonic);
     auto login_handler = new LoginHandler(this, mnemonic);
@@ -372,7 +275,7 @@ void Wallet::signup(const QStringList& mnemonic, const QByteArray& pin)
         login_handler->deleteLater();
         set_pin_handler->exec();
     });
-    QObject::connect(set_pin_handler, &Handler::done, this, [this, set_pin_handler] {
+    QObject::connect(set_pin_handler, &Handler::done, this, [this, set_pin_handler, activity] {
         set_pin_handler->deleteLater();
         m_pin_data = set_pin_handler->pinData();
         save();
@@ -380,48 +283,10 @@ void Wallet::signup(const QStringList& mnemonic, const QByteArray& pin)
         reload();
         updateConfig();
         setAuthentication(Authenticated);
+        activity->finish();
+        activity->deleteLater();
     });
     register_user_handler->exec();
-}
-
-void Wallet::login(const QStringList& mnemonic, const QString& password)
-{
-    setAuthentication(Authenticating);
-
-    auto handler = new LoginHandler(this, mnemonic, password);
-    QObject::connect(handler, &Handler::done, this, [this, handler] {
-       handler->deleteLater();
-       updateCurrencies();
-       reload();
-       updateConfig();
-       setAuthentication(Authenticated);
-    });
-    QObject::connect(handler, &Handler::error, this, [this, handler] {
-        handler->deleteLater();
-        const auto error = handler->result().value("error").toString();
-        // TODO: these are examples of errors
-        // these sould be handled in Handler class, see TODO above
-        // {"action":"get_xpubs","device":{},"error":"get_xpubs exception:login failed:id_login_failed","status":"error"}
-        // {"action":"get_xpubs","device":{},"error":"get_xpubs exception:reconnect required","status":"error"}
-        emit loginError(error);
-        return setAuthentication(Unauthenticated);
-    });
-    handler->exec();
-}
-
-void Wallet::setPin(const QByteArray& pin)
-{
-    Q_ASSERT(m_authentication == Authenticated);
-    Q_ASSERT(m_name.isEmpty());
-    Q_ASSERT(m_pin_data.isEmpty());
-
-    auto handler = new SetPinHandler(this, pin);
-    QObject::connect(handler, &Handler::done, this, [this, handler] {
-        handler->deleteLater();
-        m_pin_data = handler->pinData();
-        emit pinSet();
-    });
-    handler->exec();
 }
 
 void Wallet::reload()
@@ -431,15 +296,15 @@ void Wallet::reload()
         refreshAssets(false);
     }
 
+    auto activity = new WalletUpdateAccountsActivity(this, this);
+    pushActivity(activity);
     auto handler = new GetSubAccountsHandler(this);
-    QObject::connect(handler, &Handler::done, this, [this, handler] {
-        QJsonArray accounts = handler->result().value("result").toObject().value("subaccounts").toArray();
-
-        for (QJsonValue data : accounts) {
-            QJsonObject json = data.toObject();
-            int pointer = json.value("pointer").toInt();
+    QObject::connect(handler, &Handler::done, this, [this, handler, activity] {
+        for (QJsonValue value : handler->subAccounts()) {
+            QJsonObject data = value.toObject();
+            int pointer = data.value("pointer").toInt();
             Account* account = getOrCreateAccount(pointer);
-            account->update(data.toObject());
+            account->update(data);
             account->reload();
         }
 
@@ -451,6 +316,9 @@ void Wallet::reload()
             // Update cached assets
             refreshAssets(true);
         }
+
+        activity->finish();
+        activity->deleteLater();
     });
     QObject::connect(handler, &Handler::resolver, this, [](Resolver* resolver) {
         resolver->resolve();
@@ -458,42 +326,72 @@ void Wallet::reload()
     handler->exec();
 }
 
+class RefreshAssetsHandler : public Handler
+{
+public:
+    const bool m_refresh;
+    QJsonObject m_assets;
+
+    RefreshAssetsHandler(bool refresh, Wallet* wallet)
+        : Handler(wallet)
+        , m_refresh(refresh)
+    {
+    }
+    void call(GA_session* session, GA_auth_handler** auth_handler) override
+    {
+        Q_UNUSED(auth_handler);
+        auto params = Json::fromObject({
+            { "assets", true },
+            { "icons", true },
+            { "refresh", m_refresh }
+        });
+        GA_json* output;
+        int rc = GA_refresh_assets(session, params.get(), &output);
+        if (rc != GA_OK) return;
+
+        m_assets = Json::toObject(output);
+        rc = GA_destroy_json(output);
+        Q_ASSERT(rc == GA_OK);
+    }
+};
+
 void Wallet::refreshAssets(bool refresh)
 {
     Q_ASSERT(m_network->isLiquid());
 
-    QMetaObject::invokeMethod(m_session->m_context, [this, refresh] {
-        auto params = Json::fromObject({
-            { "assets", true },
-            { "icons", true },
-            { "refresh", refresh }
-        });
-        GA_json* output;
-        int err = GA_refresh_assets(m_session->m_session, params.get(), &output);
-        if (err != GA_OK) {
+    auto activity = new WalletRefreshAssets(this, this);
+    pushActivity(activity);
+
+    auto handler = new RefreshAssetsHandler(refresh, this);
+    handler->exec();
+
+    connect(handler, &Handler::done, this, [this, handler, activity] {
+        handler->deleteLater();
+
+        if (handler->m_assets.empty()) {
+            activity->fail();
+            activity->deleteLater();
             return;
         }
 
-        auto assets = Json::toObject(output);
-        err = GA_destroy_json(output);
-        Q_ASSERT(err == GA_OK);
+        auto icons = handler->m_assets.value("icons").toObject();
 
-        QMetaObject::invokeMethod(this, [this, assets] {
-            auto icons = assets.value("icons").toObject();
+        for (auto&& ref : handler->m_assets.value("assets").toObject()) {
+            QString id = ref.toObject().value("asset_id").toString();
+            if (id.isEmpty()) continue;
+            Asset* asset = getOrCreateAsset(id);
+            asset->setData(ref.toObject());
+            if (icons.contains(id)) {
+                asset->setIcon("data:image/png;base64," + icons.value(id).toString());
+            }
+        }
 
-            for (auto&& ref : assets.value("assets").toObject()) {
-                QString id = ref.toObject().value("asset_id").toString();
-                if (id.isEmpty()) continue;
-                Asset* asset = getOrCreateAsset(id);
-                asset->setData(ref.toObject());
-                if (icons.contains(id)) {
-                    asset->setIcon("data:image/png;base64," + icons.value(id).toString());
-                }
-            }
-            for (auto account : m_accounts) {
-                account->updateBalance();
-            }
-        });
+        for (auto account : m_accounts) {
+            account->updateBalance();
+        }
+
+        activity->finish();
+        activity->deleteLater();
     });
 }
 
@@ -530,30 +428,21 @@ void Wallet::updateCurrencies()
 
 void Wallet::save()
 {
-    if (m_id.isEmpty()) return;
+    Q_ASSERT(QThread::currentThread() == thread());
+    Q_ASSERT(!m_id.isEmpty());
     QJsonDocument doc({
         { "version", 1 },
         { "name", m_name },
         { "network", m_network->id() },
         { "login_attempts_remaining", m_login_attempts_remaining },
         { "pin_data", QString::fromLocal8Bit(m_pin_data.toBase64()) },
-        { "proxy", m_proxy },
-        { "use_tor", m_use_tor }
     });
     QFile file(GetDataFile("wallets", m_id));
-    bool result = file.open(QFile::ReadWrite);
+    bool result = file.open(QFile::WriteOnly | QFile::Truncate);
     Q_ASSERT(result);
     file.write(doc.toJson());
     result = file.flush();
     Q_ASSERT(result);
-}
-
-void Wallet::setConnection(ConnectionStatus connection)
-{
-    if (m_connection == connection) return;
-    qDebug() << "connection change" << m_connection << " -> " << connection;
-    m_connection = connection;
-    emit connectionChanged();
 }
 
 void Wallet::setAuthentication(AuthenticationStatus authentication)
@@ -633,13 +522,6 @@ Asset* Wallet::getOrCreateAsset(const QString& id)
     return asset;
 }
 
-void Wallet::setBusy(bool busy)
-{
-    if (m_busy == busy) return;
-    m_busy = busy;
-    emit busyChanged(m_busy);
-}
-
 Account* Wallet::getOrCreateAccount(int pointer)
 {
     Account* account = m_accounts_by_pointer.value(pointer);
@@ -653,33 +535,32 @@ Account* Wallet::getOrCreateAccount(int pointer)
 
 void Wallet::createSession()
 {
-    Q_ASSERT(!m_session);
-    m_session = new Session(this);
-    m_session->setNetwork(m_network);
-    QObject::connect(m_session, &Session::notificationHandled, this, &Wallet::handleNotification);
+    auto session = new Session(this);
+    session->setNetwork(m_network);
+    setSession(session);
+}
 
-    QObject::connect(m_session, &Session::sessionEvent, [this](const QJsonObject& event) {
-        const bool connected = event.value("connected").toBool();
-        setConnection(connected ? Connected : m_connection);
-    });
-    QObject::connect(m_session, &Session::networkEvent, [this](const QJsonObject& event) {
-        const bool connected = event.value("connected").toBool();
+void Wallet::setSession(Session* session)
+{
+    Q_ASSERT(session);
+    m_session = session;
+    if (m_network) {
+        Q_ASSERT(m_network == m_session->network());
+    } else {
+        setNetwork(m_session->network());
+    }
+    m_session.track(QObject::connect(m_session, &Session::notificationHandled, this, &Wallet::handleNotification));
+    m_session.track(QObject::connect(m_session, &Session::networkEvent, [this](const QJsonObject& event) {
         const bool login_required = event.value("login_required").toBool();
-        if (!connected) {
-            setConnection(Connecting);
-        } else {
-            setConnection(Connected);
-            if (login_required) {
-                setAuthentication(Unauthenticated);
-            }
+        if (login_required) {
+            setAuthentication(Unauthenticated);
         }
-    });
+    }));
     emit sessionChanged(m_session);
 }
 
 void Wallet::setSession()
 {
-    setConnection(Connected);
     setAuthentication(Authenticated);
     updateSettings();
     updateCurrencies();
@@ -710,11 +591,23 @@ void Wallet::setSettings(const QJsonObject& settings)
 
 bool Wallet::eventFilter(QObject* object, QEvent* event)
 {
-    if (event->type() == QEvent::KeyPress || event->type() == QEvent::MouseMove) {
+    switch (event->type()) {
+    case QEvent::MouseButtonPress:
+    case QEvent::MouseButtonRelease:
+    case QEvent::MouseButtonDblClick:
+    case QEvent::MouseMove:
+    case QEvent::KeyPress:
+    case QEvent::KeyRelease:
+    case QEvent::Wheel:
+    {
         Q_ASSERT(m_logout_timer != -1);
         killTimer(m_logout_timer);
         int altimeout = m_settings.value("altimeout").toInt();
         m_logout_timer = startTimer(altimeout * 60 * 1000);
+        break;
+    }
+    default:
+        break;
     }
     return QObject::eventFilter(object, event);
 }
@@ -734,3 +627,151 @@ void Wallet::setLocked(bool locked)
     emit lockedChanged(m_locked);
 }
 
+
+WalletActivity::WalletActivity(Wallet* wallet, QObject* parent)
+    : Activity(parent)
+    , m_wallet(wallet)
+{
+
+}
+
+WalletAuthenticateActivity::WalletAuthenticateActivity(Wallet* wallet, QObject* parent)
+    : WalletActivity(wallet, parent)
+{
+}
+
+void WalletAuthenticateActivity::exec()
+{
+}
+
+WalletRefreshAssets::WalletRefreshAssets(Wallet* wallet, QObject* parent)
+    : WalletActivity(wallet, parent)
+{
+}
+
+void WalletRefreshAssets::exec()
+{
+}
+
+WalletUpdateAccountsActivity::WalletUpdateAccountsActivity(Wallet* wallet, QObject* parent)
+    : WalletActivity(wallet, parent)
+{
+
+}
+
+void WalletUpdateAccountsActivity::exec()
+{
+}
+
+WalletSignupActivity::WalletSignupActivity(Wallet *wallet, QObject *parent)
+    : WalletActivity(wallet, parent)
+{
+
+}
+
+void WalletSignupActivity::exec()
+{
+
+}
+
+LoginWithPinController::LoginWithPinController(QObject* parent)
+    : Entity(parent)
+{
+}
+
+void LoginWithPinController::setWallet(Wallet* wallet)
+{
+    if (!m_wallet.update(wallet)) return;
+    emit walletChanged(m_wallet);
+    update();
+}
+
+void LoginWithPinController::setPin(const QByteArray &pin)
+{
+    if (m_pin == pin) return;
+    m_pin = pin;
+    emit pinChanged(m_pin);
+    update();
+}
+
+void LoginWithPinController::update()
+{
+    if (!m_wallet) return;
+    if (m_wallet->m_login_attempts_remaining == 0) return;
+    Q_ASSERT(!m_wallet->m_pin_data.isEmpty());
+    if (m_pin.isEmpty()) return;
+
+    auto session = m_wallet->session();
+    if (!session) {
+        m_wallet->createSession();
+        session = m_wallet->session();
+    }
+    if (m_session.update(session)) {
+        m_session.track(QObject::connect(m_session, &Session::connectedChanged, this, &LoginWithPinController::update));
+    }
+    if (!m_session->isActive()) {
+        m_session->setActive(true);
+        return;
+    }
+    if (!m_session->isConnected()) return;
+
+    m_wallet->setAuthentication(Wallet::Authenticating);
+
+    auto activity = new WalletAuthenticateActivity(m_wallet, this);
+    m_wallet->pushActivity(activity);
+
+    auto handler = new LoginWithPinHandler(m_wallet, m_wallet->m_pin_data, m_pin);
+    handler->connect(handler, &Handler::done, this, [this, activity, handler] {
+        handler->deleteLater();
+        if (m_wallet->m_login_attempts_remaining < 3) {
+            m_wallet->m_login_attempts_remaining = 3;
+            m_wallet->save();
+            emit m_wallet->loginAttemptsRemainingChanged(m_wallet->m_login_attempts_remaining);
+        }
+        m_wallet->setAuthentication(Wallet::Authenticated);
+        m_wallet->updateCurrencies();
+        m_wallet->updateSettings();
+        m_wallet->reload();
+        m_wallet->updateConfig();
+        activity->finish();
+        activity->deleteLater();
+    });
+    handler->connect(handler, &Handler::error, this, [this, activity, handler] {
+        handler->deleteLater();
+        const auto error = handler->result().value("error").toString();
+        if (error.contains("exception:login failed")) {
+            Q_ASSERT(m_wallet->m_login_attempts_remaining > 0);
+            m_wallet->setAuthentication(Wallet::Unauthenticated);
+            --m_wallet->m_login_attempts_remaining;
+            m_wallet->save();
+            emit m_wallet->loginAttemptsRemainingChanged(m_wallet->m_login_attempts_remaining);
+            if (m_wallet->m_login_attempts_remaining == 0) m_session->setActive(false);
+        }
+        if (error.contains("exception:reconnect required")) {
+            m_wallet->setAuthentication(Wallet::Unauthenticated);
+            return;
+        }
+        qWarning() << "unhandled login_with_pin error";
+        activity->fail();
+        activity->deleteLater();
+    });
+    handler->exec();
+}
+
+void SetPinHandler::call(GA_session *session, GA_auth_handler **auth_handler)
+{
+    Q_UNUSED(auth_handler);
+    m_pin_data = pinDataForNewPin(session, m_pin);
+}
+
+SetPinHandler::SetPinHandler(Wallet *wallet, const QByteArray &pin)
+    : Handler(wallet)
+    , m_pin(pin)
+{
+}
+
+QByteArray SetPinHandler::pinData() const
+{
+    Q_ASSERT(!m_pin_data.isEmpty());
+    return m_pin_data;
+}

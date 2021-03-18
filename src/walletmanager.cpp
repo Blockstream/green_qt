@@ -19,8 +19,13 @@
 
 #include <gdk.h>
 
+static WalletManager* g_wallet_manager{nullptr};
+
 WalletManager::WalletManager()
 {
+    Q_ASSERT(!g_wallet_manager);
+    g_wallet_manager = this;
+
     auto config = Json::fromObject({{ "datadir", GetDataDir("gdk") }});
     GA_init(config.get());
 
@@ -35,8 +40,6 @@ WalletManager::WalletManager()
         auto data = doc.object();
         Wallet* wallet = new Wallet(this);
         wallet->m_id = QFileInfo(file).baseName();
-        wallet->m_proxy = data.value("proxy").toString("");
-        wallet->m_use_tor = data.value("use_tor").toBool(false);
         wallet->m_pin_data = QByteArray::fromBase64(data.value("pin_data").toString().toLocal8Bit());
         wallet->m_name = data.value("name").toString();
         wallet->m_network = NetworkManager::instance()->network(data.value("network").toString());
@@ -45,10 +48,15 @@ WalletManager::WalletManager()
     }
 }
 
-WalletManager *WalletManager::instance()
+WalletManager::~WalletManager()
 {
-    static WalletManager wallet_manager;
-    return &wallet_manager;
+    qDebug() << Q_FUNC_INFO;
+}
+
+WalletManager* WalletManager::instance()
+{
+    Q_ASSERT(g_wallet_manager);
+    return g_wallet_manager;
 }
 
 void WalletManager::addWallet(Wallet* wallet)
@@ -60,22 +68,18 @@ void WalletManager::addWallet(Wallet* wallet)
 
 Wallet* WalletManager::createWallet()
 {
-    return new Wallet(this);
+    auto wallet = new Wallet(this);
+    wallet->m_id = QUuid::createUuid().toString(QUuid::WithoutBraces);
+    return wallet;
 }
 
 void WalletManager::insertWallet(Wallet* wallet)
 {
-    Q_ASSERT(wallet->m_id.isEmpty() && !wallet->m_pin_data.isEmpty());
-    wallet->m_id = QUuid::createUuid().toString(QUuid::WithoutBraces);
+    Q_ASSERT(!wallet->m_id.isEmpty() && !wallet->m_pin_data.isEmpty());
     QFile file(GetDataFile("wallets", wallet->m_id));
     Q_ASSERT(!file.exists());
     addWallet(wallet);
-
-    QMetaObject::invokeMethod(wallet->m_session->m_context, [wallet] {
-        QMetaObject::invokeMethod(wallet, [wallet] {
-            wallet->save();
-        });
-    });
+    wallet->save();
 }
 
 void WalletManager::removeWallet(Wallet* wallet)
@@ -84,13 +88,9 @@ void WalletManager::removeWallet(Wallet* wallet)
     // Q_ASSERT(wallet->connection() == Wallet::Disconnected);
     m_wallets.removeOne(wallet);
     emit changed();
-    if (!wallet->m_id.isEmpty()) {
-        QMetaObject::invokeMethod(wallet->m_session->m_context, [wallet] {
-            QMetaObject::invokeMethod(wallet, [wallet] {
-                bool result = QFile::remove(GetDataFile("wallets", wallet->m_id));
-                Q_ASSERT(result);
-            });
-        });
+    if (!wallet->m_id.isEmpty() && !wallet->m_device) {
+        bool result = QFile::remove(GetDataFile("wallets", wallet->m_id));
+        Q_ASSERT(result);
     }
 }
 
@@ -114,21 +114,6 @@ QString WalletManager::newWalletName(Network* network) const
         name = QString("My %1 Wallet %2").arg(network->name()).arg(++n);
     }
     return name;
-}
-
-Wallet* WalletManager::signup(const QString& proxy, bool use_tor, Network* network, const QString& name, const QStringList& mnemonic, const QByteArray& pin)
-{
-    Q_ASSERT(mnemonic.size() == 24 || mnemonic.size() == 27);
-    Wallet* wallet = new Wallet(this);
-    wallet->m_id = QUuid::createUuid().toString(QUuid::WithoutBraces);
-    wallet->m_proxy = proxy;
-    wallet->m_use_tor = use_tor;
-    wallet->m_network = network;
-    wallet->m_name = name;
-    wallet->connect(proxy, use_tor);
-    wallet->signup(mnemonic, pin);
-    addWallet(wallet);
-    return wallet;
 }
 
 QJsonObject WalletManager::parseUrl(const QString &url)

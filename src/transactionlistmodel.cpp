@@ -2,7 +2,7 @@
 #include "resolver.h"
 #include "transaction.h"
 #include "transactionlistmodel.h"
-#include "handlers/gettransactionshandler.h"
+
 #include <QDebug>
 
 TransactionListModel::TransactionListModel(QObject* parent)
@@ -26,7 +26,7 @@ void TransactionListModel::setAccount(Account *account)
 {
     if (m_account) {
         beginResetModel();
-        m_handler = nullptr;
+        m_get_transactions_activity.update(nullptr);
         m_transactions.clear();
         disconnect(m_account, &Account::notificationHandled, this, &TransactionListModel::handleNotification);
         m_account = nullptr;
@@ -58,40 +58,33 @@ void TransactionListModel::handleNotification(const QJsonObject& notification)
 
 void TransactionListModel::fetch(bool reset, int offset, int count)
 {
-    auto handler = new GetTransactionsHandler(m_account->pointer(), offset, count, m_account->wallet());
+    m_get_transactions_activity.update(new AccountGetTransactionsActivity(m_account, offset, count, this));
+    m_account->wallet()->pushActivity(m_get_transactions_activity);
 
-    QObject::connect(handler, &Handler::done, this, [this, reset, handler] {
-        handler->deleteLater();
-        m_handler = nullptr;
-        emit fetchingChanged(false);
-        // instantiate missing transactions
-        QVector<Transaction*> transactions;
-        for (QJsonValue data : handler->transactions()) {
-            auto transaction = m_account->getOrCreateTransaction(data.toObject());
-            transactions.append(transaction);
+    m_get_transactions_activity.track(QObject::connect(m_get_transactions_activity, &Activity::finished, this, [this, reset] {
+        for (auto transaction : m_get_transactions_activity->transactions()) {
             if (transaction->isUnconfirmed()) m_has_unconfirmed = true;
         }
         if (reset) {
             // just swap rows instead of incremental update
             // this happens after a bump fee for instance
             beginResetModel();
-            m_transactions = transactions;
+            m_transactions = m_get_transactions_activity->transactions();
             endResetModel();
         } else {
             // new page of transactions, just append to existing transaction
-            beginInsertRows(QModelIndex(), m_transactions.size(), m_transactions.size() + transactions.size() - 1);
-            m_transactions.append(transactions);
+            beginInsertRows(QModelIndex(), m_transactions.size(), m_transactions.size() + m_get_transactions_activity->transactions().size() - 1);
+            m_transactions.append(m_get_transactions_activity->transactions());
             endInsertRows();
         }
-    });
 
-    connect(handler, &Handler::resolver, this, [](Resolver* resolver) {
-        resolver->resolve();
-    });
+        m_get_transactions_activity->deleteLater();
+        m_get_transactions_activity.update(0);
+        emit fetchingChanged();
+    }));
 
-    handler->exec();
-    m_handler = handler;
-    emit fetchingChanged(true);
+    m_get_transactions_activity->exec();
+    emit fetchingChanged();
 }
 
 QHash<int, QByteArray> TransactionListModel::roleNames() const
@@ -105,7 +98,7 @@ bool TransactionListModel::canFetchMore(const QModelIndex &parent) const
 {
     Q_ASSERT(!parent.parent().isValid());
     // Prevent concurrent fetchMore
-    if (m_handler) return false;
+    if (m_get_transactions_activity) return false;
     return true;
 }
 
@@ -113,7 +106,7 @@ void TransactionListModel::fetchMore(const QModelIndex &parent)
 {
     Q_ASSERT(!parent.parent().isValid());
     if (!m_account) return;
-    if (m_handler) return;
+    if (m_get_transactions_activity) return;
     fetch(false, m_transactions.size(), 30);
 }
 
@@ -140,3 +133,4 @@ void TransactionListModel::reload()
     if (!m_account) return;
     m_reload_timer->start();
 }
+

@@ -187,6 +187,7 @@ MainPage {
                 }
             }
             StackLayout {
+                Layout.fillHeight: false
                 currentIndex: devices_list_view.currentIndex
                 Repeater {
                     model: device_list_model
@@ -194,6 +195,7 @@ MainPage {
                     }
                 }
             }
+            VSpacer {}
         }
     }
 
@@ -203,8 +205,17 @@ MainPage {
         LedgerDeviceController {
             id: controller
             device: self.device
+            onActivityCreated: {
+                if (activity instanceof SessionTorCircuitActivity) {
+                    session_tor_cirtcuit_view.createObject(activities_row, { activity })
+                } else if (activity instanceof SessionConnectActivity) {
+                    session_connect_view.createObject(activities_row, { activity })
+                }
+            }
         }
-        background: Item {
+        background: Rectangle {
+            color: constants.c600
+            radius: 8
         }
         contentItem: ColumnLayout {
             Label {
@@ -216,6 +227,13 @@ MainPage {
             Label {
                 visible: controller.status === 'locked'
                 text: 'Unlock and select app'
+            }
+            Pane {
+                background: null
+                padding: 0
+                contentItem: RowLayout {
+                    id: activities_row
+                }
             }
             RowLayout {
                 Button {
@@ -241,10 +259,6 @@ MainPage {
                 value: controller.progress
                 visible: controller.status === 'login'
                 Behavior on value { NumberAnimation { duration: 300; easing.type: Easing.OutCubic } }
-            }
-            Item {
-                Layout.fillWidth: true
-                Layout.fillHeight: true
             }
         }
     }

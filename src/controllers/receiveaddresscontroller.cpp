@@ -36,9 +36,6 @@ ReceiveAddressController::ReceiveAddressController(QObject *parent) : QObject(pa
 
 ReceiveAddressController::~ReceiveAddressController()
 {
-    if (m_account) {
-        QMetaObject::invokeMethod(m_account->wallet()->m_session->m_context, [] {}, Qt::BlockingQueuedConnection);
-    }
 }
 
 Account *ReceiveAddressController::account() const

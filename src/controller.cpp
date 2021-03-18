@@ -133,16 +133,7 @@ void Controller::exec(Handler* handler)
     connect(handler, &Handler::requestCode, this, [this, handler] { emit requestCode(handler); });
     connect(handler, &Handler::invalidCode, this, [this, handler] { emit invalidCode(handler); });
     connect(handler, &Handler::resolver, this, &Controller::resolver);
-    QMetaObject::invokeMethod(context(), [this, handler] {
-        QMetaObject::invokeMethod(this, [handler] {
-            handler->exec();
-        }, Qt::QueuedConnection);
-    }, Qt::QueuedConnection);
-}
-
-QObject* Controller::context() const
-{
-    return m_wallet ? m_wallet->m_session->m_context : nullptr;
+    handler->exec();
 }
 
 GA_session* Controller::session() const

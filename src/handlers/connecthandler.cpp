@@ -4,6 +4,8 @@
 #include "session.h"
 
 #include <gdk.h>
+#include <QFuture>
+#include <QtConcurrentRun>
 
 namespace {
     QJsonObject get_params(Network* network, const QString& proxy, bool use_tor)
@@ -21,30 +23,33 @@ namespace {
 } // namespace
 
 ConnectHandler::ConnectHandler(Session* session, Network* network, const QString& proxy, bool use_tor)
-    : QObject(session)
+    : QFutureWatcher<int>(session)
     , m_session(session)
     , m_network(network)
     , m_params(get_params(network, proxy, use_tor))
 {
 }
 
-void ConnectHandler::exec()
+ConnectHandler::~ConnectHandler()
 {
-    QMetaObject::invokeMethod(m_session->m_context, [this] {
-        call(m_session->m_session);
-        emit done();
-    }, Qt::QueuedConnection);
+    waitForFinished();
 }
 
-void ConnectHandler::call(GA_session* session)
+void ConnectHandler::exec()
 {
-    auto params = Json::fromObject(m_params);
-    int err = GA_connect(session, params.get());
-    if (err != GA_OK) {
-        emit error();
-        return;
-    }
-    auto hint = Json::fromObject({{ "hint", "now" }});
-    err = GA_reconnect_hint(session, hint.get());
-    Q_ASSERT(err == GA_OK);
+    attempts ++;
+    setFuture(QtConcurrent::run([this] {
+        auto session = m_session->m_session;
+        auto params = Json::fromObject(m_params);
+        int err = GA_connect(session, params.get());
+        qDebug() << "GA_connect = " << err;
+        if (err != GA_OK) {
+            GA_disconnect(session);
+            return err;
+        }
+        auto hint = Json::fromObject({{ "hint", "now" }});
+        err = GA_reconnect_hint(session, hint.get());
+        qDebug() << "GA_reconnect_hint = " << err;
+        return err;
+    }));
 }

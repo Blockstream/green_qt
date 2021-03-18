@@ -53,17 +53,6 @@ AbstractDialog {
     }
 
     Component {
-        id: session_tor_cirtcuit_view
-        SessionTorCircuitToolButton {
-        }
-    }
-    Component {
-        id: session_connect_view
-        SessionConnectToolButton {
-        }
-    }
-
-    Component {
         id: jade_unlock_view
         Loader {
             property JadeUnlockActivity activity
@@ -177,8 +166,7 @@ AbstractDialog {
         }
         ComboBox {
             id: channel_combo_box
-            // hide channel combo box if in release
-            visible: Qt.application.version.indexOf('-') >= 0
+            visible: Qt.application.arguments.indexOf('--debugjade') > 0
             enabled: controller.session && controller.session.connected
             Layout.fillWidth: true
             flat: true

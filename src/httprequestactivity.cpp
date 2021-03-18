@@ -4,6 +4,8 @@
 
 #include <gdk.h>
 
+#include <QtConcurrentRun>
+
 HttpRequestActivity::HttpRequestActivity(Session* session)
     : SessionActivity(session)
     , m_session(session)
@@ -55,7 +57,23 @@ void HttpRequestActivity::exec()
     Q_ASSERT(!m_method.isEmpty());
     Q_ASSERT(!m_urls.isEmpty());
 
-    QMetaObject::invokeMethod(m_session->m_context, [this] {
+    auto connection = m_session->connection();
+    Q_ASSERT(connection);
+
+    auto watcher = new QFutureWatcher<QJsonObject>(connection);
+
+    connect(this, &QObject::destroyed, watcher, &QObject::deleteLater);
+    connect(watcher, &QFutureWatcherBase::finished, this, [this, watcher] {
+        watcher->deleteLater();
+        m_response = watcher->resultAt(0);
+        if (m_response.empty()) {
+            fail();
+        } else {
+            finish();
+        }
+    });
+
+    watcher->setFuture(QtConcurrent::run([this] {
         QJsonObject details;
         details.insert("method", m_method);
         details.insert("urls", QJsonArray::fromStringList(m_urls));
@@ -72,15 +90,9 @@ void HttpRequestActivity::exec()
         auto params = Json::fromObject(details);
         GA_json* output;
         int rc = GA_http_request(m_session->m_session, params.get(), &output);
-        m_response = Json::toObject(output);
+        if (rc != GA_OK) return QJsonObject();
+        auto response = Json::toObject(output);
         GA_destroy_json(output);
-
-        QMetaObject::invokeMethod(this, [this, rc] {
-            if (rc == GA_OK) {
-                finish();
-            } else {
-                fail();
-            }
-        });
-    });
+        return response;
+    }));
 }

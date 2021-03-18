@@ -14,6 +14,8 @@ class WalletManager : public QObject
     Q_OBJECT
     Q_PROPERTY(QQmlListProperty<Wallet> wallets READ wallets NOTIFY changed)
 public:
+    explicit WalletManager();
+    virtual ~WalletManager();
     static WalletManager* instance();
 
     Q_INVOKABLE Wallet* createWallet();
@@ -35,11 +37,6 @@ signals:
 
 public slots:
     QJsonObject parseUrl(const QString &url);
-    Wallet* signup(const QString& proxy, bool use_tor, Network* network, const QString& name, const QStringList &mnemonic, const QByteArray& pin);
-
-private:
-    explicit WalletManager();
-
 public:
     QVector<Wallet*> m_wallets;
 };

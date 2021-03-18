@@ -1,11 +1,17 @@
 #ifndef GREEN_SIGNUPCONTROLLER_H
 #define GREEN_SIGNUPCONTROLLER_H
 
+#include "connectable.h"
+#include "network.h"
+#include "session.h"
+#include "wallet.h"
+
 #include <QtQml>
 #include <QObject>
 
-class Network;
-class Wallet;
+QT_FORWARD_DECLARE_CLASS(Network);
+QT_FORWARD_DECLARE_CLASS(Session);
+QT_FORWARD_DECLARE_CLASS(Wallet);
 
 class SignupController : public QObject
 {
@@ -15,6 +21,8 @@ class SignupController : public QObject
     Q_PROPERTY(QString defaultName READ defaultName NOTIFY defaultNameChanged)
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(Wallet* wallet READ wallet NOTIFY walletChanged)
+    Q_PROPERTY(QByteArray pin READ pin WRITE setPin NOTIFY pinChanged)
+    Q_PROPERTY(bool active READ active WRITE setActive NOTIFY activeChanged)
     QML_ELEMENT
 public:
     explicit SignupController(QObject* parent = nullptr);
@@ -25,22 +33,30 @@ public:
     QString name() const;
     void setName(const QString& name);
     Wallet* wallet() const;
-public slots:
-    void signup(const QString& proxy, bool use_tor, const QByteArray& pin);
+    QByteArray pin() const { return m_pin; }
+    void setPin(const QByteArray& pin);
+    bool active() const { return m_active; }
+    void setActive(bool active);
+private slots:
+    void update();
 signals:
     void networkChanged(Network* network);
     void defaultNameChanged(const QString& default_name);
     void nameChanged(const QString& name);
     void walletChanged(Wallet* wallet);
-    void done();
+    void pinChanged(const QByteArray& pin);
+    void activeChanged(bool active);
 private:
     void setDefaultName(const QString& default_name);
 private:
     QStringList m_mnemonic;
-    Network* m_network{nullptr};
+    Connectable<Network> m_network{nullptr};
     QString m_defaultName;
     QString m_name;
-    Wallet* m_wallet{nullptr};
+    Connectable<Wallet> m_wallet;
+    Connectable<Session> m_session;
+    QByteArray m_pin;
+    bool m_active{false};
 };
 
 #endif // GREEN_SIGNUPCONTROLLER_H

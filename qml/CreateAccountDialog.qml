@@ -8,7 +8,6 @@ import QtQuick.Layouts 1.12
 
 ControllerDialog {
     id: dialog
-    required property Wallet wallet
     title: qsTrId('id_add_new_account')
     minimumWidth: 200
     controller: CreateAccountController {

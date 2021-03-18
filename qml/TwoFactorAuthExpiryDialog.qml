@@ -5,7 +5,6 @@ import QtQuick.Layouts 1.12
 
 ControllerDialog {
     id: dialog
-    required property Wallet wallet
     title: qsTrId('id_twofactor_authentication_expiry')
     doneText: qsTrId('id_twofactor_authentication_expiry')
     controller: Controller {

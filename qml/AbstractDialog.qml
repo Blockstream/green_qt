@@ -6,6 +6,7 @@ Dialog {
     id: self
     property alias toolbar: toolbar_loader.sourceComponent
     property bool showRejectButton: true
+    property bool enableRejectButton: true
     clip: true
     modal: true
     padding: 32
@@ -35,6 +36,7 @@ Dialog {
         }
         ToolButton {
             visible: self.showRejectButton
+            enabled: self.enableRejectButton
             flat: true
             icon.source: 'qrc:/svg/cancel.svg'
             icon.width: 16

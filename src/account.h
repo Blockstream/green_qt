@@ -1,6 +1,8 @@
 #ifndef GREEN_ACCOUNT_H
 #define GREEN_ACCOUNT_H
 
+#include "wallet.h"
+
 #include <QtQml>
 #include <QObject>
 
@@ -54,6 +56,32 @@ private:
     QList<Balance*> m_balances;
     QMap<QString, Balance*> m_balance_by_id;
     friend class Wallet;
+};
+
+class AccountActivity : public WalletActivity
+{
+    Q_OBJECT
+    Q_PROPERTY(Account* account READ account CONSTANT)
+    QML_ELEMENT
+public:
+    AccountActivity(Account* account, QObject* parent);
+    Account* account() const { return m_account; }
+private:
+    Connectable<Account> m_account;
+};
+
+class AccountGetTransactionsActivity : public AccountActivity
+{
+    Q_OBJECT
+    QML_ELEMENT
+public:
+    AccountGetTransactionsActivity(Account* account, int first, int count, QObject* parent);
+    void exec() override;
+    QVector<Transaction*> transactions() const { return m_transactions; }
+private:
+    const int m_first;
+    const int m_count;
+    QVector<Transaction*> m_transactions;
 };
 
 #endif // GREEN_ACCOUNT_H

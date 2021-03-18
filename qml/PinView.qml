@@ -29,8 +29,8 @@ Column {
     GridLayout {
         id: grid_layout
         columns: 3
-        columnSpacing: 16
-        rowSpacing: 8
+        columnSpacing: 9
+        rowSpacing: 0
         anchors.horizontalCenter: parent.horizontalCenter
 
         Repeater {

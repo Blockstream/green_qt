@@ -134,3 +134,41 @@ bool Account::isMainAccount() const
 {
     return m_json.value("name").toString() == "";
 }
+
+AccountActivity::AccountActivity(Account* account, QObject* parent)
+    : WalletActivity(account->wallet(), parent)
+    , m_account(account)
+{
+
+}
+
+#include "handlers/gettransactionshandler.h"
+
+AccountGetTransactionsActivity::AccountGetTransactionsActivity(Account* account, int first, int count, QObject* parent)
+    : AccountActivity(account, parent)
+    , m_first(first)
+    , m_count(count)
+{
+}
+
+void AccountGetTransactionsActivity::exec()
+{
+    auto handler = new GetTransactionsHandler(account()->pointer(), m_first, m_count, wallet());
+
+    QObject::connect(handler, &Handler::done, this, [this, handler] {
+        handler->deleteLater();
+        // instantiate missing transactions
+        for (const QJsonValue& value : handler->transactions()) {
+            auto transaction = account()->getOrCreateTransaction(value.toObject());
+            m_transactions.append(transaction);
+        }
+        finish();
+    });
+
+    connect(handler, &Handler::resolver, this, [](Resolver* resolver) {
+        resolver->resolve();
+    });
+
+    handler->exec();
+}
+

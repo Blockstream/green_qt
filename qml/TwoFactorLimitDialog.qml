@@ -7,7 +7,6 @@ import QtQuick.Layouts 1.12
 
 ControllerDialog {
     id: dialog
-    required property Wallet wallet
 
     property var currencies: [{
         is_fiat: false,

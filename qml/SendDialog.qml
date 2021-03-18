@@ -9,6 +9,7 @@ ControllerDialog {
     icon: 'qrc:/svg/send.svg'
     autoDestroy: true
     required property Account account
+    wallet: send_dialog.account.wallet
 
     controller: SendController {
         account: send_dialog.account

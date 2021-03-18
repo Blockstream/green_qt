@@ -9,7 +9,7 @@ import QtQuick.Layouts 1.12
 ItemDelegate {
     id: self
 
-    required property Transaction transaction
+    required property var transaction
     property var tx: transaction.data
     property int confirmations: transactionConfirmations(transaction)
 

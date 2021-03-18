@@ -1,6 +1,5 @@
 #include "ga.h"
 #include "signupcontroller.h"
-#include "wallet.h"
 #include "walletmanager.h"
 
 SignupController::SignupController(QObject *parent) : QObject(parent)
@@ -20,12 +19,10 @@ Network *SignupController::network() const
 
 void SignupController::setNetwork(Network *network)
 {
-    if (m_network == network) return;
-    m_network = network;
-    if (m_network) {
-        setDefaultName(WalletManager::instance()->newWalletName(m_network));
-    }
+    if (!m_network.update(network)) return;
     emit networkChanged(m_network);
+    setDefaultName(m_network ? WalletManager::instance()->newWalletName(m_network) : "");
+    update();
 }
 
 QString SignupController::defaultName() const
@@ -43,17 +40,45 @@ Wallet *SignupController::wallet() const
     return m_wallet;
 }
 
-void SignupController::signup(const QString &proxy, bool use_tor, const QByteArray& pin)
+void SignupController::update()
 {
-    Q_ASSERT(!m_wallet);
-    m_wallet = WalletManager::instance()->signup(proxy, use_tor, m_network, m_name.isEmpty() ? m_defaultName : m_name, m_mnemonic, pin);
-    emit walletChanged(m_wallet);
+    if (!m_active) return;
+    if (m_pin.isEmpty()) return;
 
-    connect(m_wallet, &Wallet::authenticationChanged, this, [this] {
-        if (m_wallet->authentication() == Wallet::Authenticated) {
-            emit done();
-        }
-    });
+    if (!m_wallet) {
+        m_wallet = WalletManager::instance()->createWallet();
+        m_wallet->m_network = m_network;
+        m_wallet->m_name = m_name.isEmpty() ? m_defaultName : m_name;
+        emit walletChanged(m_wallet);
+
+        m_wallet->createSession();
+        m_session = m_wallet->session();
+        m_session.track(QObject::connect(m_session, &Session::connectedChanged, this, &SignupController::update));
+
+        m_session->setActive(true);
+    }
+
+    if (!m_session->isConnected()) return;
+
+    m_wallet->signup(m_mnemonic, m_pin);
+    // TODO: should only add if signup completes
+    WalletManager::instance()->addWallet(m_wallet);
+}
+
+void SignupController::setPin(const QByteArray &pin)
+{
+    if (m_pin == pin) return;
+    m_pin = pin;
+    emit pinChanged(m_pin);
+    update();
+}
+
+void SignupController::setActive(bool active)
+{
+    if (m_active == active) return;
+    m_active = active;
+    emit activeChanged(m_active);
+    update();
 }
 
 void SignupController::setDefaultName(const QString &default_name)
@@ -68,4 +93,5 @@ void SignupController::setName(const QString &name)
     if (m_name == name) return;
     m_name = name;
     emit nameChanged(m_name);
+    update();
 }

@@ -99,22 +99,7 @@ MainPage {
                     }
                 }
             }
-            Item {
-                Layout.fillWidth: true
-                height: 1
-            }
-            ProgressBar {
-                Layout.maximumWidth: 64
-                indeterminate: true
-                opacity: wallet.busy ? 0.5 : 0
-                visible: opacity > 0
-                Behavior on opacity {
-                    SmoothedAnimation {
-                        duration: 500
-                        velocity: -1
-                    }
-                }
-            }
+            HSpacer {}
             ToolButton {
                 visible: (wallet.events && !!wallet.events.twofactor_reset && wallet.events.twofactor_reset.is_active) || !fiatRateAvailable
                 icon.source: 'qrc:/svg/notifications_2.svg'
@@ -248,15 +233,18 @@ MainPage {
 
     Component {
         id: bump_fee_dialog
-        BumpFeeDialog { }
+        BumpFeeDialog {
+        }
     }
     Component {
         id: send_dialog
-        SendDialog { }
+        SendDialog {
+        }
     }
     Component {
         id: receive_dialog
-        ReceiveDialog { }
+        ReceiveDialog {
+        }
     }
 
     SystemMessageDialog {

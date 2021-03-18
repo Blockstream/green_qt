@@ -16,6 +16,7 @@ SOURCES += \
     $$PWD/devicediscoveryagent_win.cpp \
     $$PWD/devicelistmodel.cpp \
     $$PWD/devicemanager.cpp \
+    $$PWD/entity.cpp \
     $$PWD/ga.cpp \
     $$PWD/httprequestactivity.cpp \
     $$PWD/json.cpp \
@@ -44,6 +45,7 @@ HEADERS += \
     $$PWD/balance.h \
     $$PWD/clipboard.h \
     $$PWD/command.h \
+    $$PWD/connectable.h \
     $$PWD/controller.h \
     $$PWD/createaccountcontroller.h \
     $$PWD/device.h \
@@ -54,6 +56,7 @@ HEADERS += \
     $$PWD/devicediscoveryagent_win.h \
     $$PWD/devicelistmodel.h \
     $$PWD/devicemanager.h \
+    $$PWD/entity.h \
     $$PWD/ga.h \
     $$PWD/httprequestactivity.h \
     $$PWD/json.h \

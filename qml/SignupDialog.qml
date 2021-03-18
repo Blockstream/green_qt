@@ -5,14 +5,33 @@ import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.12
 
 AbstractDialog {
-    id: root
-    required property string network
-    icon: icons[network]
-    title: 'Create Wallet'
+    required property Network network
+    id: self
+    icon: icons[network.id]
+    title: qsTrId('id_create_new_wallet')
+
     SignupController {
         id: controller
-        network: NetworkManager.network(root.network)
-        onDone: pushLocation(`/${controller.network.id}/${controller.wallet.id}`)
+        network: self.network
+        pin: pin_view.pin.value
+        name: name_field.text.trim()
+    }
+
+    Connections {
+        target: controller.wallet
+        function onReadyChanged(ready) {
+            if (ready) pushLocation(`/${controller.network.id}/${controller.wallet.id}`)
+        }
+    }
+    Connections {
+        target: controller.wallet ? controller.wallet.session : null
+        function onActivityCreated(activity) {
+            if (activity instanceof SessionTorCircuitActivity) {
+                session_tor_cirtcuit_view.createObject(activities_row, { activity })
+            } else if (activity instanceof SessionConnectActivity) {
+                session_connect_view.createObject(activities_row, { activity })
+            }
+        }
     }
 
     closePolicy: Popup.NoAutoClose
@@ -20,9 +39,15 @@ AbstractDialog {
     width: 800
     height: 500
 
-    signal close()
-
     footer: DialogFooter {
+        Pane {
+            Layout.minimumHeight: 48
+            background: null
+            padding: 0
+            contentItem: RowLayout {
+                id: activities_row
+            }
+        }
         PageIndicator {
             count: 7
             currentIndex: stack_view.depth - 1
@@ -121,11 +146,7 @@ AbstractDialog {
             Action {
                 text: qsTrId('id_create')
                 onTriggered: {
-                    controller.name = name_field.text.trim()
-                    const proxy = Settings.useProxy ? Settings.proxyHost + ':' + Settings.proxyPort : ''
-                    const use_tor = Settings.useTor
-                    const pin = pin_view.pin.value;
-                    const wallet = controller.signup(proxy, use_tor, pin);
+                    controller.active = true
                     stack_view.push(creating_page)
                 }
             }
@@ -152,18 +173,25 @@ AbstractDialog {
         }
     }
 
-    property Item creating_page: Item {
-        ColumnLayout {
-            spacing: 16
-
-            anchors.centerIn: parent
-            BusyIndicator {
-                Layout.alignment: Qt.AlignCenter
-            }
-            Label {
-                Layout.alignment: Qt.AlignCenter
-                text: 'Creating Wallet'
+    property Item creating_page: ColumnLayout {
+        spacing: 16
+        VSpacer {}
+        BusyIndicator {
+            Layout.alignment: Qt.AlignCenter
+        }
+        Label {
+            Layout.alignment: Qt.AlignCenter
+            text: {
+                const count = controller.wallet ? controller.wallet.activities.length : 0
+                if (count > 0) {
+                    const activity = controller.wallet.activities[count - 1]
+                    if (activity instanceof WalletRefreshAssets) {
+                        return 'Loading assets'
+                    }
+                }
+                return 'Creating wallet'
             }
         }
+        VSpacer {}
     }
 }

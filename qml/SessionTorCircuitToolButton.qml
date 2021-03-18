@@ -41,7 +41,7 @@ ToolButton {
         }
         contentItem: RowLayout {
             Label {
-                text: 'TOR'
+                text: 'Tor'
             }
             ProgressBar {
                 RowLayout.maximumWidth: 64

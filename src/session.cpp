@@ -6,7 +6,7 @@
 #include <gdk.h>
 
 Session::Session(QObject* parent)
-    : QObject(parent)
+    : Entity(parent)
 {
 }
 
@@ -47,6 +47,14 @@ void Session::setConnected(bool connected)
 {
     if (m_connected == connected) return;
     m_connected = connected;
+
+    if (m_connected && !m_connection) {
+        m_connection = new Connection(this);
+    } else if (!m_connected && m_connection) {
+        delete m_connection;
+        m_connection = nullptr;
+    }
+
     emit connectedChanged(m_connected);
 }
 
@@ -79,34 +87,44 @@ void Session::update()
             GA_destroy_json(const_cast<GA_json*>(details));
             QMetaObject::invokeMethod(session, [session, notification] {
                 session->handleNotification(notification);
-            });
+            }, Qt::QueuedConnection);
         }, this);
         Q_ASSERT(rc == GA_OK);
-
-        m_thread = new QThread(this);
-        m_context = new QObject;
-
-        m_context->moveToThread(m_thread);
-        m_thread->start();
 
         const bool use_tor = Settings::instance()->useTor();
         if (use_tor) emit activityCreated(new SessionTorCircuitActivity(this));
         emit activityCreated(new SessionConnectActivity(this));
-        auto handler = new ConnectHandler(this, m_network, Settings::instance()->proxy(), use_tor);
-        handler->exec();
+        m_connect_handler = new ConnectHandler(this, m_network, Settings::instance()->proxy(), use_tor);
+        m_connect_handler.track(QObject::connect(m_connect_handler, &ConnectHandler::finished, [this] {
+            if (m_connect_handler->resultAt(0) == GA_OK) {
+                m_connect_handler->deleteLater();
+                setConnected(true);
+            } else if (m_connect_handler->attempts < 3) {
+                QTimer::singleShot(1000, this, [this] {
+                    m_connect_handler->exec();
+                });
+            } else {
+                m_connect_handler->deleteLater();
+                setConnected(false);
+            }
+        }));
+        m_connect_handler->exec();
 
         return;
     }
 
     if ((!m_active || !m_network) && m_session) {
+        m_connect_handler.destroy();
+
         GA_set_notification_handler(m_session, nullptr, nullptr);
 
-        m_context->deleteLater();
-        m_thread->quit();
-        m_thread->wait();
+        if (m_connection) {
+            delete m_connection;
+            m_connection = nullptr;
+        }
 
         int rc = GA_disconnect(m_session);
-        Q_ASSERT(rc == GA_OK);
+        if (rc != GA_OK) qDebug() << "disconnect failed" << rc;
 
         rc = GA_destroy_session(m_session);
         Q_ASSERT(rc == GA_OK);
@@ -125,7 +143,7 @@ SessionActivity::SessionActivity(Session* session)
 SessionTorCircuitActivity::SessionTorCircuitActivity(Session* session)
     : SessionActivity(session)
 {
-    m_tor_event_connection = connect(session, &Session::torEvent, [this](const QJsonObject& event) {
+    m_tor_event_connection = connect(session, &Session::torEvent, this, [this](const QJsonObject& event) {
         const int progress_value = event.value("progress").toInt();
         if (progress_value > 0) {
             progress()->setIndeterminate(false);
@@ -145,6 +163,14 @@ SessionTorCircuitActivity::SessionTorCircuitActivity(Session* session)
         if (tag == "done") {
             finish();
             QObject::disconnect(m_tor_event_connection);
+            QObject::disconnect(m_connected_connection);
+        }
+    });
+    m_connected_connection = connect(session, &Session::connectedChanged, this, [this](bool connected) {
+        if (connected) {
+            finish();
+            QObject::disconnect(m_tor_event_connection);
+            QObject::disconnect(m_connected_connection);
         }
     });
 }
@@ -152,14 +178,20 @@ SessionTorCircuitActivity::SessionTorCircuitActivity(Session* session)
 SessionConnectActivity::SessionConnectActivity(Session* session)
     : SessionActivity(session)
 {
-    auto slot = [this](const QJsonObject& event) {
-        const bool connected = event.value("connected").toBool();
-        if (connected) {
+    m_connection = connect(session, &Session::connectedChanged, this, [this, session] {
+        if (session->isConnected()) {
             finish();
-            QObject::disconnect(m_network_event_connection);
-            QObject::disconnect(m_session_event_connection);
+            QObject::disconnect(m_connection);
         }
-    };
-    m_network_event_connection = connect(session, &Session::networkEvent, slot);
-    m_session_event_connection = connect(session, &Session::sessionEvent, slot);
+    });
+}
+
+Connection::Connection(Session* session)
+    : QObject(session)
+    , m_session(session)
+{
+}
+
+Connection::~Connection()
+{
 }

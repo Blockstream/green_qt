@@ -150,7 +150,7 @@ ApplicationWindow {
                 }
                 Menu {
                     title: qsTrId('id_export_transactions_to_csv_file')
-                    enabled: currentWallet && currentWallet.authentication === Wallet.Authenticated
+                    enabled: currentWallet && currentWallet.ready
                     Repeater {
                         model: currentWallet ? currentWallet.accounts : null
                         MenuItem {
@@ -185,12 +185,12 @@ ApplicationWindow {
                 MenuSeparator { }
                 MenuItem {
                     text: qsTrId('id_add_new_account')
-                    onClicked: create_account_dialog.createObject(window).open()
-                    enabled: currentWallet && currentWallet.authentication === Wallet.Authenticated
+                    onClicked: create_account_dialog.createObject(window, { wallet: currentWallet}).open()
+                    enabled: currentWallet && currentWallet.ready
                 }
                 MenuItem {
                     text: qsTrId('id_rename_account')
-                    enabled: currentWallet && currentWallet.authentication === Wallet.Authenticated && currentAccount && !currentAccount.mainAccount
+                    enabled: currentWallet && currentWallet.ready && currentAccount && !currentAccount.mainAccount
                     onClicked: rename_account_dialog.createObject(window, { account: currentAccount }).open()
                 }
             }
@@ -218,7 +218,7 @@ ApplicationWindow {
         required property Wallet wallet
         location: `/${wallet.network.id}/${wallet.id}`
         text: wallet.device ? wallet.device.name : wallet.name
-        busy: wallet.busy
+        busy: wallet.activities.length > 0
         icon.width: 16
         icon.height: 16
         leftPadding: 32
@@ -301,7 +301,7 @@ ApplicationWindow {
                         Repeater {
                             id: liquid_repeater
                             model: WalletListModel {
-                                justAuthenticated: true
+                                justReady: true
                                 network: 'liquid'
                             }
                             WalletButton {
@@ -315,7 +315,7 @@ ApplicationWindow {
                         Repeater {
                             id: mainnet_repeater
                             model: WalletListModel {
-                                justAuthenticated: true
+                                justReady: true
                                 network: 'mainnet'
                             }
                             WalletButton {
@@ -330,7 +330,7 @@ ApplicationWindow {
                         Repeater {
                             id: testnet_repeater
                             model: WalletListModel {
-                                justAuthenticated: true
+                                justReady: true
                                 network: 'testnet'
                             }
                             WalletButton {
@@ -419,9 +419,7 @@ ApplicationWindow {
 
     Component {
         id: create_account_dialog
-        CreateAccountDialog {
-            wallet: currentWallet
-        }
+        CreateAccountDialog {}
     }
 
     Component {
@@ -507,5 +505,15 @@ ApplicationWindow {
             BusyIndicator {}
         }
 
+    }
+    Component {
+        id: session_tor_cirtcuit_view
+        SessionTorCircuitToolButton {
+        }
+    }
+    Component {
+        id: session_connect_view
+        SessionConnectToolButton {
+        }
     }
 }

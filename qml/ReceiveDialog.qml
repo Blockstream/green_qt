@@ -4,10 +4,13 @@ import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.12
 
 WalletDialog {
+    required property Account account
+    id: self
+    wallet: self.account.wallet
     title: qsTrId('id_receive')
     icon: 'qrc:/svg/receive.svg'
     onClosed: destroy()
-    ReceiveView {
-        account: currentAccount
+    contentItem: ReceiveView {
+        account: self.account
     }
 }

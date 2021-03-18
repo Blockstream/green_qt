@@ -12,7 +12,9 @@ QT_FORWARD_DECLARE_CLASS(Wallet)
 QT_FORWARD_DECLARE_STRUCT(GA_session)
 QT_FORWARD_DECLARE_STRUCT(GA_auth_handler)
 
-class Handler : public QObject
+#include <QFutureWatcher>
+
+class Handler : public QFutureWatcher<void>
 {
     Q_OBJECT
     Q_PROPERTY(Wallet* wallet READ wallet CONSTANT)
@@ -43,6 +45,7 @@ private:
     Resolver* createResolver(const QJsonObject& result);
     void setResult(const QJsonObject &result);
 private:
+    bool m_already_exec{false};
     Wallet* const m_wallet;
     GA_auth_handler* m_auth_handler{nullptr};
     TwoFactorResolver* m_two_factor_resolver{nullptr};

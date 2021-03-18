@@ -14,7 +14,7 @@ QML_IMPORT_NAME = Blockstream.Green
 QML_IMPORT_MAJOR_VERSION = 0
 QML_IMPORT_MINOR_VERSION = 1
 
-QT += qml quick quickcontrols2 svg
+QT += qml quick quickcontrols2 svg concurrent
 
 CONFIG += c++17 metatypes qmltypes qtquickcompiler sdk_no_version_check
 

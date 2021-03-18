@@ -1,6 +1,8 @@
 #ifndef TRANSACTIONLISTMODEL_H
 #define TRANSACTIONLISTMODEL_H
 
+#include "account.h"
+
 #include <QtQml>
 #include <QAbstractListModel>
 #include <QVector>
@@ -22,7 +24,7 @@ public:
 
     Account* account() const { return m_account; }
     void setAccount(Account* account);
-    bool fetching() const { return m_handler != nullptr; }
+    bool fetching() const { return m_get_transactions_activity; }
 
     QHash<int,QByteArray> roleNames() const override;
     void fetchMore(const QModelIndex &parent) override;
@@ -34,7 +36,7 @@ public slots:
     void reload();
 signals:
     void accountChanged(Account* account);
-    void fetchingChanged(bool fetching);
+    void fetchingChanged();
 private slots:
     void handleNotification(const QJsonObject& notification);
 private:
@@ -43,7 +45,7 @@ private:
     Account* m_account{nullptr};
     QVector<Transaction*> m_transactions;
     bool m_has_unconfirmed{false};
-    Handler* m_handler{nullptr};
+    Connectable<AccountGetTransactionsActivity> m_get_transactions_activity;
     QTimer* const m_reload_timer;
 };
 

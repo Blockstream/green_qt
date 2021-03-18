@@ -1,4 +1,5 @@
 import Blockstream.Green 0.1
+import Blockstream.Green.Core 0.1
 import QtQuick 2.13
 import QtQuick.Controls 2.13
 import QtQuick.Controls.Material 2.3
@@ -23,9 +24,8 @@ Item {
             justAuthenticated: true
             network: self.network
         }
-        WalletView {
-            property string thumb
-            property bool match: wallet.authentication === Wallet.Authenticated && window.location.startsWith(wallet_view.location)
+        delegate: WalletView {
+            property bool match: wallet.ready && window.location.startsWith(wallet_view.location)
             id: wallet_view
             anchors.fill: parent
             z: match ? 1 : -1
@@ -79,7 +79,7 @@ Item {
                     cellHeight: height
                     flow: GridView.FlowTopToBottom
                     model: WalletListModel {
-                        justAuthenticated: true
+                        justReady: true
                         network: self.network
                     }
                     delegate: Flipable {
@@ -203,7 +203,7 @@ Item {
         id: signup_dialog
         active: matchesLocation(location)
         dialog: SignupDialog {
-            network: self.network
+            network: NetworkManager.network(self.network)
             onRejected: popLocation()
         }
     }
@@ -213,7 +213,7 @@ Item {
         id: restore_dialog
         active: matchesLocation(location)
         dialog: RestoreWallet {
-            network: self.network
+            network: NetworkManager.network(self.network)
             onRejected: popLocation()
         }
     }
@@ -275,7 +275,7 @@ Item {
         DialogLoader {
             readonly property string location: `/${network}/${wallet.id}`
             id: login_dialog
-            active: window.location === location && wallet.authentication !== Wallet.Authenticated
+            active: window.location.startsWith(login_dialog.location) && !wallet.ready
             dialog: LoginDialog {
                 wallet: delegate.wallet
                 onRejected: popLocation()

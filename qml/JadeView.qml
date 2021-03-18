@@ -292,8 +292,6 @@ MainPage {
     Component {
         id: update_dialog
         JadeUpdateDialog {
-            Component.onCompleted: console.log('update dialog completed')
-            Component.onDestruction: console.log('update dialog destroyed')
         }
     }
 }

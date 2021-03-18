@@ -7,7 +7,6 @@ import QtQuick.Layouts 1.12
 
 WalletDialog {
     id: self
-    required property Wallet wallet
 
     width: 800
     height: 450

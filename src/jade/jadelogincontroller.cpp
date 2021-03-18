@@ -38,57 +38,49 @@ void JadeLoginController::setNetwork(const QString& network)
 
 void JadeLoginController::login()
 {
+    if (m_active) return;
+    m_active = true;
+    update();
+}
+
+void JadeLoginController::update()
+{
+    if (!m_active) return;
+
     Q_ASSERT(m_device);
     auto network = NetworkManager::instance()->network(m_network);
     Q_ASSERT(network);
-    Q_ASSERT(!m_wallet);
 
-    m_wallet = new Wallet;
-    m_wallet->m_id = m_device->uuid();
-    m_wallet->m_device = m_device;
-    m_wallet->setNetwork(network);
-    m_wallet->createSession();
+    if (!m_wallet) {
 
-    walletChanged(m_wallet);
+        m_wallet = new Wallet;
+        m_wallet->m_id = m_device->uuid();
+        m_wallet->m_device = m_device;
+        m_wallet->setNetwork(network);
+        m_wallet->createSession();
 
-    connect(m_device, &QObject::destroyed, this, [this] {
-        if (auto wallet = m_wallet) {
-            m_wallet = nullptr;
-            emit walletChanged(nullptr);
-            WalletManager::instance()->removeWallet(wallet);
-            delete wallet;
-        }
-    });
+        walletChanged(m_wallet);
+
+        connect(m_device, &QObject::destroyed, this, [this] {
+            if (auto wallet = m_wallet) {
+                m_wallet = nullptr;
+                emit walletChanged(nullptr);
+                WalletManager::instance()->removeWallet(wallet);
+                delete wallet;
+            }
+        });
+
+        QObject::connect(m_wallet->session(), &Session::connectedChanged, this, &JadeLoginController::update);
+
+        m_wallet->session()->setActive(true);
+    }
+
+    if (!m_wallet->session()->isConnected()) return;
 
     auto device_details = device_details_from_device();
     auto register_user_handler = new RegisterUserHandler(m_wallet, device_details);
     auto login_handler = new LoginHandler(m_wallet, device_details);
 
-    connect(m_wallet->session(), &Session::connectedChanged, this, [this, network, register_user_handler] {
-        if (!m_wallet || !m_wallet->session()) return;
-        if (!m_wallet->session()->isActive() || !m_wallet->session()->isConnected()) return;
-
-        m_device->m_jade->setHttpRequestProxy([this](JadeAPI& jade, int id, const QJsonObject& req) {
-            const auto params = Json::fromObject(req.value("params").toObject());
-            GA_json* output;
-            GA_http_request(m_wallet->m_session->m_session, params.get(), &output);
-            auto res = Json::toObject(output);
-            GA_destroy_json(output);
-            jade.handleHttpResponse(id, req, res.value("body").toObject());
-        });
-        m_device->m_jade->authUser(network->id(), [this, register_user_handler](const QVariantMap& msg) {
-            Q_ASSERT(msg.contains("result"));
-            if (msg["result"] == true) {
-                register_user_handler->exec();
-            } else {
-                m_wallet->deleteLater();
-                m_wallet = nullptr;
-                emit walletChanged(nullptr);
-                emit invalidPin();
-                return;
-            }
-        });
-    });
     connect(register_user_handler, &Handler::done, this, [login_handler] {
         login_handler->exec();
     });
@@ -112,7 +104,30 @@ void JadeLoginController::login()
     connect(login_handler, &Handler::error, this, []() {
         //setStatus("locked");
     });
-    m_wallet->session()->setActive(true);
+
+    if (!m_wallet || !m_wallet->session()) return;
+    if (!m_wallet->session()->isActive() || !m_wallet->session()->isConnected()) return;
+
+    m_device->m_jade->setHttpRequestProxy([this](JadeAPI& jade, int id, const QJsonObject& req) {
+        const auto params = Json::fromObject(req.value("params").toObject());
+        GA_json* output;
+        GA_http_request(m_wallet->m_session->m_session, params.get(), &output);
+        auto res = Json::toObject(output);
+        GA_destroy_json(output);
+        jade.handleHttpResponse(id, req, res.value("body").toObject());
+    });
+    m_device->m_jade->authUser(network->id(), [this, register_user_handler](const QVariantMap& msg) {
+        Q_ASSERT(msg.contains("result"));
+        if (msg["result"] == true) {
+            register_user_handler->exec();
+        } else {
+            m_wallet->deleteLater();
+            m_wallet = nullptr;
+            emit walletChanged(nullptr);
+            emit invalidPin();
+            return;
+        }
+    });
 }
 
 JadeLoginController::JadeLoginController(QObject* parent)

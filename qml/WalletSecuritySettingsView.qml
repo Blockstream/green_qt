@@ -26,13 +26,6 @@ ColumnLayout {
             }
             Button {
                 Layout.alignment: Qt.AlignRight
-                Component {
-                    id: change_pin_dialog
-                    ChangePinDialog {
-                        modal: true
-                        anchors.centerIn: parent
-                    }
-                }
                 flat: true
                 text: qsTrId('id_change_pin')
                 onClicked: change_pin_dialog.createObject(Window.window).open()
@@ -131,16 +124,13 @@ ColumnLayout {
         contentItem: ColumnLayout {
             Label {
                 Layout.fillWidth: true
-                Layout.minimumWidth: 0 //contentWidth
+                Layout.minimumWidth: 0
                 text: qsTrId('id_set_a_limit_to_spend_without')
             }
             Button {
-                property Component dialog: TwoFactorLimitDialog {
-                    wallet: self.wallet
-                }
                 flat: true
                 text: qsTrId('id_set_twofactor_threshold')
-                onClicked: dialog.createObject(stack_view).open()
+                onClicked: set_twofactor_threshold_dialog.createObject(stack_view).open()
                 Layout.alignment: Qt.AlignRight
             }
         }
@@ -223,10 +213,22 @@ ColumnLayout {
             wallet: self.wallet
         }
     }
-
+    Component {
+        id: set_twofactor_threshold_dialog
+        TwoFactorLimitDialog {
+            wallet: self.wallet
+        }
+    }
     Component {
         id: two_factor_auth_expiry_dialog
         TwoFactorAuthExpiryDialog {
+            wallet: self.wallet
+        }
+    }
+
+    Component {
+        id: change_pin_dialog
+        ChangePinDialog {
             wallet: self.wallet
         }
     }

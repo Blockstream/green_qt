@@ -10,17 +10,14 @@ QT_FORWARD_DECLARE_CLASS(Session)
 
 QT_FORWARD_DECLARE_STRUCT(GA_session)
 
-class ConnectHandler : public QObject
+class ConnectHandler : public QFutureWatcher<int>
 {
     Q_OBJECT
 public:
     ConnectHandler(Session* session, Network* network, const QString& proxy, bool use_tor);
+    virtual ~ConnectHandler();
     void exec();
-signals:
-    void error();
-    void done();
-private:
-    void call(GA_session* session);
+    int attempts{0};
 private:
     Session* const m_session;
     Network* const m_network;

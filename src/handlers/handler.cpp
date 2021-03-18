@@ -10,14 +10,29 @@
 
 #include <gdk.h>
 
+#include <QtConcurrentRun>
+
+
+static Connection* WalletConnection(Wallet* wallet)
+{
+    Q_ASSERT(wallet);
+    Q_ASSERT(wallet->session());
+    Q_ASSERT(wallet->session()->connection());
+    return wallet->session()->connection();
+}
+
 Handler::Handler(Wallet* wallet)
-    : QObject(wallet)
+    : QFutureWatcher<void>(WalletConnection(wallet))
     , m_wallet(wallet)
 {
+    connect(this, &Handler::finished, this, [this] {
+        step();
+    });
 }
 
 Handler::~Handler()
 {
+    waitForFinished();
     if (m_auth_handler) GA_destroy_auth_handler(m_auth_handler);
 }
 
@@ -28,15 +43,13 @@ Wallet* Handler::wallet() const
 
 void Handler::exec()
 {
+    Q_ASSERT(!m_already_exec);
+    m_already_exec = true;
+
     Q_ASSERT(!m_auth_handler);
-    QMetaObject::invokeMethod(m_wallet->m_session->m_context, [this] {
+    setFuture(QtConcurrent::run([this] {
         call(m_wallet->m_session->m_session, &m_auth_handler);
-        if (m_auth_handler) {
-            step();
-        } else {
-            emit done();
-        }
-    }, Qt::QueuedConnection);
+    }));
 }
 
 void Handler::fail()
@@ -64,15 +77,20 @@ static QJsonObject getResult(GA_auth_handler* auth_handler)
 
 void Handler::step()
 {
-    Q_ASSERT(m_auth_handler);
+    if (!m_auth_handler) {
+        return emit done();
+    }
+
     for (;;) {
         const auto result = getResult(m_auth_handler);
         const auto status = result.value("status").toString();
 
         if (status == "call") {
-            int res = GA_auth_handler_call(m_auth_handler);
-            Q_ASSERT(res == GA_OK);
-            continue;
+            setFuture(QtConcurrent::run([this] {
+                int res = GA_auth_handler_call(m_auth_handler);
+                Q_ASSERT(res == GA_OK);
+            }));
+            return;
         }
 
         if (status == "done") {
@@ -100,10 +118,8 @@ void Handler::step()
         }
 
         if (status == "resolve_code") {
-            QMetaObject::invokeMethod(this, [this, result] {
-                auto instance = createResolver(result);
-                if (instance) emit resolver(instance);
-            }, Qt::QueuedConnection);
+            auto instance = createResolver(result);
+            if (instance) emit resolver(instance);
             return;
         }
 
@@ -118,9 +134,7 @@ void Handler::request(const QByteArray& method)
     Q_ASSERT(m_result.value("status").toString() == "request_code");
     int res = GA_auth_handler_request_code(m_auth_handler, method.data());
     Q_ASSERT(res == GA_OK);
-    QMetaObject::invokeMethod(m_wallet->m_session->m_context, [this] {
-        step();
-    });
+    step();
 }
 
 Resolver* Handler::createResolver(const QJsonObject& result)
@@ -177,9 +191,7 @@ void Handler::resolve(const QByteArray& data)
     Q_ASSERT(m_auth_handler);
     int res = GA_auth_handler_resolve_code(m_auth_handler, data.constData());
     Q_ASSERT(res == GA_OK);
-    QMetaObject::invokeMethod(m_wallet->m_session->m_context, [this] {
-        step();
-    });
+    step();
 }
 
 void Handler::setResult(const QJsonObject& result)

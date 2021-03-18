@@ -24,6 +24,8 @@ public:
     Wallet* wallet() const { return m_wallet; }
 public slots:
     void login();
+private slots:
+    void update();
 signals:
     void deviceChanged(JadeDevice* device);
     void networkChanged(const QString& network);
@@ -33,6 +35,7 @@ private:
     JadeDevice* m_device{nullptr};
     QString m_network;
     Wallet* m_wallet{nullptr};
+    bool m_active{false};
 };
 
 #endif // GREEN_JADELOGINCONTROLLER_H

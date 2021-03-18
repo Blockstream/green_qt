@@ -9,6 +9,7 @@
 #include "network.h"
 #include "networkmanager.h"
 #include "resolver.h"
+#include "session.h"
 #include "settings.h"
 #include "util.h"
 #include "wallet.h"
@@ -38,6 +39,10 @@ namespace {
 
 LedgerDeviceController::LedgerDeviceController(QObject* parent)
     : QObject(parent)
+{
+}
+
+LedgerDeviceController::~LedgerDeviceController()
 {
 }
 
@@ -86,28 +91,36 @@ void LedgerDeviceController::setStatus(const QString& status)
 
 void LedgerDeviceController::login()
 {
-    Q_ASSERT(m_network);
-    Q_ASSERT(!m_wallet);
+    if (!m_network) return;
+
+    if (!m_session) {
+        m_session = new Session(this);
+
+        m_session.track(connect(m_session, &Session::connectedChanged, this, &LedgerDeviceController::login));
+        m_session.track(connect(m_session, &Session::activityCreated, this, &LedgerDeviceController::activityCreated));
+
+        m_session->setNetwork(m_network);
+        m_session->setActive(true);
+
+        emit sessionChanged(m_session);
+        return;
+    }
+
+    if (m_session->isActive() && !m_session->isConnected()) return;
+
+    if (m_wallet) return;
 
     m_device_details = device_details_from_device(m_device);
     m_wallet = new Wallet;
     m_wallet->setName(m_device->name());
     m_wallet->m_device = m_device;
-    m_wallet->setNetwork(m_network);
-    m_wallet->createSession();
+    m_wallet->setSession(m_session);
     m_wallet->m_id = m_device->uuid();
     emit walletChanged(m_wallet);
 
-    const auto proxy = Settings::instance()->proxy();
-    const auto use_tor = Settings::instance()->useTor();
-
     setStatus("login");
-    auto connect_handler = new ConnectHandler(m_wallet->m_session, m_wallet->m_network, proxy, use_tor);
     auto register_user_handler = new RegisterUserHandler(m_wallet, m_device_details);
     auto login_handler = new LoginHandler(m_wallet, m_device_details);
-    connect(connect_handler, &ConnectHandler::done, this, [register_user_handler] {
-        register_user_handler->exec();
-    });
     connect(register_user_handler, &Handler::done, this, [login_handler] {
         login_handler->exec();
     });
@@ -142,5 +155,5 @@ void LedgerDeviceController::login()
     connect(login_handler, &Handler::error, this, [this]() {
         setStatus("locked");
     });
-    connect_handler->exec();
+    register_user_handler->exec();
 }

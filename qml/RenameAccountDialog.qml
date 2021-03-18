@@ -9,7 +9,7 @@ WalletDialog {
     id: dialog
     required property Account account
     title: qsTrId('id_rename_account')
-
+    wallet: dialog.account.wallet
     onAccepted: controller.rename(name_field.text)
     onClosed: destroy()
 

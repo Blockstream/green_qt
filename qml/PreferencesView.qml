@@ -15,10 +15,7 @@ MainPage {
                 font.pixelSize: 24
                 font.styleName: 'Medium'
             }
-            Item {
-                Layout.fillWidth: true
-                height: 1
-            }
+            HSpacer {}
             Button {
                 text: 'id_support'
                 opacity: 0
@@ -26,16 +23,11 @@ MainPage {
             }
         }
     }
-    component HSpacer: Item {
-        Layout.fillWidth: true
-        implicitHeight: 1
-    }
     contentItem: ScrollView {
         id: scroll_view
         ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
-        contentWidth: availableWidth
         ColumnLayout {
-            width: parent.width
+            width: scroll_view.availableWidth
             spacing: 16
             MainPageSection {
                 Layout.fillWidth: true

@@ -8,6 +8,7 @@ ControllerDialog {
     required property Transaction transaction
     readonly property Account account: transaction.account
     title: qsTrId('id_increase_fee')
+    wallet: dialog.account.wallet
 
     controller: BumpFeeController {
         account: dialog.account
