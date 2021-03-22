@@ -409,6 +409,9 @@ ApplicationWindow {
         }
     }
 
+    DebugActiveFocus {
+    }
+
     Component {
         id: rename_account_dialog
         RenameAccountDialog {}

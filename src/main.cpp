@@ -63,6 +63,7 @@ int main(int argc, char *argv[])
     parser.addHelpOption();
     parser.addVersionOption();
     parser.addOption(QCommandLineOption("printtoconsole"));
+    parser.addOption(QCommandLineOption("debugfocus"));
     parser.process(app);
 
     if (parser.isSet("printtoconsole")) {
