@@ -27,7 +27,6 @@ Dialog {
         Label {
             Layout.fillWidth: true
             text: title
-            font.capitalization: Font.Capitalize
             font.pixelSize: 18
             font.styleName: 'Medium'
         }
