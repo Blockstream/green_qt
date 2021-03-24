@@ -5,58 +5,65 @@ import QtQuick.Layouts 1.13
 
 WalletDialog {
     id: self
-    title: stack_view.currentItem.title
     width: 320
     height: 400
-
-    Component {
-        id: confirm_pin_view
-        PinView {
-            onPinChanged: {
-                if (pin.valid && pin.value !== pin_view.pin.value) {
-                    clear();
-                    ToolTip.show(qsTrId('id_pins_do_not_match_please_try'), 1000);
+    focus: true
+    contentItem: PinView {
+        id: pin_view
+        property var new_pin
+        property var new_pin_confirm
+        property bool accept: false
+        property string title: qsTrId('id_set_a_new_pin')
+        state: "new_pin"
+        states: [
+            State {
+                name: "new_pin"
+                PropertyChanges { target: self; title: qsTrId('id_set_a_new_pin') }
+            },
+            State {
+                name: "new_pin_confirm"
+                PropertyChanges { target: self; title: qsTrId('id_verify_your_pin') }
+            }
+        ]
+        onPinChanged: {
+            if (pin.valid) {
+                if (state=="new_pin") {
+                    new_pin = pin
+                    pin_view.clear()
+                    state = "new_pin_confirm"
+                }
+                else if (state=="new_pin_confirm") {
+                    new_pin_confirm = pin
+                    if (pin_view.new_pin.value !== pin_view.new_pin_confirm.value) {
+                        pin_view.accept = false
+                        clear();
+                        ToolTip.show(qsTrId('id_pins_do_not_match_please_try'), 1000);
+                        state = "new_pin"
+                    }
+                    else {
+                        pin_view.accept = true
+                    }
                 }
             }
-            property bool accept: pin.valid && pin.value === pin_view.pin.value
-            property string title: qsTrId('id_verify_your_pin')
         }
     }
-
-    StackView {
-        id: stack_view
-        anchors.fill: parent
-        anchors.margins: 20
-        initialItem: PinView {
-            id: pin_view
-            property bool accept: false
-            property string title: qsTrId('id_set_a_new_pin')
-            onPinChanged: {
-                if (pin.valid) {
-                    stack_view.push(confirm_pin_view)
-                }
-            }
-        }
-    }
-
     footer: Pane {
+        topPadding: 16
         rightPadding: 16
         bottomPadding: 8
-        background: Item {
-        }
+        background: null
         contentItem: RowLayout {
             Item {
                 Layout.fillWidth: true
             }
             Button {
-                enabled: stack_view.currentItem.accept
+                enabled: pin_view.accept
                 flat: true
                 text: qsTrId('id_change_pin')
                 onClicked: accept()
             }
         }
     }
-
     onAccepted: wallet.changePin(pin_view.pin.value)
     onClosed: destroy()
 }

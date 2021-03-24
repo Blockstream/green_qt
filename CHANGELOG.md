@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Fix hover events after opening a dialog
 - Prevent key dialogs to be closed by clicking outside
+- Fix keyboard focus when opening change pin dialog
 
 ## [0.1.1] - 2021-03-04
 ### Added

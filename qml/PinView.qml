@@ -14,8 +14,8 @@ Column {
 
     PinField {
         id: field
-        focus: true
         anchors.horizontalCenter: parent.horizontalCenter
+        Component.onCompleted: field.forceActiveFocus()
     }
 
     component PinButton: RoundButton {
