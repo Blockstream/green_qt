@@ -17,7 +17,7 @@ WalletDialog {
 
     property bool autoDestroy: false
     onClosed: if (autoDestroy) destroy()
-
+    closePolicy: Popup.NoAutoClose
     toolbar: stack_view.currentItem.toolbar
     footer: DialogFooter {
         HSpacer {}
@@ -108,13 +108,13 @@ WalletDialog {
             anchors.horizontalCenter: parent.horizontalCenter
             Image {
                 anchors.horizontalCenter: enterCodeText.horizontalCenter
-                source: `qrc:/svg/2fa_${resolver.method}.svg`
+                source: resolver ? `qrc:/svg/2fa_${resolver.method}.svg` : ''
                 sourceSize.width: 64
                 sourceSize.height: 64
             }
             Label {
                 id: enterCodeText
-                text: qsTrId('id_please_provide_your_1s_code').arg(resolver.method)
+                text: resolver ? qsTrId('id_please_provide_your_1s_code').arg(resolver.method) : ''
             }
             TextField {
                 id: code_field
@@ -131,9 +131,9 @@ WalletDialog {
                 anchors.horizontalCenter: enterCodeText.horizontalCenter
             }
             Label {
-                visible: resolver.attemptsRemaining < 3 && resolver.method !== 'gauth'
+                visible: resolver ? (resolver.attemptsRemaining < 3 && resolver.method !== 'gauth') : null
                 anchors.horizontalCenter: enterCodeText.horizontalCenter
-                text: qsTrId('id_attempts_remaining_d').arg(resolver.attemptsRemaining)
+                text: resolver ? qsTrId('id_attempts_remaining_d').arg(resolver.attemptsRemaining) : ''
                 font.pixelSize: 10
             }
         }
