@@ -2,7 +2,7 @@
 #define GREEN_SETTINGS_H
 
 #include <QObject>
-#include <QRect>
+#include <QTimer>
 
 class Settings : public QObject
 {
@@ -65,7 +65,10 @@ signals:
 private:
     void load();
     void save();
+    void saveLater();
 private:
+    QTimer m_save_timer;
+    bool m_needs_save{false};
     int m_window_x;
     int m_window_y;
     int m_window_width;
