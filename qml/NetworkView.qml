@@ -273,12 +273,12 @@ Item {
             pushLocation(login_dialog.location)
         }
         DialogLoader {
-            readonly property string location: `/${network}/${wallet.id}`
+            readonly property string location: `/${self.network}/${wallet.id}`
             id: login_dialog
             active: window.location.startsWith(login_dialog.location) && !wallet.ready
             dialog: LoginDialog {
                 wallet: delegate.wallet
-                onRejected: popLocation()
+                onRejected: pushLocation(`/{self.network}`)
             }
         }
     }
