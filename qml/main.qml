@@ -409,6 +409,18 @@ ApplicationWindow {
         }
     }
 
+    DialogLoader {
+        properties: {
+            const [,, wallet_id] = window.location.split('/')
+            const wallet = WalletManager.wallet(wallet_id)
+            return { wallet }
+        }
+        active: !!properties.wallet && !properties.wallet.ready
+        dialog: LoginDialog {
+            onRejected: popLocation()
+        }
+    }
+
     DebugActiveFocus {
     }
 

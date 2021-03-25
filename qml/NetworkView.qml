@@ -269,17 +269,6 @@ Item {
         width: wallet_list_view.width
         highlighted: ListView.isCurrentItem
         property bool valid: wallet.loginAttemptsRemaining > 0
-        onClicked: {
-            pushLocation(login_dialog.location)
-        }
-        DialogLoader {
-            readonly property string location: `/${self.network}/${wallet.id}`
-            id: login_dialog
-            active: window.location.startsWith(login_dialog.location) && !wallet.ready
-            dialog: LoginDialog {
-                wallet: delegate.wallet
-                onRejected: pushLocation(`/{self.network}`)
-            }
-        }
+        onClicked: pushLocation(`/${self.network}/${wallet.id}`)
     }
 }
