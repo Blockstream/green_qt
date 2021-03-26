@@ -1,7 +1,9 @@
 #include "settings.h"
+#include "util.h"
 
 #include <QtGlobal>
 #include <QDebug>
+#include <QFileInfo>
 #include <QGuiApplication>
 #include <QScreen>
 #include <QSettings>
@@ -135,14 +137,28 @@ QString Settings::proxy() const
     return m_use_proxy ? QString("%1:%2").arg(m_proxy_host).arg(m_proxy_port) : "";
 }
 
+
 void Settings::load()
 {
     qDebug() << "Load settings";
     // By default position window in primary screen with a 200px margin
     qGuiApp->primaryScreen()->geometry().adjusted(200, 200, -200, -200).getRect(&m_window_x, &m_window_y, &m_window_width, &m_window_height);
 
+    const auto path = GetDataFile("app", "settings.ini");
+    if (QFileInfo::exists(path)) {
+        QSettings settings(path, QSettings::IniFormat);
+        load(settings);
+    } else {
+        // Load settings from old location and save on new location
+        QSettings settings;
+        load(settings);
+        saveNow();
+    }
+}
+
+void Settings::load(const QSettings& settings)
+{
 #define LOAD(v) { const auto k = QLatin1String(QT_STRINGIFY(v)).mid(2); if (settings.contains(k)) v = settings.value(k).value<decltype (v)>(); }
-    QSettings settings;
     LOAD(m_window_x);
     LOAD(m_window_y);
     LOAD(m_window_width);
@@ -163,8 +179,13 @@ void Settings::save()
     if (!m_needs_save) return;
     m_needs_save = false;
     qDebug() << "Save settings";
+    saveNow();
+}
+
+void Settings::saveNow()
+{
 #define SAVE(v) settings.setValue(QLatin1String(QT_STRINGIFY(v)).mid(2), v);
-    QSettings settings;
+    QSettings settings(GetDataFile("app", "settings.ini"), QSettings::IniFormat);
     SAVE(m_window_x);
     SAVE(m_window_y);
     SAVE(m_window_width);

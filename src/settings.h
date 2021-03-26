@@ -4,6 +4,8 @@
 #include <QObject>
 #include <QTimer>
 
+QT_FORWARD_DECLARE_CLASS(QSettings);
+
 class Settings : public QObject
 {
     Q_OBJECT
@@ -64,7 +66,9 @@ signals:
     void recentWalletsChanged(const QStringList& recent_wallets);
 private:
     void load();
+    void load(const QSettings& settings);
     void save();
+    void saveNow();
     void saveLater();
 private:
     QTimer m_save_timer;
