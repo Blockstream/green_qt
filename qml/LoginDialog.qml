@@ -93,7 +93,7 @@ AbstractDialog {
                 PinView {
                     id: pin_view
                     Layout.alignment: Qt.AlignHCenter
-                    enabled: !self.active
+                    enabled: !self.active && self.wallet.loginAttemptsRemaining > 0
                 }
                 Label {
                     Layout.topMargin: 8
