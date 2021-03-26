@@ -6,6 +6,15 @@ import QtQuick.Layouts 1.12
 
 MainPage {
     readonly property string url: 'https://blockstream.com/green/'
+    readonly property var recentWallets: {
+        const wallets = []
+        for (const id of Settings.recentWallets) {
+            const wallet = WalletManager.wallet(id)
+            if (wallet) wallets.push(wallet)
+        }
+        return wallets
+    }
+    id: self
     header: Pane {
         padding: 24
         background: null
@@ -57,7 +66,7 @@ MainPage {
                         color: constants.c800
 
                         Text {
-                            visible: Settings.recentWallets.length===0
+                            visible: self.recentWallets.length === 0
                             text: "Looks like you haven't used a wallet yet."
                             color: 'white'
                             anchors.centerIn: parent
@@ -66,10 +75,10 @@ MainPage {
                     contentItem: ColumnLayout {
                         spacing: 0
                         Repeater {
-                            model: Settings.recentWallets
+                            model: self.recentWallets
                             Button {
+                                readonly property Wallet wallet: modelData
                                 Layout.alignment: Qt.AlignLeft
-                                property var wallet: WalletManager.wallet(modelData)
                                 spacing: 12
                                 icon.source: icons[wallet.network.id]
                                 icon.color: 'transparent'
