@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add 'recently used wallets' and 'create wallet' sections to home view
 
 ### Changed
+- Bring primary window to front when attempting to launch another instance in Windows and MacOS
+- Add connection and tor feedback when logging in with pin, mnemonic and hardware wallets
+- Overhaul the threading model to improve handling of async operations
+- Add a command line flag to expose multiple update channels for Jade
 
 ### Fixed
 - Fix hover events after opening a dialog
@@ -22,7 +26,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 ### Changed
-- Bring primary window to front when attempting to launch another instance
 - Always send prevout when signing a transaction with Jade
 - 2FA auto-advance at last digit
 - Use Blockstream icon instead of Jade icon
