@@ -4,7 +4,7 @@ import QtQuick.Controls 2.13
 QtObject {
     property bool active: false
     required property Component dialog
-    property var properties
+    property var properties: ({})
     property Dialog __instance: null
     id: self
     onActiveChanged: {
