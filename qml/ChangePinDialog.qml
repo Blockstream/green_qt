@@ -5,8 +5,8 @@ import QtQuick.Layouts 1.13
 
 WalletDialog {
     id: self
-    width: 320
-    height: 400
+    width: 350
+    height: 450
     focus: true
     contentItem: PinView {
         id: pin_view
@@ -48,16 +48,16 @@ WalletDialog {
         }
     }
     footer: Pane {
-        topPadding: 16
-        rightPadding: 16
-        bottomPadding: 8
+        padding: 0
+        bottomPadding: 32
         background: null
         contentItem: RowLayout {
-            Item {
-                Layout.fillWidth: true
-            }
-            Button {
-                enabled: pin_view.accept
+            GButton {
+                Layout.alignment: Qt.AlignHCenter
+                Layout.minimumWidth: 200
+                highlighted: true
+                large: true
+                enabled: pin_view.accept && pin_view.pin.valid
                 flat: true
                 text: qsTrId('id_change_pin')
                 onClicked: accept()

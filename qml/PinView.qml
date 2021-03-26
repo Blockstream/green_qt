@@ -10,7 +10,7 @@ Column {
         field.clear()
     }
 
-    spacing: 8
+    spacing: 24
 
     PinField {
         id: field
@@ -20,6 +20,7 @@ Column {
 
     component PinButton: RoundButton {
         signal tapped()
+        font.pixelSize: 18
         flat: true
         TapHandler {
             onTapped: parent.tapped()
@@ -29,7 +30,7 @@ Column {
     GridLayout {
         id: grid_layout
         columns: 3
-        columnSpacing: 9
+        columnSpacing: 32
         rowSpacing: 0
         anchors.horizontalCenter: parent.horizontalCenter
 

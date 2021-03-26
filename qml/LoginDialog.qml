@@ -16,7 +16,7 @@ AbstractDialog {
     focus: true
     title: self.wallet.name
     width: 350
-    height: 450
+    height: 500
 
     closePolicy: self.active ? Dialog.NoAutoClose : AbstractDialog.closePolicy
     enableRejectButton: !self.active
@@ -103,6 +103,7 @@ AbstractDialog {
                     opacity: self.wallet.activities.length === 0 ? 1 : 0
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
+                    font.pixelSize: 12
                     wrapMode: Text.WordWrap
                     text: switch (self.wallet.loginAttemptsRemaining) {
                         case 0: return qsTrId('id_no_attempts_remaining')
@@ -153,10 +154,11 @@ AbstractDialog {
                 id: activities_row
             }
         }
-        Button {
+        GButton {
+            Layout.alignment: Qt.AlignHCenter
             highlighted: true
-            Layout.minimumWidth: 250
-            Layout.minimumHeight: 25
+            large: true
+            Layout.minimumWidth: 200
             visible: self.wallet.loginAttemptsRemaining === 0
             text: 'Restore Wallet'
             onClicked: pushLocation(`/${self.wallet.network.id}/restore`)

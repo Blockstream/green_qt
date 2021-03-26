@@ -69,8 +69,8 @@ Item {
             model: 6
 
             Rectangle {
-                width: 32
-                height: 32
+                width: 28
+                height: 28
                 radius: 16
                 opacity: enabled ? 1 : 0.5
                 color: Qt.rgba(1, 1, 1, buffer.length === modelData && root.activeFocus ? 0.1 : 0)

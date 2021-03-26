@@ -38,5 +38,6 @@ Button {
         text: parent.text
         color: parent.pressed ? "black" : "white"
         opacity: self.enabled ? 1 : 0.5
+        horizontalAlignment: Text.AlignHCenter
     }
 }
