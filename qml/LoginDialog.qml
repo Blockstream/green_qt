@@ -159,7 +159,7 @@ AbstractDialog {
             Layout.minimumHeight: 25
             visible: self.wallet.loginAttemptsRemaining === 0
             text: 'Restore Wallet'
-            onClicked: pushLocation(restore_dialog.location)
+            onClicked: pushLocation(`/${self.wallet.network.id}/restore`)
         }
     }
 }
