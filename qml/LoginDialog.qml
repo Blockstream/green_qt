@@ -147,6 +147,7 @@ AbstractDialog {
 
     footer: DialogFooter {
         Pane {
+            visible: self.wallet.loginAttemptsRemaining > 0
             Layout.minimumHeight: 48
             background: null
             padding: 0
