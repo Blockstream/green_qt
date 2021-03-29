@@ -1,4 +1,4 @@
-image: greenaddress/ci@sha256:b095cb41472a56210388c97fb39a7a007d5cf40966929ac39c7c41ddecf188ca
+image: greenaddress/ci@sha256:e02a8c07252dd1988c9980da33b5314333333b26502b37e857eb1bd71ea24cd7
 
 stages:
   - build
@@ -6,7 +6,7 @@ stages:
   - installer
   - installer_sign
   - deploy
-  
+
 bionic_release:
   tags:
     - ga

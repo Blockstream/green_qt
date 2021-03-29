@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add 'recently used wallets' and 'create wallet' sections to home view
 
 ### Changed
+- Update GDK to 0.0.41
 - Use data dir to store app settings
 - Bring primary window to front when attempting to launch another instance in Windows and MacOS
 - Add connection and tor feedback when logging in with pin, mnemonic and hardware wallets
