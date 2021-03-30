@@ -8,6 +8,8 @@ MainPage {
     readonly property string url: 'https://blockstream.com/green/'
     readonly property var recentWallets: {
         const wallets = []
+        // Force update when wallets are added/removed
+        WalletManager.wallets
         for (const id of Settings.recentWallets) {
             const wallet = WalletManager.wallet(id)
             if (wallet) wallets.push(wallet)
