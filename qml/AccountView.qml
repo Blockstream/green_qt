@@ -113,9 +113,8 @@ StackView {
                         }
                     }
                 }
-                Button {
+                GButton {
                     enabled: account_view.account.balances.length > 3
-                    flat: true
                     text: {
                         const count = account_view.account.balances.length
                         if (count <= 3) return qsTrId('id_no_more_assets')

@@ -20,9 +20,9 @@ ColumnLayout {
                 text: qsTrId('id_your_wallet_backup_is_made_of') + "\n" + qsTrId('id_blockstream_does_not_have')
                 wrapMode: Label.WordWrap
             }
-            Button {
+            GButton {
                 Layout.alignment: Qt.AlignRight
-                flat: true
+                large: true
                 text: qsTrId('id_show_my_wallet_backup')
                 onClicked: mnemonic_dialog.createObject(stack_view).open()
             }
@@ -37,10 +37,10 @@ ColumnLayout {
                 text: qsTrId('id_save_a_summary_of_your_accounts')
                 wrapMode: Label.WordWrap
             }
-            Button {
+            GButton {
                 Layout.alignment: Qt.AlignRight
                 text: qsTrId('id_copy_to_clipboard')
-                flat: true
+                large: true
                 onClicked: {
                     const subaccounts = [];
                     for (let i = 0; i < wallet.accounts.length; i++) {
@@ -68,9 +68,9 @@ ColumnLayout {
                 text: qsTrId('id_redeem_your_deposited_funds') + '\n\n' + qsTrId('id_enable_email_notifications_to')
                 wrapMode: Label.WordWrap
             }
-            Button {
+            GButton {
                 Layout.alignment: Qt.AlignRight
-                flat: true
+                large: true
                 text: qsTrId('id_set_timelock')
                 onClicked: nlocktime_dialog.createObject(stack_view).open()
             }
@@ -86,7 +86,7 @@ ColumnLayout {
                 text: qsTrId('id_set_up_an_email_to_get')
                 wrapMode: Label.WordWrap
             }
-            Button {
+            GButton {
                 Layout.alignment: Qt.AlignRight
                 Component {
                     id: enable_dialog
@@ -94,7 +94,7 @@ ColumnLayout {
                         wallet: self.wallet
                     }
                 }
-                flat: true
+                large: true
                 enabled: !wallet.config.email || !wallet.config.email.confirmed
                 text: qsTrId('id_enable')
                 onClicked: enable_dialog.createObject(stack_view).open()

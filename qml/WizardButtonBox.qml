@@ -5,8 +5,8 @@ DialogButtonBox {
     property StackView stackView
     Repeater {
         model: stackView.currentItem ? stackView.currentItem.actions : []
-        Button {
-            flat: true
+        GButton {
+            large: true
             action: modelData
         }
     }

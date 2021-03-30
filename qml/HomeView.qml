@@ -30,10 +30,11 @@ MainPage {
                 Layout.fillWidth: true
                 height: 1
             }
-            Button {
-                text: 'id_support'
-                opacity: 0
-                flat: true
+            GButton {
+                text: qsTrId('id_support')
+                highlighted: true
+                large: true
+                onClicked: Qt.openUrlExternally(constants.supportUrl)
             }
         }
     }
@@ -113,9 +114,9 @@ MainPage {
                         color: constants.c800
                     }
                     contentItem: ColumnLayout {
-                        Button {
+                        GButton {
                             Layout.fillWidth: true
-                            flat: true
+                            large: true
                             text: qsTrId('id_create_wallet')
                             font.capitalization: Font.MixedCase
                             onClicked: {
@@ -124,9 +125,9 @@ MainPage {
                                 obj.open()
                             }
                         }
-                        Button {
+                        GButton {
                             Layout.fillWidth: true
-                            flat: true
+                            large: true
                             text: qsTrId('id_restore_wallet')
                             font.capitalization: Font.MixedCase
                             onClicked: {

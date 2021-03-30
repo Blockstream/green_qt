@@ -31,9 +31,10 @@ MainPage {
                 Layout.fillWidth: true
                 height: 1
             }
-            Button {
+            GButton {
                 text: qsTrId('id_blockstream_store')
                 highlighted: true
+                large: true
                 onClicked: Qt.openUrlExternally('https://store.blockstream.com/product-category/physical_storage/')
                 font.capitalization: Font.MixedCase
                 leftPadding: 18
@@ -236,18 +237,18 @@ MainPage {
                 }
             }
             RowLayout {
-                Button {
+                GButton {
                     visible: controller.network && !controller.wallet
                     icon.color: 'transparent'
                     icon.source: controller.network ? icons[controller.network.id] : ''
-                    flat: true
+                    large: true
                     text: qsTrId('id_login')
                     onClicked: controller.login()
                 }
-                Button {
+                GButton {
                     visible: controller.status === 'done'
                     text: qsTrId('id_go_to_wallet')
-                    flat: true
+                    large: true
                     onClicked: pushLocation(`/${controller.network.id}/${controller.wallet.id}`)
                 }
                 Item {

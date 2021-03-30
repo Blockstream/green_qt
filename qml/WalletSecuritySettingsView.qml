@@ -24,9 +24,9 @@ ColumnLayout {
                 text: qsTrId('id_enable_or_change_your_pin_to')
                 wrapMode: Label.WordWrap
             }
-            Button {
+            GButton {
                 Layout.alignment: Qt.AlignRight
-                flat: true
+                large: true
                 text: qsTrId('id_change_pin')
                 onClicked: change_pin_dialog.createObject(Window.window).open()
             }
@@ -135,8 +135,8 @@ ColumnLayout {
                 Layout.minimumWidth: 0
                 text: qsTrId('id_set_a_limit_to_spend_without')
             }
-            Button {
-                flat: true
+            GButton {
+                large: true
                 text: qsTrId('id_set_twofactor_threshold')
                 onClicked: set_twofactor_threshold_dialog.createObject(stack_view).open()
                 Layout.alignment: Qt.AlignRight
@@ -153,9 +153,9 @@ ColumnLayout {
                 text: qsTrId('id_customize_2fa_expiration_of')
                 wrapMode: Label.WordWrap
             }
-            Button {
+            GButton {
                 Layout.alignment: Qt.AlignRight
-                flat: true
+                large: true
                 text: qsTrId('id_set_2fa_expiry')
                 onClicked: two_factor_auth_expiry_dialog.createObject(stack_view).open()
             }
@@ -171,8 +171,8 @@ ColumnLayout {
                 text: wallet.locked ? qsTrId('wallet locked for %1 days').arg(wallet.config.twofactor_reset ? wallet.config.twofactor_reset.days_remaining : 0) : qsTrId('id_start_a_2fa_reset_process_if')
                 wrapMode: Label.WordWrap
             }
-            Button {
-                flat: true
+            GButton {
+                large: true
                 Layout.alignment: Qt.AlignRight
                 enabled: wallet.config.any_enabled || false
                 text: wallet.locked ? qsTrId('id_cancel_twofactor_reset') : qsTrId('id_reset')

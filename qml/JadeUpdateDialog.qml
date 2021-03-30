@@ -244,9 +244,9 @@ AbstractDialog {
         }
         HSpacer {
         }
-        Button {
+        GButton {
             Layout.fillWidth: false
-            flat: true
+            large: true
             text: qsTrId('id_next')
             enabled: button_group.checkedButton
             visible: stack_view.currentItem === select_view

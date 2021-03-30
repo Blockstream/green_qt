@@ -51,13 +51,14 @@ Item {
                     font.styleName: 'Medium'
                     Layout.fillWidth: true
                 }
-                Button {
+                GButton {
                     text: qsTrId('id_create_new_wallet')
                     highlighted: true
+                    large: true
                     onClicked: pushLocation(`/${network}/signup`)
                 }
-                Button {
-                    flat: true
+                GButton {
+                    large: true
                     text: qsTrId('id_restore_green_wallet')
                     onClicked: pushLocation(restore_dialog.location)
                 }
@@ -108,15 +109,22 @@ Item {
                                 color: Qt.rgba(1, 1, 1, grid_delegate.hovered ? 0.05 : 0.01)
                                 radius: 4
                             }
-                            contentItem: ColumnLayout {
-                                Button {
-                                    flat: true
-                                    text: ('Logout')
-                                    onClicked: wallet.disconnect()
-                                }
-                                Button {
-                                    text: 'Cancel'
-                                    onClicked: flipable.flipped = false
+                            contentItem: Item {
+                                RowLayout {
+                                    anchors.left: parent.left
+                                    anchors.right: parent.right
+                                    anchors.bottom: parent.bottom
+                                    spacing: constants.p2
+                                    GButton {
+                                        Layout.fillWidth: true
+                                        text: qsTrId('id_logout')
+                                        onClicked: wallet.disconnect()
+                                    }
+                                    GButton {
+                                        Layout.fillWidth: true
+                                        text: qsTrId('id_cancel')
+                                        onClicked: flipable.flipped = false
+                                    }
                                 }
                             }
                         }
@@ -179,6 +187,14 @@ Item {
                 Layout.fillHeight: true
                 Layout.fillWidth: true
                 title: qsTrId('id_all_wallets')
+                background: Item {
+                    Text {
+                        visible: wallet_list_view.count===0
+                        text: qsTrId('id_looks_like_you_havent_used_a');
+                        color: 'white'
+                        anchors.centerIn: parent
+                    }
+                }
                 contentItem: Item {
                     clip: true
                     ListView {

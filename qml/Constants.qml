@@ -27,9 +27,13 @@ QtObject {
     // paddings
     property int p0: 0
     property int p1: 12
-    property int p2: 18
+    property int p2: 16
     property int p3: 24
+    property int p4: 32
 
     // spacings
     property int s1: 12
+
+    // urls
+    property string supportUrl: "https://docs.blockstream.com/green/support.html"
 }

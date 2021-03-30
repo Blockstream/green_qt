@@ -34,9 +34,7 @@ MenuBar {
 
         Action {
             text: qsTrId('id_support')
-            onTriggered: {
-                Qt.openUrlExternally("https://docs.blockstream.com/green/support.html")
-            }
+            onTriggered: Qt.openUrlExternally(constants.supportUrl)
         }
     }
 }

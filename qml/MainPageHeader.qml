@@ -5,5 +5,5 @@ Pane {
     topPadding: 24
     leftPadding: 24
     rightPadding: 24
-    background: Item {}
+    background: null
 }

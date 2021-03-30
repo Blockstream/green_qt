@@ -19,13 +19,13 @@ WalletDialog {
     }
     footer: DialogFooter {
          HSpacer {}
-         Button {
-             flat: true
+         GButton {
+             large: true
              text: qsTrId('id_cancel')
              onClicked: dialog.reject()
          }
-         Button {
-             flat: true
+         GButton {
+             large: true
              text: qsTrId('id_ok')
              onClicked: dialog.accept()
          }

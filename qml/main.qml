@@ -205,9 +205,7 @@ ApplicationWindow {
                 }
                 Action {
                     text: qsTrId('id_support')
-                    onTriggered: {
-                        Qt.openUrlExternally("https://docs.blockstream.com/green/support.html")
-                    }
+                    onTriggered: Qt.openUrlExternally(constants.supportUrl)
                 }
             }
         }
@@ -485,9 +483,10 @@ ApplicationWindow {
                     Item {
                         Layout.fillWidth: true
                     }
-                    Button {
+                    GButton {
                         enabled: confirm_field.text === wallet.name
-                        flat: true
+                        large: true
+                        highlighted: true
                         text: qsTrId('id_remove')
                         onClicked: accept()
                     }

@@ -42,10 +42,7 @@ ColumnLayout {
                 text: qsTrId('id_show_bitcoin_amounts_in')
             }
             ComboBox {
-                //Layout.fillWidth: true
-                //Layout.mini
                 flat: true
-//                width: 200
                 property var units: ['BTC', 'mBTC', '\u00B5BTC', 'bits', 'sats']
                 model: units.map(unit => ({
                     text: wallet.network.liquid ? `L-${unit}` : unit,

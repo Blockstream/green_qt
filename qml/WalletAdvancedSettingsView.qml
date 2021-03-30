@@ -14,8 +14,8 @@ ColumnLayout {
         title: 'PGP'
         description: qsTrId('id_add_a_pgp_public_key_to_receive')
 
-        Button {
-            flat: true
+        GButton {
+            large: true
             Layout.alignment: Qt.AlignRight
             text: qsTrId('id_pgp_key')
         }

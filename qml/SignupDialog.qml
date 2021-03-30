@@ -23,6 +23,7 @@ AbstractDialog {
             if (ready) pushLocation(`/${controller.network.id}/${controller.wallet.id}`)
         }
     }
+
     Connections {
         target: controller.wallet ? controller.wallet.session : null
         function onActivityCreated(activity) {
@@ -56,9 +57,9 @@ AbstractDialog {
         HSpacer {}
         Repeater {
             model: stack_view.currentItem.actions
-            Button {
+            GButton {
                 action: modelData
-                flat: true
+                large: true
             }
         }
     }

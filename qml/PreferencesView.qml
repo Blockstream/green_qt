@@ -16,10 +16,11 @@ MainPage {
                 font.styleName: 'Medium'
             }
             HSpacer {}
-            Button {
-                text: 'id_support'
-                opacity: 0
-                flat: true
+            GButton {
+                text: qsTrId('id_support')
+                large: true
+                highlighted: true
+                onClicked: Qt.openUrlExternally(constants.supportUrl)
             }
         }
     }

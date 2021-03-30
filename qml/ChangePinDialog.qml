@@ -58,7 +58,6 @@ WalletDialog {
                 highlighted: true
                 large: true
                 enabled: pin_view.accept && pin_view.pin.valid
-                flat: true
                 text: qsTrId('id_change_pin')
                 onClicked: accept()
             }

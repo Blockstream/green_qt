@@ -6,11 +6,11 @@ Button {
     property bool large: false
 
     id: self
-    font.pixelSize: self.large ? 16 : 12
+    font.pixelSize: self.large ? 14 : 12
     font.bold: true
-    padding: self.large ? 20 : 10
-    leftPadding: self.large ? 40 : 20
-    rightPadding: self.large ? 40 : 20
+    padding: self.large ? 16 : 12
+    leftPadding: self.large ? 20 : 15
+    rightPadding: self.large ? 20 : 15
     background: Rectangle {
         id: background
         radius: 4

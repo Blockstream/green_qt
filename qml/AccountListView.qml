@@ -78,25 +78,25 @@ ListView {
                 spacing: 10
                 Label {
                     text: formatAmount(account.balance)
-                    font.pixelSize: 18
+                    font.pixelSize: 14
                     font.styleName: 'Regular'
                 }
                 Label {
-                    font.pixelSize: 18
+                    font.pixelSize: 14
                     text: '≈ ' + formatFiat(account.balance)
                     font.styleName: 'Regular'
                 }
             }
             Collapsible {
+                Layout.fillWidth: true
                 Layout.alignment: Qt.AlignRight
                 collapsed: !highlighted
-                Row {
+                RowLayout {
+                    anchors.left: parent.left
+                    anchors.right: parent.right
                     spacing: 8
-//                    MouseArea {
-//                        hoverEnabled: account.wallet.network.liquid && account.balance === 0
-//                        width: send_button.width
-//                        height: send_button.height
                     Button {
+                        Layout.fillWidth: true
                         id: send_button
                         flat: true
                         enabled: !wallet.locked && account.balance > 0
@@ -110,9 +110,8 @@ ListView {
                         ToolTip.text: qsTrId('id_insufficient_lbtc_to_send_a')
                         ToolTip.visible: hovered && !enabled
                     }
-//                    }
-
                     Button {
+                        Layout.fillWidth: true
                         flat: true
                         enabled: !wallet.locked
                         icon.source: 'qrc:/svg/receive.svg'

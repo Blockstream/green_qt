@@ -23,8 +23,8 @@ WalletDialog {
         HSpacer {}
         Repeater {
             model: stack_view.currentItem ? stack_view.currentItem.actions : []
-            Button {
-                flat: true
+            GButton {
+                large: true
                 action: modelData
             }
         }

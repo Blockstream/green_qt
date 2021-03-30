@@ -96,7 +96,7 @@ Page {
             id: tool_button
             text: qsTrId('⋮')
             onClicked: menu.open()
-            Layout.rightMargin: 16
+            Layout.rightMargin: constants.p2
             Menu {
                 id: menu
                 MenuItem {
@@ -124,18 +124,24 @@ Page {
     ScrollView {
         id: scroll_view
         anchors.fill: parent
-        anchors.leftMargin: 16
+        anchors.leftMargin: constants.p2
         clip: true
 
         ColumnLayout {
-            width: scroll_view.width - 16
-            spacing: 16
+            width: scroll_view.width - constants.p2
+            spacing: constants.p2
 
             SectionLabel {
                 text: qsTrId('id_received_on')
             }
             CopyableLabel {
                 text: formatDateTime(transaction.data.created_at)
+            }
+            SectionLabel {
+                text: qsTrId('id_transaction_id')
+            }
+            CopyableLabel {
+                text: transaction.data.txhash
             }
             SectionLabel {
                 text: qsTrId('id_transaction_status')
@@ -163,8 +169,9 @@ Page {
             }
             TextArea {
                 id: memo_edit
+                Layout.fillWidth: true
                 placeholderText: qsTrId('id_add_a_note_only_you_can_see_it')
-                width: scroll_view.width - 16
+                width: scroll_view.width - constants.p2
                 text: transaction.data.memo
                 selectByMouse: true
                 wrapMode: TextEdit.Wrap
@@ -174,28 +181,21 @@ Page {
                     }
                 }
             }
-
-            Row {
+            RowLayout {
                 Layout.alignment: Qt.AlignRight
-                Button {
-                    flat: true
+                spacing: constants.p2
+                GButton {
+                    large: true
                     text: qsTrId('id_cancel')
                     enabled: memo_edit.text !== transaction.data.memo
                     onClicked: memo_edit.text = transaction.data.memo
                 }
-                Button {
-                    flat: true
+                GButton {
+                    large: true
                     text: qsTrId('id_save')
                     enabled: memo_edit.text !== transaction.data.memo
                     onClicked: transaction.updateMemo(memo_edit.text)
                 }
-            }
-            SectionLabel {
-                text: qsTrId('id_transaction_id')
-            }
-            CopyableLabel {
-                text: transaction.data.txhash
-                Layout.bottomMargin: 32
             }
         }
     }

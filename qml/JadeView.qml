@@ -40,9 +40,10 @@ MainPage {
                 Layout.fillWidth: true
                 height: 1
             }
-            Button {
+            GButton {
                 text: qsTrId('id_get_jade')
                 highlighted: true
+                large: true
                 onClicked: Qt.openUrlExternally('https://store.blockstream.com/product/blockstream-jade/')
             }
         }
@@ -169,8 +170,8 @@ MainPage {
                                 Label {
                                     text: device.version
                                 }
-                                Button {
-                                    flat: true
+                                GButton {
+                                    large: true
                                     text: qsTrId('id_update')
                                     onClicked: update_dialog.createObject(window, { device }).open()
                                 }
@@ -250,14 +251,14 @@ MainPage {
             BusyIndicator {
                 visible: controller.wallet && controller.wallet.authentication !== Wallet.Authenticated
             }
-            Button {
-                flat: true
+            GButton {
+                large: true
                 visible: !controller.wallet
                 text: device.versionInfo.JADE_HAS_PIN ? qsTrId('id_login') : qsTrId('id_setup_jade')
                 onClicked: controller.login()
             }
-            Button {
-                flat: true
+            GButton {
+                large: true
                 visible: controller.wallet && controller.wallet.authentication === Wallet.Authenticated
                 text: qsTrId('id_go_to_wallet')
                 onClicked: pushLocation(`/${self.network.id}/${controller.wallet.id}`)

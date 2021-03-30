@@ -92,10 +92,10 @@ AbstractDialog {
         HSpacer {}
         Repeater {
             model: stack_view.currentItem.actions
-            Button {
+            GButton {
                 focus: modelData.focus || false
                 action: modelData
-                flat: true
+                large: true
             }
         }
     }

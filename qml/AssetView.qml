@@ -8,10 +8,10 @@ import QtQuick.Layouts 1.12
 Page {
     property Balance balance
 
-    background: Item {}
+    background: null
 
     header: RowLayout {
-        spacing: 16
+        spacing: constants.p2
         ToolButton {
             id: back_arrow_button
             icon.source: 'qrc:/svg/arrow_left.svg'
@@ -27,9 +27,8 @@ Page {
             Layout.fillWidth: true
         }
 
-        Button {
-            Layout.rightMargin: 32
-            flat: true
+        GButton {
+            Layout.rightMargin: constants.p1
             text: qsTrId('id_view_in_explorer')
             onClicked: balance.asset.openInExplorer()
         }
@@ -38,15 +37,15 @@ Page {
     ScrollView {
         id: scroll_view
         anchors.fill: parent
-        anchors.leftMargin: 16
+        anchors.leftMargin: constants.p2
         clip: true
 
         ColumnLayout {
-            width: scroll_view.width - 16
-            spacing: 16
+            width: scroll_view.width - constants.p2
+            spacing: constants.p2
 
             Row {
-                spacing: 16
+                spacing: constants.p2
                 AssetIcon {
                     id: icon
                     asset: balance.asset
