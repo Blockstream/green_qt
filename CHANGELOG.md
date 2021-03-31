@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+
+### Changed
+
+### Fixed
+
+## [0.1.2] - 2021-04-01
+### Added
 - Bundle Green as installer for Windows
 - Jade Over-The-Air Update support
 - Support shared build in windows
