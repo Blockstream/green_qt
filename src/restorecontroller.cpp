@@ -83,7 +83,6 @@ void RestoreController::accept()
 
 void RestoreController::update()
 {
-    qDebug() << Q_FUNC_INFO;
     auto check = [this] {
         if (!m_network) return false;
         if (m_mnemonic.length() == 27) {
@@ -116,7 +115,6 @@ void RestoreController::update()
     }
 
     if (m_active && !m_wallet) {
-        qDebug() << m_network->id() << m_mnemonic << m_password;
         qDebug() << "setup wallet and activate session";
 
         m_wallet = WalletManager::instance()->createWallet();
