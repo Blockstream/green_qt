@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support in-place renaming in wallet title view
 
 ### Changed
+- Do not ask for wallet name on signup and restore
 - Do not auto complete words in restore dialog
 - Complete word on tab press if it matches just one suggestion
 

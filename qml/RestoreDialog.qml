@@ -16,7 +16,6 @@ AbstractDialog {
         network: self.network
         mnemonic: mnemonic_page.mnemonic
         password: password_field.text
-        name: name_field.text
         pin: pin_view.pin.value
 
     }
@@ -171,27 +170,9 @@ AbstractDialog {
                     clear();
                     ToolTip.show(qsTrId('id_pins_do_not_match_please_try'), 1000);
                 } else {
-                    stack_view.push(name_page)
+                    onTriggered: controller.accept()
                 }
             }
-        }
-    }
-
-    property Item name_page: ColumnLayout {
-        property string title: qsTrId('id_set_wallet_name')
-        property list<Action> actions: [
-            Action {
-                text: qsTrId('id_restore')
-                onTriggered: controller.accept()
-            }
-        ]
-
-        TextField {
-            id: name_field
-            Layout.fillWidth: true
-            Layout.minimumWidth: 300
-            font.pixelSize: 16
-            placeholderText: controller.defaultName
         }
     }
 
