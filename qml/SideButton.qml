@@ -50,6 +50,11 @@ Button {
             visible: !Settings.collapseSideBar
             text: self.text
             Layout.fillWidth: true
+            Layout.maximumWidth: 200
+            elide: Label.ElideRight
+            ToolTip.text: self.text
+            ToolTip.visible: truncated && self.hovered
+            ToolTip.delay: 1000
             rightPadding: 16
             font.styleName: 'Regular'
         }
