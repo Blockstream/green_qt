@@ -58,26 +58,30 @@ Button {
             rightPadding: 16
             font.styleName: 'Regular'
         }
-        ProgressBar {
+        StackLayout {
+            Layout.fillHeight: false
+            Layout.fillWidth: false
             visible: !Settings.collapseSideBar
-            indeterminate: self.busy
-            opacity: self.busy ? 1 : 0
-            Layout.minimumWidth: 16
-            Layout.maximumWidth: 16
-        }
-        Label {
-            visible: !Settings.collapseSideBar
-            opacity: count > 0
-            text: count
-            color: '#444444'
-            font.pixelSize: 12
-            font.styleName: 'Medium'
-            horizontalAlignment: Label.AlignHCenter
-            leftPadding: 6
-            rightPadding: 6
-            background: Rectangle {
-                color: 'white'
-                radius: 4
+            currentIndex: self.count === 0 ? 0 : 1
+            BusyIndicator {
+                opacity: self.busy ? 1 : 0
+                padding: 0
+                Layout.minimumWidth: 16
+                Layout.maximumWidth: 16
+                Layout.maximumHeight: 16
+            }
+            Label {
+                text: count
+                color: '#444444'
+                font.pixelSize: 12
+                font.styleName: 'Medium'
+                horizontalAlignment: Label.AlignHCenter
+                leftPadding: 6
+                rightPadding: 6
+                background: Rectangle {
+                    color: 'white'
+                    radius: 4
+                }
             }
         }
     }
