@@ -40,7 +40,6 @@ ControllerDialog {
         ]
         SectionLabel { text: qsTrId('id_recovery_mnemonic') }
         RowLayout {
-            Layout.fillWidth: true
             MnemonicView {
                 Layout.fillHeight: false
                 Layout.alignment: Qt.AlignTop

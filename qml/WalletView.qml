@@ -83,7 +83,7 @@ MainPage {
             }
             Loader {
                 visible: wallet.device
-                sourceComponent:  DeviceImage {
+                sourceComponent: DeviceImage {
                     device: wallet.device
                     sourceSize.height: 32
                     MouseArea {
