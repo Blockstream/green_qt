@@ -14,7 +14,6 @@ AbstractDialog {
         id: controller
         network: self.network
         pin: pin_view.pin.value
-        name: name_field.text.trim()
     }
 
     Connections {
@@ -50,7 +49,7 @@ AbstractDialog {
             }
         }
         PageIndicator {
-            count: 7
+            count: 6
             currentIndex: stack_view.depth - 1
             width: 128
         }
@@ -131,38 +130,9 @@ AbstractDialog {
             onPinChanged: {
                 if (!pin.valid) return;
                 if (pin_view.pin.value !== pin.value) return clear();
-                stack_view.push(name_page);
+                controller.active = true
+                stack_view.push(creating_page)
             }
-        }
-        HSpacer {
-        }
-    }
-
-    property Item name_page: ColumnLayout {
-        property list<Action> actions: [
-            Action {
-                text: qsTrId('id_create')
-                onTriggered: {
-                    controller.active = true
-                    stack_view.push(creating_page)
-                }
-            }
-        ]
-
-        implicitWidth: name_field.width
-        implicitHeight: name_field.implicitHeight
-
-        Label {
-            Layout.alignment: Qt.AlignHCenter
-            text: qsTrId('id_set_wallet_name')
-            font.pixelSize: 20
-        }
-        TextField {
-            Layout.alignment: Qt.AlignHCenter
-            Layout.minimumWidth: 300
-            id: name_field
-            font.pixelSize: 16
-            placeholderText: controller.defaultName
         }
         HSpacer {
         }
