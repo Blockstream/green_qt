@@ -33,6 +33,13 @@ MnemonicEditorController::MnemonicEditorController(QObject *parent) : QObject(pa
     m_words.at(0)->setFocus(true);
 }
 
+void MnemonicEditorController::setAutoComplete(bool auto_complete)
+{
+    if (m_auto_complete == auto_complete) return;
+    m_auto_complete = auto_complete;
+    emit autoCompleteChanged(m_auto_complete);
+}
+
 QQmlListProperty<Word> MnemonicEditorController::words() {
     return { this, &m_words };
 }
