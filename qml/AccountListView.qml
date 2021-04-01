@@ -67,14 +67,32 @@ ListView {
                     radius: 4
                 }
             }
-            Label {
+            EditableLabel {
+                id: name_field
                 Layout.fillWidth: true
                 font.styleName: 'Medium'
                 font.pixelSize: 18
-                elide: Text.ElideRight
+                leftInset: -8
+                rightInset: -8
                 text: accountName(account)
-                ToolTip.text: accountName(account)
-                ToolTip.visible: truncated && hovered
+                enabled: delegate.ListView.isCurrentItem && account.name !== '' && !delegate.account.wallet.locked
+                onEdited: {
+                    account.rename(text, activeFocus)
+                }
+
+//                onTextChanged: {
+//                    account.rename(text, activeFocus)
+//                    if (!activeFocus) cursorPosition = 0
+//                }
+//                onActiveFocusChanged: {
+//                    if (activeFocus) {
+//                        account_list_view.currentIndex = index
+//                        account_list_view.clicked(account)
+//                        name_field.forceActiveFocus(Qt.MouseFocusReason)
+//                    }
+//                    account.rename(text, activeFocus)
+//                    if (!activeFocus) cursorPosition = 0
+//                }
             }
             RowLayout {
                 spacing: 10
