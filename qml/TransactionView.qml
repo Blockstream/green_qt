@@ -74,7 +74,7 @@ Page {
         }
     }
 
-    background: Item {}
+    background: null
 
     header: RowLayout {
         ToolButton {

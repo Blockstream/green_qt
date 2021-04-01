@@ -18,7 +18,7 @@ ItemDelegate {
     rightPadding: 0
     topPadding: 0
     bottomPadding: 0
-    background: Item {}
+    background: null
 
     spacing: 8
 

@@ -4,7 +4,7 @@ import QtQuick.Layouts 1.12
 
 Pane {
     default property alias contentItemData: row_layout.data
-    background: Item {}
+    background: null
     leftPadding: constants.p3
     rightPadding: constants.p3
     topPadding: constants.p3

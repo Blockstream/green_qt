@@ -189,8 +189,7 @@ MainPage {
             Pane {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                background: Item {
-                }
+                background: null
                 contentItem: StackLayout {
                     currentIndex: devices_list_view.currentIndex
                     Repeater {
@@ -211,7 +210,7 @@ MainPage {
         padding: 16
         header: Pane {
             padding: 16
-            background: Item {}
+            background: null
             contentItem: RowLayout {
                 spacing: 8
                 Image {

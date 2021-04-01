@@ -56,7 +56,7 @@ StackView {
             onHeightChanged: transaction_list_view.positionViewAtBeginning()
             width: transaction_list_view.width-16
             property bool showAllAssets: false
-            background: Item {}
+            background: null
             padding: 0
             contentItem: ColumnLayout {
                 spacing: 8

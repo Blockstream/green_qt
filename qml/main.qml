@@ -477,8 +477,7 @@ ApplicationWindow {
             footer: Pane {
                 rightPadding: 16
                 bottomPadding: 8
-                background: Item {
-                }
+                background: null
                 contentItem: RowLayout {
                     HSpacer {
                     }
