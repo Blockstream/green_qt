@@ -84,12 +84,15 @@ ApplicationWindow {
             if (currentWallet.device) {
                 parts.push(currentWallet.device.name);
             } else {
-                parts.push(currentWallet.name);
+                parts.push(font_metrics.elidedText(currentWallet.name, Qt.ElideRight, window.width / 3));
             }
-            if (currentAccount) parts.push(accountName(currentAccount));
+            if (currentAccount) parts.push(font_metrics.elidedText(accountName(currentAccount), Qt.ElideRight, window.width / 3));
         }
         parts.push('Blockstream Green');
         return parts.join(' - ');
+    }
+    FontMetrics {
+        id: font_metrics
     }
 
     header: MenuBar {

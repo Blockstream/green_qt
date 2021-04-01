@@ -37,7 +37,7 @@ MainPage {
         }
     }
     bottomPadding: 24
-    contentItem: ColumnLayout {       
+    contentItem: ColumnLayout {
         Image {
             Layout.topMargin: 24
             Layout.bottomMargin: 24
@@ -80,6 +80,7 @@ MainPage {
                             Button {
                                 readonly property Wallet wallet: modelData
                                 Layout.alignment: Qt.AlignLeft
+                                Layout.maximumWidth: parent.width
                                 spacing: 12
                                 icon.source: icons[wallet.network.id]
                                 icon.color: 'transparent'
