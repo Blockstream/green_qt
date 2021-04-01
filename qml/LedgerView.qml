@@ -27,9 +27,7 @@ MainPage {
                 font.pixelSize: 24
                 font.styleName: 'Medium'
             }
-            Item {
-                Layout.fillWidth: true
-                height: 1
+            HSpacer {
             }
             GButton {
                 text: qsTrId('id_blockstream_store')
@@ -46,9 +44,7 @@ MainPage {
         currentIndex: self.count === 0 ? 0 : 1
         ColumnLayout {
             spacing: 16
-            Item {
-                Layout.fillWidth: true
-                Layout.fillHeight: true
+            Spacer {
             }
             Flipable {
                 id: flipable
@@ -251,8 +247,7 @@ MainPage {
                     large: true
                     onClicked: pushLocation(`/${controller.network.id}/${controller.wallet.id}`)
                 }
-                Item {
-                    Layout.fillWidth: true
+                HSpacer {
                 }
             }
             ProgressBar {

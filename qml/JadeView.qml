@@ -36,9 +36,7 @@ MainPage {
                     radius: 4
                 }
             }
-            Item {
-                Layout.fillWidth: true
-                height: 1
+            HSpacer {
             }
             GButton {
                 text: qsTrId('id_get_jade')
@@ -52,9 +50,7 @@ MainPage {
         currentIndex: self.count === 0 ? 0 : 1
         ColumnLayout {
             spacing: 16
-            Item {
-                Layout.fillWidth: true
-                Layout.fillHeight: true
+            Spacer {
             }
             Image {
                 Layout.alignment: Qt.AlignHCenter
@@ -97,9 +93,7 @@ MainPage {
                     cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor
                 }
             }
-            Item {
-                Layout.fillWidth: true
-                Layout.fillHeight: true
+            Spacer {
             }
         }
 

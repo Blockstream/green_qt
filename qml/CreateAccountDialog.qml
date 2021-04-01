@@ -47,9 +47,7 @@ ControllerDialog {
                 Layout.fillWidth: true
                 mnemonic: handler.result.result.recovery_mnemonic.split(' ')
             }
-            Item {
-                Layout.fillWidth: true
-                Layout.fillHeight: true
+            Spacer {
             }
             QRCode {
                 Layout.fillWidth: false

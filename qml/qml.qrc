@@ -93,5 +93,6 @@
         <file>DialogLoader.qml</file>
         <file>ChooseNetworkDialog.qml</file>
         <file>GButton.qml</file>
+        <file>Spacer.qml</file>
     </qresource>
 </RCC>

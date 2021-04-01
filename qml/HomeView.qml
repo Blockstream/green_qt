@@ -26,9 +26,7 @@ MainPage {
                 font.pixelSize: 24
                 font.styleName: 'Medium'
             }
-            Item {
-                Layout.fillWidth: true
-                height: 1
+            HSpacer {
             }
             GButton {
                 text: qsTrId('id_support')
@@ -94,9 +92,7 @@ MainPage {
                     }
                 }
             }
-            Item {
-                Layout.fillWidth: true
-                Layout.fillHeight: true
+            Spacer {
             }
             ColumnLayout {
                 Layout.rightMargin: 16

@@ -49,15 +49,10 @@ AbstractDialog {
                 text: qsTrId("id_the_liquid_network_is_a_bitcoin")
             }
 
-            Item {
-                Layout.fillWidth: true
-                Layout.minimumWidth: 200
+            HSpacer {
             }
         }
-
-        Item {
-            Layout.fillWidth: true
-            Layout.fillHeight: true
+        Spacer {
         }
     }
 

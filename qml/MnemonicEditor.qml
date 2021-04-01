@@ -45,8 +45,7 @@ WizardPage {
                 text: qsTrId('id_password_protected')
                 onCheckedChanged: controller.password = checked
             }
-            Item {
-                Layout.fillWidth: true
+            HSpacer {
             }
             Repeater {
                 id: checksum

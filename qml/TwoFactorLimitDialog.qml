@@ -60,8 +60,7 @@ ControllerDialog {
                 padding: 10
                 Layout.fillWidth: true
             }
-            Item {
-                Layout.fillHeight: true
+            VSpacer {
             }
         }
     }

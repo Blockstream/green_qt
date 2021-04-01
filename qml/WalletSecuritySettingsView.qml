@@ -103,8 +103,7 @@ ColumnLayout {
                             font.pixelSize: 10
                         }
                     }
-                    Item {
-                        Layout.fillWidth: true
+                    HSpacer {
                     }
                     Switch {
                         Binding on checked {

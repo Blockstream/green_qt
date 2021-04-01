@@ -480,8 +480,7 @@ ApplicationWindow {
                 background: Item {
                 }
                 contentItem: RowLayout {
-                    Item {
-                        Layout.fillWidth: true
+                    HSpacer {
                     }
                     GButton {
                         enabled: confirm_field.text === wallet.name

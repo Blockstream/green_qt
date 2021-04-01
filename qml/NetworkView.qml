@@ -251,9 +251,7 @@ Item {
             Label {
                 text: wallet.device ? wallet.device.name : wallet.name
             }
-            Item {
-                Layout.fillWidth: true
-                height: 1
+            HSpacer {
             }
             Label {
                 visible: wallet.loginAttemptsRemaining === 0

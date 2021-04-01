@@ -87,9 +87,7 @@ WalletDialog {
                 onClicked: handler.request(method)
             }
         }
-        Item {
-            Layout.fillWidth: true
-            Layout.fillHeight: true
+        Spacer {
         }
     }
 

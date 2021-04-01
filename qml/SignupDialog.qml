@@ -113,9 +113,7 @@ AbstractDialog {
                 }
             }
         }
-        Item {
-            Layout.fillWidth: true
-            width: 1
+        HSpacer {
         }
     }
 
@@ -136,9 +134,7 @@ AbstractDialog {
                 stack_view.push(name_page);
             }
         }
-        Item {
-            Layout.fillWidth: true
-            width: 1
+        HSpacer {
         }
     }
 
@@ -168,9 +164,7 @@ AbstractDialog {
             font.pixelSize: 16
             placeholderText: controller.defaultName
         }
-        Item {
-            Layout.fillWidth: true
-            width: 1
+        HSpacer {
         }
     }
 
