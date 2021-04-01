@@ -30,6 +30,13 @@ Dialog {
             text: title
             font.pixelSize: 18
             font.styleName: 'Medium'
+            elide: Label.ElideRight
+            ToolTip.text: title
+            ToolTip.visible: truncated && mouse_area.containsMouse
+            background: MouseArea {
+                id: mouse_area
+                hoverEnabled: true
+            }
         }
         Loader {
             id: toolbar_loader

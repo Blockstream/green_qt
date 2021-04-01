@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Do not auto complete words in restore dialog
 
 ### Fixed
+- Elide dialog title and show tooltip with full title when truncated
 - During restore wallet use default name if no name is specified
 
 ## [0.1.2] - 2021-04-01
