@@ -26,7 +26,6 @@
         <file>SendDialog.qml</file>
         <file>ReceiveDialog.qml</file>
         <file>MnemonicEditor.qml</file>
-        <file>NetworkPage.qml</file>
         <file>WordField.qml</file>
         <file>StackViewPushAction.qml</file>
         <file>FeeComboBox.qml</file>
