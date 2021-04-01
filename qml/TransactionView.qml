@@ -121,10 +121,8 @@ Page {
         }
     }
 
-    ScrollView {
+    contentItem: ScrollView {
         id: scroll_view
-        anchors.fill: parent
-        anchors.leftMargin: constants.p2
         clip: true
 
         ColumnLayout {

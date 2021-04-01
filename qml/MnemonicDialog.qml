@@ -6,11 +6,12 @@ import QtQuick.Layouts 1.12
 
 WalletDialog {
     title: qsTrId('id_mnemonic')
-    Item {
-        implicitWidth: layout.implicitWidth
-        implicitHeight: layout.implicitHeight
-        StackLayout {
-            id: layout
+    contentItem: Pane {
+        background: MouseArea {
+            id: mouse_area
+            hoverEnabled: true
+        }
+        contentItem: StackLayout {
             currentIndex: qrcode_switch.checked ? 1 : 0
             MnemonicView {
                 mnemonic: wallet.mnemonic
@@ -21,11 +22,6 @@ WalletDialog {
                 implicitWidth: 200
                 text: wallet.mnemonic.join(' ')
             }
-        }
-        MouseArea {
-            id: mouse_area
-            anchors.fill: parent
-            hoverEnabled: true
         }
     }
 
@@ -50,5 +46,4 @@ WalletDialog {
             text: qsTrId('id_show_qr_code')
         }
     }
-
 }

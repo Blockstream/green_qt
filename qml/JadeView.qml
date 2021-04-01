@@ -87,8 +87,7 @@ MainPage {
                 textFormat: Text.RichText
                 color: 'white'
                 onLinkActivated: Qt.openUrlExternally(url)
-                MouseArea {
-                    anchors.fill: parent
+                background: MouseArea {
                     acceptedButtons: Qt.NoButton
                     cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor
                 }

@@ -32,9 +32,8 @@ ControllerDialog {
             onTriggered: controller.changeTwoFactorLimit(currency_combo.fiat, amount_field.text)
         }
 
-        GridLayout {
+        contentItem: GridLayout {
             columns: 2
-            anchors.fill: parent
 
             Label {
                 text: qsTrId('id_currency')

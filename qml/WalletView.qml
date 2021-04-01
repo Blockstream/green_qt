@@ -147,11 +147,9 @@ MainPage {
                 leftPadding: 40
                 wrapMode: Label.WordWrap
                 Layout.fillWidth: true
-                Rectangle {
-                    anchors.fill: parent
+                background: Rectangle {
                     color: 'white'
                     opacity: 0.05
-                    z: -1
                 }
             }
             Label {
@@ -177,11 +175,9 @@ MainPage {
                     x: 8
                     source: 'qrc:/svg/twofactor.svg'
                 }
-                Rectangle {
-                    anchors.fill: parent
+                background: Rectangle {
                     color: 'white'
                     opacity: 0.05
-                    z: -1
                 }
             }
         }
