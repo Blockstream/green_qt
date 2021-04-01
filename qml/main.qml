@@ -190,7 +190,7 @@ ApplicationWindow {
                 }
                 MenuItem {
                     text: qsTrId('id_rename_account')
-                    enabled: currentWallet && currentWallet.ready && currentAccount && !currentAccount.mainAccount
+                    enabled: currentWallet && currentWallet.ready && !currentWallet.locked && currentAccount && !currentAccount.mainAccount
                     onClicked: rename_account_dialog.createObject(window, { account: currentAccount }).open()
                 }
             }

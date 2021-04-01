@@ -118,6 +118,22 @@ void Account::reload()
     handler->exec();
 }
 
+void Account::rename(QString name, bool active_focus)
+{
+    if (pointer() == 0) return;
+    if (!active_focus) name = name.trimmed();
+    if (name.isEmpty() && !active_focus) {
+        emit jsonChanged();
+        return;
+    }
+    if (this->name() == name) return;
+    if (!active_focus) {
+        int res = GA_rename_subaccount(wallet()->session()->m_session, pointer(), name.toUtf8().constData());
+        Q_ASSERT(res == GA_OK);
+        wallet()->reload();
+    }
+}
+
 Transaction* Account::getOrCreateTransaction(const QJsonObject& data)
 {
     auto hash = data.value("txhash").toString();

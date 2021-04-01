@@ -48,6 +48,7 @@ signals:
     void notificationHandled(const QJsonObject& notification);
 public slots:
     void reload();
+    void rename(QString name, bool active_focus);
 private:
     Wallet* const m_wallet;
     int m_pointer{-1};
