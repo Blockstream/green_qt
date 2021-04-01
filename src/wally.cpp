@@ -166,16 +166,17 @@ bool Word::setText(QString text) {
         for (QString word : g_wordlist) {
             if (word.startsWith(text)) {
                 suggestions.append(word);
-                //if (suggestions.length() == 5) break;
             }
         }
     }
     // Handle auto complete only if match is unique
     // and if new text increments current text so that
     // backspace works.
-    if (suggestions.length() == 1 && !m_text.startsWith(text)) {
-        text = suggestions.at(0);
-        suggestions.clear();
+    if (m_controller->autoComplete()) {
+        if (suggestions.length() == 1 && !m_text.startsWith(text)) {
+            text = suggestions.at(0);
+            suggestions.clear();
+        }
     }
     if (m_suggestions != suggestions) {
         m_suggestions = suggestions;
