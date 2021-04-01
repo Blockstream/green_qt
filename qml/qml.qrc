@@ -14,7 +14,7 @@
         <file>DebugActiveFocus.qml</file>
         <file>JadeView.qml</file>
         <file>MainMenuBar.qml</file>
-        <file>RestoreWallet.qml</file>
+        <file>RestoreDialog.qml</file>
         <file>DeviceView.qml</file>
         <file>TransactionView.qml</file>
         <file>CreateAccountDialog.qml</file>

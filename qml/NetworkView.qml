@@ -228,7 +228,7 @@ Item {
         readonly property string location: `/${network}/restore`
         id: restore_dialog
         active: matchesLocation(location)
-        dialog: RestoreWallet {
+        dialog: RestoreDialog {
             network: NetworkManager.network(self.network)
             onRejected: popLocation()
         }
