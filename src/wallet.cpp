@@ -11,6 +11,7 @@
 #include "handlers/loginhandler.h"
 #include "registeruserhandler.h"
 #include "session.h"
+#include "walletmanager.h"
 
 #include <type_traits>
 
@@ -150,7 +151,6 @@ void Wallet::setNetwork(Network* network)
 
 void Wallet::setName(const QString& name)
 {
-    Q_ASSERT(m_name.isEmpty());
     m_name = name;
     emit nameChanged(m_name);
 }
@@ -393,6 +393,21 @@ void Wallet::refreshAssets(bool refresh)
         activity->finish();
         activity->deleteLater();
     });
+}
+
+void Wallet::rename(QString name, bool active_focus)
+{
+    if (!active_focus) name = name.trimmed();
+    if (name.isEmpty() && !active_focus) {
+        if (m_network) {
+            name = WalletManager::instance()->newWalletName(m_network);
+        } else {
+            name = "My Wallet";
+        }
+    }
+    if (m_name == name) return;
+    setName(name);
+    if (!m_name.isEmpty()) save();
 }
 
 void Wallet::updateConfig()

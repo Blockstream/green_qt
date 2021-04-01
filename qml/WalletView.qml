@@ -76,10 +76,27 @@ MainPage {
                 sourceSize.width: 32
                 source: icons[wallet.network.id]
             }
-            Label {
-                text: wallet.device ? wallet.device.name : wallet.name
-                font.pixelSize: 24
-                font.styleName: 'Medium'
+            Loader {
+                active: !wallet.device
+                Layout.fillWidth: true
+                sourceComponent: EditableLabel {
+                    leftPadding: 8
+                    rightPadding: 8
+                    font.pixelSize: 24
+                    font.styleName: 'Medium'
+                    text: wallet.name
+                    onEdited: {
+                        wallet.rename(text, activeFocus)
+                    }
+                }
+            }
+            Loader {
+                active: wallet.device
+                sourceComponent: Label {
+                    text: wallet.device.name
+                    font.pixelSize: 24
+                    font.styleName: 'Medium'
+                }
             }
             Loader {
                 visible: wallet.device
@@ -99,7 +116,9 @@ MainPage {
                     }
                 }
             }
-            HSpacer {}
+            HSpacer {
+                visible: wallet.device
+            }
             ToolButton {
                 visible: (wallet.events && !!wallet.events.twofactor_reset && wallet.events.twofactor_reset.is_active) || !fiatRateAvailable
                 icon.source: 'qrc:/svg/notifications_2.svg'

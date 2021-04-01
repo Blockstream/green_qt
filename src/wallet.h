@@ -125,6 +125,8 @@ public slots:
     void updateSettings();
 
     void refreshAssets(bool refresh);
+
+    void rename(QString name, bool active_focus);
 signals:
     void readyChanged(bool ready);
     void sessionChanged(Session* session);

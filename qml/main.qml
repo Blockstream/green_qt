@@ -250,6 +250,7 @@ ApplicationWindow {
         spacing: 0
         Page {
             id: side_bar
+            focusPolicy: Qt.ClickFocus
             Layout.fillHeight: true
             topPadding: 8
             bottomPadding: 8
