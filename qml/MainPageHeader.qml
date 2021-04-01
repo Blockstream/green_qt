@@ -6,4 +6,5 @@ Pane {
     leftPadding: 24
     rightPadding: 24
     background: null
+    focusPolicy: Qt.ClickFocus
 }

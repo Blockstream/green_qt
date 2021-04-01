@@ -205,6 +205,7 @@ MainPage {
     }
 
     contentItem: SplitView {
+        focusPolicy: Qt.ClickFocus
         handle: Item {
             implicitWidth: 20
             implicitHeight: parent.height
@@ -220,6 +221,7 @@ MainPage {
         }
         StackView {
             id: stack_view
+            focusPolicy: Qt.ClickFocus
             SplitView.fillWidth: true
             SplitView.minimumWidth: self.width / 2
             initialItem: Item {}

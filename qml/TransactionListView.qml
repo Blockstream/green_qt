@@ -22,7 +22,11 @@ ListView {
     }
 
     ScrollIndicator.vertical: ScrollIndicator { }
-
+    MouseArea {
+        anchors.fill: parent
+        onClicked: parent.forceActiveFocus(Qt.MouseFocusReason)
+        z: -1
+    }
     BusyIndicator {
         width: 32
         height: 32

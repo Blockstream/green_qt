@@ -13,6 +13,7 @@ ItemDelegate {
     property var tx: transaction.data
     property int confirmations: transactionConfirmations(transaction)
 
+    focusPolicy: Qt.ClickFocus
     hoverEnabled: true
     leftPadding: 0
     rightPadding: 0

@@ -11,6 +11,8 @@ ListView {
     spacing: 8
     delegate: ItemDelegate {
         id: delegate
+        focusPolicy: Qt.ClickFocus
+
         property Account account: modelData
 
         onClicked: {
@@ -126,4 +128,9 @@ ListView {
     }
 
     ScrollIndicator.vertical: ScrollIndicator { }
+    MouseArea {
+        anchors.fill: parent
+        onClicked: parent.forceActiveFocus(Qt.MouseFocusReason)
+        z: -1
+    }
 }
