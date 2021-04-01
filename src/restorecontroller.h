@@ -34,6 +34,7 @@ public:
     void setPassword(const QString& password);
     bool isValid() const { return m_valid; }
     QString defaultName() const { return m_default_name; }
+    void setDefaultName(const QString& default_name);
     QString name() const { return m_name; }
     void setName(const QString& name);
     Wallet* wallet() const { return m_wallet; }

@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 ### Fixed
+- During restore wallet use default name if no name is specified
 
 ## [0.1.2] - 2021-04-01
 ### Added
