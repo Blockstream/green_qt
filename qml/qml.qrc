@@ -7,7 +7,6 @@
         <file>ReceiveView.qml</file>
         <file>DebugRectangle.qml</file>
         <file>SendView.qml</file>
-        <file>Amount.qml</file>
         <file>TransactionDelegate.qml</file>
         <file>SignupDialog.qml</file>
         <file>PinField.qml</file>
