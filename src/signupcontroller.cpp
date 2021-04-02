@@ -1,6 +1,8 @@
 #include "ga.h"
+#include "handlers/createaccounthandler.h"
 #include "handlers/connecthandler.h"
 #include "handlers/loginhandler.h"
+#include "handlers/updateaccounthandler.h"
 #include "json.h"
 #include "registeruserhandler.h"
 #include "signupcontroller.h"
@@ -31,7 +33,6 @@ void SignupController::setNetwork(Network *network)
 
 void SignupController::setType(const QString& type)
 {
-    Q_ASSERT(type.isEmpty() || type == "amp");
     if (m_type == type) return;
     m_type = type;
     emit typeChanged(m_type);
@@ -54,6 +55,8 @@ Wallet *SignupController::wallet() const
 
 void SignupController::update()
 {
+    if (m_wallet && m_wallet->ready()) return;
+
     if (!m_active) return;
     if (m_pin.isEmpty()) return;
 
@@ -91,7 +94,19 @@ void SignupController::update()
 
         if (m_type == "amp") {
             Q_ASSERT(m_network->isLiquid());
+            auto create_amp_account_handler = new CreateAccountHandler({{ "name", "AMP Account" }, { "type", "2of2_no_recovery" }}, m_wallet);
+            auto hide_main_account_handler = new UpdateAccountHandler(m_wallet, {{ "subaccount", 0 }, { "hidden", true }});
+            connect(create_amp_account_handler, &Handler::done, this, [=] {
+                create_amp_account_handler->deleteLater();
+                hide_main_account_handler->exec();
+            });
+            connect(hide_main_account_handler, &Handler::done, this, [=] {
+                hide_main_account_handler->deleteLater();
+                set_pin_handler->exec();
+            });
+            create_amp_account_handler->exec();
         } else {
+            Q_ASSERT(m_type == "default");
             set_pin_handler->exec();
         }
     });

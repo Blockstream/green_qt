@@ -61,7 +61,7 @@ private:
     Connectable<Session> m_session;
     QByteArray m_pin;
     bool m_active{false};
-    QString m_type;
+    QString m_type{"default"};
 };
 
 #endif // GREEN_SIGNUPCONTROLLER_H
