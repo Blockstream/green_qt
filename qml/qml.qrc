@@ -92,5 +92,6 @@
         <file>ChooseNetworkDialog.qml</file>
         <file>GButton.qml</file>
         <file>Spacer.qml</file>
+        <file>EditableLabel.qml</file>
     </qresource>
 </RCC>

@@ -1,0 +1,53 @@
+import QtQuick 2.12
+import QtQuick.Controls 2.5
+import QtQuick.Layouts 1.12
+
+TextField {
+    signal edited(string text, bool activeFocus)
+    id: self
+    color: 'white'
+    focus: false
+    readOnly: !self.enabled
+    activeFocusOnPress: true
+    background: Rectangle {
+        color: 'transparent'
+        border.width: 1
+        border.color: self.activeFocus ? constants.g400 : 'white'
+        Behavior on border.color {
+            ColorAnimation {
+            }
+        }
+        radius: 4
+        visible: !self.readOnly
+        opacity: (self.activeFocus ? 0.4 : 0) + (self.hovered ? 0.1 : 0)
+        Behavior on opacity {
+            SequentialAnimation {
+                PauseAnimation {
+                    duration: 300
+                }
+                SmoothedAnimation {
+                    velocity: 1
+                }
+            }
+        }
+    }
+    bottomPadding: topPadding
+    cursorPosition: 0
+    selectByMouse: activeFocus
+    onTextChanged: {
+        self.edited(text, self.activeFocus)
+        if (!self.activeFocus) self.cursorPosition = 0
+    }
+    onActiveFocusChanged: {
+//        if (activeFocus) {
+//            account_list_view.currentIndex = index
+//            account_list_view.clicked(account)
+//            self.forceActiveFocus(Qt.MouseFocusReason)
+//        }
+        self.edited(self.text, activeFocus)
+        if (!activeFocus) self.cursorPosition = 0
+    }
+    ToolTip.text: self.text
+    ToolTip.visible: contentWidth > availableWidth && hovered
+    ToolTip.delay: 1000
+}
