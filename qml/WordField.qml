@@ -7,7 +7,6 @@ import QtQuick.Layouts 1.12
 TextField {
     property Word word
     enabled: word.enabled
-    focus: word.focus
     leftPadding: 32
     Binding on text {
         restoreMode: Binding.RestoreBinding
@@ -17,7 +16,17 @@ TextField {
     onTextChanged: {
         if (activeFocus) {
             text = word.update(text);
+            if (word.suggestions.length === 1 && text === word.suggestions[0]) {
+                nextItemInFocusChain().forceActiveFocus()
+            }
         }
+    }
+
+    Keys.onTabPressed: {
+        if (word.suggestions.length === 1) {
+            text = word.suggestions[0]
+        }
+        nextItemInFocusChain().forceActiveFocus()
     }
     Keys.onPressed: {
         if (word.index > 0 && event.key === Qt.Key_Backspace && text === '') {

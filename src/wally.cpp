@@ -30,7 +30,6 @@ MnemonicEditorController::MnemonicEditorController(QObject *parent) : QObject(pa
         m_words.append(new Word(this, i));
     }
     m_words.at(0)->setEnabled(true);
-    m_words.at(0)->setFocus(true);
 }
 
 void MnemonicEditorController::setAutoComplete(bool auto_complete)
@@ -130,7 +129,6 @@ void MnemonicEditorController::update()
     m_valid = true;
     int total = m_password ? 27 : 24;
     bool enabled = true;
-    int focus = false;
     int last_valid = 26;
     while (last_valid >= 0) {
         if (m_words.at(last_valid)->valid()) break;
@@ -140,12 +138,6 @@ void MnemonicEditorController::update()
         auto word = m_words.at(i);
         if (!m_words.at(i)->valid()) m_valid = false;
         word->setEnabled(enabled);
-        if (!focus && i >= last_valid) {
-            focus = enabled && (!word->valid() || word->suggestions().length() > 1);
-            word->setFocus(focus);
-        } else {
-            word->setFocus(false);
-        }
         enabled = enabled && word->valid();
     }
     emit mnemonicChanged();
@@ -200,13 +192,6 @@ void Word::setEnabled(bool enabled)
     m_enabled = enabled;
     emit enabledChanged(m_enabled);
 
-}
-
-void Word::setFocus(bool focus)
-{
-    if (m_focus == focus) return;
-    m_focus = focus;
-    emit focusChanged(m_focus);
 }
 
 QString Word::update(const QString& text)

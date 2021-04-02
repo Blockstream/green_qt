@@ -15,7 +15,6 @@ class Word : public QObject
     Q_PROPERTY(bool valid READ valid NOTIFY validChanged)
     Q_PROPERTY(QStringList suggestions READ suggestions NOTIFY suggestionsChanged)
     Q_PROPERTY(bool enabled READ enabled NOTIFY enabledChanged)
-    Q_PROPERTY(bool focus READ focus WRITE setFocus NOTIFY focusChanged)
     QML_ELEMENT
     QML_UNCREATABLE("Word is instanced by MnemonicEditorController.")
     MnemonicEditorController* const m_controller;
@@ -24,7 +23,6 @@ class Word : public QObject
     bool m_valid{false};
     bool m_enabled{false};
     QStringList m_suggestions;
-    bool m_focus{false};
 public:
     Word(MnemonicEditorController* controller, int index);
     int index() const { return m_index; }
@@ -34,8 +32,6 @@ public:
     void setEnabled(bool enabled);
     bool valid() const { return m_valid; }
     QStringList suggestions() const { return m_suggestions; }
-    bool focus() const { return m_focus; }
-    void setFocus(bool focus);
 
     Q_INVOKABLE QString update(const QString& text);
 
@@ -44,7 +40,6 @@ signals:
     void validChanged(bool valid);
     void enabledChanged(bool enabled);
     void suggestionsChanged();
-    void focusChanged(bool focus);
 };
 
 class MnemonicEditorController : public QObject
