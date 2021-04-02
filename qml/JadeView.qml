@@ -163,8 +163,9 @@ MainPage {
                                 Label {
                                     text: device.version
                                 }
+                                HSpacer {
+                                }
                                 GButton {
-                                    large: true
                                     text: qsTrId('id_update')
                                     onClicked: update_dialog.createObject(window, { device }).open()
                                 }
@@ -244,13 +245,11 @@ MainPage {
                 visible: controller.wallet && controller.wallet.authentication !== Wallet.Authenticated
             }
             GButton {
-                large: true
                 visible: !controller.wallet
                 text: device.versionInfo.JADE_HAS_PIN ? qsTrId('id_login') : qsTrId('id_setup_jade')
                 onClicked: controller.login()
             }
             GButton {
-                large: true
                 visible: controller.wallet && controller.wallet.authentication === Wallet.Authenticated
                 text: qsTrId('id_go_to_wallet')
                 onClicked: pushLocation(`/${self.network.id}/${controller.wallet.id}`)

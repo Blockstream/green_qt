@@ -237,14 +237,12 @@ MainPage {
                     visible: controller.network && !controller.wallet
                     icon.color: 'transparent'
                     icon.source: controller.network ? icons[controller.network.id] : ''
-                    large: true
                     text: qsTrId('id_login')
                     onClicked: controller.login()
                 }
                 GButton {
                     visible: controller.status === 'done'
                     text: qsTrId('id_go_to_wallet')
-                    large: true
                     onClicked: pushLocation(`/${controller.network.id}/${controller.wallet.id}`)
                 }
                 HSpacer {
