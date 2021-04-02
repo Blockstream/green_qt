@@ -25,6 +25,14 @@ void SignupController::setNetwork(Network *network)
     update();
 }
 
+void SignupController::setType(const QString& type)
+{
+    Q_ASSERT(type.isEmpty() || type == "amp");
+    if (m_type == type) return;
+    m_type = type;
+    emit typeChanged(m_type);
+}
+
 QString SignupController::defaultName() const
 {
     return m_defaultName;

@@ -18,6 +18,7 @@ class SignupController : public QObject
     Q_OBJECT
     Q_PROPERTY(QStringList mnemonic READ mnemonic CONSTANT)
     Q_PROPERTY(Network* network READ network WRITE setNetwork NOTIFY networkChanged)
+    Q_PROPERTY(QString type READ type WRITE setType NOTIFY typeChanged)
     Q_PROPERTY(QString defaultName READ defaultName NOTIFY defaultNameChanged)
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(Wallet* wallet READ wallet NOTIFY walletChanged)
@@ -29,6 +30,8 @@ public:
     QStringList mnemonic() const;
     Network* network() const;
     void setNetwork(Network* network);
+    QString type() const { return m_type; }
+    void setType(const QString& type);
     QString defaultName() const;
     QString name() const;
     void setName(const QString& name);
@@ -46,6 +49,7 @@ signals:
     void walletChanged(Wallet* wallet);
     void pinChanged(const QByteArray& pin);
     void activeChanged(bool active);
+    void typeChanged(const QString& type);
 private:
     void setDefaultName(const QString& default_name);
 private:
@@ -57,6 +61,7 @@ private:
     Connectable<Session> m_session;
     QByteArray m_pin;
     bool m_active{false};
+    QString m_type;
 };
 
 #endif // GREEN_SIGNUPCONTROLLER_H
