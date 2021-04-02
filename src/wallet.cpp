@@ -7,9 +7,6 @@
 #include "wallet.h"
 #include "resolver.h"
 #include "handler.h"
-#include "handlers/connecthandler.h"
-#include "handlers/loginhandler.h"
-#include "registeruserhandler.h"
 #include "session.h"
 #include "walletmanager.h"
 
@@ -252,41 +249,6 @@ void Wallet::changePin(const QByteArray& pin)
         save();
     });
     handler->exec();
-}
-
-void Wallet::signup(const QStringList& mnemonic, const QByteArray& pin)
-{
-    Q_ASSERT(mnemonic.size() == 24);
-
-    setAuthentication(Authenticating);
-
-    auto activity = new WalletSignupActivity(this, this);
-    pushActivity(activity);
-
-    auto register_user_handler = new RegisterUserHandler(this, mnemonic);
-    auto login_handler = new LoginHandler(this, mnemonic);
-    auto set_pin_handler = new SetPinHandler(this, pin);
-
-    QObject::connect(register_user_handler, &Handler::done, this, [register_user_handler, login_handler] {
-        register_user_handler->deleteLater();
-        login_handler->exec();
-    });
-    QObject::connect(login_handler, &Handler::done, this, [login_handler, set_pin_handler] {
-        login_handler->deleteLater();
-        set_pin_handler->exec();
-    });
-    QObject::connect(set_pin_handler, &Handler::done, this, [this, set_pin_handler, activity] {
-        set_pin_handler->deleteLater();
-        m_pin_data = set_pin_handler->pinData();
-        save();
-        updateCurrencies();
-        reload();
-        updateConfig();
-        setAuthentication(Authenticated);
-        activity->finish();
-        activity->deleteLater();
-    });
-    register_user_handler->exec();
 }
 
 void Wallet::reload()

@@ -1,4 +1,8 @@
 #include "ga.h"
+#include "handlers/connecthandler.h"
+#include "handlers/loginhandler.h"
+#include "json.h"
+#include "registeruserhandler.h"
 #include "signupcontroller.h"
 #include "walletmanager.h"
 
@@ -68,8 +72,42 @@ void SignupController::update()
 
     if (!m_session->isConnected()) return;
 
-    m_wallet->signup(m_mnemonic, m_pin);
     // TODO: should only add if signup completes
+    m_wallet->setAuthentication(Wallet::Authenticating);
+
+    auto activity = new WalletSignupActivity(m_wallet, this);
+    m_wallet->pushActivity(activity);
+
+    auto register_user_handler = new RegisterUserHandler(m_wallet, m_mnemonic);
+    auto login_handler = new LoginHandler(m_wallet, m_mnemonic);
+    auto set_pin_handler = new SetPinHandler(m_wallet, m_pin);
+
+    connect(register_user_handler, &Handler::done, this, [register_user_handler, login_handler] {
+        register_user_handler->deleteLater();
+        login_handler->exec();
+    });
+    connect(login_handler, &Handler::done, this, [this, login_handler, set_pin_handler] {
+        login_handler->deleteLater();
+
+        if (m_type == "amp") {
+            Q_ASSERT(m_network->isLiquid());
+        } else {
+            set_pin_handler->exec();
+        }
+    });
+    connect(set_pin_handler, &Handler::done, this, [this, set_pin_handler, activity] {
+        set_pin_handler->deleteLater();
+        m_wallet->m_pin_data = set_pin_handler->pinData();
+        m_wallet->save();
+        m_wallet->updateCurrencies();
+        m_wallet->reload();
+        m_wallet->updateConfig();
+        m_wallet->setAuthentication(Wallet::Authenticated);
+
+        activity->finish();
+        activity->deleteLater();
+    });
+    register_user_handler->exec();
     WalletManager::instance()->addWallet(m_wallet);
 }
 

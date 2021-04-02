@@ -118,7 +118,6 @@ public:
     Device* device() const { return m_device; }
 public slots:
     void disconnect();
-    void signup(const QStringList &mnemonic, const QByteArray& pin);
     void reload();
 
     void updateConfig();
