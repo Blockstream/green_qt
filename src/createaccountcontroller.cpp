@@ -1,29 +1,9 @@
 #include "createaccountcontroller.h"
-#include "handler.h"
+#include "handlers/createaccounthandler.h"
 #include "json.h"
 #include "wallet.h"
 
 #include <gdk.h>
-
-class CreateAccountHandler : public Handler
-{
-    QJsonObject m_details;
-    void call(GA_session* session, GA_auth_handler** auth_handler) override {
-        auto details = Json::fromObject(m_details);
-        int res = GA_create_subaccount(session, details.get(), auth_handler);
-        Q_ASSERT(res == GA_OK);
-    }
-public:
-    CreateAccountHandler(const QJsonObject& details, Wallet* wallet)
-        : Handler(wallet)
-        , m_details(details)
-    {
-    }
-    int pointer() const {
-        Q_ASSERT(result().value("status").toString() == "done");
-        return result().value("result").toObject().value("pointer").toInt();
-    }
-};
 
 CreateAccountController::CreateAccountController(QObject *parent)
     : Controller(parent)
