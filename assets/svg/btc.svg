@@ -7,9 +7,9 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="39.998337"
-   height="40.000282"
-   viewBox="0 0 39.998337 40.000282"
+   width="42"
+   height="42"
+   viewBox="0 0 42 42"
    version="1.1"
    id="svg179"
    sodipodi:docname="btc.svg"
@@ -35,7 +35,7 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="704"
+     inkscape:window-width="1319"
      inkscape:window-height="480"
      id="namedview181"
      showgrid="false"
@@ -44,20 +44,21 @@
      fit-margin-right="0"
      fit-margin-bottom="0"
      inkscape:zoom="6.6895145"
-     inkscape:cx="37.348486"
-     inkscape:cy="28.125033"
+     inkscape:cx="38.946437"
+     inkscape:cy="21.052698"
      inkscape:window-x="0"
      inkscape:window-y="23"
      inkscape:window-maximized="0"
-     inkscape:current-layer="svg179" />
+     inkscape:current-layer="svg179"
+     inkscape:document-rotation="0" />
   <defs
      id="defs163">
     <linearGradient
        id="o1y4jxdtva"
-       x1="20.000121"
-       x2="39.999776"
-       y1="30.953454"
-       y2="-46.854007"
+       x1="20.00012"
+       x2="39.999775"
+       y1="30.953453"
+       y2="-46.854008"
        gradientTransform="scale(0.99997568,1.0000243)"
        gradientUnits="userSpaceOnUse">
       <stop
@@ -74,7 +75,7 @@
      fill="none"
      fill-rule="evenodd"
      id="g177"
-     transform="translate(-10.000466,-9.9995858)">
+     transform="translate(-9.000466,-8.9995858)">
     <g
        id="g175">
       <g
