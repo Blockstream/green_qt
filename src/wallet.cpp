@@ -262,12 +262,16 @@ void Wallet::reload()
     pushActivity(activity);
     auto handler = new GetSubAccountsHandler(this);
     QObject::connect(handler, &Handler::done, this, [this, handler, activity] {
+        m_accounts.clear();
         for (QJsonValue value : handler->subAccounts()) {
             QJsonObject data = value.toObject();
             int pointer = data.value("pointer").toInt();
             Account* account = getOrCreateAccount(pointer);
             account->update(data);
             account->reload();
+            if (!data.value("hidden").toBool()) {
+                m_accounts.append(account);
+            }
         }
 
         emit accountsChanged();
@@ -504,7 +508,6 @@ Account* Wallet::getOrCreateAccount(int pointer)
     Account* account = m_accounts_by_pointer.value(pointer);
     if (!account) {
         account = new Account(this);
-        m_accounts.append(account);
         m_accounts_by_pointer.insert(pointer, account);
     }
     return account;
