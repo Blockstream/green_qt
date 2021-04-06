@@ -1,4 +1,4 @@
-#define MyAppName "Green"
+#define MyAppName "Blockstream Green"
 #define MyAppVersion "VERSION_STRING"
 #define MyAppPublisher "Blockstream"
 #define MyAppURL "https://blockstream.com/green/"
@@ -35,7 +35,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked; OnlyBelowVersion: 0,6.1
 
 [Files]
-Source: "Green.exe"; DestDir: "{app}"
+Source: "{#MyAppName}.exe"; DestDir: "{app}"
 
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppName}.exe"

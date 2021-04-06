@@ -148,7 +148,7 @@ windows_installer:
     - windows_sign
   script:
     - cd $CI_PROJECT_DIR/build-mingw-w64/release
-    - mv GreenSigned.exe Green.exe
+    - mv GreenSigned.exe "Blockstream Green.exe"
     - ../../tools/buildwininstaller.sh
 
 windows_installer_sign:

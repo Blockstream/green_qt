@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support in-place renaming in wallet title view
 
 ### Changed
+- Rename exectuable from Green.exe to "Blockstream Green.exe" on Windows
 - Do not ask for wallet name on signup and restore
 - Use secondary buttons on devices views
 - Do not auto complete words in restore dialog
