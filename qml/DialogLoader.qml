@@ -11,7 +11,10 @@ QtObject {
         if (active) {
             const instance = self.__instance = dialog.createObject(window, self.properties)
             instance.closed.connect(function () {
-                instance.destroy()
+                try {
+                    instance.destroy()
+                } catch (e) {
+                }
             })
             instance.open()
         } else if (self.__instance) {
