@@ -21,6 +21,7 @@ SOURCES += \
     $$PWD/httprequestactivity.cpp \
     $$PWD/json.cpp \
     $$PWD/main.cpp \
+    $$PWD/navigation.cpp \
     $$PWD/network.cpp \
     $$PWD/networkmanager.cpp \
     $$PWD/renameaccountcontroller.cpp \
@@ -60,6 +61,7 @@ HEADERS += \
     $$PWD/ga.h \
     $$PWD/httprequestactivity.h \
     $$PWD/json.h \
+    $$PWD/navigation.h \
     $$PWD/network.h \
     $$PWD/networkmanager.h \
     $$PWD/renameaccountcontroller.h \
