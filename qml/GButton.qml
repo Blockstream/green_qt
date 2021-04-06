@@ -7,6 +7,8 @@ Button {
 
     id: self
     font.pixelSize: self.large ? 14 : 12
+    icon.width: self.large ? 16 : 12
+    icon.height: self.large ? 16 : 12
     font.bold: true
     padding: self.large ? 16 : 12
     leftPadding: self.large ? 20 : 15
@@ -34,10 +36,19 @@ Button {
             }
         ]
     }
-    contentItem: Label {
-        text: parent.text
-        color: parent.pressed ? "black" : "white"
-        opacity: self.enabled ? 1 : 0.5
-        horizontalAlignment: Text.AlignHCenter
+    contentItem: RowLayout {
+        spacing: self.padding
+        Image {
+            visible: status === Image.Ready
+            source: self.icon.source
+            Layout.preferredWidth: self.icon.width
+            Layout.preferredHeight: self.icon.height
+        }
+        Label {
+            text: self.text
+            color: self.pressed ? "black" : "white"
+            opacity: self.enabled ? 1 : 0.5
+            horizontalAlignment: Text.AlignHCenter
+        }
     }
 }
