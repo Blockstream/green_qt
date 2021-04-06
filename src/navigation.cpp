@@ -49,7 +49,6 @@ void Navigation::go(const QString &location, const QVariantMap &param)
     for (auto i = param.constBegin(); i != param.constEnd(); ++i) {
         q.removeQueryItem(i.key());
         if (i.value() == QVariant::Invalid) continue;
-        qDebug() << "SET PARMA" << i.key() << i.value() << i.value();
         if (i->type() == QVariant::StringList) {
             q.addQueryItem(i.key(), i.value().toStringList().join(','));
         } else {

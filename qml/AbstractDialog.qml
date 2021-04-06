@@ -3,10 +3,12 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.13
 
 Dialog {
-    id: self
+    property string icon
     property alias toolbar: toolbar_loader.sourceComponent
     property bool showRejectButton: true
     property bool enableRejectButton: true
+    id: self
+    focus: true
     clip: true
     modal: true
     padding: 32
@@ -21,9 +23,11 @@ Dialog {
     spacing: 0
     header: DialogHeader {
         Image {
+            Layout.maximumWidth: 32
+            Layout.maximumHeight: 32
+            fillMode: Image.PreserveAspectFit
             source: self.icon
-            sourceSize.width: 32
-            sourceSize.height: 32
+            visible: self.icon && self.icon !== ''
         }
         Label {
             Layout.fillWidth: true
@@ -60,9 +64,5 @@ Dialog {
     background: Rectangle {
         radius: 16
         color: constants.c800
-        border.width: 1
-        border.color: Qt.rgba(0, 0, 0, 0.2)
     }
-
-    property string icon: ""
 }

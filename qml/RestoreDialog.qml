@@ -1,23 +1,25 @@
 import Blockstream.Green 0.1
 import Blockstream.Green.Core 0.1
-import QtQuick 2.12
-import QtQuick.Window 2.12
-import QtQuick.Controls 2.13
-import QtQuick.Controls.Material 2.3
-import QtQuick.Layouts 1.12
+import QtQuick 2.15
+import QtQml 2.15
+import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
+import QtQml.Models 2.0
 
 AbstractDialog {
-    required property Network network
-
     id: self
+    title: qsTrId('id_restore_green_wallet')
+    width: 850
+    height: 500
+    closePolicy: Popup.NoAutoClose
 
     RestoreController {
         id: controller
-        network: self.network
-        mnemonic: mnemonic_page.mnemonic
-        password: password_field.text
-        pin: pin_view.pin.value
-
+        network: NetworkManager.network(navigation.param.network || '')
+        mnemonic: (navigation.param.mnemonic || '').split(',')
+        password: navigation.param.password || ''
+        pin: navigation.param.pin || ''
+        active: mnemonic.length === 24 || (mnemonic.length === 27 && password !== '')
     }
 
     Connections {
@@ -32,7 +34,7 @@ AbstractDialog {
                 const view = accept_view.createObject(activities_row, { activity })
                 activity.finished.connect(() => {
                     view.destroy()
-                    pushLocation(`/${self.network.id}/${controller.wallet.id}`)
+                    navigation.go(`/${controller.network.id}/${controller.wallet.id}`)
                 })
             }
         }
@@ -62,24 +64,14 @@ AbstractDialog {
                 self.footer.ToolTip.show(error, 2000);
             }
         }
-        function onAuthenticatedChanged() {
-            if (controller.wallet.authenticated) {
-                stack_view.push(pin_page)
-            }
-        }
-    }
-
-    closePolicy: Popup.NoAutoClose
-
-    contentItem: StackView {
-        id: stack_view
-        onCurrentItemChanged: currentItem.forceActiveFocus()
-        implicitWidth: currentItem.implicitWidth
-        implicitHeight: currentItem.implicitHeight
-        initialItem: mnemonic_page
     }
 
     footer: DialogFooter {
+        GButton {
+            action: stack_layout.currentItem ? stack_layout.currentItem.backAction || null : null
+            large: true
+            visible: action
+        }
         Pane {
             Layout.minimumHeight: 48
             background: null
@@ -90,87 +82,162 @@ AbstractDialog {
         }
         HSpacer {}
         Repeater {
-            model: stack_view.currentItem.actions
+            model: stack_layout.currentItem ? stack_layout.currentItem.actions || null : null
             GButton {
-                focus: modelData.focus || false
                 action: modelData
                 large: true
             }
         }
     }
 
-    icon: icons[controller.network.id]
-    title: stack_view.currentItem.title
-    toolbar: stack_view.currentItem.toolbar || null
-
-    property Item mnemonic_page: MnemonicEditor {
-        id: mnemonicEditor
-        enabled: !controller.active
-        title: qsTrId('Insert your green mnemonic')
-        actions: [
-            Action {
-                property bool focus: mnemonic_page.valid
+    property bool closing: false
+    onAboutToHide: closing = true
+    contentItem: StackLayout {
+        property Item currentItem: {
+            if (stack_layout.currentIndex < 0) return null
+            let item = stack_layout.children[stack_layout.currentIndex]
+            if (item instanceof Loader) item = item.item
+            if (item) item.focus = true
+            return item
+        }
+        id: stack_layout
+        Binding on currentIndex {
+            when: !self.closing
+            restoreMode: Binding.RestoreNone
+            value: {
+                let index = -1
+                for (let i = 0; i < stack_layout.children.length; ++i) {
+                    let child = stack_layout.children[i]
+                    if (!(child instanceof Item)) continue
+                    if (child.active) index = i
+                }
+                console.log('current index', index)
+                return index
+            }
+        }
+        SelectNetworkView {
+            readonly property bool active: true
+            showAMP: false
+            view: 'restore'
+        }
+        AnimLoader {
+            active: controller.network
+            animated: self.opened
+            sourceComponent: MnemonicEditor {
+                // TODO: in order to go back activities must be removed
+                // and session destroyed
+                // readonly property Action backAction: Action {
+                //     text: qsTrId('id_back')
+                //     onTriggered: navigation.set({ network: undefined })
+                // }
+                id: editor
                 enabled: !controller.active
-                text: qsTrId('id_clear')
-                onTriggered: mnemonicEditor.controller.clear();
-            },
-            Action {
-                property bool focus: mnemonic_page.valid
-                text: qsTrId('id_continue')
-                enabled: !controller.active && controller.valid || (mnemonic_page.valid && mnemonic_page.password)
-                onTriggered: {
-                    if (mnemonic_page.password) {
-                        stack_view.push(password_page)
-                    } else {
-                        controller.active = true
-                        // controller.wallet.login()
+                title: qsTrId('Insert your green mnemonic')
+                actions: [
+                    Action {
+                        enabled: !controller.active
+                        text: qsTrId('id_clear')
+                        onTriggered: editor.controller.clear();
+                    },
+                    Action {
+                        text: qsTrId('id_continue')
+                        enabled: editor.valid // || (editor.valid && editor.password)
+                        onTriggered: navigation.set({ mnemonic: editor.mnemonic })
                     }
+                ]
+            }
+        }
+        AnimLoader {
+            active: controller.network && controller.mnemonic.length === 27
+            animated: self.opened
+            sourceComponent: ColumnLayout {
+                readonly property Action backAction: Action {
+                    text: qsTrId('id_back')
+                    onTriggered: navigation.set({ mnemonic: undefined, password: undefined })
+                }
+                property list<Action> actions: [
+                    Action {
+                        id: passphrase_next_action
+                        text: qsTrId('id_continue')
+                        // enabled: !controller.active && controller.valid
+                        onTriggered: navigation.set({ password: password_field.text })
+                    }
+                ]
+                spacing: 16
+                VSpacer {
+                }
+                Label {
+                    Layout.alignment: Qt.AlignHCenter
+                    text: qsTrId('id_please_provide_your_passphrase')
+                    font.pixelSize: 20
+                }
+                TextField {
+                    Layout.alignment: Qt.AlignHCenter
+                    id: password_field
+                    implicitWidth: 400
+                    echoMode: TextField.Password
+                    onAccepted: passphrase_next_action.trigger()
+                    enabled: !controller.active
+                    placeholderText: qsTrId('id_encryption_passphrase')
+                }
+                VSpacer {
                 }
             }
-        ]
-    }
-
-    property Item password_page: WizardPage {
-        title: qsTrId('id_please_provide_your_passphrase')
-        actions: [
-            Action {
-                id: passphrase_next_action
-                text: qsTrId('id_continue')
-                enabled: !controller.active && controller.valid
-                onTriggered: controller.active = true
+        }
+        AnimLoader {
+            active: controller.wallet && controller.wallet.authenticated
+            animated: self.opened
+            sourceComponent: ColumnLayout {
+                spacing: 16
+                VSpacer {
+                }
+                Label {
+                    Layout.alignment: Qt.AlignHCenter
+                    text: qsTrId('id_set_a_new_pin')
+                    font.pixelSize: 20
+                }
+                PinView {
+                    Layout.alignment: Qt.AlignHCenter
+                    id: pin_view
+                    onPinChanged: {
+                        if (!pin.valid) return
+                        navigation.set({ pin: pin.value })
+                        Qt.callLater(pin_view.clear)
+                    }
+                }
+                VSpacer {
+                }
             }
-        ]
-        TextField {
-            id: password_field
-            anchors.centerIn: parent
-            implicitWidth: 400
-            echoMode: TextField.Password
-            onAccepted: passphrase_next_action.trigger()
-            enabled: !controller.active
-            placeholderText: qsTrId('id_encryption_passphrase')
         }
-    }
-
-    property Item pin_page: WizardPage {
-        title: qsTrId('id_set_a_new_pin')
-        PinView {
-            id: pin_view
-            anchors.centerIn: parent
-            onPinChanged: if (pin.valid) stack_view.push(pin_verify_page)
-        }
-    }
-
-    property Item pin_verify_page: WizardPage {
-        title: qsTrId('id_verify_your_pin')
-        PinView {
-            anchors.centerIn: parent
-            onPinChanged: {
-                if (!pin.valid) return
-                if (pin.value !== pin_view.pin.value) {
-                    clear();
-                    ToolTip.show(qsTrId('id_pins_do_not_match_please_try'), 1000);
-                } else {
-                    onTriggered: controller.accept()
+        AnimLoader {
+            active: controller.pin.length === 6
+            animated: self.opened
+            sourceComponent: ColumnLayout {
+                readonly property Action backAction: Action {
+                    text: qsTrId('id_back')
+                    onTriggered: navigation.set({ pin: undefined })
+                }
+                spacing: 16
+                VSpacer {
+                }
+                Label {
+                    Layout.alignment: Qt.AlignHCenter
+                    text: qsTrId('id_verify_your_pin')
+                    font.pixelSize: 20
+                }
+                PinView {
+                    Layout.alignment: Qt.AlignHCenter
+                    onPinChanged: {
+                        if (!pin.valid) return
+                        if (pin.value !== controller.pin) {
+                            clear();
+                            ToolTip.show(qsTrId('id_pins_do_not_match_please_try'), 1000);
+                        } else {
+                            onTriggered: controller.accept()
+                        }
+                    }
+                }
+                VSpacer {
                 }
             }
         }

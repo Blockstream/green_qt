@@ -28,12 +28,15 @@ WizardPage {
 
     contentItem: ColumnLayout {
         spacing: 16
+        VSpacer {
+        }
         GridLayout {
             columns: 6
             Repeater {
                 id: repeater
                 model: 24
                 WordField {
+                    Layout.fillWidth: true
                     word: controller.words[index]
                 }
             }
@@ -55,6 +58,8 @@ WizardPage {
                     word: controller.words[index + 24]
                 }
             }
+        }
+        VSpacer {
         }
     }
 }

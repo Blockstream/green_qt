@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- AMP wallet creating flow
 - Support in-place renaming in wallet title view
 
 ### Changed
@@ -15,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Complete word on tab press if it matches just one suggestion
 
 ### Fixed
+- Minor GUI adjustments
 - Elide dialog title and show tooltip with full title when truncated
 - During restore wallet use default name if no name is specified
 

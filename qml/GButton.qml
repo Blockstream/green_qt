@@ -16,7 +16,7 @@ Button {
     background: Rectangle {
         id: background
         radius: 4
-        color: self.hovered ? constants.c600: constants.c500
+        color: self.activeFocus || self.hovered ? constants.c600: constants.c500
         states: [
             State {
                 when: !self.enabled
@@ -27,7 +27,7 @@ Button {
                 PropertyChanges { target: background; color: "white" }
             },
             State {
-                when: self.highlighted && self.hovered
+                when: self.highlighted && (self.activeFocus || self.hovered)
                 PropertyChanges { target: background; color: constants.g600 }
             },
             State {

@@ -1,25 +1,31 @@
 import Blockstream.Green 0.1
 import Blockstream.Green.Core 0.1
-import QtQuick 2.13
-import QtQuick.Controls 2.13
-import QtQuick.Layouts 1.12
+import QtQuick 2.15
+import QtQml 2.15
+import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
+import QtQml.Models 2.0
 
 AbstractDialog {
-    required property Network network
     id: self
-    icon: icons[network.id]
+    icon: controller.type === 'amp' ? 'qrc:/svg/amp.svg' : controller.network ? icons[controller.network.id] : null
     title: qsTrId('id_create_new_wallet')
+    closePolicy: Popup.NoAutoClose
+    width: 1000
+    height: 500
 
     SignupController {
         id: controller
-        network: self.network
-        pin: pin_view.pin.value
+        network: NetworkManager.network(navigation.param.network || '')
+        type: navigation.param.type || ''
+        pin: navigation.param.pin || ''
+        active: navigation.param.verify || false
     }
 
     Connections {
         target: controller.wallet
         function onReadyChanged(ready) {
-            if (ready) pushLocation(`/${controller.network.id}/${controller.wallet.id}`)
+            if (ready) navigation.go(`/${controller.network.id}/${controller.wallet.id}`)
         }
     }
 
@@ -34,12 +40,12 @@ AbstractDialog {
         }
     }
 
-    closePolicy: Popup.NoAutoClose
-
-    width: 800
-    height: 500
-
     footer: DialogFooter {
+        GButton {
+            action: stack_layout.currentItem ? stack_layout.currentItem.backAction || null : null
+            large: true
+            visible: action
+        }
         Pane {
             Layout.minimumHeight: 48
             background: null
@@ -48,14 +54,9 @@ AbstractDialog {
                 id: activities_row
             }
         }
-        PageIndicator {
-            count: 6
-            currentIndex: stack_view.depth - 1
-            width: 128
-        }
         HSpacer {}
         Repeater {
-            model: stack_view.currentItem.actions
+            model: stack_layout.currentItem ? stack_layout.currentItem.actions || null : null
             GButton {
                 action: modelData
                 large: true
@@ -63,100 +64,330 @@ AbstractDialog {
         }
     }
 
-    contentItem: StackView {
-        id: stack_view
-        focus: true
-        clip: true
-        initialItem: welcome_page
-    }
-
-    property Item welcome_page: WelcomePage {
-        onNext: stack_view.push(mnemonic_page)
-    }
-
-    property Item mnemonic_page: MnemonicPage {
-        mnemonic: controller.mnemonic
-        onBack: {
-            stack_view.pop();
+    property bool closing: false
+    onAboutToHide: closing = true
+    contentItem: StackLayout {
+        property Item currentItem: {
+            if (stack_layout.currentIndex < 0) return null
+            let item = stack_layout.children[stack_layout.currentIndex]
+            if (item instanceof Loader) item = item.item
+            if (item) item.focus = true
+            return item
         }
-        onNext: {
-            quiz_page.reset()
-            stack_view.push(quiz_page);
-        }
-    }
-
-    property Item quiz_page: MnemonicQuizPage {
-        mnemonic: controller.mnemonic
-        onBack: stack_view.pop()
-        onNext: stack_view.push(set_pin_page)
-    }
-
-    property Item set_pin_page: ColumnLayout {
-        property list<Action> actions
-
-        implicitWidth: pin_view.implicitWidth
-        implicitHeight: pin_view.implicitHeight
-        spacing: 16
-        Label {
-            Layout.alignment: Qt.AlignHCenter
-            text: qsTrId('id_create_a_pin_to_access_your')
-            font.pixelSize: 20
-        }
-        PinView {
-            Layout.alignment: Qt.AlignHCenter
-            id: pin_view
-            focus: true
-            onPinChanged: {
-                if (pin.valid) {
-                    stack_view.push(verify_pin_page);
+        id: stack_layout
+        Binding on currentIndex {
+            when: !self.closing
+            restoreMode: Binding.RestoreNone
+            value: {
+                let index = -1
+                for (let i = 0; i < stack_layout.children.length; ++i) {
+                    let child = stack_layout.children[i]
+                    if (!(child instanceof Item)) continue
+                    if (child.active) index = i
                 }
+                return index
             }
         }
-        HSpacer {
+        SelectNetworkView {
+            readonly property bool active: true
+            showAMP: true
+            view: 'signup'
         }
-    }
 
-    property Item verify_pin_page: ColumnLayout {
-        property list<Action> actions
-        Label {
-            Layout.alignment: Qt.AlignHCenter
-            text: qsTrId('id_verify_your_pin')
-            font.pixelSize: 20
-        }
-        PinView {
-            Layout.alignment: Qt.AlignHCenter
-            id: verify_pin_view
-            focus: true
-            onPinChanged: {
-                if (!pin.valid) return;
-                if (pin_view.pin.value !== pin.value) return clear();
-                controller.active = true
-                stack_view.push(creating_page)
+        AnimLoader {
+            active: controller.network && controller.network.id !== 'liquid'
+            animated: self.opened
+            sourceComponent: WelcomePage {
+                readonly property Action backAction: Action {
+                    enabled: navigation.path === '/signup'
+                    text: qsTrId('id_back')
+                    onTriggered: navigation.set({ network: undefined, type: undefined })
+                }
+                readonly property list<Action> actions: [
+                    Action {
+                        text: qsTrId('id_continue')
+                        enabled: agreeWithTermsOfService
+                        onTriggered: navigation.set({ tos: true })
+                    }
+                ]
             }
         }
-        HSpacer {
-        }
-    }
-
-    property Item creating_page: ColumnLayout {
-        spacing: 16
-        VSpacer {}
-        BusyIndicator {
-            Layout.alignment: Qt.AlignCenter
-        }
-        Label {
-            Layout.alignment: Qt.AlignCenter
-            text: {
-                const count = controller.wallet ? controller.wallet.activities.length : 0
-                if (count > 0) {
-                    const activity = controller.wallet.activities[count - 1]
-                    if (activity instanceof WalletRefreshAssets) {
-                        return qsTrId('id_loading_assets')
+        AnimLoader {
+            active: controller.network && controller.network.id === 'liquid' && controller.type === 'default'
+            animated: self.opened
+            sourceComponent: Pane {
+                readonly property Action backAction: Action {
+                    text: qsTrId('id_back')
+                    onTriggered: navigation.set({ network: undefined, type: undefined })
+                }
+                readonly property list<Action> actions: [
+                    Action {
+                        text: qsTrId('id_continue')
+                        enabled: checkbox.checked
+                        onTriggered: navigation.set({ tos: true })
+                    }
+                ]
+                background: Item {
+                    Image {
+                        OpacityAnimator on opacity {
+                            from: 0
+                            to: 0.5
+                            duration: 5000
+                            easing.type: Easing.OutCirc
+                        }
+                        ScaleAnimator on scale {
+                            from: 1.1
+                            to: 1
+                            duration: 10000
+                            easing.type: Easing.OutCirc
+                        }
+                        source: 'qrc:/png/liquid_background.png'
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.right: parent.right
+                        width: parent.width * 0.8
+                        fillMode: Image.PreserveAspectFit
                     }
                 }
-                return qsTrId('id_creating_wallet')
+                contentItem: ColumnLayout {
+                    spacing: 32
+                    VSpacer {
+                    }
+                    Label {
+                        Layout.maximumWidth: 500
+                        text: qsTrId('Faster, more confidential Bitcoin transactions')
+                        font.pixelSize: 28
+                        font.bold: true
+                        wrapMode: Label.WordWrap
+                    }
+                    Label {
+                        Layout.maximumWidth: 500
+                        text: qsTrId('Liquid is a sidechain-based settlement network for traders and exchanges, enabling faster, more confidential Bitcoin transactions and the issuance of digital assets.')
+                        font.pixelSize: 16
+                        wrapMode: Label.WordWrap
+                    }
+                    RowLayout {
+                        Layout.maximumWidth: 500
+                        Layout.fillWidth: false
+                        Layout.fillHeight: false
+                        CheckBox {
+                            id: checkbox
+                            focus: true
+                        }
+                        Label {
+                            textFormat: Text.RichText
+                            text: qsTrId('id_i_agree_to_the') + ' ' + link('https://blockstream.com/green/terms/', qsTrId('id_terms_of_service'))
+                            onLinkActivated: Qt.openUrlExternally(link)
+                            background: MouseArea {
+                                acceptedButtons: Qt.NoButton
+                                cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor
+                            }
+                        }
+                    }
+                    VSpacer {
+                    }
+                }
             }
         }
-        VSpacer {}
+        AnimLoader {
+            active: controller.network && controller.network.id === 'liquid' && controller.type === 'amp'
+            animated: self.opened
+            sourceComponent: Pane {
+                readonly property Action backAction: Action {
+                    text: qsTrId('id_back')
+                    onTriggered: navigation.set({ network: undefined, type: undefined })
+                }
+                readonly property list<Action> actions: [
+                    Action {
+                        text: qsTrId('id_continue')
+                        enabled: checkbox.checked
+                        onTriggered: navigation.set({ tos: true })
+                    }
+                ]
+                background: Item {
+                    Image {
+                        OpacityAnimator on opacity {
+                            from: 0
+                            to: 0.5
+                            duration: 5000
+                            easing.type: Easing.OutCirc
+                        }
+                        ScaleAnimator on scale {
+                            from: 1.1
+                            to: 1
+                            duration: 10000
+                            easing.type: Easing.OutCirc
+                        }
+
+                        source: 'qrc:/png/amp_background.png'
+                        anchors.centerIn: parent
+                        width: parent.width
+                        fillMode: Image.PreserveAspectFit
+                    }
+                }
+                contentItem: ColumnLayout {
+                    spacing: 32
+                    VSpacer {
+                    }
+                    Label {
+                        Layout.maximumWidth: 500
+                        text: qsTrId(`Send and receive Liquid-based Managed Assets`)
+                        font.pixelSize: 28
+                        font.bold: true
+                        wrapMode: Label.WordWrap
+                    }
+                    Label {
+                        Layout.maximumWidth: 500
+                        text: qsTrId(`We'll get you set up with an AMP wallet in no time. Note that you can alternatively create AMP accounts in any existing Liquid wallet.`)
+                        font.pixelSize: 16
+                        wrapMode: Label.WordWrap
+                    }
+                    RowLayout {
+                        Layout.maximumWidth: 500
+                        Layout.fillWidth: false
+                        Layout.fillHeight: false
+                        CheckBox {
+                            id: checkbox
+                            focus: true
+                        }
+                        Label {
+                            textFormat: Text.RichText
+                            text: qsTrId('id_i_agree_to_the') + ' ' + link('https://blockstream.com/green/terms/', qsTrId('id_terms_of_service'))
+                            onLinkActivated: Qt.openUrlExternally(link)
+                            background: MouseArea {
+                                acceptedButtons: Qt.NoButton
+                                cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor
+                            }
+                        }
+                    }
+                    VSpacer {
+                    }
+                }
+            }
+        }
+        AnimLoader {
+            active: navigation.param.tos || false
+            animated: self.opened
+            sourceComponent: MnemonicPage {
+                readonly property Action backAction: Action {
+                    text: qsTrId('id_back')
+                    onTriggered: navigation.set({ tos: undefined })
+                }
+                property list<Action> actions: [
+                    Action {
+                        text: qsTrId('id_continue')
+                        onTriggered: navigation.set({ backup: true })
+                    }
+                ]
+                mnemonic: controller.mnemonic
+            }
+        }
+//        AnimLoader {
+//            active: navigation.param.backup || false
+//            sourceComponent: MnemonicQuizView {
+//                readonly property Action backAction: Action {
+//                    text: qsTrId('id_back')
+//                    onTriggered: navigation.set({ backup: undefined })
+//                }
+//                mnemonic: controller.mnemonic
+//                onCompletedChanged: if (completed) navigation.set({ quiz: true })
+//                onFailedChanged: if (failed) navigation.set({ backup: undefined })
+//            }
+//        }
+        AnimLoader {
+            active: navigation.param.backup || false
+            animated: self.opened
+            sourceComponent: MnemonicQuizPage {
+                readonly property Action backAction: Action {
+                    text: qsTrId('id_back')
+                    onTriggered: navigation.set({ backup: undefined })
+                }
+                mnemonic: controller.mnemonic
+                onCompleteChanged: if (complete) navigation.set({ quiz: true })
+            }
+        }
+        AnimLoader {
+            active: navigation.param.quiz || false
+            animated: self.opened
+            sourceComponent: ColumnLayout {
+                readonly property Action backAction: Action {
+                    text: qsTrId('id_back')
+                    onTriggered: navigation.set({ backup: undefined, quiz: undefined })
+                }
+                spacing: 16
+                VSpacer {
+                }
+                Label {
+                    Layout.alignment: Qt.AlignHCenter
+                    text: qsTrId('id_create_a_pin_to_access_your')
+                    font.pixelSize: 20
+                }
+                PinView {
+                    Layout.alignment: Qt.AlignHCenter
+                    id: pin_view
+                    focus: true
+                    onPinChanged: {
+                        if (!pin.valid) return
+                        navigation.set({ pin: pin.value })
+                        Qt.callLater(pin_view.clear)
+                    }
+                }
+                VSpacer {
+                }
+            }
+        }
+        AnimLoader {
+            active: navigation.param.pin || false
+            animated: self.opened
+            sourceComponent: ColumnLayout {
+                spacing: 16
+                VSpacer {
+                }
+                Label {
+                    Layout.alignment: Qt.AlignHCenter
+                    text: qsTrId('id_verify_your_pin')
+                    font.pixelSize: 20
+                }
+                PinView {
+                    Layout.alignment: Qt.AlignHCenter
+                    id: verify_pin_view
+                    focus: true
+                    onPinChanged: {
+                        if (!pin.valid) return;
+                        if (navigation.param.pin === pin.value) {
+                            navigation.set({ verify: true })
+                        } else {
+                            navigation.set({ pin: undefined })
+                        }
+                    }
+                }
+                VSpacer {
+                }
+            }
+        }
+        AnimLoader {
+            active: navigation.param.verify || false
+            animated: self.opened
+            sourceComponent: ColumnLayout {
+                spacing: 16
+                VSpacer {}
+                BusyIndicator {
+                    Layout.alignment: Qt.AlignCenter
+                }
+                Label {
+                    Layout.alignment: Qt.AlignCenter
+                    text: {
+                        const count = controller.wallet ? controller.wallet.activities.length : 0
+                        if (count > 0) {
+                            const activity = controller.wallet.activities[count - 1]
+                            if (activity instanceof WalletRefreshAssets) {
+                                return qsTrId('id_loading_assets')
+                            }
+                        }
+                        return qsTrId('id_creating_wallet')
+                    }
+                }
+                VSpacer {}
+            }
+        }
     }
 }

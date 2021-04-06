@@ -6,34 +6,28 @@ import QtQuick.Layouts 1.12
 GridLayout {
     property var mnemonic
 
+    columnSpacing: 24
+    rowSpacing: 24
     columns: 6
     flow: GridLayout.LeftToRight
 
     Repeater {
         model: mnemonic
-
-        Item {
-            width: childrenRect.width + 20
-            height: 25
-
-            Row {
-                spacing: 5
-
-                Label {
-                    text: `${index + 1}`
-                    textFormat: Text.RichText
-                    font.pixelSize : 12
-                    color: Material.accentColor
-                    anchors.baseline: word.baseline
-                    horizontalAlignment: Label.AlignRight
-                }
-
-                Label {
-                    id: word
-                    text: `${modelData}`
-                    textFormat: Text.RichText
-                    font.pixelSize : 15
-                }
+        RowLayout {
+            Label {
+                Layout.minimumWidth: 24
+                text: `${index + 1}`
+                textFormat: Text.RichText
+                font.pixelSize : 12
+                color: Material.accentColor
+                horizontalAlignment: Label.AlignRight
+            }
+            Label {
+                Layout.fillWidth: true
+                id: word
+                text: modelData
+                textFormat: Text.RichText
+                font.pixelSize : 15
             }
         }
     }

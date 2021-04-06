@@ -55,7 +55,7 @@ Item {
                     text: qsTrId('id_create_new_wallet')
                     highlighted: true
                     large: true
-                    onClicked: navigation.go(`/${self.network}/signup`, self.network === 'testnet' ? { network: 'testnet', type: 'default' } : {})
+                    onClicked: navigation.go(`/${self.network}/signup`, { network: self.network, type: (self.network === 'liquid' ? undefined : 'default') })
                 }
                 GButton {
                     large: true

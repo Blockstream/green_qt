@@ -49,7 +49,7 @@ MainPage {
             Layout.fillWidth: true
             Layout.fillHeight: true
             Layout.minimumHeight: 210
-            Layout.maximumHeight: 210
+            Layout.maximumHeight: 230
             spacing: 12
             ColumnLayout {
                 Layout.fillHeight: true
@@ -116,6 +116,13 @@ MainPage {
                             text: qsTrId('id_create_wallet')
                             font.capitalization: Font.MixedCase
                             onClicked: navigation.go('/signup')
+                        }
+                        GButton {
+                            Layout.fillWidth: true
+                            large: true
+                            text: qsTrId('Add an AMP Wallet')
+                            font.capitalization: Font.MixedCase
+                            onClicked: navigation.go('/signup?network=liquid&type=amp')
                         }
                         GButton {
                             Layout.fillWidth: true
