@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Use secondary buttons on devices views
 - Do not auto complete words in restore dialog
 - Complete word on tab press if it matches just one suggestion
+- Update translations for AMP accounts
 
 ### Fixed
 - Minor GUI adjustments

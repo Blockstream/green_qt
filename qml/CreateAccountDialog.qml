@@ -115,8 +115,8 @@ ControllerDialog {
             }
             DescriptiveRadioButton {
                 readonly property string type: '2of2_no_recovery'
-                text: qsTrId('id_managed_assets_account')
-                description: qsTrId('id_managed_assets_accounts_are')
+                text: qsTrId('id_amp_account')
+                description: qsTrId('id_amp_accounts_are_only_available')
                 enabled: wallet.network.liquid
                 ButtonGroup.group: type_button_group
                 Layout.fillWidth: true

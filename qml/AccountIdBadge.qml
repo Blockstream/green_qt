@@ -25,7 +25,7 @@ Button {
         spacing: 8
         Label {
             Layout.fillWidth: true
-            text: qsTrId('id_account_id')
+            text: qsTrId('id_amp_id')
             font.styleName: 'Regular'
         }
         Label {
@@ -46,5 +46,5 @@ Button {
     }
     ToolTip.delay: 300
     ToolTip.visible: hovered
-    ToolTip.text: qsTrId('id_provide_this_id_to_the_asset')
+    ToolTip.text: qsTrId('id_provide_your_amp_id_to_the')
 }

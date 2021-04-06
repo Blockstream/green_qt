@@ -35,7 +35,7 @@ ListView {
         contentItem: ColumnLayout {
             spacing: 8
             Label {
-                text: qsTrId('id_managed_assets')
+                text: qsTrId('id_amp_account')
                 visible: account.json.type === '2of2_no_recovery'
                 font.pixelSize: 12
                 font.capitalization: Font.AllUppercase
