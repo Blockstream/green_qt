@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+
+### Changed
+
+### Fixed
+
+## [0.1.3] - 2021-04-07
+### Added
 - AMP wallet creating flow
 - Support in-place renaming in wallet title view
 
