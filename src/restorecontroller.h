@@ -67,6 +67,7 @@ private:
     QString m_pin;
     bool m_active{false};
     Connectable<Session> m_session;
+    bool m_accepted{false};
 };
 
 class CheckRestoreActivity : public WalletActivity

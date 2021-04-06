@@ -66,6 +66,8 @@ void RestoreController::accept()
 {
     Q_ASSERT(m_wallet->isAuthenticated());
     Q_ASSERT(m_wallet->m_pin_data.isEmpty());
+    Q_ASSERT(!m_accepted);
+    m_accepted = true;
 
     auto activity = new AcceptRestoreActivity(m_wallet, this);
     m_wallet->pushActivity(activity);
@@ -90,6 +92,7 @@ void RestoreController::accept()
 
 void RestoreController::update()
 {
+    if (m_accepted) return;
     auto check = [this] {
         if (!m_network) {
             setDefaultName("");
