@@ -77,4 +77,66 @@ signals:
     void autoCompleteChanged(bool auto_complete);
 };
 
+class MnemonicQuizWord : public QObject
+{
+    Q_OBJECT
+    Q_PROPERTY(QString value READ value NOTIFY valueChanged)
+    Q_PROPERTY(QStringList options READ options NOTIFY optionsChanged)
+    Q_PROPERTY(bool enabled READ enabled NOTIFY enabledChanged)
+    Q_PROPERTY(bool correct READ isCorrect NOTIFY correctChanged)
+    QML_ELEMENT
+public:
+    MnemonicQuizWord(int index = 0, QObject* parent = nullptr);
+    int index() const { return m_index; }
+    QString value() const { return m_value; }
+    void setValue(const QString& value);
+    bool isCorrect() const { return m_correct; }
+    void setCorrect(bool correct);
+    QStringList options() const { return m_options; }
+    void setOptions(const QStringList& options);
+    bool enabled() const { return m_enabled; }
+    void setEnabled(bool enabled);
+signals:
+    void valueChanged(const QString& value);
+    void correctChanged(bool correct);
+    void optionsChanged(const QStringList& options);
+    void enabledChanged(bool enabled);
+private:
+    const int m_index;
+    QString m_value;
+    bool m_correct{false};
+    QStringList m_options;
+    bool m_enabled{false};
+};
+
+class MnemonicQuizController : public QObject
+{
+    Q_OBJECT
+    Q_PROPERTY(QStringList mnemonic READ mnemonic WRITE setMnemonic NOTIFY mnemonicChanged)
+    Q_PROPERTY(QQmlListProperty<MnemonicQuizWord> words READ words CONSTANT)
+    Q_PROPERTY(int attempts READ attempts NOTIFY attemptsChanged)
+    Q_PROPERTY(bool completed READ completed NOTIFY completedChanged)
+    QML_ELEMENT
+public:
+    MnemonicQuizController(QObject* parent = nullptr);
+    QStringList mnemonic() const { return m_mnemonic; }
+    void setMnemonic(const QStringList& mnemonic);
+    QQmlListProperty<MnemonicQuizWord> words();
+    int attempts() const { return m_attempts; }
+    bool completed() const { return m_completed; }
+public slots:
+    void reset();
+    void change(MnemonicQuizWord* word, const QString& value);
+signals:
+    void mnemonicChanged(QStringList mnemonic);
+    void attemptsChanged(int attempts);
+    void completedChanged(bool completed);
+private:
+    QStringList m_mnemonic;
+    QList<int> m_incorrects;
+    QList<MnemonicQuizWord*> m_words;
+    int m_attempts{6};
+    bool m_completed{false};
+};
+
 #endif // GREEN_WALLY_H

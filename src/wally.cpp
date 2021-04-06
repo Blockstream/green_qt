@@ -1,5 +1,6 @@
 #include "wally.h"
 
+#include <QRandomGenerator>
 #include <QSet>
 #include <wally_bip39.h>
 
@@ -197,4 +198,126 @@ void Word::setEnabled(bool enabled)
 QString Word::update(const QString& text)
 {
     return m_controller->update(m_index, text);
+}
+
+MnemonicQuizController::MnemonicQuizController( QObject *parent)
+    : QObject(parent)
+{
+    for (int i = 0; i < 24; ++i) {
+        m_words.append(new MnemonicQuizWord(i, this));
+    }
+}
+
+void MnemonicQuizController::setMnemonic(const QStringList &mnemonic)
+{
+    if (m_mnemonic == mnemonic) return;
+    m_mnemonic = mnemonic;
+    emit mnemonicChanged(m_mnemonic);
+    reset();
+}
+
+QQmlListProperty<MnemonicQuizWord> MnemonicQuizController::words()
+{
+    return { this, &m_words };
+}
+
+template <typename T>
+QList<T> range(T lower, T upper)
+{
+    QList<T> res;
+    for (T i = lower; i < upper; ++i) {
+        res.append(i);
+    }
+    return res;
+}
+
+template <typename T>
+QList<T> shuffle(QList<T> list)
+{
+    QList<T> res;
+    while (!list.isEmpty()) {
+        res.append(list.takeAt(QRandomGenerator::global()->bounded(list.size())));
+    }
+    return res;
+}
+
+void MnemonicQuizController::reset()
+{
+    if (m_mnemonic.size() != 24) {
+        for (int i = 0; i < 24; ++i) {
+            m_words.at(i)->setValue(QString());
+            m_words.at(i)->setOptions(QStringList());
+            m_words.at(i)->setCorrect(false);
+        }
+        return;
+    }
+
+    m_incorrects = shuffle(range(0, 24)).mid(0, 5);
+    qDebug() << m_incorrects;
+    for (int i = 0; i < 24; ++i) {
+        auto word = m_words.at(i);
+        auto value = m_mnemonic.at(i);
+        bool correct = !m_incorrects.contains(i);
+        word->setEnabled(true);
+        word->setCorrect(correct);
+        auto words = GetWordlist();
+        words.removeOne(m_mnemonic.at(i));
+        words = shuffle(words).mid(0, 3);
+        if (!correct) value = words.first();
+        words.append(m_mnemonic.at(i));
+        word->setOptions(shuffle(words));
+        word->setValue(value);
+    }
+}
+
+void MnemonicQuizController::change(MnemonicQuizWord *word, const QString &value)
+{
+    if (m_completed) return;
+    Q_ASSERT(m_attempts > 0);
+    word->setValue(value);
+    word->setCorrect(value == m_mnemonic.at(word->index()));
+    if (!word->isCorrect()) {
+        m_attempts--;
+        emit attemptsChanged(m_attempts);
+    } else {
+        m_completed = true;
+        for (int i = 0; m_completed && i < 24; ++i) {
+            m_completed = m_words.at(i)->isCorrect();
+        }
+        if (m_completed )
+        emit completedChanged(m_completed);
+    }
+}
+
+MnemonicQuizWord::MnemonicQuizWord(int index, QObject *parent)
+    : QObject(parent)
+    , m_index(index)
+{
+}
+
+void MnemonicQuizWord::setValue(const QString &value)
+{
+    if (m_value == value) return;
+    m_value = value;
+    emit valueChanged(m_value);
+}
+
+void MnemonicQuizWord::setOptions(const QStringList &options)
+{
+    m_options = options;
+    emit optionsChanged(m_options);
+}
+
+void MnemonicQuizWord::setEnabled(bool enabled)
+{
+    if (m_enabled == enabled) return;
+    m_enabled = enabled;
+    emit enabledChanged(m_enabled);
+}
+
+void MnemonicQuizWord::setCorrect(bool correct)
+{
+    if (m_correct == correct) return;
+    m_correct = correct;
+    emit correctChanged(m_correct);
 }
