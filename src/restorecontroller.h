@@ -21,7 +21,7 @@ class RestoreController : public Entity
     Q_PROPERTY(QString defaultName READ defaultName NOTIFY defaultNameChanged)
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(Wallet* wallet READ wallet NOTIFY walletChanged)
-    Q_PROPERTY(QByteArray pin READ pin WRITE setPin NOTIFY pinChanged)
+    Q_PROPERTY(QString pin READ pin WRITE setPin NOTIFY pinChanged)
     Q_PROPERTY(bool active READ isActive WRITE setActive NOTIFY activeChanged)
     QML_ELEMENT
 public:
@@ -38,8 +38,8 @@ public:
     QString name() const { return m_name; }
     void setName(const QString& name);
     Wallet* wallet() const { return m_wallet; }
-    QByteArray pin() const { return m_pin; }
-    void setPin(const QByteArray& pin);
+    QString pin() const { return m_pin; }
+    void setPin(const QString& pin);
     bool isActive() const { return m_active; }
     void setActive(bool active);
 public slots:
@@ -53,7 +53,7 @@ signals:
     void defaultNameChanged(const QString& name);
     void nameChanged(const QString& name);
     void walletChanged(Wallet* wallet);
-    void pinChanged(const QByteArray& pin);
+    void pinChanged(const QString& pin);
     void activeChanged(bool active);
     void validChanged(bool valid);
 private:
@@ -64,7 +64,7 @@ private:
     QString m_name;
     QString m_default_name;
     Wallet* m_wallet{nullptr};
-    QByteArray m_pin;
+    QString m_pin;
     bool m_active{false};
     Connectable<Session> m_session;
 };

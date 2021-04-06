@@ -47,7 +47,7 @@ void RestoreController::setName(const QString& name)
     emit nameChanged(m_name);
 }
 
-void RestoreController::setPin(const QByteArray &pin)
+void RestoreController::setPin(const QString& pin)
 {
     if (m_pin == pin) return;
     m_pin = pin;
@@ -70,7 +70,7 @@ void RestoreController::accept()
     auto activity = new AcceptRestoreActivity(m_wallet, this);
     m_wallet->pushActivity(activity);
 
-    auto handler = new SetPinHandler(m_wallet, m_pin);
+    auto handler = new SetPinHandler(m_wallet, m_pin.toLocal8Bit());
     QObject::connect(handler, &Handler::done, this, [this, handler, activity] {
         handler->deleteLater();
         m_wallet->m_pin_data = handler->pinData();
