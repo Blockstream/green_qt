@@ -12,32 +12,19 @@ ApplicationWindow {
     readonly property WalletView currentWalletView: stack_layout.currentWalletView
     readonly property Wallet currentWallet: currentWalletView ? currentWalletView.wallet : null
     readonly property Account currentAccount: currentWalletView ? currentWalletView.currentAccount : null
-    readonly property string currentNetwork: {
-        console.assert(location.startsWith('/'))
-        const i = location.indexOf('/', 1)
-        const id = i < 0 ? location.slice(1) : location.slice(1, i)
-        return NetworkManager.network(id) ? id : null
+    Navigation {
+        id: navigation
+        location: '/home'
     }
-
-    property var history: []
-    readonly property string location: history.length > 0 ? history[history.length - 1] : '/home'
     function matchesLocation(l) {
-        return location.startsWith(l)
-    }
-    function pushLocation(l) {
-        const count = history.length
-        if (count > 0 && history[count - 1] === l) return;
-        history = history.slice(-4).concat(l)
-    }
-    function popLocation() {
-        history = history.slice(0, -1)
+        return navigation.location.startsWith(l)
     }
     function childIndexForLocation(stack_layout) {
        for (let i = 0; i < stack_layout.children.length; ++i) {
            const child = stack_layout.children[i]
            if (!(child instanceof Item)) continue
            const l = child.location
-           if (l && child.enabled && location.startsWith(l)) return i
+           if (l && child.enabled && navigation.location.startsWith(l)) return i
        }
        return 0
     }
@@ -140,13 +127,11 @@ ApplicationWindow {
                 title: qsTrId('File')
                 Action {
                     text: qsTrId('id_create_new_wallet')
-                    enabled: currentNetwork
-                    onTriggered: pushLocation(`/${currentNetwork}/signup`)
+                    onTriggered: navigation.go('/signup')
                 }
                 Action {
                     text: qsTrId('id_restore_green_wallet')
-                    enabled: currentNetwork
-                    onTriggered: pushLocation(`/${currentNetwork}/restore`)
+                    onTriggered: navigation.go('/restore')
                 }
                 Menu {
                     title: qsTrId('id_export_transactions_to_csv_file')
@@ -201,7 +186,7 @@ ApplicationWindow {
                 width: fitMenuWidth(this)
                 Action {
                     text: qsTrId('id_about')
-                    onTriggered: pushLocation('/home')
+                    onTriggered: navigation.go('/home')
                 }
                 Action {
                     text: qsTrId('id_support')
@@ -349,7 +334,7 @@ ApplicationWindow {
                             icon.source: 'qrc:/svg/ledger-logo.svg'
                             location: ledger_view.location
                             count: ledger_view.count
-                            isCurrent: Window.window.location.startsWith(location)
+                            isCurrent: navigation.location.startsWith(location)
                             text: 'Ledger'
                         }
                     }
@@ -408,15 +393,48 @@ ApplicationWindow {
         }
     }
 
+    Route {
+        id: signup_route
+        location: navigation.location
+        path: '/signup'
+    }
+
     DialogLoader {
-        properties: {
-            const [,, wallet_id] = window.location.split('/')
-            const wallet = WalletManager.wallet(wallet_id)
-            return { wallet }
+        active: signup_route.active
+        dialog: SignupDialog {
+            onRejected: navigation.go(signup_route.previous)
         }
-        active: !!properties.wallet && !properties.wallet.ready
+    }
+
+    Route {
+        id: restore_route
+        location: navigation.location
+        path: '/restore'
+    }
+
+    DialogLoader {
+        active: restore_route.active
+        dialog: RestoreDialog {
+            onRejected: navigation.go(restore_route.previous)
+        }
+    }
+
+    Route {
+        readonly property Wallet wallet: {
+            const [,, wallet_id] = navigation.path.split('/')
+            const wallet = WalletManager.wallet(wallet_id)
+            return wallet
+        }
+        id: login_route
+        location: navigation.location
+        path: wallet && !wallet.ready ? navigation.location : ''
+    }
+
+    DialogLoader {
+        properties: ({ wallet: login_route.wallet })
+        active: login_route.active
         dialog: LoginDialog {
-            onRejected: popLocation()
+            onRejected: navigation.go(login_route.previous)
         }
     }
 

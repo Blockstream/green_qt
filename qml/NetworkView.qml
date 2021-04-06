@@ -25,7 +25,7 @@ Item {
             network: self.network
         }
         delegate: WalletView {
-            property bool match: wallet.ready && window.location.startsWith(wallet_view.location)
+            property bool match: wallet.ready && navigation.location.startsWith(wallet_view.location)
             id: wallet_view
             anchors.fill: parent
             z: match ? 1 : -1
@@ -55,12 +55,12 @@ Item {
                     text: qsTrId('id_create_new_wallet')
                     highlighted: true
                     large: true
-                    onClicked: pushLocation(`/${network}/signup`)
+                    onClicked: navigation.go(`/${self.network}/signup`, self.network === 'testnet' ? { network: 'testnet', type: 'default' } : {})
                 }
                 GButton {
                     large: true
                     text: qsTrId('id_restore_green_wallet')
-                    onClicked: pushLocation(restore_dialog.location)
+                    onClicked: navigation.go(`/${self.network}/restore`, { network: self.network })
                 }
             }
         }
@@ -176,7 +176,7 @@ Item {
                                     }
                                 }
                             }
-                            onClicked: pushLocation(`/${network}/${wallet.id}`)
+                            onClicked: navigation.go(`/${network}/${wallet.id}`)
                         }
                     }
                     ScrollIndicator.horizontal: ScrollIndicator {}
@@ -211,26 +211,6 @@ Item {
                     }
                 }
             }
-        }
-    }
-
-    DialogLoader {
-        readonly property string location: `/${network}/signup`
-        id: signup_dialog
-        active: matchesLocation(location)
-        dialog: SignupDialog {
-            network: NetworkManager.network(self.network)
-            onRejected: popLocation()
-        }
-    }
-
-    DialogLoader {
-        readonly property string location: `/${network}/restore`
-        id: restore_dialog
-        active: matchesLocation(location)
-        dialog: RestoreDialog {
-            network: NetworkManager.network(self.network)
-            onRejected: popLocation()
         }
     }
 
@@ -283,6 +263,6 @@ Item {
         width: wallet_list_view.width
         highlighted: ListView.isCurrentItem
         property bool valid: wallet.loginAttemptsRemaining > 0
-        onClicked: pushLocation(`/${self.network}/${wallet.id}`)
+        onClicked: navigation.go(`/${self.network}/${wallet.id}`)
     }
 }

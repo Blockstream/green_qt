@@ -48,24 +48,24 @@ MainPage {
 
     property Action disconnectAction: Action {
         onTriggered: {
-            pushLocation(`/${wallet.network.id}`)
+            navigation.go(`/${wallet.network.id}`)
             self.wallet.disconnect()
         }
     }
 
     property Action settingsAction: Action {
         enabled: settings_dialog.enabled
-        onTriggered: pushLocation(settings_dialog.location)
+        onTriggered: navigation.go(settings_dialog.location)
     }
     DialogLoader {
         id: settings_dialog
         property string location: `${self.location}/settings`
         property bool enabled: !!self.wallet.settings.pricing && !!self.wallet.config.limits
-        active: settings_dialog.enabled && window.location === settings_dialog.location
+        active: settings_dialog.enabled && navigation.location === settings_dialog.location
         dialog: WalletSettingsDialog {
             parent: window.Overlay.overlay
             wallet: self.wallet
-            onRejected: popLocation()
+            onRejected: navigation.go(self.location)
         }
     }
     header: MainPageHeader {
@@ -108,9 +108,9 @@ MainPage {
                         cursorShape: Qt.PointingHandCursor
                         onClicked: {
                             if (wallet.device.type === Device.BlockstreamJade) {
-                                pushLocation(`/jade/${wallet.device.uuid}`)
+                                navigation.go(`/jade/${wallet.device.uuid}`)
                             } else if (wallet.device.vendor === Device.Ledger) {
-                                pushLocation(`/ledger/${wallet.device.uuid}`)
+                                navigation.go(`/ledger/${wallet.device.uuid}`)
                             }
                         }
                     }

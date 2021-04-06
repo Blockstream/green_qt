@@ -109,7 +109,7 @@ MainPage {
                 orientation: ListView.Horizontal
                 currentIndex: {
                     for (let i = 0; i < devices_list_view.count; ++i) {
-                        if (devices_list_view.itemAtIndex(i).location === window.location) {
+                        if (devices_list_view.itemAtIndex(i).location === navigation.location) {
                             return i
                         }
                     }
@@ -252,7 +252,7 @@ MainPage {
             GButton {
                 visible: controller.wallet && controller.wallet.authentication === Wallet.Authenticated
                 text: qsTrId('id_go_to_wallet')
-                onClicked: pushLocation(`/${self.network.id}/${controller.wallet.id}`)
+                onClicked: navigation.go(`/${self.network.id}/${controller.wallet.id}`)
             }
         }
     }

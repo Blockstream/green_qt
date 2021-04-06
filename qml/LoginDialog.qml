@@ -162,7 +162,7 @@ AbstractDialog {
             Layout.minimumWidth: 200
             visible: self.wallet.loginAttemptsRemaining === 0
             text: 'Restore Wallet'
-            onClicked: pushLocation(`/${self.wallet.network.id}/restore`)
+            onClicked: navigation.go('/restore', { network: self.wallet.network.id })
         }
     }
 }

@@ -86,7 +86,7 @@ MainPage {
                                 font.capitalization: Font.MixedCase
                                 flat: true
                                 text: wallet.name
-                                onClicked: pushLocation(`/${wallet.network.id}/${wallet.id}`)
+                                onClicked: navigation.go(`/${wallet.network.id}/${wallet.id}`)
                             }
                         }
                     }
@@ -115,22 +115,14 @@ MainPage {
                             large: true
                             text: qsTrId('id_create_wallet')
                             font.capitalization: Font.MixedCase
-                            onClicked: {
-                                var obj = chooose_network.createObject(window, { title: qsTrId('id_create_wallet') })
-                                obj.networkSelected.connect((network) => { pushLocation(`/${network}/signup`) })
-                                obj.open()
-                            }
+                            onClicked: navigation.go('/signup')
                         }
                         GButton {
                             Layout.fillWidth: true
                             large: true
                             text: qsTrId('id_restore_wallet')
                             font.capitalization: Font.MixedCase
-                            onClicked: {
-                                var obj = chooose_network.createObject(window, { title: qsTrId('id_restore_wallet') })
-                                obj.networkSelected.connect((network) => { pushLocation(`/${network}/restore`) })
-                                obj.open()
-                            }
+                            onClicked: navigation.go('/restore')
                         }
                     }
                 }

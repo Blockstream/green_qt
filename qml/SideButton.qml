@@ -9,7 +9,7 @@ Button {
     id: self
     required property string location
     property int count: 0
-    property bool isCurrent: Window.window.location === location
+    property bool isCurrent: navigation.location === location
     property bool busy: false
     topPadding: 8
     bottomPadding: 8
@@ -21,7 +21,7 @@ Button {
     bottomInset: 0
 
     Layout.fillWidth: true
-    onClicked: pushLocation(location)
+    onClicked: navigation.go(location)
     icon.width: 24
     icon.height: 24
     Behavior on implicitWidth { SmoothedAnimation { velocity: 600 } }

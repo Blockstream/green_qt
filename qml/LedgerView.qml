@@ -125,7 +125,7 @@ MainPage {
                 currentIndex: {
                     if (devices_list_view.count === 0) return -1
                     for (let i = 0; i < devices_list_view.count; ++i) {
-                        if (devices_list_view.itemAtIndex(i).location === window.location) {
+                        if (devices_list_view.itemAtIndex(i).location === navigation.location) {
                             return i
                         }
                     }
@@ -142,9 +142,9 @@ MainPage {
                     bottomPadding: 32
                     background: Rectangle {
                         radius: 8
-                        color: ((window.location === '/ledger' && index === 0) || window.location === location) ? constants.c500 : hovered ? constants.c600 : constants.c700
+                        color: ((navigation.location === '/ledger' && index === 0) || navigation.location === location) ? constants.c500 : hovered ? constants.c600 : constants.c700
                     }
-                    onClicked: pushLocation(location)
+                    onClicked: navigation.go(location)
                     contentItem: ColumnLayout {
                         spacing: 32
                         Image {
@@ -243,7 +243,7 @@ MainPage {
                 GButton {
                     visible: controller.status === 'done'
                     text: qsTrId('id_go_to_wallet')
-                    onClicked: pushLocation(`/${controller.network.id}/${controller.wallet.id}`)
+                    onClicked: navigation.go(`/${controller.network.id}/${controller.wallet.id}`)
                 }
                 HSpacer {
                 }
