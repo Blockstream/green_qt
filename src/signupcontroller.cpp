@@ -72,7 +72,7 @@ void SignupController::update()
 
     auto register_user_handler = new RegisterUserHandler(m_wallet, m_mnemonic);
     auto login_handler = new LoginHandler(m_wallet, m_mnemonic);
-    auto set_pin_handler = new SetPinHandler(m_wallet, m_pin);
+    auto set_pin_handler = new SetPinHandler(m_wallet, m_pin.toLocal8Bit());
 
     connect(register_user_handler, &Handler::done, this, [register_user_handler, login_handler] {
         register_user_handler->deleteLater();
@@ -121,7 +121,7 @@ void SignupController::update()
     WalletManager::instance()->addWallet(m_wallet);
 }
 
-void SignupController::setPin(const QByteArray &pin)
+void SignupController::setPin(const QString& pin)
 {
     if (m_pin == pin) return;
     m_pin = pin;

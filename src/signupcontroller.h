@@ -20,7 +20,7 @@ class SignupController : public QObject
     Q_PROPERTY(Network* network READ network WRITE setNetwork NOTIFY networkChanged)
     Q_PROPERTY(QString type READ type WRITE setType NOTIFY typeChanged)
     Q_PROPERTY(Wallet* wallet READ wallet NOTIFY walletChanged)
-    Q_PROPERTY(QByteArray pin READ pin WRITE setPin NOTIFY pinChanged)
+    Q_PROPERTY(QString pin READ pin WRITE setPin NOTIFY pinChanged)
     Q_PROPERTY(bool active READ active WRITE setActive NOTIFY activeChanged)
     QML_ELEMENT
 public:
@@ -31,8 +31,8 @@ public:
     QString type() const { return m_type; }
     void setType(const QString& type);
     Wallet* wallet() const;
-    QByteArray pin() const { return m_pin; }
-    void setPin(const QByteArray& pin);
+    QString pin() const { return m_pin; }
+    void setPin(const QString& pin);
     bool active() const { return m_active; }
     void setActive(bool active);
 private slots:
@@ -40,7 +40,7 @@ private slots:
 signals:
     void networkChanged(Network* network);
     void walletChanged(Wallet* wallet);
-    void pinChanged(const QByteArray& pin);
+    void pinChanged(const QString& pin);
     void activeChanged(bool active);
     void typeChanged(const QString& type);
 private:
@@ -48,7 +48,7 @@ private:
     Connectable<Network> m_network{nullptr};
     Connectable<Wallet> m_wallet;
     Connectable<Session> m_session;
-    QByteArray m_pin;
+    QString m_pin;
     bool m_active{false};
     QString m_type{"default"};
 };
