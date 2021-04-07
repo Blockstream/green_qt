@@ -5,7 +5,9 @@ import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.12
 
 TextField {
+    id: self
     property Word word
+    readonly property bool invalid: word.suggestions.length === 0 && self.text.length > 2
     enabled: word.enabled
     leftPadding: 32
     Binding on text {
@@ -33,13 +35,14 @@ TextField {
             nextItemInFocusChain(false).forceActiveFocus();
         }
     }
-    ToolTip.text: word.suggestions.join(' ')
-    ToolTip.visible: activeFocus && word.suggestions.length > 0
+    ToolTip.text: self.invalid ? qsTrId('Not a BIP39 word') : word.suggestions.join(' ')
+    ToolTip.visible: activeFocus && (word.suggestions.length > 0 || self.invalid)
     ToolTip.toolTip.exit: null
 
     Label {
         anchors.baseline: parent.baseline
         x: 8
         text: word.index + 1
+        color: self.invalid ? 'red' : 'white'
     }
 }

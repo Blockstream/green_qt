@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Warn when input is not a valid BIP39 word
 - Language selector in application settings
 
 ### Changed
