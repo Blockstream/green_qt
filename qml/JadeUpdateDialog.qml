@@ -8,7 +8,7 @@ AbstractDialog {
     required property JadeDevice device
     property bool updated: false
     id: self
-    title: 'Over-The-Air Firmware Update'
+    title: qsTrId('id_firmware_update')
     closePolicy: Dialog.NoAutoClose
     onClosed: {
         if (updated) controller.disconnectDevice()
