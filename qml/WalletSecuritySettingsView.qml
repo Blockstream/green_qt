@@ -201,16 +201,15 @@ ColumnLayout {
         TwoFactorEnableDialog {
             wallet: self.wallet
             description: switch(method) {
-                        case 'sms':
-                            return qsTrId('id_enter_phone_number')
-                        case 'gauth':
-                            return qsTrId('id_scan_the_qr_code_in_google')
-                        case 'email':
-                            return qsTrId('id_enter_your_email_address')
-                        case 'phone':
-                            return qsTrId('id_enter_phone_number')
-
-                    }
+                case 'sms':
+                    return qsTrId('id_enter_phone_number')
+                case 'gauth':
+                    return qsTrId('id_scan_the_qr_code_in_google')
+                case 'email':
+                    return qsTrId('id_enter_your_email_address')
+                case 'phone':
+                    return qsTrId('id_enter_phone_number')
+            }
         }
     }
 
@@ -220,12 +219,14 @@ ColumnLayout {
             wallet: self.wallet
         }
     }
+
     Component {
         id: set_twofactor_threshold_dialog
         TwoFactorLimitDialog {
             wallet: self.wallet
         }
     }
+
     Component {
         id: two_factor_auth_expiry_dialog
         TwoFactorAuthExpiryDialog {

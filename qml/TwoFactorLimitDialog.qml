@@ -21,8 +21,6 @@ ControllerDialog {
 
     title: qsTrId('id_set_twofactor_threshold')
     doneText: qsTrId('id_your_twofactor_threshold_is_s').arg(threshold + ' ' +  ticker)
-    minimumWidth: 400
-    height: 250
     controller: Controller {
         wallet: dialog.wallet
     }
@@ -59,6 +57,7 @@ ControllerDialog {
                 padding: 10
                 Layout.fillWidth: true
             }
+
             VSpacer {
             }
         }
