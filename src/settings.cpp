@@ -107,6 +107,14 @@ QStringList Settings::recentWallets()
     return m_recent_wallets;
 }
 
+void Settings::setLanguage(const QString& language)
+{
+    if (m_language == language) return;
+    m_language = language;
+    emit languageChanged(m_language);
+    saveLater();
+}
+
 void Settings::updateRecentWallet(const QString& id)
 {
     m_recent_wallets.removeOne(id);
@@ -140,7 +148,6 @@ QString Settings::proxy() const
 
 void Settings::load()
 {
-    qDebug() << "Load settings";
     // By default position window in primary screen with a 200px margin
     qGuiApp->primaryScreen()->geometry().adjusted(200, 200, -200, -200).getRect(&m_window_x, &m_window_y, &m_window_width, &m_window_height);
 
@@ -171,6 +178,7 @@ void Settings::load(const QSettings& settings)
     LOAD(m_proxy_port)
     LOAD(m_use_tor)
     LOAD(m_recent_wallets)
+    LOAD(m_language)
 #undef LOAD
 }
 
@@ -178,7 +186,6 @@ void Settings::save()
 {
     if (!m_needs_save) return;
     m_needs_save = false;
-    qDebug() << "Save settings";
     saveNow();
 }
 
@@ -198,6 +205,7 @@ void Settings::saveNow()
     SAVE(m_proxy_port)
     SAVE(m_use_tor)
     SAVE(m_recent_wallets)
+    SAVE(m_language)
 #undef SAVE
 }
 
