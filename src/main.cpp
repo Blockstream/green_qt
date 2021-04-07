@@ -159,6 +159,10 @@ int main(int argc, char *argv[])
         languages.append(language);
     }
     engine.rootContext()->setContextProperty("languages", languages);
+
+    if (Settings::instance()->language().isEmpty()) {
+        Settings::instance()->setLanguage(language);
+    }
     QZXing::registerQMLTypes();
     QZXing::registerQMLImageProvider(engine);
 
