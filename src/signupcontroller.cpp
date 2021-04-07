@@ -8,7 +8,8 @@
 #include "signupcontroller.h"
 #include "walletmanager.h"
 
-SignupController::SignupController(QObject *parent) : QObject(parent)
+SignupController::SignupController(QObject *parent)
+    : QObject(parent)
 {
     m_mnemonic = GA::generate_mnemonic();
 }
@@ -27,7 +28,6 @@ void SignupController::setNetwork(Network *network)
 {
     if (!m_network.update(network)) return;
     emit networkChanged(m_network);
-    setDefaultName(m_network ? WalletManager::instance()->newWalletName(m_network) : "");
     update();
 }
 
@@ -36,16 +36,6 @@ void SignupController::setType(const QString& type)
     if (m_type == type) return;
     m_type = type;
     emit typeChanged(m_type);
-}
-
-QString SignupController::defaultName() const
-{
-    return m_defaultName;
-}
-
-QString SignupController::name() const
-{
-    return m_name;
 }
 
 Wallet *SignupController::wallet() const
@@ -63,7 +53,6 @@ void SignupController::update()
     if (!m_wallet) {
         m_wallet = WalletManager::instance()->createWallet();
         m_wallet->m_network = m_network;
-        m_wallet->m_name = m_name.isEmpty() ? m_defaultName : m_name;
         emit walletChanged(m_wallet);
 
         m_wallet->createSession();
@@ -112,6 +101,12 @@ void SignupController::update()
     });
     connect(set_pin_handler, &Handler::done, this, [this, set_pin_handler, activity] {
         set_pin_handler->deleteLater();
+        if (m_type == "amp") {
+            Q_ASSERT(m_network->isLiquid());
+            m_wallet->setName(WalletManager::instance()->uniqueWalletName("My AMP Wallet"));
+        } else {
+            m_wallet->setName(WalletManager::instance()->newWalletName(m_network));
+        }
         m_wallet->m_pin_data = set_pin_handler->pinData();
         m_wallet->save();
         m_wallet->updateCurrencies();
@@ -139,20 +134,5 @@ void SignupController::setActive(bool active)
     if (m_active == active) return;
     m_active = active;
     emit activeChanged(m_active);
-    update();
-}
-
-void SignupController::setDefaultName(const QString &default_name)
-{
-    if (m_defaultName == default_name) return;
-    m_defaultName = default_name;
-    emit defaultNameChanged(m_defaultName);
-}
-
-void SignupController::setName(const QString &name)
-{
-    if (m_name == name) return;
-    m_name = name;
-    emit nameChanged(m_name);
     update();
 }
