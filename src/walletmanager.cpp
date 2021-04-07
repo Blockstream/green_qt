@@ -104,14 +104,19 @@ QQmlListProperty<Wallet> WalletManager::wallets()
 QString WalletManager::newWalletName(Network* network) const
 {
     if (!network) return {};
+    return uniqueWalletName(QString("My %1 Wallet").arg(network->name()));
+}
+
+QString WalletManager::uniqueWalletName(const QString& base) const
+{
     QSet<QString> names;
     for (Wallet* wallet : m_wallets) {
-        if (wallet->network() == network) names.insert(wallet->name());
+        if (wallet->name().startsWith(base)) names.insert(wallet->name());
     }
     int n = 0;
-    QString name = QString("My %1 Wallet").arg(network->name());
+    QString name = base;
     while (names.contains(name)) {
-        name = QString("My %1 Wallet %2").arg(network->name()).arg(++n);
+        name = QString("%1 %2").arg(base).arg(++n);
     }
     return name;
 }

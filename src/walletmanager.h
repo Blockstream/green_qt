@@ -29,6 +29,7 @@ public:
     QQmlListProperty<Wallet> wallets();
 
     QString newWalletName(Network* network) const;
+    QString uniqueWalletName(const QString& base) const;
 
 signals:
     void changed();
