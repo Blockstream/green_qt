@@ -148,6 +148,17 @@ int main(int argc, char *argv[])
     QQmlApplicationEngine engine;
     engine.setBaseUrl(QUrl("qrc:/"));
 
+    QDirIterator it(":/i18n", QDirIterator::Subdirectories);
+    QVariantList languages;
+    while (it.hasNext()) {
+        const auto key = it.next().mid(13).chopped(3);
+        QLocale locale(key);
+        QVariantMap language;
+        language.insert("name", locale.nativeCountryName());
+        language.insert("language", key);
+        languages.append(language);
+    }
+    engine.rootContext()->setContextProperty("languages", languages);
     QZXing::registerQMLTypes();
     QZXing::registerQMLImageProvider(engine);
 
