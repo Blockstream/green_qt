@@ -11,7 +11,7 @@ ColumnLayout {
     }
     Label {
         Layout.alignment: Qt.AlignHCenter
-        text: qsTrId('id_write_down_your_mnemonic_on')
+        text: qsTrId('id_write_down_your_recovery_phrase')
         font.pixelSize: 20
     }
     Pane {
