@@ -10,6 +10,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 ### Fixed
+
+## [0.1.4] - 2021-04-07
+### Added
+
+### Changed
+
+### Fixed
 - Don't use old string ids
 
 ## [0.1.3] - 2021-04-07
