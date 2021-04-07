@@ -38,6 +38,25 @@ MainPage {
                     columnSpacing: 16
                     rowSpacing: 8
                     Label {
+                        text: qsTrId('Language')
+                    }
+                    ComboBox {
+                        Layout.minimumWidth: 200
+                        flat: true
+                        model: languages
+                        textRole: 'name'
+                        valueRole: 'language'
+                        currentIndex: {
+                            for (let i = 0; i < languages.length; ++i) {
+                                if (languages[i].language === Settings.language) return i;
+                            }
+                            return -1
+                        }
+                        onCurrentValueChanged: Settings.language = currentValue
+                    }
+                    HSpacer {
+                    }
+                    Label {
                         text: 'Collapse Side Bar'
                     }
                     Switch {
