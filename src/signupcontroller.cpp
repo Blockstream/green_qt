@@ -14,16 +14,6 @@ SignupController::SignupController(QObject *parent)
     m_mnemonic = GA::generate_mnemonic();
 }
 
-QStringList SignupController::mnemonic() const
-{
-    return m_mnemonic;
-}
-
-Network *SignupController::network() const
-{
-    return m_network;
-}
-
 void SignupController::setNetwork(Network *network)
 {
     if (!m_network.update(network)) return;
@@ -36,11 +26,6 @@ void SignupController::setType(const QString& type)
     if (m_type == type) return;
     m_type = type;
     emit typeChanged(m_type);
-}
-
-Wallet *SignupController::wallet() const
-{
-    return m_wallet;
 }
 
 void SignupController::update()

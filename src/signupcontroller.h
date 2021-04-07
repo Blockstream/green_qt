@@ -25,12 +25,12 @@ class SignupController : public QObject
     QML_ELEMENT
 public:
     explicit SignupController(QObject* parent = nullptr);
-    QStringList mnemonic() const;
-    Network* network() const;
+    QStringList mnemonic() const { return m_mnemonic; }
+    Network* network() const { return m_network.get(); };
     void setNetwork(Network* network);
     QString type() const { return m_type; }
     void setType(const QString& type);
-    Wallet* wallet() const;
+    Wallet* wallet() const { return m_wallet.get(); }
     QString pin() const { return m_pin; }
     void setPin(const QString& pin);
     bool active() const { return m_active; }
@@ -45,7 +45,7 @@ signals:
     void typeChanged(const QString& type);
 private:
     QStringList m_mnemonic;
-    Connectable<Network> m_network{nullptr};
+    Connectable<Network> m_network;
     Connectable<Wallet> m_wallet;
     Connectable<Session> m_session;
     QString m_pin;
