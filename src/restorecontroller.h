@@ -56,6 +56,7 @@ signals:
     void pinChanged(const QString& pin);
     void activeChanged(bool active);
     void validChanged(bool valid);
+    void loginError(const QString& error);
 private:
     Network* m_network{nullptr};
     QStringList m_mnemonic;

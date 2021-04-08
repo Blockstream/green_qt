@@ -8,6 +8,7 @@ ToolButton {
     id: self
     flat: true
     icon.source: 'qrc:/svg/proxyV2.svg'
+    onActivityChanged: if (!activity) self.destroy()
     Popup {
         id: popup
         y: -height - 12

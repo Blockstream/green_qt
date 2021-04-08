@@ -164,10 +164,10 @@ void RestoreController::update()
             // {"action":"get_xpubs","device":{},"error":"get_xpubs exception:reconnect required","status":"error"}
 
             // TODO controller should expose error? or activity?
-            // emit loginError(error);
             m_wallet->setAuthentication(Wallet::Unauthenticated);
             activity->finish();
             activity->deleteLater();
+            emit loginError(error);
         });
         handler->exec();
     }

@@ -52,8 +52,9 @@ AbstractDialog {
     }
 
     Connections {
-        target: controller.wallet
+        target: controller
         function onLoginError(error) {
+            navigation.set({ mnemonic: undefined })
             if (error.includes('id_login_failed')) {
                 self.footer.ToolTip.show(qsTrId('id_login_failed'), 2000);
             } else if (error.includes('bip39_mnemonic_to_seed')) {
@@ -137,11 +138,14 @@ AbstractDialog {
                     Action {
                         enabled: !controller.active
                         text: qsTrId('id_clear')
-                        onTriggered: editor.controller.clear();
+                        onTriggered: {
+                            navigation.set({ mnemonic: undefined })
+                            editor.controller.clear();
+                        }
                     },
                     Action {
                         text: qsTrId('id_continue')
-                        enabled: editor.valid // || (editor.valid && editor.password)
+                        enabled: editor.valid && navigation.param.mnemonic === undefined
                         onTriggered: navigation.set({ mnemonic: editor.mnemonic })
                     }
                 ]

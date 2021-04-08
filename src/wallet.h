@@ -139,9 +139,7 @@ signals:
     void loginAttemptsRemainingChanged(int loginAttemptsRemaining);
     void settingsChanged();
     void configChanged();
-    void loginError(const QString& error);
     void pinSet();
-
 
 protected:
     bool eventFilter(QObject* object, QEvent* event) override;

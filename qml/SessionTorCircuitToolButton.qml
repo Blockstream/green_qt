@@ -13,6 +13,7 @@ ToolButton {
         if (hovered) pending = activity.status === Activity.Pending
         popup.visible = hovered
     }
+    onActivityChanged: if (!activity) self.destroy()
     Connections {
         target: self.activity.progress
         function onValueChanged(value) {
