@@ -9,6 +9,7 @@ TextField {
     focus: false
     readOnly: !self.enabled
     activeFocusOnPress: true
+    autoScroll: false
     background: Rectangle {
         color: 'transparent'
         border.width: 1
@@ -36,16 +37,11 @@ TextField {
     selectByMouse: activeFocus
     onTextChanged: {
         self.edited(text, self.activeFocus)
-        if (!self.activeFocus) self.cursorPosition = 0
+        if (!self.activeFocus) self.ensureVisible(0)
     }
     onActiveFocusChanged: {
-//        if (activeFocus) {
-//            account_list_view.currentIndex = index
-//            account_list_view.clicked(account)
-//            self.forceActiveFocus(Qt.MouseFocusReason)
-//        }
         self.edited(self.text, activeFocus)
-        if (!activeFocus) self.cursorPosition = 0
+        if (!activeFocus) self.ensureVisible(0)
     }
     ToolTip.text: self.text
     ToolTip.visible: contentWidth > availableWidth && hovered
