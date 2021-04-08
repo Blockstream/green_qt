@@ -45,10 +45,10 @@ Button {
             Layout.preferredHeight: self.icon.height
         }
         Label {
+            Layout.alignment: Qt.AlignCenter
             text: self.text
             color: self.pressed ? "black" : "white"
             opacity: self.enabled ? 1 : 0.5
-            horizontalAlignment: Text.AlignHCenter
         }
     }
 }
