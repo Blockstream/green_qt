@@ -41,7 +41,8 @@ MainPage {
                         text: qsTrId('Language')
                     }
                     ComboBox {
-                        Layout.minimumWidth: 200
+                        id: control
+                        Layout.minimumWidth: 400
                         flat: true
                         model: languages
                         textRole: 'name'
@@ -53,6 +54,18 @@ MainPage {
                             return -1
                         }
                         onCurrentValueChanged: Settings.language = currentValue
+                        font.capitalization: Font.Capitalize
+                        delegate: ItemDelegate {
+                            width: control.width
+                            contentItem: Text {
+                                text: modelData.name
+                                color: 'white'
+                                font: control.font
+                                elide: Text.ElideRight
+                                verticalAlignment: Text.AlignVCenter
+                            }
+                            highlighted: control.highlightedIndex === index
+                        }
                     }
                     HSpacer {
                     }

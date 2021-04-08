@@ -149,16 +149,14 @@ int main(int argc, char *argv[])
     engine.setBaseUrl(QUrl("qrc:/"));
 
     QDirIterator it(":/i18n", QDirIterator::Subdirectories);
-    QVariantList languages;
+    QMap<QString, QVariant> languages;
     while (it.hasNext()) {
-        const auto key = it.next().mid(13).chopped(3);
-        QLocale locale(key);
-        QVariantMap language;
-        language.insert("name", locale.nativeCountryName());
-        language.insert("language", key);
-        languages.append(language);
+        const auto language = it.next().mid(13).chopped(3);
+        QLocale locale(language);
+        const auto name = locale.nativeCountryName() + " - " + locale.nativeLanguageName();
+        languages.insert(name, QVariantMap({{ "name", name }, { "language", language }}));
     }
-    engine.rootContext()->setContextProperty("languages", languages);
+    engine.rootContext()->setContextProperty("languages", languages.values());
 
     if (Settings::instance()->language().isEmpty()) {
         Settings::instance()->setLanguage(language);
