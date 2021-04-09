@@ -77,7 +77,7 @@ ItemDelegate {
             rightPadding: 12
             background: Rectangle {
                 radius: 4
-                color: confirmations === 0 ? '#b74747' : '#474747'
+                color: confirmations === 0 ? '#d2934a' : '#474747'
             }
         }
         Label {
