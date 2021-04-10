@@ -7,7 +7,7 @@ ToolButton {
     required property SessionConnectActivity activity
     id: self
     flat: true
-    icon.source: 'qrc:/svg/proxyV2.svg'
+    icon.source: 'qrc:/svg/green_server.svg'
     onActivityChanged: if (!activity) self.destroy()
     Popup {
         id: popup

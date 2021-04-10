@@ -22,5 +22,6 @@
         <file>svg/torV2.svg</file>
         <file>svg/proxyV2.svg</file>
         <file>svg/amp.svg</file>
+        <file>svg/green_server.svg</file>
     </qresource>
 </RCC>
