@@ -92,6 +92,7 @@ void WalletManager::removeWallet(Wallet* wallet)
         bool result = QFile::remove(GetDataFile("wallets", wallet->m_id));
         Q_ASSERT(result);
     }
+    wallet->deleteLater();
 }
 
 QQmlListProperty<Wallet> WalletManager::wallets()
