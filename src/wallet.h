@@ -64,7 +64,7 @@ private:
     Q_PROPERTY(int loginAttemptsRemaining READ loginAttemptsRemaining NOTIFY loginAttemptsRemainingChanged)
     Q_PROPERTY(QJsonObject config READ config NOTIFY configChanged)
     Q_PROPERTY(Device* device READ device CONSTANT)
-
+    Q_PROPERTY(bool empty READ isEmpty NOTIFY emptyChanged)
 public:
     explicit Wallet(QObject *parent = nullptr);
     virtual ~Wallet();
@@ -80,7 +80,7 @@ public:
     AuthenticationStatus authentication() const { return m_authentication; }
 
     bool ready() const { return m_ready; }
-
+    bool isEmpty() const { return m_empty; }
     bool isLocked() const { return m_locked; }
     void setLocked(bool locked);
 
@@ -140,14 +140,17 @@ signals:
     void settingsChanged();
     void configChanged();
     void pinSet();
+    void emptyChanged(bool empty);
 
 protected:
     bool eventFilter(QObject* object, QEvent* event) override;
     void timerEvent(QTimerEvent* event) override;
-
+private:
+    void updateEmpty();
+    void setEmpty(bool empty);
 private:
     bool m_ready{false};
-
+    bool m_empty{true};
 public:
     void setAuthentication(AuthenticationStatus authentication);
     void setSettings(const QJsonObject& settings);

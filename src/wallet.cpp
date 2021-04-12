@@ -1,5 +1,6 @@
 #include "account.h"
 #include "asset.h"
+#include "balance.h"
 #include "ga.h"
 #include "json.h"
 #include "network.h"
@@ -198,6 +199,7 @@ void Wallet::handleNotification(const QJsonObject &notification)
             auto account = m_accounts_by_pointer.value(pointer.toInt());
             account->handleNotification(notification);
         }
+        updateEmpty();
         return;
     }
 
@@ -277,6 +279,7 @@ void Wallet::reload()
         emit accountsChanged();
 
         updateConfig();
+        updateEmpty();
 
         if (m_network->isLiquid()) {
             // Update cached assets
@@ -424,6 +427,26 @@ void Wallet::save()
     file.write(doc.toJson());
     result = file.flush();
     Q_ASSERT(result);
+}
+
+void Wallet::updateEmpty()
+{
+    for (auto account : m_accounts_by_pointer.values()) {
+        for (auto balance : account->m_balances) {
+            if (balance->amount() > 0) {
+                setEmpty(false);
+                return;
+            }
+        }
+    }
+    setEmpty(true);
+}
+
+void Wallet::setEmpty(bool empty)
+{
+    if (m_empty == empty) return;
+    m_empty = empty;
+    emit emptyChanged(m_empty);
 }
 
 void Wallet::setAuthentication(AuthenticationStatus authentication)
