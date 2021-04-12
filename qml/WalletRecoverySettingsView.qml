@@ -102,6 +102,36 @@ ColumnLayout {
         }
     }
 
+    SettingsBox {
+        title: qsTrId('Delete wallet')
+        contentItem: ColumnLayout {
+            Label {
+                Layout.fillWidth: true
+                text: qsTrId('Delete permanently your wallet from the Blockstream Green database. You will never be able to log in to it thereafter.')
+                wrapMode: Label.WordWrap
+            }
+            Label {
+                Layout.fillWidth: true
+                visible: !self.wallet.empty
+                text: qsTrId('All of the accounts in your wallet need to be empty before deleting it.')
+                wrapMode: Label.WordWrap
+            }
+            Label {
+                Layout.fillWidth: true
+                visible: self.wallet.empty
+                text: qsTrId('Are you sure you want to permanently delete your wallet? You will never be able to log in again.')
+                wrapMode: Label.WordWrap
+            }
+            GButton {
+                Layout.alignment: Qt.AlignRight
+                large: true
+                enabled: self.wallet.empty
+                text: qsTrId('Delete wallet')
+                onClicked: delete_wallet_dialog.createObject(self).open()
+            }
+        }
+    }
+
     Component {
         id: mnemonic_dialog
         MnemonicDialog {
@@ -113,6 +143,13 @@ ColumnLayout {
     Component {
         id: nlocktime_dialog
         NLockTimeDialog {
+            wallet: self.wallet
+        }
+    }
+
+    Component {
+        id: delete_wallet_dialog
+        DeleteWalletDialog {
             wallet: self.wallet
         }
     }
