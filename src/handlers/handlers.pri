@@ -4,6 +4,7 @@ HEADERS += \
     $$PWD/connecthandler.h \
     $$PWD/createaccounthandler.h \
     $$PWD/createtransactionhandler.h \
+    $$PWD/deletewallethandler.h \
     $$PWD/getbalancehandler.h \
     $$PWD/gettransactionshandler.h \
     $$PWD/getaddresseshandler.h \
@@ -18,6 +19,7 @@ SOURCES += \
     $$PWD/connecthandler.cpp \
     $$PWD/createaccounthandler.cpp \
     $$PWD/createtransactionhandler.cpp \
+    $$PWD/deletewallethandler.cpp \
     $$PWD/getbalancehandler.cpp \
     $$PWD/gettransactionshandler.cpp \
     $$PWD/getaddresseshandler.cpp \
