@@ -98,5 +98,6 @@
         <file>AnimLoader.qml</file>
         <file>AddressesListView.qml</file>
         <file>AddressDelegate.qml</file>
+        <file>DeleteWalletDialog.qml</file>
     </qresource>
 </RCC>
