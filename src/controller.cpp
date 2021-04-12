@@ -316,3 +316,21 @@ void Controller::setCsvTime(int value)
     });
     exec(handler);
 }
+
+#include "deletewallethandler.h"
+#include "walletmanager.h"
+void Controller::deleteWallet()
+{
+    auto handler = new DeleteWalletHandler(m_wallet);
+    connect(handler, &Handler::done, [this, handler] {
+        handler->deleteLater();
+        qDebug() << "WALLET REMOVED";
+        m_wallet->disconnect();
+        WalletManager::instance()->removeWallet(m_wallet);
+    });
+    connect(handler, &Handler::error, [handler] {
+        handler->deleteLater();
+        qDebug() << "WALLET NOT REMOVED" << handler->result();
+    });
+    exec(handler);
+}
