@@ -159,6 +159,16 @@ Address* Account::getOrCreateAddress(const QJsonObject& data)
     return address;
 }
 
+Balance *Account::getBalanceByAssetId(const QString &id) const
+{
+    return m_balance_by_id.value(id=="6f0279e9ed041c3d710a9f57d0c02928416460c4b722ae3457a11eec381c526d" ? "btc" : id);
+}
+
+Transaction *Account::getTransactionByTxHash(const QString &id) const
+{
+    return m_transactions_by_hash.value(id);
+}
+
 bool Account::isMainAccount() const
 {
     return m_json.value("name").toString() == "";

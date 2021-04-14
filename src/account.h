@@ -42,6 +42,8 @@ public:
     void updateBalance();
     Transaction *getOrCreateTransaction(const QJsonObject &data);
     Address *getOrCreateAddress(const QJsonObject &data);
+    Q_INVOKABLE Balance* getBalanceByAssetId(const QString &id) const;
+    Q_INVOKABLE Transaction* getTransactionByTxHash(const QString &id) const;
 signals:
     void walletChanged();
     void jsonChanged();
