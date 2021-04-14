@@ -17,6 +17,14 @@ void RestoreController::setNetwork(Network* network)
     update();
 }
 
+void RestoreController::setType(const QString& type)
+{
+    if (m_type == type) return;
+    m_type = type;
+    emit typeChanged(m_type);
+    update();
+}
+
 void RestoreController::setMnemonic(const QStringList& mnemonic)
 {
     if (m_mnemonic == mnemonic) return;
@@ -76,7 +84,12 @@ void RestoreController::accept()
     QObject::connect(handler, &Handler::done, this, [this, handler, activity] {
         handler->deleteLater();
         m_wallet->m_pin_data = handler->pinData();
-        m_wallet->setName(m_name.isEmpty() ? m_default_name : m_name);
+        if (m_type == "amp") {
+            Q_ASSERT(m_network->isLiquid());
+            m_wallet->setName(WalletManager::instance()->uniqueWalletName("My AMP Wallet"));
+        } else {
+            m_wallet->setName(WalletManager::instance()->newWalletName(m_network));
+        }
 
         WalletManager::instance()->insertWallet(m_wallet);
 
