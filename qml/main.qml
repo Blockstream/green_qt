@@ -79,7 +79,7 @@ ApplicationWindow {
     visible: true
     color: constants.c900
     title: {
-        const parts = []
+        const parts = Qt.application.arguments.indexOf('--debugnavigation') > 0 ? [navigation.location] : []
         if (currentWallet) {
             if (currentWallet.device) {
                 parts.push(currentWallet.device.name);

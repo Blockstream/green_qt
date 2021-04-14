@@ -83,6 +83,7 @@ int main(int argc, char *argv[])
     parser.addOption(QCommandLineOption("printtoconsole"));
     parser.addOption(QCommandLineOption("debugfocus"));
     parser.addOption(QCommandLineOption("debugjade"));
+    parser.addOption(QCommandLineOption("debugnavigation"));
     parser.process(app);
 
     if (parser.isSet("printtoconsole")) {
