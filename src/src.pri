@@ -5,6 +5,7 @@ SOURCES += \
     $$PWD/account.cpp \
     $$PWD/address.cpp \
     $$PWD/addresslistmodel.cpp \
+    $$PWD/addresslistmodelfilter.cpp \
     $$PWD/asset.cpp \
     $$PWD/balance.cpp \
     $$PWD/clipboard.cpp \
@@ -46,6 +47,7 @@ HEADERS += \
     $$PWD/account.h \
     $$PWD/address.h \
     $$PWD/addresslistmodel.h \
+    $$PWD/addresslistmodelfilter.h \
     $$PWD/asset.h \
     $$PWD/balance.h \
     $$PWD/clipboard.h \
