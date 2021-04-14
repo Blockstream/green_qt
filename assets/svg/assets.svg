@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30">
+    <defs>
+        <filter id="anhaxyahpa">
+            <feColorMatrix in="SourceGraphic" values="0 0 0 0 1.000000 0 0 0 0 1.000000 0 0 0 0 1.000000 0 0 0 1.000000 0"/>
+        </filter>
+    </defs>
+    <g fill="none" fill-rule="evenodd">
+        <g>
+            <g>
+                <path fill="#D8D8D8" fill-opacity="0" d="M0 0H30V30H0z" transform="translate(-277 -12944) translate(277 12944)"/>
+                <g filter="url(#anhaxyahpa)" transform="translate(-277 -12944) translate(277 12944)">
+                    <g>
+                        <path fill="#FFF" fill-rule="nonzero" d="M13.757 3.292L13.757.03 10.285.03zM4.963 3.98L12.957 3.98 8.96.225zM13.48 5.03L4.44 5.03 8.96 15.37zM4.163 3.292L7.635.03 4.163.03zM3.113 3.98L3.113.821.114 3.98zM14.807 3.98L17.806 3.98 14.807.821zM14.626 5.03L10.939 13.463 17.92 5.03zM3.294 5.03L0 5.03 6.981 13.463z" transform="translate(6 7.5)"/>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

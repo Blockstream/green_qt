@@ -23,5 +23,9 @@
         <file>svg/proxyV2.svg</file>
         <file>svg/amp.svg</file>
         <file>svg/green_server.svg</file>
+        <file>svg/addresses.svg</file>
+        <file>svg/assets.svg</file>
+        <file>svg/overview.svg</file>
+        <file>svg/search.svg</file>
     </qresource>
 </RCC>
