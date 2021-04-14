@@ -99,5 +99,6 @@
         <file>AddressesListView.qml</file>
         <file>AddressDelegate.qml</file>
         <file>DeleteWalletDialog.qml</file>
+        <file>OverviewView.qml</file>
     </qresource>
 </RCC>

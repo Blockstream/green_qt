@@ -6,10 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Add view with list of generated addresses
+- Support searching for a generated address
 - Warn when input is not a valid BIP39 word
 - Language selector in application settings
 
 ### Changed
+- Send and receive buttons moved from account card to toolbar
 
 ### Fixed
 - Show error when restore fails

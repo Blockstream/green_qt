@@ -17,7 +17,10 @@ Page {
             icon.source: 'qrc:/svg/arrow_left.svg'
             icon.height: 16
             icon.width: 16
-            onClicked: account_view.pop()
+            onClicked: {
+                const [,network_id,wallet_id,pointer,asset_id] = navigation.location.split('/')
+                navigation.go(`/${network_id}/${wallet_id}/assets`)
+            }
         }
 
         Label {

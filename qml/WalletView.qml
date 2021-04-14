@@ -253,16 +253,6 @@ MainPage {
         BumpFeeDialog {
         }
     }
-    Component {
-        id: send_dialog
-        SendDialog {
-        }
-    }
-    Component {
-        id: receive_dialog
-        ReceiveDialog {
-        }
-    }
 
     SystemMessageDialog {
         id: system_message_dialog

@@ -107,41 +107,6 @@ ListView {
                     font.styleName: 'Regular'
                 }
             }
-            Collapsible {
-                Layout.fillWidth: true
-                Layout.alignment: Qt.AlignRight
-                collapsed: !highlighted
-                RowLayout {
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    spacing: 8
-                    Button {
-                        Layout.fillWidth: true
-                        id: send_button
-                        flat: true
-                        enabled: !wallet.locked && account.balance > 0
-                        icon.source: 'qrc:/svg/send.svg'
-                        icon.width: 24
-                        icon.height: 24
-                        hoverEnabled: true
-                        text: qsTrId('id_send')
-                        onClicked: send_dialog.createObject(window, { account: delegate.account }).open()
-                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                        ToolTip.text: qsTrId('id_insufficient_lbtc_to_send_a')
-                        ToolTip.visible: hovered && !enabled
-                    }
-                    Button {
-                        Layout.fillWidth: true
-                        flat: true
-                        enabled: !wallet.locked
-                        icon.source: 'qrc:/svg/receive.svg'
-                        icon.width: 24
-                        icon.height: 24
-                        text: qsTrId('id_receive')
-                        onClicked: receive_dialog.createObject(window, { account: delegate.account }).open()
-                    }
-                }
-            }
         }
     }
 

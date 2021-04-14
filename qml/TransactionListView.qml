@@ -8,9 +8,7 @@ ListView {
     required property Account account
     signal clicked(Transaction transaction)
     clip: true
-
     spacing: 8
-
     model: TransactionListModel {
         account: list_view.account
     }

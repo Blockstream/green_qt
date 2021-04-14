@@ -1,51 +1,119 @@
 import Blockstream.Green 0.1
 import QtQuick 2.12
-import QtQuick.Controls 2.5
+import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.3
 
-ListView {
-    id: list_view
+ColumnLayout {
     required property Account account
     signal clicked(Address address)
-    clip: true
 
-    spacing: 8
+    id: self
+    Layout.fillWidth: true
+    Layout.fillHeight: true
 
-    model: AddressListModel {
-        account: list_view.account
+    RowLayout {
+        Layout.fillWidth: true
+        Layout.preferredHeight: 50
+
+        ToolButton {
+            icon.source: "qrc:/svg/search.svg"
+            icon.width: 24
+            icon.height: 24
+            icon.color: 'white'
+        }
+
+        TextField {
+            id: search_field
+            Layout.fillWidth: true
+            placeholderText: "search address history"
+            onTextChanged: address_model_filter.search(text)
+        }
+
+        ToolButton {
+            visible: search_field.text.length>0
+            icon.source: "qrc:/svg/cancel.svg"
+            icon.width: 12
+            icon.height: 12
+            icon.color: 'white'
+            padding: 0
+            onClicked: {
+                search_field.clear()
+                address_model_filter.clear()
+            }
+        }
     }
 
-    delegate: AddressDelegate {
-        hoverEnabled: false
-        width: list_view.width
-        onClicked: list_view.clicked(address)
+    RowLayout {
+        Layout.fillWidth: true
+        Layout.leftMargin: constants.p1
+        Layout.rightMargin: constants.p1
+        Layout.preferredHeight: 50
+        spacing: constants.p3
+        Label {
+            Layout.fillWidth: true
+            elide: Text.ElideRight
+            text: qsTrId('id_address')
+            font.capitalization: Font.AllUppercase
+            font.pixelSize: 16
+            font.styleName: 'Medium'
+        }
+        Label {
+            text: 'TYPE'
+            horizontalAlignment: Text.AlignHCenter
+            font.capitalization: Font.AllUppercase
+            font.pixelSize: 16
+            font.styleName: 'Medium'
+            Layout.minimumWidth: 50
+        }
+        Label {
+            text: 'COUNT'
+            horizontalAlignment: Text.AlignHCenter
+            font.capitalization: Font.AllUppercase
+            font.pixelSize: 16
+            font.styleName: 'Medium'
+            Layout.minimumWidth: 50
+        }
     }
 
-    ScrollIndicator.vertical: ScrollIndicator { }
+    ListView {
+        id: list_view
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+        clip: true
+        spacing: 8
+        model: AddressListModelFilter {
+            id: address_model_filter
+            model: AddressListModel {
+                id: address_model
+                account: self.account
+            }
+        }
+        delegate: AddressDelegate {
+            hoverEnabled: false
+            width: list_view.width
+            onClicked: self.clicked(address)
+        }
 
-    Rectangle {
-        anchors.fill: parent
-        color: constants.c800
-        visible: model.fetching
-        opacity: visible ? 0.5 : 0
-        Behavior on opacity { OpacityAnimator {} }
-    }
+        ScrollIndicator.vertical: ScrollIndicator { }
 
-    ColumnLayout {
-        opacity: model.fetching ? 1 : 0
-        Behavior on opacity { OpacityAnimator {} }
-        anchors.centerIn: parent
-        spacing: 16
+        Rectangle {
+            anchors.fill: parent
+            color: constants.c800
+            visible: address_model.fetching
+            opacity: visible ? 0.5 : 0
+            Behavior on opacity { OpacityAnimator {} }
+        }
+
         BusyIndicator {
             width: 32
             height: 32
-            running: model.fetching
+            running: address_model.fetching
             anchors.margins: 8
             Layout.alignment: Qt.AlignHCenter
-        }
-        Label {
-            text: 'Loading addresses...'
-            Layout.alignment: Qt.AlignHCenter
+            opacity: address_model.fetching ? 1 : 0
+            Behavior on opacity { OpacityAnimator {} }
+            anchors.bottom: parent.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
         }
     }
 }

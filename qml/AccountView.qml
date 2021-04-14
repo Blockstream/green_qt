@@ -6,8 +6,9 @@ import QtQuick.Controls 2.14
 import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.12
 
-StackView {
+ColumnLayout {
     id: account_view
+    spacing: constants.p3
     required property Account account
 
     function getUnblindingData(tx) {
@@ -41,113 +42,164 @@ StackView {
         item.ToolTip.show(qsTrId('id_copied_to_clipboard'), 2000);
     }
 
-    Component {
-        id: bitcoin_header
-        Label {
-            text: qsTrId('id_transactions')
-            Layout.fillWidth: true
-            font.pixelSize: 18
-            font.styleName: 'Medium'
+    RowLayout {
+        id: toolbar
+        Layout.fillWidth: true
+        spacing: constants.p1
+        TabButton {
+            visible: account_view.account.wallet.network.liquid
+            icon.source: "qrc:/svg/overview.svg"
+            ToolTip.text: qsTrId('id_overview')
+            checked: stack_layout.currentIndex === 0 && overview_view.active
+            onClicked: navigation.go(`/${wallet.network.id}/${wallet.id}/overview`)
         }
-    }
-    Component {
-        id: liquid_header
-        Pane {
-            onHeightChanged: transaction_list_view.positionViewAtBeginning()
-            width: transaction_list_view.width-16
-            property bool showAllAssets: false
-            background: null
-            padding: 0
-            contentItem: ColumnLayout {
-                spacing: 8
-                AccountIdBadge {
-                    visible: account_view.account.json.type === '2of2_no_recovery'
-                    account: account_view.account
-                    Layout.fillWidth: true
-                }
-                Label {
-                    text: qsTrId('id_assets')
-                    Layout.fillWidth: true
-                    font.pixelSize: 18
-                    font.styleName: 'Medium'
-                }
-                Repeater {
-                    model: {
-                        const balances = []
-                        for (let i = 0; i < account_view.account.balances.length; ++i) {
-                            if (!showAllAssets && i === 3) break
-                            balances.push(account_view.account.balances[i])
-                        }
-                        return balances
-                    }
-                    ItemDelegate {
-                        topPadding: 8
-                        bottomPadding: 8
-                        leftPadding: 16
-                        rightPadding: 16
-                        background: Rectangle {
-                            color: constants.c700
-                            radius: 8
-                        }
-                        Layout.fillWidth: true
-                        contentItem: RowLayout {
-                            spacing: 16
-                            AssetIcon {
-                                asset: modelData.asset
-                            }
-                            Label {
-                                Layout.fillWidth: true
-                                text: modelData.asset.name
-                                font.pixelSize: 16
-                                elide: Label.ElideRight
-                                font.styleName: 'Regular'
-                            }
-                            Label {
-                                text: modelData.displayAmount
-                                font.pixelSize: 14
-                                font.styleName: 'Regular'
-                            }
-                        }
-                        onClicked: {
-                            account_view.push(asset_view_component, { balance: modelData })
-                        }
-                    }
-                }
-                GButton {
-                    enabled: account_view.account.balances.length > 3
-                    text: {
-                        const count = account_view.account.balances.length
-                        if (count <= 3) return qsTrId('id_no_more_assets')
-                        if (showAllAssets) return qsTrId('id_hide_assets')
-                        return qsTrId('id_show_all_assets')
-                    }
-                    Layout.alignment: Qt.AlignCenter
-                    onClicked: showAllAssets = !showAllAssets
-                }
-                Label {
-                    text: qsTrId('id_transactions')
-                    Layout.fillWidth: true
-                    font.pixelSize: 18
-                    font.styleName: 'Medium'
-                }
-            }
+        TabButton {
+            visible: account_view.account.wallet.network.liquid
+            icon.source: "qrc:/svg/assets.svg"
+            ToolTip.text: qsTrId('id_assets')
+            checked: assets_view.active || asset_view.active
+            onClicked: navigation.go(`/${wallet.network.id}/${wallet.id}/assets`)
+        }
+        TabButton {
+            checked: transactions_view.active || transaction_view.active
+            icon.source: "qrc:/svg/transactions.svg"
+            ToolTip.text: qsTrId('id_transactions')
+            onClicked: navigation.go(`/${wallet.network.id}/${wallet.id}/transactions`)
+        }
+        TabButton {
+            checked: addresses_view.active
+            icon.source: "qrc:/svg/addresses.svg"
+            ToolTip.text: qsTrId('id_addresses')
+            onClicked: navigation.go(`/${wallet.network.id}/${wallet.id}/addresses`)
+        }
+        HSpacer {
+        }
+        GButton {
+            id: send_button
+            Layout.alignment: Qt.AlignRight
+            large: true
+            enabled: !wallet.locked && account.balance > 0
+            hoverEnabled: true
+            text: qsTrId('id_send')
+            onClicked: send_dialog.createObject(window, { account: account_view.account }).open()
+            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+            ToolTip.text: qsTrId('id_insufficient_lbtc_to_send_a')
+            ToolTip.visible: hovered && !enabled
+        }
+        GButton {
+            Layout.alignment: Qt.AlignRight
+            large: true
+            enabled: !wallet.locked
+            text: qsTrId('id_receive')
+            onClicked: receive_dialog.createObject(window, { account: account_view.account }).open()
         }
     }
 
-    initialItem: TransactionListView {
-        id: transaction_list_view
-        account: account_view.account
-        onClicked: account_view.push(transaction_view_component, { transaction })
-        header: Loader {
-            sourceComponent: account_view.account.wallet.network.liquid ? liquid_header : bitcoin_header
+    StackLayout {
+        id: stack_layout
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+        currentIndex: {
+            let index = -1
+            for (let i = 0; i < stack_layout.children.length; ++i) {
+                let child = stack_layout.children[i]
+                if (!(child instanceof Item)) continue
+                if (child.active) index = i
+            }
+            return index
+        }
+
+        OverviewView {
+            id: overview_view
+            property bool active: account_view.account.wallet.network.liquid
+            showAllAssets: false
+        }
+
+        AssetListView {
+            id: assets_view
+            property bool active: navigation.location.indexOf("assets")>0
+            account: account_view.account
+            onClicked: navigation.go(`/${wallet.network.id}/${wallet.id}/${account_view.account.json.pointer}/${balance.asset.id}`)
+        }
+
+        Loader {
+            id: asset_view
+            active: {
+                const [,,wallet_id,pointer,asset_id] = navigation.location.split('/')
+                if (account_view.account.wallet.id!==wallet_id) return false
+                if (account_view.account.json.pointer!=pointer) return false // it is important that the comparision is made this way because the types differ
+                if (account_view.account.getBalanceByAssetId(asset_id)===null) return false
+                return true;
+            }
+            sourceComponent: AssetView {
+                balance: {
+                    const [,,,,asset_id] = navigation.location.split('/')
+                    return account_view.account.getBalanceByAssetId(asset_id)
+                }
+            }
+        }
+
+        TransactionListView {
+            id: transactions_view
+            property bool active: navigation.location.indexOf("transactions")>0
+            account: account_view.account
+            onClicked: navigation.go(`/${wallet.network.id}/${wallet.id}/${account_view.account.json.pointer}/${transaction.data.txhash}`)
+        }
+
+        Loader {
+            id: transaction_view
+            active: {
+                const [,,wallet_id,pointer,transaction_id] = navigation.location.split('/')
+                if (account_view.account.wallet.id!==wallet_id) return false
+                if (account_view.account.json.pointer!=pointer) return false // it is important that the comparision is made this way because the types differ
+                if (account_view.account.getTransactionByTxHash(transaction_id)===null) return false
+                return true;
+            }
+            sourceComponent: TransactionView {
+                transaction: {
+                    const [,,,,transaction_id] = navigation.location.split('/')
+                    return account_view.account.getTransactionByTxHash(transaction_id)
+                }
+            }
+        }
+
+        AddressesListView {
+            id: addresses_view
+            property bool active: navigation.location.indexOf("addresses")>0
+            account: account_view.account
         }
     }
+
     Component {
         id: transaction_view_component
         TransactionView { }
     }
+
     Component {
         id: asset_view_component
         AssetView { }
+    }
+
+    Component {
+        id: send_dialog
+        SendDialog { }
+    }
+
+    Component {
+        id: receive_dialog
+        ReceiveDialog { }
+    }
+
+    component TabButton: ToolButton {
+        icon.width: constants.p3
+        icon.height: constants.p3
+        icon.color: 'white'
+        padding: 8
+        background: Rectangle {
+            color: parent.checked ? constants.c400 : parent.hovered ? constants.c600 : constants.c700
+            radius: 4
+        }
+        ToolTip.delay: 300
+        ToolTip.visible: hovered
     }
 }
