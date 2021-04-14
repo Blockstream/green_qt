@@ -8,14 +8,16 @@ import QtQml.Models 2.0
 
 AbstractDialog {
     id: self
+    icon: controller.type === 'amp' ? 'qrc:/svg/amp.svg' : controller.network ? icons[controller.network.id] : null
     title: qsTrId('id_restore_green_wallet')
-    width: 850
+    width: 1000
     height: 500
     closePolicy: Popup.NoAutoClose
 
     RestoreController {
         id: controller
         network: NetworkManager.network(navigation.param.network || '')
+        type: navigation.param.type
         mnemonic: (navigation.param.mnemonic || '').split(',')
         password: navigation.param.password || ''
         pin: navigation.param.pin || ''
@@ -112,13 +114,12 @@ AbstractDialog {
                     if (!(child instanceof Item)) continue
                     if (child.active) index = i
                 }
-                console.log('current index', index)
                 return index
             }
         }
         SelectNetworkView {
             readonly property bool active: true
-            showAMP: false
+            showAMP: true
             view: 'restore'
         }
         AnimLoader {
