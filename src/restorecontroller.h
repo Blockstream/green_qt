@@ -19,8 +19,6 @@ class RestoreController : public Entity
     Q_PROPERTY(QStringList mnemonic READ mnemonic WRITE setMnemonic NOTIFY mnemonicChanged)
     Q_PROPERTY(QString password READ password WRITE setPassword NOTIFY passwordChanged)
     Q_PROPERTY(bool valid READ isValid NOTIFY validChanged)
-    Q_PROPERTY(QString defaultName READ defaultName NOTIFY defaultNameChanged)
-    Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(Wallet* wallet READ wallet NOTIFY walletChanged)
     Q_PROPERTY(QString pin READ pin WRITE setPin NOTIFY pinChanged)
     Q_PROPERTY(bool active READ isActive WRITE setActive NOTIFY activeChanged)
@@ -36,10 +34,6 @@ public:
     QString password() const { return m_password; }
     void setPassword(const QString& password);
     bool isValid() const { return m_valid; }
-    QString defaultName() const { return m_default_name; }
-    void setDefaultName(const QString& default_name);
-    QString name() const { return m_name; }
-    void setName(const QString& name);
     Wallet* wallet() const { return m_wallet; }
     QString pin() const { return m_pin; }
     void setPin(const QString& pin);
@@ -54,8 +48,6 @@ signals:
     void typeChanged(const QString& type);
     void mnemonicChanged(const QStringList& mnemonic);
     void passwordChanged(const QString& password);
-    void defaultNameChanged(const QString& name);
-    void nameChanged(const QString& name);
     void walletChanged(Wallet* wallet);
     void pinChanged(const QString& pin);
     void activeChanged(bool active);
@@ -67,8 +59,6 @@ private:
     QStringList m_mnemonic;
     QString m_password;
     bool m_valid{false};
-    QString m_name;
-    QString m_default_name;
     Wallet* m_wallet{nullptr};
     QString m_pin;
     bool m_active{false};

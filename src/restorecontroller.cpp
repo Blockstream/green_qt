@@ -41,20 +41,6 @@ void RestoreController::setPassword(const QString& password)
     update();
 }
 
-void RestoreController::setDefaultName(const QString &default_name)
-{
-    if (m_default_name == default_name) return;
-    m_default_name = default_name;
-    emit defaultNameChanged(m_default_name);
-}
-
-void RestoreController::setName(const QString& name)
-{
-    if (m_name == name) return;
-    m_name = name;
-    emit nameChanged(m_name);
-}
-
 void RestoreController::setPin(const QString& pin)
 {
     if (m_pin == pin) return;
@@ -108,10 +94,8 @@ void RestoreController::update()
     if (m_accepted) return;
     auto check = [this] {
         if (!m_network) {
-            setDefaultName("");
             return false;
         }
-        setDefaultName(WalletManager::instance()->newWalletName(m_network));
         if (m_mnemonic.length() == 27) {
             if (m_password.isEmpty()) return false;
         } else if (m_mnemonic.length() == 24) {
