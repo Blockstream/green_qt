@@ -80,7 +80,10 @@ void AddressListModel::fetch(bool reset)
 QHash<int, QByteArray> AddressListModel::roleNames() const
 {
     return {
-        { Qt::UserRole, "address" }
+        { AddressRole, "address" },
+        { PointerRole, "last_pointer" },
+        { AddressStringRole, "address_string" },
+        { CountRole, "tx_count" }
     };
 }
 
@@ -114,7 +117,18 @@ int AddressListModel::columnCount(const QModelIndex& parent) const
 
 QVariant AddressListModel::data(const QModelIndex& index, int role) const
 {
-    if (role == Qt::UserRole) return QVariant::fromValue(m_addresses.at(index.row()));
+    switch (role)
+    {
+        case AddressRole:
+            return QVariant::fromValue(m_addresses.at(index.row()));
+        case PointerRole:
+            return QVariant::fromValue(m_addresses.at(index.row())->data()["last_pointer"].toVariant());
+        case AddressStringRole:
+            return QVariant::fromValue(m_addresses.at(index.row())->data()["address"].toVariant());
+        case CountRole:
+            return QVariant::fromValue(m_addresses.at(index.row())->data()["tx_count"].toVariant());
+    }
+
     return QVariant();
 }
 

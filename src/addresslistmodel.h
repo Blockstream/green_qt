@@ -15,6 +15,13 @@ class AddressListModel : public QAbstractListModel
     Q_PROPERTY(bool fetching READ fetching NOTIFY fetchingChanged)
     QML_ELEMENT
 public:
+    enum AddressRoles {
+        AddressRole = Qt::UserRole,
+        PointerRole = Qt::UserRole + 1,
+        AddressStringRole,
+        CountRole
+    };
+
     AddressListModel(QObject* parent = nullptr);
     ~AddressListModel();
 
