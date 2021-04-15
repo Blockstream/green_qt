@@ -8,6 +8,21 @@
 
 #include <gdk.h>
 
+class DisableAllPinLoginsHandler : public Handler
+{
+    void call(GA_session* session, GA_auth_handler** auth_handler) override
+    {
+        Q_UNUSED(auth_handler)
+        int err = GA_disable_all_pin_logins(session);
+        Q_ASSERT(err == GA_OK);
+    }
+public:
+    DisableAllPinLoginsHandler(Wallet* wallet)
+        : Handler(wallet)
+    {
+    }
+};
+
 class ChangeSettingsHandler : public Handler
 {
     QJsonObject m_data;
@@ -23,7 +38,6 @@ public:
     {
     }
 };
-
 
 class SendNLocktimesHandler : public Handler
 {
@@ -324,13 +338,24 @@ void Controller::deleteWallet()
     auto handler = new DeleteWalletHandler(m_wallet);
     connect(handler, &Handler::done, [this, handler] {
         handler->deleteLater();
-        qDebug() << "WALLET REMOVED";
         m_wallet->disconnect();
         WalletManager::instance()->removeWallet(m_wallet);
     });
     connect(handler, &Handler::error, [handler] {
         handler->deleteLater();
-        qDebug() << "WALLET NOT REMOVED" << handler->result();
+    });
+    exec(handler);
+}
+
+void Controller::disableAllPins()
+{
+    auto handler = new DisableAllPinLoginsHandler(m_wallet);
+    QObject::connect(handler, &Handler::done, [this, handler] {
+        Q_UNUSED(this)
+        handler->deleteLater();
+    });
+    connect(handler, &Handler::error, [handler] {
+        handler->deleteLater();
     });
     exec(handler);
 }

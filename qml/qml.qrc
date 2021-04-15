@@ -100,5 +100,6 @@
         <file>AddressDelegate.qml</file>
         <file>DeleteWalletDialog.qml</file>
         <file>OverviewView.qml</file>
+        <file>DisableAllPinsDialog.qml</file>
     </qresource>
 </RCC>

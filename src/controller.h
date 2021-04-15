@@ -37,6 +37,7 @@ public slots:
     void setRecoveryEmail(const QString& email);
     void setCsvTime(int value);
     void deleteWallet();
+    void disableAllPins();
 signals:
     void walletChanged(Wallet* wallet);
     void finished();

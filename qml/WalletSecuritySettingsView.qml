@@ -17,6 +17,25 @@ ColumnLayout {
     }
 
     SettingsBox {
+        title: qsTrId('emergency')
+        visible: !wallet.device
+        contentItem: ColumnLayout {
+            Label {
+                Layout.fillWidth: true
+                text: 'Disable all PIN logins previously set. This will prevent pin access on any device for this wallet. Use this only in case of emergency as you will need to use the mnemonics to restore wallet access.'
+                wrapMode: Label.WordWrap
+            }
+            GButton {
+                destructive: true
+                Layout.alignment: Qt.AlignRight
+                large: true
+                text: qsTrId('Disable all pin logins')
+                onClicked: disable_all_pins_dialog.createObject(self).open()
+            }
+        }
+    }
+
+    SettingsBox {
         title: qsTrId('id_access')
         visible: !wallet.device
         contentItem: ColumnLayout {
@@ -237,6 +256,13 @@ ColumnLayout {
     Component {
         id: change_pin_dialog
         ChangePinDialog {
+            wallet: self.wallet
+        }
+    }
+
+    Component {
+        id: disable_all_pins_dialog
+        DisableAllPinsDialog {
             wallet: self.wallet
         }
     }
