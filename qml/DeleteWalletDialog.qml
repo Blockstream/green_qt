@@ -13,6 +13,7 @@ ControllerDialog {
     initialItem: ColumnLayout {
         property list<Action> actions: [
             Action {
+                property bool destructive: true
                 text: qsTrId('Delete wallet')
                 enabled: confirm_checkbox.checked
                 onTriggered: controller.deleteWallet()

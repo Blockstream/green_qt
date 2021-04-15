@@ -24,6 +24,7 @@ WalletDialog {
         Repeater {
             model: stack_view.currentItem ? stack_view.currentItem.actions : []
             GButton {
+                destructive: modelData.destructive || false
                 large: true
                 action: modelData
             }

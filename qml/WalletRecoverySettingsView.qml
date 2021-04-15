@@ -125,6 +125,7 @@ ColumnLayout {
             GButton {
                 Layout.alignment: Qt.AlignRight
                 large: true
+                destructive: true
                 enabled: self.wallet.empty
                 text: qsTrId('Delete wallet')
                 onClicked: delete_wallet_dialog.createObject(self).open()
