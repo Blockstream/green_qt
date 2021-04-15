@@ -24,6 +24,10 @@ QtObject {
     property string g800: "#008139"
     property string g900: "#006224"
 
+    property string r500: '#69302E'
+    property string r600: '#612B29'
+    property string r700: '#341817'
+
     // paddings
     property int p0: 0
     property int p1: 12
