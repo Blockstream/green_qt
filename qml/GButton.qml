@@ -4,7 +4,11 @@ import QtQuick.Layouts 1.13
 
 Button {
     property bool large: false
-
+    property bool destructive: false
+    function _color(index) {
+        const prefix = self.highlighted ? 'g' : self.destructive ? 'r' : 'c'
+        return constants[prefix + index]
+    }
     id: self
     font.pixelSize: self.large ? 14 : 12
     icon.width: self.large ? 16 : 12
@@ -16,25 +20,12 @@ Button {
     background: Rectangle {
         id: background
         radius: 4
-        color: self.activeFocus || self.hovered ? constants.c600: constants.c500
-        states: [
-            State {
-                when: !self.enabled
-                PropertyChanges { target: background; color: constants.c700 }
-            },
-            State {
-                when: self.pressed
-                PropertyChanges { target: background; color: "white" }
-            },
-            State {
-                when: self.highlighted && (self.activeFocus || self.hovered)
-                PropertyChanges { target: background; color: constants.g600 }
-            },
-            State {
-                when: self.highlighted
-                PropertyChanges { target: background; color: constants.g500 }
-            }
-        ]
+        color: {
+            if (!self.enabled) return _color(700)
+            if (self.pressed) return 'white'
+            if (self.activeFocus || self.hovered) return _color(600)
+            return _color(500)
+        }
     }
     contentItem: RowLayout {
         spacing: self.padding
