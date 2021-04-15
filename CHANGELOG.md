@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fiat amounts are updated after receiving a ticker notification
 
 ### Fixed
+- Ensure that window is correctly restored regardless of available screens changes
 
 ## [1.0.1] - 2021-09-30
 ### Added

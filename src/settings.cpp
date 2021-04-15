@@ -165,7 +165,8 @@ QString Settings::proxy() const
 void Settings::load()
 {
     // By default position window in primary screen with a 200px margin
-    qGuiApp->primaryScreen()->geometry().adjusted(200, 200, -200, -200).getRect(&m_window_x, &m_window_y, &m_window_width, &m_window_height);
+    auto default_rect = qGuiApp->primaryScreen()->geometry().adjusted(200, 200, -200, -200);
+    default_rect.getRect(&m_window_x, &m_window_y, &m_window_width, &m_window_height);
 
     const auto path = GetDataFile("app", "settings.ini");
     if (QFileInfo::exists(path)) {
@@ -176,6 +177,17 @@ void Settings::load()
         QSettings settings;
         load(settings);
         saveNow();
+    }
+
+    // verify if window position is contained in any of the available screens and reposition in primary screen if necessary
+    bool intersects = false;
+    const QRect rect(m_window_x, m_window_y, m_window_width, m_window_height);
+    for (QScreen* screen : qGuiApp->screens()) {
+        intersects = screen->availableGeometry().intersects(rect);
+        if (intersects) break;
+    }
+    if (!intersects) {
+        default_rect.getRect(&m_window_x, &m_window_y, &m_window_width, &m_window_height);
     }
 }
 
