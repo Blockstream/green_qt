@@ -19,6 +19,7 @@ Pane {
         Label {
             text: qsTrId('id_transactions')
             Layout.fillWidth: true
+            Layout.topMargin: constants.p1
             font.pixelSize: 18
             font.styleName: 'Medium'
         }
@@ -29,7 +30,11 @@ Pane {
             Layout.fillHeight: true
             height: contentHeight
             account: account_view.account
-            onClicked: navigation.go(`/${wallet.network.id}/${wallet.id}/${account_view.account.json.pointer}/${transaction.data.txhash}`)
+            onClicked: {
+                transactions_toolbar_button.checked = true
+                while (transactions_stack_view.depth>1) transactions_stack_view.pop()
+                transactions_stack_view.push(transaction_view_component.createObject(transactions_stack_view, { transaction }))
+            }
         }
     }
 
@@ -44,6 +49,7 @@ Pane {
         Label {
             text: qsTrId('id_assets')
             Layout.fillWidth: true
+            Layout.bottomMargin: constants.p1
             font.pixelSize: 18
             font.styleName: 'Medium'
         }
@@ -84,10 +90,15 @@ Pane {
                         font.styleName: 'Regular'
                     }
                 }
-                onClicked: navigation.go(`/${wallet.network.id}/${wallet.id}/${account_view.account.json.pointer}/${modelData.asset.id}`)
+                onClicked: {
+                    assets_toolbar_button.checked = true
+                    while (assets_stack_view.depth>1) assets_stack_view.pop()
+                    assets_stack_view.push(asset_view_component.createObject(assets_stack_view, { balance: modelData }))
+                }
             }
         }
         GButton {
+            visible: false
             enabled: account_view.account.balances.length > 3
             text: {
                 const count = account_view.account.balances.length

@@ -82,10 +82,7 @@ Page {
             icon.source: 'qrc:/svg/arrow_left.svg'
             icon.height: 16
             icon.width: 16
-            onClicked: {
-                const [,network_id,wallet_id,pointer,transaction_id] = navigation.location.split('/')
-                navigation.go(`/${network_id}/${wallet_id}/transactions`)
-            }
+            onClicked: transactions_stack_view.pop()
         }
 
         Label {

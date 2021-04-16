@@ -20,5 +20,5 @@ ListView {
         onClicked: if (hasDetails) list_view.clicked(balance)
     }
 
-    ScrollBar.vertical: ScrollBar { }
+    ScrollIndicator.vertical: ScrollIndicator { }
 }

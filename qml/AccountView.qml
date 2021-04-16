@@ -46,31 +46,50 @@ ColumnLayout {
         id: toolbar
         Layout.fillWidth: true
         spacing: constants.p1
+        ButtonGroup {
+            id: button_group
+            onCheckedButtonChanged: {
+                let index = -1
+                let size = button_group.buttons.length
+                if (!account_view.account.wallet.network.liquid) size -= 2 // if account is not liquid ignore the first two buttons
+                for (let i = 0; i < size; ++i) {
+                    let child = button_group.buttons[i]
+                    if (child.enabled && child.checked) index = button_group.buttons.length-i-1
+                }
+                if (index>-1) stack_layout.currentIndex = index
+            }
+        }
         TabButton {
-            visible: account_view.account.wallet.network.liquid
+            checked: account_view.account.wallet.network.liquid
+            ButtonGroup.group: button_group
+            enabled: account_view.account.wallet.network.liquid
+            visible: enabled
             icon.source: "qrc:/svg/overview.svg"
             ToolTip.text: qsTrId('id_overview')
-            checked: stack_layout.currentIndex === 0 && overview_view.active
-            onClicked: navigation.go(`/${wallet.network.id}/${wallet.id}/overview`)
+            onClicked: checked = true
         }
         TabButton {
-            visible: account_view.account.wallet.network.liquid
+            id: assets_toolbar_button
+            ButtonGroup.group: button_group
+            enabled: account_view.account.wallet.network.liquid
+            visible: enabled
             icon.source: "qrc:/svg/assets.svg"
             ToolTip.text: qsTrId('id_assets')
-            checked: assets_view.active || asset_view.active
-            onClicked: navigation.go(`/${wallet.network.id}/${wallet.id}/assets`)
+            onClicked: checked = true
         }
         TabButton {
-            checked: transactions_view.active || transaction_view.active
+            id: transactions_toolbar_button
+            checked: !account_view.account.wallet.network.liquid
+            ButtonGroup.group: button_group
             icon.source: "qrc:/svg/transactions.svg"
             ToolTip.text: qsTrId('id_transactions')
-            onClicked: navigation.go(`/${wallet.network.id}/${wallet.id}/transactions`)
+            onClicked: checked = true
         }
         TabButton {
-            checked: addresses_view.active
+            ButtonGroup.group: button_group
             icon.source: "qrc:/svg/addresses.svg"
             ToolTip.text: qsTrId('id_addresses')
-            onClicked: navigation.go(`/${wallet.network.id}/${wallet.id}/addresses`)
+            onClicked: checked = true
         }
         HSpacer {
         }
@@ -99,73 +118,33 @@ ColumnLayout {
         id: stack_layout
         Layout.fillWidth: true
         Layout.fillHeight: true
-        currentIndex: {
-            let index = -1
-            for (let i = 0; i < stack_layout.children.length; ++i) {
-                let child = stack_layout.children[i]
-                if (!(child instanceof Item)) continue
-                if (child.active) index = i
-            }
-            return index
-        }
+        currentIndex: account_view.account.wallet.network.liquid ? 0 : 2
 
         OverviewView {
             id: overview_view
-            property bool active: account_view.account.wallet.network.liquid
             showAllAssets: false
         }
 
-        AssetListView {
-            id: assets_view
-            property bool active: navigation.location.indexOf("assets")>0
-            account: account_view.account
-            onClicked: navigation.go(`/${wallet.network.id}/${wallet.id}/${account_view.account.json.pointer}/${balance.asset.id}`)
-        }
-
-        Loader {
-            id: asset_view
-            active: {
-                const [,,wallet_id,pointer,asset_id] = navigation.location.split('/')
-                if (account_view.account.wallet.id!==wallet_id) return false
-                if (account_view.account.json.pointer!=pointer) return false // it is important that the comparision is made this way because the types differ
-                if (account_view.account.getBalanceByAssetId(asset_id)===null) return false
-                return true;
-            }
-            sourceComponent: AssetView {
-                balance: {
-                    const [,,,,asset_id] = navigation.location.split('/')
-                    return account_view.account.getBalanceByAssetId(asset_id)
-                }
+        StackView {
+            id: assets_stack_view
+            initialItem: AssetListView {
+                id: assets_view
+                account: account_view.account
+                onClicked: parent.push(asset_view_component.createObject(assets_stack_view, { balance }))
             }
         }
 
-        TransactionListView {
-            id: transactions_view
-            property bool active: navigation.location.indexOf("transactions")>0
-            account: account_view.account
-            onClicked: navigation.go(`/${wallet.network.id}/${wallet.id}/${account_view.account.json.pointer}/${transaction.data.txhash}`)
-        }
-
-        Loader {
-            id: transaction_view
-            active: {
-                const [,,wallet_id,pointer,transaction_id] = navigation.location.split('/')
-                if (account_view.account.wallet.id!==wallet_id) return false
-                if (account_view.account.json.pointer!=pointer) return false // it is important that the comparision is made this way because the types differ
-                if (account_view.account.getTransactionByTxHash(transaction_id)===null) return false
-                return true;
-            }
-            sourceComponent: TransactionView {
-                transaction: {
-                    const [,,,,transaction_id] = navigation.location.split('/')
-                    return account_view.account.getTransactionByTxHash(transaction_id)
-                }
+        StackView {
+            id: transactions_stack_view
+            initialItem: TransactionListView {
+                id: transactions_view
+                account: account_view.account
+                onClicked: parent.push(transaction_view_component.createObject(transactions_stack_view, { transaction }))
             }
         }
 
         AddressesListView {
             id: addresses_view
-            property bool active: navigation.location.indexOf("addresses")>0
             account: account_view.account
         }
     }
