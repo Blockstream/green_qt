@@ -191,10 +191,10 @@ ColumnLayout {
     }
 
     component TabButton: ToolButton {
-        icon.width: constants.p3
-        icon.height: constants.p3
+        icon.width: constants.p4
+        icon.height: constants.p4
         icon.color: 'white'
-        padding: 8
+        padding: 4
         background: Rectangle {
             color: parent.checked ? constants.c400 : parent.hovered ? constants.c600 : constants.c700
             radius: 4
