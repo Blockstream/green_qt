@@ -91,6 +91,12 @@ ColumnLayout {
             ToolTip.text: qsTrId('id_addresses')
             onClicked: checked = true
         }
+        TabButton {
+            ButtonGroup.group: button_group
+            icon.source: "qrc:/svg/addresses.svg"
+            ToolTip.text: qsTrId('id_outputs')
+            onClicked: checked = true
+        }
         HSpacer {
         }
         GButton {
@@ -145,6 +151,11 @@ ColumnLayout {
 
         AddressesListView {
             id: addresses_view
+            account: account_view.account
+        }
+
+        OutputsListView {
+            id: outputs_view
             account: account_view.account
         }
     }

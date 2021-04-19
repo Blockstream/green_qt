@@ -101,5 +101,7 @@
         <file>DeleteWalletDialog.qml</file>
         <file>OverviewView.qml</file>
         <file>DisableAllPinsDialog.qml</file>
+        <file>OutputsListView.qml</file>
+        <file>OutputDelegate.qml</file>
     </qresource>
 </RCC>

@@ -7,6 +7,7 @@
 #include "json.h"
 #include "network.h"
 #include "resolver.h"
+#include "output.h"
 #include "transaction.h"
 #include "wallet.h"
 
@@ -147,6 +148,19 @@ Transaction* Account::getOrCreateTransaction(const QJsonObject& data)
     return transaction;
 }
 
+Output* Account::getOrCreateOutput(const QJsonObject& data)
+{
+    auto txhash = data.value("txhash").toString();
+    auto pt_idx = data.value("pt_idx").toInt();
+    auto output = m_outputs_by_hash.value(QPair<QString,int>(txhash, pt_idx));
+    if (!output) {
+        output = new Output(this);
+        m_outputs_by_hash.insert(QPair<QString,int>(txhash, pt_idx), output);
+    }
+    output->updateFromData(data);
+    return output;
+}
+
 Address* Account::getOrCreateAddress(const QJsonObject& data)
 {
     auto hash = data.value("address").toString();
@@ -211,3 +225,33 @@ void AccountGetTransactionsActivity::exec()
     handler->exec();
 }
 
+#include "handlers/getunspentoutputshandler.h"
+
+AccountGetUnspentOutputsActivity::AccountGetUnspentOutputsActivity(Account* account, int num_confs, bool all_coins, QObject* parent)
+    : AccountActivity(account, parent)
+    , m_num_confs(num_confs)
+    , m_all_coins(all_coins)
+{
+}
+
+void AccountGetUnspentOutputsActivity::exec()
+{
+    auto handler = new GetUnspentOutputsHandler(account()->pointer(), m_num_confs, m_all_coins, wallet());
+
+    QObject::connect(handler, &Handler::done, this, [this, handler] {
+        handler->deleteLater();
+        for (const QJsonValue& assets_values : handler->unspentOutputs()) {
+            for (const QJsonValue& asset_value : assets_values.toArray()) {
+                auto output = account()->getOrCreateOutput(asset_value.toObject());
+                m_outputs.append(output);
+            }
+        }
+        finish();
+    });
+
+    connect(handler, &Handler::resolver, this, [](Resolver* resolver) {
+        resolver->resolve();
+    });
+
+    handler->exec();
+}
