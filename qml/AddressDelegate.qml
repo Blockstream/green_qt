@@ -7,7 +7,7 @@ import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.12
 
 ItemDelegate {
-    required property Address address
+    required property var address
     id: self
     hoverEnabled: true
     padding: 0

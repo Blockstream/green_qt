@@ -96,14 +96,6 @@ ColumnLayout {
 
         ScrollIndicator.vertical: ScrollIndicator { }
 
-        Rectangle {
-            anchors.fill: parent
-            color: constants.c800
-            visible: address_model.fetching
-            opacity: visible ? 0.5 : 0
-            Behavior on opacity { OpacityAnimator {} }
-        }
-
         BusyIndicator {
             width: 32
             height: 32
