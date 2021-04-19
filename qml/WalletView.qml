@@ -78,6 +78,7 @@ MainPage {
             }
             Loader {
                 active: !wallet.device
+                visible: active
                 Layout.fillWidth: true
                 sourceComponent: EditableLabel {
                     leftPadding: 8
