@@ -51,7 +51,7 @@ private:
     Q_PROPERTY(Session* session READ session NOTIFY sessionChanged)
     Q_PROPERTY(Network* network READ network WRITE setNetwork NOTIFY networkChanged)
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
-//    Q_PROPERTY(bool authenticating READ isAuthenticating NOTIFY authenticating)
+    Q_PROPERTY(bool hasPinData READ hasPinData NOTIFY hasPinDataChanged)
     Q_PROPERTY(bool authenticated READ isAuthenticated NOTIFY authenticationChanged)
     Q_PROPERTY(AuthenticationStatus authentication READ authentication NOTIFY authenticationChanged)
     Q_PROPERTY(bool ready READ ready NOTIFY readyChanged)
@@ -130,6 +130,7 @@ signals:
     void readyChanged(bool ready);
     void sessionChanged(Session* session);
     void networkChanged(Network* network);
+    void hasPinDataChanged();
     void authenticationChanged();
     void lockedChanged(bool locked);
     void notification(const QString& type, const QJsonObject& data);
@@ -178,6 +179,9 @@ public:
 
     void save();
     Device* m_device{nullptr};
+    bool hasPinData() const { return !m_pin_data.isEmpty(); }
+    void clearPinData();
+
 protected slots:
     void updateReady();
 };

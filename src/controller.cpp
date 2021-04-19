@@ -351,7 +351,7 @@ void Controller::disableAllPins()
 {
     auto handler = new DisableAllPinLoginsHandler(m_wallet);
     QObject::connect(handler, &Handler::done, [this, handler] {
-        Q_UNUSED(this)
+        m_wallet->clearPinData();
         handler->deleteLater();
     });
     connect(handler, &Handler::error, [handler] {

@@ -414,19 +414,28 @@ void Wallet::save()
 {
     Q_ASSERT(QThread::currentThread() == thread());
     Q_ASSERT(!m_id.isEmpty());
-    QJsonDocument doc({
+    QJsonObject data({
         { "version", 1 },
         { "name", m_name },
-        { "network", m_network->id() },
-        { "login_attempts_remaining", m_login_attempts_remaining },
-        { "pin_data", QString::fromLocal8Bit(m_pin_data.toBase64()) },
+        { "network", m_network->id() }
     });
+    if (!m_pin_data.isEmpty()) {
+        data.insert("login_attempts_remaining", m_login_attempts_remaining);
+        data.insert("pin_data", QString::fromLocal8Bit(m_pin_data.toBase64()));
+    }
     QFile file(GetDataFile("wallets", m_id));
     bool result = file.open(QFile::WriteOnly | QFile::Truncate);
     Q_ASSERT(result);
-    file.write(doc.toJson());
+    file.write(QJsonDocument(data).toJson());
     result = file.flush();
     Q_ASSERT(result);
+}
+
+void Wallet::clearPinData()
+{
+    m_pin_data.clear();
+    emit hasPinDataChanged();
+    save();
 }
 
 void Wallet::updateEmpty()
@@ -701,8 +710,8 @@ void LoginWithPinController::update()
 {
     if (!m_wallet) return;
     if (m_wallet->m_login_attempts_remaining == 0) return;
-    Q_ASSERT(!m_wallet->m_pin_data.isEmpty());
     if (m_pin.isEmpty()) return;
+    if (m_wallet->m_pin_data.isEmpty()) return;
 
     auto session = m_wallet->session();
     if (!session) {

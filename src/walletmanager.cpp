@@ -40,10 +40,12 @@ WalletManager::WalletManager()
         auto data = doc.object();
         Wallet* wallet = new Wallet(this);
         wallet->m_id = QFileInfo(file).baseName();
-        wallet->m_pin_data = QByteArray::fromBase64(data.value("pin_data").toString().toLocal8Bit());
+        if (data.contains("pin_data")) {
+            wallet->m_pin_data = QByteArray::fromBase64(data.value("pin_data").toString().toLocal8Bit());
+            wallet->m_login_attempts_remaining = data.value("login_attempts_remaining").toInt();
+        }
         wallet->m_name = data.value("name").toString();
         wallet->m_network = NetworkManager::instance()->network(data.value("network").toString());
-        wallet->m_login_attempts_remaining = data.value("login_attempts_remaining").toInt();
         addWallet(wallet);
     }
 }

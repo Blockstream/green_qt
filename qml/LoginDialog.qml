@@ -93,7 +93,7 @@ AbstractDialog {
                 PinView {
                     id: pin_view
                     Layout.alignment: Qt.AlignHCenter
-                    enabled: !self.active && self.wallet.loginAttemptsRemaining > 0
+                    enabled: !self.active && self.wallet.loginAttemptsRemaining > 0 && self.wallet.hasPinData
                 }
                 Label {
                     Layout.topMargin: 8
@@ -105,11 +105,15 @@ AbstractDialog {
                     verticalAlignment: Text.AlignVCenter
                     font.pixelSize: 12
                     wrapMode: Text.WordWrap
-                    text: switch (self.wallet.loginAttemptsRemaining) {
-                        case 0: return qsTrId('id_no_attempts_remaining')
-                        case 1: return qsTrId('id_last_attempt_if_failed_you_will')
-                        case 2: return qsTrId('id_attempts_remaining_d').arg(self.wallet.loginAttemptsRemaining)
-                        default: return qsTrId('id_enter_pin')
+                    text: {
+                        if (!self.wallet.hasPinData) {
+                            return qsTrId('PIN was disabled')
+                        } else switch (self.wallet.loginAttemptsRemaining) {
+                            case 0: return qsTrId('id_no_attempts_remaining')
+                            case 1: return qsTrId('id_last_attempt_if_failed_you_will')
+                            case 2: return qsTrId('id_attempts_remaining_d').arg(self.wallet.loginAttemptsRemaining)
+                            default: return qsTrId('id_enter_pin')
+                        }
                     }
                     Behavior on opacity { NumberAnimation {} }
                 }
@@ -160,7 +164,7 @@ AbstractDialog {
             highlighted: true
             large: true
             Layout.minimumWidth: 200
-            visible: self.wallet.loginAttemptsRemaining === 0
+            visible: self.wallet.loginAttemptsRemaining === 0 || !self.wallet.hasPinData
             text: 'Restore Wallet'
             onClicked: navigation.go('/restore', { network: self.wallet.network.id })
         }
