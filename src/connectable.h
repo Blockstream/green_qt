@@ -3,7 +3,6 @@
 
 #include <QMetaObject>
 #include <QObject>
-#include <QDebug>
 
 #include <vector>
 
@@ -23,7 +22,6 @@ public:
     const T* operator->() const { return m_value; }
     bool update(T* value) {
         if (m_value == value) return false;
-        qDebug() << Q_FUNC_INFO << m_value << " to " << value;
         for (const auto& connection : m_connections) {
             QObject::disconnect(connection);
         }
