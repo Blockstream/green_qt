@@ -24,10 +24,16 @@ ControllerDialog {
             text: qsTrId('id_delete_permanently_your_wallet')
             wrapMode: Label.WordWrap
         }
-        CheckBox {
+        RowLayout {
             Layout.fillWidth: true
-            id: confirm_checkbox
-            text: qsTrId('id_i_confirm_i_want_to_delete_this')
+            CheckBox {
+                id: confirm_checkbox
+            }
+            Label {
+                Layout.fillWidth: true
+                wrapMode: Label.WordWrap
+                text: qsTrId('id_i_confirm_i_want_to_delete_this')
+            }
         }
     }
 }

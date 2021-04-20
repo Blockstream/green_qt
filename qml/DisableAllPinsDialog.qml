@@ -27,10 +27,16 @@ ControllerDialog {
             text: qsTrId('id_this_will_disable_pin_login_for')
             wrapMode: Label.WordWrap
         }
-        CheckBox {
+        RowLayout {
             Layout.fillWidth: true
-            id: confirm_checkbox
-            text: qsTrId('id_i_confirm_i_want_to_disable_pin')
+            CheckBox {
+                id: confirm_checkbox
+            }
+            Label {
+                Layout.fillWidth: true
+                wrapMode: Label.WordWrap
+                text: qsTrId('id_i_confirm_i_want_to_disable_pin')
+            }
         }
     }
 }
