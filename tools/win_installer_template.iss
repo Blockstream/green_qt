@@ -26,6 +26,7 @@ SolidCompression=yes
 ChangesEnvironment=true
 PrivilegesRequired=admin
 ArchitecturesInstallIn64BitMode=x64
+CloseApplications=force
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -35,7 +36,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked; OnlyBelowVersion: 0,6.1
 
 [Files]
-Source: "{#MyAppName}.exe"; DestDir: "{app}"
+Source: "{#MyAppName}.exe"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppName}.exe"
@@ -43,5 +44,40 @@ Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
 Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppName}.exe"; Tasks: desktopicon
 Name: "{userappdata}\Microsoft\Internet Explorer\Quick Launch\{#MyAppName}"; Filename: "{app}\{#MyAppName}.exe"; Tasks: quicklaunchicon
 
-[UninstallRun]
-Filename: "{cmd}"; Parameters: "/C ""taskkill /im {#MyAppName}.exe /f"
+[Code]
+const
+  WM_CLOSE = 16;
+
+function InitializeSetup : Boolean;
+var winHwnd: Longint;
+    retVal : Boolean;
+    strProg: string;
+begin
+  Result := True;
+  try
+    strProg := 'Blockstream Green';
+    winHwnd := FindWindowByClassName(strProg);
+    winHwnd := FindWindowByWindowName(strProg);
+    Log('winHwnd: ' + IntToStr(winHwnd));
+    if winHwnd <> 0 then
+      Result := PostMessage(winHwnd,WM_CLOSE,0,0);
+  except
+  end;
+end;
+
+function InitializeUninstall : Boolean;
+var winHwnd: Longint;
+    retVal : Boolean;
+    strProg: string;
+begin
+  Result := True;
+  try
+    strProg := 'Blockstream Green';
+    winHwnd := FindWindowByClassName(strProg);
+    winHwnd := FindWindowByWindowName(strProg);
+    Log('winHwnd: ' + IntToStr(winHwnd));
+    if winHwnd <> 0 then
+      Result := PostMessage(winHwnd,WM_CLOSE,0,0);
+  except
+  end;
+end;
