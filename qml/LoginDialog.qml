@@ -107,7 +107,7 @@ AbstractDialog {
                     wrapMode: Text.WordWrap
                     text: {
                         if (!self.wallet.hasPinData) {
-                            return qsTrId('PIN was disabled')
+                            return qsTrId('id_pin_access_disabled')
                         } else switch (self.wallet.loginAttemptsRemaining) {
                             case 0: return qsTrId('id_no_attempts_remaining')
                             case 1: return qsTrId('id_last_attempt_if_failed_you_will')

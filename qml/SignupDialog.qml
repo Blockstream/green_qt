@@ -154,14 +154,14 @@ AbstractDialog {
                     }
                     Label {
                         Layout.maximumWidth: 500
-                        text: qsTrId('Faster, more confidential Bitcoin transactions')
+                        text: qsTrId('id_faster_more_confidential')
                         font.pixelSize: 28
                         font.bold: true
                         wrapMode: Label.WordWrap
                     }
                     Label {
                         Layout.maximumWidth: 500
-                        text: qsTrId('Liquid is a sidechain-based settlement network for traders and exchanges, enabling faster, more confidential Bitcoin transactions and the issuance of digital assets.')
+                        text: qsTrId('id_liquid_is_a_sidechainbased')
                         font.pixelSize: 16
                         wrapMode: Label.WordWrap
                     }

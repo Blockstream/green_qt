@@ -25,7 +25,7 @@ ColumnLayout {
         TextField {
             id: search_field
             Layout.fillWidth: true
-            placeholderText: "search address history"
+            placeholderText: qsTrId('id_search_address')
             onTextChanged: address_model_filter.search(text)
         }
 
@@ -53,22 +53,19 @@ ColumnLayout {
             Layout.fillWidth: true
             elide: Text.ElideRight
             text: qsTrId('id_address')
-            font.capitalization: Font.AllUppercase
             font.pixelSize: 16
             font.styleName: 'Medium'
         }
         Label {
-            text: 'TYPE'
+            text: qsTrId('Type')
             horizontalAlignment: Text.AlignHCenter
-            font.capitalization: Font.AllUppercase
             font.pixelSize: 16
             font.styleName: 'Medium'
             Layout.minimumWidth: 50
         }
         Label {
-            text: 'COUNT'
+            text: qsTrId('Tx count')
             horizontalAlignment: Text.AlignHCenter
-            font.capitalization: Font.AllUppercase
             font.pixelSize: 16
             font.styleName: 'Medium'
             Layout.minimumWidth: 50

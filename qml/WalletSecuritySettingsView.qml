@@ -17,19 +17,19 @@ ColumnLayout {
     }
 
     SettingsBox {
-        title: qsTrId('emergency')
+        title: qsTrId('id_security')
         visible: !wallet.device
         contentItem: ColumnLayout {
             Label {
                 Layout.fillWidth: true
-                text: 'Disable all PIN logins previously set. This will prevent pin access on any device for this wallet. Use this only in case of emergency as you will need to use the mnemonics to restore wallet access.'
+                text: qsTrId('id_disable_pin_access_for_this')
                 wrapMode: Label.WordWrap
             }
             GButton {
                 destructive: true
                 Layout.alignment: Qt.AlignRight
                 large: true
-                text: qsTrId('Disable all pin logins')
+                text: qsTrId('id_disable_pin_access')
                 onClicked: disable_all_pins_dialog.createObject(self).open()
             }
         }

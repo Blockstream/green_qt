@@ -5,7 +5,7 @@ import QtQuick.Layouts 1.12
 
 ControllerDialog {
     id: dialog
-    title: qsTrId('Delete Wallet')
+    title: qsTrId('id_delete_wallet')
     controller: Controller {
         wallet: dialog.wallet
     }
@@ -14,20 +14,20 @@ ControllerDialog {
         property list<Action> actions: [
             Action {
                 property bool destructive: true
-                text: qsTrId('Delete wallet')
+                text: qsTrId('id_delete_wallet')
                 enabled: confirm_checkbox.checked
                 onTriggered: controller.deleteWallet()
             }
         ]
         Label {
             Layout.fillWidth: true
-            text: qsTrId('This will log you out and delete this wallet from the app and the Blockstream servers database.')
+            text: qsTrId('id_delete_permanently_your_wallet')
             wrapMode: Label.WordWrap
         }
         CheckBox {
             Layout.fillWidth: true
             id: confirm_checkbox
-            text: qsTrId('I confirm I want to delete this wallet')
+            text: qsTrId('id_i_confirm_i_want_to_delete_this')
         }
     }
 }

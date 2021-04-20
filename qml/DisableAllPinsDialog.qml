@@ -5,7 +5,7 @@ import QtQuick.Layouts 1.12
 
 ControllerDialog {
     id: dialog
-    title: qsTrId('Disable All Pins')
+    title: qsTrId('id_disable_pin_access')
     controller: Controller {
         wallet: dialog.wallet
     }
@@ -14,7 +14,7 @@ ControllerDialog {
         property list<Action> actions: [
             Action {
                 property bool destructive: true
-                text: qsTrId('Disable All Pins')
+                text: qsTrId('id_disable_pin_access')
                 enabled: confirm_checkbox.checked
                 onTriggered: {
                     controller.disableAllPins()
@@ -24,13 +24,13 @@ ControllerDialog {
         ]
         Label {
             Layout.fillWidth: true
-            text: qsTrId('This will prevent this wallet to be access by pin on any device. Mnemonic restore will be necessary to restore access to wallet.')
+            text: qsTrId('id_this_will_disable_pin_login_for')
             wrapMode: Label.WordWrap
         }
         CheckBox {
             Layout.fillWidth: true
             id: confirm_checkbox
-            text: qsTrId('I confirm I want to disable all pins access')
+            text: qsTrId('id_i_confirm_i_want_to_disable_pin')
         }
     }
 }

@@ -35,7 +35,7 @@ TextField {
             nextItemInFocusChain(false).forceActiveFocus();
         }
     }
-    ToolTip.text: self.invalid ? qsTrId('Not a BIP39 word') : word.suggestions.join(' ')
+    ToolTip.text: self.invalid ? qsTrId('id_not_a_valid_word') : word.suggestions.join(' ')
     ToolTip.visible: activeFocus && (word.suggestions.length > 0 || self.invalid)
     ToolTip.toolTip.exit: null
 

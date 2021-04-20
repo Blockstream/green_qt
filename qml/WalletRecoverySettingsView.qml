@@ -103,23 +103,17 @@ ColumnLayout {
     }
 
     SettingsBox {
-        title: qsTrId('Delete wallet')
+        title: qsTrId('id_delete_wallet')
         contentItem: ColumnLayout {
             Label {
                 Layout.fillWidth: true
-                text: qsTrId('Delete permanently your wallet from the Blockstream Green database. You will never be able to log in to it thereafter.')
+                text: qsTrId('id_delete_permanently_your_wallet')
                 wrapMode: Label.WordWrap
             }
             Label {
                 Layout.fillWidth: true
                 visible: !self.wallet.empty
-                text: qsTrId('All of the accounts in your wallet need to be empty before deleting it.')
-                wrapMode: Label.WordWrap
-            }
-            Label {
-                Layout.fillWidth: true
-                visible: self.wallet.empty
-                text: qsTrId('Are you sure you want to permanently delete your wallet? You will never be able to log in again.')
+                text: qsTrId('id_all_of_the_accounts_in_your')
                 wrapMode: Label.WordWrap
             }
             GButton {
@@ -127,7 +121,7 @@ ColumnLayout {
                 large: true
                 destructive: true
                 enabled: self.wallet.empty
-                text: qsTrId('Delete wallet')
+                text: qsTrId('id_delete_wallet')
                 onClicked: delete_wallet_dialog.createObject(self).open()
             }
         }

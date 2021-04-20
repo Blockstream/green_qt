@@ -38,7 +38,7 @@ MainPage {
                     columnSpacing: 16
                     rowSpacing: 8
                     Label {
-                        text: qsTrId('Language')
+                        text: qsTrId('id_language')
                     }
                     ComboBox {
                         id: control
@@ -70,7 +70,7 @@ MainPage {
                     HSpacer {
                     }
                     Label {
-                        text: 'Collapse Side Bar'
+                        text: qsTrId('Collapse Side Bar')
                     }
                     Switch {
                         checked: Settings.collapseSideBar
@@ -79,7 +79,7 @@ MainPage {
                     HSpacer {
                     }
                     Label {
-                        text: qsTrId('Enable testnet')
+                        text: qsTrId('id_enable_testnet')
                     }
                     Switch {
                         id: testnet_switch
@@ -108,7 +108,7 @@ MainPage {
                     HSpacer {
                     }
                     Label {
-                        text: qsTrId('Proxy host')
+                        text: qsTrId('id_proxy_host')
                         enabled: proxy_switch.checked
                     }
                     TextField {
@@ -122,7 +122,7 @@ MainPage {
                     HSpacer {
                     }
                     Label {
-                        text: qsTrId('Proxy port')
+                        text: qsTrId('id_proxy_port')
                         enabled: proxy_switch.checked
                     }
                     TextField {
