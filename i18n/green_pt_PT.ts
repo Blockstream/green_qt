@@ -44,12 +44,20 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
         <translation>~ 2 Horas</translation>
     </message>
     <message>
+        <source>id_2fa_dispute_in_progress</source>
+        <translation>2FA Dispute in Progress</translation>
+    </message>
+    <message>
         <source>id_2fa_expiry</source>
         <translation>2FA Expiry</translation>
     </message>
     <message>
         <source>id_2fa_methods</source>
         <translation>2FA Methods</translation>
+    </message>
+    <message>
+        <source>id_2fa_reset_in_progress</source>
+        <translation>2FA Reset in Progress</translation>
     </message>
     <message>
         <source>id_2fa_threshold</source>
@@ -180,6 +188,10 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
         <translation>Endereço copiado para a área de transferência</translation>
     </message>
     <message>
+        <source>id_addresses</source>
+        <translation>Addresses</translation>
+    </message>
+    <message>
         <source>id_advanced</source>
         <translation>AVANÇADO</translation>
     </message>
@@ -190,6 +202,10 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     <message>
         <source>id_all</source>
         <translation>Todos</translation>
+    </message>
+    <message>
+        <source>id_all_of_the_accounts_in_your</source>
+        <translation>All of the accounts in your wallet need to be empty before deleting it.</translation>
     </message>
     <message>
         <source>id_all_wallets</source>
@@ -395,6 +411,10 @@ Simple and Secure</translation>
     <message>
         <source>id_cancel</source>
         <translation>Cancelar</translation>
+    </message>
+    <message>
+        <source>id_cancel_2fa_reset</source>
+        <translation>Cancel 2FA reset</translation>
     </message>
     <message>
         <source>id_cancel_a_reset_to_unlock_your</source>
@@ -749,8 +769,16 @@ Simple and Secure</translation>
         <translation>Delete</translation>
     </message>
     <message>
+        <source>id_delete_permanently_your_wallet</source>
+        <translation>Delete permanently your wallet from the Blockstream Green database. You will never be able to log in to it thereafter.</translation>
+    </message>
+    <message>
         <source>id_delete_s_twofactor</source>
         <translation>Remover %1 autenticação de dois factores </translation>
+    </message>
+    <message>
+        <source>id_delete_wallet</source>
+        <translation>Delete Wallet</translation>
     </message>
     <message>
         <source>id_deleting_your_pin_will_remove</source>
@@ -771,6 +799,14 @@ Simple and Secure</translation>
     <message>
         <source>id_disable</source>
         <translation>Desativar</translation>
+    </message>
+    <message>
+        <source>id_disable_pin_access</source>
+        <translation>Disable PIN access</translation>
+    </message>
+    <message>
+        <source>id_disable_pin_access_for_this</source>
+        <translation>Disable PIN access for this wallet on all devices. Make sure you have a backup of your recovery phrase before disabling PIN access.</translation>
     </message>
     <message>
         <source>id_disable_s_twofactor</source>
@@ -875,6 +911,10 @@ Simple and Secure</translation>
     <message>
         <source>id_enable_spv_and_modify_spv</source>
         <translation>Ativar SPV e modificar as configurações de SPV</translation>
+    </message>
+    <message>
+        <source>id_enable_testnet</source>
+        <translation>Enable testnet</translation>
     </message>
     <message>
         <source>id_enable_touch_id</source>
@@ -1040,6 +1080,10 @@ Recovery Phrase</translation>
     <message>
         <source>id_fast</source>
         <translation>Rápido</translation>
+    </message>
+    <message>
+        <source>id_faster_more_confidential</source>
+        <translation>Faster, more confidential Bitcoin transactions</translation>
     </message>
     <message>
         <source>id_fee</source>
@@ -1226,12 +1270,24 @@ Recovery Phrase</translation>
         <translation>horas</translation>
     </message>
     <message>
+        <source>id_how_to_stop_this_reset</source>
+        <translation>How to Stop This Reset</translation>
+    </message>
+    <message>
         <source>id_i_agree_to_the</source>
         <translation>I agree to the</translation>
     </message>
     <message>
         <source>id_i_confirm_i_have_read_and</source>
         <translation>I confirm I have read and understood the above message</translation>
+    </message>
+    <message>
+        <source>id_i_confirm_i_want_to_delete_this</source>
+        <translation>I confirm I want to delete this wallet</translation>
+    </message>
+    <message>
+        <source>id_i_confirm_i_want_to_disable_pin</source>
+        <translation>I confirm I want to disable PIN access on all my devices.</translation>
     </message>
     <message>
         <source>id_i_forgot_my_password</source>
@@ -1252,6 +1308,22 @@ Recovery Phrase</translation>
     <message>
         <source>id_id</source>
         <translation>ID</translation>
+    </message>
+    <message>
+        <source>id_if_you_are_the_rightful_owner</source>
+        <translation>If you are the rightful owner of this wallet, and you still possess one of its active 2FA methods, cancel the reset to be able to spend and empty this wallet.</translation>
+    </message>
+    <message>
+        <source>id_if_you_did_not_request_the</source>
+        <translation>If you did not request the reset, but you cannot cancel the reset process because you can&apos;t access any existing Two-Factor Authorization methods, please contact our support.</translation>
+    </message>
+    <message>
+        <source>id_if_you_have_access_to_a</source>
+        <translation>If you have access to a Two-Factor method for this wallet, cancel the reset to be able to spend and receive immediately, or wait %1 days.</translation>
+    </message>
+    <message>
+        <source>id_if_you_initiated_the_2fa_reset</source>
+        <translation>If you initiated the 2FA reset dispute by mistake, you can undo it and set the wallet back to 2FA reset state.</translation>
     </message>
     <message>
         <source>id_import_a_wallet_created_on</source>
@@ -1402,6 +1474,10 @@ Recovery Phrase</translation>
         <translation>LABEL</translation>
     </message>
     <message>
+        <source>id_language</source>
+        <translation>Language</translation>
+    </message>
+    <message>
         <source>id_last_attempt_if_failed_you_will</source>
         <translation>Last attempt: if failed, you will have to restore your wallet using the 24-words mnemonic.</translation>
     </message>
@@ -1416,6 +1492,10 @@ Recovery Phrase</translation>
     <message>
         <source>id_lbtc_has_no_issuer_and_is</source>
         <translation>L-BTC has no issuer and is instead created on the network via a peg-in.</translation>
+    </message>
+    <message>
+        <source>id_learn_more</source>
+        <translation>Learn more</translation>
     </message>
     <message>
         <source>id_learn_more_about_s</source>
@@ -1440,6 +1520,10 @@ Recovery Phrase</translation>
     <message>
         <source>id_liquid_electrum_backend</source>
         <translation>Liquid Electrum backend</translation>
+    </message>
+    <message>
+        <source>id_liquid_is_a_sidechainbased</source>
+        <translation>Liquid is a sidechain-based settlement network for traders and exchanges, enabling faster, more confidential Bitcoin transactions and the issuance of digital assets.</translation>
     </message>
     <message>
         <source>id_liquid_securities</source>
@@ -1774,6 +1858,10 @@ Recovery Phrase</translation>
         <translation>Not a valid phone number</translation>
     </message>
     <message>
+        <source>id_not_a_valid_word</source>
+        <translation>Not a valid word</translation>
+    </message>
+    <message>
         <source>id_not_connected_connecting_in_ds_</source>
         <translation>Not connected. Connecting in %1s …</translation>
     </message>
@@ -1866,6 +1954,10 @@ Recovery Phrase</translation>
         <translation>Outgoing</translation>
     </message>
     <message>
+        <source>id_overview</source>
+        <translation>Overview</translation>
+    </message>
+    <message>
         <source>id_password</source>
         <translation>Password</translation>
     </message>
@@ -1876,6 +1968,10 @@ Recovery Phrase</translation>
     <message>
         <source>id_paste</source>
         <translation>Paste</translation>
+    </message>
+    <message>
+        <source>id_permanently_block_this_wallet</source>
+        <translation>Permanently Block This Wallet</translation>
     </message>
     <message>
         <source>id_pgp_key</source>
@@ -1892,6 +1988,10 @@ Recovery Phrase</translation>
     <message>
         <source>id_pin</source>
         <translation>PIN</translation>
+    </message>
+    <message>
+        <source>id_pin_access_disabled</source>
+        <translation>PIN access disabled</translation>
     </message>
     <message>
         <source>id_pin_has_to_be_between_4_and_15</source>
@@ -2008,6 +2108,14 @@ Recovery Phrase</translation>
     <message>
         <source>id_provide_your_amp_id_to_the</source>
         <translation>Provide your AMP ID to the asset issuer if requested.</translation>
+    </message>
+    <message>
+        <source>id_proxy_host</source>
+        <translation>Proxy host</translation>
+    </message>
+    <message>
+        <source>id_proxy_port</source>
+        <translation>Proxy port</translation>
     </message>
     <message>
         <source>id_proxy_settings</source>
@@ -2272,6 +2380,10 @@ Recovery Phrase</translation>
     <message>
         <source>id_search</source>
         <translation>Search</translation>
+    </message>
+    <message>
+        <source>id_search_address</source>
+        <translation>Search address</translation>
     </message>
     <message>
         <source>id_second</source>
@@ -2711,6 +2823,10 @@ Reset this setting and then re-activate it.</translation>
         <translation>Thank you for downloading Green! Please leave us a review when you get a chance</translation>
     </message>
     <message>
+        <source>id_the_1_year_2fa_reset_process</source>
+        <translation>The 1 year 2FA reset process was ongoing, but someone blocked it by disputing the 2FA reset.</translation>
+    </message>
+    <message>
         <source>id_the_address_is_valid</source>
         <translation>The address is valid.</translation>
     </message>
@@ -2775,6 +2891,10 @@ Reset this setting and then re-activate it.</translation>
         <translation>The transaction contains non-confidential funds.</translation>
     </message>
     <message>
+        <source>id_the_waiting_period_is_necessary</source>
+        <translation>The waiting period is necessary to ensure the security of your wallet, to prevent thieves from getting around your Two-Factor protection.</translation>
+    </message>
+    <message>
         <source>id_there_is_already_a_pin_set_for</source>
         <translation>There is already a PIN set for a %1 wallet. Proceeding will not allow setting a PIN and login will require the 24 words mnemonic. You can disable PIN from settings or with 3 failed attempts.</translation>
     </message>
@@ -2789,6 +2909,14 @@ Reset this setting and then re-activate it.</translation>
     <message>
         <source>id_this_transaction_spent</source>
         <translation>This transaction spent non-confidential funds.</translation>
+    </message>
+    <message>
+        <source>id_this_will_disable_pin_login_for</source>
+        <translation>This will disable PIN login for this wallet on all your devices. You will need your recovery phrase to access your wallet.</translation>
+    </message>
+    <message>
+        <source>id_this_will_log_you_out_and</source>
+        <translation>This will log you out and delete this wallet from the app and the Blockstream servers database.</translation>
     </message>
     <message>
         <source>id_ticker</source>
@@ -2933,6 +3061,10 @@ Reset this setting and then re-activate it.</translation>
     <message>
         <source>id_unconfirmed</source>
         <translation>Unconfirmed</translation>
+    </message>
+    <message>
+        <source>id_undo_2fa_dispute</source>
+        <translation>Undo 2FA dispute</translation>
     </message>
     <message>
         <source>id_unknown</source>
@@ -3124,7 +3256,7 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_well_get_you_set_up_with_an_amp</source>
-        <translation>We&apos;ll get you set up with an AMP wallet in no time. Note that you can alternatively create AMP accounts in any existing Liquid wwallet.</translation>
+        <translation>We&apos;ll get you set up with an AMP wallet in no time. Note that you can alternatively create AMP accounts in any existing Liquid wallet.</translation>
     </message>
     <message>
         <source>id_what_type_of_account_would_you</source>
@@ -3282,6 +3414,10 @@ Reset this setting and then re-activate it.</translation>
         <source>id_your_wallet_is_not_yet_fully</source>
         <translation>Your wallet is not yet fully secured.
 Please enable Two-Factor authentication.</translation>
+    </message>
+    <message>
+        <source>id_your_wallet_locked_under_2fa</source>
+        <translation>Your wallet locked under 2FA dispute.</translation>
     </message>
     <message>
         <source>id_your_watchonly_username_and</source>
