@@ -28,6 +28,7 @@ ControllerDialog {
                     onTriggered: controller.enableTwoFactor(method, data_field.text)
                 }
             ]
+            spacing: constants.s1
             Image {
                 source: `qrc:/svg/2fa_${method}.svg`
                 sourceSize.width: 64
@@ -61,10 +62,12 @@ ControllerDialog {
                     onTriggered: controller.enableTwoFactor(method, wallet.config[method].data)
                 }
             ]
+            spacing: constants.s1
             SectionLabel {
                 text: qsTrId('id_authenticator_secret_key')
             }
             RowLayout {
+                spacing: constants.s1
                 Label {
                     id: secret_label
                     Layout.alignment: Qt.AlignHCenter
@@ -79,6 +82,7 @@ ControllerDialog {
                 }
             }
             RowLayout {
+                spacing: constants.s1
                 Image {
                     source: `qrc:/svg/2fa_${method}.svg`
                     sourceSize.width: 32
@@ -89,6 +93,9 @@ ControllerDialog {
                     text: qsTrId('id_scan_the_qr_code_with_an')
                     wrapMode: Text.WordWrap
                 }
+            }
+            HSpacer {
+                height: 12
             }
             QRCode {
                 Layout.fillWidth: true

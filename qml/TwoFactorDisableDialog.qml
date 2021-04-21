@@ -20,7 +20,7 @@ ControllerDialog {
                 onTriggered: controller.disableTwoFactor(method)
             }
         ]
-
+        spacing: constants.s1
         Image {
             source: `qrc:/svg/2fa_${method}.svg`
             sourceSize.width: 32
