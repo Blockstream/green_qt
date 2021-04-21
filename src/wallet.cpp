@@ -440,8 +440,12 @@ void Wallet::clearPinData()
 
 void Wallet::updateEmpty()
 {
-    for (auto account : m_accounts_by_pointer.values()) {
-        for (auto balance : account->m_balances) {
+    for (const auto& account : m_accounts_by_pointer.values()) {
+        if (account->balance() > 0) {
+            setEmpty(false);
+            return;
+        }
+        for (const auto& balance : account->m_balances) {
             if (balance->amount() > 0) {
                 setEmpty(false);
                 return;
