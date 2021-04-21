@@ -35,6 +35,7 @@ SOURCES += \
     $$PWD/signupcontroller.cpp \
     $$PWD/output.cpp \
     $$PWD/outputlistmodel.cpp \
+    $$PWD/outputlistmodelfilter.cpp \
     $$PWD/transaction.cpp \
     $$PWD/transactionlistmodel.cpp \
     $$PWD/twofactorcontroller.cpp \
@@ -80,6 +81,7 @@ HEADERS += \
     $$PWD/signupcontroller.h \
     $$PWD/output.h \
     $$PWD/outputlistmodel.h \
+    $$PWD/outputlistmodelfilter.h \
     $$PWD/transaction.h \
     $$PWD/transactionlistmodel.h \
     $$PWD/twofactorcontroller.h \

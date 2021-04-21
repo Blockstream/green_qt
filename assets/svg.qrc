@@ -27,5 +27,6 @@
         <file>svg/assets.svg</file>
         <file>svg/overview.svg</file>
         <file>svg/search.svg</file>
+        <file>svg/coins.svg</file>
     </qresource>
 </RCC>

@@ -103,5 +103,6 @@
         <file>DisableAllPinsDialog.qml</file>
         <file>OutputsListView.qml</file>
         <file>OutputDelegate.qml</file>
+        <file>Tag.qml</file>
     </qresource>
 </RCC>

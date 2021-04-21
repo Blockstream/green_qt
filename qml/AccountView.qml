@@ -93,8 +93,8 @@ ColumnLayout {
         }
         TabButton {
             ButtonGroup.group: button_group
-            icon.source: "qrc:/svg/addresses.svg"
-            ToolTip.text: qsTrId('id_outputs')
+            icon.source: "qrc:/svg/coins.svg"
+            ToolTip.text: qsTrId('id_coins')
             onClicked: checked = true
         }
         HSpacer {
