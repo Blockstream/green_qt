@@ -11,7 +11,7 @@ class OutputListModelFilter : public QSortFilterProxyModel
 {
     Q_OBJECT
     Q_PROPERTY(OutputListModel* model READ model WRITE setModel NOTIFY modelChanged)
-    Q_PROPERTY(QStringList tags READ tags CONSTANT)
+    Q_PROPERTY(QString filter READ filter WRITE setFilter NOTIFY filterChanged)
     QML_ELEMENT
 public:
     OutputListModelFilter(QObject* parent = nullptr);
@@ -19,23 +19,19 @@ public:
     OutputListModel* model() const { return m_model; }
     void setModel(OutputListModel* model);
 
-    Qt::SortOrder sortOrder();
-    void setSortOrder(Qt::SortOrder sortOrder);
+    bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
+    bool lessThan(const QModelIndex & left, const QModelIndex & right) const override;
 
-    bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const;
-    bool lessThan(const QModelIndex & left, const QModelIndex & right) const;
-
-    Q_INVOKABLE void filterBy(const QString &filter);
-    Q_INVOKABLE void clear();
-
-    QStringList tags();
+    QString filter();
+    void setFilter(const QString &filter);
 
 signals:
     void modelChanged(OutputListModel* account);
+    void filterChanged(const QString &filter);
+
 private:
     OutputListModel* m_model{nullptr};
-    QStringList m_tags;
-    QString m_filter;
+    QString m_filter{"all"};
 };
 
 #endif // GREEN_OUTPUTLISTMODELFILTER_H

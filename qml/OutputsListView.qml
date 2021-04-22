@@ -15,48 +15,34 @@ ColumnLayout {
         id: tags_layout
         Layout.fillWidth: true
         implicitHeight: 50
-        spacing: constants.p2
+        spacing: constants.p1
 
         ButtonGroup {
             id: button_group
         }
 
         Repeater {
-            model: output_model_filter.tags
+            model: account.wallet.network.liquid ? ['all', 'csv', 'p2wsh', 'expired', 'not confidential'] : ['all', 'csv', 'p2wsh', 'dust', 'frozen']
 
             Button {
                 ButtonGroup.group: button_group
+                checked: index === 0
                 background: Tag {
                     large: true
                     color: parent.checked ? constants.c200 : constants.c300
-                    font.pixelSize: 16
+                    font.pixelSize: 12
                     font.styleName: "Medium"
+                    font.capitalization: Font.AllUppercase
                     text: modelData
                 }
                 onClicked: {
                     checked = true
-                    output_model_filter.filterBy(modelData)
+                    output_model_filter.filter = modelData
                 }
             }
         }
 
         HSpacer {
-        }
-
-        ToolButton {
-            visible: button_group.checkedButton
-            icon.source: "qrc:/svg/cancel.svg"
-            icon.width: 12
-            icon.height: 12
-            icon.color: 'white'
-            padding: 0
-            onClicked: {
-                for (let i=0; i<button_group.buttons.length; ++i)
-                    button_group.buttons[i].checked = false;
-
-                button_group.checkedButton = null
-                output_model_filter.clear()
-            }
         }
     }
 
@@ -90,6 +76,23 @@ ColumnLayout {
             Behavior on opacity { OpacityAnimator {} }
             anchors.bottom: parent.bottom
             anchors.horizontalCenter: parent.horizontalCenter
+        }
+
+        Label {
+            id: label
+            visible: list_view.count===0
+            anchors.centerIn: parent
+            color: 'white'
+            states: [
+                State {
+                    when: output_model_filter.filter ==='all'
+                    PropertyChanges { target: label; text: "You'll see your coins here when you receive funds" }
+                },
+                State {
+                    when: output_model_filter.filter !=='all'
+                    PropertyChanges { target: label; text: "There are no results for the applied filter" }
+                }
+            ]
         }
     }
 }

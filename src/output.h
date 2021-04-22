@@ -14,6 +14,11 @@ class Output : public QObject
     Q_PROPERTY(Account* account READ account CONSTANT)
     Q_PROPERTY(QJsonObject data READ data NOTIFY dataChanged)
     Q_PROPERTY(Asset* asset READ asset NOTIFY assetChanged)
+    Q_PROPERTY(bool dust READ dust CONSTANT)
+    Q_PROPERTY(bool frozen READ frozen CONSTANT)
+    Q_PROPERTY(bool confidential READ confidential CONSTANT)
+    Q_PROPERTY(bool expired READ expired CONSTANT)
+    Q_PROPERTY(QString addressType READ addressType CONSTANT)
     QML_ELEMENT
     QML_UNCREATABLE("Output is instanced by Account.")
 public:
@@ -24,6 +29,11 @@ public:
     QJsonObject data() const { return m_data; }
     void updateFromData(const QJsonObject& data);
     Q_INVOKABLE QString formatAmount(bool include_ticker = true) const;
+    bool dust();
+    bool frozen();
+    bool confidential();
+    bool expired();
+    QString addressType();
 signals:
     void dataChanged(const QJsonObject& data);
     void assetChanged(const Asset* asset);

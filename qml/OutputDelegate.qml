@@ -21,15 +21,24 @@ Pane {
         ColumnLayout {
             Layout.fillWidth: false
             Layout.preferredHeight: 80
-            AssetIcon {
-                asset: output.asset
-                Layout.preferredWidth: 36
-                Layout.preferredHeight: 36
+            Image {
+                visible: !output.account.wallet.network.liquid
+                sourceSize.height: 36
+                sourceSize.width: 36
+                source: icons[wallet.network.id]
+            }
+            Loader {
+                active: output.asset
+                visible: active
+                sourceComponent: AssetIcon {
+                    asset: output.asset
+                    Layout.preferredWidth: 36
+                    Layout.preferredHeight: 36
+                }
             }
             VSpacer {
             }
         }
-
         ColumnLayout {
             Layout.fillWidth: true
             Layout.fillHeight: true
@@ -50,58 +59,31 @@ Pane {
             }
             RowLayout {
                 Tag {
-                    visible: output.data["user_status"]===1
+                    visible: output.frozen
                     text: "FROZEN"
                 }
                 Tag {
                     text: "DUST"
-                    visible: output.data["satoshi"]<1092
+                    visible: output.dust
                 }
                 Tag {
                     text: "NOT CONFIDENTIAL"
-                    visible: output.data["confidential"]===false
+                    visible: !output.confidential
                 }
                 Tag {
-                    text: output.data["address_type"]
+                    text: output.addressType
                     font.capitalization: Font.AllUppercase
                 }
                 Tag {
                     text: "2FA EXPIRED"
-                    visible: {
-                        if (output.data["address_type"]==="csv") {
-                             return (output.data["block_height"] + output.data["subtype"]) < output.data["current_block_height"]
-                        }
-                        else {
-                             return output.data["nlocktime_at"]===0
-                        }
-                    }
+                    visible: output.expired
                 }
                 Tag {
                     text: output.data["block_height"]
                 }
             }
-
             VSpacer {
             }
-
-            /*
-            Label {
-                Layout.fillWidth: true
-                Layout.leftMargin: constants.p1
-                elide: Text.ElideRight
-                text: output.data["txhash"]
-                font.pixelSize: 14
-                font.styleName: 'Regular'
-            }
-            Label {
-                text: output.data["satoshi"]
-                horizontalAlignment: Text.AlignHCenter
-                font.pixelSize: 14
-                font.capitalization: Font.AllUppercase
-                font.styleName: 'Regular'
-                Layout.minimumWidth: 50
-            }
-            */
         }
     }
 }

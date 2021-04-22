@@ -8,10 +8,9 @@ Label {
     text: self.text
     font.pixelSize: 10
     font.styleName: "Medium"
-    padding: 4
-    verticalAlignment: Label.AlignVCenter
+    padding: large ? 8 : 4
     topPadding: large ? 6 : 3
-    bottomPadding: large ? 12 : 6
+    bottomPadding: large ? 6 : 3
     background: Rectangle {
         id: rectangle
         radius: 4

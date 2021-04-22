@@ -33,10 +33,38 @@ void Output::updateFromData(const QJsonObject& data)
 
 QString Output::formatAmount(bool include_ticker) const
 {
-    if (m_asset) {
-        return m_asset->formatAmount(m_data["satoshi"].toDouble(), include_ticker);
+    if (m_asset)  return m_asset->formatAmount(m_data["satoshi"].toDouble(), include_ticker);
+    else return m_account->wallet()->formatAmount(m_data["satoshi"].toDouble(), include_ticker);
+}
+
+bool Output::dust()
+{
+    return data()["satoshi"].toDouble()<1092;
+}
+
+bool Output::frozen()
+{
+    return data()["user_status"].toInt()==1;
+}
+
+bool Output::confidential()
+{
+    return data()["confidential"].toBool();
+}
+
+bool Output::expired()
+{
+    if (data()["address_type"]=="csv") {
+        auto block_height = data()["block_height"].toDouble()+data()["subtype"].toDouble();
+        auto current_block_height = account()->wallet()->events()["block"].toObject()["block_height"].toDouble();
+        return block_height < current_block_height;
     } else {
-        return m_account->wallet()->formatAmount(m_data["satoshi"].toDouble(), include_ticker);
+        return data()["nlocktime_at"].toInt()==0;
     }
+}
+
+QString Output::addressType()
+{
+    return data()["address_type"].toString();
 }
 
