@@ -14,10 +14,6 @@ Output::Output(Account* account)
 {
 }
 
-Output::~Output()
-{
-}
-
 void Output::updateFromData(const QJsonObject& data)
 {
     if (m_data == data) return;
@@ -29,12 +25,6 @@ void Output::updateFromData(const QJsonObject& data)
         m_asset = m_account->wallet()->getOrCreateAsset(asset_id);
         emit assetChanged(m_asset);
     }
-}
-
-QString Output::formatAmount(bool include_ticker) const
-{
-    if (m_asset)  return m_asset->formatAmount(m_data["satoshi"].toDouble(), include_ticker);
-    else return m_account->wallet()->formatAmount(m_data["satoshi"].toDouble(), include_ticker);
 }
 
 bool Output::dust()

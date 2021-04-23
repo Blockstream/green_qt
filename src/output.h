@@ -23,12 +23,10 @@ class Output : public QObject
     QML_UNCREATABLE("Output is instanced by Account.")
 public:
     explicit Output(Account* account);
-    virtual ~Output();
     Account* account() const { return m_account; }
     Asset* asset() const { return m_asset; }
     QJsonObject data() const { return m_data; }
     void updateFromData(const QJsonObject& data);
-    Q_INVOKABLE QString formatAmount(bool include_ticker = true) const;
     bool dust();
     bool frozen();
     bool confidential();

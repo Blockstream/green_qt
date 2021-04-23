@@ -8,6 +8,12 @@ import QtQuick.Layouts 1.12
 
 Pane {
     required property var output
+
+    function formatAmount(amount, include_ticker = true) {
+        const unit = wallet.settings.unit;
+        return wallet.formatAmount(amount || 0, include_ticker, unit);
+    }
+
     id: self
     hoverEnabled: true
     padding: constants.p3
@@ -46,7 +52,7 @@ Pane {
             Label {
                 Layout.fillWidth: true
                 elide: Text.ElideRight
-                text: output.formatAmount()
+                text: formatAmount(output.data["satoshi"], true)
                 font.pixelSize: 16
                 font.styleName: 'Medium'
             }
