@@ -124,6 +124,7 @@ ColumnLayout {
         id: stack_layout
         Layout.fillWidth: true
         Layout.fillHeight: true
+        Layout.bottomMargin: constants.p1
         currentIndex: account_view.account.wallet.network.liquid ? 0 : 2
 
         OverviewView {

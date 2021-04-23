@@ -22,7 +22,7 @@ ColumnLayout {
         }
 
         Repeater {
-            model: account.wallet.network.liquid ? ['all', 'csv', 'p2wsh', 'expired', 'not confidential'] : ['all', 'csv', 'p2wsh', 'dust', 'frozen']
+            model: account.wallet.network.liquid ? ['all', 'csv', 'p2wsh', 'not confidential'] : ['all', 'csv', 'p2wsh', 'dust', 'locked']
 
             Button {
                 ButtonGroup.group: button_group
@@ -34,6 +34,7 @@ ColumnLayout {
                     font.styleName: "Medium"
                     font.capitalization: Font.AllUppercase
                     text: modelData
+                    ToolTip.text: qsTrId(`id_tag_${modelData}`);
                 }
                 onClicked: {
                     checked = true
@@ -61,7 +62,7 @@ ColumnLayout {
         }
         delegate: OutputDelegate {
             hoverEnabled: false
-            width: list_view.width
+            width: list_view.width-constants.p1
         }
 
         ScrollIndicator.vertical: ScrollIndicator { }

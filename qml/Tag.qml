@@ -16,4 +16,11 @@ Label {
         radius: 4
         color: self.color
     }
+    MouseArea {
+        id: mouse_area
+        anchors.fill: parent
+        hoverEnabled: true
+    }
+    ToolTip.delay: 300
+    ToolTip.visible: mouse_area.containsMouse
 }

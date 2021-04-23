@@ -11,7 +11,7 @@ Pane {
 
     function formatAmount(amount, include_ticker = true) {
         const unit = wallet.settings.unit;
-        return wallet.formatAmount(amount || 0, include_ticker, unit);
+        return output.account.wallet.network.liquid ? output.asset.formatAmount(amount, true) : wallet.formatAmount(amount || 0, include_ticker, unit)
     }
 
     id: self
@@ -65,27 +65,24 @@ Pane {
             }
             RowLayout {
                 Tag {
-                    visible: output.frozen
-                    text: "FROZEN"
+                    visible: output.locked
+                    text: "LOCKED"
+                    ToolTip.text: qsTrId('id_tag_locked')
                 }
                 Tag {
                     text: "DUST"
                     visible: output.dust
+                    ToolTip.text: qsTrId('id_tag_dust')
                 }
                 Tag {
                     text: "NOT CONFIDENTIAL"
-                    visible: !output.confidential
+                    visible: output.account.wallet.network.liquid && !output.confidential
+                    ToolTip.text: qsTrId('id_tag_not_confidential')
                 }
                 Tag {
                     text: output.addressType
                     font.capitalization: Font.AllUppercase
-                }
-                Tag {
-                    text: "2FA EXPIRED"
-                    visible: output.expired
-                }
-                Tag {
-                    text: output.data["block_height"]
+                    ToolTip.text: qsTrId('id_tag_address_type')
                 }
             }
             VSpacer {

@@ -32,7 +32,7 @@ bool Output::dust()
     return data()["satoshi"].toDouble()<1092;
 }
 
-bool Output::frozen()
+bool Output::locked()
 {
     return data()["user_status"].toInt()==1;
 }

@@ -24,8 +24,8 @@ bool OutputListModelFilter::filterAcceptsRow(int source_row, const QModelIndex &
     else if (m_filter=="csv") return output->addressType()=="csv";
     else if (m_filter=="p2wsh") return output->addressType()=="p2wsh";
     else if (m_filter=="dust") return output->dust();
-    else if (m_filter=="frozen") return output->frozen();
-    else if (m_filter=="not confidential") return output->data()["not confidential"].toBool()==false;
+    else if (m_filter=="locked") return output->locked();
+    else if (m_filter=="not confidential") return output->data()["confidential"].toBool()==false;
 
     return false;
 }
