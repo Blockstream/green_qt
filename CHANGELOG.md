@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Make remove wallet button destructive
 
 ### Fixed
+- Prevent endless dialogs loop when restoring wallet
 
 ## [0.1.5] - 2021-04-20
 ### Added

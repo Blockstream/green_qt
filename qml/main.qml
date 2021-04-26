@@ -418,7 +418,7 @@ ApplicationWindow {
     DialogLoader {
         active: restore_route.active
         dialog: RestoreDialog {
-            onRejected: navigation.go(restore_route.previous)
+            onRejected: navigation.go('/home')
         }
     }
 
