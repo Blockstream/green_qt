@@ -35,6 +35,10 @@ bool OutputListModelFilter::lessThan(const QModelIndex &left, const QModelIndex 
     double output_l_height = left.data(Qt::UserRole).value<Output*>()->data()["block_height"].toDouble();
     double output_r_height = right.data(Qt::UserRole).value<Output*>()->data()["block_height"].toDouble();
 
+    // exception to bring unconfirmed coins to top of the list
+    if (output_l_height==0) return true;
+    if (output_r_height==0) return true;
+
     if (output_l_height<output_r_height) return true;
     if (output_l_height>output_r_height) return false;
 

@@ -53,6 +53,11 @@ bool Output::expired()
     }
 }
 
+bool Output::unconfirmed()
+{
+    return data()["block_height"].toDouble()==0;
+}
+
 QString Output::addressType()
 {
     return data()["address_type"].toString();

@@ -52,30 +52,30 @@ Pane {
             Label {
                 Layout.fillWidth: true
                 elide: Text.ElideRight
-                text: formatAmount(output.data["satoshi"], true)
+                text: formatAmount(output.data['satoshi'], true)
                 font.pixelSize: 16
                 font.styleName: 'Medium'
             }
             Label {
                 Layout.fillWidth: true
                 elide: Text.ElideRight
-                text: output.data["txhash"] + ':' + output.data["pt_idx"]
+                text: output.data['txhash'] + ':' + output.data['pt_idx']
                 font.pixelSize: 14
                 font.styleName: 'Regular'
             }
             RowLayout {
                 Tag {
                     visible: output.locked
-                    text: "LOCKED"
+                    text: 'LOCKED'
                     ToolTip.text: qsTrId('id_tag_locked')
                 }
                 Tag {
-                    text: "DUST"
+                    text: 'DUST'
                     visible: output.dust
                     ToolTip.text: qsTrId('id_tag_dust')
                 }
                 Tag {
-                    text: "NOT CONFIDENTIAL"
+                    text: 'NOT CONFIDENTIAL'
                     visible: output.account.wallet.network.liquid && !output.confidential
                     ToolTip.text: qsTrId('id_tag_not_confidential')
                 }
@@ -83,6 +83,13 @@ Pane {
                     text: output.addressType
                     font.capitalization: Font.AllUppercase
                     ToolTip.text: qsTrId('id_tag_address_type')
+                }
+                Tag {
+                    visible: output.unconfirmed
+                    text: 'UNCONFIRMED'
+                    color: '#d2934a'
+                    font.capitalization: Font.AllUppercase
+                    ToolTip.text: qsTrId('id_tag_unconfirmed')
                 }
             }
             VSpacer {

@@ -18,6 +18,7 @@ class Output : public QObject
     Q_PROPERTY(bool locked READ locked CONSTANT)
     Q_PROPERTY(bool confidential READ confidential CONSTANT)
     Q_PROPERTY(bool expired READ expired CONSTANT)
+    Q_PROPERTY(bool unconfirmed READ unconfirmed CONSTANT)
     Q_PROPERTY(QString addressType READ addressType CONSTANT)
     QML_ELEMENT
     QML_UNCREATABLE("Output is instanced by Account.")
@@ -31,6 +32,7 @@ public:
     bool locked();
     bool confidential();
     bool expired();
+    bool unconfirmed();
     QString addressType();
 signals:
     void dataChanged(const QJsonObject& data);
