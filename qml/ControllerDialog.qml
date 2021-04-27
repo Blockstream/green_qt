@@ -112,6 +112,19 @@ WalletDialog {
                 sourceSize.height: 64
             }
             Label {
+                anchors.horizontalCenter: enterCodeText.horizontalCenter
+                visible: wallet.config[resolver.method].enabled
+                text: {
+                    if (resolver) {
+                        if (resolver.method === 'gauth') return qsTrId('id_authenticator_app')
+                        return wallet.config[resolver.method].data
+                    }
+                    return ''
+                }
+                color: constants.c100
+                font.pixelSize: 14
+            }
+            Label {
                 id: enterCodeText
                 text: resolver ? qsTrId('id_please_provide_your_1s_code').arg(resolver.method) : ''
             }

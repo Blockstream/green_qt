@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Show 2FA method when 2FA is requsted
 
 ### Changed
 - Make remove wallet button destructive
