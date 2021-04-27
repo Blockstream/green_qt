@@ -34,12 +34,15 @@ ColumnLayout {
                     font.styleName: "Medium"
                     font.capitalization: Font.AllUppercase
                     text: modelData
-                    ToolTip.text: qsTrId(`id_tag_${modelData}`);
+                    showTooltip: false
                 }
                 onClicked: {
                     checked = true
                     output_model_filter.filter = modelData
                 }
+                ToolTip.delay: 300
+                ToolTip.visible: hovered
+                ToolTip.text: qsTrId(`id_tag_${modelData}`);
             }
         }
 

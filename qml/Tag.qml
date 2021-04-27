@@ -5,6 +5,7 @@ Label {
     id: self
     property color color: constants.c300
     property bool large: false
+    property bool showTooltip: true
     text: self.text
     font.pixelSize: 10
     font.styleName: "Medium"
@@ -20,6 +21,7 @@ Label {
         id: mouse_area
         anchors.fill: parent
         hoverEnabled: true
+        enabled: self.showTooltip
     }
     ToolTip.delay: 300
     ToolTip.visible: mouse_area.containsMouse
