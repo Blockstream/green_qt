@@ -505,8 +505,8 @@ ApplicationWindow {
                     }
                     GButton {
                         enabled: confirm_field.text === wallet.name
+                        destructive: true
                         large: true
-                        highlighted: true
                         text: qsTrId('id_remove')
                         onClicked: accept()
                     }
