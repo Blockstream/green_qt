@@ -17,15 +17,13 @@ OutputListModel::~OutputListModel()
 
 void OutputListModel::setAccount(Account *account)
 {
+    if (m_account == account) return;
     if (m_account) {
         beginResetModel();
         m_get_outputs_activity.update(nullptr);
         m_outputs.clear();
-        m_account = nullptr;
-        emit accountChanged(nullptr);
         endResetModel();
     }
-    if (!account) return;
     m_account = account;
     emit accountChanged(account);
     fetch();
