@@ -28,12 +28,12 @@ public:
     Asset* asset() const { return m_asset; }
     QJsonObject data() const { return m_data; }
     void updateFromData(const QJsonObject& data);
-    bool dust();
-    bool locked();
-    bool confidential();
-    bool expired();
-    bool unconfirmed();
-    QString addressType();
+    bool dust() const;
+    bool locked() const;
+    bool confidential() const;
+    bool expired() const;
+    bool unconfirmed() const;
+    QString addressType() const;
 signals:
     void dataChanged(const QJsonObject& data);
     void assetChanged(const Asset* asset);

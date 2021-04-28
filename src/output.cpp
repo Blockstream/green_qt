@@ -27,38 +27,38 @@ void Output::updateFromData(const QJsonObject& data)
     }
 }
 
-bool Output::dust()
+bool Output::dust() const
 {
-    return data()["satoshi"].toDouble()<1092;
+    return data()["satoshi"].toDouble() < 1092;
 }
 
-bool Output::locked()
+bool Output::locked() const
 {
-    return data()["user_status"].toInt()==1;
+    return data()["user_status"].toInt() == 1;
 }
 
-bool Output::confidential()
+bool Output::confidential() const
 {
     return data()["confidential"].toBool();
 }
 
-bool Output::expired()
+bool Output::expired() const
 {
-    if (data()["address_type"]=="csv") {
-        auto block_height = data()["block_height"].toDouble()+data()["subtype"].toDouble();
+    if (m_data["address_type"] == "csv") {
+        auto block_height = m_data["block_height"].toDouble() + m_data["subtype"].toDouble();
         auto current_block_height = account()->wallet()->events()["block"].toObject()["block_height"].toDouble();
         return block_height < current_block_height;
     } else {
-        return data()["nlocktime_at"].toInt()==0;
+        return m_data["nlocktime_at"].toInt() == 0;
     }
 }
 
-bool Output::unconfirmed()
+bool Output::unconfirmed() const
 {
-    return data()["block_height"].toDouble()==0;
+    return data()["block_height"].toDouble() == 0;
 }
 
-QString Output::addressType()
+QString Output::addressType() const
 {
     return data()["address_type"].toString();
 }

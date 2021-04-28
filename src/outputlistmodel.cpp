@@ -43,8 +43,8 @@ void OutputListModel::fetch()
         beginResetModel();
         m_outputs = m_get_outputs_activity->outputs();
         endResetModel();
-        m_get_outputs_activity.update(nullptr);
         m_get_outputs_activity->deleteLater();
+        m_get_outputs_activity.update(nullptr);
         emit fetchingChanged();
     }));
 
