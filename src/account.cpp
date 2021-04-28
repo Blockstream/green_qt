@@ -154,10 +154,11 @@ Output* Account::getOrCreateOutput(const QJsonObject& data)
     auto pt_idx = data.value("pt_idx").toInt();
     auto output = m_outputs_by_hash.value(QPair<QString,int>(txhash, pt_idx));
     if (!output) {
-        output = new Output(this);
+        output = new Output(data, this);
         m_outputs_by_hash.insert(QPair<QString,int>(txhash, pt_idx), output);
+    } else {
+        output->updateFromData(data);
     }
-    output->updateFromData(data);
     return output;
 }
 
