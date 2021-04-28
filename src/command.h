@@ -65,7 +65,7 @@ public:
         : DeviceCommand(device, batch)
         , m_data(data) {}
     QByteArray payload() const override { return m_data; }
-    virtual bool parse(QDataStream& stream) override { return true; };
+    virtual bool parse(QDataStream&) override { return true; };
 };
 
 #endif // GREEN_COMMAND_H

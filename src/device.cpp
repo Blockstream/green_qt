@@ -45,7 +45,7 @@ Device::Type Device::typefromVendorAndProduct(uint32_t vendor_id, uint32_t produ
     return Device::NoType;
 }
 
-bool DeviceCommand::readAPDUResponse(Device* device, int length, QDataStream &stream)
+bool DeviceCommand::readAPDUResponse(Device*, int length, QDataStream &stream)
 {
     QByteArray response;
     if (length > 0) {
