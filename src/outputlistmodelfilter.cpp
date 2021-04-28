@@ -20,14 +20,13 @@ bool OutputListModelFilter::filterAcceptsRow(int source_row, const QModelIndex &
 {
     auto output = m_model->index(source_row, 0, source_parent).data(Qt::UserRole).value<Output*>();
 
-    if (m_filter=="all") return true;
-    else if (m_filter=="csv") return output->addressType()=="csv";
-    else if (m_filter=="p2wsh") return output->addressType()=="p2wsh";
-    else if (m_filter=="dust") return output->dust();
-    else if (m_filter=="locked") return output->locked();
-    else if (m_filter=="not confidential") return output->data()["confidential"].toBool()==false;
-
-    return false;
+    if (m_filter == "csv") return output->addressType() == "csv";
+    if (m_filter == "p2wsh") return output->addressType() == "p2wsh";
+    if (m_filter == "dust") return output->dust();
+    if (m_filter == "locked") return output->locked();
+    if (m_filter == "not confidential") return !output->confidential();
+    // empty filter or filter === 'all'
+    return true;
 }
 
 bool OutputListModelFilter::lessThan(const QModelIndex &left, const QModelIndex &right) const

@@ -23,23 +23,17 @@ ColumnLayout {
 
         Repeater {
             model: account.wallet.network.liquid ? ['all', 'csv', 'p2wsh', 'not confidential'] : ['all', 'csv', 'p2wsh', 'dust', 'locked']
-
-            Button {
+            delegate: Button {
+                id: self
                 ButtonGroup.group: button_group
                 checked: index === 0
-                background: Tag {
-                    large: true
-                    color: parent.checked ? constants.c200 : constants.c300
-                    font.pixelSize: 12
-                    font.styleName: "Medium"
-                    font.capitalization: Font.AllUppercase
-                    text: modelData
-                    showTooltip: false
+                checkable: true
+                background: Rectangle {
+                    id: rectangle
+                    radius: 4
+                    color: self.checked ? constants.c200 : constants.c300
                 }
-                onClicked: {
-                    checked = true
-                    output_model_filter.filter = modelData
-                }
+                text: modelData
                 ToolTip.delay: 300
                 ToolTip.visible: hovered
                 ToolTip.text: qsTrId(`id_tag_${modelData}`);
@@ -58,6 +52,7 @@ ColumnLayout {
         spacing: 8
         model: OutputListModelFilter {
             id: output_model_filter
+            filter: button_group.checkedButton.text
             model: OutputListModel {
                 id: output_model
                 account: self.account
@@ -84,19 +79,16 @@ ColumnLayout {
 
         Label {
             id: label
-            visible: list_view.count===0
+            visible: list_view.count === 0
             anchors.centerIn: parent
             color: 'white'
-            states: [
-                State {
-                    when: output_model_filter.filter ==='all'
-                    PropertyChanges { target: label; text: "You'll see your coins here when you receive funds" }
-                },
-                State {
-                    when: output_model_filter.filter !=='all'
-                    PropertyChanges { target: label; text: "There are no results for the applied filter" }
+            text: {
+                if (output_model_filter.filter === '') {
+                    return qsTrId(`You'll see your coins here when you receive funds`)
+                } else {
+                    return qsTrId('There are no results for the applied filter')
                 }
-            ]
+            }
         }
     }
 }

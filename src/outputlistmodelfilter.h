@@ -31,7 +31,7 @@ signals:
 
 private:
     OutputListModel* m_model{nullptr};
-    QString m_filter{"all"};
+    QString m_filter;
 };
 
 #endif // GREEN_OUTPUTLISTMODELFILTER_H
