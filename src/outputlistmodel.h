@@ -32,7 +32,7 @@ signals:
 private:
     void fetch();
 private:
-    Account* m_account{nullptr};
+    Connectable<Account> m_account;
     QVector<Output*> m_outputs;
     Connectable<AccountGetUnspentOutputsActivity> m_get_outputs_activity;
 };

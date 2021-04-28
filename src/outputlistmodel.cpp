@@ -17,16 +17,26 @@ OutputListModel::~OutputListModel()
 
 void OutputListModel::setAccount(Account *account)
 {
-    if (m_account == account) return;
-    if (m_account) {
-        beginResetModel();
-        m_get_outputs_activity.update(nullptr);
-        m_outputs.clear();
-        endResetModel();
-    }
-    m_account = account;
-    emit accountChanged(account);
+    if (!m_account.update(account)) return;
+    beginResetModel();
+    m_get_outputs_activity.update(nullptr);
+    m_outputs.clear();
+    endResetModel();
+    emit accountChanged(m_account);
     fetch();
+    if (m_account) {
+        m_account.track(QObject::connect(m_account, &Account::notificationHandled, this, [this](const QJsonObject& notification) {
+            const auto event = notification.value("event").toString();
+            if (event == "transaction") {
+                fetch();
+                return;
+            }
+            if (event == "block") {
+                fetch();
+                return;
+            }
+        }));
+    }
 }
 
 void OutputListModel::fetch()
