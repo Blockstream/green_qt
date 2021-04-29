@@ -28,6 +28,7 @@ public:
     Asset* asset() const { return m_asset; }
     QJsonObject data() const { return m_data; }
     void updateFromData(const QJsonObject& data);
+    void update();
     bool dust() const { return m_dust; }
     bool locked() const { return m_locked; }
     bool confidential() const { return m_confidential; }

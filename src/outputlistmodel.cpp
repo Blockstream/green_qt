@@ -60,6 +60,13 @@ void OutputListModel::fetch()
     emit fetchingChanged();
 }
 
+void OutputListModel::update()
+{
+    for (auto& output : m_outputs) {
+        output->update();
+    }
+}
+
 QHash<int, QByteArray> OutputListModel::roleNames() const
 {
     return {

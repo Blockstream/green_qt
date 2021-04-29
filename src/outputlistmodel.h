@@ -31,6 +31,7 @@ signals:
     void fetchingChanged();
 private:
     void fetch();
+    void update();
 private:
     Connectable<Account> m_account;
     QVector<Output*> m_outputs;

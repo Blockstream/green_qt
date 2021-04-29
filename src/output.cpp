@@ -20,24 +20,28 @@ void Output::updateFromData(const QJsonObject& data)
     if (m_data == data) return;
     m_data = data;
     emit dataChanged(m_data);
+    update();
+}
 
+void Output::update()
+{
     if (!m_asset && m_account->wallet()->network()->isLiquid()) {
-        auto asset_id = data["asset_id"].toString();
+        auto asset_id = m_data["asset_id"].toString();
         m_asset = m_account->wallet()->getOrCreateAsset(asset_id);
         emit assetChanged(m_asset);
     }
 
-    setDust(data["satoshi"].toDouble() < 1092);
-    setLocked(data["user_status"].toInt() == 1);
-    setConfidential(data["confidential"].toBool());
-    setUnconfirmed(data["block_height"].toDouble() == 0);
-    setAddressType(data["address_type"].toString());
+    setDust(m_data["satoshi"].toDouble() < 1092);
+    setLocked(m_data["user_status"].toInt() == 1);
+    setConfidential(m_data["confidential"].toBool());
+    setUnconfirmed(m_data["block_height"].toDouble() == 0);
+    setAddressType(m_data["address_type"].toString());
     if (m_address_type == "csv") {
-        auto block_height = data["block_height"].toDouble() + data["subtype"].toDouble();
+        auto block_height = m_data["block_height"].toDouble() + m_data["subtype"].toDouble();
         auto current_block_height = m_account->wallet()->events()["block"].toObject()["block_height"].toDouble();
         setExpired(block_height < current_block_height);
     } else {
-        setExpired(data["nlocktime_at"].toInt() == 0);
+        setExpired(m_data["nlocktime_at"].toInt() == 0);
     }
 }
 
