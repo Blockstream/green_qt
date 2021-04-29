@@ -6,7 +6,7 @@ import QtQuick.Controls 2.5
 import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.12
 
-Pane {
+Button {
     required property var output
 
     function formatAmount(amount, include_ticker = true) {
@@ -21,6 +21,9 @@ Pane {
         color: constants.c500
         radius: 4
     }
+    checkable: true
+    checked: output.selected
+    onCheckedChanged: output.selected = checked
     spacing: constants.p2
     contentItem: RowLayout {
         spacing: constants.p2
@@ -93,6 +96,14 @@ Pane {
                 }
             }
             VSpacer {
+            }
+        }
+        ColumnLayout {
+            Layout.fillWidth: false
+            Layout.preferredHeight: 80
+            CheckBox {
+                checked: self.checked
+                onCheckedChanged: output.selected = checked
             }
         }
     }
