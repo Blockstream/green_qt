@@ -150,7 +150,7 @@ Resolver* Handler::createResolver(const QJsonObject& result)
         return new BlindingKeyResolver(this, result);
     }
 
-    if (action == "get_balance" || action == "get_subaccounts" || action == "get_transactions") {
+    if (action == "get_balance" || action == "get_subaccounts" || action == "get_transactions" || action == "get_unspent_outputs") {
         return new BlindingNoncesResolver(this, result);
     }
 
