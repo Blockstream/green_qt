@@ -2,11 +2,43 @@
 #include "device.h"
 #include "handler.h"
 #include "json.h"
+#include "output.h"
 #include "resolver.h"
 #include "session.h"
 #include "wallet.h"
 
 #include <gdk.h>
+
+class SetUnspentOutputsStatusHandler : public Handler
+{
+    QVariantList m_outputs;
+    QString m_status;
+    void call(GA_session* session, GA_auth_handler** auth_handler) override
+    {
+        QJsonArray list;
+        for (const auto &output : m_outputs)
+        {
+            QJsonObject o;
+            o["txhash"] = output.value<Output*>()->data()["txhash"].toString();
+            o["pt_idx"] = output.value<Output*>()->data()["pt_idx"].toInt();
+            o["user_status"] = m_status;
+            list.append(o);
+        }
+        auto details = Json::fromObject({
+            { "list", list }
+        });
+
+        int err = GA_set_unspent_outputs_status(session, details.get(), auth_handler);
+        Q_ASSERT(err == GA_OK);
+    }
+public:
+    SetUnspentOutputsStatusHandler(const QVariantList &outputs, const QString &status, Wallet* wallet)
+        : Handler(wallet),
+        m_outputs(outputs),
+        m_status(status)
+    {
+    }
+};
 
 class DisableAllPinLoginsHandler : public Handler
 {
@@ -352,6 +384,18 @@ void Controller::disableAllPins()
     auto handler = new DisableAllPinLoginsHandler(m_wallet);
     QObject::connect(handler, &Handler::done, [this, handler] {
         m_wallet->clearPinData();
+        handler->deleteLater();
+    });
+    connect(handler, &Handler::error, [handler] {
+        handler->deleteLater();
+    });
+    exec(handler);
+}
+
+void Controller::setUnspentOutputsStatus(const QVariantList &outputs, const QString &status)
+{
+    auto handler = new SetUnspentOutputsStatusHandler(outputs, status, m_wallet);
+    QObject::connect(handler, &Handler::done, [this, handler] {
         handler->deleteLater();
     });
     connect(handler, &Handler::error, [handler] {

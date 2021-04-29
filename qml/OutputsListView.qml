@@ -91,4 +91,23 @@ ColumnLayout {
             }
         }
     }
+
+    RowLayout {
+        Layout.fillWidth: true
+        spacing: constants.p1
+        HSpacer {
+        }
+        GButton {
+            text: "LOCK"
+            onClicked: lock_coins_dialog.createObject(self, { outputs: output_model.selection() }).open();
+        }
+    }
+
+    Component {
+        id: lock_coins_dialog
+        SetUnspentOutputsDialog {
+            wallet: self.account.wallet
+            status: "frozen"
+        }
+    }
 }

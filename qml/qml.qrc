@@ -104,5 +104,6 @@
         <file>OutputsListView.qml</file>
         <file>OutputDelegate.qml</file>
         <file>Tag.qml</file>
+        <file>SetUnspentOutputsStatusDialog.qml</file>
     </qresource>
 </RCC>

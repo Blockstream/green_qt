@@ -8,6 +8,7 @@
 
 class Handler;
 class Resolver;
+class Output;
 class Wallet;
 
 class Controller : public QObject
@@ -38,6 +39,7 @@ public slots:
     void setCsvTime(int value);
     void deleteWallet();
     void disableAllPins();
+    void setUnspentOutputsStatus(const QVariantList &outputs, const QString &status);
 signals:
     void walletChanged(Wallet* wallet);
     void finished();
