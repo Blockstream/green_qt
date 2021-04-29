@@ -28,12 +28,25 @@ void OutputListModel::setAccount(Account *account)
         m_account.track(QObject::connect(m_account, &Account::notificationHandled, this, [this](const QJsonObject& notification) {
             const auto event = notification.value("event").toString();
             if (event == "transaction") {
+                // In Wallet::handleNotification transaction notifications are only
+                // forward to relevant accounts meaning that it's fine to always
+                // update there.
                 fetch();
-                return;
-            }
-            if (event == "block") {
-                fetch();
-                return;
+            } else if (event == "block") {
+                bool has_unconfirmed = false;
+                for (auto& output : m_outputs) {
+                    if (output->unconfirmed()) {
+                        has_unconfirmed = true;
+                        break;
+                    }
+                }
+                if (has_unconfirmed) {
+                    // Need to fetch coins since unconfirmed coins can now be included in the block.
+                    fetch();
+                } else {
+                    // Just update existing coins.
+                    update();
+                }
             }
         }));
     }
