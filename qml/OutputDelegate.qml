@@ -72,30 +72,28 @@ Button {
             RowLayout {
                 Tag {
                     visible: output.locked
-                    text: 'LOCKED'
-                    ToolTip.text: qsTrId('id_tag_locked')
-                }
-                Tag {
-                    text: 'DUST'
-                    visible: output.dust
-                    ToolTip.text: qsTrId('id_tag_dust')
-                }
-                Tag {
-                    text: 'NOT CONFIDENTIAL'
-                    visible: output.account.wallet.network.liquid && !output.confidential
-                    ToolTip.text: qsTrId('id_tag_not_confidential')
-                }
-                Tag {
-                    text: output.addressType
+                    text: qsTrId('id_locked')
                     font.capitalization: Font.AllUppercase
-                    ToolTip.text: qsTrId('id_tag_address_type')
+                }
+                Tag {
+                    text: qsTrId('id_dust')
+                    visible: output.dust
+                    font.capitalization: Font.AllUppercase
+                }
+                Tag {
+                    text: qsTrId('id_not_confidential')
+                    visible: output.account.wallet.network.liquid && !output.confidential
+                    font.capitalization: Font.AllUppercase
+                }
+                Tag {
+                    text: output.addressType === 'csv' ? qsTrId('id_csv') : qsTrId('id_p2wsh')
+                    font.capitalization: Font.AllUppercase
                 }
                 Tag {
                     visible: output.unconfirmed
-                    text: 'UNCONFIRMED'
+                    text: qsTrId('id_unconfirmed')
                     color: '#d2934a'
                     font.capitalization: Font.AllUppercase
-                    ToolTip.text: qsTrId('id_tag_unconfirmed')
                 }
             }
             VSpacer {

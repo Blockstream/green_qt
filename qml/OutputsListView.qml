@@ -17,6 +17,23 @@ ColumnLayout {
         return outputs;
     }
 
+    function localizedLabel(label) {
+        switch (label) {
+            case 'all':
+                return qsTrId('id_all')
+            case 'csv':
+                return qsTrId('id_csv')
+            case 'p2wsh':
+                return qsTrId('id_p2wsh')
+            case 'not confidential':
+                return qsTrId('id_not_confidential')
+            case 'dust':
+                return qsTrId('id_dust')
+            case 'locked':
+                return qsTrId('id_locked')
+        }
+    }
+
     id: self
     Layout.fillWidth: true
     Layout.fillHeight: true
@@ -44,10 +61,9 @@ ColumnLayout {
                     radius: 4
                     color: self.checked ? constants.c200 : constants.c300
                 }
-                text: modelData
-                ToolTip.delay: 300
-                ToolTip.visible: hovered
-                ToolTip.text: qsTrId(`id_tag_${modelData}`);
+                text: localizedLabel(modelData)
+                property string buttonTag: modelData
+                font.capitalization: Font.AllUppercase
             }
         }
 
@@ -69,7 +85,7 @@ ColumnLayout {
         spacing: 8
         model: OutputListModelFilter {
             id: output_model_filter
-            filter: button_group.checkedButton.text
+            filter: button_group.checkedButton.buttonTag
             model: OutputListModel {
                 id: output_model
                 account: self.account
@@ -167,32 +183,49 @@ ColumnLayout {
     Component {
         id: info_dialog
         AbstractDialog {
-            title: qsTrId('id_filter_types')
+            title: qsTrId('Filters')
             icon: "qrc:/svg/info.svg"
             contentItem: ColumnLayout {
-                spacing: constants.p1
+                spacing: constants.p3
                 Repeater {
-                    model: [['ALL', 'Lists all available coins'],
-                            ['CSV', 'Lists coins that have CSV address type'],
-                            ['P2WSH', 'Lists coins that have P2WSH address type'],
-                            ['NOT CONFIDENTIAL', 'Lists coins that are not confidential'],
-                            ['DUST', 'Lists coins that have a value < 1092 satoshi'],
-                            ['LOCKED', 'Lists coins that are locked']
-                            ]
+                    model: ['all', 'csv', 'p2wsh', 'not confidential', 'dust', 'locked']
                     delegate: RowLayout {
                         spacing: constants.p1
                         Label {
-                            text: modelData[0]
+                            text: localizedLabel(modelData)
+                            font.capitalization: Font.AllUppercase
+                            Layout.minimumWidth: 120
+                            horizontalAlignment: Label.AlignHCenter
+                            font.pixelSize: 12
+                            fontSizeMode: Label.Fit
                             padding: 6
                             background: Rectangle {
                                 id: rectangle
                                 radius: 4
                                 color: constants.c300
                             }
+                            Layout.alignment: Qt.AlignTop
                         }
 
                         Label {
-                            text: modelData[1]
+                            Layout.maximumWidth: 400
+                            text: {
+                                switch (modelData) {
+                                    case 'all':
+                                        return qsTrId('id_all_the_coins_received_or')
+                                    case 'csv':
+                                        return qsTrId('id_coins_protected_by_the_new')
+                                    case 'p2wsh':
+                                        return qsTrId('id_coins_protected_by_the_legacy')
+                                    case 'not confidential':
+                                        return qsTrId('id_coins_whose_asset_and_amount')
+                                    case 'dust':
+                                        return qsTrId('id_coins_with_a_value_lower_than')
+                                    case 'locked':
+                                        return qsTrId('id_locking_coins_can_help_protect')
+                                }
+                            }
+                            wrapMode: Label.WordWrap
                         }
                     }
                 }

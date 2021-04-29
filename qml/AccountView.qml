@@ -95,7 +95,7 @@ ColumnLayout {
         TabButton {
             ButtonGroup.group: button_group
             icon.source: "qrc:/svg/coins.svg"
-            ToolTip.text: qsTrId('id_coins')
+            ToolTip.text: qsTrId('Coins')
             enabled: !account_view.account.wallet.watchOnly
             onClicked: checked = true
         }

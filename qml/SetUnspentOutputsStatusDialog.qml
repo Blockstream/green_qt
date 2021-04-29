@@ -9,8 +9,8 @@ ControllerDialog {
     required property string status
 
     id: self
-    title: qsTrId('id_set_unspent_outputs_status')
-    doneText: qsTrId('id_done')
+    title: status === 'default' ? qsTrId('id_unlocking_coins') : qsTrId('id_locking_coins')
+    doneText: status === 'default' ? qsTrId('id_coins_unlocked') : qsTrId('id_coins_locked')
 
     controller: Controller {
         wallet: self.wallet
@@ -27,10 +27,10 @@ ControllerDialog {
         Label {
             text: {
                 if (status=="default") {
-                    return qsTrId('UNLOCK COINS STRINGS')
+                    return qsTrId('id_unlocked_coins_can_be_spent_and')
                 }
                 if (status=="frozen") {
-                    return qsTrId('LOCK COINS STRINGS')
+                    return qsTrId('id_locked_coins_will_not_be_spent')
                 }
             }
         }

@@ -23,6 +23,4 @@ Label {
         hoverEnabled: true
         enabled: self.showTooltip
     }
-    ToolTip.delay: 300
-    ToolTip.visible: mouse_area.containsMouse
 }
