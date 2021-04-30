@@ -105,15 +105,7 @@ QVariant OutputListModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
-QVariantList OutputListModel::selection() const
+int OutputListModel::indexOf(Output *output) const
 {
-    QVariantList outputs;
-
-    for (Output *output : m_outputs) {
-        if (output->selected()) {
-            outputs.append(QVariant::fromValue(output));
-        }
-    }
-
-    return outputs;
+    return m_outputs.indexOf(output);
 }

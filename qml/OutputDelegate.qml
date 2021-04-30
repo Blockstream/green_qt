@@ -5,6 +5,7 @@ import QtQuick.Window 2.12
 import QtQuick.Controls 2.5
 import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.12
+import QtQml.Models 2.11
 
 Button {
     required property var output
@@ -21,15 +22,12 @@ Button {
         color: constants.c500
         radius: 4
     }
-    checkable: true
-    checked: output.selected
-    onCheckedChanged: output.selected = checked
+    onClicked: selection_model.select(output_model.index(output_model.indexOf(output), 0), ItemSelectionModel.Toggle)
     spacing: constants.p2
     contentItem: RowLayout {
         spacing: constants.p2
         ColumnLayout {
             Layout.fillWidth: false
-            Layout.preferredHeight: 80
             Image {
                 visible: !output.account.wallet.network.liquid
                 sourceSize.height: 36
@@ -50,7 +48,6 @@ Button {
         }
         ColumnLayout {
             Layout.fillWidth: true
-            Layout.fillHeight: true
             spacing: constants.p1
             Label {
                 Layout.fillWidth: true
@@ -102,8 +99,8 @@ Button {
             Layout.fillWidth: false
             Layout.preferredHeight: 80
             CheckBox {
-                checked: self.checked
-                onCheckedChanged: output.selected = checked
+                checked: self.highlighted
+                onToggled: selection_model.select(output_model.index(output_model.indexOf(output), 0), ItemSelectionModel.Toggle)
             }
         }
     }

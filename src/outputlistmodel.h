@@ -17,21 +17,21 @@ class OutputListModel : public QAbstractListModel
 public:
     OutputListModel(QObject* parent = nullptr);
     ~OutputListModel();
-
     Account* account() const { return m_account; }
     void setAccount(Account* account);
     bool fetching() const { return m_get_outputs_activity; }
-
     QHash<int,QByteArray> roleNames() const override;
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
-    Q_INVOKABLE QVariantList selection() const;
+public slots:
+    int indexOf(Output* output) const;
+    void fetch();
 signals:
     void accountChanged(Account* account);
     void fetchingChanged();
+    void selectionChanged();
 private:
-    void fetch();
     void update();
 private:
     Connectable<Account> m_account;

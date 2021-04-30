@@ -77,14 +77,7 @@ void Output::setUnconfirmed(bool unconfirmed)
 {
     if (m_unconfirmed == unconfirmed) return;
     m_unconfirmed = unconfirmed;
-    emit expiredChanged(m_unconfirmed);
-}
-
-void Output::setSelected(bool selected)
-{
-    if (m_selected == selected) return;
-    m_selected = selected;
-    emit expiredChanged(m_selected);
+    emit unconfirmedChanged(m_unconfirmed);
 }
 
 void Output::setAddressType(const QString& address_type)

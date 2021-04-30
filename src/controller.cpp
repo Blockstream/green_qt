@@ -397,6 +397,7 @@ void Controller::setUnspentOutputsStatus(const QVariantList &outputs, const QStr
     auto handler = new SetUnspentOutputsStatusHandler(outputs, status, m_wallet);
     QObject::connect(handler, &Handler::done, [this, handler] {
         handler->deleteLater();
+        emit finished();
     });
     connect(handler, &Handler::error, [handler] {
         handler->deleteLater();

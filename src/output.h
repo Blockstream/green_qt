@@ -19,7 +19,6 @@ class Output : public QObject
     Q_PROPERTY(bool confidential READ confidential NOTIFY confidentialChanged)
     Q_PROPERTY(bool expired READ expired NOTIFY expiredChanged)
     Q_PROPERTY(bool unconfirmed READ unconfirmed NOTIFY unconfirmedChanged)
-    Q_PROPERTY(bool selected READ selected WRITE setSelected NOTIFY selectedChanged)
     Q_PROPERTY(QString addressType READ addressType NOTIFY addressTypeChanged)
     QML_ELEMENT
     QML_UNCREATABLE("Output is instanced by Account.")
@@ -35,7 +34,6 @@ public:
     bool confidential() const { return m_confidential; }
     bool expired() const { return m_expired; }
     bool unconfirmed() const { return m_unconfirmed; }
-    bool selected() const { return m_selected; }
     QString addressType() const { return m_address_type; }
 signals:
     void dataChanged(const QJsonObject& data);
@@ -45,7 +43,7 @@ signals:
     void confidentialChanged(bool confidential);
     void expiredChanged(bool expired);
     void unconfirmedChanged(bool unconfirmed);
-    void selectedChanged(bool expired);
+    void selectedChanged(bool selected);
     void addressTypeChanged(const QString& address_type);
 private:
     void setDust(bool dust);
@@ -53,7 +51,6 @@ private:
     void setConfidential(bool confidential);
     void setExpired(bool expired);
     void setUnconfirmed(bool unconfirmed);
-    void setSelected(bool selected);
     void setAddressType(const QString& address_type);
 public:
     Account* const m_account;
@@ -64,7 +61,6 @@ public:
     bool m_confidential{false};
     bool m_expired{false};
     bool m_unconfirmed{false};
-    bool m_selected{false};
     QString m_address_type;
 };
 

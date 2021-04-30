@@ -4,8 +4,9 @@ import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.12
 
 ControllerDialog {
-    property var outputs
-    property string status
+    required property var model
+    required property var outputs
+    required property string status
 
     id: self
     title: qsTrId('id_set_unspent_outputs_status')
@@ -13,6 +14,7 @@ ControllerDialog {
 
     controller: Controller {
         wallet: self.wallet
+        onFinished: self.model.fetch()
     }
 
     initialItem: RowLayout {
