@@ -10,20 +10,31 @@ ControllerDialog {
 
     id: self
     title: qsTrId('id_set_unspent_outputs_status')
-    doneText: qsTrId('id_disabled')
+    doneText: qsTrId('id_done')
 
     controller: Controller {
         wallet: self.wallet
         onFinished: self.model.fetch()
     }
 
-    initialItem: RowLayout {
+    initialItem: ColumnLayout {
         property list<Action> actions: [
             Action {
                 text: qsTrId('id_next')
                 onTriggered: controller.setUnspentOutputsStatus(self.outputs, self.status)
             }
         ]
+        Label {
+            text: {
+                if (status=="default") {
+                    return "UNLOCK COINS STRINGS"
+                }
+                if (status=="frozen") {
+                    return "LOCK COINS STRINGS"
+                }
+            }
+        }
+
         spacing: constants.s1
     }
 }

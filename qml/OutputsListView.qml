@@ -110,7 +110,7 @@ ColumnLayout {
     }
 
     RowLayout {
-        visible: selection_model.hasSelection
+        visible: selection_model.hasSelection && !account.wallet.network.liquid
         Layout.fillWidth: true
         spacing: constants.p1
 

@@ -10,6 +10,10 @@ import QtQml.Models 2.11
 Button {
     required property var output
 
+    function toggleSelection() {
+        if (!output.account.wallet.network.liquid) selection_model.select(output_model.index(output_model.indexOf(output), 0), ItemSelectionModel.Toggle)
+    }
+
     function formatAmount(amount, include_ticker = true) {
         const unit = wallet.settings.unit;
         return output.account.wallet.network.liquid ? output.asset.formatAmount(amount, true) : wallet.formatAmount(amount || 0, include_ticker, unit)
@@ -22,7 +26,7 @@ Button {
         color: constants.c500
         radius: 4
     }
-    onClicked: selection_model.select(output_model.index(output_model.indexOf(output), 0), ItemSelectionModel.Toggle)
+    onClicked: self.toggleSelection()
     spacing: constants.p2
     contentItem: RowLayout {
         spacing: constants.p2
@@ -96,11 +100,12 @@ Button {
             }
         }
         ColumnLayout {
+            visible: !output.account.wallet.network.liquid
             Layout.fillWidth: false
             Layout.preferredHeight: 80
             CheckBox {
                 checked: self.highlighted
-                onToggled: selection_model.select(output_model.index(output_model.indexOf(output), 0), ItemSelectionModel.Toggle)
+                onClicked: self.toggleSelection()
             }
         }
     }
