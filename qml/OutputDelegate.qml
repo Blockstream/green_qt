@@ -23,8 +23,10 @@ Button {
     hoverEnabled: true
     padding: constants.p3
     background: Rectangle {
-        color: constants.c500
+        color: self.hovered ? constants.c600 : self.highlighted ? constants.c500 : constants.c700
         radius: 4
+        border.width: self.highlighted ? 1 : 0
+        border.color: constants.g500
     }
     onClicked: self.toggleSelection()
     spacing: constants.p2
@@ -97,15 +99,6 @@ Button {
                 }
             }
             VSpacer {
-            }
-        }
-        ColumnLayout {
-            visible: !output.account.wallet.network.liquid
-            Layout.fillWidth: false
-            Layout.preferredHeight: 80
-            CheckBox {
-                checked: self.highlighted
-                onClicked: self.toggleSelection()
             }
         }
     }

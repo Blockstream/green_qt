@@ -76,7 +76,6 @@ ColumnLayout {
             }
         }
         delegate: OutputDelegate {
-            hoverEnabled: false
             highlighted: selection_model.selectedIndexes.indexOf(output_model.index(output_model.indexOf(output), 0))>-1
             width: list_view.width
         }
