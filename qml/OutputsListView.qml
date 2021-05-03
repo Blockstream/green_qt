@@ -135,7 +135,11 @@ ColumnLayout {
                 }
                 return true;
             }
-            onClicked: set_unspent_outputs_status_dialog.createObject(self, { outputs: selectedOutputs, status: "frozen" }).open();
+            onClicked: {
+                var outputs = selectedOutputs;
+                selection_model.clearSelection()
+                set_unspent_outputs_status_dialog.createObject(self, { outputs, status: "frozen" }).open();
+            }
         }
 
         GButton {
@@ -146,7 +150,11 @@ ColumnLayout {
                 }
                 return true;
             }
-            onClicked: set_unspent_outputs_status_dialog.createObject(self, { outputs: selectedOutputs, status: "default" }).open();
+            onClicked: {
+                var outputs = selectedOutputs;
+                selection_model.clearSelection()
+                set_unspent_outputs_status_dialog.createObject(self, { outputs, status: "default" }).open();
+            }
         }
 
         GButton {
