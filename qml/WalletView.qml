@@ -60,7 +60,7 @@ MainPage {
     DialogLoader {
         id: settings_dialog
         property string location: `${self.location}/settings`
-        property bool enabled: !!self.wallet.settings.pricing && !!self.wallet.config.limits
+        property bool enabled: !self.wallet.watchOnly && !!self.wallet.settings.pricing && !!self.wallet.config.limits
         active: settings_dialog.enabled && navigation.location === settings_dialog.location
         dialog: WalletSettingsDialog {
             parent: window.Overlay.overlay
@@ -77,7 +77,7 @@ MainPage {
                 source: icons[wallet.network.id]
             }
             Loader {
-                active: !wallet.device
+                active: !wallet.device && !wallet.watchOnly
                 visible: active
                 Layout.fillWidth: true
                 sourceComponent: EditableLabel {
@@ -89,6 +89,14 @@ MainPage {
                     onEdited: {
                         wallet.rename(text, activeFocus)
                     }
+                }
+            }
+            Loader {
+                active: !wallet.device && wallet.watchOnly
+                sourceComponent: Label {
+                    text: walletName(wallet)
+                    font.pixelSize: 24
+                    font.styleName: 'Medium'
                 }
             }
             Loader {
@@ -118,7 +126,7 @@ MainPage {
                 }
             }
             HSpacer {
-                visible: wallet.device
+                visible: wallet.device || wallet.watchOnly
             }
             ToolButton {
                 visible: (wallet.events && !!wallet.events.twofactor_reset && wallet.events.twofactor_reset.is_active) || !fiatRateAvailable

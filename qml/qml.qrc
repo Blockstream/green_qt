@@ -105,5 +105,6 @@
         <file>OutputDelegate.qml</file>
         <file>Tag.qml</file>
         <file>SetUnspentOutputsStatusDialog.qml</file>
+        <file>WatchOnlyLoginDialog.qml</file>
     </qresource>
 </RCC>

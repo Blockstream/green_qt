@@ -62,8 +62,21 @@ Item {
                     text: qsTrId('id_restore_green_wallet')
                     onClicked: navigation.go(`/${self.network}/restore`, { network: self.network })
                 }
+                GButton {
+                    visible: self.network !== 'liquid'
+                    text: qsTrId('id_watchonly_login')
+                    large: true
+                    onClicked: watch_only_login_dialog.createObject(window).open()
+                }
             }
         }
+        Component {
+            id: watch_only_login_dialog
+            WatchOnlyLoginDialog {
+                network: NetworkManager.network(self.network)
+            }
+        }
+
         contentItem: ColumnLayout {
             MainPageSection {
                 Layout.fillWidth: true
@@ -168,9 +181,9 @@ Item {
                                     RowLayout {
                                         Label {
                                             Layout.fillWidth: true
-                                            text: wallet.name
+                                            text: walletName(wallet)
                                             elide: Label.ElideRight
-                                            ToolTip.text: wallet.name
+                                            ToolTip.text: walletName(wallet)
                                             ToolTip.visible: truncated && mouse_area.containsMouse
                                             ToolTip.delay: 1000
                                             background: MouseArea {
@@ -238,7 +251,7 @@ Item {
         contentItem: RowLayout {
             Label {
                 Layout.maximumWidth: 400
-                text: wallet.device ? wallet.device.name : wallet.name
+                text: wallet.device ? wallet.device.name : walletName(wallet)
                 elide: Label.ElideRight
             }
             HSpacer {

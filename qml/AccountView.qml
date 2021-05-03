@@ -89,12 +89,14 @@ ColumnLayout {
             ButtonGroup.group: button_group
             icon.source: "qrc:/svg/addresses.svg"
             ToolTip.text: qsTrId('id_addresses')
+            enabled: !account_view.account.wallet.watchOnly
             onClicked: checked = true
         }
         TabButton {
             ButtonGroup.group: button_group
             icon.source: "qrc:/svg/coins.svg"
             ToolTip.text: qsTrId('id_coins')
+            enabled: !account_view.account.wallet.watchOnly
             onClicked: checked = true
         }
         HSpacer {
@@ -103,7 +105,7 @@ ColumnLayout {
             id: send_button
             Layout.alignment: Qt.AlignRight
             large: true
-            enabled: !wallet.locked && account.balance > 0
+            enabled: !account_view.account.wallet.watchOnly && !wallet.locked && account.balance > 0
             hoverEnabled: true
             text: qsTrId('id_send')
             onClicked: send_dialog.createObject(window, { account: account_view.account }).open()
@@ -150,14 +152,20 @@ ColumnLayout {
             }
         }
 
-        AddressesListView {
-            id: addresses_view
-            account: account_view.account
+        Loader {
+            active: !account_view.account.wallet.watchOnly
+            sourceComponent: AddressesListView {
+                id: addresses_view
+                account: account_view.account
+            }
         }
 
-        OutputsListView {
-            id: outputs_view
-            account: account_view.account
+        Loader {
+            active: !account_view.account.wallet.watchOnly
+                sourceComponent: OutputsListView {
+                id: outputs_view
+                account: account_view.account
+            }
         }
     }
 
@@ -184,7 +192,7 @@ ColumnLayout {
     component TabButton: ToolButton {
         icon.width: constants.p4
         icon.height: constants.p4
-        icon.color: 'white'
+        icon.color: Qt.rgba(1, 1, 1, enabled ? 1 : 0.5)
         padding: 4
         background: Rectangle {
             color: parent.checked ? constants.c400 : parent.hovered ? constants.c600 : constants.c700

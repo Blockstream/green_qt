@@ -75,9 +75,11 @@ ListView {
                 leftInset: -8
                 rightInset: -8
                 text: accountName(account)
-                enabled: delegate.ListView.isCurrentItem && account.name !== '' && !delegate.account.wallet.locked
+                enabled: !account.wallet.watchOnly && delegate.ListView.isCurrentItem && account.name !== '' && !delegate.account.wallet.locked
                 onEdited: {
-                    account.rename(text, activeFocus)
+                    if (!account.wallet.watchOnly) {
+                        account.rename(text, activeFocus)
+                    }
                 }
 
 //                onTextChanged: {

@@ -44,8 +44,17 @@ ApplicationWindow {
         return new Date(date_time).toLocaleString(locale.dateTimeFormat(Locale.LongFormat))
     }
 
+    function walletName(wallet) {
+        if (!wallet) return ''
+        if (wallet.watchOnly) return qsTrId('%1 watch-only wallet').arg(wallet.username)
+        return wallet.name
+    }
+
     function accountName(account) {
-        return account ? (account.name === '' ? qsTrId('id_main_account') : account.name) : ''
+        if (!account) return ''
+        if (account.mainAccount) return qsTrId('id_main_account')
+        if (account.wallet.watchOnly) return qsTrId('Account %1').arg(account.pointer)
+        return account.name
     }
 
     function fitMenuWidth(menu) {
@@ -69,7 +78,7 @@ ApplicationWindow {
     onWidthChanged: Settings.windowWidth = width
     onHeightChanged: Settings.windowHeight = height
     onCurrentWalletChanged: {
-        if (currentWallet && !currentWallet.device) {
+        if (currentWallet && !currentWallet.device && !currentWallet.watchOnly) {
             Settings.updateRecentWallet(currentWallet.id)
         }
     }
@@ -84,7 +93,7 @@ ApplicationWindow {
             if (currentWallet.device) {
                 parts.push(currentWallet.device.name);
             } else {
-                parts.push(font_metrics.elidedText(currentWallet.name, Qt.ElideRight, window.width / 3));
+                parts.push(font_metrics.elidedText(walletName(currentWallet), Qt.ElideRight, window.width / 3));
             }
             if (currentAccount) parts.push(font_metrics.elidedText(accountName(currentAccount), Qt.ElideRight, window.width / 3));
         }
@@ -203,7 +212,7 @@ ApplicationWindow {
         id: self
         required property Wallet wallet
         location: `/${wallet.network.id}/${wallet.id}`
-        text: wallet.device ? wallet.device.name : wallet.name
+        text: wallet.device ? wallet.device.name : walletName(wallet)
         busy: wallet.activities.length > 0
         icon.width: 16
         icon.height: 16
