@@ -28,5 +28,6 @@
         <file>svg/overview.svg</file>
         <file>svg/search.svg</file>
         <file>svg/coins.svg</file>
+        <file>svg/info.svg</file>
     </qresource>
 </RCC>

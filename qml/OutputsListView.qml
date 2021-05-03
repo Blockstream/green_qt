@@ -53,6 +53,12 @@ ColumnLayout {
 
         HSpacer {
         }
+
+        ToolButton {
+            icon.source: "qrc:/svg/info.svg"
+            icon.color: "white"
+            onClicked: info_dialog.createObject(self).open();
+        }
     }
 
     ListView {
@@ -155,6 +161,42 @@ ColumnLayout {
         SetUnspentOutputsStatusDialog {
             model: output_model
             wallet: self.account.wallet
+        }
+    }
+
+    Component {
+        id: info_dialog
+        AbstractDialog {
+            title: qsTrId('id_filter_types')
+            icon: "qrc:/svg/info.svg"
+            contentItem: ColumnLayout {
+                spacing: constants.p1
+                Repeater {
+                    model: [['ALL', 'Lists all available coins'],
+                            ['CSV', 'Lists coins that have CSV address type'],
+                            ['P2WSH', 'Lists coins that have P2WSH address type'],
+                            ['NOT CONFIDENTIAL', 'Lists coins that are not confidential'],
+                            ['DUST', 'Lists coins that have a value < 1092 satoshi'],
+                            ['LOCKED', 'Lists coins that are locked']
+                            ]
+                    delegate: RowLayout {
+                        spacing: constants.p1
+                        Label {
+                            text: modelData[0]
+                            padding: 6
+                            background: Rectangle {
+                                id: rectangle
+                                radius: 4
+                                color: constants.c300
+                            }
+                        }
+
+                        Label {
+                            text: modelData[1]
+                        }
+                    }
+                }
+            }
         }
     }
 }
