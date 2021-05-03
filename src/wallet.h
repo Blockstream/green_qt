@@ -48,6 +48,8 @@ public:
 
 private:
     Q_PROPERTY(QString id READ id CONSTANT)
+    Q_PROPERTY(bool watchOnly READ isWatchOnly CONSTANT)
+    Q_PROPERTY(QString username READ username NOTIFY usernameChanged)
     Q_PROPERTY(Session* session READ session NOTIFY sessionChanged)
     Q_PROPERTY(Network* network READ network WRITE setNetwork NOTIFY networkChanged)
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
@@ -126,6 +128,7 @@ public slots:
     void refreshAssets(bool refresh);
 
     void rename(QString name, bool active_focus);
+    void setWatchOnly(const QString& username, const QString& password);
 signals:
     void readyChanged(bool ready);
     void sessionChanged(Session* session);
@@ -142,7 +145,7 @@ signals:
     void configChanged();
     void pinSet();
     void emptyChanged(bool empty);
-
+    void usernameChanged(const QString& username);
 protected:
     bool eventFilter(QObject* object, QEvent* event) override;
     void timerEvent(QTimerEvent* event) override;
@@ -182,6 +185,10 @@ public:
     bool hasPinData() const { return !m_pin_data.isEmpty(); }
     void clearPinData();
 
+    bool m_watch_only{false};
+    QString m_username;
+    bool isWatchOnly() const { return m_watch_only; }
+    QString username() const { return m_username; }
 protected slots:
     void updateReady();
 };

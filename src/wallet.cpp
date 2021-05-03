@@ -286,6 +286,17 @@ void Wallet::reload()
             refreshAssets(true);
         }
 
+        if (!m_watch_only) {
+            char* data;
+            GA_get_watch_only_username(m_session->m_session, &data);
+            auto username = QString::fromUtf8(data);
+            GA_destroy_string(data);
+            if (m_username != username) {
+                m_username = username;
+                emit usernameChanged(m_username);
+            }
+        }
+
         activity->finish();
         activity->deleteLater();
     });
@@ -379,8 +390,18 @@ void Wallet::rename(QString name, bool active_focus)
     if (!m_name.isEmpty()) save();
 }
 
+void Wallet::setWatchOnly(const QString& username, const QString& password)
+{
+    Q_ASSERT(!m_watch_only);
+    int rc = GA_set_watch_only(m_session->m_session, username.toUtf8().constData(), password.toUtf8().constData());
+    if (rc != GA_OK) return;
+    m_username = username;
+    emit usernameChanged(m_username);
+}
+
 void Wallet::updateConfig()
 {
+    if (m_watch_only) return;
     GA_json* config;
     int err = GA_get_twofactor_config(m_session->m_session, &config);
     Q_ASSERT(err == GA_OK);
