@@ -131,7 +131,7 @@ ColumnLayout {
             text: qsTrId('id_lock')
             enabled: {
                 for (const output of selectedOutputs) {
-                    if (output.data.satoshi>1092) return false;
+                    if (output.data.satoshi>1092 || output.locked) return false;
                 }
                 return true;
             }
