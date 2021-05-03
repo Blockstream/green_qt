@@ -6,6 +6,7 @@ SOURCES += \
     $$PWD/address.cpp \
     $$PWD/addresslistmodel.cpp \
     $$PWD/addresslistmodelfilter.cpp \
+    $$PWD/appupdatecontroller.cpp \
     $$PWD/asset.cpp \
     $$PWD/balance.cpp \
     $$PWD/clipboard.cpp \
@@ -53,6 +54,7 @@ HEADERS += \
     $$PWD/address.h \
     $$PWD/addresslistmodel.h \
     $$PWD/addresslistmodelfilter.h \
+    $$PWD/appupdatecontroller.h \
     $$PWD/asset.h \
     $$PWD/balance.h \
     $$PWD/clipboard.h \
