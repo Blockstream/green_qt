@@ -13,9 +13,10 @@
 
 #include <gdk.h>
 
-Account::Account(Wallet* wallet)
+Account::Account(int pointer, Wallet* wallet)
     : QObject(wallet)
     , m_wallet(wallet)
+    , m_pointer(pointer)
 {
 }
 
@@ -31,8 +32,8 @@ QJsonObject Account::json() const
 
 void Account::update(const QJsonObject& json)
 {
+    Q_ASSERT(m_pointer == json.value("pointer").toInt());
     m_json = json;
-    m_pointer = m_json.value("pointer").toInt();
     emit jsonChanged();
 
     updateBalance();
@@ -186,7 +187,7 @@ Transaction *Account::getTransactionByTxHash(const QString &id) const
 
 bool Account::isMainAccount() const
 {
-    return m_json.value("name").toString() == "";
+    return m_pointer == 0;
 }
 
 AccountActivity::AccountActivity(Account* account, QObject* parent)

@@ -15,15 +15,16 @@ QT_FORWARD_DECLARE_CLASS(Wallet)
 class Account : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(Wallet* wallet READ wallet NOTIFY walletChanged)
-    Q_PROPERTY(bool mainAccount READ isMainAccount NOTIFY jsonChanged)
+    Q_PROPERTY(Wallet* wallet READ wallet CONSTANT)
+    Q_PROPERTY(int pointer READ pointer CONSTANT)
+    Q_PROPERTY(bool mainAccount READ isMainAccount CONSTANT)
     Q_PROPERTY(QJsonObject json READ json NOTIFY jsonChanged)
     Q_PROPERTY(QString name READ name NOTIFY jsonChanged)
     Q_PROPERTY(qint64 balance READ balance NOTIFY balanceChanged)
     Q_PROPERTY(QQmlListProperty<Balance> balances READ balances NOTIFY balancesChanged)
     QML_ELEMENT
 public:
-    explicit Account(Wallet* wallet);
+    explicit Account(int pointer, Wallet* wallet);
 
     Wallet* wallet() const { return m_wallet; }
     int pointer() const { Q_ASSERT(m_pointer >= 0); return m_pointer; }
@@ -57,7 +58,7 @@ public slots:
     void rename(QString name, bool active_focus);
 private:
     Wallet* const m_wallet;
-    int m_pointer{-1};
+    const int m_pointer;
     QJsonObject m_json;
     QMap<QString, Transaction*> m_transactions_by_hash;
     QMap<QPair<QString, int>, Output*> m_outputs_by_hash;

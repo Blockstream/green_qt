@@ -564,7 +564,7 @@ Account* Wallet::getOrCreateAccount(int pointer)
 {
     Account* account = m_accounts_by_pointer.value(pointer);
     if (!account) {
-        account = new Account(this);
+        account = new Account(pointer, this);
         m_accounts_by_pointer.insert(pointer, account);
     }
     return account;
