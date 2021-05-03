@@ -27,10 +27,10 @@ ControllerDialog {
         Label {
             text: {
                 if (status=="default") {
-                    return "UNLOCK COINS STRINGS"
+                    return qsTrId('UNLOCK COINS STRINGS')
                 }
                 if (status=="frozen") {
-                    return "LOCK COINS STRINGS"
+                    return qsTrId('LOCK COINS STRINGS')
                 }
             }
         }
