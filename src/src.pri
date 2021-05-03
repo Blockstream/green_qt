@@ -43,7 +43,8 @@ SOURCES += \
     $$PWD/wallet.cpp \
     $$PWD/walletlistmodel.cpp \
     $$PWD/walletmanager.cpp \
-    $$PWD/wally.cpp
+    $$PWD/wally.cpp \
+    $$PWD/watchonlylogincontroller.cpp
 
 HEADERS += \
     $$PWD/accountcontroller.h \
@@ -89,7 +90,8 @@ HEADERS += \
     $$PWD/wallet.h \
     $$PWD/walletlistmodel.h \
     $$PWD/walletmanager.h \
-    $$PWD/wally.h
+    $$PWD/wally.h \
+    $$PWD/watchonlylogincontroller.h
 
 include(core/core.pri)
 include(controllers/controllers.pri)
