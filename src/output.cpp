@@ -31,7 +31,8 @@ void Output::update()
         emit assetChanged(m_asset);
     }
 
-    setDust(m_data["satoshi"].toDouble() < 1092);
+    setDust(m_data["satoshi"].toDouble() < 1092 && !m_account->wallet()->network()->isLiquid());
+    setCanBeLocked(m_data["satoshi"].toDouble() < 2184);
     setLocked(m_data["user_status"].toInt() == 1);
     setConfidential(m_data["confidential"].toBool());
     setUnconfirmed(m_data["block_height"].toDouble() == 0);
@@ -57,6 +58,13 @@ void Output::setLocked(bool locked)
     if (m_locked == locked) return;
     m_locked = locked;
     emit lockedChanged(m_locked);
+}
+
+void Output::setCanBeLocked(bool canBeLocked)
+{
+    if (m_can_be_locked == canBeLocked) return;
+    m_can_be_locked = canBeLocked;
+    emit canBeLockedChanged(m_can_be_locked);
 }
 
 void Output::setConfidential(bool confidential)

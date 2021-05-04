@@ -73,6 +73,7 @@ ColumnLayout {
             model: OutputListModel {
                 id: output_model
                 account: self.account
+                onModelAboutToBeReset: selection_model.clear()
             }
         }
         delegate: OutputDelegate {
@@ -131,15 +132,11 @@ ColumnLayout {
             text: qsTrId('id_lock')
             enabled: {
                 for (const output of selectedOutputs) {
-                    if (output.data.satoshi>1092 || output.locked) return false;
+                    if (!output.canBeLocked || output.locked || output.unconfirmed) return false;
                 }
                 return true;
             }
-            onClicked: {
-                var outputs = selectedOutputs;
-                selection_model.clearSelection()
-                set_unspent_outputs_status_dialog.createObject(self, { outputs, status: "frozen" }).open();
-            }
+            onClicked: set_unspent_outputs_status_dialog.createObject(self, { outputs: selectedOutputs, status: "frozen" }).open();
         }
 
         GButton {
@@ -150,11 +147,7 @@ ColumnLayout {
                 }
                 return true;
             }
-            onClicked: {
-                var outputs = selectedOutputs;
-                selection_model.clearSelection()
-                set_unspent_outputs_status_dialog.createObject(self, { outputs, status: "default" }).open();
-            }
+            onClicked: set_unspent_outputs_status_dialog.createObject(self, { outputs: selectedOutputs, status: "default" }).open();
         }
 
         GButton {

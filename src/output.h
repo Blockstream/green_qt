@@ -19,6 +19,7 @@ class Output : public QObject
     Q_PROPERTY(bool confidential READ confidential NOTIFY confidentialChanged)
     Q_PROPERTY(bool expired READ expired NOTIFY expiredChanged)
     Q_PROPERTY(bool unconfirmed READ unconfirmed NOTIFY unconfirmedChanged)
+    Q_PROPERTY(bool canBeLocked READ canBeLocked NOTIFY canBeLockedChanged)
     Q_PROPERTY(QString addressType READ addressType NOTIFY addressTypeChanged)
     QML_ELEMENT
     QML_UNCREATABLE("Output is instanced by Account.")
@@ -34,6 +35,7 @@ public:
     bool confidential() const { return m_confidential; }
     bool expired() const { return m_expired; }
     bool unconfirmed() const { return m_unconfirmed; }
+    bool canBeLocked() const { return m_data["satoshi"].toDouble() < 2184; }
     QString addressType() const { return m_address_type; }
 signals:
     void dataChanged(const QJsonObject& data);
@@ -44,10 +46,12 @@ signals:
     void expiredChanged(bool expired);
     void unconfirmedChanged(bool unconfirmed);
     void selectedChanged(bool selected);
+    void canBeLockedChanged(bool canBeLocked);
     void addressTypeChanged(const QString& address_type);
 private:
     void setDust(bool dust);
     void setLocked(bool locked);
+    void setCanBeLocked(bool canBeLocked);
     void setConfidential(bool confidential);
     void setExpired(bool expired);
     void setUnconfirmed(bool unconfirmed);
@@ -61,6 +65,7 @@ public:
     bool m_confidential{false};
     bool m_expired{false};
     bool m_unconfirmed{false};
+    bool m_can_be_locked{false};
     QString m_address_type;
 };
 
