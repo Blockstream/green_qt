@@ -29,6 +29,7 @@ Button {
     }
     contentItem: RowLayout {
         spacing: self.padding
+        opacity: self.enabled ? 1 : 0.5
         Image {
             visible: status === Image.Ready
             source: self.icon.source
@@ -39,7 +40,6 @@ Button {
             Layout.alignment: Qt.AlignCenter
             text: self.text
             color: self.pressed ? "black" : "white"
-            opacity: self.enabled ? 1 : 0.5
         }
     }
 }
