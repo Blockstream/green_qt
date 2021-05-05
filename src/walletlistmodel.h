@@ -16,8 +16,16 @@ class WalletListModel : public QSortFilterProxyModel
     Q_PROPERTY(bool justAuthenticated READ justAuthenticated WRITE setJustAuthenticated NOTIFY justAuthenticatedChanged)
     Q_PROPERTY(bool justReady READ justReady WRITE setJustReady NOTIFY justReadyChanged)
     Q_PROPERTY(bool withoutDevice READ withoutDevice WRITE setWithoutDevice NOTIFY withoutDeviceChanged)
+    Q_PROPERTY(Filter watchOnly READ watchOnly WRITE setWatchOnly NOTIFY watchOnlyChanged)
     QML_ELEMENT
 public:
+    enum class Filter {
+        Any,
+        Yes,
+        No,
+    };
+    Q_ENUM(Filter)
+
     WalletListModel(QObject* parent = nullptr);
     Q_INVOKABLE int indexOf(Wallet* wallet) const;
     QString network() const { return m_network; }
@@ -28,11 +36,14 @@ public:
     void setJustReady(bool just_ready);
     bool withoutDevice() const { return m_without_device; }
     void setWithoutDevice(bool without_device);
+    Filter watchOnly() const { return m_watch_only; }
+    void setWatchOnly(Filter watch_only);
 signals:
     void networkChanged(const QString& network);
     void justAuthenticatedChanged(bool just_authenticated);
     void justReadyChanged(bool just_ready);
     void withoutDeviceChanged(bool without_device);
+    void watchOnlyChanged(Filter watch_only);
 private slots:
     void update();
 protected:
@@ -45,6 +56,7 @@ private:
     bool m_just_authenticated{false};
     bool m_just_ready{false};
     bool m_without_device{false};
+    Filter m_watch_only{Filter::Any};
 };
 
 #endif // GREEN_WALLETLISTMODEL_H

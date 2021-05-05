@@ -59,6 +59,8 @@ bool WalletListModel::filterAcceptsRow(int source_row, const QModelIndex &source
     if (m_just_authenticated && !wallet->isAuthenticated()) return false;
     if (m_just_ready && !wallet->ready()) return false;
     if (m_without_device && wallet->m_device) return false;
+    if (m_watch_only == Filter::Yes && !wallet->m_watch_only) return false;
+    if (m_watch_only == Filter::No && wallet->m_watch_only) return false;
     return filterRegExp().indexIn(wallet->name()) >= 0;
 }
 
@@ -95,5 +97,13 @@ void WalletListModel::setWithoutDevice(bool without_device)
     if (m_without_device == without_device) return;
     m_without_device = without_device;
     emit withoutDeviceChanged(m_without_device);
+    invalidateFilter();
+}
+
+void WalletListModel::setWatchOnly(WalletListModel::Filter watch_only)
+{
+    if (m_watch_only == watch_only) return;
+    m_watch_only = watch_only;
+    emit watchOnlyChanged(m_watch_only);
     invalidateFilter();
 }
