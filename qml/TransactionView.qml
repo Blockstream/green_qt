@@ -163,9 +163,11 @@ Page {
                 text: `${transaction.data.fee / 100000000} ${wallet.network.liquid ? 'Liquid Bitcoin' : 'BTC'} (${Math.round(transaction.data.fee_rate / 1000)} sat/vB)`
             }
             SectionLabel {
+                visible: !wallet.watchOnly
                 text: qsTrId('id_my_notes')
             }
             TextArea {
+                visible: !wallet.watchOnly
                 id: memo_edit
                 Layout.fillWidth: true
                 placeholderText: qsTrId('id_add_a_note_only_you_can_see_it')
@@ -180,6 +182,7 @@ Page {
                 }
             }
             RowLayout {
+                visible: !wallet.watchOnly
                 Layout.alignment: Qt.AlignRight
                 spacing: constants.p2
                 GButton {
