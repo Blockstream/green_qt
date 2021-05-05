@@ -118,6 +118,7 @@ ColumnLayout {
         Layout.fillWidth: true
         active: !wallet.network.liquid
         sourceComponent: SettingsBox {
+            enabled: !wallet.locked
             title: qsTrId('id_watchonly_login')
             contentItem: RowLayout {
                 spacing: 16
