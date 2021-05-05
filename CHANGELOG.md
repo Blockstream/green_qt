@@ -6,10 +6,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+
+### Changed
+
+### Fixed
+
+## [0.1.6] - 2021-05-05
+### Added
 - Support for temporary watch-only login
 - Setup watch-only credentials in wallet settings
 - Add coins tab to account view
 - Show 2FA method when 2FA is requested
+- Add support to lock coins labeled as dust
 
 ### Changed
 - Make remove wallet button destructive
