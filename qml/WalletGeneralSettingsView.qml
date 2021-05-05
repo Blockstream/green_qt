@@ -114,6 +114,38 @@ ColumnLayout {
         }
     }
 
+    Loader {
+        Layout.fillWidth: true
+        active: !wallet.network.liquid
+        sourceComponent: SettingsBox {
+            title: qsTrId('id_watchonly_login')
+            contentItem: RowLayout {
+                spacing: 16
+                TextField {
+                    id: username_field
+                    text: wallet.username
+                    placeholderText: qsTrId('id_username')
+                }
+                TextField {
+                    id: password_field
+                    echoMode: TextField.Password
+                    placeholderText: qsTrId('id_password')
+                }
+                HSpacer {
+                }
+                GButton {
+                    large: true
+                    text: qsTrId('id_update')
+                    enabled: password_field.text !== ''
+                    onClicked: {
+                        wallet.setWatchOnly(username_field.text, password_field.text)
+                        password_field.clear();
+                    }
+                }
+            }
+        }
+    }
+
     SettingsBox {
         title: qsTrId('id_notifications')
         enabled: !wallet.locked && !!wallet.config.email && wallet.config.email.confirmed

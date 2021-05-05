@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Setup watch-only credentials in wallet settings
 - Add coins tab to account view
 - Show 2FA method when 2FA is requested
 
