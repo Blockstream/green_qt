@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 ### Fixed
+- Use scrollable list view in firmwares listing
 
 ## [0.1.6] - 2021-05-05
 ### Added

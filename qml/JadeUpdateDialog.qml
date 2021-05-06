@@ -192,9 +192,14 @@ AbstractDialog {
                 }
             }
         }
-        Repeater {
+        ListView {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            clip: true
             model: controller.firmwares
             delegate: DescriptiveRadioButton {
+                leftPadding: 16
+                rightPadding: 16
                 property var firmware: modelData
                 property string name: {
                     if (firmware.config === 'ble') return qsTrId('id_radio_firmware') + ' ' + firmware.version
@@ -209,11 +214,10 @@ AbstractDialog {
                 }
                 checked: false
                 enabled: !firmware.installed
+                width: ListView.view.width
                 ButtonGroup.group: button_group
-                Layout.fillWidth: true
             }
-        }
-        VSpacer {
+            ScrollIndicator.vertical: ScrollIndicator { }
         }
     }
 
