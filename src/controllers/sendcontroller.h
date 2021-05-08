@@ -4,6 +4,7 @@
 #include "accountcontroller.h"
 
 QT_FORWARD_DECLARE_CLASS(Balance)
+QT_FORWARD_DECLARE_CLASS(Transaction)
 
 class SendController : public AccountController
 {
@@ -20,6 +21,7 @@ class SendController : public AccountController
     Q_PROPERTY(int feeRate READ feeRate WRITE setFeeRate NOTIFY changed)
     Q_PROPERTY(bool hasFiatRate READ hasFiatRate NOTIFY changed)
     Q_PROPERTY(QJsonObject transaction READ transaction NOTIFY transactionChanged)
+    Q_PROPERTY(Transaction* signedTransaction READ signedTransaction NOTIFY signedTransactionChanged)
     QML_ELEMENT
 public:
     explicit SendController(QObject* parent = nullptr);
@@ -55,16 +57,20 @@ public:
 
     QJsonObject transaction() const;
 
+    Transaction* signedTransaction() const;
+
 public slots:
     void signAndSend();
 
 signals:
     void changed();
     void transactionChanged();
+    void signedTransactionChanged(Transaction* transaction);
 
 private:
     void update();
     void create();
+    void setSignedTransaction(Transaction* signed_transaction);
 
 protected:
     bool m_valid{false};
@@ -79,6 +85,7 @@ protected:
     QJsonObject m_transaction;
     void setValid(bool valid);
     Handler* m_create_handler{nullptr};
+    Transaction* m_signed_transaction{nullptr};
 };
 
 #endif // GREEN_SENDCONTROLLER_H
