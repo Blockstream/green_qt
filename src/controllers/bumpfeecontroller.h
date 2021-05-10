@@ -14,6 +14,7 @@ class BumpFeeController : public AccountController
     Q_OBJECT
     Q_PROPERTY(int feeRate READ feeRate WRITE setFeeRate NOTIFY changed)
     Q_PROPERTY(QJsonObject tx READ tx NOTIFY txChanged)
+    Q_PROPERTY(Transaction* signedTransaction READ signedTransaction NOTIFY signedTransactionChanged)
     QML_ELEMENT
     QJsonObject m_tx;
     int m_fee_rate{0};
@@ -24,14 +25,18 @@ public:
     int feeRate() const { return m_fee_rate; }
     void setFeeRate(int feeRate);
     Transaction* transaction();
+    Transaction* signedTransaction() const { return m_signed_transaction; };
     Q_INVOKABLE void bumpFee();
     QJsonObject tx() const { return m_tx; }
-
 private slots:
     void create();
 signals:
     void changed();
     void txChanged(const QJsonObject& tx);
+    void signedTransactionChanged(Transaction* transaction);
+private:
+    void setSignedTransaction(Transaction* signed_transaction);
+    Transaction* m_signed_transaction{nullptr};
 };
 
 #endif // GREEN_BUMPFEECONTROLLER_H

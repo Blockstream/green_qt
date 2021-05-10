@@ -57,7 +57,7 @@ public:
 
     QJsonObject transaction() const;
 
-    Transaction* signedTransaction() const;
+    Transaction* signedTransaction() const { return m_signed_transaction; }
 
 public slots:
     void signAndSend();

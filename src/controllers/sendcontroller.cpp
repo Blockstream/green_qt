@@ -242,8 +242,7 @@ void SendController::signAndSend()
         details["memo"] = m_memo;
         auto send = new SendTransactionHandler(wallet(), details);
         connect(send, &Handler::done, this, [this, send] {
-            auto tx = send->result().value("result").toObject();
-            setSignedTransaction(m_account->getOrCreateTransaction(tx));
+            setSignedTransaction(m_account->getOrCreateTransaction(send->result().value("result").toObject()));
             send->deleteLater();
             wallet()->updateConfig();
             emit finished();
@@ -253,15 +252,9 @@ void SendController::signAndSend()
     exec(sign);
 }
 
-Transaction* SendController::signedTransaction() const
-{
-    return m_signed_transaction;
-}
-
 void SendController::setSignedTransaction(Transaction* signed_transaction)
 {
-    if (m_signed_transaction!=signed_transaction) {
-        m_signed_transaction = signed_transaction;
-        emit signedTransactionChanged(m_signed_transaction);
-    }
+    if (m_signed_transaction==signed_transaction) return;
+    m_signed_transaction = signed_transaction;
+    emit signedTransactionChanged(m_signed_transaction);
 }

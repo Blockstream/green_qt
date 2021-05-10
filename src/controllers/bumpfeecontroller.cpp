@@ -45,9 +45,10 @@ void BumpFeeController::bumpFee()
         auto details = sign->result().value("result").toObject();
         auto send = new SendTransactionHandler(wallet(), details);
         connect(send, &Handler::done, this, [this, send] {
-           send->deleteLater();
-           wallet()->updateConfig();
-           emit finished();
+            setSignedTransaction(m_account->getOrCreateTransaction(send->result().value("result").toObject()));
+            send->deleteLater();
+            wallet()->updateConfig();
+            emit finished();
         });
         exec(send);
     });
@@ -83,4 +84,11 @@ void BumpFeeController::create()
         }
     });
     exec(m_create_handler);
+}
+
+void BumpFeeController::setSignedTransaction(Transaction *signed_transaction)
+{
+    if (m_signed_transaction==signed_transaction) return;
+    m_signed_transaction = signed_transaction;
+    emit signedTransactionChanged(m_signed_transaction);
 }

@@ -4,16 +4,15 @@ import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.12
 
 ControllerDialog {
-    id: dialog
     required property Transaction transaction
     readonly property Account account: transaction.account
+
+    id: self
     title: qsTrId('id_increase_fee')
-    wallet: dialog.account.wallet
-
+    wallet: self.account.wallet
     controller: BumpFeeController {
-        account: dialog.account
+        account: self.account
     }
-
     doneText: qsTrId('id_transaction_sent')
     minimumWidth: 500
     initialItem: FocusScope {
@@ -76,5 +75,9 @@ ControllerDialog {
                 }
             }
         }
+    }
+    doneComponent: TransactionDoneView {
+        dialog: self
+        transaction: self.controller.signedTransaction
     }
 }
