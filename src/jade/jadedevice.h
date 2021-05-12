@@ -144,6 +144,7 @@ private:
 class JadeDevice : public Device
 {
     Q_OBJECT
+    Q_PROPERTY(bool updateRequired READ updateRequired NOTIFY versionInfoChanged)
     Q_PROPERTY(QString version READ version NOTIFY versionInfoChanged)
     Q_PROPERTY(QVariantMap versionInfo READ versionInfo NOTIFY versionInfoChanged)
     Q_PROPERTY(QString systemLocation READ systemLocation CONSTANT)
@@ -166,6 +167,7 @@ public:
     void updateVersionInfo();
     void setVersionInfo(const QVariantMap& version_info);
     QVariantMap versionInfo() const;
+    bool updateRequired() const;
     QString version() const;
     QString systemLocation() const { return m_system_location; }
 signals:

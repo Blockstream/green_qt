@@ -994,6 +994,15 @@ QVariantMap JadeDevice::versionInfo() const
     return m_version_info;
 }
 
+namespace {
+const QString JADE_MIN_ALLOWED_FW_VERSION = "0.1.24";
+}
+
+bool JadeDevice::updateRequired() const
+{
+    return SemVer(version()) < SemVer(JADE_MIN_ALLOWED_FW_VERSION);
+}
+
 QString JadeDevice::version() const
 {
     return m_version_info.value("JADE_VERSION").toString();

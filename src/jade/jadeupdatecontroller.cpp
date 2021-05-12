@@ -12,7 +12,6 @@
 
 namespace {
 
-const QString JADE_MIN_ALLOWED_FW_VERSION = "0.1.23";
 const QString JADE_FW_VERSIONS_FILE = "LATEST";
 
 const QString JADE_FW_SERVER_HTTPS = "https://jadefw.blockstream.com";
