@@ -8,6 +8,15 @@ MainPage {
     id: self
     property alias count: devices_list_view.count
     readonly property string url: 'https://help.blockstream.com/hc/en-us/categories/900000061906-Blockstream-Jade'
+
+    function supportsNetwork(device, network) {
+        const nets = device.versionInfo.JADE_NETWORKS
+        if (nets === "ALL") return true
+        if (nets === 'MAIN') return network === 'mainnet' || network === 'liquid'
+        if (nets === 'TEST') return network === 'testnet'
+        return false
+    }
+
     JadeDeviceSerialPortDiscoveryAgent {
     }
     DeviceListModel {
@@ -207,6 +216,7 @@ MainPage {
         id: self
         required property Network network
         required property JadeDevice device
+        enabled: supportsNetwork(self.device, self.network.id)
         Layout.minimumWidth: 300
         padding: 16
         header: Pane {
@@ -274,6 +284,11 @@ MainPage {
             }
             NetworkSection {
                 network: NetworkManager.network('mainnet')
+                device: self.device
+            }
+            NetworkSection {
+                visible: Settings.enableTestnet
+                network: NetworkManager.network('testnet')
                 device: self.device
             }
         }
