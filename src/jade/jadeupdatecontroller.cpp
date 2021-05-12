@@ -25,38 +25,6 @@ static const QString JADE_FW_SUFFIX = "fw.bin";
 static const QString JADE_BOARD_TYPE_JADE = "JADE";
 static const QString JADE_FEATURE_SECURE_BOOT = "SB";
 
-class SemVer {
-    int major;
-    int minor;
-    int patch;
-public:
-    SemVer(const QString& str)
-    {
-        const auto parts = str.split('.');
-        Q_ASSERT(parts.size() == 3);
-        bool ok;
-        major = parts[0].toInt(&ok); Q_ASSERT(ok);
-        minor = parts[1].toInt(&ok); Q_ASSERT(ok);
-        patch = parts[2].toInt(&ok); Q_ASSERT(ok);
-    }
-    bool operator<(const SemVer& v) const
-    {
-        if (major < v.major) return true;
-        if (major > v.major) return false;
-        if (minor < v.minor) return true;
-        if (minor > v.minor) return false;
-        return patch < v.patch;
-    }
-    bool operator==(const SemVer& v) const
-    {
-        return major == v.major && minor == v.minor && patch == v.patch;
-    }
-    bool operator!=(const SemVer& v) const
-    {
-        return major != v.major || minor != v.minor || patch != v.patch;
-    }
-};
-
 } // namespace
 
 JadeHttpRequestActivity::JadeHttpRequestActivity(const QString& path, Session* session)
@@ -289,7 +257,8 @@ void JadeUpdateController::update(const QVariantMap& firmware)
 
 JadeUnlockActivity* JadeUpdateController::unlock()
 {
-    auto activity = new JadeUnlockActivity("mainnet", m_device);
+    const auto nets = m_device->versionInfo().value("JADE_NETWORKS").toString();
+    auto activity = new JadeUnlockActivity(nets == "TEST" ? "testnet" : "mainnet", m_device);
     activity->exec();
     emit activityCreated(activity);
     return activity;

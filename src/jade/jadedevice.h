@@ -174,4 +174,37 @@ private:
     QVariantMap m_version_info;
 };
 
+
+class SemVer {
+    int major;
+    int minor;
+    int patch;
+public:
+    SemVer(const QString& str)
+    {
+        const auto parts = str.split('.');
+        Q_ASSERT(parts.size() == 3);
+        bool ok;
+        major = parts[0].toInt(&ok); Q_ASSERT(ok);
+        minor = parts[1].toInt(&ok); Q_ASSERT(ok);
+        patch = parts[2].toInt(&ok); Q_ASSERT(ok);
+    }
+    bool operator<(const SemVer& v) const
+    {
+        if (major < v.major) return true;
+        if (major > v.major) return false;
+        if (minor < v.minor) return true;
+        if (minor > v.minor) return false;
+        return patch < v.patch;
+    }
+    bool operator==(const SemVer& v) const
+    {
+        return major == v.major && minor == v.minor && patch == v.patch;
+    }
+    bool operator!=(const SemVer& v) const
+    {
+        return major != v.major || minor != v.minor || patch != v.patch;
+    }
+};
+
 #endif // JADEDEVICE_H
