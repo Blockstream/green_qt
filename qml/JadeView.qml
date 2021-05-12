@@ -166,7 +166,8 @@ MainPage {
                                 HSpacer {
                                 }
                                 GButton {
-                                    text: qsTrId('id_update')
+                                    highlighted: self.device.updateRequired
+                                    text: self.device.updateRequired ? qsTrId('id_new_jade_firmware_required') : qsTrId('id_update')
                                     onClicked: update_dialog.createObject(window, { device }).open()
                                 }
                             }
@@ -262,6 +263,7 @@ MainPage {
         required property JadeDevice device
         spacing: 16
         RowLayout {
+            visible: !self.device.updateRequired
             Layout.fillWidth: false
             Layout.fillHeight: false
             Layout.alignment: Qt.AlignCenter
