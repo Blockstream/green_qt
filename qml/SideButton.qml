@@ -9,7 +9,7 @@ Button {
     id: self
     required property string location
     property int count: 0
-    property bool isCurrent: navigation.location === location
+    property bool isCurrent: Settings.collapseSideBar ? navigation.location.startsWith(location) : navigation.location === location
     property bool busy: false
     topPadding: 8
     bottomPadding: 8
