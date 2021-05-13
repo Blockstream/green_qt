@@ -254,7 +254,11 @@ ApplicationWindow {
             leftPadding: 8
             rightPadding: 8
             background: Rectangle {
-                color: constants.c700
+                color: Qt.lighter(constants.c700, side_bar.hovered ? 1.1 : 1)
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: Settings.collapseSideBar = !Settings.collapseSideBar
+                }
                 Rectangle {
                     height: parent.height
                     anchors.right: parent.right
@@ -285,6 +289,11 @@ ApplicationWindow {
                     contentWidth: foo.width
                     implicitWidth: foo.implicitWidth
                     ScrollIndicator.vertical: ScrollIndicator { }
+                    MouseArea {
+                        width: foo.width
+                        height: Math.max(foo.height, flickable.height)
+                        onClicked: Settings.collapseSideBar = !Settings.collapseSideBar
+                    }
                     ColumnLayout {
                         id: foo
                         width: Math.max(implicitWidth, flickable.width)
