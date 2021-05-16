@@ -3,6 +3,7 @@
 #include "balance.h"
 #include "ga.h"
 #include "json.h"
+#include "loginhandler.h"
 #include "network.h"
 #include "util.h"
 #include "wallet.h"
@@ -37,25 +38,6 @@ public:
     }
     QJsonArray subAccounts() const {
         return result().value("result").toObject().value("subaccounts").toArray();
-    }
-};
-
-class LoginWithPinHandler : public Handler
-{
-    const QByteArray m_pin_data;
-    const QByteArray m_pin;
-    void call(GA_session* session, GA_auth_handler** auth_handler) override
-    {
-        auto pin_data = Json::stringToJson(m_pin_data);
-        int err = GA_login_with_pin(session, m_pin.constData(), pin_data.get(), auth_handler);
-        Q_ASSERT(err == GA_OK);
-    }
-public:
-    LoginWithPinHandler(Wallet* wallet, const QByteArray& pin_data, const QByteArray& pin)
-        : Handler(wallet)
-        , m_pin_data(pin_data)
-        , m_pin(pin)
-    {
     }
 };
 
@@ -757,7 +739,7 @@ void LoginWithPinController::update()
     auto activity = new WalletAuthenticateActivity(m_wallet, this);
     m_wallet->pushActivity(activity);
 
-    auto handler = new LoginWithPinHandler(m_wallet, m_wallet->m_pin_data, m_pin);
+    auto handler = new LoginHandler(m_wallet, QJsonDocument::fromJson(m_wallet->m_pin_data).object(), QString::fromLocal8Bit(m_pin));
     handler->connect(handler, &Handler::done, this, [this, activity, handler] {
         handler->deleteLater();
         if (m_wallet->m_login_attempts_remaining < 3) {
