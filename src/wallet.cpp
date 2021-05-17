@@ -417,6 +417,8 @@ void Wallet::save()
 {
     Q_ASSERT(QThread::currentThread() == thread());
     Q_ASSERT(!m_id.isEmpty());
+    if (m_device) return;
+    if (m_watch_only) return;
     QJsonObject data({
         { "version", 1 },
         { "name", m_name },
@@ -425,6 +427,9 @@ void Wallet::save()
     if (!m_pin_data.isEmpty()) {
         data.insert("login_attempts_remaining", m_login_attempts_remaining);
         data.insert("pin_data", QString::fromLocal8Bit(m_pin_data.toBase64()));
+    }
+    if (!m_hash_id.isEmpty()) {
+        data.insert("hash_id", m_hash_id);
     }
     QFile file(GetDataFile("wallets", m_id));
     bool result = file.open(QFile::WriteOnly | QFile::Truncate);
@@ -585,6 +590,17 @@ void Wallet::setSession()
     updateCurrencies();
     updateConfig();
     reload();
+}
+
+void Wallet::updateHashId(const QString& hash_id)
+{
+    qDebug() << Q_FUNC_INFO << "new:" << hash_id << "current:" << m_hash_id;
+    if (m_hash_id.isEmpty()) {
+        m_hash_id = hash_id;
+        save();
+    } else {
+        Q_ASSERT(m_hash_id == hash_id);
+    }
 }
 
 void Wallet::setSettings(const QJsonObject& settings)

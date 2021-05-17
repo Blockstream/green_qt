@@ -44,6 +44,9 @@ WalletManager::WalletManager()
             wallet->m_pin_data = QByteArray::fromBase64(data.value("pin_data").toString().toLocal8Bit());
             wallet->m_login_attempts_remaining = data.value("login_attempts_remaining").toInt();
         }
+        if (data.contains("hash_id")) {
+            wallet->m_hash_id = data.value("hash_id").toString();
+        }
         wallet->m_name = data.value("name").toString();
         wallet->m_network = NetworkManager::instance()->network(data.value("network").toString());
         addWallet(wallet);

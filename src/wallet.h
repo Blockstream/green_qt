@@ -118,6 +118,8 @@ public:
     void setSession();
 
     Device* device() const { return m_device; }
+
+    void updateHashId(const QString& hash_id);
 public slots:
     void disconnect();
     void reload();
@@ -161,6 +163,8 @@ public:
     void updateCurrencies();
 
     QString m_id;
+    QString m_hash_id;
+
     Connectable<Session> m_session;
     AuthenticationStatus m_authentication{Unauthenticated};
     bool m_locked{true};
