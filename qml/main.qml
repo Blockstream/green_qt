@@ -57,17 +57,6 @@ ApplicationWindow {
         return account.name
     }
 
-    function fitMenuWidth(menu) {
-        let result = 0;
-        let padding = 0;
-        for (let i = 0; i < menu.count; ++i) {
-            const item = menu.itemAt(i);
-            result = Math.max(item.contentItem.implicitWidth, result);
-            padding = Math.max(item.padding, padding);
-        }
-        return result + padding * 2;
-    }
-
     x: Settings.windowX
     y: Settings.windowY
     width: Settings.windowWidth
@@ -102,110 +91,6 @@ ApplicationWindow {
     }
     FontMetrics {
         id: font_metrics
-    }
-
-    header: MenuBar {
-        component GMenuBarItem: MenuBarItem {
-            id: self
-            leftPadding: 16
-            rightPadding: 16
-            background: Item {
-                Rectangle {
-                    anchors.fill: parent
-                    visible: self.highlighted
-                    color: constants.c400
-                    anchors.margins: 4
-                    radius: 8
-                }
-            }
-        }
-        component GMenu: Menu {
-            id: self
-            width: fitMenuWidth(this)
-        }
-
-        background: Rectangle {
-            color: constants.c600
-            Rectangle {
-                width: parent.width
-                anchors.bottom: parent.bottom
-                height: 1
-                color: 'black'
-                opacity: 0.5
-            }
-        }
-        GMenuBarItem {
-            menu: GMenu {
-                title: qsTrId('File')
-                Action {
-                    text: qsTrId('id_create_new_wallet')
-                    onTriggered: navigation.go('/signup')
-                }
-                Action {
-                    text: qsTrId('id_restore_green_wallet')
-                    onTriggered: navigation.go('/restore')
-                }
-                Menu {
-                    title: qsTrId('id_export_transactions_to_csv_file')
-                    enabled: currentWallet && currentWallet.ready
-                    Repeater {
-                        model: currentWallet ? currentWallet.accounts : null
-                        MenuItem {
-                            text: accountName(modelData)
-                            onTriggered: {
-                                const popup = export_transactions_popup.createObject(window, { account: modelData })
-                                popup.open()
-                            }
-                        }
-                    }
-                }
-                Action {
-                    text: qsTrId('&Exit')
-                    onTriggered: window.close()
-                }
-            }
-        }
-        GMenuBarItem {
-            menu: Menu {
-                title: qsTrId('Wallet')
-                width: fitMenuWidth(this)
-                MenuItem {
-                    text: qsTrId('id_settings')
-                    action: currentWalletView ? currentWalletView.settingsAction : null
-                    enabled: !!currentWalletView
-                }
-                MenuItem {
-                    enabled: currentWallet && currentWallet.session && currentWallet.session && !currentWallet.device
-                    text: qsTrId('id_log_out')
-                    onClicked: currentWallet.disconnect()
-                }
-                MenuSeparator { }
-                MenuItem {
-                    text: qsTrId('id_add_new_account')
-                    onClicked: create_account_dialog.createObject(window, { wallet: currentWallet}).open()
-                    enabled: currentWallet && currentWallet.ready
-                }
-                MenuItem {
-                    text: qsTrId('id_rename_account')
-                    enabled: currentWallet && currentWallet.ready && !currentWallet.locked && currentAccount && !currentAccount.mainAccount
-                    onClicked: rename_account_dialog.createObject(window, { account: currentAccount }).open()
-                }
-            }
-        }
-        GMenuBarItem {
-            menu: Menu {
-                title: qsTrId('id_help')
-                width: fitMenuWidth(this)
-                Action {
-                    text: qsTrId('id_about')
-                    onTriggered: navigation.go('/home')
-                }
-                Action {
-                    text: qsTrId('id_support')
-                    onTriggered: Qt.openUrlExternally(constants.supportUrl)
-                }
-            }
-        }
     }
 
     component WalletButton: SideButton {
@@ -460,11 +345,6 @@ ApplicationWindow {
     }
 
     DebugActiveFocus {
-    }
-
-    Component {
-        id: rename_account_dialog
-        RenameAccountDialog {}
     }
 
     Component {
