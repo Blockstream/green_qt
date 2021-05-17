@@ -52,9 +52,9 @@ ApplicationWindow {
 
     function accountName(account) {
         if (!account) return ''
+        if (account.name !== '') return account.name
         if (account.mainAccount) return qsTrId('id_main_account')
-        if (account.wallet.watchOnly) return qsTrId('Account %1').arg(account.pointer)
-        return account.name
+        return qsTrId('Account %1').arg(account.pointer)
     }
 
     x: Settings.windowX

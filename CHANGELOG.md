@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update GDK to 0.0.42
 
 ### Fixed
+- Display main account name if set
 - Highlight matched side bar button when collapsed
 - Use scrollable list view in firmwares listing
 
