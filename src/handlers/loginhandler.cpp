@@ -54,3 +54,11 @@ void LoginHandler::call(GA_session *session, GA_auth_handler **auth_handler)
     int err = GA_login_user(session, hw_device.get(), details.get(), auth_handler);
     Q_ASSERT(err == GA_OK);
 }
+
+QString LoginHandler::walletHashId() const
+{
+    Q_ASSERT(result().value("status") == "done");
+    const auto wallet_hash_id = result().value("result").toObject().value("wallet_hash_id").toString();
+    Q_ASSERT(!wallet_hash_id.isEmpty());
+    return wallet_hash_id;
+}
