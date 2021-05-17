@@ -763,6 +763,7 @@ void LoginWithPinController::update()
             m_wallet->save();
             emit m_wallet->loginAttemptsRemainingChanged(m_wallet->m_login_attempts_remaining);
         }
+        m_wallet->updateHashId(handler->walletHashId());
         m_wallet->setAuthentication(Wallet::Authenticated);
         m_wallet->updateCurrencies();
         m_wallet->updateSettings();

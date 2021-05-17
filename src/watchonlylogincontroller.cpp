@@ -60,6 +60,7 @@ void WatchOnlyLoginController::login()
             auto handler = new LoginHandler(m_wallet, m_username, m_password);
             handler->connect(handler, &Handler::done, this, [this, handler] {
                 handler->deleteLater();
+                m_wallet->updateHashId(handler->walletHashId());
                 emit walletChanged(m_wallet);
                 m_wallet->setSession();
                 WalletManager::instance()->addWallet(m_wallet);

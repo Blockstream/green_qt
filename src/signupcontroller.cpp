@@ -66,6 +66,7 @@ void SignupController::update()
     connect(login_handler, &Handler::done, this, [this, login_handler, set_pin_handler] {
         login_handler->deleteLater();
 
+        m_wallet->updateHashId(login_handler->walletHashId());
         if (m_type == "amp") {
             Q_ASSERT(m_network->isLiquid());
             auto create_amp_account_handler = new CreateAccountHandler({{ "name", "AMP Account" }, { "type", "2of2_no_recovery" }}, m_wallet);

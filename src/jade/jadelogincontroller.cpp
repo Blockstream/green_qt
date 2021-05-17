@@ -90,7 +90,8 @@ void JadeLoginController::update()
     connect(register_user_handler, &Handler::error, this, []() {
         //setStatus("locked");
     });
-    connect(login_handler, &Handler::done, this, [this] {
+    connect(login_handler, &Handler::done, this, [this, login_handler] {
+        m_wallet->updateHashId(login_handler->walletHashId());
         m_wallet->setSession();
         WalletManager::instance()->addWallet(m_wallet);
     });

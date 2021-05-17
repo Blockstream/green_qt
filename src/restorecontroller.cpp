@@ -148,6 +148,7 @@ void RestoreController::update()
         auto handler = new LoginHandler(m_wallet, m_mnemonic, m_password);
         QObject::connect(handler, &Handler::done, this, [this, handler, activity] {
            handler->deleteLater();
+           m_wallet->updateHashId(handler->walletHashId());
            m_wallet->setAuthentication(Wallet::Authenticated);
            activity->finish();
            activity->deleteLater();
