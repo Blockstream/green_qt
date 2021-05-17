@@ -11,11 +11,10 @@ class LoginHandler : public Handler
 public:
     LoginHandler(Wallet* wallet, const QStringList& mnemonic);
     LoginHandler(Wallet* wallet, const QStringList& mnemonic, const QString& password);
-    LoginHandler(Wallet* wallet, const QJsonObject& device_details);
+    LoginHandler(Wallet* wallet, const QJsonObject& hw_device);
 private:
-    const QStringList m_mnemonic;
-    const QString m_password;
-    const QJsonObject m_device_details;
+    const QJsonObject m_hw_device{};
+    const QJsonObject m_details{};
     void call(GA_session* session, GA_auth_handler** auth_handler) override;
 };
 
