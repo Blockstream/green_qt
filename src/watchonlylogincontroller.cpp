@@ -1,3 +1,4 @@
+#include "loginhandler.h"
 #include "network.h"
 #include "networkmanager.h"
 #include "walletmanager.h"
@@ -56,17 +57,21 @@ void WatchOnlyLoginController::login()
         m_wallet.track(QObject::connect(m_session, &Session::connectedChanged, this, [this] {
             if (!m_wallet->session()->isConnected()) return;
 
-            int rc = GA_login_watch_only(m_wallet->session()->m_session, m_username.toUtf8().constData(), m_password.toUtf8().constData());
-            if (rc == GA_OK) {
+            auto handler = new LoginHandler(m_wallet, m_username, m_password);
+            handler->connect(handler, &Handler::done, this, [this, handler] {
+                handler->deleteLater();
                 emit walletChanged(m_wallet);
                 m_wallet->setSession();
                 WalletManager::instance()->addWallet(m_wallet);
-            } else {
+            });
+            handler->connect(handler, &Handler::error, this, [this, handler] {
+                handler->deleteLater();
                 m_wallet->deleteLater();
                 m_session = nullptr;
                 emit sessionChanged(m_session);
                 emit unauthorized();
-            }
+            });
+            handler->exec();
         }));
         m_wallet->session()->setActive(true);
     }

@@ -38,6 +38,15 @@ LoginHandler::LoginHandler(Wallet *wallet, const QJsonObject &pin_data, const QS
 {
 }
 
+LoginHandler::LoginHandler(Wallet *wallet, const QString &username, const QString &password)
+    : Handler(wallet)
+    , m_details({
+        { "username", username },
+        { "password", password }
+    })
+{
+}
+
 void LoginHandler::call(GA_session *session, GA_auth_handler **auth_handler)
 {
     auto hw_device = Json::fromObject(m_hw_device);
