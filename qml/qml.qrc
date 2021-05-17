@@ -18,7 +18,6 @@
         <file>DeviceView.qml</file>
         <file>TransactionView.qml</file>
         <file>CreateAccountDialog.qml</file>
-        <file>RenameAccountDialog.qml</file>
         <file>PinView.qml</file>
         <file>TransactionListView.qml</file>
         <file>WizardPage.qml</file>
