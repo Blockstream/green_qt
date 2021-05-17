@@ -29,16 +29,9 @@ static const QString JADE_FEATURE_SECURE_BOOT = "SB";
 JadeHttpRequestActivity::JadeHttpRequestActivity(const QString& path, Session* session)
     : HttpRequestActivity(session)
 {
-    static QString certificate;
-    if (certificate.isEmpty()) {
-        QFile file("://jade_services_certificate.pem");
-        file.open(QFile::ReadOnly);
-        certificate = QString::fromLocal8Bit(file.readAll());
-    }
     setMethod("GET");
     addUrl(JADE_FW_SERVER_HTTPS + path);
     addUrl(JADE_FW_SERVER_ONION + path);
-    addRootCertificate(certificate);
 }
 
 JadeChannelRequestActivity::JadeChannelRequestActivity(const QString& base, const QString& channel, Session* session)

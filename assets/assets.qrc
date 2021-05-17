@@ -64,7 +64,6 @@
         <file>fonts/Roboto/Roboto-Regular.ttf</file>
         <file>fonts/Roboto/Roboto-Thin.ttf</file>
         <file>fonts/Roboto/Roboto-ThinItalic.ttf</file>
-        <file>jade_services_certificate.pem</file>
         <file>png/amp_background.png</file>
         <file>png/liquid_background.png</file>
     </qresource>
