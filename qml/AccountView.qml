@@ -164,11 +164,6 @@ ColumnLayout {
         }
     }
     Component {
-        id: asset_view_component
-        AssetView { }
-    }
-
-    Component {
         id: send_dialog
         SendDialog { }
     }

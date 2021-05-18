@@ -5,42 +5,18 @@ import QtQuick.Controls 2.13
 import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.12
 
-Page {
-    property Balance balance
+AbstractDialog {
+    required property Balance balance
 
-    background: null
-
-    header: RowLayout {
-        spacing: constants.p2
-        ToolButton {
-            id: back_arrow_button
-            icon.source: 'qrc:/svg/arrow_left.svg'
-            icon.height: 16
-            icon.width: 16
-            onClicked: assets_stack_view.pop()
-        }
-
-        Label {
-            text: qsTrId("id_asset_details")
-            font.pixelSize: 16
-            font.capitalization: Font.AllUppercase
-            Layout.fillWidth: true
-        }
-
-        GButton {
-            Layout.rightMargin: constants.p1
-            text: qsTrId('id_view_in_explorer')
-            onClicked: balance.asset.openInExplorer()
-        }
-    }
-
+    id: self
+    title: qsTrId('id_asset_details')
     contentItem: ScrollView {
         id: scroll_view
         clip: true
 
         ColumnLayout {
             width: scroll_view.width - constants.p2
-            spacing: constants.p2
+            spacing: constants.p3
 
             Row {
                 spacing: constants.p2
@@ -55,34 +31,68 @@ Page {
                     anchors.verticalCenter: icon.verticalCenter
                 }
             }
-            SectionLabel {
-                text: qsTrId('id_ticker')
-                visible: 'ticker' in balance.asset.data
+
+            ColumnLayout {
+                spacing: constants.p0
+
+                SectionLabel {
+                    text: qsTrId('id_ticker')
+                    visible: 'ticker' in balance.asset.data
+                }
+
+                CopyableLabel {
+                    text: balance.asset.data.ticker
+                    visible: 'ticker' in balance.asset.data
+                }
             }
-            CopyableLabel {
-                text: balance.asset.data.ticker
-                visible: 'ticker' in balance.asset.data
+
+            ColumnLayout {
+                spacing: constants.p0
+
+                SectionLabel {
+                    text: qsTrId('id_issuer')
+                    visible: 'entity' in balance.asset.data
+                }
+
+                CopyableLabel {
+                    text: balance.asset.data.entity.domain
+                    visible: 'entity' in balance.asset.data
+                }
             }
-            SectionLabel {
-                text: qsTrId('id_issuer')
-                visible: 'entity' in balance.asset.data
+
+            ColumnLayout {
+                spacing: constants.p0
+
+                SectionLabel {
+                    text: qsTrId('id_total_balance')
+                }
+
+                CopyableLabel {
+                    text: balance.displayAmount
+                }
             }
-            CopyableLabel {
-                text: balance.asset.data.entity.domain
-                visible: 'entity' in balance.asset.data
-            }
-            SectionLabel {
-                text: qsTrId('id_total_balance')
-            }
-            CopyableLabel {
-                text: balance.displayAmount
-            }
-            SectionLabel {
+
+            ColumnLayout {
+                spacing: constants.p0
+
+                SectionLabel {
                     text: qsTrId('id_asset_id')
+                }
+
+                CopyableLabel {
+                    text: balance.asset.id
+                }
             }
-            CopyableLabel {
-                text: balance.asset.id
-            }
+            HSpacer { }
+        }
+    }
+
+    footer: DialogFooter {
+        HSpacer {
+        }
+        GButton {
+            text: qsTrId('id_view_in_explorer')
+            onClicked: balance.asset.openInExplorer()
         }
     }
 }
