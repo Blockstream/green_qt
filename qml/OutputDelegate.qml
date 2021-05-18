@@ -23,7 +23,7 @@ Button {
     hoverEnabled: true
     padding: constants.p3
     background: Rectangle {
-        color: self.hovered ? constants.c600 : self.highlighted ? constants.c500 : constants.c700
+        color: self.hovered ? constants.c700 : self.highlighted ? constants.c600 : constants.c800
         radius: 4
         border.width: self.highlighted ? 1 : 0
         border.color: constants.g500
@@ -34,6 +34,8 @@ Button {
         spacing: constants.p2
         ColumnLayout {
             Layout.fillWidth: false
+            Layout.fillHeight: false
+            Layout.alignment: Qt.AlignTop
             Image {
                 visible: !output.account.wallet.network.liquid
                 sourceSize.height: 36
@@ -41,6 +43,7 @@ Button {
                 source: icons[wallet.network.id]
             }
             Loader {
+                Layout.alignment: Qt.AlignTop
                 active: output.asset
                 visible: active
                 sourceComponent: AssetIcon {
@@ -48,8 +51,6 @@ Button {
                     Layout.preferredWidth: 36
                     Layout.preferredHeight: 36
                 }
-            }
-            VSpacer {
             }
         }
         ColumnLayout {
@@ -59,14 +60,14 @@ Button {
                 Layout.fillWidth: true
                 elide: Text.ElideRight
                 text: formatAmount(output.data['satoshi'], true)
-                font.pixelSize: 16
+                font.pixelSize: 14
                 font.styleName: 'Medium'
             }
             Label {
                 Layout.fillWidth: true
                 elide: Text.ElideRight
                 text: output.data['txhash'] + ':' + output.data['pt_idx']
-                font.pixelSize: 14
+                font.pixelSize: 12
                 font.styleName: 'Regular'
             }
             RowLayout {
@@ -95,8 +96,6 @@ Button {
                     color: '#d2934a'
                     font.capitalization: Font.AllUppercase
                 }
-            }
-            VSpacer {
             }
         }
     }

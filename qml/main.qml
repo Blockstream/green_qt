@@ -139,8 +139,9 @@ ApplicationWindow {
             leftPadding: 8
             rightPadding: 8
             background: Rectangle {
-                color: Qt.lighter(constants.c700, side_bar.hovered ? 1.1 : 1)
+                color: constants.c700
                 MouseArea {
+                    enabled: false
                     anchors.fill: parent
                     onClicked: Settings.collapseSideBar = !Settings.collapseSideBar
                 }
@@ -175,6 +176,7 @@ ApplicationWindow {
                     implicitWidth: foo.implicitWidth
                     ScrollIndicator.vertical: ScrollIndicator { }
                     MouseArea {
+                        enabled: false
                         width: foo.width
                         height: Math.max(foo.height, flickable.height)
                         onClicked: Settings.collapseSideBar = !Settings.collapseSideBar

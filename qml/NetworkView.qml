@@ -40,11 +40,6 @@ Item {
         header: MainPageHeader {
             contentItem: RowLayout {
                 spacing: 16
-                Image {
-                    sourceSize.height: 32
-                    sourceSize.width: 32
-                    source: icons[network]
-                }
                 Label {
                     text: self.title
                     font.pixelSize: 24

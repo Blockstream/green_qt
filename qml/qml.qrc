@@ -106,5 +106,6 @@
         <file>SetUnspentOutputsStatusDialog.qml</file>
         <file>WatchOnlyLoginDialog.qml</file>
         <file>TransactionDoneView.qml</file>
+        <file>WalletViewHeader.qml</file>
     </qresource>
 </RCC>

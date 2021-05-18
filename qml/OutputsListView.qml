@@ -37,13 +37,25 @@ ColumnLayout {
     id: self
     Layout.fillWidth: true
     Layout.fillHeight: true
-    spacing: constants.p2
+    spacing: constants.p1
+
+    RowLayout {
+        Layout.preferredHeight: constants.p5
+
+        Label {
+            text: "Coins"
+            font.pixelSize: 22
+            font.styleName: "Bold"
+        }
+
+        HSpacer { }
+    }
 
     RowLayout {
         id: tags_layout
         Layout.fillWidth: true
         implicitHeight: 50
-        spacing: constants.p1
+        spacing: 6
 
         ButtonGroup {
             id: button_group
@@ -56,10 +68,18 @@ ColumnLayout {
                 ButtonGroup.group: button_group
                 checked: index === 0
                 checkable: true
+                padding: 18
+                topPadding: 10
+                bottomPadding: 10
                 background: Rectangle {
                     id: rectangle
                     radius: 4
-                    color: self.checked ? constants.c200 : constants.c300
+                    color: self.checked ? constants.c300 : constants.c500
+                }
+                contentItem: Label {
+                    text: self.text
+                    font.pixelSize: 10
+                    font.family: "Medium"
                 }
                 text: localizedLabel(modelData)
                 property string buttonTag: modelData
@@ -82,7 +102,7 @@ ColumnLayout {
         Layout.fillWidth: true
         Layout.fillHeight: true
         clip: true
-        spacing: 8
+        spacing: 0
         model: OutputListModelFilter {
             id: output_model_filter
             filter: button_group.checkedButton.buttonTag
@@ -132,6 +152,7 @@ ColumnLayout {
     }
 
     RowLayout {
+        Layout.bottomMargin: -constants.p2
         visible: selection_model.hasSelection && !account.wallet.network.liquid
         Layout.fillWidth: true
         spacing: constants.p1
@@ -191,20 +212,13 @@ ColumnLayout {
                     model: ['all', 'csv', 'p2wsh', 'not confidential', 'dust', 'locked']
                     delegate: RowLayout {
                         spacing: constants.p1
-                        Label {
+
+                        Tag {
                             text: localizedLabel(modelData)
-                            font.capitalization: Font.AllUppercase
                             Layout.minimumWidth: 120
-                            horizontalAlignment: Label.AlignHCenter
-                            font.pixelSize: 12
-                            fontSizeMode: Label.Fit
-                            padding: 6
-                            background: Rectangle {
-                                id: rectangle
-                                radius: 4
-                                color: constants.c300
-                            }
                             Layout.alignment: Qt.AlignTop
+                            horizontalAlignment: Label.AlignHCenter
+                            font.capitalization: Font.AllUppercase
                         }
 
                         Label {

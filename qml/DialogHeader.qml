@@ -8,7 +8,7 @@ Pane {
     leftPadding: constants.p3
     rightPadding: constants.p3
     topPadding: constants.p3
-    bottomPadding: constants.p0
+    bottomPadding: 0
     contentItem: RowLayout {
         id: row_layout
         spacing: constants.s1

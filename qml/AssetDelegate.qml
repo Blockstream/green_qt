@@ -8,33 +8,17 @@ import QtQuick.Layouts 1.12
 Button {
     property Balance balance
     property bool hasDetails: balance.asset.hasData && balance.asset.data.name !== 'btc'
-    property bool showIndicator: true
 
     id: self
     hoverEnabled: true
     padding: constants.p2
     background: Rectangle {
-        color: self.hovered ? constants.c700 : self.highlighted ? constants.c600 : constants.c800
+        color: self.hovered && hasDetails ? constants.c700 : self.highlighted ? constants.c600 : constants.c800
         radius: 4
         border.width: self.highlighted ? 1 : 0
         border.color: constants.g500
     }
     contentItem: BalanceItem {
         balance: self.balance
-
-        Item {
-            visible: showIndicator
-            width: 16
-            height: 16
-            Layout.alignment: Qt.AlignVCenter
-
-            Image {
-                visible: hasDetails
-                anchors.centerIn: parent
-                sourceSize.width: 16
-                sourceSize.height: 16
-                source: 'qrc:/svg/arrow_right.svg'
-            }
-        }
     }
 }

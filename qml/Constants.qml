@@ -29,11 +29,12 @@ QtObject {
     property string r700: '#341817'
 
     // paddings
-    property int p0: 0
+    property int p0: 8
     property int p1: 12
     property int p2: 16
     property int p3: 24
     property int p4: 32
+    property int p5: 48
 
     // spacings
     property int s1: 12

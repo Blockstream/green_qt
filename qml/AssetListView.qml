@@ -13,7 +13,6 @@ Page {
     id: self
     background: null
     spacing: constants.p1
-
     header: RowLayout {
         Label {
             id: label
@@ -31,6 +30,7 @@ Page {
         clip: true
         model: self.account.balances
         spacing: 0
+        implicitHeight: contentHeight
         delegate: AssetDelegate {
             balance: modelData
             width: parent.width

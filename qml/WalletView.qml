@@ -7,10 +7,10 @@ import QtQuick.Layouts 1.12
 import QtQml 2.15
 
 MainPage {
-    id: self
     required property Wallet wallet
     readonly property string location: `/${wallet.network.id}/${wallet.id}`
     readonly property Account currentAccount: accounts_list.currentAccount
+    readonly property bool fiatRateAvailable: formatFiat(0, false) !== 'n/a'
 
     function parseAmount(amount) {
         const unit = wallet.settings.unit;
@@ -44,19 +44,6 @@ MainPage {
         return qsTrId('id_completed');
     }
 
-    readonly property bool fiatRateAvailable: formatFiat(0, false) !== 'n/a'
-
-    property Action disconnectAction: Action {
-        onTriggered: {
-            navigation.go(`/${wallet.network.id}`)
-            self.wallet.disconnect()
-        }
-    }
-
-    property Action settingsAction: Action {
-        enabled: settings_dialog.enabled
-        onTriggered: navigation.go(settings_dialog.location)
-    }
     DialogLoader {
         id: settings_dialog
         property string location: `${self.location}/settings`
@@ -68,92 +55,14 @@ MainPage {
             onRejected: navigation.go(self.location)
         }
     }
-    header: MainPageHeader {
-        contentItem: RowLayout {
-            spacing: 16
-            Image {
-                sourceSize.height: 32
-                sourceSize.width: 32
-                source: icons[wallet.network.id]
-            }
-            Loader {
-                active: !wallet.device && !wallet.watchOnly
-                visible: active
-                Layout.fillWidth: true
-                sourceComponent: EditableLabel {
-                    leftPadding: 8
-                    rightPadding: 8
-                    font.pixelSize: 24
-                    font.styleName: 'Medium'
-                    text: wallet.name
-                    onEdited: {
-                        wallet.rename(text, activeFocus)
-                    }
-                }
-            }
-            Loader {
-                active: !wallet.device && wallet.watchOnly
-                sourceComponent: Label {
-                    text: walletName(wallet)
-                    font.pixelSize: 24
-                    font.styleName: 'Medium'
-                }
-            }
-            Loader {
-                active: wallet.device
-                sourceComponent: Label {
-                    text: wallet.device.name
-                    font.pixelSize: 24
-                    font.styleName: 'Medium'
-                }
-            }
-            Loader {
-                visible: wallet.device
-                sourceComponent: DeviceImage {
-                    device: wallet.device
-                    sourceSize.height: 32
-                    MouseArea {
-                        anchors.fill: parent
-                        cursorShape: Qt.PointingHandCursor
-                        onClicked: {
-                            if (wallet.device.type === Device.BlockstreamJade) {
-                                navigation.go(`/jade/${wallet.device.uuid}`)
-                            } else if (wallet.device.vendor === Device.Ledger) {
-                                navigation.go(`/ledger/${wallet.device.uuid}`)
-                            }
-                        }
-                    }
-                }
-            }
-            HSpacer {
-                visible: wallet.device || wallet.watchOnly
-            }
-            ToolButton {
-                visible: (wallet.events && !!wallet.events.twofactor_reset && wallet.events.twofactor_reset.is_active) || !fiatRateAvailable
-                icon.source: 'qrc:/svg/notifications_2.svg'
-                icon.color: 'transparent'
-                icon.width: 16
-                icon.height: 16
-                onClicked: notifications_drawer.open()
-            }
-            ToolButton {
-                icon.source: 'qrc:/svg/gearFill.svg'
-                flat: true
-                action: self.settingsAction
-                ToolTip.text: qsTrId('id_settings')
-                ToolTip.delay: 300
-                ToolTip.visible: hovered
-            }
-            ToolButton {
-                visible: !self.wallet.device
-                icon.source: 'qrc:/svg/logout.svg'
-                flat: true
-                action: self.disconnectAction
-                ToolTip.text: 'Logout'
-                ToolTip.delay: 300
-                ToolTip.visible: hovered
-            }
-        }
+    id: self
+    leftPadding: 0
+    rightPadding: 0
+    header: WalletViewHeader {
+        id: wallet_view_header
+        currentAccount: self.currentAccount
+        wallet: self.wallet
+        onViewSelected: stack_view.currentItem.currentView = viewIndex
     }
 
     Drawer {
@@ -227,6 +136,7 @@ MainPage {
             }
             if (stack_view.currentItem === account_view) return;
             stack_view.replace(account_view, StackView.Immediate)
+            wallet_view_header.currentView = account_view.currentView
         } else {
             stack_view.replace(stack_view.initialItem, StackView.Immediate)
         }
@@ -235,25 +145,45 @@ MainPage {
     contentItem: SplitView {
         focusPolicy: Qt.ClickFocus
         handle: Item {
-            implicitWidth: 20
+            implicitWidth: 4
             implicitHeight: parent.height
         }
-        AccountListView {
-            id: accounts_list
+
+        Rectangle {
             Layout.fillHeight: true
             Layout.fillWidth: true
-            SplitView.minimumWidth: Math.max(implicitWidth, 300)
+            SplitView.minimumWidth: wallet_view_header.showAccounts ? 350 :0
             clip: true
-            onClicked: switchToAccount(currentAccount)
-            onCurrentAccountChanged: switchToAccount(currentAccount)
+            color: constants.c900
+
+            Behavior on SplitView.minimumWidth {
+                NumberAnimation { easing.type: Easing.OutCubic; duration: 150 }
+            }
+
+            AccountListView {
+                id: accounts_list
+                anchors.fill: parent
+                anchors.margins: constants.p3
+                anchors.bottomMargin: 0
+                onClicked: switchToAccount(currentAccount)
+                onCurrentAccountChanged: switchToAccount(currentAccount)
+            }
         }
-        StackView {
-            id: stack_view
-            focusPolicy: Qt.ClickFocus
+
+        Rectangle {
             SplitView.fillWidth: true
             SplitView.minimumWidth: self.width / 2
-            initialItem: Item {}
-            clip: true
+            color: constants.c900
+
+            StackView {
+                id: stack_view
+                anchors.fill: parent
+                anchors.margins: constants.p3
+                anchors.bottomMargin: 0
+                focusPolicy: Qt.ClickFocus
+                initialItem: Item {}
+                clip: true
+            }
         }
     }
 

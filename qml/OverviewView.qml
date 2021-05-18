@@ -4,99 +4,77 @@ import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.3
 
 Pane {
+    property bool showAllAssets: false
+    required property Account account
+
     id: self
     Layout.fillWidth: true
     Layout.fillHeight: true
-    property bool showAllAssets: false
     background: null
     padding: 0
     contentItem: ColumnLayout {
         Layout.fillWidth: true
-        spacing: 8
+        spacing: constants.p1
+
+        RowLayout {
+            Layout.preferredHeight: constants.p5
+
+            Label {
+                text: "Overview"
+                font.pixelSize: 22
+                font.styleName: "Bold"
+                verticalAlignment: Label.AlignVCenter
+            }
+
+            HSpacer { }
+        }
+
         LiquidHeader {
-            visible: account_view.account.wallet.network.liquid
+            Layout.topMargin: constants.p2
+            visible: self.account.wallet.network.liquid
         }
-        Label {
-            text: qsTrId('id_transactions')
-            Layout.fillWidth: true
-            Layout.topMargin: constants.p1
-            font.pixelSize: 18
-            font.styleName: 'Medium'
-        }
+
         TransactionListView {
             id: transaction_list_view
             interactive: false
+            hasExport: false
+            label.font.pixelSize: 18
             Layout.fillWidth: true
             Layout.fillHeight: true
             height: contentHeight
-            account: account_view.account
+            account: self.account
         }
     }
 
     component LiquidHeader: ColumnLayout {
         Layout.fillWidth: true
         Layout.fillHeight: true
+        spacing: constants.p1
+
         AccountIdBadge {
-            visible: account_view.account.json.type === '2of2_no_recovery'
-            account: account_view.account
+            visible: self.account.json.type === '2of2_no_recovery'
+            account: self.account
             Layout.fillWidth: true
         }
-        Label {
-            text: qsTrId('id_assets')
+
+        AssetListView {
             Layout.fillWidth: true
-            Layout.bottomMargin: constants.p1
-            font.pixelSize: 18
-            font.styleName: 'Medium'
-        }
-        Repeater {
+            label.font.pixelSize: 18
             model: {
                 const balances = []
-                for (let i = 0; i < account_view.account.balances.length; ++i) {
+                for (let i = 0; i < self.account.balances.length; ++i) {
                     if (!self.showAllAssets && i === 3) break
-                    balances.push(account_view.account.balances[i])
+                    balances.push(self.account.balances[i])
                 }
                 return balances
             }
-            ItemDelegate {
-                topPadding: 8
-                bottomPadding: 8
-                leftPadding: 16
-                rightPadding: 16
-                background: Rectangle {
-                    color: constants.c700
-                    radius: 8
-                }
-                Layout.fillWidth: true
-                contentItem: RowLayout {
-                    spacing: 16
-                    AssetIcon {
-                        asset: modelData.asset
-                    }
-                    Label {
-                        Layout.fillWidth: true
-                        text: modelData.asset.name
-                        font.pixelSize: 16
-                        elide: Label.ElideRight
-                        font.styleName: 'Regular'
-                    }
-                    Label {
-                        text: modelData.displayAmount
-                        font.pixelSize: 14
-                        font.styleName: 'Regular'
-                    }
-                }
-                onClicked: {
-                    assets_toolbar_button.checked = true
-                    while (assets_stack_view.depth>1) assets_stack_view.pop()
-                    assets_stack_view.push(asset_view_component.createObject(assets_stack_view, { balance: modelData }))
-                }
-            }
         }
+
         GButton {
             visible: false
-            enabled: account_view.account.balances.length > 3
+            enabled: self.account.balances.length > 3
             text: {
-                const count = account_view.account.balances.length
+                const count = self.account.balances.length
                 if (count <= 3) return qsTrId('id_no_more_assets')
                 if (self.showAllAssets) return qsTrId('id_hide_assets')
                 return qsTrId('id_show_all_assets')

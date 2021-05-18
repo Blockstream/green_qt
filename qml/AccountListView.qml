@@ -3,120 +3,144 @@ import QtQuick 2.12
 import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.12
 
-ListView {
-    id: account_list_view
-    model: wallet.accounts
-    property Account currentAccount: currentItem ? currentItem.account : null
+Page {
+    property Account currentAccount: account_list_view.currentItem ? account_list_view.currentItem.account : null
     signal clicked(Account account)
-    spacing: 8
-    delegate: ItemDelegate {
-        id: delegate
-        focusPolicy: Qt.ClickFocus
 
-        property Account account: modelData
+    id: self
+    background: null
+    spacing: constants.p1
 
-        onClicked: {
-            account_list_view.currentIndex = index
-            account_list_view.clicked(account)
-        }
-        background: Rectangle {
-            color: delegate.highlighted ? constants.c500 : constants.c700
-            radius: 8
+    header: RowLayout {
+        Label {
+            Layout.fillWidth: true
+            text: "Accounts"
+            font.pixelSize: 22
+            font.styleName: "Bold"
         }
 
-        highlighted: currentIndex === index
-        leftPadding: 16
-        rightPadding: 16
-        topPadding: 16
-        bottomPadding: 16
+        HSpacer {
+        }
 
-        width: ListView.view.width-16
+        GButton {
+            text: '+'
+            font.pixelSize: 18
+            font.styleName: "Medium"
+            onClicked: create_account_dialog.createObject(window, { wallet }).open()
+        }
+    }
+    contentItem: ListView {
+        id: account_list_view
+        model: wallet.accounts
+        clip: true
+        spacing: 8
+        delegate: Button {
+            property Account account: modelData
 
-        contentItem: ColumnLayout {
-            spacing: 8
-            Label {
-                text: qsTrId('id_amp_account')
-                visible: account.json.type === '2of2_no_recovery'
-                font.pixelSize: 12
-                font.capitalization: Font.AllUppercase
-                leftPadding: 8
-                rightPadding: 8
-                topPadding: 4
-                bottomPadding: 4
-                opacity: 1
-                color: 'white'
-                background: Rectangle {
-                    color: '#080b0e'
-                    opacity: 0.2
-                    radius: 4
-                }
+            id: delegate
+            focusPolicy: Qt.ClickFocus
+            onClicked: {
+                account_list_view.currentIndex = index
+                self.clicked(account)
             }
-            Label {
-                text: qsTrId('id_2of3_account')
-                visible: account.json.type === '2of3'
-                font.pixelSize: 12
-                font.capitalization: Font.AllUppercase
-                leftPadding: 8
-                rightPadding: 8
-                topPadding: 4
-                bottomPadding: 4
-                color: 'white'
-                background: Rectangle {
-                    color: '#080b0e'
-                    opacity: 0.2
-                    radius: 4
-                }
+            background: Rectangle {
+                color: delegate.highlighted ? constants.c700 : delegate.hovered ? constants.c700 : constants.c800
+                radius: 4
+                border.width: 1
+                border.color: delegate.highlighted ? constants.g500 : constants.c700
             }
-            EditableLabel {
-                id: name_field
-                Layout.fillWidth: true
-                font.styleName: 'Medium'
-                font.pixelSize: 18
-                leftInset: -8
-                rightInset: -8
-                text: accountName(account)
-                enabled: !account.wallet.watchOnly && delegate.ListView.isCurrentItem && account.name !== '' && !delegate.account.wallet.locked
-                onEdited: {
-                    if (!account.wallet.watchOnly) {
-                        account.rename(text, activeFocus)
+            highlighted: account_list_view.currentIndex === index
+            leftPadding: constants.p2
+            rightPadding: constants.p2
+            topPadding: constants.p2
+            bottomPadding: constants.p3
+            hoverEnabled: true
+            width: ListView.view.width
+            contentItem: ColumnLayout {
+                spacing: 4
+
+                RowLayout {
+                    EditableLabel {
+                        id: name_field
+                        Layout.fillWidth: true
+                        font.styleName: 'Medium'
+                        font.pixelSize: 14
+                        leftInset: -8
+                        rightInset: -8
+                        text: accountName(account)
+                        enabled: !account.wallet.watchOnly && delegate.ListView.isCurrentItem && !delegate.account.wallet.locked
+                        onEdited: {
+                            if (!account.wallet.watchOnly) {
+                                account.rename(text, activeFocus)
+                            }
+                        }
                     }
                 }
 
-//                onTextChanged: {
-//                    account.rename(text, activeFocus)
-//                    if (!activeFocus) cursorPosition = 0
-//                }
-//                onActiveFocusChanged: {
-//                    if (activeFocus) {
-//                        account_list_view.currentIndex = index
-//                        account_list_view.clicked(account)
-//                        name_field.forceActiveFocus(Qt.MouseFocusReason)
-//                    }
-//                    account.rename(text, activeFocus)
-//                    if (!activeFocus) cursorPosition = 0
-//                }
-            }
-            RowLayout {
-                spacing: 10
-                Label {
-                    text: formatAmount(account.balance)
-                    font.pixelSize: 14
-                    font.styleName: 'Regular'
-                }
-                Label {
-                    font.pixelSize: 14
-                    text: '≈ ' + formatFiat(account.balance)
-                    font.styleName: 'Regular'
+                RowLayout {
+                    spacing: 10
+
+                    Label {
+                        text: formatAmount(account.balance)
+                        font.pixelSize: 12
+                        font.styleName: 'Regular'
+                    }
+
+                    Label {
+                        font.pixelSize: 12
+                        text: '≈ ' + formatFiat(account.balance)
+                        font.styleName: 'Regular'
+                    }
+
+                    HSpacer {
+                    }
+
+                    Label {
+                        text: qsTrId('id_amp_account')
+                        visible: account.json.type === '2of2_no_recovery'
+                        font.pixelSize: 10
+                        font.capitalization: Font.AllUppercase
+                        leftPadding: 8
+                        rightPadding: 8
+                        topPadding: 4
+                        bottomPadding: 4
+                        opacity: 1
+                        color: 'white'
+                        background: Rectangle {
+                            color: constants.c400
+                            radius: 4
+                        }
+                    }
+
+                    Label {
+                        text: qsTrId('id_2of3_account')
+                        visible: account.json.type === '2of3'
+                        font.pixelSize: 10
+                        font.capitalization: Font.AllUppercase
+                        leftPadding: 8
+                        rightPadding: 8
+                        topPadding: 4
+                        bottomPadding: 4
+                        color: 'white'
+                        background: Rectangle {
+                            color: constants.c400
+                            radius: 4
+                        }
+                    }
                 }
             }
         }
-    }
-
-    ScrollIndicator.vertical: ScrollIndicator { }
-
-    MouseArea {
-        anchors.fill: parent
-        onClicked: parent.forceActiveFocus(Qt.MouseFocusReason)
-        z: -1
+        ScrollIndicator.vertical: ScrollIndicator {
+            parent: account_list_view.parent
+            anchors.top: account_list_view.top
+            anchors.left: account_list_view.right
+            anchors.leftMargin: 8
+            anchors.bottom: account_list_view.bottom
+        }
+        MouseArea {
+            anchors.fill: parent
+            onClicked: parent.forceActiveFocus(Qt.MouseFocusReason)
+            z: -1
+        }
     }
 }

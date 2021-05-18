@@ -6,11 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Allow to rename main account 
 - Persist wallet hash id
 - Click side bar to toggle collapsed
 - Add copyable label with transaction hash to the end of send flow
 
 ### Changed
+- Improved wallet toolbar in wallet view
 - Show asset details in a dialog
 - Show transaction details in a dialog
 - Remove window menu bar

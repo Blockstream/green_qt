@@ -7,6 +7,6 @@ Page {
         color: constants.c900
     }
     clip: true
-    leftPadding: 24
-    rightPadding: 24
+    leftPadding: constants.p2
+    rightPadding: constants.p2
 }

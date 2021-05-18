@@ -9,7 +9,7 @@ Label {
     text: self.text
     font.pixelSize: 10
     font.styleName: "Medium"
-    padding: large ? 8 : 4
+    padding: large ? 24 : 16
     topPadding: large ? 6 : 3
     bottomPadding: large ? 6 : 3
     background: Rectangle {

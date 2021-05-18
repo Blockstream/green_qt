@@ -29,6 +29,7 @@
         <file>svg/search.svg</file>
         <file>svg/coins.svg</file>
         <file>svg/info.svg</file>
+        <file>svg/sidebar.svg</file>
         <file>svg/export.svg</file>
     </qresource>
 </RCC>

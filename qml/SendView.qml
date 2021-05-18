@@ -96,7 +96,6 @@ StackView {
                 delegate: AssetDelegate {
                     highlighted: index === asset_field.currentIndex
                     balance: modelData
-                    showIndicator: false
                     width: parent.width
                 }
 

@@ -123,7 +123,6 @@ void Account::reload()
 
 void Account::rename(QString name, bool active_focus)
 {
-    if (pointer() == 0) return;
     if (!active_focus) name = name.trimmed();
     if (name.isEmpty() && !active_focus) {
         emit jsonChanged();

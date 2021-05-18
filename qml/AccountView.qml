@@ -10,6 +10,7 @@ ColumnLayout {
     id: account_view
     spacing: constants.p3
     required property Account account
+    property var currentView: account_view.account.wallet.network.liquid ? 0 : 2
 
     function getUnblindingData(tx) {
         return {
@@ -42,96 +43,17 @@ ColumnLayout {
         item.ToolTip.show(qsTrId('id_copied_to_clipboard'), 2000);
     }
 
-    RowLayout {
-        id: toolbar
-        Layout.fillWidth: true
-        spacing: constants.p1
-        ButtonGroup {
-            id: button_group
-            onCheckedButtonChanged: {
-                let index = -1
-                let size = button_group.buttons.length
-                if (!account_view.account.wallet.network.liquid) size -= 2 // if account is not liquid ignore the first two buttons
-                for (let i = 0; i < size; ++i) {
-                    let child = button_group.buttons[i]
-                    if (child.enabled && child.checked) index = button_group.buttons.length-i-1
-                }
-                if (index>-1) stack_layout.currentIndex = index
-            }
-        }
-        TabButton {
-            checked: account_view.account.wallet.network.liquid
-            ButtonGroup.group: button_group
-            enabled: account_view.account.wallet.network.liquid
-            visible: enabled
-            icon.source: "qrc:/svg/overview.svg"
-            ToolTip.text: qsTrId('id_overview')
-            onClicked: checked = true
-        }
-        TabButton {
-            id: assets_toolbar_button
-            ButtonGroup.group: button_group
-            enabled: account_view.account.wallet.network.liquid
-            visible: enabled
-            icon.source: "qrc:/svg/assets.svg"
-            ToolTip.text: qsTrId('id_assets')
-            onClicked: checked = true
-        }
-        TabButton {
-            id: transactions_toolbar_button
-            checked: !account_view.account.wallet.network.liquid
-            ButtonGroup.group: button_group
-            icon.source: "qrc:/svg/transactions.svg"
-            ToolTip.text: qsTrId('id_transactions')
-            onClicked: checked = true
-        }
-        TabButton {
-            ButtonGroup.group: button_group
-            icon.source: "qrc:/svg/addresses.svg"
-            ToolTip.text: qsTrId('id_addresses')
-            enabled: !account_view.account.wallet.watchOnly
-            onClicked: checked = true
-        }
-        TabButton {
-            ButtonGroup.group: button_group
-            icon.source: "qrc:/svg/coins.svg"
-            ToolTip.text: qsTrId('Coins')
-            enabled: !account_view.account.wallet.watchOnly
-            onClicked: checked = true
-        }
-        HSpacer {
-        }
-        GButton {
-            id: send_button
-            Layout.alignment: Qt.AlignRight
-            large: true
-            enabled: !account_view.account.wallet.watchOnly && !wallet.locked && account.balance > 0
-            hoverEnabled: true
-            text: qsTrId('id_send')
-            onClicked: send_dialog.createObject(window, { account: account_view.account }).open()
-            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-            ToolTip.text: qsTrId('id_insufficient_lbtc_to_send_a')
-            ToolTip.visible: hovered && !enabled
-        }
-        GButton {
-            Layout.alignment: Qt.AlignRight
-            large: true
-            enabled: !wallet.locked
-            text: qsTrId('id_receive')
-            onClicked: receive_dialog.createObject(window, { account: account_view.account }).open()
-        }
-    }
-
     StackLayout {
         id: stack_layout
         Layout.fillWidth: true
         Layout.fillHeight: true
         Layout.bottomMargin: constants.p1
-        currentIndex: account_view.account.wallet.network.liquid ? 0 : 2
+        currentIndex: account_view.currentView
 
         OverviewView {
             id: overview_view
             showAllAssets: false
+            account: account_view.account
         }
 
         AssetListView {
@@ -157,27 +79,5 @@ ColumnLayout {
                 account: account_view.account
             }
         }
-    }
-    Component {
-        id: send_dialog
-        SendDialog { }
-    }
-
-    Component {
-        id: receive_dialog
-        ReceiveDialog { }
-    }
-
-    component TabButton: ToolButton {
-        icon.width: constants.p4
-        icon.height: constants.p4
-        icon.color: Qt.rgba(1, 1, 1, enabled ? 1 : 0.5)
-        padding: 4
-        background: Rectangle {
-            color: parent.checked ? constants.c400 : parent.hovered ? constants.c600 : constants.c700
-            radius: 4
-        }
-        ToolTip.delay: 300
-        ToolTip.visible: hovered
     }
 }
