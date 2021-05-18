@@ -134,13 +134,8 @@ ColumnLayout {
             showAllAssets: false
         }
 
-        StackView {
-            id: assets_stack_view
-            initialItem: AssetListView {
-                id: assets_view
-                account: account_view.account
-                onClicked: parent.push(asset_view_component.createObject(assets_stack_view, { balance }))
-            }
+        AssetListView {
+            account: account_view.account
         }
 
         TransactionListView {
