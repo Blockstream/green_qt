@@ -143,12 +143,8 @@ ColumnLayout {
             }
         }
 
-        StackView {
-            id: transactions_stack_view
-            initialItem: TransactionListView {
-                id: transactions_view
-                account: account_view.account
-            }
+        TransactionListView {
+            account: account_view.account
         }
 
         Loader {
