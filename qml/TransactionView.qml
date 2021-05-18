@@ -6,9 +6,11 @@ import QtQuick.Controls 2.13
 import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.12
 
-Page {
-    property Transaction transaction
+AbstractDialog {
+    required property Transaction transaction
     property int confirmations: transactionConfirmations(transaction)
+
+    title: qsTrId('id_transaction_details') + ' - ' + tx_direction(transaction.data.type)
 
     function tx_direction(type) {
         switch (type) {
@@ -18,14 +20,9 @@ Page {
                 return qsTrId('id_outgoing')
             case 'redeposit':
                 return qsTrId('id_redeposited')
-
         }
     }
-    Action {
-        id: copy_unblinding_data_action
-        text: qsTrId('id_copy_unblinding_data')
-        onTriggered: copyUnblindingData(tool_button, transaction.data)
-    }
+
     Component {
         id: liquid_amount_delegate
         RowLayout {
@@ -74,130 +71,130 @@ Page {
         }
     }
 
-    background: null
-
-    header: RowLayout {
-        ToolButton {
-            id: back_arrow_button
-            icon.source: 'qrc:/svg/arrow_left.svg'
-            icon.height: 16
-            icon.width: 16
-            onClicked: transactions_stack_view.pop()
-        }
-
-        Label {
-            text: qsTrId('id_transaction_details') + ' - ' + tx_direction(transaction.data.type)
-            font.pixelSize: 14
-            font.capitalization: Font.AllUppercase
-            Layout.fillWidth: true
-        }
-
-        ToolButton {
-            id: tool_button
-            text: qsTrId('⋮')
-            onClicked: menu.open()
-            Layout.rightMargin: constants.p2
-            Menu {
-                id: menu
-                MenuItem {
-                    text: qsTrId('id_view_in_explorer')
-                    onTriggered: transaction.openInExplorer()
-                }
-                MenuItem {
-                    enabled: transaction.account.wallet.network.liquid
-                    text: qsTrId('Copy unblinded link')
-                    onTriggered: {
-                        Clipboard.copy(transaction.unblindedLink())
-                        ToolTip.show(qsTrId('id_copied_to_clipboard'), 1000)
-                    }
-                }
-                Repeater {
-                    model: transaction.account.wallet.network.liquid ? [copy_unblinding_data_action] : []
-                    MenuItem {
-                        action: modelData
-                    }
-                }
-            }
-        }
-    }
-
     contentItem: ScrollView {
         id: scroll_view
         clip: true
 
         ColumnLayout {
             width: scroll_view.width - constants.p2
-            spacing: constants.p2
+            spacing: constants.p3
 
-            SectionLabel {
-                text: qsTrId('id_received_on')
+            ColumnLayout {
+                spacing: constants.p0
+
+                SectionLabel {
+                    text: qsTrId('id_received_on')
+                }
+
+                CopyableLabel {
+                    text: formatDateTime(transaction.data.created_at)
+                }
             }
-            CopyableLabel {
-                text: formatDateTime(transaction.data.created_at)
+
+            ColumnLayout {
+                spacing: constants.p0
+
+                SectionLabel {
+                    text: qsTrId('id_transaction_id')
+                }
+
+                CopyableLabel {
+                    text: transaction.data.txhash
+                }
             }
-            SectionLabel {
-                text: qsTrId('id_transaction_id')
+
+            ColumnLayout {
+                spacing: constants.p0
+
+                SectionLabel {
+                    text: qsTrId('id_transaction_status')
+                }
+
+                Label {
+                    text: transactionStatus(confirmations)
+                }
             }
-            CopyableLabel {
-                text: transaction.data.txhash
+
+            ColumnLayout {
+                spacing: constants.p0
+
+                SectionLabel {
+                    text: qsTrId('id_amount')
+                }
+
+                Repeater {
+                    model: transaction.amounts
+                    delegate: wallet.network.liquid ? liquid_amount_delegate : bitcoin_amount_delegate
+                }
             }
-            SectionLabel {
-                text: qsTrId('id_transaction_status')
+
+            ColumnLayout {
+                spacing: constants.p0
+
+                SectionLabel {
+                    visible: transaction.data.type === 'outgoing'
+                    text: qsTrId('id_fee')
+                }
+
+                CopyableLabel {
+                    visible: transaction.data.type === 'outgoing'
+                    text: `${transaction.data.fee / 100000000} ${wallet.network.liquid ? 'Liquid Bitcoin' : 'BTC'} (${Math.round(transaction.data.fee_rate / 1000)} sat/vB)`
+                }
             }
-            Label {
-                text: transactionStatus(confirmations)
-            }
-            SectionLabel {
-                text: qsTrId('id_amount')
-            }
-            Repeater {
-                model: transaction.amounts
-                delegate: wallet.network.liquid ? liquid_amount_delegate : bitcoin_amount_delegate
-            }
-            SectionLabel {
-                visible: transaction.data.type === 'outgoing'
-                text: qsTrId('id_fee')
-            }
-            CopyableLabel {
-                visible: transaction.data.type === 'outgoing'
-                text: `${transaction.data.fee / 100000000} ${wallet.network.liquid ? 'Liquid Bitcoin' : 'BTC'} (${Math.round(transaction.data.fee_rate / 1000)} sat/vB)`
-            }
-            SectionLabel {
-                visible: !wallet.watchOnly
-                text: qsTrId('id_my_notes')
-            }
-            TextArea {
-                visible: !wallet.watchOnly
-                id: memo_edit
-                Layout.fillWidth: true
-                placeholderText: qsTrId('id_add_a_note_only_you_can_see_it')
-                width: scroll_view.width - constants.p2
-                text: transaction.data.memo
-                selectByMouse: true
-                wrapMode: TextEdit.Wrap
-                onTextChanged: {
-                    if (text.length > 1024) {
-                        memo_edit.text = text.slice(0, 1024);
+
+            ColumnLayout {
+                spacing: constants.p0
+
+                SectionLabel {
+                    visible: !wallet.watchOnly
+                    text: qsTrId('id_my_notes')
+                }
+
+                EditableLabel {
+                    id: memo_edit
+                    visible: !wallet.watchOnly
+                    leftPadding: constants.p0
+                    rightPadding: constants.p0
+                    Layout.fillWidth: true
+                    placeholderText: qsTrId('id_add_a_note_only_you_can_see_it')
+                    width: scroll_view.width - constants.p2
+                    text: transaction.data.memo
+                    selectByMouse: true
+                    wrapMode: TextEdit.Wrap
+                    onTextChanged: {
+                        if (text.length > 1024) {
+                            memo_edit.text = text.slice(0, 1024);
+                        }
+                    }
+                    onEdited: {
+                        console.log('update...')
+                        transaction.updateMemo(memo_edit.text)
                     }
                 }
             }
-            RowLayout {
-                visible: !wallet.watchOnly
-                Layout.alignment: Qt.AlignRight
-                spacing: constants.p2
-                GButton {
-                    large: true
-                    text: qsTrId('id_cancel')
-                    enabled: memo_edit.text !== transaction.data.memo
-                    onClicked: memo_edit.text = transaction.data.memo
-                }
-                GButton {
-                    large: true
-                    text: qsTrId('id_save')
-                    enabled: memo_edit.text !== transaction.data.memo
-                    onClicked: transaction.updateMemo(memo_edit.text)
-                }
+
+            HSpacer { }
+        }
+    }
+    footer: DialogFooter {
+        HSpacer {
+        }
+        GButton {
+            text: qsTrId('id_view_in_explorer')
+            onClicked: transaction.openInExplorer()
+        }
+        GButton {
+            text: qsTrId('Copy unblinded link')
+            visible: transaction.account.wallet.network.liquid
+            onClicked: {
+                Clipboard.copy(transaction.unblindedLink())
+                ToolTip.show(qsTrId('id_copied_to_clipboard'), 1000)
             }
+        }
+        GButton {
+            text: qsTrId('Copy unblinded data')
+            visible: transaction.account.wallet.network.liquid
+            onClicked: copyUnblindingData(this, transaction.data)
         }
     }
 }

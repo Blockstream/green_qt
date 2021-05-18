@@ -30,11 +30,6 @@ Pane {
             Layout.fillHeight: true
             height: contentHeight
             account: account_view.account
-            onClicked: {
-                transactions_toolbar_button.checked = true
-                while (transactions_stack_view.depth>1) transactions_stack_view.pop()
-                transactions_stack_view.push(transaction_view_component.createObject(transactions_stack_view, { transaction }))
-            }
         }
     }
 

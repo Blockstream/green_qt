@@ -148,7 +148,6 @@ ColumnLayout {
             initialItem: TransactionListView {
                 id: transactions_view
                 account: account_view.account
-                onClicked: parent.push(transaction_view_component.createObject(transactions_stack_view, { transaction }))
             }
         }
 
@@ -168,12 +167,6 @@ ColumnLayout {
             }
         }
     }
-
-    Component {
-        id: transaction_view_component
-        TransactionView { }
-    }
-
     Component {
         id: asset_view_component
         AssetView { }
