@@ -19,7 +19,7 @@ class Account : public QObject
     Q_PROPERTY(int pointer READ pointer CONSTANT)
     Q_PROPERTY(bool mainAccount READ isMainAccount CONSTANT)
     Q_PROPERTY(QJsonObject json READ json NOTIFY jsonChanged)
-    Q_PROPERTY(QString name READ name NOTIFY jsonChanged)
+    Q_PROPERTY(QString name READ name NOTIFY nameChanged)
     Q_PROPERTY(qint64 balance READ balance NOTIFY balanceChanged)
     Q_PROPERTY(QQmlListProperty<Balance> balances READ balances NOTIFY balancesChanged)
     QML_ELEMENT
@@ -30,7 +30,8 @@ public:
     int pointer() const { Q_ASSERT(m_pointer >= 0); return m_pointer; }
     bool isMainAccount() const;
 
-    QString name() const;
+    QString name() const { return m_name; }
+    void setName(const QString& name);
     QJsonObject json() const;
 
     void update(const QJsonObject& json);
@@ -50,6 +51,7 @@ public:
 signals:
     void walletChanged();
     void jsonChanged();
+    void nameChanged(const QString& name);
     void balanceChanged();
     void balancesChanged();
     void notificationHandled(const QJsonObject& notification);
@@ -60,6 +62,7 @@ private:
     Wallet* const m_wallet;
     const int m_pointer;
     QJsonObject m_json;
+    QString m_name;
     QMap<QString, Transaction*> m_transactions_by_hash;
     QMap<QPair<QString, int>, Output*> m_outputs_by_hash;
     QMap<QString, Address*> m_address_by_hash;

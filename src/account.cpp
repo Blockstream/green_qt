@@ -20,11 +20,6 @@ Account::Account(int pointer, Wallet* wallet)
 {
 }
 
-QString Account::name() const
-{
-    return m_json.value("name").toString();
-}
-
 QJsonObject Account::json() const
 {
     return m_json;
@@ -35,7 +30,7 @@ void Account::update(const QJsonObject& json)
     Q_ASSERT(m_pointer == json.value("pointer").toInt());
     m_json = json;
     emit jsonChanged();
-
+    setName(m_json.value("name").toString());
     updateBalance();
 }
 
@@ -132,7 +127,7 @@ void Account::rename(QString name, bool active_focus)
     if (!active_focus) {
         int res = GA_rename_subaccount(wallet()->session()->m_session, pointer(), name.toUtf8().constData());
         Q_ASSERT(res == GA_OK);
-        wallet()->reload();
+        setName(name);
     }
 }
 
@@ -187,6 +182,13 @@ Transaction *Account::getTransactionByTxHash(const QString &id) const
 bool Account::isMainAccount() const
 {
     return m_pointer == 0;
+}
+
+void Account::setName(const QString& name)
+{
+    if (m_name == name) return;
+    m_name = name;
+    emit nameChanged(m_name);
 }
 
 AccountActivity::AccountActivity(Account* account, QObject* parent)
