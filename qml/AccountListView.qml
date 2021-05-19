@@ -29,7 +29,7 @@ Page {
             onClicked: create_account_dialog.createObject(window, { wallet }).open()
         }
     }
-    contentItem: ListView {
+    contentItem: GListView {
         id: account_list_view
         model: wallet.accounts
         clip: true
@@ -136,11 +136,6 @@ Page {
             anchors.left: account_list_view.right
             anchors.leftMargin: 8
             anchors.bottom: account_list_view.bottom
-        }
-        MouseArea {
-            anchors.fill: parent
-            onClicked: parent.forceActiveFocus(Qt.MouseFocusReason)
-            z: -1
         }
     }
 }

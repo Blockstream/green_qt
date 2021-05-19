@@ -27,10 +27,11 @@ MainPageHeader {
     }
     contentItem: ColumnLayout {
         spacing: constants.p1
-        Pane {
+        GPane {
             Layout.fillWidth: true
             background: null
             padding: 0
+            focusPolicy: Qt.ClickFocus
             contentItem: RowLayout {
                 spacing: 16
                 Loader {
@@ -132,10 +133,11 @@ MainPageHeader {
                 }
             }
         }
-        Pane {
+        GPane {
             Layout.fillWidth: true
             background: null
             padding: 0
+            focusPolicy: Qt.ClickFocus
             contentItem: RowLayout {
                 id: toolbar
                 Layout.fillWidth: true

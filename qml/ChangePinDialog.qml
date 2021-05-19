@@ -47,7 +47,7 @@ WalletDialog {
             }
         }
     }
-    footer: Pane {
+    footer: GPane {
         padding: 0
         bottomPadding: 32
         background: null

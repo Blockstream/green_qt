@@ -86,7 +86,7 @@ AbstractDialog {
         onCurrentItemChanged: {
             currentItem.forceActiveFocus()
         }
-        initialItem: Pane {
+        initialItem: GPane {
             background: null
             contentItem: ColumnLayout {
                 spacing: 8
@@ -150,7 +150,7 @@ AbstractDialog {
     }
 
     footer: DialogFooter {
-        Pane {
+        GPane {
             visible: self.wallet.loginAttemptsRemaining > 0
             Layout.minimumHeight: 48
             background: null

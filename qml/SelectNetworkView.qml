@@ -6,7 +6,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 import QtQml.Models 2.0
 
-Pane {
+GPane {
     required property bool showAMP
     required property string view
 

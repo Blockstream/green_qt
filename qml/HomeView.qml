@@ -17,7 +17,7 @@ MainPage {
         return wallets
     }
     id: self
-    header: Pane {
+    header: GPane {
         padding: 24
         background: null
         contentItem: RowLayout {
@@ -60,7 +60,7 @@ MainPage {
                     font.pixelSize: 18
                     font.bold: true
                 }
-                Pane {
+                GPane {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     background: Rectangle {
@@ -104,7 +104,7 @@ MainPage {
                     font.pixelSize: 18
                     font.bold: true
                 }
-                Pane {
+                GPane {
                     Layout.minimumWidth: 200
                     Layout.fillHeight: true
                     background: Rectangle {

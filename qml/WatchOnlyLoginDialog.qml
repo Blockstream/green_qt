@@ -49,7 +49,7 @@ AbstractDialog {
     }
 
     footer: DialogFooter {
-        Pane {
+        GPane {
             background: null
             padding: 0
             contentItem: RowLayout {

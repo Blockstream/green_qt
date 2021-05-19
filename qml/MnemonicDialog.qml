@@ -6,7 +6,7 @@ import QtQuick.Layouts 1.12
 
 WalletDialog {
     title: qsTrId('id_mnemonic')
-    contentItem: Pane {
+    contentItem: GPane {
         background: MouseArea {
             id: mouse_area
             hoverEnabled: true

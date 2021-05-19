@@ -213,7 +213,7 @@ Item {
                 }
                 contentItem: Item {
                     clip: true
-                    ListView {
+                    GListView {
                         id: wallet_list_view
                         anchors.fill: parent
                         anchors.margins: 16

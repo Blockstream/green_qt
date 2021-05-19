@@ -29,7 +29,7 @@ Page {
             onClicked: export_transactions_popup.createObject(window, { account: self.account }).open()
         }
     }
-    contentItem: ListView {
+    contentItem: GListView {
         id: list_view
         clip: true
         spacing: 8
@@ -42,12 +42,6 @@ Page {
             onClicked: transaction_dialog.createObject(window, { transaction }).open()
         }
         ScrollIndicator.vertical: ScrollIndicator { }
-
-        MouseArea {
-            anchors.fill: parent
-            onClicked: parent.forceActiveFocus(Qt.MouseFocusReason)
-            z: -1
-        }
 
         BusyIndicator {
             width: 32

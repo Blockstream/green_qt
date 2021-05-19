@@ -46,7 +46,7 @@ AbstractDialog {
             large: true
             visible: action
         }
-        Pane {
+        GPane {
             Layout.minimumHeight: 48
             background: null
             padding: 0
@@ -115,7 +115,7 @@ AbstractDialog {
         AnimLoader {
             active: controller.network && controller.network.id === 'liquid' && controller.type === 'default'
             animated: self.opened
-            sourceComponent: Pane {
+            sourceComponent: GPane {
                 readonly property Action backAction: Action {
                     text: qsTrId('id_back')
                     onTriggered: navigation.set({ network: undefined, type: undefined })
@@ -191,7 +191,7 @@ AbstractDialog {
         AnimLoader {
             active: controller.network && controller.network.id === 'liquid' && controller.type === 'amp'
             animated: self.opened
-            sourceComponent: Pane {
+            sourceComponent: GPane {
                 readonly property Action backAction: Action {
                     text: qsTrId('id_back')
                     onTriggered: navigation.set({ network: undefined, type: undefined })

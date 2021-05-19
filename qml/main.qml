@@ -176,10 +176,12 @@ ApplicationWindow {
                     implicitWidth: foo.implicitWidth
                     ScrollIndicator.vertical: ScrollIndicator { }
                     MouseArea {
-                        enabled: false
                         width: foo.width
                         height: Math.max(foo.height, flickable.height)
-                        onClicked: Settings.collapseSideBar = !Settings.collapseSideBar
+                        onClicked: {
+                            flickable.forceActiveFocus(Qt.MouseFocusReason)
+                            // Settings.collapseSideBar = !Settings.collapseSideBar
+                        }
                     }
                     ColumnLayout {
                         id: foo
@@ -396,7 +398,7 @@ ApplicationWindow {
                     text: qsTrId('id_backup_your_mnemonic_before')
                 }
             }
-            footer: Pane {
+            footer: GPane {
                 rightPadding: 16
                 bottomPadding: 8
                 background: null

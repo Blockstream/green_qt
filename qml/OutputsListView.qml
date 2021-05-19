@@ -97,7 +97,7 @@ ColumnLayout {
         }
     }
 
-    ListView {
+    GListView {
         id: list_view
         Layout.fillWidth: true
         Layout.fillHeight: true

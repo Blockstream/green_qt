@@ -192,7 +192,7 @@ AbstractDialog {
                 }
             }
         }
-        ListView {
+        GListView {
             Layout.fillWidth: true
             Layout.fillHeight: true
             clip: true
@@ -239,7 +239,7 @@ AbstractDialog {
         }
     }
     footer: DialogFooter {
-        Pane {
+        GPane {
             background: null
             padding: 0
             contentItem: RowLayout {

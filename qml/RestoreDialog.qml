@@ -75,7 +75,7 @@ AbstractDialog {
             large: true
             visible: action
         }
-        Pane {
+        GPane {
             Layout.minimumHeight: 48
             background: null
             padding: 0

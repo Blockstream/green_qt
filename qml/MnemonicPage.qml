@@ -14,7 +14,7 @@ ColumnLayout {
         text: qsTrId('id_write_down_your_recovery_phrase')
         font.pixelSize: 20
     }
-    Pane {
+    GPane {
         id: view_pane
         visible: false
         background: null

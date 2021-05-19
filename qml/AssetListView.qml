@@ -10,6 +10,7 @@ Page {
     property alias model: list_view.model
     property alias label: label
 
+    focusPolicy: Qt.ClickFocus
     id: self
     background: null
     spacing: constants.p1
@@ -25,7 +26,7 @@ Page {
         }
     }
 
-    contentItem: ListView {
+    contentItem: GListView {
         id: list_view
         clip: true
         model: self.account.balances

@@ -81,7 +81,7 @@ MainPage {
                     onTriggered: flipable.flipped = !flipable.flipped
                 }
             }
-            Pane {
+            GPane {
                 Layout.topMargin: 40
                 Layout.alignment: Qt.AlignHCenter
                 background: Rectangle {
@@ -113,7 +113,7 @@ MainPage {
         }
         ColumnLayout {
             spacing: 16
-            ListView {
+            GListView {
                 id: devices_list_view
                 ScrollIndicator.horizontal: ScrollIndicator { }
                 Layout.alignment: Qt.AlignCenter
@@ -196,7 +196,7 @@ MainPage {
         }
     }
 
-    component View: Pane {
+    component View: GPane {
         id: self
         required property LedgerDevice device
         LedgerDeviceController {
@@ -225,7 +225,7 @@ MainPage {
                 visible: controller.status === 'locked'
                 text: 'Unlock and select app'
             }
-            Pane {
+            GPane {
                 background: null
                 padding: 0
                 contentItem: RowLayout {

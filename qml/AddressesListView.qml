@@ -21,7 +21,7 @@ Page {
         }
     }
     contentItem: ColumnLayout {
-        Pane {
+        GPane {
             Layout.fillWidth: true
             padding: 0
             leftPadding: constants.p1
@@ -60,7 +60,7 @@ Page {
             }
         }
 
-        ListView {
+        GListView {
             id: list_view
             Layout.fillWidth: true
             Layout.fillHeight: true

@@ -107,5 +107,7 @@
         <file>WatchOnlyLoginDialog.qml</file>
         <file>TransactionDoneView.qml</file>
         <file>WalletViewHeader.qml</file>
+        <file>GListView.qml</file>
+        <file>GPane.qml</file>
     </qresource>
 </RCC>

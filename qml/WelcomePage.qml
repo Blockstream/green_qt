@@ -2,7 +2,7 @@ import QtQuick 2.13
 import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.12
 
-Pane {
+GPane {
     property bool agreeWithTermsOfService: checkbox.checked
     signal next()
     background: null

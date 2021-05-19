@@ -65,7 +65,7 @@ MainPage {
                 Layout.alignment: Qt.AlignHCenter
                 source: 'qrc:/svg/blockstream_jade.svg'
             }
-            Pane {
+            GPane {
                 Layout.topMargin: 40
                 Layout.alignment: Qt.AlignHCenter
                 background: Rectangle {
@@ -107,7 +107,7 @@ MainPage {
 
         ColumnLayout {
             spacing: 16
-            ListView {
+            GListView {
                 id: devices_list_view
                 ScrollIndicator.horizontal: ScrollIndicator { }
                 Layout.alignment: Qt.AlignCenter
@@ -125,7 +125,7 @@ MainPage {
                     return -1
                 }
 
-                delegate: Pane {
+                delegate: GPane {
                     id: self
                     required property JadeDevice device
                     readonly property string location: '/jade/' + device.versionInfo.EFUSEMAC.slice(-6)
@@ -196,7 +196,7 @@ MainPage {
                     }
                 }
             }
-            Pane {
+            GPane {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 background: null
@@ -219,7 +219,7 @@ MainPage {
         enabled: supportsNetwork(self.device, self.network.id)
         Layout.minimumWidth: 300
         padding: 16
-        header: Pane {
+        header: GPane {
             padding: 16
             background: null
             contentItem: RowLayout {
