@@ -17,7 +17,7 @@ TextField {
         border.width: 1
         border.color: self.activeFocus ? constants.g700 : constants.c600
     }
-    implicitWidth: self.activeFocus || !self.empty ? 250 : 150
+    implicitWidth: self.activeFocus || !self.empty ? 300 : 200
     Behavior on implicitWidth {
         SmoothedAnimation {
             velocity: 800

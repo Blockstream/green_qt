@@ -14,18 +14,16 @@ Page {
     id: self
     background: null
     spacing: constants.p1
-    header: RowLayout {
+    header: GHeader {
         Label {
             id: label
-            Layout.fillWidth: true
             text: qsTrId('id_assets')
-            font.pixelSize: 22
-            font.styleName: "Bold"
+            font.pixelSize: 20
+            font.styleName: 'Bold'
         }
         HSpacer {
         }
     }
-
     contentItem: GListView {
         id: list_view
         clip: true

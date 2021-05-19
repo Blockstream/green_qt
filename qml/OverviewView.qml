@@ -16,17 +16,16 @@ GPane {
         Layout.fillWidth: true
         spacing: constants.p1
 
-        RowLayout {
-            Layout.preferredHeight: constants.p5
-
+        GHeader {
             Label {
-                text: "Overview"
-                font.pixelSize: 22
-                font.styleName: "Bold"
+                Layout.alignment: Qt.AlignVCenter
+                text: qsTrId('Overview')
+                font.pixelSize: 20
+                font.styleName: 'Bold'
                 verticalAlignment: Label.AlignVCenter
             }
-
-            HSpacer { }
+            HSpacer {
+            }
         }
 
         LiquidHeader {

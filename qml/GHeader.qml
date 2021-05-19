@@ -4,10 +4,18 @@ import QtQuick.Layouts 1.12
 
 GPane {
     default property alias contentItemData: row_layout.data
+    Layout.fillWidth: true
     background: null
     padding: 0
     contentItem: RowLayout {
-        id: row_layout
-        spacing: constants.s1
+        spacing: 0
+        Item {
+            Layout.minimumHeight: 44
+            width: 0
+        }
+        RowLayout {
+            id: row_layout
+            spacing: constants.s1
+        }
     }
 }

@@ -14,22 +14,26 @@ Page {
     spacing: constants.p1
     header: GHeader {
         Label {
+            Layout.alignment: Qt.AlignVCenter
             id: label
             text: qsTrId('id_transactions')
-            font.pixelSize: 22
+            font.pixelSize: 20
             font.styleName: "Bold"
         }
         HSpacer {
         }
         GSearchField {
+            Layout.alignment: Qt.AlignVCenter
             visible: self.hasExport
             id: search_field
         }
-        ToolButton {
+        GButton {
+            Layout.alignment: Qt.AlignVCenter
+            text: qsTrId('Export')
             visible: self.hasExport
-            enabled: self.account.wallet.ready && !transaction_list_model.fetching && list_view.count > 0
-            icon.source: "qrc:/svg/export.svg"
+            enabled: self.account.wallet.ready && !list_view.model.fetching && list_view.count > 0
             onClicked: export_transactions_popup.createObject(window, { account: self.account }).open()
+            ToolTip.text: qsTrId('id_export_transactions_to_csv_file')
         }
     }
     contentItem: GListView {

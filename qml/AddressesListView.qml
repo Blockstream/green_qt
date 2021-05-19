@@ -13,13 +13,15 @@ Page {
 
     header: GHeader {
         Label {
+            Layout.alignment: Qt.AlignVCenter
             text: qsTrId('id_addresses')
-            font.pixelSize: 22
+            font.pixelSize: 20
             font.styleName: 'Bold'
         }
         HSpacer {
         }
         GSearchField {
+            Layout.alignment: Qt.AlignVCenter
             id: search_field
         }
     }

@@ -31,7 +31,7 @@ MainPageHeader {
             Layout.fillWidth: true
             background: null
             padding: 0
-            leftPadding: -8
+            leftPadding: wallet.device || wallet.watchOnly ? 0 : -8
             focusPolicy: Qt.ClickFocus
             contentItem: RowLayout {
                 spacing: 16

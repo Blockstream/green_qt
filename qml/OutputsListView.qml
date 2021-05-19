@@ -4,7 +4,7 @@ import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.3
 import QtQml.Models 2.11
 
-ColumnLayout {
+Page {
     required property Account account
 
     readonly property var selectedOutputs: {
@@ -35,123 +35,119 @@ ColumnLayout {
     }
 
     id: self
-    Layout.fillWidth: true
-    Layout.fillHeight: true
     spacing: constants.p1
-
-    RowLayout {
-        Layout.preferredHeight: constants.p5
-
+    background: null
+    header: GHeader {
         Label {
-            text: "Coins"
-            font.pixelSize: 22
-            font.styleName: "Bold"
+            Layout.alignment: Qt.AlignVCenter
+            text: qsTrId('Coins')
+            font.pixelSize: 20
+            font.styleName: 'Bold'
         }
-
         HSpacer { }
-    }
+    }    
+    contentItem: ColumnLayout {
+        RowLayout {
+            id: tags_layout
+            Layout.fillWidth: true
+            spacing: 6
 
-    RowLayout {
-        id: tags_layout
-        Layout.fillWidth: true
-        implicitHeight: 50
-        spacing: 6
+            ButtonGroup {
+                id: button_group
+            }
 
-        ButtonGroup {
-            id: button_group
-        }
-
-        Repeater {
-            model: account.wallet.network.liquid ? ['all', 'csv', 'p2wsh', 'not confidential'] : ['all', 'csv', 'p2wsh', 'dust', 'locked']
-            delegate: Button {
-                id: self
-                ButtonGroup.group: button_group
-                checked: index === 0
-                checkable: true
-                padding: 18
-                topPadding: 10
-                bottomPadding: 10
-                background: Rectangle {
-                    id: rectangle
-                    radius: 4
-                    color: self.checked ? constants.c300 : constants.c500
+            Repeater {
+                model: account.wallet.network.liquid ? ['all', 'csv', 'p2wsh', 'not confidential'] : ['all', 'csv', 'p2wsh', 'dust', 'locked']
+                delegate: Button {
+                    id: self
+                    ButtonGroup.group: button_group
+                    checked: index === 0
+                    checkable: true
+                    padding: 18
+                    topPadding: 10
+                    bottomPadding: 10
+                    background: Rectangle {
+                        id: rectangle
+                        radius: 4
+                        color: self.checked ? constants.c300 : constants.c500
+                    }
+                    contentItem: Label {
+                        text: self.text
+                        font.pixelSize: 10
+                        font.family: "Medium"
+                    }
+                    text: localizedLabel(modelData)
+                    property string buttonTag: modelData
+                    font.capitalization: Font.AllUppercase
                 }
-                contentItem: Label {
-                    text: self.text
-                    font.pixelSize: 10
-                    font.family: "Medium"
-                }
-                text: localizedLabel(modelData)
-                property string buttonTag: modelData
-                font.capitalization: Font.AllUppercase
+            }
+
+            HSpacer {
+            }
+
+            ToolButton {
+                icon.source: "qrc:/svg/info.svg"
+                icon.color: "white"
+                onClicked: info_dialog.createObject(self).open();
             }
         }
 
-        HSpacer {
-        }
-
-        ToolButton {
-            icon.source: "qrc:/svg/info.svg"
-            icon.color: "white"
-            onClicked: info_dialog.createObject(self).open();
-        }
-    }
-
-    GListView {
-        id: list_view
-        Layout.fillWidth: true
-        Layout.fillHeight: true
-        clip: true
-        spacing: 0
-        model: OutputListModelFilter {
-            id: output_model_filter
-            filter: button_group.checkedButton.buttonTag
-            model: OutputListModel {
-                id: output_model
-                account: self.account
-                onModelAboutToBeReset: selection_model.clear()
-            }
-        }
-        delegate: OutputDelegate {
-            highlighted: selection_model.selectedIndexes.indexOf(output_model.index(output_model.indexOf(output), 0))>-1
-            width: list_view.width
-        }
-
-        ScrollIndicator.vertical: ScrollIndicator {}
-
-        BusyIndicator {
-            width: 32
-            height: 32
-            running: output_model.fetching
-            anchors.margins: 8
-            Layout.alignment: Qt.AlignHCenter
-            opacity: output_model.fetching ? 1 : 0
-            Behavior on opacity { OpacityAnimator {} }
-            anchors.bottom: parent.bottom
-            anchors.horizontalCenter: parent.horizontalCenter
-        }
-
-        Label {
-            id: label
-            visible: list_view.count === 0
-            anchors.centerIn: parent
-            color: 'white'
-            text: {
-                if (output_model_filter.filter === '') {
-                    return qsTrId(`You'll see your coins here when you receive funds`)
-                } else {
-                    return qsTrId('There are no results for the applied filter')
+        GListView {
+            id: list_view
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            clip: true
+            spacing: 0
+            model: OutputListModelFilter {
+                id: output_model_filter
+                filter: button_group.checkedButton.buttonTag
+                model: OutputListModel {
+                    id: output_model
+                    account: self.account
+                    onModelAboutToBeReset: selection_model.clear()
                 }
             }
-        }
+            delegate: OutputDelegate {
+                highlighted: selection_model.selectedIndexes.indexOf(output_model.index(output_model.indexOf(output), 0))>-1
+                width: list_view.width
+            }
 
-        ItemSelectionModel {
-            id: selection_model
-            model: output_model
+            ScrollIndicator.vertical: ScrollIndicator {}
+
+            BusyIndicator {
+                width: 32
+                height: 32
+                running: output_model.fetching
+                anchors.margins: 8
+                Layout.alignment: Qt.AlignHCenter
+                opacity: output_model.fetching ? 1 : 0
+                Behavior on opacity { OpacityAnimator {} }
+                anchors.bottom: parent.bottom
+                anchors.horizontalCenter: parent.horizontalCenter
+            }
+
+            Label {
+                id: label
+                visible: list_view.count === 0
+                anchors.centerIn: parent
+                color: 'white'
+                text: {
+                    if (output_model_filter.filter === '') {
+                        return qsTrId(`You'll see your coins here when you receive funds`)
+                    } else {
+                        return qsTrId('There are no results for the applied filter')
+                    }
+                }
+            }
+
+            ItemSelectionModel {
+                id: selection_model
+                model: output_model
+            }
         }
     }
 
-    RowLayout {
+    footer: RowLayout {
         Layout.bottomMargin: -constants.p2
         visible: selection_model.hasSelection && !account.wallet.network.liquid
         Layout.fillWidth: true

@@ -11,21 +11,21 @@ Page {
     background: null
     spacing: constants.p1
 
-    header: RowLayout {
+    header: GHeader {
         Label {
-            Layout.fillWidth: true
-            text: "Accounts"
-            font.pixelSize: 22
-            font.styleName: "Bold"
+            Layout.alignment: Qt.AlignVCenter
+            text: qsTrId('Accounts')
+            font.pixelSize: 20
+            font.styleName: 'Bold'
+            verticalAlignment: Label.AlignVCenter
         }
-
         HSpacer {
         }
-
         GButton {
+            Layout.alignment: Qt.AlignVCenter
             text: '+'
-            font.pixelSize: 18
-            font.styleName: "Medium"
+            font.pixelSize: 14
+            font.styleName: 'Medium'
             onClicked: create_account_dialog.createObject(window, { wallet }).open()
         }
     }
