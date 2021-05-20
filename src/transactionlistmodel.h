@@ -45,6 +45,7 @@ private:
     Account* m_account{nullptr};
     QVector<Transaction*> m_transactions;
     bool m_has_unconfirmed{false};
+    bool m_reached_end{false};
     Connectable<AccountGetTransactionsActivity> m_get_transactions_activity;
     QTimer* const m_reload_timer;
 };

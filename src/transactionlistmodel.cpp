@@ -12,6 +12,7 @@ TransactionListModel::TransactionListModel(QObject* parent)
     m_reload_timer->setSingleShot(true);
     m_reload_timer->setInterval(200);
     connect(m_reload_timer, &QTimer::timeout, [this] {
+        m_reached_end = false;
         m_has_unconfirmed = false;
         fetch(true, 0, 30);
     });
@@ -26,6 +27,7 @@ void TransactionListModel::setAccount(Account *account)
 {
     if (m_account) {
         beginResetModel();
+        m_reached_end = false;
         m_get_transactions_activity.update(nullptr);
         m_transactions.clear();
         disconnect(m_account, &Account::notificationHandled, this, &TransactionListModel::handleNotification);
@@ -65,6 +67,7 @@ void TransactionListModel::fetch(bool reset, int offset, int count)
         for (auto transaction : m_get_transactions_activity->transactions()) {
             if (transaction->isUnconfirmed()) m_has_unconfirmed = true;
         }
+        m_reached_end = m_get_transactions_activity->transactions().empty();
         if (reset) {
             // just swap rows instead of incremental update
             // this happens after a bump fee for instance
@@ -97,6 +100,7 @@ QHash<int, QByteArray> TransactionListModel::roleNames() const
 bool TransactionListModel::canFetchMore(const QModelIndex &parent) const
 {
     Q_ASSERT(!parent.parent().isValid());
+    if (m_reached_end) return false;
     // Prevent concurrent fetchMore
     if (m_get_transactions_activity) return false;
     return true;
