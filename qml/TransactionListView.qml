@@ -15,16 +15,19 @@ Page {
     header: RowLayout {
         Label {
             id: label
-            Layout.fillWidth: true
             text: qsTrId('id_transactions')
             font.pixelSize: 22
             font.styleName: "Bold"
         }
         HSpacer {
         }
+        GSearchField {
+            visible: self.hasExport
+            id: search_field
+        }
         ToolButton {
             visible: self.hasExport
-            enabled: self.account.wallet.ready && !list_view.model.fetching && list_view.count > 0
+            enabled: self.account.wallet.ready && !transaction_list_model.fetching && list_view.count > 0
             icon.source: "qrc:/svg/export.svg"
             onClicked: export_transactions_popup.createObject(window, { account: self.account }).open()
         }
@@ -33,8 +36,12 @@ Page {
         id: list_view
         clip: true
         spacing: 8
-        model: TransactionListModel {
-            account: self.account
+        model: TransactionFilterProxyModel {
+            filter: search_field.text
+            model: TransactionListModel {
+                id: transaction_list_model
+                account: self.account
+            }
         }
         delegate: TransactionDelegate {
             hoverEnabled: false
@@ -46,11 +53,10 @@ Page {
         BusyIndicator {
             width: 32
             height: 32
-            running: list_view.model.fetching
+            running: transaction_list_model.fetching
             anchors.margins: 8
             Layout.alignment: Qt.AlignHCenter
-            opacity: list_view.model.fetching ? 1 : 0
-            Behavior on opacity { OpacityAnimator {} }
+            visible: running ? 1 : 0
             anchors.bottom: parent.bottom
             anchors.horizontalCenter: parent.horizontalCenter
         }

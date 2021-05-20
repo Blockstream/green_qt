@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Support searching for transaction hash or memo
 - Allow to rename main account 
 - Persist wallet hash id
 - Click side bar to toggle collapsed
