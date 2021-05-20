@@ -6,8 +6,6 @@ import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.12
 
 ColumnLayout {
-    id: self
-
     required property Wallet wallet
     readonly property var per_currency: {
         const result = {}
@@ -24,7 +22,9 @@ ColumnLayout {
         }
         return result
     }
-    spacing: 16
+
+    id: self
+    spacing: constants.p3
 
     Controller {
         id: controller
@@ -36,6 +36,7 @@ ColumnLayout {
         title: qsTrId('id_bitcoin_denomination')
         enabled: !wallet.locked
         contentItem: RowLayout {
+            spacing: constants.p1
             Label {
                 Layout.fillWidth: true
                 Layout.minimumWidth: contentWidth
@@ -117,6 +118,7 @@ ColumnLayout {
     Loader {
         Layout.fillWidth: true
         active: !wallet.network.liquid
+        visible: active
         sourceComponent: SettingsBox {
             enabled: !wallet.locked
             title: qsTrId('id_watchonly_login')
@@ -135,7 +137,7 @@ ColumnLayout {
                 HSpacer {
                 }
                 GButton {
-                    large: true
+                    large: false
                     text: qsTrId('id_update')
                     enabled: password_field.text !== ''
                     onClicked: {

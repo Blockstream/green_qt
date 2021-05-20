@@ -8,27 +8,42 @@ import QtQuick.Layouts 1.12
 WalletDialog {
     id: self
 
-    width: 800
-    height: 450
-
+    width: 900
+    height: 600
+    //padding: constants.p2
+    padding: 0
     background: Rectangle {
         radius: 16
         color: constants.c800
-        Rectangle {
-            height: parent.height
-            width: side_bar.width + self.leftPadding + 16
-            radius: parent.radius
-            color: constants.c700
-            Rectangle {
-                height: parent.height
-                anchors.right: parent.right
-                width: parent.radius + 1
-                color: constants.c700
-            }
-        }
     }
 
-    header: null
+    header: DialogHeader {
+        Image {
+            Layout.maximumWidth: 32
+            Layout.maximumHeight: 32
+            fillMode: Image.PreserveAspectFit
+            source: 'qrc:/svg/gearFill.svg'
+        }
+
+        Label {
+            Layout.fillWidth: true
+            text: qsTrId('id_settings')
+            font.pixelSize: 18
+            font.styleName: 'Medium'
+            elide: Label.ElideRight
+            ToolTip.text: title
+            ToolTip.visible: truncated && mouse_area.containsMouse
+        }
+
+        ToolButton {
+            Layout.alignment: Qt.AlignTop
+            flat: true
+            icon.source: 'qrc:/svg/cancel.svg'
+            icon.width: 16
+            icon.height: 16
+            onClicked: self.reject()
+        }
+    }
 
     component B: Button {
         id: b
@@ -53,13 +68,13 @@ WalletDialog {
                 anchors.fill: parent
                 visible: b.highlighted
                 color: constants.c500
-                radius: 8
+                radius: 4
             }
             Rectangle {
                 anchors.fill: parent
                 visible: b.hovered
                 color: constants.c300
-                radius: 8
+                radius: 4
             }
         }
         contentItem: RowLayout {
@@ -72,7 +87,7 @@ WalletDialog {
             Label {
                 text: b.text
                 Layout.fillWidth: true
-                rightPadding: 16
+                rightPadding: 12
                 font.styleName: 'Regular'
             }
         }
@@ -80,22 +95,15 @@ WalletDialog {
     component F: Flickable {
         id: flickagle
         contentWidth: width
-        ScrollIndicator.vertical: ScrollIndicator {
-            parent: self.background
-            anchors.top: parent.top
-            anchors.topMargin: self.topPadding
-            anchors.right: parent.right
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: self.bottomPadding
-        }
+        ScrollIndicator.vertical: ScrollIndicator { }
     }
     contentItem: RowLayout {
         id: layout
-        spacing: 8
+        spacing: constants.p3
         ColumnLayout {
             id: side_bar
             Layout.fillWidth: false
-            spacing: 8
+            spacing: constants.p1
             B {
                 index: 0
                 text: 'General'
@@ -108,22 +116,27 @@ WalletDialog {
             }
             B {
                 index: 2
+                text: 'Two Factor Authentication'
+                icon.source: 'qrc:/svg/security.svg'
+            }
+            B {
+                index: 3
                 text: 'Recovery'
                 icon.source: 'qrc:/svg/recovery.svg'
             }
-            Item {
-                Layout.fillHeight: true
-                width: 1
-            }
+            VSpacer { }
         }
-        Item {
+        Rectangle {
+            Layout.preferredWidth: 1
             Layout.fillHeight: true
-            width: 32
+            color: constants.c500
         }
         StackLayout {
             id: stack_layout
             Layout.fillWidth: true
             Layout.fillHeight: true
+            clip: true
+
             F {
                 contentHeight: general_view.height
                 WalletGeneralSettingsView {
@@ -132,6 +145,7 @@ WalletDialog {
                     wallet: self.wallet
                 }
             }
+
             F {
                 contentHeight: security_view.height
                 WalletSecuritySettingsView {
@@ -140,6 +154,16 @@ WalletDialog {
                     wallet: self.wallet
                 }
             }
+
+            F {
+                contentHeight: two_factor_auth_view.height
+                Wallet2faSettingsView {
+                    id: two_factor_auth_view
+                    width: parent.width
+                    wallet: self.wallet
+                }
+            }
+
             F {
                 contentHeight: recovery_view.height
                 WalletRecoverySettingsView {
@@ -148,14 +172,6 @@ WalletDialog {
                     wallet: self.wallet
                 }
             }
-        }
-        ToolButton {
-            Layout.alignment: Qt.AlignTop
-            flat: true
-            icon.source: 'qrc:/svg/cancel.svg'
-            icon.width: 16
-            icon.height: 16
-            onClicked: self.reject()
-        }
+        }        
     }
 }

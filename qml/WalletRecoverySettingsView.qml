@@ -22,7 +22,7 @@ ColumnLayout {
             }
             GButton {
                 Layout.alignment: Qt.AlignRight
-                large: true
+                large: false
                 text: qsTrId('id_show_my_wallet_backup')
                 onClicked: mnemonic_dialog.createObject(stack_view).open()
             }
@@ -40,7 +40,7 @@ ColumnLayout {
             GButton {
                 Layout.alignment: Qt.AlignRight
                 text: qsTrId('id_copy_to_clipboard')
-                large: true
+                large: false
                 onClicked: {
                     const subaccounts = [];
                     for (let i = 0; i < wallet.accounts.length; i++) {
@@ -70,7 +70,7 @@ ColumnLayout {
             }
             GButton {
                 Layout.alignment: Qt.AlignRight
-                large: true
+                large: false
                 text: qsTrId('id_set_timelock')
                 onClicked: nlocktime_dialog.createObject(stack_view).open()
             }
@@ -94,7 +94,7 @@ ColumnLayout {
                         wallet: self.wallet
                     }
                 }
-                large: true
+                large: false
                 enabled: !wallet.config.email || !wallet.config.email.confirmed
                 text: qsTrId('id_enable')
                 onClicked: enable_dialog.createObject(stack_view).open()
@@ -118,7 +118,7 @@ ColumnLayout {
             }
             GButton {
                 Layout.alignment: Qt.AlignRight
-                large: true
+                large: false
                 destructive: true
                 enabled: self.wallet.empty
                 text: qsTrId('id_delete_wallet')

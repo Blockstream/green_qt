@@ -111,5 +111,6 @@
         <file>GSearchField.qml</file>
         <file>GHeader.qml</file>
         <file>GFlickable.qml</file>
+        <file>Wallet2faSettingsView.qml</file>
     </qresource>
 </RCC>
