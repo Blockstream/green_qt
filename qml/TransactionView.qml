@@ -161,14 +161,11 @@ AbstractDialog {
                     text: transaction.data.memo
                     selectByMouse: true
                     wrapMode: TextEdit.Wrap
+                    onEditingFinished: transaction.updateMemo(memo_edit.text)
                     onTextChanged: {
                         if (text.length > 1024) {
                             memo_edit.text = text.slice(0, 1024);
                         }
-                    }
-                    onEdited: {
-                        console.log('update...')
-                        transaction.updateMemo(memo_edit.text)
                     }
                 }
             }
