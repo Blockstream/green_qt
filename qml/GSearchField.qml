@@ -7,7 +7,7 @@ TextField {
     id: self
     topInset: 4
     bottomInset: 4
-    leftPadding: height / 2
+    leftPadding: height / 2 + contentHeight
     rightPadding: self.empty ? height / 2 : clear_button.height + self.height - self.font.pixelSize
     topPadding: 12
     bottomPadding: 12
@@ -25,13 +25,21 @@ TextField {
     }
     placeholderText: qsTrId('id_search')
     Keys.onEscapePressed: self.clear()
+    Image {
+        source: 'qrc:/svg/search.svg'
+        height: self.contentHeight + 4
+        width: height
+        anchors.left: parent.left
+        anchors.leftMargin: (self.height - self.font.pixelSize) / 2
+        anchors.verticalCenter: parent.verticalCenter
+    }
     Rectangle {
         id: clear_button
         visible: !self.empty
         anchors.right: parent.right
         anchors.rightMargin: (self.height - self.font.pixelSize) / 2
         anchors.verticalCenter: parent.verticalCenter
-        height: self.contentHeight
+        height: self.contentHeight + 4
         width: height
         color: mouse_area.containsMouse ? constants.c400 : constants.c500
         radius: height / 2
