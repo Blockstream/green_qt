@@ -73,7 +73,7 @@ ApplicationWindow {
     }
 
     minimumWidth: 900
-    minimumHeight: main_layout.implicitHeight
+    minimumHeight: 600
     visible: true
     color: constants.c900
     title: {
