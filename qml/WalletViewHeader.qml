@@ -31,6 +31,7 @@ MainPageHeader {
             Layout.fillWidth: true
             background: null
             padding: 0
+            leftPadding: -8
             focusPolicy: Qt.ClickFocus
             contentItem: RowLayout {
                 spacing: 16
