@@ -110,5 +110,6 @@
         <file>GListView.qml</file>
         <file>GPane.qml</file>
         <file>GSearchField.qml</file>
+        <file>GHeader.qml</file>
     </qresource>
 </RCC>

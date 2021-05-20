@@ -12,7 +12,7 @@ Page {
     id: self
     background: null
     spacing: constants.p1
-    header: RowLayout {
+    header: GHeader {
         Label {
             id: label
             text: qsTrId('id_transactions')
