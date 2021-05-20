@@ -11,6 +11,7 @@ class AddressListModelFilter : public QSortFilterProxyModel
 {
     Q_OBJECT
     Q_PROPERTY(AddressListModel* model READ model WRITE setModel NOTIFY modelChanged)
+    Q_PROPERTY(QString filter READ filter WRITE setFilter NOTIFY filterChanged)
     QML_ELEMENT
 public:
     AddressListModelFilter(QObject* parent = nullptr);
@@ -23,13 +24,15 @@ public:
 
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const;
 
-    Q_INVOKABLE void search(const QString &search);
-    Q_INVOKABLE void clear();
+    QString filter() const { return m_filter; }
+    void setFilter(const QString& filter);
 
 signals:
     void modelChanged(AddressListModel* account);
+    void filterChanged(const QString& filter);
 private:
     AddressListModel* m_model{nullptr};
+    QString m_filter;
 };
 
 #endif // GREEN_ADDRESSLISTMODELFILTER_H

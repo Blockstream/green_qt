@@ -16,17 +16,16 @@ void AddressListModelFilter::setModel(AddressListModel *model)
 
 bool AddressListModelFilter::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
 {
+    if (m_filter.isEmpty()) return true;
     auto address = m_model->index(source_row, 0, source_parent).data(AddressListModel::AddressRole).value<Address*>();
-    return filterRegExp().indexIn(address->data()["address"].toString()) >= 0;
+    if (address->data()["address"].toString().contains(m_filter)) return true;
+    return false;
 }
 
-void AddressListModelFilter::search(const QString &search)
+void AddressListModelFilter::setFilter(const QString& filter)
 {
-    if (search.count()>0) setFilterRegExp(QRegExp(QString("(%1)").arg(search)));
-    else setFilterRegExp(QRegExp(".*"));
-}
-
-void AddressListModelFilter::clear()
-{
-    setFilterRegExp(QRegExp(".*"));
+    if (m_filter == filter) return;
+    m_filter = filter;
+    emit filterChanged(m_filter);
+    invalidateFilter();
 }
