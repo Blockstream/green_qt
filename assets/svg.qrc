@@ -31,5 +31,6 @@
         <file>svg/info.svg</file>
         <file>svg/sidebar.svg</file>
         <file>svg/export.svg</file>
+        <file>svg/x.svg</file>
     </qresource>
 </RCC>

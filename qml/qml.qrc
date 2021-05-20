@@ -109,5 +109,6 @@
         <file>WalletViewHeader.qml</file>
         <file>GListView.qml</file>
         <file>GPane.qml</file>
+        <file>GSearchField.qml</file>
     </qresource>
 </RCC>
