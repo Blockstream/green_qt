@@ -138,3 +138,36 @@ void TransactionListModel::reload()
     m_reload_timer->start();
 }
 
+TransactionFilterProxyModel::TransactionFilterProxyModel(QObject* parent)
+    : QSortFilterProxyModel(parent)
+{
+}
+
+void TransactionFilterProxyModel::setModel(TransactionListModel* model)
+{
+    if (m_model == model) return;
+    m_model = model;
+    emit modelChanged(m_model);
+    setSourceModel(m_model);
+    connect(m_model, &TransactionListModel::fetchingChanged, this, [this] {
+        if (!m_filter.isEmpty() && m_model->canFetchMore({})) m_model->fetchMore({});
+    });
+}
+
+void TransactionFilterProxyModel::setFilter(const QString& filter)
+{
+    if (m_filter == filter) return;
+    m_filter = filter;
+    emit filterChanged(m_filter);
+    invalidateFilter();
+    if (!m_filter.isEmpty() && !m_model->fetching()) m_model->fetchMore(QModelIndex{});
+}
+
+bool TransactionFilterProxyModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
+{
+    if (m_filter.isEmpty()) return true;
+    auto transaction = m_model->index(source_row, 0, source_parent).data(Qt::UserRole).value<Transaction*>();
+    if (transaction->hash().contains(m_filter, Qt::CaseInsensitive)) return true;
+    if (transaction->memo().contains(m_filter, Qt::CaseInsensitive)) return true;
+    return false;
+}

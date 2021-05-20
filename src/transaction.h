@@ -48,6 +48,9 @@ public:
     explicit Transaction(Account* account);
     virtual ~Transaction();
 
+    QString hash() const { return m_data.value("txhash").toString(); }
+    QString memo() const { return m_data.value("memo").toString(); }
+
     bool isUnconfirmed() const;
 
     Account* account() const;

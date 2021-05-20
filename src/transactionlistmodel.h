@@ -5,8 +5,9 @@
 
 #include <QtQml>
 #include <QAbstractListModel>
-#include <QVector>
 #include <QModelIndex>
+#include <QSortFilterProxyModel>
+#include <QVector>
 
 QT_FORWARD_DECLARE_CLASS(Account)
 QT_FORWARD_DECLARE_CLASS(Handler)
@@ -48,6 +49,28 @@ private:
     bool m_reached_end{false};
     Connectable<AccountGetTransactionsActivity> m_get_transactions_activity;
     QTimer* const m_reload_timer;
+};
+
+class TransactionFilterProxyModel : public QSortFilterProxyModel
+{
+    Q_OBJECT
+    Q_PROPERTY(TransactionListModel* model READ model WRITE setModel NOTIFY modelChanged)
+    Q_PROPERTY(QString filter READ filter WRITE setFilter NOTIFY filterChanged)
+    QML_ELEMENT
+    TransactionListModel* m_model{nullptr};
+    QString m_filter;
+
+public:
+    TransactionFilterProxyModel(QObject* parent = nullptr);
+    TransactionListModel* model() const { return m_model; }
+    void setModel(TransactionListModel* model);
+    QString filter() const { return m_filter; }
+    void setFilter(const QString& filter);
+protected:
+    bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const override;
+signals:
+    void modelChanged(TransactionListModel* model);
+    void filterChanged(const QString& filter);
 };
 
 #endif // TRANSACTIONLISTMODEL_H
