@@ -6,10 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+
+### Changed
+
+### Fixed
+
+## [0.1.7] - 2021-05-21
+### Added
 - Support searching for transaction hash or memo
 - Allow to rename main account 
 - Persist wallet hash id
-- Click side bar to toggle collapsed
 - Add copyable label with transaction hash to the end of send flow
 
 ### Changed
