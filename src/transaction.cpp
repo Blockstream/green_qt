@@ -114,8 +114,6 @@ void Transaction::updateFromData(const QJsonObject& data)
                         m_amounts.append(new TransactionAmount(this, asset, amount));
                     }
                 }
-            } else {
-                Q_UNREACHABLE();
             }
         } else {
             qint64 amount = satoshi.value("btc").toDouble();
