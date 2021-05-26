@@ -633,6 +633,8 @@ public:
             const auto input = value.toObject();
             const bool sw_input = input.value("address_type") != "p2sh";
             const auto script = ParseByteArray(input.value("prevout_script"));
+            const auto ae_host_commitment = ParseByteArray(input.value("ae_host_commitment"));
+            const auto ae_host_entropy = ParseByteArray(input.value("ae_host_entropy"));
 
             if (sw_input && m_signing_inputs.size() == 1) {
                 inputs.append(QVariantMap({
@@ -641,6 +643,8 @@ public:
                     { "script", script },
                     { "satoshi", ParseSatoshi(input.value("satoshi")) },
                     { "path", ParsePath(input.value("user_path")) },
+                    { "ae_host_commitment", ae_host_commitment },
+                    { "ae_host_entropy", ae_host_entropy },
                 }));
             } else {
                 const auto input_tx = ParseByteArray(m_signing_transactions.value(input.value("txhash").toString()));
@@ -651,6 +655,8 @@ public:
                     { "script", script },
                     { "satoshi", ParseSatoshi(input.value("satoshi")) },
                     { "path", ParsePath(input.value("user_path")) },
+                    { "ae_host_commitment", ae_host_commitment },
+                    { "ae_host_entropy", ae_host_entropy },
                 }));
             }
         }
@@ -674,9 +680,12 @@ public:
         }
 
         m_device->m_jade->signTx(m_network->id(), txn, inputs, change, [this](const QVariantMap& result) {
-            if (result.contains("result") && result["result"].type() == QVariant::List) {
-                for (const auto& s : result["result"].toList()) {
+            if (result.contains("result")) {
+                for (const auto& s : result["result"].toMap()["signatures"].toList()) {
                     m_signatures.append(s.toByteArray());
+                }
+                for (const auto& c : result["result"].toMap()["signer_commitments"].toList()) {
+                    m_signer_commitments.append(c.toByteArray());
                 }
                 finish();
             } else {
@@ -806,11 +815,15 @@ public:
             const auto script = ParseByteArray(input.value("prevout_script"));
             const auto value_commitment = ParseByteArray(input.value("commitment"));
             const auto path = ParsePath(input.value("user_path"));
+            const auto ae_host_commitment = ParseByteArray(input.value("ae_host_commitment"));
+            const auto ae_host_entropy = ParseByteArray(input.value("ae_host_entropy"));
             m_inputs.append(QVariantMap({
                 { "is_witness", is_segwit },
                 { "script", script },
                 { "value_commitment", value_commitment },
-                { "path", path }
+                { "path", path },
+                { "ae_host_commitment", ae_host_commitment },
+                { "ae_host_entropy", ae_host_entropy }
             }));
 
             m_values.append(ParseSatoshi(input.value("satoshi")));
@@ -918,9 +931,12 @@ public:
         m_device->m_jade->signLiquidTx("liquid", tx, m_inputs, m_trusted_commitments, m_change, [this](const QVariantMap& msg) {
             if (handleError(msg)) return;
             progress()->incrementValue();
-            Q_ASSERT(msg.contains("result") && msg["result"].type() == QVariant::List);
-            for (const auto& signature : msg["result"].toList()) {
+            Q_ASSERT(msg.contains("result"));
+            for (const auto& signature : msg["result"].toMap()["signatures"].toList()) {
                 m_signatures.append(signature.toByteArray());
+            }
+            for (const auto& signer_commitment : msg["result"].toMap()["signer_commitments"].toList()) {
+                m_signer_commitments.append(signer_commitment.toByteArray());
             }
             for (const auto& value : m_trusted_commitments) {
                 const auto commitment = value.toMap();

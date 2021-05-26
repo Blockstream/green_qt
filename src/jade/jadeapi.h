@@ -142,7 +142,8 @@ private:
 
     // Helpers for signTx / signLiquidTx to send all tx inputs
     ResponseHandler makeSendInputsCallback(const int id, const QVariantList &inputs);
-    ResponseHandler makeRecieveSignatureCallback(const int id, const int nInputs, const int index, const QVariant &input, const QSharedPointer<QMap<int, QVariant>> &sigs);
+    ResponseHandler makeReceiveCommitmentCallback(const int id, const int index, const QVariant &input, const QSharedPointer<QMap<int, QVariant>> &commitments);
+    ResponseHandler makeReceiveSignatureCallback(const int id, const int nInputs, const int index, const QVariant &input, const QSharedPointer<QMap<int, QVariant>> &sigs, const QSharedPointer<QMap<int, QVariant>> &commitments);
 
     // Send cbor message to Jade
     void sendToJade(const QCborMap &msg);

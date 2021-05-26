@@ -421,6 +421,7 @@ int JadeAPI::signTx(const QString &network, const QByteArray &txn, const QVarian
 
     // Initiate signing process, and return the exposed id
     const QCborMap params = { {"network", network},
+                              {"use_ae_signatures", true},
                               {"txn", txn},
                               {"num_inputs", inputs.size()},
                               {"change", QCborArray::fromVariantList(change)} };
@@ -438,6 +439,7 @@ JadeAPI::ResponseHandler JadeAPI::makeSendInputsCallback(const int id, const QVa
         if (rslt.contains("result") && rslt["result"].toBool())
         {
             // Structure to hold returned signatures
+            QSharedPointer<QMap<int, QVariant>> commitments(new QMap<int, QVariant>());
             QSharedPointer<QMap<int, QVariant>> sigs(new QMap<int, QVariant>());
 
             // Send each input (using a timer)
@@ -447,12 +449,30 @@ JadeAPI::ResponseHandler JadeAPI::makeSendInputsCallback(const int id, const QVa
             {
                 qDebug() << "JadeAPI::makeSendInputsCallback()::lambda for" << id << "scheduling tx input" << index+1 << "of" << ninputs;
                 QTimer::singleShot(index*100,
-                    [this, id, ninputs, input, index, sigs]()
+                    [this, id, ninputs, input, index, commitments]()
                     {
                         qDebug() << "JadeAPI::makeSendInputsCallback()::lambda for" << id << "sending tx input" << index+1 << "of" << ninputs;
-                        const int inputId = registerResponseHandler(makeRecieveSignatureCallback(id, ninputs, index, input, sigs));
-                        const QCborMap params = QCborMap::fromVariantMap(input.toMap());
+                        const int inputId = registerResponseHandler(makeReceiveCommitmentCallback(id, index, input, commitments));
+                        auto _input = input.toMap();
+                        _input.remove("ae_host_entropy");
+                        const QCborMap params = QCborMap::fromVariantMap(_input);
                         const QCborMap request = getRequest(inputId, "tx_input", params);
+                        sendToJade(request);
+                    }
+                );
+                ++index;
+            }
+            index = 0;
+            for (const QVariant& input : inputs)
+            {
+                qDebug() << "JadeAPI::makeSendInputsCallback()::lambda for" << id << "scheduling tx input" << index+1 << "of" << ninputs;
+                QTimer::singleShot((ninputs + index)*100,
+                    [this, id, ninputs, input, index, sigs, commitments]()
+                    {
+                        const int inputId = registerResponseHandler(makeReceiveSignatureCallback(id, ninputs, index, input, sigs, commitments));
+                        auto ae_host_entropy = input.toMap().value("ae_host_entropy").toByteArray();
+                        const QCborMap params = { {"ae_host_entropy", ae_host_entropy} };
+                        const QCborMap request = getRequest(inputId, "get_signature", params);
                         sendToJade(request);
                     }
                 );
@@ -468,17 +488,41 @@ JadeAPI::ResponseHandler JadeAPI::makeSendInputsCallback(const int id, const QVa
 }
 
 // Helper for signTx / signLiquidTx to receive and collect the signatures
-JadeAPI::ResponseHandler JadeAPI::makeRecieveSignatureCallback(const int id, const int nInputs, const int index, const QVariant &input, const QSharedPointer<QMap<int, QVariant>> &sigs)
+JadeAPI::ResponseHandler JadeAPI::makeReceiveCommitmentCallback(const int id, const int index, const QVariant &input, const QSharedPointer<QMap<int, QVariant>> &commitments)
+{
+    Q_ASSERT(!commitments.isNull());
+    Q_ASSERT(commitments->isEmpty());
+
+    // Helper for signTx / signLiquidTx to collect all signatures
+    return [this, id, index, input, commitments](const QVariantMap &rslt)
+    {
+        Q_ASSERT(!commitments.isNull());
+
+        // If all good, collect signatures
+        if (rslt.contains("result"))
+        {
+            Q_ASSERT(!commitments->contains(index));
+            commitments->insert(index, rslt["result"].toByteArray());
+        }
+        else
+        {
+            // Error - forward error to caller's response handler
+            forwardToResponseHandler(id, rslt);
+        }
+    };
+}
+
+// Helper for signTx / signLiquidTx to receive and collect the signatures
+JadeAPI::ResponseHandler JadeAPI::makeReceiveSignatureCallback(const int id, const int nInputs, const int index, const QVariant &input, const QSharedPointer<QMap<int, QVariant>> &sigs, const QSharedPointer<QMap<int, QVariant>> &commitments)
 {
     Q_ASSERT(nInputs > 0);
     Q_ASSERT(!sigs.isNull());
     Q_ASSERT(sigs->isEmpty());
 
     // Helper for signTx / signLiquidTx to collect all signatures
-    return [this, id, nInputs, index, input, sigs](const QVariantMap &rslt)
+    return [this, id, nInputs, index, input, commitments, sigs](const QVariantMap &rslt)
     {
         Q_ASSERT(!sigs.isNull());
-        qDebug() << "JadeAPI::makeRecieveSignatureCallback()::lambda for" << id << "received signature" << index+1 << "of" << nInputs;
 
         // If all good, collect signatures
         if (rslt.contains("result"))
@@ -489,8 +533,11 @@ JadeAPI::ResponseHandler JadeAPI::makeRecieveSignatureCallback(const int id, con
             // If we have all responses, forward them to caller's handler
             if (sigs->size() == nInputs)
             {
-                qDebug() << "JadeAPI::makeRecieveSignatureCallback()::lambda for" << id << "received all signatures, forwarding to caller's handler";
-                const QVariantMap rslt = { {"id", id}, {"result", sigs->values()} };
+                QVariantMap result{
+                    { "signatures", sigs->values() },
+                    { "signer_commitments", commitments->values() }
+                };
+                const QVariantMap rslt = { {"id", id}, {"result", result} };
                 forwardToResponseHandler(id, rslt);
             }
         }
@@ -586,6 +633,7 @@ int JadeAPI::signLiquidTx(const QString &network, const QByteArray &txn, const Q
 
     // Initiate signing process, and return the exposed id
     const QCborMap params = { {"network", network},
+                              {"use_ae_signatures", true},
                               {"txn", txn},
                               {"num_inputs", inputs.size()},
                               {"trusted_commitments", QCborArray::fromVariantList(commitments)},

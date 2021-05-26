@@ -97,8 +97,6 @@ class SignTransactionResolver : public DeviceResolver
 public:
     SignTransactionResolver(Handler* handler, const QJsonObject& result);
     void resolve() override;
-protected:
-    QJsonArray m_signatures;
 };
 
 class BlindingKeysResolver : public DeviceResolver

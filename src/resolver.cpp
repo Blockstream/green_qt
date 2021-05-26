@@ -128,10 +128,21 @@ void SignTransactionResolver::resolve()
     auto activity = device()->signTransaction(network(), transaction, signing_inputs, transaction_outputs, signing_transactions, signing_address_types);
     connect(activity, &SignTransactionActivity::finished, [this, activity] {
         activity->deleteLater();
+        QJsonArray signatures;
         for (const auto& signature : activity->signatures()) {
-            m_signatures.append(QString::fromLocal8Bit(signature.toHex()));
+            signatures.append(QString::fromLocal8Bit(signature.toHex()));
         }
-        m_handler->resolve({{ "signatures", m_signatures }});
+        QJsonObject data{
+            { "signatures", signatures }
+        };
+        if (m_required_data.value("use_ae_protocol").toBool()) {
+            QJsonArray signer_commitments;
+            for (const auto& signer_commitment : activity->signerCommitments()) {
+                signer_commitments.append(QString::fromLocal8Bit(signer_commitment.toHex()));
+            }
+            data["signer_commitments"] = signer_commitments;
+        }
+        m_handler->resolve(data);
     });
     connect(activity, &SignTransactionActivity::failed, [this, activity] {
         activity->deleteLater();
@@ -298,13 +309,23 @@ void SignLiquidTransactionResolver::resolve()
                 vbfs.append(QString::fromLocal8Bit(ReverseByteArray(vbf).toHex()));
             }
         }
-        m_handler->resolve({
+        QJsonObject data{
             { "signatures", signatures },
             { "asset_commitments", asset_commitments },
             { "value_commitments", value_commitments },
             { "assetblinders", abfs },
             { "amountblinders", vbfs }
-        });
+        };
+
+        if (m_required_data.value("use_ae_protocol").toBool()) {
+            QJsonArray signer_commitments;
+            for (const auto& signer_commitment : activity->signerCommitments()) {
+                signer_commitments.append(QString::fromLocal8Bit(signer_commitment.toHex()));
+            }
+            data["signer_commitments"] = signer_commitments;
+        }
+
+        m_handler->resolve(data);
     });
     connect(activity, &Activity::failed, [this] {
         setFailed(true);
