@@ -597,6 +597,7 @@ class JadeSignTransactionActivity : public SignTransactionActivity
     const QJsonObject m_signing_transactions;
     const QJsonArray m_signing_address_types;
     QList<QByteArray> m_signatures;
+    QList<QByteArray> m_signer_commitments;
 public:
     JadeSignTransactionActivity(Network* network, const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& transaction_outputs, const QJsonObject& signing_transactions, const QJsonArray& signing_address_types, JadeDevice* device)
         : SignTransactionActivity(device)
@@ -613,6 +614,7 @@ public:
     }
 
     QList<QByteArray> signatures() const override { return m_signatures; }
+    QList<QByteArray> signerCommitments() const override { return m_signer_commitments; }
 
     static QVariantList ParsePath(const QJsonValue& value)
     {
@@ -758,6 +760,7 @@ class JadeSignLiquidTransactionActivity : public SignLiquidTransactionActivity
     QByteArray m_last_vbf;
 
     QList<QByteArray> m_signatures;
+    QList<QByteArray> m_signer_commitments;
     QList<QByteArray> m_asset_commitments;
     QList<QByteArray> m_value_commitments;
     QList<QByteArray> m_asset_blinders;
@@ -785,6 +788,7 @@ public:
         Q_ASSERT(m_last_blinded_index >= 0);
     }
     QList<QByteArray> signatures() const override { return m_signatures; };
+    QList<QByteArray> signerCommitments() const override { return m_signer_commitments; }
     QList<QByteArray> assetCommitments() const override { return m_asset_commitments; }
     QList<QByteArray> valueCommitments() const override { return m_value_commitments; }
     QList<QByteArray> assetBlinders() const override { return m_asset_blinders; }

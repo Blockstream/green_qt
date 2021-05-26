@@ -21,6 +21,11 @@ QList<QByteArray> LedgerSignTransactionActivity::signatures() const
     return m_signatures;
 }
 
+QList<QByteArray> LedgerSignTransactionActivity::signerCommitments() const
+{
+    Q_UNREACHABLE();
+}
+
 DeviceCommand *LedgerSignTransactionActivity::exchange(CommandBatch* batch, const QByteArray& data)
 {
     auto command = new LedgerGenericCommand(m_device, data);

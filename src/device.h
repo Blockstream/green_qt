@@ -33,6 +33,7 @@ class SignTransactionActivity : public Activity
 public:
     SignTransactionActivity(QObject* parent) : Activity(parent) {}
     virtual QList<QByteArray> signatures() const = 0;
+    virtual QList<QByteArray> signerCommitments() const = 0;
 };
 
 class GetBlindingKeyActivity : public Activity
@@ -54,6 +55,7 @@ class SignLiquidTransactionActivity : public Activity
 public:
     SignLiquidTransactionActivity(QObject* parent) : Activity(parent) {}
     virtual QList<QByteArray> signatures() const = 0;
+    virtual QList<QByteArray> signerCommitments() const = 0;
     virtual QList<QByteArray> assetCommitments() const = 0;
     virtual QList<QByteArray> valueCommitments() const = 0;
     virtual QList<QByteArray> assetBlinders() const = 0;

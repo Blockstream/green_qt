@@ -12,6 +12,7 @@ public:
     LedgerSignLiquidTransactionActivity(const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs, LedgerDevice* device);
 
     virtual QList<QByteArray> signatures() const override { return m_sigs; }
+    virtual QList<QByteArray> signerCommitments() const override { Q_UNREACHABLE(); }
     virtual QList<QByteArray> assetCommitments() const override { return m_asset_commitments; }
     virtual QList<QByteArray> valueCommitments() const override { return m_value_commitments; }
     virtual QList<QByteArray> assetBlinders() const override { return m_abfs; }

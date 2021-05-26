@@ -17,6 +17,7 @@ class LedgerSignTransactionActivity : public SignTransactionActivity
 public:
     LedgerSignTransactionActivity(const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& transaction_outputs, const QJsonObject& signing_transactions, const QJsonArray& signing_address_types, LedgerDevice* device);
     QList<QByteArray> signatures() const override;
+    QList<QByteArray> signerCommitments() const override;
     void exec() override;
     Command *startUntrustedTransaction(uint32_t version, bool new_transaction, size_t index, const QList<Input> &used_inputs, const QByteArray &redeem_script, bool segwit);
     Command *untrustedHashSign(const QVector<uint32_t> &private_key_path, QString pin, uint32_t locktime);
