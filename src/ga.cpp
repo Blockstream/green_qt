@@ -17,10 +17,12 @@ QJsonObject convert_amount(GA_session* session, const QJsonObject& input)
     return value;
 }
 
-QStringList generate_mnemonic()
+QStringList generate_mnemonic(int size)
 {
+    Q_ASSERT(size == 12 || size == 24);
+
     char* mnemonic;
-    int err = GA_generate_mnemonic(&mnemonic);
+    int err = size == 12 ? GA_generate_mnemonic_12(&mnemonic) : GA_generate_mnemonic(&mnemonic);
     Q_ASSERT(err == GA_OK);
     auto result = QString(mnemonic).split(' ');
     GA_destroy_string(mnemonic);

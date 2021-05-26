@@ -69,8 +69,7 @@ GPane {
         property string description
         property var icons
         Layout.minimumHeight: 160
-        Layout.preferredWidth: 280
-        Layout.maximumWidth: 280
+        Layout.preferredWidth: 240
         padding: 24
         scale: self.hovered || self.activeFocus ? 1.05 : 1
         transformOrigin: Item.Center
@@ -107,14 +106,14 @@ GPane {
                     Layout.fillWidth: true
                     text: self.title
                     font.bold: true
-                    font.pixelSize: 24
+                    font.pixelSize: 20
                 }
             }
             Label {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 text: self.description
-                font.pixelSize: 14
+                font.pixelSize: 12
                 wrapMode: Label.WordWrap
                 horizontalAlignment: Label.AlignJustify
             }

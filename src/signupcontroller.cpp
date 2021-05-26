@@ -11,7 +11,7 @@
 SignupController::SignupController(QObject *parent)
     : QObject(parent)
 {
-    m_mnemonic = GA::generate_mnemonic();
+    setMnemonicSize(m_mnemonic_size);
 }
 
 void SignupController::setNetwork(Network *network)
@@ -121,4 +121,29 @@ void SignupController::setActive(bool active)
     m_active = active;
     emit activeChanged(m_active);
     update();
+}
+
+int SignupController::mnemonicSize()
+{
+    return m_mnemonic_size;
+}
+
+void SignupController::setMnemonicSize(int size)
+{
+    if (size==m_mnemonic_size && m_mnemonic.size()==m_mnemonic_size) return;
+
+    m_mnemonic_size = size;
+
+    switch (m_mnemonic_size) {
+        case TwentyFour:
+            m_mnemonic = GA::generate_mnemonic(TwentyFour);
+            break;
+        case Twelve:
+        default:
+            m_mnemonic = GA::generate_mnemonic(Twelve);
+            break;
+    }
+
+    emit mnemonicChanged(m_mnemonic);
+    emit mnemonicSizeChanged(size);
 }

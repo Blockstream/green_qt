@@ -7,7 +7,7 @@ RegisterUserHandler::RegisterUserHandler(Wallet* wallet, const QStringList& mnem
     : Handler(wallet)
     , m_mnemonic(mnemonic)
 {
-    Q_ASSERT(m_mnemonic.size() == 24 || m_mnemonic.size() == 27);
+    Q_ASSERT(m_mnemonic.size() == 12 || m_mnemonic.size() == 24 || m_mnemonic.size() == 27);
 }
 
 RegisterUserHandler::RegisterUserHandler(Wallet* wallet, const QJsonObject& device_details)

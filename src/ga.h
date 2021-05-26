@@ -9,7 +9,7 @@ struct GA_session;
 namespace GA {
 
 QJsonObject convert_amount(GA_session* session, const QJsonObject& input);
-QStringList generate_mnemonic();
+QStringList generate_mnemonic(int size);
 
 } // namespace GA
 

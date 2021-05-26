@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Use Anti-Exfil protocol with Jade
 
 ### Changed
+- Create wallets with 12 words mnemonics by default
 
 ### Fixed
 

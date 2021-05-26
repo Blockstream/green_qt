@@ -16,12 +16,12 @@ ColumnLayout {
     }
 
     function reset() {
-        const indexes = [...Array(24).keys()];
+        const indexes = [...Array(mnemonic.length).keys()];
         const result = [];
         while (result.length < count) {
             const remove = indexes.length * Math.random();
             const [index] = indexes.splice(remove, 1);
-            indexes.splice(Math.max(0, remove - 2), 4);
+            indexes.splice(Math.max(0, remove - 2), mnemonic.length === 24 ? 4 : 2);
             result.push(index);
         }
         repeater.model = result.sort((a, b) => a - b).map(index => ({ index, word: mnemonic[index] }));

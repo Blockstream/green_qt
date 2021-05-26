@@ -10,7 +10,7 @@ LoginHandler::LoginHandler(Wallet* wallet, const QStringList &mnemonic)
         { "password", "" }
     })
 {
-    Q_ASSERT(mnemonic.size() == 24);
+    Q_ASSERT(mnemonic.size() == 12 || mnemonic.size() == 24);
 }
 
 LoginHandler::LoginHandler(Wallet* wallet, const QStringList& mnemonic, const QString& password)
@@ -20,7 +20,7 @@ LoginHandler::LoginHandler(Wallet* wallet, const QStringList& mnemonic, const QS
         { "password", password }
     })
 {
-    Q_ASSERT((mnemonic.size() == 24 && password.isEmpty()) || (mnemonic.size() == 27 && !password.isEmpty()));
+    Q_ASSERT((mnemonic.size() == 12 && password.isEmpty()) || (mnemonic.size() == 24 && password.isEmpty()) || (mnemonic.size() == 27 && !password.isEmpty()));
 }
 
 LoginHandler::LoginHandler(Wallet* wallet, const QJsonObject& hw_device)

@@ -11,8 +11,8 @@ AbstractDialog {
     icon: controller.type === 'amp' ? 'qrc:/svg/amp.svg' : controller.network ? icons[controller.network.id] : null
     title: qsTrId('id_create_new_wallet')
     closePolicy: Popup.NoAutoClose
-    width: 1000
-    height: 500
+    width: 900
+    height: 600
 
     SignupController {
         id: controller
