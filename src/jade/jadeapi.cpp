@@ -594,28 +594,3 @@ int JadeAPI::signLiquidTx(const QString &network, const QByteArray &txn, const Q
     sendToJade(request);
     return id;
 }
-
-int JadeAPI::signLiquidTxStart(const QString &network, const QByteArray &txn, int num_inputs, const QVariantList &commitments, const QVariantList &change, const ResponseHandler &cb)
-{
-    const int id = registerResponseHandler(cb);
-    // Initiate signing process, and return the exposed id
-    const QCborMap params = { {"network", network},
-                              {"txn", txn},
-                              {"num_inputs", num_inputs},
-                              {"trusted_commitments", QCborArray::fromVariantList(commitments)},
-                              {"change", QCborArray::fromVariantList(change)} };
-    const QCborMap request = getRequest(id, "sign_liquid_tx", params);
-    sendToJade(request);
-    return id;
-
-}
-
-int JadeAPI::signLiquidTxInput(const QVariantMap& input, const ResponseHandler &cb)
-{
-    const int id = registerResponseHandler(cb);
-    const QCborMap params = QCborMap::fromVariantMap(input);
-    const QCborMap request = getRequest(id, "tx_input", params);
-    sendToJade(request);
-    return id;
-
-}
