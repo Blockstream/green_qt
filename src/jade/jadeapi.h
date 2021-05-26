@@ -77,7 +77,7 @@ public:
     int getXpub(const QString &network, const QVector<quint32> &path, const ResponseHandler &cb);
 
     // Sign a message
-    int signMessage(const QVector<quint32> &path, const QString &message, const ResponseHandler &cb);
+    int signMessage(const QVector<quint32> &path, const QString &message, const QByteArray& ae_host_commitment, const QByteArray& ae_host_entropy, const ResponseHandler &cb);
 
     // Sign a txn
     int signTx(const QString &network, const QByteArray &txn, const QVariantList &inputs, const QVariantList &change, const ResponseHandler &cb);

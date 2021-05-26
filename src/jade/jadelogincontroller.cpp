@@ -24,7 +24,8 @@ static QJsonObject device_details_from_device()
             { "name", "JADE" },
             { "supports_arbitrary_scripts", true },
             { "supports_low_r", true },
-            { "supports_liquid", 1 }
+            { "supports_liquid", 1 },
+            { "ae_protocol_support_level", 1 }
         })
     }};
 }

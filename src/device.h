@@ -25,6 +25,7 @@ class SignMessageActivity : public Activity
 public:
     SignMessageActivity(QObject* parent) : Activity(parent) {}
     virtual QByteArray signature() const = 0;
+    virtual QByteArray signerCommitment() const { return {}; }
 };
 
 class SignTransactionActivity : public Activity
@@ -95,6 +96,7 @@ public:
     virtual QString name() const = 0;
     virtual GetWalletPublicKeyActivity* getWalletPublicKey(Network* network, const QVector<uint32_t>& path) = 0;
     virtual SignMessageActivity* signMessage(const QString& message, const QVector<uint32_t>& path) = 0;
+    virtual SignMessageActivity* signMessage(const QString& message, const QVector<uint32_t>& path, const QByteArray& ae_host_commitment, const QByteArray& ae_host_entropy) = 0;
     virtual SignTransactionActivity* signTransaction(Network* network, const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& transaction_outputs, const QJsonObject& signing_transactions, const QJsonArray& signing_address_types) = 0;
     virtual GetBlindingKeyActivity* getBlindingKey(const QString& script) = 0;
     virtual GetBlindingNonceActivity* getBlindingNonce(const QByteArray& pubkey, const QByteArray& script) = 0;

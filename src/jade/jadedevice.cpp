@@ -548,29 +548,38 @@ class JadeSignMessageActivity : public SignMessageActivity
     JadeDevice* const m_device;
     const QString m_message;
     const QVector<uint32_t> m_path;
+    const QByteArray m_ae_host_commitment;
+    const QByteArray m_ae_host_entropy;
     QByteArray m_signature;
+    QByteArray m_signer_commitment;
 public:
-    JadeSignMessageActivity(const QString& message, const QVector<uint32_t>& path, JadeDevice* device)
+    JadeSignMessageActivity(const QString& message, const QVector<uint32_t>& path, const QByteArray& ae_host_commitment, const QByteArray& ae_host_entropy, JadeDevice* device)
         : SignMessageActivity(device)
         , m_device(device)
         , m_message(message)
         , m_path(path)
+        , m_ae_host_commitment(ae_host_commitment)
+        , m_ae_host_entropy(ae_host_entropy)
     {}
     QByteArray signature() const override
     {
         return m_signature;
     }
+    QByteArray signerCommitment() const override
+    {
+        return m_signer_commitment;
+    }
     virtual void exec() override
     {
-        m_device->m_jade->signMessage(m_path, m_message, [this](const QVariantMap& result) {
-            Q_ASSERT(result.contains("result") && result["result"].type() == QVariant::String);
-            auto sig = QByteArray::fromBase64(result["result"].toString().toLocal8Bit());
+        m_device->m_jade->signMessage(m_path, m_message, m_ae_host_commitment, m_ae_host_entropy, [this](const QVariantMap& result) {
+            auto sig = QByteArray::fromBase64(result["signature"].toString().toLocal8Bit());
             if (sig.size() == EC_SIGNATURE_RECOVERABLE_LEN) sig = sig.mid(1);
             Q_ASSERT(sig.size() == EC_SIGNATURE_LEN);
             QByteArray xxx(EC_SIGNATURE_DER_MAX_LEN, 0);
             size_t yyy;
             wally_ec_sig_to_der((const unsigned char*) sig.constData(), sig.size(), (unsigned char*) xxx.data(), EC_SIGNATURE_DER_MAX_LEN, &yyy);
             m_signature = QByteArray(xxx.constData(), yyy);
+            m_signer_commitment = result["signer_commitment"].toByteArray();
             finish();
         });
     }
@@ -949,7 +958,12 @@ GetWalletPublicKeyActivity *JadeDevice::getWalletPublicKey(Network *network, con
 
 SignMessageActivity *JadeDevice::signMessage(const QString &message, const QVector<uint32_t> &path)
 {
-    return new JadeSignMessageActivity(message, path, this);
+    Q_UNREACHABLE();
+}
+
+SignMessageActivity *JadeDevice::signMessage(const QString &message, const QVector<uint32_t> &path, const QByteArray& ae_host_commitment, const QByteArray& ae_host_entropy)
+{
+    return new JadeSignMessageActivity(message, path, ae_host_commitment, ae_host_entropy, this);
 }
 
 SignTransactionActivity *JadeDevice::signTransaction(Network* network, const QJsonObject &transaction, const QJsonArray &signing_inputs, const QJsonArray &transaction_outputs, const QJsonObject &signing_transactions, const QJsonArray &signing_address_types)

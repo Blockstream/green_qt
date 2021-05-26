@@ -55,6 +55,11 @@ SignMessageActivity* LedgerDevice::signMessage(const QString& message, const QVe
     return new LedgerSignMessageActivity(message, path, this);
 }
 
+SignMessageActivity* LedgerDevice::signMessage(const QString& message, const QVector<uint32_t>& path, const QByteArray& ae_host_commitment, const QByteArray& ae_host_entropy)
+{
+    Q_UNREACHABLE();
+}
+
 SignTransactionActivity* LedgerDevice::signTransaction(Network* network, const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& transaction_outputs, const QJsonObject& signing_transactions, const QJsonArray& signing_address_types)
 {
     Q_UNUSED(network);
