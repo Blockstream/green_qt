@@ -281,18 +281,6 @@ AbstractDialog {
                 mnemonic: controller.mnemonic
             }
         }
-//        AnimLoader {
-//            active: navigation.param.backup || false
-//            sourceComponent: MnemonicQuizView {
-//                readonly property Action backAction: Action {
-//                    text: qsTrId('id_back')
-//                    onTriggered: navigation.set({ backup: undefined })
-//                }
-//                mnemonic: controller.mnemonic
-//                onCompletedChanged: if (completed) navigation.set({ quiz: true })
-//                onFailedChanged: if (failed) navigation.set({ backup: undefined })
-//            }
-//        }
         AnimLoader {
             active: navigation.param.backup || false
             animated: self.opened

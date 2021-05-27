@@ -10,8 +10,8 @@ AbstractDialog {
     id: self
     icon: controller.type === 'amp' ? 'qrc:/svg/amp.svg' : controller.network ? icons[controller.network.id] : null
     title: qsTrId('id_restore_green_wallet')
-    width: 1000
-    height: 500
+    width: 900
+    height: 600
     closePolicy: Popup.NoAutoClose
 
     RestoreController {
@@ -21,7 +21,7 @@ AbstractDialog {
         mnemonic: (navigation.param.mnemonic || '').split(',')
         password: navigation.param.password || ''
         pin: navigation.param.pin || ''
-        active: mnemonic.length === 24 || (mnemonic.length === 27 && password !== '')
+        active: mnemonic.length === 12 || mnemonic.length === 24 || (mnemonic.length === 27 && password !== '')
     }
 
     Connections {

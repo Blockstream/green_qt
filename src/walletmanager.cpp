@@ -82,7 +82,6 @@ void WalletManager::insertWallet(Wallet* wallet)
 {
     Q_ASSERT(!wallet->m_id.isEmpty() && !wallet->m_pin_data.isEmpty());
     QFile file(GetDataFile("wallets", wallet->m_id));
-    Q_ASSERT(!file.exists());
     addWallet(wallet);
     wallet->save();
 }

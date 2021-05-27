@@ -7,11 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Use Anti-Exfil protocol with Jade
+- Allow restore of wallets using 12 words mnemonics
 
 ### Changed
 - Build GDK with rust enabled for singlesig support
 - Update GDK to 0.0.42.post1
 - Create wallets with 12 words mnemonics by default
+- Restore dialog now requires to choose between 12, 24 or 27 words mnemonics
 
 ### Fixed
 - Handle long messages in system message dialog

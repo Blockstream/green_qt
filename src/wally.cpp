@@ -78,7 +78,7 @@ QString MnemonicEditorController::updateWord(int index, const QString& text)
 
     if (!diff.isEmpty()) {
         auto words = diff.trimmed().split(QRegExp("\\s+"));
-        if (words.length() == 24 || words.length() == 27) {
+        if (words.length() == 12 || words.length() == 24 || words.length() == 27) {
             setPassword(words.length() == 27);
             bool changed = false;
             for (int i = 0; i < words.length(); ++i) {
@@ -109,7 +109,7 @@ void MnemonicEditorController::clear()
 QStringList MnemonicEditorController::mnemonic() const
 {
     QStringList result;
-    for (int i = 0; i < (m_password ? 27 : 24); ++i) {
+    for (int i = 0; i < m_mnemonic_size; ++i) {
         result.append(m_words.at(i)->text());
     }
     return result;
@@ -118,30 +118,35 @@ QStringList MnemonicEditorController::mnemonic() const
 float MnemonicEditorController::progress() const
 {
     int count = 0;
-    int total = m_password ? 27 : 24;
-    for (int i = 0; i < total; ++i) {
+    for (int i = 0; i < m_mnemonic_size; ++i) {
         if (m_words.at(i)->valid()) count ++;
     }
-    return static_cast<float>(count) / static_cast<float>(total);
+    return static_cast<float>(count) / static_cast<float>(m_mnemonic_size);
 }
 
 void MnemonicEditorController::update()
 {
     m_valid = true;
-    int total = m_password ? 27 : 24;
     bool enabled = true;
     int last_valid = 26;
     while (last_valid >= 0) {
         if (m_words.at(last_valid)->valid()) break;
         last_valid --;
     }
-    for (int i = 0; i < total; ++i) {
+    for (int i = 0; i < m_mnemonic_size; ++i) {
         auto word = m_words.at(i);
         if (!m_words.at(i)->valid()) m_valid = false;
         word->setEnabled(enabled);
         enabled = enabled && word->valid();
     }
     emit mnemonicChanged();
+}
+
+void MnemonicEditorController::setMnemonicSize(int size)
+{
+    if (size==m_mnemonic_size) return;
+    m_mnemonic_size = size;
+    emit mnemonicSizeChanged(size);
 }
 
 Word::Word(MnemonicEditorController* controller, int index)
@@ -192,33 +197,11 @@ void Word::setEnabled(bool enabled)
     if (m_enabled == enabled) return;
     m_enabled = enabled;
     emit enabledChanged(m_enabled);
-
 }
 
 QString Word::update(const QString& text)
 {
     return m_controller->update(m_index, text);
-}
-
-MnemonicQuizController::MnemonicQuizController( QObject *parent)
-    : QObject(parent)
-{
-    for (int i = 0; i < 24; ++i) {
-        m_words.append(new MnemonicQuizWord(i, this));
-    }
-}
-
-void MnemonicQuizController::setMnemonic(const QStringList &mnemonic)
-{
-    if (m_mnemonic == mnemonic) return;
-    m_mnemonic = mnemonic;
-    emit mnemonicChanged(m_mnemonic);
-    reset();
-}
-
-QQmlListProperty<MnemonicQuizWord> MnemonicQuizController::words()
-{
-    return { this, &m_words };
 }
 
 template <typename T>
@@ -239,54 +222,6 @@ QList<T> shuffle(QList<T> list)
         res.append(list.takeAt(QRandomGenerator::global()->bounded(list.size())));
     }
     return res;
-}
-
-void MnemonicQuizController::reset()
-{
-    if (m_mnemonic.size() != 24) {
-        for (int i = 0; i < 24; ++i) {
-            m_words.at(i)->setValue(QString());
-            m_words.at(i)->setOptions(QStringList());
-            m_words.at(i)->setCorrect(false);
-        }
-        return;
-    }
-
-    m_incorrects = shuffle(range(0, 24)).mid(0, 5);
-    qDebug() << m_incorrects;
-    for (int i = 0; i < 24; ++i) {
-        auto word = m_words.at(i);
-        auto value = m_mnemonic.at(i);
-        bool correct = !m_incorrects.contains(i);
-        word->setEnabled(true);
-        word->setCorrect(correct);
-        auto words = GetWordlist();
-        words.removeOne(m_mnemonic.at(i));
-        words = shuffle(words).mid(0, 3);
-        if (!correct) value = words.first();
-        words.append(m_mnemonic.at(i));
-        word->setOptions(shuffle(words));
-        word->setValue(value);
-    }
-}
-
-void MnemonicQuizController::change(MnemonicQuizWord *word, const QString &value)
-{
-    if (m_completed) return;
-    Q_ASSERT(m_attempts > 0);
-    word->setValue(value);
-    word->setCorrect(value == m_mnemonic.at(word->index()));
-    if (!word->isCorrect()) {
-        m_attempts--;
-        emit attemptsChanged(m_attempts);
-    } else {
-        m_completed = true;
-        for (int i = 0; m_completed && i < 24; ++i) {
-            m_completed = m_words.at(i)->isCorrect();
-        }
-        if (m_completed )
-        emit completedChanged(m_completed);
-    }
 }
 
 MnemonicQuizWord::MnemonicQuizWord(int index, QObject *parent)

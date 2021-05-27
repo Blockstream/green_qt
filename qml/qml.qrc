@@ -92,7 +92,6 @@
         <file>GButton.qml</file>
         <file>Spacer.qml</file>
         <file>EditableLabel.qml</file>
-        <file>MnemonicQuizView.qml</file>
         <file>SelectNetworkView.qml</file>
         <file>AnimLoader.qml</file>
         <file>AddressesListView.qml</file>

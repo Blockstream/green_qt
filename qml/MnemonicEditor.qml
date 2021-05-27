@@ -24,38 +24,34 @@ WizardPage {
 
     MnemonicEditorController {
         id: controller
+        mnemonicSize: mnemonic_size_combobox.size
     }
 
     contentItem: ColumnLayout {
         spacing: 16
         VSpacer {
         }
+        RowLayout {
+            Label {
+                text: "Please select the mnemonic length"
+            }
+            HSpacer {
+
+            }
+            ComboBox {
+                id: mnemonic_size_combobox
+                property var sizes: [12, 24, 27]
+                property real size: sizes[currentIndex]
+                model: ["12 words", "24 words", "27 words"]
+            }
+        }
         GridLayout {
             columns: 6
             Repeater {
-                id: repeater
-                model: 24
+                model: mnemonic_size_combobox.size
                 WordField {
                     Layout.fillWidth: true
                     word: controller.words[index]
-                }
-            }
-        }
-        RowLayout {
-            Layout.alignment: Qt.AlignHCenter
-            CheckBox {
-                checked: controller.password
-                text: qsTrId('id_password_protected')
-                onCheckedChanged: controller.password = checked
-            }
-            HSpacer {
-            }
-            Repeater {
-                id: checksum
-                model: 3
-                WordField {
-                    enabled: controller.password
-                    word: controller.words[index + 24]
                 }
             }
         }

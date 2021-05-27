@@ -100,6 +100,7 @@ void RestoreController::update()
             if (m_password.isEmpty()) return false;
         } else if (m_mnemonic.length() == 24) {
             if (!m_password.isEmpty()) return false;
+        } else if (m_mnemonic.length() == 12) {
         } else {
             return false;
         }
