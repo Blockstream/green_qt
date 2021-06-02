@@ -111,5 +111,6 @@
         <file>GPane.qml</file>
         <file>GSearchField.qml</file>
         <file>GHeader.qml</file>
+        <file>GFlickable.qml</file>
     </qresource>
 </RCC>

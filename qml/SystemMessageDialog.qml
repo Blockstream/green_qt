@@ -36,13 +36,24 @@ ControllerDialog {
                 }
             }
         ]
-        Label {
-            id: message_label
-            Layout.maximumWidth: 500
+        GFlickable {
+            id: flickable
+            clip: true
+            Layout.minimumHeight: 300
+            Layout.maximumHeight: 300
             Layout.fillWidth: true
-            wrapMode: Label.WrapAtWordBoundaryOrAnywhere
-            onLinkActivated: Qt.openUrlExternally(link)
-            textFormat: Label.MarkdownText
+            Layout.fillHeight: true
+            contentHeight: message_label.height
+
+            Label {
+                id: message_label
+                padding: 0
+                width: flickable.availableWidth
+                height: paintedHeight
+                wrapMode: Label.WrapAtWordBoundaryOrAnywhere
+                onLinkActivated: Qt.openUrlExternally(link)
+                textFormat: Label.MarkdownText
+            }
         }
         CheckBox {
             id: confirm_checkbox
@@ -51,7 +62,6 @@ ControllerDialog {
         }
     }
     Timer {
-        //id: recheck_timer
         running: true
         repeat: true
         interval: 5000
