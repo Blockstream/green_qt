@@ -17,6 +17,9 @@ fi
 
 cd ${GDK_PATH}/src
 
+# unset to disable building gdk java support
+unset JAVA_HOME
+
 if [ ! -f ${GDKVENV}/build.done ]; then
     virtualenv -p python3 ${GDKVENV} >> ${GDK_PATH}/build.log 2>&1
     source ${GDKVENV}/bin/activate >> ${GDK_PATH}/build.log 2>&1
