@@ -26,7 +26,7 @@ AbstractDialog {
                 session_connect_view.createObject(activities_row, { activity })
             }
         }
-        onUnauthorized: self.contentItem.ToolTip.show(qsTrId('id_unauthorized'), 3000);
+        onUnauthorized: self.contentItem.ToolTip.show(qsTrId('id_user_not_found_or_invalid'), 3000);
     }
 
     contentItem: GridLayout {
