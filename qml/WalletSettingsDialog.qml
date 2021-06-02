@@ -117,7 +117,7 @@ WalletDialog {
             B {
                 index: 2
                 text: 'Two Factor Authentication'
-                icon.source: 'qrc:/svg/security.svg'
+                icon.source: 'qrc:/svg/2fa_general.svg'
             }
             B {
                 index: 3
