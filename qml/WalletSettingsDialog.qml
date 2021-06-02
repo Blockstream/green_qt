@@ -7,16 +7,13 @@ import QtQuick.Layouts 1.12
 
 WalletDialog {
     id: self
-
     width: 900
     height: 600
-    //padding: constants.p2
     padding: 0
     background: Rectangle {
         radius: 16
         color: constants.c800
     }
-
     header: DialogHeader {
         Image {
             Layout.maximumWidth: 32
@@ -92,11 +89,6 @@ WalletDialog {
             }
         }
     }
-    component F: Flickable {
-        id: flickagle
-        contentWidth: width
-        ScrollIndicator.vertical: ScrollIndicator { }
-    }
     contentItem: RowLayout {
         id: layout
         spacing: constants.p3
@@ -137,38 +129,44 @@ WalletDialog {
             Layout.fillHeight: true
             clip: true
 
-            F {
+            GFlickable {
+                id: general_settings_flickable
                 contentHeight: general_view.height
+                interactive: false
                 WalletGeneralSettingsView {
                     id: general_view
-                    width: parent.width
+                    width: general_settings_flickable.availableWidth
                     wallet: self.wallet
                 }
             }
 
-            F {
+            GFlickable {
+                id: security_settings_flickable
                 contentHeight: security_view.height
+                interactive: false
                 WalletSecuritySettingsView {
                     id: security_view
-                    width: parent.width
+                    width: security_settings_flickable.availableWidth
                     wallet: self.wallet
                 }
             }
 
-            F {
+            GFlickable {
+                id: two_factor_settings_flickable
                 contentHeight: two_factor_auth_view.height
                 Wallet2faSettingsView {
                     id: two_factor_auth_view
-                    width: parent.width
+                    width: two_factor_settings_flickable.availableWidth
                     wallet: self.wallet
                 }
             }
 
-            F {
+            GFlickable {
+                id: recovery_settings_flickable
                 contentHeight: recovery_view.height
                 WalletRecoverySettingsView {
                     id: recovery_view
-                    width: parent.width
+                    width: recovery_settings_flickable.availableWidth
                     wallet: self.wallet
                 }
             }
