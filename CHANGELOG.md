@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Use Anti-Exfil protocol with Jade
 
 ### Changed
+- Build GDK with rust enabled for singlesig support
+- Update GDK to 0.0.42.post1
 - Create wallets with 12 words mnemonics by default
 
 ### Fixed
