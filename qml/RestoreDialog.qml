@@ -56,7 +56,7 @@ AbstractDialog {
     Connections {
         target: controller
         function onLoginError(error) {
-            navigation.set({ mnemonic: undefined })
+            navigation.set({ mnemonic: undefined, password: undefined })
             if (error.includes('id_login_failed')) {
                 self.footer.ToolTip.show(qsTrId('id_login_failed'), 2000);
             } else if (error.includes('bip39_mnemonic_to_seed')) {
