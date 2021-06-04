@@ -61,8 +61,12 @@ AbstractDialog {
                 self.footer.ToolTip.show(qsTrId('id_login_failed'), 2000);
             } else if (error.includes('bip39_mnemonic_to_seed')) {
                 self.footer.ToolTip.show(qsTrId('id_invalid_mnemonic'), 2000);
+            } else if (error.includes('bip39_mnemonic_to_bytes')) {
+                self.footer.ToolTip.show(qsTrId('id_invalid_mnemonic'), 2000);
             } else if (error.includes('reconnect required')) {
                 self.footer.ToolTip.show(qsTrId('id_unable_to_contact_the_green'), 2000);
+            } else if (error.includes('Invalid checksum')) {
+                self.footer.ToolTip.show(qsTrId('id_error_passphrases_do_not_match'), 2000);
             } else {
                 self.footer.ToolTip.show(error, 2000);
             }
