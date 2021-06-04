@@ -115,7 +115,6 @@ GPane {
                 text: self.description
                 font.pixelSize: 12
                 wrapMode: Label.WordWrap
-                horizontalAlignment: Label.AlignJustify
             }
         }
         onClicked: navigation.set({ network: self.network, type: self.type })
