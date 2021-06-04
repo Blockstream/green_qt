@@ -5,11 +5,12 @@ import QtQuick.Controls 2.13
 import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.12
 
-AbstractDialog {
+WalletDialog {
     required property Balance balance
 
     id: self
     title: qsTrId('id_asset_details')
+    wallet: balance.account.wallet
     contentItem: ScrollView {
         id: scroll_view
         clip: true

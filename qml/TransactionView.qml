@@ -6,10 +6,11 @@ import QtQuick.Controls 2.13
 import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.12
 
-AbstractDialog {
+WalletDialog {
     required property Transaction transaction
     property int confirmations: transactionConfirmations(transaction)
 
+    wallet: transaction.account.wallet
     title: qsTrId('id_transaction_details') + ' - ' + tx_direction(transaction.data.type)
 
     function tx_direction(type) {

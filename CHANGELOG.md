@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Restore dialog now requires to choose between 12, 24 or 27 words mnemonics
 
 ### Fixed
+- Fix crash after autologout with transaction or asset dialog open
 - Handle long messages in system message dialog
 
 ## [0.1.7] - 2021-05-21
