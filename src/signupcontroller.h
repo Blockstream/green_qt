@@ -60,7 +60,7 @@ private:
     Connectable<Session> m_session;
     QString m_pin;
     bool m_active{false};
-    int m_mnemonic_size{Twelve};
+    int m_mnemonic_size{TwentyFour};
     QString m_type{"default"};
 };
 

@@ -12,7 +12,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Build GDK with rust enabled for singlesig support
 - Update GDK to 0.0.42.post1
-- Create wallets with 12 words mnemonics by default
 - Restore dialog now requires to choose between 12, 24 or 27 words mnemonics
 - Improved wallet settings layout
 - Under settings, always show scrollbars if content is scrollable
