@@ -94,7 +94,7 @@ ColumnLayout {
             }
             GButton {
                 large: false
-                text: qsTrId('id_set_twofactor_threshold')
+                text: qsTrId('id_change')
                 onClicked: set_twofactor_threshold_dialog.createObject(stack_view).open()
                 Layout.alignment: Qt.AlignRight
             }
@@ -113,7 +113,7 @@ ColumnLayout {
             GButton {
                 Layout.alignment: Qt.AlignRight
                 large: false
-                text: qsTrId('id_set_2fa_expiry')
+                text: qsTrId('id_change')
                 onClicked: two_factor_auth_expiry_dialog.createObject(stack_view).open()
             }
         }

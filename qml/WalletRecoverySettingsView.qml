@@ -12,18 +12,18 @@ ColumnLayout {
     spacing: 16
 
     SettingsBox {
-        title: qsTrId('id_wallet_backup')
+        title: qsTrId('id_recovery_phrase')
         visible: !wallet.device
         contentItem: ColumnLayout {
             Label {
                 Layout.fillWidth: true
-                text: qsTrId('id_your_wallet_backup_is_made_of') + "\n" + qsTrId('id_blockstream_does_not_have')
+                text: qsTrId('id_the_recovery_phrase_can_be_used') + ' ' + qsTrId('id_blockstream_does_not_have')
                 wrapMode: Label.WordWrap
             }
             GButton {
                 Layout.alignment: Qt.AlignRight
                 large: false
-                text: qsTrId('id_show_my_wallet_backup')
+                text: qsTrId('id_show')
                 onClicked: mnemonic_dialog.createObject(stack_view).open()
             }
         }
@@ -39,7 +39,7 @@ ColumnLayout {
             }
             GButton {
                 Layout.alignment: Qt.AlignRight
-                text: qsTrId('id_copy_to_clipboard')
+                text: qsTrId('id_copy')
                 large: false
                 onClicked: {
                     const subaccounts = [];
