@@ -2,6 +2,7 @@
 #include "jadedevice.h"
 #include "network.h"
 #include "networkmanager.h"
+#include "semver.h"
 #include "session.h"
 #include "json.h"
 #include "jadeapi.h"
@@ -197,7 +198,7 @@ void JadeUpdateController::check()
         m_firmwares.clear();
         for (auto data : activity->firmwares()) {
             QVariantMap firmware = data.toMap();
-            const bool installed = SemVer(m_device->version()) == SemVer(firmware.value("version").toString()) && config.compare(firmware.value("config").toString(), Qt::CaseInsensitive) == 0;
+            const bool installed = SemVer::parse(m_device->version()) == SemVer::parse(firmware.value("version").toString()) && config.compare(firmware.value("config").toString(), Qt::CaseInsensitive) == 0;
             firmware.insert("installed", installed);
             m_firmwares.append(firmware);
         }

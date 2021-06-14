@@ -30,6 +30,7 @@ SOURCES += \
     $$PWD/renameaccountcontroller.cpp \
     $$PWD/resolver.cpp \
     $$PWD/restorecontroller.cpp \
+    $$PWD/semver.cpp \
     $$PWD/session.cpp \
     $$PWD/settings.cpp \
     $$PWD/signupcontroller.cpp \
@@ -77,6 +78,7 @@ HEADERS += \
     $$PWD/renameaccountcontroller.h \
     $$PWD/resolver.h \
     $$PWD/restorecontroller.h \
+    $$PWD/semver.h \
     $$PWD/session.h \
     $$PWD/settings.h \
     $$PWD/signupcontroller.h \

@@ -3,6 +3,7 @@
 
 #include "command.h"
 #include "device.h"
+#include "semver.h"
 
 QT_FORWARD_DECLARE_CLASS(LedgerDevice);
 
@@ -48,6 +49,7 @@ class GetFirmwareActivity : public Activity
 public:
     GetFirmwareActivity(LedgerDevice* device);
     void exec() override;
+    SemVer version() const { return {m_fw_major, m_fw_minor, m_fw_patch}; }
 };
 
 class GetAppActivity : public Activity
@@ -93,6 +95,7 @@ public:
     GetBlindingNonceActivity* getBlindingNonce(const QByteArray& pubkey, const QByteArray& script) override;
     SignLiquidTransactionActivity* signLiquidTransaction(const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs) override;
 
+    GetFirmwareActivity* getFirmware();
     GetAppActivity* getApp();
 
     QByteArray m_master_public_key;

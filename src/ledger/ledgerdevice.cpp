@@ -149,7 +149,7 @@ QString GetAppActivity::name() const
     return m_name;
 }
 
-QString GetAppActivity::version() const
+SemVer GetAppActivity::version() const
 {
     return m_version;
 }
@@ -176,12 +176,21 @@ void GetAppActivity::exec()
 
         m_name = QString::fromLocal8Bit(name, name_length);
         m_version = QString::fromLocal8Bit(version, version_length);
+        if (m_version.startsWith(".")) {
+            m_version = "1" + m_version.mid(0, m_version.size() - 1);
+        }
+
         finish();
     });
     connect(command, &Command::error, [this, command] {
         command->deleteLater();
         fail();
     });
+}
+
+GetFirmwareActivity *LedgerDevice::getFirmware()
+{
+    return new GetFirmwareActivity(this);
 }
 
 GetAppActivity* LedgerDevice::getApp()
