@@ -127,6 +127,7 @@ void JadeLoginController::update()
             m_wallet = nullptr;
             emit walletChanged(nullptr);
             emit invalidPin();
+            m_active = false;
             return;
         }
     });
