@@ -2,6 +2,7 @@
 #define GREEN_LEDGERDEVICECONTROLLER_H
 
 #include "connectable.h"
+#include "semver.h"
 
 #include <QtQml>
 #include <QObject>
@@ -24,6 +25,8 @@ class LedgerDeviceController : public QObject
     Q_PROPERTY(qreal progress READ progress NOTIFY progressChanged)
     Q_PROPERTY(QString status READ status NOTIFY statusChanged)
     Q_PROPERTY(Wallet* wallet READ wallet NOTIFY walletChanged)
+    Q_PROPERTY(QString firmwareVersion READ firmwareVersion NOTIFY firmwareChanged)
+    Q_PROPERTY(QString appVersion READ appVersion NOTIFY appChanged)
     QML_ELEMENT
 public:
     LedgerDeviceController(QObject* parent = nullptr);
@@ -36,7 +39,8 @@ public:
     qreal progress() const { return m_progress; }
     void setDevice(Device* device);
     Wallet* wallet() const { return m_wallet; }
-
+    QString firmwareVersion() const { return m_fw_version.toString(); }
+    QString appVersion() const { return m_app_version.toString(); }
 public slots:
     void login();
 private slots:
@@ -49,6 +53,8 @@ signals:
     void statusChanged(const QString& status);
     void progressChanged(qreal progress);
     void walletChanged(Wallet* wallet);
+    void firmwareChanged();
+    void appChanged();
 private:
     void setStatus(const QString& status);
 private:
@@ -59,6 +65,9 @@ private:
     QString m_status;
     Wallet* m_wallet{nullptr};
     qreal m_progress{0};
+    SemVer m_fw_version;
+    SemVer m_app_version;
+    QString m_app_name;
 };
 
 #endif // GREEN_LEDGERDEVICECONTROLLER_H

@@ -56,11 +56,11 @@ class GetAppActivity : public Activity
 {
     LedgerDevice* const m_device;
     QString m_name;
-    QString m_version;
+    SemVer m_version;
 public:
     GetAppActivity(LedgerDevice* device);
     QString name() const;
-    QString version() const;
+    SemVer version() const;
     void exec() override;
 };
 

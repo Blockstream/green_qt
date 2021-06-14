@@ -9,6 +9,7 @@
 #include "network.h"
 #include "networkmanager.h"
 #include "resolver.h"
+#include "semver.h"
 #include "session.h"
 #include "settings.h"
 #include "util.h"
@@ -62,24 +63,93 @@ void LedgerDeviceController::initialize()
     LedgerDevice* device = qobject_cast<LedgerDevice*>(m_device);
     if (!device) return;
 
-    auto activity = device->getApp();
-    connect(activity, &Activity::finished, this, [this, activity] {
-        activity->deleteLater();
-        m_network = network_from_app_name(activity->name());
-        emit networkChanged(m_network);
-        if (!m_network) {
-            // TODO: device can be in dashboard or in another applet
-            // either ignore or warn of that
-            // It is in dashboard if cmd->m_name.indexOf("OLOS") >= 0
+#if 1
+    if (m_app_version.isNull()) {
+        auto activity = device->getApp();
+        connect(activity, &Activity::finished, this, [this, activity, device] {
+            activity->deleteLater();
+            m_app_version = activity->version();
+            m_app_name = activity->name();
+            emit appChanged();
+
+            m_network = network_from_app_name(activity->name());
+            emit networkChanged(m_network);
+
+            if (!m_network) {
+                if (device->type() == Device::LedgerNanoS) {
+                    if (m_app_version < SemVer::parse("2.0.0")) {
+                        setStatus("outdated");
+                        return;
+                    }
+                } else if (device->type() == Device::LedgerNanoX) {
+                    if (m_app_version < SemVer::parse("1.3.0")) {
+                        setStatus("outdated");
+                        return;
+                    }
+                } else {
+                    setStatus("dashboard");
+                }
+            } else {
+                if (m_device->type() == Device::LedgerNanoS) {
+                    if (m_network->isLiquid()) {
+                        if (m_app_version < SemVer(1, 4, 8)) {
+                            setStatus("outdated");
+                            return;
+                        }
+                    } else {
+                        if (m_app_version < SemVer(1, 6, 0)) {
+                            setStatus("outdated");
+                            return;
+                        }
+                    }
+                } else if (m_device->type() == Device::LedgerNanoX) {
+                    if (m_app_version < SemVer(1, 6, 1)) {
+                        setStatus("outdated");
+                        return;
+                    }
+                }
+            }
+
+//            if (!m_network) {
+//                // TODO: device can be in dashboard or in another applet
+//                // either ignore or warn of that
+//                // It is in dashboard if cmd->m_name.indexOf("OLOS") >= 0
+////                QTimer::singleShot(1000, this, &LedgerDeviceController::initialize);
+//                return;
+//            }
+
             QTimer::singleShot(1000, this, &LedgerDeviceController::initialize);
-            return;
-        }
-    });
-    connect(activity, &Activity::failed, this, [this, activity] {
-        activity->deleteLater();
-        QTimer::singleShot(1000, this, &LedgerDeviceController::initialize);
-    });
-    activity->exec();
+        });
+        connect(activity, &Activity::failed, this, [this, activity] {
+            activity->deleteLater();
+            setStatus("error");
+            //QTimer::singleShot(1000, this, &LedgerDeviceController::initialize);
+        });
+        activity->exec();
+        return;
+    }
+#endif
+#if 0
+    if (m_fw_version.isNull()) {
+        auto activity = device->getFirmware();
+        connect(activity, &Activity::finished, this, [this, activity] {
+            activity->deleteLater();
+            m_fw_version = activity->version();
+            emit firmwareChanged();
+
+            /*
+
+            */
+        });
+        connect(activity, &Activity::failed, this, [this, activity] {
+            activity->deleteLater();
+            setStatus("error");
+            //QTimer::singleShot(1000, this, &LedgerDeviceController::initialize);
+        });
+        activity->exec();
+        return;
+    }
+#endif
 }
 
 void LedgerDeviceController::setStatus(const QString& status)

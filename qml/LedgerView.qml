@@ -8,7 +8,7 @@ MainPage {
     id: self
     readonly property bool busy: {
         for (let i = 0; i < devices_list_view.count; ++i) {
-            if (devices_list_view.itemAtIndex(i).busy) return true
+            if (devices_list_view.itemAt(i).busy) return true
         }
         return false
     }
@@ -111,7 +111,24 @@ MainPage {
                 Layout.fillHeight: true
             }
         }
-        ColumnLayout {
+        GFlickable {
+            id: devices_flickable
+            clip: true
+            contentHeight: devices_column_layout.height
+            ColumnLayout {
+                spacing: constants.s1
+                id: devices_column_layout
+                width: devices_flickable.availableWidth
+                Repeater {
+                    id: devices_list_view
+                    model: device_list_model
+                    delegate: DeviceDelegate {
+                        Layout.fillWidth: true
+                    }
+                }
+            }
+        }
+/*
             spacing: 16
             GListView {
                 id: devices_list_view
@@ -119,7 +136,7 @@ MainPage {
                 Layout.alignment: Qt.AlignCenter
                 implicitWidth: Math.min(contentWidth, parent.width)
                 height: 200
-                model: device_list_model
+
                 spacing: 16
                 orientation: ListView.Horizontal
                 currentIndex: {
@@ -131,128 +148,127 @@ MainPage {
                     }
                     return 0
                 }
-                delegate: ItemDelegate {
-                    required property LedgerDevice device
-                    readonly property string location: '/ledger/' + device.uuid
-                    required property int index
-                    padding: 32
-                    leftPadding: 32
-                    rightPadding: 32
-                    topPadding: 32
-                    bottomPadding: 32
-                    background: Rectangle {
-                        radius: 8
-                        color: ((navigation.location === '/ledger' && index === 0) || navigation.location === location) ? constants.c500 : hovered ? constants.c600 : constants.c700
-                    }
-                    onClicked: navigation.go(location)
-                    contentItem: ColumnLayout {
-                        spacing: 32
-                        Image {
-                            Layout.alignment: Qt.AlignCenter
-                            smooth: true
-                            mipmap: true
-                            fillMode: Image.PreserveAspectFit
-                            horizontalAlignment: Image.AlignHCenter
-                            verticalAlignment: Image.AlignVCenter
-                            sourceSize.height: 48
-                            source: switch(device.type) {
-                                case Device.LedgerNanoS: return 'qrc:/svg/ledger_nano_s.svg'
-                                case Device.LedgerNanoX: return 'qrc:/svg/ledger_nano_x.svg'
-                            }
-                        }
-                        GridLayout {
-                            columnSpacing: 16
-                            rowSpacing: 8
-                            columns: 2
-                            Label {
-                                text: qsTrId('id_model')
-                            }
-                            Label {
-                                text: switch(device.type) {
-                                    case Device.LedgerNanoS: return 'Nano S'
-                                    case Device.LedgerNanoX: return 'Nano X'
-                                }
-                            }
-                            Label {
-                                text: qsTrId('id_connection')
-                            }
-                            Label {
-                                text: 'USB'
-                            }
-                        }
-                    }
+                delegate: DeviceDelegate {
                 }
             }
-            StackLayout {
-                Layout.fillHeight: false
-                currentIndex: devices_list_view.currentIndex
-                Repeater {
-                    model: device_list_model
-                    View {
-                    }
-                }
-            }
-            VSpacer {}
         }
+*/
     }
-
-    component View: GPane {
+    component DeviceDelegate: ItemDelegate {
         id: self
         required property LedgerDevice device
+        readonly property string location: '/ledger/' + device.uuid
+        required property int index
         LedgerDeviceController {
             id: controller
             device: self.device
-            onActivityCreated: {
-                if (activity instanceof SessionTorCircuitActivity) {
-                    session_tor_cirtcuit_view.createObject(activities_row, { activity })
-                } else if (activity instanceof SessionConnectActivity) {
-                    session_connect_view.createObject(activities_row, { activity })
-                }
-            }
         }
+        padding: 32
+        leftPadding: 32
+        rightPadding: 32
+        topPadding: 32
+        bottomPadding: 32
         background: Rectangle {
-            color: constants.c600
             radius: 8
+            color: ((navigation.location === '/ledger' && index === 0) || navigation.location === location) ? constants.c700 : constants.c800
         }
-        contentItem: ColumnLayout {
-            Label {
-                visible: !controller.network
-                text: qsTrId('id_select_an_app_on_s').arg(controller.device.name)
-                horizontalAlignment: Label.AlignHCenter
+        onClicked: navigation.go(location)
+        contentItem: RowLayout {
+            spacing: 32
+            Image {
+                Layout.alignment: Qt.AlignCenter
+                smooth: true
+                mipmap: true
+                fillMode: Image.PreserveAspectFit
+                horizontalAlignment: Image.AlignHCenter
+                verticalAlignment: Image.AlignVCenter
+                sourceSize.height: 48
+                source: switch(device.type) {
+                    case Device.LedgerNanoS: return 'qrc:/svg/ledger_nano_s.svg'
+                    case Device.LedgerNanoX: return 'qrc:/svg/ledger_nano_x.svg'
+                }
+            }
+            GridLayout {
                 Layout.fillWidth: true
-            }
-            Label {
-                visible: controller.status === 'locked'
-                text: 'Unlock and select app'
-            }
-            GPane {
-                background: null
-                padding: 0
-                contentItem: RowLayout {
-                    id: activities_row
+                columnSpacing: 16
+                rowSpacing: 8
+                columns: 2
+                Label {
+                    text: qsTrId('id_model')
+                }
+                RowLayout {
+                    spacing: constants.s1
+                    Label {
+                        Layout.alignment: Qt.AlignBaseline
+                        text: switch(device.type) {
+                            case Device.LedgerNanoS: return 'Nano S'
+                            case Device.LedgerNanoX: return 'Nano X'
+                        }
+                    }
+                    Label {
+                        Layout.alignment: Qt.AlignBaseline
+                        visible: controller.status === 'outdated'
+                        text: 'Update required'
+                        background: Rectangle {
+                            color: constants.r500
+                            radius: 4
+                        }
+                        padding: 4
+                    }
+                    HSpacer {
+                    }
+                }
+                Label {
+                    text: qsTrId('id_connection')
+                }
+                Label {
+                    text: 'USB'
                 }
             }
-            RowLayout {
-                GButton {
-                    visible: controller.network && !controller.wallet
-                    icon.color: 'transparent'
-                    icon.source: controller.network ? icons[controller.network.id] : ''
-                    text: qsTrId('id_login')
-                    onClicked: controller.login()
+            ColumnLayout {
+                visible: controller.status !== 'outdated'
+                Label {
+                    visible: !controller.network
+                    text: qsTrId('id_select_an_app_on_s').arg(controller.device.name)
+                    horizontalAlignment: Label.AlignHCenter
+                    Layout.fillWidth: true
                 }
-                GButton {
-                    visible: controller.status === 'done'
-                    text: qsTrId('id_go_to_wallet')
-                    onClicked: navigation.go(`/${controller.network.id}/${controller.wallet.id}`)
+                Label {
+                    visible: controller.status === 'locked'
+                    text: 'Unlock and select app'
                 }
-                HSpacer {
+                GPane {
+                    background: null
+                    padding: 0
+                    contentItem: RowLayout {
+                        id: activities_row
+                    }
                 }
-            }
-            ProgressBar {
-                indeterminate: controller.indeterminate
-                value: controller.progress
-                visible: controller.status === 'login'
-                Behavior on value { NumberAnimation { duration: 300; easing.type: Easing.OutCubic } }
+                RowLayout {
+                    GButton {
+                        large: true
+                        visible: controller.network && !controller.wallet
+                        icon.color: 'transparent'
+                        icon.source: controller.network ? icons[controller.network.id] : ''
+                        text: qsTrId('id_login')
+                        onClicked: {
+                            login_dialog.createObject(window, { controller }).open()
+                            controller.login()
+                        }
+                    }
+                    GButton {
+                        visible: controller.status === 'done'
+                        text: qsTrId('id_go_to_wallet')
+                        onClicked: navigation.go(`/${controller.network.id}/${controller.wallet.id}`)
+                    }
+                    HSpacer {
+                    }
+                }
+                Component {
+                    id: login_dialog
+                    LedgerLoginDialog {
+                    }
+                }
             }
         }
     }
