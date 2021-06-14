@@ -12,6 +12,7 @@ Flickable {
         visible: self.childrenRect.height > self.height
         background: Rectangle {
             color: constants.c800
+            radius: width / 2
         }
         contentItem: Rectangle {
             implicitWidth: constants.p0
