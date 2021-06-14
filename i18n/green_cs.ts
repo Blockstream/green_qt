@@ -45,23 +45,23 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_2fa_dispute_in_progress</source>
-        <translation>2FA Dispute in Progress</translation>
+        <translation>Probíhá 2FA spor</translation>
     </message>
     <message>
         <source>id_2fa_expiry</source>
-        <translation>2FA Expiry</translation>
+        <translation>Vypršení platnosti 2FA</translation>
     </message>
     <message>
         <source>id_2fa_methods</source>
-        <translation>2FA Methods</translation>
+        <translation>Metody 2FA</translation>
     </message>
     <message>
         <source>id_2fa_reset_in_progress</source>
-        <translation>2FA Reset in Progress</translation>
+        <translation>Probíhá resetování 2FA</translation>
     </message>
     <message>
         <source>id_2fa_threshold</source>
-        <translation>2FA Threshold</translation>
+        <translation>Prahová hodnota 2FA</translation>
     </message>
     <message>
         <source>id_2of3_account</source>
@@ -169,7 +169,7 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_additional_networks</source>
-        <translation>Additional Networks</translation>
+        <translation>Další sítě</translation>
     </message>
     <message>
         <source>id_additional_security</source>
@@ -189,7 +189,7 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_addresses</source>
-        <translation>Addresses</translation>
+        <translation>Adresy</translation>
     </message>
     <message>
         <source>id_advanced</source>
@@ -205,11 +205,11 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_all_of_the_accounts_in_your</source>
-        <translation>All of the accounts in your wallet need to be empty before deleting it.</translation>
+        <translation>Před odstraněním musí být všechny účty v peněžence prázdné.</translation>
     </message>
     <message>
         <source>id_all_the_coins_received_or</source>
-        <translation>All the coins received or created as change</translation>
+        <translation>Všechny mince přijaté nebo vytvořené jako drobné</translation>
     </message>
     <message>
         <source>id_all_wallets</source>
@@ -229,23 +229,23 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_amp_account</source>
-        <translation>AMP Account</translation>
+        <translation>Účet AMP</translation>
     </message>
     <message>
         <source>id_amp_accounts_are_only_available</source>
-        <translation>AMP accounts are only available on Liquid wallets. You may be required to provide your account ID to issuers to receive an AMP Asset.</translation>
+        <translation>Účty AMP jsou k dispozici pouze v peněženkách Liquid. Může se od vás vyžadovat, abyste emitentům poskytli ID svého účtu, abyste získali aktivum AMP.</translation>
     </message>
     <message>
         <source>id_amp_id</source>
-        <translation>AMP ID</translation>
+        <translation>ID AMP</translation>
     </message>
     <message>
         <source>id_another_2fa_method_is_already</source>
-        <translation>Another 2FA method is already active. Confirm via 2FA that you authorize this change.</translation>
+        <translation>Další metoda 2FA je již aktivní. Prostřednictvím 2FA potvrďte, že tuto změnu autorizujete.</translation>
     </message>
     <message>
         <source>id_app_settings</source>
-        <translation>App Settings</translation>
+        <translation>Nastavení aplikace</translation>
     </message>
     <message>
         <source>id_are_you_sure_you_want_to_view</source>
@@ -253,7 +253,7 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_as_easy_as_snapping_a_photo</source>
-        <translation>As easy as snapping a photo with your phone. If you have an existing wallet, scan your recovery phrase from settings.</translation>
+        <translation>Stejně snadné jako fotografování pomocí telefonu. Pokud máte existující peněženku, naskenujte frázi pro obnovení z nastavení.</translation>
     </message>
     <message>
         <source>id_asset</source>
@@ -281,7 +281,7 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_authenticate_to_view_the</source>
-        <translation>Authenticate to view the recovery phrase</translation>
+        <translation>Ověřte se pro zobrazení fráze pro obnovení</translation>
     </message>
     <message>
         <source>id_authenticator_app</source>
@@ -309,7 +309,7 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_back_up_recovery_phrase</source>
-        <translation>Back Up Recovery Phrase</translation>
+        <translation>Zálohovat frázi pro obnovení</translation>
     </message>
     <message>
         <source>id_backup_the_recovery_mnemonic</source>
@@ -402,7 +402,7 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_cable</source>
-        <translation>Cable</translation>
+        <translation>Kabel</translation>
     </message>
     <message>
         <source>id_call</source>
@@ -438,7 +438,7 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_change</source>
-        <translation>VRÁCENÉ DROBNÉ</translation>
+        <translation>Change</translation>
     </message>
     <message>
         <source>id_change_address</source>
@@ -665,6 +665,10 @@ Simple and Secure</translation>
         <translation>Zkopírováno do schránky</translation>
     </message>
     <message>
+        <source>id_copy</source>
+        <translation>Copy</translation>
+    </message>
+    <message>
         <source>id_copy_address</source>
         <translation>Kopírovat adresu</translation>
     </message>
@@ -838,7 +842,7 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_disable_pin_access_for_this</source>
-        <translation>Disable PIN access for this wallet on all devices. Make sure you have a backup of your recovery phrase before disabling PIN access.</translation>
+        <translation>Disable PIN access for this wallet on all devices</translation>
     </message>
     <message>
         <source>id_disable_s_twofactor</source>
@@ -1507,7 +1511,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_label</source>
-        <translation>ŠTÍTEK</translation>
+        <translation>Label</translation>
     </message>
     <message>
         <source>id_language</source>
@@ -2319,7 +2323,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_request_amount</source>
-        <translation>ŽÁDOST O ČÁSTKU</translation>
+        <translation>Request Amount</translation>
     </message>
     <message>
         <source>id_request_failed</source>
@@ -2668,6 +2672,10 @@ Recovery Phrase</translation>
     <message>
         <source>id_share_unblinding_data</source>
         <translation>Sdílet nezaslepená data</translation>
+    </message>
+    <message>
+        <source>id_show</source>
+        <translation>Show</translation>
     </message>
     <message>
         <source>id_show_all_assets</source>

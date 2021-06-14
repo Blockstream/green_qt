@@ -438,7 +438,7 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_change</source>
-        <translation>改变</translation>
+        <translation>Change</translation>
     </message>
     <message>
         <source>id_change_address</source>
@@ -665,6 +665,10 @@ Simple and Secure</translation>
         <translation>已复制到剪贴板</translation>
     </message>
     <message>
+        <source>id_copy</source>
+        <translation>Copy</translation>
+    </message>
+    <message>
         <source>id_copy_address</source>
         <translation>复制地址</translation>
     </message>
@@ -838,7 +842,7 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_disable_pin_access_for_this</source>
-        <translation>Disable PIN access for this wallet on all devices. Make sure you have a backup of your recovery phrase before disabling PIN access.</translation>
+        <translation>Disable PIN access for this wallet on all devices</translation>
     </message>
     <message>
         <source>id_disable_s_twofactor</source>
@@ -1507,7 +1511,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_label</source>
-        <translation>标签</translation>
+        <translation>Label</translation>
     </message>
     <message>
         <source>id_language</source>
@@ -2319,7 +2323,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_request_amount</source>
-        <translation>请求金额</translation>
+        <translation>Request Amount</translation>
     </message>
     <message>
         <source>id_request_failed</source>
@@ -2668,6 +2672,10 @@ Recovery Phrase</translation>
     <message>
         <source>id_share_unblinding_data</source>
         <translation>Share unblinding data</translation>
+    </message>
+    <message>
+        <source>id_show</source>
+        <translation>Show</translation>
     </message>
     <message>
         <source>id_show_all_assets</source>
