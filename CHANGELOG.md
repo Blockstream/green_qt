@@ -6,8 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+
+### Changed
+
+### Fixed
+
+## [0.1.8] - 2021-06-15
+### Added
 - Use Anti-Exfil protocol with Jade
-- Allow restore of wallets using 12 words mnemonics
+- Enforce minimum Ledger firmware version
 
 ### Changed
 - Build GDK with rust enabled for singlesig support
@@ -19,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Fix crash after autologout with transaction or asset dialog open
 - Handle long messages in system message dialog
+- Fix login with Jade when user uses an incorrect PIN
 
 ## [0.1.7] - 2021-05-21
 ### Added
