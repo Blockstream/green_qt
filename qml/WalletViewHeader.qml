@@ -99,7 +99,7 @@ MainPageHeader {
                         text: accountName(self.currentAccount)
                         enabled: !self.wallet.watchOnly && self.currentAccount && !self.wallet.locked
                         onEdited: {
-                            if (self.currentAccount && !self.wallet.watchOnly) {
+                            if (enabled) {
                                 self.currentAccount.rename(text, activeFocus)
                             }
                         }

@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 ### Fixed
+- Fix crash loading a locked wallet
 
 ## [0.1.8] - 2021-06-15
 ### Added

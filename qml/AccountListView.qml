@@ -70,7 +70,7 @@ Page {
                         text: accountName(account)
                         enabled: !account.wallet.watchOnly && delegate.ListView.isCurrentItem && !delegate.account.wallet.locked
                         onEdited: {
-                            if (!account.wallet.watchOnly) {
+                            if (enabled) {
                                 account.rename(text, activeFocus)
                             }
                         }
