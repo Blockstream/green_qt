@@ -179,7 +179,7 @@ void Wallet::handleNotification(const QJsonObject &notification)
         QJsonObject transaction = data.toObject();
         for (auto pointer : transaction.value("subaccounts").toArray()) {
             auto account = m_accounts_by_pointer.value(pointer.toInt());
-            account->handleNotification(notification);
+            if (account) account->handleNotification(notification);
         }
         updateEmpty();
         return;
