@@ -38,6 +38,8 @@ WalletManager::WalletManager()
         if (parser_error.error != QJsonParseError::NoError) continue;
         if (!doc.isObject()) continue;
         auto data = doc.object();
+        auto network = NetworkManager::instance()->network(data.value("network").toString());
+        if (!network) continue;
         Wallet* wallet = new Wallet(this);
         wallet->m_id = QFileInfo(file).baseName();
         if (data.contains("pin_data")) {
@@ -48,7 +50,7 @@ WalletManager::WalletManager()
             wallet->m_hash_id = data.value("hash_id").toString();
         }
         wallet->m_name = data.value("name").toString();
-        wallet->m_network = NetworkManager::instance()->network(data.value("network").toString());
+        wallet->m_network = network;
         addWallet(wallet);
     }
 }
