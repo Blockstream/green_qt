@@ -7,14 +7,28 @@
 #include <QDesktopServices>
 #include <QUrl>
 
-Network::Network(const QJsonObject &data, QObject *parent)
+namespace {
+
+QString GetNetworkKey(const QJsonObject& data)
+{
+    const auto mainnet = data.value("mainnet").toBool();
+    const auto liquid = data.value("liquid").toBool();
+    if (mainnet && !liquid) return "bitcoin";
+    if (mainnet && liquid) return "liquid";
+    if (!mainnet && !liquid) return "testnet";
+    if (!mainnet && liquid) return "testnet-liquid";
+    Q_UNREACHABLE();
+}
+
+}
+
+Network::Network(const QJsonObject& data, QObject *parent)
     : QObject(parent)
     , m_data(data)
+    , m_id(data.value("network").toString())
+    , m_key(GetNetworkKey(data))
+    , m_name(data.value("name").toString())
 {
-    Q_ASSERT(data.contains("network"));
-    Q_ASSERT(data.contains("name"));
-    m_id = data.value("network").toString();
-    m_name = data.value("name").toString();
 }
 
 QString Network::explorerUrl() const
