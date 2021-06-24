@@ -76,7 +76,7 @@ MainPage {
                 }
                 Timer {
                     repeat: true
-                    running: true
+                    running: self.visible
                     interval: 3000
                     onTriggered: flipable.flipped = !flipable.flipped
                 }
