@@ -64,7 +64,8 @@ Button {
             visible: !Settings.collapseSideBar
             currentIndex: self.count === 0 ? 0 : 1
             BusyIndicator {
-                opacity: self.busy ? 1 : 0
+                visible: self.busy
+                running: self.busy
                 padding: 0
                 Layout.minimumWidth: 16
                 Layout.maximumWidth: 16
