@@ -113,5 +113,6 @@
         <file>GFlickable.qml</file>
         <file>Wallet2faSettingsView.qml</file>
         <file>LedgerLoginDialog.qml</file>
+        <file>SelectServerTypeView.qml</file>
     </qresource>
 </RCC>

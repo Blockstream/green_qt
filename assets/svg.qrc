@@ -33,5 +33,6 @@
         <file>svg/export.svg</file>
         <file>svg/x.svg</file>
         <file>svg/2fa_general.svg</file>
+        <file>svg/singleSig.svg</file>
     </qresource>
 </RCC>
