@@ -225,7 +225,7 @@ MainPage {
             contentItem: RowLayout {
                 spacing: 8
                 Image {
-                    source: icons[self.network.id]
+                    source: icons[self.network.key]
                     sourceSize.width: 16
                     sourceSize.height: 16
                 }
@@ -263,7 +263,7 @@ MainPage {
             GButton {
                 visible: controller.wallet && controller.wallet.authentication === Wallet.Authenticated
                 text: qsTrId('id_go_to_wallet')
-                onClicked: navigation.go(`/${self.network.id}/${controller.wallet.id}`)
+                onClicked: navigation.go(`/${self.network.key}/${controller.wallet.id}`)
             }
         }
     }

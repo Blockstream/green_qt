@@ -7,7 +7,7 @@ import QtQuick.Layouts 1.12
 AbstractDialog {
     required property Network network
     id: self
-    icon: icons[self.network.id]
+    icon: icons[self.network.key]
     title: qsTrId('id_watchonly_login')
     onClosed: destroy()
     WatchOnlyLoginController {
@@ -16,7 +16,7 @@ AbstractDialog {
         username: username_field.text
         password: password_field.text
         onWalletChanged: {
-            navigation.go(`/${wallet.network.id}/${wallet.id}`)
+            navigation.go(`/${wallet.network.key}/${wallet.id}`)
             self.close()
         }
         onActivityCreated: {

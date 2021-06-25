@@ -82,12 +82,12 @@ MainPage {
                                 Layout.alignment: Qt.AlignLeft
                                 Layout.maximumWidth: parent.width
                                 spacing: 12
-                                icon.source: icons[wallet.network.id]
+                                icon.source: icons[wallet.network.key]
                                 icon.color: 'transparent'
                                 font.capitalization: Font.MixedCase
                                 flat: true
                                 text: wallet.name
-                                onClicked: navigation.go(`/${wallet.network.id}/${wallet.id}`)
+                                onClicked: navigation.go(`/${wallet.network.key}/${wallet.id}`)
                             }
                         }
                     }

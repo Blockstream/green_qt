@@ -18,7 +18,7 @@ ColumnLayout {
 
     SettingsBox {
         title: qsTrId('id_security')
-        visible: !wallet.device
+        visible: !wallet.device && !self.wallet.network.electrum
         contentItem: RowLayout {
             Label {
                 Layout.fillWidth: true

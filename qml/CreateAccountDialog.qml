@@ -106,26 +106,49 @@ ControllerDialog {
             }
             DescriptiveRadioButton {
                 readonly property string type: '2of2'
+                visible: !controller.wallet.network.electrum
                 text: qsTrId('id_standard_account')
                 description: qsTrId('id_standard_accounts_allow_you_to')
                 checked: true
                 enabled: true
                 ButtonGroup.group: type_button_group
                 Layout.fillWidth: true
+                Layout.maximumWidth: 400
             }
             DescriptiveRadioButton {
                 readonly property string type: '2of2_no_recovery'
+                visible: !controller.wallet.network.electrum
                 text: qsTrId('id_amp_account')
                 description: qsTrId('id_amp_accounts_are_only_available')
                 enabled: wallet.network.liquid
                 ButtonGroup.group: type_button_group
+                Layout.maximumWidth: 400
                 Layout.fillWidth: true
             }
             DescriptiveRadioButton {
                 readonly property string type: '2of3'
+                visible: !controller.wallet.network.electrum
                 text: qsTrId('id_2of3_account')
                 description: qsTrId('id_a_2of3_account_requires_two_out')
                 enabled: !wallet.network.liquid
+                ButtonGroup.group: type_button_group
+                Layout.fillWidth: true
+                Layout.maximumWidth: 400
+            }
+            DescriptiveRadioButton {
+                readonly property string type: 'p2sh-p2wpkh'
+                visible: controller.wallet.network.electrum
+                text: qsTrId('Legacy Account')
+                description: qsTrId('BIP49 accounts allow you to segregate funds, and to receive on wrapped segwit addresses, thus ensuring the highest backwards compatibility when receiving funds from anyone on the network.')
+                ButtonGroup.group: type_button_group
+                Layout.fillWidth: true
+                Layout.maximumWidth: 400
+            }
+            DescriptiveRadioButton {
+                readonly property string type: 'p2wpkh'
+                visible: controller.wallet.network.electrum
+                text: qsTrId('SegWit Account')
+                description: qsTrId('BIP84 accounts allow you to segregate your funds, and to receive on bech32 native segwit addresses. This account type ensures cheaper transactions when sending funds, but not all services support bech32 addresses yet.')
                 ButtonGroup.group: type_button_group
                 Layout.fillWidth: true
                 Layout.maximumWidth: 400

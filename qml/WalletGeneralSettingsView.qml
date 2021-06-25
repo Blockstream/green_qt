@@ -53,6 +53,7 @@ ColumnLayout {
                 valueRole: 'value'
                 currentIndex: units.indexOf(wallet.settings.unit)
                 onCurrentValueChanged: {
+                    console.log('xxxx', currentValue, wallet.settings.unit)
                     if (currentValue === '') return
                     if (currentValue === wallet.settings.unit) return
                     controller.changeSettings({ unit: currentValue })
@@ -117,7 +118,7 @@ ColumnLayout {
 
     Loader {
         Layout.fillWidth: true
-        active: !wallet.network.liquid
+        active: !wallet.network.liquid && !wallet.network.electrum
         visible: active
         sourceComponent: SettingsBox {
             enabled: !wallet.locked
@@ -149,27 +150,32 @@ ColumnLayout {
         }
     }
 
-    SettingsBox {
-        title: qsTrId('id_notifications')
-        enabled: !wallet.locked && !!wallet.config.email && wallet.config.email.confirmed
-        contentItem: RowLayout {
-            Label {
-                Layout.fillWidth: true
-                Layout.minimumWidth: contentWidth
-                text: qsTrId('id_receive_email_notifications_for')
-            }
-            Switch {
-                Binding on checked {
-                    value: wallet.settings.notifications ? (wallet.settings.notifications.email_outgoing && wallet.settings.notifications.email_outgoing) : false
+    Loader {
+        Layout.fillWidth: true
+        active: !wallet.network.electrum
+        visible: active
+        sourceComponent: SettingsBox {
+            title: qsTrId('id_notifications')
+            enabled: !wallet.locked && !!wallet.config.email && wallet.config.email.confirmed
+            contentItem: RowLayout {
+                Label {
+                    Layout.fillWidth: true
+                    Layout.minimumWidth: contentWidth
+                    text: qsTrId('id_receive_email_notifications_for')
                 }
-                onClicked: {
-                    checked = wallet.settings.notifications.email_outgoing;
-                    controller.changeSettings({
-                        notifications: {
-                            email_incoming: !checked,
-                            email_outgoing: !checked
-                        }
-                    });
+                Switch {
+                    Binding on checked {
+                        value: wallet.settings.notifications ? (wallet.settings.notifications.email_outgoing && wallet.settings.notifications.email_outgoing) : false
+                    }
+                    onClicked: {
+                        checked = wallet.settings.notifications.email_outgoing;
+                        controller.changeSettings({
+                            notifications: {
+                                email_incoming: !checked,
+                                email_outgoing: !checked
+                            }
+                        });
+                    }
                 }
             }
         }

@@ -116,7 +116,7 @@ bool SendController::hasFiatRate() const
 {
     if (!wallet()) return false;
     if (!wallet()->network()->isLiquid()) return true;
-    if (m_balance && m_balance->asset()->data().value("name").toString() == "btc") return true;
+    if (m_balance && m_balance->asset()->isLBTC()) return true;
     return false;
 }
 
@@ -202,9 +202,10 @@ void SendController::create()
     }
 
     QJsonObject address{{ "address", m_address }};
-    auto asset = m_balance ? m_balance->asset() : nullptr;
-    if (wallet()->network()->isLiquid() && asset->data().value("name").toString() != "btc") {
-        address.insert("asset_tag", asset->id());
+    if (wallet()->network()->isLiquid()) {
+        Q_ASSERT(m_balance);
+        auto asset = m_balance->asset();
+        address.insert("asset_id", asset->id());
         address.insert("satoshi", asset->parseAmount(m_effective_amount));
     } else {
         const qint64 amount = wallet()->amountToSats(m_effective_amount);
@@ -217,10 +218,15 @@ void SendController::create()
         { "addressees", QJsonArray{address}}
     };
 
+    qDebug() << data;
     m_create_handler = new CreateTransactionHandler(wallet(), data);
     connect(m_create_handler, &Handler::done, this, [this, count] {
         if (m_count == count) {
             m_transaction = m_create_handler->result().value("result").toObject();
+            qDebug() << "=========";
+            qDebug() << "=========";
+            qDebug() << m_transaction;
+
             emit transactionChanged();
             setValid(true);
             m_count = 0;
@@ -240,6 +246,9 @@ void SendController::signAndSend()
         // sign->deleteLater();
         auto details = sign->result().value("result").toObject();
         details["memo"] = m_memo;
+        qDebug() << "*********";
+        qDebug() << "*********";
+        qDebug() << details;
         auto send = new SendTransactionHandler(wallet(), details);
         connect(send, &Handler::done, this, [this, send] {
             setSignedTransaction(m_account->getOrCreateTransaction(send->result().value("result").toObject()));

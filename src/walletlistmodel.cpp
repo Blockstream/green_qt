@@ -55,7 +55,7 @@ void WalletListModel::update()
 bool WalletListModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
 {
     auto wallet = m_source_model.index(source_row, 0, source_parent).data(Qt::UserRole).value<Wallet*>();
-    if (!m_network.isEmpty() && wallet->network()->id() != m_network) return false;
+    if (!m_network.isEmpty() && wallet->network()->key() != m_network) return false;
     if (m_just_authenticated && !wallet->isAuthenticated()) return false;
     if (m_just_ready && !wallet->ready()) return false;
     if (m_without_device && wallet->m_device) return false;

@@ -13,7 +13,7 @@ AbstractDialog {
     property bool active: self.wallet.activities.length > 0 || (self.wallet.session && self.wallet.session.activities.length > 0)
 
     id: self
-    icon: icons[controller.network.id]
+    icon: icons[controller.network.key]
     focus: true
     title: controller.device.name
     width: 350
@@ -60,7 +60,7 @@ AbstractDialog {
         }
         function onStatusChanged(status) {
             if (status === 'done') {
-                navigation.go(`/${controller.network.id}/${controller.wallet.id}`)
+                navigation.go(`/${controller.network.key}/${controller.wallet.id}`)
                 self.reject()
             } else if (status === 'locked') {
                 self.reject()

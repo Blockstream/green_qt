@@ -1,5 +1,6 @@
 #include "handlers/connecthandler.h"
 #include "json.h"
+#include "network.h"
 #include "session.h"
 #include "settings.h"
 
@@ -90,7 +91,7 @@ void Session::update()
         }, this);
         Q_ASSERT(rc == GA_OK);
 
-        const bool use_tor = Settings::instance()->useTor();
+        const bool use_tor = !m_network->isElectrum() && Settings::instance()->useTor();
         if (use_tor) emit activityCreated(new SessionTorCircuitActivity(this));
         emit activityCreated(new SessionConnectActivity(this));
         m_connect_handler = new ConnectHandler(this, m_network, Settings::instance()->proxy(), use_tor);

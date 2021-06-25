@@ -99,7 +99,7 @@ MainPageHeader {
                         text: accountName(self.currentAccount)
                         enabled: !self.wallet.watchOnly && self.currentAccount && !self.wallet.locked
                         onEdited: {
-                            if (enabled) {
+                            if (enabled && self.currentAccount) {
                                 self.currentAccount.rename(text, activeFocus)
                             }
                         }
@@ -203,7 +203,7 @@ MainPageHeader {
                     ButtonGroup.group: button_group
                     icon.source: "qrc:/svg/addresses.svg"
                     ToolTip.text: qsTrId('id_addresses')
-                    enabled: !self.wallet.watchOnly
+                    enabled: !self.wallet.watchOnly && !self.wallet.network.electrum
                     onClicked: checked = true
                 }
 
@@ -211,7 +211,7 @@ MainPageHeader {
                     ButtonGroup.group: button_group
                     icon.source: "qrc:/svg/coins.svg"
                     ToolTip.text: qsTrId('Coins')
-                    enabled: !self.wallet.watchOnly
+                    enabled: !self.wallet.watchOnly && !self.wallet.network.electrum
                     onClicked: checked = true
                 }
 
@@ -266,7 +266,7 @@ MainPageHeader {
 
     property Action disconnectAction: Action {
         onTriggered: {
-            navigation.go(`/${wallet.network.id}`)
+            navigation.go(`/${wallet.network.key}`)
             self.wallet.disconnect()
         }
     }

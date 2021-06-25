@@ -105,11 +105,13 @@ WalletDialog {
                 index: 1
                 text: 'Security'
                 icon.source: 'qrc:/svg/security.svg'
+                enabled: !self.wallet.device
             }
             B {
                 index: 2
                 text: 'Two Factor Authentication'
                 icon.source: 'qrc:/svg/2fa_general.svg'
+                enabled: !self.wallet.network.electrum
             }
             B {
                 index: 3
@@ -151,13 +153,16 @@ WalletDialog {
                 }
             }
 
-            GFlickable {
-                id: two_factor_settings_flickable
-                contentHeight: two_factor_auth_view.height
-                Wallet2faSettingsView {
-                    id: two_factor_auth_view
-                    width: two_factor_settings_flickable.availableWidth
-                    wallet: self.wallet
+            Loader {
+                active: !self.wallet.network.electrum
+                sourceComponent: GFlickable {
+                    id: two_factor_settings_flickable
+                    contentHeight: two_factor_auth_view.height
+                    Wallet2faSettingsView {
+                        id: two_factor_auth_view
+                        width: two_factor_settings_flickable.availableWidth
+                        wallet: self.wallet
+                    }
                 }
             }
 

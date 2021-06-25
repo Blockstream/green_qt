@@ -10,6 +10,7 @@ Item {
     id: self
     required property string title
     required property string network
+    readonly property string location: `/${network}`
     readonly property WalletView currentWalletView: {
         for (let i = 0; i < wallet_view_repeater.count; ++i) {
             const view = wallet_view_repeater.itemAt(i)
@@ -68,7 +69,7 @@ Item {
         Component {
             id: watch_only_login_dialog
             WatchOnlyLoginDialog {
-                network: NetworkManager.network(self.network)
+                network: NetworkManager.networkWithServerType(self.network, 'green')
             }
         }
 
@@ -192,7 +193,7 @@ Item {
                                         }
                                     }
                                 }
-                                onClicked: navigation.go(`/${network}/${wallet.id}`)
+                                onClicked: navigation.go(`/${wallet.network.key}/${wallet.id}`)
                             }
                         }
                         ScrollIndicator.horizontal: ScrollIndicator {}
@@ -282,6 +283,6 @@ Item {
         width: wallet_list_view.width
         highlighted: ListView.isCurrentItem
         property bool valid: wallet.loginAttemptsRemaining > 0
-        onClicked: navigation.go(`/${self.network}/${wallet.id}`)
+        onClicked: navigation.go(`/${wallet.network.key}/${wallet.id}`)
     }
 }

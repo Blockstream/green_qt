@@ -1,4 +1,5 @@
 #include "asset.h"
+#include "network.h"
 #include "wallet.h"
 
 #include <QDesktopServices>
@@ -11,6 +12,11 @@ Asset::Asset(const QString& id, Wallet* wallet)
     , m_wallet(wallet)
     , m_id(id)
 {
+}
+
+bool Asset::isLBTC() const
+{
+    return m_data.value("asset_id").toString() == m_wallet->network()->policyAsset();
 }
 
 void Asset::setIcon(const QString &icon)
@@ -37,7 +43,7 @@ void Asset::setData(const QJsonObject &data)
 
 qint64 Asset::parseAmount(const QString& amount) const
 {
-    if (m_data.value("name").toString() == "btc") {
+    if (isLBTC()) {
         return wallet()->amountToSats(amount);
     }
 
@@ -53,7 +59,7 @@ qint64 Asset::parseAmount(const QString& amount) const
 
 QString Asset::formatAmount(qint64 amount, bool include_ticker, const QString& unit) const
 {
-    if (m_data.value("name").toString() == "btc") {
+    if (isLBTC()) {
         return wallet()->formatAmount(amount, include_ticker, unit);
     }
 

@@ -71,7 +71,7 @@ ScrollView {
     Component {
         id: liquid_address
         ColumnLayout {
-            property Asset address_asset: wallet.getOrCreateAsset(modelData.asset_tag || 'btc')
+            property Asset address_asset: wallet.getOrCreateAsset(modelData.asset_id)
             spacing: 8
             SectionLabel { text: qsTrId('id_address') }
             Label { text: modelData.address }

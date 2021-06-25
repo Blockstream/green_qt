@@ -83,6 +83,7 @@ void Handler::step()
 
     for (;;) {
         const auto result = getResult(m_auth_handler);
+        qDebug() << Q_FUNC_INFO << result;
         const auto status = result.value("status").toString();
 
         if (status == "call") {

@@ -34,7 +34,7 @@ ApplicationWindow {
 
     property var icons: ({
         'liquid': 'qrc:/svg/liquid.svg',
-        'mainnet': 'qrc:/svg/btc.svg',
+        'bitcoin': 'qrc:/svg/btc.svg',
         'testnet': 'qrc:/svg/btc_testnet.svg'
     })
 
@@ -96,13 +96,13 @@ ApplicationWindow {
     component WalletButton: SideButton {
         id: self
         required property Wallet wallet
-        location: `/${wallet.network.id}/${wallet.id}`
+        location: `/${wallet.network.key}/${wallet.id}`
         text: wallet.device ? wallet.device.name : walletName(wallet)
         busy: wallet.activities.length > 0
         icon.width: 16
         icon.height: 16
         leftPadding: 32
-        icon.source: icons[wallet.network.id]
+        icon.source: icons[wallet.network.key]
         visible: !Settings.collapseSideBar
         DeviceImage {
             Layout.minimumWidth: paintedWidth
@@ -202,15 +202,15 @@ ApplicationWindow {
                             }
                         }
                         SideButton {
-                            icon.source: icons.mainnet
-                            location: mainnet_view.location
+                            icon.source: icons.bitcoin
+                            location: '/bitcoin'
                             text: 'Bitcoin'
                         }
                         Repeater {
                             id: mainnet_repeater
                             model: WalletListModel {
                                 justReady: true
-                                network: 'mainnet'
+                                network: 'bitcoin'
                             }
                             WalletButton {
                             }
@@ -285,18 +285,15 @@ ApplicationWindow {
             }
             NetworkView {
                 id: mainnet_view
-                readonly property string location: '/mainnet'
-                network: 'mainnet'
+                network: 'bitcoin'
                 title: qsTrId('id_bitcoin_wallets')
             }
             NetworkView {
-                readonly property string location: '/liquid'
                 network: 'liquid'
                 title: qsTrId('id_liquid_wallets')
             }
             NetworkView {
                 enabled: Settings.enableTestnet
-                readonly property string location: '/testnet'
                 network: 'testnet'
                 title: qsTrId('id_testnet_wallets')
             }
@@ -380,7 +377,7 @@ ApplicationWindow {
                     Image {
                         sourceSize.width: 16
                         sourceSize.height: 16
-                        source: icons[wallet.network.id]
+                        source: icons[wallet.network.key]
                     }
                     Label {
                         text: wallet.network.name

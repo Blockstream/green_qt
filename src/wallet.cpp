@@ -537,12 +537,12 @@ qint64 Wallet::parseAmount(const QString& amount, const QString& unit) const
 Asset* Wallet::getOrCreateAsset(const QString& id)
 {
     Q_ASSERT(m_network && m_network->isLiquid());
-    QString key = id == "btc" ? "6f0279e9ed041c3d710a9f57d0c02928416460c4b722ae3457a11eec381c526d" : id;
+    Q_ASSERT(id != "btc");
 
-    Asset* asset = m_assets.value(key);
+    Asset* asset = m_assets.value(id);
     if (!asset) {
-        asset = new Asset(key, this);
-        m_assets.insert(key, asset);
+        asset = new Asset(id, this);
+        m_assets.insert(id, asset);
     }
     return asset;
 }
@@ -594,18 +594,19 @@ void Wallet::setSession()
 
 void Wallet::updateHashId(const QString& hash_id)
 {
-    qDebug() << Q_FUNC_INFO << "new:" << hash_id << "current:" << m_hash_id;
-    if (m_hash_id.isEmpty()) {
-        m_hash_id = hash_id;
-        save();
-    } else {
-        Q_ASSERT(m_hash_id == hash_id);
+    if (m_hash_id == hash_id) return;
+    if (!m_hash_id.isEmpty() && m_hash_id != hash_id) {
+        qWarning() << Q_FUNC_INFO << "new:" << hash_id << "current:" << m_hash_id;
     }
+    m_hash_id = hash_id;
+    save();
 }
 
 void Wallet::setSettings(const QJsonObject& settings)
 {
     if (m_settings == settings) return;
+    qDebug() << Q_FUNC_INFO << settings;
+
     m_settings = settings;
     emit settingsChanged();
 

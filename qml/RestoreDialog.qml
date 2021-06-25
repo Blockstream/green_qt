@@ -8,7 +8,10 @@ import QtQml.Models 2.0
 
 AbstractDialog {
     id: self
-    icon: controller.type === 'amp' ? 'qrc:/svg/amp.svg' : controller.network ? icons[controller.network.id] : null
+    icon: {
+        if (controller.type === 'amp') return 'qrc:/svg/amp.svg'
+        if (controller.network) return icons[controller.network.key]
+    }
     title: qsTrId('id_restore_green_wallet')
     width: 900
     height: 600
@@ -16,7 +19,11 @@ AbstractDialog {
 
     RestoreController {
         id: controller
-        network: NetworkManager.network(navigation.param.network || '')
+        network: {
+            const network = navigation.param.network || ''
+            const server_type = network === 'testnet' ? (navigation.param.server_type || '') : 'green'
+            return NetworkManager.networkWithServerType(network, server_type)
+        }
         type: navigation.param.type
         mnemonic: (navigation.param.mnemonic || '').split(',')
         password: navigation.param.password || ''
@@ -36,7 +43,7 @@ AbstractDialog {
                 const view = accept_view.createObject(activities_row, { activity })
                 activity.finished.connect(() => {
                     view.destroy()
-                    navigation.go(`/${controller.network.id}/${controller.wallet.id}`)
+                    navigation.go(`/${controller.network.key}/${controller.wallet.id}`)
                 })
             }
         }
@@ -74,6 +81,9 @@ AbstractDialog {
     }
 
     footer: DialogFooter {
+        TorUnavailableWithElectrumWarning {
+            network: controller.network
+        }
         GButton {
             action: stack_layout.currentItem ? stack_layout.currentItem.backAction || null : null
             large: true
@@ -125,6 +135,17 @@ AbstractDialog {
             readonly property bool active: true
             showAMP: true
             view: 'restore'
+        }
+        AnimLoader {
+            active: (navigation.param.network || '') !== ''
+            animated: self.opened
+            sourceComponent: SelectServerTypeView {
+                readonly property Action backAction: Action {
+                    enabled: navigation.path === '/restore'
+                    text: qsTrId('id_back')
+                    onTriggered: navigation.set({ network: undefined, type: undefined })
+                }
+            }
         }
         AnimLoader {
             active: controller.network

@@ -22,9 +22,9 @@ GPane {
             contentItem: RowLayout {
                 spacing: 24
                 Card {
-                    network: 'mainnet'
+                    network: 'bitcoin'
                     type: 'default'
-                    icons: [window.icons['mainnet']]
+                    icons: [window.icons['bitcoin']]
                     title: 'Bitcoin Wallet'
                     description: qsTrId('id_bitcoin_is_the_worlds_leading')
                 }

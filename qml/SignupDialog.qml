@@ -8,7 +8,11 @@ import QtQml.Models 2.0
 
 AbstractDialog {
     id: self
-    icon: controller.type === 'amp' ? 'qrc:/svg/amp.svg' : controller.network ? icons[controller.network.id] : null
+    icon: {
+        if (controller.type === 'amp') return 'qrc:/svg/amp.svg'
+        if (controller.network) return icons[controller.network.key]
+        return null
+    }
     title: qsTrId('id_create_new_wallet')
     closePolicy: Popup.NoAutoClose
     width: 900
@@ -16,7 +20,11 @@ AbstractDialog {
 
     SignupController {
         id: controller
-        network: NetworkManager.network(navigation.param.network || '')
+        network: {
+            const network = navigation.param.network || ''
+            const server_type = network === 'testnet' ? (navigation.param.server_type || '') : 'green'
+            return NetworkManager.networkWithServerType(network, server_type)
+        }
         type: navigation.param.type || ''
         pin: navigation.param.pin || ''
         active: navigation.param.verify || false
@@ -25,7 +33,7 @@ AbstractDialog {
     Connections {
         target: controller.wallet
         function onReadyChanged(ready) {
-            if (ready) navigation.go(`/${controller.network.id}/${controller.wallet.id}`)
+            if (ready) navigation.go(`/${controller.network.key}/${controller.wallet.id}`)
         }
     }
 
@@ -41,6 +49,9 @@ AbstractDialog {
     }
 
     footer: DialogFooter {
+        TorUnavailableWithElectrumWarning {
+            network: controller.network
+        }
         GButton {
             action: stack_layout.currentItem ? stack_layout.currentItem.backAction || null : null
             large: true
@@ -95,13 +106,25 @@ AbstractDialog {
         }
 
         AnimLoader {
-            active: controller.network && controller.network.id !== 'liquid'
+            active: (navigation.param.network || '') !== '' && !controller.network
+            animated: self.opened
+            sourceComponent: SelectServerTypeView {
+                readonly property Action backAction: Action {
+                    enabled: navigation.path === '/signup'
+                    text: qsTrId('id_back')
+                    onTriggered: navigation.set({ network: undefined, type: undefined })
+                }
+            }
+        }
+
+        AnimLoader {
+            active: controller.network && !controller.network.liquid
             animated: self.opened
             sourceComponent: WelcomePage {
                 readonly property Action backAction: Action {
                     enabled: navigation.path === '/signup'
                     text: qsTrId('id_back')
-                    onTriggered: navigation.set({ network: undefined, type: undefined })
+                    onTriggered: navigation.set({ network: undefined, server_type: undefined })
                 }
                 readonly property list<Action> actions: [
                     Action {
@@ -113,12 +136,12 @@ AbstractDialog {
             }
         }
         AnimLoader {
-            active: controller.network && controller.network.id === 'liquid' && controller.type === 'default'
+            active: controller.network && controller.network.liquid && controller.type === 'default'
             animated: self.opened
             sourceComponent: GPane {
                 readonly property Action backAction: Action {
                     text: qsTrId('id_back')
-                    onTriggered: navigation.set({ network: undefined, type: undefined })
+                    onTriggered: navigation.set({ network: undefined, server_type: undefined })
                 }
                 readonly property list<Action> actions: [
                     Action {
@@ -189,12 +212,12 @@ AbstractDialog {
             }
         }
         AnimLoader {
-            active: controller.network && controller.network.id === 'liquid' && controller.type === 'amp'
+            active: controller.network && controller.network.key === 'liquid' && controller.type === 'amp'
             animated: self.opened
             sourceComponent: GPane {
                 readonly property Action backAction: Action {
                     text: qsTrId('id_back')
-                    onTriggered: navigation.set({ network: undefined, type: undefined })
+                    onTriggered: navigation.set({ server_type: undefined })
                 }
                 readonly property list<Action> actions: [
                     Action {

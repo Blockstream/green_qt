@@ -249,7 +249,7 @@ MainPage {
                         large: true
                         visible: controller.network && !controller.wallet
                         icon.color: 'transparent'
-                        icon.source: controller.network ? icons[controller.network.id] : ''
+                        icon.source: controller.network ? icons[controller.network.key] : ''
                         text: qsTrId('id_login')
                         onClicked: {
                             login_dialog.createObject(window, { controller }).open()
@@ -259,7 +259,7 @@ MainPage {
                     GButton {
                         visible: controller.status === 'done'
                         text: qsTrId('id_go_to_wallet')
-                        onClicked: navigation.go(`/${controller.network.id}/${controller.wallet.id}`)
+                        onClicked: navigation.go(`/${controller.network.key}/${controller.wallet.id}`)
                     }
                     HSpacer {
                     }

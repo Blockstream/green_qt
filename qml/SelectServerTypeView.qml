@@ -18,6 +18,7 @@ GPane {
             description: qsTrId('Your funds are secured by a single key held on your device. Simpler to set up and operate than multisig. If in doubt, select this option.')
         }
         Card {
+            enabled: (navigation.param.type || '') !== 'amp'
             server_type: 'green'
             icons: ['qrc:/svg/home.svg']
             title: 'Multisig Shield'
@@ -63,6 +64,7 @@ GPane {
                 Repeater {
                     model: self.icons
                     delegate: Image {
+                        opacity: self.enabled ? 1 : 0.5
                         source: modelData
                         Layout.preferredWidth: 32
                         Layout.preferredHeight: 32

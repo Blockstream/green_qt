@@ -12,11 +12,11 @@ AbstractDialog {
     property bool active: self.wallet.activities.length > 0 || (self.wallet.session && self.wallet.session.activities.length > 0)
 
     id: self
-    icon: icons[self.wallet.network.id]
+    icon: icons[self.wallet.network.key]
     focus: true
     title: self.wallet.name
     width: 350
-    height: 500
+    height: 550
 
     closePolicy: self.active ? Dialog.NoAutoClose : AbstractDialog.closePolicy
     enableRejectButton: !self.active
@@ -117,6 +117,10 @@ AbstractDialog {
                     }
                     Behavior on opacity { NumberAnimation {} }
                 }
+                TorUnavailableWithElectrumWarning {
+                    Layout.alignment: Qt.AlignHCenter
+                    network: controller.network ? controller.network : null
+                }
             }
         }
     }
@@ -166,7 +170,7 @@ AbstractDialog {
             Layout.minimumWidth: 200
             visible: self.wallet.loginAttemptsRemaining === 0 || !self.wallet.hasPinData
             text: 'Restore Wallet'
-            onClicked: navigation.go('/restore', { network: self.wallet.network.id })
+            onClicked: navigation.go('/restore', { network: self.wallet.network.key })
         }
     }
 }

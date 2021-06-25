@@ -28,7 +28,16 @@ Network::Network(const QJsonObject& data, QObject *parent)
     , m_id(data.value("network").toString())
     , m_key(GetNetworkKey(data))
     , m_name(data.value("name").toString())
+    , m_liquid(data.value("liquid").toBool())
+    , m_electrum(data.value("server_type").toString() == "electrum")
+    , m_policy_asset(data.value("policy_asset").toString())
 {
+}
+
+QString Network::policyAsset() const
+{
+    Q_ASSERT(m_liquid);
+    return m_policy_asset;
 }
 
 QString Network::explorerUrl() const
@@ -37,11 +46,6 @@ QString Network::explorerUrl() const
     auto tx_explorer_url = m_data.value("tx_explorer_url").toString();
     Q_ASSERT(tx_explorer_url.endsWith("/"));
     return tx_explorer_url;
-}
-
-bool Network::isLiquid() const
-{
-    return m_data.value("liquid").toBool();
 }
 
 void Network::openTransactionInExplorer(const QString& hash)

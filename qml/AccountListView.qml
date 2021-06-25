@@ -58,7 +58,6 @@ Page {
             width: ListView.view.width
             contentItem: ColumnLayout {
                 spacing: 4
-
                 RowLayout {
                     EditableLabel {
                         id: name_field
@@ -93,6 +92,40 @@ Page {
                     }
 
                     HSpacer {
+                    }
+
+                    Label {
+                        text: qsTrId('Legacy')
+                        visible: account.json.type === 'p2sh-p2wpkh'
+                        font.pixelSize: 10
+                        font.capitalization: Font.AllUppercase
+                        leftPadding: 8
+                        rightPadding: 8
+                        topPadding: 4
+                        bottomPadding: 4
+                        opacity: 1
+                        color: 'white'
+                        background: Rectangle {
+                            color: constants.c400
+                            radius: 4
+                        }
+                    }
+
+                    Label {
+                        text: qsTrId('Segwit')
+                        visible: account.json.type === 'p2wpkh'
+                        font.pixelSize: 10
+                        font.capitalization: Font.AllUppercase
+                        leftPadding: 8
+                        rightPadding: 8
+                        topPadding: 4
+                        bottomPadding: 4
+                        opacity: 1
+                        color: 'white'
+                        background: Rectangle {
+                            color: constants.c400
+                            radius: 4
+                        }
                     }
 
                     Label {

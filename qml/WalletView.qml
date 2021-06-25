@@ -8,7 +8,7 @@ import QtQml 2.15
 
 MainPage {
     required property Wallet wallet
-    readonly property string location: `/${wallet.network.id}/${wallet.id}`
+    readonly property string location: `/${wallet.network.key}/${wallet.id}`
     readonly property Account currentAccount: accounts_list.currentAccount
     readonly property bool fiatRateAvailable: formatFiat(0, false) !== 'n/a'
 
@@ -47,7 +47,13 @@ MainPage {
     DialogLoader {
         id: settings_dialog
         property string location: `${self.location}/settings`
-        property bool enabled: !self.wallet.watchOnly && !!self.wallet.settings.pricing && !!self.wallet.config.limits
+        property bool enabled: {
+            if (self.wallet.watchOnly) return false
+            if (self.wallet.network.electrum) {
+                return true
+            }
+            return !!self.wallet.settings.pricing && !!self.wallet.config.limits
+        }
         active: settings_dialog.enabled && navigation.location === settings_dialog.location
         dialog: WalletSettingsDialog {
             parent: window.Overlay.overlay

@@ -27,10 +27,14 @@ ItemDelegate {
         const memo = tx.memo.trim().replace(/\n/g, ' ')
         const separator = memo === '' ? '' : ' - '
         if (tx.type === 'incoming') {
-            for (const o of tx.outputs) {
-                if (o.is_relevant) {
-                    return qsTrId('id_received') + separator + memo
+            if (tx.outputs.length > 0) {
+                for (const o of tx.outputs) {
+                    if (o.is_relevant) {
+                        return qsTrId('id_received') + separator + memo
+                    }
                 }
+            } else {
+                return qsTrId('id_received') + separator + memo
             }
         }
         if (tx.type === 'outgoing') {

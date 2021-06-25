@@ -25,7 +25,7 @@ static QJsonObject device_details_from_device()
             { "supports_arbitrary_scripts", true },
             { "supports_low_r", true },
             { "supports_liquid", 1 },
-            { "ae_protocol_support_level", 1 }
+            { "supports_ae_protocol", 1 }
         })
     }};
 }

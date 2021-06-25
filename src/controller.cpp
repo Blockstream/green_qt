@@ -60,6 +60,7 @@ class ChangeSettingsHandler : public Handler
     QJsonObject m_data;
     void call(GA_session* session, GA_auth_handler** auth_handler) override {
         auto data = Json::fromObject(m_data);
+        qDebug() << Q_FUNC_INFO << m_data;
         int err = GA_change_settings(session, data.get(), auth_handler);
         Q_ASSERT(err == GA_OK);
     }
@@ -209,15 +210,18 @@ void Controller::changeSettings(const QJsonObject& data)
     for (auto i = data.begin(); i != data.end(); ++i) {
         if (settings.value(i.key()) != i.value()) {
             updated = false;
-            break;
+            settings[i.key()] = i.value();
         }
     }
     if (updated) return;
 
     // Check if wallet is undergoing reset
-    if (m_wallet->isLocked()) return;
+    if (m_wallet->isLocked()) {
+        qDebug() << Q_FUNC_INFO << "wallet is locked";
+        return;
+    }
 
-    auto handler = new ChangeSettingsHandler(data, m_wallet);
+    auto handler = new ChangeSettingsHandler(settings, m_wallet);
     connect(handler, &Handler::done, this, [this, handler] {
         m_wallet->updateSettings();
         handler->deleteLater();
