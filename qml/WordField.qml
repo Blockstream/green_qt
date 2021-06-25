@@ -17,7 +17,7 @@ TextField {
     }
     onTextChanged: {
         if (activeFocus) {
-            text = word.update(text);
+            text = word.update(text.trim());
             if (word.suggestions.length === 1 && text === word.suggestions[0]) {
                 nextItemInFocusChain().forceActiveFocus()
             }
