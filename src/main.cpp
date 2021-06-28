@@ -8,6 +8,7 @@
 #include <QStyleHints>
 #include <QTranslator>
 #include <QWindow>
+#include <QStandardPaths>
 
 #include "clipboard.h"
 #include "devicemanager.h"
@@ -15,6 +16,7 @@
 #include "settings.h"
 #include "walletmanager.h"
 #include "kdsingleapplication.h"
+#include "util.h"
 
 #include <QZXing.h>
 
@@ -38,6 +40,26 @@ Q_IMPORT_PLUGIN(QCocoaIntegrationPlugin);
 
 extern QString g_data_location;
 
+void gMessageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
+{
+    Q_UNUSED(context)
+
+    static QHash<QtMsgType, QString> msgLevelHash({{QtDebugMsg, "debug"}, {QtInfoMsg, "info"}, {QtWarningMsg, "warning"}, {QtCriticalMsg, "critical"}, {QtFatalMsg, "fatal"}});
+    QByteArray localMsg = msg.toLocal8Bit();
+    QString timestamp = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzzzzz");
+    QString logLevelName = msgLevelHash[type];
+
+    fprintf(stdout, "[%s] [%s] %s\n", timestamp.toLocal8Bit().constData(), logLevelName.toLocal8Bit().constData(), localMsg.constData());
+    fflush(stdout);
+
+    if (type == QtFatalMsg) abort();
+}
+
+void initLog()
+{
+    qInstallMessageHandler(gMessageHandler);
+}
+
 int main(int argc, char *argv[])
 {
     QCoreApplication::setApplicationName("Green");
@@ -48,6 +70,10 @@ int main(int argc, char *argv[])
     QCoreApplication::setApplicationVersion(QT_STRINGIFY(VERSION));
 
     g_data_location = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+
+    // init log is called after setting the app name and version so that we have this information available for log location
+    initLog();
+
 #ifdef Q_OS_LINUX
     QCoreApplication::setApplicationName("Blockstream Green");
 #endif
@@ -100,6 +126,16 @@ int main(int argc, char *argv[])
 #ifndef Q_OS_MACOS
     QApplication::setWindowIcon(QIcon(":/icons/green.png"));
 #endif
+
+    qInfo() << qPrintable(QCoreApplication::organizationName()) << qPrintable(QCoreApplication::applicationName()) << qPrintable(QCoreApplication::applicationVersion());
+    qInfo() << "System Information:";
+    qInfo() << "  Build ABI:" << qPrintable(QSysInfo::buildAbi());
+    qInfo() << "  Build CPU Architecture:" << qPrintable(QSysInfo::buildCpuArchitecture());
+    qInfo() << "  Current CPU Architecture:" << qPrintable(QSysInfo::currentCpuArchitecture());
+    qInfo() << "  Kernel Type:" << qPrintable(QSysInfo::kernelType());
+    qInfo() << "  Kernel Version:" << qPrintable(QSysInfo::kernelVersion());
+    qInfo() << "  Product Type:" << qPrintable(QSysInfo::productType());
+    qInfo() << "  Product Version:" << qPrintable(QSysInfo::productVersion());
 
     // Reset the locale that is used for number formatting, see:
     // https://doc.qt.io/qt-5/qcoreapplication.html#locale-settings

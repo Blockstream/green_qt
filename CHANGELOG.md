@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Save console output to file. File is kept under AppConfigLocation inside respective version directory
 
 ### Changed
 
