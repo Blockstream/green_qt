@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Save application log to file
 - Add support for Jade 1.1
 - By default add segwit account in new singlesig wallets
 
@@ -46,7 +47,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.7] - 2021-05-21
 ### Added
 - Support searching for transaction hash or memo
-- Allow to rename main account 
+- Allow to rename main account
 - Persist wallet hash id
 - Add copyable label with transaction hash to the end of send flow
 

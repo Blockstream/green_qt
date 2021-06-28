@@ -7,6 +7,7 @@
 #include <QStandardPaths>
 #include <QStyleHints>
 #include <QTranslator>
+#include <QUrl>
 #include <QWindow>
 #include <QStandardPaths>
 
@@ -40,6 +41,7 @@ Q_IMPORT_PLUGIN(QCocoaIntegrationPlugin);
 
 extern QString g_data_location;
 QCommandLineParser g_args;
+static QFile g_log_file;
 
 void gMessageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
@@ -53,11 +55,16 @@ void gMessageHandler(QtMsgType type, const QMessageLogContext &context, const QS
     fprintf(stdout, "[%s] [%s] %s\n", timestamp.toLocal8Bit().constData(), logLevelName.toLocal8Bit().constData(), localMsg.constData());
     fflush(stdout);
 
+    QTextStream ts(&g_log_file);
+    ts << QString("[%1] [%2] %3").arg(timestamp, logLevelName, msg) << Qt::endl;
+
     if (type == QtFatalMsg) abort();
 }
 
 void initLog()
 {
+    g_log_file.setFileName(GetDataFile("logs", QString("%1.%2.%3.txt").arg(VERSION_MAJOR).arg(VERSION_MINOR).arg(VERSION_PATCH)));
+    g_log_file.open(QIODevice::WriteOnly | QIODevice::Append);
     qInstallMessageHandler(gMessageHandler);
 }
 
@@ -138,6 +145,9 @@ int main(int argc, char *argv[])
     qInfo() << "  Product Type:" << qPrintable(QSysInfo::productType());
     qInfo() << "  Product Version:" << qPrintable(QSysInfo::productVersion());
 
+    qInfo() << "Data directory" << g_data_location;
+    qInfo() << "Log file:" << g_log_file.fileName();
+
     // Reset the locale that is used for number formatting, see:
     // https://doc.qt.io/qt-5/qcoreapplication.html#locale-settings
     setlocale(LC_NUMERIC, "C");
@@ -195,6 +205,8 @@ int main(int argc, char *argv[])
         languages.insert(name, QVariantMap({{ "name", name }, { "language", language }}));
     }
     engine.rootContext()->setContextProperty("languages", languages.values());
+    engine.rootContext()->setContextProperty("data_dir", QUrl::fromLocalFile(g_data_location));
+    engine.rootContext()->setContextProperty("log_file", QUrl::fromLocalFile(g_log_file.fileName()));
 
     if (Settings::instance()->language().isEmpty()) {
         Settings::instance()->setLanguage(language);

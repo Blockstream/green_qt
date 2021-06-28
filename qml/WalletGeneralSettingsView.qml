@@ -53,7 +53,6 @@ ColumnLayout {
                 valueRole: 'value'
                 currentIndex: units.indexOf(wallet.settings.unit)
                 onCurrentValueChanged: {
-                    console.log('xxxx', currentValue, wallet.settings.unit)
                     if (currentValue === '') return
                     if (currentValue === wallet.settings.unit) return
                     controller.changeSettings({ unit: currentValue })

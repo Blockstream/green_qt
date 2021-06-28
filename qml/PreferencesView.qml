@@ -154,6 +154,39 @@ MainPage {
                     }
                 }
             }
+            MainPageSection {
+                Layout.fillWidth: true
+                title: qsTrId('id_support')
+                contentItem: GridLayout {
+                    columns: 4
+                    columnSpacing: 16
+                    rowSpacing: 8
+                    Label {
+                        text: qsTrId('id_data_dir')
+                    }
+                    Label {
+                        text: data_dir
+                    }
+                    GButton {
+                        text: 'id_open'
+                        onClicked: Qt.openUrlExternally(data_dir)
+                    }
+                    HSpacer {
+                    }
+                    Label {
+                        text: qsTrId('id_log_file')
+                    }
+                    Label {
+                        text: log_file
+                    }
+                    GButton {
+                        text: 'id_open'
+                        onClicked: Qt.openUrlExternally(log_file)
+                    }
+                    HSpacer {
+                    }
+                }
+            }
         }
     }
 }
