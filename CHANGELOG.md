@@ -6,12 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
-- Save console output to file. File is kept under AppConfigLocation inside respective version directory
+- Support for creating and restoring Singlesig wallets on Bitcoin Testnet
+- Notifications for application updates
 
 ### Changed
 
 ### Fixed
-- Fix crash loading a locked wallet
+- Fixed crash when loading wallet with 2FA reset
+- Reduce high CPU/GPU usage when application is idle
+- Update GDK to 0.0.43
 
 ## [0.1.8] - 2021-06-15
 ### Added
