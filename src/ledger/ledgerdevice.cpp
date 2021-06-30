@@ -174,11 +174,10 @@ void GetAppActivity::exec()
         stream >> version_length;
         stream.readRawData(version, version_length);
 
-        m_name = QString::fromLocal8Bit(name, name_length);
-        auto version_string = QString::fromLocal8Bit(version, version_length);
-        if (version_string.startsWith(".")) {
-            version_string = "1" + version_string.mid(0, version_string.size() - 1);
-        }
+        m_name = QString::fromLocal8Bit(name, name[name_length - 1] ? name_length : name_length - 1);
+        auto version_string = QString::fromLocal8Bit(version, version[version_length - 1] ? version_length : version_length - 1);
+        if (version_string.startsWith('.')) version_string.prepend('1');
+
         m_version = SemVer::parse(version_string);
 
         finish();
