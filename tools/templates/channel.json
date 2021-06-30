@@ -1,0 +1,17 @@
+{
+    "version" : "VERSION_STRING",
+    "files" : {
+        "windows" : {
+            "filename" : "VERSION_STRING/BlockstreamGreen_Windows_x86_64.zip",
+            "hash" : "HASH_WINDOWS"
+        },
+        "mac" : {
+            "filename" : "VERSION_STRING/BlockstreamGreen_MacOS_x86_64.zip",
+            "hash" : "HASH_MAC"
+        },
+        "linux" : {
+            "filename" : "VERSION_STRING/BlockstreamGreen-x86_64.AppImage",
+            "hash" : "HASH_LINUX"
+        }
+    }
+}

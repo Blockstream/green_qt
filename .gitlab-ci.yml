@@ -6,6 +6,7 @@ stages:
   - installer
   - installer_sign
   - deploy
+  - publish
 
 bionic_release:
   tags:
@@ -203,3 +204,18 @@ package_release:
     - bionic_release
     - osx_sign
     - windows_installer_sign
+
+publish_release:
+  tags:
+    - ga
+  only:
+    - /^release_.*/
+  stage: publish
+  when: manual
+  image: blockstream/gcloud-docker:0.15.4
+  script:
+    - cd green_qt_dist
+    - ../tools/publish.sh
+  needs:
+    - package_release
+
