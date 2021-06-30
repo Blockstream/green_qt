@@ -102,6 +102,14 @@ void Settings::setUseTor(bool use_tor)
     saveLater();
 }
 
+void Settings::setCheckForUpdates(bool check_for_updates)
+{
+    if (m_check_for_updates == check_for_updates) return;
+    m_check_for_updates = check_for_updates;
+    emit checkForUpdatesChanged(m_check_for_updates);
+    saveLater();
+}
+
 QStringList Settings::recentWallets()
 {
     return m_recent_wallets;
@@ -179,6 +187,7 @@ void Settings::load(const QSettings& settings)
     LOAD(m_use_tor)
     LOAD(m_recent_wallets)
     LOAD(m_language)
+    LOAD(m_check_for_updates)
 #undef LOAD
 }
 
@@ -206,6 +215,7 @@ void Settings::saveNow()
     SAVE(m_use_tor)
     SAVE(m_recent_wallets)
     SAVE(m_language)
+    SAVE(m_check_for_updates)
 #undef SAVE
 }
 
