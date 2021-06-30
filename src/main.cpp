@@ -39,6 +39,7 @@ Q_IMPORT_PLUGIN(QCocoaIntegrationPlugin);
 #include <hidapi/hidapi.h>
 
 extern QString g_data_location;
+QCommandLineParser g_args;
 
 void gMessageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
@@ -103,16 +104,16 @@ int main(int argc, char *argv[])
     });
     #endif
 
-    QCommandLineParser parser;
-    parser.addHelpOption();
-    parser.addVersionOption();
-    parser.addOption(QCommandLineOption("printtoconsole"));
-    parser.addOption(QCommandLineOption("debugfocus"));
-    parser.addOption(QCommandLineOption("debugjade"));
-    parser.addOption(QCommandLineOption("debugnavigation"));
-    parser.process(app);
+    g_args.addHelpOption();
+    g_args.addVersionOption();
+    g_args.addOption(QCommandLineOption("printtoconsole"));
+    g_args.addOption(QCommandLineOption("debugfocus"));
+    g_args.addOption(QCommandLineOption("debugjade"));
+    g_args.addOption(QCommandLineOption("debugnavigation"));
+    g_args.addOption(QCommandLineOption("channel", "", "name", "latest"));
+    g_args.process(app);
 
-    if (parser.isSet("printtoconsole")) {
+    if (g_args.isSet("printtoconsole")) {
 #ifdef _WIN32
         if (AttachConsole(ATTACH_PARENT_PROCESS)) {
             freopen("CONOUT$", "w", stdout);
