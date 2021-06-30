@@ -34,5 +34,7 @@
         <file>svg/x.svg</file>
         <file>svg/2fa_general.svg</file>
         <file>svg/singleSig.svg</file>
+        <file>svg/key.svg</file>
+        <file>svg/multi-sig.svg</file>
     </qresource>
 </RCC>

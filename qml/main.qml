@@ -102,7 +102,7 @@ ApplicationWindow {
         icon.width: 16
         icon.height: 16
         leftPadding: 32
-        icon.source: icons[wallet.network.key]
+        icon.source: wallet.network.electrum ? 'qrc:/svg/key.svg' : 'qrc:/svg/multi-sig.svg'
         visible: !Settings.collapseSideBar
         DeviceImage {
             Layout.minimumWidth: paintedWidth
