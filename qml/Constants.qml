@@ -41,4 +41,5 @@ QtObject {
 
     // urls
     property string supportUrl: "https://docs.blockstream.com/green/support.html"
+    property string downloadUrl: "https://blockstream.com/green/"
 }

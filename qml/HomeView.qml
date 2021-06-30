@@ -16,23 +16,77 @@ MainPage {
         }
         return wallets
     }
+
+    AppUpdateController {
+        id: app_update_controller
+        onUpdateAvailableChanged: if (updateAvailable) notification_panel.y = constants.p1
+        Component.onCompleted: if (Settings.checkForUpdates) checkForUpdates()
+    }
+
     id: self
     header: GPane {
+        id: header_pane
         padding: 24
+        implicitHeight: 80
         background: null
-        contentItem: RowLayout {
-            Label {
-                text: 'Welcome back!'
-                font.pixelSize: 24
-                font.styleName: 'Medium'
+        contentItem: Item {
+            id: notification
+            anchors.fill: parent
+            clip: true
+
+            RowLayout {
+                anchors.fill: parent
+                anchors.margins: constants.p1
+
+                Label {
+                    text: 'Welcome back!'
+                    font.pixelSize: 24
+                    font.styleName: 'Medium'
+                }
+                HSpacer {
+                }
+                GButton {
+                    text: qsTrId('id_support')
+                    highlighted: true
+                    large: true
+                    onClicked: Qt.openUrlExternally(constants.supportUrl)
+                }
             }
-            HSpacer {
-            }
-            GButton {
-                text: qsTrId('id_support')
-                highlighted: true
-                large: true
-                onClicked: Qt.openUrlExternally(constants.supportUrl)
+
+            GPane {
+                id: notification_panel
+                x: constants.p1
+                y: constants.p1 - parent.height
+                width: parent.width - constants.p1*2
+                implicitHeight: constants.p5
+                padding: constants.p1
+                background: Rectangle {
+                    radius: 4
+                    color: 'white'
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: Qt.openUrlExternally(constants.downloadUrl)
+                    }
+                }
+                contentItem: RowLayout {
+                    Label {
+                        Layout.fillWidth: true
+                        text: 'There is a newer version of Green Desktop available'
+                        color: 'black'
+                    }
+                    Label {
+                        text: 'Download'
+                        font.bold: true
+                        color: 'black'
+                    }
+                }
+
+                Behavior on y {
+                    NumberAnimation {
+                        duration: 300
+                        easing.type: Easing.OutCubic
+                    }
+                }
             }
         }
     }

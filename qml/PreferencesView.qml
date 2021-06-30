@@ -82,11 +82,17 @@ MainPage {
                         text: qsTrId('id_enable_testnet')
                     }
                     Switch {
-                        id: testnet_switch
                         checked: Settings.enableTestnet
                         onCheckedChanged: Settings.enableTestnet = checked
                     }
                     HSpacer {
+                    }
+                    Label {
+                        text: qsTrId('Check for updates on startup')
+                    }
+                    Switch {
+                        checked: Settings.checkForUpdates
+                        onCheckedChanged: Settings.checkForUpdates = checked
                     }
                 }
             }
