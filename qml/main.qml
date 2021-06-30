@@ -188,20 +188,6 @@ ApplicationWindow {
                         width: Math.max(implicitWidth, flickable.width)
                         spacing: 8
                         SideButton {
-                            icon.source: icons.liquid
-                            location: '/liquid'
-                            text: 'Liquid'
-                        }
-                        Repeater {
-                            id: liquid_repeater
-                            model: WalletListModel {
-                                justReady: true
-                                network: 'liquid'
-                            }
-                            WalletButton {
-                            }
-                        }
-                        SideButton {
                             icon.source: icons.bitcoin
                             location: '/bitcoin'
                             text: 'Bitcoin'
@@ -219,7 +205,7 @@ ApplicationWindow {
                             visible: Settings.enableTestnet
                             icon.source: icons.testnet
                             location: '/testnet'
-                            text: 'Testnet'
+                            text: 'Bitcoin Testnet'
                         }
                         Repeater {
                             id: testnet_repeater
@@ -229,6 +215,20 @@ ApplicationWindow {
                             }
                             WalletButton {
                                 visible: !Settings.collapseSideBar && Settings.enableTestnet
+                            }
+                        }
+                        SideButton {
+                            icon.source: icons.liquid
+                            location: '/liquid'
+                            text: 'Liquid'
+                        }
+                        Repeater {
+                            id: liquid_repeater
+                            model: WalletListModel {
+                                justReady: true
+                                network: 'liquid'
+                            }
+                            WalletButton {
                             }
                         }
                         SideLabel {
