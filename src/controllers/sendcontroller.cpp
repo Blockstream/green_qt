@@ -241,6 +241,7 @@ void SendController::create()
 
 void SendController::signAndSend()
 {
+    m_transaction["memo"] = m_memo;
     auto sign = new SignTransactionHandler(wallet(), m_transaction);
     connect(sign, &Handler::done, this, [this, sign] {
         // sign->deleteLater();
