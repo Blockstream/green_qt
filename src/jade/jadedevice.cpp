@@ -790,12 +790,7 @@ public:
         , m_signing_inputs(signing_inputs)
         , m_outputs(outputs)
     {
-        m_last_blinded_index = m_outputs.size();
-        while (--m_last_blinded_index >= 0) {
-            const auto output = m_outputs.at(m_last_blinded_index).toObject();
-            if (!output.value("is_fee").toBool()) break;
-        }
-        Q_ASSERT(m_last_blinded_index >= 0);
+        m_last_blinded_index = m_outputs.size() - 2;
     }
     QList<QByteArray> signatures() const override { return m_signatures; };
     QList<QByteArray> signerCommitments() const override { return m_signer_commitments; }
@@ -849,7 +844,7 @@ public:
             if (output.value("is_change").toBool()) {
                 const auto path = ParsePath(output.value("user_path"));
                 const auto recovery_xpub = output.value("recovery_xpub").toString();
-                const auto csv_blocks = output.value("address_type").toString() == "csv" ? output.value("subtype").toInt() : 65535;
+                const auto csv_blocks = output.value("address_type").toString() == "csv" ? output.value("subtype").toInt() : 0;
                 const QVariantMap data = {
                     { "path", path },
                     { "recovery_xpub", recovery_xpub },
