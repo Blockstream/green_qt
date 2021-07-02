@@ -111,7 +111,7 @@ public:
 
     Q_INVOKABLE Asset* getOrCreateAsset(const QString& id);
 
-    Account* getOrCreateAccount(int pointer);
+    Account* getOrCreateAccount(const QJsonObject& data);
 
     void createSession();
     void setSession();

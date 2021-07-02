@@ -24,7 +24,7 @@ class Account : public QObject
     Q_PROPERTY(QQmlListProperty<Balance> balances READ balances NOTIFY balancesChanged)
     QML_ELEMENT
 public:
-    explicit Account(int pointer, Wallet* wallet);
+    explicit Account(const QJsonObject& data, Wallet* wallet);
 
     Wallet* wallet() const { return m_wallet; }
     int pointer() const { Q_ASSERT(m_pointer >= 0); return m_pointer; }

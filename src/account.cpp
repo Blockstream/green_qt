@@ -13,11 +13,12 @@
 
 #include <gdk.h>
 
-Account::Account(int pointer, Wallet* wallet)
+Account::Account(const QJsonObject& data, Wallet* wallet)
     : QObject(wallet)
     , m_wallet(wallet)
-    , m_pointer(pointer)
+    , m_pointer(data.value("pointer").toInt())
 {
+    update(data);
 }
 
 QJsonObject Account::json() const

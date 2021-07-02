@@ -242,9 +242,7 @@ void Wallet::reload()
         m_accounts.clear();
         for (QJsonValue value : handler->subAccounts()) {
             QJsonObject data = value.toObject();
-            int pointer = data.value("pointer").toInt();
-            Account* account = getOrCreateAccount(pointer);
-            account->update(data);
+            Account* account = getOrCreateAccount(data);
             account->reload();
             if (!data.value("hidden").toBool()) {
                 m_accounts.append(account);
@@ -540,11 +538,15 @@ Asset* Wallet::getOrCreateAsset(const QString& id)
     return asset;
 }
 
-Account* Wallet::getOrCreateAccount(int pointer)
+Account* Wallet::getOrCreateAccount(const QJsonObject& data)
 {
+    Q_ASSERT(data.contains("pointer"));
+    const int pointer = data.value("pointer").toInt();
     Account* account = m_accounts_by_pointer.value(pointer);
-    if (!account) {
-        account = new Account(pointer, this);
+    if (account) {
+        account->update(data);
+    } else {
+        account = new Account(data, this);
         m_accounts_by_pointer.insert(pointer, account);
     }
     return account;
