@@ -32,17 +32,21 @@ AbstractDialog {
     contentItem: GridLayout {
         enabled: !controller.session
         columns: 2
+        columnSpacing: 12
+        rowSpacing: 12
         Label {
             text: qsTrId('id_username')
         }
-        TextField {
+        GTextField {
+            Layout.fillWidth: true
             id: username_field
             focus: true
         }
         Label {
             text: qsTrId('id_password')
         }
-        TextField {
+        GTextField {
+            Layout.fillWidth: true
             id: password_field
             echoMode: TextField.Password
         }
