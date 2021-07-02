@@ -17,6 +17,7 @@ class Account : public QObject
     Q_OBJECT
     Q_PROPERTY(Wallet* wallet READ wallet CONSTANT)
     Q_PROPERTY(int pointer READ pointer CONSTANT)
+    Q_PROPERTY(QString type READ type CONSTANT)
     Q_PROPERTY(bool mainAccount READ isMainAccount CONSTANT)
     Q_PROPERTY(QJsonObject json READ json NOTIFY jsonChanged)
     Q_PROPERTY(QString name READ name NOTIFY nameChanged)
@@ -27,7 +28,8 @@ public:
     explicit Account(const QJsonObject& data, Wallet* wallet);
 
     Wallet* wallet() const { return m_wallet; }
-    int pointer() const { Q_ASSERT(m_pointer >= 0); return m_pointer; }
+    int pointer() const { return m_pointer; }
+    QString type() const { return m_type; }
     bool isMainAccount() const;
 
     QString name() const { return m_name; }
@@ -61,6 +63,7 @@ public slots:
 private:
     Wallet* const m_wallet;
     const int m_pointer;
+    const QString m_type;
     QJsonObject m_json;
     QString m_name;
     QMap<QString, Transaction*> m_transactions_by_hash;

@@ -17,7 +17,10 @@ Account::Account(const QJsonObject& data, Wallet* wallet)
     : QObject(wallet)
     , m_wallet(wallet)
     , m_pointer(data.value("pointer").toInt())
+    , m_type(data.value("type").toString())
 {
+    Q_ASSERT(m_pointer >= 0);
+    Q_ASSERT(!m_type.isEmpty());
     update(data);
 }
 
