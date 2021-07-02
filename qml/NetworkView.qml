@@ -246,6 +246,13 @@ Item {
             }
         }
         contentItem: RowLayout {
+            spacing: constants.s1
+            Image {
+                fillMode: Image.PreserveAspectFit
+                sourceSize.height: 24
+                sourceSize.width: 24
+                source: delegate.wallet.network.electrum ? 'qrc:/svg/key.svg' : 'qrc:/svg/multi-sig.svg'
+            }
             Label {
                 Layout.maximumWidth: 400
                 text: wallet.device ? wallet.device.name : walletName(wallet)
@@ -278,7 +285,6 @@ Item {
                 }
             }
         }
-
         padding: 16
         width: wallet_list_view.width
         highlighted: ListView.isCurrentItem
