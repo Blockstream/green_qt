@@ -201,7 +201,7 @@ AbstractDialog {
                     text: qsTrId('id_please_provide_your_passphrase')
                     font.pixelSize: 20
                 }
-                TextField {
+                GTextField {
                     Layout.alignment: Qt.AlignHCenter
                     id: password_field
                     implicitWidth: 400

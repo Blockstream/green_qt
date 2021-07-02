@@ -127,7 +127,7 @@ WalletDialog {
                 id: enterCodeText
                 text: resolver ? qsTrId('id_please_provide_your_1s_code').arg(resolver.method) : ''
             }
-            TextField {
+            GTextField {
                 id: code_field
                 horizontalAlignment: Qt.AlignHCenter
                 onTextChanged: {

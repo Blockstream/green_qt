@@ -386,7 +386,7 @@ ApplicationWindow {
                 SectionLabel {
                     text: qsTrId('id_confirm_action')
                 }
-                TextField {
+                GTextField {
                     Layout.minimumWidth: 300
                     id: confirm_field
                     placeholderText: qsTrId('id_confirm_by_typing_the_wallet')

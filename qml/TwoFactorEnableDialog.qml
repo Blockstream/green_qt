@@ -41,7 +41,7 @@ ControllerDialog {
                 wrapMode: Text.WordWrap
                 Layout.alignment: Qt.AlignHCenter
             }
-            TextField {
+            GTextField {
                 id: data_field
                 placeholderText: placeholder
                 selectByMouse: true

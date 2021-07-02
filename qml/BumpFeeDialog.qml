@@ -62,16 +62,20 @@ ControllerDialog {
                         }
                     }
                 }
-                TextField {
+                GTextField {
                     enabled: fee_combo.currentIndex === 3
                     onTextChanged: controller.feeRate = Number(text) * 1000
+                    horizontalAlignment: TextField.AlignRight
+                    validator: AmountValidator {
+                    }
                     Label {
                         id: fee_unit_label
                         anchors.right: parent.right
+                        anchors.rightMargin: 8
                         anchors.baseline: parent.baseline
                         text: 'sat/vB'
                     }
-                    rightPadding: fee_unit_label.width + 8
+                    rightPadding: fee_unit_label.width + 16
                 }
             }
         }

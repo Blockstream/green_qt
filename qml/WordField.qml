@@ -4,7 +4,7 @@ import QtQml 2.14
 import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.12
 
-TextField {
+GTextField {
     id: self
     property Word word
     readonly property bool invalid: word.suggestions.length === 0 && self.text.length > 2

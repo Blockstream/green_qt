@@ -181,7 +181,7 @@ ControllerDialog {
             SectionLabel {
                 text: qsTrId('id_account_name')
             }
-            TextField {
+            GTextField {
                 id: name_field
                 Layout.fillWidth: true
             }

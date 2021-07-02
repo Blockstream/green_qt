@@ -51,7 +51,7 @@ ControllerDialog {
                 text: qsTrId('id_amount')
             }
 
-            TextField {
+            GTextField {
                 id: amount_field
                 text: threshold
                 padding: 10

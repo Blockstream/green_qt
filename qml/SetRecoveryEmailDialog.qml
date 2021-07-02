@@ -24,7 +24,7 @@ ControllerDialog {
             Layout.fillWidth: true
             Layout.fillHeight: true
         }
-        TextField {
+        GTextField {
             id: email_field
             Layout.fillWidth: true
             placeholderText: qsTrId('id_enter_your_email_address')

@@ -117,12 +117,12 @@ MainPage {
                         text: qsTrId('id_proxy_host')
                         enabled: proxy_switch.checked
                     }
-                    TextField {
+                    GTextField {
                         id: proxy_host_field
                         enabled: Settings.useProxy
                         Layout.alignment: Qt.AlignLeft
                         Layout.minimumWidth: 200
-                        text: Settings.proxyHost
+                        //text: Settings.proxyHost
                         onTextChanged: Settings.proxyHost = text
                     }
                     HSpacer {
@@ -131,7 +131,7 @@ MainPage {
                         text: qsTrId('id_proxy_port')
                         enabled: proxy_switch.checked
                     }
-                    TextField {
+                    GTextField {
                         id: proxy_port_field
                         enabled: Settings.useProxy
                         Layout.alignment: Qt.AlignLeft

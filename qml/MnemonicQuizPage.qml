@@ -50,7 +50,7 @@ ColumnLayout {
                 enabled: word_field.enabled
                 horizontalAlignment: Label.AlignRight
             }
-            TextField {
+            GTextField {
                 id: word_field
                 width: 150
                 enabled: (index === 0 || repeater.itemAt(index - 1).matching) && !matching

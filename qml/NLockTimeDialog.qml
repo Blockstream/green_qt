@@ -26,7 +26,7 @@ ControllerDialog {
         }
         RowLayout {
             Layout.alignment: Qt.AlignCenter
-            TextField {
+            GTextField {
                 id: nlocktime_days
                 text: Math.round(wallet.settings.nlocktime / 144 || 0)
                 validator: IntValidator { bottom: 1; top: 200000 / 144; }
@@ -40,7 +40,7 @@ ControllerDialog {
                 text: qsTrId('id_days') + ' ≈ '
                 Layout.alignment: Qt.AlignBaseline
             }
-            TextField {
+            GTextField {
                 id: nlocktime_blocks
                 text: wallet.settings.nlocktime || 0
                 validator: IntValidator { bottom: 144; top: 200000; }

@@ -125,12 +125,12 @@ ColumnLayout {
             title: qsTrId('id_watchonly_login')
             contentItem: RowLayout {
                 spacing: 16
-                TextField {
+                GTextField {
                     id: username_field
                     text: wallet.username
                     placeholderText: qsTrId('id_username')
                 }
-                TextField {
+                GTextField {
                     id: password_field
                     echoMode: TextField.Password
                     placeholderText: qsTrId('id_password')

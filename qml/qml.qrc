@@ -115,5 +115,6 @@
         <file>LedgerLoginDialog.qml</file>
         <file>SelectServerTypeView.qml</file>
         <file>TorUnavailableWithElectrumWarning.qml</file>
+        <file>GTextField.qml</file>
     </qresource>
 </RCC>

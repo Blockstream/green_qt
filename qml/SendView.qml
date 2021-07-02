@@ -49,7 +49,7 @@ StackView {
         SectionLabel { text: qsTrId('id_address') }
 
         RowLayout {
-            TextField {
+            GTextField {
                 id: address_field
                 selectByMouse: true
                 Layout.fillWidth: true
@@ -115,7 +115,7 @@ StackView {
                 id: send_all_button
                 text: qsTrId('id_send_all_funds')
             }
-            TextField {
+            GTextField {
                 id: amount_field
                 Layout.fillWidth: true
                 enabled: !send_all_button.checked
@@ -132,10 +132,11 @@ StackView {
                 Label {
                     id: unit
                     anchors.right: parent.right
+                    anchors.rightMargin: 8
                     anchors.baseline: parent.baseline
                     text: wallet.network.liquid ? (balance.asset.data.name === 'btc' ? 'L-'+wallet.settings.unit : (balance.asset.data.ticker || '')) : wallet.settings.unit
                 }
-                rightPadding: unit.width + 8
+                rightPadding: unit.width + 16
             }
 
             Label {
@@ -143,7 +144,7 @@ StackView {
                 text: '≈'
             }
 
-            TextField {
+            GTextField {
                 id: fiat_field
                 Layout.fillWidth: true
                 enabled: !send_all_button.checked && controller.hasFiatRate && fiatRateAvailable
@@ -160,10 +161,11 @@ StackView {
                 Label {
                     id: currency
                     anchors.right: parent.right
+                    anchors.rightMargin: 8
                     anchors.baseline: parent.baseline
                     text: wallet.settings.pricing.currency
                 }
-                rightPadding: currency.width + 8
+                rightPadding: currency.width + 16
             }
         }
         SectionLabel { text: qsTrId('id_network_fee') }
@@ -188,7 +190,7 @@ StackView {
                     }
                 }
             }
-            TextField {
+            GTextField {
                 id: custom_fee_field
                 visible: fee_combo.currentIndex === 3
                 onTextChanged: {
@@ -200,10 +202,11 @@ StackView {
                 Label {
                     id: fee_unit
                     anchors.right: parent.right
+                    anchors.rightMargin: 8
                     anchors.baseline: parent.baseline
                     text: 'sat/vB'
                 }
-                rightPadding: fee_unit.width + 8
+                rightPadding: fee_unit.width + 16
                 selectByMouse: true
             }
         }
