@@ -51,7 +51,7 @@ GPane {
         spacing: constants.p1
 
         AccountIdBadge {
-            visible: self.account.json.type === '2of2_no_recovery'
+            visible: self.account.type === '2of2_no_recovery'
             account: self.account
             Layout.fillWidth: true
         }

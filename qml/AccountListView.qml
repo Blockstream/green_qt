@@ -96,7 +96,7 @@ Page {
 
                     Label {
                         text: qsTrId('Legacy')
-                        visible: account.json.type === 'p2sh-p2wpkh'
+                        visible: account.type === 'p2sh-p2wpkh'
                         font.pixelSize: 10
                         font.capitalization: Font.AllUppercase
                         leftPadding: 8
@@ -113,7 +113,7 @@ Page {
 
                     Label {
                         text: qsTrId('Segwit')
-                        visible: account.json.type === 'p2wpkh'
+                        visible: account.type === 'p2wpkh'
                         font.pixelSize: 10
                         font.capitalization: Font.AllUppercase
                         leftPadding: 8
@@ -130,7 +130,7 @@ Page {
 
                     Label {
                         text: qsTrId('id_amp_account')
-                        visible: account.json.type === '2of2_no_recovery'
+                        visible: account.type === '2of2_no_recovery'
                         font.pixelSize: 10
                         font.capitalization: Font.AllUppercase
                         leftPadding: 8
@@ -147,7 +147,7 @@ Page {
 
                     Label {
                         text: qsTrId('id_2of3_account')
-                        visible: account.json.type === '2of3'
+                        visible: account.type === '2of3'
                         font.pixelSize: 10
                         font.capitalization: Font.AllUppercase
                         leftPadding: 8
