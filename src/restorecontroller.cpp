@@ -129,8 +129,7 @@ void RestoreController::update()
     if (m_active && !m_wallet) {
         qDebug() << "setup wallet and activate session";
 
-        m_wallet = WalletManager::instance()->createWallet();
-        m_wallet->setNetwork(m_network);
+        m_wallet = WalletManager::instance()->createWallet(m_network);
         emit walletChanged(m_wallet);
 
         m_wallet->createSession();

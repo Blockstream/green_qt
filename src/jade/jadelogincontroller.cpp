@@ -54,10 +54,9 @@ void JadeLoginController::update()
 
     if (!m_wallet) {
 
-        m_wallet = new Wallet;
+        m_wallet = new Wallet(network);
         m_wallet->m_id = m_device->uuid();
         m_wallet->m_device = m_device;
-        m_wallet->setNetwork(network);
         m_wallet->createSession();
 
         walletChanged(m_wallet);

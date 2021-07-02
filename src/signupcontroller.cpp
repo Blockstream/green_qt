@@ -36,8 +36,7 @@ void SignupController::update()
     if (m_pin.isEmpty()) return;
 
     if (!m_wallet) {
-        m_wallet = WalletManager::instance()->createWallet();
-        m_wallet->m_network = m_network;
+        m_wallet = WalletManager::instance()->createWallet(m_network);
         emit walletChanged(m_wallet);
 
         m_wallet->createSession();

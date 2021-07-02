@@ -40,7 +40,7 @@ WalletManager::WalletManager()
         auto data = doc.object();
         auto network = NetworkManager::instance()->network(data.value("network").toString());
         if (!network) continue;
-        Wallet* wallet = new Wallet(this);
+        Wallet* wallet = new Wallet(network, this);
         wallet->m_id = QFileInfo(file).baseName();
         if (data.contains("pin_data")) {
             wallet->m_pin_data = QByteArray::fromBase64(data.value("pin_data").toString().toLocal8Bit());
@@ -50,7 +50,6 @@ WalletManager::WalletManager()
             wallet->m_hash_id = data.value("hash_id").toString();
         }
         wallet->m_name = data.value("name").toString();
-        wallet->m_network = network;
         addWallet(wallet);
     }
 }
@@ -73,9 +72,9 @@ void WalletManager::addWallet(Wallet* wallet)
     emit walletAdded(wallet);
 }
 
-Wallet* WalletManager::createWallet()
+Wallet* WalletManager::createWallet(Network* network)
 {
-    auto wallet = new Wallet(this);
+    auto wallet = new Wallet(network, this);
     wallet->m_id = QUuid::createUuid().toString(QUuid::WithoutBraces);
     return wallet;
 }

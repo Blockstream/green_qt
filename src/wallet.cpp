@@ -64,8 +64,9 @@ QByteArray pinDataForNewPin(GA_session* session, const QByteArray& pin)
 }
 } // namespace
 
-Wallet::Wallet(QObject *parent)
+Wallet::Wallet(Network* network, QObject *parent)
     : Entity(parent)
+    , m_network(network)
 {
     QObject::connect(this, &Wallet::activitiesChanged, this, &Wallet::updateReady);
     QObject::connect(this, &Wallet::authenticationChanged, this, &Wallet::updateReady);
@@ -119,14 +120,6 @@ QString Wallet::id() const
 {
     Q_ASSERT(!m_id.isEmpty() || m_device);
     return m_id;
-}
-
-void Wallet::setNetwork(Network* network)
-{
-    // TODO: shouldn't change
-    Q_ASSERT(!m_network);
-    m_network = network;
-    emit networkChanged(m_network);
 }
 
 void Wallet::setName(const QString& name)
@@ -568,11 +561,7 @@ void Wallet::setSession(Session* session)
 {
     Q_ASSERT(session);
     m_session = session;
-    if (m_network) {
-        Q_ASSERT(m_network == m_session->network());
-    } else {
-        setNetwork(m_session->network());
-    }
+    Q_ASSERT(m_network == m_session->network());
     m_session.track(QObject::connect(m_session, &Session::notificationHandled, this, &Wallet::handleNotification));
     m_session.track(QObject::connect(m_session, &Session::networkEvent, [this](const QJsonObject& event) {
         const bool login_required = event.value("login_required").toBool();

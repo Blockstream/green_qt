@@ -51,7 +51,7 @@ private:
     Q_PROPERTY(bool watchOnly READ isWatchOnly CONSTANT)
     Q_PROPERTY(QString username READ username NOTIFY usernameChanged)
     Q_PROPERTY(Session* session READ session NOTIFY sessionChanged)
-    Q_PROPERTY(Network* network READ network WRITE setNetwork NOTIFY networkChanged)
+    Q_PROPERTY(Network* network READ network CONSTANT)
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(bool hasPinData READ hasPinData NOTIFY hasPinDataChanged)
     Q_PROPERTY(bool authenticated READ isAuthenticated NOTIFY authenticationChanged)
@@ -68,13 +68,12 @@ private:
     Q_PROPERTY(Device* device READ device CONSTANT)
     Q_PROPERTY(bool empty READ isEmpty NOTIFY emptyChanged)
 public:
-    explicit Wallet(QObject *parent = nullptr);
+    explicit Wallet(Network* network, QObject *parent = nullptr);
     virtual ~Wallet();
     QString id() const;
     Session* session() const { return m_session; }
     void setSession(Session *session);
     Network* network() const { return m_network; }
-    void setNetwork(Network* network);
     QString name() const { return m_name; }
     void setName(const QString& name);
 
@@ -134,7 +133,6 @@ public slots:
 signals:
     void readyChanged(bool ready);
     void sessionChanged(Session* session);
-    void networkChanged(Network* network);
     void hasPinDataChanged();
     void authenticationChanged();
     void lockedChanged(bool locked);
@@ -179,7 +177,7 @@ public:
     QByteArray getPinData() const;
     QByteArray m_pin_data;
     QString m_name;
-    Network* m_network{nullptr};
+    Network* const m_network{nullptr};
     int m_login_attempts_remaining{3};
     int m_logout_timer{-1};
     bool m_busy{false};

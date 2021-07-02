@@ -6,8 +6,8 @@
 #include <QQmlListProperty>
 #include <QVector>
 
-class Network;
-class Wallet;
+QT_FORWARD_DECLARE_CLASS(Network)
+QT_FORWARD_DECLARE_CLASS(Wallet)
 
 class WalletManager : public QObject
 {
@@ -18,7 +18,7 @@ public:
     virtual ~WalletManager();
     static WalletManager* instance();
 
-    Q_INVOKABLE Wallet* createWallet();
+    Q_INVOKABLE Wallet* createWallet(Network* network);
     Q_INVOKABLE Wallet* wallet(const QString& id) const;
 
     void addWallet(Wallet *wallet);

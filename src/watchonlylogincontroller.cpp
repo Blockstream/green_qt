@@ -44,10 +44,9 @@ void WatchOnlyLoginController::login()
 {
     if (!m_valid) return;
     if (!m_wallet) {
-        m_wallet = WalletManager::instance()->createWallet();
+        m_wallet = WalletManager::instance()->createWallet(m_network);
         m_wallet->m_watch_only = true;
         m_wallet->m_username = m_username;
-        m_wallet->setNetwork(m_network);
         m_wallet->createSession();
 
         m_session = m_wallet->session();
