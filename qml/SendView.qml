@@ -128,7 +128,8 @@ StackView {
                     if (!activeFocus) return;
                     controller.amount = text;
                 }
-
+                validator: AmountValidator {
+                }
                 Label {
                     id: unit
                     anchors.right: parent.right
@@ -152,12 +153,12 @@ StackView {
                 placeholderText: controller.effectiveFiatAmount
                 text: controller.fiatAmount
                 selectByMouse: true
-
                 onTextChanged: {
                     if (!activeFocus) return;
                     controller.fiatAmount = text
                 }
-
+                validator: AmountValidator {
+                }
                 Label {
                     id: currency
                     anchors.right: parent.right
@@ -199,6 +200,8 @@ StackView {
                     }
                 }
                 horizontalAlignment: TextField.AlignRight
+                validator: AmountValidator {
+                }
                 Label {
                     id: fee_unit
                     anchors.right: parent.right

@@ -108,6 +108,8 @@ ColumnLayout {
             horizontalAlignment: TextField.AlignRight
             rightPadding: unit.width + 16
             Layout.fillWidth: true
+            validator: AmountValidator {
+            }
             Label {
                 id: unit
                 anchors.right: parent.right

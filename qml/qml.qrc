@@ -116,5 +116,6 @@
         <file>SelectServerTypeView.qml</file>
         <file>TorUnavailableWithElectrumWarning.qml</file>
         <file>GTextField.qml</file>
+        <file>AmountValidator.qml</file>
     </qresource>
 </RCC>
