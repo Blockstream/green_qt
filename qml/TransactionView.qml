@@ -159,7 +159,7 @@ WalletDialog {
                     Layout.fillWidth: true
                     placeholderText: qsTrId('id_add_a_note_only_you_can_see_it')
                     width: scroll_view.width - constants.p2
-                    text: transaction.data.memo
+                    text: transaction.memo
                     selectByMouse: true
                     wrapMode: TextEdit.Wrap
                     onEditingFinished: transaction.updateMemo(memo_edit.text)

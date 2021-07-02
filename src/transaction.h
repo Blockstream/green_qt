@@ -42,6 +42,7 @@ class Transaction : public QObject
     Q_PROPERTY(Account* account READ account CONSTANT)
     Q_PROPERTY(QQmlListProperty<TransactionAmount> amounts READ amounts NOTIFY amountsChanged)
     Q_PROPERTY(QJsonObject data READ data NOTIFY dataChanged)
+    Q_PROPERTY(QString memo READ memo NOTIFY memoChanged)
     QML_ELEMENT
     QML_UNCREATABLE("Transaction is instanced by Wallet.")
 public:
@@ -49,7 +50,7 @@ public:
     virtual ~Transaction();
 
     QString hash() const { return m_data.value("txhash").toString(); }
-    QString memo() const { return m_data.value("memo").toString(); }
+    QString memo() const { return m_memo; }
 
     bool isUnconfirmed() const;
 
@@ -69,11 +70,14 @@ public slots:
 signals:
     void amountsChanged();
     void dataChanged(const QJsonObject& data);
-
+    void memoChanged(const QString& memo);
+private:
+    void setMemo(const QString& memo);
 public:
     Account* const m_account;
     QList<TransactionAmount*> m_amounts;
     QJsonObject m_data;
+    QString m_memo;
 };
 
 #endif // GREEN_TRANSACTION_H

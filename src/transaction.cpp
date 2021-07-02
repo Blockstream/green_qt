@@ -76,6 +76,8 @@ void Transaction::updateFromData(const QJsonObject& data)
     m_data = data;
     emit dataChanged(m_data);
 
+    setMemo(m_data.value("memo").toString());
+
     // Amounts are one time set
     const auto satoshi = m_data.value("satoshi").toObject();
     const int count = satoshi.keys().length();
@@ -150,16 +152,19 @@ QString Transaction::unblindedLink() const
     return QString("%1%2#blinded=%3").arg(tx_explorer_url, m_data.value("txhash").toString(), args.join(','));
 }
 
-void Transaction::updateMemo(const QString &memo)
+void Transaction::updateMemo(const QString& memo)
 {
-    if (memo == m_data.value("memo").toString()) return;
-
     Q_ASSERT(memo.length() <= 1024);
-
+    if (m_memo == memo) return;
     auto txhash = m_data.value("txhash").toString().toLocal8Bit();
     int err = GA_set_transaction_memo(m_account->wallet()->m_session->m_session, txhash.constData(), memo.toLocal8Bit().constData(), 0);
     Q_ASSERT(err == GA_OK);
+    setMemo(memo);
+}
 
-    m_data["memo"] = memo;
-    emit dataChanged(m_data);
+void Transaction::setMemo(const QString& memo)
+{
+    if (m_memo == memo) return;
+    m_memo = memo;
+    emit memoChanged(m_memo);
 }

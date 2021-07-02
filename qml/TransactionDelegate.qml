@@ -24,7 +24,7 @@ ItemDelegate {
     spacing: 8
 
     function txType(tx) {
-        const memo = tx.memo.trim().replace(/\n/g, ' ')
+        const memo = transaction.memo.trim().replace(/\n/g, ' ')
         const separator = memo === '' ? '' : ' - '
         if (tx.type === 'incoming') {
             if (tx.outputs.length > 0) {
