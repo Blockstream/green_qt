@@ -372,7 +372,8 @@ ApplicationWindow {
                 SectionLabel {
                     text: qsTrId('id_network')
                 }
-                Row {
+                RowLayout {
+                    Layout.fillHeight: false
                     spacing: 8
                     Image {
                         sourceSize.width: 16
@@ -380,6 +381,7 @@ ApplicationWindow {
                         source: icons[wallet.network.key]
                     }
                     Label {
+                        Layout.fillWidth: true
                         text: wallet.network.name
                     }
                 }
@@ -388,6 +390,7 @@ ApplicationWindow {
                 }
                 GTextField {
                     Layout.minimumWidth: 300
+                    Layout.fillWidth: true
                     id: confirm_field
                     placeholderText: qsTrId('id_confirm_by_typing_the_wallet')
                 }
