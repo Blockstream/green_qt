@@ -9,7 +9,7 @@ GTextField {
     property Word word
     readonly property bool invalid: word.suggestions.length === 0 && self.text.length > 2
     enabled: word.enabled
-    leftPadding: 32
+    leftPadding: 40
     Binding on text {
         restoreMode: Binding.RestoreBinding
         when: !activeFocus
@@ -36,12 +36,14 @@ GTextField {
         }
     }
     ToolTip.text: self.invalid ? qsTrId('id_not_a_valid_word') : word.suggestions.join(' ')
-    ToolTip.visible: activeFocus && (word.suggestions.length > 0 || self.invalid)
+    ToolTip.visible: activeFocus && (word.suggestions.length > 1 || (word.suggestions.length === 1 && word.suggestions[0] !== self.text) || self.invalid)
     ToolTip.toolTip.exit: null
 
     Label {
         anchors.baseline: parent.baseline
         x: 8
+        width: 24
+        horizontalAlignment: Qt.AlignRight
         text: word.index + 1
         color: self.invalid ? 'red' : 'white'
     }
