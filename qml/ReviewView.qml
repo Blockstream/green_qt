@@ -39,7 +39,7 @@ ScrollView {
             ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
             ScrollBar.vertical.policy: ScrollBar.AsNeeded
             ScrollBar.vertical.interactive: hovered
-            TextArea {
+            GTextArea {
                 id: memo_edit
                 Layout.fillWidth: true
                 selectByMouse: true
