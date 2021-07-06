@@ -101,8 +101,13 @@ void ReceiveAddressController::setGenerating(bool generating)
     emit generatingChanged(m_generating);
 }
 
-#include "jadedevice.h"
-#include "jadeapi.h"
+void ReceiveAddressController::setAddressVerification(ReceiveAddressController::AddressVerification address_verification)
+{
+    if (m_address_verification == address_verification) return;
+    m_address_verification = address_verification;
+    emit addressVerificationChanged(m_address_verification);
+}
+
 void ReceiveAddressController::generate()
 {
     if (!m_account || m_account->wallet()->isLocked()) return;
@@ -113,39 +118,48 @@ void ReceiveAddressController::generate()
 
     auto handler = new GetReceiveAddressHandler(m_account);
     connect(handler, &Handler::done, this, [this, handler] {
-        const auto result = handler->result().value("result").toObject();
-        m_address = result.value("address").toString();
-        auto device = qobject_cast<JadeDevice*>(m_account->wallet()->device());
-        if (device) {
-            const quint32 subaccount = result.value("subaccount").toDouble();
-            const quint32 branch = result.value("branch").toDouble();
-            const quint32 pointer = result.value("pointer").toDouble();
-            const quint32 subtype = result.value("subtype").toDouble();
-            QByteArray recovery_xpub;
-#if 0
-            // Jade expects any 'recoveryxpub' to be at the subact/branch level, consistent with tx outputs - but gdk
-            // subaccount data has the base subaccount chain code and pubkey - so we apply the branch derivation here.
-            if (subaccount.getRecoveryChainCode() != null && subaccount.getRecoveryChainCode().length() > 0) {
-                final Object subactkey = Wally.bip32_pub_key_init(
-                    getNetwork().getVerPublic(), 0, 0,
-                    subaccount.getRecoveryChainCodeAsBytes(), subaccount.getRecoveryPubKeyAsBytes());
-                final Object branchkey = Wally.bip32_key_from_parent(subactkey, branch,
-                                                                     Wally.BIP32_FLAG_KEY_PUBLIC |
-                                                                     Wally.BIP32_FLAG_SKIP_HASH);
-                recoveryxpub = Wally.bip32_key_to_base58(branchkey, Wally.BIP32_FLAG_KEY_PUBLIC);
-                Wally.bip32_key_free(branchkey);
-                Wally.bip32_key_free(subactkey);
-            }
-#endif
-            device->m_jade->getReceiveAddress(m_account->wallet()->network()->id(), subaccount, branch, pointer, recovery_xpub, subtype, [](const QVariantMap& msg) {
-                qDebug() << msg;
-            });
-        }
+        m_result = handler->result().value("result").toObject();
+        m_address = m_result.value("address").toString();
         setGenerating(false);
+        setAddressVerification(VerificationNone);
         emit changed();
     });
     connect(handler, &Handler::resolver, this, [](Resolver* resolver) {
         resolver->resolve();
     });
     handler->exec();
+}
+
+#include "jadedevice.h"
+#include "jadeapi.h"
+void ReceiveAddressController::verify()
+{
+    Q_ASSERT(!m_generating);
+    Q_ASSERT(m_address_verification != VerificationPending);
+    setAddressVerification(VerificationPending);
+    auto device = qobject_cast<JadeDevice*>(m_account->wallet()->device());
+    Q_ASSERT(device);
+    const quint32 subaccount = m_result.value("subaccount").toDouble();
+    const quint32 branch = m_result.value("branch").toDouble();
+    const quint32 pointer = m_result.value("pointer").toDouble();
+    const quint32 subtype = m_result.value("subtype").toDouble();
+    QByteArray recovery_xpub;
+#if 0
+    // Jade expects any 'recoveryxpub' to be at the subact/branch level, consistent with tx outputs - but gdk
+    // subaccount data has the base subaccount chain code and pubkey - so we apply the branch derivation here.
+    if (subaccount.getRecoveryChainCode() != null && subaccount.getRecoveryChainCode().length() > 0) {
+        final Object subactkey = Wally.bip32_pub_key_init(
+            getNetwork().getVerPublic(), 0, 0,
+            subaccount.getRecoveryChainCodeAsBytes(), subaccount.getRecoveryPubKeyAsBytes());
+        final Object branchkey = Wally.bip32_key_from_parent(subactkey, branch,
+                                                             Wally.BIP32_FLAG_KEY_PUBLIC |
+                                                             Wally.BIP32_FLAG_SKIP_HASH);
+        recoveryxpub = Wally.bip32_key_to_base58(branchkey, Wally.BIP32_FLAG_KEY_PUBLIC);
+        Wally.bip32_key_free(branchkey);
+        Wally.bip32_key_free(subactkey);
+    }
+#endif
+    device->m_jade->getReceiveAddress(m_account->wallet()->network()->id(), subaccount, branch, pointer, recovery_xpub, subtype, [this](const QVariantMap& msg) {
+        setAddressVerification(msg.contains("error") ? VerificationRejected : VerificationAccepted);
+    });
 }

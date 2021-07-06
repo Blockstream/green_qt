@@ -18,6 +18,7 @@ ColumnLayout {
         icon.source: 'qrc:/svg/refresh.svg'
         icon.width: 16
         icon.height: 16
+        enabled: !receive_address.generating && receive_address.addressVerification !== ReceiveAddressController.VerificationPending
         onTriggered: receive_address.generate()
     }
 
@@ -77,7 +78,7 @@ ColumnLayout {
             wrapMode: Text.WrapAnywhere
         }
         ToolButton {
-            enabled: !receive_address.generating
+            enabled: !receive_address.generating && (receive_address.addressVerification === ReceiveAddressController.VerificationNone || receive_address.addressVerification === ReceiveAddressController.VerificationAccepted)
             icon.source: 'qrc:/svg/copy.svg'
             icon.width: 16
             icon.height: 16
@@ -87,16 +88,60 @@ ColumnLayout {
             ToolTip.visible: hovered
         }
     }
-    Label {
+    Loader {
         Layout.alignment: Qt.AlignCenter
-        visible: account.wallet.device instanceof JadeDevice
-        text: 'Verify address matches the one displayed on Jade'
-        font.capitalization: Font.AllUppercase
-        font.styleName: 'Medium'
-        padding: 8
-        background: Rectangle {
-            radius: 4
-            color: '#b74747'
+        Layout.fillWidth: true
+        active: account.wallet.device instanceof JadeDevice
+        sourceComponent: ColumnLayout {
+            spacing: 16
+            SectionLabel {
+                text: qsTrId('Verify address matches the one displayed on Jade')
+            }
+            RowLayout {
+                spacing: 16
+                DeviceImage {
+                    device: account.wallet.device
+                    Layout.maximumHeight: 32
+                    Layout.maximumWidth: paintedWidth
+                }
+                GButton {
+                    large: true
+                    text: {
+                        if (receive_address.addressVerification === ReceiveAddressController.VerificationNone) return qsTrId('Verify')
+                        if (receive_address.addressVerification === ReceiveAddressController.VerificationPending) return qsTrId('Check Jade')
+                        return qsTrId('Verify again')
+                    }
+                    enabled: !receive_address.generating && receive_address.addressVerification !== ReceiveAddressController.VerificationPending
+                    onClicked: receive_address.verify()
+                }
+                HSpacer {
+                }
+                BusyIndicator {
+                    Layout.maximumHeight: 32
+                    running: receive_address.addressVerification === ReceiveAddressController.VerificationPending
+                    visible: running
+                }
+                Image {
+                    visible: receive_address.addressVerification === ReceiveAddressController.VerificationAccepted
+                    Layout.maximumWidth: 24
+                    Layout.maximumHeight: 24
+                    source: 'qrc:/svg/check.svg'
+                }
+                Image {
+                    visible: receive_address.addressVerification === ReceiveAddressController.VerificationRejected
+                    Layout.maximumWidth: 16
+                    Layout.maximumHeight: 16
+                    source: 'qrc:/svg/x.svg'
+                }
+            }
+
+//            font.capitalization: Font.AllUppercase
+//            font.styleName: 'Medium'
+//            padding: 8
+//            background: Rectangle {
+//                radius: 4
+//                color: '#b74747'
+//            }
         }
     }
     SectionLabel {

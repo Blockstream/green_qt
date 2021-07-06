@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - By default add segwit account in new singlesig wallets
 
 ### Changed
+- Manually trigger address confirmation on Jade
 
 ### Fixed
 
