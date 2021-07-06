@@ -19,10 +19,13 @@ const QString JADE_FW_SERVER_HTTPS = "https://jadefw.blockstream.com";
 static const QString JADE_FW_SERVER_ONION = "http://vgza7wu4h7osixmrx6e4op5r72okqpagr3w6oupgsvmim4cz3wzdgrad.onion";
 
 static const QString JADE_FW_JADE_PATH = "/bin/jade/";
+static const QString JADE_FW_JADE1_1_PATH = "/bin/jade1.1/";
 static const QString JADE_FW_JADEDEV_PATH = "/bin/jadedev/";
+static const QString JADE_FW_JADE1_1DEV_PATH = "/bin/jade1.1dev/";
 static const QString JADE_FW_SUFFIX = "fw.bin";
 
 static const QString JADE_BOARD_TYPE_JADE = "JADE";
+static const QString JADE_BOARD_TYPE_JADE_V1_1 = "JADE_V1.1";
 static const QString JADE_FEATURE_SECURE_BOOT = "SB";
 
 } // namespace
@@ -181,17 +184,22 @@ void JadeUpdateController::check()
         jade.handleHttpResponse(id, req, res.value("body").toObject());
     });
 
-
     const auto version_info = m_device->versionInfo();
     const auto board_type = version_info.value("BOARD_TYPE", JADE_BOARD_TYPE_JADE).toString();
-    if (board_type != JADE_BOARD_TYPE_JADE) return;
     const auto config = version_info.value("JADE_CONFIG").toString();
     const auto features = version_info.value("JADE_FEATURES").toStringList();
     const bool secure_boot = features.contains(JADE_FEATURE_SECURE_BOOT);
 
-    const QString path = secure_boot ? JADE_FW_JADE_PATH : JADE_FW_JADEDEV_PATH;
-    const QString channel = m_channel.isEmpty() ? JADE_FW_VERSIONS_FILE : m_channel;
+    QString path;
+    if (board_type == JADE_BOARD_TYPE_JADE) {
+        path = secure_boot ? JADE_FW_JADE_PATH : JADE_FW_JADEDEV_PATH;
+    } else if (board_type == JADE_BOARD_TYPE_JADE_V1_1) {
+        path = secure_boot ? JADE_FW_JADE1_1_PATH : JADE_FW_JADE1_1DEV_PATH;
+    } else {
+        return;
+    }
 
+    const QString channel = m_channel.isEmpty() ? JADE_FW_VERSIONS_FILE : m_channel;
     auto activity = new JadeChannelRequestActivity(path, channel, m_session);
     connect(activity, &Activity::finished, this, [this, activity, config] {
         activity->deleteLater();

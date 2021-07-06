@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Add support for Jade 1.1
 - By default add segwit account in new singlesig wallets
 
 ### Changed
