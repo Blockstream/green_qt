@@ -79,6 +79,13 @@ void SignupController::update()
                 set_pin_handler->exec();
             });
             create_amp_account_handler->exec();
+        } else if (m_network->isElectrum()) {
+            auto create_segwit_account_handler = new CreateAccountHandler({{ "name", "Segwit Account" }, { "type", "p2wpkh" }}, m_wallet);
+            connect(create_segwit_account_handler, &Handler::done, this, [=] {
+                create_segwit_account_handler->deleteLater();
+                set_pin_handler->exec();
+            });
+            create_segwit_account_handler->exec();
         } else {
             Q_ASSERT(m_type == "default");
             set_pin_handler->exec();
