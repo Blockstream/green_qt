@@ -6,7 +6,7 @@ Blockstream Green is a non-custodial Bitcoin wallet - it allows you to safely st
 
 It is also available for [Android](https://github.com/Blockstream/green_android) and [iOS](https://github.com/Blockstream/green_ios), and it is based on [gdk](https://github.com/blockstream/gdk), our cross-platform wallet library.
 
-You can read more about Blockstream Green [here](https://docs.blockstream.com/green/getting-started/intro.html).
+You can read more about Blockstream Green [here](https://blockstream.com/green/).
 
 ## Build
 
