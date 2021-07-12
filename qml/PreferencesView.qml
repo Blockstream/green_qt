@@ -27,6 +27,9 @@ MainPage {
     contentItem: ScrollView {
         id: scroll_view
         ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
+        ScrollBar.vertical.policy: ScrollBar.AlwaysOn
+        clip: true
+        focusPolicy: Qt.StrongFocus
         ColumnLayout {
             width: scroll_view.availableWidth
             spacing: 16
