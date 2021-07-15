@@ -79,6 +79,13 @@ Wallet* WalletManager::createWallet(Network* network)
     return wallet;
 }
 
+Wallet *WalletManager::restoreWallet(Network *network)
+{
+    auto wallet = createWallet(network);
+    wallet->m_restoring = true;
+    return wallet;
+}
+
 void WalletManager::insertWallet(Wallet* wallet)
 {
     Q_ASSERT(!wallet->m_id.isEmpty() && !wallet->m_pin_data.isEmpty());

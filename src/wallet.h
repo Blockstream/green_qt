@@ -163,6 +163,7 @@ public:
 
     QString m_id;
     QString m_hash_id;
+    bool m_restoring{false};
     WalletUpdateAccountsActivity* m_update_accounts_activity{nullptr};
 
     Connectable<Session> m_session;
