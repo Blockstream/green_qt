@@ -3,6 +3,7 @@
 #include "balance.h"
 #include "ga.h"
 #include "json.h"
+#include "createaccounthandler.h"
 #include "loginhandler.h"
 #include "network.h"
 #include "util.h"
@@ -242,14 +243,28 @@ void Wallet::reload()
 
     auto handler = new GetSubAccountsHandler(this);
     QObject::connect(handler, &Handler::done, this, [this, handler] {
+        const bool create_segwit = m_network->isElectrum();
+        bool has_segwit = false;
+
         m_accounts.clear();
         for (QJsonValue value : handler->subAccounts()) {
             QJsonObject data = value.toObject();
             Account* account = getOrCreateAccount(data);
             account->reload();
+            has_segwit |= account->type() == "p2wpkh";
             if (!data.value("hidden").toBool()) {
                 m_accounts.append(account);
             }
+        }
+
+        if (m_restoring && create_segwit && !has_segwit) {
+            auto handler = new CreateAccountHandler({{ "name", "Segwit Account" }, { "type", "p2wpkh" }}, this);
+            QObject::connect(handler, &Handler::done, this, [=] {
+                handler->deleteLater();
+                reload();
+            });
+            handler->exec();
+            return;
         }
 
         emit accountsChanged();
