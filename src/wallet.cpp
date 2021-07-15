@@ -235,10 +235,13 @@ void Wallet::reload()
         refreshAssets(false);
     }
 
-    auto activity = new WalletUpdateAccountsActivity(this, this);
-    pushActivity(activity);
+    if (!m_update_accounts_activity) {
+        m_update_accounts_activity = new WalletUpdateAccountsActivity(this, this);
+        pushActivity(m_update_accounts_activity);
+    }
+
     auto handler = new GetSubAccountsHandler(this);
-    QObject::connect(handler, &Handler::done, this, [this, handler, activity] {
+    QObject::connect(handler, &Handler::done, this, [this, handler] {
         m_accounts.clear();
         for (QJsonValue value : handler->subAccounts()) {
             QJsonObject data = value.toObject();
@@ -270,8 +273,9 @@ void Wallet::reload()
             }
         }
 
-        activity->finish();
-        activity->deleteLater();
+        m_update_accounts_activity->finish();
+        m_update_accounts_activity->deleteLater();
+        m_update_accounts_activity = nullptr;
     });
     QObject::connect(handler, &Handler::resolver, this, [](Resolver* resolver) {
         resolver->resolve();

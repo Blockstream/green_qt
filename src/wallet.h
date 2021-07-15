@@ -18,6 +18,7 @@ class Asset;
 class Device;
 class Network;
 class Session;
+class WalletUpdateAccountsActivity;
 
 struct GA_session;
 struct GA_auth_handler;
@@ -162,6 +163,7 @@ public:
 
     QString m_id;
     QString m_hash_id;
+    WalletUpdateAccountsActivity* m_update_accounts_activity{nullptr};
 
     Connectable<Session> m_session;
     AuthenticationStatus m_authentication{Unauthenticated};
