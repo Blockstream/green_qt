@@ -118,5 +118,7 @@
         <file>GTextField.qml</file>
         <file>AmountValidator.qml</file>
         <file>GTextArea.qml</file>
+        <file>GComboBox.qml</file>
+        <file>GSwitch.qml</file>
     </qresource>
 </RCC>

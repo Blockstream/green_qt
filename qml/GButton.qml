@@ -26,7 +26,7 @@ Button {
             if (self.activeFocus || self.hovered) return _color(600)
             return _color(500)
         }
-        border.width: self.activeFocus ? 2 : 0
+        border.width: self.activeFocus ? 1 : 0
         border.color: Qt.lighter(background.color)
     }
     contentItem: RowLayout {

@@ -63,7 +63,7 @@ ColumnLayout {
                     }
                     HSpacer {
                     }
-                    Switch {
+                    GSwitch {
                         Binding on checked {
                             value: wallet.config[method].enabled
                         }

@@ -39,7 +39,7 @@ WalletDialog {
                 onFinished: close()
             }
         }
-        Switch {
+        GSwitch {
             id: qrcode_switch
             checked: false
             Layout.margins: 20

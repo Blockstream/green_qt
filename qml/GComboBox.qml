@@ -2,12 +2,12 @@ import QtQuick 2.12
 import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.3
 
-TextField {
+ComboBox {
     id: self
-    bottomPadding: 8
-    topPadding: 8
+    bottomPadding: 10
+    topPadding: 10
     leftPadding: 8
-    rightPadding: 8
+    rightPadding: 8 + self.indicator.width + self.spacing
     background: Rectangle {
         implicitWidth: 200
         radius: 4

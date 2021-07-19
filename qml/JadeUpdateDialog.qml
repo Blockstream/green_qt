@@ -169,12 +169,11 @@ AbstractDialog {
         ButtonGroup {
             id: button_group
         }
-        ComboBox {
+        GComboBox {
             id: channel_combo_box
             visible: Qt.application.arguments.indexOf('--debugjade') > 0
             enabled: controller.session && controller.session.connected
             Layout.fillWidth: true
-            flat: true
             valueRole: 'channel'
             textRole: 'text'
             model: ListModel {

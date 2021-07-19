@@ -43,10 +43,9 @@ MainPage {
                     Label {
                         text: qsTrId('id_language')
                     }
-                    ComboBox {
+                    GComboBox {
                         id: control
                         Layout.minimumWidth: 400
-                        flat: true
                         model: languages
                         textRole: 'name'
                         valueRole: 'language'
@@ -75,7 +74,7 @@ MainPage {
                     Label {
                         text: qsTrId('Collapse Side Bar')
                     }
-                    Switch {
+                    GSwitch {
                         checked: Settings.collapseSideBar
                         onCheckedChanged: Settings.collapseSideBar = checked
                     }
@@ -84,7 +83,7 @@ MainPage {
                     Label {
                         text: qsTrId('id_enable_testnet')
                     }
-                    Switch {
+                    GSwitch {
                         checked: Settings.enableTestnet
                         onCheckedChanged: Settings.enableTestnet = checked
                     }
@@ -93,7 +92,7 @@ MainPage {
                     Label {
                         text: qsTrId('Check for updates on startup')
                     }
-                    Switch {
+                    GSwitch {
                         checked: Settings.checkForUpdates
                         onCheckedChanged: Settings.checkForUpdates = checked
                     }
@@ -109,7 +108,7 @@ MainPage {
                     Label {
                         text: qsTrId('id_connect_through_a_proxy')
                     }
-                    Switch {
+                    GSwitch {
                         id: proxy_switch
                         checked: Settings.useProxy
                         onCheckedChanged: Settings.useProxy = checked
@@ -147,7 +146,7 @@ MainPage {
                     Label {
                         text: qsTrId('id_connect_with_tor')
                     }
-                    Switch {
+                    GSwitch {
                         id: tor_switch
                         Layout.alignment: Qt.AlignLeft
                         checked: Settings.useTor

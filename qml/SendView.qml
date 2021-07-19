@@ -53,8 +53,6 @@ StackView {
                 id: address_field
                 selectByMouse: true
                 Layout.fillWidth: true
-                horizontalAlignment: TextField.AlignHCenter
-                placeholderText: qsTrId('id_enter_an_address')
                 Layout.minimumWidth: contentWidth + 2 * padding
                 font.pixelSize: 12
                 onTextChanged: text = text.trim()
@@ -111,7 +109,7 @@ StackView {
         SectionLabel { text: qsTrId('id_amount') }
         RowLayout {
             spacing: 16
-            Switch {
+            GSwitch {
                 id: send_all_button
                 text: qsTrId('id_send_all_funds')
             }

@@ -38,7 +38,7 @@ WizardPage {
             HSpacer {
 
             }
-            ComboBox {
+            GComboBox {
                 id: mnemonic_size_combobox
                 property var sizes: [12, 24, 27]
                 property real size: sizes[currentIndex]

@@ -42,8 +42,7 @@ ColumnLayout {
                 Layout.minimumWidth: contentWidth
                 text: qsTrId('id_show_bitcoin_amounts_in')
             }
-            ComboBox {
-                flat: true
+            GComboBox {
                 property var units: ['BTC', 'mBTC', '\u00B5BTC', 'bits', 'sats']
                 model: units.map(unit => ({
                     text: wallet.network.liquid ? `L-${unit}` : unit,
@@ -76,10 +75,9 @@ ColumnLayout {
                 text: qsTrId('id_reference_exchange_rate')
             }
             RowLayout {
-                ComboBox {
+                GComboBox {
                     id: currency_combo
                     Layout.fillWidth: true
-                    flat: true
                     width: 200
                     model: Object.keys(self.per_currency).sort()
                     currentIndex: model.indexOf(self.wallet.settings.pricing ? self.wallet.settings.pricing.currency : '')
@@ -95,10 +93,9 @@ ColumnLayout {
                         controller.changeSettings({ pricing })
                     }
                 }
-                ComboBox {
+                GComboBox {
                     id: exchange_combo
                     Layout.fillWidth: true
-                    flat: true
                     width: 200
                     model: currency_combo.currentText ? per_currency[currency_combo.currentText].sort() : []
                     currentIndex: self.wallet.settings.pricing ? Math.max(0, model.indexOf(self.wallet.settings.pricing.exchange)) : 0
@@ -162,7 +159,7 @@ ColumnLayout {
                     Layout.minimumWidth: contentWidth
                     text: qsTrId('id_receive_email_notifications_for')
                 }
-                Switch {
+                GSwitch {
                     Binding on checked {
                         value: wallet.settings.notifications ? (wallet.settings.notifications.email_outgoing && wallet.settings.notifications.email_outgoing) : false
                     }

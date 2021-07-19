@@ -1,6 +1,6 @@
 import QtQuick.Controls 2.13
 
-ComboBox {
+GComboBox {
     property var extra: []
     property int feeRate: model[currentIndex].feeRate || 0
     property int blocks: model[currentIndex].blocks || 0
@@ -21,7 +21,6 @@ ComboBox {
         fee('id_slow', 'id_4_hours', 24)
     ]
 
-    flat: true
     model: (wallet.network.liquid ? liquid_fees : fees).concat(extra)
     textRole: 'text'
 }

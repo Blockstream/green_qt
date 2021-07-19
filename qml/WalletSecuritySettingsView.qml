@@ -61,9 +61,8 @@ ColumnLayout {
                 wrapMode: Label.WordWrap
                 text: qsTrId('id_set_a_timeout_to_logout_after')
             }
-            ComboBox {
+            GComboBox {
                 Layout.alignment: Qt.AlignRight
-                flat: true
                 model: [1, 2, 5, 10, 60]
                 width: 200
                 delegate: ItemDelegate {
