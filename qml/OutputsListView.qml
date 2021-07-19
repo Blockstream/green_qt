@@ -57,7 +57,7 @@ Page {
             }
 
             Repeater {
-                model: account.wallet.network.liquid ? ['all', 'csv', 'p2wsh', 'not confidential'] : ['all', 'csv', 'p2wsh', 'dust', 'locked']
+                model: account.wallet.network.liquid ? ['', 'csv', 'p2wsh', 'not confidential'] : ['all', 'csv', 'p2wsh', 'dust', 'locked']
                 delegate: Button {
                     id: self
                     ButtonGroup.group: button_group

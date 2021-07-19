@@ -7,11 +7,15 @@ import QtQuick.Layouts 1.12
 
 StackView {
     id: stack_view
+    required property Account account
     property alias address: address_field.text
     property Balance balance: asset_field_loader.item ? asset_field_loader.item.balance : null
     property alias sendAll: send_all_button.checked
+    property var selectedOutputs: coins_view.selectedOutputs
+    property bool manualCoinSelection: coins_combo_box.currentIndex === 1
 
     property var actions: currentItem.actions
+    property var options: currentItem.options
 
     Component {
         id: scanner_view
@@ -26,15 +30,25 @@ StackView {
         }
     }
 
-    implicitHeight: currentItem.implicitHeight
-    implicitWidth: currentItem.implicitWidth
+    implicitHeight: setup_view.implicitHeight
+    implicitWidth: setup_view.implicitWidth
+
+    property Item coins_view: SelectCoinsView {
+        account: stack_view.account
+        property list<Action> actions: [
+            Action {
+                text: qsTrId('Done')
+                onTriggered: stack_view.pop()
+            }
+        ]
+    }
 
     Component {
         id: review_view
         ReviewView {}
     }
 
-    initialItem: ColumnLayout {
+    initialItem: GridLayout {
         id: setup_view
         property list<Action> actions: [
             Action {
@@ -44,9 +58,13 @@ StackView {
             }
         ]
 
-        spacing: 0
+        columns: 2
+        rowSpacing: 12
+        columnSpacing: 12
 
-        SectionLabel { text: qsTrId('id_address') }
+        SectionLabel {
+            text: qsTrId('id_address')
+        }
 
         RowLayout {
             GTextField {
@@ -69,8 +87,8 @@ StackView {
             }
             ToolButton {
                 icon.source: 'qrc:/svg/paste.svg'
-                icon.width: 16
-                icon.height: 16
+                icon.width: 24
+                icon.height: 24
                 onClicked: {
                     address_field.clear();
                     address_field.paste();
@@ -80,16 +98,23 @@ StackView {
                 ToolTip.visible: hovered
             }
         }
-        SectionLabel { text: qsTrId('id_asset'); visible: wallet.network.liquid }
+        Loader {
+            visible: active
+            active: wallet.network.liquid
+            sourceComponent: SectionLabel {
+                text: qsTrId('id_asset')
+            }
+        }
         Loader {
             id: asset_field_loader
+            visible: active
             active: wallet.network.liquid
             Layout.fillWidth: true
-            sourceComponent: ComboBox {
+            sourceComponent: GComboBox {
                 property Balance balance: account.balances[asset_field.currentIndex]
                 property Asset asset: balance.asset
                 id: asset_field
-                flat: true
+
                 model: account.balances
                 delegate: AssetDelegate {
                     highlighted: index === asset_field.currentIndex
@@ -106,12 +131,81 @@ StackView {
                 }
             }
         }
-        SectionLabel { text: qsTrId('id_amount') }
+        SectionLabel {
+            text: qsTrId('Coins')
+            visible: !wallet.network.liquid
+        }
         RowLayout {
             spacing: 16
+            visible: !wallet.network.liquid
+            GComboBox {
+                Layout.fillWidth: true
+                id: coins_combo_box
+                model: [
+                    { text: qsTrId('Use all available coins'), enabled: true },
+                    { text: qsTrId('Manual coin selection'), enabled: !wallet.network.electrum }
+                ]
+                bottomPadding: 13
+                topPadding: 13
+                contentItem: RowLayout {
+                    spacing: 12
+                    Image {
+                        Layout.preferredHeight: 24
+                        Layout.preferredWidth: 24
+                        source: icons[wallet.network.key]
+                    }
+                    Label {
+                        text: wallet.network.name
+                    }
+                    Label {
+                        Layout.fillWidth: true
+                        text: {
+                            if (coins_combo_box.currentIndex === 0) return qsTrId('(all coins)')
+                            const count = send_view.selectedOutputs.length
+                            if (count === 0) return qsTrId('(no coins selected)')
+                            return qsTrId('(%1 coins selected)').arg(count)
+                        }
+                    }
+                    Label {
+                        text: {
+                            if (coins_combo_box.currentIndex === 0) {
+                                return stack_view.balance ? stack_view.balance.displayAmount : formatAmount(account.balance)
+                            }
+
+                            const asset = stack_view.balance ? stack_view.balance.asset : null
+                            var x = 0
+                            for (const u of send_view.selectedOutputs) {
+                                if (!u.asset || u.asset === asset) {
+                                    x += u.data['satoshi']
+                                }
+                            }
+                            return asset ? asset.formatAmount(x, true) : formatAmount(x)
+                        }
+                    }
+                }
+                delegate: ItemDelegate {
+                    width: coins_combo_box.width
+                    text: modelData.text
+                    highlighted: ListView.isCurrentItem
+                    enabled: modelData.enabled
+                }
+            }
+            GButton {
+                large: true
+                visible: coins_combo_box.currentIndex === 1
+                onClicked: stack_view.push(coins_view)
+                text: 'Select Coins'
+            }
+        }
+        SectionLabel {
+            text: qsTrId('id_amount')
+        }
+        RowLayout {
+            spacing: 12
             GSwitch {
+                Layout.fillWidth: true
                 id: send_all_button
-                text: qsTrId('id_send_all_funds')
+                text: qsTrId('Send all')
             }
             GTextField {
                 id: amount_field
@@ -167,8 +261,11 @@ StackView {
                 rightPadding: currency.width + 16
             }
         }
-        SectionLabel { text: qsTrId('id_network_fee') }
+        SectionLabel {
+            text: qsTrId('id_network_fee')
+        }
         RowLayout {
+            spacing: 12
             FeeComboBox {
                 id: fee_combo
                 Layout.fillWidth: true

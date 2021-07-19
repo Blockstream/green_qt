@@ -20,12 +20,18 @@ bool OutputListModelFilter::filterAcceptsRow(int source_row, const QModelIndex &
 {
     auto output = m_model->index(source_row, 0, source_parent).data(Qt::UserRole).value<Output*>();
 
-    if (m_filter == "csv") return output->addressType() == "csv";
-    if (m_filter == "p2wsh") return output->addressType() == "p2wsh";
-    if (m_filter == "dust") return output->dust();
-    if (m_filter == "locked") return output->locked();
-    if (m_filter == "not confidential") return !output->confidential();
-    // empty filter or filter === 'all'
+    for (auto filter : m_filter.split(' ', Qt::SkipEmptyParts)) {
+        bool invert = filter.startsWith('!');
+        if (invert) filter = filter.mid(1);
+        bool result = true;
+        if (filter == "csv") result = output->addressType() == "csv";
+        if (filter == "p2wsh") result = output->addressType() == "p2wsh";
+        if (filter == "dust") result = output->dust();
+        if (filter == "locked") result = output->locked();
+        if (filter == "not confidential") result = !output->confidential();
+        if (invert) result = !result;
+        if (!result) return false;
+    }
     return true;
 }
 

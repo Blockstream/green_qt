@@ -120,5 +120,7 @@
         <file>GTextArea.qml</file>
         <file>GComboBox.qml</file>
         <file>GSwitch.qml</file>
+        <file>CoinDelegate.qml</file>
+        <file>SelectCoinsView.qml</file>
     </qresource>
 </RCC>

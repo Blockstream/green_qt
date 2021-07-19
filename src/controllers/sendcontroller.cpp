@@ -130,35 +130,37 @@ void SendController::update()
     if (!wallet()) return;
     const bool is_liquid = wallet()->network()->isLiquid();
     if (hasFiatRate()) {
-        auto unit = wallet()->settings().value("unit").toString();
-        unit = unit == "\u00B5BTC" ? "ubtc" : unit.toLower();
-        QJsonObject convert;
+        if (!m_send_all) {
+            auto unit = wallet()->settings().value("unit").toString();
+            unit = unit == "\u00B5BTC" ? "ubtc" : unit.toLower();
+            QJsonObject convert;
 
-        if (m_send_all) {
-            if (is_liquid) {
-                if (m_balance) {
-                    convert.insert("sats", QString::number(m_balance->amount()));
-                }
-            } else {
-                auto satoshi = account()->json().value("satoshi").toObject();
-                Q_ASSERT(satoshi.contains("btc"));
-                convert.insert("sats", QString::number(satoshi.value("btc").toDouble()));
+            if (m_send_all) {
+    //            if (is_liquid) {
+    //                if (m_balance) {
+    //                    convert.insert("sats", QString::number(m_balance->amount()));
+    //                }
+    //            } else {
+    //                auto satoshi = account()->json().value("satoshi").toObject();
+    //                Q_ASSERT(satoshi.contains("btc"));
+    //                convert.insert("sats", QString::number(satoshi.value("btc").toDouble()));
+    //            }
+            } else if (!m_amount.isEmpty()) {
+                Q_ASSERT(m_fiat_amount.isEmpty());
+                auto amount = m_amount;
+                amount.replace(',', '.');
+                convert.insert(unit, amount);
+            } else if (!m_fiat_amount.isEmpty()) {
+                Q_ASSERT(m_amount.isEmpty());
+                auto fiat = m_fiat_amount;
+                fiat.replace(',', '.');
+                convert.insert("fiat", fiat);
             }
-        } else if (!m_amount.isEmpty()) {
-            Q_ASSERT(m_fiat_amount.isEmpty());
-            auto amount = m_amount;
-            amount.replace(',', '.');
-            convert.insert(unit, amount);
-        } else if (!m_fiat_amount.isEmpty()) {
-            Q_ASSERT(m_amount.isEmpty());
-            auto fiat = m_fiat_amount;
-            fiat.replace(',', '.');
-            convert.insert("fiat", fiat);
-        }
 
-        const auto res = wallet()->convert(convert);
-        m_effective_amount = res.value(unit).toString();
-        m_effective_fiat_amount = res.value("fiat").isNull() ? "n/a" : res.value("fiat").toString();
+            const auto res = wallet()->convert(convert);
+            m_effective_amount = res.value(unit).toString();
+            m_effective_fiat_amount = res.value("fiat").isNull() ? "n/a" : res.value("fiat").toString();
+        }
     } else {
         Q_ASSERT(is_liquid);
         if (m_send_all) {
@@ -215,17 +217,27 @@ void SendController::create()
         { "subaccount", static_cast<qint64>(account()->pointer()) },
         { "fee_rate", m_fee_rate },
         { "send_all", m_send_all },
-        { "addressees", QJsonArray{address}}
+        { "addressees", QJsonArray{address} }
     };
 
-    qDebug() << data;
+    if (m_manual_coin_selection) {
+        const auto key = m_balance ? m_balance->asset()->id() : "btc";
+        auto utxos = m_utxos;
+        if (!utxos.contains(key)) utxos.insert(key, QJsonArray());
+        data.insert("utxos", utxos);
+    }
+
     m_create_handler = new CreateTransactionHandler(wallet(), data);
     connect(m_create_handler, &Handler::done, this, [this, count] {
         if (m_count == count) {
             m_transaction = m_create_handler->result().value("result").toObject();
-            qDebug() << "=========";
-            qDebug() << "=========";
-            qDebug() << m_transaction;
+
+            if (m_send_all) {
+                const auto satoshi = m_transaction.value("transaction_outputs").toArray().first().toObject().value("satoshi").toDouble();
+                m_amount = wallet()->formatAmount(satoshi, false);
+                m_fiat_amount = wallet()->formatAmount(satoshi, false, "fiat");
+                emit changed();
+            }
 
             emit transactionChanged();
             setValid(true);
@@ -260,6 +272,22 @@ void SendController::signAndSend()
         exec(send);
     });
     exec(sign);
+}
+
+void SendController::setUtxos(const QJsonObject& utxos)
+{
+    if (m_utxos == utxos) return;
+    m_utxos = utxos;
+    emit utxosChanged(m_utxos);
+    create();
+}
+
+void SendController::setManualCoinSelection(bool manual_coin_selection)
+{
+    if (m_manual_coin_selection == manual_coin_selection) return;
+    m_manual_coin_selection = manual_coin_selection;
+    emit changed();
+    create();
 }
 
 void SendController::setSignedTransaction(Transaction* signed_transaction)

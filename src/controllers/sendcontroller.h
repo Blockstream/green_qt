@@ -19,6 +19,8 @@ class SendController : public AccountController
     Q_PROPERTY(QString effectiveFiatAmount READ effectiveFiatAmount NOTIFY changed)
     Q_PROPERTY(QString memo READ memo WRITE setMemo NOTIFY changed)
     Q_PROPERTY(int feeRate READ feeRate WRITE setFeeRate NOTIFY changed)
+    Q_PROPERTY(bool manualCoinSelection READ manualCoinSelection WRITE setManualCoinSelection NOTIFY changed)
+    Q_PROPERTY(QJsonObject utxos READ utxos WRITE setUtxos NOTIFY utxosChanged)
     Q_PROPERTY(bool hasFiatRate READ hasFiatRate NOTIFY changed)
     Q_PROPERTY(QJsonObject transaction READ transaction NOTIFY transactionChanged)
     Q_PROPERTY(Transaction* signedTransaction READ signedTransaction NOTIFY signedTransactionChanged)
@@ -59,6 +61,12 @@ public:
 
     Transaction* signedTransaction() const { return m_signed_transaction; }
 
+    QJsonObject utxos() const { return m_utxos; }
+    void setUtxos(const QJsonObject& utxos);
+
+    bool manualCoinSelection() const { return m_manual_coin_selection; }
+    void setManualCoinSelection(bool manual_coin_selection);
+
 public slots:
     void signAndSend();
 
@@ -67,10 +75,16 @@ signals:
     void transactionChanged();
     void signedTransactionChanged(Transaction* transaction);
 
+    void utxosChanged(QJsonObject utxos);
+
 private:
     void update();
     void create();
     void setSignedTransaction(Transaction* signed_transaction);
+
+    QJsonObject m_utxos;
+
+    bool m_manual_coin_selection;
 
 protected:
     bool m_valid{false};

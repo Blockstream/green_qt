@@ -35,7 +35,7 @@ public:
     bool confidential() const { return m_confidential; }
     bool expired() const { return m_expired; }
     bool unconfirmed() const { return m_unconfirmed; }
-    bool canBeLocked() const { return m_data["satoshi"].toDouble() < 2184; }
+    bool canBeLocked() const { return m_can_be_locked; }
     QString addressType() const { return m_address_type; }
 signals:
     void dataChanged(const QJsonObject& data);
