@@ -2,21 +2,16 @@ import QtQuick 2.12
 import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.3
 
-TextField {
+GTextField {
     readonly property bool empty: text === ''
     id: self
+    radius: height / 2
     topInset: 4
     bottomInset: 4
-    leftPadding: height / 2 + contentHeight
+    leftPadding: height / 2 + contentHeight + 4
     rightPadding: self.empty ? height / 2 : clear_button.height + self.height - self.font.pixelSize
-    topPadding: 12
-    bottomPadding: 12
-    background: Rectangle {
-        radius: height / 2
-        color: 'transparent'
-        border.width: 1
-        border.color: self.activeFocus ? constants.g700 : constants.c600
-    }
+    topPadding: 9
+    bottomPadding: 9
     implicitWidth: self.activeFocus || !self.empty ? 300 : 200
     Behavior on implicitWidth {
         SmoothedAnimation {
@@ -29,6 +24,8 @@ TextField {
         source: 'qrc:/svg/search.svg'
         height: self.contentHeight + 4
         width: height
+        smooth: true
+        mipmap: true
         anchors.left: parent.left
         anchors.leftMargin: (self.height - self.font.pixelSize) / 2
         anchors.verticalCenter: parent.verticalCenter
