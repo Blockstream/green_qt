@@ -9,9 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Save application log to file
 - Add support for Jade 1.1
 - By default add segwit account in new singlesig wallets
+- 'Show All' button to overview assets list (only visible when there are more than 3 assets)
+- 'Show All' button to overview transactions list (only visible when there are transactions)
 
 ### Changed
 - Manually trigger address confirmation on Jade
+- Overview 'Transactions' label renamed to 'Latest Transactions'
+- Overview 'Latest Transactions' now show 10 scrollable results
 
 ### Fixed
 

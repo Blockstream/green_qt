@@ -35,13 +35,30 @@ GPane {
 
         TransactionListView {
             id: transaction_list_view
-            interactive: false
+            header: GHeader {
+                Label {
+                    Layout.alignment: Qt.AlignVCenter
+                    id: label
+                    text: qsTrId('Latest Transactions')
+                    font.pixelSize: 20
+                    font.styleName: 'Bold'
+                }
+                HSpacer {
+                }
+                GButton {
+                    visible: transaction_list_view.list.count > 0
+                    Layout.alignment: Qt.AlignVCenter
+                    text: qsTrId('Show All')
+                    onClicked: wallet_view_header.currentView = 2
+                }
+            }
             hasExport: false
             label.font.pixelSize: 18
             Layout.fillWidth: true
             Layout.fillHeight: true
             height: contentHeight
             account: self.account
+            maxRowCount: 10
         }
     }
 
@@ -57,6 +74,21 @@ GPane {
         }
 
         AssetListView {
+            header: GHeader {
+                Label {
+                    text: qsTrId('id_assets')
+                    font.pixelSize: 20
+                    font.styleName: 'Bold'
+                }
+                HSpacer {
+                }
+                GButton {
+                    visible: self.account.balances.length > 3
+                    Layout.alignment: Qt.AlignHCenter
+                    text: qsTrId('Show All')
+                    onClicked: wallet_view_header.currentView = 1
+                }
+            }
             Layout.fillWidth: true
             label.font.pixelSize: 18
             model: {
@@ -67,19 +99,6 @@ GPane {
                 }
                 return balances
             }
-        }
-
-        GButton {
-            visible: false
-            enabled: self.account.balances.length > 3
-            text: {
-                const count = self.account.balances.length
-                if (count <= 3) return qsTrId('id_no_more_assets')
-                if (self.showAllAssets) return qsTrId('id_hide_assets')
-                return qsTrId('id_show_all_assets')
-            }
-            Layout.alignment: Qt.AlignCenter
-            onClicked: self.showAllAssets = !self.showAllAssets
         }
     }
 }

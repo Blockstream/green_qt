@@ -163,8 +163,20 @@ void TransactionFilterProxyModel::setFilter(const QString& filter)
     if (!m_filter.isEmpty() && !m_model->fetching()) m_model->fetchMore(QModelIndex{});
 }
 
+int TransactionFilterProxyModel::maxRowCount() const
+{
+    return m_max_row_count;
+}
+
+void TransactionFilterProxyModel::setMaxRowCount(int max_row_count)
+{
+    m_max_row_count = max_row_count;
+    emit maxRowCountChanged(max_row_count);
+}
+
 bool TransactionFilterProxyModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
 {
+    if (m_max_row_count >- 1 && source_row >= m_max_row_count) return false;
     if (m_filter.isEmpty()) return true;
     auto transaction = m_model->index(source_row, 0, source_parent).data(Qt::UserRole).value<Transaction*>();
     if (transaction->hash().contains(m_filter, Qt::CaseInsensitive)) return true;

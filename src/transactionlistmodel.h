@@ -56,6 +56,7 @@ class TransactionFilterProxyModel : public QSortFilterProxyModel
     Q_OBJECT
     Q_PROPERTY(TransactionListModel* model READ model WRITE setModel NOTIFY modelChanged)
     Q_PROPERTY(QString filter READ filter WRITE setFilter NOTIFY filterChanged)
+    Q_PROPERTY(int maxRowCount READ maxRowCount WRITE setMaxRowCount NOTIFY maxRowCountChanged)
     QML_ELEMENT
     TransactionListModel* m_model{nullptr};
     QString m_filter;
@@ -66,11 +67,16 @@ public:
     void setModel(TransactionListModel* model);
     QString filter() const { return m_filter; }
     void setFilter(const QString& filter);
+    int maxRowCount() const;
+    void setMaxRowCount(int max_row_count);
 protected:
     bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const override;
 signals:
     void modelChanged(TransactionListModel* model);
     void filterChanged(const QString& filter);
+    void maxRowCountChanged(int max_row_count);
+private:
+    int m_max_row_count = {-1};
 };
 
 #endif // TRANSACTIONLISTMODEL_H

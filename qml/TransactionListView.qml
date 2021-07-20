@@ -7,18 +7,21 @@ Page {
     required property Account account
     property alias interactive: list_view.interactive
     property alias label: label
+    property alias list: list_view
+    property alias maxRowCount: transaction_list_filter.maxRowCount
     property bool hasExport: true
 
     id: self
+    title: qsTrId('id_transactions')
     background: null
     spacing: constants.p1
     header: GHeader {
         Label {
             Layout.alignment: Qt.AlignVCenter
             id: label
-            text: qsTrId('id_transactions')
+            text: self.title
             font.pixelSize: 20
-            font.styleName: "Bold"
+            font.styleName: 'Bold'
         }
         HSpacer {
         }
@@ -41,6 +44,7 @@ Page {
         clip: true
         spacing: 8
         model: TransactionFilterProxyModel {
+            id: transaction_list_filter
             filter: search_field.text
             model: TransactionListModel {
                 id: transaction_list_model
@@ -69,7 +73,7 @@ Page {
             visible: !list_view.model.fetching && list_view.count === 0
             anchors.centerIn: parent
             color: 'white'
-            text: qsTrId("No transactions available")
+            text: qsTrId('No transactions available')
         }
     }
 
