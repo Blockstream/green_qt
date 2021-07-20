@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Warn on send dialog that Ledger Nano S supports a limited set of liquid assets
 - Warn on receive dialog that Ledger Nano S supports a limited set of liquid assets
+- Support for creating and restoring Singlesig wallets on Bitcoin Mainnet
 
 ### Changed
 - Show warning when sending with no available balance

@@ -21,7 +21,7 @@ AbstractDialog {
         id: controller
         network: {
             const network = navigation.param.network || ''
-            const server_type = (network === 'testnet' || network === 'testnet-liquid') ? (navigation.param.server_type || '') : 'green'
+            const server_type = network === 'liquid' ? 'green' : (navigation.param.server_type || '')
             return NetworkManager.networkWithServerType(network, server_type)
         }
         type: navigation.param.type
@@ -240,7 +240,7 @@ AbstractDialog {
                     VSpacer {
                     }
                 }
-            }            
+            }
         }
         AnimLoader {
             active: controller.pin.length === 6
