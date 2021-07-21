@@ -148,6 +148,10 @@ Pokud vám žádný z těchto tipů nepomohl nebo pokud nemáte frázi pro obnov
         <translation>Přidat částku (volitelné)</translation>
     </message>
     <message>
+        <source>id_add_an_amp_wallet</source>
+        <translation>Add an AMP wallet</translation>
+    </message>
+    <message>
         <source>id_add_another_wallet</source>
         <translation>Přidat další peněženku</translation>
     </message>
@@ -193,7 +197,7 @@ Pokud vám žádný z těchto tipů nepomohl nebo pokud nemáte frázi pro obnov
     </message>
     <message>
         <source>id_advanced</source>
-        <translation>POKROČILÉ</translation>
+        <translation>Advanced</translation>
     </message>
     <message>
         <source>id_advanced_network_settings</source>
@@ -336,6 +340,14 @@ Pokud vám žádný z těchto tipů nepomohl nebo pokud nemáte frázi pro obnov
         <translation>Biometrické přihlášení je povoleno</translation>
     </message>
     <message>
+        <source>id_bip49_accounts_allow_you_to</source>
+        <translation>BIP49 accounts allow you to segregate funds, and to receive on wrapped segwit addresses, thus ensuring the highest backwards compatibility when receiving funds from anyone on the network.</translation>
+    </message>
+    <message>
+        <source>id_bip84_accounts_allow_you_to</source>
+        <translation>BIP84 accounts allow you to segregate your funds, and to receive on bech32 native segwit addresses. This account type ensures cheaper transactions when sending funds, but not all services support bech32 addresses yet.</translation>
+    </message>
+    <message>
         <source>id_bitcoin_denomination</source>
         <translation>Bitcoin denominace</translation>
     </message>
@@ -453,6 +465,10 @@ Jednoduše a bezpečně</translation>
         <translation>Změnou referenčního směnného kurzu se nastaví prahová hodnota 2FA na 0. Po utrácení nezapomeňte upravit prahovou hodnotu 2FA.</translation>
     </message>
     <message>
+        <source>id_check_for_updates_on_startup</source>
+        <translation>Check for updates on startup</translation>
+    </message>
+    <message>
         <source>id_check_your_backup</source>
         <translation>Zkontrolujte svou zálohu</translation>
     </message>
@@ -471,6 +487,10 @@ Jednoduše a bezpečně</translation>
     <message>
         <source>id_choose_method_to_authorize_the</source>
         <translation>Vyberte metodu k autorizaci akce</translation>
+    </message>
+    <message>
+        <source>id_choose_recovery_phrase_length</source>
+        <translation>Choose recovery phrase length</translation>
     </message>
     <message>
         <source>id_choose_security_policy</source>
@@ -517,6 +537,10 @@ Jednoduše a bezpečně</translation>
         <translation>Kód</translation>
     </message>
     <message>
+        <source>id_coins</source>
+        <translation>Coins</translation>
+    </message>
+    <message>
         <source>id_coins_locked</source>
         <translation>Mince uzamčeny</translation>
     </message>
@@ -539,6 +563,10 @@ Jednoduše a bezpečně</translation>
     <message>
         <source>id_coins_with_a_value_lower_than</source>
         <translation>Mince s hodnotou nižší než 1092 satoshi, které jsou neekonomické utratit; tyto mince může generovat vaše peněženka jako drobné nebo vám je mohou poslat třetí strany, které se pokoušejí spamovat nebo deanonymizovat vaši peněženku.</translation>
+    </message>
+    <message>
+        <source>id_collapse_side_bar</source>
+        <translation>Collapse side bar</translation>
     </message>
     <message>
         <source>id_communication_timed_out_make</source>
@@ -689,6 +717,10 @@ Jednoduše a bezpečně</translation>
         <translation>Kopírovat ID transakce</translation>
     </message>
     <message>
+        <source>id_copy_unblinded_link</source>
+        <translation>Copy unblinded link</translation>
+    </message>
+    <message>
         <source>id_copy_unblinding_data</source>
         <translation>Kopírovat nezaslepená data</translation>
     </message>
@@ -775,6 +807,10 @@ Jednoduše a bezpečně</translation>
     <message>
         <source>id_d_assets_in_this_account</source>
         <translation>%1 aktiva v tomto účtu</translation>
+    </message>
+    <message>
+        <source>id_data_directory</source>
+        <translation>Data directory</translation>
     </message>
     <message>
         <source>id_date</source>
@@ -1166,6 +1202,10 @@ obnovovací frázi</translation>
         <translation>Načítání nového firmwaru</translation>
     </message>
     <message>
+        <source>id_filters</source>
+        <translation>Filters</translation>
+    </message>
+    <message>
         <source>id_finishing_up</source>
         <translation>Dokončování</translation>
     </message>
@@ -1355,7 +1395,7 @@ obnovovací frázi</translation>
     </message>
     <message>
         <source>id_if_you_did_not_request_the</source>
-        <translation>Pokud jste o reset nepožádali, ale nemůžete proces resetování zrušit, protože nemáte přístup k žádným existujícím metodám dvoufaktorové autorizace, kontaktujte naši podporu.</translation>
+        <translation>If you did not request the reset, but you cannot cancel the reset process because you can&apos;t access any existing Two-Factor Authorization methods, dispute this 2FA reset. This will permanently block your wallet, but you can undo this action.</translation>
     </message>
     <message>
         <source>id_if_you_have_access_to_a</source>
@@ -1470,6 +1510,10 @@ obnovovací frázi</translation>
         <translation>Neplatný soukromý klíč</translation>
     </message>
     <message>
+        <source>id_invalid_recovery_phrase</source>
+        <translation>Invalid recovery phrase</translation>
+    </message>
+    <message>
         <source>id_invalid_replacement_fee_rate</source>
         <translation>Neplatná sazba náhradního poplatku (RBF)</translation>
     </message>
@@ -1554,6 +1598,10 @@ obnovovací frázi</translation>
         <translation>Ledger podporuje omezenou sadu aktiv: klepnutím sem zkontrolujete seznam.</translation>
     </message>
     <message>
+        <source>id_legacy_account</source>
+        <translation>Legacy Account</translation>
+    </message>
+    <message>
         <source>id_lets_get_you_set_up</source>
         <translation>Pojďme se připravit.</translation>
     </message>
@@ -1612,6 +1660,10 @@ obnovovací frázi</translation>
     <message>
         <source>id_locking_coins_can_help_protect</source>
         <translation>Zamykání mincí může pomoci chránit vaše soukromí a ušetřit na transakčních poplatcích. Zamčené mince se odečítají z vašeho zůstatku a nepoužívají se při odesílání transakcí. Mince označené jako prachové můžete uzamknout a odemknout je můžete kdykoli později.</translation>
+    </message>
+    <message>
+        <source>id_log_file</source>
+        <translation>Log file</translation>
     </message>
     <message>
         <source>id_log_in</source>
@@ -1802,6 +1854,10 @@ obnovovací frázi</translation>
         <translation>Sledování sítě</translation>
     </message>
     <message>
+        <source>id_new_account_created</source>
+        <translation>New account created</translation>
+    </message>
+    <message>
         <source>id_new_accounts_functionality</source>
         <translation>Nová funkce účtů již brzy!</translation>
     </message>
@@ -1976,6 +2032,10 @@ obnovovací frázi</translation>
     <message>
         <source>id_only_this_time</source>
         <translation>Pouze tentokrát</translation>
+    </message>
+    <message>
+        <source>id_open</source>
+        <translation>Open</translation>
     </message>
     <message>
         <source>id_operation_failure</source>
@@ -2478,6 +2538,10 @@ obnovovací frázi</translation>
         <translation>Přečtěte si naše smluvní podmínky %1</translation>
     </message>
     <message>
+        <source>id_segwit_account</source>
+        <translation>SegWit Account</translation>
+    </message>
+    <message>
         <source>id_select_a_fiat_currency_and</source>
         <translation>Vyberte fiat měnu a bitcoinovou denominaci, aby se v peněžence zobrazovaly správné částky</translation>
     </message>
@@ -2967,6 +3031,10 @@ Obnovte toto nastavení a znovu jej aktivujte.</translation>
         <translation>Čekací doba je nezbytná k zajištění bezpečnosti vaší peněženky, aby se zabránilo tomu, že by zloději obcházeli vaši ochranu dvou faktorů.</translation>
     </message>
     <message>
+        <source>id_there_are_no_results_for_the</source>
+        <translation>There are no results for the applied filter</translation>
+    </message>
+    <message>
         <source>id_there_is_already_a_pin_set_for</source>
         <translation>Pro %1 peněženku je již nastaven PIN. Pokračování neumožňuje nastavení PIN a přihlášení bude vyžadovat 24 slov mnemotechnické fráze. PIN můžete deaktivovat z nastavení nebo po 3 neúspěšných pokusech.</translation>
     </message>
@@ -3201,6 +3269,10 @@ Obnovte toto nastavení a znovu jej aktivujte.</translation>
     <message>
         <source>id_value_must_be_between_144_and</source>
         <translation>Hodnota musí být mezi 144 a 200000</translation>
+    </message>
+    <message>
+        <source>id_verify_on_device</source>
+        <translation>Verify on Device</translation>
     </message>
     <message>
         <source>id_verify_your_pin</source>
@@ -3443,6 +3515,10 @@ Obnovte toto nastavení a znovu jej aktivujte.</translation>
         <translation>K přihlášení do peněženky budete potřebovat PIN. Tento PIN zajišťuje peněženku pouze na tomto zařízení.</translation>
     </message>
     <message>
+        <source>id_youll_see_your_coins_here_when</source>
+        <translation>You&apos;ll see your coins here when you receive funds</translation>
+    </message>
+    <message>
         <source>id_your_2fa_expires_so_that_if_you</source>
         <translation>Platnost vašeho 2FA vyprší, takže pokud ztratíte přístup ke své metodě 2FA nebo služba Blockstream Green nebude k dispozici, můžete své bitcoiny kdykoli obnovit pomocí tohoto nástroje s otevřeným zdrojovým kódem</translation>
     </message>
@@ -3495,13 +3571,13 @@ Obnovte toto nastavení a znovu jej aktivujte.</translation>
         <translation>Vaše peněženka je uzamčena pro resetování dvoufaktorového ověření. Reset bude dokončen za %1 dní.</translation>
     </message>
     <message>
+        <source>id_your_wallet_is_locked_under_2fa</source>
+        <translation>Your wallet is locked under 2FA dispute.</translation>
+    </message>
+    <message>
         <source>id_your_wallet_is_not_yet_fully</source>
         <translation>Vaše peněženka ještě není zcela zabezpečená.
 Aktivujte prosím 2-Faktorové ověřování.</translation>
-    </message>
-    <message>
-        <source>id_your_wallet_locked_under_2fa</source>
-        <translation>Vaše peněženka uzamčena v rámci sporu 2FA.</translation>
     </message>
     <message>
         <source>id_your_watchonly_username_and</source>
