@@ -19,7 +19,7 @@ GPane {
         GHeader {
             Label {
                 Layout.alignment: Qt.AlignVCenter
-                text: qsTrId('Overview')
+                text: qsTrId('id_overview')
                 font.pixelSize: 20
                 font.styleName: 'Bold'
                 verticalAlignment: Label.AlignVCenter

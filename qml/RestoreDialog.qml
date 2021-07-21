@@ -159,7 +159,7 @@ AbstractDialog {
                 // }
                 id: editor
                 enabled: !controller.active
-                title: qsTrId('Insert your green mnemonic')
+                title: qsTrId('id_enter_your_recovery_phrase')
                 actions: [
                     Action {
                         enabled: !controller.active

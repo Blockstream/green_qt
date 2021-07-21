@@ -33,7 +33,7 @@ WizardPage {
         }
         RowLayout {
             Label {
-                text: "Please select the mnemonic length"
+                text: qsTrId('id_choose_recovery_phrase_length')
             }
             HSpacer {
 

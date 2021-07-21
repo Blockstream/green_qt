@@ -182,7 +182,7 @@ WalletDialog {
             onClicked: transaction.openInExplorer()
         }
         GButton {
-            text: qsTrId('Copy unblinded link')
+            text: qsTrId('id_copy_unblinded_link')
             visible: transaction.account.wallet.network.liquid
             onClicked: {
                 Clipboard.copy(transaction.unblindedLink())
@@ -190,7 +190,7 @@ WalletDialog {
             }
         }
         GButton {
-            text: qsTrId('Copy unblinded data')
+            text: qsTrId('id_copy_unblinding_data')
             visible: transaction.account.wallet.network.liquid
             onClicked: copyUnblindingData(this, transaction.data)
         }

@@ -218,7 +218,7 @@ MainPageHeader {
                 TabButton {
                     ButtonGroup.group: button_group
                     icon.source: "qrc:/svg/coins.svg"
-                    ToolTip.text: qsTrId('Coins')
+                    ToolTip.text: qsTrId('id_coins')
                     enabled: !self.wallet.watchOnly && !self.wallet.network.electrum
                     onClicked: checked = true
                 }

@@ -73,7 +73,7 @@ Page {
             visible: !list_view.model.fetching && list_view.count === 0
             anchors.centerIn: parent
             color: 'white'
-            text: qsTrId('No transactions available')
+            text: qsTrId('id_your_transactions_will_be_shown')
         }
     }
 

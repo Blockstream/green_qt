@@ -15,14 +15,14 @@ GPane {
             server_type: 'electrum'
             icons: ['qrc:/svg/singleSig.svg']
             title: qsTrId('Singlesig')
-            description: qsTrId('Your funds are secured by a single key held on your device. Simpler to set up and operate than multisig. If in doubt, select this option.')
+            description: qsTrId('id_your_funds_are_secured_by_a')
         }
         Card {
             enabled: (navigation.param.type || '') !== 'amp'
             server_type: 'green'
             icons: ['qrc:/svg/home.svg']
             title: 'Multisig Shield'
-            description: qsTrId('Your funds are secured by multiple keys, with one key on your device and another on our servers. For enhanced security.')
+            description: qsTrId('id_your_funds_are_secured_by')
         }
         HSpacer {
         }

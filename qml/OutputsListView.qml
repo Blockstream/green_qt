@@ -40,7 +40,7 @@ Page {
     header: GHeader {
         Label {
             Layout.alignment: Qt.AlignVCenter
-            text: qsTrId('Coins')
+            text: qsTrId('id_coins')
             font.pixelSize: 20
             font.styleName: 'Bold'
         }
@@ -133,9 +133,9 @@ Page {
                 color: 'white'
                 text: {
                     if (output_model_filter.filter === '') {
-                        return qsTrId(`You'll see your coins here when you receive funds`)
+                        return qsTrId('id_youll_see_your_coins_here_when')
                     } else {
-                        return qsTrId('There are no results for the applied filter')
+                        return qsTrId('id_there_are_no_results_for_the')
                     }
                 }
             }
@@ -200,7 +200,7 @@ Page {
     Component {
         id: info_dialog
         AbstractDialog {
-            title: qsTrId('Filters')
+            title: qsTrId('id_filters')
             icon: "qrc:/svg/info.svg"
             contentItem: ColumnLayout {
                 spacing: constants.p3

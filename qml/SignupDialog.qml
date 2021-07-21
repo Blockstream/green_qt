@@ -253,14 +253,14 @@ AbstractDialog {
                     }
                     Label {
                         Layout.maximumWidth: 500
-                        text: qsTrId(`Send and receive Liquid-based Managed Assets`)
+                        text: qsTrId('id_send_and_receive_liquidbased')
                         font.pixelSize: 28
                         font.bold: true
                         wrapMode: Label.WordWrap
                     }
                     Label {
                         Layout.maximumWidth: 500
-                        text: qsTrId(`We'll get you set up with an AMP wallet in no time. Note that you can alternatively create AMP accounts in any existing Liquid wallet.`)
+                        text: qsTrId('id_well_get_you_set_up_with_an_amp')
                         font.pixelSize: 16
                         wrapMode: Label.WordWrap
                     }

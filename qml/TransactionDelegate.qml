@@ -109,7 +109,7 @@ ItemDelegate {
                 }
                 MenuItem {
                     enabled: transaction.account.wallet.network.liquid
-                    text: qsTrId('Copy unblinded link')
+                    text: qsTrId('id_copy_unblinded_link')
                     onTriggered: {
                         Clipboard.copy(transaction.unblindedLink())
                         ToolTip.show(qsTrId('id_copied_to_clipboard'), 1000)

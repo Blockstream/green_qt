@@ -95,7 +95,7 @@ ColumnLayout {
         sourceComponent: ColumnLayout {
             spacing: 16
             SectionLabel {
-                text: qsTrId('Verify address matches the one displayed on Jade')
+                text: qsTrId('Verify receive address on Jade')
             }
             RowLayout {
                 spacing: 16
@@ -107,9 +107,8 @@ ColumnLayout {
                 GButton {
                     large: true
                     text: {
-                        if (receive_address.addressVerification === ReceiveAddressController.VerificationNone) return qsTrId('Verify')
-                        if (receive_address.addressVerification === ReceiveAddressController.VerificationPending) return qsTrId('Check Jade')
-                        return qsTrId('Verify again')
+                        if (receive_address.addressVerification === ReceiveAddressController.VerificationPending) return qsTrId('id_verify_on_device')
+                        return qsTrId('Verify')
                     }
                     enabled: !receive_address.generating && receive_address.addressVerification !== ReceiveAddressController.VerificationPending
                     onClicked: receive_address.verify()

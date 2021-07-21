@@ -35,7 +35,7 @@ MainPage {
             spacing: 16
             MainPageSection {
                 Layout.fillWidth: true
-                title: qsTrId('General')
+                title: qsTrId('id_general')
                 contentItem: GridLayout {
                     columns: 3
                     columnSpacing: 16
@@ -72,7 +72,7 @@ MainPage {
                     HSpacer {
                     }
                     Label {
-                        text: qsTrId('Collapse Side Bar')
+                        text: qsTrId('id_collapse_side_bar')
                     }
                     GSwitch {
                         checked: Settings.collapseSideBar
@@ -90,7 +90,7 @@ MainPage {
                     HSpacer {
                     }
                     Label {
-                        text: qsTrId('Check for updates on startup')
+                        text: qsTrId('id_check_for_updates_on_startup')
                     }
                     GSwitch {
                         checked: Settings.checkForUpdates
@@ -164,13 +164,13 @@ MainPage {
                     columnSpacing: 16
                     rowSpacing: 8
                     Label {
-                        text: qsTrId('id_data_dir')
+                        text: qsTrId('id_data_directory')
                     }
                     Label {
                         text: data_dir
                     }
                     GButton {
-                        text: 'id_open'
+                        text: qsTrId('id_open')
                         onClicked: Qt.openUrlExternally(data_dir)
                     }
                     HSpacer {
@@ -182,7 +182,7 @@ MainPage {
                         text: log_file
                     }
                     GButton {
-                        text: 'id_open'
+                        text: qsTrId('id_open')
                         onClicked: Qt.openUrlExternally(log_file)
                     }
                     HSpacer {

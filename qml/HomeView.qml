@@ -71,7 +71,7 @@ MainPage {
                 contentItem: RowLayout {
                     Label {
                         Layout.fillWidth: true
-                        text: 'There is a newer version of Green Desktop available'
+                        text: qsTrId('There is a newer version of Green Desktop available')
                         color: 'black'
                     }
                     Label {
@@ -175,7 +175,7 @@ MainPage {
                         GButton {
                             Layout.fillWidth: true
                             large: true
-                            text: qsTrId('Add an AMP Wallet')
+                            text: qsTrId('id_add_an_amp_wallet')
                             font.capitalization: Font.MixedCase
                             onClicked: navigation.go('/signup?network=liquid&type=amp')
                         }

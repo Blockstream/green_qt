@@ -81,7 +81,7 @@ ControllerDialog {
         }
     }
 
-    doneText: qsTrId("New account created")
+    doneText: qsTrId('id_new_account_created')
 
     initialItem: StackView {
         id: stack_view
@@ -138,8 +138,8 @@ ControllerDialog {
             DescriptiveRadioButton {
                 readonly property string type: 'p2sh-p2wpkh'
                 visible: controller.wallet.network.electrum
-                text: qsTrId('Legacy Account')
-                description: qsTrId('BIP49 accounts allow you to segregate funds, and to receive on wrapped segwit addresses, thus ensuring the highest backwards compatibility when receiving funds from anyone on the network.')
+                text: qsTrId('id_legacy_account')
+                description: qsTrId('id_bip49_accounts_allow_you_to')
                 ButtonGroup.group: type_button_group
                 Layout.fillWidth: true
                 Layout.maximumWidth: 400
@@ -147,8 +147,8 @@ ControllerDialog {
             DescriptiveRadioButton {
                 readonly property string type: 'p2wpkh'
                 visible: controller.wallet.network.electrum
-                text: qsTrId('SegWit Account')
-                description: qsTrId('BIP84 accounts allow you to segregate your funds, and to receive on bech32 native segwit addresses. This account type ensures cheaper transactions when sending funds, but not all services support bech32 addresses yet.')
+                text: qsTrId('id_segwit_account')
+                description: qsTrId('id_bip84_accounts_allow_you_to')
                 ButtonGroup.group: type_button_group
                 Layout.fillWidth: true
                 Layout.maximumWidth: 400

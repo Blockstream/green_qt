@@ -42,7 +42,7 @@ GPane {
                     network: 'liquid'
                     type: 'default'
                     icons: [window.icons['liquid']]
-                    title: 'Liquid Wallet'
+                    title: qsTrId('Liquid Wallet')
                     description: qsTrId('id_the_liquid_network_is_a_bitcoin')
                 }
                 Card {
@@ -50,8 +50,8 @@ GPane {
                     network: 'liquid'
                     type: 'amp'
                     icons: ['qrc:/svg/amp.svg']
-                    title: 'AMP Wallet'
-                    description: qsTrId('AMP accounts are only available on Liquid wallets. You may be required to provide your account ID to issuers to receive an AMP Asset.')
+                    title: qsTrId('AMP Wallet')
+                    description: qsTrId('id_amp_accounts_are_only_available')
                 }
                 HSpacer {
                 }
