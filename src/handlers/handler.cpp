@@ -41,6 +41,15 @@ Wallet* Handler::wallet() const
     return m_wallet;
 }
 
+static QJsonObject getErrorDetails()
+{
+    GA_json* output;
+    GA_get_thread_error_details(&output);
+    const auto result = Json::toObject(output);
+    GA_destroy_json(output);
+    return result;
+}
+
 void Handler::exec()
 {
     Q_ASSERT(!m_already_exec);
@@ -49,6 +58,7 @@ void Handler::exec()
     Q_ASSERT(!m_auth_handler);
     setFuture(QtConcurrent::run([this] {
         call(m_wallet->m_session->m_session, &m_auth_handler);
+        m_error_details = getErrorDetails();
     }));
 }
 
@@ -77,6 +87,14 @@ static QJsonObject getResult(GA_auth_handler* auth_handler)
 
 void Handler::step()
 {
+    if (m_error_details.contains("details")) {
+        setResult({
+            { "status", "error" },
+            { "error", m_error_details.value("details") }
+        });
+        return emit error();
+    }
+
     if (!m_auth_handler) {
         return emit done();
     }

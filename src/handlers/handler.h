@@ -50,6 +50,7 @@ private:
     GA_auth_handler* m_auth_handler{nullptr};
     TwoFactorResolver* m_two_factor_resolver{nullptr};
     QJsonObject m_result;
+    QJsonObject m_error_details;
 };
 
 #endif // GREEN_HANDLER_H
