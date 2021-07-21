@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Overview 'Transactions' label renamed to 'Latest Transactions'
 - Overview 'Latest Transactions' now show 10 scrollable results
 - Reviewed layout details of some settings panels
+- Set keyboard focus in pin field when creating or restoring wallet
 
 ### Fixed
 - Fix setting 2FA threshold denominated in μBTC

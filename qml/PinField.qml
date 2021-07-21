@@ -15,18 +15,15 @@ Item {
         if (digit < 0 && digit > 9) return
         if (buffer.length === 6) return
         buffer = buffer + digit
-        root.forceActiveFocus()
     }
 
     function removeDigit() {
         if (buffer.length === 0) return
         buffer = buffer.slice(0, -1)
-        root.forceActiveFocus()
     }
 
     function clear() {
         if (buffer !== '') buffer = ''
-        root.forceActiveFocus()
     }
 
     width: row_layout.width

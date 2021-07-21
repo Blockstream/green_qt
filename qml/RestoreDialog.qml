@@ -217,57 +217,63 @@ AbstractDialog {
         AnimLoader {
             active: controller.wallet && controller.wallet.authenticated
             animated: self.opened
-            sourceComponent: ColumnLayout {
-                spacing: 16
-                VSpacer {
-                }
-                Label {
-                    Layout.alignment: Qt.AlignHCenter
-                    text: qsTrId('id_set_a_new_pin')
-                    font.pixelSize: 20
-                }
-                PinView {
-                    Layout.alignment: Qt.AlignHCenter
-                    id: pin_view
-                    onPinChanged: {
-                        if (!pin.valid) return
-                        navigation.set({ pin: pin.value })
-                        Qt.callLater(pin_view.clear)
+            sourceComponent: Pane {
+                background: null
+                contentItem: ColumnLayout {
+                    spacing: 16
+                    VSpacer {
+                    }
+                    Label {
+                        Layout.alignment: Qt.AlignHCenter
+                        text: qsTrId('id_set_a_new_pin')
+                        font.pixelSize: 20
+                    }
+                    PinView {
+                        Layout.alignment: Qt.AlignHCenter
+                        id: pin_view
+                        onPinChanged: {
+                            if (!pin.valid) return
+                            navigation.set({ pin: pin.value })
+                            Qt.callLater(pin_view.clear)
+                        }
+                    }
+                    VSpacer {
                     }
                 }
-                VSpacer {
-                }
-            }
+            }            
         }
         AnimLoader {
             active: controller.pin.length === 6
             animated: self.opened
-            sourceComponent: ColumnLayout {
-                readonly property Action backAction: Action {
-                    text: qsTrId('id_back')
-                    onTriggered: navigation.set({ pin: undefined })
-                }
-                spacing: 16
-                VSpacer {
-                }
-                Label {
-                    Layout.alignment: Qt.AlignHCenter
-                    text: qsTrId('id_verify_your_pin')
-                    font.pixelSize: 20
-                }
-                PinView {
-                    Layout.alignment: Qt.AlignHCenter
-                    onPinChanged: {
-                        if (!pin.valid) return
-                        if (pin.value !== controller.pin) {
-                            clear();
-                            ToolTip.show(qsTrId('id_pins_do_not_match_please_try'), 1000);
-                        } else {
-                            onTriggered: controller.accept()
+            sourceComponent: Pane {
+                background: null
+                contentItem: ColumnLayout {
+                    readonly property Action backAction: Action {
+                        text: qsTrId('id_back')
+                        onTriggered: navigation.set({ pin: undefined })
+                    }
+                    spacing: 16
+                    VSpacer {
+                    }
+                    Label {
+                        Layout.alignment: Qt.AlignHCenter
+                        text: qsTrId('id_verify_your_pin')
+                        font.pixelSize: 20
+                    }
+                    PinView {
+                        Layout.alignment: Qt.AlignHCenter
+                        onPinChanged: {
+                            if (!pin.valid) return
+                            if (pin.value !== controller.pin) {
+                                clear();
+                                ToolTip.show(qsTrId('id_pins_do_not_match_please_try'), 1000);
+                            } else {
+                                onTriggered: controller.accept()
+                            }
                         }
                     }
-                }
-                VSpacer {
+                    VSpacer {
+                    }
                 }
             }
         }

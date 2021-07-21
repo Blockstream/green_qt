@@ -319,59 +319,65 @@ AbstractDialog {
         AnimLoader {
             active: navigation.param.quiz || false
             animated: self.opened
-            sourceComponent: ColumnLayout {
-                readonly property Action backAction: Action {
-                    text: qsTrId('id_back')
-                    onTriggered: navigation.set({ backup: undefined, quiz: undefined })
-                }
-                spacing: 16
-                VSpacer {
-                }
-                Label {
-                    Layout.alignment: Qt.AlignHCenter
-                    text: qsTrId('id_create_a_pin_to_access_your')
-                    font.pixelSize: 20
-                }
-                PinView {
-                    Layout.alignment: Qt.AlignHCenter
-                    id: pin_view
-                    focus: true
-                    onPinChanged: {
-                        if (!pin.valid) return
-                        navigation.set({ pin: pin.value })
-                        Qt.callLater(pin_view.clear)
+            sourceComponent: Pane {
+                background: null
+                contentItem: ColumnLayout {
+                    readonly property Action backAction: Action {
+                        text: qsTrId('id_back')
+                        onTriggered: navigation.set({ backup: undefined, quiz: undefined })
                     }
-                }
-                VSpacer {
+                    spacing: 16
+                    VSpacer {
+                    }
+                    Label {
+                        Layout.alignment: Qt.AlignHCenter
+                        text: qsTrId('id_create_a_pin_to_access_your')
+                        font.pixelSize: 20
+                    }
+                    PinView {
+                        Layout.alignment: Qt.AlignHCenter
+                        id: pin_view
+                        focus: true
+                        onPinChanged: {
+                            if (!pin.valid) return
+                            navigation.set({ pin: pin.value })
+                            Qt.callLater(pin_view.clear)
+                        }
+                    }
+                    VSpacer {
+                    }
                 }
             }
         }
         AnimLoader {
             active: navigation.param.pin || false
             animated: self.opened
-            sourceComponent: ColumnLayout {
-                spacing: 16
-                VSpacer {
-                }
-                Label {
-                    Layout.alignment: Qt.AlignHCenter
-                    text: qsTrId('id_verify_your_pin')
-                    font.pixelSize: 20
-                }
-                PinView {
-                    Layout.alignment: Qt.AlignHCenter
-                    id: verify_pin_view
-                    focus: true
-                    onPinChanged: {
-                        if (!pin.valid) return;
-                        if (navigation.param.pin === pin.value) {
-                            navigation.set({ verify: true })
-                        } else {
-                            navigation.set({ pin: undefined })
+            sourceComponent: Pane {
+                background: null
+                contentItem: ColumnLayout {
+                    spacing: 16
+                    VSpacer {
+                    }
+                    Label {
+                        Layout.alignment: Qt.AlignHCenter
+                        text: qsTrId('id_verify_your_pin')
+                        font.pixelSize: 20
+                    }
+                    PinView {
+                        Layout.alignment: Qt.AlignHCenter
+                        id: verify_pin_view
+                        focus: true
+                        onPinChanged: {
+                            if (!pin.valid) return;
+                            if (navigation.param.pin === pin.value) {
+                                navigation.set({ verify: true })
+                            } else {
+                                navigation.set({ pin: undefined })
+                            }
                         }
                     }
-                }
-                VSpacer {
+                    VSpacer {
+                    }
                 }
             }
         }

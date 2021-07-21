@@ -38,7 +38,10 @@ Column {
             model: 9
             PinButton {
                 text: modelData + 1
-                onTapped: field.addDigit(modelData + 1)
+                onTapped: {
+                    field.forceActiveFocus()
+                    field.addDigit(modelData + 1)
+                }
             }
         }
 
@@ -47,12 +50,18 @@ Column {
             width: 32
             icon.source: 'qrc:/svg/arrow_left.svg'
             icon.width: 24
-            onTapped: field.removeDigit()
+            onTapped: {
+                field.forceActiveFocus()
+                field.removeDigit()
+            }
         }
 
         PinButton {
             text: '0'
-            onTapped: field.addDigit(0)
+            onTapped: {
+                field.forceActiveFocus()
+                field.addDigit(0)
+            }
         }
 
         PinButton {
@@ -60,7 +69,10 @@ Column {
             icon.source: 'qrc:/svg/cancel.svg'
             icon.height: 16
             icon.width: 16
-            onTapped: field.clear()
+            onTapped: {
+                field.forceActiveFocus()
+                field.clear()
+            }
         }
     }
 }
