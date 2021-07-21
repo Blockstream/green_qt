@@ -16,8 +16,13 @@ ControllerDialog {
         text: wallet.settings.pricing.currency
     }]
 
-    property string threshold: wallet.config.limits.is_fiat ? wallet.config.limits.fiat : wallet.config.limits[wallet.settings.unit.toLowerCase()]
-    property string ticker: wallet.config.limits.is_fiat ? wallet.settings.pricing.currency : wallet.settings.unit
+    readonly property string unit: {
+        const unit = wallet.settings.unit
+        return unit === '\u00B5BTC' ? 'ubtc' : unit.toLowerCase()
+    }
+
+    property string threshold: wallet.config.limits.is_fiat ? wallet.config.limits.fiat : wallet.config.limits[unit]
+    property string ticker: wallet.config.limits.is_fiat ? wallet.settings.pricing.currency : unit
 
     title: qsTrId('id_set_twofactor_threshold')
     doneText: qsTrId('id_your_twofactor_threshold_is_s').arg(threshold + ' ' +  ticker)
@@ -32,6 +37,8 @@ ControllerDialog {
 
         contentItem: GridLayout {
             columns: 2
+            rowSpacing: constants.s1
+            columnSpacing: constants.s1
 
             Label {
                 text: qsTrId('id_currency')

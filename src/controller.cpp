@@ -111,8 +111,7 @@ class TwoFactorChangeLimitsHandler : public Handler
     QJsonObject m_details;
     void call(GA_session* session, GA_auth_handler** auth_handler) override {
         auto details = Json::fromObject(m_details);
-        int err = GA_twofactor_change_limits(session, details.get(), auth_handler);
-        Q_ASSERT(err == GA_OK);
+        GA_twofactor_change_limits(session, details.get(), auth_handler);
     }
 public:
     TwoFactorChangeLimitsHandler(const QJsonObject& details, Wallet* wallet)
@@ -278,10 +277,11 @@ void Controller::disableTwoFactor(const QString& method)
 void Controller::changeTwoFactorLimit(bool is_fiat, const QString& limit)
 {
     if (!m_wallet) return;
-    auto unit = m_wallet->settings().value("unit").toString().toLower();
+    auto unit = is_fiat ? "fiat" : m_wallet->settings().value("unit").toString().toLower();
+    if (!is_fiat && unit == "\u00B5btc") unit = "ubtc";
     auto details = QJsonObject{
         { "is_fiat", is_fiat },
-        { is_fiat ? "fiat" : unit, limit }
+        { unit, limit }
     };
     auto handler = new TwoFactorChangeLimitsHandler(details, m_wallet);
     connect(handler, &Handler::done, this, [this, handler] {
