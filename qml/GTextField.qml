@@ -5,10 +5,11 @@ import QtQuick.Layouts 1.3
 TextField {
     id: self
     property real radius: 4
-    bottomPadding: 8
-    topPadding: 8
+    bottomPadding: 6
+    topPadding: 6
     leftPadding: 8
     rightPadding: 8
+    font.pixelSize: 12
     background: Rectangle {
         implicitWidth: 200
         radius: self.radius
