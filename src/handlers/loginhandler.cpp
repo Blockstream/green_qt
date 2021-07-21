@@ -51,8 +51,7 @@ void LoginHandler::call(GA_session *session, GA_auth_handler **auth_handler)
 {
     auto hw_device = Json::fromObject(m_hw_device);
     auto details = Json::fromObject(m_details);
-    int err = GA_login_user(session, hw_device.get(), details.get(), auth_handler);
-    Q_ASSERT(err == GA_OK);
+    GA_login_user(session, hw_device.get(), details.get(), auth_handler);
 }
 
 QString LoginHandler::walletHashId() const
