@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Reviewed layout details of some settings panels
 
 ### Fixed
+- Fix missing account name for watchonly wallet
 
 ## [0.1.9] - 2021-07-01
 ### Added

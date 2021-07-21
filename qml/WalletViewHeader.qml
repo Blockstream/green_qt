@@ -105,6 +105,14 @@ MainPageHeader {
                         }
                     }
                 }
+                Loader {
+                    active: !wallet.device && wallet.watchOnly
+                    sourceComponent: Label {
+                        text: accountName(self.currentAccount)
+                        font.pixelSize: 24
+                        font.styleName: 'Medium'
+                    }
+                }
                 HSpacer {
                 }
                 ToolButton {
