@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Manually trigger address confirmation on Jade
 - Overview 'Transactions' label renamed to 'Latest Transactions'
 - Overview 'Latest Transactions' now show 10 scrollable results
+- Reviewed layout details of some settings panels
 
 ### Fixed
 

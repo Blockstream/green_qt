@@ -20,6 +20,7 @@ ColumnLayout {
         title: qsTrId('id_security')
         visible: !wallet.device && !self.wallet.network.electrum
         contentItem: RowLayout {
+            spacing: constants.s1
             Label {
                 Layout.fillWidth: true
                 text: qsTrId('id_disable_pin_access_for_this')
@@ -39,7 +40,9 @@ ColumnLayout {
         title: qsTrId('id_access')
         visible: !wallet.device
         contentItem: RowLayout {
+            spacing: constants.s1
             Label {
+                Layout.fillWidth: true
                 text: qsTrId('id_enable_or_change_your_pin_to')
                 wrapMode: Label.WordWrap
             }
@@ -57,14 +60,17 @@ ColumnLayout {
         enabled: !wallet.locked
         visible: !wallet.device
         contentItem: RowLayout {
+            spacing: constants.s1
             Label {
                 wrapMode: Label.WordWrap
+                Layout.fillWidth: true
                 text: qsTrId('id_set_a_timeout_to_logout_after')
             }
             GComboBox {
+                Layout.maximumWidth: 150
                 Layout.alignment: Qt.AlignRight
                 model: [1, 2, 5, 10, 60]
-                width: 200
+                width: 150
                 delegate: ItemDelegate {
                     width: parent.width
                     text: qsTrId('id_1d_minutes').arg(modelData)

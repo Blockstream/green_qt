@@ -36,7 +36,7 @@ ColumnLayout {
         title: qsTrId('id_bitcoin_denomination')
         enabled: !wallet.locked
         contentItem: RowLayout {
-            spacing: constants.p1
+            spacing: constants.s1
             Label {
                 Layout.fillWidth: true
                 Layout.minimumWidth: contentWidth
@@ -75,6 +75,7 @@ ColumnLayout {
                 text: qsTrId('id_reference_exchange_rate')
             }
             RowLayout {
+                spacing: constants.s1
                 GComboBox {
                     id: currency_combo
                     Layout.fillWidth: true
@@ -92,6 +93,8 @@ ColumnLayout {
                         }
                         controller.changeSettings({ pricing })
                     }
+                }
+                HSpacer {
                 }
                 GComboBox {
                     id: exchange_combo

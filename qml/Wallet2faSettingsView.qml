@@ -133,7 +133,6 @@ ColumnLayout {
                 Layout.alignment: Qt.AlignRight
                 enabled: wallet.config.any_enabled || false
                 text: wallet.locked ? qsTrId('id_cancel_twofactor_reset') : qsTrId('id_reset')
-                padding: 10
                 Component {
                     id: cancel_dialog
                     CancelTwoFactorResetDialog { }
