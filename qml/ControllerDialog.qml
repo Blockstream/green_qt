@@ -171,15 +171,30 @@ WalletDialog {
                 id: doneLabel
                 text: doneText
                 font.pixelSize: 20
-
             }
         }
     }
 
-    property Component errorComponent: Label {
-        property Handler handler
-        property list<Action> actions
-        text: 'ERROR:' + handler.result.error
+    property Component errorComponent: WizardPage {
+        actions: Action {
+            text: qsTrId('id_ok')
+            onTriggered: controller_dialog.accept()
+        }
+        Column {
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.horizontalCenter: parent.horizontalCenter
+            Image {
+                anchors.horizontalCenter: parent.horizontalCenter
+                source: 'qrc:/svg/2fa_general.svg'
+                sourceSize.width: 64
+                sourceSize.height: 64
+            }
+            Label {
+                property Handler handler
+                property list<Action> actions
+                text: qsTrId('id_no_attempts_remaining')
+            }
+        }
     }
 
     contentItem: StackView {

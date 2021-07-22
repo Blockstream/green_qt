@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Icon indicating whether a wallet is Singlesig or Multisig Shield
 
 ### Changed
+- Improves 2FA code error when all 3 attempts are used
 - Improves for Jade hardware
 - Improves look and feel to user interface controls
 - Improves address validation on Jade, now triggered manually
