@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 ### Changed
+- Auto-focus on 2FA input code field when prompted
 
 ### Fixed
 

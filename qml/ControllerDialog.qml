@@ -94,6 +94,7 @@ WalletDialog {
 
     property Component resolveCodeComponent: WizardPage {
         property TwoFactorResolver resolver
+        Component.onCompleted: code_field.forceActiveFocus()
         Connections {
             target: resolver
             function onInvalidCode() {
@@ -103,8 +104,9 @@ WalletDialog {
             }
         }
         Column {
-            spacing: 10
+            spacing: constants.s1
             anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
             Image {
                 anchors.horizontalCenter: enterCodeText.horizontalCenter
                 source: resolver ? `qrc:/svg/2fa_${resolver.method}.svg` : ''
