@@ -56,7 +56,6 @@ WalletManager::WalletManager()
 
 WalletManager::~WalletManager()
 {
-    qDebug() << Q_FUNC_INFO;
 }
 
 WalletManager* WalletManager::instance()

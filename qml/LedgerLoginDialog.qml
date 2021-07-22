@@ -20,23 +20,9 @@ AbstractDialog {
     enableRejectButton: false
     closePolicy: self.active ? Dialog.NoAutoClose : AbstractDialog.closePolicy
 
-
-//    LoginWithPinController {
-//        id: controller
-//        wallet: self.wallet
-//        pin: pin_view.pin.value
-//    }
-
-//    Connections {
-//        target: self.wallet
-//        function onLoginAttemptsRemainingChanged(loginAttemptsRemaining) {
-//            pin_view.clear()
-//        }
-//    }
     Connections {
         target: self.wallet
         function onActivityCreated(activity) {
-            console.log(controller, 'activity created', activity)
             if (activity instanceof WalletAuthenticateActivity) {
                 const view = foo.createObject(activities_row, { activity })
                 activity.failed.connect(() => {

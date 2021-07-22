@@ -36,7 +36,6 @@ AbstractDialog {
     Connections {
         target: self.wallet
         function onActivityCreated(activity) {
-            console.log(controller, 'activity created', activity)
             if (activity instanceof WalletAuthenticateActivity) {
                 const view = foo.createObject(activities_row, { activity })
                 activity.failed.connect(() => {

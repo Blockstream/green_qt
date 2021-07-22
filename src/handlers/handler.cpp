@@ -59,6 +59,9 @@ void Handler::exec()
     setFuture(QtConcurrent::run([this] {
         call(m_wallet->m_session->m_session, &m_auth_handler);
         m_error_details = getErrorDetails();
+        if (!m_error_details.isEmpty()) {
+            qDebug() << m_error_details;
+        }
     }));
 }
 
@@ -101,7 +104,6 @@ void Handler::step()
 
     for (;;) {
         const auto result = getResult(m_auth_handler);
-        qDebug() << Q_FUNC_INFO << result;
         const auto status = result.value("status").toString();
 
         if (status == "call") {

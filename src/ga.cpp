@@ -2,8 +2,6 @@
 #include "json.h"
 #include <gdk.h>
 
-#include <QDebug>
-
 namespace GA {
 
 QJsonObject convert_amount(GA_session* session, const QJsonObject& input)

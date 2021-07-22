@@ -55,7 +55,6 @@ bool DeviceCommand::readAPDUResponse(Device*, int length, QDataStream &stream)
     uint16_t sw;
     stream >> sw;
     if (sw != 0x9000) {
-        qDebug() << "SW = " << sw;
         emit error();
         return false;
     }
@@ -112,8 +111,6 @@ int DeviceCommand::readHIDReport(Device* device, QDataStream& stream)
     offset += read;
 
     if (length > 0) return 2;
-
-    //qDebug() << "READ APDU RESPONSE" << buf.toHex();
 
     QDataStream s(buf);
     return readAPDUResponse(device, buf.size(), s) ? 0 : 1;
