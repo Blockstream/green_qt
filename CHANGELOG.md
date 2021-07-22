@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+
+### Changed
+
+### Fixed
+
+## [0.1.10] - 2021-07-22
+### Added
 - Support manual coin selection in Bitcoin Multisig Shield wallets
 - Saving application log to file
 - Default SegWit accounts in new Singlesig wallets
