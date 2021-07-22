@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Send Dialog - highlight review button, make it a primary button
 - Auto-focus on 2FA input code field when prompted
+- Show copy to clipboard button when hovering an address card
 
 ### Fixed
 

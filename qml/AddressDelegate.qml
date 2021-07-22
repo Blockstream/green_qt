@@ -49,7 +49,7 @@ Button {
         ColumnLayout {
             Layout.fillWidth: true
             spacing: constants.p1
-            CopyableLabel {
+            Label {
                 Layout.fillWidth: true
                 elide: Text.ElideRight
                 text: address.data["address"]
@@ -61,6 +61,18 @@ Button {
                     color: constants.c500
                     text: address.data["address_type"]
                     font.capitalization: Font.AllUppercase
+                }
+            }
+        }
+        ToolButton {
+            opacity: self.hovered ? 1 : 0
+            icon.source: 'qrc:/svg/copy.svg'
+            onClicked: {
+                Clipboard.copy(address.data["address"]);
+                ToolTip.show(qsTrId('id_copied_to_clipboard'), 1000);
+            }
+            Behavior on opacity {
+                OpacityAnimator {
                 }
             }
         }

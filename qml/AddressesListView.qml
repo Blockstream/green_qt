@@ -38,7 +38,6 @@ Page {
             }
         }
         delegate: AddressDelegate {
-            hoverEnabled: false
             width: list_view.width
             onClicked: self.clicked(address)
         }
