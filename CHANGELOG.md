@@ -6,22 +6,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
-- Save application log to file
-- Add support for Jade 1.1
-- By default add segwit account in new singlesig wallets
-- 'Show All' button to overview assets list (only visible when there are more than 3 assets)
-- 'Show All' button to overview transactions list (only visible when there are transactions)
+- Support manual coin selection in Bitcoin Multisig Shield wallets
+- Saving application log to file
+- Default SegWit accounts in new Singlesig wallets
+- Add shortcut buttons to Asset and Transactions lists in overview view
+- Validation on amount input fields
+- Icon indicating whether a wallet is Singlesig or Multisig Shield
 
 ### Changed
-- Manually trigger address confirmation on Jade
-- Overview 'Transactions' label renamed to 'Latest Transactions'
-- Overview 'Latest Transactions' now show 10 scrollable results
-- Reviewed layout details of some settings panels
-- Set keyboard focus in pin field when creating or restoring wallet
+- Improves for Jade hardware
+- Improves look and feel to user interface controls
+- Improves address validation on Jade, now triggered manually
+- Overview 'Transactions' label renamed to 'Latest Transactions', now showing 10 scrollable results
+- Improves layout details of some settings panels
+- Improves Watch-Only login dialog
+- Improves remove wallet dialog
 
 ### Fixed
-- Fix setting 2FA threshold denominated in μBTC
-- Fix missing account name for watchonly wallet
+- Fixes crash when mnemonic is invalid
+- Fixes missing account name for Watch-Only wallets
+- Fixes setup of μBTC denominated 2FA threshold
 
 ## [0.1.9] - 2021-07-01
 ### Added
