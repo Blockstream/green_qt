@@ -224,7 +224,17 @@ void SendController::create()
         const auto key = m_balance ? m_balance->asset()->id() : "btc";
         auto utxos = m_utxos;
         if (!utxos.contains(key)) utxos.insert(key, QJsonArray());
+        QJsonArray used_utxos;
+        for (auto policy : utxos.keys()) {
+            for (auto utxo : utxos.value(policy).toArray()) {
+                used_utxos.append(utxo);
+            }
+        }
         data.insert("utxos", utxos);
+        if (!m_send_all) {
+            data.insert("used_utxos", used_utxos);
+            data.insert("utxo_strategy", "manual");
+        }
     }
 
     m_create_handler = new CreateTransactionHandler(wallet(), data);
