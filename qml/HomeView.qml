@@ -37,12 +37,6 @@ MainPage {
             RowLayout {
                 anchors.fill: parent
                 anchors.margins: constants.p1
-
-                Label {
-                    text: 'Welcome back!'
-                    font.pixelSize: 24
-                    font.styleName: 'Medium'
-                }
                 HSpacer {
                 }
                 GButton {
@@ -92,12 +86,81 @@ MainPage {
     }
     bottomPadding: 24
     contentItem: ColumnLayout {
-        Image {
-            Layout.topMargin: 24
-            Layout.bottomMargin: 24
-            Layout.alignment: Qt.AlignHCenter
-            source: 'qrc:/svg/green_logo.svg'
-            sourceSize.height: 96
+        spacing: constants.p4
+        ColumnLayout {
+            id: news_container
+            Layout.rightMargin: 16
+            Label {
+                Layout.bottomMargin: 16
+                text: "What's New at Blockstream"
+                font.pixelSize: 18
+                font.bold: true
+            }
+            GridLayout {
+                columns: 3
+                columnSpacing: constants.p2
+
+                Repeater {
+                    model: news_feed_controller.model
+                    Button {
+                        id: news_card
+                        implicitWidth: news_container.width/3
+                        implicitHeight: 300
+                        Layout.fillWidth: true
+                        padding: constants.p3
+
+                        background: Rectangle {
+                            radius: 4
+                            color: news_card.hovered ? Qt.lighter(constants.c600, 1.25) : constants.c600
+                            Behavior on color {
+                                ColorAnimation {
+                                    duration: 100
+                                }
+                            }
+                        }
+                        scale: news_card.hovered || news_card.activeFocus ? 1.01 : 1
+                        transformOrigin: Item.Center
+                        Behavior on scale {
+                            NumberAnimation {
+                                easing.type: Easing.OutBack
+                                duration: 400
+                            }
+                        }
+                        onClicked: Qt.openUrlExternally(modelData.link)
+                        clip: true
+                        contentItem: ColumnLayout {
+                            spacing: constants.s1
+                            Image {
+                                Layout.fillWidth: true
+                                Layout.fillHeight: true
+                                Layout.minimumHeight: 150
+                                Layout.maximumHeight: 150
+                                fillMode: Image.PreserveAspectCrop
+                                source: modelData.image
+                            }
+                            Label {
+                                Layout.fillWidth: true
+                                text: modelData.title
+                                color: "white"
+                                font.pixelSize: 16
+                                font.bold: true
+                                clip: true
+                                elide: Label.ElideRight
+                            }
+                            Label {
+                                Layout.fillWidth: true
+                                Layout.fillHeight: true
+                                text: modelData.description
+                                wrapMode: Label.WordWrap
+                                elide: Label.ElideRight
+                                color: "white"
+                                font.pixelSize: 12
+                                clip: true
+                            }
+                        }
+                    }
+                }
+            }
         }
         RowLayout {
             Layout.fillWidth: true
@@ -215,5 +278,10 @@ MainPage {
         ChooseNetworkDialog {
 
         }
+    }
+
+    NewsFeedController {
+        id: news_feed_controller
+        Component.onCompleted: fetch()
     }
 }

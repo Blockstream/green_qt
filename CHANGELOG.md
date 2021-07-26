@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- News feed to home view
 
 ### Changed
 - Send Dialog - highlight review button, make it a primary button

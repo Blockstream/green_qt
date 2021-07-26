@@ -28,6 +28,7 @@ SOURCES += \
     $$PWD/navigation.cpp \
     $$PWD/network.cpp \
     $$PWD/networkmanager.cpp \
+    $$PWD/newsfeedcontroller.cpp \
     $$PWD/renameaccountcontroller.cpp \
     $$PWD/resolver.cpp \
     $$PWD/restorecontroller.cpp \
@@ -77,6 +78,7 @@ HEADERS += \
     $$PWD/navigation.h \
     $$PWD/network.h \
     $$PWD/networkmanager.h \
+    $$PWD/newsfeedcontroller.h \
     $$PWD/renameaccountcontroller.h \
     $$PWD/resolver.h \
     $$PWD/restorecontroller.h \
