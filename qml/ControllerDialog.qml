@@ -25,6 +25,7 @@ WalletDialog {
             model: stack_view.currentItem ? stack_view.currentItem.actions : []
             GButton {
                 destructive: modelData.destructive || false
+                highlighted: modelData.highlighted || false
                 large: true
                 action: modelData
             }

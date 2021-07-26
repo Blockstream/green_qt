@@ -52,6 +52,7 @@ StackView {
         id: setup_view
         property list<Action> actions: [
             Action {
+                property bool highlighted: enabled
                 text: controller.transaction.error ? qsTrId(controller.transaction.error || '') : qsTrId('id_review')
                 enabled: controller.valid && !controller.transaction.error
                 onTriggered: stack_view.push(review_view)
