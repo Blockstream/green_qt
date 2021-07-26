@@ -212,7 +212,7 @@ publish_release:
     - /^release_.*/
   stage: publish
   when: manual
-  image: blockstream/gcloud-docker:0.15.4
+  image: glregistry.blockstream.io/blockstream/p/gcloud-docker:tf0.15.4
   script:
     - cd green_qt_dist
     - ../tools/publish.sh
