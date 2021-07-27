@@ -44,6 +44,11 @@ MainPage {
         return qsTrId('id_completed');
     }
 
+    FeeEstimates {
+        id: fee_estimates
+        wallet: self.wallet
+    }
+
     DialogLoader {
         id: settings_dialog
         property string location: `${self.location}/settings`

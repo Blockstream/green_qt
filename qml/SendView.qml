@@ -274,7 +274,7 @@ StackView {
                 extra: wallet.network.liquid ? [] : [{ text: qsTrId('id_custom') }]
                 Component.onCompleted: {
                     currentIndex = wallet.network.liquid ? 0 : indexes.indexOf(wallet.settings.required_num_blocks)
-                    controller.feeRate = wallet.events.fees[blocks]
+                    controller.feeRate = fee_estimates.fees[blocks]
                 }
                 onFeeRateChanged: {
                     if (feeRate) {

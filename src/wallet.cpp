@@ -189,11 +189,6 @@ void Wallet::handleNotification(const QJsonObject &notification)
         return;
     }
 
-    if (event == "fees") {
-        // TODO: fees are being used in QML as `event.fees`.
-        return;
-    }
-
     if (event == "block") {
         for (auto account : m_accounts) {
             account->handleNotification(notification);
@@ -821,4 +816,35 @@ QByteArray SetPinHandler::pinData() const
 {
     Q_ASSERT(!m_pin_data.isEmpty());
     return m_pin_data;
+}
+
+FeeEstimates::FeeEstimates(QObject* parent) :
+    QObject(parent)
+{
+    connect(&m_update_timer, &QTimer::timeout, this, &FeeEstimates::update);
+}
+
+void FeeEstimates::setWallet(Wallet* wallet)
+{
+    if (!m_wallet.update(wallet)) return;
+    if (m_wallet) {
+        update();
+        m_update_timer.start(120000);
+    } else {
+        m_update_timer.stop();
+    }
+}
+
+void FeeEstimates::update()
+{
+    if (!m_wallet->session()) return;
+    GA_json* estimates;
+    if (GA_OK == GA_get_fee_estimates(m_wallet->session()->m_session, &estimates)) {
+        const auto fees = Json::toObject(estimates).value("fees").toArray();
+        GA_destroy_json(estimates);
+        if (m_fees != fees) {
+            m_fees = fees;
+            emit feesChanged(m_fees);
+        }
+    }
 }

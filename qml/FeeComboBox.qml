@@ -6,7 +6,7 @@ GComboBox {
     property int blocks: model[currentIndex].blocks || 0
 
     function fee(label, duration, blocks) {
-        const feeRate = wallet.events.fees[blocks] ;
+        const feeRate = fee_estimates.fees[blocks] ;
         const text = qsTrId(label) + ' ' + qsTrId(duration) + ' ( '+ Math.round(feeRate / 10 + 0.5) / 100 + ' sat/vB)';
         return { blocks, feeRate, text }
     }
