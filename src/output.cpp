@@ -37,13 +37,6 @@ void Output::update()
     setConfidential(m_data["confidential"].toBool());
     setUnconfirmed(m_data["block_height"].toDouble() == 0);
     setAddressType(m_data["address_type"].toString());
-    if (m_address_type == "csv") {
-        auto block_height = m_data["block_height"].toDouble() + m_data["subtype"].toDouble();
-        auto current_block_height = m_account->wallet()->events()["block"].toObject()["block_height"].toDouble();
-        setExpired(block_height < current_block_height);
-    } else {
-        setExpired(m_data["nlocktime_at"].toInt() == 0);
-    }
 }
 
 void Output::setDust(bool dust)
@@ -72,13 +65,6 @@ void Output::setConfidential(bool confidential)
     if (m_confidential == confidential) return;
     m_confidential = confidential;
     emit confidentialChanged(m_confidential);
-}
-
-void Output::setExpired(bool expired)
-{
-    if (m_expired == expired) return;
-    m_expired = expired;
-    emit expiredChanged(m_expired);
 }
 
 void Output::setUnconfirmed(bool unconfirmed)
