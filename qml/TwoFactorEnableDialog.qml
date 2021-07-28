@@ -15,8 +15,13 @@ ControllerDialog {
     controller: Controller {
         wallet: dialog.wallet
     }
+    //[2021-08-01 01:06:40.526526] [debug] QJsonObject({"action":"enable_telegram","auth_data":{"telegram_url":"https://t.me/BlockstreamGreenTestnetBot?start=MCWTAJ7ABFVZLJUOPF7L3AALL6OYNGH7"},"device":null,"method":"telegram","status":"resolve_code"})
 
-    initialItem: method === 'gauth' ? gauth_component : generic_component
+    initialItem: {
+        if (method === 'gauth') return gauth_component
+        // if (method === 'telegram') return telegram_component
+        return generic_component
+    }
 
     Component {
         id: generic_component

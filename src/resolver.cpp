@@ -60,6 +60,20 @@ void TwoFactorResolver::retry(const QJsonObject& result)
     emit invalidCode();
 }
 
+QString TwoFactorResolver::telegramBrowserUrl() const
+{
+    Q_ASSERT(m_method == "telegram");
+    return m_result.value("auth_data").toObject().value("telegram_url").toString();
+}
+
+QString TwoFactorResolver::telegramAppUrl() const
+{
+    auto url = telegramBrowserUrl();
+    url.replace("https://t.me/", "tg://resolve?domain=");
+    url.replace("?start=", "&start=");
+    return url;
+}
+
 void TwoFactorResolver::setCode(const QString &code)
 {
     if (m_code == code) return;

@@ -36,6 +36,7 @@ ColumnLayout {
                             case 'sms': return true
                             case 'phone': return true
                             case 'gauth': return true
+                            case 'telegram': return true
                             default: return false
                         }
                     })
@@ -62,6 +63,8 @@ ColumnLayout {
                                         return qsTrId('id_phone_call')
                                     case 'gauth':
                                         return qsTrId('id_authenticator_app')
+                                    case 'telegram':
+                                        return qsTrId('id_telegram')
                                 }
                             }
                         }
@@ -177,6 +180,8 @@ ColumnLayout {
                     return qsTrId('id_enter_your_email_address')
                 case 'phone':
                     return qsTrId('id_enter_phone_number')
+                case 'telegram':
+                    return qsTrId('id_enter_telegram_username_or_number')
             }
         }
     }

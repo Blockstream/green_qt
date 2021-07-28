@@ -16,12 +16,14 @@ class Resolver : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(Handler* handler READ handler CONSTANT)
+    Q_PROPERTY(QJsonObject result READ result CONSTANT)
     Q_PROPERTY(Activity* activity READ activity NOTIFY activityChanged)
     Q_PROPERTY(bool failed READ failed NOTIFY failedChanged)
     QML_ELEMENT
 public:
     Resolver(Handler* handler, const QJsonObject& result);
     Handler* handler() const { return m_handler; }
+    QJsonObject result() const { return m_result; }
     Wallet* wallet() const;
     Network* network() const;
     Activity* activity() const { return m_activity; }
@@ -48,6 +50,8 @@ class TwoFactorResolver : public Resolver
     Q_PROPERTY(QString method READ method CONSTANT)
     Q_PROPERTY(int attemptsRemaining READ attemptsRemaining NOTIFY attemptsRemainingChanged)
     Q_PROPERTY(QString code READ code WRITE setCode NOTIFY codeChanged)
+    Q_PROPERTY(QString telegramBrowserUrl READ telegramBrowserUrl CONSTANT)
+    Q_PROPERTY(QString telegramAppUrl READ telegramAppUrl CONSTANT)
     QML_ELEMENT
 public:
     TwoFactorResolver(Handler* handler, const QJsonObject& result);
@@ -57,6 +61,8 @@ public:
     void setCode(const QString& code);
     void resolve() override;
     void retry(const QJsonObject& result);
+    QString telegramBrowserUrl() const;
+    QString telegramAppUrl() const;
 signals:
     void invalidCode();
     void codeChanged(const QString& code);

@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Telegram can be used for 2FA, only in testnet for now
 - Support for host unblinding for Jade with firmware 0.1.27
 
 ### Changed

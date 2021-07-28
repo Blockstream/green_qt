@@ -105,7 +105,7 @@ void Handler::step()
     for (;;) {
         const auto result = getResult(m_auth_handler);
         const auto status = result.value("status").toString();
-
+        qDebug() << result;
         if (status == "call") {
             setFuture(QtConcurrent::run([this] {
                 int res = GA_auth_handler_call(m_auth_handler);

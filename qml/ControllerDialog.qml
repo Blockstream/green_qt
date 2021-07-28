@@ -36,7 +36,8 @@ WalletDialog {
         email: 'id_email',
         gauth: 'id_authenticator_app',
         phone: 'id_phone_call',
-        sms: 'id_sms'
+        sms: 'id_sms',
+        telegram: 'id_telegram'
     })
 
     Connections {
@@ -110,19 +111,17 @@ WalletDialog {
                 code_field.forceActiveFocus()
             }
         }
-        Column {
+        contentItem: ColumnLayout {
             spacing: constants.s1
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.verticalCenter: parent.verticalCenter
             Image {
-                anchors.horizontalCenter: enterCodeText.horizontalCenter
+                Layout.alignment: Qt.AlignCenter
                 source: resolver ? `qrc:/svg/2fa_${resolver.method}.svg` : ''
                 sourceSize.width: 64
                 sourceSize.height: 64
             }
             Loader {
+                Layout.alignment: Qt.AlignCenter
                 active: resolver && wallet.config[resolver.method].enabled
-                anchors.horizontalCenter: enterCodeText.horizontalCenter
                 sourceComponent: Label {
                     text: {
                         if (resolver.method === 'gauth') return qsTrId('id_authenticator_app')
@@ -132,13 +131,37 @@ WalletDialog {
                     font.pixelSize: 14
                 }
             }
+            Loader {
+                active: resolver && resolver.method === 'telegram'
+                Layout.alignment: Qt.AlignCenter
+                sourceComponent: RowLayout {
+                    spacing: constants.s1
+                    ColumnLayout {
+                        GButton {
+                            Layout.fillWidth: true
+                            large: true
+                            text: 'Open in Browser'
+                            onClicked: Qt.openUrlExternally(resolver.telegramBrowserUrl)
+                        }
+                        GButton {
+                            Layout.fillWidth: true
+                            large: true
+                            text: 'Open Telegram'
+                            onClicked: Qt.openUrlExternally(resolver.telegramAppUrl)
+                        }
+                    }
+                    QRCode {
+                        text: resolver.telegramAppUrl
+                    }
+                }
+            }
             Label {
-                id: enterCodeText
+                Layout.alignment: Qt.AlignCenter
                 text: resolver ? qsTrId('id_please_provide_your_1s_code').arg(resolver.method) : ''
             }
             GTextField {
                 id: code_field
-                horizontalAlignment: Qt.AlignHCenter
+                Layout.alignment: Qt.AlignCenter
                 onTextChanged: {
                     if (acceptableInput) {
                         resolver.code = code_field.text
@@ -148,14 +171,22 @@ WalletDialog {
                 validator: RegExpValidator {
                     regExp: /[0-9]{6}/
                 }
-                anchors.horizontalCenter: enterCodeText.horizontalCenter
             }
-            Label {
-                visible: resolver ? (resolver.attemptsRemaining < 3 && resolver.method !== 'gauth') : null
-                anchors.horizontalCenter: enterCodeText.horizontalCenter
-                text: resolver ? qsTrId('id_attempts_remaining_d').arg(resolver.attemptsRemaining) : ''
-                font.pixelSize: 10
+            Loader {
+                Layout.alignment: Qt.AlignCenter
+                active: {
+                    if (!resolver) return false
+                    if (resolver.method === 'gauth') return false
+                    if (resolver.method === 'telegram') return false
+                    return resolver.attemptsRemaining < 3
+                }
+                visible: active
+                sourceComponent: Label {
+                    text: resolver ? qsTrId('id_attempts_remaining_d').arg(resolver.attemptsRemaining) : ''
+                    font.pixelSize: 10
+                }
             }
+
         }
     }
 
