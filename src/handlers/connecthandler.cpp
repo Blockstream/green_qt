@@ -46,8 +46,6 @@ void ConnectHandler::exec()
             GA_disconnect(session);
             return err;
         }
-        auto hint = Json::fromObject({{ "hint", "now" }});
-        err = GA_reconnect_hint(session, hint.get());
         return err;
     }));
 }
