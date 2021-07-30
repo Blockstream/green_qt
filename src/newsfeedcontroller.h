@@ -26,6 +26,7 @@ signals:
 
 private:
     void parse();
+    void updateModel();
 
     QJsonArray m_model;
     Connectable<Session> m_session;
@@ -39,6 +40,17 @@ class NewsFeedActivity : public HttpRequestActivity
 public:
     NewsFeedActivity(Session* session);
     QString feed() const;
+};
+
+class NewsImageDownloadActivity : public HttpRequestActivity
+{
+    Q_OBJECT
+    QML_ELEMENT
+public:
+    NewsImageDownloadActivity(Session* session, const QString &url);
+    void handleResponse();
+private:
+    QString m_url;
 };
 
 #endif // NEWSFEEDCONTROLLER_H
