@@ -16,6 +16,11 @@ QString getCachedImageFileName(const QString &url)
 NewsFeedController::NewsFeedController(QObject *parent) :
     QObject(parent)
 {
+    QFile feed_file(GetDataFile("cache", "feed.xml"));
+    if (feed_file.open(QFile::ReadOnly)) {
+        m_feed = QString::fromUtf8(feed_file.readAll());
+        parse();
+    }
 }
 
 void NewsFeedController::fetch()
@@ -37,6 +42,10 @@ void NewsFeedController::fetch()
     connect(activity, &NewsFeedActivity::finished, this, [=] {
         activity->deleteLater();
         m_feed = activity->feed();
+        QFile feed_file(GetDataFile("cache", "feed.xml"));
+        if (feed_file.open(QFile::WriteOnly)) {
+            feed_file.write(m_feed.toUtf8());
+        }
         parse();
     });
     activity->exec();
