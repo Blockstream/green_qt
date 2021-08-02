@@ -104,7 +104,6 @@ MainPage {
                     model: news_feed_controller.model
                     Button {
                         id: news_card
-                        implicitWidth: news_container.width/3
                         implicitHeight: 300
                         Layout.fillWidth: true
                         padding: constants.p3

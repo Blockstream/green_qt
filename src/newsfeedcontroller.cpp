@@ -6,13 +6,6 @@
 #include <QDomDocument>
 #include <QJsonArray>
 
-QString getCachedImageFileName(const QString &url)
-{
-    QStringList parts = url.split('/');
-    Q_ASSERT(parts.size()>0);
-    return parts.at(parts.size()-1);
-}
-
 NewsFeedController::NewsFeedController(QObject *parent) :
     QObject(parent)
 {
@@ -69,21 +62,23 @@ void NewsFeedController::parse()
 
             if (e.tagName() == "image") {
                 if (e.elementsByTagName("url").size() > 0) {
-                    QString url = e.elementsByTagName("url").at(0).toElement().text();
-                    QString path = QString("%1/%2").arg(GetDataDir("cache"), getCachedImageFileName(url));
+                    const auto url = e.elementsByTagName("url").at(0).toElement().text();
+                    const auto path = GetDataFile("cache", Sha256(url));
                     QFile file(path);
-
                     if (!file.exists()) {
                         auto activity = new NewsImageDownloadActivity(m_session, url);
                         connect(activity, &NewsImageDownloadActivity::finished, this, [=] {
-                            activity->handleResponse();
                             activity->deleteLater();
+                            QFile file(path);
+                            if (file.open(QFile::WriteOnly)) {
+                                file.write(QByteArray::fromBase64(activity->response().value("body").toString().toLocal8Bit()));
+                                file.close();
+                            }
                             updateModel();
                         });
                         activity->exec();
                     }
-
-                    item[e.tagName()] = QString("file:///%1").arg(path);
+                    item[e.tagName()] = QUrl::fromLocalFile(path).toString();
                 }
             } else {
                 item[e.tagName()] = e.text();
@@ -134,15 +129,4 @@ NewsImageDownloadActivity::NewsImageDownloadActivity(Session* session, const QSt
     setAccept("base64");
     addUrl(url);
     //addUrl(QString("http://greenupjcyad2xow7xmrunreetczmqje2nz6bdez3a5xhddlockoqryd.onion/desktop/%1.json").arg(channel));
-}
-
-void NewsImageDownloadActivity::handleResponse()
-{
-    QString path = QString("%1/%2").arg(GetDataDir("cache"), getCachedImageFileName(m_url));
-    QFile file(path);
-
-    if (file.open(QFile::WriteOnly)) {
-        file.write(QByteArray::fromBase64(response().value("body").toString().toUtf8()));
-        file.close();
-    }
 }

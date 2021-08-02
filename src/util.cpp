@@ -1,6 +1,7 @@
 #include "util.h"
 
 #include <QDir>
+#include <QCryptographicHash>
 
 QString g_data_location;
 
@@ -61,4 +62,11 @@ QByteArray ReverseByteArray(const QByteArray& byte_array)
         result.append(byte_array[i]);
     }
     return result;
+}
+
+QString Sha256(const QString &value)
+{
+    QCryptographicHash hash(QCryptographicHash::Sha256);
+    hash.addData(value.toLocal8Bit());
+    return QString::fromLocal8Bit(hash.result().toHex());
 }

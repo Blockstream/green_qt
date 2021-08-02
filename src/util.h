@@ -19,4 +19,6 @@ QByteArray ParseByteArray(const QJsonValue& value);
 
 QByteArray ReverseByteArray(const QByteArray& byte_array);
 
+QString Sha256(const QString& value);
+
 #endif // GREEN_UTIL_H

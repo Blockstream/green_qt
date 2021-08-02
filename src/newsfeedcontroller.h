@@ -48,7 +48,6 @@ class NewsImageDownloadActivity : public HttpRequestActivity
     QML_ELEMENT
 public:
     NewsImageDownloadActivity(Session* session, const QString &url);
-    void handleResponse();
 private:
     QString m_url;
 };
