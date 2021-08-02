@@ -58,55 +58,44 @@ void NewsFeedController::parse()
     doc.setContent(m_feed);
     QDomNodeList items = doc.elementsByTagName("item");
 
-    for (int i = 0; i < items.size(); i++)
-    {
+    for (int i = 0; i < items.size(); ++i) {
         QJsonObject item = QJsonObject();
         QDomNode n = items.item(i).firstChild();
 
-        while (!n.isNull())
-        {
+        while (!n.isNull()) {
             QDomElement e = n.toElement();
-
-            if (!e.isNull())
-            {
-                if (e.tagName()=="image")
-                {
-                    if (e.elementsByTagName("url").size()>0)
-                    {
-                        QString url = e.elementsByTagName("url").at(0).toElement().text();
-                        QString path = QString("%1/%2").arg(GetDataDir("cache"), getCachedImageFileName(url));
-                        QFile file(path);
-
-                        if (!file.exists())
-                        {
-                            auto activity = new NewsImageDownloadActivity(m_session, url);
-                            connect(activity, &NewsImageDownloadActivity::finished, this, [=] {
-                                activity->handleResponse();
-                                activity->deleteLater();
-                                updateModel();
-                            });
-                            activity->exec();
-                        }
-
-                        item[e.tagName()] = QString("file:///%1").arg(path);
-                    }
-                }
-                else
-                {
-                    item[e.tagName()] = e.text();
-                }
-            }
-
             n = n.nextSibling();
+            if (e.isNull()) continue;
+
+            if (e.tagName() == "image") {
+                if (e.elementsByTagName("url").size() > 0) {
+                    QString url = e.elementsByTagName("url").at(0).toElement().text();
+                    QString path = QString("%1/%2").arg(GetDataDir("cache"), getCachedImageFileName(url));
+                    QFile file(path);
+
+                    if (!file.exists()) {
+                        auto activity = new NewsImageDownloadActivity(m_session, url);
+                        connect(activity, &NewsImageDownloadActivity::finished, this, [=] {
+                            activity->handleResponse();
+                            activity->deleteLater();
+                            updateModel();
+                        });
+                        activity->exec();
+                    }
+
+                    item[e.tagName()] = QString("file:///%1").arg(path);
+                }
+            } else {
+                item[e.tagName()] = e.text();
+            }
         }
 
         array.append(item);
-
-        if (array.count()>2) break;
+        // Limit to 3 entries
+        if (array.count() == 3) break;
     }
 
     m_model = array;
-
     emit modelChanged();
 }
 
@@ -152,8 +141,7 @@ void NewsImageDownloadActivity::handleResponse()
     QString path = QString("%1/%2").arg(GetDataDir("cache"), getCachedImageFileName(m_url));
     QFile file(path);
 
-    if (file.open(QFile::WriteOnly))
-    {
+    if (file.open(QFile::WriteOnly)) {
         file.write(QByteArray::fromBase64(response().value("body").toString().toUtf8()));
         file.close();
     }
