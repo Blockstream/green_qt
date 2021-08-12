@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 ### Fixed
+- Restore compability with macOS 10.13 High Sierra
 
 ## [0.1.11] - 2021-08-12
 ### Added
