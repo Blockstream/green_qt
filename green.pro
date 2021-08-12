@@ -47,6 +47,7 @@ EXTRA_TRANSLATIONS = $$files($$PWD/i18n/*.ts)
 INCLUDEPATH += $${GDK_PATH}
 
 macos {
+    QMAKE_MACOSX_DEPLOYMENT_TARGET = 11.0
     QMAKE_TARGET_BUNDLE_PREFIX = com.blockstream
     LIBS += -framework Foundation -framework Cocoa
     ICON = assets/icons/green.icns
