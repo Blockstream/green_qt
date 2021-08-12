@@ -13,6 +13,8 @@ bionic_release:
     - ga
   stage: build
   script:
+    - curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain 1.49.0
+    - source $HOME/.cargo/env
     - ./tools/buildgreen.sh linux
     - mkdir build-linux-gcc
     - cp /docker_bld_root/*/green build-linux-gcc/
@@ -30,6 +32,9 @@ windows_release:
     - ga
   stage: build
   script:
+    - curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain 1.49.0
+    - source $HOME/.cargo/env
+    - rustup target add x86_64-pc-windows-gnu
     - ./tools/buildgreen.sh windows
     - mkdir -p build-mingw-w64/release
     - cp /docker_bld_root/*/release/green.exe "build-mingw-w64/release/Green.exe"
@@ -45,6 +50,8 @@ osx_release:
     - osx
   stage: build
   script:
+    - curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain 1.49.0
+    - source $HOME/.cargo/env
     - cd $CI_PROJECT_DIR
     - ./tools/buildgreen.sh osx
   cache:
