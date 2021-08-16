@@ -22,9 +22,9 @@ if __name__ == '__main__':
     next_version = VersionInfo(args.major, args.minor, args.patch)
 
     with open('version.pri') as file:
-        major = int(next(file).split(' = ')[1])
-        minor = int(next(file).split(' = ')[1])
-        patch = int(next(file).split(' = ')[1])
+        major = int(next(file).split('=')[1])
+        minor = int(next(file).split('=')[1])
+        patch = int(next(file).split('=')[1])
         current_version = VersionInfo(major, minor, patch)
 
     assert current_version < next_version
@@ -41,10 +41,10 @@ if __name__ == '__main__':
     print('tag created', tag)
 
     with open('version.pri', 'w') as file:
-        file.write('VERSION_MAJOR = {}\n'.format(next_version.major))
-        file.write('VERSION_MINOR = {}\n'.format(next_version.minor))
-        file.write('VERSION_PATCH = {}\n'.format(next_version.patch))
-        file.write('VERSION_PRERELEASE =\n')
+        file.write('VERSION_MAJOR={}\n'.format(next_version.major))
+        file.write('VERSION_MINOR={}\n'.format(next_version.minor))
+        file.write('VERSION_PATCH={}\n'.format(next_version.patch))
+        file.write('VERSION_PRERELEASE=\n')
 
     repo.git.add('version.pri')
     repo.git.commit('-m', 'Bump to version {}'.format(next_version))
