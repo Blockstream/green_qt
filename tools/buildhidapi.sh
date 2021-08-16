@@ -26,7 +26,7 @@ if [ "$GREENPLATFORM" = "linux" ]; then
 elif [ "$GREENPLATFORM" = "windows" ]; then
     ./configure --host=x86_64-w64-mingw32 --prefix=${HIDAPI_PATH} >> ${HIDAPI_PATH}/build.log 2>&1
 elif [ "$GREENPLATFORM" = "osx" ]; then
-    ./configure --prefix=${HIDAPI_PATH} >> ${HIDAPI_PATH}/build.log 2>&1
+    CFLAGS="-mmacosx-version-min=10.13" ./configure --prefix=${HIDAPI_PATH} >> ${HIDAPI_PATH}/build.log 2>&1
 else
     exit 1
 fi
