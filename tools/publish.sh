@@ -32,7 +32,7 @@ sed -i -e "s/HASH_LINUX/${HASH_LINUX}/g" ${CHANNEL}.json
 
 echo $GCLOUD_KEY > .key
 gcloud auth activate-service-account --key-file=.key
-gsutil cp ${CHANNEL}.json gs://${GCLOUD_BUCKET}/desktop/
+gsutil cp -h "Cache-Control: no-store" ${CHANNEL}.json gs://${GCLOUD_BUCKET}/desktop/
 
 gsutil cp SHA256SUMS.asc gs://${GCLOUD_BUCKET}/desktop/${VERSION}/
 gsutil cp BlockstreamGreen_Windows_x86_64.zip gs://${GCLOUD_BUCKET}/desktop/${VERSION}/
