@@ -11,7 +11,6 @@ if __name__ == '__main__':
     parser.add_argument('--minor', type=int, required=True)
     parser.add_argument('--patch', type=int, required=True)
     parser.add_argument('--sign', default=False, action='store_true')
-    parser.add_argument('--release_notes', type=str)
 
     args = parser.parse_args()
 
