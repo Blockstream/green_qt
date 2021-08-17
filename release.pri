@@ -2,8 +2,7 @@ include(version.pri)
 
 DEFINES += "VERSION_MAJOR=$$VERSION_MAJOR"\
    "VERSION_MINOR=$$VERSION_MINOR"\
-   "VERSION_PATCH=$$VERSION_PATCH" \
-   "VERSION_PRERELEASE=\"$$VERSION_PRERELEASE\"" \
+   "VERSION_PATCH=$$VERSION_PATCH"
 
 CI = $$(CI)
 CI_BUILD_TAG = $$(CI_BUILD_TAG)
@@ -15,11 +14,7 @@ equals(CI, "true") {
     } else {
         DEFINES += "VERSION=\"$${VERSION_MAJOR}.$${VERSION_MINOR}.$${VERSION_PATCH}\""
     }
-} else:system(git --version) {
-    VERSION = $$system(git describe --tags --dirty --long)
-    VERSION = $$split(VERSION, "_")
-    VERSION = $$member(VERSION, 1)
-    DEFINES += "VERSION=\"$${VERSION}\""
 } else {
-    DEFINES += "VERSION=\"$${VERSION_MAJOR}.$${VERSION_MINOR}.$${VERSION_PATCH}\""
+    DEFINES += "VERSION=\"$${VERSION_MAJOR}.$${VERSION_MINOR}.$${VERSION_PATCH}-dev\""
 }
+
