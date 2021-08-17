@@ -44,7 +44,6 @@ if __name__ == '__main__':
         file.write('VERSION_MAJOR={}\n'.format(next_version.major))
         file.write('VERSION_MINOR={}\n'.format(next_version.minor))
         file.write('VERSION_PATCH={}\n'.format(next_version.patch))
-        file.write('VERSION_PRERELEASE=\n')
 
     repo.git.add('version.pri')
     repo.git.commit('-m', 'Bump to version {}'.format(next_version))
