@@ -154,31 +154,20 @@ void SignTransactionResolver::resolve()
 BlindingKeysResolver::BlindingKeysResolver(Handler* handler, const QJsonObject& result)
     : DeviceResolver(handler, result)
 {
-    const auto transaction = m_required_data.value("transaction").toObject();
-    if (transaction.isEmpty() || !transaction.contains("change_address")) return;
-
-    const auto change_address = transaction.value("change_address").toObject();
-    for (auto i = change_address.begin(); i != change_address.end(); ++i) {
-        const auto key = i.key();
-        const auto address = i.value().toObject();
-        const auto script = address.value("blinding_script_hash").toString();
-        m_keys.append(key);
-        m_scripts.append(script);
-    }
+    m_scripts = m_required_data.value("scripts").toArray();
 }
 
 void BlindingKeysResolver::resolve()
 {
-    Q_ASSERT(m_keys.size() == m_scripts.size());
+    if (m_public_keys.size() == m_scripts.size()) {
+        return m_handler->resolve(QJsonObject({{ "public_keys", m_public_keys }}));
+    }
 
-    if (m_scripts.empty()) return m_handler->resolve({{ "blinding_keys", m_blinding_keys }});
-
-    const auto key = m_keys.takeFirst();
-    const auto script = m_scripts.takeFirst();
-    auto activity = device()->getBlindingKey(script);
-    connect(activity, &Activity::finished, this, [this, activity, key] {
+    const auto script = m_scripts.at(m_public_keys.size());
+    auto activity = device()->getBlindingKey(script.toString());
+    connect(activity, &Activity::finished, this, [this, activity] {
         activity->deleteLater();
-        m_blinding_keys.insert(key, QString::fromLocal8Bit(activity->publicKey().toHex()));
+        m_public_keys.append(QString::fromLocal8Bit(activity->publicKey().toHex()));
         resolve();
     });
     connect(activity, &Activity::failed, this, [this, activity] {
@@ -188,46 +177,21 @@ void BlindingKeysResolver::resolve()
     activity->exec();
 }
 
-BlindingKeyResolver::BlindingKeyResolver(Handler* handler, const QJsonObject& result)
-    : DeviceResolver(handler, result)
-{
-    const auto address = m_required_data.value("address").toObject();
-    m_script = address.value("blinding_script_hash").toString();
-}
-
-void BlindingKeyResolver::resolve()
-{
-    auto activity = device()->getBlindingKey(m_script);
-    connect(activity, &Activity::finished, [this, activity] {
-        activity->deleteLater();
-        const auto blinding_key = QString::fromLocal8Bit(activity->publicKey().toHex());
-        m_handler->resolve({{ "blinding_key", blinding_key }});
-    });
-    connect(activity, &Activity::failed, [this, activity] {
-        activity->deleteLater();
-        m_handler->error();
-    });
-    activity->exec();
-}
-
-
 BlindingNoncesResolver::BlindingNoncesResolver(Handler* handler, const QJsonObject& result)
     : DeviceResolver(handler, result)
 {
-    for (const auto blinded_script : m_required_data.value("blinded_scripts").toArray()) {
-        m_pubkeys.append(blinded_script.toObject().value("pubkey").toString());
-        m_scripts.append(blinded_script.toObject().value("script").toString());
-    }
+    m_scripts = m_required_data.value("scripts").toArray();
+    m_public_keys = m_required_data.value("public_keys").toArray();
+    Q_ASSERT(m_scripts.size() == m_public_keys.size());
 }
 
 void BlindingNoncesResolver::resolve()
 {
-    Q_ASSERT(m_pubkeys.size() == m_scripts.size());
+    const int index = m_nonces.size();
+    if (index == m_scripts.size()) return m_handler->resolve({{ "nonces", m_nonces }});
 
-    if (m_pubkeys.empty()) return m_handler->resolve({{ "nonces", m_nonces }});
-
-    const auto pubkey = QByteArray::fromHex(m_pubkeys.takeFirst().toLocal8Bit());
-    const auto script = QByteArray::fromHex(m_scripts.takeFirst().toLocal8Bit());
+    const auto pubkey = QByteArray::fromHex(m_public_keys.at(index).toString().toLocal8Bit());
+    const auto script = QByteArray::fromHex(m_scripts.at(index).toString().toLocal8Bit());
 
     auto activity = device()->getBlindingNonce(pubkey, script);
     connect(activity, &Activity::finished, this, [this, activity] {

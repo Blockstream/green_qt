@@ -160,46 +160,39 @@ void Handler::request(const QByteArray& method)
 
 Resolver* Handler::createResolver(const QJsonObject& result)
 {
-    const auto action = result.value("action").toString();
-    if (action == "get_xpubs") {
-        return new GetXPubsResolver(this, result);
-    }
-    if (action == "create_transaction") {
-        return new BlindingKeysResolver(this, result);
-    }
-    if (action == "get_receive_address") {
-        return new BlindingKeyResolver(this, result);
-    }
-
-    if (action == "get_balance" || action == "get_subaccounts" || action == "get_transactions" || action == "get_unspent_outputs") {
-        return new BlindingNoncesResolver(this, result);
-    }
-
-    if (action =="sign_tx") {
-        if (m_wallet->network()->isLiquid()) {
-            return new SignLiquidTransactionResolver(this, result);
-        } else {
-            return new SignTransactionResolver(this, result);
+    if (result.contains("required_data")) {
+        const auto required_data = result.value("required_data").toObject();
+        const auto device = required_data.value("device").toObject();
+        Q_ASSERT(device.value("device_type").toString() == "hardware");
+        const auto action = required_data.value("action").toString();
+        if (action == "get_xpubs") {
+            return new GetXPubsResolver(this, result);
         }
-    }
-
-    if (action == "sign_message") {
-        return new SignMessageResolver(this, result);
-    }
-
-    const auto method = result.value("method");
-    if (method == "email" || method == "sms" || method == "phone" || method == "gauth") {
-        if (m_two_factor_resolver) {
-            if (m_two_factor_resolver->method() == result.value("method").toString()) {
-                m_two_factor_resolver->retry(result);
-                return nullptr;
+        if (action == "get_blinding_public_keys") {
+            return new BlindingKeysResolver(this, result);
+        }
+        if (action == "get_blinding_nonces") {
+            return new BlindingNoncesResolver(this, result);
+        }
+        if (action =="sign_tx") {
+            if (m_wallet->network()->isLiquid()) {
+                return new SignLiquidTransactionResolver(this, result);
+            } else {
+                return new SignTransactionResolver(this, result);
             }
         }
-        m_two_factor_resolver = new TwoFactorResolver(this, result);
-        return m_two_factor_resolver;
+        if (action == "sign_message") {
+            return new SignMessageResolver(this, result);
+        }
+        Q_UNREACHABLE();
     }
-
-    Q_UNREACHABLE();
+    const auto method = result.value("method").toString();
+    if (m_two_factor_resolver && m_two_factor_resolver->method() == method) {
+        m_two_factor_resolver->retry(result);
+        return nullptr;
+    }
+    m_two_factor_resolver = new TwoFactorResolver(this, result);
+    return m_two_factor_resolver;
 }
 
 void Handler::resolve(const QJsonObject& data)

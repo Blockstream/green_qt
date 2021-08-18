@@ -107,20 +107,8 @@ public:
     BlindingKeysResolver(Handler* handler, const QJsonObject& result);
     void resolve() override;
 protected:
-    QStringList m_keys;
-    QStringList m_scripts;
-    QJsonObject m_blinding_keys;
-};
-
-class BlindingKeyResolver : public DeviceResolver
-{
-    Q_OBJECT
-    QML_ELEMENT
-public:
-    BlindingKeyResolver(Handler* handler, const QJsonObject& result);
-    void resolve() override;
-protected:
-    QString m_script;
+    QJsonArray m_scripts;
+    QJsonArray m_public_keys;
 };
 
 class BlindingNoncesResolver : public DeviceResolver
@@ -131,8 +119,8 @@ public:
     BlindingNoncesResolver(Handler* handler, const QJsonObject& result);
     void resolve() override;
 protected:
-    QStringList m_pubkeys;
-    QStringList m_scripts;
+    QJsonArray m_scripts;
+    QJsonArray m_public_keys;
     QJsonArray m_nonces;
 };
 
