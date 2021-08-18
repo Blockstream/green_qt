@@ -91,9 +91,11 @@ void Transaction::updateFromData(const QJsonObject& data)
             const auto type = data.value("type").toString();
             if (type == "incoming" || type == "redeposit") {
                 for (auto i = satoshi.constBegin(); i != satoshi.constEnd(); ++i) {
-                    Asset* asset = wallet->getOrCreateAsset(i.key());
                     qint64 amount = i.value().toDouble();
-                    m_amounts.append(new TransactionAmount(this, asset, amount));
+                    if (amount > 0) {
+                        Asset* asset = wallet->getOrCreateAsset(i.key());
+                        m_amounts.append(new TransactionAmount(this, asset, amount));
+                    }
                 }
             } else if (type == "outgoing") {
                 for (auto i = satoshi.constBegin(); i != satoshi.constEnd(); ++i) {
