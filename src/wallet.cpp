@@ -781,7 +781,7 @@ void LoginWithPinController::update()
     handler->connect(handler, &Handler::error, this, [this, activity, handler] {
         handler->deleteLater();
         const auto error = handler->result().value("error").toString();
-        if (error.contains("exception:login failed")) {
+        if (error == "id_invalid_pin") {
             Q_ASSERT(m_wallet->m_login_attempts_remaining > 0);
             m_wallet->setAuthentication(Wallet::Unauthenticated);
             --m_wallet->m_login_attempts_remaining;
