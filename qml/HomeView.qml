@@ -135,6 +135,8 @@ MainPage {
                                 Layout.minimumHeight: 150
                                 Layout.maximumHeight: 150
                                 fillMode: Image.PreserveAspectCrop
+                                smooth: true
+                                mipmap: true
                                 source: modelData.image
                             }
                             Label {
