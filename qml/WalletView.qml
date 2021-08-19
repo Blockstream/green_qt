@@ -12,6 +12,14 @@ MainPage {
     readonly property Account currentAccount: accounts_list.currentAccount
     readonly property bool fiatRateAvailable: formatFiat(0, false) !== 'n/a'
 
+    property bool convert_fiat_trigger: false
+    Timer {
+        interval: 30000
+        repeat: true
+        running: true
+        onTriggered: convert_fiat_trigger = !convert_fiat_trigger
+    }
+
     function parseAmount(amount) {
         const unit = wallet.settings.unit;
         return wallet.parseAmount(amount, unit);
@@ -23,12 +31,14 @@ MainPage {
     }
 
     function formatFiat(sats, include_ticker = true) {
+        const trigger = convert_fiat_trigger
         const pricing = wallet.settings.pricing;
         const { fiat, fiat_currency } = wallet.convert({ satoshi: sats });
         return (fiat === null ? 'n/a' : Number(fiat).toLocaleString(Qt.locale(), 'f', 2)) + (include_ticker ? ' ' + fiat_currency : '');
     }
 
     function parseFiat(fiat) {
+        const trigger = convert_fiat_trigger
         fiat = fiat.trim().replace(/,/, '.');
         return fiat === '' ? 0 : wallet.convert({ fiat }).satoshi;
     }

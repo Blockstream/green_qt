@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Only show supported two factor authentication methods
+- Refresh fiat amounts periodically
 
 ## [0.1.12] - 2021-08-19
 ### Added
