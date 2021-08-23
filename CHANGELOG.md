@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 ### Changed
+- Show warning when sending with no available balance
 
 ### Fixed
 - Only show supported two factor authentication methods
@@ -18,7 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 ### Fixed
- - Restore compability with macOS 10.13 High Sierra
+- Restore compability with macOS 10.13 High Sierra
 
 ## [0.1.11] - 2021-08-12
 ### Added

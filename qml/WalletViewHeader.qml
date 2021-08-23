@@ -229,10 +229,20 @@ MainPageHeader {
                     id: send_button
                     Layout.alignment: Qt.AlignRight
                     large: true
-                    enabled: !self.wallet.watchOnly && !self.wallet.locked && self.currentAccount && self.currentAccount.balance > 0
+                    enabled: !self.wallet.watchOnly && !self.wallet.locked && self.currentAccount
                     hoverEnabled: true
                     text: qsTrId('id_send')
-                    onClicked: send_dialog.createObject(window, { account: self.currentAccount }).open()
+                    onClicked: {
+                        if (self.currentAccount.balance > 0) {
+                            send_dialog.createObject(window, { account: self.currentAccount }).open()
+                        }
+                        else {
+                            message_dialog.createObject(window, {
+                                account: self.currentAccount,
+                                title: qsTrId('id_warning'), message: self.wallet.network.liquid ? qsTrId('id_insufficient_lbtc_to_send_a') : qsTrId('You have no coins to send. Generate an address to receive some bitcoins.')
+                            }).open()
+                        }
+                    }
                     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                     ToolTip.text: qsTrId('id_insufficient_lbtc_to_send_a')
                     ToolTip.visible: hovered && !enabled
@@ -257,6 +267,30 @@ MainPageHeader {
     Component {
         id: receive_dialog
         ReceiveDialog { }
+    }
+
+    Component {
+        id: message_dialog
+        MessageDialog {
+            id: dialog
+            wallet: self.wallet
+            width: 300
+            actions: [
+                Action {
+                    text: qsTrId('id_cancel')
+                    onTriggered: {
+                        dialog.reject()
+                    }
+                },
+                Action {
+                    text: qsTrId('id_receive')
+                    onTriggered: {
+                        dialog.reject()
+                        receive_dialog.createObject(window, { account: self.currentAccount }).open()
+                    }
+                }
+            ]
+        }
     }
 
     component TabButton: ToolButton {

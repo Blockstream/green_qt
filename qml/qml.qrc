@@ -122,5 +122,6 @@
         <file>GSwitch.qml</file>
         <file>CoinDelegate.qml</file>
         <file>SelectCoinsView.qml</file>
+        <file>MessageDialog.qml</file>
     </qresource>
 </RCC>
