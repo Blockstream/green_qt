@@ -28,7 +28,18 @@ ColumnLayout {
                 wrapMode: Label.WordWrap
             }
             Repeater {
-                model: wallet.config.all_methods || []
+                model: {
+                    const methods = wallet.config.all_methods || []
+                    return methods.filter(method => {
+                        switch (method) {
+                            case 'email': return true
+                            case 'sms': return true
+                            case 'phone': return true
+                            case 'gauth': return true
+                            default: return false
+                        }
+                    })
+                }
 
                 RowLayout {
                     Layout.fillWidth: true
