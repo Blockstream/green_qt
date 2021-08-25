@@ -38,13 +38,15 @@ ControllerDialog {
                 onTriggered: accept()
             }
         ]
+        spacing: 12
         SectionLabel { text: qsTrId('id_recovery_mnemonic') }
         RowLayout {
+            spacing: 12
             MnemonicView {
                 Layout.fillHeight: false
                 Layout.alignment: Qt.AlignTop
                 Layout.fillWidth: true
-                mnemonic: handler.result.result.recovery_mnemonic.split(' ')
+                mnemonic: create_account_controller.recoveryMnemonic
             }
             Spacer {
             }
@@ -54,7 +56,7 @@ ControllerDialog {
                 id: qrcode
                 implicitHeight: 128
                 implicitWidth: 128
-                text: handler.result.result.recovery_mnemonic
+                text: create_account_controller.recoveryMnemonic.join(' ')
             }
         }
         SectionLabel { text: qsTrId('id_recovery_xpub') }
