@@ -1,4 +1,4 @@
-image: greenaddress/ci@sha256:6e511478ccc6979ff043b79e7d59370c07f4cbb55dab5c7dbb0126ae7c9e4d05
+image: greenaddress/ci@sha256:c3d3f8c63d9523ce452c400bc8c9148261a8a5f1ed36c07e7795b0339c1b249e
 
 stages:
   - build
@@ -13,8 +13,6 @@ bionic_release:
     - ga
   stage: build
   script:
-    - curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain 1.49.0
-    - source $HOME/.cargo/env
     - ./tools/buildgreen.sh linux
     - mkdir build-linux-gcc
     - cp /docker_bld_root/*/green build-linux-gcc/
@@ -32,9 +30,6 @@ windows_release:
     - ga
   stage: build
   script:
-    - curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain 1.49.0
-    - source $HOME/.cargo/env
-    - rustup target add x86_64-pc-windows-gnu
     - ./tools/buildgreen.sh windows
     - mkdir -p build-mingw-w64/release
     - cp /docker_bld_root/*/release/green.exe "build-mingw-w64/release/Green.exe"
@@ -50,8 +45,6 @@ osx_release:
     - osx
   stage: build
   script:
-    - curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain 1.49.0
-    - source $HOME/.cargo/env
     - cd $CI_PROJECT_DIR
     - ./tools/buildgreen.sh osx
   cache:
@@ -225,4 +218,3 @@ publish_release:
     - ../tools/publish.sh
   needs:
     - package_release
-
