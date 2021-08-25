@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Show warning when sending with no available balance
+- Make the whole address card clickable for copy to clipboard action
 
 ### Fixed
 - Only show supported two factor authentication methods

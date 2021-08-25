@@ -13,7 +13,7 @@ Button {
     hoverEnabled: true
     padding: constants.p3
     background: Rectangle {
-        color: constants.c800
+        color: self.hovered ? constants.c700 : constants.c800
         radius: 4
         border.width: self.highlighted ? 1 : 0
         border.color: constants.g500
@@ -64,17 +64,20 @@ Button {
                 }
             }
         }
-        ToolButton {
+
+        Image {
+            Layout.preferredWidth: 22
+            Layout.preferredHeight: 22
+            source: 'qrc:/svg/copy.svg'
             opacity: self.hovered ? 1 : 0
-            icon.source: 'qrc:/svg/copy.svg'
-            onClicked: {
-                Clipboard.copy(address.data["address"]);
-                ToolTip.show(qsTrId('id_copied_to_clipboard'), 1000);
-            }
             Behavior on opacity {
                 OpacityAnimator {
                 }
             }
         }
+    }
+    onClicked: {
+        Clipboard.copy(address.data["address"]);
+        ToolTip.show(qsTrId('id_copied_to_clipboard'), 1000);
     }
 }
