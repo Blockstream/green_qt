@@ -54,6 +54,14 @@ MainPage {
                 width: parent.width - constants.p1*2
                 implicitHeight: constants.p5
                 padding: constants.p1
+                scale: notification_panel.hovered ? 1.01 : 1
+                transformOrigin: Item.Center
+                Behavior on scale {
+                    NumberAnimation {
+                        easing.type: Easing.OutBack
+                        duration: 400
+                    }
+                }
                 background: Rectangle {
                     radius: 4
                     color: 'white'
@@ -63,13 +71,15 @@ MainPage {
                     }
                 }
                 contentItem: RowLayout {
+                    spacing: 12
                     Label {
-                        Layout.fillWidth: true
                         text: qsTrId('There is a newer version of Green Desktop available')
                         color: 'black'
                     }
+                    HSpacer {
+                    }
                     Label {
-                        text: 'Download'
+                        text: qsTrId('Download %1').arg(app_update_controller.latestVersion)
                         font.bold: true
                         color: 'black'
                     }
