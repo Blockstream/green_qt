@@ -27,9 +27,10 @@ void AppUpdateController::checkForUpdates()
     connect(activity, &CheckForUpdatesActivity::finished, this, [=] {
         activity->deleteLater();
         m_latest_version = activity->latestVersion();
-        m_update_available = SemVer::parse(qApp->applicationVersion())<SemVer::parse(m_latest_version);
+        m_update_available = SemVer::parse(qApp->applicationVersion()) < SemVer::parse(m_latest_version);
         emit latestVersionChanged(m_latest_version);
         emit updateAvailableChanged(m_update_available);
+        m_session.destroy();
     });
     activity->exec();
 }
