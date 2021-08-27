@@ -32,6 +32,7 @@ void NewsFeedController::fetch()
     }
 
     auto activity = new NewsFeedActivity(m_session);
+    m_pending.insert(activity);
     connect(activity, &NewsFeedActivity::finished, this, [=] {
         activity->deleteLater();
         m_feed = activity->feed();
@@ -40,6 +41,7 @@ void NewsFeedController::fetch()
             feed_file.write(m_feed.toUtf8());
         }
         parse();
+        updatePending(activity);
     });
     activity->exec();
 }
@@ -67,6 +69,7 @@ void NewsFeedController::parse()
                     QFile file(path);
                     if (!file.exists()) {
                         auto activity = new NewsImageDownloadActivity(m_session, url);
+                        m_pending.insert(activity);
                         connect(activity, &NewsImageDownloadActivity::finished, this, [=] {
                             activity->deleteLater();
                             QFile file(path);
@@ -75,6 +78,7 @@ void NewsFeedController::parse()
                                 file.close();
                             }
                             updateModel();
+                            updatePending(activity);
                         });
                         activity->exec();
                     }
@@ -92,6 +96,15 @@ void NewsFeedController::parse()
 
     m_model = array;
     emit modelChanged();
+}
+
+void NewsFeedController::updatePending(HttpRequestActivity* activity)
+{
+    m_pending.remove(activity);
+    if (m_pending.isEmpty()) {
+        qDebug() << "release news feed session";
+        m_session.destroy();
+    }
 }
 
 QJsonArray NewsFeedController::model()

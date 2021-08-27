@@ -27,10 +27,12 @@ signals:
 private:
     void parse();
     void updateModel();
+    void updatePending(HttpRequestActivity *activity);
 
     QJsonArray m_model;
     Connectable<Session> m_session;
     QString m_feed;
+    QSet<HttpRequestActivity*> m_pending;
 };
 
 class NewsFeedActivity : public HttpRequestActivity

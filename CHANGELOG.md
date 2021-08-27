@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Fix filtering for not confidential coins
+- Release session after fetching news feed and images
 - Only show supported two factor authentication methods
 - Refresh fiat amounts periodically
 
