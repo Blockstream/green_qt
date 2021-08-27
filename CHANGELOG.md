@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Make the whole address card clickable for copy to clipboard action
 
 ### Fixed
+- Fix filtering for not confidential coins
 - Only show supported two factor authentication methods
 - Refresh fiat amounts periodically
 

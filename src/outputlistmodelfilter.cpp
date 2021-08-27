@@ -28,7 +28,7 @@ bool OutputListModelFilter::filterAcceptsRow(int source_row, const QModelIndex &
         if (filter == "p2wsh") result = output->addressType() == "p2wsh";
         if (filter == "dust") result = output->dust();
         if (filter == "locked") result = output->locked();
-        if (filter == "not confidential") result = !output->confidential();
+        if (filter == "not_confidential") result = !output->confidential();
         if (invert) result = !result;
         if (!result) return false;
     }

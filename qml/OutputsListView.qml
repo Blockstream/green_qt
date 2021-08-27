@@ -25,7 +25,7 @@ Page {
                 return qsTrId('id_csv')
             case 'p2wsh':
                 return qsTrId('id_p2wsh')
-            case 'not confidential':
+            case 'not_confidential':
                 return qsTrId('id_not_confidential')
             case 'dust':
                 return qsTrId('id_dust')
@@ -57,7 +57,7 @@ Page {
             }
 
             Repeater {
-                model: account.wallet.network.liquid ? ['', 'csv', 'p2wsh', 'not confidential'] : ['', 'csv', 'p2wsh', 'dust', 'locked']
+                model: account.wallet.network.liquid ? ['', 'csv', 'p2wsh', 'not_confidential'] : ['', 'csv', 'p2wsh', 'dust', 'locked']
                 delegate: Button {
                     id: self
                     ButtonGroup.group: button_group
