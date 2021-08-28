@@ -187,6 +187,8 @@ void SendController::create()
         Q_ASSERT(!m_balance);
     }
 
+    if (m_fee_rate == 0) return;
+
     setValid(false);
 
     // Skip transaction creation if m_address and m_amount are empty
@@ -199,10 +201,6 @@ void SendController::create()
         return;
     }
 
-    if (!m_fee_rate) {
-        m_fee_rate = static_cast<qint64>(wallet()->settings().value("required_num_blocks").toInt());
-    }
-
     QJsonObject address{{ "address", m_address }};
     if (wallet()->network()->isLiquid()) {
         Q_ASSERT(m_balance);
@@ -213,39 +211,30 @@ void SendController::create()
         const qint64 amount = wallet()->amountToSats(m_effective_amount);
         address.insert("satoshi", amount);
     }
-    QJsonObject data{
-        { "subaccount", static_cast<qint64>(account()->pointer()) },
-        { "fee_rate", m_fee_rate },
-        { "send_all", m_send_all },
-        { "addressees", QJsonArray{address} }
-    };
+
+    m_transaction["subaccount"] = static_cast<qint64>(account()->pointer());
+    m_transaction["fee_rate"] = m_fee_rate;
+    m_transaction["send_all"] = m_send_all;
+    m_transaction["addressees"] = QJsonArray{address};
+    m_transaction["utxo_strategy"] = m_manual_coin_selection ? "manual" : "default";
 
     if (m_manual_coin_selection) {
-        const auto key = m_balance ? m_balance->asset()->id() : "btc";
-        auto utxos = m_utxos;
-        if (!utxos.contains(key)) utxos.insert(key, QJsonArray());
-        QJsonArray used_utxos;
-        for (auto policy : utxos.keys()) {
-            for (auto utxo : utxos.value(policy).toArray()) {
-                used_utxos.append(utxo);
-            }
-        }
-        data.insert("utxos", utxos);
-        if (!m_send_all) {
-            data.insert("used_utxos", used_utxos);
-            data.insert("utxo_strategy", "manual");
-        }
+        Q_ASSERT(!m_balance);
+        m_transaction.remove("utxos");
+        m_transaction["used_utxos"] = m_utxos.value("btc").toArray();
     }
 
-    m_create_handler = new CreateTransactionHandler(wallet(), data);
+    m_create_handler = new CreateTransactionHandler(wallet(), m_transaction);
     connect(m_create_handler, &Handler::done, this, [this, count] {
         if (m_count == count) {
             m_transaction = m_create_handler->result().value("result").toObject();
 
             if (m_send_all) {
-                const auto satoshi = m_transaction.value("transaction_outputs").toArray().first().toObject().value("satoshi").toDouble();
+                Q_ASSERT(m_transaction.value("amount_read_only").toBool());
+                const auto id = m_balance ? m_balance->asset()->id() : "btc";
+                const auto satoshi = m_transaction.value("satoshi").toObject().value(id).toDouble();
                 m_amount = wallet()->formatAmount(satoshi, false);
-                m_fiat_amount = wallet()->formatAmount(satoshi, false, "fiat");
+                if (!m_balance || m_balance->asset()->isLBTC()) m_fiat_amount = wallet()->formatAmount(satoshi, false, "fiat");
                 emit changed();
             }
 
@@ -269,9 +258,6 @@ void SendController::signAndSend()
         // sign->deleteLater();
         auto details = sign->result().value("result").toObject();
         details["memo"] = m_memo;
-        qDebug() << "*********";
-        qDebug() << "*********";
-        qDebug() << details;
         auto send = new SendTransactionHandler(wallet(), details);
         connect(send, &Handler::done, this, [this, send] {
             setSignedTransaction(m_account->getOrCreateTransaction(send->result().value("result").toObject()));

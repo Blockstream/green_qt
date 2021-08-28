@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for creating and restoring Singlesig wallets on Bitcoin Mainnet
 
 ### Changed
+- Improve send performance and avoid generating multiple change addresses
 - Show warning when sending with no available balance
 - Make the whole address card clickable for copy to clipboard action
 
