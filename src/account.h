@@ -28,7 +28,7 @@ public:
     explicit Account(const QJsonObject& data, Wallet* wallet);
 
     Wallet* wallet() const { return m_wallet; }
-    int pointer() const { return m_pointer; }
+    quint32 pointer() const { return m_pointer; }
     QString type() const { return m_type; }
     bool isMainAccount() const;
 
@@ -62,7 +62,7 @@ public slots:
     void rename(QString name, bool active_focus);
 private:
     Wallet* const m_wallet;
-    const int m_pointer;
+    const quint32 m_pointer;
     const QString m_type;
     QJsonObject m_json;
     QString m_name;

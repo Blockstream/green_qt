@@ -3,13 +3,15 @@
 
 #include "handler.h"
 
+QT_FORWARD_DECLARE_CLASS(Account)
+
 class GetAddressesHandler : public Handler
 {
-    int m_subaccount;
+    const quint32 m_subaccount;
     int m_last_pointer = 0;
     void call(GA_session* session, GA_auth_handler** auth_handler) override;
 public:
-    GetAddressesHandler(int subaccount, int last_pointer, Wallet *wallet);
+    GetAddressesHandler(int last_pointer, Account* account);
     QJsonArray addresses() const;
     int lastPointer() const;
 };

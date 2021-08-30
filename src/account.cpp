@@ -16,7 +16,7 @@
 Account::Account(const QJsonObject& data, Wallet* wallet)
     : QObject(wallet)
     , m_wallet(wallet)
-    , m_pointer(data.value("pointer").toInt())
+    , m_pointer(data.value("pointer").toDouble())
     , m_type(data.value("type").toString())
 {
     Q_ASSERT(m_pointer >= 0);
@@ -244,7 +244,7 @@ AccountGetUnspentOutputsActivity::AccountGetUnspentOutputsActivity(Account* acco
 
 void AccountGetUnspentOutputsActivity::exec()
 {
-    auto handler = new GetUnspentOutputsHandler(account()->pointer(), m_num_confs, m_all_coins, wallet());
+    auto handler = new GetUnspentOutputsHandler(m_num_confs, m_all_coins, account());
 
     QObject::connect(handler, &Handler::done, this, [this, handler] {
         handler->deleteLater();

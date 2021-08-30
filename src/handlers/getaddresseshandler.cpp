@@ -1,3 +1,4 @@
+#include "account.h"
 #include "json.h"
 #include "getaddresseshandler.h"
 
@@ -6,7 +7,7 @@
 void GetAddressesHandler::call(GA_session *session, GA_auth_handler **auth_handler)
 {
     auto details = Json::fromObject({
-        { "subaccount", m_subaccount },
+        { "subaccount", static_cast<qint64>(m_subaccount) },
         { "last_pointer", m_last_pointer }
     });
 
@@ -14,9 +15,9 @@ void GetAddressesHandler::call(GA_session *session, GA_auth_handler **auth_handl
     Q_ASSERT(err == GA_OK);
 }
 
-GetAddressesHandler::GetAddressesHandler(int subaccount, int last_pointer, Wallet *wallet)
-    : Handler(wallet)
-    , m_subaccount(subaccount)
+GetAddressesHandler::GetAddressesHandler(int last_pointer, Account* account)
+    : Handler(account->wallet())
+    , m_subaccount(account->pointer())
     , m_last_pointer(last_pointer)
 {
 }

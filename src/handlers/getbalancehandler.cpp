@@ -13,7 +13,7 @@ GetBalanceHandler::GetBalanceHandler(Account* account)
 void GetBalanceHandler::call(GA_session* session, GA_auth_handler** auth_handler)
 {
     auto details = Json::fromObject({
-        { "subaccount", m_account->pointer() },
+        { "subaccount", static_cast<qint64>(m_account->pointer()) },
         { "num_confs", 0 }
     });
 

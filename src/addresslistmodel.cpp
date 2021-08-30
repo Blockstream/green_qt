@@ -41,7 +41,7 @@ void AddressListModel::setAccount(Account* account)
 
 void AddressListModel::fetch(bool reset)
 {
-    auto handler = new GetAddressesHandler(m_account->pointer(), m_last_pointer, m_account->wallet());
+    auto handler = new GetAddressesHandler(m_last_pointer, m_account);
 
     QObject::connect(handler, &Handler::done, this, [this, reset, handler] {
         handler->deleteLater();
