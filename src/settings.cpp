@@ -127,7 +127,7 @@ void Settings::updateRecentWallet(const QString& id)
 {
     m_recent_wallets.removeOne(id);
     m_recent_wallets.prepend(id);
-    if (m_recent_wallets.size() > 3) m_recent_wallets.removeLast();
+    if (m_recent_wallets.size() > 10) m_recent_wallets.removeLast();
     emit recentWalletsChanged(m_recent_wallets);
     saveLater();
 }

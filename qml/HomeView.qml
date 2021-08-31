@@ -13,6 +13,7 @@ MainPage {
         for (const id of Settings.recentWallets) {
             const wallet = WalletManager.wallet(id)
             if (wallet) wallets.push(wallet)
+            if (wallets.length === 3) break
         }
         return wallets
     }
