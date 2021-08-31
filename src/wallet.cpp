@@ -360,6 +360,11 @@ void Wallet::refreshAssets(bool refresh)
         activity->finish();
         activity->deleteLater();
     });
+    connect(handler, &Handler::error, this, [handler, activity] {
+        handler->deleteLater();
+        activity->fail();
+        activity->deleteLater();
+    });
 }
 
 void Wallet::rename(QString name, bool active_focus)
