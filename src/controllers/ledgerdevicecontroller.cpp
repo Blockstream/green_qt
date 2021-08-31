@@ -76,6 +76,8 @@ void LedgerDeviceController::initialize()
                     << "app_name:" << m_app_name
                     << "app_version:" << m_app_version.toString();
 
+            device->setAppVersion(m_app_version.toString());
+
             m_network = network_from_app_name(activity->name());
             emit networkChanged(m_network);
 

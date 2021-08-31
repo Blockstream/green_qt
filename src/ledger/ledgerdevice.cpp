@@ -198,6 +198,13 @@ GetAppActivity* LedgerDevice::getApp()
     return new GetAppActivity(this);
 }
 
+void LedgerDevice::setAppVersion(const QString& app_version)
+{
+    if (m_app_version == app_version) return;
+    m_app_version = app_version;
+    emit appVersionChanged(m_app_version);
+}
+
 DevicePrivate* DevicePrivate::get(LedgerDevice* device)
 {
     return device->d;

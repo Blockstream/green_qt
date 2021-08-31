@@ -76,6 +76,7 @@ class DevicePrivate;
 class LedgerDevice : public Device
 {
     Q_OBJECT
+    Q_PROPERTY(QString appVersion READ appVersion NOTIFY appVersionChanged)
     QML_ELEMENT
 public:
     explicit LedgerDevice(DevicePrivate* d, QObject* parent = nullptr);
@@ -101,9 +102,15 @@ public:
     QByteArray m_master_public_key;
     QByteArray m_fingerprint;
 
+    QString appVersion() const { return m_app_version; }
+    void setAppVersion(const QString& app_version);
+signals:
+    void appVersionChanged(const QString& app_version);
+
 private:
     friend class DevicePrivate;
     DevicePrivate* const d;
+    QString m_app_version;
 };
 
 #endif // GREEN_LEDGERDEVICE_H
