@@ -42,7 +42,13 @@ WalletDialog {
     Connections {
         target: controller
         function onFinished() { stack_view.push(doneComponent) }
-        function onError(handler) { push(handler, errorComponent) }
+        function onError(handler) {
+            if (handler.result.error === 'id_invalid_twofactor_code') {
+                push(handler, twoFactorAuthenticationErrorComponent)
+            } else {
+                push(handler, genericErrorComponent)
+            }
+        }
         function onRequestCode(handler) { push(handler, requestCodeComponent) }
         function onResolver(resolver) {
             if (resolver instanceof TwoFactorResolver) {
@@ -175,24 +181,53 @@ WalletDialog {
         }
     }
 
-    property Component errorComponent: WizardPage {
+    property Component genericErrorComponent: WizardPage {
+        property Handler handler
+
+        id: self
         actions: Action {
             text: qsTrId('id_ok')
             onTriggered: controller_dialog.accept()
         }
-        Column {
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.horizontalCenter: parent.horizontalCenter
-            Image {
-                anchors.horizontalCenter: parent.horizontalCenter
-                source: 'qrc:/svg/2fa_general.svg'
-                sourceSize.width: 64
-                sourceSize.height: 64
+        GButton {
+            anchors.centerIn: parent
+            icon.source: 'qrc:/svg/warning.svg'
+            baseColor: '#e5e7e9'
+            textColor: 'black'
+            highlighted: true
+            large: true
+            text: self.handler.result.error || qsTrId('There was an error processing this request')
+            scale: hovered ? 1.01 : 1
+            transformOrigin: Item.Center
+            Behavior on scale {
+                NumberAnimation {
+                    easing.type: Easing.OutBack
+                    duration: 400
+                }
             }
-            Label {
-                property Handler handler
-                property list<Action> actions
-                text: qsTrId('id_no_attempts_remaining')
+        }
+    }
+
+    property Component twoFactorAuthenticationErrorComponent: WizardPage {
+        actions: Action {
+            text: qsTrId('id_ok')
+            onTriggered: controller_dialog.accept()
+        }
+        GButton {
+            anchors.centerIn: parent
+            icon.source: 'qrc:/svg/warning.svg'
+            baseColor: '#e5e7e9'
+            textColor: 'black'
+            highlighted: true
+            large: true
+            text: qsTrId('id_no_attempts_remaining')
+            scale: hovered ? 1.01 : 1
+            transformOrigin: Item.Center
+            Behavior on scale {
+                NumberAnimation {
+                    easing.type: Easing.OutBack
+                    duration: 400
+                }
             }
         }
     }

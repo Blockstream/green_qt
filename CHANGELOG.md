@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Make the whole address card clickable for copy to clipboard action
 
 ### Fixed
+- Fix dialog error regression
 - Fix filtering for not confidential coins
 - Release session after fetching news feed and images
 - Only show supported two factor authentication methods
