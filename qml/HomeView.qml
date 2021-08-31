@@ -12,7 +12,10 @@ MainPage {
         WalletManager.wallets
         for (const id of Settings.recentWallets) {
             const wallet = WalletManager.wallet(id)
-            if (wallet) wallets.push(wallet)
+            if (!wallet) continue
+            if (wallet.network.key === 'testnet' && !Settings.enableTestnet) continue
+            if (wallet.network.key === 'testnet-liquid' && (!Settings.enableTestnet || build_type === 'release')) continue
+            wallets.push(wallet)
             if (wallets.length === 3) break
         }
         return wallets
