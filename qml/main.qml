@@ -34,6 +34,7 @@ ApplicationWindow {
 
     property var icons: ({
         'liquid': 'qrc:/svg/liquid.svg',
+        'testnet-liquid': 'qrc:/svg/testnet-liquid.svg',
         'bitcoin': 'qrc:/svg/btc.svg',
         'testnet': 'qrc:/svg/btc_testnet.svg'
     })
