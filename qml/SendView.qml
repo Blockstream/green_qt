@@ -54,7 +54,7 @@ StackView {
             Action {
                 property bool highlighted: enabled
                 text: controller.transaction.error ? qsTrId(controller.transaction.error || '') : qsTrId('id_review')
-                enabled: controller.valid && !controller.transaction.error
+                enabled: !ledger_support_warning.active && controller.valid && !controller.transaction.error
                 onTriggered: stack_view.push(review_view)
             }
         ]
@@ -97,6 +97,49 @@ StackView {
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                 ToolTip.text: qsTrId('id_paste')
                 ToolTip.visible: hovered
+            }
+        }
+        Pane {
+            visible: ledger_support_warning.visible
+        }
+        Loader {
+            id: ledger_support_warning
+            Layout.fillWidth: true
+            active: {
+                const device = account.wallet.device
+                if (device && device.type === Device.LedgerNanoS && device.appVersion === '1.4.8') {
+                    switch (stack_view.balance.asset.id) {
+                    case '6f0279e9ed041c3d710a9f57d0c02928416460c4b722ae3457a11eec381c526d':
+                    case 'b00b0ff0b11ebd47f7c6f57614c046dbbd204e84bf01178baf2be3713a206eb7':
+                    case '0e99c1a6da379d1f4151fb9df90449d40d0608f6cb33a5bcbfc8c265f42bab0a':
+                    case 'd9f6bb516c9f3ab16bed3f3662ae018573ee6b00130f2347a4b735d8e7c4c396':
+                    case '3438ecb49fc45c08e687de4749ed628c511e326460ea4336794e1cf02741329e':
+                    case 'ce091c998b83c78bb71a632313ba3760f1763d9cfcffae02258ffa9865a37bd2':
+                    case 'ffff7e448a09977dbb2d32209154fc4fb44f1e1098d80574f66c3a8e0ab5559f':
+                        break;
+                    default:
+                        return true
+                    }
+                }
+                return false
+            }
+            visible: active
+            sourceComponent: GButton {
+                icon.source: 'qrc:/svg/warning.svg'
+                baseColor: '#e5e7e9'
+                textColor: 'black'
+                highlighted: true
+                large: true
+                text: qsTrId('id_ledger_supports_a_limited_set')
+                onClicked: Qt.openUrlExternally('https://docs.blockstream.com/green/hww/hww-index.html#ledger-supported-assets')
+                scale: hovered ? 1.01 : 1
+                transformOrigin: Item.Center
+                Behavior on scale {
+                    NumberAnimation {
+                        easing.type: Easing.OutBack
+                        duration: 400
+                    }
+                }
             }
         }
         Loader {
