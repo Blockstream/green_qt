@@ -233,6 +233,20 @@ ApplicationWindow {
                             WalletButton {
                             }
                         }
+                        SideButton {
+                            visible: Settings.enableTestnet && build_type !== 'release'
+                            icon.source: icons['testnet-liquid']
+                            location: '/testnet-liquid'
+                            text: 'Liquid Testnet'
+                        }
+                        Repeater {
+                            model: WalletListModel {
+                                justReady: true
+                                network: 'testnet-liquid'
+                            }
+                            WalletButton {
+                            }
+                        }
                         SideLabel {
                             text: qsTrId('id_devices')
                         }
@@ -292,6 +306,11 @@ ApplicationWindow {
             NetworkView {
                 network: 'liquid'
                 title: qsTrId('id_liquid_wallets')
+            }
+            NetworkView {
+                enabled: Settings.enableTestnet
+                network: 'testnet-liquid'
+                title: qsTrId('id_liquid_testnet_wallets')
             }
             NetworkView {
                 enabled: Settings.enableTestnet
