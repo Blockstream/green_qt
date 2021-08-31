@@ -204,6 +204,7 @@ int main(int argc, char *argv[])
         const auto name = locale.nativeCountryName() + " - " + locale.nativeLanguageName();
         languages.insert(name, QVariantMap({{ "name", name }, { "language", language }}));
     }
+    engine.rootContext()->setContextProperty("build_type", QT_STRINGIFY(BUILD_TYPE));
     engine.rootContext()->setContextProperty("languages", languages.values());
     engine.rootContext()->setContextProperty("data_dir", QUrl::fromLocalFile(g_data_location));
     engine.rootContext()->setContextProperty("log_file", QUrl::fromLocalFile(g_log_file.fileName()));

@@ -10,11 +10,14 @@ CI_COMMIT_SHORT_SHA = $$(CI_COMMIT_SHORT_SHA)
 
 equals(CI, "true") {
     equals(CI_BUILD_TAG, "") {
+        DEFINES += "BUILD_TYPE=test"
         DEFINES += "VERSION=\"$${VERSION_MAJOR}.$${VERSION_MINOR}.$${VERSION_PATCH}-$${CI_COMMIT_SHORT_SHA}\""
     } else {
+        DEFINES += "BUILD_TYPE=release"
         DEFINES += "VERSION=\"$${VERSION_MAJOR}.$${VERSION_MINOR}.$${VERSION_PATCH}\""
     }
 } else {
+    DEFINES += "BUILD_TYPE=development"
     DEFINES += "VERSION=\"$${VERSION_MAJOR}.$${VERSION_MINOR}.$${VERSION_PATCH}-dev\""
 }
 

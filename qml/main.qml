@@ -87,6 +87,7 @@ ApplicationWindow {
             if (currentAccount) parts.push(font_metrics.elidedText(accountName(currentAccount), Qt.ElideRight, window.width / 3));
         }
         parts.push('Blockstream Green');
+        if (build_type !== 'release') parts.push(`[${build_type}]`)
         return parts.join(' - ');
     }
     FontMetrics {
