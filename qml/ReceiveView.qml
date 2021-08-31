@@ -77,6 +77,7 @@ ColumnLayout {
             anchors.centerIn: parent
             border.width: 1
             border.color: '#00B45E'
+            radius: 4
             color: '#1000B45E'
             width: parent.height + 16
             height: width
@@ -94,15 +95,20 @@ ColumnLayout {
             horizontalAlignment: Label.AlignHCenter
             verticalAlignment: Label.AlignVCenter
             Layout.fillWidth: true
+            Layout.preferredWidth: 0
             Layout.minimumWidth: 400
-            Layout.maximumWidth: 400
             wrapMode: Text.WrapAnywhere
+            MouseArea {
+                anchors.fill: parent
+                enabled: !receive_address.generating && (receive_address.addressVerification === ReceiveAddressController.VerificationNone || receive_address.addressVerification === ReceiveAddressController.VerificationAccepted)
+                onClicked: copy_address_action.trigger()
+            }
         }
         ToolButton {
             enabled: !receive_address.generating && (receive_address.addressVerification === ReceiveAddressController.VerificationNone || receive_address.addressVerification === ReceiveAddressController.VerificationAccepted)
             icon.source: 'qrc:/svg/copy.svg'
-            icon.width: 16
-            icon.height: 16
+            icon.width: 24
+            icon.height: 24
             action: copy_address_action
             ToolTip.text: qsTrId('id_copy_to_clipboard')
             ToolTip.delay: 300
@@ -154,14 +160,6 @@ ColumnLayout {
                     source: 'qrc:/svg/x.svg'
                 }
             }
-
-//            font.capitalization: Font.AllUppercase
-//            font.styleName: 'Medium'
-//            padding: 8
-//            background: Rectangle {
-//                radius: 4
-//                color: '#b74747'
-//            }
         }
     }
     SectionLabel {
