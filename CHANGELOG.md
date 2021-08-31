@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Warn on receive dialog that Ledger Nano S supports a limited set of liquid assets
 
 ### Changed
 - Show warning when sending with no available balance

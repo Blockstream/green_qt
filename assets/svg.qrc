@@ -36,5 +36,6 @@
         <file>svg/singleSig.svg</file>
         <file>svg/key.svg</file>
         <file>svg/multi-sig.svg</file>
+        <file>svg/warning.svg</file>
     </qresource>
 </RCC>

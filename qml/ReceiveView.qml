@@ -6,7 +6,7 @@ import QtQuick.Layouts 1.12
 
 ColumnLayout {
     property alias account: receive_address.account
-    spacing: 16
+    spacing: 12
 
     ReceiveAddressController {
         id: receive_address
@@ -31,6 +31,27 @@ ColumnLayout {
         }
     }
 
+    Loader {
+        Layout.alignment: Qt.AlignCenter
+        active: account && account.wallet.network.liquid && account.wallet.device && account.wallet.device.type === Device.LedgerNanoS
+        sourceComponent: GButton {
+            icon.source: 'qrc:/svg/warning.svg'
+            baseColor: '#e5e7e9'
+            textColor: 'black'
+            highlighted: true
+            large: true
+            text: qsTrId('id_ledger_supports_a_limited_set')
+            onClicked: Qt.openUrlExternally('https://docs.blockstream.com/green/hww/hww-index.html#ledger-supported-assets')
+            scale: hovered ? 1.01 : 1
+            transformOrigin: Item.Center
+            Behavior on scale {
+                NumberAnimation {
+                    easing.type: Easing.OutBack
+                    duration: 400
+                }
+            }
+        }
+    }
     RowLayout {
         SectionLabel {
             text: qsTrId('id_scan_to_send_here')
