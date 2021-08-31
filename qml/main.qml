@@ -24,7 +24,10 @@ ApplicationWindow {
            const child = stack_layout.children[i]
            if (!(child instanceof Item)) continue
            const l = child.location
-           if (l && child.enabled && navigation.location.startsWith(l)) return i
+           if (l && child.enabled) {
+               if (navigation.location === l) return i
+               if (navigation.location.startsWith(l + '/')) return i
+           }
        }
        return 0
     }
@@ -195,7 +198,6 @@ ApplicationWindow {
                             text: 'Bitcoin'
                         }
                         Repeater {
-                            id: mainnet_repeater
                             model: WalletListModel {
                                 justReady: true
                                 network: 'bitcoin'
@@ -210,7 +212,6 @@ ApplicationWindow {
                             text: 'Bitcoin Testnet'
                         }
                         Repeater {
-                            id: testnet_repeater
                             model: WalletListModel {
                                 justReady: true
                                 network: 'testnet'
@@ -225,7 +226,6 @@ ApplicationWindow {
                             text: 'Liquid'
                         }
                         Repeater {
-                            id: liquid_repeater
                             model: WalletListModel {
                                 justReady: true
                                 network: 'liquid'
@@ -286,7 +286,6 @@ ApplicationWindow {
                 readonly property string location: '/ledger'
             }
             NetworkView {
-                id: mainnet_view
                 network: 'bitcoin'
                 title: qsTrId('id_bitcoin_wallets')
             }
