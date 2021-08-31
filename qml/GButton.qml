@@ -5,9 +5,15 @@ import QtQuick.Layouts 1.13
 Button {
     property bool large: false
     property bool destructive: false
+    property var baseColor
+    property var textColor: self.pressed ? "black" : "white"
     function _color(index) {
-        const prefix = self.highlighted ? 'g' : self.destructive ? 'r' : 'c'
-        return constants[prefix + index]
+        if (baseColor) {
+            return Qt.lighter(baseColor, 1 + 0.001 * index)
+        } else {
+            const prefix = self.highlighted ? 'g' : self.destructive ? 'r' : 'c'
+            return constants[prefix + index]
+        }
     }
     id: self
     font.pixelSize: self.large ? 14 : 12
@@ -41,7 +47,7 @@ Button {
         Label {
             Layout.alignment: Qt.AlignCenter
             text: self.text
-            color: self.pressed ? "black" : "white"
+            color: self.textColor
         }
     }
 }
