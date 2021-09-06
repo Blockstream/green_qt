@@ -233,7 +233,7 @@ void SendController::create()
                 Q_ASSERT(m_transaction.value("amount_read_only").toBool());
                 const auto id = m_balance ? m_balance->asset()->id() : "btc";
                 const auto satoshi = m_transaction.value("satoshi").toObject().value(id).toDouble();
-                m_amount = wallet()->formatAmount(satoshi, false);
+                m_amount = m_balance ? m_balance->asset()->formatAmount(satoshi, false) : wallet()->formatAmount(satoshi, false);
                 if (!m_balance || m_balance->asset()->isLBTC()) m_fiat_amount = wallet()->formatAmount(satoshi, false, "fiat");
                 emit changed();
             }
