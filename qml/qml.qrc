@@ -123,5 +123,6 @@
         <file>CoinDelegate.qml</file>
         <file>SelectCoinsView.qml</file>
         <file>MessageDialog.qml</file>
+        <file>NewsPage.qml</file>
     </qresource>
 </RCC>

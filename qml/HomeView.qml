@@ -101,80 +101,13 @@ MainPage {
     bottomPadding: 24
     contentItem: ColumnLayout {
         spacing: constants.p4
-        ColumnLayout {
-            id: news_container
+        Loader {
             Layout.rightMargin: 16
-            Label {
-                Layout.bottomMargin: 16
-                text: "What's New at Blockstream"
-                font.pixelSize: 18
-                font.bold: true
-            }
-            GridLayout {
-                columns: 3
-                columnSpacing: constants.p2
-
-                Repeater {
-                    model: news_feed_controller.model
-                    Button {
-                        id: news_card
-                        implicitHeight: 300
-                        Layout.fillWidth: true
-                        padding: constants.p3
-
-                        background: Rectangle {
-                            radius: 4
-                            color: news_card.hovered ? Qt.lighter(constants.c600, 1.25) : constants.c600
-                            Behavior on color {
-                                ColorAnimation {
-                                    duration: 100
-                                }
-                            }
-                        }
-                        scale: news_card.hovered || news_card.activeFocus ? 1.01 : 1
-                        transformOrigin: Item.Center
-                        Behavior on scale {
-                            NumberAnimation {
-                                easing.type: Easing.OutBack
-                                duration: 400
-                            }
-                        }
-                        onClicked: Qt.openUrlExternally(modelData.link)
-                        clip: true
-                        contentItem: ColumnLayout {
-                            spacing: constants.s1
-                            Image {
-                                Layout.fillWidth: true
-                                Layout.fillHeight: true
-                                Layout.minimumHeight: 150
-                                Layout.maximumHeight: 150
-                                fillMode: Image.PreserveAspectCrop
-                                smooth: true
-                                mipmap: true
-                                source: modelData.image
-                            }
-                            Label {
-                                Layout.fillWidth: true
-                                text: modelData.title
-                                color: "white"
-                                font.pixelSize: 16
-                                font.bold: true
-                                clip: true
-                                elide: Label.ElideRight
-                            }
-                            Label {
-                                Layout.fillWidth: true
-                                Layout.fillHeight: true
-                                text: modelData.description
-                                wrapMode: Label.WordWrap
-                                elide: Label.ElideRight
-                                color: "white"
-                                font.pixelSize: 12
-                                clip: true
-                            }
-                        }
-                    }
-                }
+            Layout.fillWidth: true
+            Layout.minimumHeight: 320
+            active: Settings.showNews
+            visible: active
+            sourceComponent: NewsPage {
             }
         }
         RowLayout {
@@ -268,6 +201,8 @@ MainPage {
                 }
             }
         }
+        VSpacer {
+        }
         Label {
             Layout.fillWidth: true
             wrapMode: Text.WordWrap
@@ -293,10 +228,5 @@ MainPage {
         ChooseNetworkDialog {
 
         }
-    }
-
-    NewsFeedController {
-        id: news_feed_controller
-        Component.onCompleted: fetch()
     }
 }

@@ -90,8 +90,6 @@ void NewsFeedController::parse()
         }
 
         array.append(item);
-        // Limit to 3 entries
-        if (array.count() == 3) break;
     }
 
     m_model = array;
