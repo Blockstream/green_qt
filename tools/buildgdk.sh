@@ -40,9 +40,11 @@ else
 fi
 
 mv ${GDK_PATH}/src/build-*/src/libgreenaddress* ${GDK_PATH}
-mv ${GDK_PATH}/src/include/gdk.h ${GDK_PATH}/gdk.h
 mv ${GDK_PATH}/src/build-*/libwally-core/build/include/* ${GDK_PATH}
+mv ${GDK_PATH}/src/build-*/boost/build/lib/libboost_log.a ${GDK_PATH}
 mv ${GDK_PATH}/src/subprojects/json-3.8.0/include/nlohmann ${GDK_PATH}
+mv ${GDK_PATH}/src/subprojects/boost_1_76_0/boost ${GDK_PATH}
+mv ${GDK_PATH}/src/include/gdk.h ${GDK_PATH}/gdk.h
 
 rm -fr ${GDK_PATH}/src ${GDKVENV}
 
