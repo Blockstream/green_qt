@@ -35,6 +35,8 @@ Q_IMPORT_PLUGIN(QCocoaIntegrationPlugin);
 
 #ifdef _WIN32
 #include <windows.h>
+#include <fcntl.h>
+#include <io.h>
 #endif
 
 #include <hidapi/hidapi.h>
@@ -42,6 +44,11 @@ Q_IMPORT_PLUGIN(QCocoaIntegrationPlugin);
 extern QString g_data_location;
 QCommandLineParser g_args;
 static QFile g_log_file;
+
+#if BUILD_TYPE != development
+#include <boost/log/core.hpp>
+#include <boost/log/sinks/async_frontend.hpp>
+#include <boost/log/sinks/basic_sink_backend.hpp>
 
 void gMessageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
@@ -52,20 +59,64 @@ void gMessageHandler(QtMsgType type, const QMessageLogContext &context, const QS
     QString timestamp = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzzzzz");
     QString logLevelName = msgLevelHash[type];
 
-    fprintf(stdout, "[%s] [%s] %s\n", timestamp.toLocal8Bit().constData(), logLevelName.toLocal8Bit().constData(), localMsg.constData());
-    fflush(stdout);
-
     QTextStream ts(&g_log_file);
-    ts << QString("[%1] [%2] %3").arg(timestamp, logLevelName, msg) << Qt::endl;
+    ts << QString("[%1] [app:%2] %3").arg(timestamp, logLevelName, msg) << Qt::endl;
 
     if (type == QtFatalMsg) abort();
 }
 
+class gdk_sink : public boost::log::sinks::basic_formatted_sink_backend<char> {
+public:
+    void consume(const boost::log::record_view&, const std::string& formatted_message)
+    {
+        QTextStream ts(&g_log_file);
+        QString timestamp = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzzzzz");
+        ts << QString("[%1] [gdk:info] %2").arg(timestamp, QString::fromStdString(formatted_message)) << Qt::endl;
+    }
+};
+
+static QString g_gdk_debug_buffer;
+#endif
+
 void initLog()
 {
     g_log_file.setFileName(GetDataFile("logs", QString("%1.%2.%3.txt").arg(VERSION_MAJOR).arg(VERSION_MINOR).arg(VERSION_PATCH)));
+#if BUILD_TYPE != development
     g_log_file.open(QIODevice::WriteOnly | QIODevice::Append);
     qInstallMessageHandler(gMessageHandler);
+
+    using sink_t = boost::log::sinks::asynchronous_sink<gdk_sink>;
+    auto sink = boost::make_shared<sink_t>(boost::make_shared<gdk_sink>());
+    boost::log::core::get()->add_sink(sink);
+
+    auto logger_thread = std::thread([] {
+        int pipes[2];
+        setvbuf(stdout, 0, _IOLBF, 0);
+        setvbuf(stderr, 0, _IONBF, 0);
+#ifdef _WIN32
+        _pipe(pipes, 1024, _O_NOINHERIT);
+        _dup2(pipes[1], 1);
+        _dup2(pipes[1], 2);
+#else
+        pipe(pipes);
+        dup2(pipes[1], 1);
+        dup2(pipes[1], 2);
+#endif
+        ssize_t read_size;
+        char buffer[1024];
+        while ((read_size = read(pipes[0], buffer, sizeof buffer - 1)) > 0) {
+            g_gdk_debug_buffer.append(QByteArray(buffer, read_size));
+            auto lines = g_gdk_debug_buffer.split('\n');
+            QTextStream ts(&g_log_file);
+            QString timestamp = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzzzzz");
+            while (lines.size() > 1) {
+                ts << QString("[%1] [gdk:debug] %3").arg(timestamp, lines.takeFirst()) << Qt::endl;
+            }
+            g_gdk_debug_buffer = lines.first();
+        }
+    });
+    logger_thread.detach();
+#endif
 }
 
 int main(int argc, char *argv[])
