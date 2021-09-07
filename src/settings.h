@@ -23,6 +23,7 @@ class Settings : public QObject
     Q_PROPERTY(bool checkForUpdates READ checkForUpdates WRITE setCheckForUpdates NOTIFY checkForUpdatesChanged)
     Q_PROPERTY(QStringList recentWallets READ recentWallets NOTIFY recentWalletsChanged)
     Q_PROPERTY(QString language READ language WRITE setLanguage NOTIFY languageChanged)
+    Q_PROPERTY(bool showNews READ showNews WRITE setShowNews NOTIFY showNewsChanged)
 public:
     Settings(QObject* parent = nullptr);
     virtual ~Settings();
@@ -55,6 +56,8 @@ public:
     QStringList recentWallets();
     QString language() const { return m_language; }
     void setLanguage(const QString& language);
+    bool showNews() const { return m_show_news; }
+    void setShowNews(bool show_news);
 public slots:
     void updateRecentWallet(const QString& id);
 signals:
@@ -72,6 +75,7 @@ signals:
     void useTorChanged(bool use_tor);
     void recentWalletsChanged(const QStringList& recent_wallets);
     void languageChanged(const QString& language);
+    void showNewsChanged(bool show_news);
 private:
     void load();
     void load(const QSettings& settings);
@@ -95,6 +99,7 @@ private:
     bool m_check_for_updates{true};
     QStringList m_recent_wallets;
     QString m_language;
+    bool m_show_news{true};
 };
 
 #endif // GREEN_SETTINGS_H

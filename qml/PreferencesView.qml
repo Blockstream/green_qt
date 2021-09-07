@@ -72,6 +72,15 @@ MainPage {
                     HSpacer {
                     }
                     Label {
+                        text: qsTrId('Show Blockstrem News')
+                    }
+                    GSwitch {
+                        checked: Settings.showNews
+                        onCheckedChanged: Settings.showNews = checked
+                    }
+                    HSpacer {
+                    }
+                    Label {
                         text: qsTrId('id_collapse_side_bar')
                     }
                     GSwitch {

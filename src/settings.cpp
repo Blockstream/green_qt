@@ -123,6 +123,14 @@ void Settings::setLanguage(const QString& language)
     saveLater();
 }
 
+void Settings::setShowNews(bool show_news)
+{
+    if (m_show_news == show_news) return;
+    m_show_news = show_news;
+    emit showNewsChanged(m_show_news);
+    saveLater();
+}
+
 void Settings::updateRecentWallet(const QString& id)
 {
     m_recent_wallets.removeOne(id);
@@ -188,6 +196,7 @@ void Settings::load(const QSettings& settings)
     LOAD(m_recent_wallets)
     LOAD(m_language)
     LOAD(m_check_for_updates)
+    LOAD(m_show_news)
 #undef LOAD
 }
 
@@ -216,6 +225,7 @@ void Settings::saveNow()
     SAVE(m_recent_wallets)
     SAVE(m_language)
     SAVE(m_check_for_updates)
+    SAVE(m_show_news)
 #undef SAVE
 }
 
