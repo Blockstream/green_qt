@@ -257,8 +257,10 @@ int main(int argc, char *argv[])
     }
     engine.rootContext()->setContextProperty("build_type", QT_STRINGIFY(BUILD_TYPE));
     engine.rootContext()->setContextProperty("languages", languages.values());
-    engine.rootContext()->setContextProperty("data_dir", QUrl::fromLocalFile(g_data_location));
-    engine.rootContext()->setContextProperty("log_file", QUrl::fromLocalFile(g_log_file.fileName()));
+    engine.rootContext()->setContextProperty("data_location_path", g_data_location);
+    engine.rootContext()->setContextProperty("data_location_url", QUrl::fromLocalFile(g_data_location));
+    engine.rootContext()->setContextProperty("log_file_path", g_log_file.fileName());
+    engine.rootContext()->setContextProperty("log_file_url", QUrl::fromLocalFile(g_log_file.fileName()));
 
     if (Settings::instance()->language().isEmpty()) {
         Settings::instance()->setLanguage(language);

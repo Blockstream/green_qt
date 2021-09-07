@@ -160,18 +160,25 @@ MainPage {
                 Layout.fillWidth: true
                 title: qsTrId('id_support')
                 contentItem: GridLayout {
-                    columns: 4
+                    columns: 5
                     columnSpacing: 16
                     rowSpacing: 8
                     Label {
                         text: qsTrId('id_data_directory')
                     }
                     Label {
-                        text: data_dir
+                        text: data_location_path
+                    }
+                    GButton {
+                        text: qsTrId('id_copy')
+                        onClicked: {
+                            Clipboard.copy(data_location_path);
+                            ToolTip.show(qsTrId('id_copied_to_clipboard'), 1000);
+                        }
                     }
                     GButton {
                         text: qsTrId('id_open')
-                        onClicked: Qt.openUrlExternally(data_dir)
+                        onClicked: Qt.openUrlExternally(data_location_url)
                     }
                     HSpacer {
                     }
@@ -179,11 +186,18 @@ MainPage {
                         text: qsTrId('id_log_file')
                     }
                     Label {
-                        text: log_file
+                        text: log_file_path
+                    }
+                    GButton {
+                        text: qsTrId('id_copy')
+                        onClicked: {
+                            Clipboard.copy(log_file_path);
+                            ToolTip.show(qsTrId('id_copied_to_clipboard'), 1000);
+                        }
                     }
                     GButton {
                         text: qsTrId('id_open')
-                        onClicked: Qt.openUrlExternally(log_file)
+                        onClicked: Qt.openUrlExternally(log_file_url)
                     }
                     HSpacer {
                     }
