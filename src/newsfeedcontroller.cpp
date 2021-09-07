@@ -67,7 +67,7 @@ void NewsFeedController::parse()
                     const auto url = e.elementsByTagName("url").at(0).toElement().text();
                     const auto path = GetDataFile("cache", Sha256(url));
                     QFile file(path);
-                    if (!file.exists()) {
+                    if (!file.exists() && m_session) {
                         auto activity = new NewsImageDownloadActivity(m_session, url);
                         m_pending.insert(activity);
                         connect(activity, &NewsImageDownloadActivity::finished, this, [=] {
