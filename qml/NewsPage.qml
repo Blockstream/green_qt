@@ -50,7 +50,7 @@ Page {
                             }
                         }
                     }
-                    scale: news_card.hovered || news_card.activeFocus ? 1.01 : 1
+                    scale: news_card.down ? 0.95 : (news_card.hovered || news_card.activeFocus ? 1.01 : 1)
                     transformOrigin: Item.Center
                     Behavior on scale {
                         NumberAnimation {
