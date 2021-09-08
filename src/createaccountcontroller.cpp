@@ -4,6 +4,7 @@
 #include "wallet.h"
 
 #include <gdk.h>
+#include "ga.h"
 
 CreateAccountController::CreateAccountController(QObject *parent)
     : Controller(parent)
@@ -24,17 +25,38 @@ void CreateAccountController::setType(const QString& type)
     emit typeChanged(m_type);
 }
 
+void CreateAccountController::setRecoveryMnemonic(const QStringList& recovery_mnemonic)
+{
+    if (m_recovery_mnemonic == recovery_mnemonic) return;
+    m_recovery_mnemonic = recovery_mnemonic;
+    emit recoveryMnemonicChanged(m_recovery_mnemonic);
+    m_recovery_xpub.clear();
+    emit recoveryXpubChanged(m_recovery_xpub);
+}
+
+void CreateAccountController::generateRecoveryMnemonic()
+{
+    setRecoveryMnemonic(GA::generate_mnemonic(12));
+}
+
 void CreateAccountController::create()
 {
     auto details = QJsonObject{
         { "name", m_name },
-        { "type", m_type }
+        { "type", m_type },
     };
+
     if (m_type == "2of3") {
-        m_recovery_mnemonic = GA::generate_mnemonic(24);
-        emit recoveryMnemonicChanged(m_recovery_mnemonic);
-        details["recovery_mnemonic"] = m_recovery_mnemonic.join(" ");
+        if (!m_recovery_mnemonic.isEmpty()) {
+            Q_ASSERT(m_recovery_xpub.isEmpty());
+            details["recovery_mnemonic"] = m_recovery_mnemonic.join(" ");
+        } else if (!m_recovery_xpub.isEmpty()) {
+            details["recovery_xpub"] = m_recovery_xpub;
+        } else {
+            Q_UNREACHABLE();
+        }
     }
+
     auto handler = new CreateAccountHandler(details, wallet());
     connect(handler, &Handler::done, this, [this, handler] {
         // TODO switch to new account
@@ -43,4 +65,13 @@ void CreateAccountController::create()
         emit created(handler);
     });
     exec(handler);
+}
+
+void CreateAccountController::setRecoveryXpub(const QString &recovery_xpub)
+{
+    if (m_recovery_xpub == recovery_xpub) return;
+    m_recovery_xpub = recovery_xpub;
+    emit recoveryXpubChanged(m_recovery_xpub);
+    m_recovery_mnemonic.clear();
+    emit recoveryMnemonicChanged(m_recovery_mnemonic);
 }
