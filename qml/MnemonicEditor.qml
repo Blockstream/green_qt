@@ -10,6 +10,7 @@ WizardPage {
     property alias password: controller.password
     property alias mnemonic: controller.mnemonic
     property alias controller: controller
+    property alias lengths: mnemonic_size_combobox.model
     property Component toolbar: ProgressBar {
         from: 0
         to: 1

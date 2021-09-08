@@ -408,3 +408,34 @@ void Controller::setUnspentOutputsStatus(const QVariantList &outputs, const QStr
     });
     exec(handler);
 }
+
+void Controller::updateError(const QString &key, const QVariant &value, bool when)
+{
+    if (when) {
+        setError(key, value);
+    } else {
+        clearError(key);
+    }
+}
+
+void Controller::setError(const QString &key, const QVariant &value)
+{
+    Q_ASSERT(!value.isNull());
+    if (m_errors.contains(key) && m_errors.value(key) == value) return;
+    m_errors[key] = value;
+    emit errorsChanged();
+}
+
+void Controller::clearError(const QString &key)
+{
+    if (!m_errors.contains(key)) return;
+    m_errors.remove(key);
+    emit errorsChanged();
+}
+
+void Controller::clearErrors()
+{
+    if (m_errors.empty()) return;
+    m_errors.clear();
+    emit errorsChanged();
+}

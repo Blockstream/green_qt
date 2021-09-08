@@ -16,10 +16,10 @@ AbstractButton {
         }
     }
     background: Rectangle {
-        border.width: 1
-        border.color: self.activeFocus ? constants.g400 : Qt.rgba(0, 0, 0, 0.2)
+        border.width: self.activeFocus ? 1 : 0
+        border.color: constants.c600
         radius: 8
-        color: Qt.rgba(1, 1, 1, self.hovered ? 0.1 : 0.05)
+        color: self.hovered ? constants.c500 : constants.c700
         Behavior on color {
             ColorAnimation {
                 duration: 300

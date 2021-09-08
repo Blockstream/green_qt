@@ -15,6 +15,8 @@ class Controller : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(Wallet* wallet READ wallet WRITE setWallet NOTIFY walletChanged)
+    Q_PROPERTY(QVariantMap errors READ errors NOTIFY errorsChanged)
+    Q_PROPERTY(bool noErrors READ noErrors NOTIFY errorsChanged)
     QML_ELEMENT
 public:
     explicit Controller(QObject* parent = nullptr);
@@ -27,6 +29,8 @@ public:
     Wallet* wallet() const;
     void setWallet(Wallet* wallet);
 
+    QVariantMap errors() const { return m_errors; }
+    bool noErrors() const { return m_errors.isEmpty(); }
 public slots:
     void changeSettings(const QJsonObject& data);
     void sendRecoveryTransactions();
@@ -40,10 +44,14 @@ public slots:
     void deleteWallet();
     void disableAllPins();
     void setUnspentOutputsStatus(const QVariantList &outputs, const QString &status);
+protected:
+    void setError(const QString& key, const QVariant& value);
+    void clearError(const QString& key);
+    void updateError(const QString &key, const QVariant &value, bool when);
+    void clearErrors();
 signals:
     void walletChanged(Wallet* wallet);
     void finished();
-
 
     void resultChanged(Handler* handler, const QJsonObject& result);
     void done(Handler* handler);
@@ -52,9 +60,10 @@ signals:
     void invalidCode(Handler* handler);
 
     void resolver(Resolver* resolver);
-
+    void errorsChanged();
 protected:
     Wallet* m_wallet{nullptr};
+    QVariantMap m_errors;
 };
 
 #endif // GREEN_CONTROLLER_H

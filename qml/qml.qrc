@@ -126,5 +126,6 @@
         <file>NewsPage.qml</file>
         <file>AccountTypeBadge.qml</file>
         <file>GCard.qml</file>
+        <file>FixedErrorBadge.qml</file>
     </qresource>
 </RCC>
