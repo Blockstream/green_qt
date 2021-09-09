@@ -104,7 +104,7 @@ MainPage {
         Loader {
             Layout.rightMargin: 16
             Layout.fillWidth: true
-            Layout.minimumHeight: 320
+            Layout.minimumHeight: 300
             active: Settings.showNews
             visible: active
             sourceComponent: NewsPage {
