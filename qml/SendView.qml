@@ -17,15 +17,23 @@ StackView {
     property var actions: currentItem.actions
     property var options: currentItem.options
 
+    function parsePayment(url) {
+        const payment = WalletManager.parseUrl(url.trim())
+        address_field.text = payment.address;
+        if (payment.amount) {
+            controller.amount = formatAmount(payment.amount * 100000000, false)
+        }
+    }
+
     Component {
         id: scanner_view
         ScannerView {
             implicitHeight: Math.max(setup_view.implicitHeight, 300)
             implicitWidth: Math.max(setup_view.implicitWidth, 300)
-            onCancel: stack_view.pop();
+            onCancel: stack_view.pop()
             onCodeScanned: {
-                address_field.text = WalletManager.parseUrl(code).address;
-                stack_view.pop();
+                parsePayment(code)
+                stack_view.pop()
             }
         }
     }
@@ -74,7 +82,7 @@ StackView {
                 Layout.fillWidth: true
                 Layout.minimumWidth: contentWidth + 2 * padding
                 font.pixelSize: 12
-                onTextChanged: text = text.trim()
+                onTextChanged: parsePayment(text)
             }
             ToolButton {
                 enabled: QtMultimedia.availableCameras.length > 0
@@ -93,6 +101,7 @@ StackView {
                 onClicked: {
                     address_field.clear();
                     address_field.paste();
+                    parsePayment(address_field.text)
                 }
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                 ToolTip.text: qsTrId('id_paste')

@@ -20,9 +20,8 @@ MainPage {
         onTriggered: convert_fiat_trigger = !convert_fiat_trigger
     }
 
-    function parseAmount(amount) {
-        const unit = wallet.settings.unit;
-        return wallet.parseAmount(amount, unit);
+    function parseAmount(amount, unit) {
+        return wallet.parseAmount(amount, unit || wallet.settings.unit);
     }
 
     function formatAmount(amount, include_ticker = true) {
