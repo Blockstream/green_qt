@@ -38,5 +38,6 @@
         <file>svg/multi-sig.svg</file>
         <file>svg/warning.svg</file>
         <file>svg/testnet-liquid.svg</file>
+        <file>svg/external_link.svg</file>
     </qresource>
 </RCC>

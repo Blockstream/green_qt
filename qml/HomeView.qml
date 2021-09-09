@@ -108,6 +108,23 @@ MainPage {
             active: Settings.showNews
             visible: active
             sourceComponent: NewsPage {
+                id: news_page
+                Rectangle {
+                    color: 'black'
+                    opacity: news_page.contentItem.atXBeginning ? 0 : 0.75
+                    height: parent.height + 32
+                    width: 16
+                    x: -16
+                    y: -16
+                }
+                Rectangle {
+                    color: 'black'
+                    opacity: news_page.contentItem.atXEnd ? 0 : 0.75
+                    height: parent.height + 32
+                    width: 32
+                    x: parent.width
+                    y: -16
+                }
             }
         }
         RowLayout {

@@ -9,7 +9,7 @@ Flickable {
     ScrollBar.vertical: ScrollBar {
         id: vertical_scroll_bar
         policy: ScrollBar.AlwaysOn
-        visible: self.childrenRect.height > self.height
+        visible: self.contentHeight > self.height
         background: Rectangle {
             color: constants.c800
             radius: width / 2
@@ -23,7 +23,7 @@ Flickable {
     ScrollBar.horizontal: ScrollBar {
         id: horizontal_scroll_bar
         policy: ScrollBar.AlwaysOn
-        visible: self.childrenRect.width > self.width
+        visible: self.contentWidth > self.width
         background: Rectangle {
             color: constants.c800
             radius: width / 2
