@@ -6,6 +6,7 @@ import QtGraphicalEffects 1.15
 
 ColumnLayout {
     property alias mnemonic: view.mnemonic
+    property int mnemonicSize: size_combobox.currentValue
     spacing: 20
     VSpacer {
     }
@@ -22,6 +23,24 @@ ColumnLayout {
         contentItem: MnemonicView {
             Layout.alignment: Qt.AlignHCenter
             id: view
+        }
+    }
+    RowLayout {
+        Layout.alignment: Qt.AlignHCenter
+        Layout.fillWidth: true
+        spacing: constants.s1
+        Label {
+            text: qsTrId('id_choose_recovery_phrase_length')
+        }
+        GComboBox {
+            id: size_combobox
+            Layout.minimumWidth: 120
+            model: [
+                { value: 12, text: qsTrId('12 words') },
+                { value: 24, text: qsTrId('24 words') },
+            ]
+            textRole: 'text'
+            valueRole: 'value'
         }
     }
     GaussianBlur {

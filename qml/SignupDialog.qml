@@ -27,6 +27,7 @@ AbstractDialog {
         }
         type: navigation.param.type || ''
         pin: navigation.param.pin || ''
+        mnemonicSize: navigation.param.size || 12
         active: navigation.param.verify || false
     }
 
@@ -302,6 +303,7 @@ AbstractDialog {
                     }
                 ]
                 mnemonic: controller.mnemonic
+                onMnemonicSizeChanged: navigation.set({ size: mnemonicSize })
             }
         }
         AnimLoader {

@@ -25,11 +25,6 @@ class SignupController : public QObject
     Q_PROPERTY(int mnemonicSize READ mnemonicSize WRITE setMnemonicSize NOTIFY mnemonicSizeChanged)
     QML_ELEMENT
 public:
-    enum MnemonicSize {
-        Twelve=12,
-        TwentyFour=24
-    };
-    Q_ENUM(MnemonicSize)
     explicit SignupController(QObject* parent = nullptr);
     QStringList mnemonic() const { return m_mnemonic; }
     Network* network() const { return m_network.get(); };
@@ -60,7 +55,7 @@ private:
     Connectable<Session> m_session;
     QString m_pin;
     bool m_active{false};
-    int m_mnemonic_size{TwentyFour};
+    int m_mnemonic_size;
     QString m_type{"default"};
 };
 

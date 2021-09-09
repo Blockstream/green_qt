@@ -36,9 +36,9 @@ WizardPage {
                 text: qsTrId('id_choose_recovery_phrase_length')
             }
             HSpacer {
-
             }
             GComboBox {
+                Layout.minimumWidth: 120
                 id: mnemonic_size_combobox
                 property var sizes: [12, 24, 27]
                 property real size: sizes[currentIndex]
