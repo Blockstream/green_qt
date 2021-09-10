@@ -31,7 +31,12 @@ Button {
     onClicked: navigation.go(location)
     icon.width: 24
     icon.height: 24
-    Behavior on implicitWidth { SmoothedAnimation { velocity: 600 } }
+    Behavior on implicitWidth {
+        NumberAnimation {
+            duration: 300
+            easing.type: Easing.OutBack
+        }
+    }
     background: Item {
         Rectangle {
             anchors.fill: parent

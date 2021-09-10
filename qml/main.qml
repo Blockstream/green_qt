@@ -140,16 +140,9 @@ ApplicationWindow {
             background: Rectangle {
                 color: constants.c700
                 MouseArea {
-                    enabled: false
+                    enabled: true
                     anchors.fill: parent
                     onClicked: Settings.collapseSideBar = !Settings.collapseSideBar
-                }
-                Rectangle {
-                    height: parent.height
-                    anchors.right: parent.right
-                    width: 1
-                    color: 'black'
-                    opacity: 0.5
                 }
             }
 
@@ -162,7 +155,7 @@ ApplicationWindow {
                     text: 'Home'
                 }
                 SideLabel {
-                    text: 'Wallets'
+                    text: qsTrId('id_wallets')
                 }
                 Flickable {
                     id: flickable
@@ -179,7 +172,7 @@ ApplicationWindow {
                         height: Math.max(foo.height, flickable.height)
                         onClicked: {
                             flickable.forceActiveFocus(Qt.MouseFocusReason)
-                            // Settings.collapseSideBar = !Settings.collapseSideBar
+                            Settings.collapseSideBar = !Settings.collapseSideBar
                         }
                     }
                     ColumnLayout {
@@ -265,7 +258,7 @@ ApplicationWindow {
                 SideButton {
                     icon.source: 'qrc:/svg/appsettings.svg'
                     location: '/preferences'
-                    text: 'App Settings'
+                    text: qsTrId('App Settings')
                     icon.width: 24
                     icon.height: 24
                 }
