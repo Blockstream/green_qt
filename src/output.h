@@ -20,6 +20,7 @@ class Output : public QObject
     Q_PROPERTY(bool unconfirmed READ unconfirmed NOTIFY unconfirmedChanged)
     Q_PROPERTY(bool canBeLocked READ canBeLocked NOTIFY canBeLockedChanged)
     Q_PROPERTY(QString addressType READ addressType NOTIFY addressTypeChanged)
+    Q_PROPERTY(bool expired READ expired NOTIFY expiredChanged)
     QML_ELEMENT
     QML_UNCREATABLE("Output is instanced by Account.")
 public:
@@ -35,6 +36,8 @@ public:
     bool unconfirmed() const { return m_unconfirmed; }
     bool canBeLocked() const { return m_can_be_locked; }
     QString addressType() const { return m_address_type; }
+    bool expired() const { return m_expired; }
+    void setExpired(bool expired);
 signals:
     void dataChanged(const QJsonObject& data);
     void assetChanged(const Asset* asset);
@@ -45,6 +48,7 @@ signals:
     void selectedChanged(bool selected);
     void canBeLockedChanged(bool canBeLocked);
     void addressTypeChanged(const QString& address_type);
+    void expiredChanged(bool expired);
 private:
     void setDust(bool dust);
     void setLocked(bool locked);
@@ -62,6 +66,7 @@ public:
     bool m_unconfirmed{false};
     bool m_can_be_locked{false};
     QString m_address_type;
+    bool m_expired{false};
 };
 
 #endif // GREEN_OUTPUT_H
