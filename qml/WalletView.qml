@@ -45,7 +45,7 @@ MainPage {
 
     function transactionConfirmations(transaction) {
         if (transaction.data.block_height === 0) return 0;
-        return 1 + transaction.account.wallet.events.block.block_height - transaction.data.block_height;
+        return 1 + transaction.account.wallet.blockHeight - transaction.data.block_height;
     }
 
     function transactionStatus(confirmations) {

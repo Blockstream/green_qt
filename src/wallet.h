@@ -68,6 +68,7 @@ private:
     Q_PROPERTY(QJsonObject config READ config NOTIFY configChanged)
     Q_PROPERTY(Device* device READ device CONSTANT)
     Q_PROPERTY(bool empty READ isEmpty NOTIFY emptyChanged)
+    Q_PROPERTY(int blockHeight READ blockHeight NOTIFY blockHeightChanged)
 public:
     explicit Wallet(Network* network, QObject *parent = nullptr);
     virtual ~Wallet();
@@ -120,6 +121,8 @@ public:
     Device* device() const { return m_device; }
 
     void updateHashId(const QString& hash_id);
+    int blockHeight() const { return m_block_height; }
+    void setBlockHeight(int block_height);
 public slots:
     void disconnect();
     void reload();
@@ -147,6 +150,7 @@ signals:
     void pinSet();
     void emptyChanged(bool empty);
     void usernameChanged(const QString& username);
+    void blockHeightChanged(int block_height);
 protected:
     bool eventFilter(QObject* object, QEvent* event) override;
     void timerEvent(QTimerEvent* event) override;
@@ -184,6 +188,7 @@ public:
     int m_login_attempts_remaining{3};
     int m_logout_timer{-1};
     bool m_busy{false};
+    int m_block_height{0};
 
     void save();
     Device* m_device{nullptr};

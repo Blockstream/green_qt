@@ -190,6 +190,7 @@ void Wallet::handleNotification(const QJsonObject &notification)
     }
 
     if (event == "block") {
+        setBlockHeight(data.toObject().value("block_height").toInt());
         for (auto account : m_accounts) {
             account->handleNotification(notification);
         }
@@ -610,6 +611,13 @@ void Wallet::updateHashId(const QString& hash_id)
     }
     m_hash_id = hash_id;
     save();
+}
+
+void Wallet::setBlockHeight(int block_height)
+{
+    if (m_block_height == block_height) return;
+    m_block_height = block_height;
+    emit blockHeightChanged(m_block_height);
 }
 
 void Wallet::setSettings(const QJsonObject& settings)
