@@ -117,12 +117,6 @@ ApplicationWindow {
             device: wallet.device
         }
     }
-    component SideSeparator: Rectangle {
-        implicitHeight: 1
-        color: 'white'
-        opacity: 0.05
-        Layout.fillWidth: true
-    }
     component SideLabel: SectionLabel {
         topPadding: 16
         leftPadding: 4
