@@ -21,7 +21,7 @@ AbstractDialog {
         id: controller
         network: {
             const network = navigation.param.network || ''
-            const server_type = network === 'liquid' ? 'green' : (navigation.param.server_type || '')
+            const server_type = ((navigation.param.type === 'amp' || build_type === 'release') && network === 'liquid') ? 'green' : (navigation.param.server_type || '')
             return NetworkManager.networkWithServerType(network, server_type)
         }
         type: navigation.param.type

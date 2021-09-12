@@ -22,7 +22,7 @@ AbstractDialog {
         id: controller
         network: {
             const network = navigation.param.network || ''
-            const server_type = network === 'liquid' ? 'green' : (navigation.param.server_type || '')
+            const server_type = ((navigation.param.type === 'amp' || build_type === 'release') && network === 'liquid') ? 'green' : (navigation.param.server_type || '')
             return NetworkManager.networkWithServerType(network, server_type)
         }
         type: navigation.param.type || ''
@@ -107,7 +107,7 @@ AbstractDialog {
         }
 
         AnimLoader {
-            active: (navigation.param.network || '') !== '' && !controller.network
+            active: (navigation.param.network || false) && (navigation.param.type || false) && !controller.network
             animated: self.opened
             sourceComponent: SelectServerTypeView {
                 readonly property Action backAction: Action {
