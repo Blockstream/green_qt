@@ -98,4 +98,7 @@ Button {
             }
         }
     }
+    ToolTip.visible: Settings.collapseSideBar && self.hovered
+    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+    ToolTip.text: self.text
 }
