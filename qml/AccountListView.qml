@@ -32,7 +32,10 @@ Page {
     }
     contentItem: GListView {
         id: account_list_view
-        model: wallet.accounts
+        model: AccountListModel {
+            wallet: self.wallet
+            filter: '!hidden'
+        }
         clip: true
         spacing: 8
         delegate: Button {

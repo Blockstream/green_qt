@@ -243,14 +243,12 @@ void Wallet::reload()
         bool has_segwit = false;
 
         m_accounts.clear();
-        for (QJsonValue value : handler->subAccounts()) {
+        for (auto value : handler->subAccounts()) {
             QJsonObject data = value.toObject();
             Account* account = getOrCreateAccount(data);
             account->reload();
             has_segwit |= account->type() == "p2wpkh";
-            if (!data.value("hidden").toBool()) {
-                m_accounts.append(account);
-            }
+            m_accounts.append(account);
         }
 
         if (m_restoring && create_segwit && !has_segwit) {
