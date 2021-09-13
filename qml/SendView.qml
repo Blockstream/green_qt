@@ -23,6 +23,9 @@ StackView {
         if (payment.amount) {
             controller.amount = formatAmount(payment.amount * 100000000, false)
         }
+        if (payment.message) {
+            controller.memo = payment.message
+        }
     }
 
     Component {

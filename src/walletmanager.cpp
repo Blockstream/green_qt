@@ -143,6 +143,9 @@ QJsonObject WalletManager::parseUrl(const QString &url)
     if (q.hasQueryItem("amount")) {
         r.insert("amount", q.queryItemValue("amount"));
     }
+    if (q.hasQueryItem("message")) {
+        r.insert("message", q.queryItemValue("message"));
+    }
 
     return r;
 }

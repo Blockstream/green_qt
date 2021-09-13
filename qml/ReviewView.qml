@@ -44,6 +44,7 @@ ScrollView {
                 Layout.fillWidth: true
                 selectByMouse: true
                 wrapMode: TextEdit.Wrap
+                text: controller.memo
                 onTextChanged: {
                     if (text.length > 1024) {
                         text = text.slice(0, 1024);
