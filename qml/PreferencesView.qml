@@ -81,15 +81,6 @@ MainPage {
                     HSpacer {
                     }
                     Label {
-                        text: qsTrId('id_collapse_side_bar')
-                    }
-                    GSwitch {
-                        checked: Settings.collapseSideBar
-                        onCheckedChanged: Settings.collapseSideBar = checked
-                    }
-                    HSpacer {
-                    }
-                    Label {
                         text: qsTrId('id_enable_testnet')
                     }
                     GSwitch {

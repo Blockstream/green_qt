@@ -252,6 +252,12 @@ ApplicationWindow {
                     Layout.minimumHeight: 16
                 }
                 SideButton {
+                    icon.source: Settings.collapseSideBar ? 'qrc:/svg/arrow_right.svg' : 'qrc:/svg/arrow_left.svg'
+                    text: Settings.collapseSideBar ? qsTrId('id_expand_side_bar') : qsTrId('id_collapse_side_bar')
+                    isCurrent: false
+                    onClicked: Settings.collapseSideBar = !Settings.collapseSideBar
+                }
+                SideButton {
                     icon.source: 'qrc:/svg/appsettings.svg'
                     location: '/preferences'
                     text: qsTrId('App Settings')
