@@ -44,6 +44,7 @@ public:
 
     QQmlListProperty<Balance> balances();
 
+    bool hasBalance() const;
     void updateBalance();
     Transaction *getOrCreateTransaction(const QJsonObject &data);
     Output *getOrCreateOutput(const QJsonObject &data);

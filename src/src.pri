@@ -3,6 +3,7 @@ INCLUDEPATH += $$PWD
 SOURCES += \
     $$PWD/accountcontroller.cpp \
     $$PWD/account.cpp \
+    $$PWD/accountlistmodel.cpp \
     $$PWD/address.cpp \
     $$PWD/addresslistmodel.cpp \
     $$PWD/addresslistmodelfilter.cpp \
@@ -52,6 +53,7 @@ SOURCES += \
 HEADERS += \
     $$PWD/accountcontroller.h \
     $$PWD/account.h \
+    $$PWD/accountlistmodel.h \
     $$PWD/address.h \
     $$PWD/addresslistmodel.h \
     $$PWD/addresslistmodelfilter.h \

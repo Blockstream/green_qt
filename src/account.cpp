@@ -31,7 +31,7 @@ QJsonObject Account::json() const
 
 void Account::update(const QJsonObject& json)
 {
-    Q_ASSERT(m_pointer == json.value("pointer").toInt());
+    Q_ASSERT(m_pointer == static_cast<qint64>(json.value("pointer").toDouble()));
     m_json = json;
     emit jsonChanged();
     setName(m_json.value("name").toString());
@@ -104,6 +104,18 @@ qint64 Account::balance() const
 QQmlListProperty<Balance> Account::balances()
 {
     return { this, &m_balances };
+}
+
+bool Account::hasBalance() const
+{
+    if (m_wallet->network()->isLiquid()) {
+        for (auto balance : m_balances) {
+            if (balance->amount() > 0) return true;
+        }
+        return false;
+    } else {
+        return balance() > 0;
+    }
 }
 
 void Account::reload()
