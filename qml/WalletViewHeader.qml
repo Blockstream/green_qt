@@ -251,7 +251,7 @@ MainPageHeader {
                 GButton {
                     Layout.alignment: Qt.AlignRight
                     large: true
-                    enabled: !wallet.locked
+                    enabled: !wallet.locked && self.currentAccount
                     text: qsTrId('id_receive')
                     onClicked: receive_dialog.createObject(window, { account: self.currentAccount }).open()
                 }
