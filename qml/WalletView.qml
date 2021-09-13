@@ -185,6 +185,7 @@ MainPage {
                 anchors.fill: parent
                 anchors.margins: constants.p3
                 anchors.bottomMargin: 0
+                wallet: self.wallet
                 onClicked: switchToAccount(currentAccount)
                 onCurrentAccountChanged: switchToAccount(currentAccount)
             }

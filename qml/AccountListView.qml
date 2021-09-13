@@ -4,6 +4,7 @@ import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.12
 
 Page {
+    required property Wallet wallet
     property Account currentAccount: account_list_view.currentItem ? account_list_view.currentItem.account : null
     signal clicked(Account account)
 
