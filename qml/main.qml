@@ -139,11 +139,6 @@ ApplicationWindow {
             rightPadding: 8
             background: Rectangle {
                 color: constants.c700
-                MouseArea {
-                    enabled: true
-                    anchors.fill: parent
-                    onClicked: Settings.collapseSideBar = !Settings.collapseSideBar
-                }
             }
 
             contentItem: ColumnLayout {
@@ -169,8 +164,9 @@ ApplicationWindow {
                     ScrollIndicator.vertical: ScrollIndicator { }
                     MouseArea {
                         width: foo.width
-                        height: Math.max(foo.height, flickable.height)
-                        onClicked: {
+                        height: Math.max(foo.height, flickable.height) - height - 16
+                        y: foo.height + 16
+                        onDoubleClicked: {
                             flickable.forceActiveFocus(Qt.MouseFocusReason)
                             Settings.collapseSideBar = !Settings.collapseSideBar
                         }
