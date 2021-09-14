@@ -184,6 +184,9 @@ Resolver* Handler::createResolver(const QJsonObject& result)
         if (action == "sign_message") {
             return new SignMessageResolver(this, result);
         }
+        if (action == "get_master_blinding_key") {
+            return new GetMasterBlindingKeyResolver(this, result);
+        }
         Q_UNREACHABLE();
     }
     const auto method = result.value("method").toString();

@@ -297,3 +297,24 @@ void SignLiquidTransactionResolver::resolve()
     activity->exec();
     pushActivity(activity);
 }
+
+GetMasterBlindingKeyResolver::GetMasterBlindingKeyResolver(Handler* handler, const QJsonObject& result)
+    : DeviceResolver(handler, result)
+{
+}
+
+void GetMasterBlindingKeyResolver::resolve()
+{
+    auto activity = device()->getMasterBlindingKey();
+    connect(activity, &Activity::finished, [this, activity] {
+        activity->deleteLater();
+        m_handler->resolve({
+            { "master_blinding_key", QString::fromLocal8Bit(activity->masterBlindingKey().toHex()) }
+        });
+    });
+    connect(activity, &Activity::failed, [this] {
+        setFailed(true);
+    });
+    activity->exec();
+    pushActivity(activity);
+}

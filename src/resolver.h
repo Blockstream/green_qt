@@ -143,4 +143,13 @@ protected:
     QJsonObject m_message;
 };
 
+class GetMasterBlindingKeyResolver : public DeviceResolver
+{
+    Q_OBJECT
+    QML_ELEMENT
+public:
+    GetMasterBlindingKeyResolver(Handler* handler, const QJsonObject& result);
+    void resolve() override;
+};
+
 #endif // GREEN_RESOLVER_H
