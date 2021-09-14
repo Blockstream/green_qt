@@ -28,7 +28,7 @@ Button {
     bottomInset: 0
 
     Layout.fillWidth: true
-    onClicked: navigation.go(location)
+    onClicked: if (location) navigation.go(location)
     icon.width: 24
     icon.height: 24
     Behavior on implicitWidth {
