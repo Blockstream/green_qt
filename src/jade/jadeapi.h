@@ -116,6 +116,9 @@ public:
 
     // Sign a liquid txn
     int signLiquidTx(const QString &network, const QByteArray &txn, const QVariantList &inputs, const QVariantList &commitments, const QVariantList &change, const ResponseHandler &cb);
+
+    // Get master [un-]blinding key for wallet
+    int getMasterBlindingKey(const ResponseHandler &cb);
 signals:
     void onOpenError();
     void onConnected();

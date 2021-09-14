@@ -642,3 +642,11 @@ int JadeAPI::signLiquidTx(const QString &network, const QByteArray &txn, const Q
     sendToJade(request);
     return id;
 }
+
+int JadeAPI::getMasterBlindingKey(const ResponseHandler &cb)
+{
+    const int id = registerResponseHandler(cb);
+    const QCborMap request = getRequest(id, "get_master_blinding_key");
+    sendToJade(request);
+    return id;
+}
