@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Support for host unblinding for Jade with firmware 0.1.27
 
 ### Changed
 - Layout improvements in News section of Home view

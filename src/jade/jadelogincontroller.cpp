@@ -8,6 +8,7 @@
 #include "network.h"
 #include "networkmanager.h"
 #include "resolver.h"
+#include "semver.h"
 #include "session.h"
 #include "settings.h"
 #include "wallet.h"
@@ -17,15 +18,18 @@
 
 #include <wally_bip32.h>
 
-static QJsonObject device_details_from_device()
+
+static QJsonObject device_details_from_device(JadeDevice* device)
 {
+    const bool supports_host_unblinding = SemVer::parse(device->version()) >= SemVer(0, 1, 27);
     return {{
         "device", QJsonObject({
             { "name", "JADE" },
             { "supports_arbitrary_scripts", true },
             { "supports_low_r", true },
             { "supports_liquid", 1 },
-            { "supports_ae_protocol", 1 }
+            { "supports_ae_protocol", 1 },
+            { "supports_host_unblinding", supports_host_unblinding }
         })
     }};
 }
@@ -77,7 +81,7 @@ void JadeLoginController::update()
 
     if (!m_wallet->session()->isConnected()) return;
 
-    auto device_details = device_details_from_device();
+    auto device_details = device_details_from_device(m_device);
     auto register_user_handler = new RegisterUserHandler(m_wallet, device_details);
     auto login_handler = new LoginHandler(m_wallet, device_details);
 

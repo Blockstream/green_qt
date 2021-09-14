@@ -15,6 +15,7 @@ public:
     bool isNull() const { return m_null; }
     SemVer& operator=(const SemVer& other);
     bool operator<(const SemVer& other) const;
+    bool operator>=(const SemVer& other) const { return !(*this < other); }
     bool operator==(const SemVer& other) const;
     bool operator!=(const SemVer& other) const;
     static SemVer parse(const QString& string);
