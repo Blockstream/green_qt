@@ -961,6 +961,38 @@ public:
     }
 };
 
+class JadeGetMasterBlindingKeyActivity : public GetMasterBlindingKeyActivity
+{
+    JadeDevice* const m_device;
+    QByteArray m_master_blinding_key;
+public:
+    JadeGetMasterBlindingKeyActivity(JadeDevice* device)
+        : GetMasterBlindingKeyActivity(device)
+        , m_device(device)
+    {
+    }
+    QByteArray masterBlindingKey() const override
+    {
+        return m_master_blinding_key;
+    }
+    void exec() override
+    {
+        m_device->m_jade->getMasterBlindingKey([this](const QVariantMap& msg) {
+            if (msg.contains("result")) {
+                m_master_blinding_key = msg["result"].toByteArray();
+                finish();
+                return;
+            }
+            auto error = msg["error"].toMap();
+            if (error["code"] == -32000) { // CBOR_RPC_USER_CANCELLED
+                finish();
+                return;
+            }
+            fail();
+        });
+    }
+};
+
 JadeDevice::JadeDevice(JadeAPI* jade, QObject* parent)
     : Device(parent)
     , m_jade(jade)
@@ -1000,6 +1032,11 @@ GetBlindingNonceActivity *JadeDevice::getBlindingNonce(const QByteArray& pubkey,
 SignLiquidTransactionActivity *JadeDevice::signLiquidTransaction(const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs)
 {
     return new JadeSignLiquidTransactionActivity(transaction, signing_inputs, outputs, this);
+}
+
+GetMasterBlindingKeyActivity *JadeDevice::getMasterBlindingKey()
+{
+    return new JadeGetMasterBlindingKeyActivity(this);
 }
 
 void JadeDevice::updateVersionInfo()

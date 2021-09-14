@@ -62,6 +62,13 @@ public:
     virtual QList<QByteArray> amountBlinders() const = 0;
 };
 
+class GetMasterBlindingKeyActivity : public Activity
+{
+public:
+    GetMasterBlindingKeyActivity(QObject* parent) : Activity(parent) {}
+    virtual QByteArray masterBlindingKey() const = 0;
+};
+
 class Device : public QObject
 {
     Q_OBJECT
@@ -103,7 +110,7 @@ public:
     virtual GetBlindingKeyActivity* getBlindingKey(const QString& script) = 0;
     virtual GetBlindingNonceActivity* getBlindingNonce(const QByteArray& pubkey, const QByteArray& script) = 0;
     virtual SignLiquidTransactionActivity* signLiquidTransaction(const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs) = 0;
-
+    virtual GetMasterBlindingKeyActivity* getMasterBlindingKey() = 0;
     static Type typefromVendorAndProduct(uint32_t vendor_id, uint32_t product_id);
 signals:
     void nameChanged();

@@ -95,6 +95,7 @@ public:
     GetBlindingKeyActivity* getBlindingKey(const QString& script) override;
     GetBlindingNonceActivity* getBlindingNonce(const QByteArray& pubkey, const QByteArray& script) override;
     SignLiquidTransactionActivity* signLiquidTransaction(const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs) override;
+    GetMasterBlindingKeyActivity* getMasterBlindingKey() override;
 
     GetFirmwareActivity* getFirmware();
     GetAppActivity* getApp();

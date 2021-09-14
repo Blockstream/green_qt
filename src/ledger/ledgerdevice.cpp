@@ -71,6 +71,11 @@ SignLiquidTransactionActivity *LedgerDevice::signLiquidTransaction(const QJsonOb
     return new LedgerSignLiquidTransactionActivity(transaction, signing_inputs, outputs, this);
 }
 
+GetMasterBlindingKeyActivity *LedgerDevice::getMasterBlindingKey()
+{
+    Q_UNREACHABLE();
+}
+
 GetBlindingKeyActivity* LedgerDevice::getBlindingKey(const QString& script)
 {
     return new LedgerGetBlindingKeyActivity(script, this);

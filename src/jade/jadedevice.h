@@ -162,6 +162,7 @@ public:
     GetBlindingKeyActivity* getBlindingKey(const QString& script) override;
     GetBlindingNonceActivity* getBlindingNonce(const QByteArray& pubkey, const QByteArray& script) override;
     SignLiquidTransactionActivity* signLiquidTransaction(const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs) override;
+    GetMasterBlindingKeyActivity* getMasterBlindingKey() override;
     JadeAPI* m_jade;
     QString m_name;
     QString m_system_location;
