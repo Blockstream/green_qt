@@ -72,6 +72,12 @@ Button {
             }
             RowLayout {
                 Tag {
+                    color: constants.r500
+                    visible: output.expired
+                    text: qsTrId('2FA Expired')
+                    font.capitalization: Font.AllUppercase
+                }
+                Tag {
                     visible: output.locked
                     text: qsTrId('id_locked')
                     font.capitalization: Font.AllUppercase
