@@ -13,9 +13,7 @@ Output::Output(const QJsonObject& data, Account* account)
     , m_account(account)
 {
     updateFromData(data);
-    connect(account->wallet(), &Wallet::blockHeightChanged, this, [this](int block_height) {
-        setExpired(block_height >= m_data["expiry_height"].toInt());
-    });
+    connect(account->wallet(), &Wallet::blockHeightChanged, this, &Output::updateExpired);
 }
 
 void Output::updateFromData(const QJsonObject& data)
@@ -40,7 +38,18 @@ void Output::update()
     setConfidential(m_data["confidential"].toBool());
     setUnconfirmed(m_data["block_height"].toDouble() == 0);
     setAddressType(m_data["address_type"].toString());
-    setExpired(account()->wallet()->blockHeight() >= m_data["expiry_height"].toInt());
+    updateExpired();
+}
+
+void Output::updateExpired()
+{
+    const auto expiry_height = m_data.value("expiry_height");
+    if (expiry_height.isDouble()) {
+        const auto block_height = account()->wallet()->blockHeight();
+        setExpired(expiry_height.toInt() <= block_height);
+    } else {
+        setExpired(false);
+    }
 }
 
 void Output::setExpired(bool expired)

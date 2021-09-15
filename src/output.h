@@ -49,6 +49,8 @@ signals:
     void canBeLockedChanged(bool canBeLocked);
     void addressTypeChanged(const QString& address_type);
     void expiredChanged(bool expired);
+private slots:
+    void updateExpired();
 private:
     void setDust(bool dust);
     void setLocked(bool locked);
