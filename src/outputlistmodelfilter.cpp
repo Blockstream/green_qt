@@ -29,6 +29,7 @@ bool OutputListModelFilter::filterAcceptsRow(int source_row, const QModelIndex &
         if (filter == "dust") result = output->dust();
         if (filter == "locked") result = output->locked();
         if (filter == "not_confidential") result = !output->confidential();
+        if (filter == "expired") result = output->expired();
         if (invert) result = !result;
         if (!result) return false;
     }

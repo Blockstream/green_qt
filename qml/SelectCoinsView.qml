@@ -39,7 +39,18 @@ Page {
             }
 
             Repeater {
-                model: account.wallet.network.liquid ? ['', 'csv', 'p2wsh', 'not confidential'] : ['all', 'csv', 'p2wsh', 'dust']
+                model: {
+                    const filters = ['', 'csv', 'p2wsh']
+                    if (account.wallet.network.liquid) {
+                        filters.push('not_confidential')
+                    } else {
+                        filters.push('dust')
+                    }
+                    if (account.type !== '2of3' && account.type !== '2of2_no_recovery') {
+                        filters.push('expired')
+                    }
+                    return filters
+                }
                 delegate: Button {
                     id: self
                     ButtonGroup.group: button_group
