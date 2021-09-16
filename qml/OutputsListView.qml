@@ -17,23 +17,6 @@ Page {
         return outputs;
     }
 
-    function localizedLabel(label) {
-        switch (label) {
-            case '':
-                return qsTrId('id_all')
-            case 'csv':
-                return qsTrId('id_csv')
-            case 'p2wsh':
-                return qsTrId('id_p2wsh')
-            case 'not_confidential':
-                return qsTrId('id_not_confidential')
-            case 'dust':
-                return qsTrId('id_dust')
-            case 'locked':
-                return qsTrId('id_locked')
-        }
-    }
-
     id: self
     spacing: constants.p1
     background: null
@@ -45,7 +28,7 @@ Page {
             font.styleName: 'Bold'
         }
         HSpacer { }
-    }    
+    }
     contentItem: ColumnLayout {
         RowLayout {
             id: tags_layout

@@ -17,23 +17,6 @@ Page {
         return outputs;
     }
 
-    function localizedLabel(label) {
-        switch (label) {
-            case 'all':
-                return qsTrId('id_all')
-            case 'csv':
-                return qsTrId('id_csv')
-            case 'p2wsh':
-                return qsTrId('id_p2wsh')
-            case 'not confidential':
-                return qsTrId('id_not_confidential')
-            case 'dust':
-                return qsTrId('id_dust')
-            case 'locked':
-                return qsTrId('id_locked')
-        }
-    }
-
     property list<Action> options: [
         Action {
             enabled: selection_model.hasSelection
