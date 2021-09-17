@@ -198,7 +198,7 @@ Page {
             contentItem: ColumnLayout {
                 spacing: constants.p3
                 Repeater {
-                    model: ['all', 'csv', 'p2wsh', 'not confidential', 'dust', 'locked']
+                    model: ['all', 'csv', 'p2wsh', 'not_confidential', 'dust', 'locked', 'expired']
                     delegate: RowLayout {
                         spacing: constants.p1
 
@@ -220,12 +220,14 @@ Page {
                                         return qsTrId('id_coins_protected_by_the_new')
                                     case 'p2wsh':
                                         return qsTrId('id_coins_protected_by_the_legacy')
-                                    case 'not confidential':
+                                    case 'not_confidential':
                                         return qsTrId('id_coins_whose_asset_and_amount')
                                     case 'dust':
                                         return qsTrId('id_coins_with_a_value_lower_than')
                                     case 'locked':
                                         return qsTrId('id_locking_coins_can_help_protect')
+                                    case 'expired':
+                                        return qsTrId('id_2fa_expiry')
                                 }
                             }
                             wrapMode: Label.WordWrap

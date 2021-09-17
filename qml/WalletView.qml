@@ -56,6 +56,7 @@ MainPage {
     function localizedLabel(label) {
         switch (label) {
             case '':
+            case 'all':
                 return qsTrId('id_all')
             case 'csv':
                 return qsTrId('id_csv')
