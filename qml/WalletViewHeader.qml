@@ -119,6 +119,9 @@ MainPageHeader {
                         font.styleName: 'Medium'
                     }
                 }
+                AccountTypeBadge {
+                    account: self.currentAccount
+                }
                 HSpacer {
                 }
                 ToolButton {

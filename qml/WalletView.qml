@@ -189,7 +189,7 @@ MainPage {
         }
 
         Rectangle {
-            SplitView.minimumWidth: wallet_view_header.showAccounts ? 350 :0
+            SplitView.minimumWidth: wallet_view_header.showAccounts ? 380 : 0
             clip: true
             color: constants.c900
 

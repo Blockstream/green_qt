@@ -98,71 +98,8 @@ Page {
                     HSpacer {
                     }
 
-                    Label {
-                        text: qsTrId('Legacy')
-                        visible: account.type === 'p2sh-p2wpkh'
-                        font.pixelSize: 10
-                        font.capitalization: Font.AllUppercase
-                        leftPadding: 8
-                        rightPadding: 8
-                        topPadding: 4
-                        bottomPadding: 4
-                        opacity: 1
-                        color: 'white'
-                        background: Rectangle {
-                            color: constants.c400
-                            radius: 4
-                        }
-                    }
-
-                    Label {
-                        text: qsTrId('Segwit')
-                        visible: account.type === 'p2wpkh'
-                        font.pixelSize: 10
-                        font.capitalization: Font.AllUppercase
-                        leftPadding: 8
-                        rightPadding: 8
-                        topPadding: 4
-                        bottomPadding: 4
-                        opacity: 1
-                        color: 'white'
-                        background: Rectangle {
-                            color: constants.c400
-                            radius: 4
-                        }
-                    }
-
-                    Label {
-                        text: qsTrId('id_amp_account')
-                        visible: account.type === '2of2_no_recovery'
-                        font.pixelSize: 10
-                        font.capitalization: Font.AllUppercase
-                        leftPadding: 8
-                        rightPadding: 8
-                        topPadding: 4
-                        bottomPadding: 4
-                        opacity: 1
-                        color: 'white'
-                        background: Rectangle {
-                            color: constants.c400
-                            radius: 4
-                        }
-                    }
-
-                    Label {
-                        text: qsTrId('id_2of3_account')
-                        visible: account.type === '2of3'
-                        font.pixelSize: 10
-                        font.capitalization: Font.AllUppercase
-                        leftPadding: 8
-                        rightPadding: 8
-                        topPadding: 4
-                        bottomPadding: 4
-                        color: 'white'
-                        background: Rectangle {
-                            color: constants.c400
-                            radius: 4
-                        }
+                    AccountTypeBadge {
+                        account: delegate.account
                     }
                 }
             }
