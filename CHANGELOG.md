@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add setting to toggle News section of Home view
 
 ### Fixed
+- Use same vertical scrollbar in list views
 
 ## [1.0.0] - 2021-09-07
 ### Added

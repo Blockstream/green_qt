@@ -38,11 +38,9 @@ Page {
             }
         }
         delegate: AddressDelegate {
-            width: list_view.width
+            width: ListView.view.contentWidth
             onClicked: self.clicked(address)
         }
-
-        ScrollIndicator.vertical: ScrollIndicator { }
 
         BusyIndicator {
             width: 32

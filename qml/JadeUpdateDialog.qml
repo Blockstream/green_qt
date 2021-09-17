@@ -213,10 +213,9 @@ AbstractDialog {
                 }
                 checked: false
                 enabled: !firmware.installed
-                width: ListView.view.width
+                width: ListView.view.contentWidth
                 ButtonGroup.group: button_group
             }
-            ScrollIndicator.vertical: ScrollIndicator { }
         }
     }
 

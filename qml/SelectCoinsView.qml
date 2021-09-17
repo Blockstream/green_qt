@@ -96,10 +96,8 @@ Page {
             }
             delegate: CoinDelegate {
                 highlighted: selection_model.selectedIndexes.indexOf(output_model.index(output_model.indexOf(output), 0))>-1
-                width: list_view.width
+                width: ListView.view.contentWidth
             }
-
-            ScrollIndicator.vertical: ScrollIndicator {}
 
             BusyIndicator {
                 width: 32

@@ -184,13 +184,11 @@ MainPage {
     contentItem: SplitView {
         focusPolicy: Qt.ClickFocus
         handle: Item {
-            implicitWidth: 4
+            implicitWidth: 32
             implicitHeight: parent.height
         }
 
         Rectangle {
-            Layout.fillHeight: true
-            Layout.fillWidth: true
             SplitView.minimumWidth: wallet_view_header.showAccounts ? 350 :0
             clip: true
             color: constants.c900
@@ -202,8 +200,8 @@ MainPage {
             AccountListView {
                 id: accounts_list
                 anchors.fill: parent
-                anchors.margins: constants.p3
-                anchors.bottomMargin: 0
+                anchors.leftMargin: constants.p3
+                anchors.topMargin: constants.p3
                 wallet: self.wallet
                 onClicked: switchToAccount(currentAccount)
                 onCurrentAccountChanged: switchToAccount(currentAccount)
@@ -214,12 +212,11 @@ MainPage {
             SplitView.fillWidth: true
             SplitView.minimumWidth: self.width / 2
             color: constants.c900
-
             StackView {
                 id: stack_view
                 anchors.fill: parent
-                anchors.margins: constants.p3
-                anchors.bottomMargin: 0
+                anchors.rightMargin: constants.p3
+                anchors.topMargin: constants.p3
                 focusPolicy: Qt.ClickFocus
                 initialItem: Item {}
                 clip: true

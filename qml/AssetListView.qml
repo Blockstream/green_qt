@@ -32,10 +32,9 @@ Page {
         implicitHeight: contentHeight
         delegate: AssetDelegate {
             balance: modelData
-            width: parent.width
+            width: ListView.view.contentWidth
             onClicked: if (hasDetails) balance_dialog.createObject(window, { balance }).open()
         }
-        ScrollIndicator.vertical: ScrollIndicator { }
     }
 
     Component {

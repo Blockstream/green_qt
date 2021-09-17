@@ -53,11 +53,9 @@ Page {
         }
         delegate: TransactionDelegate {
             hoverEnabled: false
-            width: list_view.width
+            width: ListView.view.contentWidth
             onClicked: transaction_dialog.createObject(window, { transaction }).open()
         }
-        ScrollIndicator.vertical: ScrollIndicator { }
-
         BusyIndicator {
             width: 32
             height: 32

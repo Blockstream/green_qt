@@ -37,7 +37,7 @@ Page {
             filter: '!hidden'
         }
         clip: true
-        spacing: 8
+        spacing: 0
         delegate: Button {
             property Account account: modelData
 
@@ -59,7 +59,7 @@ Page {
             topPadding: constants.p2
             bottomPadding: constants.p3
             hoverEnabled: true
-            width: ListView.view.width
+            width: ListView.view.contentWidth
             contentItem: ColumnLayout {
                 spacing: 4
                 RowLayout {
@@ -166,13 +166,6 @@ Page {
                     }
                 }
             }
-        }
-        ScrollIndicator.vertical: ScrollIndicator {
-            parent: account_list_view.parent
-            anchors.top: account_list_view.top
-            anchors.left: account_list_view.right
-            anchors.leftMargin: 8
-            anchors.bottom: account_list_view.bottom
         }
     }
 }

@@ -224,8 +224,9 @@ Item {
                             watchOnly: WalletListModel.No
                             network: self.network
                         }
-                        delegate: WalletDelegate {}
-                        ScrollIndicator.vertical: ScrollIndicator {}
+                        delegate: WalletDelegate {
+                            width: ListView.view.contentWidth
+                        }
                     }
                 }
             }
@@ -286,7 +287,6 @@ Item {
             }
         }
         padding: 16
-        width: wallet_list_view.width
         highlighted: ListView.isCurrentItem
         property bool valid: wallet.loginAttemptsRemaining > 0
         onClicked: navigation.go(`/${wallet.network.key}/${wallet.id}`)
