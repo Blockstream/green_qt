@@ -208,7 +208,7 @@ StackView {
                         source: icons[wallet.network.key]
                     }
                     Label {
-                        text: wallet.network.name
+                        text: wallet.network.displayName
                     }
                     Label {
                         Layout.fillWidth: true

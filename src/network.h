@@ -10,6 +10,7 @@ class Network : public QObject
     Q_OBJECT
     Q_PROPERTY(QString id READ id CONSTANT)
     Q_PROPERTY(QString key READ key CONSTANT)
+    Q_PROPERTY(QString displayName READ displayName CONSTANT)
     Q_PROPERTY(QString name READ name CONSTANT)
     Q_PROPERTY(QJsonObject data READ data CONSTANT)
     Q_PROPERTY(bool liquid READ isLiquid CONSTANT)
@@ -21,6 +22,7 @@ public:
 
     QJsonObject data() const { return m_data; }
     QString key() const { return m_key; }
+    QString displayName() const { return m_display_name; }
     QString id() const { return m_id; }
     QString name() const { return m_name; }
     QString policyAsset() const;
@@ -34,6 +36,7 @@ private:
     const QJsonObject m_data;
     const QString m_id;
     const QString m_key;
+    const QString m_display_name;
     const QString m_name;
     const bool m_liquid;
     const bool m_electrum;

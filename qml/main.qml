@@ -391,7 +391,7 @@ ApplicationWindow {
                     }
                     Label {
                         Layout.fillWidth: true
-                        text: wallet.network.name
+                        text: wallet.network.displayName
                     }
                 }
                 SectionLabel {

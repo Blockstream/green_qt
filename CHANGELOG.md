@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Use same vertical scrollbar in list views
+- Dropped Electrum from default wallet name
 
 ## [1.0.0] - 2021-09-07
 ### Added

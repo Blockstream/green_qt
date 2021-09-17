@@ -116,7 +116,7 @@ QQmlListProperty<Wallet> WalletManager::wallets()
 QString WalletManager::newWalletName(Network* network) const
 {
     if (!network) return {};
-    return uniqueWalletName(QString("My %1 Wallet").arg(network->name()));
+    return uniqueWalletName(QString("My %1 Wallet").arg(network->displayName()));
 }
 
 QString WalletManager::uniqueWalletName(const QString& base) const

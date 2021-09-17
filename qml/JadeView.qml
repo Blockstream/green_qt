@@ -231,7 +231,7 @@ MainPage {
                 }
                 Label {
                     Layout.fillWidth: true
-                    text: self.network.name
+                    text: self.network.displayName
                     font.styleName: 'Light'
                     font.pixelSize: 20
                 }

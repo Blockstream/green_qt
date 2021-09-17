@@ -20,6 +20,17 @@ QString GetNetworkKey(const QJsonObject& data)
     Q_UNREACHABLE();
 }
 
+QString GetNetworkDisplayName(const QJsonObject& data)
+{
+    const auto mainnet = data.value("mainnet").toBool();
+    const auto liquid = data.value("liquid").toBool();
+    if (mainnet && !liquid) return "Bitcoin";
+    if (mainnet && liquid) return "Liquid";
+    if (!mainnet && !liquid) return "Testnet";
+    if (!mainnet && liquid) return "Testnet Liquid";
+    Q_UNREACHABLE();
+}
+
 }
 
 Network::Network(const QJsonObject& data, QObject *parent)
@@ -27,6 +38,7 @@ Network::Network(const QJsonObject& data, QObject *parent)
     , m_data(data)
     , m_id(data.value("network").toString())
     , m_key(GetNetworkKey(data))
+    , m_display_name(GetNetworkDisplayName(data))
     , m_name(data.value("name").toString())
     , m_liquid(data.value("liquid").toBool())
     , m_electrum(data.value("server_type").toString() == "electrum")
