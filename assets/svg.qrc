@@ -41,5 +41,6 @@
         <file>svg/external_link.svg</file>
         <file>svg/arrow_left.svg</file>
         <file>svg/2fa_telegram.svg</file>
+        <file>svg/right.svg</file>
     </qresource>
 </RCC>

@@ -31,96 +31,143 @@ MainPageHeader {
             Layout.fillWidth: true
             background: null
             padding: 0
-            leftPadding: wallet.device || wallet.watchOnly ? 0 : -8
+            leftPadding: -8
             focusPolicy: Qt.ClickFocus
             contentItem: RowLayout {
                 spacing: 16
-                Loader {
-                    visible: wallet.device
-                    sourceComponent: DeviceImage {
-                        device: wallet.device
-                        sourceSize.height: 32
+                Control {
+                    id: wallet_pill
+                    padding: 2
+                    rightPadding: 16
+                    leftPadding: 8
+                    background: Rectangle {
+                        color: constants.c700
+                        radius: height / 2
+                        border.width: 1
+                        border.color: constants.c600
+                        visible: wallet_pill.hovered
+                    }
+                    contentItem: RowLayout {
+                        spacing: 8
+                        Image {
+                            fillMode: Image.PreserveAspectFit
+                            sourceSize.height: 32
+                            sourceSize.width: 32
+                            source: icons[self.wallet.network.key]
+                        }
+                        Loader {
+                            active: !wallet.device && !wallet.watchOnly
+                            visible: active
+                            sourceComponent: EditableLabel {
+                                leftPadding: 8
+                                rightPadding: 8
+                                font.pixelSize: 22
+                                font.styleName: 'Medium'
+                                text: wallet.name
+                                onEdited: {
+                                    wallet.rename(text, activeFocus)
+                                }
+                            }
+                        }
+                        Loader {
+                            Layout.minimumHeight: 42
+                            active: !wallet.device && wallet.watchOnly
+                            sourceComponent: Label {
+                                verticalAlignment: Qt.AlignVCenter
+                                text: walletName(wallet)
+                                font.pixelSize: 24
+                                font.styleName: 'Medium'
+                            }
+                        }
+                        Loader {
+                            Layout.minimumHeight: 42
+                            active: wallet.device
+                            sourceComponent: Label {
+                                verticalAlignment: Qt.AlignVCenter
+                                text: wallet.device.name
+                                font.pixelSize: 24
+                                font.styleName: 'Medium'
+                            }
+                        }
+                        Image {
+                            fillMode: Image.PreserveAspectFit
+                            sourceSize.height: 24
+                            sourceSize.width: 24
+                            source: wallet.network.electrum ? 'qrc:/svg/key.svg' : 'qrc:/svg/multi-sig.svg'
+                        }
+                        Loader {
+                            visible: wallet.device
+                            sourceComponent: DeviceImage {
+                                device: wallet.device
+                                sourceSize.height: 24
 
-                        MouseArea {
-                            anchors.fill: parent
-                            cursorShape: Qt.PointingHandCursor
-                            onClicked: {
-                                if (wallet.device.type === Device.BlockstreamJade) {
-                                    navigation.go(`/jade/${wallet.device.uuid}`)
-                                } else if (wallet.device.vendor === Device.Ledger) {
-                                    navigation.go(`/ledger/${wallet.device.uuid}`)
+                                MouseArea {
+                                    anchors.fill: parent
+                                    cursorShape: Qt.PointingHandCursor
+                                    onClicked: {
+                                        if (wallet.device.type === Device.BlockstreamJade) {
+                                            navigation.go(`/jade/${wallet.device.uuid}`)
+                                        } else if (wallet.device.vendor === Device.Ledger) {
+                                            navigation.go(`/ledger/${wallet.device.uuid}`)
+                                        }
+                                    }
                                 }
                             }
                         }
                     }
                 }
-                Loader {
-                    active: !wallet.device && !wallet.watchOnly
-                    visible: active
-                    sourceComponent: EditableLabel {
-                        leftPadding: 8
-                        rightPadding: 8
-                        font.pixelSize: 22
-                        font.styleName: 'Medium'
-                        text: wallet.name
-                        onEdited: {
-                            wallet.rename(text, activeFocus)
-                        }
-                    }
-                }
                 Image {
                     fillMode: Image.PreserveAspectFit
-                    sourceSize.height: 16
-                    sourceSize.width: 16
-                    source: wallet.network.electrum ? 'qrc:/svg/key.svg' : 'qrc:/svg/multi-sig.svg'
+                    sourceSize.height: 24
+                    sourceSize.width: 24
+                    source: 'qrc:/svg/right.svg'
                 }
-                Loader {
-                    active: !wallet.device && wallet.watchOnly
-                    sourceComponent: Label {
-                        text: walletName(wallet)
-                        font.pixelSize: 24
-                        font.styleName: 'Medium'
+                Control {
+                    id: account_pill
+                    padding: 2
+                    rightPadding: account_type_badge.visible ? 24 : 16
+                    leftPadding: 16
+                    background: Rectangle {
+                        color: constants.c700
+                        radius: height / 2
+                        border.width: 1
+                        border.color: constants.c600
+                        visible: account_pill.hovered
                     }
-                }
-                Loader {
-                    active: wallet.device
-                    sourceComponent: Label {
-                        text: wallet.device.name
-                        font.pixelSize: 24
-                        font.styleName: 'Medium'
-                    }
-                }
-                Rectangle {
-                    Layout.preferredWidth: 1
-                    Layout.preferredHeight: constants.p2
-                }
-                Loader {
-                    active: !wallet.watchOnly
-                    visible: active
-                    sourceComponent: EditableLabel {
-                        leftPadding: 8
-                        rightPadding: 8
-                        font.pixelSize: 22
-                        font.styleName: 'Regular'
-                        text: accountName(self.currentAccount)
-                        enabled: !self.wallet.watchOnly && self.currentAccount && !self.wallet.locked
-                        onEdited: {
-                            if (enabled && self.currentAccount) {
-                                self.currentAccount.rename(text, activeFocus)
+                    contentItem: RowLayout {
+                        spacing: account_type_badge.visible ? 8 : 0
+                        Loader {
+                            active: !wallet.watchOnly
+                            visible: active
+                            sourceComponent: EditableLabel {
+                                leftPadding: 8
+                                rightPadding: 8
+                                font.pixelSize: 22
+                                font.styleName: 'Regular'
+                                text: accountName(self.currentAccount)
+                                enabled: !self.wallet.watchOnly && self.currentAccount && !self.wallet.locked
+                                onEdited: {
+                                    if (enabled && self.currentAccount) {
+                                        self.currentAccount.rename(text, activeFocus)
+                                    }
+                                }
                             }
                         }
+                        Loader {
+                            Layout.minimumHeight: 42
+                            active: !wallet.device && wallet.watchOnly
+                            sourceComponent: Label {
+                                verticalAlignment: Qt.AlignVCenter
+                                text: accountName(self.currentAccount)
+                                font.pixelSize: 24
+                                font.styleName: 'Medium'
+                            }
+                        }
+                        AccountTypeBadge {
+                            id: account_type_badge
+                            account: self.currentAccount
+                        }
                     }
-                }
-                Loader {
-                    active: !wallet.device && wallet.watchOnly
-                    sourceComponent: Label {
-                        text: accountName(self.currentAccount)
-                        font.pixelSize: 24
-                        font.styleName: 'Medium'
-                    }
-                }
-                AccountTypeBadge {
-                    account: self.currentAccount
                 }
                 HSpacer {
                 }
