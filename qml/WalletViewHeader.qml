@@ -68,6 +68,12 @@ MainPageHeader {
                         }
                     }
                 }
+                Image {
+                    fillMode: Image.PreserveAspectFit
+                    sourceSize.height: 16
+                    sourceSize.width: 16
+                    source: wallet.network.electrum ? 'qrc:/svg/key.svg' : 'qrc:/svg/multi-sig.svg'
+                }
                 Loader {
                     active: !wallet.device && wallet.watchOnly
                     sourceComponent: Label {
