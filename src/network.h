@@ -13,6 +13,7 @@ class Network : public QObject
     Q_PROPERTY(QString displayName READ displayName CONSTANT)
     Q_PROPERTY(QString name READ name CONSTANT)
     Q_PROPERTY(QJsonObject data READ data CONSTANT)
+    Q_PROPERTY(bool mainnet READ isMainnet CONSTANT)
     Q_PROPERTY(bool liquid READ isLiquid CONSTANT)
     Q_PROPERTY(bool electrum READ isElectrum CONSTANT)
     QML_ELEMENT
@@ -27,6 +28,7 @@ public:
     QString name() const { return m_name; }
     QString policyAsset() const;
     QString explorerUrl() const;
+    bool isMainnet() const { return m_mainnet; }
     bool isLiquid() const { return m_liquid; }
     bool isElectrum() const { return m_electrum; }
 
@@ -38,6 +40,7 @@ private:
     const QString m_key;
     const QString m_display_name;
     const QString m_name;
+    const bool m_mainnet;
     const bool m_liquid;
     const bool m_electrum;
     const QString m_policy_asset;

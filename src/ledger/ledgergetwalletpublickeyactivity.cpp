@@ -39,7 +39,7 @@ void LedgerGetWalletPublicKeyActivity::exec()
     auto cmd = m_device->exchange(apdu(BTCHIP_CLA, BTCHIP_INS_GET_WALLET_PUBLIC_KEY, 0x0, 0, path));
     connect(cmd, &Command::finished, this, [this, cmd] {
         cmd->deleteLater();
-        uint32_t version = m_network->data().value("mainnet").toBool() ? BIP32_VER_MAIN_PUBLIC : BIP32_VER_TEST_PUBLIC;
+        uint32_t version = m_network->isMainnet() ? BIP32_VER_MAIN_PUBLIC : BIP32_VER_TEST_PUBLIC;
         QDataStream stream(cmd->m_response);
         uint8_t pubkey_len, address_len;
         stream >> pubkey_len;
