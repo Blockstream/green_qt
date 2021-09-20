@@ -15,7 +15,7 @@ Label {
         color: constants.c400
         radius: 4
     }
-    visible: !!text
+    visible: text !== ''
     text: {
         if (account) {
             switch (account.type) {
@@ -25,5 +25,6 @@ Label {
                 case 'p2wpkh': return qsTrId('id_segwit_account')
             }
         }
+        return ''
     }
 }
