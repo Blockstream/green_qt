@@ -9,15 +9,6 @@ import QZXing 2.3
 Item {
     id: self
 
-    property alias source: video_output.source
-    property list<Action> actions: [
-        Action {
-            text: qsTrId('id_back')
-            onTriggered: cancel()
-        }
-    ]
-
-    signal cancel()
     signal codeScanned(string code)
 
     BusyIndicator {
