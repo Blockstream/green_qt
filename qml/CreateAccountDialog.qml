@@ -328,7 +328,9 @@ ControllerDialog {
                         ToolTip.visible: hovered
                         Popup {
                             id: scanner_popup
-                            background: null
+                            background: MouseArea {
+                                hoverEnabled: true
+                            }
                             parent: xpub_field
                             x: parent.width / 2 - width / 2
                             y: -height
@@ -337,6 +339,14 @@ ControllerDialog {
                                 sourceComponent: Item {
                                     implicitWidth: 300
                                     implicitHeight: 200
+                                    scale: scanner_popup.background.containsMouse ? 1.05 : (scanner_popup.visible ? 1 : 0)
+                                    transformOrigin: Item.Bottom
+                                    Behavior on scale {
+                                        NumberAnimation {
+                                            easing.type: Easing.OutBack
+                                            duration: 400
+                                        }
+                                    }
                                     Shape {
                                         anchors.fill: parent
                                         BallonPath {
@@ -347,10 +357,9 @@ ControllerDialog {
                                     ScannerView {
                                         anchors.fill: parent
                                         id: scanner_view
-                                        onCancel: stack_view.pop();
                                         onCodeScanned: {
                                             xpub_field.text = code
-                                            scanner_view.scanner_popup()
+                                            scanner_popup.close()
                                         }
                                         layer.enabled: true
                                         layer.effect: OpacityMask {
@@ -378,6 +387,7 @@ ControllerDialog {
                                         anchors.top: parent.top
                                         anchors.right: parent.right
                                         anchors.margins: 8
+                                        hoverEnabled: false
                                         flat: true
                                         icon.source: 'qrc:/svg/cancel.svg'
                                         icon.width: 16
