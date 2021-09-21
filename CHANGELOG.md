@@ -6,12 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Create 2of3 accounts with custom mnemonic or BIP32 Extended Public Key
 - Option to filter for coins that have 2FA expired
 - Telegram can be used for 2FA, only in testnet for now
 - Support for host unblinding for Jade with firmware 0.1.27
 - Use scanned BIP21 message as transaction memo
 
 ### Changed
+- Shwo QR Code scanner popup in send view
 - Layout improvements in News section of Home view
 - Add setting to toggle News section of Home view
 - Update GDK to 0.0.45

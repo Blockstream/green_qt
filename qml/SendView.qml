@@ -28,19 +28,6 @@ StackView {
         }
     }
 
-    Component {
-        id: scanner_view
-        ScannerView {
-            implicitHeight: Math.max(setup_view.implicitHeight, 300)
-            implicitWidth: Math.max(setup_view.implicitWidth, 300)
-            onCancel: stack_view.pop()
-            onCodeScanned: {
-                parsePayment(code)
-                stack_view.pop()
-            }
-        }
-    }
-
     implicitHeight: setup_view.implicitHeight
     implicitWidth: setup_view.implicitWidth
 
@@ -48,7 +35,7 @@ StackView {
         account: stack_view.account
         property list<Action> actions: [
             Action {
-                text: qsTrId('Done')
+                text: qsTrId('id_done')
                 onTriggered: stack_view.pop()
             }
         ]
@@ -74,6 +61,12 @@ StackView {
         rowSpacing: 12
         columnSpacing: 12
 
+        ScannerPopup {
+            id: scanner_popup
+            parent: address_field
+            onCodeScanned: parsePayment(code)
+        }
+
         SectionLabel {
             text: qsTrId('id_address')
         }
@@ -88,11 +81,11 @@ StackView {
                 onTextChanged: parsePayment(text)
             }
             ToolButton {
-                enabled: QtMultimedia.availableCameras.length > 0
+                enabled: scanner_popup.available && !scanner_popup.visible
                 icon.source: 'qrc:/svg/qr.svg'
                 icon.width: 16
                 icon.height: 16
-                onClicked: stack_view.push(scanner_view)
+                onClicked: scanner_popup.open()
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                 ToolTip.text: qsTrId('id_scan_qr_code')
                 ToolTip.visible: hovered
