@@ -12,6 +12,7 @@ TextField {
     leftPadding: 8
     rightPadding: 8
     font.pixelSize: 12
+    selectByMouse: true
     background: Rectangle {
         implicitWidth: 200
         radius: self.radius
