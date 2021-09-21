@@ -7,6 +7,8 @@ import QtQuick.Window 2.12
 import QZXing 2.3
 
 Item {
+    id: self
+
     property alias source: video_output.source
     property list<Action> actions: [
         Action {
@@ -20,6 +22,7 @@ Item {
 
     BusyIndicator {
         anchors.centerIn: parent
+        hoverEnabled: false
     }
 
     VideoOutput {
@@ -60,9 +63,14 @@ Item {
         border.width: 1
         border.color: Material.accent
         color: 'transparent'
-        width: Math.min(parent.width, parent.height) - 128
+        width: Math.min(parent.width, parent.height) - Math.round(self.width / 10)
         height: width
         anchors.centerIn: parent
+        opacity: 0
+        SequentialAnimation on opacity {
+            PauseAnimation { duration: 2000 }
+            SmoothedAnimation { to: 0.5; velocity: 2 }
+        }
 
         Rectangle {
             color: Material.accent
