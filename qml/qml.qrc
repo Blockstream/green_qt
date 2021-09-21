@@ -127,5 +127,6 @@
         <file>AccountTypeBadge.qml</file>
         <file>GCard.qml</file>
         <file>FixedErrorBadge.qml</file>
+        <file>ScannerPopup.qml</file>
     </qresource>
 </RCC>

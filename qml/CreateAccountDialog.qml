@@ -5,9 +5,6 @@ import QtQuick.Window 2.12
 import QtQuick.Controls 2.5
 import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.12
-import QtMultimedia 5.13
-import QtGraphicalEffects 1.15
-import QtQuick.Shapes 1.0
 
 ControllerDialog {
     id: dialog
@@ -230,64 +227,10 @@ ControllerDialog {
         }
     }
 
-    component BallonPath: ShapePath {
-        startX: 16
-        startY: 0
-        PathAngleArc {
-            moveToStart: false
-            radiusX: 16
-            radiusY: 16
-            centerX: width - 16
-            centerY: 16
-            startAngle: -90
-            sweepAngle: 90
-        }
-        PathAngleArc {
-            moveToStart: false
-            radiusX: 16
-            radiusY: 16
-            centerX: width - 16
-            centerY: height - 16 - 8
-            startAngle: 0
-            sweepAngle: 90
-        }
-        PathLine {
-            x: width / 2 + 8
-            y: height - 8
-        }
-        PathLine {
-            x: width / 2
-            y: height
-        }
-        PathLine {
-            x: width / 2 - 8
-            y: height - 8
-        }
-        PathAngleArc {
-            moveToStart: false
-            radiusX: 16
-            radiusY: 16
-            centerX: 16
-            centerY: height - 16 - 8
-            startAngle: 90
-            sweepAngle: 90
-        }
-        PathAngleArc {
-            moveToStart: false
-            radiusX: 16
-            radiusY: 16
-            centerX: 16
-            centerY: 16
-            startAngle: 180
-            sweepAngle: 90
-        }
-    }
-
     Component {
         id: prompt_xpub_view        
         GPane {
             id: self
-
             property list<Action> actions: [
                 Action {
                     text: qsTrId('id_back')
@@ -299,6 +242,12 @@ ControllerDialog {
                     onTriggered: stack_view.push(finish_view)
                 }
             ]
+            ScannerPopup {
+                id: scanner_popup
+                parent: xpub_field
+                onCodeScanned: xpub_field.text = code
+            }
+
             background: null
             contentItem: ColumnLayout {
                 spacing: 12
@@ -317,7 +266,7 @@ ControllerDialog {
                         error: dialog.controller.errors.recoveryXpub
                     }
                     ToolButton {
-                        enabled: QtMultimedia.availableCameras.length > 0 && !scanner_popup.visible
+                        enabled: scanner_popup.available && !scanner_popup.visible
                         icon.source: 'qrc:/svg/qr.svg'
                         icon.width: 16
                         icon.height: 16
@@ -325,78 +274,6 @@ ControllerDialog {
                         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                         ToolTip.text: qsTrId('id_scan_qr_code')
                         ToolTip.visible: hovered
-                        Popup {
-                            id: scanner_popup
-                            background: MouseArea {
-                                hoverEnabled: true
-                            }
-                            parent: xpub_field
-                            x: parent.width / 2 - width / 2
-                            y: -height
-                            contentItem: Loader {
-                                active: scanner_popup.visible
-                                sourceComponent: Item {
-                                    implicitWidth: 300
-                                    implicitHeight: 200
-                                    scale: scanner_popup.background.containsMouse ? 1.05 : (scanner_popup.visible ? 1 : 0)
-                                    transformOrigin: Item.Bottom
-                                    Behavior on scale {
-                                        NumberAnimation {
-                                            easing.type: Easing.OutBack
-                                            duration: 400
-                                        }
-                                    }
-                                    Shape {
-                                        anchors.fill: parent
-                                        BallonPath {
-                                            strokeWidth: 0
-                                            fillColor: constants.c800
-                                        }
-                                    }
-                                    ScannerView {
-                                        anchors.fill: parent
-                                        id: scanner_view
-                                        onCodeScanned: {
-                                            xpub_field.text = code
-                                            scanner_popup.close()
-                                        }
-                                        layer.enabled: true
-                                        layer.effect: OpacityMask {
-                                            maskSource: Shape {
-                                                width: scanner_view.width
-                                                height: scanner_view.height
-                                                BallonPath {
-                                                    strokeWidth: 1
-                                                    strokeColor: 'transparent'
-                                                    fillColor: 'white'
-                                                }
-                                            }
-                                        }
-                                    }
-                                    Shape {
-                                        anchors.fill: parent
-                                        layer.samples: 4
-                                        BallonPath {
-                                            strokeColor: constants.g400
-                                            strokeWidth: 1
-                                            fillColor: 'transparent'
-                                        }
-                                    }
-                                    ToolButton {
-                                        anchors.top: parent.top
-                                        anchors.right: parent.right
-                                        anchors.margins: 8
-                                        hoverEnabled: false
-                                        flat: true
-                                        icon.source: 'qrc:/svg/cancel.svg'
-                                        icon.width: 16
-                                        icon.height: 16
-                                        onClicked: scanner_popup.close()
-                                    }
-                                }
-                            }
-                        }
-
                     }
                     ToolButton {
                         icon.source: 'qrc:/svg/paste.svg'
