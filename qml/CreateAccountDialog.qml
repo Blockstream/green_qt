@@ -65,10 +65,9 @@ ControllerDialog {
                 }
             }
             Card {
-                visible: !controller.wallet.network.electrum
                 text: _labels['2of3']
                 description: qsTrId('id_a_2of3_account_requires_two_out')
-                enabled: !wallet.network.liquid
+                visible: !wallet.network.electrum && !wallet.network.liquid
                 onClicked: {
                     create_account_controller.type = '2of3'
                     create_account_controller.name = _labels['2of3']
