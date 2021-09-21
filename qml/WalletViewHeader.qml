@@ -293,10 +293,7 @@ MainPageHeader {
                             send_dialog.createObject(window, { account: self.currentAccount }).open()
                         }
                         else {
-                            message_dialog.createObject(window, {
-                                account: self.currentAccount,
-                                title: qsTrId('id_warning'), message: self.wallet.network.liquid ? qsTrId('id_insufficient_lbtc_to_send_a') : qsTrId('You have no coins to send. Generate an address to receive some bitcoins.')
-                            }).open()
+                            message_dialog.createObject(window).open()
                         }
                     }
                     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
@@ -330,19 +327,23 @@ MainPageHeader {
         MessageDialog {
             id: dialog
             wallet: self.wallet
-            width: 300
+            width: 350
+            title: qsTrId('id_warning')
+            message: self.wallet.network.liquid ? qsTrId('id_insufficient_lbtc_to_send_a') : qsTrId('You have no coins to send. Generate an address to receive some bitcoins.')
             actions: [
                 Action {
                     text: qsTrId('id_cancel')
-                    onTriggered: {
-                        dialog.reject()
-                    }
+                    onTriggered: dialog.reject()
                 },
                 Action {
-                    text: qsTrId('id_receive')
+                    text: self.wallet.network.liquid ? qsTrId('id_learn_more') : qsTrId('id_receive')
                     onTriggered: {
                         dialog.reject()
-                        receive_dialog.createObject(window, { account: self.currentAccount }).open()
+                        if (self.wallet.network.liquid) {
+                            Qt.openUrlExternally('https://help.blockstream.com/hc/en-us/articles/900000630846-How-do-I-get-Liquid-Bitcoin-L-BTC-')
+                        } else {
+                            receive_dialog.createObject(window, { account: self.currentAccount }).open()
+                        }
                     }
                 }
             ]
