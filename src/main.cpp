@@ -45,7 +45,6 @@ extern QString g_data_location;
 QCommandLineParser g_args;
 static QFile g_log_file;
 
-#if BUILD_TYPE != development
 #include <boost/log/core.hpp>
 #include <boost/log/sinks/async_frontend.hpp>
 #include <boost/log/sinks/basic_sink_backend.hpp>
@@ -76,47 +75,47 @@ public:
 };
 
 static QString g_gdk_debug_buffer;
-#endif
 
 void initLog()
 {
     g_log_file.setFileName(GetDataFile("logs", QString("%1.%2.%3.txt").arg(VERSION_MAJOR).arg(VERSION_MINOR).arg(VERSION_PATCH)));
-#if BUILD_TYPE != development
-    g_log_file.open(QIODevice::WriteOnly | QIODevice::Append);
-    qInstallMessageHandler(gMessageHandler);
 
-    using sink_t = boost::log::sinks::asynchronous_sink<gdk_sink>;
-    auto sink = boost::make_shared<sink_t>(boost::make_shared<gdk_sink>());
-    boost::log::core::get()->add_sink(sink);
+    if (QString{"development"} != QT_STRINGIFY(BUILD_TYPE)) {
+        g_log_file.open(QIODevice::WriteOnly | QIODevice::Append);
+        qInstallMessageHandler(gMessageHandler);
 
-    auto logger_thread = std::thread([] {
-        int pipes[2];
-        setvbuf(stdout, 0, _IOLBF, 0);
-        setvbuf(stderr, 0, _IONBF, 0);
-#ifdef _WIN32
-        _pipe(pipes, 1024, _O_NOINHERIT);
-        _dup2(pipes[1], 1);
-        _dup2(pipes[1], 2);
-#else
-        pipe(pipes);
-        dup2(pipes[1], 1);
-        dup2(pipes[1], 2);
-#endif
-        ssize_t read_size;
-        char buffer[1024];
-        while ((read_size = read(pipes[0], buffer, sizeof buffer - 1)) > 0) {
-            g_gdk_debug_buffer.append(QByteArray(buffer, read_size));
-            auto lines = g_gdk_debug_buffer.split('\n');
-            QTextStream ts(&g_log_file);
-            QString timestamp = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzzzzz");
-            while (lines.size() > 1) {
-                ts << QString("[%1] [gdk:debug] %3").arg(timestamp, lines.takeFirst()) << Qt::endl;
+        using sink_t = boost::log::sinks::asynchronous_sink<gdk_sink>;
+        auto sink = boost::make_shared<sink_t>(boost::make_shared<gdk_sink>());
+        boost::log::core::get()->add_sink(sink);
+
+        auto logger_thread = std::thread([] {
+            int pipes[2];
+            setvbuf(stdout, 0, _IOLBF, 0);
+            setvbuf(stderr, 0, _IONBF, 0);
+    #ifdef _WIN32
+            _pipe(pipes, 1024, _O_NOINHERIT);
+            _dup2(pipes[1], 1);
+            _dup2(pipes[1], 2);
+    #else
+            pipe(pipes);
+            dup2(pipes[1], 1);
+            dup2(pipes[1], 2);
+    #endif
+            ssize_t read_size;
+            char buffer[1024];
+            while ((read_size = read(pipes[0], buffer, sizeof buffer - 1)) > 0) {
+                g_gdk_debug_buffer.append(QByteArray(buffer, read_size));
+                auto lines = g_gdk_debug_buffer.split('\n');
+                QTextStream ts(&g_log_file);
+                QString timestamp = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzzzzz");
+                while (lines.size() > 1) {
+                    ts << QString("[%1] [gdk:debug] %3").arg(timestamp, lines.takeFirst()) << Qt::endl;
+                }
+                g_gdk_debug_buffer = lines.first();
             }
-            g_gdk_debug_buffer = lines.first();
-        }
-    });
-    logger_thread.detach();
-#endif
+        });
+        logger_thread.detach();
+    }
 }
 
 int main(int argc, char *argv[])
@@ -195,8 +194,8 @@ int main(int argc, char *argv[])
     qInfo() << "  Kernel Version:" << qPrintable(QSysInfo::kernelVersion());
     qInfo() << "  Product Type:" << qPrintable(QSysInfo::productType());
     qInfo() << "  Product Version:" << qPrintable(QSysInfo::productVersion());
-
-    qInfo() << "Data directory" << g_data_location;
+    qInfo() << "Build Type:" << QT_STRINGIFY(BUILD_TYPE);
+    qInfo() << "Data directory:" << g_data_location;
     qInfo() << "Log file:" << g_log_file.fileName();
 
     // Reset the locale that is used for number formatting, see:
