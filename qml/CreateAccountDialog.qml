@@ -51,10 +51,9 @@ ControllerDialog {
                 }
             }
             Card {
-                visible: !controller.wallet.network.electrum
+                visible: wallet.network.liquid && !controller.wallet.network.electrum
                 text: _labels['2of2_no_recovery']
                 description: qsTrId('id_amp_accounts_are_only_available')
-                enabled: wallet.network.liquid
                 onClicked: {
                     create_account_controller.type = '2of2_no_recovery'
                     create_account_controller.name = _labels['2of2_no_recovery']
