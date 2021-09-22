@@ -16,7 +16,11 @@ QML_IMPORT_MINOR_VERSION = 1
 
 QT += qml quick quickcontrols2 svg concurrent xml
 
-CONFIG += c++17 metatypes qmltypes qtquickcompiler sdk_no_version_check
+CONFIG += c++17 metatypes sdk_no_version_check
+CONFIG += qmltypes
+CONFIG += qtquickcompiler
+CONFIG += hide_symbols
+CONFIG += ltcg
 
 !defined(GDK_PATH, var): error(Run qmake with GDK_PATH set. See BUILD.md for more details.)
 DEFINES += BUILD_ELEMENTS
