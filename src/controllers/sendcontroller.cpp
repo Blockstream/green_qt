@@ -176,6 +176,8 @@ void SendController::update()
     create();
 }
 
+#include <handlers/getunspentoutputshandler.h>
+
 void SendController::create()
 {
     if (!wallet() || !account()) return;
@@ -190,6 +192,23 @@ void SendController::create()
     if (m_fee_rate == 0) return;
 
     setValid(false);
+
+    if (m_get_unspent_outputs_handler) return;
+    if (!m_transaction.contains("utxos")) {
+        auto handler = new GetUnspentOutputsHandler(0, true, account());
+        connect(handler, &Handler::finished, this, [this, handler] {
+            m_transaction["utxos"] = handler->unspentOutputs();
+            m_get_unspent_outputs_handler = nullptr;
+            create();
+            handler->deleteLater();
+        });
+        connect(handler, &Handler::error, this, [&] {
+            handler->deleteLater();
+        });
+        m_get_unspent_outputs_handler = handler;
+        handler->exec();
+        return;
+    }
 
     // Skip transaction creation if m_address and m_amount are empty
     // or if asset is need but not defined
@@ -220,7 +239,6 @@ void SendController::create()
 
     if (m_manual_coin_selection) {
         Q_ASSERT(!m_balance);
-        m_transaction.remove("utxos");
         m_transaction["used_utxos"] = m_utxos.value("btc").toArray();
     }
 

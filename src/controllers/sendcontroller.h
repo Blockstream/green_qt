@@ -83,6 +83,7 @@ private:
     void setSignedTransaction(Transaction* signed_transaction);
 
     QJsonObject m_utxos;
+    Handler* m_get_unspent_outputs_handler{nullptr};
 
     bool m_manual_coin_selection;
 

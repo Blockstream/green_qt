@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Layout improvements in News section of Home view
 - Add setting to toggle News section of Home view
+- Update GDK to 0.0.45
 
 ### Fixed
 - Jade address verification with 2of3 account
