@@ -34,7 +34,7 @@ elif [ "$GREENPLATFORM" = "windows" ]; then
     tools/build.sh --mingw-w64 --lto=false --enable-rust >> ${GDK_PATH}/build.log 2>&1
 elif [ "$GREENPLATFORM" = "osx" ]; then
     unset JAVA_HOME
-    tools/build.sh --clang --lto=true --enable-rust >> ${GDK_PATH}/build.log 2>&1
+    tools/build.sh --clang --enable-rust >> ${GDK_PATH}/build.log 2>&1
 else
     exit 1
 fi
