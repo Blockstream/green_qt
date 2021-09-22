@@ -28,7 +28,7 @@ if [ "${GREENPLATFORM}" = "linux" ]; then
 elif [ "${GREENPLATFORM}" = "windows" ]; then
     QTOPTIONS="-xplatform win32-g++ -device-option CROSS_COMPILE=/usr/bin/x86_64-w64-mingw32- -skip qtwayland -opengl desktop -native-win32-bluetooth -no-dbus"
 elif [ "${GREENPLATFORM}" = "osx" ]; then
-    QTOPTIONS="-skip qtwayland -ltcg -no-dbus"
+    QTOPTIONS="-skip qtwayland -no-dbus"
 fi
 
 tmpdir=qt-${GREENPLATFORM}
