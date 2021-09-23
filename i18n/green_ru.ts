@@ -10,18 +10,18 @@
     </message>
     <message>
         <source>id_12_months_51840_blocks</source>
-        <translation>12 months (51840 blocks)</translation>
+        <translation>12 месяцев (51840 блоков)</translation>
     </message>
     <message>
         <source>id_15_months_65535_blocks</source>
-        <translation>15 months (65535 blocks)</translation>
+        <translation>15 месяцев (65535 блоков)</translation>
     </message>
     <message>
         <source>id_1_double_check_all_of_your</source>
-        <translation>1. Double check all of your recovery phrase word by word, are all words correct?
-2. The order of words is important! Make sure you&apos;ve typed the words in the correct order.
+        <translation>1. Дважды проверьте свою фразу восстановления, все ли слова правильные? 
+2. Порядок слов важен! Убедитесь, что вы ввели слова в правильном порядке. 
 
-If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 27 words recovery phrase please check our help center.</translation>
+Если ни один из этих советов не помог или у вас нет фразы восстановления из 12, 24 или 27 слов, обратитесь в нашу службу поддержки.</translation>
     </message>
     <message>
         <source>id_1d_2s_ago</source>
@@ -36,8 +36,8 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
         <translation>%1блоков осталось%2</translation>
     </message>
     <message>
-        <source>id_1s_twofactor_set_up</source>
-        <translation>%1 Двухфакторная настройка</translation>
+        <source>id_1s_twofactor_setup</source>
+        <translation>%1Двухфакторная настройка</translation>
     </message>
     <message>
         <source>id_2_hours</source>
@@ -45,23 +45,27 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_2fa_dispute_in_progress</source>
-        <translation>2FA Dispute in Progress</translation>
+        <translation>Оспаривание 2FA в процессе</translation>
+    </message>
+    <message>
+        <source>id_2fa_expired</source>
+        <translation>Срок действия 2FA истек</translation>
     </message>
     <message>
         <source>id_2fa_expiry</source>
-        <translation>2FA Expiry</translation>
+        <translation>Срок действия 2FA </translation>
     </message>
     <message>
         <source>id_2fa_methods</source>
-        <translation>2FA Methods</translation>
+        <translation>Методы 2FA</translation>
     </message>
     <message>
         <source>id_2fa_reset_in_progress</source>
-        <translation>2FA Reset in Progress</translation>
+        <translation>Перезапуск 2FA в процессе</translation>
     </message>
     <message>
         <source>id_2fa_threshold</source>
-        <translation>2FA Threshold</translation>
+        <translation>Порог 2FA</translation>
     </message>
     <message>
         <source>id_2of3_account</source>
@@ -77,7 +81,7 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_6_months_25920_blocks</source>
-        <translation>6 months (25920 blocks)</translation>
+        <translation>6 месяцев (25920 блоков)</translation>
     </message>
     <message>
         <source>id_a_2of3_account_requires_two_out</source>
@@ -133,7 +137,7 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_add_a_note_only_you_can_see_it</source>
-        <translation>Добавить заметку (только вы будете видеть ее)</translation>
+        <translation>Добавить заметку (будет видна только вам)</translation>
     </message>
     <message>
         <source>id_add_a_pgp_public_key_to_receive</source>
@@ -149,11 +153,11 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_add_an_amp_wallet</source>
-        <translation>Add an AMP wallet</translation>
+        <translation>Добавить AMP кошелек</translation>
     </message>
     <message>
         <source>id_add_another_wallet</source>
-        <translation>Add another wallet</translation>
+        <translation>Добавить еще один кошелек</translation>
     </message>
     <message>
         <source>id_add_custom_network_by_qr_code</source>
@@ -173,7 +177,7 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_additional_networks</source>
-        <translation>Additional Networks</translation>
+        <translation>Дополнительные сети</translation>
     </message>
     <message>
         <source>id_additional_security</source>
@@ -192,16 +196,24 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
         <translation>Адрес скопирован в буфер обмена</translation>
     </message>
     <message>
+        <source>id_address_verified</source>
+        <translation>Адрес подтвержден!</translation>
+    </message>
+    <message>
         <source>id_addresses</source>
-        <translation>Addresses</translation>
+        <translation>Адреса</translation>
     </message>
     <message>
         <source>id_advanced</source>
-        <translation>Advanced</translation>
+        <translation>Продвинутый</translation>
     </message>
     <message>
         <source>id_advanced_network_settings</source>
         <translation>Расширенные настройки сети</translation>
+    </message>
+    <message>
+        <source>id_advanced_options_for_your_third</source>
+        <translation>Расширенные параметры для вашего третьего ключа восстановления</translation>
     </message>
     <message>
         <source>id_all</source>
@@ -209,15 +221,15 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_all_of_the_accounts_in_your</source>
-        <translation>All of the accounts in your wallet need to be empty before deleting it.</translation>
+        <translation>Перед удалением все аккаунты в вашем кошельке должны быть пустыми.</translation>
     </message>
     <message>
         <source>id_all_the_coins_received_or</source>
-        <translation>All the coins received or created as change</translation>
+        <translation>Все монеты, полученные или созданные в качестве сдачи.</translation>
     </message>
     <message>
         <source>id_all_wallets</source>
-        <translation>All wallets</translation>
+        <translation>Все кошельки</translation>
     </message>
     <message>
         <source>id_allows_you_to_quickly_check</source>
@@ -232,12 +244,16 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
         <translation>Сумма</translation>
     </message>
     <message>
+        <source>id_amount_in_s</source>
+        <translation>Сумма в%1</translation>
+    </message>
+    <message>
         <source>id_amp_account</source>
-        <translation>AMP Account</translation>
+        <translation>Учетная запись AMP</translation>
     </message>
     <message>
         <source>id_amp_accounts_are_only_available</source>
-        <translation>AMP accounts are only available on Liquid wallets. You may be required to provide your account ID to issuers to receive an AMP Asset.</translation>
+        <translation>Учетные записи AMP доступны только в кошельках Liquid. Для получения актива AMP от вас может потребоваться предоставить идентификатор вашей учетной записи эмитентам.</translation>
     </message>
     <message>
         <source>id_amp_id</source>
@@ -245,11 +261,11 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_another_2fa_method_is_already</source>
-        <translation>Another 2FA method is already active. Confirm via 2FA that you authorize this change.</translation>
+        <translation>Другой метод 2FA уже активен. Подтвердите через 2FA, что вы разрешаете это изменение.</translation>
     </message>
     <message>
         <source>id_app_settings</source>
-        <translation>App Settings</translation>
+        <translation>Настройки приложения</translation>
     </message>
     <message>
         <source>id_are_you_sure_you_want_to_view</source>
@@ -257,7 +273,7 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_as_easy_as_snapping_a_photo</source>
-        <translation>As easy as snapping a photo with your phone. If you have an existing wallet, scan your recovery phrase from settings.</translation>
+        <translation>Так же просто, как сделать снимок с помощью телефона. Если у вас есть кошелек, отсканируйте фразу восстановления в настройках.</translation>
     </message>
     <message>
         <source>id_asset</source>
@@ -265,19 +281,23 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_asset_details</source>
-        <translation>Детали токена</translation>
+        <translation>Подробная информация об активах</translation>
+    </message>
+    <message>
+        <source>id_asset_icons_are_missing_try</source>
+        <translation>Иконки активов отсутствуют, попробуйте перезагрузить их.</translation>
     </message>
     <message>
         <source>id_asset_id</source>
-        <translation>ID токена</translation>
+        <translation>ID актива</translation>
     </message>
     <message>
         <source>id_asset_name</source>
-        <translation>Наименование токена</translation>
+        <translation>Наименование актива</translation>
     </message>
     <message>
         <source>id_assets</source>
-        <translation>Assets</translation>
+        <translation>Активы</translation>
     </message>
     <message>
         <source>id_attempts_remaining_d</source>
@@ -285,19 +305,19 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_authenticate_to_view_the</source>
-        <translation>Authenticate to view the recovery phrase</translation>
+        <translation>Выполните аутентификацию, чтобы просмотреть фразу восстановления</translation>
     </message>
     <message>
         <source>id_authenticator_app</source>
-        <translation>Authenticator app</translation>
+        <translation>Приложение для аутентификации</translation>
     </message>
     <message>
         <source>id_authenticator_qr_code</source>
-        <translation>Authenticator QR Code</translation>
+        <translation>QR-код аутентификатора</translation>
     </message>
     <message>
         <source>id_authenticator_secret_key</source>
-        <translation>Authenticator secret key</translation>
+        <translation>Секретный ключ аутентификатора</translation>
     </message>
     <message>
         <source>id_auto_logout_timeout</source>
@@ -309,11 +329,11 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_back</source>
-        <translation>Back</translation>
+        <translation>Назад</translation>
     </message>
     <message>
         <source>id_back_up_recovery_phrase</source>
-        <translation>Back Up Recovery Phrase</translation>
+        <translation>Бэкап фразы восстановления</translation>
     </message>
     <message>
         <source>id_backup_the_recovery_mnemonic</source>
@@ -329,15 +349,15 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_be_sure_your_recovery_phrase_is</source>
-        <translation>Be sure your recovery phrase is backed up before removing this wallet.</translation>
+        <translation>Перед удалением кошелька убедитесь, что вы сделали резервную копию фразы восстановления.</translation>
     </message>
     <message>
         <source>id_biometric_login_is_disabled</source>
-        <translation>Biometric Login is Disabled</translation>
+        <translation>Биометрический вход отключен</translation>
     </message>
     <message>
         <source>id_biometric_login_is_enabled</source>
-        <translation>Biometric Login is Enabled</translation>
+        <translation>Биометрический вход включен</translation>
     </message>
     <message>
         <source>id_bip49_accounts_allow_you_to</source>
@@ -365,7 +385,7 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_bitcoin_wallets</source>
-        <translation>Bitcoin wallets</translation>
+        <translation>Биткоин-кошельки</translation>
     </message>
     <message>
         <source>id_block</source>
@@ -373,7 +393,7 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_block_d</source>
-        <translation>Block %1</translation>
+        <translation>Блок %1</translation>
     </message>
     <message>
         <source>id_block_height_1d</source>
@@ -390,6 +410,10 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     <message>
         <source>id_blockstream_does_not_have</source>
         <translation>Blockstream не имеет доступа к сохраненной копии вашего кошелька и не сможет помочь вам в случае его утери </translation>
+    </message>
+    <message>
+        <source>id_blockstream_green_needs_access</source>
+        <translation>Blockstream Green needs access to Bluetooth in order to connect to hardware wallets. Location data is not used or kept by Blockstream.</translation>
     </message>
     <message>
         <source>id_blockstream_green_supports_both</source>
@@ -410,7 +434,7 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_by_proceeding_to_the_next_steps</source>
-        <translation>Переходя к следующему шагу вы соглашаетесь с 1%1</translation>
+        <translation>Переходя к следующему шагу, вы соглашаетесь с 1%1</translation>
     </message>
     <message>
         <source>id_cable</source>
@@ -486,7 +510,7 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_choose_method_to_authorize_the</source>
-        <translation>Выберите метод для авторизации действия</translation>
+        <translation>Выберите метод авторизации действия</translation>
     </message>
     <message>
         <source>id_choose_recovery_phrase_length</source>
@@ -541,16 +565,20 @@ Simple and Secure</translation>
         <translation>Coins</translation>
     </message>
     <message>
+        <source>id_coins_for_which_2fa_protection</source>
+        <translation>Coins for which 2FA protection is expired.</translation>
+    </message>
+    <message>
         <source>id_coins_locked</source>
         <translation>Coins locked</translation>
     </message>
     <message>
         <source>id_coins_protected_by_the_legacy</source>
-        <translation>Coins protected by the legacy script recoverable with your nlocktimes.zip file</translation>
+        <translation>Coins protected by the legacy script recoverable with your nlocktimes.zip file.</translation>
     </message>
     <message>
         <source>id_coins_protected_by_the_new</source>
-        <translation>Coins protected by the new script with embedded 2FA expiry through CheckSequenceVerify</translation>
+        <translation>Coins protected by the new script with embedded 2FA expiry through CheckSequenceVerify.</translation>
     </message>
     <message>
         <source>id_coins_unlocked</source>
@@ -558,7 +586,7 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_coins_whose_asset_and_amount</source>
-        <translation>Coins whose asset and amount are publicly visible</translation>
+        <translation>Coins whose asset and amount are publicly visible.</translation>
     </message>
     <message>
         <source>id_coins_with_a_value_lower_than</source>
@@ -567,6 +595,10 @@ Simple and Secure</translation>
     <message>
         <source>id_collapse_side_bar</source>
         <translation>Collapse side bar</translation>
+    </message>
+    <message>
+        <source>id_coming_soon</source>
+        <translation>Coming Soon!</translation>
     </message>
     <message>
         <source>id_communication_timed_out_make</source>
@@ -645,12 +677,16 @@ Simple and Secure</translation>
         <translation>Connected to Jade</translation>
     </message>
     <message>
+        <source>id_connecting</source>
+        <translation>Connecting…</translation>
+    </message>
+    <message>
         <source>id_connecting_through_tor</source>
         <translation>Connecting through Tor</translation>
     </message>
     <message>
         <source>id_connecting_to_a_trusted_node</source>
-        <translation>Подключение к доверенному узлу через Tor требует перед входом в учетную запись включения настроек прокси в приложении с указанием Socks5 прокси (приложение Orbot для Android)</translation>
+        <translation>Для подключения к доверенному узлу через Tor перед входом в учетную запись потребуется включить настройки прокси в приложении с указанием Socks5 прокси (приложение Orbot для Android)</translation>
     </message>
     <message>
         <source>id_connecting_to_peers</source>
@@ -659,6 +695,10 @@ Simple and Secure</translation>
     <message>
         <source>id_connecting_to_tor_onion_nodes</source>
         <translation>Подключение к Tor (.onion) узлам обеспечивает максимальную конфиденциальность и безопасность. Нажмите &quot;OK&quot; для продолжения.</translation>
+    </message>
+    <message>
+        <source>id_connecting_to_your_device</source>
+        <translation>Connecting to your device</translation>
     </message>
     <message>
         <source>id_connection</source>
@@ -706,7 +746,7 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_copy_raw_transaction</source>
-        <translation>Скопировать транзакцию в сыром виде</translation>
+        <translation>Скопировать raw транзакцию</translation>
     </message>
     <message>
         <source>id_copy_to_clipboard</source>
@@ -731,6 +771,10 @@ Simple and Secure</translation>
     <message>
         <source>id_copy_xpub</source>
         <translation>Copy xpub</translation>
+    </message>
+    <message>
+        <source>id_country</source>
+        <translation>Country</translation>
     </message>
     <message>
         <source>id_create</source>
@@ -798,15 +842,15 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_d_asset_in_this_account</source>
-        <translation>%1 актив в этом аккаунте</translation>
+        <translation>%1 актив на этом аккаунте</translation>
     </message>
     <message>
         <source>id_d_assets</source>
-        <translation>%1 assets</translation>
+        <translation>%1 активы</translation>
     </message>
     <message>
         <source>id_d_assets_in_this_account</source>
-        <translation>%1 активов в этом аккаунте</translation>
+        <translation>%1 активов на этом аккаунте</translation>
     </message>
     <message>
         <source>id_data_directory</source>
@@ -921,6 +965,10 @@ Simple and Secure</translation>
         <translation>Больше не спрашивать</translation>
     </message>
     <message>
+        <source>id_dont_show_this_again</source>
+        <translation>Don&apos;t show this again</translation>
+    </message>
+    <message>
         <source>id_dont_store_your_recovery_phrase</source>
         <translation>Don&apos;t store your recovery phrase on your phone, computer, or any online services.</translation>
     </message>
@@ -949,12 +997,20 @@ Simple and Secure</translation>
         <translation>Dust</translation>
     </message>
     <message>
+        <source>id_edit</source>
+        <translation>Edit</translation>
+    </message>
+    <message>
         <source>id_email</source>
         <translation>Email</translation>
     </message>
     <message>
         <source>id_email_address</source>
         <translation>email адрес</translation>
+    </message>
+    <message>
+        <source>id_empty</source>
+        <translation>Empty</translation>
     </message>
     <message>
         <source>id_enable</source>
@@ -975,6 +1031,10 @@ Simple and Secure</translation>
     <message>
         <source>id_enable_face_id</source>
         <translation>Включить Face ID</translation>
+    </message>
+    <message>
+        <source>id_enable_location_services</source>
+        <translation>Enable location services</translation>
     </message>
     <message>
         <source>id_enable_or_change_your_pin_to</source>
@@ -998,7 +1058,7 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_enable_twofactor_authentication</source>
-        <translation>Включить 2FA для защиты средств и критически важных настроек от несанкционированного доступа </translation>
+        <translation>Включить двухфакторную аутентификацию для защиты средств и критически важных настроек от несанкционированного доступа </translation>
     </message>
     <message>
         <source>id_enabled</source>
@@ -1057,12 +1117,20 @@ Simple and Secure</translation>
         <translation>Enter PIN on Jade</translation>
     </message>
     <message>
+        <source>id_enter_the_email_for_which_you</source>
+        <translation>Enter the email for which you want to delete a dispute request</translation>
+    </message>
+    <message>
         <source>id_enter_the_matching_words</source>
         <translation>Введите соответствующие слова</translation>
     </message>
     <message>
         <source>id_enter_the_pin_for_your_hardware</source>
         <translation>Введите PIN-код для вашего аппаратного кошелька</translation>
+    </message>
+    <message>
+        <source>id_enter_your_12_24_or_27_words</source>
+        <translation>Enter your 12, 24 or 27 words recovery phrase</translation>
     </message>
     <message>
         <source>id_enter_your_24_or_27_words</source>
@@ -1091,6 +1159,10 @@ Simple and Secure</translation>
     <message>
         <source>id_enter_your_wallet_mnemonic</source>
         <translation>Введите вашу мнемоническую фразу</translation>
+    </message>
+    <message>
+        <source>id_enter_your_xpub</source>
+        <translation>Enter your xpub</translation>
     </message>
     <message>
         <source>id_enter_your_xpub_to_add_a</source>
@@ -1142,6 +1214,10 @@ Recovery Phrase</translation>
         <translation>Пример: 8.90.14.2:8333,40.116.12.85:8333</translation>
     </message>
     <message>
+        <source>id_existing_recovery_phrase</source>
+        <translation>Existing recovery phrase</translation>
+    </message>
+    <message>
         <source>id_explore_your_wallet</source>
         <translation>Explore Your Wallet</translation>
     </message>
@@ -1152,6 +1228,14 @@ Recovery Phrase</translation>
     <message>
         <source>id_face_id</source>
         <translation>Face ID</translation>
+    </message>
+    <message>
+        <source>id_failed_to_load_asset_icons</source>
+        <translation>Failed to load asset icons</translation>
+    </message>
+    <message>
+        <source>id_failed_to_load_asset_registry</source>
+        <translation>Failed to Load Asset Registry</translation>
     </message>
     <message>
         <source>id_fast</source>
@@ -1222,6 +1306,10 @@ Recovery Phrase</translation>
         <translation>Firmware update completed</translation>
     </message>
     <message>
+        <source>id_follow_the_instructions_on_your</source>
+        <translation>Follow the instructions on your device.</translation>
+    </message>
+    <message>
         <source>id_for_investors</source>
         <translation>For investors</translation>
     </message>
@@ -1239,11 +1327,19 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_funds_received_in_this</source>
-        <translation>Средства полученные в данной транзакции не конфиденцеальны</translation>
+        <translation>Средства, полученные в результате этой транзакции, не являются конфиденциальными.</translation>
     </message>
     <message>
         <source>id_general</source>
         <translation>General</translation>
+    </message>
+    <message>
+        <source>id_generate</source>
+        <translation>Generate</translation>
+    </message>
+    <message>
+        <source>id_generate_a_new_recovery_phrase</source>
+        <translation>Generate a new recovery phrase as your third recovery key.</translation>
     </message>
     <message>
         <source>id_generate_new_address</source>
@@ -1254,8 +1350,16 @@ Recovery Phrase</translation>
         <translation>Получить код</translation>
     </message>
     <message>
+        <source>id_get_id</source>
+        <translation>Get ID</translation>
+    </message>
+    <message>
         <source>id_get_jade</source>
         <translation>Get Jade</translation>
+    </message>
+    <message>
+        <source>id_give_bluetooth_permissions</source>
+        <translation>Give Bluetooth Permissions</translation>
     </message>
     <message>
         <source>id_go_to_account</source>
@@ -1308,6 +1412,10 @@ Recovery Phrase</translation>
     <message>
         <source>id_green_uses_multisig_with_one</source>
         <translation>Green использует мультиподпись с подписью, сгенерированной вашим устройством, и подписью, сгенерированной серверами Blockstream. Настройка двухфакторной аутентификации обеспечивает дополнительный уровень безопасности для подписи на сервере.</translation>
+    </message>
+    <message>
+        <source>id_hardware_wallet</source>
+        <translation>Hardware wallet</translation>
     </message>
     <message>
         <source>id_hardware_wallet_support_for</source>
@@ -1386,6 +1494,10 @@ Recovery Phrase</translation>
         <translation>I typed all my recovery phrase why can&apos;t I continue?</translation>
     </message>
     <message>
+        <source>id_i_understand_amounts_could_be</source>
+        <translation>I understand amounts could be incorrect</translation>
+    </message>
+    <message>
         <source>id_id</source>
         <translation>ID</translation>
     </message>
@@ -1400,6 +1512,10 @@ Recovery Phrase</translation>
     <message>
         <source>id_if_you_have_access_to_a</source>
         <translation>If you have access to a Two-Factor method for this wallet, cancel the reset to be able to spend and receive immediately, or wait %1 days.</translation>
+    </message>
+    <message>
+        <source>id_if_you_have_some_coins_on_the</source>
+        <translation>If you have some coins on the legacy address type, and you won&apos;t spend them shortly, you might need to setup an email and receive your recovery transactions to be sure you are always in control of your funds.</translation>
     </message>
     <message>
         <source>id_if_you_initiated_the_2fa_reset</source>
@@ -1438,6 +1554,10 @@ Recovery Phrase</translation>
         <translation>Initializing Tor…</translation>
     </message>
     <message>
+        <source>id_insert_your_email_to_receive</source>
+        <translation>Insert your email to receive 2FA codes to authorize transfers and other operations.</translation>
+    </message>
+    <message>
         <source>id_install_version_s</source>
         <translation>Install version: %1?</translation>
     </message>
@@ -1460,6 +1580,10 @@ Recovery Phrase</translation>
     <message>
         <source>id_invalid_amount</source>
         <translation>Недопустимая сумма</translation>
+    </message>
+    <message>
+        <source>id_invalid_clipboard_contents</source>
+        <translation>Invalid clipboard contents</translation>
     </message>
     <message>
         <source>id_invalid_mnemonic</source>
@@ -1499,7 +1623,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_invalid_pin_you_dont_have_any</source>
-        <translation>Неверный PIN-код, у вас не осталось попыток. Пожалуйста, войдите, используя вашу мнемоническую фразу.</translation>
+        <translation>Неверный PIN-код, у вас не осталось попыток. Пожалуйста, введите вашу мнемоническую фразу.</translation>
     </message>
     <message>
         <source>id_invalid_pin_you_have_1d</source>
@@ -1530,8 +1654,12 @@ Recovery Phrase</translation>
         <translation>Неверный URL</translation>
     </message>
     <message>
+        <source>id_invalid_xpub</source>
+        <translation>Invalid xpub</translation>
+    </message>
+    <message>
         <source>id_is_a_noncustodial</source>
-        <translation>управляется только владельцем</translation>
+        <translation>контролируется только владельцем</translation>
     </message>
     <message>
         <source>id_issuer</source>
@@ -1563,7 +1691,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_last_attempt_if_failed_you_will</source>
-        <translation>Last attempt: if failed, you will have to restore your wallet using the 24-words mnemonic.</translation>
+        <translation>Last attempt: if failed, you will have to restore your wallet with your recovery phrase.</translation>
     </message>
     <message>
         <source>id_last_ping_1d_ms</source>
@@ -1587,7 +1715,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_ledger_dashboard_detected</source>
-        <translation>Обнаружена панель Ledger, пожалуйста, откройте правильное приложение для доступа.</translation>
+        <translation>Обнаружена панель Ledger, пожалуйста, откройте приложение для доступа.</translation>
     </message>
     <message>
         <source>id_ledger_devices</source>
@@ -1600,6 +1728,10 @@ Recovery Phrase</translation>
     <message>
         <source>id_legacy_account</source>
         <translation>Legacy Account</translation>
+    </message>
+    <message>
+        <source>id_legacy_script_coins</source>
+        <translation>Legacy script coins</translation>
     </message>
     <message>
         <source>id_lets_get_you_set_up</source>
@@ -1640,6 +1772,10 @@ Recovery Phrase</translation>
     <message>
         <source>id_loading_wallet</source>
         <translation>Loading wallet…</translation>
+    </message>
+    <message>
+        <source>id_location_services_are_disabled</source>
+        <translation>Location services are disabled, do you want to enable them?</translation>
     </message>
     <message>
         <source>id_lock</source>
@@ -1882,6 +2018,10 @@ Recovery Phrase</translation>
         <translation>Новая исходящая транзакция с аккаунта %1 (%2).</translation>
     </message>
     <message>
+        <source>id_new_recovery_phrase</source>
+        <translation>New recovery phrase</translation>
+    </message>
+    <message>
         <source>id_new_s_transaction_of_s_in</source>
         <translation>Новая %1 транзакция %2 на аккаунте %3.</translation>
     </message>
@@ -2000,6 +2140,10 @@ Recovery Phrase</translation>
     <message>
         <source>id_of_24</source>
         <translation>of 24</translation>
+    </message>
+    <message>
+        <source>id_of_s</source>
+        <translation>of %1</translation>
     </message>
     <message>
         <source>id_ok</source>
@@ -2151,7 +2295,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_please_enable_camera</source>
-        <translation>Включите разрешение для использования камеры.</translation>
+        <translation>Пожалуйста, разрешите использование камеры.</translation>
     </message>
     <message>
         <source>id_please_enable_pin</source>
@@ -2266,6 +2410,10 @@ Recovery Phrase</translation>
         <translation>Read more at our %1</translation>
     </message>
     <message>
+        <source>id_ready_to_start</source>
+        <translation>Ready to start</translation>
+    </message>
+    <message>
         <source>id_receive</source>
         <translation>Получить</translation>
     </message>
@@ -2295,7 +2443,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_recovery</source>
-        <translation>Recovery</translation>
+        <translation>Восстановление</translation>
     </message>
     <message>
         <source>id_recovery_and_notifications</source>
@@ -2303,7 +2451,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_recovery_mnemonic</source>
-        <translation>Recovery mnemonic</translation>
+        <translation>Восстановление мнемонической фразы</translation>
     </message>
     <message>
         <source>id_recovery_phrase</source>
@@ -2352,6 +2500,10 @@ Recovery Phrase</translation>
     <message>
         <source>id_refresh</source>
         <translation>Обновление</translation>
+    </message>
+    <message>
+        <source>id_reload</source>
+        <translation>Reload</translation>
     </message>
     <message>
         <source>id_remember_me</source>
@@ -2407,7 +2559,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_reset</source>
-        <translation>Reset</translation>
+        <translation>Сброс</translation>
     </message>
     <message>
         <source>id_reset_spv</source>
@@ -2782,12 +2934,16 @@ Recovery Phrase</translation>
         <translation>Singlesig</translation>
     </message>
     <message>
+        <source>id_singlesig_wallets_are_not_yet</source>
+        <translation>Singlesig wallets are not yet supported for use with hardware devices. By continuing you&apos;ll access a Multisig Shield wallet.</translation>
+    </message>
+    <message>
         <source>id_skip</source>
         <translation>ПРОПУСТИТЬ</translation>
     </message>
     <message>
         <source>id_skip_not_recommended</source>
-        <translation>Пропустить (не рекоменлуется)</translation>
+        <translation>Пропустить (не рекомендуется)</translation>
     </message>
     <message>
         <source>id_slide_to_send</source>
@@ -2829,11 +2985,11 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_spv_is_always_synchronized_on</source>
-        <translation>SPV всегда синхронизируется в  таких сетях, как WiFi или Ethernet. Этот параметр также синхронизируется при использовании мобильных данных. Это может быть дорого в зависимости от вашего тарифного плана, поэтому будьте внимательны при включении.</translation>
+        <translation>SPV всегда синхронизируется в  таких сетях, как WiFi или Ethernet. Этот параметр также синхронизируется при использовании мобильных данных. Может быть дорогостоящим в зависимости от вашего тарифного плана, поэтому будьте внимательны при включении.</translation>
     </message>
     <message>
         <source>id_spv_not_fully_synced</source>
-        <translation>SPV-синхронизация произошла не полностью</translation>
+        <translation>SPV не полностью синхронизирован</translation>
     </message>
     <message>
         <source>id_spv_notifications</source>
@@ -2841,7 +2997,7 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_spv_reset_and_restarted</source>
-        <translation>SPV переустановлено и перезапущено</translation>
+        <translation>SPV переустановлен и перезапущен</translation>
     </message>
     <message>
         <source>id_spv_synchronization</source>
@@ -2943,6 +3099,10 @@ Reset this setting and then re-activate it.</translation>
         <translation>Tap to scan a QR code and connect to a node for SPV</translation>
     </message>
     <message>
+        <source>id_telegram</source>
+        <translation>Telegram</translation>
+    </message>
+    <message>
         <source>id_terms_of_service</source>
         <translation>Terms of Service</translation>
     </message>
@@ -2956,7 +3116,7 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_thank_you_for_downloading_green</source>
-        <translation>Благодарим вас за загрузку кошелька Green! Пожалуйста, оставьте нам свой отзыв, если у вас будет такая возможность</translation>
+        <translation>Благодарим вас за загрузку кошелька Green! Пожалуйста, оставьте свой отзыв, если у вас будет такая возможность</translation>
     </message>
     <message>
         <source>id_the_1_year_2fa_reset_process</source>
@@ -2992,7 +3152,7 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_the_hardware_wallet_you_are</source>
-        <translation>Используемый вами аппаратный кошелек еще не поддерживается</translation>
+        <translation>Используемый вами аппаратный кошелек пока не поддерживается</translation>
     </message>
     <message>
         <source>id_the_liquid_network_is_a_bitcoin</source>
@@ -3047,6 +3207,10 @@ Reset this setting and then re-activate it.</translation>
         <translation>These settings apply for every wallet you use on Blockstream Green.</translation>
     </message>
     <message>
+        <source>id_this_feature_is_coming_soon</source>
+        <translation>This feature is coming soon, stay tuned!</translation>
+    </message>
+    <message>
         <source>id_this_transaction_spent</source>
         <translation>This transaction spent non-confidential funds.</translation>
     </message>
@@ -3079,12 +3243,20 @@ Reset this setting and then re-activate it.</translation>
         <translation>To keep you in control of your funds, Two-Factor Authentication protection expires after roughly %1 days since your last payment. You will be prompted to make a Two-Factor Reactivation transaction, if you don&apos;t move funds often enough.</translation>
     </message>
     <message>
+        <source>id_tor</source>
+        <translation>Tor</translation>
+    </message>
+    <message>
         <source>id_tor_connectivity_disabled</source>
         <translation>Соединение с Tor разорвано!</translation>
     </message>
     <message>
         <source>id_tor_is_connected</source>
         <translation>Tor is connected</translation>
+    </message>
+    <message>
+        <source>id_tor_is_not_yet_available_for</source>
+        <translation>Tor is not yet available for singlesig wallets</translation>
     </message>
     <message>
         <source>id_tor_status</source>
@@ -3147,6 +3319,10 @@ Reset this setting and then re-activate it.</translation>
         <translation>Transactions</translation>
     </message>
     <message>
+        <source>id_try_again</source>
+        <translation>Try Again</translation>
+    </message>
+    <message>
         <source>id_try_now</source>
         <translation>Попробовать сейчас</translation>
     </message>
@@ -3196,7 +3372,7 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_unable_to_contact_the_green</source>
-        <translation>Не удалось связаться со службой поддержки Green. Проверьте подключение к сети и подождите, чтобы его повторно подключили.</translation>
+        <translation>Не удалось связаться со службой поддержки Green. Проверьте соединение и дождитесь повторного подключения.</translation>
     </message>
     <message>
         <source>id_unconfirmed</source>
@@ -3247,12 +3423,36 @@ Reset this setting and then re-activate it.</translation>
         <translation>обновленный</translation>
     </message>
     <message>
+        <source>id_updating_firmware</source>
+        <translation>Updating firmware…</translation>
+    </message>
+    <message>
         <source>id_uploading_firmware</source>
         <translation>Uploading firmware</translation>
     </message>
     <message>
+        <source>id_use_a_hardware_wallet_as_your</source>
+        <translation>Use a hardware wallet as your third recovery key.</translation>
+    </message>
+    <message>
+        <source>id_use_a_public_key</source>
+        <translation>Use a public key</translation>
+    </message>
+    <message>
+        <source>id_use_an_existing_recovery_phrase</source>
+        <translation>Use an existing recovery phrase as your third recovery key.</translation>
+    </message>
+    <message>
+        <source>id_use_an_xpub_for_which_you_own</source>
+        <translation>Use an xpub for which you own the corresponding private key as your third recovery key.</translation>
+    </message>
+    <message>
         <source>id_use_android_screen_lock_to_log</source>
         <translation>Use Android screen lock to log in</translation>
+    </message>
+    <message>
+        <source>id_use_your_email_to_receive</source>
+        <translation>Use your email to receive recovery transactions and transactions notifications</translation>
     </message>
     <message>
         <source>id_user_not_found_or_invalid</source>
@@ -3296,7 +3496,7 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_view_in_explorer</source>
-        <translation>Просмотреть в обозревателе</translation>
+        <translation>Посмотреть в обозревателе</translation>
     </message>
     <message>
         <source>id_visit_s_for_further_information</source>
@@ -3483,12 +3683,20 @@ Reset this setting and then re-activate it.</translation>
         <translation>Ваши средства у вас под контролем.</translation>
     </message>
     <message>
+        <source>id_you_have_no_coins_to_send</source>
+        <translation>You have no coins to send. Generate an address to receive some bitcoins.</translation>
+    </message>
+    <message>
         <source>id_you_have_received_s</source>
         <translation>Вы получили %1</translation>
     </message>
     <message>
         <source>id_you_have_successfully_changed</source>
         <translation>You have successfully changed your PIN</translation>
+    </message>
+    <message>
+        <source>id_you_have_tor_enabled_are_you</source>
+        <translation>You have Tor enabled, are you sure you want to open this webpage?</translation>
     </message>
     <message>
         <source>id_you_must_first_log_out_before</source>
@@ -3513,6 +3721,10 @@ Reset this setting and then re-activate it.</translation>
     <message>
         <source>id_youll_need_your_pin_to_log_in</source>
         <translation>You&apos;ll need your PIN to log in to your wallet. This PIN secures the wallet on this device only.</translation>
+    </message>
+    <message>
+        <source>id_youll_need_your_recovery_phrase</source>
+        <translation>You&apos;ll need your recovery phrase to restore this wallet</translation>
     </message>
     <message>
         <source>id_youll_see_your_coins_here_when</source>
@@ -3585,9 +3797,7 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_youve_entered_an_invalid_pin</source>
-        <translation>You&apos;ve entered an invalid PIN too many times.
-
-You&apos;ll need your recovery phrase to restore this wallet.</translation>
+        <translation>You&apos;ve entered an invalid PIN too many times.</translation>
     </message>
 </context>
 </TS>
