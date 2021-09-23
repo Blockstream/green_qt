@@ -41,6 +41,8 @@ private:
     Transaction* m_transaction{nullptr};
     void setSignedTransaction(Transaction* signed_transaction);
     Transaction* m_signed_transaction{nullptr};
+    QJsonValue m_utxos;
+    Handler* m_get_unspent_outputs_handler{nullptr};
 };
 
 #endif // GREEN_BUMPFEECONTROLLER_H

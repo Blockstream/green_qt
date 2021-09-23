@@ -2,6 +2,7 @@
 #include "asset.h"
 #include "balance.h"
 #include "handlers/createtransactionhandler.h"
+#include "handlers/getunspentoutputshandler.h"
 #include "handlers/sendtransactionhandler.h"
 #include "handlers/signtransactionhandler.h"
 #include "json.h"
@@ -176,8 +177,6 @@ void SendController::update()
     create();
 }
 
-#include <handlers/getunspentoutputshandler.h>
-
 void SendController::create()
 {
     if (!wallet() || !account()) return;
@@ -241,6 +240,9 @@ void SendController::create()
         Q_ASSERT(!m_balance);
         m_transaction["used_utxos"] = m_utxos.value("btc").toArray();
     }
+
+    qDebug() << "==========";
+    qDebug() << m_transaction;
 
     m_create_handler = new CreateTransactionHandler(wallet(), m_transaction);
     connect(m_create_handler, &Handler::done, this, [this, count] {

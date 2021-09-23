@@ -3,6 +3,7 @@
 #include "asset.h"
 #include "balance.h"
 #include "handlers/createtransactionhandler.h"
+#include "handlers/getunspentoutputshandler.h"
 #include "handlers/sendtransactionhandler.h"
 #include "handlers/signtransactionhandler.h"
 #include "json.h"
@@ -11,8 +12,6 @@
 #include "wallet.h"
 
 #include <gdk.h>
-
-#include <QDebug>
 
 BumpFeeController::BumpFeeController(QObject* parent)
     : AccountController(parent)
@@ -58,14 +57,32 @@ void BumpFeeController::create()
 {
     if (!account()) return;
     if (!wallet()) return;
-    if (m_transaction) return;
+    if (!m_transaction) return;
     int req = ++m_req;
     if (m_create_handler) return;
     auto a = account();
 
+    if (m_get_unspent_outputs_handler) return;
+    if (m_utxos.isNull()) {
+        auto handler = new GetUnspentOutputsHandler(1, true, a);
+        connect(handler, &Handler::finished, this, [this, handler] {
+            m_utxos = handler->unspentOutputs();
+            m_get_unspent_outputs_handler = nullptr;
+            create();
+            handler->deleteLater();
+        });
+        connect(handler, &Handler::error, this, [&] {
+            handler->deleteLater();
+        });
+        m_get_unspent_outputs_handler = handler;
+        handler->exec();
+        return;
+    }
+
     QJsonObject details{
         { "subaccount", static_cast<qint64>(a->pointer()) },
         { "fee_rate", m_fee_rate },
+        { "utxos", m_utxos },
         { "previous_transaction", m_transaction->data() }
     };
 
