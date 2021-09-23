@@ -227,7 +227,7 @@ Page {
                                     case 'locked':
                                         return qsTrId('id_locking_coins_can_help_protect')
                                     case 'expired':
-                                        return qsTrId('id_2fa_expiry')
+                                        return qsTrId('id_coins_for_which_2fa_protection')
                                 }
                             }
                             wrapMode: Label.WordWrap

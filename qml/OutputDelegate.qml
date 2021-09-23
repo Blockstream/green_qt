@@ -74,7 +74,7 @@ Button {
                 Tag {
                     color: constants.r500
                     visible: output.expired
-                    text: qsTrId('2FA Expired')
+                    text: qsTrId('id_2fa_expired')
                     font.capitalization: Font.AllUppercase
                 }
                 Tag {

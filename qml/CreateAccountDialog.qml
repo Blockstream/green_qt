@@ -19,6 +19,14 @@ ControllerDialog {
         'p2sh-p2wpkh': qsTrId('id_legacy_account')
     })
 
+    function xPubError(error) {
+        switch (error) {
+            case 'empty': return qsTrId('id_empty')
+            case 'invalid': return qsTrId('id_invalid_xpub')
+            default: return ''
+            }
+    }
+
     controller: CreateAccountController {
         id: create_account_controller
         wallet: dialog.wallet
@@ -106,8 +114,8 @@ ControllerDialog {
             Card {
                 id: hww_card
                 enabled: false
-                text: qsTrId('Hardware wallet')
-                description: qsTrId('Use a hardware wallet to hold your 3rd recovery key.')
+                text: qsTrId('id_hardware_wallet')
+                description: qsTrId('id_use_a_hardware_wallet_as_your')
                 Label {
                     Layout.alignment: Qt.AlignCenter
                     background: Rectangle {
@@ -119,7 +127,7 @@ ControllerDialog {
                     rightPadding: 8
                     topPadding: 2
                     bottomPadding: 2
-                    text: qsTrId('Coming Soon')
+                    text: qsTrId('id_coming_soon')
                     font.pixelSize: 10
                     font.styleName: 'Medium'
                     font.capitalization: Font.AllUppercase
@@ -127,16 +135,16 @@ ControllerDialog {
                 }
             }
             Card {
-                text: qsTrId('New Recovery Phrase')
-                description: qsTrId('Generate a new recovery phrase to be used as your 3rd recovery key.')
+                text: qsTrId('id_new_recovery_phrase')
+                description: qsTrId('id_generate_a_new_recovery_phrase')
                 onClicked: {
                     dialog.controller.generateRecoveryMnemonic()
                     stack_view.push(generate_mnemonic_view)
                 }
             }
             Card {
-                text: qsTrId('More Options')
-                description: qsTrId('Choose among advanced options for your 3rd recovery key.')
+                text: qsTrId('id_more_options')
+                description: qsTrId('id_advanced_options_for_your_third')
                 onClicked: stack_view.push(advanced_view)
             }
         }
@@ -152,7 +160,7 @@ ControllerDialog {
                     onTriggered: stack_view.pop()
                 },
                 Action {
-                    text: qsTrId('Generate')
+                    text: qsTrId('id_generate')
                     onTriggered: dialog.controller.generateRecoveryMnemonic()
                 },
                 Action {
@@ -192,13 +200,13 @@ ControllerDialog {
             ]
             spacing: 16
             Card {
-                text: qsTrId('Existing Recovery Phrase')
-                description: qsTrId('Use an existing recovery phrase as your 3rd recovery key.')
+                text: qsTrId('id_existing_recovery_phrase')
+                description: qsTrId('id_use_an_existing_recovery_phrase')
                 onClicked: stack_view.push(edit_mnemonic_view)
             }
             Card {
-                text: qsTrId('Extended Public Key')
-                description: qsTrId('Use the xpub associated with an xpriv you want to use as your 3rd recovery key.')
+                text: qsTrId('id_use_a_public_key')
+                description: qsTrId('id_use_an_xpub_for_which_you_own')
                 onClicked: stack_view.push(prompt_xpub_view)
             }
         }
@@ -227,7 +235,7 @@ ControllerDialog {
     }
 
     Component {
-        id: prompt_xpub_view        
+        id: prompt_xpub_view
         GPane {
             id: self
             property list<Action> actions: [
@@ -251,7 +259,7 @@ ControllerDialog {
             contentItem: ColumnLayout {
                 spacing: 12
                 SectionLabel {
-                    text: qsTrId('Enter your xpub')
+                    text: qsTrId('id_enter_your_xpub')
                 }
                 RowLayout {
                     GTextField {
@@ -288,7 +296,7 @@ ControllerDialog {
                     }
                 }
                 FixedErrorBadge {
-                    error: dialog.controller.errors.recoveryXpub
+                    error: xPubError(dialog.controller.errors.recoveryXpub)
                 }
             }
         }

@@ -329,7 +329,7 @@ MainPageHeader {
             wallet: self.wallet
             width: 350
             title: qsTrId('id_warning')
-            message: self.wallet.network.liquid ? qsTrId('id_insufficient_lbtc_to_send_a') : qsTrId('You have no coins to send. Generate an address to receive some bitcoins.')
+            message: self.wallet.network.liquid ? qsTrId('id_insufficient_lbtc_to_send_a') : qsTrId('id_you_have_no_coins_to_send')
             actions: [
                 Action {
                     text: qsTrId('id_cancel')

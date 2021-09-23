@@ -69,7 +69,7 @@ MainPage {
             case 'locked':
                 return qsTrId('id_locked')
             case 'expired':
-                return qsTrId('2FA Expired')
+                return qsTrId('id_2fa_expired')
         }
     }
 
