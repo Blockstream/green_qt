@@ -19,15 +19,6 @@ BumpFeeController::BumpFeeController(QObject* parent)
 {
 }
 
-Transaction* BumpFeeController::transaction()
-{
-    QQmlContext* context = qmlContext(this);
-    if (!context) return nullptr;
-    auto transaction = context->contextProperty("transaction");
-    if (transaction.isNull()) return nullptr;
-    return qobject_cast<Transaction*>(transaction.value<QObject*>());
-}
-
 void BumpFeeController::setFeeRate(int fee_rate)
 {
     if (m_fee_rate == fee_rate) return;
@@ -55,20 +46,27 @@ void BumpFeeController::bumpFee()
     exec(sign);
 }
 
+void BumpFeeController::setTransaction(Transaction *transaction)
+{
+    if (m_transaction == transaction) return;
+    m_transaction = transaction;
+    emit transactionChanged(m_transaction);
+    create();
+}
+
 void BumpFeeController::create()
 {
     if (!account()) return;
     if (!wallet()) return;
-    if (!transaction()) return;
+    if (m_transaction) return;
     int req = ++m_req;
     if (m_create_handler) return;
-    auto t = transaction();
     auto a = account();
 
     QJsonObject details{
         { "subaccount", static_cast<qint64>(a->pointer()) },
         { "fee_rate", m_fee_rate },
-        { "previous_transaction", t->data() }
+        { "previous_transaction", m_transaction->data() }
     };
 
     m_create_handler = new CreateTransactionHandler(wallet(), details);

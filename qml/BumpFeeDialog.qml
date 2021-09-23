@@ -12,6 +12,7 @@ ControllerDialog {
     wallet: self.account.wallet
     controller: BumpFeeController {
         account: self.account
+        transaction: self.transaction
     }
     doneText: qsTrId('id_transaction_sent')
     minimumWidth: 500
