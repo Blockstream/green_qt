@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+
+### Changed
+
+### Fixed
+
+## [1.0.1] - 2021-09-30
+### Added
 - Option for creating 2of3 accounts with custom recovery phrase or BIP32 Extended Public Key
 - Support for client-side Liquid transactions unblinding, available on Blockstream Jade 0.1.27+
 - Option for filtering coins with expired 2FA
@@ -23,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Uses a consistent vertical scrollbar in all lists
 - Drops Electrum from default wallet name
 - Application log is now saved correctly
+- Ignore expired server certs in Jade PIN requests
 
 ## [1.0.0] - 2021-09-07
 ### Added
