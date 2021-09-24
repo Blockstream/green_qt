@@ -6,22 +6,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
-- Create 2of3 accounts with custom mnemonic or BIP32 Extended Public Key
-- Option to filter for coins that have 2FA expired
-- Telegram can be used for 2FA, only in testnet for now
-- Support for host unblinding for Jade with firmware 0.1.27
-- Use scanned BIP21 message as transaction memo
+- Option for creating 2of3 accounts with custom recovery phrase or BIP32 Extended Public Key
+- Support for client-side Liquid transactions unblinding, available on Blockstream Jade 0.1.27+
+- Option for filtering coins with expired 2FA
+- Telegram 2FA method, available for testing in Bitcoin testnet
+- Option to enable and disable the news section in the Home view
 
 ### Changed
-- Shwo QR Code scanner popup in send view
-- Layout improvements in News section of Home view
-- Add setting to toggle News section of Home view
-- Update GDK to 0.0.45
+- Uses BIP21 payment request message as transaction memo
+- Shows QR Code scanner popup in send view
+- Improvements to the news section layout in the Home view
+- Updates GDK to 0.0.45
 
 ### Fixed
-- Jade address verification with 2of3 account
-- Use same vertical scrollbar in list views
-- Dropped Electrum from default wallet name
+- Jade address verification with 2of3 accounts
+- Uses a consistent vertical scrollbar in all lists
+- Drops Electrum from default wallet name
 - Application log is now saved correctly
 
 ## [1.0.0] - 2021-09-07
