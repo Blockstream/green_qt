@@ -6,9 +6,13 @@
 class SignMessageResolver : public DeviceResolver
 {
     Q_OBJECT
+    Q_PROPERTY(QString message READ message CONSTANT)
+    Q_PROPERTY(QString path READ path CONSTANT)
     QML_ELEMENT
 public:
     SignMessageResolver(Handler* handler, const QJsonObject& result);
+    QString message() const { return m_message; }
+    QString path() const;
     void resolve() override;
 private:
     const QString m_message;

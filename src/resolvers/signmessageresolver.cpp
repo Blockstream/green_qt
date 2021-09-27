@@ -13,6 +13,16 @@ SignMessageResolver::SignMessageResolver(Handler* handler, const QJsonObject& re
 {
 }
 
+QString SignMessageResolver::path() const
+{
+    QStringList path;
+    path.append("m");
+    for (auto x : m_path) {
+        path.append(QString::number(x));
+    }
+    return path.join("/");
+}
+
 void SignMessageResolver::resolve()
 {
     auto activity = m_use_ae_protocol ? device()->signMessage(m_message, m_path, m_ae_host_commitment, m_ae_host_entropy) : device()->signMessage(m_message, m_path);
@@ -31,4 +41,5 @@ void SignMessageResolver::resolve()
         setFailed(true);
     });
     activity->exec();
+    pushActivity(activity);
 }
