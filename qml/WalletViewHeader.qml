@@ -1,3 +1,4 @@
+import Blockstream.Green.Core 0.1
 import Blockstream.Green 0.1
 import QtQuick 2.12
 import QtQuick.Window 2.12
@@ -170,6 +171,52 @@ MainPageHeader {
                     }
                 }
                 HSpacer {
+                }
+                Loader {
+                    property string unit: {
+                        const unit = wallet.settings.unit.toLowerCase()
+                        return unit === '\u00B5btc' ? 'ubtc' : unit
+                    }
+
+                    property var amount: {
+                        const ticker = wallet.events.ticker
+                        const pricing = wallet.settings.pricing;
+                        for (let value = 1; ; value = value * 10) {
+                            const data = { [unit]: String(value) }
+                            const result = wallet.convert(data);
+                            if (!result.fiat || Number(result.fiat) >= 1) return result
+                        }
+                    }
+                    active: Settings.enableExperimental && amount.fiat
+                    sourceComponent: Control {
+                        background: Rectangle {
+                            color: constants.c700
+                            radius: height / 2
+                        }
+                        padding: 8
+                        contentItem: RowLayout {
+                            spacing: 8
+                            Image {
+                                fillMode: Image.PreserveAspectFit
+                                Layout.maximumHeight: 24
+                                Layout.maximumWidth: 24
+                                mipmap: true
+                                source: {
+                                    if (wallet.network.liquid) {
+                                        return wallet.getOrCreateAsset(wallet.network.policyAsset).icon
+                                    } else {
+                                        return icons[self.wallet.network.key]
+                                    }
+                                }
+                            }
+                            Label {
+                                font.pixelSize: 14
+                                font.styleName: 'Medium'
+                                color: 'white'
+                                text: `${Number(amount[unit])} ${wallet.settings.unit} ≈ ${amount.fiat} ${amount.fiat_currency}`
+                            }
+                        }
+                    }
                 }
                 ToolButton {
                     visible: (wallet.events && !!wallet.events.twofactor_reset && wallet.events.twofactor_reset.is_active) || !fiatRateAvailable

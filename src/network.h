@@ -13,6 +13,7 @@ class Network : public QObject
     Q_PROPERTY(QString displayName READ displayName CONSTANT)
     Q_PROPERTY(QString name READ name CONSTANT)
     Q_PROPERTY(QJsonObject data READ data CONSTANT)
+    Q_PROPERTY(QString policyAsset READ policyAsset CONSTANT)
     Q_PROPERTY(bool mainnet READ isMainnet CONSTANT)
     Q_PROPERTY(bool liquid READ isLiquid CONSTANT)
     Q_PROPERTY(bool electrum READ isElectrum CONSTANT)

@@ -6,13 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Show fiat rate on wallet view header
 - Show details to verify on jade when creating 2of2 accounts
+- Setting for experimental features
 
 ### Changed
 - Fiat amounts are updated after receiving a ticker notification
 
 ### Fixed
 - Ensure that window is correctly restored regardless of available screens changes
+- Use correct vertical scrollbar in app settings
 
 ## [1.0.1] - 2021-09-30
 ### Added
