@@ -128,5 +128,6 @@
         <file>GCard.qml</file>
         <file>FixedErrorBadge.qml</file>
         <file>ScannerPopup.qml</file>
+        <file>JadeSignMessageView.qml</file>
     </qresource>
 </RCC>
