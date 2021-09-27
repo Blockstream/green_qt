@@ -76,6 +76,7 @@ protected:
 class DeviceResolver : public Resolver
 {
     Q_OBJECT
+    Q_PROPERTY(Device* device READ device CONSTANT)
     QML_ELEMENT
 public:
     DeviceResolver(Handler* handler, const QJsonObject& result);
