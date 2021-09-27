@@ -54,16 +54,27 @@ WalletDialog {
         function onResolver(resolver) {
             if (resolver instanceof TwoFactorResolver) {
                 stack_view.push(resolveCodeComponent, { resolver })
-            } else if (resolver instanceof SignTransactionResolver) {
+                return
+            }
+            if (resolver instanceof SignTransactionResolver) {
                 stack_view.push(sign_transaction_resolver_view_component, { resolver })
                 resolver.resolve()
-            } else if (resolver instanceof SignLiquidTransactionResolver) {
+                return
+            }
+            if (resolver instanceof SignLiquidTransactionResolver) {
                 stack_view.push(sign_liquid_transaction_resolver_view_component, { resolver })
                 resolver.resolve()
-            } else {
-                // automatically resolve
-                resolver.resolve()
+                return
             }
+            if (resolver instanceof SignMessageResolver) {
+                if (resolver.device instanceof JadeDevice) {
+                    const view = jade_sign_message_view.createObject(stack_view, { resolver })
+                    stack_view.push(view)
+                    return
+                }
+            }
+            // automatically resolve
+            resolver.resolve()
         }
     }
 
@@ -79,6 +90,12 @@ WalletDialog {
     Component {
         id: sign_liquid_transaction_resolver_view_component
         SignLiquidTransactionResolverView {}
+    }
+
+    Component {
+        id: jade_sign_message_view
+        JadeSignMessageView {
+        }
     }
 
     property Component requestCodeComponent: ColumnLayout {

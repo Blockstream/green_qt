@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Show details to verify on jade when creating 2of2 accounts
 
 ### Changed
 - Fiat amounts are updated after receiving a ticker notification
