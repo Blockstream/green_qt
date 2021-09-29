@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Uses BIP21 payment request message as transaction memo
 - Shows QR Code scanner popup in send view
 - Improvements to the news section layout in the Home view
-- Updates GDK to 0.0.45
+- Updates GDK to 0.0.45.post1
 
 ### Fixed
 - Jade address verification with 2of3 accounts
