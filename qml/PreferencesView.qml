@@ -158,6 +158,18 @@ MainPage {
             }
             MainPageSection {
                 Layout.fillWidth: true
+                title: qsTrId('id_advanced')
+                contentItem: ColumnLayout {
+                    spacing: 8
+                    GSwitch {
+                        checked: Settings.enableExperimental
+                        onCheckedChanged: Settings.enableExperimental = checked
+                        text: 'Enable Experimental Features'
+                    }
+                }
+            }
+            MainPageSection {
+                Layout.fillWidth: true
                 title: qsTrId('id_support')
                 contentItem: GridLayout {
                     columns: 5

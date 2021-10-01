@@ -131,6 +131,14 @@ void Settings::setShowNews(bool show_news)
     saveLater();
 }
 
+void Settings::setEnableExperimental(bool enable_experimental)
+{
+    if (m_enable_experimental == enable_experimental) return;
+    m_enable_experimental = enable_experimental;
+    emit enableExperimentalChanged(m_enable_experimental);
+    saveLater();
+}
+
 void Settings::updateRecentWallet(const QString& id)
 {
     m_recent_wallets.removeOne(id);
@@ -209,6 +217,7 @@ void Settings::load(const QSettings& settings)
     LOAD(m_language)
     LOAD(m_check_for_updates)
     LOAD(m_show_news)
+    LOAD(m_enable_experimental)
 #undef LOAD
 }
 
@@ -238,6 +247,7 @@ void Settings::saveNow()
     SAVE(m_language)
     SAVE(m_check_for_updates)
     SAVE(m_show_news)
+    SAVE(m_enable_experimental)
 #undef SAVE
 }
 

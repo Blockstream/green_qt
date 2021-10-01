@@ -24,6 +24,7 @@ class Settings : public QObject
     Q_PROPERTY(QStringList recentWallets READ recentWallets NOTIFY recentWalletsChanged)
     Q_PROPERTY(QString language READ language WRITE setLanguage NOTIFY languageChanged)
     Q_PROPERTY(bool showNews READ showNews WRITE setShowNews NOTIFY showNewsChanged)
+    Q_PROPERTY(bool enableExperimental READ enableExperimental WRITE setEnableExperimental NOTIFY enableExperimentalChanged)
 public:
     Settings(QObject* parent = nullptr);
     virtual ~Settings();
@@ -58,6 +59,8 @@ public:
     void setLanguage(const QString& language);
     bool showNews() const { return m_show_news; }
     void setShowNews(bool show_news);
+    bool enableExperimental() const { return m_enable_experimental; }
+    void setEnableExperimental(bool enable_experimental);
 public slots:
     void updateRecentWallet(const QString& id);
 signals:
@@ -76,6 +79,7 @@ signals:
     void recentWalletsChanged(const QStringList& recent_wallets);
     void languageChanged(const QString& language);
     void showNewsChanged(bool show_news);
+    void enableExperimentalChanged(bool enable_experimental);
 private:
     void load();
     void load(const QSettings& settings);
@@ -100,6 +104,7 @@ private:
     QStringList m_recent_wallets;
     QString m_language;
     bool m_show_news{true};
+    bool m_enable_experimental{false};
 };
 
 #endif // GREEN_SETTINGS_H
