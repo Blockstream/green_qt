@@ -24,14 +24,14 @@ MainPage {
             }
         }
     }
-    contentItem: ScrollView {
-        id: scroll_view
-        ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
-        ScrollBar.vertical.policy: ScrollBar.AlwaysOn
+    contentItem: GFlickable {
+        id: flickable
         clip: true
-        focusPolicy: Qt.StrongFocus
+        contentHeight: layout.height
+
         ColumnLayout {
-            width: scroll_view.availableWidth
+            id: layout
+            width: flickable.availableWidth
             spacing: 16
             MainPageSection {
                 Layout.fillWidth: true
