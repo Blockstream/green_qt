@@ -10,6 +10,7 @@ WalletDialog {
     required property Transaction transaction
     property int confirmations: transactionConfirmations(transaction)
 
+    id: self
     wallet: transaction.account.wallet
     title: qsTrId('id_transaction_details') + ' - ' + tx_direction(transaction.data.type)
 
@@ -113,6 +114,17 @@ WalletDialog {
 
                 Label {
                     text: transactionStatus(confirmations)
+                    font.pixelSize: 12
+                    font.styleName: 'Medium'
+                    font.capitalization: Font.AllUppercase
+                    topPadding: 4
+                    bottomPadding: 4
+                    leftPadding: 12
+                    rightPadding: 12
+                    background: Rectangle {
+                        radius: 4
+                        color: confirmations === 0 ? '#d2934a' : '#474747'
+                    }
                 }
             }
 
@@ -176,6 +188,14 @@ WalletDialog {
     }
     footer: DialogFooter {
         HSpacer {
+        }
+        GButton {
+            visible: transaction.data.can_rbf
+            text: qsTrId('id_increase_fee')
+            onClicked: {
+                bump_fee_dialog.createObject(window, { transaction  }).open()
+                self.accept()
+            }
         }
         GButton {
             text: qsTrId('id_view_in_explorer')
