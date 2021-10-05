@@ -253,7 +253,7 @@ ApplicationWindow {
                 }
                 SideButton {
                     icon.source: Settings.collapseSideBar ? 'qrc:/svg/arrow_right.svg' : 'qrc:/svg/arrow_left.svg'
-                    text: Settings.collapseSideBar ? qsTrId('id_expand_side_bar') : qsTrId('id_collapse_side_bar')
+                    text: Settings.collapseSideBar ? qsTrId('id_expand_sidebar') : qsTrId('id_collapse_sidebar')
                     isCurrent: false
                     onClicked: Settings.collapseSideBar = !Settings.collapseSideBar
                 }

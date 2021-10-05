@@ -34,7 +34,7 @@ ColumnLayout {
         Layout.maximumWidth: 500
     }
     SectionLabel {
-        text: qsTrId('id_hash')
+        text: qsTrId('id_message_hash')
     }
     Label {
         text: resolver.hash
@@ -42,7 +42,7 @@ ColumnLayout {
         Layout.maximumWidth: 500
     }
     SectionLabel {
-        text: qsTrId('id_path')
+        text: qsTrId('id_path_used_for_signing')
     }
     Label {
         text: resolver.path
