@@ -10,13 +10,11 @@ if __name__ == '__main__':
     parser.add_argument('--major', type=int, required=True)
     parser.add_argument('--minor', type=int, required=True)
     parser.add_argument('--patch', type=int, required=True)
-    parser.add_argument('--sign', default=False, action='store_true')
 
     args = parser.parse_args()
 
     repo = Repo('.')
-    assert str(repo.active_branch) == 'master'
-    assert not repo.is_dirty()
+    print("Currently active branch: {}".format(repo.active_branch))
 
     next_version = VersionInfo(args.major, args.minor, args.patch)
 
@@ -35,9 +33,6 @@ if __name__ == '__main__':
 
     repo.git.add('CHANGELOG.md')
     repo.git.commit('-m', 'Close version {} in CHANGELOG.md'.format(current_version))
-
-    tag = repo.create_tag('release_{}'.format(current_version), sign=args.sign)
-    print('tag created', tag)
 
     with open('version.pri', 'w') as file:
         file.write('VERSION_MAJOR={}\n'.format(next_version.major))
