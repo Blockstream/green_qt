@@ -118,7 +118,7 @@ AbstractDialog {
                 }
                 TorUnavailableWithElectrumWarning {
                     Layout.alignment: Qt.AlignHCenter
-                    network: controller.network ? controller.network : null
+                    network: self.wallet.network
                 }
             }
         }

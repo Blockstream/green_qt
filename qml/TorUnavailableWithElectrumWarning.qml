@@ -4,8 +4,9 @@ import QtQuick 2.0
 import QtQuick.Controls 2.13
 
 Loader {
+    id: self
     required property Network network
-    active: Settings.useTor && controller.network && controller.network.electrum
+    active: Settings.useTor && self.network && self.network.electrum
     sourceComponent: Label {
         padding: 8
         background: Rectangle {
