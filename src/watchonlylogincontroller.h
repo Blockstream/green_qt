@@ -16,6 +16,7 @@ class WatchOnlyLoginController : public Entity
     Q_PROPERTY(Network* network READ network WRITE setNetwork NOTIFY networkChanged)
     Q_PROPERTY(QString username READ username WRITE setUsername NOTIFY usernameChanged)
     Q_PROPERTY(QString password READ password WRITE setPassword NOTIFY passwordChanged)
+    Q_PROPERTY(bool saveWallet READ saveWallet WRITE setSaveWallet NOTIFY saveWalletChanged)
     Q_PROPERTY(bool valid READ isValid NOTIFY validChanged)
     QML_ELEMENT
 public:
@@ -28,6 +29,8 @@ public:
     void setUsername(const QString& username);
     QString password() const { return m_password; }
     void setPassword(const QString& password);
+    bool saveWallet() const { return m_save_wallet; }
+    void setSaveWallet(bool save_wallet);
     bool isValid() const { return m_valid; }
 public slots:
     void login();
@@ -37,6 +40,7 @@ signals:
     void networkChanged(Network* network);
     void usernameChanged(const QString& username);
     void passwordChanged(const QString& passwod);
+    void saveWalletChanged(bool save_wallet);
     void validChanged(bool valid);
     void unauthorized();
 private:
@@ -48,6 +52,7 @@ private:
     Network* m_network{nullptr};
     QString m_username;
     QString m_password;
+    bool m_save_wallet{false};
     bool m_valid{false};
 };
 

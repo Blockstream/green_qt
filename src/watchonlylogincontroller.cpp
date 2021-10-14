@@ -35,6 +35,13 @@ void WatchOnlyLoginController::setPassword(const QString &password)
     updateValid();
 }
 
+void WatchOnlyLoginController::setSaveWallet(bool save_wallet)
+{
+    if (m_save_wallet == save_wallet) return;
+    m_save_wallet = save_wallet;
+    emit saveWalletChanged(m_save_wallet);
+}
+
 void WatchOnlyLoginController::updateValid()
 {
     setValid(m_network && !m_network->isLiquid() && !m_username.isEmpty() && !m_password.isEmpty());
@@ -47,6 +54,9 @@ void WatchOnlyLoginController::login()
         m_wallet = WalletManager::instance()->createWallet(m_network);
         m_wallet->m_watch_only = true;
         m_wallet->m_username = m_username;
+        m_wallet->m_is_persisted = m_save_wallet;
+        m_wallet->m_name = QString("%1 watch-only wallet").arg(m_username);
+
         m_wallet->createSession();
 
         m_session = m_wallet->session();
