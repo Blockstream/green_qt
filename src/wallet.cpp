@@ -456,12 +456,14 @@ void Wallet::save()
     Q_ASSERT(!m_id.isEmpty());
     if (!m_is_persisted) return;
     if (m_device) return;
-    if (m_watch_only) return;
     QJsonObject data({
         { "version", 1 },
         { "name", m_name },
         { "network", m_network->id() }
     });
+    if (m_watch_only) {
+        data.insert("username", m_username);
+    }
     if (!m_pin_data.isEmpty()) {
         data.insert("login_attempts_remaining", m_login_attempts_remaining);
         data.insert("pin_data", QString::fromLocal8Bit(m_pin_data.toBase64()));

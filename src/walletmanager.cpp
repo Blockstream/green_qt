@@ -50,6 +50,10 @@ WalletManager::WalletManager()
         if (data.contains("hash_id")) {
             wallet->m_hash_id = data.value("hash_id").toString();
         }
+        if (data.contains("username")) {
+            wallet->m_watch_only = true;
+            wallet->m_username = data.value("username").toString();
+        }
         wallet->m_name = data.value("name").toString();
         addWallet(wallet);
     }
