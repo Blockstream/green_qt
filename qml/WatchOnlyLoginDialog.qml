@@ -15,6 +15,7 @@ AbstractDialog {
         network: self.network
         username: username_field.text
         password: password_field.text
+        saveWallet: remember_checkbox.checked
         onWalletChanged: {
             navigation.go(`/${wallet.network.key}/${wallet.id}`)
             self.close()
@@ -49,6 +50,12 @@ AbstractDialog {
             Layout.fillWidth: true
             id: password_field
             echoMode: TextField.Password
+        }
+        CheckBox {
+            Layout.columnSpan: 2
+            id: remember_checkbox
+            text: qsTrId('id_remember_me')
+            checked: true
         }
     }
 
