@@ -87,17 +87,4 @@ GPane {
         }
         onClicked: navigation.set({ server_type: self.server_type })
     }
-
-    component Section: Page {
-        property color color
-        id: self
-        bottomPadding: 12
-        header: Label {
-            bottomPadding: 12
-            topPadding: 12
-            opacity: 0.5
-            text: self.title
-        }
-        background: null
-    }
 }
