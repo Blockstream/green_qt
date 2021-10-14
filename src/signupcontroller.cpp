@@ -36,6 +36,7 @@ void SignupController::update()
 
     if (!m_wallet) {
         m_wallet = WalletManager::instance()->createWallet(m_network);
+        m_wallet->m_is_persisted = true;
         emit walletChanged(m_wallet);
 
         m_wallet->createSession();

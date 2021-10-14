@@ -49,6 +49,7 @@ public:
 
 private:
     Q_PROPERTY(QString id READ id CONSTANT)
+    Q_PROPERTY(bool persisted READ isPersisted NOTIFY isPersistedChanged)
     Q_PROPERTY(bool watchOnly READ isWatchOnly CONSTANT)
     Q_PROPERTY(QString username READ username NOTIFY usernameChanged)
     Q_PROPERTY(Session* session READ session NOTIFY sessionChanged)
@@ -74,6 +75,7 @@ public:
     explicit Wallet(Network* network, QObject *parent = nullptr);
     virtual ~Wallet();
     QString id() const;
+    bool isPersisted() const { return m_is_persisted; }
     Session* session() const { return m_session; }
     void setSession(Session *session);
     Network* network() const { return m_network; }
@@ -138,6 +140,7 @@ public slots:
     void rename(QString name, bool active_focus);
     void setWatchOnly(const QString& username, const QString& password);
 signals:
+    void isPersistedChanged(bool is_persisted);
     void readyChanged(bool ready);
     void sessionChanged(Session* session);
     void hasPinDataChanged();
@@ -173,6 +176,7 @@ public:
     void setSettings(const QJsonObject& settings);
     void updateCurrencies();
 
+    bool m_is_persisted{false};
     QString m_id;
     QString m_hash_id;
     bool m_restoring{false};

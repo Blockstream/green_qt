@@ -454,6 +454,7 @@ void Wallet::save()
 {
     Q_ASSERT(QThread::currentThread() == thread());
     Q_ASSERT(!m_id.isEmpty());
+    if (!m_is_persisted) return;
     if (m_device) return;
     if (m_watch_only) return;
     QJsonObject data({

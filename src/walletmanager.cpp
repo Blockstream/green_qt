@@ -41,6 +41,7 @@ WalletManager::WalletManager()
         auto network = NetworkManager::instance()->network(data.value("network").toString());
         if (!network) continue;
         Wallet* wallet = new Wallet(network, this);
+        wallet->m_is_persisted = true;
         wallet->m_id = QFileInfo(file).baseName();
         if (data.contains("pin_data")) {
             wallet->m_pin_data = QByteArray::fromBase64(data.value("pin_data").toString().toLocal8Bit());
@@ -81,6 +82,7 @@ Wallet* WalletManager::createWallet(Network* network)
 Wallet *WalletManager::restoreWallet(Network *network)
 {
     auto wallet = createWallet(network);
+    wallet->m_is_persisted = true;
     wallet->m_restoring = true;
     return wallet;
 }
