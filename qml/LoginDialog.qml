@@ -168,7 +168,7 @@ AbstractDialog {
             large: true
             Layout.minimumWidth: 200
             visible: self.wallet.loginAttemptsRemaining === 0 || !self.wallet.hasPinData
-            text: 'Restore Wallet'
+            text: qsTrId('id_restore_wallet')
             onClicked: navigation.go('/restore', { network: self.wallet.network.key })
         }
     }
