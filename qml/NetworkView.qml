@@ -221,7 +221,6 @@ Item {
                         currentIndex: -1
                         model: WalletListModel {
                             withoutDevice: true
-                            watchOnly: WalletListModel.No
                             network: self.network
                         }
                         delegate: WalletDelegate {

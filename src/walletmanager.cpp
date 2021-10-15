@@ -71,6 +71,7 @@ WalletManager* WalletManager::instance()
 
 void WalletManager::addWallet(Wallet* wallet)
 {
+    if (m_wallets.contains(wallet)) return;
     m_wallets.append(wallet);
     emit changed();
     emit walletAdded(wallet);

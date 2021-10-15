@@ -12,7 +12,7 @@ class WatchOnlyLoginController : public Entity
 {
     Q_OBJECT
     Q_PROPERTY(Session* session READ session NOTIFY sessionChanged)
-    Q_PROPERTY(Wallet* wallet READ wallet NOTIFY walletChanged)
+    Q_PROPERTY(Wallet* wallet READ wallet WRITE setWallet NOTIFY walletChanged)
     Q_PROPERTY(Network* network READ network WRITE setNetwork NOTIFY networkChanged)
     Q_PROPERTY(QString username READ username WRITE setUsername NOTIFY usernameChanged)
     Q_PROPERTY(QString password READ password WRITE setPassword NOTIFY passwordChanged)
@@ -23,6 +23,7 @@ public:
     WatchOnlyLoginController(QObject* parent = nullptr);
     Session* session() const { return m_session; }
     Wallet* wallet() const { return m_wallet; }
+    void setWallet(Wallet* wallet);
     Network* network() const { return m_network; }
     void setNetwork(Network* network);
     QString username() const { return m_username; }

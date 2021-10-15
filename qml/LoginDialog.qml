@@ -71,7 +71,69 @@ AbstractDialog {
         onCurrentItemChanged: {
             currentItem.forceActiveFocus()
         }
-        initialItem: login_with_pin_view
+        initialItem: self.wallet.watchOnly ? login_with_password_view : login_with_pin_view
+    }
+
+    Component {
+        id: login_with_password_view
+        GPane {
+            WatchOnlyLoginController {
+                id: watchonly_login_controller
+                wallet: self.wallet
+                password: password_field.text
+                onUnauthorized: {
+                    password_error.error = qsTrId('id_user_not_found_or_invalid')
+                    password_field.enabled = true
+                    password_field.clear()
+                    password_field.forceActiveFocus()
+                }
+            }
+            Action {
+                id: login_action
+                onTriggered: {
+                    password_error.error = undefined
+                    password_field.enabled = false
+                    watchonly_login_controller.login()
+                }
+            }
+            background: null
+            contentItem: GridLayout {
+                enabled: !controller.session
+                columns: 2
+                columnSpacing: 12
+                rowSpacing: 12
+                Label {
+                    text: qsTrId('id_username')
+                }
+                Label {
+                    text: self.wallet.username
+                }
+                Label {
+                    text: qsTrId('id_password')
+                }
+                GTextField {
+                    Layout.fillWidth: true
+                    id: password_field
+                    echoMode: TextField.Password
+                    focus: true
+                    onAccepted: login_action.trigger()
+                }
+                Label {
+                }
+                FixedErrorBadge {
+                    id: password_error
+                }
+                GButton {
+                    Layout.columnSpan: 2
+                    Layout.alignment: Qt.AlignHCenter
+                    highlighted: true
+                    large: true
+                    text: qsTrId('id_login')
+                    onClicked: login_action.trigger()
+                    enabled: watchonly_login_controller.valid && !watchonly_login_controller.session
+                }
+            }
+        }
     }
 
     Component {
@@ -89,7 +151,7 @@ AbstractDialog {
             }
             background: null
             contentItem: ColumnLayout {
-                spacing: 8
+                spacing: 12
                 PinView {
                     id: pin_view
                     Layout.alignment: Qt.AlignHCenter

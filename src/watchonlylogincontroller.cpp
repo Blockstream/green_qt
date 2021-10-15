@@ -11,6 +11,19 @@ WatchOnlyLoginController::WatchOnlyLoginController(QObject* parent)
 {
 }
 
+void WatchOnlyLoginController::setWallet(Wallet* wallet)
+{
+    if (m_wallet == wallet) return;
+    m_wallet = wallet;
+    emit walletChanged(m_wallet);
+    if (m_wallet) {
+        Q_ASSERT(wallet->isWatchOnly());
+        setUsername(m_wallet->username());
+        setNetwork(m_wallet->network());
+    }
+    updateValid();
+}
+
 void WatchOnlyLoginController::setNetwork(Network *network)
 {
     if (m_network == network) return;
@@ -56,35 +69,41 @@ void WatchOnlyLoginController::login()
         m_wallet->m_username = m_username;
         m_wallet->m_is_persisted = m_save_wallet;
         m_wallet->m_name = QString("%1 watch-only wallet").arg(m_username);
+    }
 
+    if (!m_wallet->session()) {
         m_wallet->createSession();
 
         m_session = m_wallet->session();
         emit sessionChanged(m_session);
 
         m_wallet.track(QObject::connect(m_session, &Session::activityCreated, this, &WatchOnlyLoginController::activityCreated));
-        m_wallet.track(QObject::connect(m_session, &Session::connectedChanged, this, [this] {
-            if (!m_wallet->session()->isConnected()) return;
-
-            auto handler = new LoginHandler(m_wallet, m_username, m_password);
-            handler->connect(handler, &Handler::done, this, [this, handler] {
-                handler->deleteLater();
-                m_wallet->updateHashId(handler->walletHashId());
-                emit walletChanged(m_wallet);
-                m_wallet->setSession();
-                WalletManager::instance()->addWallet(m_wallet);
-            });
-            handler->connect(handler, &Handler::error, this, [this, handler] {
-                handler->deleteLater();
-                m_wallet->deleteLater();
-                m_session = nullptr;
-                emit sessionChanged(m_session);
-                emit unauthorized();
-            });
-            handler->exec();
-        }));
+        m_wallet.track(QObject::connect(m_session, &Session::connectedChanged, this, &WatchOnlyLoginController::login));
         m_wallet->session()->setActive(true);
     }
+
+    if (!m_wallet->session()->isConnected()) return;
+
+    auto handler = new LoginHandler(m_wallet, m_username, m_password);
+    handler->connect(handler, &Handler::done, this, [this, handler] {
+        handler->deleteLater();
+        m_wallet->updateHashId(handler->walletHashId());
+        emit walletChanged(m_wallet);
+        m_wallet->setSession();
+        WalletManager::instance()->addWallet(m_wallet);
+    });
+    handler->connect(handler, &Handler::error, this, [this, handler] {
+        handler->deleteLater();
+        if (!m_wallet->isPersisted()) {
+            m_wallet->deleteLater();
+            m_wallet = nullptr;
+            emit walletChanged(m_wallet);
+        }
+            m_session = nullptr;
+        emit sessionChanged(m_session);
+        emit unauthorized();
+    });
+    handler->exec();
 }
 
 void WatchOnlyLoginController::setValid(bool valid)
