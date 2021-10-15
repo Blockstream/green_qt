@@ -21,12 +21,6 @@ AbstractDialog {
 
     Connections {
         target: self.wallet
-        function onLoginAttemptsRemainingChanged(loginAttemptsRemaining) {
-            pin_view.clear()
-        }
-    }
-    Connections {
-        target: self.wallet
         function onActivityCreated(activity) {
             if (activity instanceof WalletAuthenticateActivity) {
                 const view = foo.createObject(activities_row, { activity })
@@ -77,10 +71,21 @@ AbstractDialog {
         onCurrentItemChanged: {
             currentItem.forceActiveFocus()
         }
-        initialItem: GPane {
+        initialItem: login_with_pin_view
+    }
+
+    Component {
+        id: login_with_pin_view
+        GPane {
             LoginWithPinController {
                 wallet: self.wallet
                 pin: pin_view.pin.value
+            }
+            Connections {
+                target: self.wallet
+                function onLoginAttemptsRemainingChanged(loginAttemptsRemaining) {
+                    pin_view.clear()
+                }
             }
             background: null
             contentItem: ColumnLayout {
