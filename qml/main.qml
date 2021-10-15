@@ -70,7 +70,7 @@ ApplicationWindow {
     onWidthChanged: Settings.windowWidth = width
     onHeightChanged: Settings.windowHeight = height
     onCurrentWalletChanged: {
-        if (currentWallet && !currentWallet.device && !currentWallet.watchOnly) {
+        if (currentWallet && currentWallet.persisted) {
             Settings.updateRecentWallet(currentWallet.id)
         }
     }
