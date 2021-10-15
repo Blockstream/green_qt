@@ -15,8 +15,6 @@ AbstractDialog {
     icon: icons[self.wallet.network.key]
     focus: true
     title: self.wallet.name
-    width: 350
-    height: 550
 
     closePolicy: self.active ? Dialog.NoAutoClose : AbstractDialog.closePolicy
     enableRejectButton: !self.active
@@ -147,7 +145,6 @@ AbstractDialog {
     footer: DialogFooter {
         GPane {
             visible: self.wallet.loginAttemptsRemaining > 0
-            Layout.minimumHeight: 48
             background: null
             padding: 0
             contentItem: RowLayout {
