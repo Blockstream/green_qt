@@ -30,14 +30,6 @@ AbstractButton {
         spacing: 12
         RowLayout {
             spacing: 12
-//            Repeater {
-//                model: self.icons
-//                delegate: Image {
-//                    source: modelData
-//                    Layout.preferredWidth: 32
-//                    Layout.preferredHeight: 32
-//                }
-//            }
             Label {
                 Layout.fillWidth: true
                 text: self.text
@@ -53,5 +45,4 @@ AbstractButton {
             wrapMode: Label.WordWrap
         }
     }
-    //onClicked: navigation.set({ network: self.network, type: self.type })
 }
