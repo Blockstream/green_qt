@@ -611,6 +611,10 @@ void Wallet::setSession(Session* session)
     Q_ASSERT(session);
     m_session = session;
     Q_ASSERT(m_network == m_session->network());
+    for (auto event : session->events().keys()) {
+        auto value = session->events().value(event);
+        handleNotification({{ "event", event }, { event, value }});
+    }
     m_session.track(QObject::connect(m_session, &Session::notificationHandled, this, &Wallet::handleNotification));
     m_session.track(QObject::connect(m_session, &Session::networkEvent, [this](const QJsonObject& event) {
         const bool login_required = event.value("login_required").toBool();
