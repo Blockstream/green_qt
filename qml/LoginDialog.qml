@@ -110,6 +110,14 @@ AbstractDialog {
                     Layout.alignment: Qt.AlignHCenter
                     network: self.wallet.network
                 }
+                GButton {
+                    Layout.alignment: Qt.AlignHCenter
+                    highlighted: true
+                    large: true
+                    visible: self.wallet.loginAttemptsRemaining === 0 || !self.wallet.hasPinData
+                    text: qsTrId('id_restore_wallet')
+                    onClicked: navigation.go('/restore', { network: self.wallet.network.key })
+                }
             }
         }
     }
@@ -150,15 +158,6 @@ AbstractDialog {
             contentItem: RowLayout {
                 id: activities_row
             }
-        }
-        GButton {
-            Layout.alignment: Qt.AlignHCenter
-            highlighted: true
-            large: true
-            Layout.minimumWidth: 200
-            visible: self.wallet.loginAttemptsRemaining === 0 || !self.wallet.hasPinData
-            text: qsTrId('id_restore_wallet')
-            onClicked: navigation.go('/restore', { network: self.wallet.network.key })
         }
     }
 }
