@@ -50,7 +50,6 @@ ApplicationWindow {
 
     function walletName(wallet) {
         if (!wallet) return ''
-        if (wallet.watchOnly) return qsTrId('%1 watch-only wallet').arg(wallet.username)
         return wallet.name
     }
 

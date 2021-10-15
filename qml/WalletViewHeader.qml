@@ -57,7 +57,7 @@ MainPageHeader {
                             source: icons[self.wallet.network.key]
                         }
                         Loader {
-                            active: !wallet.device && !wallet.watchOnly
+                            active: !wallet.device && wallet.persisted
                             visible: active
                             sourceComponent: EditableLabel {
                                 leftPadding: 8
@@ -72,7 +72,7 @@ MainPageHeader {
                         }
                         Loader {
                             Layout.minimumHeight: 42
-                            active: !wallet.device && wallet.watchOnly
+                            active: !wallet.device && !wallet.persisted
                             sourceComponent: Label {
                                 verticalAlignment: Qt.AlignVCenter
                                 text: walletName(wallet)
