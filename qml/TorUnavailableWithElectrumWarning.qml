@@ -16,6 +16,6 @@ Loader {
         font.capitalization: Font.AllUppercase
         font.styleName: 'Medium'
         font.pixelSize: 10
-        text: qsTrId('Tor is not available yet for singlesig wallets')
+        text: qsTrId('id_tor_is_not_yet_available_for')
     }
 }
