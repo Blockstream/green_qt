@@ -19,12 +19,6 @@ AbstractDialog {
     closePolicy: self.active ? Dialog.NoAutoClose : AbstractDialog.closePolicy
     enableRejectButton: !self.active
 
-    LoginWithPinController {
-        id: controller
-        wallet: self.wallet
-        pin: pin_view.pin.value
-    }
-
     Connections {
         target: self.wallet
         function onLoginAttemptsRemainingChanged(loginAttemptsRemaining) {
@@ -84,6 +78,10 @@ AbstractDialog {
             currentItem.forceActiveFocus()
         }
         initialItem: GPane {
+            LoginWithPinController {
+                wallet: self.wallet
+                pin: pin_view.pin.value
+            }
             background: null
             contentItem: ColumnLayout {
                 spacing: 8
