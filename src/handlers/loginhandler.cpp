@@ -38,8 +38,8 @@ LoginHandler::LoginHandler(Wallet *wallet, const QJsonObject &pin_data, const QS
 {
 }
 
-LoginHandler::LoginHandler(Wallet *wallet, const QString &username, const QString &password)
-    : Handler(wallet)
+LoginHandler::LoginHandler(Session* session, const QString &username, const QString &password)
+    : Handler(session)
     , m_details({
         { "username", username },
         { "password", password }

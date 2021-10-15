@@ -13,7 +13,7 @@ public:
     LoginHandler(Wallet* wallet, const QStringList& mnemonic, const QString& password);
     LoginHandler(Wallet* wallet, const QJsonObject& hw_device);
     LoginHandler(Wallet* wallet, const QJsonObject& pin_data, const QString& pin);
-    LoginHandler(Wallet* wallet, const QString& username, const QString& password);
+    LoginHandler(Session* session, const QString& username, const QString& password);
     QString walletHashId() const;
 private:
     const QJsonObject m_hw_device{};

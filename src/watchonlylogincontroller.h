@@ -48,7 +48,7 @@ private:
     void updateValid();
     void setValid(bool valid);
 private:
-    Session* m_session{nullptr};
+    Connectable<Session> m_session;
     Connectable<Wallet> m_wallet;
     Network* m_network{nullptr};
     QString m_username;

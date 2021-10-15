@@ -13,6 +13,13 @@
 #include <QtConcurrentRun>
 
 
+static Connection* SessionConnection(Session* session)
+{
+    Q_ASSERT(session);
+    Q_ASSERT(session->connection());
+    return session->connection();
+}
+
 static Connection* WalletConnection(Wallet* wallet)
 {
     Q_ASSERT(wallet);
@@ -23,7 +30,18 @@ static Connection* WalletConnection(Wallet* wallet)
 
 Handler::Handler(Wallet* wallet)
     : QFutureWatcher<void>(WalletConnection(wallet))
+    , m_session(wallet->session())
     , m_wallet(wallet)
+{
+    connect(this, &Handler::finished, this, [this] {
+        step();
+    });
+}
+
+Handler::Handler(Session* session)
+    : QFutureWatcher<void>(SessionConnection(session))
+    , m_session(session)
+    , m_wallet(nullptr)
 {
     connect(this, &Handler::finished, this, [this] {
         step();
@@ -38,6 +56,7 @@ Handler::~Handler()
 
 Wallet* Handler::wallet() const
 {
+    Q_ASSERT(m_wallet);
     return m_wallet;
 }
 
@@ -57,7 +76,7 @@ void Handler::exec()
 
     Q_ASSERT(!m_auth_handler);
     setFuture(QtConcurrent::run([this] {
-        call(m_wallet->m_session->m_session, &m_auth_handler);
+        call(m_session->m_session, &m_auth_handler);
         m_error_details = getErrorDetails();
         if (!m_error_details.isEmpty()) {
             qDebug() << m_error_details;
@@ -175,7 +194,7 @@ Resolver* Handler::createResolver(const QJsonObject& result)
             return new BlindingNoncesResolver(this, result);
         }
         if (action =="sign_tx") {
-            if (m_wallet->network()->isLiquid()) {
+            if (m_session->network()->isLiquid()) {
                 return new SignLiquidTransactionResolver(this, result);
             } else {
                 return new SignTransactionResolver(this, result);

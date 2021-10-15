@@ -63,43 +63,45 @@ void WatchOnlyLoginController::updateValid()
 void WatchOnlyLoginController::login()
 {
     if (!m_valid) return;
-    if (!m_wallet) {
-        m_wallet = WalletManager::instance()->createWallet(m_network);
-        m_wallet->m_watch_only = true;
-        m_wallet->m_username = m_username;
-        m_wallet->m_is_persisted = m_save_wallet;
-        m_wallet->m_name = QString("%1 watch-only wallet").arg(m_username);
-    }
 
-    if (!m_wallet->session()) {
-        m_wallet->createSession();
+    if (!m_session) {
+        m_session = new Session(this);
 
-        m_session = m_wallet->session();
+        m_session.track(connect(m_session, &Session::connectedChanged, this, &WatchOnlyLoginController::login));
+        m_session.track(connect(m_session, &Session::activityCreated, this, &WatchOnlyLoginController::activityCreated));
+
+        m_session->setNetwork(m_network);
+        m_session->setActive(true);
+
         emit sessionChanged(m_session);
-
-        m_wallet.track(QObject::connect(m_session, &Session::activityCreated, this, &WatchOnlyLoginController::activityCreated));
-        m_wallet.track(QObject::connect(m_session, &Session::connectedChanged, this, &WatchOnlyLoginController::login));
-        m_wallet->session()->setActive(true);
+        return;
     }
 
-    if (!m_wallet->session()->isConnected()) return;
+    if (m_session->isActive() && !m_session->isConnected()) return;
 
-    auto handler = new LoginHandler(m_wallet, m_username, m_password);
+    auto handler = new LoginHandler(m_session, m_username, m_password);
     handler->connect(handler, &Handler::done, this, [this, handler] {
         handler->deleteLater();
+
+        if (!m_wallet) {
+            m_wallet = WalletManager::instance()->createWallet(m_network);
+            m_wallet->m_watch_only = true;
+            m_wallet->m_username = m_username;
+            m_wallet->m_is_persisted = m_save_wallet;
+            m_wallet->m_name = QString("%1 watch-only wallet").arg(m_username);
+            emit walletChanged(m_wallet);
+        }
         m_wallet->updateHashId(handler->walletHashId());
-        emit walletChanged(m_wallet);
+        m_wallet->setSession(m_session);
         m_wallet->setSession();
+        m_session->setParent(m_wallet);
+        m_session = nullptr;
         WalletManager::instance()->addWallet(m_wallet);
     });
     handler->connect(handler, &Handler::error, this, [this, handler] {
         handler->deleteLater();
-        if (!m_wallet->isPersisted()) {
-            m_wallet->deleteLater();
-            m_wallet = nullptr;
-            emit walletChanged(m_wallet);
-        }
-            m_session = nullptr;
+        m_session->deleteLater();
+        m_session = nullptr;
         emit sessionChanged(m_session);
         emit unauthorized();
     });

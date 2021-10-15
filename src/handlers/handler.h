@@ -7,6 +7,7 @@
 
 QT_FORWARD_DECLARE_CLASS(Resolver)
 QT_FORWARD_DECLARE_CLASS(TwoFactorResolver)
+QT_FORWARD_DECLARE_CLASS(Session)
 QT_FORWARD_DECLARE_CLASS(Wallet)
 
 QT_FORWARD_DECLARE_STRUCT(GA_session)
@@ -23,6 +24,7 @@ class Handler : public QFutureWatcher<void>
     QML_UNCREATABLE("Handler is an abstract base class.")
 public:
     Handler(Wallet* wallet);
+    Handler(Session* wallet);
     virtual ~Handler();
     Wallet* wallet() const;
     void exec();
@@ -46,6 +48,7 @@ private:
     void setResult(const QJsonObject &result);
 private:
     bool m_already_exec{false};
+    Session* const m_session;
     Wallet* const m_wallet;
     GA_auth_handler* m_auth_handler{nullptr};
     TwoFactorResolver* m_two_factor_resolver{nullptr};
