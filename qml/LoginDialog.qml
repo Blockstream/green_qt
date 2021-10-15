@@ -93,8 +93,18 @@ AbstractDialog {
                     enabled: !self.active && self.wallet.loginAttemptsRemaining > 0 && self.wallet.hasPinData
                 }
                 Label {
-                    Layout.alignment: Qt.AlignHCenter
-                    font.pixelSize: 12
+                    Layout.preferredWidth: 0
+                    Layout.fillWidth: true
+                    padding: 8
+                    background: Rectangle {
+                        visible: !self.wallet.hasPinData || self.wallet.loginAttemptsRemaining < 3
+                        radius: 4
+                        color: constants.r500
+                    }
+                    font.capitalization: Font.AllUppercase
+                    font.styleName: 'Medium'
+                    font.pixelSize: 10
+                    horizontalAlignment: Qt.AlignHCenter
                     text: {
                         if (!self.wallet.hasPinData) {
                             return qsTrId('id_pin_access_disabled')
@@ -105,6 +115,7 @@ AbstractDialog {
                             default: return qsTrId('id_enter_pin')
                         }
                     }
+                    wrapMode: Label.WordWrap
                 }
                 TorUnavailableWithElectrumWarning {
                     Layout.alignment: Qt.AlignHCenter
