@@ -67,7 +67,7 @@ private:
     Q_PROPERTY(QStringList mnemonic READ mnemonic CONSTANT)
     Q_PROPERTY(int loginAttemptsRemaining READ loginAttemptsRemaining NOTIFY loginAttemptsRemainingChanged)
     Q_PROPERTY(QJsonObject config READ config NOTIFY configChanged)
-    Q_PROPERTY(Device* device READ device CONSTANT)
+    Q_PROPERTY(Device* device READ device NOTIFY deviceChanged)
     Q_PROPERTY(bool empty READ isEmpty NOTIFY emptyChanged)
     Q_PROPERTY(int blockHeight READ blockHeight NOTIFY blockHeightChanged)
     Q_PROPERTY(QString displayUnit READ displayUnit NOTIFY displayUnitChanged)
@@ -122,6 +122,7 @@ public:
     void setSession();
 
     Device* device() const { return m_device; }
+    void setDevice(Device* device);
 
     void updateHashId(const QString& hash_id);
     int blockHeight() const { return m_block_height; }
@@ -158,7 +159,7 @@ signals:
     void usernameChanged(const QString& username);
     void blockHeightChanged(int block_height);
     void displayUnitChanged(const QString display_unit);
-
+    void deviceChanged(Device* device);
 protected:
     bool eventFilter(QObject* object, QEvent* event) override;
     void timerEvent(QTimerEvent* event) override;

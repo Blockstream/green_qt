@@ -2,6 +2,7 @@
 #include "asset.h"
 #include "balance.h"
 #include "ga.h"
+#include "device.h"
 #include "json.h"
 #include "createaccounthandler.h"
 #include "loginhandler.h"
@@ -632,6 +633,19 @@ void Wallet::setSession()
     updateCurrencies();
     updateConfig();
     reload();
+}
+
+void Wallet::setDevice(Device* device)
+{
+    if (m_device == device) return;
+    m_device = device;
+    if (m_device) {
+        QObject::connect(m_device, &QObject::destroyed, this, [=] {
+            setDevice(nullptr);
+        });
+
+    }
+    emit deviceChanged(m_device);
 }
 
 void Wallet::updateHashId(const QString& hash_id)
