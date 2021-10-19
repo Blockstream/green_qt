@@ -35,6 +35,7 @@ public:
     void connectDevice();
     void disconnectDevice();
 
+    bool isBusy() const { return !m_responseHandlers.isEmpty(); }
     // User can override the basic http-request implementation if desired.
     // NOTE: the funciton MUST ensure JadeAPI::handleHttpResponse() is called
     // when the http-request response is received, passing the originating id
