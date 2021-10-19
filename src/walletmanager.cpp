@@ -173,3 +173,13 @@ Wallet* WalletManager::wallet(const QString& id) const
     }
     return nullptr;
 }
+
+Wallet *WalletManager::walletWithHashId(const QString &hash_id, bool watch_only) const
+{
+    for (auto wallet : m_wallets) {
+        if (wallet->m_hash_id == hash_id && wallet->m_watch_only == watch_only) {
+            return wallet;
+        }
+    }
+    return nullptr;
+}

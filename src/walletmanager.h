@@ -21,6 +21,7 @@ public:
     Q_INVOKABLE Wallet* createWallet(Network* network);
     Wallet* restoreWallet(Network* network);
     Q_INVOKABLE Wallet* wallet(const QString& id) const;
+    Wallet* walletWithHashId(const QString& hash_id, bool watch_only) const;
 
     void addWallet(Wallet *wallet);
 
