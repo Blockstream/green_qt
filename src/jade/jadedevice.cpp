@@ -754,6 +754,7 @@ public:
 
 class JadeSignLiquidTransactionActivity : public SignLiquidTransactionActivity
 {
+    Network* const m_network;
     JadeDevice* const m_device;
     const QJsonObject m_transaction;
     const QJsonArray m_signing_inputs;
@@ -783,8 +784,9 @@ private:
         return path;
     }
 public:
-    JadeSignLiquidTransactionActivity(const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs, JadeDevice* device)
+    JadeSignLiquidTransactionActivity(Network* network, const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs, JadeDevice* device)
         : SignLiquidTransactionActivity(device)
+        , m_network(network)
         , m_device(device)
         , m_transaction(transaction)
         , m_signing_inputs(signing_inputs)
@@ -924,7 +926,7 @@ public:
     void sign()
     {
         const auto tx = ParseByteArray(m_transaction.value("transaction"));
-        m_device->m_jade->signLiquidTx("liquid", tx, m_inputs, m_trusted_commitments, m_change, [this](const QVariantMap& msg) {
+        m_device->m_jade->signLiquidTx(m_network->id(), tx, m_inputs, m_trusted_commitments, m_change, [this](const QVariantMap& msg) {
             if (handleError(msg)) return;
             progress()->incrementValue();
             Q_ASSERT(msg.contains("result"));
@@ -1029,9 +1031,9 @@ GetBlindingNonceActivity *JadeDevice::getBlindingNonce(const QByteArray& pubkey,
     return new JadeGetBlindingNonceActivity(pubkey, script, this);
 }
 
-SignLiquidTransactionActivity *JadeDevice::signLiquidTransaction(const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs)
+SignLiquidTransactionActivity *JadeDevice::signLiquidTransaction(Network* network, const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs)
 {
-    return new JadeSignLiquidTransactionActivity(transaction, signing_inputs, outputs, this);
+    return new JadeSignLiquidTransactionActivity(network, transaction, signing_inputs, outputs, this);
 }
 
 GetMasterBlindingKeyActivity *JadeDevice::getMasterBlindingKey()

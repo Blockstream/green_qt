@@ -7,6 +7,7 @@
 #include "ledgersignliquidtransactionactivity.h"
 #include "ledgersignmessageactivity.h"
 #include "ledgersigntransactionactivity.h"
+#include "network.h"
 
 LedgerDevice::LedgerDevice(DevicePrivate* d, QObject* parent)
     : Device(parent)
@@ -66,8 +67,9 @@ SignTransactionActivity* LedgerDevice::signTransaction(Network* network, const Q
     return new LedgerSignTransactionActivity(transaction, signing_inputs, transaction_outputs, signing_transactions, signing_address_types, this);
 }
 
-SignLiquidTransactionActivity *LedgerDevice::signLiquidTransaction(const QJsonObject &transaction, const QJsonArray &signing_inputs, const QJsonArray &outputs)
+SignLiquidTransactionActivity *LedgerDevice::signLiquidTransaction(Network* network, const QJsonObject &transaction, const QJsonArray &signing_inputs, const QJsonArray &outputs)
 {
+    Q_ASSERT(network->isLiquid() && network->isMainnet());
     return new LedgerSignLiquidTransactionActivity(transaction, signing_inputs, outputs, this);
 }
 
