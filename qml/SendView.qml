@@ -276,7 +276,7 @@ StackView {
                     anchors.right: parent.right
                     anchors.rightMargin: 8
                     anchors.baseline: parent.baseline
-                    text: wallet.network.liquid ? (balance.asset.data.name === 'btc' ? 'L-'+wallet.settings.unit : (balance.asset.data.ticker || '')) : wallet.settings.unit
+                    text: wallet.network.liquid ? (balance.asset.id === wallet.network.policyAsset ? wallet.displayUnit : (balance.asset.data.ticker || '')) : wallet.displayUnit
                 }
                 rightPadding: unit.width + 16
             }
@@ -305,7 +305,7 @@ StackView {
                     anchors.right: parent.right
                     anchors.rightMargin: 8
                     anchors.baseline: parent.baseline
-                    text: wallet.settings.pricing.currency
+                    text: wallet.network.mainnet ? wallet.settings.pricing.currency : 'FIAT'
                 }
                 rightPadding: currency.width + 16
             }

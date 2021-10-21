@@ -15,7 +15,7 @@ Button {
     }
 
     function formatAmount(amount, include_ticker = true) {
-        const unit = wallet.settings.unit;
+        const unit = wallet.displayUnit;
         return output.account.wallet.network.liquid ? output.asset.formatAmount(amount, true) : wallet.formatAmount(amount || 0, include_ticker, unit)
     }
 

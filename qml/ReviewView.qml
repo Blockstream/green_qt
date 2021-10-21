@@ -88,7 +88,12 @@ ScrollView {
                 }
             }
             SectionLabel { text: qsTrId('id_amount') }
-            Label { text: address_asset.formatAmount(modelData.satoshi, true, wallet.settings.unit) }
+            Label {
+                text: {
+                    wallet.displayUnit
+                    return address_asset.formatAmount(modelData.satoshi, true, wallet.settings.unit)
+                }
+            }
         }
     }
 }

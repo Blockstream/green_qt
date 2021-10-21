@@ -69,6 +69,7 @@ private:
     Q_PROPERTY(Device* device READ device CONSTANT)
     Q_PROPERTY(bool empty READ isEmpty NOTIFY emptyChanged)
     Q_PROPERTY(int blockHeight READ blockHeight NOTIFY blockHeightChanged)
+    Q_PROPERTY(QString displayUnit READ displayUnit NOTIFY displayUnitChanged)
 public:
     explicit Wallet(Network* network, QObject *parent = nullptr);
     virtual ~Wallet();
@@ -123,6 +124,8 @@ public:
     void updateHashId(const QString& hash_id);
     int blockHeight() const { return m_block_height; }
     void setBlockHeight(int block_height);
+
+    Q_INVOKABLE QString getDisplayUnit(const QString& unit);
 public slots:
     void disconnect();
     void reload();
@@ -151,6 +154,8 @@ signals:
     void emptyChanged(bool empty);
     void usernameChanged(const QString& username);
     void blockHeightChanged(int block_height);
+    void displayUnitChanged(const QString display_unit);
+
 protected:
     bool eventFilter(QObject* object, QEvent* event) override;
     void timerEvent(QTimerEvent* event) override;
@@ -160,6 +165,9 @@ private:
 private:
     bool m_ready{false};
     bool m_empty{true};
+    QString m_display_unit;
+
+    void updateDisplayUnit();
 public:
     void setAuthentication(AuthenticationStatus authentication);
     void setSettings(const QJsonObject& settings);
@@ -199,6 +207,8 @@ public:
     QString m_username;
     bool isWatchOnly() const { return m_watch_only; }
     QString username() const { return m_username; }
+    QString displayUnit() const { return m_display_unit; }
+
 protected slots:
     void updateReady();
 };

@@ -213,7 +213,7 @@ MainPageHeader {
                                 font.pixelSize: 14
                                 font.styleName: 'Medium'
                                 color: 'white'
-                                text: `${Number(amount[unit])} ${wallet.network.liquid ? 'L-' : ''}${wallet.settings.unit} ≈ ${amount.fiat} ${amount.fiat_currency}`
+                                text: `${Number(amount[unit])} ${wallet.displayUnit} ≈ ${amount.fiat} ${wallet.network.mainnet ? amount.fiat_currency : 'FIAT'}`
                             }
                         }
                     }

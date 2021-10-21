@@ -178,8 +178,7 @@ ColumnLayout {
                 anchors.right: parent.right
                 anchors.rightMargin: 8
                 anchors.baseline: parent.baseline
-                text: (wallet.network.liquid ? 'L-'+wallet.settings.unit : wallet.settings.unit) +
-                      ' ≈ ' + formatFiat(parseAmount(amount_field.text))
+                text: wallet.displayUnit + ' ≈ ' + formatFiat(parseAmount(amount_field.text))
             }
         }
     }

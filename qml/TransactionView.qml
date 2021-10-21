@@ -55,7 +55,10 @@ WalletDialog {
             }
 
             Label {
-                text: amount.formatAmount(wallet.settings.unit) // TODO: drop unit here?
+                text: {
+                    wallet.displayUnit
+                    return amount.formatAmount(wallet.settings.unit)
+                }
             }
         }
     }

@@ -13,10 +13,12 @@ MainPage {
     readonly property bool fiatRateAvailable: formatFiat(0, false) !== 'n/a'
 
     function parseAmount(amount, unit) {
+        wallet.displayUnit;
         return wallet.parseAmount(amount, unit || wallet.settings.unit);
     }
 
     function formatAmount(amount, include_ticker = true) {
+        wallet.displayUnit;
         const unit = wallet.settings.unit;
         return wallet.formatAmount(amount || 0, include_ticker, unit);
     }
@@ -25,7 +27,8 @@ MainPage {
         const ticker = wallet.events.ticker
         const pricing = wallet.settings.pricing;
         const { fiat, fiat_currency } = wallet.convert({ satoshi: sats });
-        return (fiat === null ? 'n/a' : Number(fiat).toLocaleString(Qt.locale(), 'f', 2)) + (include_ticker ? ' ' + fiat_currency : '');
+        const currency = wallet.network.mainnet ? fiat_currency : 'FIAT'
+        return (fiat === null ? 'n/a' : Number(fiat).toLocaleString(Qt.locale(), 'f', 2)) + (include_ticker ? ' ' + currency : '');
     }
 
     function parseFiat(fiat) {

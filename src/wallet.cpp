@@ -411,6 +411,34 @@ void Wallet::updateSettings()
     auto data = Json::toObject(settings);
     GA_destroy_json(settings);
     setSettings(data);
+    updateDisplayUnit();
+}
+
+QString ComputeDisplayUnit(Network* network, QString unit)
+{
+    if (!network->isMainnet()) {
+        if (unit == "BTC") {
+            unit = "TEST";
+        } else if (unit == "mBTC") {
+            unit = "mTEST";
+        } else if (unit == "\u00B5BTC") {
+            unit = "\u00B5TEST";
+        } else if (unit == "bits") {
+            unit = "bTEST";
+        } else if (unit == "sats") {
+            unit = "sTEST";
+        }
+    }
+    if (network->isLiquid()) unit.prepend("L-");
+    return unit;
+}
+
+void Wallet::updateDisplayUnit()
+{
+    const auto display_unit = ComputeDisplayUnit(m_network, m_settings.value("unit").toString());
+    if (m_display_unit == display_unit) return;
+    m_display_unit = display_unit;
+    emit displayUnitChanged(m_display_unit);
 }
 
 void Wallet::updateCurrencies()
@@ -507,9 +535,7 @@ QString Wallet::formatAmount(qint64 amount, bool include_ticker, const QString& 
 {
     Q_ASSERT(m_network);
     const auto effective_unit = unit.isEmpty() ? m_settings.value("unit").toString() : unit;
-    if (effective_unit.isEmpty()) {
-        return {};
-    }
+    if (effective_unit.isEmpty()) return {};
     auto str = convert({{ "satoshi", amount }}).value(effective_unit == "\u00B5BTC" ? "ubtc" : effective_unit.toLower()).toString();
     auto val = str.toDouble();
     if (val == ((int64_t) val)) {
@@ -519,7 +545,7 @@ QString Wallet::formatAmount(qint64 amount, bool include_ticker, const QString& 
         str.remove(QRegExp("\\.?0+$"));
     }
     if (include_ticker) {
-        str += (m_network->isLiquid() ? " L-" : " ") + effective_unit;
+        str += " " + m_display_unit;
     }
     return str;
 }
@@ -616,6 +642,11 @@ void Wallet::setBlockHeight(int block_height)
     if (m_block_height == block_height) return;
     m_block_height = block_height;
     emit blockHeightChanged(m_block_height);
+}
+
+QString Wallet::getDisplayUnit(const QString& unit)
+{
+    return ComputeDisplayUnit(m_network, unit);
 }
 
 void Wallet::setSettings(const QJsonObject& settings)

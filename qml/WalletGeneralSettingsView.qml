@@ -45,7 +45,7 @@ ColumnLayout {
             GComboBox {
                 property var units: ['BTC', 'mBTC', '\u00B5BTC', 'bits', 'sats']
                 model: units.map(unit => ({
-                    text: wallet.network.liquid ? `L-${unit}` : unit,
+                    text: wallet.getDisplayUnit(unit),
                     value: unit
                 }))
                 textRole: 'text'

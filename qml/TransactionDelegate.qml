@@ -90,6 +90,7 @@ ItemDelegate {
             font.pixelSize: 16
             font.styleName: 'Medium'
             text: {
+                wallet.displayUnit
                 if (transaction.amounts.length > 1) return qsTrId('id_multiple_assets')
                 const amount = transaction.amounts[0]
                 if (amount.asset) return amount.formatAmount(true, transaction.account.wallet.settings.unit, amount.asset.data)
