@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updates GDK to 0.0.46
 
 ### Fixed
+- Paste numbers with trailing whitespace in amount fields
 
 ## [1.0.2] - 2021-10-05
 ### Added
