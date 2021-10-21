@@ -11,56 +11,8 @@ ToolButton {
     icon.source: 'qrc:/svg/torV2.svg'
     onHoveredChanged: {
         if (hovered) pending = activity.status === Activity.Pending
-        popup.visible = hovered
     }
     onActivityChanged: if (!activity) self.destroy()
-    Connections {
-        target: self.activity.progress
-        function onValueChanged(value) {
-            if (value > 0) {
-                popup.visible = true
-            }
-        }
-    }
-    Connections {
-        target: self.activity
-        function onStatusChanged(status) {
-            if (self.activity.status === Activity.Finished) {
-                popup.visible = false
-            }
-        }
-    }
-    Popup {
-        id: popup
-        y: -height - 12
-        visible: false
-        closePolicy: Popup.NoAutoClose
-        background: Rectangle {
-            color: constants.c400
-            radius: 4
-            opacity: 0.9
-        }
-        contentItem: RowLayout {
-            Label {
-                text: 'Tor'
-            }
-            ProgressBar {
-                RowLayout.maximumWidth: 64
-                visible: self.pending
-                from: self.activity.progress.from
-                to: self.activity.progress.to
-                value: self.activity.progress.value
-                indeterminate: self.activity.progress.indeterminate
-                Behavior on value {
-                    SmoothedAnimation { }
-                }
-            }
-            Label {
-                visible: self.pending
-                text: self.activity.logs[0] || qsTrId('id_initializing_tor')
-            }
-        }
-    }
     BlinkAnimation on opacity {
         running: activity.status === Activity.Pending
     }
