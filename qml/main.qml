@@ -217,7 +217,7 @@ ApplicationWindow {
                             }
                         }
                         SideButton {
-                            visible: Settings.enableTestnet && build_type !== 'release'
+                            visible: Settings.enableTestnet
                             icon.source: icons['testnet-liquid']
                             location: '/testnet-liquid'
                             text: 'Liquid Testnet'

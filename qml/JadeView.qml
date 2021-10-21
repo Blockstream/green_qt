@@ -13,7 +13,7 @@ MainPage {
         const nets = device.versionInfo.JADE_NETWORKS
         if (nets === "ALL") return true
         if (nets === 'MAIN') return network === 'mainnet' || network === 'liquid'
-        if (nets === 'TEST') return network === 'testnet'
+        if (nets === 'TEST') return network === 'testnet-liquid' || network === 'testnet'
         return false
     }
 
@@ -289,6 +289,11 @@ MainPage {
             NetworkSection {
                 visible: Settings.enableTestnet
                 network: NetworkManager.network('testnet')
+                device: self.device
+            }
+            NetworkSection {
+                visible: Settings.enableTestnet
+                network: NetworkManager.network('testnet-liquid')
                 device: self.device
             }
         }

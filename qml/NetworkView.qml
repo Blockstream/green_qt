@@ -59,7 +59,7 @@ Item {
                     onClicked: navigation.go(`/${self.network}/restore`, { network: self.network })
                 }
                 GButton {
-                    visible: self.network !== 'liquid'
+                    visible: self.network !== 'liquid' && self.network !== 'testnet-liquid'
                     text: qsTrId('id_watchonly_login')
                     large: true
                     onClicked: watch_only_login_dialog.createObject(window).open()
