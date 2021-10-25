@@ -7,10 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Option to remember Watch-Only logins
-- Expose Liquid testnet network
+- Supports creating and restoring Singlesig wallets on Liquid
 
 ### Changed
 - Updates GDK to 0.0.46.post1
+- Use test tickers in test networks for amounts
 
 ### Fixed
 - Paste numbers with trailing whitespace in amount fields
