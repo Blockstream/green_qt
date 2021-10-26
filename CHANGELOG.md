@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Expose Liquid testnet network
 
 ### Changed
-- Updates GDK to 0.0.46
+- Updates GDK to 0.0.46.post1
 
 ### Fixed
 - Paste numbers with trailing whitespace in amount fields
