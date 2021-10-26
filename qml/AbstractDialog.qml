@@ -31,6 +31,7 @@ Dialog {
         }
         Label {
             Layout.fillWidth: true
+            Layout.preferredWidth: 0
             text: title
             font.pixelSize: 18
             font.styleName: 'Medium'
