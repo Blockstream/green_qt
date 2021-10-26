@@ -124,7 +124,7 @@ MainPage {
                         enabled: Settings.useProxy
                         Layout.alignment: Qt.AlignLeft
                         Layout.minimumWidth: 200
-                        //text: Settings.proxyHost
+                        text: Settings.proxyHost
                         onTextChanged: Settings.proxyHost = text
                     }
                     HSpacer {
