@@ -75,6 +75,13 @@ void WalletManager::addWallet(Wallet* wallet)
     m_wallets.append(wallet);
     emit changed();
     emit walletAdded(wallet);
+
+    // Not persisted wallets should be removed when session is lost
+    connect(wallet, &Wallet::sessionChanged, this, [=](Session* session) {
+        if (!session && !wallet->isPersisted()) {
+            removeWallet(wallet);
+        }
+    });
 }
 
 Wallet* WalletManager::createWallet(Network* network)
@@ -106,7 +113,7 @@ void WalletManager::removeWallet(Wallet* wallet)
     // Q_ASSERT(wallet->connection() == Wallet::Disconnected);
     m_wallets.removeOne(wallet);
     emit changed();
-    if (!wallet->m_id.isEmpty() && !wallet->m_device) {
+    if (wallet->isPersisted()) {
         bool result = QFile::remove(GetDataFile("wallets", wallet->m_id));
         Q_ASSERT(result);
     }
