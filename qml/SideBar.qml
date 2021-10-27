@@ -30,21 +30,21 @@ Pane {
             Layout.fillHeight: true
             clip: true
             flickableDirection: Flickable.VerticalFlick
-            contentHeight: foo.height
-            contentWidth: foo.width
-            implicitWidth: foo.implicitWidth
+            contentHeight: layout.height
+            contentWidth: layout.width
+            implicitWidth: layout.implicitWidth
             ScrollIndicator.vertical: ScrollIndicator { }
             MouseArea {
-                width: foo.width
-                height: Math.max(foo.height, flickable.height) - height - 16
-                y: foo.height + 16
+                width: layout.width
+                height: Math.max(flickable.height - layout.height + flickable.contentY - 16, 0)
+                y: layout.height + 16
                 onDoubleClicked: {
                     flickable.forceActiveFocus(Qt.MouseFocusReason)
                     Settings.collapseSideBar = !Settings.collapseSideBar
                 }
             }
             ColumnLayout {
-                id: foo
+                id: layout
                 width: Math.max(implicitWidth, flickable.width)
                 spacing: 8
                 SideButton {
