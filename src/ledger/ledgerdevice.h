@@ -85,6 +85,7 @@ public:
     Transport transport() const override;
     Type type() const override;
     QString name() const override;
+    QJsonObject details() const override;
 
     DeviceCommand* exchange(const QByteArray& data);
 

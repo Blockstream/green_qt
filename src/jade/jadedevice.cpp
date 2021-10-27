@@ -1001,6 +1001,11 @@ JadeDevice::JadeDevice(JadeAPI* jade, QObject* parent)
 {
 }
 
+QJsonObject JadeDevice::details() const
+{
+    return {{"type", "jade"}, {"version", version()}, {"name", name()}};
+}
+
 GetWalletPublicKeyActivity *JadeDevice::getWalletPublicKey(Network *network, const QVector<uint32_t>& path)
 {
     return new JadeGetWalletPublicKeyActivity(network, path, this);
@@ -1056,6 +1061,7 @@ void JadeDevice::setVersionInfo(const QVariantMap& version_info)
     emit versionInfoChanged();
     m_name = QString("Jade %1").arg(version_info.value("EFUSEMAC").toString().mid(6));
     emit nameChanged();
+    emit detailsChanged();
 }
 
 QVariantMap JadeDevice::versionInfo() const

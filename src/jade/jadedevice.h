@@ -155,6 +155,7 @@ public:
     Transport transport() const override { return Transport::USB; }
     Type type() const override { return Type::BlockstreamJade; }
     QString name() const override { return m_name; }
+    QJsonObject details() const override;
     GetWalletPublicKeyActivity* getWalletPublicKey(Network* network, const QVector<uint32_t>& path) override;
     SignMessageActivity* signMessage(const QString& message, const QVector<uint32_t>& path) override;
     SignMessageActivity* signMessage(const QString& message, const QVector<uint32_t>& path, const QByteArray& ae_host_commitment, const QByteArray& ae_host_entropy) override;

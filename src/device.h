@@ -77,6 +77,7 @@ class Device : public QObject
     Q_PROPERTY(Transport transport READ transport CONSTANT)
     Q_PROPERTY(Type type READ type CONSTANT)
     Q_PROPERTY(QString name READ name NOTIFY nameChanged)
+    Q_PROPERTY(QJsonObject details READ details NOTIFY detailsChanged)
     QML_ELEMENT
     QML_UNCREATABLE("Devices are instanced by DeviceDiscoveryAgent.")
 public:
@@ -103,6 +104,7 @@ public:
     virtual Vendor vendor() const = 0;
     virtual Type type() const = 0;
     virtual QString name() const = 0;
+    virtual QJsonObject details() const = 0;
     virtual GetWalletPublicKeyActivity* getWalletPublicKey(Network* network, const QVector<uint32_t>& path) = 0;
     virtual SignMessageActivity* signMessage(const QString& message, const QVector<uint32_t>& path) = 0;
     virtual SignMessageActivity* signMessage(const QString& message, const QVector<uint32_t>& path, const QByteArray& ae_host_commitment, const QByteArray& ae_host_entropy) = 0;
@@ -114,6 +116,7 @@ public:
     static Type typefromVendorAndProduct(uint32_t vendor_id, uint32_t product_id);
 signals:
     void nameChanged();
+    void detailsChanged();
 private:
     const QString m_uuid;
 };

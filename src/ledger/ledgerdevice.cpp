@@ -40,6 +40,12 @@ QString LedgerDevice::name() const
     }
 }
 
+QJsonObject LedgerDevice::details() const
+{
+    const QString type = d->m_type == LedgerNanoS ? "nanos" : "nanox";
+    return {{"type", type}, {"version", m_app_version}, {"name", name()}};
+}
+
 DeviceCommand* LedgerDevice::exchange(const QByteArray& data) {
     auto command = new LedgerGenericCommand(this, data);
     command->exec();
