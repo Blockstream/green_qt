@@ -48,11 +48,6 @@ ApplicationWindow {
         return new Date(date_time).toLocaleString(locale.dateTimeFormat(Locale.LongFormat))
     }
 
-    function walletName(wallet) {
-        if (!wallet) return ''
-        return wallet.name
-    }
-
     function accountName(account) {
         if (!account) return ''
         if (account.name !== '') return account.name
@@ -82,11 +77,7 @@ ApplicationWindow {
     title: {
         const parts = Qt.application.arguments.indexOf('--debugnavigation') > 0 ? [navigation.location] : []
         if (currentWallet) {
-            if (currentWallet.device) {
-                parts.push(currentWallet.device.name);
-            } else {
-                parts.push(font_metrics.elidedText(walletName(currentWallet), Qt.ElideRight, window.width / 3));
-            }
+            parts.push(font_metrics.elidedText(currentWallet.name, Qt.ElideRight, window.width / 3));
             if (currentAccount) parts.push(font_metrics.elidedText(accountName(currentAccount), Qt.ElideRight, window.width / 3));
         }
         parts.push('Blockstream Green');

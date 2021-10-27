@@ -177,9 +177,9 @@ Item {
                                     RowLayout {
                                         Label {
                                             Layout.fillWidth: true
-                                            text: walletName(wallet)
+                                            text: wallet.name
                                             elide: Label.ElideRight
-                                            ToolTip.text: walletName(wallet)
+                                            ToolTip.text: wallet.name
                                             ToolTip.visible: truncated && mouse_area.containsMouse
                                             ToolTip.delay: 1000
                                             background: MouseArea {
@@ -255,7 +255,7 @@ Item {
             }
             Label {
                 Layout.maximumWidth: 400
-                text: wallet.device ? wallet.device.name : walletName(wallet)
+                text: wallet.name
                 elide: Label.ElideRight
             }
             HSpacer {

@@ -75,7 +75,7 @@ MainPageHeader {
                             active: !wallet.device && !wallet.persisted
                             sourceComponent: Label {
                                 verticalAlignment: Qt.AlignVCenter
-                                text: walletName(wallet)
+                                text: wallet.name
                                 font.pixelSize: 24
                                 font.styleName: 'Medium'
                             }
