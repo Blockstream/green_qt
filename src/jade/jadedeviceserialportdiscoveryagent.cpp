@@ -27,28 +27,27 @@ JadeDeviceSerialPortDiscoveryAgent::JadeDeviceSerialPortDiscoveryAgent(QObject* 
             auto device = devices.take(system_location);
             if (!device) {
                 auto api = new JadeAPI(info);
-                device = new JadeDevice(api, this);
+                device = new JadeDevice(api, system_location, this);
                 api->setParent(device);
-                device->m_system_location = system_location;
                 connect(api, &JadeAPI::onConnected, this, [this, device] {
-                    device->m_jade->getVersionInfo([this, device](const QVariantMap& data) {
+                    device->api()->getVersionInfo([device](const QVariantMap& data) {
                         const auto result = data.value("result").toMap();
                         device->setVersionInfo(result);
                         DeviceManager::instance()->addDevice(device);
                     });
                 });
                 connect(api, &JadeAPI::onOpenError, this, [this, device] {
-                    m_failed_locations.insert(device->m_system_location);
+                    m_failed_locations.insert(device->systemLocation());
                 });
                 connect(api, &JadeAPI::onDisconnected, this, [this, device] {
-                    if (m_devices.take(device->m_system_location)) {
+                    if (m_devices.take(device->systemLocation())) {
                         DeviceManager::instance()->removeDevice(device);
                         delete device;
                     }
                 });
                 m_devices.insert(system_location, device);
                 api->connectDevice();
-            } else if (device->m_jade->isConnected()) {
+            } else if (device->api()->isConnected()) {
                 m_devices.insert(system_location, device);
             } else {
                 devices.insert(system_location, device);
@@ -61,7 +60,7 @@ JadeDeviceSerialPortDiscoveryAgent::JadeDeviceSerialPortDiscoveryAgent(QObject* 
             const auto system_location = devices.firstKey();
             auto device = devices.take(system_location);
             DeviceManager::instance()->removeDevice(device);
-            device->m_jade->disconnectDevice();
+            device->api()->disconnectDevice();
             delete device;
         }
     });

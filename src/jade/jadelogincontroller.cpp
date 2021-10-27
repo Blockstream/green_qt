@@ -114,7 +114,7 @@ void JadeLoginController::update()
     if (!m_wallet || !m_wallet->session()) return;
     if (!m_wallet->session()->isActive() || !m_wallet->session()->isConnected()) return;
 
-    m_device->m_jade->setHttpRequestProxy([this](JadeAPI& jade, int id, const QJsonObject& req) {
+    m_device->api()->setHttpRequestProxy([this](JadeAPI& jade, int id, const QJsonObject& req) {
         QJsonObject _params = req.value("params").toObject();
         QJsonArray root_certificates;
         for (auto certificate : _params.value("root_certificates").toArray()) {
@@ -134,7 +134,7 @@ void JadeLoginController::update()
         GA_destroy_json(output);
         jade.handleHttpResponse(id, req, res.value("body").toObject());
     });
-    m_device->m_jade->authUser(network->id(), [this, register_user_handler](const QVariantMap& msg) {
+    m_device->api()->authUser(network->id(), [this, register_user_handler](const QVariantMap& msg) {
         Q_ASSERT(msg.contains("result"));
         if (msg["result"] == true) {
             register_user_handler->exec();

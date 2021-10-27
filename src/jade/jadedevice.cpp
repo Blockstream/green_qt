@@ -23,7 +23,7 @@ public:
     }
     void exec() override
     {
-        m_device->m_jade->getXpub(m_network->id(), m_path, [this](const QVariantMap& msg) {
+        m_device->api()->getXpub(m_network->id(), m_path, [this](const QVariantMap& msg) {
             Q_ASSERT(msg.contains("result") && msg["result"].type() == QVariant::String);
             m_public_key = msg["result"].toString().toLocal8Bit();
             finish();
@@ -59,7 +59,7 @@ public:
     }
     virtual void exec() override
     {
-        m_device->m_jade->signMessage(m_path, m_message, m_ae_host_commitment, m_ae_host_entropy, [this](const QVariantMap& result) {
+        m_device->api()->signMessage(m_path, m_message, m_ae_host_commitment, m_ae_host_entropy, [this](const QVariantMap& result) {
             auto sig = QByteArray::fromBase64(result["signature"].toString().toLocal8Bit());
             if (sig.size() == EC_SIGNATURE_RECOVERABLE_LEN) sig = sig.mid(1);
             Q_ASSERT(sig.size() == EC_SIGNATURE_LEN);
@@ -167,7 +167,7 @@ public:
             }
         }
 
-        m_device->m_jade->signTx(m_network->id(), txn, inputs, change, [this](const QVariantMap& result) {
+        m_device->api()->signTx(m_network->id(), txn, inputs, change, [this](const QVariantMap& result) {
             if (result.contains("result")) {
                 for (const auto& s : result["result"].toMap()["signatures"].toList()) {
                     m_signatures.append(s.toByteArray());
@@ -203,7 +203,7 @@ public:
     {
         // TODO: the following QByteArray::fromHex should be done in resolver (and refactor ledger activity)
         const auto script = QByteArray::fromHex(m_script.toLocal8Bit());
-        m_device->m_jade->getBlindingKey(script, [this](const QVariantMap& msg) {
+        m_device->api()->getBlindingKey(script, [this](const QVariantMap& msg) {
             Q_ASSERT(msg.contains("result") && msg["result"].type() == QVariant::ByteArray);
             m_public_key = msg["result"].toByteArray();
             finish();
@@ -231,7 +231,7 @@ public:
     }
     void exec() override
     {
-        m_device->m_jade->getSharedNonce(m_script, m_pubkey, [this](const QVariantMap& msg) {
+        m_device->api()->getSharedNonce(m_script, m_pubkey, [this](const QVariantMap& msg) {
             Q_ASSERT(msg.contains("result") && msg["result"].type() == QVariant::ByteArray);
             m_nonce = msg["result"].toByteArray();
             finish();
@@ -289,7 +289,6 @@ public:
     QList<QByteArray> amountBlinders() const override { return m_amount_blinders; }
     void exec() override
     {
-        qDebug() << Q_FUNC_INFO << 1;
         QByteArray prevouts;
         QDataStream stream_prevouts(&prevouts, QIODevice::WriteOnly);
         stream_prevouts.setByteOrder(QDataStream::LittleEndian);
@@ -360,7 +359,7 @@ public:
         }
 
         if (index == m_last_blinded_index && m_last_vbf.isEmpty()) {
-            m_device->m_jade->getBlindingFactor(m_hash_prev_outs, index, "ASSET", [this, index](const QVariantMap& msg) {
+            m_device->api()->getBlindingFactor(m_hash_prev_outs, index, "ASSET", [this, index](const QVariantMap& msg) {
                 if (handleError(msg)) return;
                 progress()->incrementValue();
 
@@ -390,7 +389,7 @@ public:
         const auto blinding_key = ParseByteArray(output.value("public_key"));
         const auto satoshi = ParseSatoshi(output.value("satoshi"));
 
-        m_device->m_jade->getCommitments(asset_id, satoshi, m_hash_prev_outs, index, m_last_vbf, [this, index, blinding_key](const QVariantMap& msg) {
+        m_device->api()->getCommitments(asset_id, satoshi, m_hash_prev_outs, index, m_last_vbf, [this, index, blinding_key](const QVariantMap& msg) {
             if (handleError(msg)) return;
             progress()->incrementValue();
 
@@ -414,7 +413,7 @@ public:
     void sign()
     {
         const auto tx = ParseByteArray(m_transaction.value("transaction"));
-        m_device->m_jade->signLiquidTx(m_network->id(), tx, m_inputs, m_trusted_commitments, m_change, [this](const QVariantMap& msg) {
+        m_device->api()->signLiquidTx(m_network->id(), tx, m_inputs, m_trusted_commitments, m_change, [this](const QVariantMap& msg) {
             if (handleError(msg)) return;
             progress()->incrementValue();
             Q_ASSERT(msg.contains("result"));
@@ -438,14 +437,11 @@ public:
                     m_amount_blinders.append(commitment["vbf"].toByteArray());
                 }
             }
-            qDebug() << Q_FUNC_INFO << 1;
             finish();
         });
     }
     bool handleError(const QVariantMap& msg)
     {
-        qDebug() << Q_FUNC_INFO << 1;
-        qDebug() << msg;
         if (!msg.contains("error")) return false;
         Q_ASSERT(msg["error"].type() == QVariant::Map);
         setMessage(QJsonObject::fromVariantMap(msg["error"].toMap()));
@@ -470,7 +466,7 @@ public:
     }
     void exec() override
     {
-        m_device->m_jade->getMasterBlindingKey([this](const QVariantMap& msg) {
+        m_device->api()->getMasterBlindingKey([this](const QVariantMap& msg) {
             if (msg.contains("result")) {
                 m_master_blinding_key = msg["result"].toByteArray();
                 finish();
@@ -486,9 +482,10 @@ public:
     }
 };
 
-JadeDevice::JadeDevice(JadeAPI* jade, QObject* parent)
+JadeDevice::JadeDevice(JadeAPI* api, const QString& system_location, QObject* parent)
     : Device(parent)
-    , m_jade(jade)
+    , m_api(api)
+    , m_system_location(system_location)
 {
 }
 
@@ -504,6 +501,8 @@ GetWalletPublicKeyActivity *JadeDevice::getWalletPublicKey(Network *network, con
 
 SignMessageActivity *JadeDevice::signMessage(const QString &message, const QVector<uint32_t> &path)
 {
+    Q_UNUSED(message);
+    Q_UNUSED(path);
     Q_UNREACHABLE();
 }
 
@@ -539,9 +538,7 @@ GetMasterBlindingKeyActivity *JadeDevice::getMasterBlindingKey()
 
 void JadeDevice::updateVersionInfo()
 {
-    m_jade->getVersionInfo([this](const QVariantMap& data) {
-
-        qDebug() << "JadeDevice::updateVersionInfo()" << data;
+    api()->getVersionInfo([this](const QVariantMap& data) {
         setVersionInfo(data.value("result").toMap());
     });
 }
@@ -549,7 +546,6 @@ void JadeDevice::updateVersionInfo()
 void JadeDevice::setVersionInfo(const QVariantMap& version_info)
 {
     if (m_version_info == version_info) return;
-    // qDebug() << QJsonDocument(QJsonObject::fromVariantMap(data)).toJson(QJsonDocument::Indented).toStdString().c_str();
     m_version_info = version_info;
     emit versionInfoChanged();
     m_name = QString("Jade %1").arg(version_info.value("EFUSEMAC").toString().mid(6));

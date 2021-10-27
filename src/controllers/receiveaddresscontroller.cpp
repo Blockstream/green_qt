@@ -173,7 +173,7 @@ void ReceiveAddressController::verify()
         wally_free_string(base58);
     }
 
-    device->m_jade->getReceiveAddress(m_account->wallet()->network()->id(), subaccount, branch, pointer, recovery_xpub, subtype, [this](const QVariantMap& msg) {
+    device->api()->getReceiveAddress(m_account->wallet()->network()->id(), subaccount, branch, pointer, recovery_xpub, subtype, [this](const QVariantMap& msg) {
         setAddressVerification(msg.contains("error") ? VerificationRejected : VerificationAccepted);
     });
 }

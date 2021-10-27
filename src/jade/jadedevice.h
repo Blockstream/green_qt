@@ -11,17 +11,18 @@ QT_FORWARD_DECLARE_CLASS (JadeAPI)
 class JadeDevice : public Device
 {
     Q_OBJECT
-    Q_PROPERTY(bool updateRequired READ updateRequired NOTIFY versionInfoChanged)
-    Q_PROPERTY(QString version READ version NOTIFY versionInfoChanged)
-    Q_PROPERTY(QVariantMap versionInfo READ versionInfo NOTIFY versionInfoChanged)
     Q_PROPERTY(QString systemLocation READ systemLocation CONSTANT)
+    Q_PROPERTY(QVariantMap versionInfo READ versionInfo NOTIFY versionInfoChanged)
+    Q_PROPERTY(QString version READ version NOTIFY versionInfoChanged)
+    Q_PROPERTY(bool updateRequired READ updateRequired NOTIFY versionInfoChanged)
     QML_ELEMENT
 public:
-    JadeDevice(JadeAPI* jade, QObject* parent = nullptr);
+    JadeDevice(JadeAPI* api, const QString& system_location, QObject* parent = nullptr);
     Vendor vendor() const override { return Device::Blockstream; }
     Transport transport() const override { return Transport::USB; }
     Type type() const override { return Type::BlockstreamJade; }
     QString name() const override { return m_name; }
+    JadeAPI *api() const { return m_api; }
     QJsonObject details() const override;
     GetWalletPublicKeyActivity* getWalletPublicKey(Network* network, const QVector<uint32_t>& path) override;
     SignMessageActivity* signMessage(const QString& message, const QVector<uint32_t>& path) override;
@@ -31,9 +32,6 @@ public:
     GetBlindingNonceActivity* getBlindingNonce(const QByteArray& pubkey, const QByteArray& script) override;
     SignLiquidTransactionActivity* signLiquidTransaction(Network* network, const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs) override;
     GetMasterBlindingKeyActivity* getMasterBlindingKey() override;
-    JadeAPI* m_jade;
-    QString m_name;
-    QString m_system_location;
     void updateVersionInfo();
     void setVersionInfo(const QVariantMap& version_info);
     QVariantMap versionInfo() const;
@@ -44,7 +42,10 @@ public:
 signals:
     void versionInfoChanged();
 private:
+    JadeAPI* const m_api;
+    const QString m_system_location;
     QVariantMap m_version_info;
+    QString m_name;
 };
 
 #endif // GREEN_JADEDEVICE_H

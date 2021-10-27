@@ -79,7 +79,7 @@ JadeUnlockActivity::JadeUnlockActivity(const QString& network, JadeDevice* devic
 
 void JadeUnlockActivity::exec()
 {
-    m_device->m_jade->authUser(m_network, [this](const QVariantMap& msg) {
+    m_device->api()->authUser(m_network, [this](const QVariantMap& msg) {
         Q_ASSERT(msg.contains("result"));
         if (msg["result"] == true) {
             finish();
@@ -102,7 +102,7 @@ void JadeUpdateActivity::exec()
     const auto size = m_firmware.value("size").toLongLong();
     const auto chunk_size = m_device->versionInfo().value("JADE_OTA_MAX_CHUNK").toInt();
 
-    m_device->m_jade->otaUpdate(m_data, size, chunk_size, [this](const QVariantMap& result) {
+    m_device->api()->otaUpdate(m_data, size, chunk_size, [this](const QVariantMap& result) {
         Q_ASSERT(result.contains("uploaded"));
         const auto uploaded = result.value("uploaded").toLongLong();
         progress()->setIndeterminate(uploaded <= 12288);
@@ -147,7 +147,7 @@ void JadeUpdateController::setChannel(const QString& channel)
 
 void JadeUpdateController::disconnectDevice()
 {
-    m_device->m_jade->disconnectDevice();
+    m_device->api()->disconnectDevice();
 }
 
 void JadeUpdateController::setDevice(JadeDevice *device)
@@ -175,7 +175,7 @@ void JadeUpdateController::check()
 
     if (!m_session->isActive() || !m_session->isConnected()) return;
 
-    m_device->m_jade->setHttpRequestProxy([this](JadeAPI& jade, int id, const QJsonObject& req) {
+    m_device->api()->setHttpRequestProxy([this](JadeAPI& jade, int id, const QJsonObject& req) {
         const auto params = Json::fromObject(req.value("params").toObject());
         GA_json* output;
         GA_http_request(m_session->m_session, params.get(), &output);
