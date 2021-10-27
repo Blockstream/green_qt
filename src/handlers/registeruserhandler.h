@@ -12,6 +12,7 @@ class RegisterUserHandler : public Handler
 public:
     RegisterUserHandler(Wallet* wallet, const QStringList& mnemonic);
     RegisterUserHandler(Wallet* wallet, const QJsonObject& device_details);
+    QString walletHashId() const;
 private:
     void call(GA_session* session, GA_auth_handler** auth_handler) override;
 private:

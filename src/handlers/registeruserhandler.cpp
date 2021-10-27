@@ -24,3 +24,10 @@ void RegisterUserHandler::call(GA_session* session, GA_auth_handler** auth_handl
     int err = GA_register_user(session, device_details.get(), mnemonic.constData(), auth_handler);
     Q_ASSERT(err == GA_OK);
 }
+QString RegisterUserHandler::walletHashId() const
+{
+    Q_ASSERT(result().value("status") == "done");
+    const auto wallet_hash_id = result().value("result").toObject().value("wallet_hash_id").toString();
+    Q_ASSERT(!wallet_hash_id.isEmpty());
+    return wallet_hash_id;
+}
