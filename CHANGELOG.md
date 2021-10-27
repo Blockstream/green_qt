@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+
+### Changed
+
+### Fixed
+
+## [1.0.3] - 2021-10-27
+### Added
 - Option to remember Watch-Only logins
 - Supports creating and restoring Singlesig wallets on Liquid
 
