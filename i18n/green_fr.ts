@@ -372,8 +372,8 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
         <translation>Unité affichée</translation>
     </message>
     <message>
-        <source>id_bitcoin_electrum_backend</source>
-        <translation>Bitcoin Electrum backend</translation>
+        <source>id_bitcoin_electrum_server</source>
+        <translation>Bitcoin Electrum server</translation>
     </message>
     <message>
         <source>id_bitcoin_is_the_worlds_leading</source>
@@ -665,6 +665,10 @@ Simple and Secure</translation>
         <translation>Connect hardware wallet</translation>
     </message>
     <message>
+        <source>id_connect_jade_with_a_usb_cable</source>
+        <translation>Connect Jade with a USB cable to download the latest firmware update</translation>
+    </message>
+    <message>
         <source>id_connect_through_a_proxy</source>
         <translation>Connectez-vous via un proxy</translation>
     </message>
@@ -839,6 +843,10 @@ Simple and Secure</translation>
     <message>
         <source>id_custom_network_with_this_name</source>
         <translation>Il existe déjà un réseau personnalisé avec le même nom</translation>
+    </message>
+    <message>
+        <source>id_custom_servers_and_validation</source>
+        <translation>Custom servers and validation</translation>
     </message>
     <message>
         <source>id_customize_2fa_expiration_of</source>
@@ -1762,8 +1770,8 @@ Recovery Phrase</translation>
         <translation>Préparons votre installation.</translation>
     </message>
     <message>
-        <source>id_liquid_electrum_backend</source>
-        <translation>Liquid Electrum backend</translation>
+        <source>id_liquid_electrum_server</source>
+        <translation>Liquid Electrum server</translation>
     </message>
     <message>
         <source>id_liquid_is_a_sidechainbased</source>
@@ -1772,6 +1780,10 @@ Recovery Phrase</translation>
     <message>
         <source>id_liquid_securities</source>
         <translation>Liquid Securities</translation>
+    </message>
+    <message>
+        <source>id_liquid_testnet_wallets</source>
+        <translation>Liquid testnet wallets</translation>
     </message>
     <message>
         <source>id_liquid_wallets</source>
@@ -2822,6 +2834,10 @@ Recovery Phrase</translation>
         <translation>Envoyer à</translation>
     </message>
     <message>
+        <source>id_server_ip_and_port_ipport</source>
+        <translation>Server IP and port (ip:port)</translation>
+    </message>
+    <message>
         <source>id_set_2fa_expiry</source>
         <translation>Set 2FA expiry</translation>
     </message>
@@ -3042,6 +3058,10 @@ Reset this setting and then re-activate it.</translation>
         <translation>SPV se synchronise toujours sur des réseaux non mobiles, tels que WiFi ou Ethernet. Ce réglage permet de le synchroniser aussi sur les réseaux de data mobile. Selon votre forfait cela peut entraîner des frais importants, à utiliser avec précaution.</translation>
     </message>
     <message>
+        <source>id_spv_mode_is_currently_available</source>
+        <translation>SPV mode is currently available for singlesig bitcoin wallets only.</translation>
+    </message>
+    <message>
         <source>id_spv_not_fully_synced</source>
         <translation>Synchronisation SPV incomplète</translation>
     </message>
@@ -3165,6 +3185,10 @@ Reset this setting and then re-activate it.</translation>
         <translation>Conditions d&apos;utilisation</translation>
     </message>
     <message>
+        <source>id_testnet_electrum_server</source>
+        <translation>Testnet Electrum server</translation>
+    </message>
+    <message>
         <source>id_testnet_wallets</source>
         <translation>Testnet wallets</translation>
     </message>
@@ -3234,6 +3258,10 @@ Reset this setting and then re-activate it.</translation>
         <translation>The recovery phrase can be used to claim your funds at any point. Keep it safe, keep it private.</translation>
     </message>
     <message>
+        <source>id_the_recovery_phrase_doesnt</source>
+        <translation>The recovery phrase doesn&apos;t match the previously existing wallet. Please retry with a different recovery phrase.</translation>
+    </message>
+    <message>
         <source>id_the_source_code_is_available_at</source>
         <translation>The source code is available at %1</translation>
     </message>
@@ -3270,6 +3298,10 @@ Reset this setting and then re-activate it.</translation>
         <source>id_this_transaction_spent</source>
         <translation>Cette transaction a généré des fonds non confidentiels.
  </translation>
+    </message>
+    <message>
+        <source>id_this_wallet_operates_on_a_test</source>
+        <translation>This wallet operates on a test network. Anything you receive or send here has no value</translation>
     </message>
     <message>
         <source>id_this_will_disable_pin_login_for</source>
@@ -3532,6 +3564,10 @@ Reset this setting and then re-activate it.</translation>
         <translation>Value must be between 144 and 200000</translation>
     </message>
     <message>
+        <source>id_verified</source>
+        <translation>Verified</translation>
+    </message>
+    <message>
         <source>id_verify_on_device</source>
         <translation>Verify on Device</translation>
     </message>
@@ -3542,6 +3578,10 @@ Reset this setting and then re-activate it.</translation>
     <message>
         <source>id_verify_your_transactions_are</source>
         <translation>Verify your transactions are included on the blockchain</translation>
+    </message>
+    <message>
+        <source>id_verifying_transactions</source>
+        <translation>Verifying transactions…</translation>
     </message>
     <message>
         <source>id_version</source>

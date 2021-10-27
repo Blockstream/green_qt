@@ -373,8 +373,8 @@ Dacă aceste instrucțiuni nu au fost de ajutor sau dacă nu aveți o frază de 
         <translation>Subunități Bitcoin</translation>
     </message>
     <message>
-        <source>id_bitcoin_electrum_backend</source>
-        <translation>Bitcoin Electrum backend</translation>
+        <source>id_bitcoin_electrum_server</source>
+        <translation>Bitcoin Electrum server</translation>
     </message>
     <message>
         <source>id_bitcoin_is_the_worlds_leading</source>
@@ -665,6 +665,10 @@ Dacă aceste instrucțiuni nu au fost de ajutor sau dacă nu aveți o frază de 
         <translation>Conectați portofelul hardware</translation>
     </message>
     <message>
+        <source>id_connect_jade_with_a_usb_cable</source>
+        <translation>Connect Jade with a USB cable to download the latest firmware update</translation>
+    </message>
+    <message>
         <source>id_connect_through_a_proxy</source>
         <translation>Conectare printr-un proxy</translation>
     </message>
@@ -839,6 +843,10 @@ Dacă aceste instrucțiuni nu au fost de ajutor sau dacă nu aveți o frază de 
     <message>
         <source>id_custom_network_with_this_name</source>
         <translation>Există deja o rețea personalizată cu acest nume</translation>
+    </message>
+    <message>
+        <source>id_custom_servers_and_validation</source>
+        <translation>Custom servers and validation</translation>
     </message>
     <message>
         <source>id_customize_2fa_expiration_of</source>
@@ -1762,8 +1770,8 @@ fraza de recuperare</translation>
         <translation>Haideți să facem setările inițiale.</translation>
     </message>
     <message>
-        <source>id_liquid_electrum_backend</source>
-        <translation>Liquid Electrum backend</translation>
+        <source>id_liquid_electrum_server</source>
+        <translation>Liquid Electrum server</translation>
     </message>
     <message>
         <source>id_liquid_is_a_sidechainbased</source>
@@ -1772,6 +1780,10 @@ fraza de recuperare</translation>
     <message>
         <source>id_liquid_securities</source>
         <translation>Acțiuni Liquid</translation>
+    </message>
+    <message>
+        <source>id_liquid_testnet_wallets</source>
+        <translation>Liquid testnet wallets</translation>
     </message>
     <message>
         <source>id_liquid_wallets</source>
@@ -2822,6 +2834,10 @@ fraza de recuperare</translation>
         <translation>Trimis către</translation>
     </message>
     <message>
+        <source>id_server_ip_and_port_ipport</source>
+        <translation>Server IP and port (ip:port)</translation>
+    </message>
+    <message>
         <source>id_set_2fa_expiry</source>
         <translation>Setați termen de expirare pentru 2FA</translation>
     </message>
@@ -3040,6 +3056,10 @@ fraza de recuperare</translation>
         <translation>SPV este întotdeauna sincronizat folosind rețele non-mobile precum WiFi sau Ethernet. Această setare se sincronizează și atunci când sunt folosite date mobile. Folosirea datelor mobile poate fi costisitoare, în funcție de abonament și planul de date. Așa că fiți atenți înainte de a activa setarea.</translation>
     </message>
     <message>
+        <source>id_spv_mode_is_currently_available</source>
+        <translation>SPV mode is currently available for singlesig bitcoin wallets only.</translation>
+    </message>
+    <message>
         <source>id_spv_not_fully_synced</source>
         <translation>SPV nu s-a sincronizat în totalitate</translation>
     </message>
@@ -3163,6 +3183,10 @@ fraza de recuperare</translation>
         <translation>Termeni de Utilizare</translation>
     </message>
     <message>
+        <source>id_testnet_electrum_server</source>
+        <translation>Testnet Electrum server</translation>
+    </message>
+    <message>
         <source>id_testnet_wallets</source>
         <translation>Portofele testnet</translation>
     </message>
@@ -3231,6 +3255,10 @@ fraza de recuperare</translation>
         <translation>Fraza de recuperare poate fi utilizată pentru a restabili accesul la fondurile dvs. Păstrați-o in siguranță! Aveți grijă să nu o divulgați nimanui.</translation>
     </message>
     <message>
+        <source>id_the_recovery_phrase_doesnt</source>
+        <translation>The recovery phrase doesn&apos;t match the previously existing wallet. Please retry with a different recovery phrase.</translation>
+    </message>
+    <message>
         <source>id_the_source_code_is_available_at</source>
         <translation>Codul sursă este disponibil la %1</translation>
     </message>
@@ -3265,6 +3293,10 @@ fraza de recuperare</translation>
     <message>
         <source>id_this_transaction_spent</source>
         <translation>Această tranzacție a trimis monede non-confidențiale.</translation>
+    </message>
+    <message>
+        <source>id_this_wallet_operates_on_a_test</source>
+        <translation>This wallet operates on a test network. Anything you receive or send here has no value</translation>
     </message>
     <message>
         <source>id_this_will_disable_pin_login_for</source>
@@ -3527,6 +3559,10 @@ fraza de recuperare</translation>
         <translation>Valoarea trebuie să fie între 144 și 200.000</translation>
     </message>
     <message>
+        <source>id_verified</source>
+        <translation>Verified</translation>
+    </message>
+    <message>
         <source>id_verify_on_device</source>
         <translation>Verify on Device</translation>
     </message>
@@ -3537,6 +3573,10 @@ fraza de recuperare</translation>
     <message>
         <source>id_verify_your_transactions_are</source>
         <translation>Verificați dacă tranzacțiile au fost incluse in blockchain</translation>
+    </message>
+    <message>
+        <source>id_verifying_transactions</source>
+        <translation>Verifying transactions…</translation>
     </message>
     <message>
         <source>id_version</source>

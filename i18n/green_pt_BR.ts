@@ -49,7 +49,7 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_2fa_expired</source>
-        <translation>2FA Expired</translation>
+        <translation>2FA expirou</translation>
     </message>
     <message>
         <source>id_2fa_expiry</source>
@@ -372,8 +372,8 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
         <translation>Unidade de Bitcoin</translation>
     </message>
     <message>
-        <source>id_bitcoin_electrum_backend</source>
-        <translation>Bitcoin Electrum backend</translation>
+        <source>id_bitcoin_electrum_server</source>
+        <translation>Bitcoin Electrum server</translation>
     </message>
     <message>
         <source>id_bitcoin_is_the_worlds_leading</source>
@@ -422,7 +422,7 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     <message>
         <source>id_blockstream_greennsimple_and</source>
         <translation>Blockstream Green:
-Simples e segura</translation>
+simples e segura</translation>
     </message>
     <message>
         <source>id_blockstream_store</source>
@@ -470,7 +470,7 @@ Simples e segura</translation>
     </message>
     <message>
         <source>id_cant_connect_to_this_url</source>
-        <translation>Impossível conectar-se a essa URL</translation>
+        <translation>Não foi possível conectar a esta URL</translation>
     </message>
     <message>
         <source>id_change</source>
@@ -598,7 +598,7 @@ Simples e segura</translation>
     </message>
     <message>
         <source>id_coming_soon</source>
-        <translation>Coming Soon!</translation>
+        <translation>Em breve!</translation>
     </message>
     <message>
         <source>id_communication_timed_out_make</source>
@@ -654,7 +654,7 @@ Simples e segura</translation>
     </message>
     <message>
         <source>id_confirmations</source>
-        <translation>Confirmations</translation>
+        <translation>Confirmações</translation>
     </message>
     <message>
         <source>id_congratulations</source>
@@ -665,8 +665,12 @@ Simples e segura</translation>
         <translation>Conectar carteira física</translation>
     </message>
     <message>
+        <source>id_connect_jade_with_a_usb_cable</source>
+        <translation>Connect Jade with a USB cable to download the latest firmware update</translation>
+    </message>
+    <message>
         <source>id_connect_through_a_proxy</source>
-        <translation>Conectar-se através de um proxy</translation>
+        <translation>Conectar através de um proxy</translation>
     </message>
     <message>
         <source>id_connect_with_tor</source>
@@ -686,11 +690,11 @@ Simples e segura</translation>
     </message>
     <message>
         <source>id_connecting</source>
-        <translation>Connecting…</translation>
+        <translation>Conectando…</translation>
     </message>
     <message>
         <source>id_connecting_through_tor</source>
-        <translation>Connecting through Tor</translation>
+        <translation>Conectando através do Tor</translation>
     </message>
     <message>
         <source>id_connecting_to_a_trusted_node</source>
@@ -706,7 +710,7 @@ Simples e segura</translation>
     </message>
     <message>
         <source>id_connecting_to_your_device</source>
-        <translation>Connecting to your device</translation>
+        <translation>Conectando ao seu dispositivo</translation>
     </message>
     <message>
         <source>id_connection</source>
@@ -734,7 +738,7 @@ Simples e segura</translation>
     </message>
     <message>
         <source>id_continue_with_1s</source>
-        <translation>Continue with %1</translation>
+        <translation>Continuar com %1</translation>
     </message>
     <message>
         <source>id_copied_to_clipboard</source>
@@ -782,7 +786,7 @@ Simples e segura</translation>
     </message>
     <message>
         <source>id_country</source>
-        <translation>Country</translation>
+        <translation>País</translation>
     </message>
     <message>
         <source>id_create</source>
@@ -841,6 +845,10 @@ Simples e segura</translation>
         <translation>Já existe uma rede personalizada com este nome</translation>
     </message>
     <message>
+        <source>id_custom_servers_and_validation</source>
+        <translation>Custom servers and validation</translation>
+    </message>
+    <message>
         <source>id_customize_2fa_expiration_of</source>
         <translation>Customize 2FA expiration of your coins</translation>
     </message>
@@ -882,7 +890,7 @@ Simples e segura</translation>
     </message>
     <message>
         <source>id_default_custom_fee_rate</source>
-        <translation>Padrão da taxa de transação personalizada</translation>
+        <translation>Taxa de transação padrão</translation>
     </message>
     <message>
         <source>id_default_transaction_priority</source>
@@ -918,7 +926,7 @@ Simples e segura</translation>
     </message>
     <message>
         <source>id_device</source>
-        <translation>Device</translation>
+        <translation>Dispositivo</translation>
     </message>
     <message>
         <source>id_devices</source>
@@ -1042,7 +1050,7 @@ Simples e segura</translation>
     </message>
     <message>
         <source>id_enable_experimental_features</source>
-        <translation>Enable experimental features</translation>
+        <translation>Ativar recursos experimentais</translation>
     </message>
     <message>
         <source>id_enable_face_id</source>
@@ -1178,7 +1186,7 @@ Simples e segura</translation>
     </message>
     <message>
         <source>id_enter_your_xpub</source>
-        <translation>Enter your xpub</translation>
+        <translation>Insira seu xpub</translation>
     </message>
     <message>
         <source>id_enter_your_xpub_to_add_a</source>
@@ -1327,7 +1335,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_follow_the_instructions_on_your</source>
-        <translation>Follow the instructions on your device.</translation>
+        <translation>Siga as instruções no seu dispositivo.</translation>
     </message>
     <message>
         <source>id_for_investors</source>
@@ -1495,7 +1503,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_i_confirm_i_want_to_disable_pin</source>
-        <translation>I confirm I want to disable PIN access on all my devices.</translation>
+        <translation>Confirmo que desejo desabilitar o acesso por PIN em todos os meus dispositivos.</translation>
     </message>
     <message>
         <source>id_i_forgot_my_password</source>
@@ -1583,7 +1591,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_install_version_s</source>
-        <translation>Install version: %1?</translation>
+        <translation>Instalar versão: %1?</translation>
     </message>
     <message>
         <source>id_insufficient_funds</source>
@@ -1679,7 +1687,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_invalid_xpub</source>
-        <translation>Invalid xpub</translation>
+        <translation>xpub inválido</translation>
     </message>
     <message>
         <source>id_is_a_noncustodial</source>
@@ -1762,8 +1770,8 @@ Recovery Phrase</translation>
         <translation>Vamos lá então preparar sua carteira.</translation>
     </message>
     <message>
-        <source>id_liquid_electrum_backend</source>
-        <translation>Liquid Electrum backend</translation>
+        <source>id_liquid_electrum_server</source>
+        <translation>Liquid Electrum server</translation>
     </message>
     <message>
         <source>id_liquid_is_a_sidechainbased</source>
@@ -1772,6 +1780,10 @@ Recovery Phrase</translation>
     <message>
         <source>id_liquid_securities</source>
         <translation>Valores Mobiliários</translation>
+    </message>
+    <message>
+        <source>id_liquid_testnet_wallets</source>
+        <translation>Liquid testnet wallets</translation>
     </message>
     <message>
         <source>id_liquid_wallets</source>
@@ -1931,7 +1943,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_message</source>
-        <translation>Message</translation>
+        <translation>Mensagem</translation>
     </message>
     <message>
         <source>id_message_hash</source>
@@ -2071,7 +2083,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_new_wallet</source>
-        <translation>Nova carteira</translation>
+        <translation>Criar nova carteira</translation>
     </message>
     <message>
         <source>id_next</source>
@@ -2287,11 +2299,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_pending_confirmation</source>
-        <translation>Pending confirmation</translation>
+        <translation>Confirmação pendente</translation>
     </message>
     <message>
         <source>id_permanently_block_this_wallet</source>
-        <translation>Permanently Block This Wallet</translation>
+        <translation>Bloquear permanentemente esta carteira</translation>
     </message>
     <message>
         <source>id_pgp_key</source>
@@ -2459,7 +2471,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_ready_to_start</source>
-        <translation>Ready to start</translation>
+        <translation>Pronto para começar</translation>
     </message>
     <message>
         <source>id_receive</source>
@@ -2551,7 +2563,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_reload</source>
-        <translation>Reload</translation>
+        <translation>Atualizar</translation>
     </message>
     <message>
         <source>id_remember_me</source>
@@ -2822,6 +2834,10 @@ Recovery Phrase</translation>
         <translation>Enviar para</translation>
     </message>
     <message>
+        <source>id_server_ip_and_port_ipport</source>
+        <translation>Server IP and port (ip:port)</translation>
+    </message>
+    <message>
         <source>id_set_2fa_expiry</source>
         <translation>Set 2FA expiry</translation>
     </message>
@@ -3040,6 +3056,10 @@ Redefina essa configuração e depois a reative.</translation>
         <translation>SPV sempre sincroniza em redes não-móveis como WiFi e Ethernet. Esta configuração ativa a sincronização também quando estiver usando dados móveis. Isso pode ser caro dependendo do seu plano de dados, portanto, cuidado ao ativar.</translation>
     </message>
     <message>
+        <source>id_spv_mode_is_currently_available</source>
+        <translation>SPV mode is currently available for singlesig bitcoin wallets only.</translation>
+    </message>
+    <message>
         <source>id_spv_not_fully_synced</source>
         <translation>A sincronização SPV não está totalmente concluída.</translation>
     </message>
@@ -3163,6 +3183,10 @@ Redefina essa configuração e depois a reative.</translation>
         <translation>Termos de uso</translation>
     </message>
     <message>
+        <source>id_testnet_electrum_server</source>
+        <translation>Testnet Electrum server</translation>
+    </message>
+    <message>
         <source>id_testnet_wallets</source>
         <translation>Carteiras testnet</translation>
     </message>
@@ -3231,6 +3255,10 @@ Redefina essa configuração e depois a reative.</translation>
         <translation>A frase de recuperação, também conhecida como seed, é o backup da sua carteira e permite recuperar seus fundos. Mantenha-a privada e não compartilhe com ninguém.</translation>
     </message>
     <message>
+        <source>id_the_recovery_phrase_doesnt</source>
+        <translation>The recovery phrase doesn&apos;t match the previously existing wallet. Please retry with a different recovery phrase.</translation>
+    </message>
+    <message>
         <source>id_the_source_code_is_available_at</source>
         <translation>O código-fonte está disponível em %1</translation>
     </message>
@@ -3267,6 +3295,10 @@ Redefina essa configuração e depois a reative.</translation>
         <translation>Esta transação gastou fundos não confidenciais.</translation>
     </message>
     <message>
+        <source>id_this_wallet_operates_on_a_test</source>
+        <translation>This wallet operates on a test network. Anything you receive or send here has no value</translation>
+    </message>
+    <message>
         <source>id_this_will_disable_pin_login_for</source>
         <translation>This will disable PIN login for this wallet on all your devices. You will need your recovery phrase to access your wallet.</translation>
     </message>
@@ -3284,7 +3316,7 @@ Redefina essa configuração e depois a reative.</translation>
     </message>
     <message>
         <source>id_tip_we_recommend_you_enable</source>
-        <translation>Tip: We recommend you enable more than one 2FA method. If you only set up one 2FA method and then lose it, you&apos;ll have to wait at least one year until the 2FA expires.</translation>
+        <translation>Dica: É recomendado habilitar mais de um método de autenticação. Se você tiver só um método habilitado e perde-lo, você terá que esperar pelo menos 1 ano completo para conseguir movimentar seus fundos.  </translation>
     </message>
     <message>
         <source>id_to</source>
@@ -3372,7 +3404,7 @@ Redefina essa configuração e depois a reative.</translation>
     </message>
     <message>
         <source>id_try_again</source>
-        <translation>Try Again</translation>
+        <translation>Tentar novamente</translation>
     </message>
     <message>
         <source>id_try_now</source>
@@ -3527,6 +3559,10 @@ Redefina essa configuração e depois a reative.</translation>
         <translation>O valor precisa ser entre 144 e 200000</translation>
     </message>
     <message>
+        <source>id_verified</source>
+        <translation>Verified</translation>
+    </message>
+    <message>
         <source>id_verify_on_device</source>
         <translation>Verify on Device</translation>
     </message>
@@ -3537,6 +3573,10 @@ Redefina essa configuração e depois a reative.</translation>
     <message>
         <source>id_verify_your_transactions_are</source>
         <translation>Verify your transactions are included on the blockchain</translation>
+    </message>
+    <message>
+        <source>id_verifying_transactions</source>
+        <translation>Verifying transactions…</translation>
     </message>
     <message>
         <source>id_version</source>
@@ -3788,7 +3828,7 @@ Redefina essa configuração e depois a reative.</translation>
     </message>
     <message>
         <source>id_your_2fa_expires_so_that_if_you</source>
-        <translation>Your 2FA expires, so that if you lose access to your 2FA method, or the Blockstream Green service becomes unavailable, you can always recover your bitcoin using this open source tool</translation>
+        <translation>A proteção 2FA expira para permitir você recuperar seus fundos mesmo que o serviço da Blockstream Green fique indisponível ou você perca o acesso ao seus métodos de autenticação. Você sempre pode recuperar seus bitcoins usando a ferramenta de recuperação</translation>
     </message>
     <message>
         <source>id_your_favourite_exchange_rate_is</source>

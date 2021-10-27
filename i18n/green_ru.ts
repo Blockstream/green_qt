@@ -85,7 +85,7 @@
     </message>
     <message>
         <source>id_a_2of3_account_requires_two_out</source>
-        <translation>Аккаунт 2of3 требует двух подписей из трех, чтобы тратить монеты. Третья подпись - это резервный ключ, известный только вам. Это дает вам преимущества безопасности стандартной учетной записи, в то же время позволяя вам перемещать свои монеты независимо в любой момент времени..</translation>
+        <translation>Аккаунт 2из3 требует двух подписей из трех, чтобы тратить монеты. Третья подпись - это резервный ключ, известный только вам. Это дает вам преимущества безопасности стандартной учетной записи, в то же время позволяя вам перемещать свои монеты независимо в любой момент времени.</translation>
     </message>
     <message>
         <source>id_a_new_transaction_has_just</source>
@@ -117,7 +117,7 @@
     </message>
     <message>
         <source>id_account_id</source>
-        <translation>Идентификатор учетной записи</translation>
+        <translation>ID аккаунта</translation>
     </message>
     <message>
         <source>id_account_name</source>
@@ -372,8 +372,8 @@
         <translation>Деноминация биткоина</translation>
     </message>
     <message>
-        <source>id_bitcoin_electrum_backend</source>
-        <translation>Бэкэнд Bitcoin Electrum</translation>
+        <source>id_bitcoin_electrum_server</source>
+        <translation>Bitcoin Electrum server</translation>
     </message>
     <message>
         <source>id_bitcoin_is_the_worlds_leading</source>
@@ -434,7 +434,7 @@
     </message>
     <message>
         <source>id_by_proceeding_to_the_next_steps</source>
-        <translation>Переходя к следующему шагу, вы соглашаетесь с 1%1</translation>
+        <translation>Переходя к следующему шагу, вы соглашаетесь с %1</translation>
     </message>
     <message>
         <source>id_cable</source>
@@ -594,7 +594,7 @@
     </message>
     <message>
         <source>id_collapse_sidebar</source>
-        <translation>Collapse sidebar</translation>
+        <translation>Свернуть боковую панель</translation>
     </message>
     <message>
         <source>id_coming_soon</source>
@@ -614,7 +614,7 @@
     </message>
     <message>
         <source>id_confidential_transaction</source>
-        <translation>Confidential Transaction</translation>
+        <translation>Конфиденциальная транзакция</translation>
     </message>
     <message>
         <source>id_confirm_action</source>
@@ -654,7 +654,7 @@
     </message>
     <message>
         <source>id_confirmations</source>
-        <translation>Confirmations</translation>
+        <translation>Подтверждения</translation>
     </message>
     <message>
         <source>id_congratulations</source>
@@ -663,6 +663,10 @@
     <message>
         <source>id_connect_hardware_wallet</source>
         <translation>Подключите аппаратный кошелек</translation>
+    </message>
+    <message>
+        <source>id_connect_jade_with_a_usb_cable</source>
+        <translation>Connect Jade with a USB cable to download the latest firmware update</translation>
     </message>
     <message>
         <source>id_connect_through_a_proxy</source>
@@ -841,6 +845,10 @@
         <translation>Настраиваемая сеть с таким именем уже существует</translation>
     </message>
     <message>
+        <source>id_custom_servers_and_validation</source>
+        <translation>Custom servers and validation</translation>
+    </message>
+    <message>
         <source>id_customize_2fa_expiration_of</source>
         <translation>Настройте срок действия 2FA для ваших монет</translation>
     </message>
@@ -918,7 +926,7 @@
     </message>
     <message>
         <source>id_device</source>
-        <translation>Device</translation>
+        <translation>Устройство</translation>
     </message>
     <message>
         <source>id_devices</source>
@@ -990,7 +998,7 @@
     </message>
     <message>
         <source>id_double_check_spv_with_other</source>
-        <translation>Дважды проверьте SPV с помощью других серверов</translation>
+        <translation>Перепроверьте SPV с помощью других серверов</translation>
     </message>
     <message>
         <source>id_double_spend</source>
@@ -1042,7 +1050,7 @@
     </message>
     <message>
         <source>id_enable_experimental_features</source>
-        <translation>Enable experimental features</translation>
+        <translation>Включить экспериментальные функции</translation>
     </message>
     <message>
         <source>id_enable_face_id</source>
@@ -1054,7 +1062,7 @@
     </message>
     <message>
         <source>id_enable_or_change_your_pin_to</source>
-        <translation>Включить или изменить PIN для быстрого доступа к средствам</translation>
+        <translation>Активировать или изменить PIN-код для быстрого доступа к вашему кошельку</translation>
     </message>
     <message>
         <source>id_enable_spv</source>
@@ -1182,7 +1190,7 @@
     </message>
     <message>
         <source>id_enter_your_xpub_to_add_a</source>
-        <translation>Введите свой xPub, чтобы добавить кошелек только для просмотра, на который вы можете получать средства и проверять свой баланс, не импортируя свои личные ключи.</translation>
+        <translation>Введите свой xPub, чтобы добавить кошелек watch-only, на который вы можете получать средства и проверять свой баланс, не импортируя свои личные ключи.</translation>
     </message>
     <message>
         <source>id_enter_yournrecovery_phrase</source>
@@ -1191,7 +1199,7 @@
     </message>
     <message>
         <source>id_entity</source>
-        <translation>Entity</translation>
+        <translation>Организация</translation>
     </message>
     <message>
         <source>id_error</source>
@@ -1235,7 +1243,7 @@
     </message>
     <message>
         <source>id_expand_sidebar</source>
-        <translation>Expand sidebar</translation>
+        <translation>Развернуть боковую панель</translation>
     </message>
     <message>
         <source>id_explore_your_wallet</source>
@@ -1279,7 +1287,7 @@
     </message>
     <message>
         <source>id_fee_rate_is_above_maximum</source>
-        <translation>Размер комиссии выше максимального допустимого</translation>
+        <translation>Размер комиссии выше максимального допустимого.</translation>
     </message>
     <message>
         <source>id_fee_rate_is_below_minimum</source>
@@ -1503,7 +1511,7 @@
     </message>
     <message>
         <source>id_i_lost_my_2fa</source>
-        <translation>Я потерял 2FA</translation>
+        <translation>Я потерял свой 2FA</translation>
     </message>
     <message>
         <source>id_i_secured_the_mnemonic_and_i</source>
@@ -1543,7 +1551,7 @@
     </message>
     <message>
         <source>id_import_a_multisig_shield_wallet</source>
-        <translation>Import a Multisig Shield wallet created on Blockstream Green.</translation>
+        <translation>Импортируйте кошелек Multisig Shield, созданный в Blockstream Green.</translation>
     </message>
     <message>
         <source>id_import_a_wallet_created_on</source>
@@ -1762,8 +1770,8 @@
         <translation>Давайте произведем настройку.</translation>
     </message>
     <message>
-        <source>id_liquid_electrum_backend</source>
-        <translation>Бэкэнд Liquid Electrum</translation>
+        <source>id_liquid_electrum_server</source>
+        <translation>Liquid Electrum server</translation>
     </message>
     <message>
         <source>id_liquid_is_a_sidechainbased</source>
@@ -1772,6 +1780,10 @@
     <message>
         <source>id_liquid_securities</source>
         <translation>Ценные бумаги Liquid</translation>
+    </message>
+    <message>
+        <source>id_liquid_testnet_wallets</source>
+        <translation>Liquid testnet wallets</translation>
     </message>
     <message>
         <source>id_liquid_wallets</source>
@@ -1931,11 +1943,11 @@
     </message>
     <message>
         <source>id_message</source>
-        <translation>Message</translation>
+        <translation>Сообщение</translation>
     </message>
     <message>
         <source>id_message_hash</source>
-        <translation>Message hash</translation>
+        <translation>Хеш сообщения</translation>
     </message>
     <message>
         <source>id_migrate_another_wallet</source>
@@ -1991,7 +2003,7 @@
     </message>
     <message>
         <source>id_multisig_shield</source>
-        <translation>Мультиподписной щит</translation>
+        <translation>Multisig Shield</translation>
     </message>
     <message>
         <source>id_my_notes</source>
@@ -2127,11 +2139,11 @@
     </message>
     <message>
         <source>id_non_confidential</source>
-        <translation>Non Confidential</translation>
+        <translation>Неконфиденциально</translation>
     </message>
     <message>
         <source>id_non_confidential_transaction</source>
-        <translation>Non Confidential Transaction</translation>
+        <translation>Неконфиденциальная транзакция</translation>
     </message>
     <message>
         <source>id_nonconfidential_addresses_not</source>
@@ -2283,11 +2295,11 @@
     </message>
     <message>
         <source>id_path_used_for_signing</source>
-        <translation>Path used for signing</translation>
+        <translation>Путь, используемый для подписи</translation>
     </message>
     <message>
         <source>id_pending_confirmation</source>
-        <translation>Pending confirmation</translation>
+        <translation>Ожидание подтверждения</translation>
     </message>
     <message>
         <source>id_permanently_block_this_wallet</source>
@@ -2443,7 +2455,7 @@
     </message>
     <message>
         <source>id_qr_code</source>
-        <translation>QR код</translation>
+        <translation>QR-код</translation>
     </message>
     <message>
         <source>id_qr_scanner</source>
@@ -2627,7 +2639,7 @@
     </message>
     <message>
         <source>id_restore_a_singlesig_wallet</source>
-        <translation>Restore a Singlesig wallet created on Blockstream Green, or import a wallet created with other apps. This option only works with singlesig wallets using BIP39 mnemonics, and following the BIP44, BIP49, or BIP84 derivations.</translation>
+        <translation>Восстановите кошелек Singlesig, созданный на Blockstream Green, или импортируйте кошелек, созданный с помощью других приложений. Эта опция работает только с одноподписными кошельками, использующими мнемонику BIP39, и следуя BIP44, BIP49 или BIP84 стандартам.</translation>
     </message>
     <message>
         <source>id_restore_a_wallet</source>
@@ -2751,7 +2763,7 @@
     </message>
     <message>
         <source>id_select_account</source>
-        <translation>Выберите учетную запись</translation>
+        <translation>Выберите аккаунт</translation>
     </message>
     <message>
         <source>id_select_an_app_on_s</source>
@@ -2763,7 +2775,7 @@
     </message>
     <message>
         <source>id_select_duration_of_twofactor</source>
-        <translation>Выберите продолжительность защиты двухфакторной аутентификации для ваших монет. Новая опция применяется к вновь полученным монетам.</translation>
+        <translation>Выберите продолжительность защиты ваших монет двухфакторной аутентификацией. Новая опция применяется к вновь полученным монетам.</translation>
     </message>
     <message>
         <source>id_select_network</source>
@@ -2771,7 +2783,7 @@
     </message>
     <message>
         <source>id_select_the_s_app_on_your_ledger</source>
-        <translation>Выберите приложение %1 в Ledger и повторите попытку.</translation>
+        <translation>Выберите %1 приложение в Ledger и повторите попытку.</translation>
     </message>
     <message>
         <source>id_select_wallet</source>
@@ -2820,6 +2832,10 @@
     <message>
         <source>id_sent_to</source>
         <translation>Отправить на</translation>
+    </message>
+    <message>
+        <source>id_server_ip_and_port_ipport</source>
+        <translation>Server IP and port (ip:port)</translation>
     </message>
     <message>
         <source>id_set_2fa_expiry</source>
@@ -2987,7 +3003,7 @@
     </message>
     <message>
         <source>id_singlesig_wallets_are_not_yet</source>
-        <translation>Пока не поддерживается использование одноподписных кошельков Singlesig с аппаратными устройствами. Продолжив, вы получите доступ к кошельку Multisig Shield.</translation>
+        <translation>Использование одноподписных кошельков Singlesig с аппаратными устройствами пока не поддерживается. Продолжив, вы получите доступ к кошельку Multisig Shield.</translation>
     </message>
     <message>
         <source>id_skip</source>
@@ -3025,7 +3041,7 @@
     </message>
     <message>
         <source>id_socks5_proxy_and_port_must_be</source>
-        <translation>SOCKS5 прокси и порт должны быть настроены</translation>
+        <translation>Прокси и порт SOCKS5 должны быть настроены</translation>
     </message>
     <message>
         <source>id_something_went_wrong</source>
@@ -3038,6 +3054,10 @@
     <message>
         <source>id_spv_is_always_synchronized_on</source>
         <translation>SPV всегда синхронизируется в  таких сетях, как WiFi или Ethernet. Этот параметр также синхронизируется при использовании мобильных данных. Может быть дорогостоящим в зависимости от вашего тарифного плана, поэтому будьте внимательны при включении.</translation>
+    </message>
+    <message>
+        <source>id_spv_mode_is_currently_available</source>
+        <translation>SPV mode is currently available for singlesig bitcoin wallets only.</translation>
     </message>
     <message>
         <source>id_spv_not_fully_synced</source>
@@ -3057,7 +3077,7 @@
     </message>
     <message>
         <source>id_spv_synchronization_using_tor</source>
-        <translation>SPV synchronization using Tor requires a trusted node onion URL</translation>
+        <translation>Для синхронизации SPV с помощью Tor нужен onion URL надежного узла.</translation>
     </message>
     <message>
         <source>id_spv_unverified</source>
@@ -3163,6 +3183,10 @@
         <translation>Условия использования</translation>
     </message>
     <message>
+        <source>id_testnet_electrum_server</source>
+        <translation>Testnet Electrum server</translation>
+    </message>
+    <message>
         <source>id_testnet_wallets</source>
         <translation>Testnet-кошельки</translation>
     </message>
@@ -3231,6 +3255,10 @@
         <translation>Фразу восстановления можно использовать для востребования ваших средств в любой момент. Держите ее в безопасности и в секрете.</translation>
     </message>
     <message>
+        <source>id_the_recovery_phrase_doesnt</source>
+        <translation>The recovery phrase doesn&apos;t match the previously existing wallet. Please retry with a different recovery phrase.</translation>
+    </message>
+    <message>
         <source>id_the_source_code_is_available_at</source>
         <translation>Исходный код доступен по адресу %1</translation>
     </message>
@@ -3267,6 +3295,10 @@
         <translation>На эту транзакцию потрачены неконфиденциальные средства.</translation>
     </message>
     <message>
+        <source>id_this_wallet_operates_on_a_test</source>
+        <translation>This wallet operates on a test network. Anything you receive or send here has no value</translation>
+    </message>
+    <message>
         <source>id_this_will_disable_pin_login_for</source>
         <translation>Это действие отключит вход с помощью PIN-кода для этого кошелька на всех ваших устройствах. Для доступа к кошельку вам понадобится фраза восстановления.</translation>
     </message>
@@ -3276,7 +3308,7 @@
     </message>
     <message>
         <source>id_ticker</source>
-        <translation>Ticker</translation>
+        <translation>Тикер</translation>
     </message>
     <message>
         <source>id_time_s</source>
@@ -3292,7 +3324,7 @@
     </message>
     <message>
         <source>id_to_keep_you_in_control_of_your</source>
-        <translation>To keep you in control of your funds, Two-Factor Authentication protection expires after roughly %1 days since your last payment. You will be prompted to make a Two-Factor Reactivation transaction, if you don&apos;t move funds often enough.</translation>
+        <translation>Для контроля ваших средств, защита с помощью двухфакторной аутентификации истекает примерно через %1 дней с момента вашего последнего платежа. Вам будет предложено совершить транзакцию двухфакторной реактивации, если вы недостаточно часто переводите средства.</translation>
     </message>
     <message>
         <source>id_tor</source>
@@ -3304,7 +3336,7 @@
     </message>
     <message>
         <source>id_tor_is_connected</source>
-        <translation>Tor is connected</translation>
+        <translation>Tor подключен</translation>
     </message>
     <message>
         <source>id_tor_is_not_yet_available_for</source>
@@ -3312,7 +3344,7 @@
     </message>
     <message>
         <source>id_tor_status</source>
-        <translation>Tor status</translation>
+        <translation>Статус Tor</translation>
     </message>
     <message>
         <source>id_tor_will_use_1s_and_only_work</source>
@@ -3348,7 +3380,7 @@
     </message>
     <message>
         <source>id_transaction_copied_to_clipboard</source>
-        <translation>Transaction copied to clipboard</translation>
+        <translation>Транзакция скопирована в буфер обмена</translation>
     </message>
     <message>
         <source>id_transaction_details</source>
@@ -3364,11 +3396,11 @@
     </message>
     <message>
         <source>id_transaction_status</source>
-        <translation>Transaction status</translation>
+        <translation>Статус транзакции</translation>
     </message>
     <message>
         <source>id_transactions</source>
-        <translation>Transactions</translation>
+        <translation>Транзакции</translation>
     </message>
     <message>
         <source>id_try_again</source>
@@ -3380,7 +3412,7 @@
     </message>
     <message>
         <source>id_turn_on_bluetooth_to_connect</source>
-        <translation>Turn on bluetooth to connect your hardware wallet.</translation>
+        <translation>Включите Bluetooth, чтобы подключить аппаратный кошелек.</translation>
     </message>
     <message>
         <source>id_two_factor_authentication</source>
@@ -3396,7 +3428,7 @@
     </message>
     <message>
         <source>id_twofactor_authentication_expiry</source>
-        <translation>Two-Factor authentication expiry</translation>
+        <translation>Срок действия двухфакторной аутентификации</translation>
     </message>
     <message>
         <source>id_twofactor_expiration_period</source>
@@ -3404,7 +3436,7 @@
     </message>
     <message>
         <source>id_twofactor_protection_does_not</source>
-        <translation>Two-Factor protection does not expire on this account, enable 2 separate Two-Factor methods as backup in case you lose access to one.</translation>
+        <translation>Двухфакторная защита не истекает для этой учетной записи, включите 2 отдельных двухфакторных метода, чтобы использовать один в качестве резервного на случай, если вы потеряете доступ к другому.</translation>
     </message>
     <message>
         <source>id_twofactor_reset_in_progress</source>
@@ -3428,7 +3460,7 @@
     </message>
     <message>
         <source>id_unblinding_data</source>
-        <translation>Unblinding data</translation>
+        <translation>Раскрытие данных</translation>
     </message>
     <message>
         <source>id_unconfirmed</source>
@@ -3440,7 +3472,7 @@
     </message>
     <message>
         <source>id_unknown</source>
-        <translation>Unknown</translation>
+        <translation>Неизвестно</translation>
     </message>
     <message>
         <source>id_unknown_bip21_parameter</source>
@@ -3504,7 +3536,7 @@
     </message>
     <message>
         <source>id_use_android_screen_lock_to_log</source>
-        <translation>Use Android screen lock to log in</translation>
+        <translation>Используйте блокировку экрана Android для входа в систему</translation>
     </message>
     <message>
         <source>id_use_your_email_to_receive</source>
@@ -3524,7 +3556,11 @@
     </message>
     <message>
         <source>id_value_must_be_between_144_and</source>
-        <translation>Value must be between 144 and 200000</translation>
+        <translation>Значение должно быть от 144 до 200000.</translation>
+    </message>
+    <message>
+        <source>id_verified</source>
+        <translation>Verified</translation>
     </message>
     <message>
         <source>id_verify_on_device</source>
@@ -3537,6 +3573,10 @@
     <message>
         <source>id_verify_your_transactions_are</source>
         <translation>Убедитесь, что ваши транзакции включены в блокчейн</translation>
+    </message>
+    <message>
+        <source>id_verifying_transactions</source>
+        <translation>Verifying transactions…</translation>
     </message>
     <message>
         <source>id_version</source>
@@ -3556,7 +3596,7 @@
     </message>
     <message>
         <source>id_visit_s_for_further_information</source>
-        <translation>Visit %1 for further information about the software</translation>
+        <translation>Посетите %1 для получения дополнительной информации о программном обеспечении</translation>
     </message>
     <message>
         <source>id_visit_the_blockstream_help</source>
@@ -3568,7 +3608,7 @@
     </message>
     <message>
         <source>id_wallet_backup</source>
-        <translation>Wallet Backup</translation>
+        <translation>Резервное копирование кошелька</translation>
     </message>
     <message>
         <source>id_wallet_coins_will_require</source>
@@ -3592,7 +3632,7 @@
     </message>
     <message>
         <source>id_warning_no_trusted_node_set</source>
-        <translation>Warning: No trusted node set!</translation>
+        <translation>Предупреждение: доверенный узел не установлен!</translation>
     </message>
     <message>
         <source>id_warning_nononion_address</source>
@@ -3612,7 +3652,7 @@
     </message>
     <message>
         <source>id_warning_watchonly_credentials</source>
-        <translation>Warning: Watch-only credentials will be saved on your device</translation>
+        <translation>Внимание! Учетные данные watch-only будут сохранены на вашем устройстве.</translation>
     </message>
     <message>
         <source>id_warning_you_need_a_positive</source>
@@ -3636,7 +3676,7 @@
     </message>
     <message>
         <source>id_watchonly_mode_cannot_be</source>
-        <translation>Watch-only mode cannot be activated on Liquid as your funds are fully confidential.</translation>
+        <translation>Режим watch-only нельзя активировать на Liquid, так как ваши средства полностью конфиденциальны.</translation>
     </message>
     <message>
         <source>id_watchonly_wallet</source>
@@ -3672,15 +3712,15 @@
     </message>
     <message>
         <source>id_what_type_of_account_would_you</source>
-        <translation>What type of account would you like to add?</translation>
+        <translation>Какой тип учетной записи вы хотите добавить?</translation>
     </message>
     <message>
         <source>id_whats_new</source>
-        <translation>What&apos;s new?</translation>
+        <translation>Что нового?</translation>
     </message>
     <message>
         <source>id_where_would_you_like_to</source>
-        <translation>Where would you like to transfer the funds?</translation>
+        <translation>Куда бы вы хотели перевести средства?</translation>
     </message>
     <message>
         <source>id_wireless</source>
@@ -3732,7 +3772,7 @@
     </message>
     <message>
         <source>id_you_cannot_create_or_restore_a</source>
-        <translation>You cannot create or restore a wallet on %1 as you already have a PIN protected wallet.</translation>
+        <translation>Вы не можете создать или восстановить кошелек на %1 так как у вас уже есть кошелек, защищенный PIN-кодом.</translation>
     </message>
     <message>
         <source>id_you_have_control_on_your_funds</source>
@@ -3792,7 +3832,7 @@
     </message>
     <message>
         <source>id_your_favourite_exchange_rate_is</source>
-        <translation>Your favourite exchange rate is not available at the moment. You can change it from settings.</translation>
+        <translation>Ваш предпочитаемый обменный курс в данный момент недоступен. Вы можете изменить его в настройках.</translation>
     </message>
     <message>
         <source>id_your_funds_are_secured_by</source>
@@ -3808,7 +3848,7 @@
     </message>
     <message>
         <source>id_your_ios_device_might_not_be</source>
-        <translation>Your iOS device might not be supported</translation>
+        <translation>Ваше устройство iOS может не поддерживаться</translation>
     </message>
     <message>
         <source>id_your_notifications_will_be</source>
@@ -3820,7 +3860,7 @@
     </message>
     <message>
         <source>id_your_s_sent_to_s_has_been</source>
-        <translation>Ваша %1 отправленная на %2 подтверждена</translation>
+        <translation>Ваша %1 , отправленная на %2 , подтверждена</translation>
     </message>
     <message>
         <source>id_your_transactions_will_be_shown</source>
@@ -3832,11 +3872,11 @@
     </message>
     <message>
         <source>id_your_wallet_backup_is_made_of</source>
-        <translation>Your wallet backup is made of 24 words, also known as your mnemonic. Make sure you have a backup and keep it safe. Anyone who finds it can steal your money. You can use it to restore your Blockstream Green wallet on another device in case yours is lost, damaged or stolen.</translation>
+        <translation>Резервная копия вашего кошелька состоит из 24 слов, также известных как ваша мнемоническая фраза. Убедитесь, что у вас есть резервная копия, и сохраните ее. Любой, кто его найдет, может украсть ваши деньги. Вы можете использовать ее для восстановления своего кошелька Blockstream Green на другом устройстве в случае потери, повреждения или кражи вашего кошелька.</translation>
     </message>
     <message>
         <source>id_your_wallet_is_locked_for_a</source>
-        <translation>Your wallet is locked for a Two-Factor Authentication reset. The reset will be completed in %1 days.</translation>
+        <translation>Ваш кошелек заблокирован для сброса двухфакторной аутентификации. Сброс будет завершен через%1 дней.</translation>
     </message>
     <message>
         <source>id_your_wallet_is_locked_under_2fa</source>
@@ -3849,7 +3889,7 @@
     </message>
     <message>
         <source>id_your_watchonly_username_and</source>
-        <translation>Your watch-only username and password will be stored un-encrypted on this device. If your device is compromised third parties can get access to your transaction history. Press &quot;OK&quot; to continue.</translation>
+        <translation>Ваше имя пользователя и пароль watch-only будут храниться на этом устройстве в незашифрованном виде. Если ваше устройство будет взломано, третьи лица смогут получить доступ к вашей истории транзакций. Нажмите «ОК», чтобы продолжить.</translation>
     </message>
     <message>
         <source>id_youve_entered_an_invalid_pin</source>

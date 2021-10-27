@@ -10,18 +10,18 @@
     </message>
     <message>
         <source>id_12_months_51840_blocks</source>
-        <translation>12 months (51840 blocks)</translation>
+        <translation>12个月（51840个区块）</translation>
     </message>
     <message>
         <source>id_15_months_65535_blocks</source>
-        <translation>15 months (65535 blocks)</translation>
+        <translation>15个月（65535个区块）</translation>
     </message>
     <message>
         <source>id_1_double_check_all_of_your</source>
-        <translation>1. Double check all of your recovery phrase word by word, are all words correct?
-2. The order of words is important! Make sure you&apos;ve typed the words in the correct order.
+        <translation>1. 请仔细检查所有助记词，所有单词都正确吗？
+2. 助记词的顺序很重要！请确保您已按正确顺序输入单词。
 
-If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 27 words recovery phrase please check our help center.</translation>
+如果这些提示都没有帮助到您，或者您没有12、24或27个单词的助记词，请查看我们的帮助中心。</translation>
     </message>
     <message>
         <source>id_1d_2s_ago</source>
@@ -37,7 +37,7 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_1s_twofactor_setup</source>
-        <translation>%1 Two-Factor setup</translation>
+        <translation>%1设置双重验证</translation>
     </message>
     <message>
         <source>id_2_hours</source>
@@ -45,27 +45,27 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_2fa_dispute_in_progress</source>
-        <translation>2FA Dispute in Progress</translation>
+        <translation>双重验证（2FA）被打断</translation>
     </message>
     <message>
         <source>id_2fa_expired</source>
-        <translation>2FA Expired</translation>
+        <translation>双重验证（2FA）已失效</translation>
     </message>
     <message>
         <source>id_2fa_expiry</source>
-        <translation>2FA Expiry</translation>
+        <translation>双重验证（2FA）已到期</translation>
     </message>
     <message>
         <source>id_2fa_methods</source>
-        <translation>2FA Methods</translation>
+        <translation>双重验证（2FA）方法</translation>
     </message>
     <message>
         <source>id_2fa_reset_in_progress</source>
-        <translation>2FA Reset in Progress</translation>
+        <translation>双重验证（2FA）重设中</translation>
     </message>
     <message>
         <source>id_2fa_threshold</source>
-        <translation>2FA Threshold</translation>
+        <translation>双重验证（2FA）临界点</translation>
     </message>
     <message>
         <source>id_2of3_account</source>
@@ -81,7 +81,7 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_6_months_25920_blocks</source>
-        <translation>6 months (25920 blocks)</translation>
+        <translation>6个月（25920个区块）</translation>
     </message>
     <message>
         <source>id_a_2of3_account_requires_two_out</source>
@@ -153,11 +153,11 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_add_an_amp_wallet</source>
-        <translation>Add an AMP wallet</translation>
+        <translation>添加一个AMP钱包</translation>
     </message>
     <message>
         <source>id_add_another_wallet</source>
-        <translation>Add another wallet</translation>
+        <translation>添加另一个钱包</translation>
     </message>
     <message>
         <source>id_add_custom_network_by_qr_code</source>
@@ -177,7 +177,7 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_additional_networks</source>
-        <translation>Additional Networks</translation>
+        <translation>更多网络</translation>
     </message>
     <message>
         <source>id_additional_security</source>
@@ -197,15 +197,15 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_address_verified</source>
-        <translation>Address verified!</translation>
+        <translation>地址已验证！</translation>
     </message>
     <message>
         <source>id_addresses</source>
-        <translation>Addresses</translation>
+        <translation>地址</translation>
     </message>
     <message>
         <source>id_advanced</source>
-        <translation>Advanced</translation>
+        <translation>高级</translation>
     </message>
     <message>
         <source>id_advanced_network_settings</source>
@@ -213,7 +213,7 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_advanced_options_for_your_third</source>
-        <translation>Advanced options for your third recovery key</translation>
+        <translation>第三个恢复秘钥的高级选项</translation>
     </message>
     <message>
         <source>id_all</source>
@@ -221,7 +221,7 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_all_of_the_accounts_in_your</source>
-        <translation>All of the accounts in your wallet need to be empty before deleting it.</translation>
+        <translation>删除钱包之前，您钱包中的所有帐户都需要为空。</translation>
     </message>
     <message>
         <source>id_all_the_coins_received_or</source>
@@ -229,7 +229,7 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_all_wallets</source>
-        <translation>All wallets</translation>
+        <translation>所有钱包</translation>
     </message>
     <message>
         <source>id_allows_you_to_quickly_check</source>
@@ -249,7 +249,7 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_amp_account</source>
-        <translation>AMP Account</translation>
+        <translation>AMP账户</translation>
     </message>
     <message>
         <source>id_amp_accounts_are_only_available</source>
@@ -372,8 +372,8 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
         <translation>比特币面值</translation>
     </message>
     <message>
-        <source>id_bitcoin_electrum_backend</source>
-        <translation>Bitcoin Electrum backend</translation>
+        <source>id_bitcoin_electrum_server</source>
+        <translation>Bitcoin Electrum server</translation>
     </message>
     <message>
         <source>id_bitcoin_is_the_worlds_leading</source>
@@ -665,6 +665,10 @@ Simple and Secure</translation>
         <translation>连接硬件钱包</translation>
     </message>
     <message>
+        <source>id_connect_jade_with_a_usb_cable</source>
+        <translation>Connect Jade with a USB cable to download the latest firmware update</translation>
+    </message>
+    <message>
         <source>id_connect_through_a_proxy</source>
         <translation>通过proxy连接</translation>
     </message>
@@ -839,6 +843,10 @@ Simple and Secure</translation>
     <message>
         <source>id_custom_network_with_this_name</source>
         <translation>已存在同名的自定义网络</translation>
+    </message>
+    <message>
+        <source>id_custom_servers_and_validation</source>
+        <translation>Custom servers and validation</translation>
     </message>
     <message>
         <source>id_customize_2fa_expiration_of</source>
@@ -1762,8 +1770,8 @@ Recovery Phrase</translation>
         <translation>立即开始设置。</translation>
     </message>
     <message>
-        <source>id_liquid_electrum_backend</source>
-        <translation>Liquid Electrum backend</translation>
+        <source>id_liquid_electrum_server</source>
+        <translation>Liquid Electrum server</translation>
     </message>
     <message>
         <source>id_liquid_is_a_sidechainbased</source>
@@ -1772,6 +1780,10 @@ Recovery Phrase</translation>
     <message>
         <source>id_liquid_securities</source>
         <translation>Liquid证券型资产</translation>
+    </message>
+    <message>
+        <source>id_liquid_testnet_wallets</source>
+        <translation>Liquid testnet wallets</translation>
     </message>
     <message>
         <source>id_liquid_wallets</source>
@@ -2822,6 +2834,10 @@ Recovery Phrase</translation>
         <translation>发送至</translation>
     </message>
     <message>
+        <source>id_server_ip_and_port_ipport</source>
+        <translation>Server IP and port (ip:port)</translation>
+    </message>
+    <message>
         <source>id_set_2fa_expiry</source>
         <translation>Set 2FA expiry</translation>
     </message>
@@ -3040,6 +3056,10 @@ Recovery Phrase</translation>
         <translation>SPV永远在非移动网络，如WiFi或以太网上同步。此设置在使用移动数据网络时也进行同步，可能会产生较高额的流量费用，请谨慎开启。</translation>
     </message>
     <message>
+        <source>id_spv_mode_is_currently_available</source>
+        <translation>SPV mode is currently available for singlesig bitcoin wallets only.</translation>
+    </message>
+    <message>
         <source>id_spv_not_fully_synced</source>
         <translation>SPV未完全同步</translation>
     </message>
@@ -3163,6 +3183,10 @@ Recovery Phrase</translation>
         <translation>用户协议</translation>
     </message>
     <message>
+        <source>id_testnet_electrum_server</source>
+        <translation>Testnet Electrum server</translation>
+    </message>
+    <message>
         <source>id_testnet_wallets</source>
         <translation>Testnet wallets</translation>
     </message>
@@ -3231,6 +3255,10 @@ Recovery Phrase</translation>
         <translation>The recovery phrase can be used to claim your funds at any point. Keep it safe, keep it private.</translation>
     </message>
     <message>
+        <source>id_the_recovery_phrase_doesnt</source>
+        <translation>The recovery phrase doesn&apos;t match the previously existing wallet. Please retry with a different recovery phrase.</translation>
+    </message>
+    <message>
         <source>id_the_source_code_is_available_at</source>
         <translation>可以在%1找到源代码</translation>
     </message>
@@ -3265,6 +3293,10 @@ Recovery Phrase</translation>
     <message>
         <source>id_this_transaction_spent</source>
         <translation>这笔转账花费了非隐私资金。</translation>
+    </message>
+    <message>
+        <source>id_this_wallet_operates_on_a_test</source>
+        <translation>This wallet operates on a test network. Anything you receive or send here has no value</translation>
     </message>
     <message>
         <source>id_this_will_disable_pin_login_for</source>
@@ -3527,6 +3559,10 @@ Recovery Phrase</translation>
         <translation>该值必须在144到200000之间</translation>
     </message>
     <message>
+        <source>id_verified</source>
+        <translation>Verified</translation>
+    </message>
+    <message>
         <source>id_verify_on_device</source>
         <translation>Verify on Device</translation>
     </message>
@@ -3537,6 +3573,10 @@ Recovery Phrase</translation>
     <message>
         <source>id_verify_your_transactions_are</source>
         <translation>Verify your transactions are included on the blockchain</translation>
+    </message>
+    <message>
+        <source>id_verifying_transactions</source>
+        <translation>Verifying transactions…</translation>
     </message>
     <message>
         <source>id_version</source>

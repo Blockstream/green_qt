@@ -372,8 +372,8 @@ Pokud vám žádný z těchto tipů nepomohl nebo pokud nemáte frázi pro obnov
         <translation>Nominální hodnota bitcoinu</translation>
     </message>
     <message>
-        <source>id_bitcoin_electrum_backend</source>
-        <translation>Bitcoin Electrum backend</translation>
+        <source>id_bitcoin_electrum_server</source>
+        <translation>Bitcoin Electrum server</translation>
     </message>
     <message>
         <source>id_bitcoin_is_the_worlds_leading</source>
@@ -594,7 +594,7 @@ Jednoduše a bezpečně</translation>
     </message>
     <message>
         <source>id_collapse_sidebar</source>
-        <translation>Collapse sidebar</translation>
+        <translation>Sbalit boční panel</translation>
     </message>
     <message>
         <source>id_coming_soon</source>
@@ -614,7 +614,7 @@ Jednoduše a bezpečně</translation>
     </message>
     <message>
         <source>id_confidential_transaction</source>
-        <translation>Confidential Transaction</translation>
+        <translation>Důvěrná transakce</translation>
     </message>
     <message>
         <source>id_confirm_action</source>
@@ -654,7 +654,7 @@ Jednoduše a bezpečně</translation>
     </message>
     <message>
         <source>id_confirmations</source>
-        <translation>Confirmations</translation>
+        <translation>Potvrzení</translation>
     </message>
     <message>
         <source>id_congratulations</source>
@@ -663,6 +663,10 @@ Jednoduše a bezpečně</translation>
     <message>
         <source>id_connect_hardware_wallet</source>
         <translation>Připojit hardwarovou peněženku</translation>
+    </message>
+    <message>
+        <source>id_connect_jade_with_a_usb_cable</source>
+        <translation>Connect Jade with a USB cable to download the latest firmware update</translation>
     </message>
     <message>
         <source>id_connect_through_a_proxy</source>
@@ -841,6 +845,10 @@ Jednoduše a bezpečně</translation>
         <translation>Vlastní síť s tímto názvem již existuje</translation>
     </message>
     <message>
+        <source>id_custom_servers_and_validation</source>
+        <translation>Custom servers and validation</translation>
+    </message>
+    <message>
         <source>id_customize_2fa_expiration_of</source>
         <translation>Přizpůsobte si vypršení platnosti 2FA u vašich mincí </translation>
     </message>
@@ -918,7 +926,7 @@ Jednoduše a bezpečně</translation>
     </message>
     <message>
         <source>id_device</source>
-        <translation>Device</translation>
+        <translation>Zařízení</translation>
     </message>
     <message>
         <source>id_devices</source>
@@ -1042,7 +1050,7 @@ Jednoduše a bezpečně</translation>
     </message>
     <message>
         <source>id_enable_experimental_features</source>
-        <translation>Enable experimental features</translation>
+        <translation>Povolit experimentální funkce</translation>
     </message>
     <message>
         <source>id_enable_face_id</source>
@@ -1235,7 +1243,7 @@ obnovovací frázi</translation>
     </message>
     <message>
         <source>id_expand_sidebar</source>
-        <translation>Expand sidebar</translation>
+        <translation>Rozbalit boční panel</translation>
     </message>
     <message>
         <source>id_explore_your_wallet</source>
@@ -1543,7 +1551,7 @@ obnovovací frázi</translation>
     </message>
     <message>
         <source>id_import_a_multisig_shield_wallet</source>
-        <translation>Import a Multisig Shield wallet created on Blockstream Green.</translation>
+        <translation>Importovat Multisig Shield peněženku vytvořenou na Blockstream Green.</translation>
     </message>
     <message>
         <source>id_import_a_wallet_created_on</source>
@@ -1762,8 +1770,8 @@ obnovovací frázi</translation>
         <translation>Pojďme se připravit.</translation>
     </message>
     <message>
-        <source>id_liquid_electrum_backend</source>
-        <translation>Liquid Electrum backend</translation>
+        <source>id_liquid_electrum_server</source>
+        <translation>Liquid Electrum server</translation>
     </message>
     <message>
         <source>id_liquid_is_a_sidechainbased</source>
@@ -1772,6 +1780,10 @@ obnovovací frázi</translation>
     <message>
         <source>id_liquid_securities</source>
         <translation>Liquid Securities</translation>
+    </message>
+    <message>
+        <source>id_liquid_testnet_wallets</source>
+        <translation>Liquid testnet wallets</translation>
     </message>
     <message>
         <source>id_liquid_wallets</source>
@@ -1931,11 +1943,11 @@ obnovovací frázi</translation>
     </message>
     <message>
         <source>id_message</source>
-        <translation>Message</translation>
+        <translation>Zpráva</translation>
     </message>
     <message>
         <source>id_message_hash</source>
-        <translation>Message hash</translation>
+        <translation>Hash zprávy</translation>
     </message>
     <message>
         <source>id_migrate_another_wallet</source>
@@ -2127,11 +2139,11 @@ obnovovací frázi</translation>
     </message>
     <message>
         <source>id_non_confidential</source>
-        <translation>Non Confidential</translation>
+        <translation>Ne-důvěrné</translation>
     </message>
     <message>
         <source>id_non_confidential_transaction</source>
-        <translation>Non Confidential Transaction</translation>
+        <translation>Ne-důvěrná transakce</translation>
     </message>
     <message>
         <source>id_nonconfidential_addresses_not</source>
@@ -2283,11 +2295,11 @@ obnovovací frázi</translation>
     </message>
     <message>
         <source>id_path_used_for_signing</source>
-        <translation>Path used for signing</translation>
+        <translation>Cesta používaná pro podepisování</translation>
     </message>
     <message>
         <source>id_pending_confirmation</source>
-        <translation>Pending confirmation</translation>
+        <translation>Čekající transakce</translation>
     </message>
     <message>
         <source>id_permanently_block_this_wallet</source>
@@ -2627,7 +2639,7 @@ obnovovací frázi</translation>
     </message>
     <message>
         <source>id_restore_a_singlesig_wallet</source>
-        <translation>Restore a Singlesig wallet created on Blockstream Green, or import a wallet created with other apps. This option only works with singlesig wallets using BIP39 mnemonics, and following the BIP44, BIP49, or BIP84 derivations.</translation>
+        <translation>Obnovte Singlesig peněženku vytvořenou v aplikaci Blockstream Green nebo importujte peněženku vytvořenou pomocí jiných aplikací. Tato možnost funguje pouze s peněženkami Singlesig používající BIP39 standard a následující BIP44, BIP49 nebo BIP84 derivace.</translation>
     </message>
     <message>
         <source>id_restore_a_wallet</source>
@@ -2820,6 +2832,10 @@ obnovovací frázi</translation>
     <message>
         <source>id_sent_to</source>
         <translation>Odesláno na</translation>
+    </message>
+    <message>
+        <source>id_server_ip_and_port_ipport</source>
+        <translation>Server IP and port (ip:port)</translation>
     </message>
     <message>
         <source>id_set_2fa_expiry</source>
@@ -3040,6 +3056,10 @@ Obnovte toto nastavení a znovu jej aktivujte.</translation>
         <translation>SPV je vždy synchronizován v jiných než mobilních sítích, jako je WiFi nebo Ethernet. Toto nastavení ho také synchronizuje při používání mobilních dat. To může být drahé v závislosti na vašem datovém plánu, takže při aktivaci buďte opatrní.</translation>
     </message>
     <message>
+        <source>id_spv_mode_is_currently_available</source>
+        <translation>SPV mode is currently available for singlesig bitcoin wallets only.</translation>
+    </message>
+    <message>
         <source>id_spv_not_fully_synced</source>
         <translation>SPV není plně synchronizováno</translation>
     </message>
@@ -3163,6 +3183,10 @@ Obnovte toto nastavení a znovu jej aktivujte.</translation>
         <translation>Podmínky použití</translation>
     </message>
     <message>
+        <source>id_testnet_electrum_server</source>
+        <translation>Testnet Electrum server</translation>
+    </message>
+    <message>
         <source>id_testnet_wallets</source>
         <translation>Testnet peněženky</translation>
     </message>
@@ -3231,6 +3255,10 @@ Obnovte toto nastavení a znovu jej aktivujte.</translation>
         <translation>Frázi pro obnovení lze kdykoli použít k vyzvednutí finančních prostředků. Mějte ji v bezpečí a soukromí</translation>
     </message>
     <message>
+        <source>id_the_recovery_phrase_doesnt</source>
+        <translation>The recovery phrase doesn&apos;t match the previously existing wallet. Please retry with a different recovery phrase.</translation>
+    </message>
+    <message>
         <source>id_the_source_code_is_available_at</source>
         <translation>Zdrojový kód je k dispozici na %1</translation>
     </message>
@@ -3265,6 +3293,10 @@ Obnovte toto nastavení a znovu jej aktivujte.</translation>
     <message>
         <source>id_this_transaction_spent</source>
         <translation>Tato transakce utratila nedůvěrné prostředky.</translation>
+    </message>
+    <message>
+        <source>id_this_wallet_operates_on_a_test</source>
+        <translation>This wallet operates on a test network. Anything you receive or send here has no value</translation>
     </message>
     <message>
         <source>id_this_will_disable_pin_login_for</source>
@@ -3428,7 +3460,7 @@ Obnovte toto nastavení a znovu jej aktivujte.</translation>
     </message>
     <message>
         <source>id_unblinding_data</source>
-        <translation>Unblinding data</translation>
+        <translation>Odtajněná data</translation>
     </message>
     <message>
         <source>id_unconfirmed</source>
@@ -3527,6 +3559,10 @@ Obnovte toto nastavení a znovu jej aktivujte.</translation>
         <translation>Hodnota musí být mezi 144 a 200000</translation>
     </message>
     <message>
+        <source>id_verified</source>
+        <translation>Verified</translation>
+    </message>
+    <message>
         <source>id_verify_on_device</source>
         <translation>Ověřit na zařízení</translation>
     </message>
@@ -3537,6 +3573,10 @@ Obnovte toto nastavení a znovu jej aktivujte.</translation>
     <message>
         <source>id_verify_your_transactions_are</source>
         <translation>Ověřte, zda jsou vaše transakce zahrnuty do blockchainu</translation>
+    </message>
+    <message>
+        <source>id_verifying_transactions</source>
+        <translation>Verifying transactions…</translation>
     </message>
     <message>
         <source>id_version</source>
