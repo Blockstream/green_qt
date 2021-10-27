@@ -130,5 +130,6 @@
         <file>ScannerPopup.qml</file>
         <file>JadeSignMessageView.qml</file>
         <file>WalletSideButton.qml</file>
+        <file>SideBar.qml</file>
     </qresource>
 </RCC>
