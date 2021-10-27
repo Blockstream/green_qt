@@ -97,25 +97,6 @@ ApplicationWindow {
         id: font_metrics
     }
 
-    component WalletButton: SideButton {
-        id: self
-        required property Wallet wallet
-        location: `/${wallet.network.key}/${wallet.id}`
-        text: wallet.device ? wallet.device.name : walletName(wallet)
-        busy: wallet.activities.length > 0
-        icon.width: 16
-        icon.height: 16
-        leftPadding: 32
-        icon.source: wallet.network.electrum ? 'qrc:/svg/key.svg' : 'qrc:/svg/multi-sig.svg'
-        visible: !Settings.collapseSideBar
-        DeviceImage {
-            Layout.minimumWidth: paintedWidth
-            sourceSize.height: 16
-            parent: self.contentItem
-            visible: wallet.device
-            device: wallet.device
-        }
-    }
     component SideLabel: SectionLabel {
         topPadding: 16
         leftPadding: 4
@@ -184,7 +165,7 @@ ApplicationWindow {
                                 justReady: true
                                 network: 'bitcoin'
                             }
-                            WalletButton {
+                            WalletSideButton {
                             }
                         }
                         SideButton {
@@ -198,7 +179,7 @@ ApplicationWindow {
                                 justReady: true
                                 network: 'testnet'
                             }
-                            WalletButton {
+                            WalletSideButton {
                                 visible: !Settings.collapseSideBar && Settings.enableTestnet
                             }
                         }
@@ -212,7 +193,7 @@ ApplicationWindow {
                                 justReady: true
                                 network: 'liquid'
                             }
-                            WalletButton {
+                            WalletSideButton {
                             }
                         }
                         SideButton {
@@ -226,7 +207,7 @@ ApplicationWindow {
                                 justReady: true
                                 network: 'testnet-liquid'
                             }
-                            WalletButton {
+                            WalletSideButton {
                             }
                         }
                         SideLabel {

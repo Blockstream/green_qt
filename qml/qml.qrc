@@ -129,5 +129,6 @@
         <file>FixedErrorBadge.qml</file>
         <file>ScannerPopup.qml</file>
         <file>JadeSignMessageView.qml</file>
+        <file>WalletSideButton.qml</file>
     </qresource>
 </RCC>
