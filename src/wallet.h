@@ -71,6 +71,7 @@ private:
     Q_PROPERTY(bool empty READ isEmpty NOTIFY emptyChanged)
     Q_PROPERTY(int blockHeight READ blockHeight NOTIFY blockHeightChanged)
     Q_PROPERTY(QString displayUnit READ displayUnit NOTIFY displayUnitChanged)
+    Q_PROPERTY(QJsonObject deviceDetails READ deviceDetails NOTIFY deviceDetailsChanged)
 public:
     explicit Wallet(Network* network, QObject *parent = nullptr);
     virtual ~Wallet();
@@ -123,6 +124,7 @@ public:
 
     Device* device() const { return m_device; }
     void setDevice(Device* device);
+    QJsonObject deviceDetails() const { return m_device_details; }
 
     void updateHashId(const QString& hash_id);
     int blockHeight() const { return m_block_height; }
@@ -160,6 +162,7 @@ signals:
     void blockHeightChanged(int block_height);
     void displayUnitChanged(const QString display_unit);
     void deviceChanged(Device* device);
+    void deviceDetailsChanged();
 protected:
     bool eventFilter(QObject* object, QEvent* event) override;
     void timerEvent(QTimerEvent* event) override;
@@ -197,6 +200,7 @@ public:
     QByteArray getPinData() const;
     QByteArray m_pin_data;
     QString m_name;
+    QJsonObject m_device_details;
     Network* const m_network{nullptr};
     int m_login_attempts_remaining{3};
     int m_logout_timer{-1};

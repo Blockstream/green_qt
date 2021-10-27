@@ -472,6 +472,9 @@ void Wallet::save()
     if (!m_hash_id.isEmpty()) {
         data.insert("hash_id", m_hash_id);
     }
+    if (!m_device_details.isEmpty()) {
+        data.insert("device_details", m_device_details);
+    }
     QFile file(GetDataFile("wallets", m_id));
     bool result = file.open(QFile::WriteOnly | QFile::Truncate);
     Q_ASSERT(result);
@@ -644,6 +647,12 @@ void Wallet::setDevice(Device* device)
             setDevice(nullptr);
         });
 
+        const auto device_details = m_device->details();
+        if (m_device_details != device_details) {
+            m_device_details = device_details;
+            save();
+            emit deviceDetailsChanged();
+        }
     }
     emit deviceChanged(m_device);
 }

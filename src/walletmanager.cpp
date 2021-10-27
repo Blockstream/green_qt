@@ -54,6 +54,9 @@ WalletManager::WalletManager()
             wallet->m_watch_only = true;
             wallet->m_username = data.value("username").toString();
         }
+        if (data.contains("device_details")) {
+            wallet->m_device_details = data.value("device_details").toObject();
+        }
         wallet->m_name = data.value("name").toString();
         addWallet(wallet);
     }
