@@ -24,7 +24,6 @@ public:
     Resolver(Handler* handler, const QJsonObject& result);
     Handler* handler() const { return m_handler; }
     QJsonObject result() const { return m_result; }
-    Wallet* wallet() const;
     Network* network() const;
     Activity* activity() const { return m_activity; }
     bool failed() const { return m_failed; }

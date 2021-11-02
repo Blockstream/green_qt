@@ -12,14 +12,9 @@ Resolver::Resolver(Handler *handler, const QJsonObject& result)
 {
 }
 
-Wallet *Resolver::wallet() const
-{
-    return m_handler->wallet();
-}
-
 Network *Resolver::network() const
 {
-    return wallet()->network();
+    return m_handler->wallet()->network();
 }
 
 void Resolver::pushActivity(Activity* activity)
