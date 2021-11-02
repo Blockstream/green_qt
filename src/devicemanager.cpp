@@ -19,6 +19,14 @@ QSet<Device*> DeviceManager::devices() const
     return m_devices;
 }
 
+Device *DeviceManager::deviceWithId(const QString& id)
+{
+    for (auto device : m_devices) {
+        if (device->uuid() == id) return device;
+    }
+    return nullptr;
+}
+
 void DeviceManager::addDevice(Device* device)
 {
     Q_ASSERT(!m_devices.contains(device));

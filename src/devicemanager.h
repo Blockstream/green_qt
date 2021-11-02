@@ -15,6 +15,7 @@ public:
     virtual ~DeviceManager();
     static DeviceManager* instance();
     QSet<Device*> devices() const;
+    Device* deviceWithId(const QString& id);
 public slots:
     void addDevice(Device* device);
     void removeDevice(Device* device);
