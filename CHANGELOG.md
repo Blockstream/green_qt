@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update GDK to 0.0.47
 
 ### Fixed
+Fix unblinded link for Liquid transaction on Singlesig wallets
 
 ## [1.0.3] - 2021-10-27
 ### Added

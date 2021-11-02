@@ -133,12 +133,12 @@ QString Transaction::unblindedLink() const
 
     QStringList args;
 
-    auto append_blinding_data = [&](const QJsonValue value) {
+    auto append_blinding_data = [&](const QJsonValue& value) {
         QJsonObject o = value.toObject();
 
-        if (!o.contains("satoshi") && o["satoshi"].toInt()==0) return;
-        if (!o.contains("assetblinder") && o["assetblinder"].toString()!="") return;
-        if (!o.contains("amountblinder") && o["amountblinder"].toString()!="") return;
+        if (!o.contains("satoshi") || o["satoshi"].toInt() == 0) return;
+        if (!o.contains("assetblinder") || o["assetblinder"].toString() == "") return;
+        if (!o.contains("amountblinder") || o["amountblinder"].toString() == "") return;
 
         args.append(QString::number(ParseSatoshi(o["satoshi"])));
         args.append(o["asset_id"].toString());
