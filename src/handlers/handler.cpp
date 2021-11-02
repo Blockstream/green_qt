@@ -1,5 +1,6 @@
 #include "network.h"
 #include "device.h"
+#include "devicemanager.h"
 #include "ga.h"
 #include "handler.h"
 #include "json.h"
@@ -177,34 +178,43 @@ void Handler::request(const QByteArray& method)
     step();
 }
 
+static Device* GetDeviceFromRequiredData(const QJsonObject& required_data)
+{
+    const auto device = required_data.value("device").toObject();
+    const auto device_type = device.value("device_type").toString();
+    Q_ASSERT(device_type == "hardware");
+    const auto id = device.value("name").toString();
+    return DeviceManager::instance()->deviceWithId(id);
+}
+
 Resolver* Handler::createResolver(const QJsonObject& result)
 {
     if (result.contains("required_data")) {
         const auto required_data = result.value("required_data").toObject();
-        const auto device = required_data.value("device").toObject();
-        Q_ASSERT(device.value("device_type").toString() == "hardware");
+        auto device = GetDeviceFromRequiredData(required_data);
+        Q_ASSERT(device);
         const auto action = required_data.value("action").toString();
         if (action == "get_xpubs") {
-            return new GetXPubsResolver(this, result);
+            return new GetXPubsResolver(this, device, result);
         }
         if (action == "get_blinding_public_keys") {
-            return new BlindingKeysResolver(this, result);
+            return new BlindingKeysResolver(this, device, result);
         }
         if (action == "get_blinding_nonces") {
-            return new BlindingNoncesResolver(this, result);
+            return new BlindingNoncesResolver(this, device, result);
         }
         if (action =="sign_tx") {
             if (m_session->network()->isLiquid()) {
-                return new SignLiquidTransactionResolver(this, result);
+                return new SignLiquidTransactionResolver(this, device, result);
             } else {
-                return new SignTransactionResolver(this, result);
+                return new SignTransactionResolver(this, device, result);
             }
         }
         if (action == "sign_message") {
-            return new SignMessageResolver(this, result);
+            return new SignMessageResolver(this, device, result);
         }
         if (action == "get_master_blinding_key") {
-            return new GetMasterBlindingKeyResolver(this, result);
+            return new GetMasterBlindingKeyResolver(this, device, result);
         }
         Q_UNREACHABLE();
     }

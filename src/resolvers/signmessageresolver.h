@@ -11,7 +11,7 @@ class SignMessageResolver : public DeviceResolver
     Q_PROPERTY(QString path READ path CONSTANT)
     QML_ELEMENT
 public:
-    SignMessageResolver(Handler* handler, const QJsonObject& result);
+    SignMessageResolver(Handler* handler, Device* device, const QJsonObject& result);
     QString message() const { return m_message; }
     QString hash() const { return m_hash; }
     QString path() const;

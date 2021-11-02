@@ -79,9 +79,10 @@ class DeviceResolver : public Resolver
     Q_PROPERTY(Device* device READ device CONSTANT)
     QML_ELEMENT
 public:
-    DeviceResolver(Handler* handler, const QJsonObject& result);
-    Device* device() const;
+    DeviceResolver(Handler* handler, Device* device, const QJsonObject& result);
+    Device* device() const { return m_device; }
 protected:
+    Device* const m_device;
     QJsonObject const m_required_data;
 };
 
@@ -90,7 +91,7 @@ class GetXPubsResolver : public DeviceResolver
     Q_OBJECT
     QML_ELEMENT
 public:
-    GetXPubsResolver(Handler* handler, const QJsonObject& result);
+    GetXPubsResolver(Handler* handler, Device* device, const QJsonObject& result);
     void resolve() override;
 protected:
     QList<QVector<uint32_t>> m_paths;
@@ -102,7 +103,7 @@ class SignTransactionResolver : public DeviceResolver
     Q_OBJECT
     QML_ELEMENT
 public:
-    SignTransactionResolver(Handler* handler, const QJsonObject& result);
+    SignTransactionResolver(Handler* handler, Device* device, const QJsonObject& result);
     void resolve() override;
 };
 
@@ -111,7 +112,7 @@ class BlindingKeysResolver : public DeviceResolver
     Q_OBJECT
     QML_ELEMENT
 public:
-    BlindingKeysResolver(Handler* handler, const QJsonObject& result);
+    BlindingKeysResolver(Handler* handler, Device* device, const QJsonObject& result);
     void resolve() override;
 protected:
     QJsonArray m_scripts;
@@ -123,7 +124,7 @@ class BlindingNoncesResolver : public DeviceResolver
     Q_OBJECT
     QML_ELEMENT
 public:
-    BlindingNoncesResolver(Handler* handler, const QJsonObject& result);
+    BlindingNoncesResolver(Handler* handler, Device* device, const QJsonObject& result);
     void resolve() override;
 protected:
     QJsonArray m_scripts;
@@ -138,7 +139,7 @@ class SignLiquidTransactionResolver : public DeviceResolver
     Q_PROPERTY(QJsonObject message READ message NOTIFY messageChanged)
     QML_ELEMENT
 public:
-    SignLiquidTransactionResolver(Handler* handler, const QJsonObject& result);
+    SignLiquidTransactionResolver(Handler* handler, Device* device, const QJsonObject& result);
     qreal progress() const { return m_progress; };
     QJsonObject message() const { return m_message; };
     void resolve() override;
@@ -155,7 +156,7 @@ class GetMasterBlindingKeyResolver : public DeviceResolver
     Q_OBJECT
     QML_ELEMENT
 public:
-    GetMasterBlindingKeyResolver(Handler* handler, const QJsonObject& result);
+    GetMasterBlindingKeyResolver(Handler* handler, Device* device, const QJsonObject& result);
     void resolve() override;
 };
 

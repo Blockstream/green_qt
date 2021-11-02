@@ -81,20 +81,16 @@ void TwoFactorResolver::setCode(const QString &code)
     emit codeChanged(m_code);
 }
 
-DeviceResolver::DeviceResolver(Handler* handler, const QJsonObject& result)
+DeviceResolver::DeviceResolver(Handler* handler, Device* device, const QJsonObject& result)
     : Resolver(handler, result)
+    , m_device(device)
     , m_required_data(result.value("required_data").toObject())
 {
     Q_ASSERT(m_required_data.contains("device"));
 }
 
-Device *DeviceResolver::device() const
-{
-    return wallet()->m_device;
-}
-
-GetXPubsResolver::GetXPubsResolver(Handler* handler, const QJsonObject& result)
-    : DeviceResolver(handler, result)
+GetXPubsResolver::GetXPubsResolver(Handler* handler, Device* device, const QJsonObject& result)
+    : DeviceResolver(handler, device, result)
 {
     for (auto path : m_required_data.value("paths").toArray()) {
         QVector<uint32_t> p;
@@ -124,8 +120,8 @@ void GetXPubsResolver::resolve()
     activity->exec();
 }
 
-SignTransactionResolver::SignTransactionResolver(Handler* handler, const QJsonObject& result)
-    : DeviceResolver(handler, result)
+SignTransactionResolver::SignTransactionResolver(Handler* handler, Device* device, const QJsonObject& result)
+    : DeviceResolver(handler, device, result)
 {
 }
 
@@ -165,8 +161,8 @@ void SignTransactionResolver::resolve()
     activity->exec();
 }
 
-BlindingKeysResolver::BlindingKeysResolver(Handler* handler, const QJsonObject& result)
-    : DeviceResolver(handler, result)
+BlindingKeysResolver::BlindingKeysResolver(Handler* handler, Device* device, const QJsonObject& result)
+    : DeviceResolver(handler, device, result)
 {
     m_scripts = m_required_data.value("scripts").toArray();
 }
@@ -191,8 +187,8 @@ void BlindingKeysResolver::resolve()
     activity->exec();
 }
 
-BlindingNoncesResolver::BlindingNoncesResolver(Handler* handler, const QJsonObject& result)
-    : DeviceResolver(handler, result)
+BlindingNoncesResolver::BlindingNoncesResolver(Handler* handler, Device* device, const QJsonObject& result)
+    : DeviceResolver(handler, device, result)
 {
     m_scripts = m_required_data.value("scripts").toArray();
     m_public_keys = m_required_data.value("public_keys").toArray();
@@ -220,8 +216,8 @@ void BlindingNoncesResolver::resolve()
     activity->exec();
 }
 
-SignLiquidTransactionResolver::SignLiquidTransactionResolver(Handler* handler, const QJsonObject& result)
-    : DeviceResolver(handler, result)
+SignLiquidTransactionResolver::SignLiquidTransactionResolver(Handler* handler, Device* device, const QJsonObject& result)
+    : DeviceResolver(handler, device, result)
 {
     Q_ASSERT(network()->isLiquid());
     Q_ASSERT(m_required_data.value("action").toString() == "sign_tx");
@@ -312,8 +308,8 @@ void SignLiquidTransactionResolver::resolve()
     pushActivity(activity);
 }
 
-GetMasterBlindingKeyResolver::GetMasterBlindingKeyResolver(Handler* handler, const QJsonObject& result)
-    : DeviceResolver(handler, result)
+GetMasterBlindingKeyResolver::GetMasterBlindingKeyResolver(Handler* handler, Device* device, const QJsonObject& result)
+    : DeviceResolver(handler, device, result)
 {
 }
 
