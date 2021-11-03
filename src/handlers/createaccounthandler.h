@@ -8,7 +8,7 @@ class CreateAccountHandler : public Handler
     QJsonObject m_details;
     void call(GA_session* session, GA_auth_handler** auth_handler) override;
 public:
-    CreateAccountHandler(const QJsonObject& details, Wallet* wallet);
+    CreateAccountHandler(const QJsonObject& details, Session* session);
     int pointer() const;
 };
 

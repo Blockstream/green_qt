@@ -32,8 +32,8 @@ class SetUnspentOutputsStatusHandler : public Handler
         Q_ASSERT(err == GA_OK);
     }
 public:
-    SetUnspentOutputsStatusHandler(const QVariantList &outputs, const QString &status, Wallet* wallet)
-        : Handler(wallet),
+    SetUnspentOutputsStatusHandler(const QVariantList &outputs, const QString &status, Session* session)
+        : Handler(session),
         m_outputs(outputs),
         m_status(status)
     {
@@ -49,8 +49,8 @@ class DisableAllPinLoginsHandler : public Handler
         Q_ASSERT(err == GA_OK);
     }
 public:
-    DisableAllPinLoginsHandler(Wallet* wallet)
-        : Handler(wallet)
+    DisableAllPinLoginsHandler(Session* session)
+        : Handler(session)
     {
     }
 };
@@ -60,13 +60,12 @@ class ChangeSettingsHandler : public Handler
     QJsonObject m_data;
     void call(GA_session* session, GA_auth_handler** auth_handler) override {
         auto data = Json::fromObject(m_data);
-        qDebug() << Q_FUNC_INFO << m_data;
         int err = GA_change_settings(session, data.get(), auth_handler);
         Q_ASSERT(err == GA_OK);
     }
 public:
-    ChangeSettingsHandler(const QJsonObject& data, Wallet* wallet)
-        : Handler(wallet)
+    ChangeSettingsHandler(const QJsonObject& data, Session* session)
+        : Handler(session)
         , m_data(data)
     {
     }
@@ -82,8 +81,8 @@ class SendNLocktimesHandler : public Handler
         Q_UNUSED(err);
     }
 public:
-    SendNLocktimesHandler(Wallet* wallet)
-        : Handler(wallet)
+    SendNLocktimesHandler(Session* session)
+        : Handler(session)
     {
     }
 };
@@ -98,8 +97,8 @@ class ChangeSettingsTwoFactorHandler : public Handler
         Q_ASSERT(res == GA_OK);
     }
 public:
-    ChangeSettingsTwoFactorHandler(const QByteArray& method, const QJsonObject& details, Wallet* wallet)
-        : Handler(wallet)
+    ChangeSettingsTwoFactorHandler(const QByteArray& method, const QJsonObject& details, Session* session)
+        : Handler(session)
         , m_method(method)
         , m_details(details)
     {
@@ -114,8 +113,8 @@ class TwoFactorChangeLimitsHandler : public Handler
         GA_twofactor_change_limits(session, details.get(), auth_handler);
     }
 public:
-    TwoFactorChangeLimitsHandler(const QJsonObject& details, Wallet* wallet)
-        : Handler(wallet)
+    TwoFactorChangeLimitsHandler(const QJsonObject& details, Session* session)
+        : Handler(session)
         , m_details(details)
     {
     }
@@ -130,8 +129,8 @@ class TwoFactorResetHandler : public Handler
         Q_ASSERT(res == GA_OK);
     }
 public:
-    TwoFactorResetHandler(const QByteArray& email, Wallet* wallet)
-        : Handler(wallet)
+    TwoFactorResetHandler(const QByteArray& email, Session* session)
+        : Handler(session)
         , m_email(email)
     {
     }
@@ -144,8 +143,8 @@ class TwoFactorCancelResetHandler : public Handler
         Q_ASSERT(res == GA_OK);
     }
 public:
-    TwoFactorCancelResetHandler(Wallet* wallet)
-        : Handler(wallet)
+    TwoFactorCancelResetHandler(Session* session)
+        : Handler(session)
     {
     }
 };
@@ -159,8 +158,8 @@ class SetCsvTimeHandler : public Handler
         Q_ASSERT(res == GA_OK);
     }
 public:
-    SetCsvTimeHandler(const int value, Wallet* wallet)
-        : Handler(wallet)
+    SetCsvTimeHandler(const int value, Session* session)
+        : Handler(session)
         , m_value(value)
     {
     }
@@ -220,7 +219,7 @@ void Controller::changeSettings(const QJsonObject& data)
         return;
     }
 
-    auto handler = new ChangeSettingsHandler(settings, m_wallet);
+    auto handler = new ChangeSettingsHandler(settings, m_wallet->session());
     connect(handler, &Handler::done, this, [this, handler] {
         m_wallet->updateSettings();
         handler->deleteLater();
@@ -232,7 +231,7 @@ void Controller::changeSettings(const QJsonObject& data)
 void Controller::sendRecoveryTransactions()
 {
     if (!m_wallet) return;
-    auto handler = new SendNLocktimesHandler(m_wallet);
+    auto handler = new SendNLocktimesHandler(m_wallet->session());
     connect(handler, &Handler::done, this, [this, handler] {
         m_wallet->updateSettings();
         handler->deleteLater();
@@ -248,7 +247,7 @@ void Controller::enableTwoFactor(const QString& method, const QString& data)
         { "data", data },
         { "enabled", true }
     };
-    auto handler = new ChangeSettingsTwoFactorHandler(method.toLatin1(), details, m_wallet);
+    auto handler = new ChangeSettingsTwoFactorHandler(method.toLatin1(), details, m_wallet->session());
     connect(handler, &Handler::done, this, [this, handler] {
         // Two factor configuration has changed, update it.
         m_wallet->updateConfig();
@@ -264,7 +263,7 @@ void Controller::disableTwoFactor(const QString& method)
     auto details = QJsonObject{
         { "enabled", false }
     };
-    auto handler = new ChangeSettingsTwoFactorHandler(method.toLatin1(), details, m_wallet);
+    auto handler = new ChangeSettingsTwoFactorHandler(method.toLatin1(), details, m_wallet->session());
     connect(handler, &Handler::done, this, [this, handler] {
         // Two factor configuration has changed, update it.
         m_wallet->updateConfig();
@@ -283,7 +282,7 @@ void Controller::changeTwoFactorLimit(bool is_fiat, const QString& limit)
         { "is_fiat", is_fiat },
         { unit, limit }
     };
-    auto handler = new TwoFactorChangeLimitsHandler(details, m_wallet);
+    auto handler = new TwoFactorChangeLimitsHandler(details, m_wallet->session());
     connect(handler, &Handler::done, this, [this, handler] {
         // Two factor configuration has changed, update it.
         m_wallet->updateConfig();
@@ -296,7 +295,7 @@ void Controller::changeTwoFactorLimit(bool is_fiat, const QString& limit)
 void Controller::requestTwoFactorReset(const QString& email)
 {
     if (!m_wallet) return;
-    auto handler = new TwoFactorResetHandler(email.toLatin1(), m_wallet);
+    auto handler = new TwoFactorResetHandler(email.toLatin1(), m_wallet->session());
     connect(handler, &Handler::done, this, [this, handler] {
         m_wallet->updateConfig();
         // TODO: updateConfig doesn't update 2f reset data,
@@ -312,7 +311,7 @@ void Controller::requestTwoFactorReset(const QString& email)
 void Controller::cancelTwoFactorReset()
 {
     if (!m_wallet) return;
-    auto handler = new TwoFactorCancelResetHandler(m_wallet);
+    auto handler = new TwoFactorCancelResetHandler(m_wallet->session());
     connect(handler, &Handler::done, this, [this, handler] {
         m_wallet->updateConfig();
         // TODO: updateConfig doesn't update 2f reset data,
@@ -334,7 +333,7 @@ void Controller::setRecoveryEmail(const QString& email)
         { "confirmed", true },
         { "enabled", false }
     };
-    auto handler = new ChangeSettingsTwoFactorHandler(method, details, m_wallet);
+    auto handler = new ChangeSettingsTwoFactorHandler(method, details, m_wallet->session());
     connect(handler, &Handler::done, this, [this, handler] {
         handler->deleteLater();
         m_wallet->updateConfig();
@@ -346,7 +345,7 @@ void Controller::setRecoveryEmail(const QString& email)
                 { "email_outgoing", true }})
             }
         };
-        auto handler = new ChangeSettingsHandler(details, m_wallet);
+        auto handler = new ChangeSettingsHandler(details, m_wallet->session());
         connect(handler, &Handler::done, this, [this, handler] {
             handler->deleteLater();
             emit finished();
@@ -358,7 +357,7 @@ void Controller::setRecoveryEmail(const QString& email)
 
 void Controller::setCsvTime(int value)
 {
-    const auto handler = new SetCsvTimeHandler(value, m_wallet);
+    const auto handler = new SetCsvTimeHandler(value, m_wallet->session());
     connect(handler, &Handler::done, this, [this, handler] {
         handler->deleteLater();
         m_wallet->updateSettings();
@@ -371,7 +370,7 @@ void Controller::setCsvTime(int value)
 #include "walletmanager.h"
 void Controller::deleteWallet()
 {
-    auto handler = new DeleteWalletHandler(m_wallet);
+    auto handler = new DeleteWalletHandler(m_wallet->session());
     connect(handler, &Handler::done, [this, handler] {
         handler->deleteLater();
         m_wallet->disconnect();
@@ -385,7 +384,7 @@ void Controller::deleteWallet()
 
 void Controller::disableAllPins()
 {
-    auto handler = new DisableAllPinLoginsHandler(m_wallet);
+    auto handler = new DisableAllPinLoginsHandler(m_wallet->session());
     QObject::connect(handler, &Handler::done, [this, handler] {
         m_wallet->clearPinData();
         handler->deleteLater();
@@ -398,7 +397,7 @@ void Controller::disableAllPins()
 
 void Controller::setUnspentOutputsStatus(const QVariantList &outputs, const QString &status)
 {
-    auto handler = new SetUnspentOutputsStatusHandler(outputs, status, m_wallet);
+    auto handler = new SetUnspentOutputsStatusHandler(outputs, status, m_wallet->session());
     QObject::connect(handler, &Handler::done, [this, handler] {
         handler->deleteLater();
         emit finished();

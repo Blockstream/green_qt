@@ -3,8 +3,8 @@
 
 #include <gdk.h>
 
-CreateAccountHandler::CreateAccountHandler(const QJsonObject &details, Wallet *wallet)
-    : Handler(wallet)
+CreateAccountHandler::CreateAccountHandler(const QJsonObject &details, Session* session)
+    : Handler(session)
     , m_details(details)
 {
 }

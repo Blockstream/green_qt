@@ -2,8 +2,8 @@
 
 #include <gdk.h>
 
-DeleteWalletHandler::DeleteWalletHandler(Wallet* wallet)
-    : Handler(wallet)
+DeleteWalletHandler::DeleteWalletHandler(Session* session)
+    : Handler(session)
 {
 }
 

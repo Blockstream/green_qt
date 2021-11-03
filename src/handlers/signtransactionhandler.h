@@ -8,7 +8,7 @@ class SignTransactionHandler : public Handler
     const QJsonObject m_details;
     void call(GA_session* session, GA_auth_handler** auth_handler) override;
 public:
-    SignTransactionHandler(Wallet *wallet, const QJsonObject& details);
+    SignTransactionHandler(const QJsonObject& details, Session* session);
 };
 
 #endif // GREEN_SIGNTRANSACTIONHANDLER_H

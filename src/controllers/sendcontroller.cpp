@@ -244,7 +244,7 @@ void SendController::create()
     qDebug() << "==========";
     qDebug() << m_transaction;
 
-    m_create_handler = new CreateTransactionHandler(wallet(), m_transaction);
+    m_create_handler = new CreateTransactionHandler(m_transaction, wallet()->session());
     connect(m_create_handler, &Handler::done, this, [this, count] {
         if (m_count == count) {
             m_transaction = m_create_handler->result().value("result").toObject();
@@ -273,12 +273,12 @@ void SendController::create()
 void SendController::signAndSend()
 {
     m_transaction["memo"] = m_memo;
-    auto sign = new SignTransactionHandler(wallet(), m_transaction);
+    auto sign = new SignTransactionHandler(m_transaction, wallet()->session());
     connect(sign, &Handler::done, this, [this, sign] {
         // sign->deleteLater();
         auto details = sign->result().value("result").toObject();
         details["memo"] = m_memo;
-        auto send = new SendTransactionHandler(wallet(), details);
+        auto send = new SendTransactionHandler(details, wallet()->session());
         connect(send, &Handler::done, this, [this, send] {
             setSignedTransaction(m_account->getOrCreateTransaction(send->result().value("result").toObject()));
             send->deleteLater();

@@ -3,8 +3,8 @@
 
 #include <gdk.h>
 
-LoginHandler::LoginHandler(Wallet* wallet, const QStringList &mnemonic)
-    : Handler(wallet)
+LoginHandler::LoginHandler(const QStringList& mnemonic, Session* session)
+    : Handler(session)
     , m_details({
         { "mnemonic", mnemonic.join(' ') },
         { "password", "" }
@@ -13,8 +13,8 @@ LoginHandler::LoginHandler(Wallet* wallet, const QStringList &mnemonic)
     Q_ASSERT(mnemonic.size() == 12 || mnemonic.size() == 24);
 }
 
-LoginHandler::LoginHandler(Wallet* wallet, const QStringList& mnemonic, const QString& password)
-    : Handler(wallet)
+LoginHandler::LoginHandler(const QStringList& mnemonic, const QString& password, Session* session)
+    : Handler(session)
     , m_details({
         { "mnemonic", mnemonic.join(' ') },
         { "password", password }
@@ -23,14 +23,14 @@ LoginHandler::LoginHandler(Wallet* wallet, const QStringList& mnemonic, const QS
     Q_ASSERT((mnemonic.size() == 12 && password.isEmpty()) || (mnemonic.size() == 24 && password.isEmpty()) || (mnemonic.size() == 27 && !password.isEmpty()));
 }
 
-LoginHandler::LoginHandler(Wallet* wallet, const QJsonObject& hw_device)
-    : Handler(wallet)
+LoginHandler::LoginHandler(const QJsonObject& hw_device, Session* session)
+    : Handler(session)
     , m_hw_device(hw_device)
 {
 }
 
-LoginHandler::LoginHandler(Wallet *wallet, const QJsonObject &pin_data, const QString &pin)
-    : Handler(wallet)
+LoginHandler::LoginHandler(const QJsonObject& pin_data, const QString& pin, Session* session)
+    : Handler(session)
     , m_details({
         { "pin", pin },
         { "pin_data", pin_data }
@@ -38,7 +38,7 @@ LoginHandler::LoginHandler(Wallet *wallet, const QJsonObject &pin_data, const QS
 {
 }
 
-LoginHandler::LoginHandler(Session* session, const QString &username, const QString &password)
+LoginHandler::LoginHandler(const QString& username, const QString& password, Session* session)
     : Handler(session)
     , m_details({
         { "username", username },

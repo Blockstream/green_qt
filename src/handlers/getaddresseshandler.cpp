@@ -16,7 +16,7 @@ void GetAddressesHandler::call(GA_session *session, GA_auth_handler **auth_handl
 }
 
 GetAddressesHandler::GetAddressesHandler(int last_pointer, Account* account)
-    : Handler(account->wallet())
+    : Handler(account->wallet()->session())
     , m_subaccount(account->pointer())
     , m_last_pointer(last_pointer)
 {

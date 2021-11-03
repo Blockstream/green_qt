@@ -5,6 +5,7 @@ import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.12
 
 Column {
+    property Wallet wallet
     property SignLiquidTransactionResolver resolver
     property var actions: resolver.failed ? failed_action : null
 
@@ -28,7 +29,7 @@ Column {
         onTriggered: controller_dialog.accept()
     }
     DeviceImage {
-        device: resolver.handler.wallet.device
+        device: resolver.device
         anchors.horizontalCenter: parent.horizontalCenter
         height: 32
     }
@@ -64,7 +65,7 @@ Column {
             id: output_view
             property var output
             property int index
-            readonly property Asset asset: resolver.handler.wallet.getOrCreateAsset(output.asset_id)
+            readonly property Asset asset: wallet.getOrCreateAsset(output.asset_id)
             spacing: 16
             SectionLabel {
                 text: qsTrId('id_review_output_s').arg('#' + (index + 1))
@@ -107,7 +108,7 @@ Column {
         Column {
             id: fee_view
             property var output
-            readonly property Asset asset: resolver.handler.wallet.getOrCreateAsset(output.asset_id)
+            readonly property Asset asset: wallet.getOrCreateAsset(output.asset_id)
             spacing: 16
             SectionLabel {
                 text: qsTrId('id_confirm_transaction')

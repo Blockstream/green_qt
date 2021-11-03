@@ -14,8 +14,8 @@ class AckSystemMessageHandler : public Handler
         Q_ASSERT(res == GA_OK);
     }
 public:
-    AckSystemMessageHandler(Wallet* wallet, const QByteArray& message)
-        : Handler(wallet)
+    AckSystemMessageHandler(const QByteArray& message, Session* session)
+        : Handler(session)
         , m_message(message)
     {
     }
@@ -67,7 +67,7 @@ void SystemMessageController::ack()
     if (m_pending.size() == m_accepted.size()) return;
 
     auto text = m_pending.last();
-    auto handler = new AckSystemMessageHandler(m_wallet, text.toLocal8Bit());
+    auto handler = new AckSystemMessageHandler(text.toLocal8Bit(), m_wallet->session());
     connect(handler, &Handler::done, this, [this, handler, text] {
         m_accepted.append(text);
         handler->deleteLater();

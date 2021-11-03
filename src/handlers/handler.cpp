@@ -21,28 +21,9 @@ static Connection* SessionConnection(Session* session)
     return session->connection();
 }
 
-static Connection* WalletConnection(Wallet* wallet)
-{
-    Q_ASSERT(wallet);
-    Q_ASSERT(wallet->session());
-    Q_ASSERT(wallet->session()->connection());
-    return wallet->session()->connection();
-}
-
-Handler::Handler(Wallet* wallet)
-    : QFutureWatcher<void>(WalletConnection(wallet))
-    , m_session(wallet->session())
-    , m_wallet(wallet)
-{
-    connect(this, &Handler::finished, this, [this] {
-        step();
-    });
-}
-
 Handler::Handler(Session* session)
     : QFutureWatcher<void>(SessionConnection(session))
     , m_session(session)
-    , m_wallet(nullptr)
 {
     connect(this, &Handler::finished, this, [this] {
         step();
@@ -53,12 +34,6 @@ Handler::~Handler()
 {
     waitForFinished();
     if (m_auth_handler) GA_destroy_auth_handler(m_auth_handler);
-}
-
-Wallet* Handler::wallet() const
-{
-    Q_ASSERT(m_wallet);
-    return m_wallet;
 }
 
 static QJsonObject getErrorDetails()
@@ -125,7 +100,7 @@ void Handler::step()
     for (;;) {
         const auto result = getResult(m_auth_handler);
         const auto status = result.value("status").toString();
-        qDebug() << result;
+
         if (status == "call") {
             setFuture(QtConcurrent::run([this] {
                 int res = GA_auth_handler_call(m_auth_handler);

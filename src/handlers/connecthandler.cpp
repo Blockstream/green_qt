@@ -37,11 +37,13 @@ ConnectHandler::~ConnectHandler()
 
 void ConnectHandler::exec()
 {
+    qDebug() << Q_FUNC_INFO << this;
     attempts ++;
     setFuture(QtConcurrent::run([this] {
         auto session = m_session->m_session;
         auto params = Json::fromObject(m_params);
         int err = GA_connect(session, params.get());
+        qDebug() << this << "GA_connect" << err;
         if (err != GA_OK) {
             GA_disconnect(session);
             return err;

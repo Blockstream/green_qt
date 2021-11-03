@@ -7,7 +7,7 @@ class DeleteWalletHandler : public Handler
 {
     void call(GA_session* session, GA_auth_handler** auth_handler) override;
 public:
-    DeleteWalletHandler(Wallet* wallet);
+    DeleteWalletHandler(Session* session);
 };
 
 #endif // GREEN_DELETEWALLETHANDLER_H

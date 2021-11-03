@@ -79,7 +79,7 @@ void WatchOnlyLoginController::login()
 
     if (m_session->isActive() && !m_session->isConnected()) return;
 
-    auto handler = new LoginHandler(m_session, m_username, m_password);
+    auto handler = new LoginHandler(m_username, m_password, m_session);
     handler->connect(handler, &Handler::done, this, [this, handler] {
         handler->deleteLater();
 

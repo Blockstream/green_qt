@@ -27,7 +27,7 @@ class GetReceiveAddressHandler : public Handler
     }
 public:
     GetReceiveAddressHandler(Account* account)
-        : Handler(account->wallet())
+        : Handler(account->wallet()->session())
         , m_account(account)
     {
     }

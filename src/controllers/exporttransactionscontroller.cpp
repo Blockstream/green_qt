@@ -60,7 +60,7 @@ void ExportTransactionsController::save()
 
 void ExportTransactionsController::nextPage()
 {
-    auto handler = new GetTransactionsHandler(m_account->pointer(), m_offset, m_count, m_account->wallet());
+    auto handler = new GetTransactionsHandler(m_account->pointer(), m_offset, m_count, m_account->wallet()->session());
     QObject::connect(handler, &Handler::done, this, [this, handler] {
         auto wallet = m_account->wallet();
         auto settings = wallet->settings();

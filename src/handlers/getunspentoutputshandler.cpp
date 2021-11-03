@@ -17,7 +17,7 @@ void GetUnspentOutputsHandler::call(GA_session *session, GA_auth_handler **auth_
 }
 
 GetUnspentOutputsHandler::GetUnspentOutputsHandler(int num_confs, bool all_coins, Account* account)
-    : Handler(account->wallet())
+    : Handler(account->wallet()->session())
     , m_subaccount(account->pointer())
     , m_num_confs(num_confs)
     , m_all_coins(all_coins)

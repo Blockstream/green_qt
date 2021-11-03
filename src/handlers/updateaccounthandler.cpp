@@ -3,8 +3,8 @@
 
 #include <gdk.h>
 
-UpdateAccountHandler::UpdateAccountHandler(Wallet *wallet, const QJsonObject &details)
-    : Handler(wallet)
+UpdateAccountHandler::UpdateAccountHandler(const QJsonObject &details, Session* session)
+    : Handler(session)
     , m_details(details)
 {
 }

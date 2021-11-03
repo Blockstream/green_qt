@@ -54,9 +54,9 @@ void SignupController::update()
     auto activity = new WalletSignupActivity(m_wallet, this);
     m_wallet->pushActivity(activity);
 
-    auto register_user_handler = new RegisterUserHandler(m_wallet, m_mnemonic);
-    auto login_handler = new LoginHandler(m_wallet, m_mnemonic);
-    auto set_pin_handler = new SetPinHandler(m_wallet, m_pin.toLocal8Bit());
+    auto register_user_handler = new RegisterUserHandler(m_mnemonic, m_session);
+    auto login_handler = new LoginHandler(m_mnemonic, m_session);
+    auto set_pin_handler = new SetPinHandler(m_pin.toLocal8Bit(), m_session);
 
     connect(register_user_handler, &Handler::done, this, [register_user_handler, login_handler] {
         register_user_handler->deleteLater();
@@ -68,8 +68,8 @@ void SignupController::update()
         m_wallet->updateHashId(login_handler->walletHashId());
         if (m_type == "amp") {
             Q_ASSERT(m_network->isLiquid());
-            auto create_amp_account_handler = new CreateAccountHandler({{ "name", "AMP Account" }, { "type", "2of2_no_recovery" }}, m_wallet);
-            auto hide_main_account_handler = new UpdateAccountHandler(m_wallet, {{ "subaccount", 0 }, { "hidden", true }});
+            auto create_amp_account_handler = new CreateAccountHandler({{ "name", "AMP Account" }, { "type", "2of2_no_recovery" }}, m_session);
+            auto hide_main_account_handler = new UpdateAccountHandler({{ "subaccount", 0 }, { "hidden", true }}, m_session);
             connect(create_amp_account_handler, &Handler::done, this, [=] {
                 create_amp_account_handler->deleteLater();
                 hide_main_account_handler->exec();
@@ -80,7 +80,7 @@ void SignupController::update()
             });
             create_amp_account_handler->exec();
         } else if (m_network->isElectrum()) {
-            auto create_segwit_account_handler = new CreateAccountHandler({{ "name", "Segwit Account" }, { "type", "p2wpkh" }}, m_wallet);
+            auto create_segwit_account_handler = new CreateAccountHandler({{ "name", "Segwit Account" }, { "type", "p2wpkh" }}, m_session);
             connect(create_segwit_account_handler, &Handler::done, this, [=] {
                 create_segwit_account_handler->deleteLater();
                 set_pin_handler->exec();

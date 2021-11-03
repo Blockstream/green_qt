@@ -67,7 +67,7 @@ void CreateAccountController::create()
         }
     }
 
-    auto handler = new CreateAccountHandler(details, wallet());
+    auto handler = new CreateAccountHandler(details, wallet()->session());
     connect(handler, &Handler::done, this, [this, handler] {
         // TODO switch to new account
         auto account = wallet()->getOrCreateAccount(handler->result().value("result").toObject());

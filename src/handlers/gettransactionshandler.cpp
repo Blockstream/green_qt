@@ -11,12 +11,12 @@ void GetTransactionsHandler::call(GA_session *session, GA_auth_handler **auth_ha
         { "count", m_count }
     });
 
-    int err = GA_get_transactions(session, details.get(), auth_handler);
-    qDebug() << Q_FUNC_INFO << "GA_get_transactions" << "result:" <<  err;
+    // TODO: check result value
+    GA_get_transactions(session, details.get(), auth_handler);
 }
 
-GetTransactionsHandler::GetTransactionsHandler(int subaccount, int first, int count, Wallet *wallet)
-    : Handler(wallet)
+GetTransactionsHandler::GetTransactionsHandler(int subaccount, int first, int count, Session *session)
+    : Handler(session)
     , m_subaccount(subaccount)
     , m_first(first)
     , m_count(count)

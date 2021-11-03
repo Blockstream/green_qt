@@ -66,7 +66,7 @@ void RestoreController::accept()
     auto activity = new AcceptRestoreActivity(m_wallet, this);
     m_wallet->pushActivity(activity);
 
-    auto handler = new SetPinHandler(m_wallet, m_pin.toLocal8Bit());
+    auto handler = new SetPinHandler(m_pin.toLocal8Bit(), m_session);
     QObject::connect(handler, &Handler::done, this, [this, handler, activity] {
         handler->deleteLater();
         m_wallet->m_pin_data = handler->pinData();
@@ -145,7 +145,7 @@ void RestoreController::update()
         qDebug() << "attempt login with mnemonic and password";
         m_wallet->setAuthentication(Wallet::Authenticating);
 
-        auto handler = new LoginHandler(m_wallet, m_mnemonic, m_password);
+        auto handler = new LoginHandler(m_mnemonic, m_password, m_session);
         QObject::connect(handler, &Handler::done, this, [this, handler, activity] {
            handler->deleteLater();
            m_wallet->updateHashId(handler->walletHashId());

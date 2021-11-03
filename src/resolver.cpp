@@ -14,7 +14,7 @@ Resolver::Resolver(Handler *handler, const QJsonObject& result)
 
 Network *Resolver::network() const
 {
-    return m_handler->wallet()->network();
+    return m_handler->session()->network();
 }
 
 void Resolver::pushActivity(Activity* activity)
@@ -229,7 +229,7 @@ void SignLiquidTransactionResolver::resolve()
     const auto signing_inputs = m_required_data.value("signing_inputs").toArray();
     const auto outputs = m_required_data.value("transaction_outputs").toArray();
 
-    auto activity = device()->signLiquidTransaction(handler()->wallet()->network(), transaction, signing_inputs, outputs);
+    auto activity = device()->signLiquidTransaction(handler()->session()->network(), transaction, signing_inputs, outputs);
 
 //    connect(command, &SignLiquidTransactionCommand::progressChanged, [this](int count, int total) {
 //       m_progress = qreal(count) / qreal(total);

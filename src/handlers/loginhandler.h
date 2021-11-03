@@ -9,11 +9,11 @@ class LoginHandler : public Handler
 {
     Q_OBJECT
 public:
-    LoginHandler(Wallet* wallet, const QStringList& mnemonic);
-    LoginHandler(Wallet* wallet, const QStringList& mnemonic, const QString& password);
-    LoginHandler(Wallet* wallet, const QJsonObject& hw_device);
-    LoginHandler(Wallet* wallet, const QJsonObject& pin_data, const QString& pin);
-    LoginHandler(Session* session, const QString& username, const QString& password);
+    LoginHandler(const QStringList& mnemonic, Session* session);
+    LoginHandler(const QStringList& mnemonic, const QString& password, Session* session);
+    LoginHandler(const QJsonObject& hw_device, Session* session);
+    LoginHandler(const QJsonObject& pin_data, const QString& pin, Session* session);
+    LoginHandler(const QString& username, const QString& password, Session* session);
     QString walletHashId() const;
 private:
     const QJsonObject m_hw_device{};

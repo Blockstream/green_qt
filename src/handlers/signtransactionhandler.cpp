@@ -3,8 +3,8 @@
 
 #include <gdk.h>
 
-SignTransactionHandler::SignTransactionHandler(Wallet* wallet, const QJsonObject& details)
-    : Handler(wallet)
+SignTransactionHandler::SignTransactionHandler(const QJsonObject& details, Session *session)
+    : Handler(session)
     , m_details(details)
 {
 }

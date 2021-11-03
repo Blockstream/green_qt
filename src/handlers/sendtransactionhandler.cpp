@@ -5,8 +5,8 @@
 
 #include <QDebug>
 
-SendTransactionHandler::SendTransactionHandler(Wallet* wallet, const QJsonObject& details)
-    : Handler(wallet)
+SendTransactionHandler::SendTransactionHandler(const QJsonObject& details, Session *session)
+    : Handler(session)
     , m_details(details)
 {
 }

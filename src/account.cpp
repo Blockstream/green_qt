@@ -226,7 +226,7 @@ AccountGetTransactionsActivity::AccountGetTransactionsActivity(Account* account,
 
 void AccountGetTransactionsActivity::exec()
 {
-    auto handler = new GetTransactionsHandler(account()->pointer(), m_first, m_count, wallet());
+    auto handler = new GetTransactionsHandler(account()->pointer(), m_first, m_count, wallet()->session());
 
     QObject::connect(handler, &Handler::done, this, [this, handler] {
         handler->deleteLater();

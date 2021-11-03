@@ -18,6 +18,7 @@ class Asset;
 class Device;
 class Network;
 class Session;
+class Wallet;
 class WalletUpdateAccountsActivity;
 
 struct GA_session;
@@ -31,7 +32,7 @@ class SetPinHandler : public Handler
     QByteArray m_pin_data;
     void call(GA_session* session, GA_auth_handler** auth_handler) override;
 public:
-    SetPinHandler(Wallet* wallet, const QByteArray& pin);
+    SetPinHandler(const QByteArray& pin, Session* session);
     QByteArray pinData() const;
 };
 

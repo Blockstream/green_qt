@@ -81,9 +81,10 @@ void JadeLoginController::update()
 
     if (!m_wallet->session()->isConnected()) return;
 
+    auto session = m_wallet->session();
     auto device_details = device_details_from_device(m_device);
-    auto register_user_handler = new RegisterUserHandler(m_wallet, device_details);
-    auto login_handler = new LoginHandler(m_wallet, device_details);
+    auto register_user_handler = new RegisterUserHandler(device_details, session);
+    auto login_handler = new LoginHandler(device_details, session);
 
     connect(register_user_handler, &Handler::done, this, [login_handler] {
         login_handler->exec();

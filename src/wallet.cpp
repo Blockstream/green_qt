@@ -34,8 +34,8 @@ class GetSubAccountsHandler : public Handler
         Q_ASSERT(res == GA_OK);
     }
 public:
-    GetSubAccountsHandler(Wallet* wallet)
-        : Handler(wallet)
+    GetSubAccountsHandler(Session* session)
+        : Handler(session)
     {
     }
     QJsonArray subAccounts() const {
@@ -217,7 +217,7 @@ QStringList Wallet::mnemonic() const
 
 void Wallet::changePin(const QByteArray& pin)
 {
-    auto handler = new SetPinHandler(this, pin);
+    auto handler = new SetPinHandler(pin, m_session);
     QObject::connect(handler, &Handler::done, this, [this, handler] {
         handler->deleteLater();
         m_pin_data = handler->pinData();
@@ -238,7 +238,7 @@ void Wallet::reload()
         pushActivity(m_update_accounts_activity);
     }
 
-    auto handler = new GetSubAccountsHandler(this);
+    auto handler = new GetSubAccountsHandler(m_session);
     QObject::connect(handler, &Handler::done, this, [this, handler] {
         const bool create_segwit = m_network->isElectrum();
         bool has_segwit = false;
@@ -253,7 +253,7 @@ void Wallet::reload()
         }
 
         if (m_restoring && create_segwit && !has_segwit) {
-            auto handler = new CreateAccountHandler({{ "name", "Segwit Account" }, { "type", "p2wpkh" }}, this);
+            auto handler = new CreateAccountHandler({{ "name", "Segwit Account" }, { "type", "p2wpkh" }}, m_session);
             QObject::connect(handler, &Handler::done, this, [=] {
                 handler->deleteLater();
                 reload();
@@ -299,8 +299,8 @@ public:
     const bool m_refresh;
     QJsonObject m_assets;
 
-    RefreshAssetsHandler(bool refresh, Wallet* wallet)
-        : Handler(wallet)
+    RefreshAssetsHandler(bool refresh, Session* session)
+        : Handler(session)
         , m_refresh(refresh)
     {
     }
@@ -329,7 +329,7 @@ void Wallet::refreshAssets(bool refresh)
     auto activity = new WalletRefreshAssets(this, this);
     pushActivity(activity);
 
-    auto handler = new RefreshAssetsHandler(refresh, this);
+    auto handler = new RefreshAssetsHandler(refresh, m_session);
     handler->exec();
 
     connect(handler, &Handler::done, this, [this, handler, activity] {
@@ -833,7 +833,7 @@ void LoginWithPinController::update()
     auto activity = new WalletAuthenticateActivity(m_wallet, this);
     m_wallet->pushActivity(activity);
 
-    auto handler = new LoginHandler(m_wallet, QJsonDocument::fromJson(m_wallet->m_pin_data).object(), QString::fromLocal8Bit(m_pin));
+    auto handler = new LoginHandler(QJsonDocument::fromJson(m_wallet->m_pin_data).object(), QString::fromLocal8Bit(m_pin), m_session);
     handler->connect(handler, &Handler::done, this, [this, activity, handler] {
         handler->deleteLater();
         if (m_wallet->m_login_attempts_remaining < 3) {
@@ -878,8 +878,8 @@ void SetPinHandler::call(GA_session *session, GA_auth_handler **auth_handler)
     m_pin_data = pinDataForNewPin(session, m_pin);
 }
 
-SetPinHandler::SetPinHandler(Wallet *wallet, const QByteArray &pin)
-    : Handler(wallet)
+SetPinHandler::SetPinHandler(const QByteArray& pin, Session* session)
+    : Handler(session)
     , m_pin(pin)
 {
 }

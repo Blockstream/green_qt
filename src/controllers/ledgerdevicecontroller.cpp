@@ -195,8 +195,8 @@ void LedgerDeviceController::login()
     emit walletChanged(m_wallet);
 
     setStatus("login");
-    auto register_user_handler = new RegisterUserHandler(m_wallet, m_device_details);
-    auto login_handler = new LoginHandler(m_wallet, m_device_details);
+    auto register_user_handler = new RegisterUserHandler(m_device_details, m_wallet->session());
+    auto login_handler = new LoginHandler(m_device_details, m_wallet->session());
     connect(register_user_handler, &Handler::done, this, [login_handler] {
         login_handler->exec();
     });

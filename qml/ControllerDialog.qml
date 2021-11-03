@@ -52,6 +52,7 @@ WalletDialog {
         }
         function onRequestCode(handler) { push(handler, requestCodeComponent) }
         function onResolver(resolver) {
+            const wallet = controller_dialog.wallet
             if (resolver instanceof TwoFactorResolver) {
                 stack_view.push(resolveCodeComponent, { resolver })
                 return
@@ -62,7 +63,7 @@ WalletDialog {
                 return
             }
             if (resolver instanceof SignLiquidTransactionResolver) {
-                stack_view.push(sign_liquid_transaction_resolver_view_component, { resolver })
+                stack_view.push(sign_liquid_transaction_resolver_view_component, { resolver, wallet })
                 resolver.resolve()
                 return
             }

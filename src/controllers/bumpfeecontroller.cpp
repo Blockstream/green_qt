@@ -30,10 +30,10 @@ void BumpFeeController::bumpFee()
 {
     Q_ASSERT(!m_tx.isEmpty());
     Q_ASSERT(m_tx.value("error").toString().isEmpty());
-    auto sign = new SignTransactionHandler(wallet(), m_tx);
+    auto sign = new SignTransactionHandler(m_tx, wallet()->session());
     connect(sign, &Handler::done, this, [this, sign] {
         auto details = sign->result().value("result").toObject();
-        auto send = new SendTransactionHandler(wallet(), details);
+        auto send = new SendTransactionHandler(details, wallet()->session());
         connect(send, &Handler::done, this, [this, send] {
             setSignedTransaction(m_account->getOrCreateTransaction(send->result().value("result").toObject()));
             send->deleteLater();
@@ -86,7 +86,7 @@ void BumpFeeController::create()
         { "previous_transaction", m_transaction->data() }
     };
 
-    m_create_handler = new CreateTransactionHandler(wallet(), details);
+    m_create_handler = new CreateTransactionHandler(details, wallet()->session());
     connect(m_create_handler, &Handler::done, this, [this, req] {
         if (m_req == req) {
             m_tx = m_create_handler->result().value("result").toObject();
