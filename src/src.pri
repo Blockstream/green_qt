@@ -4,6 +4,7 @@ SOURCES += \
     $$PWD/accountcontroller.cpp \
     $$PWD/account.cpp \
     $$PWD/accountlistmodel.cpp \
+    $$PWD/activitymanager.cpp \
     $$PWD/address.cpp \
     $$PWD/addresslistmodel.cpp \
     $$PWD/addresslistmodelfilter.cpp \
@@ -54,6 +55,7 @@ HEADERS += \
     $$PWD/accountcontroller.h \
     $$PWD/account.h \
     $$PWD/accountlistmodel.h \
+    $$PWD/activitymanager.h \
     $$PWD/address.h \
     $$PWD/addresslistmodel.h \
     $$PWD/addresslistmodelfilter.h \
