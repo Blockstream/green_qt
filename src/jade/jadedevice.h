@@ -15,8 +15,18 @@ class JadeDevice : public Device
     Q_PROPERTY(QVariantMap versionInfo READ versionInfo NOTIFY versionInfoChanged)
     Q_PROPERTY(QString version READ version NOTIFY versionInfoChanged)
     Q_PROPERTY(bool updateRequired READ updateRequired NOTIFY versionInfoChanged)
+    Q_PROPERTY(State state READ state NOTIFY versionInfoChanged)
     QML_ELEMENT
 public:
+    enum State {
+        StateReady,
+        StateTemporary,
+        StateUnsaved,
+        StateLocked,
+        StateUninitialized,
+    };
+    Q_ENUM(State)
+
     JadeDevice(JadeAPI* api, const QString& system_location, QObject* parent = nullptr);
     Vendor vendor() const override { return Device::Blockstream; }
     Transport transport() const override { return Transport::USB; }
@@ -38,7 +48,7 @@ public:
     bool updateRequired() const;
     QString version() const;
     QString systemLocation() const { return m_system_location; }
-    bool isLocked() const;
+    State state() const;
 signals:
     void versionInfoChanged();
 private:

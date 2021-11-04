@@ -572,8 +572,23 @@ QString JadeDevice::version() const
     return m_version_info.value("JADE_VERSION").toString();
 }
 
-bool JadeDevice::isLocked() const
+JadeDevice::State JadeDevice::state() const
 {
-    const auto state = m_version_info.value(QStringLiteral("JADE_STATE"));
-    return state == QStringLiteral("LOCKED");
+    // 1. Ready - has keys already associated with a message source
+    //    - READY
+    // 2. Temporary keys - has temporary keys in memory, but not yet connected to app
+    //    - TEMP
+    // 3. Unsaved keys - has proper keys in memory, but not yet saved with a PIN
+    //    - UNSAVED
+    // 4. Locked - has persisted/encrypted keys, but no keys in memory
+    //    - LOCKED
+    // 5. Uninitialised - has no persisted/encrypted keys and no keys in memory
+    //    - UNINT
+    const auto state = m_version_info.value(QStringLiteral("JADE_STATE")).toString();
+    if (state == "READY") return StateReady;
+    if (state == "TEMP") return StateTemporary;
+    if (state == "UNSAVED") return StateUnsaved;
+    if (state == "LOCKED") return StateLocked;
+    if (state == "UNINT") return StateUninitialized;
+    Q_UNREACHABLE();
 }
