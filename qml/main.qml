@@ -95,44 +95,46 @@ ApplicationWindow {
         SideBar {
             Layout.fillHeight: true
         }
-        StackLayout {
-            id: stack_layout
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            readonly property WalletView currentWalletView: currentIndex < 0 ? null : (stack_layout.children[currentIndex].currentWalletView || null)
-            currentIndex: childIndexForLocation(stack_layout)
-            HomeView {
-                readonly property string location: '/home'
-            }
-            PreferencesView {
-                id: settings_view
-                readonly property string location: '/preferences'
-            }
-            JadeView {
-                id: jade_view
-                readonly property string location: '/jade'
-            }
-            LedgerView {
-                id: ledger_view
-                readonly property string location: '/ledger'
-            }
-            NetworkView {
-                network: 'bitcoin'
-                title: qsTrId('id_bitcoin_wallets')
-            }
-            NetworkView {
-                network: 'liquid'
-                title: qsTrId('id_liquid_wallets')
-            }
-            NetworkView {
-                enabled: Settings.enableTestnet
-                network: 'testnet-liquid'
-                title: qsTrId('id_liquid_testnet_wallets')
-            }
-            NetworkView {
-                enabled: Settings.enableTestnet
-                network: 'testnet'
-                title: qsTrId('id_testnet_wallets')
+        ColumnLayout {
+            StackLayout {
+                id: stack_layout
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                readonly property WalletView currentWalletView: currentIndex < 0 ? null : (stack_layout.children[currentIndex].currentWalletView || null)
+                currentIndex: childIndexForLocation(stack_layout)
+                HomeView {
+                    readonly property string location: '/home'
+                }
+                PreferencesView {
+                    id: settings_view
+                    readonly property string location: '/preferences'
+                }
+                JadeView {
+                    id: jade_view
+                    readonly property string location: '/jade'
+                }
+                LedgerView {
+                    id: ledger_view
+                    readonly property string location: '/ledger'
+                }
+                NetworkView {
+                    network: 'bitcoin'
+                    title: qsTrId('id_bitcoin_wallets')
+                }
+                NetworkView {
+                    network: 'liquid'
+                    title: qsTrId('id_liquid_wallets')
+                }
+                NetworkView {
+                    enabled: Settings.enableTestnet
+                    network: 'testnet-liquid'
+                    title: qsTrId('id_liquid_testnet_wallets')
+                }
+                NetworkView {
+                    enabled: Settings.enableTestnet
+                    network: 'testnet'
+                    title: qsTrId('id_testnet_wallets')
+                }
             }
         }
     }
