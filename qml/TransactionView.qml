@@ -92,7 +92,7 @@ WalletDialog {
                 }
 
                 CopyableLabel {
-                    text: formatDateTime(transaction.data.created_at)
+                    text: formatTransactionTimestamp(transaction.data)
                 }
             }
 

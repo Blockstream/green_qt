@@ -54,7 +54,7 @@ ItemDelegate {
         spacing: 16
 
         Label {
-            text: formatDateTime(tx.created_at)
+            text: formatTransactionTimestamp(tx)
             font.pixelSize: 12
             font.capitalization: Font.AllUppercase
             font.styleName: 'Regular'

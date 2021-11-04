@@ -44,8 +44,8 @@ ApplicationWindow {
 
     property Constants constants: Constants {}
 
-    function formatDateTime(date_time) {
-        return new Date(date_time).toLocaleString(locale.dateTimeFormat(Locale.LongFormat))
+    function formatTransactionTimestamp(tx) {
+        return new Date(tx.created_at_ts / 1000).toLocaleString(locale.dateTimeFormat(Locale.LongFormat))
     }
 
     function accountName(account) {
