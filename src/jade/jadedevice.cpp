@@ -24,6 +24,7 @@ public:
     void exec() override
     {
         m_device->api()->getXpub(m_network->id(), m_path, [this](const QVariantMap& msg) {
+            if (msg.contains("error")) return fail();
             Q_ASSERT(msg.contains("result") && msg["result"].type() == QVariant::String);
             m_public_key = msg["result"].toString().toLocal8Bit();
             finish();
