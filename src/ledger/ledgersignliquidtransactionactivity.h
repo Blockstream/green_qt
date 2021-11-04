@@ -18,7 +18,6 @@ public:
     virtual QList<QByteArray> assetBlinders() const override { return m_abfs; }
     virtual QList<QByteArray> amountBlinders() const override { return m_vbfs; }
 
-    void exec() override;
     void getLiquidCommitment(int output_index);
 
     DeviceCommand* exchange(const QByteArray& data);
@@ -47,6 +46,8 @@ public:
     int exchange_count{0};
     int exchange_total{0};
     CommandBatch* m_batch;
+private:
+    void exec() override;
 };
 
 #endif // LEDGERSIGNLIQUIDTRANSACTIONACTIVITY_H

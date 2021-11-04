@@ -1,3 +1,4 @@
+#include "activitymanager.h"
 #include "device.h"
 #include "handler.h"
 #include "signmessageresolver.h"
@@ -62,6 +63,6 @@ void SignMessageResolver::resolve()
         activity->deleteLater();
         setFailed(true);
     });
-    activity->exec();
+    ActivityManager::instance()->exec(activity);
     pushActivity(activity);
 }

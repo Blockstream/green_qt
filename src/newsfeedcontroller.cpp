@@ -1,3 +1,4 @@
+#include "activitymanager.h"
 #include "newsfeedcontroller.h"
 #include "networkmanager.h"
 #include "util.h"
@@ -43,7 +44,7 @@ void NewsFeedController::fetch()
         parse();
         updatePending(activity);
     });
-    activity->exec();
+    ActivityManager::instance()->exec(activity);
 }
 
 void NewsFeedController::parse()
@@ -80,7 +81,7 @@ void NewsFeedController::parse()
                             updateModel();
                             updatePending(activity);
                         });
-                        activity->exec();
+                        ActivityManager::instance()->exec(activity);
                     }
                     item[e.tagName()] = QUrl::fromLocalFile(path).toString();
                 }

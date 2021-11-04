@@ -1,3 +1,4 @@
+#include "activitymanager.h"
 #include "jadeupdatecontroller.h"
 #include "jadedevice.h"
 #include "network.h"
@@ -212,7 +213,7 @@ void JadeUpdateController::check()
         }
         emit firmwaresChanged(m_firmwares);
     });
-    activity->exec();
+    ActivityManager::instance()->exec(activity);
     emit activityCreated(activity);
 }
 
@@ -234,14 +235,14 @@ void JadeUpdateController::update(const QVariantMap& firmware)
             update(firmware);
         });
         emit activityCreated(activity);
-        activity->exec();
+        ActivityManager::instance()->exec(activity);
     } else {
         auto activity = new JadeUpdateActivity(firmware, data, m_device);
         connect(activity, &JadeUpdateActivity::locked, this, [this, activity] {
             auto unlock_activity = unlock();
             connect(unlock_activity, &Activity::finished, this, [activity, unlock_activity] {
                 unlock_activity->deleteLater();
-                activity->exec();
+                ActivityManager::instance()->exec(activity);
             });
             connect(unlock_activity, &Activity::failed, this, [activity, unlock_activity] {
                 unlock_activity->deleteLater();
@@ -252,7 +253,7 @@ void JadeUpdateController::update(const QVariantMap& firmware)
             activity->deleteLater();
         });
         emit activityCreated(activity);
-        activity->exec();
+        ActivityManager::instance()->exec(activity);
     }
 }
 
@@ -260,7 +261,7 @@ JadeUnlockActivity* JadeUpdateController::unlock()
 {
     const auto nets = m_device->versionInfo().value("JADE_NETWORKS").toString();
     auto activity = new JadeUnlockActivity(nets == "TEST" ? "testnet" : "mainnet", m_device);
-    activity->exec();
+    ActivityManager::instance()->exec(activity);
     emit activityCreated(activity);
     return activity;
 }

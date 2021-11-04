@@ -14,6 +14,7 @@ class LedgerGetBlindingNonceActivity : public GetBlindingNonceActivity
 public:
     LedgerGetBlindingNonceActivity(const QByteArray& pubkey, const QByteArray& script, LedgerDevice* device);
     QByteArray nonce() const override;
+private:
     void exec() override;
 };
 

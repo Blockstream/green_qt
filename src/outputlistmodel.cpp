@@ -1,3 +1,4 @@
+#include "activitymanager.h"
 #include "account.h"
 #include "resolver.h"
 #include "output.h"
@@ -69,7 +70,7 @@ void OutputListModel::fetch()
         emit fetchingChanged();
     }));
 
-    m_get_outputs_activity->exec();
+    ActivityManager::instance()->exec(m_get_outputs_activity);
     emit fetchingChanged();
 }
 

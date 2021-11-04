@@ -14,9 +14,10 @@ class LedgerSignMessageActivity : public SignMessageActivity
 public:
     LedgerSignMessageActivity(const QString& message, const QVector<uint32_t>& path, LedgerDevice* device);
     QByteArray signature() const override;
-    virtual void exec() override;
     void prepare();
     void sign();
+private:
+    void exec() override;
 };
 
 #endif // GREEN_LEDGERSIGNMESSAGEACTIVITY_H

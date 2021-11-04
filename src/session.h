@@ -86,6 +86,7 @@ class SessionTorCircuitActivity : public SessionActivity
 public:
     SessionTorCircuitActivity(Session* session);
     QStringList logs() const { return m_logs; }
+private:
     void exec() {}
 signals:
     void logsChanged(const QStringList& logs);
@@ -101,6 +102,7 @@ class SessionConnectActivity : public SessionActivity
     QML_ELEMENT
 public:
     SessionConnectActivity(Session* session);
+private:
     void exec() {}
 private:
     QMetaObject::Connection m_connection;

@@ -1,3 +1,4 @@
+#include "activitymanager.h"
 #include "device.h"
 #include "handler.h"
 #include "network.h"
@@ -112,7 +113,7 @@ void GetXPubsResolver::resolve()
         activity->deleteLater();
         setFailed(true);
     });
-    activity->exec();
+    ActivityManager::instance()->exec(activity);
 }
 
 SignTransactionResolver::SignTransactionResolver(Handler* handler, Device* device, const QJsonObject& result)
@@ -153,7 +154,7 @@ void SignTransactionResolver::resolve()
         activity->deleteLater();
         m_handler->fail();
     });
-    activity->exec();
+    ActivityManager::instance()->exec(activity);
 }
 
 BlindingKeysResolver::BlindingKeysResolver(Handler* handler, Device* device, const QJsonObject& result)
@@ -179,7 +180,7 @@ void BlindingKeysResolver::resolve()
         activity->deleteLater();
         m_handler->error();
     });
-    activity->exec();
+    ActivityManager::instance()->exec(activity);
 }
 
 BlindingNoncesResolver::BlindingNoncesResolver(Handler* handler, Device* device, const QJsonObject& result)
@@ -208,7 +209,7 @@ void BlindingNoncesResolver::resolve()
         activity->deleteLater();
         m_handler->error();
     });
-    activity->exec();
+    ActivityManager::instance()->exec(activity);
 }
 
 SignLiquidTransactionResolver::SignLiquidTransactionResolver(Handler* handler, Device* device, const QJsonObject& result)
@@ -299,7 +300,7 @@ void SignLiquidTransactionResolver::resolve()
     connect(activity, &Activity::failed, [this] {
         setFailed(true);
     });
-    activity->exec();
+    ActivityManager::instance()->exec(activity);
     pushActivity(activity);
 }
 
@@ -320,6 +321,6 @@ void GetMasterBlindingKeyResolver::resolve()
     connect(activity, &Activity::failed, [this] {
         setFailed(true);
     });
-    activity->exec();
+    ActivityManager::instance()->exec(activity);
     pushActivity(activity);
 }

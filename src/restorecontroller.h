@@ -72,6 +72,7 @@ class CheckRestoreActivity : public WalletActivity
     QML_ELEMENT
 public:
     CheckRestoreActivity(Wallet* wallet, QObject* parent);
+private:
     void exec() override {}
 };
 
@@ -81,6 +82,7 @@ class AcceptRestoreActivity : public WalletActivity
     QML_ELEMENT
 public:
     AcceptRestoreActivity(Wallet* wallet, QObject* parent);
+private:
     void exec() override {}
 };
 

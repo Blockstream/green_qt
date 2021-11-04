@@ -18,6 +18,7 @@ public:
     void setTimeout(int timeout);
     void addRootCertificate(const QString& root_certificate);
     QJsonObject response() const { return m_response; }
+private:
     void exec() override;
 private:
     Session* const m_session;

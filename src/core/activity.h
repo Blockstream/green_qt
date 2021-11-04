@@ -4,6 +4,8 @@
 #include <QtQml>
 #include <QObject>
 
+QT_FORWARD_DECLARE_CLASS(ActivityManager)
+
 class Progress : public QObject
 {
     Q_OBJECT
@@ -59,8 +61,7 @@ public:
     void setMessage(const QJsonObject& message);
     void finish();
     void fail();
-    // TODO exec should not exists since not all activities have an action
-    // TODO instead each activity subclass should have a concrete "action" method, like "sign"
+private:
     virtual void exec() = 0;
 signals:
     void statusChanged(Status status);
@@ -71,6 +72,8 @@ private:
     Status m_status{Status::Pending};
     Progress m_progress;
     QJsonObject m_message;
+
+    friend class ActivityManager;
 };
 
 #endif // GREEN_ACTIVITY_H

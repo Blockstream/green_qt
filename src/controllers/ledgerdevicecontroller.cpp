@@ -1,3 +1,4 @@
+#include "activitymanager.h"
 #include "command.h"
 #include "ga.h"
 #include "json.h"
@@ -131,7 +132,7 @@ void LedgerDeviceController::initialize()
             setStatus("error");
             //QTimer::singleShot(1000, this, &LedgerDeviceController::initialize);
         });
-        activity->exec();
+        ActivityManager::instance()->exec(activity);
         return;
     }
 #endif

@@ -93,8 +93,9 @@ class AccountGetTransactionsActivity : public AccountActivity
     QML_ELEMENT
 public:
     AccountGetTransactionsActivity(Account* account, int first, int count, QObject* parent);
-    void exec() override;
     QVector<Transaction*> transactions() const { return m_transactions; }
+private:
+    void exec() override;
 private:
     const int m_first;
     const int m_count;
@@ -107,8 +108,9 @@ class AccountGetUnspentOutputsActivity : public AccountActivity
     QML_ELEMENT
 public:
     AccountGetUnspentOutputsActivity(Account* account, int m_num_confs, bool all_coins, QObject* parent);
-    void exec() override;
     QVector<Output*> outputs() const { return m_outputs; }
+private:
+    void exec() override;
 private:
     const int m_num_confs;
     const bool m_all_coins;

@@ -13,6 +13,7 @@ class LedgerGetBlindingKeyActivity : public GetBlindingKeyActivity
 public:
     LedgerGetBlindingKeyActivity(const QString& script, LedgerDevice* device);
     QByteArray publicKey() const override;
+private:
     void exec() override;
 };
 

@@ -1,3 +1,4 @@
+#include "activitymanager.h"
 #include "appupdatecontroller.h"
 #include "network.h"
 #include "networkmanager.h"
@@ -32,7 +33,7 @@ void AppUpdateController::checkForUpdates()
         emit updateAvailableChanged(m_update_available);
         m_session.destroy();
     });
-    activity->exec();
+    ActivityManager::instance()->exec(activity);
 }
 
 extern QCommandLineParser g_args;

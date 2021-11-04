@@ -1,3 +1,4 @@
+#include "activitymanager.h"
 #include "account.h"
 #include "resolver.h"
 #include "transaction.h"
@@ -86,7 +87,7 @@ void TransactionListModel::fetch(bool reset, int offset, int count)
         emit fetchingChanged();
     }));
 
-    m_get_transactions_activity->exec();
+    ActivityManager::instance()->exec(m_get_transactions_activity);
     emit fetchingChanged();
 }
 

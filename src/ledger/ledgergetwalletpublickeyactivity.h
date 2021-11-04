@@ -14,8 +14,8 @@ class LedgerGetWalletPublicKeyActivity : public GetWalletPublicKeyActivity
 public:
     LedgerGetWalletPublicKeyActivity(Network* network, const QVector<uint32_t>& path, LedgerDevice* device);
     QByteArray publicKey() const override;
+private:
     void exec() override;
 };
-
 
 #endif // GREEN_LEDGERGETWALLETPUBLICKEYACTIVITY_H

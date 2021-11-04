@@ -48,8 +48,9 @@ class GetFirmwareActivity : public Activity
     uint8_t m_loader_minor;
 public:
     GetFirmwareActivity(LedgerDevice* device);
-    void exec() override;
     SemVer version() const { return {m_fw_major, m_fw_minor, m_fw_patch}; }
+private:
+    void exec() override;
 };
 
 class GetAppActivity : public Activity
@@ -61,6 +62,7 @@ public:
     GetAppActivity(LedgerDevice* device);
     QString name() const;
     SemVer version() const;
+private:
     void exec() override;
 };
 

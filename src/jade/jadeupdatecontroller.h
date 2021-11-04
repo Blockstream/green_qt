@@ -45,6 +45,7 @@ class JadeUnlockActivity : public Activity
 public:
     JadeUnlockActivity(const QString& network, JadeDevice* device);
     JadeDevice* device() const { return m_device; }
+private:
     void exec() override;
 private:
     JadeDevice* const m_device;
@@ -61,6 +62,7 @@ public:
     JadeUpdateActivity(const QVariantMap& firmware, const QByteArray& data, JadeDevice* device);
     JadeDevice* device() const { return m_device; }
     QVariantMap firmware() const { return m_firmware; }
+private:
     void exec() override;
 signals:
     void locked();
