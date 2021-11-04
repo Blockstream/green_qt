@@ -83,8 +83,6 @@ void Transaction::updateFromData(const QJsonObject& data)
     const int count = satoshi.keys().length();
 
     if (m_amounts.empty() && count > 0) {
-        qDebug() << Q_FUNC_INFO << data;
-
         Wallet* wallet = m_account->wallet();
         const auto satoshi = m_data.value("satoshi").toObject();
         if (wallet->network()->isLiquid()) {
