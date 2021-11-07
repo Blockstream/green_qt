@@ -9,12 +9,19 @@ MainPage {
     property alias count: devices_list_view.count
     readonly property string url: 'https://help.blockstream.com/hc/en-us/categories/900000061906-Blockstream-Jade'
 
-    function supportsNetwork(device, network) {
-        const nets = device.versionInfo.JADE_NETWORKS
-        if (nets === "ALL") return true
-        if (nets === 'MAIN') return network === 'mainnet' || network === 'liquid'
-        if (nets === 'TEST') return network === 'testnet-liquid' || network === 'testnet'
-        return false
+    function formatDeviceState(state) {
+        switch (state) {
+            case JadeDevice.StateLocked:
+                return qsTrId('Locked')
+            case JadeDevice.StateTemporary:
+            case JadeDevice.StateReady:
+                return qsTrId('Ready')
+            case JadeDevice.StateUnsaved:
+            case JadeDevice.StateUninitialized:
+                return qsTrId('Uninitialized')
+            default:
+                return qsTrId('Unknonw')
+        }
     }
 
     JadeDeviceSerialPortDiscoveryAgent {
@@ -56,42 +63,18 @@ MainPage {
         }
     }
     contentItem: StackLayout {
-        currentIndex: self.count === 0 ? 0 : 1
+        currentIndex: devices_list_view.count === 0 ? 0 : 1
         ColumnLayout {
-            spacing: 16
-            Spacer {
-            }
-            Image {
-                Layout.alignment: Qt.AlignHCenter
-                source: 'qrc:/svg/blockstream_jade.svg'
-            }
-            GPane {
-                Layout.topMargin: 40
-                Layout.alignment: Qt.AlignHCenter
-                background: Rectangle {
-                    radius: 8
-                    border.width: 2
-                    border.color: constants.c600
-                    color: 'transparent'
-                }
-                contentItem: RowLayout {
-                    spacing: 16
-                    Image {
-                        Layout.alignment: Qt.AlignVCenter
-                        sourceSize.width: 32
-                        sourceSize.height: 32
-                        fillMode: Image.PreserveAspectFit
-                        source: 'qrc:/svg/usbAlt.svg'
-                        clip: true
-                    }
-                    Label {
-                        Layout.alignment: Qt.AlignVCenter
-                        text: qsTrId('id_connect_your_jade_to_use_it')
-                    }
-                }
+            VSpacer {
+                Layout.fillWidth: true
             }
             Label {
-                Layout.alignment: Qt.AlignHCenter
+                Layout.alignment: Qt.AlignCenter
+                visible: devices_list_view.count === 0
+                text: qsTrId('id_connect_your_jade_to_use_it')
+            }
+            Label {
+                Layout.alignment: Qt.AlignCenter
                 text: qsTrId('id_need_help') + ' ' + link(url, qsTrId('id_visit_the_blockstream_help'))
                 textFormat: Text.RichText
                 color: 'white'
@@ -101,146 +84,106 @@ MainPage {
                     cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor
                 }
             }
-            Spacer {
+            VSpacer {
             }
         }
-
-        ColumnLayout {
-            spacing: 16
+        SplitView {
+            focusPolicy: Qt.ClickFocus
+            handle: Item {
+                implicitWidth: 32
+                implicitHeight: parent.height
+            }
             GListView {
+                SplitView.minimumWidth: 300
                 id: devices_list_view
-                ScrollIndicator.horizontal: ScrollIndicator { }
-                Layout.alignment: Qt.AlignCenter
-                implicitWidth: Math.min(contentWidth, parent.width)
-                height: 200
                 model: device_list_model
-                spacing: 16
-                orientation: ListView.Horizontal
+                spacing: 0
                 currentIndex: {
                     for (let i = 0; i < devices_list_view.count; ++i) {
                         if (devices_list_view.itemAtIndex(i).location === navigation.location) {
                             return i
                         }
                     }
-                    return -1
+                    return 0
                 }
-
-                delegate: GPane {
+                delegate: Button {
                     id: self
                     required property JadeDevice device
                     readonly property string location: '/jade/' + device.versionInfo.EFUSEMAC.slice(-6)
+                    width: ListView.view.contentWidth
+                    onClicked: navigation.go(location)
                     padding: 16
+                    highlighted: ListView.isCurrentItem
                     background: Rectangle {
-                        radius: 8
-                        color: constants.c700
+                        radius: 4
+                        border.width: 1
+                        color: self.highlighted ? constants.c700 : self.hovered ? constants.c700 : constants.c800
+                        border.color: self.highlighted ? constants.g500 : constants.c700
                     }
-                    contentItem: RowLayout {
+                    contentItem: ColumnLayout {
                         spacing: 16
-                        Image {
-                            Layout.alignment: Qt.AlignCenter
-                            smooth: true
-                            mipmap: true
-                            fillMode: Image.PreserveAspectFit
-                            horizontalAlignment: Image.AlignHCenter
-                            verticalAlignment: Image.AlignVCenter
-                            source: 'qrc:/svg/blockstream_jade.svg'
-                            sourceSize.height: 64
+                        Label {
+                            Layout.fillWidth: true
+                            text: `Jade ${device.versionInfo.EFUSEMAC.slice(-6)}`
+                            font.pixelSize: 16
                         }
-                        GridLayout {
-                            columnSpacing: 16
-                            rowSpacing: 8
-                            columns: 2
-                            Label {
-                                text: qsTrId('id_status')
+                        RowLayout {
+                            spacing: 16
+                            Image {
+                                Layout.preferredHeight: 24
+                                Layout.preferredWidth: 24
+                                source: 'qrc:/svg/usbAlt.svg'
+                            }
+                            Image {
+                                Layout.alignment: Qt.AlignLeft
+                                smooth: true
+                                mipmap: true
+                                fillMode: Image.PreserveAspectFit
+                                horizontalAlignment: Image.AlignHCenter
+                                verticalAlignment: Image.AlignVCenter
+                                source: 'qrc:/svg/blockstream_jade.svg'
+                                sourceSize.height: 24
+                            }
+                            HSpacer {
                             }
                             Label {
-                                text: {
-                                    if (!device.versionInfo.JADE_HAS_PIN) return qsTrId('id_not_initialized')
-                                    return qsTrId('id_initialized')
+                                font.pixelSize: 10
+                                font.capitalization: Font.AllUppercase
+                                leftPadding: 8
+                                rightPadding: 8
+                                topPadding: 4
+                                bottomPadding: 4
+                                color: 'white'
+                                background: Rectangle {
+                                    color: constants.c400
+                                    radius: 4
                                 }
-                            }
-                            Label {
-                                text: qsTrId('id_id')
-                            }
-                            Label {
-                                text: device.versionInfo.EFUSEMAC.slice(-6)
-                            }
-                            Label {
-                                text: qsTrId('id_firmware')
-                            }
-                            RowLayout {
-                                Label {
-                                    text: device.version
-                                }
-                                HSpacer {
-                                }
-                                GButton {
-                                    highlighted: self.device.updateRequired
-                                    text: self.device.updateRequired ? qsTrId('id_new_jade_firmware_required') : qsTrId('id_update')
-                                    onClicked: update_dialog.createObject(window, { device }).open()
-                                }
-                            }
-                            Label {
-                                text: qsTrId('id_connection')
-                            }
-                            Label {
-                                text: 'USB'
-                            }
-                            Label {
-                                text: qsTrId('id_system_location')
-                            }
-                            Label {
-                                text: device.systemLocation
+                                text: formatDeviceState(device.state)
                             }
                         }
                     }
                 }
             }
-            GPane {
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                background: null
-                contentItem: StackLayout {
-                    currentIndex: devices_list_view.currentIndex
-                    Repeater {
-                        model: device_list_model
-                        View {
-                        }
+            StackLayout {
+                SplitView.fillWidth: true
+                currentIndex: devices_list_view.currentIndex
+                Repeater {
+                    model: device_list_model
+                    View {
                     }
                 }
             }
         }
     }
 
-    component NetworkSection: Page {
+    component NetworkSection: Pane {
         id: self
         required property Network network
         required property JadeDevice device
-        enabled: supportsNetwork(self.device, self.network.id)
-        Layout.minimumWidth: 300
-        padding: 16
-        header: GPane {
-            padding: 16
-            background: null
-            contentItem: RowLayout {
-                spacing: 8
-                Image {
-                    source: icons[self.network.key]
-                    sourceSize.width: 16
-                    sourceSize.height: 16
-                }
-                Label {
-                    Layout.fillWidth: true
-                    text: self.network.displayName
-                    font.styleName: 'Light'
-                    font.pixelSize: 20
-                }
-            }
-        }
-        background: Rectangle {
-            radius: 16
-            color: constants.c700
-        }
+        Layout.fillWidth: true
+        enabled: controller.enabled
+        background: null
+        padding: 0
         JadeLoginController {
             id: controller
             device: self.device
@@ -248,17 +191,35 @@ MainPage {
             onInvalidPin: self.ToolTip.show(qsTrId('id_invalid_pin'), 2000);
         }
         contentItem: RowLayout {
-            Label {
-                visible: controller.wallet && controller.wallet.authentication !== Wallet.Authenticated
-                text: device.versionInfo.JADE_HAS_PIN ? qsTrId('id_enter_pin_on_jade') : qsTrId('id_setup_jade')
+            spacing: constants.s1
+            Image {
+                source: icons[self.network.key]
+                sourceSize.width: 24
+                sourceSize.height: 24
             }
-            BusyIndicator {
-                visible: controller.wallet && controller.wallet.authentication !== Wallet.Authenticated
+            Label {
+                Layout.fillWidth: true
+                text: self.network.displayName
+//                font.styleName: 'Light'
+//                font.pixelSize: 20
+            }
+            Label {
+                visible: controller.wallet
+                text: controller.wallet ? controller.wallet.name : 'N/A'
             }
             GButton {
-                visible: !controller.wallet
-                text: device.versionInfo.JADE_HAS_PIN ? qsTrId('id_login') : qsTrId('id_setup_jade')
-                onClicked: controller.login()
+                visible: !controller.wallet || controller.wallet.authentication !== Wallet.Authenticated
+                enabled: !controller.active
+                text: switch (device.state) {
+                    case JadeDevice.StateReady:
+                    case JadeDevice.StateTemporary:
+                        return qsTrId('id_login')
+                    case JadeDevice.StateLocked:
+                        return qsTrId('id_unlock_and_login')
+                    default:
+                        return qsTrId('id_setup_jade')
+                }
+                onClicked: controller.active = true
             }
             GButton {
                 visible: controller.wallet && controller.wallet.authentication === Wallet.Authenticated
@@ -271,35 +232,121 @@ MainPage {
     component View: ColumnLayout {
         id: self
         required property JadeDevice device
-        spacing: 16
+        spacing: constants.s2
         RowLayout {
-            visible: !self.device.updateRequired
-            Layout.fillWidth: false
             Layout.fillHeight: false
-            Layout.alignment: Qt.AlignCenter
-            spacing: 16
-            NetworkSection {
-                network: NetworkManager.network('liquid')
-                device: self.device
+            spacing: constants.s2
+            Page {
+                Layout.fillWidth: true
+                background: null
+                header: Label {
+                    text: qsTrId('id_details')
+                    font.pixelSize: 20
+                    font.styleName: 'Bold'
+                    bottomPadding: constants.s1
+                }
+                contentItem: GridLayout {
+                    columns: 2
+                    columnSpacing: constants.s2
+                    rowSpacing: constants.s1
+                    Label {
+                        text: qsTrId('id_id')
+                    }
+                    Label {
+                        text: device.versionInfo.EFUSEMAC.slice(-6)
+                    }
+                    Label {
+                        text: qsTrId('id_status')
+                    }
+                    Label {
+                        Layout.fillWidth: true
+                        text: formatDeviceState(device.state)
+                    }
+                    Label {
+                        text: qsTrId('id_connection')
+                    }
+                    Label {
+                        text: 'USB'
+                    }
+                    Label {
+                        text: qsTrId('id_system_location')
+                    }
+                    Label {
+                        text: device.systemLocation
+                    }
+                }
             }
-            NetworkSection {
-                network: NetworkManager.network('mainnet')
-                device: self.device
-            }
-            NetworkSection {
-                visible: Settings.enableTestnet
-                network: NetworkManager.network('testnet')
-                device: self.device
-            }
-            NetworkSection {
-                visible: Settings.enableTestnet
-                network: NetworkManager.network('testnet-liquid')
-                device: self.device
+            Page {
+                Layout.fillWidth: true
+                background: null
+                header: Label {
+                    text: qsTrId('id_firmware')
+                    font.pixelSize: 20
+                    font.styleName: 'Bold'
+                    bottomPadding: constants.s1
+                }
+                contentItem: GridLayout {
+                    columns: 2
+                    columnSpacing: constants.s2
+                    rowSpacing: constants.s1
+                    Label {
+                        text: qsTrId('id_version')
+                    }
+                    Label {
+                        Layout.fillWidth: true
+                        text: device.version
+                    }
+                    Label {
+                        text: qsTrId('Bluetooth')
+                    }
+                    Label {
+                        text: device.versionInfo.JADE_CONFIG === 'NORADIO' ? qsTrId('id_not_supported') : qsTrId('id_supported')
+                    }
+                    Label {
+                        text: qsTrId('id_update')
+                    }
+                    GButton {
+                        highlighted: self.device.updateRequired
+                        text: self.device.updateRequired ? qsTrId('id_new_jade_firmware_required') : qsTrId('id_check_for_updates')
+                        onClicked: update_dialog.createObject(window, { device }).open()
+                    }
+                }
             }
         }
-        Item {
-            Layout.fillHeight: true
-            width: 1
+        Page {
+            Layout.fillWidth: true
+            background: null
+            header: Label {
+                text: qsTrId('id_wallets')
+                font.pixelSize: 20
+                font.styleName: 'Bold'
+                bottomPadding: constants.s1
+            }
+            contentItem: ColumnLayout {
+                spacing: constants.s1
+                NetworkSection {
+                    visible: !self.device.updateRequired
+                    network: NetworkManager.network('liquid')
+                    device: self.device
+                }
+                NetworkSection {
+                    visible: !self.device.updateRequired
+                    network: NetworkManager.network('mainnet')
+                    device: self.device
+                }
+                NetworkSection {
+                    visible: !self.device.updateRequired && Settings.enableTestnet
+                    network: NetworkManager.network('testnet')
+                    device: self.device
+                }
+                NetworkSection {
+                    visible: !self.device.updateRequired && Settings.enableTestnet
+                    network: NetworkManager.network('testnet-liquid')
+                    device: self.device
+                }
+            }
+        }
+        VSpacer {
         }
     }
 

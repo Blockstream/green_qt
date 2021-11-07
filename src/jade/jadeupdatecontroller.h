@@ -62,7 +62,6 @@ public:
     JadeUpdateActivity(const QVariantMap& firmware, const QByteArray& data, JadeDevice* device);
     JadeDevice* device() const { return m_device; }
     QVariantMap firmware() const { return m_firmware; }
-private:
     void exec() override;
 signals:
     void locked();

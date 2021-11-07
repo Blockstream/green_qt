@@ -242,7 +242,7 @@ void JadeUpdateController::update(const QVariantMap& firmware)
             auto unlock_activity = unlock();
             connect(unlock_activity, &Activity::finished, this, [activity, unlock_activity] {
                 unlock_activity->deleteLater();
-                ActivityManager::instance()->exec(activity);
+                activity->exec();
             });
             connect(unlock_activity, &Activity::failed, this, [activity, unlock_activity] {
                 unlock_activity->deleteLater();
