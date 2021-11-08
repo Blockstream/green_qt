@@ -35,7 +35,7 @@ MainPageHeader {
             leftPadding: -8
             focusPolicy: Qt.ClickFocus
             contentItem: RowLayout {
-                spacing: 16
+                spacing: 8
                 Control {
                     id: wallet_pill
                     padding: 2
@@ -57,7 +57,7 @@ MainPageHeader {
                             source: icons[self.wallet.network.key]
                         }
                         Loader {
-                            active: !wallet.device && wallet.persisted
+                            active: wallet.persisted
                             visible: active
                             sourceComponent: EditableLabel {
                                 leftPadding: 8
@@ -72,20 +72,11 @@ MainPageHeader {
                         }
                         Loader {
                             Layout.minimumHeight: 42
-                            active: !wallet.device && !wallet.persisted
+                            active: !wallet.persisted
+                            visible: active
                             sourceComponent: Label {
                                 verticalAlignment: Qt.AlignVCenter
                                 text: wallet.name
-                                font.pixelSize: 24
-                                font.styleName: 'Medium'
-                            }
-                        }
-                        Loader {
-                            Layout.minimumHeight: 42
-                            active: wallet.device
-                            sourceComponent: Label {
-                                verticalAlignment: Qt.AlignVCenter
-                                text: wallet.device.name
                                 font.pixelSize: 24
                                 font.styleName: 'Medium'
                             }
@@ -97,19 +88,21 @@ MainPageHeader {
                             source: wallet.network.electrum ? 'qrc:/svg/key.svg' : 'qrc:/svg/multi-sig.svg'
                         }
                         Loader {
-                            visible: wallet.device
-                            sourceComponent: DeviceImage {
+                            active: 'type' in wallet.deviceDetails
+                            visible: active
+                            sourceComponent: DeviceBadge {
                                 device: wallet.device
-                                sourceSize.height: 24
-
-                                MouseArea {
+                                details: wallet.deviceDetails
+                                background: MouseArea {
+                                    enabled: wallet.device
                                     anchors.fill: parent
                                     cursorShape: Qt.PointingHandCursor
                                     onClicked: {
-                                        if (wallet.device.type === Device.BlockstreamJade) {
-                                            navigation.go(`/jade/${wallet.device.uuid}`)
-                                        } else if (wallet.device.vendor === Device.Ledger) {
-                                            navigation.go(`/ledger/${wallet.device.uuid}`)
+                                        const device = wallet.device
+                                        if (device.type === Device.BlockstreamJade) {
+                                            navigation.go(`/jade/${device.uuid}`)
+                                        } else if (device.vendor === Device.Ledger) {
+                                            navigation.go(`/ledger/${device.uuid}`)
                                         }
                                     }
                                 }
@@ -157,6 +150,7 @@ MainPageHeader {
                         Loader {
                             Layout.minimumHeight: 42
                             active: !wallet.device && wallet.watchOnly
+                            visible: active
                             sourceComponent: Label {
                                 verticalAlignment: Qt.AlignVCenter
                                 text: accountName(self.currentAccount)
@@ -235,7 +229,6 @@ MainPageHeader {
                     ToolTip.visible: hovered
                 }
                 ToolButton {
-                    visible: !self.wallet.device
                     icon.source: 'qrc:/svg/logout.svg'
                     flat: true
                     action: self.disconnectAction
