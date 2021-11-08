@@ -101,6 +101,7 @@ MainPage {
             GListView {
                 SplitView.minimumWidth: 300
                 id: devices_list_view
+                clip: true
                 model: device_list_model
                 spacing: 0
                 currentIndex: {
@@ -170,7 +171,9 @@ MainPage {
                 }
             }
             StackLayout {
+                id: xxx
                 SplitView.fillWidth: true
+                SplitView.minimumWidth: 600// children[currentIndex+1].implicitWidth
                 currentIndex: devices_list_view.currentIndex
                 Repeater {
                     model: device_list_model
@@ -187,8 +190,17 @@ MainPage {
         property JadeDevice device
         Layout.fillWidth: true
         enabled: controller.enabled
-        background: null
+        background: Item {
+            Rectangle {
+                width: parent.width
+                height: 1
+                y: parent.height - 1
+                color: constants.c600
+            }
+        }
         padding: 0
+        bottomPadding: 8
+        topPadding: 8
         JadeLoginController {
             id: controller
             device: self.device
@@ -197,39 +209,45 @@ MainPage {
         }
         contentItem: RowLayout {
             spacing: constants.s1
-            Image {
-                source: icons[self.network.key]
-                sourceSize.width: 24
-                sourceSize.height: 24
+            RowLayout {
+                Layout.fillWidth: false
+                Layout.minimumWidth: 200
+                Image {
+                    source: icons[self.network.key]
+                    sourceSize.width: 24
+                    sourceSize.height: 24
+                }
+                Label {
+                    Layout.fillWidth: true
+                    text: self.network.displayName
+                }
             }
             Label {
                 Layout.fillWidth: true
-                text: self.network.displayName
-//                font.styleName: 'Light'
-//                font.pixelSize: 20
-            }
-            Label {
-                visible: controller.wallet
                 text: controller.wallet ? controller.wallet.name : 'N/A'
             }
-            GButton {
-                visible: !controller.wallet || controller.wallet.authentication !== Wallet.Authenticated
-                enabled: !controller.active
-                text: switch (device.state) {
-                    case JadeDevice.StateReady:
-                    case JadeDevice.StateTemporary:
-                        return qsTrId('id_login')
-                    case JadeDevice.StateLocked:
-                        return qsTrId('id_unlock_and_login')
-                    default:
-                        return qsTrId('id_setup_jade')
+            RowLayout {
+                Layout.fillWidth: false
+                Layout.minimumWidth: 150
+                GButton {
+                    visible: !controller.wallet || controller.wallet.authentication !== Wallet.Authenticated
+                    enabled: !controller.active
+                    text: switch (device.state) {
+                        case JadeDevice.StateReady:
+                        case JadeDevice.StateTemporary:
+                            return qsTrId('id_login')
+                        case JadeDevice.StateLocked:
+                            return qsTrId('id_unlock_and_login')
+                        default:
+                            return qsTrId('id_setup_jade')
+                    }
+                    onClicked: controller.active = true
                 }
-                onClicked: controller.active = true
-            }
-            GButton {
-                visible: controller.wallet && controller.wallet.authentication === Wallet.Authenticated
-                text: qsTrId('id_go_to_wallet')
-                onClicked: navigation.go(`/${self.network.key}/${controller.wallet.id}`)
+                GButton {
+                    visible: controller.wallet && controller.wallet.authentication === Wallet.Authenticated
+                    text: qsTrId('id_go_to_wallet')
+                    onClicked: navigation.go(`/${self.network.key}/${controller.wallet.id}`)
+                }
             }
         }
     }
@@ -238,10 +256,13 @@ MainPage {
         id: self
         required property JadeDevice device
         spacing: constants.s2
+        Layout.minimumWidth: implicitWidth
         RowLayout {
             Layout.fillHeight: false
             spacing: constants.s2
             Page {
+                Layout.alignment: Qt.AlignTop
+                Layout.minimumWidth: implicitWidth
                 Layout.fillWidth: true
                 background: null
                 header: Label {
@@ -282,7 +303,9 @@ MainPage {
                 }
             }
             Page {
+                Layout.alignment: Qt.AlignTop
                 Layout.fillWidth: true
+                Layout.minimumWidth: implicitWidth
                 background: null
                 header: Label {
                     text: qsTrId('id_firmware')
@@ -329,7 +352,38 @@ MainPage {
                 bottomPadding: constants.s1
             }
             contentItem: ColumnLayout {
-                spacing: constants.s1
+                spacing: 0
+                Pane {
+                    Layout.fillWidth: true
+                    padding: 0
+                    bottomPadding: 8
+                    background: Item {
+                        Rectangle {
+                            width: parent.width
+                            height: 1
+                            y: parent.height - 1
+                            color: constants.c600
+                        }
+                    }
+                    contentItem: RowLayout {
+                        spacing: constants.s1
+                        Label {
+                            text: qsTrId('id_network')
+                            color: constants.c300
+                            Layout.minimumWidth: 200
+                        }
+                        Label {
+                            Layout.fillWidth: true
+                            text: qsTrId('id_wallet')
+                            color: constants.c300
+                        }
+                        Label {
+                            Layout.minimumWidth: 150
+                            text: qsTrId('id_actions')
+                            color: constants.c300
+                        }
+                    }
+                }
                 Repeater {
                     model: {
                         if (self.device.updateRequired) return []

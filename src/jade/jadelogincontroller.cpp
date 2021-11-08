@@ -109,7 +109,6 @@ void JadeLoginController::update()
 
     if (!m_wallet) {
         m_wallet = WalletManager::instance()->walletWithHashId(m_wallet_hash_id, false);
-        qDebug() << "HASH ID = " << network->id() << m_wallet_hash_id;
         if (m_wallet) {
             emit walletChanged(m_wallet);
             m_wallet->setDevice(m_device);
