@@ -104,7 +104,7 @@ Wallet *WalletManager::restoreWallet(Network *network)
 
 void WalletManager::insertWallet(Wallet* wallet)
 {
-    Q_ASSERT(!wallet->m_id.isEmpty() && !wallet->m_pin_data.isEmpty());
+    Q_ASSERT(!wallet->m_id.isEmpty());
     QFile file(GetDataFile("wallets", wallet->m_id));
     addWallet(wallet);
     wallet->save();

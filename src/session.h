@@ -31,7 +31,7 @@ public:
     void setActive(bool active);
     bool isConnected() const { return m_connected; }
     Connection* connection() const { return m_connection; };
-    QJsonObject events() const { return m_events; }
+    QList<QJsonObject> events() const { return m_events; }
 signals:
     void networkChanged(Network* network);
     void notificationHandled(const QJsonObject& notification);
@@ -53,7 +53,7 @@ public:
     bool m_connected{false};
     Connectable<ConnectHandler> m_connect_handler;
     Connection* m_connection{nullptr};
-    QJsonObject m_events;
+    QList<QJsonObject> m_events;
 };
 
 class Connection : public QObject

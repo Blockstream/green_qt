@@ -24,7 +24,8 @@ void Session::handleNotification(const QJsonObject& notification)
     Q_ASSERT(!event.isEmpty());
     const auto value = notification.value(event);
 
-    m_events.insert(event, value);
+    m_events.append(notification);
+
     if (event == "session") {
         auto data = value.toObject();
         emit sessionEvent(data);

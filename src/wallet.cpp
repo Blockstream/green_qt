@@ -170,6 +170,14 @@ void Wallet::handleNotification(const QJsonObject &notification)
     m_events.insert(event, data);
     emit eventsChanged(m_events);
 
+    if (event == "network") {
+        const bool login_required = data.toObject().value("login_required").toBool();
+        if (login_required) {
+            setAuthentication(Unauthenticated);
+        }
+        return;
+    }
+
     if (event == "transaction") {
         QJsonObject transaction = data.toObject();
         for (auto pointer : transaction.value("subaccounts").toArray()) {
@@ -456,7 +464,6 @@ void Wallet::save()
     Q_ASSERT(QThread::currentThread() == thread());
     Q_ASSERT(!m_id.isEmpty());
     if (!m_is_persisted) return;
-    if (m_device) return;
     QJsonObject data({
         { "version", 1 },
         { "name", m_name },
@@ -613,19 +620,14 @@ void Wallet::createSession()
 void Wallet::setSession(Session* session)
 {
     Q_ASSERT(session);
+    Q_ASSERT(!m_session);
     m_session = session;
+    m_session->setParent(this);
     Q_ASSERT(m_network == m_session->network());
-    for (auto event : session->events().keys()) {
-        auto value = session->events().value(event);
-        handleNotification({{ "event", event }, { event, value }});
+    for (auto notification : session->events()) {
+        handleNotification(notification);
     }
     m_session.track(QObject::connect(m_session, &Session::notificationHandled, this, &Wallet::handleNotification));
-    m_session.track(QObject::connect(m_session, &Session::networkEvent, [this](const QJsonObject& event) {
-        const bool login_required = event.value("login_required").toBool();
-        if (login_required) {
-            setAuthentication(Unauthenticated);
-        }
-    }));
     emit sessionChanged(m_session);
 }
 
@@ -660,11 +662,12 @@ void Wallet::setDevice(Device* device)
 void Wallet::updateHashId(const QString& hash_id)
 {
     if (m_hash_id == hash_id) return;
-    if (!m_hash_id.isEmpty() && m_hash_id != hash_id) {
+    if (!m_hash_id.isEmpty()) {
         qWarning() << Q_FUNC_INFO << "new:" << hash_id << "current:" << m_hash_id;
     }
     m_hash_id = hash_id;
     save();
+    updateReady();
 }
 
 void Wallet::setBlockHeight(int block_height)
