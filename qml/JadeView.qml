@@ -183,8 +183,8 @@ MainPage {
 
     component NetworkSection: Pane {
         id: self
-        required property Network network
-        required property JadeDevice device
+        property Network network
+        property JadeDevice device
         Layout.fillWidth: true
         enabled: controller.enabled
         background: null
@@ -330,25 +330,25 @@ MainPage {
             }
             contentItem: ColumnLayout {
                 spacing: constants.s1
-                NetworkSection {
-                    visible: !self.device.updateRequired
-                    network: NetworkManager.network('liquid')
-                    device: self.device
-                }
-                NetworkSection {
-                    visible: !self.device.updateRequired
-                    network: NetworkManager.network('mainnet')
-                    device: self.device
-                }
-                NetworkSection {
-                    visible: !self.device.updateRequired && Settings.enableTestnet
-                    network: NetworkManager.network('testnet')
-                    device: self.device
-                }
-                NetworkSection {
-                    visible: !self.device.updateRequired && Settings.enableTestnet
-                    network: NetworkManager.network('testnet-liquid')
-                    device: self.device
+                Repeater {
+                    model: {
+                        if (self.device.updateRequired) return []
+                        const nets = self.device.versionInfo.JADE_NETWORKS
+                        const networks = []
+                        if (nets === 'ALL' || nets === 'MAIN') {
+                            networks.push('mainnet')
+                            networks.push('liquid')
+                        }
+                        if (Settings.enableTestnet && (nets === 'ALL' || nets === 'TEST')) {
+                            networks.push('testnet')
+                            networks.push('testnet-liquid')
+                        }
+                        return networks
+                    }
+                    delegate: NetworkSection {
+                        network: NetworkManager.network(modelData)
+                        device: self.device
+                    }
                 }
             }
         }

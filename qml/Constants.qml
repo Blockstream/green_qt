@@ -38,6 +38,7 @@ QtObject {
 
     // spacings
     property int s1: 12
+    property int s2: 24
 
     // urls
     property string supportUrl: "https://docs.blockstream.com/green/support.html"
