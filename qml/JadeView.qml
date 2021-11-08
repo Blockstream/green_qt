@@ -65,12 +65,17 @@ MainPage {
     contentItem: StackLayout {
         currentIndex: devices_list_view.count === 0 ? 0 : 1
         ColumnLayout {
+            spacing: constants.s1
             VSpacer {
                 Layout.fillWidth: true
             }
+            Image {
+                Layout.alignment: Qt.AlignCenter
+                source: 'qrc:/svg/blockstream_jade.svg'
+                sourceSize.height: 32
+            }
             Label {
                 Layout.alignment: Qt.AlignCenter
-                visible: devices_list_view.count === 0
                 text: qsTrId('id_connect_your_jade_to_use_it')
             }
             Label {
