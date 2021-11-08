@@ -321,6 +321,7 @@ MainPage {
         Page {
             Layout.fillWidth: true
             background: null
+            visible: !self.device.updateRequired
             header: Label {
                 text: qsTrId('id_wallets')
                 font.pixelSize: 20

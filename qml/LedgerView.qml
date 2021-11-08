@@ -43,72 +43,20 @@ MainPage {
     contentItem: StackLayout {
         currentIndex: self.count === 0 ? 0 : 1
         ColumnLayout {
-            spacing: 16
-            Spacer {
-            }
-            Flipable {
-                id: flipable
-                property bool flipped: false
-                width: Math.max(nano_s_image.width, nano_x_image.width)
-                height: Math.max(nano_s_image.height, nano_x_image.height)
-                Layout.alignment: Qt.AlignHCenter
-                front: Image {
-                    id: nano_x_image
-                    anchors.centerIn: parent
-                    source: 'qrc:/svg/ledger_nano_x.svg'
-                }
-                back: Image {
-                    id: nano_s_image
-                    anchors.centerIn: parent
-                    source: 'qrc:/svg/ledger_nano_s.svg'
-                }
-                transform: Rotation {
-                    id: rotation
-                    origin.x: flipable.width / 2
-                    origin.y: flipable.height / 2
-                    axis.x: 1
-                    axis.y: 0
-                    axis.z: 0
-                    angle: flipable.flipped ? 180 : 0
-                    Behavior on angle {
-                        SmoothedAnimation { }
-                    }
-                }
-                Timer {
-                    repeat: true
-                    running: self.visible
-                    interval: 3000
-                    onTriggered: flipable.flipped = !flipable.flipped
-                }
-            }
-            GPane {
-                Layout.topMargin: 40
-                Layout.alignment: Qt.AlignHCenter
-                background: Rectangle {
-                    radius: 8
-                    border.width: 2
-                    border.color: constants.c600
-                    color: "transparent"
-                }
-                contentItem: RowLayout {
-                    spacing: 16
-                    Image {
-                        Layout.alignment: Qt.AlignVCenter
-                        sourceSize.width: 32
-                        sourceSize.height: 32
-                        fillMode: Image.PreserveAspectFit
-                        source: 'qrc:/svg/usbAlt.svg'
-                        clip: true
-                    }
-                    Label {
-                        Layout.alignment: Qt.AlignVCenter
-                        text: qsTrId('id_connect_your_ledger_to_use_it')
-                    }
-                }
-            }
-            Item {
+            spacing: constants.s1
+            VSpacer {
                 Layout.fillWidth: true
-                Layout.fillHeight: true
+            }
+            Image {
+                Layout.alignment: Qt.AlignCenter
+                source: 'qrc:/svg/ledger_nano_x.svg'
+                sourceSize.height: 32
+            }
+            Label {
+                Layout.alignment: Qt.AlignCenter
+                text: qsTrId('id_connect_your_ledger_to_use_it')
+            }
+            VSpacer {
             }
         }
         GFlickable {
