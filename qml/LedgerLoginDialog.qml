@@ -46,8 +46,8 @@ AbstractDialog {
         }
         function onStatusChanged(status) {
             if (status === 'done') {
-                navigation.go(`/${controller.network.key}/${controller.wallet.id}`)
-                self.reject()
+                window.navigation.go(`/${controller.network.key}/${controller.wallet.id}`)
+                self.accept()
             } else if (status === 'locked') {
                 self.reject()
             }

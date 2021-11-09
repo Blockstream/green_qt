@@ -192,7 +192,7 @@ AbstractDialog {
                     large: true
                     visible: self.wallet.loginAttemptsRemaining === 0 || !self.wallet.hasPinData
                     text: qsTrId('id_restore_wallet')
-                    onClicked: navigation.go('/restore', { network: self.wallet.network.key })
+                    onClicked: window.navigation.go('/restore', { network: self.wallet.network.key })
                 }
             }
         }

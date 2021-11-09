@@ -18,6 +18,11 @@ AbstractDialog {
     width: 900
     height: 600
 
+    Navigation {
+        id: navigation
+        location: window.navigation.location
+    }
+
     SignupController {
         id: controller
         network: {
@@ -34,7 +39,7 @@ AbstractDialog {
     Connections {
         target: controller.wallet
         function onReadyChanged(ready) {
-            if (ready) navigation.go(`/${controller.network.key}/${controller.wallet.id}`)
+            if (ready) window.navigation.go(`/${controller.network.key}/${controller.wallet.id}`)
         }
     }
 
@@ -76,8 +81,6 @@ AbstractDialog {
         }
     }
 
-    property bool closing: false
-    onAboutToHide: closing = true
     contentItem: StackLayout {
         property Item currentItem: {
             if (stack_layout.currentIndex < 0) return null
@@ -87,18 +90,14 @@ AbstractDialog {
             return item
         }
         id: stack_layout
-        Binding on currentIndex {
-            when: !self.closing
-            restoreMode: Binding.RestoreNone
-            value: {
-                let index = -1
-                for (let i = 0; i < stack_layout.children.length; ++i) {
-                    let child = stack_layout.children[i]
-                    if (!(child instanceof Item)) continue
-                    if (child.active) index = i
-                }
-                return index
+        currentIndex: {
+            let index = -1
+            for (let i = 0; i < stack_layout.children.length; ++i) {
+                let child = stack_layout.children[i]
+                if (!(child instanceof Item)) continue
+                if (child.active) index = i
             }
+            return index
         }
         SelectNetworkView {
             readonly property bool active: true

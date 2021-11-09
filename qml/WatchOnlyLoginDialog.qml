@@ -17,8 +17,8 @@ AbstractDialog {
         password: password_field.text
         saveWallet: remember_checkbox.checked
         onWalletChanged: {
-            navigation.go(`/${wallet.network.key}/${wallet.id}`)
-            self.close()
+            window.navigation.go(`/${wallet.network.key}/${wallet.id}`)
+            self.accept()
         }
         onActivityCreated: {
             if (activity instanceof SessionTorCircuitActivity) {

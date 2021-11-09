@@ -18,6 +18,11 @@ AbstractDialog {
     height: 600
     closePolicy: Popup.NoAutoClose
 
+    Navigation {
+        id: navigation
+        location: window.navigation.location
+    }
+
     RestoreController {
         id: controller
         network: {
@@ -25,7 +30,7 @@ AbstractDialog {
             const server_type = (navigation.param.type === 'amp' || network === 'testnet-liquid') ? 'green' : (navigation.param.server_type || '')
             return NetworkManager.networkWithServerType(network, server_type)
         }
-        type: navigation.param.type
+        type: navigation.param.type || ''
         mnemonic: (navigation.param.mnemonic || '').split(',')
         password: navigation.param.password || ''
         pin: navigation.param.pin || ''
@@ -44,7 +49,7 @@ AbstractDialog {
                 const view = accept_view.createObject(activities_row, { activity })
                 activity.finished.connect(() => {
                     view.destroy()
-                    navigation.go(`/${controller.network.key}/${controller.wallet.id}`)
+                    window.navigation.go(`/${controller.network.key}/${controller.wallet.id}`)
                 })
             }
         }
@@ -108,8 +113,6 @@ AbstractDialog {
         }
     }
 
-    property bool closing: false
-    onAboutToHide: closing = true
     contentItem: StackLayout {
         property Item currentItem: {
             if (stack_layout.currentIndex < 0) return null
@@ -119,18 +122,14 @@ AbstractDialog {
             return item
         }
         id: stack_layout
-        Binding on currentIndex {
-            when: !self.closing
-            restoreMode: Binding.RestoreNone
-            value: {
-                let index = -1
-                for (let i = 0; i < stack_layout.children.length; ++i) {
-                    let child = stack_layout.children[i]
-                    if (!(child instanceof Item)) continue
-                    if (child.active) index = i
-                }
-                return index
+        currentIndex: {
+            let index = -1
+            for (let i = 0; i < stack_layout.children.length; ++i) {
+                let child = stack_layout.children[i]
+                if (!(child instanceof Item)) continue
+                if (child.active) index = i
             }
+            return index
         }
         SelectNetworkView {
             readonly property bool active: true
