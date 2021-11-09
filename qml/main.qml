@@ -139,48 +139,29 @@ ApplicationWindow {
         }
     }
 
-    Route {
-        id: signup_route
-        location: navigation.location
-        path: '/signup'
-    }
-
     DialogLoader {
-        active: signup_route.active
+        active: navigation.path.match(/\/signup$/)
         dialog: SignupDialog {
-            onRejected: navigation.go(signup_route.previous)
+            onRejected: navigation.pop()
         }
-    }
-
-    Route {
-        id: restore_route
-        location: navigation.location
-        path: '/restore'
     }
 
     DialogLoader {
-        active: restore_route.active
+        active: navigation.path.match(/\/restore$/)
         dialog: RestoreDialog {
-            onRejected: navigation.go('/home')
+            onRejected: navigation.pop()
         }
     }
 
-    Route {
-        readonly property Wallet wallet: {
+    DialogLoader {
+        properties: {
             const [,, wallet_id] = navigation.path.split('/')
             const wallet = WalletManager.wallet(wallet_id)
-            return wallet
+            return { wallet }
         }
-        id: login_route
-        location: navigation.location
-        path: wallet && !wallet.ready ? navigation.location : ''
-    }
-
-    DialogLoader {
-        properties: ({ wallet: login_route.wallet })
-        active: login_route.active
+        active: properties.wallet && !properties.wallet.ready
         dialog: LoginDialog {
-            onRejected: navigation.go(login_route.previous)
+            onRejected: navigation.pop()
         }
     }
 
