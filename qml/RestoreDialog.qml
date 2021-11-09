@@ -11,6 +11,7 @@ AbstractDialog {
     icon: {
         if (controller.type === 'amp') return 'qrc:/svg/amp.svg'
         if (controller.network) return icons[controller.network.key]
+        return ''
     }
     title: qsTrId('id_restore_green_wallet')
     width: 900
