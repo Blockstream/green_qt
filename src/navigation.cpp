@@ -10,6 +10,9 @@ Navigation::Navigation(QObject *parent) : QObject(parent)
 void Navigation::setLocation(const QString &location)
 {
     if (m_location == location) return;
+    if (!m_location.isEmpty()) {
+        m_history.push(m_location);
+    }
     m_location = location;
     emit locationChanged(m_location);
     QUrl url(location);
@@ -57,6 +60,12 @@ void Navigation::go(const QString &location, const QVariantMap &param)
     }
     u.setQuery(q);
     setLocation(u.toString());
+}
+
+void Navigation::pop()
+{
+    if (m_history.isEmpty()) return;
+    setLocation(m_history.pop());
 }
 
 void Navigation::set(const QVariantMap& param)

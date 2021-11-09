@@ -4,6 +4,7 @@
 #include <QtQml>
 #include <QObject>
 #include <QVariantMap>
+#include <QStack>
 
 class Navigation : public QObject
 {
@@ -22,6 +23,7 @@ public:
     void setParam(const QVariantMap& param);
 public slots:
     void go(const QString& location, const QVariantMap& param = {});
+    void pop();
     void set(const QVariantMap& kvs);
 signals:
     void locationChanged(const QString& location);
@@ -29,6 +31,7 @@ signals:
     void paramChanged(const QVariantMap& param);
 private:
     QString m_location;
+    QStack<QString> m_history;
     QString m_path;
     QVariantMap m_param;
 };
