@@ -12,8 +12,8 @@ ApplicationWindow {
     readonly property WalletView currentWalletView: stack_layout.currentWalletView
     readonly property Wallet currentWallet: currentWalletView ? currentWalletView.wallet : null
     readonly property Account currentAccount: currentWalletView ? currentWalletView.currentAccount : null
-    Navigation {
-        id: navigation
+
+    property Navigation navigation: Navigation {
         location: '/home'
     }
     function matchesLocation(l) {
