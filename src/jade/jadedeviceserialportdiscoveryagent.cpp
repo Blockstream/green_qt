@@ -16,9 +16,15 @@ JadeDeviceSerialPortDiscoveryAgent::JadeDeviceSerialPortDiscoveryAgent(QObject* 
         auto devices = m_devices;
         m_devices.clear();
 
+        auto failed_locations = m_failed_locations;
+        m_failed_locations.clear();
+
         for (const auto &info : QSerialPortInfo::availablePorts()) {
             const auto system_location = info.systemLocation();
-            if (m_failed_locations.contains(system_location)) continue;
+             if (failed_locations.contains(system_location)) {
+                 m_failed_locations.insert(system_location);
+                 continue;
+             }
 
             // filter for Silicon Laboratories USB to UART
             if (info.vendorIdentifier() != 0x10c4) continue;

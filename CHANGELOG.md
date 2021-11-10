@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Closing dialogs takes the application to previous state
 - Fix unblinded link for Liquid transaction on Singlesig wallets
+- Fix detecting jade after being idle
 
 ## [1.0.3] - 2021-10-27
 ### Added
