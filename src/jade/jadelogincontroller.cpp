@@ -147,6 +147,7 @@ void JadeLoginController::unlock()
     if (!m_device) return;
     if (!m_session) return connect();
     if (!m_session->isConnected()) return;
+    if (!m_active) return;
 
     qDebug() << "unlocking";
 
@@ -165,7 +166,7 @@ void JadeLoginController::unlock()
             m_device->updateVersionInfo();
         } else {
             emit invalidPin();
-            setActive(false);
+            update();
         }
     });
 }
