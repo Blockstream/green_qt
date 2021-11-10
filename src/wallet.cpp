@@ -420,7 +420,6 @@ void Wallet::updateSettings()
     auto data = Json::toObject(settings);
     GA_destroy_json(settings);
     setSettings(data);
-    updateDisplayUnit();
 }
 
 QString ComputeDisplayUnit(Network* network, QString unit)
@@ -688,6 +687,7 @@ void Wallet::setSettings(const QJsonObject& settings)
     qDebug() << Q_FUNC_INFO << settings;
 
     m_settings = settings;
+    updateDisplayUnit();
     emit settingsChanged();
 
     if (m_logout_timer != -1 ) {
