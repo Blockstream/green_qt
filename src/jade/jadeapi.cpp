@@ -267,7 +267,7 @@ int JadeAPI::setMnemonic(const QString& mnemonic, const ResponseHandler &cb)
 // Get version information from the jade
 int JadeAPI::getVersionInfo(const ResponseHandler &cb)
 {
-    const int id = registerResponseHandler(cb);
+    const int id = registerResponseHandler(cb, 500);
     const QCborMap request = getRequest(id, "get_version_info");
     sendToJade(request);
     return id;
