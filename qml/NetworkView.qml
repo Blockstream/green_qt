@@ -18,6 +18,13 @@ Item {
         }
         return null
     }
+    property bool active: {
+        if (window.navigation.path === location) return true
+        if (!window.navigation.path.startsWith(`/${network}/`)) return false
+        const [,, wallet_id] = window.navigation.path.split('/')
+        const wallet = WalletManager.wallet(wallet_id)
+        return wallet && wallet.ready
+    }
 
     Repeater {
         id: wallet_view_repeater

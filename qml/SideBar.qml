@@ -107,15 +107,14 @@ Pane {
                 }
                 SideButton {
                     icon.source: 'qrc:/svg/blockstream-logo.svg'
-                    location: jade_view.location
+                    location: '/jade'
                     count: jade_view.count
                     text: 'Blockstream'
                 }
                 SideButton {
                     icon.source: 'qrc:/svg/ledger-logo.svg'
-                    location: ledger_view.location
+                    location: '/ledger'
                     count: ledger_view.count
-                    isCurrent: navigation.location.startsWith(location)
                     text: 'Ledger'
                 }
             }

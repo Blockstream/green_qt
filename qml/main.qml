@@ -16,21 +16,6 @@ ApplicationWindow {
     property Navigation navigation: Navigation {
         location: '/home'
     }
-    function matchesLocation(l) {
-        return navigation.location.startsWith(l)
-    }
-    function childIndexForLocation(stack_layout) {
-       for (let i = 0; i < stack_layout.children.length; ++i) {
-           const child = stack_layout.children[i]
-           if (!(child instanceof Item)) continue
-           const l = child.location
-           if (l && child.enabled) {
-               if (navigation.location === l) return i
-               if (navigation.location.startsWith(l + '/')) return i
-           }
-       }
-       return 0
-    }
     function link(url, text) {
         return `<style>a:link { color: "#00B45A"; text-decoration: none; }</style><a href="${url}">${text || url}</a>`
     }
@@ -101,21 +86,31 @@ ApplicationWindow {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 readonly property WalletView currentWalletView: currentIndex < 0 ? null : (stack_layout.children[currentIndex].currentWalletView || null)
-                currentIndex: childIndexForLocation(stack_layout)
+                Binding on currentIndex {
+                    delayed: true
+                    value: {
+                        let index = stack_layout.currentIndex
+                        for (let i = 0; i < stack_layout.children.length; ++i) {
+                            const child = stack_layout.children[i]
+                            if (!(child instanceof Item)) continue
+                            if (child.active && child.enabled) index = i
+                        }
+                        return index
+                    }
+                }
                 HomeView {
-                    readonly property string location: '/home'
+                    readonly property bool active: navigation.path === '/home'
                 }
                 PreferencesView {
-                    id: settings_view
-                    readonly property string location: '/preferences'
+                    readonly property bool active: navigation.path === '/preferences'
                 }
                 JadeView {
                     id: jade_view
-                    readonly property string location: '/jade'
+                    readonly property bool active: navigation.path.startsWith('/jade')
                 }
                 LedgerView {
                     id: ledger_view
-                    readonly property string location: '/ledger'
+                    readonly property bool active: navigation.path.startsWith('/ledger')
                 }
                 NetworkView {
                     network: 'bitcoin'

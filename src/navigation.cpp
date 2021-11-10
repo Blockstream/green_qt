@@ -11,6 +11,8 @@ void Navigation::setLocation(const QString &location)
 {
     if (m_location == location) return;
     if (!m_location.isEmpty()) {
+        m_history.removeAll(location);
+        m_history.removeAll(m_location);
         m_history.push(m_location);
     }
     m_location = location;

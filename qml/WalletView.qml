@@ -87,7 +87,7 @@ MainPage {
         dialog: WalletSettingsDialog {
             parent: window.Overlay.overlay
             wallet: self.wallet
-            onRejected: navigation.go(self.location)
+            onRejected: navigation.pop()
         }
     }
     id: self
