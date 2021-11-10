@@ -137,7 +137,7 @@ private:
     int getNewId();
 
     // Client call response handlers for async response
-    int registerResponseHandler(const ResponseHandler &cb);
+    int registerResponseHandler(const ResponseHandler &cb, int timeout = 0);
     void callResponseHandler(const QVariantMap &msg);
     void forwardToResponseHandler(const int targetId, const QVariantMap &msg);
 
@@ -161,7 +161,7 @@ private:
 
     // Map of registered response handlers awaiting response
     QMap<int, ResponseHandler>  m_responseHandlers;
-
+    QMap<int, int>              m_msg_timeout;
     // Underlying connection - lifetime managed by QObject hierarchy
     JadeConnection              *m_jade;
 };

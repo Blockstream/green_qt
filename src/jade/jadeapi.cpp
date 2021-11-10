@@ -124,8 +124,9 @@ inline int JadeAPI::getNewId() {
 }
 
 // Register callback for request/response when received
-int JadeAPI::registerResponseHandler(const ResponseHandler &cb) {
+int JadeAPI::registerResponseHandler(const ResponseHandler &cb, int timeout) {
     Q_ASSERT(cb);
+    Q_ASSERT(timeout >= 0);
 
     // Get a new id not currently present in the map
     int id = getNewId();
@@ -136,6 +137,7 @@ int JadeAPI::registerResponseHandler(const ResponseHandler &cb) {
     // Insert the callback keyed by id
     // qDebug() << "JadeAPI::registerResponseHandler() - Registering response handler with id" << id;
     m_responseHandlers.insert(id, cb);
+    if (timeout > 0) m_msg_timeout[id] = timeout;
 
     // Return the new callback id
     return id;
@@ -223,6 +225,19 @@ void JadeAPI::sendToJade(const QCborMap &msg)
     // qInfo() << "JadeAPI::sendToJade() - Sending message ->" << Qt::endl << msg;
     Q_ASSERT(m_jade);
     m_jade->send(msg);
+    int id = msg["id"].toString().toInt();
+    int timeout = m_msg_timeout.value(id, 0);
+    if (timeout > 0) QTimer::singleShot(timeout, [=] {
+        // Get (ie. remove) the response handler for that id from the map of registered handlers
+        const ResponseHandler handler = m_responseHandlers.take(id);
+        if (!handler) return;
+        QVariantMap error = {{ "message", "timeout" }};
+        try {
+            handler({{ "error", error }});
+        } catch(...) {
+            qWarning() << "JadeAPI::callResponseHandler() - Error in client handler for" << msg;
+        }
+    });
 }
 
 /*
