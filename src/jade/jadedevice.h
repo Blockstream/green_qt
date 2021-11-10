@@ -51,6 +51,7 @@ public:
     State state() const;
 signals:
     void versionInfoChanged();
+    void error();
 private:
     JadeAPI* const m_api;
     const QString m_system_location;

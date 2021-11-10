@@ -540,6 +540,11 @@ GetMasterBlindingKeyActivity *JadeDevice::getMasterBlindingKey()
 void JadeDevice::updateVersionInfo()
 {
     api()->getVersionInfo([this](const QVariantMap& data) {
+        if (data.contains("error")) {
+            qDebug() << "update version info failed";
+            emit error();
+            return;
+        }
         setVersionInfo(data.value("result").toMap());
     });
 }
