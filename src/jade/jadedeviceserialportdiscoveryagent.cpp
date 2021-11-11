@@ -53,6 +53,12 @@ JadeDeviceSerialPortDiscoveryAgent::JadeDeviceSerialPortDiscoveryAgent(QObject* 
                         const auto result = data.value("result").toMap();
                         device->setVersionInfo(result);
                         DeviceManager::instance()->addDevice(device);
+                        connect(device, &JadeDevice::error, [=] {
+                            if (m_devices.take(device->systemLocation())) {
+                                DeviceManager::instance()->removeDevice(device);
+                                delete device;
+                            }
+                        });
                     });
                 });
                 connect(api, &JadeAPI::onOpenError, this, [this, device] {
