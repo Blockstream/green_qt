@@ -282,7 +282,7 @@ JadeLoginController::JadeLoginController(QObject* parent)
 {
     auto timer = new QTimer(this);
     QObject::connect(timer, &QTimer::timeout, this, &JadeLoginController::ping);
-    timer->start(30000);
+    timer->start(5000);
 }
 
 void JadeLoginController::setDevice(JadeDevice* device)
