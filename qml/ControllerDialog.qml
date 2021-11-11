@@ -140,6 +140,7 @@ WalletDialog {
             Loader {
                 Layout.alignment: Qt.AlignCenter
                 active: resolver && wallet.config[resolver.method].enabled
+                visible: active
                 sourceComponent: Label {
                     text: {
                         if (resolver.method === 'gauth') return qsTrId('id_authenticator_app')
@@ -150,8 +151,9 @@ WalletDialog {
                 }
             }
             Loader {
-                active: resolver && resolver.method === 'telegram'
                 Layout.alignment: Qt.AlignCenter
+                active: resolver && resolver.method === 'telegram'
+                visible: active
                 sourceComponent: RowLayout {
                     spacing: constants.s1
                     ColumnLayout {
@@ -177,13 +179,24 @@ WalletDialog {
                 Layout.alignment: Qt.AlignCenter
                 text: resolver ? qsTrId('id_please_provide_your_1s_code').arg(resolver.method) : ''
             }
+            Timer {
+                id: delayed_resolve_timer
+                interval: 300
+                running: false
+                repeat: false
+                onTriggered: {
+                    code_field.readOnly = false
+                    resolver.resolve()
+                }
+            }
             GTextField {
                 id: code_field
                 Layout.alignment: Qt.AlignCenter
                 onTextChanged: {
                     if (acceptableInput) {
+                        code_field.readOnly = true
                         resolver.code = code_field.text
-                        resolver.resolve()
+                        delayed_resolve_timer.start()
                     }
                 }
                 validator: RegExpValidator {

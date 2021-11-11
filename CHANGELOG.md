@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update GDK to 0.0.47
 - Set minimum width for dialog titles
 - Automatically retry PIN on Jade after wrong attempt
+- Add small delay after entering a 2FA code
 
 ### Fixed
 - Closing dialogs takes the application to previous state
