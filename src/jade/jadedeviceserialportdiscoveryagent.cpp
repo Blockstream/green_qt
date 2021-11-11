@@ -43,7 +43,13 @@ JadeDeviceSerialPortDiscoveryAgent::JadeDeviceSerialPortDiscoveryAgent(QObject* 
                 device = new JadeDevice(api, system_location, this);
                 api->setParent(device);
                 connect(api, &JadeAPI::onConnected, this, [this, device] {
-                    device->api()->getVersionInfo([device](const QVariantMap& data) {
+                    device->api()->getVersionInfo([=](const QVariantMap& data) {
+                        if (data.contains("error")) {
+                            m_devices.remove(device->systemLocation());
+                            m_failed_locations.insert(device->systemLocation());
+                            delete device;
+                            return;
+                        }
                         const auto result = data.value("result").toMap();
                         device->setVersionInfo(result);
                         DeviceManager::instance()->addDevice(device);
