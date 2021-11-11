@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Supports creating and restoring Singlesig wallets on Liquid testnet
+- Manual coin selection in Singlesig wallets
 
 ### Changed
 - Update GDK to 0.0.47
