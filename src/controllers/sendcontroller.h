@@ -101,6 +101,7 @@ protected:
     void setValid(bool valid);
     Handler* m_create_handler{nullptr};
     Transaction* m_signed_transaction{nullptr};
+    QJsonObject m_all_utxos;
 };
 
 #endif // GREEN_SENDCONTROLLER_H

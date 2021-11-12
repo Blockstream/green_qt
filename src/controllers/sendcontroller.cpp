@@ -193,10 +193,10 @@ void SendController::create()
     setValid(false);
 
     if (m_get_unspent_outputs_handler) return;
-    if (!m_transaction.contains("utxos")) {
+    if (m_all_utxos.isEmpty()) {
         auto handler = new GetUnspentOutputsHandler(0, true, account());
         connect(handler, &Handler::finished, this, [this, handler] {
-            m_transaction["utxos"] = handler->unspentOutputs();
+            m_all_utxos = handler->unspentOutputs();
             m_get_unspent_outputs_handler = nullptr;
             create();
             handler->deleteLater();
@@ -235,14 +235,11 @@ void SendController::create()
     m_transaction["send_all"] = m_send_all;
     m_transaction["addressees"] = QJsonArray{address};
     m_transaction["utxo_strategy"] = m_manual_coin_selection ? "manual" : "default";
+    m_transaction["utxos"] = m_manual_coin_selection ? m_utxos : m_all_utxos;
 
-    if (m_manual_coin_selection) {
-        Q_ASSERT(!m_balance);
+    if (m_manual_coin_selection && !wallet()->network()->isElectrum()) {
         m_transaction["used_utxos"] = m_utxos.value("btc").toArray();
     }
-
-    qDebug() << "==========";
-    qDebug() << m_transaction;
 
     m_create_handler = new CreateTransactionHandler(m_transaction, wallet()->session());
     connect(m_create_handler, &Handler::done, this, [this, count] {
@@ -250,9 +247,14 @@ void SendController::create()
             m_transaction = m_create_handler->result().value("result").toObject();
 
             if (m_send_all) {
-                Q_ASSERT(m_transaction.value("amount_read_only").toBool());
                 const auto id = m_balance ? m_balance->asset()->id() : "btc";
-                const auto satoshi = m_transaction.value("satoshi").toObject().value(id).toDouble();
+                qint64 satoshi = 0;
+                if (wallet()->network()->isElectrum()) {
+                    satoshi = m_transaction.value("addressees").toArray().first().toObject().value("satoshi").toDouble();
+                } else {
+                     Q_ASSERT(m_transaction.value("amount_read_only").toBool());
+                    satoshi = m_transaction.value("satoshi").toObject().value(id).toDouble();
+                }
                 m_amount = m_balance ? m_balance->asset()->formatAmount(satoshi, false) : wallet()->formatAmount(satoshi, false);
                 if (!m_balance || m_balance->asset()->isLBTC()) m_fiat_amount = wallet()->formatAmount(satoshi, false, "fiat");
                 emit changed();
