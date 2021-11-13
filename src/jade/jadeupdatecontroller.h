@@ -43,13 +43,13 @@ class JadeUnlockActivity : public Activity
     Q_PROPERTY(JadeDevice* device READ device CONSTANT)
     QML_ELEMENT
 public:
-    JadeUnlockActivity(const QString& network, JadeDevice* device);
+    JadeUnlockActivity(Session* session, JadeDevice* device);
     JadeDevice* device() const { return m_device; }
 private:
     void exec() override;
 private:
     JadeDevice* const m_device;
-    const QString m_network;
+    Session* const m_session;
 };
 
 class JadeUpdateActivity : public Activity

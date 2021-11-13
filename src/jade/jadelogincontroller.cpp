@@ -151,16 +151,7 @@ void JadeLoginController::unlock()
 
     qDebug() << "unlocking";
 
-    m_device->api()->setHttpRequestProxy([this](JadeAPI& jade, int id, const QJsonObject& req) {
-        const auto params = Json::fromObject(req.value("params").toObject());
-        GA_json* output;
-        GA_http_request(m_session->m_session, params.get(), &output);
-        auto res = Json::toObject(output);
-        GA_destroy_json(output);
-        jade.handleHttpResponse(id, req, res.value("body").toObject());
-    });
     m_device->api()->authUser(m_network, [=](const QVariantMap& msg) {
-        m_device->api()->setHttpRequestProxy(nullptr);
         Q_ASSERT(msg.contains("result"));
         if (msg["result"] == true) {
             m_device->updateVersionInfo();
@@ -168,6 +159,13 @@ void JadeLoginController::unlock()
             emit invalidPin();
             update();
         }
+    }, [=](JadeAPI& jade, int id, const QJsonObject& req) {
+        const auto params = Json::fromObject(req.value("params").toObject());
+        GA_json* output;
+        GA_http_request(m_session->m_session, params.get(), &output);
+        auto res = Json::toObject(output);
+        GA_destroy_json(output);
+        jade.handleHttpResponse(id, req, res.value("body").toObject());
     });
 }
 

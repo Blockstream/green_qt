@@ -71,22 +71,30 @@ JadeBinaryRequestActivity::JadeBinaryRequestActivity(const QString& path, Sessio
     setAccept("base64");
 }
 
-JadeUnlockActivity::JadeUnlockActivity(const QString& network, JadeDevice* device)
+JadeUnlockActivity::JadeUnlockActivity(Session* session, JadeDevice* device)
     : Activity(device)
     , m_device(device)
-    , m_network(network)
+    , m_session(session)
 {
 }
 
 void JadeUnlockActivity::exec()
 {
-    m_device->api()->authUser(m_network, [this](const QVariantMap& msg) {
+    const auto nets = m_device->versionInfo().value("JADE_NETWORKS").toString();
+    m_device->api()->authUser(nets == "TEST" ? "testnet" : "mainnet", [this](const QVariantMap& msg) {
         Q_ASSERT(msg.contains("result"));
         if (msg["result"] == true) {
             finish();
         } else {
             fail();
         }
+    }, [=](JadeAPI& jade, int id, const QJsonObject& req) {
+        const auto params = Json::fromObject(req.value("params").toObject());
+        GA_json* output;
+        GA_http_request(m_session->m_session, params.get(), &output);
+        auto res = Json::toObject(output);
+        GA_destroy_json(output);
+        jade.handleHttpResponse(id, req, res.value("body").toObject());
     });
 }
 
@@ -176,15 +184,6 @@ void JadeUpdateController::check()
 
     if (!m_session->isActive() || !m_session->isConnected()) return;
 
-    m_device->api()->setHttpRequestProxy([this](JadeAPI& jade, int id, const QJsonObject& req) {
-        const auto params = Json::fromObject(req.value("params").toObject());
-        GA_json* output;
-        GA_http_request(m_session->m_session, params.get(), &output);
-        auto res = Json::toObject(output);
-        GA_destroy_json(output);
-        jade.handleHttpResponse(id, req, res.value("body").toObject());
-    });
-
     const auto version_info = m_device->versionInfo();
     const auto board_type = version_info.value("BOARD_TYPE", JADE_BOARD_TYPE_JADE).toString();
     const auto config = version_info.value("JADE_CONFIG").toString();
@@ -259,8 +258,7 @@ void JadeUpdateController::update(const QVariantMap& firmware)
 
 JadeUnlockActivity* JadeUpdateController::unlock()
 {
-    const auto nets = m_device->versionInfo().value("JADE_NETWORKS").toString();
-    auto activity = new JadeUnlockActivity(nets == "TEST" ? "testnet" : "mainnet", m_device);
+    auto activity = new JadeUnlockActivity(m_session, m_device);
     ActivityManager::instance()->exec(activity);
     emit activityCreated(activity);
     return activity;

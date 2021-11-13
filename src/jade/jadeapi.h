@@ -36,12 +36,6 @@ public:
     void disconnectDevice();
 
     bool isBusy() const { return !m_responseHandlers.isEmpty(); }
-    // User can override the basic http-request implementation if desired.
-    // NOTE: the funciton MUST ensure JadeAPI::handleHttpResponse() is called
-    // when the http-request response is received, passing the originating id
-    // and request object, as well as the response body received.
-    // Call this with a nullptr to set back to the default proxy function.
-    void setHttpRequestProxy(const HttpRequestProxy& makeHttpRequest);
 
     // Function which must be called whenever an http-request response is received.
     // (If caller sets their own HttpRequestProxy, it should call this when the response is received.)
@@ -64,7 +58,10 @@ public:
 
     // Trigger user authentication on the hw
     // Involves pinserver handshake
-    int authUser(const QString &network, const ResponseHandler &cb);
+    // NOTE: the callback MUST ensure JadeAPI::handleHttpResponse() is called
+    // when the http-request response is received, passing the originating id
+    // and request object, as well as the response body received.
+    int authUser(const QString &network, const ResponseHandler &cb, const HttpRequestProxy &request_proxy);
 
     // OTA update the connected Jade
     // The passed ResponseHandler will be called multiple times during the update process
@@ -155,9 +152,8 @@ private:
     // id generator for Jade messages
     QRandomGenerator            m_idgen;
 
-    // Function to use to make http requests.
-    // Must call handleHttpResponse() when response received.
-    HttpRequestProxy            m_makeHttpRequest;
+    // Map of functions to use to make http requests
+    QMap<int, HttpRequestProxy> m_request_proxy;
 
     // Map of registered response handlers awaiting response
     QMap<int, ResponseHandler>  m_responseHandlers;

@@ -91,12 +91,6 @@ void JadeAPI::disconnectDevice()
     m_jade->disconnectDevice();
 }
 
-// Function to override the basic http-request implementation
-void JadeAPI::setHttpRequestProxy(const HttpRequestProxy &httpRequestProxy)
-{
-    m_makeHttpRequest = httpRequestProxy;
-}
-
 // Handle result of an http-request.
 // MUST be called when an http-request response is received.
 void JadeAPI::handleHttpResponse(const int id, const QJsonObject &httpRequest, const QJsonObject &httpResponse)
@@ -116,6 +110,7 @@ void JadeAPI::handleHttpResponse(const int id, const QJsonObject &httpRequest, c
     // Forward http-response back to 'on-reply' function in Jade using the above response handler
     const QString on_reply = httpRequest["on-reply"].toString();
     const QCborMap newRequest = getRequest(newId, on_reply, QCborMap::fromJsonObject(httpResponse));
+    m_request_proxy[newId] = m_request_proxy[id];
     sendToJade(newRequest);
 }
 
@@ -154,6 +149,7 @@ void JadeAPI::callResponseHandler(const QVariantMap &msg)
 
     // Get (ie. remove) the response handler for that id from the map of registered handlers
     const ResponseHandler handler = m_responseHandlers.take(id);
+    m_request_proxy.remove(id);
     if (!handler)
     {
         // qWarning() << "JadeAPI::callResponseHandler() - Message ignored - no handler found for id" << msg;
@@ -202,7 +198,7 @@ void JadeAPI::processResponseMessage(const QCborMap &msg)
             && msg["result"].toMap().contains(QCborValue("http_request")))
     {
         qDebug() << "JadeAPI::processResponseMessage() - Jade response" << id << "requires http-request";
-        Q_ASSERT(m_makeHttpRequest);
+        Q_ASSERT(m_request_proxy.contains(id));
 
         // Handle responses which require the results of an http_request
         Q_ASSERT(msg["result"]["http_request"].isMap());
@@ -211,7 +207,7 @@ void JadeAPI::processResponseMessage(const QCborMap &msg)
         // Make http-request.
         // NOTE: when http request returns, JadeAPI::handleHttpResponse() should be called, which
         // should result in another call to Jade, and ultimately this function being called again.
-        m_makeHttpRequest(*this, id, httpRequest.toJsonObject());
+        m_request_proxy[id](*this, id, httpRequest.toJsonObject());
     }
     else
     {
@@ -285,9 +281,10 @@ int JadeAPI::addEntropy(const QByteArray &entropy, const ResponseHandler &cb)
 
 // Trigger user authentication on the hw
 // Involves pinserver handshake
-int JadeAPI::authUser(const QString &network, const ResponseHandler &cb)
+int JadeAPI::authUser(const QString &network, const ResponseHandler &cb, const HttpRequestProxy& request_proxy)
 {
     const int id = registerResponseHandler(cb);
+    m_request_proxy[id] = request_proxy;
     const QCborMap params = { {"network", network} };
     const QCborMap request = getRequest(id, "auth_user", params);
     sendToJade(request);
