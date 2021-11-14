@@ -134,12 +134,10 @@ void Handler::step()
         }
 
         if (status == "resolve_code") {
-            auto instance = createResolver(result);
-            if (instance) emit resolver(instance);
+            handleResolveCode(result);
             return;
         }
 
-        qDebug() << result;
         Q_UNREACHABLE();
     }
 }
@@ -162,44 +160,43 @@ static Device* GetDeviceFromRequiredData(const QJsonObject& required_data)
     return DeviceManager::instance()->deviceWithId(id);
 }
 
-Resolver* Handler::createResolver(const QJsonObject& result)
+void Handler::handleResolveCode(const QJsonObject& result)
 {
+    Resolver* resolver{nullptr};
     if (result.contains("required_data")) {
         const auto required_data = result.value("required_data").toObject();
         auto device = GetDeviceFromRequiredData(required_data);
         Q_ASSERT(device);
         const auto action = required_data.value("action").toString();
         if (action == "get_xpubs") {
-            return new GetXPubsResolver(this, device, result);
-        }
-        if (action == "get_blinding_public_keys") {
-            return new BlindingKeysResolver(this, device, result);
-        }
-        if (action == "get_blinding_nonces") {
-            return new BlindingNoncesResolver(this, device, result);
-        }
-        if (action =="sign_tx") {
+            resolver = new GetXPubsResolver(this, device, result);
+        } else if (action == "get_blinding_public_keys") {
+            resolver = new BlindingKeysResolver(this, device, result);
+        } else if (action == "get_blinding_nonces") {
+            resolver = new BlindingNoncesResolver(this, device, result);
+        } else if (action =="sign_tx") {
             if (m_session->network()->isLiquid()) {
-                return new SignLiquidTransactionResolver(this, device, result);
+                resolver = new SignLiquidTransactionResolver(this, device, result);
             } else {
-                return new SignTransactionResolver(this, device, result);
+                resolver = new SignTransactionResolver(this, device, result);
             }
+        } else if (action == "sign_message") {
+            resolver = new SignMessageResolver(this, device, result);
+        } else if (action == "get_master_blinding_key") {
+            resolver = new GetMasterBlindingKeyResolver(this, device, result);
+        } else {
+            Q_UNREACHABLE();
         }
-        if (action == "sign_message") {
-            return new SignMessageResolver(this, device, result);
+    } else {
+        const auto method = result.value("method").toString();
+        Q_ASSERT(!method.isEmpty());
+        if (m_two_factor_resolver && m_two_factor_resolver->method() == method) {
+            m_two_factor_resolver->retry(result);
+            return;
         }
-        if (action == "get_master_blinding_key") {
-            return new GetMasterBlindingKeyResolver(this, device, result);
-        }
-        Q_UNREACHABLE();
+        resolver = m_two_factor_resolver = new TwoFactorResolver(this, result);
     }
-    const auto method = result.value("method").toString();
-    if (m_two_factor_resolver && m_two_factor_resolver->method() == method) {
-        m_two_factor_resolver->retry(result);
-        return nullptr;
-    }
-    m_two_factor_resolver = new TwoFactorResolver(this, result);
-    return m_two_factor_resolver;
+    emit this->resolver(resolver);
 }
 
 void Handler::resolve(const QJsonObject& data)

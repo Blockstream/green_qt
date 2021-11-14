@@ -41,7 +41,7 @@ signals:
 private:
     virtual void call(GA_session* session, GA_auth_handler** auth_handler) = 0;
     void step();
-    Resolver* createResolver(const QJsonObject& result);
+    void handleResolveCode(const QJsonObject& result);
     void setResult(const QJsonObject &result);
 private:
     bool m_already_exec{false};
