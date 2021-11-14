@@ -22,6 +22,8 @@ public:
         , m_path(path)
     {}
     QByteArray publicKey() const { return m_public_key; }
+    void exec() override;
+    virtual void fetch() = 0;
 protected:
     Network* const m_network;
     const QVector<uint32_t> m_path;

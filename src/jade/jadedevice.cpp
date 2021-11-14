@@ -14,7 +14,7 @@ public:
         : GetWalletPublicKeyActivity(network, path, device)
         , m_device(device)
     {}
-    void exec() override
+    void fetch() override
     {
         m_device->api()->getXpub(m_network->id(), m_path, [this](const QVariantMap& msg) {
             if (msg.contains("error")) return fail();

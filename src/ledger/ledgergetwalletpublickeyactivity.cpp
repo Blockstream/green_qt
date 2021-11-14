@@ -11,7 +11,7 @@ LedgerGetWalletPublicKeyActivity::LedgerGetWalletPublicKeyActivity(Network* netw
 {
 }
 
-void LedgerGetWalletPublicKeyActivity::exec()
+void LedgerGetWalletPublicKeyActivity::fetch()
 {
     QByteArray path;
     QDataStream s(&path, QIODevice::WriteOnly);

@@ -26,6 +26,11 @@ QByteArray pathToData(const QVector<uint32_t>& path)
     return data;
 }
 
+void GetWalletPublicKeyActivity::exec()
+{
+    fetch();
+}
+
 Device::Device(QObject* parent)
     : QObject(parent)
     , m_uuid(QUuid::createUuid().toString(QUuid::WithoutBraces))
