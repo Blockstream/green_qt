@@ -104,7 +104,6 @@ public:
     GetAppActivity* getApp();
 
     QByteArray m_master_public_key;
-    QByteArray m_fingerprint;
 
     QString appVersion() const { return m_app_version; }
     void setAppVersion(const QString& app_version);
