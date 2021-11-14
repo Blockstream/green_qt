@@ -9,18 +9,11 @@
 class JadeGetWalletPublicKeyActivity : public GetWalletPublicKeyActivity
 {
     JadeDevice* const m_device;
-    Network* const m_network;
-    const QVector<uint32_t> m_path;
-    QByteArray m_public_key;
 public:
     JadeGetWalletPublicKeyActivity(Network* network, const QVector<uint32_t>& path, JadeDevice* device)
-        : GetWalletPublicKeyActivity(device)
-        , m_device(device), m_network(network), m_path(path)
-    {
-    }
-    QByteArray publicKey() const override {
-        return m_public_key;
-    }
+        : GetWalletPublicKeyActivity(network, path, device)
+        , m_device(device)
+    {}
     void exec() override
     {
         m_device->api()->getXpub(m_network->id(), m_path, [this](const QVariantMap& msg) {

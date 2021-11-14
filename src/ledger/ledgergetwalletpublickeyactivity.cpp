@@ -6,16 +6,9 @@
 #include <wally_bip32.h>
 
 LedgerGetWalletPublicKeyActivity::LedgerGetWalletPublicKeyActivity(Network* network, const QVector<uint32_t>& path, LedgerDevice* device)
-    : GetWalletPublicKeyActivity(device)
+    : GetWalletPublicKeyActivity(network, path, device)
     , m_device(device)
-    , m_network(network)
-    , m_path(path)
 {
-}
-
-QByteArray LedgerGetWalletPublicKeyActivity::publicKey() const
-{
-    return m_public_key;
 }
 
 void LedgerGetWalletPublicKeyActivity::exec()

@@ -16,8 +16,16 @@ QT_FORWARD_DECLARE_CLASS(Network);
 class GetWalletPublicKeyActivity : public Activity
 {
 public:
-    GetWalletPublicKeyActivity(QObject* parent) : Activity(parent) {}
-    virtual QByteArray publicKey() const = 0;
+    GetWalletPublicKeyActivity(Network* network, const QVector<uint32_t>& path, QObject* parent)
+        : Activity(parent)
+        , m_network(network)
+        , m_path(path)
+    {}
+    QByteArray publicKey() const { return m_public_key; }
+protected:
+    Network* const m_network;
+    const QVector<uint32_t> m_path;
+    QByteArray m_public_key;
 };
 
 class SignMessageActivity : public Activity
