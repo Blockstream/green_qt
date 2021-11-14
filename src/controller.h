@@ -58,6 +58,7 @@ signals:
     void error(Handler* handler);
     void requestCode(Handler* handler);
     void invalidCode(Handler* handler);
+    void deviceRequested(Handler* handler);
 
     void resolver(Resolver* resolver);
     void errorsChanged();

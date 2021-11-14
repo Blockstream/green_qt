@@ -178,6 +178,7 @@ void Controller::exec(Handler* handler)
     connect(handler, &Handler::requestCode, this, [this, handler] { emit requestCode(handler); });
     connect(handler, &Handler::invalidCode, this, [this, handler] { emit invalidCode(handler); });
     connect(handler, &Handler::resolver, this, &Controller::resolver);
+    connect(handler, &Handler::deviceRequested, this, [=] { emit deviceRequested(handler); });
     handler->exec();
 }
 

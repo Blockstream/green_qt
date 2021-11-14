@@ -166,7 +166,10 @@ void Handler::handleResolveCode(const QJsonObject& result)
     if (result.contains("required_data")) {
         const auto required_data = result.value("required_data").toObject();
         auto device = GetDeviceFromRequiredData(required_data);
-        Q_ASSERT(device);
+        if (!device) {
+            emit deviceRequested();
+            return;
+        }
         const auto action = required_data.value("action").toString();
         if (action == "get_xpubs") {
             resolver = new GetXPubsResolver(this, device, result);

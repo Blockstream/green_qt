@@ -38,6 +38,7 @@ signals:
     void requestCode();
     void invalidCode();
     void resolver(Resolver* resolver);
+    void deviceRequested();
 private:
     virtual void call(GA_session* session, GA_auth_handler** auth_handler) = 0;
     void step();
