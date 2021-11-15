@@ -33,7 +33,6 @@ public:
     QString status() const { return m_status; }
 private slots:
     void update();
-    void ping();
 private:
     void connect();
     void unlock();

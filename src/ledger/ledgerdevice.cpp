@@ -84,6 +84,10 @@ GetMasterBlindingKeyActivity *LedgerDevice::getMasterBlindingKey()
     Q_UNREACHABLE();
 }
 
+void LedgerDevice::ping()
+{
+}
+
 GetBlindingKeyActivity* LedgerDevice::getBlindingKey(const QString& script)
 {
     return new LedgerGetBlindingKeyActivity(script, this);

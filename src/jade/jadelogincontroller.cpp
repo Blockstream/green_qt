@@ -118,13 +118,6 @@ void JadeLoginController::update()
     login();
 }
 
-void JadeLoginController::ping()
-{
-    if (!m_device) return;
-    if (m_device->api()->isBusy()) return;
-    m_device->updateVersionInfo();
-}
-
 void JadeLoginController::connect()
 {
     if (!m_active) return;
@@ -278,9 +271,6 @@ void JadeLoginController::signup()
 JadeLoginController::JadeLoginController(QObject* parent)
     : QObject(parent)
 {
-    auto timer = new QTimer(this);
-    QObject::connect(timer, &QTimer::timeout, this, &JadeLoginController::ping);
-    timer->start(5000);
 }
 
 void JadeLoginController::setDevice(JadeDevice* device)
