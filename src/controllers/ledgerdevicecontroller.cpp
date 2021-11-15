@@ -30,7 +30,7 @@ namespace {
     {
         return {{
             "device", QJsonObject({
-                { "name", device->name() },
+                { "name", device->uuid() },
                 { "supports_arbitrary_scripts", true },
                 { "supports_low_r", false },
                 { "supports_liquid", device->type() == Device::LedgerNanoS ? 1 : 0 }
