@@ -103,8 +103,6 @@ public:
     GetFirmwareActivity* getFirmware();
     GetAppActivity* getApp();
 
-    QByteArray m_master_public_key;
-
     QString appVersion() const { return m_app_version; }
     void setAppVersion(const QString& app_version);
 signals:

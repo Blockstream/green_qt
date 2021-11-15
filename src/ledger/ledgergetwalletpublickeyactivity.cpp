@@ -5,9 +5,6 @@
 
 #include <wally_bip32.h>
 
-// master xpub -> path -> xpub
-static QMap<QByteArray, QMap<QVector<uint32_t>, QByteArray>> g_xpubs_cache;
-
 LedgerGetWalletPublicKeyActivity::LedgerGetWalletPublicKeyActivity(Network* network, const QVector<uint32_t>& path, LedgerDevice* device)
     : GetWalletPublicKeyActivity(device)
     , m_device(device)
@@ -23,15 +20,6 @@ QByteArray LedgerGetWalletPublicKeyActivity::publicKey() const
 
 void LedgerGetWalletPublicKeyActivity::exec()
 {
-    if (!m_device->m_master_public_key.isEmpty()) {
-        m_public_key = g_xpubs_cache.value(m_device->m_master_public_key).value(m_path);
-    }
-
-    if (!m_public_key.isEmpty()) {
-        finish();
-        return;
-    }
-
     QByteArray path;
     QDataStream s(&path, QIODevice::WriteOnly);
     s << uint8_t(m_path.size());
@@ -63,14 +51,6 @@ void LedgerGetWalletPublicKeyActivity::exec()
         bip32_key_free(k);
 
         m_public_key = QByteArray(base58);
-
-        if (m_device->m_master_public_key.isEmpty() && m_path.isEmpty()) {
-            m_device->m_master_public_key = m_public_key;
-        }
-
-        if (!m_device->m_master_public_key.isEmpty()) {
-            g_xpubs_cache[m_device->m_master_public_key].insert(m_path, m_public_key);
-        }
 
         wally_free_string(base58);
         finish();
