@@ -28,6 +28,7 @@ QByteArray pathToData(const QVector<uint32_t>& path)
 
 class GetWalletPublickKeyDispatcher
 {
+    QMap<QByteArray, QMap<QVector<uint32_t>, QByteArray>> m_cache;
     QQueue<GetWalletPublicKeyActivity*> m_queue;
     GetWalletPublicKeyActivity* m_activity{nullptr};
 
@@ -44,6 +45,22 @@ public:
         if (m_queue.isEmpty()) return;
 
         m_activity = m_queue.dequeue();
+        auto device = m_activity->device();
+        auto master_public_key = device->masterPublicKey();
+        auto path = m_activity->path();
+
+        if (!master_public_key.isEmpty()) {
+            if (m_cache.contains(master_public_key)) {
+                const auto& public_key = m_cache[master_public_key][path];
+                if (!public_key.isEmpty()) {
+                    m_activity->setPublicKey(public_key);
+                    m_activity->finish();
+                    m_activity = nullptr;
+                    next();
+                    return;
+                }
+            }
+        }
 
         QObject::connect(m_activity, &Activity::finished, [=]{
             auto device = m_activity->device();
