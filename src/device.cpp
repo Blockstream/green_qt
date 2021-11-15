@@ -58,6 +58,17 @@ Device::Type Device::typefromVendorAndProduct(uint32_t vendor_id, uint32_t produ
     return Device::NoType;
 }
 
+QByteArray Device::masterPublicKey() const
+{
+    return m_master_public_key;
+}
+
+void Device::setMasterPublicKey(const QByteArray& master_public_key)
+{
+    Q_ASSERT(m_master_public_key.isEmpty());
+    m_master_public_key = master_public_key;
+}
+
 bool DeviceCommand::readAPDUResponse(Device*, int length, QDataStream &stream)
 {
     QByteArray response;

@@ -125,11 +125,14 @@ public:
     virtual SignLiquidTransactionActivity* signLiquidTransaction(Network* network, const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs) = 0;
     virtual GetMasterBlindingKeyActivity* getMasterBlindingKey() = 0;
     static Type typefromVendorAndProduct(uint32_t vendor_id, uint32_t product_id);
+    QByteArray masterPublicKey() const;
+    void setMasterPublicKey(const QByteArray& master_public_key);
 signals:
     void nameChanged();
     void detailsChanged();
 private:
     const QString m_uuid;
+    QByteArray m_master_public_key;
 };
 
 QT_FORWARD_DECLARE_CLASS(LedgerDevice);
