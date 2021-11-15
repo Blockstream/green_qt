@@ -26,6 +26,14 @@ QByteArray pathToData(const QVector<uint32_t>& path)
     return data;
 }
 
+
+GetWalletPublicKeyActivity::GetWalletPublicKeyActivity(Network* network, const QVector<uint32_t>& path, Device* device)
+    : Activity(device)
+    , m_device(device)
+    , m_network(network)
+    , m_path(path)
+{}
+
 void GetWalletPublicKeyActivity::exec()
 {
     fetch();

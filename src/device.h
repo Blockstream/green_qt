@@ -10,21 +10,22 @@
 #define LEDGER_NANOS_ID 0x0001
 #define LEDGER_NANOX_ID 0x0004
 
+QT_FORWARD_DECLARE_CLASS(Device);
 QT_FORWARD_DECLARE_CLASS(DeviceCommand);
 QT_FORWARD_DECLARE_CLASS(Network);
 
 class GetWalletPublicKeyActivity : public Activity
 {
 public:
-    GetWalletPublicKeyActivity(Network* network, const QVector<uint32_t>& path, QObject* parent)
-        : Activity(parent)
-        , m_network(network)
-        , m_path(path)
-    {}
+    GetWalletPublicKeyActivity(Network* network, const QVector<uint32_t>& path, Device* device);
+    Device* device() const { return m_device; }
+    Network* network() const { return m_network; }
+    QVector<uint32_t> path() const { return m_path; }
     QByteArray publicKey() const { return m_public_key; }
     void exec() override;
     virtual void fetch() = 0;
 protected:
+    Device* const m_device;
     Network* const m_network;
     const QVector<uint32_t> m_path;
     QByteArray m_public_key;
