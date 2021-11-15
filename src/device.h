@@ -22,6 +22,7 @@ public:
     Network* network() const { return m_network; }
     QVector<uint32_t> path() const { return m_path; }
     QByteArray publicKey() const { return m_public_key; }
+    void setPublicKey(const QByteArray& public_key);
     void exec() override;
     virtual void fetch() = 0;
 protected:
