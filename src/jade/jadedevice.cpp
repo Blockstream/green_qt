@@ -532,7 +532,9 @@ GetMasterBlindingKeyActivity *JadeDevice::getMasterBlindingKey()
 
 void JadeDevice::ping()
 {
-    if (!m_api->isBusy()) updateVersionInfo();
+    if (m_api->isIdle() && !m_api->isBusy()) {
+        updateVersionInfo();
+    }
 }
 
 void JadeDevice::updateVersionInfo()
