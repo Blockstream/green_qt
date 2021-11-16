@@ -1,9 +1,10 @@
 #ifndef JADEAPI_H
 #define JADEAPI_H
 
+#include <QElapsedTimer>
+#include <QMap>
 #include <QObject>
 #include <QRandomGenerator>
-#include <QMap>
 
 #include "jadeconnection.h"
 
@@ -35,7 +36,8 @@ public:
     void connectDevice();
     void disconnectDevice();
 
-    bool isBusy() const { return !m_responseHandlers.isEmpty(); }
+    bool isIdle() const;
+    bool isBusy() const;
 
     // Function which must be called whenever an http-request response is received.
     // (If caller sets their own HttpRequestProxy, it should call this when the response is received.)
@@ -148,6 +150,9 @@ private:
 
     // Send cbor message to Jade
     void sendToJade(const QCborMap &msg);
+
+    // Used to measure elapsed time since last activity
+    QElapsedTimer m_idle_timer;
 
     // id generator for Jade messages
     QRandomGenerator            m_idgen;

@@ -91,10 +91,22 @@ void JadeAPI::disconnectDevice()
     m_jade->disconnectDevice();
 }
 
+bool JadeAPI::isIdle() const
+{
+    return !m_idle_timer.isValid() || m_idle_timer.elapsed() > 30000;
+}
+
+bool JadeAPI::isBusy() const
+{
+    return !m_responseHandlers.isEmpty();
+}
+
 // Handle result of an http-request.
 // MUST be called when an http-request response is received.
 void JadeAPI::handleHttpResponse(const int id, const QJsonObject &httpRequest, const QJsonObject &httpResponse)
 {
+    m_idle_timer.restart();
+
     // qDebug() << "JadeAPI::handleHttpResponse() called for" << id << "with response data" << httpResponse;
 
     Q_ASSERT(httpRequest.contains("on-reply"));
@@ -141,6 +153,8 @@ int JadeAPI::registerResponseHandler(const ResponseHandler &cb, int timeout) {
 // Invoke client callback for request/response when received
 void JadeAPI::callResponseHandler(const QVariantMap &msg)
 {
+    m_idle_timer.restart();
+    
     // Get the id from the message
     Q_ASSERT(msg["id"].isValid() && msg["id"].toString().toInt() > 0);
     const int id = msg["id"].toString().toInt();
@@ -168,6 +182,8 @@ void JadeAPI::callResponseHandler(const QVariantMap &msg)
 // Forward the message to the handler indicated by id, copying the map to update the id if necessary
 void JadeAPI::forwardToResponseHandler(const int targetId, const QVariantMap &msg)
 {
+    m_idle_timer.restart();
+
     if (msg.contains("id") && msg["id"] == targetId)
     {
         // Already correct id, just forward
@@ -185,6 +201,8 @@ void JadeAPI::forwardToResponseHandler(const int targetId, const QVariantMap &ms
 // The callback function invoked when a (complete) cbor message is received over the wrapped connection
 void JadeAPI::processResponseMessage(const QCborMap &msg)
 {
+    m_idle_timer.restart();
+
     // qInfo() << "JadeAPI::processResponseMessage() received <-" << Qt::endl << msg;
 
     // Ensure the message has an id
@@ -218,6 +236,8 @@ void JadeAPI::processResponseMessage(const QCborMap &msg)
 
 void JadeAPI::sendToJade(const QCborMap &msg)
 {
+    m_idle_timer.restart();
+
     // qInfo() << "JadeAPI::sendToJade() - Sending message ->" << Qt::endl << msg;
     Q_ASSERT(m_jade);
     m_jade->send(msg);
