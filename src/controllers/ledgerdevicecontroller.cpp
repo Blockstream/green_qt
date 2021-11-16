@@ -17,6 +17,8 @@
 #include "wallet.h"
 #include "walletmanager.h"
 
+#include <gdk.h>
+
 namespace {
     Network *network_from_app_name(const QString& app_name)
     {
@@ -48,7 +50,7 @@ LedgerDeviceController::~LedgerDeviceController()
 {
 }
 
-void LedgerDeviceController::setDevice(Device *device)
+void LedgerDeviceController::setDevice(LedgerDevice *device)
 {
     if (m_device == device) return;
     m_device = device;
@@ -61,34 +63,34 @@ void LedgerDeviceController::setDevice(Device *device)
 
 void LedgerDeviceController::initialize()
 {
-    LedgerDevice* device = qobject_cast<LedgerDevice*>(m_device);
-    if (!device) return;
+    if (!m_device) return;
 
-#if 1
     if (m_app_version.isNull()) {
-        auto activity = device->getApp();
-        connect(activity, &Activity::finished, this, [this, activity, device] {
+        auto activity = m_device->getApp();
+        QObject::connect(activity, &Activity::finished, this, [=] {
             activity->deleteLater();
             m_app_version = activity->version();
             m_app_name = activity->name();
             emit appChanged();
 
-            qInfo() << "device:" << device->name()
+            qInfo() << "device:" << m_device->name()
                     << "app_name:" << m_app_name
                     << "app_version:" << m_app_version.toString();
 
-            device->setAppVersion(m_app_version.toString());
+            m_device->setAppVersion(m_app_version.toString());
 
             m_network = network_from_app_name(activity->name());
             emit networkChanged(m_network);
 
+            update();
+
             if (!m_network) {
-                if (device->type() == Device::LedgerNanoS) {
+                if (m_device->type() == Device::LedgerNanoS) {
                     if (m_app_version < SemVer::parse("2.0.0")) {
                         setStatus("outdated");
                         return;
                     }
-                } else if (device->type() == Device::LedgerNanoX) {
+                } else if (m_device->type() == Device::LedgerNanoX) {
                     if (m_app_version < SemVer::parse("1.3.0")) {
                         setStatus("outdated");
                         return;
@@ -116,122 +118,166 @@ void LedgerDeviceController::initialize()
                     }
                 }
             }
-
-//            if (!m_network) {
-//                // TODO: device can be in dashboard or in another applet
-//                // either ignore or warn of that
-//                // It is in dashboard if cmd->m_name.indexOf("OLOS") >= 0
-////                QTimer::singleShot(1000, this, &LedgerDeviceController::initialize);
-//                return;
-//            }
-
             QTimer::singleShot(1000, this, &LedgerDeviceController::initialize);
         });
-        connect(activity, &Activity::failed, this, [this, activity] {
+        QObject::connect(activity, &Activity::failed, this, [this, activity] {
             activity->deleteLater();
             setStatus("error");
-            //QTimer::singleShot(1000, this, &LedgerDeviceController::initialize);
         });
         ActivityManager::instance()->exec(activity);
         return;
     }
-#endif
-#if 0
-    if (m_fw_version.isNull()) {
-        auto activity = device->getFirmware();
-        connect(activity, &Activity::finished, this, [this, activity] {
-            activity->deleteLater();
-            m_fw_version = activity->version();
-            emit firmwareChanged();
-
-            /*
-
-            */
-        });
-        connect(activity, &Activity::failed, this, [this, activity] {
-            activity->deleteLater();
-            setStatus("error");
-            //QTimer::singleShot(1000, this, &LedgerDeviceController::initialize);
-        });
-        activity->exec();
-        return;
-    }
-#endif
 }
 
 void LedgerDeviceController::setStatus(const QString& status)
 {
+    qDebug() << Q_FUNC_INFO << m_status << status;
     if (m_status == status) return;
     m_status = status;
     emit statusChanged(m_status);
+    update();
+}
+
+void LedgerDeviceController::update()
+{
+    if (m_wallet_hash_id.isEmpty()) {
+        return identify();
+    }
+
+    if (!m_wallet) {
+        m_wallet = WalletManager::instance()->walletWithHashId(m_wallet_hash_id, false);
+        if (m_wallet) {
+            emit walletChanged(m_wallet);
+            m_wallet->setDevice(m_device);
+        }
+    }
+
+    login();
+}
+
+void LedgerDeviceController::setActive(bool active)
+{
+    if (m_active == active) return;
+    m_active = active;
+    emit activeChanged(m_active);
+    update();
+}
+
+void LedgerDeviceController::connect()
+{
+    if (m_session) return;
+    if (!m_network) return;
+    if (!m_active) return;
+
+    m_session = new Session(this);
+
+    m_session.track(QObject::connect(m_session, &Session::connectedChanged, this, &LedgerDeviceController::update));
+    m_session.track(QObject::connect(m_session, &Session::activityCreated, this, &LedgerDeviceController::activityCreated));
+
+    m_session->setNetwork(m_network);
+    m_session->setActive(true);
+
+    emit sessionChanged(m_session);
+}
+
+void LedgerDeviceController::identify()
+{
+    if (!m_device) return;
+
+    qDebug() << "identifying, retrieve master public key";
+    auto activity = m_device->getWalletPublicKey(m_network, {});
+    QObject::connect(activity, &Activity::finished, [=] {
+        activity->deleteLater();
+
+        const auto master_xpub = activity->publicKey();
+        Q_ASSERT(!master_xpub.isEmpty());
+
+        qDebug() << "identifying, compute wallet hash id";
+        const auto net_params = Json::fromObject({{ "name", m_network->id() }});
+        const auto params = Json::fromObject({{ "master_xpub", QString::fromLocal8Bit(master_xpub) }});
+        GA_json* output;
+        int rc = GA_get_wallet_identifier(net_params.get(), params.get(), &output);
+        Q_ASSERT(rc == GA_OK);
+        const auto identifier = Json::toObject(output);
+        GA_destroy_json(output);
+
+        m_wallet_hash_id = identifier.value("wallet_hash_id").toString();
+        Q_ASSERT(!m_wallet_hash_id.isEmpty());
+        update();
+    });
+    QObject::connect(activity, &Activity::failed, [=] {
+        activity->deleteLater();
+        setStatus("locked");
+    });
+    ActivityManager::instance()->exec(activity);
 }
 
 void LedgerDeviceController::login()
 {
-    if (!m_network) return;
-
-    if (!m_session) {
-        m_session = new Session(this);
-
-        m_session.track(connect(m_session, &Session::connectedChanged, this, &LedgerDeviceController::login));
-        m_session.track(connect(m_session, &Session::activityCreated, this, &LedgerDeviceController::activityCreated));
-
-        m_session->setNetwork(m_network);
-        m_session->setActive(true);
-
-        emit sessionChanged(m_session);
-        return;
-    }
-
-    if (m_session->isActive() && !m_session->isConnected()) return;
-
-    if (m_wallet) return;
-
-    m_device_details = device_details_from_device(m_device);
-    m_wallet = new Wallet(m_network);
-    m_wallet->setName(m_device->name());
-    m_wallet->m_device = m_device;
-    m_wallet->setSession(m_session);
-    m_wallet->m_id = m_device->uuid();
-    emit walletChanged(m_wallet);
-
+    if (!m_device) return;
+    if (!m_session) return connect();
+    if (!m_session->isConnected()) return;
+    if (m_login_handler) return;
+    if (m_wallet && m_wallet->authentication() != Wallet::Unauthenticated) return;
+    if (m_status == "login") return;
     setStatus("login");
-    auto register_user_handler = new RegisterUserHandler(m_device_details, m_wallet->session());
-    auto login_handler = new LoginHandler(m_device_details, m_wallet->session());
-    connect(register_user_handler, &Handler::done, this, [login_handler] {
-        login_handler->exec();
-    });
-    connect(register_user_handler, &Handler::resolver, this, [](Resolver* resolver) {
-        resolver->resolve();
-    });
-    connect(register_user_handler, &Handler::error, this, [this]() {
-        setStatus("locked");
-    });
-    connect(login_handler, &Handler::done, this, [this, login_handler] {
-        m_wallet->updateHashId(login_handler->walletHashId());
+
+    auto device_details = device_details_from_device(m_device);
+    m_login_handler = new LoginHandler(device_details, m_session);
+
+    QObject::connect(m_login_handler, &Handler::done, this, [=] {
+        Q_ASSERT(m_wallet_hash_id == m_login_handler->walletHashId());
+        m_login_handler->deleteLater();
+        m_login_handler = nullptr;
+
+        if (!m_wallet) {
+            m_wallet = WalletManager::instance()->createWallet(m_session->network());
+            m_wallet->m_is_persisted = true;
+            m_wallet->updateHashId(m_wallet_hash_id);
+            m_wallet->setName(QString("%1 on %2").arg(m_session->network()->displayName()).arg(m_device->name()));
+            m_wallet->setDevice(m_device);
+            WalletManager::instance()->insertWallet(m_wallet);
+            emit walletChanged(m_wallet);
+        }
+
+        m_wallet->setSession(m_session);
         m_wallet->setSession();
-        WalletManager::instance()->addWallet(m_wallet);
-
-        m_progress = 1;
-        emit progressChanged(m_progress);
-
-        // TODO: should the controller decide wallet lifetime?
-        auto w = m_wallet;
-        connect(m_device, &QObject::destroyed, this, [w] {
-            WalletManager::instance()->removeWallet(w);
-            delete w;
-        });
         setStatus("done");
+        m_session = nullptr;
+
     });
-    connect(login_handler, &Handler::resolver, this, [this](Resolver* resolver) {
-        connect(resolver, &Resolver::progress, this, [this](int current, int total) {
-            m_progress = current == total ? 0 : qreal(current) / qreal(total);
-            emit progressChanged(m_progress);
-        });
+    QObject::connect(m_login_handler, &Handler::resolver, this, [](Resolver* resolver) {
         resolver->resolve();
     });
-    connect(login_handler, &Handler::error, this, [this]() {
+    QObject::connect(m_login_handler, &Handler::error, this, [=]{
+        setStatus("locked");
+        m_login_handler->deleteLater();
+        m_login_handler = nullptr;
+        signup();
+    });
+
+    m_login_handler->exec();
+}
+
+void LedgerDeviceController::signup()
+{
+    if (!m_device) return;
+    if (!m_session) return connect();
+    if (!m_session->isConnected()) return;
+
+    auto device_details = device_details_from_device(m_device);
+    auto handler = new RegisterUserHandler(device_details, m_session);
+
+    QObject::connect(handler, &Handler::done, this, [=] {
+        Q_ASSERT(m_wallet_hash_id == handler->walletHashId());
+        login();
+    });
+    QObject::connect(handler, &Handler::resolver, this, [](Resolver* resolver) {
+        resolver->resolve();
+    });
+    QObject::connect(handler, &Handler::error, this, [=]() {
         setStatus("locked");
     });
-    register_user_handler->exec();
+
+    handler->exec();
 }

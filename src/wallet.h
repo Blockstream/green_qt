@@ -174,6 +174,7 @@ private:
     bool m_ready{false};
     bool m_empty{true};
     QString m_display_unit;
+    Device* m_device{nullptr};
 
     void updateDisplayUnit();
 public:
@@ -209,7 +210,6 @@ public:
     int m_block_height{0};
 
     void save();
-    Device* m_device{nullptr};
     bool hasPinData() const { return !m_pin_data.isEmpty(); }
     void clearPinData();
 

@@ -195,17 +195,17 @@ MainPage {
                 RowLayout {
                     GButton {
                         large: true
-                        visible: controller.network && !controller.wallet
+                        visible: controller.status !== 'locked' && (!controller.wallet || controller.wallet.authentication === Wallet.Unauthenticated)
                         icon.color: 'transparent'
                         icon.source: controller.network ? icons[controller.network.key] : ''
                         text: qsTrId('id_login')
                         onClicked: {
                             login_dialog.createObject(window, { controller }).open()
-                            controller.login()
+                            controller.active = true
                         }
                     }
                     GButton {
-                        visible: controller.status === 'done'
+                        visible: controller.wallet && controller.wallet.ready
                         text: qsTrId('id_go_to_wallet')
                         onClicked: navigation.go(`/${controller.network.key}/${controller.wallet.id}`)
                     }
