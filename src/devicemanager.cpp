@@ -30,8 +30,21 @@ QSet<Device*> DeviceManager::devices() const
 Device *DeviceManager::deviceWithId(const QString& id)
 {
     for (auto device : m_devices) {
-        if (device->uuid() == id) return device;
+        if (device->uuid() == id) {
+            auto xpub = device->masterPublicKey();
+            Q_ASSERT(!xpub.isEmpty());
+            m_xpubs[id] = xpub;
+            return device;
+        }
     }
+    auto xpub = m_xpubs[id];
+    for (auto device : m_devices) {
+        if (device->masterPublicKey() == xpub) {
+            m_xpubs[id] = xpub;
+            return device;
+        }
+    }
+
     return nullptr;
 }
 

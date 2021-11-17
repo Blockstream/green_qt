@@ -25,6 +25,7 @@ signals:
 private:
     explicit DeviceManager(QObject* parent = nullptr);
     QSet<Device*> m_devices;
+    QMap<QString, QByteArray> m_xpubs;
 };
 
 #endif // GREEN_DEVICEMANAGER_H
