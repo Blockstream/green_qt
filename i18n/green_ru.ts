@@ -136,6 +136,10 @@
         <translation>Действие отменено</translation>
     </message>
     <message>
+        <source>id_actions</source>
+        <translation>Actions</translation>
+    </message>
+    <message>
         <source>id_add_a_note_only_you_can_see_it</source>
         <translation>Добавить заметку (будет видна только вам)</translation>
     </message>
@@ -200,6 +204,10 @@
         <translation>Адрес подтвержден!</translation>
     </message>
     <message>
+        <source>id_address_was_filled_by_a_payment</source>
+        <translation>Address was filled by a Payment URI</translation>
+    </message>
+    <message>
         <source>id_addresses</source>
         <translation>Адреса</translation>
     </message>
@@ -218,6 +226,10 @@
     <message>
         <source>id_all</source>
         <translation>Все</translation>
+    </message>
+    <message>
+        <source>id_all_assets</source>
+        <translation>All Assets</translation>
     </message>
     <message>
         <source>id_all_of_the_accounts_in_your</source>
@@ -300,12 +312,24 @@
         <translation>Активы</translation>
     </message>
     <message>
+        <source>id_assets_cannot_be_used_on_bitcoin</source>
+        <translation>Assets cannot be used on Bitcoin</translation>
+    </message>
+    <message>
         <source>id_attempts_remaining_d</source>
         <translation>Осталось попыток: %1</translation>
     </message>
     <message>
         <source>id_authenticate_to_view_the</source>
         <translation>Выполните аутентификацию, чтобы просмотреть фразу восстановления</translation>
+    </message>
+    <message>
+        <source>id_authentication_error_s</source>
+        <translation>Authentication error: %1</translation>
+    </message>
+    <message>
+        <source>id_authentication_failed</source>
+        <translation>Authentication failed</translation>
     </message>
     <message>
         <source>id_authenticator_app</source>
@@ -324,8 +348,16 @@
         <translation>Автоматический выход</translation>
     </message>
     <message>
+        <source>id_auto_logout_timeout_expired</source>
+        <translation>Auto logout timeout expired</translation>
+    </message>
+    <message>
         <source>id_autolock_after</source>
         <translation>Автоматическая блокировка</translation>
+    </message>
+    <message>
+        <source>id_available</source>
+        <translation>Available</translation>
     </message>
     <message>
         <source>id_back</source>
@@ -360,6 +392,10 @@
         <translation>Биометрический вход включен</translation>
     </message>
     <message>
+        <source>id_biometrics_authentication</source>
+        <translation>Biometrics Authentication</translation>
+    </message>
+    <message>
         <source>id_bip49_accounts_allow_you_to</source>
         <translation>Учетные записи BIP49 позволяют разделять средства и получать их на SegWit адреса, обеспечивая тем самым высочайшую обратную совместимость при получении средств от кого-либо в сети.</translation>
     </message>
@@ -373,7 +409,7 @@
     </message>
     <message>
         <source>id_bitcoin_electrum_server</source>
-        <translation>Bitcoin Electrum server</translation>
+        <translation>Electrum-сервер для Bitcoin</translation>
     </message>
     <message>
         <source>id_bitcoin_is_the_worlds_leading</source>
@@ -487,6 +523,10 @@
     <message>
         <source>id_changing_reference_exchange</source>
         <translation>При изменении референтного обменного курса ваш порог 2FA сбрасывается до 0. Не забудьте настроить порог 2FA после траты.</translation>
+    </message>
+    <message>
+        <source>id_check_for_updates</source>
+        <translation>Check for updates</translation>
     </message>
     <message>
         <source>id_check_for_updates_on_startup</source>
@@ -666,7 +706,7 @@
     </message>
     <message>
         <source>id_connect_jade_with_a_usb_cable</source>
-        <translation>Connect Jade with a USB cable to download the latest firmware update</translation>
+        <translation>Подключите Jade с помощью USB-кабеля, чтобы загрузить последнее обновление прошивки</translation>
     </message>
     <message>
         <source>id_connect_through_a_proxy</source>
@@ -846,7 +886,7 @@
     </message>
     <message>
         <source>id_custom_servers_and_validation</source>
-        <translation>Custom servers and validation</translation>
+        <translation>Пользовательские серверы и валидация</translation>
     </message>
     <message>
         <source>id_customize_2fa_expiration_of</source>
@@ -923,6 +963,10 @@
     <message>
         <source>id_deposit</source>
         <translation>Депозит</translation>
+    </message>
+    <message>
+        <source>id_details</source>
+        <translation>Details</translation>
     </message>
     <message>
         <source>id_device</source>
@@ -1614,8 +1658,16 @@
         <translation>Недопустимая сумма</translation>
     </message>
     <message>
+        <source>id_invalid_asset_id</source>
+        <translation>Invalid Asset ID</translation>
+    </message>
+    <message>
         <source>id_invalid_clipboard_contents</source>
         <translation>Неверное содержимое буфера обмена</translation>
+    </message>
+    <message>
+        <source>id_invalid_merkle_proof</source>
+        <translation>Invalid Merkle proof</translation>
     </message>
     <message>
         <source>id_invalid_mnemonic</source>
@@ -1771,7 +1823,7 @@
     </message>
     <message>
         <source>id_liquid_electrum_server</source>
-        <translation>Liquid Electrum server</translation>
+        <translation>Сервер Liquid Electrum</translation>
     </message>
     <message>
         <source>id_liquid_is_a_sidechainbased</source>
@@ -1782,8 +1834,12 @@
         <translation>Ценные бумаги Liquid</translation>
     </message>
     <message>
+        <source>id_liquid_testnet_electrum_server</source>
+        <translation>Liquid Testnet Electrum Server</translation>
+    </message>
+    <message>
         <source>id_liquid_testnet_wallets</source>
-        <translation>Liquid testnet wallets</translation>
+        <translation>Кошельки Liquid Testnet</translation>
     </message>
     <message>
         <source>id_liquid_wallets</source>
@@ -1994,12 +2050,12 @@
         <translation>Больше опций</translation>
     </message>
     <message>
-        <source>id_multiple_assets</source>
-        <translation>Множественные активы</translation>
+        <source>id_multi_server_validation</source>
+        <translation>Multi Server Validation</translation>
     </message>
     <message>
-        <source>id_multiserver_validation</source>
-        <translation>Мультисерверная валидация</translation>
+        <source>id_multiple_assets</source>
+        <translation>Множественные активы</translation>
     </message>
     <message>
         <source>id_multisig_shield</source>
@@ -2102,6 +2158,10 @@
         <translation>Сумма не указана</translation>
     </message>
     <message>
+        <source>id_no_asset_in_this_account</source>
+        <translation>No asset in this account</translation>
+    </message>
+    <message>
         <source>id_no_attempts_remaining</source>
         <translation>Попыток не осталось</translation>
     </message>
@@ -2170,6 +2230,10 @@
         <translation>Неверное слово</translation>
     </message>
     <message>
+        <source>id_not_available_noradio_build</source>
+        <translation>Not available (No-radio build)</translation>
+    </message>
+    <message>
         <source>id_not_confidential</source>
         <translation>Not confidential</translation>
     </message>
@@ -2180,6 +2244,10 @@
     <message>
         <source>id_not_initialized</source>
         <translation>Не инициализировано</translation>
+    </message>
+    <message>
+        <source>id_not_on_longest_chain</source>
+        <translation>Not on longest chain</translation>
     </message>
     <message>
         <source>id_notifications</source>
@@ -2306,6 +2374,10 @@
         <translation>Заблокировать кошелек навсегда</translation>
     </message>
     <message>
+        <source>id_personal_electrum_server</source>
+        <translation>Personal Electrum Server</translation>
+    </message>
+    <message>
         <source>id_pgp_key</source>
         <translation>PGP-ключ</translation>
     </message>
@@ -2430,6 +2502,10 @@
         <translation>Приватное, но менее стабильное соединение</translation>
     </message>
     <message>
+        <source>id_private_key</source>
+        <translation>Private Key</translation>
+    </message>
+    <message>
         <source>id_problem_with_key_1s</source>
         <translation>Проблема с ключом %1</translation>
     </message>
@@ -2464,6 +2540,10 @@
     <message>
         <source>id_radio_firmware</source>
         <translation>Radio firmware</translation>
+    </message>
+    <message>
+        <source>id_read_more</source>
+        <translation>Read more</translation>
     </message>
     <message>
         <source>id_read_more_at_our_s</source>
@@ -2835,7 +2915,7 @@
     </message>
     <message>
         <source>id_server_ip_and_port_ipport</source>
-        <translation>Server IP and port (ip:port)</translation>
+        <translation>IP-адрес и порт сервера (ip: порт)</translation>
     </message>
     <message>
         <source>id_set_2fa_expiry</source>
@@ -3057,7 +3137,7 @@
     </message>
     <message>
         <source>id_spv_mode_is_currently_available</source>
-        <translation>SPV mode is currently available for singlesig bitcoin wallets only.</translation>
+        <translation>Режим SPV в настоящее время доступен только для одноподписных биткоин-кошельков.</translation>
     </message>
     <message>
         <source>id_spv_not_fully_synced</source>
@@ -3184,7 +3264,7 @@
     </message>
     <message>
         <source>id_testnet_electrum_server</source>
-        <translation>Testnet Electrum server</translation>
+        <translation>Сервер Testnet Electrum</translation>
     </message>
     <message>
         <source>id_testnet_wallets</source>
@@ -3256,7 +3336,7 @@
     </message>
     <message>
         <source>id_the_recovery_phrase_doesnt</source>
-        <translation>The recovery phrase doesn&apos;t match the previously existing wallet. Please retry with a different recovery phrase.</translation>
+        <translation>Фраза восстановления не соответствует ранее существовавшему кошельку. Повторите попытку, используя другую фразу восстановления.</translation>
     </message>
     <message>
         <source>id_the_source_code_is_available_at</source>
@@ -3296,7 +3376,7 @@
     </message>
     <message>
         <source>id_this_wallet_operates_on_a_test</source>
-        <translation>This wallet operates on a test network. Anything you receive or send here has no value</translation>
+        <translation>Этот кошелек работает в тестовой сети. Все, что вы получаете или отправляете здесь, не имеет ценности</translation>
     </message>
     <message>
         <source>id_this_will_disable_pin_login_for</source>
@@ -3325,6 +3405,10 @@
     <message>
         <source>id_to_keep_you_in_control_of_your</source>
         <translation>Для контроля ваших средств, защита с помощью двухфакторной аутентификации истекает примерно через %1 дней с момента вашего последнего платежа. Вам будет предложено совершить транзакцию двухфакторной реактивации, если вы недостаточно часто переводите средства.</translation>
+    </message>
+    <message>
+        <source>id_too_many_pin_attempts</source>
+        <translation>Too many PIN attempts</translation>
     </message>
     <message>
         <source>id_tor</source>
@@ -3503,6 +3587,10 @@
         <translation>Разблокировка монет</translation>
     </message>
     <message>
+        <source>id_unstable_internet_connection</source>
+        <translation>Unstable internet connection</translation>
+    </message>
+    <message>
         <source>id_update</source>
         <translation>Обновление</translation>
     </message>
@@ -3560,23 +3648,23 @@
     </message>
     <message>
         <source>id_verified</source>
-        <translation>Verified</translation>
+        <translation>Верифицировано</translation>
     </message>
     <message>
         <source>id_verify_on_device</source>
         <translation>Проверить на устройстве</translation>
     </message>
     <message>
+        <source>id_verify_your_bitcoin</source>
+        <translation>Verify your bitcoin transactions are included on the blockchain</translation>
+    </message>
+    <message>
         <source>id_verify_your_pin</source>
         <translation>Проверьте PIN-код</translation>
     </message>
     <message>
-        <source>id_verify_your_transactions_are</source>
-        <translation>Убедитесь, что ваши транзакции включены в блокчейн</translation>
-    </message>
-    <message>
         <source>id_verifying_transactions</source>
-        <translation>Verifying transactions…</translation>
+        <translation>Верификация транзакций…</translation>
     </message>
     <message>
         <source>id_version</source>
@@ -3595,6 +3683,10 @@
         <translation>Посмотреть в обозревателе</translation>
     </message>
     <message>
+        <source>id_view_more</source>
+        <translation>View More</translation>
+    </message>
+    <message>
         <source>id_visit_s_for_further_information</source>
         <translation>Посетите %1 для получения дополнительной информации о программном обеспечении</translation>
     </message>
@@ -3605,6 +3697,10 @@
     <message>
         <source>id_waiting_for_transaction</source>
         <translation>Ожидание транзакции ...</translation>
+    </message>
+    <message>
+        <source>id_wallet</source>
+        <translation>Wallet</translation>
     </message>
     <message>
         <source>id_wallet_backup</source>
@@ -3775,6 +3871,10 @@
         <translation>Вы не можете создать или восстановить кошелек на %1 так как у вас уже есть кошелек, защищенный PIN-кодом.</translation>
     </message>
     <message>
+        <source>id_you_have_clicked_a_payment_uri</source>
+        <translation>You have clicked a Payment URI, select a wallet to handle it</translation>
+    </message>
+    <message>
         <source>id_you_have_control_on_your_funds</source>
         <translation>Ваши средства у вас под контролем.</translation>
     </message>
@@ -3789,6 +3889,10 @@
     <message>
         <source>id_you_have_successfully_changed</source>
         <translation>Вы успешно изменили свой PIN-код</translation>
+    </message>
+    <message>
+        <source>id_you_have_to_authenticate_using</source>
+        <translation>You have to Authenticate using biometrics</translation>
     </message>
     <message>
         <source>id_you_have_tor_enabled_are_you</source>
@@ -3829,6 +3933,10 @@
     <message>
         <source>id_your_2fa_expires_so_that_if_you</source>
         <translation>Срок действия вашей 2FA истекает, поэтому, если вы потеряете доступ к своему методу 2FA или служба Blockstream Green станет недоступной, вы всегда можете восстановить свои биткоины с помощью этого инструмента с открытым исходным кодом.</translation>
+    </message>
+    <message>
+        <source>id_your_device_was_disconnected</source>
+        <translation>Your device was disconnected</translation>
     </message>
     <message>
         <source>id_your_favourite_exchange_rate_is</source>

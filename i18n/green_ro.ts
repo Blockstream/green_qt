@@ -137,6 +137,10 @@ Dacă aceste instrucțiuni nu au fost de ajutor sau dacă nu aveți o frază de 
         <translation>Acțiune anulată</translation>
     </message>
     <message>
+        <source>id_actions</source>
+        <translation>Actions</translation>
+    </message>
+    <message>
         <source>id_add_a_note_only_you_can_see_it</source>
         <translation>Adăugare notă (doar dvs. o puteți vedea).</translation>
     </message>
@@ -201,6 +205,10 @@ Dacă aceste instrucțiuni nu au fost de ajutor sau dacă nu aveți o frază de 
         <translation>Address verified!</translation>
     </message>
     <message>
+        <source>id_address_was_filled_by_a_payment</source>
+        <translation>Address was filled by a Payment URI</translation>
+    </message>
+    <message>
         <source>id_addresses</source>
         <translation>Adrese</translation>
     </message>
@@ -219,6 +227,10 @@ Dacă aceste instrucțiuni nu au fost de ajutor sau dacă nu aveți o frază de 
     <message>
         <source>id_all</source>
         <translation>Tot/toate</translation>
+    </message>
+    <message>
+        <source>id_all_assets</source>
+        <translation>All Assets</translation>
     </message>
     <message>
         <source>id_all_of_the_accounts_in_your</source>
@@ -301,12 +313,24 @@ Dacă aceste instrucțiuni nu au fost de ajutor sau dacă nu aveți o frază de 
         <translation>Active</translation>
     </message>
     <message>
+        <source>id_assets_cannot_be_used_on_bitcoin</source>
+        <translation>Assets cannot be used on Bitcoin</translation>
+    </message>
+    <message>
         <source>id_attempts_remaining_d</source>
         <translation>Încercări rămase: %1</translation>
     </message>
     <message>
         <source>id_authenticate_to_view_the</source>
         <translation>Logați-vă pentru a vedea fraza de recuperare</translation>
+    </message>
+    <message>
+        <source>id_authentication_error_s</source>
+        <translation>Authentication error: %1</translation>
+    </message>
+    <message>
+        <source>id_authentication_failed</source>
+        <translation>Authentication failed</translation>
     </message>
     <message>
         <source>id_authenticator_app</source>
@@ -325,8 +349,16 @@ Dacă aceste instrucțiuni nu au fost de ajutor sau dacă nu aveți o frază de 
         <translation>Interval delogare automată</translation>
     </message>
     <message>
+        <source>id_auto_logout_timeout_expired</source>
+        <translation>Auto logout timeout expired</translation>
+    </message>
+    <message>
         <source>id_autolock_after</source>
         <translation>Blocare automată după</translation>
+    </message>
+    <message>
+        <source>id_available</source>
+        <translation>Available</translation>
     </message>
     <message>
         <source>id_back</source>
@@ -359,6 +391,10 @@ Dacă aceste instrucțiuni nu au fost de ajutor sau dacă nu aveți o frază de 
     <message>
         <source>id_biometric_login_is_enabled</source>
         <translation>Logarea biometrică este activată</translation>
+    </message>
+    <message>
+        <source>id_biometrics_authentication</source>
+        <translation>Biometrics Authentication</translation>
     </message>
     <message>
         <source>id_bip49_accounts_allow_you_to</source>
@@ -487,6 +523,10 @@ Dacă aceste instrucțiuni nu au fost de ajutor sau dacă nu aveți o frază de 
     <message>
         <source>id_changing_reference_exchange</source>
         <translation>Schimbarea ratei de referință va reseta la 0 limita de cheltuire fara 2FA. Vă rugăm să restabiliți limita 2FA manual.</translation>
+    </message>
+    <message>
+        <source>id_check_for_updates</source>
+        <translation>Check for updates</translation>
     </message>
     <message>
         <source>id_check_for_updates_on_startup</source>
@@ -923,6 +963,10 @@ Dacă aceste instrucțiuni nu au fost de ajutor sau dacă nu aveți o frază de 
     <message>
         <source>id_deposit</source>
         <translation>Depunere</translation>
+    </message>
+    <message>
+        <source>id_details</source>
+        <translation>Details</translation>
     </message>
     <message>
         <source>id_device</source>
@@ -1614,8 +1658,16 @@ fraza de recuperare</translation>
         <translation>Cantitate invalidă</translation>
     </message>
     <message>
+        <source>id_invalid_asset_id</source>
+        <translation>Invalid Asset ID</translation>
+    </message>
+    <message>
         <source>id_invalid_clipboard_contents</source>
         <translation>Invalid clipboard contents</translation>
+    </message>
+    <message>
+        <source>id_invalid_merkle_proof</source>
+        <translation>Invalid Merkle proof</translation>
     </message>
     <message>
         <source>id_invalid_mnemonic</source>
@@ -1780,6 +1832,10 @@ fraza de recuperare</translation>
     <message>
         <source>id_liquid_securities</source>
         <translation>Acțiuni Liquid</translation>
+    </message>
+    <message>
+        <source>id_liquid_testnet_electrum_server</source>
+        <translation>Liquid Testnet Electrum Server</translation>
     </message>
     <message>
         <source>id_liquid_testnet_wallets</source>
@@ -1994,12 +2050,12 @@ fraza de recuperare</translation>
         <translation>Mai multe opțiuni</translation>
     </message>
     <message>
-        <source>id_multiple_assets</source>
-        <translation>Monede multiple</translation>
+        <source>id_multi_server_validation</source>
+        <translation>Multi Server Validation</translation>
     </message>
     <message>
-        <source>id_multiserver_validation</source>
-        <translation>Validare multi-server</translation>
+        <source>id_multiple_assets</source>
+        <translation>Monede multiple</translation>
     </message>
     <message>
         <source>id_multisig_shield</source>
@@ -2102,6 +2158,10 @@ fraza de recuperare</translation>
         <translation>Nu a fost specificată cantitatea</translation>
     </message>
     <message>
+        <source>id_no_asset_in_this_account</source>
+        <translation>No asset in this account</translation>
+    </message>
+    <message>
         <source>id_no_attempts_remaining</source>
         <translation>Ați rămas fără încercări</translation>
     </message>
@@ -2170,6 +2230,10 @@ fraza de recuperare</translation>
         <translation>Nu este un cuvînt valabil</translation>
     </message>
     <message>
+        <source>id_not_available_noradio_build</source>
+        <translation>Not available (No-radio build)</translation>
+    </message>
+    <message>
         <source>id_not_confidential</source>
         <translation>Not confidential</translation>
     </message>
@@ -2180,6 +2244,10 @@ fraza de recuperare</translation>
     <message>
         <source>id_not_initialized</source>
         <translation>Nu este inițializat</translation>
+    </message>
+    <message>
+        <source>id_not_on_longest_chain</source>
+        <translation>Not on longest chain</translation>
     </message>
     <message>
         <source>id_notifications</source>
@@ -2306,6 +2374,10 @@ fraza de recuperare</translation>
         <translation>Ștergeți definitiv acest portofel</translation>
     </message>
     <message>
+        <source>id_personal_electrum_server</source>
+        <translation>Personal Electrum Server</translation>
+    </message>
+    <message>
         <source>id_pgp_key</source>
         <translation>Cheie PGP</translation>
     </message>
@@ -2430,6 +2502,10 @@ fraza de recuperare</translation>
         <translation>Conexiune privată dar instabilă</translation>
     </message>
     <message>
+        <source>id_private_key</source>
+        <translation>Private Key</translation>
+    </message>
+    <message>
         <source>id_problem_with_key_1s</source>
         <translation>Problemă cu cheia %1</translation>
     </message>
@@ -2464,6 +2540,10 @@ fraza de recuperare</translation>
     <message>
         <source>id_radio_firmware</source>
         <translation>Firmware cu wireless</translation>
+    </message>
+    <message>
+        <source>id_read_more</source>
+        <translation>Read more</translation>
     </message>
     <message>
         <source>id_read_more_at_our_s</source>
@@ -3327,6 +3407,10 @@ fraza de recuperare</translation>
         <translation>Pentru a vă ajuta să păstrați controlul monedelor, protecția oferită de autentificarea cu doi factori (2FA) expiră după aproximativ %1 zile de la ultima dvs plată. Dacă nu tranzacționați monedele suficient de des, vi se va cere să realizați o operațiune pentru reactivarea 2FA.</translation>
     </message>
     <message>
+        <source>id_too_many_pin_attempts</source>
+        <translation>Too many PIN attempts</translation>
+    </message>
+    <message>
         <source>id_tor</source>
         <translation>Tor</translation>
     </message>
@@ -3503,6 +3587,10 @@ fraza de recuperare</translation>
         <translation>Unlocking coins</translation>
     </message>
     <message>
+        <source>id_unstable_internet_connection</source>
+        <translation>Unstable internet connection</translation>
+    </message>
+    <message>
         <source>id_update</source>
         <translation>Actualizează</translation>
     </message>
@@ -3567,12 +3655,12 @@ fraza de recuperare</translation>
         <translation>Verify on Device</translation>
     </message>
     <message>
-        <source>id_verify_your_pin</source>
-        <translation>Verificați PIN-ul</translation>
+        <source>id_verify_your_bitcoin</source>
+        <translation>Verify your bitcoin transactions are included on the blockchain</translation>
     </message>
     <message>
-        <source>id_verify_your_transactions_are</source>
-        <translation>Verificați dacă tranzacțiile au fost incluse in blockchain</translation>
+        <source>id_verify_your_pin</source>
+        <translation>Verificați PIN-ul</translation>
     </message>
     <message>
         <source>id_verifying_transactions</source>
@@ -3595,6 +3683,10 @@ fraza de recuperare</translation>
         <translation>Vizualizare în Explorer</translation>
     </message>
     <message>
+        <source>id_view_more</source>
+        <translation>View More</translation>
+    </message>
+    <message>
         <source>id_visit_s_for_further_information</source>
         <translation>Vizitați %1 pentru mai multe informații despre software</translation>
     </message>
@@ -3605,6 +3697,10 @@ fraza de recuperare</translation>
     <message>
         <source>id_waiting_for_transaction</source>
         <translation>Se așteaptă tranzacția...</translation>
+    </message>
+    <message>
+        <source>id_wallet</source>
+        <translation>Wallet</translation>
     </message>
     <message>
         <source>id_wallet_backup</source>
@@ -3775,6 +3871,10 @@ fraza de recuperare</translation>
         <translation>Nu puteți crea sau recupera un portofel în %1, deoarece aveți deja un portofel protejat prin PIN.</translation>
     </message>
     <message>
+        <source>id_you_have_clicked_a_payment_uri</source>
+        <translation>You have clicked a Payment URI, select a wallet to handle it</translation>
+    </message>
+    <message>
         <source>id_you_have_control_on_your_funds</source>
         <translation>Aveți control asupra fondurilor dvs</translation>
     </message>
@@ -3789,6 +3889,10 @@ fraza de recuperare</translation>
     <message>
         <source>id_you_have_successfully_changed</source>
         <translation>PIN-ul a fost schimbat</translation>
+    </message>
+    <message>
+        <source>id_you_have_to_authenticate_using</source>
+        <translation>You have to Authenticate using biometrics</translation>
     </message>
     <message>
         <source>id_you_have_tor_enabled_are_you</source>
@@ -3829,6 +3933,10 @@ fraza de recuperare</translation>
     <message>
         <source>id_your_2fa_expires_so_that_if_you</source>
         <translation>2FA-ul are un termen de expirare. În acest fel, daca vă pierdeți accesul la 2FA sau dacă serverele Blockstream Green sunt offline, puteți oricând să vă recuperați fondurile folosind acest program open-source.</translation>
+    </message>
+    <message>
+        <source>id_your_device_was_disconnected</source>
+        <translation>Your device was disconnected</translation>
     </message>
     <message>
         <source>id_your_favourite_exchange_rate_is</source>

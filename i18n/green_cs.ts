@@ -136,6 +136,10 @@ Pokud vám žádný z těchto tipů nepomohl nebo pokud nemáte frázi pro obnov
         <translation>Akce byla zrušena</translation>
     </message>
     <message>
+        <source>id_actions</source>
+        <translation>Actions</translation>
+    </message>
+    <message>
         <source>id_add_a_note_only_you_can_see_it</source>
         <translation>Přidat poznámku (uvidíte ji pouze vy).</translation>
     </message>
@@ -200,6 +204,10 @@ Pokud vám žádný z těchto tipů nepomohl nebo pokud nemáte frázi pro obnov
         <translation>Adresa ověřena!</translation>
     </message>
     <message>
+        <source>id_address_was_filled_by_a_payment</source>
+        <translation>Adresa byla vyplněna pomocí Payment URI</translation>
+    </message>
+    <message>
         <source>id_addresses</source>
         <translation>Adresy</translation>
     </message>
@@ -218,6 +226,10 @@ Pokud vám žádný z těchto tipů nepomohl nebo pokud nemáte frázi pro obnov
     <message>
         <source>id_all</source>
         <translation>Vše</translation>
+    </message>
+    <message>
+        <source>id_all_assets</source>
+        <translation>Všechna aktiva</translation>
     </message>
     <message>
         <source>id_all_of_the_accounts_in_your</source>
@@ -300,12 +312,24 @@ Pokud vám žádný z těchto tipů nepomohl nebo pokud nemáte frázi pro obnov
         <translation>Aktiva</translation>
     </message>
     <message>
+        <source>id_assets_cannot_be_used_on_bitcoin</source>
+        <translation>Assets cannot be used on Bitcoin</translation>
+    </message>
+    <message>
         <source>id_attempts_remaining_d</source>
         <translation>Zbývající pokusy: %1</translation>
     </message>
     <message>
         <source>id_authenticate_to_view_the</source>
         <translation>Ověření pro zobrazení fráze pro obnovení</translation>
+    </message>
+    <message>
+        <source>id_authentication_error_s</source>
+        <translation>Chyba ověřování: %1</translation>
+    </message>
+    <message>
+        <source>id_authentication_failed</source>
+        <translation>Ověření se nezdařilo</translation>
     </message>
     <message>
         <source>id_authenticator_app</source>
@@ -324,8 +348,16 @@ Pokud vám žádný z těchto tipů nepomohl nebo pokud nemáte frázi pro obnov
         <translation>Časový limit automatického odhlášení</translation>
     </message>
     <message>
+        <source>id_auto_logout_timeout_expired</source>
+        <translation>Vypršel čas automatického odhlášení</translation>
+    </message>
+    <message>
         <source>id_autolock_after</source>
         <translation>Automatické uzamčení po</translation>
+    </message>
+    <message>
+        <source>id_available</source>
+        <translation>Available</translation>
     </message>
     <message>
         <source>id_back</source>
@@ -360,6 +392,10 @@ Pokud vám žádný z těchto tipů nepomohl nebo pokud nemáte frázi pro obnov
         <translation>Biometrické přihlášení je povoleno</translation>
     </message>
     <message>
+        <source>id_biometrics_authentication</source>
+        <translation>Biometrické ověřování</translation>
+    </message>
+    <message>
         <source>id_bip49_accounts_allow_you_to</source>
         <translation>Účty BIP49 umožňují oddělit prostředky a přijímat na zabalených adresách segwit, čímž je zajištěna nejvyšší zpětná kompatibilita při přijímání prostředků od kohokoli v síti.</translation>
     </message>
@@ -373,7 +409,7 @@ Pokud vám žádný z těchto tipů nepomohl nebo pokud nemáte frázi pro obnov
     </message>
     <message>
         <source>id_bitcoin_electrum_server</source>
-        <translation>Bitcoin Electrum server</translation>
+        <translation>Server Bitcoin Electrum</translation>
     </message>
     <message>
         <source>id_bitcoin_is_the_worlds_leading</source>
@@ -487,6 +523,10 @@ Jednoduše a bezpečně</translation>
     <message>
         <source>id_changing_reference_exchange</source>
         <translation>Změnou referenčního směnného kurzu se nastaví prahová hodnota 2FA na 0. Po utrácení nezapomeňte upravit prahovou hodnotu 2FA.</translation>
+    </message>
+    <message>
+        <source>id_check_for_updates</source>
+        <translation>Zkontrolovat aktualizace</translation>
     </message>
     <message>
         <source>id_check_for_updates_on_startup</source>
@@ -666,7 +706,7 @@ Jednoduše a bezpečně</translation>
     </message>
     <message>
         <source>id_connect_jade_with_a_usb_cable</source>
-        <translation>Connect Jade with a USB cable to download the latest firmware update</translation>
+        <translation>Připojte zařízení Jade pomocí USB kabelu a stáhněte si nejnovější aktualizaci firmwaru.</translation>
     </message>
     <message>
         <source>id_connect_through_a_proxy</source>
@@ -846,7 +886,7 @@ Jednoduše a bezpečně</translation>
     </message>
     <message>
         <source>id_custom_servers_and_validation</source>
-        <translation>Custom servers and validation</translation>
+        <translation>Vlastní servery a ověřování</translation>
     </message>
     <message>
         <source>id_customize_2fa_expiration_of</source>
@@ -923,6 +963,10 @@ Jednoduše a bezpečně</translation>
     <message>
         <source>id_deposit</source>
         <translation>Vklad</translation>
+    </message>
+    <message>
+        <source>id_details</source>
+        <translation>Podrobnosti</translation>
     </message>
     <message>
         <source>id_device</source>
@@ -1614,8 +1658,16 @@ obnovovací frázi</translation>
         <translation>Neplatná částka</translation>
     </message>
     <message>
+        <source>id_invalid_asset_id</source>
+        <translation>Invalid Asset ID</translation>
+    </message>
+    <message>
         <source>id_invalid_clipboard_contents</source>
         <translation>Neplatný obsah schránky</translation>
+    </message>
+    <message>
+        <source>id_invalid_merkle_proof</source>
+        <translation>Neplatný Merkleův důkaz</translation>
     </message>
     <message>
         <source>id_invalid_mnemonic</source>
@@ -1771,7 +1823,7 @@ obnovovací frázi</translation>
     </message>
     <message>
         <source>id_liquid_electrum_server</source>
-        <translation>Liquid Electrum server</translation>
+        <translation>Server Liquid Electrum</translation>
     </message>
     <message>
         <source>id_liquid_is_a_sidechainbased</source>
@@ -1782,8 +1834,12 @@ obnovovací frázi</translation>
         <translation>Liquid Securities</translation>
     </message>
     <message>
+        <source>id_liquid_testnet_electrum_server</source>
+        <translation>Liquid Testnet Electrum Server</translation>
+    </message>
+    <message>
         <source>id_liquid_testnet_wallets</source>
-        <translation>Liquid testnet wallets</translation>
+        <translation>Liquid testnet peněženky</translation>
     </message>
     <message>
         <source>id_liquid_wallets</source>
@@ -1994,12 +2050,12 @@ obnovovací frázi</translation>
         <translation>Více možností</translation>
     </message>
     <message>
-        <source>id_multiple_assets</source>
-        <translation>Více aktiv</translation>
+        <source>id_multi_server_validation</source>
+        <translation>Validace více serverů</translation>
     </message>
     <message>
-        <source>id_multiserver_validation</source>
-        <translation>Ověření více serverů</translation>
+        <source>id_multiple_assets</source>
+        <translation>Více aktiv</translation>
     </message>
     <message>
         <source>id_multisig_shield</source>
@@ -2102,6 +2158,10 @@ obnovovací frázi</translation>
         <translation>Nebyla zadána žádná částka</translation>
     </message>
     <message>
+        <source>id_no_asset_in_this_account</source>
+        <translation>Žádná aktiva na tomto účtu</translation>
+    </message>
+    <message>
         <source>id_no_attempts_remaining</source>
         <translation>Nezbývají žádné pokusy</translation>
     </message>
@@ -2170,6 +2230,10 @@ obnovovací frázi</translation>
         <translation>Není platné slovo</translation>
     </message>
     <message>
+        <source>id_not_available_noradio_build</source>
+        <translation>Not available (No-radio build)</translation>
+    </message>
+    <message>
         <source>id_not_confidential</source>
         <translation>Není důvěrné</translation>
     </message>
@@ -2180,6 +2244,10 @@ obnovovací frázi</translation>
     <message>
         <source>id_not_initialized</source>
         <translation>Není inicializováno</translation>
+    </message>
+    <message>
+        <source>id_not_on_longest_chain</source>
+        <translation>Není na nejdelším řetězci</translation>
     </message>
     <message>
         <source>id_notifications</source>
@@ -2306,6 +2374,10 @@ obnovovací frázi</translation>
         <translation>Trvale blokovat tuto peněženku</translation>
     </message>
     <message>
+        <source>id_personal_electrum_server</source>
+        <translation>Osobní Electrum Server</translation>
+    </message>
+    <message>
         <source>id_pgp_key</source>
         <translation>PGP klíč</translation>
     </message>
@@ -2430,6 +2502,10 @@ obnovovací frázi</translation>
         <translation>Soukromé, ale méně stabilní připojení</translation>
     </message>
     <message>
+        <source>id_private_key</source>
+        <translation>Soukromý klíč</translation>
+    </message>
+    <message>
         <source>id_problem_with_key_1s</source>
         <translation>Problém s klíčem %1</translation>
     </message>
@@ -2464,6 +2540,10 @@ obnovovací frázi</translation>
     <message>
         <source>id_radio_firmware</source>
         <translation>Rádiový firmware</translation>
+    </message>
+    <message>
+        <source>id_read_more</source>
+        <translation>Přečtěte si více</translation>
     </message>
     <message>
         <source>id_read_more_at_our_s</source>
@@ -2835,7 +2915,7 @@ obnovovací frázi</translation>
     </message>
     <message>
         <source>id_server_ip_and_port_ipport</source>
-        <translation>Server IP and port (ip:port)</translation>
+        <translation>IP adresa a port serveru (ip:port)</translation>
     </message>
     <message>
         <source>id_set_2fa_expiry</source>
@@ -3057,7 +3137,7 @@ Obnovte toto nastavení a znovu jej aktivujte.</translation>
     </message>
     <message>
         <source>id_spv_mode_is_currently_available</source>
-        <translation>SPV mode is currently available for singlesig bitcoin wallets only.</translation>
+        <translation>Režim SPV je v současné době k dispozici pouze pro singlesig bitcoinové peněženky.</translation>
     </message>
     <message>
         <source>id_spv_not_fully_synced</source>
@@ -3184,7 +3264,7 @@ Obnovte toto nastavení a znovu jej aktivujte.</translation>
     </message>
     <message>
         <source>id_testnet_electrum_server</source>
-        <translation>Testnet Electrum server</translation>
+        <translation>Server Testnet Electrum</translation>
     </message>
     <message>
         <source>id_testnet_wallets</source>
@@ -3256,7 +3336,7 @@ Obnovte toto nastavení a znovu jej aktivujte.</translation>
     </message>
     <message>
         <source>id_the_recovery_phrase_doesnt</source>
-        <translation>The recovery phrase doesn&apos;t match the previously existing wallet. Please retry with a different recovery phrase.</translation>
+        <translation>Fráze pro obnovení se neshoduje s dříve existující peněženkou. Zkuste to prosím znovu s jinou frází pro obnovení.</translation>
     </message>
     <message>
         <source>id_the_source_code_is_available_at</source>
@@ -3296,7 +3376,7 @@ Obnovte toto nastavení a znovu jej aktivujte.</translation>
     </message>
     <message>
         <source>id_this_wallet_operates_on_a_test</source>
-        <translation>This wallet operates on a test network. Anything you receive or send here has no value</translation>
+        <translation>Tato peněženka funguje v testovací síti. Cokoli, co zde obdržíte nebo odešlete, nemá žádnou hodnotu.</translation>
     </message>
     <message>
         <source>id_this_will_disable_pin_login_for</source>
@@ -3325,6 +3405,10 @@ Obnovte toto nastavení a znovu jej aktivujte.</translation>
     <message>
         <source>id_to_keep_you_in_control_of_your</source>
         <translation>Abyste si udrželi kontrolu nad svými prostředky, vyprší ochrana 2-Faktorové autentizace zhruba po %1 dnech od vaší poslední platby. Pokud nepřesunete prostředky dostatečně často, budete vyzváni k provedení transakce dvoufaktorové reaktivace.</translation>
+    </message>
+    <message>
+        <source>id_too_many_pin_attempts</source>
+        <translation>Příliš mnoho pokusů při zadání PINu</translation>
     </message>
     <message>
         <source>id_tor</source>
@@ -3424,11 +3508,11 @@ Obnovte toto nastavení a znovu jej aktivujte.</translation>
     </message>
     <message>
         <source>id_twofactor_authentication</source>
-        <translation>2-Faktorové potvrzení</translation>
+        <translation>Dvoufaktorové ověřování</translation>
     </message>
     <message>
         <source>id_twofactor_authentication_expiry</source>
-        <translation>Platnost 2-Faktorového potvrzení</translation>
+        <translation>Vypršení platnosti dvoufaktorového ověřování</translation>
     </message>
     <message>
         <source>id_twofactor_expiration_period</source>
@@ -3503,6 +3587,10 @@ Obnovte toto nastavení a znovu jej aktivujte.</translation>
         <translation>Odemykání mincí</translation>
     </message>
     <message>
+        <source>id_unstable_internet_connection</source>
+        <translation>Nestabilní připojení k internetu</translation>
+    </message>
+    <message>
         <source>id_update</source>
         <translation>Aktualizace</translation>
     </message>
@@ -3560,23 +3648,23 @@ Obnovte toto nastavení a znovu jej aktivujte.</translation>
     </message>
     <message>
         <source>id_verified</source>
-        <translation>Verified</translation>
+        <translation>Ověřeno</translation>
     </message>
     <message>
         <source>id_verify_on_device</source>
         <translation>Ověřit na zařízení</translation>
     </message>
     <message>
+        <source>id_verify_your_bitcoin</source>
+        <translation>Ověřit, zda jsou vaše bitcoinové transakce zahrnuty do blockchainu</translation>
+    </message>
+    <message>
         <source>id_verify_your_pin</source>
         <translation>Ověřte svůj PIN</translation>
     </message>
     <message>
-        <source>id_verify_your_transactions_are</source>
-        <translation>Ověřte, zda jsou vaše transakce zahrnuty do blockchainu</translation>
-    </message>
-    <message>
         <source>id_verifying_transactions</source>
-        <translation>Verifying transactions…</translation>
+        <translation>Ověřování transakcí...</translation>
     </message>
     <message>
         <source>id_version</source>
@@ -3595,6 +3683,10 @@ Obnovte toto nastavení a znovu jej aktivujte.</translation>
         <translation>Zobrazit v průzkumníku</translation>
     </message>
     <message>
+        <source>id_view_more</source>
+        <translation>Zobrazit více</translation>
+    </message>
+    <message>
         <source>id_visit_s_for_further_information</source>
         <translation>Navštivte %1 pro další informace o softwaru</translation>
     </message>
@@ -3605,6 +3697,10 @@ Obnovte toto nastavení a znovu jej aktivujte.</translation>
     <message>
         <source>id_waiting_for_transaction</source>
         <translation>Čekání na transakci…</translation>
+    </message>
+    <message>
+        <source>id_wallet</source>
+        <translation>Wallet</translation>
     </message>
     <message>
         <source>id_wallet_backup</source>
@@ -3775,6 +3871,10 @@ Obnovte toto nastavení a znovu jej aktivujte.</translation>
         <translation>Nelze vytvořit ani obnovit peněženku na %1, protože již máte peněženku chráněnou pomocí PIN.</translation>
     </message>
     <message>
+        <source>id_you_have_clicked_a_payment_uri</source>
+        <translation>Klikli jste na URI platby, vyberte peněženku, která ji bude zpracovávat.</translation>
+    </message>
+    <message>
         <source>id_you_have_control_on_your_funds</source>
         <translation>Máte kontrolu nad svými prostředky</translation>
     </message>
@@ -3789,6 +3889,10 @@ Obnovte toto nastavení a znovu jej aktivujte.</translation>
     <message>
         <source>id_you_have_successfully_changed</source>
         <translation>Úspěšně jste změnili svůj PIN</translation>
+    </message>
+    <message>
+        <source>id_you_have_to_authenticate_using</source>
+        <translation>Musíte se ověřit pomocí biometrických údajů.</translation>
     </message>
     <message>
         <source>id_you_have_tor_enabled_are_you</source>
@@ -3829,6 +3933,10 @@ Obnovte toto nastavení a znovu jej aktivujte.</translation>
     <message>
         <source>id_your_2fa_expires_so_that_if_you</source>
         <translation>Platnost vašeho 2FA vyprší, takže pokud ztratíte přístup ke své metodě 2FA nebo služba Blockstream Green nebude k dispozici, můžete své bitcoiny kdykoli obnovit pomocí tohoto nástroje s otevřeným zdrojovým kódem</translation>
+    </message>
+    <message>
+        <source>id_your_device_was_disconnected</source>
+        <translation>Vaše zařízení bylo odpojeno</translation>
     </message>
     <message>
         <source>id_your_favourite_exchange_rate_is</source>

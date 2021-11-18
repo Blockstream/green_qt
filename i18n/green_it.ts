@@ -136,6 +136,10 @@ Se questi consigli non sono di aiuto, o non possiedi una recovery phrase da 12, 
         <translation>Azione annullata</translation>
     </message>
     <message>
+        <source>id_actions</source>
+        <translation>Actions</translation>
+    </message>
+    <message>
         <source>id_add_a_note_only_you_can_see_it</source>
         <translation>Aggiungi una nota (solo tu puoi vederla).</translation>
     </message>
@@ -200,6 +204,10 @@ Se questi consigli non sono di aiuto, o non possiedi una recovery phrase da 12, 
         <translation>Address verified!</translation>
     </message>
     <message>
+        <source>id_address_was_filled_by_a_payment</source>
+        <translation>Address was filled by a Payment URI</translation>
+    </message>
+    <message>
         <source>id_addresses</source>
         <translation>Addresses</translation>
     </message>
@@ -218,6 +226,10 @@ Se questi consigli non sono di aiuto, o non possiedi una recovery phrase da 12, 
     <message>
         <source>id_all</source>
         <translation>Tutto</translation>
+    </message>
+    <message>
+        <source>id_all_assets</source>
+        <translation>All Assets</translation>
     </message>
     <message>
         <source>id_all_of_the_accounts_in_your</source>
@@ -300,12 +312,24 @@ Se questi consigli non sono di aiuto, o non possiedi una recovery phrase da 12, 
         <translation>Asset</translation>
     </message>
     <message>
+        <source>id_assets_cannot_be_used_on_bitcoin</source>
+        <translation>Assets cannot be used on Bitcoin</translation>
+    </message>
+    <message>
         <source>id_attempts_remaining_d</source>
         <translation>Tentativi rimasti: %1</translation>
     </message>
     <message>
         <source>id_authenticate_to_view_the</source>
         <translation>Autenticati per vedere la recovery phrase</translation>
+    </message>
+    <message>
+        <source>id_authentication_error_s</source>
+        <translation>Authentication error: %1</translation>
+    </message>
+    <message>
+        <source>id_authentication_failed</source>
+        <translation>Authentication failed</translation>
     </message>
     <message>
         <source>id_authenticator_app</source>
@@ -324,8 +348,16 @@ Se questi consigli non sono di aiuto, o non possiedi una recovery phrase da 12, 
         <translation>Timeout per auto logout</translation>
     </message>
     <message>
+        <source>id_auto_logout_timeout_expired</source>
+        <translation>Auto logout timeout expired</translation>
+    </message>
+    <message>
         <source>id_autolock_after</source>
         <translation>Autolock Dopo</translation>
+    </message>
+    <message>
+        <source>id_available</source>
+        <translation>Available</translation>
     </message>
     <message>
         <source>id_back</source>
@@ -358,6 +390,10 @@ Se questi consigli non sono di aiuto, o non possiedi una recovery phrase da 12, 
     <message>
         <source>id_biometric_login_is_enabled</source>
         <translation>Biometric Login is Enabled</translation>
+    </message>
+    <message>
+        <source>id_biometrics_authentication</source>
+        <translation>Biometrics Authentication</translation>
     </message>
     <message>
         <source>id_bip49_accounts_allow_you_to</source>
@@ -487,6 +523,10 @@ Facile e Sicuro</translation>
     <message>
         <source>id_changing_reference_exchange</source>
         <translation>Changing reference exchange rate will reset your 2FA threshold to 0. Remember to adjust the 2FA threshold after spending.</translation>
+    </message>
+    <message>
+        <source>id_check_for_updates</source>
+        <translation>Check for updates</translation>
     </message>
     <message>
         <source>id_check_for_updates_on_startup</source>
@@ -923,6 +963,10 @@ Facile e Sicuro</translation>
     <message>
         <source>id_deposit</source>
         <translation>Deposita</translation>
+    </message>
+    <message>
+        <source>id_details</source>
+        <translation>Details</translation>
     </message>
     <message>
         <source>id_device</source>
@@ -1614,8 +1658,16 @@ Recovery Phrase</translation>
         <translation>Importo non valido</translation>
     </message>
     <message>
+        <source>id_invalid_asset_id</source>
+        <translation>Invalid Asset ID</translation>
+    </message>
+    <message>
         <source>id_invalid_clipboard_contents</source>
         <translation>Invalid clipboard contents</translation>
+    </message>
+    <message>
+        <source>id_invalid_merkle_proof</source>
+        <translation>Invalid Merkle proof</translation>
     </message>
     <message>
         <source>id_invalid_mnemonic</source>
@@ -1780,6 +1832,10 @@ Recovery Phrase</translation>
     <message>
         <source>id_liquid_securities</source>
         <translation>Liquid Securities</translation>
+    </message>
+    <message>
+        <source>id_liquid_testnet_electrum_server</source>
+        <translation>Liquid Testnet Electrum Server</translation>
     </message>
     <message>
         <source>id_liquid_testnet_wallets</source>
@@ -1994,12 +2050,12 @@ Recovery Phrase</translation>
         <translation>More Options</translation>
     </message>
     <message>
-        <source>id_multiple_assets</source>
-        <translation>Asset Multipli</translation>
+        <source>id_multi_server_validation</source>
+        <translation>Multi Server Validation</translation>
     </message>
     <message>
-        <source>id_multiserver_validation</source>
-        <translation>Multi-server validation</translation>
+        <source>id_multiple_assets</source>
+        <translation>Asset Multipli</translation>
     </message>
     <message>
         <source>id_multisig_shield</source>
@@ -2102,6 +2158,10 @@ Recovery Phrase</translation>
         <translation>Nessun importo specificato</translation>
     </message>
     <message>
+        <source>id_no_asset_in_this_account</source>
+        <translation>No asset in this account</translation>
+    </message>
+    <message>
         <source>id_no_attempts_remaining</source>
         <translation>Nessun tentativo rimasto</translation>
     </message>
@@ -2170,6 +2230,10 @@ Recovery Phrase</translation>
         <translation>Not a valid word</translation>
     </message>
     <message>
+        <source>id_not_available_noradio_build</source>
+        <translation>Not available (No-radio build)</translation>
+    </message>
+    <message>
         <source>id_not_confidential</source>
         <translation>Not confidential</translation>
     </message>
@@ -2180,6 +2244,10 @@ Recovery Phrase</translation>
     <message>
         <source>id_not_initialized</source>
         <translation>Not initialized</translation>
+    </message>
+    <message>
+        <source>id_not_on_longest_chain</source>
+        <translation>Not on longest chain</translation>
     </message>
     <message>
         <source>id_notifications</source>
@@ -2306,6 +2374,10 @@ Recovery Phrase</translation>
         <translation>Permanently Block This Wallet</translation>
     </message>
     <message>
+        <source>id_personal_electrum_server</source>
+        <translation>Personal Electrum Server</translation>
+    </message>
+    <message>
         <source>id_pgp_key</source>
         <translation>Chiave PGP</translation>
     </message>
@@ -2430,6 +2502,10 @@ Recovery Phrase</translation>
         <translation>Connessione riservata</translation>
     </message>
     <message>
+        <source>id_private_key</source>
+        <translation>Private Key</translation>
+    </message>
+    <message>
         <source>id_problem_with_key_1s</source>
         <translation>Problema con il tasto %1</translation>
     </message>
@@ -2464,6 +2540,10 @@ Recovery Phrase</translation>
     <message>
         <source>id_radio_firmware</source>
         <translation>Radio firmware</translation>
+    </message>
+    <message>
+        <source>id_read_more</source>
+        <translation>Read more</translation>
     </message>
     <message>
         <source>id_read_more_at_our_s</source>
@@ -3327,6 +3407,10 @@ Reset questa impostazione e successivamente riattivala.</translation>
         <translation>Per mantenre controllo dei tuoi fondi, la protezione col Secondo Fattore d&apos;Autenticazione scade dopo circa %1 giorni dal tuo ultimo pagamento. Ti verrà proposto di fare una transazione di Riattivazione del Secondo Fattore se non muovi i fondi abbastanza spesso.</translation>
     </message>
     <message>
+        <source>id_too_many_pin_attempts</source>
+        <translation>Too many PIN attempts</translation>
+    </message>
+    <message>
         <source>id_tor</source>
         <translation>Tor</translation>
     </message>
@@ -3503,6 +3587,10 @@ Reset questa impostazione e successivamente riattivala.</translation>
         <translation>Unlocking coins</translation>
     </message>
     <message>
+        <source>id_unstable_internet_connection</source>
+        <translation>Unstable internet connection</translation>
+    </message>
+    <message>
         <source>id_update</source>
         <translation>Update</translation>
     </message>
@@ -3567,12 +3655,12 @@ Reset questa impostazione e successivamente riattivala.</translation>
         <translation>Verify on Device</translation>
     </message>
     <message>
-        <source>id_verify_your_pin</source>
-        <translation>Verifica il PIN</translation>
+        <source>id_verify_your_bitcoin</source>
+        <translation>Verify your bitcoin transactions are included on the blockchain</translation>
     </message>
     <message>
-        <source>id_verify_your_transactions_are</source>
-        <translation>Verify your transactions are included on the blockchain</translation>
+        <source>id_verify_your_pin</source>
+        <translation>Verifica il PIN</translation>
     </message>
     <message>
         <source>id_verifying_transactions</source>
@@ -3595,6 +3683,10 @@ Reset questa impostazione e successivamente riattivala.</translation>
         <translation>Vedi nell&apos;Explorer</translation>
     </message>
     <message>
+        <source>id_view_more</source>
+        <translation>View More</translation>
+    </message>
+    <message>
         <source>id_visit_s_for_further_information</source>
         <translation>Visita %1 per maggiori informazioni sul software</translation>
     </message>
@@ -3605,6 +3697,10 @@ Reset questa impostazione e successivamente riattivala.</translation>
     <message>
         <source>id_waiting_for_transaction</source>
         <translation>In attesa della transazione…</translation>
+    </message>
+    <message>
+        <source>id_wallet</source>
+        <translation>Wallet</translation>
     </message>
     <message>
         <source>id_wallet_backup</source>
@@ -3775,6 +3871,10 @@ Reset questa impostazione e successivamente riattivala.</translation>
         <translation>Non puoi creare o rigenerare un wallet  %1 poichè esiste già un wallet protetto da PIN.</translation>
     </message>
     <message>
+        <source>id_you_have_clicked_a_payment_uri</source>
+        <translation>You have clicked a Payment URI, select a wallet to handle it</translation>
+    </message>
+    <message>
         <source>id_you_have_control_on_your_funds</source>
         <translation>Hai tu il controllo dei tuoi fondi.</translation>
     </message>
@@ -3789,6 +3889,10 @@ Reset questa impostazione e successivamente riattivala.</translation>
     <message>
         <source>id_you_have_successfully_changed</source>
         <translation>You have successfully changed your PIN</translation>
+    </message>
+    <message>
+        <source>id_you_have_to_authenticate_using</source>
+        <translation>You have to Authenticate using biometrics</translation>
     </message>
     <message>
         <source>id_you_have_tor_enabled_are_you</source>
@@ -3829,6 +3933,10 @@ Reset questa impostazione e successivamente riattivala.</translation>
     <message>
         <source>id_your_2fa_expires_so_that_if_you</source>
         <translation>Your 2FA expires, so that if you lose access to your 2FA method, or the Blockstream Green service becomes unavailable, you can always recover your bitcoin using this open source tool</translation>
+    </message>
+    <message>
+        <source>id_your_device_was_disconnected</source>
+        <translation>Your device was disconnected</translation>
     </message>
     <message>
         <source>id_your_favourite_exchange_rate_is</source>

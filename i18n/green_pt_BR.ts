@@ -136,6 +136,10 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
         <translation>Ação cancelada</translation>
     </message>
     <message>
+        <source>id_actions</source>
+        <translation>Actions</translation>
+    </message>
+    <message>
         <source>id_add_a_note_only_you_can_see_it</source>
         <translation>Adicione uma nota (somente você pode ver).</translation>
     </message>
@@ -200,6 +204,10 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
         <translation>Endereço verificado!</translation>
     </message>
     <message>
+        <source>id_address_was_filled_by_a_payment</source>
+        <translation>Address was filled by a Payment URI</translation>
+    </message>
+    <message>
         <source>id_addresses</source>
         <translation>Endereços</translation>
     </message>
@@ -218,6 +226,10 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     <message>
         <source>id_all</source>
         <translation>Todos</translation>
+    </message>
+    <message>
+        <source>id_all_assets</source>
+        <translation>All Assets</translation>
     </message>
     <message>
         <source>id_all_of_the_accounts_in_your</source>
@@ -300,12 +312,24 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
         <translation>Ativos</translation>
     </message>
     <message>
+        <source>id_assets_cannot_be_used_on_bitcoin</source>
+        <translation>Assets cannot be used on Bitcoin</translation>
+    </message>
+    <message>
         <source>id_attempts_remaining_d</source>
         <translation>Tentativas restantes: %1</translation>
     </message>
     <message>
         <source>id_authenticate_to_view_the</source>
         <translation>Autentique para ver sua seed</translation>
+    </message>
+    <message>
+        <source>id_authentication_error_s</source>
+        <translation>Authentication error: %1</translation>
+    </message>
+    <message>
+        <source>id_authentication_failed</source>
+        <translation>Authentication failed</translation>
     </message>
     <message>
         <source>id_authenticator_app</source>
@@ -324,8 +348,16 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
         <translation>Tempo de espera para encerrar a sessão automaticamente</translation>
     </message>
     <message>
+        <source>id_auto_logout_timeout_expired</source>
+        <translation>Auto logout timeout expired</translation>
+    </message>
+    <message>
         <source>id_autolock_after</source>
         <translation>Bloquear após</translation>
+    </message>
+    <message>
+        <source>id_available</source>
+        <translation>Available</translation>
     </message>
     <message>
         <source>id_back</source>
@@ -358,6 +390,10 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     <message>
         <source>id_biometric_login_is_enabled</source>
         <translation>Acesso com biometria habilitado</translation>
+    </message>
+    <message>
+        <source>id_biometrics_authentication</source>
+        <translation>Biometrics Authentication</translation>
     </message>
     <message>
         <source>id_bip49_accounts_allow_you_to</source>
@@ -487,6 +523,10 @@ simples e segura</translation>
     <message>
         <source>id_changing_reference_exchange</source>
         <translation>Changing reference exchange rate will reset your 2FA threshold to 0. Remember to adjust the 2FA threshold after spending.</translation>
+    </message>
+    <message>
+        <source>id_check_for_updates</source>
+        <translation>Check for updates</translation>
     </message>
     <message>
         <source>id_check_for_updates_on_startup</source>
@@ -923,6 +963,10 @@ simples e segura</translation>
     <message>
         <source>id_deposit</source>
         <translation>Depósito</translation>
+    </message>
+    <message>
+        <source>id_details</source>
+        <translation>Details</translation>
     </message>
     <message>
         <source>id_device</source>
@@ -1614,8 +1658,16 @@ Recovery Phrase</translation>
         <translation>Quantidade inválida</translation>
     </message>
     <message>
+        <source>id_invalid_asset_id</source>
+        <translation>Invalid Asset ID</translation>
+    </message>
+    <message>
         <source>id_invalid_clipboard_contents</source>
         <translation>Invalid clipboard contents</translation>
+    </message>
+    <message>
+        <source>id_invalid_merkle_proof</source>
+        <translation>Invalid Merkle proof</translation>
     </message>
     <message>
         <source>id_invalid_mnemonic</source>
@@ -1780,6 +1832,10 @@ Recovery Phrase</translation>
     <message>
         <source>id_liquid_securities</source>
         <translation>Valores Mobiliários</translation>
+    </message>
+    <message>
+        <source>id_liquid_testnet_electrum_server</source>
+        <translation>Liquid Testnet Electrum Server</translation>
     </message>
     <message>
         <source>id_liquid_testnet_wallets</source>
@@ -1994,12 +2050,12 @@ Recovery Phrase</translation>
         <translation>Mais opções</translation>
     </message>
     <message>
-        <source>id_multiple_assets</source>
-        <translation>Vários ativos</translation>
+        <source>id_multi_server_validation</source>
+        <translation>Multi Server Validation</translation>
     </message>
     <message>
-        <source>id_multiserver_validation</source>
-        <translation>Multi-server validation</translation>
+        <source>id_multiple_assets</source>
+        <translation>Vários ativos</translation>
     </message>
     <message>
         <source>id_multisig_shield</source>
@@ -2102,6 +2158,10 @@ Recovery Phrase</translation>
         <translation>Quantidade não especificada</translation>
     </message>
     <message>
+        <source>id_no_asset_in_this_account</source>
+        <translation>No asset in this account</translation>
+    </message>
+    <message>
         <source>id_no_attempts_remaining</source>
         <translation>Sem tentativas restantes</translation>
     </message>
@@ -2170,6 +2230,10 @@ Recovery Phrase</translation>
         <translation>Not a valid word</translation>
     </message>
     <message>
+        <source>id_not_available_noradio_build</source>
+        <translation>Not available (No-radio build)</translation>
+    </message>
+    <message>
         <source>id_not_confidential</source>
         <translation>Não confidencial</translation>
     </message>
@@ -2180,6 +2244,10 @@ Recovery Phrase</translation>
     <message>
         <source>id_not_initialized</source>
         <translation>Não inicializado</translation>
+    </message>
+    <message>
+        <source>id_not_on_longest_chain</source>
+        <translation>Not on longest chain</translation>
     </message>
     <message>
         <source>id_notifications</source>
@@ -2306,6 +2374,10 @@ Recovery Phrase</translation>
         <translation>Bloquear permanentemente esta carteira</translation>
     </message>
     <message>
+        <source>id_personal_electrum_server</source>
+        <translation>Personal Electrum Server</translation>
+    </message>
+    <message>
         <source>id_pgp_key</source>
         <translation>Chave PGP</translation>
     </message>
@@ -2430,6 +2502,10 @@ Recovery Phrase</translation>
         <translation>Privado, mas conexão instável</translation>
     </message>
     <message>
+        <source>id_private_key</source>
+        <translation>Private Key</translation>
+    </message>
+    <message>
         <source>id_problem_with_key_1s</source>
         <translation>Problema com a chave %1</translation>
     </message>
@@ -2464,6 +2540,10 @@ Recovery Phrase</translation>
     <message>
         <source>id_radio_firmware</source>
         <translation>Radio firmware</translation>
+    </message>
+    <message>
+        <source>id_read_more</source>
+        <translation>Read more</translation>
     </message>
     <message>
         <source>id_read_more_at_our_s</source>
@@ -3327,6 +3407,10 @@ Redefina essa configuração e depois a reative.</translation>
         <translation>Para garantir que você tenha o controle dos fundos, a proteção de autenticação de dois fatores expira após um período aproximado de %1 após seu último pagamento. Se você não realizar transações com frequência, será solicitado que você faça uma transação de reativação de Fator Duplo.</translation>
     </message>
     <message>
+        <source>id_too_many_pin_attempts</source>
+        <translation>Too many PIN attempts</translation>
+    </message>
+    <message>
         <source>id_tor</source>
         <translation>Tor</translation>
     </message>
@@ -3503,6 +3587,10 @@ Redefina essa configuração e depois a reative.</translation>
         <translation>Unlocking coins</translation>
     </message>
     <message>
+        <source>id_unstable_internet_connection</source>
+        <translation>Unstable internet connection</translation>
+    </message>
+    <message>
         <source>id_update</source>
         <translation>Atualizar</translation>
     </message>
@@ -3567,12 +3655,12 @@ Redefina essa configuração e depois a reative.</translation>
         <translation>Verify on Device</translation>
     </message>
     <message>
-        <source>id_verify_your_pin</source>
-        <translation>Verifique seu PIN</translation>
+        <source>id_verify_your_bitcoin</source>
+        <translation>Verify your bitcoin transactions are included on the blockchain</translation>
     </message>
     <message>
-        <source>id_verify_your_transactions_are</source>
-        <translation>Verify your transactions are included on the blockchain</translation>
+        <source>id_verify_your_pin</source>
+        <translation>Verifique seu PIN</translation>
     </message>
     <message>
         <source>id_verifying_transactions</source>
@@ -3595,6 +3683,10 @@ Redefina essa configuração e depois a reative.</translation>
         <translation>Ver no Explorer</translation>
     </message>
     <message>
+        <source>id_view_more</source>
+        <translation>View More</translation>
+    </message>
+    <message>
         <source>id_visit_s_for_further_information</source>
         <translation>Acesse %1 para obter mais informações sobre o software </translation>
     </message>
@@ -3605,6 +3697,10 @@ Redefina essa configuração e depois a reative.</translation>
     <message>
         <source>id_waiting_for_transaction</source>
         <translation>Aguardando transação…</translation>
+    </message>
+    <message>
+        <source>id_wallet</source>
+        <translation>Wallet</translation>
     </message>
     <message>
         <source>id_wallet_backup</source>
@@ -3775,12 +3871,16 @@ Redefina essa configuração e depois a reative.</translation>
         <translation>Você não pode criar ou restaurar uma carteira na %1 porque você já tem uma carteira protegida com PIN.</translation>
     </message>
     <message>
+        <source>id_you_have_clicked_a_payment_uri</source>
+        <translation>You have clicked a Payment URI, select a wallet to handle it</translation>
+    </message>
+    <message>
         <source>id_you_have_control_on_your_funds</source>
         <translation>Você tem controle sobre seus fundos</translation>
     </message>
     <message>
         <source>id_you_have_no_coins_to_send</source>
-        <translation>You have no coins to send. Generate an address to receive some bitcoins.</translation>
+        <translation>Esta conta está vazia. Clique em receber para gerar um endereço bitcoin.</translation>
     </message>
     <message>
         <source>id_you_have_received_s</source>
@@ -3789,6 +3889,10 @@ Redefina essa configuração e depois a reative.</translation>
     <message>
         <source>id_you_have_successfully_changed</source>
         <translation>Você alterou com sucesso seu PIN</translation>
+    </message>
+    <message>
+        <source>id_you_have_to_authenticate_using</source>
+        <translation>You have to Authenticate using biometrics</translation>
     </message>
     <message>
         <source>id_you_have_tor_enabled_are_you</source>
@@ -3829,6 +3933,10 @@ Redefina essa configuração e depois a reative.</translation>
     <message>
         <source>id_your_2fa_expires_so_that_if_you</source>
         <translation>A proteção 2FA expira para permitir você recuperar seus fundos mesmo que o serviço da Blockstream Green fique indisponível ou você perca o acesso ao seus métodos de autenticação. Você sempre pode recuperar seus bitcoins usando a ferramenta de recuperação</translation>
+    </message>
+    <message>
+        <source>id_your_device_was_disconnected</source>
+        <translation>Your device was disconnected</translation>
     </message>
     <message>
         <source>id_your_favourite_exchange_rate_is</source>
