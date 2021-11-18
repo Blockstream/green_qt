@@ -336,7 +336,7 @@ ControllerDialog {
                     error: dialog.controller.errors.name
                 }
                 FixedErrorBadge {
-                    error: dialog.controller.errors.name
+                    error: xPubError(dialog.controller.errors.recoveryXpub)
                 }
             }
         }

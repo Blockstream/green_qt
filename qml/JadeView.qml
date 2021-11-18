@@ -237,7 +237,7 @@ MainPage {
                         case JadeDevice.StateTemporary:
                             return qsTrId('id_login')
                         case JadeDevice.StateLocked:
-                            return qsTrId('id_unlock_and_login')
+                            return qsTrId('id_unlock')
                         default:
                             return qsTrId('id_setup_jade')
                     }
@@ -328,7 +328,7 @@ MainPage {
                         text: qsTrId('Bluetooth')
                     }
                     Label {
-                        text: device.versionInfo.JADE_CONFIG === 'NORADIO' ? qsTrId('id_not_supported') : qsTrId('id_supported')
+                        text: device.versionInfo.JADE_CONFIG === 'NORADIO' ? qsTrId('id_not_available_noradio_build') : qsTrId('id_available')
                     }
                     Label {
                         text: qsTrId('id_update')

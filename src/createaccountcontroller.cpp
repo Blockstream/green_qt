@@ -16,7 +16,7 @@ void CreateAccountController::setName(const QString& name)
     if (m_name == name) return;
     m_name = name;
     emit nameChanged(m_name);
-    updateError("name", QString{"is_empty"}, m_name.isEmpty());
+    updateError("name", QString{"empty"}, m_name.isEmpty());
 }
 
 void CreateAccountController::setType(const QString& type)
