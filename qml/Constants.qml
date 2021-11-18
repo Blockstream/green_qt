@@ -37,6 +37,7 @@ QtObject {
     property int p5: 48
 
     // spacings
+    property int s0: 4
     property int s1: 12
     property int s2: 24
 

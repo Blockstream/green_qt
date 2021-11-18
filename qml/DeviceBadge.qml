@@ -10,9 +10,9 @@ Pane {
     readonly property bool connected: !!device
     readonly property var _details: device ? device.details : details
     background: null
-    padding: 0
+    padding: 4
     contentItem: RowLayout {
-        spacing: 4
+        spacing: 8
         Rectangle {
             height: radius * 2
             width: radius * 2

@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Wallet status bar
 - Supports creating and restoring Singlesig wallets on Liquid testnet
 - Manual coin selection in Singlesig wallets
 

@@ -35,19 +35,12 @@ MainPageHeader {
             leftPadding: -8
             focusPolicy: Qt.ClickFocus
             contentItem: RowLayout {
-                spacing: 8
+                spacing: 0
                 Control {
-                    id: wallet_pill
                     padding: 2
                     rightPadding: 16
                     leftPadding: 8
-                    background: Rectangle {
-                        color: constants.c700
-                        radius: height / 2
-                        border.width: 1
-                        border.color: constants.c600
-                        visible: wallet_pill.hovered
-                    }
+                    background: null
                     contentItem: RowLayout {
                         spacing: 8
                         Image {
@@ -81,33 +74,6 @@ MainPageHeader {
                                 font.styleName: 'Medium'
                             }
                         }
-                        Image {
-                            fillMode: Image.PreserveAspectFit
-                            sourceSize.height: 24
-                            sourceSize.width: 24
-                            source: wallet.network.electrum ? 'qrc:/svg/key.svg' : 'qrc:/svg/multi-sig.svg'
-                        }
-                        Loader {
-                            active: 'type' in wallet.deviceDetails
-                            visible: active
-                            sourceComponent: DeviceBadge {
-                                device: wallet.device
-                                details: wallet.deviceDetails
-                                background: MouseArea {
-                                    enabled: wallet.device
-                                    anchors.fill: parent
-                                    cursorShape: Qt.PointingHandCursor
-                                    onClicked: {
-                                        const device = wallet.device
-                                        if (device.type === Device.BlockstreamJade) {
-                                            navigation.go(`/jade/${device.uuid}`)
-                                        } else if (device.vendor === Device.Ledger) {
-                                            navigation.go(`/ledger/${device.uuid}`)
-                                        }
-                                    }
-                                }
-                            }
-                        }
                     }
                 }
                 Image {
@@ -117,17 +83,10 @@ MainPageHeader {
                     source: 'qrc:/svg/right.svg'
                 }
                 Control {
-                    id: account_pill
                     padding: 2
                     rightPadding: account_type_badge.visible ? 24 : 16
                     leftPadding: 16
-                    background: Rectangle {
-                        color: constants.c700
-                        radius: height / 2
-                        border.width: 1
-                        border.color: constants.c600
-                        visible: account_pill.hovered
-                    }
+                    background: null
                     contentItem: RowLayout {
                         spacing: account_type_badge.visible ? 8 : 0
                         Loader {
@@ -166,75 +125,33 @@ MainPageHeader {
                 }
                 HSpacer {
                 }
-                Loader {
-                    property string unit: {
-                        const unit = wallet.settings.unit.toLowerCase()
-                        return unit === '\u00B5btc' ? 'ubtc' : unit
+                RowLayout {
+                    Layout.fillWidth: false
+                    spacing: constants.s1
+                    ToolButton {
+                        visible: (wallet.events && !!wallet.events.twofactor_reset && wallet.events.twofactor_reset.is_active) || !fiatRateAvailable
+                        icon.source: 'qrc:/svg/notifications_2.svg'
+                        icon.color: 'transparent'
+                        icon.width: 16
+                        icon.height: 16
+                        onClicked: notifications_drawer.open()
                     }
-
-                    property var amount: {
-                        const ticker = wallet.events.ticker
-                        const pricing = wallet.settings.pricing;
-                        for (let value = 1; ; value = value * 10) {
-                            const data = { [unit]: String(value) }
-                            const result = wallet.convert(data);
-                            if (!result.fiat || Number(result.fiat) >= 1) return result
-                        }
+                    ToolButton {
+                        icon.source: 'qrc:/svg/gearFill.svg'
+                        flat: true
+                        action: self.settingsAction
+                        ToolTip.text: qsTrId('id_settings')
+                        ToolTip.delay: 300
+                        ToolTip.visible: hovered
                     }
-                    active: Settings.enableExperimental && amount.fiat
-                    sourceComponent: Control {
-                        background: Rectangle {
-                            color: constants.c700
-                            radius: height / 2
-                        }
-                        padding: 8
-                        contentItem: RowLayout {
-                            spacing: 8
-                            Image {
-                                fillMode: Image.PreserveAspectFit
-                                Layout.maximumHeight: 24
-                                Layout.maximumWidth: 24
-                                mipmap: true
-                                source: {
-                                    if (wallet.network.liquid) {
-                                        return wallet.getOrCreateAsset(wallet.network.policyAsset).icon
-                                    } else {
-                                        return icons[self.wallet.network.key]
-                                    }
-                                }
-                            }
-                            Label {
-                                font.pixelSize: 14
-                                font.styleName: 'Medium'
-                                color: 'white'
-                                text: `${Number(amount[unit])} ${wallet.displayUnit} ≈ ${amount.fiat} ${wallet.network.mainnet ? amount.fiat_currency : 'FIAT'}`
-                            }
-                        }
+                    ToolButton {
+                        icon.source: 'qrc:/svg/logout.svg'
+                        flat: true
+                        action: self.disconnectAction
+                        ToolTip.text: 'Logout'
+                        ToolTip.delay: 300
+                        ToolTip.visible: hovered
                     }
-                }
-                ToolButton {
-                    visible: (wallet.events && !!wallet.events.twofactor_reset && wallet.events.twofactor_reset.is_active) || !fiatRateAvailable
-                    icon.source: 'qrc:/svg/notifications_2.svg'
-                    icon.color: 'transparent'
-                    icon.width: 16
-                    icon.height: 16
-                    onClicked: notifications_drawer.open()
-                }
-                ToolButton {
-                    icon.source: 'qrc:/svg/gearFill.svg'
-                    flat: true
-                    action: self.settingsAction
-                    ToolTip.text: qsTrId('id_settings')
-                    ToolTip.delay: 300
-                    ToolTip.visible: hovered
-                }
-                ToolButton {
-                    icon.source: 'qrc:/svg/logout.svg'
-                    flat: true
-                    action: self.disconnectAction
-                    ToolTip.text: 'Logout'
-                    ToolTip.delay: 300
-                    ToolTip.visible: hovered
                 }
             }
         }

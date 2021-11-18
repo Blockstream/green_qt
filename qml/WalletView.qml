@@ -99,6 +99,9 @@ MainPage {
         wallet: self.wallet
         onViewSelected: stack_view.currentItem.currentView = viewIndex
     }
+    footer: WalletViewFooter {
+        wallet: self.wallet
+    }
 
     Drawer {
         id: notifications_drawer
@@ -198,6 +201,7 @@ MainPage {
                 anchors.fill: parent
                 anchors.leftMargin: constants.p3
                 anchors.topMargin: constants.p3
+                anchors.bottomMargin: constants.p3
                 wallet: self.wallet
                 onClicked: switchToAccount(currentAccount)
                 onCurrentAccountChanged: switchToAccount(currentAccount)
@@ -213,6 +217,7 @@ MainPage {
                 anchors.fill: parent
                 anchors.rightMargin: constants.p3
                 anchors.topMargin: constants.p3
+                anchors.bottomMargin: constants.p3
                 focusPolicy: Qt.ClickFocus
                 initialItem: Item {}
                 clip: true
