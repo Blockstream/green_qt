@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Manual coin selection in Singlesig wallets
 
 ### Changed
-- Update GDK to 0.0.47
+- Update GDK to 0.0.47.post1
 - Set minimum width for dialog titles
 - Automatically retry PIN on Jade after wrong attempt
 - Add small delay after entering a 2FA code
