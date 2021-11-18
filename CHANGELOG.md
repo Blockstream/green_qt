@@ -6,20 +6,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
-- Wallet status bar
-- Supports creating and restoring Singlesig wallets on Liquid testnet
-- Manual coin selection in Singlesig wallets
 
 ### Changed
-- Update GDK to 0.0.47.post1
-- Set minimum width for dialog titles
-- Automatically retry PIN on Jade after wrong attempt
-- Add small delay after entering a 2FA code
 
 ### Fixed
-- Closing dialogs takes the application to previous state
-- Fix unblinded link for Liquid transaction on Singlesig wallets
-- Fix detecting jade after being idle
+
+## [1.0.4] - 2021-11-19
+### Added
+- Support for send to bech32m addresses, available 144 blocks after Taproot activation
+- Creation and restore of singlesig wallets on Liquid testnet
+- Manual coin selection for singlesig bitcoin wallets
+- Wallet status bar
+
+### Changed
+- Updates GDK to 0.0.47.post1
+- Automatically prompts for PIN on Jade again after a wrong attempt
+- Detects and handles when Jade goes idle
+
+### Fixed
+- Closing dialogs takes the application to the original context
+- URL with unblinding data for Liquid transactions on singlesig wallets
+- Minimum width for titles in dialogs
 
 ## [1.0.3] - 2021-10-27
 ### Added
