@@ -12,6 +12,23 @@ ItemDelegate {
     required property var transaction
     property var tx: transaction.data
     property int confirmations: transactionConfirmations(transaction)
+    readonly property var spv: {
+        const liquid = transaction.account.wallet.network.liquid
+        const unconfirmed = (liquid && confirmations < 2) || (!liquid && confirmations < 6)
+        if (unconfirmed) return null
+        switch (transaction.spv) {
+        case Transaction.Disabled:
+        case Transaction.Unconfirmed:
+        case Transaction.Verified:
+            return null
+        case Transaction.NotVerified:
+            return { icon: 'qrc:/svg/tx-spv-not-verified.svg', text: qsTrId('id_invalid_merkle_proof') }
+        case Transaction.NotLongest:
+            return { icon: 'qrc:/svg/tx-spv-not-longest.svg', text: qsTrId('id_not_on_longest_chain') }
+        case Transaction.InProgress:
+            return { icon: 'qrc:/svg/tx-spv-in-progress.svg', text: qsTrId('id_verifying_transactions') }
+        }
+    }
 
     focusPolicy: Qt.ClickFocus
     hoverEnabled: true
@@ -62,10 +79,13 @@ ItemDelegate {
         }
         Label {
             Layout.fillWidth: true
+            Layout.maximumWidth: self.width / 2
             font.pixelSize: 16
             font.styleName: 'Medium'
             text: txType(tx)
             elide: Label.ElideRight
+        }
+        HSpacer {
         }
         Label {
             Layout.alignment: Qt.AlignRight
@@ -84,9 +104,24 @@ ItemDelegate {
                 color: confirmations === 0 ? '#d2934a' : '#474747'
             }
         }
+        Loader {
+            active: spv
+            visible: active
+            sourceComponent: Image {
+                smooth: true
+                mipmap: true
+                fillMode: Image.PreserveAspectFit
+                horizontalAlignment: Image.AlignHCenter
+                source: spv.icon
+                sourceSize.height: 24
+            }
+        }
         Label {
+            Layout.fillWidth: true
+            Layout.maximumWidth: Math.max(contentWidth, self.width / 5)
+            Layout.minimumWidth: contentWidth
             color: tx.type === 'incoming' ? '#00b45a' : 'white'
-            Layout.alignment: Qt.AlignRight
+            horizontalAlignment: Qt.AlignRight
             font.pixelSize: 16
             font.styleName: 'Medium'
             text: {

@@ -44,5 +44,9 @@
         <file>svg/right.svg</file>
         <file>svg/electrum.svg</file>
         <file>svg/tx-check.svg</file>
+        <file>svg/tx-spv-in-progress.svg</file>
+        <file>svg/tx-spv-not-verified.svg</file>
+        <file>svg/tx-spv-not-longest.svg</file>
+        <file>svg/tx-spv-verified.svg</file>
     </qresource>
 </RCC>
