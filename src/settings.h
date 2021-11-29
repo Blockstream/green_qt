@@ -25,6 +25,12 @@ class Settings : public QObject
     Q_PROPERTY(QString language READ language WRITE setLanguage NOTIFY languageChanged)
     Q_PROPERTY(bool showNews READ showNews WRITE setShowNews NOTIFY showNewsChanged)
     Q_PROPERTY(bool enableExperimental READ enableExperimental WRITE setEnableExperimental NOTIFY enableExperimentalChanged)
+    Q_PROPERTY(bool usePersonalNode READ usePersonalNode WRITE setUsePersonalNode NOTIFY usePersonalNodeChanged)
+    Q_PROPERTY(QString bitcoinElectrumUrl READ bitcoinElectrumUrl WRITE setBitcoinElectrumUrl NOTIFY bitcoinElectrumUrlChanged)
+    Q_PROPERTY(QString testnetElectrumUrl READ testnetElectrumUrl WRITE setTestnetElectrumUrl NOTIFY testnetElectrumUrlChanged)
+    Q_PROPERTY(QString liquidElectrumUrl READ liquidElectrumUrl WRITE setLiquidElectrumUrl NOTIFY liquidElectrumUrlChanged)
+    Q_PROPERTY(QString liquidTestnetElectrumUrl READ liquidTestnetElectrumUrl WRITE setLiquidTestnetElectrumUrl NOTIFY liquidTestnetElectrumUrlChanged)
+    Q_PROPERTY(bool enableSPV READ enableSPV WRITE setEnableSPV NOTIFY enableSPVChanged)
 public:
     Settings(QObject* parent = nullptr);
     virtual ~Settings();
@@ -61,6 +67,18 @@ public:
     void setShowNews(bool show_news);
     bool enableExperimental() const { return m_enable_experimental; }
     void setEnableExperimental(bool enable_experimental);
+    bool usePersonalNode() const { return m_use_personal_node; }
+    void setUsePersonalNode(bool use_personal_node);
+    QString bitcoinElectrumUrl() const { return m_bitcoin_electrum_url; }
+    void setBitcoinElectrumUrl(const QString& bitcoin_electrum_url);
+    QString testnetElectrumUrl() const { return m_testnet_electrum_url; }
+    void setTestnetElectrumUrl(const QString& testnet_electrum_url);
+    QString liquidElectrumUrl() const { return m_liquid_electrum_url; }
+    void setLiquidElectrumUrl(const QString& liquid_electrum_url);
+    QString liquidTestnetElectrumUrl() const { return m_liquid_testnet_electrum_url; }
+    void setLiquidTestnetElectrumUrl(const QString& liquid_testnet_electrum_url);
+    bool enableSPV() const { return m_enable_spv; }
+    void setEnableSPV(bool enable_spv);
 public slots:
     void updateRecentWallet(const QString& id);
 signals:
@@ -80,6 +98,12 @@ signals:
     void languageChanged(const QString& language);
     void showNewsChanged(bool show_news);
     void enableExperimentalChanged(bool enable_experimental);
+    void usePersonalNodeChanged(bool use_personal_node);
+    void bitcoinElectrumUrlChanged(const QString& bitcoin_electrum_url);
+    void testnetElectrumUrlChanged(const QString& tesnet_electrum_url);
+    void liquidElectrumUrlChanged(const QString& liquid_electrum_url);
+    void liquidTestnetElectrumUrlChanged(const QString& liquid_testnet_electrum_url);
+    void enableSPVChanged(bool enable_spv);
 private:
     void load();
     void load(const QSettings& settings);
@@ -105,6 +129,12 @@ private:
     QString m_language;
     bool m_show_news{true};
     bool m_enable_experimental{false};
+    bool m_use_personal_node{false};
+    QString m_bitcoin_electrum_url;
+    QString m_testnet_electrum_url;
+    QString m_liquid_electrum_url;
+    QString m_liquid_testnet_electrum_url;
+    bool m_enable_spv{false};
 };
 
 #endif // GREEN_SETTINGS_H

@@ -139,12 +139,60 @@ void Settings::setEnableExperimental(bool enable_experimental)
     saveLater();
 }
 
+void Settings::setLiquidElectrumUrl(const QString &liquid_electrum_url)
+{
+    if (m_liquid_electrum_url == liquid_electrum_url) return;
+    m_liquid_electrum_url = liquid_electrum_url;
+    emit liquidElectrumUrlChanged(m_liquid_electrum_url);
+    saveLater();
+}
+
+void Settings::setLiquidTestnetElectrumUrl(const QString &liquid_testnet_electrum_url)
+{
+    if (m_liquid_testnet_electrum_url == liquid_testnet_electrum_url) return;
+    m_liquid_testnet_electrum_url = liquid_testnet_electrum_url;
+    emit liquidTestnetElectrumUrlChanged(m_liquid_testnet_electrum_url);
+    saveLater();
+}
+
 void Settings::updateRecentWallet(const QString& id)
 {
     m_recent_wallets.removeOne(id);
     m_recent_wallets.prepend(id);
     if (m_recent_wallets.size() > 10) m_recent_wallets.removeLast();
     emit recentWalletsChanged(m_recent_wallets);
+    saveLater();
+}
+
+void Settings::setUsePersonalNode(bool use_personal_node)
+{
+    if (m_use_personal_node == use_personal_node) return;
+    m_use_personal_node = use_personal_node;
+    emit usePersonalNodeChanged(m_use_personal_node);
+    saveLater();
+}
+
+void Settings::setBitcoinElectrumUrl(const QString& bitcoin_electrum_url)
+{
+    if (m_bitcoin_electrum_url == bitcoin_electrum_url) return;
+    m_bitcoin_electrum_url = bitcoin_electrum_url;
+    emit bitcoinElectrumUrlChanged(m_bitcoin_electrum_url);
+    saveLater();
+}
+
+void Settings::setTestnetElectrumUrl(const QString& testnet_electrum_url)
+{
+    if (m_testnet_electrum_url == testnet_electrum_url) return;
+    m_testnet_electrum_url = testnet_electrum_url;
+    emit testnetElectrumUrlChanged(m_testnet_electrum_url);
+    saveLater();
+}
+
+void Settings::setEnableSPV(bool enable_spv)
+{
+    if (m_enable_spv == enable_spv) return;
+    m_enable_spv = enable_spv;
+    emit enableSPVChanged(m_enable_spv);
     saveLater();
 }
 
@@ -218,6 +266,12 @@ void Settings::load(const QSettings& settings)
     LOAD(m_check_for_updates)
     LOAD(m_show_news)
     LOAD(m_enable_experimental)
+    LOAD(m_use_personal_node)
+    LOAD(m_bitcoin_electrum_url)
+    LOAD(m_testnet_electrum_url)
+    LOAD(m_liquid_electrum_url)
+    LOAD(m_liquid_testnet_electrum_url)
+    LOAD(m_enable_spv)
 #undef LOAD
 }
 
@@ -248,6 +302,12 @@ void Settings::saveNow()
     SAVE(m_check_for_updates)
     SAVE(m_show_news)
     SAVE(m_enable_experimental)
+    SAVE(m_use_personal_node)
+    SAVE(m_bitcoin_electrum_url)
+    SAVE(m_testnet_electrum_url)
+    SAVE(m_liquid_electrum_url)
+    SAVE(m_liquid_testnet_electrum_url)
+    SAVE(m_enable_spv)
 #undef SAVE
 }
 
