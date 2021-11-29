@@ -8,6 +8,21 @@
 #include "wallet.h"
 #include <gdk.h>
 
+namespace  {
+
+Transaction::SPVStatus ParseSVPStatus(const QString& spv_status)
+{
+    if (spv_status == QStringLiteral("unconfirmed")) return Transaction::SPVStatus::Unconfirmed;
+    if (spv_status == QStringLiteral("in_progress")) return Transaction::SPVStatus::InProgress;
+    if (spv_status == QStringLiteral("verified")) return Transaction::SPVStatus::Verified;
+    if (spv_status == QStringLiteral("not_verified")) return Transaction::SPVStatus::NotVerified;
+    if (spv_status == QStringLiteral("not_longest")) return Transaction::SPVStatus::NotLongest;
+    if (spv_status == QStringLiteral("disabled")) return Transaction::SPVStatus::Disabled;
+    Q_UNREACHABLE();
+}
+
+} // namespace
+
 TransactionAmount::TransactionAmount(Transaction *transaction, qint64 amount)
     : TransactionAmount(transaction, nullptr, amount)
 {
@@ -77,6 +92,7 @@ void Transaction::updateFromData(const QJsonObject& data)
     emit dataChanged(m_data);
 
     setMemo(m_data.value("memo").toString());
+    setSpvStatus(ParseSVPStatus(m_data.value("spv_verified").toString()));
 
     // Amounts are one time set
     const auto satoshi = m_data.value("satoshi").toObject();
@@ -167,4 +183,11 @@ void Transaction::setMemo(const QString& memo)
     if (m_memo == memo) return;
     m_memo = memo;
     emit memoChanged(m_memo);
+}
+
+void Transaction::setSpvStatus(Transaction::SPVStatus spv_status)
+{
+    if (m_spv_status == spv_status) return;
+    m_spv_status = spv_status;
+    emit spvStatusChanged(m_spv_status);
 }
