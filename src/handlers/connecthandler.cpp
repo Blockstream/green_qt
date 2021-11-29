@@ -8,25 +8,25 @@
 #include <QtConcurrentRun>
 
 namespace {
-    QJsonObject get_params(Network* network, const QString& proxy, bool use_tor)
+    QJsonObject get_params(Session* session)
     {
+        const auto network = session->network();
         const auto log_level = QString::fromLocal8Bit(qgetenv("GREEN_GDK_LOG_LEVEL"));
-        QJsonObject params = {
+        const QString user_agent = QString("green_qt_%1").arg(QT_STRINGIFY(VERSION));
+        QJsonObject params{
             { "name", network->id() },
             { "log_level", log_level.isEmpty() ? "info" : log_level },
-            { "use_tor", network->isElectrum() ? false : use_tor },
-            { "user_agent", QString("green_qt_%1").arg(QT_STRINGIFY(VERSION)) }
+            { "use_tor", network->isElectrum() ? false : session->useTor() },
+            { "user_agent", user_agent }
         };
-        if (!proxy.isEmpty()) params.insert("proxy", proxy);
+        if (!session->proxy().isEmpty()) params.insert("proxy", session->proxy());
         return params;
     }
 } // namespace
 
-ConnectHandler::ConnectHandler(Session* session, Network* network, const QString& proxy, bool use_tor)
+ConnectHandler::ConnectHandler(Session* session)
     : QFutureWatcher<int>(session)
     , m_session(session)
-    , m_network(network)
-    , m_params(get_params(network, proxy, use_tor))
 {
 }
 
@@ -37,13 +37,11 @@ ConnectHandler::~ConnectHandler()
 
 void ConnectHandler::exec()
 {
-    qDebug() << Q_FUNC_INFO << this;
     attempts ++;
     setFuture(QtConcurrent::run([this] {
+        auto params = get_params(m_session);
         auto session = m_session->m_session;
-        auto params = Json::fromObject(m_params);
-        int err = GA_connect(session, params.get());
-        qDebug() << this << "GA_connect" << err;
+        int err = GA_connect(session, Json::fromObject(params).get());
         if (err != GA_OK) {
             GA_disconnect(session);
             return err;

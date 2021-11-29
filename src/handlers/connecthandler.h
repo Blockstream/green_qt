@@ -14,14 +14,12 @@ class ConnectHandler : public QFutureWatcher<int>
 {
     Q_OBJECT
 public:
-    ConnectHandler(Session* session, Network* network, const QString& proxy, bool use_tor);
+    ConnectHandler(Session* session);
     virtual ~ConnectHandler();
     void exec();
     int attempts{0};
 private:
     Session* const m_session;
-    Network* const m_network;
-    const QJsonObject m_params;
 };
 
 #endif // GREEN_CONNECTHANDLER_H

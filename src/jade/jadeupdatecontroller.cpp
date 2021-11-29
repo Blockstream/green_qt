@@ -171,12 +171,12 @@ void JadeUpdateController::check()
     if (!m_device) return;
 
     if (!m_session) {
-        m_session = new Session(this);
+        auto network = NetworkManager::instance()->network("mainnet");
+        m_session = new Session(network, this);
 
         connect(m_session, &Session::connectedChanged, this, &JadeUpdateController::check);
         connect(m_session, &Session::activityCreated, this, &JadeUpdateController::activityCreated);
 
-        m_session->setNetwork(NetworkManager::instance()->network("mainnet"));
         m_session->setActive(true);
 
         emit sessionChanged(m_session);

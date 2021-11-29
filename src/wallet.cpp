@@ -611,8 +611,7 @@ Account* Wallet::getOrCreateAccount(const QJsonObject& data)
 
 void Wallet::createSession()
 {
-    auto session = new Session(this);
-    session->setNetwork(m_network);
+    auto session = new Session(m_network, this);
     setSession(session);
 }
 

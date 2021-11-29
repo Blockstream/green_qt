@@ -13,8 +13,7 @@ void AppUpdateController::checkForUpdates()
 {
     if (!m_session) {
         auto network = NetworkManager::instance()->network("mainnet");
-        m_session = new Session(this);
-        m_session->setNetwork(network);
+        m_session = new Session(network, this);
         m_session->setActive(true);
         m_session.track(connect(m_session, &Session::connectedChanged, this, [this] {
             if (!m_session->isConnected()) return;

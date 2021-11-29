@@ -6,8 +6,14 @@
 
 #include <gdk.h>
 
-Session::Session(QObject* parent)
+Session::Session(Network* network, QObject* parent)
     : Entity(parent)
+    , m_network(network)
+    , m_use_tor(Settings::instance()->useTor())
+    , m_use_proxy(Settings::instance()->useProxy())
+    , m_proxy_host(Settings::instance()->proxyHost())
+    , m_proxy_port(Settings::instance()->proxyPort())
+    , m_proxy(m_use_proxy ? QString("%1:%2").arg(m_proxy_host).arg(m_proxy_port) : "")
 {
 }
 
@@ -61,14 +67,6 @@ void Session::setConnected(bool connected)
     emit connectedChanged(m_connected);
 }
 
-void Session::setNetwork(Network* network)
-{
-    if (m_network == network) return;
-    m_network = network;
-    emit networkChanged(m_network);
-    update();
-}
-
 void Session::setActive(bool active)
 {
     if (m_active == active) return;
@@ -79,7 +77,7 @@ void Session::setActive(bool active)
 
 void Session::update()
 {
-    if (m_active && m_network && !m_session) {
+    if (m_active && !m_session) {
         int rc = GA_create_session(&m_session);
         Q_ASSERT(rc == GA_OK);
 
@@ -93,10 +91,9 @@ void Session::update()
         }, this);
         Q_ASSERT(rc == GA_OK);
 
-        const bool use_tor = !m_network->isElectrum() && Settings::instance()->useTor();
-        if (use_tor) emit activityCreated(new SessionTorCircuitActivity(this));
+        if (!m_network->isElectrum() && m_use_tor) emit activityCreated(new SessionTorCircuitActivity(this));
         emit activityCreated(new SessionConnectActivity(this));
-        m_connect_handler = new ConnectHandler(this, m_network, Settings::instance()->proxy(), use_tor);
+        m_connect_handler = new ConnectHandler(this);
         m_connect_handler.track(QObject::connect(m_connect_handler, &ConnectHandler::finished, [this] {
             if (m_connect_handler->resultAt(0) == GA_OK) {
                 m_connect_handler->deleteLater();
@@ -115,7 +112,7 @@ void Session::update()
         return;
     }
 
-    if ((!m_active || !m_network) && m_session) {
+    if (!m_active && m_session) {
         m_connect_handler.destroy();
 
         GA_set_notification_handler(m_session, nullptr, nullptr);

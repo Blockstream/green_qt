@@ -18,22 +18,29 @@ QT_FORWARD_DECLARE_STRUCT(GA_session)
 class Session : public Entity
 {
     Q_OBJECT
-    Q_PROPERTY(Network* network READ network WRITE setNetwork NOTIFY networkChanged)
+    Q_PROPERTY(Network* network READ network CONSTANT)
+    Q_PROPERTY(bool useTor READ useTor CONSTANT)
+    Q_PROPERTY(bool useProxy READ useProxy CONSTANT)
+    Q_PROPERTY(QString proxyHost READ proxyHost CONSTANT)
+    Q_PROPERTY(int proxyPort READ proxyPort CONSTANT)
     Q_PROPERTY(bool active READ isActive WRITE setActive NOTIFY activeChanged)
     Q_PROPERTY(bool connected READ isConnected NOTIFY connectedChanged)
     QML_ELEMENT
 public:
-    Session(QObject* parent = nullptr);
+    Session(Network* network, QObject* parent = nullptr);
     virtual ~Session();
     Network* network() const { return m_network; }
-    void setNetwork(Network* network);
+    bool useTor() const { return m_use_tor; }
+    bool useProxy() const { return m_use_proxy; }
+    QString proxyHost() const { return m_proxy_host; }
+    QString proxy() const { return m_proxy; }
+    int proxyPort() const { return m_proxy_port; }
     bool isActive() const { return m_active; }
     void setActive(bool active);
     bool isConnected() const { return m_connected; }
     Connection* connection() const { return m_connection; };
     QList<QJsonObject> events() const { return m_events; }
 signals:
-    void networkChanged(Network* network);
     void notificationHandled(const QJsonObject& notification);
     void networkEvent(const QJsonObject& event);
     void sessionEvent(const QJsonObject& event);
@@ -46,7 +53,12 @@ private:
     void handleNotification(const QJsonObject& notification);
     void setConnected(bool connected);
 public:
-    Network* m_network{nullptr};
+    Network* const m_network;
+    bool const m_use_tor;
+    bool const m_use_proxy;
+    QString const m_proxy_host;
+    int const m_proxy_port;
+    QString const m_proxy;
     bool m_active{false};
     // TODO: make m_session private
     GA_session* m_session{nullptr};

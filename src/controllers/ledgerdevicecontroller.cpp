@@ -169,12 +169,11 @@ void LedgerDeviceController::connect()
     if (!m_network) return;
     if (!m_active) return;
 
-    m_session = new Session(this);
+    m_session = new Session(m_network, this);
 
     m_session.track(QObject::connect(m_session, &Session::connectedChanged, this, &LedgerDeviceController::update));
     m_session.track(QObject::connect(m_session, &Session::activityCreated, this, &LedgerDeviceController::activityCreated));
 
-    m_session->setNetwork(m_network);
     m_session->setActive(true);
 
     emit sessionChanged(m_session);

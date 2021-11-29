@@ -65,12 +65,11 @@ void WatchOnlyLoginController::login()
     if (!m_valid) return;
 
     if (!m_session) {
-        m_session = new Session(this);
+        m_session = new Session(m_network, this);
 
         m_session.track(connect(m_session, &Session::connectedChanged, this, &WatchOnlyLoginController::login));
         m_session.track(connect(m_session, &Session::activityCreated, this, &WatchOnlyLoginController::activityCreated));
 
-        m_session->setNetwork(m_network);
         m_session->setActive(true);
 
         emit sessionChanged(m_session);

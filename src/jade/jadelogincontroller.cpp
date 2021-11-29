@@ -130,8 +130,7 @@ void JadeLoginController::connect()
 
     qDebug() << "connecting";
 
-    m_session = new Session(this);
-    m_session->setNetwork(network);
+    m_session = new Session(network, this);
     m_session->setActive(true);
 
     QObject::connect(m_session, &Session::connectedChanged, this, &JadeLoginController::update);
