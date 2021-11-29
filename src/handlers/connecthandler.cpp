@@ -17,7 +17,8 @@ namespace {
             { "name", network->id() },
             { "log_level", log_level.isEmpty() ? "info" : log_level },
             { "use_tor", network->isElectrum() ? false : session->useTor() },
-            { "user_agent", user_agent }
+            { "user_agent", user_agent },
+            { "spv_enabled", session->enableSPV() }
         };
         if (!session->proxy().isEmpty()) params.insert("proxy", session->proxy());
         return params;

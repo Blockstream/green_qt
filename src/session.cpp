@@ -6,6 +6,23 @@
 
 #include <gdk.h>
 
+namespace  {
+QString ElectrumUrlForNetwork(Network* network)
+{
+    if (Settings::instance()->usePersonalNode()) {
+        const auto mainnet = network->isMainnet();
+        const auto liquid = network->isLiquid();
+        if (network->isElectrum()) {
+            if (mainnet && !liquid) return Settings::instance()->bitcoinElectrumUrl();
+            if (mainnet && liquid) return Settings::instance()->liquidElectrumUrl();
+            if (!mainnet && !liquid) return Settings::instance()->testnetElectrumUrl();
+            if (!mainnet && liquid) return Settings::instance()->liquidTestnetElectrumUrl();
+        }
+    }
+    return {};
+}
+}
+
 Session::Session(Network* network, QObject* parent)
     : Entity(parent)
     , m_network(network)
@@ -14,6 +31,8 @@ Session::Session(Network* network, QObject* parent)
     , m_proxy_host(Settings::instance()->proxyHost())
     , m_proxy_port(Settings::instance()->proxyPort())
     , m_proxy(m_use_proxy ? QString("%1:%2").arg(m_proxy_host).arg(m_proxy_port) : "")
+    , m_enable_spv(network->isElectrum() ? Settings::instance()->enableSPV() : false)
+    , m_electrum_url(ElectrumUrlForNetwork(network))
 {
 }
 

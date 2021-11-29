@@ -23,6 +23,9 @@ class Session : public Entity
     Q_PROPERTY(bool useProxy READ useProxy CONSTANT)
     Q_PROPERTY(QString proxyHost READ proxyHost CONSTANT)
     Q_PROPERTY(int proxyPort READ proxyPort CONSTANT)
+    Q_PROPERTY(bool enableSPV READ enableSPV CONSTANT)
+    Q_PROPERTY(bool usePersonalNode READ usePersonalNode CONSTANT)
+    Q_PROPERTY(QString electrumUrl READ electrumUrl CONSTANT)
     Q_PROPERTY(bool active READ isActive WRITE setActive NOTIFY activeChanged)
     Q_PROPERTY(bool connected READ isConnected NOTIFY connectedChanged)
     Q_PROPERTY(QJsonObject event READ event NOTIFY eventChanged)
@@ -36,6 +39,9 @@ public:
     QString proxyHost() const { return m_proxy_host; }
     QString proxy() const { return m_proxy; }
     int proxyPort() const { return m_proxy_port; }
+    bool enableSPV() const { return m_enable_spv; }
+    bool usePersonalNode() const { return !m_electrum_url.isEmpty(); }
+    QString electrumUrl() const { return m_electrum_url; }
     bool isActive() const { return m_active; }
     void setActive(bool active);
     bool isConnected() const { return m_connected; }
@@ -55,14 +61,17 @@ private:
     void update();
     void handleNotification(const QJsonObject& notification);
     void setConnected(bool connected);
-public:
+private:
     Network* const m_network;
     bool const m_use_tor;
     bool const m_use_proxy;
     QString const m_proxy_host;
     int const m_proxy_port;
     QString const m_proxy;
+    bool const m_enable_spv;
+    QString const m_electrum_url;
     bool m_active{false};
+public:
     // TODO: make m_session private
     GA_session* m_session{nullptr};
     bool m_connected{false};
