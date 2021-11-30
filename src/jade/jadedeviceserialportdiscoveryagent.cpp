@@ -8,6 +8,21 @@
 
 #include "devicemanager.h"
 
+namespace {
+
+bool FilterSerialPort(const QSerialPortInfo& info)
+{
+    // Silicon Laboratories USB to UART (0x10c4, 0xea60)
+    if (info.vendorIdentifier() == 0x10c4 && info.productIdentifier() == 0xea60) return false;
+
+    // WCH CH9102F (0x1a86, 0x55d4)
+    if (info.vendorIdentifier() == 0x1a86 && info.productIdentifier() == 0x55d4) return false;
+
+    return true;
+}
+
+} // namespace
+
 JadeDeviceSerialPortDiscoveryAgent::JadeDeviceSerialPortDiscoveryAgent(QObject* parent)
     : QObject(parent)
 {
@@ -33,9 +48,7 @@ JadeDeviceSerialPortDiscoveryAgent::JadeDeviceSerialPortDiscoveryAgent(QObject* 
                 continue;
             }
 
-            // filter for Silicon Laboratories USB to UART
-            if (info.vendorIdentifier() != 0x10c4) continue;
-            if (info.productIdentifier() != 0xea60) continue;
+            if (FilterSerialPort(info)) continue;
 
             auto device = devices.take(system_location);
             if (!device) {
