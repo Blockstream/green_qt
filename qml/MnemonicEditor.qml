@@ -51,6 +51,7 @@ WizardPage {
             Repeater {
                 model: mnemonic_size_combobox.size
                 WordField {
+                    focus: index === 0
                     Layout.fillWidth: true
                     word: controller.words[index]
                 }
