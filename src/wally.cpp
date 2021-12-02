@@ -33,13 +33,6 @@ MnemonicEditorController::MnemonicEditorController(QObject *parent) : QObject(pa
     m_words.at(0)->setEnabled(true);
 }
 
-void MnemonicEditorController::setAutoComplete(bool auto_complete)
-{
-    if (m_auto_complete == auto_complete) return;
-    m_auto_complete = auto_complete;
-    emit autoCompleteChanged(m_auto_complete);
-}
-
 QQmlListProperty<Word> MnemonicEditorController::words() {
     return { this, &m_words };
 }
@@ -129,7 +122,7 @@ void MnemonicEditorController::update()
 
 void MnemonicEditorController::setMnemonicSize(int size)
 {
-    if (size==m_mnemonic_size) return;
+    if (m_mnemonic_size == size) return;
     m_mnemonic_size = size;
     emit mnemonicSizeChanged(size);
 }
@@ -150,15 +143,6 @@ bool Word::setText(QString text) {
             if (word.startsWith(text)) {
                 suggestions.append(word);
             }
-        }
-    }
-    // Handle auto complete only if match is unique
-    // and if new text increments current text so that
-    // backspace works.
-    if (m_controller->autoComplete()) {
-        if (suggestions.length() == 1 && !m_text.startsWith(text)) {
-            text = suggestions.at(0);
-            suggestions.clear();
         }
     }
     if (m_suggestions != suggestions) {

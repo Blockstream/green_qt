@@ -45,20 +45,14 @@ signals:
 class MnemonicEditorController : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(bool autoComplete READ autoComplete WRITE setAutoComplete NOTIFY autoCompleteChanged)
     Q_PROPERTY(QQmlListProperty<Word> words READ words CONSTANT)
     Q_PROPERTY(QStringList mnemonic READ mnemonic NOTIFY mnemonicChanged)
     Q_PROPERTY(bool valid READ valid NOTIFY mnemonicChanged)
     Q_PROPERTY(float progress READ progress NOTIFY mnemonicChanged)
     Q_PROPERTY(int mnemonicSize READ mnemonicSize WRITE setMnemonicSize NOTIFY mnemonicSizeChanged)
     QML_ELEMENT
-    bool m_auto_complete{false};
-    QList<Word*> m_words;
-    bool m_valid{false};
 public:
     MnemonicEditorController(QObject* parent = nullptr);
-    bool autoComplete() const { return m_auto_complete; }
-    void setAutoComplete(bool auto_complete);
     QQmlListProperty<Word> words();
     QString updateWord(int index, const QString& text);
     QString update(int index, const QString& text);
@@ -72,9 +66,10 @@ public slots:
     void clear();
 signals:
     void mnemonicChanged();
-    void autoCompleteChanged(bool auto_complete);
     void mnemonicSizeChanged(int mnemonicSize);
 private:
+    QList<Word*> m_words;
+    bool m_valid{false};
     int m_mnemonic_size{12};
 };
 
