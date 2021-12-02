@@ -47,7 +47,6 @@ class MnemonicEditorController : public QObject
     Q_OBJECT
     Q_PROPERTY(bool autoComplete READ autoComplete WRITE setAutoComplete NOTIFY autoCompleteChanged)
     Q_PROPERTY(QQmlListProperty<Word> words READ words CONSTANT)
-    Q_PROPERTY(bool password READ password WRITE setPassword NOTIFY passwordChanged)
     Q_PROPERTY(QStringList mnemonic READ mnemonic NOTIFY mnemonicChanged)
     Q_PROPERTY(bool valid READ valid NOTIFY mnemonicChanged)
     Q_PROPERTY(float progress READ progress NOTIFY mnemonicChanged)
@@ -56,14 +55,11 @@ class MnemonicEditorController : public QObject
     bool m_auto_complete{false};
     QList<Word*> m_words;
     bool m_valid{false};
-    bool m_password{false};
 public:
     MnemonicEditorController(QObject* parent = nullptr);
     bool autoComplete() const { return m_auto_complete; }
     void setAutoComplete(bool auto_complete);
     QQmlListProperty<Word> words();
-    bool password() const { return m_password; }
-    void setPassword(bool password);
     QString updateWord(int index, const QString& text);
     QString update(int index, const QString& text);
     QStringList mnemonic() const;
@@ -75,7 +71,6 @@ public:
 public slots:
     void clear();
 signals:
-    void passwordChanged(bool password);
     void mnemonicChanged();
     void autoCompleteChanged(bool auto_complete);
     void mnemonicSizeChanged(int mnemonicSize);

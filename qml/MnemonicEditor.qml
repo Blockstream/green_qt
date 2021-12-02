@@ -7,7 +7,7 @@ import QtQuick.Layouts 1.12
 
 WizardPage {
     property alias valid: controller.valid
-    property alias password: controller.password
+    readonly property bool password: controller.mnemonicSize === 27
     property alias mnemonic: controller.mnemonic
     property alias controller: controller
     property alias lengths: mnemonic_size_combobox.model

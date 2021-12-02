@@ -44,19 +44,6 @@ QQmlListProperty<Word> MnemonicEditorController::words() {
     return { this, &m_words };
 }
 
-void MnemonicEditorController::setPassword(bool password)
-{
-    if (m_password == password) return;
-    m_password = password;
-    emit passwordChanged(m_password);
-    if (!m_password) {
-        m_words.at(24)->setText({});
-        m_words.at(25)->setText({});
-        m_words.at(26)->setText({});
-    }
-    update();
-}
-
 QString MnemonicEditorController::update(int index, const QString& text)
 {
     QString out = updateWord(index, text);
@@ -66,7 +53,7 @@ QString MnemonicEditorController::update(int index, const QString& text)
 
 QString MnemonicEditorController::updateWord(int index, const QString& text)
 {
-    if (!m_password && index >= 24) return text;
+    if (index >= m_mnemonic_size) return text;
 
     QString diff;
     Word* word = m_words.at(index);
@@ -79,7 +66,6 @@ QString MnemonicEditorController::updateWord(int index, const QString& text)
     if (!diff.isEmpty()) {
         auto words = diff.trimmed().split(QRegExp("\\s+"));
         if (words.length() == 12 || words.length() == 24 || words.length() == 27) {
-            setPassword(words.length() == 27);
             bool changed = false;
             for (int i = 0; i < words.length(); ++i) {
                 changed = m_words.at(i)->setText(words.at(i)) || changed;
@@ -102,7 +88,6 @@ void MnemonicEditorController::clear()
     for (int i = 0; i < 27; ++i) {
         m_words.at(i)->setText("");
     }
-    setPassword(false);
     update();
 }
 
