@@ -71,7 +71,12 @@ void JadeLoginController::setWallet(Wallet *wallet)
         Q_ASSERT(!m_active);
         m_wallet = wallet;
         emit walletChanged(m_wallet);
+        if (m_device) m_wallet->setDevice(m_device);
         setNetwork(wallet->network()->id());
+
+        QObject::connect(m_wallet, &Wallet::authenticationChanged, this, [=] {
+            setActive(m_wallet && m_wallet->isAuthenticated());
+        });
     }
 }
 
@@ -108,11 +113,8 @@ void JadeLoginController::update()
     }
 
     if (!m_wallet) {
-        m_wallet = WalletManager::instance()->walletWithHashId(m_wallet_hash_id, false);
-        if (m_wallet) {
-            emit walletChanged(m_wallet);
-            m_wallet->setDevice(m_device);
-        }
+        auto wallet = WalletManager::instance()->walletWithHashId(m_wallet_hash_id, false);
+        if (wallet) setWallet(wallet);
     }
 
     login();
@@ -213,19 +215,17 @@ void JadeLoginController::login()
         Q_ASSERT(m_wallet_hash_id == handler->walletHashId());
 
         if (!m_wallet) {
-            m_wallet = WalletManager::instance()->createWallet(m_session->network());
-            m_wallet->m_is_persisted = true;
-            m_wallet->updateHashId(m_wallet_hash_id);
-            m_wallet->setName(QString("%1 on %2").arg(m_session->network()->displayName()).arg(m_device->name()));
-            m_wallet->setDevice(m_device);
-            WalletManager::instance()->insertWallet(m_wallet);
-            emit walletChanged(m_wallet);
+            auto wallet = WalletManager::instance()->createWallet(m_session->network());
+            wallet->m_is_persisted = true;
+            wallet->updateHashId(m_wallet_hash_id);
+            wallet->setName(QString("%1 on %2").arg(m_session->network()->displayName()).arg(m_device->name()));
+            WalletManager::instance()->insertWallet(wallet);
+            setWallet(wallet);
         }
 
         m_wallet->setSession(m_session);
         m_wallet->setSession();
         m_session = nullptr;
-
     });
     QObject::connect(handler, &Handler::resolver, this, [](Resolver* resolver) {
 //        qDebug() << "RESOLVE NOW!" << resolver;
