@@ -24,6 +24,7 @@ SOURCES += \
     $$PWD/devicemanager.cpp \
     $$PWD/entity.cpp \
     $$PWD/ga.cpp \
+    $$PWD/httpmanager.cpp \
     $$PWD/httprequestactivity.cpp \
     $$PWD/json.cpp \
     $$PWD/main.cpp \
@@ -77,6 +78,7 @@ HEADERS += \
     $$PWD/devicemanager.h \
     $$PWD/entity.h \
     $$PWD/ga.h \
+    $$PWD/httpmanager.h \
     $$PWD/httprequestactivity.h \
     $$PWD/json.h \
     $$PWD/navigation.h \

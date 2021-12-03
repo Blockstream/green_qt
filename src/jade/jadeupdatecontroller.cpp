@@ -1,4 +1,5 @@
 #include "activitymanager.h"
+#include "httpmanager.h"
 #include "jadeupdatecontroller.h"
 #include "jadedevice.h"
 #include "network.h"
@@ -31,16 +32,16 @@ static const QString JADE_FEATURE_SECURE_BOOT = "SB";
 
 } // namespace
 
-JadeHttpRequestActivity::JadeHttpRequestActivity(const QString& path, Session* session)
-    : HttpRequestActivity(session)
+JadeHttpRequestActivity::JadeHttpRequestActivity(const QString& path, QObject* parent)
+    : HttpRequestActivity(parent)
 {
     setMethod("GET");
     addUrl(JADE_FW_SERVER_HTTPS + path);
     addUrl(JADE_FW_SERVER_ONION + path);
 }
 
-JadeChannelRequestActivity::JadeChannelRequestActivity(const QString& base, const QString& channel, Session* session)
-    : JadeHttpRequestActivity(base + channel, session)
+JadeChannelRequestActivity::JadeChannelRequestActivity(const QString& base, const QString& channel, QObject* parent)
+    : JadeHttpRequestActivity(base + channel, parent)
     , m_base(base)
 {
     setAccept("text");
@@ -65,16 +66,15 @@ QVariantList JadeChannelRequestActivity::firmwares() const
     return firmwares;
 }
 
-JadeBinaryRequestActivity::JadeBinaryRequestActivity(const QString& path, Session* session)
-    : JadeHttpRequestActivity(path, session)
+JadeBinaryRequestActivity::JadeBinaryRequestActivity(const QString& path, QObject* parent)
+    : JadeHttpRequestActivity(path, parent)
 {
     setAccept("base64");
 }
 
-JadeUnlockActivity::JadeUnlockActivity(Session* session, JadeDevice* device)
-    : Activity(device)
+JadeUnlockActivity::JadeUnlockActivity(JadeDevice* device, QObject* parent)
+    : SessionActivity(parent)
     , m_device(device)
-    , m_session(session)
 {
 }
 
@@ -91,7 +91,7 @@ void JadeUnlockActivity::exec()
     }, [=](JadeAPI& jade, int id, const QJsonObject& req) {
         const auto params = Json::fromObject(req.value("params").toObject());
         GA_json* output;
-        GA_http_request(m_session->m_session, params.get(), &output);
+        GA_http_request(session()->m_session, params.get(), &output);
         auto res = Json::toObject(output);
         GA_destroy_json(output);
         jade.handleHttpResponse(id, req, res.value("body").toObject());
@@ -170,20 +170,6 @@ void JadeUpdateController::check()
 {
     if (!m_device) return;
 
-    if (!m_session) {
-        auto network = NetworkManager::instance()->network("mainnet");
-        m_session = new Session(network, this);
-
-        connect(m_session, &Session::connectedChanged, this, &JadeUpdateController::check);
-        connect(m_session, &Session::activityCreated, this, &JadeUpdateController::activityCreated);
-
-        m_session->setActive(true);
-
-        emit sessionChanged(m_session);
-    }
-
-    if (!m_session->isActive() || !m_session->isConnected()) return;
-
     const auto version_info = m_device->versionInfo();
     const auto board_type = version_info.value("BOARD_TYPE", JADE_BOARD_TYPE_JADE).toString();
     const auto config = version_info.value("JADE_CONFIG").toString();
@@ -200,7 +186,7 @@ void JadeUpdateController::check()
     }
 
     const QString channel = m_channel.isEmpty() ? JADE_FW_VERSIONS_FILE : m_channel;
-    auto activity = new JadeChannelRequestActivity(path, channel, m_session);
+    auto activity = new JadeChannelRequestActivity(path, channel, this);
     connect(activity, &Activity::finished, this, [this, activity, config] {
         activity->deleteLater();
         m_firmwares.clear();
@@ -212,7 +198,7 @@ void JadeUpdateController::check()
         }
         emit firmwaresChanged(m_firmwares);
     });
-    ActivityManager::instance()->exec(activity);
+    HttpManager::instance()->exec(activity);
     emit activityCreated(activity);
 }
 
@@ -222,7 +208,7 @@ void JadeUpdateController::update(const QVariantMap& firmware)
     const auto data = m_firmware_data.value(path);
 
     if (data.isEmpty()) {
-        auto activity = new JadeBinaryRequestActivity(path, m_session);
+        auto activity = new JadeBinaryRequestActivity(path, this);
         connect(activity, &Activity::failed, this, [activity] {
             activity->deleteLater();
         });
@@ -234,7 +220,7 @@ void JadeUpdateController::update(const QVariantMap& firmware)
             update(firmware);
         });
         emit activityCreated(activity);
-        ActivityManager::instance()->exec(activity);
+        HttpManager::instance()->exec(activity);
     } else {
         auto activity = new JadeUpdateActivity(firmware, data, m_device);
         connect(activity, &JadeUpdateActivity::locked, this, [this, activity] {
@@ -258,8 +244,8 @@ void JadeUpdateController::update(const QVariantMap& firmware)
 
 JadeUnlockActivity* JadeUpdateController::unlock()
 {
-    auto activity = new JadeUnlockActivity(m_session, m_device);
-    ActivityManager::instance()->exec(activity);
+    auto activity = new JadeUnlockActivity(m_device, this);
+    HttpManager::instance()->exec(activity);
     emit activityCreated(activity);
     return activity;
 }

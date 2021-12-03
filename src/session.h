@@ -81,13 +81,13 @@ private:
 class SessionActivity : public Activity
 {
     Q_OBJECT
-    Q_PROPERTY(Session* session READ session CONSTANT)
     QML_ELEMENT
 public:
-    SessionActivity(Session* session);
+    SessionActivity(QObject* parent);
     Session* session() const { return m_session; }
+    void setSession(Session* session);
 private:
-    Session* const m_session;
+    Session* m_session{nullptr};
 };
 
 class SessionTorCircuitActivity : public SessionActivity

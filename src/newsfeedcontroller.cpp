@@ -1,4 +1,4 @@
-#include "activitymanager.h"
+#include "httpmanager.h"
 #include "newsfeedcontroller.h"
 #include "networkmanager.h"
 #include "util.h"
@@ -19,20 +19,7 @@ NewsFeedController::NewsFeedController(QObject *parent) :
 
 void NewsFeedController::fetch()
 {
-    if (!m_session) {
-        auto network = NetworkManager::instance()->network("mainnet");
-        m_session = new Session(network, this);
-        m_session->setActive(true);
-        m_session.track(connect(m_session, &Session::connectedChanged, this, [this] {
-            if (!m_session->isConnected()) return;
-            fetch();
-
-        }));
-        return;
-    }
-
-    auto activity = new NewsFeedActivity(m_session);
-    m_pending.insert(activity);
+    auto activity = new NewsFeedActivity(this);
     connect(activity, &NewsFeedActivity::finished, this, [=] {
         activity->deleteLater();
         m_feed = activity->feed();
@@ -41,9 +28,8 @@ void NewsFeedController::fetch()
             feed_file.write(m_feed.toUtf8());
         }
         parse();
-        updatePending(activity);
     });
-    ActivityManager::instance()->exec(activity);
+    HttpManager::instance()->exec(activity);
 }
 
 void NewsFeedController::parse()
@@ -67,9 +53,8 @@ void NewsFeedController::parse()
                     const auto url = e.elementsByTagName("url").at(0).toElement().text();
                     const auto path = GetDataFile("cache", Sha256(url));
                     QFile file(path);
-                    if (!file.exists() && m_session) {
-                        auto activity = new NewsImageDownloadActivity(m_session, url);
-                        m_pending.insert(activity);
+                    if (!file.exists()) {
+                        auto activity = new NewsImageDownloadActivity(url, this);
                         connect(activity, &NewsImageDownloadActivity::finished, this, [=] {
                             activity->deleteLater();
                             QFile file(path);
@@ -78,9 +63,8 @@ void NewsFeedController::parse()
                                 file.close();
                             }
                             updateModel();
-                            updatePending(activity);
                         });
-                        ActivityManager::instance()->exec(activity);
+                        HttpManager::instance()->exec(activity);
                     }
                     item[e.tagName()] = QUrl::fromLocalFile(path).toString();
                 }
@@ -96,16 +80,7 @@ void NewsFeedController::parse()
     emit modelChanged();
 }
 
-void NewsFeedController::updatePending(HttpRequestActivity* activity)
-{
-    m_pending.remove(activity);
-    if (m_pending.isEmpty()) {
-        qDebug() << "release news feed session";
-        m_session.destroy();
-    }
-}
-
-QJsonArray NewsFeedController::model()
+QJsonArray NewsFeedController::model() const
 {
     return m_model;
 }
@@ -119,8 +94,8 @@ void NewsFeedController::updateModel()
     emit modelChanged();
 }
 
-NewsFeedActivity::NewsFeedActivity(Session* session)
-    : HttpRequestActivity(session)
+NewsFeedActivity::NewsFeedActivity(QObject* parent)
+    : HttpRequestActivity(parent)
 {
     setMethod("GET");
     addUrl(QString("https://blockstream.com/feed.xml"));
@@ -132,8 +107,8 @@ QString NewsFeedActivity::feed() const
     return response().value("body").toString();
 }
 
-NewsImageDownloadActivity::NewsImageDownloadActivity(Session* session, const QString &url)
-    : HttpRequestActivity(session)
+NewsImageDownloadActivity::NewsImageDownloadActivity(const QString& url, QObject* parent)
+    : HttpRequestActivity(parent)
 {
     m_url = url;
     setMethod("GET");

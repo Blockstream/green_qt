@@ -6,9 +6,8 @@
 
 #include <QtConcurrentRun>
 
-HttpRequestActivity::HttpRequestActivity(Session* session)
-    : SessionActivity(session)
-    , m_session(session)
+HttpRequestActivity::HttpRequestActivity(QObject* parent)
+    : SessionActivity(parent)
 {
 }
 
@@ -57,7 +56,7 @@ void HttpRequestActivity::exec()
     Q_ASSERT(!m_method.isEmpty());
     Q_ASSERT(!m_urls.isEmpty());
 
-    auto connection = m_session->connection();
+    auto connection = session()->connection();
     Q_ASSERT(connection);
 
     auto watcher = new QFutureWatcher<QJsonObject>(connection);
@@ -89,7 +88,7 @@ void HttpRequestActivity::exec()
 
         auto params = Json::fromObject(details);
         GA_json* output;
-        int rc = GA_http_request(m_session->m_session, params.get(), &output);
+        int rc = GA_http_request(session()->m_session, params.get(), &output);
         if (rc != GA_OK) return QJsonObject();
         auto response = Json::toObject(output);
         GA_destroy_json(output);

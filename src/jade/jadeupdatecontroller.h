@@ -8,14 +8,13 @@
 
 QT_FORWARD_DECLARE_CLASS(Activity)
 QT_FORWARD_DECLARE_CLASS(JadeDevice)
-QT_FORWARD_DECLARE_CLASS(Session)
 
 class JadeHttpRequestActivity : public HttpRequestActivity
 {
     Q_OBJECT
     QML_ELEMENT
 public:
-    JadeHttpRequestActivity(const QString& path, Session* session);
+    JadeHttpRequestActivity(const QString& path, QObject* parent);
 };
 
 class JadeChannelRequestActivity : public JadeHttpRequestActivity
@@ -23,7 +22,7 @@ class JadeChannelRequestActivity : public JadeHttpRequestActivity
     Q_OBJECT
     QML_ELEMENT
 public:
-    JadeChannelRequestActivity(const QString& base, const QString& channel, Session* session);
+    JadeChannelRequestActivity(const QString& base, const QString& channel, QObject* parent);
     QVariantList firmwares() const;
 private:
     const QString m_base;
@@ -34,22 +33,21 @@ class JadeBinaryRequestActivity : public JadeHttpRequestActivity
     Q_OBJECT
     QML_ELEMENT
 public:
-    JadeBinaryRequestActivity(const QString& path, Session* session);
+    JadeBinaryRequestActivity(const QString& path, QObject* parent);
 };
 
-class JadeUnlockActivity : public Activity
+class JadeUnlockActivity : public SessionActivity
 {
     Q_OBJECT
     Q_PROPERTY(JadeDevice* device READ device CONSTANT)
     QML_ELEMENT
 public:
-    JadeUnlockActivity(Session* session, JadeDevice* device);
+    JadeUnlockActivity(JadeDevice* device, QObject* parent);
     JadeDevice* device() const { return m_device; }
 private:
     void exec() override;
 private:
     JadeDevice* const m_device;
-    Session* const m_session;
 };
 
 class JadeUpdateActivity : public Activity
@@ -75,14 +73,12 @@ private:
 class JadeUpdateController : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(Session* session READ session NOTIFY sessionChanged)
     Q_PROPERTY(JadeDevice* device READ device WRITE setDevice NOTIFY deviceChanged)
     Q_PROPERTY(QString channel READ channel WRITE setChannel NOTIFY channelChanged)
     Q_PROPERTY(QVariantList firmwares READ firmwares NOTIFY firmwaresChanged)
     QML_ELEMENT
 public:
     explicit JadeUpdateController(QObject *parent = nullptr);
-    Session* session() const { return m_session; }
     JadeDevice* device() const { return m_device; }
     void setDevice(JadeDevice* device);
     QString channel() const { return m_channel; }
@@ -95,7 +91,6 @@ public slots:
     JadeUnlockActivity *unlock();
 signals:
     void activityCreated(Activity* activity);
-    void sessionChanged(Session* session);
     void deviceChanged(JadeDevice* device);
     void channelChanged(QString channel);
     void firmwaresChanged(const QVariantList& firmwares);
@@ -103,7 +98,6 @@ protected:
     void pushActivity(Activity* activity);
     void popActivity();
 private:
-    Session* m_session{nullptr};
     JadeDevice* m_device{nullptr};
     QString m_channel;
     QVariantList m_firmwares;

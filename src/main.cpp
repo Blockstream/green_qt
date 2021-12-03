@@ -14,6 +14,7 @@
 #include "clipboard.h"
 #include "devicemanager.h"
 #include "networkmanager.h"
+#include "httpmanager.h"
 #include "settings.h"
 #include "walletmanager.h"
 #include "kdsingleapplication.h"
@@ -235,10 +236,12 @@ int main(int argc, char *argv[])
 
     QQuickStyle::setStyle("Material");
 
+    HttpManager http_manager;
     WalletManager wallet_manager;
 
     qmlRegisterSingletonInstance<Clipboard>("Blockstream.Green.Core", 0, 1, "Clipboard", Clipboard::instance());
     qmlRegisterSingletonInstance<DeviceManager>("Blockstream.Green.Core", 0, 1, "DeviceManager", DeviceManager::instance());
+    qmlRegisterSingletonInstance<HttpManager>("Blockstream.Green.Core", 0, 1, "HttpManager", HttpManager::instance());
     qmlRegisterSingletonInstance<NetworkManager>("Blockstream.Green.Core", 0, 1, "NetworkManager", NetworkManager::instance());
     qmlRegisterSingletonInstance<Settings>("Blockstream.Green.Core", 0, 1, "Settings", Settings::instance());
     qmlRegisterSingletonInstance<WalletManager>("Blockstream.Green.Core", 0, 1, "WalletManager", WalletManager::instance());

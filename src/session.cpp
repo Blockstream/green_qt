@@ -94,7 +94,7 @@ void Session::update()
         if (!m_network->isElectrum() && m_use_tor) emit activityCreated(new SessionTorCircuitActivity(this));
         emit activityCreated(new SessionConnectActivity(this));
         m_connect_handler = new ConnectHandler(this);
-        m_connect_handler.track(QObject::connect(m_connect_handler, &ConnectHandler::finished, [this] {
+        m_connect_handler.track(QObject::connect(m_connect_handler, &ConnectHandler::finished, this, [=] {
             if (m_connect_handler->resultAt(0) == GA_OK) {
                 m_connect_handler->deleteLater();
                 setConnected(true);
@@ -133,10 +133,15 @@ void Session::update()
     }
 }
 
-SessionActivity::SessionActivity(Session* session)
-    : Activity(session)
-    , m_session(session)
+SessionActivity::SessionActivity(QObject* parent)
+    : Activity(parent)
 {
+}
+
+void SessionActivity::setSession(Session* session)
+{
+    Q_ASSERT(!m_session);
+    m_session = session;
 }
 
 SessionTorCircuitActivity::SessionTorCircuitActivity(Session* session)
@@ -165,7 +170,7 @@ SessionTorCircuitActivity::SessionTorCircuitActivity(Session* session)
             QObject::disconnect(m_connected_connection);
         }
     });
-    m_connected_connection = connect(session, &Session::connectedChanged, this, [this](bool connected) {
+    m_connected_connection = connect(session, &Session::connectedChanged, this, [=](bool connected) {
         if (connected) {
             finish();
             QObject::disconnect(m_tor_event_connection);
@@ -177,7 +182,7 @@ SessionTorCircuitActivity::SessionTorCircuitActivity(Session* session)
 SessionConnectActivity::SessionConnectActivity(Session* session)
     : SessionActivity(session)
 {
-    m_connection = connect(session, &Session::connectedChanged, this, [this, session] {
+    m_connection = connect(session, &Session::connectedChanged, this, [=] {
         if (session->isConnected()) {
             finish();
             QObject::disconnect(m_connection);

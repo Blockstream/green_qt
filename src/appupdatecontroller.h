@@ -1,8 +1,6 @@
 #ifndef GREEN_APPUPDATECONTROLLER_H
 #define GREEN_APPUPDATECONTROLLER_H
 
-#include "connectable.h"
-#include "session.h"
 #include "httprequestactivity.h"
 
 #include <QtQml>
@@ -24,7 +22,6 @@ signals:
     void latestVersionChanged(const QString& latest_version);
     void updateAvailableChanged(bool updateAvailable);
 private:
-    Connectable<Session> m_session;
     QString m_latest_version;
     bool m_update_available;
 };
@@ -34,7 +31,7 @@ class CheckForUpdatesActivity : public HttpRequestActivity
     Q_OBJECT
     QML_ELEMENT
 public:
-    CheckForUpdatesActivity(Session* session);
+    CheckForUpdatesActivity(QObject* parent);
     QString latestVersion() const;
 };
 

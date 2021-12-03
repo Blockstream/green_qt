@@ -8,7 +8,7 @@ class HttpRequestActivity : public SessionActivity
     Q_OBJECT
     QML_ELEMENT
 public:
-    HttpRequestActivity(Session* session);
+    HttpRequestActivity(QObject* parent);
     void setMethod(const QString& method);
     void addUrl(const QString& urls);
     void setData(const QString& data);
@@ -21,7 +21,6 @@ public:
 private:
     void exec() override;
 private:
-    Session* const m_session;
     QString m_method;
     QStringList m_urls;
     QString m_data;

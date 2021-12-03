@@ -172,7 +172,7 @@ AbstractDialog {
         GComboBox {
             id: channel_combo_box
             visible: Qt.application.arguments.indexOf('--debugjade') > 0
-            enabled: controller.session && controller.session.connected
+            enabled: HttpManager.session && HttpManager.session.connected
             Layout.fillWidth: true
             valueRole: 'channel'
             textRole: 'text'
@@ -227,7 +227,7 @@ AbstractDialog {
             }
             Label {
                 Layout.alignment: Qt.AlignCenter
-                text: controller.session && controller.session.connected ? qsTrId('id_loading') : qsTrId('id_establishing_session')
+                text: HttpManager.session && HttpManager.session.connected ? qsTrId('id_loading') : qsTrId('id_establishing_session')
             }
             BusyIndicator {
                 Layout.alignment: Qt.AlignCenter

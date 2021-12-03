@@ -1,11 +1,10 @@
-#ifndef NEWSFEEDCONTROLLER_H
-#define NEWSFEEDCONTROLLER_H
+#ifndef GREEN_NEWSFEEDCONTROLLER_H
+#define GREEN_NEWSFEEDCONTROLLER_H
 
 #include "httprequestactivity.h"
 
 #include <QtQml>
 #include <QObject>
-#include <QNetworkAccessManager>
 
 class NewsFeedController : public QObject
 {
@@ -14,9 +13,9 @@ class NewsFeedController : public QObject
     QML_ELEMENT
 
 public:
-    explicit NewsFeedController(QObject *parent = nullptr);
+    explicit NewsFeedController(QObject* parent = nullptr);
 
-    QJsonArray model();
+    QJsonArray model() const;
 
 public slots:
     void fetch();
@@ -27,12 +26,9 @@ signals:
 private:
     void parse();
     void updateModel();
-    void updatePending(HttpRequestActivity *activity);
 
     QJsonArray m_model;
-    Connectable<Session> m_session;
     QString m_feed;
-    QSet<HttpRequestActivity*> m_pending;
 };
 
 class NewsFeedActivity : public HttpRequestActivity
@@ -40,7 +36,7 @@ class NewsFeedActivity : public HttpRequestActivity
     Q_OBJECT
     QML_ELEMENT
 public:
-    NewsFeedActivity(Session* session);
+    NewsFeedActivity(QObject* parent);
     QString feed() const;
 };
 
@@ -49,9 +45,9 @@ class NewsImageDownloadActivity : public HttpRequestActivity
     Q_OBJECT
     QML_ELEMENT
 public:
-    NewsImageDownloadActivity(Session* session, const QString &url);
+    NewsImageDownloadActivity(const QString &url, QObject* parent);
 private:
     QString m_url;
 };
 
-#endif // NEWSFEEDCONTROLLER_H
+#endif // GREEN_NEWSFEEDCONTROLLER_H
