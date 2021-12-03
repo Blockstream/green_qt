@@ -48,6 +48,24 @@ GPane {
         HSpacer {
         }
         Loader {
+            active: wallet.session.useTor
+            visible: active
+            sourceComponent: RowLayout {
+                spacing: 8
+                Image {
+                    fillMode: Image.PreserveAspectFit
+                    Layout.maximumHeight: 16
+                    Layout.maximumWidth: 16
+                    mipmap: true
+                    source: 'qrc:/svg/torV2.svg'
+                }
+                Label {
+                    font.pixelSize: 12
+                    text: qsTrId('id_tor')
+                }
+            }
+        }
+        Loader {
             active: 'type' in wallet.deviceDetails
             visible: active
             sourceComponent: DeviceBadge {
