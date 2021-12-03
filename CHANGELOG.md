@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Show Tor indicator in status bar when Tor is active
 
 ### Changed
+- New icons for Liquid and Liquid testnet
 
 ### Fixed
 - Enable Jade login button after logout
