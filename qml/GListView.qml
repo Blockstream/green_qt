@@ -3,6 +3,9 @@ import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.12
 
 ListView {
+    property bool refreshGesture: false
+    signal refreshTriggered()
+
     id: self
     contentWidth: vertical_scroll_bar.visible ? width - constants.p0 * 2 : width
     MouseArea {
@@ -10,6 +13,57 @@ ListView {
         onClicked: forceActiveFocus(Qt.MouseFocusReason)
         z: -1
     }
+
+    onContentYChanged: {
+        if (self.refreshGesture && dragging) {
+            if (contentY < -32) {
+                if (refresh_label.scale === 0) {
+                    show_refresh_animation.start()
+                }
+            } else {
+                refresh_label.scale = 0
+                show_refresh_animation.stop()
+            }
+        }
+    }
+
+    NumberAnimation {
+        id: show_refresh_animation
+        target: refresh_label
+        property: 'scale'
+        to: 1
+        easing.type: Easing.OutBack
+        duration: 400
+    }
+
+    Label {
+        id: refresh_label
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top: parent.top
+        anchors.margins: constants.p1
+        text: qsTrId('id_refresh')
+        scale: 0
+        padding: 8
+        leftPadding: 16
+        rightPadding: 16
+        background: Rectangle {
+            radius: height / 2
+            color: constants.g500
+        }
+        font.styleName: 'Medium'
+        font.pixelSize: 10
+    }
+
+    onDraggingChanged: {
+        if (self.refreshGesture) {
+            show_refresh_animation.stop()
+            refresh_label.scale = 0
+            if (!dragging && self.contentY < -32) {
+                self.refreshTriggered()
+            }
+        }
+    }
+
     ScrollBar.vertical: ScrollBar {
         id: vertical_scroll_bar
         policy: ScrollBar.AlwaysOn
