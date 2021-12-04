@@ -40,6 +40,13 @@ MainPage {
             }
         }
     }
+    footer: StatusBar {
+        contentItem: RowLayout {
+            SessionBadge {
+                session: HttpManager.session
+            }
+        }
+    }
     contentItem: StackLayout {
         currentIndex: self.count === 0 ? 0 : 1
         ColumnLayout {

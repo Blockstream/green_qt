@@ -4,17 +4,9 @@ import QtQuick 2.12
 import QtQuick.Controls 2.14
 import QtQuick.Layouts 1.12
 
-GPane {
+StatusBar {
     required property Wallet wallet
     id: self
-    topPadding: 8
-    bottomPadding: 8
-    leftPadding: 24
-    rightPadding: 24
-    focusPolicy: Qt.ClickFocus
-    background: Rectangle {
-        color: constants.c800
-    }
     contentItem: RowLayout {
         spacing: constants.s2
         RowLayout {
@@ -47,23 +39,8 @@ GPane {
         }
         HSpacer {
         }
-        Loader {
-            active: wallet.session.useTor
-            visible: active
-            sourceComponent: RowLayout {
-                spacing: 8
-                Image {
-                    fillMode: Image.PreserveAspectFit
-                    Layout.maximumHeight: 16
-                    Layout.maximumWidth: 16
-                    mipmap: true
-                    source: 'qrc:/svg/torV2.svg'
-                }
-                Label {
-                    font.pixelSize: 12
-                    text: qsTrId('id_tor')
-                }
-            }
+        SessionBadge {
+            session: wallet.session
         }
         Loader {
             active: 'type' in wallet.deviceDetails

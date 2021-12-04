@@ -98,6 +98,13 @@ MainPage {
             }
         }
     }
+    footer: StatusBar {
+        contentItem: RowLayout {
+            SessionBadge {
+                session: HttpManager.session
+            }
+        }
+    }
     bottomPadding: 24
     contentItem: ColumnLayout {
         spacing: constants.p4

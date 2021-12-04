@@ -73,6 +73,13 @@ Item {
                 }
             }
         }
+        footer: StatusBar {
+            contentItem: RowLayout {
+                SessionBadge {
+                    session: HttpManager.session
+                }
+            }
+        }
         Component {
             id: watch_only_login_dialog
             WatchOnlyLoginDialog {

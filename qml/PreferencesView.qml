@@ -24,6 +24,13 @@ MainPage {
             }
         }
     }
+    footer: StatusBar {
+        contentItem: RowLayout {
+            SessionBadge {
+                session: HttpManager.session
+            }
+        }
+    }
     contentItem: GFlickable {
         id: flickable
         clip: true

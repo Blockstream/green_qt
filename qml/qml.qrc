@@ -133,5 +133,7 @@
         <file>SideBar.qml</file>
         <file>DeviceBadge.qml</file>
         <file>WalletViewFooter.qml</file>
+        <file>StatusBar.qml</file>
+        <file>SessionBadge.qml</file>
     </qresource>
 </RCC>
