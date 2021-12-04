@@ -34,7 +34,10 @@ Page {
                 AbstractButton {
                     id: news_card
                     height: parent.height - constants.p2
-                    implicitWidth: 350
+                    implicitWidth: {
+                        const n = Math.ceil(flickable.width / 400)
+                        return (flickable.width - (n - 1) * layout.spacing) / n
+                    }
                     padding: constants.p2
                     topPadding: height / 2 + constants.p2
                     background: Rectangle {
