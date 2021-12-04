@@ -72,7 +72,7 @@ MainPage {
                     HSpacer {
                     }
                     Label {
-                        text: qsTrId('Show Blockstrem News')
+                        text: qsTrId('Show Blockstream News')
                     }
                     GSwitch {
                         checked: Settings.showNews
