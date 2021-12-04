@@ -139,13 +139,23 @@ WalletDialog {
             }
             Loader {
                 Layout.alignment: Qt.AlignCenter
-                active: resolver && wallet.config[resolver.method].enabled
+                active: resolver && wallet.config[resolver.method].enabled && !(resolver.handler instanceof TwoFactorResetHandler)
                 visible: active
                 sourceComponent: Label {
                     text: {
                         if (resolver.method === 'gauth') return qsTrId('id_authenticator_app')
                         return wallet.config[resolver.method].data
                     }
+                    color: constants.c100
+                    font.pixelSize: 14
+                }
+            }
+            Loader {
+                Layout.alignment: Qt.AlignCenter
+                active: resolver && resolver.handler instanceof TwoFactorResetHandler
+                visible: active
+                sourceComponent: Label {
+                    text: resolver.handler.email
                     color: constants.c100
                     font.pixelSize: 14
                 }
