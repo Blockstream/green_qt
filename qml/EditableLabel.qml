@@ -9,7 +9,7 @@ TextField {
     focus: false
     readOnly: !self.enabled
     activeFocusOnPress: true
-    autoScroll: false
+    autoScroll: activeFocus
     background: Rectangle {
         color: 'transparent'
         border.width: 1

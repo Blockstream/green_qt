@@ -37,6 +37,7 @@ MainPageHeader {
             contentItem: RowLayout {
                 spacing: 0
                 Control {
+                    Layout.maximumWidth: self.width / 3
                     padding: 2
                     rightPadding: 16
                     leftPadding: 8
@@ -52,6 +53,7 @@ MainPageHeader {
                         Loader {
                             active: wallet.persisted
                             visible: active
+                            Layout.fillWidth: true
                             sourceComponent: EditableLabel {
                                 leftPadding: 8
                                 rightPadding: 8
@@ -83,6 +85,7 @@ MainPageHeader {
                     source: 'qrc:/svg/right.svg'
                 }
                 Control {
+                    Layout.maximumWidth: self.width / 3
                     padding: 2
                     rightPadding: account_type_badge.visible ? 24 : 16
                     leftPadding: 16
@@ -92,6 +95,7 @@ MainPageHeader {
                         Loader {
                             active: !wallet.watchOnly
                             visible: active
+                            Layout.fillWidth: true
                             sourceComponent: EditableLabel {
                                 leftPadding: 8
                                 rightPadding: 8
