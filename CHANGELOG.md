@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Show liquid transaction details when signing with Jade
 - Show bitcoin transaction details when signing with Jade
 - Show bitcoin transaction details when signing with Ledger
+- Pull down transaction list to refresh
 
 ### Changed
 - New icons for Liquid and Liquid testnet

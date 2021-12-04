@@ -56,6 +56,9 @@ Page {
             width: ListView.view.contentWidth
             onClicked: transaction_dialog.createObject(window, { transaction }).open()
         }
+        refreshGesture: true
+        refreshText: qsTrId('id_loading_transactions')
+        onRefreshTriggered: transaction_list_model.reload()
         BusyIndicator {
             width: 32
             height: 32

@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.12
 
 ListView {
     property bool refreshGesture: false
+    property alias refreshText: refresh_label.text
     signal refreshTriggered()
 
     id: self

@@ -61,6 +61,7 @@ void TransactionListModel::handleNotification(const QJsonObject& notification)
 
 void TransactionListModel::fetch(bool reset, int offset, int count)
 {
+    qDebug() << "transactions: fetch  account:" << m_account->pointer() << "reset:" << reset << "offset:" << offset << "count:" << count;
     m_get_transactions_activity.update(new AccountGetTransactionsActivity(m_account, offset, count, this));
     m_account->wallet()->pushActivity(m_get_transactions_activity);
 
