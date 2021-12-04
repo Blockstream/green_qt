@@ -10,6 +10,7 @@ ControllerDialog {
         wallet: dialog.wallet
     }
     initialItem: ColumnLayout {
+        spacing: constants.s2
         property list<Action> actions: [
             Action {
                 enabled: email_field.text.trim() !== ''
