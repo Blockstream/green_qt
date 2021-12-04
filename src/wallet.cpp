@@ -248,6 +248,7 @@ void Wallet::reload()
 
     auto handler = new GetSubAccountsHandler(m_session);
     QObject::connect(handler, &Handler::done, this, [this, handler] {
+        handler->deleteLater();
         const bool create_segwit = m_network->isElectrum();
         bool has_segwit = false;
 
