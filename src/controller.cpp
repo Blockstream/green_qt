@@ -120,22 +120,6 @@ public:
     }
 };
 
-class TwoFactorResetHandler : public Handler
-{
-    const QByteArray m_email;
-    void call(GA_session* session, GA_auth_handler** auth_handler) override {
-        const uint32_t is_dispute = GA_FALSE;
-        int res = GA_twofactor_reset(session, m_email.data(), is_dispute, auth_handler);
-        Q_ASSERT(res == GA_OK);
-    }
-public:
-    TwoFactorResetHandler(const QByteArray& email, Session* session)
-        : Handler(session)
-        , m_email(email)
-    {
-    }
-};
-
 class TwoFactorCancelResetHandler : public Handler
 {
     void call(GA_session* session, GA_auth_handler** auth_handler) override {
@@ -438,4 +422,16 @@ void Controller::clearErrors()
     if (m_errors.empty()) return;
     m_errors.clear();
     emit errorsChanged();
+}
+
+void TwoFactorResetHandler::call(GA_session *session, GA_auth_handler **auth_handler) {
+    const uint32_t is_dispute = GA_FALSE;
+    int res = GA_twofactor_reset(session, m_email.data(), is_dispute, auth_handler);
+    Q_ASSERT(res == GA_OK);
+}
+
+TwoFactorResetHandler::TwoFactorResetHandler(const QByteArray &email, Session *session)
+    : Handler(session)
+    , m_email(email)
+{
 }

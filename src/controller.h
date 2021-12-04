@@ -67,4 +67,17 @@ protected:
     QVariantMap m_errors;
 };
 
+#include "handler.h"
+class TwoFactorResetHandler : public Handler
+{
+    Q_OBJECT
+    Q_PROPERTY(QString email READ email CONSTANT)
+    QML_ELEMENT
+    const QByteArray m_email;
+    void call(GA_session* session, GA_auth_handler** auth_handler) override;
+public:
+    TwoFactorResetHandler(const QByteArray& email, Session* session);
+    QString email() const { return m_email; }
+};
+
 #endif // GREEN_CONTROLLER_H
