@@ -89,7 +89,7 @@ void BumpFeeController::create()
     m_create_handler = new CreateTransactionHandler(details, wallet()->session());
     connect(m_create_handler, &Handler::done, this, [this, req] {
         if (m_req == req) {
-            m_tx = m_create_handler->result().value("result").toObject();
+            m_tx = m_create_handler->transaction();
             emit txChanged(m_tx);
             m_req = 0;
             m_create_handler = nullptr;

@@ -244,7 +244,7 @@ void SendController::create()
     m_create_handler = new CreateTransactionHandler(m_transaction, wallet()->session());
     connect(m_create_handler, &Handler::done, this, [this, count] {
         if (m_count == count) {
-            m_transaction = m_create_handler->result().value("result").toObject();
+            m_transaction = m_create_handler->transaction();
 
             if (m_send_all) {
                 const auto id = m_balance ? m_balance->asset()->id() : "btc";

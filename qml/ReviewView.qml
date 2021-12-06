@@ -29,7 +29,7 @@ ScrollView {
                   formatFiat(controller.transaction.fee)
         }
         Repeater {
-            model: controller.transaction.addressees
+            model: controller.transaction._addressees
             delegate: wallet.network.liquid ? liquid_address : bitcoin_address
         }
         SectionLabel { text: qsTrId('id_my_notes') }

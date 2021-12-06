@@ -6,6 +6,7 @@
 #include <QtQml>
 #include <QJsonObject>
 
+class CreateTransactionHandler;
 class Balance;
 class Transaction;
 
@@ -20,7 +21,7 @@ class BumpFeeController : public AccountController
     QJsonObject m_tx;
     int m_fee_rate{0};
     int m_req{0};
-    Handler* m_create_handler{nullptr};
+    CreateTransactionHandler* m_create_handler{nullptr};
 public:
     BumpFeeController(QObject* parent = nullptr);
     int feeRate() const { return m_fee_rate; }

@@ -3,6 +3,7 @@
 
 #include "accountcontroller.h"
 
+QT_FORWARD_DECLARE_CLASS(CreateTransactionHandler)
 QT_FORWARD_DECLARE_CLASS(Balance)
 QT_FORWARD_DECLARE_CLASS(Transaction)
 
@@ -99,7 +100,7 @@ protected:
     qint64 m_fee_rate{0};
     QJsonObject m_transaction;
     void setValid(bool valid);
-    Handler* m_create_handler{nullptr};
+    CreateTransactionHandler* m_create_handler{nullptr};
     Transaction* m_signed_transaction{nullptr};
     QJsonObject m_all_utxos;
 };

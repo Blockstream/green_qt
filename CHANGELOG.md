@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Enable Jade login button after logout
 - Restore wallet with 27 word mnemonic
 - Prevent long names to break the header layout
+- Show correct amounts in review step
 
 ## [1.0.4] - 2021-11-19
 ### Added

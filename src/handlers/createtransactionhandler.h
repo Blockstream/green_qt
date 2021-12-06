@@ -9,6 +9,7 @@ class CreateTransactionHandler : public Handler
     void call(GA_session* session, GA_auth_handler** auth_handler) override;
 public:
     CreateTransactionHandler(const QJsonObject& details, Session* session);
+    QJsonObject transaction() const;
 };
 
 #endif // GREEN_CREATETRANSACTIONHANDLER_H
