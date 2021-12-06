@@ -296,6 +296,17 @@ MainPage {
                         text: formatDeviceState(device.state)
                     }
                     Label {
+                        text: qsTrId('Networks')
+                    }
+                    Label {
+                        text: {
+                            const nets = self.device.versionInfo.JADE_NETWORKS
+                            if (nets === 'ALL') return qsTrId('All networks')
+                            if (nets === 'TEST') return qsTrId('Bitcoin Testnet and Liquid Testnet')
+                            if (nets === 'MAIN') return qsTrId('Bitcoin and Liquid')
+                        }
+                    }
+                    Label {
                         text: qsTrId('id_connection')
                     }
                     Label {
@@ -390,6 +401,22 @@ MainPage {
                             color: constants.c300
                         }
                     }
+                }
+                Label {
+                    visible: self.device.versionInfo.JADE_NETWORKS === 'TEST' && !Settings.enableTestnet
+                    Layout.margins: constants.s2
+                    Layout.alignment: Qt.AlignCenter
+                    horizontalAlignment: Text.AlignHCenter
+                    padding: 8
+                    background: Rectangle {
+                        radius: 4
+                        color: 'white'
+                    }
+                    font.capitalization: Font.AllUppercase
+                    font.styleName: 'Medium'
+                    color: 'black'
+                    font.pixelSize: 10
+                    text: qsTrId('Jade initialized for testnet networks\nEnable testnet in App Settings to use this Jade')
                 }
                 Repeater {
                     model: {
