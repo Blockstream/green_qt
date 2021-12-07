@@ -134,11 +134,15 @@ protected:
 class SignLiquidTransactionResolver : public DeviceResolver
 {
     Q_OBJECT
+    Q_PROPERTY(QJsonObject transaction READ transaction CONSTANT)
+    Q_PROPERTY(QJsonArray outputs READ outputs CONSTANT)
     Q_PROPERTY(qreal progress READ progress NOTIFY progressChanged)
     Q_PROPERTY(QJsonObject message READ message NOTIFY messageChanged)
     QML_ELEMENT
 public:
     SignLiquidTransactionResolver(Handler* handler, Device* device, const QJsonObject& result);
+    QJsonObject transaction() const { return m_transaction; }
+    QJsonArray outputs() const { return m_outputs; }
     qreal progress() const { return m_progress; };
     QJsonObject message() const { return m_message; };
     void resolve() override;
@@ -146,6 +150,8 @@ signals:
     void progressChanged(qreal progress);
     void messageChanged(const QJsonObject& message);
 protected:
+    QJsonObject const m_transaction;
+    QJsonArray const m_outputs;
     qreal m_progress{0};
     QJsonObject m_message;
 };

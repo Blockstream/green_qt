@@ -135,5 +135,6 @@
         <file>WalletViewFooter.qml</file>
         <file>StatusBar.qml</file>
         <file>SessionBadge.qml</file>
+        <file>JadeSignLiquidTransactionView.qml</file>
     </qresource>
 </RCC>

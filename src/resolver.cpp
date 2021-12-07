@@ -214,6 +214,8 @@ void BlindingNoncesResolver::resolve()
 
 SignLiquidTransactionResolver::SignLiquidTransactionResolver(Handler* handler, Device* device, const QJsonObject& result)
     : DeviceResolver(handler, device, result)
+    , m_transaction(m_required_data.value("transaction").toObject())
+    , m_outputs(m_required_data.value("transaction_outputs").toArray())
 {
     Q_ASSERT(network()->isLiquid());
     Q_ASSERT(m_required_data.value("action").toString() == "sign_tx");
