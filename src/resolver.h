@@ -100,10 +100,17 @@ protected:
 class SignTransactionResolver : public DeviceResolver
 {
     Q_OBJECT
+    Q_PROPERTY(QJsonObject transaction READ transaction CONSTANT)
+    Q_PROPERTY(QJsonArray outputs READ outputs CONSTANT)
     QML_ELEMENT
 public:
     SignTransactionResolver(Handler* handler, Device* device, const QJsonObject& result);
+    QJsonObject transaction() const { return m_transaction; }
+    QJsonArray outputs() const { return m_outputs; }
     void resolve() override;
+private:
+    QJsonObject const m_transaction;
+    QJsonArray const m_outputs;
 };
 
 class BlindingKeysResolver : public DeviceResolver
