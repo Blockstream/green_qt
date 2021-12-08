@@ -25,7 +25,7 @@ ControllerDialog {
         Label {
             Layout.fillWidth: true
             text: qsTrId('id_this_will_disable_pin_login_for')
-            wrapMode: Label.WordWrap
+            wrapMode: Text.WordWrap
         }
         RowLayout {
             Layout.fillWidth: true
@@ -34,7 +34,7 @@ ControllerDialog {
             }
             Label {
                 Layout.fillWidth: true
-                wrapMode: Label.WordWrap
+                wrapMode: Text.WordWrap
                 text: qsTrId('id_i_confirm_i_want_to_disable_pin')
             }
         }

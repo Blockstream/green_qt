@@ -120,7 +120,7 @@ MainPage {
                 text: qsTrId('id_your_favourite_exchange_rate_is')
                 padding: 8
                 leftPadding: 40
-                wrapMode: Label.WordWrap
+                wrapMode: Text.WordWrap
                 Layout.fillWidth: true
                 background: Rectangle {
                     color: 'white'
@@ -131,7 +131,7 @@ MainPage {
                 visible: wallet.events && !!wallet.events.twofactor_reset && wallet.events.twofactor_reset.is_active
                 padding: 8
                 leftPadding: 40
-                wrapMode: Label.WordWrap
+                wrapMode: Text.WordWrap
                 Layout.fillWidth: true
                 text: {
                     const data = wallet.events.twofactor_reset

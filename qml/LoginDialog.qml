@@ -180,7 +180,7 @@ AbstractDialog {
                             default: return qsTrId('id_enter_pin')
                         }
                     }
-                    wrapMode: Label.WordWrap
+                    wrapMode: Text.WordWrap
                 }
                 TorUnavailableWithElectrumWarning {
                     Layout.alignment: Qt.AlignHCenter

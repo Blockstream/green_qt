@@ -180,13 +180,13 @@ AbstractDialog {
                         text: qsTrId('id_faster_more_confidential')
                         font.pixelSize: 28
                         font.bold: true
-                        wrapMode: Label.WordWrap
+                        wrapMode: Text.WordWrap
                     }
                     Label {
                         Layout.maximumWidth: 500
                         text: qsTrId('id_liquid_is_a_sidechainbased')
                         font.pixelSize: 16
-                        wrapMode: Label.WordWrap
+                        wrapMode: Text.WordWrap
                     }
                     RowLayout {
                         Layout.maximumWidth: 500
@@ -256,13 +256,13 @@ AbstractDialog {
                         text: qsTrId('id_send_and_receive_liquidbased')
                         font.pixelSize: 28
                         font.bold: true
-                        wrapMode: Label.WordWrap
+                        wrapMode: Text.WordWrap
                     }
                     Label {
                         Layout.maximumWidth: 500
                         text: qsTrId('id_well_get_you_set_up_with_an_amp')
                         font.pixelSize: 16
-                        wrapMode: Label.WordWrap
+                        wrapMode: Text.WordWrap
                     }
                     RowLayout {
                         Layout.maximumWidth: 500

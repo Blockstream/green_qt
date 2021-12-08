@@ -24,7 +24,7 @@ ColumnLayout {
             Label {
                 Layout.fillWidth: true
                 text: qsTrId('id_disable_pin_access_for_this')
-                wrapMode: Label.WordWrap
+                wrapMode: Text.WordWrap
             }
             GButton {
                 destructive: true
@@ -44,7 +44,7 @@ ColumnLayout {
             Label {
                 Layout.fillWidth: true
                 text: qsTrId('id_enable_or_change_your_pin_to')
-                wrapMode: Label.WordWrap
+                wrapMode: Text.WordWrap
             }
             GButton {
                 Layout.alignment: Qt.AlignRight
@@ -62,7 +62,7 @@ ColumnLayout {
         contentItem: RowLayout {
             spacing: constants.s1
             Label {
-                wrapMode: Label.WordWrap
+                wrapMode: Text.WordWrap
                 Layout.fillWidth: true
                 text: qsTrId('id_set_a_timeout_to_logout_after')
             }

@@ -67,7 +67,7 @@ ColumnLayout {
             Label {
                 Layout.fillWidth: true
                 text: qsTrId('id_select_a_fiat_currency_and') // TODO: update string
-                wrapMode: Label.WordWrap
+                wrapMode: Text.WordWrap
             }
             Label {
                 Layout.fillWidth: true

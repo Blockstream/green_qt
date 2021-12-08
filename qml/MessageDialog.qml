@@ -12,7 +12,7 @@ WalletDialog {
     contentItem: Label {
         id: message_label
         padding: 0
-        wrapMode: Label.WrapAtWordBoundaryOrAnywhere
+        wrapMode: Text.Wrap
     }
     footer: DialogFooter {
         HSpacer {}

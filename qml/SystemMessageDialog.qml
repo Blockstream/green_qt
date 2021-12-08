@@ -50,7 +50,7 @@ ControllerDialog {
                 padding: 0
                 width: flickable.availableWidth
                 height: paintedHeight
-                wrapMode: Label.WrapAtWordBoundaryOrAnywhere
+                wrapMode: Text.Wrap
                 onLinkActivated: Qt.openUrlExternally(link)
                 textFormat: Label.MarkdownText
             }

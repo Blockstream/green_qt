@@ -35,7 +35,7 @@ AbstractDialog {
             Layout.fillWidth: true
             text: qsTrId('id_blockstream_green_supports_both')
             font.pixelSize: 12
-            wrapMode: Label.WordWrap
+            wrapMode: Text.WordWrap
         }
         RowLayout {
             spacing: 20
@@ -90,7 +90,7 @@ AbstractDialog {
                 Layout.maximumWidth: 200
                 text: self.text
                 font.pixelSize: 12
-                wrapMode: Label.WordWrap
+                wrapMode: Text.WordWrap
             }
         }
         onClicked: select(network)

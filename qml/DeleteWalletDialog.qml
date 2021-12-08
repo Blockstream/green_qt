@@ -22,7 +22,7 @@ ControllerDialog {
         Label {
             Layout.fillWidth: true
             text: qsTrId('id_delete_permanently_your_wallet')
-            wrapMode: Label.WordWrap
+            wrapMode: Text.WordWrap
         }
         RowLayout {
             Layout.fillWidth: true
@@ -31,7 +31,7 @@ ControllerDialog {
             }
             Label {
                 Layout.fillWidth: true
-                wrapMode: Label.WordWrap
+                wrapMode: Text.WordWrap
                 text: qsTrId('id_i_confirm_i_want_to_delete_this')
             }
         }

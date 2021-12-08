@@ -30,7 +30,7 @@ ColumnLayout {
     }
     Label {
         text: resolver.message
-        wrapMode: Label.WrapAtWordBoundaryOrAnywhere
+        wrapMode: Text.Wrap
         Layout.maximumWidth: 500
     }
     SectionLabel {
@@ -38,7 +38,7 @@ ColumnLayout {
     }
     Label {
         text: resolver.hash
-        wrapMode: Label.WrapAtWordBoundaryOrAnywhere
+        wrapMode: Text.Wrap
         Layout.maximumWidth: 500
     }
     SectionLabel {

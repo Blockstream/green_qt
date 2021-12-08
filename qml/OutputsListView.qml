@@ -230,7 +230,7 @@ Page {
                                         return qsTrId('id_coins_for_which_2fa_protection')
                                 }
                             }
-                            wrapMode: Label.WordWrap
+                            wrapMode: Text.WordWrap
                         }
                     }
                 }

@@ -18,7 +18,7 @@ ColumnLayout {
             Label {
                 Layout.fillWidth: true
                 text: qsTrId('id_the_recovery_phrase_can_be_used') + ' ' + qsTrId('id_blockstream_does_not_have')
-                wrapMode: Label.WordWrap
+                wrapMode: Text.WordWrap
             }
             GButton {
                 Layout.alignment: Qt.AlignRight
@@ -39,7 +39,7 @@ ColumnLayout {
                 Label {
                     Layout.fillWidth: true
                     text: qsTrId('id_save_a_summary_of_your_accounts')
-                    wrapMode: Label.WordWrap
+                    wrapMode: Text.WordWrap
                 }
                 GButton {
                     Layout.alignment: Qt.AlignRight
@@ -74,7 +74,7 @@ ColumnLayout {
                 Label {
                     Layout.fillWidth: true
                     text: qsTrId('id_redeem_your_deposited_funds') + '\n\n' + qsTrId('id_enable_email_notifications_to')
-                    wrapMode: Label.WordWrap
+                    wrapMode: Text.WordWrap
                 }
                 GButton {
                     Layout.alignment: Qt.AlignRight
@@ -96,7 +96,7 @@ ColumnLayout {
                 Label {
                     Layout.fillWidth: true
                     text: qsTrId('id_set_up_an_email_to_get')
-                    wrapMode: Label.WordWrap
+                    wrapMode: Text.WordWrap
                 }
                 GButton {
                     Layout.alignment: Qt.AlignRight
@@ -125,13 +125,13 @@ ColumnLayout {
                 Label {
                     Layout.fillWidth: true
                     text: qsTrId('id_delete_permanently_your_wallet')
-                    wrapMode: Label.WordWrap
+                    wrapMode: Text.WordWrap
                 }
                 Label {
                     Layout.fillWidth: true
                     visible: !self.wallet.empty
                     text: qsTrId('id_all_of_the_accounts_in_your')
-                    wrapMode: Label.WordWrap
+                    wrapMode: Text.WordWrap
                 }
                 GButton {
                     Layout.alignment: Qt.AlignRight

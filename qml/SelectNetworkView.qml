@@ -114,7 +114,7 @@ GPane {
                 Layout.fillHeight: true
                 text: self.description
                 font.pixelSize: 12
-                wrapMode: Label.WordWrap
+                wrapMode: Text.WordWrap
             }
         }
         onClicked: navigation.set({ network: self.network, type: self.type })

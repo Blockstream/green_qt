@@ -132,7 +132,7 @@ Page {
                             Layout.fillWidth: true
                             Layout.fillHeight: true
                             text: modelData.description
-                            wrapMode: Label.WordWrap
+                            wrapMode: Text.WordWrap
                             elide: Label.ElideRight
                             color: "white"
                             font.pixelSize: 12
