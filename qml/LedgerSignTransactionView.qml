@@ -6,6 +6,7 @@ import QtQuick.Layouts 1.12
 GFlickable {
     required property Wallet wallet
     required property SignTransactionResolver resolver
+    readonly property var inputs: resolver.requiredData.signing_inputs
     readonly property var outputs: resolver.requiredData.transaction_outputs.filter(({ is_change, is_fee }) => !is_fee)
 
     id: self
@@ -73,6 +74,29 @@ GFlickable {
                 Label {
                     Layout.fillWidth: true
                     text: wallet.formatAmount(resolver.transaction.fee, true, 'btc')
+                }
+            }
+        }
+        Repeater {
+            model: inputs
+            delegate: Page {
+                Layout.fillWidth: true
+                background: null
+                header: SectionLabel {
+                    bottomPadding: constants.s1
+                    text: 'Input ' + (index + 1) + '/' + inputs.length
+                }
+                contentItem: GridLayout {
+                    columnSpacing: constants.s1
+                    rowSpacing: constants.s1
+                    columns: 2
+                    Label {
+                        text: qsTrId('Sign path')
+                    }
+                    Label {
+                        Layout.fillWidth: true
+                        text: modelData.user_path.map(i => i < 2147483648 ? i : (i - 2147483648) + '\'').join('/')
+                    }
                 }
             }
         }
