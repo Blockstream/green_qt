@@ -137,5 +137,6 @@
         <file>SessionBadge.qml</file>
         <file>JadeSignLiquidTransactionView.qml</file>
         <file>JadeSignTransactionView.qml</file>
+        <file>LedgerSignTransactionView.qml</file>
     </qresource>
 </RCC>

@@ -76,10 +76,12 @@ class DeviceResolver : public Resolver
 {
     Q_OBJECT
     Q_PROPERTY(Device* device READ device CONSTANT)
+    Q_PROPERTY(QJsonObject requiredData READ requiredData CONSTANT)
     QML_ELEMENT
 public:
     DeviceResolver(Handler* handler, Device* device, const QJsonObject& result);
     Device* device() const { return m_device; }
+    QJsonObject requiredData() const { return m_required_data; }
 protected:
     Device* const m_device;
     QJsonObject const m_required_data;

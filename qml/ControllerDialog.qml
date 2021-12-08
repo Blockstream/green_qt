@@ -58,14 +58,15 @@ WalletDialog {
                 return
             }
             if (resolver instanceof SignTransactionResolver) {
+                let component
                 if (resolver.device instanceof JadeDevice) {
-                    const view = jade_sign_transaction_view.createObject(stack_view, { resolver, wallet })
-                    stack_view.push(view)
-                    resolver.resolve()
+                    component = jade_sign_transaction_view
                 } else {
-                    stack_view.push(sign_transaction_resolver_view_component, { resolver })
-                    resolver.resolve()
+                    component = ledger_sign_transaction_view
                 }
+                const view = component.createObject(stack_view, { resolver, wallet })
+                stack_view.push(view)
+                resolver.resolve()
                 return
             }
             if (resolver instanceof SignLiquidTransactionResolver) {
@@ -103,6 +104,11 @@ WalletDialog {
     Component {
         id: sign_liquid_transaction_resolver_view_component
         SignLiquidTransactionResolverView {}
+    }
+
+    Component {
+        id: ledger_sign_transaction_view
+        LedgerSignTransactionView {}
     }
 
     Component {
