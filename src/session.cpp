@@ -30,6 +30,9 @@ void Session::handleNotification(const QJsonObject& notification)
     Q_ASSERT(!event.isEmpty());
     const auto value = notification.value(event);
 
+    m_event[event] = value;
+    emit eventChanged(m_event);
+
     m_events.append(notification);
 
     if (event == "session") {

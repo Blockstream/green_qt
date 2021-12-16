@@ -25,6 +25,7 @@ class Session : public Entity
     Q_PROPERTY(int proxyPort READ proxyPort CONSTANT)
     Q_PROPERTY(bool active READ isActive WRITE setActive NOTIFY activeChanged)
     Q_PROPERTY(bool connected READ isConnected NOTIFY connectedChanged)
+    Q_PROPERTY(QJsonObject event READ event NOTIFY eventChanged)
     QML_ELEMENT
 public:
     Session(Network* network, QObject* parent = nullptr);
@@ -40,6 +41,7 @@ public:
     bool isConnected() const { return m_connected; }
     Connection* connection() const { return m_connection; };
     QList<QJsonObject> events() const { return m_events; }
+    QJsonObject event() const { return m_event; }
 signals:
     void notificationHandled(const QJsonObject& notification);
     void networkEvent(const QJsonObject& event);
@@ -48,6 +50,7 @@ signals:
     void connectedChanged(bool connected);
     void torEvent(const QJsonObject& event);
     void activityCreated(Activity* activity);
+    void eventChanged(const QJsonObject& event);
 private:
     void update();
     void handleNotification(const QJsonObject& notification);
@@ -66,6 +69,7 @@ public:
     Connectable<ConnectHandler> m_connect_handler;
     Connection* m_connection{nullptr};
     QList<QJsonObject> m_events;
+    QJsonObject m_event;
 };
 
 class Connection : public QObject
