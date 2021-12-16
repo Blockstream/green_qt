@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - New icons for Liquid and Liquid testnet
+- Updates GDK to 0.0.48
 
 ### Fixed
 - Enable Jade login button after logout
