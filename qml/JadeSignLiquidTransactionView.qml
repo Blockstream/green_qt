@@ -52,7 +52,7 @@ GFlickable {
                     }
                     Label {
                         Layout.fillWidth: true
-                        text: asset.formatAmount(modelData.satoshi, true)
+                        text: asset.formatAmount(modelData.satoshi, true, 'btc')
                     }
                     Label {
                         text: qsTrId('id_asset_id')

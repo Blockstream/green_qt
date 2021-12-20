@@ -425,8 +425,12 @@ void Wallet::updateSettings()
 
 QString ComputeDisplayUnit(Network* network, QString unit)
 {
-    if (!network->isMainnet()) {
-        if (unit == "BTC") {
+    if (network->isMainnet()) {
+        if (unit == "btc") {
+            unit = "BTC";
+        }
+    } else {
+        if (unit == "BTC" || unit == "btc") {
             unit = "TEST";
         } else if (unit == "mBTC") {
             unit = "mTEST";
@@ -559,7 +563,7 @@ QString Wallet::formatAmount(qint64 amount, bool include_ticker, const QString& 
         str.remove(QRegExp("\\.?0+$"));
     }
     if (include_ticker) {
-        str += " " + m_display_unit;
+        str += " " + ComputeDisplayUnit(m_network, effective_unit);
     }
     return str;
 }
