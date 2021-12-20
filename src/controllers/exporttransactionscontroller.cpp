@@ -74,7 +74,9 @@ void ExportTransactionsController::nextPage()
                 QStringList values;
                 for (auto field : m_fields) {
                     if (field == "time") {
-                        values.append(data.value("created_at").toString());
+                        const auto created_at_ts = data.value("created_at_ts").toDouble();
+                        const auto created_at = QDateTime::fromMSecsSinceEpoch(created_at_ts / 1000);
+                        values.append(QLocale::system().toString(created_at));
                     } else if (field == "description") {
                         values.append(data.value("type").toString());
                     } else if (field == "amount") {
