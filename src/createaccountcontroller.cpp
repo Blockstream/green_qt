@@ -4,7 +4,18 @@
 #include "wallet.h"
 
 #include <gdk.h>
+#include <wally_bip32.h>
 #include "ga.h"
+
+namespace {
+
+bool IsValidXpub(const QByteArray& xpub)
+{
+    ext_key key;
+    return bip32_key_from_base58(xpub.constData(), &key) == WALLY_OK;
+}
+
+} // namespace
 
 CreateAccountController::CreateAccountController(QObject *parent)
     : Controller(parent)
@@ -77,20 +88,6 @@ void CreateAccountController::create()
     exec(handler);
 }
 
-#include <wally_bip32.h>
-namespace {
-bool ValidXpub(const QByteArray& xpub) {
-    size_t len;
-    if (wally_base58_get_length(xpub.constData(), &len) != WALLY_OK) return false;
-    QByteArray w(len, 0);
-    if (wally_base58_to_bytes(xpub.constData(), BASE58_FLAG_CHECKSUM, (unsigned char*) w.data(), len, &len) != WALLY_OK) return false;
-    w.resize(len);
-    ext_key k;
-    if (bip32_key_unserialize((const unsigned char*) w.constData(), w.size(), &k) != WALLY_OK) return false;
-    return true;
-}
-}
-
 void CreateAccountController::setRecoveryXpub(const QString& recovery_xpub)
 {
     if (m_recovery_xpub == recovery_xpub) return;
@@ -99,7 +96,7 @@ void CreateAccountController::setRecoveryXpub(const QString& recovery_xpub)
     setRecoveryMnemonic({});
     if (m_recovery_xpub.isEmpty()) {
         setError("recoveryXpub", QString{"empty"});
-    } else if (!ValidXpub(m_recovery_xpub.toLocal8Bit())) {
+    } else if (!IsValidXpub(m_recovery_xpub.toLocal8Bit())) {
         setError("recoveryXpub", QString{"invalid"});
     } else {
         clearError("recoveryXpub");
