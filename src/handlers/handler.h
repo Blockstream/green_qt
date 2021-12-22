@@ -53,4 +53,12 @@ private:
     QJsonObject m_error_details;
 };
 
+class GetSubAccountsHandler : public Handler
+{
+    void call(GA_session* session, GA_auth_handler** auth_handler) override;
+public:
+    GetSubAccountsHandler(Session* session);
+    QJsonArray subAccounts() const;
+};
+
 #endif // GREEN_HANDLER_H

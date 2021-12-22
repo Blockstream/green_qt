@@ -220,3 +220,19 @@ void Handler::setResult(const QJsonObject& result)
     m_result = result;
     emit resultChanged(m_result);
 }
+
+GetSubAccountsHandler::GetSubAccountsHandler(Session *session)
+    : Handler(session)
+{
+}
+
+void GetSubAccountsHandler::call(GA_session *session, GA_auth_handler **auth_handler)
+{
+    int res = GA_get_subaccounts(session, auth_handler);
+    Q_ASSERT(res == GA_OK);
+}
+
+QJsonArray GetSubAccountsHandler::subAccounts() const
+{
+    return result().value("result").toObject().value("subaccounts").toArray();
+}

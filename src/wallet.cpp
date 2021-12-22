@@ -26,22 +26,6 @@
 
 #include <gdk.h>
 
-class GetSubAccountsHandler : public Handler
-{
-    void call(GA_session* session, GA_auth_handler** auth_handler) override
-    {
-        int res = GA_get_subaccounts(session, auth_handler);
-        Q_ASSERT(res == GA_OK);
-    }
-public:
-    GetSubAccountsHandler(Session* session)
-        : Handler(session)
-    {
-    }
-    QJsonArray subAccounts() const {
-        return result().value("result").toObject().value("subaccounts").toArray();
-    }
-};
 
 namespace {
 QByteArray getMnemonicPassphrase(GA_session* session)
