@@ -15,22 +15,7 @@ void Navigation::setLocation(const QString &location)
         m_history.removeAll(m_location);
         m_history.push(m_location);
     }
-    m_location = location;
-    emit locationChanged(m_location);
-    QUrl url(location);
-    setPath(url.path());
-    QUrlQuery q(url);
-    QVariantMap param;
-    for (auto& pair : q.queryItems()) {
-        if (pair.second == "true") {
-            param.insert(pair.first, true);
-        } else if (pair.second == "false") {
-            param.insert(pair.first, false);
-        } else {
-            param.insert(pair.first, pair.second);
-        }
-    }
-    setParam(param);
+    updateLocation(location);
 }
 
 void Navigation::setPath(const QString& path)
@@ -67,7 +52,27 @@ void Navigation::go(const QString &location, const QVariantMap &param)
 void Navigation::pop()
 {
     if (m_history.isEmpty()) return;
-    setLocation(m_history.pop());
+    updateLocation(m_history.pop());
+}
+
+void Navigation::updateLocation(const QString& location)
+{
+    m_location = location;
+    emit locationChanged(m_location);
+    QUrl url(m_location);
+    setPath(url.path());
+    QUrlQuery q(url);
+    QVariantMap param;
+    for (auto& pair : q.queryItems()) {
+        if (pair.second == "true") {
+            param.insert(pair.first, true);
+        } else if (pair.second == "false") {
+            param.insert(pair.first, false);
+        } else {
+            param.insert(pair.first, pair.second);
+        }
+    }
+    setParam(param);
 }
 
 void Navigation::set(const QVariantMap& param)

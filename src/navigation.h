@@ -3,8 +3,8 @@
 
 #include <QtQml>
 #include <QObject>
-#include <QVariantMap>
 #include <QStack>
+#include <QVariantMap>
 
 class Navigation : public QObject
 {
@@ -34,6 +34,7 @@ private:
     QStack<QString> m_history;
     QString m_path;
     QVariantMap m_param;
+    void updateLocation(const QString& location);
 };
 
 #endif // GREEN_NAVIGATION_H
