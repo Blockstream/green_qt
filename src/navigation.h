@@ -12,6 +12,7 @@ class Navigation : public QObject
     Q_PROPERTY(QString location READ location WRITE setLocation NOTIFY locationChanged)
     Q_PROPERTY(QString path READ path NOTIFY pathChanged)
     Q_PROPERTY(QVariantMap param READ param NOTIFY paramChanged)
+    Q_PROPERTY(bool canPop READ canPop NOTIFY locationChanged)
     QML_ELEMENT
 public:
     explicit Navigation(QObject* parent = nullptr);
@@ -21,6 +22,7 @@ public:
     void setPath(const QString& path);
     QVariantMap param() const { return m_param; }
     void setParam(const QVariantMap& param);
+    bool canPop() const { return !m_history.isEmpty(); }
 public slots:
     void go(const QString& location, const QVariantMap& param = {});
     void pop();
