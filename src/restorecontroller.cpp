@@ -1,11 +1,12 @@
 #include "handlers/loginhandler.h"
+#include "handlers/gettransactionshandler.h"
 #include "network.h"
 #include "restorecontroller.h"
 #include "wallet.h"
 #include "walletmanager.h"
 
 RestoreController::RestoreController(QObject *parent)
-    : Entity(parent)
+    : AbstractController(parent)
 {
 }
 
@@ -24,6 +25,8 @@ void RestoreController::setType(const QString& type)
     emit typeChanged(m_type);
     update();
 }
+
+#include <wally_bip39.h>
 
 void RestoreController::setMnemonic(const QStringList& mnemonic)
 {
@@ -58,6 +61,14 @@ void RestoreController::setActive(bool active)
 
 void RestoreController::accept()
 {
+    Q_ASSERT(!m_wallet);
+    m_wallet = WalletManager::instance()->restoreWallet(m_network);
+    emit walletChanged(m_wallet);
+    m_wallet->updateHashId(m_wallet_hash_id);
+    m_wallet->setSession(m_session);
+    m_wallet->setSession();
+    m_session = nullptr;
+
     Q_ASSERT(m_wallet->isAuthenticated());
     Q_ASSERT(m_wallet->m_pin_data.isEmpty());
     Q_ASSERT(!m_accepted);
@@ -66,8 +77,8 @@ void RestoreController::accept()
     auto activity = new AcceptRestoreActivity(m_wallet, this);
     m_wallet->pushActivity(activity);
 
-    auto handler = new SetPinHandler(m_pin.toLocal8Bit(), m_session);
-    QObject::connect(handler, &Handler::done, this, [this, handler, activity] {
+    auto handler = new SetPinHandler(m_pin.toLocal8Bit(), m_wallet->session());
+    QObject::connect(handler, &Handler::done, this, [=] {
         handler->deleteLater();
         m_wallet->m_pin_data = handler->pinData();
         if (m_type == "amp") {
@@ -109,66 +120,141 @@ void RestoreController::update()
         }
         return true;
     };
-    bool valid = check();
-    if (m_valid != valid) {
-        m_valid = valid;
-        emit validChanged(m_valid);
-        if (!m_valid && m_wallet) {
-            delete m_wallet;
-            m_wallet = nullptr;
-            emit walletChanged(m_wallet);
+    if (!check()) return;
+
+    if (!m_active) {
+        if (m_session) {
+            // TODO: free session etc
         }
+        return;
     }
 
-    if (!m_valid) return;
+    setBusy(true);
 
-    if (!m_active && m_wallet) {
-        // TODO delete wallet
-    }
-
-    if (m_active && !m_wallet) {
-        qDebug() << "setup wallet and activate session";
-
-        m_wallet = WalletManager::instance()->restoreWallet(m_network);
-        emit walletChanged(m_wallet);
-
-        m_wallet->createSession();
-        m_session = m_wallet->session();
-        m_session.track(QObject::connect(m_session, &Session::connectedChanged, this, &RestoreController::update));
-
+    if (!m_session) {
+        m_session = new Session(m_network, this);
+        QObject::connect(m_session, &Session::connectedChanged, this, &RestoreController::update);
         m_session->setActive(true);
+        emit sessionChanged(m_session);
+        return;
     }
 
-    if (m_active && m_wallet && m_wallet->m_session->isConnected()) {
-        auto activity = new CheckRestoreActivity(m_wallet, this);
-        m_wallet->pushActivity(activity);
-        qDebug() << "attempt login with mnemonic and password";
-        m_wallet->setAuthentication(Wallet::Authenticating);
+    if (!m_session->isConnected()) {
+        return;
+    }
 
+
+//        qDebug() << "setup wallet and activate session";
+
+//        m_wallet = WalletManager::instance()->restoreWallet(m_network);
+//        emit walletChanged(m_wallet);
+
+//        m_wallet->createSession();
+//        m_session = m_wallet->session();
+//        m_session.track(QObject::connect(m_session, &Session::connectedChanged, this, &RestoreController::update));
+
+//        m_session->setActive(true);
+//    }
+
+//    if (m_active && m_wallet && m_wallet->m_session->isConnected()) {
+//        auto activity = new CheckRestoreActivity(m_wallet, this);
+//        m_wallet->pushActivity(activity);
+//        qDebug() << "attempt login with mnemonic and password";
+//        m_wallet->setAuthentication(Wallet::Authenticating);
+
+    if (m_wallet_hash_id.isEmpty()) {
         auto handler = new LoginHandler(m_mnemonic, m_password, m_session);
-        QObject::connect(handler, &Handler::done, this, [this, handler, activity] {
-           handler->deleteLater();
-           m_wallet->updateHashId(handler->walletHashId());
-           m_wallet->setAuthentication(Wallet::Authenticated);
-           activity->finish();
-           activity->deleteLater();
+        QObject::connect(handler, &Handler::done, this, [=] {
+            handler->deleteLater();
+            m_wallet_hash_id = handler->walletHashId();
+
+            update();
+//           m_wallet->updateHashId();
+//           m_wallet->setAuthentication(Wallet::Authenticated);
+//           activity->finish();
+//           activity->deleteLater();
         });
-        QObject::connect(handler, &Handler::error, this, [this, handler, activity] {
+        QObject::connect(handler, &Handler::error, this, [=] {
             handler->deleteLater();
             const auto error = handler->result().value("error").toString();
+
+            updateError("password", QStringLiteral("mismatch"), error.indexOf("Invalid checksum") >= 0);
+
+            setValid(false);
+            setBusy(false);
+
             // TODO: these are examples of errors
             // these sould be handled in Handler class, see TODO above
             // {"action":"get_xpubs","device":{},"error":"get_xpubs exception:login failed:id_login_failed","status":"error"}
             // {"action":"get_xpubs","device":{},"error":"get_xpubs exception:reconnect required","status":"error"}
 
             // TODO controller should expose error? or activity?
-            m_wallet->setAuthentication(Wallet::Unauthenticated);
-            activity->finish();
-            activity->deleteLater();
-            emit loginError(error);
+//            m_wallet->setAuthentication(Wallet::Unauthenticated);
+//            activity->finish();
+//            activity->deleteLater();
+//            emit loginError(error);
         });
         handler->exec();
+        return;
     }
+
+    m_wallet = WalletManager::instance()->walletWithHashId(m_wallet_hash_id, false);
+    if (m_wallet) {
+        qDebug() << Q_FUNC_INFO << m_network->id() << m_wallet_hash_id << m_wallet->name();
+        setBusy(false);
+        setValid(false);
+        emit walletChanged(m_wallet);
+        return;
+    }
+
+    if (!m_network->isElectrum()) {
+        setBusy(false);
+        setValid(true);
+        return;
+    }
+
+    if (m_subaccounts.isEmpty()) {
+        qDebug() << Q_FUNC_INFO << "get subaccounts" << m_network->id();
+
+        auto handler = new GetSubAccountsHandler(m_session);
+        QObject::connect(handler, &Handler::done, this, [=] {
+            handler->deleteLater();
+            m_subaccounts = handler->subAccounts();
+            update();
+        });
+        handler->exec();
+        return;
+    }
+
+    if (m_transaction_count == 0 && m_current_subaccount <= m_subaccounts.size()) {
+        int subaccount = m_subaccounts.at(m_current_subaccount++).toObject().value("pointer").toInt();
+        qDebug() << Q_FUNC_INFO << "get transactions" << m_network->id() << subaccount;
+        auto handler = new GetTransactionsHandler(subaccount, 0, 30, m_session);
+        QObject::connect(handler, &Handler::done, this, [=] {
+            handler->deleteLater();
+            m_transaction_count += handler->transactions().size();
+            update();
+        });
+        handler->exec();
+        return;
+    }
+
+    setBusy(false);
+    setValid(m_transaction_count > 0);
+}
+
+void RestoreController::setBusy(bool busy)
+{
+    if (m_busy == busy) return;
+    m_busy = busy;
+    emit busyChanged(m_busy);
+}
+
+void RestoreController::setValid(bool valid)
+{
+    if (m_valid == valid) return;
+    m_valid = valid;
+    emit validChanged(m_valid);
 }
 
 CheckRestoreActivity::CheckRestoreActivity(Wallet* wallet, QObject* parent)

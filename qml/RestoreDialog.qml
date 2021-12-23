@@ -9,109 +9,38 @@ import QtQml.Models 2.0
 AbstractDialog {
     id: self
     icon: {
-        if (controller.type === 'amp') return 'qrc:/svg/amp.svg'
-        if (controller.network) return icons[controller.network.key]
+        const { network, type } = navigation.param
+        if (type === 'amp') return 'qrc:/svg/amp.svg'
+        if (network) return icons[network]
         return ''
     }
     title: qsTrId('id_restore_green_wallet')
     width: 900
-    height: 600
+    height: 500
     closePolicy: Popup.NoAutoClose
 
     Navigation {
         id: navigation
+        property RestoreController controller
         location: window.navigation.location
     }
 
-    RestoreController {
-        id: controller
-        network: {
-            const network = navigation.param.network || ''
-            const server_type = navigation.param.type === 'amp' ? 'green' : (navigation.param.server_type || '')
-            return NetworkManager.networkWithServerType(network, server_type)
-        }
-        type: navigation.param.type || ''
-        mnemonic: (navigation.param.mnemonic || '').split(',')
-        password: navigation.param.password || ''
-        pin: navigation.param.pin || ''
-        active: mnemonic.length === 12 || mnemonic.length === 24 || (mnemonic.length === 27 && password !== '')
-    }
 
     Connections {
-        target: controller.wallet
+        enabled: target
+        target: navigation.controller ? navigation.controller.wallet : null
         function onActivityCreated(activity) {
             if (activity instanceof CheckRestoreActivity) {
-                const view = check_view.createObject(activities_row, { activity })
-                activity.finished.connect(() => {
-                    view.destroy()
-                })
             } else if (activity instanceof AcceptRestoreActivity) {
-                const view = accept_view.createObject(activities_row, { activity })
                 activity.finished.connect(() => {
-                    view.destroy()
-                    window.navigation.go(`/${controller.network.key}/${controller.wallet.id}`)
+                    const wallet = navigation.controller.wallet
+                    window.navigation.go(`/${wallet.network.key}/${wallet.id}`)
                 })
             }
         }
     }
 
-    Connections {
-        target: controller.wallet ? controller.wallet.session : null
-        function onActivityCreated(activity) {
-            if (activity instanceof SessionTorCircuitActivity) {
-                session_tor_cirtcuit_view.createObject(activities_row, { activity })
-            } else if (activity instanceof SessionConnectActivity) {
-                session_connect_view.createObject(activities_row, { activity })
-            }
-        }
-    }
 
-    Connections {
-        target: controller
-        function onLoginError(error) {
-            navigation.set({ mnemonic: undefined, password: undefined })
-            if (error.includes('id_login_failed')) {
-                self.footer.ToolTip.show(qsTrId('id_login_failed'), 2000);
-            } else if (error.includes('bip39_mnemonic_to_seed')) {
-                self.footer.ToolTip.show(qsTrId('id_invalid_mnemonic'), 2000);
-            } else if (error.includes('bip39_mnemonic_to_bytes')) {
-                self.footer.ToolTip.show(qsTrId('id_invalid_mnemonic'), 2000);
-            } else if (error.includes('reconnect required')) {
-                self.footer.ToolTip.show(qsTrId('id_unable_to_contact_the_green'), 2000);
-            } else if (error.includes('Invalid checksum')) {
-                self.footer.ToolTip.show(qsTrId('id_error_passphrases_do_not_match'), 2000);
-            } else {
-                self.footer.ToolTip.show(error, 2000);
-            }
-        }
-    }
-
-    footer: DialogFooter {
-        TorUnavailableWithElectrumWarning {
-            network: controller.network
-        }
-        GButton {
-            action: stack_layout.currentItem ? stack_layout.currentItem.backAction || null : null
-            large: true
-            visible: action
-        }
-        GPane {
-            Layout.minimumHeight: 48
-            background: null
-            padding: 0
-            contentItem: RowLayout {
-                id: activities_row
-            }
-        }
-        HSpacer {}
-        Repeater {
-            model: stack_layout.currentItem ? stack_layout.currentItem.actions || null : null
-            GButton {
-                action: modelData
-                large: true
-            }
-        }
-    }
 
     contentItem: StackLayout {
         property Item currentItem: {
@@ -139,94 +68,65 @@ AbstractDialog {
         AnimLoader {
             active: (navigation.param.network || '') !== ''
             animated: self.opened
-            sourceComponent: SelectServerTypeView {
-                readonly property Action backAction: Action {
-                    enabled: navigation.path === '/restore'
-                    text: qsTrId('id_back')
-                    onTriggered: navigation.set({ network: undefined, type: undefined })
-                }
-            }
-        }
-        AnimLoader {
-            active: controller.network
-            animated: self.opened
             sourceComponent: MnemonicEditor {
-                // TODO: in order to go back activities must be removed
-                // and session destroyed
-                // readonly property Action backAction: Action {
-                //     text: qsTrId('id_back')
-                //     onTriggered: navigation.set({ network: undefined })
-                // }
                 id: editor
-                enabled: !controller.active
                 title: qsTrId('id_enter_your_recovery_phrase')
-                actions: [
-                    Action {
-                        enabled: !controller.active
+                footer: RowLayout {
+                    spacing: constants.s1
+                    GButton {
+                        visible: navigation.canPop
+                        text: qsTrId('id_back')
+                        onClicked: navigation.pop()
+                    }
+                    GButton {
                         text: qsTrId('id_clear')
-                        onTriggered: {
-                            navigation.set({ mnemonic: undefined })
-                            editor.controller.clear();
-                        }
-                    },
-                    Action {
-                        text: qsTrId('id_continue')
-                        enabled: editor.valid && navigation.param.mnemonic === undefined
-                        onTriggered: navigation.set({ mnemonic: editor.mnemonic })
+                        enabled: !editor.controller.active
+                        onClicked: editor.controller.clear();
                     }
-                ]
-            }
-        }
-        AnimLoader {
-            active: controller.network && controller.mnemonic.length === 27
-            animated: self.opened
-            sourceComponent: ColumnLayout {
-                readonly property Action backAction: Action {
-                    text: qsTrId('id_back')
-                    onTriggered: navigation.set({ mnemonic: undefined, password: undefined })
-                }
-                property list<Action> actions: [
-                    Action {
-                        id: passphrase_next_action
-                        text: qsTrId('id_continue')
-                        // enabled: !controller.active && controller.valid
-                        onTriggered: navigation.set({ password: password_field.text })
+                    HSpacer {
                     }
-                ]
-                spacing: 16
-                VSpacer {
-                }
-                Label {
-                    Layout.alignment: Qt.AlignHCenter
-                    text: qsTrId('id_please_provide_your_passphrase')
-                    font.pixelSize: 20
-                }
-                GTextField {
-                    Layout.alignment: Qt.AlignHCenter
-                    id: password_field
-                    implicitWidth: 400
-                    echoMode: TextField.Password
-                    onAccepted: passphrase_next_action.trigger()
-                    enabled: !controller.active
-                    placeholderText: qsTrId('id_encryption_passphrase')
-                }
-                VSpacer {
+                    GButton {
+                        text: qsTrId('id_continue')
+                        enabled: editor.valid
+                        onClicked: navigation.set({ mnemonic: editor.mnemonic, password: editor.password })
+                    }
                 }
             }
         }
         AnimLoader {
-            active: controller.wallet && controller.wallet.authenticated
+            active: {
+                const { mnemonic, password } = navigation.param
+                if (mnemonic === undefined) return false
+                const words = mnemonic.split(',')
+                if (words.length === 12) return true
+                if (words.length === 24) return true
+                if (words.length === 27 && password !== undefined) return true
+                return false
+            }
             animated: self.opened
-            sourceComponent: Pane {
+            sourceComponent: DiscoverServerTypeView {
+            }
+        }
+
+        AnimLoader {
+            active: navigation.controller
+            animated: self.opened
+            sourceComponent: Page {
                 background: null
+                footer: RowLayout {
+                    spacing: constants.s1
+                    GButton {
+                        text: qsTrId('id_back')
+                        onClicked: navigation.pop()
+                    }
+                    HSpacer {
+                    }
+                }
                 contentItem: ColumnLayout {
                     spacing: 16
-                    VSpacer {
-                    }
                     Label {
                         Layout.alignment: Qt.AlignHCenter
                         text: qsTrId('id_set_a_new_pin')
-                        font.pixelSize: 20
                     }
                     PinView {
                         Layout.alignment: Qt.AlignHCenter
@@ -242,33 +142,36 @@ AbstractDialog {
                 }
             }
         }
+
         AnimLoader {
-            active: controller.pin.length === 6
+            active: navigation.controller && navigation.controller.pin.length === 6
             animated: self.opened
-            sourceComponent: Pane {
+            sourceComponent: Page {
                 background: null
-                contentItem: ColumnLayout {
-                    readonly property Action backAction: Action {
+                footer: RowLayout {
+                    spacing: constants.s1
+                    GButton {
                         text: qsTrId('id_back')
-                        onTriggered: navigation.set({ pin: undefined })
+                        onClicked: navigation.pop()
                     }
+                    HSpacer {
+                    }
+                }
+                contentItem: ColumnLayout {
                     spacing: 16
-                    VSpacer {
-                    }
                     Label {
                         Layout.alignment: Qt.AlignHCenter
                         text: qsTrId('id_verify_your_pin')
-                        font.pixelSize: 20
                     }
                     PinView {
                         Layout.alignment: Qt.AlignHCenter
                         onPinChanged: {
                             if (!pin.valid) return
-                            if (pin.value !== controller.pin) {
+                            if (pin.value !== navigation.controller.pin) {
                                 clear();
                                 ToolTip.show(qsTrId('id_pins_do_not_match_please_try'), 1000);
                             } else {
-                                onTriggered: controller.accept()
+                                onTriggered: navigation.controller.accept()
                             }
                         }
                     }

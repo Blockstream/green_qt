@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Restore now automatically lookups for wallets of both types
 - Show Tor indicator in status bar when Tor is active
 - Show liquid transaction details when signing with Jade
 - Show bitcoin transaction details when signing with Jade

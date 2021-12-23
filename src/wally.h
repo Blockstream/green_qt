@@ -6,6 +6,8 @@
 #include <QStringList>
 #include <QQmlListProperty>
 
+#include "controller.h"
+
 class MnemonicEditorController;
 class Word : public QObject
 {
@@ -42,14 +44,15 @@ signals:
     void suggestionsChanged();
 };
 
-class MnemonicEditorController : public QObject
+class MnemonicEditorController : public AbstractController
 {
     Q_OBJECT
     Q_PROPERTY(QQmlListProperty<Word> words READ words CONSTANT)
     Q_PROPERTY(QStringList mnemonic READ mnemonic NOTIFY mnemonicChanged)
-    Q_PROPERTY(bool valid READ valid NOTIFY mnemonicChanged)
+    Q_PROPERTY(bool valid READ valid NOTIFY validChanged)
     Q_PROPERTY(float progress READ progress NOTIFY mnemonicChanged)
     Q_PROPERTY(int mnemonicSize READ mnemonicSize WRITE setMnemonicSize NOTIFY mnemonicSizeChanged)
+    Q_PROPERTY(QString passphrase READ passphrase WRITE setPassphrase NOTIFY passphraseChanged)
     QML_ELEMENT
 public:
     MnemonicEditorController(QObject* parent = nullptr);
@@ -58,19 +61,25 @@ public:
     QString update(int index, const QString& text);
     QStringList mnemonic() const;
     bool valid() const { return m_valid; }
+    void setValid(bool valid);
     float progress() const;
     void update();
     int mnemonicSize() { return m_mnemonic_size; };
     void setMnemonicSize(int size);
+    QString passphrase() const { return m_passphrase; }
+    void setPassphrase(const QString& passphrase);
 public slots:
     void clear();
 signals:
+    void validChanged(bool valid);
     void mnemonicChanged();
     void mnemonicSizeChanged(int mnemonicSize);
+    void passphraseChanged(const QString& passphrase);
 private:
     QList<Word*> m_words;
     bool m_valid{false};
     int m_mnemonic_size{12};
+    QString m_passphrase;
 };
 
 class MnemonicQuizWord : public QObject

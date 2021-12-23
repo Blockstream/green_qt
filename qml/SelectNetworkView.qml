@@ -13,8 +13,6 @@ GPane {
     id: self
     background: null
     contentItem: RowLayout {
-        HSpacer {
-        }
         Section {
             visible: navigation.path === `/${view}` || navigation.path === `/mainnet/${view}`
             title: 'Bitcoin Network'

@@ -26,7 +26,9 @@ QSet<QString> g_wordset{g_wordlist.begin(), g_wordlist.end()};
 
 } // namespace
 
-MnemonicEditorController::MnemonicEditorController(QObject *parent) : QObject(parent) {
+MnemonicEditorController::MnemonicEditorController(QObject* parent)
+    : AbstractController(parent)
+{
     for (int i = 0; i < 27; i++) {
         m_words.append(new Word(this, i));
     }
@@ -81,6 +83,7 @@ void MnemonicEditorController::clear()
     for (int i = 0; i < 27; ++i) {
         m_words.at(i)->setText("");
     }
+    setPassphrase("");
     update();
 }
 
@@ -91,6 +94,13 @@ QStringList MnemonicEditorController::mnemonic() const
         result.append(m_words.at(i)->text());
     }
     return result;
+}
+
+void MnemonicEditorController::setValid(bool valid)
+{
+    if (m_valid == valid) return;
+    m_valid = valid;
+    emit validChanged(m_valid);
 }
 
 float MnemonicEditorController::progress() const
@@ -104,7 +114,7 @@ float MnemonicEditorController::progress() const
 
 void MnemonicEditorController::update()
 {
-    m_valid = true;
+    bool valid = true;
     bool enabled = true;
     int last_valid = 26;
     while (last_valid >= 0) {
@@ -113,11 +123,37 @@ void MnemonicEditorController::update()
     }
     for (int i = 0; i < m_mnemonic_size; ++i) {
         auto word = m_words.at(i);
-        if (!m_words.at(i)->valid()) m_valid = false;
+        if (!m_words.at(i)->valid()) valid = false;
         word->setEnabled(enabled);
         enabled = enabled && word->valid();
     }
     emit mnemonicChanged();
+
+    clearErrors();
+    if (!valid) return setValid(false);
+
+    const auto m = mnemonic().join(" ").toUtf8();
+    const auto p = m_passphrase.toUtf8();
+
+    struct words* ws;
+    bip39_get_wordlist(nullptr, &ws);
+    int rc = bip39_mnemonic_validate(ws, m.data());
+    if (rc != WALLY_OK) {
+        setError("mnemonic", "invalid");
+        setValid(false);
+        return;
+    }
+
+    unsigned char bytes[BIP39_SEED_LEN_512];
+    size_t len;
+    rc = bip39_mnemonic_to_seed(m.data(), m_mnemonic_size == 27 ? p.data() : nullptr, bytes, BIP39_SEED_LEN_512, &len);
+    if (rc != WALLY_OK) {
+        setError("mnemonic", "invalid");
+        setValid(false);
+        return;
+    }
+
+    setValid(true);
 }
 
 void MnemonicEditorController::setMnemonicSize(int size)
@@ -125,6 +161,15 @@ void MnemonicEditorController::setMnemonicSize(int size)
     if (m_mnemonic_size == size) return;
     m_mnemonic_size = size;
     emit mnemonicSizeChanged(size);
+    clear();
+}
+
+void MnemonicEditorController::setPassphrase(const QString& passphrase)
+{
+    if (m_passphrase == passphrase) return;
+    m_passphrase = passphrase;
+    emit passphraseChanged(m_passphrase);
+    update();
 }
 
 Word::Word(MnemonicEditorController* controller, int index)

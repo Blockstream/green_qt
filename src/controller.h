@@ -2,8 +2,8 @@
 #define GREEN_CONTROLLER_H
 
 #include <QtQml>
-#include <QObject>
 
+#include "entity.h"
 #include "ga.h"
 
 class Handler;
@@ -11,12 +11,31 @@ class Resolver;
 class Output;
 class Wallet;
 
-class Controller : public QObject
+class AbstractController : public Entity
+{
+    Q_OBJECT
+    Q_PROPERTY(QVariantMap errors READ errors NOTIFY errorsChanged)
+    Q_PROPERTY(bool noErrors READ noErrors NOTIFY errorsChanged)
+    QML_ELEMENT
+public:
+    AbstractController(QObject* parent = nullptr);
+    QVariantMap errors() const { return m_errors; }
+    bool noErrors() const { return m_errors.isEmpty(); }
+signals:
+    void errorsChanged();
+protected:
+    void setError(const QString& key, const QVariant& value);
+    void clearError(const QString& key);
+    bool updateError(const QString &key, const QVariant &value, bool when);
+    void clearErrors();
+private:
+    QVariantMap m_errors;
+};
+
+class Controller : public AbstractController
 {
     Q_OBJECT
     Q_PROPERTY(Wallet* wallet READ wallet WRITE setWallet NOTIFY walletChanged)
-    Q_PROPERTY(QVariantMap errors READ errors NOTIFY errorsChanged)
-    Q_PROPERTY(bool noErrors READ noErrors NOTIFY errorsChanged)
     QML_ELEMENT
 public:
     explicit Controller(QObject* parent = nullptr);
@@ -29,8 +48,6 @@ public:
     Wallet* wallet() const;
     void setWallet(Wallet* wallet);
 
-    QVariantMap errors() const { return m_errors; }
-    bool noErrors() const { return m_errors.isEmpty(); }
 public slots:
     void changeSettings(const QJsonObject& data);
     void sendRecoveryTransactions();
@@ -44,11 +61,6 @@ public slots:
     void deleteWallet();
     void disableAllPins();
     void setUnspentOutputsStatus(const QVariantList &outputs, const QString &status);
-protected:
-    void setError(const QString& key, const QVariant& value);
-    void clearError(const QString& key);
-    void updateError(const QString &key, const QVariant &value, bool when);
-    void clearErrors();
 signals:
     void walletChanged(Wallet* wallet);
     void finished();
@@ -61,7 +73,6 @@ signals:
     void deviceRequested(Handler* handler);
 
     void resolver(Resolver* resolver);
-    void errorsChanged();
 protected:
     Wallet* m_wallet{nullptr};
     QVariantMap m_errors;

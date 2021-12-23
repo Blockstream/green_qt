@@ -7,31 +7,18 @@ import QtQuick.Layouts 1.12
 
 WizardPage {
     property alias valid: controller.valid
-    readonly property bool password: controller.mnemonicSize === 27
+    readonly property string password: mnemonic_size_combobox.size === 27 ? password_field.text : ''
     property alias mnemonic: controller.mnemonic
     property alias controller: controller
     property alias lengths: mnemonic_size_combobox.model
-    property Component toolbar: ProgressBar {
-        from: 0
-        to: 1
-        value: controller.progress
-        Behavior on value {
-            NumberAnimation {
-                duration: 300
-                easing.type: Easing.OutCubic
-            }
-        }
-    }
-
     MnemonicEditorController {
         id: controller
         mnemonicSize: mnemonic_size_combobox.size
+        passphrase: password_field.text
     }
 
     contentItem: ColumnLayout {
         spacing: 16
-        VSpacer {
-        }
         RowLayout {
             Label {
                 text: qsTrId('id_choose_recovery_phrase_length')
@@ -55,6 +42,26 @@ WizardPage {
                     Layout.fillWidth: true
                     word: controller.words[index]
                 }
+            }
+        }
+        RowLayout {
+            visible: mnemonic_size_combobox.size === 27
+            Label {
+                text: qsTrId('id_please_provide_your_passphrase')
+            }
+            HSpacer {
+            }
+            GTextField {
+                id: password_field
+                implicitWidth: 400
+                echoMode: TextField.Password
+                placeholderText: qsTrId('id_encryption_passphrase')
+            }
+        }
+        FixedErrorBadge {
+            Layout.alignment: Qt.AlignCenter
+            error: switch (controller.errors.mnemonic) {
+                case 'invalid': return qsTrId('id_invalid_recovery_phrase')
             }
         }
         VSpacer {

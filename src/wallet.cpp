@@ -625,6 +625,7 @@ void Wallet::setSession()
     updateCurrencies();
     updateConfig();
     reload();
+    updateReady();
 }
 
 void Wallet::setDevice(Device* device)

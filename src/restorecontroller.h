@@ -1,7 +1,7 @@
 #ifndef GREEN_RESTORECONTROLLER_H
 #define GREEN_RESTORECONTROLLER_H
 
-#include "entity.h"
+#include "controller.h"
 #include "session.h"
 #include "wallet.h"
 
@@ -11,7 +11,7 @@
 QT_FORWARD_DECLARE_CLASS(Network)
 QT_FORWARD_DECLARE_CLASS(Wallet)
 
-class RestoreController : public Entity
+class RestoreController : public AbstractController
 {
     Q_OBJECT
     Q_PROPERTY(Network* network READ network WRITE setNetwork NOTIFY networkChanged)
@@ -22,6 +22,8 @@ class RestoreController : public Entity
     Q_PROPERTY(Wallet* wallet READ wallet NOTIFY walletChanged)
     Q_PROPERTY(QString pin READ pin WRITE setPin NOTIFY pinChanged)
     Q_PROPERTY(bool active READ isActive WRITE setActive NOTIFY activeChanged)
+    Q_PROPERTY(Session* session READ session NOTIFY sessionChanged)
+    Q_PROPERTY(bool busy READ busy NOTIFY busyChanged)
     QML_ELEMENT
 public:
     explicit RestoreController(QObject *parent = nullptr);
@@ -34,11 +36,13 @@ public:
     QString password() const { return m_password; }
     void setPassword(const QString& password);
     bool isValid() const { return m_valid; }
+    Session* session() const { return m_session; }
     Wallet* wallet() const { return m_wallet; }
     QString pin() const { return m_pin; }
     void setPin(const QString& pin);
     bool isActive() const { return m_active; }
     void setActive(bool active);
+    bool busy() const { return m_busy; }
 public slots:
     void accept();
 private slots:
@@ -52,7 +56,9 @@ signals:
     void pinChanged(const QString& pin);
     void activeChanged(bool active);
     void validChanged(bool valid);
+    void sessionChanged(Session* session);
     void loginError(const QString& error);
+    void busyChanged(bool busy);
 private:
     Network* m_network{nullptr};
     QString m_type;
@@ -62,8 +68,15 @@ private:
     Wallet* m_wallet{nullptr};
     QString m_pin;
     bool m_active{false};
-    Connectable<Session> m_session;
+    Session* m_session{nullptr};
     bool m_accepted{false};
+    QString m_wallet_hash_id;
+    QJsonArray m_subaccounts;
+    int m_current_subaccount{0};
+    int m_transaction_count{0};
+    bool m_busy{false};
+    void setBusy(bool busy);
+    void setValid(bool valid);
 };
 
 class CheckRestoreActivity : public WalletActivity

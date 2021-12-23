@@ -149,8 +149,46 @@ public:
     }
 };
 
+AbstractController::AbstractController(QObject* parent)
+    : Entity(parent)
+{
+}
+
+bool AbstractController::updateError(const QString &key, const QVariant &value, bool when)
+{
+    if (when) {
+        setError(key, value);
+        return true;
+    } else {
+        clearError(key);
+        return false;
+    }
+}
+
+void AbstractController::setError(const QString &key, const QVariant &value)
+{
+    Q_ASSERT(!value.isNull());
+    if (m_errors.contains(key) && m_errors.value(key) == value) return;
+    m_errors[key] = value;
+    emit errorsChanged();
+}
+
+void AbstractController::clearError(const QString &key)
+{
+    if (!m_errors.contains(key)) return;
+    m_errors.remove(key);
+    emit errorsChanged();
+}
+
+void AbstractController::clearErrors()
+{
+    if (m_errors.empty()) return;
+    m_errors.clear();
+    emit errorsChanged();
+}
+
 Controller::Controller(QObject* parent)
-    : QObject(parent)
+    : AbstractController(parent)
 {
 }
 
@@ -391,37 +429,6 @@ void Controller::setUnspentOutputsStatus(const QVariantList &outputs, const QStr
         handler->deleteLater();
     });
     exec(handler);
-}
-
-void Controller::updateError(const QString &key, const QVariant &value, bool when)
-{
-    if (when) {
-        setError(key, value);
-    } else {
-        clearError(key);
-    }
-}
-
-void Controller::setError(const QString &key, const QVariant &value)
-{
-    Q_ASSERT(!value.isNull());
-    if (m_errors.contains(key) && m_errors.value(key) == value) return;
-    m_errors[key] = value;
-    emit errorsChanged();
-}
-
-void Controller::clearError(const QString &key)
-{
-    if (!m_errors.contains(key)) return;
-    m_errors.remove(key);
-    emit errorsChanged();
-}
-
-void Controller::clearErrors()
-{
-    if (m_errors.empty()) return;
-    m_errors.clear();
-    emit errorsChanged();
 }
 
 void TwoFactorResetHandler::call(GA_session *session, GA_auth_handler **auth_handler) {

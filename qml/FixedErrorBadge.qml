@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.3
 
 Label {
     id: self
+    property bool pointer: true
     property var error
     onErrorChanged: if (error) text = error
     scale: self.error ? 1 : 0
@@ -23,6 +24,7 @@ Label {
         radius: 4
         color: constants.r500
         Item {
+            visible: pointer
             x: parent.width / 2
             Rectangle {
                 width: 8

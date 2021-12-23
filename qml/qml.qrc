@@ -138,5 +138,6 @@
         <file>JadeSignLiquidTransactionView.qml</file>
         <file>JadeSignTransactionView.qml</file>
         <file>LedgerSignTransactionView.qml</file>
+        <file>DiscoverServerTypeView.qml</file>
     </qresource>
 </RCC>
