@@ -25,11 +25,7 @@ AbstractDialog {
         channel: channel_combo_box.currentValue
         device: self.device
         onActivityCreated: {
-            if (activity instanceof SessionTorCircuitActivity) {
-                session_tor_cirtcuit_view.createObject(activities_row, { activity })
-            } else if (activity instanceof SessionConnectActivity) {
-                session_connect_view.createObject(activities_row, { activity })
-            } else if (activity instanceof JadeChannelRequestActivity) {
+            if (activity instanceof JadeChannelRequestActivity) {
                 const view = http_request_view.createObject(activities_row, { activity, text: 'Fetching list' })
                 activity.finished.connect(() => {
                     stack_view.push(select_view)
