@@ -12,6 +12,7 @@ class JadeLoginController : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(JadeDevice* device READ device WRITE setDevice NOTIFY deviceChanged)
+    Q_PROPERTY(Session* session READ session NOTIFY sessionChanged)
     Q_PROPERTY(QString network READ network WRITE setNetwork NOTIFY networkChanged)
     Q_PROPERTY(bool enabled READ isEnabled NOTIFY isEnabledChanged)
     Q_PROPERTY(bool active READ isActive WRITE setActive NOTIFY activeChanged)
@@ -22,6 +23,7 @@ public:
     JadeLoginController(QObject* parent = nullptr);
     JadeDevice* device() const { return m_device; }
     void setDevice(JadeDevice* device);
+    Session* session() const { return m_session; }
     QString network() const { return m_network; }
     void setNetwork(const QString& network);
     bool isEnabled() const { return m_enabled; }
@@ -41,6 +43,7 @@ private:
     void signup();
 signals:
     void deviceChanged(JadeDevice* device);
+    void sessionChanged(Session* session);
     void networkChanged(const QString& network);
     void isEnabledChanged(bool enabled);
     void walletChanged(Wallet* wallet);

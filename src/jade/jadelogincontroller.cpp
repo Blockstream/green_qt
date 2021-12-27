@@ -132,6 +132,7 @@ void JadeLoginController::connect()
 
     m_session = new Session(network, this);
     m_session->setActive(true);
+    emit sessionChanged(m_session);
 
     QObject::connect(m_session, &Session::connectedChanged, this, &JadeLoginController::update);
 }
@@ -225,6 +226,7 @@ void JadeLoginController::login()
         m_wallet->setSession(m_session);
         m_wallet->setSession();
         m_session = nullptr;
+        emit sessionChanged(m_session);
     });
     QObject::connect(handler, &Handler::resolver, this, [](Resolver* resolver) {
 //        qDebug() << "RESOLVE NOW!" << resolver;
