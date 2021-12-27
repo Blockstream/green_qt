@@ -260,17 +260,17 @@ Item {
         }
         contentItem: RowLayout {
             spacing: constants.s1
-            Label {
-                Layout.maximumWidth: delegate.width / 3
-                Layout.minimumWidth: delegate.width / 3
-                text: wallet.name
-                elide: Label.ElideRight
-            }
             Image {
                 fillMode: Image.PreserveAspectFit
                 sourceSize.height: 24
                 sourceSize.width: 24
                 source: delegate.wallet.network.electrum ? 'qrc:/svg/key.svg' : 'qrc:/svg/multi-sig.svg'
+            }
+            Label {
+                Layout.maximumWidth: delegate.width / 3
+                Layout.minimumWidth: delegate.width / 3
+                text: wallet.name
+                elide: Label.ElideRight
             }
             Loader {
                 active: 'type' in wallet.deviceDetails
