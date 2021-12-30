@@ -15,7 +15,8 @@ RowLayout {
     opacity: (connecting || connected) ? 1 : 0.5
 
     component ProgressCircle: Shape {
-        property real radius: Math.floor(Math.min(width, height) / 2) - 1
+        id: self
+        property real radius: Math.min(self.width, self.height) / 2
         property bool indeterminate: true
         property real progress: 0
         anchors.fill: parent
@@ -31,19 +32,15 @@ RowLayout {
                 }
             }
         }
-        ShapePath {
-            strokeWidth: 1
-            strokeColor: constants.c500
-            fillColor: 'transparent'
-            PathAngleArc {
-                moveToStart: true
-                radiusX: radius
-                radiusY: radius
-                centerX: width / 2
-                centerY: height / 2
-                startAngle: 0
-                sweepAngle: 360
-            }
+        Rectangle {
+            width: self.radius * 2
+            height: self.radius * 2
+            color: 'transparent'
+            border.width: 1
+            border.color: constants.c500
+            anchors.centerIn: parent
+            radius: self.radius
+            z: -1
         }
         ShapePath {
             strokeWidth: 1
@@ -51,10 +48,10 @@ RowLayout {
             fillColor: 'transparent'
             PathAngleArc {
                 moveToStart: true
-                radiusX: radius
-                radiusY: radius
-                centerX: width / 2
-                centerY: height / 2
+                radiusX: self.radius - 0.5
+                radiusY: self.radius - 0.5
+                centerX: self.width / 2
+                centerY: self.height / 2
                 startAngle: -90
                 NumberAnimation on startAngle {
                     loops: Animation.Infinite
@@ -64,7 +61,7 @@ RowLayout {
                     to: 270
                     duration: 1000
                 }
-                sweepAngle: indeterminate ? 30 : progress * 360
+                sweepAngle: indeterminate ? 60 : progress * 360
                 Behavior on sweepAngle {
                     SmoothedAnimation {
                         velocity: 360
