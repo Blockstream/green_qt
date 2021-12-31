@@ -22,7 +22,7 @@ Switch {
         Rectangle {
             id: circle
             x: self.checked ? parent.width - width - 3 : 3
-            y: 3
+            anchors.verticalCenter: parent.verticalCenter
             Behavior on x {
                 SmoothedAnimation {
                     velocity: 100
@@ -30,7 +30,14 @@ Switch {
             }
             width: 18
             height: 18
-            radius: width / 2
+            scale: self.down ? 0.75 : 1
+            transformOrigin: Item.Center
+            Behavior on scale {
+                SmoothedAnimation {
+                    velocity: 2
+                }
+            }
+            radius: height / 2
             color: 'white'
         }
     }
