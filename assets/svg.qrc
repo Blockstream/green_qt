@@ -42,5 +42,7 @@
         <file>svg/arrow_left.svg</file>
         <file>svg/2fa_telegram.svg</file>
         <file>svg/right.svg</file>
+        <file>svg/electrum.svg</file>
+        <file>svg/tx-check.svg</file>
     </qresource>
 </RCC>
