@@ -104,4 +104,34 @@ RowLayout {
             }
         }
     }
+    Loader {
+        active: session && session.network.electrum
+        visible: active
+        sourceComponent: RowLayout {
+            Image {
+                smooth: true
+                mipmap: true
+                fillMode: Image.PreserveAspectFit
+                horizontalAlignment: Image.AlignHCenter
+                source: 'qrc:/svg/electrum.svg'
+                sourceSize.height: 16
+            }
+            Label {
+                text: session.usePersonalNode ? session.electrumUrl : session.network.data.electrum_url
+                font.pixelSize: 12
+            }
+        }
+    }
+    Loader {
+        active: session && session.enableSPV
+        visible: active
+        sourceComponent: Image {
+            smooth: true
+            mipmap: true
+            fillMode: Image.PreserveAspectFit
+            horizontalAlignment: Image.AlignHCenter
+            source: 'qrc:/svg/tx-check.svg'
+            sourceSize.height: 16
+        }
+    }
 }
