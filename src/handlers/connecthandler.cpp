@@ -21,6 +21,7 @@ namespace {
             { "spv_enabled", session->enableSPV() }
         };
         if (!session->proxy().isEmpty()) params.insert("proxy", session->proxy());
+        if (session->usePersonalNode()) params.insert("electrum_url", session->electrumUrl());
         return params;
     }
 } // namespace
