@@ -249,6 +249,7 @@ MainPageHeader {
                     enabled: !self.wallet.watchOnly && !self.wallet.locked && self.currentAccount
                     hoverEnabled: true
                     text: qsTrId('id_send')
+                    icon.source: 'qrc:/svg/send.svg'
                     onClicked: {
                         if (self.currentAccount.balance > 0) {
                             send_dialog.createObject(window, { account: self.currentAccount }).open()
@@ -267,6 +268,7 @@ MainPageHeader {
                     large: true
                     enabled: !wallet.locked && self.currentAccount
                     text: qsTrId('id_receive')
+                    icon.source: 'qrc:/svg/receive.svg'
                     onClicked: receive_dialog.createObject(window, { account: self.currentAccount }).open()
                 }
             }
