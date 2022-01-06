@@ -78,7 +78,7 @@ StatusBar {
                     if (!result.fiat || Number(result.fiat) >= 1) return result
                 }
             }
-            active: Settings.enableExperimental && amount.fiat
+            active: amount.fiat
             sourceComponent: RowLayout {
                 spacing: 8
                 Image {
