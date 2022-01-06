@@ -102,27 +102,10 @@ void Transaction::updateFromData(const QJsonObject& data)
         Wallet* wallet = m_account->wallet();
         const auto satoshi = m_data.value("satoshi").toObject();
         if (wallet->network()->isLiquid()) {
-            const auto type = data.value("type").toString();
-            if (type == "incoming" || type == "redeposit") {
-                for (auto i = satoshi.constBegin(); i != satoshi.constEnd(); ++i) {
-                    qint64 amount = i.value().toDouble();
-                    if (amount > 0) {
-                        Asset* asset = wallet->getOrCreateAsset(i.key());
-                        m_amounts.append(new TransactionAmount(this, asset, amount));
-                    }
-                }
-            } else if (type == "outgoing") {
-                for (auto i = satoshi.constBegin(); i != satoshi.constEnd(); ++i) {
-                    qint64 amount = i.value().toDouble();
-                    if (i.key() == wallet->network()->policyAsset()) {
-                        qint64 fee = data.value("fee").toDouble();
-                        Q_ASSERT(fee <= amount);
-                        amount -= fee;
-                        if (amount == 0) continue; // just fee
-                    }
-                    Asset* asset = wallet->getOrCreateAsset(i.key());
-                    m_amounts.append(new TransactionAmount(this, asset, amount));
-                }
+            for (auto i = satoshi.constBegin(); i != satoshi.constEnd(); ++i) {
+                const qint64 amount = i.value().toDouble();
+                Asset* asset = wallet->getOrCreateAsset(i.key());
+                m_amounts.append(new TransactionAmount(this, asset, amount));
             }
         } else {
             qint64 amount = satoshi.value("btc").toDouble();
