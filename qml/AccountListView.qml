@@ -61,8 +61,9 @@ Page {
             hoverEnabled: true
             width: ListView.view.contentWidth
             contentItem: ColumnLayout {
-                spacing: 4
+                spacing: 8
                 RowLayout {
+                    spacing: 16
                     EditableLabel {
                         id: name_field
                         Layout.fillWidth: true
@@ -78,28 +79,59 @@ Page {
                             }
                         }
                     }
-                }
-
-                RowLayout {
-                    spacing: 10
-
-                    Label {
-                        text: formatAmount(account.balance)
-                        font.pixelSize: 12
-                        font.styleName: 'Regular'
-                    }
-
-                    Label {
-                        font.pixelSize: 12
-                        text: '≈ ' + formatFiat(account.balance)
-                        font.styleName: 'Regular'
-                    }
-
-                    HSpacer {
-                    }
-
                     AccountTypeBadge {
                         account: delegate.account
+                    }
+                }
+                RowLayout {
+                    RowLayout {
+                        spacing: 2
+                        Repeater {
+                            model: {
+                                const assets = []
+                                let without_icon = false
+                                for (let i = 0; i < account.balances.length; i++) {
+                                    const asset = account.balances[i].asset
+                                    if (asset.icon || !without_icon) assets.push(asset)
+                                    without_icon = !asset.icon
+                                }
+                                return assets
+                            }
+                            AssetIcon {
+                                asset: modelData
+                                size: 16
+                            }
+                        }
+                    }
+                    HSpacer {
+                    }
+                    Loader {
+                        Layout.alignment: Qt.AlignRight
+                        active: !account.wallet.network.liquid
+                        visible: active
+                        sourceComponent: RowLayout {
+                            spacing: 10
+                            Label {
+                                text: formatAmount(account.balance)
+                                font.pixelSize: 12
+                                font.styleName: 'Regular'
+                            }
+                            Label {
+                                font.pixelSize: 14
+                                text: '≈ ' + formatFiat(account.balance)
+                                font.styleName: 'Regular'
+                            }
+                        }
+                    }
+                    Loader {
+                        Layout.alignment: Qt.AlignRight
+                        active: account.wallet.network.liquid
+                        visible: active
+                        sourceComponent: Label {
+                            text: formatAmount(account.balance)
+                            font.pixelSize: 14
+                            font.styleName: 'Regular'
+                        }
                     }
                 }
             }
