@@ -31,7 +31,7 @@ Session::Session(Network* network, QObject* parent)
     , m_proxy_host(Settings::instance()->proxyHost())
     , m_proxy_port(Settings::instance()->proxyPort())
     , m_proxy(m_use_proxy ? QString("%1:%2").arg(m_proxy_host).arg(m_proxy_port) : "")
-    , m_enable_spv(network->isElectrum() ? Settings::instance()->enableSPV() : false)
+    , m_enable_spv(network->isElectrum() && !network->isLiquid() ? Settings::instance()->enableSPV() : false)
     , m_electrum_url(ElectrumUrlForNetwork(network))
 {
 }
