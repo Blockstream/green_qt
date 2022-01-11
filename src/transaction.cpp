@@ -102,10 +102,13 @@ void Transaction::updateFromData(const QJsonObject& data)
         Wallet* wallet = m_account->wallet();
         const auto satoshi = m_data.value("satoshi").toObject();
         if (wallet->network()->isLiquid()) {
+            const auto policy_asset = wallet->network()->policyAsset();
+            const qint64 fee = m_data.value("fee").toDouble();
             for (auto i = satoshi.constBegin(); i != satoshi.constEnd(); ++i) {
-                const qint64 amount = i.value().toDouble();
+                qint64 amount = i.value().toDouble();
                 Asset* asset = wallet->getOrCreateAsset(i.key());
-                m_amounts.append(new TransactionAmount(this, asset, amount));
+                if (asset->id() == policy_asset) amount -= fee;
+                if (amount > 0) m_amounts.append(new TransactionAmount(this, asset, amount));
             }
         } else {
             qint64 amount = satoshi.value("btc").toDouble();
