@@ -139,6 +139,7 @@
         <file>JadeSignTransactionView.qml</file>
         <file>LedgerSignTransactionView.qml</file>
         <file>DiscoverServerTypeView.qml</file>
+        <file>TransactionProgress.qml</file>
         <file>TransactionStatusBadge.qml</file>
         <file>QRCodePopup.qml</file>
     </qresource>

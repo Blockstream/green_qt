@@ -76,6 +76,7 @@ public:
 
 public slots:
     void openInExplorer() const;
+    QString link() const;
     QString unblindedLink() const;
     void updateMemo(const QString& memo);
 

@@ -48,5 +48,6 @@
         <file>svg/tx-spv-not-verified.svg</file>
         <file>svg/tx-spv-not-longest.svg</file>
         <file>svg/tx-spv-verified.svg</file>
+        <file>svg/qr.svg</file>
     </qresource>
 </RCC>

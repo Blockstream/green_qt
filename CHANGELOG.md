@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Support to bump unconfirmed transaction from transaction dialog
 - Restore now automatically lookups for wallets of both types
 - Show Tor indicator in status bar when Tor is active
 - Show liquid transaction details when signing with Jade
@@ -14,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Pull down transaction list to refresh
 
 ### Changed
+- Improvements to the transaction dialog 
 - New icons for Liquid and Liquid testnet
 - Updates GDK to 0.0.48
 

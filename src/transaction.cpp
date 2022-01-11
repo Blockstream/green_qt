@@ -124,6 +124,11 @@ void Transaction::openInExplorer() const
     m_account->wallet()->network()->openTransactionInExplorer(m_data.value("txhash").toString());
 }
 
+QString Transaction::link() const
+{
+    return m_account->wallet()->network()->explorerUrl() + m_data.value("txhash").toString();
+}
+
 QString Transaction::unblindedLink() const
 {
     Q_ASSERT(account()->wallet()->network()->isLiquid());

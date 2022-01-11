@@ -6,14 +6,19 @@ import QtQuick.Layouts 1.12
 Label {
     required property Transaction transaction
     required property int confirmations
+    property bool showConfirmations: true
     readonly property bool liquid: transaction.account.wallet.network.liquid
     readonly property bool completed: confirmations >= (liquid ? 2 : 6)
     color: 'white'
     text: {
         if (completed) return qsTrId('id_completed')
-        if (confirmations === 0) return qsTrId('id_unconfirmed');
-        if (liquid) return qsTrId('id_12_confirmations')
-        return qsTrId('id_d6_confirmations').arg(confirmations);
+        if (confirmations === 0) return qsTrId('id_unconfirmed')
+        if (showConfirmations) {
+            if (liquid) return qsTrId('id_12_confirmations')
+            return qsTrId('id_d6_confirmations').arg(confirmations)
+        } else {
+            return qsTrId('id_pending_confirmation')
+        }
     }
     font.pixelSize: 12
     font.styleName: 'Medium'

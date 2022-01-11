@@ -60,14 +60,14 @@ Button {
         ColumnLayout {
             Layout.fillWidth: true
             spacing: constants.p1
-            Label {
+            CopyableLabel {
                 Layout.fillWidth: true
                 elide: Text.ElideRight
                 text: formatAmount(output.data['satoshi'], true)
                 font.pixelSize: 14
                 font.styleName: 'Medium'
             }
-            Label {
+            CopyableLabel {
                 Layout.fillWidth: true
                 elide: Text.ElideRight
                 text: output.data['txhash'] + ':' + output.data['pt_idx']
@@ -106,6 +106,10 @@ Button {
                     color: '#d2934a'
                     font.capitalization: Font.AllUppercase
                 }
+            }
+            CopyableLabel {
+                text: JSON.stringify(output.data, null, '  ')
+                font.pixelSize: 10
             }
         }
     }
