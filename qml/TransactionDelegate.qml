@@ -32,12 +32,14 @@ ItemDelegate {
 
     focusPolicy: Qt.ClickFocus
     hoverEnabled: true
-    leftPadding: 0
-    rightPadding: 0
-    topPadding: 0
-    bottomPadding: 0
-    background: null
+    padding: constants.p3
 
+    background: Rectangle {
+        color: self.hovered ? constants.c700 : constants.c800
+        radius: 4
+        border.width: self.highlighted ? 1 : 0
+        border.color: constants.g500
+    }
     spacing: 8
 
     function txType(tx) {
@@ -79,7 +81,7 @@ ItemDelegate {
         }
         Label {
             Layout.fillWidth: true
-            Layout.maximumWidth: self.width / 2
+            Layout.maximumWidth: self.width * 0.3
             font.pixelSize: 16
             font.styleName: 'Medium'
             text: txType(tx)

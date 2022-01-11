@@ -52,7 +52,6 @@ Page {
             }
         }
         delegate: TransactionDelegate {
-            hoverEnabled: false
             width: ListView.view.contentWidth
             onClicked: transaction_dialog.createObject(window, { transaction }).open()
         }
