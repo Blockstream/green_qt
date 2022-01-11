@@ -89,22 +89,10 @@ ItemDelegate {
         }
         HSpacer {
         }
-        Label {
-            Layout.alignment: Qt.AlignRight
-            color: 'white'
-            text: transactionStatus(confirmations)
-            font.pixelSize: 12
-            font.styleName: 'Medium'
-            font.capitalization: Font.AllUppercase
+        TransactionStatusBadge {
+            transaction: self.transaction
+            confirmations: self.confirmations
             visible: confirmations < (transaction.account.wallet.network.liquid ? 1 : 6)
-            topPadding: 4
-            bottomPadding: 4
-            leftPadding: 12
-            rightPadding: 12
-            background: Rectangle {
-                radius: 4
-                color: confirmations === 0 ? '#d2934a' : '#474747'
-            }
         }
         Loader {
             active: spv
