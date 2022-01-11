@@ -221,14 +221,16 @@ void Handler::setResult(const QJsonObject& result)
     emit resultChanged(m_result);
 }
 
-GetSubAccountsHandler::GetSubAccountsHandler(Session *session)
+GetSubAccountsHandler::GetSubAccountsHandler(Session *session, bool refresh)
     : Handler(session)
+    , m_refresh(refresh)
 {
 }
 
 void GetSubAccountsHandler::call(GA_session *session, GA_auth_handler **auth_handler)
 {
-    int res = GA_get_subaccounts(session, auth_handler);
+    auto details = Json::fromObject({{ "refresh", m_refresh }});
+    int res = GA_get_subaccounts(session, details.get(), auth_handler);
     Q_ASSERT(res == GA_OK);
 }
 

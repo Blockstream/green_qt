@@ -18,7 +18,7 @@ cd green_qt
 Note: change 'linux' to 'windows' to build a full symbols build for Windows
 
 ```
-docker run -v $PWD:/ga greenaddress/ci@sha256:6c5e4cda684a05c5f320fbad03f55148a87a506acffedd08d6114d683cc4e0d3 /bin/sh -c "cd /ga && ./tools/buildgreen.sh linux allsymbolsunstripped && cp /docker_bld_root/build-linux-gcc/green /ga/green"
+docker run -v $PWD:/ga greenaddress/ci@sha256:9de7ab34f3bc9ae45f827c8c5a8ef0c4486d10c77df4d3b7da6dfc54ddeb3600 /bin/sh -c "cd /ga && ./tools/buildgreen.sh linux allsymbolsunstripped && cp /docker_bld_root/build-linux-gcc/green /ga/green"
 ```
 
 ## Build static release on macOS
@@ -30,13 +30,13 @@ docker run -v $PWD:/ga greenaddress/ci@sha256:6c5e4cda684a05c5f320fbad03f55148a8
 ## Build static release on Linux
 
 ```
-docker run -v $PWD:/ga greenaddress/ci@sha256:6c5e4cda684a05c5f320fbad03f55148a87a506acffedd08d6114d683cc4e0d3 /bin/sh -c "cd /ga && ./tools/buildgreen.sh linux && cp /docker_bld_root/build-linux-gcc/green /docker_bld_root/build-linux-gcc/BlockstreamGreen-x86_64.AppImage /ga"
+docker run -v $PWD:/ga greenaddress/ci@sha256:9de7ab34f3bc9ae45f827c8c5a8ef0c4486d10c77df4d3b7da6dfc54ddeb3600 /bin/sh -c "cd /ga && ./tools/buildgreen.sh linux && cp /docker_bld_root/build-linux-gcc/green /docker_bld_root/build-linux-gcc/BlockstreamGreen-x86_64.AppImage /ga"
 ```
 
 ## Build static release on Linux for Windows
 
 ```
-docker run -v $PWD:/ga greenaddress/ci@sha256:6c5e4cda684a05c5f320fbad03f55148a87a506acffedd08d6114d683cc4e0d3 /bin/sh -c "cd /ga && ./tools/buildgreen.sh Windows && cp build-mingw-w64/release/green.exe /ga/"
+docker run -v $PWD:/ga greenaddress/ci@sha256:9de7ab34f3bc9ae45f827c8c5a8ef0c4486d10c77df4d3b7da6dfc54ddeb3600 /bin/sh -c "cd /ga && ./tools/buildgreen.sh Windows && cp build-mingw-w64/release/green.exe /ga/"
 ```
 
 ## Development in QtCreator

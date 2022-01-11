@@ -57,8 +57,10 @@ class GetSubAccountsHandler : public Handler
 {
     void call(GA_session* session, GA_auth_handler** auth_handler) override;
 public:
-    GetSubAccountsHandler(Session* session);
+    GetSubAccountsHandler(Session* session, bool refresh);
     QJsonArray subAccounts() const;
+private:
+    const bool m_refresh;
 };
 
 #endif // GREEN_HANDLER_H

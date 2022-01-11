@@ -72,8 +72,6 @@ private:
     bool m_accepted{false};
     QString m_wallet_hash_id;
     QJsonArray m_subaccounts;
-    int m_current_subaccount{0};
-    int m_transaction_count{0};
     bool m_busy{false};
     void setBusy(bool busy);
     void setValid(bool valid);

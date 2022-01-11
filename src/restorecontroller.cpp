@@ -216,7 +216,7 @@ void RestoreController::update()
     if (m_subaccounts.isEmpty()) {
         qDebug() << Q_FUNC_INFO << "get subaccounts" << m_network->id();
 
-        auto handler = new GetSubAccountsHandler(m_session);
+        auto handler = new GetSubAccountsHandler(m_session, true);
         QObject::connect(handler, &Handler::done, this, [=] {
             handler->deleteLater();
             m_subaccounts = handler->subAccounts();
@@ -226,21 +226,14 @@ void RestoreController::update()
         return;
     }
 
-    if (m_transaction_count == 0 && m_current_subaccount <= m_subaccounts.size()) {
-        int subaccount = m_subaccounts.at(m_current_subaccount++).toObject().value("pointer").toInt();
-        qDebug() << Q_FUNC_INFO << "get transactions" << m_network->id() << subaccount;
-        auto handler = new GetTransactionsHandler(subaccount, 0, 30, m_session);
-        QObject::connect(handler, &Handler::done, this, [=] {
-            handler->deleteLater();
-            m_transaction_count += handler->transactions().size();
-            update();
-        });
-        handler->exec();
-        return;
+    for (auto subaccount : m_subaccounts) {
+        if (subaccount.toObject().value("bip44_discovered").toBool()) {
+            setValid(true);
+            break;
+        }
     }
 
     setBusy(false);
-    setValid(m_transaction_count > 0);
 }
 
 void RestoreController::setBusy(bool busy)
