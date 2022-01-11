@@ -140,5 +140,6 @@
         <file>LedgerSignTransactionView.qml</file>
         <file>DiscoverServerTypeView.qml</file>
         <file>TransactionStatusBadge.qml</file>
+        <file>QRCodePopup.qml</file>
     </qresource>
 </RCC>
