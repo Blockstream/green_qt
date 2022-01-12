@@ -137,8 +137,6 @@ void Session::update()
     if (!m_active && m_session) {
         m_connect_handler.destroy();
 
-        GA_set_notification_handler(m_session, nullptr, nullptr);
-
         if (m_connection) {
             delete m_connection;
             m_connection = nullptr;
