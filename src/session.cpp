@@ -4,9 +4,16 @@
 #include "session.h"
 #include "settings.h"
 
+#include <QMutex>
+#include <QMutexLocker>
+
 #include <gdk.h>
 
 namespace  {
+qint64 m_session_context_id{0};
+QMap<qint64, Session*> m_session_by_id;
+QMutex m_session_mutex;
+
 QString ElectrumUrlForNetwork(Network* network)
 {
     if (Settings::instance()->usePersonalNode()) {
@@ -103,14 +110,28 @@ void Session::update()
         int rc = GA_create_session(&m_session);
         Q_ASSERT(rc == GA_OK);
 
+        {
+            QMutexLocker lock(&m_session_mutex);
+            m_id = ++m_session_context_id;
+            m_session_by_id[m_id] = this;
+        }
+
         rc = GA_set_notification_handler(m_session, [](void* context, GA_json* details) {
-            auto session = static_cast<Session*>(context);
             auto notification = Json::toObject(details);
+            QMutexLocker lock(&m_session_mutex);
+
+            auto id = reinterpret_cast<qint64>(context);
+            auto session = m_session_by_id.value(id);
+
+            qDebug() << "session: handle notification" << id << session << notification;
+
+            if (!session) return;
+
             GA_destroy_json(details);
             QMetaObject::invokeMethod(session, [session, notification] {
                 session->handleNotification(notification);
             }, Qt::QueuedConnection);
-        }, this);
+        }, reinterpret_cast<void*>(m_id));
         Q_ASSERT(rc == GA_OK);
 
         if (!m_network->isElectrum() && m_use_tor) emit activityCreated(new SessionTorCircuitActivity(this));
@@ -135,6 +156,12 @@ void Session::update()
     }
 
     if (!m_active && m_session) {
+        {
+            QMutexLocker lock(&m_session_mutex);
+            m_session_by_id.take(m_id);
+            m_id = 0;
+        }
+
         m_connect_handler.destroy();
 
         if (m_connection) {
