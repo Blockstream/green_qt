@@ -142,5 +142,6 @@
         <file>TransactionProgress.qml</file>
         <file>TransactionStatusBadge.qml</file>
         <file>QRCodePopup.qml</file>
+        <file>ProgressIndicator.qml</file>
     </qresource>
 </RCC>
