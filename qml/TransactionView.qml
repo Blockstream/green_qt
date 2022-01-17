@@ -11,6 +11,7 @@ WalletDialog {
     required property Transaction transaction
     readonly property Network network: transaction.account.wallet.network
     property int confirmations: transactionConfirmations(transaction)
+    readonly property bool completed: confirmations >= (network.liquid ? 2 : 6)
 
     wallet: transaction.account.wallet
     title: qsTrId('id_transaction_details') + ' - ' + tx_direction(transaction.data.type)
@@ -23,6 +24,24 @@ WalletDialog {
                 return qsTrId('id_outgoing')
             case 'redeposit':
                 return qsTrId('id_redeposited')
+        }
+    }
+
+    readonly property var spv: {
+        const value = transaction.spv
+        if (value === Transaction.Disabled) return null
+        if (!completed) return null
+        switch (value) {
+        case Transaction.Unconfirmed:
+            return null
+        case Transaction.Verified:
+            return { value, color: constants.g500, icon: 'qrc:/svg/tx-spv-verified.svg', text: qsTrId('id_verified') }
+        case Transaction.NotVerified:
+            return { value, color: constants.r500, icon: 'qrc:/svg/tx-spv-not-verified.svg', text: qsTrId('id_invalid_merkle_proof') }
+        case Transaction.NotLongest:
+            return { value, color: constants.r500, icon: 'qrc:/svg/tx-spv-not-longest.svg', text: qsTrId('id_not_on_longest_chain') }
+        case Transaction.InProgress:
+            return { value, color: constants.g500, icon: 'qrc:/svg/tx-spv-in-progress.svg', text: qsTrId('id_verifying_transactions') }
         }
     }
 
@@ -204,29 +223,50 @@ WalletDialog {
                     color: 'transparent'
                     radius: 4
                 }
-
                 contentItem: RowLayout {
-                    ColumnLayout {
-                        Layout.fillWidth: false
-                        spacing: constants.s1
-                        CopyableLabel {
-                            font.pixelSize: 12
-                            text: formatTransactionTimestamp(transaction.data)
+                    GPane {
+                        Layout.fillWidth: true
+                        background: null
+                        contentItem: ColumnLayout {
+                            spacing: constants.s1
+                            CopyableLabel {
+                                font.pixelSize: 12
+                                text: formatTransactionTimestamp(transaction.data)
+                            }
+                            Label {
+                                color: 'white'
+                                text: {
+                                    if (confirmations === 0) return qsTrId('id_unconfirmed')
+                                    if (!completed) return qsTrId('id_pending_confirmation')
+                                    if (!spv) return qsTrId('id_completed')
+                                    return spv.text
+                                }
+                                font.pixelSize: 12
+                                font.styleName: 'Medium'
+                                font.capitalization: Font.AllUppercase
+
+                                topPadding: 4
+                                bottomPadding: 4
+                                leftPadding: 12
+                                rightPadding: 12
+                                background: Rectangle {
+                                    radius: 4
+                                    color: {
+                                        if (confirmations === 0) return '#d2934a'
+                                        if (!completed) return '#474747'
+                                        return spv ? spv.color : constants.g500
+                                    }
+                                }
+                            }
                         }
-                        TransactionStatusBadge {
-                            transaction: self.transaction
-                            confirmations: self.confirmations
-                            showConfirmations: false
-                        }
-                    }
-                    HSpacer {
                     }
                     TransactionProgress {
-                        Layout.maximumWidth: 64
-                        Layout.preferredWidth:  64
-                        Layout.preferredHeight: 64
+                        implicitWidth: 64
+                        implicitHeight: 64
                         max: network.liquid ? 2 : 6
                         current: confirmations
+                        indeterminate: spv && spv.value === Transaction.InProgress
+                        icon: spv ? spv.icon : 'qrc:/svg/check.svg'
                     }
                 }
             }
