@@ -107,10 +107,6 @@ Button {
                     font.capitalization: Font.AllUppercase
                 }
             }
-            CopyableLabel {
-                text: JSON.stringify(output.data, null, '  ')
-                font.pixelSize: 10
-            }
         }
     }
 }
