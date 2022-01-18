@@ -135,9 +135,11 @@ public:
     BlindingNoncesResolver(Handler* handler, Device* device, const QJsonObject& result);
     void resolve() override;
 protected:
+    bool m_blinding_keys_required;
     QJsonArray m_scripts;
     QJsonArray m_public_keys;
     QJsonArray m_nonces;
+    QJsonArray m_blinding_keys;
 };
 
 class SignLiquidTransactionResolver : public DeviceResolver

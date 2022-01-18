@@ -188,6 +188,7 @@ void BlindingKeysResolver::resolve()
 BlindingNoncesResolver::BlindingNoncesResolver(Handler* handler, Device* device, const QJsonObject& result)
     : DeviceResolver(handler, device, result)
 {
+    m_blinding_keys_required = m_required_data.value("blinding_keys_required").toBool();
     m_scripts = m_required_data.value("scripts").toArray();
     m_public_keys = m_required_data.value("public_keys").toArray();
     Q_ASSERT(m_scripts.size() == m_public_keys.size());
@@ -196,16 +197,32 @@ BlindingNoncesResolver::BlindingNoncesResolver(Handler* handler, Device* device,
 void BlindingNoncesResolver::resolve()
 {
     const int index = m_nonces.size();
-    if (index == m_scripts.size()) return m_handler->resolve({{ "nonces", m_nonces }});
+    if (index == m_scripts.size()) {
+        return m_handler->resolve({{ "nonces", m_nonces }, { "public_keys", m_blinding_keys }});
+    }
 
     const auto pubkey = QByteArray::fromHex(m_public_keys.at(index).toString().toLocal8Bit());
     const auto script = QByteArray::fromHex(m_scripts.at(index).toString().toLocal8Bit());
 
     auto activity = device()->getBlindingNonce(pubkey, script);
-    connect(activity, &Activity::finished, this, [this, activity] {
+    connect(activity, &Activity::finished, this, [=] {
         activity->deleteLater();
         m_nonces.append(QString::fromLocal8Bit(activity->nonce().toHex()));
-        resolve();
+        if (m_blinding_keys_required) {
+            auto activity = device()->getBlindingKey(m_scripts.at(index).toString());
+            connect(activity, &Activity::finished, this, [=] {
+                activity->deleteLater();
+                m_blinding_keys.append(QString::fromLocal8Bit(activity->publicKey().toHex()));
+                resolve();
+            });
+            connect(activity, &Activity::failed, this, [=] {
+                activity->deleteLater();
+                m_handler->error();
+            });
+            ActivityManager::instance()->exec(activity);
+        } else {
+            resolve();
+        }
     });
     connect(activity, &Activity::failed, this, [this, activity] {
         activity->deleteLater();
