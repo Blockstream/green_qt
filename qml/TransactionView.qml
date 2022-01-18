@@ -198,7 +198,7 @@ WalletDialog {
                     }
                     HSpacer {
                     }
-                    ColumnLayout {
+                    RowLayout {
                         Label {
                             Layout.alignment: Qt.AlignRight
                             text: formatAmount(transaction.data.fee)
