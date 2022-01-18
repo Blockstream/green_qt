@@ -315,6 +315,18 @@ WalletDialog {
 
             ColumnLayout {
                 spacing: constants.p0
+                visible: confirmations > 0
+                SectionLabel {
+                    text: qsTrId('id_confirmations')
+                }
+
+                CopyableLabel {
+                    text: confirmations
+                }
+            }
+
+            ColumnLayout {
+                spacing: constants.p0
 
                 SectionLabel {
                     text: qsTrId('id_account_name')
