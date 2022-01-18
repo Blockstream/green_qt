@@ -10,11 +10,11 @@ Dialog {
     focus: true
     clip: true
     modal: true
-    padding: 32
-    topPadding: 32
-    bottomPadding: 32
-    leftPadding: 32
-    rightPadding: 32
+    padding: constants.p3
+    topPadding: constants.p3
+    bottomPadding: constants.p3
+    leftPadding: constants.p3
+    rightPadding: constants.p3
     horizontalPadding: 0
     verticalPadding: 16
     anchors.centerIn: parent
@@ -44,6 +44,8 @@ Dialog {
             }
         }
         ToolButton {
+            padding: 0
+            background: null
             visible: self.showRejectButton
             enabled: self.enableRejectButton
             flat: true
