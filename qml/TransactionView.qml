@@ -54,37 +54,70 @@ WalletDialog {
                 color: constants.c600
                 radius: 4
             }
-            contentItem: RowLayout {
-            spacing: 16
-                AssetIcon {
-                    asset: amount.asset
-                }
+            contentItem: ColumnLayout {
+                spacing: 16
                 ColumnLayout {
-                    Label {
-                        Layout.fillWidth: true
-                        text: amount.asset.name
-                        font.pixelSize: 14
-                        elide: Label.ElideRight
+                    Layout.fillWidth: true
+                    spacing: constants.s1
+                    visible: recipients_repeater.count > 0
+                    SectionLabel {
+                        text: recipients_repeater.count === 1 ? qsTrId('Recipient') : qsTrId('Recipients')
                     }
+                    Repeater {
+                        id: recipients_repeater
+                        model: {
+                            const addresses = []
+                            for (const input of self.transaction.data.inputs) {
+                                if (input.is_blinded && input.is_relevant && input.asset_id === amount.asset.id) {
+                                    addresses.push(input.address)
+                                }
+                            }
+                            for (const output of self.transaction.data.outputs) {
+                                if (output.is_blinded && output.is_relevant && output.asset_id === amount.asset.id) {
+                                    addresses.push(output.address)
+                                }
+                            }
+                            return addresses
+                        }
+                        CopyableLabel {
+                            font.pixelSize: 10
+                            color: constants.c100
+                            text: modelData
+                        }
+                    }
+                }
+                RowLayout {
+                    spacing: 16
+                    AssetIcon {
+                        asset: amount.asset
+                    }
+                    ColumnLayout {
+                        Label {
+                            Layout.fillWidth: true
+                            text: amount.asset.name
+                            font.pixelSize: 14
+                            elide: Label.ElideRight
+                        }
 
+                        Label {
+                            visible: 'entity' in amount.asset.data
+                            Layout.fillWidth: true
+                            opacity: 0.5
+                            text: amount.asset.data.entity ? amount.asset.data.entity.domain : ''
+                            elide: Label.ElideRight
+                        }
+                    }
+                    HSpacer {
+                    }
                     Label {
-                        visible: 'entity' in amount.asset.data
-                        Layout.fillWidth: true
-                        opacity: 0.5
-                        text: amount.asset.data.entity ? amount.asset.data.entity.domain : ''
-                        elide: Label.ElideRight
+                        text: {
+                            wallet.displayUnit
+                            return amount.formatAmount(true)
+                        }
+                        color: amount.transaction.data.type === 'incoming' ? '#00b45a' : 'white'
+                        font.pixelSize: 16
+                        font.styleName: 'Medium'
                     }
-                }
-                HSpacer {
-                }
-                Label {
-                    text: {
-                        wallet.displayUnit
-                        return amount.formatAmount(true)
-                    }
-                    color: amount.transaction.data.type === 'incoming' ? '#00b45a' : 'white'
-                    font.pixelSize: 16
-                    font.styleName: 'Medium'
                 }
             }
         }
@@ -184,7 +217,8 @@ WalletDialog {
             }
 
             Repeater {
-                model: transaction.amounts
+                visible: count > 0
+                model: transaction.data.type === 'redeposit' ? [] : transaction.amounts
                 delegate: network.liquid ? liquid_amount_delegate : bitcoin_amount_delegate
             }
 
