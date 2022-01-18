@@ -60,14 +60,14 @@ Button {
         ColumnLayout {
             Layout.fillWidth: true
             spacing: constants.p1
-            CopyableLabel {
+            Label {
                 Layout.fillWidth: true
                 elide: Text.ElideRight
                 text: formatAmount(output.data['satoshi'], true)
                 font.pixelSize: 14
                 font.styleName: 'Medium'
             }
-            CopyableLabel {
+            Label {
                 Layout.fillWidth: true
                 elide: Text.ElideRight
                 text: output.data['txhash'] + ':' + output.data['pt_idx']
