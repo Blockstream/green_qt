@@ -256,6 +256,7 @@ WalletDialog {
                     GPane {
                         Layout.fillWidth: true
                         background: null
+                        padding: 0
                         contentItem: ColumnLayout {
                             spacing: constants.s1
                             CopyableLabel {
