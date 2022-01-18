@@ -14,16 +14,11 @@ WalletDialog {
     readonly property bool completed: confirmations >= (network.liquid ? 2 : 6)
 
     wallet: transaction.account.wallet
-    title: qsTrId('id_transaction_details') + ' - ' + tx_direction(transaction.data.type)
-
-    function tx_direction(type) {
-        switch (type) {
-            case 'incoming':
-                return qsTrId('id_incoming')
-            case 'outgoing':
-                return qsTrId('id_outgoing')
-            case 'redeposit':
-                return qsTrId('id_redeposited')
+    title: {
+        switch(transaction.data.type) {
+            case 'incoming': return qsTrId('id_incoming')
+            case 'outgoing': return qsTrId('id_outgoing')
+            case 'redeposit': return qsTrId('id_redeposited')
         }
     }
 
