@@ -18,7 +18,6 @@ WalletDialog {
     property bool autoDestroy: false
     onClosed: if (autoDestroy) destroy()
     closePolicy: Popup.NoAutoClose
-    toolbar: stack_view.currentItem.toolbar
     footer: DialogFooter {
         HSpacer {}
         Repeater {

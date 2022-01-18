@@ -4,7 +4,6 @@ import QtQuick.Layouts 1.13
 
 Dialog {
     property string icon
-    property alias toolbar: toolbar_loader.sourceComponent
     property bool showRejectButton: true
     property bool enableRejectButton: true
     id: self
@@ -43,9 +42,6 @@ Dialog {
                 id: mouse_area
                 hoverEnabled: true
             }
-        }
-        Loader {
-            id: toolbar_loader
         }
         ToolButton {
             visible: self.showRejectButton
