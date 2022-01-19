@@ -6,25 +6,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
-- Support to bump unconfirmed transaction from transaction dialog
-- Restore now automatically lookups for wallets of both types
-- Show Tor indicator in status bar when Tor is active
-- Show liquid transaction details when signing with Jade
-- Show bitcoin transaction details when signing with Jade
-- Show bitcoin transaction details when signing with Ledger
+- Automatic wallet restore, Green will find any wallet associated with your recovery phrase
+- Improved transaction signing with Jade and Ledger, showing the transaction details to be confirmed on the hardware wallets
+- SPV support for singlesig wallets, available in app settings
+- Support connection to your personal electrum server, available in app settings
+- Show indicators for tor, electrum servers and spv in the wallet status bar
 - Pull down transaction list to refresh
+- Show the available assets in account cards
 
 ### Changed
-- Improvements to the transaction dialog 
-- New icons for Liquid and Liquid testnet
-- Updates GDK to 0.0.48
+- Improved transaction details dialog
+- Improved transaction list look and feel
+- New icons for Liquid
+- Updates GDK to 0.0.49
 
 ### Fixed
 - Enable Jade login button after logout
-- Restore wallet with 27 word mnemonic
+- Restore wallet with 27 word recovery phrases
 - Prevent long names to break the header layout
 - Show correct amounts in review step
-- Fix timestamp when exporting transactions to CSV
+- Timestamp when exporting transactions to CSV file
+- Show locked coins under the locked filter
 
 ## [1.0.4] - 2021-11-19
 ### Added
