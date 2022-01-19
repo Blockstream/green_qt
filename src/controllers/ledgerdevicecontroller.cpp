@@ -149,6 +149,10 @@ void LedgerDeviceController::update()
         if (m_wallet) {
             emit walletChanged(m_wallet);
             m_wallet->setDevice(m_device);
+
+            QObject::connect(m_wallet, &Wallet::authenticationChanged, this, [=] {
+                setActive(m_wallet->isAuthenticated());
+            });
         }
     }
 
