@@ -36,13 +36,11 @@ void NewsFeedController::fetch()
 
 void NewsFeedController::parse()
 {
-    QJsonArray array;
     QDomDocument doc;
     doc.setContent(m_feed);
     QDomNodeList items = doc.elementsByTagName("item");
 
     for (int i = 0; i < items.size(); ++i) {
-        QJsonObject item = QJsonObject();
         QDomNode n = items.item(i).firstChild();
 
         while (!n.isNull()) {
@@ -68,18 +66,11 @@ void NewsFeedController::parse()
                         });
                         HttpManager::instance()->exec(activity);
                     }
-                    item[e.tagName()] = QUrl::fromLocalFile(path).toString();
                 }
-            } else {
-                item[e.tagName()] = e.text();
             }
         }
-
-        array.append(item);
     }
-
-    m_model = array;
-    emit modelChanged();
+    updateModel();
 }
 
 QJsonArray NewsFeedController::model() const
@@ -89,10 +80,39 @@ QJsonArray NewsFeedController::model() const
 
 void NewsFeedController::updateModel()
 {
-    QJsonArray tmp = m_model;
-    m_model = QJsonArray();
-    emit modelChanged();
-    m_model = tmp;
+    QJsonArray array;
+    QDomDocument doc;
+    doc.setContent(m_feed);
+    QDomNodeList items = doc.elementsByTagName("item");
+
+    for (int i = 0; i < items.size(); ++i) {
+        QJsonObject item;
+        QDomNode n = items.item(i).firstChild();
+
+        while (!n.isNull()) {
+            QDomElement e = n.toElement();
+            n = n.nextSibling();
+            if (e.isNull()) continue;
+
+            if (e.tagName() == "image") {
+                if (e.elementsByTagName("url").size() > 0) {
+                    const auto url = e.elementsByTagName("url").at(0).toElement().text();
+                    const auto path = GetDataFile("cache", Sha256(url));
+                    QFile file(path);
+                    if (file.exists()) {
+                        item["image"] = QUrl::fromLocalFile(path).toString();
+                    }
+                }
+            } else {
+                item[e.tagName()] = e.text();
+            }
+        }
+        if (item.contains("image")) {
+            array.append(item);
+        }
+    }
+
+    m_model = array;
     emit modelChanged();
 }
 
