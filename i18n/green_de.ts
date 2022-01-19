@@ -92,6 +92,10 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
         <translation>Eine neue Transaktion ist soeben eingetroffen.</translation>
     </message>
     <message>
+        <source>id_a_newer_version_of_blockstream</source>
+        <translation>A newer version of Blockstream Green is now available</translation>
+    </message>
+    <message>
         <source>id_a_screen_lock_must_be_enabled</source>
         <translation>Eine Bildschirmsperre muss über die Android-Einstellungen aktiviert werden</translation>
     </message>
@@ -126,6 +130,10 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     <message>
         <source>id_account_type</source>
         <translation>Konto-Typ</translation>
+    </message>
+    <message>
+        <source>id_accounts</source>
+        <translation>Accounts</translation>
     </message>
     <message>
         <source>id_accounts_summary</source>
@@ -232,6 +240,14 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
         <translation>All Assets</translation>
     </message>
     <message>
+        <source>id_all_coins</source>
+        <translation>All coins</translation>
+    </message>
+    <message>
+        <source>id_all_networks</source>
+        <translation>All networks</translation>
+    </message>
+    <message>
         <source>id_all_of_the_accounts_in_your</source>
         <translation>All of the accounts in your wallet need to be empty before deleting it.</translation>
     </message>
@@ -270,6 +286,10 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     <message>
         <source>id_amp_id</source>
         <translation>AMP ID</translation>
+    </message>
+    <message>
+        <source>id_amp_wallet</source>
+        <translation>AMP Wallet</translation>
     </message>
     <message>
         <source>id_another_2fa_method_is_already</source>
@@ -404,6 +424,10 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
         <translation>BIP84 accounts allow you to segregate your funds, and to receive on bech32 native segwit addresses. This account type ensures cheaper transactions when sending funds, but not all services support bech32 addresses yet.</translation>
     </message>
     <message>
+        <source>id_bitcoin_and_liquid</source>
+        <translation>Bitcoin and Liquid</translation>
+    </message>
+    <message>
         <source>id_bitcoin_denomination</source>
         <translation>Bitcoin-Denominierung</translation>
     </message>
@@ -444,6 +468,10 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
         <translation>bestätigte Blöcke </translation>
     </message>
     <message>
+        <source>id_blockstream_devices</source>
+        <translation>Blockstream Devices</translation>
+    </message>
+    <message>
         <source>id_blockstream_does_not_have</source>
         <translation>Blockstream hat keinen Zugriff auf dein Wallet-Backup und kann dir nicht helfen, falls du es verlieren solltest</translation>
     </message>
@@ -463,6 +491,10 @@ Simple and Secure</translation>
     <message>
         <source>id_blockstream_store</source>
         <translation>Blockstream Store</translation>
+    </message>
+    <message>
+        <source>id_bluetooth</source>
+        <translation>Bluetooth</translation>
     </message>
     <message>
         <source>id_btchip_is_not_set_up_please_set</source>
@@ -909,6 +941,14 @@ Simple and Secure</translation>
         <translation>%1 Assets in diesem Konto</translation>
     </message>
     <message>
+        <source>id_d_coins_selected</source>
+        <translation>%1 coins selected</translation>
+    </message>
+    <message>
+        <source>id_d_words</source>
+        <translation>%1 words</translation>
+    </message>
+    <message>
         <source>id_data_directory</source>
         <translation>Data directory</translation>
     </message>
@@ -1119,6 +1159,10 @@ Simple and Secure</translation>
     <message>
         <source>id_enable_testnet</source>
         <translation>Enable testnet</translation>
+    </message>
+    <message>
+        <source>id_enable_testnet_in_app_settings</source>
+        <translation>Enable testnet in app settings to use Jade</translation>
     </message>
     <message>
         <source>id_enable_touch_id</source>
@@ -1762,6 +1806,10 @@ Recovery Phrase</translation>
         <translation>Jade unlocked</translation>
     </message>
     <message>
+        <source>id_jade_was_initialized_for_testnet</source>
+        <translation>Jade was initialized for testnet</translation>
+    </message>
+    <message>
         <source>id_just_a_few_more_steps_to_get</source>
         <translation>Just a few more steps to get you set up.</translation>
     </message>
@@ -1784,6 +1832,10 @@ Recovery Phrase</translation>
     <message>
         <source>id_later</source>
         <translation>SPÄTER</translation>
+    </message>
+    <message>
+        <source>id_latest_transactions</source>
+        <translation>Latest transactions</translation>
     </message>
     <message>
         <source>id_lbtc_has_no_issuer_and_is</source>
@@ -1835,11 +1887,15 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_liquid_testnet_electrum_server</source>
-        <translation>Liquid Testnet Electrum Server</translation>
+        <translation>Liquid Testnet Electrum server</translation>
     </message>
     <message>
         <source>id_liquid_testnet_wallets</source>
         <translation>Liquid testnet wallets</translation>
+    </message>
+    <message>
+        <source>id_liquid_wallet</source>
+        <translation>Liquid Wallet</translation>
     </message>
     <message>
         <source>id_liquid_wallets</source>
@@ -1990,6 +2046,10 @@ Recovery Phrase</translation>
         <translation>Konten für verwalteten Vermögenswerte sind nur für Liquid Wallets verfügbar. Möglicherweise musst du deine Konto-ID dem Herausgeber angeben, um Managed Assets zu erhalten.</translation>
     </message>
     <message>
+        <source>id_manual_coin_selection</source>
+        <translation>Manual coin selection</translation>
+    </message>
+    <message>
         <source>id_medium</source>
         <translation>Mittel</translation>
     </message>
@@ -2090,6 +2150,10 @@ Recovery Phrase</translation>
         <translation>Netzwerk-Monitor</translation>
     </message>
     <message>
+        <source>id_networks</source>
+        <translation>Networks</translation>
+    </message>
+    <message>
         <source>id_new_account_created</source>
         <translation>New account created</translation>
     </message>
@@ -2164,6 +2228,10 @@ Recovery Phrase</translation>
     <message>
         <source>id_no_attempts_remaining</source>
         <translation>Keine Versuche übrig</translation>
+    </message>
+    <message>
+        <source>id_no_coins_selected</source>
+        <translation>No coins selected</translation>
     </message>
     <message>
         <source>id_no_device_connected</source>
@@ -2550,6 +2618,10 @@ Recovery Phrase</translation>
         <translation>Weitere Informationen auf unserer %1</translation>
     </message>
     <message>
+        <source>id_ready</source>
+        <translation>Ready</translation>
+    </message>
+    <message>
         <source>id_ready_to_start</source>
         <translation>Ready to start</translation>
     </message>
@@ -2882,6 +2954,10 @@ Recovery Phrase</translation>
         <translation>Senden</translation>
     </message>
     <message>
+        <source>id_send_all</source>
+        <translation>Send all</translation>
+    </message>
+    <message>
         <source>id_send_all_funds</source>
         <translation>Alle Gelder verschicken</translation>
     </message>
@@ -3040,6 +3116,14 @@ Recovery Phrase</translation>
     <message>
         <source>id_show</source>
         <translation>Show</translation>
+    </message>
+    <message>
+        <source>id_show_advanced_options</source>
+        <translation>Show advanced options</translation>
+    </message>
+    <message>
+        <source>id_show_all</source>
+        <translation>Show all</translation>
     </message>
     <message>
         <source>id_show_all_assets</source>
@@ -3261,6 +3345,10 @@ Einstellung zurücksetzen und dann reaktivieren.</translation>
     <message>
         <source>id_terms_of_use</source>
         <translation>Nutzungsbedingungen</translation>
+    </message>
+    <message>
+        <source>id_testnet_and_liquid_testnet</source>
+        <translation>Testnet and Liquid Testnet</translation>
     </message>
     <message>
         <source>id_testnet_electrum_server</source>
@@ -3615,6 +3703,10 @@ Einstellung zurücksetzen und dann reaktivieren.</translation>
         <translation>Use a public key</translation>
     </message>
     <message>
+        <source>id_use_all_available_coins</source>
+        <translation>Use all available coins</translation>
+    </message>
+    <message>
         <source>id_use_an_existing_recovery_phrase</source>
         <translation>Use an existing recovery phrase as your third recovery key.</translation>
     </message>
@@ -3649,6 +3741,10 @@ Einstellung zurücksetzen und dann reaktivieren.</translation>
     <message>
         <source>id_verified</source>
         <translation>Verified</translation>
+    </message>
+    <message>
+        <source>id_verify</source>
+        <translation>Verify</translation>
     </message>
     <message>
         <source>id_verify_on_device</source>
@@ -3703,6 +3799,10 @@ Einstellung zurücksetzen und dann reaktivieren.</translation>
         <translation>Wallet</translation>
     </message>
     <message>
+        <source>id_wallet_already_restored</source>
+        <translation>Wallet already restored</translation>
+    </message>
+    <message>
         <source>id_wallet_backup</source>
         <translation>Wallet Backup</translation>
     </message>
@@ -3715,8 +3815,16 @@ Einstellung zurücksetzen und dann reaktivieren.</translation>
         <translation>Wallet-Erstellung fehlgeschlagen</translation>
     </message>
     <message>
+        <source>id_wallet_found</source>
+        <translation>Wallet found</translation>
+    </message>
+    <message>
         <source>id_wallet_name</source>
         <translation>Wallet Name</translation>
+    </message>
+    <message>
+        <source>id_wallet_not_found</source>
+        <translation>Wallet not found</translation>
     </message>
     <message>
         <source>id_wallets</source>
@@ -3913,6 +4021,10 @@ Einstellung zurücksetzen und dann reaktivieren.</translation>
     <message>
         <source>id_you_will_need_to_reenter_your</source>
         <translation>Du musst Deinen Merksatz erneut eingeben um dich neu einzuloggen, falls Du keinen PIN eingerichtet hast.  Drücke &quot;OK&quot; um fortzufahren.</translation>
+    </message>
+    <message>
+        <source>id_you_will_see_your_coins_here</source>
+        <translation>You will see your coins here</translation>
     </message>
     <message>
         <source>id_youll_need_to_back_up_your</source>

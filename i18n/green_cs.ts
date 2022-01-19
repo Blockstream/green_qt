@@ -92,6 +92,10 @@ Pokud vám žádný z těchto tipů nepomohl nebo pokud nemáte frázi pro obnov
         <translation>Do vaší peněženky právě dorazila nová transakce.</translation>
     </message>
     <message>
+        <source>id_a_newer_version_of_blockstream</source>
+        <translation>Nyní je k dispozici novější verze aplikace Blockstream Green</translation>
+    </message>
+    <message>
         <source>id_a_screen_lock_must_be_enabled</source>
         <translation>V nastavení systému Android musí být povolen zámek obrazovky</translation>
     </message>
@@ -128,6 +132,10 @@ Pokud vám žádný z těchto tipů nepomohl nebo pokud nemáte frázi pro obnov
         <translation>Typ účtu</translation>
     </message>
     <message>
+        <source>id_accounts</source>
+        <translation>Účty</translation>
+    </message>
+    <message>
         <source>id_accounts_summary</source>
         <translation>Přehled účtů</translation>
     </message>
@@ -137,7 +145,7 @@ Pokud vám žádný z těchto tipů nepomohl nebo pokud nemáte frázi pro obnov
     </message>
     <message>
         <source>id_actions</source>
-        <translation>Actions</translation>
+        <translation>Akce</translation>
     </message>
     <message>
         <source>id_add_a_note_only_you_can_see_it</source>
@@ -232,6 +240,14 @@ Pokud vám žádný z těchto tipů nepomohl nebo pokud nemáte frázi pro obnov
         <translation>Všechna aktiva</translation>
     </message>
     <message>
+        <source>id_all_coins</source>
+        <translation>Všechny mince</translation>
+    </message>
+    <message>
+        <source>id_all_networks</source>
+        <translation>Všechny sítě</translation>
+    </message>
+    <message>
         <source>id_all_of_the_accounts_in_your</source>
         <translation>Před odstraněním musí být všechny účty v peněžence prázdné.</translation>
     </message>
@@ -270,6 +286,10 @@ Pokud vám žádný z těchto tipů nepomohl nebo pokud nemáte frázi pro obnov
     <message>
         <source>id_amp_id</source>
         <translation>ID AMP</translation>
+    </message>
+    <message>
+        <source>id_amp_wallet</source>
+        <translation>AMP peněženka</translation>
     </message>
     <message>
         <source>id_another_2fa_method_is_already</source>
@@ -313,7 +333,7 @@ Pokud vám žádný z těchto tipů nepomohl nebo pokud nemáte frázi pro obnov
     </message>
     <message>
         <source>id_assets_cannot_be_used_on_bitcoin</source>
-        <translation>Assets cannot be used on Bitcoin</translation>
+        <translation>Aktiva nelze použít na Bitcoinu</translation>
     </message>
     <message>
         <source>id_attempts_remaining_d</source>
@@ -357,7 +377,7 @@ Pokud vám žádný z těchto tipů nepomohl nebo pokud nemáte frázi pro obnov
     </message>
     <message>
         <source>id_available</source>
-        <translation>Available</translation>
+        <translation>K dispozici</translation>
     </message>
     <message>
         <source>id_back</source>
@@ -404,6 +424,10 @@ Pokud vám žádný z těchto tipů nepomohl nebo pokud nemáte frázi pro obnov
         <translation>Účty BIP84 umožňují oddělit finanční prostředky a přijímat je na nativních adresách bech32 segwit. Tento typ účtu zajišťuje levnější transakce při odesílání prostředků, ale ne všechny služby zatím podporují adresy bech32.</translation>
     </message>
     <message>
+        <source>id_bitcoin_and_liquid</source>
+        <translation>Bitcoin a Liquid</translation>
+    </message>
+    <message>
         <source>id_bitcoin_denomination</source>
         <translation>Nominální hodnota bitcoinu</translation>
     </message>
@@ -444,6 +468,10 @@ Pokud vám žádný z těchto tipů nepomohl nebo pokud nemáte frázi pro obnov
         <translation>potvrzené bloky</translation>
     </message>
     <message>
+        <source>id_blockstream_devices</source>
+        <translation>Zařízení Blockstream</translation>
+    </message>
+    <message>
         <source>id_blockstream_does_not_have</source>
         <translation>Blockstream nemá přístup k zálohám vaší peněženky a v případě ztráty vám nebude schopen pomoci</translation>
     </message>
@@ -463,6 +491,10 @@ Jednoduše a bezpečně</translation>
     <message>
         <source>id_blockstream_store</source>
         <translation>Blockstream obchod</translation>
+    </message>
+    <message>
+        <source>id_bluetooth</source>
+        <translation>Bluetooth</translation>
     </message>
     <message>
         <source>id_btchip_is_not_set_up_please_set</source>
@@ -909,6 +941,14 @@ Jednoduše a bezpečně</translation>
         <translation>%1 aktiva v tomto účtu</translation>
     </message>
     <message>
+        <source>id_d_coins_selected</source>
+        <translation>vybrané mince %1</translation>
+    </message>
+    <message>
+        <source>id_d_words</source>
+        <translation>%1 slova</translation>
+    </message>
+    <message>
         <source>id_data_directory</source>
         <translation>Datový adresář</translation>
     </message>
@@ -1119,6 +1159,10 @@ Jednoduše a bezpečně</translation>
     <message>
         <source>id_enable_testnet</source>
         <translation>Povolit testnet</translation>
+    </message>
+    <message>
+        <source>id_enable_testnet_in_app_settings</source>
+        <translation>Povolit testnet v nastavení aplikace pro použití Jade</translation>
     </message>
     <message>
         <source>id_enable_touch_id</source>
@@ -1659,7 +1703,7 @@ obnovovací frázi</translation>
     </message>
     <message>
         <source>id_invalid_asset_id</source>
-        <translation>Invalid Asset ID</translation>
+        <translation>Neplatné ID aktiva</translation>
     </message>
     <message>
         <source>id_invalid_clipboard_contents</source>
@@ -1762,6 +1806,10 @@ obnovovací frázi</translation>
         <translation>Jade odemčen</translation>
     </message>
     <message>
+        <source>id_jade_was_initialized_for_testnet</source>
+        <translation>Jade byl inicializován pro testnet</translation>
+    </message>
+    <message>
         <source>id_just_a_few_more_steps_to_get</source>
         <translation>Ještě pár kroků k nastavení.</translation>
     </message>
@@ -1784,6 +1832,10 @@ obnovovací frázi</translation>
     <message>
         <source>id_later</source>
         <translation>POZDĚJI</translation>
+    </message>
+    <message>
+        <source>id_latest_transactions</source>
+        <translation>Poslední transakce</translation>
     </message>
     <message>
         <source>id_lbtc_has_no_issuer_and_is</source>
@@ -1835,11 +1887,15 @@ obnovovací frázi</translation>
     </message>
     <message>
         <source>id_liquid_testnet_electrum_server</source>
-        <translation>Liquid Testnet Electrum Server</translation>
+        <translation>Liquid Testnet Electrum server</translation>
     </message>
     <message>
         <source>id_liquid_testnet_wallets</source>
         <translation>Liquid testnet peněženky</translation>
+    </message>
+    <message>
+        <source>id_liquid_wallet</source>
+        <translation>Liquid peněženka</translation>
     </message>
     <message>
         <source>id_liquid_wallets</source>
@@ -1990,6 +2046,10 @@ obnovovací frázi</translation>
         <translation>Účty spravovaných aktiv jsou k dispozici pouze v peněženkách Liquid. Může se od vás vyžadovat, abyste emitentům poskytli ID svého účtu, abyste obdrželi spravované aktivum.</translation>
     </message>
     <message>
+        <source>id_manual_coin_selection</source>
+        <translation>Ruční výběr mincí</translation>
+    </message>
+    <message>
         <source>id_medium</source>
         <translation>Střední</translation>
     </message>
@@ -2090,6 +2150,10 @@ obnovovací frázi</translation>
         <translation>Sledování sítě</translation>
     </message>
     <message>
+        <source>id_networks</source>
+        <translation>Sítě</translation>
+    </message>
+    <message>
         <source>id_new_account_created</source>
         <translation>Vytvořen nový účet</translation>
     </message>
@@ -2166,6 +2230,10 @@ obnovovací frázi</translation>
         <translation>Nezbývají žádné pokusy</translation>
     </message>
     <message>
+        <source>id_no_coins_selected</source>
+        <translation>Nebyly vybrány žádné mince</translation>
+    </message>
+    <message>
         <source>id_no_device_connected</source>
         <translation>Není připojeno žádné zařízení</translation>
     </message>
@@ -2231,7 +2299,7 @@ obnovovací frázi</translation>
     </message>
     <message>
         <source>id_not_available_noradio_build</source>
-        <translation>Not available (No-radio build)</translation>
+        <translation>Není k dispozici</translation>
     </message>
     <message>
         <source>id_not_confidential</source>
@@ -2548,6 +2616,10 @@ obnovovací frázi</translation>
     <message>
         <source>id_read_more_at_our_s</source>
         <translation>Přečtěte si více na našem %1</translation>
+    </message>
+    <message>
+        <source>id_ready</source>
+        <translation>Připraveno</translation>
     </message>
     <message>
         <source>id_ready_to_start</source>
@@ -2882,6 +2954,10 @@ obnovovací frázi</translation>
         <translation>Odeslat</translation>
     </message>
     <message>
+        <source>id_send_all</source>
+        <translation>Poslat vše</translation>
+    </message>
+    <message>
         <source>id_send_all_funds</source>
         <translation>Odeslat všechny prostředky</translation>
     </message>
@@ -3040,6 +3116,14 @@ obnovovací frázi</translation>
     <message>
         <source>id_show</source>
         <translation>Zobrazit</translation>
+    </message>
+    <message>
+        <source>id_show_advanced_options</source>
+        <translation>Zobrazit rozšířené možnosti</translation>
+    </message>
+    <message>
+        <source>id_show_all</source>
+        <translation>Zobrazit vše</translation>
     </message>
     <message>
         <source>id_show_all_assets</source>
@@ -3261,6 +3345,10 @@ Obnovte toto nastavení a znovu jej aktivujte.</translation>
     <message>
         <source>id_terms_of_use</source>
         <translation>Podmínky použití</translation>
+    </message>
+    <message>
+        <source>id_testnet_and_liquid_testnet</source>
+        <translation>Testnet a Liquid Testnet</translation>
     </message>
     <message>
         <source>id_testnet_electrum_server</source>
@@ -3615,6 +3703,10 @@ Obnovte toto nastavení a znovu jej aktivujte.</translation>
         <translation>Použijte veřejný klíč</translation>
     </message>
     <message>
+        <source>id_use_all_available_coins</source>
+        <translation>Použít všechny dostupné mince</translation>
+    </message>
+    <message>
         <source>id_use_an_existing_recovery_phrase</source>
         <translation>Jako třetí klíč pro obnovení použijte stávající frázi pro obnovení.</translation>
     </message>
@@ -3649,6 +3741,10 @@ Obnovte toto nastavení a znovu jej aktivujte.</translation>
     <message>
         <source>id_verified</source>
         <translation>Ověřeno</translation>
+    </message>
+    <message>
+        <source>id_verify</source>
+        <translation>Ověřit</translation>
     </message>
     <message>
         <source>id_verify_on_device</source>
@@ -3700,7 +3796,11 @@ Obnovte toto nastavení a znovu jej aktivujte.</translation>
     </message>
     <message>
         <source>id_wallet</source>
-        <translation>Wallet</translation>
+        <translation>Peněženka</translation>
+    </message>
+    <message>
+        <source>id_wallet_already_restored</source>
+        <translation>Peněženka již byla obnovena</translation>
     </message>
     <message>
         <source>id_wallet_backup</source>
@@ -3715,8 +3815,16 @@ Obnovte toto nastavení a znovu jej aktivujte.</translation>
         <translation>Vytvoření peněženky se nezdařilo</translation>
     </message>
     <message>
+        <source>id_wallet_found</source>
+        <translation>Peněženka nalezena</translation>
+    </message>
+    <message>
         <source>id_wallet_name</source>
         <translation>Název peněženky</translation>
+    </message>
+    <message>
+        <source>id_wallet_not_found</source>
+        <translation>Peněženka nebyla nalezena</translation>
     </message>
     <message>
         <source>id_wallets</source>
@@ -3913,6 +4021,10 @@ Obnovte toto nastavení a znovu jej aktivujte.</translation>
     <message>
         <source>id_you_will_need_to_reenter_your</source>
         <translation>Pokud nenastavíte PIN, budete muset znovu zadat svou mnemotechnickkou frázi a znovu se přihlásit. Pokračujte stisknutím tlačítka „OK“.</translation>
+    </message>
+    <message>
+        <source>id_you_will_see_your_coins_here</source>
+        <translation>Své mince uvidíte zde</translation>
     </message>
     <message>
         <source>id_youll_need_to_back_up_your</source>

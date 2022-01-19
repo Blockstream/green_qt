@@ -92,6 +92,10 @@
         <translation>Новая транзакция только что поступила на ваш кошелек.</translation>
     </message>
     <message>
+        <source>id_a_newer_version_of_blockstream</source>
+        <translation>A newer version of Blockstream Green is now available</translation>
+    </message>
+    <message>
         <source>id_a_screen_lock_must_be_enabled</source>
         <translation>Блокировка экрана должна быть включена в настройках Android</translation>
     </message>
@@ -126,6 +130,10 @@
     <message>
         <source>id_account_type</source>
         <translation>Тип учетной записи</translation>
+    </message>
+    <message>
+        <source>id_accounts</source>
+        <translation>Accounts</translation>
     </message>
     <message>
         <source>id_accounts_summary</source>
@@ -232,6 +240,14 @@
         <translation>All Assets</translation>
     </message>
     <message>
+        <source>id_all_coins</source>
+        <translation>All coins</translation>
+    </message>
+    <message>
+        <source>id_all_networks</source>
+        <translation>All networks</translation>
+    </message>
+    <message>
         <source>id_all_of_the_accounts_in_your</source>
         <translation>Перед удалением все аккаунты в вашем кошельке должны быть пустыми.</translation>
     </message>
@@ -270,6 +286,10 @@
     <message>
         <source>id_amp_id</source>
         <translation>AMP ID</translation>
+    </message>
+    <message>
+        <source>id_amp_wallet</source>
+        <translation>AMP Wallet</translation>
     </message>
     <message>
         <source>id_another_2fa_method_is_already</source>
@@ -404,6 +424,10 @@
         <translation>Учетные записи BIP84 позволяют разделять ваши средства и получать их на собственные SegWit адреса в формате bech32. Этот тип счета обеспечивает более дешевые транзакции при отправке средств, но пока не все сервисы поддерживают адреса в формате bech32.</translation>
     </message>
     <message>
+        <source>id_bitcoin_and_liquid</source>
+        <translation>Bitcoin and Liquid</translation>
+    </message>
+    <message>
         <source>id_bitcoin_denomination</source>
         <translation>Деноминация биткоина</translation>
     </message>
@@ -444,6 +468,10 @@
         <translation>подтвержденные блоки</translation>
     </message>
     <message>
+        <source>id_blockstream_devices</source>
+        <translation>Blockstream Devices</translation>
+    </message>
+    <message>
         <source>id_blockstream_does_not_have</source>
         <translation>Blockstream не имеет доступа к сохраненной копии вашего кошелька и не сможет помочь вам в случае его утери </translation>
     </message>
@@ -463,6 +491,10 @@
     <message>
         <source>id_blockstream_store</source>
         <translation>Магазин Blockstream</translation>
+    </message>
+    <message>
+        <source>id_bluetooth</source>
+        <translation>Bluetooth</translation>
     </message>
     <message>
         <source>id_btchip_is_not_set_up_please_set</source>
@@ -909,6 +941,14 @@
         <translation>%1 активов на этом аккаунте</translation>
     </message>
     <message>
+        <source>id_d_coins_selected</source>
+        <translation>%1 coins selected</translation>
+    </message>
+    <message>
+        <source>id_d_words</source>
+        <translation>%1 words</translation>
+    </message>
+    <message>
         <source>id_data_directory</source>
         <translation>Каталог данных</translation>
     </message>
@@ -1119,6 +1159,10 @@
     <message>
         <source>id_enable_testnet</source>
         <translation>Включить тестнет</translation>
+    </message>
+    <message>
+        <source>id_enable_testnet_in_app_settings</source>
+        <translation>Enable testnet in app settings to use Jade</translation>
     </message>
     <message>
         <source>id_enable_touch_id</source>
@@ -1762,6 +1806,10 @@
         <translation>Jade разблокирован</translation>
     </message>
     <message>
+        <source>id_jade_was_initialized_for_testnet</source>
+        <translation>Jade was initialized for testnet</translation>
+    </message>
+    <message>
         <source>id_just_a_few_more_steps_to_get</source>
         <translation>Еще несколько шагов для настройки.</translation>
     </message>
@@ -1784,6 +1832,10 @@
     <message>
         <source>id_later</source>
         <translation>ПОЗЖЕ</translation>
+    </message>
+    <message>
+        <source>id_latest_transactions</source>
+        <translation>Latest transactions</translation>
     </message>
     <message>
         <source>id_lbtc_has_no_issuer_and_is</source>
@@ -1835,11 +1887,15 @@
     </message>
     <message>
         <source>id_liquid_testnet_electrum_server</source>
-        <translation>Liquid Testnet Electrum Server</translation>
+        <translation>Liquid Testnet Electrum server</translation>
     </message>
     <message>
         <source>id_liquid_testnet_wallets</source>
         <translation>Кошельки Liquid Testnet</translation>
+    </message>
+    <message>
+        <source>id_liquid_wallet</source>
+        <translation>Liquid Wallet</translation>
     </message>
     <message>
         <source>id_liquid_wallets</source>
@@ -1990,6 +2046,10 @@
         <translation>Аккаунты с управляемыми активами доступны только на кошельках Liquid. Для получения Managed Asset может потребоваться предоставить ID вашей учетной записи эмитентам.</translation>
     </message>
     <message>
+        <source>id_manual_coin_selection</source>
+        <translation>Manual coin selection</translation>
+    </message>
+    <message>
         <source>id_medium</source>
         <translation>Средний</translation>
     </message>
@@ -2090,6 +2150,10 @@
         <translation>Сетевой монитор</translation>
     </message>
     <message>
+        <source>id_networks</source>
+        <translation>Networks</translation>
+    </message>
+    <message>
         <source>id_new_account_created</source>
         <translation>Создана новая учетная запись</translation>
     </message>
@@ -2164,6 +2228,10 @@
     <message>
         <source>id_no_attempts_remaining</source>
         <translation>Попыток не осталось</translation>
+    </message>
+    <message>
+        <source>id_no_coins_selected</source>
+        <translation>No coins selected</translation>
     </message>
     <message>
         <source>id_no_device_connected</source>
@@ -2550,6 +2618,10 @@
         <translation>Узнайте больше на нашем %1</translation>
     </message>
     <message>
+        <source>id_ready</source>
+        <translation>Ready</translation>
+    </message>
+    <message>
         <source>id_ready_to_start</source>
         <translation>Готов начать</translation>
     </message>
@@ -2882,6 +2954,10 @@
         <translation>Отправить</translation>
     </message>
     <message>
+        <source>id_send_all</source>
+        <translation>Send all</translation>
+    </message>
+    <message>
         <source>id_send_all_funds</source>
         <translation>Отправить всю сумму</translation>
     </message>
@@ -3040,6 +3116,14 @@
     <message>
         <source>id_show</source>
         <translation>Показать</translation>
+    </message>
+    <message>
+        <source>id_show_advanced_options</source>
+        <translation>Show advanced options</translation>
+    </message>
+    <message>
+        <source>id_show_all</source>
+        <translation>Show all</translation>
     </message>
     <message>
         <source>id_show_all_assets</source>
@@ -3261,6 +3345,10 @@
     <message>
         <source>id_terms_of_use</source>
         <translation>Условия использования</translation>
+    </message>
+    <message>
+        <source>id_testnet_and_liquid_testnet</source>
+        <translation>Testnet and Liquid Testnet</translation>
     </message>
     <message>
         <source>id_testnet_electrum_server</source>
@@ -3615,6 +3703,10 @@
         <translation>Используйте открытый ключ</translation>
     </message>
     <message>
+        <source>id_use_all_available_coins</source>
+        <translation>Use all available coins</translation>
+    </message>
+    <message>
         <source>id_use_an_existing_recovery_phrase</source>
         <translation>Используйте существующую фразу восстановления в качестве третьего ключа восстановления.</translation>
     </message>
@@ -3649,6 +3741,10 @@
     <message>
         <source>id_verified</source>
         <translation>Верифицировано</translation>
+    </message>
+    <message>
+        <source>id_verify</source>
+        <translation>Verify</translation>
     </message>
     <message>
         <source>id_verify_on_device</source>
@@ -3703,6 +3799,10 @@
         <translation>Wallet</translation>
     </message>
     <message>
+        <source>id_wallet_already_restored</source>
+        <translation>Wallet already restored</translation>
+    </message>
+    <message>
         <source>id_wallet_backup</source>
         <translation>Резервное копирование кошелька</translation>
     </message>
@@ -3715,8 +3815,16 @@
         <translation>Не удалось создать кошелек</translation>
     </message>
     <message>
+        <source>id_wallet_found</source>
+        <translation>Wallet found</translation>
+    </message>
+    <message>
         <source>id_wallet_name</source>
         <translation>Название кошелька</translation>
+    </message>
+    <message>
+        <source>id_wallet_not_found</source>
+        <translation>Wallet not found</translation>
     </message>
     <message>
         <source>id_wallets</source>
@@ -3913,6 +4021,10 @@
     <message>
         <source>id_you_will_need_to_reenter_your</source>
         <translation>Если вы не установите PIN-код, каждый раз, чтобы войти, вам придется вводить вашу мнемоническую фразу. Нажмите &quot;OK&quot; для продолжения.</translation>
+    </message>
+    <message>
+        <source>id_you_will_see_your_coins_here</source>
+        <translation>You will see your coins here</translation>
     </message>
     <message>
         <source>id_youll_need_to_back_up_your</source>
