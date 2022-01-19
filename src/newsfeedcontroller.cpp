@@ -120,7 +120,8 @@ NewsFeedActivity::NewsFeedActivity(QObject* parent)
     : HttpRequestActivity(parent)
 {
     setMethod("GET");
-    addUrl(QString("https://blockstream.com/feed.xml"));
+    addUrl(QStringLiteral("https://blockstream.com/feed.xml"));
+    addUrl(QStringLiteral("http://blkstrmccjufnkm3otpwjso67apg3f4e53dxzz7nbvr5zg6kiicq2jqd.onion/feed.xml"));
 }
 
 QString NewsFeedActivity::feed() const
@@ -135,4 +136,7 @@ NewsImageDownloadActivity::NewsImageDownloadActivity(const QString& url, QObject
     setMethod("GET");
     setAccept("base64");
     addUrl(url);
+    QString onion = url;
+    onion.replace(QStringLiteral("https://blockstream.com/"), QStringLiteral("http://blkstrmccjufnkm3otpwjso67apg3f4e53dxzz7nbvr5zg6kiicq2jqd.onion/"));
+    addUrl(onion);
 }
