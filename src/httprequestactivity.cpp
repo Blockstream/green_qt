@@ -51,6 +51,11 @@ void HttpRequestActivity::addRootCertificate(const QString& root_certificate)
     m_root_certificates.append(root_certificate);
 }
 
+bool HttpRequestActivity::hasError() const
+{
+    return m_response.contains("error");
+}
+
 void HttpRequestActivity::exec()
 {
     Q_ASSERT(!m_method.isEmpty());

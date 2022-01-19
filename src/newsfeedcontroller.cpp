@@ -22,6 +22,8 @@ void NewsFeedController::fetch()
     auto activity = new NewsFeedActivity(this);
     connect(activity, &NewsFeedActivity::finished, this, [=] {
         activity->deleteLater();
+        // TODO propagate error
+        if (activity->hasError()) return;
         m_feed = activity->feed();
         QFile feed_file(GetDataFile("cache", "feed.xml"));
         if (feed_file.open(QFile::WriteOnly)) {
@@ -99,7 +101,6 @@ NewsFeedActivity::NewsFeedActivity(QObject* parent)
 {
     setMethod("GET");
     addUrl(QString("https://blockstream.com/feed.xml"));
-    //addUrl(QString("http://greenupjcyad2xow7xmrunreetczmqje2nz6bdez3a5xhddlockoqryd.onion/desktop/%1.json").arg(channel));
 }
 
 QString NewsFeedActivity::feed() const
@@ -114,5 +115,4 @@ NewsImageDownloadActivity::NewsImageDownloadActivity(const QString& url, QObject
     setMethod("GET");
     setAccept("base64");
     addUrl(url);
-    //addUrl(QString("http://greenupjcyad2xow7xmrunreetczmqje2nz6bdez3a5xhddlockoqryd.onion/desktop/%1.json").arg(channel));
 }
