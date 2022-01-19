@@ -189,7 +189,7 @@ void LedgerDeviceController::identify()
 
     qDebug() << "identifying, retrieve master public key";
     auto activity = m_device->getWalletPublicKey(m_network, {});
-    QObject::connect(activity, &Activity::finished, [=] {
+    QObject::connect(activity, &Activity::finished, this, [=] {
         activity->deleteLater();
 
         const auto master_xpub = activity->publicKey();
@@ -208,7 +208,7 @@ void LedgerDeviceController::identify()
         Q_ASSERT(!m_wallet_hash_id.isEmpty());
         update();
     });
-    QObject::connect(activity, &Activity::failed, [=] {
+    QObject::connect(activity, &Activity::failed, this, [=] {
         activity->deleteLater();
         setStatus("locked");
     });
