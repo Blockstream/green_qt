@@ -105,29 +105,36 @@ Page {
                 visible: active
             }
             Loader {
+                Layout.alignment: Qt.AlignCenter
                 active: controller.wallet
                 visible: active
                 sourceComponent: ColumnLayout {
+                    Layout.fillHeight: false
                     spacing: constants.s1
                     Label {
+                        Layout.alignment: Qt.AlignCenter
                         text: qsTrId('Wallet already restored')
                     }
                     Label {
+                        Layout.alignment: Qt.AlignCenter
                         text: controller.wallet.name
                     }
                 }
             }
             Loader {
+                Layout.alignment: Qt.AlignCenter
                 active: controller.busy
                 visible: active
-                sourceComponent: RowLayout {
+                sourceComponent: ColumnLayout {
+                    Layout.fillHeight: false
+                    spacing: constants.s1
+                    BusyIndicator {
+                        Layout.alignment: Qt.AlignCenter
+                        running: true
+                    }
                     Label {
+                        Layout.alignment: Qt.AlignCenter
                         text: qsTrId('Looking for wallet')
-                    }
-                    HSpacer {
-                    }
-                    ProgressBar {
-                        indeterminate: true
                     }
                 }
             }
@@ -140,10 +147,11 @@ Page {
             }
             Label {
                 Layout.alignment: Qt.AlignCenter
-                visible: !controller.wallet && !controller.valid && controller.noErrors
+                visible: !controller.wallet && !controller.busy && !controller.valid && controller.noErrors
                 text: qsTrId('Wallet not found')
             }
             RowLayout {
+                Layout.fillHeight: false
                 visible: !controller.wallet && !controller.busy && controller.active
                 Label {
                     visible: controller.valid
@@ -161,11 +169,6 @@ Page {
                     visible: controller.valid
                     onClicked: navigation.controller = controller
                 }
-            }
-            VSpacer {
-            }
-            SessionBadge {
-                session: controller.session
             }
         }
     }

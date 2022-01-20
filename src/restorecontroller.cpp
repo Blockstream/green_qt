@@ -167,12 +167,7 @@ void RestoreController::update()
         QObject::connect(handler, &Handler::done, this, [=] {
             handler->deleteLater();
             m_wallet_hash_id = handler->walletHashId();
-
             update();
-//           m_wallet->updateHashId();
-//           m_wallet->setAuthentication(Wallet::Authenticated);
-//           activity->finish();
-//           activity->deleteLater();
         });
         QObject::connect(handler, &Handler::error, this, [=] {
             handler->deleteLater();
