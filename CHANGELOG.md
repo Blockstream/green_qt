@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+
+### Changed
+
+### Fixed
+
+## [1.0.5] - 2022-01-21
+### Added
 - Automatic wallet restore, Green will find any wallet associated with your recovery phrase
 - Improved transaction signing with Jade and Ledger, showing the transaction details to be confirmed on the hardware wallets
 - SPV support for singlesig wallets, available in app settings
