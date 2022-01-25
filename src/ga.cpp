@@ -27,4 +27,14 @@ QStringList generate_mnemonic(int size)
     return result;
 }
 
+QJsonObject get_settings(GA_session* session)
+{
+    GA_json* settings;
+    int err = GA_get_settings(session, &settings);
+    Q_ASSERT(err == GA_OK);
+    auto result = Json::toObject(settings);
+    GA_destroy_json(settings);
+    return result;
+}
+
 } // namespace GA

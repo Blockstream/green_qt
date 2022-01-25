@@ -399,12 +399,8 @@ void Wallet::updateConfig()
 
 void Wallet::updateSettings()
 {
-    GA_json* settings;
-    int err = GA_get_settings(m_session->m_session, &settings);
-    Q_ASSERT(err == GA_OK);
-    auto data = Json::toObject(settings);
-    GA_destroy_json(settings);
-    setSettings(data);
+    const auto settings = gdk::get_settings(m_session->m_session);
+    setSettings(settings);
 }
 
 QString ComputeDisplayUnit(Network* network, QString unit)
