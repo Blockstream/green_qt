@@ -2,7 +2,7 @@
 #include "json.h"
 #include <gdk.h>
 
-namespace GA {
+namespace gdk {
 
 QJsonObject convert_amount(GA_session* session, const QJsonObject& input)
 {

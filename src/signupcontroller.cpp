@@ -140,6 +140,6 @@ void SignupController::setMnemonicSize(int mnemonic_size)
     m_mnemonic_size = mnemonic_size;
     emit mnemonicSizeChanged(m_mnemonic_size);
 
-    m_mnemonic = GA::generate_mnemonic(mnemonic_size);
+    m_mnemonic = gdk::generate_mnemonic(mnemonic_size);
     emit mnemonicChanged(m_mnemonic);
 }

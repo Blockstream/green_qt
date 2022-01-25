@@ -55,7 +55,7 @@ void CreateAccountController::setRecoveryMnemonic(const QStringList& recovery_mn
 
 void CreateAccountController::generateRecoveryMnemonic()
 {
-    setRecoveryMnemonic(GA::generate_mnemonic(m_recovery_mnemonic_size));
+    setRecoveryMnemonic(gdk::generate_mnemonic(m_recovery_mnemonic_size));
 }
 
 void CreateAccountController::create()

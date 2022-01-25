@@ -6,11 +6,11 @@
 
 struct GA_session;
 
-namespace GA {
+namespace gdk {
 
 QJsonObject convert_amount(GA_session* session, const QJsonObject& input);
 QStringList generate_mnemonic(int size);
 
-} // namespace GA
+} // namespace gdk
 
 #endif // GREEN_GA_H
