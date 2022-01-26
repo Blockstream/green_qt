@@ -890,13 +890,8 @@ void FeeEstimates::setWallet(Wallet* wallet)
 void FeeEstimates::update()
 {
     if (!m_wallet->session()) return;
-    GA_json* estimates;
-    if (GA_OK == GA_get_fee_estimates(m_wallet->session()->m_session, &estimates)) {
-        const auto fees = Json::toObject(estimates).value("fees").toArray();
-        GA_destroy_json(estimates);
-        if (m_fees != fees) {
-            m_fees = fees;
-            emit feesChanged(m_fees);
-        }
-    }
+    const auto fees = gdk::get_fee_estimates(m_wallet->session()->m_session);
+    if (fees.isEmpty() || m_fees == fees) return;
+    m_fees = fees;
+    emit feesChanged(m_fees);
 }

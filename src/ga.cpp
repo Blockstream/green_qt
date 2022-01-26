@@ -57,4 +57,14 @@ QJsonObject get_available_currencies(GA_session* session)
     return result;
 }
 
+QJsonArray get_fee_estimates(GA_session* session)
+{
+    GA_json* estimates;
+    int err = GA_get_fee_estimates(session, &estimates);
+    if (err != GA_OK) return {};
+    const auto fees = Json::toObject(estimates).value("fees").toArray();
+    GA_destroy_json(estimates);
+    return fees;
+}
+
 } // namespace GA
