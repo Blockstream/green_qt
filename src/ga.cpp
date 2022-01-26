@@ -37,4 +37,14 @@ QJsonObject get_settings(GA_session* session)
     return result;
 }
 
+QJsonObject get_twofactor_config(GA_session* session)
+{
+    GA_json* config;
+    int err = GA_get_twofactor_config(session, &config);
+    Q_ASSERT(err == GA_OK);
+    auto result = Json::toObject(config);
+    GA_destroy_json(config);
+    return result;
+}
+
 } // namespace GA

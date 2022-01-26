@@ -387,11 +387,7 @@ void Wallet::setWatchOnly(const QString& username, const QString& password)
 void Wallet::updateConfig()
 {
     if (m_watch_only) return;
-    GA_json* config;
-    int err = GA_get_twofactor_config(m_session->m_session, &config);
-    Q_ASSERT(err == GA_OK);
-    m_config = Json::toObject(config);
-    GA_destroy_json(config);
+    m_config = gdk::get_twofactor_config(m_session->m_session);
     emit configChanged();
 
     setLocked(m_config.value("twofactor_reset").toObject().value("is_active").toBool());
