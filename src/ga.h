@@ -12,6 +12,7 @@ QJsonObject convert_amount(GA_session* session, const QJsonObject& input);
 QStringList generate_mnemonic(int size);
 QJsonObject get_settings(GA_session* session);
 QJsonObject get_twofactor_config(GA_session* session);
+QJsonObject get_available_currencies(GA_session* session);
 
 } // namespace gdk
 

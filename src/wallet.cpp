@@ -432,11 +432,7 @@ void Wallet::updateDisplayUnit()
 
 void Wallet::updateCurrencies()
 {
-    GA_json* currencies;
-    int err = GA_get_available_currencies(m_session->m_session, &currencies);
-    Q_ASSERT(err == GA_OK);
-    m_currencies = Json::toObject(currencies);
-    GA_destroy_json(currencies);
+    m_currencies = gdk::get_available_currencies(m_session->m_session);
 }
 
 void Wallet::save()
