@@ -103,7 +103,9 @@ MainPage {
         id: wallet_view_header
         currentAccount: self.currentAccount
         wallet: self.wallet
-        onViewSelected: stack_view.currentItem.currentView = viewIndex
+        onViewSelected: if (stack_view.currentItem) {
+            stack_view.currentItem.currentView = viewIndex
+        }
     }
     footer: WalletViewFooter {
         wallet: self.wallet
