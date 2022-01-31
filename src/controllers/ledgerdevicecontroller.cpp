@@ -234,9 +234,8 @@ void LedgerDeviceController::login()
         m_login_handler = nullptr;
 
         if (!m_wallet) {
-            m_wallet = WalletManager::instance()->createWallet(m_session->network());
+            m_wallet = WalletManager::instance()->createWallet(m_session->network(), m_wallet_hash_id);
             m_wallet->m_is_persisted = true;
-            m_wallet->updateHashId(m_wallet_hash_id);
             m_wallet->setName(QString("%1 on %2").arg(m_session->network()->displayName()).arg(m_device->name()));
             m_wallet->setDevice(m_device);
             WalletManager::instance()->insertWallet(m_wallet);

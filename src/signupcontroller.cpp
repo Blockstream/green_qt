@@ -34,25 +34,14 @@ void SignupController::update()
     if (!m_active) return;
     if (m_pin.isEmpty()) return;
 
-    if (!m_wallet) {
-        m_wallet = WalletManager::instance()->createWallet(m_network);
-        m_wallet->m_is_persisted = true;
-        emit walletChanged(m_wallet);
-
-        m_wallet->createSession();
-        m_session = m_wallet->session();
-        m_session.track(QObject::connect(m_session, &Session::connectedChanged, this, &SignupController::update));
-
+    if (!m_session) {
+        m_session = new Session(m_network, this);
         m_session->setActive(true);
+        QObject::connect(m_session, &Session::connectedChanged, this, &SignupController::update);
+        return;
     }
 
     if (!m_session->isConnected()) return;
-
-    // TODO: should only add if signup completes
-    m_wallet->setAuthentication(Wallet::Authenticating);
-
-    auto activity = new WalletSignupActivity(m_wallet, this);
-    m_wallet->pushActivity(activity);
 
     auto register_user_handler = new RegisterUserHandler(m_mnemonic, m_session);
     auto login_handler = new LoginHandler(m_mnemonic, m_session);
@@ -65,7 +54,7 @@ void SignupController::update()
     connect(login_handler, &Handler::done, this, [this, login_handler, set_pin_handler] {
         login_handler->deleteLater();
 
-        m_wallet->updateHashId(login_handler->walletHashId());
+        m_wallet_hash_id = login_handler->walletHashId();
         if (m_type == "amp") {
             Q_ASSERT(m_network->isLiquid());
             auto create_amp_account_handler = new CreateAccountHandler({{ "name", "AMP Account" }, { "type", "2of2_no_recovery" }}, m_session);
@@ -91,7 +80,14 @@ void SignupController::update()
             set_pin_handler->exec();
         }
     });
-    connect(set_pin_handler, &Handler::done, this, [this, set_pin_handler, activity] {
+    connect(set_pin_handler, &Handler::done, this, [this, set_pin_handler] {
+        m_wallet = WalletManager::instance()->createWallet(m_network, m_wallet_hash_id);
+        m_wallet->m_is_persisted = true;
+        emit walletChanged(m_wallet);
+
+        m_wallet->setSession(m_session);
+        m_wallet->setAuthentication(Wallet::Authenticating);
+
         set_pin_handler->deleteLater();
         if (m_type == "amp") {
             Q_ASSERT(m_network->isLiquid());
@@ -105,12 +101,9 @@ void SignupController::update()
         m_wallet->reload();
         m_wallet->updateConfig();
         m_wallet->setAuthentication(Wallet::Authenticated);
-
-        activity->finish();
-        activity->deleteLater();
+        WalletManager::instance()->addWallet(m_wallet);
     });
     register_user_handler->exec();
-    WalletManager::instance()->addWallet(m_wallet);
 }
 
 void SignupController::setPin(const QString& pin)

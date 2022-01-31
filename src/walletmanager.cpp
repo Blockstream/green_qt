@@ -40,15 +40,13 @@ WalletManager::WalletManager()
         auto data = doc.object();
         auto network = NetworkManager::instance()->network(data.value("network").toString());
         if (!network) continue;
-        Wallet* wallet = new Wallet(network, this);
+        const auto hash_id = data.value("hash_id").toString();
+        Wallet* wallet = new Wallet(network, hash_id, this);
         wallet->m_is_persisted = true;
         wallet->m_id = QFileInfo(file).baseName();
         if (data.contains("pin_data")) {
             wallet->m_pin_data = QByteArray::fromBase64(data.value("pin_data").toString().toLocal8Bit());
             wallet->m_login_attempts_remaining = data.value("login_attempts_remaining").toInt();
-        }
-        if (data.contains("hash_id")) {
-            wallet->m_hash_id = data.value("hash_id").toString();
         }
         if (data.contains("username")) {
             wallet->m_watch_only = true;
@@ -87,16 +85,16 @@ void WalletManager::addWallet(Wallet* wallet)
     });
 }
 
-Wallet* WalletManager::createWallet(Network* network)
+Wallet* WalletManager::createWallet(Network* network, const QString& hash_id)
 {
-    auto wallet = new Wallet(network, this);
+    auto wallet = new Wallet(network, hash_id, this);
     wallet->m_id = QUuid::createUuid().toString(QUuid::WithoutBraces);
     return wallet;
 }
 
-Wallet *WalletManager::restoreWallet(Network *network)
+Wallet *WalletManager::restoreWallet(Network *network, const QString& hash_id)
 {
-    auto wallet = createWallet(network);
+    auto wallet = createWallet(network, hash_id);
     wallet->m_is_persisted = true;
     wallet->m_restoring = true;
     return wallet;

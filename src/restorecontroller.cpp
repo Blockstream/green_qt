@@ -62,9 +62,8 @@ void RestoreController::setActive(bool active)
 void RestoreController::accept()
 {
     Q_ASSERT(!m_wallet);
-    m_wallet = WalletManager::instance()->restoreWallet(m_network);
+    m_wallet = WalletManager::instance()->restoreWallet(m_network, m_wallet_hash_id);
     emit walletChanged(m_wallet);
-    m_wallet->updateHashId(m_wallet_hash_id);
     m_wallet->setSession(m_session);
     m_wallet->setSession();
     m_session = nullptr;

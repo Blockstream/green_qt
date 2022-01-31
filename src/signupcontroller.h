@@ -52,11 +52,12 @@ private:
     QStringList m_mnemonic;
     Connectable<Network> m_network;
     Connectable<Wallet> m_wallet;
-    Connectable<Session> m_session;
+    Session* m_session{nullptr};
     QString m_pin;
     bool m_active{false};
     int m_mnemonic_size;
     QString m_type{"default"};
+    QString m_wallet_hash_id;
 };
 
 #endif // GREEN_SIGNUPCONTROLLER_H

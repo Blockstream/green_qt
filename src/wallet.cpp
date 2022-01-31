@@ -50,9 +50,10 @@ QByteArray pinDataForNewPin(GA_session* session, const QByteArray& pin)
 }
 } // namespace
 
-Wallet::Wallet(Network* network, QObject *parent)
+Wallet::Wallet(Network* network, const QString& hash_id, QObject* parent)
     : Entity(parent)
     , m_network(network)
+    , m_hash_id(hash_id)
 {
     QObject::connect(this, &Wallet::activitiesChanged, this, &Wallet::updateReady);
     QObject::connect(this, &Wallet::authenticationChanged, this, &Wallet::updateReady);

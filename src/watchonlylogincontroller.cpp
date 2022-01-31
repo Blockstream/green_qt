@@ -83,14 +83,13 @@ void WatchOnlyLoginController::login()
         handler->deleteLater();
 
         if (!m_wallet) {
-            m_wallet = WalletManager::instance()->createWallet(m_network);
+            m_wallet = WalletManager::instance()->createWallet(m_network, handler->walletHashId());
             m_wallet->m_watch_only = true;
             m_wallet->m_username = m_username;
             m_wallet->m_is_persisted = m_save_wallet;
             m_wallet->m_name = QString("%1 watch-only wallet").arg(m_username);
             emit walletChanged(m_wallet);
         }
-        m_wallet->updateHashId(handler->walletHashId());
         m_wallet->setSession(m_session);
         m_wallet->setSession();
         m_session->setParent(m_wallet);

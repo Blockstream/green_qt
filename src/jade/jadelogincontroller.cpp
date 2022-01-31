@@ -215,9 +215,8 @@ void JadeLoginController::login()
         Q_ASSERT(m_wallet_hash_id == handler->walletHashId());
 
         if (!m_wallet) {
-            auto wallet = WalletManager::instance()->createWallet(m_session->network());
+            auto wallet = WalletManager::instance()->createWallet(m_session->network(), m_wallet_hash_id);
             wallet->m_is_persisted = true;
-            wallet->updateHashId(m_wallet_hash_id);
             wallet->setName(QString("%1 on %2").arg(m_session->network()->displayName()).arg(m_device->name()));
             WalletManager::instance()->insertWallet(wallet);
             setWallet(wallet);

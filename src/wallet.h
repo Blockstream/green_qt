@@ -74,7 +74,7 @@ private:
     Q_PROPERTY(QString displayUnit READ displayUnit NOTIFY displayUnitChanged)
     Q_PROPERTY(QJsonObject deviceDetails READ deviceDetails NOTIFY deviceDetailsChanged)
 public:
-    explicit Wallet(Network* network, QObject *parent = nullptr);
+    explicit Wallet(Network* network, const QString& hash_id, QObject *parent = nullptr);
     virtual ~Wallet();
     QString id() const;
     bool isPersisted() const { return m_is_persisted; }
@@ -184,7 +184,6 @@ public:
 
     bool m_is_persisted{false};
     QString m_id;
-    QString m_hash_id;
     bool m_restoring{false};
     WalletUpdateAccountsActivity* m_update_accounts_activity{nullptr};
 
@@ -204,6 +203,7 @@ public:
     QString m_name;
     QJsonObject m_device_details;
     Network* const m_network{nullptr};
+    QString m_hash_id;
     int m_login_attempts_remaining{3};
     int m_logout_timer{-1};
     bool m_busy{false};

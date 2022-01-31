@@ -18,8 +18,8 @@ public:
     virtual ~WalletManager();
     static WalletManager* instance();
 
-    Q_INVOKABLE Wallet* createWallet(Network* network);
-    Wallet* restoreWallet(Network* network);
+    Q_INVOKABLE Wallet* createWallet(Network* network, const QString& hash_id);
+    Wallet* restoreWallet(Network* network, const QString& hash_id);
     Q_INVOKABLE Wallet* wallet(const QString& id) const;
     Wallet* walletWithHashId(const QString& hash_id, bool watch_only) const;
 
