@@ -19,7 +19,7 @@ public:
     QList<QByteArray> signatures() const override;
     QList<QByteArray> signerCommitments() const override;
     Command *startUntrustedTransaction(uint32_t version, bool new_transaction, size_t index, const QList<Input> &used_inputs, const QByteArray &redeem_script, bool segwit);
-    Command *untrustedHashSign(const QVector<uint32_t> &private_key_path, QString pin, uint32_t locktime);
+    Command *untrustedHashSign(int index, const QVector<uint32_t> &private_key_path, QString pin, uint32_t locktime);
 private:
     void exec() override;
 private:
@@ -41,7 +41,7 @@ private:
     const QJsonArray m_signing_address_types;
 
     QList<Input> m_hw_inputs;
-    QList<QByteArray> m_signatures;
+    QVector<QByteArray> m_signatures;
 };
 
 #endif // GREEN_LEDGERSIGNTRANSACTIONACTIVITY_H

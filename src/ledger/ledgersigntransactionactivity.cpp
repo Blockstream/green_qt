@@ -18,7 +18,7 @@ LedgerSignTransactionActivity::LedgerSignTransactionActivity(const QJsonObject& 
 
 QList<QByteArray> LedgerSignTransactionActivity::signatures() const
 {
-    return m_signatures;
+    return m_signatures.toList();
 }
 
 QList<QByteArray> LedgerSignTransactionActivity::signerCommitments() const
@@ -43,6 +43,7 @@ void LedgerSignTransactionActivity::exec()
 
     auto batch = new CommandBatch;
 
+    m_signatures.resize(m_signing_inputs.size());
     if (sw) batch->add(signSW());
     if (p2sh) batch->add(signNonSW());
 
@@ -96,7 +97,7 @@ Command* LedgerSignTransactionActivity::finalizeInputFull(const QByteArray &data
     return batch;
 }
 
-Command* LedgerSignTransactionActivity::untrustedHashSign(const QVector<uint32_t> &private_key_path, QString pin, uint32_t locktime)
+Command* LedgerSignTransactionActivity::untrustedHashSign(int index, const QVector<uint32_t> &private_key_path, QString pin, uint32_t locktime)
 {
     const uint8_t sig_hash_type = 1;
     auto batch = new CommandBatch;
@@ -111,11 +112,11 @@ Command* LedgerSignTransactionActivity::untrustedHashSign(const QVector<uint32_t
     stream.writeRawData(_pin.data(), _pin.size());
     stream << locktime << sig_hash_type;
     auto cmd = exchange(batch, apdu(BTCHIP_CLA, BTCHIP_INS_HASH_SIGN, 0, 0, data));
-    connect(cmd, &Command::finished, [this, cmd] {
+    connect(cmd, &Command::finished, [this, cmd, index] {
         QByteArray signature;
         signature.append(0x30);
         signature.append(cmd->m_response.mid(1));
-        m_signatures.append(signature);
+        m_signatures[index] = signature;
     });
     return batch;
 }
@@ -141,8 +142,10 @@ Command* LedgerSignTransactionActivity::signSW()
             const auto user_path = ParsePath(input.value("user_path"));
 
             batch->add(startUntrustedTransaction(version, false, 0, m_hw_inputs.mid(i, 1), script, true));
-            batch->add(untrustedHashSign(user_path, "0", locktime));
+            batch->add(untrustedHashSign(i, user_path, "0", locktime));
         }
+
+        m_hw_inputs.clear();
     });
     batch->add(cmd);
     return batch;
@@ -150,7 +153,26 @@ Command* LedgerSignTransactionActivity::signSW()
 
 Command* LedgerSignTransactionActivity::signNonSW()
 {
-    Q_UNREACHABLE();
+    auto batch = new CommandBatch;
+    auto cmd = getHwInputs(false);
+    connect(cmd, &Command::finished, [this, batch] {
+        const uint32_t version = m_transaction.value("transaction_version").toDouble();
+        const uint32_t locktime = m_transaction.value("transaction_locktime").toDouble();
+        const auto data = outputBytes();
+
+        for (int i = 0; i < m_hw_inputs.size(); i++) {
+            const auto input = m_signing_inputs[i].toObject();
+            const auto address_type = input.value("address_type").toString();
+            const auto script = ParseByteArray(input.value("prevout_script"));
+            const auto user_path = ParsePath(input.value("user_path"));
+
+            batch->add(startUntrustedTransaction(version, i == 0, i, m_hw_inputs, script, false));
+            batch->add(finalizeInputFull(data));
+            if (address_type == "p2sh") batch->add(untrustedHashSign(i, user_path, "0", locktime));
+        }
+    });
+    batch->add(cmd);
+    return batch;
 }
 
 QByteArray sequenceBytes(const QJsonObject& in)
