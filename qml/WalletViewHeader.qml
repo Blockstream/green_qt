@@ -141,6 +141,14 @@ MainPageHeader {
                         onClicked: notifications_drawer.open()
                     }
                     ToolButton {
+                        icon.source: 'qrc:/svg/refresh.svg'
+                        flat: true
+                        action: self.refreshAction
+                        ToolTip.text: qsTrId('id_refresh')
+                        ToolTip.delay: 300
+                        ToolTip.visible: hovered
+                    }
+                    ToolButton {
                         icon.source: 'qrc:/svg/gearFill.svg'
                         flat: true
                         action: self.settingsAction
@@ -336,5 +344,10 @@ MainPageHeader {
     property Action settingsAction: Action {
         enabled: settings_dialog.enabled
         onTriggered: navigation.go(settings_dialog.location)
+    }
+
+    property Action refreshAction: Action {
+        enabled: wallet.activities.length === 0
+        onTriggered: wallet.reload(true)
     }
 }
