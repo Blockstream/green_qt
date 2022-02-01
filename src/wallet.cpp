@@ -218,7 +218,7 @@ void Wallet::changePin(const QByteArray& pin)
     handler->exec();
 }
 
-void Wallet::reload()
+void Wallet::reload(bool refresh_accounts)
 {
     if (m_network->isLiquid()) {
         // Load cached assets
@@ -230,7 +230,7 @@ void Wallet::reload()
         pushActivity(m_update_accounts_activity);
     }
 
-    auto handler = new GetSubAccountsHandler(m_session, false);
+    auto handler = new GetSubAccountsHandler(m_session, refresh_accounts);
     QObject::connect(handler, &Handler::done, this, [this, handler] {
         handler->deleteLater();
         const bool create_segwit = m_network->isElectrum();
@@ -249,7 +249,7 @@ void Wallet::reload()
             auto handler = new CreateAccountHandler({{ "name", "Segwit Account" }, { "type", "p2wpkh" }}, m_session);
             QObject::connect(handler, &Handler::done, this, [=] {
                 handler->deleteLater();
-                reload();
+                reload(false);
             });
             handler->exec();
             return;

@@ -134,7 +134,7 @@ public:
     Q_INVOKABLE QString getDisplayUnit(const QString& unit);
 public slots:
     void disconnect();
-    void reload();
+    void reload(bool refresh_accounts = false);
 
     void updateConfig();
     void updateSettings();
