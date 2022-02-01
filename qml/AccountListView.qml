@@ -91,7 +91,8 @@ Page {
                                 const assets = []
                                 let without_icon = false
                                 for (let i = 0; i < account.balances.length; i++) {
-                                    const asset = account.balances[i].asset
+                                    const { amount, asset }= account.balances[i]
+                                    if (amount === 0) continue;
                                     if (asset.icon || !without_icon) assets.push(asset)
                                     without_icon = !asset.icon
                                 }
