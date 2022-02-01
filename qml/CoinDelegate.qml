@@ -91,7 +91,7 @@ Button {
                         font.capitalization: Font.AllUppercase
                     }
                     Tag {
-                        text: output.addressType === 'csv' ? qsTrId('id_csv') : qsTrId('id_p2wsh')
+                        text: localizedLabel(output.addressType)
                         font.capitalization: Font.AllUppercase
                     }
                     Tag {

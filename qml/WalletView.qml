@@ -57,6 +57,8 @@ MainPage {
                 return qsTrId('id_csv')
             case 'p2wsh':
                 return qsTrId('id_p2wsh')
+            case 'p2sh':
+                return qsTrId('id_p2sh')
             case 'not_confidential':
                 return qsTrId('id_not_confidential')
             case 'dust':

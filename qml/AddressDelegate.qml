@@ -59,7 +59,7 @@ Button {
             RowLayout {
                 Tag {
                     color: constants.c500
-                    text: address.data["address_type"]
+                    text: localizedLabel(address.data["address_type"])
                     font.capitalization: Font.AllUppercase
                 }
             }
