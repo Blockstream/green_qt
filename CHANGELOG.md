@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Sign p2sh inputs with Ledger devices
+- Show fiat balance of Liquid accounts
 
 ## [1.0.5] - 2022-01-21
 ### Added

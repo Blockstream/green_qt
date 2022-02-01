@@ -105,30 +105,16 @@ Page {
                     }
                     HSpacer {
                     }
-                    Loader {
+                    RowLayout {
                         Layout.alignment: Qt.AlignRight
-                        active: !account.wallet.network.liquid
-                        visible: active
-                        sourceComponent: RowLayout {
-                            spacing: 10
-                            Label {
-                                text: formatAmount(account.balance)
-                                font.pixelSize: 12
-                                font.styleName: 'Regular'
-                            }
-                            Label {
-                                font.pixelSize: 14
-                                text: '≈ ' + formatFiat(account.balance)
-                                font.styleName: 'Regular'
-                            }
-                        }
-                    }
-                    Loader {
-                        Layout.alignment: Qt.AlignRight
-                        active: account.wallet.network.liquid
-                        visible: active
-                        sourceComponent: Label {
+                        spacing: 10
+                        Label {
                             text: formatAmount(account.balance)
+                            font.pixelSize: 14
+                            font.styleName: 'Regular'
+                        }
+                        Label {
+                            text: '≈ ' + formatFiat(account.balance)
                             font.pixelSize: 14
                             font.styleName: 'Regular'
                         }
