@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Refresh button to sync and reload  wallet state
+- Automatically select new accounts
 
 ### Changed
 - Improve layout of outputs view

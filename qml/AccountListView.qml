@@ -27,7 +27,15 @@ Page {
             text: '+'
             font.pixelSize: 14
             font.styleName: 'Medium'
-            onClicked: create_account_dialog.createObject(window, { wallet }).open()
+            onClicked: {
+                const dialog = create_account_dialog.createObject(window, { wallet })
+                dialog.accepted.connect(() => {
+                    // automatically select the last account since it is the newly created account
+                    // if account ordering is added then if should determine the correct index
+                    account_list_view.currentIndex = account_list_view.count - 1;
+                })
+                dialog.open()
+            }
         }
     }
     contentItem: GListView {
