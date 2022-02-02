@@ -26,6 +26,7 @@ bool OutputListModelFilter::filterAcceptsRow(int source_row, const QModelIndex &
         bool result = true;
         if (filter == "csv") result = output->addressType() == "csv";
         if (filter == "p2wsh") result = output->addressType() == "p2wsh";
+        if (filter == "p2sh") result = output->addressType() == "p2sh";
         if (filter == "dust") result = output->dust();
         if (filter == "locked") result = output->locked();
         if (filter == "not_confidential") result = !output->confidential();

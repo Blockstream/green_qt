@@ -38,6 +38,7 @@ Page {
                 if (account.wallet.network.liquid) {
                     filters.push('not_confidential')
                 } else {
+                    filters.push('p2sh')
                     filters.push('dust')
                     filters.push('locked')
                 }

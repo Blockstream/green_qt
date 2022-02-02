@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Refresh button to sync and reload  wallet state
 - Automatically select new accounts
+- Filter for p2sh outputs
 
 ### Changed
 - Improve layout of outputs view

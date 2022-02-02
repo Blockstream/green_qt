@@ -44,6 +44,7 @@ Page {
                     if (account.wallet.network.liquid) {
                         filters.push('not_confidential')
                     } else {
+                        filters.push('p2sh')
                         filters.push('dust')
                     }
                     if (account.type !== '2of3' && account.type !== '2of2_no_recovery') {
