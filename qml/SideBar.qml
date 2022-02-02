@@ -28,11 +28,11 @@ Pane {
             id: flickable
             Layout.fillWidth: true
             Layout.fillHeight: true
+            Layout.preferredWidth: layout.implicitWidth
             clip: true
             flickableDirection: Flickable.VerticalFlick
             contentHeight: layout.height
             contentWidth: layout.width
-            implicitWidth: layout.implicitWidth
             ScrollIndicator.vertical: ScrollIndicator { }
             MouseArea {
                 width: layout.width
@@ -45,7 +45,6 @@ Pane {
             }
             ColumnLayout {
                 id: layout
-                width: Math.max(implicitWidth, flickable.width)
                 spacing: 8
                 SideButton {
                     icon.source: icons.bitcoin
