@@ -75,57 +75,53 @@ Page {
             onClicked: info_dialog.createObject(self).open();
         }
     }
-    contentItem: ColumnLayout {
-        GListView {
-            id: list_view
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            clip: true
-            spacing: 0
-            model: OutputListModelFilter {
-                id: output_model_filter
-                filter: button_group.checkedButton.buttonTag
-                model: OutputListModel {
-                    id: output_model
-                    account: self.account
-                    onModelAboutToBeReset: selection_model.clear()
+    contentItem: GListView {
+        id: list_view
+        clip: true
+        spacing: 0
+        model: OutputListModelFilter {
+            id: output_model_filter
+            filter: button_group.checkedButton.buttonTag
+            model: OutputListModel {
+                id: output_model
+                account: self.account
+                onModelAboutToBeReset: selection_model.clear()
+            }
+        }
+        delegate: OutputDelegate {
+            highlighted: selection_model.selectedIndexes.indexOf(output_model.index(output_model.indexOf(output), 0))>-1
+            width: ListView.view.contentWidth
+        }
+
+        BusyIndicator {
+            width: 32
+            height: 32
+            running: output_model.fetching
+            anchors.margins: 8
+            Layout.alignment: Qt.AlignHCenter
+            opacity: output_model.fetching ? 1 : 0
+            Behavior on opacity { OpacityAnimator {} }
+            anchors.bottom: parent.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+        }
+
+        Label {
+            id: label
+            visible: list_view.count === 0
+            anchors.centerIn: parent
+            color: 'white'
+            text: {
+                if (output_model_filter.filter === '') {
+                    return qsTrId('id_youll_see_your_coins_here_when')
+                } else {
+                    return qsTrId('id_there_are_no_results_for_the')
                 }
             }
-            delegate: OutputDelegate {
-                highlighted: selection_model.selectedIndexes.indexOf(output_model.index(output_model.indexOf(output), 0))>-1
-                width: ListView.view.contentWidth
-            }
+        }
 
-            BusyIndicator {
-                width: 32
-                height: 32
-                running: output_model.fetching
-                anchors.margins: 8
-                Layout.alignment: Qt.AlignHCenter
-                opacity: output_model.fetching ? 1 : 0
-                Behavior on opacity { OpacityAnimator {} }
-                anchors.bottom: parent.bottom
-                anchors.horizontalCenter: parent.horizontalCenter
-            }
-
-            Label {
-                id: label
-                visible: list_view.count === 0
-                anchors.centerIn: parent
-                color: 'white'
-                text: {
-                    if (output_model_filter.filter === '') {
-                        return qsTrId('id_youll_see_your_coins_here_when')
-                    } else {
-                        return qsTrId('id_there_are_no_results_for_the')
-                    }
-                }
-            }
-
-            ItemSelectionModel {
-                id: selection_model
-                model: output_model
-            }
+        ItemSelectionModel {
+            id: selection_model
+            model: output_model
         }
     }
 

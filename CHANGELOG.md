@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Refresh button to sync and reload  wallet state
 
 ### Changed
+- Improve layout of outputs view
 
 ### Fixed
 - Sign p2sh inputs with Ledger devices
