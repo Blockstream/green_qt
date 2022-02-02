@@ -102,7 +102,7 @@ Button {
                     }
                 }
             }
-            CopyableLabel {
+            Label {
                 Layout.fillWidth: true
                 elide: Text.ElideRight
                 text: output.data['txhash'] + ':' + output.data['pt_idx']
