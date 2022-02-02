@@ -21,6 +21,7 @@ Page {
     spacing: constants.p1
     background: null
     header: GHeader {
+        spacing: 6
         Label {
             Layout.alignment: Qt.AlignVCenter
             text: qsTrId('id_coins')
@@ -28,65 +29,53 @@ Page {
             font.styleName: 'Bold'
         }
         HSpacer { }
-    }
-    contentItem: ColumnLayout {
-        RowLayout {
-            id: tags_layout
-            Layout.fillWidth: true
-            spacing: 6
-
-            ButtonGroup {
-                id: button_group
-            }
-
-            Repeater {
-                model: {
-                    const filters = ['', 'csv', 'p2wsh']
-                    if (account.wallet.network.liquid) {
-                        filters.push('not_confidential')
-                    } else {
-                        filters.push('dust')
-                        filters.push('locked')
-                    }
-                    if (account.type !== '2of3' && account.type !== '2of2_no_recovery') {
-                        filters.push('expired')
-                    }
-                    return filters
+        ButtonGroup {
+            id: button_group
+        }
+        Repeater {
+            model: {
+                const filters = ['', 'csv', 'p2wsh']
+                if (account.wallet.network.liquid) {
+                    filters.push('not_confidential')
+                } else {
+                    filters.push('dust')
+                    filters.push('locked')
                 }
-                delegate: Button {
-                    id: self
-                    ButtonGroup.group: button_group
-                    checked: index === 0
-                    checkable: true
-                    padding: 18
-                    topPadding: 10
-                    bottomPadding: 10
-                    background: Rectangle {
-                        id: rectangle
-                        radius: 4
-                        color: self.checked ? constants.c300 : constants.c500
-                    }
-                    contentItem: Label {
-                        text: self.text
-                        font.pixelSize: 10
-                        font.family: "Medium"
-                    }
-                    text: localizedLabel(modelData)
-                    property string buttonTag: modelData
-                    font.capitalization: Font.AllUppercase
+                if (account.type !== '2of3' && account.type !== '2of2_no_recovery') {
+                    filters.push('expired')
                 }
+                return filters
             }
-
-            HSpacer {
-            }
-
-            ToolButton {
-                icon.source: "qrc:/svg/info.svg"
-                icon.color: "white"
-                onClicked: info_dialog.createObject(self).open();
+            delegate: Button {
+                id: self
+                ButtonGroup.group: button_group
+                checked: index === 0
+                checkable: true
+                padding: 18
+                topPadding: 10
+                bottomPadding: 10
+                background: Rectangle {
+                    id: rectangle
+                    radius: 4
+                    color: self.checked ? constants.c300 : constants.c500
+                }
+                contentItem: Label {
+                    text: self.text
+                    font.pixelSize: 10
+                    font.family: "Medium"
+                }
+                text: localizedLabel(modelData)
+                property string buttonTag: modelData
+                font.capitalization: Font.AllUppercase
             }
         }
-
+        ToolButton {
+            icon.source: "qrc:/svg/info.svg"
+            icon.color: "white"
+            onClicked: info_dialog.createObject(self).open();
+        }
+    }
+    contentItem: ColumnLayout {
         GListView {
             id: list_view
             Layout.fillWidth: true
