@@ -38,15 +38,18 @@ Page {
             }
         }
     }
-    contentItem: GListView {
-        id: account_list_view
-        model: AccountListModel {
-            wallet: self.wallet
-            filter: '!hidden'
-        }
+    contentItem: SwipeView {
+        interactive: false
         clip: true
-        spacing: 0
-        delegate: AccountDelegate {
+        GListView {
+            id: account_list_view
+            model: AccountListModel {
+                wallet: self.wallet
+                filter: '!hidden'
+            }
+            spacing: 0
+            delegate: AccountDelegate {
+            }
         }
     }
 
