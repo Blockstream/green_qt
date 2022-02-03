@@ -46,87 +46,90 @@ Page {
         }
         clip: true
         spacing: 0
-        delegate: Button {
-            property Account account: modelData
+        delegate: AccountDelegate {
+        }
+    }
 
-            id: delegate
-            focusPolicy: Qt.ClickFocus
-            onClicked: {
-                account_list_view.currentIndex = index
-                self.clicked(account)
-            }
-            background: Rectangle {
-                color: delegate.highlighted ? constants.c700 : delegate.hovered ? constants.c700 : constants.c800
-                radius: 4
-                border.width: 1
-                border.color: delegate.highlighted ? constants.g500 : constants.c700
-            }
-            highlighted: account_list_view.currentIndex === index
-            leftPadding: constants.p2
-            rightPadding: constants.p2
-            topPadding: constants.p2
-            bottomPadding: constants.p3
-            hoverEnabled: true
-            width: ListView.view.contentWidth
-            contentItem: ColumnLayout {
-                spacing: 8
-                RowLayout {
-                    spacing: 16
-                    EditableLabel {
-                        id: name_field
-                        Layout.fillWidth: true
-                        font.styleName: 'Medium'
-                        font.pixelSize: 14
-                        leftInset: -8
-                        rightInset: -8
-                        text: accountName(account)
-                        enabled: !account.wallet.watchOnly && delegate.ListView.isCurrentItem && !delegate.account.wallet.locked
-                        onEdited: {
-                            if (enabled) {
-                                account.rename(text, activeFocus)
-                            }
+    component AccountDelegate: Button {
+        property Account account: modelData
+
+        id: delegate
+        focusPolicy: Qt.ClickFocus
+        onClicked: {
+            account_list_view.currentIndex = index
+            self.clicked(account)
+        }
+        background: Rectangle {
+            color: delegate.highlighted ? constants.c700 : delegate.hovered ? constants.c700 : constants.c800
+            radius: 4
+            border.width: 1
+            border.color: delegate.highlighted ? constants.g500 : constants.c700
+        }
+        highlighted: account_list_view.currentIndex === index
+        leftPadding: constants.p2
+        rightPadding: constants.p2
+        topPadding: constants.p2
+        bottomPadding: constants.p3
+        hoverEnabled: true
+        width: ListView.view.contentWidth
+        contentItem: ColumnLayout {
+            spacing: 8
+            RowLayout {
+                spacing: 16
+                EditableLabel {
+                    id: name_field
+                    Layout.fillWidth: true
+                    font.styleName: 'Medium'
+                    font.pixelSize: 14
+                    leftInset: -8
+                    rightInset: -8
+                    text: accountName(account)
+                    enabled: !account.wallet.watchOnly && delegate.ListView.isCurrentItem && !delegate.account.wallet.locked
+                    onEdited: {
+                        if (enabled) {
+                            account.rename(text, activeFocus)
                         }
-                    }
-                    AccountTypeBadge {
-                        account: delegate.account
                     }
                 }
+                AccountTypeBadge {
+                    account: delegate.account
+                }
+            }
+            RowLayout {
                 RowLayout {
-                    RowLayout {
-                        spacing: 2
-                        Repeater {
-                            model: {
-                                const assets = []
-                                let without_icon = false
-                                for (let i = 0; i < account.balances.length; i++) {
-                                    const { amount, asset }= account.balances[i]
-                                    if (amount === 0) continue;
-                                    if (asset.icon || !without_icon) assets.push(asset)
-                                    without_icon = !asset.icon
-                                }
-                                return assets
+                    spacing: 2
+                    Repeater {
+                        model: {
+                            const assets = []
+                            let without_icon = false
+                            for (let i = 0; i < account.balances.length; i++) {
+                                const { amount, asset }= account.balances[i]
+                                if (amount === 0) continue;
+                                if (asset.icon || !without_icon) assets.push(asset)
+                                without_icon = !asset.icon
                             }
-                            AssetIcon {
-                                asset: modelData
-                                size: 16
-                            }
+                            return assets
+                        }
+                        AssetIcon {
+                            asset: modelData
+                            size: 16
                         }
                     }
-                    HSpacer {
+                }
+                HSpacer {
+                }
+                RowLayout {
+                    Layout.alignment: Qt.AlignRight
+                    spacing: 10
+                    Label {
+                        text: formatAmount(account.balance)
+                        font.pixelSize: 14
+                        font.styleName: 'Regular'
                     }
-                    RowLayout {
-                        Layout.alignment: Qt.AlignRight
-                        spacing: 10
-                        Label {
-                            text: formatAmount(account.balance)
-                            font.pixelSize: 14
-                            font.styleName: 'Regular'
-                        }
-                        Label {
-                            text: '≈ ' + formatFiat(account.balance)
-                            font.pixelSize: 14
-                            font.styleName: 'Regular'
-                        }
+                    Label {
+                        text: '≈ ' + formatFiat(account.balance)
+                        font.pixelSize: 14
+                        font.styleName: 'Regular'
                     }
                 }
             }
