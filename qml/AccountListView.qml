@@ -1,53 +1,132 @@
 import Blockstream.Green 0.1
+import Blockstream.Green.Core 0.1
 import QtQuick 2.12
 import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.12
 
-Page {
+SwipeView {
     required property Wallet wallet
-    property Account currentAccount: account_list_view.currentItem ? account_list_view.currentItem.account : null
+    property Account currentAccount: {
+        const view = showArchived ? archive_list_view : account_list_view
+        return view.currentItem ? view.currentItem.account : null
+    }
+    property bool showArchived: false
     signal clicked(Account account)
 
-    id: self
-    background: null
-    spacing: constants.p1
+    function openCreateDialog() {
+        const dialog = create_account_dialog.createObject(window, { wallet })
+        dialog.accepted.connect(() => {
+            // automatically select the last account since it is the newly created account
+            // if account ordering is added then if should determine the correct index
+            account_list_view.currentIndex = account_list_view.count - 1;
+        })
+        dialog.open()
+    }
 
-    header: GHeader {
-        Label {
-            Layout.alignment: Qt.AlignVCenter
-            text: qsTrId('Accounts')
-            font.pixelSize: 20
-            font.styleName: 'Bold'
-            verticalAlignment: Label.AlignVCenter
-        }
-        HSpacer {
-        }
-        GButton {
-            Layout.alignment: Qt.AlignVCenter
-            text: '+'
-            font.pixelSize: 14
-            font.styleName: 'Medium'
-            onClicked: {
-                const dialog = create_account_dialog.createObject(window, { wallet })
-                dialog.accepted.connect(() => {
-                    // automatically select the last account since it is the newly created account
-                    // if account ordering is added then if should determine the correct index
-                    account_list_view.currentIndex = account_list_view.count - 1;
-                })
-                dialog.open()
-            }
+    Connections {
+        target: archive_list_view
+        function onCountChanged() {
+            if (showArchived && archive_list_view.count === 0) showArchived = false
         }
     }
-    contentItem: SwipeView {
-        interactive: false
-        clip: true
-        GListView {
+
+    Connections {
+        target: Settings
+        function onEnableExperimentalChanged() {
+            if (showArchived && !Settings.enableExperimental) showArchived = false
+        }
+    }
+
+    id: self
+    interactive: false
+    currentIndex: showArchived ? 1 : 0
+    clip: true
+    spacing: constants.p1
+
+    Page {
+        background: null
+        header: GHeader {
+            Label {
+                Layout.alignment: Qt.AlignVCenter
+                text: qsTrId('Accounts')
+                font.pixelSize: 20
+                font.styleName: 'Bold'
+                verticalAlignment: Label.AlignVCenter
+            }
+            HSpacer {
+            }
+            GButton {
+                visible: !Settings.enableExperimental
+                Layout.alignment: Qt.AlignVCenter
+                text: '+'
+                font.pixelSize: 14
+                font.styleName: 'Medium'
+                onClicked: openCreateDialog()
+            }
+            GButton {
+                visible: Settings.enableExperimental
+                Layout.alignment: Qt.AlignVCenter
+                icon.source: 'qrc:/svg/kebab.svg'
+                icon.height: 14
+                icon.width: 14
+                enabled: !menu.opened
+                Menu {
+                    id: menu
+                    width: 300
+                    MenuItem {
+                        text: qsTrId('id_add_new_account')
+                        onTriggered: openCreateDialog()
+                    }
+                    MenuItem {
+                        enabled: !showArchived && archive_list_view.count > 0
+                        text: archive_list_view.count > 0
+                            ? qsTrId('View archived accounts (%1)').arg(archive_list_view.count)
+                            : qsTrId('Archive is empty')
+                        onTriggered: showArchived = !showArchived
+                    }
+                }
+                onClicked: menu.popup()
+            }
+        }
+        contentItem: GListView {
             id: account_list_view
+            clip: true
+            spacing: 0
             model: AccountListModel {
                 wallet: self.wallet
                 filter: '!hidden'
             }
+            delegate: AccountDelegate {
+            }
+        }
+    }
+
+    Page {
+        background: null
+        header: RowLayout {
+            spacing: constants.s2
+            GToolButton {
+                icon.source: 'qrc:/svg/arrow_left.svg'
+                Layout.alignment: Qt.AlignVCenter
+                onClicked: showArchived = false
+            }
+            Label {
+                Layout.alignment: Qt.AlignVCenter
+                Layout.fillWidth: true
+                text: qsTrId('Archived Accounts')
+                font.pixelSize: 20
+                font.styleName: 'Bold'
+                verticalAlignment: Label.AlignVCenter
+            }
+        }
+        contentItem: GListView {
+            id: archive_list_view
+            clip: true
             spacing: 0
+            model: AccountListModel {
+                wallet: self.wallet
+                filter: 'hidden'
+            }
             delegate: AccountDelegate {
             }
         }
@@ -59,46 +138,64 @@ Page {
         id: delegate
         focusPolicy: Qt.ClickFocus
         onClicked: {
-            account_list_view.currentIndex = index
+            delegate.ListView.view.currentIndex = index
             self.clicked(account)
+        }
+        Menu {
+            id: menu
+            MenuItem {
+                text: qsTrId('Rename')
+                enabled: name_field.enabled
+                onTriggered: name_field.forceActiveFocus()
+            }
+            MenuItem {
+                text: delegate.account.hidden ? qsTrId('Unarchive') : qsTrId('Archive')
+                onTriggered: delegate.account.toggleHidden()
+            }
         }
         background: Rectangle {
             color: delegate.highlighted ? constants.c700 : delegate.hovered ? constants.c700 : constants.c800
             radius: 4
             border.width: 1
             border.color: delegate.highlighted ? constants.g500 : constants.c700
+            TapHandler {
+                enabled: Settings.enableExperimental && delegate.highlighted
+                acceptedButtons: Qt.RightButton
+                onTapped: menu.popup()
+            }
         }
-        highlighted: account_list_view.currentIndex === index
+        highlighted: currentAccount === delegate.account
         leftPadding: constants.p2
         rightPadding: constants.p2
         topPadding: constants.p2
-        bottomPadding: constants.p3
+        bottomPadding: constants.p2
         hoverEnabled: true
         width: ListView.view.contentWidth
-        contentItem: ColumnLayout {
-            spacing: 8
-            RowLayout {
-                spacing: 16
-                EditableLabel {
-                    id: name_field
-                    Layout.fillWidth: true
-                    font.styleName: 'Medium'
-                    font.pixelSize: 14
-                    leftInset: -8
-                    rightInset: -8
-                    text: accountName(account)
-                    enabled: !account.wallet.watchOnly && delegate.ListView.isCurrentItem && !delegate.account.wallet.locked
-                    onEdited: {
-                        if (enabled) {
-                            account.rename(text, activeFocus)
+        contentItem: RowLayout {
+            spacing: 0
+            ColumnLayout {
+                spacing: 8
+                RowLayout {
+                    spacing: 16
+                    EditableLabel {
+                        id: name_field
+                        Layout.fillWidth: true
+                        font.styleName: 'Medium'
+                        font.pixelSize: 14
+                        leftInset: -8
+                        rightInset: -8
+                        text: accountName(account)
+                        enabled: !account.wallet.watchOnly && delegate.ListView.isCurrentItem && !delegate.account.wallet.locked
+                        onEdited: {
+                            if (enabled) {
+                                account.rename(text, activeFocus)
+                            }
                         }
                     }
+                    AccountTypeBadge {
+                        account: delegate.account
+                    }
                 }
-                AccountTypeBadge {
-                    account: delegate.account
-                }
-            }
-            RowLayout {
                 RowLayout {
                     spacing: 2
                     Repeater {
@@ -118,22 +215,41 @@ Page {
                             size: 16
                         }
                     }
-                }
-                HSpacer {
+                    HSpacer {
+                    }
                 }
                 RowLayout {
-                    Layout.alignment: Qt.AlignRight
-                    spacing: 10
-                    Label {
-                        text: formatAmount(account.balance)
-                        font.pixelSize: 14
-                        font.styleName: 'Regular'
+                    HSpacer {
                     }
-                    Label {
-                        text: '≈ ' + formatFiat(account.balance)
-                        font.pixelSize: 14
-                        font.styleName: 'Regular'
+                    RowLayout {
+                        Layout.alignment: Qt.AlignRight
+                        spacing: 10
+                        Label {
+                            text: formatAmount(account.balance)
+                            font.pixelSize: 14
+                            font.styleName: 'Regular'
+                        }
+                        Label {
+                            text: '≈ ' + formatFiat(account.balance)
+                            font.pixelSize: 14
+                            font.styleName: 'Regular'
+                        }
                     }
+                }
+            }
+            Item {
+                visible: Settings.enableExperimental
+                implicitWidth: delegate.hovered || menu.opened ? constants.s1 + tool_button.width : 0
+                Behavior on implicitWidth {
+                    SmoothedAnimation {}
+                }
+                implicitHeight: tool_button.height
+                clip: true
+                GToolButton {
+                    id: tool_button
+                    x: constants.s1
+                    icon.source: 'qrc:/svg/kebab.svg'
+                    onClicked: menu.popup()
                 }
             }
         }
