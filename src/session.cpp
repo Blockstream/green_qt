@@ -61,13 +61,6 @@ void Session::handleNotification(const QJsonObject& notification)
 
     m_events.append(notification);
 
-    if (event == "session") {
-        auto data = value.toObject();
-        emit sessionEvent(data);
-        const bool connected = data.value("connected").toBool();
-        setConnected(connected);
-        return;
-    }
     if (event == "network") {
         auto data = value.toObject();
         emit networkEvent(data);
