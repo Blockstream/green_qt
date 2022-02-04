@@ -67,6 +67,10 @@ MainPage {
                 return qsTrId('id_locked')
             case 'expired':
                 return qsTrId('id_2fa_expired')
+            default:
+                console.warn(`missing localized label for ${label}`)
+                console.trace()
+                return label
         }
     }
 
