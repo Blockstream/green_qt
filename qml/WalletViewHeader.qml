@@ -12,6 +12,7 @@ MainPageHeader {
     required property Account currentAccount
     property bool showAccounts: true
     property var currentView: 0
+    readonly property bool archived: self.currentAccount ? self.currentAccount.hidden : false
 
     onCurrentViewChanged: {
         for (let i = button_group.buttons.length; i >= 0; --i) {
@@ -85,7 +86,7 @@ MainPageHeader {
                     source: 'qrc:/svg/right.svg'
                 }
                 Control {
-                    Layout.maximumWidth: self.width / 3
+                    Layout.maximumWidth: self.width / 2
                     padding: 2
                     rightPadding: account_type_badge.visible ? 24 : 16
                     leftPadding: 16
@@ -124,6 +125,21 @@ MainPageHeader {
                         AccountTypeBadge {
                             id: account_type_badge
                             account: self.currentAccount
+                        }
+                        Label {
+                            visible: self.archived
+                            font.pixelSize: 10
+                            font.capitalization: Font.AllUppercase
+                            leftPadding: 8
+                            rightPadding: 8
+                            topPadding: 4
+                            bottomPadding: 4
+                            color: 'white'
+                            background: Rectangle {
+                                color: constants.c400
+                                radius: 4
+                            }
+                            text: qsTrId('Archived')
                         }
                     }
                 }
