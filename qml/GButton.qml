@@ -46,6 +46,7 @@ Button {
         }
         Label {
             Layout.alignment: Qt.AlignCenter
+            visible: self.text !== ''
             text: self.text
             color: self.textColor
         }
