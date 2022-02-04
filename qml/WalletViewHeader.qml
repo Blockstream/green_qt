@@ -270,7 +270,7 @@ MainPageHeader {
                     id: send_button
                     Layout.alignment: Qt.AlignRight
                     large: true
-                    enabled: !self.wallet.watchOnly && !self.wallet.locked && self.currentAccount
+                    enabled: !self.archived && !self.wallet.watchOnly && !self.wallet.locked && self.currentAccount
                     hoverEnabled: true
                     text: qsTrId('id_send')
                     icon.source: 'qrc:/svg/send.svg'
@@ -290,7 +290,7 @@ MainPageHeader {
                 GButton {
                     Layout.alignment: Qt.AlignRight
                     large: true
-                    enabled: !wallet.locked && self.currentAccount
+                    enabled: !self.archived && !wallet.locked && self.currentAccount
                     text: qsTrId('id_receive')
                     icon.source: 'qrc:/svg/receive.svg'
                     onClicked: receive_dialog.createObject(window, { account: self.currentAccount }).open()
