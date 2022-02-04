@@ -21,6 +21,7 @@ class Account : public QObject
     Q_PROPERTY(bool mainAccount READ isMainAccount CONSTANT)
     Q_PROPERTY(QJsonObject json READ json NOTIFY jsonChanged)
     Q_PROPERTY(QString name READ name NOTIFY nameChanged)
+    Q_PROPERTY(bool hidden READ isHidden NOTIFY hiddenChanged)
     Q_PROPERTY(qint64 balance READ balance NOTIFY balanceChanged)
     Q_PROPERTY(QQmlListProperty<Balance> balances READ balances NOTIFY balancesChanged)
     QML_ELEMENT
@@ -34,6 +35,7 @@ public:
 
     QString name() const { return m_name; }
     void setName(const QString& name);
+    bool isHidden() const { return m_hidden; }
     QJsonObject json() const;
 
     void update(const QJsonObject& json);
@@ -55,18 +57,23 @@ signals:
     void walletChanged();
     void jsonChanged();
     void nameChanged(const QString& name);
+    void hiddenChanged(bool hidden);
     void balanceChanged();
     void balancesChanged();
     void notificationHandled(const QJsonObject& notification);
 public slots:
     void reload();
     void rename(QString name, bool active_focus);
+    void toggleHidden();
+private:
+    void setHidden(bool hidden);
 private:
     Wallet* const m_wallet;
     const quint32 m_pointer;
     const QString m_type;
     QJsonObject m_json;
     QString m_name;
+    bool m_hidden{false};
     QMap<QString, Transaction*> m_transactions_by_hash;
     QMap<QPair<QString, int>, Output*> m_outputs_by_hash;
     QMap<QString, Address*> m_address_by_hash;

@@ -41,6 +41,7 @@ void AccountListModel::update()
         m_items.insert(account, item);
         item->setData(QVariant::fromValue(account), Qt::UserRole);
         m_model->appendRow(item);
+        connect(account, &Account::hiddenChanged, this, [=] { invalidateFilter(); });
         connect(account, &Account::balanceChanged, this, [=] { invalidateFilter(); });
         connect(account, &Account::balancesChanged, this, [=] { invalidateFilter(); });
     }
@@ -55,10 +56,7 @@ bool AccountListModel::filterAcceptsRow(int source_row, const QModelIndex &sourc
         bool invert = filter.startsWith('!');
         if (invert) filter = filter.mid(1);
         bool result = true;
-        if (filter == "hidden") {
-            const bool hidden = account->json().value("hidden").toBool();
-            result = hidden && !account->hasBalance();
-        }
+        if (filter == "hidden") result = account->isHidden();
         if (invert) result = !result;
         if (!result) return false;
     }

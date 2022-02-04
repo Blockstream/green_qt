@@ -9,6 +9,7 @@
 #include "resolver.h"
 #include "output.h"
 #include "transaction.h"
+#include "updateaccounthandler.h"
 #include "wallet.h"
 
 #include <gdk.h>
@@ -35,6 +36,7 @@ void Account::update(const QJsonObject& json)
     m_json = json;
     emit jsonChanged();
     setName(m_json.value("name").toString());
+    setHidden(m_json.value("hidden").toBool());
     updateBalance();
 }
 
@@ -146,6 +148,28 @@ void Account::rename(QString name, bool active_focus)
         Q_ASSERT(res == GA_OK);
         setName(name);
     }
+}
+
+void Account::toggleHidden()
+{
+    bool hidden = !m_hidden;
+    auto handler = new UpdateAccountHandler({
+        { "subaccount", static_cast<qint64>(m_pointer) },
+        { "hidden", hidden }
+    }, wallet()->session());
+    connect(handler, &Handler::done, this, [=] {
+        handler->deleteLater(),
+        m_json["hidden"] = hidden;
+        setHidden(hidden);
+    });
+    handler->exec();
+}
+
+void Account::setHidden(bool hidden)
+{
+    if (m_hidden == hidden) return;
+    m_hidden = hidden;
+    emit hiddenChanged(m_hidden);
 }
 
 Transaction* Account::getOrCreateTransaction(const QJsonObject& data)
