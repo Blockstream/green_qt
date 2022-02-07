@@ -26,7 +26,10 @@ WalletManager::WalletManager()
     Q_ASSERT(!g_wallet_manager);
     g_wallet_manager = this;
 
-    auto config = Json::fromObject({{ "datadir", GetDataDir("gdk") }});
+    auto config = Json::fromObject({
+        { "datadir", GetDataDir("gdk") },
+        { "log_level", qEnvironmentVariable("GREEN_GDK_LOG_LEVEL", "info") }
+    });
     GA_init(config.get());
 
     QDirIterator it(GetDataDir("wallets"));

@@ -11,11 +11,9 @@ namespace {
     QJsonObject get_params(Session* session)
     {
         const auto network = session->network();
-        const auto log_level = QString::fromLocal8Bit(qgetenv("GREEN_GDK_LOG_LEVEL"));
         const QString user_agent = QString("green_qt_%1").arg(QT_STRINGIFY(VERSION));
         QJsonObject params{
             { "name", network->id() },
-            { "log_level", log_level.isEmpty() ? "info" : log_level },
             { "use_tor", network->isElectrum() ? false : session->useTor() },
             { "user_agent", user_agent },
             { "spv_enabled", session->enableSPV() }
