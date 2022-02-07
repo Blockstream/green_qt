@@ -123,9 +123,9 @@ ItemDelegate {
                 }
             }
         }
-        ToolButton {
+        GToolButton {
             id: tool_button
-            text: qsTrId('⋮')
+            icon.source: 'qrc:/svg/kebab.svg'
             onClicked: menu.open()
 
             Menu {

@@ -368,10 +368,7 @@ WalletDialog {
         }
     }
     footer: DialogFooter {
-        ToolButton {
-            flat: true
-            icon.width: 16
-            icon.height: 16
+        GToolButton {
             icon.source: 'qrc:/svg/qr.svg'
             onClicked: qrcode_popup.open()
             QRCodePopup {

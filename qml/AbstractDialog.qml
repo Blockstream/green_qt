@@ -43,15 +43,11 @@ Dialog {
                 hoverEnabled: true
             }
         }
-        ToolButton {
-            padding: 0
-            background: null
+        GToolButton {
             visible: self.showRejectButton
             enabled: self.enableRejectButton
             flat: true
             icon.source: 'qrc:/svg/cancel.svg'
-            icon.width: 16
-            icon.height: 16
             onClicked: self.reject()
             ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
             ToolTip.text: qsTrId('id_cancel')
