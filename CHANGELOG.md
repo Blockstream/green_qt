@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Improve layout of outputs view
+- Hover to show transaction options button
 
 ### Fixed
 - Sign p2sh inputs with Ledger devices

@@ -33,6 +33,7 @@ ItemDelegate {
     focusPolicy: Qt.ClickFocus
     hoverEnabled: true
     padding: constants.p3
+    rightPadding: constants.p3 - constants.s1
 
     background: Rectangle {
         color: self.hovered ? constants.c700 : constants.c800
@@ -70,7 +71,7 @@ ItemDelegate {
         onTriggered: copyUnblindingData(tool_button, tx)
     }
     contentItem: RowLayout {
-        spacing: 16
+        spacing: constants.s1
 
         Label {
             text: formatTransactionTimestamp(tx)
@@ -123,41 +124,59 @@ ItemDelegate {
                 }
             }
         }
-        GToolButton {
-            id: tool_button
-            icon.source: 'qrc:/svg/kebab.svg'
-            onClicked: menu.open()
+        Item {
+            implicitWidth: self.hovered || menu.visible ? actions_layout.width : 0
+            Behavior on implicitWidth {
+                SmoothedAnimation {
+                    velocity: 400
+                }
+            }
+            implicitHeight: actions_layout.height
+            clip: true
+            RowLayout {
+                id: actions_layout
+                spacing: constants.s0
+                GToolButton {
+                    icon.source: 'qrc:/svg/external_link.svg'
+                    onClicked: transaction.openInExplorer()
+                }
+                GToolButton {
+                    id: tool_button
+                    icon.source: 'qrc:/svg/kebab.svg'
+                    onClicked: menu.open()
 
-            Menu {
-                id: menu
-                MenuItem {
-                    text: qsTrId('id_view_in_explorer')
-                    onTriggered: transaction.openInExplorer()
-                }
-                MenuItem {
-                    enabled: transaction.account.wallet.network.liquid
-                    text: qsTrId('id_copy_unblinded_link')
-                    onTriggered: {
-                        Clipboard.copy(transaction.unblindedLink())
-                        ToolTip.show(qsTrId('id_copied_to_clipboard'), 1000)
+                    Menu {
+                        id: menu
+                        MenuItem {
+                            text: qsTrId('id_view_in_explorer')
+                            onTriggered: transaction.openInExplorer()
+                        }
+                        MenuItem {
+                            enabled: transaction.account.wallet.network.liquid
+                            text: qsTrId('id_copy_unblinded_link')
+                            onTriggered: {
+                                Clipboard.copy(transaction.unblindedLink())
+                                ToolTip.show(qsTrId('id_copied_to_clipboard'), 1000)
+                            }
+                        }
+                        Repeater {
+                            model: transaction.account.wallet.network.liquid ? [copy_unblinding_data_action] : []
+                            MenuItem {
+                                action: modelData
+                            }
+                        }
+                        MenuItem {
+                            enabled: transaction.data.can_rbf
+                            text: qsTrId('id_increase_fee')
+                            onTriggered: bump_fee_dialog.createObject(window, { transaction }).open()
+                        }
+                        MenuSeparator {
+                        }
+                        MenuItem {
+                            text: qsTrId('id_copy_transaction_id')
+                            onTriggered: Clipboard.copy(transaction.data.txhash)
+                        }
                     }
-                }
-                Repeater {
-                    model: transaction.account.wallet.network.liquid ? [copy_unblinding_data_action] : []
-                    MenuItem {
-                        action: modelData
-                    }
-                }
-                MenuItem {
-                    enabled: transaction.data.can_rbf
-                    text: qsTrId('id_increase_fee')
-                    onTriggered: bump_fee_dialog.createObject(window, { transaction }).open()
-                }
-                MenuSeparator {
-                }
-                MenuItem {
-                    text: qsTrId('id_copy_transaction_id')
-                    onTriggered: Clipboard.copy(transaction.data.txhash)
                 }
             }
         }
