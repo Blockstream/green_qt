@@ -49,7 +49,7 @@ Se nenhuma dessas orientações te ajudou ou se você não tiver uma frase de re
     </message>
     <message>
         <source>id_2fa_expired</source>
-        <translation>2FA expirou</translation>
+        <translation>2FA vencido</translation>
     </message>
     <message>
         <source>id_2fa_expiry</source>
@@ -93,7 +93,7 @@ Se nenhuma dessas orientações te ajudou ou se você não tiver uma frase de re
     </message>
     <message>
         <source>id_a_newer_version_of_blockstream</source>
-        <translation>A newer version of Blockstream Green is now available</translation>
+        <translation>Uma nova versão da Blockstream Green está disponível para download</translation>
     </message>
     <message>
         <source>id_a_screen_lock_must_be_enabled</source>
@@ -133,7 +133,7 @@ Se nenhuma dessas orientações te ajudou ou se você não tiver uma frase de re
     </message>
     <message>
         <source>id_accounts</source>
-        <translation>Accounts</translation>
+        <translation>Contas</translation>
     </message>
     <message>
         <source>id_accounts_summary</source>
@@ -233,7 +233,7 @@ Se nenhuma dessas orientações te ajudou ou se você não tiver uma frase de re
     </message>
     <message>
         <source>id_all</source>
-        <translation>Todos</translation>
+        <translation>Todas</translation>
     </message>
     <message>
         <source>id_all_assets</source>
@@ -241,11 +241,11 @@ Se nenhuma dessas orientações te ajudou ou se você não tiver uma frase de re
     </message>
     <message>
         <source>id_all_coins</source>
-        <translation>All coins</translation>
+        <translation>Todas moedas</translation>
     </message>
     <message>
         <source>id_all_networks</source>
-        <translation>All networks</translation>
+        <translation>Todas as redes</translation>
     </message>
     <message>
         <source>id_all_of_the_accounts_in_your</source>
@@ -289,7 +289,7 @@ Se nenhuma dessas orientações te ajudou ou se você não tiver uma frase de re
     </message>
     <message>
         <source>id_amp_wallet</source>
-        <translation>AMP Wallet</translation>
+        <translation>Carteira AMP</translation>
     </message>
     <message>
         <source>id_another_2fa_method_is_already</source>
@@ -298,6 +298,18 @@ Se nenhuma dessas orientações te ajudou ou se você não tiver uma frase de re
     <message>
         <source>id_app_settings</source>
         <translation>Configurações do aplicativo</translation>
+    </message>
+    <message>
+        <source>id_archive</source>
+        <translation>Archive</translation>
+    </message>
+    <message>
+        <source>id_archived</source>
+        <translation>Archived</translation>
+    </message>
+    <message>
+        <source>id_archived_accounts</source>
+        <translation>Archived Accounts</translation>
     </message>
     <message>
         <source>id_are_you_sure_you_want_to_view</source>
@@ -353,7 +365,7 @@ Se nenhuma dessas orientações te ajudou ou se você não tiver uma frase de re
     </message>
     <message>
         <source>id_authenticator_app</source>
-        <translation>Authenticator app</translation>
+        <translation>App autenticador</translation>
     </message>
     <message>
         <source>id_authenticator_qr_code</source>
@@ -425,7 +437,7 @@ Se nenhuma dessas orientações te ajudou ou se você não tiver uma frase de re
     </message>
     <message>
         <source>id_bitcoin_and_liquid</source>
-        <translation>Bitcoin and Liquid</translation>
+        <translation>Bitcoin e Liquid</translation>
     </message>
     <message>
         <source>id_bitcoin_denomination</source>
@@ -469,7 +481,7 @@ Se nenhuma dessas orientações te ajudou ou se você não tiver uma frase de re
     </message>
     <message>
         <source>id_blockstream_devices</source>
-        <translation>Blockstream Devices</translation>
+        <translation>Dispositivos Blockstream</translation>
     </message>
     <message>
         <source>id_blockstream_does_not_have</source>
@@ -651,6 +663,10 @@ simples e segura</translation>
     <message>
         <source>id_coins_protected_by_the_new</source>
         <translation>Coins protected by the new script with embedded 2FA expiry through CheckSequenceVerify.</translation>
+    </message>
+    <message>
+        <source>id_coins_received_or_created</source>
+        <translation>Coins received or created before SegWit was activated.</translation>
     </message>
     <message>
         <source>id_coins_unlocked</source>
@@ -922,7 +938,7 @@ simples e segura</translation>
     </message>
     <message>
         <source>id_customize_2fa_expiration_of</source>
-        <translation>Personalize o prazo para expirar o 2FA</translation>
+        <translation>Personalize o prazo de vencimento do 2FA</translation>
     </message>
     <message>
         <source>id_d6_confirmations</source>
@@ -942,11 +958,11 @@ simples e segura</translation>
     </message>
     <message>
         <source>id_d_coins_selected</source>
-        <translation>%1 coins selected</translation>
+        <translation>%1 moedas selecionadas</translation>
     </message>
     <message>
         <source>id_d_words</source>
-        <translation>%1 words</translation>
+        <translation>%1 palavras</translation>
     </message>
     <message>
         <source>id_data_directory</source>
@@ -1082,7 +1098,7 @@ simples e segura</translation>
     </message>
     <message>
         <source>id_double_check_spv_with_other</source>
-        <translation>Double check SPV with other servers</translation>
+        <translation>Verifique novamente o SPV com outros servidores</translation>
     </message>
     <message>
         <source>id_double_spend</source>
@@ -1162,7 +1178,7 @@ simples e segura</translation>
     </message>
     <message>
         <source>id_enable_testnet_in_app_settings</source>
-        <translation>Enable testnet in app settings to use Jade</translation>
+        <translation>Habilite a rede teste nas configurações do aplicativo para usar a Jade</translation>
     </message>
     <message>
         <source>id_enable_touch_id</source>
@@ -1719,7 +1735,7 @@ Frase de recuperação</translation>
     </message>
     <message>
         <source>id_invalid_mnemonic_continue</source>
-        <translation>Invalid mnemonic. Continue typing or ask for help</translation>
+        <translation>Mnemônico inválido. Continue digitando ou peça ajuda</translation>
     </message>
     <message>
         <source>id_invalid_mnemonic_must_be_24_or</source>
@@ -1795,11 +1811,11 @@ Frase de recuperação</translation>
     </message>
     <message>
         <source>id_issuer_domain_s</source>
-        <translation>Issuer Domain: %1</translation>
+        <translation>Domínio do emissor: %1</translation>
     </message>
     <message>
         <source>id_it_looks_like_you_have_no</source>
-        <translation>Parece que você não tem carteiras. Clique abaixo para adicionar uma.</translation>
+        <translation>Você ainda não possui nenhuma carteira. Clique abaixo para adicionar uma.</translation>
     </message>
     <message>
         <source>id_jade_unlocked</source>
@@ -1807,7 +1823,7 @@ Frase de recuperação</translation>
     </message>
     <message>
         <source>id_jade_was_initialized_for_testnet</source>
-        <translation>Jade was initialized for testnet</translation>
+        <translation>A Jade foi inicializada na rede de teste</translation>
     </message>
     <message>
         <source>id_just_a_few_more_steps_to_get</source>
@@ -1823,7 +1839,7 @@ Frase de recuperação</translation>
     </message>
     <message>
         <source>id_last_attempt_if_failed_you_will</source>
-        <translation>Last attempt: if failed, you will have to restore your wallet with your recovery phrase.</translation>
+        <translation>Última tentativa: se falhar, você terá que restaurar sua carteira usando sua frase de recuperação.</translation>
     </message>
     <message>
         <source>id_last_ping_1d_ms</source>
@@ -1835,7 +1851,7 @@ Frase de recuperação</translation>
     </message>
     <message>
         <source>id_latest_transactions</source>
-        <translation>Latest transactions</translation>
+        <translation>Últimas transações</translation>
     </message>
     <message>
         <source>id_lbtc_has_no_issuer_and_is</source>
@@ -1895,7 +1911,7 @@ Frase de recuperação</translation>
     </message>
     <message>
         <source>id_liquid_wallet</source>
-        <translation>Liquid Wallet</translation>
+        <translation>Carteira Liquid</translation>
     </message>
     <message>
         <source>id_liquid_wallets</source>
@@ -1923,7 +1939,7 @@ Frase de recuperação</translation>
     </message>
     <message>
         <source>id_location_services_are_disabled</source>
-        <translation>Location services are disabled, do you want to enable them?</translation>
+        <translation>Os serviços de localização estão desabilitados, você deseja habilitá-los?</translation>
     </message>
     <message>
         <source>id_lock</source>
@@ -1935,11 +1951,11 @@ Frase de recuperação</translation>
     </message>
     <message>
         <source>id_locked_coins_will_not_be_spent</source>
-        <translation>Locked coins will not be spent nor included in your balance.</translation>
+        <translation>As moedas bloqueadas não serão gastas nem incluídas no seu saldo.</translation>
     </message>
     <message>
         <source>id_locking_coins</source>
-        <translation>Locking coins</translation>
+        <translation>Bloqueando moedas</translation>
     </message>
     <message>
         <source>id_locking_coins_can_help_protect</source>
@@ -1975,7 +1991,7 @@ Frase de recuperação</translation>
     </message>
     <message>
         <source>id_logged_in_wallets</source>
-        <translation>Carteiras com acesso aberto</translation>
+        <translation>Carteiras atualmente abertas</translation>
     </message>
     <message>
         <source>id_logging_in</source>
@@ -2047,7 +2063,7 @@ Frase de recuperação</translation>
     </message>
     <message>
         <source>id_manual_coin_selection</source>
-        <translation>Manual coin selection</translation>
+        <translation>Selecionar manualmente as moedas</translation>
     </message>
     <message>
         <source>id_medium</source>
@@ -2151,7 +2167,7 @@ Frase de recuperação</translation>
     </message>
     <message>
         <source>id_networks</source>
-        <translation>Networks</translation>
+        <translation>Redes</translation>
     </message>
     <message>
         <source>id_new_account_created</source>
@@ -2231,7 +2247,7 @@ Frase de recuperação</translation>
     </message>
     <message>
         <source>id_no_coins_selected</source>
-        <translation>No coins selected</translation>
+        <translation>Nenhuma moeda selecionada</translation>
     </message>
     <message>
         <source>id_no_device_connected</source>
@@ -2412,6 +2428,10 @@ Frase de recuperação</translation>
     <message>
         <source>id_overview</source>
         <translation>Overview</translation>
+    </message>
+    <message>
+        <source>id_p2sh</source>
+        <translation>P2sh</translation>
     </message>
     <message>
         <source>id_p2wsh</source>
@@ -2734,6 +2754,10 @@ Frase de recuperação</translation>
         <translation>Remover carteira</translation>
     </message>
     <message>
+        <source>id_rename</source>
+        <translation>Rename</translation>
+    </message>
+    <message>
         <source>id_rename_account</source>
         <translation>Alterar nome</translation>
     </message>
@@ -2863,7 +2887,7 @@ Frase de recuperação</translation>
     </message>
     <message>
         <source>id_scan_the_qr_code_with_an</source>
-        <translation>Scan the QR Code with an Authenticator app</translation>
+        <translation>Leia o código QR usando o app autenticador</translation>
     </message>
     <message>
         <source>id_scan_to_send_here</source>
@@ -2947,7 +2971,7 @@ Frase de recuperação</translation>
     </message>
     <message>
         <source>id_select_your_jade_to_login</source>
-        <translation>Select your Jade to login</translation>
+        <translation>Selecione sua Jade para logar</translation>
     </message>
     <message>
         <source>id_send</source>
@@ -2955,7 +2979,7 @@ Frase de recuperação</translation>
     </message>
     <message>
         <source>id_send_all</source>
-        <translation>Send all</translation>
+        <translation>Enviar tudo</translation>
     </message>
     <message>
         <source>id_send_all_funds</source>
@@ -3035,7 +3059,7 @@ Frase de recuperação</translation>
     </message>
     <message>
         <source>id_set_twofactor_threshold</source>
-        <translation>Valor permitido sem necessidade de 2FA</translation>
+        <translation>Gasto máximo permitido sem necessidade de 2FA</translation>
     </message>
     <message>
         <source>id_set_up_a_passcode_for_your_ios</source>
@@ -3119,11 +3143,11 @@ Frase de recuperação</translation>
     </message>
     <message>
         <source>id_show_advanced_options</source>
-        <translation>Show advanced options</translation>
+        <translation>Mostrar opções avançadas</translation>
     </message>
     <message>
         <source>id_show_all</source>
-        <translation>Show all</translation>
+        <translation>Mostrar tudo</translation>
     </message>
     <message>
         <source>id_show_all_assets</source>
@@ -3258,7 +3282,7 @@ Redefina essa configuração e depois a reative.</translation>
     <message>
         <source>id_standard_accounts_allow_you_to</source>
         <translation>Contas conjuntas 2de2 exigem duas assinaturas para movimentar os fundos. A segunda assinatura é uma chave conhecida somente pela empresa Blockstream.
-Obs. É possível resgatar os fundos mesmo que a empresa Blockstream deixe de existir ou assinar as transações.</translation>
+Obs. É possível resgatar os fundos mesmo que a empresa Blockstream deixe de existir ou pare de assinar as transações.</translation>
     </message>
     <message>
         <source>id_standard_wallet</source>
@@ -3601,7 +3625,7 @@ Obs. É possível resgatar os fundos mesmo que a empresa Blockstream deixe de ex
     </message>
     <message>
         <source>id_twofactor_authentication_expiry</source>
-        <translation>Prazo que expira a autenticação de dois fatores</translation>
+        <translation>Prazo de vencimento da autenticação de dois fatores</translation>
     </message>
     <message>
         <source>id_twofactor_expiration_period</source>
@@ -3630,6 +3654,10 @@ Obs. É possível resgatar os fundos mesmo que a empresa Blockstream deixe de ex
     <message>
         <source>id_unable_to_contact_the_green</source>
         <translation>Impossível contatar o serviço Green. Por favor, verifique sua conexão de rede e aguarde para ser reconectado.</translation>
+    </message>
+    <message>
+        <source>id_unarchive</source>
+        <translation>Unarchive</translation>
     </message>
     <message>
         <source>id_unblinding_data</source>
@@ -3705,7 +3733,7 @@ Obs. É possível resgatar os fundos mesmo que a empresa Blockstream deixe de ex
     </message>
     <message>
         <source>id_use_all_available_coins</source>
-        <translation>Use all available coins</translation>
+        <translation>Usar todas as moedas disponíveis</translation>
     </message>
     <message>
         <source>id_use_an_existing_recovery_phrase</source>
@@ -3745,7 +3773,7 @@ Obs. É possível resgatar os fundos mesmo que a empresa Blockstream deixe de ex
     </message>
     <message>
         <source>id_verify</source>
-        <translation>Verify</translation>
+        <translation>Verificar</translation>
     </message>
     <message>
         <source>id_verify_on_device</source>
@@ -3776,6 +3804,10 @@ Obs. É possível resgatar os fundos mesmo que a empresa Blockstream deixe de ex
         <translation>Versão %1 %2</translation>
     </message>
     <message>
+        <source>id_view_archived_accounts_d</source>
+        <translation>View archived accounts (%1)</translation>
+    </message>
+    <message>
         <source>id_view_in_explorer</source>
         <translation>Ver na blockchain</translation>
     </message>
@@ -3801,7 +3833,7 @@ Obs. É possível resgatar os fundos mesmo que a empresa Blockstream deixe de ex
     </message>
     <message>
         <source>id_wallet_already_restored</source>
-        <translation>Wallet already restored</translation>
+        <translation>Carteira já restaurada</translation>
     </message>
     <message>
         <source>id_wallet_backup</source>
@@ -3817,7 +3849,7 @@ Obs. É possível resgatar os fundos mesmo que a empresa Blockstream deixe de ex
     </message>
     <message>
         <source>id_wallet_found</source>
-        <translation>Wallet found</translation>
+        <translation>Carteira encontrada</translation>
     </message>
     <message>
         <source>id_wallet_name</source>
@@ -3825,7 +3857,7 @@ Obs. É possível resgatar os fundos mesmo que a empresa Blockstream deixe de ex
     </message>
     <message>
         <source>id_wallet_not_found</source>
-        <translation>Wallet not found</translation>
+        <translation>Carteira não encontrada</translation>
     </message>
     <message>
         <source>id_wallets</source>
@@ -4029,7 +4061,7 @@ Obs. É possível resgatar os fundos mesmo que a empresa Blockstream deixe de ex
     </message>
     <message>
         <source>id_youll_need_to_back_up_your</source>
-        <translation>You’ll need to back up your recovery phrase before you can send or receive funds, but you can still check out the wallet for now.</translation>
+        <translation>Para enviar ou receber fundos é necessário antes realizar o backup da sua carteira.</translation>
     </message>
     <message>
         <source>id_youll_need_your_pin_to_log_in</source>
@@ -4057,7 +4089,7 @@ Obs. É possível resgatar os fundos mesmo que a empresa Blockstream deixe de ex
     </message>
     <message>
         <source>id_your_funds_are_secured_by</source>
-        <translation>Os fundos são administrados por mais de uma chave, sendo uma chave em seu dispositivo e outra em nossos servidores protegida com seu 2FA. Selecione essa opção se deseja maior segurança.</translation>
+        <translation>Os fundos são administrados por mais de uma chave, sendo uma chave em seu dispositivo e a outra em nossos servidores protegida com seu 2FA. Selecione essa opção se deseja maior segurança.</translation>
     </message>
     <message>
         <source>id_your_funds_are_secured_by_a</source>

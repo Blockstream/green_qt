@@ -300,6 +300,18 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
         <translation>App Settings</translation>
     </message>
     <message>
+        <source>id_archive</source>
+        <translation>Archive</translation>
+    </message>
+    <message>
+        <source>id_archived</source>
+        <translation>Archived</translation>
+    </message>
+    <message>
+        <source>id_archived_accounts</source>
+        <translation>Archived Accounts</translation>
+    </message>
+    <message>
         <source>id_are_you_sure_you_want_to_view</source>
         <translation>Bạn có chắc là muốn xem giao dịch sử dụng địa chỉ %1 ?</translation>
     </message>
@@ -651,6 +663,10 @@ Simple and Secure</translation>
     <message>
         <source>id_coins_protected_by_the_new</source>
         <translation>Coins protected by the new script with embedded 2FA expiry through CheckSequenceVerify.</translation>
+    </message>
+    <message>
+        <source>id_coins_received_or_created</source>
+        <translation>Coins received or created before SegWit was activated.</translation>
     </message>
     <message>
         <source>id_coins_unlocked</source>
@@ -2414,6 +2430,10 @@ Recovery Phrase</translation>
         <translation>Overview</translation>
     </message>
     <message>
+        <source>id_p2sh</source>
+        <translation>P2sh</translation>
+    </message>
+    <message>
         <source>id_p2wsh</source>
         <translation>P2wsh</translation>
     </message>
@@ -2732,6 +2752,10 @@ Recovery Phrase</translation>
     <message>
         <source>id_remove_wallet</source>
         <translation>Remove wallet</translation>
+    </message>
+    <message>
+        <source>id_rename</source>
+        <translation>Rename</translation>
     </message>
     <message>
         <source>id_rename_account</source>
@@ -3631,6 +3655,10 @@ Reset this setting and then re-activate it.</translation>
         <translation>Không thể nối tới dịch vụ của Green. Làm ơn kiểm tra lại kết nối mạng và chờ để kết nối lại.</translation>
     </message>
     <message>
+        <source>id_unarchive</source>
+        <translation>Unarchive</translation>
+    </message>
+    <message>
         <source>id_unblinding_data</source>
         <translation>Unblinding data</translation>
     </message>
@@ -3773,6 +3801,10 @@ Reset this setting and then re-activate it.</translation>
     <message>
         <source>id_version_1s_2s</source>
         <translation>Phiên bản %1 %2</translation>
+    </message>
+    <message>
+        <source>id_view_archived_accounts_d</source>
+        <translation>View archived accounts (%1)</translation>
     </message>
     <message>
         <source>id_view_in_explorer</source>

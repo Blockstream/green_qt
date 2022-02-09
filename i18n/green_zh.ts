@@ -300,6 +300,18 @@
         <translation>App Settings</translation>
     </message>
     <message>
+        <source>id_archive</source>
+        <translation>Archive</translation>
+    </message>
+    <message>
+        <source>id_archived</source>
+        <translation>Archived</translation>
+    </message>
+    <message>
+        <source>id_archived_accounts</source>
+        <translation>Archived Accounts</translation>
+    </message>
+    <message>
         <source>id_are_you_sure_you_want_to_view</source>
         <translation>你确定要使用%1查看转账信息吗?</translation>
     </message>
@@ -651,6 +663,10 @@ Simple and Secure</translation>
     <message>
         <source>id_coins_protected_by_the_new</source>
         <translation>Coins protected by the new script with embedded 2FA expiry through CheckSequenceVerify.</translation>
+    </message>
+    <message>
+        <source>id_coins_received_or_created</source>
+        <translation>Coins received or created before SegWit was activated.</translation>
     </message>
     <message>
         <source>id_coins_unlocked</source>
@@ -2414,6 +2430,10 @@ Recovery Phrase</translation>
         <translation>Overview</translation>
     </message>
     <message>
+        <source>id_p2sh</source>
+        <translation>P2sh</translation>
+    </message>
+    <message>
         <source>id_p2wsh</source>
         <translation>P2wsh</translation>
     </message>
@@ -2732,6 +2752,10 @@ Recovery Phrase</translation>
     <message>
         <source>id_remove_wallet</source>
         <translation>移除钱包</translation>
+    </message>
+    <message>
+        <source>id_rename</source>
+        <translation>Rename</translation>
     </message>
     <message>
         <source>id_rename_account</source>
@@ -3631,6 +3655,10 @@ Recovery Phrase</translation>
         <translation>无法连接Green服务器。请检查网络，并耐心等待重新连接。</translation>
     </message>
     <message>
+        <source>id_unarchive</source>
+        <translation>Unarchive</translation>
+    </message>
+    <message>
         <source>id_unblinding_data</source>
         <translation>Unblinding data</translation>
     </message>
@@ -3773,6 +3801,10 @@ Recovery Phrase</translation>
     <message>
         <source>id_version_1s_2s</source>
         <translation>版本%1 %2</translation>
+    </message>
+    <message>
+        <source>id_view_archived_accounts_d</source>
+        <translation>View archived accounts (%1)</translation>
     </message>
     <message>
         <source>id_view_in_explorer</source>

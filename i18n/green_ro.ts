@@ -301,6 +301,18 @@ Dacă aceste instrucțiuni nu au fost de ajutor sau dacă nu aveți o frază de 
         <translation>Setări aplicație</translation>
     </message>
     <message>
+        <source>id_archive</source>
+        <translation>Archive</translation>
+    </message>
+    <message>
+        <source>id_archived</source>
+        <translation>Archived</translation>
+    </message>
+    <message>
+        <source>id_archived_accounts</source>
+        <translation>Archived Accounts</translation>
+    </message>
+    <message>
         <source>id_are_you_sure_you_want_to_view</source>
         <translation>Sunteți sigur(ă) că vreți să vizualizați tranzacția folosind %1?</translation>
     </message>
@@ -651,6 +663,10 @@ Dacă aceste instrucțiuni nu au fost de ajutor sau dacă nu aveți o frază de 
     <message>
         <source>id_coins_protected_by_the_new</source>
         <translation>Coins protected by the new script with embedded 2FA expiry through CheckSequenceVerify.</translation>
+    </message>
+    <message>
+        <source>id_coins_received_or_created</source>
+        <translation>Coins received or created before SegWit was activated.</translation>
     </message>
     <message>
         <source>id_coins_unlocked</source>
@@ -2414,6 +2430,10 @@ fraza de recuperare</translation>
         <translation>Prezentare generală</translation>
     </message>
     <message>
+        <source>id_p2sh</source>
+        <translation>P2sh</translation>
+    </message>
+    <message>
         <source>id_p2wsh</source>
         <translation>P2wsh</translation>
     </message>
@@ -2732,6 +2752,10 @@ fraza de recuperare</translation>
     <message>
         <source>id_remove_wallet</source>
         <translation>Eliminare portofel</translation>
+    </message>
+    <message>
+        <source>id_rename</source>
+        <translation>Rename</translation>
     </message>
     <message>
         <source>id_rename_account</source>
@@ -3631,6 +3655,10 @@ fraza de recuperare</translation>
         <translation>Serviciul Green nu a putut fi contactat. Vă rugăm să verificați conexiunea la rețea și să așteptați reconectarea.</translation>
     </message>
     <message>
+        <source>id_unarchive</source>
+        <translation>Unarchive</translation>
+    </message>
+    <message>
         <source>id_unblinding_data</source>
         <translation>Unblinding data</translation>
     </message>
@@ -3773,6 +3801,10 @@ fraza de recuperare</translation>
     <message>
         <source>id_version_1s_2s</source>
         <translation>Versiune %1 %2</translation>
+    </message>
+    <message>
+        <source>id_view_archived_accounts_d</source>
+        <translation>View archived accounts (%1)</translation>
     </message>
     <message>
         <source>id_view_in_explorer</source>
