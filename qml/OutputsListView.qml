@@ -207,7 +207,7 @@ Page {
                                     case 'p2wsh':
                                         return qsTrId('id_coins_protected_by_the_legacy')
                                     case 'p2sh':
-                                        return qsTrId('Coins received or created before SegWit was activated')
+                                        return qsTrId('id_coins_received_or_created')
                                     case 'not_confidential':
                                         return qsTrId('id_coins_whose_asset_and_amount')
                                     case 'dust':

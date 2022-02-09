@@ -148,14 +148,14 @@ Page {
             Label {
                 Layout.alignment: Qt.AlignCenter
                 visible: !controller.wallet && !controller.busy && !controller.valid && controller.noErrors
-                text: qsTrId('Wallet not found')
+                text: qsTrId('id_wallet_not_found')
             }
             RowLayout {
                 Layout.fillHeight: false
                 visible: !controller.wallet && !controller.busy && controller.active
                 Label {
                     visible: controller.valid
-                    text: qsTrId('Wallet found')
+                    text: qsTrId('id_wallet_found')
                 }
                 HSpacer {
                 }

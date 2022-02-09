@@ -48,7 +48,7 @@ SwipeView {
         header: GHeader {
             Label {
                 Layout.alignment: Qt.AlignVCenter
-                text: qsTrId('Accounts')
+                text: qsTrId('id_accounts')
                 font.pixelSize: 20
                 font.styleName: 'Bold'
                 verticalAlignment: Label.AlignVCenter
@@ -79,9 +79,7 @@ SwipeView {
                     }
                     MenuItem {
                         enabled: !showArchived && archive_list_view.count > 0
-                        text: archive_list_view.count > 0
-                            ? qsTrId('View archived accounts (%1)').arg(archive_list_view.count)
-                            : qsTrId('Archive is empty')
+                        text: qsTrId('id_view_archived_accounts_d').arg(archive_list_view.count)
                         onTriggered: showArchived = !showArchived
                     }
                 }
@@ -113,7 +111,7 @@ SwipeView {
             Label {
                 Layout.alignment: Qt.AlignVCenter
                 Layout.fillWidth: true
-                text: qsTrId('Archived Accounts')
+                text: qsTrId('id_archived_accounts')
                 font.pixelSize: 20
                 font.styleName: 'Bold'
                 verticalAlignment: Label.AlignVCenter
@@ -144,12 +142,12 @@ SwipeView {
         Menu {
             id: menu
             MenuItem {
-                text: qsTrId('Rename')
+                text: qsTrId('id_rename')
                 enabled: name_field.enabled
                 onTriggered: name_field.forceActiveFocus()
             }
             MenuItem {
-                text: delegate.account.hidden ? qsTrId('Unarchive') : qsTrId('Archive')
+                text: delegate.account.hidden ? qsTrId('id_unarchive') : qsTrId('id_archive')
                 onTriggered: delegate.account.toggleHidden()
             }
         }

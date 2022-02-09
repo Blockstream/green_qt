@@ -39,7 +39,7 @@ GPane {
                 Label {
                     Layout.alignment: Qt.AlignVCenter
                     id: label
-                    text: qsTrId('Latest Transactions')
+                    text: qsTrId('id_latest_transactions')
                     font.pixelSize: 20
                     font.styleName: 'Bold'
                 }
@@ -48,7 +48,7 @@ GPane {
                 GButton {
                     visible: transaction_list_view.list.count > 0
                     Layout.alignment: Qt.AlignVCenter
-                    text: qsTrId('Show All')
+                    text: qsTrId('id_show_all')
                     onClicked: wallet_view_header.currentView = 2
                 }
             }
@@ -85,7 +85,7 @@ GPane {
                 GButton {
                     visible: self.account.balances.length > 3
                     Layout.alignment: Qt.AlignHCenter
-                    text: qsTrId('Show All')
+                    text: qsTrId('id_show_all')
                     onClicked: wallet_view_header.currentView = 1
                 }
             }

@@ -192,7 +192,7 @@ StackView {
                 id: coins_combo_box
                 model: [
                     { text: qsTrId('Use all available coins'), enabled: true },
-                    { text: qsTrId('Manual coin selection'), enabled: true }
+                    { text: qsTrId('id_manual_coin_selection'), enabled: true }
                 ]
                 bottomPadding: 13
                 topPadding: 13

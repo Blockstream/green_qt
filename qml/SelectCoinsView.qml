@@ -119,9 +119,9 @@ Page {
                 color: 'white'
                 text: {
                     if (output_model_filter.filter === '') {
-                        return qsTrId(`You'll see your coins here when you receive funds`)
+                        return qsTrId('id_youll_see_your_coins_here_when')
                     } else {
-                        return qsTrId('There are no results for the applied filter')
+                        return qsTrId('id_there_are_no_results_for_the')
                     }
                 }
             }

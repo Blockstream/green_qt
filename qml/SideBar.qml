@@ -130,7 +130,7 @@ Pane {
         SideButton {
             icon.source: 'qrc:/svg/appsettings.svg'
             location: '/preferences'
-            text: qsTrId('App Settings')
+            text: qsTrId('id_app_settings')
             icon.width: 24
             icon.height: 24
         }
