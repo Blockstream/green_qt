@@ -77,11 +77,10 @@ class JadeSignTransactionActivity : public SignTransactionActivity
     const QJsonArray m_signing_inputs;
     const QJsonArray m_transaction_outputs;
     const QJsonObject m_signing_transactions;
-    const QJsonArray m_signing_address_types;
     QList<QByteArray> m_signatures;
     QList<QByteArray> m_signer_commitments;
 public:
-    JadeSignTransactionActivity(Network* network, const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& transaction_outputs, const QJsonObject& signing_transactions, const QJsonArray& signing_address_types, JadeDevice* device)
+    JadeSignTransactionActivity(Network* network, const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& transaction_outputs, const QJsonObject& signing_transactions, JadeDevice* device)
         : SignTransactionActivity(device)
         , m_device(device)
         , m_network(network)
@@ -89,9 +88,7 @@ public:
         , m_signing_inputs(signing_inputs)
         , m_transaction_outputs(transaction_outputs)
         , m_signing_transactions(signing_transactions)
-        , m_signing_address_types(signing_address_types)
     {
-        Q_ASSERT(!m_signing_address_types.contains("pwpkh"));
         Q_ASSERT(!m_signing_transactions.isEmpty());
     }
 
@@ -505,9 +502,9 @@ SignMessageActivity *JadeDevice::signMessage(const QString &message, const QVect
     return new JadeSignMessageActivity(message, path, ae_host_commitment, ae_host_entropy, this);
 }
 
-SignTransactionActivity *JadeDevice::signTransaction(Network* network, const QJsonObject &transaction, const QJsonArray &signing_inputs, const QJsonArray &transaction_outputs, const QJsonObject &signing_transactions, const QJsonArray &signing_address_types)
+SignTransactionActivity *JadeDevice::signTransaction(Network* network, const QJsonObject &transaction, const QJsonArray &signing_inputs, const QJsonArray &transaction_outputs, const QJsonObject &signing_transactions)
 {
-    return new JadeSignTransactionActivity(network, transaction, signing_inputs, transaction_outputs, signing_transactions, signing_address_types, this);
+    return new JadeSignTransactionActivity(network, transaction, signing_inputs, transaction_outputs, signing_transactions, this);
 }
 
 GetBlindingKeyActivity *JadeDevice::getBlindingKey(const QString& script)

@@ -5,14 +5,13 @@
 
 #include <wally_transaction.h>
 
-LedgerSignTransactionActivity::LedgerSignTransactionActivity(const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& transaction_outputs, const QJsonObject& signing_transactions, const QJsonArray& signing_address_types, LedgerDevice* device)
+LedgerSignTransactionActivity::LedgerSignTransactionActivity(const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& transaction_outputs, const QJsonObject& signing_transactions, LedgerDevice* device)
     : SignTransactionActivity(device)
     , m_device(device)
     , m_transaction(transaction)
     , m_signing_inputs(signing_inputs)
     , m_transaction_outputs(transaction_outputs)
     , m_signing_transactions(signing_transactions)
-    , m_signing_address_types(signing_address_types)
 {
 }
 
@@ -35,11 +34,15 @@ DeviceCommand *LedgerSignTransactionActivity::exchange(CommandBatch* batch, cons
 
 void LedgerSignTransactionActivity::exec()
 {
-    const bool sw = m_signing_address_types.contains("p2wsh") || m_signing_address_types.contains("csv");
-    const bool p2sh = m_signing_address_types.contains("p2sh");
-
-    // Hardware Wallet cannot sign sweep inputs
-    Q_ASSERT(!m_signing_address_types.contains("p2pkh"));
+    bool sw = false;
+    bool p2sh = false;
+    for (const auto i : m_signing_inputs) {
+        if (i.toObject().value("address_type").toString() == "p2sh") {
+            p2sh = true;
+        } else {
+            sw = true;
+        }
+    }
 
     auto batch = new CommandBatch;
 

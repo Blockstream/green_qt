@@ -15,7 +15,7 @@ struct Input {
 class LedgerSignTransactionActivity : public SignTransactionActivity
 {
 public:
-    LedgerSignTransactionActivity(const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& transaction_outputs, const QJsonObject& signing_transactions, const QJsonArray& signing_address_types, LedgerDevice* device);
+    LedgerSignTransactionActivity(const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& transaction_outputs, const QJsonObject& signing_transactions, LedgerDevice* device);
     QList<QByteArray> signatures() const override;
     QList<QByteArray> signerCommitments() const override;
     Command *startUntrustedTransaction(uint32_t version, bool new_transaction, size_t index, const QList<Input> &used_inputs, const QByteArray &redeem_script, bool segwit);
@@ -38,7 +38,6 @@ private:
     const QJsonArray m_signing_inputs;
     const QJsonArray m_transaction_outputs;
     const QJsonObject m_signing_transactions;
-    const QJsonArray m_signing_address_types;
 
     QList<Input> m_hw_inputs;
     QVector<QByteArray> m_signatures;

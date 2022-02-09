@@ -131,9 +131,8 @@ void SignTransactionResolver::resolve()
     const auto signing_inputs = m_required_data.value("signing_inputs").toArray();
     const auto transaction_outputs = m_required_data.value("transaction_outputs").toArray();
     const auto signing_transactions = m_required_data.value("signing_transactions").toObject();
-    const auto signing_address_types = m_required_data.value("signing_address_types").toArray();
 
-    auto activity = device()->signTransaction(network(), transaction, signing_inputs, transaction_outputs, signing_transactions, signing_address_types);
+    auto activity = device()->signTransaction(network(), transaction, signing_inputs, transaction_outputs, signing_transactions);
     connect(activity, &SignTransactionActivity::finished, [this, activity] {
         activity->deleteLater();
         QJsonArray signatures;
@@ -238,11 +237,6 @@ SignLiquidTransactionResolver::SignLiquidTransactionResolver(Handler* handler, D
 {
     Q_ASSERT(network()->isLiquid());
     Q_ASSERT(m_required_data.value("action").toString() == "sign_tx");
-
-    const auto signing_address_type = m_required_data.value("signing_address_type").toArray();
-    for (const auto type : signing_address_type) {
-        Q_ASSERT(type.toString() != "p2pkh");
-    }
 }
 
 void SignLiquidTransactionResolver::resolve()
