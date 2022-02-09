@@ -6,10 +6,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+
+### Changed
+
+### Fixed
+
+## [1.0.6] - 2022-02-09
+### Added
 - Experimental support for archived accounts
-- Refresh button to sync and reload  wallet state
-- Automatically select new accounts
-- Filter for p2sh outputs
+- Refresh button to manually sync accounts, balances and transactions
+- Automatically select new accounts after creating one
+- Filter coins received before SegWit activation
 
 ### Changed
 - Improve layout of outputs view
@@ -17,7 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Sign p2sh inputs with Ledger devices
-- Show fiat balance of Liquid accounts
+- Show fiat denominated balance of Liquid accounts
 - Show asset icon only if balance is positive
 
 ## [1.0.5] - 2022-01-21
