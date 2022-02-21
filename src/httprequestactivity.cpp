@@ -21,7 +21,7 @@ void HttpRequestActivity::addUrl(const QString& url)
     m_urls.append(url);
 }
 
-void HttpRequestActivity::setData(const QString& data)
+void HttpRequestActivity::setData(const QJsonValue& data)
 {
     m_data = data;
 }
@@ -83,10 +83,10 @@ void HttpRequestActivity::exec()
         details.insert("urls", QJsonArray::fromStringList(m_urls));
 
         if (!m_accept.isEmpty()) details.insert("accept", m_accept);
-        if (!m_data.isEmpty()) details.insert("data", m_accept);
+        if (!m_data.isNull()) details.insert("data", m_data);
         if (!m_proxy.isEmpty()) details.insert("proxy", m_proxy);
 
-        if (m_headers.isEmpty()) details.insert("headers", QJsonObject::fromVariantMap(m_headers));
+        if (!m_headers.isEmpty()) details.insert("headers", QJsonObject::fromVariantMap(m_headers));
         if (m_timeout > 0) details.insert("timeout", m_timeout);
 
         if (!m_root_certificates.isEmpty()) details.insert("root_certificates", QJsonArray::fromStringList(m_root_certificates));

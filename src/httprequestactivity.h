@@ -11,7 +11,7 @@ public:
     HttpRequestActivity(QObject* parent);
     void setMethod(const QString& method);
     void addUrl(const QString& urls);
-    void setData(const QString& data);
+    void setData(const QJsonValue& data);
     void setAccept(const QString& accept);
     void setProxy(const QString& proxy);
     void addHeader(const QString& header, const QString& value);
@@ -24,7 +24,7 @@ private:
 private:
     QString m_method;
     QStringList m_urls;
-    QString m_data;
+    QJsonValue m_data;
     QString m_accept;
     QString m_proxy;
     QVariantMap m_headers;
