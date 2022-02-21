@@ -105,6 +105,7 @@ ColumnLayout {
                 Layout.fillWidth: true
                 Layout.minimumWidth: 0
                 text: qsTrId('id_set_a_limit_to_spend_without')
+                wrapMode: Text.WordWrap
             }
             GButton {
                 large: false

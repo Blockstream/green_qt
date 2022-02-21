@@ -19,7 +19,7 @@ Pane {
             id: home_button
             icon.source: 'qrc:/svg/home.svg'
             location: '/home'
-            text: 'Home'
+            text: qsTrId('id_home')
         }
         SideLabel {
             text: qsTrId('id_wallets')
