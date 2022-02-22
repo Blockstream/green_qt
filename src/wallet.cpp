@@ -156,10 +156,7 @@ void Wallet::handleNotification(const QJsonObject &notification)
     emit eventsChanged(m_events);
 
     if (event == "network") {
-        const bool login_required = data.toObject().value("login_required").toBool();
-        if (login_required) {
-            setAuthentication(Unauthenticated);
-        }
+        setAuthentication(Unauthenticated);
         return;
     }
 
