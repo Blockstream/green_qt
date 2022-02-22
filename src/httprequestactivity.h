@@ -13,7 +13,6 @@ public:
     void addUrl(const QString& urls);
     void setData(const QJsonValue& data);
     void setAccept(const QString& accept);
-    void setProxy(const QString& proxy);
     void addHeader(const QString& header, const QString& value);
     void setTimeout(int timeout);
     void addRootCertificate(const QString& root_certificate);
@@ -26,7 +25,6 @@ private:
     QStringList m_urls;
     QJsonValue m_data;
     QString m_accept;
-    QString m_proxy;
     QVariantMap m_headers;
     int m_timeout{0};
     QStringList m_root_certificates;

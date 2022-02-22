@@ -31,11 +31,6 @@ void HttpRequestActivity::setAccept(const QString& accept)
     m_accept = accept;
 }
 
-void HttpRequestActivity::setProxy(const QString& proxy)
-{
-    m_proxy = proxy;
-}
-
 void HttpRequestActivity::addHeader(const QString& header, const QString& value)
 {
     m_headers.insert(header, value);
@@ -84,7 +79,6 @@ void HttpRequestActivity::exec()
 
         if (!m_accept.isEmpty()) details.insert("accept", m_accept);
         if (!m_data.isNull()) details.insert("data", m_data);
-        if (!m_proxy.isEmpty()) details.insert("proxy", m_proxy);
 
         if (!m_headers.isEmpty()) details.insert("headers", QJsonObject::fromVariantMap(m_headers));
         if (m_timeout > 0) details.insert("timeout", m_timeout);
