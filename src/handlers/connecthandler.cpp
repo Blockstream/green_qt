@@ -37,7 +37,6 @@ ConnectHandler::~ConnectHandler()
 
 void ConnectHandler::exec()
 {
-    attempts ++;
     setFuture(QtConcurrent::run([this] {
         auto params = get_params(m_session);
         auto session = m_session->m_session;

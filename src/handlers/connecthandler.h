@@ -17,7 +17,6 @@ public:
     ConnectHandler(Session* session);
     virtual ~ConnectHandler();
     void exec();
-    int attempts{0};
 private:
     Session* const m_session;
 };
