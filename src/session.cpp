@@ -162,10 +162,7 @@ void Session::update()
             m_connection = nullptr;
         }
 
-        int rc = GA_disconnect(m_session);
-        if (rc != GA_OK) qDebug() << "disconnect failed" << rc;
-
-        rc = GA_destroy_session(m_session);
+        int rc = GA_destroy_session(m_session);
         Q_ASSERT(rc == GA_OK);
 
         m_session = nullptr;

@@ -41,11 +41,6 @@ void ConnectHandler::exec()
     setFuture(QtConcurrent::run([this] {
         auto params = get_params(m_session);
         auto session = m_session->m_session;
-        int err = GA_connect(session, Json::fromObject(params).get());
-        if (err != GA_OK) {
-            GA_disconnect(session);
-            return err;
-        }
-        return err;
+        return GA_connect(session, Json::fromObject(params).get());
     }));
 }
