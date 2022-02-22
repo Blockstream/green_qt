@@ -6,6 +6,7 @@
 
 #include <QMutex>
 #include <QMutexLocker>
+#include <QtConcurrentRun>
 
 #include <gdk.h>
 
@@ -162,8 +163,10 @@ void Session::update()
             m_connection = nullptr;
         }
 
-        int rc = GA_destroy_session(m_session);
-        Q_ASSERT(rc == GA_OK);
+        QtConcurrent::run([=] {
+            int rc = GA_destroy_session(m_session);
+            Q_ASSERT(rc == GA_OK);
+        });
 
         m_session = nullptr;
         return;
