@@ -71,7 +71,6 @@ private:
     bool const m_enable_spv;
     QString const m_electrum_url;
     bool m_active{false};
-    qint64 m_id{0};
 public:
     // TODO: make m_session private
     GA_session* m_session{nullptr};
