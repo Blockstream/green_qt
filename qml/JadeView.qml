@@ -168,6 +168,21 @@ MainPage {
                                 bottomPadding: 4
                                 color: 'white'
                                 background: Rectangle {
+                                    color: constants.r500
+                                    radius: 4
+                                }
+                                visible: device.versionInfo.JADE_FEATURES !== 'SB'
+                                text: device.versionInfo.JADE_FEATURES
+                            }
+                            Label {
+                                font.pixelSize: 10
+                                font.capitalization: Font.AllUppercase
+                                leftPadding: 8
+                                rightPadding: 8
+                                topPadding: 4
+                                bottomPadding: 4
+                                color: 'white'
+                                background: Rectangle {
                                     color: constants.c400
                                     radius: 4
                                 }
