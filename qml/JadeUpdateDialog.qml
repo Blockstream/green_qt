@@ -167,7 +167,7 @@ AbstractDialog {
         }
         GComboBox {
             id: channel_combo_box
-            visible: Qt.application.arguments.indexOf('--debugjade') > 0
+            visible: Settings.enableExperimental
             enabled: HttpManager.session && HttpManager.session.connected
             Layout.fillWidth: true
             valueRole: 'channel'
