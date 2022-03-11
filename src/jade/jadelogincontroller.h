@@ -60,6 +60,7 @@ private:
     QString m_wallet_hash_id;
     Wallet* m_wallet{nullptr};
     QString m_status;
+    bool m_identifying{false};
 };
 
 #endif // GREEN_JADELOGINCONTROLLER_H

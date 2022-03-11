@@ -168,14 +168,17 @@ void JadeLoginController::identify()
 {
     if (!m_device) return;
     if (m_device->state() == JadeDevice::StateLocked) return unlock();
+    if (m_identifying) return;
+    m_identifying = true;
 
-    qDebug() << "identifying";
+    qDebug() << "identifying" << m_network;
 
     auto network = NetworkManager::instance()->network(m_network);
 
     auto activity = m_device->getWalletPublicKey(network, {});
-    QObject::connect(activity, &Activity::finished, [this, activity] {
+    QObject::connect(activity, &Activity::finished, this, [=] {
         activity->deleteLater();
+        m_identifying = false;
 
         const auto master_xpub = activity->publicKey();
         Q_ASSERT(!master_xpub.isEmpty());
@@ -193,8 +196,9 @@ void JadeLoginController::identify()
 
         update();
     });
-    QObject::connect(activity, &Activity::failed, [this, activity] {
+    QObject::connect(activity, &Activity::failed, this, [=] {
         activity->deleteLater();
+        m_identifying = false;
     });
     ActivityManager::instance()->exec(activity);
 }
