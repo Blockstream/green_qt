@@ -56,10 +56,7 @@ void HttpRequestActivity::exec()
     Q_ASSERT(!m_method.isEmpty());
     Q_ASSERT(!m_urls.isEmpty());
 
-    auto connection = session()->connection();
-    Q_ASSERT(connection);
-
-    auto watcher = new QFutureWatcher<QJsonObject>(connection);
+    auto watcher = new QFutureWatcher<QJsonObject>(session());
 
     connect(this, &QObject::destroyed, watcher, &QObject::deleteLater);
     connect(watcher, &QFutureWatcherBase::finished, this, [this, watcher] {

@@ -76,14 +76,6 @@ void Session::setConnected(bool connected)
 {
     if (m_connected == connected) return;
     m_connected = connected;
-
-    if (m_connected && !m_connection) {
-        m_connection = new Connection(this);
-    } else if (!m_connected && m_connection) {
-        delete m_connection;
-        m_connection = nullptr;
-    }
-
     emit connectedChanged(m_connected);
 }
 
@@ -138,11 +130,6 @@ void Session::update()
 
     if (!m_active && m_session) {
         m_connect_handler.destroy();
-
-        if (m_connection) {
-            delete m_connection;
-            m_connection = nullptr;
-        }
 
         GA_set_notification_handler(m_session, nullptr, nullptr);
         QtConcurrent::run([=] {
@@ -210,14 +197,4 @@ SessionConnectActivity::SessionConnectActivity(Session* session)
             QObject::disconnect(m_connection);
         }
     });
-}
-
-Connection::Connection(Session* session)
-    : QObject(session)
-    , m_session(session)
-{
-}
-
-Connection::~Connection()
-{
 }

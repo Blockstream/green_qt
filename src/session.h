@@ -8,7 +8,6 @@
 #include <QtQml>
 #include <QObject>
 
-QT_FORWARD_DECLARE_CLASS(Connection);
 QT_FORWARD_DECLARE_CLASS(ConnectHandler);
 QT_FORWARD_DECLARE_CLASS(Network);
 
@@ -47,7 +46,6 @@ public:
     void setActive(bool active);
     bool isConnected() const { return m_connected; }
     bool isConnecting() const { return m_connecting; }
-    Connection* connection() const { return m_connection; };
     QList<QJsonObject> events() const { return m_events; }
     QJsonObject event() const { return m_event; }
 signals:
@@ -79,19 +77,8 @@ public:
     bool m_connected{false};
     bool m_connecting{false};
     Connectable<ConnectHandler> m_connect_handler;
-    Connection* m_connection{nullptr};
     QList<QJsonObject> m_events;
     QJsonObject m_event;
-};
-
-class Connection : public QObject
-{
-    Q_OBJECT
-public:
-    Connection(Session* session);
-    virtual ~Connection();
-private:
-    Session* const m_session;
 };
 
 class SessionActivity : public Activity

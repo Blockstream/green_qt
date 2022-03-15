@@ -13,16 +13,8 @@
 
 #include <QtConcurrentRun>
 
-
-static Connection* SessionConnection(Session* session)
-{
-    Q_ASSERT(session);
-    Q_ASSERT(session->connection());
-    return session->connection();
-}
-
 Handler::Handler(Session* session)
-    : QFutureWatcher<void>(SessionConnection(session))
+    : QFutureWatcher<void>(session)
     , m_session(session)
 {
     connect(this, &Handler::finished, this, [this] {
