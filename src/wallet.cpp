@@ -26,6 +26,16 @@
 
 #include <gdk.h>
 
+class ReloginHandler : public Handler
+{
+public:
+    ReloginHandler(Session* session) : Handler(session) {}
+    void call(GA_session* session, GA_auth_handler** auth_handler) override
+    {
+        QJsonObject hw_device, details;
+        GA_login_user(session, Json::fromObject(hw_device).get(), Json::fromObject(details).get(), auth_handler);
+    }
+};
 
 namespace {
 QByteArray getMnemonicPassphrase(GA_session* session)
@@ -156,7 +166,13 @@ void Wallet::handleNotification(const QJsonObject &notification)
     emit eventsChanged(m_events);
 
     if (event == "network") {
-        setAuthentication(Unauthenticated);
+        if (m_authentication == Authenticated) {
+            auto handler = new ReloginHandler(m_session);
+            QObject::connect(handler, &Handler::done, this, [=] {
+                handler->deleteLater();
+            });
+            handler->exec();
+        }
         return;
     }
 
