@@ -62,7 +62,7 @@ void AddressListModel::fetch(bool reset)
             endResetModel();
         } else {
             // new page of transactions, just append to existing transaction
-            beginInsertRows(QModelIndex(), m_addresses.size(), m_addresses.size() + addresses.size() - 1);
+            beginInsertRows(QModelIndex(), m_addresses.size(), m_addresses.size() + addresses.size());
             m_addresses.append(addresses);
             endInsertRows();
         }

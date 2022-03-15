@@ -78,7 +78,9 @@ void TransactionListModel::fetch(bool reset, int offset, int count)
             endResetModel();
         } else {
             // new page of transactions, just append to existing transaction
-            beginInsertRows(QModelIndex(), m_transactions.size(), m_transactions.size() + m_get_transactions_activity->transactions().size() - 1);
+            const auto first = m_transactions.size();
+            const auto last = m_transactions.size() + m_get_transactions_activity->transactions().size();
+            beginInsertRows(QModelIndex(), first, last);
             m_transactions.append(m_get_transactions_activity->transactions());
             endInsertRows();
         }
