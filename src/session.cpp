@@ -60,9 +60,10 @@ void Session::handleNotification(const QJsonObject& notification)
 
     if (event == "network") {
         auto data = value.toObject();
-        emit networkEvent(data);
-        const bool connected = data.value("connected").toBool();
-        setConnected(connected);
+        const auto current_state = data.value("current_state").toString();
+        const auto next_state = data.value("next_state").toString();
+        setConnected(current_state == "connected");
+        setConnecting(current_state == "disconnected" && next_state == "connected");
         return;
     }
     if (event == "tor") {
@@ -84,6 +85,13 @@ void Session::setConnected(bool connected)
     }
 
     emit connectedChanged(m_connected);
+}
+
+void Session::setConnecting(bool connecting)
+{
+    if (m_connecting == connecting) return;
+    m_connecting = connecting;
+    emit connectingChanged(m_connecting);
 }
 
 void Session::setActive(bool active)

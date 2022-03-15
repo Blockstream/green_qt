@@ -28,6 +28,7 @@ class Session : public Entity
     Q_PROPERTY(QString electrumUrl READ electrumUrl CONSTANT)
     Q_PROPERTY(bool active READ isActive WRITE setActive NOTIFY activeChanged)
     Q_PROPERTY(bool connected READ isConnected NOTIFY connectedChanged)
+    Q_PROPERTY(bool connecting READ isConnecting NOTIFY connectingChanged)
     Q_PROPERTY(QJsonObject event READ event NOTIFY eventChanged)
     QML_ELEMENT
 public:
@@ -45,15 +46,15 @@ public:
     bool isActive() const { return m_active; }
     void setActive(bool active);
     bool isConnected() const { return m_connected; }
+    bool isConnecting() const { return m_connecting; }
     Connection* connection() const { return m_connection; };
     QList<QJsonObject> events() const { return m_events; }
     QJsonObject event() const { return m_event; }
 signals:
     void notificationHandled(const QJsonObject& notification);
-    void networkEvent(const QJsonObject& event);
-    void sessionEvent(const QJsonObject& event);
     void activeChanged(bool active);
     void connectedChanged(bool connected);
+    void connectingChanged(bool connecting);
     void torEvent(const QJsonObject& event);
     void activityCreated(Activity* activity);
     void eventChanged(const QJsonObject& event);
@@ -61,6 +62,7 @@ private:
     void update();
     void handleNotification(const QJsonObject& notification);
     void setConnected(bool connected);
+    void setConnecting(bool connecting);
 private:
     Network* const m_network;
     bool const m_use_tor;
@@ -75,6 +77,7 @@ public:
     // TODO: make m_session private
     GA_session* m_session{nullptr};
     bool m_connected{false};
+    bool m_connecting{false};
     Connectable<ConnectHandler> m_connect_handler;
     Connection* m_connection{nullptr};
     QList<QJsonObject> m_events;
