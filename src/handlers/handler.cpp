@@ -39,11 +39,14 @@ static QJsonObject getErrorDetails()
 
 void Handler::exec()
 {
+    static QThreadPool pool;
+    pool.setMaxThreadCount(2);
+
     Q_ASSERT(!m_already_exec);
     m_already_exec = true;
 
     Q_ASSERT(!m_auth_handler);
-    setFuture(QtConcurrent::run([this] {
+    setFuture(QtConcurrent::run(&pool, [this] {
         call(m_session->m_session, &m_auth_handler);
         m_error_details = getErrorDetails();
         if (!m_error_details.isEmpty()) {
