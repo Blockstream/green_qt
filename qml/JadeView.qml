@@ -234,6 +234,7 @@ MainPage {
             RowLayout {
                 Layout.fillWidth: false
                 Layout.minimumWidth: 200
+                spacing: constants.s1
                 Image {
                     source: icons[self.network.key]
                     sourceSize.width: 24

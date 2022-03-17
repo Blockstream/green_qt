@@ -66,7 +66,8 @@ void JadeLoginController::setWallet(Wallet *wallet)
         Q_ASSERT(!wallet);
         m_wallet = nullptr;
         emit walletChanged(nullptr);
-    } else {
+    }
+    if (wallet) {
         Q_ASSERT(!m_wallet);
         Q_ASSERT(!m_active);
         m_wallet = wallet;
