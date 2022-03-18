@@ -54,7 +54,7 @@ void ExportTransactionsController::save()
         m_lines.append(m_fields.join(m_separator));
     }
 
-    QTimer::singleShot(1000, [this] { nextPage(); });
+    QTimer::singleShot(1000, this, [=] { nextPage(); });
 }
 
 void ExportTransactionsController::nextPage()
@@ -122,7 +122,7 @@ void ExportTransactionsController::nextPage()
             emit saved();
         } else {
             m_offset += m_count;
-            QTimer::singleShot(100, [this] { nextPage(); });
+            QTimer::singleShot(100, this, [=] { nextPage(); });
         }
     });
 

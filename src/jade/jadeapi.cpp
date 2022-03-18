@@ -243,7 +243,7 @@ void JadeAPI::sendToJade(const QCborMap &msg)
     m_jade->send(msg);
     int id = msg["id"].toString().toInt();
     int timeout = m_msg_timeout.value(id, 0);
-    if (timeout > 0) QTimer::singleShot(timeout, [=] {
+    if (timeout > 0) QTimer::singleShot(timeout, this, [=] {
         // Get (ie. remove) the response handler for that id from the map of registered handlers
         const ResponseHandler handler = m_responseHandlers.take(id);
         if (!handler) return;
@@ -480,7 +480,7 @@ JadeAPI::ResponseHandler JadeAPI::makeSendInputsCallback(const int id, const QVa
             for (const QVariant& input : inputs)
             {
                 qDebug() << "JadeAPI::makeSendInputsCallback()::lambda for" << id << "scheduling tx input" << index+1 << "of" << ninputs;
-                QTimer::singleShot(index*100,
+                QTimer::singleShot(index*100, this,
                     [this, id, ninputs, input, index, commitments]()
                     {
                         qDebug() << "JadeAPI::makeSendInputsCallback()::lambda for" << id << "sending tx input" << index+1 << "of" << ninputs;
@@ -498,7 +498,7 @@ JadeAPI::ResponseHandler JadeAPI::makeSendInputsCallback(const int id, const QVa
             for (const QVariant& input : inputs)
             {
                 qDebug() << "JadeAPI::makeSendInputsCallback()::lambda for" << id << "scheduling tx input" << index+1 << "of" << ninputs;
-                QTimer::singleShot((ninputs + index)*100,
+                QTimer::singleShot((ninputs + index)*100, this,
                     [this, id, ninputs, input, index, sigs, commitments]()
                     {
                         const int inputId = registerResponseHandler(makeReceiveSignatureCallback(id, ninputs, index, input, sigs, commitments));
