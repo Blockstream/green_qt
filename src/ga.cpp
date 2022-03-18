@@ -1,8 +1,20 @@
 #include "ga.h"
 #include "json.h"
+#include "util.h"
 #include <gdk.h>
 
 namespace gdk {
+
+void init(const QCommandLineParser& args)
+{
+    const auto log_level = args.isSet("debug") ? QStringLiteral("debug") : qEnvironmentVariable("GREEN_GDK_LOG_LEVEL", "info");
+
+    auto config = Json::fromObject({
+        { "datadir", GetDataDir("gdk") },
+        { "log_level", log_level }
+    });
+    GA_init(config.get());
+}
 
 QJsonObject convert_amount(GA_session* session, const QJsonObject& input)
 {
@@ -67,4 +79,4 @@ QJsonArray get_fee_estimates(GA_session* session)
     return fees;
 }
 
-} // namespace GA
+} // namespace gdk

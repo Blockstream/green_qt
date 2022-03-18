@@ -14,6 +14,7 @@
 #include "clipboard.h"
 #include "devicemanager.h"
 #include "networkmanager.h"
+#include "ga.h"
 #include "httpmanager.h"
 #include "settings.h"
 #include "walletmanager.h"
@@ -165,6 +166,7 @@ int main(int argc, char *argv[])
     g_args.addHelpOption();
     g_args.addVersionOption();
     g_args.addOption(QCommandLineOption("printtoconsole"));
+    g_args.addOption(QCommandLineOption("debug"));
     g_args.addOption(QCommandLineOption("debugfocus"));
     g_args.addOption(QCommandLineOption("debugnavigation"));
     g_args.addOption(QCommandLineOption("channel", "", "name", "latest"));
@@ -197,6 +199,8 @@ int main(int argc, char *argv[])
     qInfo() << "Build Type:" << QT_STRINGIFY(BUILD_TYPE);
     qInfo() << "Data directory:" << g_data_location;
     qInfo() << "Log file:" << g_log_file.fileName();
+
+    gdk::init(g_args);
 
     // Reset the locale that is used for number formatting, see:
     // https://doc.qt.io/qt-5/qcoreapplication.html#locale-settings

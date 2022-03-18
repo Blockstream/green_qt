@@ -3,11 +3,13 @@
 
 #include <QJsonArray>
 #include <QJsonObject>
+#include <QCommandLineParser>
 
 struct GA_session;
 
 namespace gdk {
 
+void init(const QCommandLineParser& args);
 QJsonObject convert_amount(GA_session* session, const QJsonObject& input);
 QStringList generate_mnemonic(int size);
 QJsonObject get_settings(GA_session* session);
