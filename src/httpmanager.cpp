@@ -70,10 +70,7 @@ void HttpManager::dispatch()
         return;
     }
 
-    if (m_running) {
-        qDebug() << "http: postpone, session busy";
-        return;
-    }
+    if (m_running) return;
 
     if (!m_session) {
         qDebug() << "http: create session";
