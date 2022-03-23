@@ -12,15 +12,15 @@ MainPage {
     function formatDeviceState(state) {
         switch (state) {
             case JadeDevice.StateLocked:
-                return qsTrId('Locked')
+                return qsTrId('id_locked')
             case JadeDevice.StateTemporary:
             case JadeDevice.StateReady:
-                return qsTrId('Ready')
+                return qsTrId('id_ready')
             case JadeDevice.StateUnsaved:
             case JadeDevice.StateUninitialized:
-                return qsTrId('Uninitialized')
+                return qsTrId('id_not_initialized')
             default:
-                return qsTrId('Unknonw')
+                return qsTrId('id_unknown')
         }
     }
 
@@ -34,7 +34,7 @@ MainPage {
         contentItem: RowLayout {
             spacing: 12
             Label {
-                text: qsTrId('Blockstream Devices')
+                text: qsTrId('id_blockstream_devices')
                 font.pixelSize: 24
                 font.styleName: 'Medium'
             }
@@ -312,14 +312,14 @@ MainPage {
                         text: formatDeviceState(device.state)
                     }
                     Label {
-                        text: qsTrId('Networks')
+                        text: qsTrId('id_networks')
                     }
                     Label {
                         text: {
                             const nets = self.device.versionInfo.JADE_NETWORKS
-                            if (nets === 'ALL') return qsTrId('All networks')
-                            if (nets === 'TEST') return qsTrId('Bitcoin Testnet and Liquid Testnet')
-                            if (nets === 'MAIN') return qsTrId('Bitcoin and Liquid')
+                            if (nets === 'ALL') return qsTrId('id_all_networks')
+                            if (nets === 'TEST') return qsTrId('id_bitcoin_testnet_and_liquid')
+                            if (nets === 'MAIN') return qsTrId('id_bitcoin_and_liquid')
                         }
                     }
                     Label {
@@ -359,7 +359,7 @@ MainPage {
                         text: device.version
                     }
                     Label {
-                        text: qsTrId('Bluetooth')
+                        text: qsTrId('id_bluetooth')
                     }
                     Label {
                         text: device.versionInfo.JADE_CONFIG === 'NORADIO' ? qsTrId('id_not_available_noradio_build') : qsTrId('id_available')
@@ -432,7 +432,7 @@ MainPage {
                     font.styleName: 'Medium'
                     color: 'black'
                     font.pixelSize: 10
-                    text: qsTrId('Jade initialized for testnet networks\nEnable testnet in App Settings to use this Jade')
+                    text: qaTrId('id_jade_was_initialized_for_testnet') + '\n' + qsTrId('id_enable_testnet_in_app_settings')
                 }
                 Repeater {
                     model: {

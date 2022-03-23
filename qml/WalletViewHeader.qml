@@ -139,7 +139,7 @@ MainPageHeader {
                                 color: constants.c400
                                 radius: 4
                             }
-                            text: qsTrId('Archived')
+                            text: qsTrId('id_archived')
                         }
                     }
                 }

@@ -37,7 +37,7 @@ Page {
             id: advanced_checkbox
             visible: singlesig_card.active && singlesig_card.noErrors && multisig_card.noErrors
             enabled: !(singlesig_card.busy || multisig_card.busy) && !(singlesig_card.valid && multisig_card.valid) && !(multisig_card.wallet && singlesig_card.wallet)
-            text: qsTrId('Show advanced options')
+            text: qsTrId('id_show_advanced_options')
         }
     }
 
@@ -113,7 +113,7 @@ Page {
                     spacing: constants.s1
                     Label {
                         Layout.alignment: Qt.AlignCenter
-                        text: qsTrId('Wallet already restored')
+                        text: qsTrId('id_wallet_already_restored')
                     }
                     Label {
                         Layout.alignment: Qt.AlignCenter
@@ -134,7 +134,7 @@ Page {
                     }
                     Label {
                         Layout.alignment: Qt.AlignCenter
-                        text: qsTrId('Looking for wallet')
+                        text: qsTrId('id_looking_for_wallets')
                     }
                 }
             }

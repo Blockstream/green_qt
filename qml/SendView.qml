@@ -181,7 +181,7 @@ StackView {
             }
         }
         SectionLabel {
-            text: qsTrId('Coins')
+            text: qsTrId('id_coins')
             visible: !wallet.network.liquid
         }
         RowLayout {
@@ -209,10 +209,10 @@ StackView {
                     Label {
                         Layout.fillWidth: true
                         text: {
-                            if (coins_combo_box.currentIndex === 0) return qsTrId('(all coins)')
+                            if (coins_combo_box.currentIndex === 0) return qsTrId('id_all_coins')
                             const count = send_view.selectedOutputs.length
-                            if (count === 0) return qsTrId('(no coins selected)')
-                            return qsTrId('(%1 coins selected)').arg(count)
+                            if (count === 0) return qsTrId('id_no_coins_selected')
+                            return qsTrId('id_d_coins_selected').arg(count)
                         }
                     }
                     Label {
@@ -254,7 +254,7 @@ StackView {
             GSwitch {
                 Layout.fillWidth: true
                 id: send_all_button
-                text: qsTrId('Send all')
+                text: qsTrId('id_send_all')
             }
             GTextField {
                 id: amount_field

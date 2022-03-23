@@ -91,7 +91,7 @@ GFlickable {
                     rowSpacing: constants.s1
                     columns: 2
                     Label {
-                        text: qsTrId('Sign path')
+                        text: qsTrId('id_path_used_for_signing')
                     }
                     Label {
                         Layout.fillWidth: true
