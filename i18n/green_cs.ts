@@ -241,7 +241,7 @@ Pokud vám žádný z těchto tipů nepomohl nebo pokud nemáte frázi pro obnov
     </message>
     <message>
         <source>id_all_coins</source>
-        <translation>Všechny mince</translation>
+        <translation>(All coins)</translation>
     </message>
     <message>
         <source>id_all_networks</source>
@@ -301,15 +301,15 @@ Pokud vám žádný z těchto tipů nepomohl nebo pokud nemáte frázi pro obnov
     </message>
     <message>
         <source>id_archive</source>
-        <translation>Archive</translation>
+        <translation>Archivovat</translation>
     </message>
     <message>
         <source>id_archived</source>
-        <translation>Archived</translation>
+        <translation>Archivováno</translation>
     </message>
     <message>
         <source>id_archived_accounts</source>
-        <translation>Archived Accounts</translation>
+        <translation>Archivované účty</translation>
     </message>
     <message>
         <source>id_are_you_sure_you_want_to_view</source>
@@ -450,6 +450,10 @@ Pokud vám žádný z těchto tipů nepomohl nebo pokud nemáte frázi pro obnov
     <message>
         <source>id_bitcoin_is_the_worlds_leading</source>
         <translation>Bitcoin je přední světová P2P kryptoměnová síť. Vyberte pro odesílání a přijímání bitcoinů.</translation>
+    </message>
+    <message>
+        <source>id_bitcoin_testnet_and_liquid</source>
+        <translation>Bitcoin Testnet and Liquid Testnet</translation>
     </message>
     <message>
         <source>id_bitcoin_wallet</source>
@@ -666,7 +670,7 @@ Jednoduše a bezpečně</translation>
     </message>
     <message>
         <source>id_coins_received_or_created</source>
-        <translation>Coins received or created before SegWit was activated.</translation>
+        <translation>Mince přijaté nebo vytvořené před aktivací SegWit.</translation>
     </message>
     <message>
         <source>id_coins_unlocked</source>
@@ -726,7 +730,7 @@ Jednoduše a bezpečně</translation>
     </message>
     <message>
         <source>id_confirm_transaction_details_on</source>
-        <translation>Potvrďte podrobnosti transakce na vaší hardwarové peněžence</translation>
+        <translation>Confirm transaction details on your hardware wallet</translation>
     </message>
     <message>
         <source>id_confirm_update_on_your_jade</source>
@@ -958,7 +962,7 @@ Jednoduše a bezpečně</translation>
     </message>
     <message>
         <source>id_d_coins_selected</source>
-        <translation>vybrané mince %1</translation>
+        <translation>(%1 coins selected)</translation>
     </message>
     <message>
         <source>id_d_words</source>
@@ -1582,6 +1586,10 @@ obnovovací frázi</translation>
         <translation>Držte NFC tag v blízkosti zařízení</translation>
     </message>
     <message>
+        <source>id_home</source>
+        <translation>Home</translation>
+    </message>
+    <message>
         <source>id_hour</source>
         <translation>hodina</translation>
     </message>
@@ -2026,6 +2034,10 @@ obnovovací frázi</translation>
         <translation>Podívejte se na zařízení na pozice čísel</translation>
     </message>
     <message>
+        <source>id_looking_for_wallets</source>
+        <translation>Looking for wallets…</translation>
+    </message>
+    <message>
         <source>id_looks_like_you_havent_used_a</source>
         <translation>Vypadá to, že jste dosud nepoužili peněženku. Zkuste vytvořit novou.</translation>
     </message>
@@ -2247,7 +2259,7 @@ obnovovací frázi</translation>
     </message>
     <message>
         <source>id_no_coins_selected</source>
-        <translation>Nebyly vybrány žádné mince</translation>
+        <translation>(No coins selected)</translation>
     </message>
     <message>
         <source>id_no_device_connected</source>
@@ -2755,7 +2767,7 @@ obnovovací frázi</translation>
     </message>
     <message>
         <source>id_rename</source>
-        <translation>Rename</translation>
+        <translation>Přejmenovat</translation>
     </message>
     <message>
         <source>id_rename_account</source>
@@ -3656,7 +3668,7 @@ Obnovte toto nastavení a znovu jej aktivujte.</translation>
     </message>
     <message>
         <source>id_unarchive</source>
-        <translation>Unarchive</translation>
+        <translation>Odarchivovat</translation>
     </message>
     <message>
         <source>id_unblinding_data</source>
@@ -3804,7 +3816,7 @@ Obnovte toto nastavení a znovu jej aktivujte.</translation>
     </message>
     <message>
         <source>id_view_archived_accounts_d</source>
-        <translation>View archived accounts (%1)</translation>
+        <translation>Zobrazit archivované účty (%1)</translation>
     </message>
     <message>
         <source>id_view_in_explorer</source>

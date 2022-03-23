@@ -242,7 +242,7 @@ Dacă aceste instrucțiuni nu au fost de ajutor sau dacă nu aveți o frază de 
     </message>
     <message>
         <source>id_all_coins</source>
-        <translation>All coins</translation>
+        <translation>(All coins)</translation>
     </message>
     <message>
         <source>id_all_networks</source>
@@ -451,6 +451,10 @@ Dacă aceste instrucțiuni nu au fost de ajutor sau dacă nu aveți o frază de 
     <message>
         <source>id_bitcoin_is_the_worlds_leading</source>
         <translation>Bitcoin este cea mai importantă criptomonedă din lume. Selectează pentru a trimite și primi bitcoin.</translation>
+    </message>
+    <message>
+        <source>id_bitcoin_testnet_and_liquid</source>
+        <translation>Bitcoin Testnet and Liquid Testnet</translation>
     </message>
     <message>
         <source>id_bitcoin_wallet</source>
@@ -726,7 +730,7 @@ Dacă aceste instrucțiuni nu au fost de ajutor sau dacă nu aveți o frază de 
     </message>
     <message>
         <source>id_confirm_transaction_details_on</source>
-        <translation>Confirmați detaliile tranzacției pe portofelul fizic</translation>
+        <translation>Confirm transaction details on your hardware wallet</translation>
     </message>
     <message>
         <source>id_confirm_update_on_your_jade</source>
@@ -958,7 +962,7 @@ Dacă aceste instrucțiuni nu au fost de ajutor sau dacă nu aveți o frază de 
     </message>
     <message>
         <source>id_d_coins_selected</source>
-        <translation>%1 coins selected</translation>
+        <translation>(%1 coins selected)</translation>
     </message>
     <message>
         <source>id_d_words</source>
@@ -1582,6 +1586,10 @@ fraza de recuperare</translation>
         <translation>Țineți eticheta NFC aproape de dispozitiv</translation>
     </message>
     <message>
+        <source>id_home</source>
+        <translation>Home</translation>
+    </message>
+    <message>
         <source>id_hour</source>
         <translation>oră</translation>
     </message>
@@ -2026,6 +2034,10 @@ fraza de recuperare</translation>
         <translation>Priviți ecranul dispozitivului pentru a identifica pozițiile numerelor</translation>
     </message>
     <message>
+        <source>id_looking_for_wallets</source>
+        <translation>Looking for wallets…</translation>
+    </message>
+    <message>
         <source>id_looks_like_you_havent_used_a</source>
         <translation>Nu ați folosit pînă acum un portofel. Creați unul acum.</translation>
     </message>
@@ -2247,7 +2259,7 @@ fraza de recuperare</translation>
     </message>
     <message>
         <source>id_no_coins_selected</source>
-        <translation>No coins selected</translation>
+        <translation>(No coins selected)</translation>
     </message>
     <message>
         <source>id_no_device_connected</source>

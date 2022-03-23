@@ -241,7 +241,7 @@ Se nenhuma destas dicas foi útil, ou se não possui uma frase de recuperação 
     </message>
     <message>
         <source>id_all_coins</source>
-        <translation>All coins</translation>
+        <translation>(All coins)</translation>
     </message>
     <message>
         <source>id_all_networks</source>
@@ -450,6 +450,10 @@ Se nenhuma destas dicas foi útil, ou se não possui uma frase de recuperação 
     <message>
         <source>id_bitcoin_is_the_worlds_leading</source>
         <translation>Bitcoin é a rede de criptomoeda P2P líder do mundo. Seleccione para enviar e receber bitcoin.</translation>
+    </message>
+    <message>
+        <source>id_bitcoin_testnet_and_liquid</source>
+        <translation>Bitcoin Testnet and Liquid Testnet</translation>
     </message>
     <message>
         <source>id_bitcoin_wallet</source>
@@ -726,7 +730,7 @@ Simples e Segura</translation>
     </message>
     <message>
         <source>id_confirm_transaction_details_on</source>
-        <translation>Confirme os detalhes da transação na sua carteira de hardware</translation>
+        <translation>Confirm transaction details on your hardware wallet</translation>
     </message>
     <message>
         <source>id_confirm_update_on_your_jade</source>
@@ -958,7 +962,7 @@ Simples e Segura</translation>
     </message>
     <message>
         <source>id_d_coins_selected</source>
-        <translation>%1 coins selected</translation>
+        <translation>(%1 coins selected)</translation>
     </message>
     <message>
         <source>id_d_words</source>
@@ -1582,6 +1586,10 @@ Recovery Phrase</translation>
         <translation>Hold your NFC tag close to the device</translation>
     </message>
     <message>
+        <source>id_home</source>
+        <translation>Home</translation>
+    </message>
+    <message>
         <source>id_hour</source>
         <translation>hora</translation>
     </message>
@@ -2026,6 +2034,10 @@ Recovery Phrase</translation>
         <translation>Look at the device for the number positions</translation>
     </message>
     <message>
+        <source>id_looking_for_wallets</source>
+        <translation>Looking for wallets…</translation>
+    </message>
+    <message>
         <source>id_looks_like_you_havent_used_a</source>
         <translation>Looks like you haven&apos;t used a wallet yet. Try creating a new one.</translation>
     </message>
@@ -2247,7 +2259,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_no_coins_selected</source>
-        <translation>No coins selected</translation>
+        <translation>(No coins selected)</translation>
     </message>
     <message>
         <source>id_no_device_connected</source>

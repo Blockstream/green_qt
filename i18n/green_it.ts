@@ -45,11 +45,11 @@ Se questi consigli non sono di aiuto, o non possiedi una recovery phrase da 12, 
     </message>
     <message>
         <source>id_2fa_dispute_in_progress</source>
-        <translation>2FA Dispute in Progress</translation>
+        <translation>Disputa 2FA in corso</translation>
     </message>
     <message>
         <source>id_2fa_expired</source>
-        <translation>2FA Expired</translation>
+        <translation>2FA Scaduto</translation>
     </message>
     <message>
         <source>id_2fa_expiry</source>
@@ -61,7 +61,7 @@ Se questi consigli non sono di aiuto, o non possiedi una recovery phrase da 12, 
     </message>
     <message>
         <source>id_2fa_reset_in_progress</source>
-        <translation>2FA Reset in Progress</translation>
+        <translation>Reset 2FA in corso</translation>
     </message>
     <message>
         <source>id_2fa_threshold</source>
@@ -93,7 +93,7 @@ Se questi consigli non sono di aiuto, o non possiedi una recovery phrase da 12, 
     </message>
     <message>
         <source>id_a_newer_version_of_blockstream</source>
-        <translation>A newer version of Blockstream Green is now available</translation>
+        <translation>Una nuova versione di Blockstream Green è disponibile ora</translation>
     </message>
     <message>
         <source>id_a_screen_lock_must_be_enabled</source>
@@ -133,7 +133,7 @@ Se questi consigli non sono di aiuto, o non possiedi una recovery phrase da 12, 
     </message>
     <message>
         <source>id_accounts</source>
-        <translation>Accounts</translation>
+        <translation>Account</translation>
     </message>
     <message>
         <source>id_accounts_summary</source>
@@ -145,7 +145,7 @@ Se questi consigli non sono di aiuto, o non possiedi una recovery phrase da 12, 
     </message>
     <message>
         <source>id_actions</source>
-        <translation>Actions</translation>
+        <translation>Azioni</translation>
     </message>
     <message>
         <source>id_add_a_note_only_you_can_see_it</source>
@@ -165,7 +165,7 @@ Se questi consigli non sono di aiuto, o non possiedi una recovery phrase da 12, 
     </message>
     <message>
         <source>id_add_an_amp_wallet</source>
-        <translation>Add an AMP wallet</translation>
+        <translation>Aggiungi un wallet AMP</translation>
     </message>
     <message>
         <source>id_add_another_wallet</source>
@@ -209,7 +209,7 @@ Se questi consigli non sono di aiuto, o non possiedi una recovery phrase da 12, 
     </message>
     <message>
         <source>id_address_verified</source>
-        <translation>Address verified!</translation>
+        <translation>Indirizzo validato!</translation>
     </message>
     <message>
         <source>id_address_was_filled_by_a_payment</source>
@@ -217,11 +217,11 @@ Se questi consigli non sono di aiuto, o non possiedi una recovery phrase da 12, 
     </message>
     <message>
         <source>id_addresses</source>
-        <translation>Addresses</translation>
+        <translation>Indirizzi</translation>
     </message>
     <message>
         <source>id_advanced</source>
-        <translation>Advanced</translation>
+        <translation>Avanzate</translation>
     </message>
     <message>
         <source>id_advanced_network_settings</source>
@@ -229,7 +229,7 @@ Se questi consigli non sono di aiuto, o non possiedi una recovery phrase da 12, 
     </message>
     <message>
         <source>id_advanced_options_for_your_third</source>
-        <translation>Advanced options for your third recovery key</translation>
+        <translation>Opzioni avanzate per la terza chiave</translation>
     </message>
     <message>
         <source>id_all</source>
@@ -237,23 +237,23 @@ Se questi consigli non sono di aiuto, o non possiedi una recovery phrase da 12, 
     </message>
     <message>
         <source>id_all_assets</source>
-        <translation>All Assets</translation>
+        <translation>Tutti gli assets</translation>
     </message>
     <message>
         <source>id_all_coins</source>
-        <translation>All coins</translation>
+        <translation>(All coins)</translation>
     </message>
     <message>
         <source>id_all_networks</source>
-        <translation>All networks</translation>
+        <translation>Tutti i network</translation>
     </message>
     <message>
         <source>id_all_of_the_accounts_in_your</source>
-        <translation>All of the accounts in your wallet need to be empty before deleting it.</translation>
+        <translation>Tutti gli account del tuo wallet devono essere vuoti prima di eliminarlo</translation>
     </message>
     <message>
         <source>id_all_the_coins_received_or</source>
-        <translation>All the coins received or created as change.</translation>
+        <translation>Tutte le coins ricevute o create come resto</translation>
     </message>
     <message>
         <source>id_all_wallets</source>
@@ -273,15 +273,15 @@ Se questi consigli non sono di aiuto, o non possiedi una recovery phrase da 12, 
     </message>
     <message>
         <source>id_amount_in_s</source>
-        <translation>Amount in %1</translation>
+        <translation>Ammontare in %1</translation>
     </message>
     <message>
         <source>id_amp_account</source>
-        <translation>AMP Account</translation>
+        <translation>Account AMP</translation>
     </message>
     <message>
         <source>id_amp_accounts_are_only_available</source>
-        <translation>AMP accounts are only available on Liquid wallets. You may be required to provide your account ID to issuers to receive an AMP Asset.</translation>
+        <translation>Gli account AMP sono disponibile solo su wallet Liquid. Potrebbe essere necessario fornire l&apos;ID del tuo account ad un emettitore per ricevere un asset AMP</translation>
     </message>
     <message>
         <source>id_amp_id</source>
@@ -289,11 +289,11 @@ Se questi consigli non sono di aiuto, o non possiedi una recovery phrase da 12, 
     </message>
     <message>
         <source>id_amp_wallet</source>
-        <translation>AMP Wallet</translation>
+        <translation>Wallet AMP</translation>
     </message>
     <message>
         <source>id_another_2fa_method_is_already</source>
-        <translation>Another 2FA method is already active. Confirm via 2FA that you authorize this change.</translation>
+        <translation>Un altro metodo 2FA è già attivo. Autorizza questo cambiamento con 2FA</translation>
     </message>
     <message>
         <source>id_app_settings</source>
@@ -301,15 +301,15 @@ Se questi consigli non sono di aiuto, o non possiedi una recovery phrase da 12, 
     </message>
     <message>
         <source>id_archive</source>
-        <translation>Archive</translation>
+        <translation>Archivia</translation>
     </message>
     <message>
         <source>id_archived</source>
-        <translation>Archived</translation>
+        <translation>Archiviato</translation>
     </message>
     <message>
         <source>id_archived_accounts</source>
-        <translation>Archived Accounts</translation>
+        <translation>Account archiviati</translation>
     </message>
     <message>
         <source>id_are_you_sure_you_want_to_view</source>
@@ -329,7 +329,7 @@ Se questi consigli non sono di aiuto, o non possiedi una recovery phrase da 12, 
     </message>
     <message>
         <source>id_asset_icons_are_missing_try</source>
-        <translation>Asset icons are missing, try reloading them.</translation>
+        <translation>Le icone degli asset non sono disponibili, prova a ricaricarle.</translation>
     </message>
     <message>
         <source>id_asset_id</source>
@@ -345,7 +345,7 @@ Se questi consigli non sono di aiuto, o non possiedi una recovery phrase da 12, 
     </message>
     <message>
         <source>id_assets_cannot_be_used_on_bitcoin</source>
-        <translation>Assets cannot be used on Bitcoin</translation>
+        <translation>Altri assets non possono essere usati su Bitcoin</translation>
     </message>
     <message>
         <source>id_attempts_remaining_d</source>
@@ -357,11 +357,11 @@ Se questi consigli non sono di aiuto, o non possiedi una recovery phrase da 12, 
     </message>
     <message>
         <source>id_authentication_error_s</source>
-        <translation>Authentication error: %1</translation>
+        <translation>Errore di autenticazione: %1</translation>
     </message>
     <message>
         <source>id_authentication_failed</source>
-        <translation>Authentication failed</translation>
+        <translation>Autenticazione fallita</translation>
     </message>
     <message>
         <source>id_authenticator_app</source>
@@ -381,7 +381,7 @@ Se questi consigli non sono di aiuto, o non possiedi una recovery phrase da 12, 
     </message>
     <message>
         <source>id_auto_logout_timeout_expired</source>
-        <translation>Auto logout timeout expired</translation>
+        <translation>Timeout per inattività</translation>
     </message>
     <message>
         <source>id_autolock_after</source>
@@ -389,7 +389,7 @@ Se questi consigli non sono di aiuto, o non possiedi una recovery phrase da 12, 
     </message>
     <message>
         <source>id_available</source>
-        <translation>Available</translation>
+        <translation>Disponibile</translation>
     </message>
     <message>
         <source>id_back</source>
@@ -417,11 +417,11 @@ Se questi consigli non sono di aiuto, o non possiedi una recovery phrase da 12, 
     </message>
     <message>
         <source>id_biometric_login_is_disabled</source>
-        <translation>Biometric Login is Disabled</translation>
+        <translation>Login biometrico disabilitato</translation>
     </message>
     <message>
         <source>id_biometric_login_is_enabled</source>
-        <translation>Biometric Login is Enabled</translation>
+        <translation>Login biometrico abilitato</translation>
     </message>
     <message>
         <source>id_biometrics_authentication</source>
@@ -450,6 +450,10 @@ Se questi consigli non sono di aiuto, o non possiedi una recovery phrase da 12, 
     <message>
         <source>id_bitcoin_is_the_worlds_leading</source>
         <translation>Bitcoin è la più famosa rete P2P per crittovaluta. Seleziona per inviare e ricevere bitcoin.</translation>
+    </message>
+    <message>
+        <source>id_bitcoin_testnet_and_liquid</source>
+        <translation>Bitcoin Testnet and Liquid Testnet</translation>
     </message>
     <message>
         <source>id_bitcoin_wallet</source>
@@ -726,7 +730,7 @@ Facile e Sicuro</translation>
     </message>
     <message>
         <source>id_confirm_transaction_details_on</source>
-        <translation>Conferma i dettagli di transazione sul tuo hardware wallet</translation>
+        <translation>Confirm transaction details on your hardware wallet</translation>
     </message>
     <message>
         <source>id_confirm_update_on_your_jade</source>
@@ -958,7 +962,7 @@ Facile e Sicuro</translation>
     </message>
     <message>
         <source>id_d_coins_selected</source>
-        <translation>%1 coins selected</translation>
+        <translation>(%1 coins selected)</translation>
     </message>
     <message>
         <source>id_d_words</source>
@@ -1582,6 +1586,10 @@ Recovery Phrase</translation>
         <translation>Tieni il tag NFC vicino al dispositivo</translation>
     </message>
     <message>
+        <source>id_home</source>
+        <translation>Home</translation>
+    </message>
+    <message>
         <source>id_hour</source>
         <translation>ora</translation>
     </message>
@@ -2026,6 +2034,10 @@ Recovery Phrase</translation>
         <translation>Guarda la disposizione dei numeri sul dispositivo</translation>
     </message>
     <message>
+        <source>id_looking_for_wallets</source>
+        <translation>Looking for wallets…</translation>
+    </message>
+    <message>
         <source>id_looks_like_you_havent_used_a</source>
         <translation>Looks like you haven&apos;t used a wallet yet. Try creating a new one.</translation>
     </message>
@@ -2247,7 +2259,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_no_coins_selected</source>
-        <translation>No coins selected</translation>
+        <translation>(No coins selected)</translation>
     </message>
     <message>
         <source>id_no_device_connected</source>

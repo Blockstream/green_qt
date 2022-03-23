@@ -93,7 +93,7 @@
     </message>
     <message>
         <source>id_a_newer_version_of_blockstream</source>
-        <translation>A newer version of Blockstream Green is now available</translation>
+        <translation>Доступна новая версия Blockstream Green</translation>
     </message>
     <message>
         <source>id_a_screen_lock_must_be_enabled</source>
@@ -133,7 +133,7 @@
     </message>
     <message>
         <source>id_accounts</source>
-        <translation>Accounts</translation>
+        <translation>Аккаунты</translation>
     </message>
     <message>
         <source>id_accounts_summary</source>
@@ -145,7 +145,7 @@
     </message>
     <message>
         <source>id_actions</source>
-        <translation>Actions</translation>
+        <translation>Действия</translation>
     </message>
     <message>
         <source>id_add_a_note_only_you_can_see_it</source>
@@ -213,7 +213,7 @@
     </message>
     <message>
         <source>id_address_was_filled_by_a_payment</source>
-        <translation>Address was filled by a Payment URI</translation>
+        <translation>Адрес был заполнен платежным URI</translation>
     </message>
     <message>
         <source>id_addresses</source>
@@ -237,15 +237,15 @@
     </message>
     <message>
         <source>id_all_assets</source>
-        <translation>All Assets</translation>
+        <translation>Все активы</translation>
     </message>
     <message>
         <source>id_all_coins</source>
-        <translation>All coins</translation>
+        <translation>(All coins)</translation>
     </message>
     <message>
         <source>id_all_networks</source>
-        <translation>All networks</translation>
+        <translation>Все сети</translation>
     </message>
     <message>
         <source>id_all_of_the_accounts_in_your</source>
@@ -289,7 +289,7 @@
     </message>
     <message>
         <source>id_amp_wallet</source>
-        <translation>AMP Wallet</translation>
+        <translation>AMP-кошелек</translation>
     </message>
     <message>
         <source>id_another_2fa_method_is_already</source>
@@ -301,15 +301,15 @@
     </message>
     <message>
         <source>id_archive</source>
-        <translation>Archive</translation>
+        <translation>Архив</translation>
     </message>
     <message>
         <source>id_archived</source>
-        <translation>Archived</translation>
+        <translation>Архивировано</translation>
     </message>
     <message>
         <source>id_archived_accounts</source>
-        <translation>Archived Accounts</translation>
+        <translation>Архивные аккаунты</translation>
     </message>
     <message>
         <source>id_are_you_sure_you_want_to_view</source>
@@ -345,7 +345,7 @@
     </message>
     <message>
         <source>id_assets_cannot_be_used_on_bitcoin</source>
-        <translation>Assets cannot be used on Bitcoin</translation>
+        <translation>Активы нельзя использовать в Bitcoin</translation>
     </message>
     <message>
         <source>id_attempts_remaining_d</source>
@@ -357,11 +357,11 @@
     </message>
     <message>
         <source>id_authentication_error_s</source>
-        <translation>Authentication error: %1</translation>
+        <translation>Ошибка аутентификации: %1</translation>
     </message>
     <message>
         <source>id_authentication_failed</source>
-        <translation>Authentication failed</translation>
+        <translation>Аутентификация не удалась</translation>
     </message>
     <message>
         <source>id_authenticator_app</source>
@@ -381,7 +381,7 @@
     </message>
     <message>
         <source>id_auto_logout_timeout_expired</source>
-        <translation>Auto logout timeout expired</translation>
+        <translation>Время ожидания автоматического выхода истекло</translation>
     </message>
     <message>
         <source>id_autolock_after</source>
@@ -389,7 +389,7 @@
     </message>
     <message>
         <source>id_available</source>
-        <translation>Available</translation>
+        <translation>Доступный</translation>
     </message>
     <message>
         <source>id_back</source>
@@ -425,7 +425,7 @@
     </message>
     <message>
         <source>id_biometrics_authentication</source>
-        <translation>Biometrics Authentication</translation>
+        <translation>Биометрическая аутентификация</translation>
     </message>
     <message>
         <source>id_bip49_accounts_allow_you_to</source>
@@ -437,7 +437,7 @@
     </message>
     <message>
         <source>id_bitcoin_and_liquid</source>
-        <translation>Bitcoin and Liquid</translation>
+        <translation>Bitcoin и Liquid</translation>
     </message>
     <message>
         <source>id_bitcoin_denomination</source>
@@ -450,6 +450,10 @@
     <message>
         <source>id_bitcoin_is_the_worlds_leading</source>
         <translation>Bitcoin - ведущая в мире сеть криптовалют P2P. Выберите, чтобы отправлять и получать биткоины.</translation>
+    </message>
+    <message>
+        <source>id_bitcoin_testnet_and_liquid</source>
+        <translation>Bitcoin Testnet and Liquid Testnet</translation>
     </message>
     <message>
         <source>id_bitcoin_wallet</source>
@@ -481,7 +485,7 @@
     </message>
     <message>
         <source>id_blockstream_devices</source>
-        <translation>Blockstream Devices</translation>
+        <translation>Blockstream-устройства</translation>
     </message>
     <message>
         <source>id_blockstream_does_not_have</source>
@@ -570,7 +574,7 @@
     </message>
     <message>
         <source>id_check_for_updates</source>
-        <translation>Check for updates</translation>
+        <translation>Проверить наличие обновлений</translation>
     </message>
     <message>
         <source>id_check_for_updates_on_startup</source>
@@ -666,7 +670,7 @@
     </message>
     <message>
         <source>id_coins_received_or_created</source>
-        <translation>Coins received or created before SegWit was activated.</translation>
+        <translation>Монеты, полученные или созданные до активации SegWit.</translation>
     </message>
     <message>
         <source>id_coins_unlocked</source>
@@ -726,7 +730,7 @@
     </message>
     <message>
         <source>id_confirm_transaction_details_on</source>
-        <translation>Подтвердите детали транзакции на вашем аппаратном кошельке</translation>
+        <translation>Confirm transaction details on your hardware wallet</translation>
     </message>
     <message>
         <source>id_confirm_update_on_your_jade</source>
@@ -958,11 +962,11 @@
     </message>
     <message>
         <source>id_d_coins_selected</source>
-        <translation>%1 coins selected</translation>
+        <translation>(%1 coins selected)</translation>
     </message>
     <message>
         <source>id_d_words</source>
-        <translation>%1 words</translation>
+        <translation>%1 слов</translation>
     </message>
     <message>
         <source>id_data_directory</source>
@@ -1022,7 +1026,7 @@
     </message>
     <message>
         <source>id_details</source>
-        <translation>Details</translation>
+        <translation>Детали</translation>
     </message>
     <message>
         <source>id_device</source>
@@ -1178,7 +1182,7 @@
     </message>
     <message>
         <source>id_enable_testnet_in_app_settings</source>
-        <translation>Enable testnet in app settings to use Jade</translation>
+        <translation>Включите тестнет в настройках приложения, чтобы использовать Jade</translation>
     </message>
     <message>
         <source>id_enable_touch_id</source>
@@ -1582,6 +1586,10 @@
         <translation>Держите NFC-тег рядом с вашим устройством</translation>
     </message>
     <message>
+        <source>id_home</source>
+        <translation>Home</translation>
+    </message>
+    <message>
         <source>id_hour</source>
         <translation>час</translation>
     </message>
@@ -1719,7 +1727,7 @@
     </message>
     <message>
         <source>id_invalid_asset_id</source>
-        <translation>Invalid Asset ID</translation>
+        <translation>Недопустимый ID актива</translation>
     </message>
     <message>
         <source>id_invalid_clipboard_contents</source>
@@ -1727,7 +1735,7 @@
     </message>
     <message>
         <source>id_invalid_merkle_proof</source>
-        <translation>Invalid Merkle proof</translation>
+        <translation>Недействительное доказательство Меркла</translation>
     </message>
     <message>
         <source>id_invalid_mnemonic</source>
@@ -1823,7 +1831,7 @@
     </message>
     <message>
         <source>id_jade_was_initialized_for_testnet</source>
-        <translation>Jade was initialized for testnet</translation>
+        <translation>Jade был инициализирован для тестнета</translation>
     </message>
     <message>
         <source>id_just_a_few_more_steps_to_get</source>
@@ -1851,7 +1859,7 @@
     </message>
     <message>
         <source>id_latest_transactions</source>
-        <translation>Latest transactions</translation>
+        <translation>Последние транзакции</translation>
     </message>
     <message>
         <source>id_lbtc_has_no_issuer_and_is</source>
@@ -1903,7 +1911,7 @@
     </message>
     <message>
         <source>id_liquid_testnet_electrum_server</source>
-        <translation>Liquid Testnet Electrum server</translation>
+        <translation>Electrum-сервер в Liquid Testnet</translation>
     </message>
     <message>
         <source>id_liquid_testnet_wallets</source>
@@ -1911,7 +1919,7 @@
     </message>
     <message>
         <source>id_liquid_wallet</source>
-        <translation>Liquid Wallet</translation>
+        <translation>Liquid-кошелек</translation>
     </message>
     <message>
         <source>id_liquid_wallets</source>
@@ -2026,6 +2034,10 @@
         <translation>Посмотрите расположение чисел на устройстве</translation>
     </message>
     <message>
+        <source>id_looking_for_wallets</source>
+        <translation>Looking for wallets…</translation>
+    </message>
+    <message>
         <source>id_looks_like_you_havent_used_a</source>
         <translation>Похоже, вы еще не использовали кошелек. Попробуйте создать новый.</translation>
     </message>
@@ -2063,7 +2075,7 @@
     </message>
     <message>
         <source>id_manual_coin_selection</source>
-        <translation>Manual coin selection</translation>
+        <translation>Ручной выбор монет</translation>
     </message>
     <message>
         <source>id_medium</source>
@@ -2127,7 +2139,7 @@
     </message>
     <message>
         <source>id_multi_server_validation</source>
-        <translation>Multi Server Validation</translation>
+        <translation>Мультисерверная валидация</translation>
     </message>
     <message>
         <source>id_multiple_assets</source>
@@ -2167,7 +2179,7 @@
     </message>
     <message>
         <source>id_networks</source>
-        <translation>Networks</translation>
+        <translation>Сети</translation>
     </message>
     <message>
         <source>id_new_account_created</source>
@@ -2239,7 +2251,7 @@
     </message>
     <message>
         <source>id_no_asset_in_this_account</source>
-        <translation>No asset in this account</translation>
+        <translation>На этом аккаунте нет активов</translation>
     </message>
     <message>
         <source>id_no_attempts_remaining</source>
@@ -2247,7 +2259,7 @@
     </message>
     <message>
         <source>id_no_coins_selected</source>
-        <translation>No coins selected</translation>
+        <translation>(No coins selected)</translation>
     </message>
     <message>
         <source>id_no_device_connected</source>
@@ -2315,7 +2327,7 @@
     </message>
     <message>
         <source>id_not_available_noradio_build</source>
-        <translation>Not available (No-radio build)</translation>
+        <translation>Недоступно (сборка без радио)</translation>
     </message>
     <message>
         <source>id_not_confidential</source>
@@ -2331,7 +2343,7 @@
     </message>
     <message>
         <source>id_not_on_longest_chain</source>
-        <translation>Not on longest chain</translation>
+        <translation>Не на самой длинной цепочке</translation>
     </message>
     <message>
         <source>id_notifications</source>
@@ -2463,7 +2475,7 @@
     </message>
     <message>
         <source>id_personal_electrum_server</source>
-        <translation>Personal Electrum Server</translation>
+        <translation>Персональный Electrum-сервер</translation>
     </message>
     <message>
         <source>id_pgp_key</source>
@@ -2591,7 +2603,7 @@
     </message>
     <message>
         <source>id_private_key</source>
-        <translation>Private Key</translation>
+        <translation>Закрытый ключ</translation>
     </message>
     <message>
         <source>id_problem_with_key_1s</source>
@@ -2631,7 +2643,7 @@
     </message>
     <message>
         <source>id_read_more</source>
-        <translation>Read more</translation>
+        <translation>Подробнее</translation>
     </message>
     <message>
         <source>id_read_more_at_our_s</source>
@@ -2639,7 +2651,7 @@
     </message>
     <message>
         <source>id_ready</source>
-        <translation>Ready</translation>
+        <translation>Готовый</translation>
     </message>
     <message>
         <source>id_ready_to_start</source>
@@ -2755,7 +2767,7 @@
     </message>
     <message>
         <source>id_rename</source>
-        <translation>Rename</translation>
+        <translation>Переименовать</translation>
     </message>
     <message>
         <source>id_rename_account</source>
@@ -2979,7 +2991,7 @@
     </message>
     <message>
         <source>id_send_all</source>
-        <translation>Send all</translation>
+        <translation>Отправить все</translation>
     </message>
     <message>
         <source>id_send_all_funds</source>
@@ -3143,11 +3155,11 @@
     </message>
     <message>
         <source>id_show_advanced_options</source>
-        <translation>Show advanced options</translation>
+        <translation>Показать дополнительные параметры</translation>
     </message>
     <message>
         <source>id_show_all</source>
-        <translation>Show all</translation>
+        <translation>Показать все</translation>
     </message>
     <message>
         <source>id_show_all_assets</source>
@@ -3372,7 +3384,7 @@
     </message>
     <message>
         <source>id_testnet_and_liquid_testnet</source>
-        <translation>Testnet and Liquid Testnet</translation>
+        <translation>Testnet и Liquid Testnet</translation>
     </message>
     <message>
         <source>id_testnet_electrum_server</source>
@@ -3520,7 +3532,7 @@
     </message>
     <message>
         <source>id_too_many_pin_attempts</source>
-        <translation>Too many PIN attempts</translation>
+        <translation>Слишком много попыток PIN-кода</translation>
     </message>
     <message>
         <source>id_tor</source>
@@ -3656,7 +3668,7 @@
     </message>
     <message>
         <source>id_unarchive</source>
-        <translation>Unarchive</translation>
+        <translation>Разархивировать</translation>
     </message>
     <message>
         <source>id_unblinding_data</source>
@@ -3704,7 +3716,7 @@
     </message>
     <message>
         <source>id_unstable_internet_connection</source>
-        <translation>Unstable internet connection</translation>
+        <translation>Нестабильное интернет-соединение</translation>
     </message>
     <message>
         <source>id_update</source>
@@ -3732,7 +3744,7 @@
     </message>
     <message>
         <source>id_use_all_available_coins</source>
-        <translation>Use all available coins</translation>
+        <translation>Используйте все доступные монеты</translation>
     </message>
     <message>
         <source>id_use_an_existing_recovery_phrase</source>
@@ -3772,7 +3784,7 @@
     </message>
     <message>
         <source>id_verify</source>
-        <translation>Verify</translation>
+        <translation>Проверить</translation>
     </message>
     <message>
         <source>id_verify_on_device</source>
@@ -3780,7 +3792,7 @@
     </message>
     <message>
         <source>id_verify_your_bitcoin</source>
-        <translation>Verify your bitcoin transactions are included on the blockchain</translation>
+        <translation>Убедитесь, что ваши биткоин-транзакции включены в блокчейн</translation>
     </message>
     <message>
         <source>id_verify_your_pin</source>
@@ -3804,7 +3816,7 @@
     </message>
     <message>
         <source>id_view_archived_accounts_d</source>
-        <translation>View archived accounts (%1)</translation>
+        <translation>Просмотр архивных аккаунтов (%1)</translation>
     </message>
     <message>
         <source>id_view_in_explorer</source>
@@ -3812,7 +3824,7 @@
     </message>
     <message>
         <source>id_view_more</source>
-        <translation>View More</translation>
+        <translation>Посмотреть больше</translation>
     </message>
     <message>
         <source>id_visit_s_for_further_information</source>
@@ -3828,11 +3840,11 @@
     </message>
     <message>
         <source>id_wallet</source>
-        <translation>Wallet</translation>
+        <translation>Кошелек</translation>
     </message>
     <message>
         <source>id_wallet_already_restored</source>
-        <translation>Wallet already restored</translation>
+        <translation>Кошелек уже восстановлен</translation>
     </message>
     <message>
         <source>id_wallet_backup</source>
@@ -3848,7 +3860,7 @@
     </message>
     <message>
         <source>id_wallet_found</source>
-        <translation>Wallet found</translation>
+        <translation>Кошелек найден</translation>
     </message>
     <message>
         <source>id_wallet_name</source>
@@ -3856,7 +3868,7 @@
     </message>
     <message>
         <source>id_wallet_not_found</source>
-        <translation>Wallet not found</translation>
+        <translation>Кошелек не найден</translation>
     </message>
     <message>
         <source>id_wallets</source>
@@ -4012,7 +4024,7 @@
     </message>
     <message>
         <source>id_you_have_clicked_a_payment_uri</source>
-        <translation>You have clicked a Payment URI, select a wallet to handle it</translation>
+        <translation>Вы нажали платежный URI, выберите кошелек для его обработки</translation>
     </message>
     <message>
         <source>id_you_have_control_on_your_funds</source>
@@ -4032,7 +4044,7 @@
     </message>
     <message>
         <source>id_you_have_to_authenticate_using</source>
-        <translation>You have to Authenticate using biometrics</translation>
+        <translation>Вы должны пройти аутентификацию с помощью биометрии</translation>
     </message>
     <message>
         <source>id_you_have_tor_enabled_are_you</source>
@@ -4056,7 +4068,7 @@
     </message>
     <message>
         <source>id_you_will_see_your_coins_here</source>
-        <translation>You will see your coins here</translation>
+        <translation>Здесь вы увидите свои монеты</translation>
     </message>
     <message>
         <source>id_youll_need_to_back_up_your</source>
@@ -4080,7 +4092,7 @@
     </message>
     <message>
         <source>id_your_device_was_disconnected</source>
-        <translation>Your device was disconnected</translation>
+        <translation>Ваше устройство было отключено</translation>
     </message>
     <message>
         <source>id_your_favourite_exchange_rate_is</source>
