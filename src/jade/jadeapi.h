@@ -72,6 +72,7 @@ public:
     // Get (receive) green address
     int getReceiveAddress(const QString &network, quint32 subaccount, quint32 branch, quint32 pointer,
                           const QString &recoveryxpub, quint32 csvBlocks, const ResponseHandler &cb);
+    int getReceiveAddress(const QString &network, const QString &variant, const QVector<quint32> &path, const ResponseHandler &cb);
 
     // Get xpub given path
     int getXpub(const QString &network, const QVector<quint32> &path, const ResponseHandler &cb);

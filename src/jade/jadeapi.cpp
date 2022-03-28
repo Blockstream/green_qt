@@ -403,6 +403,19 @@ int JadeAPI::getReceiveAddress(const QString &network, const quint32 subaccount,
     return id;
 }
 
+// Get (receive) green address
+int JadeAPI::getReceiveAddress(const QString& network, const QString& variant, const QVector<quint32>& path, const ResponseHandler &cb)
+{
+    const int id = registerResponseHandler(cb);
+    const QCborMap params = { {"network", network},
+                              {"variant", variant},
+                              {"path", convertPath(path) },
+                            };
+    const QCborMap request = getRequest(id, "get_receive_address", params);
+    sendToJade(request);
+    return id;
+}
+
 // Get xpub given path
 int JadeAPI::getXpub(const QString &network, const QVector<quint32> &path, const ResponseHandler &cb)
 {
