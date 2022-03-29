@@ -12,6 +12,7 @@ GFlickable {
     clip: true
     contentHeight: layout.height
     implicitWidth: layout.implicitWidth
+    implicitHeight: repeater.count > 1 ? Math.min(500, layout.height) : layout.height
 
     ColumnLayout {
         id: layout
@@ -27,6 +28,7 @@ GFlickable {
             text: qsTrId('id_confirm_transaction_details_on')
         }
         Repeater {
+            id: repeater
             model: outputs
             delegate: Page {
                 Layout.fillWidth: true
