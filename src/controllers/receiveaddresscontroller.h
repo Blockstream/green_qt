@@ -48,6 +48,9 @@ signals:
     void changed();
     void generatingChanged(bool generating);
     void addressVerificationChanged(AddressVerification address_verification);
+private:
+    void verifyMultisig();
+    void verifySinglesig();
 public:
     Account* m_account{nullptr};
     QString m_amount;

@@ -26,6 +26,7 @@ public:
     QString key() const { return m_key; }
     QString displayName() const { return m_display_name; }
     QString id() const { return m_id; }
+    QString canonicalId() const { return m_canonical_id; }
     QString name() const { return m_name; }
     QString policyAsset() const;
     QString explorerUrl() const;
@@ -38,6 +39,7 @@ public:
 private:
     const QJsonObject m_data;
     const QString m_id;
+    const QString m_canonical_id;
     const QString m_key;
     const QString m_display_name;
     const QString m_name;

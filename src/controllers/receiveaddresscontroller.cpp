@@ -136,6 +136,17 @@ void ReceiveAddressController::generate()
 
 void ReceiveAddressController::verify()
 {
+    auto device = qobject_cast<JadeDevice*>(m_account->wallet()->device());
+    Q_ASSERT(device);
+    const auto network = m_account->wallet()->network();
+    if (network->isElectrum()) {
+        verifySinglesig();
+    } else {
+        verifyMultisig();
+    }
+}
+
+void ReceiveAddressController::verifyMultisig() {
     Q_ASSERT(!m_generating);
     Q_ASSERT(m_address_verification != VerificationPending);
     setAddressVerification(VerificationPending);
@@ -173,7 +184,28 @@ void ReceiveAddressController::verify()
         wally_free_string(base58);
     }
 
-    device->api()->getReceiveAddress(m_account->wallet()->network()->id(), subaccount, branch, pointer, recovery_xpub, subtype, [this](const QVariantMap& msg) {
+    device->api()->getReceiveAddress(m_account->wallet()->network()->canonicalId(), subaccount, branch, pointer, recovery_xpub, subtype, [this](const QVariantMap& msg) {
+        qDebug() << "jade: verify result" << msg;
+        setAddressVerification(msg.contains("error") ? VerificationRejected : VerificationAccepted);
+    });
+}
+
+void ReceiveAddressController::verifySinglesig()
+{
+    Q_ASSERT(!m_generating);
+    Q_ASSERT(m_address_verification != VerificationPending);
+    setAddressVerification(VerificationPending);
+    auto device = qobject_cast<JadeDevice*>(m_account->wallet()->device());
+    Q_ASSERT(device);
+    const auto type = m_account->type();
+    const auto path = ParsePath(m_result.value("user_path"));
+
+    QString variant;
+    if (type == "p2pkh") variant = "pkh(k)";
+    if (type == "p2wpkh") variant = "wpkh(k)";
+    if (type == "p2sh-p2wpkh") variant = "sh(wpkh(k))";
+
+    device->api()->getReceiveAddress(m_account->wallet()->network()->canonicalId(), variant, path, [this](const QVariantMap& msg) {
         setAddressVerification(msg.contains("error") ? VerificationRejected : VerificationAccepted);
     });
 }

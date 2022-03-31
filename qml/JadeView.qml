@@ -240,6 +240,12 @@ MainPage {
                     sourceSize.width: 24
                     sourceSize.height: 24
                 }
+                Image {
+                    fillMode: Image.PreserveAspectFit
+                    sourceSize.height: 24
+                    sourceSize.width: 24
+                    source: self.network.electrum ? 'qrc:/svg/key.svg' : 'qrc:/svg/multi-sig.svg'
+                }
                 Label {
                     Layout.fillWidth: true
                     text: self.network.displayName
@@ -432,7 +438,7 @@ MainPage {
                     font.styleName: 'Medium'
                     color: 'black'
                     font.pixelSize: 10
-                    text: qaTrId('id_jade_was_initialized_for_testnet') + '\n' + qsTrId('id_enable_testnet_in_app_settings')
+                    text: qsTrId('id_jade_was_initialized_for_testnet') + '\n' + qsTrId('id_enable_testnet_in_app_settings')
                 }
                 Repeater {
                     model: {
@@ -441,10 +447,12 @@ MainPage {
                         const networks = []
                         if (nets === 'ALL' || nets === 'MAIN') {
                             networks.push('mainnet')
+                            networks.push('electrum-mainnet')
                             networks.push('liquid')
                         }
                         if (Settings.enableTestnet && (nets === 'ALL' || nets === 'TEST')) {
                             networks.push('testnet')
+                            networks.push('electrum-testnet')
                             networks.push('testnet-liquid')
                         }
                         return networks

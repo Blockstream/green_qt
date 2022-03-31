@@ -147,7 +147,9 @@ void JadeLoginController::unlock()
 
     qDebug() << "unlocking";
 
-    m_device->api()->authUser(m_network, [=](const QVariantMap& msg) {
+    auto network = NetworkManager::instance()->network(m_network);
+
+    m_device->api()->authUser(network->canonicalId(), [=](const QVariantMap& msg) {
         Q_ASSERT(msg.contains("result"));
         if (msg["result"] == true) {
             m_device->updateVersionInfo();

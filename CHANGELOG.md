@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Singlesig wallet with Jade
 
 ### Changed
 - Updates GDK to 0.0.51

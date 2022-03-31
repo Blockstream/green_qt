@@ -16,7 +16,7 @@ public:
     {}
     void fetch() override
     {
-        m_device->api()->getXpub(m_network->id(), m_path, [this](const QVariantMap& msg) {
+        m_device->api()->getXpub(m_network->canonicalId(), m_path, [this](const QVariantMap& msg) {
             if (msg.contains("error")) return fail();
             Q_ASSERT(msg.contains("result") && msg["result"].type() == QVariant::String);
             m_public_key = msg["result"].toString().toLocal8Bit();
@@ -146,11 +146,20 @@ public:
             if (is_change) {
                 const auto path = ParsePath(output.value("user_path"));
                 const auto recovery_xpub = output.value("recovery_xpub").toString();
-                const auto csv_blocks = output.value("address_type").toString() == "csv" ? output.value("subtype").toInt() : 0;
+                const auto type = output.value("address_type").toString();
+                const auto csv_blocks = type == "csv" ? output.value("subtype").toInt() : 0;
+
+                QString variant;
+                if (type == "p2pkh") variant = "pkh(k)";
+                if (type == "p2wpkh") variant = "wpkh(k)";
+                if (type == "p2sh-p2wpkh") variant = "sh(wpkh(k))";
+                Q_ASSERT(!variant.isEmpty());
+
                 const QVariantMap data = {
                     { "path", path },
                     { "recovery_xpub", recovery_xpub },
                     { "csv_blocks", csv_blocks },
+                    { "variant", variant },
                 };
                 change.append(data);
             } else {
@@ -158,7 +167,7 @@ public:
             }
         }
 
-        m_device->api()->signTx(m_network->id(), txn, inputs, change, [this](const QVariantMap& result) {
+        m_device->api()->signTx(m_network->canonicalId(), txn, inputs, change, [this](const QVariantMap& result) {
             if (result.contains("result")) {
                 for (const auto& s : result["result"].toMap()["signatures"].toList()) {
                     m_signatures.append(s.toByteArray());
@@ -404,7 +413,7 @@ public:
     void sign()
     {
         const auto tx = ParseByteArray(m_transaction.value("transaction"));
-        m_device->api()->signLiquidTx(m_network->id(), tx, m_inputs, m_trusted_commitments, m_change, [this](const QVariantMap& msg) {
+        m_device->api()->signLiquidTx(m_network->canonicalId(), tx, m_inputs, m_trusted_commitments, m_change, [this](const QVariantMap& msg) {
             if (handleError(msg)) return;
             progress()->incrementValue();
             Q_ASSERT(msg.contains("result"));
