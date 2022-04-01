@@ -114,7 +114,6 @@
         <file>Wallet2faSettingsView.qml</file>
         <file>LedgerLoginDialog.qml</file>
         <file>SelectServerTypeView.qml</file>
-        <file>TorUnavailableWithElectrumWarning.qml</file>
         <file>GTextField.qml</file>
         <file>AmountValidator.qml</file>
         <file>GTextArea.qml</file>

@@ -55,9 +55,6 @@ AbstractDialog {
     }
 
     footer: DialogFooter {
-        TorUnavailableWithElectrumWarning {
-            network: controller.network
-        }
         GButton {
             action: stack_layout.currentItem ? stack_layout.currentItem.backAction || null : null
             large: true

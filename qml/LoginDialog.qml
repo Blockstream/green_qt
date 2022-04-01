@@ -182,10 +182,6 @@ AbstractDialog {
                     }
                     wrapMode: Text.WordWrap
                 }
-                TorUnavailableWithElectrumWarning {
-                    Layout.alignment: Qt.AlignHCenter
-                    network: self.wallet.network
-                }
                 GButton {
                     Layout.alignment: Qt.AlignHCenter
                     highlighted: true

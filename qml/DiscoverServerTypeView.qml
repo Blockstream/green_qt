@@ -62,7 +62,7 @@ Page {
             mnemonic: navigation.param.mnemonic.split(',')
             password: navigation.param.password || ''
             pin: navigation.param.pin || ''
-            active: self.visible && (server_type !== 'electrum' || !Settings.useTor)
+            active: self.visible
         }
 
         Layout.alignment: Qt.AlignTop
@@ -98,11 +98,6 @@ Page {
                 }
             }
             VSpacer {
-            }
-            TorUnavailableWithElectrumWarning {
-                Layout.alignment: Qt.AlignHCenter
-                network: controller.network
-                visible: active
             }
             Loader {
                 Layout.alignment: Qt.AlignCenter
@@ -161,7 +156,7 @@ Page {
                 }
                 GButton {
                     text: 'Restore anyway'
-                    visible: !controller.valid && advanced_checkbox.checked
+                    visible: !controller.valid && !controller.wallet && advanced_checkbox.checked
                     onClicked: navigation.controller = controller
                 }
                 GButton {

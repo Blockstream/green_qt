@@ -14,7 +14,7 @@ namespace {
         const QString user_agent = QString("green_qt_%1").arg(QT_STRINGIFY(VERSION));
         QJsonObject params{
             { "name", network->id() },
-            { "use_tor", network->isElectrum() ? false : session->useTor() },
+            { "use_tor", session->useTor() },
             { "user_agent", user_agent },
             { "spv_enabled", session->enableSPV() }
         };
