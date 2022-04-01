@@ -233,12 +233,16 @@ MainPage {
             spacing: constants.s1
             RowLayout {
                 Layout.fillWidth: false
-                Layout.minimumWidth: 200
+                Layout.minimumWidth: 300
                 spacing: constants.s1
                 Image {
                     source: icons[self.network.key]
                     sourceSize.width: 24
                     sourceSize.height: 24
+                }
+                Label {
+                    Layout.minimumWidth: 100
+                    text: self.network.displayName
                 }
                 Image {
                     fillMode: Image.PreserveAspectFit
@@ -248,7 +252,17 @@ MainPage {
                 }
                 Label {
                     Layout.fillWidth: true
-                    text: self.network.displayName
+                    text: self.network.electrum ? qsTrId('id_singlesig') : qsTrId('id_multisig_shield')
+                    ToolTip.delay: 300
+                    ToolTip.visible: mouse_area.containsMouse
+                    ToolTip.text: self.network.electrum
+                          ? qsTrId('id_your_funds_are_secured_by_a')
+                          : qsTrId('id_your_funds_are_secured_by')
+                    MouseArea {
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        id: mouse_area
+                    }
                 }
             }
             Label {
@@ -410,7 +424,7 @@ MainPage {
                         Label {
                             text: qsTrId('id_network')
                             color: constants.c300
-                            Layout.minimumWidth: 200
+                            Layout.minimumWidth: 300
                         }
                         Label {
                             Layout.fillWidth: true
