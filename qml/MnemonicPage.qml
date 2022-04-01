@@ -36,8 +36,8 @@ ColumnLayout {
             id: size_combobox
             Layout.minimumWidth: 120
             model: [
-                { value: 12, text: qsTrId('id_d_words').arg(value) },
-                { value: 24, text: qsTrId('id_d_words').arg(value) },
+                { value: 12, text: qsTrId('id_d_words').arg(12) },
+                { value: 24, text: qsTrId('id_d_words').arg(24) },
             ]
             textRole: 'text'
             valueRole: 'value'
