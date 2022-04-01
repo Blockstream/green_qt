@@ -96,6 +96,7 @@ void Transaction::updateFromData(const QJsonObject& data)
 
     // Amounts are one time set
     const auto satoshi = m_data.value("satoshi").toObject();
+    const bool is_outgoing = m_data.value("type").toString() == "outgoing";
     const int count = satoshi.keys().length();
 
     if (m_amounts.empty() && count > 0) {
@@ -107,7 +108,7 @@ void Transaction::updateFromData(const QJsonObject& data)
             for (auto i = satoshi.constBegin(); i != satoshi.constEnd(); ++i) {
                 qint64 amount = i.value().toDouble();
                 Asset* asset = wallet->getOrCreateAsset(i.key());
-                if (asset->id() == policy_asset) amount -= fee;
+                if (is_outgoing && asset->id() == policy_asset) amount -= fee;
                 if (amount > 0) m_amounts.append(new TransactionAmount(this, asset, amount));
             }
         } else {
