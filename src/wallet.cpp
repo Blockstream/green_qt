@@ -674,6 +674,28 @@ QString Wallet::getDisplayUnit(const QString& unit)
     return ComputeDisplayUnit(m_network, unit);
 }
 
+void Wallet::resetLoginAttempts()
+{
+    if (m_login_attempts_remaining < 3) {
+        m_login_attempts_remaining = 3;
+        emit loginAttemptsRemainingChanged(m_login_attempts_remaining);
+        save();
+    }
+}
+
+void Wallet::decrementLoginAttempts()
+{
+    Q_ASSERT(m_login_attempts_remaining > 0);
+    --m_login_attempts_remaining;
+    emit loginAttemptsRemainingChanged(m_login_attempts_remaining);
+    if (m_login_attempts_remaining == 0) {
+        m_pin_data.clear();
+        emit hasPinDataChanged();
+        m_session->setActive(false);
+    }
+    save();
+}
+
 void Wallet::setSettings(const QJsonObject& settings)
 {
     if (m_settings == settings) return;
@@ -832,11 +854,7 @@ void LoginWithPinController::update()
     auto handler = new LoginHandler(QJsonDocument::fromJson(m_wallet->m_pin_data).object(), QString::fromLocal8Bit(m_pin), m_session);
     handler->connect(handler, &Handler::done, this, [this, activity, handler] {
         handler->deleteLater();
-        if (m_wallet->m_login_attempts_remaining < 3) {
-            m_wallet->m_login_attempts_remaining = 3;
-            m_wallet->save();
-            emit m_wallet->loginAttemptsRemainingChanged(m_wallet->m_login_attempts_remaining);
-        }
+        m_wallet->resetLoginAttempts();
         m_wallet->updateHashId(handler->walletHashId());
         m_wallet->setAuthentication(Wallet::Authenticated);
         m_wallet->updateCurrencies();
@@ -850,12 +868,8 @@ void LoginWithPinController::update()
         handler->deleteLater();
         const auto error = handler->result().value("error").toString();
         if (error == "id_invalid_pin") {
-            Q_ASSERT(m_wallet->m_login_attempts_remaining > 0);
             m_wallet->setAuthentication(Wallet::Unauthenticated);
-            --m_wallet->m_login_attempts_remaining;
-            m_wallet->save();
-            emit m_wallet->loginAttemptsRemainingChanged(m_wallet->m_login_attempts_remaining);
-            if (m_wallet->m_login_attempts_remaining == 0) m_session->setActive(false);
+            m_wallet->decrementLoginAttempts();
         }
         if (error.contains("exception:reconnect required")) {
             m_wallet->setAuthentication(Wallet::Unauthenticated);

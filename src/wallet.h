@@ -132,6 +132,9 @@ public:
     void setBlockHeight(int block_height);
 
     Q_INVOKABLE QString getDisplayUnit(const QString& unit);
+
+    void resetLoginAttempts();
+    void decrementLoginAttempts();
 public slots:
     void disconnect();
     void reload(bool refresh_accounts = false);

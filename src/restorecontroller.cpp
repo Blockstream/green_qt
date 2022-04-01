@@ -82,12 +82,13 @@ void RestoreController::accept()
         handler->deleteLater();
         m_wallet->m_login_attempts_remaining = 3;
         m_wallet->m_pin_data = handler->pinData();
-        m_wallet->save();
-        if (m_type == "amp") {
-            Q_ASSERT(m_network->isLiquid());
-            m_wallet->setName(WalletManager::instance()->uniqueWalletName("My AMP Wallet"));
-        } else {
-            m_wallet->setName(WalletManager::instance()->newWalletName(m_network));
+        if (m_wallet->name().isEmpty()) {
+            if (m_type == "amp") {
+                Q_ASSERT(m_network->isLiquid());
+                m_wallet->setName(WalletManager::instance()->uniqueWalletName("My AMP Wallet"));
+            } else {
+                m_wallet->setName(WalletManager::instance()->newWalletName(m_network));
+            }
         }
 
         WalletManager::instance()->insertWallet(m_wallet);

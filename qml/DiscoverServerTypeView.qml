@@ -106,7 +106,7 @@ Page {
             }
             Loader {
                 Layout.alignment: Qt.AlignCenter
-                active: controller.wallet
+                active: controller.wallet && controller.wallet.hasPinData
                 visible: active
                 sourceComponent: ColumnLayout {
                     Layout.fillHeight: false
@@ -152,7 +152,7 @@ Page {
             }
             RowLayout {
                 Layout.fillHeight: false
-                visible: !controller.wallet && !controller.busy && controller.active
+                visible: (!controller.wallet || !controller.wallet.hasPinData) && !controller.busy && controller.active
                 Label {
                     visible: controller.valid
                     text: qsTrId('id_wallet_found')
@@ -161,11 +161,13 @@ Page {
                 }
                 GButton {
                     text: 'Restore anyway'
-                    visible: !controller.valid && advanced_checkbox.checked && controller.network.electrum
+                    visible: !controller.valid && advanced_checkbox.checked
                     onClicked: navigation.controller = controller
                 }
                 GButton {
-                    text: qsTrId('id_restore')
+                    text: controller.wallet && !controller.hasPinData
+                        ? qsTrId('id_create_a_pin_to_access_your')
+                        : qsTrId('id_restore')
                     visible: controller.valid
                     onClicked: navigation.controller = controller
                 }
