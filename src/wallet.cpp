@@ -247,7 +247,6 @@ void Wallet::reload(bool refresh_accounts)
     auto handler = new GetSubAccountsHandler(m_session, refresh_accounts);
     QObject::connect(handler, &Handler::done, this, [this, handler] {
         handler->deleteLater();
-        const bool create_segwit = m_network->isElectrum() && (m_restoring || m_device);
         bool has_segwit = false;
 
         m_accounts.clear();
@@ -259,7 +258,7 @@ void Wallet::reload(bool refresh_accounts)
             m_accounts.append(account);
         }
 
-        if (create_segwit && !has_segwit) {
+        if (m_network->isElectrum() && !has_segwit) {
             auto handler = new CreateAccountHandler({{ "name", "Segwit Account" }, { "type", "p2wpkh" }}, m_session);
             QObject::connect(handler, &Handler::done, this, [=] {
                 handler->deleteLater();
