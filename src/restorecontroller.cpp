@@ -61,9 +61,10 @@ void RestoreController::setActive(bool active)
 
 void RestoreController::accept()
 {
-    Q_ASSERT(!m_wallet);
-    m_wallet = WalletManager::instance()->restoreWallet(m_network, m_wallet_hash_id);
-    emit walletChanged(m_wallet);
+    if (!m_wallet) {
+        m_wallet = WalletManager::instance()->restoreWallet(m_network, m_wallet_hash_id);
+        emit walletChanged(m_wallet);
+    }
     m_wallet->setSession(m_session);
     m_wallet->setSession();
     m_session = nullptr;
@@ -79,7 +80,9 @@ void RestoreController::accept()
     auto handler = new SetPinHandler(m_pin.toLocal8Bit(), m_wallet->session());
     QObject::connect(handler, &Handler::done, this, [=] {
         handler->deleteLater();
+        m_wallet->m_login_attempts_remaining = 3;
         m_wallet->m_pin_data = handler->pinData();
+        m_wallet->save();
         if (m_type == "amp") {
             Q_ASSERT(m_network->isLiquid());
             m_wallet->setName(WalletManager::instance()->uniqueWalletName("My AMP Wallet"));
@@ -196,7 +199,7 @@ void RestoreController::update()
     if (m_wallet) {
         qDebug() << Q_FUNC_INFO << m_network->id() << m_wallet_hash_id << m_wallet->name();
         setBusy(false);
-        setValid(false);
+        setValid(!m_wallet->hasPinData());
         emit walletChanged(m_wallet);
         return;
     }
