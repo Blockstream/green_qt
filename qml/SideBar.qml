@@ -136,11 +136,17 @@ Pane {
         }
     }
 
-    component SideLabel: SectionLabel {
+    component SideLabel: Pane {
+        id: label
+        property string text
+        background: null
         topPadding: 16
         leftPadding: 4
         bottomPadding: 4
-        font.pixelSize: 10
-        font.styleName: 'Medium'
+        contentItem: SectionLabel {
+            font.pixelSize: 10
+            font.styleName: 'Medium'
+            text: Settings.collapseSideBar ? '' : label.text
+        }
     }
 }
