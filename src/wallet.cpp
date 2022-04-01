@@ -464,7 +464,7 @@ void Wallet::save()
     if (m_watch_only) {
         data.insert("username", m_username);
     }
-    if (!m_pin_data.isEmpty()) {
+    if (m_login_attempts_remaining > 0 || !m_pin_data.isEmpty() ) {
         data.insert("login_attempts_remaining", m_login_attempts_remaining);
         data.insert("pin_data", QString::fromLocal8Bit(m_pin_data.toBase64()));
     }

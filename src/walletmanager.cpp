@@ -26,23 +26,29 @@ WalletManager::WalletManager()
 
     QDirIterator it(GetDataDir("wallets"));
     while (it.hasNext()) {
-        QFile file(it.next());
-        if (!file.open(QFile::ReadOnly)) continue;
-        QJsonParseError parser_error;
-        auto doc = QJsonDocument::fromJson(file.readAll(), &parser_error);
-        if (parser_error.error != QJsonParseError::NoError) continue;
-        if (!doc.isObject()) continue;
-        auto data = doc.object();
+        QJsonObject data;
+        QString id;
+        {
+            QFile file(it.next());
+            if (!file.open(QFile::ReadOnly)) continue;
+            QJsonParseError parser_error;
+            auto doc = QJsonDocument::fromJson(file.readAll(), &parser_error);
+            if (parser_error.error != QJsonParseError::NoError) continue;
+            if (!doc.isObject()) continue;
+            data = doc.object();
+            id = QFileInfo(file).baseName();
+        }
         auto network = NetworkManager::instance()->network(data.value("network").toString());
         if (!network) continue;
         const auto hash_id = data.value("hash_id").toString();
         Wallet* wallet = new Wallet(network, hash_id, this);
         wallet->m_is_persisted = true;
-        wallet->m_id = QFileInfo(file).baseName();
+        wallet->m_name = data.value("name").toString();
+        wallet->m_id = id;
         if (data.contains("pin_data")) {
             wallet->m_pin_data = QByteArray::fromBase64(data.value("pin_data").toString().toLocal8Bit());
-            wallet->m_login_attempts_remaining = data.value("login_attempts_remaining").toInt();
         }
+        wallet->m_login_attempts_remaining = data.value("login_attempts_remaining").toInt();
         if (data.contains("username")) {
             wallet->m_watch_only = true;
             wallet->m_username = data.value("username").toString();
@@ -50,7 +56,12 @@ WalletManager::WalletManager()
         if (data.contains("device_details")) {
             wallet->m_device_details = data.value("device_details").toObject();
         }
-        wallet->m_name = data.value("name").toString();
+        if (wallet->m_login_attempts_remaining == 0) {
+            if (!wallet->m_pin_data.isEmpty()) {
+                wallet->m_pin_data.clear();
+                wallet->save();
+            }
+        }
         addWallet(wallet);
     }
 }
