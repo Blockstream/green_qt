@@ -228,11 +228,11 @@ QList<QPair<QJsonObject, QByteArray>> LedgerSignLiquidTransactionActivity::outpu
             res.append({{}, m_commitments.at(i).mid(64, 143)});
         }
 
-        if (output.contains("public_key")) {
+        if (output.contains("blinding_key")) {
             const auto eph_keypair_pub = ParseByteArray(output.value("eph_keypair_pub"));
-            const auto public_key = ParseByteArray(output.value("public_key"));
+            const auto blinding_key = ParseByteArray(output.value("blinding_key"));
             res.append({{}, eph_keypair_pub});
-            res.append({{}, public_key});
+            res.append({{}, blinding_key});
         } else {
             QByteArray nonce(1, 0);
             res.append({{}, nonce});

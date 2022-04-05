@@ -386,7 +386,7 @@ public:
         }
 
         const auto asset_id = ParseByteArray(output.value("asset_id"));
-        const auto blinding_key = ParseByteArray(output.value("public_key"));
+        const auto blinding_key = ParseByteArray(output.value("blinding_key"));
         const auto satoshi = ParseSatoshi(output.value("satoshi"));
 
         m_device->api()->getCommitments(asset_id, satoshi, m_hash_prev_outs, index, m_last_vbf, [this, index, blinding_key](const QVariantMap& msg) {
