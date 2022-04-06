@@ -43,9 +43,9 @@ TransactionAmount::~TransactionAmount()
 {
 }
 
-QString TransactionAmount::formatAmount(bool include_ticker) const
+QString TransactionAmount::formatAmount(bool include_ticker, bool ignore_transaction_type) const
 {
-    QString prefix = m_transaction->data().value("type").toString() != "incoming" ? "-" : "";
+    const QString prefix = !ignore_transaction_type && m_transaction->data().value("type").toString() != "incoming" ? "-" : "";
     if (m_asset) {
         return prefix + m_asset->formatAmount(m_amount, include_ticker);
     } else {

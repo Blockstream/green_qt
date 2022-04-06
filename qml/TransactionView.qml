@@ -87,14 +87,14 @@ WalletDialog {
                         asset: amount.asset
                     }
                     ColumnLayout {
-                        Label {
+                        CopyableLabel {
                             Layout.fillWidth: true
                             text: amount.asset.name
                             font.pixelSize: 14
                             elide: Label.ElideRight
                         }
 
-                        Label {
+                        CopyableLabel {
                             visible: 'entity' in amount.asset.data
                             Layout.fillWidth: true
                             opacity: 0.5
@@ -104,7 +104,7 @@ WalletDialog {
                     }
                     HSpacer {
                     }
-                    Label {
+                    CopyableLabel {
                         text: {
                             wallet.displayUnit
                             return amount.formatAmount(true)
@@ -128,17 +128,21 @@ WalletDialog {
                 radius: 4
             }
             contentItem: ColumnLayout {
-                spacing: constants.s0
+                spacing: constants.s1
                 SectionLabel {
                     visible: transaction.data.type === 'outgoing'
                     text: qsTrId('id_recipient')
                 }
-                Label {
+                CopyableLabel {
                     visible: transaction.data.type === 'outgoing'
                     text: transaction.data.addressees[0]
                 }
+                CopyableLabel {
+                    visible: transaction.data.type === 'incoming'
+                    text: transaction.data.outputs[0].address
+                }
                 RowLayout {
-                    spacing: constants.s0
+                    spacing: constants.s1
                     Image {
                         fillMode: Image.PreserveAspectFit
                         sourceSize.height: 24
@@ -153,11 +157,12 @@ WalletDialog {
                     }
                     HSpacer {
                     }
-                    Label {
+                    CopyableLabel {
                         text: {
                             wallet.displayUnit
-                            return amount.formatAmount(wallet.settings.unit)
+                            return amount.formatAmount(true)
                         }
+                        copyText: amount.formatAmount(true, true)
                         color: amount.transaction.data.type === 'incoming' ? '#00b45a' : 'white'
                         font.pixelSize: 16
                         font.styleName: 'Medium'
@@ -182,7 +187,6 @@ WalletDialog {
             id: layout
             width: flickable.availableWidth
             spacing: constants.s1
-
             GPane {
                 visible: !network.liquid && (transaction.data.type === 'redeposit' || transaction.data.type === 'outgoing')
                 enabled: confirmations === 0
@@ -228,17 +232,19 @@ WalletDialog {
                     HSpacer {
                     }
                     RowLayout {
-                        Label {
+                        CopyableLabel {
                             Layout.alignment: Qt.AlignRight
                             text: formatAmount(transaction.data.fee)
                         }
-                        Label {
+                        CopyableLabel {
                             Layout.alignment: Qt.AlignRight
                             text: `≈ ` + formatFiat(transaction.data.fee)
+                            copyText: formatFiat(transaction.data.fee)
                         }
-                        Label {
+                        CopyableLabel {
                             Layout.alignment: Qt.AlignRight
                             text: `(${transaction.data.fee_rate / 1000} satoshi/vbyte)`
+                            copyText: `${transaction.data.fee_rate / 1000} satoshi/vbyte`
                         }
                     }
                 }
@@ -310,18 +316,6 @@ WalletDialog {
 
                 CopyableLabel {
                     text: transaction.data.txhash
-                }
-            }
-
-            ColumnLayout {
-                spacing: constants.p0
-                visible: confirmations > 0
-                SectionLabel {
-                    text: qsTrId('id_confirmations')
-                }
-
-                CopyableLabel {
-                    text: confirmations
                 }
             }
 
