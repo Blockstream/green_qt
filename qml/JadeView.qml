@@ -208,6 +208,7 @@ MainPage {
 
     component NetworkSection: Pane {
         id: self
+        property bool comingSoon
         property Network network
         property JadeDevice device
         Layout.fillWidth: true
@@ -225,7 +226,7 @@ MainPage {
         topPadding: 8
         JadeLoginController {
             id: controller
-            device: self.device
+            device: comingSoon ? null : self.device
             network: self.network.id
             onInvalidPin: self.ToolTip.show(qsTrId('id_invalid_pin'), 2000);
         }
@@ -267,9 +268,10 @@ MainPage {
             }
             Label {
                 Layout.fillWidth: true
-                text: controller.wallet ? controller.wallet.name : 'N/A'
+                text: controller.wallet ? controller.wallet.name : ''
             }
             RowLayout {
+                visible: !comingSoon
                 Layout.fillWidth: false
                 Layout.minimumWidth: 150
                 GButton {
@@ -290,6 +292,26 @@ MainPage {
                     visible: controller.wallet && controller.wallet.authentication === Wallet.Authenticated
                     text: qsTrId('id_go_to_wallet')
                     onClicked: navigation.go(`/${self.network.key}/${controller.wallet.id}`)
+                }
+            }
+            RowLayout {
+                visible: comingSoon
+                Layout.fillWidth: false
+                Layout.minimumWidth: 150
+                Label {
+                    background: Rectangle {
+                        color: 'yellow'
+                        radius: height / 2
+                    }
+                    color: 'black'
+                    leftPadding: 8
+                    rightPadding: 8
+                    topPadding: 2
+                    bottomPadding: 2
+                    text: qsTrId('id_coming_soon')
+                    font.pixelSize: 10
+                    font.styleName: 'Medium'
+                    font.capitalization: Font.AllUppercase
                 }
             }
         }
@@ -460,19 +482,22 @@ MainPage {
                         const nets = self.device.versionInfo.JADE_NETWORKS
                         const networks = []
                         if (nets === 'ALL' || nets === 'MAIN') {
-                            networks.push('mainnet')
-                            networks.push('electrum-mainnet')
-                            networks.push('liquid')
+                            networks.push({ id: 'mainnet' })
+                            networks.push({ id: 'electrum-mainnet' })
+                            networks.push({ id: 'liquid' })
+                            networks.push({ id: 'electrum-liquid', comingSoon: true })
                         }
                         if (Settings.enableTestnet && (nets === 'ALL' || nets === 'TEST')) {
-                            networks.push('testnet')
-                            networks.push('electrum-testnet')
-                            networks.push('testnet-liquid')
+                            networks.push({ id: 'testnet' })
+                            networks.push({ id: 'electrum-testnet' })
+                            networks.push({ id: 'testnet-liquid' })
+                            networks.push({ id: 'electrum-testnet-liquid', comingSoon: true })
                         }
                         return networks
                     }
                     delegate: NetworkSection {
-                        network: NetworkManager.network(modelData)
+                        comingSoon: !!modelData.comingSoon
+                        network: NetworkManager.network(modelData.id)
                         device: self.device
                     }
                 }
