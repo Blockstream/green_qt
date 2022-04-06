@@ -53,7 +53,6 @@ void JadeLoginController::setEnabled(bool enabled)
 void JadeLoginController::setActive(bool active)
 {
     if (m_active == active) return;
-    Q_ASSERT(!m_active);
     m_active = active;
     emit activeChanged(m_active);
     update();
@@ -69,7 +68,6 @@ void JadeLoginController::setWallet(Wallet *wallet)
     }
     if (wallet) {
         Q_ASSERT(!m_wallet);
-        Q_ASSERT(!m_active);
         m_wallet = wallet;
         emit walletChanged(m_wallet);
         if (m_device) m_wallet->setDevice(m_device);
@@ -229,8 +227,12 @@ void JadeLoginController::login()
             setWallet(wallet);
         }
 
-        m_wallet->setSession(m_session);
-        m_wallet->setSession();
+        if (m_wallet->session()) {
+            m_session->deleteLater();
+        } else {
+            m_wallet->setSession(m_session);
+            m_wallet->setSession();
+        }
         m_session = nullptr;
         emit sessionChanged(m_session);
     });
