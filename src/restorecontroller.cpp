@@ -93,10 +93,6 @@ void RestoreController::accept()
 
         WalletManager::instance()->insertWallet(m_wallet);
 
-        m_wallet->updateCurrencies();
-        m_wallet->reload();
-        m_wallet->updateConfig();
-
         activity->finish();
         activity->deleteLater();
     });
