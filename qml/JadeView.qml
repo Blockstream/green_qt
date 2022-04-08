@@ -234,7 +234,7 @@ MainPage {
             spacing: constants.s1
             RowLayout {
                 Layout.fillWidth: false
-                Layout.minimumWidth: 300
+                Layout.minimumWidth: 150
                 spacing: constants.s1
                 Image {
                     source: icons[self.network.key]
@@ -242,9 +242,14 @@ MainPage {
                     sourceSize.height: 24
                 }
                 Label {
-                    Layout.minimumWidth: 100
+                    Layout.fillWidth: true
                     text: self.network.displayName
                 }
+            }
+            RowLayout {
+                Layout.fillWidth: false
+                Layout.minimumWidth: 150
+                spacing: constants.s1
                 Image {
                     fillMode: Image.PreserveAspectFit
                     sourceSize.height: 24
@@ -446,7 +451,12 @@ MainPage {
                         Label {
                             text: qsTrId('id_network')
                             color: constants.c300
-                            Layout.minimumWidth: 300
+                            Layout.minimumWidth: 150
+                        }
+                        Label {
+                            text: qsTrId('Type')
+                            color: constants.c300
+                            Layout.minimumWidth: 150
                         }
                         Label {
                             Layout.fillWidth: true
