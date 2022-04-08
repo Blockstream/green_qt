@@ -422,10 +422,29 @@ MainPage {
                 }
             }
         }
+        Loader {
+            Layout.margins: constants.s2
+            Layout.alignment: Qt.AlignCenter
+            active: self.device.versionInfo.JADE_NETWORKS === 'TEST' && !Settings.enableTestnet
+            visible: active
+            sourceComponent: Label {
+                horizontalAlignment: Text.AlignHCenter
+                padding: 8
+                background: Rectangle {
+                    radius: 4
+                    color: 'white'
+                }
+                font.capitalization: Font.AllUppercase
+                font.styleName: 'Medium'
+                color: 'black'
+                font.pixelSize: 10
+                text: qsTrId('id_jade_was_initialized_for_testnet') + '\n' + qsTrId('id_enable_testnet_in_app_settings')
+            }
+        }
         Page {
             Layout.fillWidth: true
             background: null
-            visible: !self.device.updateRequired
+            visible: !self.device.updateRequired && !(self.device.versionInfo.JADE_NETWORKS === 'TEST' && !Settings.enableTestnet)
             header: Label {
                 text: qsTrId('id_wallets')
                 font.pixelSize: 20
@@ -469,22 +488,6 @@ MainPage {
                             color: constants.c300
                         }
                     }
-                }
-                Label {
-                    visible: self.device.versionInfo.JADE_NETWORKS === 'TEST' && !Settings.enableTestnet
-                    Layout.margins: constants.s2
-                    Layout.alignment: Qt.AlignCenter
-                    horizontalAlignment: Text.AlignHCenter
-                    padding: 8
-                    background: Rectangle {
-                        radius: 4
-                        color: 'white'
-                    }
-                    font.capitalization: Font.AllUppercase
-                    font.styleName: 'Medium'
-                    color: 'black'
-                    font.pixelSize: 10
-                    text: qsTrId('id_jade_was_initialized_for_testnet') + '\n' + qsTrId('id_enable_testnet_in_app_settings')
                 }
                 Repeater {
                     model: {
