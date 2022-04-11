@@ -6,14 +6,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
-- Singlesig wallet with Jade
 
 ### Changed
-- Updates GDK to 0.0.51
-- Jade firmware channel selector available as experimental feature
 
 ### Fixed
-- Fix crash on Jade setup
+
+## [1.0.7] - 2022-04-13
+### Added
+- Singlesig wallet support for Blockstream Jade hardware devices
+- Tor connection support also for singlesig wallets
+
+### Changed
+- Transaction details can now be copied to clipboard, simply by clicking on them
+- Updates GDK to 0.0.51
+- Jade firmware channel selector available as experimental feature, to test beta firmware versions
+- Updates translations
+
+### Fixed
+- Crash on Jade setup
 - Wrap 2FA label in wallet settings
 
 ## [1.0.6] - 2022-02-09
