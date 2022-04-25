@@ -10,6 +10,14 @@
 
 namespace  {
 
+Transaction::Type ParseType(const QString& type)
+{
+    if (type == QStringLiteral("incoming")) return Transaction::Type::Incoming;
+    if (type == QStringLiteral("outgoing")) return Transaction::Type::Outgoing;
+    if (type == QStringLiteral("redeposit")) return Transaction::Type::Redeposit;
+    return Transaction::Type::Unknown;
+}
+
 Transaction::SPVStatus ParseSVPStatus(const QString& spv_status)
 {
     if (spv_status == QStringLiteral("unconfirmed")) return Transaction::SPVStatus::Unconfirmed;
@@ -91,6 +99,7 @@ void Transaction::updateFromData(const QJsonObject& data)
     m_data = data;
     emit dataChanged(m_data);
 
+    setType(ParseType(m_data.value("type").toString()));
     setMemo(m_data.value("memo").toString());
     setSpvStatus(ParseSVPStatus(m_data.value("spv_verified").toString()));
 
@@ -168,6 +177,13 @@ void Transaction::updateMemo(const QString& memo)
     int err = GA_set_transaction_memo(m_account->wallet()->m_session->m_session, txhash.constData(), memo.toLocal8Bit().constData(), 0);
     Q_ASSERT(err == GA_OK);
     setMemo(memo);
+}
+
+void Transaction::setType(Transaction::Type type)
+{
+    if (m_type == type) return;
+    m_type = type;
+    emit typeChanged(m_type);
 }
 
 void Transaction::setMemo(const QString& memo)
