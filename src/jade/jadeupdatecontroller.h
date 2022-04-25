@@ -76,6 +76,7 @@ class JadeUpdateController : public QObject
     Q_PROPERTY(JadeDevice* device READ device WRITE setDevice NOTIFY deviceChanged)
     Q_PROPERTY(QString channel READ channel WRITE setChannel NOTIFY channelChanged)
     Q_PROPERTY(QVariantList firmwares READ firmwares NOTIFY firmwaresChanged)
+    Q_PROPERTY(QVariant firmwareAvailable READ firmwareAvailable NOTIFY firmwareAvailableChanged)
     QML_ELEMENT
 public:
     explicit JadeUpdateController(QObject *parent = nullptr);
@@ -84,6 +85,7 @@ public:
     QString channel() const { return m_channel; }
     void setChannel(const QString& channel);
     QVariantList firmwares() const { return m_firmwares; }
+    QVariant firmwareAvailable() const { return m_firmware_available; }
 public slots:
     void disconnectDevice();
     void check();
@@ -94,6 +96,7 @@ signals:
     void deviceChanged(JadeDevice* device);
     void channelChanged(QString channel);
     void firmwaresChanged(const QVariantList& firmwares);
+    void firmwareAvailableChanged();
 protected:
     void pushActivity(Activity* activity);
     void popActivity();
@@ -102,6 +105,7 @@ private:
     QString m_channel;
     QVariantList m_firmwares;
     QMap<QString, QByteArray> m_firmware_data;
+    QVariant m_firmware_available;
 };
 
 #endif // GREEN_JADEUPDATECONTROLLER_H

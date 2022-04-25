@@ -186,17 +186,25 @@ void JadeUpdateController::check()
     }
 
     const QString channel = m_channel.isEmpty() ? JADE_FW_VERSIONS_FILE : m_channel;
+    const bool latest_channel = channel == JADE_FW_VERSIONS_FILE;
     auto activity = new JadeChannelRequestActivity(path, channel, this);
-    connect(activity, &Activity::finished, this, [this, activity, config] {
+    connect(activity, &Activity::finished, this, [=] {
         activity->deleteLater();
         m_firmwares.clear();
         for (auto data : activity->firmwares()) {
             QVariantMap firmware = data.toMap();
-            const bool installed = SemVer::parse(m_device->version()) == SemVer::parse(firmware.value("version").toString()) && config.compare(firmware.value("config").toString(), Qt::CaseInsensitive) == 0;
+            const bool same_version = SemVer::parse(m_device->version()) == SemVer::parse(firmware.value("version").toString());
+            const bool greater_version = SemVer::parse(m_device->version()) < SemVer::parse(firmware.value("version").toString());
+            const bool same_config = config.compare(firmware.value("config").toString(), Qt::CaseInsensitive) == 0;
+            const bool installed = same_version && same_config;
             firmware.insert("installed", installed);
             m_firmwares.append(firmware);
+            if (latest_channel && same_config && greater_version) {
+                m_firmware_available = firmware;
+            }
         }
         emit firmwaresChanged(m_firmwares);
+        emit firmwareAvailableChanged();
     });
     HttpManager::instance()->exec(activity);
     emit activityCreated(activity);
