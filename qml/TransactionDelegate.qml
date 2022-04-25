@@ -46,7 +46,7 @@ ItemDelegate {
     function txType(tx) {
         const memo = transaction.memo.trim().replace(/\n/g, ' ')
         const separator = memo === '' ? '' : ' - '
-        if (tx.type === 'incoming') {
+        if (transaction.type === Transaction.Incoming) {
             if (tx.outputs.length > 0) {
                 for (const o of tx.outputs) {
                     if (o.is_relevant) {
@@ -57,10 +57,10 @@ ItemDelegate {
                 return qsTrId('id_received') + separator + memo
             }
         }
-        if (tx.type === 'outgoing') {
+        if (transaction.type === Transaction.Outgoing) {
             return qsTrId('id_sent') + separator + memo
         }
-        if (tx.type === 'redeposit') {
+        if (transaction.type === Transaction.Redeposit) {
             return qsTrId("id_redeposited") + separator + memo
         }
         return JSON.stringify(tx, null, '\t')
@@ -111,7 +111,7 @@ ItemDelegate {
             Layout.fillWidth: true
             Layout.maximumWidth: Math.max(contentWidth, self.width / 5)
             Layout.minimumWidth: contentWidth
-            color: tx.type === 'incoming' ? '#00b45a' : 'white'
+            color: transaction.type === Transaction.Incoming ? '#00b45a' : 'white'
             horizontalAlignment: Qt.AlignRight
             font.pixelSize: 16
             font.styleName: 'Medium'

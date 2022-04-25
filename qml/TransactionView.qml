@@ -15,10 +15,10 @@ WalletDialog {
 
     wallet: transaction.account.wallet
     title: {
-        switch(transaction.data.type) {
-            case 'incoming': return qsTrId('id_incoming')
-            case 'outgoing': return qsTrId('id_outgoing')
-            case 'redeposit': return qsTrId('id_redeposited')
+        switch (transaction.type) {
+            case Transaction.Incoming: return qsTrId('id_incoming')
+            case Transaction.Outgoing: return qsTrId('id_outgoing')
+            case Transaction.Redeposit: return qsTrId('id_redeposited')
         }
     }
 
@@ -109,7 +109,7 @@ WalletDialog {
                             wallet.displayUnit
                             return amount.formatAmount(true)
                         }
-                        color: amount.transaction.data.type === 'incoming' ? '#00b45a' : 'white'
+                        color: amount.transaction.type === Transaction.Incoming ? '#00b45a' : 'white'
                         font.pixelSize: 16
                         font.styleName: 'Medium'
                     }
@@ -130,15 +130,15 @@ WalletDialog {
             contentItem: ColumnLayout {
                 spacing: constants.s1
                 SectionLabel {
-                    visible: transaction.data.type === 'outgoing'
+                    visible: transaction.type === TransactionOutgoing
                     text: qsTrId('id_recipient')
                 }
                 CopyableLabel {
-                    visible: transaction.data.type === 'outgoing'
+                    visible: transaction.type === TransactionOutgoing
                     text: transaction.data.addressees[0]
                 }
                 CopyableLabel {
-                    visible: transaction.data.type === 'incoming'
+                    visible: transaction.type === Transaction.Incoming
                     text: transaction.data.outputs[0].address
                 }
                 RowLayout {
@@ -163,7 +163,7 @@ WalletDialog {
                             return amount.formatAmount(true)
                         }
                         copyText: amount.formatAmount(true, true)
-                        color: amount.transaction.data.type === 'incoming' ? '#00b45a' : 'white'
+                        color: amount.transaction.type === Transaction.Incoming ? '#00b45a' : 'white'
                         font.pixelSize: 16
                         font.styleName: 'Medium'
                     }
@@ -188,7 +188,7 @@ WalletDialog {
             width: flickable.availableWidth
             spacing: constants.s1
             GPane {
-                visible: !network.liquid && (transaction.data.type === 'redeposit' || transaction.data.type === 'outgoing')
+                visible: !network.liquid && (transaction.type === Transaction.Redeposit || transaction.type === Transaction.Outgoing)
                 enabled: confirmations === 0
                 Layout.fillWidth: true
                 background: Rectangle {
@@ -217,7 +217,7 @@ WalletDialog {
 
             Repeater {
                 visible: count > 0
-                model: transaction.data.type === 'redeposit' ? [] : transaction.amounts
+                model: transaction.type === Transaction.Redeposit ? [] : transaction.amounts
                 delegate: network.liquid ? liquid_amount_delegate : bitcoin_amount_delegate
             }
 
