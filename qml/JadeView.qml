@@ -327,6 +327,12 @@ MainPage {
         required property JadeDevice device
         spacing: constants.s2
         Layout.minimumWidth: implicitWidth
+
+        JadeUpdateDialog {
+            id: update_dialog
+            device: self.device
+        }
+
         RowLayout {
             Layout.fillHeight: false
             spacing: constants.s2
@@ -415,9 +421,14 @@ MainPage {
                         text: qsTrId('id_update')
                     }
                     GButton {
-                        highlighted: self.device.updateRequired
-                        text: self.device.updateRequired ? qsTrId('id_new_jade_firmware_required') : qsTrId('id_check_for_updates')
-                        onClicked: update_dialog.createObject(window, { device }).open()
+                        highlighted: self.device.updateRequired || update_dialog.controller.firmwareAvailable
+                        text: {
+                            if (self.device.updateRequired) return qsTrId('id_new_jade_firmware_required')
+                            const fw = update_dialog.controller.firmwareAvailable
+                            if (fw) return `${fw.version} available`
+                            return qsTrId('id_check_for_updates')
+                        }
+                        onClicked: update_dialog.open()
                     }
                 }
             }
@@ -517,12 +528,6 @@ MainPage {
             }
         }
         VSpacer {
-        }
-    }
-
-    Component {
-        id: update_dialog
-        JadeUpdateDialog {
         }
     }
 }

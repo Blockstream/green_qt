@@ -10,18 +10,15 @@ AbstractDialog {
     id: self
     title: qsTrId('id_firmware_update')
     closePolicy: Dialog.NoAutoClose
-    onClosed: {
-        if (updated) controller.disconnectDevice()
-        destroy()
-    }
+    onClosed: if (updated) controller.disconnectDevice()
     onOpened: controller.check()
+    Component.onCompleted: controller.check()
     onDeviceChanged: if (!device) self.close()
 
     width: 550
     height: 450
 
-    JadeUpdateController {
-        id: controller
+    property JadeUpdateController controller: JadeUpdateController {
         channel: channel_combo_box.currentValue
         device: self.device
         onActivityCreated: {
