@@ -26,7 +26,7 @@ Transaction::SPVStatus ParseSVPStatus(const QString& spv_status)
     if (spv_status == QStringLiteral("not_verified")) return Transaction::SPVStatus::NotVerified;
     if (spv_status == QStringLiteral("not_longest")) return Transaction::SPVStatus::NotLongest;
     if (spv_status == QStringLiteral("disabled")) return Transaction::SPVStatus::Disabled;
-    Q_UNREACHABLE();
+    return Transaction::SPVStatus::Disabled;
 }
 
 } // namespace
