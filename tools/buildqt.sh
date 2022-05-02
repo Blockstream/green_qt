@@ -19,9 +19,13 @@ if [ ! -d ${QTSRCDIR} ]; then
    QTSRCDIR=${BUILDROOT}/qt-everywhere-src-${QTVERSION}
 fi
 
+QTPATCH="${PWD}/tools/patches/fix_montery_include.patch"
+
 echo "Qt: building with ${NUM_JOBS} cores in ${QT_PATH}"
 mkdir ${QT_PATH}
 cd ${QTSRCDIR}
+
+patch -p1 -N -i ${QTPATCH} || true
 
 if [ "${GREENPLATFORM}" = "linux" ]; then
     QTOPTIONS="-reduce-relocations -ltcg -xcb -bundled-xcb-xinput -gstreamer -dbus-linked"
