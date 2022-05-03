@@ -15,18 +15,13 @@ fi
 
 cd ${HIDAPI_PATH}/src
 
-# Remove duplicate AC_CONFIG_MACRO_DIR
-# see https://github.com/libusb/hidapi/commit/d15d594a415e5f51d2cd8ff8bb77b3765a539b98
-# (can be removed when hidapi is updated)
-sed -i.bak '16d' configure.ac
-
 ./bootstrap
 if [ "$GREENPLATFORM" = "linux" ]; then
-    PKG_CONFIG_PATH=${LIBUSB_PATH}/lib/pkgconfig ./configure --prefix=${HIDAPI_PATH} >> ${HIDAPI_PATH}/build.log 2>&1
+    PKG_CONFIG_PATH=${LIBUSB_PATH}/lib/pkgconfig ./configure --prefix=${HIDAPI_PATH} --disable-shared >> ${HIDAPI_PATH}/build.log 2>&1
 elif [ "$GREENPLATFORM" = "windows" ]; then
-    ./configure --host=x86_64-w64-mingw32 --prefix=${HIDAPI_PATH} >> ${HIDAPI_PATH}/build.log 2>&1
+    ./configure --host=x86_64-w64-mingw32 --prefix=${HIDAPI_PATH} --disable-shared >> ${HIDAPI_PATH}/build.log 2>&1
 elif [ "$GREENPLATFORM" = "osx" ]; then
-    CFLAGS="-mmacosx-version-min=10.13" ./configure --prefix=${HIDAPI_PATH} >> ${HIDAPI_PATH}/build.log 2>&1
+    CFLAGS="-mmacosx-version-min=10.13" ./configure --prefix=${HIDAPI_PATH} --disable-shared >> ${HIDAPI_PATH}/build.log 2>&1
 else
     exit 1
 fi
