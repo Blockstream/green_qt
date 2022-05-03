@@ -15,13 +15,13 @@ fi
 
 cd ${LIBUSB_PATH}/src
 
-./autogen.sh
+./bootstrap.sh
 if [ "$GREENPLATFORM" = "linux" ]; then
-    ./configure --prefix=${LIBUSB_PATH} >> ${LIBUSB_PATH}/build.log 2>&1
+    ./configure --prefix=${LIBUSB_PATH} --disable-shared >> ${LIBUSB_PATH}/build.log 2>&1
 elif [ "$GREENPLATFORM" = "windows" ]; then
-    ./configure --host=x86_64-w64-mingw32 --prefix=${LIBUSB_PATH} >> ${LIBUSB_PATH}/build.log 2>&1
+    ./configure --host=x86_64-w64-mingw32 --prefix=${LIBUSB_PATH} --disable-shared >> ${LIBUSB_PATH}/build.log 2>&1
 elif [ "$GREENPLATFORM" = "osx" ]; then
-    ./configure --prefix=${LIBUSB_PATH} >> ${LIBUSB_PATH}/build.log 2>&1
+    ./configure --prefix=${LIBUSB_PATH} --disable-shared >> ${LIBUSB_PATH}/build.log 2>&1
 else
     exit 1
 fi
