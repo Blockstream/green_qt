@@ -6,9 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Export account addresses to CSV file
 
 ### Changed
 - Jade automatic check for firmware updates
+- Updates GDK to 0.0.53
 
 ### Fixed
 

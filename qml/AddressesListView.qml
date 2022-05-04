@@ -1,4 +1,5 @@
 import Blockstream.Green 0.1
+import Blockstream.Green.Core 0.1
 import QtQuick 2.12
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.3
@@ -23,6 +24,14 @@ Page {
         GSearchField {
             Layout.alignment: Qt.AlignVCenter
             id: search_field
+        }
+        GButton {
+            Layout.alignment: Qt.AlignVCenter
+            visible: Settings.enableExperimental
+            text: qsTrId('Export')
+            enabled: self.account.wallet.ready && list_view.count > 0
+            onClicked: export_addresses_popup.createObject(window, { account: self.account }).open()
+            ToolTip.text: qsTrId('Export addresses to CSV file')
         }
     }
     contentItem: GListView {
