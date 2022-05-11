@@ -29,12 +29,12 @@ fi
 
 source ${GDKVENV}/bin/activate >> ${GDK_PATH}/build.log 2>&1
 if [ "$GREENPLATFORM" = "linux" ]; then
-    tools/build.sh --gcc --lto=true --enable-rust >> ${GDK_PATH}/build.log 2>&1
+    tools/build.sh --gcc --lto=true >> ${GDK_PATH}/build.log 2>&1
 elif [ "$GREENPLATFORM" = "windows" ]; then
-    tools/build.sh --mingw-w64 --lto=false --enable-rust >> ${GDK_PATH}/build.log 2>&1
+    tools/build.sh --mingw-w64 --lto=false >> ${GDK_PATH}/build.log 2>&1
 elif [ "$GREENPLATFORM" = "osx" ]; then
     unset JAVA_HOME
-    tools/build.sh --clang --enable-rust >> ${GDK_PATH}/build.log 2>&1
+    tools/build.sh --clang >> ${GDK_PATH}/build.log 2>&1
 else
     exit 1
 fi
