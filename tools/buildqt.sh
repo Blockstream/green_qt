@@ -30,9 +30,9 @@ patch -p1 -N -i ${QTPATCH} || true
 if [ "${GREENPLATFORM}" = "linux" ]; then
     QTOPTIONS="-reduce-relocations -ltcg -xcb -bundled-xcb-xinput -gstreamer -dbus-linked"
 elif [ "${GREENPLATFORM}" = "windows" ]; then
-    QTOPTIONS="-xplatform win32-g++ -device-option CROSS_COMPILE=/usr/bin/x86_64-w64-mingw32- -skip qtwayland -opengl desktop -native-win32-bluetooth -no-dbus"
+    QTOPTIONS="-xplatform win32-g++ -device-option CROSS_COMPILE=/usr/bin/x86_64-w64-mingw32- -opengl desktop -native-win32-bluetooth -no-dbus"
 elif [ "${GREENPLATFORM}" = "osx" ]; then
-    QTOPTIONS="-skip qtwayland -no-dbus"
+    QTOPTIONS="-no-dbus"
 fi
 
 tmpdir=qt-${GREENPLATFORM}
@@ -46,7 +46,7 @@ cd ${tmpdir}
     -no-cups -no-gif -no-feature-testlib \
     -skip qt3d -skip qtquick3d -skip qtlottie -skip qtactiveqt -skip qtandroidextras -skip qtcanvas3d -skip qtcharts -skip qtdatavis3d -skip qtdoc -skip qtgamepad \
     -skip qtlocation -skip qtmacextras -skip qtnetworkauth -skip qtpurchasing -skip qtremoteobjects -skip qtscript -skip qtscxml -skip qtsensors -skip qtserialbus -skip qtspeech -skip qtxmlpatterns \
-    -skip qtspeech -skip qttranslations -skip qtvirtualkeyboard -skip qtwebchannel -skip qtwebsockets -skip qtwebview -skip qtwinextras -skip qtx11extras -skip qtwebengine > ${QT_PATH}/build.log 2>&1
+    -skip qtspeech -skip qttranslations -skip qtvirtualkeyboard -skip qtwebchannel -skip qtwebsockets -skip qtwebview -skip qtwinextras -skip qtx11extras -skip qtwebengine -skip qtwayland > ${QT_PATH}/build.log 2>&1
 
 make -j${NUM_JOBS} >> ${QT_PATH}/build.log 2>&1
 make install >> ${QT_PATH}/build.log 2>&1
