@@ -1,4 +1,4 @@
-image: greenaddress/ci@sha256:5b81dba03f87f4f7a4f92052f402dc998a359033b2cec3b6de52304a364011e1
+image: greenaddress/ci@sha256:c75ce82236a13a0d18bbc9f7a86eca52b6da930041a60dcb3f13ff955726e070
 
 stages:
   - build
