@@ -156,7 +156,7 @@ Page {
                 }
                 GButton {
                     text: 'Restore anyway'
-                    visible: !controller.valid && !controller.wallet && advanced_checkbox.checked
+                    visible: self.server_type === 'electrum' && !controller.valid && !controller.wallet && advanced_checkbox.checked
                     onClicked: navigation.controller = controller
                 }
                 GButton {
