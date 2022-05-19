@@ -6,6 +6,21 @@
 #include <wally_crypto.h>
 #include <wally_elements.h>
 
+namespace {
+const SemVer JADE_MIN_ALLOWED_FW_VERSION{0, 1, 24};
+
+bool IsSegwitAddressType(const QString& addr_type)
+{
+    if (addr_type == "csv" || addr_type == "p2wsh" || addr_type == "p2wpkh" || addr_type == "p2sh-p2wpkh") {
+        return true;
+    }
+    if (addr_type == "p2sh" || addr_type == "p2pkh") {
+        return false;
+    }
+    Q_UNREACHABLE();
+}
+} // namespace
+
 class JadeGetWalletPublicKeyActivity : public GetWalletPublicKeyActivity
 {
     JadeDevice* const m_device;
@@ -296,7 +311,7 @@ public:
         for (const auto value : m_signing_inputs) {
             const auto input = value.toObject();
             const auto address_type = input.value("address_type").toString();
-            const bool is_segwit = address_type != "p2sh";
+            const bool is_segwit = IsSegwitAddressType(address_type);
             const auto script = ParseByteArray(input.value("prevout_script"));
             const auto value_commitment = ParseByteArray(input.value("commitment"));
             const auto path = ParsePath(input.value("user_path"));
@@ -568,10 +583,6 @@ void JadeDevice::setVersionInfo(const QVariantMap& version_info)
 QVariantMap JadeDevice::versionInfo() const
 {
     return m_version_info;
-}
-
-namespace {
-const SemVer JADE_MIN_ALLOWED_FW_VERSION{0, 1, 24};
 }
 
 bool JadeDevice::updateRequired() const
