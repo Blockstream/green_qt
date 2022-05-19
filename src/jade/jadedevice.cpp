@@ -168,7 +168,6 @@ public:
                 if (type == "p2pkh") variant = "pkh(k)";
                 if (type == "p2wpkh") variant = "wpkh(k)";
                 if (type == "p2sh-p2wpkh") variant = "sh(wpkh(k))";
-                Q_ASSERT(!variant.isEmpty());
 
                 const QVariantMap data = {
                     { "path", path },
