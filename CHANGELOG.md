@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Export account addresses to CSV file
 
 ### Changed
+- Use electrum session for HTTP requests
 - Jade automatic check for firmware updates
 - Updates GDK to 0.0.53
 

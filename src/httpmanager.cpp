@@ -74,7 +74,7 @@ void HttpManager::dispatch()
 
     if (!m_session) {
         qDebug() << "http: create session";
-        auto network = NetworkManager::instance()->network("mainnet");
+        auto network = NetworkManager::instance()->network("electrum-mainnet");
         m_session = new Session(network, this);
         m_session->setActive(true);
         connect(m_session, &Session::connectedChanged, this, [=] {
