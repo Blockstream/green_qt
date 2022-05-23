@@ -113,6 +113,14 @@ AbstractDialog {
                     Label {
                         text: self.activity.firmware.version
                     }
+                    Label {
+                        text: 'Hash'
+                    }
+                    Label {
+                        text: self.activity.firmware.hash
+                        Layout.maximumWidth: 200
+                        wrapMode: Label.WrapAnywhere
+                    }
                 }
                 Label {
                     Layout.alignment: Qt.AlignCenter

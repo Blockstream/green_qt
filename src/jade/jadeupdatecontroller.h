@@ -65,7 +65,7 @@ signals:
     void locked();
 private:
     JadeDevice* const m_device;
-    const QVariantMap m_firmware;
+    QVariantMap m_firmware;
     const QByteArray m_data;
     qlonglong m_uploaded{0};
 };

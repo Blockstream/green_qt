@@ -9,6 +9,7 @@
 #include "json.h"
 #include "jadeapi.h"
 
+#include <QCryptographicHash>
 #include <QFile>
 
 #include <gdk.h>
@@ -104,6 +105,9 @@ JadeUpdateActivity::JadeUpdateActivity(const QVariantMap& firmware, const QByteA
     , m_firmware(firmware)
     , m_data(data)
 {
+    QCryptographicHash hash(QCryptographicHash::Sha256);
+    hash.addData(m_data);
+    m_firmware.insert("hash", hash.result().toHex());
 }
 
 void JadeUpdateActivity::exec()

@@ -5,10 +5,10 @@
 #include <QCborMap>
 #include <QCborValue>
 #include <QCborArray>
-#include <QVariant>
-
+#include <QCryptographicHash>
 #include <QThread>
 #include <QTimer>
+#include <QVariant>
 
 #include "jadebleimpl.h"
 #include "jadeserialimpl.h"
@@ -321,9 +321,13 @@ int JadeAPI::otaUpdate(const QByteArray& fwcmp, const int fwlen, const int chunk
     // Register the recursive callback used to upload ota data chunks
     const int tmpId = registerResponseHandler(makeOtaChunkCallback(id, fwcmp, chunkSize, 0, cbProgress));
 
+    QCryptographicHash hash(QCryptographicHash::Sha256);
+    hash.addData(fwcmp);
+    const auto cmphash = hash.result();
+
     // Initiate OTA process, and return the exposed id
     const int compressedSize = fwcmp.length();
-    const QCborMap params = { {"fwsize", fwlen}, {"cmpsize", compressedSize} };
+    const QCborMap params = { {"fwsize", fwlen}, {"cmpsize", compressedSize}, {"cmphash", cmphash} };
     const QCborMap request = getRequest(tmpId, "ota", params);
     sendToJade(request);
     return id;
