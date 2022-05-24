@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Singlesig wallet support for Ledger hardware devices
 - Export account addresses to CSV file
 
 ### Changed

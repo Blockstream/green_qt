@@ -108,7 +108,7 @@ ApplicationWindow {
                     id: jade_view
                     readonly property bool active: navigation.path.startsWith('/jade')
                 }
-                LedgerView {
+                LedgerDevicesView {
                     id: ledger_view
                     readonly property bool active: navigation.path.startsWith('/ledger')
                 }

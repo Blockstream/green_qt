@@ -143,5 +143,6 @@
         <file>QRCodePopup.qml</file>
         <file>ProgressIndicator.qml</file>
         <file>GToolButton.qml</file>
+        <file>LedgerDevicesView.qml</file>
     </qresource>
 </RCC>
