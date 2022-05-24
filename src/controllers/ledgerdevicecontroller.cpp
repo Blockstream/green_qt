@@ -20,13 +20,13 @@
 #include <gdk.h>
 
 namespace {
-    Network *network_from_app_name(const QString& app_name)
+    QString network_key_from_app_name(const QString& app_name)
     {
-        QString id;
-        if (app_name == "Bitcoin") id = "mainnet";
-        if (app_name == "Bitcoin Test") id = "testnet";
-        if (app_name == "Liquid") id = "liquid";
-        return id.isEmpty() ? nullptr : NetworkManager::instance()->network(id);
+        if (app_name == "Bitcoin") return "bitcoin";
+        if (app_name == "Bitcoin Test") return "testnet";
+        if (app_name == "Liquid") return "liquid";
+        if (app_name == "Liquid Test") return "testnet-liquid";
+        return {};
     }
     QJsonObject device_details_from_device(Device* device)
     {
@@ -50,6 +50,17 @@ LedgerDeviceController::~LedgerDeviceController()
 {
 }
 
+void LedgerDeviceController::setNetwork(Network *network)
+{
+    if (m_network == network) return;
+    m_network = network;
+    emit networkChanged(network);
+
+    if (m_device) {
+        QTimer::singleShot(1000, this, &LedgerDeviceController::initialize);
+    }
+}
+
 void LedgerDeviceController::setDevice(LedgerDevice *device)
 {
     if (m_device == device) return;
@@ -64,6 +75,7 @@ void LedgerDeviceController::setDevice(LedgerDevice *device)
 void LedgerDeviceController::initialize()
 {
     if (!m_device) return;
+    if (!m_network) return;
 
     if (m_app_version.isNull()) {
         auto activity = m_device->getApp();
@@ -79,12 +91,13 @@ void LedgerDeviceController::initialize()
 
             m_device->setAppVersion(m_app_version.toString());
 
-            m_network = network_from_app_name(activity->name());
-            emit networkChanged(m_network);
+            m_network_key = network_key_from_app_name(activity->name());
+
+            setEnabled(m_network->key() == m_network_key);
 
             update();
 
-            if (!m_network) {
+            if (m_network_key.isEmpty()) {
                 if (m_device->type() == Device::LedgerNanoS) {
                     if (m_app_version < SemVer::parse("2.0.0")) {
                         setStatus("outdated");
@@ -282,4 +295,11 @@ void LedgerDeviceController::signup()
     });
 
     handler->exec();
+}
+
+void LedgerDeviceController::setEnabled(bool enabled)
+{
+    if (m_enabled == enabled) return;
+    m_enabled = enabled;
+    emit enabledChanged();
 }
