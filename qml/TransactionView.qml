@@ -130,11 +130,11 @@ WalletDialog {
             contentItem: ColumnLayout {
                 spacing: constants.s1
                 SectionLabel {
-                    visible: transaction.type === TransactionOutgoing
+                    visible: transaction.type === Transaction.Outgoing
                     text: qsTrId('id_recipient')
                 }
                 CopyableLabel {
-                    visible: transaction.type === TransactionOutgoing
+                    visible: transaction.type === Transaction.Outgoing
                     text: transaction.data.addressees[0]
                 }
                 CopyableLabel {
