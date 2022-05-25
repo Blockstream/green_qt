@@ -127,14 +127,14 @@ public:
     virtual GetMasterBlindingKeyActivity* getMasterBlindingKey() = 0;
     virtual void ping() = 0;
     static Type typefromVendorAndProduct(uint32_t vendor_id, uint32_t product_id);
-    QByteArray masterPublicKey() const;
-    void setMasterPublicKey(const QByteArray& master_public_key);
+    QByteArray masterPublicKey(Network* network) const;
+    void setMasterPublicKey(Network* network, const QByteArray& master_public_key);
 signals:
     void nameChanged();
     void detailsChanged();
 private:
     const QString m_uuid;
-    QByteArray m_master_public_key;
+    QMap<Network*, QByteArray> m_master_public_key;
 };
 
 QT_FORWARD_DECLARE_CLASS(LedgerDevice);

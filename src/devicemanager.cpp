@@ -1,5 +1,6 @@
 #include "devicemanager.h"
 #include "device.h"
+#include "networkmanager.h"
 
 DeviceManager::DeviceManager(QObject* parent)
     : QObject(parent)
@@ -29,22 +30,28 @@ QSet<Device*> DeviceManager::devices() const
 
 Device *DeviceManager::deviceWithId(const QString& id)
 {
+    // track master xpubs by device id
+    for (auto network : NetworkManager::instance()->networks()) {
+        for (auto device : m_devices) {
+            auto xpub = device->masterPublicKey(network);
+            if (xpub.isEmpty()) continue;
+            m_xpubs[id].insert(xpub);
+        }
+    }
+    // return device if still available
     for (auto device : m_devices) {
         if (device->uuid() == id) {
-            auto xpub = device->masterPublicKey();
-            Q_ASSERT(!xpub.isEmpty());
-            m_xpubs[id] = xpub;
             return device;
         }
     }
-    auto xpub = m_xpubs[id];
-    for (auto device : m_devices) {
-        if (device->masterPublicKey() == xpub) {
-            m_xpubs[id] = xpub;
-            return device;
+    // search device for tracked xpubs
+    for (auto network : NetworkManager::instance()->networks()) {
+        for (auto device : m_devices) {
+            auto xpub = device->masterPublicKey(network);
+            if (xpub.isEmpty()) continue;
+            if (m_xpubs[id].contains(xpub)) return device;
         }
     }
-
     return nullptr;
 }
 

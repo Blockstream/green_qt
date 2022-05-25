@@ -46,7 +46,7 @@ public:
 
         m_activity = m_queue.dequeue();
         auto device = m_activity->device();
-        auto master_public_key = device->masterPublicKey();
+        auto master_public_key = device->masterPublicKey(m_activity->network());
         auto path = m_activity->path();
 
         if (!master_public_key.isEmpty()) {
@@ -64,13 +64,13 @@ public:
 
         QObject::connect(m_activity, &Activity::finished, [=]{
             auto device = m_activity->device();
-            auto master_public_key = device->masterPublicKey();
+            auto master_public_key = device->masterPublicKey(m_activity->network());
             auto path = m_activity->path();
             auto publick_key = m_activity->publicKey();
 
             if (master_public_key.isEmpty() && path.isEmpty()) {
                 master_public_key = publick_key;
-                device->setMasterPublicKey(publick_key);
+                device->setMasterPublicKey(m_activity->network(), publick_key);
             }
             if (!master_public_key.isEmpty()) {
                 m_cache[master_public_key][path] = publick_key;
@@ -124,15 +124,16 @@ Device::Type Device::typefromVendorAndProduct(uint32_t vendor_id, uint32_t produ
     return Device::NoType;
 }
 
-QByteArray Device::masterPublicKey() const
+QByteArray Device::masterPublicKey(Network* network) const
 {
-    return m_master_public_key;
+    return m_master_public_key[network];
 }
 
-void Device::setMasterPublicKey(const QByteArray& master_public_key)
+void Device::setMasterPublicKey(Network* network, const QByteArray& master_public_key)
 {
-    Q_ASSERT(m_master_public_key.isEmpty());
-    m_master_public_key = master_public_key;
+    Q_ASSERT(network);
+    Q_ASSERT(!m_master_public_key.contains(network));
+    m_master_public_key[network] = master_public_key;
 }
 
 bool DeviceCommand::readAPDUResponse(Device*, int length, QDataStream &stream)

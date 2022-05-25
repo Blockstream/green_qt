@@ -3,7 +3,7 @@
 
 #include <QtQml>
 #include <QObject>
-#include <QQmlListProperty>
+#include <QSet>
 #include <QVector>
 
 class Device;
@@ -25,7 +25,7 @@ signals:
 private:
     explicit DeviceManager(QObject* parent = nullptr);
     QSet<Device*> m_devices;
-    QMap<QString, QByteArray> m_xpubs;
+    QMap<QString, QSet<QByteArray>> m_xpubs;
 };
 
 #endif // GREEN_DEVICEMANAGER_H
