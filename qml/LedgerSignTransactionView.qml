@@ -16,10 +16,10 @@ GFlickable {
 
     ColumnLayout {
         id: layout
-        spacing: constants.s2
+        spacing: constants.s1
         width: availableWidth
         DeviceImage {
-            Layout.maximumHeight: 32
+            Layout.maximumHeight: 24
             Layout.alignment: Qt.AlignCenter
             device: resolver.device
         }
@@ -78,7 +78,7 @@ GFlickable {
             }
         }
         Repeater {
-            model: inputs
+            model: !wallet.network.mainnet && !wallet.network.electrum ? inputs : []
             delegate: Page {
                 Layout.fillWidth: true
                 background: null
