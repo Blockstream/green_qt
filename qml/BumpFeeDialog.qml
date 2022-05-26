@@ -16,6 +16,8 @@ ControllerDialog {
     }
     doneText: qsTrId('id_transaction_sent')
     minimumWidth: 500
+    minimumHeight: 400
+
     initialItem: FocusScope {
         property list<Action> actions: [
             Action {
