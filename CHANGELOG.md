@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Prevent restoring a non existing multisig shield wallets
 - Show correct recipient address in transaction details dialog
+- Disable option to create account on watch-only wallets
 
 ## [1.0.7] - 2022-04-13
 ### Added

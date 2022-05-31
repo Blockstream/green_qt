@@ -56,6 +56,7 @@ SwipeView {
             HSpacer {
             }
             GButton {
+                enabled: !wallet.watchOnly
                 visible: !Settings.enableExperimental
                 Layout.alignment: Qt.AlignVCenter
                 text: '+'
@@ -74,6 +75,7 @@ SwipeView {
                     id: menu
                     width: 300
                     MenuItem {
+                        enabled: !wallet.watchOnly
                         text: qsTrId('id_add_new_account')
                         onTriggered: openCreateDialog()
                     }
