@@ -6,16 +6,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
-- Singlesig wallet support for Ledger hardware devices
-- Export account addresses to CSV file
+- Singlesig Bitcoin wallet support for Ledger hardware devices
+- New experimental feature, export account addresses to .csv file
 
 ### Changed
-- Use electrum session for HTTP requests
-- Jade automatic check for firmware updates
+- Automatic check for Jade firmware updates upon plug-in
+- Uses Electrum session for HTTP requests
 - Updates GDK to 0.0.53
 
 ### Fixed
-- Prevent restoring an unexisting Multisig wallet
+- Prevent restoring a non existing multisig shield wallets
+- Show correct recipient address in transaction details dialog
 
 ## [1.0.7] - 2022-04-13
 ### Added

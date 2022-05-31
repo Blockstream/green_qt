@@ -122,6 +122,23 @@ WalletDialog {
         id: bitcoin_amount_delegate
         GPane {
             property TransactionAmount amount: modelData
+            readonly property var output: {
+                if (transaction.type === Transaction.Outgoing) {
+                    for (const output of transaction.data.outputs) {
+                        if (!output.is_relevant) return output
+                    }
+                }
+            }
+            readonly property string satoshi: {
+                wallet.displayUnit;
+                const unit = wallet.settings.unit;
+                if (output) {
+                    return wallet.formatAmount(output.satoshi, true, unit);
+                } else {
+                    return amount.formatAmount(true)
+                }
+            }
+
             Layout.fillWidth: true
             background: Rectangle {
                 color: constants.c600
@@ -134,12 +151,8 @@ WalletDialog {
                     text: qsTrId('id_recipient')
                 }
                 CopyableLabel {
-                    visible: transaction.type === Transaction.Outgoing
-                    text: transaction.data.addressees[0]
-                }
-                CopyableLabel {
-                    visible: transaction.type === Transaction.Incoming
-                    text: transaction.data.outputs[0].address
+                    visible: !!output
+                    text: output ? output.address : ''
                 }
                 RowLayout {
                     spacing: constants.s1
@@ -158,12 +171,9 @@ WalletDialog {
                     HSpacer {
                     }
                     CopyableLabel {
-                        text: {
-                            wallet.displayUnit
-                            return amount.formatAmount(true)
-                        }
-                        copyText: amount.formatAmount(true, true)
-                        color: amount.transaction.type === Transaction.Incoming ? '#00b45a' : 'white'
+                        text: (transaction.type === Transaction.Outgoing ? '-' : '') + satoshi
+                        copyText: satoshi
+                        color: transaction.type === Transaction.Incoming ? '#00b45a' : 'white'
                         font.pixelSize: 16
                         font.styleName: 'Medium'
                     }
