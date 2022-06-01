@@ -51,36 +51,6 @@ WalletDialog {
             }
             contentItem: ColumnLayout {
                 spacing: 16
-                ColumnLayout {
-                    Layout.fillWidth: true
-                    spacing: constants.s1
-                    visible: recipients_repeater.count > 0
-                    SectionLabel {
-                        text: recipients_repeater.count === 1 ? qsTrId('Recipient') : qsTrId('Recipients')
-                    }
-                    Repeater {
-                        id: recipients_repeater
-                        model: {
-                            const addresses = []
-                            for (const input of self.transaction.data.inputs) {
-                                if (input.is_blinded && input.is_relevant && input.asset_id === amount.asset.id) {
-                                    addresses.push(input.address)
-                                }
-                            }
-                            for (const output of self.transaction.data.outputs) {
-                                if (output.is_blinded && output.is_relevant && output.asset_id === amount.asset.id) {
-                                    addresses.push(output.address)
-                                }
-                            }
-                            return addresses
-                        }
-                        CopyableLabel {
-                            font.pixelSize: 10
-                            color: constants.c100
-                            text: modelData
-                        }
-                    }
-                }
                 RowLayout {
                     spacing: 16
                     AssetIcon {
