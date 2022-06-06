@@ -108,25 +108,27 @@ void Transaction::updateFromData(const QJsonObject& data)
     const bool is_outgoing = m_data.value("type").toString() == "outgoing";
     const int count = satoshi.keys().length();
 
-    if (m_amounts.empty() && count > 0) {
-        Wallet* wallet = m_account->wallet();
-        const auto satoshi = m_data.value("satoshi").toObject();
-        if (wallet->network()->isLiquid()) {
-            const auto policy_asset = wallet->network()->policyAsset();
-            const qint64 fee = m_data.value("fee").toDouble();
-            for (auto i = satoshi.constBegin(); i != satoshi.constEnd(); ++i) {
-                qint64 amount = i.value().toDouble();
-                Asset* asset = wallet->getOrCreateAsset(i.key());
-                if (is_outgoing && asset->id() == policy_asset) amount -= fee;
-                if (amount > 0) m_amounts.append(new TransactionAmount(this, asset, amount));
-            }
-        } else {
-            qint64 amount = satoshi.value("btc").toDouble();
-            m_amounts.append(new TransactionAmount(this, amount));
+    // FIXME: because redeposits have incorrect satoshi.btc values we compute
+    // amounts again. note that above we early return if m_data doesn't change.
+    auto amounts = m_amounts;
+    m_amounts.clear();
+    Wallet* wallet = m_account->wallet();
+    if (wallet->network()->isLiquid()) {
+        const auto policy_asset = wallet->network()->policyAsset();
+        const qint64 fee = m_data.value("fee").toDouble();
+        for (auto i = satoshi.constBegin(); i != satoshi.constEnd(); ++i) {
+            qint64 amount = i.value().toDouble();
+            Asset* asset = wallet->getOrCreateAsset(i.key());
+            if (is_outgoing && asset->id() == policy_asset) amount -= fee;
+            if (amount > 0) m_amounts.append(new TransactionAmount(this, asset, amount));
         }
-
-        emit amountsChanged();
+    } else {
+        qint64 amount = satoshi.value("btc").toDouble();
+        m_amounts.append(new TransactionAmount(this, amount));
     }
+
+    emit amountsChanged();
+    qDeleteAll(amounts);
 }
 
 void Transaction::openInExplorer() const
