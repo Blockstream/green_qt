@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 ### Changed
+- Updates GDK to 0.0.54.post1
 
 ### Fixed
 - Net value of redeposits after sending
