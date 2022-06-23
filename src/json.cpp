@@ -1,7 +1,8 @@
 #include "json.h"
 
-#include <memory>
 #include <gdk.h>
+#include <memory>
+#include <nlohmann/json.hpp>
 
 #include <QJsonDocument>
 
@@ -15,22 +16,60 @@ void Destructor::operator()(GA_json* json)
 
 namespace {
 
-QJsonDocument doc(const GA_json* json)
+QJsonValue nlohmann_to_qt(const nlohmann::json& json)
 {
-    Q_ASSERT(json);
-    return QJsonDocument::fromJson(jsonToString(json));
+    if (json.is_object()) {
+        QJsonObject object;
+        for (auto& [key, val] : json.items()) {
+            object[QString::fromStdString(key)] = nlohmann_to_qt(val);
+        }
+        return object;
+    }
+    if (json.is_string()) {
+        return QString::fromStdString(json.get<std::string>());
+    }
+    if (json.is_number_unsigned()) {
+        const auto uv = json.get<quint64>();
+        const auto sv = json.get<qint64>();
+        Q_ASSERT(uv == static_cast<quint64>(sv));
+        return sv;
+    }
+    if (json.is_number_integer()) {
+        return json.get<qint64>();
+    }
+    if (json.is_number_float()) {
+        return json.get<double>();
+    }
+    if (json.is_boolean()) {
+        return json.get<bool>();
+    }
+    if (json.is_array()) {
+        QJsonArray array;
+        for (auto& it : json) {
+            array.append(nlohmann_to_qt(it));
+        }
+        return array;
+    }
+    if (json.is_null()) {
+        return QJsonValue::Null;
+    }
+    Q_UNREACHABLE();
 }
 
 } // namespace
 
 QJsonArray toArray(const GA_json* json)
 {
-    return doc(json).array();
+    auto result = nlohmann_to_qt(*(const nlohmann::json*) json);
+    Q_ASSERT(result.isArray());
+    return result.toArray();
 }
 
 QJsonObject toObject(const GA_json* json)
 {
-    return doc(json).object();
+    auto result = nlohmann_to_qt(*(const nlohmann::json*) json);
+    Q_ASSERT(result.isObject() || result.isNull());
+    return result.toObject();
 }
 
 std::unique_ptr<GA_json, Destructor> fromObject(const QJsonObject& object)

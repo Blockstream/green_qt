@@ -54,6 +54,7 @@ osx_release:
     - build-osx-clang/gdk-*/*.hpp
     - build-osx-clang/gdk-*/build.done
     - build-osx-clang/gdk-*/boost
+    - build-osx-clang/gdk-*/nlohmann
     - build-osx-clang/gdk-*/*.a
     - build-osx-clang/qt-release*
   artifacts:
