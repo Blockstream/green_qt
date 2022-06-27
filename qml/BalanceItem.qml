@@ -21,7 +21,7 @@ RowLayout {
         }
 
         Label {
-            visible: 'entity' in balance.asset.data
+            visible: balance.asset.data.entity
             Layout.fillWidth: true
             opacity: 0.5
             text: balance.asset.data.entity ? balance.asset.data.entity.domain : ''

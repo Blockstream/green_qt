@@ -38,12 +38,12 @@ WalletDialog {
 
                 SectionLabel {
                     text: qsTrId('id_ticker')
-                    visible: 'ticker' in balance.asset.data
+                    visible: balance.asset.data.ticket
                 }
 
                 CopyableLabel {
                     text: balance.asset.data.ticker
-                    visible: 'ticker' in balance.asset.data
+                    visible: balance.asset.data.ticker
                 }
             }
 
@@ -52,12 +52,12 @@ WalletDialog {
 
                 SectionLabel {
                     text: qsTrId('id_issuer')
-                    visible: 'entity' in balance.asset.data
+                    visible: balance.asset.data.entity
                 }
 
                 CopyableLabel {
                     text: balance.asset.data.entity.domain
-                    visible: 'entity' in balance.asset.data
+                    visible: balance.asset.data.entity
                 }
             }
 
