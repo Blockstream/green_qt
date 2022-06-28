@@ -11,6 +11,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+## [1.1.2] - 2022-06-28
+### Added
+
+### Changed
+- Refactor json conversion
+
+### Fixed
+- Fix utf8 memo
+- Fix for assets with no ticker or issuer
 ## [1.1.1] - 2022-06-17
 ### Added
 
