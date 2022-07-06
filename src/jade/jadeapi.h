@@ -144,10 +144,12 @@ private:
     // Helper for OTA (per-)chunk upload
     ResponseHandler makeOtaChunkCallback(const int id, const QByteArray &fwcmp, const int chunkSize, const int currentPos, const ResponseHandler &cbProgress);
 
-    // Helpers for signTx / signLiquidTx to send all tx inputs
-    ResponseHandler makeSendInputsCallback(const int id, const QVariantList &inputs);
-    ResponseHandler makeReceiveCommitmentCallback(const int id, const int index, const QVariant &input, const QSharedPointer<QMap<int, QVariant>> &commitments);
-    ResponseHandler makeReceiveSignatureCallback(const int id, const int nInputs, const int index, const QVariant &input, const QSharedPointer<QMap<int, QVariant>> &sigs, const QSharedPointer<QMap<int, QVariant>> &commitments);
+    // Helpers for signTx / signLiquidTx to send all tx inputs and receive signer-commitments and signatures
+    ResponseHandler makeSignTxInitialCallback(const int id, const QVariantList &inputs);
+    void sendTxInput(const int id, const int index, const QVariantList &inputs, const QSharedPointer<QVariantList> &commitments);
+    ResponseHandler makeReceiveCommitmentCallback(const int id, const int index, const QVariantList &inputs, const QSharedPointer<QVariantList> &commitments);
+    void sendTxSignatureRequest(const int id, const int index, const QVariantList &inputs, const QSharedPointer<QVariantList> &commitments, const QSharedPointer<QVariantList> &signatures);
+    ResponseHandler makeReceiveSignatureCallback(const int id, const int index, const QVariantList &inputs, const QSharedPointer<QVariantList> &commitments, const QSharedPointer<QVariantList> &signatures);
 
     // Send cbor message to Jade
     void sendToJade(const QCborMap &msg);
