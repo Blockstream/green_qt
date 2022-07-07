@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 ### Changed
+- Enable watch-only login for multisig shield liquid wallets
 - Disable option to speedup transaction on watch-only wallets
 
 ### Fixed

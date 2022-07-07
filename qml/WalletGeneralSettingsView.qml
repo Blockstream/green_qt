@@ -117,7 +117,7 @@ ColumnLayout {
 
     Loader {
         Layout.fillWidth: true
-        active: !wallet.network.liquid && !wallet.network.electrum
+        active: !wallet.network.electrum
         visible: active
         sourceComponent: SettingsBox {
             enabled: !wallet.locked
