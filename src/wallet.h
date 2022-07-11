@@ -36,6 +36,17 @@ public:
     QByteArray pinData() const;
 };
 
+class GetCredentialsHandler : public Handler
+{
+    Q_OBJECT
+    Q_PROPERTY(QString mnemonic READ mnemonic CONSTANT)
+public:
+    GetCredentialsHandler(Session* session);
+    QString mnemonic() const;
+protected:
+    void call(GA_session* session, GA_auth_handler** auth_handler) override;
+};
+
 class Wallet : public Entity
 {
     Q_OBJECT

@@ -926,3 +926,19 @@ void FeeEstimates::update()
     m_fees = fees;
     emit feesChanged(m_fees);
 }
+
+GetCredentialsHandler::GetCredentialsHandler(Session* session)
+    : Handler(session)
+{
+}
+
+QString GetCredentialsHandler::mnemonic() const
+{
+    return result().value("result").toObject().value("mnemonic").toString();
+}
+
+void GetCredentialsHandler::call(GA_session *session, GA_auth_handler **auth_handler)
+{
+    auto details = Json::fromObject({{"password", ""}});
+    GA_get_credentials(session, details.get(), auth_handler);
+}
