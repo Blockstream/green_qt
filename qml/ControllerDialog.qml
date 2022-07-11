@@ -41,7 +41,9 @@ WalletDialog {
 
     Connections {
         target: controller
-        function onFinished() { stack_view.push(doneComponent) }
+        function onFinished(handler) {
+            push(handler, doneComponent)
+        }
         function onError(handler) {
             if (handler.result.error === 'id_invalid_twofactor_code') {
                 push(handler, twoFactorAuthenticationErrorComponent)
@@ -92,7 +94,8 @@ WalletDialog {
     }
 
     function push(handler, component) {
-        stack_view.push(component, { handler })
+        const view = component.createObject(null, { handler })
+        stack_view.push(view)
     }
 
     Component {
