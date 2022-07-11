@@ -6,6 +6,7 @@ Dialog {
     property string icon
     property bool showRejectButton: true
     property bool enableRejectButton: true
+    readonly property bool hovered: hover_handler.hovered
     id: self
     focus: true
     clip: true
@@ -60,5 +61,8 @@ Dialog {
     background: Rectangle {
         radius: 16
         color: constants.c800
+        HoverHandler {
+            id: hover_handler
+        }
     }
 }
