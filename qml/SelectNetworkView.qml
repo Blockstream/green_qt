@@ -11,7 +11,6 @@ GPane {
     required property string view
 
     id: self
-    background: null
     contentItem: RowLayout {
         Section {
             visible: navigation.path === `/${view}` || navigation.path === `/mainnet/${view}`

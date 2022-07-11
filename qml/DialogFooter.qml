@@ -4,7 +4,6 @@ import QtQuick.Layouts 1.12
 
 GPane {
     default property alias contentItemData: row_layout.data
-    background: null
     leftPadding: constants.p3
     rightPadding: constants.p3
     bottomPadding: constants.p3

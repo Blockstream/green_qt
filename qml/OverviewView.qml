@@ -10,7 +10,6 @@ GPane {
     id: self
     Layout.fillWidth: true
     Layout.fillHeight: true
-    background: null
     padding: 0
     contentItem: ColumnLayout {
         Layout.fillWidth: true

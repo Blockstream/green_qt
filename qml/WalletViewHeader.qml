@@ -31,7 +31,6 @@ MainPageHeader {
         spacing: constants.p1
         GPane {
             Layout.fillWidth: true
-            background: null
             padding: 0
             leftPadding: -8
             focusPolicy: Qt.ClickFocus
@@ -185,7 +184,6 @@ MainPageHeader {
         }
         GPane {
             Layout.fillWidth: true
-            background: null
             padding: 0
             focusPolicy: Qt.ClickFocus
             contentItem: RowLayout {

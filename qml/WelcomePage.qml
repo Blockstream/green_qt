@@ -5,7 +5,6 @@ import QtQuick.Layouts 1.12
 GPane {
     property bool agreeWithTermsOfService: checkbox.checked
     signal next()
-    background: null
     contentItem: ColumnLayout {
         spacing: 20
         VSpacer {

@@ -254,8 +254,6 @@ ControllerDialog {
                 parent: xpub_field
                 onCodeScanned: xpub_field.text = code
             }
-
-            background: null
             contentItem: ColumnLayout {
                 spacing: 12
                 SectionLabel {
@@ -316,7 +314,6 @@ ControllerDialog {
                     onTriggered: dialog.controller.create()
                 }
             ]
-            background: null
             padding: 0
             contentItem: ColumnLayout {
                 spacing: 12

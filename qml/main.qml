@@ -216,7 +216,6 @@ ApplicationWindow {
             footer: GPane {
                 rightPadding: 16
                 bottomPadding: 8
-                background: null
                 contentItem: RowLayout {
                     HSpacer {
                     }

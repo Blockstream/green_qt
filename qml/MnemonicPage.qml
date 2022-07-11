@@ -18,7 +18,6 @@ ColumnLayout {
     GPane {
         id: view_pane
         visible: false
-        background: null
         padding: 16
         contentItem: MnemonicView {
             Layout.alignment: Qt.AlignHCenter

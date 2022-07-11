@@ -32,7 +32,6 @@ MainPage {
         id: header_pane
         padding: 24
         implicitHeight: 80
-        background: null
         contentItem: Item {
             id: notification
             anchors.fill: parent

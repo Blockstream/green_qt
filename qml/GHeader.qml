@@ -5,7 +5,6 @@ import QtQuick.Layouts 1.12
 GPane {
     default property alias contentItemData: row_layout.data
     Layout.fillWidth: true
-    background: null
     padding: 0
     contentItem: RowLayout {
         spacing: 0

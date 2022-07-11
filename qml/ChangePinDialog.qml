@@ -50,7 +50,6 @@ WalletDialog {
     footer: GPane {
         padding: 0
         bottomPadding: 32
-        background: null
         contentItem: RowLayout {
             GButton {
                 Layout.alignment: Qt.AlignHCenter

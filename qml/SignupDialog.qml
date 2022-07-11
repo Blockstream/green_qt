@@ -62,7 +62,6 @@ AbstractDialog {
         }
         GPane {
             Layout.minimumHeight: 48
-            background: null
             padding: 0
             contentItem: RowLayout {
                 id: activities_row

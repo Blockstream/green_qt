@@ -96,7 +96,6 @@ AbstractDialog {
                     watchonly_login_controller.login()
                 }
             }
-            background: null
             contentItem: GridLayout {
                 enabled: !controller.session
                 columns: 2
@@ -149,7 +148,6 @@ AbstractDialog {
                     pin_view.clear()
                 }
             }
-            background: null
             contentItem: ColumnLayout {
                 spacing: 12
                 PinView {
@@ -225,7 +223,6 @@ AbstractDialog {
     footer: DialogFooter {
         GPane {
             visible: self.wallet.loginAttemptsRemaining > 0
-            background: null
             padding: 0
             contentItem: RowLayout {
                 id: activities_row

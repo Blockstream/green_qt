@@ -193,7 +193,6 @@ MainPage {
                     text: 'Unlock and select app'
                 }
                 GPane {
-                    background: null
                     padding: 0
                     contentItem: RowLayout {
                         id: activities_row

@@ -8,7 +8,6 @@ import QtQml.Models 2.0
 
 GPane {
     id: self
-    background: null
     contentItem: RowLayout {
         spacing: 24
         Card {
