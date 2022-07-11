@@ -16,7 +16,7 @@ public:
 private:
     void call(GA_session* session, GA_auth_handler** auth_handler) override;
 private:
-    const QStringList m_mnemonic;
+    const QJsonObject m_details;
     const QJsonObject m_device_details;
 };
 

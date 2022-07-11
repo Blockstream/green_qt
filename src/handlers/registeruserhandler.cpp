@@ -5,9 +5,9 @@
 
 RegisterUserHandler::RegisterUserHandler(const QStringList& mnemonic, Session* session)
     : Handler(session)
-    , m_mnemonic(mnemonic)
+    , m_details({{ "mnemonic", mnemonic.join(' ') }})
 {
-    Q_ASSERT(m_mnemonic.size() == 12 || m_mnemonic.size() == 24 || m_mnemonic.size() == 27);
+    Q_ASSERT(mnemonic.size() == 12 || mnemonic.size() == 24 || mnemonic.size() == 27);
 }
 
 RegisterUserHandler::RegisterUserHandler(const QJsonObject& device_details, Session* session)
@@ -19,9 +19,9 @@ RegisterUserHandler::RegisterUserHandler(const QJsonObject& device_details, Sess
 
 void RegisterUserHandler::call(GA_session* session, GA_auth_handler** auth_handler)
 {
-    QByteArray mnemonic = m_mnemonic.join(' ').toLocal8Bit();
+    const auto details = Json::fromObject(m_details);
     auto device_details = Json::fromObject(m_device_details);
-    int err = GA_register_user(session, device_details.get(), mnemonic.constData(), auth_handler);
+    int err = GA_register_user(session, device_details.get(), details.get(), auth_handler);
     Q_ASSERT(err == GA_OK);
 }
 
