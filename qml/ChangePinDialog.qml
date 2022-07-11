@@ -1,14 +1,20 @@
+import Blockstream.Green 0.1
 import QtQuick 2.0
 import QtQuick.Controls 2.13
 import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.13
 
-WalletDialog {
+ControllerDialog {
     id: self
     width: 350
     height: 450
     focus: true
-    contentItem: PinView {
+    controller: ChangePinController {
+        pin: pin_view.pin.value
+        wallet: self.wallet
+        onFinished: self.accept()
+    }
+    initialItem: PinView {
         id: pin_view
         property var new_pin
         property var new_pin_confirm
@@ -58,10 +64,9 @@ WalletDialog {
                 large: true
                 enabled: pin_view.accept && pin_view.pin.valid
                 text: qsTrId('id_change_pin')
-                onClicked: accept()
+                onClicked: controller.accept()
             }
         }
     }
-    onAccepted: wallet.changePin(pin_view.pin.value)
     onClosed: destroy()
 }

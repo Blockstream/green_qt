@@ -4,23 +4,26 @@ import QtQuick 2.12
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
 
-WalletDialog {
+ControllerDialog {
+    id: dialog
+    controller: Controller {
+        wallet: dialog.wallet
+    }
+    Component.onCompleted: controller.getCredentials()
     title: qsTrId('id_mnemonic')
-    contentItem: GPane {
-        background: MouseArea {
-            id: mouse_area
-            hoverEnabled: true
-        }
+    initialItem: null
+    doneComponent: GPane {
+        property Handler handler
         contentItem: StackLayout {
             currentIndex: qrcode_switch.checked ? 1 : 0
             MnemonicView {
-                mnemonic: wallet.mnemonic
+                mnemonic: handler.mnemonic.split(' ')
             }
             QRCode {
                 id: qrcode
                 implicitHeight: 200
                 implicitWidth: 200
-                text: wallet.mnemonic.join(' ')
+                text: handler.mnemonic
             }
         }
     }
@@ -31,7 +34,7 @@ WalletDialog {
             Layout.fillWidth: true
             Layout.margins: 20
             NumberAnimation on value {
-                paused: mouse_area.containsMouse
+                paused: dialog.hovered
                 duration: 10000
                 from: 1
                 to: 0
