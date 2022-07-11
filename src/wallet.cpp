@@ -884,8 +884,9 @@ void LoginWithPinController::update()
 
 void SetPinHandler::call(GA_session *session, GA_auth_handler **auth_handler)
 {
-    Q_UNUSED(auth_handler);
-    m_pin_data = pinDataForNewPin(session, m_pin);
+    const auto details= Json::fromObject({{ "pin", QString::fromUtf8(m_pin) }});
+    GA_encrypt_with_pin(session, details.get(), auth_handler);
+
 }
 
 SetPinHandler::SetPinHandler(const QByteArray& pin, Session* session)
