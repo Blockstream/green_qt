@@ -932,9 +932,14 @@ GetCredentialsHandler::GetCredentialsHandler(Session* session)
 {
 }
 
+QJsonObject GetCredentialsHandler::credentials() const
+{
+    return result().value("result").toObject();
+}
+
 QString GetCredentialsHandler::mnemonic() const
 {
-    return result().value("result").toObject().value("mnemonic").toString();
+    return credentials().value("mnemonic").toString();
 }
 
 void GetCredentialsHandler::call(GA_session *session, GA_auth_handler **auth_handler)

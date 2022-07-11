@@ -42,6 +42,7 @@ class GetCredentialsHandler : public Handler
     Q_PROPERTY(QString mnemonic READ mnemonic CONSTANT)
 public:
     GetCredentialsHandler(Session* session);
+    QJsonObject credentials() const;
     QString mnemonic() const;
 protected:
     void call(GA_session* session, GA_auth_handler** auth_handler) override;

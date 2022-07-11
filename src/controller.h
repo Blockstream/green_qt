@@ -61,9 +61,10 @@ public slots:
     void deleteWallet();
     void disableAllPins();
     void setUnspentOutputsStatus(const QVariantList &outputs, const QString &status);
+    Handler* getCredentials();
 signals:
     void walletChanged(Wallet* wallet);
-    void finished();
+    void finished(Handler* handler = nullptr);
 
     void resultChanged(Handler* handler, const QJsonObject& result);
     void done(Handler* handler);

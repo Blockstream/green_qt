@@ -431,6 +431,17 @@ void Controller::setUnspentOutputsStatus(const QVariantList &outputs, const QStr
     exec(handler);
 }
 
+Handler* Controller::getCredentials()
+{
+    auto handler = new GetCredentialsHandler(m_wallet->session());
+    QObject::connect(handler, &Handler::done, [this, handler] {
+        emit finished(handler);
+    });
+    exec(handler);
+    handler->setParent(this);
+    return handler;
+}
+
 void TwoFactorResetHandler::call(GA_session *session, GA_auth_handler **auth_handler) {
     const uint32_t is_dispute = GA_FALSE;
     int res = GA_twofactor_reset(session, m_email.data(), is_dispute, auth_handler);
