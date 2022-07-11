@@ -77,7 +77,6 @@ private:
     Q_PROPERTY(QJsonObject currencies READ currencies CONSTANT)
     Q_PROPERTY(QQmlListProperty<Account> accounts READ accounts NOTIFY accountsChanged)
     Q_PROPERTY(QJsonObject events READ events NOTIFY eventsChanged)
-    Q_PROPERTY(QStringList mnemonic READ mnemonic CONSTANT)
     Q_PROPERTY(int loginAttemptsRemaining READ loginAttemptsRemaining NOTIFY loginAttemptsRemainingChanged)
     Q_PROPERTY(QJsonObject config READ config NOTIFY configChanged)
     Q_PROPERTY(Device* device READ device NOTIFY deviceChanged)
@@ -112,8 +111,6 @@ public:
     void handleNotification(const QJsonObject& notification);
 
     QJsonObject events() const;
-
-    QStringList mnemonic() const;
 
     int loginAttemptsRemaining() const { return m_login_attempts_remaining; }
 

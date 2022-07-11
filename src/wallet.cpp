@@ -37,29 +37,6 @@ public:
     }
 };
 
-namespace {
-QByteArray getMnemonicPassphrase(GA_session* session)
-{
-    char* data;
-    int err = GA_get_mnemonic_passphrase(session, "", &data);
-    Q_ASSERT(err == GA_OK);
-    QByteArray mnemonic(data);
-    GA_destroy_string(data);
-    return mnemonic;
-}
-QByteArray pinDataForNewPin(GA_session* session, const QByteArray& pin)
-{
-    const auto mnemonic = getMnemonicPassphrase(session);
-    GA_json* data;
-    int err = GA_set_pin(session, mnemonic.constData(), pin.constData(), "greenqt", &data);
-    Q_ASSERT(err == GA_OK);
-    auto pin_data = Json::jsonToString(data);
-    err = GA_destroy_json(data);
-    Q_ASSERT(err == GA_OK);
-    return pin_data;
-}
-} // namespace
-
 Wallet::Wallet(Network* network, const QString& hash_id, QObject* parent)
     : Entity(parent)
     , m_network(network)
@@ -208,17 +185,6 @@ void Wallet::handleNotification(const QJsonObject &notification)
 QJsonObject Wallet::events() const
 {
     return m_events;
-}
-
-QStringList Wallet::mnemonic() const
-{
-    QStringList result;
-    char* mnemonic = nullptr;
-    int err = GA_get_mnemonic_passphrase(m_session->m_session, "", &mnemonic);
-    Q_ASSERT(err == GA_OK);
-    result = QString(mnemonic).split(' ');
-    GA_destroy_string(mnemonic);
-    return result;
 }
 
 void Wallet::changePin(const QByteArray& pin)
