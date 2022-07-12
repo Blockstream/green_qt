@@ -450,7 +450,13 @@ void Wallet::save()
 
 void Wallet::clearPinData()
 {
-    m_pin_data.clear();
+    setPinData({});
+}
+
+void Wallet::setPinData(const QByteArray& pin_data)
+{
+    if (m_pin_data == pin_data) return;
+    m_pin_data = pin_data;
     emit hasPinDataChanged();
     save();
 }

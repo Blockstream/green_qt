@@ -231,6 +231,7 @@ public:
     QString username() const { return m_username; }
     QString displayUnit() const { return m_display_unit; }
 
+    void setPinData(const QByteArray &pin_data);
 protected slots:
     void updateReady();
 };
