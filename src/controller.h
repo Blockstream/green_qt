@@ -79,6 +79,24 @@ protected:
     QVariantMap m_errors;
 };
 
+class ChangePinController : public Controller
+{
+    Q_OBJECT
+    Q_PROPERTY(QString pin READ pin WRITE setPin NOTIFY pinChanged)
+    QML_ELEMENT
+public:
+    ChangePinController(QObject* parent = nullptr);
+    QString pin() const { return m_pin; }
+    void setPin(const QString& pin);
+public slots:
+    void accept();
+signals:
+    void pinChanged();
+private:
+    QString m_pin;
+    QJsonObject m_credentials;
+};
+
 #include "handler.h"
 class TwoFactorResetHandler : public Handler
 {

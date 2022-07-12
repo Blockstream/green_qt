@@ -453,3 +453,39 @@ TwoFactorResetHandler::TwoFactorResetHandler(const QByteArray &email, Session *s
     , m_email(email)
 {
 }
+
+ChangePinController::ChangePinController(QObject* parent)
+    : Controller(parent)
+{
+}
+
+void ChangePinController::setPin(const QString& pin)
+{
+    if (m_pin == pin) return;
+    m_pin = pin;
+    emit pinChanged();
+}
+
+void ChangePinController::accept()
+{
+    if (m_credentials.isEmpty()) {
+        qDebug() << Q_FUNC_INFO << "retrieving credentials";
+        auto handler = new GetCredentialsHandler(wallet()->session());
+        connect(handler, &Handler::done, this, [=] {
+            handler->deleteLater();
+            m_credentials = handler->credentials();
+            accept();
+        });
+        exec(handler);
+    } else {
+        qDebug() << Q_FUNC_INFO << "encrypting credentials with new PIN";
+        auto handler = new SetPinHandler(m_credentials, m_pin, wallet()->session());
+        connect(handler, &Handler::done, this, [=] {
+            handler->deleteLater();
+            auto pin_data = handler->pinData();
+            wallet()->setPinData(pin_data);
+            emit finished();
+        });
+        exec(handler);
+    }
+}
