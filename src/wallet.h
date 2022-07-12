@@ -26,13 +26,14 @@ struct GA_auth_handler;
 struct GA_json;
 
 #include "handler.h"
-class SetPinHandler : public Handler
+class EncryptWithPinHandler : public Handler
 {
-    const QByteArray m_pin;
+    const QJsonObject m_plaintext;
+    const QString m_pin;
     QByteArray m_pin_data;
     void call(GA_session* session, GA_auth_handler** auth_handler) override;
 public:
-    SetPinHandler(const QByteArray& pin, Session* session);
+    EncryptWithPinHandler(const QJsonObject& plaintext, const QString& pin, Session* session);
     QByteArray pinData() const;
 };
 
@@ -116,7 +117,6 @@ public:
 
     QJsonObject config() const { return m_config; }
 
-    Q_INVOKABLE void changePin(const QByteArray& pin);
     Q_INVOKABLE QJsonObject convert(const QJsonObject& value) const;
 
     qint64 amountToSats(const QString& amount) const;

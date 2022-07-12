@@ -187,17 +187,6 @@ QJsonObject Wallet::events() const
     return m_events;
 }
 
-void Wallet::changePin(const QByteArray& pin)
-{
-    auto handler = new SetPinHandler(pin, m_session);
-    QObject::connect(handler, &Handler::done, this, [this, handler] {
-        handler->deleteLater();
-        m_pin_data = handler->pinData();
-        save();
-    });
-    handler->exec();
-}
-
 void Wallet::reload(bool refresh_accounts)
 {
     if (m_network->isLiquid()) {
@@ -823,7 +812,8 @@ void LoginWithPinController::update()
     auto activity = new WalletAuthenticateActivity(m_wallet, this);
     m_wallet->pushActivity(activity);
 
-    auto handler = new LoginHandler(QJsonDocument::fromJson(m_wallet->m_pin_data).object(), QString::fromLocal8Bit(m_pin), m_session);
+    auto pin_data = QJsonDocument::fromJson(m_wallet->m_pin_data).object();
+    auto handler = new LoginHandler(pin_data, QString::fromLocal8Bit(m_pin), m_session);
     handler->connect(handler, &Handler::done, this, [this, activity, handler] {
         handler->deleteLater();
         m_wallet->resetLoginAttempts();
@@ -854,23 +844,26 @@ void LoginWithPinController::update()
     handler->exec();
 }
 
-void SetPinHandler::call(GA_session *session, GA_auth_handler **auth_handler)
+void EncryptWithPinHandler::call(GA_session *session, GA_auth_handler **auth_handler)
 {
-    const auto details= Json::fromObject({{ "pin", QString::fromUtf8(m_pin) }});
+    const auto details= Json::fromObject({
+        { "pin", m_pin },
+        { "plaintext", m_plaintext }
+    });
     GA_encrypt_with_pin(session, details.get(), auth_handler);
-
 }
 
-SetPinHandler::SetPinHandler(const QByteArray& pin, Session* session)
+EncryptWithPinHandler::EncryptWithPinHandler(const QJsonObject& plaintext, const QString& pin, Session* session)
     : Handler(session)
+    , m_plaintext(plaintext)
     , m_pin(pin)
 {
 }
 
-QByteArray SetPinHandler::pinData() const
+QByteArray EncryptWithPinHandler::pinData() const
 {
-    Q_ASSERT(!m_pin_data.isEmpty());
-    return m_pin_data;
+    auto pin_data = result().value("result").toObject().value("pin_data").toObject();
+    return QJsonDocument(pin_data).toJson();
 }
 
 FeeEstimates::FeeEstimates(QObject* parent) :

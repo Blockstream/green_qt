@@ -77,7 +77,12 @@ void RestoreController::accept()
     auto activity = new AcceptRestoreActivity(m_wallet, this);
     m_wallet->pushActivity(activity);
 
-    auto handler = new SetPinHandler(m_pin.toLocal8Bit(), m_wallet->session());
+    QJsonObject credentials({
+        { "mnemonic", m_mnemonic.join(" ") },
+        { "password", m_password }
+    });
+
+    auto handler = new EncryptWithPinHandler(credentials, m_pin, m_wallet->session());
     QObject::connect(handler, &Handler::done, this, [=] {
         handler->deleteLater();
         m_wallet->m_login_attempts_remaining = 3;

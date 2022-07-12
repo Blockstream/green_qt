@@ -45,7 +45,11 @@ void SignupController::update()
 
     auto register_user_handler = new RegisterUserHandler(m_mnemonic, m_session);
     auto login_handler = new LoginHandler(m_mnemonic, m_session);
-    auto set_pin_handler = new SetPinHandler(m_pin.toLocal8Bit(), m_session);
+    QJsonObject credentials({
+        { "mnemonic", m_mnemonic.join(' ') },
+        { "password", QString() }
+    });
+    auto set_pin_handler = new EncryptWithPinHandler(credentials, m_pin.toLocal8Bit(), m_session);
 
     connect(register_user_handler, &Handler::done, this, [register_user_handler, login_handler] {
         register_user_handler->deleteLater();

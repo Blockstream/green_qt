@@ -479,7 +479,7 @@ void ChangePinController::accept()
         exec(handler);
     } else {
         qDebug() << Q_FUNC_INFO << "encrypting credentials with new PIN";
-        auto handler = new SetPinHandler(m_credentials, m_pin, wallet()->session());
+        auto handler = new EncryptWithPinHandler(m_credentials, m_pin, wallet()->session());
         connect(handler, &Handler::done, this, [=] {
             handler->deleteLater();
             auto pin_data = handler->pinData();
