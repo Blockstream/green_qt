@@ -166,7 +166,7 @@ ItemDelegate {
                             }
                         }
                         MenuItem {
-                            enabled: transaction.data.can_rbf
+                            enabled: transaction.data.can_rbf && !transaction.account.wallet.watchOnly
                             text: qsTrId('id_increase_fee')
                             onTriggered: bump_fee_dialog.createObject(window, { transaction }).open()
                         }

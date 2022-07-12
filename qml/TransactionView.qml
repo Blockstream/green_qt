@@ -168,8 +168,7 @@ WalletDialog {
             width: flickable.availableWidth
             spacing: constants.s1
             GPane {
-                visible: !network.liquid && (transaction.type === Transaction.Redeposit || transaction.type === Transaction.Outgoing)
-                enabled: confirmations === 0
+                visible: confirmations === 0 && !transaction.account.wallet.watchOnly && !network.liquid && (transaction.type === Transaction.Redeposit || transaction.type === Transaction.Outgoing)
                 Layout.fillWidth: true
                 background: Rectangle {
                     radius: 4
