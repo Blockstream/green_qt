@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Enable list addresses and coins on Singlesig wallets
 
 ### Changed
 - Enable watch-only login for multisig shield liquid wallets

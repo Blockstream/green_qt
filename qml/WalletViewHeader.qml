@@ -250,7 +250,7 @@ MainPageHeader {
                     ButtonGroup.group: button_group
                     icon.source: "qrc:/svg/addresses.svg"
                     ToolTip.text: qsTrId('id_addresses')
-                    enabled: !self.wallet.watchOnly && !self.wallet.network.electrum
+                    enabled: !self.wallet.watchOnly
                     onClicked: checked = true
                 }
 
@@ -258,7 +258,7 @@ MainPageHeader {
                     ButtonGroup.group: button_group
                     icon.source: "qrc:/svg/coins.svg"
                     ToolTip.text: qsTrId('id_coins')
-                    enabled: !self.wallet.watchOnly && !self.wallet.network.electrum
+                    enabled: !self.wallet.watchOnly
                     onClicked: checked = true
                 }
 
