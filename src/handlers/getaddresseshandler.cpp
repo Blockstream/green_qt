@@ -6,10 +6,9 @@
 
 void GetAddressesHandler::call(GA_session *session, GA_auth_handler **auth_handler)
 {
-    auto details = Json::fromObject({
-        { "subaccount", static_cast<qint64>(m_subaccount) },
-        { "last_pointer", m_last_pointer }
-    });
+    QJsonObject _details({{ "subaccount", static_cast<qint64>(m_subaccount) }});
+    if (m_last_pointer != 0) _details["last_pointer"] = m_last_pointer;
+    auto details = Json::fromObject(_details);
 
     int err = GA_get_previous_addresses(session, details.get(), auth_handler);
     Q_ASSERT(err == GA_OK);
@@ -29,5 +28,5 @@ QJsonArray GetAddressesHandler::addresses() const
 
 int GetAddressesHandler::lastPointer() const
 {
-    return result().value("result").toObject().value("last_pointer").toInt();
+    return result().value("result").toObject().value("last_pointer").toInt(1);
 }
