@@ -81,7 +81,7 @@ void JadeSerialImpl::disconnectDeviceImpl()
     // Emit 'onDisconnected' immediately
     emit onDisconnected();
 }
-
+#include <QThread>
 // Write bytes over serial
 int JadeSerialImpl::writeImpl(const QByteArray &data)
 {
@@ -92,14 +92,15 @@ int JadeSerialImpl::writeImpl(const QByteArray &data)
 
     int written = 0;
     while (written != data.length()) {
-        const qint64 wrote = m_serial->write(data.data() + written, data.length() - written);
+        const qint64 wrote = m_serial->write(data.data() + written, qMin(256, data.length() - written));
         if (wrote == -1) {
             disconnectDevice();
             return written;
-        }
-        else {
+        } else {
+            m_serial->waitForBytesWritten(100);
             written += wrote;
         }
+        QThread::msleep(100);
     }
 
     // qDebug() << "JadeSerialImpl::writeImpl() sent" << written << "bytes";

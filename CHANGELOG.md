@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Disable option to speedup transaction on watch-only wallets
 
 ### Fixed
+- Improved Jade serial port communication
 
 ## [1.1.2] - 2022-06-28
 ### Added
