@@ -5,14 +5,15 @@ import QtQuick.Controls 2.13
 Label {
     property real delay: 500
     property string copyText: text
+    function copy() {
+        Clipboard.copy(self.copyText)
+        ToolTip.show(qsTrId('id_copied_to_clipboard'), 1000)
+    }
     id: self
     background: MouseArea {
         id: mouse_area
         hoverEnabled: true
-        onClicked: {
-            Clipboard.copy(self.copyText)
-            ToolTip.show(qsTrId('id_copied_to_clipboard'), 1000)
-        }
+        onClicked: copy()
         Rectangle {
             anchors.fill: parent
             anchors.margins: -4

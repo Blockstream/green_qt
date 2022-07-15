@@ -7,6 +7,7 @@ import QtQuick.Layouts 1.13
 Button {
     id: self
     required property Account account
+    property bool amp: true
     leftInset: 0
     rightInset: 0
     topInset: 0
@@ -25,7 +26,7 @@ Button {
         spacing: 8
         Label {
             Layout.fillWidth: true
-            text: qsTrId('id_amp_id')
+            text: self.amp ? qsTrId('id_amp_id') : qsTrId('Support ID')
             font.styleName: 'Regular'
         }
         Label {

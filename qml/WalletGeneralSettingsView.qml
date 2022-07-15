@@ -179,4 +179,17 @@ ColumnLayout {
             }
         }
     }
+
+    Loader {
+        Layout.fillWidth: true
+        active: !wallet.network.electrum
+        visible: active
+        sourceComponent: SettingsBox {
+            title: qsTrId('id_support')
+            contentItem: AccountIdBadge {
+                amp: false
+                account: wallet.accounts[0]
+            }
+        }
+    }
 }
