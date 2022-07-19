@@ -168,6 +168,7 @@ int main(int argc, char *argv[])
     g_args.addOption(QCommandLineOption("printtoconsole"));
     g_args.addOption(QCommandLineOption("debug"));
     g_args.addOption(QCommandLineOption("debugfocus"));
+    g_args.addOption(QCommandLineOption("debugjade"));
     g_args.addOption(QCommandLineOption("debugnavigation"));
     g_args.addOption(QCommandLineOption("channel", "", "name", "latest"));
     g_args.process(app);
