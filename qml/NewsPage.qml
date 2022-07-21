@@ -1,6 +1,6 @@
 import Blockstream.Green 0.1
 import Blockstream.Green.Core 0.1
-import QtQuick 2.13
+import QtQuick 2.15
 import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.12
 import QtGraphicalEffects 1.15
@@ -8,135 +8,125 @@ import QtGraphicalEffects 1.15
 Page {
     id: self
 
-    NewsFeedController {
+    BlogController {
         id: controller
         Component.onCompleted: fetch()
     }
 
     background: null
-    header: Label {
-        text: "What's New at Blockstream"
-        font.pixelSize: 18
-        font.bold: true
-        bottomPadding: constants.s1
+    header: RowLayout {
+        Label {
+            Layout.fillWidth: true
+            text: "What's New at Blockstream"
+            font.pixelSize: 18
+            font.bold: true
+            bottomPadding: constants.s1
+        }
+        BusyIndicator {
+            Layout.preferredHeight: 32
+            running: controller.fetching
+            visible: running
+            bottomPadding: constants.s1
+        }
     }
-    contentItem: GFlickable {
-        id: flickable
-        contentWidth: layout.width
-        contentHeight: height
+    contentItem: ListView {
+        ScrollBar.horizontal: ScrollBar {
+            id: horizontal_scroll_bar
+            policy: ScrollBar.AlwaysOn
+            visible: list_view.contentWidth > list_view.width
+            background: Rectangle {
+                color: constants.c800
+                radius: width / 2
+            }
+            contentItem: Rectangle {
+                implicitHeight: constants.p0
+                color: horizontal_scroll_bar.pressed ? constants.c400 : constants.c600
+                radius: 8
+            }
+        }
 
-        Row {
-            height: flickable.height
-            id: layout
-            spacing: constants.p2
-            Repeater {
-                model: controller.model
-                AbstractButton {
-                    id: news_card
-                    height: parent.height - constants.p2
-                    implicitWidth: {
-                        const n = Math.ceil(flickable.width / 400)
-                        return (flickable.width - (n - 1) * layout.spacing) / n
+        Keys.onLeftPressed: horizontal_scroll_bar.decrease()
+        Keys.onRightPressed: horizontal_scroll_bar.increase()
+
+        id: list_view
+        model: controller.model
+        spacing: constants.p2
+        orientation: ListView.Horizontal
+        displayMarginBeginning: 100
+        displayMarginEnd: 100
+        delegate: AbstractButton {
+            id: news_card
+            height: list_view.height - constants.p2
+            implicitWidth: {
+                const n = Math.ceil(list_view.width / 600)
+                return (list_view.width - (n - 1) * list_view.spacing) / n
+            }
+            padding: constants.p3
+            background: Rectangle {
+                radius: 16
+                color: constants.c800
+                Image {
+                    anchors.top: parent.top
+                    anchors.right: parent.right
+                    anchors.margins: 16
+                    source: 'qrc:/svg/external_link.svg'
+                    visible: news_card.hovered
+                    width: 16
+                    height: 16
+                    smooth: true
+                    mipmap: true
+                }
+            }
+            onClicked: Qt.openUrlExternally(post.link)
+            contentItem: RowLayout {
+                spacing: constants.s2
+                ColumnLayout {
+                    Label {
+                        text: post.category
+                        color: 'white'
+                        opacity: 0.8
+                        font.pixelSize: 10
+                        font.capitalization: Font.AllUppercase
+                        elide: Label.ElideRight
                     }
-                    padding: constants.p2
-                    topPadding: height / 2 + constants.p2
-                    background: Rectangle {
-                        Image {
-                            source: modelData.image
-                            fillMode: Image.PreserveAspectCrop
-                            smooth: true
-                            mipmap: true
-                            width: parent.width
-                            height: parent.height / 2
-                        }
-                        color: news_card.hovered ? Qt.lighter(constants.c600, 1.25) : constants.c700
-                        Behavior on color {
-                            ColorAnimation {
-                                duration: 100
-                            }
-                        }
-                        layer.enabled: true
-                        layer.effect: OpacityMask {
-                            maskSource: Rectangle {
-                                width: news_card.background.width
-                                height: news_card.background.height
-                                radius: 16
-                            }
-                        }
-                        Rectangle {
-                            border.color: parent.color
-                            border.width: 1
-                            radius: 16
-                            color: 'transparent'
-                            anchors.fill: parent
-                        }
-                        Image {
-                            anchors.top: parent.top
-                            anchors.right: parent.right
-                            anchors.margins: 16
-                            source: 'qrc:/svg/external_link.svg'
-                            visible: news_card.hovered
-                            width: 16
-                            height: 16
-                            smooth: true
-                            mipmap: true
-                        }
+                    Label {
+                        Layout.fillWidth: true
+                        text: post.title
+                        color: 'white'
+                        font.pixelSize: 16
+                        font.bold: true
+                        elide: Label.ElideRight
+                        wrapMode: Label.WordWrap
                     }
-                    scale: news_card.down ? 0.95 : (news_card.hovered || news_card.activeFocus ? 1.01 : 1)
-                    transformOrigin: Item.Center
-                    Behavior on scale {
-                        NumberAnimation {
-                            easing.type: Easing.OutBack
-                            duration: 400
-                        }
+                    VSpacer {
                     }
-                    onClicked: Qt.openUrlExternally(modelData.link)
-                    clip: true
-                    contentItem: ColumnLayout {
-                        spacing: 8
-                        Label {
-                            Layout.fillWidth: true
-                            text: modelData.title
-                            color: 'white'
-                            font.pixelSize: 14
-                            font.bold: true
-                            elide: Label.ElideRight
-                        }
-                        RowLayout {
-                            Label {
-                                Layout.fillWidth: true
-                                text: new Date(modelData.pubDate).toLocaleString(Settings.language)
-                                color: 'white'
-                                opacity: 0.8
-                                font.pixelSize: 10
-                                elide: Label.ElideRight
-                            }
-                            Label {
-                                text: modelData.category.replace('blockstream-', '')
-                                color: 'black'
-                                opacity: 0.8
-                                font.pixelSize: 8
-                                font.capitalization: Font.AllUppercase
-                                elide: Label.ElideRight
-                                topPadding: 2
-                                bottomPadding: 2
-                                leftPadding: 8
-                                rightPadding: 8
-                                background: Rectangle {
-                                    color: 'white'
-                                    radius: height / 2
-                                }
-                            }
-                        }
-                        Label {
-                            Layout.fillWidth: true
-                            Layout.fillHeight: true
-                            text: modelData.description
-                            wrapMode: Text.WordWrap
-                            elide: Label.ElideRight
-                            color: "white"
-                            font.pixelSize: 12
-                            clip: true
+                    Label {
+                        Layout.fillWidth: true
+                        text: post.publicationDate.toLocaleString(Settings.language)
+                        color: 'white'
+                        opacity: 0.8
+                        font.pixelSize: 10
+                        elide: Label.ElideRight
+                    }
+                }
+                Image {
+                    id: image
+                    source: post.imagePath
+                    fillMode: Image.PreserveAspectCrop
+                    horizontalAlignment: Image.AlignLeft
+                    verticalAlignment: Image.AlignTop
+                    smooth: true
+                    mipmap: true
+                    asynchronous: true
+                    Layout.alignment: Qt.AlignCenter
+                    Layout.preferredWidth: 140
+                    Layout.preferredHeight: 140
+                    layer.enabled: true
+                    layer.effect: OpacityMask {
+                        maskSource: Rectangle {
+                            width: image.width
+                            height: image.height
+                            radius: image.width / 2
                         }
                     }
                 }

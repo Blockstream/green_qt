@@ -11,6 +11,7 @@ SOURCES += \
     $$PWD/appupdatecontroller.cpp \
     $$PWD/asset.cpp \
     $$PWD/balance.cpp \
+    $$PWD/blogcontroller.cpp \
     $$PWD/clipboard.cpp \
     $$PWD/command.cpp \
     $$PWD/controller.cpp \
@@ -31,7 +32,6 @@ SOURCES += \
     $$PWD/navigation.cpp \
     $$PWD/network.cpp \
     $$PWD/networkmanager.cpp \
-    $$PWD/newsfeedcontroller.cpp \
     $$PWD/renameaccountcontroller.cpp \
     $$PWD/resolver.cpp \
     $$PWD/restorecontroller.cpp \
@@ -63,6 +63,7 @@ HEADERS += \
     $$PWD/appupdatecontroller.h \
     $$PWD/asset.h \
     $$PWD/balance.h \
+    $$PWD/blogcontroller.h \
     $$PWD/clipboard.h \
     $$PWD/command.h \
     $$PWD/connectable.h \
@@ -84,7 +85,6 @@ HEADERS += \
     $$PWD/navigation.h \
     $$PWD/network.h \
     $$PWD/networkmanager.h \
-    $$PWD/newsfeedcontroller.h \
     $$PWD/renameaccountcontroller.h \
     $$PWD/resolver.h \
     $$PWD/restorecontroller.h \

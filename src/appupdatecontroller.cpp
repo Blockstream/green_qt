@@ -35,8 +35,7 @@ CheckForUpdatesActivity::CheckForUpdatesActivity(QObject* parent)
 
 QString CheckForUpdatesActivity::latestVersion() const
 {
-    const auto body = response().value("body").toString();
-    QJsonObject latest = QJsonDocument::fromJson(body.toUtf8()).object();
+    QJsonObject latest = QJsonDocument::fromJson(body().toUtf8()).object();
     qDebug() << latest;
     return latest["version"].toString();
 }

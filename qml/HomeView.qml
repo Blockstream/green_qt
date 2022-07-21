@@ -23,80 +23,28 @@ MainPage {
 
     AppUpdateController {
         id: app_update_controller
-        onUpdateAvailableChanged: if (updateAvailable) notification_panel.y = constants.p1
         Component.onCompleted: if (Settings.checkForUpdates) checkForUpdates()
     }
 
     id: self
-    header: GPane {
-        id: header_pane
-        padding: 24
-        implicitHeight: 80
-        contentItem: Item {
-            id: notification
-            anchors.fill: parent
-            clip: true
+//    header: GPane {
+//        id: header_pane
+//        padding: 24
+//        implicitHeight: 80
+//        contentItem: Item {
+//            id: notification
+//            anchors.fill: parent
+//            clip: true
 
-            RowLayout {
-                anchors.fill: parent
-                anchors.margins: constants.p1
-                HSpacer {
-                }
-                GButton {
-                    text: qsTrId('id_support')
-                    highlighted: true
-                    large: true
-                    onClicked: Qt.openUrlExternally(constants.supportUrl)
-                }
-            }
-
-            GPane {
-                id: notification_panel
-                x: constants.p1
-                y: constants.p1 - parent.height
-                width: parent.width - constants.p1*2
-                implicitHeight: constants.p5
-                padding: constants.p1
-                scale: notification_panel.hovered ? 1.01 : 1
-                transformOrigin: Item.Center
-                Behavior on scale {
-                    NumberAnimation {
-                        easing.type: Easing.OutBack
-                        duration: 400
-                    }
-                }
-                background: Rectangle {
-                    radius: 4
-                    color: 'white'
-                    MouseArea {
-                        anchors.fill: parent
-                        onClicked: Qt.openUrlExternally(constants.downloadUrl)
-                    }
-                }
-                contentItem: RowLayout {
-                    spacing: 12
-                    Label {
-                        text: qsTrId('There is a newer version of Green Desktop available')
-                        color: 'black'
-                    }
-                    HSpacer {
-                    }
-                    Label {
-                        text: qsTrId('Download %1').arg(app_update_controller.latestVersion)
-                        font.bold: true
-                        color: 'black'
-                    }
-                }
-
-                Behavior on y {
-                    NumberAnimation {
-                        duration: 300
-                        easing.type: Easing.OutCubic
-                    }
-                }
-            }
-        }
-    }
+//                Behavior on y {
+//                    NumberAnimation {
+//                        duration: 300
+//                        easing.type: Easing.OutCubic
+//                    }
+//                }
+//            }
+//        }
+//    }
     footer: StatusBar {
         contentItem: RowLayout {
             SessionBadge {
@@ -104,13 +52,43 @@ MainPage {
             }
         }
     }
+    topPadding: 24
     bottomPadding: 24
     contentItem: ColumnLayout {
+        GPane {
+            id: notification_panel
+            Layout.rightMargin: 16
+            Layout.fillWidth: true
+            visible: app_update_controller.updateAvailable
+            padding: constants.p3
+            background: Rectangle {
+                radius: 4
+                color: 'white'
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: Qt.openUrlExternally(constants.downloadUrl)
+                }
+            }
+            contentItem: RowLayout {
+                Label {
+                    text: qsTrId('There is a newer version of Green Desktop available')
+                    color: 'black'
+                }
+                HSpacer {
+                }
+                Label {
+                    text: qsTrId('Download %1').arg(app_update_controller.latestVersion)
+                    font.bold: true
+                    color: 'black'
+                }
+            }
+        }
+
         spacing: constants.p4
         Loader {
             Layout.rightMargin: 16
             Layout.fillWidth: true
-            Layout.minimumHeight: 300
+            Layout.minimumHeight: 240
             active: Settings.showNews
             visible: active
             sourceComponent: NewsPage {
@@ -135,9 +113,10 @@ MainPage {
                 GPane {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
+                    padding: constants.p3
                     background: Rectangle {
+                        radius: 16
                         color: constants.c800
-
                         Text {
                             visible: self.recentWallets.length === 0
                             text: qsTrId('id_looks_like_you_havent_used_a')
@@ -150,16 +129,50 @@ MainPage {
                         Repeater {
                             model: self.recentWallets
                             Button {
+                                id: delegate
                                 readonly property Wallet wallet: modelData
-                                Layout.alignment: Qt.AlignLeft
-                                Layout.maximumWidth: parent.width
-                                spacing: 12
+                                Layout.fillWidth: true
                                 icon.source: icons[wallet.network.key]
                                 icon.color: 'transparent'
-                                font.capitalization: Font.MixedCase
                                 flat: true
                                 text: wallet.name
                                 onClicked: navigation.go(`/${wallet.network.key}/${wallet.id}`)
+                                background: Rectangle {
+                                    visible: delegate.hovered
+                                    radius: 8
+                                    color: constants.c700
+                                }
+                                contentItem: RowLayout {
+                                    spacing: 12
+                                    Image {
+                                        fillMode: Image.PreserveAspectFit
+                                        sourceSize.height: 24
+                                        sourceSize.width: 24
+                                        source: icons[delegate.wallet.network.key]
+                                    }
+                                    Image {
+                                        fillMode: Image.PreserveAspectFit
+                                        sourceSize.height: 24
+                                        sourceSize.width: 24
+                                        source: delegate.wallet.network.electrum ? 'qrc:/svg/key.svg' : 'qrc:/svg/multi-sig.svg'
+                                    }
+                                    Label {
+                                        Layout.maximumWidth: delegate.width / 3
+                                        Layout.minimumWidth: delegate.width / 3
+                                        text: wallet.name
+                                        elide: Label.ElideRight
+                                    }
+                                    Loader {
+                                        active: 'type' in wallet.deviceDetails
+                                        visible: active
+                                        sourceComponent: DeviceBadge {
+                                            device: wallet.device
+                                            details: wallet.deviceDetails
+                                        }
+                                    }
+                                    HSpacer {
+                                    }
+                                }
                             }
                         }
                     }
@@ -180,6 +193,7 @@ MainPage {
                     Layout.minimumWidth: 200
                     Layout.fillHeight: true
                     background: Rectangle {
+                        radius: 16
                         color: constants.c800
                     }
                     contentItem: ColumnLayout {

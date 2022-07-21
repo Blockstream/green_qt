@@ -51,8 +51,7 @@ JadeChannelRequestActivity::JadeChannelRequestActivity(const QString& base, cons
 QVariantList JadeChannelRequestActivity::firmwares() const
 {
     QVariantList firmwares;
-    const auto body = response().value("body").toString();
-    for (const auto& line : body.split('\n')) {
+    for (const auto& line : body().split('\n')) {
         const auto parts = line.split('_');
         if (parts.size() == 4 && parts.last() == JADE_FW_SUFFIX) {
             const auto version = parts[0];
@@ -231,8 +230,7 @@ void JadeUpdateController::update(const QVariantMap& firmware)
         });
         connect(activity, &Activity::finished, this, [this, firmware, path, activity] {
             activity->deleteLater();
-            const auto body = activity->response().value("body").toString();
-            const auto data = QByteArray::fromBase64(body.toLocal8Bit());
+            const auto data = QByteArray::fromBase64(activity->body().toLocal8Bit());
             m_firmware_data.insert(path, data);
             update(firmware);
         });

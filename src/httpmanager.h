@@ -5,6 +5,7 @@
 #include <QQueue>
 #include <QTimer>
 
+QT_FORWARD_DECLARE_CLASS(Activity)
 QT_FORWARD_DECLARE_CLASS(SessionActivity)
 QT_FORWARD_DECLARE_CLASS(Session)
 
