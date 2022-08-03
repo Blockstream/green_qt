@@ -6,6 +6,7 @@
 #include <QCborValue>
 #include <QCborArray>
 #include <QCryptographicHash>
+#include <QDateTime>
 #include <QThread>
 #include <QTimer>
 #include <QVariant>
@@ -305,7 +306,9 @@ int JadeAPI::authUser(const QString &network, const ResponseHandler &cb, const H
 {
     const int id = registerResponseHandler(cb);
     m_request_proxy[id] = request_proxy;
-    const QCborMap params = { {"network", network} };
+
+    const qint64 now_epoch_secs = QDateTime::currentSecsSinceEpoch();
+    const QCborMap params = { {"network", network}, {"epoch", now_epoch_secs } };
     const QCborMap request = getRequest(id, "auth_user", params);
     sendToJade(request);
     return id;
