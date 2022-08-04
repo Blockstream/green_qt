@@ -6,6 +6,7 @@ import QtQuick.Layouts 1.12
 
 AbstractDialog {
     required property JadeDevice device
+    readonly property bool debug_jade: Qt.application.arguments.indexOf('--debugjade') > 0
     property bool updated: false
     id: self
     title: qsTrId('id_firmware_update')
@@ -15,7 +16,7 @@ AbstractDialog {
     Component.onCompleted: controller.check()
     onDeviceChanged: if (!device) self.close()
 
-    width: 550
+    width: 650
     height: 450
 
     function firmwareVersionAndType(version, config) {
@@ -23,22 +24,10 @@ AbstractDialog {
     }
 
     property JadeUpdateController controller: JadeUpdateController {
-        channel: channel_combo_box.currentValue
+        index: firmware_controller.index
         device: self.device
         onActivityCreated: {
-            if (activity instanceof JadeChannelRequestActivity) {
-                const view = http_request_view.createObject(activities_row, { activity, text: 'Fetching list' })
-                activity.finished.connect(() => {
-                    stack_view.push(select_view)
-                    view.destroy()
-                })
-            } else if (activity instanceof JadeBinaryRequestActivity) {
-                const view = http_request_view.createObject(activities_row, { activity, text: 'Downloading firmware' })
-                activity.finished.connect(() => {
-                    stack_view.push(select_view)
-                    view.destroy()
-                })
-            } else if (activity instanceof JadeUnlockActivity) {
+            if (activity instanceof JadeUnlockActivity) {
                 activity.failed.connect(() => { stack_view.pop() })
                 activity.finished.connect(() => { stack_view.pop() })
                 stack_view.push(jade_unlock_view, { activity })
@@ -170,47 +159,44 @@ AbstractDialog {
         }
     }
 
-    property Item select_view: ColumnLayout {
+    contentItem: StackView {
+        id: stack_view
         ButtonGroup {
             id: button_group
         }
-        GComboBox {
-            id: channel_combo_box
-            visible: Qt.application.arguments.indexOf('--debugjade') > 0
-            enabled: HttpManager.session && HttpManager.session.connected
-            Layout.fillWidth: true
-            valueRole: 'channel'
-            textRole: 'text'
-            model: ListModel {
-                ListElement {
-                    text: 'Latest Channel'
-                    channel: 'LATEST'
-                }
-                ListElement {
-                    text: 'Beta Channel'
-                    channel: 'BETA'
-                }
-                ListElement {
-                    text: 'Previous Channel'
-                    channel: 'PREVIOUS'
-                }
-            }
-        }
-        GListView {
+        initialItem: GListView {
             Layout.fillWidth: true
             Layout.fillHeight: true
             clip: true
-            model: controller.firmwares
+            model: {
+                const fws = []
+                for (const fw of controller.firmwares) {
+                    if (!show_all_checkbox.checked) {
+                        if (!fw.upgrade) continue
+                        if (fw.has_delta) continue
+                    }
+                    fws.push(fw)
+                }
+                return fws
+            }
+
             delegate: DescriptiveRadioButton {
                 leftPadding: 16
                 rightPadding: 16
+                tags: {
+                    const tags = []
+                    if (firmware.channel === 'beta') tags.push({ color: '#dba5ff', text: 'BETA' })
+                    if (firmware.installed) tags.push({ color: constants.g300, text: qsTrId('id_current_version') })
+                    if (self.debug_jade) tags.push({ color: '#ff6a00', text: firmware.delta ? 'DELTA' : 'FULL' })
+                    return tags
+                }
                 property var firmware: modelData
                 property string name: {
                     if (firmware.config === 'ble') return qsTrId('id_radio_firmware') + ' ' + firmware.version
                     if (firmware.config === 'noradio') return qsTrId('id_noradio_firmware') + ' ' + firmware.version
                     return qsTrId('id_unknown_firmware') + ' ' + firmware.config + firmware.version
                 }
-                text: name + (firmware.installed ? ' (INSTALLED)' : '')
+                text: name
                 description: {
                     if (firmware.config === 'ble') return qsTrId('id_choose_this_version_to_connect')
                     if (firmware.config === 'noradio') return qsTrId('id_choose_this_version_to_disable')
@@ -223,39 +209,28 @@ AbstractDialog {
             }
         }
     }
-
-    contentItem: StackView {
-        id: stack_view
-        initialItem: ColumnLayout {
-            spacing: 32
-            VSpacer {
-            }
-            Label {
-                Layout.alignment: Qt.AlignCenter
-                text: HttpManager.session && HttpManager.session.connected ? qsTrId('id_loading') : qsTrId('id_establishing_session')
-            }
-            BusyIndicator {
-                Layout.alignment: Qt.AlignCenter
-            }
-            VSpacer {
-            }
-        }
-    }
     footer: DialogFooter {
-        GPane {
-            padding: 0
-            contentItem: RowLayout {
-                id: activities_row
-            }
+        visible: stack_view.depth === 1
+        CheckBox {
+            id: show_all_checkbox
+            visible: self.debug_jade
+            text: qsTrId('id_show_all')
         }
         HSpacer {
         }
+        Label {
+            text: qsTrId('id_fetching_new_firmware')
+            visible: controller.fetching
+        }
+        BusyIndicator {
+            Layout.preferredHeight: 32
+            running: controller.fetching
+            visible: running
+        }
         GButton {
-            Layout.fillWidth: false
             large: true
             text: qsTrId('id_next')
             enabled: button_group.checkedButton && !controller.updating
-            visible: stack_view.currentItem === select_view
             onClicked: controller.update(button_group.checkedButton.firmware)
         }
     }

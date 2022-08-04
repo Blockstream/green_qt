@@ -19,14 +19,8 @@ namespace {
 
 const QString JADE_FW_VERSIONS_FILE = "LATEST";
 
-const QString JADE_FW_SERVER_HTTPS = "https://jadefw.blockstream.com";
+static const QString JADE_FW_SERVER_HTTPS = "https://jadefw.blockstream.com";
 static const QString JADE_FW_SERVER_ONION = "http://vgza7wu4h7osixmrx6e4op5r72okqpagr3w6oupgsvmim4cz3wzdgrad.onion";
-
-static const QString JADE_FW_JADE_PATH = "/bin/jade/";
-static const QString JADE_FW_JADE1_1_PATH = "/bin/jade1.1/";
-static const QString JADE_FW_JADEDEV_PATH = "/bin/jadedev/";
-static const QString JADE_FW_JADE1_1DEV_PATH = "/bin/jade1.1dev/";
-static const QString JADE_FW_SUFFIX = "fw.bin";
 
 static const QString JADE_BOARD_TYPE_JADE = "JADE";
 static const QString JADE_BOARD_TYPE_JADE_V1_1 = "JADE_V1.1";
@@ -40,31 +34,6 @@ JadeHttpRequestActivity::JadeHttpRequestActivity(const QString& path, QObject* p
     setMethod("GET");
     addUrl(JADE_FW_SERVER_HTTPS + path);
     addUrl(JADE_FW_SERVER_ONION + path);
-}
-
-JadeChannelRequestActivity::JadeChannelRequestActivity(const QString& base, const QString& channel, QObject* parent)
-    : JadeHttpRequestActivity(base + channel, parent)
-    , m_base(base)
-{
-    setAccept("text");
-}
-
-QVariantList JadeChannelRequestActivity::firmwares() const
-{
-    QVariantList firmwares;
-    for (const auto& line : body().split('\n')) {
-        const auto parts = line.split('_');
-        if (parts.size() == 4 && parts.last() == JADE_FW_SUFFIX) {
-            const auto version = parts[0];
-            QVariantMap firmware;
-            firmware.insert("path", m_base + line);
-            firmware.insert("version", version);
-            firmware.insert("config", parts[1]);
-            firmware.insert("size", parts[2].toLongLong());
-            firmwares.append(firmware);
-        }
-    }
-    return firmwares;
 }
 
 JadeBinaryRequestActivity::JadeBinaryRequestActivity(const QString& path, QObject* parent)
@@ -112,15 +81,16 @@ JadeUpdateActivity::JadeUpdateActivity(const QVariantMap& firmware, const QByteA
 
 void JadeUpdateActivity::exec()
 {
-    const auto size = m_firmware.value("size").toLongLong();
+    const auto size = m_firmware.value("fwsize").toLongLong();
     const auto chunk_size = m_device->api()->relaxWrite() ? 256 : m_device->versionInfo().value("JADE_OTA_MAX_CHUNK").toInt();
 
-    m_device->api()->otaUpdate(m_data, size, chunk_size, [this](const QVariantMap& result) {
+    auto progress_cb = [this](const QVariantMap& result) {
         Q_ASSERT(result.contains("uploaded"));
         const auto uploaded = result.value("uploaded").toLongLong();
         progress()->setIndeterminate(uploaded <= 12288);
         progress()->setValue(double(uploaded) / double(m_data.size()));
-    }, [this](const QVariantMap& result) {
+    };
+    auto done_cb = [this](const QVariantMap& result) {
         if (result["result"] == true) {
             finish();
         } else {
@@ -140,22 +110,19 @@ void JadeUpdateActivity::exec()
                 fail();
             }
         }
-    });
+    };
+
+    if (m_firmware.value("delta").toBool()) {
+        const auto patch_size = m_firmware.value("patch_size").toInt();
+        m_device->api()->otaDeltaUpdate(m_data, size, patch_size, chunk_size, progress_cb, done_cb);
+    } else {
+        m_device->api()->otaUpdate(m_data, size, chunk_size, progress_cb, done_cb);
+    }
 }
 
 JadeUpdateController::JadeUpdateController(QObject *parent)
     : QObject(parent)
 {
-}
-
-void JadeUpdateController::setChannel(const QString& channel)
-{
-    if (m_channel == channel) return;
-    m_firmwares.clear();
-    emit firmwaresChanged(m_firmwares);
-    m_channel = channel;
-    emit channelChanged(m_channel);
-    check();
 }
 
 void JadeUpdateController::disconnectDevice()
@@ -168,50 +135,96 @@ void JadeUpdateController::setDevice(JadeDevice *device)
     if (m_device == device) return;
     m_device = device;
     emit deviceChanged(m_device);
+    check();
+}
+
+void JadeUpdateController::setIndex(const QJsonObject& index)
+{
+    if (m_index == index) return;
+    m_index = index;
+    emit indexChanged();
+    check();
 }
 
 void JadeUpdateController::check()
 {
-    if (!m_device) return;
+    m_firmwares.clear();
+    m_firmware_available.clear();
 
-    const auto version_info = m_device->versionInfo();
-    const auto board_type = version_info.value("BOARD_TYPE", JADE_BOARD_TYPE_JADE).toString();
-    const auto config = version_info.value("JADE_CONFIG").toString();
-    const auto features = version_info.value("JADE_FEATURES").toStringList();
-    const bool secure_boot = features.contains(JADE_FEATURE_SECURE_BOOT);
+    const bool debug_jade = qApp->arguments().contains("--debugjade");
+    if (m_device && !m_index.isEmpty()) {
+        const auto version_info = m_device->versionInfo();
+        const auto version = version_info.value("JADE_VERSION").toString();
+        const auto board_type = version_info.value("BOARD_TYPE", JADE_BOARD_TYPE_JADE).toString();
+        const auto config = version_info.value("JADE_CONFIG").toString().toLower();
+        const auto features = version_info.value("JADE_FEATURES").toStringList();
+        const bool secure_boot = features.contains(JADE_FEATURE_SECURE_BOOT);
 
-    QString path;
-    if (board_type == JADE_BOARD_TYPE_JADE) {
-        path = secure_boot ? JADE_FW_JADE_PATH : JADE_FW_JADEDEV_PATH;
-    } else if (board_type == JADE_BOARD_TYPE_JADE_V1_1) {
-        path = secure_boot ? JADE_FW_JADE1_1_PATH : JADE_FW_JADE1_1DEV_PATH;
-    } else {
-        return;
-    }
+        if (board_type == JADE_BOARD_TYPE_JADE) {
+            type = secure_boot ? "jade" : "jadedev";
+        } else if (board_type == JADE_BOARD_TYPE_JADE_V1_1) {
+            type = secure_boot ? "jade1.1" : "jade1.1dev";
+        }
 
-    const QString channel = m_channel.isEmpty() ? JADE_FW_VERSIONS_FILE : m_channel;
-    const bool latest_channel = channel == JADE_FW_VERSIONS_FILE;
-    auto activity = new JadeChannelRequestActivity(path, channel, this);
-    connect(activity, &Activity::finished, this, [=] {
-        activity->deleteLater();
-        m_firmwares.clear();
-        for (auto data : activity->firmwares()) {
-            QVariantMap firmware = data.toMap();
-            const bool same_version = SemVer::parse(m_device->version()) == SemVer::parse(firmware.value("version").toString());
-            const bool greater_version = SemVer::parse(m_device->version()) < SemVer::parse(firmware.value("version").toString());
-            const bool same_config = config.compare(firmware.value("config").toString(), Qt::CaseInsensitive) == 0;
-            const bool installed = same_version && same_config;
-            firmware.insert("installed", installed);
-            m_firmwares.append(firmware);
-            if (latest_channel && same_config && greater_version) {
-                m_firmware_available = firmware;
+        if (!type.isEmpty()) {
+            QStringList channels;
+            if (debug_jade) channels.append("beta");
+            channels.append("stable");
+            if (debug_jade) channels.append("previous");
+
+            QSet<QPair<QString, QString>> delta_available;
+
+            for (const auto& channel : channels) {
+                auto index = m_index.value(type).toObject().value(channel).toObject();
+
+                auto process = [&](bool delta, QJsonObject& firmware) {
+                    const bool same_version = SemVer::parse(version) == SemVer::parse(firmware.value("version").toString());
+                    const bool newer_version = SemVer::parse(version) < SemVer::parse(firmware.value("version").toString());
+                    const bool same_config = config == firmware.value("config").toString();
+                    const bool upgrade = newer_version || (same_version && !same_config);
+                    const bool downgrade = SemVer::parse(firmware.value("version").toString()) < SemVer::parse(version);
+                    const bool installed = same_version && same_config;
+                    if (delta && installed) return;
+                    firmware.insert("channel", channel);
+                    firmware.insert("newer_version", newer_version);
+                    firmware.insert("same_config", same_config);
+                    firmware.insert("delta", delta);
+                    firmware.insert("installed", installed);
+                    firmware.insert("downgrade", downgrade);
+                    firmware.insert("upgrade", upgrade);
+                    m_firmwares.append(firmware);
+                };
+
+                for (const auto& value : index.value("delta").toArray()) {
+                    auto firmware = value.toObject();
+                    if (version != firmware.value("from_version").toString()) continue;
+                    if (config != firmware.value("from_config").toString()) continue;
+                    firmware.insert("has_delta", false);
+                    delta_available.insert(qMakePair(firmware.value("version").toString(), firmware.value("config").toString()));
+                    process(true, firmware);
+                }
+
+                for (const auto& value : index.value("full").toArray()) {
+                    auto firmware = value.toObject();
+                    const bool has_delta = delta_available.contains(qMakePair(firmware.value("version").toString(), firmware.value("config").toString()));
+                    firmware.insert("has_delta", has_delta);
+                    process(false, firmware);
+                }
+            }
+
+            for (const auto& value : m_firmwares) {
+                auto firmware = value.toMap();
+                if (firmware.value("channel").toString() == "stable" &&
+                    firmware.value("same_config").toBool() &&
+                    firmware.value("newer_version").toBool()) {
+                    m_firmware_available = firmware;
+                }
             }
         }
-        emit firmwaresChanged(m_firmwares);
-        emit firmwareAvailableChanged();
-    });
-    HttpManager::instance()->exec(activity);
-    emit activityCreated(activity);
+    }
+
+    emit firmwaresChanged();
+    emit firmwareAvailableChanged();
 }
 
 void JadeUpdateController::update(const QVariantMap& firmware)
@@ -219,41 +232,51 @@ void JadeUpdateController::update(const QVariantMap& firmware)
     m_updating = true;
     emit updatingChanged();
 
-    const auto path = firmware.value("path").toString();
-    const auto data = m_firmware_data.value(path);
+    const auto path = firmware.value("filename").toString();
 
-    if (data.isEmpty()) {
-        auto activity = new JadeBinaryRequestActivity(path, this);
-        connect(activity, &Activity::failed, this, [activity] {
-            activity->deleteLater();
+    m_fetching = true;
+    emit fetchingChanged();
+
+    auto activity = new JadeBinaryRequestActivity("/bin/" + type + "/" + path, this);
+    connect(activity, &Activity::failed, this, [=] {
+        activity->deleteLater();
+        m_fetching = false;
+        emit fetchingChanged();
+    });
+    connect(activity, &Activity::finished, this, [=] {
+        activity->deleteLater();
+        m_fetching = false;
+        emit fetchingChanged();
+        if (activity->hasError()) {
+            qDebug() << activity->response();
+        } else {
+            const auto data = QByteArray::fromBase64(activity->body().toByteArray());
+            install(firmware, data);
+        }
+    });
+    emit activityCreated(activity);
+    HttpManager::instance()->exec(activity);
+}
+
+void JadeUpdateController::install(const QVariantMap& firmware, const QByteArray& data)
+{
+    auto activity = new JadeUpdateActivity(firmware, data, m_device);
+    connect(activity, &JadeUpdateActivity::locked, this, [this, activity] {
+        auto unlock_activity = unlock();
+        connect(unlock_activity, &Activity::finished, this, [activity, unlock_activity] {
+            unlock_activity->deleteLater();
+            activity->exec();
         });
-        connect(activity, &Activity::finished, this, [this, firmware, path, activity] {
-            activity->deleteLater();
-            const auto data = QByteArray::fromBase64(activity->body().toLocal8Bit());
-            m_firmware_data.insert(path, data);
-            update(firmware);
+        connect(unlock_activity, &Activity::failed, this, [activity, unlock_activity] {
+            unlock_activity->deleteLater();
+            activity->fail();
         });
-        emit activityCreated(activity);
-        HttpManager::instance()->exec(activity);
-    } else {
-        auto activity = new JadeUpdateActivity(firmware, data, m_device);
-        connect(activity, &JadeUpdateActivity::locked, this, [this, activity] {
-            auto unlock_activity = unlock();
-            connect(unlock_activity, &Activity::finished, this, [activity, unlock_activity] {
-                unlock_activity->deleteLater();
-                activity->exec();
-            });
-            connect(unlock_activity, &Activity::failed, this, [activity, unlock_activity] {
-                unlock_activity->deleteLater();
-                activity->fail();
-            });
-        });
-        connect(activity, &Activity::failed, this, [activity] {
-            activity->deleteLater();
-        });
-        emit activityCreated(activity);
-        ActivityManager::instance()->exec(activity);
-    }
+    });
+    connect(activity, &Activity::failed, this, [activity] {
+        activity->deleteLater();
+    });
+    emit activityCreated(activity);
+    ActivityManager::instance()->exec(activity);
 }
 
 JadeUnlockActivity* JadeUpdateController::unlock()
@@ -262,4 +285,45 @@ JadeUnlockActivity* JadeUpdateController::unlock()
     HttpManager::instance()->exec(activity);
     emit activityCreated(activity);
     return activity;
+}
+
+JadeFirmwareController::JadeFirmwareController(QObject* parent)
+    : QObject(parent)
+{
+}
+
+void JadeFirmwareController::check()
+{
+    fetch("jade");
+    fetch("jade1.1");
+    if (qApp->arguments().indexOf("--debugjade")) {
+        fetch("jadedev");
+        fetch("jade1.1dev");
+    }
+}
+
+void JadeFirmwareController::fetch(const QString& type)
+{
+    auto req = new HttpRequestActivity(this);
+    req->setMethod("GET");
+    req->addUrl(QString("%1/bin/%2/index.json").arg(JADE_FW_SERVER_HTTPS, type));
+    req->addUrl(QString("%1/bin/%2/index.json").arg(JADE_FW_SERVER_ONION, type));
+
+    m_fetching ++;
+    emit fetchingChanged();
+
+    connect(req, &HttpRequestActivity::finished, this, [=] {
+        qDebug() << req->body().toJsonObject();
+        m_index[type] = req->body().toJsonObject();
+
+        emit indexChanged();
+        m_fetching --;
+        emit fetchingChanged();
+    });
+    connect(req, &HttpRequestActivity::failed, this, [=] {
+        m_fetching --;
+        emit fetchingChanged();
+    });
+
+    HttpManager::instance()->exec(req);
 }

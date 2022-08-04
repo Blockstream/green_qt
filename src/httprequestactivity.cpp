@@ -47,9 +47,26 @@ void HttpRequestActivity::addRootCertificate(const QString& root_certificate)
     m_root_certificates.append(root_certificate);
 }
 
-QString HttpRequestActivity::body() const
+QString HttpRequestActivity::contentType() const
 {
-    return m_response.value("body").toString();
+    const auto headers = m_response.value("headers").toObject();
+    return headers["content-type"].toString();
+}
+
+QVariant HttpRequestActivity::body() const
+{
+    const auto content_type = contentType();
+    qDebug() << Q_FUNC_INFO << "process response body with content type" << content_type;
+    const auto body = m_response.value("body").toString();
+    if (content_type == "application/json") {
+        const auto document = QJsonDocument::fromJson(body.toUtf8());
+        if (document.isObject()) return document.object();
+        if (document.isArray()) return document.array();
+    } else if (content_type.startsWith("text/xml")) {
+        return body;
+    } else {
+        return body.toUtf8();
+    }
 }
 
 bool HttpRequestActivity::hasError() const

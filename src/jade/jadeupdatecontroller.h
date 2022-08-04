@@ -17,17 +17,6 @@ public:
     JadeHttpRequestActivity(const QString& path, QObject* parent);
 };
 
-class JadeChannelRequestActivity : public JadeHttpRequestActivity
-{
-    Q_OBJECT
-    QML_ELEMENT
-public:
-    JadeChannelRequestActivity(const QString& base, const QString& channel, QObject* parent);
-    QVariantList firmwares() const;
-private:
-    const QString m_base;
-};
-
 class JadeBinaryRequestActivity : public JadeHttpRequestActivity
 {
     Q_OBJECT
@@ -74,20 +63,23 @@ class JadeUpdateController : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(JadeDevice* device READ device WRITE setDevice NOTIFY deviceChanged)
-    Q_PROPERTY(QString channel READ channel WRITE setChannel NOTIFY channelChanged)
+    Q_PROPERTY(QJsonObject index READ index WRITE setIndex NOTIFY indexChanged)
     Q_PROPERTY(QVariantList firmwares READ firmwares NOTIFY firmwaresChanged)
     Q_PROPERTY(QVariant firmwareAvailable READ firmwareAvailable NOTIFY firmwareAvailableChanged)
+    Q_PROPERTY(bool fetching READ fetching NOTIFY fetchingChanged)
     Q_PROPERTY(bool updating READ updating NOTIFY updatingChanged)
     QML_ELEMENT
 public:
     explicit JadeUpdateController(QObject *parent = nullptr);
     JadeDevice* device() const { return m_device; }
     void setDevice(JadeDevice* device);
-    QString channel() const { return m_channel; }
-    void setChannel(const QString& channel);
+    QJsonObject index() const { return m_index; }
+    void setIndex(const QJsonObject& index);
     QVariantList firmwares() const { return m_firmwares; }
     QVariant firmwareAvailable() const { return m_firmware_available; }
+    bool fetching() const { return m_fetching; }
     bool updating() const { return m_updating; }
+    void install(const QVariantMap &firmware, const QByteArray &data);
 public slots:
     void disconnectDevice();
     void check();
@@ -96,20 +88,45 @@ public slots:
 signals:
     void activityCreated(Activity* activity);
     void deviceChanged(JadeDevice* device);
-    void channelChanged(QString channel);
-    void firmwaresChanged(const QVariantList& firmwares);
+    void indexChanged();
+    void firmwaresChanged();
     void firmwareAvailableChanged();
+    void fetchingChanged();
     void updatingChanged();
 protected:
     void pushActivity(Activity* activity);
     void popActivity();
 private:
     JadeDevice* m_device{nullptr};
+    QJsonObject m_index;
     QString m_channel;
+    QString type;
     QVariantList m_firmwares;
     QMap<QString, QByteArray> m_firmware_data;
     QVariant m_firmware_available;
+    bool m_fetching{false};
     bool m_updating{false};
+};
+
+class JadeFirmwareController : public QObject
+{
+    Q_OBJECT
+    Q_PROPERTY(bool fetching READ fetching NOTIFY fetchingChanged)
+    Q_PROPERTY(QJsonObject index READ index NOTIFY indexChanged)
+    QML_ELEMENT
+public:
+    explicit JadeFirmwareController(QObject* parent = nullptr);
+    bool fetching() const { return m_fetching > 0; }
+    QJsonObject index() const { return m_index; }
+public slots:
+    void check();
+signals:
+    void fetchingChanged();
+    void indexChanged();
+private:
+    void fetch(const QString& path);
+    int m_fetching{0};
+    QJsonObject m_index;
 };
 
 #endif // GREEN_JADEUPDATECONTROLLER_H

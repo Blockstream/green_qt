@@ -68,7 +68,7 @@ QUrl BlogPost::imagePath()
             connect(m_image_request, &Activity::finished, this, [=] {
                 QFile file(path);
                 if (file.open(QFile::WriteOnly)) {
-                    file.write(QByteArray::fromBase64(m_image_request->body().toLocal8Bit()));
+                    file.write(QByteArray::fromBase64(m_image_request->body().toByteArray()));
                     file.close();
                 }
                 m_image_request->deleteLater();
@@ -161,7 +161,7 @@ void BlogController::fetch()
         auto activity = static_cast<HttpRequestActivity*>(sender());
         // TODO propagate error
         if (activity->hasError()) return;
-        const auto content = activity->body();
+        const auto content = activity->body().toString();
         QFile file(GetDataFile("cache", "blog.xml"));
         if (file.open(QFile::WriteOnly)) {
             file.write(content.toUtf8());

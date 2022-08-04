@@ -337,6 +337,27 @@ int JadeAPI::otaUpdate(const QByteArray& fwcmp, const int fwlen, const int chunk
     return id;
 }
 
+int JadeAPI::otaDeltaUpdate(const QByteArray& fwcmp, const int fwlen, const int patch_size, const int chunkSize, const ResponseHandler &cbProgress, const ResponseHandler &cb)
+{
+    // The exposed/returned id that will key the caller's handler (invoked
+    // when the OTA completes successfully or errors).
+    const int id = registerResponseHandler(cb);
+
+    // Register the recursive callback used to upload ota data chunks
+    const int tmpId = registerResponseHandler(makeOtaChunkCallback(id, fwcmp, chunkSize, 0, cbProgress));
+
+    QCryptographicHash hash(QCryptographicHash::Sha256);
+    hash.addData(fwcmp);
+    const auto cmphash = hash.result();
+
+    // Initiate OTA process, and return the exposed id
+    const int compressedSize = fwcmp.length();
+    const QCborMap params = { {"fwsize", fwlen}, {"cmpsize", compressedSize}, {"cmphash", cmphash}, {"patchsize", patch_size} };
+    const QCborMap request = getRequest(tmpId, "ota_delta", params);
+    sendToJade(request);
+    return id;
+}
+
 // Helper for OTA (per-)chunk upload
 JadeAPI::ResponseHandler JadeAPI::makeOtaChunkCallback(const int id, const QByteArray &fwcmp, const int chunkSize, const int currentPos, const ResponseHandler &cbProgress)
 {

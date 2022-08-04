@@ -24,6 +24,11 @@ MainPage {
         }
     }
 
+    JadeFirmwareController {
+        id: firmware_controller
+        Component.onCompleted: firmware_controller.check()
+    }
+
     JadeDeviceSerialPortDiscoveryAgent {
     }
     DeviceListModel {
@@ -122,7 +127,7 @@ MainPage {
                 delegate: Button {
                     id: self
                     required property JadeDevice device
-                    readonly property string location: '/jade/' + device.versionInfo.EFUSEMAC.slice(-6)
+                    readonly property string location: device ? '/jade/' + device.versionInfo.EFUSEMAC.slice(-6) : '/jade'
                     width: ListView.view.contentWidth
                     onClicked: navigation.go(location)
                     padding: 16
@@ -186,7 +191,7 @@ MainPage {
                                     color: constants.c400
                                     radius: 4
                                 }
-                                text: formatDeviceState(device.state)
+                                text: device ? formatDeviceState(device.state) : ''
                             }
                         }
                     }
@@ -431,18 +436,27 @@ MainPage {
                         verticalAlignment: Label.AlignVCenter
                         text: qsTrId('id_update')
                     }
-                    GButton {
-                        padding: 4
-                        topInset: 0
-                        bottomInset: 0
-                        highlighted: self.device.updateRequired || update_dialog.controller.firmwareAvailable
-                        text: {
-                            if (self.device.updateRequired) return qsTrId('id_new_jade_firmware_required')
-                            const fw = update_dialog.controller.firmwareAvailable
-                            if (fw) return `${fw.version} available`
-                            return qsTrId('id_check_for_updates')
+                    RowLayout {
+                        GButton {
+                            padding: 4
+                            topInset: 0
+                            bottomInset: 0
+                            highlighted: (self.device && self.device.updateRequired) || !!update_dialog.controller.firmwareAvailable
+                            enabled: Object.keys(firmware_controller.index).length > 0
+                            text: {
+                                if (self.device.updateRequired) return qsTrId('id_new_jade_firmware_required')
+                                const fw = update_dialog.controller.firmwareAvailable
+                                if (fw) return `${fw.version} available`
+                                return qsTrId('id_check_for_updates')
+                            }
+                            onClicked: update_dialog.open()
                         }
-                        onClicked: update_dialog.open()
+                        HSpacer {}
+                        BusyIndicator {
+                            Layout.preferredHeight: 32
+                            running: firmware_controller.fetching
+                            visible: running
+                        }
                     }
                 }
             }
