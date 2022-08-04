@@ -112,12 +112,7 @@ JadeUpdateActivity::JadeUpdateActivity(const QVariantMap& firmware, const QByteA
 void JadeUpdateActivity::exec()
 {
     const auto size = m_firmware.value("size").toLongLong();
-    auto chunk_size = m_device->versionInfo().value("JADE_OTA_MAX_CHUNK").toInt();
-#ifdef Q_OS_MACOS
-    if (m_device->systemLocation().contains("cu.usbmodem")) {
-        chunk_size = 256;
-    }
-#endif
+    const auto chunk_size = m_device->api()->relaxWrite() ? 256 : m_device->versionInfo().value("JADE_OTA_MAX_CHUNK").toInt();
 
     m_device->api()->otaUpdate(m_data, size, chunk_size, [this](const QVariantMap& result) {
         Q_ASSERT(result.contains("uploaded"));

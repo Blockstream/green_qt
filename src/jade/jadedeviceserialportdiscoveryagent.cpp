@@ -52,7 +52,11 @@ JadeDeviceSerialPortDiscoveryAgent::JadeDeviceSerialPortDiscoveryAgent(QObject* 
 
             auto device = devices.take(system_location);
             if (!device) {
-                auto api = new JadeAPI(info);
+                bool relax_write = false;
+#ifdef Q_OS_MACOS
+                relax_write = system_location.contains("cu.usbmodem");
+#endif
+                auto api = new JadeAPI(info, relax_write);
                 device = new JadeDevice(api, system_location, this);
                 api->setParent(device);
                 connect(api, &JadeAPI::onConnected, this, [this, device] {

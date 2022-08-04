@@ -1,13 +1,15 @@
 #include <QDebug>
 #include <QSerialPort>
+#include <QThread>
 #include <QTimer>
 
 #include "jadeserialimpl.h"
 
-JadeSerialImpl::JadeSerialImpl(const QSerialPortInfo &deviceInfo,
+JadeSerialImpl::JadeSerialImpl(const QSerialPortInfo &deviceInfo, bool relax_write,
                                QObject *parent)
     : JadeConnection(parent),
-      m_serial(new QSerialPort(deviceInfo, this)) // take ownership
+      m_serial(new QSerialPort(deviceInfo, this)), // take ownership
+      m_relax_write(relax_write)
 {
     Q_ASSERT(m_serial);
 
@@ -81,7 +83,7 @@ void JadeSerialImpl::disconnectDeviceImpl()
     // Emit 'onDisconnected' immediately
     emit onDisconnected();
 }
-#include <QThread>
+
 // Write bytes over serial
 int JadeSerialImpl::writeImpl(const QByteArray &data)
 {
@@ -100,7 +102,7 @@ int JadeSerialImpl::writeImpl(const QByteArray &data)
             m_serial->waitForBytesWritten(100);
             written += wrote;
         }
-        QThread::msleep(100);
+        if (m_relax_write) QThread::msleep(100);
     }
 
     // qDebug() << "JadeSerialImpl::writeImpl() sent" << written << "bytes";
