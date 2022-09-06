@@ -111,7 +111,7 @@ void Session::update()
         }, this);
         Q_ASSERT(rc == GA_OK);
 
-        if (!m_network->isElectrum() && m_use_tor) emit activityCreated(new SessionTorCircuitActivity(this));
+        if (m_use_tor) emit activityCreated(new SessionTorCircuitActivity(this));
         emit activityCreated(new SessionConnectActivity(this));
         m_connect_handler = new ConnectHandler(this);
         m_connect_handler.track(QObject::connect(m_connect_handler, &ConnectHandler::finished, this, [=] {

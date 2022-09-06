@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Automatically refresh address list
+- Tor activity indicator visibility when loging into singlesig wallets
 
 ## [1.1.3] - 2022-07-18
 ### Added
