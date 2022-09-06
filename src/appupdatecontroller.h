@@ -23,7 +23,7 @@ signals:
     void updateAvailableChanged(bool updateAvailable);
 private:
     QString m_latest_version;
-    bool m_update_available;
+    bool m_update_available{false};
 };
 
 class CheckForUpdatesActivity : public HttpRequestActivity
