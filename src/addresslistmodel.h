@@ -27,7 +27,7 @@ public:
 
     Account* account() const { return m_account; }
     void setAccount(Account* account);
-    bool fetching() const { return m_handler != nullptr; }
+    bool fetching() const { return m_fetching; }
 
     QHash<int,QByteArray> roleNames() const override;
     void fetchMore(const QModelIndex& parent) override;
@@ -38,8 +38,8 @@ public:
 public slots:
     void reload();
 signals:
-    void accountChanged(Account* account);
-    void fetchingChanged(bool fetching);
+    void accountChanged();
+    void fetchingChanged();
 private:
     void fetch(bool reset);
 private:
@@ -48,6 +48,7 @@ private:
     bool m_has_unconfirmed{false};
     Handler* m_handler{nullptr};
     QTimer* const m_reload_timer;
+    bool m_fetching{false};
     int m_last_pointer{0};
 };
 

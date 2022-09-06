@@ -10,45 +10,54 @@ AddressListModel::AddressListModel(QObject* parent)
 {
     m_reload_timer->setSingleShot(true);
     m_reload_timer->setInterval(200);
-    connect(m_reload_timer, &QTimer::timeout, [this] {
-        m_has_unconfirmed = false;
+    connect(m_reload_timer, &QTimer::timeout, this, [&] {
         fetch(true);
     });
 }
 
 AddressListModel::~AddressListModel()
 {
-
 }
 
 void AddressListModel::setAccount(Account* account)
 {
     if (m_account) {
+        disconnect(m_account, &Account::addressGenerated, this, &AddressListModel::reload);
         beginResetModel();
         m_handler = nullptr;
         m_addresses.clear();
         m_account = nullptr;
-        emit accountChanged(nullptr);
+        emit accountChanged();
         endResetModel();
     }
     if (!account) return;
     m_account = account;
-    emit accountChanged(account);
+    emit accountChanged();
     if (m_account) {
+        connect(m_account, &Account::addressGenerated, this, &AddressListModel::reload);
         fetchMore(QModelIndex());
     }
 }
 
 void AddressListModel::fetch(bool reset)
 {
+    if (m_handler) return;
+
     auto handler = new GetAddressesHandler(m_last_pointer, m_account);
 
     QObject::connect(handler, &Handler::done, this, [this, reset, handler] {
         handler->deleteLater();
+
+        if (m_handler != handler) {
+            reload();
+            return;
+        }
+
+        m_fetching = false;
         m_handler = nullptr;
         m_last_pointer = handler->lastPointer();
-        emit fetchingChanged(false);
-        // instantiate missing transactions
+        emit fetchingChanged();
+        // instantiate missing addresses
         QVector<Address*> addresses;
         for (QJsonValue data : handler->addresses()) {
             auto address = m_account->getOrCreateAddress(data.toObject());
@@ -61,7 +70,7 @@ void AddressListModel::fetch(bool reset)
             m_addresses = addresses;
             endResetModel();
         } else if (addresses.size() > 0) {
-            // new page of transactions, just append to existing transaction
+            // new page of addresses, just append
             beginInsertRows(QModelIndex(), m_addresses.size(), m_addresses.size() + addresses.size() - 1);
             m_addresses.append(addresses);
             endInsertRows();
@@ -74,7 +83,8 @@ void AddressListModel::fetch(bool reset)
 
     handler->exec();
     m_handler = handler;
-    emit fetchingChanged(true);
+    m_fetching = true;
+    emit fetchingChanged();
 }
 
 QHash<int, QByteArray> AddressListModel::roleNames() const
@@ -135,5 +145,10 @@ QVariant AddressListModel::data(const QModelIndex& index, int role) const
 void AddressListModel::reload()
 {
     if (!m_account) return;
+
+    m_handler = nullptr;
+    m_has_unconfirmed = false;
+    m_last_pointer = 0;
+
     m_reload_timer->start();
 }

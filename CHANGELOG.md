@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Enable jade channel selector via command line option
 
 ### Fixed
+- Automatically refresh address list
 
 ## [1.1.3] - 2022-07-18
 ### Added

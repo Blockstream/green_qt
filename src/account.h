@@ -61,6 +61,7 @@ signals:
     void balanceChanged();
     void balancesChanged();
     void notificationHandled(const QJsonObject& notification);
+    void addressGenerated();
 public slots:
     void reload();
     void rename(QString name, bool active_focus);

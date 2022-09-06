@@ -40,6 +40,7 @@ ReceiveAddressController::ReceiveAddressController(QObject *parent) : QObject(pa
 
 ReceiveAddressController::~ReceiveAddressController()
 {
+    emit m_account->addressGenerated();
 }
 
 Account *ReceiveAddressController::account() const
@@ -122,6 +123,7 @@ void ReceiveAddressController::generate()
 
     auto handler = new GetReceiveAddressHandler(m_account);
     connect(handler, &Handler::done, this, [this, handler] {
+        handler->deleteLater();
         m_result = handler->result().value("result").toObject();
         m_address = m_result.value("address").toString();
         setGenerating(false);

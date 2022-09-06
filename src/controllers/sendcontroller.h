@@ -28,6 +28,7 @@ class SendController : public AccountController
     QML_ELEMENT
 public:
     explicit SendController(QObject* parent = nullptr);
+    ~SendController();
 
     bool isValid() const;
 

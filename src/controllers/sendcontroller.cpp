@@ -17,6 +17,13 @@ SendController::SendController(QObject* parent)
     connect(this, &SendController::walletChanged, this, &SendController::create);
 }
 
+SendController::~SendController()
+{
+    if (account()) {
+        emit account()->addressGenerated();
+    }
+}
+
 bool SendController::isValid() const
 {
     return m_valid;
