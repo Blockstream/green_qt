@@ -115,15 +115,12 @@ void Session::update()
         emit activityCreated(new SessionConnectActivity(this));
         m_connect_handler = new ConnectHandler(this);
         m_connect_handler.track(QObject::connect(m_connect_handler, &ConnectHandler::finished, this, [=] {
-            if (m_connect_handler->resultAt(0) == GA_OK) {
-                m_connect_handler->deleteLater();
-                setConnected(true);
-            } else {
-                m_connect_handler->deleteLater();
-                setConnected(false);
-            }
+            m_connect_handler->deleteLater();
+            setConnecting(false);
+            setConnected(m_connect_handler->resultAt(0) == GA_OK);
         }));
         m_connect_handler->exec();
+        setConnecting(true);
 
         return;
     }
