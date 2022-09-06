@@ -52,7 +52,7 @@ void HttpManager::dispatch()
 {
     m_idle_timer->stop();
 
-    if (m_session && !m_running) {
+    if (m_session && !m_running && !m_session->isConnecting()) {
         auto settings = Settings::instance();
         if (m_session->useTor() != settings->useTor() ||
             m_session->useProxy() != settings->useProxy() ||
@@ -78,9 +78,8 @@ void HttpManager::dispatch()
         auto network = NetworkManager::instance()->network("electrum-mainnet");
         m_session = new Session(network, this);
         m_session->setActive(true);
-        connect(m_session, &Session::connectedChanged, this, [=] {
-            dispatch();
-        });
+        connect(m_session, &Session::connectedChanged, this, &HttpManager::dispatch);
+        connect(m_session, &Session::connectingChanged, this, &HttpManager::dispatch);
         emit sessionChanged(m_session);
         return;
     }
