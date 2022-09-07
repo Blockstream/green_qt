@@ -13,6 +13,14 @@ SignupController::SignupController(QObject *parent)
 {
 }
 
+void SignupController::setMnemonic(const QStringList &mnemonic)
+{
+    if (m_mnemonic == mnemonic) return;
+    m_mnemonic = mnemonic;
+    emit mnemonicChanged(m_mnemonic);
+    update();
+}
+
 void SignupController::setNetwork(Network *network)
 {
     if (!m_network.update(network)) return;
@@ -126,17 +134,7 @@ void SignupController::setActive(bool active)
     update();
 }
 
-int SignupController::mnemonicSize()
+QStringList SignupController::generateMnemonic(int size)
 {
-    return m_mnemonic_size;
-}
-
-void SignupController::setMnemonicSize(int mnemonic_size)
-{
-    if (m_mnemonic_size == mnemonic_size) return;
-    m_mnemonic_size = mnemonic_size;
-    emit mnemonicSizeChanged(m_mnemonic_size);
-
-    m_mnemonic = gdk::generate_mnemonic(mnemonic_size);
-    emit mnemonicChanged(m_mnemonic);
+    return gdk::generate_mnemonic(size);
 }

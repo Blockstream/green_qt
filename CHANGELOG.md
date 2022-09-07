@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ensure at least one account is not archived
 - Automatically refresh address list
 - Tor activity indicator visibility when loging into singlesig wallets
+- Signup dialogs back button functionality and visibility
 
 ## [1.1.3] - 2022-07-18
 ### Added

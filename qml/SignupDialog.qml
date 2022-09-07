@@ -32,7 +32,7 @@ AbstractDialog {
         }
         type: navigation.param.type || ''
         pin: navigation.param.pin || ''
-        mnemonicSize: navigation.param.size || 12
+        mnemonic: (navigation.param.mnemonic || '').split(',')
         active: navigation.param.verify || false
     }
 
@@ -56,9 +56,10 @@ AbstractDialog {
 
     footer: DialogFooter {
         GButton {
-            action: stack_layout.currentItem ? stack_layout.currentItem.backAction || null : null
             large: true
-            visible: action
+            visible: navigation.canPop
+            text: qsTrId('id_back')
+            onClicked: navigation.pop()
         }
         GPane {
             Layout.minimumHeight: 48
@@ -105,11 +106,6 @@ AbstractDialog {
             active: (navigation.param.network || false) && (navigation.param.type || false) && !controller.network
             animated: self.opened
             sourceComponent: SelectServerTypeView {
-                readonly property Action backAction: Action {
-                    enabled: navigation.path === '/signup'
-                    text: qsTrId('id_back')
-                    onTriggered: navigation.set({ network: undefined, type: undefined })
-                }
             }
         }
 
@@ -117,11 +113,6 @@ AbstractDialog {
             active: controller.network && !controller.network.liquid
             animated: self.opened
             sourceComponent: WelcomePage {
-                readonly property Action backAction: Action {
-                    enabled: navigation.path === '/signup'
-                    text: qsTrId('id_back')
-                    onTriggered: navigation.set({ network: undefined, server_type: undefined })
-                }
                 readonly property list<Action> actions: [
                     Action {
                         text: qsTrId('id_continue')
@@ -135,10 +126,6 @@ AbstractDialog {
             active: controller.network && controller.network.liquid && controller.type === 'default'
             animated: self.opened
             sourceComponent: GPane {
-                readonly property Action backAction: Action {
-                    text: qsTrId('id_back')
-                    onTriggered: navigation.set({ network: undefined, server_type: undefined })
-                }
                 readonly property list<Action> actions: [
                     Action {
                         text: qsTrId('id_continue')
@@ -211,10 +198,6 @@ AbstractDialog {
             active: controller.network && controller.network.key === 'liquid' && controller.type === 'amp'
             animated: self.opened
             sourceComponent: GPane {
-                readonly property Action backAction: Action {
-                    text: qsTrId('id_back')
-                    onTriggered: navigation.set({ server_type: undefined })
-                }
                 readonly property list<Action> actions: [
                     Action {
                         text: qsTrId('id_continue')
@@ -287,28 +270,20 @@ AbstractDialog {
             active: navigation.param.tos || false
             animated: self.opened
             sourceComponent: MnemonicPage {
-                readonly property Action backAction: Action {
-                    text: qsTrId('id_back')
-                    onTriggered: navigation.set({ tos: undefined })
-                }
+                id: mnemonic_page
                 property list<Action> actions: [
                     Action {
                         text: qsTrId('id_continue')
-                        onTriggered: navigation.set({ backup: true })
+                        onTriggered: navigation.set({ backup: true, size: mnemonicSize, mnemonic: mnemonic_page.mnemonic.join(',') })
                     }
                 ]
-                mnemonic: controller.mnemonic
-                onMnemonicSizeChanged: navigation.set({ size: mnemonicSize })
+                mnemonic: controller.generateMnemonic(mnemonicSize || 12)
             }
         }
         AnimLoader {
             active: navigation.param.backup || false
             animated: self.opened
             sourceComponent: MnemonicQuizPage {
-                readonly property Action backAction: Action {
-                    text: qsTrId('id_back')
-                    onTriggered: navigation.set({ backup: undefined })
-                }
                 mnemonic: controller.mnemonic
                 onCompleteChanged: if (complete) navigation.set({ quiz: true })
             }
@@ -319,10 +294,6 @@ AbstractDialog {
             sourceComponent: Pane {
                 background: null
                 contentItem: ColumnLayout {
-                    readonly property Action backAction: Action {
-                        text: qsTrId('id_back')
-                        onTriggered: navigation.set({ backup: undefined, quiz: undefined })
-                    }
                     spacing: 16
                     VSpacer {
                     }
