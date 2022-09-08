@@ -39,7 +39,6 @@ MainPageHeader {
                 Control {
                     Layout.maximumWidth: self.width / 3
                     padding: 2
-                    rightPadding: 16
                     leftPadding: 8
                     background: null
                     contentItem: RowLayout {
@@ -88,7 +87,6 @@ MainPageHeader {
                     Layout.maximumWidth: self.width / 2
                     padding: 2
                     rightPadding: account_type_badge.visible ? 24 : 16
-                    leftPadding: 16
                     background: null
                     contentItem: RowLayout {
                         spacing: account_type_badge.visible ? 8 : 0
