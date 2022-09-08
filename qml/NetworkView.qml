@@ -97,7 +97,8 @@ Item {
                     GridView {
                         id: grid_view
                         anchors.fill: parent
-                        anchors.margins: 16
+                        anchors.topMargin: 16
+                        anchors.bottomMargin: 16
                         cellWidth: height * 1.3
                         cellHeight: height
                         flow: GridView.FlowTopToBottom
@@ -230,7 +231,7 @@ Item {
                     GListView {
                         id: wallet_list_view
                         anchors.fill: parent
-                        anchors.margins: 16
+                        anchors.topMargin: 16
                         currentIndex: -1
                         model: WalletListModel {
                             network: self.network
@@ -247,6 +248,7 @@ Item {
     component WalletDelegate: ItemDelegate {
         id: delegate
         required property Wallet wallet
+        padding: 0
         background: Rectangle {
             color: Qt.rgba(1, 1, 1, delegate.hovered ? 0.05 : 0)
             Rectangle {
@@ -306,7 +308,6 @@ Item {
                 }
             }
         }
-        padding: 16
         highlighted: ListView.isCurrentItem
         property bool valid: wallet.loginAttemptsRemaining > 0
         onClicked: navigation.go(`/${wallet.network.key}/${wallet.id}`)

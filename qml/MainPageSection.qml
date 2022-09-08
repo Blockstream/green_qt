@@ -2,10 +2,10 @@ import QtQuick 2.13
 import QtQuick.Controls 2.13
 
 Page {
-    padding: 16
+    padding: 0
     header: SectionLabel {
         topPadding: 16
-        leftPadding: 16
+        leftPadding: 0
         text: title
     }
     background: Item {
