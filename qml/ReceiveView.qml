@@ -92,7 +92,7 @@ ColumnLayout {
     RowLayout {
         Label {
             text: receive_address.uri
-            horizontalAlignment: Label.AlignHCenter
+            horizontalAlignment: Label.AlignLeft
             verticalAlignment: Label.AlignVCenter
             Layout.fillWidth: true
             Layout.preferredWidth: 0
