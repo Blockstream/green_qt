@@ -10,6 +10,8 @@ GPane {
     id: self
     contentItem: RowLayout {
         spacing: 24
+        HSpacer {
+        }
         Card {
             server_type: 'electrum'
             icons: ['qrc:/svg/singleSig.svg']
@@ -73,7 +75,7 @@ GPane {
                     Layout.fillWidth: true
                     text: self.title
                     font.bold: true
-                    font.pixelSize: 20
+                    font.pixelSize: 18
                 }
             }
             Label {

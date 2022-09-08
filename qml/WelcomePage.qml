@@ -12,7 +12,7 @@ GPane {
         Label {
             Layout.alignment: Qt.AlignHCenter
             text: qsTrId('id_welcome_to') + ' ' + qsTrId('Blockstream Green')
-            font.pixelSize: 20
+            font.pixelSize: 18
         }
         Image {
             Layout.fillWidth: true

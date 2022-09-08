@@ -34,7 +34,7 @@ Dialog {
             Layout.preferredWidth: 0
             Layout.minimumWidth: 400
             text: title
-            font.pixelSize: 18
+            font.pixelSize: 22
             font.styleName: 'Medium'
             elide: Label.ElideRight
             ToolTip.text: title

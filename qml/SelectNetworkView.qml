@@ -12,12 +12,14 @@ GPane {
 
     id: self
     contentItem: RowLayout {
+        spacing: 24
+        HSpacer {
+        }
         Section {
             visible: navigation.path === `/${view}` || navigation.path === `/mainnet/${view}`
             title: 'Bitcoin Network'
-            color: 'orange'
             contentItem: RowLayout {
-                spacing: 24
+                spacing: 12
                 Card {
                     network: 'bitcoin'
                     type: 'default'
@@ -25,16 +27,13 @@ GPane {
                     title: 'Bitcoin Wallet'
                     description: qsTrId('id_bitcoin_is_the_worlds_leading')
                 }
-                HSpacer {
-                }
             }
         }
         Section {
             visible: navigation.path === `/${view}` || navigation.path === `/liquid/${view}`
             title: 'Liquid Network'
-            color: 'cyan'
             contentItem: RowLayout {
-                spacing: 24
+                spacing: 12
                 Card {
                     network: 'liquid'
                     type: 'default'
@@ -49,8 +48,6 @@ GPane {
                     icons: ['qrc:/svg/amp.svg']
                     title: qsTrId('id_amp_wallet')
                     description: qsTrId('id_amp_accounts_are_only_available')
-                }
-                HSpacer {
                 }
             }
         }
@@ -118,14 +115,13 @@ GPane {
     }
 
     component Section: Page {
-        property color color
-        id: self
+        id: section
         bottomPadding: 12
         header: Label {
             bottomPadding: 12
             topPadding: 12
             opacity: 0.5
-            text: self.title
+            text: section.title
         }
         background: null
     }

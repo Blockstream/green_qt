@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Enable jade channel selector via command line option
+- Increased the size of sign up dialog titles
+- Moved empty transactions list label to top left of the container
 
 ### Fixed
 - Ensure at least one account is not archived

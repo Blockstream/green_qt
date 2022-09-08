@@ -71,7 +71,8 @@ Page {
 
         Label {
             visible: !list_view.model.fetching && list_view.count === 0
-            anchors.centerIn: parent
+            anchors.top: parent.top
+            anchors.left: parent.left
             color: 'white'
             text: qsTrId('id_your_transactions_will_be_shown')
         }
