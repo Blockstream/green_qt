@@ -167,32 +167,6 @@ WalletDialog {
             id: layout
             width: flickable.availableWidth
             spacing: constants.s1
-            GPane {
-                visible: confirmations === 0 && !transaction.account.wallet.watchOnly && !network.liquid && (transaction.type === Transaction.Redeposit || transaction.type === Transaction.Outgoing)
-                Layout.fillWidth: true
-                background: Rectangle {
-                    radius: 4
-                    color: constants.c500
-                }
-                contentItem: RowLayout {
-                    Label {
-                        text: confirmations === 0 ? qsTrId('Until the first confirmation, you can still speed up with a bigger fee.') : qsTrId('You can no longer speed up the transaction.')
-                        font.pixelSize: 12
-                    }
-                    HSpacer {
-                    }
-                    GButton {
-                        highlighted: confirmations === 0
-                        text: qsTrId('Speed up')
-                        font.pixelSize: 10
-                        enabled: transaction.data.can_rbf
-                        onClicked: {
-                            bump_fee_dialog.createObject(window, { transaction }).open()
-                            self.accept()
-                        }
-                    }
-                }
-            }
 
             Repeater {
                 visible: count > 0
@@ -229,6 +203,21 @@ WalletDialog {
                 }
             }
 
+            RowLayout {
+                visible: confirmations === 0 && !transaction.account.wallet.watchOnly && !network.liquid && (transaction.type === Transaction.Redeposit || transaction.type === Transaction.Outgoing)
+                HSpacer {
+                }
+                GButton {
+                    large: true
+                    highlighted: confirmations === 0
+                    text: qsTrId('id_increase_fee')
+                    enabled: transaction.data.can_rbf
+                    onClicked: {
+                        bump_fee_dialog.createObject(window, { transaction }).open()
+                    }
+                }
+            }
+
             GPane {
                 Layout.fillWidth: true
                 background: Rectangle {
@@ -240,12 +229,15 @@ WalletDialog {
                 contentItem: RowLayout {
                     GPane {
                         Layout.fillWidth: true
+                        Layout.fillHeight: true
                         padding: 0
                         contentItem: ColumnLayout {
                             spacing: constants.s1
                             CopyableLabel {
                                 font.pixelSize: 12
                                 text: formatTransactionTimestamp(transaction.data)
+                            }
+                            VSpacer {
                             }
                             Label {
                                 color: 'white'
@@ -275,8 +267,8 @@ WalletDialog {
                         }
                     }
                     TransactionProgress {
-                        implicitWidth: 64
-                        implicitHeight: 64
+                        implicitWidth: 48
+                        implicitHeight: 48
                         max: network.liquid ? 2 : 6
                         current: confirmations
                         indeterminate: spv && spv.value === Transaction.InProgress
