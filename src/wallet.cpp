@@ -350,9 +350,15 @@ void Wallet::setWatchOnly(const QString& username, const QString& password)
 {
     Q_ASSERT(!m_watch_only);
     int rc = GA_set_watch_only(m_session->m_session, username.toUtf8().constData(), password.toUtf8().constData());
-    if (rc != GA_OK) return;
+
+    if (rc != GA_OK) {
+        emit watchOnlyUpdateFailure();
+        return;
+    }
+
     m_username = username;
     emit usernameChanged(m_username);
+    emit watchOnlyUpdateSuccess();
 }
 
 void Wallet::updateConfig()

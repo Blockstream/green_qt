@@ -176,6 +176,8 @@ signals:
     void displayUnitChanged(const QString display_unit);
     void deviceChanged(Device* device);
     void deviceDetailsChanged();
+    void watchOnlyUpdateSuccess();
+    void watchOnlyUpdateFailure();
 protected:
     bool eventFilter(QObject* object, QEvent* event) override;
     void timerEvent(QTimerEvent* event) override;

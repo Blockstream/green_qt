@@ -147,6 +147,39 @@ ColumnLayout {
                 }
             }
         }
+
+        Connections {
+            target: wallet
+            onWatchOnlyUpdateSuccess: {
+                const dialog = message_dialog.createObject(window, {
+                  title: qsTrId('id_success'),
+                  message: 'Watch-only credentials updated successfully.',
+                })
+                dialog.open()
+            }
+            onWatchOnlyUpdateFailure: {
+                const dialog = message_dialog.createObject(window, {
+                    title: qsTrId('id_warning'),
+                    message: 'Failed to set new watch-only credentials.',
+                })
+                dialog.open()
+            }
+        }
+
+        Component {
+            id: message_dialog
+            MessageDialog {
+                id: dialog
+                wallet: self.wallet
+                width: 350
+                actions: [
+                    Action {
+                        text: qsTrId('id_ok')
+                        onTriggered: dialog.reject()
+                    }
+                ]
+            }
+        }
     }
 
     Loader {
