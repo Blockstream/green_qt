@@ -1,6 +1,5 @@
 #include "account.h"
 #include "accountlistmodel.h"
-#include "network.h"
 #include "wallet.h"
 
 AccountListModel::AccountListModel(QObject* parent)

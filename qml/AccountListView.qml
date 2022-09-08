@@ -142,7 +142,7 @@ SwipeView {
             self.clicked(account)
         }
         Menu {
-            id: menu
+            id: account_delegate_menu
             MenuItem {
                 text: qsTrId('id_rename')
                 enabled: name_field.enabled
@@ -150,6 +150,7 @@ SwipeView {
             }
             MenuItem {
                 text: delegate.account.hidden ? qsTrId('id_unarchive') : qsTrId('id_archive')
+                enabled: delegate.account.hidden || account_list_view.count > 1
                 onTriggered: delegate.account.toggleHidden()
             }
         }
@@ -161,7 +162,7 @@ SwipeView {
             TapHandler {
                 enabled: Settings.enableExperimental && delegate.highlighted
                 acceptedButtons: Qt.RightButton
-                onTapped: menu.popup()
+                onTapped: account_delegate_menu.popup()
             }
         }
         highlighted: currentAccount === delegate.account
@@ -249,7 +250,7 @@ SwipeView {
                     id: tool_button
                     x: constants.s1
                     icon.source: 'qrc:/svg/kebab.svg'
-                    onClicked: menu.popup()
+                    onClicked: account_delegate_menu.popup()
                 }
             }
         }
