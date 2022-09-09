@@ -12,7 +12,7 @@ GPane {
 
     id: self
     contentItem: RowLayout {
-        spacing: 24
+        spacing: 12
         HSpacer {
         }
         Section {

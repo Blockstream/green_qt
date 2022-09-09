@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Signup dialogs back button functionality and visibility
 - Prevent send dialog address textfield grow container
 - In transaction details, hide entity label when empty
+- Enhanced consistency of paddings and alignments of UI containers
 
 ## [1.1.3] - 2022-07-18
 ### Added

@@ -6,6 +6,7 @@ Label {
     id: self
     property bool pointer: true
     property var error
+    visible: text != ""
     onErrorChanged: if (error) text = error
     scale: self.error ? 1 : 0
     Behavior on scale {

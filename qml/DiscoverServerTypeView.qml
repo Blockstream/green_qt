@@ -66,10 +66,8 @@ Page {
         }
 
         Layout.alignment: Qt.AlignTop
-        Layout.minimumWidth: 405
-        //Layout.fillHeight: true
+        Layout.minimumHeight: 250
         Layout.fillWidth: true
-
         padding: 24
         background: Rectangle {
             border.width: 1
@@ -80,6 +78,7 @@ Page {
         contentItem: ColumnLayout {
             spacing: 12
             RowLayout {
+                Layout.fillHeight: false
                 spacing: 12
                 Repeater {
                     model: self.icons
@@ -91,45 +90,33 @@ Page {
                     }
                 }
                 Label {
-                    Layout.fillWidth: true
+                    Layout.preferredWidth: 0
                     text: self.title
                     font.bold: true
                     font.pixelSize: 20
                 }
             }
-            VSpacer {
-            }
-            Loader {
-                Layout.alignment: Qt.AlignCenter
-                active: controller.wallet && controller.wallet.hasPinData
-                visible: active
-                sourceComponent: ColumnLayout {
-                    Layout.fillHeight: false
-                    spacing: constants.s1
-                    Label {
-                        Layout.alignment: Qt.AlignCenter
-                        text: qsTrId('id_wallet_already_restored')
-                    }
-                    Label {
-                        Layout.alignment: Qt.AlignCenter
-                        text: controller.wallet.name
-                    }
-                }
-            }
-            Loader {
-                Layout.alignment: Qt.AlignCenter
-                active: controller.busy
-                visible: active
-                sourceComponent: ColumnLayout {
-                    Layout.fillHeight: false
-                    spacing: constants.s1
-                    BusyIndicator {
-                        Layout.alignment: Qt.AlignCenter
-                        running: true
-                    }
-                    Label {
-                        Layout.alignment: Qt.AlignCenter
-                        text: qsTrId('id_looking_for_wallets')
+            Item {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+
+                Loader {
+                    anchors.centerIn: parent
+                    Layout.preferredWidth: 100
+                    Layout.preferredHeight: 100
+                    active: controller.busy
+                    visible: active
+                    sourceComponent: ColumnLayout {
+                        Layout.fillHeight: false
+                        spacing: constants.s1
+                        BusyIndicator {
+                            Layout.alignment: Qt.AlignCenter
+                            running: true
+                        }
+                        Label {
+                            Layout.alignment: Qt.AlignCenter
+                            text: qsTrId('id_looking_for_wallets')
+                        }
                     }
                 }
             }
@@ -140,31 +127,37 @@ Page {
                     case 'mismatch': return qsTrId('id_error_passphrases_do_not_match')
                 }
             }
-            Label {
-                Layout.alignment: Qt.AlignCenter
-                visible: !controller.wallet && !controller.busy && !controller.valid && controller.noErrors
-                text: qsTrId('id_wallet_not_found')
-            }
-            RowLayout {
-                Layout.fillHeight: false
-                visible: (!controller.wallet || !controller.wallet.hasPinData) && !controller.busy && controller.active
-                Label {
-                    visible: controller.valid
-                    text: qsTrId('id_wallet_found')
-                }
-                HSpacer {
-                }
-                GButton {
-                    text: 'Restore anyway'
-                    visible: self.server_type === 'electrum' && !controller.valid && !controller.wallet && advanced_checkbox.checked
-                    onClicked: navigation.controller = controller
-                }
-                GButton {
-                    text: controller.wallet && !controller.hasPinData
-                        ? qsTrId('id_create_a_pin_to_access_your')
-                        : qsTrId('id_restore')
-                    visible: controller.valid
-                    onClicked: navigation.controller = controller
+            Item {
+                Layout.fillWidth: true
+                Layout.preferredHeight: 36
+                RowLayout {
+                    anchors.fill: parent
+                    Label {
+                        visible: !controller.wallet && !controller.busy && !controller.valid && controller.noErrors
+                        text: qsTrId('id_wallet_not_found')
+                    }
+                    Label {
+                        visible: controller.valid
+                        text: qsTrId('id_wallet_found')
+                    }
+                    Label {
+                        visible: controller.wallet && controller.wallet.hasPinData
+                        text: qsTrId('id_wallet_already_restored') + ' - ' + controller.wallet.name
+                    }
+                    HSpacer {
+                    }
+                    GButton {
+                        text: 'Restore anyway'
+                        visible: self.server_type === 'electrum' && !controller.valid && !controller.wallet && advanced_checkbox.checked
+                        onClicked: navigation.controller = controller
+                    }
+                    GButton {
+                        text: controller.wallet && !controller.hasPinData
+                            ? qsTrId('id_create_a_pin_to_access_your')
+                            : qsTrId('id_restore')
+                        visible: controller.valid
+                        onClicked: navigation.controller = controller
+                    }
                 }
             }
         }
