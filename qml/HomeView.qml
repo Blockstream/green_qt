@@ -95,7 +95,7 @@ MainPage {
                 GPane {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
-                    padding: constants.p3
+                    padding: constants.p2
                     background: Rectangle {
                         radius: 16
                         color: constants.c800
@@ -113,6 +113,7 @@ MainPage {
                             Button {
                                 id: delegate
                                 readonly property Wallet wallet: modelData
+                                Layout.alignment: Qt.AlignTop
                                 Layout.fillWidth: true
                                 icon.source: icons[wallet.network.key]
                                 icon.color: 'transparent'
