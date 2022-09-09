@@ -249,6 +249,8 @@ Item {
         id: delegate
         required property Wallet wallet
         padding: 0
+        leftPadding: 8
+        rightPadding: 8
         background: Rectangle {
             color: Qt.rgba(1, 1, 1, delegate.hovered ? 0.05 : 0)
             Rectangle {
@@ -293,6 +295,8 @@ Item {
             }
             ToolButton {
                 text: '\u22EF'
+                Layout.preferredWidth: 36
+                Layout.preferredHeight: 36
                 onClicked: wallet_menu.open()
                 Menu {
                     id: wallet_menu
