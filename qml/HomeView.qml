@@ -27,24 +27,6 @@ MainPage {
     }
 
     id: self
-//    header: GPane {
-//        id: header_pane
-//        padding: 24
-//        implicitHeight: 80
-//        contentItem: Item {
-//            id: notification
-//            anchors.fill: parent
-//            clip: true
-
-//                Behavior on y {
-//                    NumberAnimation {
-//                        duration: 300
-//                        easing.type: Easing.OutCubic
-//                    }
-//                }
-//            }
-//        }
-//    }
     footer: StatusBar {
         contentItem: RowLayout {
             SessionBadge {
