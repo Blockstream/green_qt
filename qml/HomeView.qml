@@ -242,12 +242,4 @@ MainPage {
             }
         }
     }
-
-    Component {
-        id: chooose_network
-
-        ChooseNetworkDialog {
-
-        }
-    }
 }
