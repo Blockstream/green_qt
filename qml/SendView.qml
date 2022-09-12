@@ -76,7 +76,6 @@ StackView {
                 id: address_field
                 selectByMouse: true
                 Layout.fillWidth: true
-                Layout.minimumWidth: contentWidth + 2 * padding
                 font.pixelSize: 12
                 onTextChanged: parsePayment(text)
             }
