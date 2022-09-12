@@ -319,6 +319,7 @@ MainPageHeader {
                     onTriggered: dialog.reject()
                 },
                 Action {
+                    property bool highlighted: true
                     text: self.wallet.network.liquid ? qsTrId('id_learn_more') : qsTrId('id_receive')
                     onTriggered: {
                         dialog.reject()
