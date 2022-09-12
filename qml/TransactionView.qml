@@ -63,12 +63,11 @@ WalletDialog {
                             font.pixelSize: 14
                             elide: Label.ElideRight
                         }
-
                         CopyableLabel {
-                            visible: 'entity' in amount.asset.data
+                            visible: text != ''
                             Layout.fillWidth: true
                             opacity: 0.5
-                            text: amount.asset.data.entity ? amount.asset.data.entity.domain : ''
+                            text: 'entity' in amount.asset.data ? amount.asset.data.entity.domain : ''
                             elide: Label.ElideRight
                         }
                     }
