@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Add quick action on the sidebar to create wallet
 
 ### Changed
 - Add feedback to user when updating wallet watch-only settings

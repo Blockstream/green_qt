@@ -50,5 +50,6 @@
         <file>svg/tx-spv-verified.svg</file>
         <file>svg/qr.svg</file>
         <file>svg/kebab.svg</file>
+        <file>svg/plus.svg</file>
     </qresource>
 </RCC>

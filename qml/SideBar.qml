@@ -21,8 +21,23 @@ Pane {
             location: '/home'
             text: qsTrId('id_home')
         }
-        SideLabel {
-            text: qsTrId('id_wallets')
+        RowLayout {
+            SideLabel {
+                text: qsTrId('id_wallets')
+                Layout.fillWidth: true
+            }
+            ToolButton {
+                visible: !Settings.collapseSideBar
+                icon.source: 'qrc:/svg/plus.svg'
+                icon.color: 'white'
+                onClicked: navigation.go('/signup')
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                ToolTip.text: qsTrId('id_create_wallet')
+                ToolTip.visible: hovered
+                Layout.alignment: Qt.AlignBottom
+                Layout.preferredWidth: 28
+                Layout.preferredHeight: 28
+            }
         }
         Flickable {
             id: flickable
@@ -140,7 +155,7 @@ Pane {
         id: label
         property string text
         background: null
-        topPadding: 16
+        topPadding: 4
         leftPadding: 4
         bottomPadding: 4
         contentItem: SectionLabel {
