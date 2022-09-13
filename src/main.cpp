@@ -193,8 +193,10 @@ int main(int argc, char *argv[])
     qInfo() << "  Build ABI:" << qPrintable(QSysInfo::buildAbi());
     qInfo() << "  Build CPU Architecture:" << qPrintable(QSysInfo::buildCpuArchitecture());
     qInfo() << "  Current CPU Architecture:" << qPrintable(QSysInfo::currentCpuArchitecture());
+    qInfo() << "  Hardware Model:" << qPrintable(GetHardwareModel());
     qInfo() << "  Kernel Type:" << qPrintable(QSysInfo::kernelType());
     qInfo() << "  Kernel Version:" << qPrintable(QSysInfo::kernelVersion());
+    qInfo() << "  Product:" << qPrintable(QSysInfo::prettyProductName());
     qInfo() << "  Product Type:" << qPrintable(QSysInfo::productType());
     qInfo() << "  Product Version:" << qPrintable(QSysInfo::productVersion());
     qInfo() << "Build Type:" << QT_STRINGIFY(BUILD_TYPE);

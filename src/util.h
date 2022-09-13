@@ -21,4 +21,6 @@ QByteArray ReverseByteArray(const QByteArray& byte_array);
 
 QString Sha256(const QString& value);
 
+QString GetHardwareModel();
+
 #endif // GREEN_UTIL_H
