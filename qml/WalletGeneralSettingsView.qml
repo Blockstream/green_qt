@@ -4,6 +4,7 @@ import QtQuick.Window 2.12
 import QtQuick.Controls 2.5
 import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.12
+import QtGraphicalEffects 1.13
 
 ColumnLayout {
     required property Wallet wallet
@@ -122,28 +123,54 @@ ColumnLayout {
         sourceComponent: SettingsBox {
             enabled: !wallet.locked
             title: qsTrId('id_watchonly_login')
-            contentItem: RowLayout {
-                spacing: 16
-                GTextField {
-                    id: username_field
-                    text: wallet.username
-                    placeholderText: qsTrId('id_username')
-                }
-                GTextField {
-                    id: password_field
-                    echoMode: TextField.Password
-                    placeholderText: qsTrId('id_password')
-                }
-                HSpacer {
-                }
-                GButton {
-                    large: false
-                    text: qsTrId('id_update')
-                    enabled: password_field.text !== ''
-                    onClicked: {
-                        wallet.setWatchOnly(username_field.text, password_field.text)
-                        password_field.clear();
+            contentItem: ColumnLayout {
+                Layout.fillHeight: false
+
+                Pane {
+                    padding: 0
+                    Layout.fillWidth: true
+                    background: null
+                    contentItem: RowLayout {
+                        Layout.fillHeight: false
+                        spacing: 16
+                        GTextField {
+                            id: username_field
+                            text: wallet.username
+                            placeholderText: qsTrId('id_username')
+                            validator: FieldValidator {
+                            }
+                            Check {
+                                checked: username_field.acceptableInput
+                            }
+                        }
+                        GTextField {
+                            id: password_field
+                            echoMode: TextField.Password
+                            placeholderText: qsTrId('id_password')
+                            validator: FieldValidator {
+                            }
+                            Check {
+                                checked: password_field.acceptableInput
+                            }
+                        }
+                        HSpacer {
+                        }
+                        GButton {
+                            large: false
+                            text: qsTrId('id_update')
+                            enabled: username_field.acceptableInput && password_field.acceptableInput
+                            onClicked: {
+                                wallet.setWatchOnly(username_field.text, password_field.text)
+                                password_field.clear();
+                            }
+                        }
                     }
+                }
+
+                Label {
+                    text: "Username and password should have 8 characters or more"
+                    font.pixelSize: 12
+                    color: constants.c50
                 }
             }
         }
@@ -223,6 +250,29 @@ ColumnLayout {
                 amp: false
                 account: wallet.accounts[0]
             }
+        }
+    }
+
+    component FieldValidator : RegExpValidator {
+        regExp: /^.{8,}$/
+    }
+
+    component Check : Image {
+        property bool checked: false
+
+        id: self
+        source: 'qrc:/svg/check.svg'
+        width: 16
+        height: 16
+        anchors.right: parent.right
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.rightMargin: 8
+
+        Desaturate {
+            visible: !checked
+            anchors.fill: self
+            source: self
+            desaturation: 1
         }
     }
 }
