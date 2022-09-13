@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Moved empty transactions list label to top left of the container
 
 ### Fixed
+- Limit height of language selector
 - Ensure at least one account is not archived
 - Automatically refresh address list
 - Tor activity indicator visibility when loging into singlesig wallets

@@ -66,8 +66,7 @@ MainPage {
             id: layout
         }
     }
-    component Separator: Item {//Rectangle {
-        //color: constants.c600
+    component Separator: Item {
         implicitHeight: 24
         Layout.fillWidth: true
     }
@@ -112,6 +111,7 @@ MainPage {
                         }
                         highlighted: control.highlightedIndex === index
                     }
+                    popup.contentItem.implicitHeight: 300
                 }
             }
             Field {
