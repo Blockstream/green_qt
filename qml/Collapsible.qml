@@ -1,16 +1,19 @@
 import QtQuick 2.12
 
 Item {
+    id: self
     property bool collapsed: false
-    property alias duration: animation.duration
-    property alias easing: animation.easing
+    property real contentHeight: 0
+    property real contentWidth: 0
+    function toggle() {
+        self.collapsed = !self.collapsed
+    }
     clip: true
-    implicitWidth: childrenRect.width
-    implicitHeight: collapsed ? 0 : childrenRect.height
+    implicitWidth: contentWidth
+    implicitHeight: self.collapsed ? 0 : self.contentHeight
     Behavior on implicitHeight {
         NumberAnimation {
-            id: animation
-            duration: 300;
+            duration: 500
             easing.type: Easing.OutCubic
         }
     }

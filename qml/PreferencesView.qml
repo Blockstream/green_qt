@@ -135,6 +135,13 @@ MainPage {
                     onToggled: Settings.checkForUpdates = checked
                 }
             }
+            Field {
+                name: 'Help Green Improve'
+                GSwitch {
+                    checked: Settings.analytics === 'enabled'
+                    onToggled: Settings.analytics = checked ? 'enabled' : 'disabled'
+                }
+            }
             Separator {
             }
             SectionLabel {

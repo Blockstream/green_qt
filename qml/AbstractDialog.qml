@@ -61,6 +61,7 @@ Dialog {
     background: Rectangle {
         radius: 16
         color: constants.c800
+        border.color: Qt.rgba(0, 0, 0, 0.5)
         HoverHandler {
             id: hover_handler
         }

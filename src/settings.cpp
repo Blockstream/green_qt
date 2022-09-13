@@ -196,6 +196,14 @@ void Settings::setEnableSPV(bool enable_spv)
     saveLater();
 }
 
+void Settings::setAnalytics(const QString& analytics)
+{
+    if (m_analytics == analytics) return;
+    m_analytics = analytics;
+    emit analyticsChanged();
+    saveLater();
+}
+
 void Settings::setProxyHost(const QString &proxy_host)
 {
     if (m_proxy_host == proxy_host) return;
@@ -272,6 +280,7 @@ void Settings::load(const QSettings& settings)
     LOAD(m_liquid_electrum_url)
     LOAD(m_liquid_testnet_electrum_url)
     LOAD(m_enable_spv)
+    LOAD(m_analytics)
 #undef LOAD
 }
 
@@ -308,6 +317,7 @@ void Settings::saveNow()
     SAVE(m_liquid_electrum_url)
     SAVE(m_liquid_testnet_electrum_url)
     SAVE(m_enable_spv)
+    SAVE(m_analytics)
 #undef SAVE
 }
 

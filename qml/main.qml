@@ -134,6 +134,25 @@ ApplicationWindow {
         }
     }
 
+    AnalyticsConsentDialog {
+        property real offset_y
+        x: parent.width - width - constants.s2
+        y: parent.height - height - constants.s2 - 30 + offset_y
+        visible: Settings.analytics === ''
+        enter: Transition {
+            SequentialAnimation {
+                PropertyAction { property: 'x'; value: 0 }
+                PropertyAction { property: 'offset_y'; value: 100 }
+                PropertyAction { property: 'opacity'; value: 0 }
+                PauseAnimation { duration: 2000 }
+                ParallelAnimation {
+                    NumberAnimation { property: 'opacity'; to: 1; easing.type: Easing.OutCubic; duration: 1000 }
+                    NumberAnimation { property: 'offset_y'; to: 0; easing.type: Easing.OutCubic; duration: 1000 }
+                }
+            }
+        }
+    }
+
     DialogLoader {
         active: navigation.path.match(/\/signup$/)
         dialog: SignupDialog {

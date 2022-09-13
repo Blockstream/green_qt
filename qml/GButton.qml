@@ -16,11 +16,13 @@ Button {
         }
     }
     id: self
+    topInset: 0
+    bottomInset: 0
     font.pixelSize: self.large ? 14 : 12
     icon.width: self.large ? 16 : 12
     icon.height: self.large ? 16 : 12
     font.bold: true
-    padding: self.large ? 16 : 12
+    padding: self.large ? 10 : 6
     leftPadding: self.large ? 20 : 15
     rightPadding: self.large ? 20 : 15
     background: Rectangle {
