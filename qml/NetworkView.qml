@@ -86,33 +86,22 @@ Item {
             }
         }
 
-        contentItem: ColumnLayout {
-            MainPageSection {
-                Layout.fillHeight: true
-                Layout.fillWidth: true
-                title: qsTrId('id_all_wallets')
-                background: Item {
-                    Text {
-                        visible: wallet_list_view.count===0
-                        text: qsTrId('id_looks_like_you_havent_used_a');
-                        color: 'white'
-                        anchors.centerIn: parent
-                    }
+        contentItem: Pane {
+            background: Label {
+                visible: wallet_list_view.count===0
+                text: qsTrId('id_looks_like_you_havent_used_a');
+                horizontalAlignment: Qt.AlignHCenter
+                verticalAlignment: Qt.AlignVCenter
+            }
+            contentItem: GListView {
+                id: wallet_list_view
+                clip: true
+                currentIndex: -1
+                model: WalletListModel {
+                    network: self.network
                 }
-                contentItem: Item {
-                    clip: true
-                    GListView {
-                        id: wallet_list_view
-                        anchors.fill: parent
-                        anchors.topMargin: 16
-                        currentIndex: -1
-                        model: WalletListModel {
-                            network: self.network
-                        }
-                        delegate: WalletDelegate {
-                            width: ListView.view.contentWidth
-                        }
-                    }
+                delegate: WalletDelegate {
+                    width: ListView.view.contentWidth
                 }
             }
         }
