@@ -145,8 +145,10 @@ SwipeView {
             id: account_delegate_menu
             MenuItem {
                 text: qsTrId('id_rename')
-                enabled: name_field.enabled
-                onTriggered: name_field.forceActiveFocus()
+                onTriggered: {
+                    delegate.ListView.view.currentIndex = index
+                    name_field.forceActiveFocus()
+                }
             }
             MenuItem {
                 text: delegate.account.hidden ? qsTrId('id_unarchive') : qsTrId('id_archive')
