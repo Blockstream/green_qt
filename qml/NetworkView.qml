@@ -6,7 +6,7 @@ import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.13
 import QtQuick.Window 2.12
 
-Item {
+StackLayout {
     id: self
     required property string title
     required property string network
@@ -26,25 +26,17 @@ Item {
         return wallet && wallet.ready
     }
 
-    Repeater {
-        id: wallet_view_repeater
-        model: WalletListModel {
-            justAuthenticated: true
-            network: self.network
+    currentIndex: {
+        for (let i = 0; i < self.children.length; ++i) {
+            const child = self.children[i]
+            if (child instanceof WalletView) {
+                if (child.match) return i
+            }
         }
-        delegate: WalletView {
-            property bool match: wallet.ready && navigation.location.startsWith(wallet_view.location)
-            id: wallet_view
-            anchors.fill: parent
-            z: match ? 1 : -1
-        }
+        return 0
     }
 
-    IndexView {
-        anchors.fill: parent
-    }
-
-    component IndexView: MainPage {
+    MainPage {
         header: MainPageHeader {
             contentItem: RowLayout {
                 spacing: 16
@@ -104,6 +96,18 @@ Item {
                     width: ListView.view.contentWidth
                 }
             }
+        }
+    }
+
+    Repeater {
+        id: wallet_view_repeater
+        model: WalletListModel {
+            justAuthenticated: true
+            network: self.network
+        }
+        delegate: WalletView {
+            id: wallet_view
+            property bool match: wallet.ready && navigation.location.startsWith(wallet_view.location)
         }
     }
 
