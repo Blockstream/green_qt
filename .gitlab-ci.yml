@@ -13,6 +13,9 @@ bionic_release:
     - ga
   stage: build
   script:
+    - apt-get update -qq && apt-get install -yqq --no-install-recommends --no-install-suggests cmake
+    - cmake --version
+    - ./tools/buildcountly.sh /docker_bld_root/build-linux-gcc
     - ./tools/buildgreen.sh linux
     - mkdir build-linux-gcc
     - cp /docker_bld_root/*/green build-linux-gcc/
@@ -30,6 +33,9 @@ windows_release:
     - ga
   stage: build
   script:
+    - apt-get update -qq && apt-get install -yqq --no-install-recommends --no-install-suggests cmake
+    - cmake --version
+    - ./tools/buildcountly.sh /docker_bld_root/build-mingw-w64 $(pwd)/cmake/mingw-w64-x86_64.cmake
     - ./tools/buildgreen.sh windows
     - mkdir -p build-mingw-w64/release
     - cp /docker_bld_root/*/release/green.exe "build-mingw-w64/release/Green.exe"
@@ -46,6 +52,8 @@ osx_release:
   stage: build
   script:
     - cd $CI_PROJECT_DIR
+    - cmake --version
+    - ./tools/buildcountly.sh $(pwd)/build-osx-clang
     - ./tools/buildgreen.sh osx
   cache:
     key: build-cache-osx

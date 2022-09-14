@@ -50,6 +50,9 @@ EXTRA_TRANSLATIONS = $$files($$PWD/i18n/*.ts)
 
 INCLUDEPATH += $${GDK_PATH}
 
+INCLUDEPATH += $${DEPS_PATH}/countly/include
+LIBS += $${DEPS_PATH}/countly/lib/libcountly.a
+
 macos {
     QMAKE_TARGET_BUNDLE_PREFIX = com.blockstream
     LIBS += -framework Foundation -framework Cocoa
