@@ -27,10 +27,9 @@ StackLayout {
     }
 
     currentIndex: {
-        for (let i = 0; i < self.children.length; ++i) {
-            const child = self.children[i]
-            if (child instanceof WalletView) {
-                if (child.match) return i
+        for (let i = 0; i < wallet_view_repeater.count; ++i) {
+            if (wallet_view_repeater.itemAt(i).match) {
+                return 1 + i
             }
         }
         return 0
@@ -106,8 +105,7 @@ StackLayout {
             network: self.network
         }
         delegate: WalletView {
-            id: wallet_view
-            property bool match: wallet.ready && navigation.location.startsWith(wallet_view.location)
+            property bool match: wallet.ready && navigation.location.startsWith(location)
         }
     }
 
