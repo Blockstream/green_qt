@@ -211,7 +211,6 @@ MainPage {
                 anchors.topMargin: constants.p3
                 anchors.bottomMargin: constants.p3
                 wallet: self.wallet
-                onClicked: switchToAccount(currentAccount)
                 onCurrentAccountChanged: switchToAccount(currentAccount)
             }
         }

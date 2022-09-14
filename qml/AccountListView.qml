@@ -11,7 +11,6 @@ SwipeView {
         return view.currentItem ? view.currentItem.account : null
     }
     property bool showArchived: false
-    signal clicked(Account account)
 
     function openCreateDialog() {
         const dialog = create_account_dialog.createObject(window, { wallet })
@@ -139,7 +138,6 @@ SwipeView {
         focusPolicy: Qt.ClickFocus
         onClicked: {
             delegate.ListView.view.currentIndex = index
-            self.clicked(account)
         }
         Menu {
             id: account_delegate_menu
