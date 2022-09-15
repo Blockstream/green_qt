@@ -1,4 +1,5 @@
 import Blockstream.Green.Core 0.1
+import Blockstream.Green 0.1
 import QtQuick 2.13
 import QtQuick.Controls 2.13
 import QtQuick.Controls.Material 2.3
@@ -9,6 +10,11 @@ MainPage {
     title: qsTrId('id_app_settings')
 
     readonly property int labelWidth: Math.floor(layout.width / 3)
+
+    AnalyticsView {
+        name: 'AppSettings'
+        active: window.navigation.location === '/preferences'
+    }
 
     header: MainPageHeader {
         contentItem: RowLayout {
