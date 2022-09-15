@@ -177,14 +177,14 @@ ColumnLayout {
 
         Connections {
             target: wallet
-            onWatchOnlyUpdateSuccess: {
+            function onWatchOnlyUpdateSuccess() {
                 const dialog = message_dialog.createObject(window, {
                   title: qsTrId('id_success'),
                   message: 'Watch-only credentials updated successfully.',
                 })
                 dialog.open()
             }
-            onWatchOnlyUpdateFailure: {
+            function onWatchOnlyUpdateFailure() {
                 const dialog = message_dialog.createObject(window, {
                     title: qsTrId('id_warning'),
                     message: 'Failed to set new watch-only credentials.',
