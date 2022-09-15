@@ -40,6 +40,45 @@ ApplicationWindow {
         return qsTrId('Account %1').arg(account.pointer)
     }
 
+    function segmentationNetwork(network) {
+        const segmentation = {}
+        segmentation.network
+            = network.liquid ? 'liquid'
+            : network.mainnet ? 'mainnet'
+            : 'testnet'
+        segmentation.security
+            = network.electrum ? 'singlesig'
+            : 'multisig'
+        return segmentation
+    }
+
+    function segmentationSession(wallet) {
+        const segmentation = segmentationNetwork(wallet.network)
+        const app_settings = []
+        if (Settings.useTor) app_settings.push('tor')
+        if (Settings.useProxy) app_settings.push('proxy')
+        if (Settings.enableTestnet) app_settings.push('testnet')
+        if (Settings.usePersonalNode) app_settings.push('electrum_server')
+        if (Settings.enableSPV) app_settings.push('spv')
+        segmentation.app_settings = app_settings.join(',')
+        if (wallet.device instanceof JadeDevice) {
+            segmentation.brand = 'Blockstream'
+            segmentation.model = wallet.device.versionInfo.BOARD_TYPE
+            segmentation.firmware = wallet.device.version
+            segmentation.connection = 'USB'
+        }
+        if (wallet.device instanceof LedgerDevice) {
+            segmentation.brand = 'Blockstream'
+            segmentation.model
+                = wallet.device.type === Device.LedgerNanoS ? 'Ledger Nano S'
+                : wallet.device.type === Device.LedgerNanoX ? 'Ledger Nano X'
+                : 'Unknown'
+            segmentation.firmware = wallet.device.appVersion
+            segmentation.connection = 'USB'
+        }
+        return segmentation
+    }
+
     x: Settings.windowX
     y: Settings.windowY
     width: Settings.windowWidth

@@ -19,6 +19,12 @@ AbstractDialog {
     closePolicy: self.active ? Dialog.NoAutoClose : AbstractDialog.closePolicy
     enableRejectButton: !self.active
 
+    AnalyticsView {
+        name: 'Login'
+        active: self.opened
+        segmentation: segmentationSession(self.wallet)
+    }
+
     Connections {
         target: self.wallet
         function onActivityCreated(activity) {
