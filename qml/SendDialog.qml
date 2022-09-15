@@ -41,4 +41,10 @@ ControllerDialog {
         dialog: self
         transaction: self.controller.signedTransaction
     }
+
+    AnalyticsView {
+        name: 'Send'
+        active: self.opened
+        segmentation: segmentationSubAccount(self.account)
+    }
 }
