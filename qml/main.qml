@@ -79,6 +79,12 @@ ApplicationWindow {
         return segmentation
     }
 
+    function segmentationSubAccount(account) {
+        const segmentation = segmentationSession(account.wallet)
+        segmentation.account_type = account.type
+        return segmentation
+    }
+
     x: Settings.windowX
     y: Settings.windowY
     width: Settings.windowWidth

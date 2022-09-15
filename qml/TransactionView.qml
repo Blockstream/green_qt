@@ -22,6 +22,12 @@ WalletDialog {
         }
     }
 
+    AnalyticsView {
+        name: 'TransactionDetails'
+        active: self.opened
+        segmentation: segmentationSubAccount(self.transaction.account)
+    }
+
     readonly property var spv: {
         const value = transaction.spv
         if (value === Transaction.Disabled) return null
