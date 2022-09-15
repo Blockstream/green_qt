@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - In transaction details, hide entity label when empty
 - Enhanced consistency of paddings and alignments of UI containers
 - Allow to rename unselected accounts
+- Improve layout of Jade firmware details
 
 ## [1.1.3] - 2022-07-18
 ### Added

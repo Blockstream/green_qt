@@ -193,9 +193,8 @@ MainPage {
                 }
             }
             StackLayout {
-                id: xxx
                 SplitView.fillWidth: true
-                SplitView.minimumWidth: 600// children[currentIndex+1].implicitWidth
+                SplitView.minimumWidth: 600
                 currentIndex: devices_list_view.currentIndex
                 Repeater {
                     model: device_list_model
@@ -212,6 +211,7 @@ MainPage {
         property Network network
         property JadeDevice device
         Layout.fillWidth: true
+        Layout.preferredHeight: 60
         enabled: controller.enabled
         background: Item {
             Rectangle {
@@ -325,7 +325,7 @@ MainPage {
     component View: ColumnLayout {
         id: self
         required property JadeDevice device
-        spacing: constants.s2
+        spacing: constants.s3
         Layout.minimumWidth: implicitWidth
 
         JadeUpdateDialog {
@@ -403,24 +403,37 @@ MainPage {
                 contentItem: GridLayout {
                     columns: 2
                     columnSpacing: constants.s2
-                    rowSpacing: constants.s1
+                    rowSpacing: constants.s0
                     Label {
+                        Layout.preferredHeight: constants.s2
+                        verticalAlignment: Label.AlignVCenter
                         text: qsTrId('id_version')
                     }
                     Label {
+                        Layout.preferredHeight: constants.s2
+                        verticalAlignment: Label.AlignVCenter
                         Layout.fillWidth: true
                         text: device.version
                     }
                     Label {
+                        Layout.preferredHeight: constants.s2
+                        verticalAlignment: Label.AlignVCenter
                         text: qsTrId('id_bluetooth')
                     }
                     Label {
+                        Layout.preferredHeight: constants.s2
+                        verticalAlignment: Label.AlignVCenter
                         text: device.versionInfo.JADE_CONFIG === 'NORADIO' ? qsTrId('id_not_available_noradio_build') : qsTrId('id_available')
                     }
                     Label {
+                        Layout.preferredHeight: constants.s2
+                        verticalAlignment: Label.AlignVCenter
                         text: qsTrId('id_update')
                     }
                     GButton {
+                        padding: 4
+                        topInset: 0
+                        bottomInset: 0
                         highlighted: self.device.updateRequired || update_dialog.controller.firmwareAvailable
                         text: {
                             if (self.device.updateRequired) return qsTrId('id_new_jade_firmware_required')
