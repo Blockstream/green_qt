@@ -26,6 +26,11 @@ MainPage {
         Component.onCompleted: if (Settings.checkForUpdates) checkForUpdates()
     }
 
+    AnalyticsView {
+        name: 'Home'
+        active: window.navigation.location === '/home'
+    }
+
     id: self
     footer: StatusBar {
         contentItem: RowLayout {
