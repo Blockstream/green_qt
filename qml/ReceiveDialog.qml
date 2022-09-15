@@ -13,4 +13,10 @@ WalletDialog {
     contentItem: ReceiveView {
         account: self.account
     }
+
+    AnalyticsView {
+        name: 'Receive'
+        active: self.opened
+        segmentation: segmentationSubAccount(self.account)
+    }
 }
