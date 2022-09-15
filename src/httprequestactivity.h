@@ -8,7 +8,7 @@ class HttpRequestActivity : public SessionActivity
     Q_OBJECT
     QML_ELEMENT
 public:
-    HttpRequestActivity(QObject* parent);
+    HttpRequestActivity(QObject* parent = nullptr);
     void setMethod(const QString& method);
     void addUrl(const QString& urls);
     void setData(const QJsonValue& data);
