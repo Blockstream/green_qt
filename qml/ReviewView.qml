@@ -19,6 +19,12 @@ ScrollView {
     id: scroll_view
     clip: true
 
+    AnalyticsView {
+        name: 'SendConfirm'
+        active: true
+        segmentation: segmentationSubAccount(controller.account)
+    }
+
     ColumnLayout {
         spacing: 16
         width: Math.max(implicitWidth, scroll_view.availableWidth)
