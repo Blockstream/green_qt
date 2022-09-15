@@ -28,6 +28,10 @@ ColumnLayout {
             if (receive_address.generating) return;
             Clipboard.copy(receive_address.uri)
             qrcode.ToolTip.show(qsTrId('id_copied_to_clipboard'), 1000);
+
+            const account = receive_address.account
+            const type = receive_address.uri.indexOf(':') > 0 ? 'uri' : 'address'
+            Analytics.recordEvent('receive_address', segmentationReceiveAddress(account, type))
         }
     }
 

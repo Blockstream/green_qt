@@ -85,6 +85,14 @@ ApplicationWindow {
         return segmentation
     }
 
+    function segmentationReceiveAddress(account, type) {
+        const segmentation = segmentationSubAccount(account)
+        segmentation.type = type
+        segmentation.media = 'text'
+        segmentation.method = 'copy'
+        return segmentation
+    }
+
     x: Settings.windowX
     y: Settings.windowY
     width: Settings.windowWidth
