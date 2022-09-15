@@ -6,7 +6,7 @@ import QtQuick.Layouts 1.13
 
 AbstractDialog {
     id: self
-    title: 'Help improve Green'
+    title: qsTrId('id_help_green_improve')
     modal: false
     showRejectButton: true
     closePolicy: Dialog.NoAutoClose
@@ -21,7 +21,7 @@ AbstractDialog {
         Label {
             Layout.fillWidth: true
             Layout.preferredWidth: 0
-            text: 'If you agree, Green will collect anonymous data to optimize the user experience. No individual user or wallet can be identified.'
+            text: qsTrId('id_if_you_agree_green_will_collect')
             wrapMode: Label.WordWrap
         }
         Pane {
@@ -49,7 +49,7 @@ AbstractDialog {
                 Label {
                     id: details_label
                     Layout.fillWidth: true
-                    text: collapsible.collapsed ? qsTrId('Show details') : qsTrId('Hide details')
+                    text: collapsible.collapsed ? qsTrId('id_show_details') : qsTrId('id_hide_details')
                     Image {
                         anchors.right: parent.right
                         anchors.verticalCenter: parent.verticalCenter
@@ -81,39 +81,39 @@ AbstractDialog {
                             Layout.maximumWidth: 420
                             topPadding: constants.p3 + constants.p2
                             font.bold: true
-                            text: "What's collected"
+                            text: qsTrId('id_whats_collected')
                         }
                         Label {
                             Layout.maximumWidth: 420
-                            text: "• Page visits, button presses, general application configurations"
+                            text: "• " + qsTrId('id_page_visits_button_presses')
                             wrapMode: Label.WordWrap
                         }
                         Label {
                             Layout.maximumWidth: 420
-                            text: "• Operative System and application version, loading times, crashes"
+                            text: "• " + qsTrId('id_os__app_version_loading_times')
                             wrapMode: Label.WordWrap
                         }
                         Label {
                             Layout.maximumWidth: 420
                             topPadding: constants.p2
                             font.bold: true
-                            text: "What's NOT collected"
+                            text: qsTrId('id_whats_not_collected')
                         }
                         Label {
                             Layout.maximumWidth: 420
-                            text: "• Recovery phrases, key material, addresses"
+                            text: "• " + qsTrId('id_recovery_phrases_key_material')
                             wrapMode: Label.WordWrap
                         }
                         Label {
                             Layout.maximumWidth: 420
-                            text: "• User contact info, IP address, location"
+                            text: "• " + qsTrId('id_user_contact_info_ip_address')
                             wrapMode: Label.WordWrap
                         }
                         Label {
                             Layout.maximumWidth: 420
                             textFormat: Text.RichText
                             onLinkActivated: Qt.openUrlExternally(link)
-                            text: link('https://help.blockstream.com/hc/en-us/articles/5988514431897', qsTrId('Learn more'))
+                            text: link('https://help.blockstream.com/hc/en-us/articles/5988514431897', qsTrId('id_learn_more'))
                             background: MouseArea {
                                 acceptedButtons: Qt.NoButton
                                 cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor
@@ -134,7 +134,7 @@ AbstractDialog {
             }
             GButton {
                 large: true
-                text: qsTrId("Don't collect data")
+                text: qsTrId('id_dont_collect_data')
                 onClicked: {
                     Settings.analytics = 'disabled'
                     self.accept()
@@ -143,7 +143,7 @@ AbstractDialog {
             GButton {
                 highlighted: true
                 large: true
-                text: qsTrId('Allow collection')
+                text: qsTrId('id_allow_collection')
                 onClicked: {
                     Settings.analytics = 'enabled'
                     self.accept()
