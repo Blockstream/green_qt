@@ -44,8 +44,12 @@ HttpManager::HttpManager(QObject* parent)
 
 void HttpManager::exec(SessionActivity* activity)
 {
-    m_queue.enqueue(activity);
-    dispatch();
+    {
+        QMutexLocker locker(&m_mutex);
+        activity->moveToThread(thread());
+        m_queue.enqueue(activity);
+    }
+    QMetaObject::invokeMethod(this, [&] { dispatch(); });
 }
 
 void HttpManager::dispatch()

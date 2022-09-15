@@ -1,6 +1,7 @@
 #ifndef GREEN_HTTPMANAGER_H
 #define GREEN_HTTPMANAGER_H
 
+#include <QMutex>
 #include <QObject>
 #include <QQueue>
 #include <QTimer>
@@ -23,6 +24,7 @@ signals:
 private slots:
     void dispatch();
 private:
+    QMutex m_mutex;
     Session* m_session{nullptr};
     QTimer* m_idle_timer{nullptr};
     QQueue<SessionActivity*> m_queue;
