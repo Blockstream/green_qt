@@ -13,6 +13,11 @@ ControllerDialog {
     controller: BumpFeeController {
         account: self.account
         transaction: self.transaction
+        onFinished: Analytics.recordEvent('send_transaction', segmentationTransaction(self.account, {
+            address_input: 'paste',
+            transaction_type: 'bump',
+            with_memo: false,
+        }))
     }
     doneText: qsTrId('id_transaction_sent')
     minimumWidth: 500

@@ -107,6 +107,14 @@ ApplicationWindow {
         return segmentation
     }
 
+    function segmentationTransaction(account, { address_input, transaction_type, with_memo }) {
+        const segmentation = segmentationSubAccount(account)
+        segmentation.address_input = address_input // [paste, scan, bip21]
+        segmentation.transaction_type = transaction_type // [send, sweep, bump]
+        segmentation.with_memo = with_memo
+        return segmentation
+    }
+
     function renameAccount(account, text, active_focus) {
         if (account.rename(text, active_focus)) {
             Analytics.recordEvent('account_rename', segmentationSubAccount(account))

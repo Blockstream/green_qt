@@ -9,6 +9,7 @@ StackView {
     id: stack_view
     required property Account account
     property alias address: address_field.text
+    property string address_input
     property Balance balance: asset_field_loader.item ? asset_field_loader.item.balance : null
     property alias sendAll: send_all_button.checked
     property var selectedOutputs: coins_view.selectedOutputs
@@ -64,7 +65,10 @@ StackView {
         ScannerPopup {
             id: scanner_popup
             parent: address_field
-            onCodeScanned: parsePayment(code)
+            onCodeScanned: {
+                parsePayment(code)
+                stack_view.address_input = 'scan'
+            }
         }
 
         SectionLabel {
@@ -77,7 +81,10 @@ StackView {
                 selectByMouse: true
                 Layout.fillWidth: true
                 font.pixelSize: 12
-                onTextChanged: parsePayment(text)
+                onTextChanged: {
+                    parsePayment(text)
+                    stack_view.address_input = 'paste'
+                }
             }
             ToolButton {
                 enabled: scanner_popup.available && !scanner_popup.visible
@@ -97,6 +104,7 @@ StackView {
                     address_field.clear();
                     address_field.paste();
                     parsePayment(address_field.text)
+                    stack_view.address_input = 'paste'
                 }
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                 ToolTip.text: qsTrId('id_paste')

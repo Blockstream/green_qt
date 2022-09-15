@@ -1,3 +1,4 @@
+import Blockstream.Green.Core 0.1
 import Blockstream.Green 0.1
 import QtQuick 2.13
 import QtQuick.Controls 2.13
@@ -28,6 +29,13 @@ ControllerDialog {
                 }
             }
             return r
+        }
+        onFinished: {
+            Analytics.recordEvent('send_transaction', segmentationTransaction(self.account, {
+                address_input: send_view.address_input,
+                transaction_type: 'send',
+                with_memo: self.controller.memo !== '',
+            }))
         }
     }
     doneText: qsTrId('id_transaction_sent')
