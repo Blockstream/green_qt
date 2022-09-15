@@ -2,26 +2,30 @@
 <context>
     <message>
         <source>id_1030_minutes</source>
-        <translation>~ 10-30 分</translation>
+        <translation>10-30 分ほど</translation>
     </message>
     <message>
         <source>id_12_confirmations</source>
-        <translation>1/2 confirmations</translation>
+        <translation>1/2 ブロックで承認中</translation>
     </message>
     <message>
         <source>id_12_months_51840_blocks</source>
-        <translation>12 months (51840 blocks)</translation>
+        <translation>12ヶ月 (51840ブロック)</translation>
+    </message>
+    <message>
+        <source>id_12_words</source>
+        <translation>12単語</translation>
     </message>
     <message>
         <source>id_15_months_65535_blocks</source>
-        <translation>15 months (65535 blocks)</translation>
+        <translation>15ヶ月 (65535ブロック)</translation>
     </message>
     <message>
         <source>id_1_double_check_all_of_your</source>
-        <translation>1. Double check all of your recovery phrase word by word, are all words correct?
-2. The order of words is important! Make sure you&apos;ve typed the words in the correct order.
+        <translation>1. リカバリーフレーズの単語１つ１つを正確に書き写せたか、今一度ご確認ください。
+2. 語順も重要です。単語の順番を正しく記録したことも確認してください。
 
-If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 27 words recovery phrase please check our help center.</translation>
+いずれも間違っていない場合、またはリカバリーフレーズが12, 24, 27単語のいずれでもない場合、ヘルプセンターをご覧ください。</translation>
     </message>
     <message>
         <source>id_1d_2s_ago</source>
@@ -33,47 +37,55 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_1s_blocks_left_2d</source>
-        <translation>%1 残りブロック %2</translation>
+        <translation>残り%1ブロック %2</translation>
     </message>
     <message>
         <source>id_1s_twofactor_setup</source>
-        <translation>%1 Two-Factor setup</translation>
+        <translation>%12段階認証を設定する</translation>
+    </message>
+    <message>
+        <source>id_24_words</source>
+        <translation>24単語</translation>
     </message>
     <message>
         <source>id_2_hours</source>
-        <translation>~ 2時間</translation>
+        <translation>2時間前後</translation>
     </message>
     <message>
         <source>id_2fa_dispute_in_progress</source>
-        <translation>2FA Dispute in Progress</translation>
+        <translation>2段階認証のリセットに関する係争中</translation>
     </message>
     <message>
         <source>id_2fa_expired</source>
-        <translation>2FA Expired</translation>
+        <translation>2段階認証が期限切れ</translation>
     </message>
     <message>
         <source>id_2fa_expiry</source>
-        <translation>2FA Expiry</translation>
+        <translation>2段階認証による保護の期限</translation>
     </message>
     <message>
         <source>id_2fa_methods</source>
-        <translation>2FA Methods</translation>
+        <translation>2段階認証の手段</translation>
     </message>
     <message>
         <source>id_2fa_reset_in_progress</source>
-        <translation>2FA Reset in Progress</translation>
+        <translation>2段階認証のリセット中</translation>
     </message>
     <message>
         <source>id_2fa_threshold</source>
-        <translation>2FA Threshold</translation>
+        <translation>2段階認証の閾値</translation>
+    </message>
+    <message>
+        <source>id_2of3</source>
+        <translation>2of3</translation>
     </message>
     <message>
         <source>id_2of3_account</source>
-        <translation>2of3 Account</translation>
+        <translation>2of3 アカウント</translation>
     </message>
     <message>
         <source>id_4_hours</source>
-        <translation>~ 4時間</translation>
+        <translation>4時間前後</translation>
     </message>
     <message>
         <source>id_5_seconds_minimum</source>
@@ -81,11 +93,11 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_6_months_25920_blocks</source>
-        <translation>6 months (25920 blocks)</translation>
+        <translation>6ヶ月 (25920ブロック)</translation>
     </message>
     <message>
         <source>id_a_2of3_account_requires_two_out</source>
-        <translation>A 2of3 account requires two out of three signatures to spend coins. The third signature is from a backup key known only to you. This gives you the security benefits of a standard account, while still allowing you to move your coins independently at any point in time.</translation>
+        <translation>2of3アカウントからの送金には3つの鍵のうち2つによる署名が必要です。3つ目の鍵は貴方のみが知るバックアップ用の秘密鍵となります。この選択肢はスタンダードアカウントと同じセキュリティ水準で、いつでもご自身の鍵のみで自由に送金することができます。</translation>
     </message>
     <message>
         <source>id_a_new_transaction_has_just</source>
@@ -93,11 +105,11 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_a_newer_version_of_blockstream</source>
-        <translation>A newer version of Blockstream Green is now available</translation>
+        <translation>新しいバージョンのBlockstream Greenがご利用いただけます</translation>
     </message>
     <message>
         <source>id_a_screen_lock_must_be_enabled</source>
-        <translation>A screen lock must be enabled from Android settings</translation>
+        <translation>アンドロイドの設定から画面ロックを有効化してください。</translation>
     </message>
     <message>
         <source>id_a_wallet_is_detected_on_this</source>
@@ -120,20 +132,24 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
         <translation>アカウント</translation>
     </message>
     <message>
+        <source>id_account_extended_public_keys</source>
+        <translation>アカウントの拡張公開鍵一覧</translation>
+    </message>
+    <message>
         <source>id_account_id</source>
-        <translation>Account ID</translation>
+        <translation>アカウントID</translation>
     </message>
     <message>
         <source>id_account_name</source>
-        <translation>Account Name</translation>
+        <translation>アカウント名</translation>
     </message>
     <message>
         <source>id_account_type</source>
-        <translation>Account Type</translation>
+        <translation>アカウント種別</translation>
     </message>
     <message>
         <source>id_accounts</source>
-        <translation>Accounts</translation>
+        <translation>アカウント一覧</translation>
     </message>
     <message>
         <source>id_accounts_summary</source>
@@ -145,31 +161,31 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_actions</source>
-        <translation>Actions</translation>
+        <translation>アクション</translation>
     </message>
     <message>
         <source>id_add_a_note_only_you_can_see_it</source>
-        <translation>Add a note (only you can see it).</translation>
+        <translation>メモを追加する (自身のみ閲覧可能)</translation>
     </message>
     <message>
         <source>id_add_a_pgp_public_key_to_receive</source>
-        <translation>Add a PGP public key to receive encrypted email and keep your privacy</translation>
+        <translation>PGP公開鍵を追加してプライバシーに配慮した暗号化メールを受信する</translation>
     </message>
     <message>
         <source>id_add_amount</source>
-        <translation>額を入力</translation>
+        <translation>金額を入力</translation>
     </message>
     <message>
         <source>id_add_amount_optional</source>
-        <translation>Add amount (optional)</translation>
+        <translation>金額 (任意)</translation>
     </message>
     <message>
         <source>id_add_an_amp_wallet</source>
-        <translation>Add an AMP wallet</translation>
+        <translation>AMPウォレットを追加する</translation>
     </message>
     <message>
         <source>id_add_another_wallet</source>
-        <translation>Add another wallet</translation>
+        <translation>別のウォレットを追加する</translation>
     </message>
     <message>
         <source>id_add_custom_network_by_qr_code</source>
@@ -184,12 +200,16 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
         <translation>新規アカウントの追加</translation>
     </message>
     <message>
+        <source>id_add_recipient</source>
+        <translation>宛先を追加</translation>
+    </message>
+    <message>
         <source>id_add_wallet</source>
         <translation>ウォレットを登録する</translation>
     </message>
     <message>
         <source>id_additional_networks</source>
-        <translation>Additional Networks</translation>
+        <translation>他のネットワーク</translation>
     </message>
     <message>
         <source>id_additional_security</source>
@@ -209,19 +229,19 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_address_verified</source>
-        <translation>Address verified!</translation>
+        <translation>アドレス認証完了！</translation>
     </message>
     <message>
         <source>id_address_was_filled_by_a_payment</source>
-        <translation>Address was filled by a Payment URI</translation>
+        <translation>アドレスはPayment URIから自動入力</translation>
     </message>
     <message>
         <source>id_addresses</source>
-        <translation>Addresses</translation>
+        <translation>アドレス一覧</translation>
     </message>
     <message>
         <source>id_advanced</source>
-        <translation>Advanced</translation>
+        <translation>詳細オプション</translation>
     </message>
     <message>
         <source>id_advanced_network_settings</source>
@@ -229,7 +249,7 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_advanced_options_for_your_third</source>
-        <translation>Advanced options for your third recovery key</translation>
+        <translation>第3のリカバリーキーに関する詳細オプション</translation>
     </message>
     <message>
         <source>id_all</source>
@@ -237,27 +257,35 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_all_assets</source>
-        <translation>All Assets</translation>
+        <translation>すべてのアセット</translation>
     </message>
     <message>
         <source>id_all_coins</source>
-        <translation>(All coins)</translation>
+        <translation>(すべてのコイン)</translation>
     </message>
     <message>
         <source>id_all_networks</source>
-        <translation>All networks</translation>
+        <translation>すべてのネットワーク</translation>
     </message>
     <message>
         <source>id_all_of_the_accounts_in_your</source>
-        <translation>All of the accounts in your wallet need to be empty before deleting it.</translation>
+        <translation>ウォレットを消去する前に全アカウントの残高がゼロである必要があります。</translation>
     </message>
     <message>
         <source>id_all_the_coins_received_or</source>
-        <translation>All the coins received or created as change.</translation>
+        <translation>送金で、あるいはお釣りとして受け取ったすべてのコイン。</translation>
     </message>
     <message>
         <source>id_all_wallets</source>
-        <translation>All wallets</translation>
+        <translation>すべてのウォレット</translation>
+    </message>
+    <message>
+        <source>id_allow_collection</source>
+        <translation>収集を許可する</translation>
+    </message>
+    <message>
+        <source>id_allow_data_collection</source>
+        <translation>データ収集を許可する</translation>
     </message>
     <message>
         <source>id_allows_you_to_quickly_check</source>
@@ -268,20 +296,28 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
         <translation>いつも</translation>
     </message>
     <message>
+        <source>id_always_ask</source>
+        <translation>Always ask</translation>
+    </message>
+    <message>
         <source>id_amount</source>
         <translation>額</translation>
     </message>
     <message>
         <source>id_amount_in_s</source>
-        <translation>Amount in %1</translation>
+        <translation>%1の金額</translation>
+    </message>
+    <message>
+        <source>id_amp</source>
+        <translation>AMP</translation>
     </message>
     <message>
         <source>id_amp_account</source>
-        <translation>AMP Account</translation>
+        <translation>AMPアカウント</translation>
     </message>
     <message>
         <source>id_amp_accounts_are_only_available</source>
-        <translation>AMP accounts are only available on Liquid wallets. You may be required to provide your account ID to issuers to receive an AMP Asset.</translation>
+        <translation>AMPアカウントはLiquidウォレットでのみ使用できます。AMPアセットによっては発行者にアカウントIDを提示してからしか受け取れない場合があります。</translation>
     </message>
     <message>
         <source>id_amp_id</source>
@@ -289,27 +325,39 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_amp_wallet</source>
-        <translation>AMP Wallet</translation>
+        <translation>AMPウォレット</translation>
     </message>
     <message>
         <source>id_another_2fa_method_is_already</source>
-        <translation>Another 2FA method is already active. Confirm via 2FA that you authorize this change.</translation>
+        <translation>別の2段階認証手段が設定されています。この変更を2段階認証で確認してください。</translation>
+    </message>
+    <message>
+        <source>id_any_wallet_found_will_be</source>
+        <translation>見つかったウォレットはここに表示されます。</translation>
     </message>
     <message>
         <source>id_app_settings</source>
-        <translation>App Settings</translation>
+        <translation>アプリ設定</translation>
     </message>
     <message>
         <source>id_archive</source>
-        <translation>Archive</translation>
+        <translation>アーカイブ</translation>
+    </message>
+    <message>
+        <source>id_archive_account</source>
+        <translation>アカウントをアーカイブする</translation>
     </message>
     <message>
         <source>id_archived</source>
-        <translation>Archived</translation>
+        <translation>アーカイブ済み</translation>
     </message>
     <message>
         <source>id_archived_accounts</source>
-        <translation>Archived Accounts</translation>
+        <translation>アーカイブ済みのアカウント</translation>
+    </message>
+    <message>
+        <source>id_are_you_sure_you_want_to_remove</source>
+        <translation>本当に宛先を削除しますか？</translation>
     </message>
     <message>
         <source>id_are_you_sure_you_want_to_view</source>
@@ -317,35 +365,39 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_as_easy_as_snapping_a_photo</source>
-        <translation>As easy as snapping a photo with your phone. If you have an existing wallet, scan your recovery phrase from settings.</translation>
+        <translation>写真を取るくらいシンプルに。すでにウォレットをお持ちの場合、設定画面よりリカバリーフレーズをスキャンしてください。</translation>
     </message>
     <message>
         <source>id_asset</source>
-        <translation>Asset</translation>
+        <translation>アセット</translation>
     </message>
     <message>
         <source>id_asset_details</source>
-        <translation>Asset Details</translation>
+        <translation>アセット詳細</translation>
     </message>
     <message>
         <source>id_asset_icons_are_missing_try</source>
-        <translation>Asset icons are missing, try reloading them.</translation>
+        <translation>アセットを再読み込みしてアイコンを取得してください。</translation>
     </message>
     <message>
         <source>id_asset_id</source>
-        <translation>Asset ID</translation>
+        <translation>アセットID</translation>
     </message>
     <message>
         <source>id_asset_name</source>
-        <translation>Asset Name</translation>
+        <translation>アセット名</translation>
     </message>
     <message>
         <source>id_assets</source>
-        <translation>Assets</translation>
+        <translation>アセット一覧</translation>
     </message>
     <message>
         <source>id_assets_cannot_be_used_on_bitcoin</source>
-        <translation>Assets cannot be used on Bitcoin</translation>
+        <translation>アセットはBitcoinネットワークでは利用できません</translation>
+    </message>
+    <message>
+        <source>id_at_least_8_characters_required</source>
+        <translation>8文字以上入力してください</translation>
     </message>
     <message>
         <source>id_attempts_remaining_d</source>
@@ -353,27 +405,27 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_authenticate_to_view_the</source>
-        <translation>Authenticate to view the recovery phrase</translation>
+        <translation>リカバリーフレーズを確認するには認証してください</translation>
     </message>
     <message>
         <source>id_authentication_error_s</source>
-        <translation>Authentication error: %1</translation>
+        <translation>認証エラー: %1</translation>
     </message>
     <message>
         <source>id_authentication_failed</source>
-        <translation>Authentication failed</translation>
+        <translation>認証に失敗しました</translation>
     </message>
     <message>
         <source>id_authenticator_app</source>
-        <translation>Authenticator app</translation>
+        <translation>Authenticatorアプリ</translation>
     </message>
     <message>
         <source>id_authenticator_qr_code</source>
-        <translation>Authenticator QR Code</translation>
+        <translation>Authenticator QRコード</translation>
     </message>
     <message>
         <source>id_authenticator_secret_key</source>
-        <translation>Authenticator secret key</translation>
+        <translation>Authenticator シークレットキー</translation>
     </message>
     <message>
         <source>id_auto_logout_timeout</source>
@@ -381,31 +433,35 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_auto_logout_timeout_expired</source>
-        <translation>Auto logout timeout expired</translation>
+        <translation>時間経過により自動ログアウトされました</translation>
     </message>
     <message>
         <source>id_autolock_after</source>
-        <translation>オートロック制限</translation>
+        <translation>オートロック制限まで</translation>
     </message>
     <message>
         <source>id_available</source>
-        <translation>Available</translation>
+        <translation>利用可能</translation>
+    </message>
+    <message>
+        <source>id_available_funds_s</source>
+        <translation>利用可能な残高%1</translation>
     </message>
     <message>
         <source>id_back</source>
-        <translation>Back</translation>
+        <translation>戻る</translation>
     </message>
     <message>
         <source>id_back_up_recovery_phrase</source>
-        <translation>Back Up Recovery Phrase</translation>
+        <translation>リカバリーフレーズのバックアップ</translation>
     </message>
     <message>
         <source>id_backup_the_recovery_mnemonic</source>
-        <translation>Backup the recovery mnemonic and recovery xpub to recover funds from your 2of3 account.</translation>
+        <translation>2of3アカウントの復旧時に必要になるリカバリー用ニモニックとxpubをバックアップしてください。</translation>
     </message>
     <message>
         <source>id_backup_your_mnemonic_before</source>
-        <translation>Backup your mnemonic before removing the wallet from this device.</translation>
+        <translation>このデバイスからウォレットを取り外す前にニモニックをバックアップしてください。</translation>
     </message>
     <message>
         <source>id_be_aware_other_apps_can_read_or</source>
@@ -413,31 +469,39 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_be_sure_your_recovery_phrase_is</source>
-        <translation>Be sure your recovery phrase is backed up before removing this wallet.</translation>
+        <translation>ウォレットを消去する前に、リカバリーフレーズをバックアップしているか今一度ご確認ください。</translation>
     </message>
     <message>
         <source>id_biometric_login_is_disabled</source>
-        <translation>Biometric Login is Disabled</translation>
+        <translation>生体認証ログインが無効です</translation>
     </message>
     <message>
         <source>id_biometric_login_is_enabled</source>
-        <translation>Biometric Login is Enabled</translation>
+        <translation>生体認証ログインが有効です</translation>
     </message>
     <message>
         <source>id_biometrics_authentication</source>
-        <translation>Biometrics Authentication</translation>
+        <translation>生体認証</translation>
+    </message>
+    <message>
+        <source>id_bip39_passphrase</source>
+        <translation>BIP39 Passphrase</translation>
+    </message>
+    <message>
+        <source>id_bip39_passphrase_login</source>
+        <translation>BIP39 Passphrase login</translation>
     </message>
     <message>
         <source>id_bip49_accounts_allow_you_to</source>
-        <translation>BIP49 accounts allow you to segregate funds, and to receive on wrapped segwit addresses, thus ensuring the highest backwards compatibility when receiving funds from anyone on the network.</translation>
+        <translation>BIP49アカウントは資金を分別して保管できるほか、Wrapped Segwitアドレスで送金を受け取ることができるためネットワーク上の誰からでも送金を受けられる後方互換性が最も高い種類のアカウントです。</translation>
     </message>
     <message>
         <source>id_bip84_accounts_allow_you_to</source>
-        <translation>BIP84 accounts allow you to segregate your funds, and to receive on bech32 native segwit addresses. This account type ensures cheaper transactions when sending funds, but not all services support bech32 addresses yet.</translation>
+        <translation>BIP84アカウントは資金を分別して保管できる他、bech32 Native Segwitアドレスで送金を受け取ることができます。送金時の手数料が一番安い種類のアカウントですが、bech32に未対応のサービスもあります。</translation>
     </message>
     <message>
         <source>id_bitcoin_and_liquid</source>
-        <translation>Bitcoin and Liquid</translation>
+        <translation>BitcoinとLiquid</translation>
     </message>
     <message>
         <source>id_bitcoin_denomination</source>
@@ -449,11 +513,11 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_bitcoin_is_the_worlds_leading</source>
-        <translation>Bitcoin is the world&apos;s leading P2P cryptocurrency network. Select to send and receive bitcoin.</translation>
+        <translation>Bitcoinは世界一のP2P仮想通貨ネットワークです。ビットコインの送受金にはこれを選んでください。</translation>
     </message>
     <message>
         <source>id_bitcoin_testnet_and_liquid</source>
-        <translation>Bitcoin Testnet and Liquid Testnet</translation>
+        <translation>Bitcoin TestnetとLiquid Testnet</translation>
     </message>
     <message>
         <source>id_bitcoin_wallet</source>
@@ -461,7 +525,7 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_bitcoin_wallets</source>
-        <translation>Bitcoin wallets</translation>
+        <translation>Bitcoinウォレット</translation>
     </message>
     <message>
         <source>id_block</source>
@@ -469,7 +533,11 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_block_d</source>
-        <translation>Block %1</translation>
+        <translation>ブロック %1</translation>
+    </message>
+    <message>
+        <source>id_block_height</source>
+        <translation>ブロック高</translation>
     </message>
     <message>
         <source>id_block_height_1d</source>
@@ -485,24 +553,24 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_blockstream_devices</source>
-        <translation>Blockstream Devices</translation>
+        <translation>Blockstreamデバイス</translation>
     </message>
     <message>
         <source>id_blockstream_does_not_have</source>
-        <translation>Blockstream does not have access to your wallet backup and will not be able to help you in case you lose it</translation>
+        <translation>Blockstreamはあなたのウォレットのバックアップを保持しないため、紛失時に復旧をお手伝いできません</translation>
     </message>
     <message>
         <source>id_blockstream_green_needs_access</source>
-        <translation>Blockstream Green needs access to Bluetooth in order to connect to hardware wallets. Location data is not used or kept by Blockstream.</translation>
+        <translation>Blockstream Greenはハードウェアウォレットに接続するためにBluetoothを使用する必要があります。Blockstreamは位置情報データを使用せず、保管もしません。</translation>
     </message>
     <message>
         <source>id_blockstream_green_supports_both</source>
-        <translation>Blockstream Green supports both Bitcoin and the Liquid Network. Don&apos;t worry, you can create another wallet for a different network at any time.</translation>
+        <translation>Blockstream GreenはBitcoinとLiquid Networkの双方で利用できます。もちろん、いつでも新しいウォレットを作ってもう一方のネットワークをお試しできます。</translation>
     </message>
     <message>
         <source>id_blockstream_greennsimple_and</source>
         <translation>Blockstream Green:
-Simple and Secure</translation>
+シンプルでセキュア</translation>
     </message>
     <message>
         <source>id_blockstream_store</source>
@@ -518,11 +586,11 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_by_proceeding_to_the_next_steps</source>
-        <translation>By proceeding to the next steps you agree to the %1</translation>
+        <translation>次のステップに進むことで%1に同意します</translation>
     </message>
     <message>
         <source>id_cable</source>
-        <translation>Cable</translation>
+        <translation>ケーブル</translation>
     </message>
     <message>
         <source>id_call</source>
@@ -530,7 +598,7 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_camera_problem</source>
-        <translation>カメラ問題</translation>
+        <translation>カメラが使用できません</translation>
     </message>
     <message>
         <source>id_cancel</source>
@@ -538,11 +606,11 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_cancel_2fa_reset</source>
-        <translation>Cancel 2FA reset</translation>
+        <translation>2段階認証のリセットをキャンセル</translation>
     </message>
     <message>
         <source>id_cancel_a_reset_to_unlock_your</source>
-        <translation>Cancel a reset to unlock your wallet if you recovered access to an old Two-Factor Authentication method.</translation>
+        <translation>失くした2段階認証手段が復旧した場合、2段階認証の解除をキャンセルしてウォレットを開くことができます。</translation>
     </message>
     <message>
         <source>id_cancel_twofactor_reset</source>
@@ -558,31 +626,35 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_change</source>
-        <translation>Change</translation>
+        <translation>お釣り</translation>
     </message>
     <message>
         <source>id_change_address</source>
-        <translation>Change address</translation>
+        <translation>お釣りアドレス</translation>
     </message>
     <message>
         <source>id_change_pin</source>
-        <translation>Change PIN</translation>
+        <translation>PINコードを変更する</translation>
     </message>
     <message>
         <source>id_changing_reference_exchange</source>
-        <translation>Changing reference exchange rate will reset your 2FA threshold to 0. Remember to adjust the 2FA threshold after spending.</translation>
+        <translation>交換レートの提供元を変更すると2段階認証の閾値が0にリセットされます。送金後に2段階認証の閾値を調整することをお忘れなく。</translation>
+    </message>
+    <message>
+        <source>id_check_device</source>
+        <translation>デバイスを確認してください</translation>
     </message>
     <message>
         <source>id_check_for_updates</source>
-        <translation>Check for updates</translation>
+        <translation>アップデートを確認</translation>
     </message>
     <message>
         <source>id_check_for_updates_on_startup</source>
-        <translation>Check for updates on startup</translation>
+        <translation>起動時にアップデートを確認</translation>
     </message>
     <message>
         <source>id_check_your_backup</source>
-        <translation>Check your backup</translation>
+        <translation>バックアップを確認する</translation>
     </message>
     <message>
         <source>id_choose</source>
@@ -590,11 +662,11 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_choose_a_name_for_your_new</source>
-        <translation>Choose a name for your new Blockstream Green wallet.</translation>
+        <translation>新しいBlockstream Greenウォレットに名前をつけてください。</translation>
     </message>
     <message>
         <source>id_choose_a_name_for_your_wallet</source>
-        <translation>Choose a name for your wallet</translation>
+        <translation>ウォレットに名前をつける</translation>
     </message>
     <message>
         <source>id_choose_method_to_authorize_the</source>
@@ -602,23 +674,31 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_choose_recovery_phrase_length</source>
-        <translation>Choose recovery phrase length</translation>
+        <translation>リカバリーフレーズの長さを選択する</translation>
     </message>
     <message>
         <source>id_choose_security_policy</source>
-        <translation>Choose Security Policy</translation>
+        <translation>セキュリティポリシーを設定する</translation>
     </message>
     <message>
         <source>id_choose_the_electrum_servers_you</source>
-        <translation>Choose the Electrum servers you trust</translation>
+        <translation>信頼するElectrumサーバーを選択する</translation>
+    </message>
+    <message>
+        <source>id_choose_the_security_policy_that</source>
+        <translation>ウォレットに合ったセキュリティポリシーを選択してください。</translation>
+    </message>
+    <message>
+        <source>id_choose_the_security_policy_you</source>
+        <translation>ウォレットの復元後に用いるセキュリティポリシーを選択してください。</translation>
     </message>
     <message>
         <source>id_choose_this_version_to_connect</source>
-        <translation>Choose this version to connect to your Blockstream Jade with both a usb cable and wireless</translation>
+        <translation>Blockstream JadeにUSBケーブルと無線の両方のモードで接続するにはこのバージョンを選択します</translation>
     </message>
     <message>
         <source>id_choose_this_version_to_disable</source>
-        <translation>Choose this version to disable all radio connections on your Blockstream Jade. This will make your Blockstream Jade incompatible with iOS devices</translation>
+        <translation>Blockstream Jadeの無線機能をすべて無効化するにはこのバージョンを選択します。JadeはiOSデバイスに接続できなくなります。</translation>
     </message>
     <message>
         <source>id_choose_twofactor_authentication</source>
@@ -626,7 +706,7 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_choose_watchonly</source>
-        <translation>Choose Watch-Only</translation>
+        <translation>読み取りモードを選択</translation>
     </message>
     <message>
         <source>id_choose_your_network</source>
@@ -634,67 +714,75 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_clear</source>
-        <translation>Clear</translation>
+        <translation>クリア</translation>
+    </message>
+    <message>
+        <source>id_clear_cache</source>
+        <translation>Clear cache</translation>
     </message>
     <message>
         <source>id_click_to_copy</source>
-        <translation>Click to copy</translation>
+        <translation>クリックしてコピー</translation>
     </message>
     <message>
         <source>id_click_to_receive_an_email_with</source>
-        <translation>Click to receive an email with your encrypted recovery data.</translation>
+        <translation>クリックして暗号化されたリカバリーデータをメールで受け取る。</translation>
     </message>
     <message>
         <source>id_code</source>
-        <translation>Code</translation>
+        <translation>コード</translation>
+    </message>
+    <message>
+        <source>id_coin</source>
+        <translation>コイン</translation>
     </message>
     <message>
         <source>id_coins</source>
-        <translation>Coins</translation>
+        <translation>コイン</translation>
     </message>
     <message>
         <source>id_coins_for_which_2fa_protection</source>
-        <translation>Coins for which 2FA protection is expired.</translation>
+        <translation>2段階認証の保護期限が切れたコイン。</translation>
     </message>
     <message>
         <source>id_coins_locked</source>
-        <translation>Coins locked</translation>
+        <translation>ロックされたコイン</translation>
     </message>
     <message>
         <source>id_coins_protected_by_the_legacy</source>
-        <translation>Coins protected by the legacy script recoverable with your nlocktimes.zip file.</translation>
+        <translation>旧型のスクリプトで保護されており、nlocktimes.zipファイルから復元可能なコイン。</translation>
     </message>
     <message>
         <source>id_coins_protected_by_the_new</source>
-        <translation>Coins protected by the new script with embedded 2FA expiry through CheckSequenceVerify.</translation>
+        <translation>新型のスクリプトでCheckSequenceVerifyを使った2段階認証によって保護されているコイン。</translation>
     </message>
     <message>
         <source>id_coins_received_or_created</source>
-        <translation>Coins received or created before SegWit was activated.</translation>
+        <translation>Segwit有効化以前に受け取ったか発行したコイン。</translation>
     </message>
     <message>
         <source>id_coins_unlocked</source>
-        <translation>Coins unlocked</translation>
+        <translation>アンロックされたコイン</translation>
     </message>
     <message>
         <source>id_coins_whose_asset_and_amount</source>
-        <translation>Coins whose asset and amount are publicly visible.</translation>
+        <translation>アセットの種類と金額が公開されているコイン。</translation>
     </message>
     <message>
         <source>id_coins_with_a_value_lower_than</source>
-        <translation>Coins with a value lower than 1092 satoshis that are uneconomic to spend; these coins can be generated by your wallet as change or sent to you by third parties trying to spam or deanonymize your wallet.</translation>
+        <translation>1092 satoshi以下の金額でまとまっており、手数料負けするコイン。お釣りとしてウォレットが生成したり、他者からスパムやトランザクションの結びつけを狙って送られてくることがあります。</translation>
     </message>
     <message>
         <source>id_collapse_sidebar</source>
-        <translation>Collapse sidebar</translation>
+        <translation>サイドバーを閉じる</translation>
     </message>
     <message>
         <source>id_coming_soon</source>
-        <translation>Coming Soon!</translation>
+        <translation>乞うご期待！</translation>
     </message>
     <message>
         <source>id_communication_timed_out_make</source>
-        <translation>Communication timed out. Make sure the device is powered on and try again.</translation>
+        <translation>接続が中断されました。デバイスの電源が入っていることを確認して再試行してください。</translation>
     </message>
     <message>
         <source>id_completed</source>
@@ -702,51 +790,59 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_confidential</source>
-        <translation>Confidential</translation>
+        <translation>親展 (漏洩に注意)</translation>
     </message>
     <message>
         <source>id_confidential_transaction</source>
-        <translation>Confidential Transaction</translation>
+        <translation>秘匿トランザクション</translation>
     </message>
     <message>
         <source>id_confirm_action</source>
-        <translation>Confirm action</translation>
+        <translation>許可する</translation>
     </message>
     <message>
         <source>id_confirm_by_typing_the_wallet</source>
-        <translation>Confirm by typing the wallet name</translation>
+        <translation>ウォレット名を入力して許可する</translation>
     </message>
     <message>
         <source>id_confirm_code</source>
         <translation>コードを確認</translation>
     </message>
     <message>
+        <source>id_confirm_on_your_device</source>
+        <translation>デバイスで承認してください</translation>
+    </message>
+    <message>
         <source>id_confirm_passphrase</source>
-        <translation>Confirm passphrase</translation>
+        <translation>パスフレーズを確認</translation>
     </message>
     <message>
         <source>id_confirm_transaction</source>
-        <translation>Confirm transaction</translation>
+        <translation>トランザクションを確認する</translation>
     </message>
     <message>
         <source>id_confirm_transaction_details_on</source>
-        <translation>Confirm transaction details on your hardware wallet</translation>
+        <translation>ハードウェアウォレットでトランザクションを確認する</translation>
     </message>
     <message>
         <source>id_confirm_update_on_your_jade</source>
-        <translation>Confirm update on your Jade</translation>
+        <translation>Jadeでアップデートを確認する</translation>
     </message>
     <message>
         <source>id_confirm_via_2fa_that_you</source>
-        <translation>Confirm via 2FA that you authorize this change.</translation>
+        <translation>2段階認証でこの変更を承認する。</translation>
     </message>
     <message>
         <source>id_confirmation_in_d_blocks</source>
-        <translation>Confirmation in %1 blocks</translation>
+        <translation>%1 ブロックで承認</translation>
+    </message>
+    <message>
+        <source>id_confirmation_time</source>
+        <translation>承認時間</translation>
     </message>
     <message>
         <source>id_confirmations</source>
-        <translation>Confirmations</translation>
+        <translation>承認</translation>
     </message>
     <message>
         <source>id_congratulations</source>
@@ -754,11 +850,11 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_connect_hardware_wallet</source>
-        <translation>Connect hardware wallet</translation>
+        <translation>ハードウェアウォレットを接続する</translation>
     </message>
     <message>
         <source>id_connect_jade_with_a_usb_cable</source>
-        <translation>Connect Jade with a USB cable to download the latest firmware update</translation>
+        <translation>JadeをUSBケーブルで接続して最新のファームウェアをダウンロードしてください</translation>
     </message>
     <message>
         <source>id_connect_through_a_proxy</source>
@@ -770,59 +866,59 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_connect_your_jade_to_use_it</source>
-        <translation>Connect your Jade to use it with Green</translation>
+        <translation>JadeをGreenと接続して利用する</translation>
     </message>
     <message>
         <source>id_connect_your_ledger_to_use_it</source>
-        <translation>Connect your Ledger to use it in Green</translation>
+        <translation>LedgerをGreenと接続して利用する</translation>
     </message>
     <message>
         <source>id_connected_to_jade</source>
-        <translation>Connected to Jade</translation>
+        <translation>Jadeに接続済み</translation>
+    </message>
+    <message>
+        <source>id_connected_wallets</source>
+        <translation>接続中のウォレット</translation>
     </message>
     <message>
         <source>id_connecting</source>
-        <translation>Connecting…</translation>
+        <translation>接続中…</translation>
     </message>
     <message>
         <source>id_connecting_through_tor</source>
-        <translation>Connecting through Tor</translation>
+        <translation>Tor経由で接続中</translation>
     </message>
     <message>
         <source>id_connecting_to_a_trusted_node</source>
-        <translation>Connecting to a trusted node through Tor requires enabling proxy settings in the app before logging in and a Socks5 proxy (Orbot app for Android)</translation>
+        <translation>Tor経由で信頼するノードに接続するには、ログイン前にこのアプリからプロキシの設定と、Socks5プロキシが必要になります(AndroidならOrbotアプリ)</translation>
     </message>
     <message>
         <source>id_connecting_to_peers</source>
-        <translation>Connecting to peers...</translation>
+        <translation>ピアに接続中…</translation>
     </message>
     <message>
         <source>id_connecting_to_tor_onion_nodes</source>
-        <translation>Tor(.onion)ノードに接続することで最高のセキュリティとプライバシーを保証します。このまま進めるには &quot;OK&quot; を押してください。</translation>
+        <translation>Tor(.onion)ノードに接続することで最高のセキュリティとプライバシーを保証します。このまま進めるには &quot;OK&quot; を押してください。</translation>
     </message>
     <message>
         <source>id_connecting_to_your_device</source>
-        <translation>Connecting to your device</translation>
+        <translation>デバイスに接続中</translation>
     </message>
     <message>
         <source>id_connection</source>
-        <translation>Connection</translation>
-    </message>
-    <message>
-        <source>id_connection_amp_validation</source>
-        <translation>Connection &amp;amp; Validation Settings</translation>
+        <translation>接続</translation>
     </message>
     <message>
         <source>id_connection_failed</source>
-        <translation>Connection failed</translation>
+        <translation>接続失敗</translation>
     </message>
     <message>
         <source>id_connection_to_device_failed</source>
-        <translation>Connection to device failed! Move closer to the device and try again.</translation>
+        <translation>デバイスへの接続に失敗しました。デバイスに近づいて再度お試しください。</translation>
     </message>
     <message>
         <source>id_contact_support_at_s_or_visit_s</source>
-        <translation>Contact support at %1 or visit %2</translation>
+        <translation>%1までサポートにご連絡いただくか、%2をご覧ください。</translation>
     </message>
     <message>
         <source>id_continue</source>
@@ -830,27 +926,35 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_continue_with_1s</source>
-        <translation>Continue with %1</translation>
+        <translation>%1で続行</translation>
     </message>
     <message>
         <source>id_copied_to_clipboard</source>
-        <translation>Copied to clipboard</translation>
+        <translation>クリップボードにコピーしました</translation>
     </message>
     <message>
         <source>id_copy</source>
-        <translation>Copy</translation>
+        <translation>コピー</translation>
     </message>
     <message>
         <source>id_copy_address</source>
-        <translation>Copy address</translation>
+        <translation>アドレスをコピーする</translation>
     </message>
     <message>
         <source>id_copy_details</source>
-        <translation>Copy details</translation>
+        <translation>詳細をコピーする</translation>
+    </message>
+    <message>
+        <source>id_copy_device_id</source>
+        <translation>デバイスIDをコピー</translation>
     </message>
     <message>
         <source>id_copy_raw_transaction</source>
-        <translation>Copy raw transaction</translation>
+        <translation>生のトランザクションをコピーする</translation>
+    </message>
+    <message>
+        <source>id_copy_support_id</source>
+        <translation>Copy support ID</translation>
     </message>
     <message>
         <source>id_copy_to_clipboard</source>
@@ -858,27 +962,27 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_copy_transaction_id</source>
-        <translation>Copy transaction ID</translation>
+        <translation>トランザクションIDをコピーする</translation>
     </message>
     <message>
         <source>id_copy_unblinded_link</source>
-        <translation>Copy unblinded link</translation>
+        <translation>ブラインディングされていないリンクをコピーする</translation>
     </message>
     <message>
         <source>id_copy_unblinding_data</source>
-        <translation>Copy unblinding data</translation>
+        <translation>ブラインディング解除用データをコピーする</translation>
     </message>
     <message>
         <source>id_copy_uri</source>
-        <translation>Copy URI</translation>
+        <translation>URIをコピーする</translation>
     </message>
     <message>
         <source>id_copy_xpub</source>
-        <translation>Copy xpub</translation>
+        <translation>xpubをコピーする</translation>
     </message>
     <message>
         <source>id_country</source>
-        <translation>Country</translation>
+        <translation>国</translation>
     </message>
     <message>
         <source>id_create</source>
@@ -890,7 +994,7 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_create_a_wallet_for_bitcoin</source>
-        <translation>Create a wallet for Bitcoin, Liquid or Testnet</translation>
+        <translation>Bitcoin, LiquidまたはTestnet用のウォレットを作成する</translation>
     </message>
     <message>
         <source>id_create_new_wallet</source>
@@ -898,27 +1002,27 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_create_temporary_wallet</source>
-        <translation>Create temporary wallet</translation>
+        <translation>一時的なウォレットの作成</translation>
     </message>
     <message>
         <source>id_create_wallet</source>
-        <translation>Create Wallet</translation>
+        <translation>ウォレットを作成</translation>
     </message>
     <message>
         <source>id_creating_wallet</source>
-        <translation>Creating wallet…</translation>
+        <translation>ウォレットを作成中…</translation>
     </message>
     <message>
         <source>id_csv</source>
-        <translation>Csv</translation>
+        <translation>CSV</translation>
     </message>
     <message>
         <source>id_currency</source>
-        <translation>貨幣</translation>
+        <translation>通貨</translation>
     </message>
     <message>
         <source>id_current_version</source>
-        <translation>Current version</translation>
+        <translation>現在のバージョン</translation>
     </message>
     <message>
         <source>id_custom</source>
@@ -926,7 +1030,7 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_custom_network_added_enable_it</source>
-        <translation>カスタムネットワーク登録完了、ネットワーク環境で利用する</translation>
+        <translation>カスタムネットワークを登録しました、ネットワーク設定から有効化してください</translation>
     </message>
     <message>
         <source>id_custom_network_not_found</source>
@@ -934,43 +1038,43 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_custom_network_with_this_name</source>
-        <translation>この名前でのカスタムネットワークが既にあります。</translation>
+        <translation>この名前のカスタムネットワークが既にあります。</translation>
     </message>
     <message>
         <source>id_custom_servers_and_validation</source>
-        <translation>Custom servers and validation</translation>
+        <translation>サーバーと検証設定のカスタマイズ</translation>
     </message>
     <message>
         <source>id_customize_2fa_expiration_of</source>
-        <translation>Customize 2FA expiration of your coins</translation>
+        <translation>コインの2段階認証による保護期間をカスタマイズ</translation>
     </message>
     <message>
         <source>id_d6_confirmations</source>
-        <translation>%1/6 検証</translation>
+        <translation>%1/6 承認</translation>
     </message>
     <message>
         <source>id_d_asset_in_this_account</source>
-        <translation>%1 asset in this account</translation>
+        <translation>%1 種類のアセットを保有</translation>
     </message>
     <message>
         <source>id_d_assets</source>
-        <translation>%1 assets</translation>
+        <translation>%1 種類のアセット</translation>
     </message>
     <message>
         <source>id_d_assets_in_this_account</source>
-        <translation>%1 assets in this account</translation>
+        <translation>%1 種類のアセットを保有</translation>
     </message>
     <message>
         <source>id_d_coins_selected</source>
-        <translation>(%1 coins selected)</translation>
+        <translation>(%1コインを選択中)</translation>
     </message>
     <message>
         <source>id_d_words</source>
-        <translation>%1 words</translation>
+        <translation>%1単語</translation>
     </message>
     <message>
         <source>id_data_directory</source>
-        <translation>Data directory</translation>
+        <translation>データディレクトリ</translation>
     </message>
     <message>
         <source>id_date</source>
@@ -990,31 +1094,35 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_default_custom_fee_rate</source>
-        <translation>基本カスタム手数料率</translation>
+        <translation>既定のカスタム手数料率</translation>
     </message>
     <message>
         <source>id_default_transaction_priority</source>
-        <translation>基本トランザクション優先順位</translation>
+        <translation>既定のトランザクション優先順位</translation>
     </message>
     <message>
         <source>id_delete</source>
-        <translation>Delete</translation>
+        <translation>消去</translation>
+    </message>
+    <message>
+        <source>id_delete_credentials</source>
+        <translation>認証情報を削除する</translation>
     </message>
     <message>
         <source>id_delete_permanently_your_wallet</source>
-        <translation>Delete permanently your wallet from the Blockstream Green database. You will never be able to log in to it thereafter.</translation>
+        <translation>Blockstream Greenデータベースから永久にウォレットを消去します。その後二度とログインすることはできません。</translation>
     </message>
     <message>
         <source>id_delete_s_twofactor</source>
-        <translation>2段階認証の%1削除</translation>
+        <translation>%1の2段階認証を消去</translation>
     </message>
     <message>
         <source>id_delete_wallet</source>
-        <translation>Delete Wallet</translation>
+        <translation>ウォレットを消去する</translation>
     </message>
     <message>
         <source>id_deleting_your_pin_will_remove</source>
-        <translation>PINを削除する場合、Mnemonicが無いと永久的にウォレットへのアクセスが出来なくなります。進めるには&quot;OK&quot;ボタンを押してください。</translation>
+        <translation>PINを削除した場合、ニモニックが無いと永久にウォレットへのアクセスが出来なくなります。続行するには&quot;OK&quot;ボタンを押してください。</translation>
     </message>
     <message>
         <source>id_denomination</source>
@@ -1022,19 +1130,25 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_deposit</source>
-        <translation>お預け金</translation>
+        <translation>入金</translation>
     </message>
     <message>
         <source>id_details</source>
-        <translation>Details</translation>
+        <translation>詳細</translation>
     </message>
     <message>
         <source>id_device</source>
-        <translation>Device</translation>
+        <translation>デバイス</translation>
     </message>
     <message>
         <source>id_devices</source>
-        <translation>Devices</translation>
+        <translation>デバイス一覧</translation>
+    </message>
+    <message>
+        <source>id_different_passphrases_generate</source>
+        <translation>Different passphrases generate new wallets!
+
+Remember you can only restore this wallet with both your recovery phrase and the passphrase.</translation>
     </message>
     <message>
         <source>id_disable</source>
@@ -1042,15 +1156,15 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_disable_pin_access</source>
-        <translation>Disable PIN access</translation>
+        <translation>PINを無効化する</translation>
     </message>
     <message>
         <source>id_disable_pin_access_for_this</source>
-        <translation>Disable PIN access for this wallet on all devices</translation>
+        <translation>すべてのデバイスでこのウォレットのPINを無効化する</translation>
     </message>
     <message>
         <source>id_disable_s_twofactor</source>
-        <translation>Disable %1 Two-Factor Authentication</translation>
+        <translation>%1による2段階認証を無効化する </translation>
     </message>
     <message>
         <source>id_disabled</source>
@@ -1058,7 +1172,7 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_displays_the_progress_of_spv</source>
-        <translation>SPVシンクロナイゼーションの進展度を表示</translation>
+        <translation>SPV同期の進捗を表示</translation>
     </message>
     <message>
         <source>id_dispute_twofactor_reset</source>
@@ -1066,19 +1180,19 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_disputed</source>
-        <translation>論争中</translation>
+        <translation>係争中</translation>
     </message>
     <message>
         <source>id_distributed_under_the_s_see</source>
-        <translation>Distributed under the %1, see LICENSE for more information or visit %2</translation>
+        <translation>%1により配布、詳細はLICENSEまたは%2から確認</translation>
     </message>
     <message>
         <source>id_do_you_have_the_backup</source>
-        <translation>Do you have the backup?</translation>
+        <translation>バックアップは手元にありますか？</translation>
     </message>
     <message>
         <source>id_domain</source>
-        <translation>Domain</translation>
+        <translation>ドメイン</translation>
     </message>
     <message>
         <source>id_done</source>
@@ -1089,20 +1203,24 @@ Simple and Secure</translation>
         <translation>これ以上聞かない</translation>
     </message>
     <message>
+        <source>id_dont_collect_data</source>
+        <translation>データを収集しない</translation>
+    </message>
+    <message>
         <source>id_dont_show_this_again</source>
-        <translation>Don&apos;t show this again</translation>
+        <translation>次から表示しない</translation>
     </message>
     <message>
         <source>id_dont_store_your_recovery_phrase</source>
-        <translation>Don&apos;t store your recovery phrase on your phone, computer, or any online services.</translation>
+        <translation>リカバリーフレーズはスマートフォン、パソコン、オンラインサービスなどに保存しないでください。</translation>
     </message>
     <message>
         <source>id_dont_take_screenshots_of_your</source>
-        <translation>Don&apos;t take screenshots of your recovery phrase!</translation>
+        <translation>リカバリーフレーズのスクリーンショットを撮らないでください！</translation>
     </message>
     <message>
         <source>id_double_check_spv_with_other</source>
-        <translation>Double check SPV with other servers</translation>
+        <translation>SPVを他のサーバーと照らし合わせる</translation>
     </message>
     <message>
         <source>id_double_spend</source>
@@ -1118,11 +1236,15 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_dust</source>
-        <translation>Dust</translation>
+        <translation>ダスト</translation>
     </message>
     <message>
         <source>id_edit</source>
-        <translation>Edit</translation>
+        <translation>編集する</translation>
+    </message>
+    <message>
+        <source>id_edit_fee</source>
+        <translation>手数料を変更</translation>
     </message>
     <message>
         <source>id_email</source>
@@ -1134,7 +1256,7 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_empty</source>
-        <translation>Empty</translation>
+        <translation>何もありません</translation>
     </message>
     <message>
         <source>id_enable</source>
@@ -1142,7 +1264,7 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_enable_bluetooth</source>
-        <translation>Enable Bluetooth</translation>
+        <translation>Bluetoothを有効化する</translation>
     </message>
     <message>
         <source>id_enable_custom_networks_debug</source>
@@ -1150,23 +1272,27 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_enable_email_notifications_to</source>
-        <translation>Enable email notifications to change nlocktime</translation>
+        <translation>nlocktimeの設定変更時にメールで確認する</translation>
     </message>
     <message>
         <source>id_enable_experimental_features</source>
-        <translation>Enable experimental features</translation>
+        <translation>試験的機能を有効化する</translation>
     </message>
     <message>
         <source>id_enable_face_id</source>
         <translation>顔ID機能をONにする</translation>
     </message>
     <message>
+        <source>id_enable_limited_usage_data</source>
+        <translation>限られた範囲で利用データの収集を許可する</translation>
+    </message>
+    <message>
         <source>id_enable_location_services</source>
-        <translation>Enable location services</translation>
+        <translation>位置情報を有効化する</translation>
     </message>
     <message>
         <source>id_enable_or_change_your_pin_to</source>
-        <translation>Enable or change your PIN to quickly access your wallet</translation>
+        <translation>PINを有効化するか変更してウォレットをすぐ開けるようにします</translation>
     </message>
     <message>
         <source>id_enable_spv</source>
@@ -1174,15 +1300,15 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_enable_spv_and_modify_spv</source>
-        <translation>SPVを有効にしSPV設定を調整する</translation>
+        <translation>SPVを有効にしSPVの設定を変更する</translation>
     </message>
     <message>
         <source>id_enable_testnet</source>
-        <translation>Enable testnet</translation>
+        <translation>Testnetを有効化する</translation>
     </message>
     <message>
         <source>id_enable_testnet_in_app_settings</source>
-        <translation>Enable testnet in app settings to use Jade</translation>
+        <translation>Jadeを利用するにはアプリ内設定からTestnetを有効化してください</translation>
     </message>
     <message>
         <source>id_enable_touch_id</source>
@@ -1190,7 +1316,7 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_enable_twofactor_authentication</source>
-        <translation>Enable Two-Factor Authentication to protect your wallet from unauthorized transactions or changes to critical security settings</translation>
+        <translation>2段階認証を有効化して不正送金や重要なセキュリティ設定の無断変更を防ぎましょう</translation>
     </message>
     <message>
         <source>id_enabled</source>
@@ -1198,11 +1324,15 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_enabled_1s</source>
-        <translation>使用中: %1</translation>
+        <translation>有効: %1</translation>
     </message>
     <message>
         <source>id_encryption_passphrase</source>
         <translation>暗号化パスフレーズ</translation>
+    </message>
+    <message>
+        <source>id_enhanced_privacy</source>
+        <translation>充実したプライバシー機能</translation>
     </message>
     <message>
         <source>id_enter</source>
@@ -1246,11 +1376,11 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_enter_pin_on_jade</source>
-        <translation>Enter PIN on Jade</translation>
+        <translation>JadeでPINを入力してください</translation>
     </message>
     <message>
         <source>id_enter_the_email_for_which_you</source>
-        <translation>Enter the email for which you want to delete a dispute request</translation>
+        <translation>係争リクエストを消去したいメールアドレスを入力してください</translation>
     </message>
     <message>
         <source>id_enter_the_matching_words</source>
@@ -1262,15 +1392,15 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_enter_your_12_24_or_27_words</source>
-        <translation>Enter your 12, 24 or 27 words recovery phrase</translation>
+        <translation>12, 24, または27単語のリカバリーフレーズを入力</translation>
     </message>
     <message>
         <source>id_enter_your_24_or_27_words</source>
-        <translation>Enter your 24 or 27 words recovery phrase</translation>
+        <translation>24または27単語のリカバリーフレーズを入力</translation>
     </message>
     <message>
         <source>id_enter_your_27_words_recovery</source>
-        <translation>Enter your 27 words recovery phrase</translation>
+        <translation>27単語のリカバリーフレーズを入力</translation>
     </message>
     <message>
         <source>id_enter_your_email_address</source>
@@ -1278,36 +1408,40 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_enter_your_pin</source>
-        <translation>Enter Your PIN</translation>
+        <translation>PINを入力してください</translation>
     </message>
     <message>
         <source>id_enter_your_recovery_phrase</source>
-        <translation>Enter your recovery phrase</translation>
+        <translation>リカバリーフレーズを入力してください</translation>
     </message>
     <message>
         <source>id_enter_your_s_wallet_mnemonic</source>
-        <translation>ウォレットのmnemonic%1を入力</translation>
+        <translation>%1ウォレットのニモニックを入力</translation>
     </message>
     <message>
         <source>id_enter_your_wallet_mnemonic</source>
-        <translation>ウォレットのmnemonic入力</translation>
+        <translation>ウォレットのニモニックを入力</translation>
     </message>
     <message>
         <source>id_enter_your_xpub</source>
-        <translation>Enter your xpub</translation>
+        <translation>xpubを入力してください</translation>
     </message>
     <message>
         <source>id_enter_your_xpub_to_add_a</source>
-        <translation>Enter your xPub to add a watch-only wallet where you can receive funds and check your balance without importing your private keys.</translation>
+        <translation>xpubを入力することで読み取りモードのウォレットを追加します。秘密鍵を読み込まずに資金の受け取りや残高の確認が行なえます。</translation>
     </message>
     <message>
         <source>id_enter_yournrecovery_phrase</source>
-        <translation>Enter your
-Recovery Phrase</translation>
+        <translation>リカバリーフレーズを
+入力してください</translation>
     </message>
     <message>
         <source>id_entity</source>
-        <translation>Entity</translation>
+        <translation>主体</translation>
+    </message>
+    <message>
+        <source>id_ephemeral_wallets</source>
+        <translation>Ephemeral wallets</translation>
     </message>
     <message>
         <source>id_error</source>
@@ -1319,23 +1453,23 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_error_nfc_tag_not_writable</source>
-        <translation>エラー: NFCタッグが読み取れません</translation>
+        <translation>エラー: NFCタグが読み取れません</translation>
     </message>
     <message>
         <source>id_error_nfc_tag_too_small</source>
-        <translation>エラー: NFCタッグが小さ過ぎます</translation>
+        <translation>エラー: NFCタグが小さ過ぎます</translation>
     </message>
     <message>
         <source>id_error_passphrases_do_not_match</source>
-        <translation>Error: passphrases do not match</translation>
+        <translation>エラー: パスフレーズが一致しません</translation>
     </message>
     <message>
         <source>id_error_setting_fee_rate</source>
-        <translation>Error setting Fee Rate</translation>
+        <translation>手数料率の設定に失敗しました</translation>
     </message>
     <message>
         <source>id_establishing_session</source>
-        <translation>Establishing session</translation>
+        <translation>セッションの確立中</translation>
     </message>
     <message>
         <source>id_estimated_blocks_until</source>
@@ -1347,19 +1481,31 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_existing_recovery_phrase</source>
-        <translation>Existing recovery phrase</translation>
+        <translation>既存のリカバリーフレーズ</translation>
+    </message>
+    <message>
+        <source>id_existing_wallets</source>
+        <translation>既存のウォレット</translation>
     </message>
     <message>
         <source>id_expand_sidebar</source>
-        <translation>Expand sidebar</translation>
+        <translation>サイドバーを開く</translation>
     </message>
     <message>
         <source>id_explore_your_wallet</source>
-        <translation>Explore Your Wallet</translation>
+        <translation>ウォレットを探検する</translation>
     </message>
     <message>
         <source>id_export_transactions_to_csv_file</source>
-        <translation>Export transactions to CSV file</translation>
+        <translation>トランザクション一覧をCSVファイルに出力</translation>
+    </message>
+    <message>
+        <source>id_exports_an_accounts_extended</source>
+        <translation>アカウントの拡張公開鍵(xPub/yPub/zPub)を出力して読み取りモードのウォレットを作る</translation>
+    </message>
+    <message>
+        <source>id_extended_public_key</source>
+        <translation>拡張公開鍵</translation>
     </message>
     <message>
         <source>id_face_id</source>
@@ -1367,11 +1513,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_failed_to_load_asset_icons</source>
-        <translation>Failed to load asset icons</translation>
+        <translation>アセットのアイコンの読み込みに失敗しました</translation>
     </message>
     <message>
         <source>id_failed_to_load_asset_registry</source>
-        <translation>Failed to Load Asset Registry</translation>
+        <translation>アセット登録簿の読み込みに失敗しました</translation>
     </message>
     <message>
         <source>id_fast</source>
@@ -1379,7 +1525,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_faster_more_confidential</source>
-        <translation>Faster, more confidential Bitcoin transactions</translation>
+        <translation>より早く、よりプライベートなビットコイン送金</translation>
     </message>
     <message>
         <source>id_fee</source>
@@ -1395,11 +1541,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_fee_rate_is_above_maximum</source>
-        <translation>Fee rate is above maximum accepted fee rate.</translation>
+        <translation>手数料率が設定上限額を超えています。</translation>
     </message>
     <message>
         <source>id_fee_rate_is_below_minimum</source>
-        <translation>手数料率が最小受諾料より低いです</translation>
+        <translation>手数料率が最小額を満たしていません</translation>
     </message>
     <message>
         <source>id_fee_rate_must_be_at_least_s</source>
@@ -1414,48 +1560,52 @@ Recovery Phrase</translation>
         <translation>手数料: %1 / %2</translation>
     </message>
     <message>
+        <source>id_feedback</source>
+        <translation>Feedback</translation>
+    </message>
+    <message>
         <source>id_fees_are_too_low</source>
-        <translation>Fees are too low</translation>
+        <translation>手数料が低すぎます</translation>
     </message>
     <message>
         <source>id_fetching_new_firmware</source>
-        <translation>Fetching new firmware</translation>
+        <translation>新しいファームウェアを取得中</translation>
     </message>
     <message>
         <source>id_filters</source>
-        <translation>Filters</translation>
+        <translation>フィルター</translation>
     </message>
     <message>
         <source>id_finishing_up</source>
-        <translation>Finishing Up</translation>
+        <translation>最後に</translation>
     </message>
     <message>
         <source>id_firmware</source>
-        <translation>Firmware</translation>
+        <translation>ファームウェア</translation>
     </message>
     <message>
         <source>id_firmware_update</source>
-        <translation>Firmware update</translation>
+        <translation>ファームウェアアップデート</translation>
     </message>
     <message>
         <source>id_firmware_update_completed</source>
-        <translation>Firmware update completed</translation>
+        <translation>ファームウェアアップデートが完了</translation>
     </message>
     <message>
         <source>id_follow_the_instructions_on_your</source>
-        <translation>Follow the instructions on your device.</translation>
+        <translation>デバイスの指示に従ってください。</translation>
     </message>
     <message>
         <source>id_for_investors</source>
-        <translation>For investors</translation>
+        <translation>投資家向け</translation>
     </message>
     <message>
         <source>id_for_long_term_storage</source>
-        <translation>For long term storage</translation>
+        <translation>長期保管向け</translation>
     </message>
     <message>
         <source>id_for_most_users</source>
-        <translation>For most users</translation>
+        <translation>大半のユーザー向け</translation>
     </message>
     <message>
         <source>id_from</source>
@@ -1463,19 +1613,19 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_funds_received_in_this</source>
-        <translation>Funds received in this transaction are not confidential.</translation>
+        <translation>このトランザクションで受け取った資金は秘匿されていません。</translation>
     </message>
     <message>
         <source>id_general</source>
-        <translation>General</translation>
+        <translation>一般</translation>
     </message>
     <message>
         <source>id_generate</source>
-        <translation>Generate</translation>
+        <translation>生成する</translation>
     </message>
     <message>
         <source>id_generate_a_new_recovery_phrase</source>
-        <translation>Generate a new recovery phrase as your third recovery key.</translation>
+        <translation>第3のリカバリー鍵としてリカバリーフレーズを生成します。</translation>
     </message>
     <message>
         <source>id_generate_new_address</source>
@@ -1483,27 +1633,31 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_get_code</source>
-        <translation>コードを貰う</translation>
+        <translation>コードを受け取る</translation>
     </message>
     <message>
         <source>id_get_id</source>
-        <translation>Get ID</translation>
+        <translation>IDを取得する</translation>
     </message>
     <message>
         <source>id_get_jade</source>
-        <translation>Get Jade</translation>
+        <translation>Jadeを購入する</translation>
     </message>
     <message>
         <source>id_give_bluetooth_permissions</source>
-        <translation>Give Bluetooth Permissions</translation>
+        <translation>Bluetoothの権限を与える</translation>
+    </message>
+    <message>
+        <source>id_give_us_your_feedback</source>
+        <translation>Give us your feedback</translation>
     </message>
     <message>
         <source>id_go_to_account</source>
-        <translation>Go to Account</translation>
+        <translation>アカウントを見る</translation>
     </message>
     <message>
         <source>id_go_to_receive_to_get_your</source>
-        <translation>Go to Receive to get your Account ID.</translation>
+        <translation>受け取り画面からアカウントIDを確認できます。</translation>
     </message>
     <message>
         <source>id_go_to_wallet</source>
@@ -1511,11 +1665,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_got_it_written_down_great_you</source>
-        <translation>Got it written down? Great. You can enter it here. Don’t lose it, it’ll stay the same.</translation>
+        <translation>書き留めましたか？よくできました。ここに入力してください。変わることはないので、安心して保管してください。</translation>
     </message>
     <message>
         <source>id_green_is_a_noncustodial_wallet</source>
-        <translation>Greenは利用者が直接デジタル資産を管理するウォレットです</translation>
+        <translation>Greenはノンカストディアルウォレットです</translation>
     </message>
     <message>
         <source>id_green_logo</source>
@@ -1523,15 +1677,15 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_green_mnemonic_qr_code</source>
-        <translation>Green MnemonicQRコード</translation>
+        <translation>GreenニモニックQRコード</translation>
     </message>
     <message>
         <source>id_green_only_supports_one_pin_for</source>
-        <translation>Greenは各ネットワークにつきひとつのPINをサポートします。新規ウォレットはログインの度にmnemonicが必要となります。</translation>
+        <translation>Greenは各ネットワークにつきひとつのPINをサポートします。追加のウォレットはログインの度にニモニックが必要となります。</translation>
     </message>
     <message>
         <source>id_green_only_supports_one_pin_per</source>
-        <translation>Green only supports one PIN per network. To set a PIN for this wallet, disable the PIN on your original wallet first.</translation>
+        <translation>Greenは各ネットワークにつきひとつのPINのみサポートします。このウォレットにPINを設定する場合は、まず他のウォレットのPIN設定を無効化してください。</translation>
     </message>
     <message>
         <source>id_green_uses_biometric</source>
@@ -1539,23 +1693,27 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_green_uses_bluetooth_for</source>
-        <translation>Green uses Bluetooth for communication with hardware wallets</translation>
+        <translation>GreenはBluetoothを使ってハードウェアウォレットと通信します</translation>
     </message>
     <message>
         <source>id_green_uses_bluetooth_to_connect</source>
-        <translation>Green uses Bluetooth to connect to hardware wallets</translation>
+        <translation>GreenはBluetoothでハードウェアウォレットに接続します</translation>
     </message>
     <message>
         <source>id_green_uses_multisig_with_one</source>
-        <translation>GreenはBlockstreamのサーバーと貴方のデバイスで生成された署名の二つを活用しマルチ署名を利用します。2段階認証を設定する場合、サーバー側の署名のセキュリティにもう一段層加えることになります。</translation>
+        <translation>GreenはBlockstreamのサーバーと貴方のデバイスで生成された署名の二つを活用しマルチシグを利用します。2段階認証を設定することでサーバー側の署名のセキュリティを一段と強化できます。</translation>
     </message>
     <message>
         <source>id_hardware_wallet</source>
-        <translation>Hardware wallet</translation>
+        <translation>ハードウェアウォレット</translation>
     </message>
     <message>
         <source>id_hardware_wallet_support_for</source>
-        <translation>Hardware wallet support for Confidential Transactions coming soon.</translation>
+        <translation>秘匿トランザクションのハードウェアウォレット対応が近く予定されています。</translation>
+    </message>
+    <message>
+        <source>id_hardware_wallets</source>
+        <translation>ハードウェアウォレット</translation>
     </message>
     <message>
         <source>id_hash</source>
@@ -1563,31 +1721,43 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_help</source>
-        <translation>Help</translation>
+        <translation>ヘルプ</translation>
+    </message>
+    <message>
+        <source>id_help_green_improve</source>
+        <translation>Greenの改善にご協力ください</translation>
     </message>
     <message>
         <source>id_here</source>
-        <translation>here</translation>
+        <translation>ここ</translation>
     </message>
     <message>
         <source>id_hex</source>
-        <translation>HEX</translation>
+        <translation>16進数</translation>
     </message>
     <message>
         <source>id_hide_assets</source>
-        <translation>Hide assets</translation>
+        <translation>アセットを隠す</translation>
+    </message>
+    <message>
+        <source>id_hide_details</source>
+        <translation>詳細を隠す</translation>
     </message>
     <message>
         <source>id_high</source>
         <translation>高い</translation>
     </message>
     <message>
+        <source>id_hold_button_to_send</source>
+        <translation>ボタン長押しで送信</translation>
+    </message>
+    <message>
         <source>id_hold_your_nfc_tag_close_to_the</source>
-        <translation>デバイスにNFCタッグを近づけて下さい</translation>
+        <translation>デバイスにNFCタグを近づけて下さい</translation>
     </message>
     <message>
         <source>id_home</source>
-        <translation>Home</translation>
+        <translation>ホーム</translation>
     </message>
     <message>
         <source>id_hour</source>
@@ -1599,7 +1769,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_how_to_stop_this_reset</source>
-        <translation>How to Stop This Reset</translation>
+        <translation>リセットを止めるには</translation>
     </message>
     <message>
         <source>id_i_agree_to_the</source>
@@ -1611,11 +1781,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_i_confirm_i_want_to_delete_this</source>
-        <translation>I confirm I want to delete this wallet</translation>
+        <translation>理解してこのウォレットを削除する</translation>
     </message>
     <message>
         <source>id_i_confirm_i_want_to_disable_pin</source>
-        <translation>I confirm I want to disable PIN access on all my devices.</translation>
+        <translation>理解してすべてのデバイスでPINによるアクセスを無効化する。</translation>
     </message>
     <message>
         <source>id_i_forgot_my_password</source>
@@ -1623,55 +1793,59 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_i_lost_my_2fa</source>
-        <translation>I lost my 2FA</translation>
+        <translation>2段階認証手段を失った</translation>
     </message>
     <message>
         <source>id_i_secured_the_mnemonic_and_i</source>
-        <translation>Mnemonicを安全に保管し利用規約も確認しました</translation>
+        <translation>ニモニックを安全に保管し利用規約も確認しました</translation>
     </message>
     <message>
         <source>id_i_typed_all_my_recovery_phrase</source>
-        <translation>I typed all my recovery phrase why can&apos;t I continue?</translation>
+        <translation>リカバリーフレーズを最後まで入力したのに続行できない</translation>
     </message>
     <message>
         <source>id_i_understand_amounts_could_be</source>
-        <translation>I understand amounts could be incorrect</translation>
+        <translation>金額が不正確な可能性があることを理解した</translation>
     </message>
     <message>
         <source>id_id</source>
         <translation>ID</translation>
     </message>
     <message>
+        <source>id_if_you_agree_green_will_collect</source>
+        <translation>同意するとGreenはユーザー体験向上のために限られた範囲内で利用データを収集します。機密性の高いユーザーやウォレットについてのデータは収集しません。</translation>
+    </message>
+    <message>
         <source>id_if_you_are_the_rightful_owner</source>
-        <translation>If you are the rightful owner of this wallet, and you still possess one of its active 2FA methods, cancel the reset to be able to spend and empty this wallet.</translation>
+        <translation>あなたがこのウォレットの所有者で2段階認証手段が１つでも残されている場合、リセットをキャンセルしてウォレット内の資金を退避させてください。</translation>
     </message>
     <message>
         <source>id_if_you_did_not_request_the</source>
-        <translation>If you did not request the reset, but you cannot cancel the reset process because you can&apos;t access any existing Two-Factor Authorization methods, dispute this 2FA reset. This will permanently block your wallet, but you can undo this action.</translation>
+        <translation>リセットを申請したのが貴方ではなく、2段階認証手段も失ってしまったためにキャンセルできない場合、2段階認証のリセットを係争申請してください。ウォレットの利用ができなくなりますが、この申請は取り消すこともできます。</translation>
     </message>
     <message>
         <source>id_if_you_have_access_to_a</source>
-        <translation>If you have access to a Two-Factor method for this wallet, cancel the reset to be able to spend and receive immediately, or wait %1 days.</translation>
+        <translation>このウォレットに紐づいた2段階認証手段が残されている場合、リセットをキャンセルして送受信機能を取り戻すか、%1日待つことができます。</translation>
     </message>
     <message>
         <source>id_if_you_have_some_coins_on_the</source>
-        <translation>If you have some coins on the legacy address type, and you won&apos;t spend them shortly, you might need to setup an email and receive your recovery transactions to be sure you are always in control of your funds.</translation>
+        <translation>レガシーアドレスに資金があり、近日中に送金する予定がない場合、万が一の際に資金にアクセスできるようメールアドレスを登録してリカバリー用トランザクションを受け取る必要があります。</translation>
     </message>
     <message>
         <source>id_if_you_initiated_the_2fa_reset</source>
-        <translation>If you initiated the 2FA reset dispute by mistake, you can undo it and set the wallet back to 2FA reset state.</translation>
+        <translation>誤って2段階認証リセットの係争申請をしてしまった場合、取り消すことでウォレットを2段階認証リセット中の状態に戻すことができます。</translation>
     </message>
     <message>
         <source>id_import_a_multisig_shield_wallet</source>
-        <translation>Import a Multisig Shield wallet created on Blockstream Green.</translation>
+        <translation>Blockstream Greenで作成されたマルチシグ・シールドウォレットを取り込みます。</translation>
     </message>
     <message>
         <source>id_import_a_wallet_created_on</source>
-        <translation>Import a wallet created on Blockstream Green.</translation>
+        <translation>Blockstream Greenで作成されたウォレットを取り込みます。</translation>
     </message>
     <message>
         <source>id_import_a_wallet_created_with</source>
-        <translation>Import a wallet created with other apps. This option only works with singlesig wallets using BIP39 mnemonics, and following the BIP44, BIP49, or BIP84 derivations.</translation>
+        <translation>他のアプリで作成されたウォレットを取り込みます。BIP39のニモニックとBIP44, BIP49, BIP84のいずれかの標準デリベーションを使って作成されたウォレットのみ対応しています。</translation>
     </message>
     <message>
         <source>id_incoming</source>
@@ -1679,11 +1853,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_inconsistent_data_provided_for</source>
-        <translation>Inconsistent data provided for enabling Authenticator 2FA</translation>
+        <translation>Authenticatorによる2段階認証に必要なデータが一致しません</translation>
     </message>
     <message>
         <source>id_increase_fee</source>
-        <translation>手数料を高める</translation>
+        <translation>手数料を追加する</translation>
     </message>
     <message>
         <source>id_information_not_available</source>
@@ -1691,19 +1865,19 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_initialized</source>
-        <translation>Initialized</translation>
+        <translation>初期化完了</translation>
     </message>
     <message>
         <source>id_initializing_tor</source>
-        <translation>Initializing Tor…</translation>
+        <translation>Torの初期化中…</translation>
     </message>
     <message>
         <source>id_insert_your_email_to_receive</source>
-        <translation>Insert your email to receive 2FA codes to authorize transfers and other operations.</translation>
+        <translation>送金やその他の操作時に2段階認証コードを受け取るメールアドレスを入力してください。</translation>
     </message>
     <message>
         <source>id_install_version_s</source>
-        <translation>Install version: %1?</translation>
+        <translation>バージョン%1をインストールしますか？</translation>
     </message>
     <message>
         <source>id_insufficient_funds</source>
@@ -1711,11 +1885,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_insufficient_lbtc_for_fees</source>
-        <translation>Insufficient L-BTC for fees</translation>
+        <translation>手数料のためのL-BTCが足りません</translation>
     </message>
     <message>
         <source>id_insufficient_lbtc_to_send_a</source>
-        <translation>Insufficient L-BTC to send a transaction. In Liquid, L-BTC are needed to pay transaction fees. Generate an address to receive L-BTC</translation>
+        <translation>トランザクションを送るためのL-BTCが足りません。Liquidではトランザクション手数料の支払いにL-BTCが必要です。L-BTCを受け取るためのアドレスを生成しましょう</translation>
     </message>
     <message>
         <source>id_invalid_address</source>
@@ -1727,15 +1901,15 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_invalid_asset_id</source>
-        <translation>Invalid Asset ID</translation>
+        <translation>アセットIDが無効です</translation>
     </message>
     <message>
         <source>id_invalid_clipboard_contents</source>
-        <translation>Invalid clipboard contents</translation>
+        <translation>クリップボードの内容が無効です</translation>
     </message>
     <message>
         <source>id_invalid_merkle_proof</source>
-        <translation>Invalid Merkle proof</translation>
+        <translation>マークルプルーフが無効です</translation>
     </message>
     <message>
         <source>id_invalid_mnemonic</source>
@@ -1743,11 +1917,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_invalid_mnemonic_continue</source>
-        <translation>Invalid mnemonic. Continue typing or ask for help</translation>
+        <translation>ニモニックが無効です。入力を続行するか、サポートにご連絡ください</translation>
     </message>
     <message>
         <source>id_invalid_mnemonic_must_be_24_or</source>
-        <translation>無効なmnemonic(24から27個の単語である必要があります)</translation>
+        <translation>無効なニモニック(24から27個の単語である必要があります)</translation>
     </message>
     <message>
         <source>id_invalid_network_configuration</source>
@@ -1755,7 +1929,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_invalid_payment_request_assetid</source>
-        <translation>Invalid payment request, AssetID has to be specified</translation>
+        <translation>無効な支払いリクエスト、アセットIDが指定されている必要があります</translation>
     </message>
     <message>
         <source>id_invalid_pgp_key</source>
@@ -1767,7 +1941,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_invalid_pin</source>
-        <translation>Invalid PIN</translation>
+        <translation>PINが無効です</translation>
     </message>
     <message>
         <source>id_invalid_pin_remaining_attempts</source>
@@ -1775,7 +1949,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_invalid_pin_you_dont_have_any</source>
-        <translation>無効なPIN、これ以上ログインできません。Mnemonicを使ってログインして下さい。</translation>
+        <translation>無効なPIN、これ以上ログインできません。ニモニックを使ってログインして下さい。</translation>
     </message>
     <message>
         <source>id_invalid_pin_you_have_1d</source>
@@ -1787,15 +1961,15 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_invalid_recovery_phrase</source>
-        <translation>Invalid recovery phrase</translation>
+        <translation>リカバリーフレーズが無効です。</translation>
     </message>
     <message>
         <source>id_invalid_replacement_fee_rate</source>
-        <translation>無効の手数料率</translation>
+        <translation>無効な追加手数料率</translation>
     </message>
     <message>
         <source>id_invalid_status_check_that_your</source>
-        <translation>Invalid status. Check that your device is unlocked and try again.</translation>
+        <translation>ステータスが確認できませんでした。デバイスのロックを解除して再試行してください。</translation>
     </message>
     <message>
         <source>id_invalid_twofactor_code</source>
@@ -1807,7 +1981,8 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_invalid_xpub</source>
-        <translation>Invalid xpub</translation>
+        <translation>xpubが無効です
+</translation>
     </message>
     <message>
         <source>id_is_a_noncustodial</source>
@@ -1815,39 +1990,39 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_issuer</source>
-        <translation>Issuer</translation>
+        <translation>発行者</translation>
     </message>
     <message>
         <source>id_issuer_domain_s</source>
-        <translation>Issuer Domain: %1</translation>
+        <translation>発行者のドメイン: %1</translation>
     </message>
     <message>
         <source>id_it_looks_like_you_have_no</source>
-        <translation>It looks like you have no wallets. Click below to add one.</translation>
+        <translation>ウォレットが存在しないようです。下から新しく作成しましょう</translation>
     </message>
     <message>
         <source>id_jade_unlocked</source>
-        <translation>Jade unlocked</translation>
+        <translation>Jadeのアンロックが成功</translation>
     </message>
     <message>
         <source>id_jade_was_initialized_for_testnet</source>
-        <translation>Jade was initialized for testnet</translation>
+        <translation>JadeがTestnet用に初期化されました</translation>
     </message>
     <message>
         <source>id_just_a_few_more_steps_to_get</source>
-        <translation>Just a few more steps to get you set up.</translation>
+        <translation>セットアップはあと少しで完了します。</translation>
     </message>
     <message>
         <source>id_label</source>
-        <translation>Label</translation>
+        <translation>ラベル</translation>
     </message>
     <message>
         <source>id_language</source>
-        <translation>Language</translation>
+        <translation>言語</translation>
     </message>
     <message>
         <source>id_last_attempt_if_failed_you_will</source>
-        <translation>Last attempt: if failed, you will have to restore your wallet with your recovery phrase.</translation>
+        <translation>忠告: 最後の試行です。今回入力を間違えるとリカバリーフレーズからウォレットを復元する必要があります。</translation>
     </message>
     <message>
         <source>id_last_ping_1d_ms</source>
@@ -1855,23 +2030,23 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_later</source>
-        <translation>後</translation>
+        <translation>後で</translation>
     </message>
     <message>
         <source>id_latest_transactions</source>
-        <translation>Latest transactions</translation>
+        <translation>最新のトランザクション</translation>
     </message>
     <message>
         <source>id_lbtc_has_no_issuer_and_is</source>
-        <translation>L-BTC has no issuer and is instead created on the network via a peg-in.</translation>
+        <translation>L-BTCに発行者はおらず、ペグインという機能を使ってネットワーク側で生成されます。</translation>
     </message>
     <message>
         <source>id_learn_more</source>
-        <translation>Learn more</translation>
+        <translation>詳しく知る</translation>
     </message>
     <message>
         <source>id_learn_more_about_s</source>
-        <translation>Learn more about %1.</translation>
+        <translation>%1についてより詳しく知る。</translation>
     </message>
     <message>
         <source>id_ledger_dashboard_detected</source>
@@ -1879,19 +2054,31 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_ledger_devices</source>
-        <translation>Ledger devices</translation>
+        <translation>Ledgerデバイス</translation>
     </message>
     <message>
         <source>id_ledger_supports_a_limited_set</source>
-        <translation>Ledger supports a limited set of assets: tap here to check the list.</translation>
+        <translation>Ledgerは限られた種類のアセットに対応しています。こちらをタップしてリストを確認しましょう。</translation>
     </message>
     <message>
         <source>id_legacy_account</source>
-        <translation>Legacy Account</translation>
+        <translation>レガシーアカウント</translation>
+    </message>
+    <message>
+        <source>id_legacy_bip44</source>
+        <translation>Legacy (BIP44)</translation>
     </message>
     <message>
         <source>id_legacy_script_coins</source>
-        <translation>Legacy script coins</translation>
+        <translation>レガシースクリプトで保護されたコイン</translation>
+    </message>
+    <message>
+        <source>id_legacy_segwit_account</source>
+        <translation>Legacy SegWit Account</translation>
+    </message>
+    <message>
+        <source>id_legacy_segwit_bip49</source>
+        <translation>Legacy SegWit (BIP49)</translation>
     </message>
     <message>
         <source>id_lets_get_you_set_up</source>
@@ -1903,7 +2090,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_liquid_is_a_sidechainbased</source>
-        <translation>Liquid is a sidechain-based settlement network for traders and exchanges, enabling faster, more confidential Bitcoin transactions and the issuance of digital assets.</translation>
+        <translation>Liquidはサイドチェーンを用いたトレーダーや取引所向けの決済ネットワークで、高速で秘匿性の高いビットコイントランザクションとデジタル資産の発行を可能にします。</translation>
     </message>
     <message>
         <source>id_liquid_securities</source>
@@ -1911,31 +2098,31 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_liquid_testnet_electrum_server</source>
-        <translation>Liquid Testnet Electrum server</translation>
+        <translation>Liquid Testnet用Electrcum server</translation>
     </message>
     <message>
         <source>id_liquid_testnet_wallets</source>
-        <translation>Liquid testnet wallets</translation>
+        <translation>Liquid Testnet用ウォレット</translation>
     </message>
     <message>
         <source>id_liquid_wallet</source>
-        <translation>Liquid Wallet</translation>
+        <translation>Liquidウォレット</translation>
     </message>
     <message>
         <source>id_liquid_wallets</source>
-        <translation>Liquid wallets</translation>
+        <translation>Liquidウォレット一覧</translation>
     </message>
     <message>
         <source>id_loading</source>
-        <translation>Loading</translation>
+        <translation>読み込み中</translation>
     </message>
     <message>
         <source>id_loading_accounts</source>
-        <translation>Loading accounts…</translation>
+        <translation>アカウントを読み込み中…</translation>
     </message>
     <message>
         <source>id_loading_assets</source>
-        <translation>Loading assets…</translation>
+        <translation>アセットを読み込み中…</translation>
     </message>
     <message>
         <source>id_loading_transactions</source>
@@ -1943,35 +2130,43 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_loading_wallet</source>
-        <translation>Loading wallet…</translation>
+        <translation>ウォレットを読み込み中…</translation>
     </message>
     <message>
         <source>id_location_services_are_disabled</source>
-        <translation>Location services are disabled, do you want to enable them?</translation>
+        <translation>位置情報サービスが無効です、有効化しますか？</translation>
     </message>
     <message>
         <source>id_lock</source>
-        <translation>Lock</translation>
+        <translation>ロックする</translation>
+    </message>
+    <message>
+        <source>id_lock_after_1_minute</source>
+        <translation>1分後にロックする</translation>
+    </message>
+    <message>
+        <source>id_lock_immediately</source>
+        <translation>すぐにロックする</translation>
     </message>
     <message>
         <source>id_locked</source>
-        <translation>Locked</translation>
+        <translation>ロック中</translation>
     </message>
     <message>
         <source>id_locked_coins_will_not_be_spent</source>
-        <translation>Locked coins will not be spent nor included in your balance.</translation>
+        <translation>ロックされたコインは送金されず、残高にも含まれません。</translation>
     </message>
     <message>
         <source>id_locking_coins</source>
-        <translation>Locking coins</translation>
+        <translation>コインのロック</translation>
     </message>
     <message>
         <source>id_locking_coins_can_help_protect</source>
-        <translation>Locking coins can help protect your privacy and save on transaction fees. Locked coins are deducted from your balance and are not used when sending transactions. You can only lock coins labeled as dust and unlock them later at any time.</translation>
+        <translation>コインをロックすることでプライバシーを保護したりトランザクション手数料を節約することができます。ロックしたコインは残高から除外され、送金時に使用されません。ダストのラベルが付与されたコインがロック可能で、ロック解除はいつでもできます。</translation>
     </message>
     <message>
         <source>id_log_file</source>
-        <translation>Log file</translation>
+        <translation>ログファイル</translation>
     </message>
     <message>
         <source>id_log_in</source>
@@ -1979,19 +2174,19 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_log_in_into_your_s_wallet</source>
-        <translation>Log in into your %1 wallet</translation>
+        <translation>%1ウォレットにログインする </translation>
     </message>
     <message>
         <source>id_log_in_to_your_multisig_shield</source>
-        <translation>Log in to your Multisig Shield watch-only wallet with a username and password. You can create your watch-only credentials after logging into your Multisig Shield wallet.</translation>
+        <translation>読み取りモードのマルチシグ・シールドウォレットにユーザー名とパスワードでログインします。読み取りモードの認証情報はマルチシグ・シールドウォレットへのログイン後に作成できます。</translation>
     </message>
     <message>
         <source>id_log_in_using_mnemonic</source>
-        <translation>Mnemonicを使ってログインする。</translation>
+        <translation>ニモニックを使ってログインする。</translation>
     </message>
     <message>
         <source>id_log_in_via_watchonly_to_receive</source>
-        <translation>資金の受け取り、または残高確認の為に監視-Onlyでログインする</translation>
+        <translation>資金の受け取り、または残高確認の為に読み取りモードでログインする</translation>
     </message>
     <message>
         <source>id_log_out</source>
@@ -1999,7 +2194,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_logged_in_wallets</source>
-        <translation>Logged in wallets</translation>
+        <translation>ログインしたウォレット</translation>
     </message>
     <message>
         <source>id_logging_in</source>
@@ -2007,7 +2202,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_login</source>
-        <translation>Login</translation>
+        <translation>ログイン</translation>
     </message>
     <message>
         <source>id_login_failed</source>
@@ -2019,27 +2214,31 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_login_with_biometrics</source>
-        <translation>Login with Biometrics</translation>
+        <translation>生体認証でログインする</translation>
+    </message>
+    <message>
+        <source>id_login_with_bip39_passphrase</source>
+        <translation>Login with BIP39 Passphrase</translation>
     </message>
     <message>
         <source>id_logout</source>
-        <translation>Logout</translation>
+        <translation>ログアウト</translation>
     </message>
     <message>
         <source>id_logout_and_switch</source>
-        <translation>Logout and Switch</translation>
+        <translation>アカウントの切り替え</translation>
     </message>
     <message>
         <source>id_look_at_the_device_for_the</source>
-        <translation>番号ポジションはデバイスを確認して下さい</translation>
+        <translation>番号の位置はデバイスで確認してください</translation>
     </message>
     <message>
         <source>id_looking_for_wallets</source>
-        <translation>Looking for wallets…</translation>
+        <translation>ウォレットを検索中…</translation>
     </message>
     <message>
         <source>id_looks_like_you_havent_used_a</source>
-        <translation>Looks like you haven&apos;t used a wallet yet. Try creating a new one.</translation>
+        <translation>まだウォレットがないようです。新しいウォレットを作成しましょう。</translation>
     </message>
     <message>
         <source>id_low</source>
@@ -2051,11 +2250,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_make_sure_you_have_enabled_otg</source>
-        <translation>Make sure you have enabled OTG option in Android Settings</translation>
+        <translation>Androidの設定からOTGが有効化されていることを確認してください。</translation>
     </message>
     <message>
         <source>id_make_sure_you_made_a_proper</source>
-        <translation>Make sure you made a proper backup of your wallet mnemonic.</translation>
+        <translation>ウォレットのニモニックを正しくバックアップしているかご確認ください。</translation>
     </message>
     <message>
         <source>id_malleated</source>
@@ -2063,19 +2262,23 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_managed_assets</source>
-        <translation>Managed Assets</translation>
+        <translation>マネージド・アセット</translation>
     </message>
     <message>
         <source>id_managed_assets_account</source>
-        <translation>Managed Assets Account</translation>
+        <translation>マネージド・アセット・アカウント</translation>
     </message>
     <message>
         <source>id_managed_assets_accounts_are</source>
-        <translation>Managed assets accounts are only available on Liquid wallets. You may be required to provide your account ID to issuers to receive a Managed Asset.</translation>
+        <translation>マネージド・アセット・アカウントはLiquidウォレットにのみ存在します。マネージド・アセットの受け取りには発行者にアカウントIDを伝えなければならない場合があります。</translation>
     </message>
     <message>
         <source>id_manual_coin_selection</source>
-        <translation>Manual coin selection</translation>
+        <translation>手動のコインセレクション</translation>
+    </message>
+    <message>
+        <source>id_manual_restore</source>
+        <translation>手動で復元する</translation>
     </message>
     <message>
         <source>id_medium</source>
@@ -2087,19 +2290,19 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_message</source>
-        <translation>Message</translation>
+        <translation>メッセージ</translation>
     </message>
     <message>
         <source>id_message_hash</source>
-        <translation>Message hash</translation>
+        <translation>メッセージ・ハッシュ</translation>
     </message>
     <message>
         <source>id_migrate_another_wallet</source>
-        <translation>Migrate Another Wallet</translation>
+        <translation>別のウォレットを移行する</translation>
     </message>
     <message>
         <source>id_migrating_to_blockstream_green</source>
-        <translation>Migrating to Blockstream Green? Have an existing Blockstream Green wallet you’d like to import? Let&apos;s go!</translation>
+        <translation>Blockstream Greenへの移行か、既存のBlockstream Greenウォレットの読み込みをお考えでしょうか？こちらへお進みください。</translation>
     </message>
     <message>
         <source>id_minute</source>
@@ -2111,15 +2314,15 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_mnemonic</source>
-        <translation>Mnemonic</translation>
+        <translation>ニモニック</translation>
     </message>
     <message>
         <source>id_mnemonic_not_available</source>
-        <translation>Mnemonicが有りません</translation>
+        <translation>ニモニックが有りません</translation>
     </message>
     <message>
         <source>id_model</source>
-        <translation>Model</translation>
+        <translation>モデル</translation>
     </message>
     <message>
         <source>id_month</source>
@@ -2131,23 +2334,23 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_more_info</source>
-        <translation>More Info</translation>
+        <translation>追加の情報</translation>
     </message>
     <message>
         <source>id_more_options</source>
-        <translation>More Options</translation>
+        <translation>追加のオプション</translation>
     </message>
     <message>
         <source>id_multi_server_validation</source>
-        <translation>Multi Server Validation</translation>
+        <translation>マルチサーバー検証</translation>
     </message>
     <message>
         <source>id_multiple_assets</source>
-        <translation>Multiple Assets</translation>
+        <translation>複数のアセット</translation>
     </message>
     <message>
         <source>id_multisig_shield</source>
-        <translation>Multisig Shield</translation>
+        <translation>マルチシグ・シールド</translation>
     </message>
     <message>
         <source>id_my_notes</source>
@@ -2159,11 +2362,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_need_help</source>
-        <translation>Need help?</translation>
+        <translation>サポート</translation>
     </message>
     <message>
         <source>id_network</source>
-        <translation>Network</translation>
+        <translation>ネットワーク</translation>
     </message>
     <message>
         <source>id_network_configuration</source>
@@ -2171,7 +2374,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_network_fee</source>
-        <translation>NETWORK FEE</translation>
+        <translation>ネットワーク手数料</translation>
     </message>
     <message>
         <source>id_network_monitor</source>
@@ -2179,19 +2382,19 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_networks</source>
-        <translation>Networks</translation>
+        <translation>ネットワーク一覧</translation>
     </message>
     <message>
         <source>id_new_account_created</source>
-        <translation>New account created</translation>
+        <translation>新しいアカウントを作成しました</translation>
     </message>
     <message>
         <source>id_new_accounts_functionality</source>
-        <translation>アカウントの新規機能が搭載される予定です</translation>
+        <translation>アカウント関連の新機能が近日追加予定</translation>
     </message>
     <message>
         <source>id_new_fee</source>
-        <translation>New fee</translation>
+        <translation>新しい手数料</translation>
     </message>
     <message>
         <source>id_new_incoming_transaction_in</source>
@@ -2199,11 +2402,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_new_jade_firmware_available</source>
-        <translation>New Jade Firmware Available</translation>
+        <translation>Jadeの新しいファームウェアがあります</translation>
     </message>
     <message>
         <source>id_new_jade_firmware_required</source>
-        <translation>New Jade Firmware Required</translation>
+        <translation>Jadeの新しいファームウェアが必要です</translation>
     </message>
     <message>
         <source>id_new_outgoing_transaction_from</source>
@@ -2211,7 +2414,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_new_recovery_phrase</source>
-        <translation>New recovery phrase</translation>
+        <translation>新規リカバリーフレーズ</translation>
     </message>
     <message>
         <source>id_new_s_transaction_of_s_in</source>
@@ -2227,11 +2430,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_new_version</source>
-        <translation>New version</translation>
+        <translation>新規バージョン</translation>
     </message>
     <message>
         <source>id_new_wallet</source>
-        <translation>New Wallet</translation>
+        <translation>新規ウォレット</translation>
     </message>
     <message>
         <source>id_next</source>
@@ -2243,15 +2446,19 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_nfc_tags_written</source>
-        <translation>NFC TAG 入力:</translation>
+        <translation>書き込み済のNFCタグ:</translation>
     </message>
     <message>
         <source>id_no_amount_specified</source>
         <translation>数量が決められていません</translation>
     </message>
     <message>
+        <source>id_no_archived_accounts</source>
+        <translation>アーカイブ済みのアカウントはありません</translation>
+    </message>
+    <message>
         <source>id_no_asset_in_this_account</source>
-        <translation>No asset in this account</translation>
+        <translation>このアカウントにアセットはありません</translation>
     </message>
     <message>
         <source>id_no_attempts_remaining</source>
@@ -2259,19 +2466,28 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_no_coins_selected</source>
-        <translation>(No coins selected)</translation>
+        <translation>(コインが未選択)</translation>
     </message>
     <message>
         <source>id_no_device_connected</source>
-        <translation>No device connected</translation>
+        <translation>デバイスが未接続</translation>
+    </message>
+    <message>
+        <source>id_no_existing_wallet_could_be</source>
+        <translation>既存のアカウントは見つかりませんでした。
+手動でウォレットの復元をお試しください。</translation>
     </message>
     <message>
         <source>id_no_more_assets</source>
-        <translation>No more assets.</translation>
+        <translation>アセットはこれだけです。</translation>
+    </message>
+    <message>
+        <source>id_no_multisig_shield_wallet</source>
+        <translation>このリカバリーフレーズに対応するマルチシグ・シールドウォレットは存在しません。</translation>
     </message>
     <message>
         <source>id_no_peers_connected</source>
-        <translation>ピアーが接続されていません</translation>
+        <translation>ピアが接続されていません</translation>
     </message>
     <message>
         <source>id_no_pin_provided_exiting</source>
@@ -2283,11 +2499,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_no_registered_name_for_this</source>
-        <translation>No registered name for this asset.</translation>
+        <translation>アセット名が登録されていません。</translation>
     </message>
     <message>
         <source>id_no_registered_ticker_for_this</source>
-        <translation>No registered ticker for this asset.</translation>
+        <translation>ティッカーシンボルが登録されていません。</translation>
     </message>
     <message>
         <source>id_no_utxos_found</source>
@@ -2295,19 +2511,19 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_non_confidential</source>
-        <translation>Non Confidential</translation>
+        <translation>秘匿されていない</translation>
     </message>
     <message>
         <source>id_non_confidential_transaction</source>
-        <translation>Non Confidential Transaction</translation>
+        <translation>秘匿されていないトランザクション</translation>
     </message>
     <message>
         <source>id_nonconfidential_addresses_not</source>
-        <translation>Non-confidential addresses not supported</translation>
+        <translation>秘匿化アドレスにのみ対応しています</translation>
     </message>
     <message>
         <source>id_noradio_firmware</source>
-        <translation>No-radio firmware</translation>
+        <translation>無線無効化ファームウェア</translation>
     </message>
     <message>
         <source>id_normal</source>
@@ -2315,35 +2531,35 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_not_a_valid_email_address</source>
-        <translation>Not a valid email address</translation>
+        <translation>無効なメールアドレス</translation>
     </message>
     <message>
         <source>id_not_a_valid_phone_number</source>
-        <translation>Not a valid phone number</translation>
+        <translation>無効な電話番号</translation>
     </message>
     <message>
         <source>id_not_a_valid_word</source>
-        <translation>Not a valid word</translation>
+        <translation>無効な単語</translation>
     </message>
     <message>
         <source>id_not_available_noradio_build</source>
-        <translation>Not available (No-radio build)</translation>
+        <translation>利用不可 (無線が無効化されています)</translation>
     </message>
     <message>
         <source>id_not_confidential</source>
-        <translation>Not confidential</translation>
+        <translation>秘匿されていません</translation>
     </message>
     <message>
         <source>id_not_connected_connecting_in_ds_</source>
-        <translation>接続が切れました。接続中…%1秒</translation>
+        <translation>接続が中断されました。%1秒後に再接続…</translation>
     </message>
     <message>
         <source>id_not_initialized</source>
-        <translation>Not initialized</translation>
+        <translation>初期化されていません</translation>
     </message>
     <message>
         <source>id_not_on_longest_chain</source>
-        <translation>Not on longest chain</translation>
+        <translation>最長のチェーンではありません</translation>
     </message>
     <message>
         <source>id_notifications</source>
@@ -2351,15 +2567,15 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_now</source>
-        <translation>Now</translation>
+        <translation>今すぐ</translation>
     </message>
     <message>
         <source>id_of_24</source>
-        <translation>of 24</translation>
+        <translation>/ 24単語中</translation>
     </message>
     <message>
         <source>id_of_s</source>
-        <translation>of %1</translation>
+        <translation>/ %1単語中</translation>
     </message>
     <message>
         <source>id_ok</source>
@@ -2367,11 +2583,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_on_average</source>
-        <translation>on average</translation>
+        <translation>平均で</translation>
     </message>
     <message>
         <source>id_once_selected_this_spending</source>
-        <translation>Once selected, this spending policy cannot be changed. For tips on what type of security is best for you, visit our Help Center.</translation>
+        <translation>このポリシーを一度選択すると以後変更できません。あなたに最適なセキュリティポリシーの選び方はヘルプセンターより確認できます。</translation>
     </message>
     <message>
         <source>id_one_attempt_remaining</source>
@@ -2383,11 +2599,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_onion_addresses_require_tor</source>
-        <translation>Onion addresses require Tor connectivity. Enable it in the network settings.</translation>
+        <translation>オニオンアドレスの使用にはTor接続が必要です。ネットワーク設定より有効化してください。</translation>
     </message>
     <message>
         <source>id_only_connect_to_trusted_nodes</source>
-        <translation>SPVは信頼できるノードにだけ接続する</translation>
+        <translation>SPVでは信頼できるノードにのみ接続してください</translation>
     </message>
     <message>
         <source>id_only_this_time</source>
@@ -2395,7 +2611,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_open</source>
-        <translation>Open</translation>
+        <translation>開く</translation>
     </message>
     <message>
         <source>id_operation_failure</source>
@@ -2403,11 +2619,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_optimal_if_you_rarely_spend</source>
-        <translation>Optimal if you rarely spend coins. Wallet coins will require two-factor reactivation every 455 days to remain protected by two-factor authentication</translation>
+        <translation>滅多にコインの送金をしない方に最適です。ウォレット内のコインは455日毎に2段階認証による保護の再アクティベーションが必要になります。</translation>
     </message>
     <message>
         <source>id_optimal_if_you_spend_coins</source>
-        <translation>Optimal if you spend coins every 6 months. Wallet coins will require two-factor reactivation every 6 months to remain protected by two-factor authentication.</translation>
+        <translation>6ヶ月毎にコインを送金する方に最適です。ウォレット内のコインは6ヶ月毎に2段階認証による保護の再アクティベーションが必要になります。</translation>
     </message>
     <message>
         <source>id_optional</source>
@@ -2415,19 +2631,23 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_optional_memo</source>
-        <translation>任意メモ</translation>
+        <translation>任意のメモ</translation>
     </message>
     <message>
         <source>id_optional_password</source>
-        <translation>任意パスワード</translation>
+        <translation>任意のパスワード</translation>
     </message>
     <message>
         <source>id_or</source>
-        <translation>OR</translation>
+        <translation>または</translation>
+    </message>
+    <message>
+        <source>id_os__app_version_loading_times</source>
+        <translation>OSとアプリのバージョン、読み込みに所要した時間</translation>
     </message>
     <message>
         <source>id_our_support_page</source>
-        <translation>our support page</translation>
+        <translation>弊社サポートのページ</translation>
     </message>
     <message>
         <source>id_outdated_hardware_wallet</source>
@@ -2435,19 +2655,31 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_outgoing</source>
-        <translation>Outgoing</translation>
+        <translation>このウォレットから送金中</translation>
     </message>
     <message>
         <source>id_overview</source>
-        <translation>Overview</translation>
+        <translation>概要</translation>
     </message>
     <message>
         <source>id_p2sh</source>
-        <translation>P2sh</translation>
+        <translation>P2SH</translation>
     </message>
     <message>
         <source>id_p2wsh</source>
-        <translation>P2wsh</translation>
+        <translation>P2WSH</translation>
+    </message>
+    <message>
+        <source>id_page_visits_button_presses</source>
+        <translation>ページへの移動、ボタンの押下、アプリの一般的な設定</translation>
+    </message>
+    <message>
+        <source>id_passphrase</source>
+        <translation>パスフレーズ</translation>
+    </message>
+    <message>
+        <source>id_passphrase_protected</source>
+        <translation>Passphrase protected</translation>
     </message>
     <message>
         <source>id_password</source>
@@ -2455,7 +2687,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_password_protected</source>
-        <translation>保護パスワード</translation>
+        <translation>パスワード保護</translation>
     </message>
     <message>
         <source>id_paste</source>
@@ -2463,15 +2695,15 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_path_used_for_signing</source>
-        <translation>Path used for signing</translation>
+        <translation>署名に使用されるパス</translation>
     </message>
     <message>
         <source>id_pending_confirmation</source>
-        <translation>Pending confirmation</translation>
+        <translation>承認待ち</translation>
     </message>
     <message>
         <source>id_permanently_block_this_wallet</source>
-        <translation>Permanently Block This Wallet</translation>
+        <translation>このウォレットを永久にブロックする</translation>
     </message>
     <message>
         <source>id_personal_electrum_server</source>
@@ -2495,11 +2727,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_pin_access_disabled</source>
-        <translation>PIN access disabled</translation>
+        <translation>PINアクセスが無効化されています</translation>
     </message>
     <message>
         <source>id_pin_has_to_be_between_4_and_15</source>
-        <translation>PINは4から15文字で無くてはなりません</translation>
+        <translation>PINは4から15文字で設定してください</translation>
     </message>
     <message>
         <source>id_pins_do_not_match_please_try</source>
@@ -2507,11 +2739,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_please_activate_at_least_one</source>
-        <translation>Please activate at least one fingerprint in Android settings in order to use biometric login</translation>
+        <translation>生体認証ログインを使用するにはAndroidの設定から少なくとも1つの指紋を有効にしてください</translation>
     </message>
     <message>
         <source>id_please_contribute_if_you_find</source>
-        <translation>Please contribute if you find Blockstream Green useful</translation>
+        <translation>Blockstream Greenがお役立ちであれば、ぜひ開発に貢献してください</translation>
     </message>
     <message>
         <source>id_please_disable_biometric</source>
@@ -2519,11 +2751,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_please_disconnect_your_ledger</source>
-        <translation>Please disconnect your Ledger Nano X, power it off by long-pressing both buttons, then reconnect it and enter its PIN</translation>
+        <translation>Ledger Nano Xを取り外し、両方のボタンを長押しすることで電源を切り、再接続してPINを入力してください。</translation>
     </message>
     <message>
         <source>id_please_enable_another</source>
-        <translation>資金へのアクセスを維持するにはもう一つの認証方法を有効にして下さい。</translation>
+        <translation>資金にアクセスできない事態を防ぐために認証方法をもう１つ有効にして下さい。</translation>
     </message>
     <message>
         <source>id_please_enable_camera</source>
@@ -2535,7 +2767,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_please_enter_the_passphrase_for</source>
-        <translation>ハードウェア・ウォレットの暗証フレーズを入力して下さい。</translation>
+        <translation>ハードウェア・ウォレットのパスフレーズを入力して下さい。</translation>
     </message>
     <message>
         <source>id_please_follow_the_instructions</source>
@@ -2543,7 +2775,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_please_hold_on_while_your</source>
-        <translation>Please hold on while your address is being generated</translation>
+        <translation>アドレスを生成中です、しばらくお待ち下さい</translation>
     </message>
     <message>
         <source>id_please_provide_your_1s</source>
@@ -2555,7 +2787,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_please_provide_your_passphrase</source>
-        <translation>暗証フレーズ入力:</translation>
+        <translation>パスフレーズを入力:</translation>
     </message>
     <message>
         <source>id_please_reconnect_your_hardware</source>
@@ -2563,7 +2795,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_please_secure_your_mnemonic_and</source>
-        <translation>Mnemonicを安全な場所に保管した後、利用規約に同意して下さい。</translation>
+        <translation>ニモニックを安全な場所に保管した後、利用規約に同意して下さい。</translation>
     </message>
     <message>
         <source>id_please_select_the_checkbox</source>
@@ -2571,7 +2803,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_please_set_and_enable_socks5</source>
-        <translation>Please set and enable SOCKS5 proxy and port to use Tor</translation>
+        <translation>SOCKS5プロキシとポートを設定、有効化後にTorをご利用いただけます</translation>
     </message>
     <message>
         <source>id_please_tap_card</source>
@@ -2579,59 +2811,63 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_please_verify_that_the_address</source>
-        <translation>Please verify that the address shown on your hardware wallet matches the one on your phone.</translation>
+        <translation>ハードウェアウォレットに表示されているアドレスが本画面に表示されているものと一致するかご確認ください。</translation>
     </message>
     <message>
         <source>id_please_wait_until_your_ledger</source>
-        <translation>Please wait until your Ledger displays the address to validate it. This could take up to 20 seconds.</translation>
+        <translation>Ledgerがアドレスを表示してから確認ボタンを押してください。最大20秒程度かかります。</translation>
     </message>
     <message>
         <source>id_precision</source>
-        <translation>Precision</translation>
+        <translation>精度</translation>
     </message>
     <message>
         <source>id_previous_fee</source>
-        <translation>Previous fee</translation>
+        <translation>前回の手数料</translation>
     </message>
     <message>
         <source>id_privacy_policy</source>
-        <translation>プライバシー政策</translation>
+        <translation>プライバシーポリシー</translation>
     </message>
     <message>
         <source>id_private_but_less_stable</source>
-        <translation>Private, but less stable connection</translation>
+        <translation>プライベートだが安定性で劣る接続</translation>
     </message>
     <message>
         <source>id_private_key</source>
-        <translation>Private Key</translation>
+        <translation>秘密鍵</translation>
     </message>
     <message>
         <source>id_problem_with_key_1s</source>
-        <translation>キー%1 の問題</translation>
+        <translation>キー%1 に問題が発生</translation>
     </message>
     <message>
         <source>id_provide_this_id_to_the_asset</source>
-        <translation>Provide this ID to the asset issuer if requested.</translation>
+        <translation>必要な場合は発行者にこのIDを伝えてください。</translation>
     </message>
     <message>
         <source>id_provide_your_amp_id_to_the</source>
-        <translation>Provide your AMP ID to the asset issuer if requested.</translation>
+        <translation>アセットの発行者に求められた場合はAMP IDを伝えてください。</translation>
     </message>
     <message>
         <source>id_proxy_host</source>
-        <translation>Proxy host</translation>
+        <translation>プロキシのホスト</translation>
     </message>
     <message>
         <source>id_proxy_port</source>
-        <translation>Proxy port</translation>
+        <translation>プロキシのポート</translation>
     </message>
     <message>
         <source>id_proxy_settings</source>
-        <translation>プロキシー設定</translation>
+        <translation>プロキシ設定</translation>
+    </message>
+    <message>
+        <source>id_pseudonymous_identifier_country</source>
+        <translation>匿名化された識別子、利用国</translation>
     </message>
     <message>
         <source>id_qr_code</source>
-        <translation>QR Code</translation>
+        <translation>QRコード</translation>
     </message>
     <message>
         <source>id_qr_scanner</source>
@@ -2639,23 +2875,35 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_radio_firmware</source>
-        <translation>Radio firmware</translation>
+        <translation>無線有効版ファームウェア</translation>
+    </message>
+    <message>
+        <source>id_rate</source>
+        <translation>Rate</translation>
+    </message>
+    <message>
+        <source>id_rate_us</source>
+        <translation>Rate us</translation>
+    </message>
+    <message>
+        <source>id_rate_your_experience</source>
+        <translation>Rate your experience</translation>
     </message>
     <message>
         <source>id_read_more</source>
-        <translation>Read more</translation>
+        <translation>詳しく知る</translation>
     </message>
     <message>
         <source>id_read_more_at_our_s</source>
-        <translation>Read more at our %1</translation>
+        <translation>%1で詳しく読む</translation>
     </message>
     <message>
         <source>id_ready</source>
-        <translation>Ready</translation>
+        <translation>準備完了</translation>
     </message>
     <message>
         <source>id_ready_to_start</source>
-        <translation>Ready to start</translation>
+        <translation>開始準備完了</translation>
     </message>
     <message>
         <source>id_receive</source>
@@ -2663,7 +2911,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_receive_email_notifications_for</source>
-        <translation>Receive email notifications for sent and received transactions</translation>
+        <translation>送受信したトランザクションについてメールで通知を受け取る</translation>
     </message>
     <message>
         <source>id_received</source>
@@ -2671,11 +2919,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_received_on</source>
-        <translation>受け取り先</translation>
+        <translation>受け取り</translation>
     </message>
     <message>
         <source>id_recently_used_wallets</source>
-        <translation>Recently used wallets</translation>
+        <translation>最近使ったウォレット</translation>
     </message>
     <message>
         <source>id_recipient</source>
@@ -2683,31 +2931,43 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_recipient_address</source>
-        <translation>Recipient address</translation>
+        <translation>送金先のアドレス</translation>
     </message>
     <message>
         <source>id_recovery</source>
-        <translation>Recovery</translation>
+        <translation>リカバリー</translation>
     </message>
     <message>
         <source>id_recovery_and_notifications</source>
-        <translation>リカバリーと告知</translation>
+        <translation>リカバリーと通知</translation>
+    </message>
+    <message>
+        <source>id_recovery_key_type</source>
+        <translation>リカバリーキーの種類</translation>
     </message>
     <message>
         <source>id_recovery_mnemonic</source>
-        <translation>Recovery mnemonic</translation>
+        <translation>リカバリーニモニック</translation>
     </message>
     <message>
         <source>id_recovery_phrase</source>
-        <translation>Recovery Phrase</translation>
+        <translation>リカバリーフレーズ</translation>
     </message>
     <message>
         <source>id_recovery_phrase_check</source>
-        <translation>Recovery Phrase Check</translation>
+        <translation>リカバリーフレーズの確認</translation>
+    </message>
+    <message>
+        <source>id_recovery_phrase_length</source>
+        <translation>リカバリーフレーズの長さ</translation>
+    </message>
+    <message>
+        <source>id_recovery_phrases_key_material</source>
+        <translation>リカバリーフレーズ、暗号鍵、アドレス、残高</translation>
     </message>
     <message>
         <source>id_recovery_tool</source>
-        <translation>Recovery Tool</translation>
+        <translation>リカバリーツール</translation>
     </message>
     <message>
         <source>id_recovery_transaction_emails</source>
@@ -2727,15 +2987,15 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_recovery_xpub</source>
-        <translation>Recovery xpub</translation>
+        <translation>リカバリーxpub</translation>
     </message>
     <message>
         <source>id_redeem_your_deposited_funds</source>
-        <translation>Redeem your deposited funds without Blockstream Green signature after a pre-defined period of time.</translation>
+        <translation>Blockstream Greenによる署名なしでも事前に指定した時間経過後に資金を引き出せるようにする。</translation>
     </message>
     <message>
         <source>id_redeposited</source>
-        <translation>再お預け</translation>
+        <translation>再入金</translation>
     </message>
     <message>
         <source>id_reference_exchange_rate</source>
@@ -2747,15 +3007,15 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_reload</source>
-        <translation>Reload</translation>
+        <translation>再読み込み</translation>
     </message>
     <message>
         <source>id_remember_me</source>
-        <translation>Remember me</translation>
+        <translation>記憶する</translation>
     </message>
     <message>
         <source>id_remove</source>
-        <translation>Remove</translation>
+        <translation>消去</translation>
     </message>
     <message>
         <source>id_remove_custom_network</source>
@@ -2763,19 +3023,19 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_remove_wallet</source>
-        <translation>Remove wallet</translation>
+        <translation>ウォレットを消去</translation>
     </message>
     <message>
         <source>id_rename</source>
-        <translation>Rename</translation>
+        <translation>名前を変更する</translation>
     </message>
     <message>
         <source>id_rename_account</source>
-        <translation>Rename account</translation>
+        <translation>アカウント名を変更</translation>
     </message>
     <message>
         <source>id_rename_wallet</source>
-        <translation>Rename Wallet</translation>
+        <translation>ウォレットの名前を変更する</translation>
     </message>
     <message>
         <source>id_replaceable</source>
@@ -2783,7 +3043,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_request_amount</source>
-        <translation>Request Amount</translation>
+        <translation>正確な金額をリクエスト</translation>
     </message>
     <message>
         <source>id_request_failed</source>
@@ -2807,7 +3067,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_reset</source>
-        <translation>Reset</translation>
+        <translation>リセット</translation>
     </message>
     <message>
         <source>id_reset_spv</source>
@@ -2815,7 +3075,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_resetting_your_twofactor_takes</source>
-        <translation>2段階認証をリセットするには最低12ヶ月を要します。2段階認証に必要な情報を忘れたと確信する場合、リセットの為に新しいEメールアドレスをお知らせください。</translation>
+        <translation>2段階認証をリセットするには最低12ヶ月を要します。2段階認証に必要な情報を確実に忘れた場合、リセットのため新しいEメールアドレスをお知らせください。</translation>
     </message>
     <message>
         <source>id_restore</source>
@@ -2823,35 +3083,35 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_restore_a_blockstream_green</source>
-        <translation>Restore a Blockstream Green wallet using your 24 words mnemonic backup. You can find it in the settings of any Blockstream Green app.</translation>
+        <translation>24単語のニモニックによるバックアップからBlockstream Greenウォレットを復元できます。アプリ内の設定画面に向かいましょう。</translation>
     </message>
     <message>
         <source>id_restore_a_singlesig_wallet</source>
-        <translation>Restore a Singlesig wallet created on Blockstream Green, or import a wallet created with other apps. This option only works with singlesig wallets using BIP39 mnemonics, and following the BIP44, BIP49, or BIP84 derivations.</translation>
+        <translation>Blockstream Greenで作ったシングルシグウォレットを復元するか、あるいは他のアプリで作成したウォレットを読み込みます。BIP39のニモニックとBIP44, BIP49, BIP84のいずれかの標準デリベーションを使って作成されたウォレットのみ対応しています。</translation>
     </message>
     <message>
         <source>id_restore_a_wallet</source>
-        <translation>Restore a Wallet</translation>
+        <translation>ウォレットを復元する</translation>
     </message>
     <message>
         <source>id_restore_green_wallet</source>
-        <translation>Greenウォレットの修復</translation>
+        <translation>Greenウォレットの復元</translation>
     </message>
     <message>
         <source>id_restore_temporary_wallet</source>
-        <translation>Restore temporary wallet</translation>
+        <translation>一時的なウォレットの復元</translation>
     </message>
     <message>
         <source>id_restore_wallet</source>
-        <translation>Restore Wallet</translation>
+        <translation>ウォレットの復元</translation>
     </message>
     <message>
         <source>id_restore_with_recovery_phrase</source>
-        <translation>Restore with recovery phrase</translation>
+        <translation>リカバリーフレーズから復元する</translation>
     </message>
     <message>
         <source>id_restoring_your_wallet</source>
-        <translation>Restoring Your Wallet</translation>
+        <translation>ウォレットを復元するには</translation>
     </message>
     <message>
         <source>id_review</source>
@@ -2859,11 +3119,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_review_account_information</source>
-        <translation>Review account information</translation>
+        <translation>アカウント情報の確認</translation>
     </message>
     <message>
         <source>id_review_output_s</source>
-        <translation>Review output %1</translation>
+        <translation>出力%1を確認する</translation>
     </message>
     <message>
         <source>id_s_blocks_left</source>
@@ -2883,31 +3143,35 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_save_a_summary_of_your_accounts</source>
-        <translation>Save a summary of your accounts to speed up recovery in case you need to use our recovery tool.</translation>
+        <translation>リカバリーツールの使用をスムーズに進められるよう、アカウントの概要を保存する。</translation>
     </message>
     <message>
         <source>id_save_your_mnemonic</source>
-        <translation>Mnemonicを保存する</translation>
+        <translation>ニモニックを保存する</translation>
     </message>
     <message>
         <source>id_scan_a_qr_code_for_spv_pairing</source>
-        <translation>Scan a QR code for SPV pairing</translation>
+        <translation>QRコードをスキャンしてSPVペアリングを開始する</translation>
+    </message>
+    <message>
+        <source>id_scan_or_paste_your_extended</source>
+        <translation>読み取りモードのウォレットにログインするには拡張公開鍵(xPub/yPub/zPub)をスキャンするか貼り付けてください。</translation>
     </message>
     <message>
         <source>id_scan_qr_code</source>
-        <translation>Scan QR code</translation>
+        <translation>QRコードをスキャンする</translation>
     </message>
     <message>
         <source>id_scan_the_qr_code_with_an</source>
-        <translation>Scan the QR Code with an Authenticator app</translation>
+        <translation>AuthenticatorアプリでQRコードをスキャンする</translation>
     </message>
     <message>
         <source>id_scan_to_send_here</source>
-        <translation>Scan to send here</translation>
+        <translation>スキャンしてここに送る</translation>
     </message>
     <message>
         <source>id_screen_lock</source>
-        <translation>スクリーン・ロック</translation>
+        <translation>画面ロック</translation>
     </message>
     <message>
         <source>id_search</source>
@@ -2915,7 +3179,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_search_address</source>
-        <translation>Search address</translation>
+        <translation>アドレスを検索する</translation>
     </message>
     <message>
         <source>id_second</source>
@@ -2927,55 +3191,63 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_security</source>
-        <translation>Security</translation>
+        <translation>セキュリティ</translation>
     </message>
     <message>
         <source>id_security_change</source>
-        <translation>Security Change</translation>
+        <translation>セキュリティの変更</translation>
     </message>
     <message>
         <source>id_see_our_privacy_policy_s</source>
-        <translation>See our privacy policy %1</translation>
+        <translation>プライバシーポリシーを確認する %1</translation>
     </message>
     <message>
         <source>id_see_our_terms_of_service_s</source>
-        <translation>See our Terms of Service %1</translation>
+        <translation>利用規約を確認する %1</translation>
     </message>
     <message>
         <source>id_segwit_account</source>
-        <translation>SegWit Account</translation>
+        <translation>SegWitアカウント</translation>
+    </message>
+    <message>
+        <source>id_segwit_bip84</source>
+        <translation>SegWit (BIP84)</translation>
     </message>
     <message>
         <source>id_select_a_fiat_currency_and</source>
-        <translation>Select a fiat currency and bitcoin denomination to show amounts in your wallet</translation>
+        <translation>ウォレット内の金額表示に利用する法定通貨とビットコインの単位を選択してください</translation>
     </message>
     <message>
         <source>id_select_account</source>
-        <translation>Select Account</translation>
+        <translation>アカウントを選択</translation>
     </message>
     <message>
         <source>id_select_an_app_on_s</source>
-        <translation>Select an app on %1</translation>
+        <translation>%1でアプリを選択してください</translation>
     </message>
     <message>
         <source>id_select_asset</source>
-        <translation>Select asset</translation>
+        <translation>アセットを選択</translation>
     </message>
     <message>
         <source>id_select_duration_of_twofactor</source>
-        <translation>Select duration of Two-Factor Authentication protection for your coins. The new option applies to newly received coins.</translation>
+        <translation>2段階認証による保護の期間を設定します。新しい設定はこれから受け取るコインにのみ適用されます。</translation>
     </message>
     <message>
         <source>id_select_network</source>
-        <translation>ネットワーク選択</translation>
+        <translation>ネットワークを選択</translation>
     </message>
     <message>
         <source>id_select_the_s_app_on_your_ledger</source>
-        <translation>Select the %1 app on your Ledger and retry.</translation>
+        <translation>Ledgerの%1アプリを選択して再試行してください。</translation>
     </message>
     <message>
         <source>id_select_wallet</source>
-        <translation>Select Wallet</translation>
+        <translation>ウォレットを選択</translation>
+    </message>
+    <message>
+        <source>id_select_watchonly_type</source>
+        <translation>読み取りモードの種類を選択してください</translation>
     </message>
     <message>
         <source>id_select_word_number_d</source>
@@ -2983,7 +3255,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_select_your_jade_to_login</source>
-        <translation>Select your Jade to login</translation>
+        <translation>ログインするにはJadeを選択してください</translation>
+    </message>
+    <message>
+        <source>id_select_your_recovery_key</source>
+        <translation>リカバリーキーを選択してください</translation>
     </message>
     <message>
         <source>id_send</source>
@@ -2991,7 +3267,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_send_all</source>
-        <translation>Send all</translation>
+        <translation>全額を送金する</translation>
     </message>
     <message>
         <source>id_send_all_funds</source>
@@ -3003,7 +3279,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_send_and_receive_liquidbased</source>
-        <translation>Send and receive Liquid-based Managed Assets</translation>
+        <translation>Liquid上のマネージド・アセットを送受信する</translation>
     </message>
     <message>
         <source>id_send_to</source>
@@ -3019,7 +3295,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_sent</source>
-        <translation>Sent</translation>
+        <translation>送信済み</translation>
     </message>
     <message>
         <source>id_sent_to</source>
@@ -3027,15 +3303,15 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_server_ip_and_port_ipport</source>
-        <translation>Server IP and port (ip:port)</translation>
+        <translation>サーバーのIPアドレスとポート番号 (ip:port)</translation>
     </message>
     <message>
         <source>id_set_2fa_expiry</source>
-        <translation>Set 2FA expiry</translation>
+        <translation>2段階認証の保護期限を設定する</translation>
     </message>
     <message>
         <source>id_set_a_limit_to_spend_without</source>
-        <translation>Set a limit to spend without two-factor authentication</translation>
+        <translation>2段階認証なしで送金できる上限金額を設定する</translation>
     </message>
     <message>
         <source>id_set_a_new_pin</source>
@@ -3043,19 +3319,19 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_set_a_pin</source>
-        <translation>Set a PIN</translation>
+        <translation>PINを設定する</translation>
     </message>
     <message>
         <source>id_set_a_timeout_to_logout_after</source>
-        <translation>Set a timeout to logout after prolonged inactivity</translation>
+        <translation>操作せず一定時間経過後の自動ログアウトを設定する</translation>
     </message>
     <message>
         <source>id_set_an_email_address_to_receive</source>
-        <translation>Set an email address to receive transaction notifications</translation>
+        <translation>トランザクション通知を受け取るメールアドレスを設定する</translation>
     </message>
     <message>
         <source>id_set_an_email_for_recovery</source>
-        <translation>Set an email for recovery</translation>
+        <translation>リカバリー用のメールアドレスを設定する</translation>
     </message>
     <message>
         <source>id_set_custom_fee_rate</source>
@@ -3063,35 +3339,35 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_set_locktime</source>
-        <translation>Set Locktime</translation>
+        <translation>ロックタイムの設定</translation>
     </message>
     <message>
         <source>id_set_timelock</source>
-        <translation>Set timelock</translation>
+        <translation>タイムロックを設定する</translation>
     </message>
     <message>
         <source>id_set_twofactor_threshold</source>
-        <translation>Set Two-Factor threshold</translation>
+        <translation>2段階認証の閾値を設定する</translation>
     </message>
     <message>
         <source>id_set_up_a_passcode_for_your_ios</source>
-        <translation>Set up a passcode for your iOS device to set a PIN for Blockstream Green</translation>
+        <translation>Blockstream GreenにPINを設定するには、まずiOSデバイスのパスコードを設定してください</translation>
     </message>
     <message>
         <source>id_set_up_a_screen_lock_for_your</source>
-        <translation>Set up a screen lock for your Android device to unlock your wallet using Android screen lock</translation>
+        <translation>画面ロックでウォレットにアクセスするには、まずAndroidデバイスの画面ロックを設定してください</translation>
     </message>
     <message>
         <source>id_set_up_an_email_to_get</source>
-        <translation>Set up an email to get pre-signed transactions for recovery. Email notifications contain your encrypted recovery data.</translation>
+        <translation>復元用の署名済みトランザクションを受け取るメールアドレスを設定します。メール通知には暗号化されたリカバリー用データが添付されます。</translation>
     </message>
     <message>
         <source>id_set_up_credentials_to_access_in</source>
-        <translation>Set up credentials to access in watch-only mode to receive coins without putting your private keys at risk. Access from any device using a Blockstream Green app</translation>
+        <translation>秘密鍵を危険に晒さない読み取りモードでウォレットにアクセスするための認証を設定します。Blockstream Greenアプリを使っていかなるデバイスからもアクセスできます。</translation>
     </message>
     <message>
         <source>id_set_up_pgp_key_for</source>
-        <translation>コミュニケーションの為にPGPキーを設定する</translation>
+        <translation>連絡の暗号化用にPGPキーを設定する</translation>
     </message>
     <message>
         <source>id_set_up_twofactor_authentication</source>
@@ -3099,19 +3375,19 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_set_up_watchonly</source>
-        <translation>監視-Onlyの設定</translation>
+        <translation>読み取りモードの設定</translation>
     </message>
     <message>
         <source>id_set_up_watchonly_credentials</source>
-        <translation>このウォレットの監視-Only証明書を設定する</translation>
+        <translation>このウォレットに読み取りモードを追加する</translation>
     </message>
     <message>
         <source>id_set_wallet_name</source>
-        <translation>Set wallet name</translation>
+        <translation>ウォレット名を設定する</translation>
     </message>
     <message>
         <source>id_setting_up_your_wallet</source>
-        <translation>Setting Up Your Wallet</translation>
+        <translation>ウォレットのセットアップ</translation>
     </message>
     <message>
         <source>id_setting_updated</source>
@@ -3123,15 +3399,15 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_setup_jade</source>
-        <translation>Setup Jade</translation>
+        <translation>Jadeのセットアップ</translation>
     </message>
     <message>
         <source>id_setup_pin</source>
-        <translation>PIN設定</translation>
+        <translation>PINの設定</translation>
     </message>
     <message>
         <source>id_setup_pin_and_s</source>
-        <translation>PIN設定と%1</translation>
+        <translation>PINと%1の設定</translation>
     </message>
     <message>
         <source>id_share</source>
@@ -3139,55 +3415,59 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_share_address</source>
-        <translation>シェア・アドレス</translation>
+        <translation>アドレスを共有</translation>
     </message>
     <message>
         <source>id_share_nonconfidential</source>
-        <translation>Share non-confidential transaction</translation>
+        <translation>秘匿されていないトランザクションを共有する</translation>
     </message>
     <message>
         <source>id_share_unblinding_data</source>
-        <translation>Share unblinding data</translation>
+        <translation>ブラインディング解除用データを共有する</translation>
     </message>
     <message>
         <source>id_show</source>
-        <translation>Show</translation>
+        <translation>表示する</translation>
     </message>
     <message>
         <source>id_show_advanced_options</source>
-        <translation>Show advanced options</translation>
+        <translation>詳細オプションを表示する</translation>
     </message>
     <message>
         <source>id_show_all</source>
-        <translation>Show all</translation>
+        <translation>すべて表示する</translation>
     </message>
     <message>
         <source>id_show_all_assets</source>
-        <translation>Show all assets</translation>
+        <translation>すべてのアセットを表示する</translation>
     </message>
     <message>
         <source>id_show_bitcoin_amounts_in</source>
-        <translation>Show bitcoin amounts in</translation>
+        <translation>ビットコインの表示単位</translation>
     </message>
     <message>
         <source>id_show_coins_with_expiring</source>
-        <translation>Show coins with expiring Two-Factor authentication protection.</translation>
+        <translation>2段階認証による保護期間が終了間近のコインを表示</translation>
+    </message>
+    <message>
+        <source>id_show_details</source>
+        <translation>詳細を見る</translation>
     </message>
     <message>
         <source>id_show_fiat</source>
-        <translation>法廷通貨表示</translation>
+        <translation>法定通貨で金額を表示</translation>
     </message>
     <message>
         <source>id_show_my_wallet_backup</source>
-        <translation>Show my wallet backup</translation>
+        <translation>ウォレットのバックアップ情報を確認する</translation>
     </message>
     <message>
         <source>id_show_qr_code</source>
-        <translation>Show QR code</translation>
+        <translation>QRコードを表示する</translation>
     </message>
     <message>
         <source>id_signature_validation_failed_if</source>
-        <translation>Signature validation failed. If this error is unexpected and has happened repeatedly, it is possible the hardware wallet is faulty or has been compromised. It could be leaking your keys, which could lead to loss of funds. Please consider replacing the hardware wallet.</translation>
+        <translation>署名の検証に失敗しました。このエラーが原因不明で繰り返し発生する場合、ハードウェアウォレットの故障か改造が疑われます。秘密鍵の流出と資金の盗難につながる恐れがあるので、ハードウェアウォレットの交換をお勧めします。</translation>
     </message>
     <message>
         <source>id_signup_in_progress</source>
@@ -3199,11 +3479,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_singlesig</source>
-        <translation>Singlesig</translation>
+        <translation>シングルシグ</translation>
     </message>
     <message>
         <source>id_singlesig_wallets_are_not_yet</source>
-        <translation>Singlesig wallets are not yet supported for use with hardware devices. By continuing you&apos;ll access a Multisig Shield wallet.</translation>
+        <translation>シングルシグ・ウォレットはハードウェアウォレットに未対応です。続行することでマルチシグ・シールドウォレットを使用します。</translation>
     </message>
     <message>
         <source>id_skip</source>
@@ -3219,7 +3499,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_slow</source>
-        <translation>遅く</translation>
+        <translation>遅い</translation>
     </message>
     <message>
         <source>id_sms</source>
@@ -3229,11 +3509,11 @@ Recovery Phrase</translation>
         <source>id_snnreset_this_setting_and_then</source>
         <translation>%1.
 
-Reset this setting and then re-activate it.</translation>
+この設定をリセット後、再度有効化してください。</translation>
     </message>
     <message>
         <source>id_socks5_hostname</source>
-        <translation>Socks5ホストネーム</translation>
+        <translation>Socks5ホスト名</translation>
     </message>
     <message>
         <source>id_socks5_port</source>
@@ -3241,7 +3521,7 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_socks5_proxy_and_port_must_be</source>
-        <translation>SOCKS5 proxy and port must be set</translation>
+        <translation>SOCKS5プロキシとポートの設定が必要です</translation>
     </message>
     <message>
         <source>id_something_went_wrong</source>
@@ -3249,23 +3529,23 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_spend_your_bitcoin_without_2fa</source>
-        <translation>Spend your bitcoin without 2FA up to a certain threshold. After spending bitcoin up to this amount, you will need to reset your threshold to continue spending without 2FA.</translation>
+        <translation>ある閾値までの送金を2段階認証なしで可能にします。累計でこの金額を超える送金を2段階認証なしで行うには、閾値のリセットが必要になります。</translation>
     </message>
     <message>
         <source>id_spv_is_always_synchronized_on</source>
-        <translation>SPVはWiFiやEthernetを通じて常に同時性を保つようになっています。一方、モバイルデータを使用中にも同時性を保つよう設計されている為、ご利用中のデータプランによっては通信費が過剰に計算されることもある為注意して下さい。</translation>
+        <translation>SPVはWiFiやEthernetを通じて常に同期されます。モバイルデータを使用中にも同期されるため、ご利用中のデータプランによっては通信費が高くなる可能性があるのでご注意ください。</translation>
     </message>
     <message>
         <source>id_spv_mode_is_currently_available</source>
-        <translation>SPV mode is currently available for singlesig bitcoin wallets only.</translation>
+        <translation>SPVモードは現時点でシングルシグ・ビットコインウォレットにのみ対応しています。</translation>
     </message>
     <message>
         <source>id_spv_not_fully_synced</source>
-        <translation>SPVが完全にシンクロされていません</translation>
+        <translation>SPVの同期が完了していません</translation>
     </message>
     <message>
         <source>id_spv_notifications</source>
-        <translation>SPV告知事項</translation>
+        <translation>SPV関連の通知</translation>
     </message>
     <message>
         <source>id_spv_reset_and_restarted</source>
@@ -3273,71 +3553,75 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_spv_synchronization</source>
-        <translation>SPVシンクロナイゼーション</translation>
+        <translation>SPVの同期</translation>
     </message>
     <message>
         <source>id_spv_synchronization_using_tor</source>
-        <translation>SPV synchronization using Tor requires a trusted node onion URL</translation>
+        <translation>Tor経由のSPV同期には信頼できるノードのオニオンアドレスが必要です</translation>
     </message>
     <message>
         <source>id_spv_unverified</source>
-        <translation>SPV非検証済み</translation>
+        <translation>SPV未検証</translation>
     </message>
     <message>
         <source>id_spv_verification</source>
-        <translation>SPV verification</translation>
+        <translation>SPVの検証</translation>
+    </message>
+    <message>
+        <source>id_standard</source>
+        <translation>Standard</translation>
     </message>
     <message>
         <source>id_standard_account</source>
-        <translation>Standard Account</translation>
+        <translation>スタンダードアカウント</translation>
     </message>
     <message>
         <source>id_standard_accounts_allow_you_to</source>
-        <translation>Standard accounts allow you to separate your funds. Each account will have its own receiving addresses, and moving funds across accounts requires a transaction.</translation>
+        <translation>スタンダードアカウントは資金の分割管理に向きます。各アカウントは独自の受け取り用アドレスを持ち、アカウント間の資金のやり取りにはトランザクションが必要になります。</translation>
     </message>
     <message>
         <source>id_standard_wallet</source>
-        <translation>Standard Wallet</translation>
+        <translation>スタンダード・ウォレット</translation>
     </message>
     <message>
         <source>id_start_a_2fa_reset_process_if</source>
-        <translation>Start a 2FA reset process if you lost access to all your two-factor authentication methods.</translation>
+        <translation>2段階認証方法のすべてを失った場合は、2段階認証のリセット手順を開始してください。</translation>
     </message>
     <message>
         <source>id_start_receiving_funds_and_set</source>
-        <translation>Start receiving funds and set an email to receive recovery data for your wallet</translation>
+        <translation>資金の受け取り時にアカウントのリカバリーデータを受け取るためのメールアドレスを設定してから、資金を受け取りましょう</translation>
     </message>
     <message>
         <source>id_status</source>
-        <translation>Status</translation>
+        <translation>ステータス</translation>
     </message>
     <message>
         <source>id_success</source>
-        <translation>Success</translation>
+        <translation>成功</translation>
     </message>
     <message>
         <source>id_support</source>
-        <translation>Support</translation>
+        <translation>サポート</translation>
     </message>
     <message>
         <source>id_support_page</source>
-        <translation>Support Page</translation>
+        <translation>サポートページ</translation>
     </message>
     <message>
         <source>id_sweep</source>
-        <translation>Sweep</translation>
+        <translation>資金をまとめる</translation>
     </message>
     <message>
         <source>id_sweep_from_paper_wallet</source>
-        <translation>ペーパーウォレットをSweepする</translation>
+        <translation>ペーパーウォレットから資金を引き上げる</translation>
     </message>
     <message>
         <source>id_sweep_into_s</source>
-        <translation>Sweep into %1</translation>
+        <translation>%1へと資金を引き上げる</translation>
     </message>
     <message>
         <source>id_switch_network</source>
-        <translation>Switch Network</translation>
+        <translation>ネットワークを切り替える</translation>
     </message>
     <message>
         <source>id_synchronize_spv_on_mobile</source>
@@ -3345,14 +3629,14 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_syou_need_ton1_reset_greens</source>
-        <translation>%1.You need to:
-1. Reset Green&apos;s Face/TouchID login,
-2. Log in with PIN,
-3. Re-activate Face/TouchID from Green Settings.</translation>
+        <translation>%1に必要な手順:
+1. GreenのFace/TouchIDログインをリセットする
+2. PINでログインする
+3. Face/TouchIDログインを設定画面から再度有効化する</translation>
     </message>
     <message>
         <source>id_system_location</source>
-        <translation>System location</translation>
+        <translation>システムの位置</translation>
     </message>
     <message>
         <source>id_system_message</source>
@@ -3364,27 +3648,35 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_tap_to_restart_the_simplified</source>
-        <translation>SPVをリスタートする</translation>
+        <translation>SPVを再始動する</translation>
     </message>
     <message>
         <source>id_tap_to_scan_a_qr_code_and</source>
-        <translation>Tap to scan a QR code and connect to a node for SPV</translation>
+        <translation>タップしてQRコードからSPVでノードに接続する</translation>
+    </message>
+    <message>
+        <source>id_taproot_account</source>
+        <translation>Taproot account</translation>
+    </message>
+    <message>
+        <source>id_taproot_bip86</source>
+        <translation>Taproot (BIP86)</translation>
     </message>
     <message>
         <source>id_telegram</source>
-        <translation>Telegram</translation>
+        <translation>テレグラム</translation>
     </message>
     <message>
         <source>id_terms_of_service</source>
-        <translation>Terms of Service</translation>
+        <translation>利用規約</translation>
     </message>
     <message>
         <source>id_terms_of_use</source>
-        <translation>利用条件</translation>
+        <translation>利用規約</translation>
     </message>
     <message>
         <source>id_testnet_and_liquid_testnet</source>
-        <translation>Testnet and Liquid Testnet</translation>
+        <translation>Testnet及びLiquid Testnet</translation>
     </message>
     <message>
         <source>id_testnet_electrum_server</source>
@@ -3392,27 +3684,31 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_testnet_wallets</source>
-        <translation>Testnet wallets</translation>
+        <translation>Testnetウォレット</translation>
     </message>
     <message>
         <source>id_thank_you_for_downloading_green</source>
         <translation>Greenをダウンロードして下さり誠にありがとうございます。お時間があればレビューもお願いします。</translation>
     </message>
     <message>
+        <source>id_thank_you_for_your_feedback</source>
+        <translation>Thank you for your feedback</translation>
+    </message>
+    <message>
         <source>id_the_1_year_2fa_reset_process</source>
-        <translation>The 1 year 2FA reset process was ongoing, but someone blocked it by disputing the 2FA reset.</translation>
+        <translation>1年間かかる2段階認証リセット処理が進行していましたが、誰かがリセットに関して係争を申し込んだため中断されました。</translation>
     </message>
     <message>
         <source>id_the_address_is_valid</source>
-        <translation>The address is valid.</translation>
+        <translation>このアドレスは有効です。</translation>
     </message>
     <message>
         <source>id_the_addresses_dont_match</source>
-        <translation>The addresses don&apos;t match.</translation>
+        <translation>アドレスが一致しません。</translation>
     </message>
     <message>
         <source>id_the_asset_registry_is_currently</source>
-        <translation>The asset registry is currently unavailable: proceed carefully since asset amounts might be shown with a decimal precision different from what intended by the issuers.</translation>
+        <translation>アセット登録簿は現在利用できません。発行者の想定しているものと小数点の位置が異なって表示される場合があるため、アセットの送金時にはご注意ください。</translation>
     </message>
     <message>
         <source>id_the_camera_has_a_problem_you</source>
@@ -3420,7 +3716,7 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_the_default_value_is_90_days_if</source>
-        <translation>The default value is 90 days. If you set an email, you will receive an updated copy of your recovery data.</translation>
+        <translation>既定値は90日間です。メールアドレスを登録していれば最新のリカバリーデータを受け取ることができます。</translation>
     </message>
     <message>
         <source>id_the_easier_safer_and_faster</source>
@@ -3428,91 +3724,107 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_the_email_will_also_be_used_to</source>
-        <translation>The email will also be used to receive recovery data and transaction notifications</translation>
+        <translation>このメールアドレスはリカバリーデータの受け取りとトランザクションの通知にも使用されます</translation>
     </message>
     <message>
         <source>id_the_hardware_wallet_you_are</source>
-        <translation>ご使用中のハードウェア・ウォレットは現在支援されておりません。</translation>
+        <translation>ご使用中のハードウェア・ウォレットには現在対応しておりません</translation>
     </message>
     <message>
         <source>id_the_liquid_network_is_a_bitcoin</source>
-        <translation>The Liquid Network is a Bitcoin sidechain. Select to send and receive Liquid Bitcoin (L-BTC), Tether (USDt), and other Liquid assets.</translation>
+        <translation>Liquid Networkはステーブルコインや証券トークンを始めとする金融商品をビットコイン・タイムチェーン上で高速でプライベートに取引・発行するためのビットコイン・レイヤー２ソリューションです。</translation>
     </message>
     <message>
         <source>id_the_network_selected_on_the</source>
-        <translation>The network selected on the Green app is different from the one selected on the hardware wallet. Select the same network on both devices.</translation>
+        <translation>Greenアプリ内で選択されているネットワークとハードウェアウォレットで選択されているネットワークが一致しません。同じネットワークを選択してください。</translation>
     </message>
     <message>
         <source>id_the_new_email_will_be_used_for</source>
-        <translation>The new email will be used for Two-Factor Authentication when the reset is complete. The reset takes 12 months plus any remaining timelock.</translation>
+        <translation>リセット完了後、新しいメールアドレスが2段階認証に使用されます。リセットには12ヶ月とタイムロックの残存期間の合計がかかります。</translation>
+    </message>
+    <message>
+        <source>id_the_new_firmware_requires_you</source>
+        <translation>新しいファームウェアを利用するには一度Bluetooth設定よりJadeとのペアリングを解除する必要があります。</translation>
     </message>
     <message>
         <source>id_the_password_cant_be_empty</source>
         <translation>パスワードが空欄です</translation>
     </message>
     <message>
+        <source>id_the_qr_code_does_not_include</source>
+        <translation>The QR code does not include the BIP39 Passphrase</translation>
+    </message>
+    <message>
         <source>id_the_recovery_key_below_will_not</source>
-        <translation>下の復元キーは二度とご覧になられません。資金のアクセスの為にバックアップをお願いします。</translation>
+        <translation>下の復元キーは二度とご覧になられません。資金へのアクセスを失わない為にバックアップをお願いします。</translation>
     </message>
     <message>
         <source>id_the_recovery_phrase_can_be_used</source>
-        <translation>The recovery phrase can be used to claim your funds at any point. Keep it safe, keep it private.</translation>
+        <translation>リカバリーフレーズを使っていつでも資金を回収することができます。安全に、誰にも見られないように保管してください。</translation>
     </message>
     <message>
         <source>id_the_recovery_phrase_doesnt</source>
-        <translation>The recovery phrase doesn&apos;t match the previously existing wallet. Please retry with a different recovery phrase.</translation>
+        <translation>リカバリーフレーズがウォレットと一致しません。違うリカバリーフレーズをお試しください。</translation>
     </message>
     <message>
         <source>id_the_source_code_is_available_at</source>
-        <translation>The source code is available at %1</translation>
+        <translation>ソースコードを下記にて公開しています %1</translation>
     </message>
     <message>
         <source>id_the_transaction_contains</source>
-        <translation>The transaction contains non-confidential funds.</translation>
+        <translation>このトランザクションには秘匿化されていない資金が含まれます。</translation>
+    </message>
+    <message>
+        <source>id_the_username_cant_be_empty</source>
+        <translation>ユーザー名は必須です</translation>
     </message>
     <message>
         <source>id_the_waiting_period_is_necessary</source>
-        <translation>The waiting period is necessary to ensure the security of your wallet, to prevent thieves from getting around your Two-Factor protection.</translation>
+        <translation>この待ち時間はウォレットが盗難に遭った場合に2段階認証をすぐに解除されないために存在するセキュリティ機能です。</translation>
     </message>
     <message>
         <source>id_there_are_no_results_for_the</source>
-        <translation>There are no results for the applied filter</translation>
+        <translation>フィルター条件に該当する結果はありません</translation>
     </message>
     <message>
         <source>id_there_is_already_a_pin_set_for</source>
-        <translation>%1ウォレットには既にPINが設定されています。続ける場合、PINの設定は不可能でありログインするには24個のmnemonic単語が必要です。PINの無効化は設定、または、ログインを3回失敗した場合できます。</translation>
+        <translation>%1のウォレットには既にPINが設定されているものがあります。続行する場合、PINの設定はできずログイン時には毎回24個単語のニモニックが必要です。PINの無効化は設定から、もしくはログインを3回失敗することでできます。</translation>
     </message>
     <message>
         <source>id_these_are_some_compatible</source>
-        <translation>These are some compatible wallets:</translation>
+        <translation>互換性のあるウォレットの例です:</translation>
     </message>
     <message>
         <source>id_these_settings_apply_for_every</source>
-        <translation>These settings apply for every wallet you use on Blockstream Green.</translation>
+        <translation>これらの設定はBlockstream Green上のすべてのウォレットに適用されます。</translation>
     </message>
     <message>
         <source>id_this_feature_is_coming_soon</source>
-        <translation>This feature is coming soon, stay tuned!</translation>
+        <translation>この機能はまもなく追加予定です！</translation>
     </message>
     <message>
         <source>id_this_transaction_spent</source>
-        <translation>This transaction spent non-confidential funds.</translation>
+        <translation>このトランザクションには秘匿化されていない資金が含まれていました。</translation>
+    </message>
+    <message>
+        <source>id_this_wallet_is_based_on_your</source>
+        <translation>This wallet is based on your recovery phrase and a BIP39 Passphrase</translation>
     </message>
     <message>
         <source>id_this_wallet_operates_on_a_test</source>
-        <translation>This wallet operates on a test network. Anything you receive or send here has no value</translation>
+        <translation>このウォレットはテストネット用です。送受信するものに価値はありません。</translation>
     </message>
     <message>
         <source>id_this_will_disable_pin_login_for</source>
-        <translation>This will disable PIN login for this wallet on all your devices. You will need your recovery phrase to access your wallet.</translation>
+        <translation>すべてのデバイス上でこのウォレットへのPINログインを無効化します。ウォレットへのアクセスにはリカバリーフレーズが必要になります。</translation>
     </message>
     <message>
         <source>id_this_will_log_you_out_and</source>
-        <translation>This will log you out and delete this wallet from the app and the Blockstream servers database.</translation>
+        <translation>これを選択するとログアウトされ、このウォレットがアプリとBlockstreamサーバーのデータベースから削除されます。</translation>
     </message>
     <message>
         <source>id_ticker</source>
-        <translation>Ticker</translation>
+        <translation>ティッカーシンボル</translation>
     </message>
     <message>
         <source>id_time_s</source>
@@ -3520,7 +3832,11 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_tip_we_recommend_you_enable</source>
-        <translation>Tip: We recommend you enable more than one 2FA method. If you only set up one 2FA method and then lose it, you&apos;ll have to wait at least one year until the 2FA expires.</translation>
+        <translation>おすすめ: 複数の2段階認証手段を有効化しましょう。唯一の2段階認証手段を失った場合、保護が失効するまで1年以上待つ必要があります。</translation>
+    </message>
+    <message>
+        <source>id_tip_you_can_use_the</source>
+        <translation>ちなみに、xPub/yPub/zPubによる読み取りモードのウォレットはGreenのみならず、別のウォレットに読み込むことでも利用できます。また、ウォレット内の各アカウントには個別にxPub/yPub/zPubがあります。</translation>
     </message>
     <message>
         <source>id_to</source>
@@ -3528,11 +3844,11 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_to_keep_you_in_control_of_your</source>
-        <translation>To keep you in control of your funds, Two-Factor Authentication protection expires after roughly %1 days since your last payment. You will be prompted to make a Two-Factor Reactivation transaction, if you don&apos;t move funds often enough.</translation>
+        <translation>資金を動かせない状況を回避するため、2段階認証による保護は前回の送金からおよそ%1日後に解除されます。頻繁に取引されない方は、2段階認証を再度有効化するためのトランザクションを推奨する通知を受け取る可能性があります。</translation>
     </message>
     <message>
         <source>id_too_many_pin_attempts</source>
-        <translation>Too many PIN attempts</translation>
+        <translation>PINの試行回数が残っていません</translation>
     </message>
     <message>
         <source>id_tor</source>
@@ -3544,19 +3860,19 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_tor_is_connected</source>
-        <translation>Tor is connected</translation>
+        <translation>Tor接続済み</translation>
     </message>
     <message>
         <source>id_tor_is_not_yet_available_for</source>
-        <translation>Tor is not yet available for singlesig wallets</translation>
+        <translation>Torはシングルシグウォレットではまだ使用できません</translation>
     </message>
     <message>
         <source>id_tor_status</source>
-        <translation>Tor status</translation>
+        <translation>Tor接続状況</translation>
     </message>
     <message>
         <source>id_tor_will_use_1s_and_only_work</source>
-        <translation>Torは%1のみ使用します。ProxyがOrbot又はTor利用可能である必要があります。</translation>
+        <translation>Torは%1を使用し、プロキシにOrbotまたはTorが利用可能である必要があります。</translation>
     </message>
     <message>
         <source>id_total_assets</source>
@@ -3588,7 +3904,7 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_transaction_copied_to_clipboard</source>
-        <translation>Transaction copied to clipboard</translation>
+        <translation>トランザクションがクリップボードにコピーされました</translation>
     </message>
     <message>
         <source>id_transaction_details</source>
@@ -3604,15 +3920,15 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_transaction_status</source>
-        <translation>Transaction status</translation>
+        <translation>トランザクションの状態</translation>
     </message>
     <message>
         <source>id_transactions</source>
-        <translation>Transactions</translation>
+        <translation>トランザクション一覧</translation>
     </message>
     <message>
         <source>id_try_again</source>
-        <translation>Try Again</translation>
+        <translation>もう一度試す</translation>
     </message>
     <message>
         <source>id_try_now</source>
@@ -3620,7 +3936,7 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_turn_on_bluetooth_to_connect</source>
-        <translation>Turn on bluetooth to connect your hardware wallet.</translation>
+        <translation>Bluetoothを有効化してハードウェアウォレットに接続します。</translation>
     </message>
     <message>
         <source>id_two_factor_authentication</source>
@@ -3628,7 +3944,7 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_twofactor</source>
-        <translation>Two-Factor</translation>
+        <translation>2段階認証</translation>
     </message>
     <message>
         <source>id_twofactor_authentication</source>
@@ -3636,15 +3952,15 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_twofactor_authentication_expiry</source>
-        <translation>Two-Factor authentication expiry</translation>
+        <translation>2段階認証解除までの日数</translation>
     </message>
     <message>
         <source>id_twofactor_expiration_period</source>
-        <translation>Two-Factor expiration period</translation>
+        <translation>2段階認証の保護期限</translation>
     </message>
     <message>
         <source>id_twofactor_protection_does_not</source>
-        <translation>Two-Factor protection does not expire on this account, enable 2 separate Two-Factor methods as backup in case you lose access to one.</translation>
+        <translation>このアカウントの2段階認証は無期限なので、紛失に備えて別々の2段階認証手段を2つ設定してください。</translation>
     </message>
     <message>
         <source>id_twofactor_reset_in_progress</source>
@@ -3656,7 +3972,7 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_twofactor_threshold</source>
-        <translation>Two-Factor threshold</translation>
+        <translation>2段階認証の閾値</translation>
     </message>
     <message>
         <source>id_txid</source>
@@ -3668,19 +3984,23 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_unarchive</source>
-        <translation>Unarchive</translation>
+        <translation>アーカイブから戻す</translation>
+    </message>
+    <message>
+        <source>id_unarchive_account</source>
+        <translation>アカウントをアーカイブから復元する</translation>
     </message>
     <message>
         <source>id_unblinding_data</source>
-        <translation>Unblinding data</translation>
+        <translation>ブラインディング解除用データ</translation>
     </message>
     <message>
         <source>id_unconfirmed</source>
-        <translation>未検証</translation>
+        <translation>未承認</translation>
     </message>
     <message>
         <source>id_undo_2fa_dispute</source>
-        <translation>Undo 2FA dispute</translation>
+        <translation>2段階認証の係争申請を取り消す</translation>
     </message>
     <message>
         <source>id_unknown</source>
@@ -3696,31 +4016,35 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_unknown_firmware</source>
-        <translation>Unknown firmware</translation>
+        <translation>不明なファームウェア</translation>
     </message>
     <message>
         <source>id_unlock</source>
-        <translation>Unlock</translation>
+        <translation>アンロック</translation>
+    </message>
+    <message>
+        <source>id_unlock_green</source>
+        <translation>Greenをアンロックする</translation>
     </message>
     <message>
         <source>id_unlock_jade_to_continue</source>
-        <translation>Unlock Jade to continue</translation>
+        <translation>Jadeのロックを解除して続行してください</translation>
     </message>
     <message>
         <source>id_unlocked_coins_can_be_spent_and</source>
-        <translation>Unlocked coins can be spent and are included in your balance.</translation>
+        <translation>ロックされていないコインは送金することができ、残高の計算に含まれます。</translation>
     </message>
     <message>
         <source>id_unlocking_coins</source>
-        <translation>Unlocking coins</translation>
+        <translation>コインのロック解除</translation>
     </message>
     <message>
         <source>id_unstable_internet_connection</source>
-        <translation>Unstable internet connection</translation>
+        <translation>インターネット接続が不安定</translation>
     </message>
     <message>
         <source>id_update</source>
-        <translation>Update</translation>
+        <translation>アップデート</translation>
     </message>
     <message>
         <source>id_updated</source>
@@ -3728,39 +4052,47 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_updating_firmware</source>
-        <translation>Updating firmware…</translation>
+        <translation>ファームウェアをアップデート中…</translation>
     </message>
     <message>
         <source>id_uploading_firmware</source>
-        <translation>Uploading firmware</translation>
+        <translation>ファームウェアをアップロード中</translation>
     </message>
     <message>
         <source>id_use_a_hardware_wallet_as_your</source>
-        <translation>Use a hardware wallet as your third recovery key.</translation>
+        <translation>ハードウェアウォレットを第3のリカバリーキーとして使用します。</translation>
     </message>
     <message>
         <source>id_use_a_public_key</source>
-        <translation>Use a public key</translation>
+        <translation>公開鍵を使う</translation>
     </message>
     <message>
         <source>id_use_all_available_coins</source>
-        <translation>Use all available coins</translation>
+        <translation>すべてのコインを使用する</translation>
     </message>
     <message>
         <source>id_use_an_existing_recovery_phrase</source>
-        <translation>Use an existing recovery phrase as your third recovery key.</translation>
+        <translation>既存のリカバリーフレーズを第3のリカバリーキーとして使用します。</translation>
     </message>
     <message>
         <source>id_use_an_xpub_for_which_you_own</source>
-        <translation>Use an xpub for which you own the corresponding private key as your third recovery key.</translation>
+        <translation>自身で秘密鍵を所有するウォレットのxpubを第3のリカバリーキーとして使用します。</translation>
     </message>
     <message>
         <source>id_use_android_screen_lock_to_log</source>
-        <translation>Use Android screen lock to log in</translation>
+        <translation>Android画面ロックでログインする</translation>
+    </message>
+    <message>
+        <source>id_use_secure_display_and_screen</source>
+        <translation>セキュアディスプレイおよびスクリーンロック機能を利用する</translation>
     </message>
     <message>
         <source>id_use_your_email_to_receive</source>
-        <translation>Use your email to receive recovery transactions and transactions notifications</translation>
+        <translation>メールアドレスでリカバリー用のトランザクションとトランザクション通知を受け取ります</translation>
+    </message>
+    <message>
+        <source>id_user_contact_info_ip_address</source>
+        <translation>ユーザーの連絡先、IPアドレス、詳細な現在地</translation>
     </message>
     <message>
         <source>id_user_not_found_or_invalid</source>
@@ -3776,31 +4108,31 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_value_must_be_between_144_and</source>
-        <translation>Value must be between 144 and 200000</translation>
+        <translation>設定値は144から200000である必要があります</translation>
     </message>
     <message>
         <source>id_verified</source>
-        <translation>Verified</translation>
+        <translation>検証済み</translation>
     </message>
     <message>
         <source>id_verify</source>
-        <translation>Verify</translation>
+        <translation>検証する</translation>
     </message>
     <message>
         <source>id_verify_on_device</source>
-        <translation>Verify on Device</translation>
+        <translation>デバイスで検証する</translation>
     </message>
     <message>
         <source>id_verify_your_bitcoin</source>
-        <translation>Verify your bitcoin transactions are included on the blockchain</translation>
+        <translation>ビットコイントランザクションがブロックチェーンに取り込まれたことを検証する</translation>
     </message>
     <message>
         <source>id_verify_your_pin</source>
-        <translation>PINを立証する</translation>
+        <translation>PINを確認する</translation>
     </message>
     <message>
         <source>id_verifying_transactions</source>
-        <translation>Verifying transactions…</translation>
+        <translation>トランザクションの検証中…</translation>
     </message>
     <message>
         <source>id_version</source>
@@ -3815,8 +4147,16 @@ Reset this setting and then re-activate it.</translation>
         <translation>バージョン %1 %2</translation>
     </message>
     <message>
+        <source>id_view_account</source>
+        <translation>アカウントを見る</translation>
+    </message>
+    <message>
+        <source>id_view_archived_accounts</source>
+        <translation>アーカイブされたアカウントを見る</translation>
+    </message>
+    <message>
         <source>id_view_archived_accounts_d</source>
-        <translation>View archived accounts (%1)</translation>
+        <translation>アーカイブされたアカウントを表示する (%1)</translation>
     </message>
     <message>
         <source>id_view_in_explorer</source>
@@ -3824,15 +4164,15 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_view_more</source>
-        <translation>View More</translation>
+        <translation>もっと見る</translation>
     </message>
     <message>
         <source>id_visit_s_for_further_information</source>
-        <translation>Visit %1 for further information about the software</translation>
+        <translation>ソフトウェアの詳細は%1 からご確認ください</translation>
     </message>
     <message>
         <source>id_visit_the_blockstream_help</source>
-        <translation>Visit the Blockstream Help Center</translation>
+        <translation>Blockstream Help Centerを開く</translation>
     </message>
     <message>
         <source>id_waiting_for_transaction</source>
@@ -3840,35 +4180,35 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_wallet</source>
-        <translation>Wallet</translation>
+        <translation>ウォレット</translation>
     </message>
     <message>
         <source>id_wallet_already_restored</source>
-        <translation>Wallet already restored</translation>
+        <translation>このウォレットは復元済みです</translation>
     </message>
     <message>
         <source>id_wallet_backup</source>
-        <translation>Wallet Backup</translation>
+        <translation>ウォレットのバックアップ</translation>
     </message>
     <message>
         <source>id_wallet_coins_will_require</source>
-        <translation>Wallet coins will require two-factor reactivation once a year to remain protected by two-factor authentication.</translation>
+        <translation>ウォレット内のコインの2段階認証による保護を継続するには毎年保護の再アクティベーションが必要になります。</translation>
     </message>
     <message>
         <source>id_wallet_creation_failed</source>
-        <translation>Wallet creation failed</translation>
+        <translation>ウォレット作成失敗</translation>
     </message>
     <message>
         <source>id_wallet_found</source>
-        <translation>Wallet found</translation>
+        <translation>ウォレットが見つかりました</translation>
     </message>
     <message>
         <source>id_wallet_name</source>
-        <translation>Wallet Name</translation>
+        <translation>ウォレット名</translation>
     </message>
     <message>
         <source>id_wallet_not_found</source>
-        <translation>Wallet not found</translation>
+        <translation>ウォレットが見つかりませんでした</translation>
     </message>
     <message>
         <source>id_wallets</source>
@@ -3880,7 +4220,7 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_warning_no_trusted_node_set</source>
-        <translation>Warning: No trusted node set!</translation>
+        <translation>注意: 信頼済みのノードが設定されていません。</translation>
     </message>
     <message>
         <source>id_warning_nononion_address</source>
@@ -3900,39 +4240,51 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_warning_watchonly_credentials</source>
-        <translation>Warning: Watch-only credentials will be saved on your device</translation>
+        <translation>注意: 読み取りモードの情報はデバイスに保存されます</translation>
     </message>
     <message>
         <source>id_warning_you_need_a_positive</source>
-        <translation>Warning! You need a positive L-BTC balance to be able to send transactions.</translation>
+        <translation>注意: トランザクションの送信にはL-BTC残高が必要です。</translation>
     </message>
     <message>
         <source>id_watchonly</source>
-        <translation>監視-Only</translation>
+        <translation>読み取りモード</translation>
+    </message>
+    <message>
+        <source>id_watchonly_credentials</source>
+        <translation>読み取りモードの認証情報</translation>
+    </message>
+    <message>
+        <source>id_watchonly_details</source>
+        <translation>読み取りモードの詳細</translation>
     </message>
     <message>
         <source>id_watchonly_disabled</source>
-        <translation>監視-Only無効</translation>
+        <translation>読み取りモードが無効</translation>
     </message>
     <message>
         <source>id_watchonly_login</source>
-        <translation>監視-Onlyログイン</translation>
+        <translation>読み取りモードでログイン</translation>
     </message>
     <message>
         <source>id_watchonly_mode_can_be_activated</source>
-        <translation>監視-OnlyモードはPIN、mnemonic、又は、ハードウェア・ウォレットでログインした際、設定で有効にできます。</translation>
+        <translation>読み取りモードはPIN、ニモニック、又はハードウェアウォレットでログイン後に設定から有効にできます。</translation>
     </message>
     <message>
         <source>id_watchonly_mode_cannot_be</source>
-        <translation>Watch-only mode cannot be activated on Liquid as your funds are fully confidential.</translation>
+        <translation>Liquidでは資産がすべて秘匿されているため、読み取りモードが使用できません。</translation>
     </message>
     <message>
         <source>id_watchonly_wallet</source>
-        <translation>Watch-Only Wallet</translation>
+        <translation>読み取り専用のウォレット</translation>
     </message>
     <message>
         <source>id_we_use_the_camera_to_scan_qr</source>
         <translation>カメラでQRコードをスキャンします。</translation>
+    </message>
+    <message>
+        <source>id_we_will_do_our_best_to_find_a</source>
+        <translation>このリカバリーフレーズに対応するウォレットを可能な限り探します</translation>
     </message>
     <message>
         <source>id_welcome</source>
@@ -3944,39 +4296,47 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_well_done_you_can_continue</source>
-        <translation>Well done, you can continue</translation>
+        <translation>上出来です、続きに進みましょう</translation>
     </message>
     <message>
         <source>id_well_done_you_can_continue_with</source>
-        <translation>Well done, you can continue with your password</translation>
+        <translation>さすがです、パスワードを入力して続行しましょう</translation>
     </message>
     <message>
         <source>id_well_get_you_set_up_in_no_time</source>
-        <translation>We&apos;ll get you set up in no time. Make sure you have a pen and paper ready!</translation>
+        <translation>セットアップはすぐ終わります。ペンと紙を用意したら早速取り掛かりましょう！</translation>
     </message>
     <message>
         <source>id_well_get_you_set_up_with_an_amp</source>
-        <translation>We&apos;ll get you set up with an AMP wallet in no time. Note that you can alternatively create AMP accounts in any existing Liquid wallet.</translation>
+        <translation>AMPウォレットの作成に時間はかかりません。また、既存のLiquidウォレット内にAMPアカウントを作成することもできます。</translation>
     </message>
     <message>
         <source>id_what_type_of_account_would_you</source>
-        <translation>What type of account would you like to add?</translation>
+        <translation>作成するアカウントの種類を選択してください。</translation>
+    </message>
+    <message>
+        <source>id_whats_collected</source>
+        <translation>収集されるデータ</translation>
     </message>
     <message>
         <source>id_whats_new</source>
-        <translation>What&apos;s new?</translation>
+        <translation>最新情報</translation>
+    </message>
+    <message>
+        <source>id_whats_not_collected</source>
+        <translation>収集されないデータ</translation>
     </message>
     <message>
         <source>id_where_would_you_like_to</source>
-        <translation>Where would you like to transfer the funds?</translation>
+        <translation>資金の送り先を指定してください。</translation>
     </message>
     <message>
         <source>id_wireless</source>
-        <translation>Wireless</translation>
+        <translation>無線</translation>
     </message>
     <message>
         <source>id_word</source>
-        <translation>Word</translation>
+        <translation>単語</translation>
     </message>
     <message>
         <source>id_word_d_of_d</source>
@@ -3988,11 +4348,15 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_write_down_your_recovery_phrase</source>
-        <translation>Write down your recovery phrase on paper and store it somewhere safe.</translation>
+        <translation>リカバリーフレーズを紙に記入して安全な所に保管してください。</translation>
     </message>
     <message>
         <source>id_wrong_choice_check_your</source>
-        <translation>間違えました。Mnemonicを確認してからもう一度お試しください。</translation>
+        <translation>不正解です。ニモニックを確認してからもう一度お試しください。</translation>
+    </message>
+    <message>
+        <source>id_xpub</source>
+        <translation>xPub</translation>
     </message>
     <message>
         <source>id_year</source>
@@ -4016,15 +4380,15 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_you_can_change_these_later_on</source>
-        <translation>You can change these later on.</translation>
+        <translation>これらは後からも変更できます。</translation>
     </message>
     <message>
         <source>id_you_cannot_create_or_restore_a</source>
-        <translation>You cannot create or restore a wallet on %1 as you already have a PIN protected wallet.</translation>
+        <translation>すでにPINで保護されている%1ウォレットが存在するため、ウォレットの作成や復元ができません。</translation>
     </message>
     <message>
         <source>id_you_have_clicked_a_payment_uri</source>
-        <translation>You have clicked a Payment URI, select a wallet to handle it</translation>
+        <translation>Payment URIをクリックしました。使用するウォレットを選択してください</translation>
     </message>
     <message>
         <source>id_you_have_control_on_your_funds</source>
@@ -4032,7 +4396,7 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_you_have_no_coins_to_send</source>
-        <translation>You have no coins to send. Generate an address to receive some bitcoins.</translation>
+        <translation>送金できるコインがありません。まずアドレスを生成してビットコインを受け取りましょう。</translation>
     </message>
     <message>
         <source>id_you_have_received_s</source>
@@ -4040,15 +4404,19 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_you_have_successfully_changed</source>
-        <translation>You have successfully changed your PIN</translation>
+        <translation>PINの変更に成功しました</translation>
+    </message>
+    <message>
+        <source>id_you_have_successfully_sent_a</source>
+        <translation>You have successfully sent a transaction. Please give us your feedback to improve Green.</translation>
     </message>
     <message>
         <source>id_you_have_to_authenticate_using</source>
-        <translation>You have to Authenticate using biometrics</translation>
+        <translation>生体認証が必要です</translation>
     </message>
     <message>
         <source>id_you_have_tor_enabled_are_you</source>
-        <translation>You have Tor enabled, are you sure you want to open this webpage?</translation>
+        <translation>Torが有効です。本当にこのページを開きますか？</translation>
     </message>
     <message>
         <source>id_you_must_first_log_out_before</source>
@@ -4056,55 +4424,59 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_you_must_save_this_mnemonic_now</source>
-        <translation>このMnemonicを直ちに保存して下さい</translation>
+        <translation>このニモニックを直ちに保存して下さい</translation>
     </message>
     <message>
         <source>id_you_only_have_one_twofactor</source>
-        <translation>2段階認証の一つだけ設定されています。</translation>
+        <translation>2段階認証手段が1つしか設定されていません。</translation>
+    </message>
+    <message>
+        <source>id_you_will_be_asked_to_enter_your</source>
+        <translation>You will be asked to enter your passphrase at every login.</translation>
     </message>
     <message>
         <source>id_you_will_need_to_reenter_your</source>
-        <translation>PINを設定しない場合、ログインするにはもう一度mnemonicを入力しなければなりません。続けるには&quot;OK&quot;を押してください。 </translation>
+        <translation>PINを設定しない場合、ログインするにはもう一度ニモニックを入力しなければなりません。続けるには&quot;OK&quot;を押してください。</translation>
     </message>
     <message>
         <source>id_you_will_see_your_coins_here</source>
-        <translation>You will see your coins here</translation>
+        <translation>コインがここに表示されます</translation>
     </message>
     <message>
         <source>id_youll_need_to_back_up_your</source>
-        <translation>You’ll need to back up your recovery phrase before you can send or receive funds, but you can still check out the wallet for now.</translation>
+        <translation>リカバリーフレーズをバックアップするまで送受信はできませんが、その前にウォレット内を探検することができます。</translation>
     </message>
     <message>
         <source>id_youll_need_your_pin_to_log_in</source>
-        <translation>You&apos;ll need your PIN to log in to your wallet. This PIN secures the wallet on this device only.</translation>
+        <translation>PINがないとウォレットにログインできません。設定したPINはこのデバイス上でのみウォレットを保護します。</translation>
     </message>
     <message>
         <source>id_youll_need_your_recovery_phrase</source>
-        <translation>You&apos;ll need your recovery phrase to restore this wallet</translation>
+        <translation>このウォレットの復元にはリカバリーフレーズが必要です</translation>
     </message>
     <message>
         <source>id_youll_see_your_coins_here_when</source>
-        <translation>You&apos;ll see your coins here when you receive funds</translation>
+        <translation>送金を受け取るとここにコインが表示されます</translation>
     </message>
     <message>
         <source>id_your_2fa_expires_so_that_if_you</source>
-        <translation>Your 2FA expires, so that if you lose access to your 2FA method, or the Blockstream Green service becomes unavailable, you can always recover your bitcoin using this open source tool</translation>
+        <translation>2段階認証が失効することで、2段階認証手段を失ったりBlockstream Greenがサービスを終了した場合でもご自身のビットコインをこのオープンソースのツールを使って回収することができます。</translation>
     </message>
     <message>
         <source>id_your_device_was_disconnected</source>
-        <translation>Your device was disconnected</translation>
+        <translation>デバイスの接続が解除されました</translation>
     </message>
     <message>
         <source>id_your_favourite_exchange_rate_is</source>
-        <translation>Your favourite exchange rate is not available at the moment. You can change it from settings.</translation>
+        <translation>ご指定の交換レートが取得できませんでした。設定から変更することができます。</translation>
     </message>
     <message>
         <source>id_your_funds_are_secured_by</source>
-        <translation>Your funds are secured by multiple keys, with one key on your device and another on our servers protected by your 2FA. Select this option for enhanced security.</translation>
+        <translation>貴方の資金を複数の秘密鍵で管理します。１つはデバイス上、１つは2段階認証で保護され弊社のサーバーに保管されます。高度なセキュリティを求める方向け。</translation>
     </message>
     <message>
         <source>id_your_funds_are_secured_by_a</source>
-        <translation>Your funds are secured by a single key held on your device. Simpler to set up and operate than multisig. If in doubt, select this option.</translation>
+        <translation>貴方の資金はデバイス上の１つの鍵で管理されます。マルチシグより生成や利用が簡単です。何のことかわからない場合、これがおすすめです。</translation>
     </message>
     <message>
         <source>id_your_green_wallet_is_now_ready</source>
@@ -4112,7 +4484,7 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_your_ios_device_might_not_be</source>
-        <translation>Your iOS device might not be supported</translation>
+        <translation>貴方のiOSデバイスは非対応の可能性があります</translation>
     </message>
     <message>
         <source>id_your_notifications_will_be</source>
@@ -4120,7 +4492,7 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_your_pin_or_your_mnemonic_will</source>
-        <translation>ウォレットにアクセスするにはPINもしくはmnemonicが必要です。</translation>
+        <translation>ウォレットにアクセスするにはPINもしくはニモニックが必要です。</translation>
     </message>
     <message>
         <source>id_your_s_sent_to_s_has_been</source>
@@ -4132,19 +4504,19 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_your_twofactor_threshold_is_s</source>
-        <translation>Your Two-Factor threshold is %1.</translation>
+        <translation>あなたの2段階認証の閾値は %1です。</translation>
     </message>
     <message>
         <source>id_your_wallet_backup_is_made_of</source>
-        <translation>Your wallet backup is made of 24 words, also known as your mnemonic. Make sure you have a backup and keep it safe. Anyone who finds it can steal your money. You can use it to restore your Blockstream Green wallet on another device in case yours is lost, damaged or stolen.</translation>
+        <translation>ウォレットのバックアップは24単語で、ニモニックともいいます。書き留めて安全に保管してください。ニモニックが流出すると資金も盗まれてしまいます。ニモニックはデバイスの紛失、故障、盗難の際に新しいデバイスにBlockstream Greenウォレットを復旧するのに必要です。</translation>
     </message>
     <message>
         <source>id_your_wallet_is_locked_for_a</source>
-        <translation>Your wallet is locked for a Two-Factor Authentication reset. The reset will be completed in %1 days.</translation>
+        <translation>2段階認証のリセットのためにウォレットがロックされています。リセットは残り%1日で完了します。</translation>
     </message>
     <message>
         <source>id_your_wallet_is_locked_under_2fa</source>
-        <translation>Your wallet is locked under 2FA dispute.</translation>
+        <translation>あなたのウォレットは2段階認証リセットの係争中につきロックされています。</translation>
     </message>
     <message>
         <source>id_your_wallet_is_not_yet_fully</source>
@@ -4153,11 +4525,11 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_your_watchonly_username_and</source>
-        <translation>Your watch-only username and password will be stored un-encrypted on this device. If your device is compromised third parties can get access to your transaction history. Press &quot;OK&quot; to continue.</translation>
+        <translation>読み取りモードのアクセスに使用するユーザー名とパスワードはデバイス上に平文で保管されます。デバイスに不正アクセスがあると第三者に取引履歴を閲覧される可能性があります。よろしければ続行してください。</translation>
     </message>
     <message>
         <source>id_youve_entered_an_invalid_pin</source>
-        <translation>You&apos;ve entered an invalid PIN too many times.</translation>
+        <translation>無効なPINの入力回数が上限に達しました。</translation>
     </message>
 </context>
 </TS>

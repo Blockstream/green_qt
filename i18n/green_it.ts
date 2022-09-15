@@ -13,15 +13,19 @@
         <translation>12 mesi (51840 blocchi)</translation>
     </message>
     <message>
+        <source>id_12_words</source>
+        <translation>12 parole</translation>
+    </message>
+    <message>
         <source>id_15_months_65535_blocks</source>
         <translation>15 mesi (65535 blocchi)</translation>
     </message>
     <message>
         <source>id_1_double_check_all_of_your</source>
-        <translation>1. Controlla la tua recovery phrase parola per parola, sono tutte corrette?
+        <translation>1. Ricontrolla la tua recovery phrase. Le parole sono tutte corrette?
 2. L&apos;ordine delle parole è importante! Assicurati di averle digitate nell&apos;ordine corretto.
 
-Se questi consigli non sono di aiuto, o non possiedi una recovery phrase da 12, 24 or 27 parole, consulta il nostro help center.</translation>
+Se questi consigli non ti sono di aiuto, o se non possiedi una recovery phrase da 12, 24 o 27 parole, consulta il nostro help center.</translation>
     </message>
     <message>
         <source>id_1d_2s_ago</source>
@@ -37,7 +41,11 @@ Se questi consigli non sono di aiuto, o non possiedi una recovery phrase da 12, 
     </message>
     <message>
         <source>id_1s_twofactor_setup</source>
-        <translation>%1 Two-Factor setup</translation>
+        <translation>%1 Autenticazione Due Fattori</translation>
+    </message>
+    <message>
+        <source>id_24_words</source>
+        <translation>24 parole</translation>
     </message>
     <message>
         <source>id_2_hours</source>
@@ -65,7 +73,11 @@ Se questi consigli non sono di aiuto, o non possiedi una recovery phrase da 12, 
     </message>
     <message>
         <source>id_2fa_threshold</source>
-        <translation>Limite 2FA</translation>
+        <translation>Soglia 2FA</translation>
+    </message>
+    <message>
+        <source>id_2of3</source>
+        <translation>2of3</translation>
     </message>
     <message>
         <source>id_2of3_account</source>
@@ -77,7 +89,7 @@ Se questi consigli non sono di aiuto, o non possiedi una recovery phrase da 12, 
     </message>
     <message>
         <source>id_5_seconds_minimum</source>
-        <translation>minimo 5 secondi</translation>
+        <translation>5 secondi minimo</translation>
     </message>
     <message>
         <source>id_6_months_25920_blocks</source>
@@ -85,23 +97,23 @@ Se questi consigli non sono di aiuto, o non possiedi una recovery phrase da 12, 
     </message>
     <message>
         <source>id_a_2of3_account_requires_two_out</source>
-        <translation>A 2of3 account requires two out of three signatures to spend coins. The third signature is from a backup key known only to you. This gives you the security benefits of a standard account, while still allowing you to move your coins independently at any point in time.</translation>
+        <translation>Un account 2of3 richiede due firme su tre per poter spendere coin La terza firma proviene da una chiave di backup che solo tu conosci. In questo modo puoi avere tutti i vantaggi di un account standard, continuando a trasferire coin in modo indipendente e in qualsiasi momento.</translation>
     </message>
     <message>
         <source>id_a_new_transaction_has_just</source>
-        <translation>Hai appena ricevuto una transazione.</translation>
+        <translation>Hai appena ricevuto una transazione nel tuo wallet.</translation>
     </message>
     <message>
         <source>id_a_newer_version_of_blockstream</source>
-        <translation>Una nuova versione di Blockstream Green è disponibile ora</translation>
+        <translation>É disponibile una nuova versione di Blockstream Green </translation>
     </message>
     <message>
         <source>id_a_screen_lock_must_be_enabled</source>
-        <translation>Necessario abilitare un blocco schermo nelle impostazioni Android</translation>
+        <translation>È necessario abilitare il blocco schermo dalle impostazioni di Android</translation>
     </message>
     <message>
         <source>id_a_wallet_is_detected_on_this</source>
-        <translation>Wallet presente sul dispositivo:</translation>
+        <translation>É stato trovato un wallet sul dispositivo:</translation>
     </message>
     <message>
         <source>id_about</source>
@@ -113,11 +125,15 @@ Se questi consigli non sono di aiuto, o non possiedi una recovery phrase da 12, 
     </message>
     <message>
         <source>id_access</source>
-        <translation>Accesso</translation>
+        <translation>Accedi</translation>
     </message>
     <message>
         <source>id_account</source>
         <translation>ACCOUNT</translation>
+    </message>
+    <message>
+        <source>id_account_extended_public_keys</source>
+        <translation>Extended public keys dell&apos;account</translation>
     </message>
     <message>
         <source>id_account_id</source>
@@ -129,7 +145,7 @@ Se questi consigli non sono di aiuto, o non possiedi una recovery phrase da 12, 
     </message>
     <message>
         <source>id_account_type</source>
-        <translation>Tipo di Account</translation>
+        <translation>Tipo Account</translation>
     </message>
     <message>
         <source>id_accounts</source>
@@ -149,39 +165,43 @@ Se questi consigli non sono di aiuto, o non possiedi una recovery phrase da 12, 
     </message>
     <message>
         <source>id_add_a_note_only_you_can_see_it</source>
-        <translation>Aggiungi una nota (solo tu puoi vederla).</translation>
+        <translation>Aggiungi una nota (visibile solo a te).</translation>
     </message>
     <message>
         <source>id_add_a_pgp_public_key_to_receive</source>
-        <translation>Aggiungi una chiave pubblica PGP per ricevere email crittate e preservare la tua privacy</translation>
+        <translation>Aggiungi una chiave pubblica PGP per ricevere email criptate e proteggere la tua privacy</translation>
     </message>
     <message>
         <source>id_add_amount</source>
-        <translation>Inserisci Importo</translation>
+        <translation>Inserisci importo</translation>
     </message>
     <message>
         <source>id_add_amount_optional</source>
-        <translation>Aggiungi un ammontare (opzionale)</translation>
+        <translation>Aggiungi importo (opzionale)</translation>
     </message>
     <message>
         <source>id_add_an_amp_wallet</source>
-        <translation>Aggiungi un wallet AMP</translation>
+        <translation>Aggiungi wallet AMP</translation>
     </message>
     <message>
         <source>id_add_another_wallet</source>
-        <translation>Aggiungi un wallet</translation>
+        <translation>Aggiungi wallet</translation>
     </message>
     <message>
         <source>id_add_custom_network_by_qr_code</source>
-        <translation>Aggiungi un network custom con un QR Code</translation>
+        <translation>Aggiungi custom network tramite QR Code</translation>
     </message>
     <message>
         <source>id_add_custom_network_by_url</source>
-        <translation>Aggiungi un network custom con un URL</translation>
+        <translation>Aggiungi custom network tramite URL</translation>
     </message>
     <message>
         <source>id_add_new_account</source>
-        <translation>Aggiungi Nuovo Account</translation>
+        <translation>Aggiungi nuovo account</translation>
+    </message>
+    <message>
+        <source>id_add_recipient</source>
+        <translation>Aggiungi destinatario</translation>
     </message>
     <message>
         <source>id_add_wallet</source>
@@ -193,7 +213,7 @@ Se questi consigli non sono di aiuto, o non possiedi una recovery phrase da 12, 
     </message>
     <message>
         <source>id_additional_security</source>
-        <translation>Sicurezza Aggiuntiva</translation>
+        <translation>Sicurezza aggiuntiva</translation>
     </message>
     <message>
         <source>id_address</source>
@@ -209,11 +229,11 @@ Se questi consigli non sono di aiuto, o non possiedi una recovery phrase da 12, 
     </message>
     <message>
         <source>id_address_verified</source>
-        <translation>Indirizzo validato!</translation>
+        <translation>Indirizzo verificato!</translation>
     </message>
     <message>
         <source>id_address_was_filled_by_a_payment</source>
-        <translation>Address was filled by a Payment URI</translation>
+        <translation>Indirizzo compilato tramite URI di pagamento</translation>
     </message>
     <message>
         <source>id_addresses</source>
@@ -221,7 +241,7 @@ Se questi consigli non sono di aiuto, o non possiedi una recovery phrase da 12, 
     </message>
     <message>
         <source>id_advanced</source>
-        <translation>Avanzate</translation>
+        <translation>Impostazioni avanzate</translation>
     </message>
     <message>
         <source>id_advanced_network_settings</source>
@@ -229,11 +249,11 @@ Se questi consigli non sono di aiuto, o non possiedi una recovery phrase da 12, 
     </message>
     <message>
         <source>id_advanced_options_for_your_third</source>
-        <translation>Opzioni avanzate per la terza chiave</translation>
+        <translation>Opzioni avanzate per terza chiave di recupero</translation>
     </message>
     <message>
         <source>id_all</source>
-        <translation>Tutto</translation>
+        <translation>Tutti</translation>
     </message>
     <message>
         <source>id_all_assets</source>
@@ -241,7 +261,7 @@ Se questi consigli non sono di aiuto, o non possiedi una recovery phrase da 12, 
     </message>
     <message>
         <source>id_all_coins</source>
-        <translation>(All coins)</translation>
+        <translation>(Tutti i coin)</translation>
     </message>
     <message>
         <source>id_all_networks</source>
@@ -249,23 +269,35 @@ Se questi consigli non sono di aiuto, o non possiedi una recovery phrase da 12, 
     </message>
     <message>
         <source>id_all_of_the_accounts_in_your</source>
-        <translation>Tutti gli account del tuo wallet devono essere vuoti prima di eliminarlo</translation>
+        <translation>Tutti gli account del tuo wallet devono essere vuoti prima di essere eliminati.</translation>
     </message>
     <message>
         <source>id_all_the_coins_received_or</source>
-        <translation>Tutte le coins ricevute o create come resto</translation>
+        <translation>Coin ricevuti o creati come resto.</translation>
     </message>
     <message>
         <source>id_all_wallets</source>
         <translation>Tutti i wallet</translation>
     </message>
     <message>
+        <source>id_allow_collection</source>
+        <translation>Consenti raccolta dati</translation>
+    </message>
+    <message>
+        <source>id_allow_data_collection</source>
+        <translation>Consenti raccolta dati</translation>
+    </message>
+    <message>
         <source>id_allows_you_to_quickly_check</source>
-        <translation>Permette di controllare il tuo bilancio, ricevere fondi o sweep di un paper wallet. Non puoi inviare fondi in modalità watch-only.</translation>
+        <translation>Permette di controllare il tuo saldo, ricevere fondi o eseguire lo sweep di un paper wallet. Non è possibile inviare fondi in modalità watch only.</translation>
     </message>
     <message>
         <source>id_always</source>
         <translation>Sempre</translation>
+    </message>
+    <message>
+        <source>id_always_ask</source>
+        <translation>Always ask</translation>
     </message>
     <message>
         <source>id_amount</source>
@@ -273,7 +305,11 @@ Se questi consigli non sono di aiuto, o non possiedi una recovery phrase da 12, 
     </message>
     <message>
         <source>id_amount_in_s</source>
-        <translation>Ammontare in %1</translation>
+        <translation>Importo in %1</translation>
+    </message>
+    <message>
+        <source>id_amp</source>
+        <translation>AMP</translation>
     </message>
     <message>
         <source>id_amp_account</source>
@@ -281,11 +317,11 @@ Se questi consigli non sono di aiuto, o non possiedi una recovery phrase da 12, 
     </message>
     <message>
         <source>id_amp_accounts_are_only_available</source>
-        <translation>Gli account AMP sono disponibile solo su wallet Liquid. Potrebbe essere necessario fornire l&apos;ID del tuo account ad un emettitore per ricevere un asset AMP</translation>
+        <translation>Gli account AMP sono disponibili solo su wallet Liquid. Potresti dover fornire l&apos;ID del tuo account ad un emettitore per ricevere un asset AMP</translation>
     </message>
     <message>
         <source>id_amp_id</source>
-        <translation>AMP ID</translation>
+        <translation>ID AMP </translation>
     </message>
     <message>
         <source>id_amp_wallet</source>
@@ -293,7 +329,11 @@ Se questi consigli non sono di aiuto, o non possiedi una recovery phrase da 12, 
     </message>
     <message>
         <source>id_another_2fa_method_is_already</source>
-        <translation>Un altro metodo 2FA è già attivo. Autorizza questo cambiamento con 2FA</translation>
+        <translation>É già attivo un altro metodo 2FA. Conferma di voler autorizzare la modifica tramite 2FA.</translation>
+    </message>
+    <message>
+        <source>id_any_wallet_found_will_be</source>
+        <translation>I wallet trovati verranno mostrati qui.</translation>
     </message>
     <message>
         <source>id_app_settings</source>
@@ -301,23 +341,31 @@ Se questi consigli non sono di aiuto, o non possiedi una recovery phrase da 12, 
     </message>
     <message>
         <source>id_archive</source>
-        <translation>Archivia</translation>
+        <translation>Archivio</translation>
+    </message>
+    <message>
+        <source>id_archive_account</source>
+        <translation>Archivia account</translation>
     </message>
     <message>
         <source>id_archived</source>
-        <translation>Archiviato</translation>
+        <translation>Archiviati</translation>
     </message>
     <message>
         <source>id_archived_accounts</source>
         <translation>Account archiviati</translation>
     </message>
     <message>
+        <source>id_are_you_sure_you_want_to_remove</source>
+        <translation>Sei sicuro di voler rimuovere il destinatario?</translation>
+    </message>
+    <message>
         <source>id_are_you_sure_you_want_to_view</source>
-        <translation>Sei sicuro di voler vedere la transazione usando %1?</translation>
+        <translation>Sei sicuro di voler visualizzare la transazione utilizzando %1?</translation>
     </message>
     <message>
         <source>id_as_easy_as_snapping_a_photo</source>
-        <translation>Facile come fare una foto. Se hai già un wallet, scansiona la tua recovery phrase dalle impostazioni.</translation>
+        <translation>Facile come scattare una foto dal tuo telefono. Se hai già un wallet, scansiona la tua recovery phrase dalle impostazioni.</translation>
     </message>
     <message>
         <source>id_asset</source>
@@ -325,15 +373,15 @@ Se questi consigli non sono di aiuto, o non possiedi una recovery phrase da 12, 
     </message>
     <message>
         <source>id_asset_details</source>
-        <translation>Dettaglio Asset</translation>
+        <translation>Dettagli Asset</translation>
     </message>
     <message>
         <source>id_asset_icons_are_missing_try</source>
-        <translation>Le icone degli asset non sono disponibili, prova a ricaricarle.</translation>
+        <translation>Icone asset mancanti. Ricarica.</translation>
     </message>
     <message>
         <source>id_asset_id</source>
-        <translation>Asset ID</translation>
+        <translation>ID asset </translation>
     </message>
     <message>
         <source>id_asset_name</source>
@@ -345,15 +393,19 @@ Se questi consigli non sono di aiuto, o non possiedi una recovery phrase da 12, 
     </message>
     <message>
         <source>id_assets_cannot_be_used_on_bitcoin</source>
-        <translation>Altri assets non possono essere usati su Bitcoin</translation>
+        <translation>Gli asset non possono essere utilizzati su Bitcoin</translation>
+    </message>
+    <message>
+        <source>id_at_least_8_characters_required</source>
+        <translation>Richiesti almeno 8 caratteri</translation>
     </message>
     <message>
         <source>id_attempts_remaining_d</source>
-        <translation>Tentativi rimasti: %1</translation>
+        <translation>Tentativi rimanenti: %1</translation>
     </message>
     <message>
         <source>id_authenticate_to_view_the</source>
-        <translation>Autenticati per vedere la recovery phrase</translation>
+        <translation>Autenticare per visualizzare la recovery phrase</translation>
     </message>
     <message>
         <source>id_authentication_error_s</source>
@@ -369,11 +421,11 @@ Se questi consigli non sono di aiuto, o non possiedi una recovery phrase da 12, 
     </message>
     <message>
         <source>id_authenticator_qr_code</source>
-        <translation>Authenticator QR Code</translation>
+        <translation>QR Code Authenticator </translation>
     </message>
     <message>
         <source>id_authenticator_secret_key</source>
-        <translation>Chiave segreta per Authenticator</translation>
+        <translation>Chiave segreta Authenticator</translation>
     </message>
     <message>
         <source>id_auto_logout_timeout</source>
@@ -381,15 +433,19 @@ Se questi consigli non sono di aiuto, o non possiedi una recovery phrase da 12, 
     </message>
     <message>
         <source>id_auto_logout_timeout_expired</source>
-        <translation>Timeout per inattività</translation>
+        <translation>Timeout auto logout scaduto</translation>
     </message>
     <message>
         <source>id_autolock_after</source>
-        <translation>Autolock Dopo</translation>
+        <translation>Autolock dopo</translation>
     </message>
     <message>
         <source>id_available</source>
         <translation>Disponibile</translation>
+    </message>
+    <message>
+        <source>id_available_funds_s</source>
+        <translation>Fondi disponibili %1</translation>
     </message>
     <message>
         <source>id_back</source>
@@ -397,23 +453,23 @@ Se questi consigli non sono di aiuto, o non possiedi una recovery phrase da 12, 
     </message>
     <message>
         <source>id_back_up_recovery_phrase</source>
-        <translation>Fai un backup della Recovery Phrase</translation>
+        <translation>Back up recovery phrase</translation>
     </message>
     <message>
         <source>id_backup_the_recovery_mnemonic</source>
-        <translation>Conserva sia la mnemonica sia la xpub per poter recuperare i fondi di questo account 2of3.</translation>
+        <translation>Esegui il backup della recovery mnemonic e recovery xpub per poter recuperare i fondi dal tuo account 2of3.</translation>
     </message>
     <message>
         <source>id_backup_your_mnemonic_before</source>
-        <translation>Fai un backup della tua mnemonica prima di rimuovere il wallet da questo dispositivo.</translation>
+        <translation>Esegui il backup della tua mnemonic prima di rimuovere il wallet da questo dispositivo.</translation>
     </message>
     <message>
         <source>id_be_aware_other_apps_can_read_or</source>
-        <translation>Attenzione, altre applicazioni potrebbero leggere o modificare ciò che hai copiato</translation>
+        <translation>Attenzione, altre applicazioni potrebbero leggere o modificare la clipboard</translation>
     </message>
     <message>
         <source>id_be_sure_your_recovery_phrase_is</source>
-        <translation>Assicurati di avere una copia della recovery phrase prima di rimuovere questo wallet.</translation>
+        <translation>Assicurati di avere effettuato il back up della tua recovery phrase prima di rimuovere il wallet.</translation>
     </message>
     <message>
         <source>id_biometric_login_is_disabled</source>
@@ -425,43 +481,51 @@ Se questi consigli non sono di aiuto, o non possiedi una recovery phrase da 12, 
     </message>
     <message>
         <source>id_biometrics_authentication</source>
-        <translation>Biometrics Authentication</translation>
+        <translation>Autenticazione biometrica</translation>
+    </message>
+    <message>
+        <source>id_bip39_passphrase</source>
+        <translation>BIP39 Passphrase</translation>
+    </message>
+    <message>
+        <source>id_bip39_passphrase_login</source>
+        <translation>BIP39 Passphrase login</translation>
     </message>
     <message>
         <source>id_bip49_accounts_allow_you_to</source>
-        <translation>BIP49 accounts allow you to segregate funds, and to receive on wrapped segwit addresses, thus ensuring the highest backwards compatibility when receiving funds from anyone on the network.</translation>
+        <translation>Gli account BIP49 ti consentono di segregare fondi e ricevere indirizzi su wrapped segwit, garantendo così la massima retrocompatibilità nel ricevere fondi da qualsiasi utente del network.</translation>
     </message>
     <message>
         <source>id_bip84_accounts_allow_you_to</source>
-        <translation>BIP84 accounts allow you to segregate your funds, and to receive on bech32 native segwit addresses. This account type ensures cheaper transactions when sending funds, but not all services support bech32 addresses yet.</translation>
+        <translation>Gli account BIP84 ti consentono di segregare fondi e ricevere indirizzi native segwit su bech32. Questo tipo di account garantisce transazioni più vantaggiose quando si inviano fondi, anche se non tutti i servizi supportano ancora indirizzi bech32.</translation>
     </message>
     <message>
         <source>id_bitcoin_and_liquid</source>
-        <translation>Bitcoin and Liquid</translation>
+        <translation>Bitcoin e Liquid</translation>
     </message>
     <message>
         <source>id_bitcoin_denomination</source>
-        <translation>Denominazione in bitcoin</translation>
+        <translation>Denominazione Bitcoin</translation>
     </message>
     <message>
         <source>id_bitcoin_electrum_server</source>
-        <translation>Bitcoin Electrum server</translation>
+        <translation>Server Bitcoin Electrum </translation>
     </message>
     <message>
         <source>id_bitcoin_is_the_worlds_leading</source>
-        <translation>Bitcoin è la più famosa rete P2P per crittovaluta. Seleziona per inviare e ricevere bitcoin.</translation>
+        <translation>Bitcoin è la rete di criptovalute P2P leader nel mondo. Seleziona per inviare e ricevere bitcoin.</translation>
     </message>
     <message>
         <source>id_bitcoin_testnet_and_liquid</source>
-        <translation>Bitcoin Testnet and Liquid Testnet</translation>
+        <translation>Testnet Bitcoin e Testnet Liquid </translation>
     </message>
     <message>
         <source>id_bitcoin_wallet</source>
-        <translation>Il wallet Bitcoin.</translation>
+        <translation>Wallet Bitcoin.</translation>
     </message>
     <message>
         <source>id_bitcoin_wallets</source>
-        <translation>Bitcoin wallets</translation>
+        <translation>Wallet Bitcoin</translation>
     </message>
     <message>
         <source>id_block</source>
@@ -472,8 +536,12 @@ Se questi consigli non sono di aiuto, o non possiedi una recovery phrase da 12, 
         <translation>Blocco %1</translation>
     </message>
     <message>
+        <source>id_block_height</source>
+        <translation>Altezza Blocco</translation>
+    </message>
+    <message>
         <source>id_block_height_1d</source>
-        <translation>%1Altezza blocchi: </translation>
+        <translation>Altezza blocco: %1 </translation>
     </message>
     <message>
         <source>id_blocks</source>
@@ -485,7 +553,7 @@ Se questi consigli non sono di aiuto, o non possiedi una recovery phrase da 12, 
     </message>
     <message>
         <source>id_blockstream_devices</source>
-        <translation>Blockstream Devices</translation>
+        <translation>Dispositivi Blockstream</translation>
     </message>
     <message>
         <source>id_blockstream_does_not_have</source>
@@ -493,11 +561,11 @@ Se questi consigli non sono di aiuto, o non possiedi una recovery phrase da 12, 
     </message>
     <message>
         <source>id_blockstream_green_needs_access</source>
-        <translation>Blockstream Green needs access to Bluetooth in order to connect to hardware wallets. Location data is not used or kept by Blockstream.</translation>
+        <translation>Blockstream Green richiede l&apos;accesso a Bluetooth per potersi connettere a un hardware wallet. Blockstream non utilizza né archivia dati di localizzazione.</translation>
     </message>
     <message>
         <source>id_blockstream_green_supports_both</source>
-        <translation>Blockstream Green supporta Bitcoin e Liquid Network. Non preoccuparti, potrai creare un wallet per una rete diversa in qualsiasi momento.</translation>
+        <translation>Blockstream Green supporta Bitcoin e Liquid Network. Non preoccuparti, potrai creare un altro wallet per una rete diversa in qualsiasi momento.</translation>
     </message>
     <message>
         <source>id_blockstream_greennsimple_and</source>
@@ -514,11 +582,11 @@ Facile e Sicuro</translation>
     </message>
     <message>
         <source>id_btchip_is_not_set_up_please_set</source>
-        <translation>BTChip non è impostato. Per favore  impostalo usando l&apos;applicazione desktop per riuscire ad usarlo.</translation>
+        <translation>BTChip non è inizializzato. Ti preghiamo di inizializzarlo utilizzando un client desktop per poterlo utilizzare.</translation>
     </message>
     <message>
         <source>id_by_proceeding_to_the_next_steps</source>
-        <translation>Procedendo al passaggio successivo accetti i %1</translation>
+        <translation>Procedendo ai passaggi successivi acconsenti a %1</translation>
     </message>
     <message>
         <source>id_cable</source>
@@ -538,19 +606,19 @@ Facile e Sicuro</translation>
     </message>
     <message>
         <source>id_cancel_2fa_reset</source>
-        <translation>Cancel 2FA reset</translation>
+        <translation>Annulla reset 2FA</translation>
     </message>
     <message>
         <source>id_cancel_a_reset_to_unlock_your</source>
-        <translation>Annulla il reset e sblocca il tuo wallet se hai recuperato l&apos; accesso a uno dei tuoi metodi di Autenticazione a due Fattori</translation>
+        <translation>Annulla il reset e sblocca il tuo wallet se hai recuperato l&apos;accesso a un vecchio metodo di Autenticazione a Due Fattori</translation>
     </message>
     <message>
         <source>id_cancel_twofactor_reset</source>
-        <translation>Annulla il reset del Secondo Fattore</translation>
+        <translation>Annulla reset Due Fattori</translation>
     </message>
     <message>
         <source>id_cannot_remove_enabled_network</source>
-        <translation>Impossibile rimuovere il network abilitato, per piacere disabilitalo prima.</translation>
+        <translation>Impossibile rimuovere il network abilitato. Ti preghiamo di disabilitarlo.</translation>
     </message>
     <message>
         <source>id_cant_connect_to_this_url</source>
@@ -558,27 +626,31 @@ Facile e Sicuro</translation>
     </message>
     <message>
         <source>id_change</source>
-        <translation>Change</translation>
+        <translation>Resto</translation>
     </message>
     <message>
         <source>id_change_address</source>
-        <translation>Change address</translation>
+        <translation>Indirizzo per il resto</translation>
     </message>
     <message>
         <source>id_change_pin</source>
-        <translation>Cambia il PIN</translation>
+        <translation>Modifica PIN</translation>
     </message>
     <message>
         <source>id_changing_reference_exchange</source>
-        <translation>Changing reference exchange rate will reset your 2FA threshold to 0. Remember to adjust the 2FA threshold after spending.</translation>
+        <translation>Modificando il tasso di cambio di riferimento resetterai la tua soglia 2FA a 0. Ricorda di ripristinare la soglia 2FA una volta speso. </translation>
+    </message>
+    <message>
+        <source>id_check_device</source>
+        <translation>Controlla il dispositivo</translation>
     </message>
     <message>
         <source>id_check_for_updates</source>
-        <translation>Check for updates</translation>
+        <translation>Controlla gli update</translation>
     </message>
     <message>
         <source>id_check_for_updates_on_startup</source>
-        <translation>Check for updates on startup</translation>
+        <translation>Controlla gli update sull&apos;avvio</translation>
     </message>
     <message>
         <source>id_check_your_backup</source>
@@ -598,43 +670,55 @@ Facile e Sicuro</translation>
     </message>
     <message>
         <source>id_choose_method_to_authorize_the</source>
-        <translation>Selezione un metodo per autorizzare l&apos;azione</translation>
+        <translation>Scegli un metodo per autorizzare l&apos;azione</translation>
     </message>
     <message>
         <source>id_choose_recovery_phrase_length</source>
-        <translation>Choose recovery phrase length</translation>
+        <translation>Scegli la lunghezza della tua recovery phrase</translation>
     </message>
     <message>
         <source>id_choose_security_policy</source>
-        <translation>Choose Security Policy</translation>
+        <translation>Scegli una Security Policy</translation>
     </message>
     <message>
         <source>id_choose_the_electrum_servers_you</source>
-        <translation>Choose the Electrum servers you trust</translation>
+        <translation>Scegli il tuo server Electrum di fiducia</translation>
+    </message>
+    <message>
+        <source>id_choose_the_security_policy_that</source>
+        <translation>Scegli la security policy del tuo wallet</translation>
+    </message>
+    <message>
+        <source>id_choose_the_security_policy_you</source>
+        <translation>Scegli la security policy del wallet che vuoi ripristinare</translation>
     </message>
     <message>
         <source>id_choose_this_version_to_connect</source>
-        <translation>Choose this version to connect to your Blockstream Jade with both a usb cable and wireless</translation>
+        <translation>Seleziona questa versione per connetterti al tuo Blockstream Jade sia con un cavo usb sia in modalità wireless</translation>
     </message>
     <message>
         <source>id_choose_this_version_to_disable</source>
-        <translation>Choose this version to disable all radio connections on your Blockstream Jade. This will make your Blockstream Jade incompatible with iOS devices</translation>
+        <translation>Seleziona questa versione per disabilitare tutte le connessioni radio su Blockstream Jade. Ciò renderà però Blockstream Jade incompatibile con dispositivi iOS.</translation>
     </message>
     <message>
         <source>id_choose_twofactor_authentication</source>
-        <translation>Scegli metodo di Autenticazione</translation>
+        <translation>Seleziona metodo di Autenticazione a due Fattori</translation>
     </message>
     <message>
         <source>id_choose_watchonly</source>
-        <translation>Choose Watch-Only</translation>
+        <translation>Seleziona modalità Watch-Only</translation>
     </message>
     <message>
         <source>id_choose_your_network</source>
-        <translation>Scegli la rete</translation>
+        <translation>Seleziona rete</translation>
     </message>
     <message>
         <source>id_clear</source>
         <translation>Cancella</translation>
+    </message>
+    <message>
+        <source>id_clear_cache</source>
+        <translation>Clear cache</translation>
     </message>
     <message>
         <source>id_click_to_copy</source>
@@ -642,47 +726,51 @@ Facile e Sicuro</translation>
     </message>
     <message>
         <source>id_click_to_receive_an_email_with</source>
-        <translation>Clicca per ricevere una email contenente i tuoi dati per il recupero del wallet</translation>
+        <translation>Clicca per ricevere un&apos;e-mail con i tuoi dati di recupero criptati</translation>
     </message>
     <message>
         <source>id_code</source>
-        <translation>Code</translation>
+        <translation>Codice</translation>
+    </message>
+    <message>
+        <source>id_coin</source>
+        <translation>Coin</translation>
     </message>
     <message>
         <source>id_coins</source>
-        <translation>Coins</translation>
+        <translation>Coin</translation>
     </message>
     <message>
         <source>id_coins_for_which_2fa_protection</source>
-        <translation>Coins for which 2FA protection is expired.</translation>
+        <translation>Coin con protezione 2FA scaduta</translation>
     </message>
     <message>
         <source>id_coins_locked</source>
-        <translation>Coins locked</translation>
+        <translation>Coin bloccati/protetti da chiave</translation>
     </message>
     <message>
         <source>id_coins_protected_by_the_legacy</source>
-        <translation>Coins protected by the legacy script recoverable with your nlocktimes.zip file.</translation>
+        <translation>Coin protetti da legacy script recuperabili mediante file nlocktimes.zip.</translation>
     </message>
     <message>
         <source>id_coins_protected_by_the_new</source>
-        <translation>Coins protected by the new script with embedded 2FA expiry through CheckSequenceVerify.</translation>
+        <translation>Coin protetti da nuovo script con scadenza 2FA incorporata mediante CheckSequenceVerify.</translation>
     </message>
     <message>
         <source>id_coins_received_or_created</source>
-        <translation>Coins received or created before SegWit was activated.</translation>
+        <translation>Coin ricevuti o creati prima dell&apos;attivazione di SegWit.</translation>
     </message>
     <message>
         <source>id_coins_unlocked</source>
-        <translation>Coins unlocked</translation>
+        <translation>Coin sbloccati/non protetti da chiave</translation>
     </message>
     <message>
         <source>id_coins_whose_asset_and_amount</source>
-        <translation>Coins whose asset and amount are publicly visible.</translation>
+        <translation>Coin con asset e importo visibili pubblicamente.</translation>
     </message>
     <message>
         <source>id_coins_with_a_value_lower_than</source>
-        <translation>Coins with a value lower than 1092 satoshis that are uneconomic to spend; these coins can be generated by your wallet as change or sent to you by third parties trying to spam or deanonymize your wallet.</translation>
+        <translation>Coin con valore inferiore a 1092 satoshi non vantaggiose da spendere/utilizzare. Questi coin possono essere generati dal tuo wallet come cambio o esserti inviati da terzi nel tentativo di mandare spam o deanonimizzare il tuo wallet.</translation>
     </message>
     <message>
         <source>id_collapse_sidebar</source>
@@ -690,7 +778,7 @@ Facile e Sicuro</translation>
     </message>
     <message>
         <source>id_coming_soon</source>
-        <translation>Coming Soon!</translation>
+        <translation>Coming soon!</translation>
     </message>
     <message>
         <source>id_communication_timed_out_make</source>
@@ -721,6 +809,10 @@ Facile e Sicuro</translation>
         <translation>Conferma codice</translation>
     </message>
     <message>
+        <source>id_confirm_on_your_device</source>
+        <translation>Confirma sul tuo dispositivo</translation>
+    </message>
+    <message>
         <source>id_confirm_passphrase</source>
         <translation>Conferma passphrase</translation>
     </message>
@@ -730,7 +822,7 @@ Facile e Sicuro</translation>
     </message>
     <message>
         <source>id_confirm_transaction_details_on</source>
-        <translation>Confirm transaction details on your hardware wallet</translation>
+        <translation>Conferma i dettagli della transazione sul tuo hardware wallet</translation>
     </message>
     <message>
         <source>id_confirm_update_on_your_jade</source>
@@ -738,15 +830,19 @@ Facile e Sicuro</translation>
     </message>
     <message>
         <source>id_confirm_via_2fa_that_you</source>
-        <translation>Confirm via 2FA that you authorize this change.</translation>
+        <translation>Conferma l&apos;autorizzazione alla modifica tramite 2FA </translation>
     </message>
     <message>
         <source>id_confirmation_in_d_blocks</source>
         <translation>Conferma in %1 blocchi</translation>
     </message>
     <message>
+        <source>id_confirmation_time</source>
+        <translation>Tempo di conferma</translation>
+    </message>
+    <message>
         <source>id_confirmations</source>
-        <translation>Confirmations</translation>
+        <translation>Conferme</translation>
     </message>
     <message>
         <source>id_congratulations</source>
@@ -754,63 +850,63 @@ Facile e Sicuro</translation>
     </message>
     <message>
         <source>id_connect_hardware_wallet</source>
-        <translation>Connetti un hardware wallet</translation>
+        <translation>Connetti un hardware wallet  </translation>
     </message>
     <message>
         <source>id_connect_jade_with_a_usb_cable</source>
-        <translation>Connect Jade with a USB cable to download the latest firmware update</translation>
+        <translation>Connetti Jade con un cavo USB per scaricare gli ultimi aggiornamenti firmware</translation>
     </message>
     <message>
         <source>id_connect_through_a_proxy</source>
-        <translation>Connettiti tramite proxy</translation>
+        <translation>Connessione tramite proxy</translation>
     </message>
     <message>
         <source>id_connect_with_tor</source>
-        <translation>Connettiti con Tor</translation>
+        <translation>Connessione con Tor</translation>
     </message>
     <message>
         <source>id_connect_your_jade_to_use_it</source>
-        <translation>Collega il tuo Jade per usarlo con Green</translation>
+        <translation>Collega il tuo Jade per utilizzarlo con Green</translation>
     </message>
     <message>
         <source>id_connect_your_ledger_to_use_it</source>
-        <translation>Collega il tuo Ledger per usarlo con Green</translation>
+        <translation>Collega il tuo Ledger per utilizzarlo con Green</translation>
     </message>
     <message>
         <source>id_connected_to_jade</source>
         <translation>Connesso a Jade</translation>
     </message>
     <message>
+        <source>id_connected_wallets</source>
+        <translation>Wallet connessi</translation>
+    </message>
+    <message>
         <source>id_connecting</source>
-        <translation>Connecting…</translation>
+        <translation>Connessione in corso...</translation>
     </message>
     <message>
         <source>id_connecting_through_tor</source>
-        <translation>Connettiti con Tor</translation>
+        <translation>Connessione con Tor in corso</translation>
     </message>
     <message>
         <source>id_connecting_to_a_trusted_node</source>
-        <translation>Per connettersi ad un nodo di fiducia tramite Tor, bisogna abilitare i setting di proxy dell&apos;app ed una proxy Socks5 (es. Orbot per Android), prima di effettuare il log in.</translation>
+        <translation>Per connettersi a un nodo di fiducia tramite Tor è necessario abilitare le impostazioni proxy sull&apos;app prima di effettuare il log e una proxy Socks5 (app Orbot per Android)</translation>
     </message>
     <message>
         <source>id_connecting_to_peers</source>
-        <translation>Connessione ai peer...</translation>
+        <translation>Connessione ai peer in corso...</translation>
     </message>
     <message>
         <source>id_connecting_to_tor_onion_nodes</source>
-        <translation>Connettersi a nodi Tor (.onion) garantisce massima privacy e sicurezza. Premi &quot;OK&quot; per continuare.</translation>
+        <translation>La connessione a nodi Tor (.onion) garantisce massima privacy e sicurezza. Seleziona &quot;OK&quot; per continuare.</translation>
     </message>
     <message>
         <source>id_connecting_to_your_device</source>
-        <translation>Connecting to your device</translation>
+        <translation>Connessione al tuo dispositivo in corso</translation>
     </message>
     <message>
         <source>id_connection</source>
         <translation>Connessione</translation>
-    </message>
-    <message>
-        <source>id_connection_amp_validation</source>
-        <translation>Impostazioni Connessione &amp;amp; Validazione </translation>
     </message>
     <message>
         <source>id_connection_failed</source>
@@ -818,11 +914,11 @@ Facile e Sicuro</translation>
     </message>
     <message>
         <source>id_connection_to_device_failed</source>
-        <translation>Connessione con il dispositivo fallita! Avvicinalo e riprova.</translation>
+        <translation>Connessione al dispositivo fallita! Avvicinalo e riprova.</translation>
     </message>
     <message>
         <source>id_contact_support_at_s_or_visit_s</source>
-        <translation>Contatta il supporto presso %1 oppure visita %2</translation>
+        <translation>Per ricevere supporto contatta %1 oppure visita %2</translation>
     </message>
     <message>
         <source>id_continue</source>
@@ -830,7 +926,7 @@ Facile e Sicuro</translation>
     </message>
     <message>
         <source>id_continue_with_1s</source>
-        <translation>Continue with %1</translation>
+        <translation>Continua con %1</translation>
     </message>
     <message>
         <source>id_copied_to_clipboard</source>
@@ -838,7 +934,7 @@ Facile e Sicuro</translation>
     </message>
     <message>
         <source>id_copy</source>
-        <translation>Copy</translation>
+        <translation>Copia</translation>
     </message>
     <message>
         <source>id_copy_address</source>
@@ -846,11 +942,19 @@ Facile e Sicuro</translation>
     </message>
     <message>
         <source>id_copy_details</source>
-        <translation>Copia i dettagli</translation>
+        <translation>Copia dettagli</translation>
+    </message>
+    <message>
+        <source>id_copy_device_id</source>
+        <translation>Copia ID dispositivo</translation>
     </message>
     <message>
         <source>id_copy_raw_transaction</source>
         <translation>Copia raw transaction</translation>
+    </message>
+    <message>
+        <source>id_copy_support_id</source>
+        <translation>Copy support ID</translation>
     </message>
     <message>
         <source>id_copy_to_clipboard</source>
@@ -862,11 +966,11 @@ Facile e Sicuro</translation>
     </message>
     <message>
         <source>id_copy_unblinded_link</source>
-        <translation>Copy unblinded link</translation>
+        <translation>Copia unblinded link</translation>
     </message>
     <message>
         <source>id_copy_unblinding_data</source>
-        <translation>Copia i dati per unblinding</translation>
+        <translation>Copia unblinding data</translation>
     </message>
     <message>
         <source>id_copy_uri</source>
@@ -878,7 +982,7 @@ Facile e Sicuro</translation>
     </message>
     <message>
         <source>id_country</source>
-        <translation>Country</translation>
+        <translation>Paese</translation>
     </message>
     <message>
         <source>id_create</source>
@@ -886,11 +990,11 @@ Facile e Sicuro</translation>
     </message>
     <message>
         <source>id_create_a_pin_to_access_your</source>
-        <translation>Crea un PIN per l&apos;accesso al wallet</translation>
+        <translation>Crea un PIN per accedere al tuo wallet</translation>
     </message>
     <message>
         <source>id_create_a_wallet_for_bitcoin</source>
-        <translation>Crea un nuovo waller per Bitcoin, Liquid o Testnet</translation>
+        <translation>Crea un wallet per Bitcoin, Liquid o Testnet</translation>
     </message>
     <message>
         <source>id_create_new_wallet</source>
@@ -898,7 +1002,7 @@ Facile e Sicuro</translation>
     </message>
     <message>
         <source>id_create_temporary_wallet</source>
-        <translation>Crea wallet temporaneamente</translation>
+        <translation>Crea wallet temporaneo</translation>
     </message>
     <message>
         <source>id_create_wallet</source>
@@ -906,7 +1010,7 @@ Facile e Sicuro</translation>
     </message>
     <message>
         <source>id_creating_wallet</source>
-        <translation>Creazione wallet…</translation>
+        <translation>Creazione wallet in corso…</translation>
     </message>
     <message>
         <source>id_csv</source>
@@ -922,27 +1026,27 @@ Facile e Sicuro</translation>
     </message>
     <message>
         <source>id_custom</source>
-        <translation>Personalizzata</translation>
+        <translation>Custom</translation>
     </message>
     <message>
         <source>id_custom_network_added_enable_it</source>
-        <translation>Network custom aggiunto, abilitalo nelle Impostazioni di Network</translation>
+        <translation>Custom network aggiunto. Abilitalo nelle impostazioni di rete</translation>
     </message>
     <message>
         <source>id_custom_network_not_found</source>
-        <translation>Network custom non trovato</translation>
+        <translation>Custom network non trovato</translation>
     </message>
     <message>
         <source>id_custom_network_with_this_name</source>
-        <translation>Il network custom è già presente.</translation>
+        <translation>É già presente un custom network con questo nome </translation>
     </message>
     <message>
         <source>id_custom_servers_and_validation</source>
-        <translation>Custom servers and validation</translation>
+        <translation>Custom server e convalida</translation>
     </message>
     <message>
         <source>id_customize_2fa_expiration_of</source>
-        <translation>Personalizza durata del 2FA per i tuoi fondi</translation>
+        <translation>Personalizza la durata del 2FA per i tuoi coin</translation>
     </message>
     <message>
         <source>id_d6_confirmations</source>
@@ -962,11 +1066,11 @@ Facile e Sicuro</translation>
     </message>
     <message>
         <source>id_d_coins_selected</source>
-        <translation>(%1 coins selected)</translation>
+        <translation>(%1 coin selezionati)</translation>
     </message>
     <message>
         <source>id_d_words</source>
-        <translation>%1 words</translation>
+        <translation>%1 parole</translation>
     </message>
     <message>
         <source>id_data_directory</source>
@@ -990,31 +1094,35 @@ Facile e Sicuro</translation>
     </message>
     <message>
         <source>id_default_custom_fee_rate</source>
-        <translation>Commissioni custom di default </translation>
+        <translation>Custom fee rate di default</translation>
     </message>
     <message>
         <source>id_default_transaction_priority</source>
-        <translation>Priorità delle transazioni di default</translation>
+        <translation>Priorità transazioni di default</translation>
     </message>
     <message>
         <source>id_delete</source>
-        <translation>Delete</translation>
+        <translation>Elimina</translation>
+    </message>
+    <message>
+        <source>id_delete_credentials</source>
+        <translation>Delete credentials</translation>
     </message>
     <message>
         <source>id_delete_permanently_your_wallet</source>
-        <translation>Delete permanently your wallet from the Blockstream Green database. You will never be able to log in to it thereafter.</translation>
+        <translation>Elimina il tuo wallet dal database di Blockstream Green in modo permanente. Così facendo, non potrai più accedervi</translation>
     </message>
     <message>
         <source>id_delete_s_twofactor</source>
-        <translation>Disabilita %1 Secondo Fattore</translation>
+        <translation>Elimina %1 Due Fattori</translation>
     </message>
     <message>
         <source>id_delete_wallet</source>
-        <translation>Delete Wallet</translation>
+        <translation>Elimina Wallet</translation>
     </message>
     <message>
         <source>id_deleting_your_pin_will_remove</source>
-        <translation>Cancellando il tuo PIN perderai permanetemente accesso al tuo wallet, a meno che tu non abbia a disposizione la mnemonica. Premi &quot;OK&quot; per continuare.</translation>
+        <translation>Cancellando il tuo PIN non potrai più accedere al tuo wallet se non tramite mnemonica. Seleziona &quot;OK&quot; per continuare.</translation>
     </message>
     <message>
         <source>id_denomination</source>
@@ -1026,15 +1134,21 @@ Facile e Sicuro</translation>
     </message>
     <message>
         <source>id_details</source>
-        <translation>Details</translation>
+        <translation>Dettagli</translation>
     </message>
     <message>
         <source>id_device</source>
-        <translation>Device</translation>
+        <translation>Dispositivo</translation>
     </message>
     <message>
         <source>id_devices</source>
         <translation>Dispositivi</translation>
+    </message>
+    <message>
+        <source>id_different_passphrases_generate</source>
+        <translation>Different passphrases generate new wallets!
+
+Remember you can only restore this wallet with both your recovery phrase and the passphrase.</translation>
     </message>
     <message>
         <source>id_disable</source>
@@ -1042,15 +1156,15 @@ Facile e Sicuro</translation>
     </message>
     <message>
         <source>id_disable_pin_access</source>
-        <translation>Disable PIN access</translation>
+        <translation>Disabilita accesso PIN</translation>
     </message>
     <message>
         <source>id_disable_pin_access_for_this</source>
-        <translation>Disable PIN access for this wallet on all devices</translation>
+        <translation>Disabilita accesso PIN per questo wallet su tutti i dispositivi</translation>
     </message>
     <message>
         <source>id_disable_s_twofactor</source>
-        <translation>Disabilita %1 per l&apos; Autenticazione a Due Fattori</translation>
+        <translation>Disabilita %1 Autenticazione a Due Fattori</translation>
     </message>
     <message>
         <source>id_disabled</source>
@@ -1058,11 +1172,11 @@ Facile e Sicuro</translation>
     </message>
     <message>
         <source>id_displays_the_progress_of_spv</source>
-        <translation>Mostra il progresso della sincronizzazione SPV</translation>
+        <translation>Mostra lo stato della sincronizzazione SPV</translation>
     </message>
     <message>
         <source>id_dispute_twofactor_reset</source>
-        <translation>Contesta il reset del Secondo Fattore</translation>
+        <translation>Reset contestazione Autenticazione a Due Fattori</translation>
     </message>
     <message>
         <source>id_disputed</source>
@@ -1070,11 +1184,11 @@ Facile e Sicuro</translation>
     </message>
     <message>
         <source>id_distributed_under_the_s_see</source>
-        <translation>Distribuito sotto licenza %1, si veda LICENSE per maggiori informazioni o %2</translation>
+        <translation>Distribuito dietro licenza %1. Consulta la pagina LICENZA per maggiori informazioni o visita %2</translation>
     </message>
     <message>
         <source>id_do_you_have_the_backup</source>
-        <translation>Do you have the backup?</translation>
+        <translation>Hai il backup?</translation>
     </message>
     <message>
         <source>id_domain</source>
@@ -1089,20 +1203,24 @@ Facile e Sicuro</translation>
         <translation>Non chiedermelo più</translation>
     </message>
     <message>
+        <source>id_dont_collect_data</source>
+        <translation>Non raccogliere dati</translation>
+    </message>
+    <message>
         <source>id_dont_show_this_again</source>
-        <translation>Don&apos;t show this again</translation>
+        <translation>Non mostrarmelo più</translation>
     </message>
     <message>
         <source>id_dont_store_your_recovery_phrase</source>
-        <translation>Non conservare la tua recovery phrase sul telefono, computer o altri dispositivi online.</translation>
+        <translation>Non conservare la tua recovery phrase sul tuo telefono, computer o altri servizi online.</translation>
     </message>
     <message>
         <source>id_dont_take_screenshots_of_your</source>
-        <translation>Non fare screenshots della tua recovery phrase!</translation>
+        <translation>Non fare screenshot della tua recovery phrase!</translation>
     </message>
     <message>
         <source>id_double_check_spv_with_other</source>
-        <translation>Double check SPV with other servers</translation>
+        <translation>Ricontrolla SPV con altri server</translation>
     </message>
     <message>
         <source>id_double_spend</source>
@@ -1122,19 +1240,23 @@ Facile e Sicuro</translation>
     </message>
     <message>
         <source>id_edit</source>
-        <translation>Edit</translation>
+        <translation>Modifica</translation>
+    </message>
+    <message>
+        <source>id_edit_fee</source>
+        <translation>Modifica Fee</translation>
     </message>
     <message>
         <source>id_email</source>
-        <translation>Email</translation>
+        <translation>E-mail</translation>
     </message>
     <message>
         <source>id_email_address</source>
-        <translation>indirizzo email</translation>
+        <translation>indirizzo e-mail</translation>
     </message>
     <message>
         <source>id_empty</source>
-        <translation>Empty</translation>
+        <translation>Vuota</translation>
     </message>
     <message>
         <source>id_enable</source>
@@ -1142,31 +1264,35 @@ Facile e Sicuro</translation>
     </message>
     <message>
         <source>id_enable_bluetooth</source>
-        <translation>Enable Bluetooth</translation>
+        <translation>Abilita Bluetooth</translation>
     </message>
     <message>
         <source>id_enable_custom_networks_debug</source>
-        <translation>Abilita le opzioni custom di network debug</translation>
+        <translation>Abilita opzioni di debug dei custom network</translation>
     </message>
     <message>
         <source>id_enable_email_notifications_to</source>
-        <translation>Abilita le notifiche via email per modificare nlocktime</translation>
+        <translation>Abilita notifiche via mail per modificare nlocktime</translation>
     </message>
     <message>
         <source>id_enable_experimental_features</source>
-        <translation>Enable experimental features</translation>
+        <translation>Abilita experimental features</translation>
     </message>
     <message>
         <source>id_enable_face_id</source>
         <translation>Abilita Face ID</translation>
     </message>
     <message>
+        <source>id_enable_limited_usage_data</source>
+        <translation>Abilita una limitata raccolta dati</translation>
+    </message>
+    <message>
         <source>id_enable_location_services</source>
-        <translation>Enable location services</translation>
+        <translation>Abilita servizi di localizzazione</translation>
     </message>
     <message>
         <source>id_enable_or_change_your_pin_to</source>
-        <translation>Abilita o cambia il PIN per accedere velocemente al tuo wallet</translation>
+        <translation>Abilita o modifica il tuo PIN per accedere velocemente al tuo wallet</translation>
     </message>
     <message>
         <source>id_enable_spv</source>
@@ -1178,11 +1304,11 @@ Facile e Sicuro</translation>
     </message>
     <message>
         <source>id_enable_testnet</source>
-        <translation>Enable testnet</translation>
+        <translation>Abilita testnet</translation>
     </message>
     <message>
         <source>id_enable_testnet_in_app_settings</source>
-        <translation>Enable testnet in app settings to use Jade</translation>
+        <translation>Abilita testnet nelle impostazioni dell&apos;app per utilizzare Jade</translation>
     </message>
     <message>
         <source>id_enable_touch_id</source>
@@ -1190,7 +1316,7 @@ Facile e Sicuro</translation>
     </message>
     <message>
         <source>id_enable_twofactor_authentication</source>
-        <translation>Abilita il Secondo Fattore d&apos;Autenticazione per proteggere il wallet da transazioni e cambiamenti a impostazioni di sicurezza non autorizzati</translation>
+        <translation>Abilita Autenticazione a Due Fattori per proteggere il tuo wallet da transazioni e modifiche non autorizzate alle impostazioni di sicurezza </translation>
     </message>
     <message>
         <source>id_enabled</source>
@@ -1202,7 +1328,11 @@ Facile e Sicuro</translation>
     </message>
     <message>
         <source>id_encryption_passphrase</source>
-        <translation>Encryption passphrase</translation>
+        <translation>Passphrase criptaggio</translation>
+    </message>
+    <message>
+        <source>id_enhanced_privacy</source>
+        <translation>Aumenta Privacy</translation>
     </message>
     <message>
         <source>id_enter</source>
@@ -1210,15 +1340,15 @@ Facile e Sicuro</translation>
     </message>
     <message>
         <source>id_enter_a_pgp_public_key_to_have</source>
-        <translation>Inserisci una chiave pubblica PGP per avere email crittate e maggiore privacy.</translation>
+        <translation>Inserisci una chiave pubblica PGP per e-mail criptate e maggiore privacy.</translation>
     </message>
     <message>
         <source>id_enter_a_private_key_to_sweep</source>
-        <translation>Inserisci una chiave privata per farne lo sweep in questo wallet</translation>
+        <translation>Inserisci una chiave privata per eseguire uno sweep in questo wallet</translation>
     </message>
     <message>
         <source>id_enter_a_valid_onion_or_ip</source>
-        <translation>Inserisci un indirizzo IP valido. (.onion  preferibilmente)</translation>
+        <translation>Inserisci un indirizzo IP valido. (preferibilmente .onion  )</translation>
     </message>
     <message>
         <source>id_enter_a_valid_username</source>
@@ -1230,15 +1360,15 @@ Facile e Sicuro</translation>
     </message>
     <message>
         <source>id_enter_an_address_or_sweep_paper</source>
-        <translation>Inserisci indirizzo o fai sweep di un paper wallet</translation>
+        <translation>Inserisci un indirizzo o effettua lo sweep di un paper wallet</translation>
     </message>
     <message>
         <source>id_enter_new_email</source>
-        <translation>Inserisci la nuova email</translation>
+        <translation>Inserisci nuova email</translation>
     </message>
     <message>
         <source>id_enter_phone_number</source>
-        <translation>Inserisci numero telefonico</translation>
+        <translation>Inserisci numero di telefono</translation>
     </message>
     <message>
         <source>id_enter_pin</source>
@@ -1246,31 +1376,31 @@ Facile e Sicuro</translation>
     </message>
     <message>
         <source>id_enter_pin_on_jade</source>
-        <translation>Digita il PIN su Jade</translation>
+        <translation>Digita PIN su Jade</translation>
     </message>
     <message>
         <source>id_enter_the_email_for_which_you</source>
-        <translation>Enter the email for which you want to delete a dispute request</translation>
+        <translation>Inserisci la mail per cui desideri eliminare una richiesta di contestazione</translation>
     </message>
     <message>
         <source>id_enter_the_matching_words</source>
-        <translation>Inserisci la parola corrispondente</translation>
+        <translation>Inserisci Matching Words</translation>
     </message>
     <message>
         <source>id_enter_the_pin_for_your_hardware</source>
-        <translation>Inserisci il PIN dell&apos;hardware wallet</translation>
+        <translation>Inserisci il PIN del tuo hardware wallet</translation>
     </message>
     <message>
         <source>id_enter_your_12_24_or_27_words</source>
-        <translation>Enter your 12, 24 or 27 words recovery phrase</translation>
+        <translation>Inserisci la tua recovery phrase da 12, 24 o 27 parole</translation>
     </message>
     <message>
         <source>id_enter_your_24_or_27_words</source>
-        <translation>Digita la tua recovery phrase da 24 o 27 parole</translation>
+        <translation>Inserisci la tua recovery phrase da 24 o 27 parole</translation>
     </message>
     <message>
         <source>id_enter_your_27_words_recovery</source>
-        <translation>Digita la tua recovery phrase da 27 parole</translation>
+        <translation>Inserisci la tua recovery phrase da 27 parole</translation>
     </message>
     <message>
         <source>id_enter_your_email_address</source>
@@ -1278,36 +1408,40 @@ Facile e Sicuro</translation>
     </message>
     <message>
         <source>id_enter_your_pin</source>
-        <translation>Digita il PIN</translation>
+        <translation>Inserisci PIN</translation>
     </message>
     <message>
         <source>id_enter_your_recovery_phrase</source>
-        <translation>Digita la tua recovery phrase</translation>
+        <translation>Inserisci recovery phrase</translation>
     </message>
     <message>
         <source>id_enter_your_s_wallet_mnemonic</source>
-        <translation>Inserisci la mnemonica del tuo %1 wallet</translation>
+        <translation>Inserisci mnemonic del tuo wallet %1 </translation>
     </message>
     <message>
         <source>id_enter_your_wallet_mnemonic</source>
-        <translation>Inserisci la mnemonica del tuo wallet</translation>
+        <translation>Inserisci mnemonic del tuo wallet</translation>
     </message>
     <message>
         <source>id_enter_your_xpub</source>
-        <translation>Enter your xpub</translation>
+        <translation>Inserisci xpub</translation>
     </message>
     <message>
         <source>id_enter_your_xpub_to_add_a</source>
-        <translation>Enter your xPub to add a watch-only wallet where you can receive funds and check your balance without importing your private keys.</translation>
+        <translation>Inserisci il tuo xPub per aggiungere un wallet watch-only su cui ricevere fondi e controllare il tuo saldo senza importare chiavi private.</translation>
     </message>
     <message>
         <source>id_enter_yournrecovery_phrase</source>
-        <translation>Enter your
+        <translation>Inserisci
 Recovery Phrase</translation>
     </message>
     <message>
         <source>id_entity</source>
         <translation>Entità</translation>
+    </message>
+    <message>
+        <source>id_ephemeral_wallets</source>
+        <translation>Ephemeral wallets</translation>
     </message>
     <message>
         <source>id_error</source>
@@ -1319,39 +1453,43 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_error_nfc_tag_not_writable</source>
-        <translation>Errore: NFC tag not writable</translation>
+        <translation>Errore: impossibile scrivere tag NFC </translation>
     </message>
     <message>
         <source>id_error_nfc_tag_too_small</source>
-        <translation>Errore: NFC tag too small</translation>
+        <translation>Errore: tag NFC troppo piccolo</translation>
     </message>
     <message>
         <source>id_error_passphrases_do_not_match</source>
-        <translation>Errore: le passphrases non coincidono</translation>
+        <translation>Errore: le passphrase non coincidono</translation>
     </message>
     <message>
         <source>id_error_setting_fee_rate</source>
-        <translation>Error setting Fee Rate</translation>
+        <translation>Errore durante impostazione Fee Rate </translation>
     </message>
     <message>
         <source>id_establishing_session</source>
-        <translation>Establishing session</translation>
+        <translation>Creazione sessione in corso</translation>
     </message>
     <message>
         <source>id_estimated_blocks_until</source>
-        <translation>Blocchi stimati per la conferma: %1</translation>
+        <translation>Blocchi stimati dalla conferma: %1</translation>
     </message>
     <message>
         <source>id_example_89014283334011612858333</source>
-        <translation>Es.: 8.90.14.2:8333,40.116.12.85:8333</translation>
+        <translation>Esempio: 8.90.14.2:8333,40.116.12.85:8333</translation>
     </message>
     <message>
         <source>id_existing_recovery_phrase</source>
-        <translation>Existing recovery phrase</translation>
+        <translation>Recovery phrase esistente</translation>
+    </message>
+    <message>
+        <source>id_existing_wallets</source>
+        <translation>Wallet Esistenti</translation>
     </message>
     <message>
         <source>id_expand_sidebar</source>
-        <translation>Expand sidebar</translation>
+        <translation>Espandi sidebar</translation>
     </message>
     <message>
         <source>id_explore_your_wallet</source>
@@ -1362,56 +1500,68 @@ Recovery Phrase</translation>
         <translation>Esporta transazioni su file CSV</translation>
     </message>
     <message>
+        <source>id_exports_an_accounts_extended</source>
+        <translation>Esporta le extended public keys (xPub/yPub/zPub) per usarlo modalità watch-only</translation>
+    </message>
+    <message>
+        <source>id_extended_public_key</source>
+        <translation>Extended Public Key</translation>
+    </message>
+    <message>
         <source>id_face_id</source>
         <translation>Face ID</translation>
     </message>
     <message>
         <source>id_failed_to_load_asset_icons</source>
-        <translation>Failed to load asset icons</translation>
+        <translation>Impossibile caricare asset icon</translation>
     </message>
     <message>
         <source>id_failed_to_load_asset_registry</source>
-        <translation>Failed to Load Asset Registry</translation>
+        <translation>Impossibile caricare Registro Asset</translation>
     </message>
     <message>
         <source>id_fast</source>
-        <translation>Rapido</translation>
+        <translation>Veloce</translation>
     </message>
     <message>
         <source>id_faster_more_confidential</source>
-        <translation>Faster, more confidential Bitcoin transactions</translation>
+        <translation>Più veloce, più confidential transaction Bitcoin</translation>
     </message>
     <message>
         <source>id_fee</source>
-        <translation>Commissione</translation>
+        <translation>Fee</translation>
     </message>
     <message>
         <source>id_fee_amount_size_fee_rate</source>
-        <translation>Commissioni totali, Dimensione Transazione, Tasso Commissioni</translation>
+        <translation>Totale fee, importo, fee rate</translation>
     </message>
     <message>
         <source>id_fee_rate</source>
-        <translation>Tasso commissione</translation>
+        <translation>Fee rate</translation>
     </message>
     <message>
         <source>id_fee_rate_is_above_maximum</source>
-        <translation>Tasso commissione maggiore del massimo consentito</translation>
+        <translation>Fee rate oltre il massimo consentito</translation>
     </message>
     <message>
         <source>id_fee_rate_is_below_minimum</source>
-        <translation>La commissione è inferiore al minimo accettato dalla rete</translation>
+        <translation>Fee rate inferiore al minimo consentito</translation>
     </message>
     <message>
         <source>id_fee_rate_must_be_at_least_s</source>
-        <translation>Il tasso di commissione deve essere superiore a %1 satoshi/vbyte.</translation>
+        <translation>La fee rate deve essere superiore a %1 satoshi/vbyte.</translation>
     </message>
     <message>
         <source>id_fee_rate_s</source>
-        <translation>Tasso di commissione: %1</translation>
+        <translation>Fee rate: %1</translation>
     </message>
     <message>
         <source>id_fee_s__s</source>
-        <translation>Commissione: %1 / %2</translation>
+        <translation>Fee: %1 / %2</translation>
+    </message>
+    <message>
+        <source>id_feedback</source>
+        <translation>Feedback</translation>
     </message>
     <message>
         <source>id_fees_are_too_low</source>
@@ -1419,15 +1569,15 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_fetching_new_firmware</source>
-        <translation>Fetching new firmware</translation>
+        <translation>Nuovo firmware esclusivo</translation>
     </message>
     <message>
         <source>id_filters</source>
-        <translation>Filters</translation>
+        <translation>Filtri</translation>
     </message>
     <message>
         <source>id_finishing_up</source>
-        <translation>Finishing Up</translation>
+        <translation>Sto finendo</translation>
     </message>
     <message>
         <source>id_firmware</source>
@@ -1435,7 +1585,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_firmware_update</source>
-        <translation>Firmware update</translation>
+        <translation>Aggiornamento firmware</translation>
     </message>
     <message>
         <source>id_firmware_update_completed</source>
@@ -1443,7 +1593,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_follow_the_instructions_on_your</source>
-        <translation>Follow the instructions on your device.</translation>
+        <translation>Segui le istruzioni sul tuo dispositivo.</translation>
     </message>
     <message>
         <source>id_for_investors</source>
@@ -1451,11 +1601,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_for_long_term_storage</source>
-        <translation>Per deposito di lungo termine</translation>
+        <translation>Per archiviazione a lungo termine</translation>
     </message>
     <message>
         <source>id_for_most_users</source>
-        <translation>Per la maggioranza degli utenti</translation>
+        <translation>Per normali utenti</translation>
     </message>
     <message>
         <source>id_from</source>
@@ -1463,23 +1613,23 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_funds_received_in_this</source>
-        <translation>Dei fondi ricevuti in questa transazione non sono confidenziali.</translation>
+        <translation>I fondi ricevuti in questa transazione non sono riservati.</translation>
     </message>
     <message>
         <source>id_general</source>
-        <translation>Generali</translation>
+        <translation>Generale</translation>
     </message>
     <message>
         <source>id_generate</source>
-        <translation>Generate</translation>
+        <translation>Crea</translation>
     </message>
     <message>
         <source>id_generate_a_new_recovery_phrase</source>
-        <translation>Generate a new recovery phrase as your third recovery key.</translation>
+        <translation>Crea una nuova recovery phrase come tua terza recovery key.</translation>
     </message>
     <message>
         <source>id_generate_new_address</source>
-        <translation>Genera Nuovo Indirizzo</translation>
+        <translation>Crea Nuovo Indirizzo</translation>
     </message>
     <message>
         <source>id_get_code</source>
@@ -1487,15 +1637,19 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_get_id</source>
-        <translation>Get ID</translation>
+        <translation>Ottieni ID</translation>
     </message>
     <message>
         <source>id_get_jade</source>
-        <translation>Compra Jade</translation>
+        <translation>Acquista Jade</translation>
     </message>
     <message>
         <source>id_give_bluetooth_permissions</source>
-        <translation>Give Bluetooth Permissions</translation>
+        <translation>Autorizza Bluetooth</translation>
+    </message>
+    <message>
+        <source>id_give_us_your_feedback</source>
+        <translation>Give us your feedback</translation>
     </message>
     <message>
         <source>id_go_to_account</source>
@@ -1515,39 +1669,39 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_green_is_a_noncustodial_wallet</source>
-        <translation>Green non è in custodia del tuo wallet</translation>
+        <translation>Green è un wallet non custodial</translation>
     </message>
     <message>
         <source>id_green_logo</source>
-        <translation>Green Logo</translation>
+        <translation>Logo Green </translation>
     </message>
     <message>
         <source>id_green_mnemonic_qr_code</source>
-        <translation>QR Code della Mnemonica Green</translation>
+        <translation>QR Code mnemonic Green</translation>
     </message>
     <message>
         <source>id_green_only_supports_one_pin_for</source>
-        <translation>Green supporta un solo PIN per network. Nuovi wallet richiederanno la mnemonica ad ogni login.</translation>
+        <translation>Green supporta un solo PIN per network. I nuovi wallet richiederanno la mnemonic a ogni login.</translation>
     </message>
     <message>
         <source>id_green_only_supports_one_pin_per</source>
-        <translation>Green supporta un solo PIN per network. Disabilita il PIN attualmente attivo per poterne impostare uno nuovo.</translation>
+        <translation>Green supporta un solo PIN per network. Per impostare un PIN per questo wallet, disabilita il PIN attualmente in uso sul tuo wallet originale.</translation>
     </message>
     <message>
         <source>id_green_uses_biometric</source>
-        <translation>Green usa l&apos;autenticazione biometrica per garantire un facile accesso al wallet</translation>
+        <translation>Green utilizza l&apos;autenticazione biometrica per garantire un facile accesso al wallet</translation>
     </message>
     <message>
         <source>id_green_uses_bluetooth_for</source>
-        <translation>Green utilizza il bluetooth per comunicare con gli hardware wallet</translation>
+        <translation>Green utilizza il Bluetooth per comunicare con gli hardware wallet</translation>
     </message>
     <message>
         <source>id_green_uses_bluetooth_to_connect</source>
-        <translation>Green utilizza il bluetooth per comunicare con gli hardware wallet</translation>
+        <translation>Green utilizza il Bluetooth per connettersi con gli hardware wallet</translation>
     </message>
     <message>
         <source>id_green_uses_multisig_with_one</source>
-        <translation>Green utilizza uno schema multifirma in cui una firma è generata dal tuo dispositivo e un&apos; altra da un server di Blockstream. L&apos; Autenticazione a Due Fattori aggiunge un livello di sicurezza aggiuntivo autorizzando la firma generata dal server.</translation>
+        <translation>Green utilizza un sistema multisig in cui una firma è generata dal tuo dispositivo e un&apos;altra da un server di Blockstream. L&apos;Autenticazione a Due Fattori aggiunge un ulteriore livello di sicurezza per la firma generata dal server.</translation>
     </message>
     <message>
         <source>id_hardware_wallet</source>
@@ -1555,15 +1709,23 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_hardware_wallet_support_for</source>
-        <translation>Supporto hardware wallet per transazioni confidenziali sarà disponibile prossimamente</translation>
+        <translation>Supporto hardware wallet per Confidential Transactions presto disponibile</translation>
+    </message>
+    <message>
+        <source>id_hardware_wallets</source>
+        <translation>Hardware wallet</translation>
     </message>
     <message>
         <source>id_hash</source>
-        <translation>Hash</translation>
+        <translation>Hash </translation>
     </message>
     <message>
         <source>id_help</source>
         <translation>Aiuto</translation>
+    </message>
+    <message>
+        <source>id_help_green_improve</source>
+        <translation>Aiuta Green a migliorare</translation>
     </message>
     <message>
         <source>id_here</source>
@@ -1578,12 +1740,20 @@ Recovery Phrase</translation>
         <translation>Nascondi asset</translation>
     </message>
     <message>
+        <source>id_hide_details</source>
+        <translation>Nascondi dettagli</translation>
+    </message>
+    <message>
         <source>id_high</source>
-        <translation>Alta</translation>
+        <translation>Alto</translation>
+    </message>
+    <message>
+        <source>id_hold_button_to_send</source>
+        <translation>Tieni premuto per inviare</translation>
     </message>
     <message>
         <source>id_hold_your_nfc_tag_close_to_the</source>
-        <translation>Tieni il tag NFC vicino al dispositivo</translation>
+        <translation>Tieni il tuo tag NFC vicino al dispositivo</translation>
     </message>
     <message>
         <source>id_home</source>
@@ -1599,11 +1769,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_how_to_stop_this_reset</source>
-        <translation>How to Stop This Reset</translation>
+        <translation>Come fermare il reset</translation>
     </message>
     <message>
         <source>id_i_agree_to_the</source>
-        <translation>Accetto i</translation>
+        <translation>Accetto </translation>
     </message>
     <message>
         <source>id_i_confirm_i_have_read_and</source>
@@ -1611,23 +1781,23 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_i_confirm_i_want_to_delete_this</source>
-        <translation>I confirm I want to delete this wallet</translation>
+        <translation>Confermo di voler eliminare il wallet</translation>
     </message>
     <message>
         <source>id_i_confirm_i_want_to_disable_pin</source>
-        <translation>I confirm I want to disable PIN access on all my devices.</translation>
+        <translation>Confermo di voler disabilitare l&apos;accesso PIN su tutti i miei dispositivi.</translation>
     </message>
     <message>
         <source>id_i_forgot_my_password</source>
-        <translation>Mi sono dimenticato la password</translation>
+        <translation>Ho dimenticato la mia password</translation>
     </message>
     <message>
         <source>id_i_lost_my_2fa</source>
-        <translation>I lost my 2FA</translation>
+        <translation>Ho perso la mia 2FA</translation>
     </message>
     <message>
         <source>id_i_secured_the_mnemonic_and_i</source>
-        <translation>Ho conservato la mnemonica e ho letto i Termini di Servizio</translation>
+        <translation>Ho conservato la mnemonic e ho letto i Termini di Servizio</translation>
     </message>
     <message>
         <source>id_i_typed_all_my_recovery_phrase</source>
@@ -1635,43 +1805,47 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_i_understand_amounts_could_be</source>
-        <translation>I understand amounts could be incorrect</translation>
+        <translation>Comprendo che gli importi potrebbero non essere corretti</translation>
     </message>
     <message>
         <source>id_id</source>
         <translation>ID</translation>
     </message>
     <message>
+        <source>id_if_you_agree_green_will_collect</source>
+        <translation>Se accetti, Green raccoglierà alcuni dati per migliorare l&apos;esperienza. Non verranno raccolti dati sensibili o informazioni sul wallet.</translation>
+    </message>
+    <message>
         <source>id_if_you_are_the_rightful_owner</source>
-        <translation>If you are the rightful owner of this wallet, and you still possess one of its active 2FA methods, cancel the reset to be able to spend and empty this wallet.</translation>
+        <translation>Se sei il legittimo proprietario di questo wallet, e sei ancora in possesso di uno dei suoi metodi 2FA, annulla il reset per poter utilizzare e vuotare il wallet.</translation>
     </message>
     <message>
         <source>id_if_you_did_not_request_the</source>
-        <translation>If you did not request the reset, but you cannot cancel the reset process because you can&apos;t access any existing Two-Factor Authorization methods, dispute this 2FA reset. This will permanently block your wallet, but you can undo this action.</translation>
+        <translation>Se non hai richiesto il reset, ma non puoi cancellarlo perché non puoi accedere ad alcun metodo di Autorizzazione a Due Fattori, contesta questo reset della 2FA. In questo modo il tuo wallet verrà bloccato in modo permanente. Potrai annullare questa azione in qualsiasi momento.</translation>
     </message>
     <message>
         <source>id_if_you_have_access_to_a</source>
-        <translation>If you have access to a Two-Factor method for this wallet, cancel the reset to be able to spend and receive immediately, or wait %1 days.</translation>
+        <translation>Se hai accesso a un metodo a Due Fattori per questo wallet, cancella il reset per poter spendere e ricevere immediatamente, oppure attendi %1 giorni.</translation>
     </message>
     <message>
         <source>id_if_you_have_some_coins_on_the</source>
-        <translation>If you have some coins on the legacy address type, and you won&apos;t spend them shortly, you might need to setup an email and receive your recovery transactions to be sure you are always in control of your funds.</translation>
+        <translation>Se sei in possesso di alcuni coin sull&apos;indirizzo legacy, che non spenderai a breve, potresti dover impostare un indirizzo e-mail e ricevere le tue recovery transaction per essere sicuro di mantenere sempre il controllo sui tuoi fondi.</translation>
     </message>
     <message>
         <source>id_if_you_initiated_the_2fa_reset</source>
-        <translation>If you initiated the 2FA reset dispute by mistake, you can undo it and set the wallet back to 2FA reset state.</translation>
+        <translation>Se hai iniziato la contestazione del reset della 2FA per sbaglio, potrai annullare l&apos;azione e ripristinare il reset della 2FA del tuoi wallet.</translation>
     </message>
     <message>
         <source>id_import_a_multisig_shield_wallet</source>
-        <translation>Import a Multisig Shield wallet created on Blockstream Green.</translation>
+        <translation>Importa un wallet Multisig Shield creato su Blockstream Green.</translation>
     </message>
     <message>
         <source>id_import_a_wallet_created_on</source>
-        <translation>Importa un wallet creato con Blockstream Green</translation>
+        <translation>Importa un wallet creato su Blockstream Green</translation>
     </message>
     <message>
         <source>id_import_a_wallet_created_with</source>
-        <translation>Importa un wallet creato con altre app. Questa opzione funziona con wallet a firma singola aderenti agli standard BIP39 e derivazioni BIP44, BIP49 e BIP84.</translation>
+        <translation>Importa un wallet creato con altre app. Questa opzione funziona solo con wallet singlesig che utilizzano BIP39, BIP44, BIP49 e BIP84.</translation>
     </message>
     <message>
         <source>id_incoming</source>
@@ -1679,11 +1853,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_inconsistent_data_provided_for</source>
-        <translation>Inconsistent data provided for enabling Authenticator 2FA</translation>
+        <translation>Dati insufficienti per poter abilitare Authenticator 2FA</translation>
     </message>
     <message>
         <source>id_increase_fee</source>
-        <translation>Aumenta le commissioni</translation>
+        <translation>Aumenta fee</translation>
     </message>
     <message>
         <source>id_information_not_available</source>
@@ -1695,15 +1869,15 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_initializing_tor</source>
-        <translation>Inizializzando Tor…</translation>
+        <translation>Inizializzazione Tor in corso…</translation>
     </message>
     <message>
         <source>id_insert_your_email_to_receive</source>
-        <translation>Insert your email to receive 2FA codes to authorize transfers and other operations.</translation>
+        <translation>Inserisci il tuo indirizzo e-mail per ricevere i codici 2FA e autorizzare trasferimenti e altre operazioni.</translation>
     </message>
     <message>
         <source>id_install_version_s</source>
-        <translation>Install version: %1?</translation>
+        <translation>Installa versione: %1?</translation>
     </message>
     <message>
         <source>id_insufficient_funds</source>
@@ -1711,11 +1885,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_insufficient_lbtc_for_fees</source>
-        <translation>L-BTC insufficienti per pagare commissioni</translation>
+        <translation>L-BTC insufficienti per fee</translation>
     </message>
     <message>
         <source>id_insufficient_lbtc_to_send_a</source>
-        <translation>L-BTC insufficienti per inviare una transazione. Sono necessari degli L-BTC per pagare le commissioni di transazione su Liquid. Genera un indirizzo per ricevere degli L-BTC.</translation>
+        <translation>L-BTC insufficienti per inviare una transazione. Su Liquid sono necessari degli L-BTC per pagare le fee di transazione. Crea un indirizzo per ricevere L-BTC.</translation>
     </message>
     <message>
         <source>id_invalid_address</source>
@@ -1727,35 +1901,35 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_invalid_asset_id</source>
-        <translation>Invalid Asset ID</translation>
+        <translation>ID asset non valido</translation>
     </message>
     <message>
         <source>id_invalid_clipboard_contents</source>
-        <translation>Invalid clipboard contents</translation>
+        <translation>Contenuti clipboard non validi</translation>
     </message>
     <message>
         <source>id_invalid_merkle_proof</source>
-        <translation>Invalid Merkle proof</translation>
+        <translation>Merkle proof non valida</translation>
     </message>
     <message>
         <source>id_invalid_mnemonic</source>
-        <translation>Mnemonica non valida</translation>
+        <translation>Mnemonic non valida</translation>
     </message>
     <message>
         <source>id_invalid_mnemonic_continue</source>
-        <translation>Invalid mnemonic. Continue typing or ask for help</translation>
+        <translation>Mnemonic non valida. Continua a digitare o chiedi aiuto</translation>
     </message>
     <message>
         <source>id_invalid_mnemonic_must_be_24_or</source>
-        <translation>Mnemonica non valida (dev&apos;essere 24 o 27 parole)</translation>
+        <translation>Mnemonic non valida (deve essere da 24 o 27 parole)</translation>
     </message>
     <message>
         <source>id_invalid_network_configuration</source>
-        <translation>Configurazione di Network non valida</translation>
+        <translation>Configurazione di rete non valida</translation>
     </message>
     <message>
         <source>id_invalid_payment_request_assetid</source>
-        <translation>Richiesta di pagamento non valida, specificare AssetID</translation>
+        <translation>Richiesta di pagamento non valida. Specificare ID Asset</translation>
     </message>
     <message>
         <source>id_invalid_pgp_key</source>
@@ -1763,7 +1937,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_invalid_phone_number_format</source>
-        <translation>Formato del numero non valido</translation>
+        <translation>Formato numero non valido</translation>
     </message>
     <message>
         <source>id_invalid_pin</source>
@@ -1771,15 +1945,15 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_invalid_pin_remaining_attempts</source>
-        <translation>Pin errato. Tentativi rimasti: %1.</translation>
+        <translation>Pin non valido. Tentativi rimasti: %1.</translation>
     </message>
     <message>
         <source>id_invalid_pin_you_dont_have_any</source>
-        <translation>PIN errato, non hai tentativi rimanenti. Effettua l&apos;accesso usando la tua mnemonica.</translation>
+        <translation>PIN non valido. Non hai tentativi rimanenti. Effettua l&apos;accesso usando la tua mnemonic.</translation>
     </message>
     <message>
         <source>id_invalid_pin_you_have_1d</source>
-        <translation>PIN errato, hai %1 tentativi rimasti</translation>
+        <translation>PIN non valido. Hai %1 tentativi rimanenti</translation>
     </message>
     <message>
         <source>id_invalid_private_key</source>
@@ -1787,19 +1961,19 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_invalid_recovery_phrase</source>
-        <translation>Invalid recovery phrase</translation>
+        <translation>Recovery phrase non valida</translation>
     </message>
     <message>
         <source>id_invalid_replacement_fee_rate</source>
-        <translation>Tasso di commissione non valido</translation>
+        <translation>Fee rate sostitutiva non valida</translation>
     </message>
     <message>
         <source>id_invalid_status_check_that_your</source>
-        <translation>Stato invalido. Assicurati che il dispositivo sia sbloccato e riprova.</translation>
+        <translation>Stato non valido. Assicurati che il dispositivo sia sbloccato e riprova.</translation>
     </message>
     <message>
         <source>id_invalid_twofactor_code</source>
-        <translation>Codice non valido</translation>
+        <translation>Codice a Due Fattori non valido</translation>
     </message>
     <message>
         <source>id_invalid_url</source>
@@ -1807,11 +1981,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_invalid_xpub</source>
-        <translation>Invalid xpub</translation>
+        <translation>Xpub non valido</translation>
     </message>
     <message>
         <source>id_is_a_noncustodial</source>
-        <translation>non è in custodia</translation>
+        <translation>è non custodial</translation>
     </message>
     <message>
         <source>id_issuer</source>
@@ -1819,35 +1993,35 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_issuer_domain_s</source>
-        <translation>Issuer Domain: %1</translation>
+        <translation>Dominio emittente: %1</translation>
     </message>
     <message>
         <source>id_it_looks_like_you_have_no</source>
-        <translation>Non hai un wallet. Clicca qui sotto per aggiungerne uno.</translation>
+        <translation>Sembra che tu non abbia alcun wallet. Clicca qui sotto per aggiungerne uno.</translation>
     </message>
     <message>
         <source>id_jade_unlocked</source>
-        <translation>Jade unlocked</translation>
+        <translation>Jade sbloccato</translation>
     </message>
     <message>
         <source>id_jade_was_initialized_for_testnet</source>
-        <translation>Jade was initialized for testnet</translation>
+        <translation>Jade inizializzato per testnet</translation>
     </message>
     <message>
         <source>id_just_a_few_more_steps_to_get</source>
-        <translation>Giusto gli ultimi passi per il tuo setup.</translation>
+        <translation>Rimangono soli pochi passi per poter iniziare.</translation>
     </message>
     <message>
         <source>id_label</source>
-        <translation>Label</translation>
+        <translation>Etichetta/Label</translation>
     </message>
     <message>
         <source>id_language</source>
-        <translation>Language</translation>
+        <translation>Lingua</translation>
     </message>
     <message>
         <source>id_last_attempt_if_failed_you_will</source>
-        <translation>Last attempt: if failed, you will have to restore your wallet with your recovery phrase.</translation>
+        <translation>Ultimo tentativo rimanente: in caso di esito negativo dovrai ripristinare il tuo wallet utilizzando la tua recovery phrase.</translation>
     </message>
     <message>
         <source>id_last_ping_1d_ms</source>
@@ -1855,55 +2029,67 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_later</source>
-        <translation>PIÙ TARDI</translation>
+        <translation>PIÙ TARDI/DOPO</translation>
     </message>
     <message>
         <source>id_latest_transactions</source>
-        <translation>Latest transactions</translation>
+        <translation>Ultime transazioni</translation>
     </message>
     <message>
         <source>id_lbtc_has_no_issuer_and_is</source>
-        <translation>L-BTC non ha emittenti e viene creato attraverso un peg-in.</translation>
+        <translation>Gli L-BTC non hanno emettitori e vengono creati sulla rete attraverso un peg-in.</translation>
     </message>
     <message>
         <source>id_learn_more</source>
-        <translation>Learn more</translation>
+        <translation>Maggiori informazioni</translation>
     </message>
     <message>
         <source>id_learn_more_about_s</source>
-        <translation>Scopri di più su %1.</translation>
+        <translation>Maggiori informazioni su %1.</translation>
     </message>
     <message>
         <source>id_ledger_dashboard_detected</source>
-        <translation>Dashboard Ledger rilevata, avvia l&apos;app corretta per accedere.</translation>
+        <translation>Dashboard Ledger rilevata. Avvia l&apos;app corretta per accedere.</translation>
     </message>
     <message>
         <source>id_ledger_devices</source>
-        <translation>Ledger devices</translation>
+        <translation>Dispositivi Ledger</translation>
     </message>
     <message>
         <source>id_ledger_supports_a_limited_set</source>
-        <translation>Ledger supporta un numero limitato di asset: clicca qui per consultare la lista.</translation>
+        <translation>Ledger supporta un numero limitato di asset. Clicca qui per consultare la lista.</translation>
     </message>
     <message>
         <source>id_legacy_account</source>
-        <translation>Legacy Account</translation>
+        <translation>Account Legacy</translation>
+    </message>
+    <message>
+        <source>id_legacy_bip44</source>
+        <translation>Legacy (BIP44)</translation>
     </message>
     <message>
         <source>id_legacy_script_coins</source>
-        <translation>Legacy script coins</translation>
+        <translation>Coin Legacy script</translation>
+    </message>
+    <message>
+        <source>id_legacy_segwit_account</source>
+        <translation>Legacy SegWit Account</translation>
+    </message>
+    <message>
+        <source>id_legacy_segwit_bip49</source>
+        <translation>Legacy SegWit (BIP49)</translation>
     </message>
     <message>
         <source>id_lets_get_you_set_up</source>
-        <translation>Impostiamo il tuo wallet.</translation>
+        <translation>Iniziamo!</translation>
     </message>
     <message>
         <source>id_liquid_electrum_server</source>
-        <translation>Liquid Electrum server</translation>
+        <translation>Server Liquid Electrum</translation>
     </message>
     <message>
         <source>id_liquid_is_a_sidechainbased</source>
-        <translation>Liquid is a sidechain-based settlement network for traders and exchanges, enabling faster, more confidential Bitcoin transactions and the issuance of digital assets.</translation>
+        <translation>Liquid è una rete di settlement sidechain based per trader ed exchange che consente transazioni Bitcoin più veloci e riservate, così come l&apos;emissione di asset digitali.</translation>
     </message>
     <message>
         <source>id_liquid_securities</source>
@@ -1911,63 +2097,71 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_liquid_testnet_electrum_server</source>
-        <translation>Liquid Testnet Electrum server</translation>
+        <translation>Server Liquid Testnet Electrum </translation>
     </message>
     <message>
         <source>id_liquid_testnet_wallets</source>
-        <translation>Liquid testnet wallets</translation>
+        <translation>Wallet Liquid testnet </translation>
     </message>
     <message>
         <source>id_liquid_wallet</source>
-        <translation>Liquid Wallet</translation>
+        <translation>Wallet Liquid</translation>
     </message>
     <message>
         <source>id_liquid_wallets</source>
-        <translation>Liquid wallets</translation>
+        <translation>Wallet Liquid</translation>
     </message>
     <message>
         <source>id_loading</source>
-        <translation>Loading</translation>
+        <translation>Caricamento</translation>
     </message>
     <message>
         <source>id_loading_accounts</source>
-        <translation>Caricamento accounts…</translation>
+        <translation>Caricamento account in corso…</translation>
     </message>
     <message>
         <source>id_loading_assets</source>
-        <translation>Caricamento assets…</translation>
+        <translation>Caricamento asset in corso…</translation>
     </message>
     <message>
         <source>id_loading_transactions</source>
-        <translation>Caricamento transazioni...</translation>
+        <translation>Caricamento transazioni in corso..</translation>
     </message>
     <message>
         <source>id_loading_wallet</source>
-        <translation>Caricamento wallet…</translation>
+        <translation>Caricamento wallet in corso…</translation>
     </message>
     <message>
         <source>id_location_services_are_disabled</source>
-        <translation>Location services are disabled, do you want to enable them?</translation>
+        <translation>I servizi di localizzazione sono disattivati. Vuoi attivarli?</translation>
     </message>
     <message>
         <source>id_lock</source>
-        <translation>Lock</translation>
+        <translation>Blocca</translation>
+    </message>
+    <message>
+        <source>id_lock_after_1_minute</source>
+        <translation>Blocca dopo 1 minuto</translation>
+    </message>
+    <message>
+        <source>id_lock_immediately</source>
+        <translation>Blocca immediatamente</translation>
     </message>
     <message>
         <source>id_locked</source>
-        <translation>Locked</translation>
+        <translation>Bloccato</translation>
     </message>
     <message>
         <source>id_locked_coins_will_not_be_spent</source>
-        <translation>Locked coins will not be spent nor included in your balance.</translation>
+        <translation>I coin bloccati non potranno essere utilizzati né inclusi nel tuo saldo.</translation>
     </message>
     <message>
         <source>id_locking_coins</source>
-        <translation>Locking coins</translation>
+        <translation>Blocco coin in corso</translation>
     </message>
     <message>
         <source>id_locking_coins_can_help_protect</source>
-        <translation>Locking coins can help protect your privacy and save on transaction fees. Locked coins are deducted from your balance and are not used when sending transactions. You can only lock coins labeled as dust and unlock them later at any time.</translation>
+        <translation>Bloccando i coin potrai proteggere la tua privacy e risparmiare sulle fee di transazione. I coin bloccati vengono detratte dal tuo saldo e non utilizzati quando invii delle transazioni. Puoi unicamente bloccare i coin etichettati come &quot;dust&quot; e in seguito sbloccarli in qualsiasi momento.</translation>
     </message>
     <message>
         <source>id_log_file</source>
@@ -1983,15 +2177,15 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_log_in_to_your_multisig_shield</source>
-        <translation>Log in to your Multisig Shield watch-only wallet with a username and password. You can create your watch-only credentials after logging into your Multisig Shield wallet.</translation>
+        <translation>Accedi al tuo wallet Multisig Shield watch-only con username e password. Potrai creare delle credenziali watch-only dopo aver effettuato l&apos;accesso al tuo wallet Multisig Shield.</translation>
     </message>
     <message>
         <source>id_log_in_using_mnemonic</source>
-        <translation>Accedi usando la mnemonica</translation>
+        <translation>Accedi usando mnemonic</translation>
     </message>
     <message>
         <source>id_log_in_via_watchonly_to_receive</source>
-        <translation>Accedi in modalità Watch-only per ricevere fondi e controllare il tuo bilancio.</translation>
+        <translation>Accedi in modalità Watch-only per ricevere fondi e controllare il tuo saldo.</translation>
     </message>
     <message>
         <source>id_log_out</source>
@@ -1999,7 +2193,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_logged_in_wallets</source>
-        <translation>Logged in wallets</translation>
+        <translation>Accesso ai wallet effettuato</translation>
     </message>
     <message>
         <source>id_logging_in</source>
@@ -2007,7 +2201,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_login</source>
-        <translation>Login</translation>
+        <translation>Accesso</translation>
     </message>
     <message>
         <source>id_login_failed</source>
@@ -2015,11 +2209,15 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_login_options</source>
-        <translation>Opzioni Login</translation>
+        <translation>Opzioni login</translation>
     </message>
     <message>
         <source>id_login_with_biometrics</source>
-        <translation>Login with Biometrics</translation>
+        <translation>Accedi con Biometria</translation>
+    </message>
+    <message>
+        <source>id_login_with_bip39_passphrase</source>
+        <translation>Login with BIP39 Passphrase</translation>
     </message>
     <message>
         <source>id_logout</source>
@@ -2031,19 +2229,19 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_look_at_the_device_for_the</source>
-        <translation>Guarda la disposizione dei numeri sul dispositivo</translation>
+        <translation>Controlla il tuo dispositivo per la posizione dei numeri</translation>
     </message>
     <message>
         <source>id_looking_for_wallets</source>
-        <translation>Looking for wallets…</translation>
+        <translation>Ricerca wallet in corso...</translation>
     </message>
     <message>
         <source>id_looks_like_you_havent_used_a</source>
-        <translation>Looks like you haven&apos;t used a wallet yet. Try creating a new one.</translation>
+        <translation>Sembra che tu non abbia ancora utilizzato alcun wallet. Prova a crearne uno.</translation>
     </message>
     <message>
         <source>id_low</source>
-        <translation>Bassa</translation>
+        <translation>Basso</translation>
     </message>
     <message>
         <source>id_main_account</source>
@@ -2051,11 +2249,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_make_sure_you_have_enabled_otg</source>
-        <translation>Make sure you have enabled OTG option in Android Settings</translation>
+        <translation>Assicurati di aver abilitato l&apos;opzione OTG nelle tue impostazioni Android</translation>
     </message>
     <message>
         <source>id_make_sure_you_made_a_proper</source>
-        <translation>Assicurati di aver fatto un backup corretto della tua mnemonica.</translation>
+        <translation>Assicurati di aver effettuato il backup della tua mnemonic.</translation>
     </message>
     <message>
         <source>id_malleated</source>
@@ -2067,15 +2265,19 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_managed_assets_account</source>
-        <translation>Managed Assets Account</translation>
+        <translation>Account Managed Assets</translation>
     </message>
     <message>
         <source>id_managed_assets_accounts_are</source>
-        <translation>Managed assets accounts are only available on Liquid wallets. You may be required to provide your account ID to issuers to receive a Managed Asset.</translation>
+        <translation>Gli account Managed Assets sono solo disponibili sui wallet Liquid. Ti potrebbe essere richiesto di di fornire l&apos;ID del tuo account a un emettitore per ricevere un Managed Asset.</translation>
     </message>
     <message>
         <source>id_manual_coin_selection</source>
-        <translation>Manual coin selection</translation>
+        <translation>Selezione manuale monete</translation>
+    </message>
+    <message>
+        <source>id_manual_restore</source>
+        <translation>Ripristino Manuale</translation>
     </message>
     <message>
         <source>id_medium</source>
@@ -2087,19 +2289,19 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_message</source>
-        <translation>Message</translation>
+        <translation>Messaggio</translation>
     </message>
     <message>
         <source>id_message_hash</source>
-        <translation>Message hash</translation>
+        <translation>Hash messaggio</translation>
     </message>
     <message>
         <source>id_migrate_another_wallet</source>
-        <translation>Importa un altro Wallet</translation>
+        <translation>Migrazione altro Wallet</translation>
     </message>
     <message>
         <source>id_migrating_to_blockstream_green</source>
-        <translation>Passi a Blockstream Green? Hai già un wallet creato con Blockstream Green?</translation>
+        <translation>Stai migrando a Blockstream Green? Hai già un wallet Blockstream Green che vorresti importare? Ecco come fare!</translation>
     </message>
     <message>
         <source>id_minute</source>
@@ -2111,15 +2313,15 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_mnemonic</source>
-        <translation>Mnemonica</translation>
+        <translation>Mnemonic</translation>
     </message>
     <message>
         <source>id_mnemonic_not_available</source>
-        <translation>Mnemonica non disponibile</translation>
+        <translation>Mnemonic non disponibile</translation>
     </message>
     <message>
         <source>id_model</source>
-        <translation>Model</translation>
+        <translation>Modello</translation>
     </message>
     <message>
         <source>id_month</source>
@@ -2131,15 +2333,15 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_more_info</source>
-        <translation>More Info</translation>
+        <translation>Maggiori informazioni</translation>
     </message>
     <message>
         <source>id_more_options</source>
-        <translation>More Options</translation>
+        <translation>Più opzioni</translation>
     </message>
     <message>
         <source>id_multi_server_validation</source>
-        <translation>Multi Server Validation</translation>
+        <translation>Convalida multi server</translation>
     </message>
     <message>
         <source>id_multiple_assets</source>
@@ -2171,7 +2373,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_network_fee</source>
-        <translation>COMMISSIONI DI RETE</translation>
+        <translation>FEE NETWORK</translation>
     </message>
     <message>
         <source>id_network_monitor</source>
@@ -2179,43 +2381,43 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_networks</source>
-        <translation>Networks</translation>
+        <translation>Network</translation>
     </message>
     <message>
         <source>id_new_account_created</source>
-        <translation>New account created</translation>
+        <translation>Nuovo account creato</translation>
     </message>
     <message>
         <source>id_new_accounts_functionality</source>
-        <translation>La creazione di nuovi account sarà disponibile in una versione successiva.</translation>
+        <translation>In arrivo nuove funzionalità per gli account!</translation>
     </message>
     <message>
         <source>id_new_fee</source>
-        <translation>Nuova commissione</translation>
+        <translation>Nuova fee</translation>
     </message>
     <message>
         <source>id_new_incoming_transaction_in</source>
-        <translation>Nuova transazione in uscita dall&apos; account %1 (%2).</translation>
+        <translation>Nuova transazione in entrata nell&apos;account %1 (%2).</translation>
     </message>
     <message>
         <source>id_new_jade_firmware_available</source>
-        <translation>Nuovo firmware per Jade disponibile</translation>
+        <translation>Nuovo firmware Jade disponibile</translation>
     </message>
     <message>
         <source>id_new_jade_firmware_required</source>
-        <translation>Necessario nuovo firmware per Jade</translation>
+        <translation>Richiesto nuovo firmware Jade</translation>
     </message>
     <message>
         <source>id_new_outgoing_transaction_from</source>
-        <translation>Nuova transazione in ingresso nell&apos; account %1 (%2).</translation>
+        <translation>Nuova transazione in uscita dall&apos;account %1 (%2).</translation>
     </message>
     <message>
         <source>id_new_recovery_phrase</source>
-        <translation>New recovery phrase</translation>
+        <translation>Nuova recovery phrase</translation>
     </message>
     <message>
         <source>id_new_s_transaction_of_s_in</source>
-        <translation>Nuova transazione %1  di %2 nell&apos;account %3.</translation>
+        <translation>Nuova transazione %1 di %2 nell&apos;account %3.</translation>
     </message>
     <message>
         <source>id_new_transaction</source>
@@ -2239,43 +2441,56 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_nfc_logo</source>
-        <translation>NFC Logo</translation>
+        <translation>Logo NFC</translation>
     </message>
     <message>
         <source>id_nfc_tags_written</source>
-        <translation>NFC TAGs Written:</translation>
+        <translation>TAG NFC scritti:</translation>
     </message>
     <message>
         <source>id_no_amount_specified</source>
         <translation>Nessun importo specificato</translation>
     </message>
     <message>
+        <source>id_no_archived_accounts</source>
+        <translation>Nessun account archiviato</translation>
+    </message>
+    <message>
         <source>id_no_asset_in_this_account</source>
-        <translation>No asset in this account</translation>
+        <translation>Nessun asset nell&apos;account</translation>
     </message>
     <message>
         <source>id_no_attempts_remaining</source>
-        <translation>Nessun tentativo rimasto</translation>
+        <translation>Nessun tentativo rimanente</translation>
     </message>
     <message>
         <source>id_no_coins_selected</source>
-        <translation>(No coins selected)</translation>
+        <translation>(Nessun coin selezionato)</translation>
     </message>
     <message>
         <source>id_no_device_connected</source>
-        <translation>No device connected</translation>
+        <translation>Nessun dispositivo connesso</translation>
+    </message>
+    <message>
+        <source>id_no_existing_wallet_could_be</source>
+        <translation>Nessun wallet trovato.
+Tenta un ripristino manuale.</translation>
     </message>
     <message>
         <source>id_no_more_assets</source>
-        <translation>No more assets.</translation>
+        <translation>Nessun asset rimasto.</translation>
+    </message>
+    <message>
+        <source>id_no_multisig_shield_wallet</source>
+        <translation>Non esiste un wallet multisig shield con questa recovery phrase.</translation>
     </message>
     <message>
         <source>id_no_peers_connected</source>
-        <translation>Nessun Peer Connesso</translation>
+        <translation>Nessun Peer connesso</translation>
     </message>
     <message>
         <source>id_no_pin_provided_exiting</source>
-        <translation>Nessun PIN fornito, esco.</translation>
+        <translation>Nessun PIN fornito. In uscita.</translation>
     </message>
     <message>
         <source>id_no_recipients</source>
@@ -2287,7 +2502,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_no_registered_ticker_for_this</source>
-        <translation>Nessun simbolo registrato per questo asset.</translation>
+        <translation>Nessun ticker registrato per questo asset.</translation>
     </message>
     <message>
         <source>id_no_utxos_found</source>
@@ -2299,11 +2514,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_non_confidential_transaction</source>
-        <translation>Non Confidential Transaction</translation>
+        <translation>Non-confidential Transaction</translation>
     </message>
     <message>
         <source>id_nonconfidential_addresses_not</source>
-        <translation>Indirizzi non confidenziali non supportati</translation>
+        <translation>Non-confidential address non supportati</translation>
     </message>
     <message>
         <source>id_noradio_firmware</source>
@@ -2315,7 +2530,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_not_a_valid_email_address</source>
-        <translation>Indirizzo email non valido</translation>
+        <translation>Indirizzo e-mail non valido</translation>
     </message>
     <message>
         <source>id_not_a_valid_phone_number</source>
@@ -2323,27 +2538,27 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_not_a_valid_word</source>
-        <translation>Not a valid word</translation>
+        <translation>Parola non valida</translation>
     </message>
     <message>
         <source>id_not_available_noradio_build</source>
-        <translation>Not available (No-radio build)</translation>
+        <translation>Non disponibile (No-radio build)</translation>
     </message>
     <message>
         <source>id_not_confidential</source>
-        <translation>Not confidential</translation>
+        <translation>Non confidential</translation>
     </message>
     <message>
         <source>id_not_connected_connecting_in_ds_</source>
-        <translation>Non connesso. Connessione in %1s …</translation>
+        <translation>Non connesso. Connessione in %1 …</translation>
     </message>
     <message>
         <source>id_not_initialized</source>
-        <translation>Not initialized</translation>
+        <translation>Non inizializzato</translation>
     </message>
     <message>
         <source>id_not_on_longest_chain</source>
-        <translation>Not on longest chain</translation>
+        <translation>Non sulla chain più lunga</translation>
     </message>
     <message>
         <source>id_notifications</source>
@@ -2359,7 +2574,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_of_s</source>
-        <translation>of %1</translation>
+        <translation>di %1</translation>
     </message>
     <message>
         <source>id_ok</source>
@@ -2371,19 +2586,19 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_once_selected_this_spending</source>
-        <translation>Once selected, this spending policy cannot be changed. For tips on what type of security is best for you, visit our Help Center.</translation>
+        <translation>Una volta selezionata, la spending policy non potrà essere modificata. Per capire quale tipo di sicurezza sia la migliore per te, visita il nostro Help Center.</translation>
     </message>
     <message>
         <source>id_one_attempt_remaining</source>
-        <translation>Un tentativo rimasto</translation>
+        <translation>Un tentativo rimanente</translation>
     </message>
     <message>
         <source>id_one_network_must_be_selected</source>
-        <translation>Un network dev&apos;essere selezionato. Bitcoin selezionato di default</translation>
+        <translation>Selezionare un network. Seleziona Bitcoin di default</translation>
     </message>
     <message>
         <source>id_onion_addresses_require_tor</source>
-        <translation>Un indirizzo onion richiede connessione tramite Tor. Abilitala nelle impostazioni di rete dell&apos; applicazione</translation>
+        <translation>Gli indirizzi onion richiedono connessione tramite Tor. Abilitala nelle impostazioni di rete.</translation>
     </message>
     <message>
         <source>id_only_connect_to_trusted_nodes</source>
@@ -2395,19 +2610,19 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_open</source>
-        <translation>Open</translation>
+        <translation>Apri</translation>
     </message>
     <message>
         <source>id_operation_failure</source>
-        <translation>Operazione fallita</translation>
+        <translation>Operazione non riuscita</translation>
     </message>
     <message>
         <source>id_optimal_if_you_rarely_spend</source>
-        <translation>Optimal if you rarely spend coins. Wallet coins will require two-factor reactivation every 455 days to remain protected by two-factor authentication</translation>
+        <translation>Soluzione ottimale se spendi coin raramente. I coin del wallet avranno bisongo di una riattivazione a due fattori ogni 455 giorni per rimanere protette dall&apos;autenticazione a due fattori.</translation>
     </message>
     <message>
         <source>id_optimal_if_you_spend_coins</source>
-        <translation>Optimal if you spend coins every 6 months. Wallet coins will require two-factor reactivation every 6 months to remain protected by two-factor authentication.</translation>
+        <translation>Soluzione ottimale se spendi coin ogni 6 mesi. I coin del wallet avranno bisongo di una riattivazione a due fattori ogni 6 mesi per rimanere protette dall&apos;autenticazione a due fattori.</translation>
     </message>
     <message>
         <source>id_optional</source>
@@ -2426,12 +2641,16 @@ Recovery Phrase</translation>
         <translation>O</translation>
     </message>
     <message>
+        <source>id_os__app_version_loading_times</source>
+        <translation>Sistema operativo e versione dell&apos;app, tempi di caricamento</translation>
+    </message>
+    <message>
         <source>id_our_support_page</source>
         <translation>la nostra pagina di supporto</translation>
     </message>
     <message>
         <source>id_outdated_hardware_wallet</source>
-        <translation>Firmware dell&apos;Hardware Wallet obsoleto. Esegui l&apos;upgrade all&apos;ultimo firmware dal tuo desktop.</translation>
+        <translation>Firmare hardware wallet obsoleto. Aggiornare all&apos;ultima versione del firmware dal tuo desktop.</translation>
     </message>
     <message>
         <source>id_outgoing</source>
@@ -2447,7 +2666,19 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_p2wsh</source>
-        <translation>P2wsh</translation>
+        <translation>P2sh</translation>
+    </message>
+    <message>
+        <source>id_page_visits_button_presses</source>
+        <translation>Pagine visitate, bottoni cliccati, configurazione generale dell&apos;app</translation>
+    </message>
+    <message>
+        <source>id_passphrase</source>
+        <translation>Passphrase</translation>
+    </message>
+    <message>
+        <source>id_passphrase_protected</source>
+        <translation>Passphrase protected</translation>
     </message>
     <message>
         <source>id_password</source>
@@ -2463,19 +2694,19 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_path_used_for_signing</source>
-        <translation>Path used for signing</translation>
+        <translation>Path utilizzato per firma</translation>
     </message>
     <message>
         <source>id_pending_confirmation</source>
-        <translation>Pending confirmation</translation>
+        <translation>In attesa di conferma</translation>
     </message>
     <message>
         <source>id_permanently_block_this_wallet</source>
-        <translation>Permanently Block This Wallet</translation>
+        <translation>Blocca questo Wallet in modo permanente</translation>
     </message>
     <message>
         <source>id_personal_electrum_server</source>
-        <translation>Personal Electrum Server</translation>
+        <translation>Server Electrum personale</translation>
     </message>
     <message>
         <source>id_pgp_key</source>
@@ -2487,7 +2718,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_phone_number</source>
-        <translation>Numero telefonico</translation>
+        <translation>Numero di telefono</translation>
     </message>
     <message>
         <source>id_pin</source>
@@ -2495,31 +2726,31 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_pin_access_disabled</source>
-        <translation>PIN access disabled</translation>
+        <translation>Accesso PIN disabilitato</translation>
     </message>
     <message>
         <source>id_pin_has_to_be_between_4_and_15</source>
-        <translation>Il PIN dev&apos;essere fra 4 e 15 cifre</translation>
+        <translation>Il PIN deve contenere dalle 4 alle 15 cifre</translation>
     </message>
     <message>
         <source>id_pins_do_not_match_please_try</source>
-        <translation>I PIN non coincidono, riprova.</translation>
+        <translation>I PIN non coincidono. Riprova.</translation>
     </message>
     <message>
         <source>id_please_activate_at_least_one</source>
-        <translation>Please activate at least one fingerprint in Android settings in order to use biometric login</translation>
+        <translation>Attiva almeno un&apos;impronta digitale nelle impostazioni di Android per utilizzare il login biometrico</translation>
     </message>
     <message>
         <source>id_please_contribute_if_you_find</source>
-        <translation>Contribuisci se trovi Blockstream Green utile</translation>
+        <translation>Facci sapere se trovi Blockstream Green utile</translation>
     </message>
     <message>
         <source>id_please_disable_biometric</source>
-        <translation>Disabilita l&apos;autenticazione biometrica prima di disabilitare il PIN</translation>
+        <translation>Disabilita l&apos;autenticazione biometrica prima di eliminare il PIN</translation>
     </message>
     <message>
         <source>id_please_disconnect_your_ledger</source>
-        <translation>Disconnetti il tuo Ledger Nano X, spegnilo premendo a lungo i due pulsanti, riconnettilo e inserisci nuovamente il PIN</translation>
+        <translation>Disconnetti il tuo Ledger Nano X, spegnilo premendo a lungo entrambi i pulsanti, riconnettilo e inserisci il PIN</translation>
     </message>
     <message>
         <source>id_please_enable_another</source>
@@ -2527,11 +2758,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_please_enable_camera</source>
-        <translation>Per piacere abilita i permessi dell&apos;app per usare la fotocamera.</translation>
+        <translation>Acconsenti l&apos;accesso alla videocamera per poterla utilizzare.</translation>
     </message>
     <message>
         <source>id_please_enable_pin</source>
-        <translation>Abilita autenticazione tramite PIN prima di aggiungere o rimuovere l&apos;autenticazione biometrica</translation>
+        <translation>Abilita l&apos;autenticazione PIN prima di aggiungere o rimuovere l&apos;autenticazione biometrica</translation>
     </message>
     <message>
         <source>id_please_enter_the_passphrase_for</source>
@@ -2543,7 +2774,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_please_hold_on_while_your</source>
-        <translation>Attendere generazione dell&apos; indirizzo</translation>
+        <translation>Attendere. Creazione indirizzo in corso</translation>
     </message>
     <message>
         <source>id_please_provide_your_1s</source>
@@ -2559,11 +2790,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_please_reconnect_your_hardware</source>
-        <translation>Connetti nuovamente il tuo hardware wallet prima di riprovare</translation>
+        <translation>Connetti nuovamente il tuo hardware wallet prima di riprovare.</translation>
     </message>
     <message>
         <source>id_please_secure_your_mnemonic_and</source>
-        <translation>Conserva la tua mnemonica in maniera sicura e conferma di accettare i Termini di Servizio</translation>
+        <translation>Conserva la tua mnemonic in maniera sicura e conferma di accettare i Termini di Servizio</translation>
     </message>
     <message>
         <source>id_please_select_the_checkbox</source>
@@ -2571,11 +2802,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_please_set_and_enable_socks5</source>
-        <translation>Specifica ed abilita SOCKS5 proxy e porta per usare Tor</translation>
+        <translation>Imposta e abilita la proxy e la porta SOCKS5 per utilizzare Tor</translation>
     </message>
     <message>
         <source>id_please_tap_card</source>
-        <translation>Please tap card</translation>
+        <translation>Avvicinare carta</translation>
     </message>
     <message>
         <source>id_please_verify_that_the_address</source>
@@ -2583,7 +2814,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_please_wait_until_your_ledger</source>
-        <translation>Attendi fino a che il tuo Ledger mostra l&apos;indirizzo per poterlo validare. Può impiegare fino a 20 secondi.</translation>
+        <translation>Attendi fino a che il tuo Ledger non mostrerà l&apos;indirizzo per poterlo validare. L&apos;operazione potrebbe richiedere fino a 20 secondi.</translation>
     </message>
     <message>
         <source>id_precision</source>
@@ -2591,7 +2822,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_previous_fee</source>
-        <translation>Commissione precedente</translation>
+        <translation>Fee precedente</translation>
     </message>
     <message>
         <source>id_privacy_policy</source>
@@ -2599,39 +2830,43 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_private_but_less_stable</source>
-        <translation>Connessione riservata</translation>
+        <translation>Connessione riservata ma meno stabile</translation>
     </message>
     <message>
         <source>id_private_key</source>
-        <translation>Private Key</translation>
+        <translation>Chiave privata</translation>
     </message>
     <message>
         <source>id_problem_with_key_1s</source>
-        <translation>Problema con il tasto %1</translation>
+        <translation>Problema con la chiave %1</translation>
     </message>
     <message>
         <source>id_provide_this_id_to_the_asset</source>
-        <translation>Provide this ID to the asset issuer if requested.</translation>
+        <translation>Fornisci questo ID all&apos;emettitore dell&apos;asset qualora richiesto.</translation>
     </message>
     <message>
         <source>id_provide_your_amp_id_to_the</source>
-        <translation>Provide your AMP ID to the asset issuer if requested.</translation>
+        <translation>Fornisci il tuo ID AMP all&apos;emettitore dell&apos;asset qualora richiesto.</translation>
     </message>
     <message>
         <source>id_proxy_host</source>
-        <translation>Proxy host</translation>
+        <translation>Host proxy</translation>
     </message>
     <message>
         <source>id_proxy_port</source>
-        <translation>Proxy port</translation>
+        <translation>Porta proxy</translation>
     </message>
     <message>
         <source>id_proxy_settings</source>
-        <translation>PROXY SETTINGS</translation>
+        <translation>IMPOSTAZIONI PROXY </translation>
+    </message>
+    <message>
+        <source>id_pseudonymous_identifier_country</source>
+        <translation>Pseudonimo identificativo, paese</translation>
     </message>
     <message>
         <source>id_qr_code</source>
-        <translation>QR Code</translation>
+        <translation>QR code</translation>
     </message>
     <message>
         <source>id_qr_scanner</source>
@@ -2642,20 +2877,32 @@ Recovery Phrase</translation>
         <translation>Radio firmware</translation>
     </message>
     <message>
+        <source>id_rate</source>
+        <translation>Rate</translation>
+    </message>
+    <message>
+        <source>id_rate_us</source>
+        <translation>Rate us</translation>
+    </message>
+    <message>
+        <source>id_rate_your_experience</source>
+        <translation>Rate your experience</translation>
+    </message>
+    <message>
         <source>id_read_more</source>
-        <translation>Read more</translation>
+        <translation>Maggiori informazioni</translation>
     </message>
     <message>
         <source>id_read_more_at_our_s</source>
-        <translation>Leggi di più presso la nostra %1</translation>
+        <translation>Per maggiori informazioni consulta %1</translation>
     </message>
     <message>
         <source>id_ready</source>
-        <translation>Ready</translation>
+        <translation>Pronto</translation>
     </message>
     <message>
         <source>id_ready_to_start</source>
-        <translation>Ready to start</translation>
+        <translation>Pronto a iniziare</translation>
     </message>
     <message>
         <source>id_receive</source>
@@ -2663,19 +2910,19 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_receive_email_notifications_for</source>
-        <translation>Ricevi notifiche via email per transazioni inviate e ricevute</translation>
+        <translation>Ricevi notifiche via email per le transazioni inviate e ricevute</translation>
     </message>
     <message>
         <source>id_received</source>
-        <translation>Ricevuta</translation>
+        <translation>Ricevuto</translation>
     </message>
     <message>
         <source>id_received_on</source>
-        <translation>Ricevuta su</translation>
+        <translation>Ricevuto su</translation>
     </message>
     <message>
         <source>id_recently_used_wallets</source>
-        <translation>Recently used wallets</translation>
+        <translation>Wallet utilizzati di recente</translation>
     </message>
     <message>
         <source>id_recipient</source>
@@ -2683,19 +2930,23 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_recipient_address</source>
-        <translation>Recipient address</translation>
+        <translation>Indirizzo destinatario</translation>
     </message>
     <message>
         <source>id_recovery</source>
-        <translation>Recupero fondi</translation>
+        <translation>Recovery</translation>
     </message>
     <message>
         <source>id_recovery_and_notifications</source>
-        <translation>Recupero e Notifiche</translation>
+        <translation>Recovery e Notifiche</translation>
+    </message>
+    <message>
+        <source>id_recovery_key_type</source>
+        <translation>Tipo di Recovery Key</translation>
     </message>
     <message>
         <source>id_recovery_mnemonic</source>
-        <translation>Mnemonica per recovery 2of3</translation>
+        <translation>Mnemonic recovery</translation>
     </message>
     <message>
         <source>id_recovery_phrase</source>
@@ -2703,7 +2954,15 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_recovery_phrase_check</source>
-        <translation>Validazione Recovery Phrase</translation>
+        <translation>Controllo Recovery Phrase</translation>
+    </message>
+    <message>
+        <source>id_recovery_phrase_length</source>
+        <translation>Lunghezza della Recovery Phrase</translation>
+    </message>
+    <message>
+        <source>id_recovery_phrases_key_material</source>
+        <translation>Recovery phrase, chiavi private, indirizzi, somme</translation>
     </message>
     <message>
         <source>id_recovery_tool</source>
@@ -2711,31 +2970,31 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_recovery_transaction_emails</source>
-        <translation>Email con transazione di recupero</translation>
+        <translation>E-mail transazioni di recovery</translation>
     </message>
     <message>
         <source>id_recovery_transaction_request</source>
-        <translation>Richiesta transazione di recupero inviata</translation>
+        <translation>Richiesta di transazione di recovery inviata</translation>
     </message>
     <message>
         <source>id_recovery_transactions</source>
-        <translation>Transazioni di recupero</translation>
+        <translation>Transazioni di recovery</translation>
     </message>
     <message>
         <source>id_recovery_words</source>
-        <translation>Parole per il ripristino</translation>
+        <translation>Recovery word</translation>
     </message>
     <message>
         <source>id_recovery_xpub</source>
-        <translation>Xpub per recovery 2of3</translation>
+        <translation>Recovery xpub</translation>
     </message>
     <message>
         <source>id_redeem_your_deposited_funds</source>
-        <translation>Recupera i tuoi fondi senza la firma di Blockstream Green dopo un periodo di tempo prestabilito.</translation>
+        <translation>Recupera i fondi che hai depositato senza il bisogno della firma Blockstream Green dopo un periodo di tempo prestabilito.</translation>
     </message>
     <message>
         <source>id_redeposited</source>
-        <translation>Rideposito</translation>
+        <translation>Ridepositato</translation>
     </message>
     <message>
         <source>id_reference_exchange_rate</source>
@@ -2747,7 +3006,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_reload</source>
-        <translation>Reload</translation>
+        <translation>Ricarica</translation>
     </message>
     <message>
         <source>id_remember_me</source>
@@ -2759,7 +3018,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_remove_custom_network</source>
-        <translation>Rimuovi il network custom</translation>
+        <translation>Rimuovi network custom</translation>
     </message>
     <message>
         <source>id_remove_wallet</source>
@@ -2767,7 +3026,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_rename</source>
-        <translation>Rename</translation>
+        <translation>Rinomina</translation>
     </message>
     <message>
         <source>id_rename_account</source>
@@ -2775,15 +3034,15 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_rename_wallet</source>
-        <translation>Rinomina Wallet</translation>
+        <translation>Rename wallet</translation>
     </message>
     <message>
         <source>id_replaceable</source>
-        <translation>rimpiazzabile</translation>
+        <translation>sostituibile</translation>
     </message>
     <message>
         <source>id_request_amount</source>
-        <translation>Request Amount</translation>
+        <translation>Richiedi importo</translation>
     </message>
     <message>
         <source>id_request_failed</source>
@@ -2791,7 +3050,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_request_recovery_transactions</source>
-        <translation>Richiedi transazioni di recupero</translation>
+        <translation>Richiedi transazioni di recovery</translation>
     </message>
     <message>
         <source>id_request_sent</source>
@@ -2799,11 +3058,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_request_twofactor_reset</source>
-        <translation>Richiedi reset del Secondo Fattore</translation>
+        <translation>Richiedi reset Autenticazione a Due Fattori</translation>
     </message>
     <message>
         <source>id_requested_fee_rate_too_low</source>
-        <translation>Tasso di commissione richiesto troppo basso</translation>
+        <translation>Fee rate richiesta troppo bassa</translation>
     </message>
     <message>
         <source>id_reset</source>
@@ -2811,11 +3070,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_reset_spv</source>
-        <translation>Riavvia SPV</translation>
+        <translation>Reset SPV</translation>
     </message>
     <message>
         <source>id_resetting_your_twofactor_takes</source>
-        <translation>Il reset dell&apos; Autenticazione a Due Fattori richiede minimo 12 mesi. Se sei sicuro di aver perso l&apos;accesso al tuo metodo di autenticazione, fornisci un indirizzo email per il reset.</translation>
+        <translation>Il reset dell&apos;Autenticazione a Due Fattori richiede minimo 12 mesi. Se sei sicuro di aver perso l&apos;accesso al tuo metodo di autenticazione, fornisci un nuovo indirizzo e-mail qui di seguito per ricevere il reset.</translation>
     </message>
     <message>
         <source>id_restore</source>
@@ -2823,11 +3082,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_restore_a_blockstream_green</source>
-        <translation>Ripristina un wallet Blockstream Green utilizzando la tua mnemonica da 24 parole. Puoi trovarla nelle impostazione di qualsiasi app Blockstream Green.</translation>
+        <translation>Ripristina un wallet Blockstream Green utilizzando la tua mnemonic da 24 parole. Puoi trovarla nelle impostazione di qualsiasi app Blockstream Green.</translation>
     </message>
     <message>
         <source>id_restore_a_singlesig_wallet</source>
-        <translation>Restore a Singlesig wallet created on Blockstream Green, or import a wallet created with other apps. This option only works with singlesig wallets using BIP39 mnemonics, and following the BIP44, BIP49, or BIP84 derivations.</translation>
+        <translation>Ripristina un Wallet Singlesig creato su Blockstream Green o importa un wallet creato con altre app. Questa opzione funziona solo con wallet singlesig che utilizzano mnemonic BIP39, BIP44, BIP49, BIP84 o derivazioni.</translation>
     </message>
     <message>
         <source>id_restore_a_wallet</source>
@@ -2835,35 +3094,35 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_restore_green_wallet</source>
-        <translation>Ripristina un Wallet Green</translation>
+        <translation>Ripristina Wallet Green</translation>
     </message>
     <message>
         <source>id_restore_temporary_wallet</source>
-        <translation>Ripristina wallet temporaneamente</translation>
+        <translation>Ripristina temporary wallet</translation>
     </message>
     <message>
         <source>id_restore_wallet</source>
-        <translation>Restore Wallet</translation>
+        <translation>Ripristina Wallet</translation>
     </message>
     <message>
         <source>id_restore_with_recovery_phrase</source>
-        <translation>Restore with recovery phrase</translation>
+        <translation>Ripristina con recovery phrase</translation>
     </message>
     <message>
         <source>id_restoring_your_wallet</source>
-        <translation>Restoring Your Wallet</translation>
+        <translation>Ripristino Wallet in corso</translation>
     </message>
     <message>
         <source>id_review</source>
-        <translation>Controlla</translation>
+        <translation>Rivedi</translation>
     </message>
     <message>
         <source>id_review_account_information</source>
-        <translation>Rivedi le informazioni account</translation>
+        <translation>Rivedi informazioni account</translation>
     </message>
     <message>
         <source>id_review_output_s</source>
-        <translation>Review output %1</translation>
+        <translation>Rivedi output %1</translation>
     </message>
     <message>
         <source>id_s_blocks_left</source>
@@ -2883,15 +3142,19 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_save_a_summary_of_your_accounts</source>
-        <translation>Conserva un riepilogo dei tuoi account per velocizzare il recupero dei tuoi fondi nel caso tu debba usare il recovery tool.</translation>
+        <translation>Salva un riepilogo dei tuoi account per velocizzare la recovery nel caso tu debba utilizzare il nostro recovery tool.</translation>
     </message>
     <message>
         <source>id_save_your_mnemonic</source>
-        <translation>Conserva la tua mnemonica</translation>
+        <translation>Conserva la tua mnemonic</translation>
     </message>
     <message>
         <source>id_scan_a_qr_code_for_spv_pairing</source>
-        <translation>Scansiona un QR code per SPV pairing</translation>
+        <translation>Scansiona un QR code per il pairing della SPV </translation>
+    </message>
+    <message>
+        <source>id_scan_or_paste_your_extended</source>
+        <translation>Scansiona o incolla la tua extended public key (xPub/yPub/zPub) per accedere al tuo wallet watch-only.</translation>
     </message>
     <message>
         <source>id_scan_qr_code</source>
@@ -2899,7 +3162,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_scan_the_qr_code_with_an</source>
-        <translation>Scan the QR Code with an Authenticator app</translation>
+        <translation>Scansiona il QR code con una app Authenticator</translation>
     </message>
     <message>
         <source>id_scan_to_send_here</source>
@@ -2915,7 +3178,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_search_address</source>
-        <translation>Search address</translation>
+        <translation>Cerca indirizzo</translation>
     </message>
     <message>
         <source>id_second</source>
@@ -2927,27 +3190,31 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_security</source>
-        <translation>Security</translation>
+        <translation>Sicurezza</translation>
     </message>
     <message>
         <source>id_security_change</source>
-        <translation>Security Change</translation>
+        <translation>Modifica sicurezza</translation>
     </message>
     <message>
         <source>id_see_our_privacy_policy_s</source>
-        <translation>Consulta %1 la nostra privacy policy</translation>
+        <translation>Consulta la nostra privacy policy %1 </translation>
     </message>
     <message>
         <source>id_see_our_terms_of_service_s</source>
-        <translation>Leggi %1 i Termini del Servizio</translation>
+        <translation>Consulta i nostri Termini di Servizio%1 </translation>
     </message>
     <message>
         <source>id_segwit_account</source>
-        <translation>SegWit Account</translation>
+        <translation>Account SegWit</translation>
+    </message>
+    <message>
+        <source>id_segwit_bip84</source>
+        <translation>SegWit (BIP84)</translation>
     </message>
     <message>
         <source>id_select_a_fiat_currency_and</source>
-        <translation>Seleziona una valuta fiat e una denominazione bitcoin con cui mostrare gli importi</translation>
+        <translation>Seleziona una valuta fiat e una denominazione bitcoin per mostrare gli importi nel tuo wallet</translation>
     </message>
     <message>
         <source>id_select_account</source>
@@ -2955,7 +3222,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_select_an_app_on_s</source>
-        <translation>Select an app on %1</translation>
+        <translation>Seleziona un&apos;app su %1</translation>
     </message>
     <message>
         <source>id_select_asset</source>
@@ -2963,11 +3230,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_select_duration_of_twofactor</source>
-        <translation>Seleziona la durata del Secondo Fattore d&apos;Autenticazione per i tuoi coin. La nuova selezione verrà applicata a tutti i nuovi coin ricevuti.</translation>
+        <translation>Seleziona la durata dell&apos;Autenticazione a Due Fattori per i tuoi coin. La nuova opzione è valida per i coin appena ricevuti.</translation>
     </message>
     <message>
         <source>id_select_network</source>
-        <translation>Scegli il network</translation>
+        <translation>Seleziona network</translation>
     </message>
     <message>
         <source>id_select_the_s_app_on_your_ledger</source>
@@ -2975,15 +3242,23 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_select_wallet</source>
-        <translation>Select Wallet</translation>
+        <translation>Seleziona Wallet</translation>
+    </message>
+    <message>
+        <source>id_select_watchonly_type</source>
+        <translation>Seleziona il tipo di watch-only</translation>
     </message>
     <message>
         <source>id_select_word_number_d</source>
-        <translation>Seleziona la parola numero %1</translation>
+        <translation>Seleziona numero parola %1</translation>
     </message>
     <message>
         <source>id_select_your_jade_to_login</source>
-        <translation>Select your Jade to login</translation>
+        <translation>Seleziona Jade per effettuare il login</translation>
+    </message>
+    <message>
+        <source>id_select_your_recovery_key</source>
+        <translation>Seleziona la tua recovery key</translation>
     </message>
     <message>
         <source>id_send</source>
@@ -2991,7 +3266,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_send_all</source>
-        <translation>Send all</translation>
+        <translation>Invia tutto</translation>
     </message>
     <message>
         <source>id_send_all_funds</source>
@@ -3003,7 +3278,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_send_and_receive_liquidbased</source>
-        <translation>Send and receive Liquid-based Managed Assets</translation>
+        <translation>Invia e ricevi Managed Asset Liquid based</translation>
     </message>
     <message>
         <source>id_send_to</source>
@@ -3011,11 +3286,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_sending</source>
-        <translation>Invio in corso</translation>
+        <translation>INVIO IN CORSO</translation>
     </message>
     <message>
         <source>id_sending_request</source>
-        <translation>Invio richiesta…</translation>
+        <translation>Invio richiesta in corso…</translation>
     </message>
     <message>
         <source>id_sent</source>
@@ -3027,19 +3302,19 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_server_ip_and_port_ipport</source>
-        <translation>Server IP and port (ip:port)</translation>
+        <translation>Server IP e porta (ip:port)</translation>
     </message>
     <message>
         <source>id_set_2fa_expiry</source>
-        <translation>Imposta una scadenza per 2FA</translation>
+        <translation>Imposta scadenza 2FA</translation>
     </message>
     <message>
         <source>id_set_a_limit_to_spend_without</source>
-        <translation>Imposta un limite per spendere senza Autenticazione a Due Fattori</translation>
+        <translation>Imposta un limite di spesa senza Autenticazione a Due Fattori</translation>
     </message>
     <message>
         <source>id_set_a_new_pin</source>
-        <translation>Imposta un nuovo PIN</translation>
+        <translation>Imposta nuovo PIN</translation>
     </message>
     <message>
         <source>id_set_a_pin</source>
@@ -3047,47 +3322,47 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_set_a_timeout_to_logout_after</source>
-        <translation>Imposta un timeout per logout dopo un periodo prolungato di inattività</translation>
+        <translation>Imposta un timeout per effettuare il logout dopo un periodo prolungato di inattività</translation>
     </message>
     <message>
         <source>id_set_an_email_address_to_receive</source>
-        <translation>Imposta un indirizzo email per ricevere notifiche sulle transazioni</translation>
+        <translation>Imposta un indirizzo e-mail per ricevere notifiche sulle transazioni</translation>
     </message>
     <message>
         <source>id_set_an_email_for_recovery</source>
-        <translation>Imposta email per il recupero</translation>
+        <translation>Imposta email per recovery</translation>
     </message>
     <message>
         <source>id_set_custom_fee_rate</source>
-        <translation>Imposta commissione personalizzata</translation>
+        <translation>Imposta custom fee rate/fee rate personalizzata</translation>
     </message>
     <message>
         <source>id_set_locktime</source>
-        <translation>Imposta il Locktime</translation>
+        <translation>Imposta Locktime</translation>
     </message>
     <message>
         <source>id_set_timelock</source>
-        <translation>Set timelock</translation>
+        <translation>Imposta timelock</translation>
     </message>
     <message>
         <source>id_set_twofactor_threshold</source>
-        <translation>Imposta limite per autenticazione a due fattori</translation>
+        <translation>Imposta soglia a Due Fattori</translation>
     </message>
     <message>
         <source>id_set_up_a_passcode_for_your_ios</source>
-        <translation>Imposta un codice per il tuo device iOS per impostare un PIN per Blockstream Green</translation>
+        <translation>Imposta un passcode per il tuo device iOS per impostare un PIN per Blockstream Green</translation>
     </message>
     <message>
         <source>id_set_up_a_screen_lock_for_your</source>
-        <translation>Abilita un blocco schermo Android e utilizzalo per accedere al tuo wallet</translation>
+        <translation>Imposta un blocco schermo per il tuo dispositivo Android e utilizzalo per accedere al tuo wallet</translation>
     </message>
     <message>
         <source>id_set_up_an_email_to_get</source>
-        <translation>Imposta una email per ricevere transazioni pre-firmate per recuperare i tuoi fondi. Le notifiche via email contengono i dati necessari al recupero fondi.</translation>
+        <translation>Imposta un&apos;e-mail per ricevere transazioni pre-firmate per la recovery. Le notifiche via mail contengono i tuoi dati di recovery criptati.</translation>
     </message>
     <message>
         <source>id_set_up_credentials_to_access_in</source>
-        <translation>Imposta le tue credenziali watch-only per ricevere senza mettere a rischio le tue chiavi private. Accedi da qualsiasi dispositivo con una Blockstream Green app</translation>
+        <translation>Imposta delle credenziali per accedere in modalità watch-only per ricevere coin senza mettere a rischio le tue chiavi private. Accedi da qualsiasi dispositivo tramite una delle app Blockstream Green </translation>
     </message>
     <message>
         <source>id_set_up_pgp_key_for</source>
@@ -3103,15 +3378,15 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_set_up_watchonly_credentials</source>
-        <translation>Imposta le credenziali watch-only per questo wallet</translation>
+        <translation>Imposta credenziali watch-only per questo wallet</translation>
     </message>
     <message>
         <source>id_set_wallet_name</source>
-        <translation>Scegli un nome per il tuo wallet</translation>
+        <translation>Imposta un nome per il tuo wallet</translation>
     </message>
     <message>
         <source>id_setting_up_your_wallet</source>
-        <translation>Creazione del Wallet</translation>
+        <translation>Creazione Wallet</translation>
     </message>
     <message>
         <source>id_setting_updated</source>
@@ -3123,7 +3398,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_setup_jade</source>
-        <translation>Setup Jade</translation>
+        <translation>Imposta Jade</translation>
     </message>
     <message>
         <source>id_setup_pin</source>
@@ -3143,51 +3418,55 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_share_nonconfidential</source>
-        <translation>Share non-confidential transaction</translation>
+        <translation>Condividi non-confidential transaction</translation>
     </message>
     <message>
         <source>id_share_unblinding_data</source>
-        <translation>Share unblinding data</translation>
+        <translation>Condividi unbinding data</translation>
     </message>
     <message>
         <source>id_show</source>
-        <translation>Show</translation>
+        <translation>Mostra</translation>
     </message>
     <message>
         <source>id_show_advanced_options</source>
-        <translation>Show advanced options</translation>
+        <translation>Mostra opzioni avanzate</translation>
     </message>
     <message>
         <source>id_show_all</source>
-        <translation>Show all</translation>
+        <translation>Mostra tutto</translation>
     </message>
     <message>
         <source>id_show_all_assets</source>
-        <translation>Show all assets</translation>
+        <translation>Mostra tutti gli asset</translation>
     </message>
     <message>
         <source>id_show_bitcoin_amounts_in</source>
-        <translation>Mostra gli ammontari in bitcoin in</translation>
+        <translation>Mostra importi in bitcoin in</translation>
     </message>
     <message>
         <source>id_show_coins_with_expiring</source>
-        <translation>Mostra i coin con Secondo Fattore d&apos;Autenticazione in scadenza.</translation>
+        <translation>Mostra coin con Autenticazione a Due Fattori in scadenza.</translation>
+    </message>
+    <message>
+        <source>id_show_details</source>
+        <translation>Mostra dettagli</translation>
     </message>
     <message>
         <source>id_show_fiat</source>
-        <translation>Mostra valuta corrente</translation>
+        <translation>Mostra fiat</translation>
     </message>
     <message>
         <source>id_show_my_wallet_backup</source>
-        <translation>Mostrami il backup del mio wallet</translation>
+        <translation>Mostra il backup del mio wallet</translation>
     </message>
     <message>
         <source>id_show_qr_code</source>
-        <translation>Mostra il QR code</translation>
+        <translation>Mostra QR code</translation>
     </message>
     <message>
         <source>id_signature_validation_failed_if</source>
-        <translation>Signature validation failed. If this error is unexpected and has happened repeatedly, it is possible the hardware wallet is faulty or has been compromised. It could be leaking your keys, which could lead to loss of funds. Please consider replacing the hardware wallet.</translation>
+        <translation>Convalida firma fallita. In caso di errore inaspettato e ripetuto, controllare che l&apos;hardware wallet non sia danneggiato o compromesso. Il wallet potrebbe rivelare le tue chiavi e di conseguenza farti pendere dei fondi. Sostituiscilo.</translation>
     </message>
     <message>
         <source>id_signup_in_progress</source>
@@ -3195,7 +3474,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_simplified_payment_verification</source>
-        <translation>La Simplified Payment Verification verifica le tue transazioni e il tuo bilancio utilizzando la rete Bitcoin, al di fuori dei server di Green. L&apos;abilitazione comporta maggiore utilizzo di banda e potenza di calcolo</translation>
+        <translation>La Simplified Payment Verification verifica le tue transazioni e il tuo saldo utilizzando la rete Bitcoin, al di fuori dei server di Green. L&apos;abilitazione comporta maggiore utilizzo di banda e potenza di calcolo</translation>
     </message>
     <message>
         <source>id_singlesig</source>
@@ -3203,7 +3482,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_singlesig_wallets_are_not_yet</source>
-        <translation>Singlesig wallets are not yet supported for use with hardware devices. By continuing you&apos;ll access a Multisig Shield wallet.</translation>
+        <translation>I wallet singlesig non vengono ancora supportati per l&apos;utilizzo con device hardware. Decidendo di continuare accederai a un wallet Multisig Shield.</translation>
     </message>
     <message>
         <source>id_skip</source>
@@ -3229,19 +3508,19 @@ Recovery Phrase</translation>
         <source>id_snnreset_this_setting_and_then</source>
         <translation>%1.
 
-Reset questa impostazione e successivamente riattivala.</translation>
+Resetta questa impostazione e riattivala.</translation>
     </message>
     <message>
         <source>id_socks5_hostname</source>
-        <translation>Socks5 Hostname</translation>
+        <translation>Hostname Socks5 </translation>
     </message>
     <message>
         <source>id_socks5_port</source>
-        <translation>Socks5 Port</translation>
+        <translation>Porta Socks5 </translation>
     </message>
     <message>
         <source>id_socks5_proxy_and_port_must_be</source>
-        <translation>SOCKS5 proxy e porta devono essere specificati</translation>
+        <translation>La proxy e la porta SOCKS5 devono essere impostate</translation>
     </message>
     <message>
         <source>id_something_went_wrong</source>
@@ -3249,15 +3528,15 @@ Reset questa impostazione e successivamente riattivala.</translation>
     </message>
     <message>
         <source>id_spend_your_bitcoin_without_2fa</source>
-        <translation>Spend your bitcoin without 2FA up to a certain threshold. After spending bitcoin up to this amount, you will need to reset your threshold to continue spending without 2FA.</translation>
+        <translation>Spendi i tuoi bitcoin senza 2FA fino a una certa soglia. Dopo aver speso bitcoin fino a questa cifra, dovrai resettare la soglia per continuare a spendere senza 2FA.</translation>
     </message>
     <message>
         <source>id_spv_is_always_synchronized_on</source>
-        <translation>La sincronizzazione SPV è attiva su rete WiFi o Ethernet. Questa opzione abilita la sincronizzazione tramite dati mobili. Prestare attenzione al traffico dati.</translation>
+        <translation>SPV è sempre sincronizzata su reti non mobili come WiFi o Ethernet. Questa impostazione si sincronizza anche quando si utilizzano dati mobili. Le tariffe variano in base al piano telefonico attivo. Prestare attenzione quando l&apos;opzione viene abilitata.</translation>
     </message>
     <message>
         <source>id_spv_mode_is_currently_available</source>
-        <translation>SPV mode is currently available for singlesig bitcoin wallets only.</translation>
+        <translation>La modalità SPV è attualmente solo disponibile per wallet bitcoin singlesig.</translation>
     </message>
     <message>
         <source>id_spv_not_fully_synced</source>
@@ -3269,7 +3548,7 @@ Reset questa impostazione e successivamente riattivala.</translation>
     </message>
     <message>
         <source>id_spv_reset_and_restarted</source>
-        <translation>SPV riavviato</translation>
+        <translation>SPV resettata e riavviata</translation>
     </message>
     <message>
         <source>id_spv_synchronization</source>
@@ -3277,7 +3556,7 @@ Reset questa impostazione e successivamente riattivala.</translation>
     </message>
     <message>
         <source>id_spv_synchronization_using_tor</source>
-        <translation>La sincronizzazione SPV via Tor richiede l&apos; URL onion di un nodo di fiducia</translation>
+        <translation>La sincronizzazione SPV via Tor richiede URL onion node di fiducia</translation>
     </message>
     <message>
         <source>id_spv_unverified</source>
@@ -3285,35 +3564,39 @@ Reset questa impostazione e successivamente riattivala.</translation>
     </message>
     <message>
         <source>id_spv_verification</source>
-        <translation>SPV verification</translation>
+        <translation>Verifica SPV</translation>
+    </message>
+    <message>
+        <source>id_standard</source>
+        <translation>Standard</translation>
     </message>
     <message>
         <source>id_standard_account</source>
-        <translation>Account Standard</translation>
+        <translation>Account standard</translation>
     </message>
     <message>
         <source>id_standard_accounts_allow_you_to</source>
-        <translation>Gli account standard ti permettono di separare i fondi. Ogni account avrà indirizzi di ricezione separati e muovere fondi fra gli account richiederà una transazione.</translation>
+        <translation>Gli account standard ti permettono di suddividere i tuoi fondi. Ogni account avrà indirizzi di ricezione separati e per muovere i fondi tra gli account sarà necessaria una transazione.</translation>
     </message>
     <message>
         <source>id_standard_wallet</source>
-        <translation>Standard Wallet</translation>
+        <translation>Wallet standard</translation>
     </message>
     <message>
         <source>id_start_a_2fa_reset_process_if</source>
-        <translation>Inizia il processo di reset dei 2FA solo se hai perso accesso a tutti i tuoi metodi d&apos;Autenticazione a Due Fattori.</translation>
+        <translation>Inizia il processo di reset della 2FA solo se hai perso l&apos;accesso a tutti i tuoi metodi di autenticazione a due fattori.</translation>
     </message>
     <message>
         <source>id_start_receiving_funds_and_set</source>
-        <translation>Inizia a ricevere fondi e imposta una email per ricevere i dati per il recupero del tuo wallet</translation>
+        <translation>Inizia a ricevere fondi e imposta un&apos;e-mail per ricevere i dati di recovery per il tuo wallet</translation>
     </message>
     <message>
         <source>id_status</source>
-        <translation>Status</translation>
+        <translation>Stato</translation>
     </message>
     <message>
         <source>id_success</source>
-        <translation>Success</translation>
+        <translation>Operazione completata</translation>
     </message>
     <message>
         <source>id_support</source>
@@ -3321,7 +3604,7 @@ Reset questa impostazione e successivamente riattivala.</translation>
     </message>
     <message>
         <source>id_support_page</source>
-        <translation>Pagina di Supporto</translation>
+        <translation>Pagina Supporto</translation>
     </message>
     <message>
         <source>id_sweep</source>
@@ -3329,7 +3612,7 @@ Reset questa impostazione e successivamente riattivala.</translation>
     </message>
     <message>
         <source>id_sweep_from_paper_wallet</source>
-        <translation>Trasferisci Tutto da un Paper Wallet</translation>
+        <translation>Effettua sweep da un Paper Wallet</translation>
     </message>
     <message>
         <source>id_sweep_into_s</source>
@@ -3337,7 +3620,7 @@ Reset questa impostazione e successivamente riattivala.</translation>
     </message>
     <message>
         <source>id_switch_network</source>
-        <translation>Cambio Network</translation>
+        <translation>Cambia Network</translation>
     </message>
     <message>
         <source>id_synchronize_spv_on_mobile</source>
@@ -3345,10 +3628,10 @@ Reset questa impostazione e successivamente riattivala.</translation>
     </message>
     <message>
         <source>id_syou_need_ton1_reset_greens</source>
-        <translation>%1.Devi:
-1. Effettuare il Reset del login con Face/TouchID di Green,
-2. Effettuare Log in col PIN,
-3. Riattivare il login con Face/TouchID dalle impostazioni di Green.</translation>
+        <translation>%1.É necessario:
+1. Effettuare il Reset del login Face/TouchID di Green,
+2. Effettuare il Log in tramite PIN,
+3. Riattivare il login Face/TouchID dalle impostazioni di Green.</translation>
     </message>
     <message>
         <source>id_system_location</source>
@@ -3360,15 +3643,23 @@ Reset questa impostazione e successivamente riattivala.</translation>
     </message>
     <message>
         <source>id_tap_on_the_card_to_view</source>
-        <translation>Tocca la scheda per vedere le transazioni.</translation>
+        <translation>Seleziona la carta per vedere le transazioni.</translation>
     </message>
     <message>
         <source>id_tap_to_restart_the_simplified</source>
-        <translation>Premi per re-inizializzare la Simplified Payment Verification (SPV)</translation>
+        <translation>Seleziona l&apos;opzione per riavviare Simplified Payment Verification </translation>
     </message>
     <message>
         <source>id_tap_to_scan_a_qr_code_and</source>
-        <translation>Tap per scansionare un QR code e collegarti ad un nodo per SPV</translation>
+        <translation>Seleziona l&apos;opzione per scansionare un QR code e connetterti a un nodo per SPV</translation>
+    </message>
+    <message>
+        <source>id_taproot_account</source>
+        <translation>Taproot account</translation>
+    </message>
+    <message>
+        <source>id_taproot_bip86</source>
+        <translation>Taproot (BIP86)</translation>
     </message>
     <message>
         <source>id_telegram</source>
@@ -3376,7 +3667,7 @@ Reset questa impostazione e successivamente riattivala.</translation>
     </message>
     <message>
         <source>id_terms_of_service</source>
-        <translation>Termini del Servizio</translation>
+        <translation>Termini di Servizio</translation>
     </message>
     <message>
         <source>id_terms_of_use</source>
@@ -3384,27 +3675,31 @@ Reset questa impostazione e successivamente riattivala.</translation>
     </message>
     <message>
         <source>id_testnet_and_liquid_testnet</source>
-        <translation>Testnet and Liquid Testnet</translation>
+        <translation>Testnet e Liquid Testnet</translation>
     </message>
     <message>
         <source>id_testnet_electrum_server</source>
-        <translation>Testnet Electrum server</translation>
+        <translation>Server Testnet Electrum</translation>
     </message>
     <message>
         <source>id_testnet_wallets</source>
-        <translation>Testnet wallets</translation>
+        <translation>Wallet Testnet</translation>
     </message>
     <message>
         <source>id_thank_you_for_downloading_green</source>
-        <translation>Grazie di aver scaricato Green! Lasciaci una recensione quando hai un momento</translation>
+        <translation>Grazie per aver scaricato Green! Ricordati di lasciarci una recensione appena puoi</translation>
+    </message>
+    <message>
+        <source>id_thank_you_for_your_feedback</source>
+        <translation>Thank you for your feedback</translation>
     </message>
     <message>
         <source>id_the_1_year_2fa_reset_process</source>
-        <translation>The 1 year 2FA reset process was ongoing, but someone blocked it by disputing the 2FA reset.</translation>
+        <translation>Il processo di reset della 2FA durata di 1 anno era in corso ma è stato bloccato a causa di una contestazione.</translation>
     </message>
     <message>
         <source>id_the_address_is_valid</source>
-        <translation>L&apos;indirizzo è valido.</translation>
+        <translation>Indirizzo valido.</translation>
     </message>
     <message>
         <source>id_the_addresses_dont_match</source>
@@ -3412,15 +3707,15 @@ Reset questa impostazione e successivamente riattivala.</translation>
     </message>
     <message>
         <source>id_the_asset_registry_is_currently</source>
-        <translation>Il registro degli asset è momentaneamente non disponibile: procedi con cautela poichè gli ammontare mostrati potrebbere aver un numero di cifre decimali diverso da quello stabilito dagli emittenti.</translation>
+        <translation>Il registro degli asset è momentaneamente non disponibile. Procedi con attenzione in quanto agli asset potrebbero corrispondere importi decimali diversi da quelli previsti dall&apos;emettitore.</translation>
     </message>
     <message>
         <source>id_the_camera_has_a_problem_you</source>
-        <translation>La fotocamera ha un problema. Potresti dover riavviare il dispositivo.</translation>
+        <translation>É stato rilevato un problema con la fotocamera. Prova a riavviare il dispositivo.</translation>
     </message>
     <message>
         <source>id_the_default_value_is_90_days_if</source>
-        <translation>Il valore di default è di 90 giorni. Se hai impostato una email riceverai una copia aggiornata dei tuoi dati per il recupero del wallet.</translation>
+        <translation>Il valore di default è 90 giorni. Se hai impostato un&apos;e-mail riceverai una copia aggiornata dei tuoi dati di recovery.</translation>
     </message>
     <message>
         <source>id_the_easier_safer_and_faster</source>
@@ -3428,7 +3723,7 @@ Reset questa impostazione e successivamente riattivala.</translation>
     </message>
     <message>
         <source>id_the_email_will_also_be_used_to</source>
-        <translation>L&apos;email verrà utilizzata anche per la ricezione di dati per il recupero del wallet e notifiche di transazioni</translation>
+        <translation>L&apos;e-mail verrà anche utilizzata per ricevere i dati di recovery e le notifiche di transazione</translation>
     </message>
     <message>
         <source>id_the_hardware_wallet_you_are</source>
@@ -3436,79 +3731,95 @@ Reset questa impostazione e successivamente riattivala.</translation>
     </message>
     <message>
         <source>id_the_liquid_network_is_a_bitcoin</source>
-        <translation>Liquid Network è una sidechain di Bitcoin. Seleziona per inviare e ricevere Liquid Bitcoin (L-BTC), Tether (USDt), e altri asset su Liquid.</translation>
+        <translation>Liquid Network è un layer-2 di Bitcoin che abilita transazioni rapide, confidenziali ed emissione asset, come stablecoin, security token ed altri strumenti finanziari, sulla timechain di Bitcoin.</translation>
     </message>
     <message>
         <source>id_the_network_selected_on_the</source>
-        <translation>Il network selezionato nella Green app non corrisponde a quello selezionato nell&apos;hardware wallet. Seleziona lo stesso su entrambi i dispositivi</translation>
+        <translation>Il network selezionato sull&apos;app di Green non corrisponde a quello selezionato sull&apos;hardware wallet. Seleziona lo stesso network su entrambi i dispositivi</translation>
     </message>
     <message>
         <source>id_the_new_email_will_be_used_for</source>
-        <translation>La nuova email verrà utilizzata per l&apos; Autenticazione a due fattori quando il reset sarà completato. Il reset richiede 12 mesi più eventuali locktime rimanenti.</translation>
+        <translation>La nuova e-mail verrà utilizzata per l&apos;Autenticazione a Due Fattori quando il reset sarà completato. Il reset richiede 12 mesi più eventuali timelock rimanenti.</translation>
+    </message>
+    <message>
+        <source>id_the_new_firmware_requires_you</source>
+        <translation>Il nuovo firmware richiede di disaccoppiare Jade dalle impostazioni Bluetooth.</translation>
     </message>
     <message>
         <source>id_the_password_cant_be_empty</source>
         <translation>La password non può essere vuota</translation>
     </message>
     <message>
+        <source>id_the_qr_code_does_not_include</source>
+        <translation>The QR code does not include the BIP39 Passphrase</translation>
+    </message>
+    <message>
         <source>id_the_recovery_key_below_will_not</source>
-        <translation>La chiave qua sotto non verrà mostrata in futuro. Trascrivila e conservala adesso per assicurarti di poter sempre accedere ai tuoi fondi.</translation>
+        <translation>La recovery key di seguito riportata non verrà mostrata in futuro. Esegui subito il backup per assicurarti di poter sempre accedere ai tuoi fondi.</translation>
     </message>
     <message>
         <source>id_the_recovery_phrase_can_be_used</source>
-        <translation>La tua recovery phrase può essere utilizzata per muovere i tuoi fondi. Conservala al sicuro, mantieni il segreto.</translation>
+        <translation>La tua recovery phrase può essere utilizzata per richiedere/reclamare i tuoi fondi. Preservala in un posto sicuro e riservato.</translation>
     </message>
     <message>
         <source>id_the_recovery_phrase_doesnt</source>
-        <translation>The recovery phrase doesn&apos;t match the previously existing wallet. Please retry with a different recovery phrase.</translation>
+        <translation>La recovery phrase non coincide con il wallet precedente. Riprova con una recovery phrase diversa.</translation>
     </message>
     <message>
         <source>id_the_source_code_is_available_at</source>
-        <translation>Il codice sorgente è disponibile presso %1</translation>
+        <translation>Il codice sorgente è disponibile su %1</translation>
     </message>
     <message>
         <source>id_the_transaction_contains</source>
-        <translation>La transazione contiene fondi non confidenziali.</translation>
+        <translation>La transazione contiene non-confidential fund.</translation>
+    </message>
+    <message>
+        <source>id_the_username_cant_be_empty</source>
+        <translation>L&apos;username non può essere vuoto</translation>
     </message>
     <message>
         <source>id_the_waiting_period_is_necessary</source>
-        <translation>The waiting period is necessary to ensure the security of your wallet, to prevent thieves from getting around your Two-Factor protection.</translation>
+        <translation>É necessario attendere per garantire la sicurezza del tuo wallet e impedire che la tua protezione a Due Fattori venga rubata.</translation>
     </message>
     <message>
         <source>id_there_are_no_results_for_the</source>
-        <translation>There are no results for the applied filter</translation>
+        <translation>Nessun risultato trovato per il filtro applicato</translation>
     </message>
     <message>
         <source>id_there_is_already_a_pin_set_for</source>
-        <translation>Esiste già un PIN per un wallet %1. Procedendo non potrai impostare un PIN e il login richiederà la mnemonica da 24 parole. Puoi disabilitare il PIN dalle impostazione o con 3 tentativi sbagliati.</translation>
+        <translation>Esiste già un PIN per un wallet %1. Procedendo non potrai impostare un PIN e il login richiederà la mnemonic da 24 parole. Puoi disabilitare il PIN dalle impostazione o con 3 tentativi sbagliati.</translation>
     </message>
     <message>
         <source>id_these_are_some_compatible</source>
-        <translation>These are some compatible wallets:</translation>
+        <translation>Esempi di wallet compatibili:</translation>
     </message>
     <message>
         <source>id_these_settings_apply_for_every</source>
-        <translation>Le impostazioni valgono per tutti i wallet a cui accedi con Blockstream Green</translation>
+        <translation>Queste impostazioni valgono per tutti i wallet su Blockstream Green</translation>
     </message>
     <message>
         <source>id_this_feature_is_coming_soon</source>
-        <translation>This feature is coming soon, stay tuned!</translation>
+        <translation>Nuova funzionalità in arrivo. Stay tuned!</translation>
     </message>
     <message>
         <source>id_this_transaction_spent</source>
-        <translation>Questa transazione ha speso fondi non confidenziali.</translation>
+        <translation>Con questa transazione sono stati spesi non-confidential fund.</translation>
+    </message>
+    <message>
+        <source>id_this_wallet_is_based_on_your</source>
+        <translation>This wallet is based on your recovery phrase and a BIP39 Passphrase</translation>
     </message>
     <message>
         <source>id_this_wallet_operates_on_a_test</source>
-        <translation>This wallet operates on a test network. Anything you receive or send here has no value</translation>
+        <translation>Questo wallet è attivo su un test network. Tutto quello che ricevi o invii non ha alcun valore</translation>
     </message>
     <message>
         <source>id_this_will_disable_pin_login_for</source>
-        <translation>This will disable PIN login for this wallet on all your devices. You will need your recovery phrase to access your wallet.</translation>
+        <translation>In questo modo disabiliterai il login tramite PIN per il wallet su tutti i tuoi dispositivi. Avrai bisogno di una recovery phrase per accedere al tuo wallet.</translation>
     </message>
     <message>
         <source>id_this_will_log_you_out_and</source>
-        <translation>This will log you out and delete this wallet from the app and the Blockstream servers database.</translation>
+        <translation>In questo modo effettuerai il log out e cancellerai il wallet dall&apos;app e dal database dei server Blockstream.</translation>
     </message>
     <message>
         <source>id_ticker</source>
@@ -3520,7 +3831,11 @@ Reset questa impostazione e successivamente riattivala.</translation>
     </message>
     <message>
         <source>id_tip_we_recommend_you_enable</source>
-        <translation>Tip: We recommend you enable more than one 2FA method. If you only set up one 2FA method and then lose it, you&apos;ll have to wait at least one year until the 2FA expires.</translation>
+        <translation>Consiglio: abilita più di un metodo 2FA. Se abiliti un solo metodo 2FA e in seguito lo perdi, dovrai attendere un anno come minimo prima di arrivare alla scadenza della 2FA.</translation>
+    </message>
+    <message>
+        <source>id_tip_you_can_use_the</source>
+        <translation>Consiglio: Puoi usare xPub/yPub/zPub per utilizzare il tuo watch-only in Green, o importalo su un altra piattaforma. Ogni account nel tuo wallet ha diverse xPub/yPub/zPub.</translation>
     </message>
     <message>
         <source>id_to</source>
@@ -3528,11 +3843,11 @@ Reset questa impostazione e successivamente riattivala.</translation>
     </message>
     <message>
         <source>id_to_keep_you_in_control_of_your</source>
-        <translation>Per mantenre controllo dei tuoi fondi, la protezione col Secondo Fattore d&apos;Autenticazione scade dopo circa %1 giorni dal tuo ultimo pagamento. Ti verrà proposto di fare una transazione di Riattivazione del Secondo Fattore se non muovi i fondi abbastanza spesso.</translation>
+        <translation>Per garantirti di poter mantenere il controllo sui tuoi fondi, l&apos;Autenticazione a Due Fattori scadrà dopo circa %1 giorni dal tuo ultimo pagamento. Se non muoverai i fondi abbastanza spesso ti verrà proposto di fare una transazione di Riattivazione a Due Fattori.</translation>
     </message>
     <message>
         <source>id_too_many_pin_attempts</source>
-        <translation>Too many PIN attempts</translation>
+        <translation>Troppi tentativi PIN</translation>
     </message>
     <message>
         <source>id_tor</source>
@@ -3548,27 +3863,27 @@ Reset questa impostazione e successivamente riattivala.</translation>
     </message>
     <message>
         <source>id_tor_is_not_yet_available_for</source>
-        <translation>Tor is not yet available for singlesig wallets</translation>
+        <translation>Tor non è ancora disponibile per wallet singlesig</translation>
     </message>
     <message>
         <source>id_tor_status</source>
-        <translation>Status di Tor</translation>
+        <translation>Stato Tor</translation>
     </message>
     <message>
         <source>id_tor_will_use_1s_and_only_work</source>
-        <translation>Tor userà %1 e funzionerà solo se hai una proxy Orbot o Tor abilitata.</translation>
+        <translation>Tor utilizzerà %1 e funzionerà solo con una proxy Orbot o Tor abilitata.</translation>
     </message>
     <message>
         <source>id_total_assets</source>
-        <translation>Totale disponibile</translation>
+        <translation>Totale asset</translation>
     </message>
     <message>
         <source>id_total_balance</source>
-        <translation>Bilancio Totale</translation>
+        <translation>Saldo totale</translation>
     </message>
     <message>
         <source>id_total_with_fee</source>
-        <translation>Totale incluse commissioni</translation>
+        <translation>Totale incluse fee</translation>
     </message>
     <message>
         <source>id_touch_id</source>
@@ -3604,7 +3919,7 @@ Reset questa impostazione e successivamente riattivala.</translation>
     </message>
     <message>
         <source>id_transaction_status</source>
-        <translation>Stato della transazione</translation>
+        <translation>Stato transazione</translation>
     </message>
     <message>
         <source>id_transactions</source>
@@ -3612,7 +3927,7 @@ Reset questa impostazione e successivamente riattivala.</translation>
     </message>
     <message>
         <source>id_try_again</source>
-        <translation>Try Again</translation>
+        <translation>Riprova</translation>
     </message>
     <message>
         <source>id_try_now</source>
@@ -3628,7 +3943,7 @@ Reset questa impostazione e successivamente riattivala.</translation>
     </message>
     <message>
         <source>id_twofactor</source>
-        <translation>Two-Factor</translation>
+        <translation>Due Fattori</translation>
     </message>
     <message>
         <source>id_twofactor_authentication</source>
@@ -3636,27 +3951,27 @@ Reset questa impostazione e successivamente riattivala.</translation>
     </message>
     <message>
         <source>id_twofactor_authentication_expiry</source>
-        <translation>Scadenza del Secondo Fattore d&apos;Autenticazione</translation>
+        <translation>Scadenza Autenticazione a Due Fattori</translation>
     </message>
     <message>
         <source>id_twofactor_expiration_period</source>
-        <translation>Two-Factor expiration period</translation>
+        <translation>Periodo scadenza Autenticazione a Due Fattori</translation>
     </message>
     <message>
         <source>id_twofactor_protection_does_not</source>
-        <translation>La protezione con Secondo Fattore non scade su questo account, abilita 2 metodi di Secondo Fattore d&apos;Autenticazione separati come backup in caso ne perdessi uno.</translation>
+        <translation>La protezione a Due Fattori non ha scadenza su questo account. Abilita 2 diversi metodi di Autenticazione a Due Fattori come backup in caso dovessi perdere l&apos;accesso a uno dei due.</translation>
     </message>
     <message>
         <source>id_twofactor_reset_in_progress</source>
-        <translation>Reset Secondo Fattore di Autenticazione in corso, il tuo wallet è attualmente bloccato.</translation>
+        <translation>Reset Autenticazione a Due Fattori in corso. Al momento il tuo wallet è bloccato.</translation>
     </message>
     <message>
         <source>id_twofactor_settings</source>
-        <translation>Impostazioni Secondo Fattore</translation>
+        <translation>Impostazioni a Due Fattori</translation>
     </message>
     <message>
         <source>id_twofactor_threshold</source>
-        <translation>Limite per il Secondo Fattore</translation>
+        <translation>Soglia 2FA</translation>
     </message>
     <message>
         <source>id_txid</source>
@@ -3664,11 +3979,15 @@ Reset questa impostazione e successivamente riattivala.</translation>
     </message>
     <message>
         <source>id_unable_to_contact_the_green</source>
-        <translation>Impossibile contattare il servizio Green. Controlla la tua connessione internet e attendi di riconnetterti</translation>
+        <translation>Impossibile contattare il servizio Green. Controlla la tua connessione internet e aspetta di essere riconnesso.</translation>
     </message>
     <message>
         <source>id_unarchive</source>
         <translation>Unarchive</translation>
+    </message>
+    <message>
+        <source>id_unarchive_account</source>
+        <translation>Rimuovi da archiviati</translation>
     </message>
     <message>
         <source>id_unblinding_data</source>
@@ -3676,11 +3995,11 @@ Reset questa impostazione e successivamente riattivala.</translation>
     </message>
     <message>
         <source>id_unconfirmed</source>
-        <translation>Non Confermata</translation>
+        <translation>Non confermato</translation>
     </message>
     <message>
         <source>id_undo_2fa_dispute</source>
-        <translation>Undo 2FA dispute</translation>
+        <translation>Annulla contestazione 2FA</translation>
     </message>
     <message>
         <source>id_unknown</source>
@@ -3696,11 +4015,15 @@ Reset questa impostazione e successivamente riattivala.</translation>
     </message>
     <message>
         <source>id_unknown_firmware</source>
-        <translation>Unknown firmware</translation>
+        <translation>Firmware sconosciuto</translation>
     </message>
     <message>
         <source>id_unlock</source>
-        <translation>Unlock</translation>
+        <translation>Sblocca</translation>
+    </message>
+    <message>
+        <source>id_unlock_green</source>
+        <translation>Sblocca Green</translation>
     </message>
     <message>
         <source>id_unlock_jade_to_continue</source>
@@ -3708,19 +4031,19 @@ Reset questa impostazione e successivamente riattivala.</translation>
     </message>
     <message>
         <source>id_unlocked_coins_can_be_spent_and</source>
-        <translation>Unlocked coins can be spent and are included in your balance.</translation>
+        <translation>I coin sbloccati possono essere spesi e sono inclusi nel tuo saldo.</translation>
     </message>
     <message>
         <source>id_unlocking_coins</source>
-        <translation>Unlocking coins</translation>
+        <translation>Sblocco coin in corso</translation>
     </message>
     <message>
         <source>id_unstable_internet_connection</source>
-        <translation>Unstable internet connection</translation>
+        <translation>Connessione internet instabile</translation>
     </message>
     <message>
         <source>id_update</source>
-        <translation>Update</translation>
+        <translation>Aggiorna</translation>
     </message>
     <message>
         <source>id_updated</source>
@@ -3728,7 +4051,7 @@ Reset questa impostazione e successivamente riattivala.</translation>
     </message>
     <message>
         <source>id_updating_firmware</source>
-        <translation>Updating firmware…</translation>
+        <translation>Aggiornamento firmware in corso...</translation>
     </message>
     <message>
         <source>id_uploading_firmware</source>
@@ -3736,31 +4059,39 @@ Reset questa impostazione e successivamente riattivala.</translation>
     </message>
     <message>
         <source>id_use_a_hardware_wallet_as_your</source>
-        <translation>Use a hardware wallet as your third recovery key.</translation>
+        <translation>Utilizza un hardware wallet come terza recovery key</translation>
     </message>
     <message>
         <source>id_use_a_public_key</source>
-        <translation>Use a public key</translation>
+        <translation>Utilizza chiave pubblica</translation>
     </message>
     <message>
         <source>id_use_all_available_coins</source>
-        <translation>Use all available coins</translation>
+        <translation>Utilizza tutte i coin disponibili</translation>
     </message>
     <message>
         <source>id_use_an_existing_recovery_phrase</source>
-        <translation>Use an existing recovery phrase as your third recovery key.</translation>
+        <translation>Utilizza una recovery phrase già esistente come terza recovery key.</translation>
     </message>
     <message>
         <source>id_use_an_xpub_for_which_you_own</source>
-        <translation>Use an xpub for which you own the corresponding private key as your third recovery key.</translation>
+        <translation>Utilizza una xpub di cui possiedi la private key corrispondente come terza recovery key.</translation>
     </message>
     <message>
         <source>id_use_android_screen_lock_to_log</source>
         <translation>Utilizza il blocco schermo di Android per accedere</translation>
     </message>
     <message>
+        <source>id_use_secure_display_and_screen</source>
+        <translation>Usa Secure Display e Screen Lock</translation>
+    </message>
+    <message>
         <source>id_use_your_email_to_receive</source>
-        <translation>Use your email to receive recovery transactions and transactions notifications</translation>
+        <translation>Utilizza la tua e-mail per ricevere transazioni di recovery e notifiche di transazione</translation>
+    </message>
+    <message>
+        <source>id_user_contact_info_ip_address</source>
+        <translation>Contatti dell&apos;utente, indirizzi IP, posizione</translation>
     </message>
     <message>
         <source>id_user_not_found_or_invalid</source>
@@ -3780,27 +4111,27 @@ Reset questa impostazione e successivamente riattivala.</translation>
     </message>
     <message>
         <source>id_verified</source>
-        <translation>Verified</translation>
+        <translation>Verificato</translation>
     </message>
     <message>
         <source>id_verify</source>
-        <translation>Verify</translation>
+        <translation>Verifica</translation>
     </message>
     <message>
         <source>id_verify_on_device</source>
-        <translation>Verify on Device</translation>
+        <translation>Verifica su Dispositivo</translation>
     </message>
     <message>
         <source>id_verify_your_bitcoin</source>
-        <translation>Verify your bitcoin transactions are included on the blockchain</translation>
+        <translation>Verifica che le tue transazioni bitcoin siano incluse sulla blockchain</translation>
     </message>
     <message>
         <source>id_verify_your_pin</source>
-        <translation>Verifica il PIN</translation>
+        <translation>Verifica il tuo PIN</translation>
     </message>
     <message>
         <source>id_verifying_transactions</source>
-        <translation>Verifying transactions…</translation>
+        <translation>Verifica transazioni in corso...</translation>
     </message>
     <message>
         <source>id_version</source>
@@ -3815,16 +4146,24 @@ Reset questa impostazione e successivamente riattivala.</translation>
         <translation>Versione %1%2</translation>
     </message>
     <message>
+        <source>id_view_account</source>
+        <translation>Vedi account</translation>
+    </message>
+    <message>
+        <source>id_view_archived_accounts</source>
+        <translation>Vedi Account Archiviati</translation>
+    </message>
+    <message>
         <source>id_view_archived_accounts_d</source>
-        <translation>View archived accounts (%1)</translation>
+        <translation>Visualizza account archiviati (%1)</translation>
     </message>
     <message>
         <source>id_view_in_explorer</source>
-        <translation>Vedi nell&apos;Explorer</translation>
+        <translation>Visualizza su Explorer</translation>
     </message>
     <message>
         <source>id_view_more</source>
-        <translation>View More</translation>
+        <translation>Visualizza altro</translation>
     </message>
     <message>
         <source>id_visit_s_for_further_information</source>
@@ -3844,35 +4183,35 @@ Reset questa impostazione e successivamente riattivala.</translation>
     </message>
     <message>
         <source>id_wallet_already_restored</source>
-        <translation>Wallet already restored</translation>
+        <translation>Wallet già ripristinato</translation>
     </message>
     <message>
         <source>id_wallet_backup</source>
-        <translation>Wallet Backup</translation>
+        <translation>Backup wallet </translation>
     </message>
     <message>
         <source>id_wallet_coins_will_require</source>
-        <translation>Wallet coins will require two-factor reactivation once a year to remain protected by two-factor authentication.</translation>
+        <translation>Per preservare l&apos;autenticazione a due fattori dei coin del tuo wallet sarà necessaria una riattivazione a due fattori una volta all&apos;anno.</translation>
     </message>
     <message>
         <source>id_wallet_creation_failed</source>
-        <translation>Creazione wallet fallita</translation>
+        <translation>Creazione wallet non riuscita</translation>
     </message>
     <message>
         <source>id_wallet_found</source>
-        <translation>Wallet found</translation>
+        <translation>Wallet trovato</translation>
     </message>
     <message>
         <source>id_wallet_name</source>
-        <translation>Nome Wallet</translation>
+        <translation>Nome wallet</translation>
     </message>
     <message>
         <source>id_wallet_not_found</source>
-        <translation>Wallet not found</translation>
+        <translation>Wallet non trovato</translation>
     </message>
     <message>
         <source>id_wallets</source>
-        <translation>Wallets</translation>
+        <translation>Wallet</translation>
     </message>
     <message>
         <source>id_warning</source>
@@ -3884,31 +4223,39 @@ Reset questa impostazione e successivamente riattivala.</translation>
     </message>
     <message>
         <source>id_warning_nononion_address</source>
-        <translation>Attenzione: Rilevato indirizzo non-.onion!</translation>
+        <translation>Attenzione: rilevato indirizzo non-.onion!</translation>
     </message>
     <message>
         <source>id_warning_resetting_twofactor</source>
-        <translation>ATTENZIONE: resettare il Secondo Fattore bloccherà il tuo wallet</translation>
+        <translation>ATTENZIONE: resettando l&apos;autenticazione a due fattori bloccherai il tuo wallet</translation>
     </message>
     <message>
         <source>id_warning_there_is_already_a</source>
-        <translation>ATTENZIONE: Esiste già una richiesta per resettare il Secondo Fattore sul tuo wallet. Se richiedi di resettarlo con un nuovo indirizzo email, il tuo wallet diventerà contestato e potrebbe diventare permanentemente non-disponibile.</translation>
+        <translation>ATTENZIONE: esiste già una richiesta per resettare l&apos;autenticazione a due fattori per il tuo wallet. Se stai chiedendo di resettarlo con un nuovo indirizzo e-mail, il tuo wallet diventerà contestato e potrebbe diventare non più disponibile.</translation>
     </message>
     <message>
         <source>id_warning_wallet_locked_by</source>
-        <translation>ATTENZIONE: Wallet bloccato da contestazione del Secondo Fattore. Contatta il supporto per maggiori informazioni.</translation>
+        <translation>ATTENZIONE: wallet bloccato da contestazione di un&apos;autenticazione a due fattori. Contatta il supporto per maggiori informazioni.</translation>
     </message>
     <message>
         <source>id_warning_watchonly_credentials</source>
-        <translation>Attenzione: le credenziali Watch-only verranno salvate su questo dispositivo</translation>
+        <translation>Attenzione: le credenziali watch-only verranno salvate su questo dispositivo</translation>
     </message>
     <message>
         <source>id_warning_you_need_a_positive</source>
-        <translation>Attenzione! Per inviare transazioni è richiesto un bilancio positivo di L-BTC</translation>
+        <translation>Attenzione! Per inviare transazioni è necessario un saldo L-BTC positivo.</translation>
     </message>
     <message>
         <source>id_watchonly</source>
         <translation>Watch-only</translation>
+    </message>
+    <message>
+        <source>id_watchonly_credentials</source>
+        <translation>Watch-only credentials</translation>
+    </message>
+    <message>
+        <source>id_watchonly_details</source>
+        <translation>Dettagli Watch-only</translation>
     </message>
     <message>
         <source>id_watchonly_disabled</source>
@@ -3916,23 +4263,27 @@ Reset questa impostazione e successivamente riattivala.</translation>
     </message>
     <message>
         <source>id_watchonly_login</source>
-        <translation>Login Watch-only</translation>
+        <translation>Login watch-only</translation>
     </message>
     <message>
         <source>id_watchonly_mode_can_be_activated</source>
-        <translation>La modalità Watch-only si abilita dalle impostazioni dopo aver effettuato un login con PIN, mnemonica o hardware wallet.</translation>
+        <translation>La modalità watch-only può essere attivata dalle impostazioni dopo aver effettuato il login tramite PIN, mnemonic o hardware wallet.</translation>
     </message>
     <message>
         <source>id_watchonly_mode_cannot_be</source>
-        <translation>La modalità watch-only non può essere attivata su Liquid poiché i tuoi fondi sono compeltamente confidenziali.</translation>
+        <translation>La modalità watch-only non può essere attivata su Liquid poiché i tuoi fondi sono fully confidential.</translation>
     </message>
     <message>
         <source>id_watchonly_wallet</source>
-        <translation>Watch-Only Wallet</translation>
+        <translation>Wallet watch-only </translation>
     </message>
     <message>
         <source>id_we_use_the_camera_to_scan_qr</source>
         <translation>La fotocamera verrà utilizzata per scansionare codici QR</translation>
+    </message>
+    <message>
+        <source>id_we_will_do_our_best_to_find_a</source>
+        <translation>Faremo il meglio per trovare un wallet corrispondente alla recovery phrase</translation>
     </message>
     <message>
         <source>id_welcome</source>
@@ -3944,27 +4295,35 @@ Reset questa impostazione e successivamente riattivala.</translation>
     </message>
     <message>
         <source>id_well_done_you_can_continue</source>
-        <translation>Fatto, puoi continuare</translation>
+        <translation>Complimenti, ora puoi continuare</translation>
     </message>
     <message>
         <source>id_well_done_you_can_continue_with</source>
-        <translation>Well done, you can continue with your password</translation>
+        <translation>Complimenti, continua con la tua password</translation>
     </message>
     <message>
         <source>id_well_get_you_set_up_in_no_time</source>
-        <translation>We&apos;ll get you set up in no time. Make sure you have a pen and paper ready!</translation>
+        <translation>Potrai iniziare a breve. Assicurati di avere con te foglio e penna!</translation>
     </message>
     <message>
         <source>id_well_get_you_set_up_with_an_amp</source>
-        <translation>We&apos;ll get you set up with an AMP wallet in no time. Note that you can alternatively create AMP accounts in any existing Liquid wallet.</translation>
+        <translation>Potrai iniziare a utilizzare un wallet AMP a breve. Ricorda che in alternativa puoi creare degli account AMP in qualsiasi wallet Liquid.</translation>
     </message>
     <message>
         <source>id_what_type_of_account_would_you</source>
-        <translation>Che tipo di account vuoi aggiungere?</translation>
+        <translation>Che tipo di account vorresti aggiungere?</translation>
+    </message>
+    <message>
+        <source>id_whats_collected</source>
+        <translation>Cosa viene raccolto</translation>
     </message>
     <message>
         <source>id_whats_new</source>
         <translation>Cosa c&apos;è di nuovo?</translation>
+    </message>
+    <message>
+        <source>id_whats_not_collected</source>
+        <translation>Cosa NON è raccolto</translation>
     </message>
     <message>
         <source>id_where_would_you_like_to</source>
@@ -3976,7 +4335,7 @@ Reset questa impostazione e successivamente riattivala.</translation>
     </message>
     <message>
         <source>id_word</source>
-        <translation>Word</translation>
+        <translation>Parola</translation>
     </message>
     <message>
         <source>id_word_d_of_d</source>
@@ -3992,7 +4351,11 @@ Reset questa impostazione e successivamente riattivala.</translation>
     </message>
     <message>
         <source>id_wrong_choice_check_your</source>
-        <translation>Scelta errata. Controlla la tua mnemonica e riprova.</translation>
+        <translation>Scelta sbagliata. Controlla la tua mnemonic e riprova.</translation>
+    </message>
+    <message>
+        <source>id_xpub</source>
+        <translation>xPub</translation>
     </message>
     <message>
         <source>id_year</source>
@@ -4016,23 +4379,23 @@ Reset questa impostazione e successivamente riattivala.</translation>
     </message>
     <message>
         <source>id_you_can_change_these_later_on</source>
-        <translation>Potrai modificarle successivamente.</translation>
+        <translation>Potrai modificare in seguito.</translation>
     </message>
     <message>
         <source>id_you_cannot_create_or_restore_a</source>
-        <translation>Non puoi creare o rigenerare un wallet  %1 poichè esiste già un wallet protetto da PIN.</translation>
+        <translation>Non puoi creare o ripristinare un wallet  %1 in quanto esiste già un wallet protetto da PIN.</translation>
     </message>
     <message>
         <source>id_you_have_clicked_a_payment_uri</source>
-        <translation>You have clicked a Payment URI, select a wallet to handle it</translation>
+        <translation>Hai selezionato un Payment URI. Seleziona un wallet per gestirlo</translation>
     </message>
     <message>
         <source>id_you_have_control_on_your_funds</source>
-        <translation>Hai tu il controllo dei tuoi fondi.</translation>
+        <translation>Sei tu a controllare i tuoi fondi</translation>
     </message>
     <message>
         <source>id_you_have_no_coins_to_send</source>
-        <translation>You have no coins to send. Generate an address to receive some bitcoins.</translation>
+        <translation>Non hai alcun coin da inviare. Crea un indirizzo per ricevere bitcoin.</translation>
     </message>
     <message>
         <source>id_you_have_received_s</source>
@@ -4040,15 +4403,19 @@ Reset questa impostazione e successivamente riattivala.</translation>
     </message>
     <message>
         <source>id_you_have_successfully_changed</source>
-        <translation>You have successfully changed your PIN</translation>
+        <translation>Il tuo PIN è stato modificato con successo</translation>
+    </message>
+    <message>
+        <source>id_you_have_successfully_sent_a</source>
+        <translation>You have successfully sent a transaction. Please give us your feedback to improve Green.</translation>
     </message>
     <message>
         <source>id_you_have_to_authenticate_using</source>
-        <translation>You have to Authenticate using biometrics</translation>
+        <translation>Devi effettuare l&apos;Autenticazione tramite biometria</translation>
     </message>
     <message>
         <source>id_you_have_tor_enabled_are_you</source>
-        <translation>You have Tor enabled, are you sure you want to open this webpage?</translation>
+        <translation>Tor è abilitato. Sei sicuro di voler aprire questa pagina?</translation>
     </message>
     <message>
         <source>id_you_must_first_log_out_before</source>
@@ -4056,55 +4423,59 @@ Reset questa impostazione e successivamente riattivala.</translation>
     </message>
     <message>
         <source>id_you_must_save_this_mnemonic_now</source>
-        <translation>DEVI conservare la mnemonica ORA</translation>
+        <translation>Salva la mnemonic ORA</translation>
     </message>
     <message>
         <source>id_you_only_have_one_twofactor</source>
         <translation>Hai attivato un solo metodo di autenticazione a due fattori</translation>
     </message>
     <message>
+        <source>id_you_will_be_asked_to_enter_your</source>
+        <translation>You will be asked to enter your passphrase at every login.</translation>
+    </message>
+    <message>
         <source>id_you_will_need_to_reenter_your</source>
-        <translation>Se non imposti un PIN dovrai utilizzare la mnemonica per accedere. Premi &quot;OK&quot; per continuare.</translation>
+        <translation>Se non imposti un PIN dovrai digitare nuovamente la tua mnemonic per accedere. Premi &quot;OK&quot; per continuare.</translation>
     </message>
     <message>
         <source>id_you_will_see_your_coins_here</source>
-        <translation>You will see your coins here</translation>
+        <translation>I tuoi coin appariranno qui</translation>
     </message>
     <message>
         <source>id_youll_need_to_back_up_your</source>
-        <translation>You’ll need to back up your recovery phrase before you can send or receive funds, but you can still check out the wallet for now.</translation>
+        <translation>Dovrai effettuare il backup della tua recovery phrase prima di poter inviare o ricevere fondi. Puoi comunque dare un&apos;occhiata al tuo wallet per il momento.</translation>
     </message>
     <message>
         <source>id_youll_need_your_pin_to_log_in</source>
-        <translation>Userai il tuo PIN per accedere al wallet. Questo PIN protegge il tuo wallet solo su questo dispositivo.</translation>
+        <translation>Avrai bisogno del tuo PIN per accedere al wallet. Questo PIN protegge il tuo wallet solo su questo dispositivo.</translation>
     </message>
     <message>
         <source>id_youll_need_your_recovery_phrase</source>
-        <translation>You&apos;ll need your recovery phrase to restore this wallet</translation>
+        <translation>Avrai bisogno della tua recovery phrase per ripristinare il wallet</translation>
     </message>
     <message>
         <source>id_youll_see_your_coins_here_when</source>
-        <translation>You&apos;ll see your coins here when you receive funds</translation>
+        <translation>I tuoi coin appariranno qui quando riceverai dei fondi</translation>
     </message>
     <message>
         <source>id_your_2fa_expires_so_that_if_you</source>
-        <translation>Your 2FA expires, so that if you lose access to your 2FA method, or the Blockstream Green service becomes unavailable, you can always recover your bitcoin using this open source tool</translation>
+        <translation>Qualora la tua 2FA sia scaduta, e che di conseguenza tu non riesca ad accedere al tuo metodo 2FA, o qualora il servizio Blockstream Green non sia disponibile, potrai sempre recuperare i tuoi bitcoin mediante questo tool open source</translation>
     </message>
     <message>
         <source>id_your_device_was_disconnected</source>
-        <translation>Your device was disconnected</translation>
+        <translation>Dispositivo disconnesso</translation>
     </message>
     <message>
         <source>id_your_favourite_exchange_rate_is</source>
-        <translation>Il tuo tasso di cambio preferito non è disponibile al momento. Puoi cambiarlo dalle impostazioni.</translation>
+        <translation>Il tasso di cambio salvato come preferito non è disponibile al momento. Puoi cambiarlo dalle impostazioni.</translation>
     </message>
     <message>
         <source>id_your_funds_are_secured_by</source>
-        <translation>Your funds are secured by multiple keys, with one key on your device and another on our servers protected by your 2FA. Select this option for enhanced security.</translation>
+        <translation>I tuoi fondi sono protetti da chiavi multiple, con una chiave sul tuo dispositivo e un&apos;altra sui tuoi server protetti da 2FA. Seleziona questa opzione per maggiore sicurezza.</translation>
     </message>
     <message>
         <source>id_your_funds_are_secured_by_a</source>
-        <translation>Your funds are secured by a single key held on your device. Simpler to set up and operate than multisig. If in doubt, select this option.</translation>
+        <translation>I tuoi fondi sono protetti da chiave singola custodita sul tuo dispositivo. Più facile da impostare e utilizzare rispetto a multisig. Se hai dei dubbi, seleziona questa opzione.</translation>
     </message>
     <message>
         <source>id_your_green_wallet_is_now_ready</source>
@@ -4116,48 +4487,48 @@ Reset questa impostazione e successivamente riattivala.</translation>
     </message>
     <message>
         <source>id_your_notifications_will_be</source>
-        <translation>Vedrai qui le tue notifiche.</translation>
+        <translation>Le tue notifiche appariranno qui.</translation>
     </message>
     <message>
         <source>id_your_pin_or_your_mnemonic_will</source>
-        <translation>Sarà necessario inserire il PIN o la mnemonica per accedere al wallet</translation>
+        <translation>Sarà necessario inserire il PIN o la mnemonic per accedere al wallet.</translation>
     </message>
     <message>
         <source>id_your_s_sent_to_s_has_been</source>
-        <translation>I tuoi %1 inviati a %2 sono stati confermati</translation>
+        <translation>Il tuo/La tua %1 inviato/a a %2 è stato/a confermato/a</translation>
     </message>
     <message>
         <source>id_your_transactions_will_be_shown</source>
-        <translation>Le tue transazioni saranno elencate qui.</translation>
+        <translation>Le tue transazioni appariranno qui.</translation>
     </message>
     <message>
         <source>id_your_twofactor_threshold_is_s</source>
-        <translation>Il tuo limite per il Secondo Fattore è %1.</translation>
+        <translation>La tua soglia a Due Fattori è %1.</translation>
     </message>
     <message>
         <source>id_your_wallet_backup_is_made_of</source>
-        <translation>Il backup del tuo wallet è composto da 24 parole, anche noto come mnemonica. Assicurati di avere un backup e tienilo al sicuro. Chiunque ne sia in possesso può rubare i tuoi soldi. Puoi utilizzare il tuo backup per ripristinare il tuo wallet Blockstream Green su un altro dispositivo in caso di smarrimento, malfunzionamento o furto.</translation>
+        <translation>Il backup del tuo wallet, o mnemonic, è composto da 24 parole. Assicurati di aver effettuato il backup e tienilo al sicuro. Chiunque vi abbia accesso potrebbe sottrarti del denaro. Puoi utilizzare il backup per ripristinare il tuo wallet Blockstream Green su un altro dispositivo in caso di smarrimento, malfunzionamento o furto.</translation>
     </message>
     <message>
         <source>id_your_wallet_is_locked_for_a</source>
-        <translation>Wallet bloccato per reset dell&apos; Autenticazione a due fattori. Il reset sarà completato in %1 giorni.</translation>
+        <translation>Wallet bloccato per reset Autenticazione a Due Fattori. Il reset verrà completato tra %1 giorni.</translation>
     </message>
     <message>
         <source>id_your_wallet_is_locked_under_2fa</source>
-        <translation>Your wallet is locked under 2FA dispute.</translation>
+        <translation>Wallet bloccato per contestazione 2FA.</translation>
     </message>
     <message>
         <source>id_your_wallet_is_not_yet_fully</source>
-        <translation>Il tuo wallet non è ancora in totale sicurezza.
-Abilita l&apos;Autenticazione a Due Fattori.</translation>
+        <translation>Il tuo wallet non è ancora completamente al sicuro.
+Abilita Autenticazione a Due Fattori.</translation>
     </message>
     <message>
         <source>id_your_watchonly_username_and</source>
-        <translation>I tuoi username e password per watch-only verranno salvati in chiaro su questo dispositivo. Se il tuo device è compromesso terze parti possono avere accesso alle tue transazioni. Premi OK per continuare.</translation>
+        <translation>Il tuo username e la tua password watch-only verranno salvati in chiaro su questo dispositivo. Se il tuo dispositivo è compromesso, soggetti terzi possono accedere alle cronologia delle tue transazioni. Premi OK per continuare.</translation>
     </message>
     <message>
         <source>id_youve_entered_an_invalid_pin</source>
-        <translation>You&apos;ve entered an invalid PIN too many times.</translation>
+        <translation>PIN non valido inserito troppe volte.</translation>
     </message>
 </context>
 </TS>

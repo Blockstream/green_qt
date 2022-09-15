@@ -13,6 +13,10 @@
         <translation>12 months (51840 blocks)</translation>
     </message>
     <message>
+        <source>id_12_words</source>
+        <translation>12 words</translation>
+    </message>
+    <message>
         <source>id_15_months_65535_blocks</source>
         <translation>15 months (65535 blocks)</translation>
     </message>
@@ -38,6 +42,10 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     <message>
         <source>id_1s_twofactor_setup</source>
         <translation>%1 Two-Factor setup</translation>
+    </message>
+    <message>
+        <source>id_24_words</source>
+        <translation>24 words</translation>
     </message>
     <message>
         <source>id_2_hours</source>
@@ -66,6 +74,10 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     <message>
         <source>id_2fa_threshold</source>
         <translation>2FA Threshold</translation>
+    </message>
+    <message>
+        <source>id_2of3</source>
+        <translation>2of3</translation>
     </message>
     <message>
         <source>id_2of3_account</source>
@@ -118,6 +130,10 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     <message>
         <source>id_account</source>
         <translation>TÀI KHOẢN</translation>
+    </message>
+    <message>
+        <source>id_account_extended_public_keys</source>
+        <translation>Account Extended Public Keys</translation>
     </message>
     <message>
         <source>id_account_id</source>
@@ -182,6 +198,10 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     <message>
         <source>id_add_new_account</source>
         <translation>Thêm tài khoản mới</translation>
+    </message>
+    <message>
+        <source>id_add_recipient</source>
+        <translation>Add Recipient</translation>
     </message>
     <message>
         <source>id_add_wallet</source>
@@ -260,6 +280,14 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
         <translation>All wallets</translation>
     </message>
     <message>
+        <source>id_allow_collection</source>
+        <translation>Allow collection</translation>
+    </message>
+    <message>
+        <source>id_allow_data_collection</source>
+        <translation>Allow data collection</translation>
+    </message>
+    <message>
         <source>id_allows_you_to_quickly_check</source>
         <translation>Cho phép bạn kiểm tra nhanh số dư, nhận quỹ và quẹt để nạp tiền từ ví giấy. Bạn không thể gửi tiền đi trong chế độ chỉ xem.</translation>
     </message>
@@ -268,12 +296,20 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
         <translation>Thường trực</translation>
     </message>
     <message>
+        <source>id_always_ask</source>
+        <translation>Always ask</translation>
+    </message>
+    <message>
         <source>id_amount</source>
         <translation>Số tiền</translation>
     </message>
     <message>
         <source>id_amount_in_s</source>
         <translation>Amount in %1</translation>
+    </message>
+    <message>
+        <source>id_amp</source>
+        <translation>AMP</translation>
     </message>
     <message>
         <source>id_amp_account</source>
@@ -296,6 +332,10 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
         <translation>Another 2FA method is already active. Confirm via 2FA that you authorize this change.</translation>
     </message>
     <message>
+        <source>id_any_wallet_found_will_be</source>
+        <translation>Any wallet found will be displayed here.</translation>
+    </message>
+    <message>
         <source>id_app_settings</source>
         <translation>App Settings</translation>
     </message>
@@ -304,12 +344,20 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
         <translation>Archive</translation>
     </message>
     <message>
+        <source>id_archive_account</source>
+        <translation>Archive account</translation>
+    </message>
+    <message>
         <source>id_archived</source>
         <translation>Archived</translation>
     </message>
     <message>
         <source>id_archived_accounts</source>
         <translation>Archived Accounts</translation>
+    </message>
+    <message>
+        <source>id_are_you_sure_you_want_to_remove</source>
+        <translation>Are you sure you want to remove the recipient?</translation>
     </message>
     <message>
         <source>id_are_you_sure_you_want_to_view</source>
@@ -346,6 +394,10 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     <message>
         <source>id_assets_cannot_be_used_on_bitcoin</source>
         <translation>Assets cannot be used on Bitcoin</translation>
+    </message>
+    <message>
+        <source>id_at_least_8_characters_required</source>
+        <translation>At least 8 characters required</translation>
     </message>
     <message>
         <source>id_attempts_remaining_d</source>
@@ -392,6 +444,10 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
         <translation>Available</translation>
     </message>
     <message>
+        <source>id_available_funds_s</source>
+        <translation>Available funds %1</translation>
+    </message>
+    <message>
         <source>id_back</source>
         <translation>Back</translation>
     </message>
@@ -426,6 +482,14 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     <message>
         <source>id_biometrics_authentication</source>
         <translation>Biometrics Authentication</translation>
+    </message>
+    <message>
+        <source>id_bip39_passphrase</source>
+        <translation>BIP39 Passphrase</translation>
+    </message>
+    <message>
+        <source>id_bip39_passphrase_login</source>
+        <translation>BIP39 Passphrase login</translation>
     </message>
     <message>
         <source>id_bip49_accounts_allow_you_to</source>
@@ -470,6 +534,10 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     <message>
         <source>id_block_d</source>
         <translation>Khối  %1</translation>
+    </message>
+    <message>
+        <source>id_block_height</source>
+        <translation>Block Height</translation>
     </message>
     <message>
         <source>id_block_height_1d</source>
@@ -573,6 +641,10 @@ Simple and Secure</translation>
         <translation>Changing reference exchange rate will reset your 2FA threshold to 0. Remember to adjust the 2FA threshold after spending.</translation>
     </message>
     <message>
+        <source>id_check_device</source>
+        <translation>Check Device</translation>
+    </message>
+    <message>
         <source>id_check_for_updates</source>
         <translation>Check for updates</translation>
     </message>
@@ -613,6 +685,14 @@ Simple and Secure</translation>
         <translation>Choose the Electrum servers you trust</translation>
     </message>
     <message>
+        <source>id_choose_the_security_policy_that</source>
+        <translation>Choose the security policy that matches your wallet.</translation>
+    </message>
+    <message>
+        <source>id_choose_the_security_policy_you</source>
+        <translation>Choose the security policy you want to restore this wallet on.</translation>
+    </message>
+    <message>
         <source>id_choose_this_version_to_connect</source>
         <translation>Choose this version to connect to your Blockstream Jade with both a usb cable and wireless</translation>
     </message>
@@ -637,6 +717,10 @@ Simple and Secure</translation>
         <translation>Clear</translation>
     </message>
     <message>
+        <source>id_clear_cache</source>
+        <translation>Clear cache</translation>
+    </message>
+    <message>
         <source>id_click_to_copy</source>
         <translation>Click to copy</translation>
     </message>
@@ -647,6 +731,10 @@ Simple and Secure</translation>
     <message>
         <source>id_code</source>
         <translation>Code</translation>
+    </message>
+    <message>
+        <source>id_coin</source>
+        <translation>Coin</translation>
     </message>
     <message>
         <source>id_coins</source>
@@ -721,6 +809,10 @@ Simple and Secure</translation>
         <translation>Mã xác nhận</translation>
     </message>
     <message>
+        <source>id_confirm_on_your_device</source>
+        <translation>Confirm on your device</translation>
+    </message>
+    <message>
         <source>id_confirm_passphrase</source>
         <translation>Xác nhận mật khẩu</translation>
     </message>
@@ -743,6 +835,10 @@ Simple and Secure</translation>
     <message>
         <source>id_confirmation_in_d_blocks</source>
         <translation>Xác nhận trong %1 khối tiếp theo</translation>
+    </message>
+    <message>
+        <source>id_confirmation_time</source>
+        <translation>Confirmation Time</translation>
     </message>
     <message>
         <source>id_confirmations</source>
@@ -781,6 +877,10 @@ Simple and Secure</translation>
         <translation>Connected to Jade</translation>
     </message>
     <message>
+        <source>id_connected_wallets</source>
+        <translation>Connected wallets</translation>
+    </message>
+    <message>
         <source>id_connecting</source>
         <translation>Connecting…</translation>
     </message>
@@ -807,10 +907,6 @@ Simple and Secure</translation>
     <message>
         <source>id_connection</source>
         <translation>Connection</translation>
-    </message>
-    <message>
-        <source>id_connection_amp_validation</source>
-        <translation>Connection &amp;amp; Validation Settings</translation>
     </message>
     <message>
         <source>id_connection_failed</source>
@@ -849,8 +945,16 @@ Simple and Secure</translation>
         <translation>Copy details</translation>
     </message>
     <message>
+        <source>id_copy_device_id</source>
+        <translation>Copy Device ID</translation>
+    </message>
+    <message>
         <source>id_copy_raw_transaction</source>
         <translation>Copy raw transaction</translation>
+    </message>
+    <message>
+        <source>id_copy_support_id</source>
+        <translation>Copy support ID</translation>
     </message>
     <message>
         <source>id_copy_to_clipboard</source>
@@ -1001,6 +1105,10 @@ Simple and Secure</translation>
         <translation>Delete</translation>
     </message>
     <message>
+        <source>id_delete_credentials</source>
+        <translation>Delete credentials</translation>
+    </message>
+    <message>
         <source>id_delete_permanently_your_wallet</source>
         <translation>Delete permanently your wallet from the Blockstream Green database. You will never be able to log in to it thereafter.</translation>
     </message>
@@ -1035,6 +1143,12 @@ Simple and Secure</translation>
     <message>
         <source>id_devices</source>
         <translation>Devices</translation>
+    </message>
+    <message>
+        <source>id_different_passphrases_generate</source>
+        <translation>Different passphrases generate new wallets!
+
+Remember you can only restore this wallet with both your recovery phrase and the passphrase.</translation>
     </message>
     <message>
         <source>id_disable</source>
@@ -1089,6 +1203,10 @@ Simple and Secure</translation>
         <translation>Không hỏi lại tôi</translation>
     </message>
     <message>
+        <source>id_dont_collect_data</source>
+        <translation>Don&apos;t collect data</translation>
+    </message>
+    <message>
         <source>id_dont_show_this_again</source>
         <translation>Don&apos;t show this again</translation>
     </message>
@@ -1125,6 +1243,10 @@ Simple and Secure</translation>
         <translation>Edit</translation>
     </message>
     <message>
+        <source>id_edit_fee</source>
+        <translation>Edit Fee</translation>
+    </message>
+    <message>
         <source>id_email</source>
         <translation>Thư điện tử</translation>
     </message>
@@ -1159,6 +1281,10 @@ Simple and Secure</translation>
     <message>
         <source>id_enable_face_id</source>
         <translation>Cho phép nhận dạng khuôn mặt Face ID</translation>
+    </message>
+    <message>
+        <source>id_enable_limited_usage_data</source>
+        <translation>Enable limited usage data collection</translation>
     </message>
     <message>
         <source>id_enable_location_services</source>
@@ -1203,6 +1329,10 @@ Simple and Secure</translation>
     <message>
         <source>id_encryption_passphrase</source>
         <translation>Mật khẩu để mã hóa</translation>
+    </message>
+    <message>
+        <source>id_enhanced_privacy</source>
+        <translation>Enhanced Privacy</translation>
     </message>
     <message>
         <source>id_enter</source>
@@ -1310,6 +1440,10 @@ Recovery Phrase</translation>
         <translation>Thực thể</translation>
     </message>
     <message>
+        <source>id_ephemeral_wallets</source>
+        <translation>Ephemeral wallets</translation>
+    </message>
+    <message>
         <source>id_error</source>
         <translation>Lỗi rồi</translation>
     </message>
@@ -1350,6 +1484,10 @@ Recovery Phrase</translation>
         <translation>Existing recovery phrase</translation>
     </message>
     <message>
+        <source>id_existing_wallets</source>
+        <translation>Existing Wallets</translation>
+    </message>
+    <message>
         <source>id_expand_sidebar</source>
         <translation>Expand sidebar</translation>
     </message>
@@ -1360,6 +1498,14 @@ Recovery Phrase</translation>
     <message>
         <source>id_export_transactions_to_csv_file</source>
         <translation>Export transactions to CSV file</translation>
+    </message>
+    <message>
+        <source>id_exports_an_accounts_extended</source>
+        <translation>Exports an account&apos;s extended public key (xPub/yPub/zPub) to view as a watch-only</translation>
+    </message>
+    <message>
+        <source>id_extended_public_key</source>
+        <translation>Extended Public Key</translation>
     </message>
     <message>
         <source>id_face_id</source>
@@ -1412,6 +1558,10 @@ Recovery Phrase</translation>
     <message>
         <source>id_fee_s__s</source>
         <translation>Phí: %1 / %2</translation>
+    </message>
+    <message>
+        <source>id_feedback</source>
+        <translation>Feedback</translation>
     </message>
     <message>
         <source>id_fees_are_too_low</source>
@@ -1498,6 +1648,10 @@ Recovery Phrase</translation>
         <translation>Give Bluetooth Permissions</translation>
     </message>
     <message>
+        <source>id_give_us_your_feedback</source>
+        <translation>Give us your feedback</translation>
+    </message>
+    <message>
         <source>id_go_to_account</source>
         <translation>Go to Account</translation>
     </message>
@@ -1558,12 +1712,20 @@ Recovery Phrase</translation>
         <translation>Việc hỗ trợ ví cứng để giao dịch bí mật sẽ có trong tương lai gần</translation>
     </message>
     <message>
+        <source>id_hardware_wallets</source>
+        <translation>Hardware wallets</translation>
+    </message>
+    <message>
         <source>id_hash</source>
         <translation>Băm Hash</translation>
     </message>
     <message>
         <source>id_help</source>
         <translation>Help</translation>
+    </message>
+    <message>
+        <source>id_help_green_improve</source>
+        <translation>Help Green Improve</translation>
     </message>
     <message>
         <source>id_here</source>
@@ -1578,8 +1740,16 @@ Recovery Phrase</translation>
         <translation>Hide assets</translation>
     </message>
     <message>
+        <source>id_hide_details</source>
+        <translation>Hide details</translation>
+    </message>
+    <message>
         <source>id_high</source>
         <translation>Cao</translation>
+    </message>
+    <message>
+        <source>id_hold_button_to_send</source>
+        <translation>Hold button to Send</translation>
     </message>
     <message>
         <source>id_hold_your_nfc_tag_close_to_the</source>
@@ -1640,6 +1810,10 @@ Recovery Phrase</translation>
     <message>
         <source>id_id</source>
         <translation>ID</translation>
+    </message>
+    <message>
+        <source>id_if_you_agree_green_will_collect</source>
+        <translation>If you agree, Green will collect limited usage data to optimize the user experience. No sensitive user or wallet info is collected.</translation>
     </message>
     <message>
         <source>id_if_you_are_the_rightful_owner</source>
@@ -1890,8 +2064,20 @@ Recovery Phrase</translation>
         <translation>Legacy Account</translation>
     </message>
     <message>
+        <source>id_legacy_bip44</source>
+        <translation>Legacy (BIP44)</translation>
+    </message>
+    <message>
         <source>id_legacy_script_coins</source>
         <translation>Legacy script coins</translation>
+    </message>
+    <message>
+        <source>id_legacy_segwit_account</source>
+        <translation>Legacy SegWit Account</translation>
+    </message>
+    <message>
+        <source>id_legacy_segwit_bip49</source>
+        <translation>Legacy SegWit (BIP49)</translation>
     </message>
     <message>
         <source>id_lets_get_you_set_up</source>
@@ -1952,6 +2138,14 @@ Recovery Phrase</translation>
     <message>
         <source>id_lock</source>
         <translation>Lock</translation>
+    </message>
+    <message>
+        <source>id_lock_after_1_minute</source>
+        <translation>Lock after 1 minute</translation>
+    </message>
+    <message>
+        <source>id_lock_immediately</source>
+        <translation>Lock immediately</translation>
     </message>
     <message>
         <source>id_locked</source>
@@ -2022,6 +2216,10 @@ Recovery Phrase</translation>
         <translation>Login with Biometrics</translation>
     </message>
     <message>
+        <source>id_login_with_bip39_passphrase</source>
+        <translation>Login with BIP39 Passphrase</translation>
+    </message>
+    <message>
         <source>id_logout</source>
         <translation>Logout</translation>
     </message>
@@ -2076,6 +2274,10 @@ Recovery Phrase</translation>
     <message>
         <source>id_manual_coin_selection</source>
         <translation>Manual coin selection</translation>
+    </message>
+    <message>
+        <source>id_manual_restore</source>
+        <translation>Manual Restore</translation>
     </message>
     <message>
         <source>id_medium</source>
@@ -2250,6 +2452,10 @@ Recovery Phrase</translation>
         <translation>Không có số tiền được cung cấp</translation>
     </message>
     <message>
+        <source>id_no_archived_accounts</source>
+        <translation>No archived accounts</translation>
+    </message>
+    <message>
         <source>id_no_asset_in_this_account</source>
         <translation>No asset in this account</translation>
     </message>
@@ -2266,8 +2472,17 @@ Recovery Phrase</translation>
         <translation>No device connected</translation>
     </message>
     <message>
+        <source>id_no_existing_wallet_could_be</source>
+        <translation>No existing wallet could be found.
+Try manually restoring your wallet.</translation>
+    </message>
+    <message>
         <source>id_no_more_assets</source>
         <translation>No more assets.</translation>
+    </message>
+    <message>
+        <source>id_no_multisig_shield_wallet</source>
+        <translation>No multisig shield wallet exists for this recovery phrase.</translation>
     </message>
     <message>
         <source>id_no_peers_connected</source>
@@ -2426,6 +2641,10 @@ Recovery Phrase</translation>
         <translation>HOẶC</translation>
     </message>
     <message>
+        <source>id_os__app_version_loading_times</source>
+        <translation>OS &amp; app version, loading times</translation>
+    </message>
+    <message>
         <source>id_our_support_page</source>
         <translation>our support page</translation>
     </message>
@@ -2448,6 +2667,18 @@ Recovery Phrase</translation>
     <message>
         <source>id_p2wsh</source>
         <translation>P2wsh</translation>
+    </message>
+    <message>
+        <source>id_page_visits_button_presses</source>
+        <translation>Page visits, button presses, general app configuration</translation>
+    </message>
+    <message>
+        <source>id_passphrase</source>
+        <translation>Passphrase</translation>
+    </message>
+    <message>
+        <source>id_passphrase_protected</source>
+        <translation>Passphrase protected</translation>
     </message>
     <message>
         <source>id_password</source>
@@ -2630,6 +2861,10 @@ Recovery Phrase</translation>
         <translation>CÀI ĐẶT PROXY</translation>
     </message>
     <message>
+        <source>id_pseudonymous_identifier_country</source>
+        <translation>Pseudonymous identifier, country</translation>
+    </message>
+    <message>
         <source>id_qr_code</source>
         <translation>QR Code</translation>
     </message>
@@ -2640,6 +2875,18 @@ Recovery Phrase</translation>
     <message>
         <source>id_radio_firmware</source>
         <translation>Radio firmware</translation>
+    </message>
+    <message>
+        <source>id_rate</source>
+        <translation>Rate</translation>
+    </message>
+    <message>
+        <source>id_rate_us</source>
+        <translation>Rate us</translation>
+    </message>
+    <message>
+        <source>id_rate_your_experience</source>
+        <translation>Rate your experience</translation>
     </message>
     <message>
         <source>id_read_more</source>
@@ -2694,6 +2941,10 @@ Recovery Phrase</translation>
         <translation>Khôi phục và thông báo</translation>
     </message>
     <message>
+        <source>id_recovery_key_type</source>
+        <translation>Recovery Key Type</translation>
+    </message>
+    <message>
         <source>id_recovery_mnemonic</source>
         <translation>Recovery mnemonic</translation>
     </message>
@@ -2704,6 +2955,14 @@ Recovery Phrase</translation>
     <message>
         <source>id_recovery_phrase_check</source>
         <translation>Recovery Phrase Check</translation>
+    </message>
+    <message>
+        <source>id_recovery_phrase_length</source>
+        <translation>Recovery phrase length</translation>
+    </message>
+    <message>
+        <source>id_recovery_phrases_key_material</source>
+        <translation>Recovery phrases, key material, addresses, balances</translation>
     </message>
     <message>
         <source>id_recovery_tool</source>
@@ -2775,7 +3034,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_rename_wallet</source>
-        <translation>Rename Wallet</translation>
+        <translation>Rename wallet</translation>
     </message>
     <message>
         <source>id_replaceable</source>
@@ -2894,6 +3153,10 @@ Recovery Phrase</translation>
         <translation>Quét mã QR để ghép đôi SPV</translation>
     </message>
     <message>
+        <source>id_scan_or_paste_your_extended</source>
+        <translation>Scan or paste your extended public key (xPub/yPub/zPub) to log in to your watch-only-wallet.</translation>
+    </message>
+    <message>
         <source>id_scan_qr_code</source>
         <translation>Scan QR code</translation>
     </message>
@@ -2946,6 +3209,10 @@ Recovery Phrase</translation>
         <translation>SegWit Account</translation>
     </message>
     <message>
+        <source>id_segwit_bip84</source>
+        <translation>SegWit (BIP84)</translation>
+    </message>
+    <message>
         <source>id_select_a_fiat_currency_and</source>
         <translation>Select a fiat currency and bitcoin denomination to show amounts in your wallet</translation>
     </message>
@@ -2978,12 +3245,20 @@ Recovery Phrase</translation>
         <translation>Select Wallet</translation>
     </message>
     <message>
+        <source>id_select_watchonly_type</source>
+        <translation>Select Watch-only type</translation>
+    </message>
+    <message>
         <source>id_select_word_number_d</source>
         <translation>Chọn chữ cái số %1</translation>
     </message>
     <message>
         <source>id_select_your_jade_to_login</source>
         <translation>Select your Jade to login</translation>
+    </message>
+    <message>
+        <source>id_select_your_recovery_key</source>
+        <translation>Select your recovery key</translation>
     </message>
     <message>
         <source>id_send</source>
@@ -3174,6 +3449,10 @@ Recovery Phrase</translation>
         <translation>Show coins with expiring Two-Factor authentication protection.</translation>
     </message>
     <message>
+        <source>id_show_details</source>
+        <translation>Show details</translation>
+    </message>
+    <message>
         <source>id_show_fiat</source>
         <translation>Nhìn số tiền giấy</translation>
     </message>
@@ -3288,6 +3567,10 @@ Reset this setting and then re-activate it.</translation>
         <translation>SPV verification</translation>
     </message>
     <message>
+        <source>id_standard</source>
+        <translation>Standard</translation>
+    </message>
+    <message>
         <source>id_standard_account</source>
         <translation>Standard Account</translation>
     </message>
@@ -3371,6 +3654,14 @@ Reset this setting and then re-activate it.</translation>
         <translation>Chạm để quét mã QR và nối với nốt mạng để SPV</translation>
     </message>
     <message>
+        <source>id_taproot_account</source>
+        <translation>Taproot account</translation>
+    </message>
+    <message>
+        <source>id_taproot_bip86</source>
+        <translation>Taproot (BIP86)</translation>
+    </message>
+    <message>
         <source>id_telegram</source>
         <translation>Telegram</translation>
     </message>
@@ -3397,6 +3688,10 @@ Reset this setting and then re-activate it.</translation>
     <message>
         <source>id_thank_you_for_downloading_green</source>
         <translation>Cảm ơn bạn đã tải xuống ví Green! Làm ơn để lại xem xét đánh giá của bạn khi bạn có cơ hội</translation>
+    </message>
+    <message>
+        <source>id_thank_you_for_your_feedback</source>
+        <translation>Thank you for your feedback</translation>
     </message>
     <message>
         <source>id_the_1_year_2fa_reset_process</source>
@@ -3436,7 +3731,7 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_the_liquid_network_is_a_bitcoin</source>
-        <translation>The Liquid Network is a Bitcoin sidechain. Select to send and receive Liquid Bitcoin (L-BTC), Tether (USDt), and other Liquid assets.</translation>
+        <translation>The Liquid Network is a Bitcoin layer-2 solution enabling the fast, confidential settlement and issuance of digital assets, such as stablecoins, security tokens, and other financial instruments, on top of the Bitcoin timechain.</translation>
     </message>
     <message>
         <source>id_the_network_selected_on_the</source>
@@ -3447,8 +3742,16 @@ Reset this setting and then re-activate it.</translation>
         <translation>The new email will be used for Two-Factor Authentication when the reset is complete. The reset takes 12 months plus any remaining timelock.</translation>
     </message>
     <message>
+        <source>id_the_new_firmware_requires_you</source>
+        <translation>The new firmware requires you to unpair your Jade from the Bluetooth settings.</translation>
+    </message>
+    <message>
         <source>id_the_password_cant_be_empty</source>
         <translation>Mật khẩu không thể trống</translation>
+    </message>
+    <message>
+        <source>id_the_qr_code_does_not_include</source>
+        <translation>The QR code does not include the BIP39 Passphrase</translation>
     </message>
     <message>
         <source>id_the_recovery_key_below_will_not</source>
@@ -3469,6 +3772,10 @@ Reset this setting and then re-activate it.</translation>
     <message>
         <source>id_the_transaction_contains</source>
         <translation>Giao dịch chứa tiền quỹ không bí mật.</translation>
+    </message>
+    <message>
+        <source>id_the_username_cant_be_empty</source>
+        <translation>The username can&apos;t be empty</translation>
     </message>
     <message>
         <source>id_the_waiting_period_is_necessary</source>
@@ -3499,6 +3806,10 @@ Reset this setting and then re-activate it.</translation>
         <translation>Giao dịch này đã tiêu tiền không bí mật.</translation>
     </message>
     <message>
+        <source>id_this_wallet_is_based_on_your</source>
+        <translation>This wallet is based on your recovery phrase and a BIP39 Passphrase</translation>
+    </message>
+    <message>
         <source>id_this_wallet_operates_on_a_test</source>
         <translation>This wallet operates on a test network. Anything you receive or send here has no value</translation>
     </message>
@@ -3521,6 +3832,10 @@ Reset this setting and then re-activate it.</translation>
     <message>
         <source>id_tip_we_recommend_you_enable</source>
         <translation>Tip: We recommend you enable more than one 2FA method. If you only set up one 2FA method and then lose it, you&apos;ll have to wait at least one year until the 2FA expires.</translation>
+    </message>
+    <message>
+        <source>id_tip_you_can_use_the</source>
+        <translation>Tip: You can use the xPub/yPub/zPub to view your watch-only wallet in Green, or you may import it to another platform. Each account in your wallet has a separate xPub/yPub/zPub.</translation>
     </message>
     <message>
         <source>id_to</source>
@@ -3671,6 +3986,10 @@ Reset this setting and then re-activate it.</translation>
         <translation>Unarchive</translation>
     </message>
     <message>
+        <source>id_unarchive_account</source>
+        <translation>Unarchive account</translation>
+    </message>
+    <message>
         <source>id_unblinding_data</source>
         <translation>Unblinding data</translation>
     </message>
@@ -3701,6 +4020,10 @@ Reset this setting and then re-activate it.</translation>
     <message>
         <source>id_unlock</source>
         <translation>Unlock</translation>
+    </message>
+    <message>
+        <source>id_unlock_green</source>
+        <translation>Unlock Green</translation>
     </message>
     <message>
         <source>id_unlock_jade_to_continue</source>
@@ -3759,8 +4082,16 @@ Reset this setting and then re-activate it.</translation>
         <translation>Use Android screen lock to log in</translation>
     </message>
     <message>
+        <source>id_use_secure_display_and_screen</source>
+        <translation>Use Secure Display and Screen Lock</translation>
+    </message>
+    <message>
         <source>id_use_your_email_to_receive</source>
         <translation>Use your email to receive recovery transactions and transactions notifications</translation>
+    </message>
+    <message>
+        <source>id_user_contact_info_ip_address</source>
+        <translation>User contact info, IP address, detailed location</translation>
     </message>
     <message>
         <source>id_user_not_found_or_invalid</source>
@@ -3813,6 +4144,14 @@ Reset this setting and then re-activate it.</translation>
     <message>
         <source>id_version_1s_2s</source>
         <translation>Phiên bản %1 %2</translation>
+    </message>
+    <message>
+        <source>id_view_account</source>
+        <translation>View account</translation>
+    </message>
+    <message>
+        <source>id_view_archived_accounts</source>
+        <translation>View Archived Accounts</translation>
     </message>
     <message>
         <source>id_view_archived_accounts_d</source>
@@ -3911,6 +4250,14 @@ Reset this setting and then re-activate it.</translation>
         <translation>Ví chỉ xem</translation>
     </message>
     <message>
+        <source>id_watchonly_credentials</source>
+        <translation>Watch-only credentials</translation>
+    </message>
+    <message>
+        <source>id_watchonly_details</source>
+        <translation>Watch-only details</translation>
+    </message>
+    <message>
         <source>id_watchonly_disabled</source>
         <translation>Ví chỉ xem đã tắt</translation>
     </message>
@@ -3933,6 +4280,10 @@ Reset this setting and then re-activate it.</translation>
     <message>
         <source>id_we_use_the_camera_to_scan_qr</source>
         <translation>Chúng tôi dùng camera để quét mã QR</translation>
+    </message>
+    <message>
+        <source>id_we_will_do_our_best_to_find_a</source>
+        <translation>We will do our best to find a wallet corresponding to this recovery phrase</translation>
     </message>
     <message>
         <source>id_welcome</source>
@@ -3963,8 +4314,16 @@ Reset this setting and then re-activate it.</translation>
         <translation>What type of account would you like to add?</translation>
     </message>
     <message>
+        <source>id_whats_collected</source>
+        <translation>What&apos;s collected</translation>
+    </message>
+    <message>
         <source>id_whats_new</source>
         <translation>What&apos;s new?</translation>
+    </message>
+    <message>
+        <source>id_whats_not_collected</source>
+        <translation>What&apos;s NOT collected</translation>
     </message>
     <message>
         <source>id_where_would_you_like_to</source>
@@ -3993,6 +4352,10 @@ Reset this setting and then re-activate it.</translation>
     <message>
         <source>id_wrong_choice_check_your</source>
         <translation>Chọn sai. Kiểm tra các chữ số gợi nhớ và thử lại.</translation>
+    </message>
+    <message>
+        <source>id_xpub</source>
+        <translation>xPub</translation>
     </message>
     <message>
         <source>id_year</source>
@@ -4043,6 +4406,10 @@ Reset this setting and then re-activate it.</translation>
         <translation>You have successfully changed your PIN</translation>
     </message>
     <message>
+        <source>id_you_have_successfully_sent_a</source>
+        <translation>You have successfully sent a transaction. Please give us your feedback to improve Green.</translation>
+    </message>
+    <message>
         <source>id_you_have_to_authenticate_using</source>
         <translation>You have to Authenticate using biometrics</translation>
     </message>
@@ -4061,6 +4428,10 @@ Reset this setting and then re-activate it.</translation>
     <message>
         <source>id_you_only_have_one_twofactor</source>
         <translation>Bạn chí có thể có 1 cách xác thực 2 lớp được kích hoạt.</translation>
+    </message>
+    <message>
+        <source>id_you_will_be_asked_to_enter_your</source>
+        <translation>You will be asked to enter your passphrase at every login.</translation>
     </message>
     <message>
         <source>id_you_will_need_to_reenter_your</source>

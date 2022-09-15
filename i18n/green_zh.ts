@@ -13,6 +13,10 @@
         <translation>12个月（51840个区块）</translation>
     </message>
     <message>
+        <source>id_12_words</source>
+        <translation>12个单词</translation>
+    </message>
+    <message>
         <source>id_15_months_65535_blocks</source>
         <translation>15个月（65535个区块）</translation>
     </message>
@@ -40,12 +44,16 @@
         <translation>%1设置双重验证</translation>
     </message>
     <message>
+        <source>id_24_words</source>
+        <translation>24个单词</translation>
+    </message>
+    <message>
         <source>id_2_hours</source>
         <translation>~ 2小时</translation>
     </message>
     <message>
         <source>id_2fa_dispute_in_progress</source>
-        <translation>双重验证（2FA）被打断</translation>
+        <translation>2FA争议正在进行中</translation>
     </message>
     <message>
         <source>id_2fa_expired</source>
@@ -66,6 +74,10 @@
     <message>
         <source>id_2fa_threshold</source>
         <translation>双重验证（2FA）临界点</translation>
+    </message>
+    <message>
+        <source>id_2of3</source>
+        <translation>2of3</translation>
     </message>
     <message>
         <source>id_2of3_account</source>
@@ -93,7 +105,7 @@
     </message>
     <message>
         <source>id_a_newer_version_of_blockstream</source>
-        <translation>A newer version of Blockstream Green is now available</translation>
+        <translation>Blockstream Green的新版本已经可以使用</translation>
     </message>
     <message>
         <source>id_a_screen_lock_must_be_enabled</source>
@@ -120,6 +132,10 @@
         <translation>账户</translation>
     </message>
     <message>
+        <source>id_account_extended_public_keys</source>
+        <translation>账户扩展公钥</translation>
+    </message>
+    <message>
         <source>id_account_id</source>
         <translation>账户ID</translation>
     </message>
@@ -133,7 +149,7 @@
     </message>
     <message>
         <source>id_accounts</source>
-        <translation>Accounts</translation>
+        <translation>账户</translation>
     </message>
     <message>
         <source>id_accounts_summary</source>
@@ -145,7 +161,7 @@
     </message>
     <message>
         <source>id_actions</source>
-        <translation>Actions</translation>
+        <translation>操作</translation>
     </message>
     <message>
         <source>id_add_a_note_only_you_can_see_it</source>
@@ -184,6 +200,10 @@
         <translation>添加新账户</translation>
     </message>
     <message>
+        <source>id_add_recipient</source>
+        <translation>添加收款人</translation>
+    </message>
+    <message>
         <source>id_add_wallet</source>
         <translation>添加钱包</translation>
     </message>
@@ -213,7 +233,7 @@
     </message>
     <message>
         <source>id_address_was_filled_by_a_payment</source>
-        <translation>Address was filled by a Payment URI</translation>
+        <translation>地址被支付URI填充</translation>
     </message>
     <message>
         <source>id_addresses</source>
@@ -237,27 +257,35 @@
     </message>
     <message>
         <source>id_all_assets</source>
-        <translation>All Assets</translation>
+        <translation>所有资产</translation>
     </message>
     <message>
         <source>id_all_coins</source>
-        <translation>(All coins)</translation>
+        <translation>（所有币）</translation>
     </message>
     <message>
         <source>id_all_networks</source>
-        <translation>All networks</translation>
+        <translation>所有网络</translation>
     </message>
     <message>
         <source>id_all_of_the_accounts_in_your</source>
-        <translation>删除钱包之前，您钱包中的所有帐户都需要为空。</translation>
+        <translation>删除钱包之前，您钱包中的所有帐户都需要清空。</translation>
     </message>
     <message>
         <source>id_all_the_coins_received_or</source>
-        <translation>All the coins received or created as change.</translation>
+        <translation>所有被当做找零接收或创建的币。</translation>
     </message>
     <message>
         <source>id_all_wallets</source>
         <translation>所有钱包</translation>
+    </message>
+    <message>
+        <source>id_allow_collection</source>
+        <translation>允许收集</translation>
+    </message>
+    <message>
+        <source>id_allow_data_collection</source>
+        <translation>允许数据收集</translation>
     </message>
     <message>
         <source>id_allows_you_to_quickly_check</source>
@@ -268,12 +296,20 @@
         <translation>永远</translation>
     </message>
     <message>
+        <source>id_always_ask</source>
+        <translation>Always ask</translation>
+    </message>
+    <message>
         <source>id_amount</source>
         <translation>金额</translation>
     </message>
     <message>
         <source>id_amount_in_s</source>
-        <translation>Amount in %1</translation>
+        <translation>%1中的数量</translation>
+    </message>
+    <message>
+        <source>id_amp</source>
+        <translation>AMP</translation>
     </message>
     <message>
         <source>id_amp_account</source>
@@ -281,7 +317,7 @@
     </message>
     <message>
         <source>id_amp_accounts_are_only_available</source>
-        <translation>AMP accounts are only available on Liquid wallets. You may be required to provide your account ID to issuers to receive an AMP Asset.</translation>
+        <translation>AMP账户仅适用于液态网络钱包。您可能需要向发行人提供您的帐户ID才能接收AMP资产。</translation>
     </message>
     <message>
         <source>id_amp_id</source>
@@ -289,27 +325,39 @@
     </message>
     <message>
         <source>id_amp_wallet</source>
-        <translation>AMP Wallet</translation>
+        <translation>AMP钱包</translation>
     </message>
     <message>
         <source>id_another_2fa_method_is_already</source>
-        <translation>Another 2FA method is already active. Confirm via 2FA that you authorize this change.</translation>
+        <translation>另一种2FA方法已启用。通过2FA确认您授权此更改。</translation>
+    </message>
+    <message>
+        <source>id_any_wallet_found_will_be</source>
+        <translation>任何找到的钱包都会展示在这里。</translation>
     </message>
     <message>
         <source>id_app_settings</source>
-        <translation>App Settings</translation>
+        <translation>App设置</translation>
     </message>
     <message>
         <source>id_archive</source>
-        <translation>Archive</translation>
+        <translation>归档</translation>
+    </message>
+    <message>
+        <source>id_archive_account</source>
+        <translation>归档账户</translation>
     </message>
     <message>
         <source>id_archived</source>
-        <translation>Archived</translation>
+        <translation>已归档</translation>
     </message>
     <message>
         <source>id_archived_accounts</source>
-        <translation>Archived Accounts</translation>
+        <translation>已归档账户</translation>
+    </message>
+    <message>
+        <source>id_are_you_sure_you_want_to_remove</source>
+        <translation>您确定要移除收款人吗？</translation>
     </message>
     <message>
         <source>id_are_you_sure_you_want_to_view</source>
@@ -317,7 +365,7 @@
     </message>
     <message>
         <source>id_as_easy_as_snapping_a_photo</source>
-        <translation>As easy as snapping a photo with your phone. If you have an existing wallet, scan your recovery phrase from settings.</translation>
+        <translation>就像用手机拍张照片一样简单。如果您已经有钱包，请从设置中扫描您的助记词。</translation>
     </message>
     <message>
         <source>id_asset</source>
@@ -329,7 +377,7 @@
     </message>
     <message>
         <source>id_asset_icons_are_missing_try</source>
-        <translation>Asset icons are missing, try reloading them.</translation>
+        <translation>资产标识丢失，请尝试重新加载。</translation>
     </message>
     <message>
         <source>id_asset_id</source>
@@ -345,7 +393,11 @@
     </message>
     <message>
         <source>id_assets_cannot_be_used_on_bitcoin</source>
-        <translation>Assets cannot be used on Bitcoin</translation>
+        <translation>该资产不能在比特币上使用</translation>
+    </message>
+    <message>
+        <source>id_at_least_8_characters_required</source>
+        <translation>至少需要8个字符</translation>
     </message>
     <message>
         <source>id_attempts_remaining_d</source>
@@ -353,27 +405,27 @@
     </message>
     <message>
         <source>id_authenticate_to_view_the</source>
-        <translation>Authenticate to view the recovery phrase</translation>
+        <translation>验证以查看助记词</translation>
     </message>
     <message>
         <source>id_authentication_error_s</source>
-        <translation>Authentication error: %1</translation>
+        <translation>验证错误：%1</translation>
     </message>
     <message>
         <source>id_authentication_failed</source>
-        <translation>Authentication failed</translation>
+        <translation>验证失败</translation>
     </message>
     <message>
         <source>id_authenticator_app</source>
-        <translation>Authenticator app</translation>
+        <translation>身份验证app</translation>
     </message>
     <message>
         <source>id_authenticator_qr_code</source>
-        <translation>Authenticator QR Code</translation>
+        <translation>身份验证二维码</translation>
     </message>
     <message>
         <source>id_authenticator_secret_key</source>
-        <translation>Authenticator secret key</translation>
+        <translation>身份验证秘钥</translation>
     </message>
     <message>
         <source>id_auto_logout_timeout</source>
@@ -381,7 +433,7 @@
     </message>
     <message>
         <source>id_auto_logout_timeout_expired</source>
-        <translation>Auto logout timeout expired</translation>
+        <translation>自动登出超时已过期</translation>
     </message>
     <message>
         <source>id_autolock_after</source>
@@ -389,7 +441,11 @@
     </message>
     <message>
         <source>id_available</source>
-        <translation>Available</translation>
+        <translation>可用</translation>
+    </message>
+    <message>
+        <source>id_available_funds_s</source>
+        <translation>可用资金%1</translation>
     </message>
     <message>
         <source>id_back</source>
@@ -397,7 +453,7 @@
     </message>
     <message>
         <source>id_back_up_recovery_phrase</source>
-        <translation>Back Up Recovery Phrase</translation>
+        <translation>备份助记词</translation>
     </message>
     <message>
         <source>id_backup_the_recovery_mnemonic</source>
@@ -409,35 +465,43 @@
     </message>
     <message>
         <source>id_be_aware_other_apps_can_read_or</source>
-        <translation>请注意，其他应用能够读取或改变剪贴板上已有的内容</translation>
+        <translation>请注意，其它应用能够读取或改变剪贴板上已有的内容</translation>
     </message>
     <message>
         <source>id_be_sure_your_recovery_phrase_is</source>
-        <translation>Be sure your recovery phrase is backed up before removing this wallet.</translation>
+        <translation>移除该钱包前请确认您的助记词已备份。</translation>
     </message>
     <message>
         <source>id_biometric_login_is_disabled</source>
-        <translation>Biometric Login is Disabled</translation>
+        <translation>生物识别登录已禁用</translation>
     </message>
     <message>
         <source>id_biometric_login_is_enabled</source>
-        <translation>Biometric Login is Enabled</translation>
+        <translation>生物识别登录已启用</translation>
     </message>
     <message>
         <source>id_biometrics_authentication</source>
-        <translation>Biometrics Authentication</translation>
+        <translation>生物识别验证</translation>
+    </message>
+    <message>
+        <source>id_bip39_passphrase</source>
+        <translation>BIP39 Passphrase</translation>
+    </message>
+    <message>
+        <source>id_bip39_passphrase_login</source>
+        <translation>BIP39 Passphrase login</translation>
     </message>
     <message>
         <source>id_bip49_accounts_allow_you_to</source>
-        <translation>BIP49 accounts allow you to segregate funds, and to receive on wrapped segwit addresses, thus ensuring the highest backwards compatibility when receiving funds from anyone on the network.</translation>
+        <translation>BIP49账户允许您隔离资金，并在封装过的隔离见证地址上接收，确保从网络上的任何人接收资金时具有最高的向后兼容性。</translation>
     </message>
     <message>
         <source>id_bip84_accounts_allow_you_to</source>
-        <translation>BIP84 accounts allow you to segregate your funds, and to receive on bech32 native segwit addresses. This account type ensures cheaper transactions when sending funds, but not all services support bech32 addresses yet.</translation>
+        <translation>BIP84账户允许您隔离您的资金，并在bech32原生隔离见证地址上接收。这种账户类型确保在发送资金时交易更便宜，但并非所有服务商都支持bech32地址。</translation>
     </message>
     <message>
         <source>id_bitcoin_and_liquid</source>
-        <translation>Bitcoin and Liquid</translation>
+        <translation>比特币和液态网络</translation>
     </message>
     <message>
         <source>id_bitcoin_denomination</source>
@@ -445,15 +509,15 @@
     </message>
     <message>
         <source>id_bitcoin_electrum_server</source>
-        <translation>Bitcoin Electrum server</translation>
+        <translation>比特币Electrum服务器</translation>
     </message>
     <message>
         <source>id_bitcoin_is_the_worlds_leading</source>
-        <translation>Bitcoin is the world&apos;s leading P2P cryptocurrency network. Select to send and receive bitcoin.</translation>
+        <translation>比特币是世界领先的P2P加密货币网络。选择发送和接收比特币。</translation>
     </message>
     <message>
         <source>id_bitcoin_testnet_and_liquid</source>
-        <translation>Bitcoin Testnet and Liquid Testnet</translation>
+        <translation>比特币测试网和液态网络测试网</translation>
     </message>
     <message>
         <source>id_bitcoin_wallet</source>
@@ -461,7 +525,7 @@
     </message>
     <message>
         <source>id_bitcoin_wallets</source>
-        <translation>Bitcoin wallets</translation>
+        <translation>比特币钱包</translation>
     </message>
     <message>
         <source>id_block</source>
@@ -470,6 +534,10 @@
     <message>
         <source>id_block_d</source>
         <translation>区块 %1</translation>
+    </message>
+    <message>
+        <source>id_block_height</source>
+        <translation>区块高度</translation>
     </message>
     <message>
         <source>id_block_height_1d</source>
@@ -485,7 +553,7 @@
     </message>
     <message>
         <source>id_blockstream_devices</source>
-        <translation>Blockstream Devices</translation>
+        <translation>Blockstream的设备</translation>
     </message>
     <message>
         <source>id_blockstream_does_not_have</source>
@@ -493,24 +561,24 @@
     </message>
     <message>
         <source>id_blockstream_green_needs_access</source>
-        <translation>Blockstream Green needs access to Bluetooth in order to connect to hardware wallets. Location data is not used or kept by Blockstream.</translation>
+        <translation>Blockstream Green钱包需要访问蓝牙才能连接到硬件钱包。Blockstream不会使用或保存位置数据。</translation>
     </message>
     <message>
         <source>id_blockstream_green_supports_both</source>
-        <translation>Blockstream Green supports both Bitcoin and the Liquid Network. Don&apos;t worry, you can create another wallet for a different network at any time.</translation>
+        <translation>Blockstream Green钱包同时支持比特币和液态网络。不用担心，您可以随时为不同的网络创建另一个钱包。</translation>
     </message>
     <message>
         <source>id_blockstream_greennsimple_and</source>
         <translation>Blockstream Green:
-Simple and Secure</translation>
+安全且易用</translation>
     </message>
     <message>
         <source>id_blockstream_store</source>
-        <translation>Blockstream Store</translation>
+        <translation>Blockstream商店</translation>
     </message>
     <message>
         <source>id_bluetooth</source>
-        <translation>Bluetooth</translation>
+        <translation>蓝牙</translation>
     </message>
     <message>
         <source>id_btchip_is_not_set_up_please_set</source>
@@ -522,7 +590,7 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_cable</source>
-        <translation>Cable</translation>
+        <translation>数据线</translation>
     </message>
     <message>
         <source>id_call</source>
@@ -538,7 +606,7 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_cancel_2fa_reset</source>
-        <translation>Cancel 2FA reset</translation>
+        <translation>取消2FA重置</translation>
     </message>
     <message>
         <source>id_cancel_a_reset_to_unlock_your</source>
@@ -558,11 +626,11 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_change</source>
-        <translation>Change</translation>
+        <translation>找零</translation>
     </message>
     <message>
         <source>id_change_address</source>
-        <translation>Change address</translation>
+        <translation>找零地址</translation>
     </message>
     <message>
         <source>id_change_pin</source>
@@ -570,15 +638,19 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_changing_reference_exchange</source>
-        <translation>Changing reference exchange rate will reset your 2FA threshold to 0. Remember to adjust the 2FA threshold after spending.</translation>
+        <translation>更改参考汇率会将您的2FA阈值重置为 0。请记住在转账后调整2FA阈值。</translation>
+    </message>
+    <message>
+        <source>id_check_device</source>
+        <translation>检查设备</translation>
     </message>
     <message>
         <source>id_check_for_updates</source>
-        <translation>Check for updates</translation>
+        <translation>检查更新</translation>
     </message>
     <message>
         <source>id_check_for_updates_on_startup</source>
-        <translation>Check for updates on startup</translation>
+        <translation>在启动时检查更新</translation>
     </message>
     <message>
         <source>id_check_your_backup</source>
@@ -594,7 +666,7 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_choose_a_name_for_your_wallet</source>
-        <translation>Choose a name for your wallet</translation>
+        <translation>为您的钱包选择一个名字</translation>
     </message>
     <message>
         <source>id_choose_method_to_authorize_the</source>
@@ -602,23 +674,31 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_choose_recovery_phrase_length</source>
-        <translation>Choose recovery phrase length</translation>
+        <translation>选择助记词长度</translation>
     </message>
     <message>
         <source>id_choose_security_policy</source>
-        <translation>Choose Security Policy</translation>
+        <translation>选择安全政策</translation>
     </message>
     <message>
         <source>id_choose_the_electrum_servers_you</source>
-        <translation>Choose the Electrum servers you trust</translation>
+        <translation>选择你信任的Electrum服务器</translation>
+    </message>
+    <message>
+        <source>id_choose_the_security_policy_that</source>
+        <translation>选择与您的钱包匹配的安全协议。</translation>
+    </message>
+    <message>
+        <source>id_choose_the_security_policy_you</source>
+        <translation>选择您要恢复该钱包的安全协议。</translation>
     </message>
     <message>
         <source>id_choose_this_version_to_connect</source>
-        <translation>Choose this version to connect to your Blockstream Jade with both a usb cable and wireless</translation>
+        <translation>选择此版本以使用USB和无线的方式连接到您的Blockstream Jade</translation>
     </message>
     <message>
         <source>id_choose_this_version_to_disable</source>
-        <translation>Choose this version to disable all radio connections on your Blockstream Jade. This will make your Blockstream Jade incompatible with iOS devices</translation>
+        <translation>选择此版本可禁用Blockstream Jade上的所有无线连接。这将使您的Blockstream Jade与iOS 设备不兼容</translation>
     </message>
     <message>
         <source>id_choose_twofactor_authentication</source>
@@ -626,7 +706,7 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_choose_watchonly</source>
-        <translation>Choose Watch-Only</translation>
+        <translation>选择仅查看模式</translation>
     </message>
     <message>
         <source>id_choose_your_network</source>
@@ -634,11 +714,15 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_clear</source>
-        <translation>Clear</translation>
+        <translation>清除</translation>
+    </message>
+    <message>
+        <source>id_clear_cache</source>
+        <translation>Clear cache</translation>
     </message>
     <message>
         <source>id_click_to_copy</source>
-        <translation>Click to copy</translation>
+        <translation>点击复制</translation>
     </message>
     <message>
         <source>id_click_to_receive_an_email_with</source>
@@ -646,51 +730,55 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_code</source>
-        <translation>Code</translation>
+        <translation>代码</translation>
+    </message>
+    <message>
+        <source>id_coin</source>
+        <translation>币</translation>
     </message>
     <message>
         <source>id_coins</source>
-        <translation>Coins</translation>
+        <translation>代币</translation>
     </message>
     <message>
         <source>id_coins_for_which_2fa_protection</source>
-        <translation>Coins for which 2FA protection is expired.</translation>
+        <translation>代币2FA保护已过期。</translation>
     </message>
     <message>
         <source>id_coins_locked</source>
-        <translation>Coins locked</translation>
+        <translation>已锁定代币</translation>
     </message>
     <message>
         <source>id_coins_protected_by_the_legacy</source>
-        <translation>Coins protected by the legacy script recoverable with your nlocktimes.zip file.</translation>
+        <translation>受旧脚本保护的代币可通过您的nlocktimes.zip文件恢复。</translation>
     </message>
     <message>
         <source>id_coins_protected_by_the_new</source>
-        <translation>Coins protected by the new script with embedded 2FA expiry through CheckSequenceVerify.</translation>
+        <translation>通过CheckSequenceVerify受2FA到期的新脚本保护的硬币。</translation>
     </message>
     <message>
         <source>id_coins_received_or_created</source>
-        <translation>Coins received or created before SegWit was activated.</translation>
+        <translation>在隔离见证激活之前收到或创建的代币。</translation>
     </message>
     <message>
         <source>id_coins_unlocked</source>
-        <translation>Coins unlocked</translation>
+        <translation>已解锁的代币</translation>
     </message>
     <message>
         <source>id_coins_whose_asset_and_amount</source>
-        <translation>Coins whose asset and amount are publicly visible.</translation>
+        <translation>资产和金额公开可见的代币。</translation>
     </message>
     <message>
         <source>id_coins_with_a_value_lower_than</source>
-        <translation>Coins with a value lower than 1092 satoshis that are uneconomic to spend; these coins can be generated by your wallet as change or sent to you by third parties trying to spam or deanonymize your wallet.</translation>
+        <translation>花费价值低于1092聪的代币是在经济上不明智的；这些硬币可能由您的钱包作为找零生成，也可能由试图向您的钱包发送垃圾邮件或试图去匿名化您钱包的第三方发送给您。</translation>
     </message>
     <message>
         <source>id_collapse_sidebar</source>
-        <translation>Collapse sidebar</translation>
+        <translation>收起侧边栏</translation>
     </message>
     <message>
         <source>id_coming_soon</source>
-        <translation>Coming Soon!</translation>
+        <translation>即将到来！</translation>
     </message>
     <message>
         <source>id_communication_timed_out_make</source>
@@ -706,7 +794,7 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_confidential_transaction</source>
-        <translation>Confidential Transaction</translation>
+        <translation>隐私转账</translation>
     </message>
     <message>
         <source>id_confirm_action</source>
@@ -721,32 +809,40 @@ Simple and Secure</translation>
         <translation>确认码</translation>
     </message>
     <message>
+        <source>id_confirm_on_your_device</source>
+        <translation>在您的设备上确认</translation>
+    </message>
+    <message>
         <source>id_confirm_passphrase</source>
         <translation>确认密语</translation>
     </message>
     <message>
         <source>id_confirm_transaction</source>
-        <translation>Confirm transaction</translation>
+        <translation>确认转账</translation>
     </message>
     <message>
         <source>id_confirm_transaction_details_on</source>
-        <translation>Confirm transaction details on your hardware wallet</translation>
+        <translation>在您的硬件钱包上确认转账详情</translation>
     </message>
     <message>
         <source>id_confirm_update_on_your_jade</source>
-        <translation>Confirm update on your Jade</translation>
+        <translation>在Jade上确认更新</translation>
     </message>
     <message>
         <source>id_confirm_via_2fa_that_you</source>
-        <translation>Confirm via 2FA that you authorize this change.</translation>
+        <translation>通过2FA确认您授权此更改。</translation>
     </message>
     <message>
         <source>id_confirmation_in_d_blocks</source>
         <translation>大约需要%1个区块确认</translation>
     </message>
     <message>
+        <source>id_confirmation_time</source>
+        <translation>确认时间</translation>
+    </message>
+    <message>
         <source>id_confirmations</source>
-        <translation>Confirmations</translation>
+        <translation>确认</translation>
     </message>
     <message>
         <source>id_congratulations</source>
@@ -758,7 +854,7 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_connect_jade_with_a_usb_cable</source>
-        <translation>Connect Jade with a USB cable to download the latest firmware update</translation>
+        <translation>使用USB数据线连接Jade以下载最新的固件更新</translation>
     </message>
     <message>
         <source>id_connect_through_a_proxy</source>
@@ -770,23 +866,27 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_connect_your_jade_to_use_it</source>
-        <translation>Connect your Jade to use it with Green</translation>
+        <translation>连接您的Jade以将其与Green配合使用</translation>
     </message>
     <message>
         <source>id_connect_your_ledger_to_use_it</source>
-        <translation>Connect your Ledger to use it in Green</translation>
+        <translation>连接您的Ledger以在Green中使用</translation>
     </message>
     <message>
         <source>id_connected_to_jade</source>
-        <translation>Connected to Jade</translation>
+        <translation>已连接Jade</translation>
+    </message>
+    <message>
+        <source>id_connected_wallets</source>
+        <translation>已连接钱包</translation>
     </message>
     <message>
         <source>id_connecting</source>
-        <translation>Connecting…</translation>
+        <translation>正在连接。。。</translation>
     </message>
     <message>
         <source>id_connecting_through_tor</source>
-        <translation>Connecting through Tor</translation>
+        <translation>通过Tor连接</translation>
     </message>
     <message>
         <source>id_connecting_to_a_trusted_node</source>
@@ -802,15 +902,11 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_connecting_to_your_device</source>
-        <translation>Connecting to your device</translation>
+        <translation>正在连接到你的设备</translation>
     </message>
     <message>
         <source>id_connection</source>
-        <translation>Connection</translation>
-    </message>
-    <message>
-        <source>id_connection_amp_validation</source>
-        <translation>Connection &amp;amp; Validation Settings</translation>
+        <translation>连接</translation>
     </message>
     <message>
         <source>id_connection_failed</source>
@@ -822,7 +918,7 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_contact_support_at_s_or_visit_s</source>
-        <translation>联系%1或者访问%2</translation>
+        <translation>联系支持人员%1或者访问%2</translation>
     </message>
     <message>
         <source>id_continue</source>
@@ -830,7 +926,7 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_continue_with_1s</source>
-        <translation>Continue with %1</translation>
+        <translation>继续%1</translation>
     </message>
     <message>
         <source>id_copied_to_clipboard</source>
@@ -838,7 +934,7 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_copy</source>
-        <translation>Copy</translation>
+        <translation>复制</translation>
     </message>
     <message>
         <source>id_copy_address</source>
@@ -849,8 +945,16 @@ Simple and Secure</translation>
         <translation>复制详细信息</translation>
     </message>
     <message>
+        <source>id_copy_device_id</source>
+        <translation>复制设备ID</translation>
+    </message>
+    <message>
         <source>id_copy_raw_transaction</source>
         <translation>复制raw transaction</translation>
+    </message>
+    <message>
+        <source>id_copy_support_id</source>
+        <translation>Copy support ID</translation>
     </message>
     <message>
         <source>id_copy_to_clipboard</source>
@@ -862,11 +966,11 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_copy_unblinded_link</source>
-        <translation>Copy unblinded link</translation>
+        <translation>复制解盲链接</translation>
     </message>
     <message>
         <source>id_copy_unblinding_data</source>
-        <translation>Copy unblinding data</translation>
+        <translation>复制解盲数据</translation>
     </message>
     <message>
         <source>id_copy_uri</source>
@@ -878,7 +982,7 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_country</source>
-        <translation>Country</translation>
+        <translation>国家</translation>
     </message>
     <message>
         <source>id_create</source>
@@ -886,11 +990,11 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_create_a_pin_to_access_your</source>
-        <translation>创建一个新的PIN</translation>
+        <translation>创建一个PIN来进入钱包</translation>
     </message>
     <message>
         <source>id_create_a_wallet_for_bitcoin</source>
-        <translation>为Bitcoin，Liquid或Testnet创建钱包</translation>
+        <translation>为比特币，液态网络或测试网创建钱包</translation>
     </message>
     <message>
         <source>id_create_new_wallet</source>
@@ -902,11 +1006,11 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_create_wallet</source>
-        <translation>Create Wallet</translation>
+        <translation>创建钱包</translation>
     </message>
     <message>
         <source>id_creating_wallet</source>
-        <translation>Creating wallet…</translation>
+        <translation>创建钱包中。。。</translation>
     </message>
     <message>
         <source>id_csv</source>
@@ -914,11 +1018,11 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_currency</source>
-        <translation>币种</translation>
+        <translation>货币</translation>
     </message>
     <message>
         <source>id_current_version</source>
-        <translation>Current version</translation>
+        <translation>当前版本</translation>
     </message>
     <message>
         <source>id_custom</source>
@@ -938,11 +1042,11 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_custom_servers_and_validation</source>
-        <translation>Custom servers and validation</translation>
+        <translation>自定义服务器和验证</translation>
     </message>
     <message>
         <source>id_customize_2fa_expiration_of</source>
-        <translation>Customize 2FA expiration of your coins</translation>
+        <translation>自定义代币的2FA到期时间</translation>
     </message>
     <message>
         <source>id_d6_confirmations</source>
@@ -962,15 +1066,15 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_d_coins_selected</source>
-        <translation>(%1 coins selected)</translation>
+        <translation>（%1选择代币）</translation>
     </message>
     <message>
         <source>id_d_words</source>
-        <translation>%1 words</translation>
+        <translation>%1词</translation>
     </message>
     <message>
         <source>id_data_directory</source>
-        <translation>Data directory</translation>
+        <translation>数据目录</translation>
     </message>
     <message>
         <source>id_date</source>
@@ -998,11 +1102,15 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_delete</source>
-        <translation>Delete</translation>
+        <translation>删除</translation>
+    </message>
+    <message>
+        <source>id_delete_credentials</source>
+        <translation>删除证书</translation>
     </message>
     <message>
         <source>id_delete_permanently_your_wallet</source>
-        <translation>Delete permanently your wallet from the Blockstream Green database. You will never be able to log in to it thereafter.</translation>
+        <translation>从 Blockstream Green数据库中永久删除您的钱包。此后您将永远无法登录。</translation>
     </message>
     <message>
         <source>id_delete_s_twofactor</source>
@@ -1010,7 +1118,7 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_delete_wallet</source>
-        <translation>Delete Wallet</translation>
+        <translation>删除钱包</translation>
     </message>
     <message>
         <source>id_deleting_your_pin_will_remove</source>
@@ -1026,15 +1134,21 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_details</source>
-        <translation>Details</translation>
+        <translation>详情</translation>
     </message>
     <message>
         <source>id_device</source>
-        <translation>Device</translation>
+        <translation>设备</translation>
     </message>
     <message>
         <source>id_devices</source>
-        <translation>Devices</translation>
+        <translation>设备</translation>
+    </message>
+    <message>
+        <source>id_different_passphrases_generate</source>
+        <translation>Different passphrases generate new wallets!
+
+Remember you can only restore this wallet with both your recovery phrase and the passphrase.</translation>
     </message>
     <message>
         <source>id_disable</source>
@@ -1042,11 +1156,11 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_disable_pin_access</source>
-        <translation>Disable PIN access</translation>
+        <translation>禁用PIN</translation>
     </message>
     <message>
         <source>id_disable_pin_access_for_this</source>
-        <translation>Disable PIN access for this wallet on all devices</translation>
+        <translation>在所有设备上禁用该钱包的PIN</translation>
     </message>
     <message>
         <source>id_disable_s_twofactor</source>
@@ -1074,7 +1188,7 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_do_you_have_the_backup</source>
-        <translation>Do you have the backup?</translation>
+        <translation>您有备份吗？</translation>
     </message>
     <message>
         <source>id_domain</source>
@@ -1089,28 +1203,32 @@ Simple and Secure</translation>
         <translation>不再询问</translation>
     </message>
     <message>
+        <source>id_dont_collect_data</source>
+        <translation>不要收集数据</translation>
+    </message>
+    <message>
         <source>id_dont_show_this_again</source>
-        <translation>Don&apos;t show this again</translation>
+        <translation>不再显示</translation>
     </message>
     <message>
         <source>id_dont_store_your_recovery_phrase</source>
-        <translation>Don&apos;t store your recovery phrase on your phone, computer, or any online services.</translation>
+        <translation>不要将您的助记词存储在您的手机、电脑或任何联网设备上。</translation>
     </message>
     <message>
         <source>id_dont_take_screenshots_of_your</source>
-        <translation>Don&apos;t take screenshots of your recovery phrase!</translation>
+        <translation>请勿对助记词进行截屏！</translation>
     </message>
     <message>
         <source>id_double_check_spv_with_other</source>
-        <translation>Double check SPV with other servers</translation>
+        <translation>与其他服务器一起再次检查SPV</translation>
     </message>
     <message>
         <source>id_double_spend</source>
-        <translation>双重花费</translation>
+        <translation>双花</translation>
     </message>
     <message>
         <source>id_double_spend_by</source>
-        <translation>双重花费者为</translation>
+        <translation>被双花</translation>
     </message>
     <message>
         <source>id_download_finished</source>
@@ -1118,11 +1236,15 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_dust</source>
-        <translation>Dust</translation>
+        <translation>灰尘</translation>
     </message>
     <message>
         <source>id_edit</source>
-        <translation>Edit</translation>
+        <translation>编辑</translation>
+    </message>
+    <message>
+        <source>id_edit_fee</source>
+        <translation>编辑费用</translation>
     </message>
     <message>
         <source>id_email</source>
@@ -1134,7 +1256,7 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_empty</source>
-        <translation>Empty</translation>
+        <translation>空</translation>
     </message>
     <message>
         <source>id_enable</source>
@@ -1142,7 +1264,7 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_enable_bluetooth</source>
-        <translation>Enable Bluetooth</translation>
+        <translation>启用蓝牙</translation>
     </message>
     <message>
         <source>id_enable_custom_networks_debug</source>
@@ -1154,15 +1276,19 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_enable_experimental_features</source>
-        <translation>Enable experimental features</translation>
+        <translation>启用实验性功能</translation>
     </message>
     <message>
         <source>id_enable_face_id</source>
         <translation>启用Face ID</translation>
     </message>
     <message>
+        <source>id_enable_limited_usage_data</source>
+        <translation>启用使用数据有限收集</translation>
+    </message>
+    <message>
         <source>id_enable_location_services</source>
-        <translation>Enable location services</translation>
+        <translation>启用位置服务</translation>
     </message>
     <message>
         <source>id_enable_or_change_your_pin_to</source>
@@ -1178,11 +1304,11 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_enable_testnet</source>
-        <translation>Enable testnet</translation>
+        <translation>启用测试网</translation>
     </message>
     <message>
         <source>id_enable_testnet_in_app_settings</source>
-        <translation>Enable testnet in app settings to use Jade</translation>
+        <translation>在app设置中启用测试网以使用Jade</translation>
     </message>
     <message>
         <source>id_enable_touch_id</source>
@@ -1190,7 +1316,7 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_enable_twofactor_authentication</source>
-        <translation>开启双重验证以此在发生未授权转账或修改设置时保护你的钱包</translation>
+        <translation>开启双重验证以此在发生未授权转账或修改设置时保护您的钱包</translation>
     </message>
     <message>
         <source>id_enabled</source>
@@ -1203,6 +1329,10 @@ Simple and Secure</translation>
     <message>
         <source>id_encryption_passphrase</source>
         <translation>加密密语</translation>
+    </message>
+    <message>
+        <source>id_enhanced_privacy</source>
+        <translation>加强隐私</translation>
     </message>
     <message>
         <source>id_enter</source>
@@ -1246,11 +1376,11 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_enter_pin_on_jade</source>
-        <translation>Enter PIN on Jade</translation>
+        <translation>在Jade上输入PIN</translation>
     </message>
     <message>
         <source>id_enter_the_email_for_which_you</source>
-        <translation>Enter the email for which you want to delete a dispute request</translation>
+        <translation>输入您要删除争议请求的电子邮件地址</translation>
     </message>
     <message>
         <source>id_enter_the_matching_words</source>
@@ -1262,15 +1392,15 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_enter_your_12_24_or_27_words</source>
-        <translation>Enter your 12, 24 or 27 words recovery phrase</translation>
+        <translation>输入12，24或27位的助记词</translation>
     </message>
     <message>
         <source>id_enter_your_24_or_27_words</source>
-        <translation>Enter your 24 or 27 words recovery phrase</translation>
+        <translation>输入24位或27位的助记词</translation>
     </message>
     <message>
         <source>id_enter_your_27_words_recovery</source>
-        <translation>Enter your 27 words recovery phrase</translation>
+        <translation>输入27位助记词</translation>
     </message>
     <message>
         <source>id_enter_your_email_address</source>
@@ -1278,11 +1408,11 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_enter_your_pin</source>
-        <translation>Enter Your PIN</translation>
+        <translation>输入您的PIN</translation>
     </message>
     <message>
         <source>id_enter_your_recovery_phrase</source>
-        <translation>Enter your recovery phrase</translation>
+        <translation>输入您的助记词</translation>
     </message>
     <message>
         <source>id_enter_your_s_wallet_mnemonic</source>
@@ -1294,20 +1424,24 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_enter_your_xpub</source>
-        <translation>Enter your xpub</translation>
+        <translation>输入您的xpub</translation>
     </message>
     <message>
         <source>id_enter_your_xpub_to_add_a</source>
-        <translation>Enter your xPub to add a watch-only wallet where you can receive funds and check your balance without importing your private keys.</translation>
+        <translation>输入您的xPub以添加一个仅查看的钱包，您可以在其中接收资金并检查您的余额，而无需导入您的私钥。</translation>
     </message>
     <message>
         <source>id_enter_yournrecovery_phrase</source>
-        <translation>Enter your
-Recovery Phrase</translation>
+        <translation>输入您的
+助记词</translation>
     </message>
     <message>
         <source>id_entity</source>
         <translation>实体</translation>
+    </message>
+    <message>
+        <source>id_ephemeral_wallets</source>
+        <translation>Ephemeral wallets</translation>
     </message>
     <message>
         <source>id_error</source>
@@ -1331,11 +1465,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_error_setting_fee_rate</source>
-        <translation>Error setting Fee Rate</translation>
+        <translation>设置费率错误</translation>
     </message>
     <message>
         <source>id_establishing_session</source>
-        <translation>Establishing session</translation>
+        <translation>建立会话</translation>
     </message>
     <message>
         <source>id_estimated_blocks_until</source>
@@ -1347,19 +1481,31 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_existing_recovery_phrase</source>
-        <translation>Existing recovery phrase</translation>
+        <translation>现有的助记词</translation>
+    </message>
+    <message>
+        <source>id_existing_wallets</source>
+        <translation>现有钱包</translation>
     </message>
     <message>
         <source>id_expand_sidebar</source>
-        <translation>Expand sidebar</translation>
+        <translation>展开侧边栏</translation>
     </message>
     <message>
         <source>id_explore_your_wallet</source>
-        <translation>Explore Your Wallet</translation>
+        <translation>探索您的钱包</translation>
     </message>
     <message>
         <source>id_export_transactions_to_csv_file</source>
         <translation>导出转账历史为CSV文件</translation>
+    </message>
+    <message>
+        <source>id_exports_an_accounts_extended</source>
+        <translation>导出账户的扩展公钥 (xPub/yPub/zPub)在仅查看模式下查看</translation>
+    </message>
+    <message>
+        <source>id_extended_public_key</source>
+        <translation>扩展公钥</translation>
     </message>
     <message>
         <source>id_face_id</source>
@@ -1367,11 +1513,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_failed_to_load_asset_icons</source>
-        <translation>Failed to load asset icons</translation>
+        <translation>未能加载资产图标</translation>
     </message>
     <message>
         <source>id_failed_to_load_asset_registry</source>
-        <translation>Failed to Load Asset Registry</translation>
+        <translation>未能加载资产目录</translation>
     </message>
     <message>
         <source>id_fast</source>
@@ -1379,7 +1525,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_faster_more_confidential</source>
-        <translation>Faster, more confidential Bitcoin transactions</translation>
+        <translation>更快，更隐私的比特币转账</translation>
     </message>
     <message>
         <source>id_fee</source>
@@ -1414,40 +1560,44 @@ Recovery Phrase</translation>
         <translation>费用： %1 / %2</translation>
     </message>
     <message>
+        <source>id_feedback</source>
+        <translation>Feedback</translation>
+    </message>
+    <message>
         <source>id_fees_are_too_low</source>
         <translation>手续费太低</translation>
     </message>
     <message>
         <source>id_fetching_new_firmware</source>
-        <translation>Fetching new firmware</translation>
+        <translation>获取新固件</translation>
     </message>
     <message>
         <source>id_filters</source>
-        <translation>Filters</translation>
+        <translation>筛选</translation>
     </message>
     <message>
         <source>id_finishing_up</source>
-        <translation>Finishing Up</translation>
+        <translation>完成</translation>
     </message>
     <message>
         <source>id_firmware</source>
-        <translation>Firmware</translation>
+        <translation>固件</translation>
     </message>
     <message>
         <source>id_firmware_update</source>
-        <translation>Firmware update</translation>
+        <translation>固件升级</translation>
     </message>
     <message>
         <source>id_firmware_update_completed</source>
-        <translation>Firmware update completed</translation>
+        <translation>已完成固件升级</translation>
     </message>
     <message>
         <source>id_follow_the_instructions_on_your</source>
-        <translation>Follow the instructions on your device.</translation>
+        <translation>按照设备上的说明进行操作。</translation>
     </message>
     <message>
         <source>id_for_investors</source>
-        <translation>For investors</translation>
+        <translation>对于投资者</translation>
     </message>
     <message>
         <source>id_for_long_term_storage</source>
@@ -1471,11 +1621,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_generate</source>
-        <translation>Generate</translation>
+        <translation>生成</translation>
     </message>
     <message>
         <source>id_generate_a_new_recovery_phrase</source>
-        <translation>Generate a new recovery phrase as your third recovery key.</translation>
+        <translation>生成一个新的助记词作为您的第三个恢复密钥。</translation>
     </message>
     <message>
         <source>id_generate_new_address</source>
@@ -1487,15 +1637,19 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_get_id</source>
-        <translation>Get ID</translation>
+        <translation>获取ID</translation>
     </message>
     <message>
         <source>id_get_jade</source>
-        <translation>Get Jade</translation>
+        <translation>获取Jade</translation>
     </message>
     <message>
         <source>id_give_bluetooth_permissions</source>
-        <translation>Give Bluetooth Permissions</translation>
+        <translation>给予蓝牙权限</translation>
+    </message>
+    <message>
+        <source>id_give_us_your_feedback</source>
+        <translation>Give us your feedback</translation>
     </message>
     <message>
         <source>id_go_to_account</source>
@@ -1511,7 +1665,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_got_it_written_down_great_you</source>
-        <translation>Got it written down? Great. You can enter it here. Don’t lose it, it’ll stay the same.</translation>
+        <translation>写下来了吗？好样的。你可以在这里输入。不要将它丢失，它会保持不变。</translation>
     </message>
     <message>
         <source>id_green_is_a_noncustodial_wallet</source>
@@ -1535,7 +1689,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_green_uses_biometric</source>
-        <translation>Green使用生物识别验证来使得用户能够更轻松地打开钱包</translation>
+        <translation>Green使用生物识别验证来让用户能够更轻松地打开钱包</translation>
     </message>
     <message>
         <source>id_green_uses_bluetooth_for</source>
@@ -1551,11 +1705,15 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_hardware_wallet</source>
-        <translation>Hardware wallet</translation>
+        <translation>硬件钱包</translation>
     </message>
     <message>
         <source>id_hardware_wallet_support_for</source>
         <translation>硬件钱包即将支持隐私转账。</translation>
+    </message>
+    <message>
+        <source>id_hardware_wallets</source>
+        <translation>硬件钱包</translation>
     </message>
     <message>
         <source>id_hash</source>
@@ -1564,6 +1722,10 @@ Recovery Phrase</translation>
     <message>
         <source>id_help</source>
         <translation>帮助</translation>
+    </message>
+    <message>
+        <source>id_help_green_improve</source>
+        <translation>帮助Green钱包优化</translation>
     </message>
     <message>
         <source>id_here</source>
@@ -1575,11 +1737,19 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_hide_assets</source>
-        <translation>Hide assets</translation>
+        <translation>隐藏资产</translation>
+    </message>
+    <message>
+        <source>id_hide_details</source>
+        <translation>隐藏细节</translation>
     </message>
     <message>
         <source>id_high</source>
         <translation>高</translation>
+    </message>
+    <message>
+        <source>id_hold_button_to_send</source>
+        <translation>按住按钮发送</translation>
     </message>
     <message>
         <source>id_hold_your_nfc_tag_close_to_the</source>
@@ -1587,7 +1757,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_home</source>
-        <translation>Home</translation>
+        <translation>主页</translation>
     </message>
     <message>
         <source>id_hour</source>
@@ -1599,7 +1769,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_how_to_stop_this_reset</source>
-        <translation>How to Stop This Reset</translation>
+        <translation>如何停止这次重设</translation>
     </message>
     <message>
         <source>id_i_agree_to_the</source>
@@ -1611,11 +1781,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_i_confirm_i_want_to_delete_this</source>
-        <translation>I confirm I want to delete this wallet</translation>
+        <translation>我确认我想要删除这个钱包</translation>
     </message>
     <message>
         <source>id_i_confirm_i_want_to_disable_pin</source>
-        <translation>I confirm I want to disable PIN access on all my devices.</translation>
+        <translation>我确认想要在所有设备上禁用PIN</translation>
     </message>
     <message>
         <source>id_i_forgot_my_password</source>
@@ -1623,7 +1793,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_i_lost_my_2fa</source>
-        <translation>I lost my 2FA</translation>
+        <translation>我丢失了2FA</translation>
     </message>
     <message>
         <source>id_i_secured_the_mnemonic_and_i</source>
@@ -1631,47 +1801,51 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_i_typed_all_my_recovery_phrase</source>
-        <translation>I typed all my recovery phrase why can&apos;t I continue?</translation>
+        <translation>我输入了所有的助记词，为什么不能继续？</translation>
     </message>
     <message>
         <source>id_i_understand_amounts_could_be</source>
-        <translation>I understand amounts could be incorrect</translation>
+        <translation>我明白数量有可能不准确</translation>
     </message>
     <message>
         <source>id_id</source>
         <translation>ID</translation>
     </message>
     <message>
+        <source>id_if_you_agree_green_will_collect</source>
+        <translation>如果您同意，Green钱包将收集有限的使用数据以优化用户体验。不会收集敏感的用户信息或钱包信息。</translation>
+    </message>
+    <message>
         <source>id_if_you_are_the_rightful_owner</source>
-        <translation>If you are the rightful owner of this wallet, and you still possess one of its active 2FA methods, cancel the reset to be able to spend and empty this wallet.</translation>
+        <translation>如果您是该钱包的所有者，并且您仍然拥有2FA方法之一，请取消重置以能够转账并清空该钱包。</translation>
     </message>
     <message>
         <source>id_if_you_did_not_request_the</source>
-        <translation>If you did not request the reset, but you cannot cancel the reset process because you can&apos;t access any existing Two-Factor Authorization methods, dispute this 2FA reset. This will permanently block your wallet, but you can undo this action.</translation>
+        <translation>如果您未请求重置，但由于无法访问任何现有的双重验证而无法取消重置过程，请对此2FA重置提出异议。这将永久屏蔽您的钱包，但您可以撤消此操作。</translation>
     </message>
     <message>
         <source>id_if_you_have_access_to_a</source>
-        <translation>If you have access to a Two-Factor method for this wallet, cancel the reset to be able to spend and receive immediately, or wait %1 days.</translation>
+        <translation>如果您可以访问此钱包的双重验证，请取消重置以便能够立即转账和接收，或者等待%1天。</translation>
     </message>
     <message>
         <source>id_if_you_have_some_coins_on_the</source>
-        <translation>If you have some coins on the legacy address type, and you won&apos;t spend them shortly, you might need to setup an email and receive your recovery transactions to be sure you are always in control of your funds.</translation>
+        <translation>如果您有一些代币保存在旧的地址类型，并且您不会很快花费它们，您可能需要设置电子邮件并接收您的恢复转账，以确保您始终可以控制您的资金。</translation>
     </message>
     <message>
         <source>id_if_you_initiated_the_2fa_reset</source>
-        <translation>If you initiated the 2FA reset dispute by mistake, you can undo it and set the wallet back to 2FA reset state.</translation>
+        <translation>如果您错误地发起了2FA重置争议，您可以撤消它并设置钱包回到2FA重置状态。</translation>
     </message>
     <message>
         <source>id_import_a_multisig_shield_wallet</source>
-        <translation>Import a Multisig Shield wallet created on Blockstream Green.</translation>
+        <translation>导入在Blockstream Green上创建的Multisig Shield钱包。</translation>
     </message>
     <message>
         <source>id_import_a_wallet_created_on</source>
-        <translation>Import a wallet created on Blockstream Green.</translation>
+        <translation>导入一个在Blockstream Green上创建的钱包。</translation>
     </message>
     <message>
         <source>id_import_a_wallet_created_with</source>
-        <translation>Import a wallet created with other apps. This option only works with singlesig wallets using BIP39 mnemonics, and following the BIP44, BIP49, or BIP84 derivations.</translation>
+        <translation>导入其他应用程序创建的钱包。该选项仅适用于使用BIP39助记词并遵循BIP44、BIP49或BIP84派生的单签钱包。</translation>
     </message>
     <message>
         <source>id_incoming</source>
@@ -1679,7 +1853,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_inconsistent_data_provided_for</source>
-        <translation>Inconsistent data provided for enabling Authenticator 2FA</translation>
+        <translation>启用Authenticator 2FA提供的数据不一致</translation>
     </message>
     <message>
         <source>id_increase_fee</source>
@@ -1691,19 +1865,19 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_initialized</source>
-        <translation>Initialized</translation>
+        <translation>初始化</translation>
     </message>
     <message>
         <source>id_initializing_tor</source>
-        <translation>Initializing Tor…</translation>
+        <translation>初始化Tor。。。</translation>
     </message>
     <message>
         <source>id_insert_your_email_to_receive</source>
-        <translation>Insert your email to receive 2FA codes to authorize transfers and other operations.</translation>
+        <translation>输入您的电子邮件以接收2FA代码授权转账和其他操作。</translation>
     </message>
     <message>
         <source>id_install_version_s</source>
-        <translation>Install version: %1?</translation>
+        <translation>安装版本：%1？</translation>
     </message>
     <message>
         <source>id_insufficient_funds</source>
@@ -1715,7 +1889,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_insufficient_lbtc_to_send_a</source>
-        <translation>L-BTC不足，无法发起转账。在Liquid中，需要L-BTC来支付转账手续费。生成地址以接收L-BTC</translation>
+        <translation>L-BTC不足，无法发起转账。在液态网络中，需要L-BTC来支付转账手续费。生成地址以接收L-BTC</translation>
     </message>
     <message>
         <source>id_invalid_address</source>
@@ -1727,15 +1901,15 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_invalid_asset_id</source>
-        <translation>Invalid Asset ID</translation>
+        <translation>无效的资产ID</translation>
     </message>
     <message>
         <source>id_invalid_clipboard_contents</source>
-        <translation>Invalid clipboard contents</translation>
+        <translation>无效的剪贴板内容</translation>
     </message>
     <message>
         <source>id_invalid_merkle_proof</source>
-        <translation>Invalid Merkle proof</translation>
+        <translation>无效的默克尔证明</translation>
     </message>
     <message>
         <source>id_invalid_mnemonic</source>
@@ -1743,7 +1917,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_invalid_mnemonic_continue</source>
-        <translation>Invalid mnemonic. Continue typing or ask for help</translation>
+        <translation>无效的助记词。继续输入或寻求帮助</translation>
     </message>
     <message>
         <source>id_invalid_mnemonic_must_be_24_or</source>
@@ -1767,7 +1941,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_invalid_pin</source>
-        <translation>Invalid PIN</translation>
+        <translation>无效的PIN</translation>
     </message>
     <message>
         <source>id_invalid_pin_remaining_attempts</source>
@@ -1787,7 +1961,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_invalid_recovery_phrase</source>
-        <translation>Invalid recovery phrase</translation>
+        <translation>无效的助记词</translation>
     </message>
     <message>
         <source>id_invalid_replacement_fee_rate</source>
@@ -1807,7 +1981,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_invalid_xpub</source>
-        <translation>Invalid xpub</translation>
+        <translation>无效的xpub</translation>
     </message>
     <message>
         <source>id_is_a_noncustodial</source>
@@ -1819,35 +1993,35 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_issuer_domain_s</source>
-        <translation>Issuer Domain: %1</translation>
+        <translation>发行人域名：%1</translation>
     </message>
     <message>
         <source>id_it_looks_like_you_have_no</source>
-        <translation>It looks like you have no wallets. Click below to add one.</translation>
+        <translation>你好像没有钱包。点击下方添加钱包。</translation>
     </message>
     <message>
         <source>id_jade_unlocked</source>
-        <translation>Jade unlocked</translation>
+        <translation>Jade已解锁</translation>
     </message>
     <message>
         <source>id_jade_was_initialized_for_testnet</source>
-        <translation>Jade was initialized for testnet</translation>
+        <translation>Jade已为测试网初始化</translation>
     </message>
     <message>
         <source>id_just_a_few_more_steps_to_get</source>
-        <translation>Just a few more steps to get you set up.</translation>
+        <translation>只需再完成几个步骤即可完成设置。</translation>
     </message>
     <message>
         <source>id_label</source>
-        <translation>Label</translation>
+        <translation>标签</translation>
     </message>
     <message>
         <source>id_language</source>
-        <translation>Language</translation>
+        <translation>语言</translation>
     </message>
     <message>
         <source>id_last_attempt_if_failed_you_will</source>
-        <translation>Last attempt: if failed, you will have to restore your wallet with your recovery phrase.</translation>
+        <translation>最后一次尝试：如果失败，您将不得不使用助记词来恢复您的钱包。</translation>
     </message>
     <message>
         <source>id_last_ping_1d_ms</source>
@@ -1859,7 +2033,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_latest_transactions</source>
-        <translation>Latest transactions</translation>
+        <translation>最新的转账</translation>
     </message>
     <message>
         <source>id_lbtc_has_no_issuer_and_is</source>
@@ -1867,7 +2041,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_learn_more</source>
-        <translation>Learn more</translation>
+        <translation>了解更多</translation>
     </message>
     <message>
         <source>id_learn_more_about_s</source>
@@ -1879,7 +2053,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_ledger_devices</source>
-        <translation>Ledger devices</translation>
+        <translation>Ledger设备</translation>
     </message>
     <message>
         <source>id_ledger_supports_a_limited_set</source>
@@ -1887,11 +2061,23 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_legacy_account</source>
-        <translation>Legacy Account</translation>
+        <translation>旧账户</translation>
+    </message>
+    <message>
+        <source>id_legacy_bip44</source>
+        <translation>Legacy (BIP44)</translation>
     </message>
     <message>
         <source>id_legacy_script_coins</source>
-        <translation>Legacy script coins</translation>
+        <translation>传统的脚本代币</translation>
+    </message>
+    <message>
+        <source>id_legacy_segwit_account</source>
+        <translation>Legacy SegWit Account</translation>
+    </message>
+    <message>
+        <source>id_legacy_segwit_bip49</source>
+        <translation>Legacy SegWit (BIP49)</translation>
     </message>
     <message>
         <source>id_lets_get_you_set_up</source>
@@ -1899,43 +2085,43 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_liquid_electrum_server</source>
-        <translation>Liquid Electrum server</translation>
+        <translation>液态网络Electrum服务器</translation>
     </message>
     <message>
         <source>id_liquid_is_a_sidechainbased</source>
-        <translation>Liquid is a sidechain-based settlement network for traders and exchanges, enabling faster, more confidential Bitcoin transactions and the issuance of digital assets.</translation>
+        <translation>液态网络是面向交易员和交易所的基于侧链的结算网络，可实现更快、更隐私的比特币交易和数字资产发行。</translation>
     </message>
     <message>
         <source>id_liquid_securities</source>
-        <translation>Liquid证券型资产</translation>
+        <translation>液态网络证券</translation>
     </message>
     <message>
         <source>id_liquid_testnet_electrum_server</source>
-        <translation>Liquid Testnet Electrum server</translation>
+        <translation>液态网络测试网Electrum服务器</translation>
     </message>
     <message>
         <source>id_liquid_testnet_wallets</source>
-        <translation>Liquid testnet wallets</translation>
+        <translation>液态网络测试网钱包</translation>
     </message>
     <message>
         <source>id_liquid_wallet</source>
-        <translation>Liquid Wallet</translation>
+        <translation>液态网络钱包</translation>
     </message>
     <message>
         <source>id_liquid_wallets</source>
-        <translation>Liquid wallets</translation>
+        <translation>液态网络钱包</translation>
     </message>
     <message>
         <source>id_loading</source>
-        <translation>Loading</translation>
+        <translation>加载</translation>
     </message>
     <message>
         <source>id_loading_accounts</source>
-        <translation>Loading accounts…</translation>
+        <translation>加载账户中。。。</translation>
     </message>
     <message>
         <source>id_loading_assets</source>
-        <translation>Loading assets…</translation>
+        <translation>加载资产中。。。</translation>
     </message>
     <message>
         <source>id_loading_transactions</source>
@@ -1943,35 +2129,43 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_loading_wallet</source>
-        <translation>Loading wallet…</translation>
+        <translation>加载钱包中。。。</translation>
     </message>
     <message>
         <source>id_location_services_are_disabled</source>
-        <translation>Location services are disabled, do you want to enable them?</translation>
+        <translation>位置服务已禁用，您希望启用它吗</translation>
     </message>
     <message>
         <source>id_lock</source>
-        <translation>Lock</translation>
+        <translation>锁定</translation>
+    </message>
+    <message>
+        <source>id_lock_after_1_minute</source>
+        <translation>1分钟后锁定</translation>
+    </message>
+    <message>
+        <source>id_lock_immediately</source>
+        <translation>立即锁定</translation>
     </message>
     <message>
         <source>id_locked</source>
-        <translation>Locked</translation>
+        <translation>已锁定</translation>
     </message>
     <message>
         <source>id_locked_coins_will_not_be_spent</source>
-        <translation>Locked coins will not be spent nor included in your balance.</translation>
+        <translation>锁定的代币不会被花费，也不会计入您的余额。</translation>
     </message>
     <message>
         <source>id_locking_coins</source>
-        <translation>Locking coins</translation>
+        <translation>正在锁定代币</translation>
     </message>
     <message>
         <source>id_locking_coins_can_help_protect</source>
-        <translation>Locking coins can help protect your privacy and save on transaction fees. Locked coins are deducted from your balance and are not used when sending transactions. You can only lock coins labeled as dust and unlock them later at any time.</translation>
+        <translation>锁定代币可以帮助保护您的隐私并节省交易费用。锁定的代币将从您的余额中扣除，并且在发送转账时不能使用。您只能锁定标记为灰尘的代币并在之后随时解锁。</translation>
     </message>
     <message>
         <source>id_log_file</source>
-        <translation>Log file</translation>
+        <translation>Log文件</translation>
     </message>
     <message>
         <source>id_log_in</source>
@@ -1983,7 +2177,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_log_in_to_your_multisig_shield</source>
-        <translation>Log in to your Multisig Shield watch-only wallet with a username and password. You can create your watch-only credentials after logging into your Multisig Shield wallet.</translation>
+        <translation>使用用户名和密码登录您的Multisig Shield仅查看用的专用钱包。登录Multisig Shield钱包后，您可以创建watch-only钱包的凭据。</translation>
     </message>
     <message>
         <source>id_log_in_using_mnemonic</source>
@@ -1999,7 +2193,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_logged_in_wallets</source>
-        <translation>Logged in wallets</translation>
+        <translation>已登录钱包</translation>
     </message>
     <message>
         <source>id_logging_in</source>
@@ -2007,7 +2201,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_login</source>
-        <translation>Login</translation>
+        <translation>登录</translation>
     </message>
     <message>
         <source>id_login_failed</source>
@@ -2019,11 +2213,15 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_login_with_biometrics</source>
-        <translation>Login with Biometrics</translation>
+        <translation>使用生物识别登录</translation>
+    </message>
+    <message>
+        <source>id_login_with_bip39_passphrase</source>
+        <translation>Login with BIP39 Passphrase</translation>
     </message>
     <message>
         <source>id_logout</source>
-        <translation>Logout</translation>
+        <translation>登出</translation>
     </message>
     <message>
         <source>id_logout_and_switch</source>
@@ -2035,11 +2233,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_looking_for_wallets</source>
-        <translation>Looking for wallets…</translation>
+        <translation>寻找钱包中。。。</translation>
     </message>
     <message>
         <source>id_looks_like_you_havent_used_a</source>
-        <translation>Looks like you haven&apos;t used a wallet yet. Try creating a new one.</translation>
+        <translation>您好像还没有用过钱包。请尝试创建一个新钱包。</translation>
     </message>
     <message>
         <source>id_low</source>
@@ -2051,11 +2249,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_make_sure_you_have_enabled_otg</source>
-        <translation>Make sure you have enabled OTG option in Android Settings</translation>
+        <translation>请确保您已在Android设置中启用OTG选项</translation>
     </message>
     <message>
         <source>id_make_sure_you_made_a_proper</source>
-        <translation>请确保你妥善备份了你的助记词。</translation>
+        <translation>请您确保妥善备份了助记词。</translation>
     </message>
     <message>
         <source>id_malleated</source>
@@ -2063,19 +2261,23 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_managed_assets</source>
-        <translation>Managed Assets</translation>
+        <translation>托管资产</translation>
     </message>
     <message>
         <source>id_managed_assets_account</source>
-        <translation>Managed Assets Account</translation>
+        <translation>托管资产账户</translation>
     </message>
     <message>
         <source>id_managed_assets_accounts_are</source>
-        <translation>Managed assets accounts are only available on Liquid wallets. You may be required to provide your account ID to issuers to receive a Managed Asset.</translation>
+        <translation>托管资产账户仅适用于液态网络钱包。您可能需要向发行人提供您的账户ID以接收托管资产。</translation>
     </message>
     <message>
         <source>id_manual_coin_selection</source>
-        <translation>Manual coin selection</translation>
+        <translation>手动代币选择</translation>
+    </message>
+    <message>
+        <source>id_manual_restore</source>
+        <translation>手动恢复</translation>
     </message>
     <message>
         <source>id_medium</source>
@@ -2087,19 +2289,19 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_message</source>
-        <translation>Message</translation>
+        <translation>消息</translation>
     </message>
     <message>
         <source>id_message_hash</source>
-        <translation>Message hash</translation>
+        <translation>消息哈希</translation>
     </message>
     <message>
         <source>id_migrate_another_wallet</source>
-        <translation>Migrate Another Wallet</translation>
+        <translation>迁移另一个钱包</translation>
     </message>
     <message>
         <source>id_migrating_to_blockstream_green</source>
-        <translation>Migrating to Blockstream Green? Have an existing Blockstream Green wallet you’d like to import? Let&apos;s go!</translation>
+        <translation>迁移到Blockstream Green？并且有想要导入的现有Blockstream Green钱包？现在就开始吧！</translation>
     </message>
     <message>
         <source>id_minute</source>
@@ -2119,7 +2321,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_model</source>
-        <translation>Model</translation>
+        <translation>模型</translation>
     </message>
     <message>
         <source>id_month</source>
@@ -2131,15 +2333,15 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_more_info</source>
-        <translation>More Info</translation>
+        <translation>更多信息</translation>
     </message>
     <message>
         <source>id_more_options</source>
-        <translation>More Options</translation>
+        <translation>更多选项</translation>
     </message>
     <message>
         <source>id_multi_server_validation</source>
-        <translation>Multi Server Validation</translation>
+        <translation>多服务器验证</translation>
     </message>
     <message>
         <source>id_multiple_assets</source>
@@ -2163,7 +2365,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_network</source>
-        <translation>Network</translation>
+        <translation>网络</translation>
     </message>
     <message>
         <source>id_network_configuration</source>
@@ -2179,11 +2381,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_networks</source>
-        <translation>Networks</translation>
+        <translation>网络</translation>
     </message>
     <message>
         <source>id_new_account_created</source>
-        <translation>New account created</translation>
+        <translation>新创建的账户</translation>
     </message>
     <message>
         <source>id_new_accounts_functionality</source>
@@ -2199,11 +2401,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_new_jade_firmware_available</source>
-        <translation>New Jade Firmware Available</translation>
+        <translation>新的可用的Jade固件</translation>
     </message>
     <message>
         <source>id_new_jade_firmware_required</source>
-        <translation>New Jade Firmware Required</translation>
+        <translation>需要新Jade固件</translation>
     </message>
     <message>
         <source>id_new_outgoing_transaction_from</source>
@@ -2211,7 +2413,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_new_recovery_phrase</source>
-        <translation>New recovery phrase</translation>
+        <translation>新的助记词</translation>
     </message>
     <message>
         <source>id_new_s_transaction_of_s_in</source>
@@ -2227,11 +2429,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_new_version</source>
-        <translation>New version</translation>
+        <translation>新版本</translation>
     </message>
     <message>
         <source>id_new_wallet</source>
-        <translation>New Wallet</translation>
+        <translation>新钱包</translation>
     </message>
     <message>
         <source>id_next</source>
@@ -2250,8 +2452,12 @@ Recovery Phrase</translation>
         <translation>未指定金额</translation>
     </message>
     <message>
+        <source>id_no_archived_accounts</source>
+        <translation>没有归档的账户</translation>
+    </message>
+    <message>
         <source>id_no_asset_in_this_account</source>
-        <translation>No asset in this account</translation>
+        <translation>该账户中没有资产</translation>
     </message>
     <message>
         <source>id_no_attempts_remaining</source>
@@ -2259,15 +2465,24 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_no_coins_selected</source>
-        <translation>(No coins selected)</translation>
+        <translation>（没有被选择的代币）</translation>
     </message>
     <message>
         <source>id_no_device_connected</source>
-        <translation>No device connected</translation>
+        <translation>无已连接设备</translation>
+    </message>
+    <message>
+        <source>id_no_existing_wallet_could_be</source>
+        <translation>找不到现有的钱包。
+尝试手动恢复您的钱包。</translation>
     </message>
     <message>
         <source>id_no_more_assets</source>
-        <translation>No more assets.</translation>
+        <translation>没有更多资产。</translation>
+    </message>
+    <message>
+        <source>id_no_multisig_shield_wallet</source>
+        <translation>该助记词没有多重签名保护的钱包。</translation>
     </message>
     <message>
         <source>id_no_peers_connected</source>
@@ -2295,11 +2510,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_non_confidential</source>
-        <translation>Non Confidential</translation>
+        <translation>非保密</translation>
     </message>
     <message>
         <source>id_non_confidential_transaction</source>
-        <translation>Non Confidential Transaction</translation>
+        <translation>非隐私转账</translation>
     </message>
     <message>
         <source>id_nonconfidential_addresses_not</source>
@@ -2307,7 +2522,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_noradio_firmware</source>
-        <translation>No-radio firmware</translation>
+        <translation>非无线电固件</translation>
     </message>
     <message>
         <source>id_normal</source>
@@ -2315,23 +2530,23 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_not_a_valid_email_address</source>
-        <translation>Not a valid email address</translation>
+        <translation>无效的电子邮件地址</translation>
     </message>
     <message>
         <source>id_not_a_valid_phone_number</source>
-        <translation>Not a valid phone number</translation>
+        <translation>无效的电话号码</translation>
     </message>
     <message>
         <source>id_not_a_valid_word</source>
-        <translation>Not a valid word</translation>
+        <translation>无效词语</translation>
     </message>
     <message>
         <source>id_not_available_noradio_build</source>
-        <translation>Not available (No-radio build)</translation>
+        <translation>不可用（没有无线电）</translation>
     </message>
     <message>
         <source>id_not_confidential</source>
-        <translation>Not confidential</translation>
+        <translation>不是保密的</translation>
     </message>
     <message>
         <source>id_not_connected_connecting_in_ds_</source>
@@ -2339,11 +2554,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_not_initialized</source>
-        <translation>Not initialized</translation>
+        <translation>没有初始化</translation>
     </message>
     <message>
         <source>id_not_on_longest_chain</source>
-        <translation>Not on longest chain</translation>
+        <translation>不在最长链上</translation>
     </message>
     <message>
         <source>id_notifications</source>
@@ -2355,7 +2570,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_of_24</source>
-        <translation>of 24</translation>
+        <translation>24个</translation>
     </message>
     <message>
         <source>id_of_s</source>
@@ -2371,7 +2586,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_once_selected_this_spending</source>
-        <translation>Once selected, this spending policy cannot be changed. For tips on what type of security is best for you, visit our Help Center.</translation>
+        <translation>一旦选择，支出政策将无法更改。想了解最适合您的安全类型，请访问我们的帮助中心。</translation>
     </message>
     <message>
         <source>id_one_attempt_remaining</source>
@@ -2395,7 +2610,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_open</source>
-        <translation>Open</translation>
+        <translation>打开</translation>
     </message>
     <message>
         <source>id_operation_failure</source>
@@ -2403,11 +2618,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_optimal_if_you_rarely_spend</source>
-        <translation>Optimal if you rarely spend coins. Wallet coins will require two-factor reactivation every 455 days to remain protected by two-factor authentication</translation>
+        <translation>如果您很少转账。钱包中的代币将需要每455天重新激活一次双重验证，以保证继续受到双重身份验证的保护</translation>
     </message>
     <message>
         <source>id_optimal_if_you_spend_coins</source>
-        <translation>Optimal if you spend coins every 6 months. Wallet coins will require two-factor reactivation every 6 months to remain protected by two-factor authentication.</translation>
+        <translation>如果您每6个月转账一次。钱包中的代币将需要每6个月重新激活一次双重验证，以保证继续受到双重身份验证的保护</translation>
     </message>
     <message>
         <source>id_optional</source>
@@ -2426,6 +2641,10 @@ Recovery Phrase</translation>
         <translation>或者</translation>
     </message>
     <message>
+        <source>id_os__app_version_loading_times</source>
+        <translation>OS &amp; app版本，加载时间</translation>
+    </message>
+    <message>
         <source>id_our_support_page</source>
         <translation>我们的客服网页</translation>
     </message>
@@ -2439,7 +2658,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_overview</source>
-        <translation>Overview</translation>
+        <translation>总览</translation>
     </message>
     <message>
         <source>id_p2sh</source>
@@ -2448,6 +2667,18 @@ Recovery Phrase</translation>
     <message>
         <source>id_p2wsh</source>
         <translation>P2wsh</translation>
+    </message>
+    <message>
+        <source>id_page_visits_button_presses</source>
+        <translation>页面访问、按下按钮、一般应用配置</translation>
+    </message>
+    <message>
+        <source>id_passphrase</source>
+        <translation>密码</translation>
+    </message>
+    <message>
+        <source>id_passphrase_protected</source>
+        <translation>Passphrase protected</translation>
     </message>
     <message>
         <source>id_password</source>
@@ -2463,19 +2694,19 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_path_used_for_signing</source>
-        <translation>Path used for signing</translation>
+        <translation>用于签名的路径</translation>
     </message>
     <message>
         <source>id_pending_confirmation</source>
-        <translation>Pending confirmation</translation>
+        <translation>等待确认</translation>
     </message>
     <message>
         <source>id_permanently_block_this_wallet</source>
-        <translation>Permanently Block This Wallet</translation>
+        <translation>永久屏蔽该钱包</translation>
     </message>
     <message>
         <source>id_personal_electrum_server</source>
-        <translation>Personal Electrum Server</translation>
+        <translation>个人的Electrum服务器</translation>
     </message>
     <message>
         <source>id_pgp_key</source>
@@ -2495,7 +2726,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_pin_access_disabled</source>
-        <translation>PIN access disabled</translation>
+        <translation>禁用PIN接入</translation>
     </message>
     <message>
         <source>id_pin_has_to_be_between_4_and_15</source>
@@ -2507,11 +2738,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_please_activate_at_least_one</source>
-        <translation>Please activate at least one fingerprint in Android settings in order to use biometric login</translation>
+        <translation>请在Android设置中激活至少一个指纹以使用生物识别登录</translation>
     </message>
     <message>
         <source>id_please_contribute_if_you_find</source>
-        <translation>如果你觉得Blockstream Green很好用，也请做出一些贡献</translation>
+        <translation>如果你觉得Blockstream Green钱包很好用，也请做出一些贡献</translation>
     </message>
     <message>
         <source>id_please_disable_biometric</source>
@@ -2599,11 +2830,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_private_but_less_stable</source>
-        <translation>Private, but less stable connection</translation>
+        <translation>隐私，但不太稳定的连接</translation>
     </message>
     <message>
         <source>id_private_key</source>
-        <translation>Private Key</translation>
+        <translation>私钥</translation>
     </message>
     <message>
         <source>id_problem_with_key_1s</source>
@@ -2611,27 +2842,31 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_provide_this_id_to_the_asset</source>
-        <translation>Provide this ID to the asset issuer if requested.</translation>
+        <translation>如果需要，请将此ID提供给资产发行人。</translation>
     </message>
     <message>
         <source>id_provide_your_amp_id_to_the</source>
-        <translation>Provide your AMP ID to the asset issuer if requested.</translation>
+        <translation>如有需要，请向资产发行者提供您的AMP ID。</translation>
     </message>
     <message>
         <source>id_proxy_host</source>
-        <translation>Proxy host</translation>
+        <translation>代理主机</translation>
     </message>
     <message>
         <source>id_proxy_port</source>
-        <translation>Proxy port</translation>
+        <translation>代理端口</translation>
     </message>
     <message>
         <source>id_proxy_settings</source>
         <translation>PROXY设置</translation>
     </message>
     <message>
+        <source>id_pseudonymous_identifier_country</source>
+        <translation>化名标识符，国家</translation>
+    </message>
+    <message>
         <source>id_qr_code</source>
-        <translation>QR Code</translation>
+        <translation>二维码</translation>
     </message>
     <message>
         <source>id_qr_scanner</source>
@@ -2639,11 +2874,23 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_radio_firmware</source>
-        <translation>Radio firmware</translation>
+        <translation>无线电固件</translation>
+    </message>
+    <message>
+        <source>id_rate</source>
+        <translation>Rate</translation>
+    </message>
+    <message>
+        <source>id_rate_us</source>
+        <translation>Rate us</translation>
+    </message>
+    <message>
+        <source>id_rate_your_experience</source>
+        <translation>Rate your experience</translation>
     </message>
     <message>
         <source>id_read_more</source>
-        <translation>Read more</translation>
+        <translation>阅读更多</translation>
     </message>
     <message>
         <source>id_read_more_at_our_s</source>
@@ -2651,11 +2898,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_ready</source>
-        <translation>Ready</translation>
+        <translation>准备好</translation>
     </message>
     <message>
         <source>id_ready_to_start</source>
-        <translation>Ready to start</translation>
+        <translation>准备开始</translation>
     </message>
     <message>
         <source>id_receive</source>
@@ -2675,7 +2922,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_recently_used_wallets</source>
-        <translation>Recently used wallets</translation>
+        <translation>最近使用的钱包</translation>
     </message>
     <message>
         <source>id_recipient</source>
@@ -2683,7 +2930,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_recipient_address</source>
-        <translation>Recipient address</translation>
+        <translation>收款地址</translation>
     </message>
     <message>
         <source>id_recovery</source>
@@ -2694,20 +2941,32 @@ Recovery Phrase</translation>
         <translation>恢复与通知</translation>
     </message>
     <message>
+        <source>id_recovery_key_type</source>
+        <translation>恢复密钥类型</translation>
+    </message>
+    <message>
         <source>id_recovery_mnemonic</source>
         <translation>助记词</translation>
     </message>
     <message>
         <source>id_recovery_phrase</source>
-        <translation>Recovery Phrase</translation>
+        <translation>助记词</translation>
     </message>
     <message>
         <source>id_recovery_phrase_check</source>
-        <translation>Recovery Phrase Check</translation>
+        <translation>助记词检查</translation>
+    </message>
+    <message>
+        <source>id_recovery_phrase_length</source>
+        <translation>助记词长度</translation>
+    </message>
+    <message>
+        <source>id_recovery_phrases_key_material</source>
+        <translation>助记词、关键材料、地址、余额</translation>
     </message>
     <message>
         <source>id_recovery_tool</source>
-        <translation>Recovery Tool</translation>
+        <translation>恢复工具</translation>
     </message>
     <message>
         <source>id_recovery_transaction_emails</source>
@@ -2723,7 +2982,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_recovery_words</source>
-        <translation>恢复词</translation>
+        <translation>恢复助记词</translation>
     </message>
     <message>
         <source>id_recovery_xpub</source>
@@ -2747,11 +3006,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_reload</source>
-        <translation>Reload</translation>
+        <translation>重新加载</translation>
     </message>
     <message>
         <source>id_remember_me</source>
-        <translation>记住账号</translation>
+        <translation>记住我</translation>
     </message>
     <message>
         <source>id_remove</source>
@@ -2767,7 +3026,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_rename</source>
-        <translation>Rename</translation>
+        <translation>重命名</translation>
     </message>
     <message>
         <source>id_rename_account</source>
@@ -2775,7 +3034,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_rename_wallet</source>
-        <translation>Rename Wallet</translation>
+        <translation>重命名钱包</translation>
     </message>
     <message>
         <source>id_replaceable</source>
@@ -2783,7 +3042,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_request_amount</source>
-        <translation>Request Amount</translation>
+        <translation>需要的金额</translation>
     </message>
     <message>
         <source>id_request_failed</source>
@@ -2827,11 +3086,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_restore_a_singlesig_wallet</source>
-        <translation>Restore a Singlesig wallet created on Blockstream Green, or import a wallet created with other apps. This option only works with singlesig wallets using BIP39 mnemonics, and following the BIP44, BIP49, or BIP84 derivations.</translation>
+        <translation>恢复在Blockstream Green上创建的单签名钱包，或导入在其他应用程序创建的钱包。该选项仅适用于使用BIP39助记词并遵循BIP44、BIP49或BIP84派生的单签名钱包。</translation>
     </message>
     <message>
         <source>id_restore_a_wallet</source>
-        <translation>Restore a Wallet</translation>
+        <translation>恢复一个钱包</translation>
     </message>
     <message>
         <source>id_restore_green_wallet</source>
@@ -2843,15 +3102,15 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_restore_wallet</source>
-        <translation>Restore Wallet</translation>
+        <translation>恢复钱包</translation>
     </message>
     <message>
         <source>id_restore_with_recovery_phrase</source>
-        <translation>Restore with recovery phrase</translation>
+        <translation>用助记词恢复</translation>
     </message>
     <message>
         <source>id_restoring_your_wallet</source>
-        <translation>Restoring Your Wallet</translation>
+        <translation>正在恢复您的钱包</translation>
     </message>
     <message>
         <source>id_review</source>
@@ -2863,7 +3122,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_review_output_s</source>
-        <translation>Review output %1</translation>
+        <translation>检查输出%1</translation>
     </message>
     <message>
         <source>id_s_blocks_left</source>
@@ -2894,16 +3153,20 @@ Recovery Phrase</translation>
         <translation>扫描二维码进行SPV配对</translation>
     </message>
     <message>
+        <source>id_scan_or_paste_your_extended</source>
+        <translation>扫描或粘贴您的扩展公钥 (xPub/yPub/zPub) 以登录您的仅查看钱包。</translation>
+    </message>
+    <message>
         <source>id_scan_qr_code</source>
         <translation>扫描二维码</translation>
     </message>
     <message>
         <source>id_scan_the_qr_code_with_an</source>
-        <translation>Scan the QR Code with an Authenticator app</translation>
+        <translation>使用Authenticator app扫描二维码</translation>
     </message>
     <message>
         <source>id_scan_to_send_here</source>
-        <translation>扫描并送到这里</translation>
+        <translation>扫描并发送到这里</translation>
     </message>
     <message>
         <source>id_screen_lock</source>
@@ -2915,7 +3178,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_search_address</source>
-        <translation>Search address</translation>
+        <translation>搜索地址</translation>
     </message>
     <message>
         <source>id_second</source>
@@ -2927,11 +3190,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_security</source>
-        <translation>Security</translation>
+        <translation>安全</translation>
     </message>
     <message>
         <source>id_security_change</source>
-        <translation>Security Change</translation>
+        <translation>安全变更</translation>
     </message>
     <message>
         <source>id_see_our_privacy_policy_s</source>
@@ -2943,7 +3206,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_segwit_account</source>
-        <translation>SegWit Account</translation>
+        <translation>隔离见证账户</translation>
+    </message>
+    <message>
+        <source>id_segwit_bip84</source>
+        <translation>SegWit (BIP84)</translation>
     </message>
     <message>
         <source>id_select_a_fiat_currency_and</source>
@@ -2955,7 +3222,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_select_an_app_on_s</source>
-        <translation>Select an app on %1</translation>
+        <translation>在%1上选择一个app</translation>
     </message>
     <message>
         <source>id_select_asset</source>
@@ -2975,7 +3242,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_select_wallet</source>
-        <translation>Select Wallet</translation>
+        <translation>选择钱包</translation>
+    </message>
+    <message>
+        <source>id_select_watchonly_type</source>
+        <translation>选择仅查看类型</translation>
     </message>
     <message>
         <source>id_select_word_number_d</source>
@@ -2983,7 +3254,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_select_your_jade_to_login</source>
-        <translation>Select your Jade to login</translation>
+        <translation>选择您的Jade登录</translation>
+    </message>
+    <message>
+        <source>id_select_your_recovery_key</source>
+        <translation>选择您的恢复秘钥</translation>
     </message>
     <message>
         <source>id_send</source>
@@ -2991,7 +3266,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_send_all</source>
-        <translation>Send all</translation>
+        <translation>发送所有</translation>
     </message>
     <message>
         <source>id_send_all_funds</source>
@@ -3003,7 +3278,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_send_and_receive_liquidbased</source>
-        <translation>Send and receive Liquid-based Managed Assets</translation>
+        <translation>发送和接收基于液态网络的托管资产</translation>
     </message>
     <message>
         <source>id_send_to</source>
@@ -3027,11 +3302,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_server_ip_and_port_ipport</source>
-        <translation>Server IP and port (ip:port)</translation>
+        <translation>服务器IP和端口 (ip:port)</translation>
     </message>
     <message>
         <source>id_set_2fa_expiry</source>
-        <translation>Set 2FA expiry</translation>
+        <translation>设置2FA到期</translation>
     </message>
     <message>
         <source>id_set_a_limit_to_spend_without</source>
@@ -3043,7 +3318,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_set_a_pin</source>
-        <translation>Set a PIN</translation>
+        <translation>设置一个PIN</translation>
     </message>
     <message>
         <source>id_set_a_timeout_to_logout_after</source>
@@ -3067,11 +3342,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_set_timelock</source>
-        <translation>Set timelock</translation>
+        <translation>设置时间锁</translation>
     </message>
     <message>
         <source>id_set_twofactor_threshold</source>
-        <translation>设置双验证临界值</translation>
+        <translation>设置双重验证阈值</translation>
     </message>
     <message>
         <source>id_set_up_a_passcode_for_your_ios</source>
@@ -3083,7 +3358,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_set_up_an_email_to_get</source>
-        <translation>设置一个邮箱接收预签转账数据用来恢复。邮件里通知包含了加密的恢复数据。</translation>
+        <translation>设置一个邮箱接收预签转账数据用来恢复。邮件通知包含了加密的恢复数据。</translation>
     </message>
     <message>
         <source>id_set_up_credentials_to_access_in</source>
@@ -3111,7 +3386,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_setting_up_your_wallet</source>
-        <translation>Setting Up Your Wallet</translation>
+        <translation>设置您的钱包</translation>
     </message>
     <message>
         <source>id_setting_updated</source>
@@ -3123,7 +3398,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_setup_jade</source>
-        <translation>Setup Jade</translation>
+        <translation>设置Jade</translation>
     </message>
     <message>
         <source>id_setup_pin</source>
@@ -3143,27 +3418,27 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_share_nonconfidential</source>
-        <translation>Share non-confidential transaction</translation>
+        <translation>分享非隐私转账</translation>
     </message>
     <message>
         <source>id_share_unblinding_data</source>
-        <translation>Share unblinding data</translation>
+        <translation>分享解盲数据</translation>
     </message>
     <message>
         <source>id_show</source>
-        <translation>Show</translation>
+        <translation>展示</translation>
     </message>
     <message>
         <source>id_show_advanced_options</source>
-        <translation>Show advanced options</translation>
+        <translation>显示高级选项</translation>
     </message>
     <message>
         <source>id_show_all</source>
-        <translation>Show all</translation>
+        <translation>显示所有</translation>
     </message>
     <message>
         <source>id_show_all_assets</source>
-        <translation>Show all assets</translation>
+        <translation>显示所有资产</translation>
     </message>
     <message>
         <source>id_show_bitcoin_amounts_in</source>
@@ -3172,6 +3447,10 @@ Recovery Phrase</translation>
     <message>
         <source>id_show_coins_with_expiring</source>
         <translation>显示快过期的双重验证保护的资产。</translation>
+    </message>
+    <message>
+        <source>id_show_details</source>
+        <translation>展示细节</translation>
     </message>
     <message>
         <source>id_show_fiat</source>
@@ -3187,7 +3466,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_signature_validation_failed_if</source>
-        <translation>Signature validation failed. If this error is unexpected and has happened repeatedly, it is possible the hardware wallet is faulty or has been compromised. It could be leaking your keys, which could lead to loss of funds. Please consider replacing the hardware wallet.</translation>
+        <translation>签名验证失败。如果该错误是意料之外的并且反复发生，则可能是硬件钱包出现故障或已被盗用。它可能会泄露您的私钥，从而导致资金损失。请考虑更换硬件钱包。</translation>
     </message>
     <message>
         <source>id_signup_in_progress</source>
@@ -3199,11 +3478,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_singlesig</source>
-        <translation>Singlesig</translation>
+        <translation>单签名</translation>
     </message>
     <message>
         <source>id_singlesig_wallets_are_not_yet</source>
-        <translation>Singlesig wallets are not yet supported for use with hardware devices. By continuing you&apos;ll access a Multisig Shield wallet.</translation>
+        <translation>单签名钱包尚不支持与硬件设备一起使用。如要继续，您将访问Multisig Shield钱包。</translation>
     </message>
     <message>
         <source>id_skip</source>
@@ -3249,7 +3528,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_spend_your_bitcoin_without_2fa</source>
-        <translation>Spend your bitcoin without 2FA up to a certain threshold. After spending bitcoin up to this amount, you will need to reset your threshold to continue spending without 2FA.</translation>
+        <translation>在没有2FA的情况下花费您的比特币到某个阈值。花费到此金额后，您需要重新设置阈值才能在没有2FA的情况下继续消费。</translation>
     </message>
     <message>
         <source>id_spv_is_always_synchronized_on</source>
@@ -3257,7 +3536,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_spv_mode_is_currently_available</source>
-        <translation>SPV mode is currently available for singlesig bitcoin wallets only.</translation>
+        <translation>SPV模式目前仅适用于单签名比特币钱包。</translation>
     </message>
     <message>
         <source>id_spv_not_fully_synced</source>
@@ -3285,7 +3564,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_spv_verification</source>
-        <translation>SPV verification</translation>
+        <translation>SPV验证</translation>
+    </message>
+    <message>
+        <source>id_standard</source>
+        <translation>Standard</translation>
     </message>
     <message>
         <source>id_standard_account</source>
@@ -3297,7 +3580,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_standard_wallet</source>
-        <translation>Standard Wallet</translation>
+        <translation>标准钱包</translation>
     </message>
     <message>
         <source>id_start_a_2fa_reset_process_if</source>
@@ -3309,11 +3592,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_status</source>
-        <translation>Status</translation>
+        <translation>状态</translation>
     </message>
     <message>
         <source>id_success</source>
-        <translation>Success</translation>
+        <translation>成功</translation>
     </message>
     <message>
         <source>id_support</source>
@@ -3333,7 +3616,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_sweep_into_s</source>
-        <translation>已扫描%1</translation>
+        <translation>扫描至%1</translation>
     </message>
     <message>
         <source>id_switch_network</source>
@@ -3352,7 +3635,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_system_location</source>
-        <translation>System location</translation>
+        <translation>系统位置</translation>
     </message>
     <message>
         <source>id_system_message</source>
@@ -3371,12 +3654,20 @@ Recovery Phrase</translation>
         <translation>点击以扫描二维码并连接到SPV节点</translation>
     </message>
     <message>
+        <source>id_taproot_account</source>
+        <translation>Taproot account</translation>
+    </message>
+    <message>
+        <source>id_taproot_bip86</source>
+        <translation>Taproot (BIP86)</translation>
+    </message>
+    <message>
         <source>id_telegram</source>
         <translation>Telegram</translation>
     </message>
     <message>
         <source>id_terms_of_service</source>
-        <translation>Terms of Service</translation>
+        <translation>服务条款</translation>
     </message>
     <message>
         <source>id_terms_of_use</source>
@@ -3384,23 +3675,27 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_testnet_and_liquid_testnet</source>
-        <translation>Testnet and Liquid Testnet</translation>
+        <translation>测试网和液态网络测试网</translation>
     </message>
     <message>
         <source>id_testnet_electrum_server</source>
-        <translation>Testnet Electrum server</translation>
+        <translation>测试网Electrum服务器</translation>
     </message>
     <message>
         <source>id_testnet_wallets</source>
-        <translation>Testnet wallets</translation>
+        <translation>测试网钱包</translation>
     </message>
     <message>
         <source>id_thank_you_for_downloading_green</source>
         <translation>感谢下载Green！请为我们评分！</translation>
     </message>
     <message>
+        <source>id_thank_you_for_your_feedback</source>
+        <translation>Thank you for your feedback</translation>
+    </message>
+    <message>
         <source>id_the_1_year_2fa_reset_process</source>
-        <translation>The 1 year 2FA reset process was ongoing, but someone blocked it by disputing the 2FA reset.</translation>
+        <translation>一年时间的2FA重置过程正在进行中，但有人通过对2FA重置提出异议而阻止了它。</translation>
     </message>
     <message>
         <source>id_the_address_is_valid</source>
@@ -3432,11 +3727,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_the_hardware_wallet_you_are</source>
-        <translation>目前还不支持你所使用的的硬件钱包</translation>
+        <translation>目前还不支持您所使用的的硬件钱包</translation>
     </message>
     <message>
         <source>id_the_liquid_network_is_a_bitcoin</source>
-        <translation>The Liquid Network is a Bitcoin sidechain. Select to send and receive Liquid Bitcoin (L-BTC), Tether (USDt), and other Liquid assets.</translation>
+        <translation>液态网络（Liquid Network）是一种比特币二层解决方案，可在比特币时间链之上实现数字资产（如稳定币、证券化代币和其他金融工具）的快速、隐私结算和发行。</translation>
     </message>
     <message>
         <source>id_the_network_selected_on_the</source>
@@ -3447,8 +3742,16 @@ Recovery Phrase</translation>
         <translation>重置完成时会使用新的邮箱作为双重验证的邮箱。重置需要12个月加上剩余的timelock。</translation>
     </message>
     <message>
+        <source>id_the_new_firmware_requires_you</source>
+        <translation>新固件要求您取消Jade 的蓝牙配对。</translation>
+    </message>
+    <message>
         <source>id_the_password_cant_be_empty</source>
         <translation>密码不能为空</translation>
+    </message>
+    <message>
+        <source>id_the_qr_code_does_not_include</source>
+        <translation>The QR code does not include the BIP39 Passphrase</translation>
     </message>
     <message>
         <source>id_the_recovery_key_below_will_not</source>
@@ -3456,11 +3759,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_the_recovery_phrase_can_be_used</source>
-        <translation>The recovery phrase can be used to claim your funds at any point. Keep it safe, keep it private.</translation>
+        <translation>通过助记词可随时取用您的资金。请保证助记词安全，私密。</translation>
     </message>
     <message>
         <source>id_the_recovery_phrase_doesnt</source>
-        <translation>The recovery phrase doesn&apos;t match the previously existing wallet. Please retry with a different recovery phrase.</translation>
+        <translation>助记词与以前存在的钱包不匹配。请使用不同的助记词重试。</translation>
     </message>
     <message>
         <source>id_the_source_code_is_available_at</source>
@@ -3471,12 +3774,16 @@ Recovery Phrase</translation>
         <translation>转账中包含非隐私资金。</translation>
     </message>
     <message>
+        <source>id_the_username_cant_be_empty</source>
+        <translation>用户名不能为空</translation>
+    </message>
+    <message>
         <source>id_the_waiting_period_is_necessary</source>
-        <translation>The waiting period is necessary to ensure the security of your wallet, to prevent thieves from getting around your Two-Factor protection.</translation>
+        <translation>等待期对于确保您的钱包安全是必要的，可以防止恶意人员绕过您的双重验证。</translation>
     </message>
     <message>
         <source>id_there_are_no_results_for_the</source>
-        <translation>There are no results for the applied filter</translation>
+        <translation>筛选无结果</translation>
     </message>
     <message>
         <source>id_there_is_already_a_pin_set_for</source>
@@ -3484,31 +3791,35 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_these_are_some_compatible</source>
-        <translation>These are some compatible wallets:</translation>
+        <translation>这些是兼容的钱包：</translation>
     </message>
     <message>
         <source>id_these_settings_apply_for_every</source>
-        <translation>These settings apply for every wallet you use on Blockstream Green.</translation>
+        <translation>这些设置适用于您在Blockstream Green上使用的每个钱包。</translation>
     </message>
     <message>
         <source>id_this_feature_is_coming_soon</source>
-        <translation>This feature is coming soon, stay tuned!</translation>
+        <translation>此功能即将推出，敬请期待！</translation>
     </message>
     <message>
         <source>id_this_transaction_spent</source>
         <translation>这笔转账花费了非隐私资金。</translation>
     </message>
     <message>
+        <source>id_this_wallet_is_based_on_your</source>
+        <translation>This wallet is based on your recovery phrase and a BIP39 Passphrase</translation>
+    </message>
+    <message>
         <source>id_this_wallet_operates_on_a_test</source>
-        <translation>This wallet operates on a test network. Anything you receive or send here has no value</translation>
+        <translation>该钱包在测试网上运行。您在此处接收或发送的任何内容都没有实际价值</translation>
     </message>
     <message>
         <source>id_this_will_disable_pin_login_for</source>
-        <translation>This will disable PIN login for this wallet on all your devices. You will need your recovery phrase to access your wallet.</translation>
+        <translation>这将在您的所有设备上禁用此钱包的PIN登录。您将需要助记词才能访问您的钱包。</translation>
     </message>
     <message>
         <source>id_this_will_log_you_out_and</source>
-        <translation>This will log you out and delete this wallet from the app and the Blockstream servers database.</translation>
+        <translation>这将使您注销并从app和Blockstream的服务器数据库中删除此钱包。</translation>
     </message>
     <message>
         <source>id_ticker</source>
@@ -3520,7 +3831,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_tip_we_recommend_you_enable</source>
-        <translation>Tip: We recommend you enable more than one 2FA method. If you only set up one 2FA method and then lose it, you&apos;ll have to wait at least one year until the 2FA expires.</translation>
+        <translation>提示：我们建议您启用多个2FA方法。如果您只设置了一种2FA方法然后将它丢失，那么您必须等待至少一年，直到2FA到期。</translation>
+    </message>
+    <message>
+        <source>id_tip_you_can_use_the</source>
+        <translation>提示：您可以使用xPub/yPub/zPub用仅查看模式查看您的Green钱包，也可以将其导入其他平台。您钱包中的每个帐户都有一个单独的xPub/yPub/zPub。</translation>
     </message>
     <message>
         <source>id_to</source>
@@ -3532,7 +3847,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_too_many_pin_attempts</source>
-        <translation>Too many PIN attempts</translation>
+        <translation>尝试PIN太多次</translation>
     </message>
     <message>
         <source>id_tor</source>
@@ -3548,7 +3863,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_tor_is_not_yet_available_for</source>
-        <translation>Tor is not yet available for singlesig wallets</translation>
+        <translation>Tor还不能用于单签钱包</translation>
     </message>
     <message>
         <source>id_tor_status</source>
@@ -3612,7 +3927,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_try_again</source>
-        <translation>Try Again</translation>
+        <translation>再次尝试</translation>
     </message>
     <message>
         <source>id_try_now</source>
@@ -3628,7 +3943,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_twofactor</source>
-        <translation>Two-Factor</translation>
+        <translation>双因素</translation>
     </message>
     <message>
         <source>id_twofactor_authentication</source>
@@ -3640,7 +3955,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_twofactor_expiration_period</source>
-        <translation>Two-Factor expiration period</translation>
+        <translation>双重验证有效期</translation>
     </message>
     <message>
         <source>id_twofactor_protection_does_not</source>
@@ -3656,7 +3971,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_twofactor_threshold</source>
-        <translation>触发双重验临界值</translation>
+        <translation>双重验证阈值</translation>
     </message>
     <message>
         <source>id_txid</source>
@@ -3668,11 +3983,15 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_unarchive</source>
-        <translation>Unarchive</translation>
+        <translation>取消归档</translation>
+    </message>
+    <message>
+        <source>id_unarchive_account</source>
+        <translation>取消账户归档</translation>
     </message>
     <message>
         <source>id_unblinding_data</source>
-        <translation>Unblinding data</translation>
+        <translation>解盲数据</translation>
     </message>
     <message>
         <source>id_unconfirmed</source>
@@ -3680,7 +3999,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_undo_2fa_dispute</source>
-        <translation>Undo 2FA dispute</translation>
+        <translation>撤销2FA争议</translation>
     </message>
     <message>
         <source>id_unknown</source>
@@ -3696,31 +4015,35 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_unknown_firmware</source>
-        <translation>Unknown firmware</translation>
+        <translation>未知的固件</translation>
     </message>
     <message>
         <source>id_unlock</source>
-        <translation>Unlock</translation>
+        <translation>解锁</translation>
+    </message>
+    <message>
+        <source>id_unlock_green</source>
+        <translation>解锁Green钱包</translation>
     </message>
     <message>
         <source>id_unlock_jade_to_continue</source>
-        <translation>Unlock Jade to continue</translation>
+        <translation>解锁Jade以继续</translation>
     </message>
     <message>
         <source>id_unlocked_coins_can_be_spent_and</source>
-        <translation>Unlocked coins can be spent and are included in your balance.</translation>
+        <translation>解锁的代币可以被花费并包含在您的余额中。</translation>
     </message>
     <message>
         <source>id_unlocking_coins</source>
-        <translation>Unlocking coins</translation>
+        <translation>解锁代币</translation>
     </message>
     <message>
         <source>id_unstable_internet_connection</source>
-        <translation>Unstable internet connection</translation>
+        <translation>不稳定的互联网连接</translation>
     </message>
     <message>
         <source>id_update</source>
-        <translation>Update</translation>
+        <translation>更新</translation>
     </message>
     <message>
         <source>id_updated</source>
@@ -3728,39 +4051,47 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_updating_firmware</source>
-        <translation>Updating firmware…</translation>
+        <translation>更新固件中。。。</translation>
     </message>
     <message>
         <source>id_uploading_firmware</source>
-        <translation>Uploading firmware</translation>
+        <translation>上传固件</translation>
     </message>
     <message>
         <source>id_use_a_hardware_wallet_as_your</source>
-        <translation>Use a hardware wallet as your third recovery key.</translation>
+        <translation>使用硬件钱包作为您的第三个密钥。</translation>
     </message>
     <message>
         <source>id_use_a_public_key</source>
-        <translation>Use a public key</translation>
+        <translation>使用一个公钥</translation>
     </message>
     <message>
         <source>id_use_all_available_coins</source>
-        <translation>Use all available coins</translation>
+        <translation>使用所有可用的代币</translation>
     </message>
     <message>
         <source>id_use_an_existing_recovery_phrase</source>
-        <translation>Use an existing recovery phrase as your third recovery key.</translation>
+        <translation>使用现有的助记词作为您的第三个恢复秘钥。</translation>
     </message>
     <message>
         <source>id_use_an_xpub_for_which_you_own</source>
-        <translation>Use an xpub for which you own the corresponding private key as your third recovery key.</translation>
+        <translation>使用您拥有相应私钥的xpub作为您的第三个恢复密钥。</translation>
     </message>
     <message>
         <source>id_use_android_screen_lock_to_log</source>
         <translation>使用安卓屏幕锁登录</translation>
     </message>
     <message>
+        <source>id_use_secure_display_and_screen</source>
+        <translation>使用安全显示和屏幕锁定</translation>
+    </message>
+    <message>
         <source>id_use_your_email_to_receive</source>
-        <translation>Use your email to receive recovery transactions and transactions notifications</translation>
+        <translation>使用您的电子邮件接收恢复转账和转账通知</translation>
+    </message>
+    <message>
+        <source>id_user_contact_info_ip_address</source>
+        <translation>用户联系信息、IP地址、详细位置</translation>
     </message>
     <message>
         <source>id_user_not_found_or_invalid</source>
@@ -3780,19 +4111,19 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_verified</source>
-        <translation>Verified</translation>
+        <translation>已验证</translation>
     </message>
     <message>
         <source>id_verify</source>
-        <translation>Verify</translation>
+        <translation>验证</translation>
     </message>
     <message>
         <source>id_verify_on_device</source>
-        <translation>Verify on Device</translation>
+        <translation>在设备上验证</translation>
     </message>
     <message>
         <source>id_verify_your_bitcoin</source>
-        <translation>Verify your bitcoin transactions are included on the blockchain</translation>
+        <translation>验证您的比特币转账是否包含在区块链中</translation>
     </message>
     <message>
         <source>id_verify_your_pin</source>
@@ -3800,7 +4131,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_verifying_transactions</source>
-        <translation>Verifying transactions…</translation>
+        <translation>验证交易中。。。</translation>
     </message>
     <message>
         <source>id_version</source>
@@ -3815,8 +4146,16 @@ Recovery Phrase</translation>
         <translation>版本%1 %2</translation>
     </message>
     <message>
+        <source>id_view_account</source>
+        <translation>查看账户</translation>
+    </message>
+    <message>
+        <source>id_view_archived_accounts</source>
+        <translation>查看已归档账户</translation>
+    </message>
+    <message>
         <source>id_view_archived_accounts_d</source>
-        <translation>View archived accounts (%1)</translation>
+        <translation>查看归档的账户（%1）</translation>
     </message>
     <message>
         <source>id_view_in_explorer</source>
@@ -3824,7 +4163,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_view_more</source>
-        <translation>View More</translation>
+        <translation>查看更多</translation>
     </message>
     <message>
         <source>id_visit_s_for_further_information</source>
@@ -3832,7 +4171,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_visit_the_blockstream_help</source>
-        <translation>Visit the Blockstream Help Center</translation>
+        <translation>访问Blockstream帮助中心</translation>
     </message>
     <message>
         <source>id_waiting_for_transaction</source>
@@ -3840,11 +4179,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_wallet</source>
-        <translation>Wallet</translation>
+        <translation>钱包</translation>
     </message>
     <message>
         <source>id_wallet_already_restored</source>
-        <translation>Wallet already restored</translation>
+        <translation>钱包已恢复</translation>
     </message>
     <message>
         <source>id_wallet_backup</source>
@@ -3852,7 +4191,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_wallet_coins_will_require</source>
-        <translation>Wallet coins will require two-factor reactivation once a year to remain protected by two-factor authentication.</translation>
+        <translation>钱包中的代币需要每年重新激活一次双重验证，以保证受到双重身份验证的保护。</translation>
     </message>
     <message>
         <source>id_wallet_creation_failed</source>
@@ -3860,15 +4199,15 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_wallet_found</source>
-        <translation>Wallet found</translation>
+        <translation>已找到钱包</translation>
     </message>
     <message>
         <source>id_wallet_name</source>
-        <translation>Wallet Name</translation>
+        <translation>钱包名称</translation>
     </message>
     <message>
         <source>id_wallet_not_found</source>
-        <translation>Wallet not found</translation>
+        <translation>钱包未找到</translation>
     </message>
     <message>
         <source>id_wallets</source>
@@ -3888,7 +4227,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_warning_resetting_twofactor</source>
-        <translation>警告：重置双重验证将锁定你的钱包</translation>
+        <translation>警告：重置双重验证将锁定您的钱包</translation>
     </message>
     <message>
         <source>id_warning_there_is_already_a</source>
@@ -3911,6 +4250,14 @@ Recovery Phrase</translation>
         <translation>Watch-only</translation>
     </message>
     <message>
+        <source>id_watchonly_credentials</source>
+        <translation>仅查看证书</translation>
+    </message>
+    <message>
+        <source>id_watchonly_details</source>
+        <translation>仅可查看的详情</translation>
+    </message>
+    <message>
         <source>id_watchonly_disabled</source>
         <translation>Watch-only已关闭</translation>
     </message>
@@ -3924,15 +4271,19 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_watchonly_mode_cannot_be</source>
-        <translation>由于你的资金全部是保密的，Watch-only模式无法在Liquid上开启。</translation>
+        <translation>由于你的资金全部是保密的，Watch-only模式无法在液态网络上开启。</translation>
     </message>
     <message>
         <source>id_watchonly_wallet</source>
-        <translation>Watch-Only Wallet</translation>
+        <translation>仅查看钱包</translation>
     </message>
     <message>
         <source>id_we_use_the_camera_to_scan_qr</source>
         <translation>请使用摄像头扫描二维码</translation>
+    </message>
+    <message>
+        <source>id_we_will_do_our_best_to_find_a</source>
+        <translation>我们会尽力找到与此助记词对应的钱包</translation>
     </message>
     <message>
         <source>id_welcome</source>
@@ -3944,27 +4295,35 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_well_done_you_can_continue</source>
-        <translation>Well done, you can continue</translation>
+        <translation>做得好，您可以继续</translation>
     </message>
     <message>
         <source>id_well_done_you_can_continue_with</source>
-        <translation>Well done, you can continue with your password</translation>
+        <translation>做得好，您可以用您的密码继续</translation>
     </message>
     <message>
         <source>id_well_get_you_set_up_in_no_time</source>
-        <translation>We&apos;ll get you set up in no time. Make sure you have a pen and paper ready!</translation>
+        <translation>我们会尽快为您设置好。请准备好纸和笔！</translation>
     </message>
     <message>
         <source>id_well_get_you_set_up_with_an_amp</source>
-        <translation>We&apos;ll get you set up with an AMP wallet in no time. Note that you can alternatively create AMP accounts in any existing Liquid wallet.</translation>
+        <translation>我们会立即为您设置AMP钱包。请注意，您也可以在任何现有的液态网络钱包中创建AMP账户。</translation>
     </message>
     <message>
         <source>id_what_type_of_account_would_you</source>
         <translation>你希望添加什么类型的账户？</translation>
     </message>
     <message>
+        <source>id_whats_collected</source>
+        <translation>什么会被收集</translation>
+    </message>
+    <message>
         <source>id_whats_new</source>
         <translation>有什么新情况？</translation>
+    </message>
+    <message>
+        <source>id_whats_not_collected</source>
+        <translation>什么不会被收集</translation>
     </message>
     <message>
         <source>id_where_would_you_like_to</source>
@@ -3972,11 +4331,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_wireless</source>
-        <translation>Wireless</translation>
+        <translation>无线</translation>
     </message>
     <message>
         <source>id_word</source>
-        <translation>Word</translation>
+        <translation>词</translation>
     </message>
     <message>
         <source>id_word_d_of_d</source>
@@ -3988,11 +4347,15 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_write_down_your_recovery_phrase</source>
-        <translation>Write down your recovery phrase on paper and store it somewhere safe.</translation>
+        <translation>在纸上写下您的助记词并将其存放在安全的地方。</translation>
     </message>
     <message>
         <source>id_wrong_choice_check_your</source>
         <translation>选择错误。请查看助记词后重试。</translation>
+    </message>
+    <message>
+        <source>id_xpub</source>
+        <translation>xPub</translation>
     </message>
     <message>
         <source>id_year</source>
@@ -4016,7 +4379,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_you_can_change_these_later_on</source>
-        <translation>You can change these later on.</translation>
+        <translation>您之后可以做出修改</translation>
     </message>
     <message>
         <source>id_you_cannot_create_or_restore_a</source>
@@ -4024,7 +4387,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_you_have_clicked_a_payment_uri</source>
-        <translation>You have clicked a Payment URI, select a wallet to handle it</translation>
+        <translation>你点击了一个付款URI，请选择一个钱包来处理它</translation>
     </message>
     <message>
         <source>id_you_have_control_on_your_funds</source>
@@ -4032,7 +4395,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_you_have_no_coins_to_send</source>
-        <translation>You have no coins to send. Generate an address to receive some bitcoins.</translation>
+        <translation>您没有要发送的代币。请生成一个地址来接收一些比特币。</translation>
     </message>
     <message>
         <source>id_you_have_received_s</source>
@@ -4040,15 +4403,19 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_you_have_successfully_changed</source>
-        <translation>You have successfully changed your PIN</translation>
+        <translation>您已经成功地修改了PIN</translation>
+    </message>
+    <message>
+        <source>id_you_have_successfully_sent_a</source>
+        <translation>You have successfully sent a transaction. Please give us your feedback to improve Green.</translation>
     </message>
     <message>
         <source>id_you_have_to_authenticate_using</source>
-        <translation>You have to Authenticate using biometrics</translation>
+        <translation>您必须使用生物识别技术进行身份验证</translation>
     </message>
     <message>
         <source>id_you_have_tor_enabled_are_you</source>
-        <translation>You have Tor enabled, are you sure you want to open this webpage?</translation>
+        <translation>您已启用Tor，确定要打开此网页吗？</translation>
     </message>
     <message>
         <source>id_you_must_first_log_out_before</source>
@@ -4060,7 +4427,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_you_only_have_one_twofactor</source>
-        <translation>你只开启了一项双重验证</translation>
+        <translation>您只开启了一项双重验证</translation>
+    </message>
+    <message>
+        <source>id_you_will_be_asked_to_enter_your</source>
+        <translation>You will be asked to enter your passphrase at every login.</translation>
     </message>
     <message>
         <source>id_you_will_need_to_reenter_your</source>
@@ -4068,31 +4439,31 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_you_will_see_your_coins_here</source>
-        <translation>You will see your coins here</translation>
+        <translation>您会在这里看到您的代币</translation>
     </message>
     <message>
         <source>id_youll_need_to_back_up_your</source>
-        <translation>You’ll need to back up your recovery phrase before you can send or receive funds, but you can still check out the wallet for now.</translation>
+        <translation>您需要先备份您的助记词，然后才能发送或接收资金，但您现在仍然可以查看钱包。</translation>
     </message>
     <message>
         <source>id_youll_need_your_pin_to_log_in</source>
-        <translation>You&apos;ll need your PIN to log in to your wallet. This PIN secures the wallet on this device only.</translation>
+        <translation>您需要PIN才能登录钱包。该PIN仅用于保护此设备上的钱包。</translation>
     </message>
     <message>
         <source>id_youll_need_your_recovery_phrase</source>
-        <translation>You&apos;ll need your recovery phrase to restore this wallet</translation>
+        <translation>您需要助记词才能恢复此钱包</translation>
     </message>
     <message>
         <source>id_youll_see_your_coins_here_when</source>
-        <translation>You&apos;ll see your coins here when you receive funds</translation>
+        <translation>当您收到资金时，您会在此处看到您的代币</translation>
     </message>
     <message>
         <source>id_your_2fa_expires_so_that_if_you</source>
-        <translation>Your 2FA expires, so that if you lose access to your 2FA method, or the Blockstream Green service becomes unavailable, you can always recover your bitcoin using this open source tool</translation>
+        <translation>您的2FA已过期，如果您无法访问2FA，或者Blockstream Green的服务不可用，您始终可以使用此开源工具恢复您的比特币</translation>
     </message>
     <message>
         <source>id_your_device_was_disconnected</source>
-        <translation>Your device was disconnected</translation>
+        <translation>您的设备已断开连接</translation>
     </message>
     <message>
         <source>id_your_favourite_exchange_rate_is</source>
@@ -4100,11 +4471,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_your_funds_are_secured_by</source>
-        <translation>Your funds are secured by multiple keys, with one key on your device and another on our servers protected by your 2FA. Select this option for enhanced security.</translation>
+        <translation>您的资金由多个密钥保护，一个密钥在您的设备上，另一个在我们的服务器上并由您的2FA保护。选择该选项可增强安全性。</translation>
     </message>
     <message>
         <source>id_your_funds_are_secured_by_a</source>
-        <translation>Your funds are secured by a single key held on your device. Simpler to set up and operate than multisig. If in doubt, select this option.</translation>
+        <translation>您的资金由设备上保存的单个私钥保护。比多重签名设置和操作更简单。如有疑问，请选择该选项。</translation>
     </message>
     <message>
         <source>id_your_green_wallet_is_now_ready</source>
@@ -4116,7 +4487,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_your_notifications_will_be</source>
-        <translation>你的通知消息将在此显示。</translation>
+        <translation>您的通知消息将在此显示。</translation>
     </message>
     <message>
         <source>id_your_pin_or_your_mnemonic_will</source>
@@ -4128,11 +4499,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_your_transactions_will_be_shown</source>
-        <translation>你的转账信息将在此显示。</translation>
+        <translation>您的转账信息将在此显示。</translation>
     </message>
     <message>
         <source>id_your_twofactor_threshold_is_s</source>
-        <translation>触发双重验证的临界值是%1。</translation>
+        <translation>触发双重验证的阈值是%1。</translation>
     </message>
     <message>
         <source>id_your_wallet_backup_is_made_of</source>
@@ -4144,7 +4515,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_your_wallet_is_locked_under_2fa</source>
-        <translation>Your wallet is locked under 2FA dispute.</translation>
+        <translation>您的钱包因2FA争议而被锁定。</translation>
     </message>
     <message>
         <source>id_your_wallet_is_not_yet_fully</source>
@@ -4157,7 +4528,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_youve_entered_an_invalid_pin</source>
-        <translation>You&apos;ve entered an invalid PIN too many times.</translation>
+        <translation>您输入无效PIN的次数过多。</translation>
     </message>
 </context>
 </TS>

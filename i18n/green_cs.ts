@@ -13,6 +13,10 @@
         <translation>12 měsíců (51840 bloků)</translation>
     </message>
     <message>
+        <source>id_12_words</source>
+        <translation>12 slov</translation>
+    </message>
+    <message>
         <source>id_15_months_65535_blocks</source>
         <translation>15 měsíců (65535 bloků)</translation>
     </message>
@@ -38,6 +42,10 @@ Pokud vám žádný z těchto tipů nepomohl nebo pokud nemáte frázi pro obnov
     <message>
         <source>id_1s_twofactor_setup</source>
         <translation>%1 Dvoufaktorové nastavení</translation>
+    </message>
+    <message>
+        <source>id_24_words</source>
+        <translation>24 slov</translation>
     </message>
     <message>
         <source>id_2_hours</source>
@@ -66,6 +74,10 @@ Pokud vám žádný z těchto tipů nepomohl nebo pokud nemáte frázi pro obnov
     <message>
         <source>id_2fa_threshold</source>
         <translation>Prahová hodnota 2FA</translation>
+    </message>
+    <message>
+        <source>id_2of3</source>
+        <translation>2z3</translation>
     </message>
     <message>
         <source>id_2of3_account</source>
@@ -118,6 +130,10 @@ Pokud vám žádný z těchto tipů nepomohl nebo pokud nemáte frázi pro obnov
     <message>
         <source>id_account</source>
         <translation>ÚČET</translation>
+    </message>
+    <message>
+        <source>id_account_extended_public_keys</source>
+        <translation>Rozšířené veřejné klíče (xpub) k účtu</translation>
     </message>
     <message>
         <source>id_account_id</source>
@@ -184,6 +200,10 @@ Pokud vám žádný z těchto tipů nepomohl nebo pokud nemáte frázi pro obnov
         <translation>Přidat nový účet</translation>
     </message>
     <message>
+        <source>id_add_recipient</source>
+        <translation>Přidat příjemce</translation>
+    </message>
+    <message>
         <source>id_add_wallet</source>
         <translation>Přidat peněženku</translation>
     </message>
@@ -241,7 +261,7 @@ Pokud vám žádný z těchto tipů nepomohl nebo pokud nemáte frázi pro obnov
     </message>
     <message>
         <source>id_all_coins</source>
-        <translation>(All coins)</translation>
+        <translation>(Všechny mince)</translation>
     </message>
     <message>
         <source>id_all_networks</source>
@@ -260,6 +280,14 @@ Pokud vám žádný z těchto tipů nepomohl nebo pokud nemáte frázi pro obnov
         <translation>Všechny peněženky</translation>
     </message>
     <message>
+        <source>id_allow_collection</source>
+        <translation>Povolit sběr</translation>
+    </message>
+    <message>
+        <source>id_allow_data_collection</source>
+        <translation>Povolit sběr dat</translation>
+    </message>
+    <message>
         <source>id_allows_you_to_quickly_check</source>
         <translation>Umožňuje rychle zkontrolovat váš zůstatek, přijmout finanční prostředky nebo vybrat prostředky (sweep) z papírové peněženky. V režimu pouze-pro-sledování nemůžete posílat finanční prostředky.</translation>
     </message>
@@ -268,12 +296,20 @@ Pokud vám žádný z těchto tipů nepomohl nebo pokud nemáte frázi pro obnov
         <translation>Vždy</translation>
     </message>
     <message>
+        <source>id_always_ask</source>
+        <translation>Vždy se ptejte</translation>
+    </message>
+    <message>
         <source>id_amount</source>
         <translation>Částka</translation>
     </message>
     <message>
         <source>id_amount_in_s</source>
         <translation>Částka v %1</translation>
+    </message>
+    <message>
+        <source>id_amp</source>
+        <translation>AMP</translation>
     </message>
     <message>
         <source>id_amp_account</source>
@@ -296,6 +332,10 @@ Pokud vám žádný z těchto tipů nepomohl nebo pokud nemáte frázi pro obnov
         <translation>Další metoda 2FA je již aktivní. Prostřednictvím 2FA potvrďte, že tuto změnu autorizujete.</translation>
     </message>
     <message>
+        <source>id_any_wallet_found_will_be</source>
+        <translation>Zde se zobrazí všechny nalezené peněženky.</translation>
+    </message>
+    <message>
         <source>id_app_settings</source>
         <translation>Nastavení aplikace</translation>
     </message>
@@ -304,12 +344,20 @@ Pokud vám žádný z těchto tipů nepomohl nebo pokud nemáte frázi pro obnov
         <translation>Archivovat</translation>
     </message>
     <message>
+        <source>id_archive_account</source>
+        <translation>Archivovat účet</translation>
+    </message>
+    <message>
         <source>id_archived</source>
         <translation>Archivováno</translation>
     </message>
     <message>
         <source>id_archived_accounts</source>
         <translation>Archivované účty</translation>
+    </message>
+    <message>
+        <source>id_are_you_sure_you_want_to_remove</source>
+        <translation>Jste si jisti, že chcete příjemce odebrat?</translation>
     </message>
     <message>
         <source>id_are_you_sure_you_want_to_view</source>
@@ -346,6 +394,10 @@ Pokud vám žádný z těchto tipů nepomohl nebo pokud nemáte frázi pro obnov
     <message>
         <source>id_assets_cannot_be_used_on_bitcoin</source>
         <translation>Aktiva nelze použít na Bitcoinu</translation>
+    </message>
+    <message>
+        <source>id_at_least_8_characters_required</source>
+        <translation>Vyžaduje se alespoň 8 znaků</translation>
     </message>
     <message>
         <source>id_attempts_remaining_d</source>
@@ -392,6 +444,10 @@ Pokud vám žádný z těchto tipů nepomohl nebo pokud nemáte frázi pro obnov
         <translation>K dispozici</translation>
     </message>
     <message>
+        <source>id_available_funds_s</source>
+        <translation>Dostupné prostředky %1</translation>
+    </message>
+    <message>
         <source>id_back</source>
         <translation>Zpět</translation>
     </message>
@@ -428,6 +484,14 @@ Pokud vám žádný z těchto tipů nepomohl nebo pokud nemáte frázi pro obnov
         <translation>Biometrické ověřování</translation>
     </message>
     <message>
+        <source>id_bip39_passphrase</source>
+        <translation>BIP39 Přístupová fráze</translation>
+    </message>
+    <message>
+        <source>id_bip39_passphrase_login</source>
+        <translation>BIP39 Přihlášení pomocí přístupové fráze</translation>
+    </message>
+    <message>
         <source>id_bip49_accounts_allow_you_to</source>
         <translation>Účty BIP49 umožňují oddělit prostředky a přijímat na zabalených adresách segwit, čímž je zajištěna nejvyšší zpětná kompatibilita při přijímání prostředků od kohokoli v síti.</translation>
     </message>
@@ -453,7 +517,7 @@ Pokud vám žádný z těchto tipů nepomohl nebo pokud nemáte frázi pro obnov
     </message>
     <message>
         <source>id_bitcoin_testnet_and_liquid</source>
-        <translation>Bitcoin Testnet and Liquid Testnet</translation>
+        <translation>Bitcoin Testnet a Liquid Testnet</translation>
     </message>
     <message>
         <source>id_bitcoin_wallet</source>
@@ -470,6 +534,10 @@ Pokud vám žádný z těchto tipů nepomohl nebo pokud nemáte frázi pro obnov
     <message>
         <source>id_block_d</source>
         <translation>Blok %1</translation>
+    </message>
+    <message>
+        <source>id_block_height</source>
+        <translation>Výška bloku</translation>
     </message>
     <message>
         <source>id_block_height_1d</source>
@@ -573,6 +641,10 @@ Jednoduše a bezpečně</translation>
         <translation>Změnou referenčního směnného kurzu se nastaví prahová hodnota 2FA na 0. Po utrácení nezapomeňte upravit prahovou hodnotu 2FA.</translation>
     </message>
     <message>
+        <source>id_check_device</source>
+        <translation>Zkontrolovat zařízení</translation>
+    </message>
+    <message>
         <source>id_check_for_updates</source>
         <translation>Zkontrolovat aktualizace</translation>
     </message>
@@ -613,6 +685,14 @@ Jednoduše a bezpečně</translation>
         <translation>Vyberte servery Electrum, kterým důvěřujete</translation>
     </message>
     <message>
+        <source>id_choose_the_security_policy_that</source>
+        <translation>Vyberte si zásady zabezpečení, které odpovídají vaší peněžence.</translation>
+    </message>
+    <message>
+        <source>id_choose_the_security_policy_you</source>
+        <translation>Vyberte zásady zabezpečení, na základě kterých chcete tuto peněženku obnovit.</translation>
+    </message>
+    <message>
         <source>id_choose_this_version_to_connect</source>
         <translation>Vyberte si tuto verzi pro připojení k vašemu Blockstream Jade pomocí kabelu USB i bezdrátového připojení</translation>
     </message>
@@ -637,6 +717,10 @@ Jednoduše a bezpečně</translation>
         <translation>Vymazat</translation>
     </message>
     <message>
+        <source>id_clear_cache</source>
+        <translation>Vymazat mezipaměť</translation>
+    </message>
+    <message>
         <source>id_click_to_copy</source>
         <translation>Kliknutím zkopírujte</translation>
     </message>
@@ -647,6 +731,10 @@ Jednoduše a bezpečně</translation>
     <message>
         <source>id_code</source>
         <translation>Kód</translation>
+    </message>
+    <message>
+        <source>id_coin</source>
+        <translation>Mince</translation>
     </message>
     <message>
         <source>id_coins</source>
@@ -721,6 +809,10 @@ Jednoduše a bezpečně</translation>
         <translation>Potvrďte kód</translation>
     </message>
     <message>
+        <source>id_confirm_on_your_device</source>
+        <translation>Potvrďte ve svém zařízení</translation>
+    </message>
+    <message>
         <source>id_confirm_passphrase</source>
         <translation>Potvrďte přístupovou frázi (passphrase)</translation>
     </message>
@@ -730,7 +822,7 @@ Jednoduše a bezpečně</translation>
     </message>
     <message>
         <source>id_confirm_transaction_details_on</source>
-        <translation>Confirm transaction details on your hardware wallet</translation>
+        <translation>Potvrďte údaje o transakci ve své hardwarové peněžence</translation>
     </message>
     <message>
         <source>id_confirm_update_on_your_jade</source>
@@ -743,6 +835,10 @@ Jednoduše a bezpečně</translation>
     <message>
         <source>id_confirmation_in_d_blocks</source>
         <translation>Potvrzení v %1 blocích</translation>
+    </message>
+    <message>
+        <source>id_confirmation_time</source>
+        <translation>Čas potvrzení</translation>
     </message>
     <message>
         <source>id_confirmations</source>
@@ -781,6 +877,10 @@ Jednoduše a bezpečně</translation>
         <translation>Připojeno k Jade</translation>
     </message>
     <message>
+        <source>id_connected_wallets</source>
+        <translation>Připojené peněženky</translation>
+    </message>
+    <message>
         <source>id_connecting</source>
         <translation>Připojování...</translation>
     </message>
@@ -807,10 +907,6 @@ Jednoduše a bezpečně</translation>
     <message>
         <source>id_connection</source>
         <translation>Připojení</translation>
-    </message>
-    <message>
-        <source>id_connection_amp_validation</source>
-        <translation>Nastavení připojení &amp;amp; ověření</translation>
     </message>
     <message>
         <source>id_connection_failed</source>
@@ -849,8 +945,16 @@ Jednoduše a bezpečně</translation>
         <translation>Kopírovat podrobnosti</translation>
     </message>
     <message>
+        <source>id_copy_device_id</source>
+        <translation>Zkopírovat ID zařízení</translation>
+    </message>
+    <message>
         <source>id_copy_raw_transaction</source>
         <translation>Kopírovat raw transakci</translation>
+    </message>
+    <message>
+        <source>id_copy_support_id</source>
+        <translation>Kopírovat ID podpory</translation>
     </message>
     <message>
         <source>id_copy_to_clipboard</source>
@@ -962,7 +1066,7 @@ Jednoduše a bezpečně</translation>
     </message>
     <message>
         <source>id_d_coins_selected</source>
-        <translation>(%1 coins selected)</translation>
+        <translation>(%1 vybrané mince)</translation>
     </message>
     <message>
         <source>id_d_words</source>
@@ -1001,6 +1105,10 @@ Jednoduše a bezpečně</translation>
         <translation>Smazat</translation>
     </message>
     <message>
+        <source>id_delete_credentials</source>
+        <translation>Odstranit přístupové údaje</translation>
+    </message>
+    <message>
         <source>id_delete_permanently_your_wallet</source>
         <translation>Trvale odstraňte svou peněženku z databáze Blockstream Green. Poté se k ní již nikdy nebudete moci přihlásit.</translation>
     </message>
@@ -1035,6 +1143,12 @@ Jednoduše a bezpečně</translation>
     <message>
         <source>id_devices</source>
         <translation>Zařízení</translation>
+    </message>
+    <message>
+        <source>id_different_passphrases_generate</source>
+        <translation>Různé přístupové fráze generují nové peněženky!
+
+Nezapomeňte, že tuto peněženku můžete obnovit pouze s vaší frází pro obnovení i s přístupovou frází.</translation>
     </message>
     <message>
         <source>id_disable</source>
@@ -1089,6 +1203,10 @@ Jednoduše a bezpečně</translation>
         <translation>Neptejte se mě znovu</translation>
     </message>
     <message>
+        <source>id_dont_collect_data</source>
+        <translation>Nesbírat data</translation>
+    </message>
+    <message>
         <source>id_dont_show_this_again</source>
         <translation>Už to nezobrazujte</translation>
     </message>
@@ -1125,6 +1243,10 @@ Jednoduše a bezpečně</translation>
         <translation>Upravit</translation>
     </message>
     <message>
+        <source>id_edit_fee</source>
+        <translation>Upravit poplatek</translation>
+    </message>
+    <message>
         <source>id_email</source>
         <translation>E-mail</translation>
     </message>
@@ -1159,6 +1281,10 @@ Jednoduše a bezpečně</translation>
     <message>
         <source>id_enable_face_id</source>
         <translation>Povolit Face ID</translation>
+    </message>
+    <message>
+        <source>id_enable_limited_usage_data</source>
+        <translation>Povolit omezené shromažďování údajů o používání</translation>
     </message>
     <message>
         <source>id_enable_location_services</source>
@@ -1203,6 +1329,10 @@ Jednoduše a bezpečně</translation>
     <message>
         <source>id_encryption_passphrase</source>
         <translation>Šifrovací přístupová fráze (passphrase)</translation>
+    </message>
+    <message>
+        <source>id_enhanced_privacy</source>
+        <translation>Zvýšená ochrana soukromí</translation>
     </message>
     <message>
         <source>id_enter</source>
@@ -1310,6 +1440,10 @@ obnovovací frázi</translation>
         <translation>Entita</translation>
     </message>
     <message>
+        <source>id_ephemeral_wallets</source>
+        <translation>Pomíjivé peněženky</translation>
+    </message>
+    <message>
         <source>id_error</source>
         <translation>Chyba</translation>
     </message>
@@ -1350,6 +1484,10 @@ obnovovací frázi</translation>
         <translation>Stávající fráze pro obnovu</translation>
     </message>
     <message>
+        <source>id_existing_wallets</source>
+        <translation>Stávající peněženky</translation>
+    </message>
+    <message>
         <source>id_expand_sidebar</source>
         <translation>Rozbalit boční panel</translation>
     </message>
@@ -1360,6 +1498,14 @@ obnovovací frázi</translation>
     <message>
         <source>id_export_transactions_to_csv_file</source>
         <translation>Exportovat transakce do souboru CSV</translation>
+    </message>
+    <message>
+        <source>id_exports_an_accounts_extended</source>
+        <translation>Exportuje rozšířený veřejný klíč účtu (xPub/yPub/zPub) pro zobrazení pouze pro sledování.</translation>
+    </message>
+    <message>
+        <source>id_extended_public_key</source>
+        <translation>Rozšířený veřejný klíč</translation>
     </message>
     <message>
         <source>id_face_id</source>
@@ -1412,6 +1558,10 @@ obnovovací frázi</translation>
     <message>
         <source>id_fee_s__s</source>
         <translation>Poplatek: %1 / %2</translation>
+    </message>
+    <message>
+        <source>id_feedback</source>
+        <translation>Zpětná vazba</translation>
     </message>
     <message>
         <source>id_fees_are_too_low</source>
@@ -1498,6 +1648,10 @@ obnovovací frázi</translation>
         <translation>Udělení oprávnění Bluetooth</translation>
     </message>
     <message>
+        <source>id_give_us_your_feedback</source>
+        <translation>Dejte nám svou zpětnou vazbu</translation>
+    </message>
+    <message>
         <source>id_go_to_account</source>
         <translation>Přejít do účtu</translation>
     </message>
@@ -1558,12 +1712,20 @@ obnovovací frázi</translation>
         <translation>Podpora hardwarové peněženky pro důvěrné transakce již brzy.</translation>
     </message>
     <message>
+        <source>id_hardware_wallets</source>
+        <translation>Hardwarové peněženky</translation>
+    </message>
+    <message>
         <source>id_hash</source>
         <translation>Hash</translation>
     </message>
     <message>
         <source>id_help</source>
         <translation>Pomoc</translation>
+    </message>
+    <message>
+        <source>id_help_green_improve</source>
+        <translation>Pomozte zlepšit Green</translation>
     </message>
     <message>
         <source>id_here</source>
@@ -1578,8 +1740,16 @@ obnovovací frázi</translation>
         <translation>Skrýt aktiva</translation>
     </message>
     <message>
+        <source>id_hide_details</source>
+        <translation>Skrýt podrobnosti</translation>
+    </message>
+    <message>
         <source>id_high</source>
         <translation>Vysoký</translation>
+    </message>
+    <message>
+        <source>id_hold_button_to_send</source>
+        <translation>Podržením tlačítka odešlete</translation>
     </message>
     <message>
         <source>id_hold_your_nfc_tag_close_to_the</source>
@@ -1587,7 +1757,7 @@ obnovovací frázi</translation>
     </message>
     <message>
         <source>id_home</source>
-        <translation>Home</translation>
+        <translation>Domů</translation>
     </message>
     <message>
         <source>id_hour</source>
@@ -1640,6 +1810,10 @@ obnovovací frázi</translation>
     <message>
         <source>id_id</source>
         <translation>ID</translation>
+    </message>
+    <message>
+        <source>id_if_you_agree_green_will_collect</source>
+        <translation>Pokud souhlasíte, bude Green shromažďovat omezené údaje o používání za účelem optimalizace uživatelského prostředí. Nebudou shromažďovány žádné citlivé údaje o uživateli nebo peněžence.</translation>
     </message>
     <message>
         <source>id_if_you_are_the_rightful_owner</source>
@@ -1890,8 +2064,20 @@ obnovovací frázi</translation>
         <translation>Starší účet</translation>
     </message>
     <message>
+        <source>id_legacy_bip44</source>
+        <translation>Starší verze (BIP44)</translation>
+    </message>
+    <message>
         <source>id_legacy_script_coins</source>
         <translation>Starší skriptové mince</translation>
+    </message>
+    <message>
+        <source>id_legacy_segwit_account</source>
+        <translation>Starší účet SegWit</translation>
+    </message>
+    <message>
+        <source>id_legacy_segwit_bip49</source>
+        <translation>Starší verze SegWit (BIP49)</translation>
     </message>
     <message>
         <source>id_lets_get_you_set_up</source>
@@ -1952,6 +2138,14 @@ obnovovací frázi</translation>
     <message>
         <source>id_lock</source>
         <translation>Zamknout</translation>
+    </message>
+    <message>
+        <source>id_lock_after_1_minute</source>
+        <translation>Zamknout po 1 minutě</translation>
+    </message>
+    <message>
+        <source>id_lock_immediately</source>
+        <translation>Zamknout okamžitě</translation>
     </message>
     <message>
         <source>id_locked</source>
@@ -2022,6 +2216,10 @@ obnovovací frázi</translation>
         <translation>Přihlaste se pomocí biometrie</translation>
     </message>
     <message>
+        <source>id_login_with_bip39_passphrase</source>
+        <translation>Přihlášení pomocí přístupové fráze BIP39</translation>
+    </message>
+    <message>
         <source>id_logout</source>
         <translation>Odhlásit se</translation>
     </message>
@@ -2035,7 +2233,7 @@ obnovovací frázi</translation>
     </message>
     <message>
         <source>id_looking_for_wallets</source>
-        <translation>Looking for wallets…</translation>
+        <translation>Hledám peněženky...</translation>
     </message>
     <message>
         <source>id_looks_like_you_havent_used_a</source>
@@ -2076,6 +2274,10 @@ obnovovací frázi</translation>
     <message>
         <source>id_manual_coin_selection</source>
         <translation>Ruční výběr mincí</translation>
+    </message>
+    <message>
+        <source>id_manual_restore</source>
+        <translation>Ruční obnovení</translation>
     </message>
     <message>
         <source>id_medium</source>
@@ -2250,6 +2452,10 @@ obnovovací frázi</translation>
         <translation>Nebyla zadána žádná částka</translation>
     </message>
     <message>
+        <source>id_no_archived_accounts</source>
+        <translation>Žádné archivované účty</translation>
+    </message>
+    <message>
         <source>id_no_asset_in_this_account</source>
         <translation>Žádná aktiva na tomto účtu</translation>
     </message>
@@ -2259,15 +2465,24 @@ obnovovací frázi</translation>
     </message>
     <message>
         <source>id_no_coins_selected</source>
-        <translation>(No coins selected)</translation>
+        <translation>(Nebyly vybrány žádné mince)</translation>
     </message>
     <message>
         <source>id_no_device_connected</source>
         <translation>Není připojeno žádné zařízení</translation>
     </message>
     <message>
+        <source>id_no_existing_wallet_could_be</source>
+        <translation>Nebyla nalezena žádná existující peněženka.
+Zkuste peněženku obnovit ručně.</translation>
+    </message>
+    <message>
         <source>id_no_more_assets</source>
         <translation>Žádná další aktiva.</translation>
+    </message>
+    <message>
+        <source>id_no_multisig_shield_wallet</source>
+        <translation>Pro tuto frázi pro obnovení neexistuje žádná peněženka s vícenásobným štítem.</translation>
     </message>
     <message>
         <source>id_no_peers_connected</source>
@@ -2426,6 +2641,10 @@ obnovovací frázi</translation>
         <translation>NEBO</translation>
     </message>
     <message>
+        <source>id_os__app_version_loading_times</source>
+        <translation>Verze operačního systému a aplikace, doba načítání</translation>
+    </message>
+    <message>
         <source>id_our_support_page</source>
         <translation>naše stránka podpory</translation>
     </message>
@@ -2448,6 +2667,18 @@ obnovovací frázi</translation>
     <message>
         <source>id_p2wsh</source>
         <translation>P2wsh</translation>
+    </message>
+    <message>
+        <source>id_page_visits_button_presses</source>
+        <translation>Návštěvy stránek, stisknutí tlačítek, obecná konfigurace aplikace</translation>
+    </message>
+    <message>
+        <source>id_passphrase</source>
+        <translation>Přístupová fráze</translation>
+    </message>
+    <message>
+        <source>id_passphrase_protected</source>
+        <translation>Chráněno přístupovou frází</translation>
     </message>
     <message>
         <source>id_password</source>
@@ -2630,6 +2861,10 @@ obnovovací frázi</translation>
         <translation>NASTAVENÍ PROXY</translation>
     </message>
     <message>
+        <source>id_pseudonymous_identifier_country</source>
+        <translation>Pseudonymní identifikátor, země</translation>
+    </message>
+    <message>
         <source>id_qr_code</source>
         <translation>QR kód</translation>
     </message>
@@ -2640,6 +2875,18 @@ obnovovací frázi</translation>
     <message>
         <source>id_radio_firmware</source>
         <translation>Rádiový firmware</translation>
+    </message>
+    <message>
+        <source>id_rate</source>
+        <translation>Hodnotit</translation>
+    </message>
+    <message>
+        <source>id_rate_us</source>
+        <translation>Ohodnoťte nás</translation>
+    </message>
+    <message>
+        <source>id_rate_your_experience</source>
+        <translation>Ohodnoťte své zkušenosti</translation>
     </message>
     <message>
         <source>id_read_more</source>
@@ -2694,6 +2941,10 @@ obnovovací frázi</translation>
         <translation>Obnovení a oznámení</translation>
     </message>
     <message>
+        <source>id_recovery_key_type</source>
+        <translation>Typ klíče pro obnovení</translation>
+    </message>
+    <message>
         <source>id_recovery_mnemonic</source>
         <translation>Obnova mnemotechnické fráze</translation>
     </message>
@@ -2704,6 +2955,14 @@ obnovovací frázi</translation>
     <message>
         <source>id_recovery_phrase_check</source>
         <translation>Kontrola obnovovací fráze</translation>
+    </message>
+    <message>
+        <source>id_recovery_phrase_length</source>
+        <translation>Délka fráze pro obnovení</translation>
+    </message>
+    <message>
+        <source>id_recovery_phrases_key_material</source>
+        <translation>Fráze pro obnovu, klíče, adresy, zůstatky</translation>
     </message>
     <message>
         <source>id_recovery_tool</source>
@@ -2894,6 +3153,10 @@ obnovovací frázi</translation>
         <translation>Naskenovat QR kód pro spárování SPV</translation>
     </message>
     <message>
+        <source>id_scan_or_paste_your_extended</source>
+        <translation>Naskenujte nebo vložte svůj rozšířený veřejný klíč (xPub/yPub/zPub) a přihlaste se do peněženky určené pouze pro sledování.</translation>
+    </message>
+    <message>
         <source>id_scan_qr_code</source>
         <translation>Naskenovat QR kód</translation>
     </message>
@@ -2946,6 +3209,10 @@ obnovovací frázi</translation>
         <translation>SegWit účet</translation>
     </message>
     <message>
+        <source>id_segwit_bip84</source>
+        <translation>SegWit (BIP84)</translation>
+    </message>
+    <message>
         <source>id_select_a_fiat_currency_and</source>
         <translation>Vyberte fiat měnu a bitcoinovou denominaci, aby se v peněžence zobrazovaly správné částky</translation>
     </message>
@@ -2978,12 +3245,20 @@ obnovovací frázi</translation>
         <translation>Vyberte peněženku</translation>
     </message>
     <message>
+        <source>id_select_watchonly_type</source>
+        <translation>Vybrat typ Pouze pro sledování</translation>
+    </message>
+    <message>
         <source>id_select_word_number_d</source>
         <translation>Vyberte slovo číslo %1</translation>
     </message>
     <message>
         <source>id_select_your_jade_to_login</source>
         <translation>Vyberte svůj Jade pro přihlášení</translation>
+    </message>
+    <message>
+        <source>id_select_your_recovery_key</source>
+        <translation>Vybrat klíč pro obnovení</translation>
     </message>
     <message>
         <source>id_send</source>
@@ -3174,6 +3449,10 @@ obnovovací frázi</translation>
         <translation>Zobrazit mince s vypršením platnosti dvoufaktorové ověřovací ochrany.</translation>
     </message>
     <message>
+        <source>id_show_details</source>
+        <translation>Zobrazit podrobnosti</translation>
+    </message>
+    <message>
         <source>id_show_fiat</source>
         <translation>Zobrazit fiat</translation>
     </message>
@@ -3288,6 +3567,10 @@ Obnovte toto nastavení a znovu jej aktivujte.</translation>
         <translation>Ověření SPV</translation>
     </message>
     <message>
+        <source>id_standard</source>
+        <translation>Standardní</translation>
+    </message>
+    <message>
         <source>id_standard_account</source>
         <translation>Standardní účet</translation>
     </message>
@@ -3371,6 +3654,14 @@ Obnovte toto nastavení a znovu jej aktivujte.</translation>
         <translation>Klepnutím naskenujte QR kód a připojte se k uzlu pro SPV</translation>
     </message>
     <message>
+        <source>id_taproot_account</source>
+        <translation>Účet Taproot</translation>
+    </message>
+    <message>
+        <source>id_taproot_bip86</source>
+        <translation>Taproot (BIP86)</translation>
+    </message>
+    <message>
         <source>id_telegram</source>
         <translation>Telegram</translation>
     </message>
@@ -3397,6 +3688,10 @@ Obnovte toto nastavení a znovu jej aktivujte.</translation>
     <message>
         <source>id_thank_you_for_downloading_green</source>
         <translation>Děkujeme za stažení Green! Pokud máte čas, zanechte nám prosím recenzi</translation>
+    </message>
+    <message>
+        <source>id_thank_you_for_your_feedback</source>
+        <translation>Děkujeme za vaši zpětnou vazbu</translation>
     </message>
     <message>
         <source>id_the_1_year_2fa_reset_process</source>
@@ -3436,7 +3731,7 @@ Obnovte toto nastavení a znovu jej aktivujte.</translation>
     </message>
     <message>
         <source>id_the_liquid_network_is_a_bitcoin</source>
-        <translation>Liquid Network je bitcoinový postranní řetěz. Vyberte pro odesílání a přijímání Liquid Bitcoin (L-BTC), Tether (USDt) a další Liquid aktiva.</translation>
+        <translation>Liquid Network je řešení druhé vrstvy Bitcoinu, které umožňuje rychlé a důvěrné vypořádání a vydávání digitálních aktiv, jako jsou stablecoiny, tokeny cenných papírů a další finanční nástroje, nad timechainem Bitcoinu.</translation>
     </message>
     <message>
         <source>id_the_network_selected_on_the</source>
@@ -3447,8 +3742,16 @@ Obnovte toto nastavení a znovu jej aktivujte.</translation>
         <translation>Po dokončení resetu bude nový e-mail použit pro 2-Faktorové ověření. Reset trvá 12 měsíců plus zbývající časový blok.</translation>
     </message>
     <message>
+        <source>id_the_new_firmware_requires_you</source>
+        <translation>Nový firmware vyžaduje zrušení párování zařízení Jade v nastavení Bluetooth.</translation>
+    </message>
+    <message>
         <source>id_the_password_cant_be_empty</source>
         <translation>Heslo nemůže být prázdné</translation>
+    </message>
+    <message>
+        <source>id_the_qr_code_does_not_include</source>
+        <translation>QR kód neobsahuje přístupovou frázi BIP39.</translation>
     </message>
     <message>
         <source>id_the_recovery_key_below_will_not</source>
@@ -3469,6 +3772,10 @@ Obnovte toto nastavení a znovu jej aktivujte.</translation>
     <message>
         <source>id_the_transaction_contains</source>
         <translation>Transakce obsahuje nedůvěrné prostředky.</translation>
+    </message>
+    <message>
+        <source>id_the_username_cant_be_empty</source>
+        <translation>Uživatelské jméno nesmí být prázdné</translation>
     </message>
     <message>
         <source>id_the_waiting_period_is_necessary</source>
@@ -3499,6 +3806,10 @@ Obnovte toto nastavení a znovu jej aktivujte.</translation>
         <translation>Tato transakce utratila nedůvěrné prostředky.</translation>
     </message>
     <message>
+        <source>id_this_wallet_is_based_on_your</source>
+        <translation>Tato peněženka je založena na vaší obnovovací frázi a přístupové frázi BIP39.</translation>
+    </message>
+    <message>
         <source>id_this_wallet_operates_on_a_test</source>
         <translation>Tato peněženka funguje v testovací síti. Cokoli, co zde obdržíte nebo odešlete, nemá žádnou hodnotu.</translation>
     </message>
@@ -3521,6 +3832,10 @@ Obnovte toto nastavení a znovu jej aktivujte.</translation>
     <message>
         <source>id_tip_we_recommend_you_enable</source>
         <translation>Tip: Doporučujeme povolit více než jednu metodu 2FA. Pokud nastavíte pouze jednu metodu 2FA a poté ji ztratíte, budete muset počkat alespoň jeden rok, než platnost 2FA vyprší.</translation>
+    </message>
+    <message>
+        <source>id_tip_you_can_use_the</source>
+        <translation>Tip: Pro zobrazení peněženky pouze pro sledování můžete použít xPub/yPub/zPub v Green, případně ji můžete importovat do jiné platformy. Každý účet ve vaší peněžence má samostatný xPub/yPub/zPub.</translation>
     </message>
     <message>
         <source>id_to</source>
@@ -3671,6 +3986,10 @@ Obnovte toto nastavení a znovu jej aktivujte.</translation>
         <translation>Odarchivovat</translation>
     </message>
     <message>
+        <source>id_unarchive_account</source>
+        <translation>Zrušit archivaci účtu</translation>
+    </message>
+    <message>
         <source>id_unblinding_data</source>
         <translation>Odtajněná data</translation>
     </message>
@@ -3701,6 +4020,10 @@ Obnovte toto nastavení a znovu jej aktivujte.</translation>
     <message>
         <source>id_unlock</source>
         <translation>Odemknout</translation>
+    </message>
+    <message>
+        <source>id_unlock_green</source>
+        <translation>Odemknout Green</translation>
     </message>
     <message>
         <source>id_unlock_jade_to_continue</source>
@@ -3759,8 +4082,16 @@ Obnovte toto nastavení a znovu jej aktivujte.</translation>
         <translation>Přihlaste se pomocí zámku obrazovky Android</translation>
     </message>
     <message>
+        <source>id_use_secure_display_and_screen</source>
+        <translation>Použití zabezpečeného zobrazení a zámku obrazovky</translation>
+    </message>
+    <message>
         <source>id_use_your_email_to_receive</source>
         <translation>K přijímání oznámení o transakcích obnovení a transakcích používejte svůj e-mail.</translation>
+    </message>
+    <message>
+        <source>id_user_contact_info_ip_address</source>
+        <translation>Kontaktní údaje uživatele, IP adresa, podrobná poloha</translation>
     </message>
     <message>
         <source>id_user_not_found_or_invalid</source>
@@ -3813,6 +4144,14 @@ Obnovte toto nastavení a znovu jej aktivujte.</translation>
     <message>
         <source>id_version_1s_2s</source>
         <translation>Verze %1 %2</translation>
+    </message>
+    <message>
+        <source>id_view_account</source>
+        <translation>Zobrazit účet</translation>
+    </message>
+    <message>
+        <source>id_view_archived_accounts</source>
+        <translation>Zobrazit archivované účty</translation>
     </message>
     <message>
         <source>id_view_archived_accounts_d</source>
@@ -3911,6 +4250,14 @@ Obnovte toto nastavení a znovu jej aktivujte.</translation>
         <translation>Pouze-pro-sledování</translation>
     </message>
     <message>
+        <source>id_watchonly_credentials</source>
+        <translation>Přístupové údaje pouze pro sledování</translation>
+    </message>
+    <message>
+        <source>id_watchonly_details</source>
+        <translation>Pouze pro sledování - podrobnosti</translation>
+    </message>
+    <message>
         <source>id_watchonly_disabled</source>
         <translation>Pouze-pro-sledování je zakázáno</translation>
     </message>
@@ -3933,6 +4280,10 @@ Obnovte toto nastavení a znovu jej aktivujte.</translation>
     <message>
         <source>id_we_use_the_camera_to_scan_qr</source>
         <translation>Kameru používáme ke skenování QR kódů</translation>
+    </message>
+    <message>
+        <source>id_we_will_do_our_best_to_find_a</source>
+        <translation>Uděláme vše pro to, abychom našli peněženku odpovídající této frázi pro obnovení.</translation>
     </message>
     <message>
         <source>id_welcome</source>
@@ -3963,8 +4314,16 @@ Obnovte toto nastavení a znovu jej aktivujte.</translation>
         <translation>Jaký typ účtu chcete přidat?</translation>
     </message>
     <message>
+        <source>id_whats_collected</source>
+        <translation>Co se shromažďuje</translation>
+    </message>
+    <message>
         <source>id_whats_new</source>
         <translation>Co je nového?</translation>
+    </message>
+    <message>
+        <source>id_whats_not_collected</source>
+        <translation>Co NENÍ shromážděno</translation>
     </message>
     <message>
         <source>id_where_would_you_like_to</source>
@@ -3993,6 +4352,10 @@ Obnovte toto nastavení a znovu jej aktivujte.</translation>
     <message>
         <source>id_wrong_choice_check_your</source>
         <translation>Špatná volba. Zkontrolujte si mnemotechnickou frázi a zkuste to znovu.</translation>
+    </message>
+    <message>
+        <source>id_xpub</source>
+        <translation>xPub</translation>
     </message>
     <message>
         <source>id_year</source>
@@ -4043,6 +4406,10 @@ Obnovte toto nastavení a znovu jej aktivujte.</translation>
         <translation>Úspěšně jste změnili svůj PIN</translation>
     </message>
     <message>
+        <source>id_you_have_successfully_sent_a</source>
+        <translation>Úspěšně jste odeslali transakci. Dejte nám prosím zpětnou vazbu, abychom mohli vylepšit Green.</translation>
+    </message>
+    <message>
         <source>id_you_have_to_authenticate_using</source>
         <translation>Musíte se ověřit pomocí biometrických údajů.</translation>
     </message>
@@ -4061,6 +4428,10 @@ Obnovte toto nastavení a znovu jej aktivujte.</translation>
     <message>
         <source>id_you_only_have_one_twofactor</source>
         <translation>Máte povolenou pouze jednu metodu autentizace pomocí 2-Faktorů</translation>
+    </message>
+    <message>
+        <source>id_you_will_be_asked_to_enter_your</source>
+        <translation>Při každém přihlášení budete vyzváni k zadání přístupové fráze.</translation>
     </message>
     <message>
         <source>id_you_will_need_to_reenter_your</source>
