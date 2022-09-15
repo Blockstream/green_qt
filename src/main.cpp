@@ -12,6 +12,7 @@
 #include <QStandardPaths>
 
 #include "clipboard.h"
+#include "analytics.h"
 #include "devicemanager.h"
 #include "networkmanager.h"
 #include "ga.h"
@@ -244,6 +245,7 @@ int main(int argc, char *argv[])
 
     HttpManager http_manager;
     WalletManager wallet_manager;
+    Analytics analytics;
 
     qmlRegisterSingletonInstance<Clipboard>("Blockstream.Green.Core", 0, 1, "Clipboard", Clipboard::instance());
     qmlRegisterSingletonInstance<DeviceManager>("Blockstream.Green.Core", 0, 1, "DeviceManager", DeviceManager::instance());
@@ -251,6 +253,7 @@ int main(int argc, char *argv[])
     qmlRegisterSingletonInstance<NetworkManager>("Blockstream.Green.Core", 0, 1, "NetworkManager", NetworkManager::instance());
     qmlRegisterSingletonInstance<Settings>("Blockstream.Green.Core", 0, 1, "Settings", Settings::instance());
     qmlRegisterSingletonInstance<WalletManager>("Blockstream.Green.Core", 0, 1, "WalletManager", WalletManager::instance());
+    qmlRegisterSingletonInstance<Analytics>("Blockstream.Green.Core", 0, 1, "Analytics", Analytics::instance());
 
     QQmlApplicationEngine engine;
     engine.setBaseUrl(QUrl("qrc:/"));

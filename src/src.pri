@@ -8,6 +8,7 @@ SOURCES += \
     $$PWD/address.cpp \
     $$PWD/addresslistmodel.cpp \
     $$PWD/addresslistmodelfilter.cpp \
+    $$PWD/analytics.cpp \
     $$PWD/appupdatecontroller.cpp \
     $$PWD/asset.cpp \
     $$PWD/balance.cpp \
@@ -60,6 +61,7 @@ HEADERS += \
     $$PWD/address.h \
     $$PWD/addresslistmodel.h \
     $$PWD/addresslistmodelfilter.h \
+    $$PWD/analytics.h \
     $$PWD/appupdatecontroller.h \
     $$PWD/asset.h \
     $$PWD/balance.h \
