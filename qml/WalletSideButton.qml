@@ -9,6 +9,7 @@ SideButton {
     location: `/${wallet.network.key}/${wallet.id}`
     text: wallet.name
     busy: wallet.activities.length > 0
+    ready: wallet.ready
     icon.width: 16
     icon.height: 16
     leftPadding: 32

@@ -146,7 +146,6 @@ MainPage {
                                     }
                                     Label {
                                         Layout.maximumWidth: delegate.width / 3
-                                        Layout.minimumWidth: delegate.width / 3
                                         text: wallet.name
                                         elide: Label.ElideRight
                                     }
@@ -157,6 +156,14 @@ MainPage {
                                             device: wallet.device
                                             details: wallet.deviceDetails
                                         }
+                                    }
+                                    Rectangle {
+                                        Layout.alignment: Qt.AlignVCenter
+                                        visible: wallet.ready
+                                        height: radius * 2
+                                        width: radius * 2
+                                        radius: 4
+                                        color: constants.g500
                                     }
                                     HSpacer {
                                     }

@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Increased the size of sign up dialog titles
 - Moved empty transactions list label to top left of the container
 - In order to setup watch-only, username and password require 8+ characters
+- Add indication of logged in wallets in sidebar and network view wallets list
 
 ### Fixed
 - Limit height of language selector

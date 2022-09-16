@@ -18,6 +18,7 @@ Button {
         }
     }
     property bool busy: false
+    property bool ready: false
     topPadding: 8
     bottomPadding: 8
     leftPadding: 16
@@ -52,7 +53,7 @@ Button {
         }
     }
     contentItem: RowLayout {
-        spacing: 12
+        spacing: constants.s1
         Image {
             source: self.icon.source
             sourceSize.width: self.icon.width
@@ -61,7 +62,6 @@ Button {
         Label {
             visible: !Settings.collapseSideBar
             text: self.text
-            Layout.fillWidth: true
             Layout.maximumWidth: 200
             elide: Label.ElideRight
             ToolTip.text: self.text
@@ -69,6 +69,8 @@ Button {
             ToolTip.delay: 1000
             rightPadding: 16
             font.styleName: 'Regular'
+        }
+        HSpacer {
         }
         StackLayout {
             Layout.fillHeight: false
