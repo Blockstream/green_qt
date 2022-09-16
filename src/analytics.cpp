@@ -89,7 +89,6 @@ Analytics::Analytics()
         if (!loop.exec()) {
             res.success = true;
             res.data = nlohmann::json::parse(activity->response().value("body").toString().toStdString());
-            delete activity;
         }
 
         return res;
