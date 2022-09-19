@@ -331,7 +331,7 @@ void Wallet::refreshAssets(bool refresh)
     });
 }
 
-void Wallet::rename(QString name, bool active_focus)
+bool Wallet::rename(QString name, bool active_focus)
 {
     if (!active_focus) name = name.trimmed();
     if (name.isEmpty() && !active_focus) {
@@ -341,9 +341,12 @@ void Wallet::rename(QString name, bool active_focus)
             name = "My Wallet";
         }
     }
-    if (m_name == name) return;
+    if (m_name == name) return false;
+    if (active_focus) return false;
     setName(name);
-    if (!m_name.isEmpty()) save();
+    if (m_name.isEmpty()) return false;
+    save();
+    return true;
 }
 
 void Wallet::setWatchOnly(const QString& username, const QString& password)

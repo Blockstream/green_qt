@@ -13,7 +13,7 @@ public:
     static Analytics* instance();
     bool isActive() const { return m_active; }
 public slots:
-    void recordEvent(const QString& name, const QVariantMap& segmentation);
+    void recordEvent(const QString& name, const QVariantMap& segmentation = QVariantMap());
 private slots:
     void check();
     void start();

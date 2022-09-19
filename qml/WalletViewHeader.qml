@@ -60,7 +60,9 @@ MainPageHeader {
                                 font.styleName: 'Medium'
                                 text: wallet.name
                                 onEdited: {
-                                    wallet.rename(text, activeFocus)
+                                    if (wallet.rename(text, activeFocus)) {
+                                        Analytics.recordEvent('wallet_rename')
+                                    }
                                 }
                             }
                         }

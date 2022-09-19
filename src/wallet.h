@@ -153,7 +153,7 @@ public slots:
 
     void refreshAssets(bool refresh);
 
-    void rename(QString name, bool active_focus);
+    bool rename(QString name, bool active_focus);
     void setWatchOnly(const QString& username, const QString& password);
 signals:
     void isPersistedChanged(bool is_persisted);
