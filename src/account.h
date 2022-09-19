@@ -65,8 +65,10 @@ signals:
 public slots:
     void reload();
     void rename(QString name, bool active_focus);
-    void toggleHidden();
+    void show();
+    void hide();
 private:
+    void setHiddenAsync(bool hidden);
     void setHidden(bool hidden);
 private:
     Wallet* const m_wallet;

@@ -150,15 +150,24 @@ void Account::rename(QString name, bool active_focus)
     }
 }
 
-void Account::toggleHidden()
+void Account::show()
 {
-    bool hidden = !m_hidden;
+    return setHiddenAsync(false);
+}
+
+void Account::hide()
+{
+    return setHiddenAsync(true);
+}
+
+void Account::setHiddenAsync(bool hidden)
+{
     auto handler = new UpdateAccountHandler({
         { "subaccount", static_cast<qint64>(m_pointer) },
         { "hidden", hidden }
     }, wallet()->session());
     connect(handler, &Handler::done, this, [=] {
-        handler->deleteLater(),
+        handler->deleteLater();
         m_json["hidden"] = hidden;
         setHidden(hidden);
     });

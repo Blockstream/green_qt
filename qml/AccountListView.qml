@@ -149,9 +149,17 @@ SwipeView {
                 }
             }
             MenuItem {
-                text: delegate.account.hidden ? qsTrId('id_unarchive') : qsTrId('id_archive')
-                enabled: delegate.account.hidden || account_list_view.count > 1
-                onTriggered: delegate.account.toggleHidden()
+                text: qsTrId('id_unarchive')
+                onTriggered: delegate.account.show()
+                visible: delegate.account.hidden
+                height: visible ? implicitHeight : 0
+            }
+            MenuItem {
+                text: qsTrId('id_archive')
+                enabled: account_list_view.count > 1
+                onTriggered: delegate.account.hide()
+                visible: !delegate.account.hidden
+                height: visible ? implicitHeight : 0
             }
         }
         background: Rectangle {
