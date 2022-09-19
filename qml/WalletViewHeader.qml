@@ -103,7 +103,7 @@ MainPageHeader {
                                 enabled: !self.wallet.watchOnly && self.currentAccount && !self.wallet.locked
                                 onEdited: {
                                     if (enabled && self.currentAccount) {
-                                        self.currentAccount.rename(text, activeFocus)
+                                        renameAccount(self.currentAccount, text, activeFocus)
                                     }
                                 }
                             }

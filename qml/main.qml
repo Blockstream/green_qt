@@ -93,6 +93,12 @@ ApplicationWindow {
         return segmentation
     }
 
+    function renameAccount(account, text, active_focus) {
+        if (account.rename(text, active_focus)) {
+            Analytics.recordEvent('account_rename', segmentationSubAccount(account))
+        }
+    }
+
     x: Settings.windowX
     y: Settings.windowY
     width: Settings.windowWidth

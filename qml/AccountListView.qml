@@ -197,7 +197,7 @@ SwipeView {
                         enabled: !account.wallet.watchOnly && delegate.ListView.isCurrentItem && !delegate.account.wallet.locked
                         onEdited: {
                             if (enabled) {
-                                account.rename(text, activeFocus)
+                                renameAccount(account, text, activeFocus)
                             }
                         }
                     }

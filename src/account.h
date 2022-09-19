@@ -64,7 +64,7 @@ signals:
     void addressGenerated();
 public slots:
     void reload();
-    void rename(QString name, bool active_focus);
+    bool rename(QString name, bool active_focus);
     void show();
     void hide();
 private:

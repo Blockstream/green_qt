@@ -135,25 +135,25 @@ void Account::reload()
     handler->exec();
 }
 
-void Account::rename(QString name, bool active_focus)
+bool Account::rename(QString name, bool active_focus)
 {
     if (!active_focus) name = name.trimmed();
     if (name.isEmpty() && !active_focus) {
         emit jsonChanged();
-        return;
+        return false;
     }
-    if (this->name() == name) return;
-    if (!active_focus) {
-        auto handler = new UpdateAccountHandler({
-            { "subaccount", static_cast<qint64>(m_pointer) },
-            { "name", name }
-        }, wallet()->session());
-        connect(handler, &Handler::done, this, [=] {
-            handler->deleteLater(),
-            setName(name);
-        });
-        handler->exec();
-    }
+    if (this->name() == name) return false;
+    if (active_focus) return false;
+    auto handler = new UpdateAccountHandler({
+        { "subaccount", static_cast<qint64>(m_pointer) },
+        { "name", name }
+    }, wallet()->session());
+    connect(handler, &Handler::done, this, [=] {
+        handler->deleteLater(),
+        setName(name);
+    });
+    handler->exec();
+    return true;
 }
 
 void Account::show()
