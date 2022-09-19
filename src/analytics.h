@@ -18,6 +18,7 @@ private slots:
     void check();
     void start();
     void stop();
+    void updateCustomUserDetails();
 private:
     std::atomic_bool m_active{false};
 };

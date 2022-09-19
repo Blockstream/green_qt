@@ -31,8 +31,8 @@ class Settings : public QObject
     Q_PROPERTY(QString liquidElectrumUrl READ liquidElectrumUrl WRITE setLiquidElectrumUrl NOTIFY liquidElectrumUrlChanged)
     Q_PROPERTY(QString liquidTestnetElectrumUrl READ liquidTestnetElectrumUrl WRITE setLiquidTestnetElectrumUrl NOTIFY liquidTestnetElectrumUrlChanged)
     Q_PROPERTY(bool enableSPV READ enableSPV WRITE setEnableSPV NOTIFY enableSPVChanged)
-public:
     Q_PROPERTY(QString analytics READ analytics WRITE setAnalytics NOTIFY analyticsChanged)
+public:
     Settings(QObject* parent = nullptr);
     virtual ~Settings();
     static Settings* instance();

@@ -28,6 +28,8 @@ public:
     Q_INVOKABLE void insertWallet(Wallet* wallet);
     Q_INVOKABLE void removeWallet(Wallet* wallet);
 
+    int size() const { return m_wallets.size(); }
+
     QQmlListProperty<Wallet> wallets();
 
     QString newWalletName(Network* network) const;

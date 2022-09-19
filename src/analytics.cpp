@@ -3,6 +3,7 @@
 #include "httprequestactivity.h"
 #include "settings.h"
 #include "util.h"
+#include "walletmanager.h"
 
 #include <countly/countly.hpp>
 
@@ -98,9 +99,18 @@ Analytics::Analytics()
     countly.setDeviceID(device_id, true);
     countly.SetMaxEventsPerMessage(40);
     countly.SetMinUpdatePeriod(10000);
+    updateCustomUserDetails();
     check();
 
+    connect(WalletManager::instance(), &WalletManager::changed, this, &Analytics::updateCustomUserDetails);
     connect(Settings::instance(), &Settings::analyticsChanged, this, &Analytics::check);
+}
+
+void Analytics::updateCustomUserDetails()
+{
+    std::map<std::string, std::string> user_details;
+    user_details["total_wallets"] = std::to_string(WalletManager::instance()->size());
+    cly::Countly::getInstance().setCustomUserDetails(user_details);
 }
 
 void Analytics::check()
