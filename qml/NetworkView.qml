@@ -106,6 +106,11 @@ StackLayout {
         }
         delegate: WalletView {
             property bool match: wallet.ready && navigation.location.startsWith(location)
+            AnalyticsView {
+                name: 'Overview'
+                segmentation: segmentationSession(wallet)
+                active: match
+            }
         }
     }
 
