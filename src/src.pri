@@ -33,7 +33,6 @@ SOURCES += \
     $$PWD/navigation.cpp \
     $$PWD/network.cpp \
     $$PWD/networkmanager.cpp \
-    $$PWD/renameaccountcontroller.cpp \
     $$PWD/resolver.cpp \
     $$PWD/restorecontroller.cpp \
     $$PWD/semver.cpp \
@@ -87,7 +86,6 @@ HEADERS += \
     $$PWD/navigation.h \
     $$PWD/network.h \
     $$PWD/networkmanager.h \
-    $$PWD/renameaccountcontroller.h \
     $$PWD/resolver.h \
     $$PWD/restorecontroller.h \
     $$PWD/semver.h \
