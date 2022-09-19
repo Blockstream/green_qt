@@ -144,9 +144,15 @@ void Account::rename(QString name, bool active_focus)
     }
     if (this->name() == name) return;
     if (!active_focus) {
-        int res = GA_rename_subaccount(wallet()->session()->m_session, pointer(), name.toUtf8().constData());
-        Q_ASSERT(res == GA_OK);
-        setName(name);
+        auto handler = new UpdateAccountHandler({
+            { "subaccount", static_cast<qint64>(m_pointer) },
+            { "name", name }
+        }, wallet()->session());
+        connect(handler, &Handler::done, this, [=] {
+            handler->deleteLater(),
+            setName(name);
+        });
+        handler->exec();
     }
 }
 
