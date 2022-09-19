@@ -13,6 +13,10 @@ ControllerDialog {
     initialItem: ColumnLayout {
         property list<Action> actions: [
             Action {
+                text: qsTrId('id_cancel')
+                onTriggered: dialog.reject()
+            },
+            Action {
                 property bool destructive: true
                 text: qsTrId('id_disable_pin_access')
                 enabled: confirm_checkbox.checked

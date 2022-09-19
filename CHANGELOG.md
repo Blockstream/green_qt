@@ -29,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Allow to rename unselected accounts
 - Improve layout of Jade firmware details
 - Fix remove wallet dialog button padding
+- Add cancel button to disable pin access dialog
 
 ## [1.1.3] - 2022-07-18
 ### Added
