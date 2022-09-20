@@ -53,19 +53,20 @@ ControllerDialog {
             }
         }
     }
-    footer: GPane {
-        padding: 0
-        bottomPadding: 32
-        contentItem: RowLayout {
-            GButton {
-                Layout.alignment: Qt.AlignHCenter
-                Layout.minimumWidth: 200
-                highlighted: true
-                large: true
-                enabled: pin_view.accept && pin_view.pin.valid
-                text: qsTrId('id_change_pin')
-                onClicked: controller.accept()
-            }
+    footer: DialogFooter {
+        HSpacer {
+        }
+        GButton {
+            large: true
+            text: qsTrId('id_cancel')
+            onClicked: self.reject()
+        }
+        GButton {
+            highlighted: true
+            large: true
+            enabled: pin_view.accept && pin_view.pin.valid
+            text: qsTrId('id_change_pin')
+            onClicked: controller.accept()
         }
     }
     onClosed: destroy()
