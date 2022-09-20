@@ -143,5 +143,6 @@
         <file>GToolButton.qml</file>
         <file>LedgerDevicesView.qml</file>
         <file>AnalyticsConsentDialog.qml</file>
+        <file>RemoveWalletDialog.qml</file>
     </qresource>
 </RCC>
