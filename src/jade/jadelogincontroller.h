@@ -50,7 +50,7 @@ signals:
     void invalidPin();
     void statusChanged();
     void activeChanged(bool active);
-
+    void loginDone();
 private:
     JadeDevice* m_device{nullptr};
     Session* m_session{nullptr};

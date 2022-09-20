@@ -259,7 +259,7 @@ void LedgerDeviceController::login()
         m_wallet->setSession();
         setStatus("done");
         m_session = nullptr;
-
+        emit loginDone();
     });
     QObject::connect(m_login_handler, &Handler::resolver, this, [](Resolver* resolver) {
         resolver->resolve();

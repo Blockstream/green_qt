@@ -64,6 +64,7 @@ signals:
     void appChanged();
     void activeChanged(bool active);
     void enabledChanged();
+    void loginDone();
 private:
     void update();
     void connect();

@@ -235,6 +235,7 @@ void JadeLoginController::login()
         }
         m_session = nullptr;
         emit sessionChanged(m_session);
+        emit loginDone();
     });
     QObject::connect(handler, &Handler::resolver, this, [](Resolver* resolver) {
 //        qDebug() << "RESOLVE NOW!" << resolver;

@@ -301,6 +301,7 @@ public:
 signals:
     void walletChanged(Wallet* wallet);
     void pinChanged(const QByteArray& pin);
+    void loginDone();
 private slots:
     void update();
 private:

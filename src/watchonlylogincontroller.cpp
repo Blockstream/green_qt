@@ -95,6 +95,7 @@ void WatchOnlyLoginController::login()
         m_session->setParent(m_wallet);
         m_session = nullptr;
         WalletManager::instance()->addWallet(m_wallet);
+        emit loginDone();
     });
     handler->connect(handler, &Handler::error, this, [this, handler] {
         handler->deleteLater();

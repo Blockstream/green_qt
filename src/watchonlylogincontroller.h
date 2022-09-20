@@ -44,6 +44,7 @@ signals:
     void saveWalletChanged(bool save_wallet);
     void validChanged(bool valid);
     void unauthorized();
+    void loginDone();
 private:
     void updateValid();
     void setValid(bool valid);

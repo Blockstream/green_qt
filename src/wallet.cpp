@@ -834,6 +834,7 @@ void LoginWithPinController::update()
         m_wallet->updateConfig();
         activity->finish();
         activity->deleteLater();
+        emit loginDone();
     });
     handler->connect(handler, &Handler::error, this, [this, activity, handler] {
         handler->deleteLater();
