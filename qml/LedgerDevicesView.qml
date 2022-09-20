@@ -180,6 +180,7 @@ MainPage {
             id: controller
             device: self.device
             network: self.network
+            onLoginDone: Analytics.recordEvent('wallet_login', segmentationWalletLogin(controller.wallet, { method: 'hardware' }))
         }
         contentItem: RowLayout {
             spacing: constants.s1

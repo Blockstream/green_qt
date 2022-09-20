@@ -229,6 +229,7 @@ MainPage {
             device: comingSoon ? null : self.device
             network: self.network.id
             onInvalidPin: self.ToolTip.show(qsTrId('id_invalid_pin'), 2000);
+            onLoginDone: Analytics.recordEvent('wallet_login', segmentationWalletLogin(controller.wallet, { method: 'hardware' }))
         }
         contentItem: RowLayout {
             spacing: constants.s1

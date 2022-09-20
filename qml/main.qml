@@ -79,6 +79,12 @@ ApplicationWindow {
         return segmentation
     }
 
+    function segmentationWalletLogin(wallet, { method }) {
+        const segmentation = segmentationSession(wallet)
+        segmentation.method = method
+        return segmentation
+    }
+
     function segmentationSubAccount(account) {
         const segmentation = segmentationSession(account.wallet)
         segmentation.account_type = account.type

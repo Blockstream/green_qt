@@ -48,6 +48,7 @@ AbstractDialog {
                     password_field.clear()
                     password_field.forceActiveFocus()
                 }
+                onLoginDone: Analytics.recordEvent('wallet_login', segmentationWalletLogin(self.wallet, { method: 'watch_only' }))
             }
             Action {
                 id: login_action
@@ -102,6 +103,7 @@ AbstractDialog {
             LoginWithPinController {
                 wallet: self.wallet
                 pin: pin_view.pin.value
+                onLoginDone: Analytics.recordEvent('wallet_login', segmentationWalletLogin(self.wallet, { method: 'pin' }))
             }
             Connections {
                 target: self.wallet
