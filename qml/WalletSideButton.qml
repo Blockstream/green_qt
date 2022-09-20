@@ -15,11 +15,13 @@ SideButton {
     leftPadding: 32
     icon.source: wallet.network.electrum ? 'qrc:/svg/key.svg' : 'qrc:/svg/multi-sig.svg'
     visible: !Settings.collapseSideBar
-    DeviceImage {
-        Layout.minimumWidth: paintedWidth
-        sourceSize.height: 16
+    Loader {
         parent: self.contentItem
-        visible: wallet.device
-        device: wallet.device
+        active: 'type' in wallet.deviceDetails
+        visible: active
+        sourceComponent: DeviceBadge {
+            device: wallet.device
+            details: wallet.deviceDetails
+        }
     }
 }
