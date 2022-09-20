@@ -8,7 +8,10 @@ AbstractDialog {
     title: qsTrId('id_remove_wallet')
     property Wallet wallet
     modal: true
-    onAccepted: WalletManager.removeWallet(wallet)
+    onAccepted: {
+        WalletManager.removeWallet(wallet)
+        Analytics.recordEvent('wallet_delete')
+    }
     contentItem: ColumnLayout {
         spacing: constants.s1
         SectionLabel {
