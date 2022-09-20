@@ -25,7 +25,7 @@ ColumnLayout {
     }
 
     id: self
-    spacing: constants.p3
+    spacing: constants.p2
 
     Controller {
         id: controller
@@ -216,24 +216,51 @@ ColumnLayout {
         sourceComponent: SettingsBox {
             title: qsTrId('id_notifications')
             enabled: !wallet.locked && !!wallet.config.email && wallet.config.email.confirmed
-            contentItem: RowLayout {
-                Label {
-                    Layout.fillWidth: true
-                    Layout.minimumWidth: contentWidth
-                    text: qsTrId('id_receive_email_notifications_for')
-                }
-                GSwitch {
-                    Binding on checked {
-                        value: wallet.settings.notifications ? (wallet.settings.notifications.email_outgoing && wallet.settings.notifications.email_outgoing) : false
+            contentItem: ColumnLayout {
+                RowLayout {
+                    Label {
+                        Layout.fillWidth: true
+                        Layout.minimumWidth: contentWidth
+                        text: qsTrId('id_receive_email_notifications_for')
                     }
-                    onClicked: {
-                        checked = wallet.settings.notifications.email_outgoing;
-                        controller.changeSettings({
-                            notifications: {
-                                email_incoming: !checked,
-                                email_outgoing: !checked
-                            }
-                        });
+                    GSwitch {
+                        Binding on checked {
+                            value: wallet.settings.notifications ? (wallet.settings.notifications.email_outgoing && wallet.settings.notifications.email_outgoing) : false
+                        }
+                        onClicked: {
+                            checked = wallet.settings.notifications.email_outgoing;
+                            controller.changeSettings({
+                                notifications: {
+                                    email_incoming: !checked,
+                                    email_outgoing: !checked
+                                }
+                            });
+                        }
+                    }
+                }
+                Pane {
+                    Layout.fillWidth: true
+                    visible: wallet.config.email.confirmed
+                    background: Rectangle {
+                        border.width: 1
+                        border.color: Qt.rgba(1, 1, 1, 0.12)
+                        radius: 8
+                        color: 'transparent'
+                    }
+                    contentItem: RowLayout {
+                        spacing: 8
+                        Label {
+                            Layout.fillWidth: true
+                            text: qsTrId('id_email_address')
+                            font.styleName: 'Regular'
+                            font.capitalization: Font.Capitalize
+                        }
+                        Label {
+                            Layout.fillWidth: true
+                            horizontalAlignment: Label.AlignRight
+                            text: wallet.config.email.data
+                            elide: Text.ElideRight
+                        }
                     }
                 }
             }
