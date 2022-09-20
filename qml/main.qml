@@ -291,19 +291,15 @@ ApplicationWindow {
                     text: qsTrId('id_backup_your_mnemonic_before')
                 }
             }
-            footer: GPane {
-                rightPadding: 16
-                bottomPadding: 8
-                contentItem: RowLayout {
-                    HSpacer {
-                    }
-                    GButton {
-                        enabled: confirm_field.text === wallet.name
-                        destructive: true
-                        large: true
-                        text: qsTrId('id_remove')
-                        onClicked: accept()
-                    }
+            footer: DialogFooter {
+                HSpacer {
+                }
+                GButton {
+                    enabled: confirm_field.text === wallet.name
+                    destructive: true
+                    large: true
+                    text: qsTrId('id_remove')
+                    onClicked: accept()
                 }
             }
         }

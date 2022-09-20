@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Enhanced consistency of paddings and alignments of UI containers
 - Allow to rename unselected accounts
 - Improve layout of Jade firmware details
+- Fix remove wallet dialog button padding
 
 ## [1.1.3] - 2022-07-18
 ### Added
