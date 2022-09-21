@@ -18,6 +18,7 @@ static Analytics* g_analytics_instance{nullptr};
 
 namespace {
 const std::string COUNTLY_HOST = "https://countly.blockstream.com";
+const std::string COUNTLY_TOR_ENDPOINT = "http://greciphd2z3eo6bpnvd6mctxgfs4sslx4hyvgoiew4suoxgoquzl72yd.onion";
 const std::string COUNTLY_APP_KEY = "cb8e449057253add71d2f9b65e5f66f73c073e63";
 
 std::map<std::string, std::string> QVariantMapToStdMap(const QVariantMap& in)
@@ -66,10 +67,12 @@ Analytics::Analytics()
         if (use_post) {
             activity->setMethod("POST");
             activity->addUrl(QString::fromStdString(COUNTLY_HOST + path));
+            activity->addUrl(QString::fromStdString(COUNTLY_TOR_ENDPOINT + path));
             activity->setData(QString::fromStdString(data));
         } else {
             activity->setMethod("GET");
             activity->addUrl(QString::fromStdString(COUNTLY_HOST + path + "?" + data));
+            activity->addUrl(QString::fromStdString(COUNTLY_TOR_ENDPOINT + path + "?" + data));
         }
 
         QEventLoop loop;
