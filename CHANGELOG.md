@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - In order to setup watch-only, username and password require 8+ characters
 - Add indication of logged in wallets in sidebar and network view wallets list
 - Added cancel button to change pin dialog
+- Reduced application icon size
 
 ### Fixed
 - Limit height of language selector
