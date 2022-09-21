@@ -12,6 +12,8 @@ public:
     ~Analytics();
     static Analytics* instance();
     bool isActive() const { return m_active; }
+    QString pushView(const QString &name, const QVariantMap &segmentation);
+    void popView(const QString& id);
 public slots:
     void recordEvent(const QString& name, const QVariantMap& segmentation = QVariantMap());
 private slots:
@@ -21,6 +23,12 @@ private slots:
     void updateCustomUserDetails();
 private:
     std::atomic_bool m_active{false};
+    struct View {
+        std::string name;
+        std::map<std::string, std::string> segmentation;
+        std::string id;
+    };
+    std::map<std::string, View> m_views;
 };
 
 class AnalyticsView : public QObject
@@ -53,7 +61,7 @@ private:
     QString m_name;
     QVariantMap m_segmentation;
     bool m_active{false};
-    std::string m_id;
+    QString m_id;
     int m_reset_timer{0};
 };
 

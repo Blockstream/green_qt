@@ -156,6 +156,27 @@ void Analytics::recordEvent(const QString& name, const QVariantMap& segmentation
     }
 }
 
+QString Analytics::pushView(const QString& name, const QVariantMap& segmentation)
+{
+    auto& countly = cly::Countly::getInstance();
+    View view;
+    view.name = name.toStdString();
+    view.segmentation = QVariantMapToStdMap(segmentation);
+    view.id = countly.views().openView(view.name, view.segmentation);
+    m_views[view.id] = view;
+    return QString::fromStdString(view.id);
+}
+
+void Analytics::popView(const QString& id)
+{
+    auto& countly = cly::Countly::getInstance();
+    auto it = m_views.find(id.toStdString());
+    if (it == m_views.end()) return;
+    auto& view = it->second;
+    countly.views().closeViewWithID(view.id);
+    m_views.erase(it);
+}
+
 AnalyticsView::AnalyticsView(QObject* parent)
     : QObject(parent)
 {
@@ -199,8 +220,8 @@ void AnalyticsView::reset()
 
 void AnalyticsView::close()
 {
-    if (!m_id.empty()) {
-        cly::Countly::getInstance().views().closeViewWithID(m_id);
+    if (!m_id.isEmpty()) {
+        Analytics::instance()->popView(m_id);
         m_id.clear();
     }
 }
@@ -208,10 +229,7 @@ void AnalyticsView::close()
 void AnalyticsView::open()
 {
     if (Settings::instance()->isAnalyticsEnabled() && m_active && !m_name.isEmpty()) {
-        const auto name = m_name.toStdString();
-        const auto segmentation = QVariantMapToStdMap(m_segmentation);
-        auto& countly = cly::Countly::getInstance();
-        m_id = countly.views().openView(name, segmentation);
+        m_id = Analytics::instance()->pushView(m_name, m_segmentation);
     }
 }
 
