@@ -88,8 +88,11 @@ Analytics::Analytics()
         HttpManager::instance()->exec(activity);
 
         if (!loop.exec()) {
-            res.success = true;
-            res.data = nlohmann::json::parse(activity->response().value("body").toString().toStdString());
+            try {
+                res.data = nlohmann::json::parse(activity->response().value("body").toString().toStdString());
+                res.success = true;
+            } catch (...) {
+            }
         }
 
         return res;
