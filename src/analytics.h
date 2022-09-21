@@ -15,7 +15,8 @@ public:
     QString pushView(const QString &name, const QVariantMap &segmentation);
     void popView(const QString& id);
 public slots:
-    void recordEvent(const QString& name, const QVariantMap& segmentation = QVariantMap());
+    void recordEvent(const QString& name);
+    void recordEvent(const QString& name, const QVariantMap& segmentation);
 private slots:
     void check();
     void start();

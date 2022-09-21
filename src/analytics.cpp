@@ -154,6 +154,11 @@ Analytics* Analytics::instance()
     return g_analytics_instance;
 }
 
+void Analytics::recordEvent(const QString& name)
+{
+    recordEvent(name, {});
+}
+
 void Analytics::recordEvent(const QString& name, const QVariantMap& segmentation)
 {
     if (Settings::instance()->isAnalyticsEnabled()) {
