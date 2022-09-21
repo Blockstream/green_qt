@@ -14,6 +14,11 @@ ControllerDialog {
         wallet: self.wallet
         onFinished: self.accept()
     }
+    AnalyticsView {
+        active: self.opened
+        name: 'WalletSettingsChangePIN'
+        segmentation: segmentationSession(self.wallet)
+    }
     initialItem: PinView {
         id: pin_view
         property var new_pin
