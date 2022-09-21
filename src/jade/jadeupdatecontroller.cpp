@@ -220,6 +220,9 @@ void JadeUpdateController::check()
 
 void JadeUpdateController::update(const QVariantMap& firmware)
 {
+    m_updating = true;
+    emit updatingChanged();
+
     const auto path = firmware.value("path").toString();
     const auto data = m_firmware_data.value(path);
 

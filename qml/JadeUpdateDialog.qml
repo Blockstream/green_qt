@@ -250,7 +250,7 @@ AbstractDialog {
             Layout.fillWidth: false
             large: true
             text: qsTrId('id_next')
-            enabled: button_group.checkedButton
+            enabled: button_group.checkedButton && !controller.updating
             visible: stack_view.currentItem === select_view
             onClicked: controller.update(button_group.checkedButton.firmware)
         }
