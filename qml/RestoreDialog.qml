@@ -25,7 +25,6 @@ AbstractDialog {
         location: window.navigation.location
     }
 
-
     Connections {
         enabled: target
         target: navigation.controller ? navigation.controller.wallet : null
@@ -39,8 +38,6 @@ AbstractDialog {
             }
         }
     }
-
-
 
     contentItem: StackLayout {
         property Item currentItem: {
@@ -164,6 +161,7 @@ AbstractDialog {
                         text: qsTrId('id_verify_your_pin')
                     }
                     PinView {
+                        enabled: !navigation.controller.accepted
                         Layout.alignment: Qt.AlignHCenter
                         onPinChanged: {
                             if (!pin.valid) return

@@ -73,6 +73,7 @@ void RestoreController::accept()
     Q_ASSERT(m_wallet->m_pin_data.isEmpty());
     Q_ASSERT(!m_accepted);
     m_accepted = true;
+    emit acceptedChanged(m_accepted);
 
     auto activity = new AcceptRestoreActivity(m_wallet, this);
     m_wallet->pushActivity(activity);

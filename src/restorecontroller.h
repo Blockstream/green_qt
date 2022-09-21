@@ -24,6 +24,7 @@ class RestoreController : public AbstractController
     Q_PROPERTY(bool active READ isActive WRITE setActive NOTIFY activeChanged)
     Q_PROPERTY(Session* session READ session NOTIFY sessionChanged)
     Q_PROPERTY(bool busy READ busy NOTIFY busyChanged)
+    Q_PROPERTY(bool accepted READ accepted NOTIFY acceptedChanged)
     QML_ELEMENT
 public:
     explicit RestoreController(QObject *parent = nullptr);
@@ -43,6 +44,7 @@ public:
     bool isActive() const { return m_active; }
     void setActive(bool active);
     bool busy() const { return m_busy; }
+    bool accepted() const { return m_accepted; }
 public slots:
     void accept();
 private slots:
@@ -59,6 +61,7 @@ signals:
     void sessionChanged(Session* session);
     void loginError(const QString& error);
     void busyChanged(bool busy);
+    void acceptedChanged(bool accepted);
 private:
     Network* m_network{nullptr};
     QString m_type;
