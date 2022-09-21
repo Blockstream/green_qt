@@ -68,7 +68,7 @@ ApplicationWindow {
             segmentation.connection = 'USB'
         }
         if (wallet.device instanceof LedgerDevice) {
-            segmentation.brand = 'Blockstream'
+            segmentation.brand = 'Ledger'
             segmentation.model
                 = wallet.device.type === Device.LedgerNanoS ? 'Ledger Nano S'
                 : wallet.device.type === Device.LedgerNanoX ? 'Ledger Nano X'
