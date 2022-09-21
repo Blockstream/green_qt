@@ -10,6 +10,14 @@ WalletDialog {
     width: 900
     height: 600
     padding: 0
+
+    AnalyticsView {
+        id: analytics_view
+        active: self.opened
+        name: 'WalletSettingsGeneral'
+        segmentation: segmentationSession(self.wallet)
+    }
+
     background: Rectangle {
         radius: 16
         color: constants.c800
@@ -44,6 +52,7 @@ WalletDialog {
 
     component B: Button {
         id: b
+        required property string name
         required property int index
         Layout.fillWidth: true
         flat: true
@@ -59,7 +68,10 @@ WalletDialog {
         icon.height: 24
         icon.color: 'white'
         highlighted: stack_layout.currentIndex === index
-        onClicked: stack_layout.currentIndex = index
+        onClicked: {
+            analytics_view.name = name
+            stack_layout.currentIndex = index
+        }
         background: Item {
             Rectangle {
                 anchors.fill: parent
@@ -97,23 +109,27 @@ WalletDialog {
             Layout.fillWidth: false
             spacing: constants.p1
             B {
+                name: 'WalletSettingsGeneral'
                 index: 0
                 text: 'General'
                 icon.source: 'qrc:/svg/preferences.svg'
             }
             B {
+                name: 'WalletSettingsSecurity'
                 index: 1
                 text: 'Security'
                 icon.source: 'qrc:/svg/security.svg'
                 enabled: !self.wallet.device
             }
             B {
+                name: 'WalletSettings2FA'
                 index: 2
                 text: 'Two Factor Authentication'
                 icon.source: 'qrc:/svg/2fa_general.svg'
                 enabled: !self.wallet.network.electrum
             }
             B {
+                name: 'WalletSettingsRecovery'
                 index: 3
                 text: 'Recovery'
                 icon.source: 'qrc:/svg/recovery.svg'
@@ -130,7 +146,6 @@ WalletDialog {
             Layout.fillWidth: true
             Layout.fillHeight: true
             clip: true
-
             GFlickable {
                 id: general_settings_flickable
                 contentHeight: general_view.height
@@ -175,6 +190,6 @@ WalletDialog {
                     wallet: self.wallet
                 }
             }
-        }        
+        }
     }
 }
