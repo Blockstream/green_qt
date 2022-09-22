@@ -58,9 +58,17 @@ AbstractDialog {
             return index
         }
         SelectNetworkView {
+            id: select_network_view
             readonly property bool active: true
             showAMP: true
             view: 'restore'
+            AnalyticsView {
+                active: select_network_view.visible
+                name: 'OnBoardChooseNetwork'
+                segmentation: segmentationOnBoard({
+                    flow: 'restore',
+                })
+            }
         }
         AnimLoader {
             active: (navigation.param.network || '') !== ''
@@ -91,6 +99,7 @@ AbstractDialog {
             }
         }
         AnimLoader {
+            id: discover_server_type_view
             active: {
                 const { mnemonic, password } = navigation.param
                 if (mnemonic === undefined) return false
@@ -103,9 +112,18 @@ AbstractDialog {
             animated: self.opened
             sourceComponent: DiscoverServerTypeView {
             }
+            AnalyticsView {
+                active: discover_server_type_view.visible
+                name: 'OnBoardScan'
+                segmentation: segmentationOnBoard({
+                    flow: 'restore',
+                    network: navigation.param.network === 'bitcoin' ? 'mainnet' : navigation.param.network,
+                })
+            }
         }
 
         AnimLoader {
+            id: set_pin_view
             active: navigation.controller
             animated: self.opened
             sourceComponent: Page {
@@ -137,6 +155,15 @@ AbstractDialog {
                     VSpacer {
                     }
                 }
+            }
+            AnalyticsView {
+                active: set_pin_view.visible
+                name: 'OnBoardPin'
+                segmentation: segmentationOnBoard({
+                    flow: 'restore',
+                    network: navigation.param.network === 'bitcoin' ? 'mainnet' : navigation.param.network,
+                    security: navigation.param.server_type === 'electrum' ? 'singlesig' : 'multisig'
+                })
             }
         }
 
