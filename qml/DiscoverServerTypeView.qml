@@ -63,6 +63,7 @@ Page {
             password: navigation.param.password || ''
             pin: navigation.param.pin || ''
             active: self.visible
+            onFinished: Analytics.recordEvent('wallet_restore', segmentationSession(controller.wallet))
         }
 
         Layout.alignment: Qt.AlignTop

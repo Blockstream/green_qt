@@ -62,6 +62,7 @@ signals:
     void loginError(const QString& error);
     void busyChanged(bool busy);
     void acceptedChanged(bool accepted);
+    void finished();
 private:
     Network* m_network{nullptr};
     QString m_type;

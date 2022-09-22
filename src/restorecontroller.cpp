@@ -101,6 +101,8 @@ void RestoreController::accept()
 
         activity->finish();
         activity->deleteLater();
+
+        emit finished();
     });
     handler->exec();
 }
@@ -148,25 +150,6 @@ void RestoreController::update()
         return;
     }
 
-
-//        qDebug() << "setup wallet and activate session";
-
-//        m_wallet = WalletManager::instance()->restoreWallet(m_network);
-//        emit walletChanged(m_wallet);
-
-//        m_wallet->createSession();
-//        m_session = m_wallet->session();
-//        m_session.track(QObject::connect(m_session, &Session::connectedChanged, this, &RestoreController::update));
-
-//        m_session->setActive(true);
-//    }
-
-//    if (m_active && m_wallet && m_wallet->m_session->isConnected()) {
-//        auto activity = new CheckRestoreActivity(m_wallet, this);
-//        m_wallet->pushActivity(activity);
-//        qDebug() << "attempt login with mnemonic and password";
-//        m_wallet->setAuthentication(Wallet::Authenticating);
-
     if (m_wallet_hash_id.isEmpty()) {
         auto handler = new LoginHandler(m_mnemonic, m_password, m_session);
         QObject::connect(handler, &Handler::done, this, [=] {
@@ -182,17 +165,6 @@ void RestoreController::update()
 
             setValid(false);
             setBusy(false);
-
-            // TODO: these are examples of errors
-            // these sould be handled in Handler class, see TODO above
-            // {"action":"get_xpubs","device":{},"error":"get_xpubs exception:login failed:id_login_failed","status":"error"}
-            // {"action":"get_xpubs","device":{},"error":"get_xpubs exception:reconnect required","status":"error"}
-
-            // TODO controller should expose error? or activity?
-//            m_wallet->setAuthentication(Wallet::Unauthenticated);
-//            activity->finish();
-//            activity->deleteLater();
-//            emit loginError(error);
         });
         handler->exec();
         return;
@@ -200,7 +172,6 @@ void RestoreController::update()
 
     m_wallet = WalletManager::instance()->walletWithHashId(m_wallet_hash_id, false);
     if (m_wallet) {
-        qDebug() << Q_FUNC_INFO << m_network->id() << m_wallet_hash_id << m_wallet->name();
         setBusy(false);
         setValid(!m_wallet->hasPinData());
         emit walletChanged(m_wallet);
@@ -214,8 +185,6 @@ void RestoreController::update()
     }
 
     if (m_subaccounts.isEmpty()) {
-        qDebug() << Q_FUNC_INFO << "get subaccounts" << m_network->id();
-
         auto handler = new GetSubAccountsHandler(m_session, true);
         QObject::connect(handler, &Handler::done, this, [=] {
             handler->deleteLater();
