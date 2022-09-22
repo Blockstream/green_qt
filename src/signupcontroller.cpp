@@ -114,6 +114,7 @@ void SignupController::update()
         m_wallet->updateConfig();
         m_wallet->setAuthentication(Wallet::Authenticated);
         WalletManager::instance()->addWallet(m_wallet);
+        emit finished();
     });
     register_user_handler->exec();
 }

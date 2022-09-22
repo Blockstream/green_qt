@@ -34,6 +34,7 @@ AbstractDialog {
         pin: navigation.param.pin || ''
         mnemonic: (navigation.param.mnemonic || '').split(',')
         active: navigation.param.verify || false
+        onFinished: Analytics.recordEvent('wallet_create', segmentationSession(controller.wallet))
     }
 
     Connections {

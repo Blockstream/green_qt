@@ -48,6 +48,7 @@ signals:
     void typeChanged(const QString& type);
     void mnemonicSizeChanged(int mnemonicSize);
     void mnemonicChanged(const QStringList &mnemonic);
+    void finished();
 private:
     QStringList m_mnemonic;
     Connectable<Network> m_network;
