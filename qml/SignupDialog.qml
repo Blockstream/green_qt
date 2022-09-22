@@ -97,15 +97,32 @@ AbstractDialog {
             return index
         }
         SelectNetworkView {
+            id: select_network_view
             readonly property bool active: true
             showAMP: true
             view: 'signup'
+            AnalyticsView {
+                active: select_network_view.visible
+                name: 'OnBoardChooseNetwork'
+                segmentation: segmentationOnBoard({
+                    flow: 'create',
+                })
+            }
         }
 
         AnimLoader {
+            id: select_server_type_view
             active: (navigation.param.network || false) && (navigation.param.type || false) && !controller.network
             animated: self.opened
             sourceComponent: SelectServerTypeView {
+            }
+            AnalyticsView {
+                active: select_server_type_view.visible
+                name: 'OnBoardChooseSecurity'
+                segmentation: segmentationOnBoard({
+                    flow: 'create',
+                    network: navigation.param.network === 'bitcoin' ? 'mainnet' : navigation.param.network,
+                })
             }
         }
 
@@ -289,6 +306,7 @@ AbstractDialog {
             }
         }
         AnimLoader {
+            id: set_pin_view
             active: navigation.param.quiz || false
             animated: self.opened
             sourceComponent: Pane {
@@ -315,6 +333,15 @@ AbstractDialog {
                     VSpacer {
                     }
                 }
+            }
+            AnalyticsView {
+                active: set_pin_view.visible
+                name: 'OnBoardPin'
+                segmentation: segmentationOnBoard({
+                    flow: 'create',
+                    network: navigation.param.network === 'bitcoin' ? 'mainnet' : navigation.param.network,
+                    security: navigation.param.server_type === 'electrum' ? 'singlesig' : 'multisig'
+                })
             }
         }
         AnimLoader {

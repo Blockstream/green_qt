@@ -52,6 +52,14 @@ ApplicationWindow {
         return segmentation
     }
 
+    function segmentationOnBoard({ flow, network, security }) {
+        const segmentation = {}
+        if (flow) segmentation.flow = flow
+        if (network) segmentation.network = network
+        if (security) segmentation.security = security
+        return segmentation
+    }
+
     function segmentationSession(wallet) {
         const segmentation = segmentationNetwork(wallet.network)
         const app_settings = []
