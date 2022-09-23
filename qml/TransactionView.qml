@@ -171,7 +171,7 @@ WalletDialog {
         ColumnLayout {
             id: layout
             width: flickable.availableWidth
-            spacing: constants.s1
+            spacing: constants.s2
 
             Repeater {
                 visible: count > 0
@@ -179,10 +179,12 @@ WalletDialog {
                 delegate: network.liquid ? liquid_amount_delegate : bitcoin_amount_delegate
             }
 
-            GPane {
-                Layout.fillWidth: true
-                background: null
-                contentItem: RowLayout {
+            ColumnLayout {
+                Layout.leftMargin: constants.s1
+                Layout.rightMargin: constants.s1
+                spacing: constants.p0
+
+                RowLayout {
                     spacing: 16
                     Label {
                         text: qsTrId('id_fee')
@@ -204,6 +206,27 @@ WalletDialog {
                             text: `(${transaction.data.fee_rate / 1000} satoshi/vbyte)`
                             copyText: `${transaction.data.fee_rate / 1000} satoshi/vbyte`
                         }
+                    }
+                }
+
+                Rectangle {
+                    visible: (transaction.type === Transaction.Outgoing)
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: 1
+                    color: constants.c300
+                }
+
+                RowLayout {
+                    visible: (transaction.type === Transaction.Outgoing)
+                    spacing: 16
+                    Label {
+                        text: qsTrId('id_total_with_fee')
+                    }
+                    HSpacer {
+                    }
+                    CopyableLabel {
+                        Layout.alignment: Qt.AlignRight
+                        text: formatAmount(transaction.data.satoshi[network.liquid ? network.policyAsset : 'btc'] )
                     }
                 }
             }

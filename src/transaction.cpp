@@ -1,6 +1,5 @@
 #include "account.h"
 #include "asset.h"
-#include "json.h"
 #include "network.h"
 #include "session.h"
 #include "transaction.h"
@@ -106,7 +105,6 @@ void Transaction::updateFromData(const QJsonObject& data)
     // Amounts are one time set
     const auto satoshi = m_data.value("satoshi").toObject();
     const bool is_outgoing = m_data.value("type").toString() == "outgoing";
-    const int count = satoshi.keys().length();
 
     // FIXME: because redeposits have incorrect satoshi.btc values we compute
     // amounts again. note that above we early return if m_data doesn't change.
@@ -136,12 +134,12 @@ void Transaction::openInExplorer() const
     m_account->wallet()->network()->openTransactionInExplorer(m_data.value("txhash").toString());
 }
 
-QString Transaction::link() const
+QString Transaction::link()
 {
     return m_account->wallet()->network()->explorerUrl() + m_data.value("txhash").toString();
 }
 
-QString Transaction::unblindedLink() const
+QString Transaction::unblindedLink()
 {
     Q_ASSERT(account()->wallet()->network()->isLiquid());
 

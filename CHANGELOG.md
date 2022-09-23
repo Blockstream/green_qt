@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Add quick action on the sidebar to create wallet
 - Show confirmed email (if exists) under general settings email notifications checkbox
+- Total amount for outgoing transactions
 
 ### Changed
 - Add feedback to user when updating wallet watch-only settings

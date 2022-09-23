@@ -84,16 +84,16 @@ public:
 
 public slots:
     void openInExplorer() const;
-    QString link() const;
-    QString unblindedLink() const;
+    QString link();
+    QString unblindedLink();
     void updateMemo(const QString& memo);
 
 signals:
-    void typeChanged(Type type);
+    void typeChanged(Transaction::Type type);
     void amountsChanged();
     void dataChanged(const QJsonObject& data);
     void memoChanged(const QString& memo);
-    void spvStatusChanged(SPVStatus spv_status);
+    void spvStatusChanged(Transaction::SPVStatus spv_status);
 
 private:
     void setType(Type type);
