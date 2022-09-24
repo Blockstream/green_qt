@@ -32,25 +32,10 @@ Button {
     onClicked: if (location) navigation.go(location)
     icon.width: 24
     icon.height: 24
-    Behavior on implicitWidth {
-        NumberAnimation {
-            duration: 300
-            easing.type: Easing.OutBack
-        }
-    }
-    background: Item {
-        Rectangle {
-            anchors.fill: parent
-            visible: self.isCurrent
-            color: constants.c500
-            radius: 4
-        }
-        Rectangle {
-            anchors.fill: parent
-            visible: self.hovered
-            color: constants.c600
-            radius: 4
-        }
+    background: Rectangle {
+        visible: self.isCurrent || self.hovered
+        color: self.hovered ? constants.c600 : constants.c500
+        radius: 4
     }
     contentItem: RowLayout {
         spacing: constants.s1
@@ -62,41 +47,34 @@ Button {
         Label {
             visible: !Settings.collapseSideBar
             text: self.text
-            Layout.maximumWidth: 200
-            elide: Label.ElideRight
+            elide: Label.ElideMiddle
+            Layout.fillWidth: true
             ToolTip.text: self.text
             ToolTip.visible: truncated && self.hovered
             ToolTip.delay: 1000
             rightPadding: 16
             font.styleName: 'Regular'
         }
-        HSpacer {
+        BusyIndicator {
+            visible: !Settings.collapseSideBar && self.busy
+            running: visible
+            padding: 0
+            Layout.minimumWidth: 16
+            Layout.maximumWidth: 16
+            Layout.maximumHeight: 16
         }
-        StackLayout {
-            Layout.fillHeight: false
-            Layout.fillWidth: false
-            visible: !Settings.collapseSideBar
-            currentIndex: self.count === 0 ? 0 : 1
-            BusyIndicator {
-                visible: self.busy
-                running: self.busy
-                padding: 0
-                Layout.minimumWidth: 16
-                Layout.maximumWidth: 16
-                Layout.maximumHeight: 16
-            }
-            Label {
-                text: count
-                color: '#444444'
-                font.pixelSize: 12
-                font.styleName: 'Medium'
-                horizontalAlignment: Label.AlignHCenter
-                leftPadding: 6
-                rightPadding: 6
-                background: Rectangle {
-                    color: 'white'
-                    radius: 4
-                }
+        Label {
+            visible: !Settings.collapseSideBar && count > 0
+            text: count
+            color: '#444444'
+            font.pixelSize: 12
+            font.styleName: 'Medium'
+            horizontalAlignment: Label.AlignHCenter
+            leftPadding: 6
+            rightPadding: 6
+            background: Rectangle {
+                color: 'white'
+                radius: 4
             }
         }
     }

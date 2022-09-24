@@ -13,6 +13,13 @@ Pane {
     background: Rectangle {
         color: constants.c700
     }
+    implicitWidth: Settings.collapseSideBar ? 72 : 300
+    Behavior on implicitWidth {
+        NumberAnimation {
+            duration: 300
+            easing.type: Easing.InOutCubic
+        }
+    }
     contentItem: ColumnLayout {
         spacing: 8
         SideButton {
@@ -24,17 +31,22 @@ Pane {
         RowLayout {
             SideLabel {
                 text: qsTrId('id_wallets')
-                Layout.fillWidth: true
             }
             ToolButton {
-                visible: !Settings.collapseSideBar
+                id: create_sidebar_button
+                background: Rectangle {
+                    visible: create_sidebar_button.hovered
+                    color: constants.c600
+                    radius: 4
+                }
+                Layout.fillWidth: Settings.collapseSideBar
                 icon.source: 'qrc:/svg/plus.svg'
                 icon.color: 'white'
                 onClicked: navigation.go('/signup')
                 ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                 ToolTip.text: qsTrId('id_create_wallet')
                 ToolTip.visible: hovered
-                Layout.alignment: Qt.AlignBottom
+                Layout.alignment: Qt.AlignCenter
                 Layout.preferredWidth: 28
                 Layout.preferredHeight: 28
             }
@@ -43,11 +55,10 @@ Pane {
             id: flickable
             Layout.fillWidth: true
             Layout.fillHeight: true
-            Layout.preferredWidth: layout.implicitWidth
             clip: true
             flickableDirection: Flickable.VerticalFlick
             contentHeight: layout.height
-            contentWidth: layout.width
+            contentWidth: flickable.width
             ScrollIndicator.vertical: ScrollIndicator { }
             MouseArea {
                 width: layout.width
@@ -61,6 +72,7 @@ Pane {
             ColumnLayout {
                 id: layout
                 spacing: 8
+                width: flickable.contentWidth
                 SideButton {
                     icon.source: icons.bitcoin
                     location: '/bitcoin'
@@ -158,10 +170,12 @@ Pane {
         topPadding: 4
         leftPadding: 4
         bottomPadding: 4
+        visible: !Settings.collapseSideBar
+        Layout.fillWidth: true
         contentItem: SectionLabel {
             font.pixelSize: 10
             font.styleName: 'Medium'
-            text: Settings.collapseSideBar ? '' : label.text
+            text: label.text
         }
     }
 }
