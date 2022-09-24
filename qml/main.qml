@@ -121,6 +121,16 @@ ApplicationWindow {
         }
     }
 
+    function dynamicScenePosition(item, x, y) {
+        const target = item
+        while (item) {
+            item.x
+            item.y
+            item = item.parent
+        }
+        return target.mapToItem(null, x, y)
+    }
+
     x: Settings.windowX
     y: Settings.windowY
     width: Settings.windowWidth
