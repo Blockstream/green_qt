@@ -291,6 +291,7 @@ WalletDialog {
 
                 CopyableLabel {
                     text: transaction.data.txhash
+                    onCopy: Analytics.recordEvent('share_transaction', segmentationShareTransaction(self.transaction.account))
                 }
             }
 

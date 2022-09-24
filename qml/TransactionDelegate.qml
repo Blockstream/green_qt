@@ -174,7 +174,10 @@ ItemDelegate {
                         }
                         MenuItem {
                             text: qsTrId('id_copy_transaction_id')
-                            onTriggered: Clipboard.copy(transaction.data.txhash)
+                            onTriggered: {
+                                Clipboard.copy(transaction.data.txhash)
+                                Analytics.recordEvent('share_transaction', segmentationShareTransaction(transaction.account))
+                            }
                         }
                     }
                 }

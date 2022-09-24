@@ -6,6 +6,7 @@ import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.12
 
 WizardPage {
+    required property Account account
     required property var dialog
     required property var transaction
 
@@ -35,6 +36,7 @@ WizardPage {
             font.pixelSize: 12
             delay: 50
             text: self.transaction.data.txhash
+            onCopy: Analytics.recordEvent('share_transaction', segmentationShareTransaction(self.account))
         }
         VSpacer {}
     }

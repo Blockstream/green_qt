@@ -87,6 +87,12 @@ ApplicationWindow {
         return segmentation
     }
 
+    function segmentationShareTransaction(account, { method = 'copy' } = {}) {
+        const segmentation = segmentationSession(account.wallet)
+        segmentation.method = method
+        return segmentation;
+    }
+
     function segmentationWalletLogin(wallet, { method }) {
         const segmentation = segmentationSession(wallet)
         segmentation.method = method

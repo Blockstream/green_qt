@@ -89,6 +89,7 @@ ControllerDialog {
         }
     }
     doneComponent: TransactionDoneView {
+        account: self.account
         dialog: self
         transaction: self.controller.signedTransaction
     }
