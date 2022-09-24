@@ -66,4 +66,37 @@ private:
     int m_reset_timer{0};
 };
 
+class AnalyticsEventPrivate;
+class AnalyticsEvent : public QObject
+{
+    Q_OBJECT
+    Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
+    Q_PROPERTY(QVariantMap segmentation READ segmentation WRITE setSegmentation NOTIFY segmentationChanged)
+    Q_PROPERTY(bool active READ active WRITE setActive NOTIFY activeChanged)
+    QML_ELEMENT
+public:
+    AnalyticsEvent(QObject* parent = nullptr);
+    ~AnalyticsEvent();
+    QString name() const;
+    void setName(const QString& name);
+    QVariantMap segmentation() const;
+    void setSegmentation(const QVariantMap& segmentation);
+    bool active() const;
+    void setActive(bool active);
+public slots:
+    void track();
+private slots:
+    void reset();
+    void stop();
+    void start();
+signals:
+    void nameChanged();
+    void segmentationChanged();
+    void activeChanged();
+protected:
+    void timerEvent(QTimerEvent *event);
+private:
+    QScopedPointer<AnalyticsEventPrivate> d;
+};
+
 #endif // GREEN_ANALYTICS_H

@@ -253,3 +253,111 @@ void AnalyticsView::timerEvent(QTimerEvent* event)
         open();
     }
 }
+
+class AnalyticsEventPrivate {
+public:
+    QString name;
+    QVariantMap segmentation;
+    bool active{false};
+    std::unique_ptr<cly::Event> event;
+    int reset_timer{0};
+};
+
+AnalyticsEvent::AnalyticsEvent(QObject* parent)
+    : QObject(parent)
+    , d(new AnalyticsEventPrivate)
+{
+}
+
+AnalyticsEvent::~AnalyticsEvent()
+{
+    stop();
+}
+
+QString AnalyticsEvent::name() const
+{
+    return d->name;
+}
+
+void AnalyticsEvent::setName(const QString& name)
+{
+    if (d->name == name) return;
+    d->name = name;
+    emit nameChanged();
+    reset();
+}
+
+QVariantMap AnalyticsEvent::segmentation() const
+{
+    return d->segmentation;
+}
+
+void AnalyticsEvent::setSegmentation(const QVariantMap& segmentation)
+{
+    if (d->segmentation == segmentation) return;
+    d->segmentation = segmentation;
+    emit segmentationChanged();
+}
+
+bool AnalyticsEvent::active() const
+{
+    return d->active;
+}
+
+void AnalyticsEvent::setActive(bool active)
+{
+    if (d->active == active) return;
+    d->active = active;
+    emit activeChanged();
+    reset();
+}
+
+void AnalyticsEvent::reset()
+{
+    if (d->reset_timer > 0) killTimer(d->reset_timer);
+    d->reset_timer = startTimer(0);
+}
+
+void AnalyticsEvent::stop()
+{
+    if (d->event) {
+        d->event.reset();
+    }
+}
+
+void AnalyticsEvent::start()
+{
+    if (Settings::instance()->isAnalyticsEnabled() && d->active && !d->name.isEmpty()) {
+        Q_ASSERT(!d->event);
+        auto event = new cly::Event(d->name.toStdString());
+        event->startTimer();
+        d->event.reset(event);
+    }
+}
+
+void AnalyticsEvent::timerEvent(QTimerEvent* event)
+{
+    if (event->timerId() == d->reset_timer) {
+        killTimer(d->reset_timer);
+        d->reset_timer = 0;
+        stop();
+        start();
+    }
+}
+
+void AnalyticsEvent::track()
+{
+    if (d->event) {
+        d->event->stopTimer();
+    } else {
+        auto event = new cly::Event(d->name.toStdString());
+        d->event.reset(event);
+    }
+    std::map<std::string, std::string> out;
+    for (auto i = d->segmentation.begin(); i != d->segmentation.end(); ++i) {
+        d->event->addSegmentation(i.key().toStdString(), i.value().toString().toStdString());
+    }
+    cly::Countly::getInstance().addEvent(*d->event);
+    stop();
+    start();
+}
