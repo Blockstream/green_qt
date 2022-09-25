@@ -80,27 +80,27 @@ WalletDialog {
             B {
                 name: 'WalletSettingsGeneral'
                 index: 0
-                text: 'General'
+                text: qsTrId('id_general')
                 icon.source: 'qrc:/svg/preferences.svg'
             }
             B {
                 name: 'WalletSettingsSecurity'
                 index: 1
-                text: 'Security'
+                text: qsTrId('id_security')
                 icon.source: 'qrc:/svg/security.svg'
                 enabled: !self.wallet.device
             }
             B {
                 name: 'WalletSettings2FA'
                 index: 2
-                text: 'Two Factor Authentication'
+                text: qsTrId('id_twofactor_authentication')
                 icon.source: 'qrc:/svg/2fa_general.svg'
                 enabled: !self.wallet.network.electrum
             }
             B {
                 name: 'WalletSettingsRecovery'
                 index: 3
-                text: 'Recovery'
+                text: qsTrId('id_recovery')
                 icon.source: 'qrc:/svg/recovery.svg'
             }
             VSpacer { }
