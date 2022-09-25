@@ -9,45 +9,14 @@ WalletDialog {
     id: self
     width: 900
     height: 600
-    padding: 0
+    icon: 'qrc:/svg/gearFill.svg'
+    title: qsTrId('id_settings')
 
     AnalyticsView {
         id: analytics_view
         active: self.opened
         name: 'WalletSettingsGeneral'
         segmentation: segmentationSession(self.wallet)
-    }
-
-    background: Rectangle {
-        radius: 16
-        color: constants.c800
-    }
-    header: DialogHeader {
-        Image {
-            Layout.maximumWidth: 32
-            Layout.maximumHeight: 32
-            fillMode: Image.PreserveAspectFit
-            source: 'qrc:/svg/gearFill.svg'
-        }
-
-        Label {
-            Layout.fillWidth: true
-            text: qsTrId('id_settings')
-            font.pixelSize: 18
-            font.styleName: 'Medium'
-            elide: Label.ElideRight
-            ToolTip.text: title
-            ToolTip.visible: truncated && mouse_area.containsMouse
-        }
-
-        ToolButton {
-            Layout.alignment: Qt.AlignTop
-            flat: true
-            icon.source: 'qrc:/svg/cancel.svg'
-            icon.width: 16
-            icon.height: 16
-            onClicked: self.reject()
-        }
     }
 
     component B: Button {
@@ -135,11 +104,6 @@ WalletDialog {
                 icon.source: 'qrc:/svg/recovery.svg'
             }
             VSpacer { }
-        }
-        Rectangle {
-            Layout.preferredWidth: 1
-            Layout.fillHeight: true
-            color: constants.c500
         }
         StackLayout {
             id: stack_layout
