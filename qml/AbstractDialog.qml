@@ -6,14 +6,14 @@ Dialog {
     property string icon
     property bool showRejectButton: true
     property bool enableRejectButton: true
-    readonly property bool hovered: hover_handler.hovered
+    readonly property bool hovered: background_hover_handler.hovered
     id: self
     focus: true
     clip: true
     modal: true
     padding: constants.p3
-    topPadding: constants.p3
-    bottomPadding: constants.p3
+    topPadding: constants.p1
+    bottomPadding: constants.p1
     leftPadding: constants.p3
     rightPadding: constants.p3
     horizontalPadding: 0
@@ -38,10 +38,9 @@ Dialog {
             font.styleName: 'Medium'
             elide: Label.ElideRight
             ToolTip.text: title
-            ToolTip.visible: truncated && mouse_area.containsMouse
-            background: MouseArea {
-                id: mouse_area
-                hoverEnabled: true
+            ToolTip.visible: truncated && title_hover_handler.hovered
+            HoverHandler {
+                id: title_hover_handler
             }
         }
         GToolButton {
@@ -63,7 +62,7 @@ Dialog {
         color: constants.c800
         border.color: Qt.rgba(0, 0, 0, 0.5)
         HoverHandler {
-            id: hover_handler
+            id: background_hover_handler
         }
     }
 }
