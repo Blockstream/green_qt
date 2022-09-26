@@ -22,19 +22,6 @@ ColumnLayout {
         onTriggered: receive_address.generate()
     }
 
-    Action {
-        id: copy_address_action
-        onTriggered: {
-            if (receive_address.generating) return;
-            Clipboard.copy(receive_address.uri)
-            qrcode.ToolTip.show(qsTrId('id_copied_to_clipboard'), 1000);
-
-            const account = receive_address.account
-            const type = receive_address.uri.indexOf(':') > 0 ? 'uri' : 'address'
-            Analytics.recordEvent('receive_address', segmentationReceiveAddress(account, type))
-        }
-    }
-
     Loader {
         Layout.alignment: Qt.AlignCenter
         active: account && account.wallet.network.liquid && account.wallet.device && account.wallet.device.type === Device.LedgerNanoS
@@ -93,30 +80,17 @@ ColumnLayout {
         text: qsTrId('id_address')
     }
 
-    RowLayout {
-        Label {
-            text: receive_address.uri
-            horizontalAlignment: Label.AlignLeft
-            verticalAlignment: Label.AlignVCenter
-            Layout.fillWidth: true
-            Layout.preferredWidth: 0
-            Layout.minimumWidth: 400
-            wrapMode: Text.WrapAnywhere
-            MouseArea {
-                anchors.fill: parent
-                enabled: !receive_address.generating && (receive_address.addressVerification === ReceiveAddressController.VerificationNone || receive_address.addressVerification === ReceiveAddressController.VerificationAccepted)
-                onClicked: copy_address_action.trigger()
-            }
-        }
-        ToolButton {
-            enabled: !receive_address.generating && (receive_address.addressVerification === ReceiveAddressController.VerificationNone || receive_address.addressVerification === ReceiveAddressController.VerificationAccepted)
-            icon.source: 'qrc:/svg/copy.svg'
-            icon.width: 24
-            icon.height: 24
-            action: copy_address_action
-            ToolTip.text: qsTrId('id_copy_to_clipboard')
-            ToolTip.delay: 300
-            ToolTip.visible: hovered
+    CopyableLabel {
+        delay: 200
+        enabled: !receive_address.generating && (receive_address.addressVerification === ReceiveAddressController.VerificationNone || receive_address.addressVerification === ReceiveAddressController.VerificationAccepted)
+        Layout.fillWidth: true
+        Layout.preferredWidth: 0
+        text: receive_address.uri
+        wrapMode: Text.WrapAnywhere
+        onCopy: {
+            const account = receive_address.account
+            const type = receive_address.uri.indexOf(':') > 0 ? 'uri' : 'address'
+            Analytics.recordEvent('receive_address', segmentationReceiveAddress(account, type))
         }
     }
     Loader {
