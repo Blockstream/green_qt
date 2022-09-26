@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Reduced application icon size
 
 ### Fixed
+- Fix liquid payment request according to BIP21
 - Limit height of language selector
 - Ensure at least one account is not archived
 - Automatically refresh address list

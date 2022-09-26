@@ -85,10 +85,18 @@ QString ReceiveAddressController::uri() const
     amount.replace(',', '.');
     amount = wallet->convert({{ unit, amount }}).value("btc").toString();
     if (amount.toDouble() > 0) {
-        return QString("%1:%2?amount=%3")
-                .arg(wallet->network()->data().value("bip21_prefix").toString())
-                .arg(m_address)
-                .arg(amount);
+        if (wallet->network()->isLiquid()) {
+            return QString("%1:%2?assetid=%3amount=%4")
+                    .arg(wallet->network()->data().value("bip21_prefix").toString())
+                    .arg(m_address)
+                    .arg(wallet->network()->policyAsset())
+                    .arg(amount);
+        } else {
+            return QString("%1:%2?amount=%3")
+                    .arg(wallet->network()->data().value("bip21_prefix").toString())
+                    .arg(m_address)
+                    .arg(amount);
+        }
     } else {
         return m_address;
     }
