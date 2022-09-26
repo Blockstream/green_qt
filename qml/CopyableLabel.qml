@@ -18,7 +18,10 @@ Label {
         repeat: false
     }
     Popup {
-        readonly property point scenePosition: dynamicScenePosition(self, -8, -8)
+        readonly property point scenePosition: {
+            hover_handler.hovered
+            return dynamicScenePosition(self, -8, -8)
+        }
         id: popup
         x: scenePosition.x
         y: scenePosition.y
