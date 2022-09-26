@@ -266,11 +266,13 @@ WalletDialog {
             text: qsTrId('id_ok')
             onTriggered: controller_dialog.accept()
         }
-        Column {
-            spacing: 10
-            anchors.horizontalCenter: parent.horizontalCenter
+        ColumnLayout {
+            anchors.fill: parent
+            spacing: constants.s2
+            VSpacer {
+            }
             Image {
-                anchors.horizontalCenter: doneLabel.horizontalCenter
+                Layout.alignment: Qt.AlignHCenter
                 source: 'qrc:/svg/check.svg'
                 sourceSize.width: 64
                 sourceSize.height: 64
@@ -279,6 +281,10 @@ WalletDialog {
                 id: doneLabel
                 text: doneText
                 font.pixelSize: 20
+                Layout.fillWidth: true
+                horizontalAlignment: Label.AlignHCenter
+            }
+            VSpacer {
             }
         }
     }

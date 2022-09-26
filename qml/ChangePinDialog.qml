@@ -5,6 +5,8 @@ import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.13
 
 ControllerDialog {
+    property bool pinChanged: false
+
     id: self
     width: 350
     height: 450
@@ -12,7 +14,7 @@ ControllerDialog {
     controller: ChangePinController {
         pin: pin_view.pin.value
         wallet: self.wallet
-        onFinished: self.accept()
+        onFinished: self.pinChanged = true
     }
     AnalyticsView {
         active: self.opened
@@ -62,16 +64,25 @@ ControllerDialog {
         HSpacer {
         }
         GButton {
+            visible: self.pinChanged === false
             large: true
             text: qsTrId('id_cancel')
             onClicked: self.reject()
         }
         GButton {
+            visible: self.pinChanged === false
             highlighted: true
             large: true
             enabled: pin_view.accept && pin_view.pin.valid
             text: qsTrId('id_change_pin')
             onClicked: controller.accept()
+        }
+        GButton {
+            visible: self.pinChanged === true
+            highlighted: true
+            large: true
+            text: qsTrId('id_ok')
+            onClicked: self.accept()
         }
     }
     onClosed: destroy()
