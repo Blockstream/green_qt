@@ -69,13 +69,17 @@ WalletDialog {
                             font.pixelSize: 14
                             elide: Label.ElideRight
                         }
-                        CopyableLabel {
-                            visible: text != ''
+                        Loader {
+                            active: !!amount.asset.data.entity
+                            visible: active
+                            sourceComponent: CopyableLabel {
+                                opacity: 0.5
+                                text: amount.asset.data.entity.domain
+                                elide: Label.ElideRight
+                            }
                             Layout.fillWidth: true
-                            opacity: 0.5
-                            text: 'entity' in amount.asset.data ? amount.asset.data.entity.domain : ''
-                            elide: Label.ElideRight
                         }
+
                     }
                     HSpacer {
                     }
@@ -192,41 +196,55 @@ WalletDialog {
                     HSpacer {
                     }
                     RowLayout {
+                        Layout.fillWidth: false
                         CopyableLabel {
-                            Layout.alignment: Qt.AlignRight
                             text: formatAmount(transaction.data.fee)
                         }
-                        CopyableLabel {
-                            Layout.alignment: Qt.AlignRight
-                            text: `≈ ` + formatFiat(transaction.data.fee)
-                            copyText: formatFiat(transaction.data.fee)
+                        Label {
+                            text: '≈'
                         }
                         CopyableLabel {
-                            Layout.alignment: Qt.AlignRight
-                            text: `(${transaction.data.fee_rate / 1000} satoshi/vbyte)`
-                            copyText: `${transaction.data.fee_rate / 1000} satoshi/vbyte`
+                            text: formatFiat(transaction.data.fee)
                         }
+                    }
+                }
+                RowLayout {
+                    spacing: 16
+                    HSpacer {
+                    }
+                    CopyableLabel {
+                        opacity: 0.5
+                        Layout.alignment: Qt.AlignRight
+                        text: `${transaction.data.fee_rate / 1000} satoshi/vbyte`
                     }
                 }
 
                 Rectangle {
-                    visible: (transaction.type === Transaction.Outgoing)
+                    visible: transaction.type === Transaction.Outgoing && Object.keys(transaction.data.satoshi).length === 1
                     Layout.fillWidth: true
                     Layout.preferredHeight: 1
-                    color: constants.c300
+                    color: constants.c500
                 }
 
                 RowLayout {
-                    visible: (transaction.type === Transaction.Outgoing)
+                    visible: transaction.type === Transaction.Outgoing && Object.keys(transaction.data.satoshi).length === 1
                     spacing: 16
                     Label {
                         text: qsTrId('id_total_with_fee')
                     }
                     HSpacer {
                     }
-                    CopyableLabel {
-                        Layout.alignment: Qt.AlignRight
-                        text: formatAmount(transaction.data.satoshi[network.liquid ? network.policyAsset : 'btc'] )
+                    RowLayout {
+                        Layout.fillWidth: false
+                        CopyableLabel {
+                            text: formatAmount(transaction.data.satoshi[network.liquid ? network.policyAsset : 'btc'])
+                        }
+                        Label {
+                            text: '≈'
+                        }
+                        CopyableLabel {
+                            text: formatFiat(transaction.data.satoshi[network.liquid ? network.policyAsset : 'btc'])
+                        }
                     }
                 }
             }
@@ -260,7 +278,6 @@ WalletDialog {
                         Layout.fillHeight: true
                         padding: 0
                         contentItem: ColumnLayout {
-                            spacing: constants.s1
                             CopyableLabel {
                                 font.pixelSize: 12
                                 text: formatTransactionTimestamp(transaction.data)
