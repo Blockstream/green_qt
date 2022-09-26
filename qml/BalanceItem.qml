@@ -19,13 +19,15 @@ RowLayout {
             font.pixelSize: 14
             elide: Label.ElideRight
         }
-
-        Label {
-            visible: 'entity' in balance.asset.data
+        Loader {
+            active: !!balance.asset.data.entity
+            visible: active
+            sourceComponent: Label {
+                opacity: 0.5
+                text: balance.asset.data.entity.domain
+                elide: Label.ElideRight
+            }
             Layout.fillWidth: true
-            opacity: 0.5
-            text: balance.asset.data.entity ? balance.asset.data.entity.domain : ''
-            elide: Label.ElideRight
         }
     }
 

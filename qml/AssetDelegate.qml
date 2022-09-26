@@ -10,10 +10,10 @@ Button {
     property bool hasDetails: balance.asset.hasData && balance.asset.data.name !== 'btc'
 
     id: self
-    hoverEnabled: true
+    hoverEnabled: hasDetails
     padding: constants.p2
     background: Rectangle {
-        color: self.hovered && hasDetails ? constants.c700 : self.highlighted ? constants.c600 : constants.c800
+        color: self.hovered ? constants.c700 : self.highlighted ? constants.c600 : constants.c800
         radius: 4
         border.width: self.highlighted ? 1 : 0
         border.color: constants.g500

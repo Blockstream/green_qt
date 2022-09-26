@@ -38,7 +38,7 @@ WalletDialog {
 
                 SectionLabel {
                     text: qsTrId('id_ticker')
-                    visible: balance.asset.data.ticket
+                    visible: !!balance.asset.data.ticker
                 }
 
                 CopyableLabel {
