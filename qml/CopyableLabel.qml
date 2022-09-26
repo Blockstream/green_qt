@@ -36,8 +36,14 @@ Label {
         contentItem: RowLayout {
             spacing: 8
             Label {
+                Layout.maximumWidth: self.width
+                padding: self.padding
                 font: self.font
                 text: self.text
+                wrapMode: self.wrapMode
+                elide: self.elide
+                horizontalAlignment: self.horizontalAlignment
+                verticalAlignment: self.verticalAlignment
             }
             Image {
                 source: check_timer.running ? 'qrc:/svg/check.svg' : 'qrc:/svg/copy.svg'
