@@ -246,19 +246,20 @@ SwipeView {
             RowLayout {
                 HSpacer {
                 }
-                RowLayout {
-                    Layout.alignment: Qt.AlignRight
-                    spacing: 10
-                    Label {
-                        text: formatAmount(account.balance)
-                        font.pixelSize: 14
-                        font.styleName: 'Regular'
-                    }
-                    Label {
-                        text: '≈ ' + formatFiat(account.balance)
-                        font.pixelSize: 14
-                        font.styleName: 'Regular'
-                    }
+                CopyableLabel {
+                    text: formatAmount(account.balance)
+                    font.pixelSize: 14
+                    font.styleName: 'Regular'
+                }
+                Label {
+                    text: '≈'
+                    font.pixelSize: 14
+                    font.styleName: 'Regular'
+                }
+                CopyableLabel {
+                    text: formatFiat(account.balance)
+                    font.pixelSize: 14
+                    font.styleName: 'Regular'
                 }
             }
         }
