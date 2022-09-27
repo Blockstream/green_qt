@@ -78,6 +78,7 @@ StackLayout {
         }
 
         contentItem: Pane {
+            padding: 0
             background: Label {
                 visible: wallet_list_view.count===0
                 text: qsTrId('id_looks_like_you_havent_used_a');
