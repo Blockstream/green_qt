@@ -222,8 +222,7 @@ MainPageHeader {
                     ButtonGroup.group: button_group
                     enabled: self.wallet.network.liquid
                     visible: enabled
-                    icon.source: "qrc:/svg/overview.svg"
-                    ToolTip.text: qsTrId('id_overview')
+                    text: qsTrId('id_overview')
                     onClicked: checked = true
                 }
 
@@ -232,8 +231,7 @@ MainPageHeader {
                     ButtonGroup.group: button_group
                     enabled: self.wallet.network.liquid
                     visible: enabled
-                    icon.source: "qrc:/svg/assets.svg"
-                    ToolTip.text: qsTrId('id_assets')
+                    text: qsTrId('id_assets')
                     onClicked: checked = true
                 }
 
@@ -241,23 +239,20 @@ MainPageHeader {
                     id: transactions_toolbar_button
                     checked: !self.wallet.network.liquid
                     ButtonGroup.group: button_group
-                    icon.source: "qrc:/svg/transactions.svg"
-                    ToolTip.text: qsTrId('id_transactions')
+                    text: qsTrId('id_transactions')
                     onClicked: checked = true
                 }
 
                 TabButton {
                     ButtonGroup.group: button_group
-                    icon.source: "qrc:/svg/addresses.svg"
-                    ToolTip.text: qsTrId('id_addresses')
+                    text: qsTrId('id_addresses')
                     enabled: !self.wallet.watchOnly
                     onClicked: checked = true
                 }
 
                 TabButton {
                     ButtonGroup.group: button_group
-                    icon.source: "qrc:/svg/coins.svg"
-                    ToolTip.text: qsTrId('id_coins')
+                    text: qsTrId('id_coins')
                     enabled: !self.wallet.watchOnly
                     onClicked: checked = true
                 }
@@ -336,17 +331,19 @@ MainPageHeader {
         }
     }
 
-    component TabButton: ToolButton {
-        icon.width: constants.p4
-        icon.height: constants.p4
-        icon.color: Qt.rgba(1, 1, 1, enabled ? 1 : 0.5)
-        padding: 4
+    component TabButton: Button {
+        id: tab_button
+        padding: 16
+        text: ToolTip.text
         background: Rectangle {
-            color: parent.checked ? constants.c400 : parent.hovered ? constants.c600 : constants.c700
+            color: checked ? constants.c400 : hovered ? constants.c600 : 'transparent'
             radius: 4
         }
-        ToolTip.delay: 300
-        ToolTip.visible: hovered
+        contentItem: Label {
+            text: tab_button.text
+            font.pixelSize: 14
+            font.bold: false
+        }
     }
 
     property Action disconnectAction: Action {
