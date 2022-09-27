@@ -13,7 +13,7 @@ Label {
     color: 'white'
     background: Rectangle {
         color: constants.c400
-        radius: 4
+        radius: height / 2
     }
     visible: text !== ''
     text: {
