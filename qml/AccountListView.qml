@@ -180,87 +180,84 @@ SwipeView {
         bottomPadding: constants.p2
         hoverEnabled: true
         width: ListView.view.contentWidth
-        contentItem: RowLayout {
-            spacing: 0
-            ColumnLayout {
-                spacing: 8
+        contentItem: ColumnLayout {
+            spacing: 8
+            RowLayout {
+                spacing: 0
+                EditableLabel {
+                    id: name_field
+                    Layout.fillWidth: true
+                    font.styleName: 'Medium'
+                    font.pixelSize: 14
+                    leftInset: -8
+                    rightInset: -8
+                    text: accountName(account)
+                    enabled: !account.wallet.watchOnly && delegate.ListView.isCurrentItem && !delegate.account.wallet.locked
+                    onEdited: {
+                        if (enabled) {
+                            renameAccount(account, text, activeFocus)
+                        }
+                    }
+                }
+                Item {
+                    implicitWidth: constants.s1
+                }
+                AccountTypeBadge {
+                    account: delegate.account
+                }
+                Item {
+                    visible: Settings.enableExperimental
+                    implicitWidth: delegate.hovered || account_delegate_menu.opened ? constants.s1 + tool_button.width : 0
+                    Behavior on implicitWidth {
+                        SmoothedAnimation {}
+                    }
+                    implicitHeight: tool_button.height
+                    clip: true
+                    GToolButton {
+                        id: tool_button
+                        x: constants.s1
+                        icon.source: 'qrc:/svg/kebab.svg'
+                        onClicked: account_delegate_menu.popup()
+                    }
+                }
+            }
+            RowLayout {
+                spacing: 2
+                Repeater {
+                    model: {
+                        const assets = []
+                        let without_icon = false
+                        for (let i = 0; i < account.balances.length; i++) {
+                            const { amount, asset }= account.balances[i]
+                            if (amount === 0) continue;
+                            if (asset.icon || !without_icon) assets.push(asset)
+                            without_icon = !asset.icon
+                        }
+                        return assets
+                    }
+                    AssetIcon {
+                        asset: modelData
+                        size: 16
+                    }
+                }
+                HSpacer {
+                }
+            }
+            RowLayout {
+                HSpacer {
+                }
                 RowLayout {
-                    spacing: 0
-                    EditableLabel {
-                        id: name_field
-                        Layout.fillWidth: true
-                        font.styleName: 'Medium'
+                    Layout.alignment: Qt.AlignRight
+                    spacing: 10
+                    Label {
+                        text: formatAmount(account.balance)
                         font.pixelSize: 14
-                        leftInset: -8
-                        rightInset: -8
-                        text: accountName(account)
-                        enabled: !account.wallet.watchOnly && delegate.ListView.isCurrentItem && !delegate.account.wallet.locked
-                        onEdited: {
-                            if (enabled) {
-                                renameAccount(account, text, activeFocus)
-                            }
-                        }
+                        font.styleName: 'Regular'
                     }
-                    Item {
-                        implicitWidth: constants.s1
-                    }
-                    AccountTypeBadge {
-                        account: delegate.account
-                    }
-                    Item {
-                        visible: Settings.enableExperimental
-                        implicitWidth: delegate.hovered || account_delegate_menu.opened ? constants.s1 + tool_button.width : 0
-                        Behavior on implicitWidth {
-                            SmoothedAnimation {}
-                        }
-                        implicitHeight: tool_button.height
-                        clip: true
-                        GToolButton {
-                            id: tool_button
-                            x: constants.s1
-                            icon.source: 'qrc:/svg/kebab.svg'
-                            onClicked: account_delegate_menu.popup()
-                        }
-                    }
-                }
-                RowLayout {
-                    spacing: 2
-                    Repeater {
-                        model: {
-                            const assets = []
-                            let without_icon = false
-                            for (let i = 0; i < account.balances.length; i++) {
-                                const { amount, asset }= account.balances[i]
-                                if (amount === 0) continue;
-                                if (asset.icon || !without_icon) assets.push(asset)
-                                without_icon = !asset.icon
-                            }
-                            return assets
-                        }
-                        AssetIcon {
-                            asset: modelData
-                            size: 16
-                        }
-                    }
-                    HSpacer {
-                    }
-                }
-                RowLayout {
-                    HSpacer {
-                    }
-                    RowLayout {
-                        Layout.alignment: Qt.AlignRight
-                        spacing: 10
-                        Label {
-                            text: formatAmount(account.balance)
-                            font.pixelSize: 14
-                            font.styleName: 'Regular'
-                        }
-                        Label {
-                            text: '≈ ' + formatFiat(account.balance)
-                            font.pixelSize: 14
-                            font.styleName: 'Regular'
-                        }
+                    Label {
+                        text: '≈ ' + formatFiat(account.balance)
+                        font.pixelSize: 14
+                        font.styleName: 'Regular'
                     }
                 }
             }
