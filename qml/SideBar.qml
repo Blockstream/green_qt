@@ -12,6 +12,12 @@ Pane {
     rightPadding: 8
     background: Rectangle {
         color: constants.c700
+        Rectangle {
+            width: 1
+            anchors.right: parent.right
+            height: parent.height
+            color: Qt.rgba(0, 0, 0, 0.5)
+        }
     }
     implicitWidth: Settings.collapseSideBar ? 72 : 300
     Behavior on implicitWidth {
