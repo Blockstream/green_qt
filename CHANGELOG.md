@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add indication of logged in wallets in sidebar and network view wallets list
 - Added cancel button to change pin dialog
 - Reduced application icon size
+- Replace support button by help icon
 
 ### Fixed
 - Fix liquid payment request according to BIP21

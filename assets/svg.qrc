@@ -51,5 +51,6 @@
         <file>svg/qr.svg</file>
         <file>svg/kebab.svg</file>
         <file>svg/plus.svg</file>
+        <file>svg/help.svg</file>
     </qresource>
 </RCC>

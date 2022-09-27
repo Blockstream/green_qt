@@ -17,6 +17,8 @@ MainPage {
     }
 
     header: MainPageHeader {
+        leftPadding: 24
+        rightPadding: 12
         contentItem: RowLayout {
             Label {
                 text: self.title
@@ -24,11 +26,8 @@ MainPage {
                 font.styleName: 'Medium'
             }
             HSpacer {}
-            GButton {
-                text: qsTrId('id_support')
-                large: true
-                highlighted: true
-                icon.source: 'qrc:/svg/external_link.svg'
+            ToolButton {
+                icon.source: 'qrc:/svg/help.svg'
                 onClicked: Qt.openUrlExternally(constants.supportUrl)
             }
         }
