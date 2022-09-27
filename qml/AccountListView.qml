@@ -29,13 +29,6 @@ SwipeView {
         }
     }
 
-    Connections {
-        target: Settings
-        function onEnableExperimentalChanged() {
-            if (showArchived && !Settings.enableExperimental) showArchived = false
-        }
-    }
-
     id: self
     interactive: false
     currentIndex: showArchived ? 1 : 0
@@ -55,16 +48,6 @@ SwipeView {
             HSpacer {
             }
             GButton {
-                enabled: !wallet.watchOnly
-                visible: !Settings.enableExperimental
-                Layout.alignment: Qt.AlignVCenter
-                text: '+'
-                font.pixelSize: 14
-                font.styleName: 'Medium'
-                onClicked: openCreateDialog()
-            }
-            GButton {
-                visible: Settings.enableExperimental
                 Layout.alignment: Qt.AlignVCenter
                 icon.source: 'qrc:/svg/kebab.svg'
                 icon.height: 14
@@ -168,7 +151,7 @@ SwipeView {
             border.width: 1
             border.color: delegate.highlighted ? constants.g500 : constants.c700
             TapHandler {
-                enabled: Settings.enableExperimental && delegate.highlighted
+                enabled: delegate.highlighted
                 acceptedButtons: Qt.RightButton
                 onTapped: account_delegate_menu.popup()
             }
@@ -206,7 +189,6 @@ SwipeView {
                     account: delegate.account
                 }
                 Item {
-                    visible: Settings.enableExperimental
                     implicitWidth: delegate.hovered || account_delegate_menu.opened ? constants.s1 + tool_button.width : 0
                     Behavior on implicitWidth {
                         SmoothedAnimation {}

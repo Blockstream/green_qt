@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Total amount for outgoing transactions
 
 ### Changed
+- Make account archiving non experimental
 - Add feedback to user when updating wallet watch-only settings
 - Enable jade channel selector via command line option
 - Increased the size of sign up dialog titles
