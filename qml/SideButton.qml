@@ -1,9 +1,7 @@
 import Blockstream.Green.Core 0.1
 import QtQuick 2.13
 import QtQuick.Controls 2.13
-import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.13
-import QtQuick.Window 2.12
 
 Button {
     id: self
@@ -78,7 +76,11 @@ Button {
             }
         }
     }
-    ToolTip.visible: Settings.collapseSideBar && self.hovered
-    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-    ToolTip.text: self.text
+
+    LeftArrowToolTip {
+        parent: self
+        text: self.text
+        font: self.font
+        visible: Settings.collapseSideBar && self.hovered
+    }
 }

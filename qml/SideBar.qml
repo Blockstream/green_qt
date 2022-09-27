@@ -43,12 +43,14 @@ Pane {
                 icon.source: 'qrc:/svg/plus.svg'
                 icon.color: 'white'
                 onClicked: navigation.go('/signup')
-                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                ToolTip.text: qsTrId('id_create_wallet')
-                ToolTip.visible: hovered
                 Layout.alignment: Qt.AlignCenter
                 Layout.preferredWidth: 28
                 Layout.preferredHeight: 28
+                LeftArrowToolTip {
+                    parent: create_sidebar_button
+                    text: qsTrId('id_create_wallet')
+                    visible: create_sidebar_button.hovered
+                }
             }
         }
         Flickable {
