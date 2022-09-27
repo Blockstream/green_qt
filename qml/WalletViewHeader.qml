@@ -28,7 +28,7 @@ MainPageHeader {
         color: constants.c800
     }
     contentItem: ColumnLayout {
-        spacing: constants.p1
+        spacing: constants.s0
         GPane {
             Layout.fillWidth: true
             padding: 0
