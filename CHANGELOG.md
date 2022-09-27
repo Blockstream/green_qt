@@ -22,6 +22,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Reduced application icon size
 - Replace support button by help icon
 - Display total amount on transaction list (for BTC and L-BTC only)
+- Show firmware type (radio/no radio) next to current/new firmware version when confirming the update for Jade.
+
 
 ### Fixed
 - Fix liquid payment request according to BIP21

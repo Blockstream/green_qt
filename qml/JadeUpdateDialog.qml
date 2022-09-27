@@ -18,6 +18,10 @@ AbstractDialog {
     width: 550
     height: 450
 
+    function firmwareVersionAndType(version, config) {
+        return `${version} (${config.toLowerCase() === 'noradio' ? qsTrId('id_noradio_firmware') : qsTrId('id_radio_firmware') })`
+    }
+
     property JadeUpdateController controller: JadeUpdateController {
         channel: channel_combo_box.currentValue
         device: self.device
@@ -105,13 +109,13 @@ AbstractDialog {
                         text: qsTrId('id_current_version') + ':'
                     }
                     Label {
-                        text: self.activity.device.version
+                        text: firmwareVersionAndType(self.activity.device.version, self.activity.device.versionInfo["JADE_CONFIG"])
                     }
                     Label {
                         text: qsTrId('id_new_version') + ':'
                     }
                     Label {
-                        text: self.activity.firmware.version
+                        text: firmwareVersionAndType(self.activity.firmware.version, self.activity.firmware.config)
                     }
                     Label {
                         text: 'Hash'
