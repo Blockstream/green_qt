@@ -144,5 +144,6 @@
         <file>LedgerDevicesView.qml</file>
         <file>AnalyticsConsentDialog.qml</file>
         <file>RemoveWalletDialog.qml</file>
+        <file>LeftArrowToolTip.qml</file>
     </qresource>
 </RCC>
