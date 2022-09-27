@@ -185,7 +185,7 @@ SwipeView {
             ColumnLayout {
                 spacing: 8
                 RowLayout {
-                    spacing: 16
+                    spacing: 0
                     EditableLabel {
                         id: name_field
                         Layout.fillWidth: true
@@ -201,8 +201,26 @@ SwipeView {
                             }
                         }
                     }
+                    Item {
+                        implicitWidth: constants.s1
+                    }
                     AccountTypeBadge {
                         account: delegate.account
+                    }
+                    Item {
+                        visible: Settings.enableExperimental
+                        implicitWidth: delegate.hovered || account_delegate_menu.opened ? constants.s1 + tool_button.width : 0
+                        Behavior on implicitWidth {
+                            SmoothedAnimation {}
+                        }
+                        implicitHeight: tool_button.height
+                        clip: true
+                        GToolButton {
+                            id: tool_button
+                            x: constants.s1
+                            icon.source: 'qrc:/svg/kebab.svg'
+                            onClicked: account_delegate_menu.popup()
+                        }
                     }
                 }
                 RowLayout {
@@ -244,21 +262,6 @@ SwipeView {
                             font.styleName: 'Regular'
                         }
                     }
-                }
-            }
-            Item {
-                visible: Settings.enableExperimental
-                implicitWidth: delegate.hovered || menu.opened ? constants.s1 + tool_button.width : 0
-                Behavior on implicitWidth {
-                    SmoothedAnimation {}
-                }
-                implicitHeight: tool_button.height
-                clip: true
-                GToolButton {
-                    id: tool_button
-                    x: constants.s1
-                    icon.source: 'qrc:/svg/kebab.svg'
-                    onClicked: account_delegate_menu.popup()
                 }
             }
         }
