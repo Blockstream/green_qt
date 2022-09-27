@@ -45,8 +45,8 @@ MainPageHeader {
                         spacing: 8
                         Image {
                             fillMode: Image.PreserveAspectFit
-                            sourceSize.height: 32
-                            sourceSize.width: 32
+                            sourceSize.height: 24
+                            sourceSize.width: 24
                             source: icons[self.wallet.network.key]
                         }
                         Loader {
@@ -56,7 +56,7 @@ MainPageHeader {
                             sourceComponent: EditableLabel {
                                 leftPadding: 8
                                 rightPadding: 8
-                                font.pixelSize: 22
+                                font.pixelSize: 18
                                 font.styleName: 'Medium'
                                 text: wallet.name
                                 onEdited: {
@@ -73,7 +73,7 @@ MainPageHeader {
                             sourceComponent: Label {
                                 verticalAlignment: Qt.AlignVCenter
                                 text: wallet.name
-                                font.pixelSize: 24
+                                font.pixelSize: 18
                                 font.styleName: 'Medium'
                             }
                         }
@@ -81,9 +81,10 @@ MainPageHeader {
                 }
                 Image {
                     fillMode: Image.PreserveAspectFit
-                    sourceSize.height: 24
-                    sourceSize.width: 24
+                    sourceSize.height: 16
+                    sourceSize.width: 16
                     source: 'qrc:/svg/right.svg'
+                    Layout.alignment: Qt.AlignVCenter
                 }
                 Control {
                     Layout.maximumWidth: self.width / 2
@@ -99,7 +100,7 @@ MainPageHeader {
                             sourceComponent: EditableLabel {
                                 leftPadding: 8
                                 rightPadding: 8
-                                font.pixelSize: 22
+                                font.pixelSize: 18
                                 font.styleName: 'Regular'
                                 text: accountName(self.currentAccount)
                                 enabled: !self.wallet.watchOnly && self.currentAccount && !self.wallet.locked
@@ -117,7 +118,7 @@ MainPageHeader {
                             sourceComponent: Label {
                                 verticalAlignment: Qt.AlignVCenter
                                 text: accountName(self.currentAccount)
-                                font.pixelSize: 24
+                                font.pixelSize: 18
                                 font.styleName: 'Medium'
                             }
                         }
