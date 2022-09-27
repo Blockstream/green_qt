@@ -11,7 +11,7 @@ MainPageHeader {
     required property Wallet wallet
     required property Account currentAccount
     property bool showAccounts: true
-    property var currentView: 0
+    property int currentView: 0
     readonly property bool archived: self.currentAccount ? self.currentAccount.hidden : false
 
     onCurrentViewChanged: {
