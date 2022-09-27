@@ -145,9 +145,10 @@ MainPage {
                                         source: delegate.wallet.network.electrum ? 'qrc:/svg/key.svg' : 'qrc:/svg/multi-sig.svg'
                                     }
                                     Label {
-                                        Layout.maximumWidth: delegate.width / 3
                                         text: wallet.name
                                         elide: Label.ElideRight
+                                        Layout.fillWidth: true
+                                        Layout.maximumWidth: implicitWidth + 1
                                     }
                                     Loader {
                                         active: 'type' in wallet.deviceDetails
