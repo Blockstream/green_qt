@@ -317,7 +317,7 @@ WalletDialog {
         }
         GButton {
             anchors.centerIn: parent
-            icon.source: 'qrc:/svg/warning.svg'
+            icon.source: 'qrc:/svg/warning_black.svg'
             baseColor: '#e5e7e9'
             textColor: 'black'
             highlighted: true

@@ -37,6 +37,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add cancel button to disable pin access dialog
 - Disable pin input when restoring a wallet
 - Disable firmware update dialog next button after being clicked
+- Visibility of warning icon when controller dialog results in error
 
 ## [1.1.3] - 2022-07-18
 ### Added

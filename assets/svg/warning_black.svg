@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 20 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g id="RECENT-Send-Flow-All">
+        <g id="Trigger-Verify">
+            <g id="Icons-Solid-wrench" serif:id="Icons/Solid/wrench">
+                <path id="exclamation-triangle" d="M19.775,15.469C20.416,16.594 19.611,18 18.331,18L1.669,18C0.386,18 -0.415,16.592 0.225,15.469L8.556,0.843C9.198,-0.282 10.804,-0.28 11.444,0.843L19.775,15.469ZM10,12.445C9.118,12.445 8.403,13.169 8.403,14.063C8.403,14.956 9.118,15.68 10,15.68C10.882,15.68 11.597,14.956 11.597,14.063C11.597,13.169 10.882,12.445 10,12.445ZM8.484,6.632L8.741,11.414C8.753,11.637 8.936,11.813 9.157,11.813L10.843,11.813C11.064,11.813 11.247,11.637 11.259,11.414L11.516,6.632C11.529,6.391 11.339,6.188 11.1,6.188L8.9,6.188C8.661,6.188 8.471,6.391 8.484,6.632Z" style="fill-rule:nonzero;"/>
+            </g>
+        </g>
+    </g>
+</svg>
