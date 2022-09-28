@@ -11,7 +11,7 @@ Pane {
     readonly property bool connected: !!device
     readonly property var _details: device ? device.details : details
     background: null
-    padding: 4
+    padding: 0
     hoverEnabled: true
     contentItem: Image {
         opacity: connected ? 1 : 0.5
