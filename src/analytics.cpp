@@ -130,6 +130,7 @@ void Analytics::start()
     auto& countly = cly::Countly::getInstance();
     const auto device_id = QString::fromLocal8Bit(QSysInfo::machineUniqueId().toHex()).toStdString();
     countly.setDeviceID(device_id, true);
+    countly.setTimestampOffset(m_timestamp_offset);
     countly.start(COUNTLY_APP_KEY, COUNTLY_HOST, 443, true);
     m_active = true;
 }
@@ -329,6 +330,7 @@ void AnalyticsEvent::start()
     if (Settings::instance()->isAnalyticsEnabled() && d->active && !d->name.isEmpty()) {
         Q_ASSERT(!d->event);
         auto event = new cly::Event(d->name.toStdString());
+        event->setTimestampOffset(Analytics::instance()->timestampOffset());
         event->startTimer();
         d->event.reset(event);
     }
@@ -350,6 +352,7 @@ void AnalyticsEvent::track()
         d->event->stopTimer();
     } else {
         auto event = new cly::Event(d->name.toStdString());
+        event->stamp(cly::Countly::getInstance().getTimestamp());
         d->event.reset(event);
     }
     std::map<std::string, std::string> out;

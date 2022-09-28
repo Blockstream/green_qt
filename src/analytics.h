@@ -14,6 +14,7 @@ public:
     bool isActive() const { return m_active; }
     QString pushView(const QString &name, const QVariantMap &segmentation);
     void popView(const QString& id);
+    std::chrono::seconds timestampOffset() const { return m_timestamp_offset; }
 public slots:
     void recordEvent(const QString& name);
     void recordEvent(const QString& name, const QVariantMap& segmentation);
@@ -24,6 +25,7 @@ private slots:
     void updateCustomUserDetails();
 private:
     std::atomic_bool m_active{false};
+    std::chrono::seconds m_timestamp_offset{0};
     struct View {
         std::string name;
         std::map<std::string, std::string> segmentation;
