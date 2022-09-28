@@ -41,8 +41,6 @@ Analytics::Analytics()
     auto device = GetHardwareModel().toStdString();
     auto screen_size = qGuiApp->primaryScreen()->size();
     auto resolution = QString("%1x%2").arg(screen_size.width()).arg(screen_size.height()).toStdString();
-    auto device_id = QString::fromLocal8Bit(QSysInfo::machineUniqueId().toHex()).toStdString();
-
     auto& countly = cly::Countly::getInstance();
     countly.setLogger([](cly::Countly::LogLevel level, const std::string& message) {
         switch (level) {
@@ -102,7 +100,6 @@ Analytics::Analytics()
     });
 
     countly.SetMetrics(os, os_version, device, resolution, "N/A", QCoreApplication::applicationVersion().toStdString());
-    countly.setDeviceID(device_id, true);
     countly.SetMaxEventsPerMessage(40);
     countly.SetMinUpdatePeriod(10000);
     updateCustomUserDetails();
@@ -131,6 +128,8 @@ void Analytics::check()
 void Analytics::start()
 {
     auto& countly = cly::Countly::getInstance();
+    const auto device_id = QString::fromLocal8Bit(QSysInfo::machineUniqueId().toHex()).toStdString();
+    countly.setDeviceID(device_id, true);
     countly.start(COUNTLY_APP_KEY, COUNTLY_HOST, 443, true);
     m_active = true;
 }
