@@ -150,7 +150,7 @@ void Analytics::start()
     }
 
     auto& countly = cly::Countly::getInstance();
-    countly.setDeviceID(device_id.toStdString(), true);
+    countly.setDeviceID(device_id.toStdString(), false);
     countly.setTimestampOffset(m_timestamp_offset);
     countly.start(COUNTLY_APP_KEY, COUNTLY_HOST, 443, true);
     m_active = true;
