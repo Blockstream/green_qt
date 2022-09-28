@@ -16,6 +16,7 @@ class Asset : public QObject
     Q_PROPERTY(QString icon READ icon NOTIFY iconChanged)
     Q_PROPERTY(QString name READ name NOTIFY dataChanged)
     Q_PROPERTY(bool hasData READ hasData NOTIFY dataChanged)
+    Q_PROPERTY(bool isLBTC READ isLBTC NOTIFY dataChanged)
     Q_PROPERTY(QJsonObject data READ data NOTIFY dataChanged)
     QML_ELEMENT
     QML_UNCREATABLE("Asset is instanced by Wallet.")

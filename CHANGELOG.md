@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added cancel button to change pin dialog
 - Reduced application icon size
 - Replace support button by help icon
+- Display total amount on transaction list (for BTC and L-BTC only)
 
 ### Fixed
 - Fix liquid payment request according to BIP21
