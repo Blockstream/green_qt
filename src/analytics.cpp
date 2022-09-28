@@ -9,10 +9,14 @@
 
 #include <QCryptographicHash>
 #include <QDebug>
+#include <QFile>
 #include <QGuiApplication>
+#include <QRandomGenerator>
 #include <QScreen>
+#include <QSettings>
 #include <QSysInfo>
 #include <QThread>
+#include <QUuid>
 
 static Analytics* g_analytics_instance{nullptr};
 
@@ -127,9 +131,26 @@ void Analytics::check()
 
 void Analytics::start()
 {
+    QString device_id;
+    {
+        QSettings analytics(GetDataFile("app", "analytics.ini"), QSettings::IniFormat);
+
+        device_id = analytics.value("device_id").toString();
+        if (device_id.isEmpty()) {
+            device_id = QUuid::createUuid().toString(QUuid::WithoutBraces);
+            analytics.setValue("device_id", device_id);
+        }
+
+        auto timestamp_offset = analytics.value("timestamp_offset").toInt();
+        if (timestamp_offset == 0) {
+            timestamp_offset = QRandomGenerator::global()->bounded(12 * 3600);
+            analytics.setValue("timestamp_offset", timestamp_offset);
+        }
+        m_timestamp_offset = std::chrono::seconds(timestamp_offset);
+    }
+
     auto& countly = cly::Countly::getInstance();
-    const auto device_id = QString::fromLocal8Bit(QSysInfo::machineUniqueId().toHex()).toStdString();
-    countly.setDeviceID(device_id, true);
+    countly.setDeviceID(device_id.toStdString(), true);
     countly.setTimestampOffset(m_timestamp_offset);
     countly.start(COUNTLY_APP_KEY, COUNTLY_HOST, 443, true);
     m_active = true;
@@ -140,6 +161,10 @@ void Analytics::stop()
     auto& countly = cly::Countly::getInstance();
     m_active = false;
     countly.stop();
+
+    if (!Settings::instance()->isAnalyticsEnabled()) {
+        QFile::remove(GetDataFile("app", "analytics.ini"));
+    }
 }
 
 Analytics::~Analytics()
