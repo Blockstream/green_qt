@@ -24,8 +24,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Display total amount on transaction list (for BTC and L-BTC only)
 - Show firmware type (radio/no radio) next to current/new firmware version when confirming the update for Jade.
 
-
 ### Fixed
+- Jade emergency restore login
 - Fix liquid payment request according to BIP21
 - Limit height of language selector
 - Ensure at least one account is not archived

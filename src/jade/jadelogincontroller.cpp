@@ -169,6 +169,7 @@ void JadeLoginController::identify()
 {
     if (!m_device) return;
     if (m_device->state() == JadeDevice::StateLocked) return unlock();
+    if (m_device->state() == JadeDevice::StateTemporary) return unlock();
     if (m_identifying) return;
     m_identifying = true;
 
