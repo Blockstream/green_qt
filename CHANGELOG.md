@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Enable Request Two-Factor Reset for liquid
 - Add quick action on the sidebar to create wallet
 - Show confirmed email (if exists) under general settings email notifications checkbox
 - Total amount for outgoing transactions

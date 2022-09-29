@@ -136,7 +136,6 @@ ColumnLayout {
 
     SettingsBox {
         title: qsTrId('id_request_twofactor_reset')
-        visible: !wallet.network.liquid
         contentItem: RowLayout {
             Label {
                 Layout.fillWidth: true
