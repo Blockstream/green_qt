@@ -153,8 +153,6 @@ ColumnLayout {
                                 checked: password_field.acceptableInput
                             }
                         }
-                        HSpacer {
-                        }
                         GButton {
                             large: false
                             text: qsTrId('id_update')
@@ -163,6 +161,12 @@ ColumnLayout {
                                 wallet.setWatchOnly(username_field.text, password_field.text)
                                 password_field.clear();
                             }
+                        }
+                        GButton {
+                            large: false
+                            enabled: wallet.username.length > 0
+                            text: qsTrId('id_delete')
+                            onClicked: wallet.clearWatchOnly()
                         }
                     }
                 }

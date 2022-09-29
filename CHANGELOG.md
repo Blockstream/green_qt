@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add quick action on the sidebar to create wallet
 - Show confirmed email (if exists) under general settings email notifications checkbox
 - Total amount for outgoing transactions
+- Ability to delete a watch-only login
 
 ### Changed
 - Make account archiving non experimental

@@ -364,6 +364,11 @@ void Wallet::setWatchOnly(const QString& username, const QString& password)
     emit watchOnlyUpdateSuccess();
 }
 
+void Wallet::clearWatchOnly()
+{
+    setWatchOnly("", "");
+}
+
 void Wallet::updateConfig()
 {
     if (m_watch_only) return;

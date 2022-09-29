@@ -155,6 +155,7 @@ public slots:
 
     bool rename(QString name, bool active_focus);
     void setWatchOnly(const QString& username, const QString& password);
+    void clearWatchOnly();
 signals:
     void isPersistedChanged(bool is_persisted);
     void readyChanged(bool ready);
