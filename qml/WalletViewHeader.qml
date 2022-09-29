@@ -176,7 +176,7 @@ MainPageHeader {
                         icon.source: 'qrc:/svg/logout.svg'
                         flat: true
                         action: self.disconnectAction
-                        ToolTip.text: 'Logout'
+                        ToolTip.text: qsTrId('id_logout')
                         ToolTip.delay: 300
                         ToolTip.visible: hovered
                     }

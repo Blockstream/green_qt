@@ -1,88 +1,11 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="40"
-   height="40"
-   viewBox="0 0 40 40"
-   version="1.1"
-   id="svg387"
-   sodipodi:docname="logout.svg"
-   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
-  <metadata
-     id="metadata393">
-    <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
-  <defs
-     id="defs391" />
-  <sodipodi:namedview
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1"
-     objecttolerance="10"
-     gridtolerance="10"
-     guidetolerance="10"
-     inkscape:pageopacity="0"
-     inkscape:pageshadow="2"
-     inkscape:window-width="986"
-     inkscape:window-height="695"
-     id="namedview389"
-     showgrid="false"
-     fit-margin-top="0"
-     fit-margin-left="0"
-     fit-margin-right="0"
-     fit-margin-bottom="0"
-     inkscape:zoom="5.6283885"
-     inkscape:cx="34.405044"
-     inkscape:cy="22.405282"
-     inkscape:window-x="0"
-     inkscape:window-y="23"
-     inkscape:window-maximized="0"
-     inkscape:current-layer="svg387" />
-  <g
-     fill="none"
-     fill-rule="evenodd"
-     id="g385"
-     style="fill:#ffffff"
-     transform="translate(-10,-10)">
-    <g
-       id="g383"
-       style="fill:#ffffff">
-      <g
-         id="g381"
-         style="fill:#ffffff">
-        <path
-           fill="#D8D8D8"
-           fill-opacity="0"
-           d="M 0,0 H 60 V 60 H 0 Z"
-           id="path375"
-           style="fill:#ffffff" />
-        <g
-           fill="#FFF"
-           fill-rule="nonzero"
-           id="g379"
-           style="fill:#ffffff">
-          <path
-             d="M 40,0 V 31 H 17 v -6.813 h 2 V 29 H 38 V 2 H 19 V 6.844 H 17 V 0 Z m -30.238,6 1.564,1.69 -6.7,6.22 24.565,0.002 v 2.303 H 4.628 l 6.698,6.217 -1.564,1.69 L 0,15.063 Z"
-             transform="translate(10,14)"
-             id="path377"
-             style="fill:#ffffff"
-             sodipodi:nodetypes="ccccccccccccccccccccccc" />
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="60px" height="60px" viewBox="0 0 60 60" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>logout-icon</title>
+    <g id="logout-icon" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="square">
+        <g id="Group" transform="translate(11.000000, 11.000000)" stroke="#FFFFFF" stroke-width="3">
+            <line x1="12.2" y1="19.4" x2="37" y2="19.4" id="Path" stroke-linejoin="round"></line>
+            <path d="M19.8,0 L5,0 C2.2,0 0,2.2 0,4.8 L0,32.8 C0,35.6 2.2,37.8 5,37.8 L19.8,37.8" id="Path"></path>
+            <polyline id="Path" points="30.4 11.8 38 19.4 30.4 27"></polyline>
         </g>
-      </g>
     </g>
-  </g>
 </svg>
