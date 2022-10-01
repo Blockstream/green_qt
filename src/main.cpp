@@ -6,10 +6,10 @@
 #include <QQuickStyle>
 #include <QStandardPaths>
 #include <QStyleHints>
+#include <QtPlugin>
 #include <QTranslator>
 #include <QUrl>
 #include <QWindow>
-#include <QtPlugin>
 
 #include "analytics.h"
 #include "clipboard.h"
@@ -36,9 +36,9 @@ Q_IMPORT_PLUGIN(QCocoaIntegrationPlugin);
 #endif
 
 #ifdef _WIN32
-#include <windows.h>
 #include <fcntl.h>
 #include <io.h>
+#include <windows.h>
 #endif
 
 #include <hidapi/hidapi.h>

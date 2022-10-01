@@ -1,8 +1,8 @@
 #ifndef GREEN_BALANCE_H
 #define GREEN_BALANCE_H
 
-#include <QtQml>
 #include <QObject>
+#include <QtQml>
 
 class Account;
 class Asset;

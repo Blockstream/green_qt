@@ -1,9 +1,11 @@
-#include "json.h"
 #include "connecthandler.h"
+
+#include "json.h"
 #include "network.h"
 #include "session.h"
 
 #include <gdk.h>
+
 #include <QFuture>
 #include <QtConcurrentRun>
 

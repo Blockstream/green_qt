@@ -1,11 +1,11 @@
 #include "settings.h"
 
-#include <QtGlobal>
 #include <QDebug>
 #include <QFileInfo>
 #include <QGuiApplication>
 #include <QScreen>
 #include <QSettings>
+#include <QtGlobal>
 
 #include "util.h"
 

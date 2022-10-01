@@ -1,8 +1,8 @@
 #ifndef GREEN_EXPORTADDRESSESCONTROLLER_H
 #define GREEN_EXPORTADDRESSESCONTROLLER_H
 
-#include <QtQml>
 #include <QObject>
+#include <QtQml>
 
 QT_FORWARD_DECLARE_CLASS(Account)
 QT_FORWARD_DECLARE_CLASS(Handler)
@@ -31,4 +31,3 @@ private:
 };
 
 #endif // GREEN_EXPORTADDRESSESCONTROLLER_H
-

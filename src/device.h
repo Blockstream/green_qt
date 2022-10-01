@@ -1,8 +1,8 @@
 #ifndef GREEN_DEVICE_H
 #define GREEN_DEVICE_H
 
-#include <QtQml>
 #include <QObject>
+#include <QtQml>
 
 #include "activity.h"
 

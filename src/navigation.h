@@ -1,9 +1,9 @@
 #ifndef GREEN_NAVIGATION_H
 #define GREEN_NAVIGATION_H
 
-#include <QtQml>
 #include <QObject>
 #include <QStack>
+#include <QtQml>
 #include <QVariantMap>
 
 class Navigation : public QObject

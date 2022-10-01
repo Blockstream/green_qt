@@ -1,8 +1,8 @@
 #ifndef GREEN_WATCHONLYLOGINCONTROLLER_H
 #define GREEN_WATCHONLYLOGINCONTROLLER_H
 
-#include <QtQml>
 #include <QObject>
+#include <QtQml>
 
 #include "connectable.h"
 #include "entity.h"

@@ -1,9 +1,10 @@
 #include "httpmanager.h"
+
 #include "activitymanager.h"
+#include "httprequestactivity.h"
 #include "networkmanager.h"
 #include "session.h"
 #include "settings.h"
-#include "httprequestactivity.h"
 
 static HttpManager* g_http_manager{nullptr};
 

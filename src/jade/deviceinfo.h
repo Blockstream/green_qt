@@ -52,10 +52,10 @@
 #ifndef DEVICEINFO_H
 #define DEVICEINFO_H
 
-#include <QObject>
-#include <qbluetoothdeviceinfo.h>
 #include <qbluetoothaddress.h>
+#include <qbluetoothdeviceinfo.h>
 #include <QList>
+#include <QObject>
 #include <QSerialPortInfo>
 
 class DeviceInfo: public QObject

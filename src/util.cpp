@@ -1,11 +1,11 @@
 #include "util.h"
 
-#include <QDir>
 #include <QCryptographicHash>
+#include <QDir>
 
 #ifdef Q_OS_MACOS
-#include <sys/types.h>
 #include <sys/sysctl.h>
+#include <sys/types.h>
 #endif
 
 #ifdef Q_OS_WIN

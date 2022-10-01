@@ -1,5 +1,6 @@
-#include "json.h"
 #include "gettransactionshandler.h"
+
+#include "json.h"
 
 #include <gdk.h>
 

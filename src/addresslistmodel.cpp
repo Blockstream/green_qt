@@ -1,8 +1,9 @@
+#include "addresslistmodel.h"
+
 #include "account.h"
 #include "address.h"
-#include "resolver.h"
-#include "addresslistmodel.h"
 #include "handlers/getaddresseshandler.h"
+#include "resolver.h"
 
 AddressListModel::AddressListModel(QObject* parent)
     : QAbstractListModel(parent)

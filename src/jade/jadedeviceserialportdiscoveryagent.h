@@ -1,9 +1,9 @@
 #ifndef GREEN_JADEDEVICESERIALPORTDISCOVERYAGENT_H
 #define GREEN_JADEDEVICESERIALPORTDISCOVERYAGENT_H
 
-#include <QtQml/qqml.h>
 #include <QObject>
 #include <QSet>
+#include <QtQml/qqml.h>
 
 QT_FORWARD_DECLARE_CLASS(JadeDevice)
 

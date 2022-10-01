@@ -1,6 +1,7 @@
-#include "device_p.h"
-#include "command.h"
 #include "ledgerdevice.h"
+
+#include "command.h"
+#include "device_p.h"
 #include "ledgergetblindingkeyactivity.h"
 #include "ledgergetblindingnonceactivity.h"
 #include "ledgergetwalletpublickeyactivity.h"

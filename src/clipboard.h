@@ -1,9 +1,9 @@
 #ifndef GREEN_CLIPBOARD_H
 #define GREEN_CLIPBOARD_H
 
-#include <QtQml>
 #include <QObject>
 #include <QString>
+#include <QtQml>
 
 class Clipboard : public QObject
 {

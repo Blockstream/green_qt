@@ -1,6 +1,7 @@
+#include "getaddresseshandler.h"
+
 #include "account.h"
 #include "json.h"
-#include "getaddresseshandler.h"
 
 #include <gdk.h>
 

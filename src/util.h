@@ -2,9 +2,9 @@
 #define GREEN_UTIL_H
 
 #include <QByteArray>
+#include <QJsonArray>
 #include <QJsonObject>
 #include <QJsonValue>
-#include <QJsonArray>
 #include <QString>
 
 QString GetDataDir(const QString& context);

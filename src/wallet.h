@@ -1,13 +1,13 @@
 #ifndef GREEN_WALLET_H
 #define GREEN_WALLET_H
 
-#include <QtQml>
 #include <QAtomicInteger>
+#include <QJsonObject>
 #include <QList>
 #include <QObject>
 #include <QQmlListProperty>
 #include <QThread>
-#include <QJsonObject>
+#include <QtQml>
 
 #include "activity.h"
 #include "connectable.h"

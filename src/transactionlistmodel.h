@@ -1,10 +1,10 @@
 #ifndef TRANSACTIONLISTMODEL_H
 #define TRANSACTIONLISTMODEL_H
 
-#include <QtQml>
 #include <QAbstractListModel>
 #include <QModelIndex>
 #include <QSortFilterProxyModel>
+#include <QtQml>
 #include <QVector>
 
 #include "account.h"

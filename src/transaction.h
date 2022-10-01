@@ -1,9 +1,9 @@
 #ifndef GREEN_TRANSACTION_H
 #define GREEN_TRANSACTION_H
 
-#include <QtQml>
-#include <QObject>
 #include <QJsonObject>
+#include <QObject>
+#include <QtQml>
 
 class Account;
 class Asset;

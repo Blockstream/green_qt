@@ -1,8 +1,8 @@
 #ifndef GREEN_ENTITY_H
 #define GREEN_ENTITY_H
 
-#include <QtQml>
 #include <QQmlListProperty>
+#include <QtQml>
 
 QT_FORWARD_DECLARE_CLASS(Activity)
 

@@ -4,10 +4,10 @@
 
 #include <QDebug>
 
-#include <IOKit/IOCFPlugIn.h>
-#include <IOKit/usb/IOUSBLib.h>
 #include <IOKit/hid/IOHIDDevice.h>
 #include <IOKit/hid/IOHIDManager.h>
+#include <IOKit/IOCFPlugIn.h>
+#include <IOKit/usb/IOUSBLib.h>
 
 #include "command.h"
 #include "devicediscoveryagent_macos.h"

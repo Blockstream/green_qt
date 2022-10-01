@@ -1,9 +1,9 @@
 #ifndef GREEN_HANDLER_H
 #define GREEN_HANDLER_H
 
-#include <QtQml>
-#include <QObject>
 #include <QJsonObject>
+#include <QObject>
+#include <QtQml>
 
 QT_FORWARD_DECLARE_CLASS(Resolver)
 QT_FORWARD_DECLARE_CLASS(TwoFactorResolver)

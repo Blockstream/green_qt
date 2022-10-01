@@ -8,13 +8,13 @@
 #include <QWindow>
 
 extern "C" {
-#include <windows.h>
+#include <dbt.h>
 #include <hidsdi.h>
 #include <setupapi.h>
-#include <usbioctl.h>
-#include <dbt.h>
 #include <usb100.h>
+#include <usbioctl.h>
 #include <usbiodef.h>
+#include <windows.h>
 #include <winusb.h>
 }
 

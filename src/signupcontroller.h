@@ -1,8 +1,8 @@
 #ifndef GREEN_SIGNUPCONTROLLER_H
 #define GREEN_SIGNUPCONTROLLER_H
 
-#include <QtQml>
 #include <QObject>
+#include <QtQml>
 
 #include "connectable.h"
 #include "network.h"

@@ -1,13 +1,13 @@
 #include "walletmanager.h"
 
 #include <QDir>
+#include <QDirIterator>
 #include <QJsonDocument>
 #include <QSet>
 #include <QSettings>
 #include <QStandardPaths>
 #include <QUrl>
 #include <QUrlQuery>
-#include <QDirIterator>
 #include <QUuid>
 
 #include "ga.h"

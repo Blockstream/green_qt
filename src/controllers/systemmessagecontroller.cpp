@@ -1,8 +1,10 @@
 #include "systemmessagecontroller.h"
+
+#include "handler.h"
 #include "resolver.h"
 #include "resolvers/signmessageresolver.h"
-#include "handler.h"
 #include "wallet.h"
+
 #include <gdk.h>
 
 class AckSystemMessageHandler : public Handler

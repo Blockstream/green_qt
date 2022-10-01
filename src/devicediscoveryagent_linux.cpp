@@ -2,14 +2,14 @@
 
 #ifdef Q_OS_LINUX
 
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <linux/ioctl.h>
-#include <sys/ioctl.h>
 #include <fcntl.h>
 #include <linux/hid.h>
-#include <linux/types.h>
 #include <linux/hidraw.h>
+#include <linux/ioctl.h>
+#include <linux/types.h>
+#include <sys/ioctl.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 #include <unistd.h>
 
 #include "command.h"

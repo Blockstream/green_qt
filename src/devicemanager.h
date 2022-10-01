@@ -1,9 +1,9 @@
 #ifndef GREEN_DEVICEMANAGER_H
 #define GREEN_DEVICEMANAGER_H
 
-#include <QtQml>
 #include <QObject>
 #include <QSet>
+#include <QtQml>
 #include <QVector>
 
 class Device;

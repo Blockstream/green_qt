@@ -1,8 +1,8 @@
 #ifndef GREEN_ACCOUNT_H
 #define GREEN_ACCOUNT_H
 
-#include <QtQml>
 #include <QObject>
+#include <QtQml>
 
 #include "wallet.h"
 

@@ -1,20 +1,20 @@
-#include <QDebug>
-#include <QJsonDocument>
-#include <QJsonObject>
-#include <QJsonArray>
+#include "jadeapi.h"
+
+#include <QCborArray>
 #include <QCborMap>
 #include <QCborValue>
-#include <QCborArray>
 #include <QCryptographicHash>
 #include <QDateTime>
+#include <QDebug>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <QThread>
 #include <QTimer>
 #include <QVariant>
 
 #include "jadebleimpl.h"
 #include "jadeserialimpl.h"
-
-#include "jadeapi.h"
 
 // Useful for sending null values in tx-signing calls
 QVariant JadeAPI::NULL_CHANGE_ENTRY;
@@ -156,7 +156,7 @@ int JadeAPI::registerResponseHandler(const ResponseHandler &cb, int timeout) {
 void JadeAPI::callResponseHandler(const QVariantMap &msg)
 {
     m_idle_timer.restart();
-    
+
     // Get the id from the message
     Q_ASSERT(msg["id"].isValid() && msg["id"].toString().toInt() > 0);
     const int id = msg["id"].toString().toInt();

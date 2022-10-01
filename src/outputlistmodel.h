@@ -1,10 +1,10 @@
 #ifndef GREEN_OUTPUTLISTMODEL_H
 #define GREEN_OUTPUTLISTMODEL_H
 
-#include <QtQml>
 #include <QAbstractListModel>
-#include <QVector>
 #include <QModelIndex>
+#include <QtQml>
+#include <QVector>
 
 #include "account.h"
 

@@ -1,8 +1,8 @@
 #ifndef GREEN_JADELOGINCONTROLLER_H
 #define GREEN_JADELOGINCONTROLLER_H
 
-#include <QtQml/qqml.h>
 #include <QObject>
+#include <QtQml/qqml.h>
 
 QT_FORWARD_DECLARE_CLASS(JadeDevice)
 QT_FORWARD_DECLARE_CLASS(Session)

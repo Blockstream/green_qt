@@ -5,6 +5,7 @@
 
 #ifdef Q_OS_LINUX
 #include <QSocketNotifier>
+
 #include <libudev.h>
 
 #include "device_p.h"

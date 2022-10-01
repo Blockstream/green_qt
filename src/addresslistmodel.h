@@ -1,8 +1,8 @@
 #ifndef GREEN_ADDRESSLISTMODEL_H
 #define GREEN_ADDRESSLISTMODEL_H
 
-#include <QtQml>
 #include <QAbstractListModel>
+#include <QtQml>
 
 QT_FORWARD_DECLARE_CLASS(Account)
 QT_FORWARD_DECLARE_CLASS(Address)

@@ -52,9 +52,9 @@
 #ifndef SERVICEINFO_H
 #define SERVICEINFO_H
 
+#include <QLowEnergyService>
 #include <QObject>
 #include <QSerialPort>
-#include <QLowEnergyService>
 
 struct JadeDevice2
 {

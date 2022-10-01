@@ -1,9 +1,10 @@
-#include "network.h"
+#include "handler.h"
+
 #include "device.h"
 #include "devicemanager.h"
 #include "ga.h"
-#include "handler.h"
 #include "json.h"
+#include "network.h"
 #include "resolver.h"
 #include "resolvers/signmessageresolver.h"
 #include "session.h"

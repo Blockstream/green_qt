@@ -1,10 +1,11 @@
+#include "receiveaddresscontroller.h"
+
 #include "account.h"
 #include "handler.h"
-#include "jadedevice.h"
 #include "jadeapi.h"
+#include "jadedevice.h"
 #include "json.h"
 #include "network.h"
-#include "receiveaddresscontroller.h"
 #include "resolver.h"
 #include "session.h"
 #include "util.h"

@@ -1,8 +1,8 @@
 #ifndef GREEN_SESSION_H
 #define GREEN_SESSION_H
 
-#include <QtQml>
 #include <QObject>
+#include <QtQml>
 
 #include "activity.h"
 #include "connectable.h"

@@ -3,8 +3,8 @@
 
 #include <QObject>
 #include <QSortFilterProxyModel>
-#include <QStandardItemModel>
 #include <QStandardItem>
+#include <QStandardItemModel>
 #include <QUrl>
 
 #include "httprequestactivity.h"

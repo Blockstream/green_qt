@@ -1,9 +1,9 @@
 #ifndef GREEN_OUTPUT_H
 #define GREEN_OUTPUT_H
 
-#include <QtQml>
-#include <QObject>
 #include <QJsonObject>
+#include <QObject>
+#include <QtQml>
 
 QT_FORWARD_DECLARE_CLASS(Account)
 QT_FORWARD_DECLARE_CLASS(Asset)

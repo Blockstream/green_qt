@@ -1,11 +1,11 @@
 #ifndef GREEN_WALLETLISTMODEL_H
 #define GREEN_WALLETLISTMODEL_H
 
-#include <QtQml>
 #include <QMap>
 #include <QSortFilterProxyModel>
 #include <QStandardItem>
 #include <QStandardItemModel>
+#include <QtQml>
 
 class Wallet;
 

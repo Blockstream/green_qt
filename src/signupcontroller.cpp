@@ -1,11 +1,12 @@
+#include "signupcontroller.h"
+
 #include "ga.h"
-#include "handlers/createaccounthandler.h"
 #include "handlers/connecthandler.h"
+#include "handlers/createaccounthandler.h"
 #include "handlers/loginhandler.h"
 #include "handlers/updateaccounthandler.h"
 #include "json.h"
 #include "registeruserhandler.h"
-#include "signupcontroller.h"
 #include "walletmanager.h"
 
 SignupController::SignupController(QObject *parent)

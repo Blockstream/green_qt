@@ -2,9 +2,9 @@
 
 #include <gdk.h>
 
-#include "network.h"
 #include "ga.h"
 #include "json.h"
+#include "network.h"
 
 static QJsonObject get_networks()
 {

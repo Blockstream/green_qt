@@ -1,10 +1,10 @@
 #ifndef GREEN_ASSET_H
 #define GREEN_ASSET_H
 
-#include <QtQml>
 #include <QJsonObject>
 #include <QObject>
 #include <QString>
+#include <QtQml>
 
 class Wallet;
 

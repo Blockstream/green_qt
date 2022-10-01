@@ -1,7 +1,8 @@
+#include "outputlistmodelfilter.h"
+
+#include "network.h"
 #include "output.h"
 #include "outputlistmodel.h"
-#include "outputlistmodelfilter.h"
-#include "network.h"
 
 OutputListModelFilter::OutputListModelFilter(QObject *parent)
     : QSortFilterProxyModel(parent)

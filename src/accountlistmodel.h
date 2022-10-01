@@ -1,10 +1,10 @@
 #ifndef GREEN_ACCOUNTLISTMODEL_H
 #define GREEN_ACCOUNTLISTMODEL_H
 
-#include <QtQml>
 #include <QSet>
 #include <QSortFilterProxyModel>
 #include <QStandardItemModel>
+#include <QtQml>
 
 QT_FORWARD_DECLARE_CLASS(Account)
 QT_FORWARD_DECLARE_CLASS(Wallet)

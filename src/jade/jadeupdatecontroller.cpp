@@ -1,13 +1,14 @@
+#include "jadeupdatecontroller.h"
+
 #include "activitymanager.h"
 #include "httpmanager.h"
-#include "jadeupdatecontroller.h"
+#include "jadeapi.h"
 #include "jadedevice.h"
+#include "json.h"
 #include "network.h"
 #include "networkmanager.h"
 #include "semver.h"
 #include "session.h"
-#include "json.h"
-#include "jadeapi.h"
 
 #include <QCryptographicHash>
 #include <QFile>

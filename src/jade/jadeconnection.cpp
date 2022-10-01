@@ -1,6 +1,6 @@
-#include <QDebug>
 #include <QCborMap>
 #include <QCborValue>
+#include <QDebug>
 
 #include "jadeconnection.h"
 

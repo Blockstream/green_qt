@@ -1,8 +1,8 @@
 #ifndef GREEN_APPUPDATECONTROLLER_H
 #define GREEN_APPUPDATECONTROLLER_H
 
-#include <QtQml>
 #include <QObject>
+#include <QtQml>
 
 #include "httprequestactivity.h"
 

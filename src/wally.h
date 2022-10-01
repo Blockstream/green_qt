@@ -1,10 +1,10 @@
 #ifndef GREEN_WALLY_H
 #define GREEN_WALLY_H
 
-#include <QtQml>
 #include <QObject>
-#include <QStringList>
 #include <QQmlListProperty>
+#include <QStringList>
+#include <QtQml>
 
 #include "controller.h"
 

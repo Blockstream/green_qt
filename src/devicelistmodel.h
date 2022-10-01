@@ -1,11 +1,11 @@
 #ifndef GREEN_DEVICELISTMODEL_H
 #define GREEN_DEVICELISTMODEL_H
 
-#include <QtQml>
 #include <QMap>
 #include <QSortFilterProxyModel>
 #include <QStandardItem>
 #include <QStandardItemModel>
+#include <QtQml>
 
 #include "device.h"
 

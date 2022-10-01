@@ -1,9 +1,9 @@
 #ifndef GREEN_GA_H
 #define GREEN_GA_H
 
+#include <QCommandLineParser>
 #include <QJsonArray>
 #include <QJsonObject>
-#include <QCommandLineParser>
 
 struct GA_session;
 

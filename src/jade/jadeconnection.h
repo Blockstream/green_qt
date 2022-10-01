@@ -1,8 +1,8 @@
 #ifndef JADECONNECTIONIMPL_H
 #define JADECONNECTIONIMPL_H
 
-#include <QObject>
 #include <QByteArray>
+#include <QObject>
 
 QT_FORWARD_DECLARE_CLASS(QCborMap);
 

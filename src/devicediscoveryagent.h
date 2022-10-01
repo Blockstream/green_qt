@@ -1,8 +1,8 @@
 #ifndef GREEN_DEVICEDISCOVERYAGENT_H
 #define GREEN_DEVICEDISCOVERYAGENT_H
 
-#include <QtQml>
 #include <QObject>
+#include <QtQml>
 
 QT_FORWARD_DECLARE_CLASS(Device)
 QT_FORWARD_DECLARE_CLASS(DeviceDiscoveryAgentPrivate)

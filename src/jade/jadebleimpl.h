@@ -1,8 +1,8 @@
 #ifndef JADEBLEIMPL_H
 #define JADEBLEIMPL_H
 
-#include <qlowenergyservice.h>
 #include <qlowenergycharacteristic.h>
+#include <qlowenergyservice.h>
 
 #include "jadeconnection.h"
 

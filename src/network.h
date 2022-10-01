@@ -1,9 +1,9 @@
 #ifndef GREEN_NETWORK_H
 #define GREEN_NETWORK_H
 
-#include <QtQml>
 #include <QJsonObject>
 #include <QObject>
+#include <QtQml>
 
 class Network : public QObject
 {

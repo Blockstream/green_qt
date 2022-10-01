@@ -2,8 +2,8 @@
 
 #include <wally_bip39.h>
 
-#include "handlers/loginhandler.h"
 #include "handlers/gettransactionshandler.h"
+#include "handlers/loginhandler.h"
 #include "network.h"
 #include "wallet.h"
 #include "walletmanager.h"

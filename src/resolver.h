@@ -1,8 +1,8 @@
 #ifndef GREEN_RESOLVER_H
 #define GREEN_RESOLVER_H
 
-#include <QObject>
 #include <QJsonObject>
+#include <QObject>
 #include <QtQml>
 
 QT_FORWARD_DECLARE_CLASS(Activity)

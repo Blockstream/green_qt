@@ -1,8 +1,8 @@
 #ifndef GREEN_RESTORECONTROLLER_H
 #define GREEN_RESTORECONTROLLER_H
 
-#include <QtQml>
 #include <QObject>
+#include <QtQml>
 
 #include "controller.h"
 #include "session.h"

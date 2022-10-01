@@ -2,8 +2,8 @@
 
 #include <QDesktopServices>
 #include <QLocale>
-#include <QUrl>
 #include <QtMath>
+#include <QUrl>
 
 #include "network.h"
 #include "wallet.h"

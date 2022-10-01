@@ -1,12 +1,11 @@
 #include "jadedeviceserialportdiscoveryagent.h"
 
-#include <QTimer>
 #include <QSerialPortInfo>
-
-#include "jadeapi.h"
-#include "jadedevice.h"
+#include <QTimer>
 
 #include "devicemanager.h"
+#include "jadeapi.h"
+#include "jadedevice.h"
 
 namespace {
 

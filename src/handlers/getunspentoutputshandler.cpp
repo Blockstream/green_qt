@@ -1,6 +1,7 @@
+#include "getunspentoutputshandler.h"
+
 #include "account.h"
 #include "json.h"
-#include "getunspentoutputshandler.h"
 
 #include <gdk.h>
 
