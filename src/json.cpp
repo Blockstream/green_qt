@@ -1,10 +1,13 @@
 #include "json.h"
 
-#include <gdk.h>
 #include <memory>
-#include <nlohmann/json.hpp>
+#include <string>
 
 #include <QJsonDocument>
+
+#include <gdk.h>
+
+#include <nlohmann/json.hpp>
 
 namespace Json {
 
@@ -96,6 +99,3 @@ QByteArray jsonToString(const GA_json* json)
 
 
 } // namespace Json
-
-
-

@@ -4,6 +4,9 @@
 #include <QObject>
 #include <QtQml>
 
+#include <map>
+#include <string>
+
 class Analytics : public QObject
 {
     Q_OBJECT
@@ -55,7 +58,7 @@ protected:
 private slots:
     void reset();
     void close();
-    void open();    
+    void open();
 signals:
     void nameChanged();
     void segmentationChanged();

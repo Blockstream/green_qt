@@ -18,7 +18,7 @@ public:
     bool operator>=(const SemVer& other) const { return !(*this < other); }
     bool operator==(const SemVer& other) const;
     bool operator!=(const SemVer& other) const;
-    static SemVer parse(const QString& string);
+    static SemVer parse(const QString& string); // NOLINT(build/include_what_you_use)
     QString toString() const;
 };
 

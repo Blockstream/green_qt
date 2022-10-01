@@ -90,7 +90,7 @@ BlogModel::BlogModel(QObject* parent)
 
     setSourceModel(m_source);
     setDynamicSortFilter(true);
-    sort(0, Qt::DescendingOrder);
+    sort(0, Qt::DescendingOrder); // NOLINT(build/include_what_you_use)
 }
 
 void BlogModel::updateFromContent(const QString& content)

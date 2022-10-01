@@ -12,7 +12,7 @@ WalletListModel::WalletListModel(QObject* parent)
     setSourceModel(&m_source_model);
     setDynamicSortFilter(true);
     setFilterCaseSensitivity(Qt::CaseInsensitive);
-    sort(0);
+    sort(0); // NOLINT(build/include_what_you_use)
 }
 
 int WalletListModel::indexOf(Wallet *wallet) const

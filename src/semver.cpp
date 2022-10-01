@@ -1,6 +1,9 @@
 #include "semver.h"
 
+#include <QRegularExpression>
 #include <QStringList>
+
+#include <string>
 
 SemVer& SemVer::operator=(const SemVer& other)
 {
@@ -30,7 +33,6 @@ bool SemVer::operator!=(const SemVer &v) const
     return m_major != v.m_major || m_minor != v.m_minor || m_patch != v.m_patch;
 }
 
-#include <QRegularExpression>
 SemVer SemVer::parse(const QString& string)
 {
     QRegularExpression re("^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:(?:\\.|-)((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$");

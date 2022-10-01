@@ -17,7 +17,7 @@ struct Destructor {
 QJsonArray toArray(const GA_json* json);
 QJsonObject toObject(const GA_json* json);
 std::unique_ptr<GA_json, Destructor> fromObject(const QJsonObject& object);
-std::unique_ptr<GA_json, Destructor> stringToJson(const QByteArray& string);
+std::unique_ptr<GA_json, Destructor> stringToJson(const QByteArray& string); // NOLINT(build/include_what_you_use)
 QByteArray jsonToString(const GA_json* json);
 
 } // namespace Json

@@ -18,7 +18,7 @@ DeviceListModel::DeviceListModel(QObject* parent)
     m_source_model.setItemRoleNames({{ Qt::UserRole, "device" }});
     setSourceModel(&m_source_model);
     setDynamicSortFilter(true);
-    sort(0);
+    sort(0); // NOLINT(build/include_what_you_use)
 }
 
 void DeviceListModel::setVendor(Device::Vendor vendor)

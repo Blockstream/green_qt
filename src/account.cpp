@@ -12,6 +12,8 @@
 #include "updateaccounthandler.h"
 #include "wallet.h"
 
+#include <algorithm>
+
 #include <gdk.h>
 
 Account::Account(const QJsonObject& data, Wallet* wallet)

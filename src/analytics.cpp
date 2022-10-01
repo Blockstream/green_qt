@@ -7,6 +7,10 @@
 
 #include <countly/countly.hpp>
 
+#include <map>
+#include <memory>
+#include <string>
+
 #include <QCryptographicHash>
 #include <QDebug>
 #include <QFile>

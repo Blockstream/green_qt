@@ -9,18 +9,17 @@
 #include <QTranslator>
 #include <QUrl>
 #include <QWindow>
-#include <QStandardPaths>
 
-#include "clipboard.h"
 #include "analytics.h"
+#include "clipboard.h"
 #include "devicemanager.h"
-#include "networkmanager.h"
 #include "ga.h"
 #include "httpmanager.h"
-#include "settings.h"
-#include "walletmanager.h"
 #include "kdsingleapplication.h"
+#include "networkmanager.h"
+#include "settings.h"
 #include "util.h"
+#include "walletmanager.h"
 
 #include <QZXing.h>
 

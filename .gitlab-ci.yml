@@ -1,12 +1,21 @@
 image: greenaddress/ci@sha256:2dc63b5e7a02df7175ea0e978d215a314fbc44d9411a2deac22f782661e4778e
 
 stages:
+  - lint
   - build
   - signartifacts
   - installer
   - installer_sign
   - deploy
   - publish
+
+lint:
+  stage: lint
+  script:
+    - virtualenv -p python3 .venv
+    - source .venv/bin/activate
+    - pip install cpplint
+    - cpplint --filter=-,+build/include_what_you_use --recursive src
 
 bionic_release:
   tags:
