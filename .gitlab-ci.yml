@@ -15,7 +15,7 @@ lint:
     - virtualenv -p python3 .venv
     - source .venv/bin/activate
     - pip install cpplint
-    - cpplint --filter=-,+build/include_what_you_use --recursive src
+    - ./tools/lint/cpplint.sh
 
 bionic_release:
   tags:
