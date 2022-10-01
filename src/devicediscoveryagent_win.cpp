@@ -2,11 +2,6 @@
 
 #ifdef Q_OS_WIN
 
-#include "command.h"
-#include "devicediscoveryagent.h"
-#include "devicemanager.h"
-#include "ledgerdevice.h"
-
 #include <QDebug>
 #include <QGuiApplication>
 #include <QUuid>
@@ -24,6 +19,11 @@ extern "C" {
 }
 
 #include <hidapi/hidapi.h>
+
+#include "command.h"
+#include "devicediscoveryagent.h"
+#include "devicemanager.h"
+#include "ledgerdevice.h"
 
 DeviceDiscoveryAgentPrivate::DeviceDiscoveryAgentPrivate(DeviceDiscoveryAgent* q)
     : q(q)

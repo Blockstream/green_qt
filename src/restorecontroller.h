@@ -1,12 +1,12 @@
 #ifndef GREEN_RESTORECONTROLLER_H
 #define GREEN_RESTORECONTROLLER_H
 
+#include <QtQml>
+#include <QObject>
+
 #include "controller.h"
 #include "session.h"
 #include "wallet.h"
-
-#include <QtQml>
-#include <QObject>
 
 QT_FORWARD_DECLARE_CLASS(Network)
 QT_FORWARD_DECLARE_CLASS(Wallet)

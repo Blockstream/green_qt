@@ -1,10 +1,11 @@
 #include "httprequestactivity.h"
-#include "json.h"
-#include "session.h"
 
 #include <gdk.h>
 
 #include <QtConcurrentRun>
+
+#include "json.h"
+#include "session.h"
 
 HttpRequestActivity::HttpRequestActivity(QObject* parent)
     : SessionActivity(parent)

@@ -1,5 +1,4 @@
 #include "settings.h"
-#include "util.h"
 
 #include <QtGlobal>
 #include <QDebug>
@@ -7,6 +6,8 @@
 #include <QGuiApplication>
 #include <QScreen>
 #include <QSettings>
+
+#include "util.h"
 
 Settings::Settings(QObject* parent)
     : QObject(parent)

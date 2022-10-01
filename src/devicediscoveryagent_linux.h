@@ -4,10 +4,10 @@
 #include <QtGlobal>
 
 #ifdef Q_OS_LINUX
-#include "device_p.h"
-
 #include <QSocketNotifier>
 #include <libudev.h>
+
+#include "device_p.h"
 
 class DeviceDiscoveryAgent;
 

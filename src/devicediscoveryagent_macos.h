@@ -4,12 +4,12 @@
 #include <QtGlobal>
 
 #ifdef Q_OS_MAC
-#include "device_p.h"
-
 #include <QMap>
 
 #include <IOKit/hid/IOHIDDevice.h>
 #include <IOKit/hid/IOHIDManager.h>
+
+#include "device_p.h"
 
 class DeviceDiscoveryAgent;
 

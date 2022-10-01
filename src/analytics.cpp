@@ -1,15 +1,4 @@
 #include "analytics.h"
-#include "httpmanager.h"
-#include "httprequestactivity.h"
-#include "settings.h"
-#include "util.h"
-#include "walletmanager.h"
-
-#include <countly/countly.hpp>
-
-#include <map>
-#include <memory>
-#include <string>
 
 #include <QCryptographicHash>
 #include <QDebug>
@@ -21,6 +10,18 @@
 #include <QSysInfo>
 #include <QThread>
 #include <QUuid>
+
+#include <map>
+#include <memory>
+#include <string>
+
+#include <countly/countly.hpp>
+
+#include "httpmanager.h"
+#include "httprequestactivity.h"
+#include "settings.h"
+#include "util.h"
+#include "walletmanager.h"
 
 static Analytics* g_analytics_instance{nullptr};
 

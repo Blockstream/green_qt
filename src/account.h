@@ -1,10 +1,10 @@
 #ifndef GREEN_ACCOUNT_H
 #define GREEN_ACCOUNT_H
 
-#include "wallet.h"
-
 #include <QtQml>
 #include <QObject>
+
+#include "wallet.h"
 
 QT_FORWARD_DECLARE_CLASS(Address)
 QT_FORWARD_DECLARE_CLASS(Output)

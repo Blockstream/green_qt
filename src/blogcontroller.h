@@ -1,13 +1,13 @@
 #ifndef GREEN_BLOGCONTROLLER_H
 #define GREEN_BLOGCONTROLLER_H
 
-#include "httprequestactivity.h"
-
 #include <QObject>
 #include <QSortFilterProxyModel>
 #include <QStandardItemModel>
 #include <QStandardItem>
 #include <QUrl>
+
+#include "httprequestactivity.h"
 
 class BlogPost : public QObject
 {

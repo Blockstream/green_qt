@@ -1,13 +1,13 @@
 #ifndef GREEN_SIGNUPCONTROLLER_H
 #define GREEN_SIGNUPCONTROLLER_H
 
+#include <QtQml>
+#include <QObject>
+
 #include "connectable.h"
 #include "network.h"
 #include "session.h"
 #include "wallet.h"
-
-#include <QtQml>
-#include <QObject>
 
 QT_FORWARD_DECLARE_CLASS(Network);
 QT_FORWARD_DECLARE_CLASS(Session);

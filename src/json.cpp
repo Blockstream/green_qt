@@ -1,11 +1,11 @@
 #include "json.h"
 
-#include <memory>
-#include <string>
+#include <gdk.h>
 
 #include <QJsonDocument>
 
-#include <gdk.h>
+#include <memory>
+#include <string>
 
 #include <nlohmann/json.hpp>
 

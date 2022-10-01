@@ -1,7 +1,9 @@
 #include "ga.h"
+
+#include <gdk.h>
+
 #include "json.h"
 #include "util.h"
-#include <gdk.h>
 
 namespace gdk {
 

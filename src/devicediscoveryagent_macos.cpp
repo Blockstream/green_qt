@@ -1,11 +1,6 @@
 #include "devicediscoveryagent.h"
-#include "devicediscoveryagent_macos.h"
 
 #ifdef Q_OS_MAC
-
-#include "command.h"
-#include "ledgerdevice.h"
-#include "devicemanager.h"
 
 #include <QDebug>
 
@@ -13,6 +8,11 @@
 #include <IOKit/usb/IOUSBLib.h>
 #include <IOKit/hid/IOHIDDevice.h>
 #include <IOKit/hid/IOHIDManager.h>
+
+#include "command.h"
+#include "devicediscoveryagent_macos.h"
+#include "devicemanager.h"
+#include "ledgerdevice.h"
 
 static void DeviceMatchingCallback(void* context, IOReturn /* result */, void* /* sender */, IOHIDDeviceRef handle);
 static void DeviceRemovalCallback(void* context, IOReturn /* result */, void* /* sender */, IOHIDDeviceRef handle);

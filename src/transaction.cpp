@@ -1,11 +1,13 @@
+#include "transaction.h"
+
+#include <gdk.h>
+
 #include "account.h"
 #include "asset.h"
 #include "network.h"
 #include "session.h"
-#include "transaction.h"
 #include "util.h"
 #include "wallet.h"
-#include <gdk.h>
 
 namespace  {
 

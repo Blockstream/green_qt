@@ -1,13 +1,13 @@
 #ifndef TRANSACTIONLISTMODEL_H
 #define TRANSACTIONLISTMODEL_H
 
-#include "account.h"
-
 #include <QtQml>
 #include <QAbstractListModel>
 #include <QModelIndex>
 #include <QSortFilterProxyModel>
 #include <QVector>
+
+#include "account.h"
 
 QT_FORWARD_DECLARE_CLASS(Account)
 QT_FORWARD_DECLARE_CLASS(Handler)

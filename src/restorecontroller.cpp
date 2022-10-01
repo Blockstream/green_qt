@@ -1,7 +1,10 @@
+#include "restorecontroller.h"
+
+#include <wally_bip39.h>
+
 #include "handlers/loginhandler.h"
 #include "handlers/gettransactionshandler.h"
 #include "network.h"
-#include "restorecontroller.h"
 #include "wallet.h"
 #include "walletmanager.h"
 
@@ -25,8 +28,6 @@ void RestoreController::setType(const QString& type)
     emit typeChanged(m_type);
     update();
 }
-
-#include <wally_bip39.h>
 
 void RestoreController::setMnemonic(const QStringList& mnemonic)
 {

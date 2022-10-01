@@ -1,12 +1,14 @@
+#include "output.h"
+
+#include <gdk.h>
+
 #include "account.h"
 #include "asset.h"
 #include "json.h"
 #include "network.h"
 #include "session.h"
-#include "output.h"
 #include "util.h"
 #include "wallet.h"
-#include <gdk.h>
 
 Output::Output(const QJsonObject& data, Account* account)
     : QObject(account)
@@ -100,4 +102,3 @@ void Output::setAddressType(const QString& address_type)
     m_address_type = address_type;
     emit addressTypeChanged(m_address_type);
 }
-

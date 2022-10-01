@@ -1,12 +1,12 @@
 #ifndef GREEN_OUTPUTLISTMODEL_H
 #define GREEN_OUTPUTLISTMODEL_H
 
-#include "account.h"
-
 #include <QtQml>
 #include <QAbstractListModel>
 #include <QVector>
 #include <QModelIndex>
+
+#include "account.h"
 
 class OutputListModel : public QAbstractListModel
 {

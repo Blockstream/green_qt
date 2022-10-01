@@ -1,11 +1,12 @@
 #include "asset.h"
-#include "network.h"
-#include "wallet.h"
 
 #include <QDesktopServices>
 #include <QLocale>
 #include <QUrl>
 #include <QtMath>
+
+#include "network.h"
+#include "wallet.h"
 
 Asset::Asset(const QString& id, Wallet* wallet)
     : QObject(wallet)

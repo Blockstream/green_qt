@@ -4,8 +4,6 @@
 #include <QtGlobal>
 
 #ifdef Q_OS_WIN
-#include "device_p.h"
-
 #include <QAbstractNativeEventFilter>
 #include <QMap>
 #include <QString>
@@ -15,6 +13,8 @@ extern "C" {
 }
 
 #include <hidapi/hidapi.h>
+
+#include "device_p.h"
 
 class DeviceDiscoveryAgent;
 class DevicePrivateImpl : public DevicePrivate

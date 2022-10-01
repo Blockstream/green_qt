@@ -1,12 +1,12 @@
 #ifndef GREEN_SESSION_H
 #define GREEN_SESSION_H
 
+#include <QtQml>
+#include <QObject>
+
 #include "activity.h"
 #include "connectable.h"
 #include "entity.h"
-
-#include <QtQml>
-#include <QObject>
 
 QT_FORWARD_DECLARE_CLASS(ConnectHandler);
 QT_FORWARD_DECLARE_CLASS(Network);

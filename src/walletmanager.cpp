@@ -1,10 +1,3 @@
-#include "ga.h"
-#include "json.h"
-#include "network.h"
-#include "networkmanager.h"
-#include "session.h"
-#include "util.h"
-#include "wallet.h"
 #include "walletmanager.h"
 
 #include <QDir>
@@ -16,6 +9,14 @@
 #include <QUrlQuery>
 #include <QDirIterator>
 #include <QUuid>
+
+#include "ga.h"
+#include "json.h"
+#include "network.h"
+#include "networkmanager.h"
+#include "session.h"
+#include "util.h"
+#include "wallet.h"
 
 static WalletManager* g_wallet_manager{nullptr};
 

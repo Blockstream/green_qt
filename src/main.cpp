@@ -9,6 +9,7 @@
 #include <QTranslator>
 #include <QUrl>
 #include <QWindow>
+#include <QtPlugin>
 
 #include "analytics.h"
 #include "clipboard.h"
@@ -23,7 +24,6 @@
 
 #include <QZXing.h>
 
-#include <QtPlugin>
 #if defined(QT_QPA_PLATFORM_MINIMAL)
 Q_IMPORT_PLUGIN(QMinimalIntegrationPlugin);
 #endif
@@ -305,8 +305,7 @@ int main(int argc, char *argv[])
 #ifdef Q_OS_WIN
 #include <mutex>
 #if defined(_GLIBCXX_HAS_GTHREADS) && defined(_GLIBCXX_USE_C99_STDINT_TR1)
-namespace
-{
+namespace {
   inline std::unique_lock<std::mutex>*&
   __get_once_functor_lock_ptr()
   {
@@ -315,8 +314,7 @@ namespace
   }
 }
 
-namespace std _GLIBCXX_VISIBILITY(default)
-{
+namespace std _GLIBCXX_VISIBILITY(default) {
 _GLIBCXX_BEGIN_NAMESPACE_VERSION
 
 // Explicit instantiation due to -fno-implicit-instantiation.
@@ -350,14 +348,13 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
     void __once_proxy()
     {
       function<void()> __once_call = std::move(__once_functor);
-      if (unique_lock<mutex>* __lock = __get_once_functor_lock_ptr())
-      {
+      if (unique_lock<mutex>* __lock = __get_once_functor_lock_ptr()) {
         // caller is using new ABI and provided lock ptr
         __get_once_functor_lock_ptr() = 0;
         __lock->unlock();
-      }
-      else
+      } else {
         __get_once_functor_lock().unlock();  // global lock
+      }
       __once_call();
     }
   }

@@ -1,9 +1,9 @@
 #ifndef GREEN_CREATEACCOUNTCONTROLLER_H
 #define GREEN_CREATEACCOUNTCONTROLLER_H
 
-#include "controller.h"
-
 #include <QtQml>
+
+#include "controller.h"
 
 class CreateAccountController : public Controller
 {

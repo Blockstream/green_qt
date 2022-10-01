@@ -1,11 +1,12 @@
 #include "network.h"
-#include "ga.h"
-#include "json.h"
 
 #include <gdk.h>
 
 #include <QDesktopServices>
 #include <QUrl>
+
+#include "ga.h"
+#include "json.h"
 
 namespace {
 

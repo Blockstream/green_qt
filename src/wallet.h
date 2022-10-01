@@ -1,10 +1,6 @@
 #ifndef GREEN_WALLET_H
 #define GREEN_WALLET_H
 
-#include "activity.h"
-#include "connectable.h"
-#include "session.h"
-
 #include <QtQml>
 #include <QAtomicInteger>
 #include <QList>
@@ -12,6 +8,10 @@
 #include <QQmlListProperty>
 #include <QThread>
 #include <QJsonObject>
+
+#include "activity.h"
+#include "connectable.h"
+#include "session.h"
 
 class Account;
 class Asset;

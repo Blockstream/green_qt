@@ -1,14 +1,15 @@
-#include "handlers/connecthandler.h"
-#include "json.h"
-#include "network.h"
 #include "session.h"
-#include "settings.h"
+
+#include <gdk.h>
 
 #include <QMutex>
 #include <QMutexLocker>
 #include <QtConcurrentRun>
 
-#include <gdk.h>
+#include "handlers/connecthandler.h"
+#include "json.h"
+#include "network.h"
+#include "settings.h"
 
 namespace  {
 QString ElectrumUrlForNetwork(Network* network)

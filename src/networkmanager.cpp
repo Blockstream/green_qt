@@ -1,9 +1,10 @@
-#include "network.h"
 #include "networkmanager.h"
-#include "ga.h"
-#include "json.h"
 
 #include <gdk.h>
+
+#include "network.h"
+#include "ga.h"
+#include "json.h"
 
 static QJsonObject get_networks()
 {

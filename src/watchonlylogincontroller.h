@@ -1,12 +1,15 @@
 #ifndef GREEN_WATCHONLYLOGINCONTROLLER_H
 #define GREEN_WATCHONLYLOGINCONTROLLER_H
 
-#include "connectable.h"
-#include "entity.h"
-#include "wallet.h"
-
 #include <QtQml>
 #include <QObject>
+
+#include "connectable.h"
+#include "entity.h"
+#include "session.h"
+#include "wallet.h"
+
+QT_FORWARD_DECLARE_CLASS(Network)
 
 class WatchOnlyLoginController : public Entity
 {

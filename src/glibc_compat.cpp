@@ -2,10 +2,10 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
+#include <sys/select.h>
+
 #include <cstddef>
 #include <cstdint>
-
-#include <sys/select.h>
 
 // Prior to GLIBC_2.14, memcpy was aliased to memmove.
 extern "C" void* memmove(void* a, const void* b, size_t c);

@@ -1,10 +1,11 @@
+#include "transactionlistmodel.h"
+
+#include <QDebug>
+
 #include "activitymanager.h"
 #include "account.h"
 #include "resolver.h"
 #include "transaction.h"
-#include "transactionlistmodel.h"
-
-#include <QDebug>
 
 TransactionListModel::TransactionListModel(QObject* parent)
     : QAbstractListModel(parent)

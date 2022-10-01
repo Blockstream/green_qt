@@ -1,5 +1,10 @@
-#include "command.h"
 #include "device.h"
+
+#include <wally_core.h>
+#include <wally_bip32.h>
+#include <wally_elements.h>
+
+#include "command.h"
 #include "device_p.h"
 #include "ga.h"
 #include "handler.h"
@@ -9,11 +14,6 @@
 #include "util.h"
 #include "wallet.h"
 #include "walletmanager.h"
-
-
-#include <wally_core.h>
-#include <wally_bip32.h>
-#include <wally_elements.h>
 
 QByteArray pathToData(const QVector<uint32_t>& path)
 {

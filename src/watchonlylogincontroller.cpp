@@ -1,10 +1,12 @@
-#include "loginhandler.h"
-#include "network.h"
-#include "networkmanager.h"
-#include "walletmanager.h"
 #include "watchonlylogincontroller.h"
 
 #include <gdk.h>
+
+#include "loginhandler.h"
+#include "network.h"
+#include "session.h"
+#include "wallet.h"
+#include "walletmanager.h"
 
 WatchOnlyLoginController::WatchOnlyLoginController(QObject* parent)
     : Entity(parent)

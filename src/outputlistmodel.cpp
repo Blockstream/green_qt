@@ -1,10 +1,11 @@
+#include "outputlistmodel.h"
+
+#include <QDebug>
+
 #include "activitymanager.h"
 #include "account.h"
 #include "resolver.h"
 #include "output.h"
-#include "outputlistmodel.h"
-
-#include <QDebug>
 
 OutputListModel::OutputListModel(QObject* parent)
     : QAbstractListModel(parent)

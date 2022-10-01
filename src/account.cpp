@@ -1,4 +1,9 @@
 #include "account.h"
+
+#include <gdk.h>
+
+#include <algorithm>
+
 #include "address.h"
 #include "asset.h"
 #include "balance.h"
@@ -11,10 +16,6 @@
 #include "transaction.h"
 #include "updateaccounthandler.h"
 #include "wallet.h"
-
-#include <algorithm>
-
-#include <gdk.h>
 
 Account::Account(const QJsonObject& data, Wallet* wallet)
     : QObject(wallet)

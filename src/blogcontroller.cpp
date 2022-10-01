@@ -1,8 +1,9 @@
 #include "blogcontroller.h"
-#include "httpmanager.h"
-#include "util.h"
 
 #include <QDomDocument>
+
+#include "httpmanager.h"
+#include "util.h"
 
 BlogPost::BlogPost(QObject* parent)
     : QObject(parent)

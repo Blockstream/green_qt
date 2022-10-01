@@ -1,4 +1,7 @@
 #include "controller.h"
+
+#include <gdk.h>
+
 #include "device.h"
 #include "handler.h"
 #include "json.h"
@@ -6,8 +9,6 @@
 #include "resolver.h"
 #include "session.h"
 #include "wallet.h"
-
-#include <gdk.h>
 
 class SetUnspentOutputsStatusHandler : public Handler
 {

@@ -1,3 +1,17 @@
+#include "wallet.h"
+
+#include <gdk.h>
+
+#include <QDateTime>
+#include <QDebug>
+#include <QJsonObject>
+#include <QLocale>
+#include <QSettings>
+#include <QTimer>
+#include <QUuid>
+
+#include <type_traits>
+
 #include "account.h"
 #include "asset.h"
 #include "balance.h"
@@ -8,23 +22,10 @@
 #include "loginhandler.h"
 #include "network.h"
 #include "util.h"
-#include "wallet.h"
 #include "resolver.h"
 #include "handler.h"
 #include "session.h"
 #include "walletmanager.h"
-
-#include <type_traits>
-
-#include <QDateTime>
-#include <QDebug>
-#include <QJsonObject>
-#include <QLocale>
-#include <QSettings>
-#include <QTimer>
-#include <QUuid>
-
-#include <gdk.h>
 
 class ReloginHandler : public Handler
 {

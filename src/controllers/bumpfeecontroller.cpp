@@ -1,4 +1,7 @@
 #include "bumpfeecontroller.h"
+
+#include <gdk.h>
+
 #include "account.h"
 #include "asset.h"
 #include "balance.h"
@@ -10,8 +13,6 @@
 #include "network.h"
 #include "transaction.h"
 #include "wallet.h"
-
-#include <gdk.h>
 
 BumpFeeController::BumpFeeController(QObject* parent)
     : AccountController(parent)

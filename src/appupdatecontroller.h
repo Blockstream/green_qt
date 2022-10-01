@@ -1,10 +1,10 @@
 #ifndef GREEN_APPUPDATECONTROLLER_H
 #define GREEN_APPUPDATECONTROLLER_H
 
-#include "httprequestactivity.h"
-
 #include <QtQml>
 #include <QObject>
+
+#include "httprequestactivity.h"
 
 class AppUpdateController : public QObject
 {
