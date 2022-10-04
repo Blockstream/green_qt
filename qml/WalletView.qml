@@ -1,4 +1,5 @@
 import Blockstream.Green 0.1
+import Blockstream.Green.Core 0.1
 import QtQuick 2.12
 import QtQuick.Window 2.12
 import QtQuick.Controls 2.14
@@ -73,6 +74,18 @@ MainPage {
                 return label
         }
     }
+
+    readonly property bool ready: {
+        if (!self.wallet) return false
+        if (!self.wallet.ready) return false
+        if (self.wallet.accounts.length === 0) return false
+        for (let i = 0; i < self.wallet.accounts.length; i++) {
+            if (!self.wallet.accounts[i].ready) return false
+        }
+        return true
+    }
+
+    onReadyChanged: if (ready) Analytics.recordEvent('wallet_active', segmentationWalletActive(self.wallet))
 
     FeeEstimates {
         id: fee_estimates

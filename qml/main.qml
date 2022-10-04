@@ -121,6 +121,25 @@ ApplicationWindow {
         return segmentation
     }
 
+    function segmentationWalletActive(wallet) {
+        const segmentation = segmentationSession(wallet)
+        let accounts_funded = 0
+        const accounts_types = new Set
+        const key = wallet.network.liquid ? wallet.network.policyAsset : 'btc'
+        for (let i = 0; i < wallet.accounts.length; ++i) {
+            const account = wallet.accounts[i]
+            accounts_types.add(account.type)
+            if (account.json.satoshi[key] > 0 || Object.keys(account.json.satoshi).length > 1) {
+                accounts_funded ++
+            }
+        }
+        segmentation.wallet_funded = accounts_funded > 0
+        segmentation.accounts_funded = accounts_funded
+        segmentation.accounts = wallet.accounts.length
+        segmentation.accounts_types = Array.from(accounts_types).join(',')
+        return segmentation
+    }
+
     function renameAccount(account, text, active_focus) {
         if (account.rename(text, active_focus)) {
             Analytics.recordEvent('account_rename', segmentationSubAccount(account))
