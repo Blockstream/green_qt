@@ -24,6 +24,7 @@ class Account : public QObject
     Q_PROPERTY(bool hidden READ isHidden NOTIFY hiddenChanged)
     Q_PROPERTY(qint64 balance READ balance NOTIFY balanceChanged)
     Q_PROPERTY(QQmlListProperty<Balance> balances READ balances NOTIFY balancesChanged)
+    Q_PROPERTY(bool ready READ isReady NOTIFY readyChanged)
     QML_ELEMENT
 public:
     explicit Account(const QJsonObject& data, Wallet* wallet);
@@ -53,6 +54,7 @@ public:
     Address *getOrCreateAddress(const QJsonObject &data);
     Q_INVOKABLE Balance* getBalanceByAssetId(const QString &id) const;
     Q_INVOKABLE Transaction* getTransactionByTxHash(const QString &id) const;
+    bool isReady() const { return m_ready; }
 signals:
     void walletChanged();
     void jsonChanged();
@@ -62,6 +64,7 @@ signals:
     void balancesChanged();
     void notificationHandled(const QJsonObject& notification);
     void addressGenerated();
+    void readyChanged();
 public slots:
     void reload();
     bool rename(QString name, bool active_focus);
@@ -82,6 +85,7 @@ private:
     QMap<QString, Address*> m_address_by_hash;
     QList<Balance*> m_balances;
     QMap<QString, Balance*> m_balance_by_id;
+    bool m_ready{false};
     friend class Wallet;
 };
 

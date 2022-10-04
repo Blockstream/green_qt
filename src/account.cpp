@@ -131,6 +131,10 @@ void Account::reload()
         m_json.insert("satoshi", balance);
         emit jsonChanged();
         updateBalance();
+        if (!m_ready) {
+            m_ready = true;
+            emit readyChanged();
+        }
     });
     QObject::connect(handler, &Handler::resolver, this, [](Resolver* resolver) {
         resolver->resolve();
