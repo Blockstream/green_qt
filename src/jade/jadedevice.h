@@ -6,7 +6,7 @@
 
 #include "device.h"
 
-QT_FORWARD_DECLARE_CLASS (JadeAPI)
+QT_FORWARD_DECLARE_CLASS(JadeAPI)
 
 class JadeDevice : public Device
 {

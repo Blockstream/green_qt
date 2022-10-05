@@ -51,7 +51,7 @@ void Wallet::disconnect()
 {
     Q_ASSERT(m_authentication == Authenticated);
 
-    if (m_logout_timer != -1 ) {
+    if (m_logout_timer != -1) {
         killTimer(m_logout_timer);
         m_logout_timer = -1;
         qApp->removeEventFilter(this);
@@ -434,7 +434,7 @@ void Wallet::save()
     if (m_watch_only) {
         data.insert("username", m_username);
     }
-    if (m_login_attempts_remaining > 0 || !m_pin_data.isEmpty() ) {
+    if (m_login_attempts_remaining > 0 || !m_pin_data.isEmpty()) {
         data.insert("login_attempts_remaining", m_login_attempts_remaining);
         data.insert("pin_data", QString::fromLocal8Bit(m_pin_data.toBase64()));
     }
@@ -681,7 +681,7 @@ void Wallet::setSettings(const QJsonObject& settings)
     updateDisplayUnit();
     emit settingsChanged();
 
-    if (m_logout_timer != -1 ) {
+    if (m_logout_timer != -1) {
         killTimer(m_logout_timer);
         m_logout_timer = -1;
     }

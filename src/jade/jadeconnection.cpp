@@ -55,7 +55,7 @@ void JadeConnection::onDataReceived(const QByteArray &data) {
         m_unparsed.append(data);
 
         // Try to parse cbor objects from byte buffer until it has no more complete objects
-        for(bool readNextObj = true; readNextObj; /*nothing - set in loop*/) {
+        for (bool readNextObj = true; readNextObj; /*nothing - set in loop*/) {
             QCborParserError err;
             const QCborValue cbor = QCborValue::fromCbor(m_unparsed, &err);
             // qDebug() << "Read Type:" << cbor.type() << "and error: " << err.error;

@@ -19,8 +19,8 @@ static void DeviceRemovalCallback(void* context, IOReturn /* result */, void* /*
 
 static CFMutableDictionaryRef createMatchingVendorID(int32_t vendor_id)
 {
-    CFMutableDictionaryRef dict = CFDictionaryCreateMutable( kCFAllocatorDefault, 1, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
-    CFNumberRef vendor_id_ref = CFNumberCreate( kCFAllocatorDefault, kCFNumberIntType, &vendor_id);
+    CFMutableDictionaryRef dict = CFDictionaryCreateMutable(kCFAllocatorDefault, 1, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+    CFNumberRef vendor_id_ref = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &vendor_id);
     CFDictionarySetValue(dict, CFSTR(kIOHIDVendorIDKey), vendor_id_ref);
     CFRelease(vendor_id_ref);
     return dict;
@@ -28,10 +28,10 @@ static CFMutableDictionaryRef createMatchingVendorID(int32_t vendor_id)
 
 static CFMutableDictionaryRef createMatchingDictionary(int32_t vendor_id, int32_t product_id, uint32_t usage_page)
 {
-    CFMutableDictionaryRef dict = CFDictionaryCreateMutable( kCFAllocatorDefault, 1, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
-    CFNumberRef vendor_id_ref = CFNumberCreate( kCFAllocatorDefault, kCFNumberIntType, &vendor_id);
-    CFNumberRef product_id_ref = CFNumberCreate( kCFAllocatorDefault, kCFNumberIntType, &product_id);
-    CFNumberRef usage_page_ref = CFNumberCreate( kCFAllocatorDefault, kCFNumberIntType, &usage_page);
+    CFMutableDictionaryRef dict = CFDictionaryCreateMutable(kCFAllocatorDefault, 1, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+    CFNumberRef vendor_id_ref = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &vendor_id);
+    CFNumberRef product_id_ref = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &product_id);
+    CFNumberRef usage_page_ref = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &usage_page);
     CFDictionarySetValue(dict, CFSTR(kIOHIDVendorIDKey), vendor_id_ref);
     CFDictionarySetValue(dict, CFSTR(kIOHIDProductIDKey), product_id_ref);
     CFDictionarySetValue(dict, CFSTR(kIOHIDDeviceUsagePageKey), usage_page_ref);

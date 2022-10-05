@@ -125,8 +125,7 @@ void JadeBleImpl::onServiceStateChange(const QLowEnergyService::ServiceState new
 
     // Ignore invocations other than expected service discovered
     const QLowEnergyService *const source = qobject_cast<QLowEnergyService *>(sender());
-    if(source != m_service)
-    {
+    if (source != m_service) {
         qWarning() << "JadeBleImpl::onServiceStateChange() ignoring unexpected service:" << source->serviceUuid();
         return;
     }
