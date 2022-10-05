@@ -77,7 +77,6 @@ class ServiceInfo: public QObject
     Q_PROPERTY(QString serviceCurrentVersion READ getCurrentVersion NOTIFY serviceChanged)
 
 public:
-
     ServiceInfo() = default;
     ServiceInfo(JadeDevice2 *jade);
 

@@ -365,7 +365,6 @@ public:
         nextTrustedCommitment(0);
     }
     void nextTrustedCommitment(int index) {
-
         const auto output = m_outputs.at(index).toObject();
 
         if (output.value("is_fee").toBool()) {

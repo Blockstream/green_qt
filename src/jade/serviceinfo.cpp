@@ -58,7 +58,6 @@ ServiceInfo::ServiceInfo(JadeDevice2 *service):
 
 JadeDevice2 *ServiceInfo::jade_service() const
 {
-
     return m_jade;
 }
 

@@ -11,7 +11,6 @@
 
 ExportAddressesController::ExportAddressesController(QObject *parent) : QObject(parent)
 {
-
 }
 
 void ExportAddressesController::setAccount(Account *account)

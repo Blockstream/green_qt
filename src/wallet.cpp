@@ -739,7 +739,6 @@ WalletActivity::WalletActivity(Wallet* wallet, QObject* parent)
     : Activity(parent)
     , m_wallet(wallet)
 {
-
 }
 
 WalletAuthenticateActivity::WalletAuthenticateActivity(Wallet* wallet, QObject* parent)
@@ -763,7 +762,6 @@ void WalletRefreshAssets::exec()
 WalletUpdateAccountsActivity::WalletUpdateAccountsActivity(Wallet* wallet, QObject* parent)
     : WalletActivity(wallet, parent)
 {
-
 }
 
 void WalletUpdateAccountsActivity::exec()
@@ -773,12 +771,10 @@ void WalletUpdateAccountsActivity::exec()
 WalletSignupActivity::WalletSignupActivity(Wallet *wallet, QObject *parent)
     : WalletActivity(wallet, parent)
 {
-
 }
 
 void WalletSignupActivity::exec()
 {
-
 }
 
 LoginWithPinController::LoginWithPinController(QObject* parent)

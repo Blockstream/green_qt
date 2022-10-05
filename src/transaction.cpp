@@ -66,12 +66,10 @@ Transaction::Transaction(Account* account)
     : QObject(account)
     , m_account(account)
 {
-
 }
 
 Transaction::~Transaction()
 {
-
 }
 
 bool Transaction::isUnconfirmed() const

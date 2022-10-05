@@ -17,7 +17,6 @@
 
 ExportTransactionsController::ExportTransactionsController(QObject *parent) : QObject(parent)
 {
-
 }
 
 void ExportTransactionsController::setAccount(Account *account)

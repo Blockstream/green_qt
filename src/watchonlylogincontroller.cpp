@@ -60,8 +60,8 @@ void WatchOnlyLoginController::setSaveWallet(bool save_wallet)
 void WatchOnlyLoginController::updateValid()
 {
     setValid(m_network && !m_username.isEmpty() && !m_password.isEmpty());
-
 }
+
 void WatchOnlyLoginController::login()
 {
     if (!m_valid) return;

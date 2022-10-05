@@ -91,7 +91,6 @@ void JadeConnection::onDataReceived(const QByteArray &data) {
                 disconnectDevice();
             }
         }
-
     } catch (...) {
         qWarning() << "JadeConnection::onDataReceived() ERROR";
         disconnectDevice();

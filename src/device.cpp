@@ -165,7 +165,6 @@ Command::Command(CommandBatch* batch)
 
 Command::~Command()
 {
-
 }
 
 bool DeviceCommand::parse(const QByteArray& data)

@@ -14,7 +14,6 @@ OutputListModel::OutputListModel(QObject* parent)
 
 OutputListModel::~OutputListModel()
 {
-
 }
 
 void OutputListModel::setAccount(Account *account)

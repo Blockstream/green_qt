@@ -258,7 +258,6 @@ AccountActivity::AccountActivity(Account* account, QObject* parent)
     : WalletActivity(account->wallet(), parent)
     , m_account(account)
 {
-
 }
 
 #include "handlers/gettransactionshandler.h"

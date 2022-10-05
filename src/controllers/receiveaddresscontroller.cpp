@@ -36,7 +36,6 @@ public:
 
 ReceiveAddressController::ReceiveAddressController(QObject *parent) : QObject(parent)
 {
-
 }
 
 ReceiveAddressController::~ReceiveAddressController()

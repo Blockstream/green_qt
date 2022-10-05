@@ -22,7 +22,6 @@ TransactionListModel::TransactionListModel(QObject* parent)
 
 TransactionListModel::~TransactionListModel()
 {
-
 }
 
 void TransactionListModel::setAccount(Account *account)

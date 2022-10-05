@@ -4,7 +4,6 @@
 
 Navigation::Navigation(QObject *parent) : QObject(parent)
 {
-
 }
 
 void Navigation::setLocation(const QString &location)

@@ -5,5 +5,5 @@ cpplint --quiet \
   --recursive src
 
 cpplint --quiet \
-  --filter=-,+whitespace/parens \
+  --filter=-,+whitespace/blank_line,+whitespace/parens \
   --recursive src
