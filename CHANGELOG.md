@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+
+### Changed
+
+### Fixed
+
+## [1.1.4] - 2022-10-05
+### Added
 - Support for incremental Jade firmware update
 - Enable Request Two-Factor Reset for liquid
 - Add quick action on the sidebar to create wallet
