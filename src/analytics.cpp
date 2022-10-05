@@ -28,7 +28,7 @@ static Analytics* g_analytics_instance{nullptr};
 namespace {
 const std::string COUNTLY_HOST = "https://countly.blockstream.com";
 const std::string COUNTLY_TOR_ENDPOINT = "http://greciphd2z3eo6bpnvd6mctxgfs4sslx4hyvgoiew4suoxgoquzl72yd.onion";
-const std::string COUNTLY_APP_KEY = "cb8e449057253add71d2f9b65e5f66f73c073e63";
+const std::string COUNTLY_APP_KEY = "351d316234a4a83169fecd7e760ef64bfd638d21";
 
 std::map<std::string, std::string> QVariantMapToStdMap(const QVariantMap& in)
 {
