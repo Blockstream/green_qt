@@ -26,9 +26,10 @@
 static Analytics* g_analytics_instance{nullptr};
 
 namespace {
-const std::string COUNTLY_HOST = "https://countly.blockstream.com";
-const std::string COUNTLY_TOR_ENDPOINT = "http://greciphd2z3eo6bpnvd6mctxgfs4sslx4hyvgoiew4suoxgoquzl72yd.onion";
-const std::string COUNTLY_APP_KEY = "351d316234a4a83169fecd7e760ef64bfd638d21";
+inline constexpr char COUNTLY_HOST[] = "https://countly.blockstream.com";
+inline constexpr char COUNTLY_TOR_ENDPOINT[] = "http://greciphd2z3eo6bpnvd6mctxgfs4sslx4hyvgoiew4suoxgoquzl72yd.onion";
+inline constexpr char COUNTLY_APP_KEY_DEV[] = "cb8e449057253add71d2f9b65e5f66f73c073e63";
+inline constexpr char COUNTLY_APP_KEY_REL[] = "351d316234a4a83169fecd7e760ef64bfd638d21";
 
 std::map<std::string, std::string> QVariantMapToStdMap(const QVariantMap& in)
 {
@@ -154,10 +155,12 @@ void Analytics::start()
         m_timestamp_offset = std::chrono::seconds(timestamp_offset);
     }
 
+    const bool is_release = QStringLiteral("release") == QT_STRINGIFY(BUILD_TYPE);
+
     auto& countly = cly::Countly::getInstance();
     countly.setDeviceID(device_id.toStdString(), false);
     countly.setTimestampOffset(m_timestamp_offset);
-    countly.start(COUNTLY_APP_KEY, COUNTLY_HOST, 443, true);
+    countly.start(is_release ? COUNTLY_APP_KEY_REL : COUNTLY_APP_KEY_DEV, COUNTLY_HOST, 443, true);
     m_active = true;
 }
 
