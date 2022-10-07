@@ -61,7 +61,10 @@ ItemDelegate {
             return qsTrId('id_sent') + separator + memo
         }
         if (transaction.type === Transaction.Redeposit) {
-            return qsTrId("id_redeposited") + separator + memo
+            return qsTrId('id_redeposited') + separator + memo
+        }
+        if (transaction.type === Transaction.Mixed) {
+            return qsTrId('id_swap') + separator + memo
         }
         return JSON.stringify(tx, null, '\t')
     }
@@ -107,27 +110,31 @@ ItemDelegate {
                 sourceSize.height: 24
             }
         }
-        Label {
-            Layout.fillWidth: true
-            Layout.maximumWidth: Math.max(contentWidth, self.width / 5)
-            Layout.minimumWidth: contentWidth
-            color: transaction.type === Transaction.Incoming ? '#00b45a' : 'white'
-            horizontalAlignment: Qt.AlignRight
-            font.pixelSize: 16
-            font.styleName: 'Medium'
-            text: {
-                if (transaction.amounts.length === 1) {
-                    const amount = transaction.amounts[0]
-                    if (transaction.type === Transaction.Outgoing) {
+        ColumnLayout {
+            spacing: constants.s1
+            Layout.fillWidth: false
+            Repeater {
+                model: Object.entries(transaction.data.satoshi)
+                Label {
+                    visible: {
                         const network = transaction.account.wallet.network
-                        if (!network.liquid || amount.asset.isLBTC) {
-                            const key = network.liquid ? network.policyAsset : 'btc'
-                            return formatAmount(transaction.data.satoshi[key])
+                        const [id, amount] = modelData
+                        if (network.liquid && transaction.type === Transaction.Outgoing && id === network.policyAsset && amount === -transaction.data.fee) return false
+                        return true
+                    }
+                    Layout.alignment: Qt.AlignRight
+                    color: modelData[1] > 0 ? '#00b45a' : 'white'
+                    font.pixelSize: 16
+                    font.styleName: 'Medium'
+                    text: {
+                        const network = transaction.account.wallet.network
+                        const [id, amount] = modelData
+                        if (network.liquid) {
+                            return wallet.getOrCreateAsset(id).formatAmount(amount, true)
+                        } else {
+                            return formatAmount(amount)
                         }
                     }
-                    return amount.formatAmount(true)
-                } else {
-                    return qsTrId('id_multiple_assets')
                 }
             }
         }

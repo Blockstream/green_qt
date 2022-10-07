@@ -1,4 +1,4 @@
-image: greenaddress/ci@sha256:2dc63b5e7a02df7175ea0e978d215a314fbc44d9411a2deac22f782661e4778e
+image: greenaddress/ci@sha256:c9c0bfc0eef0575d5822f9308ab16ff904a8bf99946c67938dd7637d70998220
 
 stages:
   - lint
@@ -24,8 +24,6 @@ bionic_release:
     - ga
   stage: build
   script:
-    - apt-get update -qq && apt-get install -yqq --no-install-recommends --no-install-suggests cmake
-    - cmake --version
     - ./tools/buildcountly.sh /docker_bld_root/build-linux-gcc
     - ./tools/buildgreen.sh linux
     - mkdir build-linux-gcc
@@ -44,8 +42,6 @@ windows_release:
     - ga
   stage: build
   script:
-    - apt-get update -qq && apt-get install -yqq --no-install-recommends --no-install-suggests cmake
-    - cmake --version
     - ./tools/buildcountly.sh /docker_bld_root/build-mingw-w64 $(pwd)/cmake/mingw-w64-x86_64.cmake
     - ./tools/buildgreen.sh windows
     - mkdir -p build-mingw-w64/release
@@ -63,7 +59,6 @@ osx_release:
   stage: build
   script:
     - cd $CI_PROJECT_DIR
-    - cmake --version
     - ./tools/buildcountly.sh $(pwd)/build-osx-clang
     - ./tools/buildgreen.sh osx
   cache:

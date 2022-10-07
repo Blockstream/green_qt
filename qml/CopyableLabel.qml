@@ -29,7 +29,7 @@ Label {
         height: self.height + 16
         padding: 8
         opacity: 0
-        visible: hover_handler.hovered || (popup.visible && popup_hover_handler.hovered)
+        visible: hover_handler.hovered || popup_hover_handler.hovered
         parent: Overlay.overlay
         contentItem: RowLayout {
             spacing: 8

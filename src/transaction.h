@@ -28,7 +28,7 @@ public:
 
     qint64 amount() const { return m_amount; }
 
-    Q_INVOKABLE QString formatAmount(bool include_ticker = true, bool ignore_transaction_type = false) const;
+    Q_INVOKABLE QString formatAmount(bool include_ticker = true) const;
 private:
     Transaction* const m_transaction;
     Asset* const m_asset;
@@ -52,6 +52,7 @@ public:
         Incoming,
         Outgoing,
         Redeposit,
+        Mixed,
     };
     Q_ENUM(Type)
     enum class SPVStatus {

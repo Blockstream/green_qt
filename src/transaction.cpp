@@ -16,6 +16,7 @@ Transaction::Type ParseType(const QString& type)
     if (type == QStringLiteral("incoming")) return Transaction::Type::Incoming;
     if (type == QStringLiteral("outgoing")) return Transaction::Type::Outgoing;
     if (type == QStringLiteral("redeposit")) return Transaction::Type::Redeposit;
+    if (type == QStringLiteral("mixed")) return Transaction::Type::Mixed;
     return Transaction::Type::Unknown;
 }
 
@@ -52,13 +53,12 @@ TransactionAmount::~TransactionAmount()
 {
 }
 
-QString TransactionAmount::formatAmount(bool include_ticker, bool ignore_transaction_type) const
+QString TransactionAmount::formatAmount(bool include_ticker) const
 {
-    const QString prefix = !ignore_transaction_type && m_transaction->data().value("type").toString() != "incoming" ? "-" : "";
     if (m_asset) {
-        return prefix + m_asset->formatAmount(m_amount, include_ticker);
+        return m_asset->formatAmount(m_amount, include_ticker);
     } else {
-        return prefix + m_transaction->account()->wallet()->formatAmount(m_amount, include_ticker);
+        return m_transaction->account()->wallet()->formatAmount(m_amount, include_ticker);
     }
 }
 
@@ -104,21 +104,21 @@ void Transaction::updateFromData(const QJsonObject& data)
 
     // Amounts are one time set
     const auto satoshi = m_data.value("satoshi").toObject();
-    const bool is_outgoing = m_data.value("type").toString() == "outgoing";
 
     // FIXME: because redeposits have incorrect satoshi.btc values we compute
     // amounts again. note that above we early return if m_data doesn't change.
     auto amounts = m_amounts;
     m_amounts.clear();
-    Wallet* wallet = m_account->wallet();
-    if (wallet->network()->isLiquid()) {
-        const auto policy_asset = wallet->network()->policyAsset();
+    auto wallet = m_account->wallet();
+    auto network = wallet->network();
+    if (network->isLiquid()) {
+        const auto policy_asset = network->policyAsset();
         const qint64 fee = m_data.value("fee").toDouble();
         for (auto i = satoshi.constBegin(); i != satoshi.constEnd(); ++i) {
             qint64 amount = i.value().toDouble();
             Asset* asset = wallet->getOrCreateAsset(i.key());
-            if (is_outgoing && asset->id() == policy_asset) amount -= fee;
-            if (amount > 0) m_amounts.append(new TransactionAmount(this, asset, amount));
+            if (asset->id() == policy_asset && amount < 0) amount += fee;
+            if (amount != 0) m_amounts.append(new TransactionAmount(this, asset, amount));
         }
     } else {
         qint64 amount = satoshi.value("btc").toDouble();

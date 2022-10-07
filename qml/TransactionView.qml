@@ -19,6 +19,7 @@ WalletDialog {
             case Transaction.Incoming: return qsTrId('id_incoming')
             case Transaction.Outgoing: return qsTrId('id_outgoing')
             case Transaction.Redeposit: return qsTrId('id_redeposited')
+            case Transaction.Mixed: return qsTrId('id_swap')
         }
     }
 
@@ -64,7 +65,6 @@ WalletDialog {
                     }
                     ColumnLayout {
                         CopyableLabel {
-                            Layout.fillWidth: true
                             text: amount.asset.name
                             font.pixelSize: 14
                             elide: Label.ElideRight
@@ -77,7 +77,6 @@ WalletDialog {
                                 text: amount.asset.data.entity.domain
                                 elide: Label.ElideRight
                             }
-                            Layout.fillWidth: true
                         }
 
                     }
@@ -88,7 +87,7 @@ WalletDialog {
                             wallet.displayUnit
                             return amount.formatAmount(true)
                         }
-                        color: amount.transaction.type === Transaction.Incoming ? '#00b45a' : 'white'
+                        color: amount.amount > 0 ? '#00b45a' : 'white'
                         font.pixelSize: 16
                         font.styleName: 'Medium'
                     }
@@ -179,7 +178,7 @@ WalletDialog {
 
             Repeater {
                 visible: count > 0
-                model: transaction.type === Transaction.Redeposit ? [] : transaction.amounts
+                model: transaction.amounts
                 delegate: network.liquid ? liquid_amount_delegate : bitcoin_amount_delegate
             }
 
@@ -220,14 +219,23 @@ WalletDialog {
                 }
 
                 Rectangle {
-                    visible: transaction.type === Transaction.Outgoing && Object.keys(transaction.data.satoshi).length === 1
+                    visible: total_with_fee.visible
                     Layout.fillWidth: true
                     Layout.preferredHeight: 1
                     color: constants.c500
                 }
 
                 RowLayout {
-                    visible: transaction.type === Transaction.Outgoing && Object.keys(transaction.data.satoshi).length === 1
+                    id: total_with_fee
+                    visible: {
+                        const network = transaction.account.wallet.network
+                        if (network.liquid) {
+                            const satoshi = transaction.data.satoshi[network.policyAsset] || 0
+                            return satoshi < -transaction.data.fee
+                        } else {
+                            return transaction.type === Transaction.Outgoing
+                        }
+                    }
                     spacing: 16
                     Label {
                         text: qsTrId('id_total_with_fee')
