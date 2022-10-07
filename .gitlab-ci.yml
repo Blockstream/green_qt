@@ -9,7 +9,9 @@ stages:
   - deploy
   - publish
 
-lint:
+cpplint:
+  tags:
+    - ga
   stage: lint
   script:
     - virtualenv -p python3 .venv
