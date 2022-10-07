@@ -132,7 +132,7 @@ ColumnLayout {
                     background: null
                     contentItem: RowLayout {
                         Layout.fillHeight: false
-                        spacing: 16
+                        spacing: constants.p0
                         GTextField {
                             id: username_field
                             text: wallet.username

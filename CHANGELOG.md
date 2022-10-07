@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 ### Fixed
+- Fix watch only login button trim
 
 ## [1.1.4] - 2022-10-05
 ### Added
