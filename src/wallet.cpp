@@ -27,6 +27,31 @@
 #include "util.h"
 #include "walletmanager.h"
 
+#include <nlohmann/json.hpp>
+
+namespace {
+void UpdateAsset(GA_session* session, Asset* asset)
+{
+    const auto id = asset->id().toStdString();
+
+    const nlohmann::json params = {{ "assets_id", { id } }};
+    nlohmann::json* output;
+
+    const auto err = GA_get_assets(session, (const GA_json*) &params, (GA_json**) &output);
+    Q_ASSERT(err == GA_OK);
+
+    if (output->at("assets").contains(id)) {
+        const auto data = output->at("assets").at(id);
+        asset->setData(Json::toObject((GA_json*) &data));
+    }
+    if (output->at("icons").contains(id)) {
+        const auto icon = output->at("icons").at(id).get<std::string>();
+        asset->setIcon(QString("data:image/png;base64,") + QString::fromStdString(icon));
+    }
+    GA_destroy_json((GA_json*) output);
+}
+}
+
 class ReloginHandler : public Handler
 {
 public:
@@ -262,8 +287,6 @@ class RefreshAssetsHandler : public Handler
 {
 public:
     const bool m_refresh;
-    QJsonObject m_assets;
-
     RefreshAssetsHandler(bool refresh, Session* session)
         : Handler(session)
         , m_refresh(refresh)
@@ -280,10 +303,7 @@ public:
         GA_json* output;
         int rc = GA_refresh_assets(session, params.get(), &output);
         if (rc != GA_OK) return;
-
-        m_assets = Json::toObject(output);
-        rc = GA_destroy_json(output);
-        Q_ASSERT(rc == GA_OK);
+        GA_destroy_json(output);
     }
 };
 
@@ -297,25 +317,11 @@ void Wallet::refreshAssets(bool refresh)
     auto handler = new RefreshAssetsHandler(refresh, m_session);
     handler->exec();
 
-    connect(handler, &Handler::done, this, [this, handler, activity] {
+    connect(handler, &Handler::done, this, [=] {
         handler->deleteLater();
 
-        if (handler->m_assets.empty()) {
-            activity->fail();
-            activity->deleteLater();
-            return;
-        }
-
-        auto icons = handler->m_assets.value("icons").toObject();
-
-        for (auto&& ref : handler->m_assets.value("assets").toObject()) {
-            QString id = ref.toObject().value("asset_id").toString();
-            if (id.isEmpty()) continue;
-            Asset* asset = getOrCreateAsset(id);
-            asset->setData(ref.toObject());
-            if (icons.contains(id)) {
-                asset->setIcon("data:image/png;base64," + icons.value(id).toString());
-            }
+        for (auto asset : m_assets.values()) {
+            UpdateAsset(m_session->m_session, asset);
         }
 
         for (auto account : m_accounts) {
@@ -560,6 +566,7 @@ Asset* Wallet::getOrCreateAsset(const QString& id)
     if (!asset) {
         asset = new Asset(id, this);
         m_assets.insert(id, asset);
+        UpdateAsset(m_session->m_session, asset);
     }
     return asset;
 }
