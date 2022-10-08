@@ -34,6 +34,13 @@ Pane {
             location: '/home'
             text: qsTrId('id_home')
         }
+        SideButton {
+            visible: Settings.showNews
+            icon.source: 'qrc:/svg/blockstream-logo.svg'
+            location: '/blockstream'
+            text: 'Blockstream News'
+            busy: blockstream_view.busy
+        }
         RowLayout {
             SideLabel {
                 text: qsTrId('id_wallets')
@@ -140,16 +147,16 @@ Pane {
                     text: qsTrId('id_devices')
                 }
                 SideButton {
-                    icon.source: 'qrc:/svg/blockstream-logo.svg'
+                    icon.source: 'qrc:/svg/jade_emblem_on_transparent_rgb.svg'
                     location: '/jade'
                     count: jade_view.count
-                    text: 'Blockstream'
+                    text: 'Blockstream Jade'
                 }
                 SideButton {
                     icon.source: 'qrc:/svg/ledger-logo.svg'
                     location: '/ledger'
                     count: ledger_view.count
-                    text: 'Ledger'
+                    text: 'Ledger Nano'
                 }
             }
         }

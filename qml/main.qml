@@ -217,6 +217,10 @@ ApplicationWindow {
                 HomeView {
                     readonly property bool active: navigation.path === '/home'
                 }
+                BlockstreamView {
+                    id: blockstream_view
+                    readonly property bool active: navigation.path === '/blockstream'
+                }
                 PreferencesView {
                     readonly property bool active: navigation.path === '/preferences'
                 }

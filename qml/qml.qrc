@@ -145,5 +145,6 @@
         <file>AnalyticsConsentDialog.qml</file>
         <file>RemoveWalletDialog.qml</file>
         <file>LeftArrowToolTip.qml</file>
+        <file>BlockstreamView.qml</file>
     </qresource>
 </RCC>

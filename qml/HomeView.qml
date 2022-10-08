@@ -72,16 +72,7 @@ MainPage {
         }
 
         spacing: constants.p4
-        Loader {
-            Layout.rightMargin: 16
-            Layout.fillWidth: true
-            Layout.minimumHeight: 240
-            active: Settings.showNews
-            visible: active
-            sourceComponent: NewsPage {
-                id: news_page
-            }
-        }
+
         RowLayout {
             Layout.fillWidth: true
             Layout.fillHeight: true
