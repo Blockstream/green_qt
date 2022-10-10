@@ -8,9 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 ### Changed
+- Updates GDK to 0.0.56
 
 ### Fixed
 - Fix watch only login button trim
+- Popup with button to copy being activated below dialogs
 
 ## [1.1.4] - 2022-10-05
 ### Added

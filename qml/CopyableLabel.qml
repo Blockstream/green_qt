@@ -8,9 +8,11 @@ Label {
     property real delay: 500
     property string copyText: text
     signal copy
-    HoverHandler {
+    MouseArea {
         id: hover_handler
-        onHoveredChanged: check_timer.stop()
+        anchors.fill: parent
+        hoverEnabled: true
+        onContainsMouseChanged: check_timer.stop()
     }
     Timer {
         id: check_timer
@@ -19,7 +21,7 @@ Label {
     }
     Popup {
         readonly property point scenePosition: {
-            hover_handler.hovered
+            hover_handler.containsMouse
             return dynamicScenePosition(self, -8, -8)
         }
         id: popup
@@ -29,7 +31,7 @@ Label {
         height: self.height + 16
         padding: 8
         opacity: 0
-        visible: hover_handler.hovered || popup_hover_handler.hovered
+        visible: hover_handler.containsMouse || popup_hover_handler.containsMouse
         parent: Overlay.overlay
         contentItem: RowLayout {
             spacing: 8
@@ -50,11 +52,11 @@ Label {
             border.width: 1
             border.color: constants.c200
             radius: 4
-            HoverHandler {
+            MouseArea {
                 id: popup_hover_handler
-            }
-            TapHandler {
-                onTapped: {
+                anchors.fill: parent
+                hoverEnabled: true
+                onClicked: {
                     Clipboard.copy(self.copyText)
                     check_timer.start()
                     self.copy()
