@@ -44,6 +44,7 @@ Button {
     onClicked: {
         Clipboard.copy(account.json.receiving_id);
         ToolTip.show(qsTrId('id_copied_to_clipboard'), 1000);
+        if (self.amp) Analytics.recordEvent('share_amp_id')
     }
     ToolTip.delay: 300
     ToolTip.visible: hovered
