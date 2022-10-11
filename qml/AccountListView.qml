@@ -204,8 +204,10 @@ SwipeView {
                 }
             }
             RowLayout {
+                visible: asset_icon_repeater.model.lenght > 0
                 spacing: 2
                 Repeater {
+                    id: asset_icon_repeater
                     model: {
                         const assets = []
                         let without_icon = false
