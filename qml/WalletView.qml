@@ -68,6 +68,10 @@ MainPage {
                 return qsTrId('id_locked')
             case 'expired':
                 return qsTrId('id_2fa_expired')
+            case 'p2wpkh':
+                return 'p2wpkh'
+            case 'p2sh-p2wpkh':
+                return 'p2sh-p2wpkh'
             default:
                 console.warn(`missing localized label for ${label}`)
                 console.trace()
