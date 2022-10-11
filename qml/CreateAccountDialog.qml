@@ -30,7 +30,10 @@ ControllerDialog {
     controller: CreateAccountController {
         id: create_account_controller
         wallet: dialog.wallet
-        onCreated: dialog.push(handler, doneComponent)
+        onCreated: {
+            dialog.push(handler, doneComponent)
+            Analytics.recordEvent('account_create', segmentationSubAccount(account))
+        }
     }
 
     doneText: qsTrId('id_new_account_created')

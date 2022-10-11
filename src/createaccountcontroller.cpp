@@ -84,7 +84,7 @@ void CreateAccountController::create()
         // TODO switch to new account
         auto account = wallet()->getOrCreateAccount(handler->result().value("result").toObject());
         wallet()->reload();
-        emit created(handler);
+        emit created(handler, account);
     });
     exec(handler);
 }

@@ -5,6 +5,8 @@
 
 #include "controller.h"
 
+QT_FORWARD_DECLARE_CLASS(Account)
+
 class CreateAccountController : public Controller
 {
     Q_OBJECT
@@ -29,7 +31,7 @@ public:
 signals:
     void nameChanged(const QString& name);
     void typeChanged(const QString& type);
-    void created(Handler* handler);
+    void created(Handler* handler, Account* account);
     void recoveryMnemonicSizeChanged(int recovery_mnemonic_size);
     void recoveryMnemonicChanged(const QStringList& recovery_mnemonic);
     void recoveryXpubChanged(QString recoveryXpub);
