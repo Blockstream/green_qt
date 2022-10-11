@@ -303,6 +303,7 @@ signals:
     void walletChanged(Wallet* wallet);
     void pinChanged(const QByteArray& pin);
     void loginDone();
+    void loginFailed();
 private slots:
     void update();
 private:

@@ -843,6 +843,7 @@ void LoginWithPinController::update()
         qWarning() << "unhandled login_with_pin error";
         activity->fail();
         activity->deleteLater();
+        emit loginFailed();
     });
     handler->exec();
 }

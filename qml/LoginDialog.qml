@@ -103,7 +103,14 @@ AbstractDialog {
             LoginWithPinController {
                 wallet: self.wallet
                 pin: pin_view.pin.value
-                onLoginDone: Analytics.recordEvent('wallet_login', segmentationWalletLogin(self.wallet, { method: 'pin' }))
+                onLoginDone: {
+                    Analytics.recordEvent('wallet_login', segmentationWalletLogin(self.wallet, {
+                        method: 'pin'
+                    }))
+                }
+                onLoginFailed: {
+                    Analytics.recordEvent('failed_wallet_login', segmentationSession(self.wallet))
+                }
             }
             Connections {
                 target: self.wallet
