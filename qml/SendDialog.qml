@@ -37,6 +37,9 @@ ControllerDialog {
                 with_memo: self.controller.memo !== '',
             }))
         }
+        onError: {
+            Analytics.recordEvent('failed_transaction', segmentationSession(self.account.wallet))
+        }
     }
     doneText: qsTrId('id_transaction_sent')
     minimumWidth: 500
