@@ -46,7 +46,6 @@ TransactionAmount::TransactionAmount(Transaction* transaction, Asset* asset, qin
 {
     Q_ASSERT(m_transaction);
     Q_ASSERT(!m_asset || m_asset->wallet() == transaction->account()->wallet());
-    Q_ASSERT(m_amount > 0);
 }
 
 TransactionAmount::~TransactionAmount()
