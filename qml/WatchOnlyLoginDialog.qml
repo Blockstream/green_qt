@@ -17,6 +17,9 @@ AbstractDialog {
         password: password_field.text
         saveWallet: remember_checkbox.checked
         onWalletChanged: {
+            if (controller.saveWallet) {
+                Analytics.recordEvent('wallet_restore_watch_only', segmentationSession(wallet))
+            }
             window.navigation.go(`/${wallet.network.key}/${wallet.id}`)
             self.accept()
         }
