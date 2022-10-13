@@ -55,7 +55,6 @@ Page {
             id: controller
             network: {
                 const network = navigation.param.network || ''
-                //const server_type = navigation.param.type === 'amp' ? 'green' : (navigation.param.server_type || '')
                 return NetworkManager.networkWithServerType(network, self.server_type)
             }
             type: navigation.param.type || ''

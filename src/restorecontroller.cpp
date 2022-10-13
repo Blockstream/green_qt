@@ -98,12 +98,11 @@ void RestoreController::accept()
             }
         }
 
+        emit finished();
         WalletManager::instance()->insertWallet(m_wallet);
 
         activity->finish();
         activity->deleteLater();
-
-        emit finished();
     });
     handler->exec();
 }
