@@ -56,7 +56,6 @@ QString HttpRequestActivity::contentType() const
 QVariant HttpRequestActivity::body() const
 {
     const auto content_type = contentType();
-    qDebug() << Q_FUNC_INFO << "process response body with content type" << content_type;
     const auto body = m_response.value("body").toString();
     if (content_type == "application/json") {
         const auto document = QJsonDocument::fromJson(body.toUtf8());

@@ -313,7 +313,6 @@ void JadeFirmwareController::fetch(const QString& type)
     emit fetchingChanged();
 
     connect(req, &HttpRequestActivity::finished, this, [=] {
-        qDebug() << req->body().toJsonObject();
         m_index[type] = req->body().toJsonObject();
 
         emit indexChanged();
