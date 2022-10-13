@@ -25,9 +25,12 @@ Page {
             title: qsTrId('id_multisig_shield')
         }
     }
-    footer: RowLayout {
-        spacing: constants.s1
+    footer: DialogFooter {
+        leftPadding: 0
+        rightPadding: 0
+        bottomPadding: constants.p2
         GButton {
+            large: true
             text: qsTrId('id_back')
             onClicked: navigation.pop()
         }

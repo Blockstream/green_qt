@@ -76,14 +76,18 @@ AbstractDialog {
             sourceComponent: MnemonicEditor {
                 id: editor
                 title: qsTrId('id_enter_your_recovery_phrase')
-                footer: RowLayout {
-                    spacing: constants.s1
+                footer: DialogFooter {
+                    leftPadding: 0
+                    rightPadding: 0
+                    bottomPadding: constants.p2
                     GButton {
+                        large: true
                         visible: navigation.canPop
                         text: qsTrId('id_back')
                         onClicked: navigation.pop()
                     }
                     GButton {
+                        large: true
                         text: qsTrId('id_clear')
                         enabled: !editor.controller.active
                         onClicked: editor.controller.clear();
@@ -91,6 +95,7 @@ AbstractDialog {
                     HSpacer {
                     }
                     GButton {
+                        large: true
                         text: qsTrId('id_continue')
                         enabled: editor.valid
                         onClicked: navigation.set({ mnemonic: editor.mnemonic, password: editor.password })
@@ -128,9 +133,12 @@ AbstractDialog {
             animated: self.opened
             sourceComponent: Page {
                 background: null
-                footer: RowLayout {
-                    spacing: constants.s1
+                footer: DialogFooter {
+                    leftPadding: 0
+                    rightPadding: 0
+                    bottomPadding: constants.p2
                     GButton {
+                        large: true
                         text: qsTrId('id_back')
                         onClicked: navigation.pop()
                     }
@@ -172,9 +180,12 @@ AbstractDialog {
             animated: self.opened
             sourceComponent: Page {
                 background: null
-                footer: RowLayout {
-                    spacing: constants.s1
+                footer: DialogFooter {
+                    leftPadding: 0
+                    rightPadding: 0
+                    bottomPadding: constants.p2
                     GButton {
+                        large: true
                         text: qsTrId('id_back')
                         onClicked: navigation.pop()
                     }
