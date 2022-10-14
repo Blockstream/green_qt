@@ -14,7 +14,9 @@ MainPageHeader {
     property int currentView: 0
     readonly property bool archived: self.currentAccount ? self.currentAccount.hidden : false
 
-    onCurrentViewChanged: {
+    onCurrentViewChanged: updateCurrentView()
+
+    function updateCurrentView() {
         for (let i = button_group.buttons.length; i >= 0; --i) {
             let child = button_group.buttons[i]
             if (i === currentView) button_group.buttons[button_group.buttons.length-i-1].checked = true

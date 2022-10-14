@@ -206,6 +206,11 @@ MainPage {
             if (stack_view.currentItem === account_view) return;
             stack_view.replace(account_view, StackView.Immediate)
             wallet_view_header.currentView = account_view.currentView
+
+            // for some reason the first time we switch between account
+            // onCurrentViewChanged is not called on WalletViewHeader
+            // so we call updateCurrentView to force the update of the right view
+            wallet_view_header.updateCurrentView()
         } else {
             stack_view.replace(stack_view.initialItem, StackView.Immediate)
         }

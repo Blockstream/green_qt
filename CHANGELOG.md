@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Fix watch only login button trim
 - Popup with button to copy being activated below dialogs
+- Fix view state when changing between selected account
 
 ## [1.1.4] - 2022-10-05
 ### Added
