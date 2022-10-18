@@ -17,11 +17,27 @@
 
 #include <countly/countly.hpp>
 
-#include "httpmanager.h"
-#include "httprequestactivity.h"
+#include "json.h"
 #include "settings.h"
 #include "util.h"
 #include "walletmanager.h"
+
+class AnalyticsPrivate : public QObject
+{
+public:
+    GA_session* session{nullptr};
+    std::atomic_bool active{false};
+    std::chrono::seconds timestamp_offset{0};
+    struct View {
+        std::string name;
+        std::map<std::string, std::string> segmentation;
+        std::string id;
+    };
+    std::map<std::string, View> views;
+    QThread thread;
+    QMutex busy_mutex;
+    int busy{0};
+};
 
 static Analytics* g_analytics_instance{nullptr};
 
@@ -42,9 +58,14 @@ std::map<std::string, std::string> QVariantMapToStdMap(const QVariantMap& in)
 }
 
 Analytics::Analytics()
+    : QObject(nullptr)
+    , d(new AnalyticsPrivate)
 {
     Q_ASSERT(!g_analytics_instance);
     g_analytics_instance = this;
+
+    d->moveToThread(&d->thread);
+    d->thread.start();
 
     auto os = QSysInfo::productType().toStdString();
     auto os_version = QSysInfo::productVersion().toStdString();
@@ -68,43 +89,51 @@ Analytics::Analytics()
         return hash.result().toStdString();
     });
 
-    countly.setHTTPClient([](bool use_post, const std::string& path, const std::string& data) {
+    countly.setHTTPClient([=](bool use_post, const std::string& path, const std::string& data) {
+        incrBusy();
         cly::Countly::HTTPResponse res{false, {}};
 
-        auto activity = new HttpRequestActivity;
+        if (!d->session) {
+            qDebug() << "analytics: create session";
+            GA_create_session(&d->session);
+            QJsonObject params{
+                { "name", "electrum-mainnet" },
+                { "use_tor", Settings::instance()->useTor() },
+                { "user_agent", QString("green_qt_%1").arg(QT_STRINGIFY(VERSION)) },
+            };
+            if (Settings::instance()->useProxy() && !Settings::instance()->proxy().isEmpty()) {
+                params.insert("proxy", Settings::instance()->proxy());
+            }
+            GA_connect(d->session, Json::fromObject(params).get());
+        }
+
+        QJsonObject req;
         if (use_post) {
-            activity->setMethod("POST");
-            activity->addUrl(QString::fromStdString(COUNTLY_HOST + path));
-            activity->addUrl(QString::fromStdString(COUNTLY_TOR_ENDPOINT + path));
-            activity->setData(QString::fromStdString(data));
+            QJsonArray urls;
+            urls.append(QString::fromStdString(COUNTLY_HOST + path));
+            urls.append(QString::fromStdString(COUNTLY_TOR_ENDPOINT + path));
+            req.insert("method", "POST");
+            req.insert("urls", urls);
+            req.insert("data", QString::fromStdString(data));
         } else {
-            activity->setMethod("GET");
-            activity->addUrl(QString::fromStdString(COUNTLY_HOST + path + "?" + data));
-            activity->addUrl(QString::fromStdString(COUNTLY_TOR_ENDPOINT + path + "?" + data));
+            QJsonArray urls;
+            urls.append(QString::fromStdString(COUNTLY_HOST + path + "?" + data));
+            urls.append(QString::fromStdString(COUNTLY_TOR_ENDPOINT + path + "?" + data));
+            req.insert("method", "GET");
+            req.insert("urls", urls);
         }
 
-        QEventLoop loop;
-        QObject::connect(activity, &HttpRequestActivity::finished, &loop, &QEventLoop::quit);
+        GA_json* out;
+        GA_http_request(d->session, Json::fromObject(req).get(), &out);
+        auto reply = Json::toObject(out);
 
-        QTimer timer;
-        timer.setInterval(100);
-        timer.start();
-        QObject::connect(&timer, &QTimer::timeout, &timer, [&] {
-            if (!Analytics::instance()->isActive()) {
-                timer.stop();
-                loop.exit(1);
-            }
-        });
-
-        HttpManager::instance()->exec(activity);
-
-        if (!loop.exec()) {
-            try {
-                res.data = nlohmann::json::parse(activity->response().value("body").toString().toStdString());
-                res.success = true;
-            } catch (...) {
-            }
+        try {
+            res.data = nlohmann::json::parse(reply.value("body").toString().toStdString());
+            res.success = true;
+        } catch (...) {
         }
+
+        decrBusy();
 
         return res;
     });
@@ -116,7 +145,12 @@ Analytics::Analytics()
     check();
 
     connect(WalletManager::instance(), &WalletManager::changed, this, &Analytics::updateCustomUserDetails);
-    connect(Settings::instance(), &Settings::analyticsChanged, this, &Analytics::check);
+    auto settings = Settings::instance();
+    connect(settings, &Settings::analyticsChanged, this, &Analytics::check);
+    connect(settings, &Settings::useTorChanged, this, &Analytics::restart);
+    connect(settings, &Settings::useProxyChanged, this, &Analytics::restart);
+    connect(settings, &Settings::proxyHostChanged, this, &Analytics::restart);
+    connect(settings, &Settings::proxyPortChanged, this, &Analytics::restart);
 }
 
 void Analytics::updateCustomUserDetails()
@@ -124,6 +158,23 @@ void Analytics::updateCustomUserDetails()
     std::map<std::string, std::string> user_details;
     user_details["total_wallets"] = std::to_string(WalletManager::instance()->size());
     cly::Countly::getInstance().setCustomUserDetails(user_details);
+}
+
+void Analytics::incrBusy()
+{
+    {
+        QMutexLocker lock(&d->busy_mutex);
+        d->busy ++;
+    }
+    QMetaObject::invokeMethod(this, &Analytics::busyChanged);}
+
+void Analytics::decrBusy()
+{
+    {
+        QMutexLocker lock(&d->busy_mutex);
+        d->busy --;
+    }
+    QMetaObject::invokeMethod(this, &Analytics::busyChanged);
 }
 
 void Analytics::check()
@@ -152,32 +203,51 @@ void Analytics::start()
             timestamp_offset = QRandomGenerator::global()->bounded(12 * 3600);
             analytics.setValue("timestamp_offset", timestamp_offset);
         }
-        m_timestamp_offset = std::chrono::seconds(timestamp_offset);
+        d->timestamp_offset = std::chrono::seconds(timestamp_offset);
     }
 
-    const bool is_release = QStringLiteral("release") == QT_STRINGIFY(BUILD_TYPE);
-
-    auto& countly = cly::Countly::getInstance();
-    countly.setDeviceID(device_id.toStdString(), false);
-    countly.setTimestampOffset(m_timestamp_offset);
-    countly.start(is_release ? COUNTLY_APP_KEY_REL : COUNTLY_APP_KEY_DEV, COUNTLY_HOST, 443, true);
-    m_active = true;
+    incrBusy();
+    QMetaObject::invokeMethod(d, [=] {
+        const bool is_release = QStringLiteral("release") == QT_STRINGIFY(BUILD_TYPE);
+        auto& countly = cly::Countly::getInstance();
+        countly.setDeviceID(device_id.toStdString(), false);
+        countly.setTimestampOffset(d->timestamp_offset);
+        countly.start(is_release ? COUNTLY_APP_KEY_REL : COUNTLY_APP_KEY_DEV, COUNTLY_HOST, 443, true);
+        decrBusy();
+    });
+    d->active = true;
 }
 
-void Analytics::stop()
+void Analytics::stop(Qt::ConnectionType type)
 {
-    auto& countly = cly::Countly::getInstance();
-    m_active = false;
-    countly.stop();
-
+    if (!d->active) return;
+    d->active = false;
     if (!Settings::instance()->isAnalyticsEnabled()) {
         QFile::remove(GetDataFile("app", "analytics.ini"));
     }
+    incrBusy();
+    QMetaObject::invokeMethod(d, [=] {
+        auto& countly = cly::Countly::getInstance();
+        countly.stop();
+        GA_destroy_session(d->session);
+        d->session = nullptr;
+        decrBusy();
+    }, type);
+}
+
+void Analytics::restart()
+{
+    stop();
+    check();
 }
 
 Analytics::~Analytics()
 {
-    stop();
+    stop(Qt::BlockingQueuedConnection);
+    d->thread.quit();
+    d->thread.wait();
+    cly::Countly::getInstance().setHTTPClient(nullptr);
+    delete d;
     g_analytics_instance = nullptr;
 }
 
@@ -185,6 +255,14 @@ Analytics* Analytics::instance()
 {
     Q_ASSERT(g_analytics_instance);
     return g_analytics_instance;
+}
+
+bool Analytics::isActive() const { return d->active; }
+
+bool Analytics::isBusy() const
+{
+    QMutexLocker lock(&d->busy_mutex);
+    return d->busy > 0;
 }
 
 void Analytics::recordEvent(const QString& name)
@@ -203,22 +281,27 @@ void Analytics::recordEvent(const QString& name, const QVariantMap& segmentation
 QString Analytics::pushView(const QString& name, const QVariantMap& segmentation)
 {
     auto& countly = cly::Countly::getInstance();
-    View view;
+    AnalyticsPrivate::View view;
     view.name = name.toStdString();
     view.segmentation = QVariantMapToStdMap(segmentation);
     view.id = countly.views().openView(view.name, view.segmentation);
-    m_views[view.id] = view;
+    d->views[view.id] = view;
     return QString::fromStdString(view.id);
 }
 
 void Analytics::popView(const QString& id)
 {
     auto& countly = cly::Countly::getInstance();
-    auto it = m_views.find(id.toStdString());
-    if (it == m_views.end()) return;
+    auto it = d->views.find(id.toStdString());
+    if (it == d->views.end()) return;
     auto& view = it->second;
     countly.views().closeViewWithID(view.id);
-    m_views.erase(it);
+    d->views.erase(it);
+}
+
+std::chrono::seconds Analytics::timestampOffset() const
+{
+    return d->timestamp_offset;
 }
 
 AnalyticsView::AnalyticsView(QObject* parent)
