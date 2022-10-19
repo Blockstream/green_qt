@@ -7,8 +7,6 @@
 #include <map>
 #include <string>
 
-#include <gdk.h>
-
 class AnalyticsPrivate;
 class Analytics : public QObject
 {
@@ -28,17 +26,12 @@ signals:
 public slots:
     void recordEvent(const QString& name);
     void recordEvent(const QString& name, const QVariantMap& segmentation);
-private slots:
-    void check();
-    void start();
-    void stop(Qt::ConnectionType type = Qt::AutoConnection);
-    void restart();
-    void updateCustomUserDetails();
 private:
     void incrBusy();
     void decrBusy();
 private:
     AnalyticsPrivate* const d;
+    friend class AnalyticsPrivate;
 };
 
 class AnalyticsView : public QObject

@@ -17,6 +17,8 @@
 
 #include <countly/countly.hpp>
 
+#include <gdk.h>
+
 #include "json.h"
 #include "settings.h"
 #include "util.h"
@@ -24,7 +26,10 @@
 
 class AnalyticsPrivate : public QObject
 {
+    Analytics* const q;
 public:
+    AnalyticsPrivate(Analytics* const q) : q(q) {}
+
     GA_session* session{nullptr};
     std::atomic_bool active{false};
     std::chrono::seconds timestamp_offset{0};
@@ -37,6 +42,12 @@ public:
     QThread thread;
     QMutex busy_mutex;
     int busy{0};
+
+    void check();
+    void start();
+    void stop(Qt::ConnectionType type = Qt::AutoConnection);
+    void restart();
+    void updateCustomUserDetails();
 };
 
 static Analytics* g_analytics_instance{nullptr};
@@ -59,7 +70,7 @@ std::map<std::string, std::string> QVariantMapToStdMap(const QVariantMap& in)
 
 Analytics::Analytics()
     : QObject(nullptr)
-    , d(new AnalyticsPrivate)
+    , d(new AnalyticsPrivate(this))
 {
     Q_ASSERT(!g_analytics_instance);
     g_analytics_instance = this;
@@ -141,19 +152,19 @@ Analytics::Analytics()
     countly.SetMetrics(os, os_version, device, resolution, "N/A", QCoreApplication::applicationVersion().toStdString());
     countly.SetMaxEventsPerMessage(40);
     countly.SetMinUpdatePeriod(10000);
-    updateCustomUserDetails();
-    check();
+    d->updateCustomUserDetails();
+    d->check();
 
-    connect(WalletManager::instance(), &WalletManager::changed, this, &Analytics::updateCustomUserDetails);
+    connect(WalletManager::instance(), &WalletManager::changed, d, &AnalyticsPrivate::updateCustomUserDetails);
     auto settings = Settings::instance();
-    connect(settings, &Settings::analyticsChanged, this, &Analytics::check);
-    connect(settings, &Settings::useTorChanged, this, &Analytics::restart);
-    connect(settings, &Settings::useProxyChanged, this, &Analytics::restart);
-    connect(settings, &Settings::proxyHostChanged, this, &Analytics::restart);
-    connect(settings, &Settings::proxyPortChanged, this, &Analytics::restart);
+    connect(settings, &Settings::analyticsChanged, d, &AnalyticsPrivate::check);
+    connect(settings, &Settings::useTorChanged, d, &AnalyticsPrivate::restart);
+    connect(settings, &Settings::useProxyChanged, d, &AnalyticsPrivate::restart);
+    connect(settings, &Settings::proxyHostChanged, d, &AnalyticsPrivate::restart);
+    connect(settings, &Settings::proxyPortChanged, d, &AnalyticsPrivate::restart);
 }
 
-void Analytics::updateCustomUserDetails()
+void AnalyticsPrivate::updateCustomUserDetails()
 {
     std::map<std::string, std::string> user_details;
     user_details["total_wallets"] = std::to_string(WalletManager::instance()->size());
@@ -166,7 +177,8 @@ void Analytics::incrBusy()
         QMutexLocker lock(&d->busy_mutex);
         d->busy ++;
     }
-    QMetaObject::invokeMethod(this, &Analytics::busyChanged);}
+    QMetaObject::invokeMethod(this, &Analytics::busyChanged);
+}
 
 void Analytics::decrBusy()
 {
@@ -177,7 +189,7 @@ void Analytics::decrBusy()
     QMetaObject::invokeMethod(this, &Analytics::busyChanged);
 }
 
-void Analytics::check()
+void AnalyticsPrivate::check()
 {
     if (Settings::instance()->isAnalyticsEnabled()) {
         start();
@@ -186,7 +198,7 @@ void Analytics::check()
     }
 }
 
-void Analytics::start()
+void AnalyticsPrivate::start()
 {
     QString device_id;
     {
@@ -198,44 +210,44 @@ void Analytics::start()
             analytics.setValue("device_id", device_id);
         }
 
-        auto timestamp_offset = analytics.value("timestamp_offset").toInt();
-        if (timestamp_offset == 0) {
-            timestamp_offset = QRandomGenerator::global()->bounded(12 * 3600);
-            analytics.setValue("timestamp_offset", timestamp_offset);
+        auto to = analytics.value("timestamp_offset").toInt();
+        if (to == 0) {
+            to = QRandomGenerator::global()->bounded(12 * 3600);
+            analytics.setValue("timestamp_offset", to);
         }
-        d->timestamp_offset = std::chrono::seconds(timestamp_offset);
+        timestamp_offset = std::chrono::seconds(to);
     }
 
-    incrBusy();
-    QMetaObject::invokeMethod(d, [=] {
+    q->incrBusy();
+    QMetaObject::invokeMethod(this, [=] {
         const bool is_release = QStringLiteral("release") == QT_STRINGIFY(BUILD_TYPE);
         auto& countly = cly::Countly::getInstance();
         countly.setDeviceID(device_id.toStdString(), false);
-        countly.setTimestampOffset(d->timestamp_offset);
+        countly.setTimestampOffset(timestamp_offset);
         countly.start(is_release ? COUNTLY_APP_KEY_REL : COUNTLY_APP_KEY_DEV, COUNTLY_HOST, 443, true);
-        decrBusy();
+        q->decrBusy();
     });
-    d->active = true;
+    active = true;
 }
 
-void Analytics::stop(Qt::ConnectionType type)
+void AnalyticsPrivate::stop(Qt::ConnectionType type)
 {
-    if (!d->active) return;
-    d->active = false;
+    if (!active) return;
+    active = false;
     if (!Settings::instance()->isAnalyticsEnabled()) {
         QFile::remove(GetDataFile("app", "analytics.ini"));
     }
-    incrBusy();
-    QMetaObject::invokeMethod(d, [=] {
+    q->incrBusy();
+    QMetaObject::invokeMethod(this, [=] {
         auto& countly = cly::Countly::getInstance();
         countly.stop();
-        GA_destroy_session(d->session);
-        d->session = nullptr;
-        decrBusy();
+        GA_destroy_session(session);
+        session = nullptr;
+        q->decrBusy();
     }, type);
 }
 
-void Analytics::restart()
+void AnalyticsPrivate::restart()
 {
     stop();
     check();
@@ -243,7 +255,7 @@ void Analytics::restart()
 
 Analytics::~Analytics()
 {
-    stop(Qt::BlockingQueuedConnection);
+    d->stop(Qt::BlockingQueuedConnection);
     d->thread.quit();
     d->thread.wait();
     cly::Countly::getInstance().setHTTPClient(nullptr);
