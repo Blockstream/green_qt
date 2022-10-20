@@ -29,6 +29,10 @@ MainPageHeader {
     }
     contentItem: ColumnLayout {
         spacing: constants.s0
+        AlertView {
+            id: alert_view
+            alert: overview_alert
+        }
         GPane {
             Layout.fillWidth: true
             padding: 0

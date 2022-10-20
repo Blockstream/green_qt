@@ -115,7 +115,17 @@ AbstractDialog {
                 return false
             }
             animated: self.opened
-            sourceComponent: DiscoverServerTypeView {
+            sourceComponent: ColumnLayout {
+                AlertView {
+                    alert: AnalyticsAlert {
+                        screen: 'OnBoardScan'
+                        network: navigation.param.network === 'bitcoin' ? 'mainnet' : navigation.param.network
+                    }
+                }
+                DiscoverServerTypeView {
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                }
             }
             AnalyticsView {
                 active: discover_server_type_view.visible

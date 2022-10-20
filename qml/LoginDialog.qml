@@ -113,6 +113,12 @@ AbstractDialog {
             }
             contentItem: ColumnLayout {
                 spacing: 12
+                AlertView {
+                    alert: AnalyticsAlert {
+                        screen: 'Login'
+                        network: self.wallet.network.id
+                    }
+                }
                 PinView {
                     id: pin_view
                     Layout.alignment: Qt.AlignHCenter

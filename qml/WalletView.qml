@@ -91,6 +91,12 @@ MainPage {
 
     onReadyChanged: if (ready) Analytics.recordEvent('wallet_active', segmentationWalletActive(self.wallet))
 
+    AnalyticsAlert {
+        id: overview_alert
+        screen: 'Overview'
+        network: self.wallet.network.id
+    }
+
     FeeEstimates {
         id: fee_estimates
         wallet: self.wallet

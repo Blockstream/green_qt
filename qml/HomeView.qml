@@ -70,9 +70,12 @@ MainPage {
                 }
             }
         }
-
         spacing: constants.p4
-
+        AlertView {
+            alert: AnalyticsAlert {
+                screen: 'Home'
+            }
+        }
         RowLayout {
             Layout.fillWidth: true
             Layout.fillHeight: true

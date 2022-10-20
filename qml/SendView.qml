@@ -29,8 +29,8 @@ StackView {
         }
     }
 
-    implicitHeight: setup_view.implicitHeight
-    implicitWidth: setup_view.implicitWidth
+    implicitHeight: stack_view.currentItem.implicitHeight
+    implicitWidth: stack_view.currentItem.implicitWidth
 
     property Item coins_view: SelectCoinsView {
         account: stack_view.account
@@ -61,6 +61,14 @@ StackView {
         columns: 2
         rowSpacing: 12
         columnSpacing: 12
+
+        AlertView {
+            Layout.columnSpan: 2
+            alert: AnalyticsAlert {
+                screen: 'Send'
+                network: account.wallet.network.id
+            }
+        }
 
         ScannerPopup {
             id: scanner_popup
@@ -363,6 +371,9 @@ StackView {
                 rightPadding: fee_unit.width + 16
                 selectByMouse: true
             }
+        }
+        VSpacer {
+            Layout.columnSpan: 2
         }
     }
 }
