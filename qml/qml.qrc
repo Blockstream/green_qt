@@ -146,5 +146,6 @@
         <file>RemoveWalletDialog.qml</file>
         <file>LeftArrowToolTip.qml</file>
         <file>BlockstreamView.qml</file>
+        <file>AlertView.qml</file>
     </qresource>
 </RCC>
