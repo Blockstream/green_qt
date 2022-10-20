@@ -4,8 +4,7 @@
 #include <QObject>
 #include <QtQml>
 
-#include <map>
-#include <string>
+#include <chrono>
 
 class AnalyticsPrivate;
 class Analytics : public QObject
@@ -21,8 +20,10 @@ public:
     QString pushView(const QString &name, const QVariantMap &segmentation);
     void popView(const QString& id);
     std::chrono::seconds timestampOffset() const;
+    QJsonArray alerts() const;
 signals:
     void busyChanged();
+    void alertsChanged();
 public slots:
     void recordEvent(const QString& name);
     void recordEvent(const QString& name, const QVariantMap& segmentation);
@@ -99,6 +100,43 @@ protected:
     void timerEvent(QTimerEvent *event);
 private:
     QScopedPointer<AnalyticsEventPrivate> d;
+};
+
+class AnalyticsAlert : public QObject
+{
+    Q_OBJECT
+    Q_PROPERTY(QString screen READ screen WRITE setScreen NOTIFY screenChanged)
+    Q_PROPERTY(QString network READ network WRITE setNetwork NOTIFY networkChanged)
+    Q_PROPERTY(bool active READ isActive NOTIFY dataChanged)
+    Q_PROPERTY(QJsonObject data READ data NOTIFY dataChanged)
+    Q_PROPERTY(QString title READ title NOTIFY dataChanged)
+    Q_PROPERTY(QString message READ message NOTIFY dataChanged)
+    Q_PROPERTY(QString link READ link NOTIFY dataChanged)
+    Q_PROPERTY(bool dismissable READ isDismissable NOTIFY dataChanged)
+    QML_ELEMENT
+public:
+    AnalyticsAlert(QObject* parent = nullptr);
+    QString screen() const { return m_screen; }
+    void setScreen(const QString& screen);
+    QString network() const { return m_network; }
+    void setNetwork(const QString& network);
+    bool isActive() const { return !m_data.empty(); }
+    QJsonObject data() const { return m_data; }
+    QString title() const;
+    QString message() const;
+    QString link() const;
+    bool isDismissable() const;
+signals:
+    void activeChanged();
+    void screenChanged();
+    void networkChanged();
+    void dataChanged();
+private slots:
+    void update();
+private:
+    QString m_screen;
+    QString m_network;
+    QJsonObject m_data;
 };
 
 #endif // GREEN_ANALYTICS_H

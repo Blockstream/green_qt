@@ -42,12 +42,13 @@ public:
     QThread thread;
     QMutex busy_mutex;
     int busy{0};
+    QJsonArray alerts;
 
-    void check();
     void start();
     void stop(Qt::ConnectionType type = Qt::AutoConnection);
     void restart();
     void updateCustomUserDetails();
+    void updateRemoteConfig();
 };
 
 static Analytics* g_analytics_instance{nullptr};
@@ -98,6 +99,17 @@ Analytics::Analytics()
         QCryptographicHash hash(QCryptographicHash::Sha256);
         hash.addData(QByteArray::fromStdString(salted_data));
         return hash.result().toStdString();
+    });
+
+    countly.setRemoteConfigCallback([=] {
+        QMetaObject::invokeMethod(this, [=] {
+            auto& countly = cly::Countly::getInstance();
+            const nlohmann::json reply = countly.getRemoteConfigValue("banners");
+            if (reply.is_array()) {
+                d->alerts = Json::toArray((const GA_json*) &reply);
+                emit alertsChanged();
+            }
+        });
     });
 
     countly.setHTTPClient([=](bool use_post, const std::string& path, const std::string& data) {
@@ -152,16 +164,23 @@ Analytics::Analytics()
     countly.SetMetrics(os, os_version, device, resolution, "N/A", QCoreApplication::applicationVersion().toStdString());
     countly.SetMaxEventsPerMessage(40);
     countly.SetMinUpdatePeriod(10000);
-    d->updateCustomUserDetails();
-    d->check();
 
     connect(WalletManager::instance(), &WalletManager::changed, d, &AnalyticsPrivate::updateCustomUserDetails);
     auto settings = Settings::instance();
-    connect(settings, &Settings::analyticsChanged, d, &AnalyticsPrivate::check);
     connect(settings, &Settings::useTorChanged, d, &AnalyticsPrivate::restart);
     connect(settings, &Settings::useProxyChanged, d, &AnalyticsPrivate::restart);
     connect(settings, &Settings::proxyHostChanged, d, &AnalyticsPrivate::restart);
     connect(settings, &Settings::proxyPortChanged, d, &AnalyticsPrivate::restart);
+
+    countly.enableRemoteConfig();
+
+    d->updateCustomUserDetails();
+    d->start();
+}
+
+QJsonArray Analytics::alerts() const
+{
+    return d->alerts;
 }
 
 void AnalyticsPrivate::updateCustomUserDetails()
@@ -187,15 +206,6 @@ void Analytics::decrBusy()
         d->busy --;
     }
     QMetaObject::invokeMethod(this, &Analytics::busyChanged);
-}
-
-void AnalyticsPrivate::check()
-{
-    if (Settings::instance()->isAnalyticsEnabled()) {
-        start();
-    } else {
-        stop();
-    }
 }
 
 void AnalyticsPrivate::start()
@@ -250,7 +260,7 @@ void AnalyticsPrivate::stop(Qt::ConnectionType type)
 void AnalyticsPrivate::restart()
 {
     stop();
-    check();
+    start();
 }
 
 Analytics::~Analytics()
@@ -490,4 +500,85 @@ void AnalyticsEvent::track()
     cly::Countly::getInstance().addEvent(*d->event);
     stop();
     start();
+}
+
+AnalyticsAlert::AnalyticsAlert(QObject* parent)
+    : QObject(parent)
+{
+    connect(Analytics::instance(), &Analytics::alertsChanged, this, &AnalyticsAlert::update);
+}
+
+void AnalyticsAlert::setScreen(const QString& screen)
+{
+    if (m_screen == screen) return;
+    m_screen = screen;
+    emit screenChanged();
+    update();
+}
+
+void AnalyticsAlert::setNetwork(const QString& network)
+{
+    if (m_network == network.toLower()) return;
+    m_network = network.toLower();
+    emit networkChanged();
+    update();
+}
+
+QString AnalyticsAlert::title() const
+{
+    return m_data.value("title").toString();
+}
+
+QString AnalyticsAlert::message() const
+{
+    return m_data.value("message").toString();
+}
+
+QString AnalyticsAlert::link() const
+{
+    return m_data.value("link").toString();
+}
+
+bool AnalyticsAlert::isDismissable() const
+{
+    return m_data.value("dismissable").toBool();
+}
+
+void AnalyticsAlert::update()
+{
+    const QJsonArray alerts = Analytics::instance()->alerts();
+
+    for (const QJsonValue &a : alerts) {
+        QJsonObject alert = a.toObject();
+
+        bool matches_screen = false;
+
+        for (const QJsonValue &s : alert["screens"].toArray()) {
+            if (s.toString() == m_screen) {
+                matches_screen = true;
+                break;
+            }
+        }
+
+        if (!matches_screen) continue;
+
+        const auto networks = alert["networks"].toArray();
+        bool matches_network = networks.size() == 0;
+
+        for (const QJsonValue &s : alert["networks"].toArray()) {
+            if (s.toString() == m_network) {
+                matches_network = true;
+                break;
+            }
+        }
+
+        if (!matches_network) continue;
+
+        if (m_data != alert) {
+            m_data = alert;
+            emit dataChanged();
+        }
+
+        return;
+    }
 }
