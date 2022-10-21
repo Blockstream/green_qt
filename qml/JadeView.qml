@@ -61,6 +61,7 @@ MainPage {
             }
             GButton {
                 text: qsTrId('id_get_jade')
+                visible: devices_list_view.count === 0
                 highlighted: true
                 large: true
                 onClicked: Qt.openUrlExternally('https://store.blockstream.com/product/blockstream-jade/')
@@ -339,125 +340,109 @@ MainPage {
             device: self.device
         }
 
-        RowLayout {
-            Layout.fillHeight: false
-            spacing: constants.s2
-            Page {
-                Layout.alignment: Qt.AlignTop
-                Layout.minimumWidth: implicitWidth
-                Layout.fillWidth: true
-                background: null
-                header: Label {
-                    text: qsTrId('id_details')
-                    font.pixelSize: 20
-                    font.styleName: 'Bold'
-                    bottomPadding: constants.s1
+        Page {
+            Layout.alignment: Qt.AlignTop
+            Layout.minimumWidth: implicitWidth
+            Layout.fillWidth: true
+            background: null
+            header: Label {
+                text: qsTrId('id_details')
+                font.pixelSize: 20
+                font.styleName: 'Bold'
+                bottomPadding: constants.s1
+            }
+            contentItem: GridLayout {
+                columns: 2
+                columnSpacing: constants.s2
+                rowSpacing: constants.s1
+                Label {
+                    text: qsTrId('id_networks')
                 }
-                contentItem: GridLayout {
-                    columns: 2
-                    columnSpacing: constants.s2
-                    rowSpacing: constants.s1
-                    Label {
-                        text: qsTrId('id_id')
+                Label {
+                    text: {
+                        const nets = self.device.versionInfo.JADE_NETWORKS
+                        if (nets === 'ALL') return qsTrId('id_all_networks')
+                        if (nets === 'TEST') return qsTrId('id_bitcoin_testnet_and_liquid')
+                        if (nets === 'MAIN') return qsTrId('id_bitcoin_and_liquid')
                     }
-                    Label {
-                        text: device.versionInfo.EFUSEMAC.slice(-6)
-                    }
-                    Label {
-                        text: qsTrId('id_status')
-                    }
-                    Label {
-                        Layout.fillWidth: true
-                        text: formatDeviceState(device.state)
-                    }
-                    Label {
-                        text: qsTrId('id_networks')
-                    }
-                    Label {
-                        text: {
-                            const nets = self.device.versionInfo.JADE_NETWORKS
-                            if (nets === 'ALL') return qsTrId('id_all_networks')
-                            if (nets === 'TEST') return qsTrId('id_bitcoin_testnet_and_liquid')
-                            if (nets === 'MAIN') return qsTrId('id_bitcoin_and_liquid')
-                        }
-                    }
-                    Label {
-                        text: qsTrId('id_connection')
-                    }
-                    Label {
-                        text: 'USB'
-                    }
-                    Label {
-                        text: qsTrId('id_system_location')
-                    }
-                    Label {
-                        text: device.systemLocation
-                    }
+                }
+                Label {
+                    text: qsTrId('id_system_location')
+                }
+                Label {
+                    text: device.systemLocation
                 }
             }
-            Page {
-                Layout.alignment: Qt.AlignTop
-                Layout.fillWidth: true
-                Layout.minimumWidth: implicitWidth
-                background: null
-                header: Label {
-                    text: qsTrId('id_firmware')
-                    font.pixelSize: 20
-                    font.styleName: 'Bold'
-                    bottomPadding: constants.s1
+        }
+        Page {
+            Layout.alignment: Qt.AlignTop
+            Layout.fillWidth: true
+            Layout.minimumWidth: implicitWidth
+            background: null
+            header: Label {
+                text: qsTrId('id_firmware')
+                font.pixelSize: 20
+                font.styleName: 'Bold'
+                bottomPadding: constants.s1
+            }
+            contentItem: GridLayout {
+                columns: 2
+                columnSpacing: constants.s2
+                rowSpacing: constants.s0
+                Label {
+                    Layout.minimumWidth: 100
+                    Layout.minimumHeight: 32
+                    verticalAlignment: Label.AlignVCenter
+                    text: qsTrId('id_version')
                 }
-                contentItem: GridLayout {
-                    columns: 2
-                    columnSpacing: constants.s2
-                    rowSpacing: constants.s0
-                    Label {
-                        Layout.preferredHeight: constants.s2
-                        verticalAlignment: Label.AlignVCenter
-                        text: qsTrId('id_version')
-                    }
-                    Label {
-                        Layout.preferredHeight: constants.s2
-                        verticalAlignment: Label.AlignVCenter
-                        Layout.fillWidth: true
-                        text: device.version
-                    }
-                    Label {
-                        Layout.preferredHeight: constants.s2
-                        verticalAlignment: Label.AlignVCenter
-                        text: qsTrId('id_bluetooth')
-                    }
-                    Label {
-                        Layout.preferredHeight: constants.s2
-                        verticalAlignment: Label.AlignVCenter
-                        text: device.versionInfo.JADE_CONFIG === 'NORADIO' ? qsTrId('id_not_available_noradio_build') : qsTrId('id_available')
-                    }
-                    Label {
-                        Layout.preferredHeight: constants.s2
-                        verticalAlignment: Label.AlignVCenter
-                        text: qsTrId('id_update')
-                    }
-                    RowLayout {
-                        GButton {
-                            padding: 4
-                            topInset: 0
-                            bottomInset: 0
-                            highlighted: (self.device && self.device.updateRequired) || !!update_dialog.controller.firmwareAvailable
-                            enabled: Object.keys(firmware_controller.index).length > 0
-                            text: {
-                                if (self.device.updateRequired) return qsTrId('id_new_jade_firmware_required')
-                                const fw = update_dialog.controller.firmwareAvailable
-                                if (fw) return `${fw.version} available`
-                                return qsTrId('id_check_for_updates')
+                Label {
+                    Layout.minimumHeight: 32
+                    Layout.fillWidth: true
+                    text: device.version
+                    verticalAlignment: Label.AlignVCenter
+                }
+                Label {
+                    Layout.minimumHeight: 32
+                    text: qsTrId('id_bluetooth')
+                    verticalAlignment: Label.AlignVCenter
+                }
+                Label {
+                    Layout.minimumHeight: 32
+                    text: device.versionInfo.JADE_CONFIG === 'NORADIO' ? qsTrId('id_not_available_noradio_build') : qsTrId('id_available')
+                    verticalAlignment: Label.AlignVCenter
+                }
+                Label {
+                    Layout.minimumHeight: 32
+                    text: qsTrId('id_update')
+                    verticalAlignment: Label.AlignVCenter
+                }
+                RowLayout {
+                    GButton {
+                        padding: 4
+                        topInset: 0
+                        bottomInset: 0
+                        highlighted: (self.device && self.device.updateRequired) || !!update_dialog.controller.firmwareAvailable
+                        enabled: !firmware_controller.fetching
+                        text: {
+                            if (self.device.updateRequired) return qsTrId('id_new_jade_firmware_required')
+                            const fw = update_dialog.controller.firmwareAvailable
+                            if (fw) return `${fw.version} available`
+                            return qsTrId('id_check_for_updates')
+                        }
+                        onClicked: {
+                            if (Object.keys(firmware_controller.index).length === 0) {
+                                firmware_controller.enabled = true
+                            } else {
+                                update_dialog.advancedUpdate()
                             }
-                            onClicked: update_dialog.open()
-                        }
-                        HSpacer {}
-                        BusyIndicator {
-                            Layout.preferredHeight: 32
-                            running: firmware_controller.fetching
-                            visible: running
                         }
                     }
+                    BusyIndicator {
+                        Layout.preferredHeight: 32
+                        running: firmware_controller.fetching
+                        visible: running
+                    }
+                    HSpacer {}
                 }
             }
         }
