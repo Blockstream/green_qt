@@ -296,6 +296,16 @@ JadeFirmwareController::JadeFirmwareController(QObject* parent)
 {
 }
 
+void JadeFirmwareController::setEnabled(bool enabled)
+{
+    if (m_enabled == enabled) return;
+    m_enabled = enabled;
+    emit enabledChanged();
+    if (m_fetching) return;
+    if (!m_index.isEmpty()) return;
+    check();
+}
+
 void JadeFirmwareController::check()
 {
     fetch("jade");

@@ -26,7 +26,7 @@ MainPage {
 
     JadeFirmwareController {
         id: firmware_controller
-        Component.onCompleted: firmware_controller.check()
+        enabled: Settings.checkForFirmwareUpdates
     }
 
     JadeDeviceSerialPortDiscoveryAgent {
