@@ -99,6 +99,13 @@ void HttpManager::dispatch()
     m_running = m_queue.dequeue();
     m_running->setSession(m_session);
 
+    connect(m_running, &Activity::destroyed, this, [=](QObject* activity) {
+        if (m_running == activity) {
+            m_running = nullptr;
+            dispatch();
+        }
+    });
+
     connect(m_running, &Activity::finished, this, [=] {
         m_running = nullptr;
         dispatch();
