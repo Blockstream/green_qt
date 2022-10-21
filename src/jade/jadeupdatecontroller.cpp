@@ -5,8 +5,6 @@
 #include "jadeapi.h"
 #include "jadedevice.h"
 #include "json.h"
-#include "network.h"
-#include "networkmanager.h"
 #include "semver.h"
 #include "session.h"
 
@@ -242,11 +240,15 @@ void JadeUpdateController::update(const QVariantMap& firmware)
         activity->deleteLater();
         m_fetching = false;
         emit fetchingChanged();
+        m_updating = false;
+        emit updatingChanged();
     });
     connect(activity, &Activity::finished, this, [=] {
         activity->deleteLater();
         m_fetching = false;
         emit fetchingChanged();
+        m_updating = false;
+        emit updatingChanged();
         if (activity->hasError()) {
             qDebug() << activity->response();
         } else {
@@ -272,8 +274,10 @@ void JadeUpdateController::install(const QVariantMap& firmware, const QByteArray
             activity->fail();
         });
     });
-    connect(activity, &Activity::failed, this, [activity] {
+    connect(activity, &Activity::failed, this, [=] {
         activity->deleteLater();
+        m_updating = false;
+        emit updatingChanged();
     });
     emit activityCreated(activity);
     ActivityManager::instance()->exec(activity);
