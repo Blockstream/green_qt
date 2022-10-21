@@ -21,6 +21,7 @@ class Settings : public QObject
     Q_PROPERTY(int proxyPort READ proxyPort WRITE setProxyPort NOTIFY proxyPortChanged)
     Q_PROPERTY(bool useTor READ useTor WRITE setUseTor NOTIFY useTorChanged)
     Q_PROPERTY(bool checkForUpdates READ checkForUpdates WRITE setCheckForUpdates NOTIFY checkForUpdatesChanged)
+    Q_PROPERTY(bool checkForFirmwareUpdates READ checkForFirmwareUpdates WRITE setCheckForFirmwareUpdates NOTIFY checkForFirmwareUpdatesChanged)
     Q_PROPERTY(QStringList recentWallets READ recentWallets NOTIFY recentWalletsChanged)
     Q_PROPERTY(QString language READ language WRITE setLanguage NOTIFY languageChanged)
     Q_PROPERTY(bool showNews READ showNews WRITE setShowNews NOTIFY showNewsChanged)
@@ -60,7 +61,9 @@ public:
     bool useTor() const { return m_use_tor; }
     void setUseTor(bool use_tor);
     bool checkForUpdates() const { return m_check_for_updates; }
+    bool checkForFirmwareUpdates() const { return m_check_for_firmware_updates; }
     void setCheckForUpdates(bool m_check_for_updates);
+    void setCheckForFirmwareUpdates(bool check_for_firmware_updates);
     QStringList recentWallets();
     QString language() const { return m_language; }
     void setLanguage(const QString& language);
@@ -95,6 +98,7 @@ signals:
     void enableTestnetChanged(bool enable_testnet);
     void useProxyChanged(bool use_proxy);
     void checkForUpdatesChanged(bool check_for_updates);
+    void checkForFirmwareUpdatesChanged(bool check_for_firmware_updates);
     void proxyHostChanged(const QString& proxy_host);
     void proxyPortChanged(int proxy_port);
     void useTorChanged(bool use_tor);
@@ -130,6 +134,7 @@ private:
     int m_proxy_port{9001};
     bool m_use_tor{false};
     bool m_check_for_updates{true};
+    bool m_check_for_firmware_updates{true};
     QStringList m_recent_wallets;
     QString m_language;
     bool m_show_news{true};

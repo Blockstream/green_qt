@@ -159,6 +159,18 @@ MainPage {
             Separator {
             }
             SectionLabel {
+                text: qsTrId('id_devices')
+            }
+            Field {
+                name: 'Check for firmware updates on startup'
+                GSwitch {
+                    checked: Settings.checkForFirmwareUpdates
+                    onToggled: Settings.checkForFirmwareUpdates = checked
+                }
+            }
+            Separator {
+            }
+            SectionLabel {
                 text: qsTrId('id_network')
             }
             Field {

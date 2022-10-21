@@ -111,6 +111,14 @@ void Settings::setCheckForUpdates(bool check_for_updates)
     saveLater();
 }
 
+void Settings::setCheckForFirmwareUpdates(bool check_for_firmware_updates)
+{
+    if (m_check_for_firmware_updates == check_for_firmware_updates) return;
+    m_check_for_firmware_updates = check_for_firmware_updates;
+    emit checkForFirmwareUpdatesChanged(m_check_for_firmware_updates);
+    saveLater();
+}
+
 QStringList Settings::recentWallets()
 {
     return m_recent_wallets;
@@ -282,6 +290,7 @@ void Settings::load(const QSettings& settings)
     LOAD(m_liquid_testnet_electrum_url)
     LOAD(m_enable_spv)
     LOAD(m_analytics)
+    LOAD(m_check_for_firmware_updates)
 #undef LOAD
 }
 
@@ -319,6 +328,7 @@ void Settings::saveNow()
     SAVE(m_liquid_testnet_electrum_url)
     SAVE(m_enable_spv)
     SAVE(m_analytics)
+    SAVE(m_check_for_firmware_updates)
 #undef SAVE
 }
 
