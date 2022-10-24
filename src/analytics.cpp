@@ -135,9 +135,25 @@ Analytics::Analytics()
             QJsonArray urls;
             urls.append(QString::fromStdString(COUNTLY_HOST + path));
             urls.append(QString::fromStdString(COUNTLY_TOR_ENDPOINT + path));
+            QJsonObject headers;
+            headers.insert("content-type", "application/json");
+            QUrlQuery q(QString::fromStdString(data));
+            QJsonObject body;
+            const auto query_items = q.queryItems();
+            for (const auto& kv : query_items) {
+                auto doc = QJsonDocument::fromJson(QUrl::fromPercentEncoding(kv.second.toUtf8()).toUtf8().replace("\\\"", "\""));
+                if (doc.isNull()) {
+                    body.insert(kv.first, kv.second);
+                } else if (doc.isObject()) {
+                    body.insert(kv.first, doc.object());
+                } else if (doc.isArray()) {
+                    body.insert(kv.first, doc.array());
+                }
+            }
             req.insert("method", "POST");
+            req.insert("headers", headers);
             req.insert("urls", urls);
-            req.insert("data", QString::fromStdString(data));
+            req.insert("data", body);
         } else {
             QJsonArray urls;
             urls.append(QString::fromStdString(COUNTLY_HOST + path + "?" + data));
@@ -162,8 +178,7 @@ Analytics::Analytics()
     });
 
     countly.SetMetrics(os, os_version, device, resolution, "N/A", QCoreApplication::applicationVersion().toStdString());
-    countly.SetMaxEventsPerMessage(40);
-    countly.SetMinUpdatePeriod(10000);
+    countly.alwaysUsePost(true);
 
     connect(WalletManager::instance(), &WalletManager::changed, d, &AnalyticsPrivate::updateCustomUserDetails);
     auto settings = Settings::instance();
