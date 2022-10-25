@@ -16,7 +16,7 @@ StatusBar {
                 fillMode: Image.PreserveAspectFit
                 sourceSize.height: 16
                 sourceSize.width: 16
-                source: icons[self.wallet.network.key]
+                source: iconFor(self.wallet)
             }
             Label {
                 text: wallet.network.displayName + ' ' + qsTrId('id_network')
@@ -90,7 +90,7 @@ StatusBar {
                         if (wallet.network.liquid) {
                             return wallet.getOrCreateAsset(wallet.network.policyAsset).icon
                         } else {
-                            return icons[self.wallet.network.key]
+                            return iconFor(self.wallet)
                         }
                     }
                 }

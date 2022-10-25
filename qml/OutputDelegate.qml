@@ -44,7 +44,7 @@ Button {
                 visible: !output.account.wallet.network.liquid
                 sourceSize.height: 36
                 sourceSize.width: 36
-                source: icons[wallet.network.key]
+                source: iconFor(wallet)
             }
             Loader {
                 Layout.alignment: Qt.AlignTop

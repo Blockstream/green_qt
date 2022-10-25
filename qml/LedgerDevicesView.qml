@@ -189,7 +189,7 @@ MainPage {
                 Layout.minimumWidth: 150
                 spacing: constants.s1
                 Image {
-                    source: icons[self.network.key]
+                    source: iconFor(self.network)
                     sourceSize.width: 24
                     sourceSize.height: 24
                 }

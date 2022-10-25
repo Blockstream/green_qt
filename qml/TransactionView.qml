@@ -138,7 +138,7 @@ WalletDialog {
                         fillMode: Image.PreserveAspectFit
                         sourceSize.height: 24
                         sourceSize.width: 24
-                        source: icons[network.key]
+                        source: iconFor(network)
                     }
                     Label {
                         Layout.fillWidth: true

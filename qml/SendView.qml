@@ -216,7 +216,7 @@ StackView {
                     Image {
                         Layout.preferredHeight: 24
                         Layout.preferredWidth: 24
-                        source: icons[wallet.network.key]
+                        source: iconFor(wallet)
                     }
                     Label {
                         text: wallet.network.displayName

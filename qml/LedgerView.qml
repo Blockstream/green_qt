@@ -203,7 +203,7 @@ MainPage {
                         large: true
                         visible: controller.status !== 'locked' && (!controller.wallet || controller.wallet.authentication === Wallet.Unauthenticated)
                         icon.color: 'transparent'
-                        icon.source: controller.network ? icons[controller.network.key] : ''
+                        icon.source: iconFor(controller.network)
                         text: qsTrId('id_login')
                         onClicked: {
                             login_dialog.createObject(window, { controller }).open()

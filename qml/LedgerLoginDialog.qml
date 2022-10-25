@@ -13,7 +13,7 @@ AbstractDialog {
     property bool active: self.wallet.activities.length > 0 || (self.wallet.session && self.wallet.session.activities.length > 0)
 
     id: self
-    icon: icons[controller.network.key]
+    icon: iconFor(controller.network)
     focus: true
     title: controller.device.name
     width: 350

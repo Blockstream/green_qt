@@ -29,7 +29,7 @@ AbstractDialog {
             Image {
                 sourceSize.width: 16
                 sourceSize.height: 16
-                source: icons[wallet.network.key]
+                source: iconFor(wallet)
             }
             Label {
                 Layout.fillWidth: true

@@ -20,12 +20,21 @@ ApplicationWindow {
         return `<style>a:link { color: "#00B45A"; text-decoration: none; }</style><a href="${url}">${text || url}</a>`
     }
 
-    property var icons: ({
-        'liquid': 'qrc:/svg/liquid.svg',
-        'testnet-liquid': 'qrc:/svg/testnet-liquid.svg',
-        'bitcoin': 'qrc:/svg/btc.svg',
-        'testnet': 'qrc:/svg/btc_testnet.svg'
-    })
+    function iconFor(target) {
+        if (target instanceof Wallet) return iconFor(target.network)
+        if (target instanceof Network) return iconFor(target.key)
+        switch (target) {
+            case 'liquid':
+                return 'qrc:/svg/liquid.svg'
+            case 'testnet-liquid':
+                return 'qrc:/svg/testnet-liquid.svg'
+            case 'bitcoin':
+                return 'qrc:/svg/btc.svg'
+            case 'testnet':
+                return 'qrc:/svg/btc_testnet.svg'
+        }
+        return ''
+    }
 
     property Constants constants: Constants {}
 

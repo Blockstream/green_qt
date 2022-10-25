@@ -23,7 +23,7 @@ GPane {
                 Card {
                     network: 'bitcoin'
                     type: 'default'
-                    icons: [window.icons['bitcoin']]
+                    icons: [iconFor('bitcoin')]
                     title: 'Bitcoin Wallet'
                     description: qsTrId('id_bitcoin_is_the_worlds_leading')
                 }
@@ -37,7 +37,7 @@ GPane {
                 Card {
                     network: 'liquid'
                     type: 'default'
-                    icons: [window.icons['liquid']]
+                    icons: [iconFor('liquid')]
                     title: qsTrId('id_liquid_wallet')
                     description: qsTrId('id_the_liquid_network_is_a_bitcoin')
                 }

@@ -11,7 +11,7 @@ AbstractDialog {
     icon: {
         const { network, type } = navigation.param
         if (type === 'amp') return 'qrc:/svg/amp.svg'
-        if (network) return icons[network]
+        if (network) return iconFor(network)
         return ''
     }
     title: qsTrId('id_restore_green_wallet')

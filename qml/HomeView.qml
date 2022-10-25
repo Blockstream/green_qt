@@ -114,7 +114,7 @@ MainPage {
                                 readonly property Wallet wallet: modelData
                                 Layout.alignment: Qt.AlignTop
                                 Layout.fillWidth: true
-                                icon.source: icons[wallet.network.key]
+                                icon.source: iconFor(wallet)
                                 icon.color: 'transparent'
                                 flat: true
                                 text: wallet.name
@@ -130,7 +130,7 @@ MainPage {
                                         fillMode: Image.PreserveAspectFit
                                         sourceSize.height: 24
                                         sourceSize.width: 24
-                                        source: icons[delegate.wallet.network.key]
+                                        source: iconFor(delegate.wallet)
                                     }
                                     Image {
                                         fillMode: Image.PreserveAspectFit

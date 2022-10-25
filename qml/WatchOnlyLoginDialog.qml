@@ -7,7 +7,7 @@ import QtQuick.Layouts 1.12
 AbstractDialog {
     required property Network network
     id: self
-    icon: icons[self.network.key]
+    icon: iconFor(self.network)
     title: qsTrId('id_watchonly_login')
     onClosed: destroy()
     WatchOnlyLoginController {

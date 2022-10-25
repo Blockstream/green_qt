@@ -10,7 +10,7 @@ AbstractDialog {
     id: self
     icon: {
         if (controller.type === 'amp') return 'qrc:/svg/amp.svg'
-        if (controller.network) return icons[controller.network.key]
+        if (controller.network) return iconFor(controller.network)
         return null
     }
     title: qsTrId('id_create_new_wallet')

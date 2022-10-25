@@ -12,7 +12,7 @@ AbstractDialog {
     property bool active: self.wallet.activities.length > 0 || (self.wallet.session && self.wallet.session.connecting)
 
     id: self
-    icon: icons[self.wallet.network.key]
+    icon: iconFor(self.wallet)
     focus: true
     title: self.wallet.name
 

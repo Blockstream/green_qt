@@ -89,7 +89,7 @@ Pane {
                 spacing: 8
                 width: flickable.contentWidth
                 SideButton {
-                    icon.source: icons.bitcoin
+                    icon.source: iconFor('bitcoin')
                     location: '/bitcoin'
                     text: 'Bitcoin'
                 }
@@ -103,7 +103,7 @@ Pane {
                 }
                 SideButton {
                     visible: Settings.enableTestnet
-                    icon.source: icons.testnet
+                    icon.source: iconFor('testnet')
                     location: '/testnet'
                     text: 'Bitcoin Testnet'
                 }
@@ -117,7 +117,7 @@ Pane {
                     }
                 }
                 SideButton {
-                    icon.source: icons.liquid
+                    icon.source: iconFor('liquid')
                     location: '/liquid'
                     text: 'Liquid'
                 }
@@ -131,7 +131,7 @@ Pane {
                 }
                 SideButton {
                     visible: Settings.enableTestnet
-                    icon.source: icons['testnet-liquid']
+                    icon.source: iconFor('testnet-liquid')
                     location: '/testnet-liquid'
                     text: 'Liquid Testnet'
                 }

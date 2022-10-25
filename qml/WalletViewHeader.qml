@@ -53,7 +53,7 @@ MainPageHeader {
                             fillMode: Image.PreserveAspectFit
                             sourceSize.height: 24
                             sourceSize.width: 24
-                            source: icons[self.wallet.network.key]
+                            source: iconFor(self.wallet)
                         }
                         Loader {
                             active: wallet.persisted
