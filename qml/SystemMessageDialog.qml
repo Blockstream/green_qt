@@ -67,4 +67,8 @@ ControllerDialog {
         interval: 5000
         onTriggered: controller.check()
     }
+    AnalyticsView {
+        active: self.opened
+        name: 'SystemMessage'
+    }
 }
