@@ -5,22 +5,25 @@ import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.12
 
 ControllerDialog {
-    id: dialog
     required property string method
 
+    id: dialog
     title: qsTrId('id_set_up_twofactor_authentication')
     modal: true
     doneText: qsTrId('id_enabled')
-
     controller: Controller {
         wallet: dialog.wallet
     }
-    //[2021-08-01 01:06:40.526526] [debug] QJsonObject({"action":"enable_telegram","auth_data":{"telegram_url":"https://t.me/BlockstreamGreenTestnetBot?start=MCWTAJ7ABFVZLJUOPF7L3AALL6OYNGH7"},"device":null,"method":"telegram","status":"resolve_code"})
-
     initialItem: {
         if (method === 'gauth') return gauth_component
         // if (method === 'telegram') return telegram_component
         return generic_component
+    }
+
+    AnalyticsView {
+        active: self.opened
+        name: 'WalletSettings2FASetup'
+        segmentation: segmentationSession(self.wallet)
     }
 
     Component {

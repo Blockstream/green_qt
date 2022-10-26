@@ -30,4 +30,10 @@ ControllerDialog {
             text: qsTrId('id_disable_s_twofactor').arg(method)
         }
     }
+
+    AnalyticsView {
+        active: dialog.opened
+        name: 'WalletSettings2FASetup'
+        segmentation: segmentationSession(dialog.wallet)
+    }
 }
