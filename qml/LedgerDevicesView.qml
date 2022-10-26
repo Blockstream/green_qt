@@ -14,6 +14,10 @@ MainPage {
         id: device_list_model
         vendor: Device.Ledger
     }
+    AnalyticsView {
+        active: window.navigation.location === '/ledger'
+        name: 'DeviceList'
+    }
     header: MainPageHeader {
         contentItem: RowLayout {
             spacing: 12

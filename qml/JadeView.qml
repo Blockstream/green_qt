@@ -35,6 +35,10 @@ MainPage {
         id: device_list_model
         type: Device.BlockstreamJade
     }
+    AnalyticsView {
+        active: window.navigation.location === '/jade'
+        name: 'DeviceList'
+    }
     header: MainPageHeader {
         contentItem: RowLayout {
             spacing: 12
