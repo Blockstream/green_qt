@@ -31,4 +31,10 @@ ControllerDialog {
             placeholderText: qsTrId('id_enter_new_email')
         }
     }
+
+    AnalyticsView {
+        active: dialog.opened
+        name: 'WalletSettings2FAReset'
+        segmentation: segmentationSession(dialog.wallet)
+    }
 }
