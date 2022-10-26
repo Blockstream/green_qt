@@ -43,6 +43,7 @@ AbstractDialog {
                 wallet: self.wallet
                 password: password_field.text
                 onUnauthorized: {
+                    Analytics.recordEvent('failed_wallet_login', segmentationWalletLogin(self.wallet, { method: 'watch_only' }))
                     password_error.error = qsTrId('id_user_not_found_or_invalid')
                     password_field.enabled = true
                     password_field.clear()
@@ -115,6 +116,7 @@ AbstractDialog {
             Connections {
                 target: self.wallet
                 function onLoginAttemptsRemainingChanged(loginAttemptsRemaining) {
+                    Analytics.recordEvent('failed_wallet_login', segmentationWalletLogin(self.wallet, { method: 'pin' }))
                     pin_view.clear()
                 }
             }
