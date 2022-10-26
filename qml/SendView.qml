@@ -34,6 +34,7 @@ StackView {
 
     property Item coins_view: SelectCoinsView {
         account: stack_view.account
+        visible: stack_view.currentItem === this
         property list<Action> actions: [
             Action {
                 text: qsTrId('id_done')

@@ -132,4 +132,9 @@ Page {
             }
         }
     }
+    AnalyticsView {
+        active: self.visible
+        name: 'SelectUTXO'
+        segmentation: segmentationSubAccount(self.account)
+    }
 }
