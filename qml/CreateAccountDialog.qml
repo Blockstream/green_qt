@@ -189,6 +189,11 @@ ControllerDialog {
             onCompleteChanged: {
                 if (complete) stack_view.push(finish_view)
             }
+            AnalyticsView {
+                active: true
+                name: 'RecoveryCheck'
+                segmentation: segmentationNetwork(controller.wallet.network)
+            }
         }
     }
 
