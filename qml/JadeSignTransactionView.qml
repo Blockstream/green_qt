@@ -14,6 +14,12 @@ GFlickable {
     implicitWidth: layout.implicitWidth
     implicitHeight: repeater.count > 1 ? Math.min(500, layout.height) : layout.height
 
+    AnalyticsView {
+        active: true
+        name: 'VerifyTransaction'
+        segmentation: segmentationSession(self.wallet)
+    }
+
     ColumnLayout {
         id: layout
         spacing: constants.s2
