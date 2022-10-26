@@ -4,19 +4,19 @@ import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.12
 
 ControllerDialog {
-    id: dialog
+    id: self
     property bool shouldOpen: false
     title: qsTrId('id_system_message')
     closePolicy: Popup.NoAutoClose
     autoDestroy: false
     showRejectButton: false
     controller: SystemMessageController {
-        wallet: dialog.wallet
-        onEmpty: dialog.accept()
+        wallet: self.wallet
+        onEmpty: self.accept()
         onMessage: {
             message_label.text = text
             confirm_checkbox.enabled = true
-            shouldOpen = true //dialog.open()
+            shouldOpen = true
         }
     }
     // TODO: push view for hw signing
@@ -24,7 +24,7 @@ ControllerDialog {
         property list<Action> actions: [
             Action {
                 text: qsTrId('id_skip')
-                onTriggered: dialog.reject()
+                onTriggered: self.reject()
             },
             Action {
                 enabled: confirm_checkbox.checked
