@@ -112,6 +112,11 @@ SwipeView {
             delegate: AccountDelegate {
             }
         }
+        AnalyticsView {
+            active: self.showArchived
+            name: 'ArchivedAccounts'
+            segmentation: segmentationSession(self.wallet)
+        }
     }
 
     component AccountDelegate: Button {
