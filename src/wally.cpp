@@ -114,7 +114,7 @@ float MnemonicEditorController::progress() const
 
 void MnemonicEditorController::update()
 {
-    bool valid = true;
+    bool valid = m_mnemonic_size > 0;
     bool enabled = true;
     int last_valid = 26;
     while (last_valid >= 0) {
@@ -130,6 +130,8 @@ void MnemonicEditorController::update()
     emit mnemonicChanged();
 
     clearErrors();
+    updateError("mnemonic", "incomplete", !valid);
+
     if (!valid) return setValid(false);
 
     const auto m = mnemonic().join(" ").toUtf8();
@@ -215,7 +217,8 @@ void Word::setEnabled(bool enabled)
 
 QString Word::update(const QString& text)
 {
-    return m_controller->update(m_index, text);
+    if (m_text == text) return m_text;
+    else return m_controller->update(m_index, text);
 }
 
 template <typename T>

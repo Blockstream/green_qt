@@ -11,12 +11,21 @@ WizardPage {
     property alias mnemonic: controller.mnemonic
     property alias controller: controller
     property alias lengths: mnemonic_size_combobox.model
+
+    signal failedRecoveryPhraseCheck()
+
     MnemonicEditorController {
         id: controller
         mnemonicSize: mnemonic_size_combobox.size
         passphrase: password_field.text
+        onErrorsChanged: {
+            if (errors.mnemonic === 'invalid') {
+                self.failedRecoveryPhraseCheck()
+            }
+        }
     }
 
+    id: self
     contentItem: ColumnLayout {
         spacing: 16
         RowLayout {

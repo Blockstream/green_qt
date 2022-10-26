@@ -76,6 +76,11 @@ AbstractDialog {
             sourceComponent: MnemonicEditor {
                 id: editor
                 title: qsTrId('id_enter_your_recovery_phrase')
+                onFailedRecoveryPhraseCheck: {
+                    Analytics.recordEvent('failed_recovery_phrase_check', {
+                        network: navigation.param.network === 'bitcoin' ? 'mainnet' : navigation.param.network
+                    })
+                }
                 footer: DialogFooter {
                     leftPadding: 0
                     rightPadding: 0
