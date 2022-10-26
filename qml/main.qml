@@ -96,6 +96,24 @@ ApplicationWindow {
         return segmentation
     }
 
+    function segmentationFirmwareUpdate(device) {
+        const segmentation = {}
+        const app_settings = []
+        if (Settings.useTor) app_settings.push('tor')
+        if (Settings.useProxy) app_settings.push('proxy')
+        if (Settings.enableTestnet) app_settings.push('testnet')
+        if (Settings.usePersonalNode) app_settings.push('electrum_server')
+        if (Settings.enableSPV) app_settings.push('spv')
+        segmentation.app_settings = app_settings.join(',')
+        if (device instanceof JadeDevice) {
+            segmentation.brand = 'Blockstream'
+            segmentation.model = device.versionInfo.BOARD_TYPE
+            segmentation.firmware = device.version
+            segmentation.connection = 'USB'
+        }
+        return segmentation
+    }
+
     function segmentationShareTransaction(account, { method = 'copy' } = {}) {
         const segmentation = segmentationSession(account.wallet)
         segmentation.method = method

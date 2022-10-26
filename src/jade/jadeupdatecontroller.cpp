@@ -278,7 +278,12 @@ void JadeUpdateController::install(const QVariantMap& firmware, const QByteArray
         activity->deleteLater();
         m_updating = false;
         emit updatingChanged();
+        emit updateFailed();
     });
+    connect(activity, &Activity::finished, this, [=] {
+        emit updateCompleted();
+    });
+    emit updateStarted();
     emit activityCreated(activity);
     ActivityManager::instance()->exec(activity);
 }
