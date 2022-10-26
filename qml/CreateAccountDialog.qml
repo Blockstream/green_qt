@@ -51,6 +51,11 @@ ControllerDialog {
 
         initialItem: RowLayout {
             spacing: 16
+            AnalyticsView {
+                active: dialog.opened
+                name: 'AddAccountChooseType'
+                segmentation: segmentationSession(dialog.wallet)
+            }
             Card {
                 visible: !controller.wallet.network.electrum
                 text: _labels['2of2']
