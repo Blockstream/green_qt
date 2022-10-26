@@ -6,6 +6,8 @@ import QtQuick.Layouts 1.12
 
 ColumnLayout {
     property alias account: receive_address.account
+
+    id: self
     spacing: 12
 
     ReceiveAddressController {
@@ -116,7 +118,10 @@ ColumnLayout {
                         return qsTrId('Verify')
                     }
                     enabled: !receive_address.generating && receive_address.addressVerification !== ReceiveAddressController.VerificationPending
-                    onClicked: receive_address.verify()
+                    onClicked: {
+                        Analytics.recordEvent('verify_address', segmentationSubAccount(self.account))
+                        receive_address.verify()
+                    }
                 }
                 HSpacer {
                 }
