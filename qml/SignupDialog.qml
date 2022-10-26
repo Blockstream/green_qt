@@ -311,6 +311,11 @@ AbstractDialog {
             sourceComponent: MnemonicQuizPage {
                 mnemonic: controller.mnemonic
                 onCompleteChanged: if (complete) navigation.set({ quiz: true })
+                AnalyticsView {
+                    active: true
+                    name: 'RecoveryCheck'
+                    segmentation: segmentationNetwork(controller.network)
+                }
             }
         }
         AnimLoader {
