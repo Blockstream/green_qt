@@ -5,8 +5,10 @@ import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.13
 
 AbstractDialog {
-    title: qsTrId('id_remove_wallet')
     property Wallet wallet
+
+    id: self
+    title: qsTrId('id_remove_wallet')
     modal: true
     onAccepted: {
         WalletManager.removeWallet(wallet)
@@ -59,5 +61,11 @@ AbstractDialog {
             text: qsTrId('id_remove')
             onClicked: accept()
         }
+    }
+
+    AnalyticsView {
+        active: self.opened
+        name: 'DeleteWallet'
+        segmentation: segmentationSession(self.wallet)
     }
 }
