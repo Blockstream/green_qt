@@ -78,4 +78,9 @@ AbstractDialog {
             onClicked: controller.login()
         }
     }
+    AnalyticsView {
+        active: self.opened
+        name: 'OnBoardWatchOnlyCredentials'
+        segmentation: segmentationSession(controller.wallet)
+    }
 }
