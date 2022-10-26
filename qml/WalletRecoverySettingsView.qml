@@ -11,6 +11,12 @@ ColumnLayout {
     required property Wallet wallet
     spacing: 16
 
+    AnalyticsView {
+        active: true
+        name: 'WalletSettingsRecovery'
+        segmentation: segmentationSession(self.wallet)
+    }
+
     SettingsBox {
         title: qsTrId('id_recovery_phrase')
         visible: !wallet.device

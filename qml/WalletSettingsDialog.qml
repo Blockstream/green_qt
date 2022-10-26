@@ -145,13 +145,16 @@ WalletDialog {
                 }
             }
 
-            GFlickable {
-                id: recovery_settings_flickable
-                contentHeight: recovery_view.height
-                WalletRecoverySettingsView {
-                    id: recovery_view
-                    width: recovery_settings_flickable.availableWidth
-                    wallet: self.wallet
+            Loader {
+                active: stack_layout.currentIndex === 3
+                sourceComponent: GFlickable {
+                    id: recovery_settings_flickable
+                    contentHeight: recovery_view.height
+                    WalletRecoverySettingsView {
+                        id: recovery_view
+                        width: recovery_settings_flickable.availableWidth
+                        wallet: self.wallet
+                    }
                 }
             }
         }
