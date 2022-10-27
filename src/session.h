@@ -13,7 +13,6 @@ QT_FORWARD_DECLARE_CLASS(Network);
 
 QT_FORWARD_DECLARE_STRUCT(GA_session)
 
-
 class Session : public Entity
 {
     Q_OBJECT
@@ -28,7 +27,7 @@ class Session : public Entity
     Q_PROPERTY(bool active READ isActive WRITE setActive NOTIFY activeChanged)
     Q_PROPERTY(bool connected READ isConnected NOTIFY connectedChanged)
     Q_PROPERTY(bool connecting READ isConnecting NOTIFY connectingChanged)
-    Q_PROPERTY(QJsonObject event READ event NOTIFY eventChanged)
+    Q_PROPERTY(QJsonObject eventData READ eventData NOTIFY eventDataChanged)
     QML_ELEMENT
 public:
     Session(Network* network, QObject* parent = nullptr);
@@ -47,7 +46,7 @@ public:
     bool isConnected() const { return m_connected; }
     bool isConnecting() const { return m_connecting; }
     QList<QJsonObject> events() const { return m_events; }
-    QJsonObject event() const { return m_event; }
+    QJsonObject eventData() const { return m_event_data; }
 signals:
     void notificationHandled(const QJsonObject& notification);
     void activeChanged(bool active);
@@ -55,7 +54,7 @@ signals:
     void connectingChanged(bool connecting);
     void torEvent(const QJsonObject& event);
     void activityCreated(Activity* activity);
-    void eventChanged(const QJsonObject& event);
+    void eventDataChanged();
 private:
     void update();
     void handleNotification(const QJsonObject& notification);
@@ -78,7 +77,7 @@ public:
     bool m_connecting{false};
     Connectable<ConnectHandler> m_connect_handler;
     QList<QJsonObject> m_events;
-    QJsonObject m_event;
+    QJsonObject m_event_data;
 };
 
 class SessionActivity : public Activity

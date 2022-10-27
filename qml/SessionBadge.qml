@@ -44,7 +44,7 @@ RowLayout {
                 indeterminate: connecting && progress === 0
                 progress: {
                     if (connected) return 1
-                    if (session && session.event.tor) return session.event.tor.progress * 0.01
+                    if (session && session.eventData.tor) return session.eventData.tor.progress * 0.01
                     return 0
                 }
                 opacity: connecting && progress < 1? 1 : 0
