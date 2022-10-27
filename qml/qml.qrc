@@ -77,7 +77,6 @@
         <file>LoginDialog.qml</file>
         <file>WalletSettingsDialog.qml</file>
         <file>MainPageHeader.qml</file>
-        <file>LedgerView.qml</file>
         <file>DialogFooter.qml</file>
         <file>HSpacer.qml</file>
         <file>VSpacer.qml</file>
