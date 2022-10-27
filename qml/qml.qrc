@@ -146,5 +146,7 @@
         <file>LeftArrowToolTip.qml</file>
         <file>BlockstreamView.qml</file>
         <file>AlertView.qml</file>
+        <file>JadeViewDeviceNetwork.qml</file>
+        <file>JadeViewDevice.qml</file>
     </qresource>
 </RCC>
