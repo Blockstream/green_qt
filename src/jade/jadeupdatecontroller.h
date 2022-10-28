@@ -94,7 +94,6 @@ signals:
     void fetchingChanged();
     void updatingChanged();
     void updateStarted();
-    void updateFailed();
     void updateCompleted();
 protected:
     void pushActivity(Activity* activity);

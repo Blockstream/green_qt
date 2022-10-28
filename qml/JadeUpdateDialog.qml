@@ -51,9 +51,6 @@ AbstractDialog {
         onUpdateStarted: {
             Analytics.recordEvent('ota_start', segmentationFirmwareUpdate(self.device))
         }
-        onUpdateFailed: {
-            Analytics.recordEvent('ota_fail', segmentationFirmwareUpdate(self.device))
-        }
         onUpdateCompleted: {
             Analytics.recordEvent('ota_complete', segmentationFirmwareUpdate(self.device))
         }
