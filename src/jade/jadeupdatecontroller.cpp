@@ -5,7 +5,6 @@
 #include "jadeapi.h"
 #include "jadedevice.h"
 #include "json.h"
-#include "semver.h"
 #include "session.h"
 
 #include <QCryptographicHash>
@@ -176,12 +175,12 @@ void JadeUpdateController::check()
                 auto index = m_index.value(type).toObject().value(channel).toObject();
 
                 auto process = [&](bool delta, QJsonObject& firmware) {
-                    const bool same_version = SemVer::parse(version) == SemVer::parse(firmware.value("version").toString());
-                    const bool newer_version = SemVer::parse(version) < SemVer::parse(firmware.value("version").toString());
+                    const bool same_version = QVersionNumber::fromString(version) == QVersionNumber::fromString(firmware.value("version").toString());
+                    const bool newer_version = QVersionNumber::fromString(version) < QVersionNumber::fromString(firmware.value("version").toString());
                     const bool same_config = config == firmware.value("config").toString();
                     const bool upgrade = newer_version || (same_version && !same_config);
-                    const bool downgrade = SemVer::parse(firmware.value("version").toString()) < SemVer::parse(version);
-                    const bool installed = same_version && same_config;
+                    const bool downgrade = QVersionNumber::fromString(firmware.value("version").toString()) < QVersionNumber::fromString(version);
+                    const bool installed = same_version && same_config && version==firmware.value("version").toString();
                     if (delta && installed) return;
                     firmware.insert("channel", channel);
                     firmware.insert("newer_version", newer_version);

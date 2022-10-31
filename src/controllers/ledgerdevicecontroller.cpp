@@ -1,20 +1,13 @@
 #include "ledgerdevicecontroller.h"
 
 #include "activitymanager.h"
-#include "command.h"
-#include "ga.h"
-#include "handlers/connecthandler.h"
 #include "handlers/loginhandler.h"
 #include "handlers/registeruserhandler.h"
 #include "json.h"
 #include "ledgerdevice.h"
 #include "network.h"
-#include "networkmanager.h"
 #include "resolver.h"
-#include "semver.h"
 #include "session.h"
-#include "settings.h"
-#include "util.h"
 #include "wallet.h"
 #include "walletmanager.h"
 
@@ -100,12 +93,12 @@ void LedgerDeviceController::initialize()
 
             if (m_network_key.isEmpty()) {
                 if (m_device->type() == Device::LedgerNanoS) {
-                    if (m_app_version < SemVer::parse("2.0.0")) {
+                    if (m_app_version < QVersionNumber::fromString("2.0.0")) {
                         setStatus("outdated");
                         return;
                     }
                 } else if (m_device->type() == Device::LedgerNanoX) {
-                    if (m_app_version < SemVer::parse("1.3.0")) {
+                    if (m_app_version < QVersionNumber::fromString("1.3.0")) {
                         setStatus("outdated");
                         return;
                     }
@@ -115,18 +108,18 @@ void LedgerDeviceController::initialize()
             } else {
                 if (m_device->type() == Device::LedgerNanoS) {
                     if (m_network->isLiquid()) {
-                        if (m_app_version < SemVer(1, 4, 8)) {
+                        if (m_app_version < QVersionNumber(1, 4, 8)) {
                             setStatus("outdated");
                             return;
                         }
                     } else {
-                        if (m_app_version < SemVer(1, 6, 0)) {
+                        if (m_app_version < QVersionNumber(1, 6, 0)) {
                             setStatus("outdated");
                             return;
                         }
                     }
                 } else if (m_device->type() == Device::LedgerNanoX) {
-                    if (m_app_version < SemVer(1, 6, 1)) {
+                    if (m_app_version < QVersionNumber(1, 6, 1)) {
                         setStatus("outdated");
                         return;
                     }

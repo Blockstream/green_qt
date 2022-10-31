@@ -1,13 +1,12 @@
 #include "jadedevice.h"
 #include "jadeapi.h"
 #include "network.h"
-#include "semver.h"
 
 #include <wally_crypto.h>
 #include <wally_elements.h>
 
 namespace {
-const SemVer JADE_MIN_ALLOWED_FW_VERSION{0, 1, 24};
+const QVersionNumber JADE_MIN_ALLOWED_FW_VERSION{0, 1, 24};
 
 bool IsSegwitAddressType(const QString& addr_type)
 {
@@ -585,7 +584,7 @@ QVariantMap JadeDevice::versionInfo() const
 
 bool JadeDevice::updateRequired() const
 {
-    return SemVer::parse(version()) < JADE_MIN_ALLOWED_FW_VERSION;
+    return QVersionNumber::fromString(version()) < JADE_MIN_ALLOWED_FW_VERSION;
 }
 
 QString JadeDevice::version() const

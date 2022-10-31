@@ -2,7 +2,6 @@
 #define GREEN_LEDGERDEVICECONTROLLER_H
 
 #include "connectable.h"
-#include "semver.h"
 
 #include <QtQml>
 #include <QObject>
@@ -83,8 +82,8 @@ private:
     QString m_wallet_hash_id;
     Wallet* m_wallet{nullptr};
     qreal m_progress{0};
-    SemVer m_fw_version;
-    SemVer m_app_version;
+    QVersionNumber m_fw_version;
+    QVersionNumber m_app_version;
     QString m_app_name;
     bool m_active{false};
     LoginHandler* m_login_handler{nullptr};

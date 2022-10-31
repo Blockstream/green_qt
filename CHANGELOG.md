@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Updates GDK to 0.0.56
+- Improve Jade firmware version handling
 
 ### Fixed
 - Fix watch only login button trim

@@ -3,7 +3,6 @@
 
 #include "command.h"
 #include "device.h"
-#include "semver.h"
 
 QT_FORWARD_DECLARE_CLASS(LedgerDevice);
 
@@ -48,7 +47,7 @@ class GetFirmwareActivity : public Activity
     uint8_t m_loader_minor;
 public:
     GetFirmwareActivity(LedgerDevice* device);
-    SemVer version() const { return {m_fw_major, m_fw_minor, m_fw_patch}; }
+    QVersionNumber version() const { return QVersionNumber{m_fw_major, m_fw_minor, m_fw_patch}; }
 private:
     void exec() override;
 };
@@ -57,11 +56,11 @@ class GetAppActivity : public Activity
 {
     LedgerDevice* const m_device;
     QString m_name;
-    SemVer m_version;
+    QVersionNumber m_version;
 public:
     GetAppActivity(LedgerDevice* device);
     QString name() const;
-    SemVer version() const;
+    QVersionNumber version() const;
 private:
     void exec() override;
 };

@@ -167,7 +167,7 @@ QString GetAppActivity::name() const
     return m_name;
 }
 
-SemVer GetAppActivity::version() const
+QVersionNumber GetAppActivity::version() const
 {
     return m_version;
 }
@@ -196,7 +196,7 @@ void GetAppActivity::exec()
         auto version_string = QString::fromLocal8Bit(version, version[version_length - 1] ? version_length : version_length - 1);
         if (version_string.startsWith('.')) version_string.prepend('1');
 
-        m_version = SemVer::parse(version_string);
+        m_version = QVersionNumber::fromString(version_string);
 
         finish();
     });

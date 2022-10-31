@@ -9,9 +9,7 @@
 #include "network.h"
 #include "networkmanager.h"
 #include "resolver.h"
-#include "semver.h"
 #include "session.h"
-#include "settings.h"
 #include "wallet.h"
 #include "walletmanager.h"
 
@@ -19,10 +17,9 @@
 
 #include <wally_bip32.h>
 
-
 static QJsonObject device_details_from_device(JadeDevice* device)
 {
-    const bool supports_host_unblinding = SemVer::parse(device->version()) >= SemVer(0, 1, 27);
+    const bool supports_host_unblinding = QVersionNumber::fromString(device->version()) >= QVersionNumber(0, 1, 27);
     return {{
         "device", QJsonObject({
             { "name", device->uuid() },
