@@ -16,6 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Popup with button to copy being activated below dialogs
 - Fix view state when changing between selected account
 - Fix compiler warning raised on session.h event property
+- Improve receive address while validating on device
+- Improve receive dialog footer padding consistency
 
 ## [1.1.4] - 2022-10-05
 ### Added

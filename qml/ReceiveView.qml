@@ -45,6 +45,7 @@ ColumnLayout {
             }
         }
     }
+
     RowLayout {
         SectionLabel {
             text: qsTrId('id_scan_to_send_here')
@@ -84,9 +85,10 @@ ColumnLayout {
 
     CopyableLabel {
         delay: 200
-        enabled: !receive_address.generating && (receive_address.addressVerification === ReceiveAddressController.VerificationNone || receive_address.addressVerification === ReceiveAddressController.VerificationAccepted)
+        enabled: !receive_address.generating
         Layout.fillWidth: true
         Layout.preferredWidth: 0
+        Layout.rightMargin: constants.s2
         text: receive_address.uri
         wrapMode: Text.WrapAnywhere
         onCopy: {
@@ -95,6 +97,7 @@ ColumnLayout {
             Analytics.recordEvent('receive_address', segmentationReceiveAddress(account, type))
         }
     }
+
     Loader {
         Layout.alignment: Qt.AlignCenter
         Layout.fillWidth: true
@@ -111,21 +114,8 @@ ColumnLayout {
                     Layout.maximumHeight: 32
                     Layout.maximumWidth: paintedWidth
                 }
-                GButton {
-                    large: true
-                    text: {
-                        if (receive_address.addressVerification === ReceiveAddressController.VerificationPending) return qsTrId('id_verify_on_device')
-                        return qsTrId('Verify')
-                    }
-                    enabled: !receive_address.generating && receive_address.addressVerification !== ReceiveAddressController.VerificationPending
-                    onClicked: {
-                        Analytics.recordEvent('verify_address', segmentationSubAccount(self.account))
-                        receive_address.verify()
-                    }
-                }
-                HSpacer {
-                }
                 BusyIndicator {
+                    Layout.leftMargin: -constants.s2
                     Layout.maximumHeight: 32
                     running: receive_address.addressVerification === ReceiveAddressController.VerificationPending
                     visible: running
@@ -142,12 +132,28 @@ ColumnLayout {
                     Layout.maximumHeight: 16
                     source: 'qrc:/svg/x.svg'
                 }
+                HSpacer {
+                }
+                GButton {
+                    large: true
+                    text: {
+                        if (receive_address.addressVerification === ReceiveAddressController.VerificationPending) return qsTrId('id_verify_on_device')
+                        return qsTrId('Verify')
+                    }
+                    enabled: !receive_address.generating && receive_address.addressVerification !== ReceiveAddressController.VerificationPending
+                    onClicked: {
+                        Analytics.recordEvent('verify_address', segmentationSubAccount(self.account))
+                        receive_address.verify()
+                    }
+                }
             }
         }
     }
+
     SectionLabel {
         text: qsTrId('id_add_amount_optional')
     }
+
     RowLayout {
         GTextField {
             id: amount_field

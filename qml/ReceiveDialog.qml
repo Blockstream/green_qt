@@ -13,7 +13,8 @@ WalletDialog {
     contentItem: ReceiveView {
         account: self.account
     }
-
+    footer: DialogFooter {
+    }
     AnalyticsView {
         name: 'Receive'
         active: self.opened
