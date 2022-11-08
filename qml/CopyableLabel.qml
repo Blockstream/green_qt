@@ -31,8 +31,12 @@ Label {
         height: self.height + 16
         padding: 8
         opacity: 0
+        dim: true
         visible: hover_handler.containsMouse || popup_hover_handler.containsMouse
         parent: Overlay.overlay
+        Overlay.modeless: Rectangle {
+            color: Qt.rgba(0, 0, 0, popup.opacity * 0.4)
+        }
         contentItem: RowLayout {
             spacing: 8
             Label {
