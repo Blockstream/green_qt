@@ -27,7 +27,7 @@ Label {
         id: popup
         x: scenePosition.x
         y: scenePosition.y
-        width: self.width + 16 + 8 + 16
+        width: self.width + popup.opacity * 16 + 16 + 16
         height: self.height + 16
         padding: 8
         opacity: 0
@@ -38,7 +38,7 @@ Label {
             color: Qt.rgba(0, 0, 0, popup.opacity * 0.4)
         }
         contentItem: RowLayout {
-            spacing: 8
+            spacing: 16
             Label {
                 Layout.maximumWidth: self.width
                 padding: self.padding
@@ -49,12 +49,20 @@ Label {
                 horizontalAlignment: self.horizontalAlignment
                 verticalAlignment: self.verticalAlignment
             }
-            Image {
-                source: check_timer.running ? 'qrc:/svg/check.svg' : 'qrc:/svg/copy.svg'
-                mipmap: true
-                smooth: true
+            Item {
                 Layout.preferredHeight: 16
                 Layout.preferredWidth: 16
+                Layout.maximumWidth: popup.opacity * 16
+                Image {
+                    anchors.right: parent.right
+                    width: 16
+                    height: 16
+                    anchors.verticalCenter: parent.verticalCenter
+                    source: check_timer.running ? 'qrc:/svg/check.svg' : 'qrc:/svg/copy.svg'
+                    mipmap: true
+                    smooth: true
+                    opacity: popup.opacity
+                }
             }
         }
         background: Rectangle {
