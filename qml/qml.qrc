@@ -149,5 +149,6 @@
         <file>JadeViewDeviceNetwork.qml</file>
         <file>JadeViewDevice.qml</file>
         <file>LoginWithPinView.qml</file>
+        <file>LoginWithPasswordView.qml</file>
     </qresource>
 </RCC>
