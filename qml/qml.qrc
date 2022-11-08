@@ -148,5 +148,6 @@
         <file>AlertView.qml</file>
         <file>JadeViewDeviceNetwork.qml</file>
         <file>JadeViewDevice.qml</file>
+        <file>LoginWithPinView.qml</file>
     </qresource>
 </RCC>
