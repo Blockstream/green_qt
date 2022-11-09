@@ -73,6 +73,7 @@ GPane {
         }
 
         AssetListView {
+            account: self.account
             header: GHeader {
                 Label {
                     text: qsTrId('id_assets')

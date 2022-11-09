@@ -152,5 +152,6 @@
         <file>SelectServerTypeViewCard.qml</file>
         <file>PopupBalloon.qml</file>
         <file>SelectNetworkViewCard.qml</file>
+        <file>PersistentLoader.qml</file>
     </qresource>
 </RCC>

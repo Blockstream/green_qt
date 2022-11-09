@@ -49,32 +49,38 @@ ColumnLayout {
         Layout.fillHeight: true
         currentIndex: account_view.currentView
 
-        OverviewView {
-            id: overview_view
-            showAllAssets: false
-            account: account_view.account
-        }
-
-        AssetListView {
-            account: account_view.account
-        }
-
-        TransactionListView {
-            account: account_view.account
-        }
-
-        Loader {
-            active: !account_view.account.wallet.watchOnly
-            sourceComponent: AddressesListView {
-                id: addresses_view
+        PersistentLoader {
+            load: stack_layout.currentIndex === 0
+            sourceComponent: OverviewView {
+                showAllAssets: false
                 account: account_view.account
             }
         }
 
-        Loader {
-            active: !account_view.account.wallet.watchOnly
-                sourceComponent: OutputsListView {
-                id: outputs_view
+        PersistentLoader {
+            load: stack_layout.currentIndex === 1
+            sourceComponent: AssetListView {
+                account: account_view.account
+            }
+        }
+
+        PersistentLoader {
+            load: stack_layout.currentIndex === 2
+            sourceComponent: TransactionListView {
+                account: account_view.account
+            }
+        }
+
+        PersistentLoader {
+            load: !account_view.account.wallet.watchOnly
+            sourceComponent: AddressesListView {
+                account: account_view.account
+            }
+        }
+
+        PersistentLoader {
+            load: !account_view.account.wallet.watchOnly
+            sourceComponent: OutputsListView {
                 account: account_view.account
             }
         }
