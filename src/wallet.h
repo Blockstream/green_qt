@@ -213,7 +213,6 @@ public:
     QList<Account*> m_accounts;
     QMap<int, Account*> m_accounts_by_pointer;
 
-    QByteArray getPinData() const;
     QByteArray m_pin_data;
     QString m_name;
     QJsonObject m_device_details;
