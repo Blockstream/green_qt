@@ -759,15 +759,6 @@ void WalletUpdateAccountsActivity::exec()
 {
 }
 
-WalletSignupActivity::WalletSignupActivity(Wallet *wallet, QObject *parent)
-    : WalletActivity(wallet, parent)
-{
-}
-
-void WalletSignupActivity::exec()
-{
-}
-
 LoginWithPinController::LoginWithPinController(QObject* parent)
     : Entity(parent)
 {

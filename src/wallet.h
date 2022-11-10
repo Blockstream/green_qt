@@ -260,15 +260,6 @@ public:
     void exec() override;
 };
 
-class WalletSignupActivity : public WalletActivity
-{
-    Q_OBJECT
-    QML_ELEMENT
-public:
-    WalletSignupActivity(Wallet* wallet, QObject* parent);
-    void exec() override;
-};
-
 class WalletUpdateAccountsActivity : public WalletActivity
 {
     Q_OBJECT
