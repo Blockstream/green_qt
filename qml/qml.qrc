@@ -118,7 +118,6 @@
         <file>CoinDelegate.qml</file>
         <file>SelectCoinsView.qml</file>
         <file>MessageDialog.qml</file>
-        <file>NewsPage.qml</file>
         <file>AccountTypeBadge.qml</file>
         <file>GCard.qml</file>
         <file>FixedErrorBadge.qml</file>
