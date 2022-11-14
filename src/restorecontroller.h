@@ -5,10 +5,9 @@
 #include <QtQml>
 
 #include "controller.h"
-#include "session.h"
-#include "wallet.h"
 
 class Network;
+class Session;
 class Wallet;
 
 class RestoreController : public AbstractController
@@ -79,26 +78,6 @@ private:
     bool m_busy{false};
     void setBusy(bool busy);
     void setValid(bool valid);
-};
-
-class CheckRestoreActivity : public WalletActivity
-{
-    Q_OBJECT
-    QML_ELEMENT
-public:
-    CheckRestoreActivity(Wallet* wallet, QObject* parent);
-private:
-    void exec() override {}
-};
-
-class AcceptRestoreActivity : public WalletActivity
-{
-    Q_OBJECT
-    QML_ELEMENT
-public:
-    AcceptRestoreActivity(Wallet* wallet, QObject* parent);
-private:
-    void exec() override {}
 };
 
 #endif // GREEN_RESTORECONTROLLER_H

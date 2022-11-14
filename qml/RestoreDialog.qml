@@ -25,20 +25,6 @@ AbstractDialog {
         location: window.navigation.location
     }
 
-    Connections {
-        enabled: target
-        target: navigation.controller ? navigation.controller.wallet : null
-        function onActivityCreated(activity) {
-            if (activity instanceof CheckRestoreActivity) {
-            } else if (activity instanceof AcceptRestoreActivity) {
-                activity.finished.connect(() => {
-                    const wallet = navigation.controller.wallet
-                    window.navigation.go(`/${wallet.network.key}/${wallet.id}`)
-                })
-            }
-        }
-    }
-
     contentItem: StackLayout {
         property Item currentItem: {
             if (stack_layout.currentIndex < 0) return null
@@ -229,38 +215,6 @@ AbstractDialog {
                     VSpacer {
                     }
                 }
-            }
-        }
-    }
-
-    Component {
-        id: check_view
-        RowLayout {
-            required property CheckRestoreActivity activity
-            id: self
-            BusyIndicator {
-                Layout.preferredHeight: 32
-                Layout.alignment: Qt.AlignCenter
-            }
-            Label {
-                Layout.alignment: Qt.AlignCenter
-                text: 'Checking'
-            }
-        }
-    }
-
-    Component {
-        id: accept_view
-        RowLayout {
-            required property AcceptRestoreActivity activity
-            id: self
-            BusyIndicator {
-                Layout.preferredHeight: 32
-                Layout.alignment: Qt.AlignCenter
-            }
-            Label {
-                Layout.alignment: Qt.AlignCenter
-                text: 'Restoring'
             }
         }
     }

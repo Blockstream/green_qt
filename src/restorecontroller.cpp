@@ -76,9 +76,6 @@ void RestoreController::accept()
     m_accepted = true;
     emit acceptedChanged(m_accepted);
 
-    auto activity = new AcceptRestoreActivity(m_wallet, this);
-    m_wallet->pushActivity(activity);
-
     QJsonObject credentials({
         { "mnemonic", m_mnemonic.join(" ") },
         { "password", m_password }
@@ -100,9 +97,6 @@ void RestoreController::accept()
 
         emit finished();
         WalletManager::instance()->insertWallet(m_wallet);
-
-        activity->finish();
-        activity->deleteLater();
     });
     handler->exec();
 }
@@ -217,14 +211,4 @@ void RestoreController::setValid(bool valid)
     if (m_valid == valid) return;
     m_valid = valid;
     emit validChanged(m_valid);
-}
-
-CheckRestoreActivity::CheckRestoreActivity(Wallet* wallet, QObject* parent)
-    : WalletActivity(wallet, parent)
-{
-}
-
-AcceptRestoreActivity::AcceptRestoreActivity(Wallet* wallet, QObject* parent)
-    : WalletActivity(wallet, parent)
-{
 }
