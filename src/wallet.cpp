@@ -712,12 +712,6 @@ void Wallet::setLocked(bool locked)
 }
 
 
-WalletActivity::WalletActivity(Wallet* wallet, QObject* parent)
-    : Activity(parent)
-    , m_wallet(wallet)
-{
-}
-
 LoginWithPinController::LoginWithPinController(QObject* parent)
     : Entity(parent)
 {

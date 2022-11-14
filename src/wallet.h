@@ -236,18 +236,6 @@ protected slots:
     void updateReady();
 };
 
-class WalletActivity : public Activity
-{
-    Q_OBJECT
-    Q_PROPERTY(Wallet* wallet READ wallet CONSTANT)
-    QML_ELEMENT
-public:
-    WalletActivity(Wallet* wallet, QObject* parent);
-    Wallet* wallet() const { return m_wallet; }
-private:
-    Wallet* const m_wallet;
-};
-
 class LoginWithPinController : public Entity
 {
     Q_OBJECT
