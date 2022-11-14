@@ -51,30 +51,12 @@ AbstractDialog {
         }
     }
 
-    Connections {
-        target: controller.wallet ? controller.wallet.session : null
-        function onActivityCreated(activity) {
-            if (activity instanceof SessionTorCircuitActivity) {
-                session_tor_cirtcuit_view.createObject(activities_row, { activity })
-            } else if (activity instanceof SessionConnectActivity) {
-                session_connect_view.createObject(activities_row, { activity })
-            }
-        }
-    }
-
     footer: DialogFooter {
         GButton {
             large: true
             visible: navigation.canPop
             text: qsTrId('id_back')
             onClicked: navigation.pop()
-        }
-        GPane {
-            Layout.minimumHeight: 48
-            padding: 0
-            contentItem: RowLayout {
-                id: activities_row
-            }
         }
         HSpacer {}
         Repeater {

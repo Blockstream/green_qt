@@ -23,13 +23,6 @@ AbstractDialog {
             window.navigation.go(`/${wallet.network.key}/${wallet.id}`)
             self.accept()
         }
-        onActivityCreated: {
-            if (activity instanceof SessionTorCircuitActivity) {
-                session_tor_cirtcuit_view.createObject(activities_row, { activity })
-            } else if (activity instanceof SessionConnectActivity) {
-                session_connect_view.createObject(activities_row, { activity })
-            }
-        }
         onUnauthorized: self.contentItem.ToolTip.show(qsTrId('id_user_not_found_or_invalid'), 3000);
     }
 
@@ -63,12 +56,6 @@ AbstractDialog {
     }
 
     footer: DialogFooter {
-        GPane {
-            padding: 0
-            contentItem: RowLayout {
-                id: activities_row
-            }
-        }
         HSpacer {
         }
         GButton {

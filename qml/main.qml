@@ -381,17 +381,5 @@ ApplicationWindow {
             }
             BusyIndicator {}
         }
-
-    }
-
-    Component {
-        id: session_tor_cirtcuit_view
-        SessionTorCircuitToolButton {
-        }
-    }
-    Component {
-        id: session_connect_view
-        SessionConnectToolButton {
-        }
     }
 }
