@@ -286,9 +286,6 @@ void Wallet::refreshAssets(bool refresh)
 {
     Q_ASSERT(m_network->isLiquid());
 
-    auto activity = new WalletRefreshAssets(this, this);
-    pushActivity(activity);
-
     auto handler = new RefreshAssetsHandler(refresh, m_session);
     handler->exec();
 
@@ -302,14 +299,9 @@ void Wallet::refreshAssets(bool refresh)
         for (auto account : m_accounts) {
             account->updateBalance();
         }
-
-        activity->finish();
-        activity->deleteLater();
     });
-    connect(handler, &Handler::error, this, [handler, activity] {
+    connect(handler, &Handler::error, this, [=] {
         handler->deleteLater();
-        activity->fail();
-        activity->deleteLater();
     });
 }
 
@@ -729,15 +721,6 @@ WalletAuthenticateActivity::WalletAuthenticateActivity(Wallet* wallet, QObject* 
 }
 
 void WalletAuthenticateActivity::exec()
-{
-}
-
-WalletRefreshAssets::WalletRefreshAssets(Wallet* wallet, QObject* parent)
-    : WalletActivity(wallet, parent)
-{
-}
-
-void WalletRefreshAssets::exec()
 {
 }
 

@@ -257,15 +257,6 @@ public:
     void exec() override;
 };
 
-class WalletRefreshAssets : public WalletActivity
-{
-    Q_OBJECT
-    QML_ELEMENT
-public:
-    WalletRefreshAssets(Wallet* wallet, QObject* parent);
-    void exec() override;
-};
-
 class LoginWithPinController : public Entity
 {
     Q_OBJECT

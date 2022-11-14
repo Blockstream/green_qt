@@ -400,16 +400,7 @@ AbstractDialog {
                 }
                 Label {
                     Layout.alignment: Qt.AlignCenter
-                    text: {
-                        const count = controller.wallet ? controller.wallet.activities.length : 0
-                        if (count > 0) {
-                            const activity = controller.wallet.activities[count - 1]
-                            if (activity instanceof WalletRefreshAssets) {
-                                return qsTrId('id_loading_assets')
-                            }
-                        }
-                        return qsTrId('id_creating_wallet')
-                    }
+                    text: qsTrId('id_creating_wallet')
                 }
                 VSpacer {}
             }
