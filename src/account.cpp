@@ -253,9 +253,3 @@ void Account::setName(const QString& name)
     m_name = name;
     emit nameChanged(m_name);
 }
-
-AccountActivity::AccountActivity(Account* account, QObject* parent)
-    : WalletActivity(account->wallet(), parent)
-    , m_account(account)
-{
-}

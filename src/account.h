@@ -89,16 +89,4 @@ private:
     friend class Wallet;
 };
 
-class AccountActivity : public WalletActivity
-{
-    Q_OBJECT
-    Q_PROPERTY(Account* account READ account CONSTANT)
-    QML_ELEMENT
-public:
-    AccountActivity(Account* account, QObject* parent);
-    Account* account() const { return m_account; }
-private:
-    Connectable<Account> m_account;
-};
-
 #endif // GREEN_ACCOUNT_H
