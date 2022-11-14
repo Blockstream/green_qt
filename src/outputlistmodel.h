@@ -19,7 +19,7 @@ public:
     ~OutputListModel();
     Account* account() const { return m_account; }
     void setAccount(Account* account);
-    bool fetching() const { return m_get_outputs_activity; }
+    bool fetching() const { return m_fetching; }
     QHash<int,QByteArray> roleNames() const override;
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
@@ -36,7 +36,7 @@ private:
 private:
     Connectable<Account> m_account;
     QVector<Output*> m_outputs;
-    Connectable<AccountGetUnspentOutputsActivity> m_get_outputs_activity;
+    bool m_fetching{false};
 };
 
 #endif // GREEN_OUTPUTLISTMODEL_H

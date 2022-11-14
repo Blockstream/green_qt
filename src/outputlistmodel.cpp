@@ -3,7 +3,7 @@
 #include <QDebug>
 
 #include "account.h"
-#include "activitymanager.h"
+#include "handlers/getunspentoutputshandler.h"
 #include "output.h"
 #include "resolver.h"
 
@@ -56,21 +56,32 @@ void OutputListModel::setAccount(Account *account)
 void OutputListModel::fetch()
 {
     if (!m_account) return;
-    if (m_get_outputs_activity) return;
+    if (m_fetching) return;
 
-    m_get_outputs_activity.update(new AccountGetUnspentOutputsActivity(m_account, 0, true, this));
-    m_account->wallet()->pushActivity(m_get_outputs_activity);
+    auto handler = new GetUnspentOutputsHandler(0, true, m_account);
 
-    m_get_outputs_activity.track(QObject::connect(m_get_outputs_activity, &Activity::finished, this, [this] {
+    QObject::connect(handler, &Handler::done, this, [=] {
+        handler->deleteLater();
         beginResetModel();
-        m_outputs = m_get_outputs_activity->outputs();
+        m_outputs.clear();
+        for (const QJsonValue& assets_values : handler->unspentOutputs()) {
+            for (const QJsonValue& asset_value : assets_values.toArray()) {
+                auto output = account()->getOrCreateOutput(asset_value.toObject());
+                m_outputs.append(output);
+            }
+        }
         endResetModel();
-        m_get_outputs_activity->deleteLater();
-        m_get_outputs_activity.update(nullptr);
+        m_fetching = false;
         emit fetchingChanged();
-    }));
+    });
 
-    ActivityManager::instance()->exec(m_get_outputs_activity);
+    connect(handler, &Handler::resolver, this, [](Resolver* resolver) {
+        resolver->resolve();
+    });
+
+    handler->exec();
+
+    m_fetching = true;
     emit fetchingChanged();
 }
 
