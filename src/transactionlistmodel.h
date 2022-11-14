@@ -25,7 +25,7 @@ public:
 
     Account* account() const { return m_account; }
     void setAccount(Account* account);
-    bool fetching() const { return m_get_transactions_activity; }
+    bool fetching() const { return m_fetching; }
 
     QHash<int,QByteArray> roleNames() const override;
     void fetchMore(const QModelIndex &parent) override;
@@ -47,7 +47,7 @@ private:
     QVector<Transaction*> m_transactions;
     bool m_has_unconfirmed{false};
     bool m_reached_end{false};
-    Connectable<AccountGetTransactionsActivity> m_get_transactions_activity;
+    bool m_fetching{false};
     QTimer* const m_reload_timer;
 };
 
