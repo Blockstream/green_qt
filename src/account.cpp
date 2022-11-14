@@ -260,36 +260,6 @@ AccountActivity::AccountActivity(Account* account, QObject* parent)
 {
 }
 
-#include "handlers/gettransactionshandler.h"
-
-AccountGetTransactionsActivity::AccountGetTransactionsActivity(Account* account, int first, int count, QObject* parent)
-    : AccountActivity(account, parent)
-    , m_first(first)
-    , m_count(count)
-{
-}
-
-void AccountGetTransactionsActivity::exec()
-{
-    auto handler = new GetTransactionsHandler(account()->pointer(), m_first, m_count, wallet()->session());
-
-    QObject::connect(handler, &Handler::done, this, [this, handler] {
-        handler->deleteLater();
-        // instantiate missing transactions
-        for (const QJsonValue& value : handler->transactions()) {
-            auto transaction = account()->getOrCreateTransaction(value.toObject());
-            m_transactions.append(transaction);
-        }
-        finish();
-    });
-
-    connect(handler, &Handler::resolver, this, [](Resolver* resolver) {
-        resolver->resolve();
-    });
-
-    handler->exec();
-}
-
 #include "handlers/getunspentoutputshandler.h"
 
 AccountGetUnspentOutputsActivity::AccountGetUnspentOutputsActivity(Account* account, int num_confs, bool all_coins, QObject* parent)

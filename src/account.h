@@ -101,21 +101,6 @@ private:
     Connectable<Account> m_account;
 };
 
-class AccountGetTransactionsActivity : public AccountActivity
-{
-    Q_OBJECT
-    QML_ELEMENT
-public:
-    AccountGetTransactionsActivity(Account* account, int first, int count, QObject* parent);
-    QVector<Transaction*> transactions() const { return m_transactions; }
-private:
-    void exec() override;
-private:
-    const int m_first;
-    const int m_count;
-    QVector<Transaction*> m_transactions;
-};
-
 class AccountGetUnspentOutputsActivity : public AccountActivity
 {
     Q_OBJECT
