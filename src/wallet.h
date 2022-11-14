@@ -19,7 +19,6 @@ class Device;
 class Network;
 class Session;
 class Wallet;
-class WalletUpdateAccountsActivity;
 
 struct GA_session;
 struct GA_auth_handler;
@@ -200,7 +199,6 @@ public:
     bool m_is_persisted{false};
     QString m_id;
     bool m_restoring{false};
-    WalletUpdateAccountsActivity* m_update_accounts_activity{nullptr};
 
     Connectable<Session> m_session;
     AuthenticationStatus m_authentication{Unauthenticated};
@@ -256,15 +254,6 @@ class WalletAuthenticateActivity : public WalletActivity
     QML_ELEMENT
 public:
     WalletAuthenticateActivity(Wallet* wallet, QObject* parent);
-    void exec() override;
-};
-
-class WalletUpdateAccountsActivity : public WalletActivity
-{
-    Q_OBJECT
-    QML_ELEMENT
-public:
-    WalletUpdateAccountsActivity(Wallet* wallet, QObject* parent);
     void exec() override;
 };
 

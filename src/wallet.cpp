@@ -219,11 +219,6 @@ void Wallet::reload(bool refresh_accounts)
         refreshAssets(false);
     }
 
-    if (!m_update_accounts_activity) {
-        m_update_accounts_activity = new WalletUpdateAccountsActivity(this, this);
-        pushActivity(m_update_accounts_activity);
-    }
-
     auto handler = new GetSubAccountsHandler(m_session, refresh_accounts);
     QObject::connect(handler, &Handler::done, this, [this, handler] {
         handler->deleteLater();
@@ -256,10 +251,6 @@ void Wallet::reload(bool refresh_accounts)
                 emit usernameChanged(m_username);
             }
         }
-
-        m_update_accounts_activity->finish();
-        m_update_accounts_activity->deleteLater();
-        m_update_accounts_activity = nullptr;
     });
     QObject::connect(handler, &Handler::resolver, this, [](Resolver* resolver) {
         resolver->resolve();
@@ -747,15 +738,6 @@ WalletRefreshAssets::WalletRefreshAssets(Wallet* wallet, QObject* parent)
 }
 
 void WalletRefreshAssets::exec()
-{
-}
-
-WalletUpdateAccountsActivity::WalletUpdateAccountsActivity(Wallet* wallet, QObject* parent)
-    : WalletActivity(wallet, parent)
-{
-}
-
-void WalletUpdateAccountsActivity::exec()
 {
 }
 
