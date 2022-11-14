@@ -4,8 +4,6 @@
 #include <QObject>
 #include <QtQml>
 
-#include "wallet.h"
-
 QT_FORWARD_DECLARE_CLASS(Address)
 QT_FORWARD_DECLARE_CLASS(Output)
 QT_FORWARD_DECLARE_CLASS(Balance)

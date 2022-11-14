@@ -1,6 +1,7 @@
 #include "account.h"
 #include "getbalancehandler.h"
 #include "json.h"
+#include "wallet.h"
 
 #include <gdk.h>
 

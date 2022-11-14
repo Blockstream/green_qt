@@ -2,6 +2,7 @@
 #include "controllers/exportaddressescontroller.h"
 #include "handlers/getaddresseshandler.h"
 #include "resolver.h"
+#include "wallet.h"
 
 #include <QFileDialog>
 #include <QFile>

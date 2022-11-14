@@ -6,7 +6,10 @@
 #include <QtQml>
 #include <QVector>
 
-#include "account.h"
+#include "connectable.h"
+
+class Account;
+class Output;
 
 class OutputListModel : public QAbstractListModel
 {

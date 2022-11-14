@@ -2,6 +2,7 @@
 
 #include "account.h"
 #include "json.h"
+#include "wallet.h"
 
 #include <gdk.h>
 

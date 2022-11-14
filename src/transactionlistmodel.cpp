@@ -6,6 +6,7 @@
 #include "handlers/gettransactionshandler.h"
 #include "resolver.h"
 #include "transaction.h"
+#include "wallet.h"
 
 TransactionListModel::TransactionListModel(QObject* parent)
     : QAbstractListModel(parent)
