@@ -259,34 +259,3 @@ AccountActivity::AccountActivity(Account* account, QObject* parent)
     , m_account(account)
 {
 }
-
-#include "handlers/getunspentoutputshandler.h"
-
-AccountGetUnspentOutputsActivity::AccountGetUnspentOutputsActivity(Account* account, int num_confs, bool all_coins, QObject* parent)
-    : AccountActivity(account, parent)
-    , m_num_confs(num_confs)
-    , m_all_coins(all_coins)
-{
-}
-
-void AccountGetUnspentOutputsActivity::exec()
-{
-    auto handler = new GetUnspentOutputsHandler(m_num_confs, m_all_coins, account());
-
-    QObject::connect(handler, &Handler::done, this, [this, handler] {
-        handler->deleteLater();
-        for (const QJsonValue& assets_values : handler->unspentOutputs()) {
-            for (const QJsonValue& asset_value : assets_values.toArray()) {
-                auto output = account()->getOrCreateOutput(asset_value.toObject());
-                m_outputs.append(output);
-            }
-        }
-        finish();
-    });
-
-    connect(handler, &Handler::resolver, this, [](Resolver* resolver) {
-        resolver->resolve();
-    });
-
-    handler->exec();
-}

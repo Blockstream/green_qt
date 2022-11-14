@@ -101,19 +101,4 @@ private:
     Connectable<Account> m_account;
 };
 
-class AccountGetUnspentOutputsActivity : public AccountActivity
-{
-    Q_OBJECT
-    QML_ELEMENT
-public:
-    AccountGetUnspentOutputsActivity(Account* account, int m_num_confs, bool all_coins, QObject* parent);
-    QVector<Output*> outputs() const { return m_outputs; }
-private:
-    void exec() override;
-private:
-    const int m_num_confs;
-    const bool m_all_coins;
-    QVector<Output*> m_outputs;
-};
-
 #endif // GREEN_ACCOUNT_H

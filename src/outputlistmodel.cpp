@@ -20,7 +20,6 @@ void OutputListModel::setAccount(Account *account)
 {
     if (!m_account.update(account)) return;
     beginResetModel();
-    m_get_outputs_activity.update(nullptr);
     m_outputs.clear();
     endResetModel();
     emit accountChanged(m_account);
