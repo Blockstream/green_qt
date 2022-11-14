@@ -6,8 +6,8 @@
 #include <QtQml>
 #include <QObject>
 
-QT_FORWARD_DECLARE_CLASS(Activity)
-QT_FORWARD_DECLARE_CLASS(JadeDevice)
+class Activity;
+class JadeDevice;
 
 class JadeHttpRequestActivity : public HttpRequestActivity
 {

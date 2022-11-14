@@ -5,8 +5,8 @@
 #include <QObject>
 #include <QtQml>
 
-QT_FORWARD_DECLARE_CLASS(Network)
-QT_FORWARD_DECLARE_CLASS(Session)
+class Network;
+class Session;
 
 QT_FORWARD_DECLARE_STRUCT(GA_session)
 

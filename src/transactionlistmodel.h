@@ -9,9 +9,9 @@
 
 #include "account.h"
 
-QT_FORWARD_DECLARE_CLASS(Account)
-QT_FORWARD_DECLARE_CLASS(Handler)
-QT_FORWARD_DECLARE_CLASS(Transaction)
+class Account;
+class Handler;
+class Transaction;
 
 class TransactionListModel : public QAbstractListModel
 {

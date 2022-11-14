@@ -3,7 +3,7 @@
 
 #include <QObject>
 
-QT_FORWARD_DECLARE_CLASS(Device)
+class Device;
 
 class CommandBatch;
 

@@ -5,9 +5,9 @@
 #include <QObject>
 #include <QtQml>
 
-QT_FORWARD_DECLARE_CLASS(Resolver)
-QT_FORWARD_DECLARE_CLASS(TwoFactorResolver)
-QT_FORWARD_DECLARE_CLASS(Session)
+class Resolver;
+class TwoFactorResolver;
+class Session;
 
 QT_FORWARD_DECLARE_STRUCT(GA_session)
 QT_FORWARD_DECLARE_STRUCT(GA_auth_handler)

@@ -3,7 +3,7 @@
 
 #include "device.h"
 
-QT_FORWARD_DECLARE_CLASS(LedgerDevice)
+class LedgerDevice;
 
 class LedgerGetBlindingKeyActivity : public GetBlindingKeyActivity
 {

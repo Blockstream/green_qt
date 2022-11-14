@@ -4,11 +4,11 @@
 #include <QObject>
 #include <QtQml>
 
-QT_FORWARD_DECLARE_CLASS(Address)
-QT_FORWARD_DECLARE_CLASS(Output)
-QT_FORWARD_DECLARE_CLASS(Balance)
-QT_FORWARD_DECLARE_CLASS(Transaction)
-QT_FORWARD_DECLARE_CLASS(Wallet)
+class Address;
+class Balance;
+class Output;
+class Transaction;
+class Wallet;
 
 class Account : public QObject
 {

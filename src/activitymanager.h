@@ -5,7 +5,7 @@
 #include <QObject>
 #include <QStandardItemModel>
 
-QT_FORWARD_DECLARE_CLASS(Activity)
+class Activity;
 
 class ActivityManager : public QObject
 {

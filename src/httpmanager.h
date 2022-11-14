@@ -6,9 +6,9 @@
 #include <QQueue>
 #include <QTimer>
 
-QT_FORWARD_DECLARE_CLASS(Activity)
-QT_FORWARD_DECLARE_CLASS(SessionActivity)
-QT_FORWARD_DECLARE_CLASS(Session)
+class Activity;
+class SessionActivity;
+class Session;
 
 class HttpManager : public QObject
 {

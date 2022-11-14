@@ -205,6 +205,8 @@ void Wallet::handleNotification(const QJsonObject &notification)
         }
         return;
     }
+
+    qDebug() << "unhandled event" << event;
 }
 
 QJsonObject Wallet::events() const
@@ -214,6 +216,7 @@ QJsonObject Wallet::events() const
 
 void Wallet::reload(bool refresh_accounts)
 {
+    // return;
     if (m_network->isLiquid()) {
         // Load cached assets
         refreshAssets(false);

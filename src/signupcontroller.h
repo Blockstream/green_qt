@@ -9,9 +9,9 @@
 #include "session.h"
 #include "wallet.h"
 
-QT_FORWARD_DECLARE_CLASS(Network);
-QT_FORWARD_DECLARE_CLASS(Session);
-QT_FORWARD_DECLARE_CLASS(Wallet);
+class Network;
+class Session;
+class Wallet;
 
 class SignupController : public QObject
 {

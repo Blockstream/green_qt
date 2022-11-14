@@ -5,7 +5,7 @@
 #include <QSet>
 #include <QtQml/qqml.h>
 
-QT_FORWARD_DECLARE_CLASS(JadeDevice)
+class JadeDevice;
 
 class JadeDeviceSerialPortDiscoveryAgent : public QObject
 {

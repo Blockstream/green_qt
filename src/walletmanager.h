@@ -6,8 +6,8 @@
 #include <QQmlListProperty>
 #include <QVector>
 
-QT_FORWARD_DECLARE_CLASS(Network)
-QT_FORWARD_DECLARE_CLASS(Wallet)
+class Network;
+class Wallet;
 
 class WalletManager : public QObject
 {

@@ -4,9 +4,9 @@
 #include <QAbstractListModel>
 #include <QtQml>
 
-QT_FORWARD_DECLARE_CLASS(Account)
-QT_FORWARD_DECLARE_CLASS(Address)
-QT_FORWARD_DECLARE_CLASS(Handler)
+class Account;
+class Address;
+class Handler;
 
 class AddressListModel : public QAbstractListModel
 {

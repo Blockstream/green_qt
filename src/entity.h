@@ -4,7 +4,7 @@
 #include <QQmlListProperty>
 #include <QtQml>
 
-QT_FORWARD_DECLARE_CLASS(Activity)
+class Activity;
 
 class Entity : public QObject
 {

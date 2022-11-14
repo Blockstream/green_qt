@@ -48,6 +48,8 @@ Session::~Session()
 
 void Session::handleNotification(const QJsonObject& notification)
 {
+    qDebug() << Q_FUNC_INFO << notification;
+
     emit notificationHandled(notification);
 
     const auto event = notification.value("event").toString();

@@ -4,7 +4,7 @@
 #include "command.h"
 #include "device.h"
 
-QT_FORWARD_DECLARE_CLASS(LedgerDevice);
+class LedgerDevice;
 
 #define BTCHIP_CLA              0xe0
 #define BTCHIP_CLA_COMMON_SDK   0xb0

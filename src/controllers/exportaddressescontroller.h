@@ -4,8 +4,8 @@
 #include <QObject>
 #include <QtQml>
 
-QT_FORWARD_DECLARE_CLASS(Account)
-QT_FORWARD_DECLARE_CLASS(Handler)
+class Account;
+class Handler;
 
 class ExportAddressesController : public QObject
 {

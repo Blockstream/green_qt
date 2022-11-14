@@ -8,8 +8,8 @@
 #include "session.h"
 #include "wallet.h"
 
-QT_FORWARD_DECLARE_CLASS(Network)
-QT_FORWARD_DECLARE_CLASS(Wallet)
+class Network;
+class Wallet;
 
 class RestoreController : public AbstractController
 {

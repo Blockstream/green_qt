@@ -8,8 +8,8 @@
 
 #include "jadeconnection.h"
 
-QT_FORWARD_DECLARE_CLASS(QSerialPortInfo);
-QT_FORWARD_DECLARE_CLASS(QBluetoothDeviceInfo);
+class QSerialPortInfo;
+class QBluetoothDeviceInfo;
 
 class JadeAPI : public QObject
 {

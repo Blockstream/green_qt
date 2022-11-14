@@ -3,9 +3,9 @@
 
 #include "accountcontroller.h"
 
-QT_FORWARD_DECLARE_CLASS(CreateTransactionHandler)
-QT_FORWARD_DECLARE_CLASS(Balance)
-QT_FORWARD_DECLARE_CLASS(Transaction)
+class CreateTransactionHandler;
+class Balance;
+class Transaction;
 
 class SendController : public AccountController
 {

@@ -3,8 +3,8 @@
 
 #include "device.h"
 
-QT_FORWARD_DECLARE_CLASS(CommandBatch);
-QT_FORWARD_DECLARE_CLASS(LedgerDevice);
+class CommandBatch;
+class LedgerDevice;
 
 class LedgerSignLiquidTransactionActivity : public SignLiquidTransactionActivity
 {

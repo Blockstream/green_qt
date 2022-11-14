@@ -5,11 +5,11 @@
 #include <QObject>
 #include <QtQml>
 
-QT_FORWARD_DECLARE_CLASS(Activity)
-QT_FORWARD_DECLARE_CLASS(Device)
-QT_FORWARD_DECLARE_CLASS(Handler)
-QT_FORWARD_DECLARE_CLASS(Network)
-QT_FORWARD_DECLARE_CLASS(Wallet)
+class Activity;
+class Device;
+class Handler;
+class Network;
+class Wallet;
 
 // TODO ensure Resolver::resolve isn't called incorrectly or more than possible
 class Resolver : public QObject

@@ -4,8 +4,8 @@
 #include <QSortFilterProxyModel>
 #include <QtQml>
 
-QT_FORWARD_DECLARE_CLASS(Output)
-QT_FORWARD_DECLARE_CLASS(OutputListModel)
+class Output;
+class OutputListModel;
 
 class OutputListModelFilter : public QSortFilterProxyModel
 {

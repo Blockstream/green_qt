@@ -5,7 +5,7 @@
 #include <QObject>
 #include <QtQml>
 
-QT_FORWARD_DECLARE_CLASS(Account)
+class Account;
 
 class Address : public QObject
 {

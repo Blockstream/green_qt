@@ -4,7 +4,7 @@
 #include <QByteArray>
 #include <QObject>
 
-QT_FORWARD_DECLARE_CLASS(QCborMap);
+class QCborMap;
 
 class JadeConnection : public QObject
 {

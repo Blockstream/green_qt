@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QTimer>
 
-QT_FORWARD_DECLARE_CLASS(QSettings);
+class QSettings;
 
 class Settings : public QObject
 {

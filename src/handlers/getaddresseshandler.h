@@ -3,7 +3,7 @@
 
 #include "handler.h"
 
-QT_FORWARD_DECLARE_CLASS(Account)
+class Account;
 
 class GetAddressesHandler : public Handler
 {

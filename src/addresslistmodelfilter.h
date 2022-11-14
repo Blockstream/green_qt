@@ -4,8 +4,8 @@
 #include <QSortFilterProxyModel>
 #include <QtQml>
 
-QT_FORWARD_DECLARE_CLASS(Account)
-QT_FORWARD_DECLARE_CLASS(AddressListModel)
+class Account;
+class AddressListModel;
 
 class AddressListModelFilter : public QSortFilterProxyModel
 {

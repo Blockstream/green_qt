@@ -8,12 +8,12 @@
 #include <QTimer>
 #include <QJsonArray>
 
-QT_FORWARD_DECLARE_CLASS(Activity)
-QT_FORWARD_DECLARE_CLASS(LedgerDevice)
-QT_FORWARD_DECLARE_CLASS(LoginHandler)
-QT_FORWARD_DECLARE_CLASS(Network)
-QT_FORWARD_DECLARE_CLASS(Session)
-QT_FORWARD_DECLARE_CLASS(Wallet)
+class Activity;
+class LedgerDevice;
+class LoginHandler;
+class Network;
+class Session;
+class Wallet;
 
 class LedgerDeviceController : public QObject
 {

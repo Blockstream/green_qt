@@ -6,8 +6,8 @@
 
 #include "jadeconnection.h"
 
-QT_FORWARD_DECLARE_CLASS(QLowEnergyController);
-QT_FORWARD_DECLARE_CLASS(QBluetoothDeviceInfo);
+class QLowEnergyController;
+class QBluetoothDeviceInfo;
 
 class JadeBleImpl : public JadeConnection
 {

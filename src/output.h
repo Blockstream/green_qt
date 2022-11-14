@@ -5,8 +5,8 @@
 #include <QObject>
 #include <QtQml>
 
-QT_FORWARD_DECLARE_CLASS(Account)
-QT_FORWARD_DECLARE_CLASS(Asset)
+class Account;
+class Asset;
 
 class Output : public QObject
 {

@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QtQml>
 
-QT_FORWARD_DECLARE_CLASS(ActivityManager)
+class ActivityManager;
 
 class Progress : public QObject
 {

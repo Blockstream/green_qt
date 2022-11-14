@@ -4,9 +4,9 @@
 #include <QObject>
 #include <QtQml/qqml.h>
 
-QT_FORWARD_DECLARE_CLASS(JadeDevice)
-QT_FORWARD_DECLARE_CLASS(Session)
-QT_FORWARD_DECLARE_CLASS(Wallet)
+class JadeDevice;
+class Session;
+class Wallet;
 
 class JadeLoginController : public QObject
 {

@@ -6,8 +6,8 @@
 #include <QStandardItemModel>
 #include <QtQml>
 
-QT_FORWARD_DECLARE_CLASS(Account)
-QT_FORWARD_DECLARE_CLASS(Wallet)
+class Account;
+class Wallet;
 
 class AccountListModel : public QSortFilterProxyModel
 {

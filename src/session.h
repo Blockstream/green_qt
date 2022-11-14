@@ -8,8 +8,8 @@
 #include "connectable.h"
 #include "entity.h"
 
-QT_FORWARD_DECLARE_CLASS(ConnectHandler);
-QT_FORWARD_DECLARE_CLASS(Network);
+class ConnectHandler;
+class Network;
 
 QT_FORWARD_DECLARE_STRUCT(GA_session)
 

@@ -10,9 +10,9 @@
 #define LEDGER_NANOS_ID 0x0001
 #define LEDGER_NANOX_ID 0x0004
 
-QT_FORWARD_DECLARE_CLASS(Device);
-QT_FORWARD_DECLARE_CLASS(DeviceCommand);
-QT_FORWARD_DECLARE_CLASS(Network);
+class Device;
+class DeviceCommand;
+class Network;
 
 class GetWalletPublicKeyActivity : public Activity
 {
@@ -137,6 +137,6 @@ private:
     QMap<Network*, QByteArray> m_master_public_key;
 };
 
-QT_FORWARD_DECLARE_CLASS(LedgerDevice);
+class LedgerDevice;
 
 #endif // GREEN_DEVICE_H

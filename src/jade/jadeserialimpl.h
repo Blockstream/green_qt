@@ -3,8 +3,8 @@
 
 #include "jadeconnection.h"
 
-QT_FORWARD_DECLARE_CLASS(QSerialPortInfo);
-QT_FORWARD_DECLARE_CLASS(QSerialPort);
+class QSerialPortInfo;
+class QSerialPort;
 
 class JadeSerialImpl : public JadeConnection
 {

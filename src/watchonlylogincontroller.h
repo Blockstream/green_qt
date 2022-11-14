@@ -9,7 +9,7 @@
 #include "session.h"
 #include "wallet.h"
 
-QT_FORWARD_DECLARE_CLASS(Network)
+class Network;
 
 class WatchOnlyLoginController : public Entity
 {

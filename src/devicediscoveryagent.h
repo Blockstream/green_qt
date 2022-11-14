@@ -4,8 +4,8 @@
 #include <QObject>
 #include <QtQml>
 
-QT_FORWARD_DECLARE_CLASS(Device)
-QT_FORWARD_DECLARE_CLASS(DeviceDiscoveryAgentPrivate)
+class Device;
+class DeviceDiscoveryAgentPrivate;
 
 class DeviceDiscoveryAgent : public QObject
 {
