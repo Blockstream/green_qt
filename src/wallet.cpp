@@ -715,15 +715,6 @@ WalletActivity::WalletActivity(Wallet* wallet, QObject* parent)
 {
 }
 
-WalletAuthenticateActivity::WalletAuthenticateActivity(Wallet* wallet, QObject* parent)
-    : WalletActivity(wallet, parent)
-{
-}
-
-void WalletAuthenticateActivity::exec()
-{
-}
-
 LoginWithPinController::LoginWithPinController(QObject* parent)
     : Entity(parent)
 {
@@ -767,12 +758,9 @@ void LoginWithPinController::update()
 
     m_wallet->setAuthentication(Wallet::Authenticating);
 
-    auto activity = new WalletAuthenticateActivity(m_wallet, this);
-    m_wallet->pushActivity(activity);
-
     auto pin_data = QJsonDocument::fromJson(m_wallet->m_pin_data).object();
     auto handler = new LoginHandler(pin_data, QString::fromLocal8Bit(m_pin), m_session);
-    handler->connect(handler, &Handler::done, this, [this, activity, handler] {
+    handler->connect(handler, &Handler::done, this, [=] {
         handler->deleteLater();
         m_wallet->resetLoginAttempts();
         m_wallet->updateHashId(handler->walletHashId());
@@ -781,11 +769,9 @@ void LoginWithPinController::update()
         m_wallet->updateSettings();
         m_wallet->reload();
         m_wallet->updateConfig();
-        activity->finish();
-        activity->deleteLater();
         emit loginDone();
     });
-    handler->connect(handler, &Handler::error, this, [this, activity, handler] {
+    handler->connect(handler, &Handler::error, this, [=] {
         handler->deleteLater();
         const auto error = handler->result().value("error").toString();
         if (error == "id_invalid_pin") {
@@ -797,8 +783,6 @@ void LoginWithPinController::update()
             return;
         }
         qWarning() << "unhandled login_with_pin error";
-        activity->fail();
-        activity->deleteLater();
         emit loginFailed();
     });
     handler->exec();

@@ -248,15 +248,6 @@ private:
     Wallet* const m_wallet;
 };
 
-class WalletAuthenticateActivity : public WalletActivity
-{
-    Q_OBJECT
-    QML_ELEMENT
-public:
-    WalletAuthenticateActivity(Wallet* wallet, QObject* parent);
-    void exec() override;
-};
-
 class LoginWithPinController : public Entity
 {
     Q_OBJECT
