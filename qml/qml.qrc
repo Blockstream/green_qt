@@ -147,5 +147,6 @@
         <file>LoginWithPinView.qml</file>
         <file>LoginWithPasswordView.qml</file>
         <file>AccountDelegate.qml</file>
+        <file>DiscoverServerTypeViewCard.qml</file>
     </qresource>
 </RCC>
