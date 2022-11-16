@@ -3,6 +3,7 @@
 #include "ledgersignliquidtransactionactivity.h"
 #include "util.h"
 
+#include <wally_crypto.h>
 #include <wally_elements.h>
 
 namespace {
@@ -229,8 +230,13 @@ QList<QPair<QJsonObject, QByteArray>> LedgerSignLiquidTransactionActivity::outpu
         }
 
         if (output.contains("blinding_key")) {
-            const auto eph_keypair_pub = ParseByteArray(output.value("eph_keypair_pub"));
             const auto blinding_key = ParseByteArray(output.value("blinding_key"));
+            const auto eph_private_key = ParseByteArray(output.value("eph_private_key"));
+            QByteArray eph_keypair_pub(EC_PUBLIC_KEY_LEN, 0);
+            int rc = wally_ec_public_key_from_private_key(
+                (const unsigned char*) eph_private_key.constData(), eph_private_key.size(),
+                (unsigned char*) eph_keypair_pub.data(), eph_keypair_pub.size());
+            Q_ASSERT(rc == WALLY_OK);
             res.append({{}, eph_keypair_pub});
             res.append({{}, blinding_key});
         } else {
