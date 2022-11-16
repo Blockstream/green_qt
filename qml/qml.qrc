@@ -148,5 +148,6 @@
         <file>LoginWithPasswordView.qml</file>
         <file>AccountDelegate.qml</file>
         <file>DiscoverServerTypeViewCard.qml</file>
+        <file>WalletListDelegate.qml</file>
     </qresource>
 </RCC>
