@@ -6,11 +6,9 @@ import QtQuick.Controls 2.5
 import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.12
 
-ControllerDialog {
-    id: dialog
-    autoDestroy: true
-    title: qsTrId('id_add_new_account')
+import "analytics.js" as AnalyticsJS
 
+ControllerDialog {
     property var _labels: ({
         '2of2': qsTrId('id_standard_account'),
         '2of2_no_recovery': qsTrId('id_amp_account'),
@@ -27,22 +25,18 @@ ControllerDialog {
             }
     }
 
+    id: dialog
+    autoDestroy: true
+    title: qsTrId('id_add_new_account')
     controller: CreateAccountController {
         id: create_account_controller
         wallet: dialog.wallet
         onCreated: {
             dialog.push(handler, doneComponent)
-            Analytics.recordEvent('account_create', segmentationSubAccount(account))
+            Analytics.recordEvent('account_create', AnalyticsJS.segmentationSubAccount(account))
         }
     }
-
     doneText: qsTrId('id_new_account_created')
-
-    component Card: GCard {
-        Layout.fillHeight: true
-        Layout.maximumWidth: 300
-    }
-
     initialItem: StackView {
         id: stack_view
         property var actions: currentItem.actions
@@ -54,7 +48,7 @@ ControllerDialog {
             AnalyticsView {
                 active: dialog.opened
                 name: 'AddAccountChooseType'
-                segmentation: segmentationSession(dialog.wallet)
+                segmentation: AnalyticsJS.segmentationSession(dialog.wallet)
             }
             Card {
                 visible: !controller.wallet.network.electrum
@@ -109,6 +103,11 @@ ControllerDialog {
         }
     }
 
+    component Card: GCard {
+        Layout.fillHeight: true
+        Layout.maximumWidth: 300
+    }
+
     Component {
         id: basic_2of3_view
         RowLayout {
@@ -158,7 +157,6 @@ ControllerDialog {
         }
     }
 
-
     Component {
         id: generate_mnemonic_view
         MnemonicPage {
@@ -197,7 +195,7 @@ ControllerDialog {
             AnalyticsView {
                 active: true
                 name: 'RecoveryCheck'
-                segmentation: segmentationNetwork(controller.wallet.network)
+                segmentation: AnalyticsJS.segmentationNetwork(controller.wallet.network)
             }
         }
     }
@@ -312,6 +310,7 @@ ControllerDialog {
             }
         }
     }
+
     Component {
         id: finish_view
         GPane {

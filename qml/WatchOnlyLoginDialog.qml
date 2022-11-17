@@ -4,28 +4,15 @@ import QtQuick 2.13
 import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.12
 
+import "analytics.js" as AnalyticsJS
+
 AbstractDialog {
     required property Network network
+
     id: self
     icon: iconFor(self.network)
     title: qsTrId('id_watchonly_login')
     onClosed: destroy()
-    WatchOnlyLoginController {
-        id: controller
-        network: self.network
-        username: username_field.text
-        password: password_field.text
-        saveWallet: remember_checkbox.checked
-        onWalletChanged: {
-            if (controller.saveWallet) {
-                Analytics.recordEvent('wallet_restore_watch_only', segmentationSession(wallet))
-            }
-            window.navigation.go(`/${wallet.network.key}/${wallet.id}`)
-            self.accept()
-        }
-        onUnauthorized: self.contentItem.ToolTip.show(qsTrId('id_user_not_found_or_invalid'), 3000);
-    }
-
     contentItem: GridLayout {
         enabled: !controller.session
         columns: 2
@@ -54,7 +41,6 @@ AbstractDialog {
             checked: true
         }
     }
-
     footer: DialogFooter {
         HSpacer {
         }
@@ -65,9 +51,24 @@ AbstractDialog {
             onClicked: controller.login()
         }
     }
+    WatchOnlyLoginController {
+        id: controller
+        network: self.network
+        username: username_field.text
+        password: password_field.text
+        saveWallet: remember_checkbox.checked
+        onWalletChanged: {
+            if (controller.saveWallet) {
+                Analytics.recordEvent('wallet_restore_watch_only', AnalyticsJS.segmentationSession(wallet))
+            }
+            window.navigation.go(`/${wallet.network.key}/${wallet.id}`)
+            self.accept()
+        }
+        onUnauthorized: self.contentItem.ToolTip.show(qsTrId('id_user_not_found_or_invalid'), 3000);
+    }
     AnalyticsView {
         active: self.opened
         name: 'OnBoardWatchOnlyCredentials'
-        segmentation: segmentationSession(controller.wallet)
+        segmentation: AnalyticsJS.segmentationSession(controller.wallet)
     }
 }

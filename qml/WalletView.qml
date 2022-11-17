@@ -7,6 +7,8 @@ import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.12
 import QtQml 2.15
 
+import "analytics.js" as AnalyticsJS
+
 MainPage {
     required property Wallet wallet
     readonly property string location: `/${wallet.network.key}/${wallet.id}`
@@ -89,7 +91,7 @@ MainPage {
         return true
     }
 
-    onReadyChanged: if (ready) Analytics.recordEvent('wallet_active', segmentationWalletActive(self.wallet))
+    onReadyChanged: if (ready) Analytics.recordEvent('wallet_active', AnalyticsJS.segmentationWalletActive(self.wallet))
 
     AnalyticsAlert {
         id: overview_alert

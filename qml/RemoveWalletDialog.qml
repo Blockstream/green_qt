@@ -4,6 +4,8 @@ import QtQuick 2.13
 import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.13
 
+import "analytics.js" as AnalyticsJS
+
 AbstractDialog {
     property Wallet wallet
 
@@ -66,6 +68,6 @@ AbstractDialog {
     AnalyticsView {
         active: self.opened
         name: 'DeleteWallet'
-        segmentation: segmentationSession(self.wallet)
+        segmentation: AnalyticsJS.segmentationSession(self.wallet)
     }
 }

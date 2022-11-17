@@ -4,6 +4,8 @@ import QtQuick 2.13
 import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.13
 
+import "analytics.js" as AnalyticsJS
+
 GPane {
     required property Wallet wallet
 
@@ -13,18 +15,18 @@ GPane {
         wallet: self.wallet
         pin: pin_view.pin.value
         onLoginDone: {
-            Analytics.recordEvent('wallet_login', segmentationWalletLogin(self.wallet, {
+            Analytics.recordEvent('wallet_login', AnalyticsJS.segmentationWalletLogin(self.wallet, {
                 method: 'pin'
             }))
         }
         onLoginFailed: {
-            Analytics.recordEvent('failed_wallet_login', segmentationSession(self.wallet))
+            Analytics.recordEvent('failed_wallet_login', AnalyticsJS.segmentationSession(self.wallet))
         }
     }
     Connections {
         target: self.wallet
         function onLoginAttemptsRemainingChanged(loginAttemptsRemaining) {
-            Analytics.recordEvent('failed_wallet_login', segmentationWalletLogin(self.wallet, { method: 'pin' }))
+            Analytics.recordEvent('failed_wallet_login', AnalyticsJS.segmentationWalletLogin(self.wallet, { method: 'pin' }))
             pin_view.clear()
         }
     }

@@ -6,6 +6,8 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 import QtQml.Models 2.0
 
+import "analytics.js" as AnalyticsJS
+
 AbstractDialog {
     id: self
     icon: {
@@ -41,7 +43,7 @@ AbstractDialog {
         id: wallet_create_event
         name: 'wallet_create'
         active: true
-        segmentation: segmentationSession(controller.wallet)
+        segmentation: AnalyticsJS.segmentationSession(controller.wallet)
     }
 
     Connections {
@@ -94,7 +96,7 @@ AbstractDialog {
             AnalyticsView {
                 active: select_network_view.visible
                 name: 'OnBoardChooseNetwork'
-                segmentation: segmentationOnBoard({
+                segmentation: AnalyticsJS.segmentationOnBoard({
                     flow: 'create',
                 })
             }
@@ -109,7 +111,7 @@ AbstractDialog {
             AnalyticsView {
                 active: select_server_type_view.visible
                 name: 'OnBoardChooseSecurity'
-                segmentation: segmentationOnBoard({
+                segmentation: AnalyticsJS.segmentationOnBoard({
                     flow: 'create',
                     network: navigation.param.network === 'bitcoin' ? 'mainnet' : navigation.param.network,
                 })
@@ -296,7 +298,7 @@ AbstractDialog {
                 AnalyticsView {
                     active: true
                     name: 'RecoveryCheck'
-                    segmentation: segmentationNetwork(controller.network)
+                    segmentation: AnalyticsJS.segmentationNetwork(controller.network)
                 }
             }
         }
@@ -332,7 +334,7 @@ AbstractDialog {
             AnalyticsView {
                 active: set_pin_view.visible
                 name: 'OnBoardPin'
-                segmentation: segmentationOnBoard({
+                segmentation: AnalyticsJS.segmentationOnBoard({
                     flow: 'create',
                     network: navigation.param.network === 'bitcoin' ? 'mainnet' : navigation.param.network,
                     security: navigation.param.server_type === 'electrum' ? 'singlesig' : 'multisig'

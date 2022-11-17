@@ -4,6 +4,8 @@ import QtQuick.Controls 2.13
 import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.13
 
+import "analytics.js" as AnalyticsJS
+
 ControllerDialog {
     property bool pinChanged: false
 
@@ -19,7 +21,7 @@ ControllerDialog {
     AnalyticsView {
         active: self.opened
         name: 'WalletSettingsChangePIN'
-        segmentation: segmentationSession(self.wallet)
+        segmentation: AnalyticsJS.segmentationSession(self.wallet)
     }
     initialItem: PinView {
         id: pin_view

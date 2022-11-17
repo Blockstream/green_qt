@@ -4,6 +4,8 @@ import QtQuick 2.13
 import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.13
 
+import "analytics.js" as AnalyticsJS
+
 GPane {
     required property Wallet wallet
 
@@ -14,13 +16,13 @@ GPane {
         wallet: self.wallet
         password: password_field.text
         onUnauthorized: {
-            Analytics.recordEvent('failed_wallet_login', segmentationWalletLogin(self.wallet, { method: 'watch_only' }))
+            Analytics.recordEvent('failed_wallet_login', AnalyticsJS.segmentationWalletLogin(self.wallet, { method: 'watch_only' }))
             password_error.error = qsTrId('id_user_not_found_or_invalid')
             password_field.enabled = true
             password_field.clear()
             password_field.forceActiveFocus()
         }
-        onLoginDone: Analytics.recordEvent('wallet_login', segmentationWalletLogin(self.wallet, { method: 'watch_only' }))
+        onLoginDone: Analytics.recordEvent('wallet_login', AnalyticsJS.segmentationWalletLogin(self.wallet, { method: 'watch_only' }))
     }
     Action {
         id: login_action

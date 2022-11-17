@@ -6,6 +6,8 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 import QtQml.Models 2.0
 
+import "analytics.js" as AnalyticsJS
+
 AbstractDialog {
     id: self
     icon: {
@@ -51,7 +53,7 @@ AbstractDialog {
             AnalyticsView {
                 active: select_network_view.visible
                 name: 'OnBoardChooseNetwork'
-                segmentation: segmentationOnBoard({
+                segmentation: AnalyticsJS.segmentationOnBoard({
                     flow: 'restore',
                 })
             }
@@ -121,7 +123,7 @@ AbstractDialog {
             AnalyticsView {
                 active: discover_server_type_view.visible
                 name: 'OnBoardScan'
-                segmentation: segmentationOnBoard({
+                segmentation: AnalyticsJS.segmentationOnBoard({
                     flow: 'restore',
                     network: navigation.param.network === 'bitcoin' ? 'mainnet' : navigation.param.network,
                 })
@@ -168,7 +170,7 @@ AbstractDialog {
             AnalyticsView {
                 active: set_pin_view.visible
                 name: 'OnBoardPin'
-                segmentation: segmentationOnBoard({
+                segmentation: AnalyticsJS.segmentationOnBoard({
                     flow: 'restore',
                     network: navigation.param.network === 'bitcoin' ? 'mainnet' : navigation.param.network,
                     security: navigation.param.server_type === 'electrum' ? 'singlesig' : 'multisig'

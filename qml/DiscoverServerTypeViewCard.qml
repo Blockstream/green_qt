@@ -4,6 +4,8 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 
+import "analytics.js" as AnalyticsJS
+
 Button {
     required property string server_type
     required property string title
@@ -123,7 +125,7 @@ Button {
         pin: navigation.param.pin || ''
         active: self.visible
         onFinished: {
-            Analytics.recordEvent('wallet_restore', segmentationSession(controller.wallet))
+            Analytics.recordEvent('wallet_restore', AnalyticsJS.segmentationSession(controller.wallet))
             window.navigation.go(`/${controller.wallet.network.key}/${controller.wallet.id}`)
         }
     }

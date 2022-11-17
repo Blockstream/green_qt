@@ -4,6 +4,8 @@ import QtQuick 2.13
 import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.12
 
+import "analytics.js" as AnalyticsJS
+
 ControllerDialog {
     required property Transaction transaction
     readonly property Account account: transaction.account
@@ -14,7 +16,7 @@ ControllerDialog {
     controller: BumpFeeController {
         account: self.account
         transaction: self.transaction
-        onFinished: Analytics.recordEvent('send_transaction', segmentationTransaction(self.account, {
+        onFinished: Analytics.recordEvent('send_transaction', AnalyticsJS.segmentationTransaction(self.account, {
             address_input: 'paste',
             transaction_type: 'bump',
             with_memo: false,
@@ -23,7 +25,6 @@ ControllerDialog {
     doneText: qsTrId('id_transaction_sent')
     minimumWidth: 500
     minimumHeight: 400
-
     initialItem: FocusScope {
         property list<Action> actions: [
             Action {

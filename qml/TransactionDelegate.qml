@@ -6,6 +6,8 @@ import QtQuick.Controls 2.5
 import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.12
 
+import "analytics.js" as AnalyticsJS
+
 ItemDelegate {
     id: self
 
@@ -190,7 +192,7 @@ ItemDelegate {
                             text: qsTrId('id_copy_transaction_id')
                             onTriggered: {
                                 Clipboard.copy(transaction.data.txhash)
-                                Analytics.recordEvent('share_transaction', segmentationShareTransaction(transaction.account))
+                                Analytics.recordEvent('share_transaction', AnalyticsJS.segmentationShareTransaction(transaction.account))
                             }
                         }
                     }

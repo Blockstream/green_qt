@@ -4,6 +4,8 @@ import QtQuick 2.12
 import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.12
 
+import "analytics.js" as AnalyticsJS
+
 SwipeView {
     required property Wallet wallet
     property Account currentAccount: {
@@ -115,7 +117,7 @@ SwipeView {
         AnalyticsView {
             active: self.showArchived
             name: 'ArchivedAccounts'
-            segmentation: segmentationSession(self.wallet)
+            segmentation: AnalyticsJS.segmentationSession(self.wallet)
         }
     }
 }

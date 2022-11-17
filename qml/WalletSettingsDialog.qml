@@ -5,6 +5,8 @@ import QtQuick.Controls 2.5
 import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.12
 
+import "analytics.js" as AnalyticsJS
+
 WalletDialog {
     id: self
     width: 900
@@ -16,7 +18,7 @@ WalletDialog {
         id: analytics_view
         active: self.opened
         name: 'WalletSettingsGeneral'
-        segmentation: segmentationSession(self.wallet)
+        segmentation: AnalyticsJS.segmentationSession(self.wallet)
     }
 
     component B: Button {

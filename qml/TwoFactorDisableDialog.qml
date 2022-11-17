@@ -3,16 +3,17 @@ import QtQuick 2.13
 import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.12
 
+import "analytics.js" as AnalyticsJS
+
 ControllerDialog {
-    id: dialog
     property string method
+
+    id: dialog
     title: qsTrId('id_set_up_twofactor_authentication')
     doneText: qsTrId('id_disabled')
-
     controller: Controller {
         wallet: dialog.wallet
     }
-
     initialItem: RowLayout {
         property list<Action> actions: [
             Action {
@@ -30,10 +31,9 @@ ControllerDialog {
             text: qsTrId('id_disable_s_twofactor').arg(method)
         }
     }
-
     AnalyticsView {
         active: dialog.opened
         name: 'WalletSettings2FASetup'
-        segmentation: segmentationSession(dialog.wallet)
+        segmentation: AnalyticsJS.segmentationSession(dialog.wallet)
     }
 }

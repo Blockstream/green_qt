@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>analytics.js</file>
+    </qresource>
+</RCC>

@@ -3,8 +3,11 @@ import QtQuick 2.13
 import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.12
 
+import "analytics.js" as AnalyticsJS
+
 WalletDialog {
     required property Account account
+
     id: self
     wallet: self.account.wallet
     title: qsTrId('id_receive')
@@ -18,6 +21,6 @@ WalletDialog {
     AnalyticsView {
         name: 'Receive'
         active: self.opened
-        segmentation: segmentationSubAccount(self.account)
+        segmentation: AnalyticsJS.segmentationSubAccount(self.account)
     }
 }

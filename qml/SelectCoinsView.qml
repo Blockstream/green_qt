@@ -4,6 +4,8 @@ import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.3
 import QtQml.Models 2.11
 
+import "analytics.js" as AnalyticsJS
+
 Page {
     required property Account account
 
@@ -135,6 +137,6 @@ Page {
     AnalyticsView {
         active: self.visible
         name: 'SelectUTXO'
-        segmentation: segmentationSubAccount(self.account)
+        segmentation: AnalyticsJS.segmentationSubAccount(self.account)
     }
 }

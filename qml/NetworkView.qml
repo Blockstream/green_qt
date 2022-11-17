@@ -6,6 +6,8 @@ import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.13
 import QtQuick.Window 2.12
 
+import "analytics.js" as AnalyticsJS
+
 StackLayout {
     id: self
     required property string title
@@ -109,7 +111,7 @@ StackLayout {
             property bool match: wallet.ready && navigation.location.startsWith(location)
             AnalyticsView {
                 name: 'Overview'
-                segmentation: segmentationSession(wallet)
+                segmentation: AnalyticsJS.segmentationSession(wallet)
                 active: match
             }
         }

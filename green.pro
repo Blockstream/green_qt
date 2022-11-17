@@ -43,6 +43,7 @@ include(assets/assets.pri)
 include(qml/qml.pri)
 include(src/src.pri)
 include(sa/sa.pri)
+include(js/js.pri)
 
 CONFIG += lrelease embed_translations
 

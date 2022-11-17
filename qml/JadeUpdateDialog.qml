@@ -4,18 +4,13 @@ import QtQuick 2.13
 import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.12
 
+import "analytics.js" as AnalyticsJS
+
 AbstractDialog {
     required property JadeDevice device
     readonly property bool debug_jade: Qt.application.arguments.indexOf('--debugjade') > 0
     property bool updated: false
-    id: self
-    title: qsTrId('id_firmware_update')
-    closePolicy: Dialog.NoAutoClose
-    onClosed: if (updated) controller.disconnectDevice()
-    onDeviceChanged: if (!device) self.close()
 
-    width: 650
-    height: 450
     function quickUpdate() {
         stack_view.replace(jade_update_available_view, StackView.Immediate)
         self.open()
@@ -49,11 +44,23 @@ AbstractDialog {
             }
         }
         onUpdateStarted: {
-            Analytics.recordEvent('ota_start', segmentationFirmwareUpdate(self.device))
+            Analytics.recordEvent('ota_start', AnalyticsJS.segmentationFirmwareUpdate(self.device))
         }
         onUpdateCompleted: {
-            Analytics.recordEvent('ota_complete', segmentationFirmwareUpdate(self.device))
+            Analytics.recordEvent('ota_complete', AnalyticsJS.segmentationFirmwareUpdate(self.device))
         }
+    }
+
+    id: self
+    title: qsTrId('id_firmware_update')
+    closePolicy: Dialog.NoAutoClose
+    onClosed: if (updated) controller.disconnectDevice()
+    onDeviceChanged: if (!device) self.close()
+    width: 650
+    height: 450
+    contentItem: StackView {
+        id: stack_view
+        initialItem: null
     }
 
     Component {
@@ -304,10 +311,5 @@ AbstractDialog {
                 }
             }
         }
-    }
-
-    contentItem: StackView {
-        id: stack_view
-        initialItem: null
     }
 }

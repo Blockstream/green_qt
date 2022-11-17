@@ -4,6 +4,8 @@ import QtQuick 2.13
 import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.12
 
+import "analytics.js" as AnalyticsJS
+
 Pane {
     id: self
     property bool comingSoon
@@ -28,7 +30,7 @@ Pane {
         device: comingSoon ? null : self.device
         network: self.network.id
         onInvalidPin: self.ToolTip.show(qsTrId('id_invalid_pin'), 2000);
-        onLoginDone: Analytics.recordEvent('wallet_login', segmentationWalletLogin(controller.wallet, { method: 'hardware' }))
+        onLoginDone: Analytics.recordEvent('wallet_login', AnalyticsJS.segmentationWalletLogin(controller.wallet, { method: 'hardware' }))
     }
     contentItem: RowLayout {
         spacing: constants.s1

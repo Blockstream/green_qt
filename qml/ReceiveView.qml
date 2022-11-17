@@ -4,6 +4,8 @@ import QtQuick 2.12
 import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.12
 
+import "analytics.js" as AnalyticsJS
+
 ColumnLayout {
     property alias account: receive_address.account
 
@@ -94,7 +96,7 @@ ColumnLayout {
         onCopy: {
             const account = receive_address.account
             const type = receive_address.uri.indexOf(':') > 0 ? 'uri' : 'address'
-            Analytics.recordEvent('receive_address', segmentationReceiveAddress(account, type))
+            Analytics.recordEvent('receive_address', AnalyticsJS.segmentationReceiveAddress(account, type))
         }
     }
 
@@ -142,7 +144,7 @@ ColumnLayout {
                     }
                     enabled: !receive_address.generating && receive_address.addressVerification !== ReceiveAddressController.VerificationPending
                     onClicked: {
-                        Analytics.recordEvent('verify_address', segmentationSubAccount(self.account))
+                        Analytics.recordEvent('verify_address', AnalyticsJS.segmentationSubAccount(self.account))
                         receive_address.verify()
                     }
                 }

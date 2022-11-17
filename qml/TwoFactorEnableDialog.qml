@@ -4,6 +4,8 @@ import QtQuick 2.13
 import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.12
 
+import "analytics.js" as AnalyticsJS
+
 ControllerDialog {
     required property string method
 
@@ -23,7 +25,7 @@ ControllerDialog {
     AnalyticsView {
         active: self.opened
         name: 'WalletSettings2FASetup'
-        segmentation: segmentationSession(self.wallet)
+        segmentation: AnalyticsJS.segmentationSession(self.wallet)
     }
 
     Component {

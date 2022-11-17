@@ -4,6 +4,8 @@ import QtQuick 2.13
 import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.12
 
+import "analytics.js" as AnalyticsJS
+
 ControllerDialog {
     required property Account account
 
@@ -31,14 +33,14 @@ ControllerDialog {
             return r
         }
         onFinished: {
-            Analytics.recordEvent('send_transaction', segmentationTransaction(self.account, {
+            Analytics.recordEvent('send_transaction', AnalyticsJS.segmentationTransaction(self.account, {
                 address_input: send_view.address_input,
                 transaction_type: 'send',
                 with_memo: self.controller.memo !== '',
             }))
         }
         onError: {
-            Analytics.recordEvent('failed_transaction', segmentationSession(self.account.wallet))
+            Analytics.recordEvent('failed_transaction', AnalyticsJS.segmentationSession(self.account.wallet))
         }
     }
     doneText: qsTrId('id_transaction_sent')
@@ -57,6 +59,6 @@ ControllerDialog {
     AnalyticsView {
         name: 'Send'
         active: self.opened
-        segmentation: segmentationSubAccount(self.account)
+        segmentation: AnalyticsJS.segmentationSubAccount(self.account)
     }
 }

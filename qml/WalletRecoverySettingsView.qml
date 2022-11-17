@@ -6,15 +6,18 @@ import QtQuick.Controls 2.5
 import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.12
 
+import "analytics.js" as AnalyticsJS
+
 ColumnLayout {
-    id: self
     required property Wallet wallet
+
+    id: self
     spacing: 16
 
     AnalyticsView {
         active: true
         name: 'WalletSettingsRecovery'
-        segmentation: segmentationSession(self.wallet)
+        segmentation: AnalyticsJS.segmentationSession(self.wallet)
     }
 
     SettingsBox {

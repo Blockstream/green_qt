@@ -3,6 +3,8 @@ import QtQuick 2.13
 import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.12
 
+import "analytics.js" as AnalyticsJS
+
 GFlickable {
     required property Wallet wallet
     required property SignTransactionResolver resolver
@@ -17,7 +19,7 @@ GFlickable {
     AnalyticsView {
         active: true
         name: 'VerifyTransaction'
-        segmentation: segmentationSession(self.wallet)
+        segmentation: AnalyticsJS.segmentationSession(self.wallet)
     }
 
     ColumnLayout {

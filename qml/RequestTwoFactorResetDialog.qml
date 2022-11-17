@@ -3,6 +3,8 @@ import QtQuick 2.13
 import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.12
 
+import "analytics.js" as AnalyticsJS
+
 ControllerDialog {
     id: dialog
     title: qsTrId('id_request_twofactor_reset')
@@ -35,6 +37,6 @@ ControllerDialog {
     AnalyticsView {
         active: dialog.opened
         name: 'WalletSettings2FAReset'
-        segmentation: segmentationSession(dialog.wallet)
+        segmentation: AnalyticsJS.segmentationSession(dialog.wallet)
     }
 }

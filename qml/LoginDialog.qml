@@ -6,9 +6,10 @@ import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.13
 import QtQuick.Window 2.12
 
+import "analytics.js" as AnalyticsJS
+
 AbstractDialog {
     required property Wallet wallet
-
     property bool active: self.wallet.activities.length > 0 || (self.wallet.session && self.wallet.session.connecting)
 
     id: self
@@ -22,16 +23,14 @@ AbstractDialog {
     AnalyticsView {
         name: 'Login'
         active: self.opened
-        segmentation: segmentationSession(self.wallet)
+        segmentation: AnalyticsJS.segmentationSession(self.wallet)
     }
 
     contentItem: StackView {
         id: stack_view
         implicitHeight: currentItem.implicitHeight
         implicitWidth: currentItem.implicitWidth
-        onCurrentItemChanged: {
-            currentItem.forceActiveFocus()
-        }
+        onCurrentItemChanged: currentItem.forceActiveFocus()
         initialItem: self.wallet.watchOnly ? login_with_password_view : login_with_pin_view
     }
 

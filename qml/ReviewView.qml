@@ -4,6 +4,8 @@ import QtQuick 2.12
 import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.12
 
+import "analytics.js" as AnalyticsJS
+
 ColumnLayout {
     property list<Action> actions: [
         Action {
@@ -20,7 +22,7 @@ ColumnLayout {
     AnalyticsView {
         name: 'SendConfirm'
         active: true
-        segmentation: segmentationSubAccount(controller.account)
+        segmentation: AnalyticsJS.segmentationSubAccount(controller.account)
     }
     AlertView {
         alert: AnalyticsAlert {
