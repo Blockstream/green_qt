@@ -149,5 +149,6 @@
         <file>AccountDelegate.qml</file>
         <file>DiscoverServerTypeViewCard.qml</file>
         <file>WalletListDelegate.qml</file>
+        <file>SelectServerTypeViewCard.qml</file>
     </qresource>
 </RCC>
