@@ -150,5 +150,6 @@
         <file>DiscoverServerTypeViewCard.qml</file>
         <file>WalletListDelegate.qml</file>
         <file>SelectServerTypeViewCard.qml</file>
+        <file>PopupBalloon.qml</file>
     </qresource>
 </RCC>
