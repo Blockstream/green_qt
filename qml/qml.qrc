@@ -151,5 +151,6 @@
         <file>WalletListDelegate.qml</file>
         <file>SelectServerTypeViewCard.qml</file>
         <file>PopupBalloon.qml</file>
+        <file>SelectNetworkViewCard.qml</file>
     </qresource>
 </RCC>
