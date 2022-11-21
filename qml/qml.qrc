@@ -11,7 +11,6 @@
         <file>SignupDialog.qml</file>
         <file>PinField.qml</file>
         <file>MnemonicView.qml</file>
-        <file>DebugActiveFocus.qml</file>
         <file>JadeView.qml</file>
         <file>MainMenuBar.qml</file>
         <file>RestoreDialog.qml</file>

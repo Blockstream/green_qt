@@ -161,9 +161,6 @@ ApplicationWindow {
         }
     }
 
-    DebugActiveFocus {
-    }
-
     Component {
         id: create_account_dialog
         CreateAccountDialog {}
