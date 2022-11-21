@@ -4,6 +4,9 @@ import QtQuick 2.12
 import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.12
 
+import "analytics.js" as AnalyticsJS
+import "util.js" as UtilJS
+
 Button {
     required property Account account
     required property int index
@@ -65,11 +68,13 @@ Button {
                 font.pixelSize: 14
                 leftInset: -8
                 rightInset: -8
-                text: accountName(account)
+                text: UtilJS.accountName(account)
                 enabled: !account.wallet.watchOnly && delegate.ListView.isCurrentItem && !delegate.account.wallet.locked
                 onEdited: {
                     if (enabled) {
-                        renameAccount(account, text, activeFocus)
+                        if (delegate.account.rename(text, activeFocus)) {
+                            Analytics.recordEvent('account_rename', AnalyticsJS.segmentationSubAccount(delegate.account))
+                        }
                     }
                 }
             }

@@ -7,13 +7,14 @@ import QtQuick.Layouts 1.15
 import QtQml.Models 2.0
 
 import "analytics.js" as AnalyticsJS
+import "util.js" as UtilJS
 
 AbstractDialog {
     id: self
     icon: {
         const { network, type } = navigation.param
         if (type === 'amp') return 'qrc:/svg/amp.svg'
-        if (network) return iconFor(network)
+        if (network) return UtilJS.iconFor(network)
         return ''
     }
     title: qsTrId('id_restore_green_wallet')

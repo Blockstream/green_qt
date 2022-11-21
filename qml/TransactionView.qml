@@ -7,6 +7,7 @@ import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.12
 
 import "analytics.js" as AnalyticsJS
+import "util.js" as UtilJS
 
 WalletDialog {
     required property Transaction transaction
@@ -162,7 +163,7 @@ WalletDialog {
                         contentItem: ColumnLayout {
                             CopyableLabel {
                                 font.pixelSize: 12
-                                text: formatTransactionTimestamp(transaction.data)
+                                text: UtilJS.formatTransactionTimestamp(transaction.data)
                             }
                             VSpacer {
                             }
@@ -376,7 +377,7 @@ WalletDialog {
                         fillMode: Image.PreserveAspectFit
                         sourceSize.height: 24
                         sourceSize.width: 24
-                        source: iconFor(network)
+                        source: UtilJS.iconFor(network)
                     }
                     Label {
                         Layout.fillWidth: true

@@ -5,6 +5,8 @@ import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.12
 import QtQuick.Shapes 1.0
 
+import "util.js" as UtilJS
+
 GTextField {
     id: self
     property Word word
@@ -68,7 +70,7 @@ GTextField {
     Popup {
         readonly property point scenePosition: {
             popup.visible
-            return dynamicScenePosition(self, 0, 0)
+            return UtilJS.dynamicScenePosition(self, 0, 0)
         }
         id: popup
         visible: self.activeFocus && (word.suggestions.length > 1 || (word.suggestions.length === 1 && word.suggestions[0] !== self.text) || self.invalid)

@@ -4,6 +4,8 @@ import QtQuick 2.13
 import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.13
 
+import "util.js" as UtilJS
+
 Pane {
     focusPolicy: Qt.ClickFocus
     topPadding: 8
@@ -89,7 +91,7 @@ Pane {
                 spacing: 8
                 width: flickable.contentWidth
                 SideButton {
-                    icon.source: iconFor('bitcoin')
+                    icon.source: UtilJS.iconFor('bitcoin')
                     location: '/bitcoin'
                     text: 'Bitcoin'
                 }
@@ -103,7 +105,7 @@ Pane {
                 }
                 SideButton {
                     visible: Settings.enableTestnet
-                    icon.source: iconFor('testnet')
+                    icon.source: UtilJS.iconFor('testnet')
                     location: '/testnet'
                     text: 'Bitcoin Testnet'
                 }
@@ -117,7 +119,7 @@ Pane {
                     }
                 }
                 SideButton {
-                    icon.source: iconFor('liquid')
+                    icon.source: UtilJS.iconFor('liquid')
                     location: '/liquid'
                     text: 'Liquid'
                 }
@@ -131,7 +133,7 @@ Pane {
                 }
                 SideButton {
                     visible: Settings.enableTestnet
-                    icon.source: iconFor('testnet-liquid')
+                    icon.source: UtilJS.iconFor('testnet-liquid')
                     location: '/testnet-liquid'
                     text: 'Liquid Testnet'
                 }

@@ -5,6 +5,7 @@ import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.12
 
 import "analytics.js" as AnalyticsJS
+import "util.js" as UtilJS
 
 Pane {
     id: self
@@ -39,7 +40,7 @@ Pane {
             Layout.minimumWidth: 150
             spacing: constants.s1
             Image {
-                source: iconFor(self.network)
+                source: UtilJS.iconFor(self.network)
                 sourceSize.width: 24
                 sourceSize.height: 24
             }

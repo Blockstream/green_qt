@@ -3,6 +3,8 @@ import QtQuick 2.12
 import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.12
 
+import "util.js" as UtilJS
+
 Label {
     id: self
     property real delay: 500
@@ -22,7 +24,7 @@ Label {
     Popup {
         readonly property point scenePosition: {
             hover_handler.containsMouse
-            return dynamicScenePosition(self, -8, -8)
+            return UtilJS.dynamicScenePosition(self, -8, -8)
         }
         id: popup
         x: scenePosition.x

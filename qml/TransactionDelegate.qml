@@ -7,6 +7,7 @@ import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.12
 
 import "analytics.js" as AnalyticsJS
+import "util.js" as UtilJS
 
 ItemDelegate {
     id: self
@@ -79,7 +80,7 @@ ItemDelegate {
         spacing: constants.s1
 
         Label {
-            text: formatTransactionTimestamp(tx)
+            text: UtilJS.formatTransactionTimestamp(tx)
             font.pixelSize: 12
             font.capitalization: Font.AllUppercase
             font.styleName: 'Regular'

@@ -7,12 +7,13 @@ import QtQuick.Layouts 1.15
 import QtQml.Models 2.0
 
 import "analytics.js" as AnalyticsJS
+import "util.js" as UtilJS
 
 AbstractDialog {
     id: self
     icon: {
         if (controller.type === 'amp') return 'qrc:/svg/amp.svg'
-        if (controller.network) return iconFor(controller.network)
+        if (controller.network) return UtilJS.iconFor(controller.network)
         return null
     }
     title: qsTrId('id_create_new_wallet')
@@ -190,7 +191,7 @@ AbstractDialog {
                         }
                         Label {
                             textFormat: Text.RichText
-                            text: qsTrId('id_i_agree_to_the') + ' ' + link('https://blockstream.com/green/terms/', qsTrId('id_terms_of_service'))
+                            text: qsTrId('id_i_agree_to_the') + ' ' + UtilJS.link('https://blockstream.com/green/terms/', qsTrId('id_terms_of_service'))
                             onLinkActivated: Qt.openUrlExternally(link)
                             background: MouseArea {
                                 acceptedButtons: Qt.NoButton
@@ -262,7 +263,7 @@ AbstractDialog {
                         }
                         Label {
                             textFormat: Text.RichText
-                            text: qsTrId('id_i_agree_to_the') + ' ' + link('https://blockstream.com/green/terms/', qsTrId('id_terms_of_service'))
+                            text: qsTrId('id_i_agree_to_the') + ' ' + UtilJS.link('https://blockstream.com/green/terms/', qsTrId('id_terms_of_service'))
                             onLinkActivated: Qt.openUrlExternally(link)
                             background: MouseArea {
                                 acceptedButtons: Qt.NoButton

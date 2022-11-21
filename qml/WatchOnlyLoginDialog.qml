@@ -5,12 +5,13 @@ import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.12
 
 import "analytics.js" as AnalyticsJS
+import "util.js" as UtilJS
 
 AbstractDialog {
     required property Network network
 
     id: self
-    icon: iconFor(self.network)
+    icon: UtilJS.iconFor(self.network)
     title: qsTrId('id_watchonly_login')
     onClosed: destroy()
     contentItem: GridLayout {

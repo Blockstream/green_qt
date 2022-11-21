@@ -4,6 +4,8 @@ import QtQuick 2.13
 import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.12
 
+import "util.js" as UtilJS
+
 MainPage {
     readonly property string url: 'https://blockstream.com/green/'
     readonly property var recentWallets: {
@@ -114,7 +116,7 @@ MainPage {
                                 readonly property Wallet wallet: modelData
                                 Layout.alignment: Qt.AlignTop
                                 Layout.fillWidth: true
-                                icon.source: iconFor(wallet)
+                                icon.source: UtilJS.iconFor(wallet)
                                 icon.color: 'transparent'
                                 flat: true
                                 text: wallet.name
@@ -130,7 +132,7 @@ MainPage {
                                         fillMode: Image.PreserveAspectFit
                                         sourceSize.height: 24
                                         sourceSize.width: 24
-                                        source: iconFor(delegate.wallet)
+                                        source: UtilJS.iconFor(delegate.wallet)
                                     }
                                     Image {
                                         fillMode: Image.PreserveAspectFit
@@ -220,8 +222,8 @@ MainPage {
             text: qsTrId('Copyright (©) 2021') + '<br/><br/>' +
                   qsTrId('id_version') + ' ' + Qt.application.version + '<br/><br/>' +
                   qsTrId('id_please_contribute_if_you_find') + ".<br/>" +
-                  qsTrId('id_visit_s_for_further_information').arg(link(url)) + ".<br/><br/>" +
-                  qsTrId('id_distributed_under_the_s_see').arg('GNU General Public License v3.0').arg(link('https://opensource.org/licenses/GPL-3.0'))
+                  qsTrId('id_visit_s_for_further_information').arg(UtilJS.link(url)) + ".<br/><br/>" +
+                  qsTrId('id_distributed_under_the_s_see').arg('GNU General Public License v3.0').arg(UtilJS.link('https://opensource.org/licenses/GPL-3.0'))
             textFormat: Text.RichText
             font.pixelSize: 12
             color: constants.c300

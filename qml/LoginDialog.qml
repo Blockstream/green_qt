@@ -7,13 +7,14 @@ import QtQuick.Layouts 1.13
 import QtQuick.Window 2.12
 
 import "analytics.js" as AnalyticsJS
+import "util.js" as UtilJS
 
 AbstractDialog {
     required property Wallet wallet
     property bool active: self.wallet.activities.length > 0 || (self.wallet.session && self.wallet.session.connecting)
 
     id: self
-    icon: iconFor(self.wallet)
+    icon: UtilJS.iconFor(self.wallet)
     focus: true
     title: self.wallet.name
 

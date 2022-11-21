@@ -2,6 +2,8 @@ import QtQuick 2.13
 import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.12
 
+import "util.js" as UtilJS
+
 GPane {
     property bool agreeWithTermsOfService: checkbox.checked
     signal next()
@@ -32,7 +34,7 @@ GPane {
             }
             Label {
                 textFormat: Text.RichText
-                text: qsTrId('id_i_agree_to_the') + ' ' + link('https://blockstream.com/green/terms/', qsTrId('id_terms_of_service'))
+                text: qsTrId('id_i_agree_to_the') + ' ' + UtilJS.link('https://blockstream.com/green/terms/', qsTrId('id_terms_of_service'))
                 onLinkActivated: Qt.openUrlExternally(link)
                 background: MouseArea {
                     acceptedButtons: Qt.NoButton

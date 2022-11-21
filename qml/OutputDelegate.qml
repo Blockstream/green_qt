@@ -7,6 +7,8 @@ import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.12
 import QtQml.Models 2.11
 
+import "util.js" as UtilJS
+
 Button {
     required property var output
 
@@ -44,7 +46,7 @@ Button {
                 visible: !output.account.wallet.network.liquid
                 sourceSize.height: 36
                 sourceSize.width: 36
-                source: iconFor(wallet)
+                source: UtilJS.iconFor(wallet)
             }
             Loader {
                 Layout.alignment: Qt.AlignTop

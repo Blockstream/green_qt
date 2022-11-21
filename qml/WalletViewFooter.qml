@@ -4,6 +4,8 @@ import QtQuick 2.12
 import QtQuick.Controls 2.14
 import QtQuick.Layouts 1.12
 
+import "util.js" as UtilJS
+
 StatusBar {
     required property Wallet wallet
     id: self
@@ -16,7 +18,7 @@ StatusBar {
                 fillMode: Image.PreserveAspectFit
                 sourceSize.height: 16
                 sourceSize.width: 16
-                source: iconFor(self.wallet)
+                source: UtilJS.iconFor(self.wallet)
             }
             Label {
                 text: wallet.network.displayName + ' ' + qsTrId('id_network')
@@ -90,7 +92,7 @@ StatusBar {
                         if (wallet.network.liquid) {
                             return wallet.getOrCreateAsset(wallet.network.policyAsset).icon
                         } else {
-                            return iconFor(self.wallet)
+                            return UtilJS.iconFor(self.wallet)
                         }
                     }
                 }

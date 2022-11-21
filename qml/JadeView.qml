@@ -4,6 +4,8 @@ import QtQuick 2.13
 import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.12
 
+import "util.js" as UtilJS
+
 MainPage {
     id: self
     property alias count: devices_list_view.count
@@ -97,7 +99,7 @@ MainPage {
             }
             Label {
                 Layout.alignment: Qt.AlignCenter
-                text: qsTrId('id_need_help') + ' ' + link(url, qsTrId('id_visit_the_blockstream_help'))
+                text: qsTrId('id_need_help') + ' ' + UtilJS.link(url, qsTrId('id_visit_the_blockstream_help'))
                 textFormat: Text.RichText
                 color: 'white'
                 onLinkActivated: Qt.openUrlExternally(url)

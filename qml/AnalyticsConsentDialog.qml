@@ -4,6 +4,8 @@ import QtQuick 2.13
 import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.13
 
+import "util.js" as UtilJS
+
 AbstractDialog {
     id: self
     title: qsTrId('id_help_green_improve')
@@ -113,7 +115,7 @@ AbstractDialog {
                             Layout.maximumWidth: 420
                             textFormat: Text.RichText
                             onLinkActivated: Qt.openUrlExternally(link)
-                            text: link('https://help.blockstream.com/hc/en-us/articles/5988514431897', qsTrId('id_learn_more'))
+                            text: UtilJS.link('https://help.blockstream.com/hc/en-us/articles/5988514431897', qsTrId('id_learn_more'))
                             background: MouseArea {
                                 acceptedButtons: Qt.NoButton
                                 cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor

@@ -7,10 +7,9 @@ import QtQuick.Layouts 1.13
 import QtQuick.Window 2.12
 
 import "analytics.js" as AnalyticsJS
+import "util.js" as UtilJS
 
 ApplicationWindow {
-    id: window
-
     readonly property WalletView currentWalletView: stack_layout.currentWalletView
     readonly property Wallet currentWallet: currentWalletView ? currentWalletView.wallet : null
     readonly property Account currentAccount: currentWalletView ? currentWalletView.currentAccount : null
@@ -18,60 +17,14 @@ ApplicationWindow {
     property Navigation navigation: Navigation {
         location: '/home'
     }
-    function link(url, text) {
-        return `<style>a:link { color: "#00B45A"; text-decoration: none; }</style><a href="${url}">${text || url}</a>`
-    }
-
-    function iconFor(target) {
-        if (target instanceof Wallet) return iconFor(target.network)
-        if (target instanceof Network) return iconFor(target.key)
-        switch (target) {
-            case 'liquid':
-                return 'qrc:/svg/liquid.svg'
-            case 'testnet-liquid':
-                return 'qrc:/svg/testnet-liquid.svg'
-            case 'bitcoin':
-                return 'qrc:/svg/btc.svg'
-            case 'testnet':
-                return 'qrc:/svg/btc_testnet.svg'
-        }
-        return ''
-    }
 
     property Constants constants: Constants {}
 
-    function formatTransactionTimestamp(tx) {
-        return new Date(tx.created_at_ts / 1000).toLocaleString(locale.dateTimeFormat(Locale.LongFormat))
-    }
-
-    function accountName(account) {
-        if (!account) return ''
-        if (account.name !== '') return account.name
-        if (account.mainAccount) return qsTrId('id_main_account')
-        return qsTrId('Account %1').arg(account.pointer)
-    }
-
-    function renameAccount(account, text, active_focus) {
-        if (account.rename(text, active_focus)) {
-            Analytics.recordEvent('account_rename', AnalyticsJS.segmentationSubAccount(account))
-        }
-    }
-
-    function dynamicScenePosition(item, x, y) {
-        const target = item
-        while (item) {
-            item.x
-            item.y
-            item = item.parent
-        }
-        return target.mapToItem(null, x, y)
-    }
-
+    id: window
     x: Settings.windowX
     y: Settings.windowY
     width: Settings.windowWidth
     height: Settings.windowHeight
-
     onXChanged: Settings.windowX = x
     onYChanged: Settings.windowY = y
     onWidthChanged: Settings.windowWidth = width
@@ -81,7 +34,6 @@ ApplicationWindow {
             Settings.updateRecentWallet(currentWallet.id)
         }
     }
-
     minimumWidth: 900
     minimumHeight: 600
     visible: true
@@ -90,7 +42,7 @@ ApplicationWindow {
         const parts = Qt.application.arguments.indexOf('--debugnavigation') > 0 ? [navigation.location] : []
         if (currentWallet) {
             parts.push(font_metrics.elidedText(currentWallet.name, Qt.ElideRight, window.width / 3));
-            if (currentAccount) parts.push(font_metrics.elidedText(accountName(currentAccount), Qt.ElideRight, window.width / 3));
+            if (currentAccount) parts.push(font_metrics.elidedText(UtilJS.accountName(currentAccount), Qt.ElideRight, window.width / 3));
         }
         parts.push('Blockstream Green');
         if (build_type !== 'release') parts.push(`[${build_type}]`)
@@ -99,7 +51,6 @@ ApplicationWindow {
     FontMetrics {
         id: font_metrics
     }
-
     RowLayout {
         id: main_layout
         anchors.fill: parent

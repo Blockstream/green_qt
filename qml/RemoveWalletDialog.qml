@@ -5,6 +5,7 @@ import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.13
 
 import "analytics.js" as AnalyticsJS
+import "util.js" as UtilJS
 
 AbstractDialog {
     property Wallet wallet
@@ -33,7 +34,7 @@ AbstractDialog {
             Image {
                 sourceSize.width: 16
                 sourceSize.height: 16
-                source: iconFor(wallet)
+                source: UtilJS.iconFor(wallet)
             }
             Label {
                 Layout.fillWidth: true

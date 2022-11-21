@@ -5,6 +5,8 @@ import QtQuick 2.12
 import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.12
 
+import "util.js" as UtilJS
+
 StackView {
     id: stack_view
     required property Account account
@@ -217,7 +219,7 @@ StackView {
                     Image {
                         Layout.preferredHeight: 24
                         Layout.preferredWidth: 24
-                        source: iconFor(wallet)
+                        source: UtilJS.iconFor(wallet)
                     }
                     Label {
                         text: wallet.network.displayName

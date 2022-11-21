@@ -6,6 +6,8 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 import QtQml.Models 2.0
 
+import "util.js" as UtilJS
+
 GPane {
     required property bool showAMP
     required property string view
@@ -23,7 +25,7 @@ GPane {
                 SelectNetworkViewCard {
                     network: 'bitcoin'
                     type: 'default'
-                    icons: [iconFor('bitcoin')]
+                    icons: [UtilJS.iconFor('bitcoin')]
                     title: 'Bitcoin Wallet'
                     description: qsTrId('id_bitcoin_is_the_worlds_leading')
                 }
@@ -37,7 +39,7 @@ GPane {
                 SelectNetworkViewCard {
                     network: 'liquid'
                     type: 'default'
-                    icons: [iconFor('liquid')]
+                    icons: [UtilJS.iconFor('liquid')]
                     title: qsTrId('id_liquid_wallet')
                     description: qsTrId('id_the_liquid_network_is_a_bitcoin')
                 }

@@ -7,6 +7,9 @@ import QtQuick.Controls.Material 2.3
 import QtQuick.Layouts 1.12
 import QtQml 2.15
 
+import "analytics.js" as AnalyticsJS
+import "util.js" as UtilJS
+
 MainPageHeader {
     required property Wallet wallet
     required property Account currentAccount
@@ -53,7 +56,7 @@ MainPageHeader {
                             fillMode: Image.PreserveAspectFit
                             sourceSize.height: 24
                             sourceSize.width: 24
-                            source: iconFor(self.wallet)
+                            source: UtilJS.iconFor(self.wallet)
                         }
                         Loader {
                             active: wallet.persisted
@@ -108,11 +111,13 @@ MainPageHeader {
                                 rightPadding: 8
                                 font.pixelSize: 18
                                 font.styleName: 'Regular'
-                                text: accountName(self.currentAccount)
+                                text: UtilJS.accountName(self.currentAccount)
                                 enabled: !self.wallet.watchOnly && self.currentAccount && !self.wallet.locked
                                 onEdited: {
                                     if (enabled && self.currentAccount) {
-                                        renameAccount(self.currentAccount, text, activeFocus)
+                                        if (self.currentAccount.rename(text, activeFocus)) {
+                                            Analytics.recordEvent('account_rename', AnalyticsJS.segmentationSubAccount(self.currentAccount))
+                                        }
                                     }
                                 }
                             }
@@ -123,7 +128,7 @@ MainPageHeader {
                             visible: active
                             sourceComponent: Label {
                                 verticalAlignment: Qt.AlignVCenter
-                                text: accountName(self.currentAccount)
+                                text: UtilJS.accountName(self.currentAccount)
                                 font.pixelSize: 18
                                 font.styleName: 'Medium'
                             }
