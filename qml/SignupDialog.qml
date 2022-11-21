@@ -23,7 +23,7 @@ AbstractDialog {
 
     Navigation {
         id: navigation
-        location: window.navigation.location
+        Component.onCompleted: location = window.navigation.location
     }
 
     SignupController {
