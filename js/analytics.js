@@ -19,6 +19,7 @@ function segmentationOnBoard({ flow, network, security }) {
 }
 
 function segmentationSession(wallet) {
+    if (!wallet) return {}
     const segmentation = segmentationNetwork(wallet.network)
     const app_settings = []
     if (Settings.useTor) app_settings.push('tor')

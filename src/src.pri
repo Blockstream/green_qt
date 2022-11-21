@@ -29,6 +29,7 @@ SOURCES += \
     $$PWD/httpmanager.cpp \
     $$PWD/httprequestactivity.cpp \
     $$PWD/json.cpp \
+    $$PWD/loader2.cpp \
     $$PWD/main.cpp \
     $$PWD/navigation.cpp \
     $$PWD/network.cpp \
@@ -82,6 +83,7 @@ HEADERS += \
     $$PWD/httpmanager.h \
     $$PWD/httprequestactivity.h \
     $$PWD/json.h \
+    $$PWD/loader2.h \
     $$PWD/navigation.h \
     $$PWD/network.h \
     $$PWD/networkmanager.h \

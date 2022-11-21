@@ -135,29 +135,37 @@ ApplicationWindow {
         }
     }
 
-    DialogLoader {
+    Loader2 {
         active: navigation.path.match(/\/signup$/)
-        dialog: SignupDialog {
+        onActiveChanged: if (!active) object.close()
+        sourceComponent: SignupDialog {
+            visible: true
             onRejected: navigation.pop()
+            onClosed: destroy()
         }
     }
 
-    DialogLoader {
+    Loader2 {
         active: navigation.path.match(/\/restore$/)
-        dialog: RestoreDialog {
+        onActiveChanged: if (!active) object.close()
+        sourceComponent: RestoreDialog {
+            visible: true
             onRejected: navigation.pop()
+            onClosed: destroy()
         }
     }
 
-    DialogLoader {
-        properties: {
+    Loader2 {
+        property Wallet wallet: {
             const [,, wallet_id] = navigation.path.split('/')
-            const wallet = WalletManager.wallet(wallet_id)
-            return { wallet }
+            return WalletManager.wallet(wallet_id)
         }
-        active: properties.wallet && !properties.wallet.ready
-        dialog: LoginDialog {
+        active: wallet && !wallet.ready
+        onActiveChanged: if (!active) object.close()
+        sourceComponent: LoginDialog {
+            visible: true
             onRejected: navigation.pop()
+            onClosed: destroy()
         }
     }
 

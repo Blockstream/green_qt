@@ -104,7 +104,7 @@ MainPage {
         wallet: self.wallet
     }
 
-    DialogLoader {
+    Loader2 {
         id: settings_dialog
         property string location: `${self.location}/settings`
         property bool enabled: {
@@ -114,11 +114,13 @@ MainPage {
             }
             return !!self.wallet.settings.pricing && !!self.wallet.config.limits
         }
+        property Wallet wallet: self.wallet
         active: settings_dialog.enabled && navigation.location === settings_dialog.location
-        dialog: WalletSettingsDialog {
+        sourceComponent: WalletSettingsDialog {
+            visible: true
             parent: window.Overlay.overlay
-            wallet: self.wallet
             onRejected: navigation.pop()
+            onClosed: destroy()
         }
     }
     id: self
