@@ -25,7 +25,7 @@ AbstractDialog {
     Navigation {
         id: navigation
         property RestoreController controller
-        location: window.navigation.location
+        Component.onCompleted: location = window.navigation.location
     }
 
     contentItem: StackLayout {
