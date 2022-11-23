@@ -11,7 +11,6 @@ Page {
     id: self
     spacing: constants.p1
     background: null
-
     header: GHeader {
         Label {
             Layout.alignment: Qt.AlignVCenter
@@ -50,7 +49,6 @@ Page {
             width: ListView.view.contentWidth
             onClicked: self.clicked(address)
         }
-
         BusyIndicator {
             width: 32
             height: 32
@@ -61,6 +59,29 @@ Page {
             Behavior on opacity { OpacityAnimator {} }
             anchors.bottom: parent.bottom
             anchors.horizontalCenter: parent.horizontalCenter
+        }
+    }
+
+    Component {
+        id: export_addresses_popup
+        Popup {
+            required property Account account
+            id: dialog
+            anchors.centerIn: Overlay.overlay
+            closePolicy: Popup.NoAutoClose
+            modal: true
+            Overlay.modal: Rectangle {
+                color: "#70000000"
+            }
+            onClosed: destroy()
+            onOpened: controller.save()
+            ExportAddressesController {
+                id: controller
+                account: dialog.account
+                onSaved: dialog.close()
+            }
+            BusyIndicator {
+            }
         }
     }
 }
