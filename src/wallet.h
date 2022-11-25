@@ -150,7 +150,7 @@ public slots:
     void updateConfig();
     void updateSettings();
 
-    void refreshAssets(bool refresh);
+    void refreshAssets();
 
     bool rename(QString name, bool active_focus);
     void setWatchOnly(const QString& username, const QString& password);

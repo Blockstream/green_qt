@@ -216,10 +216,8 @@ QJsonObject Wallet::events() const
 
 void Wallet::reload(bool refresh_accounts)
 {
-    // return;
     if (m_network->isLiquid()) {
-        // Load cached assets
-        refreshAssets(false);
+        refreshAssets();
     }
 
     auto handler = new GetSubAccountsHandler(m_session, refresh_accounts);
@@ -238,11 +236,6 @@ void Wallet::reload(bool refresh_accounts)
 
         updateConfig();
         updateEmpty();
-
-        if (m_network->isLiquid()) {
-            // Update cached assets
-            refreshAssets(true);
-        }
 
         if (!m_watch_only) {
             char* data;
@@ -264,10 +257,8 @@ void Wallet::reload(bool refresh_accounts)
 class RefreshAssetsHandler : public Handler
 {
 public:
-    const bool m_refresh;
-    RefreshAssetsHandler(bool refresh, Session* session)
+    RefreshAssetsHandler(Session* session)
         : Handler(session)
-        , m_refresh(refresh)
     {
     }
     void call(GA_session* session, GA_auth_handler** auth_handler) override
@@ -276,20 +267,17 @@ public:
         auto params = Json::fromObject({
             { "assets", true },
             { "icons", true },
-            { "refresh", m_refresh }
         });
-        GA_json* output;
-        int rc = GA_refresh_assets(session, params.get(), &output);
+        int rc = GA_refresh_assets(session, params.get());
         if (rc != GA_OK) return;
-        GA_destroy_json(output);
     }
 };
 
-void Wallet::refreshAssets(bool refresh)
+void Wallet::refreshAssets()
 {
     Q_ASSERT(m_network->isLiquid());
 
-    auto handler = new RefreshAssetsHandler(refresh, m_session);
+    auto handler = new RefreshAssetsHandler(m_session);
     handler->exec();
 
     connect(handler, &Handler::done, this, [=] {

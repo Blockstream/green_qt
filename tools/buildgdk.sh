@@ -39,12 +39,12 @@ else
     exit 1
 fi
 
-mv ${GDK_PATH}/src/build-*/src/libgreenaddress* ${GDK_PATH}
-mv ${GDK_PATH}/src/build-*/libwally-core/build/include/* ${GDK_PATH}
-mv ${GDK_PATH}/src/build-*/boost/build/lib/libboost_log.a ${GDK_PATH}
-mv ${GDK_PATH}/src/subprojects/json-3.10.5/include/nlohmann ${GDK_PATH}
-mv ${GDK_PATH}/src/subprojects/boost_1_76_0/boost ${GDK_PATH}
-mv ${GDK_PATH}/src/include/gdk.h ${GDK_PATH}/gdk.h
+cp -R  ${GDK_PATH}/src/build-*/src/libgreenaddress* ${GDK_PATH}
+cp -R  ${GDK_PATH}/src/build-*/external_deps_build/libwally-core/build/include/* ${GDK_PATH}
+cp -R  ${GDK_PATH}/src/build-*/external_deps_build/boost/build/lib/libboost_log.a ${GDK_PATH}
+cp -R  ${GDK_PATH}/src/build-*/external_deps_build/nlohmann_json/include/nlohmann ${GDK_PATH}
+cp -R  ${GDK_PATH}/src/build-*/external_deps_build/boost/build/include/boost ${GDK_PATH}
+cp -R  ${GDK_PATH}/src/include/*.h ${GDK_PATH}
 
 rm -fr ${GDK_PATH}/src ${GDKVENV}
 
