@@ -65,10 +65,8 @@ macos {
 
     static {
         LIBS += $${GDK_PATH}/libgreenaddress_full.a
-        LIBS += $${GDK_PATH}/libboost_log.a
     } else {
         LIBS += -L$${GDK_PATH} -lgreenaddress
-        LIBS += $${GDK_PATH}/libboost_log.a
     }
 }
 
@@ -77,7 +75,6 @@ unix:!macos:!android {
         LIBS += $${GDK_PATH}/libgreenaddress_full.a
         SOURCES += src/glibc_compat.cpp
         LIBS += -Wl,--wrap=__divmoddi4 -Wl,--wrap=log2f
-        LIBS += $${GDK_PATH}/libboost_log.a
     } else {
         LIBS += -L$${GDK_PATH} -lgreenaddress
     }
@@ -92,7 +89,6 @@ win32:static {
     INCLUDEPATH += $${DEPS_PATH}/hidapi/include
 
     LIBS += $${GDK_PATH}/libgreenaddress_full.a
-    LIBS += $${GDK_PATH}/libboost_log.a
     LIBS += $${DEPS_PATH}/hidapi/lib/libhidapi.a
     LIBS += /usr/x86_64-w64-mingw32/lib/libhid.a /usr/x86_64-w64-mingw32/lib/libsetupapi.a
 }
@@ -103,7 +99,6 @@ win32:shared {
     INCLUDEPATH += $${DEPS_PATH}/hidapi/include
 
     LIBS += $${GDK_PATH}/libgreenaddress_full.a
-    LIBS += $${GDK_PATH}/libboost_log.a
     LIBS += $${DEPS_PATH}/hidapi/lib/libhidapi.a
 }
 
