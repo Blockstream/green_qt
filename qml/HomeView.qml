@@ -13,6 +13,7 @@ MainPage {
         for (const id of Settings.recentWallets) {
             const wallet = WalletManager.wallet(id)
             if (!wallet) continue
+            if ('type' in wallet.deviceDetails && !wallet.device) continue
             if (wallet.network.key === 'testnet' && !Settings.enableTestnet) continue
             if (wallet.network.key === 'testnet-liquid' && !Settings.enableTestnet) continue
             wallets.push(wallet)

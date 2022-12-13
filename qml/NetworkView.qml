@@ -91,6 +91,7 @@ StackLayout {
                 currentIndex: -1
                 model: WalletListModel {
                     network: self.network
+                    withoutDevice: true
                 }
                 delegate: WalletDelegate {
                     width: ListView.view.contentWidth
