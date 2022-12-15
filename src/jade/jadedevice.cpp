@@ -608,6 +608,6 @@ JadeDevice::State JadeDevice::state() const
     if (state == "TEMP") return StateTemporary;
     if (state == "UNSAVED") return StateUnsaved;
     if (state == "LOCKED") return StateLocked;
-    if (state == "UNINT") return StateUninitialized;
+    if (state == "UNINIT") return StateUninitialized;
     Q_UNREACHABLE();
 }
