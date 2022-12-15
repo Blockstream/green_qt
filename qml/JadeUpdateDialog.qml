@@ -44,6 +44,10 @@ AbstractDialog {
             }
         }
         onFirmwareAvailableChanged: {
+            // we don't want to prompt firmware update
+            // in when Jade setup is in progress
+            if (self.device.state === JadeDevice.StateUnsaved) return
+
             if (firmwareAvailable && Settings.checkForFirmwareUpdates) {
                 self.quickUpdate()
             }
