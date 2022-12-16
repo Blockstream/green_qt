@@ -89,10 +89,12 @@ ColumnLayout {
             }
             Label {
                 Layout.minimumHeight: 32
+                visible: self.device.state !== JadeDevice.StateUnsaved
                 text: qsTrId('id_update')
                 verticalAlignment: Label.AlignVCenter
             }
             RowLayout {
+                visible: self.device.state !== JadeDevice.StateUnsaved
                 GButton {
                     padding: 4
                     topInset: 0
