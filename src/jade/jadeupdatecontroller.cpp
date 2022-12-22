@@ -226,6 +226,9 @@ void JadeUpdateController::check()
 
 void JadeUpdateController::update(const QVariantMap& firmware)
 {
+    m_firmware_selected = firmware;
+    emit firmwareSelectedChanged();
+
     m_updating = true;
     emit updatingChanged();
 
