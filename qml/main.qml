@@ -96,8 +96,13 @@ ApplicationWindow {
         return segmentation
     }
 
-    function segmentationFirmwareUpdate(device) {
-        const segmentation = {}
+    function segmentationFirmwareUpdate(device, firmware) {
+        const segmentation = {
+            selected_config: firmware.config,
+            selected_delta: firmware.delta,
+            selected_same_config: firmware.same_config,
+            selected_version: firmware.version,
+        }
         const app_settings = []
         if (Settings.useTor) app_settings.push('tor')
         if (Settings.useProxy) app_settings.push('proxy')
