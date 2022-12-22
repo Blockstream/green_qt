@@ -66,5 +66,6 @@
         <file>fonts/Roboto/Roboto-ThinItalic.ttf</file>
         <file>png/amp_background.png</file>
         <file>png/liquid_background.png</file>
+        <file>png/lbtc.png</file>
     </qresource>
 </RCC>

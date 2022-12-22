@@ -43,7 +43,10 @@ void UpdateAsset(GA_session* session, Asset* asset)
         const auto data = output->at("assets").at(id);
         asset->setData(Json::toObject((GA_json*) &data));
     }
-    if (output->at("icons").contains(id)) {
+    // TODO: remove the following workaround after updating gdk to 0.0.58
+    if (id == "6f0279e9ed041c3d710a9f57d0c02928416460c4b722ae3457a11eec381c526d") {
+        asset->setIcon("qrc:/png/lbtc.png");
+    } else if (output->at("icons").contains(id)) {
         const auto icon = output->at("icons").at(id).get<std::string>();
         asset->setIcon(QString("data:image/png;base64,") + QString::fromStdString(icon));
     }
