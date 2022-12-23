@@ -8,6 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 ### Changed
+
+### Fixed
+
+## [1.1.6] - 2022-12-23
+### Added
+
+### Changed
 - Avoid Jade firmware update when Jade is being setup
 
 ### Fixed
