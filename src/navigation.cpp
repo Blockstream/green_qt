@@ -37,8 +37,8 @@ void Navigation::go(const QString &location, const QVariantMap &param)
     QUrlQuery q(u);
     for (auto i = param.constBegin(); i != param.constEnd(); ++i) {
         q.removeQueryItem(i.key());
-        if (i.value() == QVariant::Invalid) continue;
-        if (i->type() == QVariant::StringList) {
+        if (i->typeId() == QMetaType::UnknownType) continue;
+        if (i->typeId() == QMetaType::QStringList) {
             q.addQueryItem(i.key(), i.value().toStringList().join(','));
         } else {
             q.addQueryItem(i.key(), i.value().toString());
