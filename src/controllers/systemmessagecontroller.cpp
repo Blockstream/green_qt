@@ -2,7 +2,7 @@
 
 #include "handler.h"
 #include "resolver.h"
-#include "resolvers/signmessageresolver.h"
+#include "signmessageresolver.h"
 #include "wallet.h"
 
 #include <gdk.h>

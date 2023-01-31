@@ -6,7 +6,7 @@
 #include "json.h"
 #include "network.h"
 #include "resolver.h"
-#include "resolvers/signmessageresolver.h"
+#include "signmessageresolver.h"
 #include "session.h"
 #include "wallet.h"
 
