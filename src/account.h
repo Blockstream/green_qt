@@ -10,6 +10,10 @@ class Output;
 class Transaction;
 class Wallet;
 
+Q_MOC_INCLUDE("wallet.h")
+Q_MOC_INCLUDE("balance.h")
+Q_MOC_INCLUDE("transaction.h")
+
 class Account : public QObject
 {
     Q_OBJECT

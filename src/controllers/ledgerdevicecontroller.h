@@ -15,6 +15,10 @@ class Network;
 class Session;
 class Wallet;
 
+Q_MOC_INCLUDE("session.h")
+Q_MOC_INCLUDE("network.h")
+Q_MOC_INCLUDE("ledger/ledgerdevice.h")
+
 class LedgerDeviceController : public QObject
 {
     Q_OBJECT

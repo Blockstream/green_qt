@@ -11,6 +11,10 @@ class Handler;
 class Network;
 class Wallet;
 
+Q_MOC_INCLUDE("activity.h")
+Q_MOC_INCLUDE("device.h")
+Q_MOC_INCLUDE("handler.h")
+
 // TODO ensure Resolver::resolve isn't called incorrectly or more than possible
 class Resolver : public QObject
 {

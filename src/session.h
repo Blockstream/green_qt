@@ -11,6 +11,8 @@
 class ConnectHandler;
 class Network;
 
+Q_MOC_INCLUDE("network.h")
+
 QT_FORWARD_DECLARE_STRUCT(GA_session)
 
 class Session : public Entity

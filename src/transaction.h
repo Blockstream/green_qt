@@ -9,6 +9,9 @@ class Account;
 class Asset;
 class Transaction;
 
+Q_MOC_INCLUDE("account.h")
+Q_MOC_INCLUDE("asset.h")
+
 class TransactionAmount : public QObject
 {
     Q_OBJECT

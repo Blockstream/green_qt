@@ -11,6 +11,9 @@ class Resolver;
 class Output;
 class Wallet;
 
+Q_MOC_INCLUDE("resolver.h")
+Q_MOC_INCLUDE("wallet.h")
+
 class AbstractController : public Entity
 {
     Q_OBJECT
