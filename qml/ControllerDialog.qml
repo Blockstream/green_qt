@@ -79,7 +79,7 @@ WalletDialog {
                     stack_view.push(sign_liquid_transaction_resolver_view_component, { resolver, wallet })
                     resolver.resolve()
                 }
-                return                    
+                return
             }
             if (resolver instanceof SignMessageResolver) {
                 if (resolver.device instanceof JadeDevice) {
@@ -239,8 +239,8 @@ WalletDialog {
                         delayed_resolve_timer.start()
                     }
                 }
-                validator: RegExpValidator {
-                    regExp: /[0-9]{6}/
+                validator: RegularExpressionValidator {
+                    regularExpression: /[0-9]{6}/
                 }
             }
             Loader {

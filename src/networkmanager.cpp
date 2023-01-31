@@ -31,8 +31,14 @@ NetworkManager::NetworkManager() : QObject(nullptr)
 
 NetworkManager *NetworkManager::instance()
 {
-    static NetworkManager network_manager;
-    return &network_manager;
+    static NetworkManager* network_manager = nullptr;
+    if (!network_manager) network_manager = new NetworkManager;
+    return network_manager;
+}
+
+NetworkManager* NetworkManager::create(QQmlEngine *, QJSEngine *engine)
+{
+    return instance();
 }
 
 QList<Network *> NetworkManager::networks() const

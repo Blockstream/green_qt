@@ -488,7 +488,7 @@ QString Wallet::formatAmount(qint64 amount, bool include_ticker, const QString& 
         str = QLocale::system().toString(val, 'f', 0);
     } else {
         str = QLocale::system().toString(val, 'f', 8);
-        str.remove(QRegExp("\\.?0+$"));
+        str.remove(QRegularExpression("\\.?0+$"));
     }
     if (include_ticker) {
         str += " " + ComputeDisplayUnit(m_network, effective_unit);

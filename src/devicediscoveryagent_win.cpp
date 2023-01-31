@@ -43,7 +43,7 @@ DeviceDiscoveryAgentPrivate::DeviceDiscoveryAgentPrivate(DeviceDiscoveryAgent* q
     Q_ASSERT(m_dev_notify);
 }
 
-bool DeviceDiscoveryAgentPrivate::nativeEventFilter(const QByteArray& eventType, void* message, long* /* result */)
+bool DeviceDiscoveryAgentPrivate::nativeEventFilter(const QByteArray& eventType, void* message, qintptr* /* result */)
 {
     if (eventType != "windows_generic_MSG") return false;
 

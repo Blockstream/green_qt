@@ -130,9 +130,10 @@ void WalletManager::removeWallet(Wallet* wallet)
 
 QQmlListProperty<Wallet> WalletManager::wallets()
 {
-    return QQmlListProperty<Wallet>(this, &m_wallets,
-        [](QQmlListProperty<Wallet>* property) { return static_cast<QVector<Wallet*>*>(property->data)->size(); },
-    [](QQmlListProperty<Wallet>* property, int index) { return static_cast<QVector<Wallet*>*>(property->data)->at(index); });
+    return {
+      this, &m_wallets,
+      [](QQmlListProperty<Wallet>* property) { return static_cast<QVector<Wallet*>*>(property->data)->size(); },
+      [](QQmlListProperty<Wallet>* property, qsizetype index) { return static_cast<QVector<Wallet*>*>(property->data)->at(index); }};
 }
 
 QString WalletManager::newWalletName(Network* network) const

@@ -132,7 +132,7 @@ void Session::update()
         m_connect_handler.destroy();
 
         GA_set_notification_handler(m_session, nullptr, nullptr);
-        QtConcurrent::run([=] {
+        QFuture<void> result = QtConcurrent::run([=] {
             int rc = GA_destroy_session(m_session);
             Q_ASSERT(rc == GA_OK);
         });

@@ -1,5 +1,6 @@
 #include "jadebleimpl.h"
 
+#include <QBluetoothUuid>
 #include <QDebug>
 
 #include <qbluetoothdeviceinfo.h>
@@ -60,7 +61,7 @@ void JadeBleImpl::connectDeviceImpl()
                 qDebug() << "JadeBleImpl::connectDeviceImpl()::lambda - Service discovery complete.  Looking for Jade service...";
                 for (const QBluetoothUuid& serviceId : m_controller->services())
                 {
-                    if (serviceId == IO_SERVICE_UUID)
+                    if (serviceId == QBluetoothUuid(IO_SERVICE_UUID))
                     {
                         // Jade service found - initiate discovering characteristics
                         m_service = m_controller->createServiceObject(serviceId, this);  // take ownership
@@ -69,12 +70,13 @@ void JadeBleImpl::connectDeviceImpl()
                             qDebug() << "JadeBleImpl::connectDeviceImpl()::lambda - Found Jade service, discovering service details";
 
                             // This could be received at any time
-                            connect(m_service, QOverload<QLowEnergyService::ServiceError>::of(&QLowEnergyService::error),
-                                    this, [this](const QLowEnergyService::ServiceError error)
-                                    {
-                                        qWarning() << "JadeBleImpl::lambda - error from the Jade service - disconnecting:" << error;
-                                        disconnectDevice();
-                                    });
+                            // TODO
+                            // connect(m_service, QOverload<QLowEnergyService::ServiceError>::of(&QLowEnergyService::error),
+                            //         this, [this](const QLowEnergyService::ServiceError error)
+                            //         {
+                            //             qWarning() << "JadeBleImpl::lambda - error from the Jade service - disconnecting:" << error;
+                            //             disconnectDevice();
+                            //         });
 
                             // Connect slot for characteristic discovery and initiate that process
                             connect(m_service, &QLowEnergyService::stateChanged,
@@ -99,12 +101,13 @@ void JadeBleImpl::connectDeviceImpl()
 
 
     // These could be received at any time
-    connect(m_controller, QOverload<QLowEnergyController::Error>::of(&QLowEnergyController::error),
-            this, [this](const QLowEnergyController::Error error)
-            {
-                qWarning() << "JadeBleImpl::lambda - error from the controller - disconnecting:" << error;
-                disconnectDevice();
-            });
+    // TODO
+    // connect(m_controller, QOverload<QLowEnergyController::Error>::of(&QLowEnergyController::error),
+    //         this, [this](const QLowEnergyController::Error error)
+    //         {
+    //             qWarning() << "JadeBleImpl::lambda - error from the controller - disconnecting:" << error;
+    //             disconnectDevice();
+    //         });
 
     connect(m_controller, &QLowEnergyController::disconnected,
             this, &JadeBleImpl::onDeviceDisconnection);
@@ -147,7 +150,7 @@ void JadeBleImpl::onServiceStateChange(const QLowEnergyService::ServiceState new
     }
 
     // Need to write the descriptor in order to enable notifications/indications from Jade
-    const QLowEnergyDescriptor notification = m_rx.descriptor(QBluetoothUuid::ClientCharacteristicConfiguration);
+    const QLowEnergyDescriptor notification = m_rx.descriptor(QBluetoothUuid::DescriptorType::ClientCharacteristicConfiguration);
     m_service->writeDescriptor(notification, QByteArray::fromHex("0100"));
 
     // Connect 'data received' slot

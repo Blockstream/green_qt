@@ -3,14 +3,19 @@
 
 #include <QObject>
 #include <QQmlListProperty>
+#include <QQmlEngine>
 
 class Network;
 
 class NetworkManager : public QObject
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_SINGLETON
 public:
     static NetworkManager* instance();
+
+    static NetworkManager *create(QQmlEngine *, QJSEngine *engine);
 
     QList<Network*> networks() const;
 

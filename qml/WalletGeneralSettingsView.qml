@@ -284,8 +284,8 @@ ColumnLayout {
         }
     }
 
-    component FieldValidator : RegExpValidator {
-        regExp: /^.{8,}$/
+    component FieldValidator : RegularExpressionValidator {
+        regularExpression: /^.{8,}$/
     }
 
     component Check : Image {

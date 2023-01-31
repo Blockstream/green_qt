@@ -3,8 +3,9 @@
 #include "ledgersignliquidtransactionactivity.h"
 #include "util.h"
 
-#include <wally_crypto.h>
-#include <wally_elements.h>
+#include <wally_wrapper.h>
+
+//#define BLINDING_FACTOR_LEN 32 /** Length of a Blinding Factor (or blinder) */
 
 namespace {
 

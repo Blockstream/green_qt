@@ -2,8 +2,7 @@
 #include "jadeapi.h"
 #include "network.h"
 
-#include <wally_crypto.h>
-#include <wally_elements.h>
+#include <wally_wrapper.h>
 
 namespace {
 const QVersionNumber JADE_MIN_ALLOWED_FW_VERSION{0, 1, 24};

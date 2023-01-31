@@ -1,5 +1,5 @@
 import QtQuick
 
-RegExpValidator {
-    regExp: /(\d*)([.,]\d*)?\s*$/
+RegularExpressionValidator {
+    regularExpression: /(\d*)([.,]\d*)?\s*$/
 }

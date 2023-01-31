@@ -57,15 +57,20 @@ QVariant HttpRequestActivity::body() const
 {
     const auto content_type = contentType();
     const auto body = m_response.value("body").toString();
+
+    QVariant result = body;
+
     if (content_type == "application/json") {
         const auto document = QJsonDocument::fromJson(body.toUtf8());
-        if (document.isObject()) return document.object();
-        if (document.isArray()) return document.array();
+        if (document.isObject()) result = document.object();
+        if (document.isArray()) result = document.array();
     } else if (content_type.startsWith("text/xml")) {
-        return body;
+        result = body;
     } else {
-        return body.toUtf8();
+        result = body.toUtf8();
     }
+
+    return result;
 }
 
 bool HttpRequestActivity::hasError() const
