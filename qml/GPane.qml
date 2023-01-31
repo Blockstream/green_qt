@@ -1,4 +1,4 @@
-import QtQuick.Controls 2.13
+import QtQuick.Controls
 
 Pane {
     background: null

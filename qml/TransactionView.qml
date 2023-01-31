@@ -1,10 +1,10 @@
-import Blockstream.Green 0.1
-import Blockstream.Green.Core 0.1
-import QtQuick 2.12
-import QtQuick.Window 2.12
-import QtQuick.Controls 2.13
-import QtQuick.Controls.Material 2.3
-import QtQuick.Layouts 1.12
+import Blockstream.Green
+import Blockstream.Green.Core
+import QtQuick
+import QtQuick.Window
+import QtQuick.Controls
+import QtQuick.Controls.Material
+import QtQuick.Layouts
 
 import "analytics.js" as AnalyticsJS
 import "util.js" as UtilJS

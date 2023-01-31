@@ -1,7 +1,7 @@
-import Blockstream.Green 0.1
-import QtQuick 2.13
-import QtQuick.Controls 2.13
-import QtQuick.Layouts 1.13
+import Blockstream.Green
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
 
 Column {
     property alias pin: field.pin

@@ -1,6 +1,6 @@
-import Blockstream.Green 0.1
-import QtQuick 2.0
-import QtQuick.Controls 2.5
+import Blockstream.Green
+import QtQuick
+import QtQuick.Controls
 
 Column {
     spacing: 16

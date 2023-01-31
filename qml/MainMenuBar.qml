@@ -1,4 +1,4 @@
-import Blockstream.Green.Gui 0.1
+import Blockstream.Green.Gui
 
 MenuBar {
     window: main_window

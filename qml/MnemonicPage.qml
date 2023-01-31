@@ -1,8 +1,8 @@
-import Blockstream.Green 0.1
-import QtQuick 2.12
-import QtQuick.Controls 2.5
-import QtQuick.Layouts 1.12
-import QtGraphicalEffects 1.15
+import Blockstream.Green
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+import Qt5Compat.GraphicalEffects
 
 ColumnLayout {
     property alias mnemonic: view.mnemonic

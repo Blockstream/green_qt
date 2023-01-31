@@ -1,13 +1,13 @@
-import Blockstream.Green 0.1
-import Blockstream.Green.Core 0.1
-import QtQuick 2.12
-import QtQuick.Window 2.12
-import QtQuick.Controls 2.5
-import QtQuick.Controls.Material 2.3
-import QtQuick.Layouts 1.12
-import QtMultimedia 5.13
-import QtGraphicalEffects 1.15
-import QtQuick.Shapes 1.0
+import Blockstream.Green
+import Blockstream.Green.Core
+import QtQuick
+import QtQuick.Window
+import QtQuick.Controls
+import QtQuick.Controls.Material
+import QtQuick.Layouts
+import QtMultimedia
+import Qt5Compat.GraphicalEffects
+import QtQuick.Shapes
 
 Popup {
     readonly property bool available: QtMultimedia.availableCameras.length > 0

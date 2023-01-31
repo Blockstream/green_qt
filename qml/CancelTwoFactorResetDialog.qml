@@ -1,7 +1,7 @@
-import Blockstream.Green 0.1
-import QtQuick 2.13
-import QtQuick.Controls 2.5
-import QtQuick.Layouts 1.12
+import Blockstream.Green
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
 
 ControllerDialog {
     id: dialog

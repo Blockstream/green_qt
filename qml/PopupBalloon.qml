@@ -1,5 +1,5 @@
-import QtQuick 2.12
-import QtQuick.Shapes 1.0
+import QtQuick
+import QtQuick.Shapes
 
 ShapePath {
     startX: 16

@@ -1,9 +1,9 @@
-import Blockstream.Green 0.1
-import QtQuick 2.14
-import QtQml 2.14
-import QtQuick.Controls 2.13
-import QtQuick.Controls.Material 2.3
-import QtQuick.Layouts 1.12
+import Blockstream.Green
+import QtQuick
+import QtQml
+import QtQuick.Controls
+import QtQuick.Controls.Material
+import QtQuick.Layouts
 
 WizardPage {
     property alias valid: controller.valid

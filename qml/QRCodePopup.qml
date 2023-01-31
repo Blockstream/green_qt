@@ -1,11 +1,11 @@
-import Blockstream.Green 0.1
-import Blockstream.Green.Core 0.1
-import QtQuick 2.12
-import QtQuick.Window 2.12
-import QtQuick.Controls 2.5
-import QtQuick.Layouts 1.12
-import QtGraphicalEffects 1.15
-import QtQuick.Shapes 1.0
+import Blockstream.Green
+import Blockstream.Green.Core
+import QtQuick
+import QtQuick.Window
+import QtQuick.Controls
+import QtQuick.Layouts
+import Qt5Compat.GraphicalEffects
+import QtQuick.Shapes
 
 Popup {
     required property string text

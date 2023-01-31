@@ -1,9 +1,9 @@
-import Blockstream.Green 0.1
-import QtQuick 2.14
-import QtQml 2.14
-import QtQuick.Controls 2.13
-import QtQuick.Layouts 1.12
-import QtQuick.Shapes 1.0
+import Blockstream.Green
+import QtQuick
+import QtQml
+import QtQuick.Controls
+import QtQuick.Layouts
+import QtQuick.Shapes
 
 import "util.js" as UtilJS
 

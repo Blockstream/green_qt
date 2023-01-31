@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick
 
 Rectangle {
     anchors.fill: parent

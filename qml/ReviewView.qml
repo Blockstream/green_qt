@@ -1,8 +1,8 @@
-import Blockstream.Green 0.1
-import QtMultimedia 5.13
-import QtQuick 2.12
-import QtQuick.Controls 2.5
-import QtQuick.Layouts 1.12
+import Blockstream.Green
+import QtMultimedia
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
 
 import "analytics.js" as AnalyticsJS
 

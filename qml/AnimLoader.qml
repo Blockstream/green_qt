@@ -1,4 +1,4 @@
-import QtQuick 2.15
+import QtQuick
 
 Loader {
     required property bool animated

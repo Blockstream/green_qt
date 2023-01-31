@@ -1,10 +1,10 @@
-import QtMultimedia 5.13
-import QtQuick 2.14
-import QtQml 2.14
-import QtQuick.Controls 2.5
-import QtQuick.Controls.Material 2.12
-import QtQuick.Window 2.12
-import QZXing 2.3
+import QtMultimedia
+import QtQuick
+import QtQml
+import QtQuick.Controls
+import QtQuick.Controls.Material
+import QtQuick.Window
+import QZXing
 
 Item {
     id: self

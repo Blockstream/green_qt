@@ -1,10 +1,10 @@
-import Blockstream.Green 0.1
-import Blockstream.Green.Core 0.1
-import QtQuick 2.15
-import QtQml 2.15
-import QtQuick.Controls 2.15
-import QtQuick.Layouts 1.15
-import QtQml.Models 2.0
+import Blockstream.Green
+import Blockstream.Green.Core
+import QtQuick
+import QtQml
+import QtQuick.Controls
+import QtQuick.Layouts
+import QtQml.Models
 
 import "analytics.js" as AnalyticsJS
 

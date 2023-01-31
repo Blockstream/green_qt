@@ -1,6 +1,6 @@
-import QtQuick 2.14
-import QtQuick.Controls 2.15
-import QtQuick.Layouts 1.13
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
 
 Button {
     property bool large: false

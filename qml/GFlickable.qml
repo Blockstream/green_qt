@@ -1,5 +1,5 @@
-import QtQuick 2.15
-import QtQuick.Controls 2.13
+import QtQuick
+import QtQuick.Controls
 
 Flickable {
     property var availableWidth: vertical_scroll_bar.visible ? width - constants.p0 * 2 : width

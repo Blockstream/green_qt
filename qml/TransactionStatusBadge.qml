@@ -1,7 +1,7 @@
-import Blockstream.Green 0.1
-import QtQuick 2.0
-import QtQuick.Controls 2.5
-import QtQuick.Layouts 1.12
+import Blockstream.Green
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
 
 Label {
     required property Transaction transaction

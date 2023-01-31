@@ -1,4 +1,4 @@
-import QtQuick 2.13
+import QtQuick
 
 SequentialAnimation {
     loops: Animation.Infinite

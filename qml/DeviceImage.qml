@@ -1,5 +1,5 @@
-import Blockstream.Green 0.1
-import QtQuick 2.13
+import Blockstream.Green
+import QtQuick
 
 Image {
     required property Device device

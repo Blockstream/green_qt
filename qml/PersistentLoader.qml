@@ -1,4 +1,4 @@
-import QtQuick 2.12
+import QtQuick
 
 Loader {
     property bool load: false

@@ -1,10 +1,10 @@
-import QtQuick 2.13
-import QtQuick.Controls 2.13
-import QtQuick.Controls.Material 2.3
-import QtQuick.Layouts 1.13
-import QtQuick.Window 2.12
-import QtGraphicalEffects 1.15
-import QtQuick.Shapes 1.0
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Controls.Material
+import QtQuick.Layouts
+import QtQuick.Window
+import Qt5Compat.GraphicalEffects
+import QtQuick.Shapes
 
 ToolTip {
     id: control
