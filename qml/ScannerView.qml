@@ -7,46 +7,45 @@ import QtQuick.Window
 import QZXing
 
 Item {
-    id: self
-
     signal codeScanned(string code)
+
+    id: self
 
     BusyIndicator {
         anchors.centerIn: parent
         hoverEnabled: false
     }
 
+    CaptureSession {
+        camera: Camera {
+            id: camera
+            Component.onCompleted: camera.start()
+        }
+        videoOutput: videoOutput
+    }
+
     VideoOutput {
-        id: video_output
+        id: videoOutput
         anchors.fill: parent
-        autoOrientation: true
-        fillMode: VideoOutput.PreserveAspectCrop
-        source: Camera {
-            Binding on cameraState {
-                restoreMode: Binding.RestoreBindingOrValue
-                value: Camera.UnloadedState
-                when: !window.active
-            }
-            focus {
-                focusMode: CameraFocus.FocusContinuous
-                focusPointMode: CameraFocus.FocusPointAuto
-            }
+    }
+
+    QZXingFilter
+    {
+        id: zxingFilter
+        videoSink: videoOutput.videoSink
+        orientation: videoOutput.orientation
+        captureRect: {
+            videoOutput.sourceRect;
+            return Qt.rect(videoOutput.sourceRect.width * videoOutput.captureRectStartFactorX,
+                           videoOutput.sourceRect.height * videoOutput.captureRectStartFactorY,
+                           videoOutput.sourceRect.width * videoOutput.captureRectFactorWidth,
+                           videoOutput.sourceRect.height * videoOutput.captureRectFactorHeight)
         }
 
-        filters: QZXingFilter {
-            captureRect: {
-                video_output.width;
-                video_output.height;
-                video_output.contentRect;
-                video_output.sourceRect;
-                return video_output.mapRectToSource(video_output.mapNormalizedRectToItem(Qt.rect(0, 0, 1, 1)));
-            }
-
-            decoder {
-                tryHarder: true
-                enabledDecoders: QZXing.DecoderFormat_QR_CODE
-                onTagFound: codeScanned(tag)
-            }
+        decoder {
+            enabledDecoders: QZXing.DecoderFormat_QR_CODE
+            onTagFound: self.codeScanned(tag)
+            tryHarder: false
         }
     }
 
