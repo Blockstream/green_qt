@@ -59,7 +59,7 @@ QString MnemonicEditorController::updateWord(int index, const QString& text)
     }
 
     if (!diff.isEmpty()) {
-        auto words = diff.trimmed().split(QRegExp("\\s+"));
+        auto words = diff.trimmed().split(QRegularExpression("\\s+"));
         if (words.length() == 12 || words.length() == 24 || words.length() == 27) {
             bool changed = false;
             for (int i = 0; i < words.length(); ++i) {

@@ -61,7 +61,7 @@ bool WalletListModel::filterAcceptsRow(int source_row, const QModelIndex &source
     if (m_without_device && wallet->device()) return false;
     if (m_watch_only == Filter::Yes && !wallet->m_watch_only) return false;
     if (m_watch_only == Filter::No && wallet->m_watch_only) return false;
-    return filterRegExp().indexIn(wallet->name()) >= 0;
+    return filterRegularExpression().match(wallet->name()).hasMatch();
 }
 
 bool WalletListModel::lessThan(const QModelIndex& source_left, const QModelIndex& source_right) const
