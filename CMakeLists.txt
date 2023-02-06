@@ -37,12 +37,12 @@ include(src.cmake)
 set(app_icon_macos "${CMAKE_CURRENT_SOURCE_DIR}/assets/icons/green.icns")
 set_source_files_properties(${app_icon_macos} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
 
-qt_add_executable(xgreen WIN32 MACOSX_BUNDLE
+qt_add_executable(green WIN32 MACOSX_BUNDLE
     ${TARGET_SOURCES}
     ${app_icon_macos}
 )
 
-set_target_properties(xgreen PROPERTIES
+set_target_properties(green PROPERTIES
     MACOSX_BUNDLE_INFO_PLIST ${CMAKE_SOURCE_DIR}/Info.plist.in
     MACOSX_BUNDLE TRUE
     WIN32_EXECUTABLE TRUE
@@ -50,7 +50,7 @@ set_target_properties(xgreen PROPERTIES
     LINK_SEARCH_END_STATIC ON
 )
 
-target_link_libraries(xgreen
+target_link_libraries(green
     PRIVATE
     qzxing
     ${GDK_LIB}
@@ -61,11 +61,11 @@ target_link_libraries(xgreen
     ${HID_LIB}
 )
 
-install(TARGETS xgreen
+install(TARGETS green
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
-target_include_directories(xgreen PRIVATE src src/jade src/resolvers src/controllers src/ledger src/handlers ${GDK_PATH} ${COUNTLY_PATH}/include/)
+target_include_directories(green PRIVATE src src/jade src/resolvers src/controllers src/ledger src/handlers ${GDK_PATH} ${COUNTLY_PATH}/include/)
 
 include(qml.cmake)
 include(assets.cmake)

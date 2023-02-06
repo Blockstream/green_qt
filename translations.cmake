@@ -1,4 +1,4 @@
-qt_add_translations(xgreen
+qt_add_translations(green
     TS_FILES
         i18n/green_cs.ts
         i18n/green_de.ts

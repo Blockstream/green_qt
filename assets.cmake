@@ -1,4 +1,4 @@
-qt_add_resources(xgreen "images"
+qt_add_resources(green "images"
     PREFIX "/"
     BASE assets
     FILES
@@ -107,7 +107,7 @@ qt_add_resources(xgreen "images"
         assets/svg/x.svg
 )
 
-qt_add_resources(xgreen "fonts"
+qt_add_resources(green "fonts"
     PREFIX "/"
     BASE assets
     FILES
@@ -124,4 +124,3 @@ qt_add_resources(xgreen "fonts"
         assets/fonts/Roboto/Roboto-Thin.ttf
         assets/fonts/Roboto/Roboto-Black.ttf
 )
-
