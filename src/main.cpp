@@ -130,7 +130,7 @@ int main(int argc, char *argv[])
     QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
     QCoreApplication::setApplicationVersion(QT_STRINGIFY(VERSION));
 
-    g_data_location = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+    g_data_location = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation);
 
     // init log is called after setting the app name and version so that we have this information available for log location
     initLog();
@@ -256,7 +256,7 @@ int main(int argc, char *argv[])
     qmlRegisterSingletonInstance<Analytics>("Blockstream.Green.Core", 0, 1, "Analytics", Analytics::instance());
 
     QQmlApplicationEngine engine;
-    engine.setBaseUrl(QUrl("qrc:/"));
+    engine.setBaseUrl(QUrl("qrc:/Blockstream/Green/qml/"));
 
     QDirIterator it(":/i18n", QDirIterator::Subdirectories);
     QMap<QString, QVariant> languages;
