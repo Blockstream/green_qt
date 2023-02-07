@@ -1,0 +1,8 @@
+cpplint:
+  image: python:3
+  tags:
+    - ga
+  stage: lint
+  script:
+    - pip install cpplint
+    - ./tools/lint/cpplint.sh

@@ -1,31 +1,22 @@
 #!/bin/bash
 set -eo pipefail
 
-if [ -f ${HIDAPI_PATH}/build.done ]; then
-    exit 0
+
+FILENAME=hidapi-0.13.1
+ARCHIVE=$FILENAME.tar.gz
+DIRNAME=hidapi-$FILENAME
+
+mkdir -p build
+
+cd build
+
+if [ ! -d $DIRNAME ]; then
+    curl -s -L -o $ARCHIVE https://github.com/libusb/hidapi/archive/refs/tags/$ARCHIVE
+    tar zxf $ARCHIVE
 fi
 
-echo "HIDAPI: building with ${NUM_JOBS} cores in ${HIDAPI_PATH}"
+cd $DIRNAME
 
-mkdir -p ${HIDAPI_PATH}
+cmake -DBUILD_SHARED_LIBS=FALSE -DHIDAPI_BUILD_HIDTEST=OFF -DCMAKE_INSTALL_PREFIX=$CMAKE_INSTALL_PREFIX
 
-if [ ! -d "${HIDAPI_PATH}/src" ]; then
-    git clone --quiet --depth 1 --branch ${HIDAPI_TAG} --single-branch https://github.com/libusb/hidapi.git ${HIDAPI_PATH}/src > ${HIDAPI_PATH}/build.log 2>&1
-fi
-
-cd ${HIDAPI_PATH}/src
-
-./bootstrap
-if [ "$GREENPLATFORM" = "linux" ]; then
-    PKG_CONFIG_PATH=${LIBUSB_PATH}/lib/pkgconfig ./configure --prefix=${HIDAPI_PATH} --disable-shared >> ${HIDAPI_PATH}/build.log 2>&1
-elif [ "$GREENPLATFORM" = "windows" ]; then
-    ./configure --host=x86_64-w64-mingw32 --prefix=${HIDAPI_PATH} --disable-shared >> ${HIDAPI_PATH}/build.log 2>&1
-elif [ "$GREENPLATFORM" = "osx" ]; then
-    CFLAGS="-mmacosx-version-min=10.13" ./configure --prefix=${HIDAPI_PATH} --disable-shared >> ${HIDAPI_PATH}/build.log 2>&1
-else
-    exit 1
-fi
-
-make -j${NUM_JOBS} install
-
-touch ${HIDAPI_PATH}/build.done
+make -j install
