@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 ### Changed
+- Updates GDK to 0.0.58
+- Updates Qt to 6.4.2
+- Updates hidapi to 0.13.1
+- Updates qzxing to support Qt 6
+- Switches to cmake build
 
 ### Fixed
 
