@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(green VERSION 1.7.0 LANGUAGES CXX)
+project(green VERSION 1.2.0 LANGUAGES CXX)
+
+configure_file(config.h.in config.h @ONLY)
 
 find_package(Qt6 6.4 COMPONENTS Concurrent Quick QuickControls2 Widgets QuickWidgets Xml Core5Compat Bluetooth SerialPort LinguistTools Multimedia REQUIRED)
 find_package(hidapi REQUIRED)
@@ -65,7 +67,13 @@ install(TARGETS green
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
-target_include_directories(green PRIVATE src src/jade src/resolvers src/controllers src/ledger src/handlers ${GDK_PATH} ${COUNTLY_PATH}/include/)
+target_include_directories(green PRIVATE
+  src src/jade src/resolvers src/controllers src/ledger src/handlers
+  ${GDK_PATH}
+  ${COUNTLY_PATH}/include/
+  sa
+  "${CMAKE_CURRENT_BINARY_DIR}"
+)
 
 include(qml.cmake)
 include(assets.cmake)

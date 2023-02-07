@@ -11,6 +11,7 @@
 #include <QUrl>
 #include <QWindow>
 
+#include "config.h"
 #include "analytics.h"
 #include "clipboard.h"
 #include "devicemanager.h"
@@ -80,8 +81,8 @@ static QString g_gdk_debug_buffer;
 
 void initLog()
 {
-    g_log_file.setFileName(GetDataFile("logs", QString("%1.%2.%3.txt").arg(VERSION_MAJOR).arg(VERSION_MINOR).arg(VERSION_PATCH)));
-
+    g_log_file.setFileName(GetDataFile("logs", QString("%1.txt").arg(GREEN_VERSION)));
+return;
     if (QString{"development"} != QT_STRINGIFY(BUILD_TYPE)) {
         g_log_file.open(QIODevice::WriteOnly | QIODevice::Append);
         qInstallMessageHandler(gMessageHandler);
