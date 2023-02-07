@@ -245,11 +245,11 @@ void AnalyticsPrivate::start()
 
     q->incrBusy();
     QMetaObject::invokeMethod(this, [=] {
-        const bool is_release = QStringLiteral("release") == QT_STRINGIFY(BUILD_TYPE);
+        const bool is_production = QStringLiteral("Production") == QT_STRINGIFY(GREEN_ENV);
         auto& countly = cly::Countly::getInstance();
         countly.setDeviceID(device_id.toStdString(), false);
         countly.setTimestampOffset(timestamp_offset);
-        countly.start(is_release ? COUNTLY_APP_KEY_REL : COUNTLY_APP_KEY_DEV, COUNTLY_HOST, 443, true);
+        countly.start(is_production ? COUNTLY_APP_KEY_REL : COUNTLY_APP_KEY_DEV, COUNTLY_HOST, 443, true);
         q->decrBusy();
     });
     active = true;

@@ -83,7 +83,7 @@ void initLog()
 {
     g_log_file.setFileName(GetDataFile("logs", QString("%1.txt").arg(GREEN_VERSION)));
 return;
-    if (QString{"development"} != QT_STRINGIFY(BUILD_TYPE)) {
+    if (QString{"Development"} != GREEN_ENV) {
         g_log_file.open(QIODevice::WriteOnly | QIODevice::Append);
         qInstallMessageHandler(gMessageHandler);
 
@@ -128,7 +128,7 @@ int main(int argc, char *argv[])
     QCoreApplication::setOrganizationDomain("blockstream.com");
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
-    QCoreApplication::setApplicationVersion(QT_STRINGIFY(VERSION));
+    QCoreApplication::setApplicationVersion(GREEN_VERSION);
 
     g_data_location = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation);
 
@@ -190,6 +190,7 @@ int main(int argc, char *argv[])
 #endif
 
     qInfo() << qPrintable(QCoreApplication::organizationName()) << qPrintable(QCoreApplication::applicationName()) << qPrintable(QCoreApplication::applicationVersion());
+    qInfo() << "Environment:" << GREEN_ENV;
     qInfo() << "System Information:";
     qInfo() << "  Build ABI:" << qPrintable(QSysInfo::buildAbi());
     qInfo() << "  Build CPU Architecture:" << qPrintable(QSysInfo::buildCpuArchitecture());
@@ -200,7 +201,6 @@ int main(int argc, char *argv[])
     qInfo() << "  Product:" << qPrintable(QSysInfo::prettyProductName());
     qInfo() << "  Product Type:" << qPrintable(QSysInfo::productType());
     qInfo() << "  Product Version:" << qPrintable(QSysInfo::productVersion());
-    qInfo() << "Build Type:" << QT_STRINGIFY(BUILD_TYPE);
     qInfo() << "Data directory:" << g_data_location;
     qInfo() << "Log file:" << g_log_file.fileName();
 
@@ -266,7 +266,7 @@ int main(int argc, char *argv[])
         const auto name = locale.nativeCountryName() + " - " + locale.nativeLanguageName();
         languages.insert(name, QVariantMap({{ "name", name }, { "language", language }}));
     }
-    engine.rootContext()->setContextProperty("build_type", QT_STRINGIFY(BUILD_TYPE));
+    engine.rootContext()->setContextProperty("env", GREEN_ENV);
     engine.rootContext()->setContextProperty("languages", languages.values());
     engine.rootContext()->setContextProperty("data_location_path", g_data_location);
     engine.rootContext()->setContextProperty("data_location_url", QUrl::fromLocalFile(g_data_location));

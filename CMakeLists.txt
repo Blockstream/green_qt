@@ -2,6 +2,11 @@ cmake_minimum_required(VERSION 3.16)
 
 project(green VERSION 1.2.0 LANGUAGES CXX)
 
+if(NOT GREEN_ENV)
+    set(GREEN_ENV Development)
+    set(GREEN_BUILD_ID -dev)
+endif()
+
 configure_file(config.h.in config.h @ONLY)
 
 find_package(Qt6 6.4 COMPONENTS Concurrent Quick QuickControls2 Widgets QuickWidgets Xml Core5Compat Bluetooth SerialPort LinguistTools Multimedia REQUIRED)
