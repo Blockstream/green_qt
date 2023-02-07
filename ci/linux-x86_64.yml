@@ -1,0 +1,28 @@
+.linux-x86_64:
+  image: borgbyte/green_qt:kinetic
+  variables:
+    PREFIX: "$CI_PROJECT_DIR/depends"
+    HOST: "linux"
+    ARCH: "x86_64"
+    PKG_CONFIG_PATH: "$PREFIX/lib/pkgconfig"
+    CMAKE_INSTALL_PREFIX: "$PREFIX"
+  cache:
+    key: linux_x86_64
+    paths: [depends/]
+  tags:
+    - ga
+
+linux-x86_64:depends:
+  extends:
+    - .linux-x86_64
+    - .depends
+
+linux-x86_64:build:
+  extends:
+    - .linux-x86_64
+    - .build
+  needs: ["linux-x86_64:depends"]
+  artifacts:
+    name: "$CI_JOB_NAME"
+    paths:
+      - green.app
