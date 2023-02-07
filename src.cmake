@@ -89,4 +89,6 @@ SET(TARGET_SOURCES
 	src/jade/jadelogincontroller.cpp
 	src/jade/jadeapi.cpp
 	src/jade/deviceinfo.cpp
+    sa/kdsingleapplication.cpp
+    sa/kdsingleapplication_localsocket.cpp
 )
