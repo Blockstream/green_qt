@@ -1,6 +1,6 @@
 .macos-x86_64:
   variables:
-    PREFIX: "$CI_PROJECT_DIR/depends"
+    PREFIX: "$CI_PROJECT_DIR/depends/macos-x86_64"
     HOST: "macos"
     ARCH: "x86_64"
     SHA256SUM: "shasum -a 256"

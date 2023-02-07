@@ -13,8 +13,7 @@ stages:
   variables:
     GIT_SUBMODULE_STRATEGY: recursive
   script:
-    - depends/bin/qt-cmake -DGREEN_ENV=Testing -DGREEN_BUILD_ID=-$CI_COMMIT_SHORT_SHA .
-    - cat config.h
+    - $PREFIX/bin/qt-cmake -DGREEN_ENV=Testing -DGREEN_BUILD_ID=-$CI_COMMIT_SHORT_SHA .
     - make -j
 
 include:

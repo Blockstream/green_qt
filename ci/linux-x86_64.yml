@@ -1,7 +1,7 @@
 .linux-x86_64:
   image: borgbyte/green_qt:kinetic
   variables:
-    PREFIX: "$CI_PROJECT_DIR/depends"
+    PREFIX: "$CI_PROJECT_DIR/depends/linux-x86_64"
     HOST: "linux"
     ARCH: "x86_64"
     PKG_CONFIG_PATH: "$PREFIX/lib/pkgconfig"
@@ -25,4 +25,4 @@ linux-x86_64:build:
   artifacts:
     name: "$CI_JOB_NAME"
     paths:
-      - green.app
+      - green
