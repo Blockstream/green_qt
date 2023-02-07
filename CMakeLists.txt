@@ -2,6 +2,10 @@ cmake_minimum_required(VERSION 3.16)
 
 project(green VERSION 1.2.0 LANGUAGES CXX)
 
+if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE Debug)
+endif()
+
 if(NOT GREEN_ENV)
     set(GREEN_ENV Development)
     set(GREEN_BUILD_ID -dev)
