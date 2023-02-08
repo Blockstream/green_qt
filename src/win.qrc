@@ -1,5 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file alias="qtquickcontrols2.conf">qtquickcontrols2_win.conf</file>
-    </qresource>
-</RCC>
