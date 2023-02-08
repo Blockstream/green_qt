@@ -78,7 +78,6 @@ install(TARGETS green
 
 target_include_directories(green PRIVATE
   src src/jade src/resolvers src/controllers src/ledger src/handlers
-  ${GDK_PATH}
   ${COUNTLY_PATH}/include/
   sa
   "${CMAKE_CURRENT_BINARY_DIR}"
