@@ -19,6 +19,8 @@ find_package(hidapi REQUIRED)
 find_library(GDK_LIB NAMES libgreenaddress_full.a REQUIRED)
 find_library(COUNTLY_LIB NAMES libcountly.a REQUIRED)
 
+find_path(GDK_INC gdk.h)
+
 set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
 
 if (WIN32)
@@ -78,7 +80,7 @@ install(TARGETS green
 
 target_include_directories(green PRIVATE
   src src/jade src/resolvers src/controllers src/ledger src/handlers
-  ${COUNTLY_PATH}/include/
+  ${GDK_INC}
   sa
   "${CMAKE_CURRENT_BINARY_DIR}"
 )
