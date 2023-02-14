@@ -74,6 +74,12 @@ target_link_libraries(green
     ${HID_LIB}
 )
 
+if (WIN32)
+elseif (APPLE)
+elseif (UNIX)
+    target_link_libraries(green PRIVATE dl)
+endif()
+
 install(TARGETS green
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})

@@ -1,5 +1,5 @@
 .linux-x86_64:
-  image: borgbyte/green_qt:kinetic
+  image: borgbyte/green_qt:linux-x86_64
   variables:
     PREFIX: "$CI_PROJECT_DIR/depends/linux-x86_64"
     HOST: "linux"
@@ -22,7 +22,10 @@ linux-x86_64:build:
     - .linux-x86_64
     - .build
   needs: ["linux-x86_64:depends"]
+  after_script:
+    - tools/appimage.sh $CI_PROJECT_DIR
   artifacts:
     name: "$CI_JOB_NAME"
     paths:
       - green
+      - BlockstreamGreen-x86_64.AppImage
