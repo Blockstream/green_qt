@@ -1,8 +1,9 @@
 qt_add_resources(green "qtquickcontrols2"
     PREFIX "/"
-    BASE src
+    BASE qml
     FILES
-        src/qtquickcontrols2.conf
+        qml/qtquickcontrols2.conf
+        qml/+windows/qtquickcontrols2.conf
 )
 
 SET(QML_FILES
