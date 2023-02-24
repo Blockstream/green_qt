@@ -51,6 +51,7 @@ signals:
     void statusChanged();
     void activeChanged(bool active);
     void loginDone();
+    void setPin(QVariantMap info);
 private:
     JadeDevice* m_device{nullptr};
     Session* m_session{nullptr};

@@ -32,6 +32,11 @@ Pane {
         network: self.network.id
         onInvalidPin: self.ToolTip.show(qsTrId('id_invalid_pin'), 2000);
         onLoginDone: Analytics.recordEvent('wallet_login', AnalyticsJS.segmentationWalletLogin(controller.wallet, { method: 'hardware' }))
+        onSetPin: (info) => {
+            if (info.JADE_STATE === 'UNSAVED' && !info.JADE_HAS_PIN) {
+                Analytics.recordEvent('jade_initialize', AnalyticsJS.segmentationSession(controller.wallet))
+            }
+        }
     }
     contentItem: RowLayout {
         spacing: constants.s1
