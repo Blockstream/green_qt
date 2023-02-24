@@ -85,7 +85,7 @@ void DeviceDiscoveryAgentPrivate::addDevice(const QString& id)
 {
     hid_device_info* info = hid_enumerate(0, 0);
     for (auto i = info; i; i = i->next) {
-        if (QString::fromLocal8Bit(i->path) == id) {
+        if (QString::fromLocal8Bit(i->path).toLower() == id.toLower()) {
             addDevice(i);
             break;
         }
@@ -102,7 +102,7 @@ void DeviceDiscoveryAgentPrivate::addDevice(hid_device_info* info)
     if (!dev) return;
 
     DevicePrivateImpl* impl = new DevicePrivateImpl;
-    impl->id = QString::fromLocal8Bit(info->path);
+    impl->id = QString::fromLocal8Bit(info->path).toLower();
     impl->dev = dev;
     impl->m_type = type;
 
