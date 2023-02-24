@@ -13,7 +13,7 @@ cd build
 if [ ! -d $QT_BASENAME ]; then
     if [ ! -f $QT_FILENAME ]; then
         echo "qt: downloading"
-        curl -s -L -o ${QT_FILENAME} https://download.qt.io/archive/qt/${QT_MAJOR}/${QT_VERSION}/single/${QT_FILENAME}
+        wget https://download.qt.io/archive/qt/${QT_MAJOR}/${QT_VERSION}/single/${QT_FILENAME}
 
         echo "qt: verifying"
         echo "${QT_HASH}  ${QT_FILENAME}" | ${SHA256SUM:-sha256sum} --check

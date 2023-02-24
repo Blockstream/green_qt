@@ -1,27 +1,9 @@
-.linux-x86_64:
+linux-x86_64:build:
   image: borgbyte/green_qt:linux-x86_64
-  variables:
-    PREFIX: "$CI_PROJECT_DIR/depends/linux-x86_64"
-    HOST: "linux"
-    ARCH: "x86_64"
-    PKG_CONFIG_PATH: "$PREFIX/lib/pkgconfig"
-    CMAKE_INSTALL_PREFIX: "$PREFIX"
-  cache:
-    key: linux_x86_64
-    paths: [depends/]
+  extends:
+    - .build
   tags:
     - ga
-
-linux-x86_64:depends:
-  extends:
-    - .linux-x86_64
-    - .depends
-
-linux-x86_64:build:
-  extends:
-    - .linux-x86_64
-    - .build
-  needs: ["linux-x86_64:depends"]
   after_script:
     - tools/appimage.sh $CI_PROJECT_DIR
   artifacts:
