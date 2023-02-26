@@ -76,7 +76,6 @@ SET(QML_FILES
     qml/AssetView.qml
     qml/AddressesListView.qml
     qml/LoginWithPinView.qml
-    qml/PinField.qml
     qml/AssetListView.qml
     qml/DescriptiveRadioButton.qml
     qml/SettingsPage.qml

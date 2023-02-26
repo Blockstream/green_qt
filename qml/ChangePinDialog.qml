@@ -7,82 +7,59 @@ import QtQuick.Layouts
 import "analytics.js" as AnalyticsJS
 
 ControllerDialog {
-    property bool pinChanged: false
+    property bool changed: false
 
     id: self
-    width: 350
-    height: 450
-    focus: true
+    title: controller.pin ? qsTrId('id_verify_your_pin') : qsTrId('id_set_a_new_pin')
+    onOpened: pin_view.forceActiveFocus()
     controller: ChangePinController {
-        pin: pin_view.pin.value
         wallet: self.wallet
-        onFinished: self.pinChanged = true
+        onFinished: self.changed = true
     }
     AnalyticsView {
         active: self.opened
         name: 'WalletSettingsChangePIN'
         segmentation: AnalyticsJS.segmentationSession(self.wallet)
     }
-    initialItem: PinView {
-        id: pin_view
-        property var new_pin
-        property var new_pin_confirm
-        property bool accept: false
-        property string title: qsTrId('id_set_a_new_pin')
-        state: "new_pin"
-        states: [
-            State {
-                name: "new_pin"
-                PropertyChanges { target: self; title: qsTrId('id_set_a_new_pin') }
-            },
-            State {
-                name: "new_pin_confirm"
-                PropertyChanges { target: self; title: qsTrId('id_verify_your_pin') }
-            }
-        ]
-        onPinChanged: {
-            if (pin.valid) {
-                if (state=="new_pin") {
-                    new_pin = pin
+    initialItem: RowLayout {
+        HSpacer {
+        }
+        PinView {
+            id: pin_view
+            focus: true
+            onPinEntered: (pin) => {
+                if (controller.pin) {
+                    if (controller.pin !== pin) {
+                        ToolTip.show(qsTrId('id_pins_do_not_match_please_try'), 1000)
+                        pin_view.clear()
+                    }
+                } else {
+                    controller.pin = pin
                     pin_view.clear()
-                    state = "new_pin_confirm"
-                }
-                else if (state=="new_pin_confirm") {
-                    new_pin_confirm = pin
-                    if (pin_view.new_pin.value !== pin_view.new_pin_confirm.value) {
-                        pin_view.accept = false
-                        clear();
-                        ToolTip.show(qsTrId('id_pins_do_not_match_please_try'), 1000);
-                        state = "new_pin"
-                    }
-                    else {
-                        pin_view.accept = true
-                    }
                 }
             }
+        }
+        HSpacer {
         }
     }
     footer: DialogFooter {
         HSpacer {
         }
         GButton {
-            visible: self.pinChanged === false
-            large: true
+            visible: !self.changed
             text: qsTrId('id_cancel')
             onClicked: self.reject()
         }
         GButton {
-            visible: self.pinChanged === false
+            visible: !self.changed
             highlighted: true
-            large: true
-            enabled: pin_view.accept && pin_view.pin.valid
+            enabled: controller.pin === pin_view.pin.value
             text: qsTrId('id_change_pin')
             onClicked: controller.accept()
         }
         GButton {
-            visible: self.pinChanged === true
+            visible: pin_view.valid && self.changed
             highlighted: true
-            large: true
             text: qsTrId('id_ok')
             onClicked: self.accept()
         }

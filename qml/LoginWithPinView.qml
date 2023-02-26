@@ -39,6 +39,7 @@ GPane {
             }
         }
         PinView {
+            focus: true
             id: pin_view
             Layout.alignment: Qt.AlignHCenter
             enabled: !self.active && self.wallet.loginAttemptsRemaining > 0 && self.wallet.hasPinData
@@ -63,7 +64,7 @@ GPane {
                     case 0: return qsTrId('id_no_attempts_remaining')
                     case 1: return qsTrId('id_last_attempt_if_failed_you_will')
                     case 2: return qsTrId('id_attempts_remaining_d').arg(self.wallet.loginAttemptsRemaining)
-                    default: return qsTrId('id_enter_pin')
+                    default: ''
                 }
             }
             wrapMode: Text.WordWrap
