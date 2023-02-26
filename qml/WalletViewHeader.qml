@@ -68,7 +68,7 @@ MainPageHeader {
                                 font.pixelSize: 18
                                 font.styleName: 'Medium'
                                 text: wallet.name
-                                onEdited: {
+                                onEdited: (text, activeFocus) => {
                                     if (wallet.rename(text, activeFocus)) {
                                         Analytics.recordEvent('wallet_rename')
                                     }
