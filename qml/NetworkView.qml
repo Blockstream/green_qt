@@ -28,13 +28,17 @@ StackLayout {
         return wallet && wallet.ready
     }
 
-    currentIndex: {
-        for (let i = 0; i < wallet_view_repeater.count; ++i) {
-            if (wallet_view_repeater.itemAt(i).match) {
-                return 1 + i
+    Binding on currentIndex {
+        delayed: true
+        value: {
+            let index = self.currentIndex
+            for (let i = 0; i < wallet_view_repeater.count; ++i) {
+                if (wallet_view_repeater.itemAt(i).match) {
+                    return 1 + i
+                }
             }
+            return index
         }
-        return 0
     }
 
     MainPage {
