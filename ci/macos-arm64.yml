@@ -22,9 +22,6 @@ macos-arm64:build:
     - .macos-arm64
     - .build
   needs: ["macos-arm64:depends"]
-  after_script:
-    - strip green.app/Contents/MacOS/green
-    - xattr -cr green.app
   artifacts:
     name: "$CI_JOB_NAME"
     paths:
