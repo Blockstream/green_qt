@@ -105,6 +105,8 @@ qt_add_resources(green "images"
         assets/svg/warning.svg
         assets/svg/warning_black.svg
         assets/svg/x.svg
+        assets/png/lbtc.png 
+        assets/png/amp_background.png
 )
 
 qt_add_resources(green "fonts"
