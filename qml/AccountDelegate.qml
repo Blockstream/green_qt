@@ -70,7 +70,7 @@ Button {
                 rightInset: -8
                 text: UtilJS.accountName(account)
                 enabled: !account.wallet.watchOnly && delegate.ListView.isCurrentItem && !delegate.account.wallet.locked
-                onEdited: {
+                onEdited: (text) => {
                     if (enabled) {
                         if (delegate.account.rename(text, activeFocus)) {
                             Analytics.recordEvent('account_rename', AnalyticsJS.segmentationSubAccount(delegate.account))
