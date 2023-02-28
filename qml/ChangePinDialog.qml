@@ -47,13 +47,8 @@ ControllerDialog {
         }
         GButton {
             visible: !self.changed
-            text: qsTrId('id_cancel')
-            onClicked: self.reject()
-        }
-        GButton {
-            visible: !self.changed
             highlighted: true
-            enabled: controller.pin === pin_view.pin.value
+            enabled: controller.pin && controller.pin === pin_view.pin.value
             text: qsTrId('id_change_pin')
             onClicked: controller.accept()
         }
@@ -62,6 +57,8 @@ ControllerDialog {
             highlighted: true
             text: qsTrId('id_ok')
             onClicked: self.accept()
+        }
+        HSpacer {
         }
     }
     onClosed: destroy()
