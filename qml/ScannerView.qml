@@ -27,6 +27,7 @@ Item {
     VideoOutput {
         id: videoOutput
         anchors.fill: parent
+        fillMode: VideoOutput.PreserveAspectCrop
     }
 
     QZXingFilter
