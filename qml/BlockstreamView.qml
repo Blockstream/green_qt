@@ -105,15 +105,17 @@ MainPage {
                         font.bold: true
                         elide: Label.ElideRight
                         wrapMode: Label.WordWrap
+                        textFormat: Text.StyledText
                     }
                     Label {
                         Layout.fillWidth: true
                         Layout.fillHeight: true
-                        text: post.description
+                        text: post.description.replace('<img', '<_img')
                         color: 'white'
                         font.pixelSize: 14
                         elide: Label.ElideRight
                         wrapMode: Label.WordWrap
+                        textFormat: Text.StyledText
                     }
                     Label {
                         Layout.fillWidth: true
