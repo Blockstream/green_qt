@@ -25,7 +25,7 @@ AbstractDialog {
     Navigation {
         id: navigation
         property RestoreController controller
-        Component.onCompleted: location = window.navigation.location
+        Component.onCompleted: push(window.navigation.param)
     }
 
     contentItem: StackLayout {
@@ -37,15 +37,7 @@ AbstractDialog {
             return item
         }
         id: stack_layout
-        currentIndex: {
-            let index = -1
-            for (let i = 0; i < stack_layout.children.length; ++i) {
-                let child = stack_layout.children[i]
-                if (!(child instanceof Item)) continue
-                if (child.active) index = i
-            }
-            return index
-        }
+        currentIndex: UtilJS.findChildIndex(stack_layout, child => child.active)
         SelectNetworkView {
             id: select_network_view
             readonly property bool active: true

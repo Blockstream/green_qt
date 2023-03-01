@@ -5,16 +5,8 @@ import QtQuick.Layouts
 
 Button {
     id: self
-    required property string location
     property int count: 0
-    property bool isCurrent: {
-        if (Settings.collapseSideBar) {
-            if (navigation.location === location) return true
-            return navigation.location.startsWith(location + '/')
-        } else {
-            return navigation.location === location
-        }
-    }
+    required property bool isCurrent
     property bool busy: false
     property bool ready: false
     topPadding: 8
@@ -27,7 +19,6 @@ Button {
     bottomInset: 0
 
     Layout.fillWidth: true
-    onClicked: if (location) navigation.go(location)
     icon.width: 24
     icon.height: 24
     background: Rectangle {

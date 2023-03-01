@@ -6,11 +6,13 @@ import QtQuick.Controls
 import QtQuick.Controls.Material
 import QtQuick.Layouts
 
+import "util.js" as UtilJS
+
 ColumnLayout {
+    required property Account account
+
     id: account_view
     spacing: constants.p3
-    required property Account account
-    property var currentView: account_view.account.wallet.network.liquid ? 0 : 2
 
     function getUnblindingData(tx) {
         return {
@@ -47,10 +49,9 @@ ColumnLayout {
         id: stack_layout
         Layout.fillWidth: true
         Layout.fillHeight: true
-        currentIndex: account_view.currentView
-
+        currentIndex: UtilJS.findChildIndex(stack_layout, child => child.load)
         PersistentLoader {
-            load: stack_layout.currentIndex === 0
+            load: navigation.param.view === 'overview'
             sourceComponent: OverviewView {
                 showAllAssets: false
                 account: account_view.account
@@ -58,28 +59,28 @@ ColumnLayout {
         }
 
         PersistentLoader {
-            load: stack_layout.currentIndex === 1
+            load: navigation.param.view === 'assets'
             sourceComponent: AssetListView {
                 account: account_view.account
             }
         }
 
         PersistentLoader {
-            load: stack_layout.currentIndex === 2
+            load: navigation.param.view === 'transactions'
             sourceComponent: TransactionListView {
                 account: account_view.account
             }
         }
 
         PersistentLoader {
-            load: !account_view.account.wallet.watchOnly
+            load: navigation.param.view === 'addresses'
             sourceComponent: AddressesListView {
                 account: account_view.account
             }
         }
 
         PersistentLoader {
-            load: !account_view.account.wallet.watchOnly
+            load: !account_view.account.wallet.watchOnly && navigation.param.view === 'coins'
             sourceComponent: OutputsListView {
                 account: account_view.account
             }

@@ -62,7 +62,7 @@ AbstractDialog {
             if (controller.saveWallet) {
                 Analytics.recordEvent('wallet_restore_watch_only', AnalyticsJS.segmentationSession(wallet))
             }
-            window.navigation.go(`/${wallet.network.key}/${wallet.id}`)
+            window.navigation.set({ view: wallet.network.key, wallet: wallet.id })
             self.accept()
         }
         onUnauthorized: self.contentItem.ToolTip.show(qsTrId('id_user_not_found_or_invalid'), 3000);

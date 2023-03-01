@@ -126,7 +126,7 @@ Button {
         active: self.visible
         onFinished: {
             Analytics.recordEvent('wallet_restore', AnalyticsJS.segmentationSession(controller.wallet))
-            window.navigation.go(`/${controller.wallet.network.key}/${controller.wallet.id}`)
+            navigation.set({ view: controller.wallet.network.key, wallet: controller.wallet.id })
         }
     }
 }

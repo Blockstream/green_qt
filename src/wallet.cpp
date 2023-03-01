@@ -715,11 +715,11 @@ void LoginWithPinController::setWallet(Wallet* wallet)
     update();
 }
 
-void LoginWithPinController::setPin(const QByteArray &pin)
+void LoginWithPinController::setPin(const QString& pin)
 {
     if (m_pin == pin) return;
     m_pin = pin;
-    emit pinChanged(m_pin);
+    emit pinChanged();
     update();
 }
 
@@ -747,7 +747,7 @@ void LoginWithPinController::update()
     m_wallet->setAuthentication(Wallet::Authenticating);
 
     auto pin_data = QJsonDocument::fromJson(m_wallet->m_pin_data).object();
-    auto handler = new LoginHandler(pin_data, QString::fromLocal8Bit(m_pin), m_session);
+    auto handler = new LoginHandler(pin_data, m_pin, m_session);
     handler->connect(handler, &Handler::done, this, [=] {
         handler->deleteLater();
         m_wallet->resetLoginAttempts();

@@ -13,20 +13,7 @@ import "util.js" as UtilJS
 MainPageHeader {
     required property Wallet wallet
     required property Account currentAccount
-    property bool showAccounts: true
-    property int currentView: 0
     readonly property bool archived: self.currentAccount ? self.currentAccount.hidden : false
-
-    onCurrentViewChanged: updateCurrentView()
-
-    function updateCurrentView() {
-        for (let i = button_group.buttons.length; i >= 0; --i) {
-            let child = button_group.buttons[i]
-            if (i === currentView) button_group.buttons[button_group.buttons.length-i-1].checked = true
-        }
-    }
-
-    signal viewSelected(var viewIndex)
 
     id: self
     background: Rectangle {
@@ -113,7 +100,7 @@ MainPageHeader {
                                 font.styleName: 'Regular'
                                 text: UtilJS.accountName(self.currentAccount)
                                 enabled: !self.wallet.watchOnly && self.currentAccount && !self.wallet.locked
-                                onEdited: {
+                                onEdited: (text) => {
                                     if (enabled && self.currentAccount) {
                                         if (self.currentAccount.rename(text, activeFocus)) {
                                             Analytics.recordEvent('account_rename', AnalyticsJS.segmentationSubAccount(self.currentAccount))
@@ -199,74 +186,43 @@ MainPageHeader {
             padding: 0
             focusPolicy: Qt.ClickFocus
             contentItem: RowLayout {
-                id: toolbar
                 Layout.fillWidth: true
                 Layout.fillHeight: false
                 spacing: constants.p1
-
-                ButtonGroup {
-                    id: button_group
-                    onCheckedButtonChanged: {
-                        let index = -1
-                        let size = button_group.buttons.length
-                        if (!self.wallet.network.liquid) size -= 2 // if account is not liquid ignore the first two buttons
-                        for (let i = 0; i < size; ++i) {
-                            let child = button_group.buttons[i]
-                            if (child.enabled && child.checked) index = button_group.buttons.length-i-1
-                        }
-                        if (index>-1) self.viewSelected(index)
-                    }
-                }
-
-                ToolButton {
-                    id: side_bar_button
-                    visible: false
-                    checkable: true
-                    icon.source: "qrc:/svg/sidebar.svg"
-                    icon.width: 16
-                    icon.height: 16
-                    checked: self.showAccounts
-                    onClicked: self.showAccounts = !self.showAccounts
-                }
-
                 TabButton {
-                    checked: self.wallet.network.liquid
-                    ButtonGroup.group: button_group
+                    checked: navigation.param.view === 'overview'
                     enabled: self.wallet.network.liquid
                     visible: enabled
                     text: qsTrId('id_overview')
-                    onClicked: checked = true
+                    onClicked: navigation.set({ view: 'overview' })
                 }
 
                 TabButton {
-                    id: assets_toolbar_button
-                    ButtonGroup.group: button_group
+                    checked: navigation.param.view === 'assets'
                     enabled: self.wallet.network.liquid
                     visible: enabled
                     text: qsTrId('id_assets')
-                    onClicked: checked = true
+                    onClicked: navigation.set({ view: 'assets' })
                 }
 
                 TabButton {
-                    id: transactions_toolbar_button
-                    checked: !self.wallet.network.liquid
-                    ButtonGroup.group: button_group
+                    checked: navigation.param.view === 'transactions'
                     text: qsTrId('id_transactions')
-                    onClicked: checked = true
+                    onClicked: navigation.set({ view: 'transactions' })
                 }
 
                 TabButton {
-                    ButtonGroup.group: button_group
+                    checked: navigation.param.view === 'addresses'
                     text: qsTrId('id_addresses')
                     enabled: !self.wallet.watchOnly
-                    onClicked: checked = true
+                    onClicked: navigation.set({ view: 'addresses' })
                 }
 
                 TabButton {
-                    ButtonGroup.group: button_group
+                    checked: navigation.param.view === 'coins'
                     text: qsTrId('id_coins')
                     enabled: !self.wallet.watchOnly
-                    onClicked: checked = true
+                    onClicked: navigation.set({ view: 'coins' })
                 }
 
                 HSpacer { }
@@ -281,7 +237,7 @@ MainPageHeader {
                     icon.source: 'qrc:/svg/send.svg'
                     onClicked: {
                         if (self.currentAccount.balance > 0) {
-                            send_dialog.createObject(window, { account: self.currentAccount }).open()
+                            onClicked: navigation.set({ flow: 'send' })
                         }
                         else {
                             message_dialog.createObject(window).open()
@@ -298,20 +254,28 @@ MainPageHeader {
                     enabled: !self.archived && !wallet.locked && self.currentAccount
                     text: qsTrId('id_receive')
                     icon.source: 'qrc:/svg/receive.svg'
-                    onClicked: receive_dialog.createObject(window, { account: self.currentAccount }).open()
+                    onClicked: navigation.set({ flow: 'receive' })
                 }
             }
         }
     }
 
-    Component {
-        id: send_dialog
-        SendDialog { }
+    Loader2 {
+        active: navigation.param.flow === 'send'
+        sourceComponent: SendDialog {
+            visible: true
+            account: self.currentAccount
+            onRejected: navigation.pop()
+        }
     }
 
-    Component {
-        id: receive_dialog
-        ReceiveDialog { }
+    Loader2 {
+        active: navigation.param.flow === 'receive'
+        sourceComponent: ReceiveDialog {
+            visible: true
+            account: self.currentAccount
+            onRejected: navigation.pop()
+        }
     }
 
     Component {
@@ -335,7 +299,7 @@ MainPageHeader {
                         if (self.wallet.network.liquid) {
                             Qt.openUrlExternally('https://help.blockstream.com/hc/en-us/articles/900000630846-How-do-I-get-Liquid-Bitcoin-L-BTC-')
                         } else {
-                            receive_dialog.createObject(window, { account: self.currentAccount }).open()
+                            navigation.set({ flow: 'receive' })
                         }
                     }
                 }
@@ -360,14 +324,17 @@ MainPageHeader {
 
     property Action disconnectAction: Action {
         onTriggered: {
-            navigation.go(`/${wallet.network.key}`)
             self.wallet.disconnect()
         }
     }
 
     property Action settingsAction: Action {
-        enabled: settings_dialog.enabled
-        onTriggered: navigation.go(settings_dialog.location)
+        enabled: {
+            if (self.wallet.watchOnly) return false
+            if (self.wallet.network.electrum) return true
+            return !!self.wallet.settings.pricing && !!self.wallet.config.limits
+        }
+        onTriggered: navigation.set({ settings: true })
     }
 
     property Action refreshAction: Action {

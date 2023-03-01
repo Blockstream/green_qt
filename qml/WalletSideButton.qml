@@ -6,7 +6,8 @@ import QtQuick.Layouts
 SideButton {
     id: self
     required property Wallet wallet
-    location: `/${wallet.network.key}/${wallet.id}`
+    isCurrent: navigation.param.wallet === self.wallet.id
+    onClicked: navigation.set({ view: wallet.network.key, wallet: self.wallet.id })
     text: wallet.name
     busy: wallet.activities.length > 0
     ready: wallet.ready

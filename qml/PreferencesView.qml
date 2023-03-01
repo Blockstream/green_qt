@@ -13,7 +13,7 @@ MainPage {
 
     AnalyticsView {
         name: 'AppSettings'
-        active: window.navigation.location === '/preferences'
+        active: navigation.param.view === 'preferences'
     }
 
     header: MainPageHeader {

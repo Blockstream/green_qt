@@ -11,13 +11,10 @@ import "util.js" as UtilJS
 
 ApplicationWindow {
     readonly property WalletView currentWalletView: stack_layout.currentWalletView
-    readonly property Wallet currentWallet: currentWalletView ? currentWalletView.wallet : null
-    readonly property Account currentAccount: currentWalletView ? currentWalletView.currentAccount : null
+    readonly property Wallet currentWallet: currentWalletView?.wallet ?? null
+    readonly property Account currentAccount: currentWalletView?.currentAccount ?? null
 
-    property Navigation navigation: Navigation {
-        location: '/home'
-    }
-
+    property Navigation navigation: Navigation {}
     property Constants constants: Constants {}
 
     id: window
@@ -30,7 +27,7 @@ ApplicationWindow {
     onWidthChanged: Settings.windowWidth = width
     onHeightChanged: Settings.windowHeight = height
     onCurrentWalletChanged: {
-        if (currentWallet && currentWallet.persisted) {
+        if (currentWallet?.persisted) {
             Settings.updateRecentWallet(currentWallet.id)
         }
     }
@@ -39,7 +36,7 @@ ApplicationWindow {
     visible: true
     color: constants.c900
     title: {
-        const parts = Qt.application.arguments.indexOf('--debugnavigation') > 0 ? [navigation.location] : []
+        const parts = env === 'Development' ? [navigation.description] : []
         if (currentWallet) {
             parts.push(font_metrics.elidedText(currentWallet.name, Qt.ElideRight, window.width / 3));
             if (currentAccount) parts.push(font_metrics.elidedText(UtilJS.accountName(currentAccount), Qt.ElideRight, window.width / 3));
@@ -64,35 +61,24 @@ ApplicationWindow {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 readonly property WalletView currentWalletView: currentIndex < 0 ? null : (stack_layout.children[currentIndex].currentWalletView || null)
-                Binding on currentIndex {
-                    delayed: true
-                    value: {
-                        let index = stack_layout.currentIndex
-                        for (let i = 0; i < stack_layout.children.length; ++i) {
-                            const child = stack_layout.children[i]
-                            if (!(child instanceof Item)) continue
-                            if (child.active && child.enabled) index = i
-                        }
-                        return index
-                    }
-                }
+                currentIndex: UtilJS.findChildIndex(stack_layout, child => child instanceof Item && child.active && child.enabled)
                 HomeView {
-                    readonly property bool active: navigation.path === '/home'
+                    readonly property bool active: !navigation.param.view || navigation.param.view === 'home'
                 }
                 BlockstreamView {
                     id: blockstream_view
-                    readonly property bool active: navigation.path === '/blockstream'
+                    readonly property bool active: navigation.param.view === 'blockstream'
                 }
                 PreferencesView {
-                    readonly property bool active: navigation.path === '/preferences'
+                    readonly property bool active: navigation.param.view === 'preferences'
                 }
                 JadeView {
                     id: jade_view
-                    readonly property bool active: navigation.path.startsWith('/jade')
+                    readonly property bool active: navigation.param.view === 'jade'
                 }
                 LedgerDevicesView {
                     id: ledger_view
-                    readonly property bool active: navigation.path.startsWith('/ledger')
+                    readonly property bool active: navigation.param.view === 'ledger'
                 }
                 NetworkView {
                     network: 'bitcoin'
@@ -136,36 +122,33 @@ ApplicationWindow {
     }
 
     Loader2 {
-        active: navigation.path.match(/\/signup$/)
+        active: navigation.param.flow === 'signup'
         onActiveChanged: if (!active) object.close()
         sourceComponent: SignupDialog {
             visible: true
             onRejected: navigation.pop()
-            onClosed: destroy()
+            // onClosed: destroy()
         }
     }
 
     Loader2 {
-        active: navigation.path.match(/\/restore$/)
+        active: navigation.param.flow === 'restore'
         onActiveChanged: if (!active) object.close()
         sourceComponent: RestoreDialog {
             visible: true
             onRejected: navigation.pop()
-            onClosed: destroy()
+            // onClosed: destroy()
         }
     }
 
     Loader2 {
-        property Wallet wallet: {
-            const [,, wallet_id] = navigation.path.split('/')
-            return WalletManager.wallet(wallet_id)
-        }
+        property Wallet wallet: WalletManager.wallet(navigation.param.wallet)
         active: wallet && !wallet.ready
         onActiveChanged: if (!active) object.close()
         sourceComponent: LoginDialog {
             visible: true
             onRejected: navigation.pop()
-            onClosed: destroy()
+            // onClosed: destroy()
         }
     }
 

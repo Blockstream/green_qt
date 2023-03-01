@@ -11,9 +11,13 @@ import "analytics.js" as AnalyticsJS
 
 MainPage {
     required property Wallet wallet
-    readonly property string location: `/${wallet.network.key}/${wallet.id}`
     readonly property Account currentAccount: accounts_list.currentAccount
     readonly property bool fiatRateAvailable: formatFiat(0, false) !== 'n/a'
+
+    Navigation {
+        id: navigation
+        Component.onCompleted: set({ view: wallet.network.liquid ? 'overview' : 'transactions' })
+    }
 
     function parseAmount(amount, unit) {
         wallet.displayUnit;
@@ -105,22 +109,12 @@ MainPage {
     }
 
     Loader2 {
-        id: settings_dialog
-        property string location: `${self.location}/settings`
-        property bool enabled: {
-            if (self.wallet.watchOnly) return false
-            if (self.wallet.network.electrum) {
-                return true
-            }
-            return !!self.wallet.settings.pricing && !!self.wallet.config.limits
-        }
-        property Wallet wallet: self.wallet
-        active: settings_dialog.enabled && navigation.location === settings_dialog.location
+        active: navigation.param.settings ?? false
         sourceComponent: WalletSettingsDialog {
             visible: true
             parent: window.Overlay.overlay
+            wallet: self.wallet
             onRejected: navigation.pop()
-            onClosed: destroy()
         }
     }
     id: self
@@ -130,9 +124,6 @@ MainPage {
         id: wallet_view_header
         currentAccount: self.currentAccount
         wallet: self.wallet
-        onViewSelected: if (stack_view.currentItem) {
-            stack_view.currentItem.currentView = viewIndex
-        }
     }
     footer: WalletViewFooter {
         wallet: self.wallet
@@ -209,12 +200,6 @@ MainPage {
             }
             if (stack_view.currentItem === account_view) return;
             stack_view.replace(account_view, StackView.Immediate)
-            wallet_view_header.currentView = account_view.currentView
-
-            // for some reason the first time we switch between account
-            // onCurrentViewChanged is not called on WalletViewHeader
-            // so we call updateCurrentView to force the update of the right view
-            wallet_view_header.updateCurrentView()
         } else {
             stack_view.replace(stack_view.initialItem, StackView.Immediate)
         }
@@ -228,13 +213,9 @@ MainPage {
         }
 
         Rectangle {
-            SplitView.minimumWidth: wallet_view_header.showAccounts ? 380 : 0
+            SplitView.minimumWidth: 380
             clip: true
             color: constants.c900
-
-            Behavior on SplitView.minimumWidth {
-                NumberAnimation { easing.type: Easing.OutCubic; duration: 150 }
-            }
 
             AccountListView {
                 id: accounts_list

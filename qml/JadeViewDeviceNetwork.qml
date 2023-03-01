@@ -102,7 +102,7 @@ Pane {
             GButton {
                 visible: controller.wallet && controller.wallet.authentication === Wallet.Authenticated
                 text: qsTrId('id_go_to_wallet')
-                onClicked: navigation.go(`/${self.network.key}/${controller.wallet.id}`)
+                onClicked: navigation.set({ view: self.network.key, wallet: controller.wallet.id })
             }
         }
         RowLayout {

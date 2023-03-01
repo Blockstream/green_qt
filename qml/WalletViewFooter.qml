@@ -57,9 +57,9 @@ StatusBar {
                     onClicked: {
                         const device = wallet.device
                         if (device.type === Device.BlockstreamJade) {
-                            navigation.go(`/jade/${device.uuid}`)
+                            navigation.set({ view: 'jade', device: device.uuid })
                         } else if (device.vendor === Device.Ledger) {
-                            navigation.go(`/ledger/${device.uuid}`)
+                            navigation.set({ view: 'ledger', device: device.uuid })
                         }
                     }
                 }

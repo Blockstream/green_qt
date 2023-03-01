@@ -38,7 +38,7 @@ MainPage {
         type: Device.BlockstreamJade
     }
     AnalyticsView {
-        active: window.navigation.location === '/jade'
+        active: navigation.param.view === 'jade'
         name: 'DeviceList'
     }
     header: MainPageHeader {
@@ -125,7 +125,7 @@ MainPage {
                 spacing: 0
                 currentIndex: {
                     for (let i = 0; i < devices_list_view.count; ++i) {
-                        if (devices_list_view.itemAtIndex(i).location === navigation.location) {
+                        if (devices_list_view.itemAtIndex(i).device.versionInfo.EFUSEMAC.slice(-6) === navigation.param.device) {
                             return i
                         }
                     }
@@ -134,9 +134,8 @@ MainPage {
                 delegate: Button {
                     id: self
                     required property JadeDevice device
-                    readonly property string location: device ? '/jade/' + device.versionInfo.EFUSEMAC.slice(-6) : '/jade'
                     width: ListView.view.contentWidth
-                    onClicked: navigation.go(location)
+                    onClicked: navigation.set({ device: device.versionInfo.EFUSEMAC.slice(-6) })
                     padding: 16
                     highlighted: ListView.isCurrentItem
                     background: Rectangle {

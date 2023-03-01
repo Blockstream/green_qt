@@ -1,81 +1,45 @@
 #include "navigation.h"
-#include <QUrl>
-#include <QUrlQuery>
 
 Navigation::Navigation(QObject *parent) : QObject(parent)
 {
 }
 
-void Navigation::setLocation(const QString &location)
+QString Navigation::description() const
 {
-    if (m_location == location) return;
-    if (!m_location.isEmpty()) {
-        m_history.removeAll(location);
-        m_history.removeAll(m_location);
-        m_history.push(m_location);
+    QStringList parts;
+    for (auto i = m_param.begin(); i != m_param.end(); ++i) {
+        parts.append(i.key() + "=" + i.value().toString());
     }
-    updateLocation(location);
+    return parts.join(" ");
 }
 
-void Navigation::setPath(const QString& path)
+void Navigation::push(const QVariantMap &param)
 {
-    if (m_path == path) return;
-    m_path = path;
-    emit pathChanged(m_path);
-}
-
-void Navigation::setParam(const QVariantMap &param)
-{
-    if (m_param == param) return;
+    if (param == m_param) return;
+    m_history.removeAll(param);
+    m_history.removeAll(m_param);
+    m_history.push(m_param);
     m_param = param;
-    emit paramChanged(m_param);
-}
-
-void Navigation::go(const QString &location, const QVariantMap &param)
-{
-    QUrl u(location);
-    QUrlQuery q(u);
-    for (auto i = param.constBegin(); i != param.constEnd(); ++i) {
-        q.removeQueryItem(i.key());
-        if (i->typeId() == QMetaType::UnknownType) continue;
-        if (i->typeId() == QMetaType::QStringList) {
-            q.addQueryItem(i.key(), i.value().toStringList().join(','));
-        } else {
-            q.addQueryItem(i.key(), i.value().toString());
-        }
-    }
-    u.setQuery(q);
-    setLocation(u.toString());
+    emit paramChanged();
 }
 
 void Navigation::pop()
 {
     if (m_history.isEmpty()) return;
-    updateLocation(m_history.pop());
-}
-
-void Navigation::updateLocation(const QString& location)
-{
-    m_location = location;
-    emit locationChanged(m_location);
-    QUrl url(m_location);
-    setPath(url.path());
-    QUrlQuery q(url);
-    QVariantMap param;
-    for (auto& pair : q.queryItems()) {
-        if (pair.second == "true") {
-            param.insert(pair.first, true);
-        } else if (pair.second == "false") {
-            param.insert(pair.first, false);
-        } else {
-            param.insert(pair.first, pair.second);
-        }
-    }
-    setParam(param);
+    m_param = m_history.pop();
+    emit paramChanged();
 }
 
 void Navigation::set(const QVariantMap& param)
 {
-    go(m_location, param);
+    auto new_param = m_param;
+    for (auto i = param.begin(); i != param.end(); ++i) {
+        if (i.value().isNull()) {
+            new_param.remove(i.key());
+        } else {
+            new_param[i.key()] = i.value();
+        }
+    }
+    push(new_param);
 }
 

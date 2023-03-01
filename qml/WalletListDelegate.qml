@@ -85,5 +85,5 @@ ItemDelegate {
             }
         }
     }
-    onClicked: navigation.go(`/${wallet.network.key}/${wallet.id}`)
+    onClicked: navigation.set({ view: wallet.network.key, wallet: wallet.id })
 }

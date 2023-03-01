@@ -30,7 +30,7 @@ MainPage {
 
     AnalyticsView {
         name: 'Home'
-        active: window.navigation.location === '/home'
+        active: navigation.param.view === 'home'
     }
 
     id: self
@@ -120,7 +120,7 @@ MainPage {
                                 icon.color: 'transparent'
                                 flat: true
                                 text: wallet.name
-                                onClicked: navigation.go(`/${wallet.network.key}/${wallet.id}`)
+                                onClicked: navigation.set({ view: wallet.network.key, wallet: wallet.id })
                                 background: Rectangle {
                                     visible: delegate.hovered
                                     radius: 8
@@ -194,21 +194,21 @@ MainPage {
                             large: true
                             text: qsTrId('id_create_wallet')
                             font.capitalization: Font.MixedCase
-                            onClicked: navigation.go('/signup')
+                            onClicked: navigation.push({ flow: 'signup' })
                         }
                         GButton {
                             Layout.fillWidth: true
                             large: true
                             text: qsTrId('id_add_an_amp_wallet')
                             font.capitalization: Font.MixedCase
-                            onClicked: navigation.go('/signup?network=liquid&type=amp')
+                            onClicked: navigation.push({ flow: 'signup', network: 'liquid', type: 'amp' })
                         }
                         GButton {
                             Layout.fillWidth: true
                             large: true
                             text: qsTrId('id_restore_wallet')
                             font.capitalization: Font.MixedCase
-                            onClicked: navigation.go('/restore')
+                            onClicked: navigation.push({ flow: 'restore' })
                         }
                     }
                 }

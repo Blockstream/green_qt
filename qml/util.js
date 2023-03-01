@@ -38,3 +38,14 @@ function dynamicScenePosition(item, x, y) {
     }
     return target.mapToItem(null, x, y)
 }
+
+function findChildIndex(parent, pred) {
+    let index = 0
+    if (!parent) return 0
+    for (let i = 0; i < parent.children.length; ++i) {
+        const child = parent.children[i]
+        if (!(child instanceof Item)) continue
+        if (pred(child)) index = i
+    }
+    return index
+}

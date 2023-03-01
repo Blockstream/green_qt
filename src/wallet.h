@@ -240,17 +240,17 @@ class LoginWithPinController : public Entity
 {
     Q_OBJECT
     Q_PROPERTY(Wallet* wallet READ wallet WRITE setWallet NOTIFY walletChanged)
-    Q_PROPERTY(QByteArray pin READ pin WRITE setPin NOTIFY pinChanged)
+    Q_PROPERTY(QString pin READ pin WRITE setPin NOTIFY pinChanged)
     QML_ELEMENT
 public:
     LoginWithPinController(QObject* parent = nullptr);
     Wallet* wallet() const { return m_wallet; }
     void setWallet(Wallet* wallet);
-    QByteArray pin() const { return m_pin; }
-    void setPin(const QByteArray& pin);
+    QString pin() const { return m_pin; }
+    void setPin(const QString& pin);
 signals:
     void walletChanged(Wallet* wallet);
-    void pinChanged(const QByteArray& pin);
+    void pinChanged();
     void loginDone();
     void loginFailed();
 private slots:
@@ -258,7 +258,7 @@ private slots:
 private:
     Connectable<Wallet> m_wallet;
     Connectable<Session> m_session;
-    QByteArray m_pin;
+    QString m_pin;
 };
 
 class FeeEstimates : public QObject

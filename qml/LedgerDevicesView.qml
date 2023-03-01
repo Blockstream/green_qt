@@ -18,7 +18,7 @@ MainPage {
         vendor: Device.Ledger
     }
     AnalyticsView {
-        active: window.navigation.location === '/ledger'
+        active: navigation.view === 'ledger'
         name: 'DeviceList'
     }
     header: MainPageHeader {
@@ -96,7 +96,7 @@ MainPage {
                 spacing: 0
                 currentIndex: {
                     for (let i = 0; i < devices_list_view.count; ++i) {
-                        if (devices_list_view.itemAtIndex(i).location === navigation.location) {
+                        if (devices_list_view.itemAtIndex(i).device.uuid === navigation.param?.device) {
                             return i
                         }
                     }
@@ -105,9 +105,8 @@ MainPage {
                 delegate: Button {
                     id: self
                     required property LedgerDevice device
-                    readonly property string location: '/ledger/' + device.uuid
                     width: ListView.view.contentWidth
-                    onClicked: navigation.go(location)
+                    onClicked: navigation.set({ device: device.uuid })
                     padding: 16
                     highlighted: ListView.isCurrentItem
                     background: Rectangle {
@@ -246,7 +245,7 @@ MainPage {
                 GButton {
                     visible: controller.wallet && controller.wallet.authentication === Wallet.Authenticated
                     text: qsTrId('id_go_to_wallet')
-                    onClicked: navigation.go(`/${self.network.key}/${controller.wallet.id}`)
+                    onClicked: navigation.set({ view: self.network.key, wallet: controller.wallet.id })
                 }
             }
         }

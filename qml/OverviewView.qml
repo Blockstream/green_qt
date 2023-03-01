@@ -48,7 +48,7 @@ GPane {
                     visible: transaction_list_view.list.count > 0
                     Layout.alignment: Qt.AlignVCenter
                     text: qsTrId('id_show_all')
-                    onClicked: wallet_view_header.currentView = 2
+                    onClicked: navigation.set({ view: 'transactions' })
                 }
             }
             hasExport: false
@@ -86,7 +86,7 @@ GPane {
                     visible: self.account.balances.length > 3
                     Layout.alignment: Qt.AlignHCenter
                     text: qsTrId('id_show_all')
-                    onClicked: wallet_view_header.currentView = 1
+                    onClicked: navigation.set({ view: 'assets' })
                 }
             }
             Layout.fillWidth: true

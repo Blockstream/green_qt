@@ -23,7 +23,7 @@ AbstractDialog {
 
     Navigation {
         id: navigation
-        Component.onCompleted: location = window.navigation.location
+        Component.onCompleted: push(window.navigation.param)
     }
 
     SignupController {
@@ -50,7 +50,7 @@ AbstractDialog {
     Connections {
         target: controller.wallet
         function onReadyChanged(ready) {
-            if (ready) window.navigation.go(`/${controller.network.key}/${controller.wallet.id}`)
+            if (ready) window.navigation.set({ network: controller.network.key, wallet: controller.wallet.id })
         }
     }
 
@@ -80,15 +80,7 @@ AbstractDialog {
             return item
         }
         id: stack_layout
-        currentIndex: {
-            let index = -1
-            for (let i = 0; i < stack_layout.children.length; ++i) {
-                let child = stack_layout.children[i]
-                if (!(child instanceof Item)) continue
-                if (child.active) index = i
-            }
-            return index
-        }
+        currentIndex: UtilJS.findChildIndex(stack_layout, child => child.active)
         SelectNetworkView {
             id: select_network_view
             readonly property bool active: true
@@ -105,7 +97,7 @@ AbstractDialog {
 
         AnimLoader {
             id: select_server_type_view
-            active: (navigation.param.network || false) && (navigation.param.type || false) && !controller.network
+            active: !!navigation.param.network && !!navigation.param.type && !controller.network
             animated: self.opened
             sourceComponent: SelectServerTypeView {
             }

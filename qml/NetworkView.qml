@@ -20,25 +20,16 @@ StackLayout {
         }
         return null
     }
-    property bool active: {
-        if (window.navigation.path === location) return true
-        if (!window.navigation.path.startsWith(`/${network}/`)) return false
-        const [,, wallet_id] = window.navigation.path.split('/')
-        const wallet = WalletManager.wallet(wallet_id)
-        return wallet && wallet.ready
-    }
+    readonly property bool active: window.navigation.param.view === self.network
 
-    Binding on currentIndex {
-        delayed: true
-        value: {
-            let index = self.currentIndex
-            for (let i = 0; i < wallet_view_repeater.count; ++i) {
-                if (wallet_view_repeater.itemAt(i).match) {
-                    return 1 + i
-                }
+    currentIndex: {
+        let index = 0
+        for (let i = 0; i < wallet_view_repeater.count; ++i) {
+            if (wallet_view_repeater.itemAt(i).match) {
+                return 1 + i
             }
-            return index
         }
+        return index
     }
 
     MainPage {
@@ -55,12 +46,12 @@ StackLayout {
                     text: qsTrId('id_create_new_wallet')
                     highlighted: true
                     large: true
-                    onClicked: navigation.go(`/${self.network}/signup`, { network: self.network, type: (self.network === 'liquid' ? undefined : 'default') })
+                    onClicked: navigation.set({ flow: 'signup', network: self.network, type: (self.network === 'liquid' ? undefined : 'default') })
                 }
                 GButton {
                     large: true
                     text: qsTrId('id_restore_green_wallet')
-                    onClicked: navigation.go(`/${self.network}/restore`, { network: self.network })
+                    onClicked: navigation.set({ flow: 'restore', network: self.network })
                 }
                 GButton {
                     text: qsTrId('id_watchonly_login')
@@ -112,7 +103,7 @@ StackLayout {
             network: self.network
         }
         delegate: WalletView {
-            property bool match: wallet.ready && navigation.location.startsWith(location)
+            property bool match: wallet.ready && navigation.param.wallet === wallet.id
             AnalyticsView {
                 name: 'Overview'
                 segmentation: AnalyticsJS.segmentationSession(wallet)

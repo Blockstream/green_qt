@@ -12,6 +12,7 @@ GPane {
     id: self
 
     LoginWithPinController {
+        id: controller
         wallet: self.wallet
         pin: pin_view.pin.value
         onLoginDone: {
@@ -42,7 +43,7 @@ GPane {
             focus: true
             id: pin_view
             Layout.alignment: Qt.AlignHCenter
-            enabled: !self.active && self.wallet.loginAttemptsRemaining > 0 && self.wallet.hasPinData
+            enabled: !self.active && self.wallet.loginAttemptsRemaining > 0 && self.wallet.hasPinData && !controller.pin
         }
         Label {
             Layout.preferredWidth: 0
@@ -75,7 +76,7 @@ GPane {
             large: true
             visible: self.wallet.loginAttemptsRemaining === 0 || !self.wallet.hasPinData
             text: qsTrId('id_restore_wallet')
-            onClicked: window.navigation.go('/restore', { network: self.wallet.network.key })
+            onClicked: navigation.set({ flow: 'restore', network: self.wallet.network.key })
         }
     }
 }

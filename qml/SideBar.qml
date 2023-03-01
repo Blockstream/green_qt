@@ -28,18 +28,28 @@ Pane {
             easing.type: Easing.InOutCubic
         }
     }
+
+    component NetworkSideButton: SideButton {
+        required property string network
+        icon.source: UtilJS.iconFor(network)
+        isCurrent: navigation.param.view === network && (Settings.collapseSideBar || !navigation.param.wallet)
+        onClicked: navigation.push({ view: network })
+    }
+
     contentItem: ColumnLayout {
         spacing: 8
         SideButton {
             id: home_button
             icon.source: 'qrc:/svg/home.svg'
-            location: '/home'
+            isCurrent: (navigation.param?.view ?? 'home') === 'home'
+            onClicked: navigation.push({ view: 'home' })
             text: qsTrId('id_home')
         }
         SideButton {
             visible: Settings.showNews
             icon.source: 'qrc:/svg/blockstream-logo.svg'
-            location: '/blockstream'
+            isCurrent: navigation.param?.view === 'blockstream'
+            onClicked: navigation.push({ view: 'blockstream' })
             text: 'Blockstream News'
             busy: blockstream_view.busy
         }
@@ -57,7 +67,7 @@ Pane {
                 Layout.fillWidth: Settings.collapseSideBar
                 icon.source: 'qrc:/svg/plus.svg'
                 icon.color: 'white'
-                onClicked: navigation.go('/signup')
+                onClicked: navigation.set({ flow: 'signup' })
                 Layout.alignment: Qt.AlignCenter
                 Layout.preferredWidth: 28
                 Layout.preferredHeight: 28
@@ -90,9 +100,8 @@ Pane {
                 id: layout
                 spacing: 8
                 width: flickable.contentWidth
-                SideButton {
-                    icon.source: UtilJS.iconFor('bitcoin')
-                    location: '/bitcoin'
+                NetworkSideButton {
+                    network: 'bitcoin'
                     text: 'Bitcoin'
                 }
                 Repeater {
@@ -103,10 +112,9 @@ Pane {
                     WalletSideButton {
                     }
                 }
-                SideButton {
+                NetworkSideButton {
                     visible: Settings.enableTestnet
-                    icon.source: UtilJS.iconFor('testnet')
-                    location: '/testnet'
+                    network: 'testnet'
                     text: 'Bitcoin Testnet'
                 }
                 Repeater {
@@ -118,9 +126,8 @@ Pane {
                         visible: !Settings.collapseSideBar && Settings.enableTestnet
                     }
                 }
-                SideButton {
-                    icon.source: UtilJS.iconFor('liquid')
-                    location: '/liquid'
+                NetworkSideButton {
+                    network: 'liquid'
                     text: 'Liquid'
                 }
                 Repeater {
@@ -131,10 +138,9 @@ Pane {
                     WalletSideButton {
                     }
                 }
-                SideButton {
+                NetworkSideButton {
                     visible: Settings.enableTestnet
-                    icon.source: UtilJS.iconFor('testnet-liquid')
-                    location: '/testnet-liquid'
+                    network: 'testnet-liquid'
                     text: 'Liquid Testnet'
                 }
                 Repeater {
@@ -150,13 +156,15 @@ Pane {
                 }
                 SideButton {
                     icon.source: 'qrc:/svg/jade_emblem_on_transparent_rgb.svg'
-                    location: '/jade'
+                    isCurrent: navigation.param.view === 'jade'
+                    onClicked: navigation.push({ view: 'jade' })
                     count: jade_view.count
                     text: 'Blockstream Jade'
                 }
                 SideButton {
                     icon.source: 'qrc:/svg/ledger-logo.svg'
-                    location: '/ledger'
+                    isCurrent: navigation.param.view === 'ledger'
+                    onClicked: navigation.push({ view: 'ledger' })
                     count: ledger_view.count
                     text: 'Ledger Nano'
                 }
@@ -173,7 +181,8 @@ Pane {
         }
         SideButton {
             icon.source: 'qrc:/svg/appsettings.svg'
-            location: '/preferences'
+            isCurrent: navigation.param.view === 'preferences'
+            onClicked: navigation.push({ view: 'preferences' })
             text: qsTrId('id_app_settings')
             icon.width: 24
             icon.height: 24

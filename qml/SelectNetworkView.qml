@@ -18,7 +18,7 @@ GPane {
         HSpacer {
         }
         Section {
-            visible: navigation.path === `/${view}` || navigation.path === `/mainnet/${view}`
+            visible: navigation.param.flow === self.view && (!navigation.param.network || navigation.param.network === 'mainnet')
             title: 'Bitcoin Network'
             contentItem: RowLayout {
                 spacing: 12
@@ -32,7 +32,7 @@ GPane {
             }
         }
         Section {
-            visible: navigation.path === `/${view}` || navigation.path === `/liquid/${view}`
+            visible: navigation.param.flow === self.view || navigation.param.network === 'liquid'
             title: 'Liquid Network'
             contentItem: RowLayout {
                 spacing: 12
