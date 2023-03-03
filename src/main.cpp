@@ -126,8 +126,6 @@ int main(int argc, char *argv[])
     QCoreApplication::setApplicationName("Green");
     QCoreApplication::setOrganizationName("Blockstream");
     QCoreApplication::setOrganizationDomain("blockstream.com");
-    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-    QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
     QCoreApplication::setApplicationVersion(GREEN_VERSION);
 
     g_data_location = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation);
