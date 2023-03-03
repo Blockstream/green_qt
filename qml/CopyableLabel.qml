@@ -7,7 +7,7 @@ import "util.js" as UtilJS
 
 Label {
     id: self
-    property real delay: 500
+    property real delay: 300
     property string copyText: text
     signal copy
     MouseArea {
@@ -36,9 +36,7 @@ Label {
         dim: true
         visible: hover_handler.containsMouse || popup_hover_handler.containsMouse
         parent: Overlay.overlay
-        Overlay.modeless: Rectangle {
-            color: Qt.rgba(0, 0, 0, popup.opacity * 0.4)
-        }
+        Overlay.modeless: null
         contentItem: RowLayout {
             spacing: 16
             Label {
@@ -78,19 +76,31 @@ Label {
                 hoverEnabled: true
                 onClicked: {
                     Clipboard.copy(self.copyText)
-                    check_timer.start()
+                    check_timer.restart()
                     self.copy()
                 }
             }
         }
         enter: Transition {
             SequentialAnimation {
-                PauseAnimation { duration: self.delay }
-                NumberAnimation { property: 'opacity'; to: 1 }
+                PropertyAction {
+                    property: 'opacity'
+                    value: 0
+                }
+                PauseAnimation {
+                    duration: self.delay
+                }
+                NumberAnimation {
+                    property: 'opacity'
+                    to: 1
+                }
             }
         }
         exit: Transition {
-            NumberAnimation { property: 'opacity'; to: 0 }
+            NumberAnimation {
+                property: 'opacity'
+                to: 0
+            }
         }
     }
 }
