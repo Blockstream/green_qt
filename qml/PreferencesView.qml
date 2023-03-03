@@ -312,17 +312,12 @@ MainPage {
             }
             Field {
                 name: qsTrId('id_data_directory')
-                Label {
-                    Layout.fillWidth: true
+                CopyableLabel {
                     text: data_location_path
+                    copyText: data_location_path.replace(' ', '\\ ')
                     elide: Text.ElideRight
                 }
-                GButton {
-                    text: qsTrId('id_copy')
-                    onClicked: {
-                        Clipboard.copy(data_location_path);
-                        ToolTip.show(qsTrId('id_copied_to_clipboard'), 1000);
-                    }
+                HSpacer {
                 }
                 GButton {
                     text: qsTrId('id_open')
@@ -331,17 +326,12 @@ MainPage {
             }
             Field {
                 name: qsTrId('id_log_file')
-                Label {
-                    Layout.fillWidth: true
+                CopyableLabel {
                     text: log_file_path
+                    copyText: log_file_path.replace(' ', '\\ ')
                     elide: Text.ElideRight
                 }
-                GButton {
-                    text: qsTrId('id_copy')
-                    onClicked: {
-                        Clipboard.copy(log_file_path);
-                        ToolTip.show(qsTrId('id_copied_to_clipboard'), 1000);
-                    }
+                HSpacer {
                 }
                 GButton {
                     text: qsTrId('id_open')
