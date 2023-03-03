@@ -152,7 +152,7 @@ MainPage {
                 }
             }
             Field {
-                name: 'Help Green Improve'
+                name: qsTrId('id_help_green_improve')
                 GSwitch {
                     enabled: !Analytics.busy
                     checked: Settings.analytics === 'enabled'
