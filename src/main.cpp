@@ -198,8 +198,8 @@ int main(int argc, char *argv[])
     qInfo() << "  Product:" << qPrintable(QSysInfo::prettyProductName());
     qInfo() << "  Product Type:" << qPrintable(QSysInfo::productType());
     qInfo() << "  Product Version:" << qPrintable(QSysInfo::productVersion());
-    qInfo() << "Data directory:" << g_data_location;
-    qInfo() << "Log file:" << g_log_file.fileName();
+    qInfo() << "Data directory:" << qPrintable(g_data_location);
+    qInfo() << "Log file:" << qPrintable(g_log_file.fileName());
 
     gdk::init(g_args);
 
