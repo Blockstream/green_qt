@@ -58,7 +58,7 @@ AbstractDialog {
         username: username_field.text
         password: password_field.text
         saveWallet: remember_checkbox.checked
-        onWalletChanged: {
+        onWalletChanged: (wallet) => {
             if (controller.saveWallet) {
                 Analytics.recordEvent('wallet_restore_watch_only', AnalyticsJS.segmentationSession(wallet))
             }

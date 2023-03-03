@@ -18,6 +18,7 @@ Button {
     }
     Menu {
         id: account_delegate_menu
+        enabled: !delegate.account.wallet.watchOnly
         MenuItem {
             text: qsTrId('id_rename')
             onTriggered: {
@@ -45,7 +46,7 @@ Button {
         border.width: 1
         border.color: delegate.highlighted ? constants.g500 : constants.c700
         TapHandler {
-            enabled: delegate.highlighted
+            enabled: delegate.highlighted && account_delegate_menu.enabled
             acceptedButtons: Qt.RightButton
             onTapped: account_delegate_menu.popup()
         }
@@ -85,6 +86,7 @@ Button {
                 account: delegate.account
             }
             Item {
+                visible: account_delegate_menu.enabled
                 implicitWidth: delegate.hovered || account_delegate_menu.opened ? constants.s1 + tool_button.width : 0
                 Behavior on implicitWidth {
                     SmoothedAnimation {}

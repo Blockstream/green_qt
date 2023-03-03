@@ -279,7 +279,7 @@ ColumnLayout {
             title: qsTrId('id_support')
             contentItem: AccountIdBadge {
                 amp: false
-                account: wallet.accounts[0]
+                account: wallet.accounts[0] ?? null
             }
         }
     }
