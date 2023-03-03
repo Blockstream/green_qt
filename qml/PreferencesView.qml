@@ -41,35 +41,45 @@ MainPage {
         }
     }
 
-    component Field: RowLayout {
+    component Field: Pane {
         default property alias contentItemData: layout.data
         property alias icon: image.source
         property alias name: label.text
-        spacing: 12
-        Image {
-            Layout.alignment: Qt.AlignTop
-            Layout.minimumWidth: 16
-            Layout.minimumHeight: 36
-            id: image
-            smooth: true
-            mipmap: true
-            fillMode: Image.Pad
-            horizontalAlignment: Image.AlignHCenter
-            verticalAlignment: Image.AlignVCenter
-            sourceSize.height: 16
-            sourceSize.width: 16
-        }
-        Label {
-            id: label
-            Layout.minimumWidth: self.labelWidth
-            Layout.maximumWidth: self.labelWidth
-            Layout.minimumHeight: 36
-            Layout.alignment: Qt.AlignTop
-            verticalAlignment: Text.AlignVCenter
-        }
-        RowLayout {
-            spacing: 8
-            id: layout
+        Layout.fillWidth: true
+        background: null
+        padding: 0
+        contentItem: RowLayout {
+            spacing: 12
+            Image {
+                Layout.alignment: Qt.AlignTop
+                Layout.minimumWidth: 16
+                Layout.minimumHeight: 36
+                id: image
+                smooth: true
+                mipmap: true
+                fillMode: Image.Pad
+                horizontalAlignment: Image.AlignHCenter
+                verticalAlignment: Image.AlignVCenter
+                sourceSize.height: 16
+                sourceSize.width: 16
+            }
+            Label {
+                id: label
+                Layout.minimumWidth: self.labelWidth
+                Layout.maximumWidth: self.labelWidth
+                Layout.minimumHeight: 36
+                Layout.alignment: Qt.AlignTop
+                verticalAlignment: Text.AlignVCenter
+            }
+            Pane {
+                Layout.fillWidth: true
+                padding: 0
+                background: null
+                contentItem: RowLayout {
+                    id: layout
+                    spacing: 8
+                }
+            }
         }
     }
     component Separator: Item {

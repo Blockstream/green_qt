@@ -1,5 +1,5 @@
 #!/bin/bash
-set -eo pipefail
+set -eox pipefail
 
 if [ -d $PREFIX ]; then
     echo "using cached depends"

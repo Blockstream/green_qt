@@ -25,7 +25,6 @@ SET(TARGET_SOURCES
 	src/devicemanager.cpp
 	src/entity.cpp
 	src/ga.cpp
-	# glibc_compat.cpp
 	src/httpmanager.cpp
 	src/httprequestactivity.cpp
 	src/json.cpp
@@ -89,6 +88,12 @@ SET(TARGET_SOURCES
 	src/jade/jadelogincontroller.cpp
 	src/jade/jadeapi.cpp
 	src/jade/deviceinfo.cpp
-    sa/kdsingleapplication.cpp
-    sa/kdsingleapplication_localsocket.cpp
+  sa/kdsingleapplication.cpp
+  sa/kdsingleapplication_localsocket.cpp
 )
+
+if (WIN32)
+elseif (APPLE)
+elseif (UNIX)
+list(APPEND TARGET_SOURCES src/glibc_compat.cpp)
+endif()

@@ -29,7 +29,7 @@ if (WIN32)
 elseif (APPLE)
     find_library(SECURITY Security REQUIRED)
 elseif (UNIX)
-    set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++ -fstack-protector")
+    set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++ -fstack-protector -Wl,--wrap=__divmoddi4 -Wl,--wrap=log2f")
 endif()
 
 set(CMAKE_AUTOMOC ON)

@@ -1,5 +1,5 @@
 #!/bin/bash
-set -eo pipefail
+set -eox pipefail
 
 QT_MAJOR=6.4
 QT_VERSION=${QT_MAJOR}.2
