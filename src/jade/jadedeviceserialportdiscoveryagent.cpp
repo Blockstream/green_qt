@@ -17,6 +17,9 @@ bool FilterSerialPort(const QSerialPortInfo& info)
     // WCH CH9102F (0x1a86, 0x55d4)
     if (info.vendorIdentifier() == 0x1a86 && info.productIdentifier() == 0x55d4) return false;
 
+    // don't filter if vid and pid are unknown, happens with flatpak
+    if (info.vendorIdentifier() == 0 && info.productIdentifier() == 0) return false;
+
     return true;
 }
 
