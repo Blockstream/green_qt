@@ -215,7 +215,7 @@ ColumnLayout {
 
     Loader {
         Layout.fillWidth: true
-        active: !wallet.network.electrum
+        active: !wallet.network.electrum && !!wallet.config.email
         visible: active
         sourceComponent: SettingsBox {
             title: qsTrId('id_notifications')

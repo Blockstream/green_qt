@@ -99,7 +99,7 @@ ColumnLayout {
     SettingsBox {
         title: qsTrId('id_set_twofactor_threshold')
         enabled: !wallet.locked
-        visible: !wallet.network.liquid
+        visible: !wallet.network.liquid && !!wallet.config.limits
         contentItem: RowLayout {
             Label {
                 Layout.fillWidth: true
@@ -203,20 +203,6 @@ ColumnLayout {
     Component {
         id: two_factor_auth_expiry_dialog
         TwoFactorAuthExpiryDialog {
-            wallet: self.wallet
-        }
-    }
-
-    Component {
-        id: change_pin_dialog
-        ChangePinDialog {
-            wallet: self.wallet
-        }
-    }
-
-    Component {
-        id: disable_all_pins_dialog
-        DisableAllPinsDialog {
             wallet: self.wallet
         }
     }

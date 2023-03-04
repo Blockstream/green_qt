@@ -332,7 +332,7 @@ MainPageHeader {
         enabled: {
             if (self.wallet.watchOnly) return false
             if (self.wallet.network.electrum) return true
-            return !!self.wallet.settings.pricing && !!self.wallet.config.limits
+            return !!self.wallet.settings.pricing
         }
         onTriggered: navigation.set({ settings: true })
     }

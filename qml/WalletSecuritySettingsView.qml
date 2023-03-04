@@ -83,27 +83,6 @@ ColumnLayout {
     }
 
     Component {
-        id: disable_dialog
-        TwoFactorDisableDialog {
-            wallet: self.wallet
-        }
-    }
-
-    Component {
-        id: set_twofactor_threshold_dialog
-        TwoFactorLimitDialog {
-            wallet: self.wallet
-        }
-    }
-
-    Component {
-        id: two_factor_auth_expiry_dialog
-        TwoFactorAuthExpiryDialog {
-            wallet: self.wallet
-        }
-    }
-
-    Component {
         id: change_pin_dialog
         ChangePinDialog {
             wallet: self.wallet
