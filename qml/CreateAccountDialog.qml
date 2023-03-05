@@ -29,7 +29,6 @@ ControllerDialog {
     autoDestroy: true
     title: qsTrId('id_add_new_account')
     controller: CreateAccountController {
-        id: create_account_controller
         wallet: dialog.wallet
         onCreated: {
             dialog.push(handler, doneComponent)
@@ -55,8 +54,8 @@ ControllerDialog {
                 text: _labels['2of2']
                 description: qsTrId('id_standard_accounts_allow_you_to')
                 onClicked: {
-                    create_account_controller.type = '2of2'
-                    create_account_controller.name = _labels['2of2']
+                    controller.type = '2of2'
+                    controller.name = _labels['2of2']
                     stack_view.push(finish_view)
                 }
             }
@@ -65,8 +64,8 @@ ControllerDialog {
                 text: _labels['2of2_no_recovery']
                 description: qsTrId('id_amp_accounts_are_only_available')
                 onClicked: {
-                    create_account_controller.type = '2of2_no_recovery'
-                    create_account_controller.name = _labels['2of2_no_recovery']
+                    controller.type = '2of2_no_recovery'
+                    controller.name = _labels['2of2_no_recovery']
                     stack_view.push(finish_view)
                 }
             }
@@ -75,8 +74,8 @@ ControllerDialog {
                 description: qsTrId('id_a_2of3_account_requires_two_out')
                 visible: !wallet.network.electrum && !wallet.network.liquid
                 onClicked: {
-                    create_account_controller.type = '2of3'
-                    create_account_controller.name = _labels['2of3']
+                    controller.type = '2of3'
+                    controller.name = _labels['2of3']
                     stack_view.push(basic_2of3_view)
                 }
             }
@@ -85,8 +84,8 @@ ControllerDialog {
                 text: _labels['p2sh-p2wpkh']
                 description: qsTrId('id_bip49_accounts_allow_you_to')
                 onClicked: {
-                    create_account_controller.type = 'p2sh-p2wpkh'
-                    create_account_controller.name = _labels['p2sh-p2wpkh']
+                    controller.type = 'p2sh-p2wpkh'
+                    controller.name = _labels['p2sh-p2wpkh']
                     stack_view.push(finish_view)
                 }
             }
@@ -95,8 +94,8 @@ ControllerDialog {
                 text: _labels['p2wpkh']
                 description: qsTrId('id_bip84_accounts_allow_you_to')
                 onClicked: {
-                    create_account_controller.type = 'p2wpkh'
-                    create_account_controller.name = _labels['p2wpkh']
+                    controller.type = 'p2wpkh'
+                    controller.name = _labels['p2wpkh']
                     stack_view.push(finish_view)
                 }
             }
