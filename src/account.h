@@ -6,18 +6,21 @@
 
 class Address;
 class Balance;
+class Network;
 class Output;
 class Transaction;
 class Wallet;
 
 Q_MOC_INCLUDE("wallet.h")
 Q_MOC_INCLUDE("balance.h")
+Q_MOC_INCLUDE("network.h")
 Q_MOC_INCLUDE("transaction.h")
 
 class Account : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(Wallet* wallet READ wallet CONSTANT)
+    Q_PROPERTY(Network* network READ network CONSTANT)
     Q_PROPERTY(int pointer READ pointer CONSTANT)
     Q_PROPERTY(QString type READ type CONSTANT)
     Q_PROPERTY(bool mainAccount READ isMainAccount CONSTANT)
@@ -29,9 +32,10 @@ class Account : public QObject
     Q_PROPERTY(bool ready READ isReady NOTIFY readyChanged)
     QML_ELEMENT
 public:
-    explicit Account(const QJsonObject& data, Wallet* wallet);
+    explicit Account(const QJsonObject& data, Network* network, Wallet* wallet);
 
     Wallet* wallet() const { return m_wallet; }
+    Network* network() const { return m_network; }
     quint32 pointer() const { return m_pointer; }
     QString type() const { return m_type; }
     bool isMainAccount() const;
@@ -77,6 +81,7 @@ private:
     void setHidden(bool hidden);
 private:
     Wallet* const m_wallet;
+    Network* const m_network;
     const quint32 m_pointer;
     const QString m_type;
     QJsonObject m_json;

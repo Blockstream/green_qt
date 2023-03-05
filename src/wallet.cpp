@@ -540,7 +540,7 @@ Account* Wallet::getOrCreateAccount(const QJsonObject& data)
     if (account) {
         account->update(data);
     } else {
-        account = new Account(data, this);
+        account = new Account(data, m_network, this);
         m_accounts_by_pointer.insert(pointer, account);
     }
     return account;

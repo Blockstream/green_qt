@@ -17,9 +17,10 @@
 #include "updateaccounthandler.h"
 #include "wallet.h"
 
-Account::Account(const QJsonObject& data, Wallet* wallet)
+Account::Account(const QJsonObject& data, Network* network, Wallet* wallet)
     : QObject(wallet)
     , m_wallet(wallet)
+    , m_network(network)
     , m_pointer(data.value("pointer").toDouble())
     , m_type(data.value("type").toString())
 {
