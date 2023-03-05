@@ -13,11 +13,11 @@ Button {
     required property var output
 
     function toggleSelection() {
-        if (!output.account.wallet.network.liquid) selection_model.select(output_model.index(output_model.indexOf(output), 0), ItemSelectionModel.Toggle)
+        if (!output.account.network.liquid) selection_model.select(output_model.index(output_model.indexOf(output), 0), ItemSelectionModel.Toggle)
     }
 
     function formatAmount(amount, include_ticker = true) {
-        if (output.account.wallet.network.liquid) {
+        if (output.account.network.liquid) {
             return output.asset.formatAmount(amount, true)
         } else {
             wallet.displayUnit
@@ -43,7 +43,7 @@ Button {
             Layout.fillHeight: false
             Layout.alignment: Qt.AlignTop
             Image {
-                visible: !output.account.wallet.network.liquid
+                visible: !output.account.network.liquid
                 sourceSize.height: 36
                 sourceSize.width: 36
                 source: UtilJS.iconFor(wallet)
@@ -95,7 +95,7 @@ Button {
                 }
                 Tag {
                     text: qsTrId('id_not_confidential')
-                    visible: output.account.wallet.network.liquid && !output.confidential
+                    visible: output.account.network.liquid && !output.confidential
                     font.capitalization: Font.AllUppercase
                 }
                 Tag {

@@ -35,7 +35,7 @@ Page {
         Repeater {
             model: {
                 const filters = ['', 'csv', 'p2wsh']
-                if (account.wallet.network.liquid) {
+                if (account.network.liquid) {
                     filters.push('not_confidential')
                 } else {
                     filters.push('p2sh')
@@ -128,7 +128,7 @@ Page {
 
     footer: RowLayout {
         Layout.bottomMargin: -constants.p2
-        visible: selection_model.hasSelection && !account.wallet.network.liquid
+        visible: selection_model.hasSelection && !account.network.liquid
         Layout.fillWidth: true
         spacing: constants.p1
 

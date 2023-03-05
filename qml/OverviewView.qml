@@ -29,7 +29,7 @@ GPane {
 
         LiquidHeader {
             Layout.topMargin: constants.p2
-            visible: self.account.wallet.network.liquid
+            visible: self.account.network.liquid
         }
 
         TransactionListView {

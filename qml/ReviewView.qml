@@ -27,7 +27,7 @@ ColumnLayout {
     AlertView {
         alert: AnalyticsAlert {
             screen: 'SendConfirm'
-            network: controller.account.wallet.network.id
+            network: controller.account.network.id
         }
     }
     SectionLabel {
@@ -38,7 +38,7 @@ ColumnLayout {
     }
     Repeater {
         model: controller.transaction._addressees
-        delegate: wallet.network.liquid ? liquid_address : bitcoin_address
+        delegate: controller.account.network.liquid ? liquid_address : bitcoin_address
     }
     SectionLabel {
         text: qsTrId('id_my_notes')

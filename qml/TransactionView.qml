@@ -11,7 +11,7 @@ import "util.js" as UtilJS
 
 WalletDialog {
     required property Transaction transaction
-    readonly property Network network: transaction.account.wallet.network
+    readonly property Network network: transaction.account.network
     property int confirmations: transactionConfirmations(transaction)
     readonly property bool completed: confirmations >= (network.liquid ? 2 : 6)
     readonly property var spv: {
@@ -105,7 +105,7 @@ WalletDialog {
                 RowLayout {
                     id: total_with_fee
                     visible: {
-                        const network = transaction.account.wallet.network
+                        const network = transaction.account.network
                         if (network.liquid) {
                             const satoshi = transaction.data.satoshi[network.policyAsset] || 0
                             return satoshi < -transaction.data.fee

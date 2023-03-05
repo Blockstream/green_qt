@@ -68,7 +68,7 @@ StackView {
             Layout.columnSpan: 2
             alert: AnalyticsAlert {
                 screen: 'Send'
-                network: account.wallet.network.id
+                network: account.network.id
             }
         }
 
@@ -166,7 +166,7 @@ StackView {
         }
         Loader {
             visible: active
-            active: wallet.network.liquid
+            active: account.network.liquid
             sourceComponent: SectionLabel {
                 text: qsTrId('id_asset')
             }
@@ -174,7 +174,7 @@ StackView {
         Loader {
             id: asset_field_loader
             visible: active
-            active: wallet.network.liquid
+            active: account.network.liquid
             Layout.fillWidth: true
             sourceComponent: GComboBox {
                 property Balance balance: account.balances[asset_field.currentIndex]
@@ -199,11 +199,11 @@ StackView {
         }
         SectionLabel {
             text: qsTrId('id_coins')
-            visible: !wallet.network.liquid
+            visible: !account.network.liquid
         }
         RowLayout {
             spacing: 16
-            visible: !wallet.network.liquid
+            visible: !account.network.liquid
             GComboBox {
                 Layout.fillWidth: true
                 id: coins_combo_box
@@ -221,7 +221,7 @@ StackView {
                         source: UtilJS.iconFor(wallet)
                     }
                     Label {
-                        text: wallet.network.displayName
+                        text: account.network.displayName
                     }
                     Label {
                         Layout.fillWidth: true
@@ -293,7 +293,7 @@ StackView {
                     anchors.right: parent.right
                     anchors.rightMargin: 8
                     anchors.baseline: parent.baseline
-                    text: wallet.network.liquid ? (balance.asset.id === wallet.network.policyAsset ? wallet.displayUnit : (balance.asset.data.ticker || '')) : wallet.displayUnit
+                    text: account.network.liquid ? (balance.asset.id === account.network.policyAsset ? wallet.displayUnit : (balance.asset.data.ticker || '')) : wallet.displayUnit
                 }
                 rightPadding: unit.width + 16
             }
@@ -322,7 +322,7 @@ StackView {
                     anchors.right: parent.right
                     anchors.rightMargin: 8
                     anchors.baseline: parent.baseline
-                    text: wallet.network.mainnet ? wallet.settings.pricing.currency : 'FIAT'
+                    text: account.network.mainnet ? wallet.settings.pricing.currency : 'FIAT'
                 }
                 rightPadding: currency.width + 16
             }
@@ -336,9 +336,9 @@ StackView {
                 id: fee_combo
                 Layout.fillWidth: true
                 property var indexes: [3, 12, 24]
-                extra: wallet.network.liquid ? [] : [{ text: qsTrId('id_custom') }]
+                extra: account.network.liquid ? [] : [{ text: qsTrId('id_custom') }]
                 Component.onCompleted: {
-                    currentIndex = wallet.network.liquid ? 0 : indexes.indexOf(wallet.settings.required_num_blocks)
+                    currentIndex = account.network.liquid ? 0 : indexes.indexOf(wallet.settings.required_num_blocks)
                     controller.feeRate = fee_estimates.fees[blocks]
                 }
                 onFeeRateChanged: {

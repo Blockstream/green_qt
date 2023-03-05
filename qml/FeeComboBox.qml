@@ -21,6 +21,6 @@ GComboBox {
         fee('id_slow', 'id_4_hours', 24)
     ]
 
-    model: (wallet.network.liquid ? liquid_fees : fees).concat(extra)
+    model: (account.network.liquid ? liquid_fees : fees).concat(extra)
     textRole: 'text'
 }

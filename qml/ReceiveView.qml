@@ -28,7 +28,7 @@ ColumnLayout {
 
     Loader {
         Layout.alignment: Qt.AlignCenter
-        active: account && account.wallet.network.liquid && account.wallet.device && account.wallet.device.type === Device.LedgerNanoS
+        active: account && account.network.liquid && account.wallet.device && account.wallet.device.type === Device.LedgerNanoS
         sourceComponent: GButton {
             icon.source: 'qrc:/svg/warning.svg'
             baseColor: '#e5e7e9'

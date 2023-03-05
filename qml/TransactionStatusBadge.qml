@@ -7,7 +7,7 @@ Label {
     required property Transaction transaction
     required property int confirmations
     property bool showConfirmations: true
-    readonly property bool liquid: transaction.account.wallet.network.liquid
+    readonly property bool liquid: transaction.account.network.liquid
     readonly property bool completed: confirmations >= (liquid ? 2 : 6)
     color: 'white'
     text: {

@@ -43,7 +43,7 @@ Page {
             Repeater {
                 model: {
                     const filters = ['', 'csv', 'p2wsh']
-                    if (account.wallet.network.liquid) {
+                    if (account.network.liquid) {
                         filters.push('not_confidential')
                     } else {
                         filters.push('p2sh')

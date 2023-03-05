@@ -16,7 +16,7 @@ ItemDelegate {
     property var tx: transaction.data
     property int confirmations: transactionConfirmations(transaction)
     readonly property var spv: {
-        const liquid = transaction.account.wallet.network.liquid
+        const liquid = transaction.account.network.liquid
         const unconfirmed = (liquid && confirmations < 2) || (!liquid && confirmations < 6)
         if (unconfirmed) return null
         switch (transaction.spv) {
@@ -99,7 +99,7 @@ ItemDelegate {
         TransactionStatusBadge {
             transaction: self.transaction
             confirmations: self.confirmations
-            visible: confirmations < (transaction.account.wallet.network.liquid ? 1 : 6)
+            visible: confirmations < (transaction.account.network.liquid ? 1 : 6)
         }
         Loader {
             active: spv
@@ -120,7 +120,7 @@ ItemDelegate {
                 model: Object.entries(transaction.data.satoshi)
                 Label {
                     visible: {
-                        const network = transaction.account.wallet.network
+                        const network = transaction.account.network
                         const [id, amount] = modelData
                         if (network.liquid && transaction.type === Transaction.Outgoing && id === network.policyAsset && amount === -transaction.data.fee) return false
                         return true
@@ -130,7 +130,7 @@ ItemDelegate {
                     font.pixelSize: 16
                     font.styleName: 'Medium'
                     text: {
-                        const network = transaction.account.wallet.network
+                        const network = transaction.account.network
                         const [id, amount] = modelData
                         if (network.liquid) {
                             return wallet.getOrCreateAsset(id).formatAmount(amount, true)
@@ -169,7 +169,7 @@ ItemDelegate {
                             onTriggered: transaction.openInExplorer()
                         }
                         MenuItem {
-                            enabled: transaction.account.wallet.network.liquid
+                            enabled: transaction.account.network.liquid
                             text: qsTrId('id_copy_unblinded_link')
                             onTriggered: {
                                 Clipboard.copy(transaction.unblindedLink())
@@ -177,7 +177,7 @@ ItemDelegate {
                             }
                         }
                         Repeater {
-                            model: transaction.account.wallet.network.liquid ? [copy_unblinding_data_action] : []
+                            model: transaction.account.network.liquid ? [copy_unblinding_data_action] : []
                             MenuItem {
                                 action: modelData
                             }
