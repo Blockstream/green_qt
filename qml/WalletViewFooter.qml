@@ -8,6 +8,7 @@ import "util.js" as UtilJS
 
 StatusBar {
     required property Wallet wallet
+    readonly property Network network: wallet.network
     id: self
     contentItem: RowLayout {
         spacing: constants.s2
@@ -21,7 +22,7 @@ StatusBar {
                 source: UtilJS.iconFor(self.wallet)
             }
             Label {
-                text: wallet.network.displayName + ' ' + qsTrId('id_network')
+                text: self.network.displayName + ' ' + qsTrId('id_network')
                 font.pixelSize: 12
             }
         }
@@ -32,10 +33,10 @@ StatusBar {
                 fillMode: Image.PreserveAspectFit
                 sourceSize.height: 16
                 sourceSize.width: 16
-                source: wallet.network.electrum ? 'qrc:/svg/key.svg' : 'qrc:/svg/multi-sig.svg'
+                source: self.network.electrum ? 'qrc:/svg/key.svg' : 'qrc:/svg/multi-sig.svg'
             }
             Label {
-                text: wallet.network.electrum ? qsTrId('id_singlesig') : qsTrId('id_multisig_shield')
+                text: self.network.electrum ? qsTrId('id_singlesig') : qsTrId('id_multisig_shield')
                 font.pixelSize: 12
             }
         }
@@ -89,8 +90,8 @@ StatusBar {
                     Layout.maximumWidth: 16
                     mipmap: true
                     source: {
-                        if (wallet.network.liquid) {
-                            return wallet.getOrCreateAsset(wallet.network.policyAsset).icon
+                        if (self.network.liquid) {
+                            return wallet.getOrCreateAsset(self.network.policyAsset).icon
                         } else {
                             return UtilJS.iconFor(self.wallet)
                         }
@@ -98,7 +99,7 @@ StatusBar {
                 }
                 Label {
                     font.pixelSize: 12
-                    text: `${Number(amount[unit])} ${wallet.displayUnit} ≈ ${amount.fiat} ${wallet.network.mainnet ? amount.fiat_currency : 'FIAT'}`
+                    text: `${Number(amount[unit])} ${wallet.displayUnit} ≈ ${amount.fiat} ${self.network.mainnet ? amount.fiat_currency : 'FIAT'}`
                 }
             }
         }
