@@ -26,22 +26,6 @@ AbstractDialog {
             text: wallet.name
         }
         SectionLabel {
-            text: qsTrId('id_network')
-        }
-        RowLayout {
-            Layout.fillHeight: false
-            spacing: 8
-            Image {
-                sourceSize.width: 16
-                sourceSize.height: 16
-                source: UtilJS.iconFor(wallet)
-            }
-            Label {
-                Layout.fillWidth: true
-                text: wallet.network.displayName
-            }
-        }
-        SectionLabel {
             text: qsTrId('id_confirm_action')
         }
         GTextField {
