@@ -63,4 +63,27 @@ private:
     const bool m_refresh;
 };
 
+class EncryptWithPinHandler : public Handler
+{
+    const QJsonObject m_plaintext;
+    const QString m_pin;
+    QByteArray m_pin_data;
+    void call(GA_session* session, GA_auth_handler** auth_handler) override;
+public:
+    EncryptWithPinHandler(const QJsonObject& plaintext, const QString& pin, Session* session);
+    QByteArray pinData() const;
+};
+
+class GetCredentialsHandler : public Handler
+{
+    Q_OBJECT
+    Q_PROPERTY(QString mnemonic READ mnemonic CONSTANT)
+public:
+    GetCredentialsHandler(Session* session);
+    QJsonObject credentials() const;
+    QString mnemonic() const;
+protected:
+    void call(GA_session* session, GA_auth_handler** auth_handler) override;
+};
+
 #endif // GREEN_HANDLER_H
