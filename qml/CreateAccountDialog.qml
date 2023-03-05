@@ -22,15 +22,16 @@ ControllerDialog {
             case 'empty': return qsTrId('id_empty')
             case 'invalid': return qsTrId('id_invalid_xpub')
             default: return ''
-            }
+        }
     }
 
     id: dialog
     autoDestroy: true
     title: qsTrId('id_add_new_account')
     controller: CreateAccountController {
+        readonly property Network network: dialog.wallet.network
         wallet: dialog.wallet
-        onCreated: {
+        onCreated: (handler) => {
             dialog.push(handler, doneComponent)
             Analytics.recordEvent('account_create', AnalyticsJS.segmentationSubAccount(account))
         }
@@ -50,7 +51,7 @@ ControllerDialog {
                 segmentation: AnalyticsJS.segmentationSession(dialog.wallet)
             }
             Card {
-                visible: !controller.wallet.network.electrum
+                visible: !controller.network.electrum
                 text: _labels['2of2']
                 description: qsTrId('id_standard_accounts_allow_you_to')
                 onClicked: {
@@ -60,7 +61,7 @@ ControllerDialog {
                 }
             }
             Card {
-                visible: wallet.network.liquid && !controller.wallet.network.electrum
+                visible: controller.network.liquid && !controller.network.electrum
                 text: _labels['2of2_no_recovery']
                 description: qsTrId('id_amp_accounts_are_only_available')
                 onClicked: {
@@ -72,7 +73,7 @@ ControllerDialog {
             Card {
                 text: _labels['2of3']
                 description: qsTrId('id_a_2of3_account_requires_two_out')
-                visible: !wallet.network.electrum && !wallet.network.liquid
+                visible: !controller.network.electrum && !controller.network.liquid
                 onClicked: {
                     controller.type = '2of3'
                     controller.name = _labels['2of3']
@@ -80,7 +81,7 @@ ControllerDialog {
                 }
             }
             Card {
-                visible: controller.wallet.network.electrum
+                visible: controller.network.electrum
                 text: _labels['p2sh-p2wpkh']
                 description: qsTrId('id_bip49_accounts_allow_you_to')
                 onClicked: {
@@ -90,7 +91,7 @@ ControllerDialog {
                 }
             }
             Card {
-                visible: controller.wallet.network.electrum
+                visible: controller.network.electrum
                 text: _labels['p2wpkh']
                 description: qsTrId('id_bip84_accounts_allow_you_to')
                 onClicked: {
@@ -194,7 +195,7 @@ ControllerDialog {
             AnalyticsView {
                 active: true
                 name: 'RecoveryCheck'
-                segmentation: AnalyticsJS.segmentationNetwork(controller.wallet.network)
+                segmentation: AnalyticsJS.segmentationNetwork(controller.network)
             }
         }
     }
