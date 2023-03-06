@@ -7,7 +7,7 @@ linux-x86_64:build:
   after_script:
     - tools/appimage.sh $CI_PROJECT_DIR
   artifacts:
-    name: "$CI_JOB_NAME"
+    name: "$CI_PROJECT_NAME-$CI_JOB_NAME-$CI_COMMIT_SHORT_SHA"
     paths:
       - green
       - BlockstreamGreen-x86_64.AppImage
