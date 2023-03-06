@@ -24,6 +24,7 @@ SET(TARGET_SOURCES
 	src/devicelistmodel.cpp
 	src/devicemanager.cpp
 	src/entity.cpp
+	src/feeestimates.cpp
 	src/ga.cpp
 	src/httpmanager.cpp
 	src/httprequestactivity.cpp
