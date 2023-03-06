@@ -2,6 +2,7 @@ stages:
   - lint
   - depends
   - build
+  - staple
 
 .depends:
   stage: depends
