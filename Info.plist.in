@@ -9,7 +9,7 @@
 	<key>CFBundleName</key>
 	<string>green</string>
 	<key>CFBundleIdentifier</key>
-	<string>green.blockstream.com</string>
+	<string>com.blockstream.Green</string>
 	<key>CFBundleExecutable</key>
 	<string>green</string>
 	<key>CFBundleVersion</key>
