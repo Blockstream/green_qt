@@ -11,7 +11,7 @@ LoginWithPinController::LoginWithPinController(QObject* parent)
 void LoginWithPinController::setWallet(Wallet* wallet)
 {
     if (!m_wallet.update(wallet)) return;
-    emit walletChanged(m_wallet);
+    emit walletChanged();
     update();
 }
 

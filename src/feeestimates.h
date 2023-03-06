@@ -22,8 +22,8 @@ public:
     void setWallet(Wallet* wallet);
     QJsonArray fees() const { return m_fees; }
 signals:
-    void walletChanged(Wallet* wallet);
-    void feesChanged(const QJsonArray& fees);
+    void walletChanged();
+    void feesChanged();
 private slots:
     void update();
 private:

@@ -21,7 +21,7 @@ public:
     QString pin() const { return m_pin; }
     void setPin(const QString& pin);
 signals:
-    void walletChanged(Wallet* wallet);
+    void walletChanged();
     void pinChanged();
     void loginDone();
     void loginFailed();
