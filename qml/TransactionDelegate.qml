@@ -10,9 +10,10 @@ import "analytics.js" as AnalyticsJS
 import "util.js" as UtilJS
 
 ItemDelegate {
-    id: self
+    required property Transaction transaction
+    required property Account account
+    required property Context context
 
-    required property var transaction
     property var tx: transaction.data
     property int confirmations: transactionConfirmations(transaction)
     readonly property var spv: {
@@ -33,10 +34,13 @@ ItemDelegate {
         }
     }
 
+    id: self
     focusPolicy: Qt.ClickFocus
     hoverEnabled: true
     padding: constants.p3
-    rightPadding: constants.p3 - constants.s1
+    verticalPadding: constants.p1
+    bottomPadding: self.ListView.section === self.ListView.nextSection ? constants.p1 : (constants.p1 + 16)
+    bottomInset: ListView.section === self.ListView.nextSection ? 0 : 16
 
     background: Rectangle {
         color: self.hovered ? constants.c700 : constants.c800
@@ -78,7 +82,6 @@ ItemDelegate {
     }
     contentItem: RowLayout {
         spacing: constants.s1
-
         Label {
             text: UtilJS.formatTransactionTimestamp(tx)
             font.pixelSize: 12
@@ -89,7 +92,7 @@ ItemDelegate {
         Label {
             Layout.fillWidth: true
             Layout.maximumWidth: self.width * 0.3
-            font.pixelSize: 16
+            font.pixelSize: 14
             font.styleName: 'Medium'
             text: txType(tx)
             elide: Label.ElideRight
@@ -127,13 +130,13 @@ ItemDelegate {
                     }
                     Layout.alignment: Qt.AlignRight
                     color: modelData[1] > 0 ? '#00b45a' : 'white'
-                    font.pixelSize: 16
+                    font.pixelSize: 14
                     font.styleName: 'Medium'
                     text: {
                         const network = transaction.account.network
                         const [id, amount] = modelData
                         if (network.liquid) {
-                            return wallet.getOrCreateAsset(id).formatAmount(amount, true)
+                            return self.context.getOrCreateAsset(id).formatAmount(amount, true)
                         } else {
                             return formatAmount(amount)
                         }
@@ -141,6 +144,7 @@ ItemDelegate {
                 }
             }
         }
+        /*
         Item {
             implicitWidth: self.hovered || menu.visible ? actions_layout.width : 0
             Behavior on implicitWidth {
@@ -183,7 +187,7 @@ ItemDelegate {
                             }
                         }
                         MenuItem {
-                            enabled: transaction.data.can_rbf && !transaction.account.wallet.watchOnly
+                            enabled: transaction.data.can_rbf && !self.context.watchonly
                             text: qsTrId('id_increase_fee')
                             onTriggered: bump_fee_dialog.createObject(window, { transaction }).open()
                         }
@@ -200,5 +204,6 @@ ItemDelegate {
                 }
             }
         }
+        */
     }
 }

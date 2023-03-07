@@ -15,6 +15,5 @@ void AccountController::setAccount(Account* account)
 {
     if (m_account == account) return;
     m_account = account;
-    emit accountChanged(m_account);
-    setWallet(m_account ? m_account->wallet() : nullptr);
+    emit accountChanged();
 }

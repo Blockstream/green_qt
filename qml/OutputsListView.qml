@@ -4,91 +4,92 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import QtQml.Models
 
-Page {
+GPane {
     required property Account account
+    readonly property real contentY: list_view.contentY + list_view.headerItem.height
 
     readonly property var selectedOutputs: {
         const outputs = []
-        for (var i=0; i<selection_model.selectedIndexes.length; ++i) {
-            var index = selection_model.selectedIndexes[i]
-            var o = output_model.data(index, Qt.UserRole)
-            outputs.push(o)
+        for (var i = 0; i < selection_model.selectedIndexes.length; i++) {
+            const index = selection_model.selectedIndexes[i]
+            const output = output_model.data(index, Qt.UserRole)
+            outputs.push(output)
         }
         return outputs;
     }
 
     id: self
-    spacing: constants.p1
-    background: null
-    header: GHeader {
-        spacing: 6
-        Label {
-            Layout.alignment: Qt.AlignVCenter
-            text: qsTrId('id_coins')
-            font.pixelSize: 20
-            font.styleName: 'Bold'
-        }
-        HSpacer { }
-        ButtonGroup {
-            id: button_group
-        }
-        Repeater {
-            model: {
-                const filters = ['', 'csv', 'p2wsh']
-                if (account.network.liquid) {
-                    filters.push('not_confidential')
-                } else {
-                    filters.push('p2sh')
-                    filters.push('dust')
-                    filters.push('locked')
-                }
-                if (account.type !== '2of3' && account.type !== '2of2_no_recovery') {
-                    filters.push('expired')
-                }
-                return filters
-            }
-            delegate: Button {
-                id: self
-                ButtonGroup.group: button_group
-                checked: index === 0
-                checkable: true
-                padding: 18
-                topPadding: 10
-                bottomPadding: 10
-                background: Rectangle {
-                    id: rectangle
-                    radius: 4
-                    color: self.checked ? constants.c300 : constants.c500
-                }
-                contentItem: Label {
-                    text: self.text
-                    font.pixelSize: 10
-                    font.family: "Medium"
-                }
-                text: localizedLabel(modelData)
-                property string buttonTag: modelData
-                font.capitalization: Font.AllUppercase
-            }
-        }
-        ToolButton {
-            icon.source: "qrc:/svg/info.svg"
-            icon.color: "white"
-            onClicked: info_dialog.createObject(self).open();
-        }
-    }
-    contentItem: GListView {
+
+    contentItem: TListView {
         id: list_view
-        clip: true
-        spacing: 0
-        model: OutputListModelFilter {
-            id: output_model_filter
-            filter: button_group.checkedButton.buttonTag
-            model: OutputListModel {
-                id: output_model
-                account: self.account
-                onModelAboutToBeReset: selection_model.clear()
+        spacing: 8
+
+        model: output_model_filter
+
+        header: Item {
+            height: 40
+            width: list_view.contentWidth
+            GPane {
+                anchors.fill: parent
+                anchors.bottomMargin: 20
+                contentItem: RowLayout {
+                    spacing: 6
+                    HSpacer {
+                    }
+                    Repeater {
+                        model: {
+                            const filters = ['', 'csv', 'p2wsh']
+                            if (account.network.liquid) {
+                                filters.push('not_confidential')
+                            } else {
+                                filters.push('p2sh')
+                                filters.push('dust')
+                                filters.push('locked')
+                            }
+                            if (account.type !== '2of3' && account.type !== '2of2_no_recovery') {
+                                filters.push('expired')
+                            }
+                            return filters
+                        }
+                        delegate: ItemDelegate {
+                            id: self
+                            ButtonGroup.group: button_group
+                            checked: index === 0
+                            checkable: true
+                            padding: 18
+                            topInset: 0
+                            bottomInset: 0
+                            topPadding: 4
+                            bottomPadding: 4
+                            background: Rectangle {
+                                id: rectangle
+                                radius: 4
+                                color: self.checked ? constants.c300 : constants.c500
+                            }
+                            contentItem: Label {
+                                text: self.text
+                                font.pixelSize: 10
+    //                            font.family: "Medium"
+                            }
+                            text: localizedLabel(modelData)
+                            property string buttonTag: modelData
+                            font.capitalization: Font.AllUppercase
+                        }
+                    }
+                    ToolButton {
+                        visible: false
+                        topPadding: 0
+                        bottomPadding: 0
+                        topInset: 0
+                        bottomInset: 0
+                        icon.source: "qrc:/svg/info.svg"
+                        icon.color: "white"
+                        onClicked: info_dialog.createObject(self).open();
+                    }
+                }
             }
         }
+
         delegate: OutputDelegate {
             highlighted: selection_model.selectedIndexes.indexOf(output_model.index(output_model.indexOf(output), 0))>-1
             width: ListView.view.contentWidth
@@ -97,6 +98,7 @@ Page {
         BusyIndicator {
             width: 32
             height: 32
+            // TODO
             running: output_model.fetching
             anchors.margins: 8
             Layout.alignment: Qt.AlignHCenter
@@ -119,16 +121,14 @@ Page {
                 }
             }
         }
-
-        ItemSelectionModel {
-            id: selection_model
-            model: output_model
-        }
     }
 
-    footer: RowLayout {
+    RowLayout {
         Layout.bottomMargin: -constants.p2
-        visible: selection_model.hasSelection && !account.network.liquid
+        // TODO
+        visible: false
+        // visible: selection_model.hasSelection && !account.network.liquid
+
         Layout.fillWidth: true
         spacing: constants.p1
 
@@ -168,11 +168,18 @@ Page {
         }
     }
 
+    component TListView: ListView {
+        ScrollIndicator.vertical: ScrollIndicator { }
+        contentWidth: width
+        displayMarginBeginning: 300
+        displayMarginEnd: 100
+    }
+
     Component {
         id: set_unspent_outputs_status_dialog
         SetUnspentOutputsStatusDialog {
             model: output_model
-            wallet: self.account.wallet
+            wallet: self.account.context.wallet
         }
     }
 

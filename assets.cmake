@@ -2,6 +2,12 @@ qt_add_resources(green "images"
     PREFIX "/"
     BASE assets
     FILES
+        assets/svg/archive.svg
+        assets/svg/unarchive.svg
+        assets/svg/archived.svg
+        assets/svg/3-dots.svg
+        assets/svg/3-h-dots.svg
+        assets/svg/btc-bg.svg
         assets/svg/2fa_email.svg
         assets/svg/2fa_gauth.svg
         assets/svg/2fa_general.svg
@@ -25,8 +31,10 @@ qt_add_resources(green "images"
         assets/svg/blockstream_jade.svg
         assets/svg/btc.svg
         assets/svg/btc_testnet.svg
+        assets/svg/localtest.svg
         assets/svg/cancel.svg
         assets/svg/check.svg
+        assets/svg/check-gray.svg
         assets/svg/coins.svg
         assets/svg/copy.svg
         assets/svg/down.svg
@@ -59,7 +67,6 @@ qt_add_resources(green "images"
         assets/svg/network_selector.svg
         assets/svg/network_selector_active.svg
         assets/svg/new.svg
-        assets/svg/new2.svg
         assets/svg/next.svg
         assets/svg/notifications.svg
         assets/svg/notifications_2.svg
@@ -92,6 +99,7 @@ qt_add_resources(green "images"
         assets/svg/singleSig.svg
         assets/svg/stack_wallets.svg
         assets/svg/testnet-liquid.svg
+        assets/svg/localtest-liquid.svg
         assets/svg/torV2.svg
         assets/svg/transactions.svg
         assets/svg/trezor.svg
@@ -105,8 +113,9 @@ qt_add_resources(green "images"
         assets/svg/warning.svg
         assets/svg/warning_black.svg
         assets/svg/x.svg
-        assets/png/lbtc.png 
+        assets/png/lbtc.png
         assets/png/amp_background.png
+        assets/png/liquid_background.png
 )
 
 qt_add_resources(green "fonts"

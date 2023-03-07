@@ -5,6 +5,7 @@
 #include "networkmanager.h"
 #include "session.h"
 #include "settings.h"
+#include "task.h"
 
 static HttpManager* g_http_manager{nullptr};
 
@@ -16,6 +17,7 @@ HttpManager* HttpManager::instance()
 
 HttpManager::HttpManager(QObject* parent)
     : QObject(parent)
+    , m_dispatcher(new TaskDispatcher(this))
     , m_idle_timer(new QTimer(this))
 {
     Q_ASSERT(!g_http_manager);
@@ -38,7 +40,7 @@ HttpManager::HttpManager(QObject* parent)
             qDebug() << "http: idle timeout, destroy session";
             delete m_session;
             m_session = nullptr;
-            emit sessionChanged(m_session);
+            emit sessionChanged();
         }
     });
 }
@@ -66,7 +68,7 @@ void HttpManager::dispatch()
             qDebug() << "http: networking settings changed, destroy session";
             delete m_session;
             m_session = nullptr;
-            emit sessionChanged(m_session);
+            emit sessionChanged();
         }
     }
 
@@ -85,7 +87,10 @@ void HttpManager::dispatch()
         m_session->setActive(true);
         connect(m_session, &Session::connectedChanged, this, &HttpManager::dispatch);
         connect(m_session, &Session::connectingChanged, this, &HttpManager::dispatch);
-        emit sessionChanged(m_session);
+        emit sessionChanged();
+
+        m_dispatcher->add(new SessionConnectTask(m_session));
+
         return;
     }
 

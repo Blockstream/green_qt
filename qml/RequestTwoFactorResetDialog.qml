@@ -6,37 +6,47 @@ import QtQuick.Layouts
 import "analytics.js" as AnalyticsJS
 
 ControllerDialog {
-    id: dialog
+    id: self
     title: qsTrId('id_request_twofactor_reset')
     controller: Controller {
-        wallet: dialog.wallet
+        id: controller
+        context: self.wallet.context
     }
-    initialItem: ColumnLayout {
-        spacing: constants.s2
-        property list<Action> actions: [
-            Action {
-                enabled: email_field.text.trim() !== ''
-                text: qsTrId('id_next')
-                onTriggered: controller.requestTwoFactorReset(email_field.text)
-            }
-        ]        
+    Action {
+        id: request_twofactor_reset_action
+        enabled: email_field.text.trim() !== ''
+        onTriggered: controller.requestTwoFactorReset(email_field.text)
+    }
+
+    ColumnLayout {
+        spacing: constants.s1
+        VSpacer {
+        }
         Label {
             text: qsTrId('id_the_new_email_will_be_used_for')
             wrapMode: Text.Wrap
-            Layout.maximumWidth: 400
             Layout.fillWidth: true
-            Layout.fillHeight: true
+            Layout.preferredWidth: 0
         }
         GTextField {
             id: email_field
             Layout.fillWidth: true
             placeholderText: qsTrId('id_enter_new_email')
+            onAccepted: request_twofactor_reset_action.trigger()
+        }
+        GButton {
+            Layout.alignment: Qt.AlignCenter
+            action: request_twofactor_reset_action
+            large: true
+            text: qsTrId('id_next')
+        }
+        VSpacer {
         }
     }
 
     AnalyticsView {
-        active: dialog.opened
+        active: self.opened
         name: 'WalletSettings2FAReset'
-        segmentation: AnalyticsJS.segmentationSession(dialog.wallet)
+        segmentation: AnalyticsJS.segmentationSession(self.wallet)
     }
 }

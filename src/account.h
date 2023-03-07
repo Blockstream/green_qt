@@ -1,25 +1,22 @@
 #ifndef GREEN_ACCOUNT_H
 #define GREEN_ACCOUNT_H
 
+#include "green.h"
+
+#include <QJsonObject>
 #include <QObject>
-#include <QtQml>
+#include <QQmlEngine>
 
-class Address;
-class Balance;
-class Network;
-class Output;
-class Transaction;
-class Wallet;
-
-Q_MOC_INCLUDE("wallet.h")
 Q_MOC_INCLUDE("balance.h")
+Q_MOC_INCLUDE("context.h")
 Q_MOC_INCLUDE("network.h")
 Q_MOC_INCLUDE("transaction.h")
+Q_MOC_INCLUDE("wallet.h")
 
 class Account : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(Wallet* wallet READ wallet CONSTANT)
+    Q_PROPERTY(Context* context READ context CONSTANT)
     Q_PROPERTY(Network* network READ network CONSTANT)
     Q_PROPERTY(int pointer READ pointer CONSTANT)
     Q_PROPERTY(QString type READ type CONSTANT)
@@ -29,13 +26,13 @@ class Account : public QObject
     Q_PROPERTY(bool hidden READ isHidden NOTIFY hiddenChanged)
     Q_PROPERTY(qint64 balance READ balance NOTIFY balanceChanged)
     Q_PROPERTY(QQmlListProperty<Balance> balances READ balances NOTIFY balancesChanged)
-    Q_PROPERTY(bool ready READ isReady NOTIFY readyChanged)
     QML_ELEMENT
 public:
-    explicit Account(const QJsonObject& data, Network* network, Wallet* wallet);
+    explicit Account(const QJsonObject& data, Network* network, Context* context);
 
-    Wallet* wallet() const { return m_wallet; }
+    Context* context() const { return m_context; }
     Network* network() const { return m_network; }
+    Session* session() const;
     quint32 pointer() const { return m_pointer; }
     QString type() const { return m_type; }
     bool isMainAccount() const;
@@ -43,6 +40,7 @@ public:
     QString name() const { return m_name; }
     void setName(const QString& name);
     bool isHidden() const { return m_hidden; }
+    void setHidden(bool hidden);
     QJsonObject json() const;
 
     void update(const QJsonObject& json);
@@ -54,33 +52,25 @@ public:
     QQmlListProperty<Balance> balances();
 
     bool hasBalance() const;
+    void setBalanceData(const QJsonObject& data);
     void updateBalance();
     Transaction *getOrCreateTransaction(const QJsonObject &data);
     Output *getOrCreateOutput(const QJsonObject &data);
     Address *getOrCreateAddress(const QJsonObject &data);
     Q_INVOKABLE Balance* getBalanceByAssetId(const QString &id) const;
     Q_INVOKABLE Transaction* getTransactionByTxHash(const QString &id) const;
-    bool isReady() const { return m_ready; }
 signals:
+    void blockEvent(const QJsonObject& event);
+    void transactionEvent(const QJsonObject& event);
     void walletChanged();
     void jsonChanged();
     void nameChanged(const QString& name);
     void hiddenChanged(bool hidden);
     void balanceChanged();
     void balancesChanged();
-    void notificationHandled(const QJsonObject& notification);
     void addressGenerated();
-    void readyChanged();
-public slots:
-    void reload();
-    bool rename(QString name, bool active_focus);
-    void show();
-    void hide();
 private:
-    void setHiddenAsync(bool hidden);
-    void setHidden(bool hidden);
-private:
-    Wallet* const m_wallet;
+    Context* const m_context;
     Network* const m_network;
     const quint32 m_pointer;
     const QString m_type;
@@ -92,7 +82,6 @@ private:
     QMap<QString, Address*> m_address_by_hash;
     QList<Balance*> m_balances;
     QMap<QString, Balance*> m_balance_by_id;
-    bool m_ready{false};
     friend class Wallet;
 };
 

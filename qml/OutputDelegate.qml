@@ -9,7 +9,7 @@ import QtQml.Models
 
 import "util.js" as UtilJS
 
-Button {
+ItemDelegate {
     required property var output
 
     function toggleSelection() {
@@ -20,8 +20,8 @@ Button {
         if (output.account.network.liquid) {
             return output.asset.formatAmount(amount, true)
         } else {
-            wallet.displayUnit
-            return wallet.formatAmount(amount || 0, include_ticker, wallet.settings.unit)
+            wallet.context.displayUnit
+            return wallet.formatAmount(amount || 0, include_ticker, wallet.context.settings.unit)
         }
     }
 

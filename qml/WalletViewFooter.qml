@@ -7,8 +7,9 @@ import QtQuick.Layouts
 import "util.js" as UtilJS
 
 StatusBar {
+    required property Context context
     required property Wallet wallet
-    readonly property Network network: wallet.network
+    readonly property Network network: context.network
     id: self
     contentItem: RowLayout {
         spacing: constants.s2
@@ -26,37 +27,23 @@ StatusBar {
                 font.pixelSize: 12
             }
         }
-        RowLayout {
-            spacing: constants.s0
-            Layout.fillWidth: false
-            Image {
-                fillMode: Image.PreserveAspectFit
-                sourceSize.height: 16
-                sourceSize.width: 16
-                source: self.network.electrum ? 'qrc:/svg/key.svg' : 'qrc:/svg/multi-sig.svg'
-            }
-            Label {
-                text: self.network.electrum ? qsTrId('id_singlesig') : qsTrId('id_multisig_shield')
-                font.pixelSize: 12
-            }
-        }
         HSpacer {
         }
         SessionBadge {
-            session: wallet.session
+            session: self.context.session
         }
         Loader {
-            active: 'type' in wallet.deviceDetails
+            active: 'type' in self.wallet.deviceDetails || self.context.device
             visible: active
             sourceComponent: DeviceBadge {
-                device: wallet.device
-                details: wallet.deviceDetails
+                device: self.context.device
+                details: self.wallet.deviceDetails
                 background: MouseArea {
-                    enabled: wallet.device
+                    enabled: self.context.device
                     anchors.fill: parent
                     cursorShape: Qt.PointingHandCursor
                     onClicked: {
-                        const device = wallet.device
+                        const device = self.context.device
                         if (device.type === Device.BlockstreamJade) {
                             navigation.set({ view: 'jade', device: device.uuid })
                         } else if (device.vendor === Device.Ledger) {
@@ -68,13 +55,13 @@ StatusBar {
         }
         Loader {
             property string unit: {
-                const unit = wallet.settings.unit.toLowerCase()
+                const unit = self.context.unit.toLowerCase()
                 return unit === '\u00B5btc' ? 'ubtc' : unit
             }
 
             property var amount: {
-                const ticker = wallet.events.ticker
-                const pricing = wallet.settings.pricing;
+                const ticker = self.context.events.ticker
+                const pricing = self.context.settings.pricing;
                 for (let value = 1; ; value = value * 10) {
                     const data = { [unit]: String(value) }
                     const result = wallet.convert(data);
@@ -91,7 +78,7 @@ StatusBar {
                     mipmap: true
                     source: {
                         if (self.network.liquid) {
-                            return wallet.getOrCreateAsset(self.network.policyAsset).icon
+                            return self.context.getOrCreateAsset(self.network.policyAsset).icon
                         } else {
                             return UtilJS.iconFor(self.wallet)
                         }
@@ -99,7 +86,7 @@ StatusBar {
                 }
                 Label {
                     font.pixelSize: 12
-                    text: `${Number(amount[unit])} ${wallet.displayUnit} ≈ ${amount.fiat} ${self.network.mainnet ? amount.fiat_currency : 'FIAT'}`
+                    text: `${Number(amount[unit])} ${self.context.displayUnit} ≈ ${amount.fiat} ${self.network.mainnet ? amount.fiat_currency : 'FIAT'}`
                 }
             }
         }

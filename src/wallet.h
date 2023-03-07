@@ -1,92 +1,48 @@
 #ifndef GREEN_WALLET_H
 #define GREEN_WALLET_H
 
+#include "green.h"
+
 #include <QAtomicInteger>
 #include <QJsonObject>
 #include <QList>
-#include <QObject>
+#include <QQmlEngine>
 #include <QQmlListProperty>
-#include <QThread>
-#include <QtQml>
+#include <QObject>
 
-#include "activity.h"
-#include "connectable.h"
-#include "session.h"
+QString ComputeDisplayUnit(Network* network, QString unit);
 
-class Account;
-class Asset;
-class Device;
-class Network;
-class Session;
-class Wallet;
-
-class Wallet : public Entity
+class Wallet : public QObject
 {
     Q_OBJECT
-    QML_ELEMENT
-public:
-    enum AuthenticationStatus {
-        Unauthenticated,
-        Authenticating,
-        Authenticated
-    };
-    Q_ENUM(AuthenticationStatus)
-
-private:
     Q_PROPERTY(QString id READ id CONSTANT)
+    Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(bool persisted READ isPersisted NOTIFY isPersistedChanged)
+    Q_PROPERTY(bool hasPinData READ hasPinData NOTIFY hasPinDataChanged)
+    Q_PROPERTY(int loginAttemptsRemaining READ loginAttemptsRemaining NOTIFY loginAttemptsRemainingChanged)
     Q_PROPERTY(bool watchOnly READ isWatchOnly CONSTANT)
     Q_PROPERTY(QString username READ username NOTIFY usernameChanged)
-    Q_PROPERTY(Session* session READ session NOTIFY sessionChanged)
     Q_PROPERTY(Network* network READ network CONSTANT)
-    Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
-    Q_PROPERTY(bool hasPinData READ hasPinData NOTIFY hasPinDataChanged)
-    Q_PROPERTY(bool authenticated READ isAuthenticated NOTIFY authenticationChanged)
-    Q_PROPERTY(AuthenticationStatus authentication READ authentication NOTIFY authenticationChanged)
-    Q_PROPERTY(bool ready READ ready NOTIFY readyChanged)
-    Q_PROPERTY(bool locked READ isLocked NOTIFY lockedChanged)
-    Q_PROPERTY(QJsonObject settings READ settings NOTIFY settingsChanged)
-    Q_PROPERTY(QJsonObject currencies READ currencies CONSTANT)
-    Q_PROPERTY(QQmlListProperty<Account> accounts READ accounts NOTIFY accountsChanged)
-    Q_PROPERTY(QJsonObject events READ events NOTIFY eventsChanged)
-    Q_PROPERTY(int loginAttemptsRemaining READ loginAttemptsRemaining NOTIFY loginAttemptsRemainingChanged)
-    Q_PROPERTY(QJsonObject config READ config NOTIFY configChanged)
-    Q_PROPERTY(Device* device READ device NOTIFY deviceChanged)
-    Q_PROPERTY(bool empty READ isEmpty NOTIFY emptyChanged)
-    Q_PROPERTY(int blockHeight READ blockHeight NOTIFY blockHeightChanged)
-    Q_PROPERTY(QString displayUnit READ displayUnit NOTIFY displayUnitChanged)
+    Q_PROPERTY(Context* context READ context NOTIFY contextChanged)
     Q_PROPERTY(QJsonObject deviceDetails READ deviceDetails NOTIFY deviceDetailsChanged)
+    QML_ELEMENT
+
 public:
     explicit Wallet(Network* network, const QString& hash_id, QObject *parent = nullptr);
     virtual ~Wallet();
+
+    Context* context() const { return m_context; }
+    void setContext(Context* context);
+
+    Session* session() const;
     QString id() const;
     bool isPersisted() const { return m_is_persisted; }
-    Session* session() const { return m_session; }
-    void setSession(Session *session);
     Network* network() const { return m_network; }
     QString name() const { return m_name; }
     void setName(const QString& name);
-
-    bool isAuthenticated() const { return m_authentication == Authenticated; }
-    AuthenticationStatus authentication() const { return m_authentication; }
-
-    bool ready() const { return m_ready; }
-    bool isEmpty() const { return m_empty; }
-    bool isLocked() const { return m_locked; }
-    void setLocked(bool locked);
-
-    QJsonObject settings() const;
-    QJsonObject currencies() const;
-
-    QQmlListProperty<Account> accounts();
-
-    void handleNotification(const QJsonObject& notification);
-
-    QJsonObject events() const;
+    QJsonObject pinData() const;
 
     int loginAttemptsRemaining() const { return m_login_attempts_remaining; }
-
-    QJsonObject config() const { return m_config; }
 
     Q_INVOKABLE QJsonObject convert(const QJsonObject& value) const;
 
@@ -96,116 +52,58 @@ public:
     QString formatAmount(qint64 amount, bool include_ticker) const;
     Q_INVOKABLE QString formatAmount(qint64 amount, bool include_ticker, const QString& unit) const;
 
-    Q_INVOKABLE Asset* getOrCreateAsset(const QString& id);
-
-    Account* getOrCreateAccount(const QJsonObject& data);
-
-    void createSession();
-    void setSession();
-
-    Device* device() const { return m_device; }
-    void setDevice(Device* device);
     QJsonObject deviceDetails() const { return m_device_details; }
+    void updateDeviceDetails(const QJsonObject& device_details);
 
     void updateHashId(const QString& hash_id);
-    int blockHeight() const { return m_block_height; }
-    void setBlockHeight(int block_height);
 
     Q_INVOKABLE QString getDisplayUnit(const QString& unit);
 
     void resetLoginAttempts();
     void decrementLoginAttempts();
+    void updateDisplayUnit();
+    QString username() const { return m_username; }
 public slots:
     void disconnect();
     void reload(bool refresh_accounts = false);
 
-    void updateConfig();
-    void updateSettings();
-
-    void refreshAssets();
-
     bool rename(QString name, bool active_focus);
-    void setWatchOnly(const QString& username, const QString& password);
-    void clearWatchOnly();
 signals:
+    void contextChanged();
     void isPersistedChanged(bool is_persisted);
-    void readyChanged(bool ready);
     void sessionChanged(Session* session);
     void hasPinDataChanged();
-    void authenticationChanged();
-    void lockedChanged(bool locked);
-    void notification(const QString& type, const QJsonObject& data);
-    void accountsChanged();
-    void eventsChanged(QJsonObject events);
     void nameChanged(QString name);
     void loginAttemptsRemainingChanged(int loginAttemptsRemaining);
-    void settingsChanged();
-    void configChanged();
     void pinSet();
     void emptyChanged(bool empty);
-    void usernameChanged(const QString& username);
     void blockHeightChanged(int block_height);
-    void displayUnitChanged(const QString display_unit);
     void deviceChanged(Device* device);
     void deviceDetailsChanged();
-    void watchOnlyUpdateSuccess();
-    void watchOnlyUpdateFailure();
-protected:
-    bool eventFilter(QObject* object, QEvent* event) override;
-    void timerEvent(QTimerEvent* event) override;
-private:
-    void updateEmpty();
-    void setEmpty(bool empty);
-private:
-    bool m_ready{false};
-    bool m_empty{true};
-    QString m_display_unit;
-    Device* m_device{nullptr};
-
-    void updateDisplayUnit();
+    void usernameChanged();
 public:
-    void setAuthentication(AuthenticationStatus authentication);
-    void setSettings(const QJsonObject& settings);
-    void updateCurrencies();
-
     bool m_is_persisted{false};
     QString m_id;
-    bool m_restoring{false};
-
-    Connectable<Session> m_session;
-    AuthenticationStatus m_authentication{Unauthenticated};
-    bool m_locked{true};
-    QJsonObject m_settings;
-    QJsonObject m_config;
-    QJsonObject m_currencies;
-    QJsonObject m_events;
-    QMap<QString, Asset*> m_assets;
-    QList<Account*> m_accounts;
-    QMap<int, Account*> m_accounts_by_pointer;
 
     QByteArray m_pin_data;
     QString m_name;
+    QString m_username;
     QJsonObject m_device_details;
     Network* const m_network{nullptr};
     QString m_hash_id;
     int m_login_attempts_remaining{3};
-    int m_logout_timer{-1};
     bool m_busy{false};
-    int m_block_height{0};
 
     void save();
     bool hasPinData() const { return !m_pin_data.isEmpty(); }
     void clearPinData();
 
     bool m_watch_only{false};
-    QString m_username;
     bool isWatchOnly() const { return m_watch_only; }
-    QString username() const { return m_username; }
-    QString displayUnit() const { return m_display_unit; }
 
     void setPinData(const QByteArray &pin_data);
-protected slots:
-    void updateReady();
+private:
+    Context* m_context{nullptr};
 };
 
 #endif // GREEN_WALLET_H

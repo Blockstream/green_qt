@@ -34,7 +34,7 @@ GTextField {
             }
         }
     }
-    Keys.onPressed: {
+    Keys.onPressed: (event) => {
         if (word.index > 0 && event.key === Qt.Key_Backspace && text === '') {
             nextItemInFocusChain(false).forceActiveFocus();
         }

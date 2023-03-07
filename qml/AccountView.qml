@@ -8,11 +8,19 @@ import QtQuick.Layouts
 
 import "util.js" as UtilJS
 
-ColumnLayout {
+StackLayout {
+    required property Context context
     required property Account account
+    property real contentY: {
+        let y = 0
+        for (let i = 0; i < children.length; i++) {
+            y = Math.max(y, children[i]?.item?.contentY ?? 0)
+        }
+        return y
+    }
 
-    id: account_view
-    spacing: constants.p3
+    property Component toolbar: children[currentIndex]?.item?.toolbar ?? null
+    id: self
 
     function getUnblindingData(tx) {
         return {
@@ -45,45 +53,76 @@ ColumnLayout {
         item.ToolTip.show(qsTrId('id_copied_to_clipboard'), 2000);
     }
 
-    StackLayout {
-        id: stack_layout
-        Layout.fillWidth: true
-        Layout.fillHeight: true
-        currentIndex: UtilJS.findChildIndex(stack_layout, child => child.load)
-        PersistentLoader {
-            load: navigation.param.view === 'overview'
-            sourceComponent: OverviewView {
-                showAllAssets: false
-                account: account_view.account
-            }
-        }
+    TransactionListModel {
+        id: transaction_list_model
+        account: self.account
+    }
 
-        PersistentLoader {
-            load: navigation.param.view === 'assets'
-            sourceComponent: AssetListView {
-                account: account_view.account
-            }
-        }
+    OutputListModel {
+        id: output_model
+        account: self.account
+        onModelAboutToBeReset: selection_model.clear()
+    }
 
-        PersistentLoader {
-            load: navigation.param.view === 'transactions'
-            sourceComponent: TransactionListView {
-                account: account_view.account
-            }
-        }
+    // TODO rename
+    ButtonGroup {
+        id: button_group
+    }
 
-        PersistentLoader {
-            load: navigation.param.view === 'addresses'
-            sourceComponent: AddressesListView {
-                account: account_view.account
-            }
-        }
+    OutputListModelFilter {
+        id: output_model_filter
+        filter: button_group.checkedButton?.buttonTag ?? ''
+        model: output_model
+    }
 
-        PersistentLoader {
-            load: !account_view.account.wallet.watchOnly && navigation.param.view === 'coins'
-            sourceComponent: OutputsListView {
-                account: account_view.account
-            }
+    ItemSelectionModel {
+        id: selection_model
+        model: output_model
+    }
+
+    Component {
+        id: balance_dialog
+        AssetView {
+        }
+    }
+
+    currentIndex: UtilJS.findChildIndex(self, child => child.load)
+
+    PersistentLoader {
+        load: navigation.param.view === 'overview'
+        sourceComponent: OverviewView {
+            context: self.context
+            account: self.account
+        }
+    }
+
+    PersistentLoader {
+        load: navigation.param.view === 'assets'
+        sourceComponent: AssetListView {
+            account: self.account
+        }
+    }
+
+    PersistentLoader {
+        load: navigation.param.view === 'transactions'
+        sourceComponent: TransactionListView {
+            account: self.account
+            leftPadding: 0
+        }
+    }
+
+    PersistentLoader {
+        load: navigation.param.view === 'addresses'
+        sourceComponent: AddressesListView {
+            account: self.account
+            leftPadding: 0
+        }
+    }
+
+    PersistentLoader {
+        load: !(self.account?.context?.watchonly ?? false) && navigation.param.view === 'coins'
+        sourceComponent: OutputsListView {
+            account: self.account
         }
     }
 }

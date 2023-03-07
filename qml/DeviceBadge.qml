@@ -20,10 +20,11 @@ Pane {
         fillMode: Image.PreserveAspectFit
         horizontalAlignment: Image.AlignHCenter
         source: {
-            const type = _details.type
+            const type = _details?.type ?? ''
             if (type === 'jade') return 'qrc:/svg/blockstream_jade.svg'
             if (type === 'nanos') return 'qrc:/svg/ledger_nano_s.svg'
             if (type === 'nanox') return 'qrc:/svg/ledger_nano_x.svg'
+            return ''
         }
         sourceSize.height: 16
     }

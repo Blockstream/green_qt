@@ -45,15 +45,16 @@ ColumnLayout {
             property bool matching: modelData.word === word_field.text
             spacing: 16
             Label {
-                width: 80
+                Layout.minimumWidth: 80
                 text: modelData.index + 1
                 enabled: word_field.enabled
                 horizontalAlignment: Label.AlignRight
             }
             GTextField {
                 id: word_field
-                width: 150
+                Layout.minimumWidth: 100
                 enabled: (index === 0 || repeater.itemAt(index - 1).matching) && !matching
+                focus: index === 0
                 onEnabledChanged: if (enabled) word_field.forceActiveFocus()
             }
             Image {

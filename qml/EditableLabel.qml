@@ -13,11 +13,7 @@ TextField {
     background: Rectangle {
         color: 'transparent'
         border.width: 1
-        border.color: self.activeFocus ? constants.g400 : 'white'
-        Behavior on border.color {
-            ColorAnimation {
-            }
-        }
+        border.color: 'white'
         radius: 4
         visible: !self.readOnly
         opacity: (self.activeFocus ? 0.4 : 0) + (self.hovered ? 0.1 : 0)

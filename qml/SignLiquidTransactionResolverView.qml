@@ -7,6 +7,8 @@ import QtQuick.Layouts
 Column {
     property Wallet wallet
     property SignLiquidTransactionResolver resolver
+
+    // TODO failed property removed from resolver
     property var actions: resolver.failed ? failed_action : null
 
     spacing: 16
@@ -36,6 +38,7 @@ Column {
     Loader {
         active: resolver.activity
         anchors.horizontalCenter: parent.horizontalCenter
+        // TODO failed property removed from resolver
         opacity: resolver.failed ? 0 : 1
         sourceComponent: ProgressBar {
             from: resolver.activity.progress.from
@@ -47,6 +50,7 @@ Column {
         Behavior on opacity { OpacityAnimator {} }
     }
     Label {
+        // TODO failed property removed from resolver
         opacity: resolver.failed ? 1 : 0
         Behavior on opacity { OpacityAnimator {} }
         anchors.horizontalCenter: parent.horizontalCenter

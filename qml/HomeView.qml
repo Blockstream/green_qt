@@ -120,8 +120,14 @@ MainPage {
                                 icon.color: 'transparent'
                                 flat: true
                                 text: wallet.name
-                                onClicked: navigation.set({ view: wallet.network.key, wallet: wallet.id })
-                                background: Rectangle {
+                                onClicked: {
+                                    if (wallet.context) {
+                                        navigation.set({ wallet: wallet.id })
+                                    } else {
+                                        navigation.push({ flow: 'login', wallet: wallet.id })
+                                    }
+                                }
+                                 background: Rectangle {
                                     visible: delegate.hovered
                                     radius: 8
                                     color: constants.c700
@@ -150,13 +156,13 @@ MainPage {
                                         active: 'type' in wallet.deviceDetails
                                         visible: active
                                         sourceComponent: DeviceBadge {
-                                            device: wallet.device
+                                            device: wallet.context?.device
                                             details: wallet.deviceDetails
                                         }
                                     }
                                     Rectangle {
                                         Layout.alignment: Qt.AlignVCenter
-                                        visible: wallet.ready
+                                        visible: wallet.context
                                         height: radius * 2
                                         width: radius * 2
                                         radius: 4
@@ -184,6 +190,7 @@ MainPage {
                 GPane {
                     Layout.minimumWidth: 200
                     Layout.fillHeight: true
+                    padding: constants.p2
                     background: Rectangle {
                         radius: 16
                         color: constants.c800

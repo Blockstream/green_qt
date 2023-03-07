@@ -6,8 +6,8 @@ Label {
     id: self
     property bool pointer: true
     property var error
-    visible: text != ""
-    onErrorChanged: if (error) text = error
+    visible: self.text !== ''
+    text: self.error ? (self.error.startsWith('id_') ? qsTrId(self.error) : self.error) : ''
     scale: self.error ? 1 : 0
     Behavior on scale {
         SmoothedAnimation {

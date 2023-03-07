@@ -5,67 +5,77 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 import "analytics.js" as AnalyticsJS
+import "util.js" as UtilJS
 
-GPane {
+ColumnLayout {
     required property Wallet wallet
 
     id: self
 
-    WatchOnlyLoginController {
-        id: watchonly_login_controller
+    readonly property PinLoginController controller: PinLoginController {
         wallet: self.wallet
-        password: password_field.text
-        onUnauthorized: {
-            Analytics.recordEvent('failed_wallet_login', AnalyticsJS.segmentationWalletLogin(self.wallet, { method: 'watch_only' }))
-            password_error.error = qsTrId('id_user_not_found_or_invalid')
-            password_field.enabled = true
-            password_field.clear()
-            password_field.forceActiveFocus()
+        pin: pin_view.pin.value
+        onLoginFinished: (wallet) => {
+            Analytics.recordEvent('wallet_login', AnalyticsJS.segmentationWalletLogin(wallet, {
+                method: 'pin'
+            }))
         }
-        onLoginDone: Analytics.recordEvent('wallet_login', AnalyticsJS.segmentationWalletLogin(self.wallet, { method: 'watch_only' }))
-    }
-    Action {
-        id: login_action
-        onTriggered: {
-            password_error.error = undefined
-            password_field.enabled = false
-            watchonly_login_controller.login()
+        onLoginFailed: {
+            Analytics.recordEvent('failed_wallet_login', AnalyticsJS.segmentationSession(self.wallet))
         }
     }
-    enabled: !controller.session
-    contentItem: GridLayout {
-        columns: 2
-        columnSpacing: 12
-        rowSpacing: 12
-        Label {
-            text: qsTrId('id_username')
+    Connections {
+        target: self.wallet
+        function onLoginAttemptsRemainingChanged(loginAttemptsRemaining) {
+            Analytics.recordEvent('failed_wallet_login', AnalyticsJS.segmentationWalletLogin(self.wallet, { method: 'pin' }))
+            pin_view.clear()
         }
-        Label {
-            text: self.wallet.username
+    }
+
+    spacing: 12
+    AlertView {
+        alert: AnalyticsAlert {
+            screen: 'Login'
+            network: self.wallet.network.id
         }
-        Label {
-            text: qsTrId('id_password')
+    }
+    PinView {
+        Layout.alignment: Qt.AlignHCenter
+        focus: true
+        id: pin_view
+        enabled: !self.active && self.wallet.loginAttemptsRemaining > 0 && self.wallet.hasPinData && !controller.pin
+    }
+    Label {
+        Layout.preferredWidth: 0
+        Layout.fillWidth: true
+        padding: 8
+        background: Rectangle {
+            visible: !self.wallet.hasPinData || self.wallet.loginAttemptsRemaining < 3
+            radius: 4
+            color: constants.r500
         }
-        GTextField {
-            Layout.fillWidth: true
-            id: password_field
-            echoMode: TextField.Password
-            focus: true
-            onAccepted: login_action.trigger()
+        font.capitalization: Font.AllUppercase
+        font.styleName: 'Medium'
+        font.pixelSize: 10
+        horizontalAlignment: Qt.AlignHCenter
+        text: {
+            if (!self.wallet.hasPinData) {
+                return qsTrId('id_pin_access_disabled')
+            } else switch (self.wallet.loginAttemptsRemaining) {
+                case 0: return qsTrId('id_no_attempts_remaining')
+                case 1: return qsTrId('id_last_attempt_if_failed_you_will')
+                case 2: return qsTrId('id_attempts_remaining_d').arg(self.wallet.loginAttemptsRemaining)
+                default: ''
+            }
         }
-        Label {
-        }
-        FixedErrorBadge {
-            id: password_error
-        }
-        GButton {
-            Layout.columnSpan: 2
-            Layout.alignment: Qt.AlignHCenter
-            highlighted: true
-            large: true
-            text: qsTrId('id_login')
-            onClicked: login_action.trigger()
-            enabled: watchonly_login_controller.valid && !watchonly_login_controller.session
-        }
+        wrapMode: Text.WordWrap
+    }
+    GButton {
+        Layout.alignment: Qt.AlignHCenter
+        highlighted: true
+        large: true
+        visible: self.wallet.loginAttemptsRemaining === 0 || !self.wallet.hasPinData
+        text: qsTrId('id_restore_wallet')
+        onClicked: navigation.set({ flow: 'restore', network: self.wallet.network.key })
     }
 }

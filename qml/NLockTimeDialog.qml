@@ -4,20 +4,14 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 ControllerDialog {
-    id: dialog
+    id: self
     title: qsTrId('id_set_timelock')
     controller: Controller {
-        wallet: dialog.wallet
+        id: controller
+        context: self.wallet
     }
 
-    initialItem: ColumnLayout {
-        property list<Action> actions: [
-            Action {
-                text: qsTrId('id_ok')
-                enabled: nlocktime_blocks.acceptableInput
-                onTriggered: controller.changeSettings({ nlocktime: Number.parseInt(nlocktime_blocks.text) })
-            }
-        ]
+    ColumnLayout {
         Label {
             text: qsTrId('id_redeem_your_deposited_funds')
         }
@@ -28,7 +22,7 @@ ControllerDialog {
             Layout.alignment: Qt.AlignCenter
             GTextField {
                 id: nlocktime_days
-                text: Math.round(wallet.settings.nlocktime / 144 || 0)
+                text: Math.round(context.settings.nlocktime / 144 || 0)
                 validator: IntValidator { bottom: 1; top: 200000 / 144; }
                 onTextChanged: {
                     if (activeFocus) nlocktime_blocks.text = Math.round(text * 144);
@@ -42,7 +36,7 @@ ControllerDialog {
             }
             GTextField {
                 id: nlocktime_blocks
-                text: wallet.settings.nlocktime || 0
+                text: context.settings.nlocktime || 0
                 validator: IntValidator { bottom: 144; top: 200000; }
                 onTextChanged: {
                     if (activeFocus) nlocktime_days.text = Math.round(text / 144);
@@ -54,6 +48,14 @@ ControllerDialog {
                 text: qsTrId('id_blocks')
                 Layout.alignment: Qt.AlignBaseline
             }
+        }
+        GButton {
+            Layout.alignment: Qt.AlignRight
+            text: qsTrId('id_ok')
+            large: true
+            highlighted: true
+            enabled: nlocktime_blocks.acceptableInput
+            onClicked: controller.changeSettings({ nlocktime: Number.parseInt(nlocktime_blocks.text) })
         }
     }
 }

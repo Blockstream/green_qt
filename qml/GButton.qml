@@ -53,4 +53,6 @@ Button {
             color: self.textColor
         }
     }
+    Keys.onReturnPressed: clicked()
+    Keys.onEnterPressed: clicked()
 }

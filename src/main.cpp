@@ -25,6 +25,14 @@
 
 #include <QZXing.h>
 
+#if defined(QT_QPA_PLATFORM_WAYLAND)
+Q_IMPORT_PLUGIN(QWaylandIntegrationPlugin)
+Q_IMPORT_PLUGIN(QWaylandBrcmEglPlatformIntegrationPlugin)
+Q_IMPORT_PLUGIN(QWaylandEglPlatformIntegrationPlugin)
+Q_IMPORT_PLUGIN(QWaylandXCompositeEglPlatformIntegrationPlugin)
+Q_IMPORT_PLUGIN(QWaylandXCompositeGlxPlatformIntegrationPlugin)
+#endif
+
 #if defined(QT_QPA_PLATFORM_MINIMAL)
 Q_IMPORT_PLUGIN(QMinimalIntegrationPlugin);
 #endif

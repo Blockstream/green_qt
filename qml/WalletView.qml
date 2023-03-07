@@ -6,10 +6,12 @@ import QtQuick.Controls
 import QtQuick.Controls.Material
 import QtQuick.Layouts
 import QtQml
+import Qt5Compat.GraphicalEffects
 
 import "analytics.js" as AnalyticsJS
 
 MainPage {
+    required property Context context
     required property Wallet wallet
     readonly property Account currentAccount: accounts_list.currentAccount
     readonly property bool fiatRateAvailable: formatFiat(0, false) !== 'n/a'
@@ -19,34 +21,39 @@ MainPage {
         Component.onCompleted: set({ view: wallet.network.liquid ? 'overview' : 'transactions' })
     }
 
+    function openCreateDialog() {
+        const dialog = create_account_dialog.createObject(window, { wallet: context.wallet })
+        dialog.open()
+    }
+
     function parseAmount(amount, unit) {
-        wallet.displayUnit;
-        return wallet.parseAmount(amount, unit || wallet.settings.unit);
+        wallet.context.displayUnit;
+        return wallet.parseAmount(amount, unit || wallet.context.settings.unit);
     }
 
     function formatAmount(amount, include_ticker = true) {
-        wallet.displayUnit;
-        const unit = wallet.settings.unit;
+        wallet.context.displayUnit;
+        const unit = wallet.context.settings.unit;
         return wallet.formatAmount(amount || 0, include_ticker, unit);
     }
 
     function formatFiat(sats, include_ticker = true) {
-        const ticker = wallet.events.ticker
-        const pricing = wallet.settings.pricing;
+        const ticker = wallet.context.events.ticker
+        const pricing = wallet.context.settings.pricing;
         const { fiat, fiat_currency } = wallet.convert({ satoshi: sats });
         const currency = wallet.network.mainnet ? fiat_currency : 'FIAT'
         return (fiat === null ? 'n/a' : Number(fiat).toLocaleString(Qt.locale(), 'f', 2)) + (include_ticker ? ' ' + currency : '');
     }
 
     function parseFiat(fiat) {
-        const ticker = wallet.events.ticker
+        const ticker = wallet.context.events.ticker
         fiat = fiat.trim().replace(/,/, '.');
         return fiat === '' ? 0 : wallet.convert({ fiat }).satoshi;
     }
 
     function transactionConfirmations(transaction) {
         if (transaction.data.block_height === 0) return 0;
-        return 1 + transaction.account.wallet.blockHeight - transaction.data.block_height;
+        return 1 + transaction.account.context.session.block.block_height - transaction.data.block_height;
     }
 
     function transactionStatus(confirmations) {
@@ -86,15 +93,15 @@ MainPage {
     }
 
     readonly property bool ready: {
-        if (!self.wallet) return false
-        if (!self.wallet.ready) return false
-        if (self.wallet.accounts.length === 0) return false
-        for (let i = 0; i < self.wallet.accounts.length; i++) {
-            if (!self.wallet.accounts[i].ready) return false
+        const accounts = self.wallet?.context.accounts ?? null
+        if (!accounts || accounts.length === 0) return false
+        for (let i = 0; i < accounts.length; i++) {
+            if (!accounts[i].ready) return false
         }
         return true
     }
 
+    // TODO
     onReadyChanged: if (ready) Analytics.recordEvent('wallet_active', AnalyticsJS.segmentationWalletActive(self.wallet))
 
     AnalyticsAlert {
@@ -103,9 +110,26 @@ MainPage {
         network: self.wallet.network.id
     }
 
+    AccountListModel {
+        id: account_list_model
+        context: self.context
+        filter: '!hidden'
+    }
+
+    AccountListModel {
+        id: archive_list_model
+        context: self.context
+        filter: 'hidden'
+    }
+
+    Controller {
+        id: controller
+        context: self.context
+    }
+
     FeeEstimates {
         id: fee_estimates
-        wallet: self.wallet
+        context: self.context
     }
 
     Loader2 {
@@ -115,22 +139,88 @@ MainPage {
             parent: window.Overlay.overlay
             wallet: self.wallet
             onRejected: navigation.pop()
+            onClosed: destroy()
         }
     }
     id: self
-    leftPadding: 0
-    rightPadding: 0
+    spacing: constants.s1
     header: WalletViewHeader {
-        id: wallet_view_header
-        currentAccount: self.currentAccount
+        context: self.context
         wallet: self.wallet
+        currentAccount: self.currentAccount
+        toobar: stack_view.currentItem?.toolbar ?? null
+
+        background: Rectangle {
+            color: constants.c700
+            opacity: Math.max(stack_view.currentItem?.contentY ?? 0, accounts_list.contentY) > 0 ? 1 : 0
+            Behavior on opacity {
+                SmoothedAnimation {
+                    velocity: 4
+                }
+            }
+
+            FastBlur {
+                anchors.fill: parent
+                cached: true
+                opacity: 0.55
+
+                radius: 128
+                source: ShaderEffectSource {
+                    sourceItem: self.contentItem
+                    sourceRect {
+                        x: -self.contentItem.x
+                        y: -self.contentItem.y
+                        width: self.header.width
+                        height: self.header.height
+                    }
+                }
+            }
+            Rectangle {
+                width: parent.width
+                height: 1
+                y: parent.height - 1
+                color: constants.c900
+            }
+        }
     }
     footer: WalletViewFooter {
+        context: self.context
         wallet: self.wallet
+
+        background: Rectangle {
+            color: constants.c600
+            FastBlur {
+                anchors.fill: parent
+                cached: true
+                opacity: 0.5
+                radius: 64
+                source: ShaderEffectSource {
+                    sourceItem: self.contentItem
+                    sourceRect {
+                        x: -self.contentItem.x
+                        y: self.footer.y - self.contentItem.y
+                        width: self.footer.width
+                        height: self.footer.height
+                    }
+                }
+            }
+            Rectangle {
+                width: parent.width
+                height: 1
+                color: constants.c900
+                opacity: 0.5
+            }
+            Rectangle {
+                width: parent.width
+                height: 1
+                y: 1
+                color: constants.c200
+                opacity: 0.5
+            }
+        }
     }
 
     Drawer {
-        id: notifications_drawer
         interactive: position > 0
         height: parent.height
         width: 320
@@ -154,13 +244,13 @@ MainPage {
                 }
             }
             Label {
-                visible: wallet.events && !!wallet.events.twofactor_reset && wallet.events.twofactor_reset.is_active
+                visible: wallet.context.events?.twofactor_reset?.is_active ?? false
                 padding: 8
                 leftPadding: 40
                 wrapMode: Text.WordWrap
                 Layout.fillWidth: true
                 text: {
-                    const data = wallet.events.twofactor_reset
+                    const data = wallet.context.events.twofactor_reset
                     if (!data) return ''
                     if (data.is_disputed) {
                         return qsTrId('id_warning_wallet_locked_by')
@@ -184,18 +274,19 @@ MainPage {
         }
     }
 
-
     Component {
         id: account_view_component
-        AccountView {}
+        AccountView {
+        }
     }
 
     property var account_views: ({})
     function switchToAccount(account) {
         if (account) {
+            const context = self.context
             let account_view = account_views[account]
             if (!account_view) {
-                account_view = account_view_component.createObject(null, { account })
+                account_view = account_view_component.createObject(null, { context, account })
                 account_views[account] = account_view
             }
             if (stack_view.currentItem === account_view) return;
@@ -208,40 +299,24 @@ MainPage {
     contentItem: SplitView {
         focusPolicy: Qt.ClickFocus
         handle: Item {
-            implicitWidth: 32
+            implicitWidth: constants.p3
             implicitHeight: parent.height
         }
 
-        Rectangle {
-            SplitView.minimumWidth: 380
-            clip: true
-            color: constants.c900
-
-            AccountListView {
-                id: accounts_list
-                anchors.fill: parent
-                anchors.leftMargin: constants.p3
-                anchors.topMargin: constants.p3
-                anchors.bottomMargin: constants.p3
-                wallet: self.wallet
-                onCurrentAccountChanged: switchToAccount(currentAccount)
-            }
+        AccountListView {
+            SplitView.preferredWidth: 380
+            SplitView.minimumWidth: 300
+            SplitView.maximumWidth: self.width / 3
+            id: accounts_list
+            context: self.wallet.context
+            onCurrentAccountChanged: switchToAccount(currentAccount)
         }
 
-        Rectangle {
+        StackView {
             SplitView.fillWidth: true
             SplitView.minimumWidth: self.width / 2
-            color: constants.c900
-            StackView {
-                id: stack_view
-                anchors.fill: parent
-                anchors.rightMargin: constants.p3
-                anchors.topMargin: constants.p3
-                anchors.bottomMargin: constants.p3
-                focusPolicy: Qt.ClickFocus
-                initialItem: Item {}
-                clip: true
-            }
+            id: stack_view
+            initialItem: Item {}
         }
     }
 
@@ -255,7 +330,7 @@ MainPage {
         id: system_message_dialog
         property bool alreadyOpened: false
         wallet: self.wallet
-        visible: shouldOpen && !alreadyOpened && self.match
+        visible: shouldOpen && !alreadyOpened
         onVisibleChanged: {
             if (!visible) {
                 Qt.callLater(function () { system_message_dialog.alreadyOpened = true })

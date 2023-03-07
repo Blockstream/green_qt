@@ -2,7 +2,8 @@ import QtQuick
 import QtQuick.Controls
 
 GPane {
-    topPadding: constants.p2
-    leftPadding: constants.p2
-    rightPadding: constants.p2
+    topPadding: constants.p3
+    bottomPadding: constants.p1
+    leftPadding: constants.p3
+    rightPadding: constants.p3
 }

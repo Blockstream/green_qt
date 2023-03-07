@@ -23,7 +23,13 @@ MainPage {
     header: MainPageHeader {
         topPadding: constants.p4
         background: Rectangle {
-            color: constants.c900
+            color: constants.c700
+            opacity: list_view.contentY > 0 ? 1 : 0
+            Behavior on opacity {
+                SmoothedAnimation {
+                    velocity: 4
+                }
+            }
             FastBlur {
                 anchors.fill: parent
                 cached: true
@@ -56,16 +62,14 @@ MainPage {
             onTapped: list_view.contentY = 0
         }
     }
-    contentItem: ListView {
+    contentItem: TListView {
         id: list_view
         model: controller.model
-        spacing: constants.p2
-        displayMarginBeginning: 1000
-        displayMarginEnd: 0
+        spacing: 8
         delegate: AbstractButton {
             id: news_card
             height: 220
-            implicitWidth: ListView.view.width - 16
+            implicitWidth: ListView.view.contentWidth
             padding: constants.p3
             background: Rectangle {
                 radius: 16
@@ -149,16 +153,11 @@ MainPage {
                 }
             }
         }
-        ScrollBar.vertical: ScrollBar {
-            policy: ScrollBar.AlwaysOn
-            visible: list_view.contentHeight > list_view.height
-            background: Item {
-            }
-            contentItem: Rectangle {
-                implicitWidth: 8
-                color: constants.c700
-                radius: 4
-            }
-        }
     }
-}
+
+    component TListView: ListView {
+        ScrollIndicator.vertical: ScrollIndicator { }
+        contentWidth: width
+        displayMarginBeginning: 300
+        displayMarginEnd: 100
+    }}

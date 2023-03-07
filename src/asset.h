@@ -1,17 +1,17 @@
 #ifndef GREEN_ASSET_H
 #define GREEN_ASSET_H
 
+#include "green.h"
+
 #include <QJsonObject>
 #include <QObject>
+#include <QQmlEngine>
 #include <QString>
-#include <QtQml>
-
-class Wallet;
 
 class Asset : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(Wallet* wallet READ wallet CONSTANT)
+    Q_PROPERTY(Context* context READ context CONSTANT)
     Q_PROPERTY(QString id READ id CONSTANT)
     Q_PROPERTY(QString icon READ icon NOTIFY iconChanged)
     Q_PROPERTY(QString name READ name NOTIFY dataChanged)
@@ -21,9 +21,9 @@ class Asset : public QObject
     QML_ELEMENT
     QML_UNCREATABLE("Asset is instanced by Wallet.")
 public:
-    explicit Asset(const QString& id, Wallet* wallet);
+    explicit Asset(const QString& id, Context* context);
 
-    Wallet* wallet() const { return m_wallet; }
+    Context* context() { return m_context; }
     QString id() const { return m_id; }
 
     bool isLBTC() const;
@@ -49,7 +49,7 @@ signals:
     void dataChanged();
 
 private:
-    Wallet* const m_wallet;
+    Context* const m_context;
     QString const m_id;
     QString m_icon;
     QJsonObject m_data;

@@ -8,6 +8,7 @@
 class Account;
 class Asset;
 class Transaction;
+class Context;
 
 Q_MOC_INCLUDE("account.h")
 Q_MOC_INCLUDE("asset.h")
@@ -78,6 +79,7 @@ public:
 
     bool isUnconfirmed() const;
 
+    Context* context() const;
     Account* account() const;
 
     QQmlListProperty<TransactionAmount> amounts();

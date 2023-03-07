@@ -136,6 +136,8 @@ Analytics::Analytics()
             urls.append(QString::fromStdString(COUNTLY_HOST + path));
             urls.append(QString::fromStdString(COUNTLY_TOR_ENDPOINT + path));
             QJsonObject headers;
+#define POST_APPLICATION_JSON 0
+#if POST_APPLICATION_JSON
             headers.insert("content-type", "application/json");
             QUrlQuery q(QString::fromStdString(data));
             QJsonObject body;
@@ -150,6 +152,10 @@ Analytics::Analytics()
                     body.insert(kv.first, doc.array());
                 }
             }
+#else
+            headers.insert("content-type", "application/x-www-form-urlencoded");
+            const auto body = QString::fromStdString(data);
+#endif
             req.insert("method", "POST");
             req.insert("headers", headers);
             req.insert("urls", urls);

@@ -6,6 +6,7 @@ import QtQuick.Layouts
 
 Column {
     property SignTransactionResolver resolver
+    // TODO failed property removed from resolver
     property var actions: resolver.failed ? failed_action : null
 
     spacing: 16

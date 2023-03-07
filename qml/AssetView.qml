@@ -10,7 +10,7 @@ WalletDialog {
 
     id: self
     title: qsTrId('id_asset_details')
-    wallet: balance.account.wallet
+    wallet: balance.account.context.wallet
     contentItem: ScrollView {
         id: scroll_view
         clip: true

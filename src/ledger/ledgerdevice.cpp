@@ -1,5 +1,6 @@
 #include "ledgerdevice.h"
 
+#include "activitymanager.h"
 #include "command.h"
 #include "device_p.h"
 #include "ledgergetblindingkeyactivity.h"
@@ -15,6 +16,30 @@ LedgerDevice::LedgerDevice(DevicePrivate* d, QObject* parent)
     , d(d)
 {
     d->q = this;
+
+    QTimer::singleShot(1000, this, [=] {
+        auto activity = getApp();
+        QObject::connect(activity, &Activity::finished, this, [=] {
+            activity->deleteLater();
+
+            const auto app_name = activity->name();
+            const auto app_version = activity->version();
+
+//            qInfo() << "device:" << device->name()
+//                    << "app_name:" << app_name
+//                    << "app_version:" << app_version;
+
+//            m_controller->setAppVersion(app_version);
+            setAppVersion(app_version.toString());
+            setAppName(app_name);
+        });
+//        QObject::connect(activity, &Activity::failed, this, [this, activity] {
+//            activity->deleteLater();
+//            m_controller->setStatus("error");
+//            setStatus(Status::Failed);
+//        });
+        ActivityManager::instance()->exec(activity);
+    });
 }
 
 LedgerDevice::~LedgerDevice()
@@ -220,7 +245,14 @@ void LedgerDevice::setAppVersion(const QString& app_version)
 {
     if (m_app_version == app_version) return;
     m_app_version = app_version;
-    emit appVersionChanged(m_app_version);
+    emit appVersionChanged();
+}
+
+void LedgerDevice::setAppName(const QString& app_name)
+{
+    if (m_app_name == app_name) return;
+    m_app_name= app_name;
+    emit appNameChanged();
 }
 
 DevicePrivate* DevicePrivate::get(LedgerDevice* device)

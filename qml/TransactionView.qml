@@ -33,7 +33,7 @@ WalletDialog {
     }
 
     id: self
-    wallet: transaction.account.wallet
+    wallet: transaction.account.context.wallet
     title: {
         switch (transaction.type) {
             case Transaction.Incoming: return qsTrId('id_incoming')
@@ -134,7 +134,7 @@ WalletDialog {
                 }
             }
             RowLayout {
-                visible: confirmations === 0 && !transaction.account.wallet.watchOnly && !network.liquid && (transaction.type === Transaction.Redeposit || transaction.type === Transaction.Outgoing)
+                visible: confirmations === 0 && !transaction.account.context.wallet.watchOnly && !network.liquid && (transaction.type === Transaction.Redeposit || transaction.type === Transaction.Outgoing)
                 HSpacer {
                 }
                 GButton {
@@ -155,6 +155,7 @@ WalletDialog {
                     color: 'transparent'
                     radius: 4
                 }
+                padding: constants.p1
                 contentItem: RowLayout {
                     GPane {
                         Layout.fillWidth: true
@@ -291,6 +292,7 @@ WalletDialog {
         GPane {
             property TransactionAmount amount: modelData
             Layout.fillWidth: true
+            padding: constants.p1
             background: Rectangle {
                 color: constants.c600
                 radius: 4
@@ -323,7 +325,7 @@ WalletDialog {
                     }
                     CopyableLabel {
                         text: {
-                            wallet.displayUnit
+                            wallet.context.displayUnit
                             return amount.formatAmount(true)
                         }
                         color: amount.amount > 0 ? '#00b45a' : 'white'
@@ -347,8 +349,8 @@ WalletDialog {
                 }
             }
             readonly property string satoshi: {
-                wallet.displayUnit;
-                const unit = wallet.settings.unit;
+                wallet.context.displayUnit;
+                const unit = wallet.context.settings.unit;
                 if (output) {
                     return wallet.formatAmount(output.satoshi, true, unit);
                 } else {
@@ -357,6 +359,7 @@ WalletDialog {
             }
 
             Layout.fillWidth: true
+            padding: constants.p1
             background: Rectangle {
                 color: constants.c600
                 radius: 4
@@ -381,7 +384,7 @@ WalletDialog {
                     }
                     Label {
                         Layout.fillWidth: true
-                        text: wallet.displayUnit
+                        text: wallet.context.displayUnit
                         font.pixelSize: 14
                         elide: Label.ElideRight
                     }

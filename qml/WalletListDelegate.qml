@@ -44,13 +44,13 @@ ItemDelegate {
             active: 'type' in wallet.deviceDetails
             visible: active
             sourceComponent: DeviceBadge {
-                device: wallet.device
+                device: wallet.context?.device
                 details: wallet.deviceDetails
             }
         }
         Rectangle {
             Layout.alignment: Qt.AlignVCenter
-            visible: wallet.ready
+            visible: wallet.context
             height: radius * 2
             width: radius * 2
             radius: 4
@@ -74,7 +74,7 @@ ItemDelegate {
             Menu {
                 id: wallet_menu
                 MenuItem {
-                    enabled: wallet.session && wallet.session.connected && wallet.authentication === Wallet.Authenticated && !wallet.device
+                    enabled: wallet.context && !wallet.context.device
                     text: qsTrId('id_log_out')
                     onTriggered: wallet.disconnect()
                 }
@@ -85,5 +85,11 @@ ItemDelegate {
             }
         }
     }
-    onClicked: navigation.set({ view: wallet.network.key, wallet: wallet.id })
+    onClicked: {
+        if (wallet.context) {
+            navigation.set({ wallet: wallet.id })
+        } else {
+            navigation.set({ flow: 'login', wallet: wallet.id })
+        }
+    }
 }

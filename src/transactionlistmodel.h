@@ -1,31 +1,26 @@
 #ifndef TRANSACTIONLISTMODEL_H
 #define TRANSACTIONLISTMODEL_H
 
+#include "green.h"
+
 #include <QAbstractListModel>
 #include <QModelIndex>
 #include <QSortFilterProxyModel>
 #include <QtQml>
 #include <QVector>
 
-#include "account.h"
-
-class Account;
-class Handler;
-class Transaction;
-
 class TransactionListModel : public QAbstractListModel
 {
     Q_OBJECT
+    Q_PROPERTY(TaskDispatcher* dispatcher READ dispatcher CONSTANT)
     Q_PROPERTY(Account* account READ account WRITE setAccount NOTIFY accountChanged)
-    Q_PROPERTY(bool fetching READ fetching NOTIFY fetchingChanged)
     QML_ELEMENT
 public:
     TransactionListModel(QObject* parent = nullptr);
-    ~TransactionListModel();
 
+    TaskDispatcher* dispatcher() const { return m_dispatcher; }
     Account* account() const { return m_account; }
     void setAccount(Account* account);
-    bool fetching() const { return m_fetching; }
 
     QHash<int,QByteArray> roleNames() const override;
     void fetchMore(const QModelIndex &parent) override;
@@ -36,18 +31,17 @@ public:
 public slots:
     void reload();
 signals:
-    void accountChanged(Account* account);
-    void fetchingChanged();
-private slots:
-    void handleNotification(const QJsonObject& notification);
+    void accountChanged();
 private:
+    void handleBlockEvent(const QJsonObject& event);
+    void handleTransactionEvent(const QJsonObject& event);
     void fetch(bool reset, int offset, int count);
 private:
+    TaskDispatcher* const m_dispatcher;
     Account* m_account{nullptr};
     QVector<Transaction*> m_transactions;
     bool m_has_unconfirmed{false};
     bool m_reached_end{false};
-    bool m_fetching{false};
     QTimer* const m_reload_timer;
 };
 
@@ -72,11 +66,11 @@ public:
 protected:
     bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const override;
 signals:
-    void modelChanged(TransactionListModel* model);
-    void filterChanged(const QString& filter);
-    void maxRowCountChanged(int max_row_count);
+    void modelChanged();
+    void filterChanged();
+    void maxRowCountChanged();
 private:
-    int m_max_row_count = {-1};
+    int m_max_row_count{-1};
 };
 
 #endif // TRANSACTIONLISTMODEL_H

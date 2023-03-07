@@ -67,6 +67,8 @@ public:
     virtual void exec() override
     {
         m_device->api()->signMessage(m_path, m_message, m_ae_host_commitment, m_ae_host_entropy, [this](const QVariantMap& result) {
+            qDebug() << result;
+
             auto sig = QByteArray::fromBase64(result["signature"].toString().toLocal8Bit());
             if (sig.size() == EC_SIGNATURE_RECOVERABLE_LEN) sig = sig.mid(1);
             Q_ASSERT(sig.size() == EC_SIGNATURE_LEN);
@@ -610,4 +612,11 @@ JadeDevice::State JadeDevice::state() const
     if (state == "LOCKED") return StateLocked;
     if (state == "UNINIT") return StateUninitialized;
     Q_UNREACHABLE();
+}
+
+void JadeDevice::setUnlocking(bool unlocking)
+{
+    if (m_unlocking == unlocking) return;
+    m_unlocking = unlocking;
+    emit unlockingChanged();
 }

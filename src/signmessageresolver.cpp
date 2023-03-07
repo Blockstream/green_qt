@@ -1,7 +1,6 @@
 #include "activitymanager.h"
 #include "device.h"
-#include "handler.h"
-#include "signmessageresolver.h"
+#include "resolver.h"
 #include "util.h"
 
 #include <wally_crypto.h>
@@ -25,8 +24,8 @@ QByteArray HashMessage(const QString& message)
 
 }
 
-SignMessageResolver::SignMessageResolver(Handler* handler, Device *device, const QJsonObject& result)
-    : DeviceResolver(handler, device, result)
+SignMessageResolver::SignMessageResolver(Device *device, const QJsonObject& result)
+    : DeviceResolver(device, result)
     , m_message(m_required_data.value("message").toString())
     , m_hash(HashMessage(m_message))
     , m_path(ParsePath(m_required_data.value("path").toArray()))
@@ -48,7 +47,7 @@ QString SignMessageResolver::path() const
 
 void SignMessageResolver::resolve()
 {
-    auto activity = m_use_ae_protocol ? device()->signMessage(m_message, m_path, m_ae_host_commitment, m_ae_host_entropy) : device()->signMessage(m_message, m_path);
+    auto activity = m_use_ae_protocol ? m_device->signMessage(m_message, m_path, m_ae_host_commitment, m_ae_host_entropy) : m_device->signMessage(m_message, m_path);
     connect(activity, &Activity::finished, this, [this, activity] {
         activity->deleteLater();
         QJsonObject data{
@@ -57,11 +56,12 @@ void SignMessageResolver::resolve()
         if (m_use_ae_protocol) {
             data["signer_commitment"] = QString::fromLocal8Bit(activity->signerCommitment().toHex());
         }
-        handler()->resolve(data);
+        qDebug() << "******" << data;
+        emit resolved(data);
     });
     connect(activity, &Activity::failed, this, [this, activity] {
         activity->deleteLater();
-        setFailed(true);
+        emit failed();
     });
     ActivityManager::instance()->exec(activity);
     pushActivity(activity);

@@ -3,7 +3,8 @@ linux-x86_64:build:
   extends:
     - .build
   tags:
-    - ga
+    - qt
+    - linux-x86_64
   after_script:
     - tools/appimage.sh $CI_PROJECT_DIR
   artifacts:

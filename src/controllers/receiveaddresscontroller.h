@@ -1,13 +1,15 @@
 #ifndef GREEN_RECEIVEADDRESSCONTROLLER_H
 #define GREEN_RECEIVEADDRESSCONTROLLER_H
 
+#include "controller.h"
+
 #include <QJsonObject>
 #include <QObject>
 #include <QtQml>
 
 class Account;
 
-class ReceiveAddressController : public QObject
+class ReceiveAddressController : public Controller
 {
     Q_OBJECT
     Q_PROPERTY(Account* account READ account WRITE setAccount NOTIFY accountChanged)
@@ -60,4 +62,15 @@ public:
     AddressVerification m_address_verification{VerificationNone};
 };
 
+#include "task.h"
+class GetReceiveAddressTask : public AuthHandlerTask
+{
+    Q_OBJECT
+    QML_ELEMENT
+public:
+    Account* const m_account;
+    bool call(GA_session* session, GA_auth_handler** auth_handler) override;
+public:
+    GetReceiveAddressTask(Account* account);
+};
 #endif // GREEN_RECEIVEADDRESSCONTROLLER_H

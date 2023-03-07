@@ -1,5 +1,7 @@
+#include "context.h"
 #include "feeestimates.h"
 #include "ga.h"
+#include "session.h"
 #include "wallet.h"
 
 FeeEstimates::FeeEstimates(QObject* parent) :
@@ -8,11 +10,12 @@ FeeEstimates::FeeEstimates(QObject* parent) :
     connect(&m_update_timer, &QTimer::timeout, this, &FeeEstimates::update);
 }
 
-void FeeEstimates::setWallet(Wallet* wallet)
+void FeeEstimates::setContext(Context* context)
 {
-    if (!m_wallet.update(wallet)) return;
-    emit walletChanged();
-    if (m_wallet) {
+    if (m_context == context) return;
+    m_context = context;
+    emit contextChanged();
+    if (m_context) {
         update();
         m_update_timer.start(120000);
     } else {
@@ -22,8 +25,8 @@ void FeeEstimates::setWallet(Wallet* wallet)
 
 void FeeEstimates::update()
 {
-    if (!m_wallet->session()) return;
-    const auto fees = gdk::get_fee_estimates(m_wallet->session()->m_session);
+    if (!m_context || !m_context->session()) return;
+    const auto fees = gdk::get_fee_estimates(m_context->session()->m_session);
     if (fees.isEmpty() || m_fees == fees) return;
     m_fees = fees;
     emit feesChanged();

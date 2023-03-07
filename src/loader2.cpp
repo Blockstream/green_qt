@@ -86,10 +86,65 @@ void Loader2::update()
     }
 
     if (m_object && (!m_active || !m_source_component)) {
-        qmlEngine(this)->setObjectOwnership(m_object, QQmlEngine::JavaScriptOwnership);
-
+        qmlEngine(m_object)->setObjectOwnership(m_object, QJSEngine::JavaScriptOwnership);
         m_object = nullptr;
         emit objectChanged();
         return;
     }
 }
+
+Clipper::Clipper(QQuickItem* parent)
+    : QQuickItem(parent)
+{
+    setClip(true);
+    setFlag(ItemHasContents);
+    setFlag(ItemClipsChildrenToShape);
+}
+
+QRectF Clipper::clipRect() const
+{
+    const auto r = QQuickItem::clipRect().adjusted(-m_offset.x(), -m_offset.y(), m_offset.x(), m_offset.y());
+    qDebug() << Q_FUNC_INFO << r;
+    return r;
+}
+
+void Clipper::setOffset(const QRectF& offset)
+{
+    if (m_offset == offset) return;
+    m_offset = offset;
+    emit offsetChanged();
+    qDebug() << Q_FUNC_INFO << offset;
+    update();
+}
+
+LimitProxyModel::LimitProxyModel(QObject* parent)
+    : QSortFilterProxyModel(parent)
+{
+}
+
+void LimitProxyModel::setSource(QAbstractItemModel* source)
+{
+    if (m_source == source) return;
+    m_source = source;
+    emit sourceChanged();
+    setSourceModel(source);
+}
+
+int LimitProxyModel::limit() const
+{
+    return m_limit;
+}
+
+void LimitProxyModel::setLimit(int limit)
+{
+    if (m_limit == limit) return;
+    m_limit = limit;
+    emit limitChanged();
+    invalidateRowsFilter();
+}
+
+bool LimitProxyModel::filterAcceptsRow(int source_row, const QModelIndex& source_parent) const
+{
+    return source_row < m_limit;
+}
+

@@ -9,8 +9,7 @@ SideButton {
     isCurrent: navigation.param.wallet === self.wallet.id
     onClicked: navigation.set({ view: wallet.network.key, wallet: self.wallet.id })
     text: wallet.name
-    busy: wallet.activities.length > 0
-    ready: wallet.ready
+//    busy: wallet.activities.length > 0
     icon.width: 16
     icon.height: 16
     leftPadding: 32
@@ -21,7 +20,7 @@ SideButton {
         active: 'type' in wallet.deviceDetails
         visible: active
         sourceComponent: DeviceBadge {
-            device: wallet.device
+            device: wallet.context?.device
             details: wallet.deviceDetails
         }
     }

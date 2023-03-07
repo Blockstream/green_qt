@@ -10,7 +10,9 @@ class Clipboard : public QObject
     Q_OBJECT
 public:
     static Clipboard* instance();
+
     Q_INVOKABLE void copy(const QString& data); // NOLINT(build/include_what_you_use)
+    Q_INVOKABLE QString text() const; // NOLINT(build/include_what_you_use)
 private:
     Clipboard(QObject* parent = nullptr);
 };

@@ -8,32 +8,43 @@ import "analytics.js" as AnalyticsJS
 ControllerDialog {
     property string method
 
-    id: dialog
+    id: self
     title: qsTrId('id_set_up_twofactor_authentication')
-    doneText: qsTrId('id_disabled')
-    controller: Controller {
-        wallet: dialog.wallet
+
+    controller: TwoFactorController {
+        id: controller
+        context: self.context
+        onFinished: self.accept()
     }
-    initialItem: RowLayout {
-        property list<Action> actions: [
-            Action {
-                text: qsTrId('id_next')
-                onTriggered: controller.disableTwoFactor(method)
-            }
-        ]
+
+    AnalyticsView {
+        active: self.opened
+        name: 'WalletSettings2FASetup'
+        segmentation: AnalyticsJS.segmentationSession(self.wallet)
+    }
+
+    ColumnLayout {
         spacing: constants.s1
+        Spacer {
+        }
         Image {
+            Layout.alignment: Qt.AlignCenter
             source: `qrc:/svg/2fa_${method}.svg`
-            sourceSize.width: 32
-            sourceSize.height: 32
+            sourceSize.width: 64
+            sourceSize.height: 64
         }
         Label {
-            text: qsTrId('id_disable_s_twofactor').arg(method)
+            Layout.alignment: Qt.AlignCenter
+            text: qsTrId('id_disable_s_twofactor').arg(method.toUpperCase())
         }
-    }
-    AnalyticsView {
-        active: dialog.opened
-        name: 'WalletSettings2FASetup'
-        segmentation: AnalyticsJS.segmentationSession(dialog.wallet)
+        GButton {
+            Layout.alignment: Qt.AlignCenter
+            highlighted: true
+            text: qsTrId('id_next')
+            focus: true
+            onClicked: controller.disable(method)
+        }
+        VSpacer {
+        }
     }
 }

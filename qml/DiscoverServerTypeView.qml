@@ -32,7 +32,6 @@ Page {
         rightPadding: 0
         bottomPadding: constants.p2
         GButton {
-            large: true
             text: qsTrId('id_back')
             onClicked: navigation.pop()
         }

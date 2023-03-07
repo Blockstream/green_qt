@@ -3,12 +3,15 @@
 #include <QDebug>
 
 #include "account.h"
-#include "handlers/getunspentoutputshandler.h"
 #include "output.h"
 #include "resolver.h"
+#include "session.h"
+#include "task.h"
+#include "wallet.h"
 
 OutputListModel::OutputListModel(QObject* parent)
     : QAbstractListModel(parent)
+    , m_dispatcher(new TaskDispatcher(this))
 {
 }
 
@@ -16,39 +19,47 @@ OutputListModel::~OutputListModel()
 {
 }
 
-void OutputListModel::setAccount(Account *account)
+void OutputListModel::setAccount(Account* account)
 {
-    if (!m_account.update(account)) return;
-    beginResetModel();
-    m_outputs.clear();
-    endResetModel();
-    emit accountChanged(m_account);
-    fetch();
+    if (m_account == account) return;
+
     if (m_account) {
-        m_account.track(QObject::connect(m_account, &Account::notificationHandled, this, [this](const QJsonObject& notification) {
-            const auto event = notification.value("event").toString();
-            if (event == "transaction") {
-                // In Wallet::handleNotification transaction notifications are only
-                // forward to relevant accounts meaning that it's fine to always
-                // update there.
-                fetch();
-            } else if (event == "block") {
-                bool has_unconfirmed = false;
-                for (auto& output : m_outputs) {
-                    if (output->unconfirmed()) {
-                        has_unconfirmed = true;
-                        break;
-                    }
-                }
-                if (has_unconfirmed) {
-                    // Need to fetch coins since unconfirmed coins can now be included in the block.
+        beginResetModel();
+        m_outputs.clear();
+        endResetModel();
+    }
+
+    m_account = account;
+    emit accountChanged(m_account);
+
+    fetch();
+
+    if (m_account) {
+        auto session = m_account->session();
+        connect(session, &Session::transactionEvent, this, [this](const QJsonObject& event) {
+            for (auto pointer : event.value("subaccounts").toArray()) {
+                if (m_account->pointer() == pointer.toInt()) {
                     fetch();
-                } else {
-                    // Just update existing coins.
-                    update();
+                    return;
                 }
             }
-        }));
+        });
+        connect(session, &Session::blockEvent, this, [this](const QJsonObject& event) {
+            bool has_unconfirmed = false;
+            for (auto& output : m_outputs) {
+                if (output->unconfirmed()) {
+                    has_unconfirmed = true;
+                    break;
+                }
+            }
+            if (has_unconfirmed) {
+                // Need to fetch coins since unconfirmed coins can now be included in the block.
+                fetch();
+            } else {
+                // Just update existing coins.
+                update();
+            }
+        });
     }
 }
 
@@ -57,13 +68,12 @@ void OutputListModel::fetch()
     if (!m_account) return;
     if (m_fetching) return;
 
-    auto handler = new GetUnspentOutputsHandler(0, true, m_account);
+    auto get_unspent_outputs = new GetUnspentOutputsTask(0, true, m_account->pointer(), m_account->context());
 
-    QObject::connect(handler, &Handler::done, this, [=] {
-        handler->deleteLater();
+    connect(get_unspent_outputs, &Task::finished, this, [=] {
         beginResetModel();
         m_outputs.clear();
-        for (const QJsonValue& assets_values : handler->unspentOutputs()) {
+        for (const QJsonValue& assets_values : get_unspent_outputs->unspentOutputs()) {
             for (const QJsonValue& asset_value : assets_values.toArray()) {
                 auto output = account()->getOrCreateOutput(asset_value.toObject());
                 m_outputs.append(output);
@@ -74,11 +84,7 @@ void OutputListModel::fetch()
         emit fetchingChanged();
     });
 
-    connect(handler, &Handler::resolver, this, [](Resolver* resolver) {
-        resolver->resolve();
-    });
-
-    handler->exec();
+    m_dispatcher->add(get_unspent_outputs);
 
     m_fetching = true;
     emit fetchingChanged();

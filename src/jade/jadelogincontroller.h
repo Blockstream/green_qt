@@ -1,67 +1,139 @@
 #ifndef GREEN_JADELOGINCONTROLLER_H
 #define GREEN_JADELOGINCONTROLLER_H
 
+#include "green.h"
+
 #include <QObject>
 #include <QtQml/qqml.h>
 
-class JadeDevice;
-class Session;
-class Wallet;
+#include "controller.h"
+#include "task.h"
 
-class JadeLoginController : public QObject
+class JadeDevice;
+
+class JadeController : public Controller
 {
     Q_OBJECT
     Q_PROPERTY(JadeDevice* device READ device WRITE setDevice NOTIFY deviceChanged)
-    Q_PROPERTY(Session* session READ session NOTIFY sessionChanged)
+    QML_ELEMENT
+
+public:
+    JadeController(QObject* parent = nullptr);
+
+    JadeDevice* device() const { return m_device; }
+    void setDevice(JadeDevice* device);
+
+signals:
+    void deviceChanged();
+    void setPin(QVariantMap info);
+
+protected:
+    JadeDevice* m_device{nullptr};
+};
+
+class JadeSetupController : public JadeController
+{
+    Q_OBJECT
+    QML_ELEMENT
+public:
+    JadeSetupController(QObject* parent = nullptr);
+
+public slots:
+    void setup(const QString& network);
+};
+
+
+class JadeSetupTask : public Task
+{
+    Q_OBJECT
+    QML_ELEMENT
+public:
+    JadeSetupTask(JadeSetupController* controller);
+private:
+    void update() override;
+private:
+    JadeSetupController* const m_controller;
+};
+
+class JadeUnlockController : public JadeController
+{
+    Q_OBJECT
+    QML_ELEMENT
+public:
+    JadeUnlockController(QObject* parent = nullptr);
+
+public slots:
+    void unlock();
+};
+
+class JadeLoginController : public JadeController
+{
+    Q_OBJECT
     Q_PROPERTY(QString network READ network WRITE setNetwork NOTIFY networkChanged)
     Q_PROPERTY(bool enabled READ isEnabled NOTIFY isEnabledChanged)
-    Q_PROPERTY(bool active READ isActive WRITE setActive NOTIFY activeChanged)
     Q_PROPERTY(Wallet* wallet READ wallet WRITE setWallet NOTIFY walletChanged)
-    Q_PROPERTY(QString status READ status NOTIFY statusChanged)
     QML_ELEMENT
 public:
     JadeLoginController(QObject* parent = nullptr);
-    JadeDevice* device() const { return m_device; }
-    void setDevice(JadeDevice* device);
-    Session* session() const { return m_session; }
     QString network() const { return m_network; }
     void setNetwork(const QString& network);
     bool isEnabled() const { return m_enabled; }
     void setEnabled(bool enabled);
-    bool isActive() const { return m_active; }
-    void setActive(bool active);
     Wallet* wallet() const { return m_wallet; }
     void setWallet(Wallet* wallet);
-    QString status() const { return m_status; }
-private slots:
-    void update();
-private:
-    void connect();
-    void unlock();
-    void identify();
+
+public slots:
     void login();
-    void signup();
+
 signals:
-    void deviceChanged(JadeDevice* device);
-    void sessionChanged(Session* session);
-    void networkChanged(const QString& network);
-    void isEnabledChanged(bool enabled);
-    void walletChanged(Wallet* wallet);
+    void deviceChanged();
+    void networkChanged();
+    void isEnabledChanged();
+    void walletChanged();
     void invalidPin();
-    void statusChanged();
-    void activeChanged(bool active);
     void loginDone();
-    void setPin(QVariantMap info);
-private:
+public:
     JadeDevice* m_device{nullptr};
-    Session* m_session{nullptr};
     QString m_network;
     bool m_enabled{false};
-    bool m_active{false};
     QString m_wallet_hash_id;
     Wallet* m_wallet{nullptr};
-    QString m_status;
-    bool m_identifying{false};
+};
+
+class JadeUnlockTask : public Task
+{
+    Q_OBJECT
+    QML_ELEMENT
+public:
+    JadeUnlockTask(JadeController* controller);
+private:
+    void update() override;
+private:
+    JadeController* const m_controller;
+};
+
+class JadeIdentifyTask : public Task
+{
+    Q_OBJECT
+    QML_ELEMENT
+public:
+    JadeIdentifyTask(JadeLoginController* controller);
+private:
+    void update() override;
+private:
+    JadeLoginController* const m_controller;
+};
+
+class JadeLoginTask : public Task
+{
+    Q_OBJECT
+    QML_ELEMENT
+public:
+    JadeLoginTask(JadeLoginController* controller);
+private:
+    void update() override;
+private:
+    JadeLoginController* const m_controller;
 };
 
 #endif // GREEN_JADELOGINCONTROLLER_H

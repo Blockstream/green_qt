@@ -4,66 +4,52 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 GPane {
-    property bool showAllAssets: false
+    required property Context context
     required property Account account
 
     id: self
     Layout.fillWidth: true
     Layout.fillHeight: true
-    padding: 0
-    contentItem: ColumnLayout {
-        Layout.fillWidth: true
-        spacing: constants.p1
 
-        GHeader {
-            Label {
-                Layout.alignment: Qt.AlignVCenter
-                text: qsTrId('id_overview')
-                font.pixelSize: 20
-                font.styleName: 'Bold'
-                verticalAlignment: Label.AlignVCenter
-            }
-            HSpacer {
-            }
-        }
+    contentItem: ColumnLayout {
+        spacing: constants.p3
 
         LiquidHeader {
-            Layout.topMargin: constants.p2
             visible: self.account.network.liquid
         }
 
-        TransactionListView {
-            id: transaction_list_view
-            header: GHeader {
-                Label {
-                    Layout.alignment: Qt.AlignVCenter
-                    id: label
-                    text: qsTrId('id_latest_transactions')
-                    font.pixelSize: 20
-                    font.styleName: 'Bold'
+        ColumnLayout {
+            Layout.fillWidth: true
+            spacing: 8
+            Label {
+                text: qsTrId('id_latest_transactions')
+                font.pixelSize: 16
+                font.styleName: 'Bold'
+            }
+            Repeater {
+                model: LimitProxyModel {
+                    source: transaction_list_model
+                    limit: 5
                 }
-                HSpacer {
-                }
-                GButton {
-                    visible: transaction_list_view.list.count > 0
-                    Layout.alignment: Qt.AlignVCenter
-                    text: qsTrId('id_show_all')
-                    onClicked: navigation.set({ view: 'transactions' })
+                delegate: TransactionDelegate {
+                    Layout.fillWidth: true
+                    context: self.context
+                    account: self.account
                 }
             }
-            hasExport: false
-            label.font.pixelSize: 18
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            height: contentHeight
-            account: self.account
-            maxRowCount: 10
+            GButton {
+                Layout.alignment: Qt.AlignHCenter
+                text: qsTrId('id_show_all')
+                onClicked: navigation.set({ view: 'transactions' })
+            }
+        }
+        VSpacer {
         }
     }
 
     component LiquidHeader: ColumnLayout {
         Layout.fillWidth: true
-        Layout.fillHeight: true
+        Layout.fillHeight: false
         spacing: constants.p1
 
         AccountIdBadge {
@@ -72,32 +58,39 @@ GPane {
             Layout.fillWidth: true
         }
 
-        AssetListView {
-            account: self.account
-            header: GHeader {
-                Label {
-                    text: qsTrId('id_assets')
-                    font.pixelSize: 20
-                    font.styleName: 'Bold'
+        ColumnLayout {
+            spacing: 8
+            Label {
+                background: Rectangle {
+                    color: 'red'
+                    opacity: 0.1
                 }
-                HSpacer {
+
+                text: qsTrId('id_assets')
+                font.pixelSize: 16
+                font.styleName: 'Bold'
+            }
+            Repeater {
+                id: asset_repeater
+                delegate: AssetDelegate {
+                    Layout.fillWidth: true
+                    balance: modelData
+                    onClicked: if (hasDetails) balance_dialog.createObject(window, { balance }).open()
                 }
-                GButton {
-                    visible: self.account.balances.length > 3
-                    Layout.alignment: Qt.AlignHCenter
-                    text: qsTrId('id_show_all')
-                    onClicked: navigation.set({ view: 'assets' })
+                model: {
+                    const balances = []
+                    for (let i = 0; i < self.account.balances.length; ++i) {
+                        if (i === 3) break
+                        balances.push(self.account.balances[i])
+                    }
+                    return balances
                 }
             }
-            Layout.fillWidth: true
-            label.font.pixelSize: 18
-            model: {
-                const balances = []
-                for (let i = 0; i < self.account.balances.length; ++i) {
-                    if (!self.showAllAssets && i === 3) break
-                    balances.push(self.account.balances[i])
-                }
-                return balances
+            GButton {
+                visible: self.account.balances.length > 3
+                Layout.alignment: Qt.AlignHCenter
+                text: qsTrId('id_show_all')
+                onClicked: navigation.set({ view: 'assets' })
             }
         }
     }

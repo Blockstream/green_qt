@@ -4,99 +4,98 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-WalletDialog {
-    id: controller_dialog
-    property Controller controller
-    property alias initialItem: stack_view.initialItem
-    property string description
-    property string placeholder
-    property string doneText: qsTrId('id_done')
+import "util.js" as UtilJS
 
-    property real minimumHeight: 0
-    property real minimumWidth: 0
+WalletDialog {
+    id: self
+
+    default property alias contentItemData: stack_layout.data
+    required property Controller controller
 
     property bool autoDestroy: false
     onClosed: if (autoDestroy) destroy()
     closePolicy: Popup.NoAutoClose
-    footer: DialogFooter {
-        HSpacer {}
-        Repeater {
-            model: stack_view.currentItem ? stack_view.currentItem.actions : []
-            GButton {
-                destructive: modelData.destructive || false
-                highlighted: modelData.highlighted || false
-                large: true
-                action: modelData
+
+    toolbar: RowLayout {
+        spacing: 12
+        ProgressIndicator {
+            Layout.minimumHeight: 24
+            Layout.minimumWidth: 24
+            indeterminate: self.controller?.dispatcher.busy ?? false
+            progress: 0
+            opacity: self.controller?.dispatcher?.busy ? 1 : 0
+            Behavior on opacity {
+                SmoothedAnimation {
+                }
+            }
+        }
+        SessionBadge {
+            visible: !!self.controller?.context
+            session: self.controller?.context?.session ?? null
+        }
+    }
+/*
+    footer: Label {
+        visible: false
+        font.pixelSize: 8
+        text: {
+            let t = ''
+            for (let i = 0; i < stack_layout.children.length; ++i) {
+                const child = stack_layout.children[i]
+                t = t + child + '  task=' + child.task + '  active=' + child.active + ' status=' + (child.task?.result?.status ?? 'N/A') + ' focus=' + child.focus + ' active_focus=' + child.activeFocus + '\n'
             }
         }
     }
-
-    property var method_label: ({
-        email: 'id_email',
-        gauth: 'id_authenticator_app',
-        phone: 'id_phone_call',
-        sms: 'id_sms',
-        telegram: 'id_telegram'
-    })
-
-    Connections {
-        target: controller
-        function onFinished(handler) {
-            push(handler, doneComponent)
-        }
-        function onError(handler) {
-            if (handler.result.error === 'id_invalid_twofactor_code') {
-                push(handler, twoFactorAuthenticationErrorComponent)
-            } else {
-                push(handler, genericErrorComponent)
-            }
-        }
-        function onRequestCode(handler) { push(handler, requestCodeComponent) }
-        function onResolver(resolver) {
-            const wallet = controller_dialog.wallet
-            if (resolver instanceof TwoFactorResolver) {
-                stack_view.push(resolveCodeComponent, { resolver })
-                return
-            }
-            if (resolver instanceof SignTransactionResolver) {
-                let component
-                if (resolver.device instanceof JadeDevice) {
-                    component = jade_sign_transaction_view
-                } else {
-                    component = ledger_sign_transaction_view
-                }
-                const view = component.createObject(stack_view, { resolver, wallet })
-                stack_view.push(view)
-                resolver.resolve()
-                return
-            }
-            if (resolver instanceof SignLiquidTransactionResolver) {
-                if (resolver.device instanceof JadeDevice) {
-                    const view = jade_sign_liquid_transaction_view.createObject(stack_view, { resolver, wallet })
-                    stack_view.push(view)
-                    resolver.resolve()
-                } else {
-                    stack_view.push(sign_liquid_transaction_resolver_view_component, { resolver, wallet })
-                    resolver.resolve()
-                }
-                return
-            }
-            if (resolver instanceof SignMessageResolver) {
-                if (resolver.device instanceof JadeDevice) {
-                    const view = jade_sign_message_view.createObject(stack_view, { resolver })
-                    stack_view.push(view)
-                    return
-                }
-            }
-            // automatically resolve
-            resolver.resolve()
-        }
-    }
-
-    function push(handler, component) {
-        const view = component.createObject(null, { handler })
-        stack_view.push(view)
-    }
+*/
+//    Connections {
+//        target: controller
+//        function onFinished(handler) {
+//            push(handler, doneComponent)
+//        }
+//        function onError(handler) {
+//            if (handler.result.error === 'id_invalid_twofactor_code') {
+//                push(handler, twoFactorAuthenticationErrorComponent)
+//            } else {
+//                push(handler, genericErrorComponent)
+//            }
+//        }
+//        function onRequestCode(handler) { push(handler, requestCodeComponent) }
+//        function onResolver(resolver) {
+//            const wallet = self.wallet
+//            if (resolver instanceof SignTransactionResolver) {
+//                let component
+//                if (resolver.device instanceof JadeDevice) {
+//                    component = jade_sign_transaction_view
+//                } else {
+//                    component = ledger_sign_transaction_view
+//                }
+//                const view = component.createObject(stack_view, { resolver, wallet })
+//                stack_view.push(view)
+//                resolver.resolve()
+//                return
+//            }
+//            if (resolver instanceof SignLiquidTransactionResolver) {
+//                if (resolver.device instanceof JadeDevice) {
+//                    const view = jade_sign_liquid_transaction_view.createObject(stack_view, { resolver, wallet })
+//                    stack_view.push(view)
+//                    resolver.resolve()
+//                } else {
+//                    stack_view.push(sign_liquid_transaction_resolver_view_component, { resolver, wallet })
+//                    resolver.resolve()
+//                }
+//                return
+//            }
+//            if (resolver instanceof SignMessageResolver) {
+//                if (resolver.device instanceof JadeDevice) {
+//                    const view = jade_sign_message_view.createObject(stack_view, { resolver })
+//                    stack_view.push(view)
+//                    return
+//                }
+//            }
+//            // automatically resolve
+//            resolver.resolve()
+//        }
+//    }
 
     Component {
         id: sign_transaction_resolver_view_component
@@ -129,173 +128,14 @@ WalletDialog {
         }
     }
 
-    property Component requestCodeComponent: ColumnLayout {
-        property Handler handler
-        Repeater {
-            // TODO: handler is deleted while this view is on the stack view
-            model: handler ? handler.result.methods : null
-            Button {
-                property string method: modelData
-                icon.source: `qrc:/svg/2fa_${method}.svg`
-                icon.color: 'transparent'
-                flat: true
-                Layout.fillWidth: true
-                text: qsTrId(method_label[method])
-                onClicked: handler.request(method)
-            }
-        }
-        Spacer {
-        }
-    }
-
-    property Component resolveCodeComponent: WizardPage {
-        property TwoFactorResolver resolver
-        Component.onCompleted: code_field.forceActiveFocus()
-        Connections {
-            target: resolver
-            function onInvalidCode() {
-                code_field.clear()
-                code_field.ToolTip.show(qsTrId('id_invalid_twofactor_code'), 1000);
-                code_field.forceActiveFocus()
-            }
-        }
-        contentItem: ColumnLayout {
-            spacing: constants.s1
-            Image {
-                Layout.alignment: Qt.AlignCenter
-                source: resolver ? `qrc:/svg/2fa_${resolver.method}.svg` : ''
-                sourceSize.width: 64
-                sourceSize.height: 64
-            }
-            Loader {
-                Layout.alignment: Qt.AlignCenter
-                active: resolver && wallet.config[resolver.method].enabled && !(resolver.handler instanceof TwoFactorResetHandler)
-                visible: active
-                sourceComponent: Label {
-                    text: {
-                        if (resolver.method === 'gauth') return qsTrId('id_authenticator_app')
-                        return wallet.config[resolver.method].data
-                    }
-                    color: constants.c100
-                    font.pixelSize: 14
-                }
-            }
-            Loader {
-                Layout.alignment: Qt.AlignCenter
-                active: resolver && resolver.handler instanceof TwoFactorResetHandler
-                visible: active
-                sourceComponent: Label {
-                    text: resolver.handler.email
-                    color: constants.c100
-                    font.pixelSize: 14
-                }
-            }
-            Loader {
-                Layout.alignment: Qt.AlignCenter
-                active: resolver && resolver.method === 'telegram'
-                visible: active
-                sourceComponent: RowLayout {
-                    spacing: constants.s1
-                    ColumnLayout {
-                        GButton {
-                            Layout.fillWidth: true
-                            large: true
-                            text: 'Open in Browser'
-                            onClicked: Qt.openUrlExternally(resolver.telegramBrowserUrl)
-                        }
-                        GButton {
-                            Layout.fillWidth: true
-                            large: true
-                            text: 'Open Telegram'
-                            onClicked: Qt.openUrlExternally(resolver.telegramAppUrl)
-                        }
-                    }
-                    QRCode {
-                        text: resolver.telegramAppUrl
-                    }
-                }
-            }
-            Label {
-                Layout.alignment: Qt.AlignCenter
-                text: resolver ? qsTrId('id_please_provide_your_1s_code').arg(resolver.method) : ''
-            }
-            Timer {
-                id: delayed_resolve_timer
-                interval: 300
-                running: false
-                repeat: false
-                onTriggered: {
-                    code_field.readOnly = false
-                    resolver.resolve()
-                }
-            }
-            GTextField {
-                id: code_field
-                Layout.alignment: Qt.AlignCenter
-                onTextChanged: {
-                    if (acceptableInput) {
-                        code_field.readOnly = true
-                        resolver.code = code_field.text
-                        delayed_resolve_timer.start()
-                    }
-                }
-                validator: RegularExpressionValidator {
-                    regularExpression: /[0-9]{6}/
-                }
-            }
-            Loader {
-                Layout.alignment: Qt.AlignCenter
-                active: {
-                    if (!resolver) return false
-                    if (resolver.method === 'gauth') return false
-                    if (resolver.method === 'telegram') return false
-                    return resolver.attemptsRemaining < 3
-                }
-                visible: active
-                sourceComponent: Label {
-                    text: resolver ? qsTrId('id_attempts_remaining_d').arg(resolver.attemptsRemaining) : ''
-                    font.pixelSize: 10
-                }
-            }
-
-        }
-    }
-
-    property Component doneComponent: WizardPage {
-        actions: Action {
-            text: qsTrId('id_ok')
-            onTriggered: controller_dialog.accept()
-        }
-        ColumnLayout {
-            anchors.fill: parent
-            spacing: constants.s2
-            VSpacer {
-            }
-            Image {
-                Layout.alignment: Qt.AlignHCenter
-                source: 'qrc:/svg/check.svg'
-                sourceSize.width: 64
-                sourceSize.height: 64
-            }
-            Label {
-                id: doneLabel
-                text: doneText
-                font.pixelSize: 20
-                Layout.fillWidth: true
-                horizontalAlignment: Label.AlignHCenter
-            }
-            VSpacer {
-            }
-        }
-    }
-
+    /*
     property Component genericErrorComponent: WizardPage {
         property Handler handler
 
         id: self
         actions: Action {
             text: qsTrId('id_ok')
-            onTriggered: controller_dialog.accept()
+            onTriggered: self.accept()
         }
         GButton {
             anchors.centerIn: parent
@@ -315,34 +155,91 @@ WalletDialog {
             }
         }
     }
+*/
 
-    property Component twoFactorAuthenticationErrorComponent: WizardPage {
-        actions: Action {
-            text: qsTrId('id_ok')
-            onTriggered: controller_dialog.accept()
-        }
-        GButton {
-            anchors.centerIn: parent
-            icon.source: 'qrc:/svg/warning_black.svg'
-            baseColor: '#e5e7e9'
-            textColor: 'black'
-            highlighted: true
-            large: true
-            text: qsTrId('id_no_attempts_remaining')
-            scale: hovered ? 1.01 : 1
-            transformOrigin: Item.Center
-            Behavior on scale {
-                NumberAnimation {
-                    easing.type: Easing.OutBack
-                    duration: 400
+    contentItem: RowLayout {
+        spacing: 8
+        StackLayout {
+            id: stack_layout
+            currentIndex: {
+                let i
+                let index = -1
+                for (i = 0; i < stack_layout.children.length; ++i) {
+                    const child = stack_layout.children[i]
+                    if (!(child instanceof Item)) continue
+                    if (child.active && index < 0) index = i
+                }
+                if (index >= 0) return index
+                for (i = 0; i < stack_layout.children.length; ++i) {
+                    const child = stack_layout.children[i]
+                    if (!(child instanceof Item)) continue
+                    if (child.active === undefined) return i
+                }
+                return 0
+            }
+            AnimLoader {
+                readonly property AuthHandlerTask task: {
+                    const groups = self.controller?.dispatcher?.groups
+                    for (let j = 0; j < groups.length; j++) {
+                        const group = groups[j]
+                        for (let i = 0; i < group.tasks.length; i++) {
+                            const task = group.tasks[i]
+                            if (!(task instanceof AuthHandlerTask)) continue
+                            if (!(task.status === Task.Active)) continue
+                            if (!(task.result.status === 'request_code' || task.result.status === 'resolve_code')) continue
+                            return task
+                        }
+                    }
+                    return null
+                }
+                id: auth_handler_loader
+                animated: true
+                active: !!auth_handler_loader.task
+                sourceComponent: AuthHandlerTaskView {
+                    task: auth_handler_loader.task
+                }
+            }
+// TODO each controller dialog should have a custom done view
+            AnimLoader {
+                id: done_loader
+                animated: true
+                active: false //sourceComponent && self.controller.dispatcher.status === TaskDispatcher.Finished
+    //            {
+    //                return false
+    //                const tasks = self.controller?.dispatcher?.tasks ?? []
+    //                if (tasks.length === 0) return false
+    //                let result = true
+    //                for (let i = 0; i < tasks.length; i++) {
+    //                    const task = tasks[i]
+    //                    if (task.status !== Task.Finished) result = false
+    //                }
+    //                return result
+    //            }
+                sourceComponent: ColumnLayout {
+                    Spacer {
+                    }
+                    Image {
+                        Layout.alignment: Qt.AlignHCenter
+                        source: 'qrc:/svg/check.svg'
+                        sourceSize.width: 64
+                        sourceSize.height: 64
+                    }
+                    Label {
+                        text: qsTrId('id_done')
+                        font.pixelSize: 20
+                        Layout.fillWidth: true
+                        horizontalAlignment: Label.AlignHCenter
+                    }
+                    VSpacer {
+                    }
                 }
             }
         }
-    }
-
-    contentItem: StackView {
-        id: stack_view
-        implicitHeight: Math.max(currentItem.implicitHeight, minimumHeight)
-        implicitWidth: Math.max(currentItem.implicitWidth, minimumWidth)
+        TaskDispatcherInspector {
+            Layout.fillHeight: true
+            Layout.minimumWidth: 200
+            dispatcher: controller.dispatcher
+            visible: self.infoEnabled
+        }
     }
 }

@@ -135,7 +135,6 @@ AbstractDialog {
             HSpacer {
             }
             GButton {
-                large: true
                 text: qsTrId('id_dont_collect_data')
                 onClicked: {
                     Settings.analytics = 'disabled'
@@ -144,7 +143,6 @@ AbstractDialog {
             }
             GButton {
                 highlighted: true
-                large: true
                 text: qsTrId('id_allow_collection')
                 onClicked: {
                     Settings.analytics = 'enabled'

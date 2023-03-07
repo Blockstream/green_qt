@@ -1,14 +1,14 @@
 #ifndef GREEN_HTTPMANAGER_H
 #define GREEN_HTTPMANAGER_H
 
+#include "green.h"
+
 #include <QMutex>
 #include <QObject>
 #include <QQueue>
 #include <QTimer>
 
-class Activity;
 class SessionActivity;
-class Session;
 
 class HttpManager : public QObject
 {
@@ -20,11 +20,13 @@ public:
     void exec(SessionActivity* activity);
     Session* session() const { return m_session; }
 signals:
-    void sessionChanged(Session* session);
+    void sessionChanged();
 private slots:
     void dispatch();
 private:
+    TaskDispatcher* const m_dispatcher;
     QMutex m_mutex;
+    Context* m_context{nullptr};
     Session* m_session{nullptr};
     QTimer* m_idle_timer{nullptr};
     QQueue<SessionActivity*> m_queue;

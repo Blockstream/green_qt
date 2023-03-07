@@ -2,11 +2,13 @@
 #define GREEN_OUTPUT_H
 
 #include <QJsonObject>
+#include <QQmlEngine>
 #include <QObject>
-#include <QtQml>
 
 class Account;
 class Asset;
+class Session;
+class Context;
 
 class Output : public QObject
 {
@@ -26,6 +28,7 @@ class Output : public QObject
 public:
     explicit Output(const QJsonObject& data, Account* account);
     Account* account() const { return m_account; }
+    Session* session() const;
     Asset* asset() const { return m_asset; }
     QJsonObject data() const { return m_data; }
     void updateFromData(const QJsonObject& data);
@@ -39,16 +42,16 @@ public:
     bool expired() const { return m_expired; }
     void setExpired(bool expired);
 signals:
-    void dataChanged(const QJsonObject& data);
-    void assetChanged(const Asset* asset);
-    void dustChanged(bool dust);
-    void lockedChanged(bool locked);
-    void confidentialChanged(bool confidential);
-    void unconfirmedChanged(bool unconfirmed);
-    void selectedChanged(bool selected);
-    void canBeLockedChanged(bool canBeLocked);
-    void addressTypeChanged(const QString& address_type);
-    void expiredChanged(bool expired);
+    void dataChanged();
+    void assetChanged();
+    void dustChanged();
+    void lockedChanged();
+    void confidentialChanged();
+    void unconfirmedChanged();
+    void selectedChanged();
+    void canBeLockedChanged();
+    void addressTypeChanged();
+    void expiredChanged();
 private slots:
     void updateExpired();
 private:

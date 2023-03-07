@@ -5,15 +5,7 @@
 #include <wally_elements.h>
 
 #include "command.h"
-#include "device_p.h"
-#include "ga.h"
-#include "handler.h"
-#include "json.h"
 #include "network.h"
-#include "networkmanager.h"
-#include "util.h"
-#include "wallet.h"
-#include "walletmanager.h"
 
 QByteArray pathToData(const QVector<uint32_t>& path)
 {

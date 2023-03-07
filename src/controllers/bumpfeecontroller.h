@@ -6,9 +6,10 @@
 #include <QtQml>
 #include <QJsonObject>
 
-class CreateTransactionHandler;
+class CreateTransactionTask;
 class Balance;
 class Transaction;
+class GetUnspentOutputsTask;
 
 class BumpFeeController : public AccountController
 {
@@ -21,7 +22,7 @@ class BumpFeeController : public AccountController
     QJsonObject m_tx;
     int m_fee_rate{0};
     int m_req{0};
-    CreateTransactionHandler* m_create_handler{nullptr};
+    CreateTransactionTask* m_create_task{nullptr};
 public:
     BumpFeeController(QObject* parent = nullptr);
     int feeRate() const { return m_fee_rate; }
@@ -43,7 +44,7 @@ private:
     void setSignedTransaction(Transaction* signed_transaction);
     Transaction* m_signed_transaction{nullptr};
     QJsonValue m_utxos;
-    Handler* m_get_unspent_outputs_handler{nullptr};
+    GetUnspentOutputsTask* m_get_unspent_outputs{nullptr};
 };
 
 #endif // GREEN_BUMPFEECONTROLLER_H

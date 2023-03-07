@@ -5,6 +5,7 @@ import QtQuick.Controls
 import QtQuick.Controls.Material
 import QtQuick.Layouts
 import QtQuick.Window
+import Qt5Compat.GraphicalEffects
 
 import "analytics.js" as AnalyticsJS
 
@@ -20,7 +21,12 @@ StackLayout {
         }
         return null
     }
-    readonly property bool active: window.navigation.param.view === self.network
+    readonly property bool active: {
+        if (window.navigation.param.view === self.network) return true
+        const wallet = WalletManager.wallet(window.navigation.param.wallet)
+        if (wallet && wallet.context && wallet.network.key === self.network) return true
+        return false
+    }
 
     currentIndex: {
         let index = 0
@@ -33,7 +39,41 @@ StackLayout {
     }
 
     MainPage {
+        id: page
         header: MainPageHeader {
+            background: Rectangle {
+                color: constants.c700
+                opacity: wallet_list_view.contentY > 0 ? 1 : 0
+                Behavior on opacity {
+                    SmoothedAnimation {
+                        velocity: 4
+                    }
+                }
+
+                FastBlur {
+                    anchors.fill: parent
+                    cached: true
+                    opacity: 0.55
+
+                    radius: 128
+                    source: ShaderEffectSource {
+                        sourceItem: page.contentItem
+                        sourceRect {
+                            x: -page.contentItem.x
+                            y: -page.contentItem.y
+                            width: page.header.width
+                            height: page.header.height
+                        }
+                    }
+                }
+                Rectangle {
+                    width: parent.width
+                    height: 1
+                    y: parent.height - 1
+                    color: constants.c900
+                }
+            }
+
             contentItem: RowLayout {
                 spacing: 16
                 Label {
@@ -45,18 +85,22 @@ StackLayout {
                 GButton {
                     text: qsTrId('id_create_new_wallet')
                     highlighted: true
-                    large: true
-                    onClicked: navigation.set({ flow: 'signup', network: self.network, type: (self.network === 'liquid' ? undefined : 'default') })
+                    onClicked: {
+                        if (self.network.liquid) {
+                            navigation.set({ flow: 'signup', network: self.network })
+                        } else {
+                            navigation.set({ flow: 'signup', network: self.network, type: 'default' })
+                        }
+                    }
                 }
                 GButton {
-                    large: true
                     text: qsTrId('id_restore_green_wallet')
                     onClicked: navigation.set({ flow: 'restore', network: self.network })
                 }
                 GButton {
                     text: qsTrId('id_watchonly_login')
-                    large: true
-                    onClicked: watch_only_login_dialog.createObject(window).open()
+                    onClicked: navigation.set({ flow: 'watch_only_login', network: self.network })
+//                    onClicked: watch_only_login_dialog.createObject(window).open()
                 }
             }
         }
@@ -67,24 +111,25 @@ StackLayout {
                 }
             }
         }
-        Component {
-            id: watch_only_login_dialog
-            WatchOnlyLoginDialog {
-                network: NetworkManager.networkWithServerType(self.network, 'green')
-            }
-        }
 
-        contentItem: Pane {
-            padding: 0
-            background: Label {
-                visible: wallet_list_view.count===0
-                text: qsTrId('id_looks_like_you_havent_used_a');
-                horizontalAlignment: Qt.AlignHCenter
-                verticalAlignment: Qt.AlignVCenter
+
+//        Component {
+//            id: watch_only_login_dialog
+//            WatchOnlyLoginDialog {
+//                network: NetworkManager.networkWithServerType(self.network, 'green')
+//            }
+//        }
+
+        contentItem: GPane {
+            background: Item {
+                Label {
+                    anchors.centerIn: parent
+                    visible: wallet_list_view.count === 0
+                    text: qsTrId('id_looks_like_you_havent_used_a');
+                }
             }
-            contentItem: GListView {
+            contentItem: TListView {
                 id: wallet_list_view
-                clip: true
                 currentIndex: -1
                 model: WalletListModel {
                     network: self.network
@@ -103,12 +148,20 @@ StackLayout {
             network: self.network
         }
         delegate: WalletView {
-            property bool match: wallet.ready && navigation.param.wallet === wallet.id
+            property bool match: navigation.param.wallet === wallet.id
+            context: wallet.context
             AnalyticsView {
                 name: 'Overview'
                 segmentation: AnalyticsJS.segmentationSession(wallet)
                 active: match
             }
         }
+    }
+
+    component TListView: ListView {
+        ScrollIndicator.vertical: ScrollIndicator { }
+        contentWidth: width
+        displayMarginBeginning: 300
+        displayMarginEnd: 100
     }
 }

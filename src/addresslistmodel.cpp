@@ -2,11 +2,11 @@
 
 #include "account.h"
 #include "address.h"
-#include "handlers/getaddresseshandler.h"
-#include "resolver.h"
+#include "task.h"
 
 AddressListModel::AddressListModel(QObject* parent)
     : QAbstractListModel(parent)
+    , m_dispatcher(new TaskDispatcher(this))
     , m_reload_timer(new QTimer(this))
 {
     m_reload_timer->setSingleShot(true);
@@ -16,16 +16,11 @@ AddressListModel::AddressListModel(QObject* parent)
     });
 }
 
-AddressListModel::~AddressListModel()
-{
-}
-
 void AddressListModel::setAccount(Account* account)
 {
     if (m_account) {
         disconnect(m_account, &Account::addressGenerated, this, &AddressListModel::reload);
         beginResetModel();
-        m_handler = nullptr;
         m_addresses.clear();
         m_account = nullptr;
         emit accountChanged();
@@ -42,25 +37,16 @@ void AddressListModel::setAccount(Account* account)
 
 void AddressListModel::fetch(bool reset)
 {
-    if (m_handler) return;
+    if (m_dispatcher->isBusy()) return;
 
-    auto handler = new GetAddressesHandler(m_last_pointer, m_account);
+    auto get_addresses = new GetAddressesTask(m_last_pointer, m_account);
 
-    QObject::connect(handler, &Handler::done, this, [this, reset, handler] {
-        handler->deleteLater();
-
-        if (m_handler != handler) {
-            reload();
-            return;
-        }
-
-        m_fetching = false;
-        m_handler = nullptr;
-        m_last_pointer = handler->lastPointer();
+    connect(get_addresses, &Task::finished, this, [=] {
+        m_last_pointer = get_addresses->lastPointer();
         emit fetchingChanged();
         // instantiate missing addresses
         QVector<Address*> addresses;
-        for (QJsonValue data : handler->addresses()) {
+        for (QJsonValue data : get_addresses->addresses()) {
             auto address = m_account->getOrCreateAddress(data.toObject());
             addresses.append(address);
         }
@@ -77,15 +63,7 @@ void AddressListModel::fetch(bool reset)
             endInsertRows();
         }
     });
-
-    connect(handler, &Handler::resolver, this, [](Resolver* resolver) {
-        resolver->resolve();
-    });
-
-    handler->exec();
-    m_handler = handler;
-    m_fetching = true;
-    emit fetchingChanged();
+    m_dispatcher->add(get_addresses);
 }
 
 QHash<int, QByteArray> AddressListModel::roleNames() const
@@ -102,7 +80,7 @@ bool AddressListModel::canFetchMore(const QModelIndex& parent) const
 {
     Q_ASSERT(!parent.parent().isValid());
     // Prevent concurrent fetchMore
-    if (m_handler) return false;
+    if (m_dispatcher->isBusy()) return false;
     return m_last_pointer != 1;
 }
 
@@ -110,7 +88,7 @@ void AddressListModel::fetchMore(const QModelIndex& parent)
 {
     Q_ASSERT(!parent.parent().isValid());
     if (!m_account) return;
-    if (m_handler) return;
+    if (m_dispatcher->isBusy()) return;
     fetch(false);
 }
 
@@ -147,7 +125,6 @@ void AddressListModel::reload()
 {
     if (!m_account) return;
 
-    m_handler = nullptr;
     m_has_unconfirmed = false;
     m_last_pointer = 0;
 

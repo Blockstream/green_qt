@@ -12,12 +12,12 @@ GTextField {
     rightPadding: self.empty ? height / 2 : clear_button.height + self.height - self.font.pixelSize
     topPadding: 9
     bottomPadding: 9
-    implicitWidth: self.activeFocus || !self.empty ? 300 : 200
-    Behavior on implicitWidth {
-        SmoothedAnimation {
-            velocity: 800
-        }
-    }
+    implicitWidth: 200 //self.activeFocus || !self.empty ? 300 : 200
+//    Behavior on implicitWidth {
+//        SmoothedAnimation {
+//            velocity: 800
+//        }
+//    }
     placeholderText: qsTrId('id_search')
     Keys.onEscapePressed: self.clear()
     Image {

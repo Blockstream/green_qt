@@ -1,4 +1,5 @@
 import Blockstream.Green
+import Blockstream.Green.Core
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -11,6 +12,7 @@ Page {
     readonly property bool empty: buffer.length === 0
     readonly property bool valid: buffer.length === 6
     readonly property var pin: buffer.length === 6 ? ({ value: buffer.join(''), valid: true, empty: false }) : ({ value: '', valid: false, empty: buffer.length === 0 })
+    property string label: qsTrId('id_enter_pin')
 
     function addDigit(digit) {
         digit = parseInt(digit)
@@ -31,23 +33,49 @@ Page {
         buffer = []
     }
 
+    function paste() {
+        const text = Clipboard.text()
+        if (text.match(/^\d{6}$/)) {
+            self.buffer = text.split('')
+            timer.restart()
+        }
+    }
+
+    Timer {
+        id: timer
+        interval: 300
+        repeat: false
+        onTriggered: {
+            if (self.pin.valid) {
+                self.pinEntered(self.pin.value)
+            }
+        }
+    }
+
+    Shortcut {
+        sequences: [StandardKey.Paste]
+        onActivated: paste()
+    }
+
     spacing: 16
     focusPolicy: Qt.StrongFocus
     opacity: self.enabled ? 1 : 0.5
     background: null
 
     Keys.onPressed: (event) => {
-        if (event.key === Qt.Key_0) return addDigit(0)
-        if (event.key === Qt.Key_1) return addDigit(1)
-        if (event.key === Qt.Key_2) return addDigit(2)
-        if (event.key === Qt.Key_3) return addDigit(3)
-        if (event.key === Qt.Key_4) return addDigit(4)
-        if (event.key === Qt.Key_5) return addDigit(5)
-        if (event.key === Qt.Key_6) return addDigit(6)
-        if (event.key === Qt.Key_7) return addDigit(7)
-        if (event.key === Qt.Key_8) return addDigit(8)
-        if (event.key === Qt.Key_9) return addDigit(9)
-        if (event.key === Qt.Key_Backspace) removeDigit()
+        switch (event.key) {
+            case Qt.Key_0: return addDigit(0)
+            case Qt.Key_1: return addDigit(1)
+            case Qt.Key_2: return addDigit(2)
+            case Qt.Key_3: return addDigit(3)
+            case Qt.Key_4: return addDigit(4)
+            case Qt.Key_5: return addDigit(5)
+            case Qt.Key_6: return addDigit(6)
+            case Qt.Key_7: return addDigit(7)
+            case Qt.Key_8: return addDigit(8)
+            case Qt.Key_9: return addDigit(9)
+            case Qt.Key_Backspace: return removeDigit()
+        }
     }
 
     header: RowLayout {
@@ -57,7 +85,7 @@ Page {
             Layout.alignment: Qt.AlignCenter
             verticalAlignment: Label.AlignVCenter
             visible: self.enabled && buffer.length === 0
-            text: qsTrId('id_enter_pin')
+            text: self.label
         }
         Pane {
             Layout.minimumHeight: 24
@@ -79,7 +107,7 @@ Page {
                         width: 8
                         height: 8
                         radius: 4
-                        color: 'white' //index < buffer.length ? 'white' : 'transparent'
+                        color: 'white'
                         opacity: index < buffer.length ? 1 : 0.1
                     }
                 }

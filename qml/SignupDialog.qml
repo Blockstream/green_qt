@@ -9,7 +9,7 @@ import QtQml.Models
 import "analytics.js" as AnalyticsJS
 import "util.js" as UtilJS
 
-AbstractDialog {
+ControllerDialog {
     id: self
     icon: {
         if (controller.type === 'amp') return 'qrc:/svg/amp.svg'
@@ -18,15 +18,15 @@ AbstractDialog {
     }
     title: qsTrId('id_create_new_wallet')
     closePolicy: Popup.NoAutoClose
-    width: 900
-    height: 600
+    width: 850
+    height: 400
 
     Navigation {
         id: navigation
         Component.onCompleted: push(window.navigation.param)
     }
 
-    SignupController {
+    controller: SignupController {
         id: controller
         network: {
             const network = navigation.param.network || ''
@@ -37,7 +37,10 @@ AbstractDialog {
         pin: navigation.param.pin || ''
         mnemonic: (navigation.param.mnemonic || '').split(',')
         active: navigation.param.verify || false
-        onFinished: wallet_create_event.track()
+        onSignup: (wallet) => {
+            wallet_create_event.track()
+            window.navigation.push({ wallet: wallet.id})
+        }
     }
 
     AnalyticsEvent {
@@ -47,16 +50,8 @@ AbstractDialog {
         segmentation: AnalyticsJS.segmentationSession(controller.wallet)
     }
 
-    Connections {
-        target: controller.wallet
-        function onReadyChanged(ready) {
-            if (ready) window.navigation.set({ network: controller.network.key, wallet: controller.wallet.id })
-        }
-    }
-
     footer: DialogFooter {
         GButton {
-            large: true
             visible: navigation.canPop
             text: qsTrId('id_back')
             onClicked: navigation.pop()
@@ -66,7 +61,6 @@ AbstractDialog {
             model: stack_layout.currentItem ? stack_layout.currentItem.actions || null : null
             GButton {
                 action: modelData
-                large: true
             }
         }
     }
@@ -208,24 +202,38 @@ AbstractDialog {
                     }
                 ]
                 background: Item {
-                    Image {
-                        OpacityAnimator on opacity {
-                            from: 0
-                            to: 0.5
-                            duration: 5000
-                            easing.type: Easing.OutCirc
-                        }
-                        ScaleAnimator on scale {
-                            from: 1.1
-                            to: 1
-                            duration: 10000
-                            easing.type: Easing.OutCirc
-                        }
+                    id: container
+                    readonly property rect bouding: {
+                        const i = self.background
+                        self.contentItem.mapFromItem(i, Qt.rect(0, 0, i.width, i.height))
+                    }
 
-                        source: 'qrc:/png/amp_background.png'
-                        anchors.centerIn: parent
-                        width: parent.width
-                        fillMode: Image.PreserveAspectFit
+                    Item {
+                        x: container.bouding.x
+                        y: container.bouding.y
+                        width: container.bouding.width
+                        height: container.bouding.height
+                        clip: true
+                        Image {
+                            NumberAnimation on opacity {
+                                from: 1
+                                to: 0.5
+                                duration: 5000
+                                easing.type: Easing.OutCirc
+                            }
+                            NumberAnimation on scale {
+                                from: 1.1
+                                to: 1
+                                duration: 10000
+                                easing.type: Easing.OutCirc
+                            }
+
+                            source: 'qrc:/png/amp_background.png'
+                            anchors.centerIn: parent
+                            width: parent.width
+
+                            fillMode: Image.PreserveAspectFit
+                        }
                     }
                 }
                 contentItem: ColumnLayout {

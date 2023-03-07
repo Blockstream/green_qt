@@ -90,7 +90,7 @@ Page {
             spacing: 0
             model: OutputListModelFilter {
                 id: output_model_filter
-                filter: [button_group.checkedButton.buttonTag, '!locked'].join(' ')
+                filter: [button_group.checkedButton?.buttonTag ?? '', '!locked'].join(' ')
                 model: OutputListModel {
                     id: output_model
                     account: self.account
@@ -109,7 +109,10 @@ Page {
                 anchors.margins: 8
                 Layout.alignment: Qt.AlignHCenter
                 opacity: output_model.fetching ? 1 : 0
-                Behavior on opacity { OpacityAnimator {} }
+                Behavior on opacity {
+                    SmoothedAnimation {
+                    }
+                }
                 anchors.bottom: parent.bottom
                 anchors.horizontalCenter: parent.horizontalCenter
             }

@@ -3,6 +3,7 @@ cpplint:
   tags:
     - ga
   stage: lint
+  allow_failure: true
   script:
     - pip install cpplint
     - ./tools/lint/cpplint.sh

@@ -16,6 +16,7 @@ class JadeDevice : public Device
     Q_PROPERTY(QString version READ version NOTIFY versionInfoChanged)
     Q_PROPERTY(bool updateRequired READ updateRequired NOTIFY versionInfoChanged)
     Q_PROPERTY(State state READ state NOTIFY versionInfoChanged)
+    Q_PROPERTY(bool unlocking READ unlocking NOTIFY unlockingChanged)
     QML_ELEMENT
 public:
     enum State {
@@ -50,14 +51,18 @@ public:
     QString version() const;
     QString systemLocation() const { return m_system_location; }
     State state() const;
+    bool unlocking() const { return m_unlocking; }
+    void setUnlocking(bool unlocking);
 signals:
     void versionInfoChanged();
     void error();
+    bool unlockingChanged();
 private:
     JadeAPI* const m_api;
     const QString m_system_location;
     QVariantMap m_version_info;
     QString m_name;
+    bool m_unlocking{false};
 };
 
 #endif // GREEN_JADEDEVICE_H

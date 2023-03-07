@@ -2,10 +2,11 @@
 
 #include "account.h"
 #include "asset.h"
+#include "context.h"
 #include "device.h"
-#include "handlers/gettransactionshandler.h"
 #include "network.h"
 #include "resolver.h"
+#include "task.h"
 #include "transaction.h"
 #include "wallet.h"
 
@@ -15,22 +16,25 @@
 #include <QTextStream>
 #include <QTimer>
 
-ExportTransactionsController::ExportTransactionsController(QObject *parent) : QObject(parent)
+ExportTransactionsController::ExportTransactionsController(QObject* parent)
+    : Controller(parent)
 {
 }
 
-void ExportTransactionsController::setAccount(Account *account)
+void ExportTransactionsController::setAccount(Account* account)
 {
     if (m_account == account) return;
     m_account = account;
-    emit accountChanged(m_account);
+    emit accountChanged();
 }
 
 void ExportTransactionsController::save()
 {
     Q_ASSERT(m_account);
-    auto wallet = m_account->wallet();
-    auto settings = wallet->settings();
+    const auto context = m_account->context();
+    const auto wallet = context->wallet();
+    const auto settings = context->settings();
+    const auto network = m_account->network();
 
     const auto now = QDateTime::currentDateTime();
     const auto account_name = m_account->name().isEmpty() ? qtTrId("id_main_account") : m_account->name();
@@ -44,10 +48,13 @@ void ExportTransactionsController::save()
         return;
     }
 
+    const auto display_unit = context->displayUnit();
     const auto pricing = settings.value("pricing").toObject();
+    const auto currency = network->isMainnet() ? pricing.value("currency").toString() : "FIAT";
+    const auto exchange = pricing.value("exchange").toString();
 
-    m_fee_field = QString("fee (%1)").arg(wallet->network()->isLiquid() ? "L-" + settings.value("unit").toString() : settings.value("unit").toString());
-    m_fiat_field = QString("fiat (%1 %2 %3)").arg(pricing.value("currency").toString()).arg(pricing.value("exchange").toString(), now.toString(Qt::ISODate));
+    m_fee_field = QString("fee (%1)").arg(display_unit);
+    m_fiat_field = QString("fiat (%1 %2 %3)").arg(currency).arg(exchange, now.toString(Qt::ISODate));
     m_fields = QStringList{"time", "description", "amount", "unit", m_fee_field, m_fiat_field, "txhash", "memo"};
 
     if (m_include_header) {
@@ -59,11 +66,14 @@ void ExportTransactionsController::save()
 
 void ExportTransactionsController::nextPage()
 {
-    auto handler = new GetTransactionsHandler(m_account->pointer(), m_offset, m_count, m_account->wallet()->session());
-    QObject::connect(handler, &Handler::done, this, [this, handler] {
-        auto wallet = m_account->wallet();
-        auto settings = wallet->settings();
-        QJsonArray transactions = handler->result().value("result").toObject().value("transactions").toArray();
+    const auto context = m_account->context();
+    const auto wallet = context->wallet();
+    const auto settings = context->settings();
+    const auto unit = context->unit().toLower().replace("µbtc", "ubtc");
+    const auto display_unit = context->displayUnit();
+    auto get_transactions = new GetTransactionsTask(m_offset, m_count, m_account);
+    connect(get_transactions, &Task::finished, this, [=] {
+        const auto transactions = get_transactions->transactions();
         for (auto value : transactions) {
             auto data = value.toObject();
             auto transaction = m_account->getOrCreateTransaction(data);
@@ -76,22 +86,30 @@ void ExportTransactionsController::nextPage()
                     if (field == "time") {
                         const auto created_at_ts = data.value("created_at_ts").toDouble();
                         const auto created_at = QDateTime::fromMSecsSinceEpoch(created_at_ts / 1000);
-                        values.append(QLocale::system().toString(created_at));
+                        values.append(created_at.toString(Qt::ISODate));
                     } else if (field == "description") {
                         values.append(data.value("type").toString());
                     } else if (field == "amount") {
-                        values.append(amount->formatAmount(false).replace(",", "."));
+                        const double satoshi = amount->amount();
+                        if (asset && !asset->isLBTC()) {
+                            const auto precision = asset->data().value("precision").toInt(0);
+                            const auto value = static_cast<double>(satoshi) / qPow(10, precision);
+                            values.append(QString::number(value, 'f', precision));
+                        } else {
+                            const auto converted = wallet->convert({{ "satoshi", satoshi }});
+                            values.append(converted.value(unit).toString());
+                        }
                     } else if (field == "unit") {
                         if (asset && !asset->isLBTC()) {
                             values.append(asset->data().value("ticker").toString());
-                        } else if (asset && asset->isLBTC()) {
-                            values.append("L-" + settings.value("unit").toString());
                         } else {
-                            values.append(settings.value("unit").toString());
+                            values.append(display_unit);
                         }
                     } else if (field == m_fee_field) {
                         if (data.value("type").toString() == "outgoing") {
-                            values.append(wallet->formatAmount(data.value("fee").toInt(), false).replace(",", "."));
+                            const double fee = data.value("fee").toInt();
+                            const auto converted = wallet->convert({{ "satoshi", fee }});
+                            values.append(converted.value(unit).toString());
                         } else {
                             values.append("");
                         }
@@ -126,9 +144,5 @@ void ExportTransactionsController::nextPage()
         }
     });
 
-    connect(handler, &Handler::resolver, this, [](Resolver* resolver) {
-        resolver->resolve();
-    });
-
-    handler->exec();
+    m_dispatcher->add(get_transactions);
 }

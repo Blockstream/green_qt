@@ -13,8 +13,8 @@ Pane {
     property Network network
     property JadeDevice device
     Layout.fillWidth: true
-    Layout.preferredHeight: 60
-    enabled: controller.enabled
+//    Layout.preferredHeight: 60
+//    enabled: controller.enabled
     background: Item {
         Rectangle {
             width: parent.width
@@ -31,7 +31,10 @@ Pane {
         device: comingSoon ? null : self.device
         network: self.network.id
         onInvalidPin: self.ToolTip.show(qsTrId('id_invalid_pin'), 2000);
-        onLoginDone: Analytics.recordEvent('wallet_login', AnalyticsJS.segmentationWalletLogin(controller.wallet, { method: 'hardware' }))
+        onLoginDone: () => {
+            Analytics.recordEvent('wallet_login', AnalyticsJS.segmentationWalletLogin(controller.wallet, { method: 'hardware' }))
+            navigation.push({ view: self.network.key, wallet: controller.wallet.id })
+        }
         onSetPin: (info) => {
             Analytics.recordEvent('jade_initialize', AnalyticsJS.segmentationSession(controller.wallet))
         }
@@ -81,28 +84,50 @@ Pane {
             Layout.fillWidth: true
             text: controller.wallet ? controller.wallet.name : ''
         }
+        ProgressBar {
+            Layout.maximumWidth: 32
+            Layout.minimumWidth: 32
+            visible: controller.dispatcher.busy
+            indeterminate: visible
+        }
         RowLayout {
             visible: !comingSoon
             Layout.fillWidth: false
             Layout.minimumWidth: 150
-            GButton {
-                visible: !controller.wallet || controller.wallet.authentication !== Wallet.Authenticated
-                enabled: !controller.active
-                text: switch (device.state) {
-                    case JadeDevice.StateReady:
-                    case JadeDevice.StateTemporary:
-                        return qsTrId('id_login')
-                    case JadeDevice.StateLocked:
-                        return qsTrId('id_unlock')
-                    default:
-                        return qsTrId('id_setup_jade')
+            Loader {
+                active: device?.state === JadeDevice.StateLocked // !controller?.wallet?.context &&
+                visible: active
+                sourceComponent: GButton {
+                    enabled: !device.unlocking
+                    text: qsTrId('id_unlock')
+                    onClicked: controller.unlock()
                 }
-                onClicked: controller.active = true
             }
-            GButton {
-                visible: controller.wallet && controller.wallet.authentication === Wallet.Authenticated
-                text: qsTrId('id_go_to_wallet')
-                onClicked: navigation.set({ view: self.network.key, wallet: controller.wallet.id })
+            Loader {
+                active: (device?.state === JadeDevice.StateReady || device?.state === JadeDevice.StateTemporary) && !controller.wallet?.context
+                visible: active
+                sourceComponent: GButton {
+                    enabled: !controller.dispatcher.busy
+                    text: qsTrId('id_login')
+                    onClicked: controller.login()
+                }
+            }
+            Loader {
+                active: device?.state === JadeDevice.StateUninitialized
+                visible: active
+                sourceComponent: GButton {
+                    enabled: !controller.dispatcher.busy
+                    text: qsTrId('id_setup_jade')
+                    onClicked: controller.setup()
+                }
+            }
+            Loader {
+                active: controller?.wallet?.context ?? false
+                visible: active
+                sourceComponent: GButton {
+                    text: qsTrId('id_go_to_wallet')
+                    onClicked: navigation.push({ view: self.network.key, wallet: controller.wallet.id })
+                }
             }
         }
         RowLayout {
@@ -125,5 +150,10 @@ Pane {
                 font.capitalization: Font.AllUppercase
             }
         }
+//        TaskDispatcherInspector {
+//            Layout.minimumHeight: 80
+//            Layout.minimumWidth: 200
+//            dispatcher: controller.dispatcher
+//        }
     }
 }

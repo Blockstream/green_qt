@@ -14,10 +14,13 @@ QString GetNetworkKey(const QJsonObject& data)
 {
     const auto mainnet = data.value("mainnet").toBool();
     const auto liquid = data.value("liquid").toBool();
+    const auto development = data.value("development").toBool();
     if (mainnet && !liquid) return "bitcoin";
     if (mainnet && liquid) return "liquid";
-    if (!mainnet && !liquid) return "testnet";
-    if (!mainnet && liquid) return "testnet-liquid";
+    if (development && !liquid) return "localtest";
+    if (development && liquid) return "localtest-liquid";
+    if (!liquid) return "testnet";
+    if (liquid) return "testnet-liquid";
     Q_UNREACHABLE();
 }
 
@@ -25,10 +28,13 @@ QString GetNetworkDisplayName(const QJsonObject& data)
 {
     const auto mainnet = data.value("mainnet").toBool();
     const auto liquid = data.value("liquid").toBool();
+    const auto development = data.value("development").toBool();
     if (mainnet && !liquid) return "Bitcoin";
     if (mainnet && liquid) return "Liquid";
-    if (!mainnet && !liquid) return "Testnet";
-    if (!mainnet && liquid) return "Testnet Liquid";
+    if (development && !liquid) return "Localtest";
+    if (development && liquid) return "Localtest Liquid";
+    if (!liquid) return "Testnet";
+    if (liquid) return "Testnet Liquid";
     Q_UNREACHABLE();
 }
 
@@ -59,11 +65,16 @@ QString Network::explorerUrl() const
 {
     Q_ASSERT(m_data.contains("tx_explorer_url"));
     auto tx_explorer_url = m_data.value("tx_explorer_url").toString();
-    Q_ASSERT(tx_explorer_url.endsWith("/"));
+    if (!tx_explorer_url.isEmpty()) {
+        Q_ASSERT(tx_explorer_url.endsWith("/"));
+    }
     return tx_explorer_url;
 }
 
 void Network::openTransactionInExplorer(const QString& hash)
 {
-    QDesktopServices::openUrl(QUrl(explorerUrl() + hash));
+    const auto explorer_url = explorerUrl();
+    if (!explorer_url.isEmpty()) {
+        QDesktopServices::openUrl(QUrl(explorer_url + hash));
+    }
 }

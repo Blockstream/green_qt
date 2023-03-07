@@ -231,9 +231,9 @@ void Settings::setProxyPort(int proxy_port)
 
 QString Settings::proxy() const
 {
-    return m_use_proxy ? QString("%1:%2").arg(m_proxy_host).arg(m_proxy_port) : "";
+    if (!m_use_proxy) return QString();
+    return QString("%1:%2").arg(m_proxy_host).arg(m_proxy_port);
 }
-
 
 void Settings::load()
 {

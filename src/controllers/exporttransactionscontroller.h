@@ -1,13 +1,14 @@
 #ifndef GREEN_EXPORTTRANSACTIONSCONTROLLER_H
 #define GREEN_EXPORTTRANSACTIONSCONTROLLER_H
 
+#include "green.h"
+
+#include "controller.h"
+
 #include <QObject>
 #include <QtQml>
 
-class Account;
-class Handler;
-
-class ExportTransactionsController : public QObject
+class ExportTransactionsController : public Controller
 {
     Q_OBJECT
     Q_PROPERTY(Account* account READ account WRITE setAccount NOTIFY accountChanged)
@@ -19,7 +20,7 @@ public:
 public slots:
     void save();
 signals:
-    void accountChanged(Account* account);
+    void accountChanged();
     void saved();
 private:
     void nextPage();

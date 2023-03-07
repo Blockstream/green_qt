@@ -3,121 +3,77 @@ import Blockstream.Green.Core
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import Qt5Compat.GraphicalEffects
 
 import "analytics.js" as AnalyticsJS
 
-SwipeView {
-    required property Wallet wallet
+GPane {
+    property real contentY: Math.max(archive_list_view.contentY, account_list_view.contentY)
+    required property Context context
     property Account currentAccount: {
         const view = showArchived ? archive_list_view : account_list_view
         return view.currentItem ? view.currentItem.account : null
     }
-    property bool showArchived: false
-
-    function openCreateDialog() {
-        const dialog = create_account_dialog.createObject(window, { wallet })
-        dialog.accepted.connect(() => {
-            // automatically select the last account since it is the newly created account
-            // if account ordering is added then if should determine the correct index
-            account_list_view.currentIndex = account_list_view.count - 1;
-        })
-        dialog.open()
-    }
+    readonly property bool showArchived: navigation.param?.archive ?? false
 
     Connections {
         target: archive_list_view
         function onCountChanged() {
-            if (showArchived && archive_list_view.count === 0) showArchived = false
+            if (showArchived && archive_list_view.count === 0) navigation.set({ archive: false })
+        }
+    }
+
+    Connections {
+        target: self.context
+        function onAccountsChanged() {
+            // automatically select the last account since it is the newly created account
+            // if account ordering is added then if should determine the correct index
+            account_list_view.currentIndex = account_list_view.count - 1;
         }
     }
 
     id: self
-    interactive: false
-    currentIndex: showArchived ? 1 : 0
-    clip: true
-    spacing: constants.p1
 
-    Page {
-        background: null
-        header: GHeader {
-            Label {
-                Layout.alignment: Qt.AlignVCenter
-                text: qsTrId('id_accounts')
-                font.pixelSize: 20
-                font.styleName: 'Bold'
-                verticalAlignment: Label.AlignVCenter
-            }
-            HSpacer {
-            }
-            GButton {
-                Layout.alignment: Qt.AlignVCenter
-                icon.source: 'qrc:/svg/kebab.svg'
-                icon.height: 14
-                icon.width: 14
-                enabled: !menu.opened
-                Menu {
-                    id: menu
-                    width: 300
-                    MenuItem {
-                        enabled: !wallet.watchOnly
-                        text: qsTrId('id_add_new_account')
-                        onTriggered: openCreateDialog()
-                    }
-                    MenuItem {
-                        enabled: !showArchived && archive_list_view.count > 0
-                        text: qsTrId('id_view_archived_accounts_d').arg(archive_list_view.count)
-                        onTriggered: showArchived = !showArchived
-                    }
-                }
-                onClicked: menu.popup()
-            }
-        }
-        contentItem: GListView {
+//    Menu {
+//        id: menu
+//        width: 300
+//        MenuItem {
+//            onTriggered: openCreateDialog()
+//        }
+//        MenuItem {
+//            enabled: !showArchived && archive_list_view.count > 0
+//            text: qsTrId('id_view_archived_accounts_d').arg(archive_list_view.count)
+//            onTriggered: showArchived = !showArchived
+//        }
+//    }
+//    onClicked: menu.popup()
+    contentItem: StackLayout {
+        currentIndex: showArchived ? 1 : 0
+        TListView {
             id: account_list_view
-            clip: true
-            spacing: 0
-            model: AccountListModel {
-                wallet: self.wallet
-                filter: '!hidden'
-            }
-            delegate: AccountDelegate {
+            model: account_list_model
+        }
+
+        TListView {
+            id: archive_list_view
+            model: archive_list_model
+            AnalyticsView {
+                active: self.showArchived
+                name: 'ArchivedAccounts'
+                segmentation: AnalyticsJS.segmentationSession(self.context.wallet)
             }
         }
     }
 
-    Page {
-        background: null
-        header: RowLayout {
-            spacing: constants.s2
-            GToolButton {
-                icon.source: 'qrc:/svg/arrow_left.svg'
-                Layout.alignment: Qt.AlignVCenter
-                onClicked: showArchived = false
-            }
-            Label {
-                Layout.alignment: Qt.AlignVCenter
-                Layout.fillWidth: true
-                text: qsTrId('id_archived_accounts')
-                font.pixelSize: 20
-                font.styleName: 'Bold'
-                verticalAlignment: Label.AlignVCenter
+    component TListView: ListView {
+        contentWidth: width
+        spacing: 8
+        displayMarginBeginning: 200
+        displayMarginEnd: 200
+        delegate: Component {
+            AccountDelegate {
             }
         }
-        contentItem: GListView {
-            id: archive_list_view
-            clip: true
-            spacing: 0
-            model: AccountListModel {
-                wallet: self.wallet
-                filter: 'hidden'
-            }
-            delegate: AccountDelegate {
-            }
-        }
-        AnalyticsView {
-            active: self.showArchived
-            name: 'ArchivedAccounts'
-            segmentation: AnalyticsJS.segmentationSession(self.wallet)
-        }
+        ScrollIndicator.vertical: ScrollIndicator { }
     }
 }

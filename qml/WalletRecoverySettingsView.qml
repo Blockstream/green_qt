@@ -22,8 +22,9 @@ ColumnLayout {
 
     SettingsBox {
         title: qsTrId('id_recovery_phrase')
-        visible: !wallet.device
+        visible: !wallet.context.device
         contentItem: ColumnLayout {
+            spacing: constants.s1
             Label {
                 Layout.fillWidth: true
                 text: qsTrId('id_the_recovery_phrase_can_be_used') + ' ' + qsTrId('id_blockstream_does_not_have')
@@ -45,6 +46,7 @@ ColumnLayout {
         sourceComponent: SettingsBox {
             title: qsTrId('id_accounts_summary')
             contentItem: ColumnLayout {
+                spacing: constants.s1
                 Label {
                     Layout.fillWidth: true
                     text: qsTrId('id_save_a_summary_of_your_accounts')
@@ -56,8 +58,8 @@ ColumnLayout {
                     large: false
                     onClicked: {
                         const subaccounts = [];
-                        for (let i = 0; i < wallet.accounts.length; i++) {
-                            const data = wallet.accounts[i].json;
+                        for (let i = 0; i < wallet.context.accounts.length; i++) {
+                            const data = wallet.context.accounts[i].json;
                             const subaccount = { type: data.type, pointer: data.pointer };
                             if (data.type === '2of3') subaccount.recovery_pub_key = data.recovery_pub_key;
                             subaccounts.push(subaccount)
@@ -76,10 +78,11 @@ ColumnLayout {
         visible: active
         sourceComponent: SettingsBox {
             title: qsTrId('id_set_timelock')
-            enabled: !!wallet.settings.notifications &&
-                     !!wallet.settings.notifications.email_incoming &&
-                     !!wallet.settings.notifications.email_outgoing
+            enabled: !!wallet.context.settings.notifications &&
+                     !!wallet.context.settings.notifications.email_incoming &&
+                     !!wallet.context.settings.notifications.email_outgoing
             contentItem: ColumnLayout {
+                spacing: constants.s1
                 Label {
                     Layout.fillWidth: true
                     text: qsTrId('id_redeem_your_deposited_funds') + '\n\n' + qsTrId('id_enable_email_notifications_to')
@@ -102,10 +105,28 @@ ColumnLayout {
         sourceComponent: SettingsBox {
             title: qsTrId('id_set_an_email_for_recovery')            
             contentItem: ColumnLayout {
+                spacing: constants.s1
                 Label {
                     Layout.fillWidth: true
                     text: qsTrId('id_set_up_an_email_to_get')
                     wrapMode: Text.WordWrap
+                }
+                Loader {
+                    Layout.fillWidth: true
+                    active: wallet.context.config?.email?.confirmed ?? false
+                    visible: active
+                    sourceComponent: RowLayout {
+                        Layout.fillWidth: true
+                        Layout.fillHeight: false
+                        Label {
+                            text: qsTrId('id_email')
+                        }
+                        HSpacer {
+                        }
+                        Label {
+                            text: wallet.context.config?.email?.data ?? ''
+                        }
+                    }
                 }
                 GButton {
                     Layout.alignment: Qt.AlignRight
@@ -116,7 +137,8 @@ ColumnLayout {
                         }
                     }
                     large: false
-                    enabled: !wallet.config.email || !wallet.config.email.confirmed
+                    enabled: !(wallet.context.config?.email?.confirmed ?? false)
+                    visible: enabled
                     text: qsTrId('id_enable')
                     onClicked: enable_dialog.createObject(stack_view).open()
                 }
@@ -131,6 +153,7 @@ ColumnLayout {
         sourceComponent: SettingsBox {
             title: qsTrId('id_delete_wallet')
             contentItem: ColumnLayout {
+                spacing: constants.s1
                 Label {
                     Layout.fillWidth: true
                     text: qsTrId('id_delete_permanently_your_wallet')
@@ -138,7 +161,7 @@ ColumnLayout {
                 }
                 Label {
                     Layout.fillWidth: true
-                    visible: !self.wallet.empty
+                    visible: self.wallet.context.hasBalance
                     text: qsTrId('id_all_of_the_accounts_in_your')
                     wrapMode: Text.WordWrap
                 }
@@ -146,7 +169,7 @@ ColumnLayout {
                     Layout.alignment: Qt.AlignRight
                     large: false
                     destructive: true
-                    enabled: self.wallet.empty
+                    enabled: !self.wallet.context.hasBalance
                     text: qsTrId('id_delete_wallet')
                     onClicked: delete_wallet_dialog.createObject(self).open()
                 }

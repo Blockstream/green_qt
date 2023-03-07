@@ -143,77 +143,172 @@ ColumnLayout {
             text: qsTrId('id_jade_was_initialized_for_testnet') + '\n' + qsTrId('id_enable_testnet_in_app_settings')
         }
     }
-    Page {
+    Loader {
         Layout.fillWidth: true
-        background: null
-        visible: !self.device.updateRequired && !(self.device.versionInfo.JADE_NETWORKS === 'TEST' && !Settings.enableTestnet)
-        header: Label {
-            text: qsTrId('id_wallets')
-            font.pixelSize: 20
-            font.styleName: 'Bold'
-            bottomPadding: constants.s1
-        }
-        contentItem: ColumnLayout {
-            spacing: 0
-            Pane {
-                Layout.fillWidth: true
-                padding: 0
-                bottomPadding: 8
-                background: Item {
-                    Rectangle {
-                        width: parent.width
-                        height: 1
-                        y: parent.height - 1
-                        color: constants.c600
-                    }
+        active: self.device.state === JadeDevice.StateUninitialized
+        visible: active
+        sourceComponent: Page {
+            JadeSetupController {
+                id: controller
+                device: self.device
+            }
+            background: null
+            header: Label {
+                text: qsTrId('id_setup')
+                font.pixelSize: 20
+                font.styleName: 'Bold'
+                bottomPadding: constants.s1
+            }
+            contentItem: RowLayout {
+                GButton {
+                    text: qsTrId('id_setup')
+                    onClicked: controller.setup("mainnet")
+                    enabled: !controller.dispatcher.busy
                 }
-                contentItem: RowLayout {
-                    spacing: constants.s1
-                    Label {
-                        text: qsTrId('id_network')
-                        color: constants.c300
-                        Layout.minimumWidth: 150
-                    }
-                    Label {
-                        text: qsTrId('Type')
-                        color: constants.c300
-                        Layout.minimumWidth: 150
-                    }
-                    Label {
-                        Layout.fillWidth: true
-                        text: qsTrId('id_wallet')
-                        color: constants.c300
-                    }
-                    Label {
-                        Layout.minimumWidth: 150
-                        text: qsTrId('id_actions')
-                        color: constants.c300
-                    }
+                GButton {
+                    text: qsTrId('id_setup_testnet')
+                    visible: Settings.enableTestnet && ['ALL', 'TEST'].indexOf(self.device.versionInfo.JADE_NETWORKS) >= 0
+                    enabled: !controller.dispatcher.busy
+                    onClicked: controller.setup("testnet")
+                }
+                ProgressBar {
+                    Layout.maximumWidth: 32
+                    Layout.minimumWidth: 32
+                    visible: controller.dispatcher.busy
+                    indeterminate: visible
+                }
+                HSpacer {
+                }
+                TaskDispatcherInspector {
+                    Layout.minimumHeight: 180
+                    Layout.minimumWidth: 200
+                    dispatcher: controller.dispatcher
                 }
             }
-            Repeater {
-                model: {
-                    if (self.device.updateRequired) return []
-                    const nets = self.device.versionInfo.JADE_NETWORKS
-                    const networks = []
-                    if (nets === 'ALL' || nets === 'MAIN') {
-                        networks.push({ id: 'mainnet' })
-                        networks.push({ id: 'electrum-mainnet' })
-                        networks.push({ id: 'liquid' })
-                        networks.push({ id: 'electrum-liquid', comingSoon: true })
-                    }
-                    if (Settings.enableTestnet && (nets === 'ALL' || nets === 'TEST')) {
-                        networks.push({ id: 'testnet' })
-                        networks.push({ id: 'electrum-testnet' })
-                        networks.push({ id: 'testnet-liquid' })
-                        networks.push({ id: 'electrum-testnet-liquid', comingSoon: true })
-                    }
-                    return networks
+        }
+    }
+    Loader {
+        Layout.fillWidth: true
+        active: self.device.state === JadeDevice.StateLocked
+        visible: active
+        sourceComponent: Page {
+            JadeUnlockController {
+                id: controller
+                device: self.device
+            }
+            background: null
+            header: Label {
+                text: qsTrId('id_unlock_jade_to_continue')
+                font.pixelSize: 20
+                font.styleName: 'Bold'
+                bottomPadding: constants.s1
+            }
+            contentItem: RowLayout {
+                GButton {
+                    text: qsTrId('id_unlock')
+                    onClicked: controller.unlock()
+                    enabled: !controller.dispatcher.busy
                 }
-                delegate: JadeViewDeviceNetwork {
-                    comingSoon: !!modelData.comingSoon
-                    network: NetworkManager.network(modelData.id)
-                    device: self.device
+                ProgressBar {
+                    Layout.maximumWidth: 32
+                    Layout.minimumWidth: 32
+                    visible: controller.dispatcher.busy
+                    indeterminate: visible
+                }
+                HSpacer {
+                }
+//                TaskDispatcherInspector {
+//                    Layout.minimumHeight: 180
+//                    Layout.minimumWidth: 200
+//                    dispatcher: controller.dispatcher
+//                }
+            }
+        }
+    }
+
+    Loader {
+        Layout.fillWidth: true
+        active: device?.state === JadeDevice.StateReady || device?.state === JadeDevice.StateTemporary
+        visible: active
+        sourceComponent: Page {
+            Layout.fillWidth: true
+            background: null
+            visible: !self.device.updateRequired && !(self.device.versionInfo.JADE_NETWORKS === 'TEST' && !Settings.enableTestnet)
+            header: Label {
+                text: qsTrId('id_wallets')
+                font.pixelSize: 20
+                font.styleName: 'Bold'
+                bottomPadding: constants.s1
+            }
+            contentItem: ColumnLayout {
+                spacing: 0
+                Pane {
+                    Layout.fillWidth: true
+                    padding: 0
+                    bottomPadding: 8
+                    background: Item {
+                        Rectangle {
+                            width: parent.width
+                            height: 1
+                            y: parent.height - 1
+                            color: constants.c600
+                        }
+                    }
+                    contentItem: RowLayout {
+                        spacing: constants.s1
+                        Label {
+                            text: qsTrId('id_network')
+                            color: constants.c300
+                            Layout.minimumWidth: 150
+                        }
+                        Label {
+                            text: qsTrId('Type')
+                            color: constants.c300
+                            Layout.minimumWidth: 150
+                        }
+                        Label {
+                            Layout.fillWidth: true
+                            text: qsTrId('id_wallet')
+                            color: constants.c300
+                        }
+                        Label {
+                            Layout.minimumWidth: 150
+                            text: qsTrId('id_actions')
+                            color: constants.c300
+                        }
+                    }
+                }
+                Repeater {
+                    model: {
+                        if (self.device.updateRequired) return []
+                        const nets = self.device.versionInfo.JADE_NETWORKS
+                        const networks = []
+                        if (nets === 'ALL' || nets === 'MAIN') {
+                            networks.push({ id: 'mainnet' })
+                            networks.push({ id: 'electrum-mainnet' })
+                            networks.push({ id: 'liquid' })
+                            networks.push({ id: 'electrum-liquid', comingSoon: true })
+                        }
+                        if (Settings.enableTestnet && (nets === 'ALL' || nets === 'TEST')) {
+                            networks.push({ id: 'testnet' })
+                            networks.push({ id: 'electrum-testnet' })
+                            networks.push({ id: 'testnet-liquid' })
+                            networks.push({ id: 'electrum-testnet-liquid', comingSoon: true })
+                        }
+                        if (env !== 'Production' && (nets === 'ALL' || nets === 'TEST')) {
+                            networks.push({ id: 'localtest' })
+                            networks.push({ id: 'electrum-localtest' })
+                            networks.push({ id: 'localtest-liquid' })
+                            networks.push({ id: 'electrum-localtest-liquid', comingSoon: true })
+                        }
+
+                        return networks
+                    }
+                    delegate: JadeViewDeviceNetwork {
+                        comingSoon: !!modelData.comingSoon
+                        network: NetworkManager.network(modelData.id)
+                        device: self.device
+                    }
                 }
             }
         }

@@ -67,13 +67,11 @@ AbstractDialog {
                     rightPadding: 0
                     bottomPadding: constants.p2
                     GButton {
-                        large: true
                         visible: navigation.canPop
                         text: qsTrId('id_back')
                         onClicked: navigation.pop()
                     }
                     GButton {
-                        large: true
                         text: qsTrId('id_clear')
                         enabled: !editor.controller.active
                         onClicked: editor.controller.clear();
@@ -81,7 +79,6 @@ AbstractDialog {
                     HSpacer {
                     }
                     GButton {
-                        large: true
                         text: qsTrId('id_continue')
                         enabled: editor.valid
                         onClicked: navigation.set({ mnemonic: editor.mnemonic, password: editor.password })
@@ -94,10 +91,9 @@ AbstractDialog {
             active: {
                 const { mnemonic, password } = navigation.param
                 if (mnemonic === undefined) return false
-                const words = mnemonic.split(',')
-                if (words.length === 12) return true
-                if (words.length === 24) return true
-                if (words.length === 27 && password !== undefined) return true
+                if (mnemonic.length === 12) return true
+                if (mnemonic.length === 24) return true
+                if (mnemonic.length === 27 && password !== undefined) return true
                 return false
             }
             animated: self.opened
@@ -134,7 +130,6 @@ AbstractDialog {
                     rightPadding: 0
                     bottomPadding: constants.p2
                     GButton {
-                        large: true
                         text: qsTrId('id_back')
                         onClicked: navigation.pop()
                     }
@@ -181,7 +176,6 @@ AbstractDialog {
                     rightPadding: 0
                     bottomPadding: constants.p2
                     GButton {
-                        large: true
                         text: qsTrId('id_back')
                         onClicked: navigation.pop()
                     }

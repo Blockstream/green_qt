@@ -1,23 +1,25 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import Qt5Compat.GraphicalEffects
 
 Dialog {
     property string icon
     property bool showRejectButton: true
     property bool enableRejectButton: true
     readonly property bool hovered: background_hover_handler.hovered
+    property alias infoEnabled: info_button.checked
+    property alias toolbar: toolbar_loader.sourceComponent
     id: self
     focus: true
-    clip: true
     modal: true
     padding: constants.p3
     topPadding: constants.p1
-    bottomPadding: constants.p1
+    bottomPadding: constants.p3
     leftPadding: constants.p3
     rightPadding: constants.p3
     horizontalPadding: 0
-    verticalPadding: 16
+    verticalPadding: 64
     anchors.centerIn: parent
     parent: Overlay.overlay
     spacing: 0
@@ -32,9 +34,9 @@ Dialog {
         Label {
             Layout.fillWidth: true
             Layout.preferredWidth: 0
-            Layout.minimumWidth: 400
+            Layout.minimumWidth: 300
             text: title
-            font.pixelSize: 22
+            font.pixelSize: 20
             font.styleName: 'Medium'
             elide: Label.ElideRight
             ToolTip.text: title
@@ -43,26 +45,92 @@ Dialog {
                 id: title_hover_handler
             }
         }
+        Loader {
+            id: toolbar_loader
+        }
+        GToolButton {
+            id: info_button
+            visible: env !== 'Production'
+            enabled: visible
+            flat: true
+            icon.source: 'qrc:/svg/info.svg'
+            checkable: true
+            checked: false
+        }
         GToolButton {
             visible: self.showRejectButton
             enabled: self.enableRejectButton
             flat: true
             icon.source: 'qrc:/svg/cancel.svg'
             onClicked: self.reject()
-            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-            ToolTip.text: qsTrId('id_cancel')
-            ToolTip.visible: hovered
         }
     }
+//    Overlay.modal: Rectangle {
+//        id: xx
+//        color: '#d0666666'
+//        Column {
+//            Label {
+//                text: {
+//                    const r = ['']
+//                    for (let i = xx; i; i = i.parent) r.push(i)
+//                    return r.join(' ')
+//                }
+//            }
+//            Label {
+//                text: {
+//                    const r = ['']
+//                    const t = xx.parent.parent
+//                    for (let i = 0; i < t.children.length; i++) r.push(t.children[i])
+//                    return r.join(' ')
+//                }
+//            }
+//        }
+//    }
     Overlay.modal: Rectangle {
-        color: '#d0000000'
+        id: modal
+        color: constants.c900 //'white'//        color: '#d0000000'
+
+        FastBlur {
+        anchors.fill: parent
+        cached: true
+        opacity: 0.5
+
+        radius: 64
+        source: ShaderEffectSource {
+            sourceItem: ApplicationWindow.contentItem
+            sourceRect {
+                x: 0
+                y: 0
+                width: modal.width
+                height: modal.height
+            }
+        }
     }
-    background: Rectangle {
-        radius: 16
-        color: constants.c800
-        border.color: Qt.rgba(0, 0, 0, 0.5)
+    }
+//    Overlay.modal: Rectangle {
+//        color: '#d0000000'
+//    }
+
+    background: Item {
         HoverHandler {
             id: background_hover_handler
+        }
+        DropShadow {
+            opacity: 0.5
+            verticalOffset: 8
+            radius: 32
+            samples: 16
+            source: r
+            anchors.fill: r
+        }
+        Rectangle {
+            id: r
+            anchors.fill: parent
+            radius: 16
+            color: constants.c800
+//            border.color: Qt.rgba(1, 1, 1, 0.1)
+            border.width: 0.5
+            border.color: Qt.lighter(constants.c500)
         }
     }
 }

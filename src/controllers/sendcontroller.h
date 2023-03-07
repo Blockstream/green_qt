@@ -1,11 +1,12 @@
 #ifndef GREEN_SENDCONTROLLER_H
 #define GREEN_SENDCONTROLLER_H
 
+#include "green.h"
+
 #include "accountcontroller.h"
 
-class CreateTransactionHandler;
-class Balance;
-class Transaction;
+class CreateTransactionTask;
+class GetUnspentOutputsTask;
 
 class SendController : public AccountController
 {
@@ -75,7 +76,7 @@ public slots:
 signals:
     void changed();
     void transactionChanged();
-    void signedTransactionChanged(Transaction* transaction);
+    void signedTransactionChanged();
 
     void utxosChanged(QJsonObject utxos);
 
@@ -85,7 +86,7 @@ private:
     void setSignedTransaction(Transaction* signed_transaction);
 
     QJsonObject m_utxos;
-    Handler* m_get_unspent_outputs_handler{nullptr};
+    GetUnspentOutputsTask* m_get_unspent_outputs{nullptr};
 
     bool m_manual_coin_selection;
 
@@ -101,7 +102,7 @@ protected:
     qint64 m_fee_rate{0};
     QJsonObject m_transaction;
     void setValid(bool valid);
-    CreateTransactionHandler* m_create_handler{nullptr};
+    CreateTransactionTask* m_create_task{nullptr};
     Transaction* m_signed_transaction{nullptr};
     QJsonObject m_all_utxos;
 };

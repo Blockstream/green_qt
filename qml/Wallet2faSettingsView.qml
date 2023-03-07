@@ -7,18 +7,19 @@ import QtQuick.Layouts
 
 ColumnLayout {
     id: self
+    required property Context context
     required property Wallet wallet
 
     spacing: 16
 
     Controller {
         id: controller
-        wallet: self.wallet
+        context: self.context
     }
 
     SettingsBox {
         title: qsTrId('id_twofactor_authentication')
-        enabled: !wallet.locked
+        enabled: !self.context.locked
         contentItem: ColumnLayout {
             Layout.fillWidth: true
             spacing: 8
@@ -29,7 +30,7 @@ ColumnLayout {
             }
             Repeater {
                 model: {
-                    const methods = wallet.config.all_methods || []
+                    const methods = self.context.config.all_methods || []
                     return methods.filter(method => {
                         switch (method) {
                             case 'email': return true
@@ -54,7 +55,7 @@ ColumnLayout {
                     ColumnLayout {
                         Label {
                             text: {
-                                switch(method) {
+                                switch (method) {
                                     case 'email':
                                         return qsTrId('id_email')
                                     case 'sms':
@@ -69,8 +70,8 @@ ColumnLayout {
                             }
                         }
                         Label {
-                            visible: wallet.config[method].enabled
-                            text: method === 'gauth' ? qsTrId('id_enabled') : wallet.config[method].data
+                            visible: self.context.config[method].enabled
+                            text: method === 'gauth' ? qsTrId('id_enabled') : self.context.config[method].data
                             color: constants.c100
                             font.pixelSize: 10
                         }
@@ -79,12 +80,12 @@ ColumnLayout {
                     }
                     GSwitch {
                         Binding on checked {
-                            value: wallet.config[method].enabled
+                            value: self.context.config[method].enabled
                         }
 
                         onClicked: {
-                            checked = wallet.config[modelData].enabled;
-                            if (!wallet.config[method].enabled) {
+                            checked = self.context.config[modelData].enabled;
+                            if (!self.context.config[method].enabled) {
                                 enable_dialog.createObject(stack_view, { method }).open();
                             } else {
                                 disable_dialog.createObject(stack_view, { method }).open();
@@ -98,8 +99,8 @@ ColumnLayout {
 
     SettingsBox {
         title: qsTrId('id_set_twofactor_threshold')
-        enabled: !wallet.locked
-        visible: !wallet.network.liquid && !!wallet.config.limits
+        enabled: !self.context.locked
+        visible: !wallet.network.liquid && !!self.context.config.limits
         contentItem: RowLayout {
             Label {
                 Layout.fillWidth: true
@@ -139,14 +140,14 @@ ColumnLayout {
         contentItem: RowLayout {
             Label {
                 Layout.fillWidth: true
-                text: wallet.locked ? qsTrId('wallet locked for %1 days').arg(wallet.config.twofactor_reset ? wallet.config.twofactor_reset.days_remaining : 0) : qsTrId('id_start_a_2fa_reset_process_if')
+                text: self.context.locked ? qsTrId('wallet locked for %1 days').arg(self.context.config.twofactor_reset ? self.context.config.twofactor_reset.days_remaining : 0) : qsTrId('id_start_a_2fa_reset_process_if')
                 wrapMode: Text.WordWrap
             }
             GButton {
                 large: false
                 Layout.alignment: Qt.AlignRight
-                enabled: wallet.config.any_enabled || false
-                text: wallet.locked ? qsTrId('id_cancel_twofactor_reset') : qsTrId('id_reset')
+                enabled: self.context.config.any_enabled || false
+                text: self.context.locked ? qsTrId('id_cancel_twofactor_reset') : qsTrId('id_reset')
                 Component {
                     id: cancel_dialog
                     CancelTwoFactorResetDialog { }
@@ -154,10 +155,11 @@ ColumnLayout {
 
                 Component {
                     id: request_dialog
-                    RequestTwoFactorResetDialog { }
+                    RequestTwoFactorResetDialog {
+                    }
                 }
                 onClicked: {
-                    if (wallet.locked) {
+                    if (self.context.locked) {
                         cancel_dialog.createObject(stack_view, { wallet }).open()
                     } else {
                         request_dialog.createObject(stack_view, { wallet }).open()
@@ -171,18 +173,6 @@ ColumnLayout {
         id: enable_dialog
         TwoFactorEnableDialog {
             wallet: self.wallet
-            description: switch(method) {
-                case 'sms':
-                    return qsTrId('id_enter_phone_number')
-                case 'gauth':
-                    return qsTrId('id_scan_the_qr_code_in_google')
-                case 'email':
-                    return qsTrId('id_enter_your_email_address')
-                case 'phone':
-                    return qsTrId('id_enter_phone_number')
-                case 'telegram':
-                    return qsTrId('id_enter_telegram_username_or_number')
-            }
         }
     }
 

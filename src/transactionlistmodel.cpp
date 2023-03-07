@@ -3,26 +3,27 @@
 #include <QDebug>
 
 #include "account.h"
-#include "handlers/gettransactionshandler.h"
-#include "resolver.h"
+#include "task.h"
 #include "transaction.h"
-#include "wallet.h"
 
 TransactionListModel::TransactionListModel(QObject* parent)
     : QAbstractListModel(parent)
+    , m_dispatcher(new TaskDispatcher(this))
     , m_reload_timer(new QTimer(this))
 {
     m_reload_timer->setSingleShot(true);
     m_reload_timer->setInterval(200);
-    connect(m_reload_timer, &QTimer::timeout, [this] {
+    connect(m_reload_timer, &QTimer::timeout, this, [=] {
         m_reached_end = false;
         m_has_unconfirmed = false;
         fetch(true, 0, 30);
-    });
-}
 
-TransactionListModel::~TransactionListModel()
-{
+        // TODO move to a better place
+        if (m_account) {
+            auto load_balance = new LoadBalanceTask(m_account);
+            m_dispatcher->add(load_balance);
+        }
+    });
 }
 
 void TransactionListModel::setAccount(Account *account)
@@ -31,31 +32,19 @@ void TransactionListModel::setAccount(Account *account)
         beginResetModel();
         m_reached_end = false;
         m_transactions.clear();
-        disconnect(m_account, &Account::notificationHandled, this, &TransactionListModel::handleNotification);
+        disconnect(m_account, &Account::blockEvent, this, &TransactionListModel::handleBlockEvent);
+        disconnect(m_account, &Account::transactionEvent, this, &TransactionListModel::handleTransactionEvent);
         m_account = nullptr;
-        emit accountChanged(nullptr);
+        emit accountChanged();
         endResetModel();
     }
     if (!account) return;
     m_account = account;
-    emit accountChanged(account);
+    emit accountChanged();
     if (m_account) {
-        connect(m_account, &Account::notificationHandled, this, &TransactionListModel::handleNotification);
+        connect(m_account, &Account::blockEvent, this, &TransactionListModel::handleBlockEvent);
+        connect(m_account, &Account::transactionEvent, this, &TransactionListModel::handleTransactionEvent);
         fetchMore(QModelIndex());
-    }
-}
-
-void TransactionListModel::handleNotification(const QJsonObject& notification)
-{
-    QString event = notification.value("event").toString();
-    if (event == "transaction") {
-        reload();
-        return;
-    }
-
-    if (event == "block" && m_has_unconfirmed) {
-        reload();
-        return;
     }
 }
 
@@ -63,12 +52,11 @@ void TransactionListModel::fetch(bool reset, int offset, int count)
 {
     qDebug() << "transactions: fetch  account:" << m_account->pointer() << "reset:" << reset << "offset:" << offset << "count:" << count;
 
-    auto handler = new GetTransactionsHandler(m_account->pointer(), offset, count, m_account->wallet()->session());
+    auto get_transactions = new GetTransactionsTask(offset, count, m_account);
 
-    QObject::connect(handler, &Handler::done, this, [=] {
-        handler->deleteLater();
+    connect(get_transactions, &Task::finished, this, [=] {
         QVector<Transaction*> transactions;
-        for (const QJsonValue& value : handler->transactions()) {
+        for (const QJsonValue& value : get_transactions->transactions()) {
             auto transaction = account()->getOrCreateTransaction(value.toObject());
             transactions.append(transaction);
         }
@@ -92,25 +80,16 @@ void TransactionListModel::fetch(bool reset, int offset, int count)
             m_transactions.append(transactions);
             endInsertRows();
         }
-
-        m_fetching = false;
-        emit fetchingChanged();
     });
 
-    connect(handler, &Handler::resolver, this, [](Resolver* resolver) {
-        resolver->resolve();
-    });
-
-    handler->exec();
-
-    m_fetching = true;
-    emit fetchingChanged();
+    m_dispatcher->add(get_transactions);
 }
 
 QHash<int, QByteArray> TransactionListModel::roleNames() const
 {
     return {
-        { Qt::UserRole, "transaction" }
+        { Qt::UserRole, "transaction" },
+        { Qt::UserRole + 1, "date" },
     };
 }
 
@@ -119,7 +98,7 @@ bool TransactionListModel::canFetchMore(const QModelIndex &parent) const
     Q_ASSERT(!parent.parent().isValid());
     if (m_reached_end) return false;
     // Prevent concurrent fetchMore
-    if (m_fetching) return false;
+    if (m_dispatcher->isBusy()) return false;
     return true;
 }
 
@@ -127,7 +106,7 @@ void TransactionListModel::fetchMore(const QModelIndex &parent)
 {
     Q_ASSERT(!parent.parent().isValid());
     if (!m_account) return;
-    if (m_fetching) return;
+    if (m_dispatcher->isBusy()) return;
     fetch(false, m_transactions.size(), 30);
 }
 
@@ -145,14 +124,37 @@ int TransactionListModel::columnCount(const QModelIndex &parent) const
 
 QVariant TransactionListModel::data(const QModelIndex &index, int role) const
 {
-    if (role == Qt::UserRole) return QVariant::fromValue(m_transactions.at(index.row()));
-    return QVariant();
+    if (index.row() >= 0 || index.row() < m_transactions.size()) {
+        auto transaction = m_transactions.at(index.row());
+        if (role == Qt::UserRole) {
+            return QVariant::fromValue(transaction);
+        } else if (role == Qt::UserRole + 1) {
+            const auto now = QDateTime::currentDateTime();
+            const auto created_at = QDateTime::fromMSecsSinceEpoch(transaction->data().value("created_at_ts").toDouble() / 1000);
+            auto date = created_at.date();
+            const auto diff = created_at.daysTo(now);
+            if (diff > 365) return QString("%1").arg(date.year());
+            if (diff > 30) return QString("%2/%1").arg(date.year()).arg(date.month());
+            return QString(); // QString("%3/%2/%1").arg(date.year()).arg(date.month()).arg(date.day());
+        }
+    }
+    return {};
 }
 
 void TransactionListModel::reload()
 {
     if (!m_account) return;
     m_reload_timer->start();
+}
+
+void TransactionListModel::handleBlockEvent(const QJsonObject &event)
+{
+    if (m_has_unconfirmed) reload();
+}
+
+void TransactionListModel::handleTransactionEvent(const QJsonObject &event)
+{
+    reload();
 }
 
 TransactionFilterProxyModel::TransactionFilterProxyModel(QObject* parent)
@@ -164,20 +166,26 @@ void TransactionFilterProxyModel::setModel(TransactionListModel* model)
 {
     if (m_model == model) return;
     m_model = model;
-    emit modelChanged(m_model);
+    emit modelChanged();
     setSourceModel(m_model);
-    connect(m_model, &TransactionListModel::fetchingChanged, this, [this] {
-        if (!m_filter.isEmpty() && m_model->canFetchMore({})) m_model->fetchMore({});
-    });
+
+    if (m_model) {
+        connect(m_model->dispatcher(), &TaskDispatcher::busyChanged, this, [=] {
+            if (m_filter.isEmpty()) return;
+            if (m_model->dispatcher()->isBusy()) return;
+            if (!m_model->canFetchMore({})) return;
+            m_model->fetchMore({});
+        });
+    }
 }
 
 void TransactionFilterProxyModel::setFilter(const QString& filter)
 {
     if (m_filter == filter) return;
     m_filter = filter;
-    emit filterChanged(m_filter);
+    emit filterChanged();
     invalidateFilter();
-    if (!m_filter.isEmpty() && !m_model->fetching()) m_model->fetchMore(QModelIndex{});
+    if (!m_filter.isEmpty() && !m_model->dispatcher()->isBusy()) m_model->fetchMore({});
 }
 
 int TransactionFilterProxyModel::maxRowCount() const
@@ -188,12 +196,12 @@ int TransactionFilterProxyModel::maxRowCount() const
 void TransactionFilterProxyModel::setMaxRowCount(int max_row_count)
 {
     m_max_row_count = max_row_count;
-    emit maxRowCountChanged(max_row_count);
+    emit maxRowCountChanged();
 }
 
 bool TransactionFilterProxyModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
 {
-    if (m_max_row_count >- 1 && source_row >= m_max_row_count) return false;
+    if (m_max_row_count >= 0 && source_row >= m_max_row_count) return false;
     if (m_filter.isEmpty()) return true;
     auto transaction = m_model->index(source_row, 0, source_parent).data(Qt::UserRole).value<Transaction*>();
     if (transaction->hash().contains(m_filter, Qt::CaseInsensitive)) return true;

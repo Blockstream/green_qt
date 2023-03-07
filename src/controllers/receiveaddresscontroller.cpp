@@ -1,11 +1,10 @@
-#include "receiveaddresscontroller.h"
-
 #include "account.h"
-#include "handler.h"
+#include "context.h"
 #include "jadeapi.h"
 #include "jadedevice.h"
 #include "json.h"
 #include "network.h"
+#include "receiveaddresscontroller.h"
 #include "resolver.h"
 #include "session.h"
 #include "util.h"
@@ -14,27 +13,8 @@
 #include <gdk.h>
 #include <wally_bip32.h>
 
-class GetReceiveAddressHandler : public Handler
-{
-    Account* const m_account;
-    void call(GA_session* session, GA_auth_handler** auth_handler) override
-    {
-        auto address_details = Json::fromObject({
-            { "subaccount", static_cast<qint64>(m_account->pointer()) },
-        });
-
-        int err = GA_get_receive_address(session, address_details.get(), auth_handler);
-        Q_ASSERT(err == GA_OK);
-    }
-public:
-    GetReceiveAddressHandler(Account* account)
-        : Handler(account->wallet()->session())
-        , m_account(account)
-    {
-    }
-};
-
-ReceiveAddressController::ReceiveAddressController(QObject *parent) : QObject(parent)
+ReceiveAddressController::ReceiveAddressController(QObject *parent)
+    : Controller(parent)
 {
 }
 
@@ -78,22 +58,24 @@ QString ReceiveAddressController::address() const
 QString ReceiveAddressController::uri() const
 {
     if (!m_account || m_generating) return {};
-    const auto wallet = m_account->wallet();
-    auto unit = wallet->settings().value("unit").toString();
+    const auto context = m_account->context();
+    const auto network = m_account->network();
+    const auto wallet = context->wallet();
+    auto unit = context->unit();
     unit = unit == "\u00B5BTC" ? "ubtc" : unit.toLower();
     auto amount = m_amount;
     amount.replace(',', '.');
     amount = wallet->convert({{ unit, amount }}).value("btc").toString();
     if (amount.toDouble() > 0) {
-        if (wallet->network()->isLiquid()) {
+        if (network->isLiquid()) {
             return QString("%1:%2?assetid=%3amount=%4")
-                    .arg(wallet->network()->data().value("bip21_prefix").toString())
+                    .arg(network->data().value("bip21_prefix").toString())
                     .arg(m_address)
-                    .arg(wallet->network()->policyAsset())
+                    .arg(network->policyAsset())
                     .arg(amount);
         } else {
             return QString("%1:%2?amount=%3")
-                    .arg(wallet->network()->data().value("bip21_prefix").toString())
+                    .arg(network->data().value("bip21_prefix").toString())
                     .arg(m_address)
                     .arg(amount);
         }
@@ -123,32 +105,30 @@ void ReceiveAddressController::setAddressVerification(ReceiveAddressController::
 
 void ReceiveAddressController::generate()
 {
-    if (!m_account || m_account->wallet()->isLocked()) return;
+    if (!m_account || m_account->context()->isLocked()) return;
 
     if (m_generating) return;
 
     setGenerating(true);
-
-    auto handler = new GetReceiveAddressHandler(m_account);
-    connect(handler, &Handler::done, this, [this, handler] {
-        handler->deleteLater();
-        m_result = handler->result().value("result").toObject();
+    const auto get_receive_address = new GetReceiveAddressTask(m_account);
+    connect(get_receive_address, &Task::finished, this, [=] {
+        m_result = get_receive_address->result().value("result").toObject();
         m_address = m_result.value("address").toString();
         setGenerating(false);
         setAddressVerification(VerificationNone);
         emit changed();
     });
-    connect(handler, &Handler::resolver, this, [](Resolver* resolver) {
-        resolver->resolve();
-    });
-    handler->exec();
+
+    m_dispatcher->add(get_receive_address);
 }
 
 void ReceiveAddressController::verify()
 {
-    auto device = qobject_cast<JadeDevice*>(m_account->wallet()->device());
+    // TODO move device to context, device details stay on wallet
+    const auto context = m_account->context();
+    auto device = qobject_cast<JadeDevice*>(context->device());
     Q_ASSERT(device);
-    const auto network = m_account->wallet()->network();
+    const auto network = m_account->network();
     if (network->isElectrum()) {
         verifySinglesig();
     } else {
@@ -160,7 +140,9 @@ void ReceiveAddressController::verifyMultisig() {
     Q_ASSERT(!m_generating);
     Q_ASSERT(m_address_verification != VerificationPending);
     setAddressVerification(VerificationPending);
-    auto device = qobject_cast<JadeDevice*>(m_account->wallet()->device());
+    const auto context = m_account->context();
+    const auto network = m_account->network();
+    auto device = qobject_cast<JadeDevice*>(context->device());
     Q_ASSERT(device);
     const quint32 subaccount = m_result.value("subaccount").toDouble();
     const quint32 branch = m_result.value("branch").toDouble();
@@ -173,7 +155,7 @@ void ReceiveAddressController::verifyMultisig() {
     const auto recovery_chain_code = ParseByteArray(m_account->json().value("recovery_chain_code"));
     if (recovery_chain_code.length() > 0) {
         const auto recovery_pub_key = ParseByteArray(m_account->json().value("recovery_pub_key"));
-        const auto version = m_account->wallet()->network()->isMainnet() ? BIP32_VER_MAIN_PUBLIC : BIP32_VER_TEST_PUBLIC;
+        const auto version = network->isMainnet() ? BIP32_VER_MAIN_PUBLIC : BIP32_VER_TEST_PUBLIC;
 
         ext_key subactkey, branchkey;
         char* base58;
@@ -194,7 +176,7 @@ void ReceiveAddressController::verifyMultisig() {
         wally_free_string(base58);
     }
 
-    device->api()->getReceiveAddress(m_account->wallet()->network()->canonicalId(), subaccount, branch, pointer, recovery_xpub, subtype, [this](const QVariantMap& msg) {
+    device->api()->getReceiveAddress(network->canonicalId(), subaccount, branch, pointer, recovery_xpub, subtype, [this](const QVariantMap& msg) {
         qDebug() << "jade: verify result" << msg;
         setAddressVerification(msg.contains("error") ? VerificationRejected : VerificationAccepted);
     });
@@ -205,7 +187,9 @@ void ReceiveAddressController::verifySinglesig()
     Q_ASSERT(!m_generating);
     Q_ASSERT(m_address_verification != VerificationPending);
     setAddressVerification(VerificationPending);
-    auto device = qobject_cast<JadeDevice*>(m_account->wallet()->device());
+    const auto context = m_account->context();
+    const auto network = m_account->network();
+    auto device = qobject_cast<JadeDevice*>(context->device());
     Q_ASSERT(device);
     const auto type = m_account->type();
     const auto path = ParsePath(m_result.value("user_path"));
@@ -215,7 +199,23 @@ void ReceiveAddressController::verifySinglesig()
     if (type == "p2wpkh") variant = "wpkh(k)";
     if (type == "p2sh-p2wpkh") variant = "sh(wpkh(k))";
 
-    device->api()->getReceiveAddress(m_account->wallet()->network()->canonicalId(), variant, path, [this](const QVariantMap& msg) {
+    device->api()->getReceiveAddress(network->canonicalId(), variant, path, [this](const QVariantMap& msg) {
         setAddressVerification(msg.contains("error") ? VerificationRejected : VerificationAccepted);
     });
+}
+
+bool GetReceiveAddressTask::call(GA_session *session, GA_auth_handler **auth_handler)
+{
+    const auto address_details = Json::fromObject({
+        { "subaccount", static_cast<qint64>(m_account->pointer()) },
+    });
+
+    const auto rc = GA_get_receive_address(session, address_details.get(), auth_handler);
+    return rc == GA_OK;
+}
+
+GetReceiveAddressTask::GetReceiveAddressTask(Account *account)
+    : AuthHandlerTask(account->context())
+    , m_account(account)
+{
 }

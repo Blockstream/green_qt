@@ -5,12 +5,10 @@
 #include "account.h"
 #include "asset.h"
 #include "balance.h"
-#include "handlers/createtransactionhandler.h"
-#include "handlers/getunspentoutputshandler.h"
-#include "handlers/sendtransactionhandler.h"
-#include "handlers/signtransactionhandler.h"
+#include "context.h"
 #include "json.h"
 #include "network.h"
+#include "task.h"
 #include "transaction.h"
 #include "wallet.h"
 
@@ -31,19 +29,28 @@ void BumpFeeController::bumpFee()
 {
     Q_ASSERT(!m_tx.isEmpty());
     Q_ASSERT(m_tx.value("error").toString().isEmpty());
-    auto sign = new SignTransactionHandler(m_tx, wallet()->session());
-    connect(sign, &Handler::done, this, [this, sign] {
+
+    const auto wallet = context()->wallet();
+
+    auto sign = new SignTransactionTask(m_tx, m_context);
+    auto send = new SendTransactionTask(m_context);
+
+    connect(sign, &Task::finished, this, [=] {
         auto details = sign->result().value("result").toObject();
-        auto send = new SendTransactionHandler(details, wallet()->session());
-        connect(send, &Handler::done, this, [this, send] {
-            setSignedTransaction(m_account->getOrCreateTransaction(send->result().value("result").toObject()));
-            send->deleteLater();
-            wallet()->updateConfig();
-            emit finished();
-        });
-        exec(send);
+        send->setDetails(details);
     });
-    exec(sign);
+
+    connect(send, &Task::finished, this, [=] {
+        const auto transaction = m_account->getOrCreateTransaction(send->result().value("result").toObject());
+        setSignedTransaction(transaction);
+        // TODO context()->updateConfig();
+        emit finished();
+    });
+
+    auto group = new TaskGroup(this);
+    group->add(sign);
+    group->add(send);
+    m_dispatcher->add(group);
 }
 
 void BumpFeeController::setTransaction(Transaction *transaction)
@@ -57,26 +64,23 @@ void BumpFeeController::setTransaction(Transaction *transaction)
 void BumpFeeController::create()
 {
     if (!account()) return;
-    if (!wallet()) return;
+    if (!m_context) return;
+    const auto wallet = m_context->wallet();
+    if (!wallet) return;
     if (!m_transaction) return;
     int req = ++m_req;
-    if (m_create_handler) return;
+    if (m_create_task) return;
     auto a = account();
 
-    if (m_get_unspent_outputs_handler) return;
+    if (m_get_unspent_outputs) return;
     if (m_utxos.isNull()) {
-        auto handler = new GetUnspentOutputsHandler(1, true, a);
-        connect(handler, &Handler::finished, this, [this, handler] {
-            m_utxos = handler->unspentOutputs();
-            m_get_unspent_outputs_handler = nullptr;
+        m_get_unspent_outputs = new GetUnspentOutputsTask(1, true, a->pointer(), m_context);
+        connect(m_get_unspent_outputs, &Task::finished, this, [=] {
+            m_utxos = m_get_unspent_outputs->unspentOutputs();
+            m_get_unspent_outputs = nullptr;
             create();
-            handler->deleteLater();
         });
-        connect(handler, &Handler::error, this, [&] {
-            handler->deleteLater();
-        });
-        m_get_unspent_outputs_handler = handler;
-        handler->exec();
+        m_dispatcher->add(m_get_unspent_outputs);
         return;
     }
 
@@ -87,19 +91,19 @@ void BumpFeeController::create()
         { "previous_transaction", m_transaction->data() }
     };
 
-    m_create_handler = new CreateTransactionHandler(details, wallet()->session());
-    connect(m_create_handler, &Handler::done, this, [this, req] {
+    m_create_task = new CreateTransactionTask(details, m_context);
+    connect(m_create_task, &CreateTransactionTask::transaction, this, [=](const QJsonObject& transaction) {
         if (m_req == req) {
-            m_tx = m_create_handler->transaction();
+            m_tx = transaction;
             emit txChanged(m_tx);
             m_req = 0;
-            m_create_handler = nullptr;
+            m_create_task = nullptr;
         } else {
-            m_create_handler = nullptr;
+            m_create_task = nullptr;
             create();
         }
     });
-    exec(m_create_handler);
+    m_dispatcher->add(m_create_task);
 }
 
 void BumpFeeController::setSignedTransaction(Transaction *signed_transaction)

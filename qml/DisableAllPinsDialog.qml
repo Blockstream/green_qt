@@ -7,32 +7,23 @@ ControllerDialog {
     id: dialog
     title: qsTrId('id_disable_pin_access')
     controller: Controller {
-        wallet: dialog.wallet
+        context: dialog.wallet.context
     }
-    width: 400
-    initialItem: ColumnLayout {
-        property list<Action> actions: [
-            Action {
-                text: qsTrId('id_cancel')
-                onTriggered: dialog.reject()
-            },
-            Action {
-                property bool destructive: true
-                text: qsTrId('id_disable_pin_access')
-                enabled: confirm_checkbox.checked
-                onTriggered: {
-                    controller.disableAllPins()
-                    dialog.accept()
-                }
-            }
-        ]
+    ColumnLayout {
+        spacing: constants.s1
+        Spacer {
+        }
         Label {
+            Layout.alignment: Qt.AlignCenter
             Layout.fillWidth: true
+            Layout.maximumWidth: 360
             text: qsTrId('id_this_will_disable_pin_login_for')
+            horizontalAlignment: Label.AlignHCenter
             wrapMode: Text.WordWrap
         }
         RowLayout {
-            Layout.fillWidth: true
+            Layout.fillWidth: false
+            Layout.alignment: Qt.AlignCenter
             CheckBox {
                 id: confirm_checkbox
             }
@@ -41,6 +32,18 @@ ControllerDialog {
                 wrapMode: Text.WordWrap
                 text: qsTrId('id_i_confirm_i_want_to_disable_pin')
             }
+        }
+        GButton {
+            Layout.alignment: Qt.AlignCenter
+            destructive: true
+            text: qsTrId('id_disable_pin_access')
+            enabled: confirm_checkbox.checked
+            onClicked: {
+                controller.disableAllPins()
+                dialog.accept()
+            }
+        }
+        Spacer {
         }
     }
 }

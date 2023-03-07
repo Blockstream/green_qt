@@ -4,21 +4,14 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 ControllerDialog {
-    id: dialog
+    id: self
     title: qsTrId('id_delete_wallet')
     controller: Controller {
-        wallet: dialog.wallet
+        id: controller
+        context: self.context
     }
-    width: 400
-    initialItem: ColumnLayout {
-        property list<Action> actions: [
-            Action {
-                property bool destructive: true
-                text: qsTrId('id_delete_wallet')
-                enabled: confirm_checkbox.checked
-                onTriggered: controller.deleteWallet()
-            }
-        ]
+    ColumnLayout {
+        spacing: constants.s1
         Label {
             Layout.fillWidth: true
             text: qsTrId('id_delete_permanently_your_wallet')
@@ -34,6 +27,13 @@ ControllerDialog {
                 wrapMode: Text.WordWrap
                 text: qsTrId('id_i_confirm_i_want_to_delete_this')
             }
+        }
+        GButton {
+            Layout.alignment: Qt.AlignCenter
+            destructive: true
+            text: qsTrId('id_delete_wallet')
+            enabled: confirm_checkbox.checked
+            onClicked: controller.deleteWallet()
         }
     }
 }

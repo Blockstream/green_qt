@@ -8,9 +8,8 @@ import QtQuick.Layouts
 import "analytics.js" as AnalyticsJS
 
 WizardPage {
-    required property Account account
     required property var dialog
-    required property var transaction
+    required property Transaction transaction
 
     id: self
     actions: Action {
@@ -38,8 +37,9 @@ WizardPage {
             font.pixelSize: 12
             delay: 50
             text: self.transaction.data.txhash
-            onCopy: Analytics.recordEvent('share_transaction', AnalyticsJS.segmentationShareTransaction(self.account))
+            onCopy: Analytics.recordEvent('share_transaction', AnalyticsJS.segmentationShareTransaction(self.transaction.account))
         }
-        VSpacer {}
+        VSpacer {
+        }
     }
 }

@@ -6,7 +6,6 @@
 #include <QMutexLocker>
 #include <QtConcurrentRun>
 
-#include "handlers/connecthandler.h"
 #include "json.h"
 #include "network.h"
 #include "settings.h"
@@ -48,8 +47,6 @@ Session::~Session()
 
 void Session::handleNotification(const QJsonObject& notification)
 {
-    qDebug() << Q_FUNC_INFO << notification;
-
     emit notificationHandled(notification);
 
     const auto event = notification.value("event").toString();
@@ -61,17 +58,32 @@ void Session::handleNotification(const QJsonObject& notification)
 
     m_events.append(notification);
 
+    qDebug() << Q_FUNC_INFO << notification;
+
     if (event == "network") {
         auto data = value.toObject();
         const auto current_state = data.value("current_state").toString();
         const auto next_state = data.value("next_state").toString();
         setConnected(current_state == "connected");
         setConnecting(current_state == "disconnected" && next_state == "connected");
-        return;
-    }
-    if (event == "tor") {
+        emit networkEvent(data);
+    } else if (event == "tor") {
         emit torEvent(value.toObject());
-        return;
+    } else if (event == "settings") {
+        emit settingsEvent(value.toObject());
+    } else if (event == "twofactor_reset") {
+        emit twoFactorResetEvent(value.toObject());
+    } else if (event == "block") {
+        const auto block = value.toObject();
+        setBlock(block);
+        emit blockEvent(block);
+    } else if (event == "transaction") {
+        emit transactionEvent(value.toObject());
+    } else if (event == "ticker") {
+        emit tickerEvent(value.toObject());
+    } else {
+        qDebug() << Q_FUNC_INFO << notification;
+        Q_UNREACHABLE();
     }
 }
 
@@ -79,23 +91,39 @@ void Session::setConnected(bool connected)
 {
     if (m_connected == connected) return;
     m_connected = connected;
-    emit connectedChanged(m_connected);
+    emit connectedChanged();
 }
 
 void Session::setConnecting(bool connecting)
 {
     if (m_connecting == connecting) return;
     m_connecting = connecting;
-    emit connectingChanged(m_connecting);
+    emit connectingChanged();
 }
 
 void Session::setActive(bool active)
 {
     if (m_active == active) return;
     m_active = active;
-    emit activeChanged(m_active);
+    emit activeChanged();
     update();
 }
+
+uint32_t Session::blockHeight() const
+{
+    return m_block.value("block_height").toDouble();
+}
+
+void Session::setBlock(const QJsonObject& block)
+{
+    if (m_block == block) return;
+    m_block = block;
+    emit blockChanged();
+}
+
+static QMutex g_session_mutex;
+static int64_t g_session_id{0};
+static QMap<int64_t, QPointer<Session>> g_sessions;
 
 void Session::update()
 {
@@ -103,40 +131,50 @@ void Session::update()
         int rc = GA_create_session(&m_session);
         Q_ASSERT(rc == GA_OK);
 
+        {
+            QMutexLocker locker(&g_session_mutex);
+            m_id = ++g_session_id;
+            g_sessions[m_id] = this;
+        }
+
         rc = GA_set_notification_handler(m_session, [](void* context, GA_json* details) {
-            auto session = reinterpret_cast<Session*>(context);
+            QMutexLocker locker(&g_session_mutex);
+            const auto id = (int64_t) context;
+
+            if (!g_sessions.contains(id)) return;
+            if (g_sessions.value(id).isNull()) return;
+
+            auto session = g_sessions.value(id).get();
             auto notification = Json::toObject(details);
 
             GA_destroy_json(details);
             QMetaObject::invokeMethod(session, [session, notification] {
                 session->handleNotification(notification);
             }, Qt::QueuedConnection);
-        }, this);
+        }, (void*) m_id);
         Q_ASSERT(rc == GA_OK);
-
-        if (m_use_tor) emit activityCreated(new SessionTorCircuitActivity(this));
-        emit activityCreated(new SessionConnectActivity(this));
-        m_connect_handler = new ConnectHandler(this);
-        m_connect_handler.track(QObject::connect(m_connect_handler, &ConnectHandler::finished, this, [=] {
-            m_connect_handler->deleteLater();
-            setConnecting(false);
-            setConnected(m_connect_handler->resultAt(0) == GA_OK);
-        }));
-        m_connect_handler->exec();
-        setConnecting(true);
-
         return;
     }
 
     if (!m_active && m_session) {
-        m_connect_handler.destroy();
+#if 1
+        {
+            QMutexLocker locker(&g_session_mutex);
+            g_sessions.remove(m_id);
+            m_id = 0;
+        }
 
-        GA_set_notification_handler(m_session, nullptr, nullptr);
-        QFuture<void> result = QtConcurrent::run([=] {
-            int rc = GA_destroy_session(m_session);
-            Q_ASSERT(rc == GA_OK);
+        int rc = GA_destroy_session(m_session);
+        qDebug() << Q_FUNC_INFO << rc;
+#else
+        m_self->clear();
+        const auto session = m_session;
+        QTimer::singleShot(60 * 1000, qApp, [session] {
+            GA_set_notification_handler(session, nullptr, nullptr);
+            int rc = GA_destroy_session(session);
+            qDebug() << Q_FUNC_INFO << "GA_destroy_session" << rc;
         });
-
+#endif
         m_session = nullptr;
         return;
     }
@@ -153,48 +191,3 @@ void SessionActivity::setSession(Session* session)
     m_session = session;
 }
 
-SessionTorCircuitActivity::SessionTorCircuitActivity(Session* session)
-    : SessionActivity(session)
-{
-    m_tor_event_connection = connect(session, &Session::torEvent, this, [this](const QJsonObject& event) {
-        const int progress_value = event.value("progress").toInt();
-        if (progress_value > 0) {
-            progress()->setIndeterminate(false);
-            progress()->setTo(100);
-            progress()->setValue(progress_value);
-        }
-
-        const auto summary = event.value("summary").toString();
-        if (!summary.isEmpty()) {
-            m_logs.prepend(summary);
-            emit logsChanged(m_logs);
-        }
-
-        // TODO: handle errors
-
-        const auto tag = event.value("tag").toString();
-        if (tag == "done") {
-            finish();
-            QObject::disconnect(m_tor_event_connection);
-            QObject::disconnect(m_connected_connection);
-        }
-    });
-    m_connected_connection = connect(session, &Session::connectedChanged, this, [=](bool connected) {
-        if (connected) {
-            finish();
-            QObject::disconnect(m_tor_event_connection);
-            QObject::disconnect(m_connected_connection);
-        }
-    });
-}
-
-SessionConnectActivity::SessionConnectActivity(Session* session)
-    : SessionActivity(session)
-{
-    m_connection = connect(session, &Session::connectedChanged, this, [=] {
-        if (session->isConnected()) {
-            finish();
-            QObject::disconnect(m_connection);
-        }
-    });
-}

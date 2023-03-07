@@ -2,66 +2,62 @@ import Blockstream.Green
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import Qt5Compat.GraphicalEffects
 
-Page {
+GPane {
+    property real contentY: list_view.contentY //+ list_view.headerItem.height
     required property Account account
     property alias interactive: list_view.interactive
-    property alias label: label
     property alias list: list_view
-    property alias maxRowCount: transaction_list_filter.maxRowCount
     property bool hasExport: true
 
     id: self
-    title: qsTrId('id_transactions')
-    background: null
-    spacing: constants.p1
-    header: GHeader {
+
+    Component {
+        id: sectionHeading
         Label {
-            Layout.alignment: Qt.AlignVCenter
-            id: label
-            text: self.title
-            font.pixelSize: 20
-            font.styleName: 'Bold'
-        }
-        HSpacer {
-        }
-        GSearchField {
-            Layout.alignment: Qt.AlignVCenter
-            visible: self.hasExport
-            id: search_field
-        }
-        GButton {
-            Layout.alignment: Qt.AlignVCenter
-            text: qsTrId('Export')
-            visible: self.hasExport
-            enabled: self.account.wallet.ready && !list_view.model.fetching && list_view.count > 0
-            onClicked: export_transactions_popup.createObject(window, { account: self.account }).open()
-            ToolTip.text: qsTrId('id_export_transactions_to_csv_file')
+            required property string section
+            topPadding: 0
+            bottomPadding: 8
+            leftPadding: constants.p3
+            text: section
+            opacity: 0.5
+            font.bold: true
+            font.pixelSize: 12
         }
     }
-    contentItem: GListView {
+
+    contentItem: TListView {
         id: list_view
-        clip: true
         spacing: 8
+//        header: THeader {
+//            width: list_view.contentWidth
+//            height: 40
+//        }
+
         model: TransactionFilterProxyModel {
-            id: transaction_list_filter
-            filter: search_field.text
-            model: TransactionListModel {
-                id: transaction_list_model
-                account: self.account
-            }
+//            filter: list_view.headerItem.searchText
+            model: transaction_list_model
         }
+
         delegate: TransactionDelegate {
             width: ListView.view.contentWidth
+            account: self.account
+            context: self.account.context
             onClicked: transaction_dialog.createObject(window, { transaction }).open()
         }
-        refreshGesture: true
-        refreshText: qsTrId('id_loading_transactions')
-        onRefreshTriggered: transaction_list_model.reload()
+        section.property: "date"
+        section.criteria: ViewSection.FullString
+        section.delegate: sectionHeading
+        section.labelPositioning: ViewSection.InlineLabels // + ViewSection.CurrentLabelAtStart
+        // TODO
+        // refreshGesture: true
+        // refreshText: qsTrId('id_loading_transactions')
+        // onRefreshTriggered: transaction_list_model.reload()
         BusyIndicator {
             width: 32
             height: 32
-            running: transaction_list_model.fetching
+            running: transaction_list_model.dispatcher.busy
             anchors.margins: 8
             Layout.alignment: Qt.AlignHCenter
             visible: running ? 1 : 0
@@ -70,7 +66,7 @@ Page {
         }
 
         Label {
-            visible: !list_view.model.fetching && list_view.count === 0
+            visible: !transaction_list_model.dispatcher.busy && list_view.count === 0
             anchors.top: parent.top
             anchors.left: parent.left
             color: 'white'
@@ -99,10 +95,42 @@ Page {
             onOpened: controller.save()
             ExportTransactionsController {
                 id: controller
+                context: dialog.account.context
                 account: dialog.account
                 onSaved: dialog.close()
             }
             BusyIndicator {}
         }
+    }
+
+    component THeader: Item {
+        property alias searchText: search_field.text
+        GPane {
+            width: list_view.contentWidth
+            contentItem: RowLayout {
+                HSpacer {
+                }
+                GSearchField {
+                    id: search_field
+                    Layout.alignment: Qt.AlignVCenter
+                    visible: self.hasExport
+                }
+                GButton {
+                    Layout.alignment: Qt.AlignVCenter
+                    text: qsTrId('Export')
+                    visible: self.hasExport
+                    enabled: self.account.context && !transaction_list_model.dispatcher.busy && list_view.count > 0
+                    onClicked: export_transactions_popup.createObject(window, { account: self.account }).open()
+                    ToolTip.text: qsTrId('id_export_transactions_to_csv_file')
+                }
+            }
+        }
+    }
+
+    component TListView: ListView {
+        ScrollIndicator.vertical: ScrollIndicator { }
+        contentWidth: width
+        displayMarginBeginning: 300
+        displayMarginEnd: 100
     }
 }

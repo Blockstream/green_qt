@@ -1,5 +1,6 @@
 #include "account.h"
 #include "accountlistmodel.h"
+#include "context.h"
 #include "wallet.h"
 
 AccountListModel::AccountListModel(QObject* parent)
@@ -8,34 +9,36 @@ AccountListModel::AccountListModel(QObject* parent)
     setDynamicSortFilter(true);
 }
 
-void AccountListModel::setWallet(Wallet *wallet)
+void AccountListModel::setContext(Context* context)
 {
-    if (m_wallet == wallet) return;
-    if (m_wallet) {
+    if (m_context == context) return;
+    if (m_context) {
         setSourceModel(nullptr);
         m_items.clear();
         delete m_model;
     }
-    m_wallet = wallet;
-    if (m_wallet) {
+    m_context = context;
+    if (m_context) {
         m_model = new QStandardItemModel(this);
         m_model->setItemRoleNames({{ Qt::UserRole, "account" }});
         update();
         setSourceModel(m_model);
-        connect(m_wallet, &Wallet::accountsChanged, this, [=] {
+        connect(m_context, &Context::accountsChanged, this, [=] {
             update();
             invalidateFilter();
         });
     }
-    emit walletChanged(m_wallet);
+    emit contextChanged();
 }
 
 void AccountListModel::update()
 {
-    Q_ASSERT(m_wallet);
+    Q_ASSERT(m_context);
     Q_ASSERT(m_model);
-    for (Account* account : m_wallet->m_accounts) {
+    bool changed = false;
+    for (Account* account : m_context->m_accounts) {
         if (m_items.contains(account)) continue;
+        changed = true;
         auto item = new QStandardItem;
         m_items.insert(account, item);
         item->setData(QVariant::fromValue(account), Qt::UserRole);
@@ -44,6 +47,7 @@ void AccountListModel::update()
         connect(account, &Account::balanceChanged, this, [=] { invalidateFilter(); });
         connect(account, &Account::balancesChanged, this, [=] { invalidateFilter(); });
     }
+    if (changed) emit countChanged();
 }
 
 bool AccountListModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
@@ -67,6 +71,6 @@ void AccountListModel::setFilter(const QString &filter)
 {
     if (m_filter == filter) return;
     m_filter = filter;
-    emit filterChanged(m_filter);
+    emit filterChanged();
     invalidateFilter();
 }

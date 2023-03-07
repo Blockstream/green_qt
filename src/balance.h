@@ -1,11 +1,10 @@
 #ifndef GREEN_BALANCE_H
 #define GREEN_BALANCE_H
 
+#include "green.h"
+
 #include <QObject>
 #include <QtQml>
-
-class Account;
-class Asset;
 
 class Balance : public QObject
 {
@@ -20,6 +19,7 @@ class Balance : public QObject
 public:
     explicit Balance(Account* account);
 
+    Context* context() const;
     Account* account() const { return m_account; }
 
     Asset* asset() const { return m_asset; }

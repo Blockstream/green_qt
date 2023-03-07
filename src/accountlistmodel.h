@@ -1,35 +1,39 @@
 #ifndef GREEN_ACCOUNTLISTMODEL_H
 #define GREEN_ACCOUNTLISTMODEL_H
 
+#include "green.h"
+
+#include <QQmlEngine>
 #include <QSet>
 #include <QSortFilterProxyModel>
 #include <QStandardItemModel>
-#include <QtQml>
-
-class Account;
-class Wallet;
 
 class AccountListModel : public QSortFilterProxyModel
 {
     Q_OBJECT
-    Q_PROPERTY(Wallet* wallet READ wallet WRITE setWallet NOTIFY walletChanged)
+    Q_PROPERTY(Context* context READ context WRITE setContext NOTIFY contextChanged)
     Q_PROPERTY(QString filter READ filter WRITE setFilter NOTIFY filterChanged)
+    Q_PROPERTY(int count READ count NOTIFY countChanged)
     QML_ELEMENT
 public:
     explicit AccountListModel(QObject* parent = nullptr);
 
-    Wallet* wallet() const { return m_wallet; }
-    void setWallet(Wallet* wallet);
+    Context* context() const { return m_context; }
+    void setContext(Context* context);
     bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const override;
     QString filter() const { return m_filter; }
     void setFilter(const QString& filter);
+    int count() const { return rowCount(); }
+
 private:
     void update();
 signals:
-    void walletChanged(Wallet* wallet);
-    void filterChanged(const QString& filter);
+    void contextChanged();
+    void filterChanged();
+    void countChanged();
+
 private:
-    Wallet* m_wallet{nullptr};
+    Context* m_context{nullptr};
     QStandardItemModel* m_model{nullptr};
     QMap<Account*, QStandardItem*> m_items;
     QString m_filter;

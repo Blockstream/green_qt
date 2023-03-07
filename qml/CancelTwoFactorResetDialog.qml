@@ -4,20 +4,22 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 ControllerDialog {
-    id: dialog
+    id: self
     title: qsTrId('id_cancel_twofactor_reset')
     controller: Controller {
-        wallet: dialog.wallet
+        id: controller
+        context: self.context
     }
-    initialItem: ColumnLayout {
-        property list<Action> actions: [
-            Action {
-                text: qsTrId('id_next')
-                onTriggered: controller.cancelTwoFactorReset()
-            }
-        ]
+    ColumnLayout {
+        spacing: constants.s1
         Label {
             text: qsTrId('id_cancel_twofactor_reset')
+        }
+        GButton {
+            Layout.alignment: Qt.AlignCenter
+            highlighted: true
+            text: qsTrId('id_next')
+            onClicked: controller.cancelTwoFactorReset()
         }
     }
 }

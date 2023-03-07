@@ -58,10 +58,7 @@ WalletManager::WalletManager()
             wallet->m_device_details = data.value("device_details").toObject();
         }
         if (wallet->m_login_attempts_remaining == 0) {
-            if (!wallet->m_pin_data.isEmpty()) {
-                wallet->m_pin_data.clear();
-                wallet->save();
-            }
+            wallet->m_pin_data.clear();
         }
         addWallet(wallet);
     }
@@ -84,9 +81,9 @@ void WalletManager::addWallet(Wallet* wallet)
     emit changed();
     emit walletAdded(wallet);
 
-    // Not persisted wallets should be removed when session is lost
-    connect(wallet, &Wallet::sessionChanged, this, [=](Session* session) {
-        if (!session && !wallet->isPersisted()) {
+    // Not persisted wallets should be removed when context is lost
+    connect(wallet, &Wallet::contextChanged, this, [=] {
+        if (!wallet->context() && !wallet->isPersisted()) {
             removeWallet(wallet);
         }
     });
@@ -103,7 +100,6 @@ Wallet *WalletManager::restoreWallet(Network *network, const QString& hash_id)
 {
     auto wallet = createWallet(network, hash_id);
     wallet->m_is_persisted = true;
-    wallet->m_restoring = true;
     return wallet;
 }
 

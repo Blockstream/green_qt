@@ -7,19 +7,19 @@
 #include "address.h"
 #include "asset.h"
 #include "balance.h"
+#include "context.h"
 #include "ga.h"
-#include "handlers/getbalancehandler.h"
 #include "json.h"
 #include "network.h"
 #include "output.h"
 #include "resolver.h"
+#include "task.h"
 #include "transaction.h"
-#include "updateaccounthandler.h"
 #include "wallet.h"
 
-Account::Account(const QJsonObject& data, Network* network, Wallet* wallet)
-    : QObject(wallet)
-    , m_wallet(wallet)
+Account::Account(const QJsonObject& data, Network* network, Context* context)
+    : QObject(context)
+    , m_context(context)
     , m_network(network)
     , m_pointer(data.value("pointer").toDouble())
     , m_type(data.value("type").toString())
@@ -27,6 +27,11 @@ Account::Account(const QJsonObject& data, Network* network, Wallet* wallet)
     Q_ASSERT(m_pointer >= 0);
     Q_ASSERT(!m_type.isEmpty());
     update(data);
+}
+
+Session *Account::session() const
+{
+    return m_context->session();
 }
 
 QJsonObject Account::json() const
@@ -46,7 +51,7 @@ void Account::update(const QJsonObject& json)
 
 void Account::updateBalance()
 {
-    if (wallet()->network()->isLiquid()) {
+    if (m_context->network()->isLiquid()) {
         auto satoshi = m_json.value("satoshi").toObject();
         auto balance_by_id = m_balance_by_id;
         m_balance_by_id.clear();
@@ -55,7 +60,7 @@ void Account::updateBalance()
             Balance* balance = balance_by_id.take(i.key());
             if (!balance) balance = new Balance(this);
             m_balance_by_id.insert(i.key(), balance);
-            balance->setAsset(wallet()->getOrCreateAsset(i.key()));
+            balance->setAsset(context()->getOrCreateAsset(i.key()));
             balance->setAmount(i.value().toDouble());
             m_balances.append(balance);
         }
@@ -87,23 +92,23 @@ void Account::handleNotification(const QJsonObject& notification)
 {
     const auto event = notification.value("event").toString();
     if (event == "transaction") {
-        reload();
-        emit notificationHandled(notification);
+        // TODO
+//        reload();
     } else if (event == "block") {
         // FIXME: Until gdk notifies of chain reorgs, resync balance every
         // 10 blocks in case a reorged tx is somehow evicted from the mempool
         const auto block = notification.value("block").toObject();
         uint32_t block_height = block.value("block_height").toDouble();
-        if (!wallet()->network()->isLiquid() || (block_height % 10) == 0) {
-            reload();
+        if (!m_network->isLiquid() || (block_height % 10) == 0) {
+            // TOOD
+            //reload();
         }
-        emit notificationHandled(notification);
     }
 }
 
 qint64 Account::balance() const
 {
-    const QString key = m_wallet->network()->isLiquid() ? m_wallet->network()->policyAsset() : "btc";
+    const QString key = m_network->isLiquid() ? m_network->policyAsset() : "btc";
     return m_json.value("satoshi").toObject().value(key).toDouble();
 }
 
@@ -114,7 +119,7 @@ QQmlListProperty<Balance> Account::balances()
 
 bool Account::hasBalance() const
 {
-    if (m_wallet->network()->isLiquid()) {
+    if (m_context->network()->isLiquid()) {
         for (auto balance : m_balances) {
             if (balance->amount() > 0) return true;
         }
@@ -124,73 +129,17 @@ bool Account::hasBalance() const
     }
 }
 
-void Account::reload()
+void Account::setBalanceData(const QJsonObject &data)
 {
-    auto handler = new GetBalanceHandler(this);
-    connect(handler, &Handler::done, this, [this, handler] {
-        auto balance = handler->result().value("result").toObject();
-        m_json.insert("satoshi", balance);
-        emit jsonChanged();
-        updateBalance();
-        if (!m_ready) {
-            m_ready = true;
-            emit readyChanged();
-        }
-    });
-    QObject::connect(handler, &Handler::resolver, this, [](Resolver* resolver) {
-        resolver->resolve();
-    });
-    handler->exec();
-}
-
-bool Account::rename(QString name, bool active_focus)
-{
-    if (!active_focus) name = name.trimmed();
-    if (name.isEmpty() && !active_focus) {
-        emit jsonChanged();
-        return false;
-    }
-    if (this->name() == name) return false;
-    if (active_focus) return false;
-    auto handler = new UpdateAccountHandler({
-        { "subaccount", static_cast<qint64>(m_pointer) },
-        { "name", name }
-    }, wallet()->session());
-    connect(handler, &Handler::done, this, [=] {
-        handler->deleteLater(),
-        setName(name);
-    });
-    handler->exec();
-    return true;
-}
-
-void Account::show()
-{
-    return setHiddenAsync(false);
-}
-
-void Account::hide()
-{
-    return setHiddenAsync(true);
-}
-
-void Account::setHiddenAsync(bool hidden)
-{
-    auto handler = new UpdateAccountHandler({
-        { "subaccount", static_cast<qint64>(m_pointer) },
-        { "hidden", hidden }
-    }, wallet()->session());
-    connect(handler, &Handler::done, this, [=] {
-        handler->deleteLater();
-        m_json["hidden"] = hidden;
-        setHidden(hidden);
-    });
-    handler->exec();
+    m_json.insert("satoshi", data);
+    emit jsonChanged();
+    updateBalance();
 }
 
 void Account::setHidden(bool hidden)
 {
     if (m_hidden == hidden) return;
+    m_json["hidden"] = hidden;
     m_hidden = hidden;
     emit hiddenChanged(m_hidden);
 }
@@ -252,5 +201,6 @@ void Account::setName(const QString& name)
 {
     if (m_name == name) return;
     m_name = name;
+    m_json["name"] = name;
     emit nameChanged(m_name);
 }

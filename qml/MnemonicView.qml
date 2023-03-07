@@ -6,8 +6,8 @@ import QtQuick.Layouts
 GridLayout {
     property var mnemonic
 
-    columnSpacing: 24
-    rowSpacing: 24
+    columnSpacing: 16
+    rowSpacing: 16
     columns: 6
     flow: GridLayout.LeftToRight
 
@@ -28,6 +28,7 @@ GridLayout {
                 text: modelData
                 textFormat: Text.RichText
                 font.pixelSize : 15
+                rightPadding: 24
             }
         }
     }

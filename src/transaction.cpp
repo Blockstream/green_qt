@@ -1,13 +1,13 @@
-#include "transaction.h"
-
-#include <gdk.h>
-
 #include "account.h"
 #include "asset.h"
+#include "context.h"
 #include "network.h"
 #include "session.h"
+#include "transaction.h"
 #include "util.h"
 #include "wallet.h"
+
+#include <gdk.h>
 
 namespace  {
 
@@ -45,7 +45,7 @@ TransactionAmount::TransactionAmount(Transaction* transaction, Asset* asset, qin
     , m_amount(amount)
 {
     Q_ASSERT(m_transaction);
-    Q_ASSERT(!m_asset || m_asset->wallet() == transaction->account()->wallet());
+    Q_ASSERT(!m_asset || m_asset->context() == transaction->account()->context());
 }
 
 TransactionAmount::~TransactionAmount()
@@ -57,7 +57,8 @@ QString TransactionAmount::formatAmount(bool include_ticker) const
     if (m_asset) {
         return m_asset->formatAmount(m_amount, include_ticker);
     } else {
-        return m_transaction->account()->wallet()->formatAmount(m_amount, include_ticker);
+        const auto wallet = m_transaction->account()->context()->wallet();
+        return wallet->formatAmount(m_amount, include_ticker);
     }
 }
 
@@ -74,6 +75,11 @@ Transaction::~Transaction()
 bool Transaction::isUnconfirmed() const
 {
     return m_data.value("block_height").toInt(0) == 0;
+}
+
+Context* Transaction::context() const
+{
+    return m_account->context();
 }
 
 Account *Transaction::account() const
@@ -108,14 +114,13 @@ void Transaction::updateFromData(const QJsonObject& data)
     // amounts again. note that above we early return if m_data doesn't change.
     auto amounts = m_amounts;
     m_amounts.clear();
-    auto wallet = m_account->wallet();
-    auto network = wallet->network();
+    const auto network = m_account->network();
     if (network->isLiquid()) {
         const auto policy_asset = network->policyAsset();
         const qint64 fee = m_data.value("fee").toDouble();
         for (auto i = satoshi.constBegin(); i != satoshi.constEnd(); ++i) {
             qint64 amount = i.value().toDouble();
-            Asset* asset = wallet->getOrCreateAsset(i.key());
+            Asset* asset = context()->getOrCreateAsset(i.key());
             if (asset->id() == policy_asset && amount < 0) amount += fee;
             if (amount != 0) m_amounts.append(new TransactionAmount(this, asset, amount));
         }
@@ -130,19 +135,20 @@ void Transaction::updateFromData(const QJsonObject& data)
 
 void Transaction::openInExplorer() const
 {
-    m_account->wallet()->network()->openTransactionInExplorer(m_data.value("txhash").toString());
+    m_account->network()->openTransactionInExplorer(m_data.value("txhash").toString());
 }
 
 QString Transaction::link()
 {
-    return m_account->wallet()->network()->explorerUrl() + m_data.value("txhash").toString();
+    return m_account->network()->explorerUrl() + m_data.value("txhash").toString();
 }
 
 QString Transaction::unblindedLink()
 {
-    Q_ASSERT(account()->wallet()->network()->isLiquid());
+    const auto network = m_account->network();
+    Q_ASSERT(network->isLiquid());
 
-    auto tx_explorer_url = m_account->wallet()->network()->explorerUrl();
+    auto tx_explorer_url = network->explorerUrl();
 
     const auto inputs = m_data.value("inputs").toArray();
     const auto outputs = m_data.value("outputs").toArray();
@@ -173,7 +179,7 @@ void Transaction::updateMemo(const QString& memo)
     Q_ASSERT(memo.length() <= 1024);
     if (m_memo == memo) return;
     auto txhash = m_data.value("txhash").toString().toLocal8Bit();
-    int err = GA_set_transaction_memo(m_account->wallet()->m_session->m_session, txhash.constData(), memo.toUtf8().constData(), 0);
+    int err = GA_set_transaction_memo(m_account->context()->session()->m_session, txhash.constData(), memo.toUtf8().constData(), 0);
     Q_ASSERT(err == GA_OK);
     setMemo(memo);
 }

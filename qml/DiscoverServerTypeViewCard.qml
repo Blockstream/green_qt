@@ -10,7 +10,7 @@ Button {
     required property string server_type
     required property string title
     property var icons
-    property alias busy: controller.busy
+    property bool busy: false
     property alias active: controller.active
     property alias wallet: controller.wallet
     property alias noErrors: controller.noErrors
@@ -92,8 +92,8 @@ Button {
                     text: qsTrId('id_wallet_found')
                 }
                 Label {
-                    visible: controller.wallet && controller.wallet.hasPinData
-                    text: qsTrId('id_wallet_already_restored') + ' - ' + controller.wallet.name
+                    visible: controller.wallet?.hasPinData ?? false
+                    text: qsTrId('id_wallet_already_restored') + ' - ' + controller.wallet?.name
                 }
                 HSpacer {
                 }
@@ -120,13 +120,13 @@ Button {
             return NetworkManager.networkWithServerType(network, self.server_type)
         }
         type: navigation.param.type || ''
-        mnemonic: navigation.param.mnemonic.split(',')
+        mnemonic: navigation.param.mnemonic
         password: navigation.param.password || ''
         pin: navigation.param.pin || ''
         active: self.visible
-        onFinished: {
-            Analytics.recordEvent('wallet_restore', AnalyticsJS.segmentationSession(controller.wallet))
-            navigation.set({ view: controller.wallet.network.key, wallet: controller.wallet.id })
+        onWalletRestored: (wallet) => {
+            Analytics.recordEvent('wallet_restore', AnalyticsJS.segmentationSession(wallet))
+            window.navigation.push({ wallet: wallet.id })
         }
     }
 }

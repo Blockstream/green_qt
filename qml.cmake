@@ -46,9 +46,7 @@ SET(QML_FILES
     qml/SignupDialog.qml
     qml/SelectNetworkViewCard.qml
     qml/GSwitch.qml
-    qml/ReceiveView.qml
     qml/SetUnspentOutputsStatusDialog.qml
-    qml/SendView.qml
     qml/AccountListView.qml
     qml/VSpacer.qml
     qml/WizardButtonBox.qml
@@ -134,7 +132,6 @@ SET(QML_FILES
     qml/StatusBar.qml
     qml/PinView.qml
     qml/GFlickable.qml
-    qml/DeviceView.qml
     qml/TransactionStatusBadge.qml
     qml/PopupBalloon.qml
     qml/SectionLabel.qml
@@ -159,6 +156,9 @@ SET(QML_FILES
     qml/WelcomePage.qml
     qml/WatchOnlyLoginDialog.qml
     qml/HomeView.qml
+    qml/AuthHandlerTaskView.qml
+    qml/GetCredentialsView.qml
+    qml/TaskDispatcherInspector.qml
 )
 
 if (GREEN_NO_RESOURCES)

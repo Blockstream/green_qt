@@ -89,6 +89,7 @@ MainPage {
                 implicitHeight: parent.height
             }
             GListView {
+                visible: false
                 SplitView.minimumWidth: 300
                 id: devices_list_view
                 clip: true
@@ -119,11 +120,15 @@ MainPage {
                         spacing: 16
                         Label {
                             Layout.fillWidth: true
-                            text: switch (device.type) {
+                            text: switch (self.device?.type) {
                                 case Device.LedgerNanoS: return 'Nano S'
                                 case Device.LedgerNanoX: return 'Nano X'
+                                default: return ''
                             }
                             font.pixelSize: 16
+                        }
+                        Label {
+                            text: (self.device?.appName ?? '') + ' ' + (self.device?.appVersion ?? '')
                         }
                         RowLayout {
                             spacing: 16
@@ -132,6 +137,8 @@ MainPage {
                                 Layout.preferredWidth: 24
                                 source: 'qrc:/svg/usbAlt.svg'
                             }
+                            HSpacer {
+                            }
                             Image {
                                 Layout.alignment: Qt.AlignLeft
                                 smooth: true
@@ -139,20 +146,18 @@ MainPage {
                                 fillMode: Image.PreserveAspectFit
                                 horizontalAlignment: Image.AlignHCenter
                                 verticalAlignment: Image.AlignVCenter
-                                source: switch (device.type) {
+                                source: switch (self.device?.type) {
                                     case Device.LedgerNanoS: return 'qrc:/svg/ledger_nano_s.svg'
                                     case Device.LedgerNanoX: return 'qrc:/svg/ledger_nano_x.svg'
+                                    default: return ''
                                 }
                                 sourceSize.height: 24
-                            }
-                            HSpacer {
                             }
                         }
                     }
                 }
             }
             StackLayout {
-                id: xxx
                 SplitView.fillWidth: true
                 SplitView.minimumWidth: 600// children[currentIndex+1].implicitWidth
                 currentIndex: devices_list_view.currentIndex
@@ -237,23 +242,23 @@ MainPage {
                 Layout.fillWidth: false
                 Layout.minimumWidth: 150
                 GButton {
-                    visible: !controller.wallet || controller.wallet.authentication !== Wallet.Authenticated
+                    visible: !controller.wallet || !controller.wallet.context
                     enabled: !controller.active
                     text: qsTrId('id_login')
                     onClicked: controller.active = true
                 }
                 GButton {
-                    visible: controller.wallet && controller.wallet.authentication === Wallet.Authenticated
+                    visible: controller.wallet && controller.wallet.context
                     text: qsTrId('id_go_to_wallet')
                     onClicked: navigation.set({ view: self.network.key, wallet: controller.wallet.id })
                 }
             }
+//            TaskDispatcherInspector {
+//                dispatcher: controller.dispatcher
+//                Layout.minimumHeight: 100
+//                Layout.minimumWidth: 100
+//            }
         }
-    }
-
-    component View1: Label {
-        required property LedgerDevice device
-        text: 'device'
     }
 
     component View: ColumnLayout {

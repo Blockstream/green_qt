@@ -1,15 +1,12 @@
 #ifndef GREEN_OUTPUTLISTMODEL_H
 #define GREEN_OUTPUTLISTMODEL_H
 
+#include "green.h"
+
 #include <QAbstractListModel>
 #include <QModelIndex>
-#include <QtQml>
+#include <QQmlEngine>
 #include <QVector>
-
-#include "connectable.h"
-
-class Account;
-class Output;
 
 class OutputListModel : public QAbstractListModel
 {
@@ -37,9 +34,10 @@ signals:
 private:
     void update();
 private:
-    Connectable<Account> m_account;
+    Account* m_account;
     QVector<Output*> m_outputs;
     bool m_fetching{false};
+    TaskDispatcher* const m_dispatcher;
 };
 
 #endif // GREEN_OUTPUTLISTMODEL_H

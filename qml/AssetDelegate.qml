@@ -5,7 +5,7 @@ import QtQuick.Controls
 import QtQuick.Controls.Material
 import QtQuick.Layouts
 
-Button {
+ItemDelegate {
     property Balance balance
     property bool hasDetails: balance.asset.hasData && balance.asset.data.name !== 'btc'
 

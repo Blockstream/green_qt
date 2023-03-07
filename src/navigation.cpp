@@ -20,6 +20,7 @@ void Navigation::push(const QVariantMap &param)
     m_history.removeAll(m_param);
     m_history.push(m_param);
     m_param = param;
+//    qDebug() << Q_FUNC_INFO << description();
     emit paramChanged();
 }
 

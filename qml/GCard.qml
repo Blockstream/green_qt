@@ -7,14 +7,6 @@ AbstractButton {
     id: self
     property string description
     padding: 24
-    scale: self.down ? 0.98 : (self.hovered || self.activeFocus ? 1.05 : 1)
-    transformOrigin: Item.Center
-    Behavior on scale {
-        NumberAnimation {
-            easing.type: Easing.OutBack
-            duration: 400
-        }
-    }
     background: Rectangle {
         border.width: self.activeFocus ? 1 : 0
         border.color: constants.c600

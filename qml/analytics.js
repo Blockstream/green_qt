@@ -28,19 +28,20 @@ function segmentationSession(wallet) {
     if (Settings.usePersonalNode) app_settings.push('electrum_server')
     if (Settings.enableSPV) app_settings.push('spv')
     segmentation.app_settings = app_settings.join(',')
-    if (wallet.device instanceof JadeDevice) {
+    const device = wallet.context?.device
+    if (device instanceof JadeDevice) {
         segmentation.brand = 'Blockstream'
-        segmentation.model = wallet.device.versionInfo.BOARD_TYPE
-        segmentation.firmware = wallet.device.version
+        segmentation.model = device.versionInfo.BOARD_TYPE
+        segmentation.firmware = device.version
         segmentation.connection = 'USB'
     }
-    if (wallet.device instanceof LedgerDevice) {
+    if (device instanceof LedgerDevice) {
         segmentation.brand = 'Ledger'
         segmentation.model
-            = wallet.device.type === Device.LedgerNanoS ? 'Ledger Nano S'
-            : wallet.device.type === Device.LedgerNanoX ? 'Ledger Nano X'
+            = device.type === Device.LedgerNanoS ? 'Ledger Nano S'
+            : device.type === Device.LedgerNanoX ? 'Ledger Nano X'
             : 'Unknown'
-        segmentation.firmware = wallet.device.appVersion
+        segmentation.firmware = device.appVersion
         segmentation.connection = 'USB'
     }
     return segmentation
@@ -70,7 +71,7 @@ function segmentationFirmwareUpdate(device, firmware) {
 }
 
 function segmentationShareTransaction(account, { method = 'copy' } = {}) {
-    const segmentation = segmentationSession(account.wallet)
+    const segmentation = segmentationSession(account.context.wallet)
     segmentation.method = method
     return segmentation;
 }
@@ -82,7 +83,7 @@ function segmentationWalletLogin(wallet, { method }) {
 }
 
 function segmentationSubAccount(account) {
-    const segmentation = segmentationSession(account.wallet)
+    const segmentation = segmentationSession(account.context.wallet)
     segmentation.account_type = account.type
     return segmentation
 }
@@ -108,8 +109,8 @@ function segmentationWalletActive(wallet) {
     let accounts_funded = 0
     const accounts_types = new Set
     const key = wallet.network.liquid ? wallet.network.policyAsset : 'btc'
-    for (let i = 0; i < wallet.accounts.length; ++i) {
-        const account = wallet.accounts[i]
+    for (let i = 0; i < wallet.context.accounts.length; ++i) {
+        const account = wallet.context.accounts[i]
         accounts_types.add(account.type)
         if (account.json.satoshi[key] > 0 || Object.keys(account.json.satoshi).length > 1) {
             accounts_funded ++
@@ -117,7 +118,7 @@ function segmentationWalletActive(wallet) {
     }
     segmentation.wallet_funded = accounts_funded > 0
     segmentation.accounts_funded = accounts_funded
-    segmentation.accounts = wallet.accounts.length
+    segmentation.accounts = wallet.context.accounts.length
     segmentation.accounts_types = Array.from(accounts_types).join(',')
     return segmentation
 }

@@ -1,7 +1,7 @@
+#include "exportaddressescontroller.h"
 #include "account.h"
-#include "controllers/exportaddressescontroller.h"
-#include "handlers/getaddresseshandler.h"
-#include "resolver.h"
+#include "context.h"
+#include "task.h"
 #include "wallet.h"
 
 #include <QFileDialog>
@@ -10,7 +10,8 @@
 #include <QStandardPaths>
 #include <QTimer>
 
-ExportAddressesController::ExportAddressesController(QObject *parent) : QObject(parent)
+ExportAddressesController::ExportAddressesController(QObject *parent)
+    : Controller(parent)
 {
 }
 
@@ -18,14 +19,15 @@ void ExportAddressesController::setAccount(Account *account)
 {
     if (m_account == account) return;
     m_account = account;
-    emit accountChanged(m_account);
+    emit accountChanged();
 }
 
 void ExportAddressesController::save()
 {
     Q_ASSERT(m_account);
-    auto wallet = m_account->wallet();
-    auto settings = wallet->settings();
+    const auto context = m_account->context();
+    const auto wallet = context->wallet();
+    const auto settings = context->settings();
 
     const auto now = QDateTime::currentDateTime();
     const auto account_name = m_account->name().isEmpty() ? qtTrId("id_main_account") : m_account->name();
@@ -48,12 +50,11 @@ void ExportAddressesController::save()
 
 void ExportAddressesController::nextPage()
 {
-    auto handler = new GetAddressesHandler(m_last_pointer, m_account);
-    QObject::connect(handler, &Handler::done, this, [=] {
-        handler->deleteLater();
-        m_last_pointer = handler->lastPointer();
+    auto task = new GetAddressesTask(m_last_pointer, m_account);
+    connect(task, &Task::finished, this, [=] {
+        m_last_pointer = task->lastPointer();
 
-        for (QJsonValue data : handler->addresses()) {
+        for (QJsonValue data : task->addresses()) {
             const auto object = data.toObject();
             qDebug() << object;
             const auto address = object.value("address").toString();
@@ -78,8 +79,5 @@ void ExportAddressesController::nextPage()
             });
         }
     });
-    connect(handler, &Handler::resolver, this, [](Resolver* resolver) {
-        resolver->resolve();
-    });
-    handler->exec();
+    m_dispatcher->add(task);
 }

@@ -6,8 +6,8 @@ import QtQuick.Layouts
 
 RowLayout {
     required property Session session
-    readonly property bool connected: session && session.connected
-    readonly property bool connecting: session && session.connecting
+    readonly property bool connected: session?.connected ?? false
+    readonly property bool connecting: session?.connecting ?? false
 
     Layout.fillWidth: false
     spacing: 12

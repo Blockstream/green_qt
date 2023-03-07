@@ -11,36 +11,21 @@ ControllerDialog {
     autoDestroy: false
     showRejectButton: false
     controller: SystemMessageController {
-        wallet: self.wallet
+        id: controller
+        context: self.wallet.context
         onEmpty: self.accept()
-        onMessage: {
-            message_label.text = text
+        onMessageChanged: {
             confirm_checkbox.enabled = true
             shouldOpen = true
         }
     }
     // TODO: push view for hw signing
-    initialItem: ColumnLayout {
-        property list<Action> actions: [
-            Action {
-                text: qsTrId('id_skip')
-                onTriggered: self.reject()
-            },
-            Action {
-                enabled: confirm_checkbox.checked
-                text: qsTrId('id_accept')
-                onTriggered: {
-                    confirm_checkbox.checked = false
-                    confirm_checkbox.enabled = false
-                    controller.ack()
-                }
-            }
-        ]
+    ColumnLayout {
         GFlickable {
             id: flickable
             clip: true
-            Layout.minimumHeight: 300
             Layout.maximumHeight: 300
+            Layout.preferredHeight: message_label.height
             Layout.fillWidth: true
             Layout.fillHeight: true
             contentHeight: message_label.height
@@ -48,6 +33,7 @@ ControllerDialog {
             Label {
                 id: message_label
                 padding: 0
+                text: controller.message
                 width: flickable.availableWidth
                 height: paintedHeight
                 wrapMode: Text.Wrap
@@ -59,6 +45,24 @@ ControllerDialog {
             id: confirm_checkbox
             enabled: false
             text: qsTrId('id_i_confirm_i_have_read_and')
+        }
+        RowLayout {
+            Layout.fillHeight: false
+            HSpacer {
+            }
+            GButton {
+                text: qsTrId('id_skip')
+                onClicked: self.reject()
+            }
+            GButton {
+                enabled: confirm_checkbox.checked
+                text: qsTrId('id_accept')
+                onClicked: {
+                    confirm_checkbox.checked = false
+                    confirm_checkbox.enabled = false
+                    controller.ack()
+                }
+            }
         }
     }
     Timer {

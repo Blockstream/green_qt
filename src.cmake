@@ -14,7 +14,10 @@ SET(TARGET_SOURCES
 	src/blogcontroller.cpp
 	src/clipboard.cpp
 	src/command.cpp
+        src/context.cpp
+        src/context.h
 	src/controller.cpp
+	src/controller.h
 	src/createaccountcontroller.cpp
 	src/device.cpp
 	src/devicediscoveryagent.cpp
@@ -26,6 +29,7 @@ SET(TARGET_SOURCES
 	src/entity.cpp
 	src/feeestimates.cpp
 	src/ga.cpp
+        src/green.h
 	src/httpmanager.cpp
 	src/httprequestactivity.cpp
 	src/json.cpp
@@ -39,11 +43,12 @@ SET(TARGET_SOURCES
 	src/outputlistmodel.cpp
 	src/outputlistmodelfilter.cpp
 	src/resolver.cpp
-	src/restorecontroller.cpp
-	src/session.cpp
-	src/settings.cpp
+	src/restorecontroller.h src/restorecontroller.cpp
+	src/session.h src/session.cpp
+	src/settings.h src/settings.cpp
 	src/signmessageresolver.cpp
 	src/signupcontroller.cpp
+	src/signupcontroller.h
 	src/transaction.cpp
 	src/transactionlistmodel.cpp
 	src/util.cpp
@@ -52,20 +57,6 @@ SET(TARGET_SOURCES
 	src/walletmanager.cpp
 	src/wally.cpp
 	src/watchonlylogincontroller.cpp
-	src/handlers/connecthandler.cpp
-	src/handlers/createaccounthandler.cpp
-	src/handlers/createtransactionhandler.cpp
-	src/handlers/deletewallethandler.cpp
-	src/handlers/getaddresseshandler.cpp
-	src/handlers/getbalancehandler.cpp
-	src/handlers/gettransactionshandler.cpp
-	src/handlers/getunspentoutputshandler.cpp
-	src/handlers/handler.cpp
-	src/handlers/loginhandler.cpp
-	src/handlers/registeruserhandler.cpp
-	src/handlers/sendtransactionhandler.cpp
-	src/handlers/signtransactionhandler.cpp
-	src/handlers/updateaccounthandler.cpp
 	src/ledger/ledgerdevice.cpp
 	src/ledger/ledgergetblindingkeyactivity.cpp
 	src/ledger/ledgergetblindingnonceactivity.cpp
@@ -92,6 +83,7 @@ SET(TARGET_SOURCES
 	src/jade/deviceinfo.cpp
   sa/kdsingleapplication.cpp
   sa/kdsingleapplication_localsocket.cpp
+	src/task.h src/task.cpp
 )
 
 if (WIN32)

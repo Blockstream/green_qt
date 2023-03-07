@@ -81,4 +81,14 @@ QJsonArray get_fee_estimates(GA_session* session)
     return fees;
 }
 
+QJsonObject get_thread_error_details()
+{
+    GA_json* output;
+    const auto rc = GA_get_thread_error_details(&output);
+    if (rc != GA_OK) return {};
+    const auto error = Json::toObject(output);
+    GA_destroy_json(output);
+    return error;
+}
+
 } // namespace gdk

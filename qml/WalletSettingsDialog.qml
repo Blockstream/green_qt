@@ -90,7 +90,7 @@ WalletDialog {
                 index: 1
                 text: qsTrId('id_security')
                 icon.source: 'qrc:/svg/security.svg'
-                enabled: !self.wallet.device
+                enabled: !self.wallet.context.device
             }
             B {
                 name: 'WalletSettings2FA'
@@ -142,6 +142,7 @@ WalletDialog {
                     Wallet2faSettingsView {
                         id: two_factor_auth_view
                         width: two_factor_settings_flickable.availableWidth
+                        context: self.wallet.context
                         wallet: self.wallet
                     }
                 }

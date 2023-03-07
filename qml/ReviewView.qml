@@ -113,8 +113,8 @@ ColumnLayout {
             }
             Label {
                 text: {
-                    wallet.displayUnit
-                    return address_asset.formatAmount(modelData.satoshi, true, wallet.settings.unit)
+                    wallet.context.displayUnit
+                    return address_asset.formatAmount(modelData.satoshi, true, wallet.context.settings.unit)
                 }
             }
         }

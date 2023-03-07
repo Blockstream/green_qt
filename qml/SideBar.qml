@@ -1,4 +1,4 @@
-import Blockstream.Green
+﻿import Blockstream.Green
 import Blockstream.Green.Core
 import QtQuick
 import QtQuick.Controls
@@ -13,7 +13,7 @@ Pane {
     leftPadding: 8
     rightPadding: 8
     background: Rectangle {
-        color: constants.c700
+        color: constants.c800
         Rectangle {
             width: 1
             anchors.right: parent.right
@@ -21,7 +21,7 @@ Pane {
             color: Qt.rgba(0, 0, 0, 0.5)
         }
     }
-    implicitWidth: Settings.collapseSideBar ? 72 : 300
+    implicitWidth: Settings.collapseSideBar ? 72 : 260
     Behavior on implicitWidth {
         NumberAnimation {
             duration: 300
@@ -66,7 +66,6 @@ Pane {
                 }
                 Layout.fillWidth: Settings.collapseSideBar
                 icon.source: 'qrc:/svg/plus.svg'
-                icon.color: 'white'
                 onClicked: navigation.set({ flow: 'signup' })
                 Layout.alignment: Qt.AlignCenter
                 Layout.preferredWidth: 28
@@ -127,6 +126,19 @@ Pane {
                     }
                 }
                 NetworkSideButton {
+                    network: 'localtest'
+                    text: 'Localtest'
+                    visible: env !== 'Production' && Settings.enableTestnet
+                }
+                Repeater {
+                    model: WalletListModel {
+                        justReady: true
+                        network: 'localtest'
+                    }
+                    WalletSideButton {
+                    }
+                }
+                NetworkSideButton {
                     network: 'liquid'
                     text: 'Liquid'
                 }
@@ -151,23 +163,46 @@ Pane {
                     WalletSideButton {
                     }
                 }
+                NetworkSideButton {
+                    network: 'localtest-liquid'
+                    text: 'Liquid Localtest'
+                    visible: env !== 'Production' && Settings.enableTestnet
+                }
+                Repeater {
+                    model: WalletListModel {
+                        justReady: true
+                        network: 'localtest-liquid'
+                    }
+                    WalletSideButton {
+                        isCurrent: false
+                    }
+                }
                 SideLabel {
                     text: qsTrId('id_devices')
+                    visible: !Settings.collapseSideBar && device_list_model.rowCount > 0
                 }
-                SideButton {
-                    icon.source: 'qrc:/svg/jade_emblem_on_transparent_rgb.svg'
-                    isCurrent: navigation.param.view === 'jade'
-                    onClicked: navigation.push({ view: 'jade' })
-                    count: jade_view.count
-                    text: 'Blockstream Jade'
+                Repeater {
+                    model: DeviceListModel {
+                        id: device_list_model
+                    }
+                    delegate: DeviceSideButton {
+                    }
                 }
-                SideButton {
-                    icon.source: 'qrc:/svg/ledger-logo.svg'
-                    isCurrent: navigation.param.view === 'ledger'
-                    onClicked: navigation.push({ view: 'ledger' })
-                    count: ledger_view.count
-                    text: 'Ledger Nano'
-                }
+
+//                SideButton {
+//                    icon.source: 'qrc:/svg/jade_emblem_on_transparent_rgb.svg'
+//                    isCurrent: navigation.param.view === 'jade'
+//                    onClicked: navigation.push({ view: 'jade' })
+//                    count: jade_view.count
+//                    text: 'Blockstream Jade'
+//                }
+//                SideButton {
+//                    icon.source: 'qrc:/svg/ledger-logo.svg'
+//                    isCurrent: navigation.param.view === 'ledger'
+//                    onClicked: navigation.push({ view: 'ledger' })
+//                    count: ledger_view.count
+//                    text: 'Ledger Nano'
+//                }
             }
         }
         Item {
@@ -203,5 +238,53 @@ Pane {
             font.styleName: 'Medium'
             text: label.text
         }
+    }
+
+    component DeviceSideButton: SideButton {
+        id: button
+        required property Device device
+        text: button.device.name
+        isCurrent: navigation.param.device === button.device.uuid
+        leftPadding: 12
+        rightPadding: 12
+        contentItem: RowLayout {
+            spacing: constants.s1
+            Label {
+                Layout.fillWidth: true
+                visible: !Settings.collapseSideBar
+                text: button.device.name
+                elide: Label.ElideMiddle
+                rightPadding: 16
+                font.styleName: 'Regular'
+            }
+            Item {
+                Layout.alignment: Qt.AlignCenter
+                implicitWidth: Settings.collapseSideBar ? 32 : 96
+                implicitHeight: Settings.collapseSideBar ? 96 : 32
+                Layout.maximumWidth: Settings.collapseSideBar ? img.paintedHeight : img.paintedWidth
+                DeviceImage {
+                    id: img
+                    width: 96
+                    height: 32
+                    anchors.centerIn: parent
+                    rotation: Settings.collapseSideBar ? 90 : 0
+                    device: button.device
+                }
+            }
+//            HSpacer {
+//            }
+        }
+        onClicked: {
+            const device = button.device
+            if (device.type === Device.BlockstreamJade) {
+                navigation.push({ view: 'jade', device: device.uuid })
+            } else if (device.vendor === Device.Ledger) {
+                navigation.push({ view: 'ledger', device: device.uuid })
+            }
+        }
+
+//        ToolTip.text: button.device.name
+//        ToolTip.visible: Settings.collapseSideBar && button.hovered
+//        ToolTip.delay: 200
     }
 }

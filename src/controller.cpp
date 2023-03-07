@@ -2,153 +2,11 @@
 
 #include <gdk.h>
 
-#include "device.h"
-#include "handler.h"
-#include "json.h"
-#include "output.h"
-#include "resolver.h"
-#include "session.h"
+#include "account.h"
+#include "context.h"
+#include "task.h"
 #include "wallet.h"
-
-class SetUnspentOutputsStatusHandler : public Handler
-{
-    QVariantList m_outputs;
-    QString m_status;
-    void call(GA_session* session, GA_auth_handler** auth_handler) override
-    {
-        QJsonArray list;
-        for (const auto &output : m_outputs)
-        {
-            QJsonObject o;
-            o["txhash"] = output.value<Output*>()->data()["txhash"].toString();
-            o["pt_idx"] = output.value<Output*>()->data()["pt_idx"].toInt();
-            o["user_status"] = m_status;
-            list.append(o);
-        }
-        auto details = Json::fromObject({
-            { "list", list }
-        });
-
-        int err = GA_set_unspent_outputs_status(session, details.get(), auth_handler);
-        Q_ASSERT(err == GA_OK);
-    }
-public:
-    SetUnspentOutputsStatusHandler(const QVariantList &outputs, const QString &status, Session* session)
-        : Handler(session),
-        m_outputs(outputs),
-        m_status(status)
-    {
-    }
-};
-
-class DisableAllPinLoginsHandler : public Handler
-{
-    void call(GA_session* session, GA_auth_handler** auth_handler) override
-    {
-        Q_UNUSED(auth_handler)
-        int err = GA_disable_all_pin_logins(session);
-        Q_ASSERT(err == GA_OK);
-    }
-public:
-    DisableAllPinLoginsHandler(Session* session)
-        : Handler(session)
-    {
-    }
-};
-
-class ChangeSettingsHandler : public Handler
-{
-    QJsonObject m_data;
-    void call(GA_session* session, GA_auth_handler** auth_handler) override {
-        auto data = Json::fromObject(m_data);
-        int err = GA_change_settings(session, data.get(), auth_handler);
-        Q_ASSERT(err == GA_OK);
-    }
-public:
-    ChangeSettingsHandler(const QJsonObject& data, Session* session)
-        : Handler(session)
-        , m_data(data)
-    {
-    }
-};
-
-class SendNLocktimesHandler : public Handler
-{
-    void call(GA_session* session, GA_auth_handler** auth_handler) override {
-        Q_UNUSED(auth_handler);
-        int err = GA_send_nlocktimes(session);
-        // Can't Q_ASSERT(err == GA_OK) because err != GA_OK
-        // if no utxos found (e.g. new wallet)
-        Q_UNUSED(err);
-    }
-public:
-    SendNLocktimesHandler(Session* session)
-        : Handler(session)
-    {
-    }
-};
-
-class ChangeSettingsTwoFactorHandler : public Handler
-{
-    QByteArray m_method;
-    QJsonObject m_details;
-    void call(GA_session* session, GA_auth_handler** auth_handler) override {
-        auto details = Json::fromObject(m_details);
-        int res = GA_change_settings_twofactor(session, m_method.data(), details.get(), auth_handler);
-        Q_ASSERT(res == GA_OK);
-    }
-public:
-    ChangeSettingsTwoFactorHandler(const QByteArray& method, const QJsonObject& details, Session* session)
-        : Handler(session)
-        , m_method(method)
-        , m_details(details)
-    {
-    }
-};
-
-class TwoFactorChangeLimitsHandler : public Handler
-{
-    QJsonObject m_details;
-    void call(GA_session* session, GA_auth_handler** auth_handler) override {
-        auto details = Json::fromObject(m_details);
-        GA_twofactor_change_limits(session, details.get(), auth_handler);
-    }
-public:
-    TwoFactorChangeLimitsHandler(const QJsonObject& details, Session* session)
-        : Handler(session)
-        , m_details(details)
-    {
-    }
-};
-
-class TwoFactorCancelResetHandler : public Handler
-{
-    void call(GA_session* session, GA_auth_handler** auth_handler) override {
-        int res = GA_twofactor_cancel_reset(session, auth_handler);
-        Q_ASSERT(res == GA_OK);
-    }
-public:
-    TwoFactorCancelResetHandler(Session* session)
-        : Handler(session)
-    {
-    }
-};
-
-class SetCsvTimeHandler : public Handler
-{
-    const int m_value;
-    void call(GA_session* session, GA_auth_handler** auth_handler) override {
-        auto details = Json::fromObject({{ "value", m_value }});
-        int res = GA_set_csvtime(session, details.get(), auth_handler);
-        Q_ASSERT(res == GA_OK);
-    }
-public:
-    SetCsvTimeHandler(const int value, Session* session)
-        : Handler(session)
-        , m_value(value)
-    {
-    }
-};
+#include "walletmanager.h"
 
 AbstractController::AbstractController(QObject* parent)
     : Entity(parent)
@@ -190,303 +48,321 @@ void AbstractController::clearErrors()
 
 Controller::Controller(QObject* parent)
     : AbstractController(parent)
+    , m_dispatcher(new TaskDispatcher(this))
 {
 }
 
-void Controller::exec(Handler* handler)
+void Controller::setContext(Context* context)
 {
-    // TODO get xpubs should be delegated
-    connect(handler, &Handler::done, this, [this, handler] { emit done(handler); });
-    connect(handler, &Handler::error, this, [this, handler] { emit error(handler); });
-    connect(handler, &Handler::requestCode, this, [this, handler] { emit requestCode(handler); });
-    connect(handler, &Handler::invalidCode, this, [this, handler] { emit invalidCode(handler); });
-    connect(handler, &Handler::resolver, this, &Controller::resolver);
-    connect(handler, &Handler::deviceRequested, this, [=] { emit deviceRequested(handler); });
-    handler->exec();
+    if (m_context == context) return;
+    m_context = context;
+    emit contextChanged();
 }
 
-GA_session* Controller::session() const
+static bool DeepContains(const QJsonObject& a, const QJsonObject& b)
 {
-    return m_wallet ? m_wallet->m_session->m_session : nullptr;
-}
-
-Wallet* Controller::wallet() const
-{
-    return m_wallet;
-}
-
-void Controller::setWallet(Wallet *wallet)
-{
-    if (m_wallet == wallet) return;
-    m_wallet = wallet;
-    emit walletChanged(m_wallet);
+    for (auto i = b.begin(); i != b.end(); ++i) {
+        const auto j = a.value(i.key());
+        if (j.type() != i->type()) return false;
+        if (j.isObject()) {
+            if (!DeepContains(j.toObject(), i.value().toObject())) return false;
+        } else {
+            if (j != i.value()) return false;
+        }
+    }
+    return true;
 }
 
 void Controller::changeSettings(const QJsonObject& data)
 {
-    if (!m_wallet) return;
-
-    // Avoid unnecessary calls to GA_change_settings
-    bool updated = true;
-    auto settings = m_wallet->settings();
-    for (auto i = data.begin(); i != data.end(); ++i) {
-        if (settings.value(i.key()) != i.value()) {
-            updated = false;
-            settings[i.key()] = i.value();
-        }
-    }
-    if (updated) return;
+    if (!m_context) return;
 
     // Check if wallet is undergoing reset
-    if (m_wallet->isLocked()) {
+    if (m_context->isLocked()) {
         qDebug() << Q_FUNC_INFO << "wallet is locked";
         return;
     }
 
-    auto handler = new ChangeSettingsHandler(settings, m_wallet->session());
-    connect(handler, &Handler::done, this, [this, handler] {
-        m_wallet->updateSettings();
-        handler->deleteLater();
-        emit finished();
-    });
-    exec(handler);
+    // Avoid unnecessary calls to GA_change_settings
+    if (DeepContains(m_context->settings(), data)) return;
+
+//    bool updated = true;
+//    auto settings = m_context->settings();
+//    for (auto i = data.begin(); i != data.end(); ++i) {
+//        if (settings.value(i.key()) != i.value()) {
+//            updated = false;
+//            settings[i.key()] = i.value();
+//        }
+//    }
+//    if (updated) return;
+
+    auto change_settings = new ChangeSettingsTask(data, m_context);
+
+    m_dispatcher->add(change_settings);
 }
 
 void Controller::sendRecoveryTransactions()
 {
-    if (!m_wallet) return;
-    auto handler = new SendNLocktimesHandler(m_wallet->session());
-    connect(handler, &Handler::done, this, [this, handler] {
-        m_wallet->updateSettings();
-        handler->deleteLater();
-        emit finished();
-    });
-    exec(handler);
+    if (!m_context) return;
+
+    auto send_nlocktimes = new SendNLocktimesTask(m_context);
+
+    m_dispatcher->add(send_nlocktimes);
 }
 
-void Controller::enableTwoFactor(const QString& method, const QString& data)
-{
-    if (!m_wallet) return;
-    auto details = QJsonObject{
-        { "data", data },
-        { "enabled", true }
-    };
-    auto handler = new ChangeSettingsTwoFactorHandler(method.toLatin1(), details, m_wallet->session());
-    connect(handler, &Handler::done, this, [this, handler] {
-        // Two factor configuration has changed, update it.
-        m_wallet->updateConfig();
-        handler->deleteLater();
-        emit finished();
-    });
-    exec(handler);
-}
-
-void Controller::disableTwoFactor(const QString& method)
-{
-    if (!m_wallet) return;
-    auto details = QJsonObject{
-        { "enabled", false }
-    };
-    auto handler = new ChangeSettingsTwoFactorHandler(method.toLatin1(), details, m_wallet->session());
-    connect(handler, &Handler::done, this, [this, handler] {
-        // Two factor configuration has changed, update it.
-        m_wallet->updateConfig();
-        handler->deleteLater();
-        emit finished();
-    });
-    exec(handler);
-}
+#include "task.h"
 
 void Controller::changeTwoFactorLimit(bool is_fiat, const QString& limit)
 {
-    if (!m_wallet) return;
-    auto unit = is_fiat ? "fiat" : m_wallet->settings().value("unit").toString().toLower();
+    if (!m_context) return;
+    auto unit = is_fiat ? "fiat" : m_context->unit().toLower();
     if (!is_fiat && unit == "\u00B5btc") unit = "ubtc";
     auto details = QJsonObject{
         { "is_fiat", is_fiat },
         { unit, limit }
     };
-    auto handler = new TwoFactorChangeLimitsHandler(details, m_wallet->session());
-    connect(handler, &Handler::done, this, [this, handler] {
-        // Two factor configuration has changed, update it.
-        m_wallet->updateConfig();
-        handler->deleteLater();
-        emit finished();
-    });
-    exec(handler);
+
+    auto group = new TaskGroup(this);
+
+    auto change_twofactor_limits = new TwoFactorChangeLimitsTask(details, m_context);
+    auto load_twofactor_config = new LoadTwoFactorConfigTask(m_context);
+
+    change_twofactor_limits->then(load_twofactor_config);
+
+    group->add(change_twofactor_limits);
+    group->add(load_twofactor_config);
+
+    m_dispatcher->add(group);
 }
 
 void Controller::requestTwoFactorReset(const QString& email)
 {
-    if (!m_wallet) return;
-    auto handler = new TwoFactorResetHandler(email.toLatin1(), m_wallet->session());
-    connect(handler, &Handler::done, this, [this, handler] {
-        m_wallet->updateConfig();
-        // TODO: updateConfig doesn't update 2f reset data,
-        // it's only updated after authentication in GDK,
-        // so force wallet lock for now.
-        m_wallet->setLocked(true);
-        handler->deleteLater();
-        emit finished();
-    });
-    exec(handler);
+    if (!m_context) return;
+
+    auto twofactor_reset = new TwoFactorResetTask(email, m_context);
+    // TODO: update config doesn't update 2f reset data,
+    // it's only updated after authentication in GDK,
+    // so force wallet lock for now
+    auto load_config = new LoadTwoFactorConfigTask(true, m_context);
+
+    twofactor_reset->then(load_config);
+
+    auto group = new TaskGroup(this);
+
+    group->add(twofactor_reset);
+    group->add(load_config);
+
+    m_dispatcher->add(group);
 }
 
 void Controller::cancelTwoFactorReset()
 {
-    if (!m_wallet) return;
-    auto handler = new TwoFactorCancelResetHandler(m_wallet->session());
-    connect(handler, &Handler::done, this, [this, handler] {
-        m_wallet->updateConfig();
+    if (!m_context) return;
+    auto task = new TwoFactorCancelResetTask(m_context);
+    connect(task, &Task::finished, this, [=] {
+        // TODO
+        // m_context->updateConfig();
+
         // TODO: updateConfig doesn't update 2f reset data,
         // it's only updated after authentication in GDK,
         // so force wallet unlock for now.
-        m_wallet->setLocked(false);
-        handler->deleteLater();
+        m_context->setLocked(false);
         emit finished();
     });
-    exec(handler);
+    m_dispatcher->add(task);
 }
 
 void Controller::setRecoveryEmail(const QString& email)
 {
-    if (!m_wallet) return;
+    if (!m_context) return;
     const auto method = QByteArray{"email"};
-    const auto details = QJsonObject{
+    const auto twofactor_details = QJsonObject{
         { "data", email.toLatin1().data() },
         { "confirmed", true },
         { "enabled", false }
     };
-    auto handler = new ChangeSettingsTwoFactorHandler(method, details, m_wallet->session());
-    connect(handler, &Handler::done, this, [this, handler] {
-        handler->deleteLater();
-        m_wallet->updateConfig();
-    });
-    connect(handler, &Handler::done, this, [this] {
-        auto details = QJsonObject{
-            { "notifications" , QJsonValue({
-                { "email_incoming", true },
-                { "email_outgoing", true }})
-            }
-        };
-        auto handler = new ChangeSettingsHandler(details, m_wallet->session());
-        connect(handler, &Handler::done, this, [this, handler] {
-            handler->deleteLater();
-            emit finished();
-        });
-        exec(handler);
-    });
-    exec(handler);
+
+    const auto settings_details = QJsonObject{
+        { "notifications" , QJsonValue({
+            { "email_incoming", true },
+            { "email_outgoing", true }})
+        }
+    };
+
+    const auto change_twofactor = new ChangeTwoFactorTask(method, twofactor_details, m_context);
+    const auto update_config = new LoadTwoFactorConfigTask(m_context);
+    const auto change_settings = new ChangeSettingsTask(settings_details, m_context);
+
+    change_twofactor->then(update_config);
+    update_config->then(change_settings);
+
+    auto group = new TaskGroup(this);
+
+    group->add(change_twofactor);
+    group->add(update_config);
+    group->add(change_settings);
+
+    m_dispatcher->add(group);
 }
 
 void Controller::setCsvTime(int value)
 {
-    const auto handler = new SetCsvTimeHandler(value, m_wallet->session());
-    connect(handler, &Handler::done, this, [this, handler] {
-        handler->deleteLater();
-        m_wallet->updateSettings();
-        emit finished();
-    });
-    exec(handler);
+    if (!m_context) return;
+
+    auto set_csv_time = new SetCsvTimeTask(value, m_context);
+
+    m_dispatcher->add(set_csv_time);
 }
 
-#include "deletewallethandler.h"
-#include "walletmanager.h"
 void Controller::deleteWallet()
 {
-    auto handler = new DeleteWalletHandler(m_wallet->session());
-    connect(handler, &Handler::done, [this, handler] {
-        handler->deleteLater();
-        m_wallet->disconnect();
-        WalletManager::instance()->removeWallet(m_wallet);
+    auto delete_wallet = new DeleteWalletTask(m_context);
+    connect(delete_wallet, &Task::finished, this, [=] {
+        WalletManager::instance()->removeWallet(m_context->wallet());
+        QTimer::singleShot(500, m_context->wallet(), &Wallet::disconnect);
     });
-    connect(handler, &Handler::error, [handler] {
-        handler->deleteLater();
-    });
-    exec(handler);
+    m_dispatcher->add(delete_wallet);
 }
 
 void Controller::disableAllPins()
 {
-    auto handler = new DisableAllPinLoginsHandler(m_wallet->session());
-    QObject::connect(handler, &Handler::done, [this, handler] {
-        m_wallet->clearPinData();
-        handler->deleteLater();
-    });
-    connect(handler, &Handler::error, [handler] {
-        handler->deleteLater();
-    });
-    exec(handler);
+    auto disable_all_pins = new DisableAllPinLoginsTask(m_context);
+
+    m_dispatcher->add(disable_all_pins);
 }
 
-void Controller::setUnspentOutputsStatus(const QVariantList &outputs, const QString &status)
+void Controller::setUnspentOutputsStatus(const QVariantList& outputs, const QString& status)
 {
-    auto handler = new SetUnspentOutputsStatusHandler(outputs, status, m_wallet->session());
-    QObject::connect(handler, &Handler::done, [this, handler] {
-        handler->deleteLater();
+    auto task = new SetUnspentOutputsStatusTask(outputs, status, m_context);
+    connect(task, &Task::finished, this, [=] {
         emit finished();
     });
-    connect(handler, &Handler::error, [handler] {
-        handler->deleteLater();
-    });
-    exec(handler);
+    m_dispatcher->add(task);
 }
 
-Handler* Controller::getCredentials()
+void Controller::changePin(const QString& pin)
 {
-    auto handler = new GetCredentialsHandler(m_wallet->session());
-    QObject::connect(handler, &Handler::done, [this, handler] {
-        emit finished(handler);
+    if (!m_context) return;
+
+    auto encrypt_with_pin = new EncryptWithPinTask(m_context->credentials(), pin, m_context);
+    auto group = new TaskGroup(this);
+    group->add(encrypt_with_pin);
+    m_dispatcher->add(group);
+
+    connect(group, &TaskGroup::finished, this, [=] {
+        emit finished();
     });
-    exec(handler);
-    handler->setParent(this);
-    return handler;
 }
 
-void TwoFactorResetHandler::call(GA_session *session, GA_auth_handler **auth_handler) {
-    const uint32_t is_dispute = GA_FALSE;
-    int res = GA_twofactor_reset(session, m_email.data(), is_dispute, auth_handler);
-    Q_ASSERT(res == GA_OK);
-}
-
-TwoFactorResetHandler::TwoFactorResetHandler(const QByteArray &email, Session *session)
-    : Handler(session)
-    , m_email(email)
+void Controller::setWatchOnly(const QString& username, const QString& password)
 {
+    if (m_context->wallet()->isWatchOnly()) return;
+
+    auto task = new SetWatchOnlyTask(username, password, m_context);
+
+    connect(task, &Task::finished, this, [=] {
+        m_context->setUsername(username);
+        emit watchOnlyUpdateSuccess();
+    });
+
+    connect(task, &Task::failed, this, [=] {
+        emit watchOnlyUpdateFailure();
+    });
+
+    m_dispatcher->add(task);
 }
 
-ChangePinController::ChangePinController(QObject* parent)
+void Controller::clearWatchOnly()
+{
+    setWatchOnly("", "");
+}
+
+bool Controller::setAccountName(Account* account, QString name, bool active_focus)
+{
+    return false;
+
+    if (!m_context) return false;
+
+    if (!active_focus) name = name.trimmed();
+    if (name.isEmpty() && !active_focus) {
+        return false;
+    }
+    if (account->name() == name) return false;
+    if (active_focus) return false;
+
+    const auto task = new UpdateAccountTask(QJsonObject{
+        { "subaccount", static_cast<qint64>(account->pointer()) },
+        { "name", name }
+    }, m_context);
+
+    connect(task, &Task::finished, this, [=] {
+        account->setName(name);
+    });
+
+    m_dispatcher->add(task);
+
+    return true;
+}
+
+void Controller::setAccountHidden(Account* account, bool hidden)
+{
+    if (!m_context) return;
+    const auto task = new UpdateAccountTask(QJsonObject{
+        { "subaccount", static_cast<qint64>(account->pointer()) },
+        { "hidden", hidden }
+    }, m_context);
+    connect(task, &UpdateAccountTask::finished, this, [=] {
+        account->setHidden(hidden);
+    });
+    m_dispatcher->add(task);
+}
+
+TwoFactorController::TwoFactorController(QObject* parent)
     : Controller(parent)
 {
 }
 
-void ChangePinController::setPin(const QString& pin)
+void TwoFactorController::enable(const QString &method, const QString &data)
 {
-    if (m_pin == pin) return;
-    m_pin = pin;
-    emit pinChanged();
+    change(method, { { "enabled", true }, { "data", data } });
 }
 
-void ChangePinController::accept()
+void TwoFactorController::disable(const QString &method)
 {
-    if (m_credentials.isEmpty()) {
-        qDebug() << Q_FUNC_INFO << "retrieving credentials";
-        auto handler = new GetCredentialsHandler(wallet()->session());
-        connect(handler, &Handler::done, this, [=] {
-            handler->deleteLater();
-            m_credentials = handler->credentials();
-            accept();
-        });
-        exec(handler);
-    } else {
-        qDebug() << Q_FUNC_INFO << "encrypting credentials with new PIN";
-        auto handler = new EncryptWithPinHandler(m_credentials, m_pin, wallet()->session());
-        connect(handler, &Handler::done, this, [=] {
-            handler->deleteLater();
-            auto pin_data = handler->pinData();
-            wallet()->setPinData(pin_data);
-            emit finished();
-        });
-        exec(handler);
-    }
+    change(method, { { "enabled", false } });
+}
+
+void TwoFactorController::change(const QString& method, const QJsonObject& details)
+{
+    if (!m_context) return;
+    if (m_done) return;
+    if (m_dispatcher->isBusy()) return;
+
+    clearErrors();
+
+    auto change_twofactor = new ChangeTwoFactorTask(method, details, m_context);
+    auto update_config = new LoadTwoFactorConfigTask(m_context);
+
+    connect(change_twofactor, &Task::failed, this, [=](const QString& error) {
+        if (error.contains("invalid phone number", Qt::CaseInsensitive)) {
+            setError("data", "id_invalid_phone_number_format");
+        } else {
+            setError("code", "id_invalid_twofactor_code");
+        }
+    });
+
+    update_config->needs(change_twofactor);
+
+    auto group = new TaskGroup(this);
+
+    group->add(change_twofactor);
+    group->add(update_config);
+
+    m_dispatcher->add(group);
+
+    connect(group, &TaskGroup::finished, this, [=] {
+        emit finished();
+        m_done = true;
+        emit doneChanged();
+    });
 }

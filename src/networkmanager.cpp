@@ -23,8 +23,10 @@ NetworkManager::NetworkManager() : QObject(nullptr)
 
     for (auto key : networks.value("all_networks").toArray()) {
         auto data = networks.value(key.toString()).toObject();
-        // Don't include development networks
-        if (data.value("development").toBool()) continue;
+
+        // Don't include lightning networks
+        if (data.value("lightning").toBool()) continue;
+
         m_networks.append(new Network(data, this));
     }
 }

@@ -6,12 +6,14 @@ import QtQuick.Controls
 import QtQuick.Controls.Material
 import QtQuick.Layouts
 
-Button {
+ItemDelegate {
     required property var address
 
     id: self
     hoverEnabled: true
     padding: constants.p3
+    verticalPadding: constants.p1
+
     background: Rectangle {
         color: self.hovered ? constants.c700 : constants.c800
         radius: 4

@@ -15,14 +15,6 @@ Button {
     Layout.minimumHeight: 160
     Layout.preferredWidth: 360
     padding: 24
-    scale: self.hovered || self.activeFocus ? 1.05 : 1
-    transformOrigin: Item.Center
-    Behavior on scale {
-        NumberAnimation {
-            easing.type: Easing.OutBack
-            duration: 400
-        }
-    }
     background: Rectangle {
         border.width: 1
         border.color: self.activeFocus ? constants.g400 : Qt.rgba(0, 0, 0, 0.2)

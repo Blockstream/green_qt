@@ -13,6 +13,7 @@ class JadeDeviceSerialPortDiscoveryAgent : public QObject
     QML_ELEMENT
 public:
     explicit JadeDeviceSerialPortDiscoveryAgent(QObject* parent = nullptr);
+    void scan();
 private:
     QMap<QString, JadeDevice*> m_devices;
     QSet<QString> m_failed_locations;

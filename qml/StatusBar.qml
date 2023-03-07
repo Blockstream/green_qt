@@ -11,5 +11,11 @@ GPane {
     focusPolicy: Qt.ClickFocus
     background: Rectangle {
         color: constants.c800
+        Rectangle {
+            anchors.top: parent.top
+            width: parent.width
+            height: 1
+            color: constants.c900
+        }
     }
 }

@@ -13,12 +13,12 @@ ColumnLayout {
 
     Controller {
         id: controller
-        wallet: self.wallet
+        context: self.wallet.context
     }
 
     SettingsBox {
         title: qsTrId('id_security')
-        visible: !wallet.device && !self.wallet.network.electrum
+        visible: !wallet.context.device && !self.wallet.network.electrum
         contentItem: RowLayout {
             spacing: constants.s1
             Label {
@@ -38,7 +38,7 @@ ColumnLayout {
 
     SettingsBox {
         title: qsTrId('id_access')
-        visible: !wallet.device
+        visible: !wallet.context.device
         contentItem: RowLayout {
             spacing: constants.s1
             Label {
@@ -58,7 +58,7 @@ ColumnLayout {
     SettingsBox {
         title: qsTrId('id_auto_logout_timeout')
         enabled: !wallet.locked
-        visible: !wallet.device
+        visible: !wallet.context.device
         contentItem: RowLayout {
             spacing: constants.s1
             Label {
@@ -77,7 +77,7 @@ ColumnLayout {
                 }
                 displayText: qsTrId('id_1d_minutes').arg(currentText)
                 onCurrentTextChanged: controller.changeSettings({ altimeout: model[currentIndex] })
-                currentIndex: model.indexOf(wallet.settings.altimeout)
+                currentIndex: model.indexOf(wallet.context.settings.altimeout)
             }
         }
     }

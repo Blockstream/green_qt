@@ -1,3 +1,4 @@
+#include "context.h"
 #include "network.h"
 #include "wallet.h"
 #include "walletlistmodel.h"
@@ -8,7 +9,7 @@ WalletListModel::WalletListModel(QObject* parent)
 {
     update();
     m_source_model.setItemRoleNames({{ Qt::UserRole, "wallet" }});
-    connect(WalletManager::instance(), &WalletManager::changed, this, &WalletListModel::update);
+    connect(WalletManager::instance(), &WalletManager::changed, this, &WalletListModel::update, Qt::QueuedConnection);
     setSourceModel(&m_source_model);
     setDynamicSortFilter(true);
     setFilterCaseSensitivity(Qt::CaseInsensitive);
@@ -41,8 +42,7 @@ void WalletListModel::update()
             item = new QStandardItem;
             item->setData(QVariant::fromValue(wallet), Qt::UserRole);
             m_source_model.appendRow(item);
-            connect(wallet, &Wallet::readyChanged, this, [this] { invalidateFilter(); });
-            connect(wallet, &Wallet::authenticationChanged, this, [this] { invalidateFilter(); });
+            connect(wallet, &Wallet::contextChanged, this, [this] { invalidateFilter(); });
         }
         m_items.insert(wallet, item);
     }
@@ -56,9 +56,10 @@ bool WalletListModel::filterAcceptsRow(int source_row, const QModelIndex &source
 {
     auto wallet = m_source_model.index(source_row, 0, source_parent).data(Qt::UserRole).value<Wallet*>();
     if (!m_network.isEmpty() && wallet->network()->key() != m_network) return false;
-    if (m_just_authenticated && !wallet->isAuthenticated()) return false;
-    if (m_just_ready && !wallet->ready()) return false;
-    if (m_without_device && wallet->device()) return false;
+//    if (m_just_authenticated && !wallet->isAuthenticated()) return false;
+//    if (m_just_ready && !wallet->ready()) return false;
+    if ((m_just_ready || m_just_authenticated) && !wallet->context()) return false;
+    if (m_without_device && wallet->context() && wallet->context()->device()) return false;
     if (m_watch_only == Filter::Yes && !wallet->m_watch_only) return false;
     if (m_watch_only == Filter::No && wallet->m_watch_only) return false;
     return filterRegularExpression().match(wallet->name()).hasMatch();

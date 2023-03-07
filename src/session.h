@@ -8,7 +8,6 @@
 #include "connectable.h"
 #include "entity.h"
 
-class ConnectHandler;
 class Network;
 
 Q_MOC_INCLUDE("network.h")
@@ -30,6 +29,7 @@ class Session : public Entity
     Q_PROPERTY(bool connected READ isConnected NOTIFY connectedChanged)
     Q_PROPERTY(bool connecting READ isConnecting NOTIFY connectingChanged)
     Q_PROPERTY(QJsonObject eventData READ eventData NOTIFY eventDataChanged)
+    Q_PROPERTY(QJsonObject block READ block NOTIFY blockChanged)
     QML_ELEMENT
 public:
     Session(Network* network, QObject* parent = nullptr);
@@ -46,22 +46,33 @@ public:
     bool isActive() const { return m_active; }
     void setActive(bool active);
     bool isConnected() const { return m_connected; }
+    void setConnected(bool connected);
     bool isConnecting() const { return m_connecting; }
+    void setConnecting(bool connecting);
     QList<QJsonObject> events() const { return m_events; }
     QJsonObject eventData() const { return m_event_data; }
+    QJsonObject block() const { return m_block; }
+    uint32_t blockHeight() const;
+    void setBlock(const QJsonObject& block);
 signals:
     void notificationHandled(const QJsonObject& notification);
-    void activeChanged(bool active);
-    void connectedChanged(bool connected);
-    void connectingChanged(bool connecting);
+    void eventHandled(Session* session, const QString& event, const QJsonObject& data);
+    void activeChanged();
+    void connectedChanged();
+    void connectingChanged();
+    void networkEvent(const QJsonObject& settings);
+    void settingsEvent(const QJsonObject& settings);
+    void twoFactorResetEvent(const QJsonObject& settings);
     void torEvent(const QJsonObject& event);
+    void blockEvent(const QJsonObject& event);
+    void transactionEvent(const QJsonObject& event);
+    void tickerEvent(const QJsonObject& event);
     void activityCreated(Activity* activity);
     void eventDataChanged();
+    void blockChanged();
 private:
     void update();
     void handleNotification(const QJsonObject& notification);
-    void setConnected(bool connected);
-    void setConnecting(bool connecting);
 private:
     Network* const m_network;
     bool const m_use_tor;
@@ -77,9 +88,11 @@ public:
     GA_session* m_session{nullptr};
     bool m_connected{false};
     bool m_connecting{false};
-    Connectable<ConnectHandler> m_connect_handler;
+    bool m_ready{false};
     QList<QJsonObject> m_events;
     QJsonObject m_event_data;
+    QJsonObject m_block;
+    int64_t m_id{0};
 };
 
 class SessionActivity : public Activity
@@ -92,36 +105,6 @@ public:
     void setSession(Session* session);
 private:
     Session* m_session{nullptr};
-};
-
-class SessionTorCircuitActivity : public SessionActivity
-{
-    Q_OBJECT
-    Q_PROPERTY(QStringList logs READ logs NOTIFY logsChanged)
-    QML_ELEMENT
-public:
-    SessionTorCircuitActivity(Session* session);
-    QStringList logs() const { return m_logs; }
-private:
-    void exec() {}
-signals:
-    void logsChanged(const QStringList& logs);
-private:
-    QMetaObject::Connection m_tor_event_connection;
-    QMetaObject::Connection m_connected_connection;
-    QStringList m_logs;
-};
-
-class SessionConnectActivity : public SessionActivity
-{
-    Q_OBJECT
-    QML_ELEMENT
-public:
-    SessionConnectActivity(Session* session);
-private:
-    void exec() {}
-private:
-    QMetaObject::Connection m_connection;
 };
 
 #endif // GREEN_SESSION_H

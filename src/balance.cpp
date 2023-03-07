@@ -1,6 +1,7 @@
 #include "account.h"
 #include "asset.h"
 #include "balance.h"
+#include "context.h"
 #include "wallet.h"
 
 Balance::Balance(Account* account)
@@ -10,7 +11,12 @@ Balance::Balance(Account* account)
     Q_ASSERT(account);
 
     // Display/input amount might change if settings are updated
-    connect(m_account->wallet(), &Wallet::settingsChanged, this, &Balance::changed);
+    connect(context(), &Context::settingsChanged, this, &Balance::changed);
+}
+
+Context* Balance::context() const
+{
+    return m_account->context();
 }
 
 void Balance::setAsset(Asset* asset)

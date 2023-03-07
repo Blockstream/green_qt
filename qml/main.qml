@@ -34,7 +34,7 @@ ApplicationWindow {
     minimumWidth: 900
     minimumHeight: 600
     visible: true
-    color: constants.c900
+    color: constants.c800
     title: {
         const parts = env === 'Development' ? [navigation.description] : []
         if (currentWallet) {
@@ -44,6 +44,34 @@ ApplicationWindow {
         parts.push('Blockstream Green');
         if (env !== 'Production') parts.push(`[${env}]`)
         return parts.join(' - ');
+    }
+    Label {
+        parent: Overlay.overlay
+        visible: false
+        anchors.bottom: parent.bottom
+        anchors.right: parent.right
+        anchors.margins: 4
+        z: 1000
+        HoverHandler {
+            id: debug_focus_hover_handler
+        }
+        opacity: debug_focus_hover_handler.hovered ? 1.0 : 0.3
+        background: Rectangle {
+            color: Qt.rgba(1, 0, 0, 0.8)
+            radius: 4
+            border.width: 2
+            border.color: 'black'
+        }
+        padding: 8
+        text: {
+            const parts = []
+            let item = activeFocusItem
+            while (item) {
+                parts.unshift((''+item).split('(')[0])
+                item = item.parent
+            }
+            return parts.join(' > ')
+        }
     }
     FontMetrics {
         id: font_metrics
@@ -79,6 +107,14 @@ ApplicationWindow {
                 LedgerDevicesView {
                     id: ledger_view
                     readonly property bool active: navigation.param.view === 'ledger'
+                }
+                NetworkView {
+                    network: 'localtest'
+                    title: qsTrId('Localtest')
+                }
+                NetworkView {
+                    network: 'localtest-liquid'
+                    title: qsTrId('Localtest Liquid')
                 }
                 NetworkView {
                     network: 'bitcoin'
@@ -127,7 +163,7 @@ ApplicationWindow {
         sourceComponent: SignupDialog {
             visible: true
             onRejected: navigation.pop()
-            // onClosed: destroy()
+            onClosed: destroy()
         }
     }
 
@@ -137,18 +173,30 @@ ApplicationWindow {
         sourceComponent: RestoreDialog {
             visible: true
             onRejected: navigation.pop()
-            // onClosed: destroy()
+            onClosed: destroy()
+        }
+    }
+
+    Loader2 {
+        active: navigation.param.flow === 'watch_only_login'
+        onActiveChanged: if (!active) object.close()
+        sourceComponent: WatchOnlyLoginDialog {
+            network: NetworkManager.networkWithServerType(navigation.param.network, 'green')
+            visible: true
+            onRejected: navigation.pop()
+            onClosed: destroy()
         }
     }
 
     Loader2 {
         property Wallet wallet: WalletManager.wallet(navigation.param.wallet)
-        active: wallet && !wallet.ready
+        active: navigation.param.flow === 'login' && wallet && !wallet.context
         onActiveChanged: if (!active) object.close()
         sourceComponent: LoginDialog {
             visible: true
             onRejected: navigation.pop()
-            // onClosed: destroy()
+            onAccepted: navigation.push({ wallet: wallet.id })
+            onClosed: destroy()
         }
     }
 

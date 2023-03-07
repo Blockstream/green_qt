@@ -1,17 +1,15 @@
 #ifndef GREEN_CONTROLLER_H
 #define GREEN_CONTROLLER_H
 
-#include <QtQml>
+#include "green.h"
+
+#include <QQmlEngine>
 
 #include "entity.h"
 #include "ga.h"
 
-class Handler;
-class Resolver;
-class Output;
-class Wallet;
-
 Q_MOC_INCLUDE("resolver.h")
+Q_MOC_INCLUDE("task.h")
 Q_MOC_INCLUDE("wallet.h")
 
 class AbstractController : public Entity
@@ -24,13 +22,14 @@ public:
     AbstractController(QObject* parent = nullptr);
     QVariantMap errors() const { return m_errors; }
     bool noErrors() const { return m_errors.isEmpty(); }
+public slots:
+    void clearErrors();
 signals:
     void errorsChanged();
 protected:
     void setError(const QString& key, const QVariant& value);
     void clearError(const QString& key);
     bool updateError(const QString &key, const QVariant &value, bool when);
-    void clearErrors();
 private:
     QVariantMap m_errors;
 };
@@ -38,24 +37,21 @@ private:
 class Controller : public AbstractController
 {
     Q_OBJECT
-    Q_PROPERTY(Wallet* wallet READ wallet WRITE setWallet NOTIFY walletChanged)
+    Q_PROPERTY(TaskDispatcher* dispatcher READ dispatcher CONSTANT)
+    Q_PROPERTY(Context* context READ context WRITE setContext NOTIFY contextChanged)
     QML_ELEMENT
+
 public:
     explicit Controller(QObject* parent = nullptr);
 
-    void exec(Handler* handler);
+    TaskDispatcher* dispatcher() const { return m_dispatcher; }
 
-    QObject* context() const;
-    GA_session* session() const;
-
-    Wallet* wallet() const;
-    void setWallet(Wallet* wallet);
+    Context* context() const { return m_context; }
+    void setContext(Context* context);
 
 public slots:
     void changeSettings(const QJsonObject& data);
     void sendRecoveryTransactions();
-    void enableTwoFactor(const QString& method, const QString& data);
-    void disableTwoFactor(const QString& method);
     void changeTwoFactorLimit(bool is_fiat, const QString &limit);
     void requestTwoFactorReset(const QString& email);
     void cancelTwoFactorReset();
@@ -64,53 +60,48 @@ public slots:
     void deleteWallet();
     void disableAllPins();
     void setUnspentOutputsStatus(const QVariantList &outputs, const QString &status);
-    Handler* getCredentials();
+    void changePin(const QString& pin);
+
+    // TODO move to SetWatchOnlyController
+    void setWatchOnly(const QString& username, const QString& password);
+    void clearWatchOnly();
+
+    bool setAccountName(Account* account, QString name, bool active_focus);
+    void setAccountHidden(Account *account, bool hidden);
+
 signals:
-    void walletChanged(Wallet* wallet);
-    void finished(Handler* handler = nullptr);
-
-    void resultChanged(Handler* handler, const QJsonObject& result);
-    void done(Handler* handler);
-    void error(Handler* handler);
-    void requestCode(Handler* handler);
-    void invalidCode(Handler* handler);
-    void deviceRequested(Handler* handler);
-
+    void contextChanged();
     void resolver(Resolver* resolver);
+    void finished();
+
+    // TODO move to SetWatchOnlyController
+    void watchOnlyUpdateSuccess();
+    void watchOnlyUpdateFailure();
+
 protected:
-    Wallet* m_wallet{nullptr};
+    TaskDispatcher* const m_dispatcher;
+    Context* m_context{nullptr};
     QVariantMap m_errors;
 };
 
-class ChangePinController : public Controller
-{
-    Q_OBJECT
-    Q_PROPERTY(QString pin READ pin WRITE setPin NOTIFY pinChanged)
-    QML_ELEMENT
-public:
-    ChangePinController(QObject* parent = nullptr);
-    QString pin() const { return m_pin; }
-    void setPin(const QString& pin);
-public slots:
-    void accept();
-signals:
-    void pinChanged();
-private:
-    QString m_pin;
-    QJsonObject m_credentials;
-};
 
-#include "handler.h"
-class TwoFactorResetHandler : public Handler
+class TwoFactorController : public Controller
 {
     Q_OBJECT
-    Q_PROPERTY(QString email READ email CONSTANT)
+    Q_PROPERTY(bool done READ done NOTIFY doneChanged)
     QML_ELEMENT
-    const QByteArray m_email;
-    void call(GA_session* session, GA_auth_handler** auth_handler) override;
 public:
-    TwoFactorResetHandler(const QByteArray& email, Session* session);
-    QString email() const { return m_email; }
+    explicit TwoFactorController(QObject* parent = nullptr);
+    bool done() const { return m_done; }
+public slots:
+    void enable(const QString& method, const QString& data);
+    void disable(const QString& method);
+signals:
+    void doneChanged();
+private:
+    void change(const QString& method, const QJsonObject& details);
+private:
+    bool m_done{false};
 };
 
 #endif // GREEN_CONTROLLER_H

@@ -4,13 +4,13 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-Page {
+GPane {
+    property real contentY: list_view.contentY
     required property Account account
     signal clicked(Address address)
 
     id: self
-    spacing: constants.p1
-    background: null
+    /*
     header: GHeader {
         Label {
             Layout.alignment: Qt.AlignVCenter
@@ -28,18 +28,19 @@ Page {
             Layout.alignment: Qt.AlignVCenter
             visible: Settings.enableExperimental
             text: qsTrId('Export')
-            enabled: self.account.wallet.ready && list_view.count > 0
+            enabled: self.account.context && list_view.count > 0
             onClicked: export_addresses_popup.createObject(window, { account: self.account }).open()
             ToolTip.text: qsTrId('Export addresses to CSV file')
         }
     }
-    contentItem: GListView {
+    */
+
+    contentItem: TListView {
         id: list_view
-        clip: true
-        spacing: 0
+        spacing: 8
         model: AddressListModelFilter {
             id: address_model_filter
-            filter: search_field.text
+//            filter: search_field.text
             model: AddressListModel {
                 id: address_model
                 account: self.account
@@ -52,10 +53,10 @@ Page {
         BusyIndicator {
             width: 32
             height: 32
-            running: address_model.fetching
+            running: address_model.dispatcher.busy
             anchors.margins: 8
             Layout.alignment: Qt.AlignHCenter
-            opacity: address_model.fetching ? 1 : 0
+            opacity: address_model.dispatcher.busy ? 1 : 0
             Behavior on opacity { OpacityAnimator {} }
             anchors.bottom: parent.bottom
             anchors.horizontalCenter: parent.horizontalCenter
@@ -83,5 +84,12 @@ Page {
             BusyIndicator {
             }
         }
+    }
+
+    component TListView: ListView {
+        ScrollIndicator.vertical: ScrollIndicator { }
+        contentWidth: width
+        displayMarginBeginning: 300
+        displayMarginEnd: 100
     }
 }

@@ -14,6 +14,10 @@ function iconFor(target) {
             return 'qrc:/svg/btc.svg'
         case 'testnet':
             return 'qrc:/svg/btc_testnet.svg'
+        case 'localtest':
+            return 'qrc:/svg/localtest.svg'
+        case 'localtest-liquid':
+            return 'qrc:/svg/localtest-liquid.svg'
     }
     return ''
 }
@@ -40,8 +44,8 @@ function dynamicScenePosition(item, x, y) {
 }
 
 function findChildIndex(parent, pred) {
-    let index = 0
     if (!parent) return 0
+    let index = 0
     for (let i = 0; i < parent.children.length; ++i) {
         const child = parent.children[i]
         if (!(child instanceof Item)) continue

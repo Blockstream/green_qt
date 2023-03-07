@@ -1,21 +1,26 @@
 #include "loginwithpincontroller.h"
 
-#include "loginhandler.h"
+#include "context.h"
+#include "network.h"
+#include "task.h"
 #include "wallet.h"
+#include "walletmanager.h"
 
-LoginWithPinController::LoginWithPinController(QObject* parent)
-    : Entity(parent)
+PinLoginController::PinLoginController(QObject* parent)
+    : Controller(parent)
 {
+    setContext(new Context(this));
 }
 
-void LoginWithPinController::setWallet(Wallet* wallet)
+void PinLoginController::setWallet(Wallet* wallet)
 {
-    if (!m_wallet.update(wallet)) return;
+    if (m_wallet == wallet) return;
+    m_wallet = wallet;
     emit walletChanged();
     update();
 }
 
-void LoginWithPinController::setPin(const QString& pin)
+void PinLoginController::setPin(const QString& pin)
 {
     if (m_pin == pin) return;
     m_pin = pin;
@@ -23,55 +28,78 @@ void LoginWithPinController::setPin(const QString& pin)
     update();
 }
 
-void LoginWithPinController::update()
+void PinLoginController::update()
 {
     if (!m_wallet) return;
-    if (m_wallet->m_login_attempts_remaining == 0) return;
     if (m_pin.isEmpty()) return;
-    if (m_wallet->m_pin_data.isEmpty()) return;
 
-    auto session = m_wallet->session();
-    if (!session) {
-        m_wallet->createSession();
-        session = m_wallet->session();
-    }
-    if (m_session.update(session)) {
-        m_session.track(QObject::connect(m_session, &Session::connectedChanged, this, &LoginWithPinController::update));
-    }
-    if (!m_session->isActive()) {
-        m_session->setActive(true);
-        return;
-    }
-    if (!m_session->isConnected()) return;
+    m_context->setWallet(m_wallet);
 
-    m_wallet->setAuthentication(Wallet::Authenticating);
+    login();
+}
 
-    auto pin_data = QJsonDocument::fromJson(m_wallet->m_pin_data).object();
-    auto handler = new LoginHandler(pin_data, m_pin, m_session);
-    handler->connect(handler, &Handler::done, this, [=] {
-        handler->deleteLater();
-        m_wallet->resetLoginAttempts();
-        m_wallet->updateHashId(handler->walletHashId());
-        m_wallet->setAuthentication(Wallet::Authenticated);
-        m_wallet->updateCurrencies();
-        m_wallet->updateSettings();
-        m_wallet->reload();
-        m_wallet->updateConfig();
-        emit loginDone();
+void PinLoginController::login()
+{
+    clearErrors();
+
+    auto connect_session = new SessionConnectTask(m_context->session());
+    auto pin_login = new SessionLoginTask(m_pin, m_wallet->pinData(), m_context);
+    auto get_credentials = new GetCredentialsTask(m_context);
+
+    connect_session->then(pin_login);
+    pin_login->then(get_credentials);
+
+    connect(connect_session, &Task::failed, this, [=](const QString& error) {
+        if (error == "timeout error") {
+            setError("session", "id_connection_failed");
+        }
     });
-    handler->connect(handler, &Handler::error, this, [=] {
-        handler->deleteLater();
-        const auto error = handler->result().value("error").toString();
+
+    connect(pin_login, &Task::failed, this, [=](const QString& error) {
         if (error == "id_invalid_pin") {
-            m_wallet->setAuthentication(Wallet::Unauthenticated);
             m_wallet->decrementLoginAttempts();
+        } else if (error == "id_connection_failed") {
+            setError("session", error);
+//            Q_UNREACHABLE();
+//            m_setup->deleteLater();
+//            m_setup = nullptr;
         }
-        if (error.contains("exception:reconnect required")) {
-            m_wallet->setAuthentication(Wallet::Unauthenticated);
-            return;
-        }
-        qWarning() << "unhandled login_with_pin error";
         emit loginFailed();
     });
-    handler->exec();
+
+    connect(pin_login, &Task::finished, this, [=] {
+        m_wallet->resetLoginAttempts();
+    });
+
+    auto group = new TaskGroup(this);
+
+    group->add(connect_session);
+    group->add(pin_login);
+    group->add(get_credentials);
+
+    m_dispatcher->add(group);
+
+    connect(group, &TaskGroup::failed, this, &PinLoginController::loginFailed);
+    connect(group, &TaskGroup::finished, this, &PinLoginController::load);
+}
+
+void PinLoginController::load()
+{
+    auto group = new TaskGroup(this);
+    group->add(new GetWatchOnlyDetailsTask(m_context));
+    group->add(new LoadTwoFactorConfigTask(m_context));
+    group->add(new LoadCurrenciesTask(m_context));
+    if (m_wallet->network()->isLiquid()) group->add(new LoadAssetsTask(m_context));
+    group->add(new LoadAccountsTask(m_context));
+    m_dispatcher->add(group);
+
+    connect(group, &TaskGroup::finished, this, [=] {
+        WalletManager::instance()->addWallet(m_wallet);
+        m_wallet->setContext(m_context);
+        emit loginFinished(m_wallet);
+    });
+
+    connect(group, &TaskGroup::failed, this, [=] {
+        emit loginFailed();
+    });
 }

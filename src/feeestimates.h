@@ -8,26 +8,26 @@
 
 #include "connectable.h"
 
-class Wallet;
+class Context;
 
 class FeeEstimates : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(Wallet* wallet READ wallet WRITE setWallet NOTIFY walletChanged)
+    Q_PROPERTY(Context* context READ context WRITE setContext NOTIFY contextChanged)
     Q_PROPERTY(QJsonArray fees READ fees NOTIFY feesChanged)
     QML_ELEMENT
 public:
     FeeEstimates(QObject* parent = nullptr);
-    Wallet* wallet() const { return m_wallet; }
-    void setWallet(Wallet* wallet);
+    Context* context() const { return m_context; }
+    void setContext(Context* context);
     QJsonArray fees() const { return m_fees; }
 signals:
-    void walletChanged();
+    void contextChanged();
     void feesChanged();
 private slots:
     void update();
 private:
-    Connectable<Wallet> m_wallet;
+    Context* m_context{nullptr};
     QJsonArray m_fees;
     QTimer m_update_timer;
 };

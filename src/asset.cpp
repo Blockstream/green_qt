@@ -5,19 +5,20 @@
 #include <QtMath>
 #include <QUrl>
 
+#include "context.h"
 #include "network.h"
 #include "wallet.h"
 
-Asset::Asset(const QString& id, Wallet* wallet)
-    : QObject(wallet)
-    , m_wallet(wallet)
+Asset::Asset(const QString& id, Context* context)
+    : QObject(context)
+    , m_context(context)
     , m_id(id)
 {
 }
 
 bool Asset::isLBTC() const
 {
-    return m_data.value("asset_id").toString() == m_wallet->network()->policyAsset();
+    return m_data.value("asset_id").toString() == m_context->network()->policyAsset();
 }
 
 void Asset::setIcon(const QString &icon)
@@ -45,7 +46,7 @@ void Asset::setData(const QJsonObject &data)
 qint64 Asset::parseAmount(const QString& amount) const
 {
     if (isLBTC()) {
-        return wallet()->amountToSats(amount);
+        return m_context->wallet()->amountToSats(amount);
     }
 
     QString sanitized_amount = amount;
@@ -61,7 +62,7 @@ qint64 Asset::parseAmount(const QString& amount) const
 QString Asset::formatAmount(qint64 amount, bool include_ticker, const QString& unit) const
 {
     if (isLBTC()) {
-        return wallet()->formatAmount(amount, include_ticker, unit);
+        return m_context->wallet()->formatAmount(amount, include_ticker, unit);
     }
 
     auto precision = m_data.value("precision").toInt(0);
