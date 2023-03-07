@@ -44,7 +44,6 @@ SET(QML_FILES
     qml/NLockTimeDialog.qml
     qml/MessageDialog.qml
     qml/SignupDialog.qml
-    qml/ConnectingView.qml
     qml/SelectNetworkViewCard.qml
     qml/GSwitch.qml
     qml/ReceiveView.qml
