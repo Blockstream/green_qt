@@ -9,6 +9,7 @@ endif()
 if(NOT GREEN_ENV)
     set(GREEN_ENV Development)
     set(GREEN_BUILD_ID -dev)
+    set(GREEN_LOG_FILE dev)
 endif()
 
 configure_file(config.h.in config.h @ONLY)

@@ -81,7 +81,7 @@ static QString g_gdk_debug_buffer;
 
 void initLog()
 {
-    g_log_file.setFileName(GetDataFile("logs", QString("%1.txt").arg(GREEN_VERSION)));
+    g_log_file.setFileName(GetDataFile("logs", QString("%1.txt").arg(GREEN_LOG_FILE)));
 
     if (QString{"Development"} != GREEN_ENV) {
         g_log_file.open(QIODevice::WriteOnly | QIODevice::Append);
