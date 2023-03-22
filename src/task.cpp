@@ -246,7 +246,13 @@ namespace {
             { "user_agent", user_agent },
             { "spv_enabled", session->enableSPV() }
         };
-        if (!session->proxy().isEmpty()) params.insert("proxy", session->proxy());
+        if (!session->proxy().isEmpty()) {
+            QTcpSocket socket;
+            socket.connectToHost(session->proxyHost(), session->proxyPort());
+            if (socket.waitForConnected(1000)) {
+                params.insert("proxy", session->proxy());
+            }
+        }
         if (session->usePersonalNode()) params.insert("electrum_url", session->electrumUrl());
         return params;
     }

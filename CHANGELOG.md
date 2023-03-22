@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Switches to cmake build
 
 ### Fixed
+- Support Ledger Bitcoin Legacy
+- Avoid using invalid or unreachable proxy
 
 ## [1.1.6] - 2022-12-23
 ### Added
