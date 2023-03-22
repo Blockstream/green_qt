@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updates GDK to 0.0.58.post1
 
 ### Fixed
+- Support Ledger Bitcoin Legacy
 
 ## [1.1.6] - 2022-12-23
 ### Added

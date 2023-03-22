@@ -16,7 +16,7 @@
 namespace {
     QString network_key_from_app_name(const QString& app_name)
     {
-        if (app_name == "Bitcoin") return "bitcoin";
+        if (app_name == "Bitcoin" || app_name == "Bitcoin Legacy") return "bitcoin";
         if (app_name == "Bitcoin Test") return "testnet";
         if (app_name == "Liquid") return "liquid";
         if (app_name == "Liquid Test") return "testnet-liquid";
