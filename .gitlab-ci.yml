@@ -24,6 +24,8 @@ bionic_release:
     - ga
   stage: build
   script:
+    - curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain 1.64.0
+    - source /root/.cargo/env
     - ./tools/buildcountly.sh /docker_bld_root/build-linux-gcc
     - ./tools/buildgreen.sh linux
     - mkdir build-linux-gcc
@@ -42,6 +44,9 @@ windows_release:
     - ga
   stage: build
   script:
+    - curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain 1.64.0
+    - source /root/.cargo/env
+    - rustup target add x86_64-pc-windows-gnu
     - ./tools/buildcountly.sh /docker_bld_root/build-mingw-w64 $(pwd)/cmake/mingw-w64-x86_64.cmake
     - ./tools/buildgreen.sh windows
     - mkdir -p build-mingw-w64/release
