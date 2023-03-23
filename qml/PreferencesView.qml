@@ -198,7 +198,10 @@ MainPage {
                     Layout.fillWidth: true
                     enabled: Settings.useProxy
                     text: Settings.proxyHost
-                    onTextChanged: Settings.proxyHost = text
+                    onEditingFinished: {
+                        console.log('update proxy host', text)
+                        Settings.proxyHost = text
+                    }
                 }
             }
             Field {
@@ -207,7 +210,10 @@ MainPage {
                 GTextField {
                     enabled: Settings.useProxy
                     text: Settings.proxyPort
-                    onTextChanged: Settings.proxyPort = text
+                    onEditingFinished: {
+                        console.log('update proxy port', text)
+                        Settings.proxyPort = text
+                    }
                 }
             }
             Field {
