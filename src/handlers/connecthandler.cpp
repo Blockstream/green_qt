@@ -27,7 +27,13 @@ namespace {
                 params.insert("proxy", session->proxy());
             }
         }
-        if (session->usePersonalNode()) params.insert("electrum_url", session->electrumUrl());
+        if (session->usePersonalNode()) {
+            const auto url = session->electrumUrl();
+            params.insert("electrum_url", url);
+            if (session->useTor()) {
+                params.insert("electrum_onion_url", url);
+            }
+        }
         return params;
     }
 } // namespace
