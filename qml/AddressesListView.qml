@@ -10,41 +10,18 @@ GPane {
     signal clicked(Address address)
 
     id: self
-    /*
-    header: GHeader {
-        Label {
-            Layout.alignment: Qt.AlignVCenter
-            text: qsTrId('id_addresses')
-            font.pixelSize: 20
-            font.styleName: 'Bold'
-        }
-        HSpacer {
-        }
-        GSearchField {
-            Layout.alignment: Qt.AlignVCenter
-            id: search_field
-        }
-        GButton {
-            Layout.alignment: Qt.AlignVCenter
-            visible: Settings.enableExperimental
-            text: qsTrId('Export')
-            enabled: self.account.context && list_view.count > 0
-            onClicked: export_addresses_popup.createObject(window, { account: self.account }).open()
-            ToolTip.text: qsTrId('Export addresses to CSV file')
-        }
-    }
-    */
 
     contentItem: TListView {
         id: list_view
         spacing: 8
+
+        header: THeader {
+            width: list_view.contentWidth
+        }
+
         model: AddressListModelFilter {
-            id: address_model_filter
-//            filter: search_field.text
-            model: AddressListModel {
-                id: address_model
-                account: self.account
-            }
+            filter: list_view.headerItem.searchText
+            model: address_model
         }
         delegate: AddressDelegate {
             width: ListView.view.contentWidth
@@ -82,6 +59,31 @@ GPane {
                 onSaved: dialog.close()
             }
             BusyIndicator {
+            }
+        }
+    }
+
+    component THeader: GPane {
+        property alias searchText: search_field.text
+        bottomPadding: constants.p3
+        width: list_view.contentWidth
+        contentItem: RowLayout {
+            GSearchField {
+                id: search_field
+                Layout.alignment: Qt.AlignVCenter
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                Layout.maximumWidth: 300
+            }
+            HSpacer {
+            }
+            GButton {
+                Layout.alignment: Qt.AlignVCenter
+                visible: Settings.enableExperimental
+                text: qsTrId('Export')
+                enabled: self.account.context && !address_model.dispatcher.busy && list_view.count > 0
+                onClicked: export_addresses_popup.createObject(window, { account: self.account }).open()
+                ToolTip.text: qsTrId('Export addresses to CSV file')
             }
         }
     }

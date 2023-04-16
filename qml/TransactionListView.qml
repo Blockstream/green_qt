@@ -5,11 +5,9 @@ import QtQuick.Layouts
 import Qt5Compat.GraphicalEffects
 
 GPane {
-    property real contentY: list_view.contentY //+ list_view.headerItem.height
     required property Account account
-    property alias interactive: list_view.interactive
-    property alias list: list_view
-    property bool hasExport: true
+    readonly property real contentY: list_view.contentY + list_view.headerItem.height
+    readonly property bool empty: !transaction_list_model.dispatcher.busy && list_view.count === 0
 
     id: self
 
@@ -27,16 +25,22 @@ GPane {
         }
     }
 
+    background: Label {
+        visible: self.empty
+        text: qsTrId('id_your_transactions_will_be_shown')
+        horizontalAlignment: Label.AlignHCenter
+        verticalAlignment: Label.AlignVCenter
+    }
+
     contentItem: TListView {
         id: list_view
         spacing: 8
-//        header: THeader {
-//            width: list_view.contentWidth
-//            height: 40
-//        }
+        header: THeader {
+            width: list_view.contentWidth
+        }
 
         model: TransactionFilterProxyModel {
-//            filter: list_view.headerItem.searchText
+            filter: list_view.headerItem.searchText
             model: transaction_list_model
         }
 
@@ -63,14 +67,6 @@ GPane {
             visible: running ? 1 : 0
             anchors.bottom: parent.bottom
             anchors.horizontalCenter: parent.horizontalCenter
-        }
-
-        Label {
-            visible: !transaction_list_model.dispatcher.busy && list_view.count === 0
-            anchors.top: parent.top
-            anchors.left: parent.left
-            color: 'white'
-            text: qsTrId('id_your_transactions_will_be_shown')
         }
     }
 
@@ -103,26 +99,26 @@ GPane {
         }
     }
 
-    component THeader: Item {
+    component THeader: GPane {
         property alias searchText: search_field.text
-        GPane {
-            width: list_view.contentWidth
-            contentItem: RowLayout {
-                HSpacer {
-                }
-                GSearchField {
-                    id: search_field
-                    Layout.alignment: Qt.AlignVCenter
-                    visible: self.hasExport
-                }
-                GButton {
-                    Layout.alignment: Qt.AlignVCenter
-                    text: qsTrId('Export')
-                    visible: self.hasExport
-                    enabled: self.account.context && !transaction_list_model.dispatcher.busy && list_view.count > 0
-                    onClicked: export_transactions_popup.createObject(window, { account: self.account }).open()
-                    ToolTip.text: qsTrId('id_export_transactions_to_csv_file')
-                }
+        bottomPadding: constants.p3
+        width: list_view.contentWidth
+        contentItem: RowLayout {
+            GSearchField {
+                id: search_field
+                Layout.alignment: Qt.AlignVCenter
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                Layout.maximumWidth: 300
+            }
+            HSpacer {
+            }
+            GButton {
+                Layout.alignment: Qt.AlignVCenter
+                text: qsTrId('Export')
+                enabled: self.account.context && !transaction_list_model.dispatcher.busy && list_view.count > 0
+                onClicked: export_transactions_popup.createObject(window, { account: self.account }).open()
+                ToolTip.text: qsTrId('id_export_transactions_to_csv_file')
             }
         }
     }

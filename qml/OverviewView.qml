@@ -61,11 +61,6 @@ GPane {
         ColumnLayout {
             spacing: 8
             Label {
-                background: Rectangle {
-                    color: 'red'
-                    opacity: 0.1
-                }
-
                 text: qsTrId('id_assets')
                 font.pixelSize: 16
                 font.styleName: 'Bold'

@@ -6,18 +6,8 @@ GTextField {
     readonly property bool empty: text === ''
     id: self
     radius: height / 2
-    topInset: 4
-    bottomInset: 4
     leftPadding: height / 2 + contentHeight + 4
     rightPadding: self.empty ? height / 2 : clear_button.height + self.height - self.font.pixelSize
-    topPadding: 9
-    bottomPadding: 9
-    implicitWidth: 200 //self.activeFocus || !self.empty ? 300 : 200
-//    Behavior on implicitWidth {
-//        SmoothedAnimation {
-//            velocity: 800
-//        }
-//    }
     placeholderText: qsTrId('id_search')
     Keys.onEscapePressed: self.clear()
     Image {
