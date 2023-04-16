@@ -65,51 +65,26 @@ Dialog {
             onClicked: self.reject()
         }
     }
-//    Overlay.modal: Rectangle {
-//        id: xx
-//        color: '#d0666666'
-//        Column {
-//            Label {
-//                text: {
-//                    const r = ['']
-//                    for (let i = xx; i; i = i.parent) r.push(i)
-//                    return r.join(' ')
-//                }
-//            }
-//            Label {
-//                text: {
-//                    const r = ['']
-//                    const t = xx.parent.parent
-//                    for (let i = 0; i < t.children.length; i++) r.push(t.children[i])
-//                    return r.join(' ')
-//                }
-//            }
-//        }
-//    }
+
     Overlay.modal: Rectangle {
         id: modal
-        color: constants.c900 //'white'//        color: '#d0000000'
-
+        color: constants.c900
         FastBlur {
-        anchors.fill: parent
-        cached: true
-        opacity: 0.5
-
-        radius: 64
-        source: ShaderEffectSource {
-            sourceItem: ApplicationWindow.contentItem
-            sourceRect {
-                x: 0
-                y: 0
-                width: modal.width
-                height: modal.height
+            anchors.fill: parent
+            cached: true
+            opacity: 0.5
+            radius: 64
+            source: ShaderEffectSource {
+                sourceItem: ApplicationWindow.contentItem
+                sourceRect {
+                    x: 0
+                    y: 0
+                    width: modal.width
+                    height: modal.height
+                }
             }
         }
     }
-    }
-//    Overlay.modal: Rectangle {
-//        color: '#d0000000'
-//    }
 
     background: Item {
         HoverHandler {
@@ -128,7 +103,6 @@ Dialog {
             anchors.fill: parent
             radius: 16
             color: constants.c800
-//            border.color: Qt.rgba(1, 1, 1, 0.1)
             border.width: 0.5
             border.color: Qt.lighter(constants.c500)
         }
