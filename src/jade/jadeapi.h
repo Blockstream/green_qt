@@ -4,7 +4,9 @@
 #include <QElapsedTimer>
 #include <QMap>
 #include <QObject>
+#include <QQueue>
 #include <QRandomGenerator>
+#include <QSet>
 
 #include "jadeconnection.h"
 
@@ -154,8 +156,10 @@ private:
     void sendTxSignatureRequest(const int id, const int index, const QVariantList &inputs, const QSharedPointer<QVariantList> &commitments, const QSharedPointer<QVariantList> &signatures);
     ResponseHandler makeReceiveSignatureCallback(const int id, const int index, const QVariantList &inputs, const QSharedPointer<QVariantList> &commitments, const QSharedPointer<QVariantList> &signatures);
 
-    // Send cbor message to Jade
-    void sendToJade(const QCborMap &msg);
+    // Enqueue or send cbor message to Jade
+    void enqueue(const QCborMap &msg);
+    void send(const QCborMap &msg);
+    void drain();
 
     // Used to measure elapsed time since last activity
     QElapsedTimer m_idle_timer;
@@ -172,6 +176,8 @@ private:
     // Underlying connection - lifetime managed by QObject hierarchy
     JadeConnection              *m_jade;
     const bool m_relax_write;
+    QQueue<QCborMap> m_msg_queue;
+    QSet<int> m_msg_inflight;
 };
 
 #endif // JADEAPI_H

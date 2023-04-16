@@ -125,7 +125,7 @@ void JadeAPI::handleHttpResponse(const int id, const QJsonObject &httpRequest, c
     const QString on_reply = httpRequest["on-reply"].toString();
     const QCborMap newRequest = getRequest(newId, on_reply, QCborMap::fromJsonObject(httpResponse));
     m_request_proxy[newId] = m_request_proxy[id];
-    sendToJade(newRequest);
+    send(newRequest);
 }
 
 inline int JadeAPI::getNewId() {
@@ -234,20 +234,34 @@ void JadeAPI::processResponseMessage(const QCborMap &msg)
         // Simple result or error - call registered callback
         callResponseHandler(msg.toVariantMap());
     }
+
+    m_msg_inflight.remove(id);
+    QTimer::singleShot(0, this, &JadeAPI::drain);
 }
 
-void JadeAPI::sendToJade(const QCborMap &msg)
+void JadeAPI::enqueue(const QCborMap &msg)
 {
     m_idle_timer.restart();
 
+    if (!m_msg_inflight.isEmpty()) {
+        m_msg_queue.enqueue(msg);
+    } else {
+        send(msg);
+    }
+}
+
+void JadeAPI::send(const QCborMap &msg)
+{
     // qInfo() << "JadeAPI::sendToJade() - Sending message ->" << Qt::endl << msg;
     Q_ASSERT(m_jade);
     m_jade->send(msg);
     int id = msg["id"].toString().toInt();
     int timeout = m_msg_timeout.value(id, 0);
+    m_msg_inflight.insert(id);
     if (timeout > 0) QTimer::singleShot(timeout, this, [=] {
         // Get (ie. remove) the response handler for that id from the map of registered handlers
         const ResponseHandler handler = m_responseHandlers.take(id);
+        m_msg_inflight.remove(id);
         if (!handler) return;
         QVariantMap error = {{ "message", "timeout" }};
         try {
@@ -255,7 +269,15 @@ void JadeAPI::sendToJade(const QCborMap &msg)
         } catch(...) {
             qWarning() << "JadeAPI::callResponseHandler() - Error in client handler for" << msg;
         }
+        drain();
     });
+}
+
+void JadeAPI::drain()
+{
+    if (!m_msg_inflight.isEmpty()) return;
+    if (m_msg_queue.isEmpty()) return;
+    send(m_msg_queue.dequeue());
 }
 
 /*
@@ -277,7 +299,7 @@ int JadeAPI::setMnemonic(const QString& mnemonic, const ResponseHandler &cb)
     const int id = registerResponseHandler(cb);
     const QCborMap params = { {"mnemonic", mnemonic} };
     const QCborMap request = getRequest(id, "debug_set_mnemonic", params);
-    sendToJade(request);
+    enqueue(request);
     return id;
 }
 #endif
@@ -287,7 +309,7 @@ int JadeAPI::getVersionInfo(const ResponseHandler &cb)
 {
     const int id = registerResponseHandler(cb, 500);
     const QCborMap request = getRequest(id, "get_version_info");
-    sendToJade(request);
+    enqueue(request);
     return id;
 }
 
@@ -297,7 +319,7 @@ int JadeAPI::addEntropy(const QByteArray &entropy, const ResponseHandler &cb)
     const int id = registerResponseHandler(cb);
     const QCborMap params = { {"entropy", entropy} };
     const QCborMap request = getRequest(id, "add_entropy", params);
-    sendToJade(request);
+    enqueue(request);
     return id;
 }
 
@@ -311,7 +333,7 @@ int JadeAPI::authUser(const QString &network, const ResponseHandler &cb, const H
     const qint64 now_epoch_secs = QDateTime::currentSecsSinceEpoch();
     const QCborMap params = { {"network", network}, {"epoch", now_epoch_secs } };
     const QCborMap request = getRequest(id, "auth_user", params);
-    sendToJade(request);
+    enqueue(request);
     return id;
 }
 
@@ -333,7 +355,7 @@ int JadeAPI::otaUpdate(const QByteArray& fwcmp, const int fwlen, const int chunk
     const int compressedSize = fwcmp.length();
     const QCborMap params = { {"fwsize", fwlen}, {"cmpsize", compressedSize}, {"cmphash", cmphash} };
     const QCborMap request = getRequest(tmpId, "ota", params);
-    sendToJade(request);
+    enqueue(request);
     return id;
 }
 
@@ -354,7 +376,7 @@ int JadeAPI::otaDeltaUpdate(const QByteArray& fwcmp, const int fwlen, const int 
     const int compressedSize = fwcmp.length();
     const QCborMap params = { {"fwsize", fwlen}, {"cmpsize", compressedSize}, {"cmphash", cmphash}, {"patchsize", patch_size} };
     const QCborMap request = getRequest(tmpId, "ota_delta", params);
-    sendToJade(request);
+    enqueue(request);
     return id;
 }
 
@@ -397,14 +419,14 @@ JadeAPI::ResponseHandler JadeAPI::makeOtaChunkCallback(const int id, const QByte
                 // Send chunk to Jade, creating a new instance of this callback
                 const int tmpId = registerResponseHandler(makeOtaChunkCallback(id, fwcmp, chunkSize, currentPos+nextChunkLen, cbProgress));
                 const QCborMap otaData = getRequest(tmpId, "ota_data", nextChunk);
-                sendToJade(otaData);
+                send(otaData);
             }
             else
             {
                 // Upload complete - send final message using exposed id (and hence directing response at callers handler)
                 qDebug() << "JadeAPI::makeOtaChunkCallback()::lambda for" << id << "all chunks uploaded - sending ota_complete";
                 const QCborMap otaData = getRequest(id, "ota_complete");
-                sendToJade(otaData);
+                send(otaData);
             }
         }
         else
@@ -428,7 +450,7 @@ int JadeAPI::getReceiveAddress(const QString &network, const quint32 subaccount,
                               {"csv_blocks", csvBlocks}
                             };
     const QCborMap request = getRequest(id, "get_receive_address", params);
-    sendToJade(request);
+    enqueue(request);
     return id;
 }
 
@@ -441,7 +463,7 @@ int JadeAPI::getReceiveAddress(const QString& network, const QString& variant, c
                               {"path", convertPath(path) },
                             };
     const QCborMap request = getRequest(id, "get_receive_address", params);
-    sendToJade(request);
+    enqueue(request);
     return id;
 }
 
@@ -451,7 +473,7 @@ int JadeAPI::getXpub(const QString &network, const QVector<quint32> &path, const
     const int id = registerResponseHandler(cb);
     const QCborMap params = { {"network", network}, {"path", convertPath(path)} };
     const QCborMap request = getRequest(id, "get_xpub", params);
-    sendToJade(request);
+    enqueue(request);
     return id;
 }
 
@@ -466,11 +488,11 @@ int JadeAPI::signMessage(const QVector<quint32> &path, const QString &message, c
         });
         const QCborMap params = { {"ae_host_entropy", ae_host_entropy} };
         const QCborMap request = getRequest(id, "get_signature", params);
-        sendToJade(request);
+        send(request);
     });
     const QCborMap params = { {"path", convertPath(path)}, {"message", message}, {"ae_host_commitment", ae_host_commitment} };
     const QCborMap request = getRequest(id, "sign_message", params);
-    sendToJade(request);
+    enqueue(request);
     return id;
 }
 
@@ -499,7 +521,7 @@ int JadeAPI::signTx(const QString &network, const QByteArray &txn, const QVarian
                               {"num_inputs", inputs.size()},
                               {"change", QCborArray::fromVariantList(change)} };
     const QCborMap request = getRequest(tmpId, "sign_tx", params);
-    sendToJade(request);
+    enqueue(request);
     return id;
 }
 
@@ -540,7 +562,7 @@ void JadeAPI::sendTxInput(const int id, const int index, const QVariantList &inp
 
     const int inputId = registerResponseHandler(makeReceiveCommitmentCallback(id, index, inputs, commitments));
     const QCborMap request = getRequest(inputId, "tx_input", params);
-    sendToJade(request);
+    enqueue(request);
 }
 
 // Helper for signTx / signLiquidTx to receive and collect the signatures
@@ -600,7 +622,7 @@ void JadeAPI::sendTxSignatureRequest(const int id, const int index, const QVaria
 
     const int sigId = registerResponseHandler(makeReceiveSignatureCallback(id, index, inputs, commitments, signatures));
     const QCborMap request = getRequest(sigId, "get_signature", params);
-    sendToJade(request);
+    send(request);
 }
 
 
@@ -658,7 +680,7 @@ int JadeAPI::getBlindingKey(const QByteArray &script, const ResponseHandler &cb)
     const int id = registerResponseHandler(cb);
     const QCborMap params = { {"script", script} };
     const QCborMap request = getRequest(id, "get_blinding_key", params);
-    sendToJade(request);
+    enqueue(request);
     return id;
 }
 
@@ -670,7 +692,7 @@ int JadeAPI::getSharedNonce(const QByteArray &script, const QByteArray &their_pu
     const int id = registerResponseHandler(cb);
     const QCborMap params = { {"script", script}, {"their_pubkey", their_pubkey} };
     const QCborMap request = getRequest(id, "get_shared_nonce", params);
-    sendToJade(request);
+    enqueue(request);
     return id;
 }
 
@@ -691,7 +713,7 @@ int JadeAPI::getBlindingFactor(const QByteArray &hashPrevouts, const quint32 out
     const int id = registerResponseHandler(cb);
     const QCborMap params = { {"hash_prevouts", hashPrevouts}, {"output_index", outputIndex}, {"type", type} };
     const QCborMap request = getRequest(id, "get_blinding_factor", params);
-    sendToJade(request);
+    enqueue(request);
     return id;
 }
 
@@ -711,7 +733,7 @@ int JadeAPI::getCommitments(const QByteArray& assetId, const qint64 value, const
         params.insert(QCborValue("vbf"), vbf);
     }
     const QCborMap request = getRequest(id, "get_commitments", params);
-    sendToJade(request);
+    enqueue(request);
     return id;
 }
 
@@ -741,7 +763,7 @@ int JadeAPI::signLiquidTx(const QString &network, const QByteArray &txn, const Q
                               {"trusted_commitments", QCborArray::fromVariantList(commitments)},
                               {"change", QCborArray::fromVariantList(change)} };
     const QCborMap request = getRequest(tmpId, "sign_liquid_tx", params);
-    sendToJade(request);
+    enqueue(request);
     return id;
 }
 
@@ -749,6 +771,6 @@ int JadeAPI::getMasterBlindingKey(const ResponseHandler &cb)
 {
     const int id = registerResponseHandler(cb);
     const QCborMap request = getRequest(id, "get_master_blinding_key");
-    sendToJade(request);
+    enqueue(request);
     return id;
 }
