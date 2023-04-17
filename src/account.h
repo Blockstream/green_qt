@@ -64,8 +64,8 @@ signals:
     void transactionEvent(const QJsonObject& event);
     void walletChanged();
     void jsonChanged();
-    void nameChanged(const QString& name);
-    void hiddenChanged(bool hidden);
+    void nameChanged();
+    void hiddenChanged();
     void balanceChanged();
     void balancesChanged();
     void addressGenerated();

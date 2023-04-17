@@ -48,7 +48,6 @@ GPane {
             width: ListView.view.contentWidth
             account: self.account
             context: self.account.context
-            onClicked: transaction_dialog.createObject(window, { transaction }).open()
         }
         section.property: "date"
         section.criteria: ViewSection.FullString
@@ -67,12 +66,6 @@ GPane {
             visible: running ? 1 : 0
             anchors.bottom: parent.bottom
             anchors.horizontalCenter: parent.horizontalCenter
-        }
-    }
-
-    Component {
-        id: transaction_dialog
-        TransactionView {
         }
     }
 

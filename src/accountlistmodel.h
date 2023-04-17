@@ -32,6 +32,9 @@ signals:
     void filterChanged();
     void countChanged();
 
+private slots:
+    void invalidateFilterAndCount();
+
 private:
     Context* m_context{nullptr};
     QStandardItemModel* m_model{nullptr};

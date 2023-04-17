@@ -86,6 +86,12 @@ StackLayout {
     }
 
     Component {
+        id: transaction_dialog
+        TransactionView {
+        }
+    }
+
+    Component {
         id: balance_dialog
         AssetView {
         }

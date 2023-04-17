@@ -34,6 +34,8 @@ ItemDelegate {
         }
     }
 
+    onClicked: transaction_dialog.createObject(window, { transaction }).open()
+
     id: self
     focusPolicy: Qt.ClickFocus
     hoverEnabled: true

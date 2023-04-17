@@ -21,10 +21,24 @@ GPane {
         ColumnLayout {
             Layout.fillWidth: true
             spacing: 8
-            Label {
-                text: qsTrId('id_latest_transactions')
-                font.pixelSize: 16
-                font.styleName: 'Bold'
+            GPane {
+                Layout.fillWidth: true
+                bottomPadding: constants.p3
+                contentItem: RowLayout {
+                    Label {
+                        text: qsTrId('id_latest_transactions')
+                        font.pixelSize: 16
+                        font.styleName: 'Bold'
+                    }
+                    HSpacer {
+
+                    }
+                    GButton {
+                        Layout.alignment: Qt.AlignHCenter
+                        text: qsTrId('id_show_all')
+                        onClicked: navigation.set({ view: 'transactions' })
+                    }
+                }
             }
             Repeater {
                 model: LimitProxyModel {
@@ -36,11 +50,6 @@ GPane {
                     context: self.context
                     account: self.account
                 }
-            }
-            GButton {
-                Layout.alignment: Qt.AlignHCenter
-                text: qsTrId('id_show_all')
-                onClicked: navigation.set({ view: 'transactions' })
             }
         }
         VSpacer {
@@ -60,10 +69,24 @@ GPane {
 
         ColumnLayout {
             spacing: 8
-            Label {
-                text: qsTrId('id_assets')
-                font.pixelSize: 16
-                font.styleName: 'Bold'
+            GPane {
+                Layout.fillWidth: true
+                bottomPadding: constants.p3
+                contentItem: RowLayout {
+                    Label {
+                        text: qsTrId('id_assets')
+                        font.pixelSize: 16
+                        font.styleName: 'Bold'
+                    }
+                    HSpacer {
+
+                    }
+                    GButton {
+                        Layout.alignment: Qt.AlignHCenter
+                        text: qsTrId('id_show_all')
+                        onClicked: navigation.set({ view: 'assets' })
+                    }
+                }
             }
             Repeater {
                 id: asset_repeater
@@ -80,12 +103,6 @@ GPane {
                     }
                     return balances
                 }
-            }
-            GButton {
-                visible: self.account.balances.length > 3
-                Layout.alignment: Qt.AlignHCenter
-                text: qsTrId('id_show_all')
-                onClicked: navigation.set({ view: 'assets' })
             }
         }
     }

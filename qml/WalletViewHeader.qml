@@ -124,20 +124,8 @@ MainPageHeader {
                                 font.styleName: 'Medium'
                             }
                         }
-                        Label {
-                            visible: self.archived
-                            font.pixelSize: 10
-                            font.capitalization: Font.AllUppercase
-                            leftPadding: 8
-                            rightPadding: 8
-                            topPadding: 4
-                            bottomPadding: 4
-                            color: 'white'
-                            background: Rectangle {
-                                color: constants.c400
-                                radius: 4
-                            }
-                            text: qsTrId('id_archived')
+                        AccountArchivedBadge {
+                            account: self.currentAccount
                         }
                     }
                 }

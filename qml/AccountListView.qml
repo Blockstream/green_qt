@@ -8,7 +8,7 @@ import Qt5Compat.GraphicalEffects
 import "analytics.js" as AnalyticsJS
 
 GPane {
-    property real contentY: Math.max(archive_list_view.contentY, account_list_view.contentY)
+    property real contentY: Math.max(archive_list_view.contentY + archive_list_view.headerItem.height, account_list_view.contentY)
     required property Context context
     property Account currentAccount: {
         const view = showArchived ? archive_list_view : account_list_view
@@ -57,6 +57,25 @@ GPane {
         TListView {
             id: archive_list_view
             model: archive_list_model
+            header: GPane {
+                bottomPadding: constants.p3
+                width: archive_list_view.contentWidth
+                contentItem: RowLayout {
+                    Label {
+                        Layout.fillWidth: true
+                        font.pixelSize: 16
+                        font.styleName: 'Bold'
+                        text: qsTrId('id_archived_accounts')
+                    }
+                    HSpacer {
+                    }
+                    GButton {
+                        Layout.alignment: Qt.AlignVCenter
+                        text: qsTrId('id_back')
+                        onClicked: navigation.set({ archive: false })
+                    }
+                }
+            }
             AnalyticsView {
                 active: self.showArchived
                 name: 'ArchivedAccounts'

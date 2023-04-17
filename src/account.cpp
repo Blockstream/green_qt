@@ -141,7 +141,7 @@ void Account::setHidden(bool hidden)
     if (m_hidden == hidden) return;
     m_json["hidden"] = hidden;
     m_hidden = hidden;
-    emit hiddenChanged(m_hidden);
+    emit hiddenChanged();
 }
 
 Transaction* Account::getOrCreateTransaction(const QJsonObject& data)
@@ -202,5 +202,5 @@ void Account::setName(const QString& name)
     if (m_name == name) return;
     m_name = name;
     m_json["name"] = name;
-    emit nameChanged(m_name);
+    emit nameChanged();
 }

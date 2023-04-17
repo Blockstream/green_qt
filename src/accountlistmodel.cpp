@@ -25,7 +25,7 @@ void AccountListModel::setContext(Context* context)
         setSourceModel(m_model);
         connect(m_context, &Context::accountsChanged, this, [=] {
             update();
-            invalidateFilter();
+            invalidateRowsFilter();
         });
     }
     emit contextChanged();
@@ -43,11 +43,17 @@ void AccountListModel::update()
         m_items.insert(account, item);
         item->setData(QVariant::fromValue(account), Qt::UserRole);
         m_model->appendRow(item);
-        connect(account, &Account::hiddenChanged, this, [=] { invalidateFilter(); });
-        connect(account, &Account::balanceChanged, this, [=] { invalidateFilter(); });
-        connect(account, &Account::balancesChanged, this, [=] { invalidateFilter(); });
+        connect(account, &Account::hiddenChanged, this, &AccountListModel::invalidateFilterAndCount);
+        connect(account, &Account::balanceChanged, this, &AccountListModel::invalidateFilterAndCount);
+        connect(account, &Account::balancesChanged, this, &AccountListModel::invalidateFilterAndCount);
     }
     if (changed) emit countChanged();
+}
+
+void AccountListModel::invalidateFilterAndCount()
+{
+    invalidateRowsFilter();
+    emit countChanged();
 }
 
 bool AccountListModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
@@ -72,5 +78,5 @@ void AccountListModel::setFilter(const QString &filter)
     if (m_filter == filter) return;
     m_filter = filter;
     emit filterChanged();
-    invalidateFilter();
+    invalidateFilterAndCount();
 }

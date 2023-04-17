@@ -79,22 +79,16 @@ ItemDelegate {
     hoverEnabled: true
     width: ListView.view.contentWidth
     contentItem: ColumnLayout {
-        spacing: 4
+        spacing: 6
         RowLayout {
             AccountTypeBadge {
                 account: delegate.account
             }
             HSpacer {
             }
-            /*
             ToolButton {
                 Layout.alignment: Qt.AlignBottom
-                scale: delegate.highlighted && !name_field.activeFocus ? 1 : 0
-                Behavior on scale {
-                    SmoothedAnimation {
-                        velocity: 4
-                    }
-                }
+                visible: !delegate.account.hidden
                 icon.source: 'qrc:/svg/3-dots.svg'
                 leftPadding: 0
                 rightPadding: 0
@@ -107,27 +101,8 @@ ItemDelegate {
                 background: null
                 onClicked: account_delegate_menu.popup()
             }
-            */
-            ToolButton {
-                Layout.alignment: Qt.AlignBottom
-                scale: delegate.highlighted && !name_field.activeFocus ? 1 : 0
-                Behavior on scale {
-                    SmoothedAnimation {
-                        velocity: 4
-                    }
-                }
-
-                icon.source: delegate.account.hidden ? 'qrc:/svg/unarchive.svg' : 'qrc:/svg/archive.svg'
-                leftPadding: 0
-                rightPadding: 0
-                bottomPadding: 0
-                topPadding: 0
-                leftInset: 0
-                rightInset: 0
-                topInset: 0
-                bottomInset: 0
-                background: null
-                onClicked: controller.setAccountHidden(delegate.account, !delegate.account.hidden)
+            AccountArchivedBadge {
+                account: delegate.account
             }
         }
         EditableLabel {
