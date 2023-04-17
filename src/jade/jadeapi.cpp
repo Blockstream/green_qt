@@ -243,10 +243,11 @@ void JadeAPI::enqueue(const QCborMap &msg)
 {
     m_idle_timer.restart();
 
-    if (!m_msg_inflight.isEmpty()) {
-        m_msg_queue.enqueue(msg);
-    } else {
+    if (m_msg_inflight.isEmpty() && m_msg_queue.empty()) {
+         // Nothing in progress, nothing queued: can send immediately
         send(msg);
+    } else {
+        m_msg_queue.enqueue(msg);
     }
 }
 
@@ -261,7 +262,6 @@ void JadeAPI::send(const QCborMap &msg)
     if (timeout > 0) QTimer::singleShot(timeout, this, [=] {
         // Get (ie. remove) the response handler for that id from the map of registered handlers
         const ResponseHandler handler = m_responseHandlers.take(id);
-        m_msg_inflight.remove(id);
         if (!handler) return;
         QVariantMap error = {{ "message", "timeout" }};
         try {
@@ -269,6 +269,7 @@ void JadeAPI::send(const QCborMap &msg)
         } catch(...) {
             qWarning() << "JadeAPI::callResponseHandler() - Error in client handler for" << msg;
         }
+        m_msg_inflight.remove(id);
         drain();
     });
 }
@@ -562,7 +563,7 @@ void JadeAPI::sendTxInput(const int id, const int index, const QVariantList &inp
 
     const int inputId = registerResponseHandler(makeReceiveCommitmentCallback(id, index, inputs, commitments));
     const QCborMap request = getRequest(inputId, "tx_input", params);
-    enqueue(request);
+    send(request);
 }
 
 // Helper for signTx / signLiquidTx to receive and collect the signatures

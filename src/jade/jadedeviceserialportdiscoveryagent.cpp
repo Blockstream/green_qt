@@ -72,7 +72,7 @@ void JadeDeviceSerialPortDiscoveryAgent::scan()
                     if (data.contains("error")) {
                         m_devices.remove(device->systemLocation());
                         m_failed_locations.insert(device->systemLocation());
-                        delete device;
+                        device->deleteLater();
                         return;
                     }
                     const auto result = data.value("result").toMap();
@@ -81,7 +81,7 @@ void JadeDeviceSerialPortDiscoveryAgent::scan()
                     connect(device, &JadeDevice::error, [=] {
                         if (m_devices.take(device->systemLocation())) {
                             DeviceManager::instance()->removeDevice(device);
-                            delete device;
+                            device->deleteLater();
                         }
                     });
                 });

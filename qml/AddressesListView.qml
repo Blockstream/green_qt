@@ -5,7 +5,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 GPane {
-    property real contentY: list_view.contentY
+    property real contentY: list_view.contentY + list_view.headerItem.height
     required property Account account
     signal clicked(Address address)
 
