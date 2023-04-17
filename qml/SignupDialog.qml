@@ -130,24 +130,37 @@ ControllerDialog {
                     }
                 ]
                 background: Item {
-                    Image {
-                        OpacityAnimator on opacity {
-                            from: 0
-                            to: 0.5
-                            duration: 5000
-                            easing.type: Easing.OutCirc
+                    id: container
+                    readonly property rect bouding: {
+                        const i = self.background
+                        self.contentItem.mapFromItem(i, Qt.rect(0, 0, i.width, i.height))
+                    }
+
+                    Item {
+                        x: container.bouding.x + 1
+                        y: container.bouding.y + 1
+                        width: container.bouding.width - 2
+                        height: container.bouding.height - 2
+                        clip: true
+                        Image {
+                            OpacityAnimator on opacity {
+                                from: 0
+                                to: 0.5
+                                duration: 5000
+                                easing.type: Easing.OutCirc
+                            }
+                            ScaleAnimator on scale {
+                                from: 1.1
+                                to: 1
+                                duration: 10000
+                                easing.type: Easing.OutCirc
+                            }
+                            source: 'qrc:/png/liquid_background.png'
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.right: parent.right
+                            width: parent.width * 0.8
+                            fillMode: Image.PreserveAspectFit
                         }
-                        ScaleAnimator on scale {
-                            from: 1.1
-                            to: 1
-                            duration: 10000
-                            easing.type: Easing.OutCirc
-                        }
-                        source: 'qrc:/png/liquid_background.png'
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.right: parent.right
-                        width: parent.width * 0.8
-                        fillMode: Image.PreserveAspectFit
                     }
                 }
                 contentItem: ColumnLayout {
@@ -209,10 +222,10 @@ ControllerDialog {
                     }
 
                     Item {
-                        x: container.bouding.x
-                        y: container.bouding.y
-                        width: container.bouding.width
-                        height: container.bouding.height
+                        x: container.bouding.x + 1
+                        y: container.bouding.y + 1
+                        width: container.bouding.width - 2
+                        height: container.bouding.height - 2
                         clip: true
                         Image {
                             NumberAnimation on opacity {
