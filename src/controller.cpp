@@ -279,8 +279,6 @@ void Controller::clearWatchOnly()
 
 bool Controller::setAccountName(Account* account, QString name, bool active_focus)
 {
-    return false;
-
     if (!m_context) return false;
 
     if (!active_focus) name = name.trimmed();
