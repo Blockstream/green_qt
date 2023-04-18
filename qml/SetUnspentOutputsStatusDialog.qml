@@ -16,13 +16,17 @@ ControllerDialog {
     controller: Controller {
         id: controller
         context: self.context
-        onFinished: self.model.fetch()
+        onFinished: {
+            self.model.fetch()
+            self.accept()
+        }
     }
 
     ColumnLayout {
         spacing: constants.s1
 
         Label {
+            Layout.fillWidth: true
             text: {
                 if (status === 'default') {
                     return qsTrId('id_unlocked_coins_can_be_spent_and')
@@ -34,7 +38,7 @@ ControllerDialog {
         }
 
         GButton {
-            large: true
+            Layout.alignment: Qt.AlignCenter
             highlighted: true
             text: qsTrId('id_next')
             onClicked: controller.setUnspentOutputsStatus(self.outputs, self.status)

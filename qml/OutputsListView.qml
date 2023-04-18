@@ -4,7 +4,11 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import QtQml.Models
 
-GPane {
+Page {
+    background: null
+    padding: 0
+    focusPolicy: Qt.ClickFocus
+
     required property Account account
     readonly property real contentY: list_view.contentY + list_view.headerItem.height
 
@@ -25,70 +29,6 @@ GPane {
         spacing: 8
 
         model: output_model_filter
-
-        header: Item {
-            height: 40
-            width: list_view.contentWidth
-            GPane {
-                anchors.fill: parent
-                anchors.bottomMargin: 20
-                contentItem: RowLayout {
-                    spacing: 6
-                    HSpacer {
-                    }
-                    Repeater {
-                        model: {
-                            const filters = ['', 'csv', 'p2wsh']
-                            if (account.network.liquid) {
-                                filters.push('not_confidential')
-                            } else {
-                                filters.push('p2sh')
-                                filters.push('dust')
-                                filters.push('locked')
-                            }
-                            if (account.type !== '2of3' && account.type !== '2of2_no_recovery') {
-                                filters.push('expired')
-                            }
-                            return filters
-                        }
-                        delegate: ItemDelegate {
-                            id: self
-                            ButtonGroup.group: button_group
-                            checked: index === 0
-                            checkable: true
-                            padding: 18
-                            topInset: 0
-                            bottomInset: 0
-                            topPadding: 4
-                            bottomPadding: 4
-                            background: Rectangle {
-                                id: rectangle
-                                radius: 4
-                                color: self.checked ? constants.c300 : constants.c500
-                            }
-                            contentItem: Label {
-                                text: self.text
-                                font.pixelSize: 10
-    //                            font.family: "Medium"
-                            }
-                            text: localizedLabel(modelData)
-                            property string buttonTag: modelData
-                            font.capitalization: Font.AllUppercase
-                        }
-                    }
-                    ToolButton {
-                        visible: false
-                        topPadding: 0
-                        bottomPadding: 0
-                        topInset: 0
-                        bottomInset: 0
-                        icon.source: "qrc:/svg/info.svg"
-                        icon.color: "white"
-                        onClicked: info_dialog.createObject(self).open();
-                    }
-                }
-            }
-        }
 
         delegate: OutputDelegate {
             highlighted: selection_model.selectedIndexes.indexOf(output_model.index(output_model.indexOf(output), 0))>-1
@@ -124,47 +64,104 @@ GPane {
     }
 
     RowLayout {
-        Layout.bottomMargin: -constants.p2
-        // TODO
-        visible: false
-        // visible: selection_model.hasSelection && !account.network.liquid
-
-        Layout.fillWidth: true
-        spacing: constants.p1
-
-        Label {
-            text: selection_model.selectedIndexes.length + ' selected'
-            padding: 4
-        }
-
-        HSpacer {
-        }
-
-        GButton {
-            text: qsTrId('id_lock')
-            enabled: {
-                for (const output of selectedOutputs) {
-                    if (!output.canBeLocked || output.locked || output.unconfirmed) return false;
+        parent: toolbarItem
+        visible: self.visible
+        spacing: 8
+        Repeater {
+            model: {
+                const filters = ['', 'csv', 'p2wsh']
+                if (account.network.liquid) {
+                    filters.push('not_confidential')
+                } else {
+                    filters.push('p2sh')
+                    filters.push('dust')
+                    filters.push('locked')
                 }
-                return true;
-            }
-            onClicked: set_unspent_outputs_status_dialog.createObject(self, { outputs: selectedOutputs, status: "frozen" }).open();
-        }
-
-        GButton {
-            text: qsTrId('id_unlock')
-            enabled: {
-                for (const output of selectedOutputs) {
-                    if (!output.locked) return false;
+                if (account.type !== '2of3' && account.type !== '2of2_no_recovery') {
+                    filters.push('expired')
                 }
-                return true;
+                return filters
             }
-            onClicked: set_unspent_outputs_status_dialog.createObject(self, { outputs: selectedOutputs, status: "default" }).open();
+            delegate: ItemDelegate {
+                id: self
+                ButtonGroup.group: button_group
+                checked: index === 0
+                checkable: true
+                padding: 18
+                topInset: 0
+                bottomInset: 0
+                topPadding: 4
+                bottomPadding: 4
+                background: Rectangle {
+                    id: rectangle
+                    radius: 4
+                    color: self.checked ? constants.c300 : constants.c500
+                }
+                contentItem: Label {
+                    text: self.text
+                    font.pixelSize: 10
+//                            font.family: "Medium"
+                }
+                text: localizedLabel(modelData)
+                property string buttonTag: modelData
+                font.capitalization: Font.AllUppercase
+            }
         }
+        ToolButton {
+            visible: false
+            topPadding: 0
+            bottomPadding: 0
+            topInset: 0
+            bottomInset: 0
+            icon.source: "qrc:/svg/info.svg"
+            icon.color: "white"
+            onClicked: info_dialog.createObject(self).open();
+        }
+    }
 
-        GButton {
-            text: qsTrId('id_clear')
-            onClicked: selection_model.clear();
+    footer: GPane {
+        visible: selection_model.hasSelection && !account.network.liquid
+        background: Rectangle {
+            color: 'black'
+            opacity: 0.5
+        }
+        contentItem: RowLayout {
+            spacing: constants.p1
+
+            Label {
+                text: selection_model.selectedIndexes.length + ' selected'
+                padding: 4
+            }
+
+            HSpacer {
+            }
+
+            GButton {
+                text: qsTrId('id_lock')
+                enabled: {
+                    for (const output of selectedOutputs) {
+                        if (!output.canBeLocked || output.locked || output.unconfirmed) return false;
+                    }
+                    return true;
+                }
+                onClicked: set_unspent_outputs_status_dialog.createObject(self, { outputs: selectedOutputs, status: "frozen" }).open();
+            }
+
+            GButton {
+                text: qsTrId('id_unlock')
+                enabled: {
+                    for (const output of selectedOutputs) {
+                        if (!output.locked) return false;
+                    }
+                    return true;
+                }
+                onClicked: set_unspent_outputs_status_dialog.createObject(self, { outputs: selectedOutputs, status: "default" }).open();
+            }
+
+            GButton {
+                text: qsTrId('id_clear')
+                onClicked: selection_model.clear();
+            }
         }
     }
 

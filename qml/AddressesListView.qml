@@ -5,7 +5,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 GPane {
-    property real contentY: list_view.contentY + list_view.headerItem.height
+    property real contentY: list_view.contentY
     required property Account account
     signal clicked(Address address)
 
@@ -15,12 +15,8 @@ GPane {
         id: list_view
         spacing: 8
 
-        header: THeader {
-            width: list_view.contentWidth
-        }
-
         model: AddressListModelFilter {
-            filter: list_view.headerItem.searchText
+            filter: search_field.text
             model: address_model
         }
         delegate: AddressDelegate {
@@ -63,28 +59,19 @@ GPane {
         }
     }
 
-    component THeader: GPane {
-        property alias searchText: search_field.text
-        bottomPadding: constants.p3
-        width: list_view.contentWidth
-        contentItem: RowLayout {
-            GSearchField {
-                id: search_field
-                Layout.alignment: Qt.AlignVCenter
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                Layout.maximumWidth: 300
-            }
-            HSpacer {
-            }
-            GButton {
-                Layout.alignment: Qt.AlignVCenter
-                visible: Settings.enableExperimental
-                text: qsTrId('Export')
-                enabled: self.account.context && !address_model.dispatcher.busy && list_view.count > 0
-                onClicked: export_addresses_popup.createObject(window, { account: self.account }).open()
-                ToolTip.text: qsTrId('Export addresses to CSV file')
-            }
+    RowLayout {
+        spacing: 8
+        parent: toolbarItem
+        visible: self.visible
+        GSearchField {
+            id: search_field
+        }
+        GButton {
+            visible: Settings.enableExperimental
+            text: qsTrId('Export')
+            enabled: self.account.context && !address_model.dispatcher.busy && list_view.count > 0
+            onClicked: export_addresses_popup.createObject(window, { account: self.account }).open()
+            ToolTip.text: qsTrId('Export addresses to CSV file')
         }
     }
 

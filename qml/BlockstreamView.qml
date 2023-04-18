@@ -30,7 +30,7 @@ MainPage {
                     velocity: 4
                 }
             }
-            FastBlur {
+            FastBlur { visible: false
                 anchors.fill: parent
                 cached: true
                 opacity: 0.5

@@ -77,16 +77,6 @@ ControllerDialog {
             Behavior on opacity {
                 OpacityAnimator { duration: 200 }
             }
-//            Rectangle {
-//                anchors.centerIn: parent
-//                border.width: 1
-//                border.color: '#00B45E'
-//                radius: 4
-//                color: '#1000B45E'
-//                width: parent.height + 16
-//                height: width
-//                z: -1
-//            }
         }
 
         SectionLabel {
@@ -114,7 +104,12 @@ ControllerDialog {
                     const account = controller.account
                     const type = controller.uri.indexOf(':') > 0 ? 'uri' : 'address'
                     Analytics.recordEvent('receive_address', AnalyticsJS.segmentationReceiveAddress(account, type))
+                    ToolTip.show(qsTrId('id_copied_to_clipboard'), 1000)
+
                 }
+                ToolTip.text: qsTrId('id_copy_address')
+                ToolTip.delay: 300
+                ToolTip.visible: hovered
             }
         }
 

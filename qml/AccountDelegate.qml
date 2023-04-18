@@ -86,66 +86,6 @@ ItemDelegate {
             }
             HSpacer {
             }
-            ToolButton {
-                Layout.alignment: Qt.AlignBottom
-                visible: !delegate.account.hidden
-                icon.source: 'qrc:/svg/3-dots.svg'
-                leftPadding: 0
-                rightPadding: 0
-                bottomPadding: 0
-                topPadding: 0
-                leftInset: 0
-                rightInset: 0
-                topInset: 0
-                bottomInset: 0
-                background: null
-                onClicked: account_delegate_menu.popup()
-            }
-            AccountArchivedBadge {
-                account: delegate.account
-            }
-        }
-        EditableLabel {
-            id: name_field
-            Layout.fillWidth: true
-            font.styleName: 'Medium'
-            font.pixelSize: 16
-            topPadding: 0
-            leftInset: -8
-            topInset: -4
-            rightInset: -8
-            bottomInset: -4
-            text: UtilJS.accountName(account)
-            enabled: !account.context.watchonly && delegate.ListView.isCurrentItem && !delegate.account.context.locked
-            onEdited: (text) => {
-                if (enabled) {
-                    if (controller.setAccountName(delegate.account, text, activeFocus)) {
-                        Analytics.recordEvent('account_rename', AnalyticsJS.segmentationSubAccount(delegate.account))
-                    }
-                }
-            }
-        }
-        Item {
-            Layout.minimumHeight: 16
-        }
-        RowLayout {
-            ColumnLayout {
-                Layout.fillWidth: false
-                CopyableLabel {
-                    text: formatFiat(account.balance)
-                    font.pixelSize: 10
-                    font.weight: 400
-                    font.styleName: 'Regular'
-                }
-                CopyableLabel {
-                    text: formatAmount(account.balance)
-                    font.pixelSize: 14
-                    font.weight: 600
-                    font.styleName: 'Medium'
-                }
-            }
-            HSpacer {
-            }
             RowLayout {
                 Layout.fillWidth: false
                 Layout.alignment: Qt.AlignBottom
@@ -183,6 +123,68 @@ ItemDelegate {
                             border.color: 'white'
                         }
                     }
+                }
+            }
+        }
+        EditableLabel {
+            id: name_field
+            Layout.fillWidth: true
+            font.styleName: 'Medium'
+            font.pixelSize: 16
+            topPadding: 0
+            leftInset: -8
+            topInset: -4
+            rightInset: -8
+            bottomInset: -4
+            text: UtilJS.accountName(account)
+            enabled: !account.context.watchonly && delegate.ListView.isCurrentItem && !delegate.account.context.locked
+            onEdited: (text) => {
+                if (enabled) {
+                    if (controller.setAccountName(delegate.account, text, activeFocus)) {
+                        Analytics.recordEvent('account_rename', AnalyticsJS.segmentationSubAccount(delegate.account))
+                    }
+                }
+            }
+        }
+        Item {
+            Layout.minimumHeight: 16
+        }
+        Item {
+            Layout.fillWidth: true
+            implicitHeight: card_footer.height
+            RowLayout {
+                id: card_footer
+                width: parent.width
+                ColumnLayout {
+                    CopyableLabel {
+                        text: formatFiat(account.balance)
+                        font.pixelSize: 10
+                        font.weight: 400
+                        font.styleName: 'Regular'
+                    }
+                    CopyableLabel {
+                        text: formatAmount(account.balance)
+                        font.pixelSize: 14
+                        font.weight: 600
+                        font.styleName: 'Medium'
+                    }
+                }
+                HSpacer {
+                }
+                ToolButton {
+                    Layout.alignment: Qt.AlignBottom
+                    visible: delegate.highlighted
+                    icon.source: 'qrc:/svg/3-dots.svg'
+                    leftPadding: 0
+                    rightPadding: 0
+                    bottomPadding: 0
+                    topPadding: 0
+                    leftInset: 0
+                    rightInset: 0
+                    topInset: 0
+                    bottomInset: 0
+                    background: null
+                    onClicked: account_delegate_menu.popup()
                 }
             }
         }

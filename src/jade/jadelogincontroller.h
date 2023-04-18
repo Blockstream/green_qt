@@ -20,6 +20,8 @@ class JadeController : public Controller
 public:
     JadeController(QObject* parent = nullptr);
 
+    Context* ensureContext();
+
     JadeDevice* device() const { return m_device; }
     void setDevice(JadeDevice* device);
 

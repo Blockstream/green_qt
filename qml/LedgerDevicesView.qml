@@ -89,7 +89,6 @@ MainPage {
                 implicitHeight: parent.height
             }
             GListView {
-                visible: false
                 SplitView.minimumWidth: 300
                 id: devices_list_view
                 clip: true

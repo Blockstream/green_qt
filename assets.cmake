@@ -2,6 +2,8 @@ qt_add_resources(green "images"
     PREFIX "/"
     BASE assets
     FILES
+        assets/svg/wallet-rename.svg
+        assets/svg/wallet-settings.svg
         assets/svg/archive.svg
         assets/svg/unarchive.svg
         assets/svg/archived.svg

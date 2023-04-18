@@ -6,7 +6,7 @@ import Qt5Compat.GraphicalEffects
 
 GPane {
     required property Account account
-    readonly property real contentY: list_view.contentY + list_view.headerItem.height
+    readonly property real contentY: list_view.contentY
     readonly property bool empty: !transaction_list_model.dispatcher.busy && list_view.count === 0
 
     id: self
@@ -35,12 +35,8 @@ GPane {
     contentItem: TListView {
         id: list_view
         spacing: 8
-        header: THeader {
-            width: list_view.contentWidth
-        }
-
         model: TransactionFilterProxyModel {
-            filter: list_view.headerItem.searchText
+            filter: search_field.text
             model: transaction_list_model
         }
 
@@ -49,14 +45,17 @@ GPane {
             account: self.account
             context: self.account.context
         }
-        section.property: "date"
-        section.criteria: ViewSection.FullString
-        section.delegate: sectionHeading
-        section.labelPositioning: ViewSection.InlineLabels // + ViewSection.CurrentLabelAtStart
+
+//        section.property: "date"
+//        section.criteria: ViewSection.FullString
+//        section.delegate: sectionHeading
+//        section.labelPositioning: ViewSection.InlineLabels
+
         // TODO
         // refreshGesture: true
         // refreshText: qsTrId('id_loading_transactions')
         // onRefreshTriggered: transaction_list_model.reload()
+
         BusyIndicator {
             width: 32
             height: 32
@@ -92,27 +91,18 @@ GPane {
         }
     }
 
-    component THeader: GPane {
-        property alias searchText: search_field.text
-        bottomPadding: constants.p3
-        width: list_view.contentWidth
-        contentItem: RowLayout {
-            GSearchField {
-                id: search_field
-                Layout.alignment: Qt.AlignVCenter
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                Layout.maximumWidth: 300
-            }
-            HSpacer {
-            }
-            GButton {
-                Layout.alignment: Qt.AlignVCenter
-                text: qsTrId('Export')
-                enabled: self.account.context && !transaction_list_model.dispatcher.busy && list_view.count > 0
-                onClicked: export_transactions_popup.createObject(window, { account: self.account }).open()
-                ToolTip.text: qsTrId('id_export_transactions_to_csv_file')
-            }
+    RowLayout {
+        parent: toolbarItem
+        visible: self.visible
+        spacing: 8
+        GSearchField {
+            id: search_field
+        }
+        GButton {
+            text: qsTrId('Export')
+            enabled: self.account.context && !transaction_list_model.dispatcher.busy && list_view.count > 0
+            onClicked: export_transactions_popup.createObject(window, { account: self.account }).open()
+            ToolTip.text: qsTrId('id_export_transactions_to_csv_file')
         }
     }
 

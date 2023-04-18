@@ -179,29 +179,35 @@ Pane {
                 }
                 SideLabel {
                     text: qsTrId('id_devices')
-                    visible: !Settings.collapseSideBar && device_list_model.rowCount > 0
+                    visible: !Settings.collapseSideBar
                 }
-                Repeater {
-                    model: DeviceListModel {
-                        id: device_list_model
-                    }
-                    delegate: DeviceSideButton {
-                    }
+                SideButton {
+                    icon.source: 'qrc:/svg/jade_emblem_on_transparent_rgb.svg'
+                    isCurrent: navigation.param.view === 'jade'
+                    onClicked: navigation.push({ view: 'jade' })
+                    count: jade_view.count
+                    text: 'Blockstream Jade'
                 }
-
-//                SideButton {
-//                    icon.source: 'qrc:/svg/jade_emblem_on_transparent_rgb.svg'
-//                    isCurrent: navigation.param.view === 'jade'
-//                    onClicked: navigation.push({ view: 'jade' })
-//                    count: jade_view.count
-//                    text: 'Blockstream Jade'
+//                Repeater {
+//                    model: DeviceListModel {
+//                        type: Device.BlockstreamJade
+//                    }
+//                    delegate: DeviceSideButton {
+//                    }
 //                }
-//                SideButton {
-//                    icon.source: 'qrc:/svg/ledger-logo.svg'
-//                    isCurrent: navigation.param.view === 'ledger'
-//                    onClicked: navigation.push({ view: 'ledger' })
-//                    count: ledger_view.count
-//                    text: 'Ledger Nano'
+                SideButton {
+                    icon.source: 'qrc:/svg/ledger-logo.svg'
+                    isCurrent: navigation.param.view === 'ledger'
+                    onClicked: navigation.push({ view: 'ledger' })
+                    count: ledger_view.count
+                    text: 'Ledger Nano'
+                }
+//                Repeater {
+//                    model: DeviceListModel {
+//                        vendor: Device.Ledger
+//                    }
+//                    delegate: DeviceSideButton {
+//                    }
 //                }
             }
         }

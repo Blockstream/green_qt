@@ -7,6 +7,7 @@ import QtQuick.Controls.Material
 import QtQuick.Layouts
 import QtQuick.Shapes
 import QtQml
+import Qt5Compat.GraphicalEffects
 
 import "analytics.js" as AnalyticsJS
 import "util.js" as UtilJS
@@ -16,8 +17,8 @@ MainPageHeader {
     required property Wallet wallet
     required property Account currentAccount
     readonly property bool archived: self.currentAccount ? self.currentAccount.hidden : false
-    property Component toobar
-
+    required property real accountListWidth
+    property Item toolbarItem: toolbar
     id: self
 
     topPadding: 0
@@ -32,6 +33,187 @@ MainPageHeader {
         background: null
     }
 
+    component TMenuSeparator: Rectangle {
+        Layout.fillWidth: true
+        Layout.minimumHeight: 1
+        Layout.maximumHeight: 1
+        color: 'white'
+        opacity: 0.05
+    }
+
+    component TMenuItem: AbstractButton {
+        id: self
+
+        readonly property var details: {
+            const re = /^([^\(\)]+)(?: \((\d+)\))?$/
+            const [_, text, count] = re.exec(self.text)
+            return { text, count: Number(count ?? '0') }
+        }
+
+        Layout.fillWidth: true
+        enabled: name_field_loader.active
+        leftPadding: 24
+        rightPadding: 24
+        topPadding: 8
+        bottomPadding: 8
+
+        background: Rectangle {
+            color: 'white'
+            opacity: 0.05
+            visible: self.hovered
+        }
+
+        contentItem: RowLayout {
+            spacing: 12
+            Image {
+                Layout.preferredHeight: 24
+                Layout.preferredWidth: 24
+                fillMode: Image.PreserveAspectFit
+                source: self.icon.source
+                opacity: self.enabled ? 1 : 0.25
+            }
+            Label {
+                Layout.fillWidth: true
+                text: self.details?.text ?? ''
+                font.pixelSize: 14
+                font.weight: 400
+            }
+            Label {
+                background: Rectangle {
+                    color: 'black'
+                    radius: height / 2
+                    opacity: 0.25
+                }
+                text: self.details.count
+                visible: self.details.count > 0
+                topPadding: 4
+                bottomPadding: 4
+                leftPadding: 12
+                rightPadding: 12
+                font.pixelSize: 12
+                font.weight: 400
+                font.bold: true
+            }
+        }
+    }
+
+    component WalletMenu: Popup {
+        id: menu
+        padding: 0
+        background: Item {
+            DropShadow {
+                opacity: 0.5
+                verticalOffset: 8
+                radius: 32
+                samples: 16
+                source: r
+                anchors.fill: r
+            }
+            Rectangle {
+                rotation: 45
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.top
+                anchors.verticalCenterOffset: 2
+                color: '#343842'
+                width: 7
+                height: 7
+            }
+            Rectangle {
+                id: r
+                color: '#222226'
+                border.color: '#343842'
+                border.width: 0.5
+                radius: 10
+                anchors.fill: parent
+            }
+            Rectangle {
+                rotation: 45
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.top
+                anchors.verticalCenterOffset: 2
+                color: '#222226'
+                width: 5.5
+                height: 5.5
+            }
+        }
+
+        contentItem: ColumnLayout {
+            id: content_item
+            layer.enabled: true
+            layer.effect: OpacityMask {
+                maskSource: Rectangle {
+                    width: content_item.width
+                    height: content_item.height
+                    radius: 9
+                }
+            }
+
+            spacing: 0
+            TMenuItem {
+                text: qsTrId('id_rename')
+                icon.source: 'qrc:/svg/wallet-rename.svg'
+                onClicked: {
+                    menu.close()
+                    name_field_loader.item.forceActiveFocus()
+                }
+            }
+            TMenuSeparator {
+            }
+            TMenuItem {
+                text: qsTrId('id_settings')
+                icon.source: 'qrc:/svg/wallet-settings.svg'
+                enabled: {
+                    if (self.context.watchonly) return false
+                    // TODO
+                    if (self.wallet.network.electrum) return true
+                    return !!self.context.settings.pricing
+                }
+                onClicked: {
+                    menu.close()
+                    navigation.set({ settings: true })
+                }
+            }
+            TMenuSeparator {
+            }
+            TMenuItem {
+                text: qsTrId('id_add_new_account')
+                icon.source: 'qrc:/svg/new.svg'
+                enabled: !self.context.watchonly
+                onClicked: {
+                    menu.close()
+                    openCreateDialog()
+                }
+            }
+            TMenuSeparator {
+            }
+            TMenuItem {
+                text: qsTrId('id_view_archived_accounts_d').arg(archive_list_model.count)
+                icon.source: 'qrc:/svg/archived.svg'
+                enabled: archive_list_model.count > 0 && !(navigation.param.archive ?? false)
+                onClicked: {
+                    menu.close()
+                    navigation.set({ archive: true })
+                }
+            }
+            TMenuSeparator {
+            }
+            TMenuItem {
+                text: qsTrId('id_logout')
+                icon.source: 'qrc:/svg/logout.svg'
+                enabled: {
+                    if (self.context.watchonly) return false
+                    // TODO
+                    if (self.wallet.network.electrum) return true
+                    return !!self.context.settings.pricing
+                }
+                onClicked: {
+                    menu.close()
+                    self.wallet.disconnect()
+                }
+            }
+        }
+    }
+
     contentItem: ColumnLayout {
         spacing: 0
         AlertView {
@@ -39,7 +221,7 @@ MainPageHeader {
             alert: overview_alert
         }
         HPane {
-            leftPadding: constants.p3 - 8
+//            leftPadding: constants.p3 - 8
             contentItem: RowLayout {
                 spacing: 0
                 Control {
@@ -49,16 +231,38 @@ MainPageHeader {
                     background: null
                     contentItem: RowLayout {
                         spacing: 8
+                        Label {
+                            verticalAlignment: Qt.AlignVCenter
+                            text: 'Overview'
+                            font.pixelSize: 18
+                            font.styleName: 'Medium'
+                        }
+                        Label {
+                            verticalAlignment: Qt.AlignVCenter
+                            leftPadding: 8
+                            text: '/'
+                            opacity: 0.5
+                            font.pixelSize: 18
+                            font.styleName: 'Medium'
+                        }
                         Loader {
+                            id: name_field_loader
                             active: wallet.persisted
                             visible: active
                             Layout.fillWidth: true
                             sourceComponent: EditableLabel {
+                                id: editable_label
                                 leftPadding: 8
                                 rightPadding: 8
                                 font.pixelSize: 18
                                 font.styleName: 'Medium'
                                 text: wallet.name
+                                onAccepted: () => {
+                                    if (wallet.rename(editable_label.text, false)) {
+                                        Analytics.recordEvent('wallet_rename')
+                                    }
+                                    tool_button.forceActiveFocus()
+                                }
                                 onEdited: (text, activeFocus) => {
                                     if (wallet.rename(text, activeFocus)) {
                                         Analytics.recordEvent('wallet_rename')
@@ -80,6 +284,7 @@ MainPageHeader {
                     }
                 }
                 Image {
+                    visible: false
                     fillMode: Image.PreserveAspectFit
                     sourceSize.height: 16
                     sourceSize.width: 16
@@ -87,6 +292,7 @@ MainPageHeader {
                     Layout.alignment: Qt.AlignVCenter
                 }
                 Control {
+                    visible: false
                     Layout.maximumWidth: self.width / 2
                     padding: 2
                     rightPadding: 16
@@ -129,6 +335,16 @@ MainPageHeader {
                         }
                     }
                 }
+                ToolButton {
+                    id: tool_button
+                    icon.source: 'qrc:/svg/3-h-dots.svg'
+                    onClicked: if (!wallet_menu.visible) wallet_menu.open()
+                    WalletMenu {
+                        id: wallet_menu
+                        x: (tool_button.width - wallet_menu.width) / 2
+                        y: tool_button.height
+                    }
+                }
                 HSpacer {
                 }
                 RowLayout {
@@ -152,17 +368,18 @@ MainPageHeader {
                         ToolTip.visible: hovered
                     }
                     ToolButton {
+                        visible: false
                         icon.source: 'qrc:/svg/logout.svg'
                         flat: true
-                        action: self.disconnectAction
+//                        action: self.disconnectAction
                         ToolTip.text: qsTrId('id_logout')
                         ToolTip.delay: 300
                         ToolTip.visible: hovered
                     }
                     ToolButton {
-                        icon.source: 'qrc:/svg/gearFill.svg'
+                        visible: false
                         flat: true
-                        action: self.settingsAction
+//                        action: self.settingsAction
                         ToolTip.text: qsTrId('id_settings')
                         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
                         ToolTip.visible: hovered
@@ -182,202 +399,52 @@ MainPageHeader {
             }
         }
         HPane {
+//            bottomPadding: 24
             contentItem: RowLayout {
-                ToolButton {
-                    icon.source: 'qrc:/svg/new.svg'
-                    flat: true
+                id: toolbar
+                Layout.fillWidth: true
+                Layout.fillHeight: false
+                spacing: 24
+                Label {
+                    Layout.minimumWidth: self.accountListWidth
+                    text: qsTrId('id_accounts')
+                    font.pixelSize: 16
+                    font.bold: true
+                }
+                TabButton {
+                    checked: navigation.param.view === 'overview'
+                    enabled: self.account?.network?.liquid ?? false
+                    visible: enabled
+                    text: qsTrId('id_overview')
+                    onClicked: navigation.set({ view: 'overview' })
+                }
+                TabButton {
+                    checked: navigation.param.view === 'assets'
+                    enabled: self.context.network.liquid
+                    visible: enabled
+                    text: qsTrId('id_assets')
+                    onClicked: navigation.set({ view: 'assets' })
+                }
+                TabButton {
+                    checked: navigation.param.view === 'transactions'
+                    text: qsTrId('id_transactions')
+                    onClicked: navigation.set({ view: 'transactions' })
+                }
+                TabButton {
+                    checked: navigation.param.view === 'addresses'
+                    text: qsTrId('id_addresses')
                     enabled: !self.context.watchonly
-                    onClicked: openCreateDialog()
-                    ToolTip.text: qsTrId('id_add_new_account')
-                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                    ToolTip.visible: hovered
+                    onClicked: navigation.set({ view: 'addresses' })
                 }
-                ToolButton {
-                    icon.source: 'qrc:/svg/archived.svg'
-                    flat: true
-//                        enabled: !self.archived && !wallet.locked && self.currentAccount
-                    enabled: archive_list_model.count > 0
-                    onClicked: navigation.set({ archive: !checked })
-                    checked: navigation.param?.archive ?? false
-//                        onClicked: navigation.set({ flow: 'receive' })
-//                        ToolTip.text: qsTrId('id_receive')
-//                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-//                        ToolTip.visible: hovered
+                TabButton {
+                    checked: navigation.param.view === 'coins'
+                    text: qsTrId('id_coins')
+                    enabled: !self.context.watchonly
+                    onClicked: navigation.set({ view: 'coins' })
                 }
                 HSpacer {
-                }
-                GPane {
-                    id: tabbar
-                    padding: 0
-                    background: null
-
-    //                    Rectangle {
-    //                    border.width: 0.5
-    //                    border.color: Qt.lighter(constants.c500)
-    //                    color: tabbar.hovered ? Qt.lighter(constants.c500) : 'transparent'
-    //                    radius: 7
-    //                    opacity: 0.5
-    //                    Behavior on color {
-    //                        SequentialAnimation {
-    //                            PauseAnimation {
-    //                                duration: 200
-    //                            }
-    //                            ColorAnimation {
-    //                                duration: 300
-    //                            }
-    //                        }
-    //                    }
-    //                }
-                    contentItem: RowLayout {
-                        Layout.fillWidth: true
-                        Layout.fillHeight: false
-                        spacing: 4
-                        TabButton {
-                            checked: navigation.param.view === 'overview'
-                            enabled: self.wallet.network.liquid
-                            visible: enabled
-                            text: qsTrId('id_overview')
-                            onClicked: navigation.set({ view: 'overview' })
-                        }
-    //                    TabSeparator {
-    //                        visible: self.wallet.network.liquid
-    //                    }
-                        TabButton {
-                            checked: navigation.param.view === 'assets'
-                            enabled: self.context.network.liquid
-                            visible: enabled
-                            text: qsTrId('id_assets')
-                            onClicked: navigation.set({ view: 'assets' })
-                        }
-    //                    TabSeparator {
-    //                        visible: self.wallet.network.liquid
-    //                    }
-                        TabButton {
-                            checked: navigation.param.view === 'transactions'
-                            text: qsTrId('id_transactions')
-                            onClicked: navigation.set({ view: 'transactions' })
-                        }
-    //                    TabSeparator {
-    //                    }
-                        TabButton {
-                            checked: navigation.param.view === 'addresses'
-                            text: qsTrId('id_addresses')
-                            enabled: !self.context.watchonly
-                            onClicked: navigation.set({ view: 'addresses' })
-                        }
-    //                    TabSeparator {
-    //                    }
-                        TabButton {
-                            checked: navigation.param.view === 'coins'
-                            text: qsTrId('id_coins')
-                            enabled: !self.context.watchonly
-                            onClicked: navigation.set({ view: 'coins' })
-                        }
-                    }
-                }
-                HSpacer {
-                }
-    //            Loader {
-    //                sourceComponent: self.toobar
-    //            }
-                ToolButton {
-                    icon.source: 'qrc:/svg/send.svg'
-                    flat: true
-                    enabled: !self.archived && !self.context.watchonly && !self.wallet.locked && self.currentAccount
-                    onClicked: {
-                        if (self.currentAccount.balance > 0) {
-                            onClicked: navigation.set({ flow: 'send' })
-                        }
-                        else {
-                            message_dialog.createObject(window).open()
-                        }
-                    }
-                    ToolTip.text: qsTrId('id_send')
-                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                    ToolTip.visible: hovered
-                }
-                ToolButton {
-                    icon.source: 'qrc:/svg/receive.svg'
-                    flat: true
-                    enabled: !self.archived && !wallet.locked && self.currentAccount
-                    onClicked: navigation.set({ flow: 'receive' })
-                    ToolTip.text: qsTrId('id_receive')
-                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                    ToolTip.visible: hovered
                 }
             }
-        }
-
-
-//            GButton {
-//                id: send_button
-//                Layout.alignment: Qt.AlignRight
-//                large: true
-//                enabled: !self.archived && !self.context.watchonly && !self.wallet.locked && self.currentAccount
-//                hoverEnabled: true
-//                padding: 4
-//                font.bold: false
-//                icon.width: 24
-//                icon.height: 24
-//                text: qsTrId('id_send')
-//                icon.source: 'qrc:/svg/send.svg'
-//                background: Rectangle {
-//                    visible: send_button.hovered
-//                    color: Qt.lighter(constants.c500)
-//                    opacity: 0.2
-//                    radius: 4
-//                }
-
-//                onClicked: {
-//                    if (self.currentAccount.balance > 0) {
-//                        onClicked: navigation.set({ flow: 'send' })
-//                    }
-//                    else {
-//                        message_dialog.createObject(window).open()
-//                    }
-//                }
-//                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-//                ToolTip.text: qsTrId('id_insufficient_lbtc_to_send_a')
-//                ToolTip.visible: hovered && !enabled
-//            }
-//            GButton {
-//                id: receive_button
-//                background: Rectangle {
-//                    visible: receive_button.hovered
-//                    color: Qt.lighter(constants.c500)
-//                    opacity: 0.2
-//                    radius: 4
-//                }
-
-//                Layout.alignment: Qt.AlignRight
-//                large: true
-//                enabled: !self.archived && !wallet.locked && self.currentAccount
-//                text: qsTrId('id_receive')
-//                font.bold: false
-//                icon.width: 24
-//                icon.height: 24
-//                icon.source: 'qrc:/svg/receive.svg'
-//                onClicked: navigation.set({ flow: 'receive' })
-//            }
-    }
-
-    Loader2 {
-        active: navigation.param.flow === 'send'
-        sourceComponent: SendDialog {
-            visible: true
-            account: self.currentAccount
-            onRejected: navigation.pop()
-            onClosed: destroy()
-        }
-    }
-
-    Loader2 {
-        active: navigation.param.flow === 'receive'
-        sourceComponent: ReceiveDialog {
-            visible: true
-            account: self.currentAccount
-            onRejected: navigation.pop()
-            onClosed: destroy()
         }
     }
 
@@ -410,77 +477,37 @@ MainPageHeader {
         }
     }
 
+
     component TabButton: Button {
         id: tab_button
-        Layout.minimumWidth: 80
+//        Layout.minimumWidth: 80
         padding: 0
         verticalPadding: 0
         topPadding: 4
         bottomPadding: 4
-        leftPadding: 4
-        rightPadding: 4
+        leftPadding: 0
+        rightPadding: 0
         text: ToolTip.text
 //        leftInset: 3
 //        rightInset: 3
 //        topInset: 3
 //        bottomInset: 3
-        background: Rectangle {
-            radius: height / 2
-            //color: checked ? Qt.lighter(constants.c500) : 'transparent'
-            color: Qt.rgba(1, 1, 1, hovered ? 0.1 : 0)
-            border.width: checked ? 0.5 : 0
-            border.color: 'white'
-        }
+        background: null
+//        background: Rectangle {
+//            radius: height / 2
+//            //color: checked ? Qt.lighter(constants.c500) : 'transparent'
+//            color: Qt.rgba(1, 1, 1, hovered ? 0.1 : 0)
+//            border.width: checked ? 0.5 : 0
+//            border.color: 'white'
+//        }
         contentItem: Label {
-            padding: 8
+//            padding: 8
             text: tab_button.text
             opacity: tab_button.checked ? 1 : 0.5
             font.pixelSize: 16
-            font.bold: false
+            font.bold: true
             horizontalAlignment: Label.AlignHCenter
         }
-    }
-
-    component TabSeparator: Rectangle {
-        id: separator
-        Layout.alignment: Qt.AlignCenter
-        implicitWidth: 1
-        implicitHeight: 20
-        color: Qt.lighter(constants.c500)
-        opacity: {
-            let button
-            let left
-            let right
-            let sep
-            for (let i = 0; i < parent.children.length; i++) {
-                const child = parent.children[i]
-                if (child === separator) {
-                    left = button
-                } else if (child.checked !== undefined && child.visible) {
-                    button = child
-                    if (left && !right) {
-                        right = button
-                        break;
-                    }
-                }
-            }
-            return left && left.checked || right && right.checked ? 0 : 1
-        }
-    }
-
-    property Action disconnectAction: Action {
-        onTriggered: {
-            self.wallet.disconnect()
-        }
-    }
-
-    property Action settingsAction: Action {
-        enabled: {
-            if (self.context.watchonly) return false
-            if (self.wallet.network.electrum) return true
-            return !!self.wallet.context.settings.pricing
-        }
-        onTriggered: navigation.set({ settings: true })
     }
 
     property Action refreshAction: Action {
@@ -502,12 +529,13 @@ MainPageHeader {
         Layout.minimumHeight: 64
         Layout.minimumWidth: 250
         id: self
+        padding: 8
         background: Rectangle {
-            visible: false
-            radius: 5
-            border.width: 0.5
-            border.color: Qt.alpha(constants.c500, 1)
-            color: Qt.alpha(constants.c500, 0.25)
+            radius: 4
+            opacity: 0.1
+//            border.width: 0.5
+//            border.color: Qt.alpha(constants.c500, 1)
+            color: 'black' //Qt.alpha(constants.c500, 0.25)
         }
         contentItem: ColumnLayout {
             SectionLabel {

@@ -8,19 +8,20 @@ import QtQuick.Layouts
 
 import "util.js" as UtilJS
 
-StackLayout {
+Page {
     required property Context context
     required property Account account
-    property real contentY: {
+    readonly property real contentY: {
         let y = 0
-        for (let i = 0; i < children.length; i++) {
-            y = Math.max(y, children[i]?.item?.contentY ?? 0)
+        for (let i = 0; i < stack_layout.children.length; i++) {
+            y = Math.max(y, stack_layout.children[i]?.item?.contentY ?? 0)
         }
         return y
     }
 
-    property Component toolbar: children[currentIndex]?.item?.toolbar ?? null
     id: self
+    spacing: constants.s1
+    background: null
 
     function getUnblindingData(tx) {
         return {
@@ -97,43 +98,48 @@ StackLayout {
         }
     }
 
-    currentIndex: UtilJS.findChildIndex(self, child => child.load)
+    contentItem: StackLayout {
+        id: stack_layout
 
-    PersistentLoader {
-        load: navigation.param.view === 'overview'
-        sourceComponent: OverviewView {
-            context: self.context
-            account: self.account
+
+        currentIndex: UtilJS.findChildIndex(stack_layout, child => child.load)
+
+        PersistentLoader {
+            load: navigation.param.view === 'overview'
+            sourceComponent: OverviewView {
+                context: self.context
+                account: self.account
+            }
         }
-    }
 
-    PersistentLoader {
-        load: navigation.param.view === 'assets'
-        sourceComponent: AssetListView {
-            account: self.account
+        PersistentLoader {
+            load: navigation.param.view === 'assets'
+            sourceComponent: AssetListView {
+                account: self.account
+            }
         }
-    }
 
-    PersistentLoader {
-        load: navigation.param.view === 'transactions'
-        sourceComponent: TransactionListView {
-            account: self.account
-            leftPadding: 0
+        PersistentLoader {
+            load: navigation.param.view === 'transactions'
+            sourceComponent: TransactionListView {
+                account: self.account
+                leftPadding: 0
+            }
         }
-    }
 
-    PersistentLoader {
-        load: navigation.param.view === 'addresses'
-        sourceComponent: AddressesListView {
-            account: self.account
-            leftPadding: 0
+        PersistentLoader {
+            load: navigation.param.view === 'addresses'
+            sourceComponent: AddressesListView {
+                account: self.account
+                leftPadding: 0
+            }
         }
-    }
 
-    PersistentLoader {
-        load: !(self.account?.context?.watchonly ?? false) && navigation.param.view === 'coins'
-        sourceComponent: OutputsListView {
-            account: self.account
+        PersistentLoader {
+            load: !(self.account?.context?.watchonly ?? false) && navigation.param.view === 'coins'
+            sourceComponent: OutputsListView {
+                account: self.account
+            }
         }
     }
 }

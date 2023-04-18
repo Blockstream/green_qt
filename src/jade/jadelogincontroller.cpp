@@ -18,8 +18,15 @@
 JadeController::JadeController(QObject* parent)
     : Controller(parent)
 {
-    auto context = new Context(this);
-    setContext(context);
+}
+
+Context* JadeController::ensureContext()
+{
+    if (!m_context) {
+        auto context = new Context(this);
+        setContext(context);
+    }
+    return m_context;
 }
 
 void JadeController::setDevice(JadeDevice* device)
@@ -41,9 +48,9 @@ JadeSetupController::JadeSetupController(QObject* parent)
 
 void JadeSetupController::setup(const QString& network)
 {
-    m_context->setNetwork(NetworkManager::instance()->network(network));
+    ensureContext()->setNetwork(NetworkManager::instance()->network(network));
 
-    auto connect_session = new SessionConnectTask(m_context->session());
+    auto connect_session = new SessionConnectTask(ensureContext()->session());
     auto setup = new JadeSetupTask(this);
 
     connect_session->then(setup);
@@ -74,7 +81,7 @@ void JadeSetupTask::update()
         return;
     }
 
-    auto network = m_controller->context()->network();
+    auto network = m_controller->ensureContext()->network();
     if (!network) return;
 
     setStatus(Status::Active);
@@ -106,7 +113,7 @@ void JadeSetupTask::update()
 //        }
 
         GA_json* output;
-        const auto context = m_controller->context();
+        const auto context = m_controller->ensureContext();
         const auto session = context->session()->m_session;
         GA_http_request(session, params.get(), &output);
         auto res = Json::toObject(output);
@@ -124,9 +131,9 @@ void JadeUnlockController::unlock()
 {
     if (!m_device) return;
     const auto nets = m_device->versionInfo().value("JADE_NETWORKS").toString();
-    m_context->setNetwork(NetworkManager::instance()->network(nets == "ALL" || nets == "MAIN" ? "mainnet" : "testnet"));
+    ensureContext()->setNetwork(NetworkManager::instance()->network(nets == "ALL" || nets == "MAIN" ? "mainnet" : "testnet"));
 
-    auto connect_session = new SessionConnectTask(m_context->session());
+    auto connect_session = new SessionConnectTask(ensureContext()->session());
     auto unlock = new JadeUnlockTask(this);
 
     connect_session->then(unlock);
@@ -159,7 +166,6 @@ void JadeLoginController::setNetwork(const QString& network)
     if (m_network == network) return;
     m_network = network;
     emit networkChanged();
-    m_context->setNetwork(NetworkManager::instance()->network(network));
     m_dispatcher->dispatch();
 }
 
@@ -208,7 +214,7 @@ void JadeUnlockTask::update()
         return;
     }
 
-    const auto network = m_controller->context()->network();
+    const auto network = m_controller->ensureContext()->network();
     if (!network) return;
 
     setStatus(Status::Active);
@@ -238,7 +244,7 @@ void JadeUnlockTask::update()
         }
 
         GA_json* output;
-        const auto context = m_controller->context();
+        const auto context = m_controller->ensureContext();
         const auto session = context->session()->m_session;
         GA_http_request(session, params.get(), &output);
         auto res = Json::toObject(output);
@@ -262,7 +268,7 @@ void JadeIdentifyTask::update()
     if (device->state() == JadeDevice::StateLocked) return;
     if (device->state() == JadeDevice::StateTemporary) return;
 
-    const auto network = m_controller->context()->network();
+    const auto network = m_controller->ensureContext()->network();
     if (!network) return;
 
     setStatus(Status::Active);
@@ -302,9 +308,11 @@ JadeLoginTask::JadeLoginTask(JadeLoginController* controller)
 
 void JadeLoginTask::update()
 {
-    auto context = m_controller->context();
-    auto network = context->network();
+    auto context = m_controller->ensureContext();
+    auto network = NetworkManager::instance()->network(m_controller->network());
     auto device = m_controller->device();
+
+    context->setNetwork(network);
 
     if (m_status == Status::Ready) {
         const auto device = m_controller->device();
@@ -369,7 +377,9 @@ void JadeLoginTask::update()
 
         connect(group(), &TaskGroup::finished, this, [=] {
             WalletManager::instance()->addWallet(wallet);
+            // transfer context to wallet
             wallet->setContext(context);
+            m_controller->setContext(nullptr);
             emit m_controller->loginDone();
         });
 

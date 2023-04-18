@@ -184,8 +184,8 @@ void TransactionFilterProxyModel::setFilter(const QString& filter)
     if (m_filter == filter) return;
     m_filter = filter;
     emit filterChanged();
-    invalidateFilter();
     if (!m_filter.isEmpty() && !m_model->dispatcher()->isBusy()) m_model->fetchMore({});
+    invalidateRowsFilter();
 }
 
 int TransactionFilterProxyModel::maxRowCount() const

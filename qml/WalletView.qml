@@ -133,6 +133,26 @@ MainPage {
     }
 
     Loader2 {
+        active: navigation.param.flow === 'send'
+        sourceComponent: SendDialog {
+            visible: true
+            account: self.currentAccount
+            onRejected: navigation.pop()
+            onClosed: destroy()
+        }
+    }
+
+    Loader2 {
+        active: navigation.param.flow === 'receive'
+        sourceComponent: ReceiveDialog {
+            visible: true
+            account: self.currentAccount
+            onRejected: navigation.pop()
+            onClosed: destroy()
+        }
+    }
+
+    Loader2 {
         active: navigation.param.settings ?? false
         sourceComponent: WalletSettingsDialog {
             visible: true
@@ -142,13 +162,17 @@ MainPage {
             onClosed: destroy()
         }
     }
+
     id: self
-    spacing: constants.s1
+    spacing: 16 //constants.s1
+    property alias toolbarItem: wallet_header.toolbarItem
+
     header: WalletViewHeader {
+        id: wallet_header
         context: self.context
         wallet: self.wallet
         currentAccount: self.currentAccount
-        toobar: stack_view.currentItem?.toolbar ?? null
+        accountListWidth: accounts_list.width
 
         background: Rectangle {
             color: constants.c700
@@ -163,7 +187,6 @@ MainPage {
                 anchors.fill: parent
                 cached: true
                 opacity: 0.55
-
                 radius: 128
                 source: ShaderEffectSource {
                     sourceItem: self.contentItem
@@ -317,6 +340,53 @@ MainPage {
             SplitView.minimumWidth: self.width / 2
             id: stack_view
             initialItem: Item {}
+        }
+    }
+    RowLayout {
+        anchors.bottom: parent.bottom
+        anchors.right: parent.right
+        anchors.margins: constants.p3
+        spacing: 5
+        visible: navigation.param.view !== 'coins'
+        GButton {
+            id: send_button
+            Layout.alignment: Qt.AlignRight
+            Layout.minimumWidth: 100
+            highlighted: true
+            enabled: !self.archived && !self.context.watchonly && !self.wallet.locked && self.currentAccount
+            font.bold: false
+            font.weight: 600
+            font.pixelSize: 14
+            icon.width: 24
+            icon.height: 24
+            text: qsTrId('id_send')
+            icon.source: 'qrc:/svg/send.svg'
+            onClicked: {
+                if (self.currentAccount.balance > 0) {
+                    onClicked: navigation.set({ flow: 'send' })
+                }
+                else {
+                    message_dialog.createObject(window).open()
+                }
+            }
+            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+            ToolTip.text: qsTrId('id_insufficient_lbtc_to_send_a')
+            ToolTip.visible: hovered && !enabled
+        }
+        GButton {
+            id: receive_button
+            Layout.alignment: Qt.AlignRight
+            Layout.minimumWidth: 100
+            highlighted: true
+            enabled: !self.archived && !wallet.locked && self.currentAccount
+            text: qsTrId('id_receive')
+            font.bold: false
+            font.weight: 600
+            font.pixelSize: 14
+            icon.width: 24
+            icon.height: 24
+            icon.source: 'qrc:/svg/receive.svg'
+            onClicked: navigation.set({ flow: 'receive' })
         }
     }
 
