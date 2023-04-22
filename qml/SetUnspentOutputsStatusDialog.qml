@@ -4,9 +4,12 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 ControllerDialog {
+    required property Account account
     required property var model
     required property var outputs
     required property string status
+
+    wallet: self.account.context.wallet
 
     id: self
     title: status === 'default' ? qsTrId('id_unlocking_coins') : qsTrId('id_locking_coins')
@@ -41,7 +44,7 @@ ControllerDialog {
             Layout.alignment: Qt.AlignCenter
             highlighted: true
             text: qsTrId('id_next')
-            onClicked: controller.setUnspentOutputsStatus(self.outputs, self.status)
+            onClicked: controller.setUnspentOutputsStatus(self.account, self.outputs, self.status)
         }
     }
 }

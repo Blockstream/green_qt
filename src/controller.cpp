@@ -231,13 +231,19 @@ void Controller::disableAllPins()
     m_dispatcher->add(disable_all_pins);
 }
 
-void Controller::setUnspentOutputsStatus(const QVariantList& outputs, const QString& status)
+void Controller::setUnspentOutputsStatus(Account* account, const QVariantList& outputs, const QString& status)
 {
-    auto task = new SetUnspentOutputsStatusTask(outputs, status, m_context);
-    connect(task, &Task::finished, this, [=] {
-        emit finished();
-    });
-    m_dispatcher->add(task);
+    auto set_status = new SetUnspentOutputsStatusTask(outputs, status, m_context);
+    auto load_balance = new LoadBalanceTask(account);
+
+    set_status->then(load_balance);
+
+    auto group = new TaskGroup(this);
+    group->add(set_status);
+    group->add(load_balance);
+    m_dispatcher->add(group);
+
+    connect(group, &TaskGroup::finished, this, &Controller::finished);
 }
 
 void Controller::changePin(const QString& pin)

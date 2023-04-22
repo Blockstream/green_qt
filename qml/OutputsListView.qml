@@ -10,7 +10,7 @@ Page {
     focusPolicy: Qt.ClickFocus
 
     required property Account account
-    readonly property real contentY: list_view.contentY + list_view.headerItem.height
+    readonly property real contentY: list_view.contentY
 
     readonly property var selectedOutputs: {
         const outputs = []
@@ -169,7 +169,7 @@ Page {
         id: set_unspent_outputs_status_dialog
         SetUnspentOutputsStatusDialog {
             model: output_model
-            wallet: self.account.context.wallet
+            account: self.account
         }
     }
 

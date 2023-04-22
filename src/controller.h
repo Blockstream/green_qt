@@ -59,7 +59,7 @@ public slots:
     void setCsvTime(int value);
     void deleteWallet();
     void disableAllPins();
-    void setUnspentOutputsStatus(const QVariantList &outputs, const QString &status);
+    void setUnspentOutputsStatus(Account* account, const QVariantList &outputs, const QString &status);
     void changePin(const QString& pin);
 
     // TODO move to SetWatchOnlyController
