@@ -74,7 +74,7 @@ void BumpFeeController::create()
 
     if (m_get_unspent_outputs) return;
     if (m_utxos.isNull()) {
-        m_get_unspent_outputs = new GetUnspentOutputsTask(1, true, a->pointer(), m_context);
+        m_get_unspent_outputs = new GetUnspentOutputsTask(1, false, a->pointer(), m_context);
         connect(m_get_unspent_outputs, &Task::finished, this, [=] {
             m_utxos = m_get_unspent_outputs->unspentOutputs();
             m_get_unspent_outputs = nullptr;

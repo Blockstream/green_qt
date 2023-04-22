@@ -202,7 +202,7 @@ void SendController::create()
 
     if (m_get_unspent_outputs) return;
     if (m_all_utxos.isEmpty()) {
-        m_get_unspent_outputs = new GetUnspentOutputsTask(0, true, m_account->pointer(), m_context);
+        m_get_unspent_outputs = new GetUnspentOutputsTask(0, false, m_account->pointer(), m_context);
         connect(m_get_unspent_outputs, &Task::finished, this, [=] {
             m_all_utxos = m_get_unspent_outputs->unspentOutputs();
             m_get_unspent_outputs = nullptr;
