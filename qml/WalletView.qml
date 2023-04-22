@@ -9,6 +9,7 @@ import QtQml
 import Qt5Compat.GraphicalEffects
 
 import "analytics.js" as AnalyticsJS
+import "util.js" as UtilJS
 
 MainPage {
     required property Context context
@@ -360,9 +361,7 @@ MainPage {
         spacing: 5
         visible: navigation.param.view !== 'coins'
         GButton {
-            id: send_button
-            Layout.alignment: Qt.AlignRight
-            Layout.minimumWidth: 100
+            Layout.minimumWidth: 120
             highlighted: true
             enabled: !self.archived && !self.context.watchonly && !self.wallet.locked && self.currentAccount
             font.bold: false
@@ -370,14 +369,18 @@ MainPage {
             font.pixelSize: 14
             icon.width: 24
             icon.height: 24
-            text: qsTrId('id_send')
-            icon.source: 'qrc:/svg/send.svg'
-            onClicked: {
-                if (self.currentAccount.balance > 0) {
-                    onClicked: navigation.set({ flow: 'send' })
-                }
-                else {
-                    message_dialog.createObject(window).open()
+            action: Action {
+                enabled: UtilJS.effectiveVisible(self)
+                text: qsTrId('id_send')
+                icon.source: 'qrc:/svg/send.svg'
+                shortcut: 'Ctrl+S'
+                onTriggered: {
+                    if (self.currentAccount.balance > 0) {
+                        onClicked: navigation.set({ flow: 'send' })
+                    }
+                    else {
+                        message_dialog.createObject(window).open()
+                    }
                 }
             }
             ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
@@ -385,19 +388,21 @@ MainPage {
             ToolTip.visible: hovered && !enabled
         }
         GButton {
-            id: receive_button
-            Layout.alignment: Qt.AlignRight
-            Layout.minimumWidth: 100
+            Layout.minimumWidth: 120
             highlighted: true
             enabled: !self.archived && !wallet.locked && self.currentAccount
-            text: qsTrId('id_receive')
             font.bold: false
             font.weight: 600
             font.pixelSize: 14
             icon.width: 24
             icon.height: 24
-            icon.source: 'qrc:/svg/receive.svg'
-            onClicked: navigation.set({ flow: 'receive' })
+            action: Action {
+                enabled: UtilJS.effectiveVisible(self)
+                text: qsTrId('id_receive')
+                icon.source: 'qrc:/svg/receive.svg'
+                shortcut: 'Ctrl+R'
+                onTriggered: navigation.set({ flow: 'receive' })
+            }
         }
     }
 

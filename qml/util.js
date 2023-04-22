@@ -53,3 +53,11 @@ function findChildIndex(parent, pred) {
     }
     return index
 }
+
+function effectiveVisible(item) {
+    while (item) {
+        if (!item.visible) return false
+        item = item.parent
+    }
+    return true
+}

@@ -399,7 +399,6 @@ MainPageHeader {
             }
         }
         HPane {
-//            bottomPadding: 24
             contentItem: RowLayout {
                 id: toolbar
                 Layout.fillWidth: true
@@ -411,36 +410,26 @@ MainPageHeader {
                     font.pixelSize: 16
                     font.bold: true
                 }
-                TabButton {
-                    checked: navigation.param.view === 'overview'
-                    enabled: self.account?.network?.liquid ?? false
-                    visible: enabled
-                    text: qsTrId('id_overview')
-                    onClicked: navigation.set({ view: 'overview' })
-                }
-                TabButton {
-                    checked: navigation.param.view === 'assets'
-                    enabled: self.context.network.liquid
-                    visible: enabled
-                    text: qsTrId('id_assets')
-                    onClicked: navigation.set({ view: 'assets' })
-                }
-                TabButton {
-                    checked: navigation.param.view === 'transactions'
-                    text: qsTrId('id_transactions')
-                    onClicked: navigation.set({ view: 'transactions' })
-                }
-                TabButton {
-                    checked: navigation.param.view === 'addresses'
-                    text: qsTrId('id_addresses')
-                    enabled: !self.context.watchonly
-                    onClicked: navigation.set({ view: 'addresses' })
-                }
-                TabButton {
-                    checked: navigation.param.view === 'coins'
-                    text: qsTrId('id_coins')
-                    enabled: !self.context.watchonly
-                    onClicked: navigation.set({ view: 'coins' })
+                RowLayout {
+                    Layout.fillWidth: false
+                    spacing: 24
+                    TabButton2 {
+                        view: 'overview'
+                        enabled: self.currentAccount?.network.liquid ?? false
+                    }
+                    TabButton2 {
+                        view: 'assets'
+                        enabled: self.currentAccount?.network.liquid ?? false
+                    }
+                    TabButton2 {
+                        view: 'transactions'
+                    }
+                    TabButton2 {
+                        view: 'addresses'
+                    }
+                    TabButton2 {
+                        view: 'coins'
+                    }
                 }
                 HSpacer {
                 }
@@ -478,30 +467,33 @@ MainPageHeader {
     }
 
 
-    component TabButton: Button {
+    component TabButton2: Button {
         id: tab_button
-//        Layout.minimumWidth: 80
+        required property string view
         padding: 0
         verticalPadding: 0
         topPadding: 4
         bottomPadding: 4
         leftPadding: 0
         rightPadding: 0
-        text: ToolTip.text
-//        leftInset: 3
-//        rightInset: 3
-//        topInset: 3
-//        bottomInset: 3
         background: null
-//        background: Rectangle {
-//            radius: height / 2
-//            //color: checked ? Qt.lighter(constants.c500) : 'transparent'
-//            color: Qt.rgba(1, 1, 1, hovered ? 0.1 : 0)
-//            border.width: checked ? 0.5 : 0
-//            border.color: 'white'
-//        }
+        checked: navigation.param.view === tab_button.view
+        visible: enabled
+        action: Action {
+            text: qsTrId('id_' + tab_button.view)
+            shortcut: {
+                let j = -1
+                for (let i = 0; i < parent.children.length; i++) {
+                    const item = parent.children[i]
+                    if (!item.visible) continue
+                    j ++
+                    if (item === tab_button) return 'Ctrl+' + (j + 1)
+                }
+                return null
+            }
+            onTriggered: navigation.set({ view: tab_button.view })
+        }
         contentItem: Label {
-//            padding: 8
             text: tab_button.text
             opacity: tab_button.checked ? 1 : 0.5
             font.pixelSize: 16
