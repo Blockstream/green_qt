@@ -15,6 +15,7 @@ ControllerDialog {
     wallet: self.account.context.wallet
     controller: BumpFeeController {
         id: controller
+        context: self.context
         account: self.account
         transaction: self.transaction
         onFinished: Analytics.recordEvent('send_transaction', AnalyticsJS.segmentationTransaction(self.account, {
@@ -28,11 +29,6 @@ ControllerDialog {
     ColumnLayout {
         id: layout
         spacing: 16
-        GButton {
-            text: controller.tx.error !== '' ? qsTrId(controller.tx.error || '') : qsTrId('id_next')
-            enabled: controller.tx && controller.tx.error === ''
-            onClicked: controller.bumpFee()
-        }
         SectionLabel {
             text: qsTrId('id_previous_fee')
         }
@@ -81,6 +77,12 @@ ControllerDialog {
                 }
                 rightPadding: fee_unit_label.width + 16
             }
+        }
+        GButton {
+            Layout.alignment: Qt.AlignCenter
+            text: controller.tx.error !== '' ? qsTrId(controller.tx.error || '') : qsTrId('id_next')
+            enabled: controller.tx && controller.tx.error === ''
+            onClicked: controller.bumpFee()
         }
     }
 

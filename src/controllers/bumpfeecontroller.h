@@ -37,8 +37,8 @@ private slots:
 signals:
     void changed();
     void txChanged(const QJsonObject& tx);
-    void signedTransactionChanged(Transaction* transaction);
-    void transactionChanged(Transaction* transaction);
+    void signedTransactionChanged();
+    void transactionChanged();
 private:
     Transaction* m_transaction{nullptr};
     void setSignedTransaction(Transaction* signed_transaction);

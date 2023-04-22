@@ -32,7 +32,7 @@ ControllerDialog {
         id: controller
         context: self.account.context
         account: self.account
-        balance: asset_field_loader.item ? asset_field_loader.item.balance : null
+        balance: asset_field_loader.item?.balance ?? null
         address: address_field.text
         sendAll: send_all_button.checked
         manualCoinSelection: coins_combo_box.currentIndex === 1
@@ -131,8 +131,9 @@ ControllerDialog {
             Layout.fillWidth: true
             active: {
                 const device = account.context.device
-                if (device && device.type === Device.LedgerNanoS && device.appVersion === '1.4.8') {
-                    switch (stack_view.balance.asset.id) {
+                const asset = asset_field_loader.item?.balance?.asset
+                if (device?.type === Device.LedgerNanoS && device.appVersion === '1.4.8' && asset) {
+                    switch (asset.id) {
                     case '6f0279e9ed041c3d710a9f57d0c02928416460c4b722ae3457a11eec381c526d':
                     case 'b00b0ff0b11ebd47f7c6f57614c046dbbd204e84bf01178baf2be3713a206eb7':
                     case '0e99c1a6da379d1f4151fb9df90449d40d0608f6cb33a5bcbfc8c265f42bab0a':
@@ -236,11 +237,13 @@ ControllerDialog {
                     }
                     Label {
                         text: {
+                            const balance = asset_field_loader.item?.balance
+                            const asset = balance?.asset
+
                             if (coins_combo_box.currentIndex === 0) {
-                                return stack_view.balance ? stack_view.balance.displayAmount : formatAmount(account.balance)
+                                return balance ? balance.displayAmount : formatAmount(account.balance)
                             }
 
-                            const asset = stack_view.balance ? stack_view.balance.asset : null
                             var x = 0
                             for (const u of coins_view.selectedOutputs) {
                                 if (!u.asset || u.asset === asset) {
@@ -261,7 +264,7 @@ ControllerDialog {
             GButton {
                 large: true
                 visible: coins_combo_box.currentIndex === 1
-                onClicked: stack_view.push(coins_view)
+                onClicked: coins_view.active = true
                 text: 'Select Coins'
             }
         }
@@ -393,15 +396,16 @@ ControllerDialog {
         }
     }
 
-    property Item coins_view: SelectCoinsView {
+    SelectCoinsView {
+        id: coins_view
+        property bool active: false
         account: self.account
-        visible: stack_view.currentItem === this
-        property list<Action> actions: [
-            Action {
-                text: qsTrId('id_done')
-                onTriggered: stack_view.pop()
-            }
-        ]
+        visible: active
+        GButton {
+            parent: coins_view.contentItem
+            text: qsTrId('id_done')
+            onClicked: coins_view.active = false
+        }
     }
 
     AnimLoader {

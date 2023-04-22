@@ -3,11 +3,7 @@
 #include <gdk.h>
 
 #include "account.h"
-#include "asset.h"
-#include "balance.h"
 #include "context.h"
-#include "json.h"
-#include "network.h"
 #include "task.h"
 #include "transaction.h"
 #include "wallet.h"
@@ -53,11 +49,11 @@ void BumpFeeController::bumpFee()
     m_dispatcher->add(group);
 }
 
-void BumpFeeController::setTransaction(Transaction *transaction)
+void BumpFeeController::setTransaction(Transaction* transaction)
 {
     if (m_transaction == transaction) return;
     m_transaction = transaction;
-    emit transactionChanged(m_transaction);
+    emit transactionChanged();
     create();
 }
 
@@ -106,9 +102,9 @@ void BumpFeeController::create()
     m_dispatcher->add(m_create_task);
 }
 
-void BumpFeeController::setSignedTransaction(Transaction *signed_transaction)
+void BumpFeeController::setSignedTransaction(Transaction* signed_transaction)
 {
-    if (m_signed_transaction==signed_transaction) return;
+    if (m_signed_transaction == signed_transaction) return;
     m_signed_transaction = signed_transaction;
-    emit signedTransactionChanged(m_signed_transaction);
+    emit signedTransactionChanged();
 }

@@ -62,7 +62,6 @@ public:
 signals:
     void blockEvent(const QJsonObject& event);
     void transactionEvent(const QJsonObject& event);
-    void walletChanged();
     void jsonChanged();
     void nameChanged();
     void hiddenChanged();
