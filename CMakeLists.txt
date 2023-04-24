@@ -17,10 +17,16 @@ configure_file(config.h.in config.h @ONLY)
 find_package(Qt6 6.4 COMPONENTS Concurrent Quick QuickControls2 Widgets QuickWidgets Xml Core5Compat Bluetooth SerialPort LinguistTools Multimedia REQUIRED)
 find_package(hidapi REQUIRED)
 
-find_library(GDK_LIB NAMES libgreenaddress_full.a REQUIRED)
-find_library(COUNTLY_LIB NAMES libcountly.a REQUIRED)
+find_package(gdk REQUIRED COMPONENT greenaddress-full)
 
-find_path(GDK_INC gdk.h)
+include(CMakePrintHelpers)
+cmake_print_properties(TARGETS gdk::greenaddress-full PROPERTIES
+    INTERFACE_INCLUDE_DIRECTORIES
+    INTERFACE_LINK_LIBRARIES
+    IMPORTED_LOCATION_RELEASE
+)
+
+find_library(COUNTLY_LIB NAMES libcountly.a REQUIRED)
 
 set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
 
@@ -38,7 +44,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_definitions(-DNO_ICONV)
-add_definitions(-DBUILD_ELEMENTS)
+add_definitions(-DGDK_STATIC_DEFINE)
 
 SET(QZXING_MULTIMEDIA ON)
 SET(QZXING_USE_DECODER_1D_BARCODES ON)
@@ -68,7 +74,7 @@ set_target_properties(green PROPERTIES
 target_link_libraries(green
     PRIVATE
     qzxing
-    ${GDK_LIB}
+    gdk::greenaddress-full
     ${COUNTLY_LIB}
     Qt6::Concurrent Qt6::Quick Qt6::QuickControls2 Qt6::Widgets Qt6::QuickWidgets Qt6::Xml Qt6::Core5Compat Qt6::Bluetooth Qt6::SerialPort Qt6::Multimedia
     ${SECURITY}
@@ -86,9 +92,11 @@ install(TARGETS green
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
+get_target_property(GDK_INCLUDE gdk::greenaddress-full INTERFACE_INCLUDE_DIRECTORIES)
+
 target_include_directories(green PRIVATE
   src src/jade src/resolvers src/controllers src/ledger src/handlers
-  ${GDK_INC}
+  ${GDK_INCLUDE}/libwally-core/
   sa
   "${CMAKE_CURRENT_BINARY_DIR}"
 )
