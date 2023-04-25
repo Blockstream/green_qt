@@ -55,7 +55,7 @@ WalletDialog {
         ColumnLayout {
             id: layout
             width: flickable.availableWidth
-            spacing: constants.s2
+            spacing: constants.s1
             Repeater {
                 visible: count > 0
                 model: transaction.amounts
@@ -138,7 +138,6 @@ WalletDialog {
                 HSpacer {
                 }
                 GButton {
-                    large: true
                     highlighted: confirmations === 0
                     text: qsTrId('id_increase_fee')
                     enabled: transaction.data.can_rbf
@@ -225,13 +224,12 @@ WalletDialog {
             }
             ColumnLayout {
                 spacing: constants.p0
+                visible: !wallet.watchOnly
                 SectionLabel {
-                    visible: !wallet.watchOnly
                     text: qsTrId('id_my_notes')
                 }
                 EditableLabel {
                     id: memo_edit
-                    visible: !wallet.watchOnly
                     leftPadding: constants.p0
                     rightPadding: constants.p0
                     Layout.fillWidth: true
@@ -246,8 +244,6 @@ WalletDialog {
                         }
                     }
                 }
-            }
-            HSpacer {
             }
         }
     }
