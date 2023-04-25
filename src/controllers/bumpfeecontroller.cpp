@@ -30,6 +30,10 @@ void BumpFeeController::bumpFee()
 
     auto sign = new SignTransactionTask(m_tx, m_context);
     auto send = new SendTransactionTask(m_context);
+    auto load_config = new LoadTwoFactorConfigTask(m_context);
+
+    sign->then(send);
+    send->then(load_config);
 
     connect(sign, &Task::finished, this, [=] {
         auto details = sign->result().value("result").toObject();
@@ -39,13 +43,14 @@ void BumpFeeController::bumpFee()
     connect(send, &Task::finished, this, [=] {
         const auto transaction = m_account->getOrCreateTransaction(send->result().value("result").toObject());
         setSignedTransaction(transaction);
-        // TODO context()->updateConfig();
-        emit finished();
     });
+
+    connect(send, &Task::finished, this, &BumpFeeController::finished);
 
     auto group = new TaskGroup(this);
     group->add(sign);
     group->add(send);
+    group->add(load_config);
     m_dispatcher->add(group);
 }
 
