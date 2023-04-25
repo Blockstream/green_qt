@@ -8,8 +8,7 @@ Dialog {
     property bool showRejectButton: true
     property bool enableRejectButton: true
     readonly property bool hovered: background_hover_handler.hovered
-    property alias infoEnabled: info_button.checked
-    property alias toolbar: toolbar_loader.sourceComponent
+    property Item toolbar: toolbar_item
     id: self
     focus: true
     modal: true
@@ -25,8 +24,8 @@ Dialog {
     spacing: 0
     header: DialogHeader {
         Image {
-            Layout.maximumWidth: 32
-            Layout.maximumHeight: 32
+            Layout.maximumWidth: 24
+            Layout.maximumHeight: 24
             fillMode: Image.PreserveAspectFit
             source: self.icon
             visible: self.icon && self.icon !== ''
@@ -34,7 +33,7 @@ Dialog {
         Label {
             Layout.fillWidth: true
             Layout.preferredWidth: 0
-            Layout.minimumWidth: 300
+            Layout.minimumWidth: 200
             text: title
             font.pixelSize: 20
             font.styleName: 'Medium'
@@ -45,17 +44,9 @@ Dialog {
                 id: title_hover_handler
             }
         }
-        Loader {
-            id: toolbar_loader
-        }
-        GToolButton {
-            id: info_button
-            visible: env !== 'Production'
-            enabled: visible
-            flat: true
-            icon.source: 'qrc:/svg/info.svg'
-            checkable: true
-            checked: false
+        RowLayout {
+            spacing: 4
+            id: toolbar_item
         }
         GToolButton {
             visible: self.showRejectButton

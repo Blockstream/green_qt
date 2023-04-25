@@ -16,23 +16,32 @@ WalletDialog {
     onClosed: if (autoDestroy) destroy()
     closePolicy: Popup.NoAutoClose
 
-    toolbar: RowLayout {
-        spacing: 12
-        ProgressIndicator {
-            Layout.minimumHeight: 24
-            Layout.minimumWidth: 24
-            indeterminate: self.controller?.dispatcher.busy ?? false
-            progress: 0
-            opacity: self.controller?.dispatcher?.busy ? 1 : 0
-            Behavior on opacity {
-                SmoothedAnimation {
-                }
+    ProgressIndicator {
+        parent: toolbar
+        Layout.minimumHeight: 24
+        Layout.minimumWidth: 24
+        indeterminate: self.controller?.dispatcher.busy ?? false
+        progress: 0
+        opacity: self.controller?.dispatcher?.busy ? 1 : 0
+        Behavior on opacity {
+            SmoothedAnimation {
             }
         }
-        SessionBadge {
-            visible: !!self.controller?.context
-            session: self.controller?.context?.session ?? null
-        }
+    }
+    SessionBadge {
+        parent: toolbar
+        visible: !!self.controller?.context
+        session: self.controller?.context?.session ?? null
+    }
+    GToolButton {
+        id: info_button
+        parent: toolbar
+        visible: env !== 'Production'
+        enabled: visible
+        flat: true
+        icon.source: 'qrc:/svg/info.svg'
+        checkable: true
+        checked: false
     }
 /*
     footer: Label {
@@ -239,7 +248,7 @@ WalletDialog {
             Layout.fillHeight: true
             Layout.minimumWidth: 200
             dispatcher: controller.dispatcher
-            visible: self.infoEnabled
+            visible: info_button.checked
         }
     }
 }
