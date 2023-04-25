@@ -49,12 +49,12 @@ GPane {
 //    onClicked: menu.popup()
     contentItem: StackLayout {
         currentIndex: showArchived ? 1 : 0
-        TListView {
+        AListView {
             id: account_list_view
             model: account_list_model
         }
 
-        TListView {
+        AListView {
             id: archive_list_view
             model: archive_list_model
             header: GPane {
@@ -84,15 +84,11 @@ GPane {
         }
     }
 
-    component TListView: ListView {
-        contentWidth: width
+    component AListView: TListView {
         spacing: 8
-        displayMarginBeginning: 200
-        displayMarginEnd: 200
         delegate: Component {
             AccountDelegate {
             }
         }
-        ScrollIndicator.vertical: ScrollIndicator { }
     }
 }

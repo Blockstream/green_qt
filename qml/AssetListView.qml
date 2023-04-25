@@ -21,11 +21,4 @@ GPane {
             onClicked: if (hasDetails) balance_dialog.createObject(window, { balance }).open()
         }
     }
-
-    component TListView: ListView {
-        ScrollIndicator.vertical: ScrollIndicator { }
-        contentWidth: width
-        displayMarginBeginning: 300
-        displayMarginEnd: 100
-    }
 }

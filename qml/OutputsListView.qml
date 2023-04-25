@@ -165,13 +165,6 @@ Page {
         }
     }
 
-    component TListView: ListView {
-        ScrollIndicator.vertical: ScrollIndicator { }
-        contentWidth: width
-        displayMarginBeginning: 300
-        displayMarginEnd: 100
-    }
-
     Component {
         id: set_unspent_outputs_status_dialog
         SetUnspentOutputsStatusDialog {

@@ -157,11 +157,4 @@ StackLayout {
             }
         }
     }
-
-    component TListView: ListView {
-        ScrollIndicator.vertical: ScrollIndicator { }
-        contentWidth: width
-        displayMarginBeginning: 300
-        displayMarginEnd: 100
-    }
 }

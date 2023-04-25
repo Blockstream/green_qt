@@ -160,6 +160,7 @@ SET(QML_FILES
     qml/AuthHandlerTaskView.qml
     qml/GetCredentialsView.qml
     qml/TaskDispatcherInspector.qml
+    qml/TListView.qml
 )
 
 if (GREEN_NO_RESOURCES)

@@ -105,11 +105,4 @@ GPane {
             ToolTip.text: qsTrId('id_export_transactions_to_csv_file')
         }
     }
-
-    component TListView: ListView {
-        ScrollIndicator.vertical: ScrollIndicator { }
-        contentWidth: width
-        displayMarginBeginning: 300
-        displayMarginEnd: 100
-    }
 }

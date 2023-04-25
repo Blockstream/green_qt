@@ -74,11 +74,4 @@ GPane {
             ToolTip.text: qsTrId('Export addresses to CSV file')
         }
     }
-
-    component TListView: ListView {
-        ScrollIndicator.vertical: ScrollIndicator { }
-        contentWidth: width
-        displayMarginBeginning: 300
-        displayMarginEnd: 100
-    }
 }
