@@ -135,7 +135,10 @@ ControllerDialog {
                 Layout.alignment: Qt.AlignHCenter
                 highlighted: true
                 text: qsTrId('id_next')
-                onClicked: controller.enable(self.method, wallet.context.config.telegram.data)
+                onClicked: controller.enable(self.method, wallet.context.config[self.method].data)
+            }
+            Label {
+                text: wallet.context?.config[self.method]?.data ?? 'N/A'
             }
             VSpacer {
             }
