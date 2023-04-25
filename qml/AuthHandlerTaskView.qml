@@ -164,7 +164,7 @@ StackLayout {
             onPinEntered: pin => task.resolveCode(pin)
             Connections {
                 target: task
-                function onResultChanged() { keypad.clear() }
+                function onUpdated() { keypad.clear() }
             }
         }
         Loader {

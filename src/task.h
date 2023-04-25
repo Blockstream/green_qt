@@ -190,6 +190,7 @@ public slots:
     void requestCode(const QString& method);
     void resolveCode(const QByteArray& code);
 signals:
+    void updated();
     void resultChanged();
 protected:
     virtual bool active() const;

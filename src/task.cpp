@@ -1,5 +1,6 @@
 #include "context.h"
 #include "devicemanager.h"
+#include "ga.h"
 #include "json.h"
 #include "network.h"
 #include "output.h"
@@ -511,6 +512,9 @@ void AuthHandlerTask::next()
         setStatus(Status::Failed);
         return;
     }
+
+    emit updated();
+
     const auto result = Json::toObject(output);
     GA_destroy_json(output);
 
@@ -539,9 +543,6 @@ void AuthHandlerTask::next()
 
     Q_UNREACHABLE();
 }
-
-#include "ga.h"
-#include "wallet.h"
 
 RegisterUserTask::RegisterUserTask(const QStringList& mnemonic, Context* context)
     : AuthHandlerTask(context)
