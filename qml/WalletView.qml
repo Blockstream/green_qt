@@ -379,7 +379,7 @@ MainPage {
                         onClicked: navigation.set({ flow: 'send' })
                     }
                     else {
-                        message_dialog.createObject(window).open()
+                        no_funds_dialog.createObject(window).open()
                     }
                 }
             }
@@ -409,6 +409,35 @@ MainPage {
     Component {
         id: bump_fee_dialog
         BumpFeeDialog {
+        }
+    }
+
+    Component {
+        id: no_funds_dialog
+        MessageDialog {
+            id: dialog
+            wallet: self.wallet
+            width: 350
+            title: qsTrId('id_warning')
+            message: self.wallet.network.liquid ? qsTrId('id_insufficient_lbtc_to_send_a') : qsTrId('id_you_have_no_coins_to_send')
+            actions: [
+                Action {
+                    text: qsTrId('id_cancel')
+                    onTriggered: dialog.reject()
+                },
+                Action {
+                    property bool highlighted: true
+                    text: self.wallet.network.liquid ? qsTrId('id_learn_more') : qsTrId('id_receive')
+                    onTriggered: {
+                        dialog.reject()
+                        if (self.wallet.network.liquid) {
+                            Qt.openUrlExternally('https://help.blockstream.com/hc/en-us/articles/900000630846-How-do-I-get-Liquid-Bitcoin-L-BTC-')
+                        } else {
+                            navigation.set({ flow: 'receive' })
+                        }
+                    }
+                }
+            ]
         }
     }
 
