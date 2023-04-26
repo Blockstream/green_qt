@@ -240,7 +240,7 @@ void SendController::create()
     m_transaction["utxo_strategy"] = m_manual_coin_selection ? "manual" : "default";
     m_transaction["utxos"] = m_manual_coin_selection ? m_utxos : m_all_utxos;
 
-    if (m_manual_coin_selection && !network->isElectrum()) {
+    if (m_manual_coin_selection) {
         m_transaction["used_utxos"] = m_utxos.value("btc").toArray();
     }
 
@@ -252,12 +252,8 @@ void SendController::create()
             if (m_send_all) {
                 const auto id = m_balance ? m_balance->asset()->id() : "btc";
                 qint64 satoshi = 0;
-                if (network->isElectrum()) {
-                    satoshi = m_transaction.value("addressees").toArray().first().toObject().value("satoshi").toDouble();
-                } else {
-                     Q_ASSERT(m_transaction.value("amount_read_only").toBool());
-                    satoshi = m_transaction.value("satoshi").toObject().value(id).toDouble();
-                }
+                Q_ASSERT(m_transaction.value("amount_read_only").toBool());
+                satoshi = m_transaction.value("satoshi").toObject().value(id).toDouble();
                 m_amount = m_balance ? m_balance->asset()->formatAmount(satoshi, false) : wallet->formatAmount(satoshi, false);
                 if (!m_balance || m_balance->asset()->isLBTC()) m_fiat_amount = wallet->formatAmount(satoshi, false, "fiat");
                 emit changed();
