@@ -167,6 +167,33 @@ MainPage {
     spacing: 16 //constants.s1
     property alias toolbarItem: wallet_header.toolbarItem
 
+    // unset blur sources, otherwise app crashes on quit
+    // TODO: review this workaround while switching to MultiEffect
+    Component.onDestruction: {
+        header_blur_source.sourceItem = null
+        footer_blur_source.sourceItem = null
+    }
+    ShaderEffectSource {
+        id: header_blur_source
+        sourceItem: split_view
+        sourceRect {
+            x: -split_view.x
+            y: -split_view.y
+            width: self.header.width
+            height: self.header.height
+        }
+    }
+    ShaderEffectSource {
+        id: footer_blur_source
+        sourceItem: split_view
+        sourceRect {
+            x: -split_view.x
+            y: self.footer.y - split_view.y
+            width: self.footer.width
+            height: self.footer.height
+        }
+    }
+
     header: WalletViewHeader {
         id: wallet_header
         context: self.context
@@ -182,21 +209,12 @@ MainPage {
                     velocity: 4
                 }
             }
-
             FastBlur {
                 anchors.fill: parent
-                cached: true
                 opacity: 0.55
+                cached: true
                 radius: 128
-                source: ShaderEffectSource {
-                    sourceItem: self.contentItem
-                    sourceRect {
-                        x: -self.contentItem.x
-                        y: -self.contentItem.y
-                        width: self.header.width
-                        height: self.header.height
-                    }
-                }
+                source: header_blur_source
             }
             Rectangle {
                 width: parent.width
@@ -217,15 +235,7 @@ MainPage {
                 cached: true
                 opacity: 0.5
                 radius: 64
-                source: ShaderEffectSource {
-                    sourceItem: self.contentItem
-                    sourceRect {
-                        x: -self.contentItem.x
-                        y: self.footer.y - self.contentItem.y
-                        width: self.footer.width
-                        height: self.footer.height
-                    }
-                }
+                source: footer_blur_source
             }
             Rectangle {
                 width: parent.width
@@ -320,6 +330,7 @@ MainPage {
     }
 
     contentItem: SplitView {
+        id: split_view
         focusPolicy: Qt.ClickFocus
         handle: Item {
             implicitWidth: constants.p3
