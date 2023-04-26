@@ -24,8 +24,7 @@ ControllerDialog {
             with_memo: false,
         }))
     }
-    // TODO
-    // doneText: qsTrId('id_transaction_sent')
+
     ColumnLayout {
         id: layout
         spacing: 16
@@ -86,9 +85,34 @@ ControllerDialog {
         }
     }
 
-//    doneComponent: TransactionDoneView {
-//        account: self.account
-//        dialog: self
-//        transaction: self.controller.signedTransaction
-//    }
+    AnimLoader {
+        animated: true
+        active: controller.signedTransaction
+        sourceComponent: ColumnLayout {
+            spacing: constants.p1
+            VSpacer {
+            }
+            Image {
+                Layout.alignment: Qt.AlignHCenter
+                source: 'qrc:/svg/check.svg'
+                sourceSize.width: 64
+                sourceSize.height: 64
+            }
+            Label {
+                Layout.alignment: Qt.AlignHCenter
+                text: qsTrId('id_transaction_sent')
+                font.pixelSize: 20
+            }
+            CopyableLabel {
+                Layout.alignment: Qt.AlignHCenter
+                Layout.topMargin: constants.p1
+                font.pixelSize: 12
+                delay: 50
+                text: controller.signedTransaction.data.txhash
+                onCopy: Analytics.recordEvent('share_transaction', AnalyticsJS.segmentationShareTransaction(self.account))
+            }
+            VSpacer {
+            }
+        }
+    }
 }

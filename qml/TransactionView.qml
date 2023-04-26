@@ -142,6 +142,7 @@ WalletDialog {
                     text: qsTrId('id_increase_fee')
                     enabled: transaction.data.can_rbf
                     onClicked: {
+                        self.accept()
                         bump_fee_dialog.createObject(window, { transaction }).open()
                     }
                 }
