@@ -13,7 +13,8 @@ void init(const QCommandLineParser& args)
 
     auto config = Json::fromObject({
         { "datadir", GetDataDir("gdk") },
-        { "log_level", log_level }
+        { "log_level", log_level },
+        { "enable_ss_liquid_hww", true },
     });
     GA_init(config.get());
 }
