@@ -129,6 +129,14 @@ void LedgerDeviceController::setActive(bool active)
     }
 
     m_dispatcher->add(group);
+
+    connect(group, &TaskGroup::finished, this, [=] {
+        m_wallet->setContext(m_context);
+        m_context = nullptr;
+        emit contextChanged();
+        setStatus("done");
+        emit loginDone();
+    });
 }
 
 void LedgerDeviceController::signup()
@@ -324,11 +332,7 @@ void LedgerLoginTask::update()
         m_context->session()->m_ready = true;
         // TODO should propagate to context
 
-        wallet->setContext(m_context);
         m_controller->setWallet(wallet);
-
-        m_controller->setStatus("done");
-        emit m_controller->loginDone();
         setStatus(Status::Finished);
     });
 
