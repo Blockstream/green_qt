@@ -5,7 +5,9 @@ import QtQuick.Layouts
 Canvas {
     property int current
     property int max
-    property real progress: Math.min(1, current / max)
+    property real progress: 0
+
+    Component.onCompleted: progress = Qt.binding(() => Math.min(1, self.current / self.max))
 
     property bool indeterminate: false
 
@@ -17,7 +19,7 @@ Canvas {
     property real sweepAngle: Math.PI * 2 * (indeterminate ? 0.1 : progress)
     Behavior on sweepAngle {
         SmoothedAnimation {
-            velocity: 6
+            velocity: 3
         }
     }
     NumberAnimation on startAngle {
@@ -27,7 +29,6 @@ Canvas {
         from: 0
         to: Math.PI * 2
         duration: 1000
-        //easing.type: Easing.OutCubic
     }
 
     onStartAngleChanged: requestPaint()

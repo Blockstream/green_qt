@@ -24,7 +24,8 @@ RowLayout {
             anchors.fill: parent
             anchors.margins: -4
             indeterminate: connecting
-            progress: connected ? 1 : 0
+            current: connected ? 1 : 0
+            max: 1
             opacity: connecting && progress < 1 ? 1 : 0
         }
     }
@@ -42,12 +43,13 @@ RowLayout {
                 anchors.fill: parent
                 anchors.margins: -4
                 indeterminate: connecting && progress === 0
-                progress: {
-                    if (connected) return 1
-                    if (session && session.eventData.tor) return session.eventData.tor.progress * 0.01
+                current: {
+                    if (connected) return 100
+                    if (session && session.eventData.tor) return session.eventData.tor.progress
                     return 0
                 }
-                opacity: connecting && progress < 1? 1 : 0
+                max: 100
+                opacity: connecting && progress < 1 ? 1 : 0
             }
         }
     }
