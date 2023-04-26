@@ -138,8 +138,10 @@ MainPage {
         sourceComponent: SendDialog {
             visible: true
             account: self.currentAccount
-            onRejected: navigation.pop()
-            onClosed: destroy()
+            onClosed: {
+                navigation.pop()
+                destroy()
+            }
         }
     }
 
@@ -148,8 +150,10 @@ MainPage {
         sourceComponent: ReceiveDialog {
             visible: true
             account: self.currentAccount
-            onRejected: navigation.pop()
-            onClosed: destroy()
+            onClosed: {
+                navigation.pop()
+                destroy()
+            }
         }
     }
 
@@ -159,8 +163,10 @@ MainPage {
             visible: true
             parent: window.Overlay.overlay
             wallet: self.wallet
-            onRejected: navigation.pop()
-            onClosed: destroy()
+            onClosed: {
+                navigation.pop()
+                destroy()
+            }
         }
     }
 
