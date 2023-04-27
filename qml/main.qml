@@ -1,5 +1,6 @@
 import Blockstream.Green
 import Blockstream.Green.Core
+import QtMultimedia
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Material
@@ -208,5 +209,14 @@ ApplicationWindow {
     Component {
         id: remove_wallet_dialog
         RemoveWalletDialog {}
+    }
+
+    readonly property bool scannerAvailable: (media_devices.item?.videoInputs?.length > 0) ?? false
+    Loader {
+        id: media_devices
+        asynchronous: true
+        active: true
+        sourceComponent: MediaDevices {
+        }
     }
 }

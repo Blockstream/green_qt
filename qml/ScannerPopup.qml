@@ -10,7 +10,6 @@ import Qt5Compat.GraphicalEffects
 import QtQuick.Shapes
 
 Popup {
-    readonly property bool available: media_devices.videoInputs.length > 0
     signal codeScanned(string code)
 
     id: self
@@ -80,9 +79,5 @@ Popup {
                 onClicked: self.close()
             }
         }
-    }
-
-    MediaDevices {
-        id: media_devices
     }
 }

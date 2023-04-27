@@ -99,7 +99,7 @@ ControllerDialog {
                 }
             }
             ToolButton {
-                enabled: scanner_popup.available && !scanner_popup.visible
+                enabled: window.scannerAvailable && !scanner_popup.visible
                 icon.source: 'qrc:/svg/qr.svg'
                 icon.width: 16
                 icon.height: 16
