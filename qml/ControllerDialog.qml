@@ -22,6 +22,7 @@ WalletDialog {
         Layout.minimumWidth: 24
         indeterminate: self.controller?.dispatcher.busy ?? false
         progress: 0
+        visible: opacity > 0
         opacity: self.controller?.dispatcher?.busy ? 1 : 0
         Behavior on opacity {
             SmoothedAnimation {
