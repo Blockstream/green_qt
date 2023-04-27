@@ -14,7 +14,7 @@ WalletDialog {
 
     property bool autoDestroy: false
     onClosed: if (autoDestroy) destroy()
-    closePolicy: Popup.NoAutoClose
+    closePolicy: Popup.CloseOnEscape
 
     ProgressIndicator {
         parent: toolbar
