@@ -443,6 +443,7 @@ ControllerDialog {
         animated: true
         active: self.review
         sourceComponent: ColumnLayout {
+            spacing: constants.s1
             AnalyticsView {
                 name: 'SendConfirm'
                 active: true
@@ -461,8 +462,8 @@ ControllerDialog {
                 text: formatAmount(controller.transaction.fee) + ' ≈ ' + formatFiat(controller.transaction.fee)
             }
             Repeater {
-                model: controller.transaction._addressees
-                delegate: controller.account.network.liquid ? liquid_address : bitcoin_address
+                model: controller.transaction.transaction_outputs.filter(output => !output.is_change && output.script.length > 0)
+                delegate: controller.account.network.liquid ? liquid_output: bitcoin_output
             }
             SectionLabel {
                 text: qsTrId('id_my_notes')
@@ -503,9 +504,9 @@ ControllerDialog {
                 }
             }
             Component {
-                id: bitcoin_address
+                id: bitcoin_output
                 ColumnLayout {
-                    spacing: 16
+                    spacing: constants.s1
                     SectionLabel {
                         text: qsTrId('id_address')
                     }
@@ -521,10 +522,10 @@ ControllerDialog {
                 }
             }
             Component {
-                id: liquid_address
+                id: liquid_output
                 ColumnLayout {
-                    property Asset address_asset: wallet.getOrCreateAsset(modelData.asset_id)
-                    spacing: 8
+                    property Asset address_asset: self.account.context.getOrCreateAsset(modelData.asset_id)
+                    spacing: constants.s1
                     SectionLabel {
                         text: qsTrId('id_address')
                     }

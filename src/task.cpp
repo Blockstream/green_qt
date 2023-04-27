@@ -1062,23 +1062,7 @@ bool CreateTransactionTask::call(GA_session *session, GA_auth_handler **auth_han
 
 void CreateTransactionTask::handleDone(const QJsonObject& result)
 {
-    auto network = m_context->network();
     auto data = result.value("result").toObject();
-    QJsonArray addressees;
-    auto send_all = data.value("send_all").toBool();
-    if (send_all && !network->isElectrum()) {
-        for (auto value : data.value("addressees").toArray()) {
-            auto object = value.toObject();
-            auto asset_id = network->isLiquid() ? object.value("asset_id").toString() : "btc";
-            auto satoshi = data.value("satoshi").toObject().value(asset_id).toDouble();
-            object.insert("satoshi", satoshi);
-            addressees.append(object);
-        }
-    } else {
-        addressees = data.value("addressees").toArray();
-    }
-    data.insert("_addressees", addressees);
-
     emit transaction(data);
 
     AuthHandlerTask::handleDone(result);
