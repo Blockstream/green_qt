@@ -3,7 +3,7 @@
 #include "ledgersigntransactionactivity.h"
 #include "util.h"
 
-#include <wally_transaction.h>
+#include <wally_wrapper.h>
 
 LedgerSignTransactionActivity::LedgerSignTransactionActivity(const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& transaction_outputs, const QJsonObject& signing_transactions, LedgerDevice* device)
     : SignTransactionActivity(device)

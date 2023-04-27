@@ -11,7 +11,7 @@
 #include "wallet.h"
 
 #include <gdk.h>
-#include <wally_bip32.h>
+#include <wally_wrapper.h>
 
 ReceiveAddressController::ReceiveAddressController(QObject *parent)
     : Controller(parent)

@@ -13,7 +13,7 @@
 
 #include <gdk.h>
 
-#include <wally_bip32.h>
+#include <wally_wrapper.h>
 
 JadeController::JadeController(QObject* parent)
     : Controller(parent)

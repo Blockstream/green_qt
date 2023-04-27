@@ -2,7 +2,7 @@
 #include "ledgerdevice.h"
 #include "ledgergetblindingnonceactivity.h"
 
-#include <wally_crypto.h>
+#include <wally_wrapper.h>
 
 LedgerGetBlindingNonceActivity::LedgerGetBlindingNonceActivity(const QByteArray& pubkey, const QByteArray& script, LedgerDevice* device)
     : GetBlindingNonceActivity(device)

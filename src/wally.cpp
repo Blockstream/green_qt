@@ -2,7 +2,7 @@
 
 #include <QRandomGenerator>
 #include <QSet>
-#include <wally_bip39.h>
+#include <wally_wrapper.h>
 
 namespace {
 

@@ -1,7 +1,7 @@
 #include "createaccountcontroller.h"
 
 #include <gdk.h>
-#include <gdk/wally_wrapper.h>
+#include <wally_wrapper.h>
 
 #include "ga.h"
 #include "json.h"

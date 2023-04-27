@@ -3,7 +3,7 @@
 #include "resolver.h"
 #include "util.h"
 
-#include <wally_crypto.h>
+#include <wally_wrapper.h>
 
 namespace {
 

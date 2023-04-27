@@ -3,7 +3,7 @@
 #include "ledgergetwalletpublickeyactivity.h"
 #include "network.h"
 
-#include <wally_bip32.h>
+#include <wally_wrapper.h>
 
 LedgerGetWalletPublicKeyActivity::LedgerGetWalletPublicKeyActivity(Network* network, const QVector<uint32_t>& path, LedgerDevice* device)
     : GetWalletPublicKeyActivity(network, path, device)

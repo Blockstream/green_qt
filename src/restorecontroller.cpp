@@ -4,7 +4,7 @@
 #include "wallet.h"
 #include "walletmanager.h"
 
-#include <gdk/wally_wrapper.h>
+#include <wally_wrapper.h>
 
 RestoreController::RestoreController(QObject *parent)
     : Controller(parent)
