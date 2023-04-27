@@ -69,6 +69,7 @@ void SignupController::setActive(bool active)
     auto load_assets = new LoadAssetsTask(m_context);
     auto load_accounts = new LoadAccountsTask(m_context);
     auto persist_wallet = new SignupPersistWalletTask(this);
+    auto get_credentials = new GetCredentialsTask(m_context);
 
     group->add(connect_session);
     group->add(register_user);
@@ -81,10 +82,12 @@ void SignupController::setActive(bool active)
     group->add(load_assets);
     group->add(load_accounts);
     group->add(persist_wallet);
+    group->add(get_credentials);
 
     register_user->then(mnemonic_login);
     mnemonic_login->then(encrypt_with_pin);
     create_wallet->needs(encrypt_with_pin);
+    create_wallet->then(get_credentials);
     load_twofactor_config->needs(create_wallet);
     load_currencies->needs(create_wallet);
     get_watchonly_details->needs(create_wallet);
