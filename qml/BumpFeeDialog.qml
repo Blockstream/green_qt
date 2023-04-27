@@ -51,9 +51,11 @@ ControllerDialog {
         }
 
         RowLayout {
+            spacing: constants.s1
             FeeComboBox {
                 id: fee_combo
                 Layout.fillWidth: true
+                Layout.minimumWidth: 270
                 extra: [{ text: qsTrId('id_custom') }]
                 onFeeRateChanged: {
                     if (feeRate) {
