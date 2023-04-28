@@ -106,7 +106,6 @@ SET(QML_FILES
     qml/ScannerPopup.qml
     qml/DiscoverServerTypeViewCard.qml
     qml/DeviceImage.qml
-    qml/ReviewView.qml
     qml/LoginDialog.qml
     qml/DeviceBadge.qml
     qml/SelectCoinsView.qml
