@@ -51,7 +51,6 @@ MainPageHeader {
         }
 
         Layout.fillWidth: true
-        enabled: name_field_loader.active
         leftPadding: 24
         rightPadding: 24
         topPadding: 8
@@ -60,7 +59,7 @@ MainPageHeader {
         background: Rectangle {
             color: 'white'
             opacity: 0.05
-            visible: self.hovered
+            visible: self.enabled && self.hovered
         }
 
         contentItem: RowLayout {
@@ -150,6 +149,7 @@ MainPageHeader {
 
             spacing: 0
             TMenuItem {
+                enabled: name_field_loader.active
                 text: qsTrId('id_rename')
                 icon.source: 'qrc:/svg/wallet-rename.svg'
                 onClicked: {
@@ -200,12 +200,7 @@ MainPageHeader {
             TMenuItem {
                 text: qsTrId('id_logout')
                 icon.source: 'qrc:/svg/logout.svg'
-                enabled: {
-                    if (self.context.watchonly) return false
-                    // TODO
-                    if (self.wallet.network.electrum) return true
-                    return !!self.context.settings.pricing
-                }
+                enabled: !!self.context
                 onClicked: {
                     menu.close()
                     self.wallet.disconnect()
@@ -481,7 +476,7 @@ MainPageHeader {
         required property Context context
         readonly property var balance: {
             let r = 0
-            for (let i = 0; i < self.context.accounts.length; i++) {
+            for (let i = 0; i < self.context?.accounts.length; i++) {
                 const account = self.context.accounts[i]
                 r += account.balance
             }

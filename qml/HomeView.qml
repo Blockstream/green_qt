@@ -15,6 +15,7 @@ MainPage {
         for (const id of Settings.recentWallets) {
             const wallet = WalletManager.wallet(id)
             if (!wallet) continue
+            if (wallet.deviceDetails?.type) continue
             if (wallet.network.key === 'testnet' && !Settings.enableTestnet) continue
             if (wallet.network.key === 'testnet-liquid' && !Settings.enableTestnet) continue
             wallets.push(wallet)
@@ -119,7 +120,6 @@ MainPage {
                                 icon.source: UtilJS.iconFor(wallet)
                                 icon.color: 'transparent'
                                 flat: true
-                                text: wallet.name
                                 onClicked: {
                                     if (wallet.context) {
                                         navigation.set({ wallet: wallet.id })
@@ -127,7 +127,7 @@ MainPage {
                                         navigation.push({ flow: 'login', wallet: wallet.id })
                                     }
                                 }
-                                 background: Rectangle {
+                                background: Rectangle {
                                     visible: delegate.hovered
                                     radius: 8
                                     color: constants.c700

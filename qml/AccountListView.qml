@@ -79,7 +79,7 @@ GPane {
             AnalyticsView {
                 active: self.showArchived
                 name: 'ArchivedAccounts'
-                segmentation: AnalyticsJS.segmentationSession(self.context.wallet)
+                segmentation: AnalyticsJS.segmentationSession(self.context?.wallet)
             }
         }
     }

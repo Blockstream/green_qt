@@ -100,7 +100,7 @@ GPane {
         }
         GButton {
             text: qsTrId('Export')
-            enabled: self.account.context && !transaction_list_model.dispatcher.busy && list_view.count > 0
+            enabled: self.account?.context && !transaction_list_model.dispatcher.busy && list_view.count > 0
             onClicked: export_transactions_popup.createObject(window, { account: self.account }).open()
             ToolTip.text: qsTrId('id_export_transactions_to_csv_file')
         }
