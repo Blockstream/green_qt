@@ -14,6 +14,7 @@ void AccountListModel::setContext(Context* context)
     if (m_context == context) return;
     if (m_context) {
         setSourceModel(nullptr);
+        emit countChanged();
         m_items.clear();
         delete m_model;
     }
