@@ -55,7 +55,7 @@ Button {
                 anchors.centerIn: parent
                 Layout.preferredWidth: 100
                 Layout.preferredHeight: 100
-                active: controller.busy
+                active: controller.dispatcher.busy
                 visible: active
                 sourceComponent: ColumnLayout {
                     Layout.fillHeight: false

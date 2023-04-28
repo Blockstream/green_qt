@@ -253,16 +253,18 @@ void RestorePersistWalletTask::update()
     const auto context = m_controller->context();
     const auto network = context->network();
     const auto wallet_hash_id = context->m_wallet_hash_id;
-    const auto wallet = WalletManager::instance()->restoreWallet(network, wallet_hash_id);
+    auto wallet = m_controller->wallet();
 
+    if (!wallet) {
+        wallet = WalletManager::instance()->restoreWallet(network, wallet_hash_id);
+        if (m_controller->type() == "amp") {
+            wallet->setName(WalletManager::instance()->uniqueWalletName("My AMP Wallet"));
+        } else {
+            wallet->setName(WalletManager::instance()->newWalletName(network));
+        }
+    }
     wallet->m_login_attempts_remaining = 3;
     wallet->m_pin_data = QJsonDocument(context->m_pin_data).toJson();
-
-    if (m_controller->type() == "amp") {
-        wallet->setName(WalletManager::instance()->uniqueWalletName("My AMP Wallet"));
-    } else {
-        wallet->setName(WalletManager::instance()->newWalletName(network));
-    }
 
     context->setWallet(wallet);
     wallet->setContext(context);
