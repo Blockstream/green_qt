@@ -59,6 +59,8 @@ void WatchOnlyLoginController::setWallet(Wallet* wallet)
     if (m_wallet == wallet) return;
     m_wallet = wallet;
     emit walletChanged();
+    if (m_context) m_context->setWallet(wallet);
+    update();
 }
 
 void WatchOnlyLoginController::setSaveWallet(bool save_wallet)
@@ -77,6 +79,7 @@ void WatchOnlyLoginController::login()
 {
     if (m_valid) {
         auto context = new Context(this);
+        context->setWallet(m_wallet);
         context->setNetwork(m_network);
         context->setWatchonly(true);
         setContext(context);
@@ -141,19 +144,20 @@ void WatchOnlyCreateWalletTask::update()
 
     setStatus(Status::Active);
 
-    const auto network = m_controller->network();
-
-    // TODO use existing wallet if it exists
-    auto wallet = WalletManager::instance()->walletWithHashId(wallet_hash_id, true);
+    auto wallet = m_controller->wallet();
     if (!wallet) {
-        wallet = WalletManager::instance()->createWallet(network, wallet_hash_id);
-        wallet->m_watch_only = true;
-        wallet->m_is_persisted = m_controller->saveWallet();
-        wallet->m_name = QString("%1 watch-only wallet").arg(m_controller->username());
-    }
-    wallet->m_username = m_controller->username();
-    wallet->save();
+        const auto network = m_controller->network();
 
+        wallet = WalletManager::instance()->walletWithHashId(wallet_hash_id, true);
+        if (!wallet) {
+            wallet = WalletManager::instance()->createWallet(network, wallet_hash_id);
+            wallet->m_watch_only = true;
+            wallet->m_is_persisted = m_controller->saveWallet();
+            wallet->m_name = QString("%1 watch-only wallet").arg(m_controller->username());
+        }
+        wallet->m_username = m_controller->username();
+        wallet->save();
+    }
     m_controller->setWallet(wallet);
 
     setStatus(Status::Finished);

@@ -14,10 +14,14 @@ ControllerDialog {
     icon: UtilJS.iconFor(self.wallet)
     title: self.wallet.name
 
-    closePolicy: self.active ? Dialog.NoAutoClose : AbstractDialog.closePolicy
-    // enableRejectButton: !self.active
-
     controller: loader.item.controller
+
+    Connections {
+        target: self.controller
+        function onLoginFinished() {
+            self.accept()
+        }
+    }
 
     AnalyticsView {
         name: 'Login'
@@ -28,7 +32,7 @@ ControllerDialog {
     Loader {
         id: loader
         sourceComponent: self.wallet.watchOnly ? login_with_password_view : login_with_pin_view
-        focus: StackLayout.isCurrentItem
+        focus: true
     }
 
     Component {

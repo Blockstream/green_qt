@@ -813,16 +813,14 @@ void LoadAssetsTask::update()
 {
     if (m_status != Status::Ready) return;
 
-    const auto wallet = m_context->wallet();
-    if (!wallet) return;
-
     auto session = m_context->session();
     if (!session) return;
     if (!session->m_ready) return;
 
     setStatus(Status::Active);
 
-    if (!wallet->network()->isLiquid()) {
+    auto network = m_context->network();
+    if (!network->isLiquid()) {
         setStatus(Status::Finished);
         return;
     }

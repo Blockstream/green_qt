@@ -6,6 +6,10 @@ Label {
     id: self
     property bool pointer: true
     property var error
+    function clear() {
+        self.error = undefined
+    }
+
     visible: self.text !== ''
     text: self.error ? (self.error.startsWith('id_') ? qsTrId(self.error) : self.error) : ''
     scale: self.error ? 1 : 0
