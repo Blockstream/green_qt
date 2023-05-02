@@ -117,24 +117,28 @@ Analytics::Analytics()
         incrBusy();
         cly::Countly::HTTPResponse res{false, {}};
 
-        if (!d->session) {
-            qDebug() << "analytics: create session";
-            GA_create_session(&d->session);
-            QJsonObject params{
-                { "name", "electrum-mainnet" },
-                { "use_tor", Settings::instance()->useTor() },
-                { "user_agent", QString("green_qt_%1").arg(QT_STRINGIFY(VERSION)) },
-            };
-            if (Settings::instance()->useProxy() && !Settings::instance()->proxy().isEmpty()) {
-                QTcpSocket socket;
-                socket.connectToHost(Settings::instance()->proxyHost(), Settings::instance()->proxyPort());
-                if (socket.waitForConnected(1000)) {
-                    params.insert("proxy", Settings::instance()->proxy());
-                } else {
-                    qDebug() << "analytics: invalid proxy, ignoring";
+        {
+            QMutexLocker lock(&d->busy_mutex);
+
+            if (!d->session) {
+                qDebug() << "analytics: create session";
+                GA_create_session(&d->session);
+                QJsonObject params{
+                    { "name", "electrum-mainnet" },
+                    { "use_tor", Settings::instance()->useTor() },
+                    { "user_agent", QString("green_qt_%1").arg(QT_STRINGIFY(VERSION)) },
+                };
+                if (Settings::instance()->useProxy() && !Settings::instance()->proxy().isEmpty()) {
+                    QTcpSocket socket;
+                    socket.connectToHost(Settings::instance()->proxyHost(), Settings::instance()->proxyPort());
+                    if (socket.waitForConnected(1000)) {
+                        params.insert("proxy", Settings::instance()->proxy());
+                    } else {
+                        qDebug() << "analytics: invalid proxy, ignoring";
+                    }
                 }
+                GA_connect(d->session, Json::fromObject(params).get());
             }
-            GA_connect(d->session, Json::fromObject(params).get());
         }
 
         QJsonObject req;
@@ -224,7 +228,7 @@ void Analytics::incrBusy()
         QMutexLocker lock(&d->busy_mutex);
         d->busy ++;
     }
-    QMetaObject::invokeMethod(this, &Analytics::busyChanged);
+    QMetaObject::invokeMethod(this, &Analytics::busyChanged, Qt::QueuedConnection);
 }
 
 void Analytics::decrBusy()
@@ -233,7 +237,7 @@ void Analytics::decrBusy()
         QMutexLocker lock(&d->busy_mutex);
         d->busy --;
     }
-    QMetaObject::invokeMethod(this, &Analytics::busyChanged);
+    QMetaObject::invokeMethod(this, &Analytics::busyChanged, Qt::QueuedConnection);
 }
 
 void AnalyticsPrivate::start()
@@ -279,8 +283,11 @@ void AnalyticsPrivate::stop(Qt::ConnectionType type)
     QMetaObject::invokeMethod(this, [=] {
         auto& countly = cly::Countly::getInstance();
         countly.stop();
-        GA_destroy_session(session);
-        session = nullptr;
+        {
+            QMutexLocker lock(&busy_mutex);
+            GA_destroy_session(session);
+            session = nullptr;
+        }
         q->decrBusy();
     }, type);
 }
