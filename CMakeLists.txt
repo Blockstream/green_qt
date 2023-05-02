@@ -36,6 +36,7 @@ if (WIN32)
 elseif (APPLE)
     find_library(SECURITY Security REQUIRED)
 elseif (UNIX)
+    find_package(Qt6 6.4 COMPONENTS WaylandClient REQUIRED)
     set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++ -fstack-protector -Wl,--wrap=__divmoddi4 -Wl,--wrap=log2f")
 endif()
 
@@ -85,7 +86,8 @@ target_link_libraries(green
 if (WIN32)
 elseif (APPLE)
 elseif (UNIX)
-    target_link_libraries(green PRIVATE dl)
+    target_link_libraries(green PRIVATE dl Qt6::WaylandClient)
+    qt_import_plugins(green INCLUDE Qt6::QXcbIntegrationPlugin Qt6::QWaylandIntegrationPlugin)
 endif()
 
 install(TARGETS green
