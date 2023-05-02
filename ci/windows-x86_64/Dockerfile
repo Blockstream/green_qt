@@ -1,4 +1,4 @@
-FROM ubuntu:kinetic
+FROM ubuntu:kinetic AS base
 COPY ci/windows-x86_64/kinetic.sh .
 RUN ./kinetic.sh
 ENV PREFIX=/depends/windows-x86_64
@@ -10,4 +10,9 @@ ENV CMAKE_TOOLCHAIN_FILE=$PWD/cmake/mingw-w64-x86_64.cmake
 ENV QT_HOST_PATH=/depends/linux-x86_64
 COPY tools tools
 COPY cmake cmake
+
+FROM base AS builder
 RUN . /root/.cargo/env && tools/builddeps.sh
+
+FROM base
+COPY --from=builder /depends /depends
