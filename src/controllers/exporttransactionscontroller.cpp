@@ -26,6 +26,13 @@ void ExportTransactionsController::setAccount(Account* account)
     if (m_account == account) return;
     m_account = account;
     emit accountChanged();
+
+    auto wallet = account->context()->wallet();
+    connect(wallet, &Wallet::contextChanged, this, [=] {
+        if (!wallet->context()) {
+            emit finished();
+        }
+    });
 }
 
 void ExportTransactionsController::save()
@@ -33,20 +40,35 @@ void ExportTransactionsController::save()
     Q_ASSERT(m_account);
     const auto context = m_account->context();
     const auto wallet = context->wallet();
-    const auto settings = context->settings();
-    const auto network = m_account->network();
 
-    const auto now = QDateTime::currentDateTime();
+    m_datetime = QDateTime::currentDateTime();
+
     const auto account_name = m_account->name().isEmpty() ? qtTrId("id_main_account") : m_account->name();
     const QString suggestion =
             QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + QDir::separator() +
             wallet->name() + " - " + account_name + " - " +
-            now.toString("yyyyMMddhhmmss") + ".csv";
-    m_file_name = QFileDialog::getSaveFileName(nullptr, "Export to CSV", suggestion);
+            m_datetime.toString("yyyyMMddhhmmss") + ".csv";
+
+    auto dialog = new QFileDialog(nullptr, "Export to CSV", suggestion);
+    dialog->setAcceptMode(QFileDialog::AcceptSave);
+    dialog->setFileMode(QFileDialog::AnyFile);
+    dialog->selectFile(suggestion);
+    connect(dialog, &QFileDialog::fileSelected, this, &ExportTransactionsController::saveToFile);
+    connect(dialog, &QFileDialog::rejected, this, &ExportTransactionsController::finished);
+    connect(this, &QObject::destroyed, dialog, &QFileDialog::deleteLater);
+    dialog->open();
+}
+
+void ExportTransactionsController::saveToFile(const QString& file)
+{
+    m_file_name = file;
     if (m_file_name.isEmpty()) {
-        emit saved();
+        emit finished();
         return;
     }
+    const auto context = m_account->context();
+    const auto network = m_account->network();
+    const auto settings = context->settings();
 
     const auto display_unit = context->displayUnit();
     const auto pricing = settings.value("pricing").toObject();
@@ -54,7 +76,7 @@ void ExportTransactionsController::save()
     const auto exchange = pricing.value("exchange").toString();
 
     m_fee_field = QString("fee (%1)").arg(display_unit);
-    m_fiat_field = QString("fiat (%1 %2 %3)").arg(currency).arg(exchange, now.toString(Qt::ISODate));
+    m_fiat_field = QString("fiat (%1 %2 %3)").arg(currency, exchange, m_datetime.toString(Qt::ISODate));
     m_fields = QStringList{"time", "description", "amount", "unit", m_fee_field, m_fiat_field, "txhash", "memo"};
 
     if (m_include_header) {
@@ -137,7 +159,7 @@ void ExportTransactionsController::nextPage()
 
             QTextStream stream(&file);
             stream << m_lines.join("\n");
-            emit saved();
+            emit finished();
         } else {
             m_offset += m_count;
             QTimer::singleShot(100, this, [=] { nextPage(); });

@@ -231,9 +231,13 @@ bool Context::eventFilter(QObject *object, QEvent *event)
 void Context::timerEvent(QTimerEvent* event)
 {
     if (event->timerId() == m_logout_timer) {
+        // avoid autologout in the following cases
+        if (!m_wallet || m_device || m_accounts.empty()) return;
+
         killTimer(m_logout_timer);
-        if (m_wallet) m_wallet->setContext(nullptr);
-        deleteLater();
+        m_wallet->setContext(nullptr);
+        QTimer::singleShot(5000, this, &QObject::deleteLater);
+        connect(qApp, &QCoreApplication::aboutToQuit, this, &QObject::deleteLater);
     }
 }
 

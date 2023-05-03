@@ -68,29 +68,6 @@ GPane {
         }
     }
 
-    Component {
-        id: export_transactions_popup
-        Popup {
-            required property Account account
-            id: dialog
-            anchors.centerIn: Overlay.overlay
-            closePolicy: Popup.NoAutoClose
-            modal: true
-            Overlay.modal: Rectangle {
-                color: "#70000000"
-            }
-            onClosed: destroy()
-            onOpened: controller.save()
-            ExportTransactionsController {
-                id: controller
-                context: dialog.account.context
-                account: dialog.account
-                onSaved: dialog.close()
-            }
-            BusyIndicator {}
-        }
-    }
-
     RowLayout {
         parent: toolbarItem
         visible: self.visible

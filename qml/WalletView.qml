@@ -458,4 +458,33 @@ MainPage {
             }
         }
     }
+
+    Component {
+        id: export_transactions_popup
+        WalletDialog {
+            required property Account account
+            wallet: account.context.wallet
+            id: dialog
+            anchors.centerIn: Overlay.overlay
+            showRejectButton: false
+            closePolicy: Popup.NoAutoClose
+            modal: true
+            Overlay.modal: Rectangle {
+                color: "#70000000"
+            }
+            onClosed: dialog.destroy()
+            onOpened: controller.save()
+            ExportTransactionsController {
+                id: controller
+                context: dialog.account.context
+                account: dialog.account
+                onFinished: dialog.accept()
+            }
+            contentItem: RowLayout {
+                BusyIndicator {
+                    Layout.alignment: Qt.AlignCenter
+                }
+            }
+        }
+    }
 }

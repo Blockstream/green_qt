@@ -19,6 +19,8 @@ public:
     void setAccount(Account* account);
 public slots:
     void save();
+private slots:
+    void saveToFile(const QString& file);
 signals:
     void accountChanged();
     void saved();
@@ -28,6 +30,7 @@ private:
     Account* m_account{nullptr};
     int m_count{5};
     int m_offset{0};
+    QDateTime m_datetime;
     QString m_file_name;
     QString m_fee_field;
     QString m_fiat_field;
