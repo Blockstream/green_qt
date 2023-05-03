@@ -9,7 +9,7 @@ MainPage {
     id: self
     title: qsTrId('id_app_settings')
 
-    readonly property int labelWidth: Math.floor(layout.width / 3)
+    readonly property int labelWidth: Math.max(300, Math.floor(layout.width / 3))
 
     AnalyticsView {
         name: 'AppSettings'
@@ -194,6 +194,7 @@ MainPage {
             Field {
                 name: qsTrId('id_proxy_host')
                 enabled: Settings.useProxy
+                visible: Settings.useProxy
                 GTextField {
                     Layout.fillWidth: true
                     enabled: Settings.useProxy
@@ -207,6 +208,7 @@ MainPage {
             Field {
                 name: qsTrId('id_proxy_port')
                 enabled: Settings.useProxy
+                visible: Settings.useProxy
                 GTextField {
                     enabled: Settings.useProxy
                     text: Settings.proxyPort
@@ -319,11 +321,10 @@ MainPage {
             Field {
                 name: qsTrId('id_data_directory')
                 CopyableLabel {
+                    Layout.fillWidth: true
                     text: data_location_path
                     copyText: data_location_path.replace(' ', '\\ ')
                     elide: Text.ElideRight
-                }
-                HSpacer {
                 }
                 GButton {
                     text: qsTrId('id_open')
@@ -333,11 +334,10 @@ MainPage {
             Field {
                 name: qsTrId('id_log_file')
                 CopyableLabel {
+                    Layout.fillWidth: true
                     text: log_file_path
                     copyText: log_file_path.replace(' ', '\\ ')
                     elide: Text.ElideRight
-                }
-                HSpacer {
                 }
                 GButton {
                     text: qsTrId('id_open')

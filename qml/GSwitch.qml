@@ -49,6 +49,7 @@ Switch {
         text: self.text
         opacity: enabled ? 1.0 : 0.3
         verticalAlignment: Text.AlignVCenter
+        elide: Label.ElideRight
         leftPadding: 0
         rightPadding: (self.text === '' ? 0 : self.spacing) + self.indicator.width
     }
