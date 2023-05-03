@@ -26,7 +26,6 @@ void AddressListModel::setAccount(Account* account)
         emit accountChanged();
         endResetModel();
     }
-    if (!account) return;
     m_account = account;
     emit accountChanged();
     if (m_account) {
@@ -37,6 +36,7 @@ void AddressListModel::setAccount(Account* account)
 
 void AddressListModel::fetch(bool reset)
 {
+    if (!m_account) return;
     if (m_dispatcher->isBusy()) return;
 
     auto get_addresses = new GetAddressesTask(m_last_pointer, m_account);

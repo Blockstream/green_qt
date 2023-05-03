@@ -20,7 +20,7 @@ ReceiveAddressController::ReceiveAddressController(QObject *parent)
 
 ReceiveAddressController::~ReceiveAddressController()
 {
-    emit m_account->addressGenerated();
+    setAccount(nullptr);
 }
 
 Account *ReceiveAddressController::account() const
@@ -31,10 +31,11 @@ Account *ReceiveAddressController::account() const
 void ReceiveAddressController::setAccount(Account *account)
 {
     if (m_account == account) return;
-
+    if (m_account) {
+        emit m_account->addressGenerated();
+    }
     m_account = account;
-    emit accountChanged(m_account);
-
+    emit accountChanged();
     generate();
 }
 

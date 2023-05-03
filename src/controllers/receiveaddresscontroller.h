@@ -46,7 +46,7 @@ public slots:
     void generate();
     void verify();
 signals:
-    void accountChanged(Account* account);
+    void accountChanged();
     void changed();
     void generatingChanged(bool generating);
     void addressVerificationChanged(AddressVerification address_verification);
