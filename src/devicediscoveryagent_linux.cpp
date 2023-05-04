@@ -31,25 +31,25 @@ DeviceDiscoveryAgentPrivate::DeviceDiscoveryAgentPrivate(DeviceDiscoveryAgent *q
     m_notifier = new QSocketNotifier(udev_monitor_get_fd(m_monitor), QSocketNotifier::Read);
     m_notifier->setEnabled(true);
     QObject::connect(m_notifier, &QSocketNotifier::activated, [this](int) {
+        qDebug() << "monitor: notification begin";
         udev_device* device = udev_monitor_receive_device(m_monitor);
-        qDebug() << "monitor: " << udev_device_get_action(device) << udev_device_get_subsystem(device) << udev_device_get_driver(device);
+	if (!device) {
+            scan();
+	} else while (device) {
+            qDebug() << "monitor: " << udev_device_get_action(device) << udev_device_get_subsystem(device) << udev_device_get_driver(device);
 
-        auto action = udev_device_get_action(device);
-        if (action) {
-            if (strcmp(action, "add") == 0) addDevice(device);
-            if (strcmp(action, "remove") == 0) removeDevice(device);
+            auto action = udev_device_get_action(device);
+            if (action) {
+                if (strcmp(action, "add") == 0) addDevice(device);
+                if (strcmp(action, "remove") == 0) removeDevice(device);
+            }
+	    udev_device_unref(device);
+            device = udev_monitor_receive_device(m_monitor);
         }
+        qDebug() << "monitor: notification end";
     });
-    auto enumerate = udev_enumerate_new(m_udev);
-    udev_enumerate_add_match_subsystem(enumerate, "hidraw");
-    udev_enumerate_scan_devices(enumerate);
-    auto entry = udev_enumerate_get_list_entry(enumerate);
-    while (entry) {
-        udev_device* device = udev_device_new_from_syspath(m_udev, udev_list_entry_get_name(entry));
-        addDevice(device);
-        entry = udev_list_entry_get_next(entry);
-    }
-    udev_enumerate_unref(enumerate);
+
+    scan();
 }
 
 DeviceDiscoveryAgentPrivate::~DeviceDiscoveryAgentPrivate()
@@ -89,20 +89,42 @@ static bool GetDevPath(udev_device* handle, QString& devpath)
     return true;
 }
 
-void DeviceDiscoveryAgentPrivate::addDevice(udev_device* handle)
+void DeviceDiscoveryAgentPrivate::scan()
+{
+    qDebug() << "monitor: scan begin";
+    auto enumerate = udev_enumerate_new(m_udev);
+    udev_enumerate_add_match_subsystem(enumerate, "hidraw");
+    udev_enumerate_scan_devices(enumerate);
+    auto entry = udev_enumerate_get_list_entry(enumerate);
+    auto impls = m_devices.values();
+    while (entry) {
+        udev_device* device = udev_device_new_from_syspath(m_udev, udev_list_entry_get_name(entry));
+        auto impl = addDevice(device);
+	if (impl) impls.removeOne(impl);
+        entry = udev_list_entry_get_next(entry);
+    }
+    udev_enumerate_unref(enumerate);
+    for (auto impl : impls) {
+        m_devices.take(impl->path);
+        DeviceManager::instance()->removeDevice(impl->q);
+        delete impl->q;
+    }
+    qDebug() << "monitor: scan end";
+}
+
+DevicePrivateImpl* DeviceDiscoveryAgentPrivate::addDevice(udev_device* handle)
 {
     auto hid_dev = udev_device_get_parent_with_subsystem_devtype(handle, "usb", "usb_device");
-    if (!hid_dev) return;
-
+    if (!hid_dev) return nullptr;
 
     uint32_t vendor_id = QString::fromLocal8Bit(udev_device_get_sysattr_value(hid_dev, "idVendor")).toUInt(nullptr, 16);
     uint32_t product_id = QString::fromLocal8Bit(udev_device_get_sysattr_value(hid_dev, "idProduct")).toUInt(nullptr, 16);
 
     Device::Type device_type = Device::typefromVendorAndProduct(vendor_id, product_id);
-    if (device_type == Device::NoType) return;
+    if (device_type == Device::NoType) return nullptr;
 
     int fd = open(udev_device_get_devnode(handle), O_RDWR); //|O_NONBLOCK);
-    if (fd < 0) return;
+    if (fd < 0) return nullptr;
 
 #if 1
     /* Get the report descriptor */
@@ -124,7 +146,10 @@ void DeviceDiscoveryAgentPrivate::addDevice(udev_device* handle)
     } else {
         auto bb = QByteArray::fromRawData((const char*) rpt_desc.value, rpt_desc.size);
         qDebug() << "B1=" << uint8_t(bb.at(1)) << "B2=" << uint8_t(bb.at(2)) << uint8_t(0xfa) << uint8_t(0xff);
-        if (uint8_t(bb.at(1)) != uint8_t(0xa0) || uint8_t(bb.at(2)) != uint8_t(0xff)) return;
+        if (uint8_t(bb.at(1)) != uint8_t(0xa0) || uint8_t(bb.at(2)) != uint8_t(0xff)) {
+            return nullptr;
+            return nullptr;
+        }
 
         qDebug() << "REPORT DESCRIPTOR = " << bb.toHex();
         /* Determine if this device uses numbered reports. */
@@ -135,9 +160,21 @@ void DeviceDiscoveryAgentPrivate::addDevice(udev_device* handle)
 
 #endif
     QString devpath;
-    if (!GetDevPath(handle, devpath)) return;
+    if (!GetDevPath(handle, devpath)) {
+        close(fd);
+        return nullptr;
+    }
 
-    auto impl = new DevicePrivateImpl;
+    auto impl = m_devices.value(devpath);
+    if (impl) {
+        close(fd);
+        return impl;
+    }
+ 
+    qDebug() << "monitor:" << "found" << devpath;
+
+    impl = new DevicePrivateImpl;
+    impl->path = devpath;
     impl->handle = handle;
     impl->fd = fd;
     impl->m_type = device_type;
@@ -155,6 +192,8 @@ void DeviceDiscoveryAgentPrivate::addDevice(udev_device* handle)
         else notifier->deleteLater();
     });
     // udev_device_unref(handle);
+
+    return impl;
 }
 
 void DeviceDiscoveryAgentPrivate::removeDevice(udev_device* handle)

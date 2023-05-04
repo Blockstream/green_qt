@@ -15,6 +15,7 @@ class DeviceDiscoveryAgent;
 class DevicePrivateImpl : public DevicePrivate
 {
 public:
+    QString path;
     udev_device* handle;
     int fd;
     void exchange(DeviceCommand* command) override;
@@ -27,7 +28,9 @@ public:
     DeviceDiscoveryAgentPrivate(DeviceDiscoveryAgent* q);
     ~DeviceDiscoveryAgentPrivate();
 
-    void addDevice(udev_device* handle);
+    void scan();
+
+    DevicePrivateImpl* addDevice(udev_device* handle);
     void removeDevice(udev_device* handle);
 
 private:
