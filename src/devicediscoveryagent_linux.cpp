@@ -35,9 +35,10 @@ DeviceDiscoveryAgentPrivate::DeviceDiscoveryAgentPrivate(DeviceDiscoveryAgent *q
         qDebug() << "monitor: " << udev_device_get_action(device) << udev_device_get_subsystem(device) << udev_device_get_driver(device);
 
         auto action = udev_device_get_action(device);
-        Q_ASSERT(action);
-        if (strcmp(action, "add") == 0) addDevice(device);
-        if (strcmp(action, "remove") == 0) removeDevice(device);
+        if (action) {
+            if (strcmp(action, "add") == 0) addDevice(device);
+            if (strcmp(action, "remove") == 0) removeDevice(device);
+        }
     });
     auto enumerate = udev_enumerate_new(m_udev);
     udev_enumerate_add_match_subsystem(enumerate, "hidraw");
