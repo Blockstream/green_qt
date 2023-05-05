@@ -16,7 +16,7 @@ AbstractDialog {
     width: layout.implicitWidth + self.leftPadding + self.rightPadding
     anchors.centerIn: undefined
 
-    ColumnLayout {
+    contentItem: ColumnLayout {
         id: layout
         spacing: constants.s2
         Layout.maximumWidth: 420
@@ -35,16 +35,15 @@ AbstractDialog {
             background: Rectangle {
                 color: constants.c500
                 radius: 8
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: collapsible.toggle()
-                }
                 Rectangle {
                     implicitHeight: 1
                     color: constants.c800
                     y: pane.padding * 2 + details_label.height
                     width: parent.width
                 }
+            }
+            TapHandler {
+                onTapped: collapsible.toggle()
             }
             contentItem: ColumnLayout {
                 spacing: 0
