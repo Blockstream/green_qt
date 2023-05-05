@@ -129,13 +129,13 @@ Analytics::Analytics()
                     { "user_agent", QString("green_qt_%1").arg(QT_STRINGIFY(VERSION)) },
                 };
                 if (Settings::instance()->useProxy() && !Settings::instance()->proxy().isEmpty()) {
-                    QTcpSocket socket;
-                    socket.connectToHost(Settings::instance()->proxyHost(), Settings::instance()->proxyPort());
-                    if (socket.waitForConnected(1000)) {
+//                    QTcpSocket socket;
+//                    socket.connectToHost(Settings::instance()->proxyHost(), Settings::instance()->proxyPort());
+//                    if (socket.waitForConnected(1000)) {
                         params.insert("proxy", Settings::instance()->proxy());
-                    } else {
-                        qDebug() << "analytics: invalid proxy, ignoring";
-                    }
+//                    } else {
+//                        qDebug() << "analytics: invalid proxy, ignoring";
+//                    }
                 }
                 GA_connect(d->session, Json::fromObject(params).get());
             }

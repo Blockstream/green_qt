@@ -247,11 +247,11 @@ namespace {
             { "spv_enabled", session->enableSPV() }
         };
         if (!session->proxy().isEmpty()) {
-            QTcpSocket socket;
-            socket.connectToHost(session->proxyHost(), session->proxyPort());
-            if (socket.waitForConnected(1000)) {
+//            QTcpSocket socket;
+//            socket.connectToHost(session->proxyHost(), session->proxyPort());
+//            if (socket.waitForConnected(1000)) {
                 params.insert("proxy", session->proxy());
-            }
+//            }
         }
         if (session->usePersonalNode()) {
             const auto url = session->electrumUrl();
