@@ -61,13 +61,8 @@ ControllerDialog {
 //        }
     }
 
-    GridLayout {
-        columns: 2
-        rowSpacing: 12
-        columnSpacing: 12
-
+    ColumnLayout {
         AlertView {
-            Layout.columnSpan: 2
             alert: AnalyticsAlert {
                 screen: 'Send'
                 network: account.network.id
@@ -380,10 +375,8 @@ ControllerDialog {
             }
         }
         VSpacer {
-            Layout.columnSpan: 2
         }
         RowLayout {
-            Layout.columnSpan: 2
             Layout.fillHeight: false
             HSpacer {
             }
