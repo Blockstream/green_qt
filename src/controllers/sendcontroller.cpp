@@ -189,6 +189,11 @@ void SendController::create()
     const auto wallet = m_context->wallet();
     const auto network = m_context->network();
 
+    // TODO: autologout unsets context on the wallet
+    // TODO: and this controller should detect that
+    // TODO: for now, check wallet's context before continuing
+    if (!wallet->context()) return;
+
     const quint64 count = ++m_count;
     if (m_create_task) return;
 

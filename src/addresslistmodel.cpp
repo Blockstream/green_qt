@@ -2,7 +2,9 @@
 
 #include "account.h"
 #include "address.h"
+#include "context.h"
 #include "task.h"
+#include "wallet.h"
 
 AddressListModel::AddressListModel(QObject* parent)
     : QAbstractListModel(parent)
@@ -38,6 +40,16 @@ void AddressListModel::fetch(bool reset)
 {
     if (!m_account) return;
     if (m_dispatcher->isBusy()) return;
+
+    const auto context = m_account->context();
+    if (!context) return;
+    const auto wallet = context->wallet();
+    if (!wallet) return;
+
+    // TODO: autologout unsets context on the wallet
+    // TODO: and this controller should detect that
+    // TODO: for now, check wallet's context before continuing
+    if (!wallet->context()) return;
 
     auto get_addresses = new GetAddressesTask(m_last_pointer, m_account);
 
