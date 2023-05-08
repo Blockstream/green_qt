@@ -363,9 +363,9 @@ MainPage {
     RowLayout {
         anchors.bottom: parent.bottom
         anchors.right: parent.right
-        anchors.margins: constants.p3
+        anchors.rightMargin: constants.p3
+        anchors.bottomMargin: constants.p3 * 2
         spacing: 5
-        visible: navigation.param.view !== 'coins'
         GButton {
             Layout.minimumWidth: 120
             highlighted: true
