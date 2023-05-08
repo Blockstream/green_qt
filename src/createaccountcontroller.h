@@ -63,7 +63,6 @@ signals:
     void created(Account* account);
     void recoveryMnemonicChanged();
     void recoveryXpubChanged();
-    void errorChanged(const QString& error);
     void accountChanged();
 
 public slots:

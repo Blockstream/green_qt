@@ -319,8 +319,8 @@ ControllerDialog {
                     placeholderText: qsTrId('id_recovery_xpub')
                     Component.onCompleted: xpub_field.forceActiveFocus()
                     Layout.minimumWidth: 450
-                    onTextChanged: dialog.controller.recoveryXpub = text
-                    error: dialog.controller.errors.recoveryXpub
+                    onTextChanged: controller.recoveryXpub = text
+                    error: controller.errors.recoveryXpub
                 }
                 ToolButton {
                     enabled: window.scannerAvailable && !scanner_popup.visible
@@ -346,7 +346,7 @@ ControllerDialog {
                 }
             }
             FixedErrorBadge {
-                error: xPubError(dialog.controller.errors.recoveryXpub)
+                error: xPubError(controller.errors.recoveryXpub)
             }
             VSpacer {
             }
@@ -359,7 +359,7 @@ ControllerDialog {
                 }
                 GButton {
                     text: qsTrId('id_next')
-                    enabled: dialog.controller.noErrors
+                    enabled: controller.noErrors
                     onClicked: {
                         navigation.set({ xpub: xpub_field.text, view: 'finish' })
                     }
@@ -387,10 +387,15 @@ ControllerDialog {
                 focus: true
                 text: navigation.param.name
                 onTextChanged: navigation.set({ name: text })
-                error: dialog.controller.errors.name
+                error: controller.errors.name
             }
             FixedErrorBadge {
-                error: xPubError(dialog.controller.errors.recoveryXpub)
+                Layout.alignment: Qt.AlignCenter
+                error: xPubError(controller.errors.recoveryXpub)
+            }
+            FixedErrorBadge {
+                Layout.alignment: Qt.AlignCenter
+                error: controller.errors.create
             }
             VSpacer {
             }
@@ -405,8 +410,8 @@ ControllerDialog {
                 GButton {
                     text: qsTrId('id_create')
                     highlighted: true
-                    enabled: dialog.controller.noErrors
-                    onClicked: dialog.controller.create()
+                    enabled: controller.noErrors
+                    onClicked: controller.create()
                 }
             }
         }

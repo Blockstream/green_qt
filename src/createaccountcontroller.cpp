@@ -30,6 +30,8 @@ void CreateAccountController::setName(const QString& name)
     if (m_name == name) return;
     m_name = name;
     emit nameChanged();
+
+    clearError("create");
     updateError("name", QString{"empty"}, m_name.isEmpty());
 }
 
@@ -38,6 +40,8 @@ void CreateAccountController::setType(const QString& type)
     if (m_type == type) return;
     m_type = type;
     emit typeChanged();
+
+    clearError("create");
 }
 
 void CreateAccountController::setRecoveryMnemonic(const QStringList& recovery_mnemonic)
@@ -88,6 +92,10 @@ void CreateAccountController::create()
     group->add(load_accounts);
 
     m_dispatcher->add(group);
+
+    connect(create_account, &Task::failed, this, [=](const QString& error) {
+        setError("create", error);
+    });
 
     connect(group, &TaskGroup::finished, this, [=] {
         m_account = context->getAccountByPointer(create_account->pointer());
