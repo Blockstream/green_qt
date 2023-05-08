@@ -394,10 +394,13 @@ ControllerDialog {
         property bool active: false
         account: self.account
         visible: active
-        GButton {
-            parent: coins_view.contentItem
-            text: qsTrId('id_done')
-            onClicked: coins_view.active = false
+        footer: RowLayout {
+            HSpacer {
+            }
+            GButton {
+                text: qsTrId('id_done')
+                onClicked: coins_view.active = false
+            }
         }
     }
 
