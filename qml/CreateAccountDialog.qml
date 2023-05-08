@@ -40,10 +40,10 @@ ControllerDialog {
         name: navigation.param.name || null
         type: navigation.param.type || null
         recoveryMnemonic: navigation.param.mnemonic || []
-        onCreated: (account) => Analytics.recordEvent('account_create', AnalyticsJS.segmentationSubAccount(account))
+        onCreated: {
+            (account) => Analytics.recordEvent('account_create', AnalyticsJS.segmentationSubAccount(account))
+        }
     }
-    // TODO
-    // doneText: qsTrId('id_new_account_created')
 
     RowLayout {
         spacing: 16
@@ -92,6 +92,36 @@ ControllerDialog {
         Layout.fillHeight: true
         Layout.maximumWidth: 300
     }
+
+    AnimLoader {
+        active: controller.account
+        animated: true
+        sourceComponent: ColumnLayout {
+            spacing: constants.p1
+            VSpacer {}
+            Image {
+                Layout.alignment: Qt.AlignHCenter
+                source: 'qrc:/svg/check.svg'
+                sourceSize.width: 32
+                sourceSize.height: 32
+            }
+            Label {
+                Layout.alignment: Qt.AlignHCenter
+                text: qsTrId('id_new_account_created')
+            }
+            GButton {
+                Layout.alignment: Qt.AlignHCenter
+                highlighted: true
+                focus: true
+                text: qsTrId('id_ok')
+                onClicked: dialog.accept()
+            }
+            VSpacer {
+            }
+        }
+    }
+
+
 
     AnimLoader {
         animated: true
@@ -354,6 +384,7 @@ ControllerDialog {
             }
             GTextField {
                 Layout.fillWidth: true
+                focus: true
                 text: navigation.param.name
                 onTextChanged: navigation.set({ name: text })
                 error: dialog.controller.errors.name
@@ -373,6 +404,7 @@ ControllerDialog {
                 }
                 GButton {
                     text: qsTrId('id_create')
+                    highlighted: true
                     enabled: dialog.controller.noErrors
                     onClicked: dialog.controller.create()
                 }
