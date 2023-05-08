@@ -3,6 +3,7 @@
 #include <gdk.h>
 #include <wally_wrapper.h>
 
+#include "context.h"
 #include "ga.h"
 #include "json.h"
 #include "task.h"
@@ -75,8 +76,9 @@ void CreateAccountController::create()
         }
     }
 
-    const auto create_account = new CreateAccountTask(details, m_context);
-    const auto load_accounts = new LoadAccountsTask(m_context);
+    const auto context = m_context;
+    const auto create_account = new CreateAccountTask(details, context);
+    const auto load_accounts = new LoadAccountsTask(context);
 
     create_account->then(load_accounts);
 
@@ -86,15 +88,13 @@ void CreateAccountController::create()
     group->add(load_accounts);
 
     m_dispatcher->add(group);
-    // TODO connect to group
-//    connect(load_accounts, &Task::statusChanged, this, [=] {
-//        if (load_accounts->status() != Task::Status::Finished) return;
 
-//        const auto account = m_context->getAccountByPointer(create_account->pointer());
-//        if (!account) return;
-
-//        emit created(account);
-//    });
+    connect(group, &TaskGroup::finished, this, [=] {
+        m_account = context->getAccountByPointer(create_account->pointer());
+        if (!m_account) return;
+        emit accountChanged();
+        emit created(m_account);
+    });
 }
 
 void CreateAccountController::setRecoveryXpub(const QString& recovery_xpub)
