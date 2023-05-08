@@ -179,14 +179,18 @@ Analytics::Analytics()
             req.insert("urls", urls);
         }
 
-        GA_json* out;
-        GA_http_request(d->session, Json::fromObject(req).get(), &out);
-        auto reply = Json::toObject(out);
+        GA_json* out = nullptr;
+        const auto rc = GA_http_request(d->session, Json::fromObject(req).get(), &out);
+        if (rc == GA_OK && out) {
+            auto reply = Json::toObject(out);
 
-        try {
-            res.data = nlohmann::json::parse(reply.value("body").toString().toStdString());
-            res.success = true;
-        } catch (...) {
+            try {
+                res.data = nlohmann::json::parse(reply.value("body").toString().toStdString());
+                res.success = true;
+            } catch (...) {
+            }
+
+            GA_destroy_json(out);
         }
 
         decrBusy();
