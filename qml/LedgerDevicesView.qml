@@ -286,6 +286,40 @@ MainPage {
             }
             contentItem: ColumnLayout {
                 spacing: 0
+                Loader {
+                    id: ledger_unsupported_warning
+                    Layout.fillWidth: true
+                    Layout.margins: 16
+                    active: self.device?.appName === 'Bitcoin' && self.device?.appVersion === '2.1.1'
+                    visible: active
+                    sourceComponent: GPane {
+                        padding: 8
+                        background: Rectangle {
+                            border.width: 0.5
+                            border.color: 'white'
+                            radius: 8
+                            opacity: 0.5
+                            color: 'transparent'
+                        }
+                        contentItem: ColumnLayout {
+                            spacing: 12
+                            Label {
+                                Layout.alignment: Qt.AlignCenter
+                                Layout.fillWidth: true
+                                Layout.preferredWidth: 0
+                                text: qsTrId('Install Bitcoin Legacy app on your Ledger')
+                                horizontalAlignment: Label.AlignHCenter
+                                wrapMode: Label.WrapAnywhere
+                            }
+                            Label {
+                                Layout.alignment: Qt.AlignCenter
+                                textFormat: Text.RichText
+                                text: UtilJS.link('https://help.blockstream.com/hc/en-us/articles/16789393282201-How-do-I-use-my-Ledger-Nano-S-or-X-with-Green#h_01GW4FRJXCRRRGC4QAX0HC02S2', qsTrId('id_read_more'))
+                                onLinkActivated: Qt.openUrlExternally(link)
+                            }
+                        }
+                    }
+                }
                 Pane {
                     Layout.fillWidth: true
                     padding: 0
@@ -326,8 +360,10 @@ MainPage {
                     model: {
                         const networks = []
                         const supports_liquid = device.type === Device.LedgerNanoS
-                        networks.push({ id: 'mainnet' })
-                        networks.push({ id: 'electrum-mainnet' })
+                        if (!ledger_unsupported_warning.active) {
+                            networks.push({ id: 'mainnet' })
+                            networks.push({ id: 'electrum-mainnet' })
+                        }
                         if (supports_liquid) {
                             networks.push({ id: 'liquid' })
                         }
