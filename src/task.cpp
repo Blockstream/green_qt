@@ -203,19 +203,14 @@ void TaskGroup::update()
         setStatus(Status::Active);
     }
 
-//    qDebug() << "=====================";
     for (auto task : tasks) {
-//        qDebug() << "CHECK" << task;
-//        qDebug() << "CHECK" << task->type();
         bool update = task->m_status == Task::Status::Ready || task->m_status == Task::Status::Active;
-//        qDebug() << "      " << update;
         if (update) {
             for (auto dependency : task->m_inputs) {
                 if (dependency->m_status != Task::Status::Finished) update = false;
             }
             if (update) task->update();
         }
-//        qDebug() << "  **";
     }
 }
 
@@ -247,11 +242,7 @@ namespace {
             { "spv_enabled", session->enableSPV() }
         };
         if (!session->proxy().isEmpty()) {
-//            QTcpSocket socket;
-//            socket.connectToHost(session->proxyHost(), session->proxyPort());
-//            if (socket.waitForConnected(1000)) {
-                params.insert("proxy", session->proxy());
-//            }
+            params.insert("proxy", session->proxy());
         }
         if (session->usePersonalNode()) {
             const auto url = session->electrumUrl();
