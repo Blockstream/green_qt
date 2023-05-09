@@ -74,15 +74,6 @@ void LedgerDeviceController::setWallet(Wallet* wallet)
     if (m_wallet == wallet) return;
     m_wallet = wallet;
     emit walletChanged();
-
-    if (m_wallet) {
-        // TODO
-        //        m_wallet->setDevice(m_device);
-
-        QObject::connect(m_wallet, &Wallet::contextChanged, this, [=] {
-            setActive(m_wallet->context());
-        });
-    }
 }
 
 void LedgerDeviceController::initialize()
@@ -97,13 +88,12 @@ void LedgerDeviceController::setStatus(const QString& status)
     emit statusChanged();
 }
 
-void LedgerDeviceController::setActive(bool active)
+void LedgerDeviceController::login()
 {
-    if (m_active == active) return;
-    m_active = active;
-    emit activeChanged(m_active);
+    if (m_wallet && m_wallet->context()) return;
 
     setContext(new Context(this));
+    m_context->setWallet(m_wallet);
     m_context->setNetwork(m_network);
 
     auto group = new TaskGroup(this);
@@ -130,6 +120,8 @@ void LedgerDeviceController::setActive(bool active)
 
     m_dispatcher->add(group);
 
+    login->then(load_accounts);
+
     connect(group, &TaskGroup::finished, this, [=] {
         m_wallet->setContext(m_context);
         m_context = nullptr;
@@ -137,28 +129,6 @@ void LedgerDeviceController::setActive(bool active)
         setStatus("done");
         emit loginDone();
     });
-}
-
-void LedgerDeviceController::signup()
-{
-//    if (!m_device) return;
-//    if (!m_session->isConnected()) return;
-
-//    auto device_details = device_details_from_device(m_device);
-//    auto handler = new RegisterHandler(device_details, m_session);
-
-//    QObject::connect(handler, &Handler::done, this, [=] {
-//        Q_ASSERT(m_wallet_hash_id == handler->walletHashId());
-//        login();
-//    });
-//    QObject::connect(handler, &Handler::resolver, this, [](Resolver* resolver) {
-//        resolver->resolve();
-//    });
-//    QObject::connect(handler, &Handler::error, this, [=]() {
-//        setStatus("locked");
-//    });
-
-//    handler->exec();
 }
 
 void LedgerDeviceController::setEnabled(bool enabled)
@@ -272,6 +242,9 @@ void LedgerIdentifyTask::update()
         const auto wallet = WalletManager::instance()->walletWithHashId(wallet_hash_id, false);
         if (wallet) {
             m_controller->setWallet(wallet);
+            const auto context = wallet->context();
+            if (context) context->setDevice(device);
+            wallet->updateDeviceDetails(device->details());
         }
 
         setStatus(Status::Finished);
@@ -318,16 +291,18 @@ void LedgerLoginTask::update()
     group()->add(session_login);
 
     connect(session_login, &Task::finished, this, [=] {
-        // TODO
-        // Q_ASSERT(m_controller->m_wallet_hash_id == login->walletHashId());
+        auto wallet = m_controller->wallet();
 
-        const auto wallet = WalletManager::instance()->createWallet(network, m_controller->m_wallet_hash_id);
-        wallet->m_is_persisted = true;
-        wallet->setName(QString("%1 on %2").arg(network->displayName()).arg(device->name()));
-        wallet->updateHashId(m_controller->m_wallet_hash_id);
-        WalletManager::instance()->insertWallet(wallet);
+        if (!wallet) {
+            wallet = WalletManager::instance()->createWallet(network, m_controller->m_wallet_hash_id);
+            wallet->m_is_persisted = true;
+            wallet->setName(QString("%1 on %2").arg(network->displayName()).arg(device->name()));
+            wallet->updateHashId(m_controller->m_wallet_hash_id);
+            WalletManager::instance()->insertWallet(wallet);
+            m_context->setWallet(wallet);
+        }
 
-        m_context->setWallet(wallet);
+        wallet->updateDeviceDetails(device->details());
         m_context->setDevice(device);
         m_context->session()->m_ready = true;
         // TODO should propagate to context

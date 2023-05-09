@@ -238,19 +238,19 @@ MainPage {
             }
             Label {
                 Layout.fillWidth: true
-                text: controller.wallet ? controller.wallet.name : ''
+                text: controller.wallet?.name ?? ''
             }
             RowLayout {
                 Layout.fillWidth: false
                 Layout.minimumWidth: 150
                 GButton {
                     visible: !controller.wallet || !controller.wallet.context
-                    enabled: !controller.active
+                    enabled: !controller.wallet?.context && !controller.dispatcher.busy
                     text: qsTrId('id_login')
-                    onClicked: controller.active = true
+                    onClicked: controller.login()
                 }
                 GButton {
-                    visible: controller.wallet && controller.wallet.context
+                    visible: controller.wallet?.context ?? false
                     text: qsTrId('id_go_to_wallet')
                     onClicked: navigation.set({ view: self.network.key, wallet: controller.wallet.id })
                 }

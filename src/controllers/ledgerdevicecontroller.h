@@ -32,7 +32,6 @@ class LedgerDeviceController : public Controller
     Q_PROPERTY(Wallet* wallet READ wallet NOTIFY walletChanged)
     Q_PROPERTY(QString firmwareVersion READ firmwareVersion NOTIFY firmwareChanged)
     Q_PROPERTY(bool enabled READ enabled NOTIFY enabledChanged)
-    Q_PROPERTY(bool active READ active WRITE setActive NOTIFY activeChanged)
     QML_ELEMENT
 public:
     LedgerDeviceController(QObject* parent = nullptr);
@@ -48,9 +47,8 @@ public:
     void setWallet(Wallet* wallet);
     QString firmwareVersion() const { return m_fw_version.toString(); }
     bool enabled() const { return m_enabled; }
-    bool active() const { return m_active; }
 public slots:
-    void setActive(bool active);
+    void login();
 
 private slots:
     void initialize();
@@ -64,12 +62,8 @@ signals:
     void walletChanged();
     void firmwareChanged();
     void appChanged();
-    void activeChanged(bool active);
     void enabledChanged();
     void loginDone();
-private:
-    void login();
-    void signup();
 public:
     void setEnabled(bool enabled);
     void setStatus(const QString& status);
@@ -83,8 +77,6 @@ public:
     Wallet* m_wallet{nullptr};
     qreal m_progress{0};
     QVersionNumber m_fw_version;
-    bool m_active{false};
-    // LoginHandler* m_login_handler{nullptr};
     bool m_enabled{false};
 };
 
