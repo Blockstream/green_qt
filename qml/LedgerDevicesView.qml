@@ -190,7 +190,10 @@ MainPage {
             id: controller
             device: self.device
             network: self.network
-            onLoginDone: Analytics.recordEvent('wallet_login', AnalyticsJS.segmentationWalletLogin(controller.wallet, { method: 'hardware' }))
+            onLoginDone: {
+                Analytics.recordEvent('wallet_login', AnalyticsJS.segmentationWalletLogin(controller.wallet, { method: 'hardware' }))
+                navigation.push({ view: self.network.key, wallet: controller.wallet.id })
+            }
         }
         contentItem: RowLayout {
             spacing: constants.s1
