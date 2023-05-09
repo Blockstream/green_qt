@@ -240,6 +240,12 @@ MainPage {
                 Layout.fillWidth: true
                 text: controller.wallet?.name ?? ''
             }
+            ProgressBar {
+                Layout.maximumWidth: 32
+                Layout.minimumWidth: 32
+                visible: controller.dispatcher.busy
+                indeterminate: visible
+            }
             RowLayout {
                 Layout.fillWidth: false
                 Layout.minimumWidth: 150
