@@ -2,27 +2,28 @@
 from argparse import ArgumentParser
 from datetime import date
 from git import Repo
-from semver import VersionInfo
-
+from semver import Version
+import re
 
 if __name__ == '__main__':
     parser = ArgumentParser()
-    parser.add_argument('--major', type=int, required=True)
-    parser.add_argument('--minor', type=int, required=True)
-    parser.add_argument('--patch', type=int, required=True)
+    parser.add_argument('version')
 
     args = parser.parse_args()
 
     repo = Repo('.')
     print("Currently active branch: {}".format(repo.active_branch))
 
-    next_version = VersionInfo(args.major, args.minor, args.patch)
+    next_version = Version.parse(args.version)
+    print(next_version)
 
-    with open('version.pri') as file:
-        major = int(next(file).split('=')[1])
-        minor = int(next(file).split('=')[1])
-        patch = int(next(file).split('=')[1])
-        current_version = VersionInfo(major, minor, patch)
+    with open('CMakeLists.txt') as file:
+        cmake = file.read()
+
+    for line in cmake.splitlines():
+        if line.startswith('project'):
+            current_version = Version.parse(line.split(' ')[2])
+            break
 
     assert current_version < next_version
 
@@ -32,14 +33,12 @@ if __name__ == '__main__':
         file.write(changelog)
 
     repo.git.add('CHANGELOG.md')
-    repo.git.commit('-m', 'Close version {} in CHANGELOG.md'.format(current_version))
+    repo.git.commit('-m', 'app: close version {} in changelog'.format(current_version))
 
-    with open('version.pri', 'w') as file:
-        file.write('VERSION_MAJOR={}\n'.format(next_version.major))
-        file.write('VERSION_MINOR={}\n'.format(next_version.minor))
-        file.write('VERSION_PATCH={}\n'.format(next_version.patch))
+    with open('CMakeLists.txt', 'w') as file:
+        file.write(cmake.replace(str(current_version), str(next_version)))
 
-    repo.git.add('version.pri')
-    repo.git.commit('-m', 'Bump to version {}'.format(next_version))
+    repo.git.add('CMakeLists.txt')
+    repo.git.commit('-m', 'app: bump to version {}'.format(next_version))
 
     print('version updated', current_version, '->', next_version)
