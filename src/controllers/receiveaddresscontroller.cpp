@@ -69,7 +69,7 @@ QString ReceiveAddressController::uri() const
     amount = wallet->convert({{ unit, amount }}).value("btc").toString();
     if (amount.toDouble() > 0) {
         if (network->isLiquid()) {
-            return QString("%1:%2?assetid=%3amount=%4")
+            return QString("%1:%2?assetid=%3&amount=%4")
                     .arg(network->data().value("bip21_prefix").toString())
                     .arg(m_address)
                     .arg(network->policyAsset())
