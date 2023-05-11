@@ -25,19 +25,12 @@ LedgerDevice::LedgerDevice(DevicePrivate* d, QObject* parent)
             const auto app_name = activity->name();
             const auto app_version = activity->version();
 
-//            qInfo() << "device:" << device->name()
-//                    << "app_name:" << app_name
-//                    << "app_version:" << app_version;
-
-//            m_controller->setAppVersion(app_version);
-            setAppVersion(app_version.toString());
-            setAppName(app_name);
+            setApp(app_name, app_version);
         });
-//        QObject::connect(activity, &Activity::failed, this, [this, activity] {
-//            activity->deleteLater();
-//            m_controller->setStatus("error");
-//            setStatus(Status::Failed);
-//        });
+        QObject::connect(activity, &Activity::failed, this, [this, activity] {
+            activity->deleteLater();
+            setState(StateLocked);
+        });
         ActivityManager::instance()->exec(activity);
     });
 }
@@ -69,7 +62,11 @@ QString LedgerDevice::name() const
 QJsonObject LedgerDevice::details() const
 {
     const QString type = d->m_type == LedgerNanoS ? "nanos" : "nanox";
-    return {{"type", type}, {"version", m_app_version}, {"name", name()}};
+    return {
+        { "type", type },
+        { "version", m_app_version.toString() },
+        { "name", name() },
+    };
 }
 
 DeviceCommand* LedgerDevice::exchange(const QByteArray& data) {
@@ -241,18 +238,33 @@ GetAppActivity* LedgerDevice::getApp()
     return new GetAppActivity(this);
 }
 
-void LedgerDevice::setAppVersion(const QString& app_version)
+bool LedgerDevice::compatible() const
 {
-    if (m_app_version == app_version) return;
-    m_app_version = app_version;
-    emit appVersionChanged();
+    if (m_app_name == "Bitcoin") return m_app_version < QVersionNumber{2, 1, 1};
+    return true;
 }
 
-void LedgerDevice::setAppName(const QString& app_name)
+void LedgerDevice::setState(State state)
 {
-    if (m_app_name == app_name) return;
-    m_app_name= app_name;
-    emit appNameChanged();
+    if (m_state == state) return;
+    m_state = state;
+    emit stateChanged();
+}
+
+void LedgerDevice::setApp(const QString& name, const QVersionNumber& version)
+{
+    if (m_app_name == name && m_app_version == version) return;
+    m_app_name = name;
+    m_app_version = version;
+    emit appChanged();
+
+    if (m_app_name.contains("OLOS")) {
+        setState(StateDashboard);
+    } else if (!m_app_name.isEmpty() && !m_app_version.isNull()) {
+        setState(StateApp);
+    } else {
+        setState(StateUnknown);
+    }
 }
 
 DevicePrivate* DevicePrivate::get(LedgerDevice* device)

@@ -77,10 +77,20 @@ class DevicePrivate;
 class LedgerDevice : public Device
 {
     Q_OBJECT
-    Q_PROPERTY(QString appVersion READ appVersion NOTIFY appVersionChanged)
-    Q_PROPERTY(QString appName READ appName NOTIFY appNameChanged)
+    Q_PROPERTY(State state READ state NOTIFY stateChanged)
+    Q_PROPERTY(QString appName READ appName NOTIFY appChanged)
+    Q_PROPERTY(QString appVersion READ appVersion NOTIFY appChanged)
+    Q_PROPERTY(bool compatible READ compatible NOTIFY appChanged)
     QML_ELEMENT
 public:
+    enum State {
+        StateUnknown,
+        StateLocked,
+        StateDashboard,
+        StateApp
+    };
+    Q_ENUM(State)
+
     explicit LedgerDevice(DevicePrivate* d, QObject* parent = nullptr);
     ~LedgerDevice();
     Vendor vendor() const override { return Device::Ledger; }
@@ -104,21 +114,25 @@ public:
     GetFirmwareActivity* getFirmware();
     GetAppActivity* getApp();
 
-    QString appVersion() const { return m_app_version; }
-    void setAppVersion(const QString& app_version);
+    State state() const { return m_state; }
+    void setState(State state);
 
+    QString appVersion() const { return m_app_version.toString(); }
     QString appName() const { return m_app_name; }
-    void setAppName(const QString& app_name);
+    void setApp(const QString& name, const QVersionNumber& version);
+
+    bool compatible() const;
 
 signals:
-    void appVersionChanged();
-    void appNameChanged();
+    void stateChanged();
+    void appChanged();
 
 private:
     friend class DevicePrivate;
     DevicePrivate* const d;
-    QString m_app_version;
+    State m_state{StateUnknown};
     QString m_app_name;
+    QVersionNumber m_app_version;
 };
 
 #endif // GREEN_LEDGERDEVICE_H

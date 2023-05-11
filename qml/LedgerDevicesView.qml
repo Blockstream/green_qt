@@ -48,7 +48,6 @@ MainPage {
             GButton {
                 text: qsTrId('id_blockstream_store')
                 highlighted: true
-                large: true
                 onClicked: Qt.openUrlExternally('https://store.blockstream.com/product-category/physical_storage/')
                 font.capitalization: Font.MixedCase
                 leftPadding: 18
@@ -127,7 +126,19 @@ MainPage {
                             font.pixelSize: 16
                         }
                         Label {
-                            text: (self.device?.appName ?? '') + ' ' + (self.device?.appVersion ?? '')
+                            text: {
+                                switch (self.device?.state ?? LedgerDevice.StateUnknown) {
+                                    case LedgerDevice.StateApp:
+                                        return self.device.appName + ' ' + self.device.appVersion
+                                    case LedgerDevice.StateDashboard:
+                                        return qsTrId('id_firmware') + ' ' + self.device.appVersion
+                                    case LedgerDevice.StateLocked:
+                                        return qstrId('id_locked')
+                                    case LedgerDevice.StateUnknown:
+                                    default:
+                                        return qsTrId('id_loading')
+                                }
+                            }
                         }
                         RowLayout {
                             spacing: 16
@@ -290,7 +301,7 @@ MainPage {
                     id: ledger_unsupported_warning
                     Layout.fillWidth: true
                     Layout.margins: 16
-                    active: self.device?.appName === 'Bitcoin' && self.device?.appVersion === '2.1.1'
+                    active: !self.device.compatible
                     visible: active
                     sourceComponent: GPane {
                         padding: 8
