@@ -145,7 +145,7 @@ ColumnLayout {
     }
     Loader {
         Layout.fillWidth: true
-        active: self.device.state === JadeDevice.StateUninitialized
+        active: self.device.state === JadeDevice.StateUninitialized || self.device.state === JadeDevice.StateUnsaved
         visible: active
         sourceComponent: Page {
             JadeSetupController {
@@ -154,14 +154,14 @@ ColumnLayout {
             }
             background: null
             header: Label {
-                text: qsTrId('id_setup')
+                text: qsTrId('id_connect_your_jade_to_use_it')
                 font.pixelSize: 20
                 font.styleName: 'Bold'
                 bottomPadding: constants.s1
             }
             contentItem: RowLayout {
                 GButton {
-                    text: qsTrId('id_setup')
+                    text: qsTrId('id_setup_your_jade')
                     onClicked: controller.setup("mainnet")
                     enabled: !controller.dispatcher.busy
                 }

@@ -76,7 +76,7 @@ void JadeSetupTask::update()
     const auto device = m_controller->device();
     if (!device) return;
 
-    if (device->state() != JadeDevice::StateUninitialized) {
+    if (!(device->state() == JadeDevice::StateUninitialized || device->state() == JadeDevice::StateUnsaved)) {
         setStatus(Status::Finished);
         return;
     }
