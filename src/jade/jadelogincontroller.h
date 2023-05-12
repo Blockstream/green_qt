@@ -84,6 +84,9 @@ public:
     Wallet* wallet() const { return m_wallet; }
     void setWallet(Wallet* wallet);
 
+    QString walletHashId() const { return m_wallet_hash_id; }
+    void setWalletHashId(const QString& wallet_hash_id);
+
 public slots:
     void login();
 
@@ -95,11 +98,11 @@ signals:
     void invalidPin();
     void loginDone();
 public:
-    JadeDevice* m_device{nullptr};
     QString m_network;
     bool m_enabled{false};
-    QString m_wallet_hash_id;
     Wallet* m_wallet{nullptr};
+private:
+    QString m_wallet_hash_id;
 };
 
 class JadeUnlockTask : public Task

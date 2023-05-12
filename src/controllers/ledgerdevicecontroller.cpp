@@ -297,7 +297,6 @@ void LedgerLoginTask::update()
             wallet = WalletManager::instance()->createWallet(network, m_controller->m_wallet_hash_id);
             wallet->m_is_persisted = true;
             wallet->setName(QString("%1 on %2").arg(network->displayName()).arg(device->name()));
-            wallet->updateHashId(m_controller->m_wallet_hash_id);
             WalletManager::instance()->insertWallet(wallet);
             m_context->setWallet(wallet);
         }

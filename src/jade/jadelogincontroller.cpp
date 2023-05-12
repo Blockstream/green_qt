@@ -176,11 +176,26 @@ void JadeLoginController::setEnabled(bool enabled)
     emit isEnabledChanged();
 }
 
-void JadeLoginController::setWallet(Wallet *wallet)
+void JadeLoginController::setWallet(Wallet* wallet)
 {
     if (m_wallet == wallet) return;
     m_wallet = wallet;
     emit walletChanged();
+    if (m_wallet && m_device) {
+        m_wallet->updateDeviceDetails(m_device->details());
+
+        const auto context = m_wallet->context();
+        if (context && !context->device()) {
+            context->setDevice(m_device);
+        }
+    }
+}
+
+void JadeLoginController::setWalletHashId(const QString& wallet_hash_id)
+{
+    if (m_wallet_hash_id == wallet_hash_id) return;
+    m_wallet_hash_id = wallet_hash_id;
+    setWallet(WalletManager::instance()->walletWithHashId(m_wallet_hash_id, false));
 }
 
 void JadeLoginController::login()
@@ -267,8 +282,10 @@ void JadeIdentifyTask::update()
     if (device->state() == JadeDevice::StateLocked) return;
     if (device->state() == JadeDevice::StateTemporary) return;
 
-    const auto network = m_controller->ensureContext()->network();
+    const auto network = NetworkManager::instance()->network(m_controller->network());
     if (!network) return;
+
+    auto context = m_controller->ensureContext();
 
     setStatus(Status::Active);
 
@@ -287,7 +304,7 @@ void JadeIdentifyTask::update()
         const auto identifier = Json::toObject(output);
         GA_destroy_json(output);
 
-        m_controller->m_wallet_hash_id = identifier.value("wallet_hash_id").toString();
+        m_controller->setWalletHashId(identifier.value("wallet_hash_id").toString());
 
         setStatus(Status::Finished);
     });
@@ -319,7 +336,7 @@ void JadeLoginTask::update()
         if (device->state() == JadeDevice::StateLocked) return;
         if (device->state() == JadeDevice::StateTemporary) return;
 
-        if (m_controller->m_wallet_hash_id.isEmpty()) return;
+        if (m_controller->walletHashId().isEmpty()) return;
 
         const auto device_details = device_details_from_device(device);
         auto connect_session = new SessionConnectTask(context->session());
@@ -344,7 +361,7 @@ void JadeLoginTask::update()
     if (m_status == Status::Active) {
         if (context->m_wallet_hash_id.isEmpty()) return;
 
-        if (context->m_wallet_hash_id != m_controller->m_wallet_hash_id) {
+        if (context->m_wallet_hash_id != m_controller->walletHashId()) {
             setError("id_mismatch_wallet_hash_id");
             setStatus(Status::Failed);
             return;
@@ -357,6 +374,7 @@ void JadeLoginTask::update()
             wallet->setName(QString("%1 on %2").arg(network->displayName()).arg(device->name()));
             WalletManager::instance()->insertWallet(wallet);
         }
+        wallet->updateDeviceDetails(device->details());
 
         context->setDevice(device);
         context->setWallet(wallet);
