@@ -4,9 +4,11 @@
 #include <QIcon>
 #include <QQmlApplicationEngine>
 #include <QQuickStyle>
+#include <QQuickWindow>
 #include <QStandardPaths>
 #include <QStyleHints>
 #include <QtPlugin>
+#include <QSGRendererInterface>
 #include <QTranslator>
 #include <QUrl>
 #include <QWindow>
@@ -59,6 +61,19 @@ static QFile g_log_file;
 #include <boost/log/core.hpp>
 #include <boost/log/sinks/async_frontend.hpp>
 #include <boost/log/sinks/basic_sink_backend.hpp>
+
+static QString GraphicsAPIToString(QSGRendererInterface::GraphicsApi api) {
+    switch (api) {
+        case QSGRendererInterface::Unknown: return "Unknown";
+        case QSGRendererInterface::Software: return "Software";
+        case QSGRendererInterface::OpenVG: return "OpenVG";
+        case QSGRendererInterface::OpenGL: return "OpenGL";
+        case QSGRendererInterface::Direct3D11: return "Direct3D11";
+        case QSGRendererInterface::Vulkan: return "Vulkan";
+        case QSGRendererInterface::Metal: return "Metal";
+        case QSGRendererInterface::Null: return "Null";
+    }
+}
 
 void gMessageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
@@ -208,7 +223,6 @@ int main(int argc, char *argv[])
     qInfo() << "  Product Version:" << qPrintable(QSysInfo::productVersion());
     qInfo() << "Data directory:" << qPrintable(g_data_location);
     qInfo() << "Log file:" << qPrintable(g_log_file.fileName());
-
     gdk::init(g_args);
 
     // Reset the locale that is used for number formatting, see:
@@ -300,6 +314,12 @@ int main(int argc, char *argv[])
     engine.load(QUrl(QStringLiteral("main.qml")));
     if (engine.rootObjects().isEmpty())
         return -1;
+
+    auto window = qobject_cast<QQuickWindow*>(engine.rootObjects().first());
+    if (!window) return -1;
+
+    qDebug() << "Window:";
+    qDebug() << "  Graphics API: " << qPrintable(GraphicsAPIToString(window->rendererInterface()->graphicsApi()));
 
     int ret = hid_init();
     if (ret != 0) return ret;
