@@ -9,12 +9,9 @@ import "util.js" as UtilJS
 
 Pane {
     id: self
-    property bool comingSoon
     property Network network
     property JadeDevice device
     Layout.fillWidth: true
-//    Layout.preferredHeight: 60
-//    enabled: controller.enabled
     background: Item {
         Rectangle {
             width: parent.width
@@ -28,7 +25,7 @@ Pane {
     topPadding: 8
     JadeLoginController {
         id: controller
-        device: comingSoon ? null : self.device
+        device: self.device
         network: self.network.id
         onInvalidPin: self.ToolTip.show(qsTrId('id_invalid_pin'), 2000);
         onLoginDone: () => {
@@ -91,7 +88,6 @@ Pane {
             indeterminate: visible
         }
         RowLayout {
-            visible: !comingSoon
             Layout.fillWidth: false
             Layout.minimumWidth: 150
             Loader {
@@ -128,27 +124,6 @@ Pane {
                     text: qsTrId('id_go_to_wallet')
                     onClicked: navigation.push({ view: self.network.key, wallet: controller.wallet.id })
                 }
-            }
-        }
-        RowLayout {
-            visible: comingSoon
-            Layout.fillWidth: false
-            Layout.minimumWidth: 150
-            Label {
-                background: Rectangle {
-                    color: 'yellow'
-                    radius: height / 2
-                }
-                color: 'black'
-                leftPadding: 8
-                rightPadding: 8
-                topPadding: 2
-                bottomPadding: 2
-                text: qsTrId('id_coming_soon')
-                font.pixelSize: 10
-                font.weight: 400
-                font.styleName: 'Regular'
-                font.capitalization: Font.AllUppercase
             }
         }
 //        TaskDispatcherInspector {

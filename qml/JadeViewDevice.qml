@@ -289,25 +289,24 @@ ColumnLayout {
                             networks.push({ id: 'mainnet' })
                             networks.push({ id: 'electrum-mainnet' })
                             networks.push({ id: 'liquid' })
-                            networks.push({ id: 'electrum-liquid', comingSoon: true })
+                            networks.push({ id: 'electrum-liquid' })
                         }
                         if (Settings.enableTestnet && (nets === 'ALL' || nets === 'TEST')) {
                             networks.push({ id: 'testnet' })
                             networks.push({ id: 'electrum-testnet' })
                             networks.push({ id: 'testnet-liquid' })
-                            networks.push({ id: 'electrum-testnet-liquid', comingSoon: true })
+                            networks.push({ id: 'electrum-testnet-liquid' })
                         }
                         if (env !== 'Production' && (nets === 'ALL' || nets === 'TEST')) {
                             networks.push({ id: 'localtest' })
                             networks.push({ id: 'electrum-localtest' })
                             networks.push({ id: 'localtest-liquid' })
-                            networks.push({ id: 'electrum-localtest-liquid', comingSoon: true })
+                            networks.push({ id: 'electrum-localtest-liquid' })
                         }
 
                         return networks
                     }
                     delegate: JadeViewDeviceNetwork {
-                        comingSoon: !!modelData.comingSoon
                         network: NetworkManager.network(modelData.id)
                         device: self.device
                     }
