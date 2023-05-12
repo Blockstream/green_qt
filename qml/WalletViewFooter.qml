@@ -38,16 +38,17 @@ StatusBar {
             sourceComponent: DeviceBadge {
                 device: self.context.device
                 details: self.wallet.deviceDetails
-                background: MouseArea {
+                TapHandler {
                     enabled: self.context.device
-                    anchors.fill: parent
                     cursorShape: Qt.PointingHandCursor
-                    onClicked: {
+                    onTapped: {
                         const device = self.context.device
+                        console.log('click man')
+                        console.log(self.context, device)
                         if (device.type === Device.BlockstreamJade) {
-                            navigation.set({ view: 'jade', device: device.uuid })
+                            window.navigation.push({ view: 'jade', device: device.uuid })
                         } else if (device.vendor === Device.Ledger) {
-                            navigation.set({ view: 'ledger', device: device.uuid })
+                            window.navigation.push({ view: 'ledger', device: device.uuid })
                         }
                     }
                 }
