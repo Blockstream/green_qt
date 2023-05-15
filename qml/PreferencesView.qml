@@ -307,7 +307,7 @@ MainPage {
                 text: qsTrId('id_advanced')
             }
             Field {
-                name: 'Enable Experimental Features'
+                name: qsTrId('id_enable_experimental_features')
                 GSwitch {
                     checked: Settings.enableExperimental
                     onToggled: Settings.enableExperimental = checked

@@ -65,16 +65,38 @@ Dacă aceste instrucțiuni nu au fost de ajutor sau dacă nu aveți o frază de 
         <translation>Expirare 2FA</translation>
     </message>
     <message>
+        <source>id_2fa_isnt_set_up_yetnnyou_can</source>
+        <translation>2FA isn’t set up yet.
+
+You can choose your favourite 2FA method among an authenticator app, email, SMS or a call.</translation>
+    </message>
+    <message>
         <source>id_2fa_methods</source>
         <translation>Metode 2FA</translation>
+    </message>
+    <message>
+        <source>id_2fa_protected</source>
+        <translation>2FA Protected</translation>
     </message>
     <message>
         <source>id_2fa_reset_in_progress</source>
         <translation>2FA în curs de resetare</translation>
     </message>
     <message>
+        <source>id_2fa_shield</source>
+        <translation>2FA Shield</translation>
+    </message>
+    <message>
+        <source>id_2fa_shield_account</source>
+        <translation>2FA Shield Account</translation>
+    </message>
+    <message>
         <source>id_2fa_threshold</source>
         <translation>Limită pentru autentificarea în doi pași (2FA)</translation>
+    </message>
+    <message>
+        <source>id_2of2</source>
+        <translation>2of2</translation>
     </message>
     <message>
         <source>id_2of3</source>
@@ -83,6 +105,14 @@ Dacă aceste instrucțiuni nu au fost de ajutor sau dacă nu aveți o frază de 
     <message>
         <source>id_2of3_account</source>
         <translation>Cont 2-din-3</translation>
+    </message>
+    <message>
+        <source>id_2of3_with_2fa</source>
+        <translation>2of3 with 2FA</translation>
+    </message>
+    <message>
+        <source>id_2of3_with_2fa_shield</source>
+        <translation>2of3 with 2FA Shield</translation>
     </message>
     <message>
         <source>id_4_hours</source>
@@ -130,11 +160,35 @@ Dacă aceste instrucțiuni nu au fost de ajutor sau dacă nu aveți o frază de 
     </message>
     <message>
         <source>id_account</source>
-        <translation>CONT</translation>
+        <translation>Account</translation>
+    </message>
+    <message>
+        <source>id_account__asset</source>
+        <translation>Account &amp; Asset</translation>
+    </message>
+    <message>
+        <source>id_account_address</source>
+        <translation>Account Address</translation>
+    </message>
+    <message>
+        <source>id_account_archived</source>
+        <translation>Account archived</translation>
+    </message>
+    <message>
+        <source>id_account_balance</source>
+        <translation>Account Balance</translation>
     </message>
     <message>
         <source>id_account_extended_public_keys</source>
         <translation>Account Extended Public Keys</translation>
+    </message>
+    <message>
+        <source>id_account_for_special_assets</source>
+        <translation>Account for special assets, monitored or authorized by the asset issuer.</translation>
+    </message>
+    <message>
+        <source>id_account_has_been_archived</source>
+        <translation>Account has been archived</translation>
     </message>
     <message>
         <source>id_account_id</source>
@@ -163,6 +217,10 @@ Dacă aceste instrucțiuni nu au fost de ajutor sau dacă nu aveți o frază de 
     <message>
         <source>id_actions</source>
         <translation>Actions</translation>
+    </message>
+    <message>
+        <source>id_add_2fa_account</source>
+        <translation>Add 2FA Account</translation>
     </message>
     <message>
         <source>id_add_a_note_only_you_can_see_it</source>
@@ -201,12 +259,20 @@ Dacă aceste instrucțiuni nu au fost de ajutor sau dacă nu aveți o frază de 
         <translation>Adăugați un cont nou</translation>
     </message>
     <message>
+        <source>id_add_note</source>
+        <translation>Add Note</translation>
+    </message>
+    <message>
         <source>id_add_recipient</source>
         <translation>Add Recipient</translation>
     </message>
     <message>
         <source>id_add_wallet</source>
         <translation>Adăugați un portofel</translation>
+    </message>
+    <message>
+        <source>id_adding_a_2fa</source>
+        <translation>adding a 2FA</translation>
     </message>
     <message>
         <source>id_additional_networks</source>
@@ -227,6 +293,10 @@ Dacă aceste instrucțiuni nu au fost de ajutor sau dacă nu aveți o frază de 
     <message>
         <source>id_address_copied_to_clipboard</source>
         <translation>Adresă copiată în clipboard</translation>
+    </message>
+    <message>
+        <source>id_address_type</source>
+        <translation>Address Type</translation>
     </message>
     <message>
         <source>id_address_verified</source>
@@ -353,6 +423,10 @@ Dacă aceste instrucțiuni nu au fost de ajutor sau dacă nu aveți o frază de 
         <translation>Archived</translation>
     </message>
     <message>
+        <source>id_archived_account</source>
+        <translation>Archived Account</translation>
+    </message>
+    <message>
         <source>id_archived_accounts</source>
         <translation>Archived Accounts</translation>
     </message>
@@ -457,6 +531,10 @@ Dacă aceste instrucțiuni nu au fost de ajutor sau dacă nu aveți o frază de 
         <translation>Frază de recuperare</translation>
     </message>
     <message>
+        <source>id_backup_recovery_phrase</source>
+        <translation>Backup Recovery Phrase</translation>
+    </message>
+    <message>
         <source>id_backup_the_recovery_mnemonic</source>
         <translation>Faceți o copie de siguranță pentru fraza mnemonică sau cheia xpub pentru a recupera fondurile din contul dvs 2-din-3</translation>
     </message>
@@ -471,6 +549,10 @@ Dacă aceste instrucțiuni nu au fost de ajutor sau dacă nu aveți o frază de 
     <message>
         <source>id_be_sure_your_recovery_phrase_is</source>
         <translation>Asigurați-vă că aveți o copie a frazei de recuperare înainte de a șterge portofelul</translation>
+    </message>
+    <message>
+        <source>id_before_you_backup</source>
+        <translation>Before You Backup</translation>
     </message>
     <message>
         <source>id_biometric_login_is_disabled</source>
@@ -566,7 +648,7 @@ Dacă aceste instrucțiuni nu au fost de ajutor sau dacă nu aveți o frază de 
     </message>
     <message>
         <source>id_blockstream_green_supports_both</source>
-        <translation>Blockstream Green acceptă rețelele Bitcoin și Liquid. Nu te îngrijora, poți crea un portofel pentru o altă rețea mai tîrziu.</translation>
+        <translation>Blockstream Green supports both Bitcoin and the Liquid Network.</translation>
     </message>
     <message>
         <source>id_blockstream_greennsimple_and</source>
@@ -641,6 +723,14 @@ Dacă aceste instrucțiuni nu au fost de ajutor sau dacă nu aveți o frază de 
         <translation>Schimbarea ratei de referință va reseta la 0 limita de cheltuire fara 2FA. Vă rugăm să restabiliți limita 2FA manual.</translation>
     </message>
     <message>
+        <source>id_cheaper_and_more_private</source>
+        <translation>Cheaper and more private singlesig option. Addresses are Bech32m.</translation>
+    </message>
+    <message>
+        <source>id_cheaper_singlesig_option</source>
+        <translation>Cheaper singlesig option. Addresses are Native SegWit Bech32.</translation>
+    </message>
+    <message>
         <source>id_check_device</source>
         <translation>Check Device</translation>
     </message>
@@ -651,6 +741,10 @@ Dacă aceste instrucțiuni nu au fost de ajutor sau dacă nu aveți o frază de 
     <message>
         <source>id_check_for_updates_on_startup</source>
         <translation>Check for updates on startup</translation>
+    </message>
+    <message>
+        <source>id_check_our_6_easy_steps_to_be</source>
+        <translation>Check our 6 easy steps to be able to send and receive AMP assets.</translation>
     </message>
     <message>
         <source>id_check_your_backup</source>
@@ -667,6 +761,18 @@ Dacă aceste instrucțiuni nu au fost de ajutor sau dacă nu aveți o frază de 
     <message>
         <source>id_choose_a_name_for_your_wallet</source>
         <translation>Alegeți un nume pentru portofelul dvs.</translation>
+    </message>
+    <message>
+        <source>id_choose_a_swap_option</source>
+        <translation>Choose a Swap Option</translation>
+    </message>
+    <message>
+        <source>id_choose_a_usb_or_bluetooth</source>
+        <translation>Choose a USB or Bluetooth connection on Jade after verifying your recovery phrase</translation>
+    </message>
+    <message>
+        <source>id_choose_bluetooth_connection_on</source>
+        <translation>Choose Bluetooth connection on Jade after verifying your recovery phrase</translation>
     </message>
     <message>
         <source>id_choose_method_to_authorize_the</source>
@@ -817,6 +923,10 @@ Dacă aceste instrucțiuni nu au fost de ajutor sau dacă nu aveți o frază de 
         <translation>Confirmați parola</translation>
     </message>
     <message>
+        <source>id_confirm_swap</source>
+        <translation>Confirm swap</translation>
+    </message>
+    <message>
         <source>id_confirm_transaction</source>
         <translation>Confirmare tranzacție</translation>
     </message>
@@ -827,6 +937,10 @@ Dacă aceste instrucțiuni nu au fost de ajutor sau dacă nu aveți o frază de 
     <message>
         <source>id_confirm_update_on_your_jade</source>
         <translation>Confirmați update-ul pe Jade</translation>
+    </message>
+    <message>
+        <source>id_confirm_version_on_jade</source>
+        <translation>Confirm version on Jade</translation>
     </message>
     <message>
         <source>id_confirm_via_2fa_that_you</source>
@@ -849,8 +963,16 @@ Dacă aceste instrucțiuni nu au fost de ajutor sau dacă nu aveți o frază de 
         <translation>Felicitări!</translation>
     </message>
     <message>
+        <source>id_connect_a_different_hardware</source>
+        <translation>Connect a different Hardware Device</translation>
+    </message>
+    <message>
         <source>id_connect_hardware_wallet</source>
         <translation>Conectați portofelul hardware</translation>
+    </message>
+    <message>
+        <source>id_connect_jade</source>
+        <translation>Connect Jade</translation>
     </message>
     <message>
         <source>id_connect_jade_with_a_usb_cable</source>
@@ -859,6 +981,18 @@ Dacă aceste instrucțiuni nu au fost de ajutor sau dacă nu aveți o frază de 
     <message>
         <source>id_connect_through_a_proxy</source>
         <translation>Conectare printr-un proxy</translation>
+    </message>
+    <message>
+        <source>id_connect_usb_cable_or_enable</source>
+        <translation>Connect USB cable or enable Bluetooth</translation>
+    </message>
+    <message>
+        <source>id_connect_using_usb_or_bluetooth</source>
+        <translation>Connect using USB or Bluetooth</translation>
+    </message>
+    <message>
+        <source>id_connect_with_bluetooth</source>
+        <translation>Connect with Bluetooth</translation>
     </message>
     <message>
         <source>id_connect_with_tor</source>
@@ -949,12 +1083,20 @@ Dacă aceste instrucțiuni nu au fost de ajutor sau dacă nu aveți o frază de 
         <translation>Copy Device ID</translation>
     </message>
     <message>
+        <source>id_copy_id</source>
+        <translation>Copy ID</translation>
+    </message>
+    <message>
         <source>id_copy_raw_transaction</source>
         <translation>Copiere tranzacție brută</translation>
     </message>
     <message>
         <source>id_copy_support_id</source>
         <translation>Copy support ID</translation>
+    </message>
+    <message>
+        <source>id_copy_swap_proposal</source>
+        <translation>Copy Swap Proposal</translation>
     </message>
     <message>
         <source>id_copy_to_clipboard</source>
@@ -981,6 +1123,10 @@ Dacă aceste instrucțiuni nu au fost de ajutor sau dacă nu aveți o frază de 
         <translation>Copiere xpub (cheie publică extinsă)</translation>
     </message>
     <message>
+        <source>id_correct_order</source>
+        <translation>correct order</translation>
+    </message>
+    <message>
         <source>id_country</source>
         <translation>Country</translation>
     </message>
@@ -989,12 +1135,32 @@ Dacă aceste instrucțiuni nu au fost de ajutor sau dacă nu aveți o frază de 
         <translation>Creați</translation>
     </message>
     <message>
+        <source>id_create_a_new_proposal</source>
+        <translation>Create a New Proposal</translation>
+    </message>
+    <message>
+        <source>id_create_a_new_swap</source>
+        <translation>Create a New Swap</translation>
+    </message>
+    <message>
+        <source>id_create_a_pin</source>
+        <translation>Create a PIN</translation>
+    </message>
+    <message>
         <source>id_create_a_pin_to_access_your</source>
         <translation>Creați un PIN pentru accesarea portofelului</translation>
     </message>
     <message>
         <source>id_create_a_wallet_for_bitcoin</source>
         <translation>Creați un portofel pentru Bitcoin, Liquid și Testnet </translation>
+    </message>
+    <message>
+        <source>id_create_account</source>
+        <translation>Create Account</translation>
+    </message>
+    <message>
+        <source>id_create_new_account</source>
+        <translation>Create New Account</translation>
     </message>
     <message>
         <source>id_create_new_wallet</source>
@@ -1007,6 +1173,10 @@ Dacă aceste instrucțiuni nu au fost de ajutor sau dacă nu aveți o frază de 
     <message>
         <source>id_create_wallet</source>
         <translation>Creează portofel</translation>
+    </message>
+    <message>
+        <source>id_create_your_first_account_to</source>
+        <translation>Create your first account to receive funds.</translation>
     </message>
     <message>
         <source>id_creating_wallet</source>
@@ -1063,6 +1233,10 @@ Dacă aceste instrucțiuni nu au fost de ajutor sau dacă nu aveți o frază de 
     <message>
         <source>id_d_assets_in_this_account</source>
         <translation>%1 posesiuni în acest cont</translation>
+    </message>
+    <message>
+        <source>id_d_assets_in_total</source>
+        <translation>%1 assets in total</translation>
     </message>
     <message>
         <source>id_d_coins_selected</source>
@@ -1133,6 +1307,10 @@ Dacă aceste instrucțiuni nu au fost de ajutor sau dacă nu aveți o frază de 
         <translation>Depunere</translation>
     </message>
     <message>
+        <source>id_descriptor</source>
+        <translation>Descriptor</translation>
+    </message>
+    <message>
         <source>id_details</source>
         <translation>Details</translation>
     </message>
@@ -1149,6 +1327,10 @@ Dacă aceste instrucțiuni nu au fost de ajutor sau dacă nu aveți o frază de 
         <translation>Different passphrases generate new wallets!
 
 Remember you can only restore this wallet with both your recovery phrase and the passphrase.</translation>
+    </message>
+    <message>
+        <source>id_digital_wallets</source>
+        <translation>Digital Wallets</translation>
     </message>
     <message>
         <source>id_disable</source>
@@ -1207,6 +1389,10 @@ Remember you can only restore this wallet with both your recovery phrase and the
         <translation>Don&apos;t collect data</translation>
     </message>
     <message>
+        <source>id_dont_have_a_jade_check_our_store</source>
+        <translation>Don’t have a Jade? Check our store</translation>
+    </message>
+    <message>
         <source>id_dont_show_this_again</source>
         <translation>Don&apos;t show this again</translation>
     </message>
@@ -1255,6 +1441,10 @@ Remember you can only restore this wallet with both your recovery phrase and the
         <translation>Adresă de e-mail</translation>
     </message>
     <message>
+        <source>id_emergency_recovery_phrase</source>
+        <translation>Emergency Recovery Phrase Restore</translation>
+    </message>
+    <message>
         <source>id_empty</source>
         <translation>Empty</translation>
     </message>
@@ -1263,8 +1453,16 @@ Remember you can only restore this wallet with both your recovery phrase and the
         <translation>Activare</translation>
     </message>
     <message>
+        <source>id_enable_2fa</source>
+        <translation>Enable 2FA</translation>
+    </message>
+    <message>
         <source>id_enable_bluetooth</source>
         <translation>Activați Bluetooth</translation>
+    </message>
+    <message>
+        <source>id_enable_bluetooth_from_system</source>
+        <translation>Enable bluetooth from system settings</translation>
     </message>
     <message>
         <source>id_enable_custom_networks_debug</source>
@@ -1331,6 +1529,10 @@ Remember you can only restore this wallet with both your recovery phrase and the
         <translation>Passphrase de criptare</translation>
     </message>
     <message>
+        <source>id_enhance_security</source>
+        <translation>Enhance Security</translation>
+    </message>
+    <message>
         <source>id_enhanced_privacy</source>
         <translation>Enhanced Privacy</translation>
     </message>
@@ -1361,6 +1563,10 @@ Remember you can only restore this wallet with both your recovery phrase and the
     <message>
         <source>id_enter_an_address_or_sweep_paper</source>
         <translation>Introduceți o adresă sau accesați portofel de hârtie (paper wallet)</translation>
+    </message>
+    <message>
+        <source>id_enter_and_confirm_a_unique_pin</source>
+        <translation>Enter and confirm a unique PIN that will be entered to unlock Jade.</translation>
     </message>
     <message>
         <source>id_enter_new_email</source>
@@ -1476,8 +1682,16 @@ fraza de recuperare</translation>
         <translation>Blocuri estimate până la confirmarea tranzacției: %1</translation>
     </message>
     <message>
+        <source>id_everything_you_need_to_take</source>
+        <translation>Everything you need to take control of your bitcoin.</translation>
+    </message>
+    <message>
         <source>id_example_89014283334011612858333</source>
         <translation>Exemplu: 8.90.14.2:8333, 40.116.12.85:8333</translation>
+    </message>
+    <message>
+        <source>id_exchange_rate</source>
+        <translation>Exchange Rate</translation>
     </message>
     <message>
         <source>id_existing_recovery_phrase</source>
@@ -1486,6 +1700,10 @@ fraza de recuperare</translation>
     <message>
         <source>id_existing_wallets</source>
         <translation>Existing Wallets</translation>
+    </message>
+    <message>
+        <source>id_exit_guide</source>
+        <translation>Exit Guide</translation>
     </message>
     <message>
         <source>id_expand_sidebar</source>
@@ -1506,6 +1724,10 @@ fraza de recuperare</translation>
     <message>
         <source>id_extended_public_key</source>
         <translation>Extended Public Key</translation>
+    </message>
+    <message>
+        <source>id_extended_public_keys</source>
+        <translation>Extended Public Keys</translation>
     </message>
     <message>
         <source>id_face_id</source>
@@ -1564,6 +1786,10 @@ fraza de recuperare</translation>
         <translation>Feedback</translation>
     </message>
     <message>
+        <source>id_fees_are_collected_by_bitcoin</source>
+        <translation>Fees are collected by bitcoin miners, not Blockstream.</translation>
+    </message>
+    <message>
         <source>id_fees_are_too_low</source>
         <translation>Comisioanele sunt prea mici</translation>
     </message>
@@ -1590,6 +1816,22 @@ fraza de recuperare</translation>
     <message>
         <source>id_firmware_update_completed</source>
         <translation>Actualizarea firmware a fost efectuată</translation>
+    </message>
+    <message>
+        <source>id_firmware_upgrade</source>
+        <translation>Firmware Upgrade</translation>
+    </message>
+    <message>
+        <source>id_firmware_version_s</source>
+        <translation>Firmware Version: %1</translation>
+    </message>
+    <message>
+        <source>id_follow_the_instructions_of_your</source>
+        <translation>Follow the instructions of your hardware wallet before continuing.</translation>
+    </message>
+    <message>
+        <source>id_follow_the_instructions_on_jade</source>
+        <translation>Follow the instructions on Jade</translation>
     </message>
     <message>
         <source>id_follow_the_instructions_on_your</source>
@@ -1704,6 +1946,14 @@ fraza de recuperare</translation>
         <translation>Green folosește multisig cu o semnătură generată de dispozitivul dumneavoastră și o alta generată de serverele Blockstream. Configurarea Autentificării cu Doi Factori (2FA) introduce un strat suplimentar de securitate pentru semnături la nivel de server.</translation>
     </message>
     <message>
+        <source>id_hardware_devices</source>
+        <translation>Hardware Devices</translation>
+    </message>
+    <message>
+        <source>id_hardware_security</source>
+        <translation>Hardware Security</translation>
+    </message>
+    <message>
         <source>id_hardware_wallet</source>
         <translation>Hardware wallet</translation>
     </message>
@@ -1718,6 +1968,10 @@ fraza de recuperare</translation>
     <message>
         <source>id_hash</source>
         <translation>Hash</translation>
+    </message>
+    <message>
+        <source>id_hash_s</source>
+        <translation>Hash: %1</translation>
     </message>
     <message>
         <source>id_help</source>
@@ -1736,6 +1990,14 @@ fraza de recuperare</translation>
         <translation>HEX</translation>
     </message>
     <message>
+        <source>id_hide_advanced_options</source>
+        <translation>Hide advanced options</translation>
+    </message>
+    <message>
+        <source>id_hide_amounts</source>
+        <translation>Hide amounts</translation>
+    </message>
+    <message>
         <source>id_hide_assets</source>
         <translation>Ascundere posesiuni</translation>
     </message>
@@ -1750,6 +2012,10 @@ fraza de recuperare</translation>
     <message>
         <source>id_hold_button_to_send</source>
         <translation>Hold button to Send</translation>
+    </message>
+    <message>
+        <source>id_hold_the_green_button_on_the</source>
+        <translation>Hold the green button on the bottom of Jade until it boots up</translation>
     </message>
     <message>
         <source>id_hold_your_nfc_tag_close_to_the</source>
@@ -1774,6 +2040,10 @@ fraza de recuperare</translation>
     <message>
         <source>id_i_agree_to_the</source>
         <translation>Sunt de acord cu</translation>
+    </message>
+    <message>
+        <source>id_i_agree_to_the_terms_of_service</source>
+        <translation>I agree to the Terms of Service and Privacy Policy</translation>
     </message>
     <message>
         <source>id_i_confirm_i_have_read_and</source>
@@ -1812,6 +2082,10 @@ fraza de recuperare</translation>
         <translation>ID</translation>
     </message>
     <message>
+        <source>id_if_for_any_reason_you_cant</source>
+        <translation>If for any reason you can&apos;t login into your wallet, you can recover your recovery phrase using your PIN/Biometrics.</translation>
+    </message>
+    <message>
         <source>id_if_you_agree_green_will_collect</source>
         <translation>If you agree, Green will collect limited usage data to optimize the user experience. No sensitive user or wallet info is collected.</translation>
     </message>
@@ -1822,6 +2096,10 @@ fraza de recuperare</translation>
     <message>
         <source>id_if_you_did_not_request_the</source>
         <translation>If you did not request the reset, but you cannot cancel the reset process because you can&apos;t access any existing Two-Factor Authorization methods, dispute this 2FA reset. This will permanently block your wallet, but you can undo this action.</translation>
+    </message>
+    <message>
+        <source>id_if_you_forget_it_or_lose_it</source>
+        <translation>If you forget it or lose it, your funds are going to be lost as well.</translation>
     </message>
     <message>
         <source>id_if_you_have_access_to_a</source>
@@ -1836,6 +2114,10 @@ fraza de recuperare</translation>
         <translation>Daca ați inițiat contestarea resetării 2FA din greșeală, puteți anula contestarea.</translation>
     </message>
     <message>
+        <source>id_import</source>
+        <translation>Import</translation>
+    </message>
+    <message>
         <source>id_import_a_multisig_shield_wallet</source>
         <translation>Import a Multisig Shield wallet created on Blockstream Green.</translation>
     </message>
@@ -1846,6 +2128,10 @@ fraza de recuperare</translation>
     <message>
         <source>id_import_a_wallet_created_with</source>
         <translation>Importați un portofel creat cu alte aplicații. Valabil doar pentru portofele cu semnatură unică cu fraze de recuperare BIP39 si derivație BIP44, BIP49 sau BIP84.</translation>
+    </message>
+    <message>
+        <source>id_import_from_file</source>
+        <translation>Import from file</translation>
     </message>
     <message>
         <source>id_incoming</source>
@@ -1860,8 +2146,20 @@ fraza de recuperare</translation>
         <translation>Creștere comision</translation>
     </message>
     <message>
+        <source>id_increase_security</source>
+        <translation>Increase Security</translation>
+    </message>
+    <message>
+        <source>id_increase_the_security_of_your</source>
+        <translation>Increase the security of your funds by adding a 2FA</translation>
+    </message>
+    <message>
         <source>id_information_not_available</source>
         <translation>Informația nu este disponibilă.</translation>
+    </message>
+    <message>
+        <source>id_initialize_and_create_wallet</source>
+        <translation>Initialize and Create wallet</translation>
     </message>
     <message>
         <source>id_initialized</source>
@@ -1876,8 +2174,16 @@ fraza de recuperare</translation>
         <translation>Insert your email to receive 2FA codes to authorize transfers and other operations.</translation>
     </message>
     <message>
+        <source>id_insert_your_phone_number_to</source>
+        <translation>Insert your phone number to receive 2FA codes to authorize transfers and other operations.</translation>
+    </message>
+    <message>
         <source>id_install_version_s</source>
         <translation>Instalați versiunea: %1? </translation>
+    </message>
+    <message>
+        <source>id_instant</source>
+        <translation>Instant</translation>
     </message>
     <message>
         <source>id_insufficient_funds</source>
@@ -1972,6 +2278,10 @@ fraza de recuperare</translation>
         <translation>Status invalid. Verificați dacă dispozitivul dvs este deblocat și apoi încercați din nou.</translation>
     </message>
     <message>
+        <source>id_invalid_swap_proposal</source>
+        <translation>Invalid swap proposal</translation>
+    </message>
+    <message>
         <source>id_invalid_twofactor_code</source>
         <translation>Cod de autentificare cu 2 factori (2FA) invalid</translation>
     </message>
@@ -1998,6 +2308,14 @@ fraza de recuperare</translation>
     <message>
         <source>id_it_looks_like_you_have_no</source>
         <translation>Se pare că nu aveți niciun portofel. Click mai jos ca să adăugați unul.</translation>
+    </message>
+    <message>
+        <source>id_jade_is_a_specialized_device</source>
+        <translation>Jade is a specialized device designed to securely store the keys needed to spend your bitcoin.</translation>
+    </message>
+    <message>
+        <source>id_jade_is_an_isolated_device_not</source>
+        <translation>Jade is an isolated device not connected to the internet, which means your funds are protected from a hacked or compromised phone.</translation>
     </message>
     <message>
         <source>id_jade_unlocked</source>
@@ -2044,6 +2362,10 @@ fraza de recuperare</translation>
         <translation>Află mai mult</translation>
     </message>
     <message>
+        <source>id_learn_more_about_amp_the_assets</source>
+        <translation>Learn more about AMP, the assets and your eligibility</translation>
+    </message>
+    <message>
         <source>id_learn_more_about_s</source>
         <translation>Învățați mai mult despre %1.</translation>
     </message>
@@ -2060,6 +2382,10 @@ fraza de recuperare</translation>
         <translation>Ledger oferă suport pentru un număr limitat de monede: apăsați aici pentru a verifica lista.</translation>
     </message>
     <message>
+        <source>id_legacy</source>
+        <translation>Legacy</translation>
+    </message>
+    <message>
         <source>id_legacy_account</source>
         <translation>Legacy Account</translation>
     </message>
@@ -2072,6 +2398,10 @@ fraza de recuperare</translation>
         <translation>Legacy script coins</translation>
     </message>
     <message>
+        <source>id_legacy_segwit</source>
+        <translation>Legacy SegWit</translation>
+    </message>
+    <message>
         <source>id_legacy_segwit_account</source>
         <translation>Legacy SegWit Account</translation>
     </message>
@@ -2082,6 +2412,14 @@ fraza de recuperare</translation>
     <message>
         <source>id_lets_get_you_set_up</source>
         <translation>Haideți să facem setările inițiale.</translation>
+    </message>
+    <message>
+        <source>id_lightning</source>
+        <translation>Lightning</translation>
+    </message>
+    <message>
+        <source>id_lightning_network_account</source>
+        <translation>Lightning Network account powered by Greenlight. Portable onto your own CLN node.</translation>
     </message>
     <message>
         <source>id_liquid_electrum_server</source>
@@ -2232,6 +2570,10 @@ fraza de recuperare</translation>
         <translation>Priviți ecranul dispozitivului pentru a identifica pozițiile numerelor</translation>
     </message>
     <message>
+        <source>id_looking_for_device</source>
+        <translation>Looking for device...</translation>
+    </message>
+    <message>
         <source>id_looking_for_wallets</source>
         <translation>Looking for wallets…</translation>
     </message>
@@ -2246,6 +2588,14 @@ fraza de recuperare</translation>
     <message>
         <source>id_main_account</source>
         <translation>Contul principal</translation>
+    </message>
+    <message>
+        <source>id_make_sure_to_be_in_a_private</source>
+        <translation>Make sure to be in a private and safe space</translation>
+    </message>
+    <message>
+        <source>id_make_sure_you_are_alone_and_no</source>
+        <translation>Make sure you are alone and no camera is recording you or the screen.</translation>
     </message>
     <message>
         <source>id_make_sure_you_have_enabled_otg</source>
@@ -2340,6 +2690,10 @@ fraza de recuperare</translation>
         <translation>Mai multe opțiuni</translation>
     </message>
     <message>
+        <source>id_move_to_2fa_protected</source>
+        <translation>Move to 2FA Protected</translation>
+    </message>
+    <message>
         <source>id_multi_server_validation</source>
         <translation>Multi Server Validation</translation>
     </message>
@@ -2348,8 +2702,16 @@ fraza de recuperare</translation>
         <translation>Monede multiple</translation>
     </message>
     <message>
+        <source>id_multisig</source>
+        <translation>Multisig</translation>
+    </message>
+    <message>
         <source>id_multisig_shield</source>
         <translation>Multisig Shiled</translation>
+    </message>
+    <message>
+        <source>id_my_assets</source>
+        <translation>My Assets</translation>
     </message>
     <message>
         <source>id_my_notes</source>
@@ -2358,6 +2720,10 @@ fraza de recuperare</translation>
     <message>
         <source>id_name</source>
         <translation>Nume</translation>
+    </message>
+    <message>
+        <source>id_native_segwit</source>
+        <translation>Native SegWit</translation>
     </message>
     <message>
         <source>id_need_help</source>
@@ -2373,7 +2739,7 @@ fraza de recuperare</translation>
     </message>
     <message>
         <source>id_network_fee</source>
-        <translation>COMISION REȚEA</translation>
+        <translation>Network Fee</translation>
     </message>
     <message>
         <source>id_network_monitor</source>
@@ -2446,6 +2812,10 @@ fraza de recuperare</translation>
     <message>
         <source>id_nfc_tags_written</source>
         <translation>Etichete NFC Scrise:</translation>
+    </message>
+    <message>
+        <source>id_no_addresses</source>
+        <translation>No addresses</translation>
     </message>
     <message>
         <source>id_no_amount_specified</source>
@@ -2557,8 +2927,20 @@ Try manually restoring your wallet.</translation>
         <translation>Nu este inițializat</translation>
     </message>
     <message>
+        <source>id_not_now</source>
+        <translation>Not now</translation>
+    </message>
+    <message>
         <source>id_not_on_longest_chain</source>
         <translation>Not on longest chain</translation>
+    </message>
+    <message>
+        <source>id_note</source>
+        <translation>Note</translation>
+    </message>
+    <message>
+        <source>id_note_down_your_recovery_phrase</source>
+        <translation>Note down your recovery phrase. Keep it somewhere safe!</translation>
     </message>
     <message>
         <source>id_notifications</source>
@@ -2575,6 +2957,10 @@ Try manually restoring your wallet.</translation>
     <message>
         <source>id_of_s</source>
         <translation>of %1</translation>
+    </message>
+    <message>
+        <source>id_offline_key_storage</source>
+        <translation>Offline Key Storage</translation>
     </message>
     <message>
         <source>id_ok</source>
@@ -2657,6 +3043,10 @@ Try manually restoring your wallet.</translation>
         <translation>În curs de trimitere</translation>
     </message>
     <message>
+        <source>id_output_descriptors</source>
+        <translation>Output Descriptors</translation>
+    </message>
+    <message>
         <source>id_overview</source>
         <translation>Prezentare generală</translation>
     </message>
@@ -2693,12 +3083,20 @@ Try manually restoring your wallet.</translation>
         <translation>Lipire</translation>
     </message>
     <message>
+        <source>id_paste_an_existing_proposal</source>
+        <translation>Paste an Existing Proposal</translation>
+    </message>
+    <message>
         <source>id_path_used_for_signing</source>
         <translation>Path used for signing</translation>
     </message>
     <message>
         <source>id_pending_confirmation</source>
         <translation>Pending confirmation</translation>
+    </message>
+    <message>
+        <source>id_permanent_2fa_account_ideal_for</source>
+        <translation>Permanent 2FA account, ideal for long term hodling, optionally with 3rd emergency key on hardware wallet.</translation>
     </message>
     <message>
         <source>id_permanently_block_this_wallet</source>
@@ -2817,6 +3215,10 @@ Try manually restoring your wallet.</translation>
         <translation>Vă rugăm să așteptați în timp ce dispozitivul dvs Ledger afișează adresa pentru validare. Acest proces poate dura până la 20 de secunde.</translation>
     </message>
     <message>
+        <source>id_power_on_jade</source>
+        <translation>Power on Jade</translation>
+    </message>
+    <message>
         <source>id_precision</source>
         <translation>Precizie</translation>
     </message>
@@ -2873,6 +3275,10 @@ Try manually restoring your wallet.</translation>
         <translation>Scanner QR</translation>
     </message>
     <message>
+        <source>id_quick_setup_2fa_account_ideal</source>
+        <translation>Quick setup 2FA account, ideal for active spenders (2FA expires if you don&apos;t move funds for 1 year).</translation>
+    </message>
+    <message>
         <source>id_radio_firmware</source>
         <translation>Firmware cu wireless</translation>
     </message>
@@ -2909,6 +3315,10 @@ Try manually restoring your wallet.</translation>
         <translation>Primire</translation>
     </message>
     <message>
+        <source>id_receive_any_liquid_asset</source>
+        <translation>Receive any Liquid Asset</translation>
+    </message>
+    <message>
         <source>id_receive_email_notifications_for</source>
         <translation>Primiți notificări pe adresa de e-mail pentru fiecare tranzacție trimisă și primită</translation>
     </message>
@@ -2919,6 +3329,10 @@ Try manually restoring your wallet.</translation>
     <message>
         <source>id_received_on</source>
         <translation>Primit pe</translation>
+    </message>
+    <message>
+        <source>id_receiving</source>
+        <translation>Receiving</translation>
     </message>
     <message>
         <source>id_recently_used_wallets</source>
@@ -3009,8 +3423,20 @@ Try manually restoring your wallet.</translation>
         <translation>Reload</translation>
     </message>
     <message>
+        <source>id_remember_device</source>
+        <translation>Remember device</translation>
+    </message>
+    <message>
+        <source>id_remember_device_connection</source>
+        <translation>Remember device connection</translation>
+    </message>
+    <message>
         <source>id_remember_me</source>
         <translation>Ține-mă minte</translation>
+    </message>
+    <message>
+        <source>id_remember_my_device</source>
+        <translation>Remember my Device</translation>
     </message>
     <message>
         <source>id_remove</source>
@@ -3133,8 +3559,32 @@ Try manually restoring your wallet.</translation>
         <translation>%1 de la %2</translation>
     </message>
     <message>
+        <source>id_s_is_a_liquid_asset_you_can</source>
+        <translation>%1 is a Liquid asset. You can receive it directly on any Liquid account.</translation>
+    </message>
+    <message>
+        <source>id_s_is_a_liquid_asset_you_need_a</source>
+        <translation>%1 is a Liquid asset. You need a Liquid account in order to receive it.</translation>
+    </message>
+    <message>
+        <source>id_s_is_an_amp_asset_you_can</source>
+        <translation>%1 is an AMP asset. You can receive it directly on any AMP account.</translation>
+    </message>
+    <message>
+        <source>id_s_is_an_amp_asset_you_need_an</source>
+        <translation>%1 is an AMP asset. You need an AMP account in order to receive it.</translation>
+    </message>
+    <message>
         <source>id_s_network</source>
         <translation>%1 rețea</translation>
+    </message>
+    <message>
+        <source>id_safe_environment</source>
+        <translation>Safe Environment</translation>
+    </message>
+    <message>
+        <source>id_safely_stored</source>
+        <translation>Safely stored</translation>
     </message>
     <message>
         <source>id_save</source>
@@ -3147,6 +3597,10 @@ Try manually restoring your wallet.</translation>
     <message>
         <source>id_save_your_mnemonic</source>
         <translation>Salvați-vă fraza mnemonică</translation>
+    </message>
+    <message>
+        <source>id_scan_a_proposal</source>
+        <translation>Scan a Proposal</translation>
     </message>
     <message>
         <source>id_scan_a_qr_code_for_spv_pairing</source>
@@ -3197,12 +3651,20 @@ Try manually restoring your wallet.</translation>
         <translation>Schimbare siguranță</translation>
     </message>
     <message>
+        <source>id_see_archived_accounts_s</source>
+        <translation>See Archived Accounts (%1)</translation>
+    </message>
+    <message>
         <source>id_see_our_privacy_policy_s</source>
         <translation>Consultați politica noastră de confidențialitate %1</translation>
     </message>
     <message>
         <source>id_see_our_terms_of_service_s</source>
         <translation>Verificați Termenii și Condițiile de Utilizare %1</translation>
+    </message>
+    <message>
+        <source>id_segwit</source>
+        <translation>SegWit</translation>
     </message>
     <message>
         <source>id_segwit_account</source>
@@ -3231,6 +3693,14 @@ Try manually restoring your wallet.</translation>
     <message>
         <source>id_select_duration_of_twofactor</source>
         <translation>Selectați durata protecției cu Autentificare cu Doi Factori (2FA) pentru monedele dvs. Noua opțiune va fi aplicată monedelor nou-primite.</translation>
+    </message>
+    <message>
+        <source>id_select_initalize_to_create_a</source>
+        <translation>Select Initalize to create a New Wallet then backup and verify your recovery phrase</translation>
+    </message>
+    <message>
+        <source>id_select_initialize_and_choose_to</source>
+        <translation>Select Initialize and choose to create a New wallet</translation>
     </message>
     <message>
         <source>id_select_network</source>
@@ -3286,11 +3756,15 @@ Try manually restoring your wallet.</translation>
     </message>
     <message>
         <source>id_sending</source>
-        <translation>ÎN CURS DE TRIMITERE</translation>
+        <translation>Sending</translation>
     </message>
     <message>
         <source>id_sending_request</source>
         <translation>Se trimite cererea....</translation>
+    </message>
+    <message>
+        <source>id_sensitive_information</source>
+        <translation>Sensitive Information</translation>
     </message>
     <message>
         <source>id_sent</source>
@@ -3397,6 +3871,18 @@ Try manually restoring your wallet.</translation>
         <translation>Setări</translation>
     </message>
     <message>
+        <source>id_setup_2fa_now</source>
+        <translation>Setup 2FA Now</translation>
+    </message>
+    <message>
+        <source>id_setup_a_new_wallet</source>
+        <translation>Setup a New Wallet</translation>
+    </message>
+    <message>
+        <source>id_setup_guide</source>
+        <translation>Setup Guide</translation>
+    </message>
+    <message>
         <source>id_setup_jade</source>
         <translation>Setați Jade</translation>
     </message>
@@ -3407,6 +3893,10 @@ Try manually restoring your wallet.</translation>
     <message>
         <source>id_setup_pin_and_s</source>
         <translation>Setați PIN și %1</translation>
+    </message>
+    <message>
+        <source>id_setup_your_jade</source>
+        <translation>Setup your Jade</translation>
     </message>
     <message>
         <source>id_share</source>
@@ -3465,12 +3955,32 @@ Try manually restoring your wallet.</translation>
         <translation>Afișare cod QR</translation>
     </message>
     <message>
+        <source>id_show_recovery_phrase</source>
+        <translation>Show Recovery Phrase</translation>
+    </message>
+    <message>
+        <source>id_sign_transaction</source>
+        <translation>Sign Transaction</translation>
+    </message>
+    <message>
         <source>id_signature_validation_failed_if</source>
         <translation>Verificarea semnăturii a eșuat. Dacă această eroare este neașteptată sau apare frecvent, este posibil ca portofelul fizic să fie defect sau să fi fost compromis de un potential atac. Luați in considerare schimbarea portofelului.</translation>
     </message>
     <message>
         <source>id_signup_in_progress</source>
         <translation>Se realizează înscrierea contului</translation>
+    </message>
+    <message>
+        <source>id_simple</source>
+        <translation>Simple</translation>
+    </message>
+    <message>
+        <source>id_simple__secure_selfcustody</source>
+        <translation>Simple &amp; Secure Self-Custody</translation>
+    </message>
+    <message>
+        <source>id_simple_portable_standard</source>
+        <translation>Simple, portable, standard singlesig account, secured by your key, the recovery phrase.</translation>
     </message>
     <message>
         <source>id_simplified_payment_verification</source>
@@ -3486,7 +3996,7 @@ Try manually restoring your wallet.</translation>
     </message>
     <message>
         <source>id_skip</source>
-        <translation>TRECEȚI PESTE</translation>
+        <translation>Skip</translation>
     </message>
     <message>
         <source>id_skip_not_recommended</source>
@@ -3595,6 +4105,18 @@ Try manually restoring your wallet.</translation>
         <translation>Status</translation>
     </message>
     <message>
+        <source>id_step</source>
+        <translation>Step</translation>
+    </message>
+    <message>
+        <source>id_store_it_somewhere_safe</source>
+        <translation>Store it somewhere safe.</translation>
+    </message>
+    <message>
+        <source>id_submit</source>
+        <translation>Submit</translation>
+    </message>
+    <message>
         <source>id_success</source>
         <translation>Succes</translation>
     </message>
@@ -3605,6 +4127,18 @@ Try manually restoring your wallet.</translation>
     <message>
         <source>id_support_page</source>
         <translation>Pagina de Asistență Tehnică</translation>
+    </message>
+    <message>
+        <source>id_swap</source>
+        <translation>Swap</translation>
+    </message>
+    <message>
+        <source>id_swap_proposal</source>
+        <translation>Swap Proposal</translation>
+    </message>
+    <message>
+        <source>id_swapped</source>
+        <translation>Swapped</translation>
     </message>
     <message>
         <source>id_sweep</source>
@@ -3642,6 +4176,10 @@ Try manually restoring your wallet.</translation>
         <translation>Mesaj de sistem</translation>
     </message>
     <message>
+        <source>id_take_control_your_keys_your</source>
+        <translation>Take Control: Your Keys, Your Bitcoin</translation>
+    </message>
+    <message>
         <source>id_tap_on_the_card_to_view</source>
         <translation>Apăsați pe card pentru a vizualiza tranzacțiile.</translation>
     </message>
@@ -3652,6 +4190,10 @@ Try manually restoring your wallet.</translation>
     <message>
         <source>id_tap_to_scan_a_qr_code_and</source>
         <translation>Apăsați pentru a scana un cod QR și pentru a vă conecta la un nod pentru SPV</translation>
+    </message>
+    <message>
+        <source>id_taproot</source>
+        <translation>Taproot</translation>
     </message>
     <message>
         <source>id_taproot_account</source>
@@ -3790,6 +4332,12 @@ Try manually restoring your wallet.</translation>
         <translation>Deja a fost setat un PIN pentru un portofel %1. Dacă veți continua astfel, nu vi se va mai permite să setați un PIN, iar logarea va necesita cele 24 de cuvinte mnemonice. Puteți dezactiva PIN-ul din setări sau prin efectuarea a 3 încercări greșite de introducere.</translation>
     </message>
     <message>
+        <source>id_there_is_already_an_archived</source>
+        <translation>There is already an archived account.
+
+Do you want to create a new one?</translation>
+    </message>
+    <message>
         <source>id_these_are_some_compatible</source>
         <translation>Acestea sunt niște portofele compatibile:</translation>
     </message>
@@ -3874,6 +4422,10 @@ Try manually restoring your wallet.</translation>
         <translation>Tor va folosi %1 și va funcționa doar dacă proxy-ul are Orbot sau Tor activat</translation>
     </message>
     <message>
+        <source>id_total</source>
+        <translation>Total</translation>
+    </message>
+    <message>
         <source>id_total_assets</source>
         <translation>Total Monede</translation>
     </message>
@@ -3926,6 +4478,10 @@ Try manually restoring your wallet.</translation>
         <translation>Tranzacții</translation>
     </message>
     <message>
+        <source>id_troubleshoot</source>
+        <translation>Troubleshoot</translation>
+    </message>
+    <message>
         <source>id_try_again</source>
         <translation>Try Again</translation>
     </message>
@@ -3972,6 +4528,10 @@ Try manually restoring your wallet.</translation>
     <message>
         <source>id_twofactor_threshold</source>
         <translation>Prag pentru autentificarea cu doi factori</translation>
+    </message>
+    <message>
+        <source>id_tx_count</source>
+        <translation>TX Count</translation>
     </message>
     <message>
         <source>id_txid</source>
@@ -4030,6 +4590,10 @@ Try manually restoring your wallet.</translation>
         <translation>Deblocați Jade pentru a continua</translation>
     </message>
     <message>
+        <source>id_unlock_your_device_to_continue</source>
+        <translation>Unlock your Device to continue</translation>
+    </message>
+    <message>
         <source>id_unlocked_coins_can_be_spent_and</source>
         <translation>Unlocked coins can be spent and are included in your balance.</translation>
     </message>
@@ -4082,8 +4646,20 @@ Try manually restoring your wallet.</translation>
         <translation>Folosiți ecranul de blocare Android pentru a vă loga</translation>
     </message>
     <message>
+        <source>id_use_comma_separated_values_or</source>
+        <translation>Use comma separated values or keep scanning</translation>
+    </message>
+    <message>
+        <source>id_use_hardware_device</source>
+        <translation>Use Hardware Device</translation>
+    </message>
+    <message>
         <source>id_use_secure_display_and_screen</source>
         <translation>Use Secure Display and Screen Lock</translation>
+    </message>
+    <message>
+        <source>id_use_the_jogwheel_to_select_the</source>
+        <translation>Use the jog-wheel to select the word that matches your recovery phrase.</translation>
     </message>
     <message>
         <source>id_use_your_email_to_receive</source>
@@ -4120,6 +4696,10 @@ Try manually restoring your wallet.</translation>
     <message>
         <source>id_verify_on_device</source>
         <translation>Verify on Device</translation>
+    </message>
+    <message>
+        <source>id_verify_recovery_phrase</source>
+        <translation>Verify Recovery Phrase</translation>
     </message>
     <message>
         <source>id_verify_your_bitcoin</source>
@@ -4186,6 +4766,10 @@ Try manually restoring your wallet.</translation>
         <translation>Wallet already restored</translation>
     </message>
     <message>
+        <source>id_wallet_assets</source>
+        <translation>Wallet Assets</translation>
+    </message>
+    <message>
         <source>id_wallet_backup</source>
         <translation>Copie de protecție pentru portofel</translation>
     </message>
@@ -4208,6 +4792,14 @@ Try manually restoring your wallet.</translation>
     <message>
         <source>id_wallet_not_found</source>
         <translation>Wallet not found</translation>
+    </message>
+    <message>
+        <source>id_wallet_pockets</source>
+        <translation>Wallet Pockets</translation>
+    </message>
+    <message>
+        <source>id_wallet_transactions</source>
+        <translation>Wallet Transactions</translation>
     </message>
     <message>
         <source>id_wallets</source>
@@ -4294,6 +4886,14 @@ Try manually restoring your wallet.</translation>
         <translation>Bine ați venit la</translation>
     </message>
     <message>
+        <source>id_welcome_to_blockstream_jade</source>
+        <translation>Welcome to Blockstream Jade</translation>
+    </message>
+    <message>
+        <source>id_welcome_to_your_wallet</source>
+        <translation>Welcome to your Wallet!</translation>
+    </message>
+    <message>
         <source>id_well_done_you_can_continue</source>
         <translation>Felicitări, puteți continua</translation>
     </message>
@@ -4308,6 +4908,10 @@ Try manually restoring your wallet.</translation>
     <message>
         <source>id_well_get_you_set_up_with_an_amp</source>
         <translation>Setarea unui cont AMP este foarte rapidă. Opțional, puteți crea un cont AMP in orice portofel Liquid.</translation>
+    </message>
+    <message>
+        <source>id_what_is_word_number_s</source>
+        <translation>What is word number %1?</translation>
     </message>
     <message>
         <source>id_what_type_of_account_would_you</source>
@@ -4330,6 +4934,10 @@ Try manually restoring your wallet.</translation>
         <translation>Unde doriți să transferați monedele?</translation>
     </message>
     <message>
+        <source>id_whomever_can_access_your</source>
+        <translation>Whomever can access your recovery phrase, can steal your funds.</translation>
+    </message>
+    <message>
         <source>id_wireless</source>
         <translation>Wireless</translation>
     </message>
@@ -4347,7 +4955,7 @@ Try manually restoring your wallet.</translation>
     </message>
     <message>
         <source>id_write_down_your_recovery_phrase</source>
-        <translation>Notați-vă fraza de recuperare pe o hârtie și păstrați-o într-un loc sigur.</translation>
+        <translation>Write down your recovery phrase in the correct order</translation>
     </message>
     <message>
         <source>id_wrong_choice_check_your</source>
@@ -4382,8 +4990,16 @@ Try manually restoring your wallet.</translation>
         <translation>Puteți să le schimbați mai târziu</translation>
     </message>
     <message>
+        <source>id_you_can_still_receive_funds_but</source>
+        <translation>You can still receive funds, but they won’t be shown on your total balance.</translation>
+    </message>
+    <message>
         <source>id_you_cannot_create_or_restore_a</source>
         <translation>Nu puteți crea sau recupera un portofel în %1, deoarece aveți deja un portofel protejat prin PIN.</translation>
+    </message>
+    <message>
+        <source>id_you_have_a_significant_amount</source>
+        <translation>You have a significant amount of funds here, consider protecting them with 2FA.</translation>
     </message>
     <message>
         <source>id_you_have_clicked_a_payment_uri</source>
@@ -4426,6 +5042,10 @@ Try manually restoring your wallet.</translation>
         <translation>TREBUIE să salvați această frază mnemonică ACUM</translation>
     </message>
     <message>
+        <source>id_you_need_a_liquid_account_in</source>
+        <translation>You need a Liquid account in order to receive it.</translation>
+    </message>
+    <message>
         <source>id_you_only_have_one_twofactor</source>
         <translation>Ați activat doar o metodă de autentificare cu doi factori</translation>
     </message>
@@ -4462,6 +5082,14 @@ Try manually restoring your wallet.</translation>
         <translation>2FA-ul are un termen de expirare. În acest fel, daca vă pierdeți accesul la 2FA sau dacă serverele Blockstream Green sunt offline, puteți oricând să vă recuperați fondurile folosind acest program open-source.</translation>
     </message>
     <message>
+        <source>id_your_bitcoin_and_liquid_assets</source>
+        <translation>Your bitcoin and Liquid assets are stored on the blockchain, and can only be spent using the keys stored on Jade.</translation>
+    </message>
+    <message>
+        <source>id_your_bluetooth_adapter_is</source>
+        <translation>Your Bluetooth adapter is disabled</translation>
+    </message>
+    <message>
         <source>id_your_device_was_disconnected</source>
         <translation>Your device was disconnected</translation>
     </message>
@@ -4478,12 +5106,32 @@ Try manually restoring your wallet.</translation>
         <translation>Fondurile sunt protejate de o singură cheie. Mai ușor de folosit și întrebuințat decât varianta multisig. Dacă aveți dubii, selectați acesta opțiune.</translation>
     </message>
     <message>
+        <source>id_your_funds_are_secured_by_your</source>
+        <translation>Your funds are secured by your PIN. Easy to use, standard and portable on most bitcoin wallets.</translation>
+    </message>
+    <message>
+        <source>id_your_funds_have_grown</source>
+        <translation>Your funds have grown recently.
+
+Consider using a 2FA protected account, so all your outgoing transactions will have an extra layer of protection.
+For that you will need to:
+
+1. Create a 2FA protected account;
+2. Setup your 2FA method;
+3. Move funds to the new account;
+4. Archive the old account;</translation>
+    </message>
+    <message>
         <source>id_your_green_wallet_is_now_ready</source>
         <translation>Portofelul dvs Green este acum gata de folosire.</translation>
     </message>
     <message>
         <source>id_your_ios_device_might_not_be</source>
         <translation>Dispozitivul dvs iOS ar putea să nu fie compatibil</translation>
+    </message>
+    <message>
+        <source>id_your_keys_secure_your_coins_on</source>
+        <translation>Your keys secure your coins on the blockchain</translation>
     </message>
     <message>
         <source>id_your_notifications_will_be</source>
@@ -4496,6 +5144,10 @@ Try manually restoring your wallet.</translation>
     <message>
         <source>id_your_s_sent_to_s_has_been</source>
         <translation>Monedele %1 trimise către %2 au fost confirmate</translation>
+    </message>
+    <message>
+        <source>id_your_swap_proposal_is_generated</source>
+        <translation>Your Swap Proposal is generated!</translation>
     </message>
     <message>
         <source>id_your_transactions_will_be_shown</source>

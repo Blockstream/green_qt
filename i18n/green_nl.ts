@@ -64,24 +64,54 @@ Als geen van deze tips je heeft geholpen, of als je geen herstelzin van 12, 24 o
         <translation>2FA-vervaldatum</translation>
     </message>
     <message>
+        <source>id_2fa_isnt_set_up_yetnnyou_can</source>
+        <translation>2FA is nog niet ingesteld.
+
+Je kunt je favoriete 2FA-methode kiezen: een authenticator-app, e-mail, SMS of een telefoongesprek.</translation>
+    </message>
+    <message>
         <source>id_2fa_methods</source>
         <translation>2FA-methoden</translation>
+    </message>
+    <message>
+        <source>id_2fa_protected</source>
+        <translation>Beschermd met 2FA</translation>
     </message>
     <message>
         <source>id_2fa_reset_in_progress</source>
         <translation>2FA-reset in behandeling</translation>
     </message>
     <message>
+        <source>id_2fa_shield</source>
+        <translation>2FA-schild</translation>
+    </message>
+    <message>
+        <source>id_2fa_shield_account</source>
+        <translation>2FA-schildaccount</translation>
+    </message>
+    <message>
         <source>id_2fa_threshold</source>
         <translation>2FA-limiet</translation>
     </message>
     <message>
+        <source>id_2of2</source>
+        <translation>2-van-2</translation>
+    </message>
+    <message>
         <source>id_2of3</source>
-        <translation>2of3</translation>
+        <translation>2-van-3</translation>
     </message>
     <message>
         <source>id_2of3_account</source>
         <translation>2-van-3-account</translation>
+    </message>
+    <message>
+        <source>id_2of3_with_2fa</source>
+        <translation>2-van-3 met 2FA</translation>
+    </message>
+    <message>
+        <source>id_2of3_with_2fa_shield</source>
+        <translation>2-of-3 met 2FA-schild</translation>
     </message>
     <message>
         <source>id_4_hours</source>
@@ -97,7 +127,7 @@ Als geen van deze tips je heeft geholpen, of als je geen herstelzin van 12, 24 o
     </message>
     <message>
         <source>id_a_2of3_account_requires_two_out</source>
-        <translation>Een 2-van-3-account vereist twee van de drie signatures om geld uit te geven. De derde signatures is van een back-upsleutel die alleen aan jou bekend is. Dit geeft je de beveiligingsvoordelen van een standaardaccount, terwijl je je geld op elk moment onafhankelijk kunt verplaatsen.</translation>
+        <translation>Een 2-van-3-account vereist twee van de drie signatures om geld uit te geven. De derde signature is van een back-upsleutel die alleen aan jou bekend is. Dit geeft je de beveiligingsvoordelen van een standaardaccount, terwijl je je geld op elk moment onafhankelijk kunt verplaatsen.</translation>
     </message>
     <message>
         <source>id_a_new_transaction_has_just</source>
@@ -129,11 +159,35 @@ Als geen van deze tips je heeft geholpen, of als je geen herstelzin van 12, 24 o
     </message>
     <message>
         <source>id_account</source>
-        <translation>ACCOUNT</translation>
+        <translation>Account</translation>
+    </message>
+    <message>
+        <source>id_account__asset</source>
+        <translation>Account en asset</translation>
+    </message>
+    <message>
+        <source>id_account_address</source>
+        <translation>Accountadres</translation>
+    </message>
+    <message>
+        <source>id_account_archived</source>
+        <translation>Account archived</translation>
+    </message>
+    <message>
+        <source>id_account_balance</source>
+        <translation>Accountbalans</translation>
     </message>
     <message>
         <source>id_account_extended_public_keys</source>
         <translation>Account Extended Public Keys</translation>
+    </message>
+    <message>
+        <source>id_account_for_special_assets</source>
+        <translation>Rekening voor speciale assets, gecontroleerd of geautoriseerd door de uitgever van de asset.</translation>
+    </message>
+    <message>
+        <source>id_account_has_been_archived</source>
+        <translation>Account is gearchiveerd</translation>
     </message>
     <message>
         <source>id_account_id</source>
@@ -162,6 +216,10 @@ Als geen van deze tips je heeft geholpen, of als je geen herstelzin van 12, 24 o
     <message>
         <source>id_actions</source>
         <translation>Acties</translation>
+    </message>
+    <message>
+        <source>id_add_2fa_account</source>
+        <translation>2FA-account toevoegen</translation>
     </message>
     <message>
         <source>id_add_a_note_only_you_can_see_it</source>
@@ -200,12 +258,20 @@ Als geen van deze tips je heeft geholpen, of als je geen herstelzin van 12, 24 o
         <translation>Nieuwe account toevoegen</translation>
     </message>
     <message>
+        <source>id_add_note</source>
+        <translation>Notitie toevoegen</translation>
+    </message>
+    <message>
         <source>id_add_recipient</source>
         <translation>Ontvanger toevoegen</translation>
     </message>
     <message>
         <source>id_add_wallet</source>
         <translation>Wallet toevoegen</translation>
+    </message>
+    <message>
+        <source>id_adding_a_2fa</source>
+        <translation>2FA toevoegen</translation>
     </message>
     <message>
         <source>id_additional_networks</source>
@@ -226,6 +292,10 @@ Als geen van deze tips je heeft geholpen, of als je geen herstelzin van 12, 24 o
     <message>
         <source>id_address_copied_to_clipboard</source>
         <translation>Adres gekopieerd naar klembord</translation>
+    </message>
+    <message>
+        <source>id_address_type</source>
+        <translation>Adrestype</translation>
     </message>
     <message>
         <source>id_address_verified</source>
@@ -297,7 +367,7 @@ Als geen van deze tips je heeft geholpen, of als je geen herstelzin van 12, 24 o
     </message>
     <message>
         <source>id_always_ask</source>
-        <translation>Always ask</translation>
+        <translation>Altijd vragen</translation>
     </message>
     <message>
         <source>id_amount</source>
@@ -350,6 +420,10 @@ Als geen van deze tips je heeft geholpen, of als je geen herstelzin van 12, 24 o
     <message>
         <source>id_archived</source>
         <translation>Gearchiveerd</translation>
+    </message>
+    <message>
+        <source>id_archived_account</source>
+        <translation>Gearchiveerde account</translation>
     </message>
     <message>
         <source>id_archived_accounts</source>
@@ -456,6 +530,10 @@ Als geen van deze tips je heeft geholpen, of als je geen herstelzin van 12, 24 o
         <translation>Back-up herstelzin</translation>
     </message>
     <message>
+        <source>id_backup_recovery_phrase</source>
+        <translation>Back-up herstelzin</translation>
+    </message>
+    <message>
         <source>id_backup_the_recovery_mnemonic</source>
         <translation>Maak een back-up van de herstelzin en -xpub om het geld van je 2-van-3-account te kunnen herstellen.</translation>
     </message>
@@ -472,6 +550,10 @@ Als geen van deze tips je heeft geholpen, of als je geen herstelzin van 12, 24 o
         <translation>Zorg ervoor dat er een back-up van je herstelzin is gemaakt voordat je deze wallet verwijdert.</translation>
     </message>
     <message>
+        <source>id_before_you_backup</source>
+        <translation>Voordat je een back-up maakt</translation>
+    </message>
+    <message>
         <source>id_biometric_login_is_disabled</source>
         <translation>Biometrische aanmelding is uitgeschakeld</translation>
     </message>
@@ -485,11 +567,11 @@ Als geen van deze tips je heeft geholpen, of als je geen herstelzin van 12, 24 o
     </message>
     <message>
         <source>id_bip39_passphrase</source>
-        <translation>BIP39 Passphrase</translation>
+        <translation>BIP39-passphrase</translation>
     </message>
     <message>
         <source>id_bip39_passphrase_login</source>
-        <translation>BIP39 Passphrase login</translation>
+        <translation>Inloggen met BIP39-passphrase</translation>
     </message>
     <message>
         <source>id_bip49_accounts_allow_you_to</source>
@@ -565,7 +647,7 @@ Als geen van deze tips je heeft geholpen, of als je geen herstelzin van 12, 24 o
     </message>
     <message>
         <source>id_blockstream_green_supports_both</source>
-        <translation>Blockstream Green ondersteunt zowel Bitcoin als het Liquid-netwerk. Geen zorgen, je kunt op elk moment een andere wallet voor een ander netwerk maken.</translation>
+        <translation>Blockstream Green ondersteunt zowel Bitcoin als het Liquid-netwerk.</translation>
     </message>
     <message>
         <source>id_blockstream_greennsimple_and</source>
@@ -641,6 +723,14 @@ Eenvoudig en veilig</translation>
         <translation>Als je de referentiewisselkoers wijzigt, wordt de 2FA-limiet teruggezet naar 0. Vergeet niet om de 2FA-limiet aan te passen na het uitgeven.</translation>
     </message>
     <message>
+        <source>id_cheaper_and_more_private</source>
+        <translation>Goedkopere en meer privacy-gerichte singlesig-optie. Adressen zijn Bech32m.</translation>
+    </message>
+    <message>
+        <source>id_cheaper_singlesig_option</source>
+        <translation>Goedkopere singlesig-optie. Adressen zijn Native SegWit Bech32.</translation>
+    </message>
+    <message>
         <source>id_check_device</source>
         <translation>Bekijk het apparaat</translation>
     </message>
@@ -651,6 +741,10 @@ Eenvoudig en veilig</translation>
     <message>
         <source>id_check_for_updates_on_startup</source>
         <translation>Controleren op updates tijdens het starten</translation>
+    </message>
+    <message>
+        <source>id_check_our_6_easy_steps_to_be</source>
+        <translation>Bekijk onze 6 eenvoudige stappen om AMP-assets te verzenden en te ontvangen.</translation>
     </message>
     <message>
         <source>id_check_your_backup</source>
@@ -667,6 +761,18 @@ Eenvoudig en veilig</translation>
     <message>
         <source>id_choose_a_name_for_your_wallet</source>
         <translation>Kies een naam voor je wallet</translation>
+    </message>
+    <message>
+        <source>id_choose_a_swap_option</source>
+        <translation>Kies een ruiloptie</translation>
+    </message>
+    <message>
+        <source>id_choose_a_usb_or_bluetooth</source>
+        <translation>Kies een USB- of Bluetooth-verbinding op Jade nadat je je herstelzin hebt geverifieerd</translation>
+    </message>
+    <message>
+        <source>id_choose_bluetooth_connection_on</source>
+        <translation>Choose Bluetooth connection on Jade after verifying your recovery phrase</translation>
     </message>
     <message>
         <source>id_choose_method_to_authorize_the</source>
@@ -718,7 +824,7 @@ Eenvoudig en veilig</translation>
     </message>
     <message>
         <source>id_clear_cache</source>
-        <translation>Clear cache</translation>
+        <translation>Cache wissen</translation>
     </message>
     <message>
         <source>id_click_to_copy</source>
@@ -817,6 +923,10 @@ Eenvoudig en veilig</translation>
         <translation>Bevestig passphrase</translation>
     </message>
     <message>
+        <source>id_confirm_swap</source>
+        <translation>Ruil bevestigen</translation>
+    </message>
+    <message>
         <source>id_confirm_transaction</source>
         <translation>Bevestig transactie</translation>
     </message>
@@ -827,6 +937,10 @@ Eenvoudig en veilig</translation>
     <message>
         <source>id_confirm_update_on_your_jade</source>
         <translation>Bevestig update op je Jade</translation>
+    </message>
+    <message>
+        <source>id_confirm_version_on_jade</source>
+        <translation>Bevestig versie op Jade</translation>
     </message>
     <message>
         <source>id_confirm_via_2fa_that_you</source>
@@ -849,8 +963,16 @@ Eenvoudig en veilig</translation>
         <translation>Gefeliciteerd!</translation>
     </message>
     <message>
+        <source>id_connect_a_different_hardware</source>
+        <translation>Sluit een ander hardwareapparaat aan</translation>
+    </message>
+    <message>
         <source>id_connect_hardware_wallet</source>
         <translation>Hardware wallet aansluiten</translation>
+    </message>
+    <message>
+        <source>id_connect_jade</source>
+        <translation>Sluit Jade aan</translation>
     </message>
     <message>
         <source>id_connect_jade_with_a_usb_cable</source>
@@ -859,6 +981,18 @@ Eenvoudig en veilig</translation>
     <message>
         <source>id_connect_through_a_proxy</source>
         <translation>Via proxy verbinden</translation>
+    </message>
+    <message>
+        <source>id_connect_usb_cable_or_enable</source>
+        <translation>Sluit USB-kabel aan of schakel Bluetooth in</translation>
+    </message>
+    <message>
+        <source>id_connect_using_usb_or_bluetooth</source>
+        <translation>Maak verbinding via USB of Bluetooth</translation>
+    </message>
+    <message>
+        <source>id_connect_with_bluetooth</source>
+        <translation>Connect with Bluetooth</translation>
     </message>
     <message>
         <source>id_connect_with_tor</source>
@@ -949,12 +1083,20 @@ Eenvoudig en veilig</translation>
         <translation>Apparaat-ID kopiëren</translation>
     </message>
     <message>
+        <source>id_copy_id</source>
+        <translation>Kopieer ID</translation>
+    </message>
+    <message>
         <source>id_copy_raw_transaction</source>
         <translation>&apos;Raw transaction&apos; kopiëren</translation>
     </message>
     <message>
         <source>id_copy_support_id</source>
-        <translation>Copy support ID</translation>
+        <translation>Ondersteunings-ID kopiëren</translation>
+    </message>
+    <message>
+        <source>id_copy_swap_proposal</source>
+        <translation>Kopieer ruilvoorstel</translation>
     </message>
     <message>
         <source>id_copy_to_clipboard</source>
@@ -981,6 +1123,10 @@ Eenvoudig en veilig</translation>
         <translation>Xpub kopiëren</translation>
     </message>
     <message>
+        <source>id_correct_order</source>
+        <translation>bestelling aanpassen</translation>
+    </message>
+    <message>
         <source>id_country</source>
         <translation>Land</translation>
     </message>
@@ -989,12 +1135,32 @@ Eenvoudig en veilig</translation>
         <translation>Aanmaken</translation>
     </message>
     <message>
+        <source>id_create_a_new_proposal</source>
+        <translation>Nieuw voorstel aanmaken</translation>
+    </message>
+    <message>
+        <source>id_create_a_new_swap</source>
+        <translation>Nieuwe ruil aanmaken</translation>
+    </message>
+    <message>
+        <source>id_create_a_pin</source>
+        <translation>PIN aanmaken</translation>
+    </message>
+    <message>
         <source>id_create_a_pin_to_access_your</source>
         <translation>Kies een PIN voor toegang tot wallet</translation>
     </message>
     <message>
         <source>id_create_a_wallet_for_bitcoin</source>
         <translation>Maak een wallet aan voor Bitcoin, Liquid of Testnet</translation>
+    </message>
+    <message>
+        <source>id_create_account</source>
+        <translation>Account aanmaken</translation>
+    </message>
+    <message>
+        <source>id_create_new_account</source>
+        <translation>Nieuwe account creëren</translation>
     </message>
     <message>
         <source>id_create_new_wallet</source>
@@ -1007,6 +1173,10 @@ Eenvoudig en veilig</translation>
     <message>
         <source>id_create_wallet</source>
         <translation>Wallet aanmaken</translation>
+    </message>
+    <message>
+        <source>id_create_your_first_account_to</source>
+        <translation>Maak je eerste account aan om betalingen te ontvangen.</translation>
     </message>
     <message>
         <source>id_creating_wallet</source>
@@ -1063,6 +1233,10 @@ Eenvoudig en veilig</translation>
     <message>
         <source>id_d_assets_in_this_account</source>
         <translation>%1 assets in deze account</translation>
+    </message>
+    <message>
+        <source>id_d_assets_in_total</source>
+        <translation>%1 assets in totaal</translation>
     </message>
     <message>
         <source>id_d_coins_selected</source>
@@ -1133,6 +1307,10 @@ Eenvoudig en veilig</translation>
         <translation>Storten</translation>
     </message>
     <message>
+        <source>id_descriptor</source>
+        <translation>Descriptor</translation>
+    </message>
+    <message>
         <source>id_details</source>
         <translation>Details</translation>
     </message>
@@ -1146,9 +1324,13 @@ Eenvoudig en veilig</translation>
     </message>
     <message>
         <source>id_different_passphrases_generate</source>
-        <translation>Different passphrases generate new wallets!
+        <translation>Verschillende passphrases genereren nieuwe wallets!
 
-Remember you can only restore this wallet with both your recovery phrase and the passphrase.</translation>
+Onthoud dat je deze wallet alleen kunt herstellen met zowel je herstelzin als je passphrase.</translation>
+    </message>
+    <message>
+        <source>id_digital_wallets</source>
+        <translation>Digitale wallets</translation>
     </message>
     <message>
         <source>id_disable</source>
@@ -1207,6 +1389,10 @@ Remember you can only restore this wallet with both your recovery phrase and the
         <translation>Geen gegevens verzamelen</translation>
     </message>
     <message>
+        <source>id_dont_have_a_jade_check_our_store</source>
+        <translation>Heb je geen Jade? Bezoek onze winkel</translation>
+    </message>
+    <message>
         <source>id_dont_show_this_again</source>
         <translation>Laat dit niet meer zien</translation>
     </message>
@@ -1255,6 +1441,10 @@ Remember you can only restore this wallet with both your recovery phrase and the
         <translation>e-mailadres</translation>
     </message>
     <message>
+        <source>id_emergency_recovery_phrase</source>
+        <translation>Noodherstel herstelzin</translation>
+    </message>
+    <message>
         <source>id_empty</source>
         <translation>Leeg</translation>
     </message>
@@ -1263,8 +1453,16 @@ Remember you can only restore this wallet with both your recovery phrase and the
         <translation>Inschakelen</translation>
     </message>
     <message>
+        <source>id_enable_2fa</source>
+        <translation>2FA inschakelen</translation>
+    </message>
+    <message>
         <source>id_enable_bluetooth</source>
         <translation>Bluetooth inschakelen</translation>
+    </message>
+    <message>
+        <source>id_enable_bluetooth_from_system</source>
+        <translation>Bluetooth inschakelen via systeeminstellingen</translation>
     </message>
     <message>
         <source>id_enable_custom_networks_debug</source>
@@ -1331,6 +1529,10 @@ Remember you can only restore this wallet with both your recovery phrase and the
         <translation>Encryptie passphrase</translation>
     </message>
     <message>
+        <source>id_enhance_security</source>
+        <translation>Beveiliging verbeteren</translation>
+    </message>
+    <message>
         <source>id_enhanced_privacy</source>
         <translation>Verbeterde privacy</translation>
     </message>
@@ -1361,6 +1563,10 @@ Remember you can only restore this wallet with both your recovery phrase and the
     <message>
         <source>id_enter_an_address_or_sweep_paper</source>
         <translation>Voer adres in of veeg papieren wallet op</translation>
+    </message>
+    <message>
+        <source>id_enter_and_confirm_a_unique_pin</source>
+        <translation>Voer unieke PIN in en bevestig deze om Jade te ontgrendelen.</translation>
     </message>
     <message>
         <source>id_enter_new_email</source>
@@ -1476,8 +1682,16 @@ herstelzin in</translation>
         <translation>Geschatte blocks tot bevestiging: %1</translation>
     </message>
     <message>
+        <source>id_everything_you_need_to_take</source>
+        <translation>Alles wat je nodig hebt om je bitcoins te beheren.</translation>
+    </message>
+    <message>
         <source>id_example_89014283334011612858333</source>
         <translation>Voorbeeld: 8.90.14.2:8333,40.116.12.85:8333</translation>
+    </message>
+    <message>
+        <source>id_exchange_rate</source>
+        <translation>Wisselkoers</translation>
     </message>
     <message>
         <source>id_existing_recovery_phrase</source>
@@ -1486,6 +1700,10 @@ herstelzin in</translation>
     <message>
         <source>id_existing_wallets</source>
         <translation>Bestaande wallets</translation>
+    </message>
+    <message>
+        <source>id_exit_guide</source>
+        <translation>Gids verlaten</translation>
     </message>
     <message>
         <source>id_expand_sidebar</source>
@@ -1506,6 +1724,10 @@ herstelzin in</translation>
     <message>
         <source>id_extended_public_key</source>
         <translation>Extended Public Key</translation>
+    </message>
+    <message>
+        <source>id_extended_public_keys</source>
+        <translation>Extended Public Keys</translation>
     </message>
     <message>
         <source>id_face_id</source>
@@ -1564,6 +1786,10 @@ herstelzin in</translation>
         <translation>Feedback</translation>
     </message>
     <message>
+        <source>id_fees_are_collected_by_bitcoin</source>
+        <translation>Kosten worden geïnd door bitcoin-miners, niet door Blockstream.</translation>
+    </message>
+    <message>
         <source>id_fees_are_too_low</source>
         <translation>Het tarief is te laag</translation>
     </message>
@@ -1590,6 +1816,22 @@ herstelzin in</translation>
     <message>
         <source>id_firmware_update_completed</source>
         <translation>Firmware-update voltooid</translation>
+    </message>
+    <message>
+        <source>id_firmware_upgrade</source>
+        <translation>Firmware-upgrade</translation>
+    </message>
+    <message>
+        <source>id_firmware_version_s</source>
+        <translation>Firmwareversie: %1</translation>
+    </message>
+    <message>
+        <source>id_follow_the_instructions_of_your</source>
+        <translation>Volg de instructies van je hardware wallet voordat je verder gaat.</translation>
+    </message>
+    <message>
+        <source>id_follow_the_instructions_on_jade</source>
+        <translation>Volg de instructies op Jade</translation>
     </message>
     <message>
         <source>id_follow_the_instructions_on_your</source>
@@ -1649,7 +1891,7 @@ herstelzin in</translation>
     </message>
     <message>
         <source>id_give_us_your_feedback</source>
-        <translation>Give us your feedback</translation>
+        <translation>Stuur ons je feedback</translation>
     </message>
     <message>
         <source>id_go_to_account</source>
@@ -1704,6 +1946,14 @@ herstelzin in</translation>
         <translation>Green gebruikt multisig met één signature van je apparaat, en één signature van de servers van Blockstream. Het instellen van tweetrapsauthenticatie zorgt voor meer veiligheid bij het verkrijgen van de signature van de server.</translation>
     </message>
     <message>
+        <source>id_hardware_devices</source>
+        <translation>Hardwareapparaten</translation>
+    </message>
+    <message>
+        <source>id_hardware_security</source>
+        <translation>Hardwarebeveiliging</translation>
+    </message>
+    <message>
         <source>id_hardware_wallet</source>
         <translation>Hardware wallet</translation>
     </message>
@@ -1718,6 +1968,10 @@ herstelzin in</translation>
     <message>
         <source>id_hash</source>
         <translation>Hash</translation>
+    </message>
+    <message>
+        <source>id_hash_s</source>
+        <translation>Hash: %1</translation>
     </message>
     <message>
         <source>id_help</source>
@@ -1736,6 +1990,14 @@ herstelzin in</translation>
         <translation>HEX</translation>
     </message>
     <message>
+        <source>id_hide_advanced_options</source>
+        <translation>Geavanceerde opties verbergen</translation>
+    </message>
+    <message>
+        <source>id_hide_amounts</source>
+        <translation>Bedragen verbergen</translation>
+    </message>
+    <message>
         <source>id_hide_assets</source>
         <translation>Assets verbergen</translation>
     </message>
@@ -1750,6 +2012,10 @@ herstelzin in</translation>
     <message>
         <source>id_hold_button_to_send</source>
         <translation>Hou ingedrukt om te verzenden</translation>
+    </message>
+    <message>
+        <source>id_hold_the_green_button_on_the</source>
+        <translation>Houd de groene knop aan de onderkant van Jade ingedrukt tot hij opstart</translation>
     </message>
     <message>
         <source>id_hold_your_nfc_tag_close_to_the</source>
@@ -1774,6 +2040,10 @@ herstelzin in</translation>
     <message>
         <source>id_i_agree_to_the</source>
         <translation>Ik ga akkoord met:</translation>
+    </message>
+    <message>
+        <source>id_i_agree_to_the_terms_of_service</source>
+        <translation>Ik ga akkoord met de dienstvoorwaarden en het privacybeleid</translation>
     </message>
     <message>
         <source>id_i_confirm_i_have_read_and</source>
@@ -1812,6 +2082,10 @@ herstelzin in</translation>
         <translation>ID</translation>
     </message>
     <message>
+        <source>id_if_for_any_reason_you_cant</source>
+        <translation>Als je om welke reden dan ook niet kunt inloggen op je wallet, kun je de herstelzin herstellen met je PIN/biometrie.</translation>
+    </message>
+    <message>
         <source>id_if_you_agree_green_will_collect</source>
         <translation>Als je akkoord gaat, zal Green gelimiteerde gebruiksgegevens verzamelen om de gebruikerservaring te optimaliseren. Gevoelige gegevens over de gebruiker of wallet worden niet verzameld.</translation>
     </message>
@@ -1822,6 +2096,10 @@ herstelzin in</translation>
     <message>
         <source>id_if_you_did_not_request_the</source>
         <translation>Als je de reset niet hebt aangevraagd, maar je het resetproces niet kunt annuleren omdat je geen toegang hebt tot bestaande tweetrapsauthenticatie-methoden, begin dan een 2FA-resetgeschil. Hiermee wordt je wallet permanent geblokkeerd, maar je kunt deze actie ongedaan maken.</translation>
+    </message>
+    <message>
+        <source>id_if_you_forget_it_or_lose_it</source>
+        <translation>Als je het vergeet of verliest, gaat je geld ook verloren.</translation>
     </message>
     <message>
         <source>id_if_you_have_access_to_a</source>
@@ -1836,6 +2114,10 @@ herstelzin in</translation>
         <translation>Als je per ongeluk het 2FA-resetgeschil hebt gestart, kun je dit ongedaan maken en de wallet terugzetten naar de 2FA-resetstatus.</translation>
     </message>
     <message>
+        <source>id_import</source>
+        <translation>Import</translation>
+    </message>
+    <message>
         <source>id_import_a_multisig_shield_wallet</source>
         <translation>Importeer een Multisig Shield-wallet die is gemaakt op Blockstream Green.</translation>
     </message>
@@ -1846,6 +2128,10 @@ herstelzin in</translation>
     <message>
         <source>id_import_a_wallet_created_with</source>
         <translation>Importeer een wallet die is gemaakt met andere apps. Deze optie werkt alleen met singlesig-wallets die BIP39-herstelzinnen gebruiken en de BIP44-, BIP49- of BIP84-regels volgen.</translation>
+    </message>
+    <message>
+        <source>id_import_from_file</source>
+        <translation>Import from file</translation>
     </message>
     <message>
         <source>id_incoming</source>
@@ -1860,8 +2146,20 @@ herstelzin in</translation>
         <translation>Tarief verhogen</translation>
     </message>
     <message>
+        <source>id_increase_security</source>
+        <translation>Beveiliging verhogen</translation>
+    </message>
+    <message>
+        <source>id_increase_the_security_of_your</source>
+        <translation>Verhoog de beveiliging van je geld door 2FA toe te voegen</translation>
+    </message>
+    <message>
         <source>id_information_not_available</source>
         <translation>Informatie niet beschikbaar.</translation>
+    </message>
+    <message>
+        <source>id_initialize_and_create_wallet</source>
+        <translation>Initialiseer en maak wallet aan</translation>
     </message>
     <message>
         <source>id_initialized</source>
@@ -1876,8 +2174,16 @@ herstelzin in</translation>
         <translation>Voer je e-mailadres in om 2FA-codes te ontvangen om overdrachten en andere bewerkingen te autoriseren.</translation>
     </message>
     <message>
+        <source>id_insert_your_phone_number_to</source>
+        <translation>Voer je telefoonnummer in om 2FA-codes te ontvangen om overdrachten en andere bewerkingen te autoriseren.</translation>
+    </message>
+    <message>
         <source>id_install_version_s</source>
         <translation>Versie installeren: %1?</translation>
+    </message>
+    <message>
+        <source>id_instant</source>
+        <translation>Direct</translation>
     </message>
     <message>
         <source>id_insufficient_funds</source>
@@ -1972,6 +2278,10 @@ herstelzin in</translation>
         <translation>Ongeldige status. Controleer of je apparaat is ontgrendeld en probeer het opnieuw.</translation>
     </message>
     <message>
+        <source>id_invalid_swap_proposal</source>
+        <translation>Ongeldig ruilvoorstel</translation>
+    </message>
+    <message>
         <source>id_invalid_twofactor_code</source>
         <translation>Ongeldige code tweetrapsauthenticatie</translation>
     </message>
@@ -1998,6 +2308,14 @@ herstelzin in</translation>
     <message>
         <source>id_it_looks_like_you_have_no</source>
         <translation>Het lijkt erop dat je geen wallet hebt. Klik hieronder om er een toe te voegen.</translation>
+    </message>
+    <message>
+        <source>id_jade_is_a_specialized_device</source>
+        <translation>Jade is een gespecialiseerd apparaat dat is ontworpen om de sleutels die nodig zijn om je bitcoins uit te geven veilig op te slaan.</translation>
+    </message>
+    <message>
+        <source>id_jade_is_an_isolated_device_not</source>
+        <translation>Jade is een geïsoleerd apparaat dat niet is verbonden met het internet, wat betekent dat je geld wordt beschermd tegen een gehackte of gecompromitteerde telefoon.</translation>
     </message>
     <message>
         <source>id_jade_unlocked</source>
@@ -2044,6 +2362,10 @@ herstelzin in</translation>
         <translation>Kom meer te weten</translation>
     </message>
     <message>
+        <source>id_learn_more_about_amp_the_assets</source>
+        <translation>Meer informatie over AMP, de assets en je kwalificatie</translation>
+    </message>
+    <message>
         <source>id_learn_more_about_s</source>
         <translation>Kom meer te weten over %1.</translation>
     </message>
@@ -2060,6 +2382,10 @@ herstelzin in</translation>
         <translation>Ledger ondersteunt een beperkte set assets: tik hier om de lijst te bekijken.</translation>
     </message>
     <message>
+        <source>id_legacy</source>
+        <translation>Legacy</translation>
+    </message>
+    <message>
         <source>id_legacy_account</source>
         <translation>Verouderde account</translation>
     </message>
@@ -2072,8 +2398,12 @@ herstelzin in</translation>
         <translation>&apos;Legacy script&apos;-munten</translation>
     </message>
     <message>
+        <source>id_legacy_segwit</source>
+        <translation>Legacy SegWit</translation>
+    </message>
+    <message>
         <source>id_legacy_segwit_account</source>
-        <translation>Legacy SegWit Account</translation>
+        <translation>Legacy SegWit-account</translation>
     </message>
     <message>
         <source>id_legacy_segwit_bip49</source>
@@ -2082,6 +2412,14 @@ herstelzin in</translation>
     <message>
         <source>id_lets_get_you_set_up</source>
         <translation>We gaan alles instellen.</translation>
+    </message>
+    <message>
+        <source>id_lightning</source>
+        <translation>Lightning</translation>
+    </message>
+    <message>
+        <source>id_lightning_network_account</source>
+        <translation>Lightning Network-account die mogelijk wordt gemaakt door Greenlight. Te gebruiken met je eigen CLN-node.</translation>
     </message>
     <message>
         <source>id_liquid_electrum_server</source>
@@ -2217,7 +2555,7 @@ herstelzin in</translation>
     </message>
     <message>
         <source>id_login_with_bip39_passphrase</source>
-        <translation>Login with BIP39 Passphrase</translation>
+        <translation>Inloggen met BIP39-passphrase</translation>
     </message>
     <message>
         <source>id_logout</source>
@@ -2230,6 +2568,10 @@ herstelzin in</translation>
     <message>
         <source>id_look_at_the_device_for_the</source>
         <translation>Kijk op het apparaat voor de positie van de cijfers</translation>
+    </message>
+    <message>
+        <source>id_looking_for_device</source>
+        <translation>Op zoek naar apparaat...</translation>
     </message>
     <message>
         <source>id_looking_for_wallets</source>
@@ -2246,6 +2588,14 @@ herstelzin in</translation>
     <message>
         <source>id_main_account</source>
         <translation>Hoofdaccount</translation>
+    </message>
+    <message>
+        <source>id_make_sure_to_be_in_a_private</source>
+        <translation>Zorg ervoor dat je je in een besloten en veilige ruimte bevindt</translation>
+    </message>
+    <message>
+        <source>id_make_sure_you_are_alone_and_no</source>
+        <translation>Zorg ervoor dat je alleen bent en dat geen camera jou of het scherm opneemt.</translation>
     </message>
     <message>
         <source>id_make_sure_you_have_enabled_otg</source>
@@ -2340,6 +2690,10 @@ herstelzin in</translation>
         <translation>Meer opties</translation>
     </message>
     <message>
+        <source>id_move_to_2fa_protected</source>
+        <translation>Wees beschermd met 2FA</translation>
+    </message>
+    <message>
         <source>id_multi_server_validation</source>
         <translation>Multi Server-validatie</translation>
     </message>
@@ -2348,8 +2702,16 @@ herstelzin in</translation>
         <translation>Meerdere assets</translation>
     </message>
     <message>
+        <source>id_multisig</source>
+        <translation>Multisig</translation>
+    </message>
+    <message>
         <source>id_multisig_shield</source>
         <translation>Multisig Shield</translation>
+    </message>
+    <message>
+        <source>id_my_assets</source>
+        <translation>Mijn assets</translation>
     </message>
     <message>
         <source>id_my_notes</source>
@@ -2358,6 +2720,10 @@ herstelzin in</translation>
     <message>
         <source>id_name</source>
         <translation>Naam</translation>
+    </message>
+    <message>
+        <source>id_native_segwit</source>
+        <translation>Native SegWit</translation>
     </message>
     <message>
         <source>id_need_help</source>
@@ -2373,7 +2739,7 @@ herstelzin in</translation>
     </message>
     <message>
         <source>id_network_fee</source>
-        <translation>NETWERKKOSTEN</translation>
+        <translation>Netwerkkosten</translation>
     </message>
     <message>
         <source>id_network_monitor</source>
@@ -2446,6 +2812,10 @@ herstelzin in</translation>
     <message>
         <source>id_nfc_tags_written</source>
         <translation>NFC-tags beschreven:</translation>
+    </message>
+    <message>
+        <source>id_no_addresses</source>
+        <translation>Geen adressen</translation>
     </message>
     <message>
         <source>id_no_amount_specified</source>
@@ -2557,8 +2927,20 @@ Probeer je wallet handmatig te herstellen.</translation>
         <translation>Niet geïnitialiseerd</translation>
     </message>
     <message>
+        <source>id_not_now</source>
+        <translation>Niet nu</translation>
+    </message>
+    <message>
         <source>id_not_on_longest_chain</source>
         <translation>Niet op langste chain</translation>
+    </message>
+    <message>
+        <source>id_note</source>
+        <translation>Opmerking</translation>
+    </message>
+    <message>
+        <source>id_note_down_your_recovery_phrase</source>
+        <translation>Schrijf je herstelzin op. Bewaar hem op een veilige plek!</translation>
     </message>
     <message>
         <source>id_notifications</source>
@@ -2575,6 +2957,10 @@ Probeer je wallet handmatig te herstellen.</translation>
     <message>
         <source>id_of_s</source>
         <translation>van %1</translation>
+    </message>
+    <message>
+        <source>id_offline_key_storage</source>
+        <translation>Offline sleutelopslag</translation>
     </message>
     <message>
         <source>id_ok</source>
@@ -2657,6 +3043,10 @@ Probeer je wallet handmatig te herstellen.</translation>
         <translation>Uitgaand</translation>
     </message>
     <message>
+        <source>id_output_descriptors</source>
+        <translation>Output Descriptors</translation>
+    </message>
+    <message>
         <source>id_overview</source>
         <translation>Overzicht</translation>
     </message>
@@ -2678,7 +3068,7 @@ Probeer je wallet handmatig te herstellen.</translation>
     </message>
     <message>
         <source>id_passphrase_protected</source>
-        <translation>Passphrase protected</translation>
+        <translation>Beveiligd met passphrase</translation>
     </message>
     <message>
         <source>id_password</source>
@@ -2693,12 +3083,20 @@ Probeer je wallet handmatig te herstellen.</translation>
         <translation>Plakken</translation>
     </message>
     <message>
+        <source>id_paste_an_existing_proposal</source>
+        <translation>Bestaand voorstel plakken</translation>
+    </message>
+    <message>
         <source>id_path_used_for_signing</source>
         <translation>Gebruikte pad voor signatures</translation>
     </message>
     <message>
         <source>id_pending_confirmation</source>
         <translation>Bevestiging in behandeling</translation>
+    </message>
+    <message>
+        <source>id_permanent_2fa_account_ideal_for</source>
+        <translation>Permanente 2FA-account, ideaal voor langdurige opslag, optioneel met 3e noodsleutel op hardware wallet.</translation>
     </message>
     <message>
         <source>id_permanently_block_this_wallet</source>
@@ -2817,6 +3215,10 @@ Probeer je wallet handmatig te herstellen.</translation>
         <translation>Wacht tot je Ledger het adres weergeeft om het te valideren. Dit kan tot 20 seconden duren.</translation>
     </message>
     <message>
+        <source>id_power_on_jade</source>
+        <translation>Jade inschakelen</translation>
+    </message>
+    <message>
         <source>id_precision</source>
         <translation>Precisie</translation>
     </message>
@@ -2873,20 +3275,24 @@ Probeer je wallet handmatig te herstellen.</translation>
         <translation>QR-scanner</translation>
     </message>
     <message>
+        <source>id_quick_setup_2fa_account_ideal</source>
+        <translation>Snel op te zetten 2FA-account, ideaal voor actief geld uitgeven (2FA vervalt als je gedurende 1 jaar geen geld verplaatst).</translation>
+    </message>
+    <message>
         <source>id_radio_firmware</source>
         <translation>Radio-firmware</translation>
     </message>
     <message>
         <source>id_rate</source>
-        <translation>Rate</translation>
+        <translation>Beoordeel</translation>
     </message>
     <message>
         <source>id_rate_us</source>
-        <translation>Rate us</translation>
+        <translation>Beoordeel ons</translation>
     </message>
     <message>
         <source>id_rate_your_experience</source>
-        <translation>Rate your experience</translation>
+        <translation>Beoordeel je ervaring</translation>
     </message>
     <message>
         <source>id_read_more</source>
@@ -2909,6 +3315,10 @@ Probeer je wallet handmatig te herstellen.</translation>
         <translation>Ontvangen</translation>
     </message>
     <message>
+        <source>id_receive_any_liquid_asset</source>
+        <translation>Ontvang Liquid-assets</translation>
+    </message>
+    <message>
         <source>id_receive_email_notifications_for</source>
         <translation>Ontvang e-mailnotificaties voor verzonden en ontvangen transacties</translation>
     </message>
@@ -2919,6 +3329,10 @@ Probeer je wallet handmatig te herstellen.</translation>
     <message>
         <source>id_received_on</source>
         <translation>Ontvangen op</translation>
+    </message>
+    <message>
+        <source>id_receiving</source>
+        <translation>Ontvangen</translation>
     </message>
     <message>
         <source>id_recently_used_wallets</source>
@@ -3009,8 +3423,20 @@ Probeer je wallet handmatig te herstellen.</translation>
         <translation>Herladen</translation>
     </message>
     <message>
+        <source>id_remember_device</source>
+        <translation>Apparaat onthouden</translation>
+    </message>
+    <message>
+        <source>id_remember_device_connection</source>
+        <translation>Apparaatverbinding onthouden</translation>
+    </message>
+    <message>
         <source>id_remember_me</source>
         <translation>Onthoud mij</translation>
+    </message>
+    <message>
+        <source>id_remember_my_device</source>
+        <translation>Mijn apparaat onthouden</translation>
     </message>
     <message>
         <source>id_remove</source>
@@ -3133,8 +3559,32 @@ Probeer je wallet handmatig te herstellen.</translation>
         <translation>%1 van %2</translation>
     </message>
     <message>
+        <source>id_s_is_a_liquid_asset_you_can</source>
+        <translation>%1 is een Liquid-asset. Je kunt het rechtstreeks op elke Liquid-account ontvangen.</translation>
+    </message>
+    <message>
+        <source>id_s_is_a_liquid_asset_you_need_a</source>
+        <translation>%1 is een Liquid-asset. Je hebt een Liquid-account nodig om deze te ontvangen.</translation>
+    </message>
+    <message>
+        <source>id_s_is_an_amp_asset_you_can</source>
+        <translation>%1 is een AMP-asset. Je kunt het rechtstreeks op elke AMP-account ontvangen.</translation>
+    </message>
+    <message>
+        <source>id_s_is_an_amp_asset_you_need_an</source>
+        <translation>%1 is een AMP-asset. Je hebt een AMP-account nodig om het te ontvangen.</translation>
+    </message>
+    <message>
         <source>id_s_network</source>
         <translation>%1 netwerk</translation>
+    </message>
+    <message>
+        <source>id_safe_environment</source>
+        <translation>Veilige omgeving</translation>
+    </message>
+    <message>
+        <source>id_safely_stored</source>
+        <translation>Veilig opgeborgen</translation>
     </message>
     <message>
         <source>id_save</source>
@@ -3147,6 +3597,10 @@ Probeer je wallet handmatig te herstellen.</translation>
     <message>
         <source>id_save_your_mnemonic</source>
         <translation>Sla je herstelzin op</translation>
+    </message>
+    <message>
+        <source>id_scan_a_proposal</source>
+        <translation>Scan een voorstel</translation>
     </message>
     <message>
         <source>id_scan_a_qr_code_for_spv_pairing</source>
@@ -3197,12 +3651,20 @@ Probeer je wallet handmatig te herstellen.</translation>
         <translation>Beveiligingswijziging</translation>
     </message>
     <message>
+        <source>id_see_archived_accounts_s</source>
+        <translation>See Archived Accounts (%1)</translation>
+    </message>
+    <message>
         <source>id_see_our_privacy_policy_s</source>
         <translation>Zie ons privacybeleid %1</translation>
     </message>
     <message>
         <source>id_see_our_terms_of_service_s</source>
         <translation>Zie onze dienstvoorwaarden %1</translation>
+    </message>
+    <message>
+        <source>id_segwit</source>
+        <translation>SegWit</translation>
     </message>
     <message>
         <source>id_segwit_account</source>
@@ -3231,6 +3693,14 @@ Probeer je wallet handmatig te herstellen.</translation>
     <message>
         <source>id_select_duration_of_twofactor</source>
         <translation>Selecteer de duur van de tweetrapsauthenticatie-bescherming voor je munten. De nieuwe optie is van toepassing op nieuw ontvangen munten.</translation>
+    </message>
+    <message>
+        <source>id_select_initalize_to_create_a</source>
+        <translation>Selecteer Initialiseren om een nieuwe wallet aan te maken, en maak vervolgens een back-up en verifieer je herstelzin</translation>
+    </message>
+    <message>
+        <source>id_select_initialize_and_choose_to</source>
+        <translation>Selecteer Initialiseren en creëer een nieuwe wallet</translation>
     </message>
     <message>
         <source>id_select_network</source>
@@ -3286,11 +3756,15 @@ Probeer je wallet handmatig te herstellen.</translation>
     </message>
     <message>
         <source>id_sending</source>
-        <translation>VERZENDEN</translation>
+        <translation>Sending</translation>
     </message>
     <message>
         <source>id_sending_request</source>
         <translation>Verzoek verzenden…</translation>
+    </message>
+    <message>
+        <source>id_sensitive_information</source>
+        <translation>Gevoelige informatie</translation>
     </message>
     <message>
         <source>id_sent</source>
@@ -3397,6 +3871,18 @@ Probeer je wallet handmatig te herstellen.</translation>
         <translation>Instellingen</translation>
     </message>
     <message>
+        <source>id_setup_2fa_now</source>
+        <translation>Nu 2FA instellen</translation>
+    </message>
+    <message>
+        <source>id_setup_a_new_wallet</source>
+        <translation>Een nieuwe wallet instellen</translation>
+    </message>
+    <message>
+        <source>id_setup_guide</source>
+        <translation>Setuphandleiding</translation>
+    </message>
+    <message>
         <source>id_setup_jade</source>
         <translation>Jade instellen</translation>
     </message>
@@ -3407,6 +3893,10 @@ Probeer je wallet handmatig te herstellen.</translation>
     <message>
         <source>id_setup_pin_and_s</source>
         <translation>PIN en %1 instellen</translation>
+    </message>
+    <message>
+        <source>id_setup_your_jade</source>
+        <translation>Je Jade instellen</translation>
     </message>
     <message>
         <source>id_share</source>
@@ -3465,12 +3955,32 @@ Probeer je wallet handmatig te herstellen.</translation>
         <translation>QR-code tonen</translation>
     </message>
     <message>
+        <source>id_show_recovery_phrase</source>
+        <translation>Herstelzin weergeven</translation>
+    </message>
+    <message>
+        <source>id_sign_transaction</source>
+        <translation>Sign Transaction</translation>
+    </message>
+    <message>
         <source>id_signature_validation_failed_if</source>
         <translation>Signature-validatie mislukt. Als deze fout onverwacht is en herhaaldelijk optreedt, is het mogelijk dat de hardware wallet defect of gecompromitteerd is. Het apparaat kan mogelijk je sleutels lekken, wat kan leiden tot verlies van geld. Overweeg om de hardware wallet te vervangen.</translation>
     </message>
     <message>
         <source>id_signup_in_progress</source>
         <translation>Aanmelding in behandeling</translation>
+    </message>
+    <message>
+        <source>id_simple</source>
+        <translation>Simpel</translation>
+    </message>
+    <message>
+        <source>id_simple__secure_selfcustody</source>
+        <translation>Simpel en veilig zelfbeheer</translation>
+    </message>
+    <message>
+        <source>id_simple_portable_standard</source>
+        <translation>Eenvoudige, mobiele, standaard singlesig-account, beveiligd met je sleutel, de herstelzin.</translation>
     </message>
     <message>
         <source>id_simplified_payment_verification</source>
@@ -3486,7 +3996,7 @@ Probeer je wallet handmatig te herstellen.</translation>
     </message>
     <message>
         <source>id_skip</source>
-        <translation>OVERSLAAN</translation>
+        <translation>Skip</translation>
     </message>
     <message>
         <source>id_skip_not_recommended</source>
@@ -3568,7 +4078,7 @@ Reset deze instelling en activeer hem vervolgens opnieuw.</translation>
     </message>
     <message>
         <source>id_standard</source>
-        <translation>Standard</translation>
+        <translation>Standaard</translation>
     </message>
     <message>
         <source>id_standard_account</source>
@@ -3595,6 +4105,18 @@ Reset deze instelling en activeer hem vervolgens opnieuw.</translation>
         <translation>Status</translation>
     </message>
     <message>
+        <source>id_step</source>
+        <translation>Stap</translation>
+    </message>
+    <message>
+        <source>id_store_it_somewhere_safe</source>
+        <translation>Bewaar het op een veilige plek.</translation>
+    </message>
+    <message>
+        <source>id_submit</source>
+        <translation>Verzenden</translation>
+    </message>
+    <message>
         <source>id_success</source>
         <translation>Succes</translation>
     </message>
@@ -3605,6 +4127,18 @@ Reset deze instelling en activeer hem vervolgens opnieuw.</translation>
     <message>
         <source>id_support_page</source>
         <translation>Ondersteuningspagina</translation>
+    </message>
+    <message>
+        <source>id_swap</source>
+        <translation>Ruilen</translation>
+    </message>
+    <message>
+        <source>id_swap_proposal</source>
+        <translation>Ruilvoorstel</translation>
+    </message>
+    <message>
+        <source>id_swapped</source>
+        <translation>Geruild</translation>
     </message>
     <message>
         <source>id_sweep</source>
@@ -3642,6 +4176,10 @@ Reset deze instelling en activeer hem vervolgens opnieuw.</translation>
         <translation>Systeembericht</translation>
     </message>
     <message>
+        <source>id_take_control_your_keys_your</source>
+        <translation>Neem het heft in handen: jouw sleutels, jouw bitcoins</translation>
+    </message>
+    <message>
         <source>id_tap_on_the_card_to_view</source>
         <translation>Tik op de kaart om de transacties in te zien.</translation>
     </message>
@@ -3654,8 +4192,12 @@ Reset deze instelling en activeer hem vervolgens opnieuw.</translation>
         <translation>Tik om een QR-code te scannen en te verbinden met een node voor SPV</translation>
     </message>
     <message>
+        <source>id_taproot</source>
+        <translation>Taproot</translation>
+    </message>
+    <message>
         <source>id_taproot_account</source>
-        <translation>Taproot account</translation>
+        <translation>Taproot-account</translation>
     </message>
     <message>
         <source>id_taproot_bip86</source>
@@ -3691,7 +4233,7 @@ Reset deze instelling en activeer hem vervolgens opnieuw.</translation>
     </message>
     <message>
         <source>id_thank_you_for_your_feedback</source>
-        <translation>Thank you for your feedback</translation>
+        <translation>Bedankt voor je feedback</translation>
     </message>
     <message>
         <source>id_the_1_year_2fa_reset_process</source>
@@ -3751,7 +4293,7 @@ Reset deze instelling en activeer hem vervolgens opnieuw.</translation>
     </message>
     <message>
         <source>id_the_qr_code_does_not_include</source>
-        <translation>The QR code does not include the BIP39 Passphrase</translation>
+        <translation>De QR-code bevat geen BIP39-passphrase</translation>
     </message>
     <message>
         <source>id_the_recovery_key_below_will_not</source>
@@ -3790,6 +4332,12 @@ Reset deze instelling en activeer hem vervolgens opnieuw.</translation>
         <translation>Er is al een PIN ingesteld voor een %1 wallet. Als je doorgaat kan er geen PIN worden ingesteld en kun je je alleen aanmelden met de 24 woorden van de herstelzin. Je kunt de PIN uitschakelen via de instellingen of door hem drie keer verkeerd in te voeren.</translation>
     </message>
     <message>
+        <source>id_there_is_already_an_archived</source>
+        <translation>Er is al een gearchiveerde account.
+
+Wil je een nieuwe account aanmaken?</translation>
+    </message>
+    <message>
         <source>id_these_are_some_compatible</source>
         <translation>Dit zijn enkele compatibele wallets:</translation>
     </message>
@@ -3807,7 +4355,7 @@ Reset deze instelling en activeer hem vervolgens opnieuw.</translation>
     </message>
     <message>
         <source>id_this_wallet_is_based_on_your</source>
-        <translation>This wallet is based on your recovery phrase and a BIP39 Passphrase</translation>
+        <translation>Deze wallet is gebaseerd op je herstelzin en een BIP39-passphrase</translation>
     </message>
     <message>
         <source>id_this_wallet_operates_on_a_test</source>
@@ -3874,6 +4422,10 @@ Reset deze instelling en activeer hem vervolgens opnieuw.</translation>
         <translation>Tor maakt gebruik van %1 en werkt alleen als je proxy Orbot of Tor ondersteunt</translation>
     </message>
     <message>
+        <source>id_total</source>
+        <translation>Totaal</translation>
+    </message>
+    <message>
         <source>id_total_assets</source>
         <translation>Totale assets</translation>
     </message>
@@ -3926,6 +4478,10 @@ Reset deze instelling en activeer hem vervolgens opnieuw.</translation>
         <translation>Transacties</translation>
     </message>
     <message>
+        <source>id_troubleshoot</source>
+        <translation>Problemen oplossen</translation>
+    </message>
+    <message>
         <source>id_try_again</source>
         <translation>Probeer het opnieuw</translation>
     </message>
@@ -3972,6 +4528,10 @@ Reset deze instelling en activeer hem vervolgens opnieuw.</translation>
     <message>
         <source>id_twofactor_threshold</source>
         <translation>Limiet tweetrapsauthenticatie</translation>
+    </message>
+    <message>
+        <source>id_tx_count</source>
+        <translation>TX-aantal</translation>
     </message>
     <message>
         <source>id_txid</source>
@@ -4030,6 +4590,10 @@ Reset deze instelling en activeer hem vervolgens opnieuw.</translation>
         <translation>Ontgrendel Jade om door te gaan</translation>
     </message>
     <message>
+        <source>id_unlock_your_device_to_continue</source>
+        <translation>Ontgrendel je apparaat om door te gaan</translation>
+    </message>
+    <message>
         <source>id_unlocked_coins_can_be_spent_and</source>
         <translation>Ontgrendelde munten kun je uitgeven en worden opgenomen in je saldo.</translation>
     </message>
@@ -4082,8 +4646,20 @@ Reset deze instelling en activeer hem vervolgens opnieuw.</translation>
         <translation>Gebruik Android-schermvergrendeling om in te loggen</translation>
     </message>
     <message>
+        <source>id_use_comma_separated_values_or</source>
+        <translation>Use comma separated values or keep scanning</translation>
+    </message>
+    <message>
+        <source>id_use_hardware_device</source>
+        <translation>Hardwareapparaat gebruiken</translation>
+    </message>
+    <message>
         <source>id_use_secure_display_and_screen</source>
         <translation>Veilige weergave en schermvergrendeling gebruiken</translation>
+    </message>
+    <message>
+        <source>id_use_the_jogwheel_to_select_the</source>
+        <translation>Gebruik het draaiwiel om het woord te selecteren dat overeenkomt met je herstelzin.</translation>
     </message>
     <message>
         <source>id_use_your_email_to_receive</source>
@@ -4120,6 +4696,10 @@ Reset deze instelling en activeer hem vervolgens opnieuw.</translation>
     <message>
         <source>id_verify_on_device</source>
         <translation>Verifiëren op apparaat</translation>
+    </message>
+    <message>
+        <source>id_verify_recovery_phrase</source>
+        <translation>Controleer de herstelzin</translation>
     </message>
     <message>
         <source>id_verify_your_bitcoin</source>
@@ -4186,6 +4766,10 @@ Reset deze instelling en activeer hem vervolgens opnieuw.</translation>
         <translation>Wallet al hersteld</translation>
     </message>
     <message>
+        <source>id_wallet_assets</source>
+        <translation>Wallet-assets</translation>
+    </message>
+    <message>
         <source>id_wallet_backup</source>
         <translation>Wallet-back-up</translation>
     </message>
@@ -4208,6 +4792,14 @@ Reset deze instelling en activeer hem vervolgens opnieuw.</translation>
     <message>
         <source>id_wallet_not_found</source>
         <translation>Wallet niet gevonden</translation>
+    </message>
+    <message>
+        <source>id_wallet_pockets</source>
+        <translation>Wallet-zakken</translation>
+    </message>
+    <message>
+        <source>id_wallet_transactions</source>
+        <translation>Wallet-transacties</translation>
     </message>
     <message>
         <source>id_wallets</source>
@@ -4294,6 +4886,14 @@ Reset deze instelling en activeer hem vervolgens opnieuw.</translation>
         <translation>Welkom bij</translation>
     </message>
     <message>
+        <source>id_welcome_to_blockstream_jade</source>
+        <translation>Welkom bij Blockstream Jade</translation>
+    </message>
+    <message>
+        <source>id_welcome_to_your_wallet</source>
+        <translation>Welkom bij jouw wallet!</translation>
+    </message>
+    <message>
         <source>id_well_done_you_can_continue</source>
         <translation>Goed gedaan, je kunt doorgaan</translation>
     </message>
@@ -4308,6 +4908,10 @@ Reset deze instelling en activeer hem vervolgens opnieuw.</translation>
     <message>
         <source>id_well_get_you_set_up_with_an_amp</source>
         <translation>We zetten snel en eenvoudig een AMP-wallet op. Houd er rekening mee dat je ook AMP-accounts kunt maken in bestaande Liquid-wallets.</translation>
+    </message>
+    <message>
+        <source>id_what_is_word_number_s</source>
+        <translation>Wat is woord nummer %1?</translation>
     </message>
     <message>
         <source>id_what_type_of_account_would_you</source>
@@ -4330,6 +4934,10 @@ Reset deze instelling en activeer hem vervolgens opnieuw.</translation>
         <translation>Waar wil je het geld naar overmaken?</translation>
     </message>
     <message>
+        <source>id_whomever_can_access_your</source>
+        <translation>Wie toegang heeft tot je herstelzin, kan je geld stelen.</translation>
+    </message>
+    <message>
         <source>id_wireless</source>
         <translation>Draadloos</translation>
     </message>
@@ -4347,7 +4955,7 @@ Reset deze instelling en activeer hem vervolgens opnieuw.</translation>
     </message>
     <message>
         <source>id_write_down_your_recovery_phrase</source>
-        <translation>Noteer je herstelzin op papier en sla het ergens veilig op.</translation>
+        <translation>Schrijf je herstelzin in de juiste volgorde op</translation>
     </message>
     <message>
         <source>id_wrong_choice_check_your</source>
@@ -4382,8 +4990,16 @@ Reset deze instelling en activeer hem vervolgens opnieuw.</translation>
         <translation>Je kunt dit later wijzigen.</translation>
     </message>
     <message>
+        <source>id_you_can_still_receive_funds_but</source>
+        <translation>You can still receive funds, but they won’t be shown on your total balance.</translation>
+    </message>
+    <message>
         <source>id_you_cannot_create_or_restore_a</source>
         <translation>Je kunt geen wallet maken of herstellen op %1 omdat je al een wallet met PIN hebt.</translation>
+    </message>
+    <message>
+        <source>id_you_have_a_significant_amount</source>
+        <translation>Je hebt hier een aanzienlijk bedrag, overweeg om het te beschermen met 2FA.</translation>
     </message>
     <message>
         <source>id_you_have_clicked_a_payment_uri</source>
@@ -4407,7 +5023,7 @@ Reset deze instelling en activeer hem vervolgens opnieuw.</translation>
     </message>
     <message>
         <source>id_you_have_successfully_sent_a</source>
-        <translation>You have successfully sent a transaction. Please give us your feedback to improve Green.</translation>
+        <translation>Je hebt met succes een transactie verzonden. Geef ons je feedback om Green te verbeteren.</translation>
     </message>
     <message>
         <source>id_you_have_to_authenticate_using</source>
@@ -4426,12 +5042,16 @@ Reset deze instelling en activeer hem vervolgens opnieuw.</translation>
         <translation>Je MOET deze herstelzin NU opslaan</translation>
     </message>
     <message>
+        <source>id_you_need_a_liquid_account_in</source>
+        <translation>Je hebt een Liquid-account nodig om deze te ontvangen.</translation>
+    </message>
+    <message>
         <source>id_you_only_have_one_twofactor</source>
         <translation>Je hebt slechts één tweetrapsauthenticatiemethode ingesteld</translation>
     </message>
     <message>
         <source>id_you_will_be_asked_to_enter_your</source>
-        <translation>You will be asked to enter your passphrase at every login.</translation>
+        <translation>Bij elke login wordt je gevraagd je passphrase in te voeren.</translation>
     </message>
     <message>
         <source>id_you_will_need_to_reenter_your</source>
@@ -4462,6 +5082,14 @@ Reset deze instelling en activeer hem vervolgens opnieuw.</translation>
         <translation>Je 2FA verloopt, dus als je de toegang tot je 2FA-methode verliest, of de Blockstream Green-dienst niet beschikbaar is, kun je je bitcoins altijd herstellen met behulp van deze open-source-tool</translation>
     </message>
     <message>
+        <source>id_your_bitcoin_and_liquid_assets</source>
+        <translation>Je bitcoins en Liquid-assets worden opgeslagen op de blockchain en kunnen alleen worden uitgegeven met behulp van de sleutels die zijn opgeslagen op Jade.</translation>
+    </message>
+    <message>
+        <source>id_your_bluetooth_adapter_is</source>
+        <translation>Je Bluetooth-adapter is uitgeschakeld</translation>
+    </message>
+    <message>
         <source>id_your_device_was_disconnected</source>
         <translation>De verbinding met je apparaat is verbroken</translation>
     </message>
@@ -4478,12 +5106,32 @@ Reset deze instelling en activeer hem vervolgens opnieuw.</translation>
         <translation>Je geld wordt beveiligd door een enkele sleutel op je apparaat. Eenvoudiger in te stellen en te gebruiken dan multisig. Kies bij twijfel deze optie.</translation>
     </message>
     <message>
+        <source>id_your_funds_are_secured_by_your</source>
+        <translation>Je geld is beveiligd met je PIN. Eenvoudig in gebruik, standaard, en te gebruiken op de meeste bitcoin-wallets.</translation>
+    </message>
+    <message>
+        <source>id_your_funds_have_grown</source>
+        <translation>Je geldwaarde is de laatste tijd gestegen.
+
+Overweeg het gebruik van een 2FA-beveiligde account, zodat al je uitgaande transacties een extra beschermingslaag hebben.
+Doe daarvoor het volgende:
+
+1. Maak een 2FA-beveiligd account aan;
+2. Stel je 2FA-methode in;
+3. Maak je geld over naar de nieuwe rekening;
+4. Archiveer de oude account;</translation>
+    </message>
+    <message>
         <source>id_your_green_wallet_is_now_ready</source>
         <translation>Green Wallet is nu klaar voor gebruik.</translation>
     </message>
     <message>
         <source>id_your_ios_device_might_not_be</source>
         <translation>Je iOS-apparaat wordt mogelijk niet ondersteund</translation>
+    </message>
+    <message>
+        <source>id_your_keys_secure_your_coins_on</source>
+        <translation>Je sleutels beveiligen je munten op de blockchain</translation>
     </message>
     <message>
         <source>id_your_notifications_will_be</source>
@@ -4496,6 +5144,10 @@ Reset deze instelling en activeer hem vervolgens opnieuw.</translation>
     <message>
         <source>id_your_s_sent_to_s_has_been</source>
         <translation>Je %1 (verstuurd naar %2) is bevestigd</translation>
+    </message>
+    <message>
+        <source>id_your_swap_proposal_is_generated</source>
+        <translation>Je ruilvoorstel is gegenereerd!</translation>
     </message>
     <message>
         <source>id_your_transactions_will_be_shown</source>

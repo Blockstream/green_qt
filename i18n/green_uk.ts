@@ -14,7 +14,7 @@
     </message>
     <message>
         <source>id_12_words</source>
-        <translation>12 words</translation>
+        <translation>12 слів</translation>
     </message>
     <message>
         <source>id_15_months_65535_blocks</source>
@@ -45,7 +45,7 @@
     </message>
     <message>
         <source>id_24_words</source>
-        <translation>24 words</translation>
+        <translation>24 слова</translation>
     </message>
     <message>
         <source>id_2_hours</source>
@@ -64,24 +64,54 @@
         <translation>Термін дії 2FA</translation>
     </message>
     <message>
+        <source>id_2fa_isnt_set_up_yetnnyou_can</source>
+        <translation>Двофакторна автентифікація ще не налаштована.
+
+Ви можете вибрати свій улюблений метод 2FA серед таких, як додаток для автентифікації, email, SMS або дзвінок.</translation>
+    </message>
+    <message>
         <source>id_2fa_methods</source>
         <translation>Методи 2FA</translation>
+    </message>
+    <message>
+        <source>id_2fa_protected</source>
+        <translation>Захищено 2FA</translation>
     </message>
     <message>
         <source>id_2fa_reset_in_progress</source>
         <translation>Скидання 2FA в процесі</translation>
     </message>
     <message>
+        <source>id_2fa_shield</source>
+        <translation>2FA-щит</translation>
+    </message>
+    <message>
+        <source>id_2fa_shield_account</source>
+        <translation>Акаунт з 2FA-щитом</translation>
+    </message>
+    <message>
         <source>id_2fa_threshold</source>
-        <translation>Поріг 2FA</translation>
+        <translation>Порогове значення 2FA</translation>
+    </message>
+    <message>
+        <source>id_2of2</source>
+        <translation>2-з-2</translation>
     </message>
     <message>
         <source>id_2of3</source>
-        <translation>2of3</translation>
+        <translation>2-з-3</translation>
     </message>
     <message>
         <source>id_2of3_account</source>
-        <translation>Акаунт 2із3</translation>
+        <translation>Акаунт 2 з 3</translation>
+    </message>
+    <message>
+        <source>id_2of3_with_2fa</source>
+        <translation>2 з 3 з 2FA</translation>
+    </message>
+    <message>
+        <source>id_2of3_with_2fa_shield</source>
+        <translation>2-з-3 з 2FA-щитом</translation>
     </message>
     <message>
         <source>id_4_hours</source>
@@ -97,7 +127,7 @@
     </message>
     <message>
         <source>id_a_2of3_account_requires_two_out</source>
-        <translation>Акаунт 2із3 вимагає двох підписів з трьох, щоб витрачати монети. Третій підпис - це резервний ключ, відомий тільки вам. Це дає вам переваги безпеки стандартного облікового запису, в той же час дозволяючи вам переміщати свої монети незалежно в будь-який момент часу.</translation>
+        <translation>Акаунт 2-з-3 вимагає двох підписів з трьох, щоб витрачати монети. Третій підпис - це резервний ключ, відомий тільки вам. Це дає вам переваги безпеки стандартного облікового запису, в той же час дозволяючи вам переміщати свої монети незалежно в будь-який момент часу.</translation>
     </message>
     <message>
         <source>id_a_new_transaction_has_just</source>
@@ -105,7 +135,7 @@
     </message>
     <message>
         <source>id_a_newer_version_of_blockstream</source>
-        <translation>Доступна новіша версія Blockstream Green</translation>
+        <translation>Доступна нова версія Blockstream Green</translation>
     </message>
     <message>
         <source>id_a_screen_lock_must_be_enabled</source>
@@ -129,11 +159,35 @@
     </message>
     <message>
         <source>id_account</source>
-        <translation>АКАУНТ</translation>
+        <translation>Акаунт</translation>
+    </message>
+    <message>
+        <source>id_account__asset</source>
+        <translation>Акаунт та Актив</translation>
+    </message>
+    <message>
+        <source>id_account_address</source>
+        <translation>Адреса акаунту</translation>
+    </message>
+    <message>
+        <source>id_account_archived</source>
+        <translation>Account archived</translation>
+    </message>
+    <message>
+        <source>id_account_balance</source>
+        <translation>Баланс акаунту</translation>
     </message>
     <message>
         <source>id_account_extended_public_keys</source>
-        <translation>Account Extended Public Keys</translation>
+        <translation>Extended Public Keys акаунту</translation>
+    </message>
+    <message>
+        <source>id_account_for_special_assets</source>
+        <translation>Акаунт для особливих активів, контрольованих або санкціонованих емітентом активів.</translation>
+    </message>
+    <message>
+        <source>id_account_has_been_archived</source>
+        <translation>Акаунт заархівовано</translation>
     </message>
     <message>
         <source>id_account_id</source>
@@ -153,7 +207,7 @@
     </message>
     <message>
         <source>id_accounts_summary</source>
-        <translation>Зведення за рахунками</translation>
+        <translation>Огляд рахунків</translation>
     </message>
     <message>
         <source>id_action_canceled</source>
@@ -162,6 +216,10 @@
     <message>
         <source>id_actions</source>
         <translation>Дії</translation>
+    </message>
+    <message>
+        <source>id_add_2fa_account</source>
+        <translation>Додати 2FA акаунт</translation>
     </message>
     <message>
         <source>id_add_a_note_only_you_can_see_it</source>
@@ -189,23 +247,31 @@
     </message>
     <message>
         <source>id_add_custom_network_by_qr_code</source>
-        <translation>Додати нову мережу за допомогою QR-коду</translation>
+        <translation>Додати користувацьку мережу за допомогою QR-коду</translation>
     </message>
     <message>
         <source>id_add_custom_network_by_url</source>
-        <translation>Додати нову мережу за допомогою URL</translation>
+        <translation>Додати користувацьку мережу за URL-адресою</translation>
     </message>
     <message>
         <source>id_add_new_account</source>
         <translation>Додати новий акаунт</translation>
     </message>
     <message>
+        <source>id_add_note</source>
+        <translation>Додати примітку</translation>
+    </message>
+    <message>
         <source>id_add_recipient</source>
-        <translation>Add Recipient</translation>
+        <translation>Додати одержувача</translation>
     </message>
     <message>
         <source>id_add_wallet</source>
         <translation>Додати гаманець</translation>
+    </message>
+    <message>
+        <source>id_adding_a_2fa</source>
+        <translation>додавши 2FA</translation>
     </message>
     <message>
         <source>id_additional_networks</source>
@@ -228,6 +294,10 @@
         <translation>Адресу скопійовано в буфер обміну</translation>
     </message>
     <message>
+        <source>id_address_type</source>
+        <translation>Тип адреси</translation>
+    </message>
+    <message>
         <source>id_address_verified</source>
         <translation>Адреса підтверджена!</translation>
     </message>
@@ -241,7 +311,7 @@
     </message>
     <message>
         <source>id_advanced</source>
-        <translation>Передовий</translation>
+        <translation>Розширені</translation>
     </message>
     <message>
         <source>id_advanced_network_settings</source>
@@ -249,7 +319,7 @@
     </message>
     <message>
         <source>id_advanced_options_for_your_third</source>
-        <translation>Розширені параметри для вашого третього ключа відновлення</translation>
+        <translation>Розширені опції для вашого третього ключа відновлення</translation>
     </message>
     <message>
         <source>id_all</source>
@@ -261,7 +331,7 @@
     </message>
     <message>
         <source>id_all_coins</source>
-        <translation>(All coins)</translation>
+        <translation>(Всі монети)</translation>
     </message>
     <message>
         <source>id_all_networks</source>
@@ -273,7 +343,7 @@
     </message>
     <message>
         <source>id_all_the_coins_received_or</source>
-        <translation>Всі монети, отримані або створені як решта</translation>
+        <translation>Всі монети, отримані або створені як решта.</translation>
     </message>
     <message>
         <source>id_all_wallets</source>
@@ -281,15 +351,15 @@
     </message>
     <message>
         <source>id_allow_collection</source>
-        <translation>Allow collection</translation>
+        <translation>Дозволити збір</translation>
     </message>
     <message>
         <source>id_allow_data_collection</source>
-        <translation>Allow data collection</translation>
+        <translation>Дозволити збір даних</translation>
     </message>
     <message>
         <source>id_allows_you_to_quickly_check</source>
-        <translation>Дозволяє швидко перевірити ваш баланс, отримати кошти або зробити свіп паперового гаманця. Ви не можете надсилати кошти в режимі лише-для-перегляду.</translation>
+        <translation>Дозволяє швидко перевіряти баланс, отримувати кошти або робити свіп паперового гаманця. Ви не можете надсилати кошти в режимі &quot;лише для перегляду&quot;.</translation>
     </message>
     <message>
         <source>id_always</source>
@@ -297,7 +367,7 @@
     </message>
     <message>
         <source>id_always_ask</source>
-        <translation>Always ask</translation>
+        <translation>Завжди запитувати</translation>
     </message>
     <message>
         <source>id_amount</source>
@@ -317,7 +387,7 @@
     </message>
     <message>
         <source>id_amp_accounts_are_only_available</source>
-        <translation>Акаунти AMP доступні тільки в гаманцях Liquid. Для отримання активу AMP від вас можуть попросити надати ідентифікатор вашого профілю емітентам.</translation>
+        <translation>Рахунки AMP доступні тільки в гаманцях Liquid. Для отримання активу AMP можуть знадобитися ваші ідентифікаційні дані рахунку для отримання активів AMP від емітентів.</translation>
     </message>
     <message>
         <source>id_amp_id</source>
@@ -333,7 +403,7 @@
     </message>
     <message>
         <source>id_any_wallet_found_will_be</source>
-        <translation>Any wallet found will be displayed here.</translation>
+        <translation>Будь-який знайдений гаманець відображатиметься тут.</translation>
     </message>
     <message>
         <source>id_app_settings</source>
@@ -345,11 +415,15 @@
     </message>
     <message>
         <source>id_archive_account</source>
-        <translation>Archive account</translation>
+        <translation>Архівувати акаунт</translation>
     </message>
     <message>
         <source>id_archived</source>
         <translation>Заархівовано</translation>
+    </message>
+    <message>
+        <source>id_archived_account</source>
+        <translation>Архівний акаунт</translation>
     </message>
     <message>
         <source>id_archived_accounts</source>
@@ -357,7 +431,7 @@
     </message>
     <message>
         <source>id_are_you_sure_you_want_to_remove</source>
-        <translation>Are you sure you want to remove the recipient?</translation>
+        <translation>Ви впевнені, що бажаєте видалити одержувача?</translation>
     </message>
     <message>
         <source>id_are_you_sure_you_want_to_view</source>
@@ -381,7 +455,7 @@
     </message>
     <message>
         <source>id_asset_id</source>
-        <translation>ID актива</translation>
+        <translation>ID активу</translation>
     </message>
     <message>
         <source>id_asset_name</source>
@@ -393,11 +467,11 @@
     </message>
     <message>
         <source>id_assets_cannot_be_used_on_bitcoin</source>
-        <translation>Активи не можна використовувати у Bitcoin</translation>
+        <translation>Активи не можуть бути використані в мережі Біткоїн.</translation>
     </message>
     <message>
         <source>id_at_least_8_characters_required</source>
-        <translation>At least 8 characters required</translation>
+        <translation>Потрібно принаймні 8 символів</translation>
     </message>
     <message>
         <source>id_attempts_remaining_d</source>
@@ -405,27 +479,27 @@
     </message>
     <message>
         <source>id_authenticate_to_view_the</source>
-        <translation>Виконайте аутентифікацію, щоб переглянути фразу відновлення</translation>
+        <translation>Виконайте автентифікацію, щоб переглянути фразу відновлення</translation>
     </message>
     <message>
         <source>id_authentication_error_s</source>
-        <translation>Помилка аутентифікації: %1</translation>
+        <translation>Помилка автентифікації: %1</translation>
     </message>
     <message>
         <source>id_authentication_failed</source>
-        <translation>Аутентифікація не вдалася</translation>
+        <translation>Автентифікація не вдалася</translation>
     </message>
     <message>
         <source>id_authenticator_app</source>
-        <translation>Додаток для аутентифікації</translation>
+        <translation>Додаток для автентифікації</translation>
     </message>
     <message>
         <source>id_authenticator_qr_code</source>
-        <translation>QR-код аутентифікатора</translation>
+        <translation>QR-код автентифікатора</translation>
     </message>
     <message>
         <source>id_authenticator_secret_key</source>
-        <translation>Секретний ключ аутентифікатора</translation>
+        <translation>Секретний ключ автентифікатора</translation>
     </message>
     <message>
         <source>id_auto_logout_timeout</source>
@@ -445,7 +519,7 @@
     </message>
     <message>
         <source>id_available_funds_s</source>
-        <translation>Available funds %1</translation>
+        <translation>Доступні кошти%1</translation>
     </message>
     <message>
         <source>id_back</source>
@@ -454,6 +528,10 @@
     <message>
         <source>id_back_up_recovery_phrase</source>
         <translation>Бекап фрази відновлення</translation>
+    </message>
+    <message>
+        <source>id_backup_recovery_phrase</source>
+        <translation>Фраза відновлення резервної копії</translation>
     </message>
     <message>
         <source>id_backup_the_recovery_mnemonic</source>
@@ -472,6 +550,10 @@
         <translation>Перед видаленням гаманця переконайтеся, що ви зробили резервну копію фрази відновлення.</translation>
     </message>
     <message>
+        <source>id_before_you_backup</source>
+        <translation>Перед резервним копіюванням</translation>
+    </message>
+    <message>
         <source>id_biometric_login_is_disabled</source>
         <translation>Біометричний вхід відключений</translation>
     </message>
@@ -481,15 +563,15 @@
     </message>
     <message>
         <source>id_biometrics_authentication</source>
-        <translation>Біометрична аутентифікація</translation>
+        <translation>Біометрична автентифікація</translation>
     </message>
     <message>
         <source>id_bip39_passphrase</source>
-        <translation>BIP39 Passphrase</translation>
+        <translation>Пароль BIP39</translation>
     </message>
     <message>
         <source>id_bip39_passphrase_login</source>
-        <translation>BIP39 Passphrase login</translation>
+        <translation>Вхід із паролем BIP39</translation>
     </message>
     <message>
         <source>id_bip49_accounts_allow_you_to</source>
@@ -513,19 +595,19 @@
     </message>
     <message>
         <source>id_bitcoin_is_the_worlds_leading</source>
-        <translation>Bitcoin - провідна в світі мережа криптовалют P2P. Виберіть, щоб відправляти і отримувати біткоіни.</translation>
+        <translation>Bitcoin - провідна в світі мережа криптовалют P2P. Виберіть, щоб відправляти і отримувати біткоїни.</translation>
     </message>
     <message>
         <source>id_bitcoin_testnet_and_liquid</source>
-        <translation>Bitcoin Testnet and Liquid Testnet</translation>
+        <translation>Bitcoin Testnet та Liquid Testnet</translation>
     </message>
     <message>
         <source>id_bitcoin_wallet</source>
-        <translation>Біткоін-гаманець</translation>
+        <translation>Біткоїн-гаманець</translation>
     </message>
     <message>
         <source>id_bitcoin_wallets</source>
-        <translation>Біткоін-гаманці</translation>
+        <translation>Біткоїн-гаманці</translation>
     </message>
     <message>
         <source>id_block</source>
@@ -537,7 +619,7 @@
     </message>
     <message>
         <source>id_block_height</source>
-        <translation>Block Height</translation>
+        <translation>Висота блоку</translation>
     </message>
     <message>
         <source>id_block_height_1d</source>
@@ -565,7 +647,7 @@
     </message>
     <message>
         <source>id_blockstream_green_supports_both</source>
-        <translation>Blockstream Green підтримує як Bitcoin, так і Liquid Network. Не хвилюйтеся, ви можете створити ще один гаманець для іншої мережі в будь-який час.</translation>
+        <translation>Blockstream Green підтримує як Bitcoin, так і Liquid Network.</translation>
     </message>
     <message>
         <source>id_blockstream_greennsimple_and</source>
@@ -610,7 +692,7 @@
     </message>
     <message>
         <source>id_cancel_a_reset_to_unlock_your</source>
-        <translation>Скасуйте скидання, щоб розблокувати гаманець, якщо ви відновили доступ до старого методу двофакторної аутентифікації.</translation>
+        <translation>Скасуйте скидання, щоб розблокувати гаманець, якщо ви відновили доступ до старого методу двофакторної автентифікації.</translation>
     </message>
     <message>
         <source>id_cancel_twofactor_reset</source>
@@ -641,8 +723,16 @@
         <translation>При зміні референтного обмінного курсу ваш поріг 2FA скидається до 0. Не забудьте налаштувати поріг 2FA після витрати.</translation>
     </message>
     <message>
+        <source>id_cheaper_and_more_private</source>
+        <translation>Дешевший та більш конфіденційний варіант сингл-сигнатури. Адреси використовують формат Bech32m.</translation>
+    </message>
+    <message>
+        <source>id_cheaper_singlesig_option</source>
+        <translation>Дешевший варіант сингл-сигнатури. Адреси використовують нативний формат SegWit Bech32.</translation>
+    </message>
+    <message>
         <source>id_check_device</source>
-        <translation>Check Device</translation>
+        <translation>Перевірити пристрій</translation>
     </message>
     <message>
         <source>id_check_for_updates</source>
@@ -651,6 +741,10 @@
     <message>
         <source>id_check_for_updates_on_startup</source>
         <translation>Перевіряти оновлення при запуску</translation>
+    </message>
+    <message>
+        <source>id_check_our_6_easy_steps_to_be</source>
+        <translation>Перевірте наші 6 простих кроків, щоб мати змогу надсилати та отримувати AMP-активи.</translation>
     </message>
     <message>
         <source>id_check_your_backup</source>
@@ -667,6 +761,18 @@
     <message>
         <source>id_choose_a_name_for_your_wallet</source>
         <translation>Оберіть ім&apos;я для свого гаманця</translation>
+    </message>
+    <message>
+        <source>id_choose_a_swap_option</source>
+        <translation>Оберіть варіант свопу</translation>
+    </message>
+    <message>
+        <source>id_choose_a_usb_or_bluetooth</source>
+        <translation>Оберіть з&apos;єднання USB або Bluetooth на пристрої Jade після перевірки вашої фрази відновлення.</translation>
+    </message>
+    <message>
+        <source>id_choose_bluetooth_connection_on</source>
+        <translation>Choose Bluetooth connection on Jade after verifying your recovery phrase</translation>
     </message>
     <message>
         <source>id_choose_method_to_authorize_the</source>
@@ -686,11 +792,11 @@
     </message>
     <message>
         <source>id_choose_the_security_policy_that</source>
-        <translation>Choose the security policy that matches your wallet.</translation>
+        <translation>Оберіть політику безпеки, яка відповідає вашому гаманцю.</translation>
     </message>
     <message>
         <source>id_choose_the_security_policy_you</source>
-        <translation>Choose the security policy you want to restore this wallet on.</translation>
+        <translation>Оберіть політику безпеки, за якою ви хочете відновити цей гаманець.</translation>
     </message>
     <message>
         <source>id_choose_this_version_to_connect</source>
@@ -702,15 +808,15 @@
     </message>
     <message>
         <source>id_choose_twofactor_authentication</source>
-        <translation>Виберіть метод двофакторної аутентифікації</translation>
+        <translation>Оберіть метод двофакторної автентифікації</translation>
     </message>
     <message>
         <source>id_choose_watchonly</source>
-        <translation>Оберіть watch-only</translation>
+        <translation>Оберіть функцію &quot;тільки для перегляду&quot;</translation>
     </message>
     <message>
         <source>id_choose_your_network</source>
-        <translation>Виберіть мережу</translation>
+        <translation>Оберіть мережу</translation>
     </message>
     <message>
         <source>id_clear</source>
@@ -718,7 +824,7 @@
     </message>
     <message>
         <source>id_clear_cache</source>
-        <translation>Clear cache</translation>
+        <translation>Очистити кеш</translation>
     </message>
     <message>
         <source>id_click_to_copy</source>
@@ -734,7 +840,7 @@
     </message>
     <message>
         <source>id_coin</source>
-        <translation>Coin</translation>
+        <translation>Монета</translation>
     </message>
     <message>
         <source>id_coins</source>
@@ -810,11 +916,15 @@
     </message>
     <message>
         <source>id_confirm_on_your_device</source>
-        <translation>Confirm on your device</translation>
+        <translation>Підтвердіть на вашому пристрої</translation>
     </message>
     <message>
         <source>id_confirm_passphrase</source>
         <translation>Підтвердити кодову фразу</translation>
+    </message>
+    <message>
+        <source>id_confirm_swap</source>
+        <translation>Підтвердіть своп</translation>
     </message>
     <message>
         <source>id_confirm_transaction</source>
@@ -822,11 +932,15 @@
     </message>
     <message>
         <source>id_confirm_transaction_details_on</source>
-        <translation>Confirm transaction details on your hardware wallet</translation>
+        <translation>Підтвердіть деталі транзакції на вашому апаратному гаманці</translation>
     </message>
     <message>
         <source>id_confirm_update_on_your_jade</source>
         <translation>Підтвердіть оновлення на вашому Jade</translation>
+    </message>
+    <message>
+        <source>id_confirm_version_on_jade</source>
+        <translation>Підтвердіть версію на Jade</translation>
     </message>
     <message>
         <source>id_confirm_via_2fa_that_you</source>
@@ -838,7 +952,7 @@
     </message>
     <message>
         <source>id_confirmation_time</source>
-        <translation>Confirmation Time</translation>
+        <translation>Час підтвердження</translation>
     </message>
     <message>
         <source>id_confirmations</source>
@@ -849,8 +963,16 @@
         <translation>Вітаємо!</translation>
     </message>
     <message>
+        <source>id_connect_a_different_hardware</source>
+        <translation>Підключіть інший апаратний пристрій</translation>
+    </message>
+    <message>
         <source>id_connect_hardware_wallet</source>
         <translation>Підключіть апаратний гаманець</translation>
+    </message>
+    <message>
+        <source>id_connect_jade</source>
+        <translation>Підключіть Jade</translation>
     </message>
     <message>
         <source>id_connect_jade_with_a_usb_cable</source>
@@ -859,6 +981,18 @@
     <message>
         <source>id_connect_through_a_proxy</source>
         <translation>Встановити з’єднання через проксі-сервер</translation>
+    </message>
+    <message>
+        <source>id_connect_usb_cable_or_enable</source>
+        <translation>Підключіть кабель USB або ввімкніть Bluetooth</translation>
+    </message>
+    <message>
+        <source>id_connect_using_usb_or_bluetooth</source>
+        <translation>Підключіться за допомогою USB або Bluetooth</translation>
+    </message>
+    <message>
+        <source>id_connect_with_bluetooth</source>
+        <translation>Connect with Bluetooth</translation>
     </message>
     <message>
         <source>id_connect_with_tor</source>
@@ -878,7 +1012,7 @@
     </message>
     <message>
         <source>id_connected_wallets</source>
-        <translation>Connected wallets</translation>
+        <translation>Підключені гаманці</translation>
     </message>
     <message>
         <source>id_connecting</source>
@@ -946,7 +1080,11 @@
     </message>
     <message>
         <source>id_copy_device_id</source>
-        <translation>Copy Device ID</translation>
+        <translation>Копіювати ідентифікатор пристрою</translation>
+    </message>
+    <message>
+        <source>id_copy_id</source>
+        <translation>Копіювати ідентифікатор</translation>
     </message>
     <message>
         <source>id_copy_raw_transaction</source>
@@ -954,7 +1092,11 @@
     </message>
     <message>
         <source>id_copy_support_id</source>
-        <translation>Copy support ID</translation>
+        <translation>Скопіюйте ідентифікатор служби підтримки</translation>
+    </message>
+    <message>
+        <source>id_copy_swap_proposal</source>
+        <translation>Копіювати своп-пропозицію</translation>
     </message>
     <message>
         <source>id_copy_to_clipboard</source>
@@ -981,6 +1123,10 @@
         <translation>Копіювати xpub</translation>
     </message>
     <message>
+        <source>id_correct_order</source>
+        <translation>правильний порядок</translation>
+    </message>
+    <message>
         <source>id_country</source>
         <translation>Країна</translation>
     </message>
@@ -989,12 +1135,32 @@
         <translation>Створити</translation>
     </message>
     <message>
+        <source>id_create_a_new_proposal</source>
+        <translation>Створити нову пропозицію</translation>
+    </message>
+    <message>
+        <source>id_create_a_new_swap</source>
+        <translation>Створити новий своп</translation>
+    </message>
+    <message>
+        <source>id_create_a_pin</source>
+        <translation>Створити PIN-код</translation>
+    </message>
+    <message>
         <source>id_create_a_pin_to_access_your</source>
         <translation>Створіть PIN-код для доступу до вашого гаманця</translation>
     </message>
     <message>
         <source>id_create_a_wallet_for_bitcoin</source>
         <translation>Create a wallet for Bitcoin, Liquid or Testnet</translation>
+    </message>
+    <message>
+        <source>id_create_account</source>
+        <translation>Створити акаунт</translation>
+    </message>
+    <message>
+        <source>id_create_new_account</source>
+        <translation>Створити новий акаунт</translation>
     </message>
     <message>
         <source>id_create_new_wallet</source>
@@ -1007,6 +1173,10 @@
     <message>
         <source>id_create_wallet</source>
         <translation>Створити гаманець</translation>
+    </message>
+    <message>
+        <source>id_create_your_first_account_to</source>
+        <translation>Створіть свій перший акаунт для отримання коштів.</translation>
     </message>
     <message>
         <source>id_creating_wallet</source>
@@ -1065,8 +1235,12 @@
         <translation>%1 активів на цьому акаунті</translation>
     </message>
     <message>
+        <source>id_d_assets_in_total</source>
+        <translation>%1активів загалом</translation>
+    </message>
+    <message>
         <source>id_d_coins_selected</source>
-        <translation>(%1 coins selected)</translation>
+        <translation>(Вибрано %1 монет)</translation>
     </message>
     <message>
         <source>id_d_words</source>
@@ -1106,7 +1280,7 @@
     </message>
     <message>
         <source>id_delete_credentials</source>
-        <translation>Delete credentials</translation>
+        <translation>Видалити облікові дані</translation>
     </message>
     <message>
         <source>id_delete_permanently_your_wallet</source>
@@ -1133,6 +1307,10 @@
         <translation>Депозит</translation>
     </message>
     <message>
+        <source>id_descriptor</source>
+        <translation>Descriptor</translation>
+    </message>
+    <message>
         <source>id_details</source>
         <translation>Деталі</translation>
     </message>
@@ -1146,9 +1324,13 @@
     </message>
     <message>
         <source>id_different_passphrases_generate</source>
-        <translation>Different passphrases generate new wallets!
+        <translation>Різні паролі створюють нові гаманці!
 
-Remember you can only restore this wallet with both your recovery phrase and the passphrase.</translation>
+Пам’ятайте, що ви можете відновити цей гаманець лише за допомогою фрази відновлення та пароля.</translation>
+    </message>
+    <message>
+        <source>id_digital_wallets</source>
+        <translation>Цифрові гаманці</translation>
     </message>
     <message>
         <source>id_disable</source>
@@ -1204,7 +1386,11 @@ Remember you can only restore this wallet with both your recovery phrase and the
     </message>
     <message>
         <source>id_dont_collect_data</source>
-        <translation>Don&apos;t collect data</translation>
+        <translation>Не збирати дані</translation>
+    </message>
+    <message>
+        <source>id_dont_have_a_jade_check_our_store</source>
+        <translation>У вас немає Jade? Перевірте наш магазин</translation>
     </message>
     <message>
         <source>id_dont_show_this_again</source>
@@ -1244,7 +1430,7 @@ Remember you can only restore this wallet with both your recovery phrase and the
     </message>
     <message>
         <source>id_edit_fee</source>
-        <translation>Edit Fee</translation>
+        <translation>Змінити комісію</translation>
     </message>
     <message>
         <source>id_email</source>
@@ -1255,6 +1441,10 @@ Remember you can only restore this wallet with both your recovery phrase and the
         <translation>email адреса</translation>
     </message>
     <message>
+        <source>id_emergency_recovery_phrase</source>
+        <translation>Відновлення екстреної фрази для входу до акаунту</translation>
+    </message>
+    <message>
         <source>id_empty</source>
         <translation>Порожній</translation>
     </message>
@@ -1263,8 +1453,16 @@ Remember you can only restore this wallet with both your recovery phrase and the
         <translation>Активувати</translation>
     </message>
     <message>
+        <source>id_enable_2fa</source>
+        <translation>Увімкнути 2FA</translation>
+    </message>
+    <message>
         <source>id_enable_bluetooth</source>
         <translation>Активуйте Bluetooth</translation>
+    </message>
+    <message>
+        <source>id_enable_bluetooth_from_system</source>
+        <translation>Увімкніть bluetooth у налаштуваннях системи</translation>
     </message>
     <message>
         <source>id_enable_custom_networks_debug</source>
@@ -1284,7 +1482,7 @@ Remember you can only restore this wallet with both your recovery phrase and the
     </message>
     <message>
         <source>id_enable_limited_usage_data</source>
-        <translation>Enable limited usage data collection</translation>
+        <translation>Включити обмежений режим збирання даних про використання</translation>
     </message>
     <message>
         <source>id_enable_location_services</source>
@@ -1331,8 +1529,12 @@ Remember you can only restore this wallet with both your recovery phrase and the
         <translation>Кодова фраза шифрування</translation>
     </message>
     <message>
+        <source>id_enhance_security</source>
+        <translation>Підвищити безпеку</translation>
+    </message>
+    <message>
         <source>id_enhanced_privacy</source>
-        <translation>Enhanced Privacy</translation>
+        <translation>Покращена конфіденційність</translation>
     </message>
     <message>
         <source>id_enter</source>
@@ -1361,6 +1563,10 @@ Remember you can only restore this wallet with both your recovery phrase and the
     <message>
         <source>id_enter_an_address_or_sweep_paper</source>
         <translation>Введіть адресу або зробіть свіп паперового гаманця</translation>
+    </message>
+    <message>
+        <source>id_enter_and_confirm_a_unique_pin</source>
+        <translation>Введіть і підтвердьте унікальний PIN-код, щоб розблокувати Jade.</translation>
     </message>
     <message>
         <source>id_enter_new_email</source>
@@ -1441,7 +1647,7 @@ Remember you can only restore this wallet with both your recovery phrase and the
     </message>
     <message>
         <source>id_ephemeral_wallets</source>
-        <translation>Ephemeral wallets</translation>
+        <translation>Ефемерні гаманці</translation>
     </message>
     <message>
         <source>id_error</source>
@@ -1476,8 +1682,16 @@ Remember you can only restore this wallet with both your recovery phrase and the
         <translation>Приблизно блоків до підтвердження: %1</translation>
     </message>
     <message>
+        <source>id_everything_you_need_to_take</source>
+        <translation>Все, що вам потрібно, щоб взяти під контроль свої біткоїни.</translation>
+    </message>
+    <message>
         <source>id_example_89014283334011612858333</source>
         <translation>Приклад: 8.90.14.2:8333,40.116.12.85:8333</translation>
+    </message>
+    <message>
+        <source>id_exchange_rate</source>
+        <translation>Курс обміну</translation>
     </message>
     <message>
         <source>id_existing_recovery_phrase</source>
@@ -1485,7 +1699,11 @@ Remember you can only restore this wallet with both your recovery phrase and the
     </message>
     <message>
         <source>id_existing_wallets</source>
-        <translation>Existing Wallets</translation>
+        <translation>Існуючі гаманці</translation>
+    </message>
+    <message>
+        <source>id_exit_guide</source>
+        <translation>Посібник з виходу</translation>
     </message>
     <message>
         <source>id_expand_sidebar</source>
@@ -1501,11 +1719,15 @@ Remember you can only restore this wallet with both your recovery phrase and the
     </message>
     <message>
         <source>id_exports_an_accounts_extended</source>
-        <translation>Exports an account&apos;s extended public key (xPub/yPub/zPub) to view as a watch-only</translation>
+        <translation>Експортує розширений публічний ключ акаунту (xPub/yPub/zPub)  для використання в режимі &quot;тільки для перегляду&quot;</translation>
     </message>
     <message>
         <source>id_extended_public_key</source>
-        <translation>Extended Public Key</translation>
+        <translation>Розширений публічний ключ</translation>
+    </message>
+    <message>
+        <source>id_extended_public_keys</source>
+        <translation>Extended Public Keys</translation>
     </message>
     <message>
         <source>id_face_id</source>
@@ -1561,7 +1783,11 @@ Remember you can only restore this wallet with both your recovery phrase and the
     </message>
     <message>
         <source>id_feedback</source>
-        <translation>Feedback</translation>
+        <translation>Зворотній зв&apos;язок</translation>
+    </message>
+    <message>
+        <source>id_fees_are_collected_by_bitcoin</source>
+        <translation>Комісії збираються майнерами біткоїнів, а не компанією Blockstream.</translation>
     </message>
     <message>
         <source>id_fees_are_too_low</source>
@@ -1590,6 +1816,22 @@ Remember you can only restore this wallet with both your recovery phrase and the
     <message>
         <source>id_firmware_update_completed</source>
         <translation>Оновлення прошивки завершено</translation>
+    </message>
+    <message>
+        <source>id_firmware_upgrade</source>
+        <translation>Оновлення прошивки</translation>
+    </message>
+    <message>
+        <source>id_firmware_version_s</source>
+        <translation>Версія прошивки: %1</translation>
+    </message>
+    <message>
+        <source>id_follow_the_instructions_of_your</source>
+        <translation>Дотримуйтеся інструкцій вашого апаратного гаманця перед продовженням.</translation>
+    </message>
+    <message>
+        <source>id_follow_the_instructions_on_jade</source>
+        <translation>Дотримуйтесь інструкцій на Jade</translation>
     </message>
     <message>
         <source>id_follow_the_instructions_on_your</source>
@@ -1649,7 +1891,7 @@ Remember you can only restore this wallet with both your recovery phrase and the
     </message>
     <message>
         <source>id_give_us_your_feedback</source>
-        <translation>Give us your feedback</translation>
+        <translation>Надішліть нам свій відгук</translation>
     </message>
     <message>
         <source>id_go_to_account</source>
@@ -1704,6 +1946,14 @@ Remember you can only restore this wallet with both your recovery phrase and the
         <translation>Green використовує мультипідпис з підписом, створеним вашим пристроєм, та підписом, згенерованим за допомогою серверів Blockstream. Налаштування двофакторної аутентифікації дає змогу отримати додатковий рівень безпеки для підпису на сервері.</translation>
     </message>
     <message>
+        <source>id_hardware_devices</source>
+        <translation>Апаратні пристрої</translation>
+    </message>
+    <message>
+        <source>id_hardware_security</source>
+        <translation>Апаратна безпека</translation>
+    </message>
+    <message>
         <source>id_hardware_wallet</source>
         <translation>Апаратний гаманець</translation>
     </message>
@@ -1713,11 +1963,15 @@ Remember you can only restore this wallet with both your recovery phrase and the
     </message>
     <message>
         <source>id_hardware_wallets</source>
-        <translation>Hardware wallets</translation>
+        <translation>Апаратні гаманці</translation>
     </message>
     <message>
         <source>id_hash</source>
         <translation>Хеш</translation>
+    </message>
+    <message>
+        <source>id_hash_s</source>
+        <translation>Хеш: %1</translation>
     </message>
     <message>
         <source>id_help</source>
@@ -1725,7 +1979,7 @@ Remember you can only restore this wallet with both your recovery phrase and the
     </message>
     <message>
         <source>id_help_green_improve</source>
-        <translation>Help Green Improve</translation>
+        <translation>Допоможіть Green покращитися</translation>
     </message>
     <message>
         <source>id_here</source>
@@ -1736,12 +1990,20 @@ Remember you can only restore this wallet with both your recovery phrase and the
         <translation>HEX</translation>
     </message>
     <message>
+        <source>id_hide_advanced_options</source>
+        <translation>Приховати додаткові параметри</translation>
+    </message>
+    <message>
+        <source>id_hide_amounts</source>
+        <translation>Приховати суми</translation>
+    </message>
+    <message>
         <source>id_hide_assets</source>
         <translation>Приховати активи</translation>
     </message>
     <message>
         <source>id_hide_details</source>
-        <translation>Hide details</translation>
+        <translation>Приховати деталі</translation>
     </message>
     <message>
         <source>id_high</source>
@@ -1749,7 +2011,11 @@ Remember you can only restore this wallet with both your recovery phrase and the
     </message>
     <message>
         <source>id_hold_button_to_send</source>
-        <translation>Hold button to Send</translation>
+        <translation>Утримуйте кнопку, щоб надіслати</translation>
+    </message>
+    <message>
+        <source>id_hold_the_green_button_on_the</source>
+        <translation>Утримуйте зелену кнопку в нижній частині Jade, доки він не увімкнеться.</translation>
     </message>
     <message>
         <source>id_hold_your_nfc_tag_close_to_the</source>
@@ -1757,7 +2023,7 @@ Remember you can only restore this wallet with both your recovery phrase and the
     </message>
     <message>
         <source>id_home</source>
-        <translation>Home</translation>
+        <translation>Домашня сторінка</translation>
     </message>
     <message>
         <source>id_hour</source>
@@ -1774,6 +2040,10 @@ Remember you can only restore this wallet with both your recovery phrase and the
     <message>
         <source>id_i_agree_to_the</source>
         <translation>Я погоджуюсь з</translation>
+    </message>
+    <message>
+        <source>id_i_agree_to_the_terms_of_service</source>
+        <translation>Я погоджуюся з умовами обслуговування та політикою конфіденційності</translation>
     </message>
     <message>
         <source>id_i_confirm_i_have_read_and</source>
@@ -1812,8 +2082,12 @@ Remember you can only restore this wallet with both your recovery phrase and the
         <translation>ID</translation>
     </message>
     <message>
+        <source>id_if_for_any_reason_you_cant</source>
+        <translation>Якщо з будь-якої причини ви не можете ввійти у свій гаманець, ви можете відновити фразу відновлення за допомогою PIN-коду/біометричних даних.</translation>
+    </message>
+    <message>
         <source>id_if_you_agree_green_will_collect</source>
-        <translation>If you agree, Green will collect limited usage data to optimize the user experience. No sensitive user or wallet info is collected.</translation>
+        <translation>Якщо ви погодитеся, Green збиратиме обмежені дані про використання для оптимізації взаємодії з користувачем. Конфіденційна інформація про користувача або гаманець не збирається.</translation>
     </message>
     <message>
         <source>id_if_you_are_the_rightful_owner</source>
@@ -1822,6 +2096,10 @@ Remember you can only restore this wallet with both your recovery phrase and the
     <message>
         <source>id_if_you_did_not_request_the</source>
         <translation>Якщо ви не запитували скидання, але не можете скасувати процес скидання, тому що у вас немає доступу до жодних існуючих методів двофакторної авторизації, ви маєте можливість оскаржити це скидання 2FA. Це назавжди заблокує ваш гаманець, але ви зможете скасувати цю дію.</translation>
+    </message>
+    <message>
+        <source>id_if_you_forget_it_or_lose_it</source>
+        <translation>Якщо ви забудете або втратите його, ваші кошти також будуть втрачені.</translation>
     </message>
     <message>
         <source>id_if_you_have_access_to_a</source>
@@ -1836,6 +2114,10 @@ Remember you can only restore this wallet with both your recovery phrase and the
         <translation>Якщо ви помилково ініціювали оскарження скидання 2FA, ви можете його скасувати  і повернути гаманець в стан скидання 2FA.</translation>
     </message>
     <message>
+        <source>id_import</source>
+        <translation>Import</translation>
+    </message>
+    <message>
         <source>id_import_a_multisig_shield_wallet</source>
         <translation>Імпортуйте гаманець Multisig Shield, створений у Blockstream Green.</translation>
     </message>
@@ -1846,6 +2128,10 @@ Remember you can only restore this wallet with both your recovery phrase and the
     <message>
         <source>id_import_a_wallet_created_with</source>
         <translation>Імпортуйте гаманець, створений в інших додатках. Ця опція працює тільки з однопідписними гаманцями, які використовують мнемоніку BIP39 і її похідні BIP44, BIP49 або BIP84.</translation>
+    </message>
+    <message>
+        <source>id_import_from_file</source>
+        <translation>Import from file</translation>
     </message>
     <message>
         <source>id_incoming</source>
@@ -1860,8 +2146,20 @@ Remember you can only restore this wallet with both your recovery phrase and the
         <translation>Підвищити комісію</translation>
     </message>
     <message>
+        <source>id_increase_security</source>
+        <translation>Підвищити безпеку</translation>
+    </message>
+    <message>
+        <source>id_increase_the_security_of_your</source>
+        <translation>Підвищіть безпеку своїх коштів, додавши 2FA</translation>
+    </message>
+    <message>
         <source>id_information_not_available</source>
         <translation>Інформація недоступна.</translation>
+    </message>
+    <message>
+        <source>id_initialize_and_create_wallet</source>
+        <translation>Ініціалізувати та створити гаманець</translation>
     </message>
     <message>
         <source>id_initialized</source>
@@ -1876,8 +2174,16 @@ Remember you can only restore this wallet with both your recovery phrase and the
         <translation>Вставте свою адресу електронної пошти, щоб отримати коди 2FA для авторизації переказів та інших операцій.</translation>
     </message>
     <message>
+        <source>id_insert_your_phone_number_to</source>
+        <translation>Введіть свій номер телефону, щоб отримати коди 2FA для авторизації переказів та інших операцій.</translation>
+    </message>
+    <message>
         <source>id_install_version_s</source>
         <translation>Встановити версію: %1?</translation>
+    </message>
+    <message>
+        <source>id_instant</source>
+        <translation>Instant</translation>
     </message>
     <message>
         <source>id_insufficient_funds</source>
@@ -1972,6 +2278,10 @@ Remember you can only restore this wallet with both your recovery phrase and the
         <translation>Невірний статус. Переконайтеся, що ваш пристрій розблоковано, і спробуйте ще раз.</translation>
     </message>
     <message>
+        <source>id_invalid_swap_proposal</source>
+        <translation>Неприпустима пропозиція обміну</translation>
+    </message>
+    <message>
         <source>id_invalid_twofactor_code</source>
         <translation>Неправильний двофакторний код</translation>
     </message>
@@ -1998,6 +2308,14 @@ Remember you can only restore this wallet with both your recovery phrase and the
     <message>
         <source>id_it_looks_like_you_have_no</source>
         <translation>Схоже, у вас немає гаманців. Клацніть нижче, щоб додати один.</translation>
+    </message>
+    <message>
+        <source>id_jade_is_a_specialized_device</source>
+        <translation>Jade – спеціалізований пристрій, розроблений для безпечного зберігання ключів, необхідних для витрати ваших біткоїнів.</translation>
+    </message>
+    <message>
+        <source>id_jade_is_an_isolated_device_not</source>
+        <translation>Jade – ізольований пристрій, не підключений до Інтернету, що означає, що ваші кошти захищені від взломаного або компрометованого телефону.</translation>
     </message>
     <message>
         <source>id_jade_unlocked</source>
@@ -2044,6 +2362,10 @@ Remember you can only restore this wallet with both your recovery phrase and the
         <translation>Дізнатися більше</translation>
     </message>
     <message>
+        <source>id_learn_more_about_amp_the_assets</source>
+        <translation>Дізнайтеся більше про AMP, активи та відповідність вимогам</translation>
+    </message>
+    <message>
         <source>id_learn_more_about_s</source>
         <translation>Дізнатися більше про %1.</translation>
     </message>
@@ -2060,6 +2382,10 @@ Remember you can only restore this wallet with both your recovery phrase and the
         <translation>Ledger підтримує лімітований набір активів: натисніть тут, щоб переглянути список.</translation>
     </message>
     <message>
+        <source>id_legacy</source>
+        <translation>Legacy</translation>
+    </message>
+    <message>
         <source>id_legacy_account</source>
         <translation>Акаунт Legacy</translation>
     </message>
@@ -2072,8 +2398,12 @@ Remember you can only restore this wallet with both your recovery phrase and the
         <translation>Монети з Legacy-скриптом</translation>
     </message>
     <message>
+        <source>id_legacy_segwit</source>
+        <translation>Legacy SegWit</translation>
+    </message>
+    <message>
         <source>id_legacy_segwit_account</source>
-        <translation>Legacy SegWit Account</translation>
+        <translation>Акаунт Legacy SegWit</translation>
     </message>
     <message>
         <source>id_legacy_segwit_bip49</source>
@@ -2082,6 +2412,14 @@ Remember you can only restore this wallet with both your recovery phrase and the
     <message>
         <source>id_lets_get_you_set_up</source>
         <translation>Давайте зробимо налаштування.</translation>
+    </message>
+    <message>
+        <source>id_lightning</source>
+        <translation>Lightning</translation>
+    </message>
+    <message>
+        <source>id_lightning_network_account</source>
+        <translation>Акаунт Lightning Network, який працює на платформі Greenlight. Переносний на ваш власний вузол CLN.</translation>
     </message>
     <message>
         <source>id_liquid_electrum_server</source>
@@ -2141,11 +2479,11 @@ Remember you can only restore this wallet with both your recovery phrase and the
     </message>
     <message>
         <source>id_lock_after_1_minute</source>
-        <translation>Lock after 1 minute</translation>
+        <translation>Заблокувати через 1 хвилину</translation>
     </message>
     <message>
         <source>id_lock_immediately</source>
-        <translation>Lock immediately</translation>
+        <translation>Негайно заблокувати</translation>
     </message>
     <message>
         <source>id_locked</source>
@@ -2217,7 +2555,7 @@ Remember you can only restore this wallet with both your recovery phrase and the
     </message>
     <message>
         <source>id_login_with_bip39_passphrase</source>
-        <translation>Login with BIP39 Passphrase</translation>
+        <translation>Увійти за допомогою фрази BIP39</translation>
     </message>
     <message>
         <source>id_logout</source>
@@ -2232,8 +2570,12 @@ Remember you can only restore this wallet with both your recovery phrase and the
         <translation>Подивіться на розташування чисел на пристрої</translation>
     </message>
     <message>
+        <source>id_looking_for_device</source>
+        <translation>Пошук пристрою...</translation>
+    </message>
+    <message>
         <source>id_looking_for_wallets</source>
-        <translation>Looking for wallets…</translation>
+        <translation>Пошук гаманців...</translation>
     </message>
     <message>
         <source>id_looks_like_you_havent_used_a</source>
@@ -2246,6 +2588,14 @@ Remember you can only restore this wallet with both your recovery phrase and the
     <message>
         <source>id_main_account</source>
         <translation>Основний акаунт</translation>
+    </message>
+    <message>
+        <source>id_make_sure_to_be_in_a_private</source>
+        <translation>Перебувайте в приватному та безпечному місці</translation>
+    </message>
+    <message>
+        <source>id_make_sure_you_are_alone_and_no</source>
+        <translation>Переконайтеся, що ви самі і жодна камера не записує вас або екран.</translation>
     </message>
     <message>
         <source>id_make_sure_you_have_enabled_otg</source>
@@ -2277,7 +2627,7 @@ Remember you can only restore this wallet with both your recovery phrase and the
     </message>
     <message>
         <source>id_manual_restore</source>
-        <translation>Manual Restore</translation>
+        <translation>Ручне відновлення</translation>
     </message>
     <message>
         <source>id_medium</source>
@@ -2340,6 +2690,10 @@ Remember you can only restore this wallet with both your recovery phrase and the
         <translation>Більше опцій</translation>
     </message>
     <message>
+        <source>id_move_to_2fa_protected</source>
+        <translation>Перевести в захищений 2FA-режим</translation>
+    </message>
+    <message>
         <source>id_multi_server_validation</source>
         <translation>Мультисерверна валідація</translation>
     </message>
@@ -2348,8 +2702,16 @@ Remember you can only restore this wallet with both your recovery phrase and the
         <translation>Множинні активи</translation>
     </message>
     <message>
+        <source>id_multisig</source>
+        <translation>Мультіпідпис</translation>
+    </message>
+    <message>
         <source>id_multisig_shield</source>
         <translation>Multisig Shield</translation>
+    </message>
+    <message>
+        <source>id_my_assets</source>
+        <translation>Мої активи</translation>
     </message>
     <message>
         <source>id_my_notes</source>
@@ -2358,6 +2720,10 @@ Remember you can only restore this wallet with both your recovery phrase and the
     <message>
         <source>id_name</source>
         <translation>Ім’я</translation>
+    </message>
+    <message>
+        <source>id_native_segwit</source>
+        <translation>Нативний SegWit</translation>
     </message>
     <message>
         <source>id_need_help</source>
@@ -2373,7 +2739,7 @@ Remember you can only restore this wallet with both your recovery phrase and the
     </message>
     <message>
         <source>id_network_fee</source>
-        <translation>КОМІСІЯ МЕРЕЖІ</translation>
+        <translation>Мережева комісія</translation>
     </message>
     <message>
         <source>id_network_monitor</source>
@@ -2448,12 +2814,16 @@ Remember you can only restore this wallet with both your recovery phrase and the
         <translation>NFC-теги:</translation>
     </message>
     <message>
+        <source>id_no_addresses</source>
+        <translation>Немає адрес</translation>
+    </message>
+    <message>
         <source>id_no_amount_specified</source>
         <translation>Сума не указана</translation>
     </message>
     <message>
         <source>id_no_archived_accounts</source>
-        <translation>No archived accounts</translation>
+        <translation>Немає архівованих акаунтів</translation>
     </message>
     <message>
         <source>id_no_asset_in_this_account</source>
@@ -2465,7 +2835,7 @@ Remember you can only restore this wallet with both your recovery phrase and the
     </message>
     <message>
         <source>id_no_coins_selected</source>
-        <translation>(No coins selected)</translation>
+        <translation>(Монети не вибрано)</translation>
     </message>
     <message>
         <source>id_no_device_connected</source>
@@ -2473,8 +2843,8 @@ Remember you can only restore this wallet with both your recovery phrase and the
     </message>
     <message>
         <source>id_no_existing_wallet_could_be</source>
-        <translation>No existing wallet could be found.
-Try manually restoring your wallet.</translation>
+        <translation>Не знайдено існуючого гаманця. 
+Спробуйте відновити його вручну.</translation>
     </message>
     <message>
         <source>id_no_more_assets</source>
@@ -2482,7 +2852,7 @@ Try manually restoring your wallet.</translation>
     </message>
     <message>
         <source>id_no_multisig_shield_wallet</source>
-        <translation>No multisig shield wallet exists for this recovery phrase.</translation>
+        <translation>Для цієї фрази відновлення не існує мультипідписного захищеного гаманця.</translation>
     </message>
     <message>
         <source>id_no_peers_connected</source>
@@ -2557,8 +2927,20 @@ Try manually restoring your wallet.</translation>
         <translation>Не ініціалізовано</translation>
     </message>
     <message>
+        <source>id_not_now</source>
+        <translation>Не зараз</translation>
+    </message>
+    <message>
         <source>id_not_on_longest_chain</source>
         <translation>Не на найдовшому ланцюжку</translation>
+    </message>
+    <message>
+        <source>id_note</source>
+        <translation>Примітка</translation>
+    </message>
+    <message>
+        <source>id_note_down_your_recovery_phrase</source>
+        <translation>Запишіть свою фразу відновлення. Збережіть її у безпечному місці!</translation>
     </message>
     <message>
         <source>id_notifications</source>
@@ -2575,6 +2957,10 @@ Try manually restoring your wallet.</translation>
     <message>
         <source>id_of_s</source>
         <translation>з %1</translation>
+    </message>
+    <message>
+        <source>id_offline_key_storage</source>
+        <translation>Зберігання ключів в автономному режимі</translation>
     </message>
     <message>
         <source>id_ok</source>
@@ -2642,7 +3028,7 @@ Try manually restoring your wallet.</translation>
     </message>
     <message>
         <source>id_os__app_version_loading_times</source>
-        <translation>OS &amp; app version, loading times</translation>
+        <translation>Версія ОС і програми, час завантаження</translation>
     </message>
     <message>
         <source>id_our_support_page</source>
@@ -2655,6 +3041,10 @@ Try manually restoring your wallet.</translation>
     <message>
         <source>id_outgoing</source>
         <translation>Вихідний </translation>
+    </message>
+    <message>
+        <source>id_output_descriptors</source>
+        <translation>Output Descriptors</translation>
     </message>
     <message>
         <source>id_overview</source>
@@ -2670,15 +3060,15 @@ Try manually restoring your wallet.</translation>
     </message>
     <message>
         <source>id_page_visits_button_presses</source>
-        <translation>Page visits, button presses, general app configuration</translation>
+        <translation>Відвідування сторінок, натискання кнопок, загальна конфігурація програми</translation>
     </message>
     <message>
         <source>id_passphrase</source>
-        <translation>Passphrase</translation>
+        <translation>Фраза-пароль</translation>
     </message>
     <message>
         <source>id_passphrase_protected</source>
-        <translation>Passphrase protected</translation>
+        <translation>Захищено фразою-паролем</translation>
     </message>
     <message>
         <source>id_password</source>
@@ -2693,12 +3083,20 @@ Try manually restoring your wallet.</translation>
         <translation>Вставити</translation>
     </message>
     <message>
+        <source>id_paste_an_existing_proposal</source>
+        <translation>Вставити існуюче пропозицію</translation>
+    </message>
+    <message>
         <source>id_path_used_for_signing</source>
         <translation>Шлях, який використовується для підпису</translation>
     </message>
     <message>
         <source>id_pending_confirmation</source>
         <translation>Очікування підтвердження</translation>
+    </message>
+    <message>
+        <source>id_permanent_2fa_account_ideal_for</source>
+        <translation>Постійний акаунт 2FA, ідеально підходить для довгострокового зберігання, з можливістю використання 3-го аварійного ключа на апаратному гаманці.</translation>
     </message>
     <message>
         <source>id_permanently_block_this_wallet</source>
@@ -2817,6 +3215,10 @@ Try manually restoring your wallet.</translation>
         <translation>Зачекайте, поки ваш Ledger не відобразить адресу, щоб її підтвердити. Це може зайняти до 20 секунд.</translation>
     </message>
     <message>
+        <source>id_power_on_jade</source>
+        <translation>Увімкнути Jade</translation>
+    </message>
+    <message>
         <source>id_precision</source>
         <translation>Точність</translation>
     </message>
@@ -2862,7 +3264,7 @@ Try manually restoring your wallet.</translation>
     </message>
     <message>
         <source>id_pseudonymous_identifier_country</source>
-        <translation>Pseudonymous identifier, country</translation>
+        <translation>Псевдонімний ідентифікатор, країна</translation>
     </message>
     <message>
         <source>id_qr_code</source>
@@ -2873,20 +3275,24 @@ Try manually restoring your wallet.</translation>
         <translation>QR-сканер</translation>
     </message>
     <message>
+        <source>id_quick_setup_2fa_account_ideal</source>
+        <translation>Швидке налаштування 2FA акаунту, ідеально підходить для активних користувачів (2FA припиняється, якщо ви не переміщували кошти протягом 1 року).</translation>
+    </message>
+    <message>
         <source>id_radio_firmware</source>
         <translation>Radio firmware</translation>
     </message>
     <message>
         <source>id_rate</source>
-        <translation>Rate</translation>
+        <translation>Оцінити</translation>
     </message>
     <message>
         <source>id_rate_us</source>
-        <translation>Rate us</translation>
+        <translation>Оцініть нас</translation>
     </message>
     <message>
         <source>id_rate_your_experience</source>
-        <translation>Rate your experience</translation>
+        <translation>Оцініть свій досвід</translation>
     </message>
     <message>
         <source>id_read_more</source>
@@ -2909,6 +3315,10 @@ Try manually restoring your wallet.</translation>
         <translation>Отримати</translation>
     </message>
     <message>
+        <source>id_receive_any_liquid_asset</source>
+        <translation>Отримайте будь-який актив Liquid</translation>
+    </message>
+    <message>
         <source>id_receive_email_notifications_for</source>
         <translation>Отримувати повідомлення по електронній пошті про надіслані та отримані транзакції</translation>
     </message>
@@ -2919,6 +3329,10 @@ Try manually restoring your wallet.</translation>
     <message>
         <source>id_received_on</source>
         <translation>Отримано</translation>
+    </message>
+    <message>
+        <source>id_receiving</source>
+        <translation>Отримання</translation>
     </message>
     <message>
         <source>id_recently_used_wallets</source>
@@ -2942,7 +3356,7 @@ Try manually restoring your wallet.</translation>
     </message>
     <message>
         <source>id_recovery_key_type</source>
-        <translation>Recovery Key Type</translation>
+        <translation>Тип ключа відновлення</translation>
     </message>
     <message>
         <source>id_recovery_mnemonic</source>
@@ -2958,11 +3372,11 @@ Try manually restoring your wallet.</translation>
     </message>
     <message>
         <source>id_recovery_phrase_length</source>
-        <translation>Recovery phrase length</translation>
+        <translation>Довжина фрази відновлення</translation>
     </message>
     <message>
         <source>id_recovery_phrases_key_material</source>
-        <translation>Recovery phrases, key material, addresses, balances</translation>
+        <translation>Фрази відновлення, ключі, адреси, баланси</translation>
     </message>
     <message>
         <source>id_recovery_tool</source>
@@ -3009,8 +3423,20 @@ Try manually restoring your wallet.</translation>
         <translation>Перезавантажити</translation>
     </message>
     <message>
+        <source>id_remember_device</source>
+        <translation>Запам&apos;ятати пристрій</translation>
+    </message>
+    <message>
+        <source>id_remember_device_connection</source>
+        <translation>Запам&apos;ятати з&apos;єднання пристрою</translation>
+    </message>
+    <message>
         <source>id_remember_me</source>
         <translation>Запам&apos;ятати мене</translation>
+    </message>
+    <message>
+        <source>id_remember_my_device</source>
+        <translation>Запам&apos;ятати мій пристрій</translation>
     </message>
     <message>
         <source>id_remove</source>
@@ -3034,7 +3460,7 @@ Try manually restoring your wallet.</translation>
     </message>
     <message>
         <source>id_rename_wallet</source>
-        <translation>Rename wallet</translation>
+        <translation>Перейменувати гаманець</translation>
     </message>
     <message>
         <source>id_replaceable</source>
@@ -3133,8 +3559,32 @@ Try manually restoring your wallet.</translation>
         <translation>%1 від %2</translation>
     </message>
     <message>
+        <source>id_s_is_a_liquid_asset_you_can</source>
+        <translation>%1є активом Liquid. Ви можете отримати його безпосередньо на будь-який акаунт Liquid.</translation>
+    </message>
+    <message>
+        <source>id_s_is_a_liquid_asset_you_need_a</source>
+        <translation>%1є активом Liquid. Вам потрібен акаунт Liquid, щоб його отримати.</translation>
+    </message>
+    <message>
+        <source>id_s_is_an_amp_asset_you_can</source>
+        <translation>%1є активом AMP. Ви можете отримувати його безпосередньо на будь-який акаунт AMP.</translation>
+    </message>
+    <message>
+        <source>id_s_is_an_amp_asset_you_need_an</source>
+        <translation>%1є активом AMP. Для його отримання вам потрібен акаунт AMP.</translation>
+    </message>
+    <message>
         <source>id_s_network</source>
         <translation>%1 мережа</translation>
+    </message>
+    <message>
+        <source>id_safe_environment</source>
+        <translation>Безпечне середовище</translation>
+    </message>
+    <message>
+        <source>id_safely_stored</source>
+        <translation>Надійне зберігання</translation>
     </message>
     <message>
         <source>id_save</source>
@@ -3149,12 +3599,16 @@ Try manually restoring your wallet.</translation>
         <translation>Збережіть вашу мнемонічну фразу</translation>
     </message>
     <message>
+        <source>id_scan_a_proposal</source>
+        <translation>Відскануйте пропозицію</translation>
+    </message>
+    <message>
         <source>id_scan_a_qr_code_for_spv_pairing</source>
         <translation>Відскануйте QR-код для сполучення SPV</translation>
     </message>
     <message>
         <source>id_scan_or_paste_your_extended</source>
-        <translation>Scan or paste your extended public key (xPub/yPub/zPub) to log in to your watch-only-wallet.</translation>
+        <translation>Відскануйте або вставте розширений публічний ключ (xPub/yPub/zPub), щоб увійти в свій гаманець у режимі &quot;лише для перегляду&quot;.</translation>
     </message>
     <message>
         <source>id_scan_qr_code</source>
@@ -3197,12 +3651,20 @@ Try manually restoring your wallet.</translation>
         <translation>Зміна безпеки</translation>
     </message>
     <message>
+        <source>id_see_archived_accounts_s</source>
+        <translation>See Archived Accounts (%1)</translation>
+    </message>
+    <message>
         <source>id_see_our_privacy_policy_s</source>
         <translation>Дивіться нашу політику конфіденційності %1</translation>
     </message>
     <message>
         <source>id_see_our_terms_of_service_s</source>
         <translation>Дивіться наші Умови використання %1</translation>
+    </message>
+    <message>
+        <source>id_segwit</source>
+        <translation>SegWit</translation>
     </message>
     <message>
         <source>id_segwit_account</source>
@@ -3233,6 +3695,14 @@ Try manually restoring your wallet.</translation>
         <translation>Оберіть тривалість захисту ваших монет двофакторною аутентифікацією. Нова опція застосовується до монет, що нещодавно отримані.</translation>
     </message>
     <message>
+        <source>id_select_initalize_to_create_a</source>
+        <translation>Виберіть Initalize для створення нового гаманця, потім створіть резервну копію та перевірте фразу відновлення</translation>
+    </message>
+    <message>
+        <source>id_select_initialize_and_choose_to</source>
+        <translation>Виберіть Initialize та виберіть створення нового гаманця</translation>
+    </message>
+    <message>
         <source>id_select_network</source>
         <translation>Оберіть мережу</translation>
     </message>
@@ -3246,7 +3716,7 @@ Try manually restoring your wallet.</translation>
     </message>
     <message>
         <source>id_select_watchonly_type</source>
-        <translation>Select Watch-only type</translation>
+        <translation>Виберіть &quot;Тільки для перегляду&quot;</translation>
     </message>
     <message>
         <source>id_select_word_number_d</source>
@@ -3258,7 +3728,7 @@ Try manually restoring your wallet.</translation>
     </message>
     <message>
         <source>id_select_your_recovery_key</source>
-        <translation>Select your recovery key</translation>
+        <translation>Виберіть ключ відновлення</translation>
     </message>
     <message>
         <source>id_send</source>
@@ -3286,11 +3756,15 @@ Try manually restoring your wallet.</translation>
     </message>
     <message>
         <source>id_sending</source>
-        <translation>ВІДПРАВЛЕННЯ</translation>
+        <translation>Sending</translation>
     </message>
     <message>
         <source>id_sending_request</source>
         <translation>Відправка запиту...</translation>
+    </message>
+    <message>
+        <source>id_sensitive_information</source>
+        <translation>Конфіденційна інформація</translation>
     </message>
     <message>
         <source>id_sent</source>
@@ -3397,6 +3871,18 @@ Try manually restoring your wallet.</translation>
         <translation>Налаштування</translation>
     </message>
     <message>
+        <source>id_setup_2fa_now</source>
+        <translation>Налаштуйте 2FA зараз</translation>
+    </message>
+    <message>
+        <source>id_setup_a_new_wallet</source>
+        <translation>Налаштувати новий гаманець</translation>
+    </message>
+    <message>
+        <source>id_setup_guide</source>
+        <translation>Посібник із налаштування</translation>
+    </message>
+    <message>
         <source>id_setup_jade</source>
         <translation>Налаштувати Jade</translation>
     </message>
@@ -3407,6 +3893,10 @@ Try manually restoring your wallet.</translation>
     <message>
         <source>id_setup_pin_and_s</source>
         <translation>Встановити PIN-код та %1</translation>
+    </message>
+    <message>
+        <source>id_setup_your_jade</source>
+        <translation>Налаштуйте свій Jade</translation>
     </message>
     <message>
         <source>id_share</source>
@@ -3450,7 +3940,7 @@ Try manually restoring your wallet.</translation>
     </message>
     <message>
         <source>id_show_details</source>
-        <translation>Show details</translation>
+        <translation>Показати деталі</translation>
     </message>
     <message>
         <source>id_show_fiat</source>
@@ -3465,12 +3955,32 @@ Try manually restoring your wallet.</translation>
         <translation>Показати QR-код</translation>
     </message>
     <message>
+        <source>id_show_recovery_phrase</source>
+        <translation>Показати фразу відновлення</translation>
+    </message>
+    <message>
+        <source>id_sign_transaction</source>
+        <translation>Sign Transaction</translation>
+    </message>
+    <message>
         <source>id_signature_validation_failed_if</source>
         <translation>Перевірка підпису не вдалася. Якщо ця помилка є несподіваною і повторювалася неодноразово, можливо, апаратний гаманець несправний або був зламаний. Можливо, стався витік ваших ключів, що може призвести до втрати коштів. Будь ласка, подумайте про заміну апаратного гаманця.</translation>
     </message>
     <message>
         <source>id_signup_in_progress</source>
         <translation>Реєстрація продовжується</translation>
+    </message>
+    <message>
+        <source>id_simple</source>
+        <translation>Простий</translation>
+    </message>
+    <message>
+        <source>id_simple__secure_selfcustody</source>
+        <translation>Простий, безпечний, некастодіальний</translation>
+    </message>
+    <message>
+        <source>id_simple_portable_standard</source>
+        <translation>Простий, портативний, стандартний акаунт з одним підписом, захищений вашим ключем та фразою відновлення</translation>
     </message>
     <message>
         <source>id_simplified_payment_verification</source>
@@ -3486,7 +3996,7 @@ Try manually restoring your wallet.</translation>
     </message>
     <message>
         <source>id_skip</source>
-        <translation>ПРОПУСТИТИ</translation>
+        <translation>Skip</translation>
     </message>
     <message>
         <source>id_skip_not_recommended</source>
@@ -3568,7 +4078,7 @@ Try manually restoring your wallet.</translation>
     </message>
     <message>
         <source>id_standard</source>
-        <translation>Standard</translation>
+        <translation>Стандартний</translation>
     </message>
     <message>
         <source>id_standard_account</source>
@@ -3595,6 +4105,18 @@ Try manually restoring your wallet.</translation>
         <translation>Статус</translation>
     </message>
     <message>
+        <source>id_step</source>
+        <translation>Крок</translation>
+    </message>
+    <message>
+        <source>id_store_it_somewhere_safe</source>
+        <translation>Зберігайте її в безпечному місці.</translation>
+    </message>
+    <message>
+        <source>id_submit</source>
+        <translation>Надіслати</translation>
+    </message>
+    <message>
         <source>id_success</source>
         <translation>Успіх</translation>
     </message>
@@ -3605,6 +4127,18 @@ Try manually restoring your wallet.</translation>
     <message>
         <source>id_support_page</source>
         <translation>Сторінка підтримки</translation>
+    </message>
+    <message>
+        <source>id_swap</source>
+        <translation>Обмін</translation>
+    </message>
+    <message>
+        <source>id_swap_proposal</source>
+        <translation>Пропозиція обміну</translation>
+    </message>
+    <message>
+        <source>id_swapped</source>
+        <translation>Обмін відбувся</translation>
     </message>
     <message>
         <source>id_sweep</source>
@@ -3642,6 +4176,10 @@ Try manually restoring your wallet.</translation>
         <translation>Системне повідомлення</translation>
     </message>
     <message>
+        <source>id_take_control_your_keys_your</source>
+        <translation>Беріть контроль: Ваші ключі, Ваші біткоїни</translation>
+    </message>
+    <message>
         <source>id_tap_on_the_card_to_view</source>
         <translation>Натисніть на картку для перегляду транзакцій. </translation>
     </message>
@@ -3654,8 +4192,12 @@ Try manually restoring your wallet.</translation>
         <translation>Натисніть, щоб відсканувати QR-код і підключитися до вузла для SPV</translation>
     </message>
     <message>
+        <source>id_taproot</source>
+        <translation>Taproot</translation>
+    </message>
+    <message>
         <source>id_taproot_account</source>
-        <translation>Taproot account</translation>
+        <translation>Акаунт Taproot</translation>
     </message>
     <message>
         <source>id_taproot_bip86</source>
@@ -3691,7 +4233,7 @@ Try manually restoring your wallet.</translation>
     </message>
     <message>
         <source>id_thank_you_for_your_feedback</source>
-        <translation>Thank you for your feedback</translation>
+        <translation>Дякуємо за ваш відгук</translation>
     </message>
     <message>
         <source>id_the_1_year_2fa_reset_process</source>
@@ -3731,7 +4273,7 @@ Try manually restoring your wallet.</translation>
     </message>
     <message>
         <source>id_the_liquid_network_is_a_bitcoin</source>
-        <translation>The Liquid Network is a Bitcoin layer-2 solution enabling the fast, confidential settlement and issuance of digital assets, such as stablecoins, security tokens, and other financial instruments, on top of the Bitcoin timechain.</translation>
+        <translation>Liquid Network – це рішення рівня-2 для Біткоїна, що забезпечує швидке та конфіденційне здійснення операцій з цифровими активами, такими як стейблкоїни, security-токени та інші фінансові інструменти, на основі ланцюжка Біткоїну.</translation>
     </message>
     <message>
         <source>id_the_network_selected_on_the</source>
@@ -3743,7 +4285,7 @@ Try manually restoring your wallet.</translation>
     </message>
     <message>
         <source>id_the_new_firmware_requires_you</source>
-        <translation>The new firmware requires you to unpair your Jade from the Bluetooth settings.</translation>
+        <translation>Нова прошивка вимагає, щоб ви від&apos;єднали ваш пристрій Jade в налаштуваннях Bluetooth.</translation>
     </message>
     <message>
         <source>id_the_password_cant_be_empty</source>
@@ -3751,7 +4293,7 @@ Try manually restoring your wallet.</translation>
     </message>
     <message>
         <source>id_the_qr_code_does_not_include</source>
-        <translation>The QR code does not include the BIP39 Passphrase</translation>
+        <translation>QR-код не містить фрази BIP39</translation>
     </message>
     <message>
         <source>id_the_recovery_key_below_will_not</source>
@@ -3775,7 +4317,7 @@ Try manually restoring your wallet.</translation>
     </message>
     <message>
         <source>id_the_username_cant_be_empty</source>
-        <translation>The username can&apos;t be empty</translation>
+        <translation>Ім&apos;я користувача не може бути порожнім</translation>
     </message>
     <message>
         <source>id_the_waiting_period_is_necessary</source>
@@ -3788,6 +4330,12 @@ Try manually restoring your wallet.</translation>
     <message>
         <source>id_there_is_already_a_pin_set_for</source>
         <translation>PIN-код встановлено для %1гаманця. Якщо продовжити, не можна буде встановити PIN і для входу буде потрібно ввести мнемонічну фразу з 24 слів. Ви зможете вимкнути PIN-код в налаштуваннях або 3-кратним помилковим введенням.</translation>
+    </message>
+    <message>
+        <source>id_there_is_already_an_archived</source>
+        <translation>Вже існує заархівований аккаунт.
+
+Бажаєте створити новий?</translation>
     </message>
     <message>
         <source>id_these_are_some_compatible</source>
@@ -3807,7 +4355,7 @@ Try manually restoring your wallet.</translation>
     </message>
     <message>
         <source>id_this_wallet_is_based_on_your</source>
-        <translation>This wallet is based on your recovery phrase and a BIP39 Passphrase</translation>
+        <translation>Цей гаманець базується на вашій фразі відновлення та паролі BIP39</translation>
     </message>
     <message>
         <source>id_this_wallet_operates_on_a_test</source>
@@ -3835,7 +4383,7 @@ Try manually restoring your wallet.</translation>
     </message>
     <message>
         <source>id_tip_you_can_use_the</source>
-        <translation>Tip: You can use the xPub/yPub/zPub to view your watch-only wallet in Green, or you may import it to another platform. Each account in your wallet has a separate xPub/yPub/zPub.</translation>
+        <translation>Порада: ви можете використовувати xPub/yPub/zPub тільки для перегляду свого гаманця в Green, або імпортувати його на іншу платформу. Для кожного акаунту в вашому гаманці є свій окремий xPub/yPub/zPub.</translation>
     </message>
     <message>
         <source>id_to</source>
@@ -3872,6 +4420,10 @@ Try manually restoring your wallet.</translation>
     <message>
         <source>id_tor_will_use_1s_and_only_work</source>
         <translation>Tor використовуватиме %1 і працюватиме тільки в тому випадку, якщо увімкнено проксі Orbot або Tor</translation>
+    </message>
+    <message>
+        <source>id_total</source>
+        <translation>Загальний</translation>
     </message>
     <message>
         <source>id_total_assets</source>
@@ -3926,6 +4478,10 @@ Try manually restoring your wallet.</translation>
         <translation>Транзакції</translation>
     </message>
     <message>
+        <source>id_troubleshoot</source>
+        <translation>Усунення проблем</translation>
+    </message>
+    <message>
         <source>id_try_again</source>
         <translation>Спробуйте знову</translation>
     </message>
@@ -3974,6 +4530,10 @@ Try manually restoring your wallet.</translation>
         <translation>Двофакторний поріг</translation>
     </message>
     <message>
+        <source>id_tx_count</source>
+        <translation>Кількість транзакцій TX</translation>
+    </message>
+    <message>
         <source>id_txid</source>
         <translation>TXID</translation>
     </message>
@@ -3987,7 +4547,7 @@ Try manually restoring your wallet.</translation>
     </message>
     <message>
         <source>id_unarchive_account</source>
-        <translation>Unarchive account</translation>
+        <translation>Розархівувати акаунт</translation>
     </message>
     <message>
         <source>id_unblinding_data</source>
@@ -4003,7 +4563,7 @@ Try manually restoring your wallet.</translation>
     </message>
     <message>
         <source>id_unknown</source>
-        <translation>Невідомо</translation>
+        <translation>Невідомий</translation>
     </message>
     <message>
         <source>id_unknown_bip21_parameter</source>
@@ -4023,11 +4583,15 @@ Try manually restoring your wallet.</translation>
     </message>
     <message>
         <source>id_unlock_green</source>
-        <translation>Unlock Green</translation>
+        <translation>Розблокувати Green</translation>
     </message>
     <message>
         <source>id_unlock_jade_to_continue</source>
         <translation>Розблокуйте Jade, щоб продовжити</translation>
+    </message>
+    <message>
+        <source>id_unlock_your_device_to_continue</source>
+        <translation>Щоб продовжити, розблокуйте свій пристрій</translation>
     </message>
     <message>
         <source>id_unlocked_coins_can_be_spent_and</source>
@@ -4082,8 +4646,20 @@ Try manually restoring your wallet.</translation>
         <translation>Використовуйте блокування екрану Android для входу в систему</translation>
     </message>
     <message>
+        <source>id_use_comma_separated_values_or</source>
+        <translation>Use comma separated values or keep scanning</translation>
+    </message>
+    <message>
+        <source>id_use_hardware_device</source>
+        <translation>Використовувати апаратний пристрій</translation>
+    </message>
+    <message>
         <source>id_use_secure_display_and_screen</source>
-        <translation>Use Secure Display and Screen Lock</translation>
+        <translation>Використовувати захищений дисплей та блокування екрану</translation>
+    </message>
+    <message>
+        <source>id_use_the_jogwheel_to_select_the</source>
+        <translation>Використовуйте колесо прокрутки для вибору слова, яке відповідає вашій фразі відновлення.</translation>
     </message>
     <message>
         <source>id_use_your_email_to_receive</source>
@@ -4091,7 +4667,7 @@ Try manually restoring your wallet.</translation>
     </message>
     <message>
         <source>id_user_contact_info_ip_address</source>
-        <translation>User contact info, IP address, detailed location</translation>
+        <translation>Контактна інформація користувача, IP-адреса, детальне місцезнаходження</translation>
     </message>
     <message>
         <source>id_user_not_found_or_invalid</source>
@@ -4122,6 +4698,10 @@ Try manually restoring your wallet.</translation>
         <translation>Перевірити на пристрої</translation>
     </message>
     <message>
+        <source>id_verify_recovery_phrase</source>
+        <translation>Перевірити фразу відновлення</translation>
+    </message>
+    <message>
         <source>id_verify_your_bitcoin</source>
         <translation>Переконайтеся, що ваші біткоїн-транзакції включені в блокчейн</translation>
     </message>
@@ -4147,11 +4727,11 @@ Try manually restoring your wallet.</translation>
     </message>
     <message>
         <source>id_view_account</source>
-        <translation>View account</translation>
+        <translation>Переглянути акаунт</translation>
     </message>
     <message>
         <source>id_view_archived_accounts</source>
-        <translation>View Archived Accounts</translation>
+        <translation>Переглянути заархівовані акаунти</translation>
     </message>
     <message>
         <source>id_view_archived_accounts_d</source>
@@ -4186,6 +4766,10 @@ Try manually restoring your wallet.</translation>
         <translation>Гаманець уже відновлений</translation>
     </message>
     <message>
+        <source>id_wallet_assets</source>
+        <translation>Активи гаманця</translation>
+    </message>
+    <message>
         <source>id_wallet_backup</source>
         <translation>Створення резервної копії гаманця</translation>
     </message>
@@ -4208,6 +4792,14 @@ Try manually restoring your wallet.</translation>
     <message>
         <source>id_wallet_not_found</source>
         <translation>Гаманець не знайдено</translation>
+    </message>
+    <message>
+        <source>id_wallet_pockets</source>
+        <translation>Wallet Pockets</translation>
+    </message>
+    <message>
+        <source>id_wallet_transactions</source>
+        <translation>Транзакції гаманця</translation>
     </message>
     <message>
         <source>id_wallets</source>
@@ -4247,35 +4839,35 @@ Try manually restoring your wallet.</translation>
     </message>
     <message>
         <source>id_watchonly</source>
-        <translation>Холодний гаманець</translation>
+        <translation>Лише для перегляду</translation>
     </message>
     <message>
         <source>id_watchonly_credentials</source>
-        <translation>Watch-only credentials</translation>
+        <translation>Облікові дані лише для перегляду</translation>
     </message>
     <message>
         <source>id_watchonly_details</source>
-        <translation>Watch-only details</translation>
+        <translation>Деталі лише для перегляду</translation>
     </message>
     <message>
         <source>id_watchonly_disabled</source>
-        <translation>Холодний гаманець відключено</translation>
+        <translation>Функція &quot;Лише для перегляду&quot; вимкнена</translation>
     </message>
     <message>
         <source>id_watchonly_login</source>
-        <translation>Логін холодного гаманця</translation>
+        <translation>Вхід лише для перегляду</translation>
     </message>
     <message>
         <source>id_watchonly_mode_can_be_activated</source>
-        <translation>Режим холодного гаманця можна активувати в налаштуваннях після входу в систему за допомогою PIN-коду, мнемонічної фрази або апаратного гаманця.</translation>
+        <translation>Режим &quot;Лише для перегляду&quot; може бути активований в налаштуваннях після входу в систему за допомогою PIN-коду, мнемонічної фрази або апаратного гаманця.</translation>
     </message>
     <message>
         <source>id_watchonly_mode_cannot_be</source>
-        <translation>Режим watch-only не можна активувати на Liquid, оскільки ваші кошти повністю конфіденційні.</translation>
+        <translation>Режим &quot;Лише для перегляду&quot; не може бути активований на Liquid, оскільки ваші кошти повністю конфіденційні.</translation>
     </message>
     <message>
         <source>id_watchonly_wallet</source>
-        <translation>Гаманець Watch-Only</translation>
+        <translation>Гаманець лише для перегляду</translation>
     </message>
     <message>
         <source>id_we_use_the_camera_to_scan_qr</source>
@@ -4283,7 +4875,7 @@ Try manually restoring your wallet.</translation>
     </message>
     <message>
         <source>id_we_will_do_our_best_to_find_a</source>
-        <translation>We will do our best to find a wallet corresponding to this recovery phrase</translation>
+        <translation>Ми спробуємо знайти гаманець, який відповідає цій фразі відновлення</translation>
     </message>
     <message>
         <source>id_welcome</source>
@@ -4292,6 +4884,14 @@ Try manually restoring your wallet.</translation>
     <message>
         <source>id_welcome_to</source>
         <translation>Ласкаво просимо до</translation>
+    </message>
+    <message>
+        <source>id_welcome_to_blockstream_jade</source>
+        <translation>Ласкаво просимо до Blockstream Jade</translation>
+    </message>
+    <message>
+        <source>id_welcome_to_your_wallet</source>
+        <translation>Ласкаво просимо до вашого гаманця!</translation>
     </message>
     <message>
         <source>id_well_done_you_can_continue</source>
@@ -4310,12 +4910,16 @@ Try manually restoring your wallet.</translation>
         <translation>Ми в найкоротші терміни надамо вам AMP-гаманець. Зверніть увагу, що ви також можете створити облікові записи AMP в будь-якому існуючому гаманці Liquid.</translation>
     </message>
     <message>
+        <source>id_what_is_word_number_s</source>
+        <translation>Яке слово відповідає номеру %1?</translation>
+    </message>
+    <message>
         <source>id_what_type_of_account_would_you</source>
         <translation>Який тип облікового запису ви хочете додати?</translation>
     </message>
     <message>
         <source>id_whats_collected</source>
-        <translation>What&apos;s collected</translation>
+        <translation>Що зібрано</translation>
     </message>
     <message>
         <source>id_whats_new</source>
@@ -4323,11 +4927,15 @@ Try manually restoring your wallet.</translation>
     </message>
     <message>
         <source>id_whats_not_collected</source>
-        <translation>What&apos;s NOT collected</translation>
+        <translation>Що НЕ зібрано</translation>
     </message>
     <message>
         <source>id_where_would_you_like_to</source>
         <translation>Куди б ви хотіли перевести кошти?</translation>
+    </message>
+    <message>
+        <source>id_whomever_can_access_your</source>
+        <translation>Будь-хто, хто може отримати доступ до вашої фрази відновлення, може вкрасти ваші кошти.</translation>
     </message>
     <message>
         <source>id_wireless</source>
@@ -4347,7 +4955,7 @@ Try manually restoring your wallet.</translation>
     </message>
     <message>
         <source>id_write_down_your_recovery_phrase</source>
-        <translation>Запишіть фразу відновлення на папері і зберігайте її в надійному місці.</translation>
+        <translation>Запишіть свою фразу відновлення в правильному порядку</translation>
     </message>
     <message>
         <source>id_wrong_choice_check_your</source>
@@ -4382,8 +4990,16 @@ Try manually restoring your wallet.</translation>
         <translation>Ви можете змінити їх пізніше.</translation>
     </message>
     <message>
+        <source>id_you_can_still_receive_funds_but</source>
+        <translation>You can still receive funds, but they won’t be shown on your total balance.</translation>
+    </message>
+    <message>
         <source>id_you_cannot_create_or_restore_a</source>
         <translation>Ви не можете створити або відновити гаманець на %1 так як у вас вже є гаманець, захищений PIN-кодом.</translation>
+    </message>
+    <message>
+        <source>id_you_have_a_significant_amount</source>
+        <translation>У вас значна сума коштів тут, розгляньте можливість захисту їх за допомогою 2FA.</translation>
     </message>
     <message>
         <source>id_you_have_clicked_a_payment_uri</source>
@@ -4407,7 +5023,7 @@ Try manually restoring your wallet.</translation>
     </message>
     <message>
         <source>id_you_have_successfully_sent_a</source>
-        <translation>You have successfully sent a transaction. Please give us your feedback to improve Green.</translation>
+        <translation>Ви успішно відправили транзакцію. Будь ласка, залиште свій відгук, щоб покращити Green.</translation>
     </message>
     <message>
         <source>id_you_have_to_authenticate_using</source>
@@ -4426,12 +5042,16 @@ Try manually restoring your wallet.</translation>
         <translation>Вам ПОТРІБНО зберегти цю мнемонічну фразу ЗАРАЗ</translation>
     </message>
     <message>
+        <source>id_you_need_a_liquid_account_in</source>
+        <translation>Вам потрібен акаунт Liquid, щоб отримати це.</translation>
+    </message>
+    <message>
         <source>id_you_only_have_one_twofactor</source>
         <translation>У вас підключено лише один метод двофакторної аутентифікації</translation>
     </message>
     <message>
         <source>id_you_will_be_asked_to_enter_your</source>
-        <translation>You will be asked to enter your passphrase at every login.</translation>
+        <translation>При кожному вході в систему вам буде запропоновано ввести пароль.</translation>
     </message>
     <message>
         <source>id_you_will_need_to_reenter_your</source>
@@ -4462,6 +5082,14 @@ Try manually restoring your wallet.</translation>
         <translation>Термін дії вашої 2FA закінчується, тому, якщо ви втратите доступ до свого методу 2FA або служба Blockstream Green стане недоступною, ви завжди можете відновити свої біткоіни за допомогою цього інструменту з відкритим вихідним кодом.</translation>
     </message>
     <message>
+        <source>id_your_bitcoin_and_liquid_assets</source>
+        <translation>Ваші біткоїни та активи Liquid зберігаються на блокчейні і можуть бути витрачені тільки з використанням ключів, що зберігаються на Jade.</translation>
+    </message>
+    <message>
+        <source>id_your_bluetooth_adapter_is</source>
+        <translation>Ваш адаптер Bluetooth вимкнено</translation>
+    </message>
+    <message>
         <source>id_your_device_was_disconnected</source>
         <translation>Ваш пристрій було відключено</translation>
     </message>
@@ -4478,12 +5106,31 @@ Try manually restoring your wallet.</translation>
         <translation>Ваші кошти захищені одним ключем на вашому пристрої. Простіше в налаштуванні і експлуатації, ніж з мультіподпісью. Якщо маєте сумніви, оберіть цей варіант.</translation>
     </message>
     <message>
+        <source>id_your_funds_are_secured_by_your</source>
+        <translation>Ваші кошти захищені PIN-кодом. Простий у використанні, стандартний та переносний на більшість біткоїн-гаманців.</translation>
+    </message>
+    <message>
+        <source>id_your_funds_have_grown</source>
+        <translation>Ваші кошти нещодавно збільшилися.
+
+Розгляньте можливість використання акаунту з 2FA, щоб усі ваші вихідні транзакції були додатково захищені.
+Для цього:
+1. Створіть акаунт з 2FA;
+2. Налаштуйте метод 2FA;
+3. Перенесіть кошти на новий акаунт;
+4. Архівуйте старий акаунт;</translation>
+    </message>
+    <message>
         <source>id_your_green_wallet_is_now_ready</source>
         <translation>Ваш Green-гаманець готовий для використання.</translation>
     </message>
     <message>
         <source>id_your_ios_device_might_not_be</source>
         <translation>Ваше пристрій iOS може не підтримуватися</translation>
+    </message>
+    <message>
+        <source>id_your_keys_secure_your_coins_on</source>
+        <translation>Ваші ключі забезпечують безпеку ваших монет на блокчейні.</translation>
     </message>
     <message>
         <source>id_your_notifications_will_be</source>
@@ -4496,6 +5143,10 @@ Try manually restoring your wallet.</translation>
     <message>
         <source>id_your_s_sent_to_s_has_been</source>
         <translation>Ваша %1, надіслана на %2 , підтверджена</translation>
+    </message>
+    <message>
+        <source>id_your_swap_proposal_is_generated</source>
+        <translation>Ваша пропозиція по обміну створена!</translation>
     </message>
     <message>
         <source>id_your_transactions_will_be_shown</source>
