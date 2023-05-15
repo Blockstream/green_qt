@@ -1,7 +1,7 @@
 #!/bin/bash
 set -eox pipefail
 
-FILE=green.app
+FILE=$1
 TEAM_ID=D9W37S9468
 
 codesign \

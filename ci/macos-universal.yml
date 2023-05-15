@@ -1,0 +1,28 @@
+macos-universal:build:
+  tags:
+    - qt
+    - osxsigner
+  stage: build
+  artifacts:
+    name: "$CI_PROJECT_NAME-$CI_JOB_NAME-$CI_COMMIT_SHORT_SHA"
+    paths:
+      - green.app
+  needs: ["macos-arm64:build", "macos-x86_64:build"]
+  script:
+    - ls -la
+    - cp -R green-x86_64.app green.app
+    - lipo -create -output green.app/Contents/MacOS/green ./green-arm64.app/Contents/MacOS/green ./green-x86_64.app/Contents/MacOS/green
+
+macos-universal:staple:
+  tags:
+    - osxsigner
+  stage: staple
+  artifacts:
+    name: "$CI_PROJECT_NAME-$CI_JOB_NAME-$CI_COMMIT_SHORT_SHA"
+    expire_in: 1 week
+    when: always
+    paths:
+      - green.app
+  needs: ["macos-universal:build"]
+  script:
+    - tools/macos-staple.sh green.app
