@@ -40,15 +40,19 @@ GPane {
                     }
                 }
             }
-            Repeater {
-                model: LimitProxyModel {
-                    source: transaction_list_model
-                    limit: 5
-                }
-                delegate: TransactionDelegate {
-                    Layout.fillWidth: true
-                    context: self.context
-                    account: self.account
+            Column {
+                Layout.fillWidth: true
+                spacing: 8
+                Repeater {
+                    model: LimitProxyModel {
+                        source: transaction_list_model
+                        limit: 5
+                    }
+                    delegate: TransactionDelegate {
+                        context: self.context
+                        account: self.account
+                        width: parent.width
+                    }
                 }
             }
         }

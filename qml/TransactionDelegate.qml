@@ -41,8 +41,8 @@ ItemDelegate {
     hoverEnabled: true
     padding: constants.p3
     verticalPadding: constants.p1
-    bottomPadding: self.ListView.section === self.ListView.nextSection ? constants.p1 : (constants.p1 + 16)
-    bottomInset: ListView.section === self.ListView.nextSection ? 0 : 16
+    bottomPadding: constants.p1
+    bottomInset: 0
 
     background: Rectangle {
         color: self.hovered ? constants.c700 : constants.c800
