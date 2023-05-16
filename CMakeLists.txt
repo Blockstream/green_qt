@@ -13,6 +13,7 @@ if(NOT GREEN_ENV)
 endif()
 
 configure_file(config.h.in config.h @ONLY)
+configure_file(installer.iss.in installer.iss @ONLY)
 
 find_package(Qt6 6.4 COMPONENTS Concurrent Quick QuickControls2 Widgets QuickWidgets Xml Core5Compat Bluetooth SerialPort LinguistTools Multimedia REQUIRED)
 find_package(hidapi REQUIRED)

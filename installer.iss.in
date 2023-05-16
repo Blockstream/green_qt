@@ -1,5 +1,5 @@
 #define MyAppName "Blockstream Green"
-#define MyAppVersion "VERSION_STRING"
+#define MyAppVersion "@PROJECT_VERSION@"
 #define MyAppPublisher "Blockstream"
 #define MyAppURL "https://blockstream.com/green/"
 

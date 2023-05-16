@@ -3,6 +3,7 @@ stages:
   - depends
   - build
   - staple
+  - installer
 
 .depends:
   stage: depends
