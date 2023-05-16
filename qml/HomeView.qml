@@ -226,7 +226,7 @@ MainPage {
         Label {
             Layout.fillWidth: true
             wrapMode: Text.WordWrap
-            text: qsTrId('Copyright (©) 2021') + '<br/><br/>' +
+            text: qsTrId('Copyright (©) 2023') + '<br/><br/>' +
                   qsTrId('id_version') + ' ' + Qt.application.version + '<br/><br/>' +
                   qsTrId('id_please_contribute_if_you_find') + ".<br/>" +
                   qsTrId('id_visit_s_for_further_information').arg(UtilJS.link(url)) + ".<br/><br/>" +
