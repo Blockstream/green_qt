@@ -9,3 +9,21 @@ windows-x86_64:build:
     name: "$CI_PROJECT_NAME-$CI_JOB_NAME-$CI_COMMIT_SHORT_SHA"
     paths:
       - green.exe
+
+windows-x86_64:sign:
+  image: borgbyte/green_qt:windows-x86_64@sha256:37f1daa8be9049fa43d46b07beb9e07a9fdfe93f106c46daf96696525e04c9aa
+  tags:
+    - garelease
+  stage: staple
+  variables:
+    GIT_STRATEGY: none
+  artifacts:
+    name: "$CI_PROJECT_NAME-$CI_JOB_NAME-$CI_COMMIT_SHORT_SHA"
+    expire_in: 1 week
+    when: always
+    paths:
+      - GreenSigned.exe
+  needs: ["windows-x86_64:build"]
+  script:
+    - cp green.exe Green.exe
+    - /opt/process_release_windows
