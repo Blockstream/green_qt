@@ -59,9 +59,15 @@ include(src.cmake)
 set(app_icon_macos "${CMAKE_CURRENT_SOURCE_DIR}/assets/icons/green.icns")
 set_source_files_properties(${app_icon_macos} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
 
+if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+    enable_language("RC")
+    set(app_icon_win "${CMAKE_CURRENT_SOURCE_DIR}/green.rc")
+endif()
+
 qt_add_executable(green WIN32 MACOSX_BUNDLE
     ${TARGET_SOURCES}
     ${app_icon_macos}
+    ${app_icon_win}
 )
 
 set_target_properties(green PROPERTIES
