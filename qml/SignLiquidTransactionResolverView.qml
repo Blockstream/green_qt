@@ -8,9 +8,6 @@ Column {
     property Wallet wallet
     property SignLiquidTransactionResolver resolver
 
-    // TODO failed property removed from resolver
-    property var actions: resolver.failed ? failed_action : null
-
     spacing: 16
 
     Connections {
@@ -24,12 +21,6 @@ Column {
             }
         }
     }
-
-    Action {
-        id: failed_action
-        text: qsTrId('id_cancel')
-        onTriggered: controller_dialog.accept()
-    }
     DeviceImage {
         device: resolver.device
         anchors.horizontalCenter: parent.horizontalCenter
@@ -39,7 +30,6 @@ Column {
         active: resolver.activity
         anchors.horizontalCenter: parent.horizontalCenter
         // TODO failed property removed from resolver
-        opacity: resolver.failed ? 0 : 1
         sourceComponent: ProgressBar {
             from: resolver.activity.progress.from
             to: resolver.activity.progress.to
@@ -49,15 +39,16 @@ Column {
         }
         Behavior on opacity { OpacityAnimator {} }
     }
-    Label {
-        // TODO failed property removed from resolver
-        opacity: resolver.failed ? 1 : 0
-        Behavior on opacity { OpacityAnimator {} }
-        anchors.horizontalCenter: parent.horizontalCenter
-        text: qsTrId('id_operation_failure')
-    }
+//    Label {
+//        // TODO failed property removed from resolver
+//        opacity: resolver.failed ? 1 : 0
+//        Behavior on opacity { OpacityAnimator {} }
+//        anchors.horizontalCenter: parent.horizontalCenter
+//        text: qsTrId('id_operation_failure')
+//    }
     StackView {
         id: stack_view
+        clip: true
         implicitHeight: currentItem.implicitHeight
         implicitWidth: currentItem.implicitWidth
         initialItem: Item {
@@ -69,7 +60,7 @@ Column {
             id: output_view
             property var output
             property int index
-            readonly property Asset asset: wallet.getOrCreateAsset(output.asset_id)
+            readonly property Asset asset: wallet.context.getOrCreateAsset(output.asset_id)
             spacing: 16
             SectionLabel {
                 text: qsTrId('id_review_output_s').arg('#' + (index + 1))
@@ -112,7 +103,7 @@ Column {
         Column {
             id: fee_view
             property var output
-            readonly property Asset asset: wallet.getOrCreateAsset(output.asset_id)
+            readonly property Asset asset: wallet.context.getOrCreateAsset(output.asset_id)
             spacing: 16
             SectionLabel {
                 text: qsTrId('id_confirm_transaction')
