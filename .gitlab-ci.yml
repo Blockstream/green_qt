@@ -4,6 +4,7 @@ stages:
   - build
   - staple
   - installer
+  - package
 
 .depends:
   stage: depends
