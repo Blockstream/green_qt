@@ -109,11 +109,6 @@ WalletDialog {
 //    }
 
     Component {
-        id: sign_transaction_resolver_view_component
-        SignTransactionResolverView {}
-    }
-
-    Component {
         id: sign_liquid_transaction_resolver_view_component
         SignLiquidTransactionResolverView {}
     }

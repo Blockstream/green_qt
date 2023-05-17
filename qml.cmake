@@ -149,7 +149,6 @@ SET(QML_FILES
     qml/MainPageHeader.qml
     qml/MnemonicEditor.qml
     qml/LedgerSignTransactionView.qml
-    qml/SignTransactionResolverView.qml
     qml/RestoreDialog.qml
     qml/AssetIcon.qml
     qml/SelectNetworkView.qml
