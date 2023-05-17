@@ -124,11 +124,6 @@ WalletDialog {
     }
 
     Component {
-        id: jade_sign_transaction_view
-        JadeSignTransactionView {}
-    }
-
-    Component {
         id: jade_sign_liquid_transaction_view
         JadeSignLiquidTransactionView {}
     }
@@ -210,39 +205,28 @@ WalletDialog {
                     task: auth_handler_loader.task
                 }
             }
-// TODO each controller dialog should have a custom done view
             AnimLoader {
-                id: done_loader
+                readonly property SignTransactionTask task: {
+                    const groups = self.controller?.dispatcher?.groups
+                    for (let j = 0; j < groups.length; j++) {
+                        const group = groups[j]
+                        for (let i = 0; i < group.tasks.length; i++) {
+                            const task = group.tasks[i]
+                            if (!(task instanceof SignTransactionTask)) continue
+                            if (!(task.resolver instanceof SignTransactionResolver)) continue
+                            if (!(task.status === Task.Active)) continue
+                            if (!(task.context.device instanceof JadeDevice)) continue
+                            return task
+                        }
+                    }
+                    return null
+                }
+                id: jade_sign_transaction_loader
                 animated: true
-                active: false //sourceComponent && self.controller.dispatcher.status === TaskDispatcher.Finished
-    //            {
-    //                return false
-    //                const tasks = self.controller?.dispatcher?.tasks ?? []
-    //                if (tasks.length === 0) return false
-    //                let result = true
-    //                for (let i = 0; i < tasks.length; i++) {
-    //                    const task = tasks[i]
-    //                    if (task.status !== Task.Finished) result = false
-    //                }
-    //                return result
-    //            }
-                sourceComponent: ColumnLayout {
-                    Spacer {
-                    }
-                    Image {
-                        Layout.alignment: Qt.AlignHCenter
-                        source: 'qrc:/svg/check.svg'
-                        sourceSize.width: 64
-                        sourceSize.height: 64
-                    }
-                    Label {
-                        text: qsTrId('id_done')
-                        font.pixelSize: 20
-                        Layout.fillWidth: true
-                        horizontalAlignment: Label.AlignHCenter
-                    }
-                    VSpacer {
-                    }
+                active: !!jade_sign_transaction_loader.task
+                sourceComponent: JadeSignTransactionView {
+                    wallet: jade_sign_transaction_loader.task.context.wallet
+                    resolver: jade_sign_transaction_loader.task.resolver
                 }
             }
         }
