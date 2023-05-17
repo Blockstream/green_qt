@@ -22,7 +22,9 @@ macos-universal:staple:
     expire_in: 1 week
     when: always
     paths:
-      - green.app
+      - "Blockstream Green.dmg"
   needs: ["macos-universal:build"]
   script:
     - tools/macos-staple.sh green.app
+    - tools/packdmg.sh green.app
+    - tools/macos-staple.sh Blockstream\ Green.dmg
