@@ -124,11 +124,6 @@ WalletDialog {
     }
 
     Component {
-        id: jade_sign_liquid_transaction_view
-        JadeSignLiquidTransactionView {}
-    }
-
-    Component {
         id: jade_sign_message_view
         JadeSignMessageView {
         }
@@ -227,6 +222,30 @@ WalletDialog {
                 sourceComponent: JadeSignTransactionView {
                     wallet: jade_sign_transaction_loader.task.context.wallet
                     resolver: jade_sign_transaction_loader.task.resolver
+                }
+            }
+            AnimLoader {
+                readonly property SignTransactionTask task: {
+                    const groups = self.controller?.dispatcher?.groups
+                    for (let j = 0; j < groups.length; j++) {
+                        const group = groups[j]
+                        for (let i = 0; i < group.tasks.length; i++) {
+                            const task = group.tasks[i]
+                            if (!(task instanceof SignTransactionTask)) continue
+                            if (!(task.resolver instanceof SignLiquidTransactionResolver)) continue
+                            if (!(task.status === Task.Active)) continue
+                            if (!(task.context.device instanceof JadeDevice)) continue
+                            return task
+                        }
+                    }
+                    return null
+                }
+                id: jade_sign_liquid_transaction_loader
+                animated: true
+                active: !!jade_sign_liquid_transaction_loader.task
+                sourceComponent: JadeSignLiquidTransactionView {
+                    wallet: jade_sign_liquid_transaction_loader.task.context.wallet
+                    resolver: jade_sign_liquid_transaction_loader.task.resolver
                 }
             }
         }
