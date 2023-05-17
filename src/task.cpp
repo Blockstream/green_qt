@@ -319,6 +319,13 @@ void AuthHandlerTask::setResult(const QJsonObject& result)
     emit resultChanged();
 }
 
+void AuthHandlerTask::setResolver(Resolver* resolver)
+{
+    if (m_resolver == resolver) return;
+    m_resolver = resolver;
+    emit resolverChanged();
+}
+
 void AuthHandlerTask::update()
 {
     if (m_status != Status::Ready) return;
@@ -478,13 +485,15 @@ void AuthHandlerTask::handleResolveCode(const QJsonObject& result)
         }
         Q_ASSERT(resolver);
         connect(resolver, &Resolver::resolved, this, [this](const QJsonObject& data) {
+            setResolver(nullptr);
             resolveCode(QJsonDocument(data).toJson(QJsonDocument::Compact));
         });
         connect(resolver, &Resolver::failed, this, [this] {
+            setResolver(nullptr);
             setStatus(Status::Failed);
         });
         resolver->resolve();
-
+        setResolver(resolver);
         return;
     }
 

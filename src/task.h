@@ -179,12 +179,15 @@ class AuthHandlerTask : public ContextTask
 {
     Q_OBJECT
     Q_PROPERTY(QJsonObject result READ result NOTIFY resultChanged)
+    Q_PROPERTY(Resolver* resolver READ resolver NOTIFY resolverChanged)
     QML_ELEMENT
 public:
     AuthHandlerTask(Context* context);
     ~AuthHandlerTask();
     QJsonObject result() const { return m_result; }
     void setResult(const QJsonObject& result);
+    Resolver* resolver() const { return m_resolver; }
+    void setResolver(Resolver* resolver);
     void update() override;
 public slots:
     void requestCode(const QString& method);
@@ -192,6 +195,7 @@ public slots:
 signals:
     void updated();
     void resultChanged();
+    void resolverChanged();
 protected:
     virtual bool active() const;
     virtual void handleDone(const QJsonObject& result);
@@ -205,6 +209,7 @@ private:
 protected:
     GA_auth_handler* m_auth_handler{nullptr};
     QJsonObject m_result;
+    Resolver* m_resolver{nullptr};
 };
 
 class RegisterUserTask : public AuthHandlerTask
