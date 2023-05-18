@@ -1,9 +1,7 @@
 #!/bin/bash
 set -eo pipefail
 
-source ../version.pri
-
-VERSION=${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}
+VERSION=1.2.0
 
 HASH_WINDOWS=`cat SHA256SUMS.asc | grep Windows | awk '{split($0, a," "); print a[1]}'`
 HASH_MAC=`cat SHA256SUMS.asc | grep Mac | awk '{split($0, a," "); print a[1]}'`
