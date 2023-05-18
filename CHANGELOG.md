@@ -6,9 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- MacOS universal build
+- Support Wayland
 
 ### Changed
-- Updates GDK to 0.0.58
+- Improved stability
+- Minor GUI cleanups
+- Updates GDK to 0.0.62
 - Updates Qt to 6.4.2
 - Updates hidapi to 0.13.1
 - Updates qzxing to support Qt 6
