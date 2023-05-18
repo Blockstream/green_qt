@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(green VERSION 1.2.0 LANGUAGES CXX)
+project(green VERSION 1.3.0 LANGUAGES CXX)
 
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Debug)
