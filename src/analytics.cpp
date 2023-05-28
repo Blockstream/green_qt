@@ -20,6 +20,7 @@
 
 #include <gdk.h>
 
+#include "config.h"
 #include "json.h"
 #include "settings.h"
 #include "util.h"
@@ -86,13 +87,13 @@ Analytics::Analytics()
     auto screen_size = qGuiApp->primaryScreen()->size();
     auto resolution = QString("%1x%2").arg(screen_size.width()).arg(screen_size.height()).toStdString();
     auto& countly = cly::Countly::getInstance();
-    countly.setLogger([](cly::Countly::LogLevel level, const std::string& message) {
+    countly.setLogger([](cly::LogLevel level, const std::string& message) {
         switch (level) {
-        case cly::Countly::DEBUG:   qDebug() << QString::fromStdString(message); break;
-        case cly::Countly::INFO:    qInfo() << QString::fromStdString(message); break;
-        case cly::Countly::WARNING: qWarning() << QString::fromStdString(message); break;
-        case cly::Countly::ERROR:   qCritical() << QString::fromStdString(message); break;
-        case cly::Countly::FATAL:   qFatal("%s\n", message.c_str()); break;
+        case cly::LogLevel::DEBUG:   qDebug() << QString::fromStdString(message); break;
+        case cly::LogLevel::INFO:    qInfo() << QString::fromStdString(message); break;
+        case cly::LogLevel::WARNING: qWarning() << QString::fromStdString(message); break;
+        case cly::LogLevel::ERROR:   qCritical() << QString::fromStdString(message); break;
+        case cly::LogLevel::FATAL:   qFatal("%s\n", message.c_str()); break;
         }
     });
 
@@ -115,7 +116,7 @@ Analytics::Analytics()
 
     countly.setHTTPClient([=](bool use_post, const std::string& path, const std::string& data) {
         incrBusy();
-        cly::Countly::HTTPResponse res{false, {}};
+        cly::HTTPResponse res{false, {}};
 
         {
             QMutexLocker lock(&d->busy_mutex);
@@ -266,7 +267,7 @@ void AnalyticsPrivate::start()
 
     q->incrBusy();
     QMetaObject::invokeMethod(this, [=] {
-        const bool is_production = QStringLiteral("Production") == QT_STRINGIFY(GREEN_ENV);
+        const bool is_production = QStringLiteral("Production") == GREEN_ENV;
         auto& countly = cly::Countly::getInstance();
         countly.setDeviceID(device_id.toStdString(), false);
         countly.setTimestampOffset(timestamp_offset);

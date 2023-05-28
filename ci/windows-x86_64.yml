@@ -1,5 +1,5 @@
 windows-x86_64:build:
-  image: borgbyte/green_qt:windows-x86_64@sha256:37f1daa8be9049fa43d46b07beb9e07a9fdfe93f106c46daf96696525e04c9aa
+  image: borgbyte/green_qt:windows-x86_64@sha256:3c8b77117bc983789d4949d60c91d1967a1c8f8b7174ad2209d2b96fc881135c
   extends:
     - .build
   tags:
@@ -12,7 +12,7 @@ windows-x86_64:build:
       - green.exe
 
 windows-x86_64:sign:
-  image: borgbyte/green_qt:windows-x86_64@sha256:37f1daa8be9049fa43d46b07beb9e07a9fdfe93f106c46daf96696525e04c9aa
+  image: borgbyte/green_qt:windows-x86_64@sha256:3c8b77117bc983789d4949d60c91d1967a1c8f8b7174ad2209d2b96fc881135c
   tags:
     - garelease
   stage: staple
@@ -50,7 +50,7 @@ windows-x86_64:installer:
     - iscc installer.iss
 
 windows-x86_64:sign-installer:
-  image: borgbyte/green_qt:windows-x86_64@sha256:37f1daa8be9049fa43d46b07beb9e07a9fdfe93f106c46daf96696525e04c9aa
+  image: borgbyte/green_qt:windows-x86_64@sha256:3c8b77117bc983789d4949d60c91d1967a1c8f8b7174ad2209d2b96fc881135c
   tags:
     - garelease
   stage: installer

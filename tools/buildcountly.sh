@@ -6,7 +6,7 @@ mkdir -p build
 cd build
 
 if [ ! -d countly-sdk-cpp ]; then
-    git clone --recurse-submodules --quiet --depth 1 --branch master --single-branch https://github.com/Blockstream/countly-sdk-cpp countly-sdk-cpp
+    git clone --recurse-submodules --quiet --depth 1 --branch bump --single-branch https://github.com/Blockstream/countly-sdk-cpp countly-sdk-cpp
 fi
 
 cd countly-sdk-cpp
