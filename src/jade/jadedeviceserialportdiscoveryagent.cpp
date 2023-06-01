@@ -18,6 +18,9 @@ bool FilterSerialPort(const QSerialPortInfo& info)
     if (info.vendorIdentifier() == 0x1a86 && info.productIdentifier() == 0x55d4) return false;
 
 #ifdef Q_OS_LINUX
+    // VMware Inc., happens in Debian VM
+    if (info.vendorIdentifier() == 0x15ad) return false;
+
     // don't filter if vid and pid are unknown, happens with flatpak
     if (info.vendorIdentifier() == 0 && info.productIdentifier() == 0) return false;
 #endif
