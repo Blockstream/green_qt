@@ -483,7 +483,20 @@ class SignTransactionTask : public AuthHandlerTask
     Q_OBJECT
     QML_ELEMENT
 public:
-    SignTransactionTask(const QJsonObject& details, Session* session);
+    SignTransactionTask(Session* session);
+    void setDetails(const QJsonObject& details);
+private:
+    bool call(GA_session* session, GA_auth_handler** auth_handler) override;
+private:
+    QJsonObject m_details;
+};
+
+class BlindTransactionTask : public AuthHandlerTask
+{
+    Q_OBJECT
+    QML_ELEMENT
+public:
+    BlindTransactionTask(const QJsonObject& details, Session* session);
 private:
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
 private:

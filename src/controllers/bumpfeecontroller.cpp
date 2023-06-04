@@ -4,6 +4,7 @@
 
 #include "account.h"
 #include "context.h"
+#include "network.h"
 #include "task.h"
 #include "transaction.h"
 #include "wallet.h"
@@ -26,13 +27,29 @@ void BumpFeeController::bumpFee()
     Q_ASSERT(!m_tx.isEmpty());
     Q_ASSERT(m_tx.value("error").toString().isEmpty());
 
+    auto group = new TaskGroup(this);
+
     const auto wallet = context()->wallet();
 
     auto network = m_transaction->account()->network();
     auto session = context()->getOrCreateSession(network);
-    auto sign = new SignTransactionTask(m_tx, session);
+    auto sign = new SignTransactionTask(session);
     auto send = new SendTransactionTask(session);
     auto load_config = new LoadTwoFactorConfigTask(session);
+
+    if (network->isLiquid()) {
+        auto blind = new BlindTransactionTask(m_tx, session);
+        blind->then(sign);
+
+        connect(blind, &Task::finished, this, [=] {
+            auto details = blind->result().value("result").toObject();
+            sign->setDetails(details);
+        });
+
+        group->add(blind);
+    } else {
+        sign->setDetails(m_tx);
+    }
 
     sign->then(send);
     send->then(load_config);
@@ -49,7 +66,6 @@ void BumpFeeController::bumpFee()
 
     connect(send, &Task::finished, this, &BumpFeeController::finished);
 
-    auto group = new TaskGroup(this);
     group->add(sign);
     group->add(send);
     group->add(load_config);

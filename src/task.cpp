@@ -1096,10 +1096,14 @@ void TaskGroup::dispatch()
     if (m_dispatcher) m_dispatcher->dispatch();
 }
 
-SignTransactionTask::SignTransactionTask(const QJsonObject& details, Session* session)
+SignTransactionTask::SignTransactionTask(Session* session)
     : AuthHandlerTask(session)
-    , m_details(details)
 {
+}
+
+void SignTransactionTask::setDetails(const QJsonObject& details)
+{
+    m_details = details;
 }
 
 bool SignTransactionTask::call(GA_session* session, GA_auth_handler** auth_handler)
@@ -1338,4 +1342,16 @@ void ConnectTask::update()
             setStatus(Status::Finished);
         }
     }
+}
+
+BlindTransactionTask::BlindTransactionTask(const QJsonObject& details, Session* session)
+    : AuthHandlerTask(session)
+    , m_details(details)
+{
+}
+
+bool BlindTransactionTask::call(GA_session* session, GA_auth_handler** auth_handler)
+{
+    const auto rc = GA_blind_transaction(session, Json::fromObject(m_details).get(), auth_handler);
+    return rc == GA_OK;
 }

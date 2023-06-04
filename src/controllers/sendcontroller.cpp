@@ -273,11 +273,28 @@ void SendController::create()
 
 void SendController::signAndSend()
 {
+    auto group = new TaskGroup(this);
+
     m_transaction["memo"] = m_memo;
     const auto network = m_account->network();
     auto session = m_context->getOrCreateSession(network);
-    auto sign = new SignTransactionTask(m_transaction, session);
+    auto sign = new SignTransactionTask(session);
     auto send = new SendTransactionTask(session);
+
+    if (network->isLiquid()) {
+        auto blind = new BlindTransactionTask(m_transaction, session);
+        blind->then(sign);
+
+        connect(blind, &Task::finished, this, [=] {
+            auto details = blind->result().value("result").toObject();
+            details["memo"] = m_memo;
+            sign->setDetails(details);
+        });
+
+        group->add(blind);
+    } else {
+        sign->setDetails(m_transaction);
+    }
 
     sign->then(send);
 
@@ -294,7 +311,6 @@ void SendController::signAndSend()
         emit finished();
     });
 
-    auto group = new TaskGroup(this);
     group->add(sign);
     group->add(send);
     m_dispatcher->add(group);
