@@ -190,7 +190,7 @@ void JadeUnlockController::unlock()
 
 static QJsonObject device_details_from_device(JadeDevice* device)
 {
-    const bool supports_host_unblinding = QVersionNumber::fromString(device->version()) >= QVersionNumber(0, 1, 27);
+    const bool supports_external_blinding = QVersionNumber::fromString(device->version()) >= QVersionNumber(0, 1, 48);
     return {{
         "device", QJsonObject({
             { "name", device->uuid() },
@@ -198,7 +198,8 @@ static QJsonObject device_details_from_device(JadeDevice* device)
             { "supports_low_r", true },
             { "supports_liquid", 1 },
             { "supports_ae_protocol", 1 },
-            { "supports_host_unblinding", supports_host_unblinding }
+            { "supports_host_unblinding", true },
+            { "supports_external_blinding", supports_external_blinding },
         })
     }};
 }
