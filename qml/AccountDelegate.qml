@@ -16,30 +16,6 @@ ItemDelegate {
     onClicked: {
         delegate.ListView.view.currentIndex = index
     }
-    Menu {
-        id: account_delegate_menu
-        enabled: !delegate.account.context.watchonly
-        MenuItem {
-            text: qsTrId('id_rename')
-            onTriggered: {
-                delegate.ListView.view.currentIndex = index
-                name_field.forceActiveFocus()
-            }
-        }
-        MenuItem {
-            text: qsTrId('id_unarchive')
-            onTriggered: controller.setAccountHidden(delegate.account, false)
-            visible: delegate.account.hidden
-            height: visible ? implicitHeight : 0
-        }
-        MenuItem {
-            text: qsTrId('id_archive')
-            enabled: account_list_view.count > 1
-            onTriggered: controller.setAccountHidden(delegate.account, true)
-            visible: !delegate.account.hidden
-            height: visible ? implicitHeight : 0
-        }
-    }
     background: Rectangle {
         color: UtilJS.networkColor(delegate.account.network)
         radius: 5
@@ -158,6 +134,7 @@ ItemDelegate {
                 HSpacer {
                 }
                 ToolButton {
+                    id: tool_button
                     Layout.alignment: Qt.AlignBottom
                     visible: delegate.highlighted
                     icon.source: 'qrc:/svg/3-dots.svg'
@@ -170,7 +147,45 @@ ItemDelegate {
                     topInset: 0
                     bottomInset: 0
                     background: null
-                    onClicked: account_delegate_menu.popup()
+                    onClicked: account_delegate_menu.open()
+                    GMenu {
+                        id: account_delegate_menu
+                        x: tool_button.width + 8
+                        y: (tool_button.height - account_delegate_menu.height) * 0.5
+                        pointerX: 0
+                        pointerY: 0.5
+                        enabled: !delegate.account.context.watchonly
+                        GMenu.Item {
+                            text: qsTrId('id_rename')
+                            icon.source: 'qrc:/svg/wallet-rename.svg'
+                            onClicked: {
+                                account_delegate_menu.close()
+                                delegate.ListView.view.currentIndex = index
+                                name_field.forceActiveFocus()
+                            }
+                        }
+                        GMenu.Item {
+                            text: qsTrId('id_unarchive')
+                            icon.source: 'qrc:/svg/unarchive.svg'
+                            onClicked: {
+                                account_delegate_menu.close()
+                                controller.setAccountHidden(delegate.account, false)
+                            }
+                            visible: delegate.account.hidden
+                            height: visible ? implicitHeight : 0
+                        }
+                        GMenu.Item {
+                            text: qsTrId('id_archive')
+                            enabled: account_list_view.count > 1
+                            icon.source: 'qrc:/svg/archived.svg'
+                            onClicked: {
+                                account_delegate_menu.close()
+                                controller.setAccountHidden(delegate.account, true)
+                            }
+                            visible: !delegate.account.hidden
+                            height: visible ? implicitHeight : 0
+                        }
+                    }
                 }
             }
         }

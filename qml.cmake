@@ -157,6 +157,7 @@ SET(QML_FILES
     qml/GetCredentialsView.qml
     qml/TaskDispatcherInspector.qml
     qml/TListView.qml
+    qml/GMenu.qml
 )
 
 if (GREEN_NO_RESOURCES)
