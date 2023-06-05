@@ -50,13 +50,6 @@ void JadeDeviceSerialPortDiscoveryAgent::scan()
         auto devices = m_devices;
         m_devices.clear();
 
-        if (m_reset_countdown == 0) {
-            m_failed_locations.clear();
-            m_reset_countdown = 0;
-        } else {
-            --m_reset_countdown;
-        }
-
         auto failed_locations = m_failed_locations;
         m_failed_locations.clear();
 
