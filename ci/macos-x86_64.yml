@@ -22,13 +22,14 @@ macos-x86_64:build:
   extends:
     - .macos-x86_64
     - .build
-  after_script:
-    - mv green.app green-x86_64.app
   needs: ["macos-x86_64:depends"]
+  after_script:
+    - mkdir macos-x86_64
+    - mv "Blockstream Green.app" macos-x86_64
   artifacts:
     name: "$CI_PROJECT_NAME-$CI_JOB_NAME-$CI_COMMIT_SHORT_SHA"
     paths:
-      - green-x86_64.app
+      - "macos-x86_64/Blockstream Green.app"
 
 macos-x86_64:staple:
   tags:
@@ -39,7 +40,7 @@ macos-x86_64:staple:
     expire_in: 1 week
     when: always
     paths:
-      - green-x86_64.app
+      - "macos-x86_64/Blockstream Green.app"
   needs: ["macos-x86_64:build"]
   script:
-    - tools/macos-staple.sh green-x86_64.app
+    - tools/macos-staple.sh "macos-x86_64/Blockstream Green.app"

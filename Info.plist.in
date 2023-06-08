@@ -7,11 +7,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleName</key>
-	<string>green</string>
+	<string>Blockstream Green</string>
 	<key>CFBundleIdentifier</key>
 	<string>com.blockstream.Green</string>
 	<key>CFBundleExecutable</key>
-	<string>green</string>
+	<string>Blockstream Green</string>
 	<key>CFBundleVersion</key>
 	<string>@PROJECT_VERSION_MAJOR@.@PROJECT_VERSION_MINOR@.@PROJECT_VERSION_PATCH@</string>
 	<key>CFBundleShortVersionString</key>

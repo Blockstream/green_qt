@@ -92,6 +92,7 @@ target_link_libraries(green
 
 if (WIN32)
 elseif (APPLE)
+    set_target_properties(green PROPERTIES OUTPUT_NAME "Blockstream Green")
 elseif (UNIX)
     target_link_libraries(green PRIVATE dl Qt6::WaylandClient)
     qt_import_plugins(green INCLUDE Qt6::QXcbIntegrationPlugin Qt6::QWaylandIntegrationPlugin)

@@ -6,12 +6,11 @@ macos-universal:build:
   artifacts:
     name: "$CI_PROJECT_NAME-$CI_JOB_NAME-$CI_COMMIT_SHORT_SHA"
     paths:
-      - green.app
+      - "Blockstream Green.app"
   needs: ["macos-arm64:build", "macos-x86_64:build"]
   script:
-    - ls -la
-    - cp -R green-x86_64.app green.app
-    - lipo -create -output green.app/Contents/MacOS/green ./green-arm64.app/Contents/MacOS/green ./green-x86_64.app/Contents/MacOS/green
+    - cp -R "macos-x86_64/Blockstream Green.app" .
+    - lipo -create -output "Blockstream Green.app/Contents/MacOS/Blockstream Green" "macos-arm64/Blockstream Green.app/Contents/MacOS/Blockstream Green" "macos-x86_64/Blockstream Green.app/Contents/MacOS/Blockstream Green"
 
 macos-universal:staple:
   tags:
@@ -22,9 +21,10 @@ macos-universal:staple:
     expire_in: 1 week
     when: always
     paths:
+      - "Blockstream Green.app"
       - "Blockstream Green.dmg"
   needs: ["macos-universal:build"]
   script:
-    - tools/macos-staple.sh green.app
-    - tools/packdmg.sh green.app
-    - tools/macos-staple.sh Blockstream\ Green.dmg
+    - tools/macos-staple.sh "Blockstream Green.app"
+    - tools/packdmg.sh "Blockstream Green.app"
+    - tools/macos-staple.sh "Blockstream Green.dmg"
