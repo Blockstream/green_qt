@@ -24,7 +24,8 @@ package:build:
     - cd green_qt_dist
     - /opt/process_release
   needs:
-    - linux-x86_64:build
+    - linux-x86_64:build-appimage
+    - linux-x86_64:build-binary
     - macos-universal:staple
     - windows-x86_64:sign-installer
 
