@@ -136,10 +136,11 @@ ColumnLayout {
                 radius: 4
                 color: 'white'
             }
-            font.capitalization: Font.AllUppercase
-            font.styleName: 'Medium'
             color: 'black'
             font.pixelSize: 10
+            font.weight: 400
+            font.styleName: 'Regular'
+            font.capitalization: Font.AllUppercase
             text: qsTrId('id_jade_was_initialized_for_testnet') + '\n' + qsTrId('id_enable_testnet_in_app_settings')
         }
     }

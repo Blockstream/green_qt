@@ -51,8 +51,9 @@ ListView {
             radius: height / 2
             color: constants.g500
         }
-        font.styleName: 'Medium'
         font.pixelSize: 10
+        font.weight: 400
+        font.styleName: 'Regular'
     }
 
     onDraggingChanged: {

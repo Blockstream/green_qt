@@ -69,7 +69,6 @@ MainPage {
                 text: qsTrId('id_get_jade')
                 visible: devices_list_view.count === 0
                 highlighted: true
-                large: true
                 onClicked: Qt.openUrlExternally('https://store.blockstream.com/product/blockstream-jade/')
             }
         }
@@ -172,6 +171,8 @@ MainPage {
                             }
                             Label {
                                 font.pixelSize: 10
+                                font.weight: 400
+                                font.styleName: 'Regular'
                                 font.capitalization: Font.AllUppercase
                                 leftPadding: 8
                                 rightPadding: 8
@@ -187,6 +188,8 @@ MainPage {
                             }
                             Label {
                                 font.pixelSize: 10
+                                font.weight: 400
+                                font.styleName: 'Regular'
                                 font.capitalization: Font.AllUppercase
                                 leftPadding: 8
                                 rightPadding: 8

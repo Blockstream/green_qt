@@ -32,6 +32,8 @@ RowLayout {
 
     Label {
         font.pixelSize: 10
+        font.weight: 400
+        font.styleName: 'Regular'
         font.capitalization: Font.AllUppercase
         color: 'white'
         text: networkLabel(self.account.network) + ' / ' + typeLabel(self.account)

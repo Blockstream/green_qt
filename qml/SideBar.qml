@@ -241,7 +241,8 @@ Pane {
         Layout.fillWidth: true
         contentItem: SectionLabel {
             font.pixelSize: 10
-            font.styleName: 'Medium'
+            font.weight: 400
+            font.styleName: 'Regular'
             text: label.text
         }
     }

@@ -146,7 +146,8 @@ Pane {
                 bottomPadding: 2
                 text: qsTrId('id_coming_soon')
                 font.pixelSize: 10
-                font.styleName: 'Medium'
+                font.weight: 400
+                font.styleName: 'Regular'
                 font.capitalization: Font.AllUppercase
             }
         }

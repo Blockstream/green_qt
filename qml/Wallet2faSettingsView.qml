@@ -74,6 +74,8 @@ ColumnLayout {
                             text: method === 'gauth' ? qsTrId('id_enabled') : self.context.config[method].data
                             color: constants.c100
                             font.pixelSize: 10
+                            font.weight: 400
+                            font.styleName: 'Regular'
                         }
                     }
                     HSpacer {

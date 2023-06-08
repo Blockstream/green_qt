@@ -56,9 +56,10 @@ ColumnLayout {
             radius: 4
             color: constants.r500
         }
-        font.capitalization: Font.AllUppercase
-        font.styleName: 'Medium'
         font.pixelSize: 10
+        font.weight: 400
+        font.styleName: 'Regular'
+        font.capitalization: Font.AllUppercase
         horizontalAlignment: Qt.AlignHCenter
         text: {
             if (!self.wallet.hasPinData) {

@@ -286,50 +286,6 @@ MainPageHeader {
                     source: 'qrc:/svg/right.svg'
                     Layout.alignment: Qt.AlignVCenter
                 }
-                Control {
-                    visible: false
-                    Layout.maximumWidth: self.width / 2
-                    padding: 2
-                    rightPadding: 16
-                    background: null
-                    contentItem: RowLayout {
-                        spacing: 0
-                        Loader {
-                            active: !self.context.watchonly
-                            visible: active
-                            Layout.fillWidth: true
-                            sourceComponent: EditableLabel {
-                                leftPadding: 8
-                                rightPadding: 8
-                                font.pixelSize: 18
-                                font.styleName: 'Regular'
-                                text: UtilJS.accountName(self.currentAccount)
-                                enabled: !self.context.watchonly && self.currentAccount && !self.wallet.locked
-                                onEdited: (text) => {
-                                    if (enabled && self.currentAccount) {
-                                        if (controller.setAccountName(self.currentAccount, text, activeFocus)) {
-                                            Analytics.recordEvent('account_rename', AnalyticsJS.segmentationSubAccount(self.currentAccount))
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        Loader {
-                            Layout.minimumHeight: 42
-                            active: !wallet.context.device && self.context.watchonly
-                            visible: active
-                            sourceComponent: Label {
-                                verticalAlignment: Qt.AlignVCenter
-                                text: UtilJS.accountName(self.currentAccount)
-                                font.pixelSize: 18
-                                font.styleName: 'Medium'
-                            }
-                        }
-                        AccountArchivedBadge {
-                            account: self.currentAccount
-                        }
-                    }
-                }
                 ToolButton {
                     id: tool_button
                     icon.source: 'qrc:/svg/3-h-dots.svg'

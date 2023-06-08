@@ -9,7 +9,6 @@ qt_add_resources(green "qtquickcontrols2"
 SET(QML_FILES
     qml/analytics.js
     qml/util.js
-    qml/AccountArchivedBadge.qml
     qml/SelectServerTypeView.qml
     qml/WalletSecuritySettingsView.qml
     qml/GCard.qml

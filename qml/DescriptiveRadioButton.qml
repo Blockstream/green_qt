@@ -32,6 +32,8 @@ RadioButton {
                     }
                     text: modelData.text
                     font.pixelSize: 10
+                    font.weight: 400
+                    font.styleName: 'Regular'
                     font.capitalization: Font.AllUppercase
                     color: modelData.color
                 }

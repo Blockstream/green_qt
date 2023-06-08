@@ -100,7 +100,8 @@ Page {
                 contentItem: Label {
                     text: self.text
                     font.pixelSize: 10
-//                            font.family: "Medium"
+                    font.weight: 400
+                    font.styleName: 'Regular'
                 }
                 text: localizedLabel(modelData)
                 property string buttonTag: modelData

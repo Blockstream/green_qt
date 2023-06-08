@@ -60,6 +60,8 @@ Page {
                         Label {
                             text: task.error ? task.type + '\n - error: ' + task.error : task.type
                             font.pixelSize: 10
+                            font.weight: 400
+                            font.styleName: 'Regular'
                             wrapMode: Label.WrapAnywhere
                         }
                     }

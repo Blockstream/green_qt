@@ -8,7 +8,8 @@ Label {
     property bool showTooltip: true
     text: self.text
     font.pixelSize: 10
-    font.styleName: "Medium"
+    font.weight: 400
+    font.styleName: 'Regular'
     padding: large ? 24 : 16
     topPadding: large ? 6 : 3
     bottomPadding: large ? 6 : 3

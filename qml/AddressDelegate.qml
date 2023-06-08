@@ -45,7 +45,9 @@ ItemDelegate {
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 text: "TX COUNT"
                 color: "white"
-                font.pixelSize: 8
+                font.pixelSize: 10
+                font.weight: 400
+                font.styleName: 'Regular'
             }
         }
         ColumnLayout {
