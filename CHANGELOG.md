@@ -11,6 +11,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+## [1.2.1] - 2023-06-08
+### Changed
+- Updated analytics library
+
+### Fixed
+- Improved Jade discovery to avoid application misbehavior
+- Remove Wayland support from Appimage binary
+- Adjusted font weight to improve readability
+- Regression around macOS bundle name
+- Log file name was empty
+
 ## [1.2.0] - 2023-05-18
 ### Added
 - MacOS universal build
