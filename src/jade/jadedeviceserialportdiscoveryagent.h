@@ -16,7 +16,7 @@ public:
     void scan();
 private:
     QMap<QString, JadeDevice*> m_devices;
-    QSet<QString> m_failed_locations;
+    QMap<QString, int> m_failed_locations;
 };
 
 #endif // GREEN_JADEDEVICESERIALPORTDISCOVERYAGENT_H

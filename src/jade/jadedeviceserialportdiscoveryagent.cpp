@@ -55,8 +55,8 @@ void JadeDeviceSerialPortDiscoveryAgent::scan()
 
         for (const auto &info : watcher->result()) {
             const auto system_location = info.systemLocation();
-            if (failed_locations.contains(system_location)) {
-                m_failed_locations.insert(system_location);
+            if (failed_locations.value(system_location) > 3) {
+                m_failed_locations.insert(system_location, failed_locations.value(system_location));
                 continue;
             }
 
@@ -71,11 +71,11 @@ void JadeDeviceSerialPortDiscoveryAgent::scan()
                 auto api = new JadeAPI(info, relax_write);
                 device = new JadeDevice(api, system_location, this);
                 api->setParent(device);
-                connect(api, &JadeAPI::onConnected, this, [this, device] {
+                connect(api, &JadeAPI::onConnected, this, [=] {
                     device->api()->getVersionInfo([=](const QVariantMap& data) {
                         if (data.contains("error")) {
                             m_devices.remove(device->systemLocation());
-                            m_failed_locations.insert(device->systemLocation());
+                            m_failed_locations[system_location] = failed_locations.value(system_location) + 1;
                             device->deleteLater();
                             return;
                         }
@@ -91,10 +91,11 @@ void JadeDeviceSerialPortDiscoveryAgent::scan()
                     });
                 });
                 connect(api, &JadeAPI::onOpenError, this, [=] {
-                    m_failed_locations.insert(device->systemLocation());
+                    m_failed_locations[system_location] = failed_locations.value(system_location) + 1;
                 });
                 connect(api, &JadeAPI::onDisconnected, this, [=] {
-                    if (m_devices.take(device->systemLocation())) {
+                    m_failed_locations.remove(system_location);
+                    if (m_devices.take(system_location)) {
                         DeviceManager::instance()->removeDevice(device);
                         delete device;
                     }
@@ -116,6 +117,6 @@ void JadeDeviceSerialPortDiscoveryAgent::scan()
             delete device;
         }
 
-        QTimer::singleShot(2000, this, &JadeDeviceSerialPortDiscoveryAgent::scan);
+        QTimer::singleShot(3000, this, &JadeDeviceSerialPortDiscoveryAgent::scan);
     });
 }
