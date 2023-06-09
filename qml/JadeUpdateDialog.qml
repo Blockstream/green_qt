@@ -190,7 +190,7 @@ AbstractDialog {
                         text: 'Hash'
                     }
                     Label {
-                        text: self.activity.firmware.hash
+                        text: String(self.activity.firmware?.hash ?? '').match(/.{1,8}/g).join(' ')
                         Layout.maximumWidth: 200
                         wrapMode: Label.WrapAnywhere
                     }

@@ -11,9 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-## [1.2.1] - 2023-06-08
+## [1.2.1] - 2023-06-09
 ### Changed
 - Updated analytics library
+- Display Jade's firmware hash in groups of 8 characters
 
 ### Fixed
 - Improved Jade discovery to avoid application misbehavior
