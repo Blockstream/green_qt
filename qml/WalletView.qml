@@ -369,14 +369,14 @@ MainPage {
         GButton {
             Layout.minimumWidth: 120
             highlighted: true
-            enabled: !self.archived && !self.context.watchonly && !self.wallet.locked && self.currentAccount
+            visible: !self.context.watchonly
             font.bold: false
             font.weight: 600
             font.pixelSize: 14
             icon.width: 24
             icon.height: 24
             action: Action {
-                enabled: UtilJS.effectiveVisible(self)
+                enabled: UtilJS.effectiveVisible(self) && !self.archived && !self.context.watchonly && !self.wallet.locked && self.currentAccount
                 text: qsTrId('id_send')
                 icon.source: 'qrc:/svg/send.svg'
                 shortcut: 'Ctrl+S'
