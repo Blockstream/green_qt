@@ -339,7 +339,7 @@ int JadeAPI::authUser(const QString &network, const ResponseHandler &cb, const H
 }
 
 // OTA update the connected Jade
-int JadeAPI::otaUpdate(const QByteArray& fwcmp, const int fwlen, const int chunkSize, const ResponseHandler &cbProgress, const ResponseHandler &cb)
+int JadeAPI::otaUpdate(const QByteArray& fwcmp, const int fwlen, const QString& fwhash, const int chunkSize, const ResponseHandler &cbProgress, const ResponseHandler &cb)
 {
     // The exposed/returned id that will key the caller's handler (invoked
     // when the OTA completes successfully or errors).
@@ -354,13 +354,14 @@ int JadeAPI::otaUpdate(const QByteArray& fwcmp, const int fwlen, const int chunk
 
     // Initiate OTA process, and return the exposed id
     const int compressedSize = fwcmp.length();
-    const QCborMap params = { {"fwsize", fwlen}, {"cmpsize", compressedSize}, {"cmphash", cmphash} };
+    QCborMap params = { {"fwsize", fwlen}, {"cmpsize", compressedSize}, {"cmphash", cmphash} };
+    if (!fwhash.isEmpty()) params.insert(QString("fwhash"), fwhash);
     const QCborMap request = getRequest(tmpId, "ota", params);
     enqueue(request);
     return id;
 }
 
-int JadeAPI::otaDeltaUpdate(const QByteArray& fwcmp, const int fwlen, const int patch_size, const int chunkSize, const ResponseHandler &cbProgress, const ResponseHandler &cb)
+int JadeAPI::otaDeltaUpdate(const QByteArray& fwcmp, const int fwlen, const QString& fwhash, const int patch_size, const int chunkSize, const ResponseHandler &cbProgress, const ResponseHandler &cb)
 {
     // The exposed/returned id that will key the caller's handler (invoked
     // when the OTA completes successfully or errors).
@@ -375,7 +376,8 @@ int JadeAPI::otaDeltaUpdate(const QByteArray& fwcmp, const int fwlen, const int 
 
     // Initiate OTA process, and return the exposed id
     const int compressedSize = fwcmp.length();
-    const QCborMap params = { {"fwsize", fwlen}, {"cmpsize", compressedSize}, {"cmphash", cmphash}, {"patchsize", patch_size} };
+    QCborMap params = { {"fwsize", fwlen}, {"cmpsize", compressedSize}, {"cmphash", cmphash}, {"patchsize", patch_size} };
+    if (!fwhash.isEmpty()) params.insert(QString("fwhash"), fwhash);
     const QCborMap request = getRequest(tmpId, "ota_delta", params);
     enqueue(request);
     return id;

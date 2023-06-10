@@ -71,8 +71,8 @@ public:
 
     // OTA update the connected Jade
     // The passed ResponseHandler will be called multiple times during the update process
-    int otaUpdate(const QByteArray& fwcmp, const int fwlen, const int chunksize, const ResponseHandler &cbProgress, const ResponseHandler &cb);
-    int otaDeltaUpdate(const QByteArray& fwcmp, const int fwlen, const int patch_size, const int chunkSize, const ResponseHandler &cbProgress, const ResponseHandler &cb);
+    int otaUpdate(const QByteArray& fwcmp, const int fwlen, const QString& fwhash, const int chunksize, const ResponseHandler &cbProgress, const ResponseHandler &cb);
+    int otaDeltaUpdate(const QByteArray& fwcmp, const int fwlen, const QString& fwhash, const int patch_size, const int chunkSize, const ResponseHandler &cbProgress, const ResponseHandler &cb);
 
     // Get (receive) green address
     int getReceiveAddress(const QString &network, quint32 subaccount, quint32 branch, quint32 pointer,

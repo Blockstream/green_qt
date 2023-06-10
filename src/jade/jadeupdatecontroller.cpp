@@ -109,11 +109,13 @@ void JadeUpdateActivity::exec()
         }
     };
 
+    const auto fwhash = m_firmware.value("fwhash").toString();
+
     if (m_firmware.value("delta").toBool()) {
         const auto patch_size = m_firmware.value("patch_size").toInt();
-        m_device->api()->otaDeltaUpdate(m_data, size, patch_size, chunk_size, progress_cb, done_cb);
+        m_device->api()->otaDeltaUpdate(m_data, size, fwhash, patch_size, chunk_size, progress_cb, done_cb);
     } else {
-        m_device->api()->otaUpdate(m_data, size, chunk_size, progress_cb, done_cb);
+        m_device->api()->otaUpdate(m_data, size, fwhash, chunk_size, progress_cb, done_cb);
     }
 }
 
