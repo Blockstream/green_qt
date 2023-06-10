@@ -11,28 +11,6 @@ ItemDelegate {
     required property Account account
     required property int index
 
-    function networkColor (network) {
-        if (network.mainnet) {
-            if (network.liquid) {
-                return '#46BEAE'
-            } else {
-                return '#FF8E00'
-            }
-        } else if (network.localtest) {
-            if (network.liquid) {
-                return '#46BEAE'
-            } else {
-                return '#FF8E00'
-            }
-        } else {
-            if (network.liquid) {
-                return '#8C8C8C'
-            } else {
-                return '#8C8C8C'
-            }
-        }
-    }
-
     id: delegate
     focusPolicy: Qt.ClickFocus
     onClicked: {
@@ -63,7 +41,7 @@ ItemDelegate {
         }
     }
     background: Rectangle {
-        color: networkColor(delegate.account.network)
+        color: UtilJS.networkColor(delegate.account.network)
         radius: 5
         opacity: delegate.highlighted ? 0.8 : 0.3
         Behavior on opacity {
@@ -81,10 +59,22 @@ ItemDelegate {
     contentItem: ColumnLayout {
         spacing: 6
         RowLayout {
-            AccountTypeBadge {
-                account: delegate.account
+            Image {
+                fillMode: Image.PreserveAspectFit
+                sourceSize.height: 16
+                sourceSize.width: 16
+                source: delegate.account.network.electrum ? 'qrc:/svg/key.svg' : 'qrc:/svg/multi-sig.svg'
             }
-            HSpacer {
+            Label {
+                font.pixelSize: 10
+                font.weight: 400
+                font.styleName: 'Regular'
+                font.capitalization: Font.AllUppercase
+                color: 'white'
+                text: UtilJS.networkLabel(delegate.account.network) + ' / ' + UtilJS.accountLabel(delegate.account)
+                elide: Label.ElideLeft
+                Layout.fillWidth: true
+                Layout.preferredWidth: 0
             }
             RowLayout {
                 Layout.fillWidth: false

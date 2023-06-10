@@ -61,3 +61,40 @@ function effectiveVisible(item) {
     }
     return true
 }
+
+function accountLabel (account) {
+    switch (account.type) {
+        case '2of2': return qsTrId('id_standard_account')
+        case '2of3': return qsTrId('id_2of3_account')
+        case '2of2_no_recovery': return qsTrId('id_amp_account')
+        case 'p2sh-p2wpkh': return qsTrId('id_legacy_segwit_bip49')
+        case 'p2wpkh': return qsTrId('id_segwit_bip84')
+        default: return qsTrId('id_unknown')
+    }
+}
+
+function networkLabel (network) {
+    return network.electrum ? qsTrId('id_singlesig') : qsTrId('id_multisig_shield')
+}
+
+function networkColor (network) {
+    if (network.mainnet) {
+        if (network.liquid) {
+            return '#46BEAE'
+        } else {
+            return '#FF8E00'
+        }
+    } else if (network.localtest) {
+        if (network.liquid) {
+            return '#46BEAE'
+        } else {
+            return '#FF8E00'
+        }
+    } else {
+        if (network.liquid) {
+            return '#8C8C8C'
+        } else {
+            return '#8C8C8C'
+        }
+    }
+}

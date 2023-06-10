@@ -65,7 +65,6 @@ SET(QML_FILES
     qml/PersistentLoader.qml
     qml/AnimLoader.qml
     qml/GToolButton.qml
-    qml/AccountTypeBadge.qml
     qml/WalletViewFooter.qml
     qml/DiscoverServerTypeView.qml
     qml/LoginWithPasswordView.qml
