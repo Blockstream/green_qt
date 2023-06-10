@@ -2,6 +2,7 @@
 
 #include <gdk.h>
 
+#include "config.h"
 #include "json.h"
 #include "util.h"
 
@@ -9,7 +10,8 @@ namespace gdk {
 
 void init(const QCommandLineParser& args)
 {
-    const auto log_level = args.isSet("debug") ? QStringLiteral("debug") : qEnvironmentVariable("GREEN_GDK_LOG_LEVEL", "info");
+    const bool is_production = QStringLiteral("Production") == GREEN_ENV;
+    const auto log_level = !is_production && args.isSet("debug") ? QStringLiteral("debug") : qEnvironmentVariable("GREEN_GDK_LOG_LEVEL", "info");
 
     auto config = Json::fromObject({
         { "datadir", GetDataDir("gdk") },
