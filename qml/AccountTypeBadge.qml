@@ -37,5 +37,8 @@ RowLayout {
         font.capitalization: Font.AllUppercase
         color: 'white'
         text: networkLabel(self.account.network) + ' / ' + typeLabel(self.account)
+        elide: Label.ElideLeft
+        Layout.fillWidth: true
+        Layout.preferredWidth: 0
     }
 }

@@ -346,7 +346,7 @@ MainPage {
 
         AccountListView {
             SplitView.preferredWidth: 380
-            SplitView.minimumWidth: 300
+            SplitView.minimumWidth: 200
             SplitView.maximumWidth: self.width / 3
             id: accounts_list
             context: self.wallet.context

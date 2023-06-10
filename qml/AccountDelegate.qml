@@ -89,11 +89,7 @@ ItemDelegate {
             RowLayout {
                 Layout.fillWidth: false
                 Layout.alignment: Qt.AlignBottom
-                spacing: delegate.hovered ? 4 : -12
-                Behavior on spacing {
-                    SmoothedAnimation {
-                    }
-                }
+                spacing: -12
                 Repeater {
                     id: asset_icon_repeater
                     model: {
