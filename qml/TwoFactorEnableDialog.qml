@@ -8,6 +8,7 @@ import "analytics.js" as AnalyticsJS
 
 ControllerDialog {
     required property string method
+    required property Session session
 
     id: self
     title: qsTrId('id_set_up_twofactor_authentication')
@@ -120,7 +121,7 @@ ControllerDialog {
                 text: {
                     const name = wallet.name
                     const label = name + ' @ Green ' + wallet.network.displayName
-                    const secret = wallet.context.config[self.method].data.split('=')[1]
+                    const secret = self.session.config[self.method].data.split('=')[1]
                     return 'otpauth://totp/' + escape(label) + '?secret=' + secret
                 }
             }
@@ -130,16 +131,16 @@ ControllerDialog {
             }
             CopyableLabel {
                 Layout.alignment: Qt.AlignHCenter
-                text: wallet.context.config[self.method].data.split('=')[1] || ''
+                text: self.session.config[self.method].data.split('=')[1] || ''
             }
             GButton {
                 Layout.alignment: Qt.AlignHCenter
                 highlighted: true
                 text: qsTrId('id_next')
-                onClicked: controller.enable(self.method, wallet.context.config[self.method].data)
+                onClicked: controller.enable(self.method, self.session.config[self.method].data)
             }
             Label {
-                text: wallet.context?.config[self.method]?.data ?? 'N/A'
+                text: self.session?.config[self.method]?.data ?? 'N/A'
             }
             VSpacer {
             }

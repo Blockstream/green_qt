@@ -76,7 +76,6 @@ ControllerDialog {
             implicitWidth: 280
             Layout.alignment: Qt.AlignHCenter
         }
-
         RowLayout {
             enabled: !controller.generating
             Label {
@@ -194,7 +193,7 @@ ControllerDialog {
                     anchors.right: parent.right
                     anchors.rightMargin: 8
                     anchors.baseline: parent.baseline
-                    text: wallet.context.displayUnit + ' ≈ ' + formatFiat(parseAmount(amount_field.text))
+                    text: self.account.session.displayUnit + ' ≈ ' + formatFiat(parseAmount(self.account, amount_field.text))
                 }
             }
         }

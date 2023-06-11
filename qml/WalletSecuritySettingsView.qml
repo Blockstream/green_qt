@@ -6,8 +6,10 @@ import QtQuick.Controls.Material
 import QtQuick.Layouts
 
 ColumnLayout {
-    id: self
     required property Wallet wallet
+    required property Session session
+
+    id: self
 
     spacing: 16
 
@@ -77,7 +79,7 @@ ColumnLayout {
                 }
                 displayText: qsTrId('id_1d_minutes').arg(currentText)
                 onCurrentTextChanged: controller.changeSettings({ altimeout: model[currentIndex] })
-                currentIndex: model.indexOf(wallet.context.settings.altimeout)
+                currentIndex: model.indexOf(self.session.settings.altimeout)
             }
         }
     }

@@ -261,54 +261,8 @@ namespace {
     }
 } // namespace
 
-SessionConnectTask::SessionConnectTask(Session* session)
+AuthHandlerTask::AuthHandlerTask(Session* session)
     : SessionTask(session)
-{
-}
-
-void SessionConnectTask::update()
-{
-    if (m_status == Status::Ready) {
-        setStatus(Status::Active);
-
-        m_session->setConnecting(true);
-
-        using Watcher = QFutureWatcher<QString>;
-        const auto watcher = new Watcher(this);
-        watcher->setFuture(QtConcurrent::run([=] {
-            const auto params = get_params(m_session);
-            const auto rc = GA_connect(m_session->m_session, Json::fromObject(params).get());
-            if (rc == GA_OK) return QString();
-            const auto error = gdk::get_thread_error_details();
-            return error.value("details").toString();
-        }));
-
-        connect(watcher, &Watcher::finished, this, [=] {
-            const auto error = watcher->result();
-            if (error.contains("session already connected")) {
-                m_session->setConnecting(false);
-                m_session->setConnected(true);
-                setStatus(Status::Finished);
-                return;
-            }
-            setError(error);
-            m_session->setConnecting(false);
-            if (error.isEmpty()) {
-                m_session->setConnected(true);
-                setStatus(Status::Finished);
-            } else {
-                setStatus(Status::Failed);
-            }
-        });
-    } else if (m_status == Status::Active) {
-        if (m_session->isConnected()) {
-            setStatus(Status::Finished);
-        }
-    }
-}
-
-AuthHandlerTask::AuthHandlerTask(Context* context)
-    : ContextTask(context)
 {
 }
 
@@ -318,7 +272,6 @@ AuthHandlerTask::~AuthHandlerTask()
         GA_destroy_auth_handler(m_auth_handler);
     }
 }
-
 
 void AuthHandlerTask::setResult(const QJsonObject& result)
 {
@@ -338,9 +291,7 @@ void AuthHandlerTask::update()
 {
     if (m_status != Status::Ready) return;
 
-    const auto session = m_context->session();
-    if (!session) return;
-    if (!session->isConnected()) return;
+    if (!m_session->isConnected()) return;
 
     if (!active()) return;
 
@@ -349,7 +300,7 @@ void AuthHandlerTask::update()
     using Watcher = QFutureWatcher<QPair<bool, QJsonObject>>;
     const auto watcher = new Watcher(this);
     watcher->setFuture(QtConcurrent::run([=] {
-        const auto ok = call(session->m_session, &m_auth_handler);
+        const auto ok = call(m_session->m_session, &m_auth_handler);
         const auto error = gdk::get_thread_error_details();
         return qMakePair(ok, error);
     }));
@@ -410,18 +361,17 @@ void AuthHandlerTask::handleError(const QJsonObject& result)
     qDebug() << Q_FUNC_INFO << type() << result;
     const auto error = result.value("error").toString();
 
-    auto session = m_context->session();
-    if (session && error == "Authentication required") {
-        session->m_ready = false;
-        auto login = new SessionLoginTask(m_context);
+    if (error == "Authentication required") {
+        m_session->m_ready = false;
+        auto login = new LoginTask(m_session);
         needs(login);
         group()->add(login);
         setStatus(Status::Ready);
         return;
     }
 
-    if (session && error == "id_connection_failed") {
-        session->setConnected(false);
+    if (error == "id_connection_failed") {
+        m_session->setConnected(false);
     }
 
     setResult(result);
@@ -469,25 +419,24 @@ void AuthHandlerTask::handleResolveCode(const QJsonObject& result)
 //                emit deviceRequested();
 //                return;
 //            }
-        const auto network = m_context->session()->network();
+        auto network = m_session->network();
         const auto action = required_data.value("action").toString();
         if (action == "get_xpubs") {
-            resolver = new GetXPubsResolver(network, device, result);
+            resolver = new GetXPubsResolver(device, result, m_session);
         } else if (action == "sign_message") {
-            resolver = new SignMessageResolver(device, result);
+            resolver = new SignMessageResolver(device, result, m_session);
         } else if (action == "get_blinding_public_keys") {
-            resolver = new BlindingKeysResolver(device, result);
+            resolver = new BlindingKeysResolver(device, result, m_session);
         } else if (action == "get_blinding_nonces") {
-            resolver = new BlindingNoncesResolver(device, result);
+            resolver = new BlindingNoncesResolver(device, result, m_session);
         } else if (action =="sign_tx") {
-            auto network = m_session->network();
             if (network->isLiquid()) {
-                resolver = new SignLiquidTransactionResolver(network, device, result);
+                resolver = new SignLiquidTransactionResolver(device, result, m_session);
             } else {
-                resolver = new SignTransactionResolver(network, device, result);
+                resolver = new SignTransactionResolver(device, result, m_session);
             }
         } else if (action == "get_master_blinding_key") {
-            resolver = new GetMasterBlindingKeyResolver(device, result);
+            resolver = new GetMasterBlindingKeyResolver(device, result, m_session);
         } else {
             Q_UNREACHABLE();
         }
@@ -562,15 +511,15 @@ void AuthHandlerTask::next()
     Q_UNREACHABLE();
 }
 
-RegisterUserTask::RegisterUserTask(const QStringList& mnemonic, Context* context)
-    : AuthHandlerTask(context)
+RegisterUserTask::RegisterUserTask(const QStringList& mnemonic, Session* session)
+    : AuthHandlerTask(session)
     , m_details({{ "mnemonic", mnemonic.join(' ') }})
 {
 }
 
 // TODO: assert device_details or use Device instance to infer them
-RegisterUserTask::RegisterUserTask(const QJsonObject& device_details, Context* context)
-    : AuthHandlerTask(context)
+RegisterUserTask::RegisterUserTask(const QJsonObject& device_details, Session* session)
+    : AuthHandlerTask(session)
     , m_device_details(device_details)
 {
 }
@@ -587,18 +536,19 @@ void RegisterUserTask::handleDone(const QJsonObject& result)
 {
     const auto wallet_hash_id = result.value("result").toObject().value("wallet_hash_id").toString();
 
-    m_context->m_wallet_hash_id = wallet_hash_id;
+    auto context = m_session->context();
+    context->m_wallet_hash_id = wallet_hash_id;
     setStatus(Status::Finished);
 }
 
 
-SessionLoginTask::SessionLoginTask(Context* context)
-    : AuthHandlerTask(context)
+LoginTask::LoginTask(Session* session)
+    : AuthHandlerTask(session)
 {
 }
 
-SessionLoginTask::SessionLoginTask(const QString& pin, const QJsonObject& pin_data, Context* context)
-    : AuthHandlerTask(context)
+LoginTask::LoginTask(const QString& pin, const QJsonObject& pin_data, Session* session)
+    : AuthHandlerTask(session)
     , m_details({
           { "pin", pin },
           { "pin_data", pin_data }
@@ -606,8 +556,8 @@ SessionLoginTask::SessionLoginTask(const QString& pin, const QJsonObject& pin_da
 {
 }
 
-SessionLoginTask::SessionLoginTask(const QStringList& mnemonic, const QString& password, Context* context)
-    : AuthHandlerTask(context)
+LoginTask::LoginTask(const QStringList& mnemonic, const QString& password, Session* session)
+    : AuthHandlerTask(session)
     , m_details({
           { "mnemonic", mnemonic.join(' ') },
           { "password", password }
@@ -615,14 +565,14 @@ SessionLoginTask::SessionLoginTask(const QStringList& mnemonic, const QString& p
 {
 }
 
-SessionLoginTask::SessionLoginTask(const QJsonObject& hw_device, Context* context)
-    : AuthHandlerTask(context)
+LoginTask::LoginTask(const QJsonObject& hw_device, Session* session)
+    : AuthHandlerTask(session)
     , m_hw_device(hw_device)
 {
 }
 
-SessionLoginTask::SessionLoginTask(const QString& username, const QString& password, Context* context)
-    : AuthHandlerTask(context)
+LoginTask::LoginTask(const QString& username, const QString& password, Session* session)
+    : AuthHandlerTask(session)
     , m_details({
           { "username", username },
           { "password", password }
@@ -630,7 +580,7 @@ SessionLoginTask::SessionLoginTask(const QString& username, const QString& passw
 {
 }
 
-bool SessionLoginTask::call(GA_session* session, GA_auth_handler** auth_handler)
+bool LoginTask::call(GA_session* session, GA_auth_handler** auth_handler)
 {
     qDebug() << Q_FUNC_INFO << m_hw_device << m_details;
     auto hw_device = Json::fromObject(m_hw_device);
@@ -640,26 +590,27 @@ bool SessionLoginTask::call(GA_session* session, GA_auth_handler** auth_handler)
     return rc == GA_OK;
 }
 
-void SessionLoginTask::handleDone(const QJsonObject& result)
+void LoginTask::handleDone(const QJsonObject& result)
 {
     qDebug() << Q_FUNC_INFO;
     const auto res = result.value("result").toObject();
-    m_context->session()->m_ready = true;
-    m_context->m_wallet_hash_id = res.value("wallet_hash_id").toString();
-    m_context->m_xpub_hash_id = res.value("xpub_hash_id").toString();
+    m_session->m_ready = true;
+    auto context = m_session->context();
+    context->m_wallet_hash_id = res.value("wallet_hash_id").toString();
+    context->m_xpub_hash_id = res.value("xpub_hash_id").toString();
 
     AuthHandlerTask::handleDone(result);
 }
 
 
-LoadTwoFactorConfigTask::LoadTwoFactorConfigTask(Context* context)
-    : ContextTask(context)
+LoadTwoFactorConfigTask::LoadTwoFactorConfigTask(Session* session)
+    : SessionTask(session)
     , m_lock(false)
 {
 }
 
-LoadTwoFactorConfigTask::LoadTwoFactorConfigTask(bool lock, Context* context)
-    : ContextTask(context)
+LoadTwoFactorConfigTask::LoadTwoFactorConfigTask(bool lock, Session* session)
+    : SessionTask(session)
     , m_lock(lock)
 {
 }
@@ -668,7 +619,8 @@ void LoadTwoFactorConfigTask::update()
 {
     if (m_status != Status::Ready) return;
 
-    const auto wallet = m_context->wallet();
+    auto context = m_session->context();
+    const auto wallet = context->wallet();
     if (!wallet) return;
 
     if (wallet->isWatchOnly()) {
@@ -676,23 +628,21 @@ void LoadTwoFactorConfigTask::update()
         return;
     }
 
-    const auto session = m_context->session();
-    if (!session) return;
-    if (!session->m_ready) return;
+    if (!m_session->m_ready) return;
 
     setStatus(Status::Active);
 
     QtConcurrent::run([=] {
-        return gdk::get_twofactor_config(session->m_session);
+        return gdk::get_twofactor_config(m_session->m_session);
     }).then(this, [=](const QJsonObject& config) {
-        m_context->setConfig(config);
-        if (m_lock) m_context->setLocked(true);
+        m_session->setConfig(config);
+        if (m_lock) context->setLocked(true);
         setStatus(Status::Finished);
     });
 }
 
-LoadCurrenciesTask::LoadCurrenciesTask(Context *context)
-    : ContextTask(context)
+LoadCurrenciesTask::LoadCurrenciesTask(Session* session)
+    : SessionTask(session)
 {
 }
 
@@ -700,28 +650,26 @@ void LoadCurrenciesTask::update()
 {
     if (m_status != Status::Ready) return;
 
-    const auto session = m_context->session();
-    if (!session) return;
-    if (!session->m_ready) return;
+    if (!m_session->m_ready) return;
 
     setStatus(Status::Active);
 
     QtConcurrent::run([=] {
-        return gdk::get_available_currencies(session->m_session);
+        return gdk::get_available_currencies(m_session->m_session);
     }).then(this, [=](const QJsonObject& currencies) {
-        m_context->setCurrencies(currencies);
+        m_session->setCurrencies(currencies);
         setStatus(Status::Finished);
     });
 }
 
-LoadAccountsTask::LoadAccountsTask(Context* context)
-    : AuthHandlerTask(context)
+LoadAccountsTask::LoadAccountsTask(Session* session)
+    : AuthHandlerTask(session)
 {
 }
 
 bool LoadAccountsTask::active() const
 {
-    return m_context->session()->m_ready;
+    return m_session->m_ready;
 }
 
 bool LoadAccountsTask::call(GA_session* session, GA_auth_handler** auth_handler)
@@ -735,22 +683,24 @@ bool LoadAccountsTask::call(GA_session* session, GA_auth_handler** auth_handler)
 void LoadAccountsTask::handleDone(const QJsonObject& result)
 {
     const auto subaccounts = result.value("result").toObject().value("subaccounts").toArray();
+    auto context = m_session->context();
+    auto network = m_session->network();
     for (auto value : subaccounts) {
-        Account* account = m_context->getOrCreateAccount(value.toObject());
-        m_context->m_accounts.append(account);
+        Account* account = context->getOrCreateAccount(network, value.toObject());
+        context->m_accounts.append(account);
         // TODO should be added by the caller
         auto load_balance = new LoadBalanceTask(account);
 
         m_group->add(load_balance);
     }
-    emit m_context->accountsChanged();
+    emit context->accountsChanged();
     setStatus(Status::Finished);
 }
 
 #include "account.h"
 
 LoadBalanceTask::LoadBalanceTask(Account* account)
-    : AuthHandlerTask(account->context())
+    : AuthHandlerTask(account->session())
     , m_account(account)
 {
 }
@@ -773,8 +723,8 @@ void LoadBalanceTask::handleDone(const QJsonObject& result)
     setStatus(Status::Finished);
 }
 
-GetWatchOnlyDetailsTask::GetWatchOnlyDetailsTask(Context* context)
-    : ContextTask(context)
+GetWatchOnlyDetailsTask::GetWatchOnlyDetailsTask(Session* session)
+    : SessionTask(session)
 {
 }
 
@@ -782,22 +732,20 @@ void GetWatchOnlyDetailsTask::update()
 {
     if (m_status != Status::Ready) return;
 
-    const auto wallet = m_context->wallet();
+    const auto wallet = m_session->context()->wallet();
     if (!wallet) return;
     if (wallet->isWatchOnly()) {
         setStatus(Status::Finished);
         return;
     }
 
-    auto session = m_context->session();
-    if (!session) return;
-    if (!session->m_ready) return;
+    if (!m_session->m_ready) return;
 
     setStatus(Status::Active);
 
     QtConcurrent::run([=] {
         char* data;
-        const auto rc = GA_get_watch_only_username(session->m_session, &data);
+        const auto rc = GA_get_watch_only_username(m_session->m_session, &data);
         if (rc != GA_OK) return QString();
         const auto username = QString::fromUtf8(data);
         GA_destroy_string(data);
@@ -806,14 +754,14 @@ void GetWatchOnlyDetailsTask::update()
         if (username.isNull()) {
             setStatus(Status::Failed);
         } else {
-            m_context->setUsername(username);
+            m_session->context()->setUsername(username);
             setStatus(Status::Finished);
         }
     });
 }
 
-LoadAssetsTask::LoadAssetsTask(Context* context)
-    : ContextTask(context)
+LoadAssetsTask::LoadAssetsTask(Session* session)
+    : SessionTask(session)
 {
 }
 
@@ -821,38 +769,35 @@ void LoadAssetsTask::update()
 {
     if (m_status != Status::Ready) return;
 
-    auto session = m_context->session();
-    if (!session) return;
-    if (!session->m_ready) return;
-
-    setStatus(Status::Active);
-
-    auto network = m_context->network();
-    if (!network->isLiquid()) {
+    if (!m_session->network()->isLiquid()) {
         setStatus(Status::Finished);
         return;
     }
+
+    if (!m_session->m_ready) return;
+
+    setStatus(Status::Active);
 
     QtConcurrent::run([=] {
         auto params = Json::fromObject({
             { "assets", true },
             { "icons", true },
         });
-        const auto rc = GA_refresh_assets(session->m_session, params.get());
+        const auto rc = GA_refresh_assets(m_session->m_session, params.get());
         return rc == GA_OK;
     }).then(this, [=](bool ok) {
         setStatus(ok ? Status::Finished : Status::Failed);
     });
 }
 
-EncryptWithPinTask::EncryptWithPinTask(const QString& pin, Context* context)
-    : AuthHandlerTask(context)
+EncryptWithPinTask::EncryptWithPinTask(const QString& pin, Session* session)
+    : AuthHandlerTask(session)
     , m_pin(pin)
 {
 }
 
-EncryptWithPinTask::EncryptWithPinTask(const QJsonValue& plaintext, const QString& pin, Context* context)
-    : AuthHandlerTask(context)
+EncryptWithPinTask::EncryptWithPinTask(const QJsonValue& plaintext, const QString& pin, Session* session)
+    : AuthHandlerTask(session)
     , m_plaintext(plaintext)
     , m_pin(pin)
 {
@@ -885,14 +830,15 @@ bool EncryptWithPinTask::call(GA_session* session, GA_auth_handler** auth_handle
 void EncryptWithPinTask::handleDone(const QJsonObject& result)
 {
     const auto pin_data = result.value("result").toObject().value("pin_data").toObject();
-    m_context->m_pin_data = pin_data;
-    const auto wallet = m_context->wallet();
+    auto context = m_session->context();
+    auto wallet = context->wallet();
+    context->m_pin_data = pin_data;
     if (wallet) wallet->setPinData(QJsonDocument(pin_data).toJson());
     AuthHandlerTask::handleDone(result);
 }
 
-CreateAccountTask::CreateAccountTask(const QJsonObject& details, Context* context)
-    : AuthHandlerTask(context)
+CreateAccountTask::CreateAccountTask(const QJsonObject& details, Session* session)
+    : AuthHandlerTask(session)
     , m_details(details)
 {
 }
@@ -910,8 +856,8 @@ void CreateAccountTask::handleDone(const QJsonObject &result)
     setStatus(Status::Finished);
 }
 
-UpdateAccountTask::UpdateAccountTask(const QJsonObject &details, Context *context)
-    : AuthHandlerTask(context)
+UpdateAccountTask::UpdateAccountTask(const QJsonObject &details, Session* session)
+    : AuthHandlerTask(session)
     , m_details(details)
 {
 }
@@ -922,8 +868,8 @@ bool UpdateAccountTask::call(GA_session* session, GA_auth_handler** auth_handler
     return rc == GA_OK;
 }
 
-ChangeTwoFactorTask::ChangeTwoFactorTask(const QString& method, const QJsonObject& details, Context* context)
-    : AuthHandlerTask(context)
+ChangeTwoFactorTask::ChangeTwoFactorTask(const QString& method, const QJsonObject& details, Session* session)
+    : AuthHandlerTask(session)
     , m_method(method)
     , m_details(details)
 {
@@ -937,14 +883,14 @@ bool ChangeTwoFactorTask::call(GA_session* session, GA_auth_handler** auth_handl
 }
 
 ContextTask::ContextTask(Context* context)
-    : SessionTask(context->session())
+    : Task(context)
     , m_context(context)
 {
     Q_ASSERT(context);
 }
 
-TwoFactorResetTask::TwoFactorResetTask(const QString& email, Context* context)
-    : AuthHandlerTask(context)
+TwoFactorResetTask::TwoFactorResetTask(const QString& email, Session* session)
+    : AuthHandlerTask(session)
     , m_email(email)
 {
 }
@@ -957,8 +903,8 @@ bool TwoFactorResetTask::call(GA_session* session, GA_auth_handler** auth_handle
 }
 
 
-SetCsvTimeTask::SetCsvTimeTask(const int value, Context* context)
-    : AuthHandlerTask(context)
+SetCsvTimeTask::SetCsvTimeTask(const int value, Session* session)
+    : AuthHandlerTask(session)
     , m_value(value)
 {
 }
@@ -971,12 +917,14 @@ bool SetCsvTimeTask::call(GA_session* session, GA_auth_handler** auth_handler) {
 
 void SetCsvTimeTask::handleDone(const QJsonObject &result)
 {
-    m_context->setSettings(gdk::get_settings(m_session->m_session));
+    Q_ASSERT(m_session->isConnected());
+    auto settings = gdk::get_settings(m_session->m_session);
+    m_session->setSettings(settings);
     AuthHandlerTask::handleDone(result);
 }
 
-GetCredentialsTask::GetCredentialsTask(Context* context)
-    : AuthHandlerTask(context)
+GetCredentialsTask::GetCredentialsTask(Session* session)
+    : AuthHandlerTask(session)
 {
 }
 
@@ -989,20 +937,19 @@ bool GetCredentialsTask::call(GA_session *session, GA_auth_handler **auth_handle
 
 bool GetCredentialsTask::active() const
 {
-    const auto session = m_context->session();
-    if (!session || !session->m_ready) return false;
+    if (!m_session->m_ready) return false;
     return AuthHandlerTask::active();
 }
 
 void GetCredentialsTask::handleDone(const QJsonObject& result)
 {
     const auto credentials = result.value("result").toObject();
-    m_context->setCredentials(credentials);
+    m_session->context()->setCredentials(credentials);
     AuthHandlerTask::handleDone(result);
 }
 
-ChangeSettingsTask::ChangeSettingsTask(const QJsonObject& data, Context* context)
-    : AuthHandlerTask(context)
+ChangeSettingsTask::ChangeSettingsTask(const QJsonObject& data, Session* session)
+    : AuthHandlerTask(session)
     , m_data(data)
 {
 }
@@ -1018,14 +965,14 @@ bool ChangeSettingsTask::call(GA_session* session, GA_auth_handler** auth_handle
 void ChangeSettingsTask::handleDone(const QJsonObject& result)
 {
     if (!m_settings.isEmpty()) {
-        m_context->setSettings(m_settings);
+        m_session->setSettings(m_settings);
     }
 
     AuthHandlerTask::handleDone(result);
 }
 
-DisableAllPinLoginsTask::DisableAllPinLoginsTask(Context* context)
-    : AuthHandlerTask(context)
+DisableAllPinLoginsTask::DisableAllPinLoginsTask(Session* session)
+    : AuthHandlerTask(session)
 {
 }
 
@@ -1037,13 +984,13 @@ bool DisableAllPinLoginsTask::call(GA_session* session, GA_auth_handler** auth_h
 
 void DisableAllPinLoginsTask::handleDone(const QJsonObject& result)
 {
-    const auto wallet = m_context->wallet();
+    const auto wallet = m_session->context()->wallet();
     if (wallet) wallet->clearPinData();
     return AuthHandlerTask::handleDone(result);
 }
 
-TwoFactorChangeLimitsTask::TwoFactorChangeLimitsTask(const QJsonObject& details, Context* context)
-    : AuthHandlerTask(context)
+TwoFactorChangeLimitsTask::TwoFactorChangeLimitsTask(const QJsonObject& details, Session* session)
+    : AuthHandlerTask(session)
     , m_details(details)
 {
 }
@@ -1054,8 +1001,8 @@ bool TwoFactorChangeLimitsTask::call(GA_session *session, GA_auth_handler **auth
     return rc == GA_OK;
 }
 
-CreateTransactionTask::CreateTransactionTask(const QJsonObject &details, Context *context)
-    : AuthHandlerTask(context)
+CreateTransactionTask::CreateTransactionTask(const QJsonObject &details, Session* session)
+    : AuthHandlerTask(session)
     , m_details(details)
 {
 }
@@ -1075,8 +1022,8 @@ void CreateTransactionTask::handleDone(const QJsonObject& result)
 }
 
 
-SendNLocktimesTask::SendNLocktimesTask(Context* context)
-    : ContextTask(context)
+SendNLocktimesTask::SendNLocktimesTask(Session* session)
+    : SessionTask(session)
 {
 }
 
@@ -1084,17 +1031,15 @@ void SendNLocktimesTask::update()
 {
     if (m_status != Status::Ready) return;
 
-    auto session = m_context->session();
-    if (!session) return;
-    if (!session->m_ready) return;
+    if (!m_session->m_ready) return;
 
     setStatus(Status::Active);
 
     QtConcurrent::run([=] {
-        const auto rc = GA_send_nlocktimes(session->m_session);
+        const auto rc = GA_send_nlocktimes(m_session->m_session);
         if (rc != GA_OK) return false;
-        const auto settings = gdk::get_settings(session->m_session);
-        m_context->setSettings(settings);
+        const auto settings = gdk::get_settings(m_session->m_session);
+        m_session->setSettings(settings);
         return true;
     }).then(this, [=](bool ok) {
         setStatus(ok ? Status::Finished : Status::Failed);
@@ -1151,8 +1096,8 @@ void TaskGroup::dispatch()
     if (m_dispatcher) m_dispatcher->dispatch();
 }
 
-SignTransactionTask::SignTransactionTask(const QJsonObject& details, Context* context)
-    : AuthHandlerTask(context)
+SignTransactionTask::SignTransactionTask(const QJsonObject& details, Session* session)
+    : AuthHandlerTask(session)
     , m_details(details)
 {
 }
@@ -1164,8 +1109,8 @@ bool SignTransactionTask::call(GA_session* session, GA_auth_handler** auth_handl
     return rc == GA_OK;
 }
 
-SendTransactionTask::SendTransactionTask(Context* context)
-    : AuthHandlerTask(context)
+SendTransactionTask::SendTransactionTask(Session* session)
+    : AuthHandlerTask(session)
 {
 }
 
@@ -1187,9 +1132,9 @@ bool SendTransactionTask::call(GA_session* session, GA_auth_handler** auth_handl
     return rc == GA_OK;
 }
 
-GetUnspentOutputsTask::GetUnspentOutputsTask(int num_confs, bool all_coins, qint64 subaccount, Context* context)
-    : AuthHandlerTask(context)
-    , m_subaccount(subaccount)
+GetUnspentOutputsTask::GetUnspentOutputsTask(int num_confs, bool all_coins, Account* account)
+    : AuthHandlerTask(account->session())
+    , m_subaccount(account->pointer())
     , m_num_confs(num_confs)
     , m_all_coins(all_coins)
 {
@@ -1213,7 +1158,7 @@ bool GetUnspentOutputsTask::call(GA_session *session, GA_auth_handler **auth_han
 }
 
 GetTransactionsTask::GetTransactionsTask(int first, int count, Account* account)
-    : AuthHandlerTask(account->context())
+    : AuthHandlerTask(account->session())
     , m_subaccount(account->pointer())
     , m_first(first)
     , m_count(count)
@@ -1238,7 +1183,7 @@ QJsonArray GetTransactionsTask::transactions() const
 }
 
 GetAddressesTask::GetAddressesTask(int last_pointer, Account* account)
-    : AuthHandlerTask(account->context())
+    : AuthHandlerTask(account->session())
     , m_subaccount(account->pointer())
     , m_last_pointer(last_pointer)
 {
@@ -1265,8 +1210,8 @@ int GetAddressesTask::lastPointer() const
 }
 
 
-DeleteWalletTask::DeleteWalletTask(Context* context)
-    : AuthHandlerTask(context)
+DeleteWalletTask::DeleteWalletTask(Session* session)
+    : AuthHandlerTask(session)
 {
 }
 
@@ -1276,8 +1221,8 @@ bool DeleteWalletTask::call(GA_session* session, GA_auth_handler** auth_handler)
     return rc == GA_OK;
 }
 
-TwoFactorCancelResetTask::TwoFactorCancelResetTask(Context *context)
-    : AuthHandlerTask(context)
+TwoFactorCancelResetTask::TwoFactorCancelResetTask(Session* session)
+    : AuthHandlerTask(session)
 {
 }
 
@@ -1287,8 +1232,8 @@ bool TwoFactorCancelResetTask::call(GA_session* session, GA_auth_handler** auth_
     return rc == GA_OK;
 }
 
-SetUnspentOutputsStatusTask::SetUnspentOutputsStatusTask(const QVariantList &outputs, const QString &status, Context *context)
-    : AuthHandlerTask(context)
+SetUnspentOutputsStatusTask::SetUnspentOutputsStatusTask(const QVariantList &outputs, const QString &status, Session* session)
+    : AuthHandlerTask(session)
     , m_outputs(outputs)
     , m_status(status)
 {
@@ -1314,8 +1259,8 @@ bool SetUnspentOutputsStatusTask::call(GA_session *session, GA_auth_handler **au
     return rc == GA_OK;
 }
 
-SetWatchOnlyTask::SetWatchOnlyTask(const QString& username, const QString& password, Context* context)
-    : ContextTask(context)
+SetWatchOnlyTask::SetWatchOnlyTask(const QString& username, const QString& password, Session* session)
+    : SessionTask(session)
     , m_username(username)
     , m_password(password)
 {
@@ -1326,6 +1271,8 @@ void SetWatchOnlyTask::update()
     if (m_status != Status::Ready) return;
 
     setStatus(Status::Active);
+
+    if (!m_session->isConnected()) return;
 
     using Watcher = QFutureWatcher<QString>;
     const auto watcher = new Watcher(this);
@@ -1345,4 +1292,50 @@ void SetWatchOnlyTask::update()
             setStatus(Status::Failed);
         }
     });
+}
+
+ConnectTask::ConnectTask(Session* session)
+    : SessionTask(session)
+{
+}
+
+void ConnectTask::update()
+{
+    if (m_status == Status::Ready) {
+        setStatus(Status::Active);
+
+        m_session->setConnecting(true);
+
+        using Watcher = QFutureWatcher<QString>;
+        const auto watcher = new Watcher(this);
+        watcher->setFuture(QtConcurrent::run([=] {
+            const auto params = get_params(m_session);
+            const auto rc = GA_connect(m_session->m_session, Json::fromObject(params).get());
+            if (rc == GA_OK) return QString();
+            const auto error = gdk::get_thread_error_details();
+            return error.value("details").toString();
+        }));
+
+        connect(watcher, &Watcher::finished, this, [=] {
+            const auto error = watcher->result();
+            if (error.contains("session already connected")) {
+                m_session->setConnecting(false);
+                m_session->setConnected(true);
+                setStatus(Status::Finished);
+                return;
+            }
+            setError(error);
+            m_session->setConnecting(false);
+            if (error.isEmpty()) {
+                m_session->setConnected(true);
+                setStatus(Status::Finished);
+            } else {
+                setStatus(Status::Failed);
+            }
+        });
+    } else if (m_status == Status::Active) {
+        if (m_session->isConnected()) {
+            setStatus(Status::Finished);
+        }
+    }
 }

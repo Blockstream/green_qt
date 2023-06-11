@@ -17,8 +17,6 @@ void RestoreController::setNetwork(Network* network)
     if (m_network == network) return;
     m_network = network;
     emit networkChanged();
-
-    m_context->setNetwork(network);
     m_dispatcher->dispatch();
 }
 
@@ -69,8 +67,9 @@ void RestoreController::setActive(bool active)
         { "password", m_password }
     });
 
-    auto connect_task = new SessionConnectTask(m_context->session());
-    auto mnemonic_login = new SessionLoginTask(m_mnemonic, m_password, m_context);
+    auto session = m_context->getOrCreateSession(m_network);
+    auto connect_task = new ConnectTask(session);
+    auto mnemonic_login = new LoginTask(m_mnemonic, m_password, session);
     auto check_exists = new RestoreCheckTask(this);
 
     connect_task->then(mnemonic_login);
@@ -85,17 +84,19 @@ void RestoreController::setActive(bool active)
 
 void RestoreController::accept()
 {
-    auto load_twofactor_config = new LoadTwoFactorConfigTask(m_context);
-    auto load_currencies = new LoadCurrenciesTask(m_context);
-    auto get_watchonly_details = new GetWatchOnlyDetailsTask(m_context);
-    auto load_assets = new LoadAssetsTask(m_context);
-    auto load_accounts = new LoadAccountsTask(m_context);
+    auto session = m_context->getOrCreateSession(m_network);
+
+    auto load_twofactor_config = new LoadTwoFactorConfigTask(session);
+    auto load_currencies = new LoadCurrenciesTask(session);
+    auto get_watchonly_details = new GetWatchOnlyDetailsTask(session);
+    auto load_assets = new LoadAssetsTask(session);
+    auto load_accounts = new LoadAccountsTask(session);
 
     const QJsonObject credentials({
         { "mnemonic", m_mnemonic.join(' ') },
         { "password", m_password }
     });
-    auto encrypt_with_pin = new EncryptWithPinTask(credentials, m_pin, m_context);
+    auto encrypt_with_pin = new EncryptWithPinTask(credentials, m_pin, session);
     auto persist_wallet = new RestorePersistWalletTask(this);
 
     load_accounts->then(encrypt_with_pin);
@@ -251,7 +252,7 @@ void RestorePersistWalletTask::update()
     setStatus(Status::Active);
 
     const auto context = m_controller->context();
-    const auto network = context->network();
+    const auto network = m_controller->network();
     const auto wallet_hash_id = context->m_wallet_hash_id;
     auto wallet = m_controller->wallet();
 

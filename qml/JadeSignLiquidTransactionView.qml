@@ -38,7 +38,7 @@ GFlickable {
             model: outputs
             delegate: Page {
                 Layout.fillWidth: true
-                readonly property Asset asset: wallet.context.getOrCreateAsset(modelData.asset_id)
+                readonly property Asset asset: wallet.context.getOrCreateAsset(self.resolver.session.network, modelData.asset_id)
                 background: null
                 header: SectionLabel {
                     bottomPadding: constants.s1

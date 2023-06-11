@@ -2,6 +2,7 @@
 #include "account.h"
 #include "context.h"
 #include "task.h"
+#include "session.h"
 #include "wallet.h"
 
 #include <QFileDialog>
@@ -27,7 +28,9 @@ void ExportAddressesController::save()
     Q_ASSERT(m_account);
     const auto context = m_account->context();
     const auto wallet = context->wallet();
-    const auto settings = context->settings();
+    const auto network = wallet->network();
+    const auto session = context->getOrCreateSession(network);
+    const auto settings = session->settings();
 
     const auto now = QDateTime::currentDateTime();
     const auto account_name = m_account->name().isEmpty() ? qtTrId("id_main_account") : m_account->name();

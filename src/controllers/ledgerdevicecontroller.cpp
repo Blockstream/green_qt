@@ -125,16 +125,16 @@ void LedgerDeviceController::login()
 
     setContext(new Context(this));
     m_context->setWallet(m_wallet);
-    m_context->setNetwork(m_network);
 
     auto group = new TaskGroup(this);
 
-    auto connect_session = new SessionConnectTask(m_context->session());
+    auto session = m_context->getOrCreateSession(m_network);
+    auto connect_session = new ConnectTask(session);
     auto login = new LedgerLoginTask(this);
-    auto get_watchonly_details = new GetWatchOnlyDetailsTask(m_context);
-    auto load_twofactor_config = new LoadTwoFactorConfigTask(m_context);
-    auto load_currencies = new LoadCurrenciesTask(m_context);
-    auto load_accounts = new LoadAccountsTask(m_context);
+    auto get_watchonly_details = new GetWatchOnlyDetailsTask(session);
+    auto load_twofactor_config = new LoadTwoFactorConfigTask(session);
+    auto load_currencies = new LoadCurrenciesTask(session);
+    auto load_accounts = new LoadAccountsTask(session);
 
     group->add(connect_session);
     group->add(login);
@@ -144,7 +144,7 @@ void LedgerDeviceController::login()
     group->add(load_accounts);
 
     if (m_network->isLiquid()) {
-        auto load_assets = new LoadAssetsTask(m_context);
+        auto load_assets = new LoadAssetsTask(session);
 
         group->add(load_assets);
     }
@@ -304,7 +304,7 @@ void LedgerLoginTask::update()
     const auto device = m_controller->device();
     if (!device) return;
 
-    const auto session = m_context->session();
+    const auto session = m_context->getOrCreateSession(network);
     if (!session) return;
     if (!session->isConnected()) return;
 
@@ -313,8 +313,8 @@ void LedgerLoginTask::update()
 
     const auto device_details = device_details_from_device(device);
 
-    auto session_register = new RegisterUserTask(device_details, m_context);
-    auto session_login = new SessionLoginTask(device_details, m_context);
+    auto session_register = new RegisterUserTask(device_details, session);
+    auto session_login = new LoginTask(device_details, session);
 
     session_register->then(session_login);
 
@@ -334,7 +334,7 @@ void LedgerLoginTask::update()
 
         wallet->updateDeviceDetails(device->details());
         m_context->setDevice(device);
-        m_context->session()->m_ready = true;
+        session->m_ready = true;
         // TODO should propagate to context
 
         m_controller->setWallet(wallet);

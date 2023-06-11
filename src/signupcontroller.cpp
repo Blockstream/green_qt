@@ -25,8 +25,7 @@ void SignupController::setNetwork(Network* network)
     if (m_network == network) return;
     m_network = network;
     emit networkChanged();
-
-    m_context->setNetwork(network);
+    m_dispatcher->dispatch();
 }
 
 void SignupController::setType(const QString& type)
@@ -58,18 +57,19 @@ void SignupController::setActive(bool active)
 
     auto group = new TaskGroup(this);
 
-    auto connect_session = new SessionConnectTask(m_context->session());
-    auto register_user = new RegisterUserTask(m_mnemonic, m_context);
-    auto mnemonic_login = new SessionLoginTask(m_mnemonic, QString(), m_context);
-    auto encrypt_with_pin = new EncryptWithPinTask(credentials, m_pin, m_context);
+    auto session = m_context->getOrCreateSession(m_network);
+    auto connect_session = new ConnectTask(session);
+    auto register_user = new RegisterUserTask(m_mnemonic, session);
+    auto mnemonic_login = new LoginTask(m_mnemonic, QString(), session);
+    auto encrypt_with_pin = new EncryptWithPinTask(credentials, m_pin, session);
     auto create_wallet = new SignupCreateWalletTask(this);
-    auto load_twofactor_config = new LoadTwoFactorConfigTask(m_context);
-    auto load_currencies = new LoadCurrenciesTask(m_context);
-    auto get_watchonly_details = new GetWatchOnlyDetailsTask(m_context);
-    auto load_assets = new LoadAssetsTask(m_context);
-    auto load_accounts = new LoadAccountsTask(m_context);
+    auto load_twofactor_config = new LoadTwoFactorConfigTask(session);
+    auto load_currencies = new LoadCurrenciesTask(session);
+    auto get_watchonly_details = new GetWatchOnlyDetailsTask(session);
+    auto load_assets = new LoadAssetsTask(session);
+    auto load_accounts = new LoadAccountsTask(session);
     auto persist_wallet = new SignupPersistWalletTask(this);
-    auto get_credentials = new GetCredentialsTask(m_context);
+    auto get_credentials = new GetCredentialsTask(session);
 
     group->add(connect_session);
     group->add(register_user);
@@ -101,8 +101,10 @@ void SignupController::setActive(bool active)
             { "type", "2of2_no_recovery" }
         };
 
-        auto create_amp_account = new CreateAccountTask(account, m_context);
-        auto hide_main_account = new UpdateAccountTask(QJsonObject{{ "subaccount", 0 }, { "hidden", true }}, m_context);
+        auto network = m_context->wallet()->network();
+        auto session = m_context->getOrCreateSession(network);
+        auto create_amp_account = new CreateAccountTask(account, session);
+        auto hide_main_account = new UpdateAccountTask(QJsonObject{{ "subaccount", 0 }, { "hidden", true }}, session);
 
         mnemonic_login->then(create_amp_account);
         create_amp_account->then(hide_main_account);
@@ -119,7 +121,7 @@ void SignupController::setActive(bool active)
             { "type", "p2wpkh" }
         };
 
-        auto create_segwit_account = new CreateAccountTask(account, m_context);
+        auto create_segwit_account = new CreateAccountTask(account, session);
 
         mnemonic_login->then(create_segwit_account);
         create_segwit_account->then(load_accounts);

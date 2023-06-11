@@ -48,9 +48,9 @@ JadeSetupController::JadeSetupController(QObject* parent)
 
 void JadeSetupController::setup(const QString& network)
 {
-    ensureContext()->setNetwork(NetworkManager::instance()->network(network));
-
-    auto connect_session = new SessionConnectTask(ensureContext()->session());
+    m_network = NetworkManager::instance()->network(network);
+    auto session = m_context->getOrCreateSession(m_network);
+    auto connect_session = new ConnectTask(session);
     auto setup = new JadeSetupTask(this);
 
     connect_session->then(setup);
@@ -81,7 +81,7 @@ void JadeSetupTask::update()
         return;
     }
 
-    auto network = m_controller->ensureContext()->network();
+    auto network = m_controller->network();
     if (!network) return;
 
     setStatus(Status::Active);
@@ -114,7 +114,7 @@ void JadeSetupTask::update()
 
         GA_json* output;
         const auto context = m_controller->ensureContext();
-        const auto session = context->session()->m_session;
+        const auto session = context->getOrCreateSession(network)->m_session;
         GA_http_request(session, params.get(), &output);
         auto res = Json::toObject(output);
         GA_destroy_json(output);
@@ -131,9 +131,10 @@ void JadeUnlockController::unlock()
 {
     if (!m_device) return;
     const auto nets = m_device->versionInfo().value("JADE_NETWORKS").toString();
-    ensureContext()->setNetwork(NetworkManager::instance()->network(nets == "ALL" || nets == "MAIN" ? "mainnet" : "testnet"));
+    m_network = NetworkManager::instance()->network(nets == "ALL" || nets == "MAIN" ? "mainnet" : "testnet");
+    auto session = ensureContext()->getOrCreateSession(m_network);
 
-    auto connect_session = new SessionConnectTask(ensureContext()->session());
+    auto connect_session = new ConnectTask(session);
     auto unlock = new JadeUnlockTask(this);
 
     connect_session->then(unlock);
@@ -211,7 +212,7 @@ JadeLoginController::JadeLoginController(QObject* parent)
     m_dispatcher->add(identify);
 }
 
-JadeUnlockTask::JadeUnlockTask(JadeController* controller)
+JadeUnlockTask::JadeUnlockTask(JadeUnlockController* controller)
     : Task(controller)
     , m_controller(controller)
 {
@@ -229,7 +230,7 @@ void JadeUnlockTask::update()
         return;
     }
 
-    const auto network = m_controller->ensureContext()->network();
+    const auto network = m_controller->network();
     if (!network) return;
 
     setStatus(Status::Active);
@@ -259,7 +260,7 @@ void JadeUnlockTask::update()
 
         GA_json* output;
         const auto context = m_controller->ensureContext();
-        const auto session = context->session()->m_session;
+        const auto session = context->getOrCreateSession(network)->m_session;
         GA_http_request(session, params.get(), &output);
         auto res = Json::toObject(output);
         GA_destroy_json(output);
@@ -335,8 +336,6 @@ void JadeLoginTask::update()
     auto network = NetworkManager::instance()->network(m_controller->network());
     auto device = m_controller->device();
 
-    context->setNetwork(network);
-
     if (m_status == Status::Ready) {
         const auto device = m_controller->device();
         if (!device) return;
@@ -350,12 +349,13 @@ void JadeLoginTask::update()
         };
 
         if (m_controller->walletHashId().isEmpty()) return;
+        auto session = context->getOrCreateSession(network);
 
         const auto device_details = device_details_from_device(device);
-        auto connect_session = new SessionConnectTask(context->session());
-        auto session_register = new RegisterUserTask(device_details, context);
-        auto session_login = new SessionLoginTask(device_details, context);
-        auto get_credentials = new GetCredentialsTask(context);
+        auto connect_session = new ConnectTask(session);
+        auto session_register = new RegisterUserTask(device_details, session);
+        auto session_login = new LoginTask(device_details, session);
+        auto get_credentials = new GetCredentialsTask(session);
 
         connect_session->then(session_register);
         session_register->then(session_login);
@@ -393,17 +393,19 @@ void JadeLoginTask::update()
         context->setWallet(wallet);
         m_controller->setWallet(wallet);
 
-        auto get_watchonly_details = new GetWatchOnlyDetailsTask(context);
-        auto load_twofactor_config = new LoadTwoFactorConfigTask(context);
-        auto load_currencies = new LoadCurrenciesTask(context);
+        auto session = context->getOrCreateSession(network);
+
+        auto get_watchonly_details = new GetWatchOnlyDetailsTask(session);
+        auto load_twofactor_config = new LoadTwoFactorConfigTask(session);
+        auto load_currencies = new LoadCurrenciesTask(session);
 
         group()->add(get_watchonly_details);
         group()->add(load_twofactor_config);
         group()->add(load_currencies);
         if (wallet->network()->isLiquid()) {
-            group()->add(new LoadAssetsTask(context));
+            group()->add(new LoadAssetsTask(session));
         }
-        group()->add(new LoadAccountsTask(context));
+        group()->add(new LoadAccountsTask(session));
 
         connect(group(), &TaskGroup::finished, this, [=] {
             WalletManager::instance()->addWallet(wallet);

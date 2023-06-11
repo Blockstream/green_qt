@@ -31,7 +31,7 @@ void Output::update()
     const auto network = m_account->network();
     if (!m_asset && network->isLiquid()) {
         auto asset_id = m_data["asset_id"].toString();
-        m_asset = m_account->context()->getOrCreateAsset(asset_id);
+        m_asset = m_account->context()->getOrCreateAsset(network, asset_id);
         emit assetChanged();
     }
 
@@ -48,7 +48,7 @@ void Output::updateExpired()
 {
     const auto expiry_height = m_data.value("expiry_height");
     if (expiry_height.isDouble()) {
-        const auto block_height = m_account->context()->session()->blockHeight();
+        const auto block_height = m_account->session()->blockHeight();
         setExpired(expiry_height.toDouble() <= block_height);
     } else {
         setExpired(false);

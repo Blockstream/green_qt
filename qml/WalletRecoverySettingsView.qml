@@ -10,6 +10,7 @@ import "analytics.js" as AnalyticsJS
 
 ColumnLayout {
     required property Wallet wallet
+    required property Session session
 
     id: self
     spacing: 16
@@ -78,9 +79,9 @@ ColumnLayout {
         visible: active
         sourceComponent: SettingsBox {
             title: qsTrId('id_set_timelock')
-            enabled: !!wallet.context.settings.notifications &&
-                     !!wallet.context.settings.notifications.email_incoming &&
-                     !!wallet.context.settings.notifications.email_outgoing
+            enabled: !!self.session.settings.notifications &&
+                     !!self.session.settings.notifications.email_incoming &&
+                     !!self.session.settings.notifications.email_outgoing
             contentItem: ColumnLayout {
                 spacing: constants.s1
                 Label {
@@ -113,7 +114,7 @@ ColumnLayout {
                 }
                 Loader {
                     Layout.fillWidth: true
-                    active: wallet.context.config?.email?.confirmed ?? false
+                    active: self.session.config?.email?.confirmed ?? false
                     visible: active
                     sourceComponent: RowLayout {
                         Layout.fillWidth: true
@@ -124,7 +125,7 @@ ColumnLayout {
                         HSpacer {
                         }
                         Label {
-                            text: wallet.context.config?.email?.data ?? ''
+                            text: self.session.config?.email?.data ?? ''
                         }
                     }
                 }
@@ -137,7 +138,7 @@ ColumnLayout {
                         }
                     }
                     large: false
-                    enabled: !(wallet.context.config?.email?.confirmed ?? false)
+                    enabled: !(self.session.config?.email?.confirmed ?? false)
                     visible: enabled
                     text: qsTrId('id_enable')
                     onClicked: enable_dialog.createObject(stack_view).open()
@@ -189,6 +190,7 @@ ColumnLayout {
         id: nlocktime_dialog
         NLockTimeDialog {
             wallet: self.wallet
+            session: self.session
         }
     }
 

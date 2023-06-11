@@ -46,18 +46,23 @@ MainPageHeader {
         }
         GMenu.Separator {
         }
-        GMenu.Item {
-            text: qsTrId('id_settings')
-            icon.source: 'qrc:/svg/wallet-settings.svg'
-            enabled: {
-                if (self.context.watchonly) return false
-                // TODO
-                if (self.wallet.network.electrum) return true
-                return !!self.context.settings.pricing
-            }
-            onClicked: {
-                menu.close()
-                navigation.set({ settings: true })
+        Repeater {
+            model: self.context.sessions
+            GMenu.Item {
+                property Session session: modelData
+                text: qsTrId('id_settings') // TODO: include session name
+                icon.source: 'qrc:/svg/wallet-settings.svg'
+                enabled: {
+                    if (self.context.watchonly) return false
+                    // TODO
+                    if (session.network.electrum) return true
+                    // TODO since settings is per session, handle the following in the settings view
+                    return !!session.settings.pricing
+                }
+                onClicked: {
+                    menu.close()
+                    navigation.set({ settings: true, network: session.network.id, session })
+                }
             }
         }
         GMenu.Separator {
@@ -188,7 +193,7 @@ MainPageHeader {
                     Layout.fillWidth: false
                     spacing: constants.s1
                     ToolButton {
-                        visible: (wallet.context.events.twofactor_reset?.is_active ?? false) || !fiatRateAvailable
+                        visible: (self.currentAccount.session.events.twofactor_reset?.is_active ?? false) || !fiatRateAvailable
                         icon.source: 'qrc:/svg/notifications_2.svg'
                         icon.color: 'transparent'
                         icon.width: 16
@@ -204,34 +209,6 @@ MainPageHeader {
                         ToolTip.delay: 300
                         ToolTip.visible: hovered
                     }
-                    ToolButton {
-                        visible: false
-                        icon.source: 'qrc:/svg/logout.svg'
-                        flat: true
-//                        action: self.disconnectAction
-                        ToolTip.text: qsTrId('id_logout')
-                        ToolTip.delay: 300
-                        ToolTip.visible: hovered
-                    }
-                    ToolButton {
-                        visible: false
-                        flat: true
-//                        action: self.settingsAction
-                        ToolTip.text: qsTrId('id_settings')
-                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                        ToolTip.visible: hovered
-                    }
-                }
-            }
-        }
-        HPane {
-            visible: false
-            contentItem: RowLayout {
-                spacing: 8
-                TotalBalanceCard {
-                    context: self.context
-                }
-                HSpacer {
                 }
             }
         }
@@ -348,7 +325,7 @@ MainPageHeader {
                 font.weight: 400
             }
             Label {
-                text: formatAmount(self.balance)
+                text: formatAmount(self.currentAccount, balance)
                 font.pixelSize: 16
                 font.weight: 600
             }

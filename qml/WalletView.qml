@@ -27,34 +27,35 @@ MainPage {
         dialog.open()
     }
 
-    function parseAmount(amount, unit) {
-        wallet.context.displayUnit;
-        return wallet.parseAmount(amount, unit || wallet.context.settings.unit);
+    function parseAmount(account, amount, unit) {
+        account.session.displayUnit;
+        return wallet.parseAmount(amount, unit || account.session.unit);
     }
 
-    function formatAmount(amount, include_ticker = true) {
-        wallet.context.displayUnit;
-        const unit = wallet.context.settings.unit;
+    function formatAmount(account, amount, include_ticker = true) {
+        if (!account) console.trace()
+        account.session.displayUnit;
+        const unit = account.session.unit;
         return wallet.formatAmount(amount || 0, include_ticker, unit);
     }
 
     function formatFiat(sats, include_ticker = true) {
-        const ticker = wallet.context.events.ticker
-        const pricing = wallet.context.settings.pricing;
+        const ticker = self.currentAccount.session.events.ticker
+        const pricing = currentAccount.session.settings.pricing;
         const { fiat, fiat_currency } = wallet.convert({ satoshi: sats });
         const currency = wallet.network.mainnet ? fiat_currency : 'FIAT'
         return (fiat === null ? 'n/a' : Number(fiat).toLocaleString(Qt.locale(), 'f', 2)) + (include_ticker ? ' ' + currency : '');
     }
 
     function parseFiat(fiat) {
-        const ticker = wallet.context.events.ticker
+        const ticker = self.currentAccount.session.events.ticker
         fiat = fiat.trim().replace(/,/, '.');
         return fiat === '' ? 0 : wallet.convert({ fiat }).satoshi;
     }
 
     function transactionConfirmations(transaction) {
         if (transaction.data.block_height === 0) return 0;
-        return 1 + transaction.account.context.session.block.block_height - transaction.data.block_height;
+        return 1 + transaction.account.session.block.block_height - transaction.data.block_height;
     }
 
     function transactionStatus(confirmations) {
@@ -128,11 +129,6 @@ MainPage {
         context: self.context
     }
 
-    FeeEstimates {
-        id: fee_estimates
-        context: self.context
-    }
-
     Loader2 {
         active: navigation.param.flow === 'send'
         sourceComponent: SendDialog {
@@ -159,6 +155,7 @@ MainPage {
 
     Loader2 {
         active: navigation.param.settings ?? false
+        property Session session: navigation.param.session ?? null
         sourceComponent: WalletSettingsDialog {
             visible: true
             parent: window.Overlay.overlay
@@ -232,6 +229,7 @@ MainPage {
         }
     }
     footer: WalletViewFooter {
+        account: currentAccount
         context: self.context
         wallet: self.wallet
 
@@ -261,6 +259,7 @@ MainPage {
     }
 
     Drawer {
+        id: notifications_drawer
         interactive: position > 0
         height: parent.height
         width: 320
@@ -284,13 +283,13 @@ MainPage {
                 }
             }
             Label {
-                visible: wallet.context.events?.twofactor_reset?.is_active ?? false
+                visible: self.currentAccount.session.events?.twofactor_reset?.is_active ?? false
                 padding: 8
                 leftPadding: 40
                 wrapMode: Text.WordWrap
                 Layout.fillWidth: true
                 text: {
-                    const data = wallet.context.events.twofactor_reset
+                    const data = self.currentAccount.session.events.twofactor_reset
                     if (!data) return ''
                     if (data.is_disputed) {
                         return qsTrId('id_warning_wallet_locked_by')

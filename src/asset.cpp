@@ -9,8 +9,9 @@
 #include "network.h"
 #include "wallet.h"
 
-Asset::Asset(const QString& id, Context* context)
+Asset::Asset(const QString& id, Network* network, Context* context)
     : QObject(context)
+    , m_network(network)
     , m_context(context)
     , m_id(id)
 {
@@ -18,7 +19,7 @@ Asset::Asset(const QString& id, Context* context)
 
 bool Asset::isLBTC() const
 {
-    return m_data.value("asset_id").toString() == m_context->network()->policyAsset();
+    return m_data.value("asset_id").toString() == m_network->policyAsset();
 }
 
 void Asset::setIcon(const QString &icon)

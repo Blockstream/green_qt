@@ -45,7 +45,7 @@ RowLayout {
                 indeterminate: connecting && progress === 0
                 current: {
                     if (connected) return 100
-                    if (session && session.eventData.tor) return session.eventData.tor.progress
+                    if (session && session.events.tor) return session.events.tor.progress
                     return 0
                 }
                 max: 100

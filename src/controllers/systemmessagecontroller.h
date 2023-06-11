@@ -30,12 +30,12 @@ private:
 //    QStringList m_accepted;
 };
 
-class GetSystemMessageTask : public ContextTask
+class GetSystemMessageTask : public SessionTask
 {
     Q_OBJECT
     QML_ELEMENT
 public:
-    GetSystemMessageTask(SystemMessageController* controller);
+    GetSystemMessageTask(Session* session, SystemMessageController* controller);
 private:
     void update() override;
 private:
@@ -47,7 +47,7 @@ class AckSystemMessageTask : public AuthHandlerTask
     Q_OBJECT
     QML_ELEMENT
 public:
-    AckSystemMessageTask(SystemMessageController* controller);
+    AckSystemMessageTask(Session* session, SystemMessageController* controller);
 private:
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
     void handleDone(const QJsonObject& result) override;

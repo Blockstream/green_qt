@@ -28,9 +28,11 @@ void BumpFeeController::bumpFee()
 
     const auto wallet = context()->wallet();
 
-    auto sign = new SignTransactionTask(m_tx, m_context);
-    auto send = new SendTransactionTask(m_context);
-    auto load_config = new LoadTwoFactorConfigTask(m_context);
+    auto network = m_transaction->account()->network();
+    auto session = context()->getOrCreateSession(network);
+    auto sign = new SignTransactionTask(m_tx, session);
+    auto send = new SendTransactionTask(session);
+    auto load_config = new LoadTwoFactorConfigTask(session);
 
     sign->then(send);
     send->then(load_config);
@@ -69,13 +71,14 @@ void BumpFeeController::create()
     const auto wallet = m_context->wallet();
     if (!wallet) return;
     if (!m_transaction) return;
+    const auto network = m_transaction->account()->network();
     int req = ++m_req;
     if (m_create_task) return;
     auto a = account();
 
     if (m_get_unspent_outputs) return;
     if (m_utxos.isNull()) {
-        m_get_unspent_outputs = new GetUnspentOutputsTask(1, false, a->pointer(), m_context);
+        m_get_unspent_outputs = new GetUnspentOutputsTask(1, false, a);
         connect(m_get_unspent_outputs, &Task::finished, this, [=] {
             m_utxos = m_get_unspent_outputs->unspentOutputs();
             m_get_unspent_outputs = nullptr;
@@ -92,7 +95,8 @@ void BumpFeeController::create()
         { "previous_transaction", m_transaction->data() }
     };
 
-    m_create_task = new CreateTransactionTask(details, m_context);
+    auto session = m_context->getOrCreateSession(network);
+    m_create_task = new CreateTransactionTask(details, session);
     connect(m_create_task, &CreateTransactionTask::transaction, this, [=](const QJsonObject& transaction) {
         if (m_req == req) {
             m_tx = transaction;

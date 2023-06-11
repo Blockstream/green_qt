@@ -81,8 +81,11 @@ void CreateAccountController::create()
     }
 
     const auto context = m_context;
-    const auto create_account = new CreateAccountTask(details, context);
-    const auto load_accounts = new LoadAccountsTask(context);
+    // TODO: network should be a property
+    auto network = context->wallet()->network();
+    auto session = context->getOrCreateSession(network);
+    const auto create_account = new CreateAccountTask(details, session);
+    const auto load_accounts = new LoadAccountsTask(session);
 
     create_account->then(load_accounts);
 
@@ -98,7 +101,7 @@ void CreateAccountController::create()
     });
 
     connect(group, &TaskGroup::finished, this, [=] {
-        m_account = context->getAccountByPointer(create_account->pointer());
+        m_account = context->getAccountByPointer(network, create_account->pointer());
         if (!m_account) return;
         emit accountChanged();
         emit created(m_account);

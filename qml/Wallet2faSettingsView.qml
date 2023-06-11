@@ -9,6 +9,7 @@ ColumnLayout {
     id: self
     required property Context context
     required property Wallet wallet
+    required property Session session
 
     spacing: 16
 
@@ -30,7 +31,7 @@ ColumnLayout {
             }
             Repeater {
                 model: {
-                    const methods = self.context.config.all_methods || []
+                    const methods = self.session.config.all_methods || []
                     return methods.filter(method => {
                         switch (method) {
                             case 'email': return true
@@ -70,8 +71,8 @@ ColumnLayout {
                             }
                         }
                         Label {
-                            visible: self.context.config[method].enabled
-                            text: method === 'gauth' ? qsTrId('id_enabled') : self.context.config[method].data
+                            visible: self.session.config[method].enabled
+                            text: method === 'gauth' ? qsTrId('id_enabled') : self.session.config[method].data
                             color: constants.c100
                             font.pixelSize: 10
                             font.weight: 400
@@ -82,12 +83,12 @@ ColumnLayout {
                     }
                     GSwitch {
                         Binding on checked {
-                            value: self.context.config[method].enabled
+                            value: self.session.config[method].enabled
                         }
 
                         onClicked: {
-                            checked = self.context.config[modelData].enabled;
-                            if (!self.context.config[method].enabled) {
+                            checked = self.session.config[modelData].enabled;
+                            if (!self.session.config[method].enabled) {
                                 enable_dialog.createObject(stack_view, { method }).open();
                             } else {
                                 disable_dialog.createObject(stack_view, { method }).open();
@@ -102,7 +103,7 @@ ColumnLayout {
     SettingsBox {
         title: qsTrId('id_set_twofactor_threshold')
         enabled: !self.context.locked
-        visible: !wallet.network.liquid && !!self.context.config.limits
+        visible: !wallet.network.liquid && !!self.session.config.limits
         contentItem: RowLayout {
             Label {
                 Layout.fillWidth: true
@@ -142,13 +143,13 @@ ColumnLayout {
         contentItem: RowLayout {
             Label {
                 Layout.fillWidth: true
-                text: self.context.locked ? qsTrId('wallet locked for %1 days').arg(self.context.config.twofactor_reset ? self.context.config.twofactor_reset.days_remaining : 0) : qsTrId('id_start_a_2fa_reset_process_if')
+                text: self.context.locked ? qsTrId('wallet locked for %1 days').arg(self.session.config.twofactor_reset ? self.session.config.twofactor_reset.days_remaining : 0) : qsTrId('id_start_a_2fa_reset_process_if')
                 wrapMode: Text.WordWrap
             }
             GButton {
                 large: false
                 Layout.alignment: Qt.AlignRight
-                enabled: self.context.config.any_enabled || false
+                enabled: self.session.config.any_enabled || false
                 text: self.context.locked ? qsTrId('id_cancel_twofactor_reset') : qsTrId('id_reset')
                 Component {
                     id: cancel_dialog
@@ -175,6 +176,7 @@ ColumnLayout {
         id: enable_dialog
         TwoFactorEnableDialog {
             wallet: self.wallet
+            session: self.session
         }
     }
 
@@ -182,6 +184,7 @@ ColumnLayout {
         id: disable_dialog
         TwoFactorDisableDialog {
             wallet: self.wallet
+            session: self.session
         }
     }
 
@@ -189,6 +192,7 @@ ColumnLayout {
         id: set_twofactor_threshold_dialog
         TwoFactorLimitDialog {
             wallet: self.wallet
+            session: self.session
         }
     }
 
@@ -196,6 +200,7 @@ ColumnLayout {
         id: two_factor_auth_expiry_dialog
         TwoFactorAuthExpiryDialog {
             wallet: self.wallet
+            session: self.session
         }
     }
 }

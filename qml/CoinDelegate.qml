@@ -20,8 +20,8 @@ Button {
         if (output.account.network.liquid) {
             return output.asset.formatAmount(amount, true)
         } else {
-            wallet.context.displayUnit
-            return wallet.formatAmount(amount || 0, include_ticker, wallet.context.settings.unit)
+            output.account.session.displayUnit
+            return wallet.formatAmount(amount || 0, include_ticker, output.account.session.unit)
         }
     }
 

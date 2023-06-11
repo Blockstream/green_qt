@@ -6,6 +6,7 @@
 #include "device.h"
 #include "network.h"
 #include "resolver.h"
+#include "session.h"
 #include "task.h"
 #include "transaction.h"
 #include "wallet.h"
@@ -68,9 +69,10 @@ void ExportTransactionsController::saveToFile(const QString& file)
     }
     const auto context = m_account->context();
     const auto network = m_account->network();
-    const auto settings = context->settings();
+    const auto session = context->getOrCreateSession(network);
+    const auto settings = session->settings();
 
-    const auto display_unit = context->displayUnit();
+    const auto display_unit = session->displayUnit();
     const auto pricing = settings.value("pricing").toObject();
     const auto currency = network->isMainnet() ? pricing.value("currency").toString() : "FIAT";
     const auto exchange = pricing.value("exchange").toString();
@@ -90,9 +92,10 @@ void ExportTransactionsController::nextPage()
 {
     const auto context = m_account->context();
     const auto wallet = context->wallet();
-    const auto settings = context->settings();
-    const auto unit = context->unit().toLower().replace("µbtc", "ubtc");
-    const auto display_unit = context->displayUnit();
+    const auto session = m_account->session();
+    const auto settings = session->settings();
+    const auto unit = session->unit().toLower().replace("µbtc", "ubtc");
+    const auto display_unit = session->displayUnit();
     auto get_transactions = new GetTransactionsTask(m_offset, m_count, m_account);
     connect(get_transactions, &Task::finished, this, [=] {
         const auto transactions = get_transactions->transactions();

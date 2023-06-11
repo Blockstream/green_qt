@@ -7,6 +7,7 @@ ControllerDialog {
     id: dialog
     title: qsTrId('id_disable_pin_access')
     controller: Controller {
+        id: controller
         context: dialog.wallet.context
     }
     ColumnLayout {

@@ -14,6 +14,8 @@ WalletDialog {
     icon: 'qrc:/svg/gearFill.svg'
     title: qsTrId('id_settings')
 
+    required property Session session
+
     AnalyticsView {
         id: analytics_view
         active: self.opened
@@ -120,6 +122,7 @@ WalletDialog {
                     id: general_view
                     width: general_settings_flickable.availableWidth
                     wallet: self.wallet
+                    session: self.session
                 }
             }
 
@@ -131,6 +134,7 @@ WalletDialog {
                     id: security_view
                     width: security_settings_flickable.availableWidth
                     wallet: self.wallet
+                    session: self.session
                 }
             }
 
@@ -144,6 +148,7 @@ WalletDialog {
                         width: two_factor_settings_flickable.availableWidth
                         context: self.wallet.context
                         wallet: self.wallet
+                        session: self.session
                     }
                 }
             }
@@ -157,6 +162,7 @@ WalletDialog {
                         id: recovery_view
                         width: recovery_settings_flickable.availableWidth
                         wallet: self.wallet
+                        session: self.session
                     }
                 }
             }

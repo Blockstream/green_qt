@@ -16,11 +16,13 @@ Q_MOC_INCLUDE("device.h")
 class Resolver : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(Session* session READ session CONSTANT)
     Q_PROPERTY(QJsonObject result READ result CONSTANT)
     Q_PROPERTY(Activity* activity READ activity NOTIFY activityChanged)
     QML_ELEMENT
 public:
-    Resolver(const QJsonObject& result);
+    Resolver(const QJsonObject& result, Session* session);
+    Session* session() const { return m_session; };
     QJsonObject result() const { return m_result; }
     Activity* activity() const { return m_activity; }
 public slots:
@@ -35,6 +37,8 @@ protected:
     QJsonObject const m_result;
 private:
     Activity* m_activity{nullptr};
+protected:
+    Session* const m_session;
 };
 
 class TwoFactorResolver : public Resolver
@@ -47,7 +51,7 @@ class TwoFactorResolver : public Resolver
     Q_PROPERTY(QString telegramAppUrl READ telegramAppUrl CONSTANT)
     QML_ELEMENT
 public:
-    TwoFactorResolver(const QJsonObject& result);
+    TwoFactorResolver(const QJsonObject& result, Session* session);
     QString method() const { return m_method; }
     int attemptsRemaining() const { return m_attempts_remaining; }
     QString code() const { return m_code; }
@@ -73,7 +77,7 @@ class DeviceResolver : public Resolver
     Q_PROPERTY(QJsonObject requiredData READ requiredData CONSTANT)
     QML_ELEMENT
 public:
-    DeviceResolver(Device* device, const QJsonObject& result);
+    DeviceResolver(Device* device, const QJsonObject& result, Session* session);
     Device* device() const { return m_device; }
     QJsonObject requiredData() const { return m_required_data; }
 protected:
@@ -86,10 +90,9 @@ class GetXPubsResolver : public DeviceResolver
     Q_OBJECT
     QML_ELEMENT
 public:
-    GetXPubsResolver(Network* network, Device* device, const QJsonObject& result);
+    GetXPubsResolver(Device* device, const QJsonObject& result, Session* session);
     void resolve() override;
 protected:
-    Network* const m_network;
     QList<QVector<uint32_t>> m_paths;
     QJsonArray m_xpubs;
 };
@@ -102,7 +105,7 @@ class SignMessageResolver : public DeviceResolver
     Q_PROPERTY(QString path READ path CONSTANT)
     QML_ELEMENT
 public:
-    SignMessageResolver(Device* device, const QJsonObject& result);
+    SignMessageResolver(Device* device, const QJsonObject& result, Session* session);
     QString message() const { return m_message; }
     QString hash() const { return m_hash; }
     QString path() const;
@@ -123,12 +126,11 @@ class SignTransactionResolver : public DeviceResolver
     Q_PROPERTY(QJsonArray outputs READ outputs CONSTANT)
     QML_ELEMENT
 public:
-    SignTransactionResolver(Network* network, Device* device, const QJsonObject& result);
+    SignTransactionResolver(Device* device, const QJsonObject& result, Session* session);
     QJsonObject transaction() const { return m_transaction; }
     QJsonArray outputs() const { return m_outputs; }
     void resolve() override;
 private:
-    Network* const m_network;
     QJsonObject const m_transaction;
     QJsonArray const m_outputs;
 };
@@ -138,7 +140,7 @@ class BlindingKeysResolver : public DeviceResolver
     Q_OBJECT
     QML_ELEMENT
 public:
-    BlindingKeysResolver(Device* device, const QJsonObject& result);
+    BlindingKeysResolver(Device* device, const QJsonObject& result, Session* session);
     void resolve() override;
 protected:
     QJsonArray m_scripts;
@@ -150,7 +152,7 @@ class BlindingNoncesResolver : public DeviceResolver
     Q_OBJECT
     QML_ELEMENT
 public:
-    BlindingNoncesResolver(Device* device, const QJsonObject& result);
+    BlindingNoncesResolver(Device* device, const QJsonObject& result, Session* session);
     void resolve() override;
 protected:
     bool m_blinding_keys_required;
@@ -169,7 +171,7 @@ class SignLiquidTransactionResolver : public DeviceResolver
     Q_PROPERTY(QJsonObject message READ message NOTIFY messageChanged)
     QML_ELEMENT
 public:
-    SignLiquidTransactionResolver(Network* network, Device* device, const QJsonObject& result);
+    SignLiquidTransactionResolver(Device* device, const QJsonObject& result, Session* session);
     QJsonObject transaction() const { return m_transaction; }
     QJsonArray outputs() const { return m_outputs; }
     qreal progress() const { return m_progress; };
@@ -179,7 +181,6 @@ signals:
     void progressChanged(qreal progress);
     void messageChanged(const QJsonObject& message);
 protected:
-    Network* const m_network;
     QJsonObject const m_transaction;
     QJsonArray const m_outputs;
     qreal m_progress{0};
@@ -191,7 +192,7 @@ class GetMasterBlindingKeyResolver : public DeviceResolver
     Q_OBJECT
     QML_ELEMENT
 public:
-    GetMasterBlindingKeyResolver(Device* device, const QJsonObject& result);
+    GetMasterBlindingKeyResolver(Device* device, const QJsonObject& result, Session* session);
     void resolve() override;
 };
 

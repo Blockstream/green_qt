@@ -32,7 +32,7 @@ ControllerDialog {
             text: qsTrId('id_previous_fee')
         }
         Label {
-            text: qsTrId('id_fee') + ': ' + formatAmount(transaction.data.fee) + ' ≈ ' +
+            text: qsTrId('id_fee') + ': ' + formatAmount(self.account, transaction.data.fee) + ' ≈ ' +
                   formatFiat(transaction.data.fee)
         }
         Label {
@@ -43,7 +43,7 @@ ControllerDialog {
             text: qsTrId('id_new_fee')
         }
         Label {
-            text: qsTrId('id_fee') + ': '  + formatAmount(controller.tx.fee) + ' ≈ ' +
+            text: qsTrId('id_fee') + ': '  + formatAmount(self.account, controller.tx.fee) + ' ≈ ' +
                   formatFiat(controller.tx.fee)
         }
         Label {
@@ -53,6 +53,7 @@ ControllerDialog {
         RowLayout {
             spacing: constants.s1
             FeeComboBox {
+                account: self.account
                 id: fee_combo
                 Layout.fillWidth: true
                 Layout.minimumWidth: 270

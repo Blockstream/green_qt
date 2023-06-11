@@ -4,12 +4,13 @@
 #include <QObject>
 #include <QtQml>
 
+#include "green.h"
+
 #include "activity.h"
 #include "connectable.h"
 #include "entity.h"
 
-class Network;
-
+Q_MOC_INCLUDE("context.h")
 Q_MOC_INCLUDE("network.h")
 
 QT_FORWARD_DECLARE_STRUCT(GA_session)
@@ -17,6 +18,7 @@ QT_FORWARD_DECLARE_STRUCT(GA_session)
 class Session : public Entity
 {
     Q_OBJECT
+    Q_PROPERTY(Context* context READ context CONSTANT)
     Q_PROPERTY(Network* network READ network CONSTANT)
     Q_PROPERTY(bool useTor READ useTor CONSTANT)
     Q_PROPERTY(bool useProxy READ useProxy CONSTANT)
@@ -28,12 +30,19 @@ class Session : public Entity
     Q_PROPERTY(bool active READ isActive WRITE setActive NOTIFY activeChanged)
     Q_PROPERTY(bool connected READ isConnected NOTIFY connectedChanged)
     Q_PROPERTY(bool connecting READ isConnecting NOTIFY connectingChanged)
-    Q_PROPERTY(QJsonObject eventData READ eventData NOTIFY eventDataChanged)
+    Q_PROPERTY(QJsonObject config READ config NOTIFY configChanged)
+    Q_PROPERTY(QJsonObject events READ events NOTIFY eventsChanged)
     Q_PROPERTY(QJsonObject block READ block NOTIFY blockChanged)
+    Q_PROPERTY(QJsonObject settings READ settings NOTIFY settingsChanged)
+    Q_PROPERTY(QJsonObject currencies READ currencies NOTIFY currenciesChanged)
+    Q_PROPERTY(QString unit READ unit NOTIFY unitChanged)
+    Q_PROPERTY(QString displayUnit READ displayUnit NOTIFY unitChanged)
     QML_ELEMENT
 public:
-    Session(Network* network, QObject* parent = nullptr);
+    Session(Network* network, QObject* parent);
+    Session(Network* network, Context* context);
     virtual ~Session();
+    Context* context() const { return m_context; }
     Network* network() const { return m_network; }
     bool useTor() const { return m_use_tor; }
     bool useProxy() const { return m_use_proxy; }
@@ -49,31 +58,53 @@ public:
     void setConnected(bool connected);
     bool isConnecting() const { return m_connecting; }
     void setConnecting(bool connecting);
-    QList<QJsonObject> events() const { return m_events; }
-    QJsonObject eventData() const { return m_event_data; }
+
+    QJsonObject config() const { return m_config; }
+    void setConfig(const QJsonObject& config);
+
+    QJsonObject events() const { return m_events; }
+    void setEvents(const QJsonObject& events);
     QJsonObject block() const { return m_block; }
     uint32_t blockHeight() const;
     void setBlock(const QJsonObject& block);
+    QJsonObject settings() const { return m_settings; }
+    void setSettings(const QJsonObject& settings);    
+    QJsonObject currencies() const { return m_currencies; }
+    void setCurrencies(const QJsonObject& currencies);
+    QString unit() const { return m_unit; }
+    void setUnit(const QString& unit);
+    QString displayUnit() const { return m_display_unit; }
+    void setAltimeout(int altimeout);
+
 signals:
     void notificationHandled(const QJsonObject& notification);
     void eventHandled(Session* session, const QString& event, const QJsonObject& data);
     void activeChanged();
     void connectedChanged();
     void connectingChanged();
+    void configChanged();
     void networkEvent(const QJsonObject& settings);
-    void settingsEvent(const QJsonObject& settings);
     void twoFactorResetEvent(const QJsonObject& settings);
     void torEvent(const QJsonObject& event);
     void blockEvent(const QJsonObject& event);
     void transactionEvent(const QJsonObject& event);
     void tickerEvent(const QJsonObject& event);
     void activityCreated(Activity* activity);
-    void eventDataChanged();
+    void eventsChanged();
     void blockChanged();
+    void settingsChanged();
+    void currenciesChanged();
+    void unitChanged();
+
+protected:
+    bool eventFilter(QObject *object, QEvent *event) override;
+    void timerEvent(QTimerEvent* event);
+
 private:
     void update();
     void handleNotification(const QJsonObject& notification);
 private:
+    Context* const m_context;
     Network* const m_network;
     bool const m_use_tor;
     bool const m_use_proxy;
@@ -83,14 +114,21 @@ private:
     bool const m_enable_spv;
     QString const m_electrum_url;
     bool m_active{false};
+    QJsonObject m_settings;
+    QJsonObject m_currencies;
+    QString m_unit;
+    QString m_display_unit;
+    int m_altimeout{0};
+    int m_logout_timer{-1};
 public:
     // TODO: make m_session private
     GA_session* m_session{nullptr};
     bool m_connected{false};
     bool m_connecting{false};
     bool m_ready{false};
-    QList<QJsonObject> m_events;
-    QJsonObject m_event_data;
+    QJsonObject m_config;
+    QJsonObject m_events;
+
     QJsonObject m_block;
     int64_t m_id{0};
 };

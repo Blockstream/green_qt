@@ -1,33 +1,31 @@
 #ifndef GREEN_FEEESTIMATES_H
 #define GREEN_FEEESTIMATES_H
 
+#include "green.h"
+
 #include <QJsonArray>
 #include <QObject>
 #include <QQmlEngine>
 #include <QTimer>
 
-#include "connectable.h"
-
-class Context;
-
 class FeeEstimates : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(Context* context READ context WRITE setContext NOTIFY contextChanged)
+    Q_PROPERTY(Account* account READ account WRITE setAccount NOTIFY accountChanged)
     Q_PROPERTY(QJsonArray fees READ fees NOTIFY feesChanged)
     QML_ELEMENT
 public:
     FeeEstimates(QObject* parent = nullptr);
-    Context* context() const { return m_context; }
-    void setContext(Context* context);
+    Account* account() const { return m_account; }
+    void setAccount(Account* account);
     QJsonArray fees() const { return m_fees; }
 signals:
-    void contextChanged();
+    void accountChanged();
     void feesChanged();
 private slots:
     void update();
 private:
-    Context* m_context{nullptr};
+    Account* m_account{nullptr};
     QJsonArray m_fees;
     QTimer m_update_timer;
 };

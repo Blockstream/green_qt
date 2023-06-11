@@ -4,6 +4,8 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 ControllerDialog {
+    required property Session session
+
     id: self
 
     title: qsTrId('id_twofactor_authentication_expiry')
@@ -18,7 +20,7 @@ ControllerDialog {
         required property int index
         readonly property int value: self.wallet.network.data.csv_buckets[index]
         Layout.maximumWidth: 500
-        checked: self.context.settings.csvtime === value
+        checked: self.session.settings.csvtime === value
         enabled: true
         ButtonGroup.group: type_button_group
         Layout.fillWidth: true
@@ -52,7 +54,7 @@ ControllerDialog {
                 large: true
                 text: qsTrId('id_next')
                 highlighted: true
-                enabled: type_button_group.checkedButton && type_button_group.checkedButton.value !== self.context.settings.csvtime
+                enabled: type_button_group.checkedButton && type_button_group.checkedButton.value !== self.session.settings.csvtime
                 onClicked: {
                     controller.setCsvTime(type_button_group.checkedButton.value)
 //                    dialog.doneText = qsTrId('id_twofactor_authentication_expiry') + " : " + type_button_group.checkedButton.text

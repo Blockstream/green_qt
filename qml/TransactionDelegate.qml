@@ -135,12 +135,13 @@ ItemDelegate {
                     font.pixelSize: 14
                     font.styleName: 'Medium'
                     text: {
-                        const network = transaction.account.network
+                        const account = self.transaction.account
+                        const network = account.network
                         const [id, amount] = modelData
                         if (network.liquid) {
-                            return self.context.getOrCreateAsset(id).formatAmount(amount, true)
+                            return self.context.getOrCreateAsset(network, id).formatAmount(amount, true)
                         } else {
-                            return formatAmount(amount)
+                            return formatAmount(account, amount)
                         }
                     }
                 }

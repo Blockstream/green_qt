@@ -80,12 +80,12 @@ void WatchOnlyLoginController::login()
     if (m_valid) {
         auto context = new Context(this);
         context->setWallet(m_wallet);
-        context->setNetwork(m_network);
         context->setWatchonly(true);
         setContext(context);
 
-        auto connect_session = new SessionConnectTask(context->session());
-        auto session_login = new SessionLoginTask(m_username, m_password, context);
+        auto session = context->getOrCreateSession(m_network);
+        auto connect_session = new ConnectTask(session);
+        auto session_login = new LoginTask(m_username, m_password, session);
         auto create_wallet = new WatchOnlyCreateWalletTask(this);
 
         connect_session->then(session_login);
@@ -107,9 +107,11 @@ void WatchOnlyLoginController::load()
 {
     auto group = new TaskGroup(this);
 
-    group->add(new LoadCurrenciesTask(m_context));
-    if (m_network->isLiquid()) group->add(new LoadAssetsTask(m_context));
-    group->add(new LoadAccountsTask(m_context));
+    auto session = m_context->getOrCreateSession(m_network);
+
+    group->add(new LoadCurrenciesTask(session));
+    if (m_network->isLiquid()) group->add(new LoadAssetsTask(session));
+    group->add(new LoadAccountsTask(session));
     m_dispatcher->add(group);
 
     connect(group, &TaskGroup::finished, this, [=] {

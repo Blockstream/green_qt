@@ -51,7 +51,10 @@ void Wallet::setContext(Context* context)
     }
 }
 
-Session *Wallet::session() const { return m_context->session(); }
+Session *Wallet::session() const
+{
+    return m_context->getOrCreateSession(m_network);
+}
 
 QString Wallet::id() const
 {
@@ -124,29 +127,6 @@ bool Wallet::rename(QString name, bool active_focus)
     return true;
 }
 
-QString ComputeDisplayUnit(Network* network, QString unit)
-{
-    if (network->isMainnet()) {
-        if (unit == "btc") {
-            unit = "BTC";
-        }
-    } else {
-        if (unit == "BTC" || unit == "btc") {
-            unit = "TEST";
-        } else if (unit == "mBTC") {
-            unit = "mTEST";
-        } else if (unit == "\u00B5BTC") {
-            unit = "\u00B5TEST";
-        } else if (unit == "bits") {
-            unit = "bTEST";
-        } else if (unit == "sats") {
-            unit = "sTEST";
-        }
-    }
-    if (network->isLiquid()) unit.prepend("L-");
-    return unit;
-}
-
 void Wallet::save()
 {
     Q_ASSERT(QThread::currentThread() == thread());
@@ -204,13 +184,16 @@ QJsonObject Wallet::convert(const QJsonObject& value) const
 
 QString Wallet::formatAmount(qint64 amount, bool include_ticker) const
 {
-    return formatAmount(amount, include_ticker, m_context->unit());
+    // TODO move to account or session
+    const auto session = m_context->getOrCreateSession(m_network);
+    return formatAmount(amount, include_ticker, session->unit());
 }
 
 QString Wallet::formatAmount(qint64 amount, bool include_ticker, const QString& unit) const
 {
     Q_ASSERT(m_network);
-    const auto effective_unit = unit.isEmpty() ? m_context->unit() : unit;
+    const auto session = m_context->getOrCreateSession(m_network);
+    const auto effective_unit = unit.isEmpty() ? session->unit() : unit;
     if (effective_unit.isEmpty()) return {};
     auto str = convert({{ "satoshi", amount }}).value(effective_unit == "\u00B5BTC" ? "ubtc" : effective_unit.toLower()).toString();
     auto val = str.toDouble();
@@ -236,7 +219,8 @@ void Wallet::updateDeviceDetails(const QJsonObject& device_details)
 
 qint64 Wallet::amountToSats(const QString& amount) const
 {
-    return parseAmount(amount, m_context->unit());
+    const auto session = m_context->getOrCreateSession(m_network);
+    return parseAmount(amount, session->unit());
 }
 
 qint64 Wallet::parseAmount(const QString& amount, const QString& unit) const

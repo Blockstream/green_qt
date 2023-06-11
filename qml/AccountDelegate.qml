@@ -125,7 +125,7 @@ ItemDelegate {
                         font.styleName: 'Regular'
                     }
                     CopyableLabel {
-                        text: formatAmount(account.balance)
+                        text: formatAmount(account, account.balance)
                         font.pixelSize: 14
                         font.weight: 600
                         font.styleName: 'Medium'

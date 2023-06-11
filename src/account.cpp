@@ -8,30 +8,22 @@
 #include "asset.h"
 #include "balance.h"
 #include "context.h"
-#include "ga.h"
-#include "json.h"
 #include "network.h"
 #include "output.h"
-#include "resolver.h"
-#include "task.h"
+#include "session.h"
 #include "transaction.h"
-#include "wallet.h"
 
-Account::Account(const QJsonObject& data, Network* network, Context* context)
-    : QObject(context)
-    , m_context(context)
-    , m_network(network)
+Account::Account(const QJsonObject& data, Session* session)
+    : QObject(session)
+    , m_session(session)
+    , m_context(session->context())
+    , m_network(session->network())
     , m_pointer(data.value("pointer").toDouble())
     , m_type(data.value("type").toString())
 {
     Q_ASSERT(m_pointer >= 0);
     Q_ASSERT(!m_type.isEmpty());
     update(data);
-}
-
-Session *Account::session() const
-{
-    return m_context->session();
 }
 
 QJsonObject Account::json() const
@@ -51,7 +43,7 @@ void Account::update(const QJsonObject& json)
 
 void Account::updateBalance()
 {
-    if (m_context->network()->isLiquid()) {
+    if (m_network->isLiquid()) {
         auto satoshi = m_json.value("satoshi").toObject();
         auto balance_by_id = m_balance_by_id;
         m_balance_by_id.clear();
@@ -60,7 +52,7 @@ void Account::updateBalance()
             Balance* balance = balance_by_id.take(i.key());
             if (!balance) balance = new Balance(this);
             m_balance_by_id.insert(i.key(), balance);
-            balance->setAsset(context()->getOrCreateAsset(i.key()));
+            balance->setAsset(context()->getOrCreateAsset(m_network, i.key()));
             balance->setAmount(i.value().toDouble());
             m_balances.append(balance);
         }
@@ -119,7 +111,7 @@ QQmlListProperty<Balance> Account::balances()
 
 bool Account::hasBalance() const
 {
-    if (m_context->network()->isLiquid()) {
+    if (m_network->isLiquid()) {
         for (auto balance : m_balances) {
             if (balance->amount() > 0) return true;
         }

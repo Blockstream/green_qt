@@ -2,6 +2,7 @@
 #include "context.h"
 #include "session.h"
 #include "task.h"
+#include "wallet.h"
 
 #include <gdk.h>
 
@@ -28,7 +29,9 @@ void SystemMessageController::check()
 
     if (m_dispatcher->isBusy()) return;
 
-    m_dispatcher->add(new GetSystemMessageTask(this));
+    auto network = m_context->wallet()->network();
+    auto session = m_context->getOrCreateSession(network);
+    m_dispatcher->add(new GetSystemMessageTask(session, this));
 
 //    // Don't fetch message if there's a pending message
 //    if (m_accepted.size() < m_pending.size()) return;
@@ -53,7 +56,9 @@ void SystemMessageController::ack()
     if (!m_context) return;
     if (m_message.isEmpty()) return;
 
-    m_dispatcher->add(new AckSystemMessageTask(this));
+    auto network = m_context->wallet()->network();
+    auto session = m_context->getOrCreateSession(network);
+    m_dispatcher->add(new AckSystemMessageTask(session, this));
 
 //    if (m_pending.size() == m_accepted.size()) return;
 
@@ -71,8 +76,8 @@ void SystemMessageController::ack()
 //    exec(handler);
 }
 
-GetSystemMessageTask::GetSystemMessageTask(SystemMessageController* controller)
-    : ContextTask(controller->context())
+GetSystemMessageTask::GetSystemMessageTask(Session* session, SystemMessageController* controller)
+    : SessionTask(session)
     , m_controller(controller)
 {
 }
@@ -81,15 +86,13 @@ void GetSystemMessageTask::update()
 {
     if (status() != Status::Ready) return;
 
-    const auto session = m_context->session();
-    if (!session) return;
-    if (!session->m_ready) return;
+    if (!m_session->m_ready) return;
 
     setStatus(Status::Active);
 
     QtConcurrent::run([=] {
         char* message_text;
-        const auto rc = GA_get_system_message(session->m_session, &message_text);
+        const auto rc = GA_get_system_message(m_session->m_session, &message_text);
         const auto message = QString::fromUtf8(message_text);
         GA_destroy_string(message_text);
         return message;
@@ -107,8 +110,8 @@ void GetSystemMessageTask::update()
     });
 }
 
-AckSystemMessageTask::AckSystemMessageTask(SystemMessageController* controller)
-    : AuthHandlerTask(controller->context())
+AckSystemMessageTask::AckSystemMessageTask(Session* session, SystemMessageController* controller)
+    : AuthHandlerTask(session)
     , m_controller(controller)
     , m_message(controller->message())
 {

@@ -5,6 +5,7 @@
 #include "account.h"
 #include "context.h"
 #include "task.h"
+#include "session.h"
 #include "wallet.h"
 #include "walletmanager.h"
 
@@ -83,8 +84,10 @@ void Controller::changeSettings(const QJsonObject& data)
         return;
     }
 
+    const auto network = m_context->wallet()->network();
+    const auto session = m_context->getOrCreateSession(network);
     // Avoid unnecessary calls to GA_change_settings
-    if (DeepContains(m_context->settings(), data)) return;
+    if (DeepContains(session->settings(), data)) return;
 
 //    bool updated = true;
 //    auto settings = m_context->settings();
@@ -96,7 +99,7 @@ void Controller::changeSettings(const QJsonObject& data)
 //    }
 //    if (updated) return;
 
-    auto change_settings = new ChangeSettingsTask(data, m_context);
+    auto change_settings = new ChangeSettingsTask(data, session);
 
     m_dispatcher->add(change_settings);
 }
@@ -105,7 +108,10 @@ void Controller::sendRecoveryTransactions()
 {
     if (!m_context) return;
 
-    auto send_nlocktimes = new SendNLocktimesTask(m_context);
+    const auto network = m_context->wallet()->network();
+    auto session = m_context->getOrCreateSession(network);
+
+    auto send_nlocktimes = new SendNLocktimesTask(session);
 
     m_dispatcher->add(send_nlocktimes);
 }
@@ -115,7 +121,9 @@ void Controller::sendRecoveryTransactions()
 void Controller::changeTwoFactorLimit(bool is_fiat, const QString& limit)
 {
     if (!m_context) return;
-    auto unit = is_fiat ? "fiat" : m_context->unit().toLower();
+    const auto network = m_context->wallet()->network();
+    const auto session = m_context->getOrCreateSession(network);
+    auto unit = is_fiat ? "fiat" : session->unit().toLower();
     if (!is_fiat && unit == "\u00B5btc") unit = "ubtc";
     auto details = QJsonObject{
         { "is_fiat", is_fiat },
@@ -124,8 +132,8 @@ void Controller::changeTwoFactorLimit(bool is_fiat, const QString& limit)
 
     auto group = new TaskGroup(this);
 
-    auto change_twofactor_limits = new TwoFactorChangeLimitsTask(details, m_context);
-    auto load_twofactor_config = new LoadTwoFactorConfigTask(m_context);
+    auto change_twofactor_limits = new TwoFactorChangeLimitsTask(details, session);
+    auto load_twofactor_config = new LoadTwoFactorConfigTask(session);
 
     change_twofactor_limits->then(load_twofactor_config);
 
@@ -139,11 +147,14 @@ void Controller::requestTwoFactorReset(const QString& email)
 {
     if (!m_context) return;
 
-    auto twofactor_reset = new TwoFactorResetTask(email, m_context);
+    auto network = m_context->wallet()->network();
+    auto session = m_context->getOrCreateSession(network);
+
+    auto twofactor_reset = new TwoFactorResetTask(email, session);
     // TODO: update config doesn't update 2f reset data,
     // it's only updated after authentication in GDK,
     // so force wallet lock for now
-    auto load_config = new LoadTwoFactorConfigTask(true, m_context);
+    auto load_config = new LoadTwoFactorConfigTask(true, session);
 
     twofactor_reset->then(load_config);
 
@@ -158,7 +169,10 @@ void Controller::requestTwoFactorReset(const QString& email)
 void Controller::cancelTwoFactorReset()
 {
     if (!m_context) return;
-    auto task = new TwoFactorCancelResetTask(m_context);
+    auto network = m_context->wallet()->network();
+    auto session = m_context->getOrCreateSession(network);
+
+    auto task = new TwoFactorCancelResetTask(session);
     connect(task, &Task::finished, this, [=] {
         // TODO
         // m_context->updateConfig();
@@ -189,9 +203,12 @@ void Controller::setRecoveryEmail(const QString& email)
         }
     };
 
-    const auto change_twofactor = new ChangeTwoFactorTask(method, twofactor_details, m_context);
-    const auto update_config = new LoadTwoFactorConfigTask(m_context);
-    const auto change_settings = new ChangeSettingsTask(settings_details, m_context);
+    auto network = m_context->wallet()->network();
+    auto session = m_context->getOrCreateSession(network);
+
+    const auto change_twofactor = new ChangeTwoFactorTask(method, twofactor_details, session);
+    const auto update_config = new LoadTwoFactorConfigTask(session);
+    const auto change_settings = new ChangeSettingsTask(settings_details, session);
 
     change_twofactor->then(update_config);
     update_config->then(change_settings);
@@ -208,15 +225,19 @@ void Controller::setRecoveryEmail(const QString& email)
 void Controller::setCsvTime(int value)
 {
     if (!m_context) return;
-
-    auto set_csv_time = new SetCsvTimeTask(value, m_context);
+    auto network = m_context->wallet()->network();
+    auto session = m_context->getOrCreateSession(network);
+    auto set_csv_time = new SetCsvTimeTask(value, session);
 
     m_dispatcher->add(set_csv_time);
 }
 
 void Controller::deleteWallet()
 {
-    auto delete_wallet = new DeleteWalletTask(m_context);
+    auto network = m_context->wallet()->network();
+    auto session = m_context->getOrCreateSession(network);
+
+    auto delete_wallet = new DeleteWalletTask(session);
     connect(delete_wallet, &Task::finished, this, [=] {
         WalletManager::instance()->removeWallet(m_context->wallet());
         QTimer::singleShot(500, m_context->wallet(), &Wallet::disconnect);
@@ -226,14 +247,20 @@ void Controller::deleteWallet()
 
 void Controller::disableAllPins()
 {
-    auto disable_all_pins = new DisableAllPinLoginsTask(m_context);
+    auto network = m_context->wallet()->network();
+    auto session = m_context->getOrCreateSession(network);
+
+    auto disable_all_pins = new DisableAllPinLoginsTask(session);
 
     m_dispatcher->add(disable_all_pins);
 }
 
 void Controller::setUnspentOutputsStatus(Account* account, const QVariantList& outputs, const QString& status)
 {
-    auto set_status = new SetUnspentOutputsStatusTask(outputs, status, m_context);
+    auto network = account->network();
+    auto session = m_context->getOrCreateSession(network);
+
+    auto set_status = new SetUnspentOutputsStatusTask(outputs, status, session);
     auto load_balance = new LoadBalanceTask(account);
 
     set_status->then(load_balance);
@@ -250,7 +277,10 @@ void Controller::changePin(const QString& pin)
 {
     if (!m_context) return;
 
-    auto encrypt_with_pin = new EncryptWithPinTask(m_context->credentials(), pin, m_context);
+    auto network = m_context->wallet()->network();
+    auto session = m_context->getOrCreateSession(network);
+
+    auto encrypt_with_pin = new EncryptWithPinTask(m_context->credentials(), pin, session);
     auto group = new TaskGroup(this);
     group->add(encrypt_with_pin);
     m_dispatcher->add(group);
@@ -262,9 +292,12 @@ void Controller::changePin(const QString& pin)
 
 void Controller::setWatchOnly(const QString& username, const QString& password)
 {
+    if (!m_context) return;
     if (m_context->wallet()->isWatchOnly()) return;
 
-    auto task = new SetWatchOnlyTask(username, password, m_context);
+    auto network = m_context->wallet()->network();
+    auto session = m_context->getOrCreateSession(network);
+    auto task = new SetWatchOnlyTask(username, password, session);
 
     connect(task, &Task::finished, this, [=] {
         m_context->setUsername(username);
@@ -294,10 +327,13 @@ bool Controller::setAccountName(Account* account, QString name, bool active_focu
     if (account->name() == name) return false;
     if (active_focus) return false;
 
+    auto network = account->network();
+    auto session = m_context->getOrCreateSession(network);
+
     const auto task = new UpdateAccountTask(QJsonObject{
         { "subaccount", static_cast<qint64>(account->pointer()) },
         { "name", name }
-    }, m_context);
+    }, session);
 
     connect(task, &Task::finished, this, [=] {
         account->setName(name);
@@ -311,10 +347,13 @@ bool Controller::setAccountName(Account* account, QString name, bool active_focu
 void Controller::setAccountHidden(Account* account, bool hidden)
 {
     if (!m_context) return;
+    auto network = account->network();
+    auto session = m_context->getOrCreateSession(network);
+
     const auto task = new UpdateAccountTask(QJsonObject{
         { "subaccount", static_cast<qint64>(account->pointer()) },
         { "hidden", hidden }
-    }, m_context);
+    }, session);
     connect(task, &UpdateAccountTask::finished, this, [=] {
         account->setHidden(hidden);
     });
@@ -344,8 +383,11 @@ void TwoFactorController::change(const QString& method, const QJsonObject& detai
 
     clearErrors();
 
-    auto change_twofactor = new ChangeTwoFactorTask(method, details, m_context);
-    auto update_config = new LoadTwoFactorConfigTask(m_context);
+    auto network = m_context->wallet()->network();
+    auto session = m_context->getOrCreateSession(network);
+
+    auto change_twofactor = new ChangeTwoFactorTask(method, details, session);
+    auto update_config = new LoadTwoFactorConfigTask(session);
 
     connect(change_twofactor, &Task::failed, this, [=](const QString& error) {
         if (error.contains("invalid phone number", Qt::CaseInsensitive)) {

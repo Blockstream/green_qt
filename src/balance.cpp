@@ -2,7 +2,7 @@
 #include "asset.h"
 #include "balance.h"
 #include "context.h"
-#include "wallet.h"
+#include "session.h"
 
 Balance::Balance(Account* account)
     : QObject(account)
@@ -11,7 +11,7 @@ Balance::Balance(Account* account)
     Q_ASSERT(account);
 
     // Display/input amount might change if settings are updated
-    connect(context(), &Context::settingsChanged, this, &Balance::changed);
+    connect(account->session(), &Session::settingsChanged, this, &Balance::changed);
 }
 
 Context* Balance::context() const

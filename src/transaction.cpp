@@ -120,7 +120,7 @@ void Transaction::updateFromData(const QJsonObject& data)
         const qint64 fee = m_data.value("fee").toDouble();
         for (auto i = satoshi.constBegin(); i != satoshi.constEnd(); ++i) {
             qint64 amount = i.value().toDouble();
-            Asset* asset = context()->getOrCreateAsset(i.key());
+            Asset* asset = context()->getOrCreateAsset(network, i.key());
             if (asset->id() == policy_asset && amount < 0) amount += fee;
             if (amount != 0) m_amounts.append(new TransactionAmount(this, asset, amount));
         }
@@ -179,7 +179,7 @@ void Transaction::updateMemo(const QString& memo)
     Q_ASSERT(memo.length() <= 1024);
     if (m_memo == memo) return;
     auto txhash = m_data.value("txhash").toString().toLocal8Bit();
-    int err = GA_set_transaction_memo(m_account->context()->session()->m_session, txhash.constData(), memo.toUtf8().constData(), 0);
+    int err = GA_set_transaction_memo(m_account->session()->m_session, txhash.constData(), memo.toUtf8().constData(), 0);
     Q_ASSERT(err == GA_OK);
     setMemo(memo);
 }

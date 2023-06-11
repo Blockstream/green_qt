@@ -7,7 +7,7 @@ import "util.js" as UtilJS
 
 StackLayout {
     required property AuthHandlerTask task
-
+    readonly property Session session: task.session
     id: self
 
     currentIndex: UtilJS.findChildIndex(self, child => child.active)
@@ -120,12 +120,12 @@ StackLayout {
         }
         Loader {
             Layout.alignment: Qt.AlignCenter
-            active: task.context.config[task.result.method].enabled && !(task instanceof TwoFactorResetTask)
+            active: self.session.config[task.result.method].enabled && !(task instanceof TwoFactorResetTask)
             visible: active
             sourceComponent: Label {
                 text: {
                     if (task.result.method === 'gauth') return qsTrId('id_authenticator_app')
-                    return wallet.context.config[task.result.method].data
+                    return self.session.config[task.result.method].data
                 }
                 color: constants.c100
                 font.pixelSize: 14

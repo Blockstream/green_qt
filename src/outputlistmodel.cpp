@@ -68,7 +68,7 @@ void OutputListModel::fetch()
     if (!m_account) return;
     if (m_fetching) return;
 
-    auto get_unspent_outputs = new GetUnspentOutputsTask(0, true, m_account->pointer(), m_account->context());
+    auto get_unspent_outputs = new GetUnspentOutputsTask(0, true, m_account);
 
     connect(get_unspent_outputs, &Task::finished, this, [=] {
         beginResetModel();

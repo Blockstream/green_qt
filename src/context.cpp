@@ -44,49 +44,43 @@ void Context::setWallet(Wallet* wallet)
     if (m_wallet == wallet) return;
     m_wallet = wallet;
     emit walletChanged();
-
-    if (m_wallet && !m_network) {
-        const auto network = m_wallet->network();
-        if (network) setNetwork(network);
-    }
 }
 
-void Context::setNetwork(Network* network)
+Session* Context::getOrCreateSession(Network* network)
 {
-    if (m_network == network) return;
-    m_network = network;
-    emit networkChanged();
+    if (!network) return nullptr;
 
-    if (m_network && !m_session) {
-        m_session = new Session(m_network, this);
-        m_session->setActive(true);
-        emit sessionChanged();
-        connect(m_session, &Session::blockEvent, this, [=](const QJsonObject& event) {
+    auto session = m_sessions.value(network);
+    if (!session) {
+        session = new Session(network, this);
+        session->setActive(true);
+        connect(session, &Session::blockEvent, this, [=](const QJsonObject& event) {
             for (auto account : m_accounts) {
                 emit account->blockEvent(event);
             }
         });
-        connect(m_session, &Session::settingsEvent, this, [this](const QJsonObject& settings) {
-            setSettings(settings);
-        });
-        connect(m_session, &Session::twoFactorResetEvent, this, [this](const QJsonObject& event) {
+        connect(session, &Session::twoFactorResetEvent, this, [=](const QJsonObject& event) {
             setLocked(event.value("is_active").toBool());
         });
-        connect(m_session,  &Session::transactionEvent, this, [this](const QJsonObject& transaction) {
+        connect(session, &Session::transactionEvent, this, [=](const QJsonObject& transaction) {
             for (auto pointer : transaction.value("subaccounts").toArray()) {
-                auto account = m_accounts_by_pointer.value(pointer.toInt());
+                auto account = m_accounts_by_pointer.value({ network, pointer.toInt() });
                 if (account) {
                     emit account->transactionEvent(transaction);
                 }
             }
             emit hasBalanceChanged();
         });
+        m_sessions.insert(network, session);
+        m_sessions_list.append(session);
+        emit sessionsChanged();
     }
-    if (!m_network && m_session) {
-        delete m_session;
-        m_session = nullptr;
-        emit sessionChanged();
-    }
+    return session;
+//    if (!m_network && m_session) {
+//        delete m_session;
+//        m_session = nullptr;
+//        emit sessionChanged();
+//    }
 }
 
 void Context::setDevice(Device* device)
@@ -127,63 +121,6 @@ void Context::setLocked(bool locked)
     emit lockedChanged();
 }
 
-void Context::setSettings(const QJsonObject& settings)
-{
-    if (m_settings == settings) return;
-    m_settings = settings;
-    emit settingsChanged();
-
-    setUnit(m_settings.value("unit").toString());
-    setAltimeout(m_settings.value("altimeout").toInt());
-}
-
-void Context::setUnit(const QString &unit)
-{
-    if (m_unit == unit) return;
-    m_unit = unit;
-    m_display_unit = ComputeDisplayUnit(m_network, m_unit);
-    emit unitChanged();
-}
-
-void Context::setAltimeout(int altimeout)
-{
-    if (m_altimeout == altimeout) return;
-    m_altimeout = altimeout;
-    if (m_logout_timer != -1) {
-        killTimer(m_logout_timer);
-        m_logout_timer = -1;
-    }
-    if (m_device) return;
-    if (m_altimeout > 0) {
-        m_logout_timer = startTimer(m_altimeout * 60 * 1000);
-        qApp->installEventFilter(this);
-    } else {
-        qApp->removeEventFilter(this);
-    }
-}
-
-void Context::setConfig(const QJsonObject& config)
-{
-    if (m_config == config) return;
-    m_config = config;
-    emit configChanged();
-    setLocked(m_config.value("twofactor_reset").toObject().value("is_active").toBool());
-}
-
-void Context::setCurrencies(const QJsonObject& currencies)
-{
-    if (m_currencies == currencies) return;
-    m_currencies = currencies;
-    emit currenciesChanged();
-}
-
-void Context::setEvents(const QJsonObject& events)
-{
-    if (m_events == events) return;
-    m_events = events;
-    emit eventsChanged();
-}
-
 void Context::setUsername(const QString& username)
 {
     if (m_username == username) return;
@@ -206,76 +143,49 @@ bool Context::hasBalance() const
     return false;
 }
 
-bool Context::eventFilter(QObject *object, QEvent *event)
+Asset* Context::getOrCreateAsset(Network* network, const QString& id)
 {
-    switch (event->type()) {
-    case QEvent::MouseButtonPress:
-    case QEvent::MouseButtonRelease:
-    case QEvent::MouseButtonDblClick:
-    case QEvent::MouseMove:
-    case QEvent::KeyPress:
-    case QEvent::KeyRelease:
-    case QEvent::Wheel:
-    {
-        Q_ASSERT(m_logout_timer != -1);
-        killTimer(m_logout_timer);
-        m_logout_timer = startTimer(m_altimeout * 60 * 1000);
-        break;
-    }
-    default:
-        break;
-    }
-    return QObject::eventFilter(object, event);
-}
-
-void Context::timerEvent(QTimerEvent* event)
-{
-    if (event->timerId() == m_logout_timer) {
-        // avoid autologout in the following cases
-        if (!m_wallet || m_device || m_accounts.empty()) return;
-
-        killTimer(m_logout_timer);
-        m_wallet->setContext(nullptr);
-        QTimer::singleShot(5000, this, &QObject::deleteLater);
-        connect(qApp, &QCoreApplication::aboutToQuit, this, &QObject::deleteLater);
-    }
-}
-
-Asset* Context::getOrCreateAsset(const QString& id)
-{
-    Q_ASSERT(m_network && m_network->isLiquid());
-    Q_ASSERT(m_session);
+    Q_ASSERT(network && network->isLiquid());
     Q_ASSERT(id != "btc");
 
-    Asset* asset = m_assets.value(id);
+    const auto session = getOrCreateSession(network);
+    if (!session) return nullptr;
+
+    Asset* asset = m_assets.value({ network, id });
     if (!asset) {
-        asset = new Asset(id, this);
-        m_assets.insert(id, asset);
-        UpdateAsset(m_session->m_session, asset);
+        asset = new Asset(id, network, this);
+        m_assets.insert({ network, id }, asset);
+        UpdateAsset(session->m_session, asset);
     }
     return asset;
 }
 
-Account* Context::getOrCreateAccount(const QJsonObject& data)
+Account* Context::getOrCreateAccount(Network* network, const QJsonObject& data)
 {
     Q_ASSERT(data.contains("pointer"));
     const int pointer = data.value("pointer").toInt();
-    Account* account = m_accounts_by_pointer.value(pointer);
+    Account* account = m_accounts_by_pointer.value({ network, pointer });
     if (account) {
         account->update(data);
     } else {
-        account = new Account(data, m_network, this);
-        m_accounts_by_pointer.insert(pointer, account);
+        auto session = getOrCreateSession(network);
+        account = new Account(data, session);
+        m_accounts_by_pointer.insert({ network, pointer }, account);
     }
     return account;
 }
 
-Account* Context::getAccountByPointer(int pointer) const
+Account* Context::getAccountByPointer(Network* network, int pointer) const
 {
-    return m_accounts_by_pointer[pointer];
+    return m_accounts_by_pointer.value({ network, pointer });
 }
 
 QQmlListProperty<Account> Context::accounts()
 {
     return { this, &m_accounts };
+}
+
+QQmlListProperty<Session> Context::sessions()
+{
+    return { this, &m_sessions_list };
 }

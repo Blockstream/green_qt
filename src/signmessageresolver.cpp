@@ -24,8 +24,8 @@ QByteArray HashMessage(const QString& message)
 
 }
 
-SignMessageResolver::SignMessageResolver(Device *device, const QJsonObject& result)
-    : DeviceResolver(device, result)
+SignMessageResolver::SignMessageResolver(Device *device, const QJsonObject& result, Session* session)
+    : DeviceResolver(device, result, session)
     , m_message(m_required_data.value("message").toString())
     , m_hash(HashMessage(m_message))
     , m_path(ParsePath(m_required_data.value("path").toArray()))

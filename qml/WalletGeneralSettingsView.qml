@@ -5,9 +5,12 @@ import QtQuick.Layouts
 
 ColumnLayout {
     required property Wallet wallet
+    required property Session session
+    readonly property Network network: self.session.network
+
     readonly property var per_currency: {
         const result = {}
-        const per_exchange = self.wallet?.context?.currencies?.per_exchange
+        const per_exchange = self.session.currencies?.per_exchange
         if (per_exchange) {
             for (const [exchange, currencies] of Object.entries(per_exchange)) {
                 for (const currency of currencies) {
@@ -49,10 +52,10 @@ ColumnLayout {
                 }))
                 textRole: 'text'
                 valueRole: 'value'
-                currentIndex: units.indexOf(wallet.context.settings.unit)
+                currentIndex: units.indexOf(self.session.settings.unit)
                 onCurrentValueChanged: {
                     if (currentValue === '') return
-                    if (currentValue === wallet.context.settings.unit) return
+                    if (currentValue === self.session.settings.unit) return
                     controller.changeSettings({ unit: currentValue })
                 }
             }
@@ -80,15 +83,15 @@ ColumnLayout {
                     Layout.fillWidth: true
                     width: 200
                     model: Object.keys(self.per_currency).sort()
-                    currentIndex: model.indexOf(wallet.context.settings.pricing?.currency ?? '')
+                    currentIndex: model.indexOf(self.session.settings.pricing?.currency ?? '')
                     onCurrentTextChanged: {
                         if (!focus) return
                         const currency = currentText
                         if (currency === '') return
-                        if (currency === wallet.context.settings.pricing.currency) return
-                        const exchange = wallet.context.settings.pricing.exchange
+                        if (currency === self.session.settings.pricing.currency) return
+                        const exchange = self.session.settings.pricing.exchange
                         const pricing = { currency, exchange }
-                        if (self.per_currency[currency].indexOf(wallet.context.settings.pricing.exchange) < 0) {
+                        if (self.per_currency[currency].indexOf(self.session.settings.pricing.exchange) < 0) {
                             pricing.exchange = self.per_currency[currentText][0]
                         }
                         controller.changeSettings({ pricing })
@@ -102,13 +105,13 @@ ColumnLayout {
                     Layout.fillWidth: true
                     width: 200
                     model: currency_combo.currentText ? per_currency[currency_combo.currentText].sort() : []
-                    currentIndex: wallet.context.settings.pricing ? Math.max(0, model.indexOf(wallet.context.settings.pricing.exchange)) : 0
+                    currentIndex: self.session.settings.pricing ? Math.max(0, model.indexOf(self.session.settings.pricing.exchange)) : 0
                     onCurrentTextChanged: {
                         if (!focus) return
                         const exchange = currentText
                         if (exchange === '') return
-                        if (exchange === wallet.context.settings.pricing.exchange) return
-                        const currency = wallet.context.settings.pricing.currency
+                        if (exchange === self.session.settings.pricing.exchange) return
+                        const currency = self.session.settings.pricing.currency
                         const pricing = { currency, exchange }
                         controller.changeSettings({ pricing })
                     }
@@ -218,11 +221,11 @@ ColumnLayout {
 
     Loader {
         Layout.fillWidth: true
-        active: !wallet.network.electrum && !!wallet.context.config.email
+        active: !self.network.electrum && !!self.session.config.email
         visible: active
         sourceComponent: SettingsBox {
             title: qsTrId('id_notifications')
-            enabled: !wallet.locked && !!wallet.context.config.email && wallet.context.config.email.confirmed
+            enabled: !self.session.locked && !!self.session.config.email && self.session.config.email.confirmed
             contentItem: ColumnLayout {
                 RowLayout {
                     Label {
@@ -232,10 +235,10 @@ ColumnLayout {
                     }
                     GSwitch {
                         Binding on checked {
-                            value: wallet.context.settings?.notifications?.email_outgoing && wallet.context.settings?.notifications?.email_outgoing
+                            value: self.session.settings?.notifications?.email_outgoing && self.session.settings?.notifications?.email_outgoing
                         }
                         onClicked: {
-                            checked = wallet.context.settings.notifications.email_outgoing;
+                            checked = self.session.settings.notifications.email_outgoing;
                             controller.changeSettings({
                                 notifications: {
                                     email_incoming: !checked,
@@ -247,7 +250,7 @@ ColumnLayout {
                 }
                 Pane {
                     Layout.fillWidth: true
-                    visible: wallet.context.config.email.confirmed
+                    visible: self.session.config.email.confirmed
                     background: Rectangle {
                         border.width: 1
                         border.color: Qt.rgba(1, 1, 1, 0.12)
@@ -265,7 +268,7 @@ ColumnLayout {
                         Label {
                             Layout.fillWidth: true
                             horizontalAlignment: Label.AlignRight
-                            text: wallet.context.config.email.data
+                            text: self.session.config.email.data
                             elide: Text.ElideRight
                         }
                     }

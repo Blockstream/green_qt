@@ -39,9 +39,11 @@ class JadeSetupController : public JadeController
     QML_ELEMENT
 public:
     JadeSetupController(QObject* parent = nullptr);
-
+    Network* network() const { return m_network; }
 public slots:
     void setup(const QString& network);
+private:
+    Network* m_network{nullptr};
 };
 
 
@@ -63,9 +65,11 @@ class JadeUnlockController : public JadeController
     QML_ELEMENT
 public:
     JadeUnlockController(QObject* parent = nullptr);
-
+    Network* network() const { return m_network; }
 public slots:
     void unlock();
+private:
+    Network* m_network{nullptr};
 };
 
 class JadeLoginController : public JadeController
@@ -110,11 +114,11 @@ class JadeUnlockTask : public Task
     Q_OBJECT
     QML_ELEMENT
 public:
-    JadeUnlockTask(JadeController* controller);
+    JadeUnlockTask(JadeUnlockController* controller);
 private:
     void update() override;
 private:
-    JadeController* const m_controller;
+    JadeUnlockController* const m_controller;
 };
 
 class JadeIdentifyTask : public Task

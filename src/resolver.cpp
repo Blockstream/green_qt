@@ -2,11 +2,12 @@
 #include "device.h"
 #include "network.h"
 #include "resolver.h"
+#include "session.h"
 #include "util.h"
 
-Resolver::Resolver(const QJsonObject& result)
-// TODO receive parent
-    : QObject(nullptr)
+Resolver::Resolver(const QJsonObject& result, Session* session)
+    : QObject(session)
+    , m_session(session)
     , m_result(result)
 {
 }
@@ -22,8 +23,8 @@ void Resolver::pushActivity(Activity* activity)
     emit activityChanged(m_activity);
 }
 
-TwoFactorResolver::TwoFactorResolver(const QJsonObject& result)
-    : Resolver(result)
+TwoFactorResolver::TwoFactorResolver(const QJsonObject& result, Session* session)
+    : Resolver(result, session)
     , m_method(result.value("method").toString())
     , m_attempts_remaining(result.value("attempts_remaining").toInt())
 {
@@ -62,17 +63,16 @@ void TwoFactorResolver::setCode(const QString &code)
     emit codeChanged(m_code);
 }
 
-DeviceResolver::DeviceResolver(Device* device, const QJsonObject& result)
-    : Resolver(result)
+DeviceResolver::DeviceResolver(Device* device, const QJsonObject& result, Session* session)
+    : Resolver(result, session)
     , m_device(device)
     , m_required_data(result.value("required_data").toObject())
 {
     Q_ASSERT(m_required_data.contains("device"));
 }
 
-GetXPubsResolver::GetXPubsResolver(Network* network, Device* device, const QJsonObject& result)
-    : DeviceResolver(device, result)
-    , m_network(network)
+GetXPubsResolver::GetXPubsResolver(Device* device, const QJsonObject& result, Session* session)
+    : DeviceResolver(device, result, session)
 {
     for (auto path : m_required_data.value("paths").toArray()) {
         QVector<uint32_t> p;
@@ -92,7 +92,7 @@ void GetXPubsResolver::resolve()
     }
 
     auto path = m_paths.takeFirst();
-    auto activity = m_device->getWalletPublicKey(m_network, path);
+    auto activity = m_device->getWalletPublicKey(m_session->network(), path);
     connect(activity, &Activity::finished, this, [this, activity] {
         activity->deleteLater();
         m_xpubs.append(QString::fromLocal8Bit(activity->publicKey()));
@@ -105,9 +105,8 @@ void GetXPubsResolver::resolve()
     ActivityManager::instance()->exec(activity);
 }
 
-SignTransactionResolver::SignTransactionResolver(Network* network, Device* device, const QJsonObject& result)
-    : DeviceResolver(device, result)
-    , m_network(network)
+SignTransactionResolver::SignTransactionResolver(Device* device, const QJsonObject& result, Session* session)
+    : DeviceResolver(device, result, session)
     , m_transaction(m_required_data.value("transaction").toObject())
     , m_outputs(m_required_data.value("transaction_outputs").toArray())
 {
@@ -122,7 +121,7 @@ void SignTransactionResolver::resolve()
     const auto transaction_outputs = m_required_data.value("transaction_outputs").toArray();
     const auto signing_transactions = m_required_data.value("signing_transactions").toObject();
 
-    auto activity = device()->signTransaction(m_network, transaction, signing_inputs, transaction_outputs, signing_transactions);
+    auto activity = device()->signTransaction(m_session->network(), transaction, signing_inputs, transaction_outputs, signing_transactions);
     connect(activity, &SignTransactionActivity::finished, [this, activity] {
         activity->deleteLater();
         QJsonArray signatures;
@@ -148,8 +147,8 @@ void SignTransactionResolver::resolve()
     ActivityManager::instance()->exec(activity);
 }
 
-BlindingKeysResolver::BlindingKeysResolver(Device* device, const QJsonObject& result)
-    : DeviceResolver(device, result)
+BlindingKeysResolver::BlindingKeysResolver(Device* device, const QJsonObject& result, Session* session)
+    : DeviceResolver(device, result, session)
 {
     m_scripts = m_required_data.value("scripts").toArray();
 }
@@ -175,8 +174,8 @@ void BlindingKeysResolver::resolve()
     ActivityManager::instance()->exec(activity);
 }
 
-BlindingNoncesResolver::BlindingNoncesResolver(Device* device, const QJsonObject& result)
-    : DeviceResolver(device, result)
+BlindingNoncesResolver::BlindingNoncesResolver(Device* device, const QJsonObject& result, Session* session)
+    : DeviceResolver(device, result, session)
 {
     m_blinding_keys_required = m_required_data.value("blinding_keys_required").toBool();
     m_scripts = m_required_data.value("scripts").toArray();
@@ -222,13 +221,12 @@ void BlindingNoncesResolver::resolve()
     ActivityManager::instance()->exec(activity);
 }
 
-SignLiquidTransactionResolver::SignLiquidTransactionResolver(Network* network, Device* device, const QJsonObject& result)
-    : DeviceResolver(device, result)
-    , m_network(network)
+SignLiquidTransactionResolver::SignLiquidTransactionResolver(Device* device, const QJsonObject& result, Session* session)
+    : DeviceResolver(device, result, session)
     , m_transaction(m_required_data.value("transaction").toObject())
     , m_outputs(m_required_data.value("transaction_outputs").toArray())
 {
-    Q_ASSERT(network->isLiquid());
+    Q_ASSERT(m_session->network()->isLiquid());
     Q_ASSERT(m_required_data.value("action").toString() == "sign_tx");
 }
 
@@ -238,7 +236,7 @@ void SignLiquidTransactionResolver::resolve()
     const auto signing_inputs = m_required_data.value("signing_inputs").toArray();
     const auto outputs = m_required_data.value("transaction_outputs").toArray();
 
-    auto activity = device()->signLiquidTransaction(m_network, transaction, signing_inputs, outputs);
+    auto activity = device()->signLiquidTransaction(m_session->network(), transaction, signing_inputs, outputs);
 
 //    connect(command, &SignLiquidTransactionCommand::progressChanged, [this](int count, int total) {
 //       m_progress = qreal(count) / qreal(total);
@@ -310,8 +308,8 @@ void SignLiquidTransactionResolver::resolve()
     pushActivity(activity);
 }
 
-GetMasterBlindingKeyResolver::GetMasterBlindingKeyResolver(Device* device, const QJsonObject& result)
-    : DeviceResolver(device, result)
+GetMasterBlindingKeyResolver::GetMasterBlindingKeyResolver(Device* device, const QJsonObject& result, Session* session)
+    : DeviceResolver(device, result, session)
 {
 }
 

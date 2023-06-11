@@ -61,8 +61,9 @@ QString ReceiveAddressController::uri() const
     if (!m_account || m_generating) return {};
     const auto context = m_account->context();
     const auto network = m_account->network();
+    const auto session = m_account->session();
     const auto wallet = context->wallet();
-    auto unit = context->unit();
+    auto unit = session->unit();
     unit = unit == "\u00B5BTC" ? "ubtc" : unit.toLower();
     auto amount = m_amount;
     amount.replace(',', '.');
@@ -216,7 +217,7 @@ bool GetReceiveAddressTask::call(GA_session *session, GA_auth_handler **auth_han
 }
 
 GetReceiveAddressTask::GetReceiveAddressTask(Account *account)
-    : AuthHandlerTask(account->context())
+    : AuthHandlerTask(account->session())
     , m_account(account)
 {
 }

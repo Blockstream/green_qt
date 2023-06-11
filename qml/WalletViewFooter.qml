@@ -7,9 +7,12 @@ import QtQuick.Layouts
 import "util.js" as UtilJS
 
 StatusBar {
+    required property Account account
     required property Context context
     required property Wallet wallet
-    readonly property Network network: context.network
+    readonly property Network network: self.account.network
+    readonly property Session session: self.account.session
+
     id: self
     contentItem: RowLayout {
         spacing: constants.s2
@@ -30,7 +33,7 @@ StatusBar {
         HSpacer {
         }
         SessionBadge {
-            session: self.context.session
+            session: self.session
         }
         Loader {
             active: 'type' in self.wallet.deviceDetails || self.context.device
@@ -56,13 +59,13 @@ StatusBar {
         }
         Loader {
             property string unit: {
-                const unit = self.context.unit.toLowerCase()
+                const unit = self.session.unit.toLowerCase()
                 return unit === '\u00B5btc' ? 'ubtc' : unit
             }
 
             property var amount: {
-                const ticker = self.context.events.ticker
-                const pricing = self.context.settings.pricing;
+                const ticker = self.session.events.ticker
+                const pricing = self.session.settings.pricing;
                 for (let value = 1; ; value = value * 10) {
                     const data = { [unit]: String(value) }
                     const result = wallet.convert(data);
@@ -79,7 +82,7 @@ StatusBar {
                     mipmap: true
                     source: {
                         if (self.network.liquid) {
-                            return self.context.getOrCreateAsset(self.network.policyAsset).icon
+                            return self.context.getOrCreateAsset(self.network, self.network.policyAsset).icon
                         } else {
                             return UtilJS.iconFor(self.wallet)
                         }
@@ -87,7 +90,7 @@ StatusBar {
                 }
                 Label {
                     font.pixelSize: 12
-                    text: `${Number(amount[unit])} ${self.context.displayUnit} ≈ ${amount.fiat} ${self.network.mainnet ? amount.fiat_currency : 'FIAT'}`
+                    text: `${Number(amount[unit])} ${self.session.displayUnit} ≈ ${amount.fiat} ${self.network.mainnet ? amount.fiat_currency : 'FIAT'}`
                 }
             }
         }

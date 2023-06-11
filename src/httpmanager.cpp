@@ -99,7 +99,7 @@ void HttpManager::dispatch()
         connect(m_session, &Session::connectingChanged, this, &HttpManager::dispatch);
         emit sessionChanged();
 
-        m_dispatcher->add(new SessionConnectTask(m_session));
+        m_dispatcher->add(new ConnectTask(m_session));
 
         return;
     }

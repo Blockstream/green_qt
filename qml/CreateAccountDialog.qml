@@ -9,6 +9,8 @@ import QtQuick.Layouts
 import "analytics.js" as AnalyticsJS
 
 ControllerDialog {
+    readonly property Network network: dialog.wallet.network
+
     property var _labels: ({
         '2of2': qsTrId('id_standard_account'),
         '2of2_no_recovery': qsTrId('id_amp_account'),
@@ -55,13 +57,13 @@ ControllerDialog {
         HSpacer {
         }
         Card {
-            visible: !controller.context.network.electrum
+            visible: !dialog.network.electrum
             text: _labels['2of2']
             description: qsTrId('id_standard_accounts_allow_you_to')
             onClicked: navigation.set({ name: _labels['2of2'], type: '2of2', view: 'finish' })
         }
         Card {
-            visible: controller.context.network.liquid && !controller.context.network.electrum
+            visible: dialog.network.liquid && !dialog.network.electrum
             text: _labels['2of2_no_recovery']
             description: qsTrId('id_amp_accounts_are_only_available')
             onClicked: navigation.set({ name: _labels['2of2_no_recovery'], type: '2of2_no_recovery', view: 'finish' })
@@ -69,17 +71,17 @@ ControllerDialog {
         Card {
             text: _labels['2of3']
             description: qsTrId('id_a_2of3_account_requires_two_out')
-            visible: !controller.context.network.electrum && !controller.context.network.liquid
+            visible: !dialog.network.electrum && !dialog.network.liquid
             onClicked: navigation.set({ name: _labels['2of3'], type: '2of3', view: '2of3' })
         }
         Card {
-            visible: controller.context.network.electrum
+            visible: dialog.network.electrum
             text: _labels['p2sh-p2wpkh']
             description: qsTrId('id_bip49_accounts_allow_you_to')
             onClicked: navigation.set({ name: _labels['p2sh-p2wpkh'], type: 'p2sh-p2wpkh', view: 'finish' })
         }
         Card {
-            visible: controller.context.network.electrum
+            visible: dialog.network.electrum
             text: _labels['p2wpkh']
             description: qsTrId('id_bip84_accounts_allow_you_to')
             onClicked: navigation.set({ name: _labels['p2wpkh'], type: 'p2wpkh', view: 'finish' })
@@ -185,7 +187,7 @@ ControllerDialog {
             AnalyticsView {
                 active: true
                 name: 'RecoveryCheck'
-                segmentation: AnalyticsJS.segmentationNetwork(controller.context.network)
+                segmentation: AnalyticsJS.segmentationNetwork(dialog.network)
             }
         }
     }

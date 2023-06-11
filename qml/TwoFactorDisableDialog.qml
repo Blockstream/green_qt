@@ -7,6 +7,7 @@ import "analytics.js" as AnalyticsJS
 
 ControllerDialog {
     property string method
+    required property Session session
 
     id: self
     title: qsTrId('id_set_up_twofactor_authentication')

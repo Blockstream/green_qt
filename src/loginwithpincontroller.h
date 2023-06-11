@@ -25,7 +25,10 @@ public:
 
     void update();
     void login();
+    void login(TaskGroup *group, Network *network);
+    void loginNetwork(Network* network);
     void load();
+    void loadNetwork(TaskGroup* group, Network* network);
 
 signals:
     void walletChanged();

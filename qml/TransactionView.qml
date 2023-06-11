@@ -76,7 +76,7 @@ WalletDialog {
                     RowLayout {
                         Layout.fillWidth: false
                         CopyableLabel {
-                            text: formatAmount(transaction.data.fee)
+                            text: formatAmount(self.transaction.account, transaction.data.fee)
                         }
                         Label {
                             text: '≈'
@@ -122,7 +122,7 @@ WalletDialog {
                     RowLayout {
                         Layout.fillWidth: false
                         CopyableLabel {
-                            text: formatAmount(transaction.data.satoshi[network.liquid ? network.policyAsset : 'btc'])
+                            text: formatAmount(transaction.account, transaction.data.satoshi[network.liquid ? network.policyAsset : 'btc'])
                         }
                         Label {
                             text: '≈'
@@ -322,7 +322,7 @@ WalletDialog {
                     }
                     CopyableLabel {
                         text: {
-                            wallet.context.displayUnit
+                            self.transaction.account.session.displayUnit
                             return amount.formatAmount(true)
                         }
                         color: amount.amount > 0 ? '#00b45a' : 'white'
@@ -346,10 +346,10 @@ WalletDialog {
                 }
             }
             readonly property string satoshi: {
-                wallet.context.displayUnit;
-                const unit = wallet.context.settings.unit;
+                const session = self.transaction.account.session
+                session.displayUnit
                 if (output) {
-                    return wallet.formatAmount(output.satoshi, true, unit);
+                    return wallet.formatAmount(output.satoshi, true, session.unit);
                 } else {
                     return amount.formatAmount(true)
                 }
@@ -381,7 +381,7 @@ WalletDialog {
                     }
                     Label {
                         Layout.fillWidth: true
-                        text: wallet.context.displayUnit
+                        text: self.transaction.account.session.displayUnit
                         font.pixelSize: 14
                         elide: Label.ElideRight
                     }

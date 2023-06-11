@@ -4,6 +4,8 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 ControllerDialog {
+    required property Session session
+
     id: self
     title: qsTrId('id_set_timelock')
     controller: Controller {
@@ -22,7 +24,7 @@ ControllerDialog {
             Layout.alignment: Qt.AlignCenter
             GTextField {
                 id: nlocktime_days
-                text: Math.round(context.settings.nlocktime / 144 || 0)
+                text: Math.round(self.session.settings.nlocktime / 144 || 0)
                 validator: IntValidator { bottom: 1; top: 200000 / 144; }
                 onTextChanged: {
                     if (activeFocus) nlocktime_blocks.text = Math.round(text * 144);
@@ -36,7 +38,7 @@ ControllerDialog {
             }
             GTextField {
                 id: nlocktime_blocks
-                text: context.settings.nlocktime || 0
+                text: self.session.settings.nlocktime || 0
                 validator: IntValidator { bottom: 144; top: 200000; }
                 onTextChanged: {
                     if (activeFocus) nlocktime_days.text = Math.round(text / 144);

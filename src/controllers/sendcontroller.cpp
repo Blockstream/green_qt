@@ -5,6 +5,7 @@
 #include "json.h"
 #include "network.h"
 #include "sendcontroller.h"
+#include "session.h"
 #include "task.h"
 #include "wallet.h"
 
@@ -119,8 +120,8 @@ void SendController::setFeeRate(qint64 fee_rate)
 
 bool SendController::hasFiatRate() const
 {
-    if (!context()) return false;
-    if (!context()->network()->isLiquid()) return true;
+    if (!m_account) return false;
+    if (!m_account->network()->isLiquid()) return true;
     if (m_balance && m_balance->asset()->isLBTC()) return true;
     return false;
 }
@@ -132,11 +133,13 @@ QJsonObject SendController::transaction() const
 
 void SendController::update()
 {
+    if (!m_account) return;
     if (!m_context) return;
-    const bool is_liquid = m_context->network()->isLiquid();
+    const auto session = m_account->session();
+    const bool is_liquid = m_account->network()->isLiquid();
     if (hasFiatRate()) {
         if (!m_send_all) {
-            auto unit = m_context->unit();
+            auto unit = session->unit();
             unit = unit == "\u00B5BTC" ? "ubtc" : unit.toLower();
             QJsonObject convert;
 
@@ -177,7 +180,8 @@ void SendController::create()
     if (!m_account) return;
 
     const auto wallet = m_context->wallet();
-    const auto network = m_context->network();
+    const auto network = m_account->network();
+    auto session = m_context->getOrCreateSession(network);
 
     // TODO: autologout unsets context on the wallet
     // TODO: and this controller should detect that
@@ -197,7 +201,7 @@ void SendController::create()
 
     if (m_get_unspent_outputs) return;
     if (m_all_utxos.isEmpty()) {
-        m_get_unspent_outputs = new GetUnspentOutputsTask(0, false, m_account->pointer(), m_context);
+        m_get_unspent_outputs = new GetUnspentOutputsTask(0, false, m_account);
         connect(m_get_unspent_outputs, &Task::finished, this, [=] {
             m_all_utxos = m_get_unspent_outputs->unspentOutputs();
             m_get_unspent_outputs = nullptr;
@@ -239,7 +243,7 @@ void SendController::create()
         m_transaction["used_utxos"] = m_utxos.value("btc").toArray();
     }
 
-    m_create_task = new CreateTransactionTask(m_transaction, m_context);
+    m_create_task = new CreateTransactionTask(m_transaction, session);
     connect(m_create_task, &CreateTransactionTask::transaction, this, [=](const QJsonObject& transaction) {
         if (m_count == count) {
             m_transaction = transaction;
@@ -270,8 +274,10 @@ void SendController::create()
 void SendController::signAndSend()
 {
     m_transaction["memo"] = m_memo;
-    auto sign = new SignTransactionTask(m_transaction, m_context);
-    auto send = new SendTransactionTask(m_context);
+    const auto network = m_account->network();
+    auto session = m_context->getOrCreateSession(network);
+    auto sign = new SignTransactionTask(m_transaction, session);
+    auto send = new SendTransactionTask(session);
 
     sign->then(send);
 

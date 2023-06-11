@@ -149,6 +149,7 @@ class Context;
 class SessionTask : public Task
 {
     Q_OBJECT
+    Q_PROPERTY(Session* session READ session CONSTANT)
     QML_ELEMENT
 public:
     SessionTask(Session* session);
@@ -157,15 +158,7 @@ protected:
     Session* const m_session;
 };
 
-class SessionConnectTask : public SessionTask
-{
-    Q_OBJECT
-public:
-    SessionConnectTask(Session* session);
-    void update() override;
-};
-
-class ContextTask : public SessionTask
+class ContextTask : public Task
 {
     Q_OBJECT
     Q_PROPERTY(Context* context READ context CONSTANT)
@@ -177,14 +170,23 @@ protected:
     Context* const m_context;
 };
 
-class AuthHandlerTask : public ContextTask
+class ConnectTask : public SessionTask
+{
+    Q_OBJECT
+    QML_ELEMENT
+public:
+    ConnectTask(Session* session);
+    void update() override;
+};
+
+class AuthHandlerTask : public SessionTask
 {
     Q_OBJECT
     Q_PROPERTY(QJsonObject result READ result NOTIFY resultChanged)
     Q_PROPERTY(Resolver* resolver READ resolver NOTIFY resolverChanged)
     QML_ELEMENT
 public:
-    AuthHandlerTask(Context* context);
+    AuthHandlerTask(Session* session);
     ~AuthHandlerTask();
     QJsonObject result() const { return m_result; }
     void setResult(const QJsonObject& result);
@@ -219,8 +221,8 @@ class RegisterUserTask : public AuthHandlerTask
     Q_OBJECT
     QML_ELEMENT
 public:
-    RegisterUserTask(const QStringList& mnemonic, Context* context);
-    RegisterUserTask(const QJsonObject &device_details, Context *context);
+    RegisterUserTask(const QStringList& mnemonic, Session* session);
+    RegisterUserTask(const QJsonObject &device_details, Session* session);
 private:
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
     void handleDone(const QJsonObject& result) override;
@@ -229,16 +231,16 @@ private:
     const QJsonObject m_device_details;
 };
 
-class SessionLoginTask : public AuthHandlerTask
+class LoginTask : public AuthHandlerTask
 {
     Q_OBJECT
     QML_ELEMENT
 public:
-    SessionLoginTask(Context* context);
-    SessionLoginTask(const QString& pin, const QJsonObject& pin_data, Context* context);
-    SessionLoginTask(const QStringList& mnemonic, const QString& password, Context* context);
-    SessionLoginTask(const QJsonObject& hw_device, Context* context);
-    SessionLoginTask(const QString& username, const QString& password, Context* context);
+    LoginTask(Session* session);
+    LoginTask(const QString& pin, const QJsonObject& pin_data, Session* session);
+    LoginTask(const QStringList& mnemonic, const QString& password, Session* session);
+    LoginTask(const QJsonObject& hw_device, Session* session);
+    LoginTask(const QString& username, const QString& password, Session* session);
 private:
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
     void handleDone(const QJsonObject& result) override;
@@ -247,35 +249,35 @@ private:
     const QJsonObject m_hw_device;
 };
 
-class LoadTwoFactorConfigTask : public ContextTask
+class LoadTwoFactorConfigTask : public SessionTask
 {
     Q_OBJECT
     QML_ELEMENT
 public:
-    LoadTwoFactorConfigTask(Context* context);
-    LoadTwoFactorConfigTask(bool lock, Context* context);
+    LoadTwoFactorConfigTask(Session* session);
+    LoadTwoFactorConfigTask(bool lock, Session* session);
 private:
     void update() override;
 private:
     const bool m_lock{false};
 };
 
-class LoadCurrenciesTask : public ContextTask
+class LoadCurrenciesTask : public SessionTask
 {
     Q_OBJECT
     QML_ELEMENT
 public:
-    LoadCurrenciesTask(Context* context);
+    LoadCurrenciesTask(Session* session);
 private:
     void update() override;
 };
 
-class GetWatchOnlyDetailsTask : public ContextTask
+class GetWatchOnlyDetailsTask : public SessionTask
 {
     Q_OBJECT
     QML_ELEMENT
 public:
-    GetWatchOnlyDetailsTask(Context* context);
+    GetWatchOnlyDetailsTask(Session* session);
 private:
     void update() override;
 };
@@ -285,8 +287,8 @@ class EncryptWithPinTask : public AuthHandlerTask
     Q_OBJECT
     QML_ELEMENT
 public:
-    EncryptWithPinTask(const QString& pin, Context* context);
-    EncryptWithPinTask(const QJsonValue& plaintext, const QString& pin, Context* context);
+    EncryptWithPinTask(const QString& pin, Session* session);
+    EncryptWithPinTask(const QJsonValue& plaintext, const QString& pin, Session* session);
     void setPlaintext(const QJsonValue& plaintext);
 private:
     bool active() const override;
@@ -302,7 +304,7 @@ class ChangeSettingsTask : public AuthHandlerTask
     Q_OBJECT
     QML_ELEMENT
 public:
-    ChangeSettingsTask(const QJsonObject& data, Context* context);
+    ChangeSettingsTask(const QJsonObject& data, Session* session);
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
     void handleDone(const QJsonObject& result) override;
 private:
@@ -315,7 +317,7 @@ class LoadAccountsTask : public AuthHandlerTask
     Q_OBJECT
     QML_ELEMENT
 public:
-    LoadAccountsTask(Context* context);
+    LoadAccountsTask(Session* session);
 private:
     bool active() const override;
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
@@ -335,12 +337,12 @@ private:
     Account* const m_account;
 };
 
-class LoadAssetsTask : public ContextTask
+class LoadAssetsTask : public SessionTask
 {
     Q_OBJECT
     QML_ELEMENT
 public:
-    LoadAssetsTask(Context* context);
+    LoadAssetsTask(Session* session);
 private:
     void update() override;
 };
@@ -350,7 +352,7 @@ class CreateAccountTask : public AuthHandlerTask
     Q_OBJECT
     QML_ELEMENT
 public:
-    CreateAccountTask(const QJsonObject& details, Context* context);
+    CreateAccountTask(const QJsonObject& details, Session* session);
     int pointer() const { return m_pointer; }
 private:
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
@@ -365,19 +367,19 @@ class UpdateAccountTask : public AuthHandlerTask
     Q_OBJECT
     QML_ELEMENT
 public:
-    UpdateAccountTask(const QJsonObject& details, Context* context);
+    UpdateAccountTask(const QJsonObject& details, Session* session);
 private:
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
 private:
     const QJsonObject m_details;
 };
 
-class SetWatchOnlyTask : public ContextTask
+class SetWatchOnlyTask : public SessionTask
 {
     Q_OBJECT
     QML_ELEMENT
 public:
-    SetWatchOnlyTask(const QString& username, const QString& password, Context* context);
+    SetWatchOnlyTask(const QString& username, const QString& password, Session* session);
 private:
     void update() override;
 private:
@@ -390,7 +392,7 @@ class ChangeTwoFactorTask : public AuthHandlerTask
     Q_OBJECT
     QML_ELEMENT
 public:
-    ChangeTwoFactorTask(const QString& method, const QJsonObject& details, Context* context);
+    ChangeTwoFactorTask(const QString& method, const QJsonObject& details, Session* session);
 private:
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
 private:
@@ -404,7 +406,7 @@ class TwoFactorResetTask : public AuthHandlerTask
     Q_PROPERTY(QString email READ email CONSTANT)
     QML_ELEMENT
 public:
-    TwoFactorResetTask(const QString& email, Context* context);
+    TwoFactorResetTask(const QString& email, Session* session);
     QString email() const { return m_email; }
 private:
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
@@ -417,7 +419,7 @@ class SetCsvTimeTask : public AuthHandlerTask
     Q_OBJECT
     QML_ELEMENT
 public:
-    SetCsvTimeTask(const int value, Context* context);
+    SetCsvTimeTask(const int value, Session* session);
 private:
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
     void handleDone(const QJsonObject& result) override;
@@ -430,7 +432,7 @@ class GetCredentialsTask : public AuthHandlerTask
     Q_OBJECT
     QML_ELEMENT
 public:
-    GetCredentialsTask(Context* context);
+    GetCredentialsTask(Session* session);
 private:
     bool active() const override;
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
@@ -442,7 +444,7 @@ class DisableAllPinLoginsTask: public AuthHandlerTask
     Q_OBJECT
     QML_ELEMENT
 public:
-    DisableAllPinLoginsTask(Context* context);
+    DisableAllPinLoginsTask(Session* session);
 private:
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
     void handleDone(const QJsonObject &result) override;
@@ -453,7 +455,7 @@ class TwoFactorChangeLimitsTask : public AuthHandlerTask
     Q_OBJECT
     QML_ELEMENT
 public:
-    TwoFactorChangeLimitsTask(const QJsonObject& details, Context* context);
+    TwoFactorChangeLimitsTask(const QJsonObject& details, Session* session);
 private:
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
 private:
@@ -465,7 +467,7 @@ class CreateTransactionTask : public AuthHandlerTask
     Q_OBJECT
     QML_ELEMENT
 public:
-    CreateTransactionTask(const QJsonObject& details, Context* context);
+    CreateTransactionTask(const QJsonObject& details, Session* session);
 private:
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
     void handleDone(const QJsonObject& result) override;
@@ -481,7 +483,7 @@ class SignTransactionTask : public AuthHandlerTask
     Q_OBJECT
     QML_ELEMENT
 public:
-    SignTransactionTask(const QJsonObject& details, Context* context);
+    SignTransactionTask(const QJsonObject& details, Session* session);
 private:
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
 private:
@@ -493,7 +495,7 @@ class SendTransactionTask : public AuthHandlerTask
     Q_OBJECT
     QML_ELEMENT
 public:
-    SendTransactionTask(Context* context);
+    SendTransactionTask(Session* session);
     void setDetails(const QJsonObject& details);
 private:
     bool active() const override;
@@ -502,12 +504,12 @@ private:
     QJsonObject m_details;
 };
 
-class SendNLocktimesTask : public ContextTask
+class SendNLocktimesTask : public SessionTask
 {
     Q_OBJECT
     QML_ELEMENT
 public:
-    SendNLocktimesTask(Context* context);
+    SendNLocktimesTask(Session* session);
 private:
     void update() override;
 };
@@ -517,7 +519,7 @@ class TwoFactorCancelResetTask : public AuthHandlerTask
     Q_OBJECT
     QML_ELEMENT
 public:
-    TwoFactorCancelResetTask(Context* context);
+    TwoFactorCancelResetTask(Session* session);
 private:
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
 };
@@ -527,7 +529,7 @@ class GetUnspentOutputsTask: public AuthHandlerTask
     Q_OBJECT
     QML_ELEMENT
 public:
-    GetUnspentOutputsTask(int num_confs, bool all_coins, qint64 subaccount, Context* context);
+    GetUnspentOutputsTask(int num_confs, bool all_coins, Account* account);
     QJsonObject unspentOutputs() const;
 private:
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
@@ -542,7 +544,7 @@ class SetUnspentOutputsStatusTask : public AuthHandlerTask
     Q_OBJECT
     QML_ELEMENT
 public:
-    SetUnspentOutputsStatusTask(const QVariantList& outputs, const QString& status, Context* context);
+    SetUnspentOutputsStatusTask(const QVariantList& outputs, const QString& status, Session* session);
 private:
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
 private:
@@ -585,7 +587,7 @@ class DeleteWalletTask : public AuthHandlerTask
     Q_OBJECT
     QML_ELEMENT
 public:
-    DeleteWalletTask(Context* context);
+    DeleteWalletTask(Session* session);
 private:
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
 };

@@ -9,6 +9,7 @@ import "util.js" as UtilJS
 
 ControllerDialog {
     required property Account account
+    readonly property Session session: account.session
     property string address_input
     property bool review: false
 
@@ -16,7 +17,7 @@ ControllerDialog {
         const payment = WalletManager.parseUrl(url.trim())
         address_field.text = payment.address;
         if (payment.amount) {
-            controller.amount = formatAmount(payment.amount * 100000000, false)
+            controller.amount = formatAmount(self.account, payment.amount * 100000000, false)
         }
         if (payment.message) {
             controller.memo = payment.message
@@ -236,7 +237,7 @@ ControllerDialog {
                             const asset = balance?.asset
 
                             if (coins_combo_box.currentIndex === 0) {
-                                return balance ? balance.displayAmount : formatAmount(account.balance)
+                                return balance ? balance.displayAmount : formatAmount(account, account.balance)
                             }
 
                             var x = 0
@@ -245,7 +246,7 @@ ControllerDialog {
                                     x += u.data['satoshi']
                                 }
                             }
-                            return asset ? asset.formatAmount(x, true) : formatAmount(x)
+                            return asset ? asset.formatAmount(x, true) : formatAmount(self.account, x)
                         }
                     }
                 }
@@ -293,7 +294,13 @@ ControllerDialog {
                     anchors.right: parent.right
                     anchors.rightMargin: 8
                     anchors.baseline: parent.baseline
-                    text: account.network.liquid ? (balance.asset.id === account.network.policyAsset ? wallet.context.displayUnit : (balance.asset.data.ticker || '')) : wallet.context.displayUnit
+                    text: {
+                        const network = account.network
+                        if (network.liquid && balance && balance.asset.id !== network.policyAsset) {
+                            return balance.asset.data.ticker || ''
+                        }
+                        return account.session.displayUnit
+                    }
                 }
                 rightPadding: unit.width + 16
             }
@@ -322,7 +329,7 @@ ControllerDialog {
                     anchors.right: parent.right
                     anchors.rightMargin: 8
                     anchors.baseline: parent.baseline
-                    text: account.network.mainnet ? wallet.context.settings.pricing.currency : 'FIAT'
+                    text: account.network.mainnet ? self.session.settings.pricing.currency : 'FIAT'
                 }
                 rightPadding: currency.width + 16
             }
@@ -333,13 +340,15 @@ ControllerDialog {
         RowLayout {
             spacing: 12
             FeeComboBox {
+                account: self.account
                 id: fee_combo
                 Layout.fillWidth: true
                 property var indexes: [3, 12, 24]
                 extra: account.network.liquid ? [] : [{ text: qsTrId('id_custom') }]
                 Component.onCompleted: {
-                    currentIndex = account.network.liquid ? 0 : indexes.indexOf(wallet.context.settings.required_num_blocks)
-                    controller.feeRate = fee_estimates.fees[blocks]
+                    currentIndex = self.account.network.liquid ? 0 : indexes.indexOf(self.session.settings.required_num_blocks)
+                    console.log(currentIndex, blocks, fee_combo.fees)
+                    controller.feeRate = fee_combo.fees[blocks]
                 }
                 onFeeRateChanged: {
                     if (feeRate) {
@@ -456,7 +465,7 @@ ControllerDialog {
                 text: qsTrId('id_fee')
             }
             Label {
-                text: formatAmount(controller.transaction.fee) + ' ≈ ' + formatFiat(controller.transaction.fee)
+                text: formatAmount(self.account, controller.transaction.fee) + ' ≈ ' + formatFiat(controller.transaction.fee)
             }
             Repeater {
                 model: controller.transaction.transaction_outputs.filter(output => !output.is_change && output.script.length > 0)
@@ -514,14 +523,14 @@ ControllerDialog {
                         text: qsTrId('id_amount')
                     }
                     Label {
-                        text: formatAmount(modelData.satoshi) + ' ≈ ' + formatFiat(modelData.satoshi)
+                        text: formatAmount(self.account, modelData.satoshi) + ' ≈ ' + formatFiat(modelData.satoshi)
                     }
                 }
             }
             Component {
                 id: liquid_output
                 ColumnLayout {
-                    property Asset address_asset: self.account.context.getOrCreateAsset(modelData.asset_id)
+                    property Asset address_asset: self.account.context.getOrCreateAsset(self.account.network, modelData.asset_id)
                     spacing: constants.s1
                     SectionLabel {
                         text: qsTrId('id_address')
@@ -547,8 +556,8 @@ ControllerDialog {
                     }
                     Label {
                         text: {
-                            wallet.context.displayUnit
-                            return address_asset.formatAmount(modelData.satoshi, true, wallet.context.unit)
+                            self.session.displayUnit
+                            return address_asset.formatAmount(modelData.satoshi, true, self.session.unit)
                         }
                     }
                 }

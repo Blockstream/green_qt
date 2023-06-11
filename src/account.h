@@ -10,6 +10,7 @@
 Q_MOC_INCLUDE("balance.h")
 Q_MOC_INCLUDE("context.h")
 Q_MOC_INCLUDE("network.h")
+Q_MOC_INCLUDE("session.h")
 Q_MOC_INCLUDE("transaction.h")
 Q_MOC_INCLUDE("wallet.h")
 
@@ -18,6 +19,7 @@ class Account : public QObject
     Q_OBJECT
     Q_PROPERTY(Context* context READ context CONSTANT)
     Q_PROPERTY(Network* network READ network CONSTANT)
+    Q_PROPERTY(Session* session READ session CONSTANT)
     Q_PROPERTY(int pointer READ pointer CONSTANT)
     Q_PROPERTY(QString type READ type CONSTANT)
     Q_PROPERTY(bool mainAccount READ isMainAccount CONSTANT)
@@ -28,11 +30,11 @@ class Account : public QObject
     Q_PROPERTY(QQmlListProperty<Balance> balances READ balances NOTIFY balancesChanged)
     QML_ELEMENT
 public:
-    explicit Account(const QJsonObject& data, Network* network, Context* context);
+    explicit Account(const QJsonObject& data, Session* session);
 
+    Session* session() const { return m_session; }
     Context* context() const { return m_context; }
     Network* network() const { return m_network; }
-    Session* session() const;
     quint32 pointer() const { return m_pointer; }
     QString type() const { return m_type; }
     bool isMainAccount() const;
@@ -69,6 +71,7 @@ signals:
     void balancesChanged();
     void addressGenerated();
 private:
+    Session* const m_session;
     Context* const m_context;
     Network* const m_network;
     const quint32 m_pointer;

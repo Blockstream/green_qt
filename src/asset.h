@@ -11,6 +11,7 @@
 class Asset : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(Network* network READ network CONSTANT)
     Q_PROPERTY(Context* context READ context CONSTANT)
     Q_PROPERTY(QString id READ id CONSTANT)
     Q_PROPERTY(QString icon READ icon NOTIFY iconChanged)
@@ -21,9 +22,10 @@ class Asset : public QObject
     QML_ELEMENT
     QML_UNCREATABLE("Asset is instanced by Wallet.")
 public:
-    explicit Asset(const QString& id, Context* context);
+    explicit Asset(const QString& id, Network* network, Context* context);
 
-    Context* context() { return m_context; }
+    Network* network() const { return m_network; }
+    Context* context() const { return m_context; }
     QString id() const { return m_id; }
 
     bool isLBTC() const;
@@ -49,6 +51,7 @@ signals:
     void dataChanged();
 
 private:
+    Network* const m_network;
     Context* const m_context;
     QString const m_id;
     QString m_icon;

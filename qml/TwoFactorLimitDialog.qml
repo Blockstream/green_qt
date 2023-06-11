@@ -8,21 +8,23 @@ import QtQuick.Layouts
 ControllerDialog {
     id: self
 
+    required property Session session
+
     property var currencies: [{
         is_fiat: false,
-        text: self.context.unit
+        text: self.session.unit
     }, {
         is_fiat: true,
-        text: self.context.settings.pricing.currency
+        text: self.session.settings.pricing.currency
     }]
 
     readonly property string unit: {
-        const unit = self.context.unit
+        const unit = self.session.unit
         return unit === '\u00B5BTC' ? 'ubtc' : unit.toLowerCase()
     }
 
-    property string threshold: self.context.config.limits.is_fiat ? self.context.config.limits.fiat : self.context.config.limits[unit]
-    property string ticker: self.context.config.limits.is_fiat ? self.context.settings.pricing.currency : unit
+    property string threshold: self.session.config.limits.is_fiat ? self.session.config.limits.fiat : self.session.config.limits[unit]
+    property string ticker: self.session.config.limits.is_fiat ? self.session.settings.pricing.currency : unit
 
     title: qsTrId('id_set_twofactor_threshold')
 
@@ -47,7 +49,7 @@ ControllerDialog {
             GComboBox {
                 property bool fiat: model[currentIndex].is_fiat
                 id: currency_combo
-                currentIndex: self.context.config.limits.is_fiat ? 1 : 0
+                currentIndex: self.session.config.limits.is_fiat ? 1 : 0
                 model: self.currencies
                 textRole: 'text'
                 Layout.fillWidth: true
