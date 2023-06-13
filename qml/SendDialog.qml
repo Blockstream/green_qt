@@ -348,7 +348,8 @@ ControllerDialog {
                 }
                 onCurrentIndexChanged: {
                     if (currentIndex === 3) {
-                        custom_fee_field.text = Math.round(controller.feeRate / 10 + 0.5) / 100
+                        custom_fee_field.clear()
+                        custom_fee_field.forceActiveFocus()
                     }
                 }
             }

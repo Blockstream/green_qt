@@ -62,8 +62,15 @@ ControllerDialog {
                         controller.feeRate = feeRate
                     }
                 }
+                onCurrentIndexChanged: {
+                    if (currentIndex === 3) {
+                        custom_fee_field.clear()
+                        custom_fee_field.forceActiveFocus()
+                    }
+                }
             }
             GTextField {
+                id: custom_fee_field
                 enabled: fee_combo.currentIndex === 3
                 onTextChanged: controller.feeRate = Number(text) * 1000
                 horizontalAlignment: TextField.AlignRight
