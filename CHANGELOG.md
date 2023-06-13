@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Pass hash of uncompressed firmware when updating Jade
 
 ### Changed
+- Better error messages in increase fee dialog
 
 ### Fixed
 

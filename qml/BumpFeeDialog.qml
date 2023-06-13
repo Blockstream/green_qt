@@ -79,11 +79,21 @@ ControllerDialog {
                 rightPadding: fee_unit_label.width + 16
             }
         }
-        GButton {
-            Layout.alignment: Qt.AlignCenter
-            text: controller.tx.error !== '' ? qsTrId(controller.tx.error || '') : qsTrId('id_next')
-            enabled: controller.tx && controller.tx.error === ''
-            onClicked: controller.bumpFee()
+        FixedErrorBadge {
+            Layout.alignment: Qt.AlignHCenter
+            pointer: false
+            error: controller.tx.error
+        }
+        RowLayout {
+            HSpacer {
+            }
+            GButton {
+                Layout.alignment: Qt.AlignCenter
+                text: qsTrId('id_next')
+                enabled: controller.tx && controller.tx.error === ''
+                highlighted: true
+                onClicked: controller.bumpFee()
+            }
         }
     }
 
