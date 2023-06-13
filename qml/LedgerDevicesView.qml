@@ -297,6 +297,21 @@ MainPage {
             }
             contentItem: ColumnLayout {
                 spacing: 0
+                Label {
+                    Layout.fillWidth: true
+                    Layout.margins: 16
+                    padding: 8
+                    visible: self.device.state === LedgerDevice.StateDashboard && self.device.compatible
+                    text: qsTrId('id_ledger_dashboard_detected')
+                    horizontalAlignment: Label.AlignHCenter
+                    background: Rectangle {
+                        border.width: 0.5
+                        border.color: 'white'
+                        radius: 8
+                        opacity: 0.5
+                        color: 'transparent'
+                    }
+                }
                 Loader {
                     id: ledger_unsupported_warning
                     Layout.fillWidth: true
