@@ -59,6 +59,8 @@ void LedgerDeviceController::setNetwork(Network *network)
     m_network = network;
     emit networkChanged();
     m_dispatcher->dispatch();
+
+    emit appNameChanged();
 }
 
 void LedgerDeviceController::setDevice(LedgerDevice *device)
@@ -67,6 +69,11 @@ void LedgerDeviceController::setDevice(LedgerDevice *device)
     m_device = device;
     emit deviceChanged();
     m_dispatcher->dispatch();
+
+
+    connect(device, &LedgerDevice::stateChanged, this, &LedgerDeviceController::appNameChanged);
+    connect(device, &LedgerDevice::appChanged, this, &LedgerDeviceController::appNameChanged);
+    emit appNameChanged();
 }
 
 void LedgerDeviceController::setWallet(Wallet* wallet)
@@ -74,6 +81,30 @@ void LedgerDeviceController::setWallet(Wallet* wallet)
     if (m_wallet == wallet) return;
     m_wallet = wallet;
     emit walletChanged();
+}
+
+QString LedgerDeviceController::appName() const
+{
+    if (m_device && m_network) {
+        if (m_network->isLiquid()) {
+            if (m_network->isMainnet()) {
+                return "Liquid";
+            } else {
+                return "Liquid Test";
+            }
+        } else {
+            const auto version = QVersionNumber::fromString(m_device->appVersion());
+            const bool legacy = m_device->state() == LedgerDevice::StateDashboard && version >= QVersionNumber{2, 1, 0}
+                                || m_device->appName() == "Bitcoin" && version >= QVersionNumber{2, 1, 1};
+
+            if (m_network->isMainnet()) {
+                return legacy ? "Bitcoin Legacy" : "Bitcoin";
+            } else {
+                return "Bitcoin Test";
+            }
+        }
+    }
+    return "N/A";
 }
 
 void LedgerDeviceController::initialize()

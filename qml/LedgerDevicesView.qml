@@ -259,9 +259,9 @@ MainPage {
             }
             RowLayout {
                 Layout.fillWidth: false
-                Layout.minimumWidth: 150
+                Layout.minimumWidth: 180
                 GButton {
-                    visible: !controller.wallet || !controller.wallet.context
+                    visible: (!controller.wallet || !controller.wallet.context) && controller.enabled
                     enabled: !controller.wallet?.context && !controller.dispatcher.busy
                     text: qsTrId('id_login')
                     onClicked: controller.login()
@@ -270,6 +270,10 @@ MainPage {
                     visible: controller.wallet?.context ?? false
                     text: qsTrId('id_go_to_wallet')
                     onClicked: navigation.set({ view: self.network.key, wallet: controller.wallet.id })
+                }
+                Label {
+                    visible: !controller.enabled
+                    text: qsTrId('Select %1 app').arg(controller.appName)
                 }
             }
 //            TaskDispatcherInspector {
