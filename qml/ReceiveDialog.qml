@@ -88,6 +88,8 @@ ControllerDialog {
             Label {
                 Layout.fillWidth: true
                 Layout.preferredWidth: 0
+                Layout.minimumWidth: 400
+                Layout.minimumHeight: contentHeight
                 wrapMode: Text.WrapAnywhere
                 text: controller.uri
             }
