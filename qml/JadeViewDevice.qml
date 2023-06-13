@@ -167,7 +167,7 @@ ColumnLayout {
                     enabled: !controller.dispatcher.busy
                 }
                 GButton {
-                    text: qsTrId('id_setup_testnet')
+                    text: 'Setup Testnet'
                     visible: Settings.enableTestnet && ['ALL', 'TEST'].indexOf(self.device.versionInfo.JADE_NETWORKS) >= 0
                     enabled: !controller.dispatcher.busy
                     onClicked: controller.setup("testnet")
