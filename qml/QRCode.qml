@@ -3,8 +3,8 @@ import QtQuick
 Item {
     property string text
 
-    implicitHeight: 120
-    implicitWidth: 120
+    implicitHeight: 160
+    implicitWidth: 160
 
     Image {
         fillMode: Image.PreserveAspectFit
