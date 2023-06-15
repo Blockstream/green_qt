@@ -64,6 +64,7 @@ AbstractDialog {
     height: 450
     contentItem: StackView {
         id: stack_view
+        clip: true
         initialItem: null
     }
 
