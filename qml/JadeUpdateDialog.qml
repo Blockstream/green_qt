@@ -28,7 +28,7 @@ AbstractDialog {
     property JadeUpdateController controller: JadeUpdateController {
         index: firmware_controller.index
         device: self.device
-        onActivityCreated: {
+        onActivityCreated: (activity) => {
             if (activity instanceof JadeUnlockActivity) {
                 activity.failed.connect(() => { stack_view.pop() })
                 activity.finished.connect(() => { stack_view.pop() })
