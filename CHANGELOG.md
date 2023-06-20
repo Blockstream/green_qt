@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Better error messages in increase fee dialog
+- CI process for signing for Windows
 
 ### Fixed
 

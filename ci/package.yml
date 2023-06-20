@@ -14,7 +14,6 @@ package:build:
     - cd $CI_PROJECT_DIR
     - rm -fr green_qt_dist
     - mkdir green_qt_dist
-    - mv GreenSigned.exe "BlockstreamGreenSetup.exe"
     - zip -j green_qt_dist/BlockstreamGreen_Windows_x86_64.zip "BlockstreamGreenSetup.exe"
     - zip -r green_qt_dist/BlockstreamGreen_MacOS_x86_64.zip "Blockstream Green.dmg"
     - chmod +x green
