@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.2.3] - 2023-06-21
 ### Changed
 - Bigger QR Codes to aid scanning with Jade
 
@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support temporary Recovery Phrase Login with Jade
 - Handle sign message error with Jade
 - Sending with minium fee rate on Liquid singlesig
+- Click on new version notification to open download page
+- Regression in analytics initialization
 
 ## [1.2.2] - 2023-06-21
 ### Added
