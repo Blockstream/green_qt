@@ -184,6 +184,7 @@ ColumnLayout {
                     Layout.minimumHeight: 180
                     Layout.minimumWidth: 200
                     dispatcher: controller.dispatcher
+                    visible: env !== 'Production'
                 }
             }
         }
