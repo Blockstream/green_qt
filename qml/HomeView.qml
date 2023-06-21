@@ -54,10 +54,6 @@ MainPage {
             background: Rectangle {
                 radius: 4
                 color: 'white'
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: Qt.openUrlExternally(constants.downloadUrl)
-                }
             }
             contentItem: RowLayout {
                 Label {
@@ -71,6 +67,9 @@ MainPage {
                     font.bold: true
                     color: 'black'
                 }
+            }
+            TapHandler {
+                onTapped: Qt.openUrlExternally(constants.downloadUrl)
             }
         }
         spacing: constants.p4
