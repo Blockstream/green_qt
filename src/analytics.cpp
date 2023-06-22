@@ -91,7 +91,7 @@ Analytics::Analytics()
         switch (level) {
         case cly::LogLevel::INFO:    qInfo() << QString::fromStdString(message); break;
         case cly::LogLevel::WARNING: qWarning() << QString::fromStdString(message); break;
-        case cly::LogLevel::ERROR:   qCritical() << QString::fromStdString(message); break;
+        case cly::LogLevel::ERROR:   qFatal("%s\n", message.c_str()); break;
         case cly::LogLevel::FATAL:   qFatal("%s\n", message.c_str()); break;
         case cly::LogLevel::DEBUG:   break;
         default: break;
@@ -212,7 +212,6 @@ Analytics::Analytics()
 
     countly.enableRemoteConfig();
 
-    d->updateCustomUserDetails();
     d->start();
 }
 
@@ -273,9 +272,13 @@ void AnalyticsPrivate::start()
         countly.setDeviceID(device_id.toStdString(), false);
         countly.setTimestampOffset(timestamp_offset);
         countly.start(is_production ? COUNTLY_APP_KEY_REL : COUNTLY_APP_KEY_DEV, COUNTLY_HOST, 443, true);
-        q->decrBusy();
+
+        QMetaObject::invokeMethod(q, [=] {
+            active = true;
+            updateCustomUserDetails();
+            q->decrBusy();
+        });
     });
-    active = true;
 }
 
 void AnalyticsPrivate::stop(Qt::ConnectionType type)
@@ -294,7 +297,10 @@ void AnalyticsPrivate::stop(Qt::ConnectionType type)
             GA_destroy_session(session);
             session = nullptr;
         }
-        q->decrBusy();
+
+        QMetaObject::invokeMethod(q, [=] {
+            q->decrBusy();
+        });
     }, type);
 }
 
