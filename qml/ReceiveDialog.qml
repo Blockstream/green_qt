@@ -71,16 +71,10 @@ ControllerDialog {
 
         QRCode {
             id: qrcode
-            opacity: controller.generating ? 0.2 : 1.0
             text: controller.uri
+            implicitHeight: 280
+            implicitWidth: 280
             Layout.alignment: Qt.AlignHCenter
-            Behavior on opacity {
-                OpacityAnimator { duration: 200 }
-            }
-        }
-
-        SectionLabel {
-            text: qsTrId('id_address')
         }
 
         RowLayout {

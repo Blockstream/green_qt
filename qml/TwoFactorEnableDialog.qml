@@ -114,8 +114,9 @@ ControllerDialog {
                 }
             }
             QRCode {
-                Layout.fillWidth: true
-                Layout.minimumHeight: 128
+                Layout.alignment: Qt.AlignCenter
+                implicitHeight: 280
+                implicitWidth: 280
                 text: {
                     const name = wallet.name
                     const label = name + ' @ Green ' + wallet.network.displayName
