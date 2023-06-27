@@ -25,7 +25,9 @@ public:
     void add(TaskGroup* group);
     void remove(TaskGroup* group);
 
-    bool isBusy() const;
+    bool isBusy() const { return m_busy; }
+    void setBusy(bool busy);
+    void updateBusy();
 
     QQmlListProperty<TaskGroup> groups();
 
@@ -39,13 +41,13 @@ signals:
 private:
     void remove(Task* task);
     void update();
-
 protected:
     void timerEvent(QTimerEvent* event) override;
 
 private:
     QList<TaskGroup*> m_groups;
     int m_dispatch_timer{0};
+    bool m_busy{false};
     friend class Task;
 };
 

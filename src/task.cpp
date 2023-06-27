@@ -105,18 +105,26 @@ TaskDispatcher::~TaskDispatcher()
     emit groupsChanged();
 }
 
-bool TaskDispatcher::isBusy() const
+void TaskDispatcher::setBusy(bool busy)
+{
+    if (m_busy == busy) return;
+    m_busy = busy;
+    emit busyChanged();
+}
+
+void TaskDispatcher::updateBusy()
 {
     QList<TaskGroup*> groups(m_groups.begin(), m_groups.end());
     for (auto group : groups) {
         QList<Task*> tasks(group->m_tasks.begin(), group->m_tasks.end());
         for (auto task : tasks) {
             if (task->m_status == Task::Status::Active) {
-                return true;
+                setBusy(true);
+                return;
             }
         }
     }
-    return false;
+    setBusy(false);
 }
 
 QQmlListProperty<TaskGroup> TaskDispatcher::groups()
@@ -220,7 +228,7 @@ void TaskDispatcher::timerEvent(QTimerEvent* event)
         killTimer(m_dispatch_timer);
         m_dispatch_timer = 0;
         update();
-        emit busyChanged();
+        updateBusy();
     }
 }
 
