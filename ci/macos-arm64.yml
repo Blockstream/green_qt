@@ -10,7 +10,6 @@
     key: macos_arm64
     paths: [depends/]
   tags:
-    - qt
     - macos-arm64
 
 macos-arm64:depends:

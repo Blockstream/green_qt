@@ -10,7 +10,6 @@
     key: macos_x86_64
     paths: [depends/]
   tags:
-    - qt
     - macos-x86_64
 
 macos-x86_64:depends:

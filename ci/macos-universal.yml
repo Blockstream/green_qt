@@ -1,6 +1,5 @@
 macos-universal:build:
   tags:
-    - qt
     - osxsigner
   stage: build
   artifacts:
