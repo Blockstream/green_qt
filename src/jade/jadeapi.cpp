@@ -484,8 +484,16 @@ int JadeAPI::getXpub(const QString &network, const QVector<quint32> &path, const
 int JadeAPI::signMessage(const QVector<quint32> &path, const QString &message, const QByteArray& ae_host_commitment, const QByteArray& ae_host_entropy, const ResponseHandler &cb)
 {
     const int id = registerResponseHandler([this, ae_host_entropy, cb](const QVariantMap& rslt) {
+        if (rslt.contains("error")) {
+            cb(rslt);
+            return;
+        }
         const auto signer_commitment = rslt.value("result").toByteArray();
         const int id = registerResponseHandler([ae_host_entropy, signer_commitment, cb](const QVariantMap& rslt) {
+            if (rslt.contains("error")) {
+                cb(rslt);
+                return;
+            }
             const auto signature = rslt.value("result").toString();
             cb({ {"signature", signature}, {"signer_commitment", signer_commitment} });
         });

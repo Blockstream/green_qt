@@ -67,7 +67,11 @@ public:
     virtual void exec() override
     {
         m_device->api()->signMessage(m_path, m_message, m_ae_host_commitment, m_ae_host_entropy, [this](const QVariantMap& result) {
-            qDebug() << result;
+            if (result.contains("error")) {
+                qDebug() << "JadeSignMessageActivity" << result;
+                fail();
+                return;
+            }
 
             auto sig = QByteArray::fromBase64(result["signature"].toString().toLocal8Bit());
             if (sig.size() == EC_SIGNATURE_RECOVERABLE_LEN) sig = sig.mid(1);

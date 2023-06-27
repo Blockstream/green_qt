@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Bigger QR Codes to aid scanning with Jade
 
+### Fixed
+- Handle sign message error with Jade
+
 ## [1.2.2] - 2023-06-21
 ### Added
 - Pass hash of uncompressed firmware when updating Jade
