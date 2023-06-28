@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bigger QR Codes to aid scanning with Jade
 
 ### Fixed
+- Support temporary Recovery Phrase Login with Jade
 - Handle sign message error with Jade
 
 ## [1.2.2] - 2023-06-21

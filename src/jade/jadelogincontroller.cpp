@@ -279,11 +279,18 @@ void JadeIdentifyTask::update()
 
     const auto device = m_controller->device();
     if (!device) return;
-    if (device->state() == JadeDevice::StateLocked) return;
-    if (device->state() == JadeDevice::StateTemporary) return;
 
     const auto network = NetworkManager::instance()->network(m_controller->network());
     if (!network) return;
+
+    if (device->state() == JadeDevice::StateLocked) return;
+    if (device->state() == JadeDevice::StateTemporary) {
+        device->api()->authUser(network->canonicalId(), [=](const QVariantMap& msg) {
+            device->updateVersionInfo();
+        }, [=](JadeAPI& jade, int id, const QJsonObject& req) {
+        });
+        return;
+    };
 
     auto context = m_controller->ensureContext();
 
@@ -334,7 +341,13 @@ void JadeLoginTask::update()
         const auto device = m_controller->device();
         if (!device) return;
         if (device->state() == JadeDevice::StateLocked) return;
-        if (device->state() == JadeDevice::StateTemporary) return;
+        if (device->state() == JadeDevice::StateTemporary) {
+            device->api()->authUser(network->canonicalId(), [=](const QVariantMap& msg) {
+                device->updateVersionInfo();
+            }, [=](JadeAPI& jade, int id, const QJsonObject& req) {
+            });
+            return;
+        };
 
         if (m_controller->walletHashId().isEmpty()) return;
 
