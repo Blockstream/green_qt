@@ -140,17 +140,7 @@ void SendController::update()
             unit = unit == "\u00B5BTC" ? "ubtc" : unit.toLower();
             QJsonObject convert;
 
-            if (m_send_all) {
-    //            if (is_liquid) {
-    //                if (m_balance) {
-    //                    convert.insert("sats", QString::number(m_balance->amount()));
-    //                }
-    //            } else {
-    //                auto satoshi = account()->json().value("satoshi").toObject();
-    //                Q_ASSERT(satoshi.contains("btc"));
-    //                convert.insert("sats", QString::number(satoshi.value("btc").toDouble()));
-    //            }
-            } else if (!m_amount.isEmpty()) {
+            if (!m_amount.isEmpty()) {
                 Q_ASSERT(m_fiat_amount.isEmpty());
                 auto amount = m_amount;
                 amount.replace(',', '.');
@@ -239,7 +229,7 @@ void SendController::create()
     }
 
     m_transaction["subaccount"] = static_cast<qint64>(m_account->pointer());
-    m_transaction["fee_rate"] = m_fee_rate;
+    m_transaction["fee_rate"] = network->isLiquid() && network->isElectrum() ? qMax(m_fee_rate, 100) : m_fee_rate;
     m_transaction["send_all"] = m_send_all;
     m_transaction["addressees"] = QJsonArray{address};
     m_transaction["utxo_strategy"] = m_manual_coin_selection ? "manual" : "default";

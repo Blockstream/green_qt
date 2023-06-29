@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Support temporary Recovery Phrase Login with Jade
 - Handle sign message error with Jade
+- Sending with minium fee rate on Liquid singlesig
 
 ## [1.2.2] - 2023-06-21
 ### Added
