@@ -209,6 +209,7 @@ Analytics::Analytics()
     connect(settings, &Settings::useProxyChanged, d, &AnalyticsPrivate::restart);
     connect(settings, &Settings::proxyHostChanged, d, &AnalyticsPrivate::restart);
     connect(settings, &Settings::proxyPortChanged, d, &AnalyticsPrivate::restart);
+    connect(settings, &Settings::analyticsChanged, d, &AnalyticsPrivate::restart);
 
     countly.enableRemoteConfig();
 
@@ -271,7 +272,11 @@ void AnalyticsPrivate::start()
         auto& countly = cly::Countly::getInstance();
         countly.setDeviceID(device_id.toStdString(), false);
         countly.setTimestampOffset(timestamp_offset);
-        countly.start(is_production ? COUNTLY_APP_KEY_REL : COUNTLY_APP_KEY_DEV, COUNTLY_HOST, 443, true);
+        static bool started = false;
+        if (!started) {
+            countly.start(is_production ? COUNTLY_APP_KEY_REL : COUNTLY_APP_KEY_DEV, COUNTLY_HOST, 443, true);
+            started = true;
+        }
 
         QMetaObject::invokeMethod(q, [=] {
             active = true;
