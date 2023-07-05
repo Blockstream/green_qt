@@ -55,6 +55,17 @@ AbstractDialog {
         }
     }
 
+    readonly property int count: {
+        if (self.debug_jade) return controller.firmwares.length
+        let result = 0
+        for (const fw of controller.firmwares) {
+            if (!fw.upgrade) continue
+            if (fw.has_delta) continue
+            result ++
+        }
+        return result
+    }
+
     id: self
     title: qsTrId('id_firmware_update')
     closePolicy: Dialog.NoAutoClose

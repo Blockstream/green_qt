@@ -100,11 +100,15 @@ ColumnLayout {
                     topInset: 0
                     bottomInset: 0
                     highlighted: (self.device && self.device.updateRequired) || !!update_dialog.controller.firmwareAvailable
-                    enabled: !firmware_controller.fetching
+                    enabled: {
+                        if (firmware_controller.fetching) return false
+                        return update_dialog.count > 0
+                    }
                     text: {
                         if (self.device.updateRequired) return qsTrId('id_new_jade_firmware_required')
                         const fw = update_dialog.controller.firmwareAvailable
                         if (fw) return `${fw.version} available`
+                        if (update_dialog.count === 0) return 'Up-to-date firmware'
                         return qsTrId('id_check_for_updates')
                     }
                     onClicked: {
