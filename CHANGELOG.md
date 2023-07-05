@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Remove local analytics details after disabling on settings
+- Change preferred currency or exchange on singlesig wallet
 
 ## [1.2.3] - 2023-06-21
 ### Changed

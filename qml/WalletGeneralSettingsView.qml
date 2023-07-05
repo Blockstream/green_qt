@@ -86,7 +86,8 @@ ColumnLayout {
                         const currency = currentText
                         if (currency === '') return
                         if (currency === wallet.context.settings.pricing.currency) return
-                        const pricing = { currency }
+                        const exchange = wallet.context.settings.pricing.exchange
+                        const pricing = { currency, exchange }
                         if (self.per_currency[currency].indexOf(wallet.context.settings.pricing.exchange) < 0) {
                             pricing.exchange = self.per_currency[currentText][0]
                         }
@@ -107,7 +108,9 @@ ColumnLayout {
                         const exchange = currentText
                         if (exchange === '') return
                         if (exchange === wallet.context.settings.pricing.exchange) return
-                        controller.changeSettings({ pricing: { exchange } })
+                        const currency = wallet.context.settings.pricing.currency
+                        const pricing = { currency, exchange }
+                        controller.changeSettings({ pricing })
                     }
                     Layout.minimumWidth: 150
                 }
