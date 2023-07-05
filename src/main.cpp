@@ -300,15 +300,17 @@ int main(int argc, char *argv[])
     }
 
     QTranslator preferred_translator;
-    preferred_translator.load(QString(":/i18n/green_%1.qm").arg(Settings::instance()->language()));
-    app.installTranslator(&preferred_translator);
+    if (preferred_translator.load(QString(":/i18n/green_%1.qm").arg(Settings::instance()->language()))) {
+        app.installTranslator(&preferred_translator);
+    }
 
     QObject::connect(Settings::instance(), &Settings::languageChanged, [&](const QString& language) {
         app.removeTranslator(&preferred_translator);
         const auto filename = QString(":/i18n/green_%1.qm").arg(language);
-        preferred_translator.load(filename);
-        app.installTranslator(&preferred_translator);
-        engine.retranslate();
+        if (preferred_translator.load(filename)) {
+            app.installTranslator(&preferred_translator);
+            engine.retranslate();
+        }
     });
 
     QZXing::registerQMLTypes();
