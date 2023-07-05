@@ -320,7 +320,6 @@ Analytics::~Analytics()
     d->stop(Qt::BlockingQueuedConnection);
     d->thread.quit();
     d->thread.wait();
-    cly::Countly::getInstance().setHTTPClient(nullptr);
     delete d;
     g_analytics_instance = nullptr;
 }
