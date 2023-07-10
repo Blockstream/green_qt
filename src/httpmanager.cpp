@@ -51,8 +51,18 @@ void HttpManager::exec(SessionActivity* activity)
         QMutexLocker locker(&m_mutex);
         activity->moveToThread(thread());
         m_queue.enqueue(activity);
+        connect(activity, &Activity::destroyed, this, [=] {
+            {
+                QMutexLocker locker(&m_mutex);
+                m_queue.removeAll(activity);
+            }
+            if (m_running == activity) {
+                m_running = nullptr;
+                QMetaObject::invokeMethod(this, [=] { dispatch(); }, Qt::QueuedConnection);
+            }
+        });
     }
-    QMetaObject::invokeMethod(this, [&] { dispatch(); });
+    QMetaObject::invokeMethod(this, [=] { dispatch(); }, Qt::QueuedConnection);
 }
 
 void HttpManager::dispatch()
@@ -104,21 +114,14 @@ void HttpManager::dispatch()
     m_running = m_queue.dequeue();
     m_running->setSession(m_session);
 
-    connect(m_running, &Activity::destroyed, this, [=](QObject* activity) {
-        if (m_running == activity) {
-            m_running = nullptr;
-            dispatch();
-        }
-    });
-
     connect(m_running, &Activity::finished, this, [=] {
         m_running = nullptr;
-        dispatch();
+        QMetaObject::invokeMethod(this, [=] { dispatch(); }, Qt::QueuedConnection);
     });
 
     connect(m_running, &Activity::failed, this, [=] {
         m_running = nullptr;
-        dispatch();
+        QMetaObject::invokeMethod(this, [=] { dispatch(); }, Qt::QueuedConnection);
     });
 
     ActivityManager::instance()->exec(m_running);
