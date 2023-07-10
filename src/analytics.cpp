@@ -42,8 +42,7 @@ public:
     };
     std::map<std::string, View> views;
     QThread thread;
-    QMutex busy_mutex;
-    int busy{0};
+    std::atomic_int busy{0};
     QJsonArray alerts;
 
     void start();
@@ -120,8 +119,6 @@ Analytics::Analytics()
         cly::HTTPResponse res{false, {}};
 
         {
-            QMutexLocker lock(&d->busy_mutex);
-
             if (!d->session) {
                 qDebug() << "analytics: create session";
                 GA_create_session(&d->session);
@@ -228,21 +225,20 @@ void AnalyticsPrivate::updateCustomUserDetails()
     cly::Countly::getInstance().setCustomUserDetails(user_details);
 }
 
+bool Analytics::isBusy() const
+{
+    return d->busy > 0;
+}
+
 void Analytics::incrBusy()
 {
-    {
-        QMutexLocker lock(&d->busy_mutex);
-        d->busy ++;
-    }
+    d->busy ++;
     QMetaObject::invokeMethod(this, &Analytics::busyChanged, Qt::QueuedConnection);
 }
 
 void Analytics::decrBusy()
 {
-    {
-        QMutexLocker lock(&d->busy_mutex);
-        d->busy --;
-    }
+    d->busy --;
     QMetaObject::invokeMethod(this, &Analytics::busyChanged, Qt::QueuedConnection);
 }
 
@@ -298,7 +294,6 @@ void AnalyticsPrivate::stop(Qt::ConnectionType type)
         auto& countly = cly::Countly::getInstance();
         countly.stop();
         {
-            QMutexLocker lock(&busy_mutex);
             GA_destroy_session(session);
             session = nullptr;
         }
@@ -331,12 +326,6 @@ Analytics* Analytics::instance()
 }
 
 bool Analytics::isActive() const { return d->active; }
-
-bool Analytics::isBusy() const
-{
-    QMutexLocker lock(&d->busy_mutex);
-    return d->busy > 0;
-}
 
 void Analytics::recordEvent(const QString& name)
 {
