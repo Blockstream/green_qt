@@ -145,13 +145,6 @@ MainPage {
                 }
             }
             Field {
-                name: qsTrId('id_check_for_updates_on_startup')
-                GSwitch {
-                    checked: Settings.checkForUpdates
-                    onToggled: Settings.checkForUpdates = checked
-                }
-            }
-            Field {
                 name: qsTrId('id_help_green_improve')
                 GSwitch {
                     enabled: !Analytics.busy
@@ -164,18 +157,6 @@ MainPage {
                     visible: Analytics.busy
                 }
                 HSpacer {
-                }
-            }
-            Separator {
-            }
-            SectionLabel {
-                text: qsTrId('id_devices')
-            }
-            Field {
-                name: 'Check for firmware updates on startup'
-                GSwitch {
-                    checked: Settings.checkForFirmwareUpdates
-                    onToggled: Settings.checkForFirmwareUpdates = checked
                 }
             }
             Separator {

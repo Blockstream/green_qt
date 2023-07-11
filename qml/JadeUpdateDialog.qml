@@ -43,7 +43,7 @@ AbstractDialog {
             // in when Jade setup is in progress
             if (self.device.state === JadeDevice.StateUnsaved) return
 
-            if (firmwareAvailable && Settings.checkForFirmwareUpdates) {
+            if (firmwareAvailable) {
                 self.quickUpdate()
             }
         }
@@ -90,23 +90,6 @@ AbstractDialog {
                 }
                 Label {
                     text: !!self.controller.firmwareAvailable ? `Firmware version ${self.controller.firmwareAvailable.version} is available for your Blockstream Jade.` : ''
-                }
-                RowLayout {
-                    CheckBox {
-                        id: checkbox
-                        focus: true
-                        checked: !Settings.checkForFirmwareUpdates
-                        onToggled: Settings.checkForFirmwareUpdates = !Settings.checkForFirmwareUpdates
-                    }
-                    Label {
-                        textFormat: Text.RichText
-                        text: "Stop showing updates"
-                        onLinkActivated: Qt.openUrlExternally(link)
-                        background: MouseArea {
-                            acceptedButtons: Qt.NoButton
-                            cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor
-                        }
-                    }
                 }
                 VSpacer {
                 }

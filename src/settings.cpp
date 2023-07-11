@@ -103,22 +103,6 @@ void Settings::setUseTor(bool use_tor)
     saveLater();
 }
 
-void Settings::setCheckForUpdates(bool check_for_updates)
-{
-    if (m_check_for_updates == check_for_updates) return;
-    m_check_for_updates = check_for_updates;
-    emit checkForUpdatesChanged(m_check_for_updates);
-    saveLater();
-}
-
-void Settings::setCheckForFirmwareUpdates(bool check_for_firmware_updates)
-{
-    if (m_check_for_firmware_updates == check_for_firmware_updates) return;
-    m_check_for_firmware_updates = check_for_firmware_updates;
-    emit checkForFirmwareUpdatesChanged(m_check_for_firmware_updates);
-    saveLater();
-}
-
 QStringList Settings::recentWallets()
 {
     return m_recent_wallets;
@@ -280,7 +264,6 @@ void Settings::load(const QSettings& settings)
     LOAD(m_use_tor)
     LOAD(m_recent_wallets)
     LOAD(m_language)
-    LOAD(m_check_for_updates)
     LOAD(m_show_news)
     LOAD(m_enable_experimental)
     LOAD(m_use_personal_node)
@@ -290,7 +273,6 @@ void Settings::load(const QSettings& settings)
     LOAD(m_liquid_testnet_electrum_url)
     LOAD(m_enable_spv)
     LOAD(m_analytics)
-    LOAD(m_check_for_firmware_updates)
 #undef LOAD
 }
 
@@ -318,7 +300,6 @@ void Settings::saveNow()
     SAVE(m_use_tor)
     SAVE(m_recent_wallets)
     SAVE(m_language)
-    SAVE(m_check_for_updates)
     SAVE(m_show_news)
     SAVE(m_enable_experimental)
     SAVE(m_use_personal_node)
@@ -328,7 +309,6 @@ void Settings::saveNow()
     SAVE(m_liquid_testnet_electrum_url)
     SAVE(m_enable_spv)
     SAVE(m_analytics)
-    SAVE(m_check_for_firmware_updates)
 #undef SAVE
 }
 

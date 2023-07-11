@@ -26,7 +26,7 @@ MainPage {
 
     AppUpdateController {
         id: app_update_controller
-        Component.onCompleted: if (Settings.checkForUpdates) checkForUpdates()
+        Component.onCompleted: checkForUpdates()
     }
 
     AnalyticsView {

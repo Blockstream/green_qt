@@ -28,7 +28,7 @@ MainPage {
 
     JadeFirmwareController {
         id: firmware_controller
-        enabled: Settings.checkForFirmwareUpdates
+        enabled: true
     }
 
     JadeDeviceSerialPortDiscoveryAgent {
