@@ -43,7 +43,7 @@ WizardPage {
             }
         }
         GridLayout {
-            columns: 6
+            columns: 3
             Repeater {
                 model: mnemonic_size_combobox.size
                 WordField {

@@ -37,8 +37,9 @@ GFlickable {
         Repeater {
             model: outputs
             delegate: Page {
-                Layout.fillWidth: true
                 readonly property Asset asset: wallet.context.getOrCreateAsset(self.resolver.session.network, modelData.asset_id)
+                id: delegate
+                Layout.fillWidth: true
                 background: null
                 header: SectionLabel {
                     bottomPadding: constants.s1
@@ -53,7 +54,9 @@ GFlickable {
                     }
                     Label {
                         Layout.fillWidth: true
+                        Layout.preferredWidth: 0
                         text: modelData.address
+                        wrapMode: Text.WrapAnywhere
                     }
                     Label {
                         text: qsTrId('id_amount')
@@ -63,11 +66,18 @@ GFlickable {
                         text: asset.formatAmount(modelData.satoshi, true, 'btc')
                     }
                     Label {
-                        text: qsTrId('id_asset_id')
+                        text: qsTrId('id_asset')
                     }
                     Label {
                         Layout.fillWidth: true
-                        text: modelData.asset_id
+                        visible: delegate.asset.data.entity
+                        text: delegate.asset.data.entity?.domain ?? ''
+                    }
+                    Item {
+                    }
+                    Label {
+                        Layout.fillWidth: true
+                        text: String(delegate.asset.id).match(/.{1,8}/g).join(' ') + '\n'
                     }
                 }
             }

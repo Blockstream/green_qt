@@ -536,7 +536,10 @@ ControllerDialog {
                         text: qsTrId('id_address')
                     }
                     Label {
+                        Layout.fillWidth: true
+                        Layout.preferredWidth: 0
                         text: modelData.address
+                        wrapMode: Text.WrapAnywhere
                     }
                     SectionLabel {
                         text: qsTrId('id_asset')

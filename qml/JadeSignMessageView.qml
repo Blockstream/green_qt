@@ -6,7 +6,6 @@ import QtQuick.Layouts
 ColumnLayout {
     spacing: constants.s1
     required property SignMessageResolver resolver
-    Component.onCompleted: resolver.resolve()
     Label {
         text: qsTrId('id_verify_on_device')
     }
@@ -37,7 +36,7 @@ ColumnLayout {
         text: qsTrId('id_message_hash')
     }
     Label {
-        text: resolver.hash
+        text: String(resolver.hash).match(/.{1,8}/g).join(' ')
         wrapMode: Text.Wrap
         Layout.maximumWidth: 500
     }

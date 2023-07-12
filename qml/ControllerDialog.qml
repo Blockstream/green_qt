@@ -96,23 +96,11 @@ WalletDialog {
 //                }
 //                return
 //            }
-//            if (resolver instanceof SignMessageResolver) {
-//                if (resolver.device instanceof JadeDevice) {
-//                    const view = jade_sign_message_view.createObject(stack_view, { resolver })
-//                    stack_view.push(view)
-//                    return
-//                }
-//            }
 //            // automatically resolve
 //            resolver.resolve()
 //        }
 //    }
 
-    Component {
-        id: jade_sign_message_view
-        JadeSignMessageView {
-        }
-    }
 
     /*
     property Component genericErrorComponent: WizardPage {
@@ -195,7 +183,7 @@ WalletDialog {
                             if (!(task instanceof SignTransactionTask)) continue
                             if (!(task.resolver instanceof SignTransactionResolver)) continue
                             if (!(task.status === Task.Active)) continue
-                            if (!(task.context.device instanceof JadeDevice)) continue
+                            if (!(task.session.context.device instanceof JadeDevice)) continue
                             return task
                         }
                     }
@@ -205,7 +193,7 @@ WalletDialog {
                 animated: true
                 active: !!jade_sign_transaction_loader.task
                 sourceComponent: JadeSignTransactionView {
-                    wallet: jade_sign_transaction_loader.task.context.wallet
+                    wallet: jade_sign_transaction_loader.task.session.context.wallet
                     resolver: jade_sign_transaction_loader.task.resolver
                 }
             }
@@ -219,7 +207,7 @@ WalletDialog {
                             if (!(task instanceof SignTransactionTask)) continue
                             if (!(task.resolver instanceof SignLiquidTransactionResolver)) continue
                             if (!(task.status === Task.Active)) continue
-                            if (!(task.context.device instanceof JadeDevice)) continue
+                            if (!(task.session.context.device instanceof JadeDevice)) continue
                             return task
                         }
                     }
@@ -229,7 +217,7 @@ WalletDialog {
                 animated: true
                 active: !!jade_sign_liquid_transaction_loader.task
                 sourceComponent: JadeSignLiquidTransactionView {
-                    wallet: jade_sign_liquid_transaction_loader.task.context.wallet
+                    wallet: jade_sign_liquid_transaction_loader.task.session.context.wallet
                     resolver: jade_sign_liquid_transaction_loader.task.resolver
                 }
             }
@@ -243,7 +231,7 @@ WalletDialog {
                             if (!(task instanceof SignTransactionTask)) continue
                             if (!(task.resolver instanceof SignTransactionResolver)) continue
                             if (!(task.status === Task.Active)) continue
-                            if (!(task.context.device instanceof LedgerDevice)) continue
+                            if (!(task.session.context.device instanceof LedgerDevice)) continue
                             return task
                         }
                     }
@@ -253,7 +241,7 @@ WalletDialog {
                 animated: true
                 active: !!ledger_sign_transaction_loader.task
                 sourceComponent: LedgerSignTransactionView {
-                    wallet: ledger_sign_transaction_loader.task.context.wallet
+                    wallet: ledger_sign_transaction_loader.task.session.context.wallet
                     resolver: ledger_sign_transaction_loader.task.resolver
                 }
             }
@@ -267,7 +255,7 @@ WalletDialog {
                             if (!(task instanceof SignTransactionTask)) continue
                             if (!(task.resolver instanceof SignLiquidTransactionResolver)) continue
                             if (!(task.status === Task.Active)) continue
-                            if (!(task.context.device instanceof LedgerDevice)) continue
+                            if (!(task.session.context.device instanceof LedgerDevice)) continue
                             return task
                         }
                     }
@@ -277,8 +265,31 @@ WalletDialog {
                 animated: true
                 active: !!ledger_sign_liquid_transaction_loader.task
                 sourceComponent: SignLiquidTransactionResolverView {
-                    wallet: ledger_sign_liquid_transaction_loader.task.context.wallet
+                    wallet: ledger_sign_liquid_transaction_loader.task.session.context.wallet
                     resolver: ledger_sign_liquid_transaction_loader.task.resolver
+                }
+            }
+            AnimLoader {
+                readonly property CreateAccountTask task: {
+                    const groups = self.controller?.dispatcher?.groups
+                    for (let j = 0; j < groups.length; j++) {
+                        const group = groups[j]
+                        for (let i = 0; i < group.tasks.length; i++) {
+                            const task = group.tasks[i]
+                            if (!(task instanceof CreateAccountTask)) continue
+                            if (!(task.resolver instanceof SignMessageResolver)) continue
+                            if (!(task.status === Task.Active)) continue
+                            if (!(task.session.context.device instanceof JadeDevice)) continue
+                            return task
+                        }
+                    }
+                    return null
+                }
+                id: jade_sign_message_loader
+                animated: true
+                active: !!jade_sign_message_loader.task
+                sourceComponent: JadeSignMessageView {
+                    resolver: jade_sign_message_loader.task.resolver
                 }
             }
         }

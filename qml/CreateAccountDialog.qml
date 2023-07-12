@@ -123,8 +123,6 @@ ControllerDialog {
         }
     }
 
-
-
     AnimLoader {
         animated: true
         active: navigation.param.view === '2of3_generate'
@@ -201,6 +199,7 @@ ControllerDialog {
                 }
                 Card {
                     id: hww_card
+                    visible: false
                     enabled: false
                     text: qsTrId('id_hardware_wallet')
                     description: qsTrId('id_use_a_hardware_wallet_as_your')
@@ -283,6 +282,7 @@ ControllerDialog {
         active: navigation.param.view === '2of3_mnemonic'
         sourceComponent: ColumnLayout {
             MnemonicEditor {
+                Layout.alignment: Qt.AlignCenter
                 id: editor
                 lengths: ["12 words", "24 words"]
             }
