@@ -11,6 +11,8 @@ ColumnLayout {
     spacing: constants.s3
     Layout.minimumWidth: implicitWidth
 
+    Component.onCompleted: window.navigation.push({ view: 'jade', device: self.device.uuid })
+
     JadeUpdateDialog {
         id: update_dialog
         device: self.device

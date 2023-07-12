@@ -45,7 +45,7 @@ MainPage {
         contentItem: RowLayout {
             spacing: 12
             Label {
-                text: qsTrId('id_blockstream_devices')
+                text: 'Blockstream Jade'
                 font.pixelSize: 24
                 font.styleName: 'Medium'
             }
