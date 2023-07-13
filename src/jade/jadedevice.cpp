@@ -352,10 +352,18 @@ public:
                 const auto path = ParsePath(output.value("user_path"));
                 const auto recovery_xpub = output.value("recovery_xpub").toString();
                 const auto csv_blocks = output.value("address_type").toString() == "csv" ? output.value("subtype").toInt() : 0;
+                const auto type = output.value("address_type").toString();
+
+                QString variant;
+                if (type == "p2pkh") variant = "pkh(k)";
+                if (type == "p2wpkh") variant = "wpkh(k)";
+                if (type == "p2sh-p2wpkh") variant = "sh(wpkh(k))";
+
                 const QVariantMap data = {
                     { "path", path },
                     { "recovery_xpub", recovery_xpub },
                     { "csv_blocks", csv_blocks },
+                    { "variant", variant },
                 };
                 m_change.append(data);
             } else {

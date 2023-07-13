@@ -66,18 +66,15 @@ GFlickable {
                         text: asset.formatAmount(modelData.satoshi, true, 'btc')
                     }
                     Label {
+                        Layout.alignment: Qt.AlignTop
                         text: qsTrId('id_asset')
                     }
                     Label {
                         Layout.fillWidth: true
-                        visible: delegate.asset.data.entity
-                        text: delegate.asset.data.entity?.domain ?? ''
-                    }
-                    Item {
-                    }
-                    Label {
-                        Layout.fillWidth: true
-                        text: String(delegate.asset.id).match(/.{1,8}/g).join(' ') + '\n'
+                        text: [
+                            delegate.asset.data.entity?.domain ?? '',
+                            String(delegate.asset.id).match(/.{1,8}/g).join(' '),
+                        ].join('\n').trim() + '\n'
                     }
                 }
             }
