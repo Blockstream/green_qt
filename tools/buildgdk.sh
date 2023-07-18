@@ -6,10 +6,12 @@ mkdir -p build
 cd build
 
 if [ ! -d gdk ]; then
-    git clone --quiet --depth 1 --branch release_0.0.62 --single-branch https://github.com/Blockstream/gdk.git gdk
+    git clone --quiet --depth 1 --branch release_0.0.64 --single-branch https://github.com/Blockstream/gdk.git gdk
 fi
 
 cd gdk
+
+sed -i.bck "s/TOR_LINK_LIBRARIES/tor_LINK_LIBRARIES/g" tools/archiver.sh.gen.in
 
 # unset to disable building gdk java support
 unset JAVA_HOME
