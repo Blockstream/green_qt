@@ -108,6 +108,11 @@ GetMasterBlindingKeyActivity *LedgerDevice::getMasterBlindingKey()
     Q_UNREACHABLE();
 }
 
+GetBlindingFactorsActivity *LedgerDevice::getBlindingFactors(const QJsonArray& inputs, const QJsonArray& outputs)
+{
+    return nullptr;
+}
+
 LogoutActivity* LedgerDevice::logout()
 {
     return nullptr;

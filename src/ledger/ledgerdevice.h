@@ -110,6 +110,7 @@ public:
     GetBlindingNonceActivity* getBlindingNonce(const QByteArray& pubkey, const QByteArray& script) override;
     SignLiquidTransactionActivity* signLiquidTransaction(Network* network, const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs) override;
     GetMasterBlindingKeyActivity* getMasterBlindingKey() override;
+    GetBlindingFactorsActivity* getBlindingFactors(const QJsonArray& inputs, const QJsonArray& outputs) override;
     LogoutActivity* logout() override;
 
     GetFirmwareActivity* getFirmware();
@@ -135,5 +136,14 @@ private:
     QString m_app_name;
     QVersionNumber m_app_version;
 };
+
+class LedgerGetBlindingFactorsActivity : public GetBlindingFactorsActivity
+{
+public:
+    LedgerGetBlindingFactorsActivity(QObject* parent) : GetBlindingFactorsActivity(parent) {}
+    virtual QByteArray assetBlinders() const = 0;
+    virtual QByteArray amountBlinders() const = 0;
+};
+
 
 #endif // GREEN_LEDGERDEVICE_H

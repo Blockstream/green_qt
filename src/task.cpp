@@ -473,6 +473,8 @@ void AuthHandlerTask::handleResolveCode(const QJsonObject& result)
             }
         } else if (action == "get_master_blinding_key") {
             resolver = new GetMasterBlindingKeyResolver(device, result, m_session);
+        } else if (action == "get_blinding_factors") {
+            resolver = new GetBlindingFactorsResolver(device, result, m_session);
         } else {
             Q_UNREACHABLE();
         }

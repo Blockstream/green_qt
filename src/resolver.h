@@ -205,4 +205,13 @@ public:
     void resolve() override;
 };
 
+class GetBlindingFactorsResolver : public DeviceResolver
+{
+    Q_OBJECT
+    QML_ELEMENT
+public:
+    GetBlindingFactorsResolver(Device* device, const QJsonObject& result, Session* session);
+    void resolve() override;
+};
+
 #endif // GREEN_RESOLVER_H

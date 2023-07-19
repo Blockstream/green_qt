@@ -588,6 +588,12 @@ GetMasterBlindingKeyActivity *JadeDevice::getMasterBlindingKey()
     return new JadeGetMasterBlindingKeyActivity(this);
 }
 
+GetBlindingFactorsActivity *JadeDevice::getBlindingFactors(const QJsonArray&, const QJsonArray&)
+{
+    Q_UNIMPLEMENTED();
+    return nullptr;
+}
+
 LogoutActivity *JadeDevice::logout()
 {
     return new JadeLogoutActivity(this);

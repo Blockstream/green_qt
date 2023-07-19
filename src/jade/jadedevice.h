@@ -52,6 +52,7 @@ public:
     GetBlindingNonceActivity* getBlindingNonce(const QByteArray& pubkey, const QByteArray& script) override;
     SignLiquidTransactionActivity* signLiquidTransaction(Network* network, const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs) override;
     GetMasterBlindingKeyActivity* getMasterBlindingKey() override;
+    GetBlindingFactorsActivity* getBlindingFactors(const QJsonArray& inputs, const QJsonArray& outputs) override;
     LogoutActivity* logout() override;
     void updateVersionInfo();
     void setVersionInfo(const QVariantMap& version_info);

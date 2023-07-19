@@ -326,3 +326,37 @@ void GetMasterBlindingKeyResolver::resolve()
     ActivityManager::instance()->exec(activity);
     pushActivity(activity);
 }
+
+GetBlindingFactorsResolver::GetBlindingFactorsResolver(Device *device, const QJsonObject &result, Session *session)
+    : DeviceResolver(device, result, session)
+{
+}
+
+void GetBlindingFactorsResolver::resolve()
+{
+    const auto inputs = m_required_data.value("transaction_inputs").toArray();
+    const auto outputs = m_required_data.value("transaction_outputs").toArray();
+
+    auto activity = device()->getBlindingFactors(inputs, outputs);
+    connect(activity, &Activity::finished, this, [=] {
+        activity->deleteLater();
+
+        QJsonArray assetblinders;
+        for (const auto& b : activity->assetBlinders()) {
+            assetblinders.append(QString::fromLocal8Bit(b.toHex()));
+        }
+
+        QJsonArray amountblinders;
+        for (const auto& b : activity->amountBlinders()) {
+            amountblinders.append(QString::fromLocal8Bit(b.toHex()));
+        }
+
+        emit resolved({
+            { "assetblinders", assetblinders },
+            { "amountblinders", amountblinders }
+        });
+    });
+    connect(activity, &Activity::failed, this, &Resolver::failed);
+    ActivityManager::instance()->exec(activity);
+    pushActivity(activity);
+}
