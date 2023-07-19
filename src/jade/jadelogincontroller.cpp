@@ -49,7 +49,7 @@ JadeSetupController::JadeSetupController(QObject* parent)
 void JadeSetupController::setup(const QString& network)
 {
     m_network = NetworkManager::instance()->network(network);
-    auto session = m_context->getOrCreateSession(m_network);
+    auto session = ensureContext()->getOrCreateSession(m_network);
     auto connect_session = new ConnectTask(session);
     auto setup = new JadeSetupTask(this);
 
