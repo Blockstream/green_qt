@@ -88,6 +88,9 @@ ItemDelegate {
     onClicked: {
         if (wallet.context) {
             navigation.set({ wallet: wallet.id })
+        } else if ('type' in wallet.deviceDetails && !wallet.hasPinData) {
+            const view = wallet.deviceDetails.type === 'jade' ? 'jade' : 'ledger'
+            navigation.push({ view })
         } else {
             navigation.set({ flow: 'login', wallet: wallet.id })
         }
