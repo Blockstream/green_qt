@@ -66,6 +66,7 @@ WalletManager::WalletManager()
 
 WalletManager::~WalletManager()
 {
+    g_wallet_manager = nullptr;
 }
 
 WalletManager* WalletManager::instance()
