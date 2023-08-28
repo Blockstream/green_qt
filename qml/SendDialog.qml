@@ -530,7 +530,7 @@ ControllerDialog {
             Component {
                 id: liquid_output
                 ColumnLayout {
-                    property Asset address_asset: self.account.context.getOrCreateAsset(self.account.network, modelData.asset_id)
+                    property Asset address_asset: self.account.context.getOrCreateAsset(modelData.asset_id)
                     spacing: constants.s1
                     SectionLabel {
                         text: qsTrId('id_address')

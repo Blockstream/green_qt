@@ -61,7 +61,7 @@ Column {
             id: output_view
             property var output
             property int index
-            readonly property Asset asset: wallet.context.getOrCreateAsset(self.resolver.session.network, output.asset_id)
+            readonly property Asset asset: wallet.context.getOrCreateAsset(output.asset_id)
             spacing: 16
             SectionLabel {
                 text: qsTrId('id_review_output_s').arg('#' + (index + 1))
@@ -104,7 +104,7 @@ Column {
         Column {
             id: fee_view
             property var output
-            readonly property Asset asset: wallet.context.getOrCreateAsset(self.resolver.session.network, output.asset_id)
+            readonly property Asset asset: wallet.context.getOrCreateAsset(output.asset_id)
             spacing: 16
             SectionLabel {
                 text: qsTrId('id_confirm_transaction')

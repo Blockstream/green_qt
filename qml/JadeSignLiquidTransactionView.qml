@@ -37,7 +37,7 @@ GFlickable {
         Repeater {
             model: outputs
             delegate: Page {
-                readonly property Asset asset: wallet.context.getOrCreateAsset(self.resolver.session.network, modelData.asset_id)
+                readonly property Asset asset: wallet.context.getOrCreateAsset(modelData.asset_id)
                 id: delegate
                 Layout.fillWidth: true
                 background: null
