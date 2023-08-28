@@ -21,12 +21,10 @@ public:
     QString pushView(const QString &name, const QVariantMap &segmentation);
     void popView(const QString& id);
     std::chrono::seconds timestampOffset() const;
-    QJsonArray alerts() const;
     QJsonValue getRemoteConfigValue(const QString& key) const;
 signals:
     void busyChanged();
     void remoteConfigChanged();
-    void alertsChanged();
 public slots:
     void recordEvent(const QString& name);
     void recordEvent(const QString& name, const QVariantMap& segmentation);

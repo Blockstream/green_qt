@@ -43,7 +43,6 @@ public:
     std::map<std::string, View> views;
     QThread thread;
     std::atomic_int busy{0};
-    QJsonArray alerts;
 
     void start();
     void stop(Qt::ConnectionType type = Qt::AutoConnection);
@@ -106,11 +105,6 @@ Analytics::Analytics()
     countly.setRemoteConfigCallback([=] {
         QMetaObject::invokeMethod(this, [=] {
             auto& countly = cly::Countly::getInstance();
-            const nlohmann::json reply = countly.getRemoteConfigValue("banners");
-            if (reply.is_array()) {
-                d->alerts = Json::toArray((const GA_json*) &reply);
-                emit alertsChanged();
-            }
             emit remoteConfigChanged();
         });
     });
@@ -212,11 +206,6 @@ Analytics::Analytics()
     countly.enableRemoteConfig();
 
     d->start();
-}
-
-QJsonArray Analytics::alerts() const
-{
-    return d->alerts;
 }
 
 QJsonValue Analytics::getRemoteConfigValue(const QString &key) const
@@ -558,7 +547,7 @@ void AnalyticsEvent::track()
 AnalyticsAlert::AnalyticsAlert(QObject* parent)
     : QObject(parent)
 {
-    connect(Analytics::instance(), &Analytics::alertsChanged, this, &AnalyticsAlert::update);
+    connect(Analytics::instance(), &Analytics::remoteConfigChanged, this, &AnalyticsAlert::update);
 }
 
 void AnalyticsAlert::setScreen(const QString& screen)
@@ -599,7 +588,10 @@ bool AnalyticsAlert::isDismissable() const
 
 void AnalyticsAlert::update()
 {
-    const QJsonArray alerts = Analytics::instance()->alerts();
+    const auto banners = Analytics::instance()->getRemoteConfigValue("banners");
+    if (!banners.isArray()) return;
+
+    const auto alerts = banners.toArray();
 
     for (const QJsonValue &a : alerts) {
         QJsonObject alert = a.toObject();
