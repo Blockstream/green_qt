@@ -116,35 +116,3 @@ void Clipper::setOffset(const QRectF& offset)
     qDebug() << Q_FUNC_INFO << offset;
     update();
 }
-
-LimitProxyModel::LimitProxyModel(QObject* parent)
-    : QSortFilterProxyModel(parent)
-{
-}
-
-void LimitProxyModel::setSource(QAbstractItemModel* source)
-{
-    if (m_source == source) return;
-    m_source = source;
-    emit sourceChanged();
-    setSourceModel(source);
-}
-
-int LimitProxyModel::limit() const
-{
-    return m_limit;
-}
-
-void LimitProxyModel::setLimit(int limit)
-{
-    if (m_limit == limit) return;
-    m_limit = limit;
-    emit limitChanged();
-    invalidateRowsFilter();
-}
-
-bool LimitProxyModel::filterAcceptsRow(int source_row, const QModelIndex& source_parent) const
-{
-    return source_row < m_limit;
-}
-

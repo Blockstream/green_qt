@@ -59,32 +59,4 @@ private:
     QRectF m_offset;
 };
 
-#include <QSortFilterProxyModel>
-class LimitProxyModel : public QSortFilterProxyModel
-{
-    Q_OBJECT
-    Q_PROPERTY(QAbstractItemModel* source READ source WRITE setSource NOTIFY sourceChanged)
-    Q_PROPERTY(int limit READ limit WRITE setLimit NOTIFY limitChanged)
-    QML_ELEMENT
-public:
-    LimitProxyModel(QObject* parent = nullptr);
-
-    QAbstractItemModel* source() const { return m_source; }
-    void setSource(QAbstractItemModel*);
-
-    int limit() const;
-    void setLimit(int);
-
-protected:
-    bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const override;
-
-signals:
-    void sourceChanged();
-    void limitChanged();
-
-private:
-    QAbstractItemModel* m_source = nullptr;
-    int m_limit = 0;
-};
-
 #endif // GREEN_LOADER2_H
