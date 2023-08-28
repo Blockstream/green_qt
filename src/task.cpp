@@ -1,3 +1,4 @@
+#include "asset.h"
 #include "context.h"
 #include "devicemanager.h"
 #include "ga.h"
@@ -16,6 +17,8 @@
 
 #include <gdk.h>
 #include <ga.h>
+
+#include <nlohmann/json.hpp>
 
 Task::Task(QObject* parent)
     : QObject(parent)
@@ -786,6 +789,28 @@ void LoadAssetsTask::update()
         const auto rc = GA_refresh_assets(m_session->m_session, params.get());
         return rc == GA_OK;
     }).then(this, [=](bool ok) {
+        if (ok) {
+            // TODO: move to bg thread?
+            const nlohmann::json params = {{ "category", "all" }};
+            nlohmann::json* output;
+
+            const auto err = GA_get_assets(m_session->m_session, (const GA_json*) &params, (GA_json**) &output);
+            Q_ASSERT(err == GA_OK);
+
+            auto context = m_session->context();
+
+            for (const auto& item : output->at("assets").items()) {
+                const auto id = item.key();
+                const auto data = item.value();
+                auto asset = context->getOrCreateAsset(QString::fromStdString(id));
+                asset->setData(Json::toObject((GA_json*) &data));
+                if (output->at("icons").contains(id)) {
+                    const auto icon = output->at("icons").at(id).get<std::string>();
+                    asset->setIcon(QString("data:image/png;base64,") + QString::fromStdString(icon));
+                }
+            }
+            GA_destroy_json((GA_json*) output);
+        }
         setStatus(ok ? Status::Finished : Status::Failed);
     });
 }
