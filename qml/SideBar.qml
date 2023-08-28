@@ -21,7 +21,7 @@ Pane {
             color: Qt.rgba(0, 0, 0, 0.5)
         }
     }
-    implicitWidth: Settings.collapseSideBar ? 72 : 260
+    implicitWidth: 72
     Behavior on implicitWidth {
         NumberAnimation {
             duration: 300
@@ -32,7 +32,7 @@ Pane {
     component NetworkSideButton: SideButton {
         required property string network
         icon.source: UtilJS.iconFor(network)
-        isCurrent: navigation.param.view === network && (Settings.collapseSideBar || !navigation.param.wallet)
+        isCurrent: navigation.param.view === network && !navigation.param.wallet
         onClicked: navigation.push({ view: network })
     }
 
@@ -54,9 +54,6 @@ Pane {
             busy: blockstream_view.busy
         }
         RowLayout {
-            SideLabel {
-                text: qsTrId('id_wallets')
-            }
             ToolButton {
                 id: create_sidebar_button
                 background: Rectangle {
@@ -64,7 +61,7 @@ Pane {
                     color: constants.c600
                     radius: 4
                 }
-                Layout.fillWidth: Settings.collapseSideBar
+                Layout.fillWidth: true
                 icon.source: 'qrc:/svg/plus.svg'
                 onClicked: navigation.set({ flow: 'signup' })
                 Layout.alignment: Qt.AlignCenter
@@ -86,15 +83,6 @@ Pane {
             contentHeight: layout.height
             contentWidth: flickable.width
             ScrollIndicator.vertical: ScrollIndicator { }
-            MouseArea {
-                width: layout.width
-                height: Math.max(flickable.height - layout.height + flickable.contentY - 16, 0)
-                y: layout.height + 16
-                onDoubleClicked: {
-                    flickable.forceActiveFocus(Qt.MouseFocusReason)
-                    Settings.collapseSideBar = !Settings.collapseSideBar
-                }
-            }
             ColumnLayout {
                 id: layout
                 spacing: 8
@@ -103,83 +91,29 @@ Pane {
                     network: 'bitcoin'
                     text: 'Bitcoin'
                 }
-                Repeater {
-                    model: WalletListModel {
-                        justReady: true
-                        network: 'bitcoin'
-                    }
-                    WalletSideButton {
-                    }
-                }
                 NetworkSideButton {
                     visible: Settings.enableTestnet
                     network: 'testnet'
                     text: 'Bitcoin Testnet'
-                }
-                Repeater {
-                    model: WalletListModel {
-                        justReady: true
-                        network: 'testnet'
-                    }
-                    WalletSideButton {
-                        visible: !Settings.collapseSideBar && Settings.enableTestnet
-                    }
                 }
                 NetworkSideButton {
                     network: 'localtest'
                     text: 'Localtest'
                     visible: env !== 'Production' && Settings.enableTestnet
                 }
-                Repeater {
-                    model: WalletListModel {
-                        justReady: true
-                        network: 'localtest'
-                    }
-                    WalletSideButton {
-                    }
-                }
                 NetworkSideButton {
                     network: 'liquid'
                     text: 'Liquid'
-                }
-                Repeater {
-                    model: WalletListModel {
-                        justReady: true
-                        network: 'liquid'
-                    }
-                    WalletSideButton {
-                    }
                 }
                 NetworkSideButton {
                     visible: Settings.enableTestnet
                     network: 'testnet-liquid'
                     text: 'Liquid Testnet'
                 }
-                Repeater {
-                    model: WalletListModel {
-                        justReady: true
-                        network: 'testnet-liquid'
-                    }
-                    WalletSideButton {
-                    }
-                }
                 NetworkSideButton {
                     network: 'localtest-liquid'
                     text: 'Liquid Localtest'
                     visible: env !== 'Production' && Settings.enableTestnet
-                }
-                Repeater {
-                    model: WalletListModel {
-                        justReady: true
-                        network: 'localtest-liquid'
-                    }
-                    WalletSideButton {
-                        isCurrent: false
-                    }
-                }
-                SideLabel {
-                    text: qsTrId('id_devices')
-                    visible: !Settings.collapseSideBar
                 }
                 SideButton {
                     icon.source: 'qrc:/svg/jade_emblem_on_transparent_rgb.svg'
@@ -215,35 +149,12 @@ Pane {
             Layout.minimumHeight: 16
         }
         SideButton {
-            icon.source: Settings.collapseSideBar ? 'qrc:/svg/arrow_right.svg' : 'qrc:/svg/arrow_left.svg'
-            text: Settings.collapseSideBar ? qsTrId('id_expand_sidebar') : qsTrId('id_collapse_sidebar')
-            isCurrent: false
-            onClicked: Settings.collapseSideBar = !Settings.collapseSideBar
-        }
-        SideButton {
             icon.source: 'qrc:/svg/appsettings.svg'
             isCurrent: navigation.param.view === 'preferences'
             onClicked: navigation.push({ view: 'preferences' })
             text: qsTrId('id_app_settings')
             icon.width: 24
             icon.height: 24
-        }
-    }
-
-    component SideLabel: Pane {
-        id: label
-        property string text
-        background: null
-        topPadding: 4
-        leftPadding: 4
-        bottomPadding: 4
-        visible: !Settings.collapseSideBar
-        Layout.fillWidth: true
-        contentItem: SectionLabel {
-            font.pixelSize: 10
-            font.weight: 400
-            font.styleName: 'Regular'
-            text: label.text
         }
     }
 
@@ -256,30 +167,20 @@ Pane {
         rightPadding: 12
         contentItem: RowLayout {
             spacing: constants.s1
-            Label {
-                Layout.fillWidth: true
-                visible: !Settings.collapseSideBar
-                text: button.device.name
-                elide: Label.ElideMiddle
-                rightPadding: 16
-                font.styleName: 'Regular'
-            }
             Item {
                 Layout.alignment: Qt.AlignCenter
-                implicitWidth: Settings.collapseSideBar ? 32 : 96
-                implicitHeight: Settings.collapseSideBar ? 96 : 32
-                Layout.maximumWidth: Settings.collapseSideBar ? img.paintedHeight : img.paintedWidth
+                implicitWidth: 32
+                implicitHeight: 96
+                Layout.maximumWidth: img.paintedHeight
                 DeviceImage {
                     id: img
                     width: 96
                     height: 32
                     anchors.centerIn: parent
-                    rotation: Settings.collapseSideBar ? 90 : 0
+                    rotation: 90
                     device: button.device
                 }
             }
-//            HSpacer {
-//            }
         }
         onClicked: {
             const device = button.device
@@ -289,9 +190,5 @@ Pane {
                 navigation.push({ view: 'ledger', device: device.uuid })
             }
         }
-
-//        ToolTip.text: button.device.name
-//        ToolTip.visible: Settings.collapseSideBar && button.hovered
-//        ToolTip.delay: 200
     }
 }

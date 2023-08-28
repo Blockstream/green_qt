@@ -71,14 +71,6 @@ void Settings::setHistory(const QStringList &history)
     saveLater();
 }
 
-void Settings::setCollapseSideBar(bool collapse_side_bar)
-{
-    if (m_collapse_side_bar == collapse_side_bar) return;
-    m_collapse_side_bar = collapse_side_bar;
-    emit collapseSideBarChanged(m_collapse_side_bar);
-    saveLater();
-}
-
 void Settings::setEnableTestnet(bool enableTestnet)
 {
     if (m_enable_testnet == enableTestnet) return;
@@ -256,7 +248,6 @@ void Settings::load(const QSettings& settings)
     LOAD(m_window_width);
     LOAD(m_window_height);
     LOAD(m_history);
-    LOAD(m_collapse_side_bar);
     LOAD(m_enable_testnet);
     LOAD(m_use_proxy)
     LOAD(m_proxy_host)
@@ -292,7 +283,6 @@ void Settings::saveNow()
     SAVE(m_window_width);
     SAVE(m_window_height);
     SAVE(m_history);
-    SAVE(m_collapse_side_bar);
     SAVE(m_enable_testnet);
     SAVE(m_use_proxy)
     SAVE(m_proxy_host)

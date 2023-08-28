@@ -34,7 +34,6 @@ SET(QML_FILES
     qml/AccountDelegate.qml
     qml/DeleteWalletDialog.qml
     qml/ChangePinDialog.qml
-    qml/WalletSideButton.qml
     qml/MnemonicView.qml
     qml/TwoFactorLimitDialog.qml
     qml/JadeUpdateDialog.qml
