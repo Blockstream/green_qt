@@ -92,6 +92,7 @@ void ExportTransactionsController::nextPage()
 {
     const auto context = m_account->context();
     const auto wallet = context->wallet();
+    const auto network = m_account->network();
     const auto session = m_account->session();
     const auto settings = session->settings();
     const auto unit = session->unit().toLower().replace("µbtc", "ubtc");
@@ -116,7 +117,7 @@ void ExportTransactionsController::nextPage()
                         values.append(data.value("type").toString());
                     } else if (field == "amount") {
                         const double satoshi = amount->amount();
-                        if (asset && !asset->isLBTC()) {
+                        if (asset && asset->id() != network->policyAsset()) {
                             const auto precision = asset->data().value("precision").toInt(0);
                             const auto value = static_cast<double>(satoshi) / qPow(10, precision);
                             values.append(QString::number(value, 'f', precision));
@@ -125,7 +126,7 @@ void ExportTransactionsController::nextPage()
                             values.append(converted.value(unit).toString());
                         }
                     } else if (field == "unit") {
-                        if (asset && !asset->isLBTC()) {
+                        if (asset && asset->id() != network->policyAsset()) {
                             values.append(asset->data().value("ticker").toString());
                         } else {
                             values.append(display_unit);
@@ -139,7 +140,7 @@ void ExportTransactionsController::nextPage()
                             values.append("");
                         }
                     } else if (field == m_fiat_field) {
-                        if (asset && !asset->isLBTC()) {
+                        if (asset && asset->id() != network->policyAsset()) {
                             values.append("");
                         } else {
                             values.append(wallet->convert({{ "satoshi", amount->amount() }}).value("fiat").toString());

@@ -52,16 +52,16 @@ void Account::updateBalance()
             Balance* balance = balance_by_id.take(i.key());
             if (!balance) balance = new Balance(this);
             m_balance_by_id.insert(i.key(), balance);
-            balance->setAsset(context()->getOrCreateAsset(m_network, i.key()));
+            balance->setAsset(context()->getOrCreateAsset(i.key()));
             balance->setAmount(i.value().toDouble());
             m_balances.append(balance);
         }
-        std::sort(m_balances.begin(), m_balances.end(), [](const Balance* b1, const Balance* b2) {
+        std::sort(m_balances.begin(), m_balances.end(), [=](const Balance* b1, const Balance* b2) {
             Asset* a1 = b1->asset();
             Asset* a2 = b2->asset();
 
-            if (a1->isLBTC()) return true;
-            if (a2->isLBTC()) return false;
+            if (a1->id() == m_network->policyAsset()) return true;
+            if (a2->id() ==  m_network->policyAsset()) return false;
 
             if (a1->hasIcon() && !a2->hasIcon()) return true;
             if (a2->hasIcon() && !a1->hasIcon()) return false;

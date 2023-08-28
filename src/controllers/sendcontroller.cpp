@@ -122,7 +122,7 @@ bool SendController::hasFiatRate() const
 {
     if (!m_account) return false;
     if (!m_account->network()->isLiquid()) return true;
-    if (m_balance && m_balance->asset()->isLBTC()) return true;
+    if (m_balance && m_balance->asset()->id() == m_account->network()->policyAsset()) return true;
     return false;
 }
 
@@ -254,7 +254,7 @@ void SendController::create()
                 Q_ASSERT(m_transaction.value("amount_read_only").toBool());
                 satoshi = m_transaction.value("satoshi").toObject().value(id).toDouble();
                 m_amount = m_balance ? m_balance->asset()->formatAmount(satoshi, false) : wallet->formatAmount(satoshi, false);
-                if (!m_balance || m_balance->asset()->isLBTC()) m_fiat_amount = wallet->formatAmount(satoshi, false, "fiat");
+                if (!m_balance || m_balance->asset()->id() == network->policyAsset()) m_fiat_amount = wallet->formatAmount(satoshi, false, "fiat");
                 emit changed();
             }
 

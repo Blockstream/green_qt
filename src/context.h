@@ -58,8 +58,7 @@ public:
     QQmlListProperty<Session> sessions();
     QQmlListProperty<Account> accounts();
 
-
-    Q_INVOKABLE Asset* getOrCreateAsset(Network* network, const QString& id);
+    Q_INVOKABLE Asset* getOrCreateAsset(const QString& id);
     Account* getOrCreateAccount(Network* network, const QJsonObject& data);
     Account* getAccountByPointer(Network* network, int pointer) const;
 
@@ -91,7 +90,7 @@ private:
     bool m_watchonly{false};
 
 public:
-    QMap<QPair<Network*, QString>, Asset*> m_assets;
+    QMap<QString, Asset*> m_assets;
     QList<Account*> m_accounts;
     QMap<QPair<Network*, int>, Account*> m_accounts_by_pointer;
 };

@@ -143,21 +143,9 @@ bool Context::hasBalance() const
     return false;
 }
 
-Asset* Context::getOrCreateAsset(Network* network, const QString& id)
+Asset* Context::getOrCreateAsset(const QString& id)
 {
-    Q_ASSERT(network && network->isLiquid());
-    Q_ASSERT(id != "btc");
-
-    const auto session = getOrCreateSession(network);
-    if (!session) return nullptr;
-
-    Asset* asset = m_assets.value({ network, id });
-    if (!asset) {
-        asset = new Asset(id, network, this);
-        m_assets.insert({ network, id }, asset);
-        UpdateAsset(session->m_session, asset);
-    }
-    return asset;
+    return AssetManager::instance()->assetWithId(id);
 }
 
 Account* Context::getOrCreateAccount(Network* network, const QJsonObject& data)

@@ -82,7 +82,7 @@ StatusBar {
                     mipmap: true
                     source: {
                         if (self.network.liquid) {
-                            return self.context.getOrCreateAsset(self.network, self.network.policyAsset).icon
+                            return self.context.getOrCreateAsset(self.network.policyAsset).icon
                         } else {
                             return UtilJS.iconFor(self.wallet)
                         }

@@ -4,6 +4,7 @@
 class Address;
 class Account;
 class Asset;
+class AssetManager;
 class Balance;
 class Context;
 class Controller;

@@ -31,7 +31,7 @@ void Output::update()
     const auto network = m_account->network();
     if (!m_asset && network->isLiquid()) {
         auto asset_id = m_data["asset_id"].toString();
-        m_asset = m_account->context()->getOrCreateAsset(network, asset_id);
+        m_asset = m_account->context()->getOrCreateAsset(asset_id);
         emit assetChanged();
     }
 

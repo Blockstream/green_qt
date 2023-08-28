@@ -139,7 +139,7 @@ ItemDelegate {
                         const network = account.network
                         const [id, amount] = modelData
                         if (network.liquid) {
-                            return self.context.getOrCreateAsset(network, id).formatAmount(amount, true)
+                            return self.context.getOrCreateAsset(id).formatAmount(amount, true)
                         } else {
                             return formatAmount(account, amount)
                         }

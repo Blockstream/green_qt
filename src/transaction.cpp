@@ -45,7 +45,6 @@ TransactionAmount::TransactionAmount(Transaction* transaction, Asset* asset, qin
     , m_amount(amount)
 {
     Q_ASSERT(m_transaction);
-    Q_ASSERT(!m_asset || m_asset->context() == transaction->account()->context());
 }
 
 TransactionAmount::~TransactionAmount()
@@ -120,7 +119,7 @@ void Transaction::updateFromData(const QJsonObject& data)
         const qint64 fee = m_data.value("fee").toDouble();
         for (auto i = satoshi.constBegin(); i != satoshi.constEnd(); ++i) {
             qint64 amount = i.value().toDouble();
-            Asset* asset = context()->getOrCreateAsset(network, i.key());
+            Asset* asset = context()->getOrCreateAsset(i.key());
             if (asset->id() == policy_asset && amount < 0) amount += fee;
             if (amount != 0) m_amounts.append(new TransactionAmount(this, asset, amount));
         }

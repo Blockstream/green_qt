@@ -15,6 +15,7 @@
 
 #include "config.h"
 #include "analytics.h"
+#include "asset.h"
 #include "clipboard.h"
 #include "devicemanager.h"
 #include "ga.h"
@@ -276,6 +277,7 @@ int main(int argc, char *argv[])
     HttpManager http_manager;
     WalletManager wallet_manager;
     Analytics analytics;
+    AssetManager asset_manager;
 
     qmlRegisterSingletonInstance<Clipboard>("Blockstream.Green.Core", 0, 1, "Clipboard", Clipboard::instance());
     qmlRegisterSingletonInstance<DeviceManager>("Blockstream.Green.Core", 0, 1, "DeviceManager", DeviceManager::instance());
