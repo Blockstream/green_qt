@@ -242,7 +242,7 @@ namespace {
     QJsonObject get_params(Session* session)
     {
         const auto network = session->network();
-        const QString user_agent = QString("green_qt_%1").arg(QT_STRINGIFY(VERSION));
+        const QString user_agent = QString("green_qt_%1").arg(QT_STRINGIFY(GREEN_VERSION));
         QJsonObject params{
             { "name", network->id() },
             { "use_tor", session->useTor() },
