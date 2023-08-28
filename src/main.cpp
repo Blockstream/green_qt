@@ -154,15 +154,6 @@ int main(int argc, char *argv[])
     QCoreApplication::setOrganizationDomain("blockstream.com");
     QCoreApplication::setApplicationVersion(GREEN_VERSION);
 
-    g_data_location = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation);
-
-    // init log is called after setting the app name and version so that we have this information available for log location
-    initLog();
-
-#ifdef Q_OS_LINUX
-    QCoreApplication::setApplicationName("Blockstream Green");
-#endif
-
     QApplication app(argc, argv);
     KDSingleApplication kdsa;
 
@@ -190,12 +181,29 @@ int main(int argc, char *argv[])
 
     g_args.addHelpOption();
     g_args.addVersionOption();
+    g_args.addOption(QCommandLineOption("datadir"));
+    g_args.addOption(QCommandLineOption("tempdatadir"));
     g_args.addOption(QCommandLineOption("printtoconsole"));
     g_args.addOption(QCommandLineOption("debug"));
     g_args.addOption(QCommandLineOption("debugfocus"));
     g_args.addOption(QCommandLineOption("debugjade"));
     g_args.addOption(QCommandLineOption("channel", "", "name", "latest"));
     g_args.process(app);
+
+    if (g_args.isSet("tempdatadir")) {
+        g_data_location = QDir::tempPath();
+    } else if (g_args.isSet("datadir")) {
+        g_data_location = g_args.value("datadir");
+    } else {
+        g_data_location = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation);
+    }
+
+    // init log is called after setting the app name and version so that we have this information available for log location
+    initLog();
+
+#ifdef Q_OS_LINUX
+    QCoreApplication::setApplicationName("Blockstream Green");
+#endif
 
     if (g_args.isSet("printtoconsole")) {
 #ifdef _WIN32
