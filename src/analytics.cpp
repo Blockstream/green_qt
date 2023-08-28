@@ -111,6 +111,7 @@ Analytics::Analytics()
                 d->alerts = Json::toArray((const GA_json*) &reply);
                 emit alertsChanged();
             }
+            emit remoteConfigChanged();
         });
     });
 
@@ -216,6 +217,18 @@ Analytics::Analytics()
 QJsonArray Analytics::alerts() const
 {
     return d->alerts;
+}
+
+QJsonValue Analytics::getRemoteConfigValue(const QString &key) const
+{
+    auto& countly = cly::Countly::getInstance();
+    const nlohmann::json value = countly.getRemoteConfigValue(key.toStdString());
+    if (value.is_array()) {
+        return Json::toArray((const GA_json*) &value);
+    } else {
+        Q_UNIMPLEMENTED();
+        return {};
+    }
 }
 
 void AnalyticsPrivate::updateCustomUserDetails()
@@ -621,4 +634,31 @@ void AnalyticsAlert::update()
 
         return;
     }
+}
+
+AnalyticsRemoteConfig::AnalyticsRemoteConfig(QObject* parent)
+    : QObject(parent)
+{
+    connect(Analytics::instance(), &Analytics::remoteConfigChanged, this, &AnalyticsRemoteConfig::update);
+}
+
+void AnalyticsRemoteConfig::setKey(const QString& key)
+{
+    if (m_key == key) return;
+    m_key = key;
+    emit keyChanged();
+    update();
+}
+
+void AnalyticsRemoteConfig::setValue(const QJsonValue& value)
+{
+    if (m_value == value) return;
+    m_value = value;
+    emit valueChanged();
+}
+
+void AnalyticsRemoteConfig::update()
+{
+    const auto value = Analytics::instance()->getRemoteConfigValue(m_key);
+    setValue(value);
 }

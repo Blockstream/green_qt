@@ -1,6 +1,7 @@
 #ifndef GREEN_ANALYTICS_H
 #define GREEN_ANALYTICS_H
 
+#include <QJsonValue>
 #include <QObject>
 #include <QtQml>
 
@@ -11,6 +12,7 @@ class Analytics : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(bool busy READ isBusy NOTIFY busyChanged)
+    Q_PROPERTY(QJsonArray alers READ alerts NOTIFY alertsChanged)
 public:
     explicit Analytics();
     ~Analytics();
@@ -21,8 +23,10 @@ public:
     void popView(const QString& id);
     std::chrono::seconds timestampOffset() const;
     QJsonArray alerts() const;
+    QJsonValue getRemoteConfigValue(const QString& key) const;
 signals:
     void busyChanged();
+    void remoteConfigChanged();
     void alertsChanged();
 public slots:
     void recordEvent(const QString& name);
@@ -137,6 +141,28 @@ private:
     QString m_screen;
     QString m_network;
     QJsonObject m_data;
+};
+
+class AnalyticsRemoteConfig : public QObject
+{
+    Q_OBJECT
+    Q_PROPERTY(QString key READ key WRITE setKey NOTIFY keyChanged)
+    Q_PROPERTY(QJsonValue value READ value NOTIFY valueChanged)
+    QML_ELEMENT
+public:
+    AnalyticsRemoteConfig(QObject* parent = nullptr);
+    QString key() const { return m_key; }
+    void setKey(const QString& key);
+    QJsonValue value() const { return m_value; }
+    void setValue(const QJsonValue& value);
+signals:
+    void keyChanged();
+    void valueChanged();
+private:
+    void update();
+private:
+    QString m_key;
+    QJsonValue m_value;
 };
 
 #endif // GREEN_ANALYTICS_H
