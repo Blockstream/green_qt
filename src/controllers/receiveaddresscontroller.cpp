@@ -1,4 +1,5 @@
 #include "account.h"
+#include "asset.h"
 #include "context.h"
 #include "jadeapi.h"
 #include "jadedevice.h"
@@ -39,6 +40,14 @@ void ReceiveAddressController::setAccount(Account *account)
     generate();
 }
 
+void ReceiveAddressController::setAsset(Asset* asset)
+{
+    if (m_asset == asset) return;
+    m_asset = asset;
+    emit assetChanged();
+    emit changed();
+}
+
 QString ReceiveAddressController::amount() const
 {
     return m_amount;
@@ -70,10 +79,11 @@ QString ReceiveAddressController::uri() const
     amount = wallet->convert({{ unit, amount }}).value("btc").toString();
     if (amount.toDouble() > 0) {
         if (network->isLiquid()) {
+            const auto asset_id = m_asset ? m_asset->id() : network->policyAsset();
             return QString("%1:%2?assetid=%3&amount=%4")
                     .arg(network->data().value("bip21_prefix").toString())
                     .arg(m_address)
-                    .arg(network->policyAsset())
+                    .arg(asset_id)
                     .arg(amount);
         } else {
             return QString("%1:%2?amount=%3")

@@ -7,12 +7,11 @@
 #include <QObject>
 #include <QtQml>
 
-class Account;
-
 class ReceiveAddressController : public Controller
 {
     Q_OBJECT
     Q_PROPERTY(Account* account READ account WRITE setAccount NOTIFY accountChanged)
+    Q_PROPERTY(Asset* asset READ asset WRITE setAsset NOTIFY assetChanged)
     Q_PROPERTY(QString amount READ amount WRITE setAmount NOTIFY changed)
     Q_PROPERTY(QString address READ address NOTIFY changed)
     Q_PROPERTY(QJsonObject result READ result NOTIFY changed)
@@ -33,6 +32,8 @@ public:
     virtual ~ReceiveAddressController();
     Account* account() const;
     void setAccount(Account* account);
+    Asset* asset() const { return m_asset; }
+    void setAsset(Asset* asset);
     QString amount() const;
     void setAmount(const QString& amount);
     QString address() const;
@@ -47,6 +48,7 @@ public slots:
     void verify();
 signals:
     void accountChanged();
+    void assetChanged();
     void changed();
     void generatingChanged(bool generating);
     void addressVerificationChanged(AddressVerification address_verification);
@@ -55,6 +57,7 @@ private:
     void verifySinglesig();
 public:
     Account* m_account{nullptr};
+    Asset* m_asset{nullptr};
     QString m_amount;
     QString m_address;
     QJsonObject m_result;
