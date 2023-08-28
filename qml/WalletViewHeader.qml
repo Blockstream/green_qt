@@ -228,14 +228,6 @@ MainPageHeader {
                     Layout.fillWidth: false
                     spacing: 24
                     TabButton2 {
-                        view: 'overview'
-                        enabled: self.currentAccount?.network.liquid ?? false
-                    }
-                    TabButton2 {
-                        view: 'assets'
-                        enabled: self.currentAccount?.network.liquid ?? false
-                    }
-                    TabButton2 {
                         view: 'transactions'
                     }
                     TabButton2 {
@@ -243,6 +235,10 @@ MainPageHeader {
                     }
                     TabButton2 {
                         view: 'coins'
+                    }
+                    TabButton2 {
+                        view: 'assets'
+                        enabled: self.currentAccount?.network.liquid ?? false
                     }
                 }
                 HSpacer {

@@ -19,7 +19,7 @@ MainPage {
 
     Navigation {
         id: navigation
-        Component.onCompleted: set({ view: wallet.network.liquid ? 'overview' : 'transactions' })
+        Component.onCompleted: set({ view: 'transactions' })
     }
 
     function openCreateDialog() {

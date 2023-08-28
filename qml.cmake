@@ -74,7 +74,6 @@ SET(QML_FILES
     qml/AssetListView.qml
     qml/DescriptiveRadioButton.qml
     qml/SettingsPage.qml
-    qml/OverviewView.qml
     qml/CopyableLabel.qml
     qml/TransactionProgress.qml
     qml/BumpFeeDialog.qml

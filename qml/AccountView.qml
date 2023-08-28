@@ -105,21 +105,6 @@ Page {
         currentIndex: UtilJS.findChildIndex(stack_layout, child => child.load)
 
         PersistentLoader {
-            load: navigation.param.view === 'overview'
-            sourceComponent: OverviewView {
-                context: self.context
-                account: self.account
-            }
-        }
-
-        PersistentLoader {
-            load: navigation.param.view === 'assets'
-            sourceComponent: AssetListView {
-                account: self.account
-            }
-        }
-
-        PersistentLoader {
             load: navigation.param.view === 'transactions'
             sourceComponent: TransactionListView {
                 account: self.account
@@ -140,6 +125,13 @@ Page {
             sourceComponent: OutputsListView {
                 account: self.account
             }
+        }
+    }
+
+    PersistentLoader {
+        load: navigation.param.view === 'assets'
+        sourceComponent: AssetListView {
+            account: self.account
         }
     }
 }
