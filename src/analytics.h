@@ -12,7 +12,6 @@ class Analytics : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(bool busy READ isBusy NOTIFY busyChanged)
-    Q_PROPERTY(QJsonArray alers READ alerts NOTIFY alertsChanged)
 public:
     explicit Analytics();
     ~Analytics();
