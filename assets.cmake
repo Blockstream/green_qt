@@ -119,6 +119,33 @@ qt_add_resources(green "images"
         assets/png/lbtc.png
         assets/png/amp_background.png
         assets/png/liquid_background.png
+
+        assets/hints/cpu.svg
+        assets/hints/jade3d.svg
+
+        assets/svg2/arrow_right.svg
+        assets/svg2/back.svg
+        assets/svg2/blockstream_green.svg
+        assets/svg2/bolt.svg
+        assets/svg2/check.svg
+        assets/svg2/check-green.svg
+        assets/svg2/close.svg
+        assets/svg2/copy.svg
+        assets/svg2/edit.svg
+        assets/svg2/eye.svg
+        assets/svg2/gear.svg
+        assets/svg2/house.svg
+        assets/svg2/next_arrow.svg
+        assets/svg2/onboard_background.svg
+        assets/svg2/printer.svg
+        assets/svg2/refresh.svg
+        assets/svg2/search.svg
+        assets/svg2/shield_check.svg
+        assets/svg2/shield_warning.svg
+        assets/svg2/star.svg
+        assets/svg2/take_control.svg
+        assets/svg2/wallet.svg
+        assets/svg2/warning.svg
 )
 
 qt_add_resources(green "fonts"
