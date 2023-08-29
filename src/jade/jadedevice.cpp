@@ -129,14 +129,14 @@ public:
 
         for (const auto value : m_signing_inputs) {
             const auto input = value.toObject();
-            const bool sw_input = input.value("address_type") != "p2sh";
+            const bool is_witness = IsSegwitAddressType(input.value("address_type").toString());
             const auto script = ParseByteArray(input.value("prevout_script"));
             const auto ae_host_commitment = ParseByteArray(input.value("ae_host_commitment"));
             const auto ae_host_entropy = ParseByteArray(input.value("ae_host_entropy"));
 
-            if (sw_input && m_signing_inputs.size() == 1) {
+            if (is_witness && m_signing_inputs.size() == 1) {
                 inputs.append(QVariantMap({
-                    { "is_witness", true },
+                    { "is_witness", is_witness },
                     { "input_tx", QVariant() },
                     { "script", script },
                     { "satoshi", ParseSatoshi(input.value("satoshi")) },
@@ -148,7 +148,7 @@ public:
                 const auto input_tx = ParseByteArray(m_signing_transactions.value(input.value("txhash").toString()));
                 Q_ASSERT(!input_tx.isEmpty());
                 inputs.append(QVariantMap({
-                    { "is_witness", true },
+                    { "is_witness", is_witness },
                     { "input_tx", input_tx },
                     { "script", script },
                     { "satoshi", ParseSatoshi(input.value("satoshi")) },
@@ -314,14 +314,14 @@ public:
         for (const auto value : m_signing_inputs) {
             const auto input = value.toObject();
             const auto address_type = input.value("address_type").toString();
-            const bool is_segwit = IsSegwitAddressType(address_type);
+            const bool is_witness = IsSegwitAddressType(address_type);
             const auto script = ParseByteArray(input.value("prevout_script"));
             const auto value_commitment = ParseByteArray(input.value("commitment"));
             const auto path = ParsePath(input.value("user_path"));
             const auto ae_host_commitment = ParseByteArray(input.value("ae_host_commitment"));
             const auto ae_host_entropy = ParseByteArray(input.value("ae_host_entropy"));
             m_inputs.append(QVariantMap({
-                { "is_witness", is_segwit },
+                { "is_witness", is_witness },
                 { "script", script },
                 { "value_commitment", value_commitment },
                 { "path", path },
