@@ -156,6 +156,7 @@ SET(QML_FILES
     qml/TaskDispatcherInspector.qml
     qml/TListView.qml
     qml/GMenu.qml
+    qml/GStackView.qml
 )
 
 if (GREEN_NO_RESOURCES)
