@@ -29,13 +29,6 @@ Pane {
         }
     }
 
-    component NetworkSideButton: SideButton {
-        required property string network
-        icon.source: UtilJS.iconFor(network)
-        isCurrent: navigation.param.view === network && !navigation.param.wallet
-        onClicked: navigation.push({ view: network })
-    }
-
     contentItem: ColumnLayout {
         spacing: 8
         SideButton {
@@ -52,6 +45,13 @@ Pane {
             onClicked: navigation.push({ view: 'blockstream' })
             text: 'Blockstream News'
             busy: blockstream_view.busy
+        }
+        SideButton {
+            enabled: WalletManager.wallets.length > 0
+            icon.source: 'qrc:/svg2/wallet.svg'
+            isCurrent: (navigation.param?.view === 'wallets') || (navigation.param?.wallet ?? false)
+            onClicked: navigation.push({ view: 'wallets' })
+            text: qsTrId('id_wallets')
         }
         RowLayout {
             ToolButton {
@@ -87,34 +87,6 @@ Pane {
                 id: layout
                 spacing: 8
                 width: flickable.contentWidth
-                NetworkSideButton {
-                    network: 'bitcoin'
-                    text: 'Bitcoin'
-                }
-                NetworkSideButton {
-                    visible: Settings.enableTestnet
-                    network: 'testnet'
-                    text: 'Bitcoin Testnet'
-                }
-                NetworkSideButton {
-                    network: 'localtest'
-                    text: 'Localtest'
-                    visible: env !== 'Production' && Settings.enableTestnet
-                }
-                NetworkSideButton {
-                    network: 'liquid'
-                    text: 'Liquid'
-                }
-                NetworkSideButton {
-                    visible: Settings.enableTestnet
-                    network: 'testnet-liquid'
-                    text: 'Liquid Testnet'
-                }
-                NetworkSideButton {
-                    network: 'localtest-liquid'
-                    text: 'Liquid Localtest'
-                    visible: env !== 'Production' && Settings.enableTestnet
-                }
                 SideButton {
                     icon.source: 'qrc:/svg/jade_emblem_on_transparent_rgb.svg'
                     isCurrent: navigation.param.view === 'jade'
@@ -149,7 +121,7 @@ Pane {
             Layout.minimumHeight: 16
         }
         SideButton {
-            icon.source: 'qrc:/svg/appsettings.svg'
+            icon.source: 'qrc:/svg2/gear.svg'
             isCurrent: navigation.param.view === 'preferences'
             onClicked: navigation.push({ view: 'preferences' })
             text: qsTrId('id_app_settings')

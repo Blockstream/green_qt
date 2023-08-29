@@ -12,8 +12,6 @@ import "analytics.js" as AnalyticsJS
 StackLayout {
     id: self
     required property string title
-    required property string network
-    readonly property string location: `/${network}`
     readonly property WalletView currentWalletView: {
         for (let i = 0; i < wallet_view_repeater.count; ++i) {
             const view = wallet_view_repeater.itemAt(i)
@@ -22,9 +20,9 @@ StackLayout {
         return null
     }
     readonly property bool active: {
-        if (window.navigation.param.view === self.network) return true
+        if (window.navigation.param.view === 'wallets') return true
         const wallet = WalletManager.wallet(window.navigation.param.wallet)
-        if (wallet && wallet.context && wallet.network.key === self.network) return true
+        if (wallet && wallet.context) return true
         return false
     }
 
@@ -132,7 +130,6 @@ StackLayout {
                 id: wallet_list_view
                 currentIndex: -1
                 model: WalletListModel {
-                    network: self.network
                 }
                 delegate: WalletListDelegate {
                     width: ListView.view.contentWidth
@@ -145,7 +142,6 @@ StackLayout {
         id: wallet_view_repeater
         model: WalletListModel {
             justAuthenticated: true
-            network: self.network
         }
         delegate: WalletView {
             property bool match: navigation.param.wallet === wallet.id

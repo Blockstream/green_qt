@@ -110,30 +110,7 @@ ApplicationWindow {
                     readonly property bool active: navigation.param.view === 'ledger'
                 }
                 NetworkView {
-                    network: 'localtest'
-                    title: qsTrId('Localtest')
-                }
-                NetworkView {
-                    network: 'localtest-liquid'
-                    title: qsTrId('Localtest Liquid')
-                }
-                NetworkView {
-                    network: 'bitcoin'
-                    title: qsTrId('id_bitcoin_wallets')
-                }
-                NetworkView {
-                    network: 'liquid'
-                    title: qsTrId('id_liquid_wallets')
-                }
-                NetworkView {
-                    enabled: Settings.enableTestnet
-                    network: 'testnet-liquid'
-                    title: qsTrId('id_liquid_testnet_wallets')
-                }
-                NetworkView {
-                    enabled: Settings.enableTestnet
-                    network: 'testnet'
-                    title: qsTrId('id_testnet_wallets')
+                    title: qsTrId('id_wallets')
                 }
             }
         }
