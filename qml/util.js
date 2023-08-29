@@ -69,6 +69,7 @@ function accountLabel (account) {
         case '2of2_no_recovery': return qsTrId('id_amp_account')
         case 'p2sh-p2wpkh': return qsTrId('id_legacy_segwit_bip49')
         case 'p2wpkh': return qsTrId('id_segwit_bip84')
+        case 'p2pkh': return qsTrId('id_legacy')
         default: return qsTrId('id_unknown')
     }
 }

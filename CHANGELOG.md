@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Updates GDK to 0.0.64
 
+### Fixed
+- Correct type label of P2PKH accounts
+
 ## [1.2.5] - 2023-07-19
 ### Changed
 - Navigate to hardware device view from wallets view
