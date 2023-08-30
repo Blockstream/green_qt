@@ -1,3 +1,4 @@
+#include "config.h"
 #include "context.h"
 #include "devicemanager.h"
 #include "ga.h"
