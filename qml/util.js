@@ -3,6 +3,11 @@ function link(url, text) {
 }
 
 function iconFor(target) {
+    if (target instanceof Account) return iconFor(target.network)
+    if (target instanceof Asset) {
+        if (target.icon) return target.icon
+        return iconFor(target.id)
+    }
     if (target instanceof Wallet) return iconFor(target.network)
     if (target instanceof Network) return iconFor(target.key)
     switch (target) {
@@ -19,7 +24,7 @@ function iconFor(target) {
         case 'localtest-liquid':
             return 'qrc:/svg/localtest-liquid.svg'
     }
-    return ''
+    return 'qrc:/svg/generic_icon_30p.svg'
 }
 
 function formatTransactionTimestamp(tx) {
