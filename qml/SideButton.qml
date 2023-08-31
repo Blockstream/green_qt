@@ -9,8 +9,8 @@ Button {
     required property bool isCurrent
     property bool busy: false
     property bool ready: false
-    topPadding: 8
-    bottomPadding: 8
+    topPadding: 16
+    bottomPadding: 16
     leftPadding: 16
     rightPadding: 16
     topInset: 0
@@ -22,13 +22,21 @@ Button {
     icon.width: 24
     icon.height: 24
     background: Rectangle {
-        visible: self.isCurrent || self.hovered
-        color: self.hovered ? constants.c600 : constants.c500
-        radius: 4
+        visible: self.enabled && (self.isCurrent || self.hovered)
+        color: Qt.rgba(1, 1, 1, self.hovered ? 0.05 : 0)
+        Rectangle {
+            visible: self.isCurrent
+            width: 1
+            color: 'white'
+            x: parent.width - 2
+            height: parent.height
+        }
     }
     contentItem: RowLayout {
-        spacing: constants.s1
+        spacing: 0
         Image {
+            Layout.alignment: Qt.AlignCenter
+            opacity: self.enabled ? 1 : 0.4
             source: self.icon.source
             sourceSize.width: self.icon.width
             sourceSize.height: self.icon.height

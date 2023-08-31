@@ -8,12 +8,12 @@ import "util.js" as UtilJS
 
 Pane {
     focusPolicy: Qt.ClickFocus
-    topPadding: 8
-    bottomPadding: 8
-    leftPadding: 8
-    rightPadding: 8
+    topPadding: 0
+    bottomPadding: 0
+    leftPadding: 0
+    rightPadding: 0
     background: Rectangle {
-        color: constants.c800
+        color: '#13161D'
         Rectangle {
             width: 1
             anchors.right: parent.right
@@ -30,7 +30,10 @@ Pane {
     }
 
     contentItem: ColumnLayout {
-        spacing: 8
+        spacing: 10
+        Item {
+            Layout.minimumHeight: 20
+        }
         SideButton {
             id: home_button
             icon.source: 'qrc:/svg/home.svg'
@@ -94,13 +97,6 @@ Pane {
                     count: jade_view.count
                     text: 'Blockstream Jade'
                 }
-//                Repeater {
-//                    model: DeviceListModel {
-//                        type: Device.BlockstreamJade
-//                    }
-//                    delegate: DeviceSideButton {
-//                    }
-//                }
                 SideButton {
                     icon.source: 'qrc:/svg/ledger-logo.svg'
                     isCurrent: navigation.param.view === 'ledger'
@@ -108,13 +104,6 @@ Pane {
                     count: ledger_view.count
                     text: 'Ledger Nano'
                 }
-//                Repeater {
-//                    model: DeviceListModel {
-//                        vendor: Device.Ledger
-//                    }
-//                    delegate: DeviceSideButton {
-//                    }
-//                }
             }
         }
         Item {
