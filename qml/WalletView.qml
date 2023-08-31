@@ -206,16 +206,11 @@ MainPage {
         accountListWidth: accounts_list.width
 
         background: Rectangle {
-            color: constants.c700
+            color: '#121416'
             opacity: Math.max(stack_view.currentItem?.contentY ?? 0, accounts_list.contentY) > 0 ? 1 : 0
-            Behavior on opacity {
-                SmoothedAnimation {
-                    velocity: 4
-                }
-            }
             FastBlur {
                 anchors.fill: parent
-                opacity: 0.55
+                opacity: 0.5
                 cached: true
                 radius: 128
                 source: header_blur_source
@@ -234,12 +229,12 @@ MainPage {
         wallet: self.wallet
 
         background: Rectangle {
-            color: constants.c600
+            color: '#121416'
             FastBlur {
                 anchors.fill: parent
                 cached: true
                 opacity: 0.5
-                radius: 64
+                radius: 128
                 source: footer_blur_source
             }
             Rectangle {
