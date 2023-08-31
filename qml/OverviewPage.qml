@@ -321,13 +321,31 @@ StackViewPage {
             implicitHeight: parent.height
         }
 
-        AccountListView {
+        Page {
             SplitView.preferredWidth: 380
             SplitView.minimumWidth: 200
             SplitView.maximumWidth: self.width / 3
-            id: accounts_list
-            context: self.wallet.context
-            onCurrentAccountChanged: switchToAccount(currentAccount)
+            id: side_view
+            padding: 0
+            background: null
+            contentItem: AccountListView {
+                id: accounts_list
+                context: self.wallet.context
+                onCurrentAccountChanged: switchToAccount(currentAccount)
+            }
+            footer: ColumnLayout {
+                spacing: 0
+                Hint1Pane {
+                    Layout.fillWidth: true
+                    id: hint1_page
+                    visible: (side_view.height - accounts_list.contentHeight) > hint1_page.height
+                }
+                Hint2Pane {
+                    Layout.fillWidth: true
+                    id: hint2_page
+                    visible: (side_view.height - accounts_list.contentHeight) > (hint1_page.height + 10 + hint2_page.height)
+                }
+            }
         }
 
         StackView {
@@ -408,6 +426,81 @@ StackViewPage {
                 BusyIndicator {
                     Layout.alignment: Qt.AlignCenter
                 }
+            }
+        }
+    }
+
+
+    component HintPane: Pane {
+        Layout.fillWidth: true
+        Layout.topMargin: 10
+        padding: 20
+        background: Rectangle {
+            border.width: 1
+            border.color: '#1F222A'
+            color: '#161921'
+            radius: 4
+        }
+    }
+
+    component Hint1Pane: HintPane {
+        contentItem: RowLayout {
+            ColumnLayout {
+                Layout.fillWidth: true
+                Label {
+                    Layout.preferredWidth: 0
+                    Layout.fillWidth: true
+                    font.family: 'SF Compact Display'
+                    font.pixelSize: 12
+                    font.weight: 600
+                    text: 'A powerful hardware wallet for securing your Bitcoin.'
+                    wrapMode: Label.WordWrap
+                }
+                Label {
+                    Layout.preferredWidth: 0
+                    Layout.fillWidth: true
+                    font.family: 'SF Compact Display'
+                    font.pixelSize: 11
+                    font.weight: 400
+                    opacity: 0.3
+                    text: 'Jade is an open-source hardware wallet for Bitcoin and Liquid assets.'
+                    wrapMode: Label.WordWrap
+                }
+            }
+            Image {
+                Layout.alignment: Qt.AlignCenter
+                source: 'qrc:/hints/jade3d.svg'
+            }
+        }
+    }
+
+    component Hint2Pane: HintPane {
+        contentItem: RowLayout {
+            ColumnLayout {
+                Layout.fillWidth: true
+                Label {
+                    Layout.preferredWidth: 0
+                    Layout.fillWidth: true
+                    font.family: 'SF Compact Display'
+                    font.pixelSize: 12
+                    font.weight: 600
+                    text: 'The Importance of Two-Factor Authentication'
+                    wrapMode: Label.WordWrap
+                }
+                Label {
+                    Layout.preferredWidth: 0
+                    Layout.fillWidth: true
+                    font.family: 'SF Compact Display'
+                    font.pixelSize: 11
+                    font.weight: 400
+                    opacity: 0.3
+                    text: 'Protect your bitcoin with a second form of verification.'
+                    wrapMode: Label.WordWrap
+                }
+            }
+            Image {
+                Layout.alignment: Qt.AlignCenter
+                source: 'qrc:/hints/cpu.svg'
             }
         }
     }
