@@ -157,6 +157,8 @@ SET(QML_FILES
     qml/TListView.qml
     qml/GMenu.qml
     qml/GStackView.qml
+    qml/BackButton.qml
+    qml/GStackView.qml
 )
 
 if (GREEN_NO_RESOURCES)
