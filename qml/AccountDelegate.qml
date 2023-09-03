@@ -18,12 +18,19 @@ ItemDelegate {
     }
     background: Rectangle {
         color: UtilJS.networkColor(delegate.account.network)
+        clip: true
         opacity: delegate.highlighted ? 1 : 0.6
         radius: 5
         Behavior on opacity {
             NumberAnimation {
                 duration: 200
             }
+        }
+        Image {
+            opacity: 0.1
+            source: 'qrc:/svg2/btc_watermark.svg'
+            anchors.right: parent.right
+            anchors.top: parent.top
         }
     }
     highlighted: currentAccount === delegate.account
