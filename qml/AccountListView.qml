@@ -85,7 +85,7 @@ GPane {
     }
 
     component AListView: TListView {
-        spacing: 8
+        spacing: 3
         delegate: Component {
             AccountDelegate {
             }

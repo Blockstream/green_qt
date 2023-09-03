@@ -69,7 +69,7 @@ ItemDelegate {
                     id: assets
                     Layout.fillWidth: false
                     Layout.alignment: Qt.AlignBottom
-                    spacing: -12
+                    spacing: -8
                     Repeater {
                         id: asset_icon_repeater
                         model: {
