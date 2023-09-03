@@ -249,6 +249,12 @@ MainPage {
                 y: 1
                 color: constants.c200
                 opacity: 0.5
+    ReceiveDrawer {
+        id: receive_drawer
+        context: self.context
+        account: self.currentAccount
+    }
+
             }
         }
     }
@@ -401,7 +407,7 @@ MainPage {
                 text: qsTrId('id_receive')
                 icon.source: 'qrc:/svg/receive.svg'
                 shortcut: 'Ctrl+R'
-                onTriggered: navigation.set({ flow: 'receive' })
+                onTriggered: receive_drawer.open()
             }
         }
     }
