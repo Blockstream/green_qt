@@ -92,11 +92,14 @@ ApplicationWindow {
                 readonly property WalletView currentWalletView: currentIndex < 0 ? null : (stack_layout.children[currentIndex].currentWalletView || null)
                 currentIndex: UtilJS.findChildIndex(stack_layout, child => child instanceof Item && child.active && child.enabled)
                 HomeView {
-                    readonly property bool active: !navigation.param.view || navigation.param.view === 'home'
+                    readonly property bool active: navigation.param.view === 'home'
                 }
                 BlockstreamView {
                     id: blockstream_view
                     readonly property bool active: navigation.param.view === 'blockstream'
+                }
+                OnboardView {
+                    readonly property bool active: !navigation.param.view || navigation.param.view === 'onboard'
                 }
                 PreferencesView {
                     readonly property bool active: navigation.param.view === 'preferences'
@@ -195,5 +198,10 @@ ApplicationWindow {
         active: true
         sourceComponent: MediaDevices {
         }
+    }
+
+    Shortcut {
+        sequence: StandardKey.New
+        onActivated: onboard_dialog.showNormal()
     }
 }
