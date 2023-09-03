@@ -157,6 +157,7 @@ SET(QML_FILES
     qml/TListView.qml
     qml/GMenu.qml
     qml/GStackView.qml
+    qml/WalletDrawer.qml
     qml/BackButton.qml
     qml/GStackView.qml
 )
