@@ -116,6 +116,7 @@ void WatchOnlyLoginController::load()
 
     connect(group, &TaskGroup::finished, this, [=] {
         m_wallet->setContext(m_context);
+        m_context->refreshAccounts();
         WalletManager::instance()->addWallet(m_wallet);
         emit loginFinished(m_wallet);
     });
