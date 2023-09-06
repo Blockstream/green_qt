@@ -24,6 +24,7 @@ class Context : public QObject
     Q_PROPERTY(QQmlListProperty<Account> accounts READ accounts NOTIFY accountsChanged)
     Q_PROPERTY(QStringList mnemonic READ mnemonic NOTIFY mnemonicChanged)
     Q_PROPERTY(bool hasBalance READ hasBalance NOTIFY hasBalanceChanged)
+    Q_PROPERTY(TaskDispatcher* dispatcher READ dispatcher CONSTANT)
 
     QML_ELEMENT
 
@@ -68,6 +69,8 @@ public:
 
     void autoLogout();
 
+    TaskDispatcher* dispatcher() const { return m_dispatcher; }
+
 signals:
     void walletChanged();
     void deviceChanged();
@@ -95,6 +98,8 @@ public:
     QMap<QString, Asset*> m_assets;
     QList<Account*> m_accounts;
     QMap<QPair<Network*, int>, Account*> m_accounts_by_pointer;
+
+    TaskDispatcher* const m_dispatcher;
 };
 
 #endif // GREEN_CONTEXT_H
