@@ -5,6 +5,7 @@
 #include "json.h"
 #include "network.h"
 #include "session.h"
+#include "task.h"
 #include "wallet.h"
 
 #include <gdk.h>
@@ -36,6 +37,7 @@ void UpdateAsset(GA_session* session, Asset* asset)
 
 Context::Context(QObject* parent)
     : QObject(parent)
+    , m_dispatcher(new TaskDispatcher(this))
 {
 }
 
