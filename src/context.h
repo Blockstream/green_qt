@@ -66,6 +66,8 @@ public:
     QString m_xpub_hash_id;
     QJsonObject m_pin_data;
 
+    void autoLogout();
+
 signals:
     void walletChanged();
     void deviceChanged();
