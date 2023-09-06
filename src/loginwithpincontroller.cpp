@@ -164,5 +164,5 @@ void PinLoginController::loadNetwork(TaskGroup* group, Network* network)
     group->add(new LoadTwoFactorConfigTask(session));
     group->add(new LoadCurrenciesTask(session));
     if (network->isLiquid()) group->add(new LoadAssetsTask(session));
-    group->add(new LoadAccountsTask(session));
+    group->add(new LoadAccountsTask(false, session));
 }

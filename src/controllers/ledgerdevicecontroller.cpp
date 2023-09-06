@@ -134,7 +134,7 @@ void LedgerDeviceController::login()
     auto get_watchonly_details = new GetWatchOnlyDetailsTask(session);
     auto load_twofactor_config = new LoadTwoFactorConfigTask(session);
     auto load_currencies = new LoadCurrenciesTask(session);
-    auto load_accounts = new LoadAccountsTask(session);
+    auto load_accounts = new LoadAccountsTask(false, session);
 
     group->add(connect_session);
     group->add(login);

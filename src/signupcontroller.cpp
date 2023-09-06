@@ -66,7 +66,7 @@ void SignupController::setActive(bool active)
     auto load_currencies = new LoadCurrenciesTask(session);
     auto get_watchonly_details = new GetWatchOnlyDetailsTask(session);
     auto load_assets = new LoadAssetsTask(session);
-    auto load_accounts = new LoadAccountsTask(session);
+    auto load_accounts = new LoadAccountsTask(false, session);
     auto persist_wallet = new SignupPersistWalletTask(this);
     auto get_credentials = new GetCredentialsTask(session);
 

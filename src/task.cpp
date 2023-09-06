@@ -655,8 +655,9 @@ void LoadCurrenciesTask::update()
     });
 }
 
-LoadAccountsTask::LoadAccountsTask(Session* session)
+LoadAccountsTask::LoadAccountsTask(bool refresh, Session* session)
     : AuthHandlerTask(session)
+    , m_refresh(refresh)
 {
 }
 
@@ -667,8 +668,7 @@ bool LoadAccountsTask::active() const
 
 bool LoadAccountsTask::call(GA_session* session, GA_auth_handler** auth_handler)
 {
-    // TODO refresh argument
-    auto details = Json::fromObject({{ "refresh", true }});
+    auto details = Json::fromObject({{ "refresh", m_refresh }});
     int res = GA_get_subaccounts(session, details.get(), auth_handler);
     return res == GA_OK;
 }
