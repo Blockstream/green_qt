@@ -680,13 +680,11 @@ void LoadAccountsTask::handleDone(const QJsonObject& result)
     auto network = m_session->network();
     for (auto value : subaccounts) {
         Account* account = context->getOrCreateAccount(network, value.toObject());
-        context->m_accounts.append(account);
         // TODO should be added by the caller
         auto load_balance = new LoadBalanceTask(account);
 
         m_group->add(load_balance);
     }
-    emit context->accountsChanged();
     setStatus(Status::Finished);
 }
 
