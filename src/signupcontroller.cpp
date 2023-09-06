@@ -31,7 +31,6 @@ void SignupController::setNetwork(Network* network)
 void SignupController::setType(const QString& type)
 {
     if (m_type == type) return;
-    qDebug() << Q_FUNC_INFO << m_type << type;
     m_type = type;
     emit typeChanged();
 }

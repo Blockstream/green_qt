@@ -11,7 +11,6 @@
 #include "task.h"
 #include "wallet.h"
 
-#include <QDebug>
 #include <QTimer>
 #include <QTimerEvent>
 #include <QtConcurrentRun>
@@ -335,7 +334,6 @@ void AuthHandlerTask::requestCode(const QString &method)
 
 void AuthHandlerTask::resolveCode(const QByteArray& code)
 {
-    qDebug() << Q_FUNC_INFO << code;
     QtConcurrent::run([=] {
         const auto rc = GA_auth_handler_resolve_code(m_auth_handler, code.constData());
         return rc == GA_OK;
@@ -362,7 +360,6 @@ void AuthHandlerTask::handleDone(const QJsonObject& result)
 
 void AuthHandlerTask::handleError(const QJsonObject& result)
 {
-    qDebug() << Q_FUNC_INFO << type() << result;
     const auto error = result.value("error").toString();
 
     if (error == "Authentication required") {
@@ -414,10 +411,8 @@ void AuthHandlerTask::handleResolveCode(const QJsonObject& result)
     if (result.contains("required_data")) {
         Resolver* resolver{nullptr};
         const auto required_data = result.value("required_data").toObject();
-        qDebug() << required_data;
         const auto device = GetDeviceFromRequiredData(required_data);
         Q_ASSERT(device);
-        qDebug() << device;
 // TODO request device
 //            if (!device) {
 //                emit deviceRequested();
@@ -586,17 +581,14 @@ LoginTask::LoginTask(const QString& username, const QString& password, Session* 
 
 bool LoginTask::call(GA_session* session, GA_auth_handler** auth_handler)
 {
-    qDebug() << Q_FUNC_INFO << m_hw_device << m_details;
     auto hw_device = Json::fromObject(m_hw_device);
     auto details = Json::fromObject(m_details);
     const auto rc = GA_login_user(session, hw_device.get(), details.get(), auth_handler);
-    qDebug() << Q_FUNC_INFO << rc;
     return rc == GA_OK;
 }
 
 void LoginTask::handleDone(const QJsonObject& result)
 {
-    qDebug() << Q_FUNC_INFO;
     const auto res = result.value("result").toObject();
     m_session->m_ready = true;
     auto context = m_session->context();

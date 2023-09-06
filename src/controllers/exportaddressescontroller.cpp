@@ -59,7 +59,6 @@ void ExportAddressesController::nextPage()
 
         for (QJsonValue data : task->addresses()) {
             const auto object = data.toObject();
-            qDebug() << object;
             const auto address = object.value("address").toString();
             const auto tx_count = object.value("tx_count").toInt();
             QStringList values;
