@@ -72,8 +72,6 @@ void Session::handleNotification(const QJsonObject& notification)
     m_events[event] = value;
     emit eventsChanged();
 
-    qDebug() << Q_FUNC_INFO << notification;
-
     if (event == "network") {
         auto data = value.toObject();
         const auto current_state = data.value("current_state").toString();
@@ -96,7 +94,6 @@ void Session::handleNotification(const QJsonObject& notification)
     } else if (event == "ticker") {
         emit tickerEvent(value.toObject());
     } else {
-        qDebug() << Q_FUNC_INFO << notification;
         Q_UNREACHABLE();
     }
 }
@@ -275,14 +272,12 @@ void Session::update()
         }
 
         int rc = GA_destroy_session(m_session);
-        qDebug() << Q_FUNC_INFO << rc;
 #else
         m_self->clear();
         const auto session = m_session;
         QTimer::singleShot(60 * 1000, qApp, [session] {
             GA_set_notification_handler(session, nullptr, nullptr);
             int rc = GA_destroy_session(session);
-            qDebug() << Q_FUNC_INFO << "GA_destroy_session" << rc;
         });
 #endif
         m_session = nullptr;

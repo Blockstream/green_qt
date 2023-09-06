@@ -56,7 +56,6 @@ void SignMessageResolver::resolve()
         if (m_use_ae_protocol) {
             data["signer_commitment"] = QString::fromLocal8Bit(activity->signerCommitment().toHex());
         }
-        qDebug() << "******" << data;
         emit resolved(data);
     });
     connect(activity, &Activity::failed, this, [this, activity] {
