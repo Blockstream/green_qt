@@ -32,6 +32,19 @@ StatusBar {
         }
         HSpacer {
         }
+        ProgressIndicator {
+            Layout.minimumHeight: 16
+            Layout.minimumWidth: 16
+            indeterminate: self.context?.dispatcher.busy ?? false
+            current: 0
+            max: 1
+            visible: opacity > 0
+            opacity: self.context?.dispatcher.busy ?? false ? 1 : 0
+            Behavior on opacity {
+                SmoothedAnimation {
+                }
+            }
+        }
         SessionBadge {
             session: self.session
         }
