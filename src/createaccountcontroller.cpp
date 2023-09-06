@@ -85,7 +85,7 @@ void CreateAccountController::create()
     auto network = context->wallet()->network();
     auto session = context->getOrCreateSession(network);
     const auto create_account = new CreateAccountTask(details, session);
-    const auto load_accounts = new LoadAccountsTask(session);
+    const auto load_accounts = new LoadAccountsTask(false, session);
 
     create_account->then(load_accounts);
 

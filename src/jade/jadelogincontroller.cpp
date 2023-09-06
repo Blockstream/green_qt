@@ -405,7 +405,7 @@ void JadeLoginTask::update()
         if (wallet->network()->isLiquid()) {
             group()->add(new LoadAssetsTask(session));
         }
-        group()->add(new LoadAccountsTask(session));
+        group()->add(new LoadAccountsTask(false, session));
 
         connect(group(), &TaskGroup::finished, this, [=] {
             WalletManager::instance()->addWallet(wallet);

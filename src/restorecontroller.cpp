@@ -90,7 +90,7 @@ void RestoreController::accept()
     auto load_currencies = new LoadCurrenciesTask(session);
     auto get_watchonly_details = new GetWatchOnlyDetailsTask(session);
     auto load_assets = new LoadAssetsTask(session);
-    auto load_accounts = new LoadAccountsTask(session);
+    auto load_accounts = new LoadAccountsTask(true, session);
 
     const QJsonObject credentials({
         { "mnemonic", m_mnemonic.join(' ') },

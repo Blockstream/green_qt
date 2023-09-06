@@ -111,7 +111,7 @@ void WatchOnlyLoginController::load()
 
     group->add(new LoadCurrenciesTask(session));
     if (m_network->isLiquid()) group->add(new LoadAssetsTask(session));
-    group->add(new LoadAccountsTask(session));
+    group->add(new LoadAccountsTask(false, session));
     m_dispatcher->add(group);
 
     connect(group, &TaskGroup::finished, this, [=] {

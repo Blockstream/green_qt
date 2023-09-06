@@ -317,11 +317,13 @@ class LoadAccountsTask : public AuthHandlerTask
     Q_OBJECT
     QML_ELEMENT
 public:
-    LoadAccountsTask(Session* session);
+    LoadAccountsTask(bool refresh, Session* session);
 private:
     bool active() const override;
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
     void handleDone(const QJsonObject& result) override;
+private:
+    const bool m_refresh;
 };
 
 class LoadBalanceTask : public AuthHandlerTask
