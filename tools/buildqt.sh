@@ -1,9 +1,9 @@
 #!/bin/bash
 set -eox pipefail
 
-QT_MAJOR=6.4
-QT_VERSION=${QT_MAJOR}.3
-QT_HASH=29a7eebdbba0ea57978dea6083709c93593a60f0f3133a3de08b9571ee8eaab4
+QT_MAJOR=6.5
+QT_VERSION=${QT_MAJOR}.2
+QT_HASH=cde57be663d0f875759797298bdc37a936d517c39f2013e4e6ece5e12edeed12
 QT_BASENAME=qt-everywhere-src-${QT_VERSION}
 QT_FILENAME=${QT_BASENAME}.tar.xz
 
@@ -43,7 +43,7 @@ if [[ "$HOST" == "windows" ]]; then
             -release \
             -static -static-runtime \
             -prefix $_QT_HOST_PATH \
-            -skip qt3d,qt5compat,qtactiveqt,qtcharts,qtcoap,qtconnectivity,qtdatavis3d,qtdoc,qthttpserver,qtimageformats,qtlanguageserver,qtlottie,qtmqtt,qtmultimedia,qtnetworkauth,qtopcua,qtpositioning,qtquick3d,qtquick3dphysics,qtquicktimeline,qtremoteobjects,qtscxml,qtsensors,qtserialbus,qtserialport,qtspeech,qtsvg,qttranslations,qtvirtualkeyboard,qtwayland,qtwebchannel,qtwebsockets,qtwebview \
+            -skip qt3d,qt5compat,qtactiveqt,qtcharts,qtcoap,qtconnectivity,qtdatavis3d,qtdoc,qthttpserver,qtimageformats,qtlanguageserver,qtlottie,qtmqtt,qtmultimedia,qtnetworkauth,qtopcua,qtpositioning,qtquick3d,qtquick3dphysics,qtquicktimeline,qtremoteobjects,qtscxml,qtsensors,qtserialbus,qtserialport,qtspeech,qtsvg,qttranslations,qtvirtualkeyboard,qtwayland,qtwebchannel,qtwebsockets,qtwebview,qtlocation \
             -no-feature-sql -no-feature-sql-sqlite \
             -nomake tests -nomake examples
 
@@ -65,7 +65,7 @@ echo "qt: configuring"
   -release \
   -static -static-runtime \
   -prefix $PREFIX \
-  -skip qt3d,qtactiveqt,qtcharts,qtcoap,qtdatavis3d,qtdoc,qthttpserver,qtlanguageserver,qtlottie,qtmqtt,qtnetworkauth,qtopcua,qtpositioning,qtquick3d,qtquick3dphysics,qtquicktimeline,qtremoteobjects,qtscxml,qtsensors,qtserialbus,qtspeech,qtvirtualkeyboard,qtwebchannel,qtwebsockets,qtwebview \
+  -skip qt3d,qtactiveqt,qtcharts,qtcoap,qtdatavis3d,qtdoc,qthttpserver,qtlanguageserver,qtlottie,qtmqtt,qtnetworkauth,qtopcua,qtpositioning,qtquick3d,qtquick3dphysics,qtquicktimeline,qtremoteobjects,qtscxml,qtsensors,qtserialbus,qtspeech,qtvirtualkeyboard,qtwebchannel,qtwebsockets,qtwebview,qtlocation \
   -no-feature-sql -no-feature-sql-sqlite \
   -nomake tests -nomake examples
 
