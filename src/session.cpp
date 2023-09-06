@@ -203,16 +203,9 @@ void Session::setAltimeout(int altimeout)
 void Session::timerEvent(QTimerEvent* event)
 {
     if (event->timerId() == m_logout_timer) {
-        // FIXME: full logout in context
-        /*
-        // avoid autologout in the following cases
-        if (!m_wallet || m_device || m_accounts.empty()) return;
-
         killTimer(m_logout_timer);
-        m_wallet->setContext(nullptr);
-        QTimer::singleShot(5000, this, &QObject::deleteLater);
-        connect(qApp, &QCoreApplication::aboutToQuit, this, &QObject::deleteLater);
-        */
+        m_logout_timer = -1;
+        m_context->autoLogout();
     }
 }
 
@@ -307,9 +300,10 @@ bool Session::eventFilter(QObject *object, QEvent *event)
     case QEvent::KeyRelease:
     case QEvent::Wheel:
     {
-        Q_ASSERT(m_logout_timer != -1);
-        killTimer(m_logout_timer);
-        m_logout_timer = startTimer(m_altimeout * 60 * 1000);
+        if (m_logout_timer != -1) {
+            killTimer(m_logout_timer);
+            m_logout_timer = startTimer(m_altimeout * 60 * 1000);
+        }
         break;
     }
     default:

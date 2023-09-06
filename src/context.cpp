@@ -180,6 +180,16 @@ Account* Context::getAccountByPointer(Network* network, int pointer) const
     return m_accounts_by_pointer.value({ network, pointer });
 }
 
+void Context::autoLogout()
+{
+    // avoid autologout in the following cases
+    if (!m_wallet || m_device || m_accounts.empty()) return;
+
+    m_wallet->setContext(nullptr);
+    QTimer::singleShot(5000, this, &QObject::deleteLater);
+    connect(qApp, &QCoreApplication::aboutToQuit, this, &QObject::deleteLater);
+}
+
 QQmlListProperty<Account> Context::accounts()
 {
     return { this, &m_accounts };
