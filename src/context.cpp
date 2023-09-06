@@ -161,6 +161,8 @@ Account* Context::getOrCreateAccount(Network* network, const QJsonObject& data)
         auto session = getOrCreateSession(network);
         account = new Account(data, session);
         m_accounts_by_pointer.insert({ network, pointer }, account);
+        m_accounts.append(account);
+        emit accountsChanged();
     }
     return account;
 }
