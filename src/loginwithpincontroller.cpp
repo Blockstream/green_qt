@@ -149,6 +149,7 @@ void PinLoginController::load()
     connect(group, &TaskGroup::finished, this, [=] {
         WalletManager::instance()->addWallet(m_wallet);
         m_wallet->setContext(m_context);
+        m_context->refreshAccounts();
         emit loginFinished(m_wallet);
     });
 

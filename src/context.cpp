@@ -180,6 +180,12 @@ void Context::autoLogout()
     connect(qApp, &QCoreApplication::aboutToQuit, this, &QObject::deleteLater);
 }
 
+void Context::refreshAccounts()
+{
+    auto session = getOrCreateSession(m_wallet->network());
+    m_dispatcher->add(new LoadAccountsTask(true, session));
+}
+
 QQmlListProperty<Account> Context::accounts()
 {
     return { this, &m_accounts };

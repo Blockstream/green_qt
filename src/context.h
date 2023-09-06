@@ -71,6 +71,8 @@ public:
 
     TaskDispatcher* dispatcher() const { return m_dispatcher; }
 
+    void refreshAccounts();
+
 signals:
     void walletChanged();
     void deviceChanged();
