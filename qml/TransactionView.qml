@@ -320,14 +320,28 @@ WalletDialog {
                     }
                     HSpacer {
                     }
-                    CopyableLabel {
-                        text: {
-                            self.transaction.account.session.displayUnit
-                            return amount.formatAmount(true)
+                    ColumnLayout {
+                        Layout.fillWidth: false
+                        Layout.fillHeight: false
+                        CopyableLabel {
+                            Layout.alignment: Qt.AlignRight
+                            text: {
+                                self.transaction.account.session.displayUnit
+                                return amount.formatAmount(true)
+                            }
+                            color: amount.amount > 0 ? '#00b45a' : 'white'
+                            font.pixelSize: 16
+                            font.styleName: 'Medium'
                         }
-                        color: amount.amount > 0 ? '#00b45a' : 'white'
-                        font.pixelSize: 16
-                        font.styleName: 'Medium'
+                        CopyableLabel {
+                            Layout.alignment: Qt.AlignRight
+                            text: {
+                                return `≈ ${copyText}`
+                            }
+                            copyText: visible ? formatFiat(amount.amount) : ''
+                            opacity: 0.5
+                            visible: amount.asset.isLBTC
+                        }
                     }
                 }
             }
@@ -387,12 +401,22 @@ WalletDialog {
                     }
                     HSpacer {
                     }
-                    CopyableLabel {
-                        text: (transaction.type === Transaction.Outgoing ? '-' : '') + satoshi
-                        copyText: satoshi
-                        color: transaction.type === Transaction.Incoming ? '#00b45a' : 'white'
-                        font.pixelSize: 16
-                        font.styleName: 'Medium'
+                    ColumnLayout {
+                        Layout.fillWidth: true
+                        Layout.fillHeight: false
+                        CopyableLabel {
+                            Layout.alignment: Qt.AlignRight
+                            text: `${transaction.type === Transaction.Outgoing ? '-' : ''}${satoshi}`
+                            color: transaction.type === Transaction.Incoming ? '#00b45a' : 'white'
+                            font.pixelSize: 16
+                            font.styleName: 'Medium'
+                        }
+                        CopyableLabel {
+                            Layout.alignment: Qt.AlignRight
+                            text: `≈ ${copyText}`
+                            copyText: `${transaction.type === Transaction.Outgoing ? '-' : ''}${formatFiat(transaction.type === Transaction.Outgoing ? output.satoshi : amount.amount)}`
+                            opacity: 0.5
+                        }
                     }
                 }
             }
