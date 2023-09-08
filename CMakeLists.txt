@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(green VERSION 1.2.6 LANGUAGES CXX)
+project(green VERSION 1.2.7 LANGUAGES CXX)
 
 option(GREEN_WAYLAND "Include Wayland support" OFF)
 
