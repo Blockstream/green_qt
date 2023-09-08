@@ -3,12 +3,12 @@
 #include <QDebug>
 
 #include "account.h"
+#include "context.h"
 #include "task.h"
 #include "transaction.h"
 
 TransactionListModel::TransactionListModel(QObject* parent)
     : QAbstractListModel(parent)
-    , m_dispatcher(new TaskDispatcher(this))
     , m_reload_timer(new QTimer(this))
 {
     m_reload_timer->setSingleShot(true);
@@ -17,12 +17,6 @@ TransactionListModel::TransactionListModel(QObject* parent)
         m_reached_end = false;
         m_has_unconfirmed = false;
         fetch(true, 0, 30);
-
-        // TODO move to a better place
-        if (m_account) {
-            auto load_balance = new LoadBalanceTask(m_account);
-            m_dispatcher->add(load_balance);
-        }
     });
 }
 
@@ -50,7 +44,7 @@ void TransactionListModel::setAccount(Account *account)
 
 void TransactionListModel::fetch(bool reset, int offset, int count)
 {
-    qDebug() << "transactions: fetch  account:" << m_account->pointer() << "reset:" << reset << "offset:" << offset << "count:" << count;
+    if (!m_account) return;
 
     auto get_transactions = new GetTransactionsTask(offset, count, m_account);
 
@@ -82,7 +76,7 @@ void TransactionListModel::fetch(bool reset, int offset, int count)
         }
     });
 
-    m_dispatcher->add(get_transactions);
+    m_account->context()->dispatcher()->add(get_transactions);
 }
 
 QHash<int, QByteArray> TransactionListModel::roleNames() const
@@ -97,8 +91,6 @@ bool TransactionListModel::canFetchMore(const QModelIndex &parent) const
 {
     Q_ASSERT(!parent.parent().isValid());
     if (m_reached_end) return false;
-    // Prevent concurrent fetchMore
-    if (m_dispatcher->isBusy()) return false;
     return true;
 }
 
@@ -106,7 +98,6 @@ void TransactionListModel::fetchMore(const QModelIndex &parent)
 {
     Q_ASSERT(!parent.parent().isValid());
     if (!m_account) return;
-    if (m_dispatcher->isBusy()) return;
     fetch(false, m_transactions.size(), 30);
 }
 
@@ -168,15 +159,6 @@ void TransactionFilterProxyModel::setModel(TransactionListModel* model)
     m_model = model;
     emit modelChanged();
     setSourceModel(m_model);
-
-    if (m_model) {
-        connect(m_model->dispatcher(), &TaskDispatcher::busyChanged, this, [=] {
-            if (m_filter.isEmpty()) return;
-            if (m_model->dispatcher()->isBusy()) return;
-            if (!m_model->canFetchMore({})) return;
-            m_model->fetchMore({});
-        });
-    }
 }
 
 void TransactionFilterProxyModel::setFilter(const QString& filter)
@@ -184,7 +166,7 @@ void TransactionFilterProxyModel::setFilter(const QString& filter)
     if (m_filter == filter) return;
     m_filter = filter;
     emit filterChanged();
-    if (!m_filter.isEmpty() && !m_model->dispatcher()->isBusy()) m_model->fetchMore({});
+    if (!m_filter.isEmpty()) m_model->fetchMore({});
     invalidateRowsFilter();
 }
 

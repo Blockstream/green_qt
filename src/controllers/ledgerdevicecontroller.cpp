@@ -155,7 +155,7 @@ void LedgerDeviceController::login()
 
     connect(group, &TaskGroup::finished, this, [=] {
         m_wallet->setContext(m_context);
-        m_context->refreshAccounts();
+        m_context->refresh();
         m_context = nullptr;
         emit contextChanged();
         setStatus("done");
