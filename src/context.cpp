@@ -182,10 +182,16 @@ void Context::autoLogout()
     connect(qApp, &QCoreApplication::aboutToQuit, this, &QObject::deleteLater);
 }
 
-void Context::refreshAccounts()
+void Context::refresh()
 {
     auto session = getOrCreateSession(m_wallet->network());
-    m_dispatcher->add(new LoadAccountsTask(true, session));
+    auto load_accounts = new LoadAccountsTask(true, session);
+    connect(load_accounts, &Task::finished, this, [=] {
+        for (auto account : m_accounts) {
+            m_dispatcher->add(new LoadBalanceTask(account));
+        }
+    });
+    m_dispatcher->add(load_accounts);
 }
 
 QQmlListProperty<Account> Context::accounts()

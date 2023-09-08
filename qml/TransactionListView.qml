@@ -7,7 +7,7 @@ import Qt5Compat.GraphicalEffects
 GPane {
     required property Account account
     readonly property real contentY: list_view.contentY
-    readonly property bool empty: !transaction_list_model.dispatcher.busy && list_view.count === 0
+    readonly property bool empty: list_view.count === 0
 
     id: self
 
@@ -55,17 +55,6 @@ GPane {
         // refreshGesture: true
         // refreshText: qsTrId('id_loading_transactions')
         // onRefreshTriggered: transaction_list_model.reload()
-
-        BusyIndicator {
-            width: 32
-            height: 32
-            running: transaction_list_model.dispatcher.busy
-            anchors.margins: 8
-            Layout.alignment: Qt.AlignHCenter
-            visible: running ? 1 : 0
-            anchors.bottom: parent.bottom
-            anchors.horizontalCenter: parent.horizontalCenter
-        }
     }
 
     RowLayout {
@@ -77,7 +66,7 @@ GPane {
         }
         GButton {
             text: qsTrId('Export')
-            enabled: self.account?.context && !transaction_list_model.dispatcher.busy && list_view.count > 0
+            enabled: self.account?.context && list_view.count > 0
             onClicked: export_transactions_popup.createObject(window, { account: self.account }).open()
             ToolTip.text: qsTrId('id_export_transactions_to_csv_file')
         }

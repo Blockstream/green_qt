@@ -12,13 +12,11 @@
 class TransactionListModel : public QAbstractListModel
 {
     Q_OBJECT
-    Q_PROPERTY(TaskDispatcher* dispatcher READ dispatcher CONSTANT)
     Q_PROPERTY(Account* account READ account WRITE setAccount NOTIFY accountChanged)
     QML_ELEMENT
 public:
     TransactionListModel(QObject* parent = nullptr);
 
-    TaskDispatcher* dispatcher() const { return m_dispatcher; }
     Account* account() const { return m_account; }
     void setAccount(Account* account);
 
@@ -37,7 +35,6 @@ private:
     void handleTransactionEvent(const QJsonObject& event);
     void fetch(bool reset, int offset, int count);
 private:
-    TaskDispatcher* const m_dispatcher;
     Account* m_account{nullptr};
     QVector<Transaction*> m_transactions;
     bool m_has_unconfirmed{false};

@@ -192,6 +192,19 @@ MainPageHeader {
                 RowLayout {
                     Layout.fillWidth: false
                     spacing: constants.s1
+                    ProgressIndicator {
+                        Layout.minimumHeight: 24
+                        Layout.minimumWidth: 24
+                        indeterminate: self.context?.dispatcher.busy ?? false
+                        current: 0
+                        max: 1
+                        visible: opacity > 0
+                        opacity: self.context?.dispatcher.busy ?? false ? 1 : 0
+                        Behavior on opacity {
+                            SmoothedAnimation {
+                            }
+                        }
+                    }
                     ToolButton {
                         visible: (self.currentAccount.session.events.twofactor_reset?.is_active ?? false) || !fiatRateAvailable
                         icon.source: 'qrc:/svg/notifications_2.svg'
@@ -199,15 +212,6 @@ MainPageHeader {
                         icon.width: 16
                         icon.height: 16
                         onClicked: notifications_drawer.open()
-                    }
-                    ToolButton {
-                        visible: false
-                        icon.source: 'qrc:/svg/refresh.svg'
-                        flat: true
-                        action: self.refreshAction
-                        ToolTip.text: qsTrId('id_refresh')
-                        ToolTip.delay: 300
-                        ToolTip.visible: hovered
                     }
                 }
             }
