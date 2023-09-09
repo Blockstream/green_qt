@@ -262,13 +262,13 @@ int main(int argc, char *argv[])
     const QString language = locale.name().split('_').first();
 
     QTranslator english_translator;
-    english_translator.load(":/i18n/green_en.qm");
+    if (!english_translator.load(":/i18n/green_en.qm")) return -1;
 
     QTranslator language_translator;
-    language_translator.load(QString(":/i18n/green_%1.qm").arg(language));
+    if (!language_translator.load(QString(":/i18n/green_%1.qm").arg(language))) return -1;
 
     QTranslator locale_translator;
-    locale_translator.load(QString(":/i18n/green_%1.qm").arg(locale.name()));
+    if (!locale_translator.load(QString(":/i18n/green_%1.qm").arg(locale.name()))) return -1;
 
     app.installTranslator(&english_translator);
     app.installTranslator(&language_translator);

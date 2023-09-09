@@ -98,7 +98,7 @@ signals:
 
 protected:
     bool eventFilter(QObject *object, QEvent *event) override;
-    void timerEvent(QTimerEvent* event);
+    void timerEvent(QTimerEvent* event) override;
 
 private:
     void update();
