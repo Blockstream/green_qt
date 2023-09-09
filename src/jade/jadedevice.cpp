@@ -31,7 +31,7 @@ public:
     {
         m_device->api()->getXpub(m_network->canonicalId(), m_path, [this](const QVariantMap& msg) {
             if (msg.contains("error")) return fail();
-            Q_ASSERT(msg.contains("result") && msg["result"].type() == QVariant::String);
+            Q_ASSERT(msg.contains("result") && msg["result"].typeId() == QMetaType::QString);
             m_public_key = msg["result"].toString().toLocal8Bit();
             finish();
         });
@@ -222,7 +222,7 @@ public:
         // TODO: the following QByteArray::fromHex should be done in resolver (and refactor ledger activity)
         const auto script = QByteArray::fromHex(m_script.toLocal8Bit());
         m_device->api()->getBlindingKey(script, [this](const QVariantMap& msg) {
-            Q_ASSERT(msg.contains("result") && msg["result"].type() == QVariant::ByteArray);
+            Q_ASSERT(msg.contains("result") && msg["result"].typeId() == QMetaType::QByteArray);
             m_public_key = msg["result"].toByteArray();
             finish();
         });
@@ -250,7 +250,7 @@ public:
     void exec() override
     {
         m_device->api()->getSharedNonce(m_script, m_pubkey, [this](const QVariantMap& msg) {
-            Q_ASSERT(msg.contains("result") && msg["result"].type() == QVariant::ByteArray);
+            Q_ASSERT(msg.contains("result") && msg["result"].typeId() == QMetaType::QByteArray);
             m_nonce = msg["result"].toByteArray();
             finish();
         });
@@ -388,7 +388,7 @@ public:
                 if (handleError(msg)) return;
                 progress()->incrementValue();
 
-                Q_ASSERT(msg.contains("result") && msg["result"].type() == QVariant::ByteArray);
+                Q_ASSERT(msg.contains("result") && msg["result"].typeId() == QMetaType::QByteArray);
                 m_abfs.append(msg["result"].toByteArray());
                 const auto abf = m_abfs.join();
                 const auto vbf = m_vbfs.join();
@@ -418,7 +418,7 @@ public:
             if (handleError(msg)) return;
             progress()->incrementValue();
 
-            Q_ASSERT(msg.contains("result") && msg["result"].type() == QVariant::Map);
+            Q_ASSERT(msg.contains("result") && msg["result"].typeId() == QMetaType::QVariantMap);
             auto commitment = msg["result"].toMap();
 
             m_abfs.append(commitment.value("abf").toByteArray());
@@ -468,7 +468,7 @@ public:
     bool handleError(const QVariantMap& msg)
     {
         if (!msg.contains("error")) return false;
-        Q_ASSERT(msg["error"].type() == QVariant::Map);
+        Q_ASSERT(msg["error"].typeId() == QMetaType::QVariantMap);
         setMessage(QJsonObject::fromVariantMap(msg["error"].toMap()));
         fail();
         return true;
