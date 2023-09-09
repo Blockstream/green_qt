@@ -160,7 +160,7 @@ SET(QML_FILES
     qml/WalletDrawer.qml
     qml/ReceiveDrawer.qml
     qml/BackButton.qml
-    qml/GStackView.qml
+    qml/CloseButton.qml
 )
 
 if (GREEN_NO_RESOURCES)

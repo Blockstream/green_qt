@@ -36,8 +36,8 @@ WalletDrawer {
                     }
                     HSpacer {
                     }
-                    Image {
-                        source: 'qrc:/svg2/close.svg'
+                    CloseButton {
+                        onClicked: self.close()
                     }
                 }
             }
