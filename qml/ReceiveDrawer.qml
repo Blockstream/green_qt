@@ -137,7 +137,6 @@ WalletDrawer {
                             text: controller.uri
                             implicitHeight: 200
                             implicitWidth: 200
-                            padding: 14
                             radius: 4
                         }
                         Label {
