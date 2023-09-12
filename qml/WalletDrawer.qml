@@ -14,7 +14,7 @@ Drawer {
     clip: true
     height: parent.height
     edge: Qt.RightEdge
-    interactive: true
+    interactive: false
     topPadding: 60
     bottomPadding: 60
     leftPadding: 48
