@@ -161,6 +161,7 @@ SET(QML_FILES
     qml/WalletDrawer.qml
     qml/ReceiveDrawer.qml
     qml/BackButton.qml
+    qml/AccountAssetField.qml
     qml/CloseButton.qml
 )
 
