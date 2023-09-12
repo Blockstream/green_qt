@@ -50,65 +50,13 @@ WalletDrawer {
                     opacity: 0.4
                     text: 'Asset & Account'
                 }
-                AbstractButton {
+                AccountAssetField {
                     Layout.fillWidth: true
-                    padding: 20
-                    background: Rectangle {
-                        radius: 5
-                        color: '#222226'
-                    }
-                    contentItem: RowLayout {
-                        spacing: 10
-                        Image {
-                            Layout.alignment: Qt.AlignCenter
-                            Layout.maximumWidth: 32
-                            Layout.maximumHeight: 32
-                            source: UtilJS.iconFor(self.asset || self.account)
-                        }
-                        ColumnLayout {
-                            Layout.alignment: Qt.AlignCenter
-                            Layout.fillWidth: false
-                            Layout.fillHeight: false
-                            spacing: 0
-                            Label {
-                                font.family: 'SF Compact Display'
-                                font.pixelSize: 16
-                                font.weight: 600
-                                text: self.asset?.name ?? self.account.network.displayName
-                            }
-                            Item {
-                                Layout.minimumHeight: 4
-                            }
-                            Label {
-                                font.capitalization: Font.AllUppercase
-                                font.family: 'SF Compact Display'
-                                font.pixelSize: 12
-                                font.weight: 500
-                                opacity: 0.4
-                                text: self.account.name
-                            }
-                            Label {
-                                font.capitalization: Font.AllUppercase
-                                font.family: 'SF Compact Display'
-                                font.pixelSize: 11
-                                font.weight: 400
-                                opacity: 0.4
-                                text: UtilJS.networkLabel(self.account.network) + ' / ' + UtilJS.accountLabel(self.account)
-                            }
-                        }
-                        HSpacer {
-                        }
-                        Image {
-                            Layout.alignment: Qt.AlignCenter
-                            source: 'qrc:/svg2/edit.svg'
-                        }
-                    }
-                    onClicked: stack_view.push(asset_account_selector)
-                }
-                Item {
-                    Layout.minimumHeight: 25
+                    account: controller.account
+                    asset: controller.asset
                 }
                 Label {
+                    Layout.topMargin: 15
                     font.family: 'SF Compact Display'
                     font.pixelSize: 14
                     font.weight: 600
