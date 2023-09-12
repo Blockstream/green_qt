@@ -269,6 +269,7 @@ void RestorePersistWalletTask::update()
 
     context->setWallet(wallet);
     wallet->setContext(context);
+    context->refresh();
     m_controller->setWallet(wallet);
 
     WalletManager::instance()->insertWallet(wallet);
