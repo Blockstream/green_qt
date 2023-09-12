@@ -165,6 +165,7 @@ SET(QML_FILES
     qml/AccountAssetField.qml
     qml/PrimaryButton.qml
     qml/RegularButton.qml
+    qml/LinkButton.qml
     qml/CloseButton.qml
     qml/CopyAddressButton.qml
 )
