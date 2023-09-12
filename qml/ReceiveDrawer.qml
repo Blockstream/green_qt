@@ -99,6 +99,7 @@ WalletDrawer {
                         }
                         CopyAddressButton {
                             Layout.alignment: Qt.AlignCenter
+                            address: controller.uri
                         }
                     }
                 }
@@ -125,41 +126,6 @@ WalletDrawer {
     Component {
         id: account_asset_selector
         AccountAssetSelector {
-        }
-    }
-
-    component CopyAddressButton: AbstractButton {
-        padding: 10
-        Timer {
-            id: timer
-            repeat: false
-            interval: 1000
-        }
-
-        background: Rectangle {
-            color: '#13161D'
-            radius: 4
-        }
-        contentItem: RowLayout {
-            spacing: 10
-            Item {
-                Layout.minimumHeight: 22
-                Layout.minimumWidth: 22
-                Image {
-                    anchors.centerIn: parent
-                    source: timer.running ? 'qrc:/svg2/check.svg' : 'qrc:/svg2/copy.svg'
-                }
-            }
-            Label {
-                font.family: 'SF Compact Display'
-                font.pixelSize: 12
-                font.weight: 600
-                text: 'Copy Address'
-            }
-        }
-        onClicked: {
-            Clipboard.copy(controller.uri)
-            timer.restart()
         }
     }
 }

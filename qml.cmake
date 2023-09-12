@@ -166,6 +166,7 @@ SET(QML_FILES
     qml/PrimaryButton.qml
     qml/RegularButton.qml
     qml/CloseButton.qml
+    qml/CopyAddressButton.qml
 )
 
 if (GREEN_NO_RESOURCES)
