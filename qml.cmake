@@ -163,6 +163,7 @@ SET(QML_FILES
     qml/BackButton.qml
     qml/AccountAssetSelector.qml
     qml/AccountAssetField.qml
+    qml/AmountField.qml
     qml/PrimaryButton.qml
     qml/RegularButton.qml
     qml/LinkButton.qml
