@@ -107,41 +107,15 @@ WalletDrawer {
                 }
                 RowLayout {
                     spacing: 26
-                    AbstractButton {
+                    RegularButton {
+                        Layout.horizontalStretchFactor: 1
                         Layout.fillWidth: true
-                        padding: 16
-                        background: Rectangle {
-                            radius: 8
-                            border.width: 1
-                            border.color: '#FFF'
-                            color: 'transparent'
-                        }
-                        contentItem: RowLayout {
-                            Label {
-                                Layout.alignment: Qt.AlignCenter
-                                font.family: 'SF Compact Display'
-                                font.pixelSize: 16
-                                font.weight: 700
-                                text: 'More Options'
-                            }
-                        }
+                        text: 'More Options'
                     }
-                    AbstractButton {
+                    PrimaryButton {
+                        Layout.horizontalStretchFactor: 1
                         Layout.fillWidth: true
-                        padding: 16
-                        background: Rectangle {
-                            radius: 8
-                            color: '#00B45A'
-                        }
-                        contentItem: RowLayout {
-                            Label {
-                                Layout.alignment: Qt.AlignCenter
-                                font.family: 'SF Compact Display'
-                                font.pixelSize: 16
-                                font.weight: 700
-                                text: 'Share'
-                            }
-                        }
+                        text: 'Share'
                     }
                 }
             }
