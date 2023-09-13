@@ -17,7 +17,14 @@ Asset::Asset(const QString& id, QObject* parent)
     m_item->setData(QVariant::fromValue(this));
 }
 
-void Asset::setIcon(const QString &icon)
+void Asset::setNetwork(Network* network)
+{
+    if (m_network == network) return;
+    m_network = network;
+    emit networkChanged();
+}
+
+void Asset::setIcon(const QString& icon)
 {
     if (m_icon == icon) return;
     m_icon = icon;
@@ -114,9 +121,12 @@ AssetManager::AssetManager()
     connect(Analytics::instance(), &Analytics::remoteConfigChanged, this, [this] {
         auto liquid_assets = Analytics::instance()->getRemoteConfigValue("liquid_assets").toArray();
 
+        auto network = NetworkManager::instance()->network("liquid");
+
         for (const auto& value: liquid_assets) {
             const auto data = value.toObject();
             auto asset = assetWithId(data.value("id").toString());
+            asset->setNetwork(network);
             asset->setIsAmp(data.value("amp").toBool(false));
             asset->setWeight(data.value("weight").toInt(0));
         }
@@ -128,6 +138,7 @@ AssetManager::AssetManager()
         qDebug() << network->id() << network->canonicalId() << network->displayName() << network->key() << network->data().value("policy_asset");
         const auto id = network->data().value("policy_asset").toString(network->key());
         auto asset = assetWithId(id);
+        asset->setNetwork(network);
         asset->setWeight(INT_MAX);
         asset->setName(network->displayName());
     }

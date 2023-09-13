@@ -13,6 +13,7 @@
 class Asset : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(Network* network READ network NOTIFY networkChanged);
     Q_PROPERTY(QString id READ id CONSTANT)
     Q_PROPERTY(QString icon READ icon NOTIFY iconChanged)
     Q_PROPERTY(QString name READ name NOTIFY nameChanged)
@@ -24,6 +25,9 @@ class Asset : public QObject
     QML_UNCREATABLE("Asset is instanced by AssetManager")
 public:
     explicit Asset(const QString& id, QObject* parent);
+
+    Network* network() const { return m_network; }
+    void setNetwork(Network* network);
 
     QString id() const { return m_id; }
     QStandardItem* item() const { return m_item; }
@@ -53,6 +57,7 @@ public slots:
     void openInExplorer() const;
 
 signals:
+    void networkChanged();
     void nameChanged();
     void iconChanged();
     void dataChanged();
@@ -60,6 +65,7 @@ signals:
     void weightChanged();
 
 private:
+    Network* m_network{nullptr};
     QString const m_id;
     QStandardItem* const m_item;
     QString m_name;
