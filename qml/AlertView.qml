@@ -38,39 +38,34 @@ Loader {
             radius: 4
             color: 'white'
         }
-        header: RowLayout {
-            Label {
-                text: self.alert.title
-                font.bold: true
-                color: constants.c900
-                padding: constants.p2
-                Layout.fillWidth: true
-                Layout.preferredWidth: 0
-            }
-            AbstractButton {
-                visible: self.alert.dismissable
-                padding: constants.p2
-                contentItem: Image {
-                    source: 'qrc:/svg/cancel.svg'
-                    width: 16
-                    height: 16
-                }
-                onClicked: self.dismissed = true
-            }
+        header: Label {
+            text: self.alert.title
+            font.bold: true
+            color: constants.c900
+            padding: constants.p2
         }
         contentItem: Label {
             text: self.alert.message
             wrapMode: Label.WordWrap
             color: constants.c800
         }
-        footer: Label {
-            text: qsTrId('id_learn_more')
-            color: 'green'
-            font.bold: true
-            wrapMode: Label.WordWrap
-            padding: constants.p2
-            TapHandler {
-                onTapped: Qt.openUrlExternally(self.alert.link)
+        footer: RowLayout {
+            LinkButton {
+                Layout.margins: constants.p2
+                font.bold: true
+                font.pixelSize: 14
+                text: qsTrId('id_learn_more')
+                onClicked: Qt.openUrlExternally(self.alert.link)
+            }
+            HSpacer {
+            }
+            LinkButton {
+                Layout.margins: constants.p2
+                font.bold: true
+                font.pixelSize: 14
+                text: 'Dismiss'
+                visible: self.alert.dismissable
+                onClicked: self.dismissed = true
             }
         }
     }
