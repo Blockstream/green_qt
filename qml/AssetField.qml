@@ -3,7 +3,12 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
+import "util.js" as UtilJS
+
 AbstractButton {
+    required property Asset asset
+
+    id: self
     leftPadding: 20
     rightPadding: 20
     topPadding: 10
@@ -26,14 +31,15 @@ AbstractButton {
         Image {
             Layout.maximumHeight: 32
             Layout.maximumWidth: 32
-            source: 'qrc:/svg/btc.svg'
+            source: UtilJS.iconFor(self.asset)
         }
         Label {
             Layout.fillWidth: true
             font.family: 'SF Compact Display'
             font.pixelSize: 14
             font.weight: 500
-            text: 'Bitcoin'
+            text: self.asset?.name ?? ''
+            wrapMode: Label.WrapAtWordBoundaryOrAnywhere
         }
         Image {
             source: 'qrc:/svg2/edit.svg'
