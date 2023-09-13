@@ -184,7 +184,7 @@ int main(int argc, char *argv[])
 
     g_args.addHelpOption();
     g_args.addVersionOption();
-    g_args.addOption(QCommandLineOption("datadir"));
+    g_args.addOption(QCommandLineOption("datadir", "", "path"));
     g_args.addOption(QCommandLineOption("tempdatadir"));
     g_args.addOption(QCommandLineOption("printtoconsole"));
     g_args.addOption(QCommandLineOption("debug"));
@@ -196,7 +196,8 @@ int main(int argc, char *argv[])
     if (g_args.isSet("tempdatadir")) {
         g_data_location = QDir::tempPath();
     } else if (g_args.isSet("datadir")) {
-        g_data_location = g_args.value("datadir");
+        QDir path(g_args.value("datadir"));
+        g_data_location = path.absolutePath();
     } else {
         g_data_location = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation);
     }
