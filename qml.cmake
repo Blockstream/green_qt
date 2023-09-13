@@ -171,6 +171,7 @@ SET(QML_FILES
     qml/CloseButton.qml
     qml/CopyAddressButton.qml
     qml/AssetField.qml
+    qml/AssetSelector.qml
 )
 
 if (GREEN_NO_RESOURCES)
