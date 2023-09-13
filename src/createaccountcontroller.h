@@ -36,6 +36,7 @@ private:
 class CreateAccountController : public Controller
 {
     Q_OBJECT
+    Q_PROPERTY(Asset* asset READ asset WRITE setAsset NOTIFY assetChanged)
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(QString type READ type WRITE setType NOTIFY typeChanged)
     Q_PROPERTY(QStringList recoveryMnemonic READ recoveryMnemonic WRITE setRecoveryMnemonic NOTIFY recoveryMnemonicChanged)
@@ -45,6 +46,8 @@ class CreateAccountController : public Controller
 
 public:
     explicit CreateAccountController(QObject *parent = nullptr);
+    Asset* asset() const { return m_asset; }
+    void setAsset(Asset* asset);
     QString name() const { return m_name; }
     void setName(const QString& name);
     QString type() const { return m_type; }
@@ -58,6 +61,7 @@ public:
     Q_INVOKABLE QStringList generateMnemonic(int size) const;
 
 signals:
+    void assetChanged();
     void nameChanged();
     void typeChanged();
     void created(Account* account);
@@ -69,6 +73,7 @@ public slots:
     void create();
 
 private:
+    Asset* m_asset{nullptr};
     QString m_name;
     QString m_type;
     QStringList m_recovery_mnemonic;

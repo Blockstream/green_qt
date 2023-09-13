@@ -1,3 +1,4 @@
+#include "asset.h"
 #include "createaccountcontroller.h"
 
 #include <gdk.h>
@@ -23,6 +24,13 @@ bool IsValidXpub(const QString& xpub)
 CreateAccountController::CreateAccountController(QObject *parent)
     : Controller(parent)
 {
+}
+
+void CreateAccountController::setAsset(Asset* asset)
+{
+    if (m_asset == asset) return;
+    m_asset = asset;
+    emit assetChanged();
 }
 
 void CreateAccountController::setName(const QString& name)
@@ -81,8 +89,7 @@ void CreateAccountController::create()
     }
 
     const auto context = m_context;
-    // TODO: network should be a property
-    auto network = context->wallet()->network();
+    auto network = m_asset->network();
     auto session = context->getOrCreateSession(network);
     const auto create_account = new CreateAccountTask(details, session);
     const auto load_accounts = new LoadAccountsTask(false, session);
