@@ -22,7 +22,7 @@ TextField {
             border.color: '#00B45A'
             color: 'transparent'
             radius: 9
-            anchors.fill: self.parent
+            anchors.fill: parent
             anchors.margins: -4
             z: -1
             opacity: {
