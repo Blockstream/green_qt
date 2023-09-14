@@ -159,6 +159,7 @@ SET(QML_FILES
     qml/GStackView.qml
     qml/OnboardView.qml
     qml/WalletDrawer.qml
+    qml/CreateAccountDrawer.qml
     qml/ReceiveDrawer.qml
     qml/BackButton.qml
     qml/AccountAssetSelector.qml
