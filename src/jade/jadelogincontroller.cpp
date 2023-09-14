@@ -89,9 +89,7 @@ void JadeSetupTask::update()
 
     device->api()->authUser(network->canonicalId(), [=](const QVariantMap& msg) {
         device->setUnlocking(false);
-
-        Q_ASSERT(msg.contains("result"));
-        if (msg["result"] == true) {
+        if (msg.contains("result") && msg["result"] == true) {
             device->updateVersionInfo();
             setStatus(Status::Finished);
         } else {
