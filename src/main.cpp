@@ -288,6 +288,7 @@ int main(int argc, char *argv[])
     qmlRegisterSingletonInstance<Settings>("Blockstream.Green.Core", 0, 1, "Settings", Settings::instance());
     qmlRegisterSingletonInstance<WalletManager>("Blockstream.Green.Core", 0, 1, "WalletManager", WalletManager::instance());
     qmlRegisterSingletonInstance<Analytics>("Blockstream.Green.Core", 0, 1, "Analytics", Analytics::instance());
+    qmlRegisterSingletonInstance<AssetManager>("Blockstream.Green.Core", 0, 1, "AssetManager", AssetManager::instance());
 
     QQmlApplicationEngine engine;
     engine.setBaseUrl(QUrl("qrc:/Blockstream/Green/qml/"));
