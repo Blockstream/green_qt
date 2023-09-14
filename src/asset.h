@@ -78,18 +78,17 @@ private:
 class AssetManager : public QObject
 {
     Q_OBJECT
-    QML_ELEMENT
-    QML_SINGLETON
 public:
-    explicit AssetManager();;
+    explicit AssetManager();
     virtual ~AssetManager();
+
     static AssetManager* instance();
 
-    AssetManager* create(QQmlEngine*, QJSEngine*);
+    static AssetManager* create(QQmlEngine*, QJSEngine*);
 
     QStandardItemModel* model() const { return m_model; }
 
-    Asset* assetWithId(const QString& id);
+    Q_INVOKABLE Asset* assetWithId(const QString& id);
 
 private:
     QMap<QString, Asset*> m_assets;

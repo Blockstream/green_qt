@@ -142,11 +142,6 @@ AssetManager::AssetManager()
         asset->setWeight(INT_MAX);
         asset->setName(network->displayName());
     }
-//    Q_UNREACHABLE();
-
-//    const auto policy_asset = data.value("policy_asset").toString(key.toString());
-//    auto asset = AssetManager::instance()->assetWithId(policy_asset);
-//    asset->setWeight(INT_MAX);
 }
 
 AssetManager::~AssetManager()
