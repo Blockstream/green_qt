@@ -58,7 +58,16 @@ Session* Context::getOrCreateSession(Network* network)
         session->setActive(true);
         connect(session, &Session::blockEvent, this, [=](const QJsonObject& event) {
             for (auto account : m_accounts) {
-                emit account->blockEvent(event);
+                if (account->session() == session) {
+                    // FIXME: Until gdk notifies of chain reorgs, resync balance every
+                    // 10 blocks in case a reorged tx is somehow evicted from the mempool
+                    const auto block = event.value("block").toObject();
+                    uint32_t block_height = block.value("block_height").toDouble();
+                    if (!network->isLiquid() || (block_height % 10) == 0) {
+                        account->loadBalance();
+                    }
+                    emit account->blockEvent(event);
+                }
             }
         });
         connect(session, &Session::twoFactorResetEvent, this, [=](const QJsonObject& event) {
@@ -68,6 +77,7 @@ Session* Context::getOrCreateSession(Network* network)
             for (auto pointer : transaction.value("subaccounts").toArray()) {
                 auto account = m_accounts_by_pointer.value({ network, pointer.toInt() });
                 if (account) {
+                    account->loadBalance();
                     emit account->transactionEvent(transaction);
                 }
             }

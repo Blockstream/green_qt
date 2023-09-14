@@ -47,7 +47,7 @@ public:
 
     void update(const QJsonObject& json);
 
-    void handleNotification(const QJsonObject& notification);
+    void loadBalance();
 
     qint64 balance() const;
 
