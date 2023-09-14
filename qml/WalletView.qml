@@ -23,8 +23,7 @@ MainPage {
     }
 
     function openCreateDialog() {
-        const dialog = create_account_dialog.createObject(window, { wallet: context.wallet })
-        dialog.open()
+        create_account_drawer.open()
     }
 
     function parseAmount(account, amount, unit) {
@@ -249,6 +248,11 @@ MainPage {
                 y: 1
                 color: constants.c200
                 opacity: 0.5
+    CreateAccountDrawer {
+        id: create_account_drawer
+        context: self.context
+    }
+
     ReceiveDrawer {
         id: receive_drawer
         context: self.context
