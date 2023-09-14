@@ -11,6 +11,7 @@
 #include "network.h"
 #include "output.h"
 #include "session.h"
+#include "task.h"
 #include "transaction.h"
 
 Account::Account(const QJsonObject& data, Session* session)
@@ -80,22 +81,9 @@ void Account::updateBalance()
     emit balanceChanged();
 }
 
-void Account::handleNotification(const QJsonObject& notification)
+void Account::loadBalance()
 {
-    const auto event = notification.value("event").toString();
-    if (event == "transaction") {
-        // TODO
-//        reload();
-    } else if (event == "block") {
-        // FIXME: Until gdk notifies of chain reorgs, resync balance every
-        // 10 blocks in case a reorged tx is somehow evicted from the mempool
-        const auto block = notification.value("block").toObject();
-        uint32_t block_height = block.value("block_height").toDouble();
-        if (!m_network->isLiquid() || (block_height % 10) == 0) {
-            // TOOD
-            //reload();
-        }
-    }
+    m_context->dispatcher()->add(new LoadBalanceTask(this));
 }
 
 qint64 Account::balance() const
