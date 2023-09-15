@@ -25,16 +25,16 @@ TextField {
             anchors.fill: parent
             anchors.margins: -4
             z: -1
-            opacity: {
+            visible: {
                 if (self.activeFocus) {
                     switch (self.focusReason) {
                     case Qt.TabFocusReason:
                     case Qt.BacktabFocusReason:
                     case Qt.ShortcutFocusReason:
-                        return 1
+                        return true
                     }
                 }
-                return 0
+                return false
             }
         }
     }
