@@ -224,6 +224,10 @@ MainPage {
                 y: 1
                 color: constants.c200
                 opacity: 0.5
+            }
+        }
+    }
+
     CreateAccountDrawer {
         id: create_account_drawer
         context: self.context
@@ -239,10 +243,6 @@ MainPage {
         id: send_drawer
         context: self.context
         account: self.currentAccount
-    }
-
-            }
-        }
     }
 
     Drawer {
