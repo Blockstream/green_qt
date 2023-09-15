@@ -245,6 +245,11 @@ MainPage {
         account: self.currentAccount
     }
 
+    AssetsDrawer {
+        id: assets_drawer
+        context: self.context
+    }
+
     Drawer {
         id: notifications_drawer
         interactive: position > 0

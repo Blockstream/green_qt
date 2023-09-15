@@ -176,6 +176,7 @@ SET(QML_FILES
     qml/AssetSelector.qml
     qml/SearchField.qml
     qml/SendDrawer.qml
+    qml/AssetsDrawer.qml
     qml/DrawerTitle.qml
     qml/FieldTitle.qml
 )
