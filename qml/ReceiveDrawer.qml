@@ -14,7 +14,7 @@ WalletDrawer {
     ReceiveAddressController {
         id: controller
         account: self.account
-        amount: '10'
+        amount: '0'
     }
 
     id: self
