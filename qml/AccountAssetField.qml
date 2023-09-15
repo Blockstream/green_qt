@@ -41,7 +41,7 @@ AbstractButton {
                 font.family: 'SF Compact Display'
                 font.pixelSize: 16
                 font.weight: 600
-                text: self.asset?.name ?? self.account.network.displayName
+                text: self.asset?.name ?? self.account?.network?.displayName ?? '-'
             }
             Item {
                 Layout.minimumHeight: 4
@@ -60,7 +60,7 @@ AbstractButton {
                 font.pixelSize: 11
                 font.weight: 400
                 opacity: 0.4
-                text: UtilJS.networkLabel(self.account.network) + ' / ' + UtilJS.accountLabel(self.account)
+                text: UtilJS.networkLabel(self.account?.network) + ' / ' + UtilJS.accountLabel(self.account)
             }
         }
         HSpacer {
