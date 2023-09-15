@@ -67,10 +67,7 @@ WalletDrawer {
             padding: 0
             bottomPadding: 20
             contentItem: RowLayout {
-                Label {
-                    font.family: 'SF Compact Display'
-                    font.pixelSize: 20
-                    font.weight: 790
+                DrawerTitle {
                     text: qsTrId('id_send')
                 }
                 HSpacer {

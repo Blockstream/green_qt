@@ -176,6 +176,7 @@ SET(QML_FILES
     qml/AssetSelector.qml
     qml/SearchField.qml
     qml/SendDrawer.qml
+    qml/DrawerTitle.qml
 )
 
 if (GREEN_NO_RESOURCES)
