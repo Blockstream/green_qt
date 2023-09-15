@@ -631,8 +631,10 @@ WalletDrawer {
     Component {
         id: account_asset_selector
         AccountAssetSelector {
+            context: controller.context
             account: controller.account
             asset: controller.asset
+            showCreateAccount: false
             onCanceled: stack_view.pop()
             onSelected: (account, asset) => {
                 stack_view.pop()

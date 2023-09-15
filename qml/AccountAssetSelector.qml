@@ -7,12 +7,15 @@ import QtQuick.Layouts
 import "util.js" as UtilJS
 
 Page {
+    required property Context context
     required property Account account
     required property Asset asset
+    property bool showCreateAccount: false
 
     signal canceled()
     signal selected(account: Account, asset: Asset)
 
+    id: self
     background: null
     header: Pane {
         background: null
@@ -153,75 +156,98 @@ Page {
                                 text: JSON.stringify(delegate.asset.data, null, '  ')
                             }
                             Repeater {
-                                model: self.context.accounts
-                                delegate: AbstractButton {
-                                    readonly property Account account: modelData
+                                model: {
+                                    const accounts = []
+                                    for (let i = 0; i < self.context.accounts.length; i++) {
+                                        const account = self.context.accounts[i]
+                                        if (account.network.key === delegate.asset.network.key) {
+                                            accounts.push(account)
+                                        }
+                                    }
+                                    return accounts
+                                }
+                                delegate: SelectAccountButton {
                                     Layout.fillWidth: true
-                                    id: account_button
-                                    background: Item {
-                                        Rectangle {
-                                            color: '#FFF'
-                                            opacity: 0.2
-                                            width: parent.width
-                                            height: 1
-                                            anchors.bottom: parent.bottom
-                                        }
-                                    }
-                                    padding: 10
-                                    contentItem: RowLayout {
-                                        ColumnLayout {
-                                            Label {
-                                                Layout.alignment: Qt.AlignCenter
-                                                font.family: 'SF Compact Display'
-                                                font.pixelSize: 14
-                                                font.weight: 500
-                                                text: account_button.account.name
-                                            }
-                                            Label {
-                                                font.family: 'SF Compact Display'
-                                                font.pixelSize: 11
-                                                font.weight: 400
-                                                opacity: 0.4
-                                                text: UtilJS.networkLabel(account_button.account.network) + ' / ' + UtilJS.accountLabel(account_button.account)
-                                            }
-                                        }
-                                        HSpacer {
-                                        }
-                                        Image {
-                                            Layout.alignment: Qt.AlignCenter
-                                            source: 'qrc:/svg2/next_arrow.svg'
-                                        }
-                                    }
-                                    onClicked: {
-                                        self.account = account_button.account
-                                        self.asset = delegate.asset
-                                        stack_view.pop()
-                                    }
+                                    id: button
+                                    onClicked: self.selected(button.account, delegate.asset)
                                 }
                             }
-                            AbstractButton {
+                            CreateAccountButton {
                                 Layout.fillWidth: true
-                                background: null
-                                padding: 10
-                                contentItem: RowLayout {
-                                    Label {
-                                        Layout.alignment: Qt.AlignCenter
-                                        font.family: 'SF Compact Display'
-                                        font.pixelSize: 14
-                                        font.weight: 500
-                                        text: 'Create New Account'
-                                    }
-                                    HSpacer {
-                                    }
-                                    Image {
-                                        Layout.alignment: Qt.AlignCenter
-                                        source: 'qrc:/svg2/next_arrow.svg'
-                                    }
-                                }
+                                visible: self.showCreateAccount
                             }
                         }
                     }
                 }
+            }
+        }
+    }
+
+    component SelectAccountButton: AbstractButton {
+        readonly property Account account: modelData
+        id: button
+        background: Item {
+            Rectangle {
+                color: '#FFF'
+                opacity: 0.2
+                width: parent.width
+                height: 1
+                anchors.bottom: parent.bottom
+            }
+            Rectangle {
+                border.width: 2
+                border.color: '#00B45A'
+                color: 'transparent'
+                radius: 4
+                anchors.fill: parent
+                anchors.margins: -4
+                z: -1
+                opacity: button.visualFocus ? 1 : 0
+            }
+        }
+        padding: 10
+        contentItem: RowLayout {
+            ColumnLayout {
+                Label {
+                    Layout.alignment: Qt.AlignCenter
+                    font.family: 'SF Compact Display'
+                    font.pixelSize: 14
+                    font.weight: 500
+                    text: button.account.name
+                }
+                Label {
+                    font.family: 'SF Compact Display'
+                    font.pixelSize: 11
+                    font.weight: 400
+                    opacity: 0.4
+                    text: UtilJS.networkLabel(button.account.network) + ' / ' + UtilJS.accountLabel(button.account)
+                }
+            }
+            HSpacer {
+            }
+            Image {
+                Layout.alignment: Qt.AlignCenter
+                source: 'qrc:/svg2/next_arrow.svg'
+            }
+        }
+    }
+
+    component CreateAccountButton: AbstractButton {
+        background: null
+        padding: 10
+        contentItem: RowLayout {
+            Label {
+                Layout.alignment: Qt.AlignCenter
+                font.family: 'SF Compact Display'
+                font.pixelSize: 14
+                font.weight: 500
+                text: 'Create New Account'
+            }
+            HSpacer {
+            }
+            Image {
+                Layout.alignment: Qt.AlignCenter
+                source: 'qrc:/svg2/next_arrow.svg'
             }
         }
     }

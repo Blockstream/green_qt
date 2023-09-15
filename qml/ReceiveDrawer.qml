@@ -13,6 +13,7 @@ WalletDrawer {
 
     ReceiveAddressController {
         id: controller
+        context: self.context
         account: self.account
         amount: '0'
     }
@@ -126,8 +127,10 @@ WalletDrawer {
     Component {
         id: account_asset_selector
         AccountAssetSelector {
+            context: controller.context
             account: controller.account
             asset: controller.asset
+            showCreateAccount: true
             onCanceled: stack_view.pop()
             onSelected: (account, asset) => {
                 stack_view.pop()
