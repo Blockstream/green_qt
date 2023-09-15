@@ -38,8 +38,6 @@ TextField {
             }
         }
     }
-    placeholderText: self.activeFocus || self.text !== '' ? '' : '0'
-    placeholderTextColor: Qt.alpha('white', 0.4)
     horizontalAlignment: TextInput.AlignRight
     font.family: 'SF Compact Display'
     font.pixelSize: 30
