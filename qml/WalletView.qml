@@ -129,30 +129,6 @@ MainPage {
     }
 
     Loader2 {
-        active: navigation.param.flow === 'send'
-        sourceComponent: SendDialog {
-            visible: true
-            account: self.currentAccount
-            onClosed: {
-                navigation.pop()
-                destroy()
-            }
-        }
-    }
-
-    Loader2 {
-        active: navigation.param.flow === 'receive'
-        sourceComponent: ReceiveDialog {
-            visible: true
-            account: self.currentAccount
-            onClosed: {
-                navigation.pop()
-                destroy()
-            }
-        }
-    }
-
-    Loader2 {
         active: navigation.param.settings ?? false
         property Session session: navigation.param.session ?? null
         sourceComponent: WalletSettingsDialog {
