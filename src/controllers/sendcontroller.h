@@ -11,6 +11,7 @@ class GetUnspentOutputsTask;
 class SendController : public AccountController
 {
     Q_OBJECT
+    Q_PROPERTY(Asset* asset READ asset WRITE setAsset NOTIFY assetChanged)
     Q_PROPERTY(bool valid READ isValid NOTIFY changed)
     Q_PROPERTY(Balance* balance READ balance WRITE setBalance NOTIFY changed)
     Q_PROPERTY(QString address READ address WRITE setAddress NOTIFY changed)
@@ -30,6 +31,9 @@ class SendController : public AccountController
 public:
     explicit SendController(QObject* parent = nullptr);
     ~SendController();
+
+    Asset* asset() const { return m_asset; }
+    void setAsset(Asset* asset);
 
     bool isValid() const;
 
@@ -74,6 +78,7 @@ public slots:
     void signAndSend();
 
 signals:
+    void assetChanged();
     void changed();
     void transactionChanged();
     void signedTransactionChanged();
@@ -91,6 +96,7 @@ private:
     bool m_manual_coin_selection;
 
 protected:
+    Asset* m_asset{nullptr};
     bool m_valid{false};
     quint64 m_count{0};
     Balance* m_balance{nullptr};

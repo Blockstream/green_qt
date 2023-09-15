@@ -22,6 +22,13 @@ SendController::~SendController()
     }
 }
 
+void SendController::setAsset(Asset* asset)
+{
+    if (m_asset == asset) return;
+    m_asset = asset;
+    emit assetChanged();
+}
+
 bool SendController::isValid() const
 {
     return m_valid;
