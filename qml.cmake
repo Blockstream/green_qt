@@ -161,6 +161,7 @@ SET(QML_FILES
     qml/WalletDrawer.qml
     qml/CreateAccountDrawer.qml
     qml/ReceiveDrawer.qml
+    qml/SendDrawer.qml
     qml/BackButton.qml
     qml/AccountAssetSelector.qml
     qml/AccountAssetField.qml
@@ -174,6 +175,7 @@ SET(QML_FILES
     qml/AssetField.qml
     qml/AssetSelector.qml
     qml/SearchField.qml
+    qml/SendDrawer.qml
 )
 
 if (GREEN_NO_RESOURCES)
