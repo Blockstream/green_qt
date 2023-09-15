@@ -173,6 +173,7 @@ SET(QML_FILES
     qml/CopyAddressButton.qml
     qml/AssetField.qml
     qml/AssetSelector.qml
+    qml/SearchField.qml
 )
 
 if (GREEN_NO_RESOURCES)

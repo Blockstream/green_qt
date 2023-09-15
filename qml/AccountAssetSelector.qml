@@ -42,26 +42,9 @@ Page {
     }
     contentItem: ColumnLayout {
         spacing: 5
-        TextField {
-            id: search_field
+        SearchField {
             Layout.fillWidth: true
-            leftPadding: 20
-            rightPadding: 40 + search_image.width
-            topPadding: 20
-            bottomPadding: 20
-            placeholderText: search_field.activeFocus || text !== '' ? '' : 'Search Asset'
-            placeholderTextColor: Qt.rgba(1, 1, 1, 0.4)
-            background: Rectangle {
-                radius: 4
-                color: '#2F2F35'
-                Image {
-                    id: search_image
-                    source: 'qrc:/svg2/search.svg'
-                    anchors.margins: 20
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.right: parent.right
-                }
-            }
+            id: search_field
         }
         Item {
             Layout.minimumHeight: 25
