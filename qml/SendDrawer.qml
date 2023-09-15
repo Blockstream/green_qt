@@ -53,13 +53,6 @@ WalletDrawer {
         }
     }
 
-    component FieldTitle: Label {
-        font.family: 'SF Compact Display'
-        font.pixelSize: 14
-        font.weight: 600
-        opacity: 0.4
-    }
-
     component Form: Page {
         background: null
         header: Pane {

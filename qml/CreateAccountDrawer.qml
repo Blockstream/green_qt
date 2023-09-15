@@ -38,11 +38,7 @@ WalletDrawer {
             }
             contentItem: ColumnLayout {
                 spacing: 10
-                Label {
-                    font.family: 'SF Compact Display'
-                    font.pixelSize: 14
-                    font.weight: 500
-                    opacity: 0.4
+                FieldTitle {
                     text: 'Asset'
                 }
                 AssetField {
@@ -51,7 +47,7 @@ WalletDrawer {
                     focus: true
                     onClicked: stack_view.push(asset_selector)
                 }
-                Label {
+                FieldTitle {
                     Layout.topMargin: 15
                     font.family: 'SF Compact Display'
                     font.pixelSize: 14

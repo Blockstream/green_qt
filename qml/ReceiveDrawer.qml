@@ -41,11 +41,7 @@ WalletDrawer {
             }
             contentItem: ColumnLayout {
                 spacing: 5
-                Label {
-                    font.family: 'SF Compact Display'
-                    font.pixelSize: 14
-                    font.weight: 600
-                    opacity: 0.4
+                FieldTitle {
                     text: 'Asset & Account'
                 }
                 AccountAssetField {
@@ -54,12 +50,8 @@ WalletDrawer {
                     asset: controller.asset
                     onClicked: stack_view.push(account_asset_selector)
                 }
-                Label {
+                FieldTitle {
                     Layout.topMargin: 15
-                    font.family: 'SF Compact Display'
-                    font.pixelSize: 14
-                    font.weight: 600
-                    opacity: 0.4
                     text: 'Account Address'
                 }
                 Pane {
