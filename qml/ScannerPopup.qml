@@ -1,11 +1,7 @@
 import Blockstream.Green
 import Blockstream.Green.Core
 import QtQuick
-import QtQuick.Window
 import QtQuick.Controls
-import QtQuick.Controls.Material
-import QtQuick.Layouts
-import QtMultimedia
 import Qt5Compat.GraphicalEffects
 import QtQuick.Shapes
 
@@ -13,38 +9,34 @@ Popup {
     signal codeScanned(string code)
 
     id: self
-    background: MouseArea {
-        hoverEnabled: true
-    }
+    background: null
     x: parent.width / 2 - width / 2
-    y: -height
+    y: -height + parent.height / 2
     contentItem: Loader {
         active: self.visible
         sourceComponent: Item {
             implicitWidth: 300
             implicitHeight: 200
-            scale: self.background.containsMouse ? 1.05 : (self.visible ? 1 : 0)
-            transformOrigin: Item.Bottom
-            Behavior on scale {
-                NumberAnimation {
-                    easing.type: Easing.OutBack
-                    duration: 400
-                }
+            DropShadow {
+                opacity: 0.5
+                verticalOffset: 8
+                radius: 32
+                samples: 16
+                source: bg
+                anchors.fill: parent
             }
             Shape {
+                id: bg
                 anchors.fill: parent
+                layer.samples: 4
                 PopupBalloon {
                     strokeWidth: 0
                     fillColor: constants.c700
                 }
             }
             ScannerView {
-                anchors.fill: parent
                 id: scanner_view
-                onCodeScanned: {
-                    self.codeScanned(code)
-                    self.close()
-                }
+                anchors.fill: parent
                 layer.enabled: true
                 layer.effect: OpacityMask {
                     maskSource: Shape {
@@ -57,25 +49,24 @@ Popup {
                         }
                     }
                 }
+                onCodeScanned: {
+                    self.codeScanned(code)
+                    self.close()
+                }
             }
             Shape {
                 anchors.fill: parent
                 layer.samples: 4
                 PopupBalloon {
-                    strokeColor: constants.g400
+                    strokeColor: '#343842'
                     strokeWidth: 1
                     fillColor: 'transparent'
                 }
             }
-            ToolButton {
+            CloseButton {
                 anchors.top: parent.top
                 anchors.right: parent.right
-                anchors.margins: 8
-                hoverEnabled: false
-                flat: true
-                icon.source: 'qrc:/svg/cancel.svg'
-                icon.width: 16
-                icon.height: 16
+                anchors.margins: 20
                 onClicked: self.close()
             }
         }
