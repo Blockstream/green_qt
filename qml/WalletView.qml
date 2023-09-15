@@ -259,6 +259,12 @@ MainPage {
         account: self.currentAccount
     }
 
+    SendDrawer {
+        id: send_drawer
+        context: self.context
+        account: self.currentAccount
+    }
+
             }
         }
     }
@@ -384,14 +390,7 @@ MainPage {
                 text: qsTrId('id_send')
                 icon.source: 'qrc:/svg/send.svg'
                 shortcut: 'Ctrl+S'
-                onTriggered: {
-                    if (self.currentAccount.balance > 0) {
-                        onClicked: navigation.set({ flow: 'send' })
-                    }
-                    else {
-                        no_funds_dialog.createObject(window).open()
-                    }
-                }
+                onTriggered: send_drawer.open()
             }
             ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
             ToolTip.text: qsTrId('id_insufficient_lbtc_to_send_a')
