@@ -7,6 +7,12 @@ import QtQuick.Layouts
 import "util.js" as UtilJS
 
 Page {
+    required property Account account
+    required property Asset asset
+
+    signal canceled()
+    signal selected(account: Account, asset: Asset)
+
     background: null
     header: Pane {
         background: null

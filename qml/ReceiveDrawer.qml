@@ -126,6 +126,14 @@ WalletDrawer {
     Component {
         id: account_asset_selector
         AccountAssetSelector {
+            account: controller.account
+            asset: controller.asset
+            onCanceled: stack_view.pop()
+            onSelected: (account, asset) => {
+                stack_view.pop()
+                controller.account = account
+                controller.asset = asset
+            }
         }
     }
 }
