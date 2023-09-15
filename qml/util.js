@@ -68,18 +68,19 @@ function effectiveVisible(item) {
 }
 
 function accountLabel (account) {
-    switch (account.type) {
+    switch (account?.type) {
         case '2of2': return qsTrId('id_standard_account')
         case '2of3': return qsTrId('id_2of3_account')
         case '2of2_no_recovery': return qsTrId('id_amp_account')
         case 'p2sh-p2wpkh': return qsTrId('id_legacy_segwit_bip49')
         case 'p2wpkh': return qsTrId('id_segwit_bip84')
         case 'p2pkh': return qsTrId('id_legacy')
-        default: return qsTrId('id_unknown')
+        default: return qsTrId('-')
     }
 }
 
 function networkLabel (network) {
+    if (!network) return '-'
     return network.electrum ? qsTrId('id_singlesig') : qsTrId('id_multisig_shield')
 }
 
