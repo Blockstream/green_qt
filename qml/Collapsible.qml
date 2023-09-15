@@ -12,9 +12,8 @@ Item {
     implicitWidth: contentWidth
     implicitHeight: self.collapsed ? 0 : self.contentHeight
     Behavior on implicitHeight {
-        NumberAnimation {
-            duration: 500
-            easing.type: Easing.OutCubic
+        SmoothedAnimation {
+            velocity: 1000
         }
     }
 }
