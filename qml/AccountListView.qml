@@ -34,19 +34,6 @@ GPane {
 
     id: self
 
-//    Menu {
-//        id: menu
-//        width: 300
-//        MenuItem {
-//            onTriggered: openCreateDialog()
-//        }
-//        MenuItem {
-//            enabled: !showArchived && archive_list_view.count > 0
-//            text: qsTrId('id_view_archived_accounts_d').arg(archive_list_view.count)
-//            onTriggered: showArchived = !showArchived
-//        }
-//    }
-//    onClicked: menu.popup()
     contentItem: StackLayout {
         currentIndex: showArchived ? 1 : 0
         AListView {
