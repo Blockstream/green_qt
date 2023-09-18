@@ -49,10 +49,6 @@ WalletDrawer {
                 }
                 FieldTitle {
                     Layout.topMargin: 15
-                    font.family: 'SF Compact Display'
-                    font.pixelSize: 14
-                    font.weight: 500
-                    opacity: 0.4
                     text: 'Security Policy'
                 }
                 SecurityPolicyButton {
