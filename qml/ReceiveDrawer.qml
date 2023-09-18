@@ -63,12 +63,9 @@ WalletDrawer {
                     }
                     contentItem: ColumnLayout {
                         spacing: 10
-                        Image {
+                        RefreshButton {
                             Layout.alignment: Qt.AlignRight
-                            source: 'qrc:/svg2/refresh.svg'
-                            TapHandler {
-                                onTapped: controller.generate()
-                            }
+                            onClicked: controller.generate()
                         }
                         QRCode {
                             Layout.alignment: Qt.AlignHCenter

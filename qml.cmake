@@ -179,6 +179,7 @@ SET(QML_FILES
     qml/AssetsDrawer.qml
     qml/DrawerTitle.qml
     qml/FieldTitle.qml
+    qml/RefreshButton.qml
 )
 
 if (GREEN_NO_RESOURCES)
