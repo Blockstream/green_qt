@@ -180,6 +180,7 @@ SET(QML_FILES
     qml/DrawerTitle.qml
     qml/FieldTitle.qml
     qml/RefreshButton.qml
+    qml/SecurityPolicyButton.qml
 )
 
 if (GREEN_NO_RESOURCES)
