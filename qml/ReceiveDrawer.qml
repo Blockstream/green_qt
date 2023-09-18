@@ -123,6 +123,17 @@ WalletDrawer {
                 controller.account = account
                 controller.asset = asset
             }
+            onCreate: (asset) => {
+                console.log('create account for asset', asset.name)
+                stack_view.push(create_account_page, { asset })
+            }
+        }
+    }
+
+    Component {
+        id: create_account_page
+        CreateAccountPage {
+            context: self.context
         }
     }
 }
