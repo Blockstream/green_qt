@@ -14,6 +14,7 @@ Page {
 
     signal canceled()
     signal selected(account: Account, asset: Asset)
+    signal create(asset: Asset)
 
     id: self
     background: null
@@ -175,6 +176,7 @@ Page {
                             CreateAccountButton {
                                 Layout.fillWidth: true
                                 visible: self.showCreateAccount
+                                onClicked: self.create(delegate.asset)
                             }
                         }
                     }
