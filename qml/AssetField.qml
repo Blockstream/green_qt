@@ -7,12 +7,14 @@ import "util.js" as UtilJS
 
 AbstractButton {
     required property Asset asset
+    property bool editable: true
 
     id: self
     leftPadding: 20
     rightPadding: 20
     topPadding: 10
     bottomPadding: 10
+    activeFocusOnTab: self.editable
     background: Rectangle {
         color: '#222226'
         radius: 5
@@ -42,6 +44,7 @@ AbstractButton {
             wrapMode: Label.WrapAtWordBoundaryOrAnywhere
         }
         Image {
+            visible: self.editable
             source: 'qrc:/svg2/edit.svg'
         }
     }

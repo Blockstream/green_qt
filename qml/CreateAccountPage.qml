@@ -56,7 +56,7 @@ Page {
         AssetField {
             Layout.fillWidth: true
             asset: controller.asset
-            focus: true
+            editable: false
         }
         FieldTitle {
             Layout.topMargin: 15
