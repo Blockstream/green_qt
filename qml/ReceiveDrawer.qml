@@ -134,6 +134,7 @@ WalletDrawer {
         id: create_account_page
         CreateAccountPage {
             context: self.context
+            onCanceled: stack_view.pop()
         }
     }
 }

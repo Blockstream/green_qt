@@ -26,7 +26,7 @@ Page {
             BackButton {
                 Layout.minimumWidth: Math.max(left_item.implicitWidth, right_item.implicitWidth)
                 id: left_item
-                onClicked: stack_view.pop()
+                onClicked: self.canceled()
             }
             HSpacer {
             }
