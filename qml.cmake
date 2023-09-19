@@ -185,6 +185,7 @@ SET(QML_FILES
     qml/WalletHeaderCard.qml
     qml/AssetsCard.qml
     qml/TotalBalanceCard.qml
+    qml/PriceCard.qml
 )
 
 if (GREEN_NO_RESOURCES)
