@@ -209,6 +209,13 @@ MainPageHeader {
             }
         }
         HPane {
+            Layout.bottomMargin: 20
+            contentItem: CardBar {
+                context: self.context
+                currentAccount: self.currentAccount
+            }
+        }
+        HPane {
             contentItem: RowLayout {
                 id: toolbar
                 Layout.fillWidth: true
