@@ -136,11 +136,13 @@ qt_add_resources(green "images"
         assets/svg2/eye.svg
         assets/svg2/gear.svg
         assets/svg2/house.svg
+        assets/svg2/multisig.svg
         assets/svg2/next_arrow.svg
         assets/svg2/onboard_background.svg
         assets/svg2/printer.svg
         assets/svg2/refresh.svg
         assets/svg2/search.svg
+        assets/svg2/singlesig.svg
         assets/svg2/shield_check.svg
         assets/svg2/shield_warning.svg
         assets/svg2/star.svg
