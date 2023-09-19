@@ -184,6 +184,7 @@ SET(QML_FILES
     qml/SecurityPolicyButton.qml
     qml/WalletHeaderCard.qml
     qml/AssetsCard.qml
+    qml/TotalBalanceCard.qml
 )
 
 if (GREEN_NO_RESOURCES)

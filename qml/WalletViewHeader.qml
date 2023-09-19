@@ -282,46 +282,4 @@ MainPageHeader {
         // TODO reload from be done from a controller, not from wallet or context
         enabled: false
     }
-
-    component TotalBalanceCard: GPane {
-        required property Context context
-        readonly property var balance: {
-            let r = 0
-            for (let i = 0; i < self.context?.accounts.length; i++) {
-                const account = self.context.accounts[i]
-                r += account.balance
-            }
-            return r
-        }
-
-        Layout.minimumHeight: 64
-        Layout.minimumWidth: 250
-        id: self
-        padding: 8
-        background: Rectangle {
-            radius: 4
-            opacity: 0.1
-//            border.width: 0.5
-//            border.color: Qt.alpha(constants.c500, 1)
-            color: 'black' //Qt.alpha(constants.c500, 0.25)
-        }
-        contentItem: ColumnLayout {
-            SectionLabel {
-                text: qsTrId('id_total_balance')
-            }
-            VSpacer {
-            }
-            Label {
-                text: formatFiat(self.balance)
-                font.pixelSize: 12
-                font.weight: 400
-            }
-            Label {
-                text: formatAmount(self.currentAccount, balance)
-                font.pixelSize: 16
-                font.weight: 600
-            }
-        }
-    }
-
 }
