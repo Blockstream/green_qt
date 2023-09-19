@@ -169,14 +169,6 @@ MainPageHeader {
                         }
                     }
                 }
-                Image {
-                    visible: false
-                    fillMode: Image.PreserveAspectFit
-                    sourceSize.height: 16
-                    sourceSize.width: 16
-                    source: 'qrc:/svg/right.svg'
-                    Layout.alignment: Qt.AlignVCenter
-                }
                 ToolButton {
                     id: tool_button
                     icon.source: 'qrc:/svg/3-h-dots.svg'
