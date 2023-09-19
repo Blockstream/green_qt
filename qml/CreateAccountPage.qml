@@ -9,6 +9,7 @@ import "util.js" as UtilJS
 Page {
     required property Context context
     required property Asset asset
+    property bool advanced: false
 
     signal canceled()
     signal selected(account: Account, asset: Asset)
@@ -78,4 +79,20 @@ Page {
         VSpacer {
         }
     }
+    footer: Pane {
+        background: null
+        padding: 0
+        bottomPadding: 20
+        contentItem: RowLayout {
+            HSpacer {
+            }
+            LinkButton {
+                text: self.advanced ? qsTrId('id_hide_advanced_options') : qsTrId('id_show_advanced_options')
+                onClicked: self.advanced = !self.advanced
+            }
+            HSpacer {
+            }
+        }
+    }
+
 }
