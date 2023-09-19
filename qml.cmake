@@ -182,6 +182,7 @@ SET(QML_FILES
     qml/RefreshButton.qml
     qml/CreateAccountPage.qml
     qml/SecurityPolicyButton.qml
+    qml/WalletHeaderCard.qml
 )
 
 if (GREEN_NO_RESOURCES)
