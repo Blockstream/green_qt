@@ -161,7 +161,7 @@ Page {
                                     const accounts = []
                                     for (let i = 0; i < self.context.accounts.length; i++) {
                                         const account = self.context.accounts[i]
-                                        if (account.network.key === delegate.asset.network.key) {
+                                        if (account.network.key === delegate.asset.networkKey) {
                                             accounts.push(account)
                                         }
                                     }

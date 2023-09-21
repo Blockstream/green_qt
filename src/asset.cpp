@@ -12,16 +12,16 @@ Asset::Asset(const QString& id, QObject* parent)
     : QObject(parent)
     , m_id(id)
     , m_item(new QStandardItem)
-    , m_name(id)
 {
     m_item->setData(QVariant::fromValue(this));
 }
 
-void Asset::setNetwork(Network* network)
+void Asset::setNetworkKey(const QString& network_key)
 {
-    if (m_network == network) return;
-    m_network = network;
-    emit networkChanged();
+    if (m_network_key == network_key) return;
+    Q_ASSERT(m_network_key.isEmpty());
+    m_network_key = network_key;
+    emit networkKeyChanged();
 }
 
 void Asset::setIcon(const QString& icon)
@@ -34,6 +34,7 @@ void Asset::setIcon(const QString& icon)
 void Asset::setName(const QString& name)
 {
     if (m_name == name) return;
+    Q_ASSERT(m_name.isEmpty());
     m_name = name;
     emit nameChanged();
 }
@@ -121,12 +122,12 @@ AssetManager::AssetManager()
     connect(Analytics::instance(), &Analytics::remoteConfigChanged, this, [this] {
         auto liquid_assets = Analytics::instance()->getRemoteConfigValue("liquid_assets").toArray();
 
-        auto network = NetworkManager::instance()->network("liquid");
+        const QString network_key = "liquid";
 
         for (const auto& value: liquid_assets) {
             const auto data = value.toObject();
             auto asset = assetWithId(data.value("id").toString());
-            asset->setNetwork(network);
+            asset->setNetworkKey(network_key);
             asset->setIsAmp(data.value("amp").toBool(false));
             asset->setWeight(data.value("weight").toInt(0));
         }
@@ -135,10 +136,10 @@ AssetManager::AssetManager()
     for (const auto network : NetworkManager::instance()->networks()) {
         if (!network->data().value("mainnet").toBool()) continue;
 
-        qDebug() << network->id() << network->canonicalId() << network->displayName() << network->key() << network->data().value("policy_asset");
-        const auto id = network->data().value("policy_asset").toString(network->key());
+        const auto network_key = network->key();
+        const auto id = network->data().value("policy_asset").toString(network_key);
         auto asset = assetWithId(id);
-        asset->setNetwork(network);
+        asset->setNetworkKey(network_key);
         asset->setWeight(INT_MAX);
         asset->setName(network->displayName());
     }
@@ -149,13 +150,13 @@ AssetManager::~AssetManager()
     g_asset_manager = nullptr;
 }
 
-AssetManager *AssetManager::instance()
+AssetManager* AssetManager::instance()
 {
     Q_ASSERT(g_asset_manager);
     return g_asset_manager;
 }
 
-AssetManager* AssetManager::create(QQmlEngine *, QJSEngine *engine)
+AssetManager* AssetManager::create(QQmlEngine*, QJSEngine* engine)
 {
     return AssetManager::instance();
 }

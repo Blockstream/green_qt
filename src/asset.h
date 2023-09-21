@@ -13,7 +13,7 @@
 class Asset : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(Network* network READ network NOTIFY networkChanged);
+    Q_PROPERTY(QString networkKey READ networkKey NOTIFY networkKeyChanged);
     Q_PROPERTY(QString id READ id CONSTANT)
     Q_PROPERTY(QString icon READ icon NOTIFY iconChanged)
     Q_PROPERTY(QString name READ name NOTIFY nameChanged)
@@ -26,8 +26,8 @@ class Asset : public QObject
 public:
     explicit Asset(const QString& id, QObject* parent);
 
-    Network* network() const { return m_network; }
-    void setNetwork(Network* network);
+    QString networkKey() const { return m_network_key; }
+    void setNetworkKey(const QString& network_key);
 
     QString id() const { return m_id; }
     QStandardItem* item() const { return m_item; }
@@ -57,7 +57,7 @@ public slots:
     void openInExplorer() const;
 
 signals:
-    void networkChanged();
+    void networkKeyChanged();
     void nameChanged();
     void iconChanged();
     void dataChanged();
@@ -65,7 +65,7 @@ signals:
     void weightChanged();
 
 private:
-    Network* m_network{nullptr};
+    QString m_network_key;
     QString const m_id;
     QStandardItem* const m_item;
     QString m_name;
