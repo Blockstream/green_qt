@@ -49,39 +49,77 @@ Page {
             }
         }
     }
-    contentItem: ColumnLayout {
-        FieldTitle {
-            text: 'Asset'
-        }
-        AssetField {
-            Layout.fillWidth: true
-            asset: controller.asset
-            editable: false
-        }
-        FieldTitle {
-            Layout.topMargin: 15
-            text: 'Security Policy'
-        }
-        SecurityPolicyButton {
-            Layout.fillWidth: true
-            icon.source: 'qrc:/svg/singleSig.svg'
-            type: 'SINGLESIG / LEGACY SEGWIT'
-            title: 'Standard'
-            description: 'Simple, portable, standard account, secured by your key, the recovery phrase.'
-        }
-        SecurityPolicyButton {
-            Layout.fillWidth: true
-            icon.source: 'qrc:/svg/multi-sig.svg'
-            type: 'MULTISIG / 2OF2'
-            title: '2FA Protected '
-            description: 'Quick setup 2FA account, ideal for active spenders (2FA expires if you don\'t move funds every 6 months).'
-        }
-        VSpacer {
+
+    component SecurityPolicyButton2: SecurityPolicyButton {
+        required property string serverType
+        Layout.fillWidth: true
+        id: btn
+        network: NetworkManager.networkWithServerType(self.asset.networkKey, btn.serverType)
+    }
+
+    component SinglesigButton: SecurityPolicyButton2 {
+        serverType: 'electrum'
+    }
+    component MultisigButton: SecurityPolicyButton2 {
+        serverType: 'green'
+    }
+
+    contentItem: Flickable {
+        contentHeight: layout.height
+        ColumnLayout {
+            id: layout
+            width: self.contentItem.width
+            FieldTitle {
+                text: 'Asset'
+            }
+            AssetField {
+                Layout.fillWidth: true
+                asset: controller.asset
+                editable: false
+            }
+            FieldTitle {
+                Layout.topMargin: 15
+                text: 'Security Policy'
+            }
+            SinglesigButton {
+                type: 'p2wpkh'
+                tag: qsTrId('id_native_segwit')
+                title: qsTrId('id_standard')
+                description: qsTrId('id_cheaper_singlesig_option')
+            }
+            SinglesigButton {
+                type: 'p2sh-p2wpkh'
+                tag: qsTrId('id_legacy_segwit')
+                title: qsTrId('id_legacy_segwit')
+                description: qsTrId('id_simple_portable_standard')
+                visible: self.advanced
+            }
+            MultisigButton {
+                type: '2of2'
+                tag: qsTrId('id_2of2')
+                title: qsTrId('id_2fa_protected')
+                description: qsTrId('id_quick_setup_2fa_account_ideal')
+            }
+            MultisigButton {
+                type: '2of3'
+                tag: qsTrId('id_2of3')
+                title: qsTrId('id_2of3_with_2fa')
+                description: qsTrId('id_permanent_2fa_account_ideal_for')
+                visible: self.advanced && self.asset.networkKey !== 'liquid'
+            }
+            MultisigButton {
+                type: '2of2_no_recovery'
+                tag: qsTrId('id_amp')
+                title: qsTrId('id_amp')
+                description: qsTrId('id_account_for_special_assets')
+                visible: self.advanced && self.asset.networkKey === 'liquid'
+            }
         }
     }
     footer: Pane {
         background: null
         padding: 0
+        topPadding: 20
         bottomPadding: 20
         contentItem: RowLayout {
             HSpacer {

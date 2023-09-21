@@ -96,8 +96,11 @@ Page {
                         padding: 10
                         contentItem: RowLayout {
                             spacing: 10
-                            AssetIcon {
-                                asset: delegate.asset
+                            Image {
+                                Layout.alignment: Qt.AlignCenter
+                                Layout.maximumWidth: 32
+                                Layout.maximumHeight: 32
+                                source: UtilJS.iconFor(delegate.asset)
                             }
                             Label {
                                 Layout.fillWidth: true
@@ -211,7 +214,6 @@ Page {
         contentItem: RowLayout {
             ColumnLayout {
                 Label {
-                    Layout.alignment: Qt.AlignCenter
                     font.family: 'SF Compact Display'
                     font.pixelSize: 14
                     font.weight: 500

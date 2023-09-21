@@ -4,8 +4,10 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 AbstractButton {
-    required property string title
+    required property Network network
     required property string type
+    required property string tag
+    required property string title
     required property string description
 
     id: self
@@ -24,35 +26,64 @@ AbstractButton {
         }
     }
     contentItem: RowLayout {
-        spacing: 10
+        spacing: 20
         ColumnLayout {
             Layout.fillWidth: true
-            spacing: 0
+            spacing: 8
             RowLayout {
-                spacing: 4
                 opacity: 0.6
-                Image {
-                    source: self.icon.source
-                    Layout.preferredHeight: 16
-                    Layout.preferredWidth: 16
-                }
+                spacing: 4
                 Label {
-                    Layout.fillWidth: true
                     Layout.alignment: Qt.AlignCenter
                     font.family: 'SF Compact Display'
                     font.pixelSize: 10
+                    font.capitalization: Font.AllUppercase
                     font.weight: 400
-                    text: self.type
+                    topPadding: 4
+                    bottomPadding: 4
+                    leftPadding: 8
+                    rightPadding: 8
+                    text: self.network.electrum ? 'singlesig' : 'multisig'
+                    background: Rectangle {
+                        radius: height / 2
+                        color: '#FFF'
+                        opacity: 0.4
+                    }
+                }
+                Label {
+                    Layout.alignment: Qt.AlignCenter
+                    font.family: 'SF Compact Display'
+                    font.pixelSize: 10
+                    font.capitalization: Font.AllUppercase
+                    font.weight: 400
+                    topPadding: 4
+                    bottomPadding: 4
+                    leftPadding: 8
+                    rightPadding: 8
+                    text: self.tag
+                    background: Rectangle {
+                        radius: height / 2
+                        color: '#FFF'
+                        opacity: 0.4
+                    }
+                }
+                HSpacer {
                 }
             }
-            Label {
-                font.family: 'SF Compact Display'
-                font.pixelSize: 16
-                font.weight: 600
-                text: self.title
-            }
-            Item {
-                Layout.minimumHeight: 10
+            RowLayout {
+                spacing: 8
+                Label {
+                    font.family: 'SF Compact Display'
+                    font.pixelSize: 16
+                    font.weight: 600
+                    text: self.title
+                }
+                Image {
+                    Layout.alignment: Qt.AlignCenter
+                    source: self.network.electrum ? 'qrc:/svg2/singlesig.svg' : 'qrc:/svg2/multisig.svg'
+                }
+                HSpacer {
+                }
             }
             Label {
                 Layout.fillWidth: true
@@ -66,9 +97,7 @@ AbstractButton {
         }
         Image {
             Layout.alignment: Qt.AlignCenter
-            sourceSize.height: 32
-            sourceSize.width: 32
-            source: 'qrc:/svg/arrow_right.svg'
+            source: 'qrc:/svg2/next_arrow.svg'
         }
     }
 }
