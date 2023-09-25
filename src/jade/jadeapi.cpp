@@ -30,7 +30,9 @@ static inline QCborMap getRequest(const int id, const QString& method) {
 
 static inline QCborMap getRequest(const int id, const QString& method, const QCborValue& params) {
     QCborMap req(getRequest(id, method));
-    req.insert(QCborValue("params"), params);
+    if (!params.isNull()) {
+        req.insert(QCborValue("params"), params);
+    }
     return req;
 }
 
@@ -105,7 +107,7 @@ bool JadeAPI::isBusy() const
 
 // Handle result of an http-request.
 // MUST be called when an http-request response is received.
-void JadeAPI::handleHttpResponse(const int id, const QJsonObject &httpRequest, const QJsonObject &httpResponse)
+void JadeAPI::handleHttpResponse(const int id, const QJsonObject &httpRequest, const QJsonValue &httpResponse)
 {
     m_idle_timer.restart();
 
@@ -123,7 +125,7 @@ void JadeAPI::handleHttpResponse(const int id, const QJsonObject &httpRequest, c
 
     // Forward http-response back to 'on-reply' function in Jade using the above response handler
     const QString on_reply = httpRequest["on-reply"].toString();
-    const QCborMap newRequest = getRequest(newId, on_reply, QCborMap::fromJsonObject(httpResponse));
+    const QCborMap newRequest = getRequest(newId, on_reply, httpResponse.isObject() ? QCborMap::fromJsonObject(httpResponse.toObject()) : QCborValue());
     m_request_proxy[newId] = m_request_proxy[id];
     send(newRequest);
 }

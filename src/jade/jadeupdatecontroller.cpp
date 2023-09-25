@@ -60,7 +60,7 @@ void JadeUnlockActivity::exec()
         GA_http_request(session()->m_session, params.get(), &output);
         auto res = Json::toObject(output);
         GA_destroy_json(output);
-        jade.handleHttpResponse(id, req, res.value("body").toObject());
+        jade.handleHttpResponse(id, req, res.value("body"));
     });
 }
 
