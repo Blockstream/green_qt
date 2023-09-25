@@ -104,13 +104,12 @@ void JadeSetupTask::update()
     }, [=](JadeAPI& jade, int id, const QJsonObject& req) {
         const auto params = Json::fromObject(req.value("params").toObject());
 
-// TODO
-//        const auto url = QUrl(req.value("params").toObject().value("urls").toArray().first().toString());
-//        if (url.path() == "/set_pin") {
-//            // copy current jade info since the signal is emitted asynchronously
-//            const auto info = device->versionInfo();
-//            QMetaObject::invokeMethod(m_controller, [=] { emit m_controller->setPin(info); }, Qt::QueuedConnection);
-//        }
+       const auto url = QUrl(req.value("params").toObject().value("urls").toArray().first().toString());
+       if (url.path() == "/set_pin") {
+           // copy current jade info since the signal is emitted asynchronously
+           const auto info = device->versionInfo();
+           QMetaObject::invokeMethod(m_controller, [=] { emit m_controller->setPin(info); }, Qt::QueuedConnection);
+       }
 
         GA_json* output;
         const auto context = m_controller->ensureContext();
