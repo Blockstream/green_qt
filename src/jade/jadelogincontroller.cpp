@@ -115,7 +115,7 @@ void JadeSetupTask::update()
         GA_http_request(session, params.get(), &output);
         auto res = Json::toObject(output);
         GA_destroy_json(output);
-        jade.handleHttpResponse(id, req, res.value("body").toObject());
+        jade.handleHttpResponse(id, req, res.value("body"));
     });
 }
 
@@ -261,7 +261,7 @@ void JadeUnlockTask::update()
         GA_http_request(session, params.get(), &output);
         auto res = Json::toObject(output);
         GA_destroy_json(output);
-        jade.handleHttpResponse(id, req, res.value("body").toObject());
+        jade.handleHttpResponse(id, req, res.value("body"));
     });
 }
 

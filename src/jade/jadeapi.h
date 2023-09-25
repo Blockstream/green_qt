@@ -45,7 +45,7 @@ public:
 
     // Function which must be called whenever an http-request response is received.
     // (If caller sets their own HttpRequestProxy, it should call this when the response is received.)
-    void handleHttpResponse(const int id, const QJsonObject &httpRequest, const QJsonObject &httpResponse);
+    void handleHttpResponse(const int id, const QJsonObject &httpRequest, const QJsonValue &httpResponse);
 
     /*
      *  The API calls
