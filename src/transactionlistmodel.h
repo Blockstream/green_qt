@@ -9,6 +9,8 @@
 #include <QtQml>
 #include <QVector>
 
+class GetTransactionsTask;
+
 class TransactionListModel : public QAbstractListModel
 {
     Q_OBJECT
@@ -21,8 +23,6 @@ public:
     void setAccount(Account* account);
 
     QHash<int,QByteArray> roleNames() const override;
-    void fetchMore(const QModelIndex &parent) override;
-    bool canFetchMore(const QModelIndex &parent) const override;
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
@@ -33,12 +33,12 @@ signals:
 private:
     void handleBlockEvent(const QJsonObject& event);
     void handleTransactionEvent(const QJsonObject& event);
-    void fetch(bool reset, int offset, int count);
+    void fetch(int offset, int count);
 private:
     Account* m_account{nullptr};
+    GetTransactionsTask* m_get_transactions{nullptr};
     QVector<Transaction*> m_transactions;
     bool m_has_unconfirmed{false};
-    bool m_reached_end{false};
     QTimer* const m_reload_timer;
 };
 
