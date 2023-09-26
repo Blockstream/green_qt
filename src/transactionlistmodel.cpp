@@ -14,9 +14,11 @@ TransactionListModel::TransactionListModel(QObject* parent)
     m_reload_timer->setSingleShot(true);
     m_reload_timer->setInterval(200);
     connect(m_reload_timer, &QTimer::timeout, this, [=] {
-        m_reached_end = false;
+        beginResetModel();
+        m_transactions.clear();
+        endResetModel();
         m_has_unconfirmed = false;
-        fetch(true, 0, 30);
+        fetch(0, 30);
     });
 }
 
@@ -24,7 +26,6 @@ void TransactionListModel::setAccount(Account *account)
 {
     if (m_account) {
         beginResetModel();
-        m_reached_end = false;
         m_transactions.clear();
         disconnect(m_account, &Account::blockEvent, this, &TransactionListModel::handleBlockEvent);
         disconnect(m_account, &Account::transactionEvent, this, &TransactionListModel::handleTransactionEvent);
@@ -38,19 +39,23 @@ void TransactionListModel::setAccount(Account *account)
     if (m_account) {
         connect(m_account, &Account::blockEvent, this, &TransactionListModel::handleBlockEvent);
         connect(m_account, &Account::transactionEvent, this, &TransactionListModel::handleTransactionEvent);
-        fetchMore(QModelIndex());
+        reload();
     }
 }
 
-void TransactionListModel::fetch(bool reset, int offset, int count)
+void TransactionListModel::fetch(int offset, int count)
 {
     if (!m_account) return;
 
-    auto get_transactions = new GetTransactionsTask(offset, count, m_account);
+    if (m_get_transactions) return;
 
-    connect(get_transactions, &Task::finished, this, [=] {
+    m_get_transactions = new GetTransactionsTask(offset, count, m_account);
+
+    connect(m_get_transactions, &Task::finished, this, [=] {
+        qDebug() << m_get_transactions->transactions();
+
         QVector<Transaction*> transactions;
-        for (const QJsonValue& value : get_transactions->transactions()) {
+        for (const QJsonValue& value : m_get_transactions->transactions()) {
             auto transaction = account()->getOrCreateTransaction(value.toObject());
             transactions.append(transaction);
         }
@@ -58,25 +63,24 @@ void TransactionListModel::fetch(bool reset, int offset, int count)
             if (transaction->isUnconfirmed()) m_has_unconfirmed = true;
             break;
         }
-        m_reached_end = transactions.empty();
 
-        if (reset) {
-            // just swap rows instead of incremental update
-            // this happens after a bump fee for instance
-            beginResetModel();
-            m_transactions = transactions;
-            endResetModel();
-        } else if (transactions.size() > 0) {
-            // new page of transactions, just append to existing transaction
+        if (transactions.size() > 0) {
             const auto first = m_transactions.size();
             const auto last = m_transactions.size() + transactions.size() - 1;
             beginInsertRows(QModelIndex(), first, last);
             m_transactions.append(transactions);
             endInsertRows();
         }
+
+        m_get_transactions->deleteLater();
+        m_get_transactions = nullptr;
+
+        if (transactions.size() == count) {
+            fetch(offset + count, count);
+        }
     });
 
-    m_account->context()->dispatcher()->add(get_transactions);
+    m_account->context()->dispatcher()->add(m_get_transactions);
 }
 
 QHash<int, QByteArray> TransactionListModel::roleNames() const
@@ -85,20 +89,6 @@ QHash<int, QByteArray> TransactionListModel::roleNames() const
         { Qt::UserRole, "transaction" },
         { Qt::UserRole + 1, "date" },
     };
-}
-
-bool TransactionListModel::canFetchMore(const QModelIndex &parent) const
-{
-    Q_ASSERT(!parent.parent().isValid());
-    if (m_reached_end) return false;
-    return true;
-}
-
-void TransactionListModel::fetchMore(const QModelIndex &parent)
-{
-    Q_ASSERT(!parent.parent().isValid());
-    if (!m_account) return;
-    fetch(false, m_transactions.size(), 30);
 }
 
 int TransactionListModel::rowCount(const QModelIndex &parent) const
