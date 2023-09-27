@@ -3,5 +3,6 @@
 <plist version="1.0">
 <dict>
   <key>com.apple.security.device.camera</key><true/>
+  <key>com.apple.security.device.microphone</key><false/>
 </dict>
 </plist>
