@@ -109,6 +109,10 @@ void PinLoginController::loginNetwork(Network* network)
         }
     });
 
+    connect(login, &Task::finished, this, [=] {
+        loadNetwork(group, network);
+    });
+
     connect(login, &Task::failed, this, [=](const QString& error) {
         if (error == "id_invalid_pin") {
             m_wallet->decrementLoginAttempts();
@@ -124,8 +128,6 @@ void PinLoginController::loginNetwork(Network* network)
     group->add(connect_session);
     group->add(login);
 
-    loadNetwork(group, network);
-
     m_dispatcher->add(group);
 }
 
@@ -135,12 +137,13 @@ void PinLoginController::load()
 
     auto group = new TaskGroup(this);
 
-//    for (auto net : NetworkManager::instance()->networks()) {
-//        if (network == net) continue;
-//        if (network->isMainnet() != net->isMainnet()) continue;
-//        qDebug() << Q_FUNC_INFO << "ATTEMPT LOGIN" << net->id() << net->name();
-//        loginNetwork(group, net);
-//    }
+    for (auto net : NetworkManager::instance()->networks()) {
+        if (network == net) continue;
+        if (network->isMainnet() != net->isMainnet()) continue;
+        if (net->isLiquid() && net->isElectrum()) continue;
+        qDebug() << Q_FUNC_INFO << "ATTEMPT LOGIN" << net->id() << net->name();
+        loginNetwork(net);
+    }
 
     loadNetwork(group, network);
 
