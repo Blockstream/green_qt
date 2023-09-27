@@ -23,6 +23,7 @@ WalletDrawer {
     contentItem: GStackView {
         id: stack_view
         initialItem: Page {
+            id: receive_view
             background: null
             header: Pane {
                 background: null
@@ -117,23 +118,11 @@ WalletDrawer {
             account: controller.account
             asset: controller.asset
             showCreateAccount: true
-            onCanceled: stack_view.pop()
             onSelected: (account, asset) => {
-                stack_view.pop()
+                stack_view.pop(receive_view)
                 controller.account = account
                 controller.asset = asset
             }
-            onCreate: (asset) => {
-                stack_view.push(create_account_page, { asset })
-            }
-        }
-    }
-
-    Component {
-        id: create_account_page
-        CreateAccountPage {
-            context: self.context
-            onCanceled: stack_view.pop()
         }
     }
 }
