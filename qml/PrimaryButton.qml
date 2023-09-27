@@ -4,6 +4,11 @@ import QtQuick.Controls
 AbstractButton {
     id: self
     padding: 16
+    leftPadding: 16
+    rightPadding: 16
+    topPadding: 12
+    bottomPadding: 12
+    opacity: self.enabled ? 1 : 0.4
     background: Rectangle {
         color: '#00B45A'
         radius: 8

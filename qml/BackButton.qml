@@ -4,6 +4,10 @@ import QtQuick.Layouts
 
 AbstractButton {
     id: self
+    leftPadding: 8
+    rightPadding: 8
+    topPadding: 8
+    bottomPadding: 8
     background: Item {
         Rectangle {
             border.width: 2
