@@ -40,9 +40,6 @@ public:
     Wallet* wallet() const { return m_wallet; }
     void setWallet(Wallet* wallet);
 
-public slots:
-    QStringList generateMnemonic(int size);
-
 signals:
     void networkChanged();
     void walletChanged();

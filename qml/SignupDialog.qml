@@ -300,7 +300,7 @@ ControllerDialog {
                         onTriggered: navigation.set({ backup: true, size: mnemonicSize, mnemonic: mnemonic_page.mnemonic.join(',') })
                     }
                 ]
-                mnemonic: controller.generateMnemonic(mnemonicSize || 12)
+                mnemonic: WalletManager.generateMnemonic(mnemonicSize || 12)
             }
         }
         AnimLoader {

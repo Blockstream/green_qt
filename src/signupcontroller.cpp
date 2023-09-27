@@ -138,11 +138,6 @@ void SignupController::setWallet(Wallet *wallet)
     emit walletChanged();
 }
 
-QStringList SignupController::generateMnemonic(int size)
-{
-    return gdk::generate_mnemonic(size);
-}
-
 SignupCreateWalletTask::SignupCreateWalletTask(SignupController* controller)
     : Task(controller->dispatcher())
     , m_controller(controller)

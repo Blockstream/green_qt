@@ -153,6 +153,11 @@ QString WalletManager::uniqueWalletName(const QString& base) const
     return name;
 }
 
+QStringList WalletManager::generateMnemonic(int size)
+{
+    return gdk::generate_mnemonic(size);
+}
+
 QJsonObject WalletManager::parseUrl(const QString &url)
 {
     QJsonObject r;
