@@ -6,44 +6,15 @@ import QtQuick.Layouts
 
 import "util.js" as UtilJS
 
-Page {
+StackViewPage {
     required property Context context
     required property Account account
     required property Asset asset
     property bool showCreateAccount: false
 
-    signal canceled()
     signal selected(account: Account, asset: Asset)
-    signal create(asset: Asset)
-
     id: self
-    background: null
-    header: Pane {
-        background: null
-        padding: 0
-        bottomPadding: 20
-        contentItem: RowLayout {
-            BackButton {
-                Layout.minimumWidth: Math.max(left_item.implicitWidth, right_item.implicitWidth)
-                id: left_item
-                onClicked: self.canceled()
-            }
-            HSpacer {
-            }
-            Label {
-                font.family: 'SF Compact Display'
-                font.pixelSize: 14
-                font.weight: 600
-                text: qsTrId('Choose Asset')
-            }
-            HSpacer {
-            }
-            Item {
-                Layout.minimumWidth: Math.max(left_item.implicitWidth, right_item.implicitWidth)
-                id: right_item
-            }
-        }
-    }
+    title: qsTrId('Choose Asset')
     contentItem: ColumnLayout {
         spacing: 5
         SearchField {
