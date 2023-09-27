@@ -2,10 +2,12 @@ import Blockstream.Green
 import QtQuick
 import QtQuick.Layouts
 
+import "util.js" as UtilJS
+
 Image {
     property Asset asset
     property real size: 32
-    source: asset?.icon || 'qrc:/svg/generic_icon_30p.svg'
+    source: UtilJS.iconFor(asset)
     Layout.preferredHeight: size
     Layout.preferredWidth: size
     height: size
