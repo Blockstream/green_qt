@@ -57,7 +57,6 @@ qt_add_resources(green "images"
         assets/svg/jade_emblem_on_transparent_rgb.svg
         assets/svg/jade_logo_white_on_transparent_rgb.svg
         assets/svg/kebab.svg
-        assets/svg/key.svg
         assets/svg/ledger-logo.svg
         assets/svg/ledger.svg
         assets/svg/ledger_nano_s.svg
@@ -65,7 +64,6 @@ qt_add_resources(green "images"
         assets/svg/leftbar.svg
         assets/svg/liquid.svg
         assets/svg/logout.svg
-        assets/svg/multi-sig.svg
         assets/svg/network.svg
         assets/svg/network_selector.svg
         assets/svg/network_selector_active.svg
@@ -99,7 +97,6 @@ qt_add_resources(green "images"
         assets/svg/settings.svg
         assets/svg/settings_clicked.svg
         assets/svg/sidebar.svg
-        assets/svg/singleSig.svg
         assets/svg/stack_wallets.svg
         assets/svg/testnet-liquid.svg
         assets/svg/localtest-liquid.svg
@@ -127,7 +124,6 @@ qt_add_resources(green "images"
         assets/svg2/back.svg
         assets/svg2/blockstream_green.svg
         assets/svg2/bolt.svg
-        assets/svg2/btc_watermark.svg
         assets/svg2/check.svg
         assets/svg2/check-green.svg
         assets/svg2/close.svg
@@ -149,6 +145,8 @@ qt_add_resources(green "images"
         assets/svg2/take_control.svg
         assets/svg2/wallet.svg
         assets/svg2/warning.svg
+        assets/svg2/watermark_bitcoin.svg
+        assets/svg2/watermark_liquid.svg
 )
 
 qt_add_resources(green "fonts"
