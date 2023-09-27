@@ -197,6 +197,7 @@ SET(QML_FILES
     qml/AddWalletPage.qml
     qml/MnemonicWarningsPage.qml
     qml/MnemonicBackupPage.qml
+    qml/MnemonicCheckPage.qml
 )
 
 if (GREEN_NO_RESOURCES)
