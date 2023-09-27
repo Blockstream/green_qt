@@ -204,6 +204,16 @@ void Context::refresh()
     m_dispatcher->add(load_accounts);
 }
 
+void Context::setXPubHashId(const QString& xpub_hash_id)
+{
+    if (m_xpub_hash_id == xpub_hash_id) return;
+    Q_ASSERT(m_xpub_hash_id.isEmpty());
+    m_xpub_hash_id = xpub_hash_id;
+    if (m_wallet) {
+        m_wallet->m_xpub_hash_id = xpub_hash_id;
+    }
+}
+
 QQmlListProperty<Account> Context::accounts()
 {
     return { this, &m_accounts };

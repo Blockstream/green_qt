@@ -90,6 +90,7 @@ public:
     QString m_username;
     QJsonObject m_device_details;
     Network* const m_network{nullptr};
+    QString m_xpub_hash_id;
     QString m_hash_id;
     int m_login_attempts_remaining{3};
     bool m_busy{false};

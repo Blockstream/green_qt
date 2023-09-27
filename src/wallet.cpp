@@ -147,6 +147,9 @@ void Wallet::save()
     if (!m_hash_id.isEmpty()) {
         data.insert("hash_id", m_hash_id);
     }
+    if (!m_xpub_hash_id.isEmpty()) {
+        data.insert("xpub_hash_id", m_xpub_hash_id);
+    }
     if (!m_device_details.isEmpty()) {
         data.insert("device_details", m_device_details);
     }

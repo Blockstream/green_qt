@@ -64,7 +64,6 @@ public:
     Account* getAccountByPointer(Network* network, int pointer) const;
 
     QString m_wallet_hash_id;
-    QString m_xpub_hash_id;
     QJsonObject m_pin_data;
 
     void autoLogout();
@@ -72,6 +71,8 @@ public:
     TaskDispatcher* dispatcher() const { return m_dispatcher; }
 
     void refresh();
+
+    void setXPubHashId(const QString& xpub_hash_id);
 
 signals:
     void walletChanged();
@@ -88,6 +89,7 @@ signals:
 private:
     Wallet* m_wallet{nullptr};
     Device* m_device{nullptr};
+    QString m_xpub_hash_id;
     QJsonObject m_credentials;
     QStringList m_mnemonic;
     QMap<Network*, Session*> m_sessions;

@@ -533,9 +533,11 @@ bool RegisterUserTask::call(GA_session* session, GA_auth_handler** auth_handler)
 
 void RegisterUserTask::handleDone(const QJsonObject& result)
 {
+    const auto xpub_hash_id = result.value("result").toObject().value("xpub_hash_id").toString();
     const auto wallet_hash_id = result.value("result").toObject().value("wallet_hash_id").toString();
 
     auto context = m_session->context();
+    context->setXPubHashId(xpub_hash_id);
     context->m_wallet_hash_id = wallet_hash_id;
     setStatus(Status::Finished);
 }
@@ -589,11 +591,13 @@ bool LoginTask::call(GA_session* session, GA_auth_handler** auth_handler)
 
 void LoginTask::handleDone(const QJsonObject& result)
 {
-    const auto res = result.value("result").toObject();
+    const auto xpub_hash_id = result.value("result").toObject().value("xpub_hash_id").toString();
+    const auto wallet_hash_id = result.value("result").toObject().value("wallet_hash_id").toString();
+
     m_session->m_ready = true;
     auto context = m_session->context();
-    context->m_wallet_hash_id = res.value("wallet_hash_id").toString();
-    context->m_xpub_hash_id = res.value("xpub_hash_id").toString();
+    context->setXPubHashId(xpub_hash_id);
+    context->m_wallet_hash_id = wallet_hash_id;
 
     AuthHandlerTask::handleDone(result);
 }

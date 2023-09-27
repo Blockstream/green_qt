@@ -46,6 +46,9 @@ WalletManager::WalletManager()
         wallet->m_is_persisted = true;
         wallet->m_name = data.value("name").toString();
         wallet->m_id = id;
+        if (data.contains("xpub_hash_id")) {
+            wallet->m_xpub_hash_id = data.value("xpub_hash_id").toString();
+        }
         if (data.contains("pin_data")) {
             wallet->m_pin_data = QByteArray::fromBase64(data.value("pin_data").toString().toLocal8Bit());
         }
