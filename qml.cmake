@@ -189,6 +189,7 @@ SET(QML_FILES
     qml/FeeRateCard.qml
     qml/CardBar.qml
     qml/StackViewPage.qml
+    qml/MnemonicSizeSelector.qml
     qml/XPubField.qml
     qml/InfoCard.qml
     qml/PrintButton.qml
