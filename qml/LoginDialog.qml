@@ -11,7 +11,6 @@ import "util.js" as UtilJS
 
 ControllerDialog {
     id: self
-    icon: UtilJS.iconFor(self.wallet)
     title: self.wallet.name
 
     controller: loader.item.controller
