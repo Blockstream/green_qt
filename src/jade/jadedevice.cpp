@@ -4,6 +4,8 @@
 
 #include <wally_wrapper.h>
 
+#include <QVersionNumber>
+
 namespace {
 const QVersionNumber JADE_MIN_ALLOWED_FW_VERSION{0, 1, 24};
 
@@ -631,4 +633,9 @@ void JadeDevice::setUnlocking(bool unlocking)
     if (m_unlocking == unlocking) return;
     m_unlocking = unlocking;
     emit unlockingChanged();
+}
+
+bool JadeDevice::versionGreaterOrEqualThan(const QString& other)
+{
+    return QVersionNumber::fromString(version()) >= QVersionNumber::fromString(other);
 }
