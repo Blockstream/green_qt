@@ -3,58 +3,33 @@ import Blockstream.Green.Core
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import QtQuick.Window
 
 import "util.js" as UtilJS
 
-Page {
+StackViewPage {
     required property Context context
     required property Asset asset
     property bool advanced: false
 
-    signal canceled()
-    signal selected(account: Account, asset: Asset)
-    signal create(asset: Asset)
-
-    CreateAccountController {
-        id: controller
-        context: self.context
-        asset: self.asset
-    }
+    signal created(account: Account)
 
     id: self
-    background: null
-    header: Pane {
-        background: null
-        padding: 0
-        bottomPadding: 20
-        contentItem: RowLayout {
-            BackButton {
-                Layout.minimumWidth: Math.max(left_item.implicitWidth, right_item.implicitWidth)
-                id: left_item
-                onClicked: self.canceled()
-            }
-            HSpacer {
-            }
-            Label {
-                font.family: 'SF Compact Display'
-                font.pixelSize: 14
-                font.weight: 600
-                text: 'Create New Account'
-            }
-            HSpacer {
-            }
-            Item {
-                Layout.minimumWidth: Math.max(left_item.implicitWidth, right_item.implicitWidth)
-                id: right_item
-            }
-        }
-    }
+    title: qsTrId('id_create_new_account')
 
     component SecurityPolicyButton2: SecurityPolicyButton {
         required property string serverType
         Layout.fillWidth: true
         id: btn
         network: NetworkManager.networkWithServerType(self.asset.networkKey, btn.serverType)
+        action: Action {
+            onTriggered: {
+                self.StackView.view.push(controller_page, {
+                    network: btn.network,
+                    type: btn.type,
+                })
+            }
+        }
     }
 
     component SinglesigButton: SecurityPolicyButton2 {
@@ -74,7 +49,7 @@ Page {
             }
             AssetField {
                 Layout.fillWidth: true
-                asset: controller.asset
+                asset: self.asset
                 editable: false
             }
             FieldTitle {
@@ -101,11 +76,20 @@ Page {
                 description: qsTrId('id_quick_setup_2fa_account_ideal')
             }
             MultisigButton {
+                id: multisig_2of3_button
                 type: '2of3'
                 tag: qsTrId('id_2of3')
                 title: qsTrId('id_2of3_with_2fa')
                 description: qsTrId('id_permanent_2fa_account_ideal_for')
                 visible: self.advanced && self.asset.networkKey !== 'liquid'
+                action: Action {
+                    onTriggered: {
+                        self.StackView.view.push(select_recovery_key_page, {
+                            network: multisig_2of3_button.network,
+                            type: multisig_2of3_button.type,
+                        })
+                    }
+                }
             }
             MultisigButton {
                 type: '2of2_no_recovery'
@@ -133,4 +117,63 @@ Page {
         }
     }
 
+    Component {
+        id: controller_page
+        Page {
+            required property Network network
+            required property string type
+            property var mnemonic: []
+            property string xpub: ''
+
+            StackView.onActivated: controller.create()
+
+            CreateAccountController {
+                id: controller
+                context: self.context
+                asset: self.asset
+                network: page.network
+                type: page.type
+                recoveryMnemonic: page.mnemonic
+                recoveryXpub: page.xpub
+                onCreated: (account) => self.created(account)
+            }
+
+            id: page
+            background: null
+            header: null
+            contentItem: ColumnLayout {
+                BusyIndicator {
+                    Layout.alignment: Qt.AlignCenter
+                }
+                TaskDispatcherInspector {
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    dispatcher: controller.dispatcher
+                }
+            }
+        }
+    }
+
+    Component {
+        id: select_recovery_key_page
+        SelectRecoveryKeyPage {
+            required property Network network
+            required property string type
+            id: page
+            onRecoveryKey: (mnemonic) => {
+                self.StackView.view.push(controller_page, {
+                    network: page.network,
+                    type: page.type,
+                    mnemonic,
+                })
+            }
+            onXpub: (xpub) => {
+                self.StackView.view.push(controller_page, {
+                    network: page.network,
+                    type: page.type,
+                    xpub,
+                })
+            }
+        }
+    }
 }
