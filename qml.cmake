@@ -189,6 +189,7 @@ SET(QML_FILES
     qml/FeeRateCard.qml
     qml/CardBar.qml
     qml/StackViewPage.qml
+    qml/InfoCard.qml
     qml/PrintButton.qml
     qml/TermOfServicePage.qml
     qml/AddWalletPage.qml
