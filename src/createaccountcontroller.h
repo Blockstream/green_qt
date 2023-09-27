@@ -37,6 +37,7 @@ class CreateAccountController : public Controller
 {
     Q_OBJECT
     Q_PROPERTY(Asset* asset READ asset WRITE setAsset NOTIFY assetChanged)
+    Q_PROPERTY(Network* network READ network WRITE setNetwork NOTIFY networkChanged)
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(QString type READ type WRITE setType NOTIFY typeChanged)
     Q_PROPERTY(QStringList recoveryMnemonic READ recoveryMnemonic WRITE setRecoveryMnemonic NOTIFY recoveryMnemonicChanged)
@@ -48,6 +49,8 @@ public:
     explicit CreateAccountController(QObject *parent = nullptr);
     Asset* asset() const { return m_asset; }
     void setAsset(Asset* asset);
+    Network* network() const { return m_network; }
+    void setNetwork(Network* network);
     QString name() const { return m_name; }
     void setName(const QString& name);
     QString type() const { return m_type; }
@@ -62,6 +65,7 @@ public:
 
 signals:
     void assetChanged();
+    void networkChanged();
     void nameChanged();
     void typeChanged();
     void created(Account* account);
@@ -74,6 +78,7 @@ public slots:
 
 private:
     Asset* m_asset{nullptr};
+    Network* m_network{nullptr};
     QString m_name;
     QString m_type;
     QStringList m_recovery_mnemonic;

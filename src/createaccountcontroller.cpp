@@ -7,6 +7,7 @@
 #include "context.h"
 #include "ga.h"
 #include "json.h"
+#include "network.h"
 #include "task.h"
 #include "wallet.h"
 
@@ -31,6 +32,13 @@ void CreateAccountController::setAsset(Asset* asset)
     if (m_asset == asset) return;
     m_asset = asset;
     emit assetChanged();
+}
+
+void CreateAccountController::setNetwork(Network* network)
+{
+    if (m_network == network) return;
+    m_network = network;
+    emit networkChanged();
 }
 
 void CreateAccountController::setName(const QString& name)
@@ -72,6 +80,11 @@ void CreateAccountController::create()
 {
     Q_ASSERT(noErrors());
 
+    if (m_name.isEmpty()) {
+        // TODO: better default name
+        setName(QString("Account %1").arg(QDateTime::currentSecsSinceEpoch()));
+    }
+
     auto details = QJsonObject{
         { "name", m_name },
         { "type", m_type },
@@ -88,16 +101,26 @@ void CreateAccountController::create()
         }
     }
 
-    const auto context = m_context;
-    auto network = m_asset->network();
-    auto session = context->getOrCreateSession(network);
-    const auto create_account = new CreateAccountTask(details, session);
-    const auto load_accounts = new LoadAccountsTask(false, session);
+    const auto mnemonic = m_context->credentials().value("mnemonic").toString().split(' ');
 
+    auto session = m_context->getOrCreateSession(m_network);
+    auto session_connect = new ConnectTask(session);
+    auto session_register = new RegisterUserTask(mnemonic, session);
+    auto session_login = new LoginTask(mnemonic, QString(), session);
+
+    auto create_account = new CreateAccountTask(details, session);
+    auto load_accounts = new LoadAccountsTask(false, session);
+
+    session_connect->then(session_register);
+    session_register->then(session_login);
+    session_login->then(create_account);
     create_account->then(load_accounts);
 
     auto group = new TaskGroup(this);
 
+    group->add(session_connect);
+    group->add(session_register);
+    group->add(session_login);
     group->add(create_account);
     group->add(load_accounts);
 
@@ -108,7 +131,7 @@ void CreateAccountController::create()
     });
 
     connect(group, &TaskGroup::finished, this, [=] {
-        m_account = context->getAccountByPointer(network, create_account->pointer());
+        m_account = m_context->getAccountByPointer(m_network, create_account->pointer());
         if (!m_account) return;
         emit accountChanged();
         emit created(m_account);
