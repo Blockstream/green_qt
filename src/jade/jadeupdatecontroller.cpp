@@ -72,7 +72,7 @@ JadeUpdateActivity::JadeUpdateActivity(const QVariantMap& firmware, const QByteA
 {
     QCryptographicHash hash(QCryptographicHash::Sha256);
     hash.addData(m_data);
-    m_firmware.insert("hash", hash.result().toHex());
+    m_firmware.insert("cmphash", hash.result().toHex());
 }
 
 void JadeUpdateActivity::exec()
