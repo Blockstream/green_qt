@@ -196,6 +196,7 @@ SET(QML_FILES
     qml/TermOfServicePage.qml
     qml/AddWalletPage.qml
     qml/MnemonicWarningsPage.qml
+    qml/MnemonicBackupPage.qml
 )
 
 if (GREEN_NO_RESOURCES)
