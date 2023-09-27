@@ -19,13 +19,7 @@ ItemDelegate {
     background: Rectangle {
         color: UtilJS.networkColor(delegate.account.network)
         clip: true
-        opacity: delegate.highlighted ? 1 : 0.6
         radius: 5
-        Behavior on opacity {
-            NumberAnimation {
-                duration: 200
-            }
-        }
         Image {
             opacity: delegate.account.network.liquid ? 0.2 : 0.1
             source: delegate.account.network.liquid ? 'qrc:/svg2/watermark_liquid.svg' : 'qrc:/svg2/watermark_bitcoin.svg'
@@ -43,6 +37,7 @@ ItemDelegate {
     contentItem: ColumnLayout {
         spacing: 0
         RowLayout {
+            Layout.bottomMargin: 6
             Image {
                 fillMode: Image.PreserveAspectFit
                 Layout.preferredWidth: 16
@@ -55,61 +50,47 @@ ItemDelegate {
                 font.styleName: 'Regular'
                 font.capitalization: Font.AllUppercase
                 color: 'white'
-                opacity: delegate.highlighted ? 1 : 0.6
                 text: UtilJS.networkLabel(delegate.account.network) + ' / ' + UtilJS.accountLabel(delegate.account)
                 elide: Label.ElideLeft
                 Layout.fillWidth: true
                 Layout.preferredWidth: 0
             }
-            Item {
-                implicitHeight: assets.implicitHeight
-                implicitWidth: assets.implicitWidth
-                RowLayout {
-                    id: assets
-                    Layout.fillWidth: false
-                    Layout.alignment: Qt.AlignBottom
-                    spacing: -8
-                    Repeater {
-                        id: asset_icon_repeater
-                        model: {
-                            const assets = []
-                            let without_icon = false
-                            for (let i = 0; i < delegate.account.balances.length; i++) {
-                                const balance = delegate.account.balances[i]
-                                if (balance.amount === 0) continue;
-                                const asset = balance.asset
-                                if (asset.icon) {
-                                    assets.push(asset)
-                                } else if (!without_icon) {
-                                    assets.unshift(asset)
-                                    without_icon = true
-                                }
+            RowLayout {
+                id: assets
+                Layout.fillWidth: false
+                Layout.alignment: Qt.AlignBottom
+                spacing: -8
+                Repeater {
+                    id: asset_icon_repeater
+                    model: {
+                        const assets = []
+                        let without_icon = false
+                        for (let i = 0; i < delegate.account.balances.length; i++) {
+                            const balance = delegate.account.balances[i]
+                            if (balance.amount === 0) continue;
+                            const asset = balance.asset
+                            if (asset.icon) {
+                                assets.push(asset)
+                            } else if (!without_icon) {
+                                assets.unshift(asset)
+                                without_icon = true
                             }
-                            return assets
                         }
-                        AssetIcon {
-                            asset: modelData
-                            size: 24
-                            Rectangle {
-                                anchors.fill: parent
-                                radius: width / 2
-                                color: 'transparent'
-                                border.width: 1
-                                border.color: 'white'
-                            }
+                        return assets
+                    }
+                    AssetIcon {
+                        asset: modelData
+                        size: 24
+                        Rectangle {
+                            anchors.fill: parent
+                            radius: width / 2
+                            color: 'transparent'
+                            border.width: 1
+                            border.color: 'white'
                         }
                     }
                 }
-                ShaderEffectSource {
-                    anchors.fill: parent
-                    hideSource: true
-                    opacity: delegate.highlighted ? 1 : 0.6
-                    sourceItem: assets
-                }
             }
-        }
-        Item {
-            Layout.minimumHeight: 6
         }
         EditableLabel {
             id: name_field
@@ -121,9 +102,10 @@ ItemDelegate {
             topInset: -4
             rightInset: -8
             bottomInset: -4
+            leftPadding: 0
+            rightPadding: 0
             text: UtilJS.accountName(account)
             enabled: !account.context.watchonly && delegate.ListView.isCurrentItem && !delegate.account.context.locked
-            opacity: delegate.highlighted ? 1 : 0.6
             onEdited: (text) => {
                 if (enabled) {
                     if (controller.setAccountName(delegate.account, text, activeFocus)) {
@@ -141,10 +123,8 @@ ItemDelegate {
                 id: details
                 width: parent.width
                 Item {
-                    Layout.minimumHeight: 64
-                }
-                Item {
                     Layout.fillWidth: true
+                    Layout.topMargin: 64
                     implicitHeight: card_footer.height
                     RowLayout {
                         id: card_footer
