@@ -7,7 +7,7 @@ import QtQuick.Shapes
 
 import "util.js" as UtilJS
 
-GTextField {
+TextField {
     id: self
     property Word word
     readonly property bool invalid: word.suggestions.length === 0 && self.text.length > 2
@@ -19,8 +19,40 @@ GTextField {
         }
     }
 
+    background: Rectangle {
+        radius: 4
+        color: self.invalid ? Qt.alpha('#F00', 0.2) : '#2F2F35'
+        Rectangle {
+            border.width: 2
+            border.color: '#00B45A'
+            color: 'transparent'
+            radius: 9
+            anchors.fill: parent
+            anchors.margins: -4
+            z: -1
+            visible: {
+                if (self.activeFocus) {
+                    switch (self.focusReason) {
+                    case Qt.TabFocusReason:
+                    case Qt.BacktabFocusReason:
+                    case Qt.ShortcutFocusReason:
+                        return true
+                    }
+                }
+                return false
+            }
+        }
+    }
+
     enabled: word.enabled
     leftPadding: 40
+    rightPadding: 10
+    topPadding: 10
+    bottomPadding: 10
+    font.family: 'SF Compact Display'
+    font.pixelSize: 16
+    font.weight: 600
+
     Binding on text {
         restoreMode: Binding.RestoreBinding
         when: !activeFocus
@@ -177,10 +209,13 @@ GTextField {
 
     Label {
         anchors.baseline: parent.baseline
-        x: 8
-        width: 24
+        font.family: 'SF Compact Display'
+        font.pixelSize: 14
+        font.weight: 600
+        x: 10
+        width: 20
         horizontalAlignment: Qt.AlignRight
+        opacity: 0.6
         text: word.index + 1
-        color: self.invalid ? 'red' : 'white'
     }
 }
