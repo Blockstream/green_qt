@@ -1,7 +1,7 @@
 #!/bin/bash
 set -eo pipefail
 
-VERSION=1.2.7
+VERSION=1.2.8
 
 HASH_WINDOWS=`cat SHA256SUMS.asc | grep Windows | awk '{split($0, a," "); print a[1]}'`
 HASH_MAC=`cat SHA256SUMS.asc | grep Mac | awk '{split($0, a," "); print a[1]}'`
