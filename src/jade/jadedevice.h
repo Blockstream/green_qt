@@ -53,6 +53,7 @@ public:
     State state() const;
     bool unlocking() const { return m_unlocking; }
     void setUnlocking(bool unlocking);
+    Q_INVOKABLE bool versionGreaterOrEqualThan(const QString& other);
 signals:
     void versionInfoChanged();
     void error();
