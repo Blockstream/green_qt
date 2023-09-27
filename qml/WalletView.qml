@@ -233,10 +233,13 @@ MainPage {
         context: self.context
     }
 
-    ReceiveDrawer {
+    Component {
         id: receive_drawer
-        context: self.context
-        account: self.currentAccount
+        ReceiveDrawer {
+            context: self.context
+            account: self.currentAccount
+            onClosed: destroy()
+        }
     }
 
     SendDrawer {
@@ -391,7 +394,9 @@ MainPage {
                 text: qsTrId('id_receive')
                 icon.source: 'qrc:/svg/receive.svg'
                 shortcut: 'Ctrl+R'
-                onTriggered: receive_drawer.open()
+                onTriggered: {
+                    receive_drawer.createObject(self).open()
+                }
             }
         }
     }
