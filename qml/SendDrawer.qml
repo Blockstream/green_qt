@@ -625,7 +625,6 @@ WalletDrawer {
             account: controller.account
             asset: controller.asset
             showCreateAccount: false
-            onCanceled: stack_view.pop()
             onSelected: (account, asset) => {
                 stack_view.pop()
                 controller.account = account
