@@ -29,6 +29,7 @@ class Account : public QObject
     Q_PROPERTY(qint64 balance READ balance NOTIFY balanceChanged)
     Q_PROPERTY(QQmlListProperty<Balance> balances READ balances NOTIFY balancesChanged)
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     explicit Account(const QJsonObject& data, Session* session);
 

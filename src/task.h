@@ -103,6 +103,7 @@ class Task : public QObject
     Q_PROPERTY(Status status READ status NOTIFY statusChanged)
     Q_PROPERTY(QString error READ error NOTIFY errorChanged);
     QML_ELEMENT
+    QML_UNCREATABLE("")
 
 public:
     enum class Status {
@@ -151,6 +152,7 @@ class SessionTask : public Task
     Q_OBJECT
     Q_PROPERTY(Session* session READ session CONSTANT)
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     SessionTask(Session* session);
     Session* session() const { return m_session; }
@@ -163,6 +165,7 @@ class ContextTask : public Task
     Q_OBJECT
     Q_PROPERTY(Context* context READ context CONSTANT)
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     ContextTask(Context* context);
     Context* context() const { return m_context; }
@@ -174,6 +177,7 @@ class ConnectTask : public SessionTask
 {
     Q_OBJECT
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     ConnectTask(Session* session);
     void update() override;
@@ -185,6 +189,7 @@ class AuthHandlerTask : public SessionTask
     Q_PROPERTY(QJsonObject result READ result NOTIFY resultChanged)
     Q_PROPERTY(Resolver* resolver READ resolver NOTIFY resolverChanged)
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     AuthHandlerTask(Session* session);
     ~AuthHandlerTask();
@@ -220,6 +225,7 @@ class RegisterUserTask : public AuthHandlerTask
 {
     Q_OBJECT
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     RegisterUserTask(const QStringList& mnemonic, Session* session);
     RegisterUserTask(const QJsonObject &device_details, Session* session);
@@ -235,6 +241,7 @@ class LoginTask : public AuthHandlerTask
 {
     Q_OBJECT
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     LoginTask(Session* session);
     LoginTask(const QString& pin, const QJsonObject& pin_data, Session* session);
@@ -253,6 +260,7 @@ class LoadTwoFactorConfigTask : public SessionTask
 {
     Q_OBJECT
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     LoadTwoFactorConfigTask(Session* session);
     LoadTwoFactorConfigTask(bool lock, Session* session);
@@ -266,6 +274,7 @@ class LoadCurrenciesTask : public SessionTask
 {
     Q_OBJECT
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     LoadCurrenciesTask(Session* session);
 private:
@@ -276,6 +285,7 @@ class GetWatchOnlyDetailsTask : public SessionTask
 {
     Q_OBJECT
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     GetWatchOnlyDetailsTask(Session* session);
 private:
@@ -286,6 +296,7 @@ class EncryptWithPinTask : public AuthHandlerTask
 {
     Q_OBJECT
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     EncryptWithPinTask(const QString& pin, Session* session);
     EncryptWithPinTask(const QJsonValue& plaintext, const QString& pin, Session* session);
@@ -303,6 +314,7 @@ class ChangeSettingsTask : public AuthHandlerTask
 {
     Q_OBJECT
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     ChangeSettingsTask(const QJsonObject& data, Session* session);
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
@@ -316,6 +328,7 @@ class LoadAccountsTask : public AuthHandlerTask
 {
     Q_OBJECT
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     LoadAccountsTask(bool refresh, Session* session);
 private:
@@ -330,6 +343,7 @@ class LoadBalanceTask : public AuthHandlerTask
 {
     Q_OBJECT
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     LoadBalanceTask(Account* account);
 private:
@@ -343,6 +357,7 @@ class LoadAssetsTask : public SessionTask
 {
     Q_OBJECT
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     LoadAssetsTask(Session* session);
 private:
@@ -353,6 +368,7 @@ class CreateAccountTask : public AuthHandlerTask
 {
     Q_OBJECT
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     CreateAccountTask(const QJsonObject& details, Session* session);
     int pointer() const { return m_pointer; }
@@ -368,6 +384,7 @@ class UpdateAccountTask : public AuthHandlerTask
 {
     Q_OBJECT
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     UpdateAccountTask(const QJsonObject& details, Session* session);
 private:
@@ -380,6 +397,7 @@ class SetWatchOnlyTask : public SessionTask
 {
     Q_OBJECT
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     SetWatchOnlyTask(const QString& username, const QString& password, Session* session);
 private:
@@ -393,6 +411,7 @@ class ChangeTwoFactorTask : public AuthHandlerTask
 {
     Q_OBJECT
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     ChangeTwoFactorTask(const QString& method, const QJsonObject& details, Session* session);
 private:
@@ -407,6 +426,7 @@ class TwoFactorResetTask : public AuthHandlerTask
     Q_OBJECT
     Q_PROPERTY(QString email READ email CONSTANT)
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     TwoFactorResetTask(const QString& email, Session* session);
     QString email() const { return m_email; }
@@ -420,6 +440,7 @@ class SetCsvTimeTask : public AuthHandlerTask
 {
     Q_OBJECT
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     SetCsvTimeTask(const int value, Session* session);
 private:
@@ -433,6 +454,7 @@ class GetCredentialsTask : public AuthHandlerTask
 {
     Q_OBJECT
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     GetCredentialsTask(Session* session);
 private:
@@ -445,6 +467,7 @@ class DisableAllPinLoginsTask: public AuthHandlerTask
 {
     Q_OBJECT
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     DisableAllPinLoginsTask(Session* session);
 private:
@@ -456,6 +479,7 @@ class TwoFactorChangeLimitsTask : public AuthHandlerTask
 {
     Q_OBJECT
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     TwoFactorChangeLimitsTask(const QJsonObject& details, Session* session);
 private:
@@ -468,6 +492,7 @@ class CreateTransactionTask : public AuthHandlerTask
 {
     Q_OBJECT
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     CreateTransactionTask(const QJsonObject& details, Session* session);
 private:
@@ -484,6 +509,7 @@ class SignTransactionTask : public AuthHandlerTask
 {
     Q_OBJECT
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     SignTransactionTask(Session* session);
     void setDetails(const QJsonObject& details);
@@ -497,6 +523,7 @@ class BlindTransactionTask : public AuthHandlerTask
 {
     Q_OBJECT
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     BlindTransactionTask(const QJsonObject& details, Session* session);
 private:
@@ -509,6 +536,7 @@ class SendTransactionTask : public AuthHandlerTask
 {
     Q_OBJECT
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     SendTransactionTask(Session* session);
     void setDetails(const QJsonObject& details);
@@ -523,6 +551,7 @@ class SendNLocktimesTask : public SessionTask
 {
     Q_OBJECT
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     SendNLocktimesTask(Session* session);
 private:
@@ -533,6 +562,7 @@ class TwoFactorCancelResetTask : public AuthHandlerTask
 {
     Q_OBJECT
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     TwoFactorCancelResetTask(Session* session);
 private:
@@ -543,6 +573,7 @@ class GetUnspentOutputsTask: public AuthHandlerTask
 {
     Q_OBJECT
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     GetUnspentOutputsTask(int num_confs, bool all_coins, Account* account);
     QJsonObject unspentOutputs() const;
@@ -558,6 +589,7 @@ class SetUnspentOutputsStatusTask : public AuthHandlerTask
 {
     Q_OBJECT
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     SetUnspentOutputsStatusTask(const QVariantList& outputs, const QString& status, Session* session);
 private:
@@ -571,6 +603,7 @@ class GetTransactionsTask : public AuthHandlerTask
 {
     Q_OBJECT
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     GetTransactionsTask(int first, int count, Account* account);
     QJsonArray transactions() const;
@@ -586,6 +619,7 @@ class GetAddressesTask : public AuthHandlerTask
 {
     Q_OBJECT
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     GetAddressesTask(int last_pointer, Account* account);
     QJsonArray addresses() const;
@@ -601,6 +635,7 @@ class DeleteWalletTask : public AuthHandlerTask
 {
     Q_OBJECT
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     DeleteWalletTask(Session* session);
 private:
