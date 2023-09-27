@@ -133,18 +133,6 @@ MainPage {
                                 }
                                 contentItem: RowLayout {
                                     spacing: 12
-                                    Image {
-                                        fillMode: Image.PreserveAspectFit
-                                        sourceSize.height: 24
-                                        sourceSize.width: 24
-                                        source: UtilJS.iconFor(delegate.wallet)
-                                    }
-                                    Image {
-                                        fillMode: Image.PreserveAspectFit
-                                        sourceSize.height: 24
-                                        sourceSize.width: 24
-                                        source: delegate.wallet.network.electrum ? 'qrc:/svg/key.svg' : 'qrc:/svg/multi-sig.svg'
-                                    }
                                     Label {
                                         text: wallet.name
                                         elide: Label.ElideRight
