@@ -14,7 +14,7 @@ GPane {
         }
         SelectServerTypeViewCard {
             server_type: 'electrum'
-            icons: ['qrc:/svg/singleSig.svg']
+            icons: ['qrc:/svg2/singlesig.svg']
             title: qsTrId('Singlesig')
             description: qsTrId('id_your_funds_are_secured_by_a')
         }

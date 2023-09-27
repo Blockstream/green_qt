@@ -100,6 +100,7 @@ ApplicationWindow {
                 }
                 OnboardView {
                     readonly property bool active: !navigation.param.view || navigation.param.view === 'onboard'
+                    focus: StackLayout.isCurrentItem
                 }
                 PreferencesView {
                     readonly property bool active: navigation.param.view === 'preferences'

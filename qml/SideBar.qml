@@ -36,9 +36,10 @@ Pane {
         }
         SideButton {
             id: home_button
+            enabled: true
             icon.source: 'qrc:/svg/home.svg'
-            isCurrent: (navigation.param?.view ?? 'home') === 'home'
-            onClicked: navigation.push({ view: 'home' })
+            isCurrent: false
+            // onClicked: navigation.push({ view: 'home' })
             text: qsTrId('id_home')
         }
         SideButton {
@@ -56,26 +57,11 @@ Pane {
             onClicked: navigation.push({ view: 'wallets' })
             text: qsTrId('id_wallets')
         }
-        RowLayout {
-            ToolButton {
-                id: create_sidebar_button
-                background: Rectangle {
-                    visible: create_sidebar_button.hovered
-                    color: constants.c600
-                    radius: 4
-                }
-                Layout.fillWidth: true
-                icon.source: 'qrc:/svg/plus.svg'
-                onClicked: navigation.set({ flow: 'signup' })
-                Layout.alignment: Qt.AlignCenter
-                Layout.preferredWidth: 28
-                Layout.preferredHeight: 28
-                LeftArrowToolTip {
-                    parent: create_sidebar_button
-                    text: qsTrId('id_create_wallet')
-                    visible: create_sidebar_button.hovered
-                }
-            }
+        SideButton {
+            icon.source: 'qrc:/svg/plus.svg'
+            isCurrent: navigation.param.view === 'onboard'
+            onClicked: navigation.set({ view: 'onboard' })
+            text: qsTrId('id_add_wallet')
         }
         Flickable {
             id: flickable
@@ -106,8 +92,7 @@ Pane {
                 }
             }
         }
-        Item {
-            Layout.minimumHeight: 16
+        VSpacer {
         }
         SideButton {
             icon.source: 'qrc:/svg2/gear.svg'
