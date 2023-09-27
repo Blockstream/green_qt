@@ -144,7 +144,11 @@ StackViewPage {
                             CreateAccountButton {
                                 Layout.fillWidth: true
                                 visible: self.showCreateAccount
-                                onClicked: self.create(delegate.asset)
+                                onClicked: {
+                                    self.StackView.view.push(create_account_page, {
+                                        asset: delegate.asset,
+                                    })
+                                }
                             }
                         }
                     }
@@ -220,6 +224,15 @@ StackViewPage {
                 Layout.alignment: Qt.AlignCenter
                 source: 'qrc:/svg2/next_arrow.svg'
             }
+        }
+    }
+
+    Component {
+        id: create_account_page
+        CreateAccountPage {
+            id: page
+            context: self.context
+            onCreated: (account) => self.selected(account, page.asset)
         }
     }
 }
