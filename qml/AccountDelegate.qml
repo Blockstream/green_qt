@@ -27,8 +27,8 @@ ItemDelegate {
             }
         }
         Image {
-            opacity: 0.1
-            source: 'qrc:/svg2/btc_watermark.svg'
+            opacity: delegate.account.network.liquid ? 0.2 : 0.1
+            source: delegate.account.network.liquid ? 'qrc:/svg2/watermark_liquid.svg' : 'qrc:/svg2/watermark_bitcoin.svg'
             anchors.right: parent.right
             anchors.top: parent.top
         }
@@ -45,10 +45,9 @@ ItemDelegate {
         RowLayout {
             Image {
                 fillMode: Image.PreserveAspectFit
-                opacity: delegate.highlighted ? 1 : 0.6
-                sourceSize.height: 16
-                sourceSize.width: 16
-                source: delegate.account.network.electrum ? 'qrc:/svg/key.svg' : 'qrc:/svg/multi-sig.svg'
+                Layout.preferredWidth: 16
+                Layout.preferredHeight: 16
+                source: delegate.account.network.electrum ? 'qrc:/svg2/singlesig.svg' : 'qrc:/svg2/multisig.svg'
             }
             Label {
                 font.pixelSize: 10

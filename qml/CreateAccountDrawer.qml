@@ -53,14 +53,14 @@ WalletDrawer {
                 }
                 SecurityPolicyButton {
                     Layout.fillWidth: true
-                    icon.source: 'qrc:/svg/singleSig.svg'
+                    icon.source: 'qrc:/svg2/singlesig.svg'
                     type: 'SINGLESIG / LEGACY SEGWIT'
                     title: 'Standard'
                     description: 'Simple, portable, standard account, secured by your key, the recovery phrase.'
                 }
                 SecurityPolicyButton {
                     Layout.fillWidth: true
-                    icon.source: 'qrc:/svg/multi-sig.svg'
+                    icon.source: 'qrc:/svg2/multisig.svg'
                     type: 'MULTISIG / 2OF2'
                     title: '2FA Protected '
                     description: 'Quick setup 2FA account, ideal for active spenders (2FA expires if you don\'t move funds every 6 months).'

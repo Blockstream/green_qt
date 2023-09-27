@@ -16,14 +16,14 @@ Page {
         DiscoverServerTypeViewCard {
             id: singlesig_card
             server_type: 'electrum'
-            icons: ['qrc:/svg/singleSig.svg']
+            icons: ['qrc:/svg2/singlesig.svg']
             title: qsTrId('id_singlesig')
             visible: navigation.param.type !== 'amp' && (navigation.param.password || '') === ''
         }
         DiscoverServerTypeViewCard {
             id: multisig_card
             server_type: 'green'
-            icons: ['qrc:/svg/multi-sig.svg']
+            icons: ['qrc:/svg2/multisig.svg']
             title: qsTrId('id_multisig_shield')
         }
     }

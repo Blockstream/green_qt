@@ -230,7 +230,7 @@ MainPage {
                     fillMode: Image.PreserveAspectFit
                     sourceSize.height: 24
                     sourceSize.width: 24
-                    source: self.network.electrum ? 'qrc:/svg/key.svg' : 'qrc:/svg/multi-sig.svg'
+                    source: self.network.electrum ? 'qrc:/svg2/singlesig.svg' : 'qrc:/svg2/multisig.svg'
                 }
                 Label {
                     Layout.fillWidth: true
