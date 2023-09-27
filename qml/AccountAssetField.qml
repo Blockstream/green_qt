@@ -43,16 +43,17 @@ AbstractButton {
                 font.weight: 600
                 text: self.asset?.name ?? self.account?.network?.displayName ?? '-'
             }
-            Item {
-                Layout.minimumHeight: 4
-            }
             Label {
+                Layout.fillWidth: true
+                Layout.preferredWidth: 0
+                Layout.topMargin: 4
                 font.capitalization: Font.AllUppercase
                 font.family: 'SF Compact Display'
                 font.pixelSize: 12
                 font.weight: 500
                 opacity: 0.4
                 text: UtilJS.accountName(self.account)
+                wrapMode: Label.Wrap
             }
             Label {
                 font.capitalization: Font.AllUppercase

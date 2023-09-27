@@ -50,14 +50,8 @@ Page {
             Layout.fillWidth: true
             id: search_field
         }
-        Item {
-            Layout.minimumHeight: 25
-        }
-        Label {
-            font.family: 'SF Compact Display'
-            font.pixelSize: 14
-            font.weight: 600
-            opacity: 0.4
+        FieldTitle {
+            Layout.topMargin: 25
             text: search_field.text.trim().length > 0 ? 'Search result' : 'Other Assets'
         }
         GListView {
@@ -214,10 +208,12 @@ Page {
         contentItem: RowLayout {
             ColumnLayout {
                 Label {
+                    Layout.fillWidth: true
                     font.family: 'SF Compact Display'
                     font.pixelSize: 14
                     font.weight: 500
-                    text: button.account.name
+                    text: UtilJS.accountName(button.account)
+                    wrapMode: Label.Wrap
                 }
                 Label {
                     font.family: 'SF Compact Display'
