@@ -182,10 +182,16 @@ AbstractDialog {
                         text: firmwareVersionAndType(self.activity.firmware.version, self.activity.firmware.config)
                     }
                     Label {
-                        text: 'Hash'
+                        text: qsTrId('id_hash')
                     }
                     Label {
-                        text: String(self.activity.firmware?.hash ?? '').match(/.{1,8}/g).join(' ')
+                        text: {
+                            const ge_0_1_46 = self.activity.device.versionGreaterOrEqualThan('0.1.46')
+                            const fwhash = self.activity.firmware?.fwhash
+                            const cmphash = self.activity.firmware?.cmphash
+                            const hash = String(ge_0_1_46 && fwhash ? fwhash : cmphash)
+                            return ge_0_1_46 ? hash.match(/.{1,8}/g).join(' ') : hash
+                        }
                         Layout.maximumWidth: 200
                         wrapMode: Label.WrapAnywhere
                     }
