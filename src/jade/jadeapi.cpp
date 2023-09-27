@@ -357,7 +357,7 @@ int JadeAPI::otaUpdate(const QByteArray& fwcmp, const int fwlen, const QString& 
     // Initiate OTA process, and return the exposed id
     const int compressedSize = fwcmp.length();
     QCborMap params = { {"fwsize", fwlen}, {"cmpsize", compressedSize}, {"cmphash", cmphash} };
-    if (!fwhash.isEmpty()) params.insert(QString("fwhash"), fwhash);
+    if (!fwhash.isEmpty()) params.insert(QString("fwhash"), QByteArray::fromHex(fwhash.toLocal8Bit()));
     const QCborMap request = getRequest(tmpId, "ota", params);
     enqueue(request);
     return id;
@@ -379,7 +379,7 @@ int JadeAPI::otaDeltaUpdate(const QByteArray& fwcmp, const int fwlen, const QStr
     // Initiate OTA process, and return the exposed id
     const int compressedSize = fwcmp.length();
     QCborMap params = { {"fwsize", fwlen}, {"cmpsize", compressedSize}, {"cmphash", cmphash}, {"patchsize", patch_size} };
-    if (!fwhash.isEmpty()) params.insert(QString("fwhash"), fwhash);
+    if (!fwhash.isEmpty()) params.insert(QString("fwhash"), QByteArray::fromHex(fwhash.toLocal8Bit()));
     const QCborMap request = getRequest(tmpId, "ota_delta", params);
     enqueue(request);
     return id;
