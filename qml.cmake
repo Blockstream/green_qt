@@ -188,6 +188,7 @@ SET(QML_FILES
     qml/PriceCard.qml
     qml/FeeRateCard.qml
     qml/CardBar.qml
+    qml/AddWalletPage.qml
 )
 
 if (GREEN_NO_RESOURCES)
