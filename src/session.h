@@ -38,6 +38,7 @@ class Session : public Entity
     Q_PROPERTY(QString unit READ unit NOTIFY unitChanged)
     Q_PROPERTY(QString displayUnit READ displayUnit NOTIFY unitChanged)
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     Session(Network* network, QObject* parent);
     Session(Network* network, Context* context);
@@ -89,6 +90,7 @@ signals:
     void blockEvent(const QJsonObject& event);
     void transactionEvent(const QJsonObject& event);
     void tickerEvent(const QJsonObject& event);
+    void subaccountEvent(const QJsonObject& event);
     void activityCreated(Activity* activity);
     void eventsChanged();
     void blockChanged();
@@ -137,6 +139,7 @@ class SessionActivity : public Activity
 {
     Q_OBJECT
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     SessionActivity(QObject* parent);
     Session* session() const { return m_session; }

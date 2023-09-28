@@ -93,6 +93,8 @@ void Session::handleNotification(const QJsonObject& notification)
         emit transactionEvent(value.toObject());
     } else if (event == "ticker") {
         emit tickerEvent(value.toObject());
+    } else if (event == "subaccount") {
+        emit subaccountEvent(value.toObject());
     } else {
         Q_UNREACHABLE();
     }
