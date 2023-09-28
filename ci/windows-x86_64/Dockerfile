@@ -1,6 +1,6 @@
-FROM ubuntu:kinetic AS base
-COPY ci/windows-x86_64/kinetic.sh .
-RUN ./kinetic.sh
+FROM ubuntu:lunar AS base
+COPY ci/windows-x86_64/lunar.sh .
+RUN ./lunar.sh
 ENV PREFIX=/depends/windows-x86_64
 ENV HOST=windows
 ENV ARCH=x86_64

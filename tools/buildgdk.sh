@@ -6,17 +6,18 @@ mkdir -p build
 cd build
 
 if [ ! -d gdk ]; then
-    git clone --quiet --depth 1 --branch release_0.67.1 --single-branch https://github.com/Blockstream/gdk.git gdk
+    git clone --quiet --depth 1 --branch release_0.68.1 --single-branch https://github.com/Blockstream/gdk.git gdk
 fi
 
 cd gdk
+git rev-parse HEAD
 
 # unset to disable building gdk java support
 unset JAVA_HOME
 # unset because it clashes with gdk build script
 unset CMAKE_TOOLCHAIN_FILE
 
-python3.10 -m venv .venv
+python3 -m venv .venv
 source .venv/bin/activate
 pip install -r tools/requirements.txt
 

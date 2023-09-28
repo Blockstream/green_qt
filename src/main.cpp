@@ -388,6 +388,7 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
     return once_functor_lock;
   }
 
+#if 0
   extern "C"
   {
     void __once_proxy()
@@ -403,6 +404,7 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
       __once_call();
     }
   }
+#endif
 
 _GLIBCXX_END_NAMESPACE_VERSION
 } // namespace std
