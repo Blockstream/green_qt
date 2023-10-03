@@ -140,7 +140,7 @@ SET(QML_FILES
     qml/WalletRecoverySettingsView.qml
     qml/CoinDelegate.qml
     qml/MainPage.qml
-    qml/WalletView.qml
+    qml/OverviewPage.qml
     qml/SetRecoveryEmailDialog.qml
     qml/MainPageHeader.qml
     qml/MnemonicEditor.qml

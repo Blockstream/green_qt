@@ -11,9 +11,9 @@ import Qt5Compat.GraphicalEffects
 import "analytics.js" as AnalyticsJS
 import "util.js" as UtilJS
 
-MainPage {
+StackViewPage {
     required property Context context
-    required property Wallet wallet
+    readonly property Wallet wallet: self.context.wallet
     readonly property Account currentAccount: accounts_list.currentAccount
     readonly property bool fiatRateAvailable: formatFiat(0, false) !== 'n/a'
 
@@ -93,7 +93,9 @@ MainPage {
         }
     }
 
-    readonly property bool ready: {
+    readonly property bool ready: true
+
+    /* TODO: handle ready and wallet_active events
         const accounts = self.wallet?.context.accounts ?? null
         if (!accounts || accounts.length === 0) return false
         for (let i = 0; i < accounts.length; i++) {
@@ -104,6 +106,15 @@ MainPage {
 
     // TODO
     onReadyChanged: if (ready) Analytics.recordEvent('wallet_active', AnalyticsJS.segmentationWalletActive(self.wallet))
+
+    LoginDialog {
+        wallet: self.wallet
+        visible: self.visible && !self.wallet.context
+        //onRejected: navigation.pop()
+        //onAccepted: navigation.push({ wallet: wallet.id })
+        //onClosed: destroy()
+    }
+    */
 
     AnalyticsAlert {
         id: overview_alert
@@ -181,23 +192,25 @@ MainPage {
         accountListWidth: accounts_list.width
 
         background: Rectangle {
+//            color: 'red'
             color: '#121416'
             opacity: Math.max(stack_view.currentItem?.contentY ?? 0, accounts_list.contentY) > 0 ? 1 : 0
             FastBlur {
                 anchors.fill: parent
-                opacity: 0.5
+                opacity: 0.25
                 cached: true
                 radius: 128
                 source: header_blur_source
             }
-            Rectangle {
-                width: parent.width
-                height: 1
-                y: parent.height - 1
-                color: constants.c900
-            }
+//            Rectangle {
+//                width: parent.width
+//                height: 1
+//                y: parent.height - 1
+//                color: constants.c900
+//            }
         }
     }
+    footer: null /*
     footer: WalletViewFooter {
         account: currentAccount
         context: self.context
@@ -227,7 +240,7 @@ MainPage {
             }
         }
     }
-
+*/
     CreateAccountDrawer {
         id: create_account_drawer
         context: self.context
@@ -404,35 +417,6 @@ MainPage {
     Component {
         id: bump_fee_dialog
         BumpFeeDialog {
-        }
-    }
-
-    Component {
-        id: no_funds_dialog
-        MessageDialog {
-            id: dialog
-            wallet: self.wallet
-            width: 350
-            title: qsTrId('id_warning')
-            message: self.wallet.network.liquid ? qsTrId('id_insufficient_lbtc_to_send_a') : qsTrId('id_you_have_no_coins_to_send')
-            actions: [
-                Action {
-                    text: qsTrId('id_cancel')
-                    onTriggered: dialog.reject()
-                },
-                Action {
-                    property bool highlighted: true
-                    text: self.wallet.network.liquid ? qsTrId('id_learn_more') : qsTrId('id_receive')
-                    onTriggered: {
-                        dialog.reject()
-                        if (self.wallet.network.liquid) {
-                            Qt.openUrlExternally('https://help.blockstream.com/hc/en-us/articles/900000630846-How-do-I-get-Liquid-Bitcoin-L-BTC-')
-                        } else {
-                            navigation.set({ flow: 'receive' })
-                        }
-                    }
-                }
-            ]
         }
     }
 
