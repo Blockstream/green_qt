@@ -200,6 +200,7 @@ SET(QML_FILES
     qml/MnemonicBackupPage.qml
     qml/MnemonicCheckPage.qml
     qml/PinField.qml
+    qml/PinLoginPage.qml
     qml/LoadingPage.qml
 )
 
