@@ -84,38 +84,42 @@ ApplicationWindow {
         SideBar {
             Layout.fillHeight: true
         }
-        ColumnLayout {
-            StackLayout {
-                id: stack_layout
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                readonly property WalletView currentWalletView: currentIndex < 0 ? null : (stack_layout.children[currentIndex].currentWalletView || null)
-                currentIndex: UtilJS.findChildIndex(stack_layout, child => child instanceof Item && child.active && child.enabled)
-                HomeView {
-                    readonly property bool active: navigation.param.view === 'home'
-                }
-                BlockstreamView {
-                    id: blockstream_view
-                    readonly property bool active: navigation.param.view === 'blockstream'
-                }
-                OnboardView {
-                    readonly property bool active: !navigation.param.view || navigation.param.view === 'onboard'
-                    focus: StackLayout.isCurrentItem
-                }
-                PreferencesView {
-                    readonly property bool active: navigation.param.view === 'preferences'
-                }
-                JadeView {
-                    id: jade_view
-                    readonly property bool active: navigation.param.view === 'jade'
-                }
-                LedgerDevicesView {
-                    id: ledger_view
-                    readonly property bool active: navigation.param.view === 'ledger'
-                }
-                NetworkView {
-                    title: qsTrId('id_wallets')
-                }
+        StackLayout {
+            id: stack_layout
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            readonly property WalletView currentWalletView: currentIndex < 0 ? null : (stack_layout.children[currentIndex].currentWalletView || null)
+            currentIndex: UtilJS.findChildIndex(stack_layout, child => child instanceof Item && child.active && child.enabled)
+            HomeView {
+                readonly property bool active: navigation.param.view === 'home'
+                focus: StackLayout.isCurrentItem
+            }
+            BlockstreamView {
+                readonly property bool active: navigation.param.view === 'blockstream'
+                id: blockstream_view
+                focus: StackLayout.isCurrentItem
+            }
+            OnboardView {
+                readonly property bool active: !navigation.param.view || navigation.param.view === 'onboard'
+                focus: StackLayout.isCurrentItem
+            }
+            PreferencesView {
+                readonly property bool active: navigation.param.view === 'preferences'
+                focus: StackLayout.isCurrentItem
+            }
+            JadeView {
+                readonly property bool active: navigation.param.view === 'jade'
+                id: jade_view
+                focus: StackLayout.isCurrentItem
+            }
+            LedgerDevicesView {
+                readonly property bool active: navigation.param.view === 'ledger'
+                id: ledger_view
+                focus: StackLayout.isCurrentItem
+            }
+            NetworkView {
+                title: qsTrId('id_wallets')
+                focus: StackLayout.isCurrentItem
             }
         }
     }
