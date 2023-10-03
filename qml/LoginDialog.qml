@@ -40,11 +40,4 @@ ControllerDialog {
             wallet: self.wallet
         }
     }
-
-    Component {
-        id: login_with_pin_view
-        LoginWithPinView {
-            wallet: self.wallet
-        }
-    }
 }
