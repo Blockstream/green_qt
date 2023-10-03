@@ -18,6 +18,7 @@ class JadeDevice : public Device
     Q_PROPERTY(State state READ state NOTIFY versionInfoChanged)
     Q_PROPERTY(bool unlocking READ unlocking NOTIFY unlockingChanged)
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     enum State {
         StateReady,

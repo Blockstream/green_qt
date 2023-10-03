@@ -45,6 +45,7 @@ class Activity : public QObject
     Q_PROPERTY(Progress* progress READ progress CONSTANT)
     Q_PROPERTY(QJsonObject message READ message NOTIFY messageChanged)
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     // TODO: maybe split Pending to Ready and Active
     enum class Status {

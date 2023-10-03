@@ -16,7 +16,7 @@ class TaskDispatcher : public QObject
     Q_PROPERTY(QQmlListProperty<TaskGroup> groups READ groups NOTIFY groupsChanged)
     Q_PROPERTY(bool busy READ isBusy NOTIFY busyChanged)
     QML_ELEMENT
-
+    QML_UNCREATABLE("")
 public:
     TaskDispatcher(QObject* parent);
     ~TaskDispatcher();

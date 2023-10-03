@@ -82,6 +82,7 @@ class LedgerDevice : public Device
     Q_PROPERTY(QString appVersion READ appVersion NOTIFY appChanged)
     Q_PROPERTY(bool compatible READ compatible NOTIFY appChanged)
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     enum State {
         StateUnknown,

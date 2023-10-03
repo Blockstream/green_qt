@@ -26,7 +26,7 @@ class Wallet : public QObject
     Q_PROPERTY(Context* context READ context NOTIFY contextChanged)
     Q_PROPERTY(QJsonObject deviceDetails READ deviceDetails NOTIFY deviceDetailsChanged)
     QML_ELEMENT
-
+    QML_UNCREATABLE("")
 public:
     explicit Wallet(Network* network, const QString& hash_id, QObject *parent = nullptr);
     virtual ~Wallet();

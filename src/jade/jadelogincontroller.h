@@ -16,7 +16,7 @@ class JadeController : public Controller
     Q_OBJECT
     Q_PROPERTY(JadeDevice* device READ device WRITE setDevice NOTIFY deviceChanged)
     QML_ELEMENT
-
+    QML_UNCREATABLE("")
 public:
     JadeController(QObject* parent = nullptr);
 
@@ -51,6 +51,7 @@ class JadeSetupTask : public Task
 {
     Q_OBJECT
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     JadeSetupTask(JadeSetupController* controller);
 private:
@@ -113,6 +114,7 @@ class JadeUnlockTask : public Task
 {
     Q_OBJECT
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     JadeUnlockTask(JadeUnlockController* controller);
 private:
@@ -125,6 +127,7 @@ class JadeIdentifyTask : public Task
 {
     Q_OBJECT
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     JadeIdentifyTask(JadeLoginController* controller);
 private:
@@ -137,6 +140,7 @@ class JadeLoginTask : public Task
 {
     Q_OBJECT
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     JadeLoginTask(JadeLoginController* controller);
 private:

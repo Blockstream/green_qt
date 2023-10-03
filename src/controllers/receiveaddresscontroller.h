@@ -70,6 +70,7 @@ class GetReceiveAddressTask : public AuthHandlerTask
 {
     Q_OBJECT
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     Account* const m_account;
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;

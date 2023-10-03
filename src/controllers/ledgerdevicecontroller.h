@@ -89,6 +89,7 @@ class LedgerInitializeTask : public Task
 {
     Q_OBJECT
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     LedgerInitializeTask(LedgerDeviceController* controller);
 private:
@@ -101,6 +102,7 @@ class LedgerIdentifyTask : public Task
 {
     Q_OBJECT
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     LedgerIdentifyTask(LedgerDeviceController* controller);
 private:
@@ -113,6 +115,7 @@ class LedgerLoginTask : public ContextTask
 {
     Q_OBJECT
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     LedgerLoginTask(LedgerDeviceController* controller);
 private:

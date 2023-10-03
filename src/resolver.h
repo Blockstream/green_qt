@@ -20,6 +20,7 @@ class Resolver : public QObject
     Q_PROPERTY(QJsonObject result READ result CONSTANT)
     Q_PROPERTY(Activity* activity READ activity NOTIFY activityChanged)
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     Resolver(const QJsonObject& result, Session* session);
     Session* session() const { return m_session; };
@@ -50,6 +51,7 @@ class TwoFactorResolver : public Resolver
     Q_PROPERTY(QString telegramBrowserUrl READ telegramBrowserUrl CONSTANT)
     Q_PROPERTY(QString telegramAppUrl READ telegramAppUrl CONSTANT)
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     TwoFactorResolver(const QJsonObject& result, Session* session);
     QString method() const { return m_method; }
@@ -76,6 +78,7 @@ class DeviceResolver : public Resolver
     Q_PROPERTY(Device* device READ device CONSTANT)
     Q_PROPERTY(QJsonObject requiredData READ requiredData CONSTANT)
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     DeviceResolver(Device* device, const QJsonObject& result, Session* session);
     Device* device() const { return m_device; }
@@ -104,6 +107,7 @@ class SignMessageResolver : public DeviceResolver
     Q_PROPERTY(QString hash READ hash CONSTANT)
     Q_PROPERTY(QString path READ path CONSTANT)
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     SignMessageResolver(Device* device, const QJsonObject& result, Session* session);
     QString message() const { return m_message; }
@@ -125,6 +129,7 @@ class SignTransactionResolver : public DeviceResolver
     Q_PROPERTY(QJsonObject transaction READ transaction CONSTANT)
     Q_PROPERTY(QJsonArray outputs READ outputs CONSTANT)
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     SignTransactionResolver(Device* device, const QJsonObject& result, Session* session);
     QJsonObject transaction() const { return m_transaction; }
@@ -139,6 +144,7 @@ class BlindingKeysResolver : public DeviceResolver
 {
     Q_OBJECT
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     BlindingKeysResolver(Device* device, const QJsonObject& result, Session* session);
     void resolve() override;
@@ -151,6 +157,7 @@ class BlindingNoncesResolver : public DeviceResolver
 {
     Q_OBJECT
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     BlindingNoncesResolver(Device* device, const QJsonObject& result, Session* session);
     void resolve() override;
@@ -170,6 +177,7 @@ class SignLiquidTransactionResolver : public DeviceResolver
     Q_PROPERTY(qreal progress READ progress NOTIFY progressChanged)
     Q_PROPERTY(QJsonObject message READ message NOTIFY messageChanged)
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     SignLiquidTransactionResolver(Device* device, const QJsonObject& result, Session* session);
     QJsonObject transaction() const { return m_transaction; }
@@ -191,6 +199,7 @@ class GetMasterBlindingKeyResolver : public DeviceResolver
 {
     Q_OBJECT
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     GetMasterBlindingKeyResolver(Device* device, const QJsonObject& result, Session* session);
     void resolve() override;

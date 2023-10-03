@@ -34,6 +34,7 @@ class GetSystemMessageTask : public SessionTask
 {
     Q_OBJECT
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     GetSystemMessageTask(Session* session, SystemMessageController* controller);
 private:
@@ -46,6 +47,7 @@ class AckSystemMessageTask : public AuthHandlerTask
 {
     Q_OBJECT
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     AckSystemMessageTask(Session* session, SystemMessageController* controller);
 private:

@@ -30,6 +30,7 @@ class CheckForUpdatesActivity : public HttpRequestActivity
 {
     Q_OBJECT
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     CheckForUpdatesActivity(QObject* parent);
     QString latestVersion() const;
