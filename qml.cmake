@@ -199,6 +199,7 @@ SET(QML_FILES
     qml/MnemonicWarningsPage.qml
     qml/MnemonicBackupPage.qml
     qml/MnemonicCheckPage.qml
+    qml/PinField.qml
     qml/LoadingPage.qml
 )
 
