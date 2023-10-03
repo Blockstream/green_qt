@@ -8,6 +8,13 @@ Page {
     property alias rightItem: right_pane.contentItem
     id: self
     background: null
+    function effectiveWidth(item) {
+        return item.visible ? item.width : 0
+    }
+    leftPadding: 0
+    rightPadding: 0
+    topPadding: 0
+    bottomPadding: 0
     header: Pane {
         background: null
         padding: 0
@@ -26,7 +33,9 @@ Page {
                 }
             }
             Item {
-                implicitWidth: header_layout.width / 2 - left_pane.implicitWidth - center_pane.implicitWidth / 2
+                Layout.preferredWidth: Math.max(effectiveWidth(right_pane) - effectiveWidth(left_pane))
+            }
+            HSpacer {
             }
             Pane {
                 id: center_pane
@@ -39,8 +48,10 @@ Page {
                     text: self.title
                 }
             }
+            HSpacer {
+            }
             Item {
-                implicitWidth: header_layout.width / 2 - right_pane.implicitWidth - center_pane.implicitWidth / 2
+                Layout.preferredWidth: Math.max(effectiveWidth(left_pane) - effectiveWidth(right_pane))
             }
             Pane {
                 id: right_pane
