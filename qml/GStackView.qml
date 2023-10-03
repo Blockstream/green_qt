@@ -48,8 +48,4 @@ StackView {
             NumberAnimation { property: "opacity"; from: 1.0; to: 0.0; duration: self.duration; easing.type: self.easing }
         }
     }
-
-    component View: GPane {
-        background: null
-    }
 }
