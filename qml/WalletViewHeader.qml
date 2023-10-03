@@ -28,8 +28,8 @@ MainPageHeader {
     component HPane: GPane {
         padding: 4
         Layout.fillWidth: true
-        leftPadding: constants.p3
-        rightPadding: constants.p3
+        leftPadding: 0
+        rightPadding: 0
         background: null
     }
 
