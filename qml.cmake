@@ -203,6 +203,7 @@ SET(QML_FILES
     qml/PinField.qml
     qml/PinLoginPage.qml
     qml/LoadingPage.qml
+    qml/SetupPinPage.qml
 )
 
 if (GREEN_NO_RESOURCES)
