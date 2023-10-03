@@ -24,6 +24,7 @@ public:
     QString filter() const { return m_filter; }
     void setFilter(const QString& filter);
     int count() const { return rowCount(); }
+    bool lessThan(const QModelIndex& source_left, const QModelIndex& source_right) const override;
 
 private:
     void update();

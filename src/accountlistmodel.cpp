@@ -1,12 +1,12 @@
 #include "account.h"
 #include "accountlistmodel.h"
 #include "context.h"
+#include "network.h"
 #include "wallet.h"
 
 AccountListModel::AccountListModel(QObject* parent)
     : QSortFilterProxyModel(parent)
 {
-    setDynamicSortFilter(true);
 }
 
 void AccountListModel::setContext(Context* context)
@@ -24,6 +24,8 @@ void AccountListModel::setContext(Context* context)
         m_model->setItemRoleNames({{ Qt::UserRole, "account" }});
         update();
         setSourceModel(m_model);
+        setDynamicSortFilter(true);
+        sort(0); // NOLINT(build/include_what_you_use)
         connect(m_context, &Context::accountsChanged, this, [=] {
             update();
             invalidateRowsFilter();
@@ -80,4 +82,31 @@ void AccountListModel::setFilter(const QString &filter)
     m_filter = filter;
     emit filterChanged();
     invalidateFilterAndCount();
+}
+
+bool AccountListModel::lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const
+{
+    auto account_left = source_left.data(Qt::UserRole).value<Account*>();
+    auto account_right = source_right.data(Qt::UserRole).value<Account*>();
+
+    auto network_left = account_left->network();
+    auto network_right = account_right->network();
+
+    if (network_left == network_right) {
+        return account_left->pointer() < account_right->pointer();
+    }
+
+    if (network_left->isMainnet() && !network_right->isMainnet()) {
+        return true;
+    }
+
+    if (!network_left->isLiquid() && network_right->isLiquid()) {
+        return true;
+    }
+
+    if (network_left->isElectrum() && !network_right->isElectrum()) {
+        return true;
+    }
+
+    return false;
 }
