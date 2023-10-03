@@ -122,6 +122,7 @@ qt_add_resources(green "images"
 
         assets/svg2/arrow_right.svg
         assets/svg2/back.svg
+        assets/svg2/backspace.svg
         assets/svg2/blockstream_green.svg
         assets/svg2/bolt.svg
         assets/svg2/check.svg
@@ -131,6 +132,7 @@ qt_add_resources(green "images"
         assets/svg2/edit.svg
         assets/svg2/eye.svg
         assets/svg2/gear.svg
+        assets/svg2/hand.svg
         assets/svg2/house.svg
         assets/svg2/multisig.svg
         assets/svg2/next_arrow.svg
@@ -147,6 +149,7 @@ qt_add_resources(green "images"
         assets/svg2/warning.svg
         assets/svg2/watermark_bitcoin.svg
         assets/svg2/watermark_liquid.svg
+        assets/svg2/x-square.svg
 )
 
 qt_add_resources(green "fonts"
