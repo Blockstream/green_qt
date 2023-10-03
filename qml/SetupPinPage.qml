@@ -20,7 +20,7 @@ StackViewPage {
             font.pixelSize: 26
             font.weight: 600
             horizontalAlignment: Label.AlignHCenter
-            text: self.pin ? 'Confirm your 6-digit PIN' : 'Set up your 6-digit PIN'
+            text: self.pin && pin_field.enabled ? 'Confirm your 6-digit PIN' : 'Set up your 6-digit PIN'
             wrapMode: Label.WordWrap
         }
         Label {
@@ -37,6 +37,8 @@ StackViewPage {
         }
         PinField {
             Layout.alignment: Qt.AlignCenter
+            Layout.bottomMargin: 54
+            Layout.topMargin: 36
             id: pin_field
             focus: true
             onPinEntered: (pin) => {
@@ -47,10 +49,24 @@ StackViewPage {
                         self.pin = null
                     }
                 } else {
+                    pin_field.enabled = false
                     self.pin = pin
-                    pin_field.clear()
+                    timer.start()
                 }
             }
+        }
+        Timer {
+            id: timer
+            interval: 300
+            repeat: false
+            onTriggered: {
+                pin_field.clear()
+                pin_field.enabled = true
+            }
+        }
+        PinLoginPage.PinPadButton {
+            Layout.alignment: Qt.AlignCenter
+            onClicked: pin_field.openPad()
         }
         VSpacer {
         }
