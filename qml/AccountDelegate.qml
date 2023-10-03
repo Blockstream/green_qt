@@ -26,6 +26,14 @@ ItemDelegate {
             anchors.right: parent.right
             anchors.top: parent.top
         }
+        ProgressBar {
+            width: parent.width - 10
+            x: 5
+            height: 1
+            anchors.bottom: parent.bottom
+            visible: !delegate.account.synced
+            indeterminate: !delegate.account.synced
+        }
     }
     highlighted: currentAccount === delegate.account
     leftPadding: constants.p2
