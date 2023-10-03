@@ -70,6 +70,15 @@ Session* Context::getOrCreateSession(Network* network)
                 }
             }
         });
+        connect(session, &Session::subaccountEvent, this, [=](const QJsonObject& event) {
+            auto pointer = event.value("pointer").toInteger();
+            auto event_type = event.value("event_type").toString();
+            if (event_type == "synced") {
+                auto account = getOrCreateAccount(session->network(), pointer);
+                account->setSynced(true);
+                m_dispatcher->add(new LoadBalanceTask(account));
+            }
+        });
         connect(session, &Session::twoFactorResetEvent, this, [=](const QJsonObject& event) {
             setLocked(event.value("is_active").toBool());
         });
