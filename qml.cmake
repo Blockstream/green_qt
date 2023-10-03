@@ -199,6 +199,7 @@ SET(QML_FILES
     qml/MnemonicWarningsPage.qml
     qml/MnemonicBackupPage.qml
     qml/MnemonicCheckPage.qml
+    qml/LoadingPage.qml
 )
 
 if (GREEN_NO_RESOURCES)
