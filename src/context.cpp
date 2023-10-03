@@ -208,14 +208,15 @@ void Context::autoLogout()
 
 void Context::refresh()
 {
-    auto session = getOrCreateSession(m_wallet->network());
-    auto load_accounts = new LoadAccountsTask(true, session);
-    connect(load_accounts, &Task::finished, this, [=] {
-        for (auto account : m_accounts) {
-            m_dispatcher->add(new LoadBalanceTask(account));
-        }
-    });
-    m_dispatcher->add(load_accounts);
+//    TODO: refresh should not be necessary after correct load controller implementation
+//    auto session = getOrCreateSession(m_wallet->network());
+//    auto load_accounts = new LoadAccountsTask(true, session);
+//    connect(load_accounts, &Task::finished, this, [=] {
+//        for (auto account : m_accounts) {
+//            m_dispatcher->add(new LoadBalanceTask(account));
+//        }
+//    });
+//    m_dispatcher->add(load_accounts);
 }
 
 void Context::setXPubHashId(const QString& xpub_hash_id)

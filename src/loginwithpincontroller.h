@@ -7,39 +7,52 @@
 #include <QObject>
 #include <QQmlEngine>
 
-class PinLoginController : public Controller
+class LoginController : public Controller
 {
     Q_OBJECT
     Q_PROPERTY(Wallet* wallet READ wallet WRITE setWallet NOTIFY walletChanged)
-    Q_PROPERTY(QString pin READ pin WRITE setPin NOTIFY pinChanged)
     QML_ELEMENT
-
 public:
-    PinLoginController(QObject* parent = nullptr);
+    LoginController(QObject* parent = nullptr);
 
     Wallet* wallet() const { return m_wallet; }
     void setWallet(Wallet* wallet);
-
-    QString pin() const { return m_pin; }
-    void setPin(const QString& pin);
 
     void update();
     void login();
     void login(TaskGroup *group, Network *network);
     void loginNetwork(Network* network);
-    void load();
-    void loadNetwork(TaskGroup* group, Network* network);
-
+public slots:
+    void loginWithPin(const QString& pin);
 signals:
     void walletChanged();
-    void pinChanged();
-
-    void loginFinished(Wallet* wallet);
+    void invalidPin();
+    void sessionError(const QString& error);
+    void loginFinished();
     void loginFailed();
 
 private:
     Wallet* m_wallet{nullptr};
     QString m_pin;
+};
+
+class LoadController : public Controller
+{
+    Q_OBJECT
+    QML_ELEMENT
+public:
+    LoadController(QObject* parent = nullptr);
+public slots:
+    void load();
+signals:
+    void loadFinished();
+private:
+    void loadNetwork(TaskGroup* group, Network* network);
+    void loginNetwork(Network* network);
+    void add(TaskGroup* group);
+    void remove(TaskGroup* group);
+private:
+    QList<TaskGroup*> m_task_groups;
 };
 
 #endif // GREEN_LOGINWITHPINCONTROLLER_H

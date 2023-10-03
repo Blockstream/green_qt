@@ -7,13 +7,13 @@
 #include "wallet.h"
 #include "walletmanager.h"
 
-PinLoginController::PinLoginController(QObject* parent)
+LoginController::LoginController(QObject* parent)
     : Controller(parent)
 {
     setContext(new Context(this));
 }
 
-void PinLoginController::setWallet(Wallet* wallet)
+void LoginController::setWallet(Wallet* wallet)
 {
     if (m_wallet == wallet) return;
     m_wallet = wallet;
@@ -21,15 +21,7 @@ void PinLoginController::setWallet(Wallet* wallet)
     update();
 }
 
-void PinLoginController::setPin(const QString& pin)
-{
-    if (m_pin == pin) return;
-    m_pin = pin;
-    emit pinChanged();
-    update();
-}
-
-void PinLoginController::update()
+void LoginController::update()
 {
     if (!m_wallet) return;
     if (m_pin.isEmpty()) return;
@@ -39,7 +31,13 @@ void PinLoginController::update()
     login();
 }
 
-void PinLoginController::login()
+void LoginController::loginWithPin(const QString& pin)
+{
+    m_pin = pin;
+    update();
+}
+
+void LoginController::login()
 {
     clearErrors();
     auto network = m_wallet->network();
@@ -50,11 +48,11 @@ void PinLoginController::login()
 
     m_dispatcher->add(group);
 
-    connect(group, &TaskGroup::failed, this, &PinLoginController::loginFailed);
-    connect(group, &TaskGroup::finished, this, &PinLoginController::load);
+    connect(group, &TaskGroup::failed, this, &LoginController::loginFailed);
+    connect(group, &TaskGroup::finished, this, &LoginController::loginFinished);
 }
 
-void PinLoginController::login(TaskGroup* group, Network* network)
+void LoginController::login(TaskGroup* group, Network* network)
 {
     auto session = m_context->getOrCreateSession(network);
     auto connect_session = new ConnectTask(session);
@@ -66,18 +64,16 @@ void PinLoginController::login(TaskGroup* group, Network* network)
 
     connect(connect_session, &Task::failed, this, [=](const QString& error) {
         if (error == "timeout error") {
-            setError("session", "id_connection_failed");
+            emit sessionError("id_connection_failed");
         }
     });
 
     connect(pin_login, &Task::failed, this, [=](const QString& error) {
         if (error == "id_invalid_pin") {
             m_wallet->decrementLoginAttempts();
+            emit invalidPin();
         } else if (error == "id_connection_failed") {
-            setError("session", error);
-            //            Q_UNREACHABLE();
-            //            m_setup->deleteLater();
-            //            m_setup = nullptr;
+            emit sessionError(error);
         }
         emit loginFailed();
     });
@@ -91,7 +87,68 @@ void PinLoginController::login(TaskGroup* group, Network* network)
     group->add(get_credentials);
 }
 
-void PinLoginController::loginNetwork(Network* network)
+LoadController::LoadController(QObject* parent)
+    : Controller(parent)
+{
+}
+
+void LoadController::add(TaskGroup* group)
+{
+    m_task_groups.append(group);
+    m_dispatcher->add(group);
+    connect(group, &TaskGroup::finished, this, [=] {
+        remove(group);
+    });
+    connect(group, &TaskGroup::failed, this, [=] {
+        remove(group);
+    });
+}
+
+void LoadController::remove(TaskGroup* group)
+{
+    m_task_groups.removeOne(group);
+    if (m_task_groups.isEmpty()) {
+        emit loadFinished();
+    }
+}
+
+void LoadController::load()
+{
+    auto wallet = m_context->wallet();
+    auto network = wallet->network();
+
+    auto group = new TaskGroup(this);
+
+    for (auto net : NetworkManager::instance()->networks()) {
+        if (network == net) continue;
+        if (network->isMainnet() != net->isMainnet()) continue;
+        if (network->isDevelopment() != net->isDevelopment()) continue;
+        qDebug() << Q_FUNC_INFO << "ATTEMPT LOGIN" << net->id() << net->name();
+        loginNetwork(net);
+    }
+
+    loadNetwork(group, network);
+
+    add(group);
+
+    connect(group, &TaskGroup::finished, this, [=] {
+        WalletManager::instance()->addWallet(wallet);
+        wallet->setContext(m_context);
+        m_context->refresh();
+    });
+}
+
+void LoadController::loadNetwork(TaskGroup* group, Network* network)
+{
+    auto session = m_context->getOrCreateSession(network);
+    group->add(new GetWatchOnlyDetailsTask(session));
+    group->add(new LoadTwoFactorConfigTask(session));
+    group->add(new LoadCurrenciesTask(session));
+    if (network->isLiquid()) group->add(new LoadAssetsTask(session));
+    group->add(new LoadAccountsTask(false, session));
+}
+
+void LoadController::loginNetwork(Network* network)
 {
     auto group = new TaskGroup(this);
 
@@ -110,63 +167,18 @@ void PinLoginController::loginNetwork(Network* network)
     });
 
     connect(login, &Task::finished, this, [=] {
+        qDebug() << "FINISHED LOGIN" << network->id();
         loadNetwork(group, network);
     });
 
     connect(login, &Task::failed, this, [=](const QString& error) {
-        if (error == "id_invalid_pin") {
-            m_wallet->decrementLoginAttempts();
-        } else if (error == "id_connection_failed") {
-            setError("session", error);
-            //            Q_UNREACHABLE();
-            //            m_setup->deleteLater();
-            //            m_setup = nullptr;
-        }
-        emit loginFailed();
+        qDebug() << "ignoring login failed for network" << network->id() << "errr:" << error;
+//        emit loginFailed();
     });
 
     group->add(connect_session);
     group->add(login);
 
-    m_dispatcher->add(group);
+    add(group);
 }
 
-void PinLoginController::load()
-{
-    auto network = m_wallet->network();
-
-    auto group = new TaskGroup(this);
-
-    for (auto net : NetworkManager::instance()->networks()) {
-        if (network == net) continue;
-        if (network->isMainnet() != net->isMainnet()) continue;
-        if (net->isLiquid() && net->isElectrum()) continue;
-        qDebug() << Q_FUNC_INFO << "ATTEMPT LOGIN" << net->id() << net->name();
-        loginNetwork(net);
-    }
-
-    loadNetwork(group, network);
-
-    m_dispatcher->add(group);
-
-    connect(group, &TaskGroup::finished, this, [=] {
-        WalletManager::instance()->addWallet(m_wallet);
-        m_wallet->setContext(m_context);
-        m_context->refresh();
-        emit loginFinished(m_wallet);
-    });
-
-    connect(group, &TaskGroup::failed, this, [=] {
-        emit loginFailed();
-    });
-}
-
-void PinLoginController::loadNetwork(TaskGroup* group, Network* network)
-{
-    auto session = m_context->getOrCreateSession(network);
-    group->add(new GetWatchOnlyDetailsTask(session));
-    group->add(new LoadTwoFactorConfigTask(session));
-    group->add(new LoadCurrenciesTask(session));
-    if (network->isLiquid()) group->add(new LoadAssetsTask(session));
-    group->add(new LoadAccountsTask(false, session));
-}
