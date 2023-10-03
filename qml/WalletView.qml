@@ -11,9 +11,14 @@ MainPage {
 
     id: self
 
-    GStackView {
+    Component.onCompleted: {
+        if (self.wallet?.context) {
+            stack_view.push(loading_page, { context: self.wallet.context }, StackView.Immediate)
+        }
+    }
+
+    contentItem: GStackView {
         id: stack_view
-        anchors.fill: parent
         focus: true
         initialItem: pin_login_page
         onCurrentItemChanged: stack_view.currentItem.forceActiveFocus()

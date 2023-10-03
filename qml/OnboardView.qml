@@ -76,6 +76,10 @@ MainPage {
                 pin: self.pin
                 mnemonic: self.mnemonic
                 network: NetworkManager.network('electrum-mainnet')
+                onWalletChanged: {
+                    navigation.set({ view: 'wallets', wallet: controller.wallet.id })
+                    stack_view.pop(stack_view.initialItem)
+                }
             }
             contentItem: ColumnLayout {
                 VSpacer {
