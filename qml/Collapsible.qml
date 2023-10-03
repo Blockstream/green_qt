@@ -10,7 +10,7 @@ Item {
     }
     id: self
     clip: self.animating || self.collapsed
-    implicitWidth: contentWidth
+    implicitWidth: self.contentWidth
     implicitHeight: self.collapsed ? 0 : self.contentHeight
     Behavior on implicitHeight {
         SmoothedAnimation {
