@@ -23,6 +23,13 @@ Account::Account(int pointer, Session* session)
 {
 }
 
+void Account::setSynced(bool synced)
+{
+    if (m_synced == synced) return;
+    m_synced = synced;
+    emit syncedChanged();
+}
+
 QJsonObject Account::json() const
 {
     return m_json;

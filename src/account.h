@@ -22,6 +22,7 @@ class Account : public QObject
     Q_PROPERTY(Session* session READ session CONSTANT)
     Q_PROPERTY(int pointer READ pointer CONSTANT)
     Q_PROPERTY(QString type READ type NOTIFY typeChanged)
+    Q_PROPERTY(bool synced READ synced NOTIFY syncedChanged)
     Q_PROPERTY(bool mainAccount READ isMainAccount CONSTANT)
     Q_PROPERTY(QJsonObject json READ json NOTIFY jsonChanged)
     Q_PROPERTY(QString name READ name NOTIFY nameChanged)
@@ -39,6 +40,8 @@ public:
     quint32 pointer() const { return m_pointer; }
     QString type() const { return m_type; }
     void setType(const QString& type);
+    bool synced() const { return m_synced; }
+    void setSynced(bool synced);
     bool isMainAccount() const;
 
     QString name() const { return m_name; }
@@ -65,6 +68,7 @@ public:
     Q_INVOKABLE Transaction* getTransactionByTxHash(const QString &id) const;
 signals:
     void typeChanged();
+    void syncedChanged();
     void blockEvent(const QJsonObject& event);
     void transactionEvent(const QJsonObject& event);
     void jsonChanged();
@@ -79,6 +83,7 @@ private:
     Network* const m_network;
     const quint32 m_pointer;
     QString m_type;
+    bool m_synced{false};
     QJsonObject m_json;
     QString m_name;
     bool m_hidden{false};
