@@ -33,7 +33,7 @@ public:
     bool isMainnet() const { return m_mainnet; }
     bool isLiquid() const { return m_liquid; }
     bool isElectrum() const { return m_electrum; }
-
+    bool isDevelopment() const { return m_development; }
     void openTransactionInExplorer(const QString& hash);
 
 private:
@@ -46,6 +46,7 @@ private:
     const bool m_mainnet;
     const bool m_liquid;
     const bool m_electrum;
+    const bool m_development;
     const QString m_policy_asset;
 };
 

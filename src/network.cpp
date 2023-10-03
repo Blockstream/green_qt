@@ -51,6 +51,7 @@ Network::Network(const QJsonObject& data, QObject *parent)
     , m_mainnet(data.value("mainnet").toBool())
     , m_liquid(data.value("liquid").toBool())
     , m_electrum(data.value("server_type").toString() == "electrum")
+    , m_development(data.value("development").toBool())
     , m_policy_asset(data.value("policy_asset").toString())
 {
 }
