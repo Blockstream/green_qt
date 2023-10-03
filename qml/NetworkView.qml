@@ -22,7 +22,7 @@ StackLayout {
     readonly property bool active: {
         if (window.navigation.param.view === 'wallets') return true
         const wallet = WalletManager.wallet(window.navigation.param.wallet)
-        if (wallet && wallet.context) return true
+        if (wallet) return true
         return false
     }
 
@@ -141,16 +141,15 @@ StackLayout {
     Repeater {
         id: wallet_view_repeater
         model: WalletListModel {
-            justAuthenticated: true
         }
         delegate: WalletView {
             property bool match: navigation.param.wallet === wallet.id
-            context: wallet.context
             AnalyticsView {
                 name: 'Overview'
                 segmentation: AnalyticsJS.segmentationSession(wallet)
                 active: match
             }
+            focus: StackLayout.isCurrentItem
         }
     }
 }

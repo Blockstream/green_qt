@@ -174,18 +174,6 @@ ApplicationWindow {
         }
     }
 
-    Loader2 {
-        property Wallet wallet: WalletManager.wallet(navigation.param.wallet)
-        active: navigation.param.flow === 'login' && wallet && !wallet.context
-        onActiveChanged: if (!active) object.close()
-        sourceComponent: LoginDialog {
-            visible: true
-            onRejected: navigation.pop()
-            onAccepted: navigation.push({ wallet: wallet.id })
-            onClosed: destroy()
-        }
-    }
-
     Component {
         id: create_account_dialog
         CreateAccountDialog {}
