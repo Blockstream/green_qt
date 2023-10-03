@@ -48,11 +48,9 @@ Dialog {
             spacing: 4
             id: toolbar_item
         }
-        GToolButton {
+        CloseButton {
             visible: self.showRejectButton
             enabled: self.enableRejectButton
-            flat: true
-            icon.source: 'qrc:/svg/cancel.svg'
             onClicked: self.reject()
         }
     }
