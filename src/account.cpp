@@ -14,17 +14,13 @@
 #include "task.h"
 #include "transaction.h"
 
-Account::Account(const QJsonObject& data, Session* session)
+Account::Account(int pointer, Session* session)
     : QObject(session)
     , m_session(session)
     , m_context(session->context())
     , m_network(session->network())
-    , m_pointer(data.value("pointer").toDouble())
-    , m_type(data.value("type").toString())
+    , m_pointer(pointer)
 {
-    Q_ASSERT(m_pointer >= 0);
-    Q_ASSERT(!m_type.isEmpty());
-    update(data);
 }
 
 QJsonObject Account::json() const
@@ -37,6 +33,7 @@ void Account::update(const QJsonObject& json)
     Q_ASSERT(m_pointer == static_cast<qint64>(json.value("pointer").toDouble()));
     m_json = json;
     emit jsonChanged();
+    setType(m_json.value("type").toString());
     setName(m_json.value("name").toString());
     setHidden(m_json.value("hidden").toBool());
     updateBalance();
@@ -175,6 +172,14 @@ Transaction *Account::getTransactionByTxHash(const QString &id) const
 bool Account::isMainAccount() const
 {
     return m_pointer == 0;
+}
+
+void Account::setType(const QString& type)
+{
+    if (m_type == type) return;
+    Q_ASSERT(m_type.isEmpty());
+    m_type = type;
+    emit typeChanged();
 }
 
 void Account::setName(const QString& name)

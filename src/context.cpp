@@ -160,20 +160,25 @@ Asset* Context::getOrCreateAsset(const QString& id)
     return AssetManager::instance()->assetWithId(id);
 }
 
-Account* Context::getOrCreateAccount(Network* network, const QJsonObject& data)
+Account* Context::getOrCreateAccount(Network* network, int pointer)
 {
-    Q_ASSERT(data.contains("pointer"));
-    const int pointer = data.value("pointer").toInt();
     Account* account = m_accounts_by_pointer.value({ network, pointer });
-    if (account) {
-        account->update(data);
-    } else {
+    if (!account) {
         auto session = getOrCreateSession(network);
-        account = new Account(data, session);
+        account = new Account(pointer, session);
         m_accounts_by_pointer.insert({ network, pointer }, account);
         m_accounts.append(account);
         emit accountsChanged();
     }
+    return account;
+}
+
+Account* Context::getOrCreateAccount(Network* network, const QJsonObject& data)
+{
+    Q_ASSERT(data.contains("pointer"));
+    const int pointer = data.value("pointer").toInt();
+    auto account = getOrCreateAccount(network, pointer);
+    account->update(data);
     return account;
 }
 

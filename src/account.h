@@ -21,7 +21,7 @@ class Account : public QObject
     Q_PROPERTY(Network* network READ network CONSTANT)
     Q_PROPERTY(Session* session READ session CONSTANT)
     Q_PROPERTY(int pointer READ pointer CONSTANT)
-    Q_PROPERTY(QString type READ type CONSTANT)
+    Q_PROPERTY(QString type READ type NOTIFY typeChanged)
     Q_PROPERTY(bool mainAccount READ isMainAccount CONSTANT)
     Q_PROPERTY(QJsonObject json READ json NOTIFY jsonChanged)
     Q_PROPERTY(QString name READ name NOTIFY nameChanged)
@@ -31,13 +31,14 @@ class Account : public QObject
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
-    explicit Account(const QJsonObject& data, Session* session);
+    explicit Account(int pointer, Session* session);
 
     Session* session() const { return m_session; }
     Context* context() const { return m_context; }
     Network* network() const { return m_network; }
     quint32 pointer() const { return m_pointer; }
     QString type() const { return m_type; }
+    void setType(const QString& type);
     bool isMainAccount() const;
 
     QString name() const { return m_name; }
@@ -63,6 +64,7 @@ public:
     Q_INVOKABLE Balance* getBalanceByAssetId(const QString &id) const;
     Q_INVOKABLE Transaction* getTransactionByTxHash(const QString &id) const;
 signals:
+    void typeChanged();
     void blockEvent(const QJsonObject& event);
     void transactionEvent(const QJsonObject& event);
     void jsonChanged();
@@ -76,7 +78,7 @@ private:
     Context* const m_context;
     Network* const m_network;
     const quint32 m_pointer;
-    const QString m_type;
+    QString m_type;
     QJsonObject m_json;
     QString m_name;
     bool m_hidden{false};

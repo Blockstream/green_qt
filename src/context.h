@@ -60,6 +60,7 @@ public:
     QQmlListProperty<Account> accounts();
 
     Q_INVOKABLE Asset* getOrCreateAsset(const QString& id);
+    Account* getOrCreateAccount(Network* network, int pointer);
     Account* getOrCreateAccount(Network* network, const QJsonObject& data);
     Account* getAccountByPointer(Network* network, int pointer) const;
 
