@@ -1,7 +1,9 @@
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Layouts
 
 Page {
+    focus: StackLayout.isCurrentItem
     focusPolicy: Qt.ClickFocus
     background: Rectangle {
         color: '#121416'
