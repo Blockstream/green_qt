@@ -13,6 +13,14 @@ StackViewPage {
     rightItem: PrintButton {
         text: 'Print Backup Template'
     }
+    background: Item {
+        Image {
+            anchors.fill: parent
+            anchors.margins: -constants.p3
+            source: 'qrc:/svg2/onboard_background.svg'
+            fillMode: Image.PreserveAspectCrop
+        }
+    }
     contentItem: ColumnLayout {
         spacing: 0
         VSpacer {
