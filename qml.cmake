@@ -203,6 +203,7 @@ SET(QML_FILES
     qml/PinLoginPage.qml
     qml/LoadingPage.qml
     qml/SetupPinPage.qml
+    qml/RegisterPage.qml
     qml/RestorePage.qml
 )
 
