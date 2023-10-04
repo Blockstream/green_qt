@@ -7,7 +7,13 @@ import QtQuick.Layouts
 StackViewPage {
     signal loginFinished(Context context)
     required property Wallet wallet
-    StackView.onDeactivated: pin_field.clear()
+    StackView.onDeactivated: {
+        pin_field.clear()
+    }
+    StackView.onActivating: {
+        pin_field.clear()
+        pin_field.enabled = true
+    }
     id: self
     padding: 60
     title: self.wallet.name
