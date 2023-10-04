@@ -7,6 +7,7 @@ import QtQuick.Layouts
 import "util.js" as UtilJS
 
 MainPage {
+    signal openWallet(Wallet wallet)
     readonly property string url: 'https://blockstream.com/green/'
     readonly property var recentWallets: {
         const wallets = []
@@ -119,13 +120,7 @@ MainPage {
                                 icon.source: UtilJS.iconFor(wallet)
                                 icon.color: 'transparent'
                                 flat: true
-                                onClicked: {
-                                    if (wallet.context) {
-                                        navigation.set({ wallet: wallet.id })
-                                    } else {
-                                        navigation.push({ flow: 'login', wallet: wallet.id })
-                                    }
-                                }
+                                onClicked: self.openWallet(wallet)
                                 background: Rectangle {
                                     visible: delegate.hovered
                                     radius: 8
