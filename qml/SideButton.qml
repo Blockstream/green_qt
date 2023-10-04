@@ -5,10 +5,7 @@ import QtQuick.Layouts
 
 Button {
     id: self
-    property int count: 0
     required property bool isCurrent
-    property bool busy: false
-    property bool ready: false
     topPadding: 16
     bottomPadding: 16
     leftPadding: 16

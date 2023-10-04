@@ -10,15 +10,17 @@ import Qt5Compat.GraphicalEffects
 import "analytics.js" as AnalyticsJS
 
 StackLayout {
+    signal openWallet(Wallet wallet)
     id: self
     required property string title
-    readonly property WalletView currentWalletView: {
-        for (let i = 0; i < wallet_view_repeater.count; ++i) {
-            const view = wallet_view_repeater.itemAt(i)
-            if (view.match) return view
-        }
-        return null
-    }
+    readonly property WalletView currentWalletView: null
+//    {
+//        for (let i = 0; i < wallet_view_repeater.count; ++i) {
+//            const view = wallet_view_repeater.itemAt(i)
+//            if (view.match) return view
+//        }
+//        return null
+//    }
     readonly property bool active: {
         if (window.navigation.param.view === 'wallets') return true
         const wallet = WalletManager.wallet(window.navigation.param.wallet)
@@ -28,11 +30,11 @@ StackLayout {
 
     currentIndex: {
         let index = 0
-        for (let i = 0; i < wallet_view_repeater.count; ++i) {
-            if (wallet_view_repeater.itemAt(i).match) {
-                return 1 + i
-            }
-        }
+//        for (let i = 0; i < wallet_view_repeater.count; ++i) {
+//            if (wallet_view_repeater.itemAt(i).match) {
+//                return 1 + i
+//            }
+//        }
         return index
     }
 
@@ -133,23 +135,24 @@ StackLayout {
                 }
                 delegate: WalletListDelegate {
                     width: ListView.view.contentWidth
+                    onClicked: self.openWallet(wallet)
                 }
             }
         }
     }
 
-    Repeater {
-        id: wallet_view_repeater
-        model: WalletListModel {
-        }
-        delegate: WalletView {
-            property bool match: navigation.param.wallet === wallet.id
-            AnalyticsView {
-                name: 'Overview'
-                segmentation: AnalyticsJS.segmentationSession(wallet)
-                active: match
-            }
-            focus: StackLayout.isCurrentItem
-        }
-    }
+//    Repeater {
+//        id: wallet_view_repeater
+//        model: WalletListModel {
+//        }
+//        delegate: WalletView {
+//            property bool match: navigation.param.wallet === wallet.id
+//            AnalyticsView {
+//                name: 'Overview'
+//                segmentation: AnalyticsJS.segmentationSession(wallet)
+//                active: match
+//            }
+//            focus: StackLayout.isCurrentItem
+//        }
+//    }
 }

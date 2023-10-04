@@ -18,6 +18,18 @@ ApplicationWindow {
     property Navigation navigation: Navigation {}
     property Constants constants: Constants {}
 
+    function openWallet(wallet) {
+        for (let i = 0; i < stack_layout.children.length; ++i) {
+            const child = stack_layout.children[i]
+            if (child instanceof WalletView && child.wallet === wallet) {
+                stack_layout.currentIndex = i;
+                return
+            }
+        }
+        wallet_view.createObject(stack_layout, { wallet })
+        stack_layout.currentIndex = stack_layout.children.length - 1
+    }
+
     id: window
     x: Settings.windowX
     y: Settings.windowY
@@ -83,44 +95,51 @@ ApplicationWindow {
         spacing: 0
         SideBar {
             Layout.fillHeight: true
+            onHomeClicked: stack_layout.currentIndex = 0
+            onBlockstreamClicked: stack_layout.currentIndex = 1
+            onPreferencesClicked: stack_layout.currentIndex = 2
+            onOnboardClicked: {
+                console.log('onboard!')
+                for (let i = 0; i < stack_layout.children.length; ++i) {
+                    const child = stack_layout.children[i]
+                    if (child instanceof WalletView && !child.wallet) {
+                        console.log('   existing onboard', i)
+                        stack_layout.currentIndex = i;
+                        return
+                    }
+                }
+                wallet_view.createObject(stack_layout, { wallet: null })
+                stack_layout.currentIndex = stack_layout.children.length - 1
+            }
+            onWalletsClicked: stack_layout.currentIndex = 5
         }
         StackLayout {
             id: stack_layout
             Layout.fillWidth: true
             Layout.fillHeight: true
             readonly property WalletView currentWalletView: currentIndex < 0 ? null : (stack_layout.children[currentIndex].currentWalletView || null)
-            currentIndex: UtilJS.findChildIndex(stack_layout, child => child instanceof Item && child.active && child.enabled)
             HomeView {
-                readonly property bool active: navigation.param.view === 'home'
-                focus: StackLayout.isCurrentItem
+                onOpenWallet: (wallet) => { window.openWallet(wallet) }
             }
             BlockstreamView {
-                readonly property bool active: navigation.param.view === 'blockstream'
-                id: blockstream_view
-                focus: StackLayout.isCurrentItem
-            }
-            OnboardView {
-                readonly property bool active: !navigation.param.view || navigation.param.view === 'onboard'
-                focus: StackLayout.isCurrentItem
             }
             PreferencesView {
-                readonly property bool active: navigation.param.view === 'preferences'
-                focus: StackLayout.isCurrentItem
             }
             JadeView {
-                readonly property bool active: navigation.param.view === 'jade'
-                id: jade_view
-                focus: StackLayout.isCurrentItem
             }
             LedgerDevicesView {
-                readonly property bool active: navigation.param.view === 'ledger'
-                id: ledger_view
-                focus: StackLayout.isCurrentItem
             }
             NetworkView {
                 title: qsTrId('id_wallets')
                 focus: StackLayout.isCurrentItem
+                onOpenWallet: (wallet) => { window.openWallet(wallet) }
             }
+        }
+    }
+
+    Component {
+        id: wallet_view
+        WalletView {
         }
     }
 

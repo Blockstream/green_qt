@@ -7,6 +7,12 @@ import QtQuick.Layouts
 import "util.js" as UtilJS
 
 Pane {
+    signal homeClicked
+    signal blockstreamClicked
+    signal preferencesClicked
+    signal onboardClicked
+    signal walletsClicked
+    id: self
     focusPolicy: Qt.ClickFocus
     topPadding: 0
     bottomPadding: 0
@@ -35,69 +41,49 @@ Pane {
             Layout.minimumHeight: 20
         }
         SideButton {
-            id: home_button
             enabled: true
             icon.source: 'qrc:/svg/home.svg'
             isCurrent: false
-            // onClicked: navigation.push({ view: 'home' })
+            onClicked: self.homeClicked()
             text: qsTrId('id_home')
         }
         SideButton {
             visible: Settings.showNews
             icon.source: 'qrc:/svg/blockstream-logo.svg'
-            isCurrent: navigation.param?.view === 'blockstream'
-            onClicked: navigation.push({ view: 'blockstream' })
+            // isCurrent: navigation.param?.view === 'blockstream'
+            onClicked: self.blockstreamClicked()
             text: 'Blockstream News'
-            busy: blockstream_view.busy
         }
         SideButton {
             enabled: WalletManager.wallets.length > 0
             icon.source: 'qrc:/svg2/wallet.svg'
             isCurrent: (navigation.param?.view === 'wallets') || (navigation.param?.wallet ?? false)
-            onClicked: navigation.push({ view: 'wallets' })
+            onClicked: self.walletsClicked()
             text: qsTrId('id_wallets')
         }
         SideButton {
             icon.source: 'qrc:/svg/plus.svg'
-            isCurrent: navigation.param.view === 'onboard'
-            onClicked: navigation.set({ view: 'onboard' })
+            onClicked: self.onboardClicked()
             text: qsTrId('id_add_wallet')
         }
-        Flickable {
-            id: flickable
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            clip: true
-            flickableDirection: Flickable.VerticalFlick
-            contentHeight: layout.height
-            contentWidth: flickable.width
-            ScrollIndicator.vertical: ScrollIndicator { }
-            ColumnLayout {
-                id: layout
-                spacing: 8
-                width: flickable.contentWidth
-                SideButton {
-                    icon.source: 'qrc:/svg/jade_emblem_on_transparent_rgb.svg'
-                    isCurrent: navigation.param.view === 'jade'
-                    onClicked: navigation.push({ view: 'jade' })
-                    count: jade_view.count
-                    text: 'Blockstream Jade'
-                }
-                SideButton {
-                    icon.source: 'qrc:/svg/ledger-logo.svg'
-                    isCurrent: navigation.param.view === 'ledger'
-                    onClicked: navigation.push({ view: 'ledger' })
-                    count: ledger_view.count
-                    text: 'Ledger Nano'
-                }
-            }
+        SideButton {
+            icon.source: 'qrc:/svg/jade_emblem_on_transparent_rgb.svg'
+            isCurrent: navigation.param.view === 'jade'
+            onClicked: navigation.push({ view: 'jade' })
+            text: 'Blockstream Jade'
+        }
+        SideButton {
+            icon.source: 'qrc:/svg/ledger-logo.svg'
+            isCurrent: navigation.param.view === 'ledger'
+            onClicked: navigation.push({ view: 'ledger' })
+            text: 'Ledger Nano'
         }
         VSpacer {
         }
         SideButton {
             icon.source: 'qrc:/svg2/gear.svg'
             isCurrent: navigation.param.view === 'preferences'
-            onClicked: navigation.push({ view: 'preferences' })
+            onClicked: self.preferencesClicked()
             text: qsTrId('id_app_settings')
             icon.width: 24
             icon.height: 24

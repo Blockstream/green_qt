@@ -157,7 +157,6 @@ SET(QML_FILES
     qml/TListView.qml
     qml/GMenu.qml
     qml/GStackView.qml
-    qml/OnboardView.qml
     qml/WalletDrawer.qml
     qml/CreateAccountDrawer.qml
     qml/ReceiveDrawer.qml
