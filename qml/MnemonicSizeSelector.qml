@@ -27,7 +27,7 @@ Pane {
         }
         Option {
             size: 27
-            text: qsTrId('id_24_words')
+            text: '27 words'
             visible: self.enable27
         }
     }
