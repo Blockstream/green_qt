@@ -7,14 +7,25 @@ StackViewPage {
     signal accepted
 
     id: self
-    title: qsTrId('id_before_you_backup')
+    padding: 60
     contentItem: ColumnLayout {
+        VSpacer {
+        }
         Pane {
             Layout.alignment: Qt.AlignCenter
             background: null
             contentItem: ColumnLayout {
                 spacing: 0
                 width: 325
+                Label {
+                    Layout.alignment: Qt.AlignCenter
+                    Layout.bottomMargin: 20
+                    font.family: 'SF Compact'
+                    font.pixelSize: 24
+                    font.weight: 600
+                    horizontalAlignment: Label.AlignHCenter
+                    text: qsTrId('id_before_you_backup')
+                }
                 InfoCard {
                     icon: 'qrc:/svg2/house.svg'
                     title: qsTrId('id_safe_environment')
@@ -43,6 +54,8 @@ StackViewPage {
                     text: 'Print Backup Template'
                 }
             }
+        }
+        VSpacer {
         }
     }
 }

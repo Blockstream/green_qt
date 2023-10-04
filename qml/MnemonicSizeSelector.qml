@@ -5,7 +5,7 @@ import QtQuick.Layouts
 
 Pane {
     property int size: 12
-
+    property bool enable27: false
     Layout.alignment: Qt.AlignCenter
     id: self
     padding: 0
@@ -25,6 +25,11 @@ Pane {
             size: 24
             text: qsTrId('id_24_words')
         }
+        Option {
+            size: 27
+            text: qsTrId('id_24_words')
+            visible: self.enable27
+        }
     }
 
     component Option: AbstractButton {
@@ -36,10 +41,7 @@ Pane {
         background: Item {
             Rectangle {
                 anchors.fill: parent
-                opacity: option.checked ? 1 : 0
-                Behavior on opacity {
-                    NumberAnimation { duration: 300 }
-                }
+                visible: option.checked
                 border.width: option.checked ? 1 : 0.5
                 border.color: Qt.alpha('#FFF', 0.3)
                 color: '#3A3A3D'
@@ -62,9 +64,6 @@ Pane {
             horizontalAlignment: Label.AlignHCenter
             verticalAlignment: Label.AlignVCenter
             opacity: option.checked ? 1 : 0.3
-            Behavior on opacity {
-                NumberAnimation { duration: 300 }
-            }
             text: option.text
         }
         onClicked: self.size = option.size

@@ -33,13 +33,12 @@ ControllerDialog {
             const server_type = navigation.param.type === 'amp' ? 'green' : (navigation.param.server_type || '')
             return NetworkManager.networkWithServerType(network, server_type)
         }
-        type: navigation.param.type || ''
         pin: navigation.param.pin || ''
         mnemonic: (navigation.param.mnemonic || '').split(',')
         active: navigation.param.verify || false
-        onSignup: (wallet) => {
+        onRegisterFinished: (context) => {
             wallet_create_event.track()
-            window.navigation.push({ wallet: wallet.id})
+            window.navigation.push({ wallet: context.wallet.id})
         }
     }
 

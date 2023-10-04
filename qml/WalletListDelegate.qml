@@ -79,16 +79,16 @@ ItemDelegate {
             }
         }
     }
-    onClicked: {
-        navigation.set({ wallet: wallet.id })
-        /* TODO
-        if (wallet.context) {
-        } else if ('type' in wallet.deviceDetails && !wallet.hasPinData) {
-            const view = wallet.deviceDetails.type === 'jade' ? 'jade' : 'ledger'
-            navigation.push({ view })
-        } else {
-            navigation.set({ flow: 'login', wallet: wallet.id })
-        }
-        */
-    }
+//    onClicked: {
+//        navigation.set({ wallet: wallet.id })
+//        /* TODO
+//        if (wallet.context) {
+//        } else if ('type' in wallet.deviceDetails && !wallet.hasPinData) {
+//            const view = wallet.deviceDetails.type === 'jade' ? 'jade' : 'ledger'
+//            navigation.push({ view })
+//        } else {
+//            navigation.set({ flow: 'login', wallet: wallet.id })
+//        }
+//        */
+//    }
 }

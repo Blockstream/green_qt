@@ -13,9 +13,9 @@ ColumnLayout {
     id: self
     enabled: !controller.dispatcher.busy
 
-    readonly property PinLoginController controller: PinLoginController {
+    readonly property LoginController controller: LoginController {
         wallet: self.wallet
-        pin: pin_view.pin.value
+//        pin: pin_view.pin.value
         onLoginFinished: (wallet) => {
             Analytics.recordEvent('wallet_login', AnalyticsJS.segmentationWalletLogin(wallet, {
                 method: 'pin'

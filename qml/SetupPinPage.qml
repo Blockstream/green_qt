@@ -9,6 +9,7 @@ StackViewPage {
     required property var mnemonic
     property string pin
     id: self
+    padding: 60
     contentItem: ColumnLayout {
         VSpacer {
         }
@@ -46,7 +47,9 @@ StackViewPage {
                     if (self.pin === pin) {
                         self.pinEntered(pin)
                     } else {
+                        pin_field.enabled = false
                         self.pin = null
+                        timer.start()
                     }
                 } else {
                     pin_field.enabled = false
@@ -71,17 +74,19 @@ StackViewPage {
         VSpacer {
         }
     }
-    footer: ColumnLayout {
-        Image {
-            Layout.alignment: Qt.AlignCenter
-            source: 'qrc:/svg2/house.svg'
-        }
-        Label {
-            Layout.alignment: Qt.AlignCenter
-            font.family: 'SF Compact Display'
-            font.pixelSize: 12
-            font.weight: 600
-            text: qsTrId('id_make_sure_to_be_in_a_private')
+    footer: StackViewPage.Footer {
+        contentItem: ColumnLayout {
+            Image {
+                Layout.alignment: Qt.AlignCenter
+                source: 'qrc:/svg2/house.svg'
+            }
+            Label {
+                Layout.alignment: Qt.AlignCenter
+                font.family: 'SF Compact Display'
+                font.pixelSize: 12
+                font.weight: 600
+                text: qsTrId('id_make_sure_to_be_in_a_private')
+            }
         }
     }
 }
