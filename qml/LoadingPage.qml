@@ -10,6 +10,7 @@ StackViewPage {
     StackView.onActivated: controller.load()
     id: self
     title: self.context.wallet.name
+    padding: 60
     LoadController {
         id: controller
         context: self.context

@@ -9,6 +9,7 @@ StackViewPage {
     required property Wallet wallet
     StackView.onDeactivated: pin_field.clear()
     id: self
+    padding: 60
     title: self.wallet.name
     LoginController {
         id: controller
@@ -93,17 +94,19 @@ StackViewPage {
         VSpacer {
         }
     }
-    footer: ColumnLayout {
-        Image {
-            Layout.alignment: Qt.AlignCenter
-            source: 'qrc:/svg2/house.svg'
-        }
-        Label {
-            Layout.alignment: Qt.AlignCenter
-            font.family: 'SF Compact Display'
-            font.pixelSize: 12
-            font.weight: 600
-            text: qsTrId('id_make_sure_to_be_in_a_private')
+    footer: StackViewPage.Footer {
+        contentItem: ColumnLayout {
+            Image {
+                Layout.alignment: Qt.AlignCenter
+                source: 'qrc:/svg2/house.svg'
+            }
+            Label {
+                Layout.alignment: Qt.AlignCenter
+                font.family: 'SF Compact Display'
+                font.pixelSize: 12
+                font.weight: 600
+                text: qsTrId('id_make_sure_to_be_in_a_private')
+            }
         }
     }
 
