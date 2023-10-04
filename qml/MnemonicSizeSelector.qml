@@ -4,6 +4,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 Pane {
+    signal sizeClicked(int size)
     property int size: 12
     property bool enable27: false
     Layout.alignment: Qt.AlignCenter
@@ -66,6 +67,6 @@ Pane {
             opacity: option.checked ? 1 : 0.3
             text: option.text
         }
-        onClicked: self.size = option.size
+        onClicked: self.sizeClicked(option.size)
     }
 }

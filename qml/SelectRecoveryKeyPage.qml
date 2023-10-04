@@ -33,13 +33,14 @@ StackViewPage {
         StackViewPage {
             MnemonicEditorController {
                 id: controller
-                mnemonicSize: mnemonic_size_selector.size
+                mnemonicSize: 12
             }
             title: qsTrId('id_enter_your_recovery_phrase')
             contentItem: ColumnLayout {
                 spacing: 5
                 MnemonicSizeSelector {
-                    id: mnemonic_size_selector
+                    size: controller.mnemonicSize
+                    onSizeClicked: (size) => { controller.mnemonicSize = size }
                 }
                 Pane {
                     Layout.fillWidth: true
@@ -52,7 +53,7 @@ StackViewPage {
                         columnSpacing: 8
                         rowSpacing: 8
                         Repeater {
-                            model: mnemonic_size_selector.size
+                            model: controller.mnemonicSize
                             WordField {
                                 Layout.horizontalStretchFactor: 0
                                 Layout.preferredWidth: 0

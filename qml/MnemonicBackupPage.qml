@@ -45,7 +45,7 @@ StackViewPage {
             Layout.topMargin: 20
             Layout.alignment: Qt.AlignCenter
             id: selector
-            onSizeChanged: self.size = selector.size
+            onSizeClicked: (size) => { self.size = selector.size }
         }
         Pane {
             Layout.alignment: Qt.AlignCenter
