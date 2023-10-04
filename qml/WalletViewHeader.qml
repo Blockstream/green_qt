@@ -13,6 +13,8 @@ import "analytics.js" as AnalyticsJS
 import "util.js" as UtilJS
 
 MainPageHeader {
+    signal logoutClicked()
+
     required property Context context
     required property Wallet wallet
     required property Account currentAccount
@@ -95,7 +97,7 @@ MainPageHeader {
             enabled: !!self.context
             onClicked: {
                 menu.close()
-                self.wallet.disconnect()
+                self.logoutClicked()
             }
         }
     }

@@ -113,6 +113,10 @@ MainPage {
     Component {
         id: overview_page
         OverviewPage {
+            // StackView.onDeactivated: self.wallet.disconnect()
+            onLogoutClicked: {
+                stack_view.pop(null)
+            }
         }
     }
 }

@@ -12,6 +12,8 @@ import "analytics.js" as AnalyticsJS
 import "util.js" as UtilJS
 
 StackViewPage {
+    signal logoutClicked()
+
     required property Context context
     readonly property Wallet wallet: self.context.wallet
     readonly property Account currentAccount: accounts_list.currentAccount
@@ -185,6 +187,8 @@ StackViewPage {
     }
 
     header: WalletViewHeader {
+        onLogoutClicked: self.logoutClicked()
+
         id: wallet_header
         context: self.context
         wallet: self.wallet
