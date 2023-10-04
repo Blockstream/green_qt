@@ -17,7 +17,7 @@ Page {
     bottomPadding: 0
     header: Pane {
         background: null
-        padding: 0
+        padding: self.padding
         bottomPadding: 20
         contentItem: RowLayout {
             spacing: 0
@@ -59,5 +59,10 @@ Page {
                 padding: 0
             }
         }
+    }
+
+    component Footer: Pane {
+        background: null
+        padding: self.padding
     }
 }
