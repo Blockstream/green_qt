@@ -92,6 +92,7 @@ class GetXPubsResolver : public DeviceResolver
 {
     Q_OBJECT
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     GetXPubsResolver(Device* device, const QJsonObject& result, Session* session);
     void resolve() override;

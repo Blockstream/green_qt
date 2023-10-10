@@ -18,7 +18,7 @@ class Word : public QObject
     Q_PROPERTY(QStringList suggestions READ suggestions NOTIFY suggestionsChanged)
     Q_PROPERTY(bool enabled READ enabled NOTIFY enabledChanged)
     QML_ELEMENT
-    QML_UNCREATABLE("Word is instanced by MnemonicEditorController.")
+    QML_UNCREATABLE("")
     MnemonicEditorController* const m_controller;
     const int m_index;
     QString m_text;

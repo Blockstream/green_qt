@@ -13,6 +13,7 @@ class JadeHttpRequestActivity : public HttpRequestActivity
 {
     Q_OBJECT
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     JadeHttpRequestActivity(const QString& path, QObject* parent);
 };
@@ -21,6 +22,7 @@ class JadeBinaryRequestActivity : public JadeHttpRequestActivity
 {
     Q_OBJECT
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     JadeBinaryRequestActivity(const QString& path, QObject* parent);
 };
@@ -30,6 +32,7 @@ class JadeUnlockActivity : public SessionActivity
     Q_OBJECT
     Q_PROPERTY(JadeDevice* device READ device CONSTANT)
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     JadeUnlockActivity(JadeDevice* device, QObject* parent);
     JadeDevice* device() const { return m_device; }
@@ -45,6 +48,7 @@ class JadeUpdateActivity : public Activity
     Q_PROPERTY(JadeDevice* device READ device CONSTANT)
     Q_PROPERTY(QVariantMap firmware READ firmware CONSTANT)
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     JadeUpdateActivity(const QVariantMap& firmware, const QByteArray& data, JadeDevice* device);
     JadeDevice* device() const { return m_device; }
