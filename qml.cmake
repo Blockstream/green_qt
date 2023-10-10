@@ -205,6 +205,7 @@ SET(QML_FILES
     qml/SetupPinPage.qml
     qml/RegisterPage.qml
     qml/RestorePage.qml
+    qml/RestoreCheckPage.qml
 )
 
 if (GREEN_NO_RESOURCES)
