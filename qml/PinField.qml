@@ -18,6 +18,7 @@ AbstractButton {
             self.pin = self.pin + digit
             if (self.pin.length === 6) {
                 self.pinEntered(self.pin)
+                pad_popup.close()
             }
         }
     }
