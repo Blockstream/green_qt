@@ -686,7 +686,7 @@ void LoadAccountsTask::handleDone(const QJsonObject& result)
     auto context = m_session->context();
     auto network = m_session->network();
     for (auto value : subaccounts) {
-        context->getOrCreateAccount(network, value.toObject());
+        m_accounts.append(context->getOrCreateAccount(network, value.toObject()));
     }
     setStatus(Status::Finished);
 }

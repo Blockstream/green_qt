@@ -331,12 +331,14 @@ class LoadAccountsTask : public AuthHandlerTask
     QML_UNCREATABLE("")
 public:
     LoadAccountsTask(bool refresh, Session* session);
+    QList<Account*> accounts() const { return m_accounts; }
 private:
     bool active() const override;
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
     void handleDone(const QJsonObject& result) override;
 private:
     const bool m_refresh;
+    QList<Account*> m_accounts;
 };
 
 class LoadBalanceTask : public AuthHandlerTask
