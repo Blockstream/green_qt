@@ -88,6 +88,13 @@ MainPage {
     Component {
         id: restore_wallet_page
         RestorePage {
+            onMnemonicEntered: (mnemonic, password) => stack_view.push(restore_check_page, { mnemonic, password })
+        }
+    }
+
+    Component {
+        id: restore_check_page
+        RestoreCheckPage {
         }
     }
 

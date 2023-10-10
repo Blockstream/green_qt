@@ -5,6 +5,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 StackViewPage {
+    signal mnemonicEntered(var mnemonic, string password)
     id: self
     padding: 60
     MnemonicEditorController {
@@ -97,6 +98,12 @@ StackViewPage {
             error: switch (controller.errors.mnemonic) {
                 case 'invalid': return qsTrId('id_invalid_recovery_phrase')
             }
+        }
+        PrimaryButton {
+            Layout.alignment: Qt.AlignCenter
+            enabled: controller.valid
+            text: qsTrId('id_restore')
+            onClicked: self.mnemonicEntered(controller.mnemonic, controller.passphrase)
         }
         VSpacer {
         }
