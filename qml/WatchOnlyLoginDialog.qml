@@ -19,7 +19,7 @@ ControllerDialog {
         network: self.network
         username: username_field.text
         password: password_field.text
-        saveWallet: remember_checkbox.checked
+        persist: remember_checkbox.checked
         onLoginFinished: (wallet) => {
             if (controller.saveWallet) {
                 Analytics.recordEvent('wallet_restore_watch_only', AnalyticsJS.segmentationSession(wallet))

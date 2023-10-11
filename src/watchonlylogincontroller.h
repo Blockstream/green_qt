@@ -15,7 +15,7 @@ class WatchOnlyLoginController : public Controller
     Q_PROPERTY(QString username READ username WRITE setUsername NOTIFY usernameChanged)
     Q_PROPERTY(QString password READ password WRITE setPassword NOTIFY passwordChanged)
     Q_PROPERTY(Wallet* wallet READ wallet WRITE setWallet NOTIFY walletChanged)
-    Q_PROPERTY(bool saveWallet READ saveWallet WRITE setSaveWallet NOTIFY saveWalletChanged)
+    Q_PROPERTY(bool persist READ saveWallet WRITE setSaveWallet NOTIFY saveWalletChanged)
     Q_PROPERTY(bool valid READ isValid NOTIFY validChanged)
     QML_ELEMENT
 public:
@@ -40,7 +40,6 @@ public:
 
 public slots:
     void login();
-    void load();
 
 signals:
     void networkChanged();
@@ -49,7 +48,7 @@ signals:
     void saveWalletChanged();
     void validChanged();
     void walletChanged();
-    void loginFinished(Wallet* wallet);
+    void loginFinished();
     void loginFailed();
 
 private:
@@ -69,6 +68,7 @@ class WatchOnlyCreateWalletTask : public Task
 {
     Q_OBJECT
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     WatchOnlyCreateWalletTask(WatchOnlyLoginController* controller);
     void update() override;

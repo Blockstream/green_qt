@@ -112,30 +112,44 @@ void LoadController::remove(TaskGroup* group)
     }
 }
 
+static bool compatibleToNetworks(Network* network, const QList<Network*> networks)
+{
+    for (auto net : networks) {
+        if (net == network) return false;
+        if (net->isMainnet() != network->isMainnet()) return false;
+        if (net->isDevelopment() != network->isDevelopment()) return false;
+    }
+    return true;
+}
+
 void LoadController::load()
 {
-    auto wallet = m_context->wallet();
-    auto network = wallet->network();
+    const auto networks = m_context->getActiveNetworks();
+    const auto sessions = m_context->getSessions();
 
     auto group = new TaskGroup(this);
 
-    for (auto net : NetworkManager::instance()->networks()) {
-        if (network == net) continue;
-        if (network->isMainnet() != net->isMainnet()) continue;
-        if (network->isDevelopment() != net->isDevelopment()) continue;
-        qDebug() << Q_FUNC_INFO << "ATTEMPT LOGIN" << net->id() << net->name();
-        loginNetwork(net);
+    for (auto network : networks) {
+        loadNetwork(group, network);
     }
-
-    loadNetwork(group, network);
 
     add(group);
 
     connect(group, &TaskGroup::finished, this, [=] {
+        auto wallet = m_context->wallet();
+        Q_ASSERT(wallet);
         WalletManager::instance()->addWallet(wallet);
         wallet->setContext(m_context);
-        m_context->refresh();
     });
+
+    if (m_context->credentials().contains("mnemonic")) {
+        for (auto network : NetworkManager::instance()->networks()) {
+            if (compatibleToNetworks(network, networks)) {
+                qDebug() << Q_FUNC_INFO << "ATTEMPT LOGIN" << network->id() << network->name();
+                loginNetwork(network);
+            }
+        }
+    }
 }
 
 void LoadController::loadNetwork(TaskGroup* group, Network* network)

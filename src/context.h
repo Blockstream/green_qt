@@ -56,6 +56,9 @@ public:
 
     bool hasBalance() const;
 
+    QList<Network*> getActiveNetworks() const { return m_sessions.keys(); }
+    QList<Session*> getSessions() const { return m_sessions.values(); }
+    // TODO remove and rename previous method
     QQmlListProperty<Session> sessions();
     QQmlListProperty<Account> accounts();
 
@@ -73,6 +76,7 @@ public:
 
     void refresh();
 
+    QString xpubHashId() const { return m_xpub_hash_id; }
     void setXPubHashId(const QString& xpub_hash_id);
 
 signals:

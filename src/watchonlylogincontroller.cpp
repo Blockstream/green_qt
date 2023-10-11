@@ -77,49 +77,32 @@ void WatchOnlyLoginController::update()
 
 void WatchOnlyLoginController::login()
 {
-    if (m_valid) {
-        auto context = new Context(this);
-        context->setWallet(m_wallet);
-        context->setWatchonly(true);
-        setContext(context);
-
-        auto session = context->getOrCreateSession(m_network);
-        auto connect_session = new ConnectTask(session);
-        auto session_login = new LoginTask(m_username, m_password, session);
-        auto create_wallet = new WatchOnlyCreateWalletTask(this);
-
-        connect_session->then(session_login);
-        session_login->then(create_wallet);
-
-        auto group = new TaskGroup(this);
-
-        group->add(connect_session);
-        group->add(session_login);
-        group->add(create_wallet);
-        m_dispatcher->add(group);
-
-        connect(group, &TaskGroup::finished, this, &WatchOnlyLoginController::load);
-        connect(group, &TaskGroup::failed, this, &WatchOnlyLoginController::loginFailed);
-    }
-}
-
-void WatchOnlyLoginController::load()
-{
-    auto group = new TaskGroup(this);
+    Q_ASSERT(m_valid);
+    setContext(new Context(this));
+    m_context->setWatchonly(true);
 
     auto session = m_context->getOrCreateSession(m_network);
 
-    group->add(new LoadCurrenciesTask(session));
-    if (m_network->isLiquid()) group->add(new LoadAssetsTask(session));
-    group->add(new LoadAccountsTask(false, session));
+    auto connect_session = new ConnectTask(session);
+    auto session_login = new LoginTask(m_username, m_password, session);
+    auto create_wallet = new WatchOnlyCreateWalletTask(this);
+
+//    context->setWallet(m_wallet);
+
+    connect_session->then(session_login);
+    session_login->then(create_wallet);
+
+    auto group = new TaskGroup(this);
+
+    group->add(connect_session);
+    group->add(session_login);
+    group->add(create_wallet);
+
     m_dispatcher->add(group);
 
-    connect(group, &TaskGroup::finished, this, [=] {
-        m_wallet->setContext(m_context);
-        m_context->refresh();
-        WalletManager::instance()->addWallet(m_wallet);
-        emit loginFinished(m_wallet);
-    });
+    connect(group, &TaskGroup::finished, this, &WatchOnlyLoginController::loginFinished);
+    connect(group, &TaskGroup::failed, this, &WatchOnlyLoginController::loginFailed);
+    connect(group, &TaskGroup::failed, m_context, &QObject::deleteLater);
 }
 
 void WatchOnlyLoginController::setValid(bool valid)
@@ -128,7 +111,6 @@ void WatchOnlyLoginController::setValid(bool valid)
     m_valid = valid;
     emit validChanged();
 }
-
 
 WatchOnlyCreateWalletTask::WatchOnlyCreateWalletTask(WatchOnlyLoginController* controller)
     : Task(controller)
@@ -150,14 +132,15 @@ void WatchOnlyCreateWalletTask::update()
     auto wallet = m_controller->wallet();
     if (!wallet) {
         const auto network = m_controller->network();
-
-        wallet = WalletManager::instance()->walletWithHashId(wallet_hash_id, true);
+        auto wallet = WalletManager::instance()->walletWithHashId(wallet_hash_id, true);
         if (!wallet) {
             wallet = WalletManager::instance()->createWallet(network, wallet_hash_id);
             wallet->m_watch_only = true;
             wallet->m_is_persisted = m_controller->saveWallet();
             wallet->m_name = QString("%1 watch-only wallet").arg(m_controller->username());
         }
+        context->setWallet(wallet);
+        wallet->setContext(context);
         wallet->m_username = m_controller->username();
         wallet->save();
     }
@@ -165,25 +148,3 @@ void WatchOnlyCreateWalletTask::update()
 
     setStatus(Status::Finished);
 }
-/*
-void WatchOnlyCreateWalletTask::load()
-{
-    auto group = new TaskGroup(this);
-    group->add(new GetWatchOnlyDetailsTask(m_context));
-    group->add(new LoadTwoFactorConfigTask(m_context));
-    group->add(new LoadCurrenciesTask(m_context));
-    if (m_wallet->network()->isLiquid()) group->add(new LoadAssetsTask(m_context));
-    group->add(new LoadAccountsTask(m_context));
-    m_dispatcher->add(group);
-
-    connect(group, &TaskGroup::finished, this, [=] {
-        WalletManager::instance()->addWallet(m_wallet);
-        m_wallet->setContext(m_context);
-        emit loginFinished(m_wallet);
-    });
-
-    connect(group, &TaskGroup::failed, this, [=] {
-        emit loginFailed();
-    });
-}
-*/
