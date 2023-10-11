@@ -176,6 +176,7 @@ void Wallet::setPinData(const QByteArray& pin_data)
 
 QJsonObject Wallet::convert(const QJsonObject& value) const
 {
+    if (!m_context) return {};
     auto details = Json::fromObject(value);
     GA_json* balance;
     int err = GA_convert_amount(session()->m_session, details.get(), &balance);
@@ -194,6 +195,7 @@ QString Wallet::formatAmount(qint64 amount, bool include_ticker) const
 
 QString Wallet::formatAmount(qint64 amount, bool include_ticker, const QString& unit) const
 {
+    if (!m_context) return {};
     Q_ASSERT(m_network);
     const auto session = m_context->getOrCreateSession(m_network);
     const auto effective_unit = unit.isEmpty() ? session->unit() : unit;
