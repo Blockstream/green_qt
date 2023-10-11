@@ -12,12 +12,19 @@ import "analytics.js" as AnalyticsJS
 import "util.js" as UtilJS
 
 StackViewPage {
-    signal logoutClicked()
+    signal logout()
 
     required property Context context
     readonly property Wallet wallet: self.context.wallet
     readonly property Account currentAccount: accounts_list.currentAccount
     readonly property bool fiatRateAvailable: formatFiat(0, false) !== 'n/a'
+
+    Connections {
+        target: self.context
+        function onAutoLogout() {
+            self.logout()
+        }
+    }
 
     Navigation {
         id: navigation
@@ -187,7 +194,7 @@ StackViewPage {
     }
 
     header: WalletViewHeader {
-        onLogoutClicked: self.logoutClicked()
+        onLogoutClicked: self.logout()
 
         id: wallet_header
         context: self.context

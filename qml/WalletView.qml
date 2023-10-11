@@ -148,9 +148,7 @@ MainPage {
         id: overview_page
         OverviewPage {
             StackView.onDeactivated: self.wallet.disconnect()
-            onLogoutClicked: {
-                stack_view.pop()
-            }
+            onLogout: stack_view.pop()
         }
     }
 }

@@ -408,7 +408,6 @@ void JadeLoginTask::update()
             WalletManager::instance()->addWallet(wallet);
             // transfer context to wallet
             wallet->setContext(context);
-            context->refresh();
             m_controller->setContext(nullptr);
             emit m_controller->loginDone();
         });

@@ -196,29 +196,6 @@ Account* Context::getAccountByPointer(Network* network, int pointer) const
     return m_accounts_by_pointer.value({ network, pointer });
 }
 
-void Context::autoLogout()
-{
-    // avoid autologout in the following cases
-    if (!m_wallet || m_device || m_accounts.empty()) return;
-
-    m_wallet->setContext(nullptr);
-    QTimer::singleShot(5000, this, &QObject::deleteLater);
-    connect(qApp, &QCoreApplication::aboutToQuit, this, &QObject::deleteLater);
-}
-
-void Context::refresh()
-{
-//    TODO: refresh should not be necessary after correct load controller implementation
-//    auto session = getOrCreateSession(m_wallet->network());
-//    auto load_accounts = new LoadAccountsTask(true, session);
-//    connect(load_accounts, &Task::finished, this, [=] {
-//        for (auto account : m_accounts) {
-//            m_dispatcher->add(new LoadBalanceTask(account));
-//        }
-//    });
-//    m_dispatcher->add(load_accounts);
-}
-
 void Context::setXPubHashId(const QString& xpub_hash_id)
 {
     if (m_xpub_hash_id == xpub_hash_id) return;

@@ -70,11 +70,7 @@ public:
     QString m_wallet_hash_id;
     QJsonObject m_pin_data;
 
-    void autoLogout();
-
     TaskDispatcher* dispatcher() const { return m_dispatcher; }
-
-    void refresh();
 
     QString xpubHashId() const { return m_xpub_hash_id; }
     void setXPubHashId(const QString& xpub_hash_id);
@@ -90,6 +86,7 @@ signals:
     void watchonlyChanged();
     void hasBalanceChanged();
     void sessionsChanged();
+    void autoLogout();
 
 private:
     Wallet* m_wallet{nullptr};
