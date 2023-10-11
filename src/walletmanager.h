@@ -42,7 +42,6 @@ signals:
 
 public slots:
     QStringList generateMnemonic(int size);
-    QJsonObject parseUrl(const QString &url);
 public:
     QVector<Wallet*> m_wallets;
 };

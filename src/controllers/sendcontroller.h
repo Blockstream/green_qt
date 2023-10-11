@@ -75,6 +75,7 @@ public:
     void setManualCoinSelection(bool manual_coin_selection);
 
 public slots:
+    void parseAndUpdate(const QString& text);
     void signAndSend();
 
 signals:

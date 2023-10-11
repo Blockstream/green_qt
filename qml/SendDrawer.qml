@@ -17,7 +17,6 @@ WalletDrawer {
         account: self.account
         asset: self.asset
         balance: asset_field_loader.item?.balance ?? null
-        address: address_field.text
         sendAll: send_all_button.checked
         manualCoinSelection: coins_combo_box.currentIndex === 1
         utxos: {
@@ -34,7 +33,8 @@ WalletDrawer {
         }
         onFinished: {
             Analytics.recordEvent('send_transaction', AnalyticsJS.segmentationTransaction(self.account, {
-                address_input: self.address_input,
+                // TODO track address_input
+                // address_input: self.address_input,
                 transaction_type: 'send',
                 with_memo: controller.memo !== '',
             }))
@@ -46,7 +46,7 @@ WalletDrawer {
     }
 
     id: self
-    width: 500
+    width: 600
     contentItem: GStackView {
         id: stack_view
         initialItem: Form {
@@ -94,15 +94,14 @@ WalletDrawer {
             ScannerPopup {
                 id: scanner_popup
                 parent: address_field
-                onCodeScanned: {
-                    parsePayment(code)
-                    self.address_input = 'scan'
-                }
+                onCodeScanned: (code) => controller.parseAndUpdate(code)
             }
             AddressField {
                 Layout.bottomMargin: 15
                 Layout.fillWidth: true
                 id: address_field
+                text: controller.address
+                onTextEdited: controller.parseAndUpdate(address_field.text)
                 focus: true
             }
             FieldTitle {
@@ -111,7 +110,9 @@ WalletDrawer {
             AmountField {
                 Layout.bottomMargin: 15
                 Layout.fillWidth: true
+                id: amount_field
                 text: controller.amount
+                onTextEdited: controller.amount = amount_field.text
             }
             Loader {
                 id: ledger_support_warning

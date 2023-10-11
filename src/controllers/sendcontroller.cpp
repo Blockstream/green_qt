@@ -9,6 +9,9 @@
 #include "task.h"
 #include "wallet.h"
 
+#include <QUrl>
+#include <QUrlQuery>
+
 SendController::SendController(QObject* parent)
     : AccountController(parent)
 {
@@ -337,6 +340,20 @@ void SendController::setManualCoinSelection(bool manual_coin_selection)
     m_manual_coin_selection = manual_coin_selection;
     emit changed();
     create();
+}
+
+void SendController::parseAndUpdate(const QString &text)
+{
+    QUrl url(text.trimmed());
+    QUrlQuery q(url);
+
+    setAddress(url.path());
+    if (q.hasQueryItem("amount")) {
+        setAmount(q.queryItemValue("amount"));
+    }
+    if (q.hasQueryItem("message")) {
+        setMemo(q.queryItemValue("message"));
+    }
 }
 
 void SendController::setSignedTransaction(Transaction* signed_transaction)

@@ -49,7 +49,7 @@ Popup {
                         }
                     }
                 }
-                onCodeScanned: {
+                onCodeScanned: (code) => {
                     self.codeScanned(code)
                     self.close()
                 }

@@ -13,17 +13,6 @@ ControllerDialog {
     property string address_input
     property bool review: false
 
-    function parsePayment(url) {
-        const payment = WalletManager.parseUrl(url.trim())
-        address_field.text = payment.address;
-        if (payment.amount) {
-            controller.amount = formatAmount(self.account, payment.amount * 100000000, false)
-        }
-        if (payment.message) {
-            controller.memo = payment.message
-        }
-    }
-
     id: self
     title: qsTrId('id_send')
     icon: 'qrc:/svg/send.svg'
@@ -70,15 +59,6 @@ ControllerDialog {
             }
         }
 
-        ScannerPopup {
-            id: scanner_popup
-            parent: address_field
-            onCodeScanned: {
-                parsePayment(code)
-                self.address_input = 'scan'
-            }
-        }
-
         SectionLabel {
             text: qsTrId('id_address')
         }
@@ -89,34 +69,6 @@ ControllerDialog {
                 selectByMouse: true
                 Layout.fillWidth: true
                 font.pixelSize: 12
-                onTextChanged: {
-                    parsePayment(text)
-                    self.address_input = 'paste'
-                }
-            }
-            ToolButton {
-                enabled: window.scannerAvailable && !scanner_popup.visible
-                icon.source: 'qrc:/svg/qr.svg'
-                icon.width: 16
-                icon.height: 16
-                onClicked: scanner_popup.open()
-                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                ToolTip.text: qsTrId('id_scan_qr_code')
-                ToolTip.visible: hovered
-            }
-            ToolButton {
-                icon.source: 'qrc:/svg/paste.svg'
-                icon.width: 24
-                icon.height: 24
-                onClicked: {
-                    address_field.clear();
-                    address_field.paste();
-                    parsePayment(address_field.text)
-                    self.address_input = 'paste'
-                }
-                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-                ToolTip.text: qsTrId('id_paste')
-                ToolTip.visible: hovered
             }
         }
         Pane {

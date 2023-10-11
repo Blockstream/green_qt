@@ -45,7 +45,7 @@ Item {
 
         decoder {
             enabledDecoders: QZXing.DecoderFormat_QR_CODE
-            onTagFound: self.codeScanned(tag)
+            onTagFound: (tag) => self.codeScanned(tag)
             tryHarder: false
         }
     }

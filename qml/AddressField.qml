@@ -3,14 +3,14 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 TextField {
-    id: self
-
     property string address_input
 
     Layout.fillWidth: true
+    id: self
     topPadding: 14
     bottomPadding: 13
     leftPadding: 15
+    rightPadding: 84
     background: Rectangle {
         color: '#222226'
         radius: 5
@@ -39,10 +39,19 @@ TextField {
     font.pixelSize: 14
     font.weight: 457
 
-    onTextChanged: {
-        parsePayment(text)
+    // TODO move to call site, abstract in controllers
+    /* onTextChanged: (text) => {
+        const payment = WalletManager.parseUrl(text.trim())
+        address_field.text = payment.address;
+        if (payment.amount) {
+            controller.amount = formatAmount(self.account, payment.amount * 100000000, false)
+        }
+        if (payment.message) {
+            controller.memo = payment.message
+        }
         self.address_input = 'paste'
     }
+    */
 
     Row {
         anchors.verticalCenter: parent.verticalCenter
@@ -65,9 +74,7 @@ TextField {
             icon.width: 24
             icon.height: 24
             onClicked: {
-                address_field.clear();
-                address_field.paste();
-                parsePayment(address_field.text)
+                self.paste();
                 self.address_input = 'paste'
             }
             ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval

@@ -6,8 +6,6 @@
 #include <QSet>
 #include <QSettings>
 #include <QStandardPaths>
-#include <QUrl>
-#include <QUrlQuery>
 #include <QUuid>
 
 #include "ga.h"
@@ -159,23 +157,6 @@ QString WalletManager::uniqueWalletName(const QString& base) const
 QStringList WalletManager::generateMnemonic(int size)
 {
     return gdk::generate_mnemonic(size);
-}
-
-QJsonObject WalletManager::parseUrl(const QString &url)
-{
-    QJsonObject r;
-    QUrl res(url);
-    QUrlQuery q(res);
-
-    r.insert("address", res.path());
-    if (q.hasQueryItem("amount")) {
-        r.insert("amount", q.queryItemValue("amount"));
-    }
-    if (q.hasQueryItem("message")) {
-        r.insert("message", q.queryItemValue("message"));
-    }
-
-    return r;
 }
 
 Wallet* WalletManager::wallet(const QString& id) const

@@ -57,12 +57,7 @@ TextField {
             icon.source: 'qrc:/svg/paste.svg'
             icon.width: 24
             icon.height: 24
-            onClicked: {
-                address_field.clear();
-                address_field.paste();
-                parsePayment(address_field.text)
-                self.address_input = 'paste'
-            }
+            onClicked: self.paste()
             ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
             ToolTip.text: qsTrId('id_paste')
             ToolTip.visible: hovered
