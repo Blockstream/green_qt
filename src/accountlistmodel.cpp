@@ -84,29 +84,34 @@ void AccountListModel::setFilter(const QString &filter)
     invalidateFilterAndCount();
 }
 
+static int weight(Account* account)
+{
+    if (account->isBitcoin() && account->isSinglesig()) return 0;
+    if (account->isBitcoin() && account->isMultisig()) return 1;
+    if (account->isLightning()) return 2;
+    if (account->isLiquid() && account->isSinglesig()) return 3;
+    if (account->isLiquid() && account->isMultisig() && !account->isAmp()) return 4;
+    if (account->isLiquid() && account->isMultisig() && account->isAmp()) return 5;
+    return 6;
+}
+
 bool AccountListModel::lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const
 {
     auto account_left = source_left.data(Qt::UserRole).value<Account*>();
     auto account_right = source_right.data(Qt::UserRole).value<Account*>();
 
-    auto network_left = account_left->network();
-    auto network_right = account_right->network();
+    auto weight_left = weight(account_left);
+    auto weight_right = weight(account_right);
 
-    if (network_left == network_right) {
-        return account_left->pointer() < account_right->pointer();
-    }
+    auto f = [&]() -> bool {
+        if (weight_left == weight_right) {
+            return account_left->pointer() < account_right->pointer();
+        }
 
-    if (network_left->isMainnet() && !network_right->isMainnet()) {
-        return true;
-    }
+        return weight_left < weight_right;
+    };
 
-    if (!network_left->isLiquid() && network_right->isLiquid()) {
-        return true;
-    }
+    auto r = f();
 
-    if (network_left->isElectrum() && !network_right->isElectrum()) {
-        return true;
-    }
-
-    return false;
+    return r;
 }
