@@ -4,6 +4,8 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
+import "analytics.js" as AnalyticsJS
+
 StackViewPage {
     signal loginFinished(Context context)
     required property Network network
@@ -24,11 +26,15 @@ StackViewPage {
         persist: remember_checkbox.checked
         onLoginFinished: {
             self.loginFinished(controller.context)
+            if (controller.persist) {
+                Analytics.recordEvent('wallet_restore_watch_only', AnalyticsJS.segmentationSession(wallet))
+            }
         }
         onLoginFailed: {
             self.contentItem.enabled = true
             password_field.clear()
             password_field.forceActiveFocus()
+            self.contentItem.ToolTip.show(qsTrId('id_user_not_found_or_invalid'), 3000);
         }
     }
     Action {
