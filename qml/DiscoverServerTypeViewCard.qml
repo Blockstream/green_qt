@@ -11,9 +11,9 @@ Button {
     required property string title
     property var icons
     property bool busy: false
-    property alias active: controller.active
-    property alias wallet: controller.wallet
-    property alias noErrors: controller.noErrors
+    property bool active: false
+    property Wallet wallet
+    property bool noErrors
 
     id: self
     Layout.alignment: Qt.AlignTop
@@ -115,18 +115,5 @@ Button {
 
     RestoreController {
         id: controller
-        network: {
-            const network = navigation.param.network || ''
-            return NetworkManager.networkWithServerType(network, self.server_type)
-        }
-        type: navigation.param.type || ''
-        mnemonic: navigation.param.mnemonic
-        password: navigation.param.password || ''
-        pin: navigation.param.pin || ''
-        active: self.visible
-        onWalletRestored: (wallet) => {
-            Analytics.recordEvent('wallet_restore', AnalyticsJS.segmentationSession(wallet))
-            window.navigation.push({ wallet: wallet.id })
-        }
     }
 }
