@@ -139,7 +139,7 @@ MainPage {
         id: loading_page
         LoadingPage {
             onLoadFinished: (context) => {
-                stack_view.push(overview_page, { context })
+                stack_view.replace(stack_view.currentItem, overview_page, { context }, StackView.PushTransition)
             }
         }
     }
@@ -147,9 +147,9 @@ MainPage {
     Component {
         id: overview_page
         OverviewPage {
-            // StackView.onDeactivated: self.wallet.disconnect()
+            StackView.onDeactivated: self.wallet.disconnect()
             onLogoutClicked: {
-                stack_view.pop(null)
+                stack_view.pop()
             }
         }
     }
