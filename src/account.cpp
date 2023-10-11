@@ -181,6 +181,36 @@ bool Account::isMainAccount() const
     return m_pointer == 0;
 }
 
+bool Account::isBitcoin() const
+{
+    return !m_network->isLiquid();
+}
+
+bool Account::isLiquid() const
+{
+    return m_network->isLiquid();
+}
+
+bool Account::isLightning() const
+{
+    return false;
+}
+
+bool Account::isSinglesig() const
+{
+    return m_network->isElectrum();
+}
+
+bool Account::isMultisig() const
+{
+    return !m_network->isElectrum();
+}
+
+bool Account::isAmp() const
+{
+    return isLiquid() && m_type == "2of2_no_recovery";
+}
+
 void Account::setType(const QString& type)
 {
     if (m_type == type) return;

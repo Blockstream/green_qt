@@ -44,6 +44,13 @@ public:
     void setSynced(bool synced);
     bool isMainAccount() const;
 
+    bool isBitcoin() const;
+    bool isLiquid() const;
+    bool isLightning() const;
+    bool isSinglesig() const;
+    bool isMultisig() const;
+    bool isAmp() const;
+
     QString name() const { return m_name; }
     void setName(const QString& name);
     bool isHidden() const { return m_hidden; }
