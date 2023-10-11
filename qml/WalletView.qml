@@ -102,6 +102,16 @@ MainPage {
     Component {
         id: watch_only_wallet_page
         WatchOnlyWalletPage {
+            onMultisigWallet: stack_view.push(multisig_watch_only_login_page)
+        }
+    }
+
+    Component {
+        id: multisig_watch_only_login_page
+        MultisigWatchOnlyLoginPage {
+            onLoginFinished: (context) => {
+                stack_view.push(loading_page, { context })
+            }
         }
     }
 
