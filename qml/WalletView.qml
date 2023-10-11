@@ -43,6 +43,7 @@ MainPage {
         AddWalletPage {
             onNewWallet: stack_view.push(mnemonic_warnings_page)
             onRestoreWallet: stack_view.push(restore_wallet_page)
+            onWatchOnlyWallet: stack_view.push(watch_only_wallet_page)
         }
     }
 
@@ -95,6 +96,12 @@ MainPage {
     Component {
         id: restore_check_page
         RestoreCheckPage {
+        }
+    }
+
+    Component {
+        id: watch_only_wallet_page
+        WatchOnlyWalletPage {
         }
     }
 
