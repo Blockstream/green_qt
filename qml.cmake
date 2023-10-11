@@ -206,6 +206,7 @@ SET(QML_FILES
     qml/RegisterPage.qml
     qml/RestorePage.qml
     qml/RestoreCheckPage.qml
+    qml/PasswordField.qml
 )
 
 if (GREEN_NO_RESOURCES)

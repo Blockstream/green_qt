@@ -90,7 +90,6 @@ StackViewPage {
             Layout.alignment: Qt.AlignCenter
             id: password_field
             implicitWidth: 400
-            echoMode: TextField.Password
             visible: controller.mnemonicSize === 27
         }
         FixedErrorBadge {
@@ -122,39 +121,5 @@ StackViewPage {
                 text: qsTrId('id_make_sure_to_be_in_a_private')
             }
         }
-    }
-
-    component PasswordField: TextField {
-        id: self
-        topPadding: 14
-        bottomPadding: 13
-        leftPadding: 15
-        background: Rectangle {
-            color: '#222226'
-            radius: 5
-            Rectangle {
-                border.width: 2
-                border.color: '#00B45A'
-                color: 'transparent'
-                radius: 9
-                anchors.fill: parent
-                anchors.margins: -4
-                z: -1
-                opacity: {
-                    if (self.activeFocus) {
-                        switch (self.focusReason) {
-                        case Qt.TabFocusReason:
-                        case Qt.BacktabFocusReason:
-                        case Qt.ShortcutFocusReason:
-                            return 1
-                        }
-                    }
-                    return 0
-                }
-            }
-        }
-        font.family: 'SF Compact Display'
-        font.pixelSize: 14
-        font.weight: 457
     }
 }
