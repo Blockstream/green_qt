@@ -6,6 +6,7 @@ import QtQuick.Layouts
 
 StackViewPage {
     signal loginFinished(Context context)
+    required property Network network
     StackView.onActivating: {
         password_field.clear()
         self.contentItem.enabled = true
@@ -19,7 +20,7 @@ StackViewPage {
         id: controller
         password: password_field.text
         username: username_field.text
-        network: NetworkManager.network('testnet')
+        network: self.network
         persist: remember_checkbox.checked
         onLoginFinished: {
             self.loginFinished(controller.context)

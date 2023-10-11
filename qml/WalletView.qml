@@ -102,7 +102,14 @@ MainPage {
     Component {
         id: watch_only_wallet_page
         WatchOnlyWalletPage {
-            onMultisigWallet: stack_view.push(multisig_watch_only_login_page)
+            onMultisigWallet: stack_view.push(multisig_watch_only_network_page)
+        }
+    }
+
+    Component {
+        id: multisig_watch_only_network_page
+        MultisigWatchOnlyNetworkPage {
+            onNetworkSelected: (network) => stack_view.push(multisig_watch_only_login_page, { network })
         }
     }
 
@@ -110,6 +117,7 @@ MainPage {
         id: multisig_watch_only_login_page
         MultisigWatchOnlyLoginPage {
             onLoginFinished: (context) => {
+                self.wallet = context.wallet
                 stack_view.push(loading_page, { context })
             }
         }

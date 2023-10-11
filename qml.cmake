@@ -210,6 +210,7 @@ SET(QML_FILES
     qml/MultisigWatchOnlyLoginPage.qml
     qml/UsernameField.qml
     qml/PasswordField.qml
+    qml/MultisigWatchOnlyNetworkPage.qml
 )
 
 if (GREEN_NO_RESOURCES)
