@@ -9,6 +9,7 @@
 #include <QStyleHints>
 #include <QtPlugin>
 #include <QSGRendererInterface>
+#include <QTemporaryDir>
 #include <QTranslator>
 #include <QUrl>
 #include <QWindow>
@@ -194,7 +195,10 @@ int main(int argc, char *argv[])
     g_args.process(app);
 
     if (g_args.isSet("tempdatadir")) {
-        g_data_location = QDir::tempPath();
+        QTemporaryDir dir;
+        Q_ASSERT(dir.isValid());
+        dir.setAutoRemove(false);
+        g_data_location = dir.path();
     } else if (g_args.isSet("datadir")) {
         QDir path(g_args.value("datadir"));
         g_data_location = path.absolutePath();
