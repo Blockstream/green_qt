@@ -43,7 +43,9 @@ MainPage {
         AddWalletPage {
             onNewWallet: stack_view.push(mnemonic_warnings_page)
             onRestoreWallet: stack_view.push(restore_wallet_page)
-            onWatchOnlyWallet: stack_view.push(watch_only_wallet_page)
+            // TODO present singlesig or multisig options once singlesig watchonly login is implemented
+            // onWatchOnlyWallet: stack_view.push(watch_only_wallet_page)
+            onWatchOnlyWallet: stack_view.push(multisig_watch_only_network_page)
         }
     }
 
