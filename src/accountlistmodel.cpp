@@ -84,7 +84,7 @@ void AccountListModel::setFilter(const QString &filter)
     invalidateFilterAndCount();
 }
 
-static int weight(Account* account)
+static int index(Account* account)
 {
     if (account->isBitcoin() && account->isSinglesig()) return 0;
     if (account->isBitcoin() && account->isMultisig()) return 1;
@@ -95,6 +95,12 @@ static int weight(Account* account)
     return 6;
 }
 
+static int weight(Account* account)
+{
+    int offset = account->network()->isMainnet() ? 0 : account->network()->isDevelopment() ? 20 : 10;
+    return offset + index(account);
+}
+
 bool AccountListModel::lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const
 {
     auto account_left = source_left.data(Qt::UserRole).value<Account*>();
@@ -103,15 +109,9 @@ bool AccountListModel::lessThan(const QModelIndex &source_left, const QModelInde
     auto weight_left = weight(account_left);
     auto weight_right = weight(account_right);
 
-    auto f = [&]() -> bool {
-        if (weight_left == weight_right) {
-            return account_left->pointer() < account_right->pointer();
-        }
+    if (weight_left == weight_right) {
+        return account_left->pointer() < account_right->pointer();
+    }
 
-        return weight_left < weight_right;
-    };
-
-    auto r = f();
-
-    return r;
+    return weight_left < weight_right;
 }
