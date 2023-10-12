@@ -662,6 +662,32 @@ void LoadCurrenciesTask::update()
     });
 }
 
+LoadAccountTask::LoadAccountTask(uint32_t pointer, Session* session)
+    : AuthHandlerTask(session)
+    , m_pointer(pointer)
+{
+}
+
+bool LoadAccountTask::active() const
+{
+    return m_session->m_ready;
+}
+
+bool LoadAccountTask::call(GA_session* session, GA_auth_handler** auth_handler)
+{
+    int res = GA_get_subaccount(session, m_pointer, auth_handler);
+    return res == GA_OK;
+}
+
+void LoadAccountTask::handleDone(const QJsonObject& result)
+{
+    const auto data = result.value("result").toObject();
+    auto context = m_session->context();
+    auto network = m_session->network();
+    m_account = context->getOrCreateAccount(network, data);
+    setStatus(Status::Finished);
+}
+
 LoadAccountsTask::LoadAccountsTask(bool refresh, Session* session)
     : AuthHandlerTask(session)
     , m_refresh(refresh)

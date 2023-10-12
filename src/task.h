@@ -324,6 +324,23 @@ private:
     QJsonObject m_settings;
 };
 
+class LoadAccountTask : public AuthHandlerTask
+{
+    Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("")
+public:
+    LoadAccountTask(uint32_t pointer, Session* session);
+    Account* account() const { return m_account; }
+private:
+    bool active() const override;
+    bool call(GA_session* session, GA_auth_handler** auth_handler) override;
+    void handleDone(const QJsonObject& result) override;
+private:
+    const uint32_t m_pointer;
+    Account* m_account{nullptr};
+};
+
 class LoadAccountsTask : public AuthHandlerTask
 {
     Q_OBJECT
