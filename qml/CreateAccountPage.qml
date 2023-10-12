@@ -42,6 +42,8 @@ StackViewPage {
 
     contentItem: Flickable {
         contentHeight: layout.height
+        ScrollIndicator.vertical: ScrollIndicator {
+        }
         ColumnLayout {
             id: layout
             width: self.contentItem.width
