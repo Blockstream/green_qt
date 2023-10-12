@@ -71,12 +71,16 @@ Session* Context::getOrCreateSession(Network* network)
             }
         });
         connect(session, &Session::subaccountEvent, this, [=](const QJsonObject& event) {
-            auto pointer = event.value("pointer").toInteger();
+            uint32_t pointer = event.value("pointer").toInteger();
             auto event_type = event.value("event_type").toString();
-            if (event_type == "synced") {
+            if (event_type == "new") {
                 auto account = getOrCreateAccount(session->network(), pointer);
-                account->setSynced(true);
+                m_dispatcher->add(new LoadAccountTask(pointer, session));
+            } else if (event_type == "synced") {
+                auto account = getOrCreateAccount(session->network(), pointer);
+                m_dispatcher->add(new LoadAccountTask(pointer, session));
                 m_dispatcher->add(new LoadBalanceTask(account));
+                account->setSynced(true);
             }
         });
         connect(session, &Session::twoFactorResetEvent, this, [=](const QJsonObject& event) {
