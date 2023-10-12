@@ -99,13 +99,16 @@ StackViewPage {
             contentItem: ColumnLayout {
                 Label {
                     Layout.fillWidth: true
+                    Layout.preferredWidth: 0
                     text: qsTrId('id_use_an_xpub_for_which_you_own')
                     wrapMode: Label.WordWrap
                 }
                 FieldTitle {
+                    Layout.topMargin: 20
                     text: qsTrId('id_xpub')
                 }
                 XPubField {
+                    Layout.fillWidth: true
                     id: xpub_field
                 }
                 VSpacer {
@@ -157,6 +160,7 @@ StackViewPage {
                 }
                 Label {
                     Layout.fillWidth: true
+                    Layout.preferredWidth: 0
                     font.family: 'SF Compact Display'
                     font.pixelSize: 12
                     font.weight: 400

@@ -4,8 +4,6 @@ import QtQuick.Layouts
 
 TextField {
     id: self
-
-    Layout.fillWidth: true
     topPadding: 14
     bottomPadding: 13
     leftPadding: 15

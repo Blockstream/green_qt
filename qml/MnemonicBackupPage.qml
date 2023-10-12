@@ -27,19 +27,25 @@ StackViewPage {
         }
         Label {
             Layout.alignment: Qt.AlignCenter
+            Layout.fillWidth: true
+            Layout.preferredWidth: 0
+            horizontalAlignment: Label.AlignHCenter
             font.family: 'SF Compact Display'
             font.pixelSize: 24
             font.weight: 600
             text: qsTrId('id_write_down_your_recovery_phrase')
+            wrapMode: Label.Wrap
         }
         Label {
-            Layout.alignment: Qt.AlignCenter
+            Layout.fillWidth: true
             Layout.topMargin: 20
+            horizontalAlignment: Label.AlignHCenter
             font.family: 'SF Compact Display'
             font.pixelSize: 14
             font.weight: 600
             opacity: 0.4
             text: qsTrId('id_store_it_somewhere_safe')
+            wrapMode: Label.Wrap
         }
         MnemonicSizeSelector {
             Layout.topMargin: 20
@@ -60,7 +66,7 @@ StackViewPage {
         }
         PrimaryButton {
             Layout.alignment: Qt.AlignCenter
-            Layout.minimumWidth: 325
+            Layout.minimumWidth: 250
             Layout.topMargin: 20
             text: qsTrId('id_next')
             onClicked: self.selected(mnemonic_view.mnemonic)
