@@ -5,38 +5,12 @@ import QtQuick.Layouts
 
 import "util.js" as UtilJS
 
-Page {
+StackViewPage {
     required property Asset asset
-
-    signal canceled()
     signal selected(asset: Asset)
 
     id: self
-    background: null
-    header: Pane {
-        background: null
-        padding: 0
-        bottomPadding: 20
-        contentItem: RowLayout {
-            BackButton {
-                id: back_button
-                onClicked: self.canceled()
-            }
-            HSpacer {
-            }
-            Label {
-                font.family: 'SF Compact Display'
-                font.pixelSize: 14
-                font.weight: 600
-                text: 'Choose Asset'
-            }
-            HSpacer {
-            }
-            Item {
-                Layout.minimumWidth: back_button.width
-            }
-        }
-    }
+    title: qsTrId('id_select_asset')
     contentItem: ListView {
         currentIndex: {
             if (self.asset) {
