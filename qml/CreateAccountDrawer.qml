@@ -10,7 +10,7 @@ WalletDrawer {
     signal created(Account account)
     required property Asset asset
     id: self
-    width: 450
+    preferredContentWidth: stack_view.currentItem.implicitWidth
 
     contentItem: GStackView {
         id: stack_view

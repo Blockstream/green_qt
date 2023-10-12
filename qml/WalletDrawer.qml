@@ -9,6 +9,8 @@ import "analytics.js" as AnalyticsJS
 
 Drawer {
     required property Context context
+    property real minimumContentWidth: 350
+    property real preferredContentWidth: 0
 
     id: self
     clip: true
@@ -19,6 +21,11 @@ Drawer {
     bottomPadding: 60
     leftPadding: 48
     rightPadding: 48
+
+    contentWidth: Math.max(self.minimumContentWidth, self.preferredContentWidth)
+    Behavior on contentWidth {
+        SmoothedAnimation { velocity: 500 }
+    }
 
     Overlay.modal: Rectangle {
         id: modal

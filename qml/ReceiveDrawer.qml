@@ -19,7 +19,7 @@ WalletDrawer {
     }
 
     id: self
-    width: 500
+    preferredContentWidth: stack_view.currentItem.implicitWidth
     contentItem: GStackView {
         id: stack_view
         initialItem: Page {
