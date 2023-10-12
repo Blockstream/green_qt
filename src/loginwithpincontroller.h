@@ -28,7 +28,7 @@ signals:
     void walletChanged();
     void invalidPin();
     void sessionError(const QString& error);
-    void loginFinished();
+    void loginFinished(Context* context);
     void loginFailed();
 
 private:

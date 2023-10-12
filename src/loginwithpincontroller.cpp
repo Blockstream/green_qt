@@ -10,7 +10,6 @@
 LoginController::LoginController(QObject* parent)
     : Controller(parent)
 {
-    setContext(new Context(this));
 }
 
 void LoginController::setWallet(Wallet* wallet)
@@ -26,6 +25,9 @@ void LoginController::update()
     if (!m_wallet) return;
     if (m_pin.isEmpty()) return;
 
+    if (!m_context) {
+        setContext(new Context(this));
+    }
     m_context->setWallet(m_wallet);
 
     login();
@@ -49,7 +51,10 @@ void LoginController::login()
     m_dispatcher->add(group);
 
     connect(group, &TaskGroup::failed, this, &LoginController::loginFailed);
-    connect(group, &TaskGroup::finished, this, &LoginController::loginFinished);
+    connect(group, &TaskGroup::finished, this, [=] {
+        emit loginFinished(m_context);
+        setContext(nullptr);
+    });
 }
 
 void LoginController::login(TaskGroup* group, Network* network)

@@ -28,7 +28,7 @@ StackViewPage {
             console.log('got session error:', error)
         }
 
-        onLoginFinished: self.loginFinished(controller.context)
+        onLoginFinished: (context) => self.loginFinished(context)
     }
     background: Item {
         Image {
