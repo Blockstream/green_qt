@@ -95,6 +95,7 @@ StackViewPage {
         }
         PinPadButton {
             Layout.alignment: Qt.AlignCenter
+            enabled: pin_field.enabled
             onClicked: pin_field.openPad()
         }
         VSpacer {
@@ -122,6 +123,7 @@ StackViewPage {
         topPadding: 12
         bottomPadding: 12
         rightPadding: 13
+        opacity: enabled ? 1 : 0.5
         background: Rectangle {
             border.width: 1
             border.color: '#FFF'
