@@ -10,6 +10,7 @@ import "util.js" as UtilJS
 StackViewPage {
     required property Context context
     required property Asset asset
+    required property bool editableAsset
     property bool advanced: false
 
     signal created(account: Account)
@@ -49,8 +50,14 @@ StackViewPage {
             }
             AssetField {
                 Layout.fillWidth: true
+                id: asset_field
                 asset: self.asset
-                editable: false
+                editable: self.editableAsset
+                onClicked: {
+                    if (self.editableAsset) {
+                        self.StackView.view.push(asset_selector, { asset: asset_field.asset })
+                    }
+                }
             }
             FieldTitle {
                 Layout.topMargin: 15
@@ -173,6 +180,16 @@ StackViewPage {
                     type: page.type,
                     xpub,
                 })
+            }
+        }
+    }
+
+    Component {
+        id: asset_selector
+        AssetSelector {
+            onSelected: (asset) => {
+                self.asset = asset
+                self.StackView.view.pop()
             }
         }
     }

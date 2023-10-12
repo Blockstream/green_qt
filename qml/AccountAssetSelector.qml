@@ -216,7 +216,7 @@ StackViewPage {
                 font.family: 'SF Compact Display'
                 font.pixelSize: 14
                 font.weight: 500
-                text: 'Create New Account'
+                text: qsTrId('id_create_new_account')
             }
             HSpacer {
             }
@@ -232,6 +232,7 @@ StackViewPage {
         CreateAccountPage {
             id: page
             context: self.context
+            editableAsset: false
             onCreated: (account) => self.selected(account, page.asset)
         }
     }

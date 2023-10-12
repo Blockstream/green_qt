@@ -32,7 +32,10 @@ StackViewPage {
     }
 
     function openCreateDialog() {
-        create_account_drawer.open()
+        const network = self.currentAccount.network
+        const id = network.liquid ? network.policyAsset : network.key
+        const asset = self.context.getOrCreateAsset(id)
+        create_account_drawer.createObject(self, { asset }).open()
     }
 
     function parseAmount(account, amount, unit) {
@@ -252,9 +255,16 @@ StackViewPage {
         }
     }
 */
-    CreateAccountDrawer {
+    Component {
         id: create_account_drawer
-        context: self.context
+        CreateAccountDrawer {
+            context: self.context
+            onCreated: (account) => {
+                switchToAccount(account)
+                close()
+            }
+            onClosed: destroy()
+        }
     }
 
     Component {
