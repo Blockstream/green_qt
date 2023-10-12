@@ -22,23 +22,11 @@ WalletDrawer {
     preferredContentWidth: stack_view.currentItem.implicitWidth
     contentItem: GStackView {
         id: stack_view
-        initialItem: Page {
+        initialItem: StackViewPage {
             id: receive_view
-            background: null
-            header: Pane {
-                background: null
-                padding: 0
-                bottomPadding: 20
-                contentItem: RowLayout {
-                    DrawerTitle {
-                        text: qsTrId('id_receive')
-                    }
-                    HSpacer {
-                    }
-                    CloseButton {
-                        onClicked: self.close()
-                    }
-                }
+            title: qsTrId('id_receive')
+            rightItem: CloseButton {
+                onClicked: self.reject()
             }
             contentItem: ColumnLayout {
                 spacing: 5
@@ -106,6 +94,7 @@ WalletDrawer {
                         Layout.horizontalStretchFactor: 1
                         Layout.fillWidth: true
                         text: 'Share'
+                        onClicked: self.accept()
                     }
                 }
             }

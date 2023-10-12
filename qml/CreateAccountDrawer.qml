@@ -20,9 +20,12 @@ WalletDrawer {
             asset: self.asset
             editableAsset: true
             rightItem: CloseButton {
-                onClicked: self.close()
+                onClicked: self.reject()
             }
-            onCreated: (account) => self.created(account)
+            onCreated: (account) => {
+                self.created(account)
+                self.accept()
+            }
         }
     }
 }

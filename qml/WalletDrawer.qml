@@ -8,15 +8,34 @@ import Qt5Compat.GraphicalEffects
 import "analytics.js" as AnalyticsJS
 
 Drawer {
+    signal aboutToDestroy
     required property Context context
     property real minimumContentWidth: 350
     property real preferredContentWidth: 0
+    property bool deleteOnClose: false
+
+    function accept() {
+        self.deleteOnClose = true
+        self.close()
+    }
+
+    function reject() {
+        self.deleteOnClose = true
+        self.close()
+    }
+
+    onClosed: {
+        if (self.deleteOnClose) {
+            self.aboutToDestroy()
+            self.destroy()
+        }
+    }
 
     id: self
     clip: true
     height: parent.height
     edge: Qt.RightEdge
-    interactive: false
+    interactive: self.visible
     topPadding: 60
     bottomPadding: 60
     leftPadding: 48

@@ -46,29 +46,17 @@ WalletDrawer {
     }
 
     id: self
-    width: 600
+    minimumContentWidth: 400
     contentItem: GStackView {
         id: stack_view
         initialItem: Form {
         }
     }
 
-    component Form: Page {
-        background: null
-        header: Pane {
-            background: null
-            padding: 0
-            bottomPadding: 20
-            contentItem: RowLayout {
-                DrawerTitle {
-                    text: qsTrId('id_send')
-                }
-                HSpacer {
-                }
-                CloseButton {
-                    onClicked: self.close()
-                }
-            }
+    component Form: StackViewPage {
+        title: qsTrId('id_send')
+        rightItem: CloseButton {
+            onClicked: self.reject()
         }
         contentItem: ColumnLayout {
             AlertView {

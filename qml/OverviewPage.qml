@@ -35,7 +35,7 @@ StackViewPage {
         const network = self.currentAccount.network
         const id = network.liquid ? network.policyAsset : network.key
         const asset = self.context.getOrCreateAsset(id)
-        create_account_drawer.createObject(self, { asset }).open()
+        create_account_drawer.open({ asset })
     }
 
     function parseAmount(account, amount, unit) {
@@ -221,31 +221,43 @@ StackViewPage {
         implicitHeight: 16
     }
 
-    Component {
+    component DrawerLoader: QtObject {
+        default property Component sourceComponent
+        property WalletDrawer drawer
+        id: loader
+        function createObject(properties) {
+            if (!loader.drawer) {
+                loader.drawer = loader.sourceComponent.createObject(self, properties)
+                loader.drawer.aboutToDestroy.connect(() => { loader.drawer = null })
+            }
+            return loader.drawer
+        }
+        function open(properties) {
+            console.log('open drawer', properties)
+            loader.createObject(properties).open()
+        }
+    }
+
+    DrawerLoader {
         id: create_account_drawer
         CreateAccountDrawer {
             context: self.context
-            onCreated: (account) => {
-                switchToAccount(account)
-                close()
-            }
-            onClosed: destroy()
+            onCreated: (account) => switchToAccount(account)
         }
     }
 
-    Component {
+    DrawerLoader {
         id: receive_drawer
         ReceiveDrawer {
             context: self.context
-            account: self.currentAccount
-            onClosed: destroy()
         }
     }
 
-    SendDrawer {
+    DrawerLoader {
         id: send_drawer
-        context: self.context
-        account: self.currentAccount
+        SendDrawer {
+            context: self.context
+        }
     }
 
     AssetsDrawer {
@@ -374,7 +386,7 @@ StackViewPage {
                 text: qsTrId('id_send')
                 icon.source: 'qrc:/svg/send.svg'
                 shortcut: 'Ctrl+S'
-                onTriggered: send_drawer.open()
+                onTriggered: send_drawer.open({ account: self.currentAccount })
             }
             ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
             ToolTip.text: qsTrId('id_insufficient_lbtc_to_send_a')
@@ -395,7 +407,7 @@ StackViewPage {
                 icon.source: 'qrc:/svg/receive.svg'
                 shortcut: 'Ctrl+R'
                 onTriggered: {
-                    receive_drawer.createObject(self).open()
+                    receive_drawer.open({ account: self.currentAccount })
                 }
             }
         }
