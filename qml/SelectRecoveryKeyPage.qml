@@ -13,6 +13,7 @@ StackViewPage {
         Option {
             text: qsTrId('id_new_recovery_phrase')
             description: qsTrId('id_generate_a_new_recovery_phrase')
+            onClicked: self.StackView.view.push(mnemonic_warnings_page)
         }
         Option {
             text: qsTrId('id_existing_recovery_phrase')
@@ -25,6 +26,27 @@ StackViewPage {
             onClicked: self.StackView.view.push(enter_xpub)
         }
         VSpacer {
+        }
+    }
+
+    Component {
+        id: mnemonic_warnings_page
+        MnemonicWarningsPage {
+            onAccepted: self.StackView.view.push(mnemonic_backup_page)
+        }
+    }
+
+    Component {
+        id: mnemonic_backup_page
+        MnemonicBackupPage {
+            onSelected: (mnemonic) => self.StackView.view.push(mnemonic_check_page, { mnemonic })
+        }
+    }
+
+    Component {
+        id: mnemonic_check_page
+        MnemonicCheckPage {
+            onChecked: (mnemonic) => self.recoveryKey(mnemonic)
         }
     }
 
