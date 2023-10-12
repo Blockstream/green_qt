@@ -206,7 +206,6 @@ StackViewPage {
         accountListWidth: accounts_list.width
 
         background: Rectangle {
-//            color: 'red'
             color: '#121416'
             opacity: Math.max(stack_view.currentItem?.contentY ?? 0, accounts_list.contentY) > 0 ? 1 : 0
             FastBlur {
@@ -216,45 +215,12 @@ StackViewPage {
                 radius: 128
                 source: header_blur_source
             }
-//            Rectangle {
-//                width: parent.width
-//                height: 1
-//                y: parent.height - 1
-//                color: constants.c900
-//            }
         }
     }
-    footer: null /*
-    footer: WalletViewFooter {
-        account: currentAccount
-        context: self.context
-        wallet: self.wallet
+    footer: Item {
+        implicitHeight: 16
+    }
 
-        background: Rectangle {
-            color: '#121416'
-            FastBlur {
-                anchors.fill: parent
-                cached: true
-                opacity: 0.5
-                radius: 128
-                source: footer_blur_source
-            }
-            Rectangle {
-                width: parent.width
-                height: 1
-                color: constants.c900
-                opacity: 0.5
-            }
-            Rectangle {
-                width: parent.width
-                height: 1
-                y: 1
-                color: constants.c200
-                opacity: 0.5
-            }
-        }
-    }
-*/
     Component {
         id: create_account_drawer
         CreateAccountDrawer {
