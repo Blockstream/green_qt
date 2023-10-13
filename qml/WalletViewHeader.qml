@@ -78,6 +78,15 @@ MainPageHeader {
                 openCreateDialog()
             }
         }
+        GMenu.Item {
+            text: qsTrId('id_refresh')
+            icon.source: 'qrc:/svg2/refresh.svg'
+            enabled: !(self.context?.dispatcher.busy ?? false)
+            onClicked: {
+                menu.close()
+                self.context.refreshAccounts()
+            }
+        }
         GMenu.Separator {
         }
         GMenu.Item {
@@ -109,7 +118,6 @@ MainPageHeader {
             alert: overview_alert
         }
         HPane {
-//            leftPadding: constants.p3 - 8
             contentItem: RowLayout {
                 spacing: 0
                 Control {
@@ -186,27 +194,41 @@ MainPageHeader {
                 RowLayout {
                     Layout.fillWidth: false
                     spacing: constants.s1
+                    visible: opacity > 0
+                    opacity: self.context?.dispatcher.busy ?? false ? 1 : 0
+                    Behavior on opacity {
+                        SmoothedAnimation {
+                            velocity: 2
+                        }
+                    }
+                    Label {
+                        text: {
+                            let name = ''
+                            const groups = self.context?.dispatcher?.groups ?? []
+                            for (let i = 0; i < groups.length; i++) {
+                                const group = groups[i]
+                                if (group.status === TaskGroup.Active && group.name) {
+                                    name = qsTrId(group.name)
+                                }
+                            }
+                            return name
+                        }
+                    }
                     ProgressIndicator {
                         Layout.minimumHeight: 24
                         Layout.minimumWidth: 24
                         indeterminate: self.context?.dispatcher.busy ?? false
                         current: 0
                         max: 1
-                        visible: opacity > 0
-                        opacity: self.context?.dispatcher.busy ?? false ? 1 : 0
-                        Behavior on opacity {
-                            SmoothedAnimation {
-                            }
-                        }
                     }
-                    ToolButton {
-                        visible: (self.currentAccount.session.events.twofactor_reset?.is_active ?? false) || !fiatRateAvailable
-                        icon.source: 'qrc:/svg/notifications_2.svg'
-                        icon.color: 'transparent'
-                        icon.width: 16
-                        icon.height: 16
-                        onClicked: notifications_drawer.open()
-                    }
+                }
+                ToolButton {
+                    visible: (self.currentAccount.session.events.twofactor_reset?.is_active ?? false) || !fiatRateAvailable
+                    icon.source: 'qrc:/svg/notifications_2.svg'
+                    icon.color: 'transparent'
+                    icon.width: 16
+                    icon.height: 16
+                    onClicked: notifications_drawer.open()
                 }
             }
         }
@@ -285,10 +307,5 @@ MainPageHeader {
             font.bold: true
             horizontalAlignment: Label.AlignHCenter
         }
-    }
-
-    property Action refreshAction: Action {
-        // TODO reload from be done from a controller, not from wallet or context
-        enabled: false
     }
 }
