@@ -165,7 +165,13 @@ void LoadController::loadNetwork(TaskGroup* group, Network* network)
     group->add(new LoadTwoFactorConfigTask(session));
     group->add(new LoadCurrenciesTask(session));
     if (network->isLiquid()) group->add(new LoadAssetsTask(session));
-    group->add(new LoadAccountsTask(false, session));
+    auto load_accounts = new LoadAccountsTask(false, session);
+    connect(load_accounts, &Task::finished, this, [=] {
+        for (auto account : load_accounts->accounts()) {
+            group->add(new LoadBalanceTask(account));
+        }
+    });
+    group->add(load_accounts);
 }
 
 void LoadController::loginNetwork(Network* network)

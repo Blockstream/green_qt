@@ -75,11 +75,8 @@ Session* Context::getOrCreateSession(Network* network)
             auto event_type = event.value("event_type").toString();
             if (event_type == "new") {
                 auto account = getOrCreateAccount(session->network(), pointer);
-                m_dispatcher->add(new LoadAccountTask(pointer, session));
             } else if (event_type == "synced") {
                 auto account = getOrCreateAccount(session->network(), pointer);
-                m_dispatcher->add(new LoadAccountTask(pointer, session));
-                m_dispatcher->add(new LoadBalanceTask(account));
                 account->setSynced(true);
             }
         });
@@ -91,7 +88,6 @@ Session* Context::getOrCreateSession(Network* network)
                 auto account = getOrCreateAccount(network, quint32(pointer.toInteger()));
                 account->getOrCreateTransaction(transaction);
                 emit account->transactionEvent(transaction);
-                account->loadBalance();
             }
             emit hasBalanceChanged();
         });
@@ -209,7 +205,13 @@ void Context::refreshAccounts()
     auto group = new TaskGroup(this);
     group->setName("id_loading_accounts");
     for (auto session : m_sessions_list) {
-        group->add(new LoadAccountsTask(true, session));
+        auto load_accounts = new LoadAccountsTask(true, session);
+        connect(load_accounts, &Task::finished, this, [=] {
+            for (auto account : load_accounts->accounts()) {
+                group->add(new LoadBalanceTask(account));
+            }
+        });
+        group->add(load_accounts);
     }
     m_dispatcher->add(group);
     connect(group, &TaskGroup::finished, group, &QObject::deleteLater);
