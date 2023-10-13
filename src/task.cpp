@@ -1,3 +1,4 @@
+#include "account.h"
 #include "asset.h"
 #include "config.h"
 #include "context.h"
@@ -744,8 +745,6 @@ void LoadAccountsTask::handleDone(const QJsonObject& result)
     }
     setStatus(Status::Finished);
 }
-
-#include "account.h"
 
 LoadBalanceTask::LoadBalanceTask(Account* account)
     : AuthHandlerTask(account->session())
