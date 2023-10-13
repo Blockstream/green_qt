@@ -48,7 +48,6 @@ WalletDrawer {
                             }
                         }
                     }
-                    console.log(assets.values())
                     return [...assets.values()]
                 }
                 delegate: ItemDelegate {
