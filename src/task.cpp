@@ -1100,6 +1100,13 @@ TaskGroup::~TaskGroup()
     }
 }
 
+void TaskGroup::setName(const QString& name)
+{
+    if (m_name == name) return;
+    m_name = name;
+    emit nameChanged();
+}
+
 void TaskGroup::setStatus(Status status)
 {
     if (m_status == status) return;

@@ -54,6 +54,7 @@ private:
 class TaskGroup : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(QString name READ name NOTIFY nameChanged)
     Q_PROPERTY(Status status READ status NOTIFY statusChanged)
     Q_PROPERTY(QQmlListProperty<Task> tasks READ tasks NOTIFY tasksChanged)
     QML_ELEMENT
@@ -70,6 +71,9 @@ public:
     TaskGroup(QObject* parent = nullptr);
     ~TaskGroup();
 
+    QString name() const { return m_name; }
+    void setName(const QString& name);
+
     Status status() const { return m_status; }
     void setStatus(Status status);
 
@@ -82,6 +86,7 @@ public:
     void update();
 
 signals:
+    void nameChanged();
     void statusChanged();
     void tasksChanged();
     void finished();
@@ -89,6 +94,7 @@ signals:
 
 private:
     TaskDispatcher* m_dispatcher{nullptr};
+    QString m_name;
     Status m_status{Status::Ready};
     QList<Task*> m_tasks;
 
