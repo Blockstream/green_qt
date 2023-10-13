@@ -88,11 +88,10 @@ Session* Context::getOrCreateSession(Network* network)
         });
         connect(session, &Session::transactionEvent, this, [=](const QJsonObject& transaction) {
             for (auto pointer : transaction.value("subaccounts").toArray()) {
-                auto account = m_accounts_by_pointer.value({ network, pointer.toInt() });
-                if (account) {
-                    account->loadBalance();
-                    emit account->transactionEvent(transaction);
-                }
+                auto account = getOrCreateAccount(network, quint32(pointer.toInteger()));
+                account->getOrCreateTransaction(transaction);
+                emit account->transactionEvent(transaction);
+                account->loadBalance();
             }
             emit hasBalanceChanged();
         });
@@ -101,11 +100,6 @@ Session* Context::getOrCreateSession(Network* network)
         emit sessionsChanged();
     }
     return session;
-//    if (!m_network && m_session) {
-//        delete m_session;
-//        m_session = nullptr;
-//        emit sessionChanged();
-//    }
 }
 
 void Context::setDevice(Device* device)
@@ -173,7 +167,7 @@ Asset* Context::getOrCreateAsset(const QString& id)
     return AssetManager::instance()->assetWithId(id);
 }
 
-Account* Context::getOrCreateAccount(Network* network, int pointer)
+Account* Context::getOrCreateAccount(Network* network, quint32 pointer)
 {
     Account* account = m_accounts_by_pointer.value({ network, pointer });
     if (!account) {
@@ -189,7 +183,7 @@ Account* Context::getOrCreateAccount(Network* network, int pointer)
 Account* Context::getOrCreateAccount(Network* network, const QJsonObject& data)
 {
     Q_ASSERT(data.contains("pointer"));
-    const int pointer = data.value("pointer").toInt();
+    const quint32 pointer = data.value("pointer").toInteger();
     auto account = getOrCreateAccount(network, pointer);
     account->update(data);
     return account;

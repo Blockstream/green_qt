@@ -893,8 +893,7 @@ bool CreateAccountTask::call(GA_session *session, GA_auth_handler **auth_handler
 
 void CreateAccountTask::handleDone(const QJsonObject &result)
 {
-    const auto pointer = result.value("result").toObject().value("pointer").toInt();
-    m_pointer = pointer;
+    m_pointer = result.value("result").toObject().value("pointer").toInteger();
     setStatus(Status::Finished);
 }
 

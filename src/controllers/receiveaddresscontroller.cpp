@@ -158,7 +158,7 @@ void ReceiveAddressController::verifyMultisig() {
     Q_ASSERT(device);
     const quint32 subaccount = m_result.value("subaccount").toDouble();
     const quint32 branch = m_result.value("branch").toDouble();
-    const quint32 pointer = m_result.value("pointer").toDouble();
+    const quint32 pointer = m_result.value("pointer").toInteger();
     const quint32 subtype = m_result.value("subtype").toDouble();
     QByteArray recovery_xpub;
 

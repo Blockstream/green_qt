@@ -63,7 +63,7 @@ public:
     QQmlListProperty<Account> accounts();
 
     Q_INVOKABLE Asset* getOrCreateAsset(const QString& id);
-    Account* getOrCreateAccount(Network* network, int pointer);
+    Account* getOrCreateAccount(Network* network, quint32 pointer);
     Account* getOrCreateAccount(Network* network, const QJsonObject& data);
     Account* getAccountByPointer(Network* network, int pointer) const;
 
@@ -103,7 +103,7 @@ private:
 public:
     QMap<QString, Asset*> m_assets;
     QList<Account*> m_accounts;
-    QMap<QPair<Network*, int>, Account*> m_accounts_by_pointer;
+    QMap<QPair<Network*, quint32>, Account*> m_accounts_by_pointer;
 
     TaskDispatcher* const m_dispatcher;
 };

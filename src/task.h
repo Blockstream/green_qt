@@ -390,13 +390,13 @@ class CreateAccountTask : public AuthHandlerTask
     QML_UNCREATABLE("")
 public:
     CreateAccountTask(const QJsonObject& details, Session* session);
-    int pointer() const { return m_pointer; }
+    quint32 pointer() const { return m_pointer; }
 private:
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
     void handleDone(const QJsonObject& result) override;
 private:
     const QJsonObject m_details;
-    int m_pointer{-1};
+    quint32 m_pointer{0};
 };
 
 class UpdateAccountTask : public AuthHandlerTask

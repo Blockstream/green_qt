@@ -37,7 +37,7 @@ QJsonObject Account::json() const
 
 void Account::update(const QJsonObject& json)
 {
-    Q_ASSERT(m_pointer == static_cast<qint64>(json.value("pointer").toDouble()));
+    Q_ASSERT(m_pointer == static_cast<quint32>(json.value("pointer").toInteger()));
     m_json = json;
     emit jsonChanged();
     setType(m_json.value("type").toString());
