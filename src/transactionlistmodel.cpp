@@ -79,8 +79,7 @@ void TransactionListModel::fetch(int offset, int count)
             fetch(offset + count, count);
         }
     });
-
-    m_account->context()->dispatcher()->add(m_get_transactions);
+    m_account->context()->dispatcher()->add("transaction list model", m_get_transactions);
 }
 
 QHash<int, QByteArray> TransactionListModel::roleNames() const
