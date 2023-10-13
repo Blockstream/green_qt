@@ -21,8 +21,9 @@ Page {
         }
         delegate: Pane {
             property TaskGroup group: modelData
+            id: group_pane
             clip: true
-            width: parent.width
+            width: parent?.width ?? 0
             background: Rectangle {
                 radius: 4
                 color: {
@@ -44,6 +45,17 @@ Page {
                 }
             }
             contentItem: ColumnLayout {
+                Label {
+                    Layout.fillWidth: true
+                    Layout.preferredWidth: 0
+                    horizontalAlignment: Label.AlignCenter
+                    font.pixelSize: 8
+                    font.weight: 400
+                    font.styleName: 'Regular'
+                    wrapMode: Label.WrapAnywhere
+                    text: group_pane?.group.name ?? 'n/a'
+                    visible: group_pane?.group.name
+                }
                 Repeater {
                     model: group.tasks
                     delegate: RowLayout {
