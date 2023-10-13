@@ -45,6 +45,7 @@ void LoginController::login()
     auto network = m_wallet->network();
 
     auto group = new TaskGroup(this);
+    group->setName("login");
 
     login(group, network);
 
@@ -200,4 +201,3 @@ void LoadController::loginNetwork(Network* network)
 
     add(group);
 }
-
