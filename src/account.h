@@ -57,7 +57,7 @@ public:
     void setHidden(bool hidden);
     QJsonObject json() const;
 
-    void update(const QJsonObject& json);
+    void update(QJsonObject json);
 
     void loadBalance();
 

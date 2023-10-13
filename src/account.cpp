@@ -35,9 +35,12 @@ QJsonObject Account::json() const
     return m_json;
 }
 
-void Account::update(const QJsonObject& json)
+void Account::update(QJsonObject json)
 {
     Q_ASSERT(m_pointer == static_cast<quint32>(json.value("pointer").toInteger()));
+    if (m_json.contains("satoshi") && !json.contains("satoshi")) {
+        json.insert("satoshi", m_json.value("satoshi"));
+    }
     m_json = json;
     emit jsonChanged();
     setType(m_json.value("type").toString());
