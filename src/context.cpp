@@ -204,6 +204,16 @@ void Context::setXPubHashId(const QString& xpub_hash_id)
     }
 }
 
+void Context::refreshAccounts()
+{
+    auto group = new TaskGroup(this);
+    group->setName("id_loading_accounts");
+    for (auto session : m_sessions_list) {
+        group->add(new LoadAccountsTask(true, session));
+    }
+    m_dispatcher->add(group);
+}
+
 QQmlListProperty<Account> Context::accounts()
 {
     return { this, &m_accounts };

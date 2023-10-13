@@ -75,6 +75,9 @@ public:
     QString xpubHashId() const { return m_xpub_hash_id; }
     void setXPubHashId(const QString& xpub_hash_id);
 
+public slots:
+    void refreshAccounts();
+
 signals:
     void walletChanged();
     void deviceChanged();
