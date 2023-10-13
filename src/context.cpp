@@ -212,6 +212,7 @@ void Context::refreshAccounts()
         group->add(new LoadAccountsTask(true, session));
     }
     m_dispatcher->add(group);
+    connect(group, &TaskGroup::finished, group, &QObject::deleteLater);
 }
 
 QQmlListProperty<Account> Context::accounts()
