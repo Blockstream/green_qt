@@ -153,6 +153,7 @@ void TaskDispatcher::add(TaskGroup* group)
     if (m_groups.contains(group)) return;
     m_groups.prepend(group);
     group->m_dispatcher = this;
+    group->setParent(this);
     emit groupsChanged();
     dispatch();
 }
