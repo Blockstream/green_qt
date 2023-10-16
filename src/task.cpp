@@ -235,6 +235,27 @@ void TaskDispatcher::timerEvent(QTimerEvent* event)
     }
 }
 
+TaskGroupMonitor::TaskGroupMonitor(QObject* parent)
+    : QObject(parent)
+{
+}
+
+void TaskGroupMonitor::add(TaskGroup* group)
+{
+    Q_ASSERT(!m_groups.contains(group));
+    m_groups.insert(group);
+    connect(group, &TaskGroup::finished, this, [=] { remove(group); });
+    connect(group, &TaskGroup::failed, this, [=] {remove(group); });
+}
+
+void TaskGroupMonitor::remove(TaskGroup* group)
+{
+    m_groups.remove(group);
+    if (m_groups.isEmpty()) {
+        emit allFinishedOrFailed();
+    }
+}
+
 SessionTask::SessionTask(Session* session)
     : Task(session)
     , m_session(session)

@@ -16,6 +16,7 @@ class Session;
 class Settings;
 class Task;
 class TaskGroup;
+class TaskGroupMonitor;
 class TaskDispatcher;
 class Transaction;
 class Wallet;

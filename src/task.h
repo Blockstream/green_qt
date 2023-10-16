@@ -148,6 +148,19 @@ protected:
     friend class TaskDispatcher;
 };
 
+class TaskGroupMonitor : public QObject
+{
+    Q_OBJECT
+public:
+    TaskGroupMonitor(QObject* parent = nullptr);
+    void add(TaskGroup* group);
+    void remove(TaskGroup* group);
+signals:
+    void allFinishedOrFailed();
+private:
+    QSet<TaskGroup*> m_groups;
+};
+
 struct GA_auth_handler;
 struct GA_session;
 class Session;
