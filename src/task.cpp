@@ -137,7 +137,13 @@ QQmlListProperty<TaskGroup> TaskDispatcher::groups()
 
 void TaskDispatcher::add(Task* task)
 {
+    add({}, task);
+}
+
+void TaskDispatcher::add(const QString& name, Task* task)
+{
     auto group = new TaskGroup(this);
+    group->setName(name);
     group->add(task);
     add(group);
 }

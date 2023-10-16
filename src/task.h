@@ -22,6 +22,7 @@ public:
     ~TaskDispatcher();
 
     void add(Task* task);
+    void add(const QString& name, Task* task);
     void add(TaskGroup* group);
     void remove(TaskGroup* group);
 
