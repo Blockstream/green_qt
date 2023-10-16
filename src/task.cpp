@@ -1148,6 +1148,7 @@ void TaskGroup::add(Task* task)
     if (m_tasks.contains(task)) return;
     m_tasks.append(task);
     task->m_group = this;
+    task->setParent(this);
     emit tasksChanged();
     dispatch();
 }
