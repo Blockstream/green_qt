@@ -86,7 +86,7 @@ Drawer {
             opacity: 0.1
             width: 1
             height: parent.height
-            x: self.edge === Qt.RightEdge ? 0 : width - 1
+            x: self.edge === Qt.RightEdge ? 0 : parent.width - 1
         }
     }
 }
