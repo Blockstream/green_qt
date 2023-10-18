@@ -28,6 +28,53 @@ ApplicationWindow {
         }
         wallet_view.createObject(stack_layout, { wallet })
         stack_layout.currentIndex = stack_layout.children.length - 1
+        side_bar.currentView = SideBar.View.Wallets
+    }
+
+    function openWallets() {
+        let current_index = -1
+        let current_wallet
+        for (let i = 0; i < stack_layout.children.length; ++i) {
+            const child = stack_layout.children[i]
+            if (child instanceof WalletView) {
+                current_index = i
+                current_wallet = child.wallet
+                break
+            }
+        }
+
+        side_bar.currentView = SideBar.View.Wallets
+
+        if (WalletManager.wallets.length > 1 && current_index < 0) {
+            stack_layout.currentIndex = 5
+            return
+        }
+
+        if (current_index >= 0) {
+            if (current_wallet) {
+                wallets_drawer.open()
+            } else {
+                stack_layout.currentIndex = current_index
+            }
+            return
+        }
+
+        if (WalletManager.wallets.length === 1 && current_index >= 0) {
+            stack_layout.currentIndex = current_index
+            return
+        }
+
+        const wallet = WalletManager.wallets[0] ?? null
+        wallet_view.createObject(stack_layout, { wallet })
+        stack_layout.currentIndex = stack_layout.children.length - 1
+    }
+
+    WalletsDrawer {
+        id: wallets_drawer
+        onWalletClicked: (wallet) => {
+            wallets_drawer.close()
+            window.openWallet(wallet)
+        }
     }
 
     id: window
@@ -94,24 +141,21 @@ ApplicationWindow {
         anchors.fill: parent
         spacing: 0
         SideBar {
+            id: side_bar
             Layout.fillHeight: true
-            onHomeClicked: stack_layout.currentIndex = 0
-            onBlockstreamClicked: stack_layout.currentIndex = 1
-            onPreferencesClicked: stack_layout.currentIndex = 2
-            onOnboardClicked: {
-                console.log('onboard!')
-                for (let i = 0; i < stack_layout.children.length; ++i) {
-                    const child = stack_layout.children[i]
-                    if (child instanceof WalletView && !child.wallet) {
-                        console.log('   existing onboard', i)
-                        stack_layout.currentIndex = i;
-                        return
-                    }
-                }
-                wallet_view.createObject(stack_layout, { wallet: null })
-                stack_layout.currentIndex = stack_layout.children.length - 1
+            onHomeClicked: {
+                stack_layout.currentIndex = 0
+                side_bar.currentView = SideBar.View.Home
             }
-            onWalletsClicked: stack_layout.currentIndex = 5
+            onBlockstreamClicked: {
+                stack_layout.currentIndex = 1
+                side_bar.currentView = SideBar.View.Blockstream
+            }
+            onPreferencesClicked: {
+                stack_layout.currentIndex = 2
+                side_bar.currentView = SideBar.View.Preferences
+            }
+            onWalletsClicked: openWallets()
         }
         StackLayout {
             id: stack_layout
@@ -119,7 +163,7 @@ ApplicationWindow {
             Layout.fillHeight: true
             readonly property WalletView currentWalletView: currentIndex < 0 ? null : (stack_layout.children[currentIndex].currentWalletView || null)
             HomeView {
-                onOpenWallet: (wallet) => { window.openWallet(wallet) }
+                onOpenWallet: (wallet) => window.openWallet(wallet)
             }
             BlockstreamView {
             }
@@ -132,10 +176,12 @@ ApplicationWindow {
             NetworkView {
                 title: qsTrId('id_wallets')
                 focus: StackLayout.isCurrentItem
-                onOpenWallet: (wallet) => { window.openWallet(wallet) }
+                onOpenWallet: (wallet) => window.openWallet(wallet)
             }
         }
     }
+
+    Component.onCompleted: openWallets()
 
     Component {
         id: wallet_view
