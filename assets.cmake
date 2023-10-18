@@ -123,6 +123,7 @@ qt_add_resources(green "images"
         assets/svg2/arrow_right.svg
         assets/svg2/back.svg
         assets/svg2/backspace.svg
+        assets/svg2/beta.svg
         assets/svg2/blockstream_green.svg
         assets/svg2/bolt.svg
         assets/svg2/check.svg
@@ -131,9 +132,11 @@ qt_add_resources(green "images"
         assets/svg2/copy.svg
         assets/svg2/edit.svg
         assets/svg2/eye.svg
+        assets/svg2/fresh_wallet.svg
         assets/svg2/gear.svg
         assets/svg2/hand.svg
         assets/svg2/house.svg
+        assets/svg2/lightning.svg
         assets/svg2/multisig.svg
         assets/svg2/next_arrow.svg
         assets/svg2/onboard_background.svg
