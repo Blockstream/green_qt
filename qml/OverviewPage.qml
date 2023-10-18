@@ -258,7 +258,6 @@ StackViewPage {
             return loader.drawer
         }
         function open(properties) {
-            console.log('open drawer', properties)
             loader.createObject(properties).open()
         }
     }
