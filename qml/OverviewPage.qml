@@ -32,7 +32,7 @@ StackViewPage {
     }
 
     function openCreateAccountDrawer() {
-        const network = self.currentAccount.network
+        const network = self.currentAccount?.network ?? NetworkManager.network('electrum-mainnet')
         const id = network.liquid ? network.policyAsset : network.key
         const asset = self.context.getOrCreateAsset(id)
         create_account_drawer.open({ asset })
@@ -44,13 +44,14 @@ StackViewPage {
     }
 
     function formatAmount(account, amount, include_ticker = true) {
-        if (!account) console.trace()
+        if (!account) return '-'
         account.session.displayUnit;
         const unit = account.session.unit;
         return wallet.formatAmount(amount || 0, include_ticker, unit);
     }
 
     function formatFiat(sats, include_ticker = true) {
+        if (!self.currentAccount) return '-'
         const ticker = self.currentAccount.session.events.ticker
         const pricing = currentAccount.session.settings.pricing;
         const { fiat, fiat_currency } = wallet.convert({ satoshi: sats });

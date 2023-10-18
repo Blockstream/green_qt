@@ -35,6 +35,7 @@ WalletHeaderCard {
             font.pixelSize: 24
             font.weight: 600
             text: {
+                if (!self.account) return '-'
                 const ticker = self.account.session.events.ticker
                 const pricing = self.account.session.settings.pricing;
                 const { fiat, fiat_currency } = self.context.wallet.convert({ btc: '1' })
