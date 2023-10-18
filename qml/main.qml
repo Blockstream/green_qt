@@ -48,8 +48,6 @@ ApplicationWindow {
             }
         }
 
-        side_bar.currentView = SideBar.View.Wallets
-
         if (WalletManager.wallets.length > 1 && current_index < 0) {
             stack_layout.currentIndex = 5
             return
@@ -60,18 +58,21 @@ ApplicationWindow {
                 wallets_drawer.open()
             } else {
                 stack_layout.currentIndex = current_index
+                side_bar.currentView = SideBar.View.Wallets
             }
             return
         }
 
         if (WalletManager.wallets.length === 1 && current_index >= 0) {
             stack_layout.currentIndex = current_index
+            side_bar.currentView = SideBar.View.Wallets
             return
         }
 
         const wallet = WalletManager.wallets[0] ?? null
         wallet_view.createObject(stack_layout, { wallet })
         stack_layout.currentIndex = stack_layout.children.length - 1
+        side_bar.currentView = SideBar.View.Wallets
     }
 
     WalletsDrawer {
