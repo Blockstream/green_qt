@@ -76,12 +76,36 @@ ApplicationWindow {
 
     WalletsDrawer {
         id: wallets_drawer
+        leftMargin: side_bar.width
         onWalletClicked: (wallet) => {
             wallets_drawer.close()
             window.openWallet(wallet)
         }
     }
 
+    SideBar {
+        id: side_bar
+        height: parent.height
+        parent: Overlay.overlay
+        z: 1
+        onHomeClicked: {
+            stack_layout.currentIndex = 0
+            side_bar.currentView = SideBar.View.Home
+            wallets_drawer.close()
+        }
+        onBlockstreamClicked: {
+            stack_layout.currentIndex = 1
+            side_bar.currentView = SideBar.View.Blockstream
+            wallets_drawer.close()
+        }
+        onPreferencesClicked: {
+            stack_layout.currentIndex = 2
+            side_bar.currentView = SideBar.View.Preferences
+            wallets_drawer.close()
+        }
+        onWalletsClicked: openWallets()
+    }
+    
     id: window
     x: Settings.windowX
     y: Settings.windowY
@@ -145,22 +169,8 @@ ApplicationWindow {
         id: main_layout
         anchors.fill: parent
         spacing: 0
-        SideBar {
-            id: side_bar
-            Layout.fillHeight: true
-            onHomeClicked: {
-                stack_layout.currentIndex = 0
-                side_bar.currentView = SideBar.View.Home
-            }
-            onBlockstreamClicked: {
-                stack_layout.currentIndex = 1
-                side_bar.currentView = SideBar.View.Blockstream
-            }
-            onPreferencesClicked: {
-                stack_layout.currentIndex = 2
-                side_bar.currentView = SideBar.View.Preferences
-            }
-            onWalletsClicked: openWallets()
+        Item {
+            Layout.minimumWidth: side_bar.width
         }
         StackLayout {
             id: stack_layout
