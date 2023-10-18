@@ -32,6 +32,11 @@ ApplicationWindow {
     }
 
     function openWallets() {
+        if (wallets_drawer.visible) {
+            wallets_drawer.close()
+            return
+        }
+
         let current_index = -1
         let current_wallet
         for (let i = 0; i < stack_layout.children.length; ++i) {
