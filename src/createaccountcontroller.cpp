@@ -134,8 +134,6 @@ void CreateAccountController::create()
     connect(group, &TaskGroup::finished, this, [=] {
         m_account = m_context->getAccountByPointer(m_network, create_account->pointer());
         if (!m_account) return;
-        // TODO as of gdk 0.68.1 synced notification is not emited for new multisig accounts
-        if (m_account->isMultisig()) m_account->setSynced(true);
         emit accountChanged();
         emit created(m_account);
     });
