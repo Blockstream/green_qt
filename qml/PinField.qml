@@ -29,6 +29,7 @@ AbstractButton {
     }
     id: self
     activeFocusOnTab: true
+    onClicked: self.forceActiveFocus()
     Keys.onPressed: (event) => {
         switch (event.key) {
             case Qt.Key_0:
