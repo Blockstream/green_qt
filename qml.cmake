@@ -211,6 +211,7 @@ SET(QML_FILES
     qml/UsernameField.qml
     qml/PasswordField.qml
     qml/MultisigWatchOnlyNetworkPage.qml
+    qml/AbstractDrawer.qml
 )
 
 if (GREEN_NO_RESOURCES)
