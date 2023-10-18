@@ -212,6 +212,7 @@ SET(QML_FILES
     qml/PasswordField.qml
     qml/MultisigWatchOnlyNetworkPage.qml
     qml/AbstractDrawer.qml
+    qml/WalletsDrawer.qml
 )
 
 if (GREEN_NO_RESOURCES)
