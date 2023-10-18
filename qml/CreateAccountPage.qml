@@ -20,7 +20,7 @@ StackViewPage {
 
     component SecurityPolicyButton2: SecurityPolicyButton {
         required property string serverType
-        Layout.fillWidth: true
+        required property string type
         id: btn
         network: NetworkManager.networkWithServerType(self.asset.networkKey, btn.serverType)
         action: Action {
@@ -40,7 +40,25 @@ StackViewPage {
         serverType: 'green'
     }
 
+    component LightningButton: SecurityPolicyButton {
+        beta: true
+        description: 'Fast transactions on the Lightning Network, powered by Greenlight.'
+        icon.source: 'qrc:/svg2/lightning.svg'
+        network: null
+        tag: 'fastest'
+        tagColor: '#D8A800'
+        text: 'lightning'
+        title: qsTrId('id_lightning')
+        visible: Settings.enableExperimental
+        action: Action {
+            onTriggered: {
+                self.StackView.view.push(lightning_page);
+            }
+        }
+    }
+
     contentItem: Flickable {
+        clip: true
         contentHeight: layout.height
         ScrollIndicator.vertical: ScrollIndicator {
         }
@@ -70,6 +88,8 @@ StackViewPage {
                 tag: qsTrId('id_native_segwit')
                 title: qsTrId('id_standard')
                 description: qsTrId('id_cheaper_singlesig_option')
+            }
+            LightningButton {
             }
             SinglesigButton {
                 type: 'p2sh-p2wpkh'
@@ -158,6 +178,51 @@ StackViewPage {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     dispatcher: controller.dispatcher
+                }
+            }
+        }
+    }
+
+    Component {
+        id: lightning_page
+        StackViewPage {
+            title: qsTrId('id_lightning')
+            contentItem: ColumnLayout {
+                spacing: 40
+                VSpacer {
+                }
+                RowLayout {
+                    Layout.alignment: Qt.AlignCenter
+                    Layout.fillWidth: false
+                    spacing: 8
+                    Label {
+                        color: '#FFF'
+                        font.family: 'SF Compact Display'
+                        font.pixelSize: 16
+                        font.weight: 600
+                        text: qsTrId('id_lightning')
+                    }
+                    Image {
+                        source: 'qrc:/svg2/lightning.svg'
+                    }
+                }
+                Label {
+                    Layout.fillWidth: true
+                    Layout.preferredWidth: 0
+                    color: '#FFF'
+                    font.family: 'SF Compact Display'
+                    font.pixelSize: 14
+                    font.weight: 400
+                    horizontalAlignment: Qt.AlignCenter
+                    text: `This feature is coming soon on desktop, but it's already available on Green mobile now!`
+                    wrapMode: Label.WordWrap
+                }
+                LinkButton {
+                    Layout.alignment: Qt.AlignCenter
+                    text: 'https://blockstream.com/green'
+                    onClicked: Qt.openUrlExternally('https://blockstream.com/green')
+                }
+                VSpacer {
                 }
             }
         }
