@@ -31,7 +31,7 @@ StackViewPage {
         Component.onCompleted: set({ view: 'transactions' })
     }
 
-    function openCreateDialog() {
+    function openCreateAccountDrawer() {
         const network = self.currentAccount.network
         const id = network.liquid ? network.policyAsset : network.key
         const asset = self.context.getOrCreateAsset(id)
@@ -149,6 +149,30 @@ StackViewPage {
     Controller {
         id: controller
         context: self.context
+    }
+
+    Component.onCompleted: {
+        let relevant = 0
+        for (let i = 0; i < self.context.accounts.length; i++) {
+            const account = self.context.accounts[i]
+            if (account.network.electrum) {
+                if (account.pointer > 0 || account.json.bip44_discovered) {
+                    relevant ++
+                }
+            } else {
+                relevant ++
+            }
+        }
+        if (relevant === 0) {
+            fresh_wallet_dialog.createObject(Overlay.overlay).open()
+        }
+    }
+
+    Component {
+        id: fresh_wallet_dialog
+        FreshWalletDialog {
+            onAccepted: openCreateAccountDrawer()
+        }
     }
 
     Loader2 {

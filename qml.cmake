@@ -211,6 +211,7 @@ SET(QML_FILES
     qml/UsernameField.qml
     qml/PasswordField.qml
     qml/MultisigWatchOnlyNetworkPage.qml
+    qml/FreshWalletDialog.qml
     qml/AbstractDrawer.qml
     qml/WalletsDrawer.qml
 )

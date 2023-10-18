@@ -75,7 +75,7 @@ MainPageHeader {
             enabled: !self.context.watchonly
             onClicked: {
                 menu.close()
-                openCreateDialog()
+                openCreateAccountDrawer()
             }
         }
         GMenu.Item {
