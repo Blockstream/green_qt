@@ -7,9 +7,11 @@ StackViewPage {
     signal registerFinished(Context context)
     required property string pin
     required property var mnemonic
-    id: self
-    leftItem: null
     StackView.onActivated: controller.active = true
+    id: self
+    padding: 0
+    leftItem: Item {
+    }
     SignupController {
         id: controller
         pin: self.pin
