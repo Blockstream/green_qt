@@ -70,10 +70,12 @@ Pane {
         SideButton {
             icon.source: 'qrc:/svg/jade_emblem_on_transparent_rgb.svg'
             text: 'Blockstream Jade'
+            visible: false
         }
         SideButton {
             icon.source: 'qrc:/svg/ledger-logo.svg'
             text: 'Ledger Nano'
+            visible: false
         }
         VSpacer {
         }
