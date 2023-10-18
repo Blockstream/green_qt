@@ -7,9 +7,18 @@ import QtQuick.Layouts
 AbstractDrawer {
     signal walletClicked(Wallet wallet)
     id: self
+    dim: true
+    modal: false
     edge: Qt.LeftEdge
     contentItem: Page {
+        spacing: 10
         background: null
+        header: RowLayout {
+            CloseButton {
+                Layout.alignment: Qt.AlignRight
+                onClicked: self.close()
+            }
+        }
         contentItem: Flickable {
             id: flickable
             clip: true

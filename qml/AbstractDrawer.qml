@@ -31,7 +31,7 @@ Drawer {
     interactive: self.visible
     topPadding: 60
     bottomPadding: 60
-    leftPadding: 48
+    leftPadding: 48 + self.leftMargin
     rightPadding: 48
 
     contentWidth: Math.max(self.minimumContentWidth, self.preferredContentWidth)
@@ -54,6 +54,26 @@ Drawer {
                     y: 0
                     width: modal.width
                     height: modal.height
+                }
+            }
+        }
+    }
+
+    Overlay.modeless: Rectangle {
+        id: modeless
+        color: constants.c900
+        FastBlur {
+            anchors.fill: parent
+            cached: true
+            opacity: self.position
+            radius: 32 * self.position
+            source: ShaderEffectSource {
+                sourceItem: ApplicationWindow.contentItem
+                sourceRect {
+                    x: 0
+                    y: 0
+                    width: modeless.width
+                    height: modeless.height
                 }
             }
         }
