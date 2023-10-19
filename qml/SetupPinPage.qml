@@ -6,7 +6,6 @@ import QtQuick.Layouts
 
 StackViewPage {
     signal pinEntered(string pin)
-    required property var mnemonic
     property string pin
     id: self
     padding: 60

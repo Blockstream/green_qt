@@ -9,8 +9,6 @@ import "util.js" as UtilJS
 MainPage {
     required property Wallet wallet
 
-    id: self
-
     Component.onCompleted: {
         if (!self.wallet) {
             stack_view.push(terms_of_service_page, {}, StackView.Immediate)
@@ -25,6 +23,7 @@ MainPage {
         stack_view.push(pin_login_page, {}, StackView.Immediate)
     }
 
+    id: self
     contentItem: GStackView {
         id: stack_view
         focus: true
@@ -100,6 +99,7 @@ MainPage {
     Component {
         id: setup_pin_page
         SetupPinPage {
+            required property var mnemonic
             onPinEntered: (pin) => stack_view.push(register_page, { pin, mnemonic })
         }
     }
@@ -165,7 +165,7 @@ MainPage {
         id: loading_page
         LoadingPage {
             onLoadFinished: (context) => {
-                stack_view.replace(stack_view.currentItem, overview_page, { context }, StackView.PushTransition)
+                stack_view.replace(null, overview_page, { context }, StackView.PushTransition)
             }
         }
     }
@@ -174,7 +174,13 @@ MainPage {
         id: overview_page
         OverviewPage {
             StackView.onDeactivated: self.wallet.disconnect()
-            onLogout: stack_view.pop()
+            onLogout: {
+                if (!self.wallet) {
+                    stack_view.push(terms_of_service_page, {})
+                    return
+                }
+                stack_view.replace(null, pin_login_page)
+            }
         }
     }
 }
