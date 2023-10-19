@@ -9,9 +9,11 @@ import "util.js" as UtilJS
 WalletDrawer {
     signal created(Account account)
     required property Asset asset
+    property bool dismissable: true
     id: self
     preferredContentWidth: stack_view.currentItem.implicitWidth
 
+    closePolicy: self.dismissable ? Popup.CloseOnEscape | Popup.CloseOnPressOutside : Popup.NoAutoClose
     contentItem: GStackView {
         id: stack_view
         focus: true
@@ -20,6 +22,7 @@ WalletDrawer {
             asset: self.asset
             editableAsset: true
             rightItem: CloseButton {
+                visible: self.dismissable
                 onClicked: self.reject()
             }
             onCreated: (account) => {

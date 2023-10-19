@@ -31,11 +31,11 @@ StackViewPage {
         Component.onCompleted: set({ view: 'transactions' })
     }
 
-    function openCreateAccountDrawer() {
+    function openCreateAccountDrawer({ dismissable = true } = {}) {
         const network = self.currentAccount?.network ?? NetworkManager.network('electrum-mainnet')
         const id = network.liquid ? network.policyAsset : network.key
         const asset = self.context.getOrCreateAsset(id)
-        create_account_drawer.open({ asset })
+        create_account_drawer.open({ asset, dismissable })
     }
 
     function parseAmount(account, amount, unit) {
@@ -172,7 +172,7 @@ StackViewPage {
     Component {
         id: fresh_wallet_dialog
         FreshWalletDialog {
-            onAccepted: openCreateAccountDrawer()
+            onAccepted: openCreateAccountDrawer({ dismissable: false })
         }
     }
 
