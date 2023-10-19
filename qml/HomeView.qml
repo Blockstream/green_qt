@@ -160,48 +160,6 @@ MainPage {
             }
             Spacer {
             }
-            ColumnLayout {
-                Layout.rightMargin: 16
-                Layout.fillHeight: true
-                Label {
-                    Layout.bottomMargin: 16
-                    text: qsTrId('id_add_another_wallet')
-                    font.pixelSize: 18
-                    font.bold: true
-                }
-                GPane {
-                    Layout.minimumWidth: 200
-                    Layout.fillHeight: true
-                    padding: constants.p2
-                    background: Rectangle {
-                        radius: 16
-                        color: constants.c800
-                    }
-                    contentItem: ColumnLayout {
-                        GButton {
-                            Layout.fillWidth: true
-                            large: true
-                            text: qsTrId('id_create_wallet')
-                            font.capitalization: Font.MixedCase
-                            onClicked: navigation.push({ flow: 'signup' })
-                        }
-                        GButton {
-                            Layout.fillWidth: true
-                            large: true
-                            text: qsTrId('id_add_an_amp_wallet')
-                            font.capitalization: Font.MixedCase
-                            onClicked: navigation.push({ flow: 'signup', network: 'liquid', type: 'amp' })
-                        }
-                        GButton {
-                            Layout.fillWidth: true
-                            large: true
-                            text: qsTrId('id_restore_wallet')
-                            font.capitalization: Font.MixedCase
-                            onClicked: navigation.push({ flow: 'restore' })
-                        }
-                    }
-                }
-            }
         }
         VSpacer {
         }
