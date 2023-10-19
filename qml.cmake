@@ -17,7 +17,7 @@ SET(QML_FILES
     qml/LedgerDevicesView.qml
     qml/DebugRectangle.qml
     qml/WalletGeneralSettingsView.qml
-    qml/NetworkView.qml
+    qml/WalletsView.qml
     qml/TransactionView.qml
     qml/HSpacer.qml
     qml/WalletDialog.qml

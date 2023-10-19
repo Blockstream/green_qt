@@ -11,6 +11,8 @@ import "analytics.js" as AnalyticsJS
 
 MainPage {
     signal openWallet(Wallet wallet)
+    signal createWallet
+
     readonly property WalletView currentWalletView: null
     readonly property bool active: {
         if (window.navigation.param.view === 'wallets') return true
@@ -65,10 +67,9 @@ MainPage {
         }
     }
     footer: StatusBar {
-        contentItem: RowLayout {
-            SessionBadge {
-                session: HttpManager.session
-            }
+        RegularButton {
+            text: qsTrId('id_setup_a_new_wallet')
+            onClicked: self.createWallet()
         }
     }
 

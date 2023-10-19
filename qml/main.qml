@@ -189,10 +189,11 @@ ApplicationWindow {
             }
             LedgerDevicesView {
             }
-            NetworkView {
+            WalletsView {
                 title: qsTrId('id_wallets')
                 focus: StackLayout.isCurrentItem
                 onOpenWallet: (wallet) => window.openWallet(wallet)
+                onCreateWallet: window.openWallet(null)
             }
         }
     }
