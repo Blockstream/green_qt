@@ -49,7 +49,7 @@ StackViewPage {
         tagColor: '#D8A800'
         text: 'lightning'
         title: qsTrId('id_lightning')
-        visible: Settings.enableExperimental
+        visible: self.asset.networkKey === 'bitcoin' && Settings.enableExperimental
         action: Action {
             onTriggered: {
                 self.StackView.view.push(lightning_page);
