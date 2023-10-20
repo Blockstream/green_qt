@@ -28,6 +28,7 @@ class Wallet : public QObject
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
+    explicit Wallet(QObject *parent = nullptr);
     explicit Wallet(Network* network, const QString& hash_id, QObject *parent = nullptr);
     virtual ~Wallet();
 

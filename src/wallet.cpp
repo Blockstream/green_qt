@@ -22,6 +22,11 @@
 
 #include <nlohmann/json.hpp>
 
+Wallet::Wallet(QObject* parent)
+    : QObject(parent)
+{
+}
+
 Wallet::Wallet(Network* network, const QString& hash_id, QObject* parent)
     : QObject(parent)
     , m_network(network)
@@ -113,11 +118,7 @@ bool Wallet::rename(QString name, bool active_focus)
 {
     if (!active_focus) name = name.trimmed();
     if (name.isEmpty() && !active_focus) {
-        if (m_network) {
-            name = WalletManager::instance()->newWalletName(m_network);
-        } else {
-            name = "My Wallet";
-        }
+        name = WalletManager::instance()->newWalletName();
     }
     if (m_name == name) return false;
     if (active_focus) return false;

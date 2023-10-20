@@ -150,7 +150,7 @@ void SignupCreateWalletTask::update()
     const auto wallet = WalletManager::instance()->createWallet(network, wallet_hash_id);
     wallet->m_is_persisted = true;
 
-    wallet->setName(WalletManager::instance()->newWalletName(network));
+    wallet->setName(WalletManager::instance()->newWalletName());
     wallet->m_pin_data = QJsonDocument(context->m_pin_data).toJson();
     wallet->save();
 

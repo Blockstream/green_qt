@@ -91,17 +91,17 @@ void WalletManager::addWallet(Wallet* wallet)
     });
 }
 
-Wallet* WalletManager::createWallet(Network* network, const QString& hash_id)
+Wallet* WalletManager::createWallet()
 {
-    auto wallet = new Wallet(network, hash_id, this);
+    auto wallet = new Wallet(this);
     wallet->m_id = QUuid::createUuid().toString(QUuid::WithoutBraces);
     return wallet;
 }
 
-Wallet *WalletManager::restoreWallet(Network *network, const QString& hash_id)
+Wallet* WalletManager::createWallet(Network* network, const QString& hash_id)
 {
-    auto wallet = createWallet(network, hash_id);
-    wallet->m_is_persisted = true;
+    auto wallet = new Wallet(network, hash_id, this);
+    wallet->m_id = QUuid::createUuid().toString(QUuid::WithoutBraces);
     return wallet;
 }
 
@@ -134,10 +134,9 @@ QQmlListProperty<Wallet> WalletManager::wallets()
       [](QQmlListProperty<Wallet>* property, qsizetype index) { return static_cast<QVector<Wallet*>*>(property->data)->at(index); }};
 }
 
-QString WalletManager::newWalletName(Network* network) const
+QString WalletManager::newWalletName() const
 {
-    if (!network) return {};
-    return uniqueWalletName(QString("My %1 Wallet").arg(network->displayName()));
+    return uniqueWalletName("My Wallet");
 }
 
 QString WalletManager::uniqueWalletName(const QString& base) const
