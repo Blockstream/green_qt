@@ -124,6 +124,15 @@ MainPage {
     Component {
         id: restore_check_page
         RestoreCheckPage {
+            onRestoreFinished: (context) => stack_view.push(restore_pin_page, { context })
+        }
+    }
+
+    Component {
+        id: restore_pin_page
+        SetupPinPage {
+            required property Context context
+            onPinEntered: (pin) => stack_view.push(loading_page, { context })
         }
     }
 

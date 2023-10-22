@@ -5,11 +5,9 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 StackViewPage {
-    StackView.onActivated: controller.restore()
+    signal restoreFinished(Context context)
     required property var mnemonic
     required property string password
-    id: self
-    padding: 60
     RestoreController {
         id: controller
         mnemonic: self.mnemonic
@@ -24,7 +22,11 @@ StackViewPage {
         //         network: navigation.param.network === 'bitcoin' ? 'mainnet' : navigation.param.network
         //     })
         // }
+        onRestoreFinished: (context) => self.restoreFinished(context)
     }
+    StackView.onActivated: controller.restore()
+    id: self
+    padding: 60
     background: Item {
         Image {
             anchors.fill: parent
