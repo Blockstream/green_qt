@@ -68,12 +68,7 @@ bool WalletListModel::lessThan(const QModelIndex& source_left, const QModelIndex
 {
     auto wallet_left = source_left.data(Qt::UserRole).value<Wallet*>();
     auto wallet_right = source_right.data(Qt::UserRole).value<Wallet*>();
-    auto network_left = wallet_left->network();
-    auto network_right = wallet_right->network();
-    if (network_left == network_right) {
-        return QString::localeAwareCompare(wallet_left->name(), wallet_right->name()) < 0;
-    }
-    return QString::localeAwareCompare(network_left->name(), network_right->name()) < 0;
+    return QString::localeAwareCompare(wallet_left->name(), wallet_right->name()) < 0;
 }
 
 void WalletListModel::setJustAuthenticated(bool just_authenticated)
