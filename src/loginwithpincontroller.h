@@ -49,10 +49,8 @@ signals:
 private:
     void loadNetwork(TaskGroup* group, Network* network);
     void loginNetwork(Network* network);
-    void add(TaskGroup* group);
-    void remove(TaskGroup* group);
 private:
-    QList<TaskGroup*> m_task_groups;
+    TaskGroupMonitor* const m_monitor;
 };
 
 #endif // GREEN_LOGINWITHPINCONTROLLER_H

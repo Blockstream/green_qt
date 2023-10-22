@@ -95,27 +95,9 @@ void LoginController::login(TaskGroup* group, Network* network)
 
 LoadController::LoadController(QObject* parent)
     : Controller(parent)
+    , m_monitor(new TaskGroupMonitor(this))
 {
-}
-
-void LoadController::add(TaskGroup* group)
-{
-    m_task_groups.append(group);
-    m_dispatcher->add(group);
-    connect(group, &TaskGroup::finished, this, [=] {
-        remove(group);
-    });
-    connect(group, &TaskGroup::failed, this, [=] {
-        remove(group);
-    });
-}
-
-void LoadController::remove(TaskGroup* group)
-{
-    m_task_groups.removeOne(group);
-    if (m_task_groups.isEmpty()) {
-        emit loadFinished();
-    }
+    connect(m_monitor, &TaskGroupMonitor::allFinishedOrFailed, this, &LoadController::loadFinished);
 }
 
 static bool compatibleToNetworks(Network* network, const QList<Network*> networks)
@@ -139,7 +121,8 @@ void LoadController::load()
         loadNetwork(group, network);
     }
 
-    add(group);
+    m_monitor->add(group);
+    m_context->dispatcher()->add(group);
 
     connect(group, &TaskGroup::finished, this, [=] {
         auto wallet = m_context->wallet();
@@ -205,5 +188,6 @@ void LoadController::loginNetwork(Network* network)
     group->add(connect_session);
     group->add(login);
 
-    add(group);
+    m_monitor->add(group);
+    m_context->dispatcher()->add(group);
 }
