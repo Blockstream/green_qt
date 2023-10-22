@@ -182,7 +182,7 @@ MainPage {
     Component {
         id: overview_page
         OverviewPage {
-            StackView.onDeactivated: self.wallet.disconnect()
+            Component.onDestruction: self.wallet.disconnect()
             onLogout: {
                 if (!self.wallet) {
                     stack_view.push(terms_of_service_page, {})
