@@ -98,6 +98,14 @@ Session* Context::getOrCreateSession(Network* network)
     return session;
 }
 
+void Context::releaseSession(Session* session)
+{
+    m_sessions.take(session->network());
+    m_sessions_list.removeOne(session);
+    emit sessionsChanged();
+    session->deleteLater();
+}
+
 void Context::setDevice(Device* device)
 {
     if (m_device == device) return;

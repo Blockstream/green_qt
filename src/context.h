@@ -35,6 +35,7 @@ public:
     void setWallet(Wallet* wallet);
 
     Session* getOrCreateSession(Network* network);
+    void releaseSession(Session *session);
 
     Device* device() const { return m_device; }
     void setDevice(Device* device);
