@@ -36,16 +36,9 @@ StackViewPage {
         }
     }
     contentItem: ColumnLayout {
-        Label {
-            text: mnemonic.join(' - ')
-        }
-        Label {
-            text: password
-        }
-        TaskDispatcherInspector {
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-            dispatcher: controller.dispatcher
+        BusyIndicator {
+            Layout.alignment: Qt.AlignCenter
+            running: true
         }
     }
 }
