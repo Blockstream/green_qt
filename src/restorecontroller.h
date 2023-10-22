@@ -62,6 +62,7 @@ signals:
     void loginError();
     void acceptedChanged();
     void walletRestored(Wallet* wallet);
+    void restoreFinished(Context* context);
 private:
 //    Network* m_network{nullptr};
 //    QString m_type;
@@ -74,7 +75,7 @@ private:
 //    bool m_accepted{false};
 //    QString m_wallet_hash_id;
     //    QJsonArray m_subaccounts;
-    void check(const QString &id);
+    TaskGroup* check(Network* network);
 
     QList<Account*> m_accounts;
 };
@@ -85,18 +86,6 @@ class RestoreCheckTask : public Task
 public:
     RestoreCheckTask(RestoreController* controller);
     void update() override;
-private:
-    RestoreController* const m_controller;
-};
-
-class RestorePersistWalletTask : public Task
-{
-    Q_OBJECT
-
-public:
-    RestorePersistWalletTask(RestoreController* controller);
-    void update() override;
-
 private:
     RestoreController* const m_controller;
 };

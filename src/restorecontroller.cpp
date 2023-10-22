@@ -13,21 +13,6 @@ RestoreController::RestoreController(QObject *parent)
 {
 }
 
-//void RestoreController::setNetwork(Network* network)
-//{
-//    if (m_network == network) return;
-//    m_network = network;
-//    emit networkChanged();
-//    m_dispatcher->dispatch();
-//}
-
-//void RestoreController::setType(const QString& type)
-//{
-//    if (m_type == type) return;
-//    m_type = type;
-//    emit typeChanged();
-//}
-
 void RestoreController::setMnemonic(const QStringList& mnemonic)
 {
     if (m_mnemonic == mnemonic) return;
@@ -86,96 +71,59 @@ void RestoreController::setPassword(const QString& password)
 void RestoreController::restore()
 {
     if (m_context) m_context->deleteLater();
-    m_context = new Context(this);
-    check("electrum-mainnet");
-    check("mainnet");
+    setContext(new Context(this));
+
+    auto monitor = new TaskGroupMonitor(this);
+    connect(monitor, &TaskGroupMonitor::allFinishedOrFailed, this, [=] {
+        auto context = m_context;
+        setContext(nullptr);
+
+        // TODO: check if wallet already exists
+        auto wallet = WalletManager::instance()->createWallet();
+        wallet->setName(WalletManager::instance()->newWalletName());
+        // TODO: new pin data, reset login attempts
+        // wallet->m_login_attempts_remaining = 3;
+        // wallet->m_pin_data = QJsonDocument(context->m_pin_data).toJson();
+
+        context->setWallet(wallet);
+        wallet->setContext(context);
+
+        WalletManager::instance()->insertWallet(wallet);
+
+        emit restoreFinished(context);
+    });
+
+    for (auto network : NetworkManager::instance()->networks()) {
+        if (network->isMainnet()) {
+            auto group = check(network);
+            monitor->add(group);
+        }
+    }
 }
 
-void RestoreController::check(const QString& id)
+TaskGroup* RestoreController::check(Network* network)
 {
-    auto network = NetworkManager::instance()->network(id);
+    auto group = new TaskGroup(this);
+
     auto session = m_context->getOrCreateSession(network);
     auto connect_session = new ConnectTask(session);
     auto login = new LoginTask(m_mnemonic, m_password, session);
-    auto load_accounts = new LoadAccountsTask(true, session);
 
-    connect_session->then(login);
-    login->then(load_accounts);
-
-    auto group = new TaskGroup(this);
     group->add(connect_session);
     group->add(login);
-    group->add(load_accounts);
-    m_dispatcher->add(group);
 
-    connect(group, &TaskGroup::finished, this, [=] {
-        m_accounts.append(load_accounts->accounts());
+    if (network->isElectrum()) {
+        auto load_accounts = new LoadAccountsTask(true, session);
+        group->add(load_accounts);
+    }
+
+    m_context->dispatcher()->add(group);
+
+    connect(group, &TaskGroup::failed, this, [=] {
+        m_context->releaseSession(session);
     });
 
-//    for (auto account : load_accounts->accounts()) {
-//        auto group = new TaskGroup(this);
-//        auto load_balance = new LoadBalanceTask(account);
-//        auto get_transactions = new GetTransactionsTask(0, 1, account);
-//        auto get_addresses = new GetAddressesTask(0, account);
-//        group->add(load_balance);
-//        group->add(get_transactions);
-//        group->add(get_addresses);
-//        m_dispatcher->add(group);
-//        connect(group, &TaskGroup::finished, this, [=] {
-//            setProgress(m_progress + step / substeps);
-//            qDebug() << network->id() << account->pointer() << account->name();
-//            qDebug() << "  balance=" << account->hasBalance();
-//            qDebug() << "  transactions=" << account->hasTransactions();
-//            qDebug() << "  addresses=" << account->hasAddresses();
-//        });
-//    }
-
-//    auto load_twofactor_config = new LoadTwoFactorConfigTask(session);
-//    auto load_currencies = new LoadCurrenciesTask(session);
-//    auto get_watchonly_details = new GetWatchOnlyDetailsTask(session);
-//    auto load_assets = new LoadAssetsTask(session);
-//    auto load_accounts = new LoadAccountsTask(true, session);
-
-//    const QJsonObject credentials({
-//        { "mnemonic", m_mnemonic.join(' ') },
-//        { "password", m_password }
-//    });
-//    auto encrypt_with_pin = new EncryptWithPinTask(credentials, m_pin, session);
-//    auto persist_wallet = new RestorePersistWalletTask(this);
-
-//    load_accounts->then(encrypt_with_pin);
-//    encrypt_with_pin->then(persist_wallet);
-
-//    auto group = new TaskGroup(this);
-//    group->add(load_twofactor_config);
-//    group->add(load_currencies);
-//    group->add(get_watchonly_details);
-//    group->add(load_assets);
-//    group->add(load_accounts);
-//    group->add(encrypt_with_pin);
-//    group->add(persist_wallet);
-//    m_dispatcher->add(group);
-
-/*
-
-    // TODO: context should be last
-    Q_ASSERT(m_wallet->context());
-    Q_ASSERT(m_wallet->m_pin_data.isEmpty());
-    Q_ASSERT(!m_accepted);
-    m_accepted = true;
-    emit acceptedChanged();
-
-    QJsonObject credentials({
-        { "mnemonic", m_mnemonic.join(" ") },
-        { "password", m_password }
-    });
-
-    auto handler = new EncryptWithPinHandler(credentials, m_pin, m_wallet->session());
-    QObject::connect(handler, &Handler::done, this, [=] {
-        handler->deleteLater();
-    });
-    handler->exec();
-*/
+    return group;
 }
 
 //void RestoreController::update()
@@ -281,44 +229,4 @@ void RestoreCheckTask::update()
     context->setWallet(wallet);
 
     setStatus(Status::Finished);
-}
-
-RestorePersistWalletTask::RestorePersistWalletTask(RestoreController *controller)
-    : Task(controller->dispatcher())
-    , m_controller(controller)
-{
-}
-
-void RestorePersistWalletTask::update()
-{
-    if (status() != Status::Ready) return;
-
-    setStatus(Status::Active);
-
-//    const auto context = m_controller->context();
-//    const auto network = m_controller->network();
-//    const auto wallet_hash_id = context->m_wallet_hash_id;
-//    auto wallet = m_controller->wallet();
-
-//    if (!wallet) {
-//        wallet = WalletManager::instance()->restoreWallet(network, wallet_hash_id);
-//        if (m_controller->type() == "amp") {
-//            wallet->setName(WalletManager::instance()->uniqueWalletName("My AMP Wallet"));
-//        } else {
-//            wallet->setName(WalletManager::instance()->newWalletName(network));
-//        }
-//    }
-//    wallet->m_login_attempts_remaining = 3;
-//    wallet->m_pin_data = QJsonDocument(context->m_pin_data).toJson();
-
-//    context->setWallet(wallet);
-//    wallet->setContext(context);
-//    context->refresh();
-//    m_controller->setWallet(wallet);
-
-//    WalletManager::instance()->insertWallet(wallet);
-
-    setStatus(Status::Finished);
-
-//    emit m_controller->walletRestored(wallet);
 }
