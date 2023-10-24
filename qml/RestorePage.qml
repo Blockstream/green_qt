@@ -66,9 +66,8 @@ StackViewPage {
         GridLayout {
             Layout.alignment: Qt.AlignCenter
             Layout.topMargin: 20
-            Layout.bottomMargin: 20
             Layout.fillWidth: false
-            columns: 3
+            columns: ({ 12: 3, 24: 4, 27: 6 })[controller.mnemonicSize]
             columnSpacing: 20
             rowSpacing: 10
             Repeater {
@@ -83,6 +82,7 @@ StackViewPage {
         }
         FieldTitle {
             Layout.alignment: Qt.AlignCenter
+            Layout.topMargin: 20
             visible: controller.mnemonicSize === 27
             text: qsTrId('id_please_provide_your_passphrase')
         }
@@ -94,12 +94,14 @@ StackViewPage {
         }
         FixedErrorBadge {
             Layout.alignment: Qt.AlignCenter
+            Layout.topMargin: 20
             error: switch (controller.errors.mnemonic) {
                 case 'invalid': return qsTrId('id_invalid_recovery_phrase')
             }
         }
         PrimaryButton {
             Layout.alignment: Qt.AlignCenter
+            Layout.topMargin: 20
             enabled: controller.valid
             text: qsTrId('id_restore')
             onClicked: self.mnemonicEntered(controller.mnemonic, controller.passphrase)
