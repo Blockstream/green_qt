@@ -7,6 +7,7 @@ import QtQuick.Layouts
 import "util.js" as UtilJS
 
 MainPage {
+    signal openWallet(Wallet wallet)
     required property Wallet wallet
 
     Component.onCompleted: {
@@ -20,7 +21,7 @@ MainPage {
             return
         }
 
-        stack_view.push(pin_login_page, {}, StackView.Immediate)
+        stack_view.push(pin_login_page, { wallet: self.wallet }, StackView.Immediate)
     }
 
     id: self
@@ -92,15 +93,7 @@ MainPage {
                     fillMode: Image.PreserveAspectCrop
                 }
             }
-            onChecked: (mnemonic) => stack_view.push(setup_pin_page, { mnemonic })
-        }
-    }
-
-    Component {
-        id: setup_pin_page
-        SetupPinPage {
-            required property var mnemonic
-            onPinEntered: (pin) => stack_view.push(register_page, { pin, mnemonic })
+            onChecked: (mnemonic) => stack_view.push(register_page, { mnemonic })
         }
     }
 
@@ -109,8 +102,15 @@ MainPage {
         RegisterPage {
             onRegisterFinished: (context) => {
                 self.wallet = context.wallet
-                stack_view.push(loading_page, { context })
+                stack_view.push(setup_pin_page, { context })
             }
+        }
+    }
+
+    Component {
+        id: setup_pin_page
+        SetupPinPage {
+            onFinished: (context) => stack_view.replace(null, loading_page, { context }, StackView.PushTransition)
         }
     }
 
@@ -124,15 +124,22 @@ MainPage {
     Component {
         id: restore_check_page
         RestoreCheckPage {
-            onRestoreFinished: (context) => stack_view.push(restore_pin_page, { context })
+            onRestoreFinished: (context) => {
+               self.wallet = context.wallet
+               stack_view.push(setup_pin_page, { context })
+            }
+            onAlreadyRestored: (wallet) => stack_view.replace(already_restored_page, { wallet })
         }
     }
 
     Component {
-        id: restore_pin_page
-        SetupPinPage {
-            required property Context context
-            onPinEntered: (pin) => stack_view.push(loading_page, { context })
+        id: already_restored_page
+        AlreadyRestoredPage {
+            onOpenWallet: (wallet) => {
+                self.openWallet(wallet)
+                stack_view.replace(null, terms_of_service_page, {}, StackView.Immediate)
+            }
+            onCancel: stack_view.replace(null, terms_of_service_page, {}, StackView.PushTransition)
         }
     }
 
@@ -163,7 +170,6 @@ MainPage {
     Component {
         id: pin_login_page
         PinLoginPage {
-            wallet: self.wallet
             onLoginFinished: (context) => {
                 stack_view.push(loading_page, { context })
             }
@@ -185,10 +191,10 @@ MainPage {
             Component.onDestruction: self.wallet.disconnect()
             onLogout: {
                 if (!self.wallet) {
-                    stack_view.push(terms_of_service_page, {})
+                    stack_view.replace(null, terms_of_service_page, {}, StackView.PushTransition)
                     return
                 }
-                stack_view.replace(null, pin_login_page)
+                stack_view.replace(null, pin_login_page, { wallet: self.wallet })
             }
         }
     }

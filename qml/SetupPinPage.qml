@@ -5,10 +5,20 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 StackViewPage {
-    signal pinEntered(string pin)
+    signal finished(Context context)
+    required property Context context
     property string pin
+
+    PinDataController {
+        id: controller
+        context: self.context
+        onFinished: self.finished(self.context)
+    }
+    
     id: self
     padding: 60
+    leftItem: Item {
+    }
     background: Item {
         Image {
             anchors.fill: parent
@@ -52,7 +62,8 @@ StackViewPage {
             onPinEntered: (pin) => {
                 if (self.pin) {
                     if (self.pin === pin) {
-                        self.pinEntered(pin)
+                        pin_field.enabled = false
+                        controller.update(pin)
                     } else {
                         pin_field.enabled = false
                         self.pin = null

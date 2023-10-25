@@ -6,6 +6,7 @@ import QtQuick.Layouts
 
 StackViewPage {
     signal restoreFinished(Context context)
+    signal alreadyRestored(Wallet wallet)
     required property var mnemonic
     required property string password
     RestoreController {
@@ -23,9 +24,12 @@ StackViewPage {
         //     })
         // }
         onRestoreFinished: (context) => self.restoreFinished(context)
+        onAlreadyRestored: (wallet) => self.alreadyRestored(wallet)
     }
     StackView.onActivated: controller.restore()
     id: self
+    leftItem: Item {
+    }
     padding: 60
     background: Item {
         Image {
@@ -36,9 +40,24 @@ StackViewPage {
         }
     }
     contentItem: ColumnLayout {
+        VSpacer {
+        }
         BusyIndicator {
             Layout.alignment: Qt.AlignCenter
             running: true
+        }
+        Label {
+            Layout.alignment: Qt.AlignCenter
+            Layout.fillWidth: true
+            Layout.preferredWidth: 0
+            font.family: 'SF Compact Display'
+            font.pixelSize: 26
+            font.weight: 600
+            horizontalAlignment: Label.AlignHCenter
+            text: qsTrId('id_restoring_your_wallet')
+            wrapMode: Label.WordWrap
+        }
+        VSpacer {
         }
     }
 }

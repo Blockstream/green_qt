@@ -5,7 +5,6 @@ import QtQuick.Layouts
 
 StackViewPage {
     signal registerFinished(Context context)
-    required property string pin
     required property var mnemonic
     StackView.onActivated: controller.active = true
     id: self
@@ -14,10 +13,9 @@ StackViewPage {
     }
     SignupController {
         id: controller
-        pin: self.pin
         mnemonic: self.mnemonic
         network: NetworkManager.network('electrum-mainnet')
-        onRegisterFinished: (context) => { self.registerFinished(context) }
+        onRegisterFinished: (context) => self.registerFinished(context)
     }
     background: Item {
         Image {

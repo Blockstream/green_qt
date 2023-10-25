@@ -176,20 +176,6 @@ StackViewPage {
         }
     }
 
-    Loader2 {
-        active: navigation.param.settings ?? false
-        property Session session: navigation.param.session ?? null
-        sourceComponent: WalletSettingsDialog {
-            visible: true
-            parent: window.Overlay.overlay
-            wallet: self.wallet
-            onClosed: {
-                navigation.pop()
-                destroy()
-            }
-        }
-    }
-
     id: self
     spacing: 16 //constants.s1
     property alias toolbarItem: wallet_header.toolbarItem

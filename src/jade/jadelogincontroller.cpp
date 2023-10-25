@@ -369,17 +369,20 @@ void JadeLoginTask::update()
     }
 
     if (m_status == Status::Active) {
-        if (context->m_wallet_hash_id.isEmpty()) return;
+        Q_UNREACHABLE();
+//        TODO refactor to xpub_hash_id
+//        if (context->m_wallet_hash_id.isEmpty()) return;
 
-        if (context->m_wallet_hash_id != m_controller->walletHashId()) {
-            setError("id_mismatch_wallet_hash_id");
-            setStatus(Status::Failed);
-            return;
-        }
+//        if (context->m_wallet_hash_id != m_controller->walletHashId()) {
+//            setError("id_mismatch_wallet_hash_id");
+//            setStatus(Status::Failed);
+//            return;
+//        }
 
-        auto wallet = WalletManager::instance()->walletWithHashId(context->m_wallet_hash_id, false);
+//        auto wallet = WalletManager::instance()->walletWithHashId(context->m_wallet_hash_id, false);
+        Wallet* wallet = nullptr;
         if (!wallet) {
-            wallet = WalletManager::instance()->createWallet(network, context->m_wallet_hash_id);
+            wallet = WalletManager::instance()->createWallet();
             wallet->m_is_persisted = true;
             wallet->setName(QString("%1 on %2").arg(network->displayName()).arg(device->name()));
             WalletManager::instance()->insertWallet(wallet);

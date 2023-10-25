@@ -54,7 +54,7 @@ ApplicationWindow {
         }
 
         if (current_index >= 0) {
-            if (current_wallet) {
+            if (current_wallet || WalletManager.wallets.length > 0) {
                 wallets_drawer.open()
             } else {
                 stack_layout.currentIndex = current_index
@@ -203,6 +203,7 @@ ApplicationWindow {
     Component {
         id: wallet_view
         WalletView {
+            onOpenWallet: (wallet) => window.openWallet(wallet)
         }
     }
 
