@@ -63,6 +63,8 @@ public:
     void decrementLoginAttempts();
     void updateDisplayUnit();
     QString username() const { return m_username; }
+
+    void setXPubHashId(const QString& xpub_hash_id);
 public slots:
     void disconnect();
     void reload(bool refresh_accounts = false);

@@ -271,3 +271,11 @@ void Wallet::decrementLoginAttempts()
     }
     save();
 }
+
+void Wallet::setXPubHashId(const QString &xpub_hash_id)
+{
+    if (m_xpub_hash_id == xpub_hash_id) return;
+    Q_ASSERT(m_xpub_hash_id.isEmpty());
+    m_xpub_hash_id = xpub_hash_id;
+    save();
+}

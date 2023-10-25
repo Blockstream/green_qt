@@ -204,7 +204,7 @@ void Context::setXPubHashId(const QString& xpub_hash_id)
     Q_ASSERT(m_xpub_hash_id.isEmpty());
     m_xpub_hash_id = xpub_hash_id;
     if (m_wallet) {
-        m_wallet->m_xpub_hash_id = xpub_hash_id;
+        m_wallet->setXPubHashId(xpub_hash_id);
     }
 }
 
