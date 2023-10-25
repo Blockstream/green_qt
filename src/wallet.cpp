@@ -262,7 +262,7 @@ void Wallet::resetLoginAttempts()
 {
     if (m_login_attempts_remaining < 3) {
         m_login_attempts_remaining = 3;
-        emit loginAttemptsRemainingChanged(m_login_attempts_remaining);
+        emit loginAttemptsRemainingChanged();
         save();
     }
 }
@@ -271,7 +271,7 @@ void Wallet::decrementLoginAttempts()
 {
     Q_ASSERT(m_login_attempts_remaining > 0);
     --m_login_attempts_remaining;
-    emit loginAttemptsRemainingChanged(m_login_attempts_remaining);
+    emit loginAttemptsRemainingChanged();
     if (m_login_attempts_remaining == 0) {
         m_pin_data.clear();
         emit hasPinDataChanged();

@@ -75,7 +75,7 @@ signals:
     void sessionChanged(Session* session);
     void hasPinDataChanged();
     void nameChanged(QString name);
-    void loginAttemptsRemainingChanged(int loginAttemptsRemaining);
+    void loginAttemptsRemainingChanged();
     void pinSet();
     void emptyChanged(bool empty);
     void blockHeightChanged(int block_height);
