@@ -98,6 +98,11 @@ Session* Context::getOrCreateSession(Network* network)
     return session;
 }
 
+Session* Context::primarySession() const
+{
+    return m_sessions_list.size() > 0 ? m_sessions_list.first() : nullptr;
+}
+
 void Context::releaseSession(Session* session)
 {
     m_sessions.take(session->network());
