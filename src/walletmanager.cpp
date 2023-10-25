@@ -177,3 +177,13 @@ Wallet *WalletManager::walletWithHashId(const QString &hash_id, bool watch_only)
     }
     return nullptr;
 }
+
+Wallet* WalletManager::findWallet(const QString& xpub_hash_id)
+{
+    for (auto wallet : m_wallets) {
+        if (wallet->m_xpub_hash_id == xpub_hash_id) {
+            return wallet;
+        }
+    }
+    return nullptr;
+}
