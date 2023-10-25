@@ -14,7 +14,6 @@ class SignupController : public Controller
     Q_OBJECT
     Q_PROPERTY(Network* network READ network WRITE setNetwork NOTIFY networkChanged)
     Q_PROPERTY(QStringList mnemonic READ mnemonic WRITE setMnemonic NOTIFY mnemonicChanged)
-    Q_PROPERTY(QString pin READ pin WRITE setPin NOTIFY pinChanged)
     Q_PROPERTY(bool active READ active WRITE setActive NOTIFY activeChanged)
     Q_PROPERTY(Wallet* wallet READ wallet NOTIFY walletChanged)
     QML_ELEMENT
@@ -27,9 +26,6 @@ public:
     QStringList mnemonic() const { return m_mnemonic; }
     void setMnemonic(const QStringList &mnemonic);
 
-    QString pin() const { return m_pin; }
-    void setPin(const QString& pin);
-
     bool active() const { return m_active; }
     void setActive(bool active);
 
@@ -39,7 +35,6 @@ public:
 signals:
     void networkChanged();
     void walletChanged();
-    void pinChanged();
     void activeChanged();
     void mnemonicSizeChanged();
     void mnemonicChanged();
@@ -48,7 +43,6 @@ signals:
 private:
     Network* m_network{nullptr};
     QStringList m_mnemonic;
-    QString m_pin;
     bool m_active{false};
     Wallet* m_wallet{nullptr};
 };
