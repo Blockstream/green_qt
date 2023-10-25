@@ -63,6 +63,7 @@ signals:
     void acceptedChanged();
     void walletRestored(Wallet* wallet);
     void restoreFinished(Context* context);
+    void alreadyRestored(Wallet* wallet);
 private:
 //    Network* m_network{nullptr};
 //    QString m_type;
