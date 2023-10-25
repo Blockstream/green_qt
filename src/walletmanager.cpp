@@ -102,13 +102,6 @@ Wallet* WalletManager::createWallet()
     return wallet;
 }
 
-Wallet* WalletManager::createWallet(Network* network, const QString& hash_id)
-{
-    auto wallet = new Wallet(network, hash_id, this);
-    wallet->m_id = QUuid::createUuid().toString(QUuid::WithoutBraces);
-    return wallet;
-}
-
 void WalletManager::insertWallet(Wallet* wallet)
 {
     Q_ASSERT(!wallet->m_id.isEmpty());
