@@ -565,12 +565,13 @@ void RegisterUserTask::handleDone(const QJsonObject& result)
     const auto xpub_hash_id = result.value("result").toObject().value("xpub_hash_id").toString();
     const auto wallet_hash_id = result.value("result").toObject().value("wallet_hash_id").toString();
 
+    m_session->m_ready = true;
+    m_session->m_wallet_hash_id = wallet_hash_id;
+
     auto context = m_session->context();
     context->setXPubHashId(xpub_hash_id);
-    context->m_wallet_hash_id = wallet_hash_id;
     setStatus(Status::Finished);
 }
-
 
 LoginTask::LoginTask(Session* session)
     : AuthHandlerTask(session)
@@ -624,9 +625,9 @@ void LoginTask::handleDone(const QJsonObject& result)
     const auto wallet_hash_id = result.value("result").toObject().value("wallet_hash_id").toString();
 
     m_session->m_ready = true;
+    m_session->m_wallet_hash_id = wallet_hash_id;
     auto context = m_session->context();
     context->setXPubHashId(xpub_hash_id);
-    context->m_wallet_hash_id = wallet_hash_id;
 
     AuthHandlerTask::handleDone(result);
 }
@@ -894,16 +895,6 @@ bool EncryptWithPinTask::call(GA_session* session, GA_auth_handler** auth_handle
     });
     const auto rc = GA_encrypt_with_pin(session, Json::fromObject(details).get(), auth_handler);
     return rc == GA_OK;
-}
-
-void EncryptWithPinTask::handleDone(const QJsonObject& result)
-{
-    const auto pin_data = result.value("result").toObject().value("pin_data").toObject();
-    auto context = m_session->context();
-    auto wallet = context->wallet();
-    context->m_pin_data = pin_data;
-    if (wallet) wallet->setPinData(QJsonDocument(pin_data).toJson());
-    AuthHandlerTask::handleDone(result);
 }
 
 CreateAccountTask::CreateAccountTask(const QJsonObject& details, Session* session)

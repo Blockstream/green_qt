@@ -52,7 +52,7 @@ WalletManager::WalletManager()
             }
             wallet->m_network = network;
             wallet->m_pin_data = QByteArray::fromBase64(data.value("pin_data").toString().toLocal8Bit());
-            wallet->m_wallet_hash_id = data.value("hash_id").toString();
+            wallet->m_hash_id = data.value("hash_id").toString();
         }
         wallet->m_login_attempts_remaining = data.value("login_attempts_remaining").toInt();
         if (data.contains("username")) {
@@ -175,10 +175,10 @@ Wallet *WalletManager::walletWithHashId(const QString &hash_id, bool watch_only)
     return nullptr;
 }
 
-Wallet* WalletManager::findWallet(const QString& xpub_hash_id)
+Wallet* WalletManager::findWallet(const QString& xpub_hash_id, bool watch_only) const
 {
     for (auto wallet : m_wallets) {
-        if (wallet->m_xpub_hash_id == xpub_hash_id) {
+        if (wallet->m_xpub_hash_id == xpub_hash_id && wallet->m_watch_only == watch_only) {
             return wallet;
         }
     }

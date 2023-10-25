@@ -138,6 +138,7 @@ void Context::setCredentials(const QJsonObject &credentials)
 void Context::setMnemonic(const QStringList& mnemonic)
 {
     if (m_mnemonic == mnemonic) return;
+    Q_ASSERT(m_mnemonic.isEmpty());
     m_mnemonic = mnemonic;
     emit mnemonicChanged();
 }

@@ -73,7 +73,6 @@ public slots:
 signals:
     void contextChanged();
     void isPersistedChanged(bool is_persisted);
-    void sessionChanged(Session* session);
     void hasPinDataChanged();
     void nameChanged(QString name);
     void loginAttemptsRemainingChanged();
@@ -104,7 +103,7 @@ public:
     bool m_watch_only{false};
     bool isWatchOnly() const { return m_watch_only; }
 
-    void setPinData(const QByteArray &pin_data);
+    void setPinData(Network* network, const QByteArray& pin_data);
 private:
     Context* m_context{nullptr};
 };

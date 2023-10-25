@@ -29,8 +29,10 @@ void SystemMessageController::check()
 
     if (m_dispatcher->isBusy()) return;
 
+    // TODO multi network support!
     auto network = m_context->wallet()->network();
     auto session = m_context->getOrCreateSession(network);
+    if (!session) return;
     m_dispatcher->add(new GetSystemMessageTask(session, this));
 
 //    // Don't fetch message if there's a pending message

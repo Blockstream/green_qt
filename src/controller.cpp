@@ -277,8 +277,7 @@ void Controller::changePin(const QString& pin)
 {
     if (!m_context) return;
 
-    auto network = m_context->wallet()->network();
-    auto session = m_context->getOrCreateSession(network);
+    auto session = m_context->primarySession();
 
     auto encrypt_with_pin = new EncryptWithPinTask(m_context->credentials(), pin, session);
     auto group = new TaskGroup(this);
@@ -286,6 +285,10 @@ void Controller::changePin(const QString& pin)
     m_dispatcher->add(group);
 
     connect(group, &TaskGroup::finished, this, [=] {
+        const auto pin_data = encrypt_with_pin->result().value("result").toObject().value("pin_data").toObject();
+
+        m_context->wallet()->setPinData(session->network(), QJsonDocument(pin_data).toJson());
+
         emit finished();
     });
 }

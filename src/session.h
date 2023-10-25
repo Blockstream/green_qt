@@ -133,6 +133,7 @@ public:
 
     QJsonObject m_block;
     int64_t m_id{0};
+    QString m_wallet_hash_id;
 };
 
 class SessionActivity : public Activity

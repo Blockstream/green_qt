@@ -413,5 +413,6 @@ void JadeLoginTask::update()
         });
 
         setStatus(Status::Finished);
+        Q_UNREACHABLE();
     }
 }

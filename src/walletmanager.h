@@ -21,7 +21,7 @@ public:
     Wallet* createWallet();
     Q_INVOKABLE Wallet* wallet(const QString& id) const;
     Wallet* walletWithHashId(const QString& hash_id, bool watch_only) const;
-    Wallet* findWallet(const QString& xpub_hash_id);
+    Wallet* findWallet(const QString& xpub_hash_id, bool watch_only = false) const;
 
     void addWallet(Wallet *wallet);
 

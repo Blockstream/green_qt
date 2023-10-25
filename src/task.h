@@ -324,7 +324,6 @@ public:
 private:
     bool active() const override;
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
-    void handleDone(const QJsonObject& result) override;
 private:
     QString m_pin;
     QJsonValue m_plaintext;

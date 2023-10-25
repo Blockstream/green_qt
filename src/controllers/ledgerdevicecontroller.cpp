@@ -325,7 +325,8 @@ void LedgerLoginTask::update()
         auto wallet = m_controller->wallet();
 
         if (!wallet) {
-            wallet = WalletManager::instance()->createWallet(network, m_controller->m_wallet_hash_id);
+            Q_UNREACHABLE();
+            wallet = WalletManager::instance()->createWallet();
             wallet->m_is_persisted = true;
             wallet->setName(QString("%1 on %2").arg(network->displayName()).arg(device->name()));
             WalletManager::instance()->insertWallet(wallet);
@@ -340,11 +341,4 @@ void LedgerLoginTask::update()
         m_controller->setWallet(wallet);
         setStatus(Status::Finished);
     });
-
-//    QObject::connect(m_login_handler, &Handler::error, this, [=]{
-//        setStatus("locked");
-//        m_login_handler->deleteLater();
-//        m_login_handler = nullptr;
-//        signup();
-//    });    
 }

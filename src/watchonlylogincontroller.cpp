@@ -123,25 +123,23 @@ void WatchOnlyCreateWalletTask::update()
     if (m_status != Status::Ready) return;
 
     const auto context = m_controller->context();
-    const auto wallet_hash_id = context->m_wallet_hash_id;
-
-    if (wallet_hash_id.isEmpty()) return;
+    const auto xpub_hash_id = context->xpubHashId();
+    if (xpub_hash_id.isEmpty()) return;
 
     setStatus(Status::Active);
 
     auto wallet = m_controller->wallet();
     if (!wallet) {
-        const auto network = m_controller->network();
-        auto wallet = WalletManager::instance()->walletWithHashId(wallet_hash_id, true);
+        auto wallet = WalletManager::instance()->findWallet(xpub_hash_id, true);
         if (!wallet) {
-            wallet = WalletManager::instance()->createWallet(network, wallet_hash_id);
+            wallet = WalletManager::instance()->createWallet();
+            wallet->setName(QString("%1 watch-only wallet").arg(m_controller->username()));
+            wallet->m_username = m_controller->username();
             wallet->m_watch_only = true;
             wallet->m_is_persisted = m_controller->saveWallet();
-            wallet->m_name = QString("%1 watch-only wallet").arg(m_controller->username());
         }
         context->setWallet(wallet);
         wallet->setContext(context);
-        wallet->m_username = m_controller->username();
         wallet->save();
     }
     m_controller->setWallet(wallet);

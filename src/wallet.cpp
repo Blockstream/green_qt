@@ -157,14 +157,16 @@ void Wallet::save()
 
 void Wallet::clearPinData()
 {
-    setPinData({});
+    setPinData(nullptr, {});
 }
 
-void Wallet::setPinData(const QByteArray& pin_data)
+void Wallet::setPinData(Network* network, const QByteArray& pin_data)
 {
-    if (m_pin_data == pin_data) return;
+    if (m_network == network && m_pin_data == pin_data) return;
+    m_network = network;
     m_pin_data = pin_data;
     emit hasPinDataChanged();
+    resetLoginAttempts();
     save();
 }
 
