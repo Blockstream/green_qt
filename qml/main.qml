@@ -228,42 +228,6 @@ ApplicationWindow {
         }
     }
 
-    Loader2 {
-        active: navigation.param.flow === 'signup'
-        onActiveChanged: if (!active) object.close()
-        sourceComponent: SignupDialog {
-            visible: true
-            onRejected: navigation.pop()
-            onClosed: destroy()
-        }
-    }
-
-    Loader2 {
-        active: navigation.param.flow === 'restore'
-        onActiveChanged: if (!active) object.close()
-        sourceComponent: RestoreDialog {
-            visible: true
-            onRejected: navigation.pop()
-            onClosed: destroy()
-        }
-    }
-
-    Loader2 {
-        active: navigation.param.flow === 'watch_only_login'
-        onActiveChanged: if (!active) object.close()
-        sourceComponent: WatchOnlyLoginDialog {
-            network: NetworkManager.networkWithServerType(navigation.param.network, 'green')
-            visible: true
-            onRejected: navigation.pop()
-            onClosed: destroy()
-        }
-    }
-
-    Component {
-        id: create_account_dialog
-        CreateAccountDialog {}
-    }
-
     Component {
         id: remove_wallet_dialog
         RemoveWalletDialog {}
