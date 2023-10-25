@@ -37,18 +37,22 @@ WalletManager::WalletManager()
             data = doc.object();
             id = QFileInfo(file).baseName();
         }
-        auto network = NetworkManager::instance()->network(data.value("network").toString());
-        if (!network) continue;
-        const auto hash_id = data.value("hash_id").toString();
-        Wallet* wallet = new Wallet(network, hash_id, this);
+        Wallet* wallet = new Wallet(this);
         wallet->m_is_persisted = true;
         wallet->m_name = data.value("name").toString();
         wallet->m_id = id;
         if (data.contains("xpub_hash_id")) {
             wallet->m_xpub_hash_id = data.value("xpub_hash_id").toString();
         }
-        if (data.contains("pin_data")) {
+        if (data.contains("pin_data") && data.contains("network")) {
+            auto network = NetworkManager::instance()->network(data.value("network").toString());
+            if (!network) {
+                delete wallet;
+                continue;
+            }
+            wallet->m_network = network;
             wallet->m_pin_data = QByteArray::fromBase64(data.value("pin_data").toString().toLocal8Bit());
+            wallet->m_wallet_hash_id = data.value("hash_id").toString();
         }
         wallet->m_login_attempts_remaining = data.value("login_attempts_remaining").toInt();
         if (data.contains("username")) {

@@ -28,8 +28,7 @@ class Wallet : public QObject
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
-    explicit Wallet(QObject *parent = nullptr);
-    explicit Wallet(Network* network, const QString& hash_id, QObject *parent = nullptr);
+    explicit Wallet(QObject* parent = nullptr);
     virtual ~Wallet();
 
     Context* context() const { return m_context; }
@@ -90,7 +89,7 @@ public:
     QString m_name;
     QString m_username;
     QJsonObject m_device_details;
-    Network* const m_network{nullptr};
+    Network* m_network{nullptr};
     QString m_xpub_hash_id;
     QString m_hash_id;
     int m_login_attempts_remaining{3};

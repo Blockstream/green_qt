@@ -27,10 +27,7 @@ Wallet::Wallet(QObject* parent)
 {
 }
 
-Wallet::Wallet(Network* network, const QString& hash_id, QObject* parent)
-    : QObject(parent)
-    , m_network(network)
-    , m_hash_id(hash_id)
+Wallet::~Wallet()
 {
 }
 
@@ -40,10 +37,6 @@ void Wallet::disconnect()
         m_context->deleteLater();
         setContext(nullptr);
     }
-}
-
-Wallet::~Wallet()
-{
 }
 
 void Wallet::setContext(Context* context)
@@ -135,13 +128,13 @@ void Wallet::save()
     if (!m_is_persisted) return;
     QJsonObject data({
         { "version", 1 },
-        { "name", m_name },
-        { "network", m_network->id() }
+        { "name", m_name }
     });
     if (m_watch_only) {
         data.insert("username", m_username);
     }
-    if (m_login_attempts_remaining > 0 || !m_pin_data.isEmpty()) {
+    if (m_network && (m_login_attempts_remaining > 0 || !m_pin_data.isEmpty())) {
+        data.insert("network", m_network->id());
         data.insert("login_attempts_remaining", m_login_attempts_remaining);
         data.insert("pin_data", QString::fromLocal8Bit(m_pin_data.toBase64()));
     }
