@@ -53,4 +53,14 @@ private:
     TaskGroupMonitor* const m_monitor;
 };
 
+class PinDataController : public Controller
+{
+    Q_OBJECT
+    QML_ELEMENT
+public:
+    PinDataController(QObject * parent = nullptr);
+public slots:
+    void update(const QString& pin);
+};
+
 #endif // GREEN_LOGINWITHPINCONTROLLER_H

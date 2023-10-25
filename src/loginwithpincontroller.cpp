@@ -3,9 +3,12 @@
 #include "context.h"
 #include "network.h"
 #include "networkmanager.h"
+#include "session.h"
 #include "task.h"
 #include "wallet.h"
 #include "walletmanager.h"
+
+#include <QJsonDocument>
 
 LoginController::LoginController(QObject* parent)
     : Controller(parent)
@@ -190,4 +193,29 @@ void LoadController::loginNetwork(Network* network)
 
     m_monitor->add(group);
     m_context->dispatcher()->add(group);
+}
+
+PinDataController::PinDataController(QObject* parent)
+    : Controller(parent)
+{
+}
+
+void PinDataController::update(const QString& pin)
+{
+    if (!m_context) return;
+
+    Q_ASSERT(m_context->wallet());
+
+    auto session = m_context->primarySession();
+    Q_ASSERT(session);
+
+    auto task = new EncryptWithPinTask(m_context->credentials(), pin, session);
+    connect(task, &Task::finished, this, [=] {
+        const auto pin_data = task->result().value("result").toObject().value("pin_data").toObject();
+
+        m_context->wallet()->setPinData(session->network(), QJsonDocument(pin_data).toJson());
+
+        emit finished();
+    });
+    m_context->dispatcher()->add(task);
 }
