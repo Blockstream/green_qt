@@ -49,11 +49,6 @@ void Wallet::setContext(Context* context)
     }
 }
 
-Session *Wallet::session() const
-{
-    return m_context->getOrCreateSession(m_network);
-}
-
 QString Wallet::id() const
 {
     Q_ASSERT(!m_id.isEmpty());
@@ -173,9 +168,11 @@ void Wallet::setPinData(Network* network, const QByteArray& pin_data)
 QJsonObject Wallet::convert(const QJsonObject& value) const
 {
     if (!m_context) return {};
+    auto session = m_context->primarySession();
+    if (!session) return {};
     auto details = Json::fromObject(value);
     GA_json* balance;
-    int err = GA_convert_amount(session()->m_session, details.get(), &balance);
+    int err = GA_convert_amount(session->m_session, details.get(), &balance);
     if (err != GA_OK) return {};
     QJsonObject result = Json::toObject(balance);
     GA_destroy_json(balance);
@@ -226,12 +223,15 @@ qint64 Wallet::amountToSats(const QString& amount) const
 
 qint64 Wallet::parseAmount(const QString& amount, const QString& unit) const
 {
+    if (!m_context) return 0;
+    auto session = m_context->primarySession();
+    if (!session) return 0;
     if (amount.isEmpty()) return 0;
     QString sanitized_amount = amount;
     sanitized_amount.replace(',', '.');
     auto details = Json::fromObject({{ unit == "\u00B5BTC" ? "ubtc" : unit.toLower(), sanitized_amount }});
     GA_json* balance;
-    int err = GA_convert_amount(session()->m_session, details.get(), &balance);
+    int err = GA_convert_amount(session->m_session, details.get(), &balance);
     if (err != GA_OK) return 0;
     QJsonObject result = Json::toObject(balance);
     GA_destroy_json(balance);

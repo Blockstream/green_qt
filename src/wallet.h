@@ -34,7 +34,6 @@ public:
     Context* context() const { return m_context; }
     void setContext(Context* context);
 
-    Session* session() const;
     QString id() const;
     bool isPersisted() const { return m_is_persisted; }
     Network* network() const { return m_network; }
