@@ -100,8 +100,7 @@ void SignupController::setActive(bool active)
             { "type", "2of2_no_recovery" }
         };
 
-        auto network = m_context->wallet()->network();
-        auto session = m_context->getOrCreateSession(network);
+        auto session = m_context->getOrCreateSession(m_network);
         auto create_amp_account = new CreateAccountTask(account, session);
         auto hide_main_account = new UpdateAccountTask(QJsonObject{{ "subaccount", 0 }, { "hidden", true }}, session);
 
