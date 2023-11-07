@@ -16,6 +16,11 @@ DeviceManager* DeviceManager::instance()
     return &instance;
 }
 
+int DeviceManager::count() const
+{
+    return m_devices.count();
+}
+
 QSet<Device*> DeviceManager::devices() const
 {
     return m_devices;
@@ -50,9 +55,10 @@ Device *DeviceManager::deviceWithId(const QString& id)
 
 void DeviceManager::addDevice(Device* device)
 {
-    Q_ASSERT(!m_devices.contains(device));
+    if (m_devices.contains(device)) return;
     m_devices.insert(device);
     emit deviceAdded(device);
+    emit countChanged();
 }
 
 void DeviceManager::removeDevice(Device* device)
@@ -60,4 +66,5 @@ void DeviceManager::removeDevice(Device* device)
     if (!m_devices.contains(device)) return;
     m_devices.remove(device);
     emit deviceRemoved(device);
+    emit countChanged();
 }
