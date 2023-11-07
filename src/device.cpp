@@ -126,6 +126,13 @@ void Device::setMasterPublicKey(Network* network, const QByteArray& master_publi
     m_master_public_key[network] = master_public_key;
 }
 
+void Device::setConnected(bool connected)
+{
+    if (m_connected == connected) return;
+    m_connected = connected;
+    emit connectedChanged();
+}
+
 bool DeviceCommand::readAPDUResponse(Device*, int length, QDataStream &stream)
 {
     QByteArray response;

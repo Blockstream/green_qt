@@ -96,6 +96,7 @@ class Device : public QObject
     Q_PROPERTY(Type type READ type CONSTANT)
     Q_PROPERTY(QString name READ name NOTIFY nameChanged)
     Q_PROPERTY(QJsonObject details READ details NOTIFY detailsChanged)
+    Q_PROPERTY(bool connected READ isConnected NOTIFY connectedChanged)
     QML_ELEMENT
     QML_UNCREATABLE("Devices are instanced by DeviceDiscoveryAgent.")
 public:
@@ -135,11 +136,15 @@ public:
     static Type typefromVendorAndProduct(uint32_t vendor_id, uint32_t product_id);
     QByteArray masterPublicKey(Network* network) const;
     void setMasterPublicKey(Network* network, const QByteArray& master_public_key);
+    bool isConnected() const { return m_connected; }
+    void setConnected(bool connected);
 signals:
     void nameChanged();
     void detailsChanged();
+    void connectedChanged();
 private:
     const QString m_uuid;
+    bool m_connected{false};
     QMap<Network*, QByteArray> m_master_public_key;
 };
 
