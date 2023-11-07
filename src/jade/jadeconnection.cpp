@@ -83,7 +83,7 @@ void JadeConnection::onDataReceived(const QByteArray &data) {
             } else if (err.error == QCborError::EndOfFile) {
                 // partial object - stop trying to read objects for now, await more data
                 if (m_unparsed.length() > 0) {
-                    qDebug() << "CBOR incomplete (" << m_unparsed.length() << " bytes present ) - awaiting more data";
+                    // qDebug() << "CBOR incomplete (" << m_unparsed.length() << " bytes present ) - awaiting more data";
                 }
             } else {
                 // Unexpected parse error
