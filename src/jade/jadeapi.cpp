@@ -307,6 +307,14 @@ int JadeAPI::setMnemonic(const QString& mnemonic, const ResponseHandler &cb)
 }
 #endif
 
+int JadeAPI::ping(const ResponseHandler &cb)
+{
+    const int id = registerResponseHandler(cb, 0);
+    const QCborMap request = getRequest(id, "ping");
+    send(request);
+    return id;
+}
+
 // Get version information from the jade
 int JadeAPI::getVersionInfo(const ResponseHandler &cb)
 {
@@ -336,6 +344,14 @@ int JadeAPI::authUser(const QString &network, const ResponseHandler &cb, const H
     const qint64 now_epoch_secs = QDateTime::currentSecsSinceEpoch();
     const QCborMap params = { {"network", network}, {"epoch", now_epoch_secs } };
     const QCborMap request = getRequest(id, "auth_user", params);
+    enqueue(request);
+    return id;
+}
+
+int JadeAPI::logout(const ResponseHandler &cb)
+{
+    const int id = registerResponseHandler(cb);
+    const QCborMap request = getRequest(id, "logout", {});
     enqueue(request);
     return id;
 }

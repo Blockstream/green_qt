@@ -56,6 +56,7 @@ public:
     int setMnemonic(const QString& mnemonic, const ResponseHandler &cb);
 #endif
 
+    int ping(const ResponseHandler &cb);
     // Get version information from the Jade
     int getVersionInfo(const ResponseHandler &cb);
 
@@ -68,6 +69,8 @@ public:
     // when the http-request response is received, passing the originating id
     // and request object, as well as the response body received.
     int authUser(const QString &network, const ResponseHandler &cb, const HttpRequestProxy &request_proxy);
+
+    int logout(const ResponseHandler &cb);
 
     // OTA update the connected Jade
     // The passed ResponseHandler will be called multiple times during the update process
