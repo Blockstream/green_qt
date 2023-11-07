@@ -16,6 +16,7 @@ class JadeDevice : public Device
     Q_PROPERTY(QString version READ version NOTIFY versionInfoChanged)
     Q_PROPERTY(bool updateRequired READ updateRequired NOTIFY versionInfoChanged)
     Q_PROPERTY(State state READ state NOTIFY versionInfoChanged)
+    Q_PROPERTY(Status status READ status NOTIFY statusChanged)
     Q_PROPERTY(bool unlocking READ unlocking NOTIFY unlockingChanged)
     QML_ELEMENT
     QML_UNCREATABLE("")
@@ -28,6 +29,12 @@ public:
         StateUninitialized,
     };
     Q_ENUM(State)
+    enum Status {
+        StatusIdle,
+        StatusHandleClientMessage,
+        StatusHandleMenuNavigation,
+    };
+    Q_ENUM(Status)
 
     JadeDevice(JadeAPI* api, const QString& system_location, QObject* parent = nullptr);
     Vendor vendor() const override { return Device::Blockstream; }
@@ -53,16 +60,20 @@ public:
     QString version() const;
     QString systemLocation() const { return m_system_location; }
     State state() const;
+    Status status() const { return m_status; }
+    void setStatus(Status status);
     bool unlocking() const { return m_unlocking; }
     void setUnlocking(bool unlocking);
     Q_INVOKABLE bool versionGreaterOrEqualThan(const QString& other);
 signals:
     void versionInfoChanged();
+    void statusChanged();
     void error();
     bool unlockingChanged();
 private:
     JadeAPI* const m_api;
     const QString m_system_location;
+    Status m_status{StatusIdle};
     QVariantMap m_version_info;
     QString m_name;
     bool m_unlocking{false};

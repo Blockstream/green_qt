@@ -633,6 +633,13 @@ JadeDevice::State JadeDevice::state() const
     Q_UNREACHABLE();
 }
 
+void JadeDevice::setStatus(Status status)
+{
+    if (m_status == status) return;
+    m_status = status;
+    emit statusChanged();
+}
+
 void JadeDevice::setUnlocking(bool unlocking)
 {
     if (m_unlocking == unlocking) return;
