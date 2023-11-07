@@ -509,11 +509,14 @@ public:
     }
 };
 
-JadeDevice::JadeDevice(JadeAPI* api, const QString& system_location, QObject* parent)
+JadeDevice::JadeDevice(QObject* parent)
     : Device(parent)
-    , m_api(api)
-    , m_system_location(system_location)
 {
+}
+
+void JadeDevice::setBackend(JadeAPI* backend)
+{
+    m_api = backend;
 }
 
 QJsonObject JadeDevice::details() const
@@ -610,6 +613,13 @@ bool JadeDevice::updateRequired() const
 QString JadeDevice::version() const
 {
     return m_version_info.value("JADE_VERSION").toString();
+}
+
+void JadeDevice::setSystemLocation(const QString& system_location)
+{
+    if (m_system_location == system_location) return;
+    m_system_location = system_location;
+    emit systemLocationChanged();
 }
 
 JadeDevice::State JadeDevice::state() const

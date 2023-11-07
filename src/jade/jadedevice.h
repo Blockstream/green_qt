@@ -11,7 +11,7 @@ class JadeAPI;
 class JadeDevice : public Device
 {
     Q_OBJECT
-    Q_PROPERTY(QString systemLocation READ systemLocation CONSTANT)
+    Q_PROPERTY(QString systemLocation READ systemLocation NOTIFY systemLocationChanged)
     Q_PROPERTY(QVariantMap versionInfo READ versionInfo NOTIFY versionInfoChanged)
     Q_PROPERTY(QString version READ version NOTIFY versionInfoChanged)
     Q_PROPERTY(bool updateRequired READ updateRequired NOTIFY versionInfoChanged)
@@ -36,12 +36,13 @@ public:
     };
     Q_ENUM(Status)
 
-    JadeDevice(JadeAPI* api, const QString& system_location, QObject* parent = nullptr);
+    JadeDevice(QObject* parent = nullptr);
     Vendor vendor() const override { return Device::Blockstream; }
     Transport transport() const override { return Transport::USB; }
     Type type() const override { return Type::BlockstreamJade; }
     QString name() const override { return m_name; }
     JadeAPI *api() const { return m_api; }
+    void setBackend(JadeAPI* api);
     QJsonObject details() const override;
     GetWalletPublicKeyActivity* getWalletPublicKey(Network* network, const QVector<uint32_t>& path) override;
     SignMessageActivity* signMessage(const QString& message, const QVector<uint32_t>& path) override;
@@ -59,6 +60,7 @@ public:
     bool updateRequired() const;
     QString version() const;
     QString systemLocation() const { return m_system_location; }
+    void setSystemLocation(const QString& system_location);
     State state() const;
     Status status() const { return m_status; }
     void setStatus(Status status);
@@ -66,14 +68,15 @@ public:
     void setUnlocking(bool unlocking);
     Q_INVOKABLE bool versionGreaterOrEqualThan(const QString& other);
 signals:
+    void systemLocationChanged();
     void versionInfoChanged();
     void statusChanged();
     void error();
     bool unlockingChanged();
 private:
-    JadeAPI* const m_api;
-    const QString m_system_location;
+    JadeAPI* m_api{nullptr};
     Status m_status{StatusIdle};
+    QString m_system_location;
     QVariantMap m_version_info;
     QString m_name;
     bool m_unlocking{false};

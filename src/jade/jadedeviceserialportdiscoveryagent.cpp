@@ -69,7 +69,7 @@ void JadeDeviceSerialPortDiscoveryAgent::scan()
                 relax_write = system_location.contains("cu.usbmodem");
 #endif
                 auto api = new JadeAPI(info, relax_write);
-                device = new JadeDevice(api, system_location, this);
+                device = new JadeDevice(this);
                 api->setParent(device);
                 connect(api, &JadeAPI::onConnected, this, [=] {
                     device->api()->getVersionInfo([=](const QVariantMap& data) {
