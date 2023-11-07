@@ -98,7 +98,7 @@ void WatchOnlyLoginController::login()
     group->add(session_login);
     group->add(create_wallet);
 
-    m_dispatcher->add(group);
+    dispatcher()->add(group);
 
     connect(group, &TaskGroup::finished, this, &WatchOnlyLoginController::loginFinished);
     connect(group, &TaskGroup::failed, this, &WatchOnlyLoginController::loginFailed);

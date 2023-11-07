@@ -217,7 +217,7 @@ void SendController::create()
             m_get_unspent_outputs = nullptr;
             create();
         });
-        m_dispatcher->add(m_get_unspent_outputs);
+        dispatcher()->add(m_get_unspent_outputs);
         return;
     }
 
@@ -278,7 +278,7 @@ void SendController::create()
         }
     });
 
-    m_dispatcher->add(m_create_task);
+    dispatcher()->add(m_create_task);
 }
 
 void SendController::signAndSend()
@@ -323,7 +323,7 @@ void SendController::signAndSend()
 
     group->add(sign);
     group->add(send);
-    m_dispatcher->add(group);
+    dispatcher()->add(group);
 }
 
 void SendController::setUtxos(const QJsonObject& utxos)

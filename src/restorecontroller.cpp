@@ -93,7 +93,7 @@ TaskGroup* RestoreController::check(Network* network)
         group->add(load_accounts);
     }
 
-    m_context->dispatcher()->add(group);
+    dispatcher()->add(group);
 
     connect(group, &TaskGroup::failed, this, [=] {
         m_context->releaseSession(session);
@@ -103,7 +103,7 @@ TaskGroup* RestoreController::check(Network* network)
 }
 
 RestoreCheckTask::RestoreCheckTask(RestoreController* controller)
-    : Task(controller->dispatcher())
+    : Task(controller)
     , m_controller(controller)
 {
 }

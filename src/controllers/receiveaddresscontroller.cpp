@@ -131,7 +131,7 @@ void ReceiveAddressController::generate()
         emit changed();
     });
 
-    m_dispatcher->add(get_receive_address);
+    dispatcher()->add(get_receive_address);
 }
 
 void ReceiveAddressController::verify()

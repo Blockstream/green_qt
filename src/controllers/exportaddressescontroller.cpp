@@ -81,5 +81,5 @@ void ExportAddressesController::nextPage()
             });
         }
     });
-    m_dispatcher->add(task);
+    dispatcher()->add(task);
 }

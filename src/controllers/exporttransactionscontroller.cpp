@@ -170,5 +170,5 @@ void ExportTransactionsController::nextPage()
         }
     });
 
-    m_dispatcher->add(get_transactions);
+    m_context->dispatcher()->add(get_transactions);
 }

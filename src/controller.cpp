@@ -49,7 +49,6 @@ void AbstractController::clearErrors()
 
 Controller::Controller(QObject* parent)
     : AbstractController(parent)
-    , m_dispatcher(new TaskDispatcher(this))
 {
 }
 
@@ -58,6 +57,12 @@ void Controller::setContext(Context* context)
     if (m_context == context) return;
     m_context = context;
     emit contextChanged();
+}
+
+TaskDispatcher *Controller::dispatcher() const
+{
+    Q_ASSERT(m_context);
+    return m_context->dispatcher();
 }
 
 static bool DeepContains(const QJsonObject& a, const QJsonObject& b)
@@ -101,7 +106,7 @@ void Controller::changeSettings(const QJsonObject& data)
 
     auto change_settings = new ChangeSettingsTask(data, session);
 
-    m_dispatcher->add(change_settings);
+    dispatcher()->add(change_settings);
 }
 
 void Controller::sendRecoveryTransactions()
@@ -113,10 +118,8 @@ void Controller::sendRecoveryTransactions()
 
     auto send_nlocktimes = new SendNLocktimesTask(session);
 
-    m_dispatcher->add(send_nlocktimes);
+    dispatcher()->add(send_nlocktimes);
 }
-
-#include "task.h"
 
 void Controller::changeTwoFactorLimit(bool is_fiat, const QString& limit)
 {
@@ -140,7 +143,7 @@ void Controller::changeTwoFactorLimit(bool is_fiat, const QString& limit)
     group->add(change_twofactor_limits);
     group->add(load_twofactor_config);
 
-    m_dispatcher->add(group);
+    dispatcher()->add(group);
 }
 
 void Controller::requestTwoFactorReset(const QString& email)
@@ -163,7 +166,7 @@ void Controller::requestTwoFactorReset(const QString& email)
     group->add(twofactor_reset);
     group->add(load_config);
 
-    m_dispatcher->add(group);
+    dispatcher()->add(group);
 }
 
 void Controller::cancelTwoFactorReset()
@@ -183,7 +186,7 @@ void Controller::cancelTwoFactorReset()
         m_context->setLocked(false);
         emit finished();
     });
-    m_dispatcher->add(task);
+    dispatcher()->add(task);
 }
 
 void Controller::setRecoveryEmail(const QString& email)
@@ -219,7 +222,7 @@ void Controller::setRecoveryEmail(const QString& email)
     group->add(update_config);
     group->add(change_settings);
 
-    m_dispatcher->add(group);
+    dispatcher()->add(group);
 }
 
 void Controller::setCsvTime(int value)
@@ -229,7 +232,7 @@ void Controller::setCsvTime(int value)
     auto session = m_context->getOrCreateSession(network);
     auto set_csv_time = new SetCsvTimeTask(value, session);
 
-    m_dispatcher->add(set_csv_time);
+    dispatcher()->add(set_csv_time);
 }
 
 void Controller::deleteWallet()
@@ -242,7 +245,7 @@ void Controller::deleteWallet()
         WalletManager::instance()->removeWallet(m_context->wallet());
         QTimer::singleShot(500, m_context->wallet(), &Wallet::disconnect);
     });
-    m_dispatcher->add(delete_wallet);
+    dispatcher()->add(delete_wallet);
 }
 
 void Controller::disableAllPins()
@@ -252,7 +255,7 @@ void Controller::disableAllPins()
 
     auto disable_all_pins = new DisableAllPinLoginsTask(session);
 
-    m_dispatcher->add(disable_all_pins);
+    dispatcher()->add(disable_all_pins);
 }
 
 void Controller::setUnspentOutputsStatus(Account* account, const QVariantList& outputs, const QString& status)
@@ -268,7 +271,7 @@ void Controller::setUnspentOutputsStatus(Account* account, const QVariantList& o
     auto group = new TaskGroup(this);
     group->add(set_status);
     group->add(load_balance);
-    m_dispatcher->add(group);
+    dispatcher()->add(group);
 
     connect(group, &TaskGroup::finished, this, &Controller::finished);
 }
@@ -282,7 +285,7 @@ void Controller::changePin(const QString& pin)
     auto encrypt_with_pin = new EncryptWithPinTask(m_context->credentials(), pin, session);
     auto group = new TaskGroup(this);
     group->add(encrypt_with_pin);
-    m_dispatcher->add(group);
+    dispatcher()->add(group);
 
     connect(group, &TaskGroup::finished, this, [=] {
         const auto pin_data = encrypt_with_pin->result().value("result").toObject().value("pin_data").toObject();
@@ -311,7 +314,7 @@ void Controller::setWatchOnly(const QString& username, const QString& password)
         emit watchOnlyUpdateFailure();
     });
 
-    m_dispatcher->add(task);
+    dispatcher()->add(task);
 }
 
 void Controller::clearWatchOnly()
@@ -342,7 +345,7 @@ bool Controller::setAccountName(Account* account, QString name, bool active_focu
         account->setName(name);
     });
 
-    m_dispatcher->add(task);
+    m_context->dispatcher()->add(task);
 
     return true;
 }
@@ -360,7 +363,7 @@ void Controller::setAccountHidden(Account* account, bool hidden)
     connect(task, &UpdateAccountTask::finished, this, [=] {
         account->setHidden(hidden);
     });
-    m_dispatcher->add(task);
+    dispatcher()->add(task);
 }
 
 TwoFactorController::TwoFactorController(QObject* parent)
@@ -382,7 +385,7 @@ void TwoFactorController::change(const QString& method, const QJsonObject& detai
 {
     if (!m_context) return;
     if (m_done) return;
-    if (m_dispatcher->isBusy()) return;
+    if (dispatcher()->isBusy()) return;
 
     clearErrors();
 
@@ -407,7 +410,7 @@ void TwoFactorController::change(const QString& method, const QJsonObject& detai
     group->add(change_twofactor);
     group->add(update_config);
 
-    m_dispatcher->add(group);
+    dispatcher()->add(group);
 
     connect(group, &TaskGroup::finished, this, [=] {
         emit finished();

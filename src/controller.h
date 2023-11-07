@@ -37,17 +37,16 @@ private:
 class Controller : public AbstractController
 {
     Q_OBJECT
-    Q_PROPERTY(TaskDispatcher* dispatcher READ dispatcher CONSTANT)
     Q_PROPERTY(Context* context READ context WRITE setContext NOTIFY contextChanged)
     QML_ELEMENT
 
 public:
     explicit Controller(QObject* parent = nullptr);
 
-    TaskDispatcher* dispatcher() const { return m_dispatcher; }
-
     Context* context() const { return m_context; }
     void setContext(Context* context);
+
+    TaskDispatcher* dispatcher() const;
 
 public slots:
     void changeSettings(const QJsonObject& data);
@@ -79,7 +78,6 @@ signals:
     void watchOnlyUpdateFailure();
 
 protected:
-    TaskDispatcher* const m_dispatcher;
     Context* m_context{nullptr};
     QVariantMap m_errors;
 };

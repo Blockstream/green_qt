@@ -125,7 +125,7 @@ void CreateAccountController::create()
     group->add(create_account);
     group->add(load_accounts);
 
-    m_dispatcher->add(group);
+    dispatcher()->add(group);
 
     connect(create_account, &Task::failed, this, [=](const QString& error) {
         setError("create", error);

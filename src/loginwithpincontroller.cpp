@@ -52,7 +52,7 @@ void LoginController::login()
 
     login(group, network);
 
-    m_dispatcher->add(group);
+    dispatcher()->add(group);
 
     connect(group, &TaskGroup::failed, this, &LoginController::loginFailed);
     connect(group, &TaskGroup::finished, this, [=] {
@@ -125,7 +125,7 @@ void LoadController::load()
     }
 
     m_monitor->add(group);
-    m_context->dispatcher()->add(group);
+    dispatcher()->add(group);
 
     connect(group, &TaskGroup::finished, this, [=] {
         auto wallet = m_context->wallet();
@@ -192,7 +192,7 @@ void LoadController::loginNetwork(Network* network)
     group->add(login);
 
     m_monitor->add(group);
-    m_context->dispatcher()->add(group);
+    dispatcher()->add(group);
 }
 
 PinDataController::PinDataController(QObject* parent)
@@ -217,5 +217,5 @@ void PinDataController::update(const QString& pin)
 
         emit finished();
     });
-    m_context->dispatcher()->add(task);
+    dispatcher()->add(task);
 }

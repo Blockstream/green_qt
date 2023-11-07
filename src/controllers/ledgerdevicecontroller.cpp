@@ -7,6 +7,7 @@
 #include "network.h"
 #include "resolver.h"
 #include "session.h"
+#include "task.h"
 #include "wallet.h"
 #include "walletmanager.h"
 
@@ -46,7 +47,7 @@ LedgerDeviceController::LedgerDeviceController(QObject* parent)
     group->add(initialize);
     group->add(identify);
 
-    m_dispatcher->add(group);
+    dispatcher()->add(group);
 }
 
 LedgerDeviceController::~LedgerDeviceController()
@@ -58,7 +59,7 @@ void LedgerDeviceController::setNetwork(Network *network)
     if (m_network == network) return;
     m_network = network;
     emit networkChanged();
-    m_dispatcher->dispatch();
+    dispatcher()->dispatch();
 
     emit appNameChanged();
 }
@@ -68,7 +69,7 @@ void LedgerDeviceController::setDevice(LedgerDevice *device)
     if (m_device == device) return;
     m_device = device;
     emit deviceChanged();
-    m_dispatcher->dispatch();
+    m_context->dispatcher()->dispatch();
 
 
     connect(device, &LedgerDevice::stateChanged, this, &LedgerDeviceController::appNameChanged);
@@ -149,7 +150,7 @@ void LedgerDeviceController::login()
         group->add(load_assets);
     }
 
-    m_dispatcher->add(group);
+    dispatcher()->add(group);
 
     login->then(load_accounts);
 

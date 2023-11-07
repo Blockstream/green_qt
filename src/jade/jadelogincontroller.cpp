@@ -33,11 +33,7 @@ void JadeController::setDevice(JadeDevice* device)
 {
     if (m_device == device) return;
     m_device = device;
-    if (m_device) {
-        QObject::connect(m_device, &JadeDevice::versionInfoChanged, m_dispatcher, &TaskDispatcher::dispatch);
-    }
     emit deviceChanged();
-    m_dispatcher->dispatch();
 }
 
 
@@ -60,7 +56,7 @@ void JadeSetupController::setup(const QString& network)
     group->add(connect_session);
     group->add(setup);
 
-    m_dispatcher->add(group);
+    dispatcher()->add(group);
 }
 
 JadeSetupTask::JadeSetupTask(JadeSetupController* controller)
@@ -141,7 +137,7 @@ void JadeUnlockController::unlock()
     group->add(connect_session);
     group->add(unlock);
 
-    m_dispatcher->add(group);
+    dispatcher()->add(group);
 }
 
 static QJsonObject device_details_from_device(JadeDevice* device)
@@ -164,7 +160,7 @@ void JadeLoginController::setNetwork(const QString& network)
     if (m_network == network) return;
     m_network = network;
     emit networkChanged();
-    m_dispatcher->dispatch();
+    dispatcher()->dispatch();
 }
 
 void JadeLoginController::setEnabled(bool enabled)
@@ -199,14 +195,14 @@ void JadeLoginController::setWalletHashId(const QString& wallet_hash_id)
 void JadeLoginController::login()
 {
     auto login = new JadeLoginTask(this);
-    m_dispatcher->add(login);
+    dispatcher()->add(login);
 }
 
 JadeLoginController::JadeLoginController(QObject* parent)
     : JadeController(parent)
 {
     auto identify = new JadeIdentifyTask(this);
-    m_dispatcher->add(identify);
+    dispatcher()->add(identify);
 }
 
 JadeUnlockTask::JadeUnlockTask(JadeUnlockController* controller)

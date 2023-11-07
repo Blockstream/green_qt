@@ -25,7 +25,6 @@ void SignupController::setNetwork(Network* network)
     if (m_network == network) return;
     m_network = network;
     emit networkChanged();
-    m_dispatcher->dispatch();
 }
 
 void SignupController::setActive(bool active)
@@ -62,7 +61,7 @@ void SignupController::setActive(bool active)
     create_wallet->then(get_credentials);
     persist_wallet->needs(get_credentials);
 
-    m_dispatcher->add(group);
+    dispatcher()->add(group);
 }
 
 void SignupController::setWallet(Wallet *wallet)
@@ -73,7 +72,7 @@ void SignupController::setWallet(Wallet *wallet)
 }
 
 SignupCreateWalletTask::SignupCreateWalletTask(SignupController* controller)
-    : Task(controller->dispatcher())
+    : Task(controller)
     , m_controller(controller)
 {
 }
@@ -100,7 +99,7 @@ void SignupCreateWalletTask::update()
 
 
 SignupPersistWalletTask::SignupPersistWalletTask(SignupController* controller)
-    : Task(controller->dispatcher())
+    : Task(controller)
     , m_controller(controller)
 {
 }

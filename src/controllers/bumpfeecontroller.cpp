@@ -69,7 +69,7 @@ void BumpFeeController::bumpFee()
     group->add(sign);
     group->add(send);
     group->add(load_config);
-    m_dispatcher->add(group);
+    dispatcher()->add(group);
 }
 
 void BumpFeeController::setTransaction(Transaction* transaction)
@@ -100,7 +100,7 @@ void BumpFeeController::create()
             m_get_unspent_outputs = nullptr;
             create();
         });
-        m_dispatcher->add(m_get_unspent_outputs);
+        dispatcher()->add(m_get_unspent_outputs);
         return;
     }
 
@@ -124,7 +124,7 @@ void BumpFeeController::create()
             create();
         }
     });
-    m_dispatcher->add(m_create_task);
+    dispatcher()->add(m_create_task);
 }
 
 void BumpFeeController::setSignedTransaction(Transaction* signed_transaction)

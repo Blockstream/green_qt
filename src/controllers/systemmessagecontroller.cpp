@@ -27,13 +27,11 @@ void SystemMessageController::check()
 
     if (!m_message.isEmpty()) return;
 
-    if (m_dispatcher->isBusy()) return;
-
     // TODO multi network support!
     auto network = m_context->wallet()->network();
     auto session = m_context->getOrCreateSession(network);
     if (!session) return;
-    m_dispatcher->add(new GetSystemMessageTask(session, this));
+    dispatcher()->add(new GetSystemMessageTask(session, this));
 
 //    // Don't fetch message if there's a pending message
 //    if (m_accepted.size() < m_pending.size()) return;
@@ -60,7 +58,7 @@ void SystemMessageController::ack()
 
     auto network = m_context->wallet()->network();
     auto session = m_context->getOrCreateSession(network);
-    m_dispatcher->add(new AckSystemMessageTask(session, this));
+    dispatcher()->add(new AckSystemMessageTask(session, this));
 
 //    if (m_pending.size() == m_accepted.size()) return;
 
