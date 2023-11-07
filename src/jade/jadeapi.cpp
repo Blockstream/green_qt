@@ -320,8 +320,9 @@ int JadeAPI::ping(const ResponseHandler &cb)
 // Get version information from the jade
 int JadeAPI::getVersionInfo(const ResponseHandler &cb)
 {
-    const int id = registerResponseHandler(cb, 500);
-    const QCborMap request = getRequest(id, "get_version_info");
+    const int id = registerResponseHandler(cb, 300);
+    const QCborMap params = { {"nonblocking", true} };
+    const QCborMap request = getRequest(id, "get_version_info", params);
     enqueue(request);
     return id;
 }
