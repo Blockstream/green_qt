@@ -97,6 +97,8 @@ Session* Context::getOrCreateSession(Network* network)
         m_sessions.insert(network, session);
         m_sessions_list.append(session);
         emit sessionsChanged();
+
+        m_dispatcher->add(new ConnectTask(session));
     }
     return session;
 }
