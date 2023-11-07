@@ -509,6 +509,28 @@ public:
     }
 };
 
+class JadeLogoutActivity : public LogoutActivity
+{
+    JadeDevice* const m_device;
+public:
+    JadeLogoutActivity(JadeDevice* device)
+        : LogoutActivity(device)
+        , m_device(device)
+    {
+    }
+    void exec() override
+    {
+        auto backend = m_device->api();
+        if (backend) {
+            backend->logout([this](const QVariantMap& msg) {
+                finish();
+            });
+        } else {
+            finish();
+        }
+    }
+};
+
 JadeDevice::JadeDevice(QObject* parent)
     : Device(parent)
 {
@@ -571,6 +593,11 @@ void JadeDevice::ping()
     if (m_api->isIdle() && !m_api->isBusy()) {
         updateVersionInfo();
     }
+}
+
+LogoutActivity *JadeDevice::logout()
+{
+    return new JadeLogoutActivity(this);
 }
 
 void JadeDevice::updateVersionInfo()

@@ -81,6 +81,12 @@ public:
     virtual QByteArray masterBlindingKey() const = 0;
 };
 
+class LogoutActivity : public Activity
+{
+public:
+    LogoutActivity(QObject* parent) : Activity(parent) {}
+};
+
 class Device : public QObject
 {
     Q_OBJECT
@@ -126,6 +132,7 @@ public:
     virtual SignLiquidTransactionActivity* signLiquidTransaction(Network* network, const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs) = 0;
     virtual GetMasterBlindingKeyActivity* getMasterBlindingKey() = 0;
     virtual void ping() = 0;
+    virtual LogoutActivity* logout() = 0;
     static Type typefromVendorAndProduct(uint32_t vendor_id, uint32_t product_id);
     QByteArray masterPublicKey(Network* network) const;
     void setMasterPublicKey(Network* network, const QByteArray& master_public_key);

@@ -111,6 +111,12 @@ void LedgerDevice::ping()
 {
 }
 
+LogoutActivity* LedgerDevice::logout()
+{
+    Q_UNIMPLEMENTED();
+    return nullptr;
+}
+
 GetBlindingKeyActivity* LedgerDevice::getBlindingKey(const QString& script)
 {
     return new LedgerGetBlindingKeyActivity(script, this);
