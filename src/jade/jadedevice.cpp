@@ -597,6 +597,11 @@ QVariantMap JadeDevice::versionInfo() const
     return m_version_info;
 }
 
+QVersionNumber JadeDevice::minimumRequiredVersion() const
+{
+    return JADE_MIN_ALLOWED_FW_VERSION;
+}
+
 bool JadeDevice::updateRequired() const
 {
     return QVersionNumber::fromString(version()) < JADE_MIN_ALLOWED_FW_VERSION;

@@ -48,6 +48,7 @@ public:
     void updateVersionInfo();
     void setVersionInfo(const QVariantMap& version_info);
     QVariantMap versionInfo() const;
+    QVersionNumber minimumRequiredVersion() const;
     bool updateRequired() const;
     QString version() const;
     QString systemLocation() const { return m_system_location; }
