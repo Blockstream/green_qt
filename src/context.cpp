@@ -77,7 +77,10 @@ Session* Context::getOrCreateSession(Network* network)
                 auto account = getOrCreateAccount(session->network(), pointer);
             } else if (event_type == "synced") {
                 auto account = getOrCreateAccount(session->network(), pointer);
-                account->setSynced(true);
+                if (!account->synced()) {
+                    account->setSynced(true);
+                    account->loadBalance();
+                }
             }
         });
         connect(session, &Session::twoFactorResetEvent, this, [=](const QJsonObject& event) {
