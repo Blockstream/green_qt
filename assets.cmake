@@ -136,7 +136,9 @@ qt_add_resources(green "images"
         assets/svg2/gear.svg
         assets/svg2/hand.svg
         assets/svg2/house.svg
+        assets/svg2/jade-logo.svg
         assets/svg2/lightning.svg
+        assets/svg2/ledger-logo.svg
         assets/svg2/multisig.svg
         assets/svg2/next_arrow.svg
         assets/svg2/onboard_background.svg
