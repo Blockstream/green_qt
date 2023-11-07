@@ -7,7 +7,7 @@
 #include <QVersionNumber>
 
 namespace {
-const QVersionNumber JADE_MIN_ALLOWED_FW_VERSION{0, 1, 24};
+const QVersionNumber JADE_MIN_ALLOWED_FW_VERSION{1, 0, 21};
 
 bool IsSegwitAddressType(const QString& addr_type)
 {
