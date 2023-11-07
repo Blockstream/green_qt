@@ -220,16 +220,18 @@ void JadeAPI::processResponseMessage(const QCborMap &msg)
             && msg["result"].toMap().contains(QCborValue("http_request")))
     {
         qDebug() << "JadeAPI::processResponseMessage() - Jade response" << id << "requires http-request";
-        Q_ASSERT(m_request_proxy.contains(id));
-
         // Handle responses which require the results of an http_request
         Q_ASSERT(msg["result"]["http_request"].isMap());
         const QCborMap httpRequest = msg["result"]["http_request"].toMap();
 
-        // Make http-request.
-        // NOTE: when http request returns, JadeAPI::handleHttpResponse() should be called, which
-        // should result in another call to Jade, and ultimately this function being called again.
-        m_request_proxy[id](*this, id, httpRequest.toJsonObject());
+        if (!m_request_proxy.contains(id)) {
+            handleHttpResponse(id, httpRequest.toJsonObject(), QJsonValue::Null);
+        } else {
+            // Make http-request.
+            // NOTE: when http request returns, JadeAPI::handleHttpResponse() should be called, which
+            // should result in another call to Jade, and ultimately this function being called again.
+            m_request_proxy[id](*this, id, httpRequest.toJsonObject());
+        }
     }
     else
     {
