@@ -2,15 +2,14 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
+import "util.js" as UtilJS
+
 Page {
     property alias leftItem: left_pane.contentItem
     property alias centerItem: center_pane.contentItem
     property alias rightItem: right_pane.contentItem
     id: self
     background: null
-    function effectiveWidth(item) {
-        return item.visible ? item.width : 0
-    }
     leftPadding: 0
     rightPadding: 0
     topPadding: 0
@@ -33,7 +32,7 @@ Page {
                 }
             }
             Item {
-                Layout.preferredWidth: Math.max(effectiveWidth(right_pane) - effectiveWidth(left_pane))
+                Layout.preferredWidth: Math.max(UtilJS.effectiveWidth(right_pane) - UtilJS.effectiveWidth(left_pane), 0)
             }
             HSpacer {
             }
@@ -51,7 +50,7 @@ Page {
             HSpacer {
             }
             Item {
-                Layout.preferredWidth: Math.max(effectiveWidth(left_pane) - effectiveWidth(right_pane))
+                Layout.preferredWidth: Math.max(UtilJS.effectiveWidth(left_pane) - UtilJS.effectiveWidth(right_pane), 0)
             }
             Pane {
                 id: right_pane

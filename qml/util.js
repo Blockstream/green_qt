@@ -67,6 +67,10 @@ function effectiveVisible(item) {
     return true
 }
 
+function effectiveWidth(item) {
+    return item.visible ? item.width : 0
+}
+
 function accountLabel (account) {
     switch (account?.type) {
         case '2of2': return qsTrId('id_standard_account')
