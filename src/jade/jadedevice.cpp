@@ -588,13 +588,6 @@ GetMasterBlindingKeyActivity *JadeDevice::getMasterBlindingKey()
     return new JadeGetMasterBlindingKeyActivity(this);
 }
 
-void JadeDevice::ping()
-{
-    if (m_api->isIdle() && !m_api->isBusy()) {
-        updateVersionInfo();
-    }
-}
-
 LogoutActivity *JadeDevice::logout()
 {
     return new JadeLogoutActivity(this);

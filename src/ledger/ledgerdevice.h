@@ -110,7 +110,6 @@ public:
     GetBlindingNonceActivity* getBlindingNonce(const QByteArray& pubkey, const QByteArray& script) override;
     SignLiquidTransactionActivity* signLiquidTransaction(Network* network, const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs) override;
     GetMasterBlindingKeyActivity* getMasterBlindingKey() override;
-    void ping() override;
     LogoutActivity* logout() override;
 
     GetFirmwareActivity* getFirmware();

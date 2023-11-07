@@ -131,7 +131,6 @@ public:
     virtual GetBlindingNonceActivity* getBlindingNonce(const QByteArray& pubkey, const QByteArray& script) = 0;
     virtual SignLiquidTransactionActivity* signLiquidTransaction(Network* network, const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs) = 0;
     virtual GetMasterBlindingKeyActivity* getMasterBlindingKey() = 0;
-    virtual void ping() = 0;
     virtual LogoutActivity* logout() = 0;
     static Type typefromVendorAndProduct(uint32_t vendor_id, uint32_t product_id);
     QByteArray masterPublicKey(Network* network) const;

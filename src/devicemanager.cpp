@@ -5,13 +5,6 @@
 DeviceManager::DeviceManager(QObject* parent)
     : QObject(parent)
 {
-    auto timer = new QTimer(this);
-    connect(timer, &QTimer::timeout, [this] {
-        for (auto device : m_devices) {
-            device->ping();
-        }
-    });
-    timer->start(5000);
 }
 
 DeviceManager::~DeviceManager()

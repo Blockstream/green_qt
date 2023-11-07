@@ -107,10 +107,6 @@ GetMasterBlindingKeyActivity *LedgerDevice::getMasterBlindingKey()
     Q_UNREACHABLE();
 }
 
-void LedgerDevice::ping()
-{
-}
-
 LogoutActivity* LedgerDevice::logout()
 {
     Q_UNIMPLEMENTED();
