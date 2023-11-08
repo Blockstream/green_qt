@@ -4,6 +4,7 @@
 #include "device.h"
 #include "json.h"
 #include "network.h"
+#include "networkmanager.h"
 #include "session.h"
 #include "task.h"
 #include "wallet.h"
@@ -36,6 +37,11 @@ void UpdateAsset(GA_session* session, Asset* asset)
 
 
 Context::Context(QObject* parent)
+    : Context({}, parent)
+{
+}
+
+Context::Context(const QString& deployment, QObject* parent)
     : QObject(parent)
     , m_dispatcher(new TaskDispatcher(this))
 {

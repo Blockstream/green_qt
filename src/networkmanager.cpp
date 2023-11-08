@@ -67,3 +67,10 @@ Network *NetworkManager::networkWithServerType(const QString &key, const QString
     }
     return nullptr;
 }
+
+Network *NetworkManager::networkForDeployment(const QString &deployment)
+{
+    if (deployment == "mainnet") return network("electrum-mainnet");
+    if (deployment == "testnet") return network("electrum-testnet");
+    Q_UNREACHABLE();
+}

@@ -30,6 +30,9 @@ class Context : public QObject
 
 public:
     Context(QObject* parent = nullptr);
+    Context(const QString& deployment, QObject* parent = nullptr);
+
+    QString deployment() const { return m_deployment; }
 
     Wallet* wallet() const { return m_wallet; }
     void setWallet(Wallet* wallet);
