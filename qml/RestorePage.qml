@@ -93,6 +93,7 @@ StackViewPage {
         }
         PrimaryButton {
             Layout.alignment: Qt.AlignCenter
+            Layout.minimumWidth: 325
             Layout.topMargin: 20
             enabled: controller.valid
             text: qsTrId('id_restore')
