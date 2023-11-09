@@ -65,7 +65,7 @@ StackViewPage {
             Repeater {
                 model: controller.mnemonicSize
                 WordField {
-                    Layout.minimumWidth: 160
+                    Layout.minimumWidth: 140
                     Layout.fillWidth: true
                     focus: index === 0
                     word: controller.words[index]
