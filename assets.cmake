@@ -117,6 +117,14 @@ qt_add_resources(green "images"
         assets/png/amp_background.png
         assets/png/liquid_background.png
 
+        assets/png/connect_jade_1.png
+        assets/png/connect_jade_2.png
+        assets/png/connect_jade_3.png
+        assets/png/connect_jade_4.png
+        assets/png/onboard_jade_1.png
+        assets/png/onboard_jade_3.png
+        assets/png/onboard_jade_2.png
+
         assets/hints/cpu.svg
         assets/hints/jade3d.svg
 
@@ -144,6 +152,7 @@ qt_add_resources(green "images"
         assets/svg2/onboard_background.svg
         assets/svg2/printer.svg
         assets/svg2/refresh.svg
+        assets/svg2/right.svg
         assets/svg2/search.svg
         assets/svg2/singlesig.svg
         assets/svg2/shield_check.svg
