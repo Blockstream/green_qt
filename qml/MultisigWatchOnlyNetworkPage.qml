@@ -10,14 +10,6 @@ StackViewPage {
     signal networkSelected(Network network)
     id: self
     padding: 60
-    background: Item {
-        Image {
-            anchors.fill: parent
-            anchors.margins: -constants.p3
-            source: 'qrc:/svg2/onboard_background.svg'
-            fillMode: Image.PreserveAspectCrop
-        }
-    }
     contentItem: ColumnLayout {
         VSpacer {
         }

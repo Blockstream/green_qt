@@ -17,14 +17,6 @@ StackViewPage {
         network: NetworkManager.network('electrum-mainnet')
         onRegisterFinished: (context) => self.registerFinished(context)
     }
-    background: Item {
-        Image {
-            anchors.fill: parent
-            anchors.margins: -constants.p3
-            source: 'qrc:/svg2/onboard_background.svg'
-            fillMode: Image.PreserveAspectCrop
-        }
-    }
     contentItem: ColumnLayout {
         VSpacer {
         }

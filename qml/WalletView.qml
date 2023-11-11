@@ -53,14 +53,6 @@ MainPage {
         id: mnemonic_warnings_page
         MnemonicWarningsPage {
             padding: 60
-            background: Item {
-                Image {
-                    anchors.fill: parent
-                    anchors.margins: -constants.p3
-                    source: 'qrc:/svg2/onboard_background.svg'
-                    fillMode: Image.PreserveAspectCrop
-                }
-            }
             onAccepted: stack_view.push(mnemonic_backup_page)
         }
     }
@@ -69,14 +61,6 @@ MainPage {
         id: mnemonic_backup_page
         MnemonicBackupPage {
             padding: 60
-            background: Item {
-                Image {
-                    anchors.fill: parent
-                    anchors.margins: -constants.p3
-                    source: 'qrc:/svg2/onboard_background.svg'
-                    fillMode: Image.PreserveAspectCrop
-                }
-            }
             onSelected: (mnemonic) => stack_view.push(mnemonic_check_page, { mnemonic })
         }
     }
@@ -85,14 +69,6 @@ MainPage {
         id: mnemonic_check_page
         MnemonicCheckPage {
             padding: 60
-            background: Item {
-                Image {
-                    anchors.fill: parent
-                    anchors.margins: -constants.p3
-                    source: 'qrc:/svg2/onboard_background.svg'
-                    fillMode: Image.PreserveAspectCrop
-                }
-            }
             onChecked: (mnemonic) => stack_view.push(register_page, { mnemonic })
         }
     }
