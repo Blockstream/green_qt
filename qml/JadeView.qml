@@ -26,13 +26,6 @@ MainPage {
         }
     }
 
-    JadeFirmwareController {
-        id: firmware_controller
-        enabled: true
-    }
-
-    JadeDeviceSerialPortDiscoveryAgent {
-    }
     DeviceListModel {
         id: device_list_model
         type: Device.BlockstreamJade
