@@ -4,7 +4,7 @@ import QtQuick.Controls
 AbstractButton {
     id: self
     font.family: 'SF Compact Display'
-    font.pixelSize: 12
+    font.pixelSize: 14
     font.weight: 400
     background: Item {
         Rectangle {
