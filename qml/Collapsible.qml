@@ -3,8 +3,8 @@ import QtQuick
 Item {
     property bool collapsed: false
     property alias animating: animation.running
-    property real contentHeight
-    property real contentWidth
+    property real contentHeight: childrenRect.height + childrenRect.y
+    property real contentWidth: childrenRect.width + childrenRect.x
     function toggle() {
         self.collapsed = !self.collapsed
     }
