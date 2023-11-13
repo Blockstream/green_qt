@@ -6,6 +6,8 @@ import QtQuick.Layouts
 
 AbstractDrawer {
     signal walletClicked(Wallet wallet)
+    signal deviceClicked(Device device)
+
     id: self
     dim: true
     modal: false
@@ -49,8 +51,13 @@ AbstractDrawer {
                     font.pixelSize: 14
                     font.weight: 600
                     opacity: 0.4
-                    text: qsTrId('id_digital_wallets')
-                    visible: false
+                    text: qsTrId('id_hardware_devices')
+                }
+                Repeater {
+                    model: DeviceListModel {
+                    }
+                    DeviceButton {
+                    }
                 }
             }
         }
@@ -71,10 +78,21 @@ AbstractDrawer {
         leftPadding: 16
         rightPadding: 24
         background: Rectangle {
-            radius: 5
             color: '#222226'
+            radius: 5
+            Rectangle {
+                border.width: 2
+                border.color: '#00B45A'
+                color: 'transparent'
+                radius: 12
+                anchors.fill: parent
+                anchors.margins: -4
+                z: -1
+                opacity: button.visualFocus ? 1 : 0
+            }
         }
         contentItem: RowLayout {
+            spacing: 14
             Label {
                 Layout.alignment: Qt.AlignCenter
                 Layout.fillWidth: true
@@ -95,13 +113,65 @@ AbstractDrawer {
                 radius: 5
                 visible: !!button.wallet.context
             }
-
             Image {
                 Layout.alignment: Qt.AlignCenter
-                opacity: 0.2
-                source: 'qrc:/svg2/arrow_right.svg'
+                source: 'qrc:/svg2/right.svg'
             }
         }
         onClicked: self.walletClicked(button.wallet)
+    }
+
+    component DeviceButton: AbstractButton {
+        required property Device device
+        Layout.fillWidth: true
+        id: button
+        implicitHeight: 60
+        leftPadding: 16
+        rightPadding: 24
+        background: Rectangle {
+            color: '#222226'
+            radius: 5
+            Rectangle {
+                border.width: 2
+                border.color: '#00B45A'
+                color: 'transparent'
+                radius: 12
+                anchors.fill: parent
+                anchors.margins: -4
+                z: -1
+                opacity: button.visualFocus ? 1 : 0
+            }
+        }
+        contentItem: RowLayout {
+            spacing: 14
+            Label {
+                Layout.alignment: Qt.AlignCenter
+                Layout.fillWidth: true
+                Layout.preferredWidth: 0
+                font.family: 'SF Compact Display'
+                font.pixelSize: 14
+                font.weight: 500
+                text: button.device.name
+                elide: Label.ElideRight
+            }
+            Rectangle {
+                Layout.alignment: Qt.AlignCenter
+                Layout.leftMargin: 20
+                Layout.rightMargin: 20
+                implicitHeight: 10
+                implicitWidth: 10
+                color: button.device.connected ? '#42FF00' : 'red'
+                radius: 5
+            }
+            Image {
+                Layout.alignment: Qt.AlignCenter
+                source: button.device.vendor === Device.Blockstream ? 'qrc:/svg2/jade-logo.svg' : 'qrc:/svg2/ledger-logo.svg'
+            }
+            Image {
+                Layout.alignment: Qt.AlignCenter
+                source: 'qrc:/svg2/right.svg'
+            }
+        }
+        onClicked: self.deviceClicked(button.device)
     }
 }
