@@ -140,6 +140,7 @@ qt_add_resources(green "images"
         assets/svg2/copy.svg
         assets/svg2/edit.svg
         assets/svg2/eye.svg
+        assets/svg2/flask.svg
         assets/svg2/fresh_wallet.svg
         assets/svg2/gear.svg
         assets/svg2/hand.svg
