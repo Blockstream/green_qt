@@ -35,7 +35,6 @@ void UpdateAsset(GA_session* session, Asset* asset)
 }
 }
 
-
 Context::Context(QObject* parent)
     : Context({}, parent)
 {
@@ -43,8 +42,10 @@ Context::Context(QObject* parent)
 
 Context::Context(const QString& deployment, QObject* parent)
     : QObject(parent)
+    , m_deployment(deployment)
     , m_dispatcher(new TaskDispatcher(this))
 {
+    Q_ASSERT(deployment == "mainnet" || deployment == "testnet" || deployment == "development");
 }
 
 void Context::setWallet(Wallet* wallet)

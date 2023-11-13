@@ -36,6 +36,8 @@ public:
     bool isDevelopment() const { return m_development; }
     void openTransactionInExplorer(const QString& hash);
 
+    QString deployment() const;
+
 private:
     const QJsonObject m_data;
     const QString m_id;

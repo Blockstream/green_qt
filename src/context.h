@@ -15,6 +15,7 @@ Q_MOC_INCLUDE("wallet.h")
 class Context : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(QString deployment READ deployment CONSTANT)
     Q_PROPERTY(Wallet* wallet READ wallet NOTIFY walletChanged)
     Q_PROPERTY(Device* device READ device NOTIFY deviceChanged)
     Q_PROPERTY(bool locked READ isLocked NOTIFY lockedChanged)
@@ -96,6 +97,7 @@ signals:
     void autoLogout();
 
 private:
+    const QString m_deployment;
     Wallet* m_wallet{nullptr};
     Device* m_device{nullptr};
     QString m_xpub_hash_id;
@@ -113,6 +115,8 @@ public:
     QMap<QPair<Network*, quint32>, Account*> m_accounts_by_pointer;
 
     TaskDispatcher* const m_dispatcher;
+
+    QJsonObject m_hw_device;
 };
 
 #endif // GREEN_CONTEXT_H

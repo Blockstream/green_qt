@@ -79,3 +79,10 @@ void Network::openTransactionInExplorer(const QString& hash)
         QDesktopServices::openUrl(QUrl(explorer_url + hash));
     }
 }
+
+QString Network::deployment() const
+{
+    if (m_mainnet) return "mainnet";
+    if (m_development) return "development";
+    return "testnet";
+}

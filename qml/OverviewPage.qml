@@ -55,7 +55,7 @@ StackViewPage {
         const ticker = self.currentAccount.session.events.ticker
         const pricing = currentAccount.session.settings.pricing;
         const { fiat, fiat_currency } = wallet.convert({ satoshi: sats });
-        const currency = wallet.network.mainnet ? fiat_currency : 'FIAT'
+        const currency = self.deployment === 'mainnet' ? fiat_currency : 'FIAT'
         return (fiat === null ? 'n/a' : Number(fiat).toLocaleString(Qt.locale(), 'f', 2)) + (include_ticker ? ' ' + currency : '');
     }
 
