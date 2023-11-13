@@ -6,6 +6,7 @@ import "util.js" as UtilJS
 
 StackViewPage {
     signal addWallet
+    signal useDevice
 
     id: self
     contentItem: ColumnLayout {
@@ -56,6 +57,7 @@ StackViewPage {
             Layout.bottomMargin: 10
             enabled: tos_check_box.checked
             text: qsTrId('id_use_hardware_device')
+            onClicked: self.useDevice()
         }
         RowLayout {
             Layout.alignment: Qt.AlignCenter

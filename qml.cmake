@@ -215,6 +215,7 @@ SET(QML_FILES
     qml/AbstractDrawer.qml
     qml/WalletsDrawer.qml
     qml/AlreadyRestoredPage.qml
+    qml/UseDevicePage.qml
 )
 
 if (GREEN_NO_RESOURCES)

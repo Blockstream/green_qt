@@ -35,6 +35,7 @@ MainPage {
         id: terms_of_service_page
         TermOfServicePage {
             onAddWallet: stack_view.push(add_wallet_page)
+            onUseDevice: stack_view.push(use_device_page)
         }
     }
 
@@ -46,6 +47,12 @@ MainPage {
             // TODO present singlesig or multisig options once singlesig watchonly login is implemented
             // onWatchOnlyWallet: stack_view.push(watch_only_wallet_page)
             onWatchOnlyWallet: stack_view.push(multisig_watch_only_network_page)
+        }
+    }
+
+    Component {
+        id: use_device_page
+        UseDevicePage {
         }
     }
 
