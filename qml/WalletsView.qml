@@ -11,78 +11,96 @@ import "analytics.js" as AnalyticsJS
 
 MainPage {
     signal openWallet(Wallet wallet)
+    signal openDevice(Device device)
     signal createWallet
 
     readonly property WalletView currentWalletView: null
 
     id: self
-    header: MainPageHeader {
-        background: Rectangle {
-            color: constants.c700
-            opacity: wallet_list_view.contentY > 0 ? 1 : 0
-            Behavior on opacity {
-                SmoothedAnimation {
-                    velocity: 4
+    padding: 60
+    contentItem: Flickable {
+        ScrollIndicator.vertical: ScrollIndicator {
+        }
+        id: flickable
+        clip: true
+        contentHeight: layout.height
+        ColumnLayout {
+            id: layout
+            width: 400
+            x: (flickable.width - 400) / 2
+            y: Math.max(0, (flickable.height - layout.height) / 2)
+            Label {
+                font.family: 'SF Compact Display'
+                font.pixelSize: 14
+                font.weight: 600
+                opacity: 0.4
+                text: qsTrId('id_digital_wallets')
+            }
+            Repeater {
+                model: WalletListModel {
+                }
+                WalletsDrawer.WalletButton {
+                    Layout.fillWidth: true
+                    id: wallet_button
+                    onClicked: self.openWallet(wallet_button.wallet)
                 }
             }
-
-            FastBlur {
-                anchors.fill: parent
-                cached: true
-                opacity: 0.55
-
-                radius: 128
-                source: ShaderEffectSource {
-                    sourceItem: self.contentItem
-                    sourceRect {
-                        x: -self.contentItem.x
-                        y: -self.contentItem.y
-                        width: self.header.width
-                        height: self.header.height
+            Label {
+                Layout.topMargin: 20
+                font.family: 'SF Compact Display'
+                font.pixelSize: 14
+                font.weight: 600
+                opacity: 0.4
+                text: qsTrId('id_hardware_devices')
+                visible: devices_repeater.count > 0
+            }
+            Repeater {
+                id: devices_repeater
+                model: DeviceListModel {
+                }
+                WalletsDrawer.DeviceButton {
+                    Layout.fillWidth: true
+                }
+            }
+        }
+    }
+    header: Pane {
+        background: null
+        padding: 60
+        bottomPadding: 20
+        contentItem: ColumnLayout {
+            Image {
+                Layout.alignment: Qt.AlignCenter
+                source: 'qrc:/svg2/blockstream_green.svg'
+            }
+        }
+    }
+    footer: Pane {
+        background: null
+        padding: 60
+        topPadding: 20
+        contentItem: ColumnLayout {
+            WalletsDrawer.ListButton {
+                Layout.alignment: Qt.AlignCenter
+                Layout.maximumWidth: 400
+                contentItem: RowLayout {
+                    spacing: 14
+                    Label {
+                        Layout.alignment: Qt.AlignCenter
+                        Layout.fillWidth: true
+                        Layout.preferredWidth: 0
+                        font.family: 'SF Compact Display'
+                        font.pixelSize: 14
+                        font.weight: 500
+                        text:  qsTrId('id_setup_a_new_wallet')
+                        elide: Label.ElideRight
+                    }
+                    Image {
+                        Layout.alignment: Qt.AlignCenter
+                        source: 'qrc:/svg2/right.svg'
                     }
                 }
-            }
-            Rectangle {
-                width: parent.width
-                height: 1
-                y: parent.height - 1
-                color: constants.c900
-            }
-        }
-
-        contentItem: RowLayout {
-            spacing: 16
-            Label {
-                text: self.title
-                font.pixelSize: 24
-                font.styleName: 'Medium'
-                Layout.fillWidth: true
-            }
-        }
-    }
-    footer: StatusBar {
-        RegularButton {
-            text: qsTrId('id_setup_a_new_wallet')
-            onClicked: self.createWallet()
-        }
-    }
-
-    contentItem: GPane {
-        background: Item {
-            Label {
-                anchors.centerIn: parent
-                visible: wallet_list_view.count === 0
-                text: qsTrId('id_looks_like_you_havent_used_a');
-            }
-        }
-        contentItem: TListView {
-            id: wallet_list_view
-            currentIndex: -1
-            model: WalletListModel {
-            }
-            delegate: WalletListDelegate {
-                width: ListView.view.contentWidth
-                onClicked: self.openWallet(wallet)
+                onClicked: self.createWallet()
             }
         }
     }
