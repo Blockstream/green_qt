@@ -21,7 +21,7 @@ ApplicationWindow {
     function openWallet(wallet) {
         for (let i = 0; i < stack_layout.children.length; ++i) {
             const child = stack_layout.children[i]
-            if (child instanceof WalletView && child.wallet === wallet) {
+            if (child instanceof WalletView && child.wallet === wallet && !child.device) {
                 stack_layout.currentIndex = i;
                 return
             }
@@ -31,10 +31,28 @@ ApplicationWindow {
         side_bar.currentView = SideBar.View.Wallets
     }
 
+    function openDevice(device) {
+        for (let i = 0; i < stack_layout.children.length; ++i) {
+            const child = stack_layout.children[i]
+            if (child instanceof WalletView && child.device === device) {
+                stack_layout.currentIndex = i;
+                return
+            }
+        }
+        wallet_view.createObject(stack_layout, { device })
+        stack_layout.currentIndex = stack_layout.children.length - 1
+        side_bar.currentView = SideBar.View.Wallets
+    }
+
     function openWallets() {
         if (wallets_drawer.visible) {
             wallets_drawer.close()
             return
+        }
+
+        if (DeviceManager.count > 0) {
+            wallets_drawer.open()
+            return;
         }
 
         let current_index = -1
@@ -75,12 +93,25 @@ ApplicationWindow {
         side_bar.currentView = SideBar.View.Wallets
     }
 
+
+    JadeFirmwareController {
+        id: firmware_controller
+        enabled: true
+    }
+
+    JadeDeviceSerialPortDiscoveryAgent {
+    }
+
     WalletsDrawer {
         id: wallets_drawer
         leftMargin: side_bar.width
         onWalletClicked: (wallet) => {
             wallets_drawer.close()
             window.openWallet(wallet)
+        }
+        onDeviceClicked: (device) => {
+            wallets_drawer.close()
+            window.openDevice(device)
         }
     }
 
@@ -185,7 +216,7 @@ ApplicationWindow {
             }
             PreferencesView {
             }
-            JadeView {
+            Item {
             }
             LedgerDevicesView {
             }
@@ -193,6 +224,7 @@ ApplicationWindow {
                 title: qsTrId('id_wallets')
                 focus: StackLayout.isCurrentItem
                 onOpenWallet: (wallet) => window.openWallet(wallet)
+                onOpenDevice: (device) => window.openDevice(device)
                 onCreateWallet: window.openWallet(null)
             }
         }
