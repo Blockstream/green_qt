@@ -23,6 +23,15 @@ MainPageHeader {
     property Item toolbarItem: toolbar
     id: self
 
+    readonly property bool busy: {
+        if (self.context?.dispatcher.busy ?? false) return true
+        const accounts = self.context?.dispatcher.busy ?? false
+        for (let i = 0; i < accounts.length; i++) {
+            if (!accounts[i].synced) return true
+        }
+        return false
+    }
+
     topPadding: 0
     leftPadding: 0
     rightPadding: 0
@@ -217,7 +226,7 @@ MainPageHeader {
                     ProgressIndicator {
                         Layout.minimumHeight: 24
                         Layout.minimumWidth: 24
-                        indeterminate: self.context?.dispatcher.busy ?? false
+                        indeterminate: self.busy
                         current: 0
                         max: 1
                     }
