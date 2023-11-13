@@ -10,6 +10,7 @@
 #include "json.h"
 #include "network.h"
 #include "settings.h"
+#include "task.h"
 
 namespace  {
 QString ElectrumUrlForNetwork(Network* network)
@@ -199,6 +200,28 @@ void Session::setAltimeout(int altimeout)
         qApp->installEventFilter(this);
     } else {
         qApp->removeEventFilter(this);
+    }
+}
+
+void Session::registerUser()
+{
+    Q_ASSERT(m_context);
+    if (m_context->device()) {
+        m_context->dispatcher()->add(new RegisterUserTask(m_context->m_hw_device, this));
+    } else {
+        const auto mnemonic = m_context->credentials().value("mnemonic").toString().split(' ');
+        m_context->dispatcher()->add(new RegisterUserTask(mnemonic, this));
+    }
+}
+
+void Session::login()
+{
+    Q_ASSERT(m_context);
+    if (m_context->device()) {
+        m_context->dispatcher()->add(new LoginTask(m_context->m_hw_device, this));
+    } else {
+        const auto mnemonic = m_context->credentials().value("mnemonic").toString().split(' ');
+        m_context->dispatcher()->add(new LoginTask(mnemonic, QString(), this));
     }
 }
 

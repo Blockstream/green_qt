@@ -77,6 +77,9 @@ public:
     QString displayUnit() const { return m_display_unit; }
     void setAltimeout(int altimeout);
 
+    void registerUser();
+    void login();
+
 signals:
     void notificationHandled(const QJsonObject& notification);
     void eventHandled(Session* session, const QString& event, const QJsonObject& data);
