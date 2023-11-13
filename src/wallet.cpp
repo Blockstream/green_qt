@@ -187,16 +187,14 @@ QJsonObject Wallet::convert(const QJsonObject& value) const
 
 QString Wallet::formatAmount(qint64 amount, bool include_ticker) const
 {
-    // TODO move to account or session
-    const auto session = m_context->getOrCreateSession(m_network);
+    const auto session = m_context->primarySession();
     return formatAmount(amount, include_ticker, session->unit());
 }
 
 QString Wallet::formatAmount(qint64 amount, bool include_ticker, const QString& unit) const
 {
     if (!m_context) return {};
-    Q_ASSERT(m_network);
-    const auto session = m_context->getOrCreateSession(m_network);
+    const auto session = m_context->primarySession();
     const auto effective_unit = unit.isEmpty() ? session->unit() : unit;
     if (effective_unit.isEmpty()) return {};
     auto str = convert({{ "satoshi", amount }}).value(effective_unit == "\u00B5BTC" ? "ubtc" : effective_unit.toLower()).toString();
@@ -208,7 +206,7 @@ QString Wallet::formatAmount(qint64 amount, bool include_ticker, const QString& 
         str.remove(QRegularExpression("\\.?0+$"));
     }
     if (include_ticker) {
-        str += " " + ComputeDisplayUnit(m_network, effective_unit);
+        str += " " + ComputeDisplayUnit(session->network(), effective_unit);
     }
     return str;
 }
@@ -223,7 +221,7 @@ void Wallet::updateDeviceDetails(const QJsonObject& device_details)
 
 qint64 Wallet::amountToSats(const QString& amount) const
 {
-    const auto session = m_context->getOrCreateSession(m_network);
+    const auto session = m_context->primarySession();
     return parseAmount(amount, session->unit());
 }
 
@@ -256,7 +254,7 @@ void Wallet::updateHashId(const QString& hash_id)
 
 QString Wallet::getDisplayUnit(const QString& unit)
 {
-    return ComputeDisplayUnit(m_network, unit);
+    return ComputeDisplayUnit(m_context->primarySession()->network(), unit);
 }
 
 void Wallet::resetLoginAttempts()

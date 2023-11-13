@@ -109,9 +109,17 @@ Session* Context::getOrCreateSession(Network* network)
     return session;
 }
 
-Session* Context::primarySession() const
+Session* Context::primarySession()
 {
-    return m_sessions_list.size() > 0 ? m_sessions_list.first() : nullptr;
+    if (m_sessions_list.size() > 0) {
+        return m_sessions_list.first();
+    } else {
+        // TODO: mainnet/testnet/localtest
+        auto network = NetworkManager::instance()->networkForDeployment(m_deployment);
+        auto session = getOrCreateSession(network);
+        m_dispatcher->add(new ConnectTask(session));
+        return session;
+    }
 }
 
 void Context::releaseSession(Session* session)
