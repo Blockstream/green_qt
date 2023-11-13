@@ -14,12 +14,6 @@ MainPage {
     signal createWallet
 
     readonly property WalletView currentWalletView: null
-    readonly property bool active: {
-        if (window.navigation.param.view === 'wallets') return true
-        const wallet = WalletManager.wallet(window.navigation.param.wallet)
-        if (wallet) return true
-        return false
-    }
 
     id: self
     header: MainPageHeader {
