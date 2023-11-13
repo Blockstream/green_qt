@@ -10,8 +10,10 @@
 #include "resolver.h"
 #include "session.h"
 #include "task.h"
+#include "util.h"
 #include "wallet.h"
 
+#include <QFileInfo>
 #include <QTimer>
 #include <QTimerEvent>
 #include <QtConcurrentRun>
@@ -718,9 +720,23 @@ void LoadAccountTask::handleDone(const QJsonObject& result)
     setStatus(Status::Finished);
 }
 
+bool ShouldRefresh(Session* session)
+{
+    // skip non electrum sessions
+    if (!session->network()->isElectrum()) return false;
+    // check if state directory exists
+    QDir dir(GetDataDir("gdk"));
+    if (!dir.cd("state")) return true;
+    if (!dir.cd(session->m_wallet_hash_id)) return true;
+    // check directory timestamp, force refresh if its recent
+    QFileInfo info(dir.absolutePath());
+    if (info.birthTime().isValid() && info.birthTime().secsTo(QDateTime::currentDateTime()) < 30) return true;
+    return false;
+}
+
 LoadAccountsTask::LoadAccountsTask(bool refresh, Session* session)
     : AuthHandlerTask(session)
-    , m_refresh(refresh)
+    , m_refresh(refresh || ShouldRefresh(session))
 {
 }
 
