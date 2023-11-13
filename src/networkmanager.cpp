@@ -20,13 +20,8 @@ static QJsonObject get_networks()
 NetworkManager::NetworkManager() : QObject(nullptr)
 {
     auto networks = get_networks();
-
     for (auto key : networks.value("all_networks").toArray()) {
         auto data = networks.value(key.toString()).toObject();
-
-        // Don't include lightning networks
-        if (data.value("lightning").toBool()) continue;
-
         m_networks.append(new Network(data, this));
     }
 }
