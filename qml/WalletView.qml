@@ -53,6 +53,13 @@ MainPage {
     Component {
         id: use_device_page
         UseDevicePage {
+            onConnectJadeClicked: stack_view.push(connect_jade_page)
+        }
+    }
+
+    Component {
+        id: connect_jade_page
+        ConnectJadePage {
         }
     }
 
