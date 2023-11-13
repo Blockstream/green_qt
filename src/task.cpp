@@ -377,7 +377,7 @@ void AuthHandlerTask::resolveCode(const QByteArray& code)
 
 bool AuthHandlerTask::active() const
 {
-    return true;
+    return m_session && m_session->isConnected();
 }
 
 void AuthHandlerTask::handleDone(const QJsonObject& result)
@@ -976,7 +976,6 @@ bool SetCsvTimeTask::call(GA_session* session, GA_auth_handler** auth_handler) {
 
 void SetCsvTimeTask::handleDone(const QJsonObject &result)
 {
-    Q_ASSERT(m_session->isConnected());
     auto settings = gdk::get_settings(m_session->m_session);
     m_session->setSettings(settings);
     AuthHandlerTask::handleDone(result);
