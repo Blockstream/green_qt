@@ -74,8 +74,8 @@ AbstractDrawer {
             }
         }
     }
-    component WalletButton: AbstractButton {
-        required property Wallet wallet
+
+    component ListButton: AbstractButton {
         Layout.fillWidth: true
         id: button
         implicitHeight: 60
@@ -95,6 +95,11 @@ AbstractDrawer {
                 opacity: button.visualFocus ? 1 : 0
             }
         }
+    }
+
+    component WalletButton: ListButton {
+        required property Wallet wallet
+        id: button
         contentItem: RowLayout {
             spacing: 14
             Label {
@@ -124,27 +129,9 @@ AbstractDrawer {
         }
     }
 
-    component DeviceButton: AbstractButton {
+    component DeviceButton: ListButton {
         required property Device device
-        Layout.fillWidth: true
         id: button
-        implicitHeight: 60
-        leftPadding: 16
-        rightPadding: 24
-        background: Rectangle {
-            color: '#222226'
-            radius: 5
-            Rectangle {
-                border.width: 2
-                border.color: '#00B45A'
-                color: 'transparent'
-                radius: 12
-                anchors.fill: parent
-                anchors.margins: -4
-                z: -1
-                opacity: button.visualFocus ? 1 : 0
-            }
-        }
         contentItem: RowLayout {
             spacing: 14
             Label {
