@@ -9,6 +9,7 @@
 #include "ga.h"
 #include "json.h"
 #include "network.h"
+#include "session.h"
 #include "task.h"
 #include "wallet.h"
 
@@ -102,26 +103,19 @@ void CreateAccountController::create()
         }
     }
 
-    const auto mnemonic = m_context->credentials().value("mnemonic").toString().split(' ');
 
     auto session = m_context->getOrCreateSession(m_network);
-    auto session_connect = new ConnectTask(session);
-    auto session_register = new RegisterUserTask(mnemonic, session);
-    auto session_login = new LoginTask(mnemonic, QString(), session);
+
+    session->registerUser();
+    session->login();
 
     auto create_account = new CreateAccountTask(details, session);
     auto load_accounts = new LoadAccountsTask(false, session);
 
-    session_connect->then(session_register);
-    session_register->then(session_login);
-    session_login->then(create_account);
     create_account->then(load_accounts);
 
     auto group = new TaskGroup(this);
 
-    group->add(session_connect);
-    group->add(session_register);
-    group->add(session_login);
     group->add(create_account);
     group->add(load_accounts);
 
