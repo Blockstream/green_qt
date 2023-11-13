@@ -43,6 +43,8 @@ AbstractDrawer {
                     model: WalletListModel {
                     }
                     WalletButton {
+                        id: wallet_button
+                        onClicked: self.walletClicked(wallet_button.wallet)
                     }
                 }
                 Label {
@@ -57,6 +59,8 @@ AbstractDrawer {
                     model: DeviceListModel {
                     }
                     DeviceButton {
+                        id: device_button
+                        onClicked: self.deviceClicked(device_button.device)
                     }
                 }
             }
@@ -118,7 +122,6 @@ AbstractDrawer {
                 source: 'qrc:/svg2/right.svg'
             }
         }
-        onClicked: self.walletClicked(button.wallet)
     }
 
     component DeviceButton: AbstractButton {
@@ -172,6 +175,5 @@ AbstractDrawer {
                 source: 'qrc:/svg2/right.svg'
             }
         }
-        onClicked: self.deviceClicked(button.device)
     }
 }
