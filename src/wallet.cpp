@@ -12,8 +12,10 @@
 
 #include <type_traits>
 
+#include "activitymanager.h"
 #include "context.h"
 #include "ga.h"
+#include "device.h"
 #include "json.h"
 #include "network.h"
 #include "session.h"
@@ -34,6 +36,10 @@ Wallet::~Wallet()
 void Wallet::disconnect()
 {
     if (m_context) {
+        if (m_context->device()) {
+            auto activity = m_context->device()->logout();
+            ActivityManager::instance()->exec(activity);
+        }
         m_context->deleteLater();
         setContext(nullptr);
     }
