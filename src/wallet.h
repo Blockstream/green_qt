@@ -16,6 +16,7 @@ class Wallet : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QString id READ id CONSTANT)
+    Q_PROPERTY(QString deployment READ deployment CONSTANT)
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(bool persisted READ isPersisted NOTIFY isPersistedChanged)
     Q_PROPERTY(bool hasPinData READ hasPinData NOTIFY hasPinDataChanged)
@@ -35,6 +36,7 @@ public:
     void setContext(Context* context);
 
     QString id() const;
+    QString deployment() const { return m_deployment; }
     bool isPersisted() const { return m_is_persisted; }
     Network* network() const { return m_network; }
     QString name() const { return m_name; }
@@ -83,6 +85,7 @@ signals:
     void usernameChanged();
 public:
     bool m_is_persisted{false};
+    QString m_deployment;
     QString m_id;
 
     QByteArray m_pin_data;
