@@ -102,6 +102,14 @@ AbstractDrawer {
         id: button
         contentItem: RowLayout {
             spacing: 14
+            Image {
+                Layout.alignment: Qt.AlignCenter
+                source: {
+                    if (button.wallet.watchOnly) return 'qrc:/svg2/eye.svg'
+                    if (button.wallet.deployment !== 'mainnet') return 'qrc:/svg2/flask.svg'
+                    return 'qrc:/svg2/wallet.svg'
+                }
+            }
             Label {
                 Layout.alignment: Qt.AlignCenter
                 Layout.fillWidth: true
