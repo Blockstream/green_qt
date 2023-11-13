@@ -8,22 +8,21 @@ import "util.js" as UtilJS
 
 MainPage {
     signal openWallet(Wallet wallet)
-    required property Wallet wallet
-
+    property Wallet wallet
+    property Device device
     Component.onCompleted: {
         if (!self.wallet) {
-            stack_view.push(terms_of_service_page, {}, StackView.Immediate)
-            return
-        }
-
-        if (self.wallet.context) {
+            if (self.device instanceof JadeDevice) {
+                stack_view.push(jade_page, { device: self.device }, StackView.Immediate)
+            } else {
+                stack_view.push(terms_of_service_page, {}, StackView.Immediate)
+            }
+        } else if (self.wallet.context) {
             stack_view.push(loading_page, { context: self.wallet.context }, StackView.Immediate)
-            return
+        } else {
+            stack_view.push(pin_login_page, { wallet: self.wallet }, StackView.Immediate)
         }
-
-        stack_view.push(pin_login_page, { wallet: self.wallet }, StackView.Immediate)
     }
-
     id: self
     contentItem: GStackView {
         id: stack_view
@@ -184,7 +183,16 @@ MainPage {
                     stack_view.replace(null, terms_of_service_page, {}, StackView.PushTransition)
                     return
                 }
-                stack_view.replace(null, pin_login_page, { wallet: self.wallet })
+                if (self.wallet.hasPinData) {
+                    stack_view.replace(null, pin_login_page, { wallet: self.wallet })
+                    return
+                }
+                if (self.wallet?.context?.device instanceof JadeDevice) {
+                    stack_view.replace(null, jade_page, { device: self.wallet?.context?.device })
+                    return
+                }
+
+                console.log('missing logout view')
             }
         }
     }
