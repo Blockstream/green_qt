@@ -22,10 +22,7 @@ JadeController::JadeController(QObject* parent)
 
 Context* JadeController::ensureContext()
 {
-    if (!m_context) {
-        auto context = new Context(this);
-        setContext(context);
-    }
+    Q_ASSERT(m_context);
     return m_context;
 }
 
@@ -44,8 +41,11 @@ JadeSetupController::JadeSetupController(QObject* parent)
 
 void JadeSetupController::setup(const QString& network)
 {
+    Q_ASSERT(!m_context);
+    setContext(new Context(network, this));
+
     m_network = NetworkManager::instance()->network(network);
-    auto session = ensureContext()->getOrCreateSession(m_network);
+    auto session = m_context->getOrCreateSession(m_network);
     auto connect_session = new ConnectTask(session);
     auto setup = new JadeSetupTask(this);
 
@@ -55,6 +55,10 @@ void JadeSetupController::setup(const QString& network)
 
     group->add(connect_session);
     group->add(setup);
+
+    connect(group, &TaskGroup::finished, this, [=] {
+        emit setupFinished(m_context);
+    });
 
     dispatcher()->add(group);
 }
@@ -124,20 +128,40 @@ void JadeUnlockController::unlock()
 {
     if (!m_device) return;
     const auto nets = m_device->versionInfo().value("JADE_NETWORKS").toString();
-    m_network = NetworkManager::instance()->network(nets == "ALL" || nets == "MAIN" ? "mainnet" : "testnet");
-    auto session = ensureContext()->getOrCreateSession(m_network);
+    const QString deployment = nets == "ALL" || nets == "MAIN" ? "mainnet" : "testnet";
+    m_network = NetworkManager::instance()->networkForDeployment(deployment);
+    if (!m_context) {
+        auto context = new Context(deployment, this);
+        setContext(context);
+    }
+
+    auto context = ensureContext();
+    auto session = context->getOrCreateSession(m_network);
 
     auto connect_session = new ConnectTask(session);
     auto unlock = new JadeUnlockTask(this);
+    auto identify = new JadeIdentifyTask(this);
 
     connect_session->then(unlock);
+    unlock->then(identify);
 
     auto group = new TaskGroup(this);
 
     group->add(connect_session);
     group->add(unlock);
+    group->add(identify);
 
     dispatcher()->add(group);
+    connect(group, &TaskGroup::finished, this, [=] {
+        context->setDevice(m_device);
+
+
+        emit unlocked(context);
+    });
+
+    connect(group, &TaskGroup::failed, this, [=] {
+        emit invalidPin();
+    });
 }
 
 static QJsonObject device_details_from_device(JadeDevice* device)
@@ -232,7 +256,6 @@ void JadeUnlockTask::update()
     device->api()->authUser(network->canonicalId(), [=](const QVariantMap& msg) {
         device->setUnlocking(false);
         if (msg.contains("result") && msg["result"] == true) {
-            device->updateVersionInfo();
             setStatus(Status::Finished);
         } else {
             qDebug() << "INVALID PIN";
@@ -261,7 +284,7 @@ void JadeUnlockTask::update()
     });
 }
 
-JadeIdentifyTask::JadeIdentifyTask(JadeLoginController* controller)
+JadeIdentifyTask::JadeIdentifyTask(JadeController* controller)
     : Task(controller)
     , m_controller(controller)
 {
@@ -274,7 +297,8 @@ void JadeIdentifyTask::update()
     const auto device = m_controller->device();
     if (!device) return;
 
-    const auto network = NetworkManager::instance()->network(m_controller->network());
+    const QString network_id = "electrum-mainnet";
+    const auto network = NetworkManager::instance()->network(network_id); //m_controller->network());
     if (!network) return;
 
     if (device->state() == JadeDevice::StateLocked) return;
@@ -297,7 +321,7 @@ void JadeIdentifyTask::update()
         const auto master_xpub = activity->publicKey();
         Q_ASSERT(!master_xpub.isEmpty());
 
-        const auto net_params = Json::fromObject({{ "name", m_controller->network() }});
+        const auto net_params = Json::fromObject({{ "name", network_id }});
         const auto params = Json::fromObject({{ "master_xpub", QString::fromLocal8Bit(master_xpub) }});
         GA_json* output;
         int rc = GA_get_wallet_identifier(net_params.get(), params.get(), &output);
@@ -305,7 +329,8 @@ void JadeIdentifyTask::update()
         const auto identifier = Json::toObject(output);
         GA_destroy_json(output);
 
-        m_controller->setWalletHashId(identifier.value("wallet_hash_id").toString());
+        const auto xpub_hash_id = identifier.value("xpub_hash_id").toString();
+        context->setXPubHashId(xpub_hash_id);
 
         setStatus(Status::Finished);
     });

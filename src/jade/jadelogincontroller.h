@@ -42,6 +42,8 @@ public:
     Network* network() const { return m_network; }
 public slots:
     void setup(const QString& network);
+signals:
+    void setupFinished(Context* context);
 private:
     Network* m_network{nullptr};
 };
@@ -69,6 +71,9 @@ public:
     Network* network() const { return m_network; }
 public slots:
     void unlock();
+signals:
+    void unlocked(Context* context);
+    void invalidPin();
 private:
     Network* m_network{nullptr};
 };
@@ -129,11 +134,11 @@ class JadeIdentifyTask : public Task
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
-    JadeIdentifyTask(JadeLoginController* controller);
+    JadeIdentifyTask(JadeController* controller);
 private:
     void update() override;
 private:
-    JadeLoginController* const m_controller;
+    JadeController* const m_controller;
 };
 
 class JadeLoginTask : public Task
