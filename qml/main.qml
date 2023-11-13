@@ -121,8 +121,8 @@ ApplicationWindow {
             Settings.updateRecentWallet(currentWallet.id)
         }
     }
-    minimumWidth: 900
-    minimumHeight: 600
+    minimumWidth: 1024
+    minimumHeight: 768
     visible: true
     color: constants.c800
     title: {

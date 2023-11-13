@@ -213,8 +213,8 @@ QString Settings::proxy() const
 
 void Settings::load()
 {
-    // By default position window in primary screen with a 200px margin
-    auto default_rect = qGuiApp->primaryScreen()->geometry().adjusted(200, 200, -200, -200);
+    // By default position window in primary screen with a 100px margin
+    auto default_rect = qGuiApp->primaryScreen()->geometry().adjusted(100, 100, -100, -100);
     default_rect.getRect(&m_window_x, &m_window_y, &m_window_width, &m_window_height);
 
     const auto path = GetDataFile("app", "settings.ini");
