@@ -48,7 +48,6 @@ void RestoreController::restore()
             setContext(nullptr);
             emit alreadyRestored(wallet);
             return;
-
         }
 
         wallet = WalletManager::instance()->createWallet();
