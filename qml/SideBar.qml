@@ -47,6 +47,14 @@ Pane {
         Item {
             Layout.minimumHeight: 20
         }
+        Image {
+            Layout.alignment: Qt.AlignCenter
+            Layout.topMargin: 20
+            Layout.bottomMargin: 20
+            Layout.preferredWidth: 24
+            Layout.preferredHeight: 24
+            source: 'qrc:/svg/home.svg'
+        }
         SideButton {
             enabled: true
             icon.source: 'qrc:/svg/home.svg'
