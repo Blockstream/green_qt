@@ -173,16 +173,34 @@ void JadeUpdateController::check()
 
             QSet<QPair<QString, QString>> delta_available;
 
+            QVersionNumber latest_version;
+            for (const auto& channel : channels) {
+                if (channel == "stable") {
+                    auto index = m_index.value(type).toObject().value(channel).toObject();
+                    for (const auto& value : index.value("full").toArray()) {
+                        auto firmware = value.toObject();
+                        const auto firmware_version = QVersionNumber::fromString(firmware.value("version").toString());
+                        if (firmware_version > latest_version) {
+                            qDebug() << latest_version << " -> " << firmware_version;
+                            latest_version = firmware_version;
+                        }
+                    }
+                }
+            }
+
             for (const auto& channel : channels) {
                 auto index = m_index.value(type).toObject().value(channel).toObject();
 
                 auto process = [&](bool delta, QJsonObject& firmware) {
-                    const bool same_version = QVersionNumber::fromString(version) == QVersionNumber::fromString(firmware.value("version").toString());
-                    const bool newer_version = QVersionNumber::fromString(version) < QVersionNumber::fromString(firmware.value("version").toString());
+                    const auto firmware_version = QVersionNumber::fromString(firmware.value("version").toString());
+                    const bool same_version = QVersionNumber::fromString(version) == firmware_version;
+                    const bool newer_version = QVersionNumber::fromString(version) < firmware_version;
                     const bool same_config = config == firmware.value("config").toString();
                     const bool upgrade = newer_version || (same_version && !same_config);
-                    const bool downgrade = QVersionNumber::fromString(firmware.value("version").toString()) < QVersionNumber::fromString(version);
+                    const bool downgrade = firmware_version < QVersionNumber::fromString(version);
                     const bool installed = same_version && same_config && version==firmware.value("version").toString();
+                    const bool compatible = m_device->minimumRequiredVersion() <= firmware_version;
+                    const bool latest = firmware_version == latest_version;
                     if (delta && installed) return;
                     firmware.insert("channel", channel);
                     firmware.insert("newer_version", newer_version);
@@ -191,6 +209,9 @@ void JadeUpdateController::check()
                     firmware.insert("installed", installed);
                     firmware.insert("downgrade", downgrade);
                     firmware.insert("upgrade", upgrade);
+                    firmware.insert("compatible", compatible);
+                    firmware.insert("latest", latest);
+                    firmware.insert("index", firmware_version.majorVersion() * 10000 + firmware_version.minorVersion() * 100 + firmware_version.microVersion());
                     m_firmwares.append(firmware);
                 };
 
@@ -211,7 +232,7 @@ void JadeUpdateController::check()
                 }
             }
 
-            for (const auto& value : m_firmwares) {
+            for (auto& value : m_firmwares) {
                 auto firmware = value.toMap();
                 if (firmware.value("channel").toString() == "stable" &&
                     firmware.value("same_config").toBool() &&
