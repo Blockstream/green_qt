@@ -411,6 +411,7 @@ public:
     CreateAccountTask(const QJsonObject& details, Session* session);
     quint32 pointer() const { return m_pointer; }
 private:
+    bool active() const override;
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
     void handleDone(const QJsonObject& result) override;
 private:

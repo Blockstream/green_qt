@@ -25,6 +25,7 @@ StackViewPage {
         focus: true
         spacing: 10
         model: AssetsModel {
+            deployment: self.asset.deployment
             minWeight: 1
         }
         delegate: ItemDelegate {

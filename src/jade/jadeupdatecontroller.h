@@ -54,8 +54,8 @@ public:
     JadeDevice* device() const { return m_device; }
     QVariantMap firmware() const { return m_firmware; }
     void exec() override;
-signals:
-    void locked();
+//signals:
+//    void locked();
 private:
     JadeDevice* const m_device;
     QVariantMap m_firmware;

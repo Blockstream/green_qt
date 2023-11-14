@@ -47,76 +47,143 @@ void JadeDeviceSerialPortDiscoveryAgent::scan()
     }));
 
     connect(watcher, &Watcher::finished, this, [=] {
-        auto devices = m_devices;
-        m_devices.clear();
-
-        auto failed_locations = m_failed_locations;
-        m_failed_locations.clear();
+        auto backends = m_backends;
+        m_backends.clear();
 
         for (const auto &info : watcher->result()) {
             const auto system_location = info.systemLocation();
-            if (failed_locations.value(system_location) > 3) {
-                m_failed_locations.insert(system_location, failed_locations.value(system_location));
-                continue;
-            }
 
             if (FilterSerialPort(info)) continue;
 
-            auto device = devices.take(system_location);
-            if (!device) {
-                bool relax_write = false;
+            auto backend = backends.take(system_location);
+            if (!backend) {
 #ifdef Q_OS_MACOS
-                relax_write = system_location.contains("cu.usbmodem");
+                const bool relax_write = system_location.contains("cu.usbmodem");
+#else
+                const bool relax_write = false;
 #endif
-                auto api = new JadeAPI(info, relax_write);
-                device = new JadeDevice(this);
-                api->setParent(device);
-                connect(api, &JadeAPI::onConnected, this, [=] {
-                    device->api()->getVersionInfo([=](const QVariantMap& data) {
-                        if (data.contains("error")) {
-                            m_devices.remove(device->systemLocation());
-                            m_failed_locations[system_location] = failed_locations.value(system_location) + 1;
-                            device->deleteLater();
-                            return;
-                        }
-                        const auto result = data.value("result").toMap();
-                        device->setVersionInfo(result);
-                        DeviceManager::instance()->addDevice(device);
-                        connect(device, &JadeDevice::error, this, [=] {
-                            if (m_devices.take(device->systemLocation())) {
-                                DeviceManager::instance()->removeDevice(device);
-                                device->deleteLater();
-                            }
-                        });
-                    });
+                // qDebug() << "CREATE BACKEND FOR " << system_location;
+                backend = new JadeAPI(info, relax_write, this);
+                connect(backend, &JadeAPI::onConnected, this, [=] {
+                    // qDebug() << "OPEN OK" << system_location;
+                    probe(backend);
                 });
-                connect(api, &JadeAPI::onOpenError, this, [=] {
-                    m_failed_locations[system_location] = failed_locations.value(system_location) + 1;
+                connect(backend, &JadeAPI::onOpenError, this, [=] {
+                    // qDebug() << "OPEN ERROR" << system_location;
                 });
-                connect(api, &JadeAPI::onDisconnected, this, [=] {
-                    m_failed_locations.remove(system_location);
-                    if (m_devices.take(system_location)) {
-                        DeviceManager::instance()->removeDevice(device);
-                        delete device;
-                    }
+                connect(backend, &JadeAPI::onDisconnected, this, [=] {
+                    // qDebug() << "DISCONNECT" << system_location;
                 });
-                m_devices.insert(system_location, device);
-                api->connectDevice();
-            } else if (device->api()->isConnected()) {
-                m_devices.insert(system_location, device);
-            } else {
-                devices.insert(system_location, device);
+                probe(backend);
             }
+            m_backends.insert(system_location, backend);
         }
 
-        while (!devices.empty()) {
-            const auto system_location = devices.firstKey();
-            auto device = devices.take(system_location);
-            DeviceManager::instance()->removeDevice(device);
-            device->api()->disconnectDevice();
-            delete device;
+        while (!backends.empty()) {
+            const auto system_location = backends.firstKey();
+            auto backend = backends.take(system_location);
+            remove(backend);
         }
 
-        QTimer::singleShot(3000, this, &JadeDeviceSerialPortDiscoveryAgent::scan);
+        QTimer::singleShot(100, this, &JadeDeviceSerialPortDiscoveryAgent::scan);
     });
+}
+
+void JadeDeviceSerialPortDiscoveryAgent::probe(JadeAPI* backend)
+{
+    if (m_attempts.value(backend) > 10) return;
+    m_attempts[backend] ++;
+    backend->connectDevice();
+    backend->getVersionInfo([=](const QVariantMap& data) {
+        if (data.contains("error")) {
+            qDebug() << "VERSION INFO ERROR:" << data.value("error");
+            auto error = data.value("error").toMap();
+            if (error.value("message").toString() == "timeout") {
+                qDebug() << "RETRY";
+                QTimer::singleShot(100, backend, [=] {
+                    probe(backend);
+                });
+            }
+            return;
+        }
+
+        const auto version_info = data.value("result").toMap();
+        const auto efusemac = version_info.value("EFUSEMAC").toString();
+
+        JadeDevice* device = nullptr;
+
+        for (auto a_device : DeviceManager::instance()->devices()) {
+            auto jade_device = qobject_cast<JadeDevice*>(a_device);
+            if (!jade_device) continue;
+            if (efusemac != jade_device->versionInfo().value("EFUSEMAC").toString()) continue;
+            device = jade_device;
+            break;
+        }
+
+        if (!device) device = new JadeDevice(this);
+        device->setBackend(backend);
+        device->setVersionInfo(version_info);
+        device->setConnected(true);
+
+        DeviceManager::instance()->addDevice(device);
+
+        updateLater(backend);
+    });
+}
+
+void JadeDeviceSerialPortDiscoveryAgent::updateLater(JadeAPI* backend)
+{
+    QTimer::singleShot(500, backend, [=] {
+        const auto device = deviceFromBackend(backend);
+        if (!device) return;
+        if (QVersionNumber(1, 0, 21) <= QVersionNumber::fromString(device->version())) {
+            backend->ping([=](const QVariantMap& data) {
+                if (data.contains("result")) {
+                    int status = data.value("result").toInt();
+                    const auto device = deviceFromBackend(backend);
+                    device->setStatus((JadeDevice::Status) status);
+                }
+            });
+        }
+        backend->getVersionInfo([=](const QVariantMap& data) {
+            const auto device = deviceFromBackend(backend);
+            if (device) {
+                if (data.contains("error")) {
+                    qDebug() << "VERSION INFO ERROR:" << data.value("error");
+                    device->setConnected(false);
+                } else {
+                    const auto version_info = data.value("result").toMap();
+                    device->setConnected(true);
+                    device->setVersionInfo(version_info);
+                }
+            }
+            updateLater(backend);
+        });
+    });
+}
+
+JadeDevice *JadeDeviceSerialPortDiscoveryAgent::deviceFromBackend(JadeAPI* backend)
+{
+    for (auto a_device : DeviceManager::instance()->devices()) {
+        auto jade_device = qobject_cast<JadeDevice*>(a_device);
+        if (!jade_device) continue;
+        if (jade_device && jade_device->api() == backend) return jade_device;
+    }
+    return nullptr;
+}
+
+void JadeDeviceSerialPortDiscoveryAgent::remove(JadeAPI* backend)
+{
+    auto system_location = m_backends.key(backend);
+    m_backends.take(system_location);
+
+    auto device = deviceFromBackend(backend);
+    if (device) {
+        device->setBackend(nullptr);
+        device->setConnected(false);
+    }
+
+    m_attempts.remove(backend);
+    backend->disconnectDevice();
+    backend->deleteLater();
 }

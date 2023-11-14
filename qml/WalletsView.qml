@@ -60,6 +60,8 @@ MainPage {
                 }
                 WalletsDrawer.DeviceButton {
                     Layout.fillWidth: true
+                    id: device_button
+                    onClicked: self.openDevice(device_button.device)
                 }
             }
         }

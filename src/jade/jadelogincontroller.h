@@ -41,7 +41,7 @@ public:
     JadeSetupController(QObject* parent = nullptr);
     Network* network() const { return m_network; }
 public slots:
-    void setup(const QString& network);
+    void setup(const QString& deployment);
 signals:
     void setupFinished(Context* context);
 private:

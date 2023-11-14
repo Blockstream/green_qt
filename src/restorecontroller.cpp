@@ -27,10 +27,10 @@ void RestoreController::setPassword(const QString& password)
     emit passwordChanged();
 }
 
-void RestoreController::restore()
+void RestoreController::restore(const QString& deployment)
 {
-    if (m_context) m_context->deleteLater();
-    setContext(new Context(this));
+    Q_ASSERT(!m_context);
+    setContext(new Context(deployment, this));
 
     auto monitor = new TaskGroupMonitor(this);
     connect(monitor, &TaskGroupMonitor::allFinishedOrFailed, this, [=] {
@@ -64,8 +64,11 @@ void RestoreController::restore()
         emit restoreFinished(wallet->context());
     });
 
+    auto network = NetworkManager::instance()->networkForDeployment(deployment);
+    m_context->getOrCreateSession(network);
+
     for (auto network : NetworkManager::instance()->networks()) {
-        if (network->isMainnet()) {
+        if (network->deployment() == deployment) {
             auto group = check(network);
             monitor->add(group);
         }

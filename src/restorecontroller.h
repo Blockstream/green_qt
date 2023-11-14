@@ -44,7 +44,7 @@ public:
 //    bool accepted() const { return m_accepted; }
 
 public slots:
-    void restore();
+    void restore(const QString& deployment);
 
 private slots:
 //    void update();

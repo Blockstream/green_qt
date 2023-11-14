@@ -919,6 +919,11 @@ CreateAccountTask::CreateAccountTask(const QJsonObject& details, Session* sessio
 {
 }
 
+bool CreateAccountTask::active() const
+{
+    return AuthHandlerTask::active() && m_session->m_ready;
+}
+
 bool CreateAccountTask::call(GA_session *session, GA_auth_handler **auth_handler)
 {
     const auto rc = GA_create_subaccount(session, Json::fromObject(m_details).get(), auth_handler);

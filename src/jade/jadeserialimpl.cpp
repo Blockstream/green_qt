@@ -52,7 +52,7 @@ void JadeSerialImpl::connectDeviceImpl()
                 this, &JadeSerialImpl::onSerialDataReady);
 
         // Emit 'onConnected' 1 second later
-        QTimer::singleShot(1000, this, [this] {
+        QTimer::singleShot(200, this, [this] {
             emit onConnected();
         });
     }

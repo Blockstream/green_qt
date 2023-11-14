@@ -6,7 +6,8 @@ import QtQuick.Layouts
 import "util.js" as UtilJS
 
 StackViewPage {
-    signal connectJadeClicked()
+    signal connectJadeClicked(string deployment)
+    required property string deployment
     id: self
     padding: 60
     footer: Pane {

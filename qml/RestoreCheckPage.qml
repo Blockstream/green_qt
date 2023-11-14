@@ -7,6 +7,7 @@ import QtQuick.Layouts
 StackViewPage {
     signal restoreFinished(Context context)
     signal alreadyRestored(Wallet wallet)
+    required property string deployment
     required property var mnemonic
     required property string password
     RestoreController {
@@ -26,7 +27,7 @@ StackViewPage {
         onRestoreFinished: (context) => self.restoreFinished(context)
         onAlreadyRestored: (wallet) => self.alreadyRestored(wallet)
     }
-    StackView.onActivated: controller.restore()
+    StackView.onActivated: controller.restore(self.deployment)
     id: self
     leftItem: Item {
     }

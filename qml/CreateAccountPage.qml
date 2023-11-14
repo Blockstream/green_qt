@@ -22,7 +22,7 @@ StackViewPage {
         required property string serverType
         required property string type
         id: btn
-        network: NetworkManager.networkWithServerType(self.asset.networkKey, btn.serverType)
+        network: NetworkManager.networkWithServerType(self.context.deployment, self.asset.networkKey, btn.serverType)
         action: Action {
             onTriggered: {
                 self.StackView.view.push(controller_page, {
@@ -49,7 +49,7 @@ StackViewPage {
         tagColor: '#D8A800'
         text: 'lightning'
         title: qsTrId('id_lightning')
-        visible: self.asset.networkKey === 'bitcoin' && Settings.enableExperimental
+        visible: context.deployment === 'mainnet' && self.asset.networkKey === 'bitcoin' && Settings.enableExperimental
         action: Action {
             onTriggered: {
                 self.StackView.view.push(lightning_page);
@@ -173,11 +173,6 @@ StackViewPage {
             contentItem: ColumnLayout {
                 BusyIndicator {
                     Layout.alignment: Qt.AlignCenter
-                }
-                TaskDispatcherInspector {
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-                    dispatcher: controller.dispatcher
                 }
             }
         }

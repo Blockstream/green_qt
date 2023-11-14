@@ -67,6 +67,7 @@ StackViewPage {
                 Layout.preferredWidth: 400
                 collapsed: index > 0 && !repeater.itemAt(index - 1).match
                 contentHeight: field.implicitHeight
+                contentWidth: field.implicitWidth
                 Rectangle {
                     border.width: 2
                     border.color: '#00B45A'

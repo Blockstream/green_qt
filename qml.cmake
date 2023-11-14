@@ -217,7 +217,9 @@ SET(QML_FILES
     qml/AlreadyRestoredPage.qml
     qml/UseDevicePage.qml
     qml/ConnectJadePage.qml
+    qml/JadePage.qml
     qml/JadeFirmwareConfigSelector.qml
+    qml/DeploymentSelector.qml
 )
 
 if (GREEN_NO_RESOURCES)

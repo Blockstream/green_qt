@@ -32,7 +32,7 @@ StackViewPage {
     }
 
     function openCreateAccountDrawer({ dismissable = true } = {}) {
-        const network = self.currentAccount?.network ?? NetworkManager.network('electrum-mainnet')
+        const network = self.currentAccount?.network ?? NetworkManager.networkForDeployment(self.context.deployment)
         const id = network.liquid ? network.policyAsset : network.key
         const asset = self.context.getOrCreateAsset(id)
         create_account_drawer.open({ asset, dismissable })

@@ -293,11 +293,5 @@ WalletDialog {
                 }
             }
         }
-        TaskDispatcherInspector {
-            Layout.fillHeight: true
-            Layout.minimumWidth: 200
-            dispatcher: controller.dispatcher
-            visible: info_button.checked
-        }
     }
 }

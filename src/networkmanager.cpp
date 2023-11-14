@@ -53,10 +53,12 @@ Network *NetworkManager::network(const QString &id) const
     return nullptr;
 }
 
-Network *NetworkManager::networkWithServerType(const QString &key, const QString &server_type) const
+Network *NetworkManager::networkWithServerType(const QString& deployment, const QString& key, const QString& server_type) const
 {
     for (auto network : m_networks) {
-        if (network->key() == key && network->data().value("server_type").toString() == server_type) {
+        if (network->deployment() == deployment &&
+            network->key() == key &&
+            network->data().value("server_type").toString() == server_type) {
             return network;
         }
     }

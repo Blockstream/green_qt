@@ -20,8 +20,8 @@ public:
     QList<Network*> networks() const;
 
     Q_INVOKABLE Network* network(const QString& id) const;
-    Q_INVOKABLE Network* networkWithServerType(const QString& key, const QString& server_type) const;
-    Network* networkForDeployment(const QString& deployment);
+    Q_INVOKABLE Network* networkWithServerType(const QString& deployment, const QString& key, const QString& server_type) const;
+    Q_INVOKABLE Network* networkForDeployment(const QString& deployment);
 
 private:
     explicit NetworkManager();

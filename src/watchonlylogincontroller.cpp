@@ -78,7 +78,8 @@ void WatchOnlyLoginController::update()
 void WatchOnlyLoginController::login()
 {
     Q_ASSERT(m_valid);
-    setContext(new Context(this));
+
+    setContext(new Context(m_network->deployment(), this));
     m_context->setWatchonly(true);
 
     auto session = m_context->getOrCreateSession(m_network);

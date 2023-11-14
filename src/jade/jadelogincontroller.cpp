@@ -39,12 +39,12 @@ JadeSetupController::JadeSetupController(QObject* parent)
 {
 }
 
-void JadeSetupController::setup(const QString& network)
+void JadeSetupController::setup(const QString& deployment)
 {
     Q_ASSERT(!m_context);
-    setContext(new Context(network, this));
+    setContext(new Context(deployment, this));
 
-    m_network = NetworkManager::instance()->network(network);
+    m_network = NetworkManager::instance()->networkForDeployment(deployment);
     auto session = m_context->getOrCreateSession(m_network);
     auto connect_session = new ConnectTask(session);
     auto setup = new JadeSetupTask(this);
@@ -152,9 +152,20 @@ void JadeUnlockController::unlock()
     group->add(identify);
 
     dispatcher()->add(group);
+
     connect(group, &TaskGroup::finished, this, [=] {
         context->setDevice(m_device);
 
+//        auto activity = m_device->getMasterBlindingKey();
+//        connect(activity, &Activity::finished, [this, activity] {
+//            activity->deleteLater();
+//            qDebug() << "master_blinding_key" << QString::fromLocal8Bit(activity->masterBlindingKey().toHex());
+//            Q_UNREACHABLE();
+//        });
+//        connect(activity, &Activity::failed, [=] {
+//            Q_UNREACHABLE();
+//        });
+//        ActivityManager::instance()->exec(activity);
 
         emit unlocked(context);
     });
@@ -242,10 +253,15 @@ void JadeUnlockTask::update()
     const auto device = m_controller->device();
     if (!device) return;
 
-    if (device->state() != JadeDevice::StateUnsaved && device->state() == JadeDevice::StateUnsaved) {
+    if (device->state() == JadeDevice::StateReady) {
         setStatus(Status::Finished);
         return;
     }
+
+//    if (device->state() != JadeDevice::StateUnsaved && device->state() == JadeDevice::StateUnsaved) {
+//        setStatus(Status::Finished);
+//        return;
+//    }
 
     const auto network = m_controller->network();
     if (!network) return;

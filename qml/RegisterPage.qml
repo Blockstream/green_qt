@@ -6,7 +6,7 @@ import QtQuick.Layouts
 StackViewPage {
     signal registerFinished(Context context)
     required property var mnemonic
-    StackView.onActivated: controller.active = true
+    StackView.onActivated: controller.signup("mainnet")
     id: self
     padding: 0
     leftItem: Item {
@@ -14,7 +14,6 @@ StackViewPage {
     SignupController {
         id: controller
         mnemonic: self.mnemonic
-        network: NetworkManager.network('electrum-mainnet')
         onRegisterFinished: (context) => self.registerFinished(context)
     }
     contentItem: ColumnLayout {

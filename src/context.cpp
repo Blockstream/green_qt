@@ -194,7 +194,7 @@ bool Context::hasBalance() const
 
 Asset* Context::getOrCreateAsset(const QString& id)
 {
-    return AssetManager::instance()->assetWithId(id);
+    return AssetManager::instance()->assetWithId(m_deployment, id);
 }
 
 Account* Context::getOrCreateAccount(Network* network, quint32 pointer)

@@ -8,8 +8,9 @@
 #include <QtMath>
 #include <QUrl>
 
-Asset::Asset(const QString& id, QObject* parent)
+Asset::Asset(const QString& deployment, const QString& id, QObject* parent)
     : QObject(parent)
+    , m_deployment(deployment)
     , m_id(id)
     , m_item(new QStandardItem)
 {
@@ -126,7 +127,7 @@ AssetManager::AssetManager()
 
         for (const auto& value: liquid_assets) {
             const auto data = value.toObject();
-            auto asset = assetWithId(data.value("id").toString());
+            auto asset = assetWithId("mainnet", data.value("id").toString());
             asset->setNetworkKey(network_key);
             asset->setIsAmp(data.value("amp").toBool(false));
             asset->setWeight(data.value("weight").toInt(0));
@@ -134,11 +135,9 @@ AssetManager::AssetManager()
     });
 
     for (const auto network : NetworkManager::instance()->networks()) {
-        if (!network->data().value("mainnet").toBool()) continue;
-
         const auto network_key = network->key();
         const auto id = network->data().value("policy_asset").toString(network_key);
-        auto asset = assetWithId(id);
+        auto asset = assetWithId(network->deployment(), id);
         asset->setNetworkKey(network_key);
         asset->setWeight(INT_MAX);
         asset->setName(network->displayName());
@@ -161,14 +160,15 @@ AssetManager* AssetManager::create(QQmlEngine*, QJSEngine* engine)
     return AssetManager::instance();
 }
 
-Asset *AssetManager::assetWithId(const QString& id)
+Asset *AssetManager::assetWithId(const QString& deployment, const QString& id)
 {
     Asset* asset = m_assets.value(id);
     if (!asset) {
-        asset = new Asset(id, this);
+        asset = new Asset(deployment, id, this);
         m_assets.insert(id, asset);
         m_model->appendRow(asset->item());
     }
+    Q_ASSERT(deployment == asset->deployment());
     return asset;
 }
 
@@ -186,6 +186,14 @@ void AssetsModel::setFilter(const QString& filter)
     if (m_filter == filter) return;
     m_filter = filter;
     emit filterChanged();
+    invalidateRowsFilter();
+}
+
+void AssetsModel::setDeployment(const QString& deployment)
+{
+    if (m_deployment == deployment) return;
+    m_deployment = deployment;
+    emit deploymentChanged();
     invalidateRowsFilter();
 }
 
@@ -208,6 +216,10 @@ bool AssetsModel::filterAcceptsRow(int source_row, const QModelIndex &source_par
 
     if (!m_filter.isEmpty()) {
         if (!asset->name().contains(m_filter, Qt::CaseInsensitive)) return false;
+    }
+
+    if (!m_deployment.isEmpty()) {
+        if (asset->deployment() != m_deployment) return false;
     }
 
     return true;

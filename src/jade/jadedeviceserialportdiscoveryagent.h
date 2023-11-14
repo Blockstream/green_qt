@@ -5,6 +5,7 @@
 #include <QSet>
 #include <QtQml/qqml.h>
 
+class JadeAPI;
 class JadeDevice;
 
 class JadeDeviceSerialPortDiscoveryAgent : public QObject
@@ -15,8 +16,13 @@ public:
     explicit JadeDeviceSerialPortDiscoveryAgent(QObject* parent = nullptr);
     void scan();
 private:
-    QMap<QString, JadeDevice*> m_devices;
-    QMap<QString, int> m_failed_locations;
+    void remove(JadeAPI* backend);
+    void probe(JadeAPI* backend);
+    void updateLater(JadeAPI* backend);
+    JadeDevice* deviceFromBackend(JadeAPI* backend);
+private:
+    QMap<QString, JadeAPI*> m_backends;
+    QMap<JadeAPI*, int> m_attempts;
 };
 
 #endif // GREEN_JADEDEVICESERIALPORTDISCOVERYAGENT_H

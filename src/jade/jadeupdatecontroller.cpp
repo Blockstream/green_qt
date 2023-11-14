@@ -94,17 +94,17 @@ void JadeUpdateActivity::exec()
             const auto code = error.value("code").toLongLong();
             const auto message = error.value("message").toString();
 
-#define CBOR_RPC_PROTOCOL_ERROR -32001
-#define CBOR_RPC_HW_LOCKED -32002
-            // message `OTA is only allowed on new or logged-in device.` code is as follow:
-            // in 0.1.21 code is CBOR_RPC_PROTOCOL_ERROR
-            // in 0.1.23 and later is CBOR_RPC_HW_LOCKED
-            if (code == CBOR_RPC_HW_LOCKED || message == "OTA is only allowed on new or logged-in device.") {
-                emit locked();
-            } else {
+//#define CBOR_RPC_PROTOCOL_ERROR -32001
+//#define CBOR_RPC_HW_LOCKED -32002
+//            // message `OTA is only allowed on new or logged-in device.` code is as follow:
+//            // in 0.1.21 code is CBOR_RPC_PROTOCOL_ERROR
+//            // in 0.1.23 and later is CBOR_RPC_HW_LOCKED
+//            if (code == CBOR_RPC_HW_LOCKED || message == "OTA is only allowed on new or logged-in device.") {
+//                emit locked();
+//            } else {
                 qDebug() << Q_FUNC_INFO << this << "Unexpected error" << code << message;
                 fail();
-            }
+//            }
         }
     };
 
@@ -288,17 +288,17 @@ void JadeUpdateController::update(const QVariantMap& firmware)
 void JadeUpdateController::install(const QVariantMap& firmware, const QByteArray& data)
 {
     auto activity = new JadeUpdateActivity(firmware, data, m_device);
-    connect(activity, &JadeUpdateActivity::locked, this, [this, activity] {
-        auto unlock_activity = unlock();
-        connect(unlock_activity, &Activity::finished, this, [activity, unlock_activity] {
-            unlock_activity->deleteLater();
-            activity->exec();
-        });
-        connect(unlock_activity, &Activity::failed, this, [activity, unlock_activity] {
-            unlock_activity->deleteLater();
-            activity->fail();
-        });
-    });
+//    connect(activity, &JadeUpdateActivity::locked, this, [this, activity] {
+//        auto unlock_activity = unlock();
+//        connect(unlock_activity, &Activity::finished, this, [activity, unlock_activity] {
+//            unlock_activity->deleteLater();
+//            activity->exec();
+//        });
+//        connect(unlock_activity, &Activity::failed, this, [activity, unlock_activity] {
+//            unlock_activity->deleteLater();
+//            activity->fail();
+//        });
+//    });
     connect(activity, &Activity::failed, this, [=] {
         activity->deleteLater();
         m_updating = false;

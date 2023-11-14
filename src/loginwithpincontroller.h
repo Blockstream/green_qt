@@ -7,6 +7,8 @@
 #include <QObject>
 #include <QQmlEngine>
 
+class LoginTask;
+
 class LoginController : public Controller
 {
     Q_OBJECT
@@ -18,12 +20,12 @@ public:
     Wallet* wallet() const { return m_wallet; }
     void setWallet(Wallet* wallet);
 
-    void update();
-    void login();
-    void login(TaskGroup *group, Network *network);
+    void login(LoginTask* login_task);
+    void login(TaskGroup *group, LoginTask* login_task);
     void loginNetwork(Network* network);
 public slots:
     void loginWithPin(const QString& pin);
+    void loginWithDevice();
 signals:
     void walletChanged();
     void invalidPin();
@@ -33,7 +35,24 @@ signals:
 
 private:
     Wallet* m_wallet{nullptr};
-    QString m_pin;
+};
+
+class DeviceController : public Controller
+{
+    Q_OBJECT
+    Q_PROPERTY(Device* device READ device WRITE setDevice NOTIFY deviceChanged)
+    QML_ELEMENT
+public:
+    DeviceController(QObject* parent = nullptr);
+    Device* device() const { return m_device; }
+    void setDevice(Device* device);
+public slots:
+    void bind();
+signals:
+    void deviceChanged();
+    void binded(Context* context);
+private:
+    Device* m_device{nullptr};
 };
 
 class LoadController : public Controller

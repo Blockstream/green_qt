@@ -1,8 +1,6 @@
 #include "context.h"
 #include "signupcontroller.h"
-#include "ga.h"
-#include "json.h"
-#include "network.h"
+#include "networkmanager.h"
 #include "wallet.h"
 #include "walletmanager.h"
 #include "task.h"
@@ -10,7 +8,6 @@
 SignupController::SignupController(QObject *parent)
     : Controller(parent)
 {
-    setContext(new Context(this));
 }
 
 void SignupController::setMnemonic(const QStringList& mnemonic)
@@ -20,20 +17,8 @@ void SignupController::setMnemonic(const QStringList& mnemonic)
     emit mnemonicChanged();
 }
 
-void SignupController::setNetwork(Network* network)
+void SignupController::signup(const QString& deployment)
 {
-    if (m_network == network) return;
-    m_network = network;
-    emit networkChanged();
-}
-
-void SignupController::setActive(bool active)
-{
-    if (m_active == active) return;
-    if (m_active) return;
-    m_active = active;
-    emit activeChanged();
-
     const QJsonObject credentials({
         { "mnemonic", m_mnemonic.join(' ') },
         { "password", QString() }
@@ -41,7 +26,12 @@ void SignupController::setActive(bool active)
 
     auto group = new TaskGroup(this);
 
-    auto session = m_context->getOrCreateSession(m_network);
+    if (!m_context) {
+        setContext(new Context(this));
+    }
+
+    auto network = NetworkManager::instance()->networkForDeployment(deployment);
+    auto session = m_context->getOrCreateSession(network);
     auto connect_session = new ConnectTask(session);
     auto register_user = new RegisterUserTask(m_mnemonic, session);
     auto mnemonic_login = new LoginTask(m_mnemonic, QString(), session);

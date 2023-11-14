@@ -38,16 +38,19 @@ namespace {
 LedgerDeviceController::LedgerDeviceController(QObject* parent)
     : Controller(parent)
 {
-    const auto initialize = new LedgerInitializeTask(this);
-    const auto identify = new LedgerIdentifyTask(this);
+    Q_UNREACHABLE();
+    // TODO: move out of constructor, must have access to context
 
-    initialize->then(identify);
+    //const auto initialize = new LedgerInitializeTask(this);
+    //const auto identify = new LedgerIdentifyTask(this);
 
-    auto group = new TaskGroup(this);
-    group->add(initialize);
-    group->add(identify);
+    //initialize->then(identify);
 
-    dispatcher()->add(group);
+    //auto group = new TaskGroup(this);
+    //group->add(initialize);
+    //group->add(identify);
+
+    // m_dispatcher->add(group);
 }
 
 LedgerDeviceController::~LedgerDeviceController()
@@ -124,7 +127,7 @@ void LedgerDeviceController::login()
 {
     if (m_wallet && m_wallet->context()) return;
 
-    setContext(new Context("dunno", this));
+    setContext(new Context(this));
     m_context->setWallet(m_wallet);
 
     auto group = new TaskGroup(this);

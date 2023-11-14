@@ -13,8 +13,9 @@
 class Asset : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString networkKey READ networkKey NOTIFY networkKeyChanged);
+    Q_PROPERTY(QString deployment READ deployment CONSTANT)
     Q_PROPERTY(QString id READ id CONSTANT)
+    Q_PROPERTY(QString networkKey READ networkKey NOTIFY networkKeyChanged)
     Q_PROPERTY(QString icon READ icon NOTIFY iconChanged)
     Q_PROPERTY(QString name READ name NOTIFY nameChanged)
     Q_PROPERTY(bool hasData READ hasData NOTIFY dataChanged)
@@ -24,7 +25,9 @@ class Asset : public QObject
     QML_ELEMENT
     QML_UNCREATABLE("Asset is instanced by AssetManager")
 public:
-    explicit Asset(const QString& id, QObject* parent);
+    explicit Asset(const QString& deployment, const QString& id, QObject* parent);
+
+    QString deployment() const { return m_deployment; }
 
     QString networkKey() const { return m_network_key; }
     void setNetworkKey(const QString& network_key);
@@ -65,6 +68,7 @@ signals:
     void weightChanged();
 
 private:
+    QString const m_deployment;
     QString m_network_key;
     QString const m_id;
     QStandardItem* const m_item;
@@ -88,7 +92,7 @@ public:
 
     QStandardItemModel* model() const { return m_model; }
 
-    Q_INVOKABLE Asset* assetWithId(const QString& id);
+    Q_INVOKABLE Asset* assetWithId(const QString& deployment, const QString& id);
 
 private:
     QMap<QString, Asset*> m_assets;
@@ -99,21 +103,26 @@ class AssetsModel : public QSortFilterProxyModel
 {
     Q_OBJECT
     Q_PROPERTY(QString filter READ filter WRITE setFilter NOTIFY filterChanged)
+    Q_PROPERTY(QString deployment READ deployment WRITE setDeployment NOTIFY deploymentChanged)
     Q_PROPERTY(int minWeight READ minWeight WRITE setMinWeight NOTIFY minWeightChanged)
     QML_ELEMENT
 public:
     AssetsModel(QObject* parent = nullptr);
     QString filter() const { return m_filter; }
     void setFilter(const QString& filter);
+    QString deployment() const { return m_deployment; }
+    void setDeployment(const QString& deployment);
     int minWeight() const { return m_min_weight; }
     void setMinWeight(int min_weight);
 signals:
     void filterChanged();
+    void deploymentChanged();
     void minWeightChanged();
 protected:
     bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const override;
 private:
     QString m_filter;
+    QString m_deployment;
     int m_min_weight{0};
 };
 
