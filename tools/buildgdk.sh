@@ -6,7 +6,7 @@ mkdir -p build
 cd build
 
 if [ ! -d gdk ]; then
-    git clone --quiet --depth 1 --branch release_0.68.4 --single-branch https://github.com/Blockstream/gdk.git gdk
+    git clone --quiet --depth 1 --branch release_0.69.0 --single-branch https://github.com/Blockstream/gdk.git gdk
 fi
 
 cd gdk
