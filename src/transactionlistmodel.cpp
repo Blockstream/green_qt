@@ -52,8 +52,6 @@ void TransactionListModel::fetch(int offset, int count)
     m_get_transactions = new GetTransactionsTask(offset, count, m_account);
 
     connect(m_get_transactions, &Task::finished, this, [=] {
-        qDebug() << m_get_transactions->transactions();
-
         QVector<Transaction*> transactions;
         for (const QJsonValue& value : m_get_transactions->transactions()) {
             auto transaction = account()->getOrCreateTransaction(value.toObject());
