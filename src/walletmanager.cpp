@@ -68,7 +68,6 @@ WalletManager::WalletManager()
             wallet->m_pin_data.clear();
         }
         addWallet(wallet);
-        if (m_wallets.size() == 20) break;
     }
 }
 
