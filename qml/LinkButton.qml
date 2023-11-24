@@ -14,12 +14,13 @@ AbstractButton {
             anchors.fill: parent
             anchors.margins: -4
             z: -1
-            opacity: self.visualFocus ? 1 : 0
+            opacity: self.enabled && self.visualFocus ? 1 : 0
         }
     }
     contentItem: Label {
         color: '#00B45A'
         font: self.font
         text: self.text
+        opacity: self.enabled ? 1 : 0.5
     }
 }
