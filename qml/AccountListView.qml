@@ -8,7 +8,6 @@ import Qt5Compat.GraphicalEffects
 import "analytics.js" as AnalyticsJS
 
 GPane {
-    property real contentY: Math.max(archive_list_view.contentY + archive_list_view.headerItem.height, account_list_view.contentY)
     required property Context context
     property Account currentAccount: {
         const view = showArchived ? archive_list_view : account_list_view

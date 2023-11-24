@@ -10,7 +10,6 @@ Page {
     focusPolicy: Qt.ClickFocus
 
     required property Account account
-    readonly property real contentY: list_view.contentY
 
     readonly property var selectedOutputs: {
         const outputs = []

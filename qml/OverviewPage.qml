@@ -3,10 +3,8 @@ import Blockstream.Green.Core
 import QtQuick
 import QtQuick.Window
 import QtQuick.Controls
-import QtQuick.Controls.Material
 import QtQuick.Layouts
 import QtQml
-import Qt5Compat.GraphicalEffects
 
 import "analytics.js" as AnalyticsJS
 import "util.js" as UtilJS
@@ -180,33 +178,6 @@ StackViewPage {
     spacing: 16 //constants.s1
     property alias toolbarItem: wallet_header.toolbarItem
 
-    // unset blur sources, otherwise app crashes on quit
-    // TODO: review this workaround while switching to MultiEffect
-    Component.onDestruction: {
-        header_blur_source.sourceItem = null
-        footer_blur_source.sourceItem = null
-    }
-    ShaderEffectSource {
-        id: header_blur_source
-        sourceItem: split_view
-        sourceRect {
-            x: -split_view.x
-            y: -split_view.y
-            width: self.header.width
-            height: self.header.height
-        }
-    }
-    ShaderEffectSource {
-        id: footer_blur_source
-        sourceItem: split_view
-        sourceRect {
-            x: -split_view.x
-            y: self.footer.y - split_view.y
-            width: self.footer.width
-            height: self.footer.height
-        }
-    }
-
     header: WalletViewHeader {
         onLogoutClicked: self.logout()
 
@@ -215,18 +186,6 @@ StackViewPage {
         wallet: self.wallet
         currentAccount: self.currentAccount
         accountListWidth: accounts_list.width
-
-        background: Rectangle {
-            color: '#121416'
-            opacity: Math.max(stack_view.currentItem?.contentY ?? 0, accounts_list.contentY) > 0 ? 1 : 0
-            FastBlur {
-                anchors.fill: parent
-                opacity: 0.25
-                cached: true
-                radius: 128
-                source: header_blur_source
-            }
-        }
     }
     footer: Item {
         implicitHeight: 16

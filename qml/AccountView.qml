@@ -11,13 +11,6 @@ import "util.js" as UtilJS
 Page {
     required property Context context
     required property Account account
-    readonly property real contentY: {
-        let y = 0
-        for (let i = 0; i < stack_layout.children.length; i++) {
-            y = Math.max(y, stack_layout.children[i]?.item?.contentY ?? 0)
-        }
-        return y
-    }
 
     id: self
     spacing: constants.s1

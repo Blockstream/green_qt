@@ -7,7 +7,6 @@ import QtQuick.Layouts
 
 GPane {
     required property Account account
-    readonly property real contentY: list_view.contentY
 
     id: self
 
