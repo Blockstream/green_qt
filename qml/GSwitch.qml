@@ -6,12 +6,12 @@ Switch {
     id: self
     opacity: self.enabled ? 1 : 0.5
     indicator: Rectangle {
-        implicitWidth: 42
-        implicitHeight: 24
+        implicitWidth: 48
+        implicitHeight: 28
         x: self.width - self.indicator.width
         y: parent.height / 2 - height / 2
-        radius: 12
-        color: self.checked ? constants.g500 : constants.c500
+        radius: 14
+        color: self.checked ? '#34C759' : constants.c500
         border.color: Qt.lighter(color)
         border.width: self.activeFocus ? 1 : 0
         Behavior on color {
@@ -28,8 +28,8 @@ Switch {
                     velocity: 100
                 }
             }
-            width: 18
-            height: 18
+            width: 22
+            height: 22
             scale: self.down ? 0.75 : 1
             transformOrigin: Item.Center
             Behavior on scale {
