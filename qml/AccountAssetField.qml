@@ -8,6 +8,7 @@ import "util.js" as UtilJS
 AbstractButton {
     property Account account
     property Asset asset
+    property bool readonly: false
 
     id: self
     padding: 20
@@ -69,6 +70,7 @@ AbstractButton {
         Image {
             Layout.alignment: Qt.AlignCenter
             source: 'qrc:/svg2/edit.svg'
+            visible: !self.readonly
         }
     }
 }
