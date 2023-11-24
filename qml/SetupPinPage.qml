@@ -77,7 +77,7 @@ StackViewPage {
                 pin_field.enabled = true
             }
         }
-        PinLoginPage.PinPadButton {
+        PinPadButton {
             Layout.alignment: Qt.AlignCenter
             enabled: pin_field.enabled
             onClicked: pin_field.openPad()
