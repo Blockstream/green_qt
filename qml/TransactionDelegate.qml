@@ -34,7 +34,7 @@ ItemDelegate {
         }
     }
 
-    onClicked: transaction_dialog.createObject(window, { transaction }).open()
+    onClicked: transaction_dialog.createObject(window, { context: self.context, transaction }).open()
 
     id: self
     focusPolicy: Qt.ClickFocus

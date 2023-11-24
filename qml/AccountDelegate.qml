@@ -35,13 +35,15 @@ ItemDelegate {
             indeterminate: !delegate.account.synced
         }
     }
-    highlighted: currentAccount === delegate.account
+    highlighted: delegate.ListView.view.currentIndex === delegate.index
     leftPadding: constants.p2
     rightPadding: constants.p2
     topPadding: constants.p1
     bottomPadding: constants.p1
     hoverEnabled: true
-    width: ListView.view.contentWidth
+    layer.enabled: true
+    opacity: delegate.highlighted ? 1 : 0.5
+    width: ListView.view.width
     contentItem: ColumnLayout {
         spacing: 0
         RowLayout {
@@ -113,7 +115,7 @@ ItemDelegate {
             leftPadding: 0
             rightPadding: 0
             text: UtilJS.accountName(account)
-            enabled: !account.context.watchonly && delegate.ListView.isCurrentItem && !delegate.account.context.locked
+            enabled: !delegate.account.hidden && !account.context.watchonly && delegate.ListView.isCurrentItem && !delegate.account.context.locked
             onEdited: (text) => {
                 if (enabled) {
                     if (controller.setAccountName(delegate.account, text, activeFocus)) {
@@ -153,10 +155,20 @@ ItemDelegate {
                         }
                         HSpacer {
                         }
+                        RegularButton {
+                            topPadding: 4
+                            bottomPadding: 4
+                            font.family: 'SF Compact Display'
+                            font.pixelSize: 14
+                            font.weight: 400
+                            text: qsTrId('id_unarchive')
+                            visible: delegate.highlighted && delegate.account.hidden
+                            onClicked: controller.setAccountHidden(delegate.account, false)
+                        }
                         ToolButton {
                             id: tool_button
                             Layout.alignment: Qt.AlignBottom
-                            visible: delegate.highlighted
+                            visible: delegate.highlighted && !delegate.account.hidden
                             icon.source: 'qrc:/svg/3-dots.svg'
                             leftPadding: 0
                             rightPadding: 0
@@ -176,6 +188,7 @@ ItemDelegate {
                                 pointerY: 0.5
                                 enabled: !delegate.account.context.watchonly
                                 GMenu.Item {
+                                    visible: !delegate.account.hidden
                                     text: qsTrId('id_rename')
                                     icon.source: 'qrc:/svg/wallet-rename.svg'
                                     onClicked: {
@@ -185,18 +198,7 @@ ItemDelegate {
                                     }
                                 }
                                 GMenu.Item {
-                                    text: qsTrId('id_unarchive')
-                                    icon.source: 'qrc:/svg/unarchive.svg'
-                                    onClicked: {
-                                        account_delegate_menu.close()
-                                        controller.setAccountHidden(delegate.account, false)
-                                    }
-                                    visible: delegate.account.hidden
-                                    height: visible ? implicitHeight : 0
-                                }
-                                GMenu.Item {
                                     text: qsTrId('id_archive')
-                                    enabled: account_list_view.count > 1
                                     icon.source: 'qrc:/svg/archived.svg'
                                     onClicked: {
                                         account_delegate_menu.close()

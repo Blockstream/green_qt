@@ -180,6 +180,7 @@ StackViewPage {
 
     header: WalletViewHeader {
         onLogoutClicked: self.logout()
+        onArchivedAccountsClicked: archived_accounts_dialog.open()
 
         id: wallet_header
         context: self.context
@@ -231,6 +232,11 @@ StackViewPage {
 
     AssetsDrawer {
         id: assets_drawer
+        context: self.context
+    }
+
+    ArchivedAccountsDialog {
+        id: archived_accounts_dialog
         context: self.context
     }
 
@@ -391,7 +397,7 @@ StackViewPage {
     SystemMessageDialog {
         id: system_message_dialog
         property bool alreadyOpened: false
-        wallet: self.wallet
+        context: self.context
         visible: shouldOpen && !alreadyOpened
         onVisibleChanged: {
             if (!visible) {
@@ -404,7 +410,7 @@ StackViewPage {
         id: export_transactions_popup
         WalletDialog {
             required property Account account
-            wallet: account.context.wallet
+            context: account.context
             id: dialog
             anchors.centerIn: Overlay.overlay
             showRejectButton: false

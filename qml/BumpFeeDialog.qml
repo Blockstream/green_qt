@@ -12,7 +12,7 @@ ControllerDialog {
 
     id: self
     title: qsTrId('id_increase_fee')
-    wallet: self.account.context.wallet
+    context: self.account.context
     controller: BumpFeeController {
         id: controller
         context: self.context

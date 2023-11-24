@@ -33,7 +33,6 @@ WalletDialog {
     }
 
     id: self
-    wallet: transaction.account.context.wallet
     title: {
         switch (transaction.type) {
             case Transaction.Incoming: return qsTrId('id_incoming')

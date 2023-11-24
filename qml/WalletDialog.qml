@@ -3,14 +3,13 @@ import QtQuick
 import QtQuick.Controls
 
 AbstractDialog {
+    required property Context context
+    readonly property Wallet wallet: self.context.wallet
     id: self
-    property Wallet wallet
-    readonly property Context context: self.wallet?.context ?? null
-
     Connections {
-        target: self.wallet
-        function onContextChanged () {
-            self.destroy()
+        target: self.context
+        function onAutoLogout() {
+            self.close()
         }
     }
 }

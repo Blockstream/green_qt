@@ -7,6 +7,7 @@ ListView {
         anchors.left: self.right
         anchors.leftMargin: 4
     }
+    clip: true
     contentWidth: self.width
     displayMarginBeginning: 300
     displayMarginEnd: 100

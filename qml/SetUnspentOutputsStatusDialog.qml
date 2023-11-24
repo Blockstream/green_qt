@@ -9,7 +9,7 @@ ControllerDialog {
     required property var outputs
     required property string status
 
-    wallet: self.account.context.wallet
+    context: self.account.context
 
     id: self
     title: status === 'default' ? qsTrId('id_unlocking_coins') : qsTrId('id_locking_coins')

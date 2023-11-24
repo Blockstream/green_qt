@@ -12,7 +12,7 @@ ControllerDialog {
     showRejectButton: false
     controller: SystemMessageController {
         id: controller
-        context: self.wallet.context
+        context: self.context
         onEmpty: self.accept()
         onMessageChanged: {
             confirm_checkbox.enabled = true

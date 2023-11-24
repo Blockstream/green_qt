@@ -220,6 +220,7 @@ SET(QML_FILES
     qml/JadePage.qml
     qml/JadeFirmwareConfigSelector.qml
     qml/DeploymentSelector.qml
+    qml/ArchivedAccountsDialog.qml
     qml/PinPadButton.qml
 )
 

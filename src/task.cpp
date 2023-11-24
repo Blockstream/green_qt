@@ -400,15 +400,6 @@ void AuthHandlerTask::handleError(const QJsonObject& result)
 {
     const auto error = result.value("error").toString();
 
-    if (error == "Authentication required") {
-        m_session->m_ready = false;
-        auto login = new LoginTask(m_session);
-        needs(login);
-        group()->add(login);
-        setStatus(Status::Ready);
-        return;
-    }
-
     if (error == "id_connection_failed") {
         m_session->setConnected(false);
     }

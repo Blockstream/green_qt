@@ -13,6 +13,7 @@ import "analytics.js" as AnalyticsJS
 import "util.js" as UtilJS
 
 MainPageHeader {
+    signal archivedAccountsClicked()
     signal logoutClicked()
 
     required property Context context
@@ -104,7 +105,7 @@ MainPageHeader {
             enabled: archive_list_model.count > 0 && !(navigation.param.archive ?? false)
             onClicked: {
                 menu.close()
-                navigation.set({ archive: true })
+                self.archivedAccountsClicked()
             }
         }
         GMenu.Separator {
