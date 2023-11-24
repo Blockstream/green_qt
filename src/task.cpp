@@ -250,17 +250,24 @@ TaskGroupMonitor::TaskGroupMonitor(QObject* parent)
 {
 }
 
+QQmlListProperty<TaskGroup> TaskGroupMonitor::groups()
+{
+    return { this, &m_groups };
+}
+
 void TaskGroupMonitor::add(TaskGroup* group)
 {
     Q_ASSERT(!m_groups.contains(group));
-    m_groups.insert(group);
+    m_groups.append(group);
+    emit groupsChanged();
     connect(group, &TaskGroup::finished, this, [=] { remove(group); });
-    connect(group, &TaskGroup::failed, this, [=] {remove(group); });
+    connect(group, &TaskGroup::failed, this, [=] { remove(group); });
 }
 
 void TaskGroupMonitor::remove(TaskGroup* group)
 {
-    m_groups.remove(group);
+    m_groups.removeOne(group);
+    emit groupsChanged();
     if (m_groups.isEmpty()) {
         emit allFinishedOrFailed();
     }

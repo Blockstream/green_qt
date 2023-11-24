@@ -152,14 +152,17 @@ protected:
 class TaskGroupMonitor : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(QQmlListProperty<TaskGroup> groups READ groups NOTIFY groupsChanged)
 public:
     TaskGroupMonitor(QObject* parent = nullptr);
+    QQmlListProperty<TaskGroup> groups();
     void add(TaskGroup* group);
     void remove(TaskGroup* group);
 signals:
+    void groupsChanged();
     void allFinishedOrFailed();
 private:
-    QSet<TaskGroup*> m_groups;
+    QList<TaskGroup*> m_groups;
 };
 
 struct GA_auth_handler;
