@@ -8,6 +8,7 @@ Page {
     property alias leftItem: left_pane.contentItem
     property alias centerItem: center_pane.contentItem
     property alias rightItem: right_pane.contentItem
+    StackView.onActivated: self.forceActiveFocus()
     id: self
     background: null
     leftPadding: 0

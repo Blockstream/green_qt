@@ -27,7 +27,6 @@ MainPage {
     contentItem: GStackView {
         id: stack_view
         focus: true
-        onCurrentItemChanged: stack_view.currentItem.forceActiveFocus()
     }
 
     Component {
