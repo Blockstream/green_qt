@@ -388,6 +388,7 @@ class LoadBalanceTask : public AuthHandlerTask
 public:
     LoadBalanceTask(Account* account);
 private:
+    bool active() const override;
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
     void handleDone(const QJsonObject& result) override;
 private:

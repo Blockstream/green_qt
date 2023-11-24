@@ -709,7 +709,7 @@ LoadAccountTask::LoadAccountTask(uint32_t pointer, Session* session)
 
 bool LoadAccountTask::active() const
 {
-    return m_session->m_ready;
+    return AuthHandlerTask::active() && m_session->m_ready;
 }
 
 bool LoadAccountTask::call(GA_session* session, GA_auth_handler** auth_handler)
@@ -749,7 +749,7 @@ LoadAccountsTask::LoadAccountsTask(bool refresh, Session* session)
 
 bool LoadAccountsTask::active() const
 {
-    return m_session->m_ready;
+    return AuthHandlerTask::active() && m_session->m_ready;
 }
 
 bool LoadAccountsTask::call(GA_session* session, GA_auth_handler** auth_handler)
@@ -774,6 +774,11 @@ LoadBalanceTask::LoadBalanceTask(Account* account)
     : AuthHandlerTask(account->session())
     , m_account(account)
 {
+}
+
+bool LoadBalanceTask::active() const
+{
+    return AuthHandlerTask::active() && m_session->m_ready;
 }
 
 bool LoadBalanceTask::call(GA_session* session, GA_auth_handler** auth_handler)
@@ -1023,8 +1028,7 @@ bool GetCredentialsTask::call(GA_session *session, GA_auth_handler **auth_handle
 
 bool GetCredentialsTask::active() const
 {
-    if (!m_session->m_ready) return false;
-    return AuthHandlerTask::active();
+    return AuthHandlerTask::active() && m_session->m_ready;
 }
 
 void GetCredentialsTask::handleDone(const QJsonObject& result)
@@ -1106,7 +1110,6 @@ void CreateTransactionTask::handleDone(const QJsonObject& result)
 
     AuthHandlerTask::handleDone(result);
 }
-
 
 SendNLocktimesTask::SendNLocktimesTask(Session* session)
     : SessionTask(session)
