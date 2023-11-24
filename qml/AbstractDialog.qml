@@ -90,10 +90,10 @@ Dialog {
         Rectangle {
             id: r
             anchors.fill: parent
-            radius: 16
-            color: constants.c800
+            radius: 10
+            color: '#13161D'
             border.width: 0.5
-            border.color: Qt.lighter(constants.c500)
+            border.color: Qt.lighter('#13161D')
         }
     }
 }
