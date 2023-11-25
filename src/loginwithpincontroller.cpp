@@ -198,7 +198,6 @@ void LoadController::loginNetwork(Network* network)
 {
     auto group = new TaskGroup(this);
 
-
     auto session = m_context->getOrCreateSession(network);
     auto connect_session = new ConnectTask(session);
     LoginTask* login;

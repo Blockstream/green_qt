@@ -77,7 +77,6 @@ void Session::handleNotification(const QJsonObject& notification)
         auto data = value.toObject();
         const auto current_state = data.value("current_state").toString();
         const auto next_state = data.value("next_state").toString();
-        setConnected(current_state == "connected");
         setConnecting(current_state == "disconnected" && next_state == "connected");
         emit networkEvent(data);
     } else if (event == "tor") {
