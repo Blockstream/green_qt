@@ -7,6 +7,7 @@ AbstractButton {
     required property Context context
 
     Layout.fillHeight: true
+    Layout.minimumWidth: 200
     id: self
     padding: 0
     opacity: {
@@ -19,6 +20,7 @@ AbstractButton {
         if ((self.x - flickable.contentX + self.width + 16) > flickable.width) return 0.1
         return 1
     }
+    layer.enabled: true
     Behavior on opacity {
         SmoothedAnimation {
             velocity: 4
