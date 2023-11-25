@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Layouts
 
 AbstractButton {
     id: self
@@ -23,12 +24,23 @@ AbstractButton {
             opacity: self.visualFocus ? 1 : 0
         }
     }
-    contentItem: Label {
-        font.family: 'SF Compact Display'
-        font.pixelSize: 16
-        font.weight: 700
-        horizontalAlignment: Text.AlignHCenter
-        text: self.text
-        verticalAlignment: Text.AlignVCenter
+    contentItem: RowLayout {
+        HSpacer {
+        }
+        Image {
+            id: image
+            source: self.icon.source
+            visible: !!image.source
+        }
+        Label {
+            font.family: 'SF Compact Display'
+            font.pixelSize: 16
+            font.weight: 700
+            horizontalAlignment: Text.AlignHCenter
+            text: self.text
+            verticalAlignment: Text.AlignVCenter
+        }
+        HSpacer {
+        }
     }
 }

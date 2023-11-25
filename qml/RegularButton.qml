@@ -9,6 +9,9 @@ AbstractButton {
     topPadding: 12
     bottomPadding: 12
     opacity: self.enabled ? 1 : 0.4
+    font.family: 'SF Compact Display'
+    font.pixelSize: 16
+    font.weight: 700
     background: Rectangle {
         color: 'transparent'
         border.width: 1
@@ -26,9 +29,7 @@ AbstractButton {
         }
     }
     contentItem: Label {
-        font.family: 'SF Compact Display'
-        font.pixelSize: 16
-        font.weight: 700
+        font: self.font
         horizontalAlignment: Text.AlignHCenter
         text: self.text
         verticalAlignment: Text.AlignVCenter
