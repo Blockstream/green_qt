@@ -206,9 +206,12 @@ QJsonValue Analytics::getRemoteConfigValue(const QString &key) const
 {
     auto& countly = cly::Countly::getInstance();
     const nlohmann::json value = countly.getRemoteConfigValue(key.toStdString());
-    if (value.is_array()) {
+    if (value.is_null()) {
+        return {};
+    } else if (value.is_array()) {
         return Json::toArray((const GA_json*) &value);
     } else {
+        qDebug() << Q_FUNC_INFO << key << value.type_name();
         Q_UNIMPLEMENTED();
         return {};
     }
