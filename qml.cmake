@@ -64,7 +64,6 @@ SET(QML_FILES
     qml/PersistentLoader.qml
     qml/AnimLoader.qml
     qml/GToolButton.qml
-    qml/WalletViewFooter.qml
     qml/DiscoverServerTypeView.qml
     qml/LoginWithPasswordView.qml
     qml/PreferencesView.qml
@@ -80,7 +79,6 @@ SET(QML_FILES
     qml/QRCode.qml
     qml/JadeSignLiquidTransactionView.qml
     qml/GButton.qml
-    qml/ReceiveDialog.qml
     qml/WordField.qml
     qml/WalletViewHeader.qml
     qml/GSearchField.qml
