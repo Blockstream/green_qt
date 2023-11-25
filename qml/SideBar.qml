@@ -6,13 +6,11 @@ import QtQuick.Layouts
 
 Pane {
     enum View {
-        Home,
         Blockstream,
         Wallets,
         Preferences
     }
 
-    signal homeClicked
     signal blockstreamClicked
     signal preferencesClicked
     signal walletsClicked
@@ -54,14 +52,6 @@ Pane {
             Layout.preferredWidth: 24
             Layout.preferredHeight: 24
             source: 'qrc:/svg/home.svg'
-        }
-        SideButton {
-            enabled: true
-            icon.source: 'qrc:/svg/home.svg'
-            isCurrent: self.currentView === SideBar.View.Home
-            onClicked: self.homeClicked()
-            text: qsTrId('id_home')
-            visible: false
         }
         SideButton {
             icon.source: 'qrc:/svg/blockstream-logo.svg'

@@ -67,7 +67,7 @@ ApplicationWindow {
         }
 
         if (WalletManager.wallets.length > 1 && current_index < 0) {
-            stack_layout.currentIndex = 5
+            stack_layout.currentIndex = 3
             return
         }
 
@@ -140,24 +140,19 @@ ApplicationWindow {
         height: parent.height
         parent: Overlay.overlay
         z: 1
-        onHomeClicked: {
-            stack_layout.currentIndex = 0
-            side_bar.currentView = SideBar.View.Home
-            wallets_drawer.close()
-        }
         onBlockstreamClicked: {
             stack_layout.currentIndex = 1
             side_bar.currentView = SideBar.View.Blockstream
             wallets_drawer.close()
         }
         onPreferencesClicked: {
-            stack_layout.currentIndex = 2
+            stack_layout.currentIndex = 1
             side_bar.currentView = SideBar.View.Preferences
             wallets_drawer.close()
         }
         onWalletsClicked: openWallets()
     }
-    
+
     id: window
     x: Settings.windowX
     y: Settings.windowY
@@ -229,14 +224,9 @@ ApplicationWindow {
             Layout.fillWidth: true
             Layout.fillHeight: true
             readonly property WalletView currentWalletView: currentIndex < 0 ? null : (stack_layout.children[currentIndex].currentWalletView || null)
-            HomeView {
-                onOpenWallet: (wallet) => window.openWallet(wallet)
-            }
             BlockstreamView {
             }
             PreferencesView {
-            }
-            Item {
             }
             LedgerDevicesView {
             }
