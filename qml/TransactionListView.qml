@@ -25,11 +25,27 @@ GPane {
         }
     }
 
-    background: Label {
-        visible: self.empty
-        text: qsTrId('id_your_transactions_will_be_shown')
-        horizontalAlignment: Label.AlignHCenter
-        verticalAlignment: Label.AlignVCenter
+    background: Rectangle {
+        color: '#161921'
+        border.width: 1
+        border.color: '#1F222A'
+        radius: 4
+        ColumnLayout {
+            anchors.centerIn: parent
+            spacing: 20
+            visible: self.empty
+            Image {
+                Layout.alignment: Qt.AlignCenter
+                source: 'qrc:/png/no_transactions.png'
+            }
+            Label {
+                Layout.alignment: Qt.AlignCenter
+                font.family: 'SF Compact Display'
+                font.pixelSize: 14
+                font.weight: 600
+                text: 'You don’t have any transactions in this wallet yet'
+            }
+        }
     }
 
     contentItem: TListView {
@@ -45,16 +61,6 @@ GPane {
             account: self.account
             context: self.account.context
         }
-
-//        section.property: "date"
-//        section.criteria: ViewSection.FullString
-//        section.delegate: sectionHeading
-//        section.labelPositioning: ViewSection.InlineLabels
-
-        // TODO
-        // refreshGesture: true
-        // refreshText: qsTrId('id_loading_transactions')
-        // onRefreshTriggered: transaction_list_model.reload()
     }
 
     RowLayout {

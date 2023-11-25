@@ -116,6 +116,7 @@ qt_add_resources(green "images"
         assets/png/lbtc.png
         assets/png/amp_background.png
         assets/png/liquid_background.png
+        assets/png/no_transactions.png
 
         assets/png/connect_jade_1.png
         assets/png/connect_jade_2.png
