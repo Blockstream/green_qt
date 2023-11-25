@@ -2,7 +2,6 @@ import Blockstream.Green.Core
 import Blockstream.Green
 import QtQuick
 import QtQuick.Controls
-import QtQuick.Controls.Material
 import QtQuick.Layouts
 
 MainPage {

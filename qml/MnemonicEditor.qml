@@ -2,7 +2,6 @@ import Blockstream.Green
 import QtQuick
 import QtQml
 import QtQuick.Controls
-import QtQuick.Controls.Material
 import QtQuick.Layouts
 
 WizardPage {

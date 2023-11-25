@@ -2,7 +2,6 @@ import QtMultimedia
 import QtQuick
 import QtQml
 import QtQuick.Controls
-import QtQuick.Controls.Material
 import QtQuick.Window
 import QZXing
 

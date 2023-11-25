@@ -3,7 +3,6 @@ import Blockstream.Green.Core
 import QtQuick
 import QtQuick.Window
 import QtQuick.Controls
-import QtQuick.Controls.Material
 import QtQuick.Layouts
 
 import "analytics.js" as AnalyticsJS
@@ -104,7 +103,7 @@ ColumnLayout {
         active: !self.wallet.network.electrum && !wallet.network.liquid
         visible: active
         sourceComponent: SettingsBox {
-            title: qsTrId('id_set_an_email_for_recovery')            
+            title: qsTrId('id_set_an_email_for_recovery')
             contentItem: ColumnLayout {
                 spacing: constants.s1
                 Label {

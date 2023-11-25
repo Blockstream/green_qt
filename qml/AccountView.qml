@@ -3,7 +3,6 @@ import Blockstream.Green.Core
 import QtQuick
 import QtQuick.Window
 import QtQuick.Controls
-import QtQuick.Controls.Material
 import QtQuick.Layouts
 
 import "util.js" as UtilJS
