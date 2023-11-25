@@ -16,6 +16,7 @@ WalletDialog {
                 onClicked: self.close()
             }
             contentItem: TListView {
+                onCountChanged: if (count === 0) self.close()
                 currentIndex: 0
                 spacing: 3
                 model: archive_list_model
