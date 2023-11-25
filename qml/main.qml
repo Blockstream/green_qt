@@ -102,6 +102,26 @@ ApplicationWindow {
     JadeDeviceSerialPortDiscoveryAgent {
     }
 
+    Connections {
+        target: DeviceManager
+        function onDeviceAdded(device) {
+            if (device instanceof JadeDevice && device.state === JadeDevice.StateUninitialized) {
+                jade_notification_dialog.createObject(window, { device }).open()
+            }
+        }
+    }
+
+    Component {
+        id: jade_notification_dialog
+        JadeNotificationDialog {
+            onSetupClicked: (device) => {
+                window.openDevice(device)
+                close()
+            }
+            onClosed: destroy()
+        }
+    }
+
     WalletsDrawer {
         id: wallets_drawer
         leftMargin: side_bar.width
