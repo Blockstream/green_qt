@@ -327,7 +327,6 @@ JadeFirmwareController::JadeFirmwareController(QObject* parent)
 
 void JadeFirmwareController::setEnabled(bool enabled)
 {
-    qDebug() << Q_FUNC_INFO;
     if (m_enabled == enabled) return;
     m_enabled = enabled;
     emit enabledChanged();
@@ -338,7 +337,6 @@ void JadeFirmwareController::setEnabled(bool enabled)
 
 void JadeFirmwareController::check()
 {
-    qDebug() << Q_FUNC_INFO;
     fetch("jade");
     fetch("jade1.1");
     if (qApp->arguments().indexOf("--debugjade")) {
@@ -349,7 +347,6 @@ void JadeFirmwareController::check()
 
 void JadeFirmwareController::fetch(const QString& type)
 {
-    qDebug() << Q_FUNC_INFO;
     auto req = new HttpRequestActivity(this);
     req->setMethod("GET");
     req->addUrl(QString("%1/bin/%2/index.json").arg(JADE_FW_SERVER_HTTPS, type));

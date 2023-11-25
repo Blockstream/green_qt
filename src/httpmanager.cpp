@@ -105,11 +105,8 @@ void HttpManager::dispatch()
     }
 
     if (!m_session->isConnected()) {
-        qDebug() << "http: waiting session to connect";
         return;
     }
-
-    qDebug() << "http: execute activity";
 
     m_running = m_queue.dequeue();
     m_running->setSession(m_session);
