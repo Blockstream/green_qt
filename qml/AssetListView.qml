@@ -8,7 +8,12 @@ GPane {
     required property Account account
 
     id: self
-
+    background: Rectangle {
+        color: '#161921'
+        border.width: 1
+        border.color: '#1F222A'
+        radius: 4
+    }
     contentItem: TListView {
         id: list_view
         model: self.account.balances

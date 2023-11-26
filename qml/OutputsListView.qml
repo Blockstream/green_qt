@@ -5,10 +5,6 @@ import QtQuick.Layouts
 import QtQml.Models
 
 Page {
-    background: null
-    padding: 0
-    focusPolicy: Qt.ClickFocus
-
     required property Account account
 
     readonly property var selectedOutputs: {
@@ -22,7 +18,14 @@ Page {
     }
 
     id: self
-
+    padding: 0
+    focusPolicy: Qt.ClickFocus
+    background: Rectangle {
+        color: '#161921'
+        border.width: 1
+        border.color: '#1F222A'
+        radius: 4
+    }
     contentItem: TListView {
         id: list_view
         spacing: 8

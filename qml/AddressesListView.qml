@@ -10,7 +10,12 @@ GPane {
     signal clicked(Address address)
 
     id: self
-
+    background: Rectangle {
+        color: '#161921'
+        border.width: 1
+        border.color: '#1F222A'
+        radius: 4
+    }
     contentItem: TListView {
         id: list_view
         spacing: 8
