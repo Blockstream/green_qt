@@ -221,6 +221,7 @@ SET(QML_FILES
     qml/ArchivedAccountsDialog.qml
     qml/JadeNotificationDialog.qml
     qml/PinPadButton.qml
+    qml/GStackLayout.qml
 )
 
 if (GREEN_NO_RESOURCES)

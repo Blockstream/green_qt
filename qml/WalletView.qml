@@ -24,6 +24,7 @@ MainPage {
         }
     }
     id: self
+    title: stack_view.currentItem?.title ?? null
     contentItem: GStackView {
         id: stack_view
         focus: true

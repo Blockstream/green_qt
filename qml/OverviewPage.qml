@@ -175,7 +175,8 @@ StackViewPage {
     }
 
     id: self
-    spacing: 16 //constants.s1
+    title: self.wallet.name
+    spacing: 16
     property alias toolbarItem: wallet_header.toolbarItem
 
     header: WalletViewHeader {

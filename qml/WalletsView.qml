@@ -17,6 +17,7 @@ MainPage {
 
     id: self
     padding: 60
+    title: null
     contentItem: Flickable {
         ScrollIndicator.vertical: ScrollIndicator {
         }

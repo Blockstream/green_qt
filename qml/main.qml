@@ -10,10 +10,6 @@ import "analytics.js" as AnalyticsJS
 import "util.js" as UtilJS
 
 ApplicationWindow {
-    readonly property WalletView currentWalletView: stack_layout.currentWalletView
-    readonly property Wallet currentWallet: currentWalletView?.wallet ?? null
-    readonly property Account currentAccount: currentWalletView?.currentAccount ?? null
-
     property Navigation navigation: Navigation {}
     property Constants constants: Constants {}
 
@@ -165,21 +161,14 @@ ApplicationWindow {
     onYChanged: Settings.windowY = y
     onWidthChanged: Settings.windowWidth = width
     onHeightChanged: Settings.windowHeight = height
-    onCurrentWalletChanged: {
-        if (currentWallet?.persisted) {
-            Settings.updateRecentWallet(currentWallet.id)
-        }
-    }
     minimumWidth: 1024
     minimumHeight: 768
     visible: true
     color: constants.c800
     title: {
-        const parts = env === 'Development' ? [navigation.description] : []
-        if (currentWallet) {
-            parts.push(font_metrics.elidedText(currentWallet.name, Qt.ElideRight, window.width / 3));
-            if (currentAccount) parts.push(font_metrics.elidedText(UtilJS.accountName(currentAccount), Qt.ElideRight, window.width / 3));
-        }
+        const title = stack_layout.currentItem?.title
+        const parts = []
+        if (title) parts.push(title)
         parts.push('Blockstream Green');
         if (env !== 'Production') parts.push(`[${env}]`)
         return parts.join(' - ');
@@ -215,31 +204,16 @@ ApplicationWindow {
     FontMetrics {
         id: font_metrics
     }
-    RowLayout {
-        id: main_layout
+    GStackLayout {
+        id: stack_layout
         anchors.fill: parent
-        spacing: 0
-        Item {
-            Layout.minimumWidth: side_bar.width
-        }
-        StackLayout {
-            id: stack_layout
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            readonly property WalletView currentWalletView: currentIndex < 0 ? null : (stack_layout.children[currentIndex].currentWalletView || null)
-            BlockstreamView {
-            }
-            PreferencesView {
-            }
-            LedgerDevicesView {
-            }
-            WalletsView {
-                title: qsTrId('id_wallets')
-                focus: StackLayout.isCurrentItem
-                onOpenWallet: (wallet) => window.openWallet(wallet)
-                onOpenDevice: (device) => window.openDevice(device)
-                onCreateWallet: window.openWallet(null)
-            }
+        anchors.leftMargin: side_bar.width
+        WalletsView {
+            title: qsTrId('id_wallets')
+            focus: StackLayout.isCurrentItem
+            onOpenWallet: (wallet) => window.openWallet(wallet)
+            onOpenDevice: (device) => window.openDevice(device)
+            onCreateWallet: window.openWallet(null)
         }
     }
 
