@@ -134,6 +134,10 @@ ApplicationWindow {
         }
     }
 
+    PreferencesView {
+        id: preferences_dialog
+    }
+
     SideBar {
         id: side_bar
         height: parent.height
@@ -145,9 +149,9 @@ ApplicationWindow {
             wallets_drawer.close()
         }
         onPreferencesClicked: {
-            stack_layout.currentIndex = 1
-            side_bar.currentView = SideBar.View.Preferences
             wallets_drawer.close()
+            preferences_dialog.open()
+            side_bar.currentView = SideBar.View.Preferences
         }
         onWalletsClicked: openWallets()
     }

@@ -4,7 +4,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-MainPage {
+AbstractDialog {
     id: self
     title: qsTrId('id_app_settings')
 
@@ -14,31 +14,10 @@ MainPage {
         name: 'AppSettings'
         active: navigation.param.view === 'preferences'
     }
-
-    header: MainPageHeader {
-        contentItem: RowLayout {
-            Label {
-                text: self.title
-                font.pixelSize: 24
-                font.styleName: 'Medium'
-            }
-            HSpacer {}
-            GToolButton {
-                flat: true
-                icon.height: 32
-                icon.width: 32
-                icon.source: 'qrc:/svg/help.svg'
-                onClicked: Qt.openUrlExternally(constants.supportUrl)
-            }
-        }
-    }
-    footer: StatusBar {
-        contentItem: RowLayout {
-            SessionBadge {
-                session: HttpManager.session
-            }
-        }
-    }
+    clip: true
+    width: 600
+    height: 700
+    header: null
 
     component Field: Pane {
         default property alias contentItemData: layout.data
