@@ -1094,12 +1094,9 @@ bool CreateTransactionTask::call(GA_session *session, GA_auth_handler **auth_han
     return rc == GA_OK;
 }
 
-void CreateTransactionTask::handleDone(const QJsonObject& result)
+QJsonObject CreateTransactionTask::transaction() const
 {
-    auto data = result.value("result").toObject();
-    emit transaction(data);
-
-    AuthHandlerTask::handleDone(result);
+    return m_result.value("result").toObject();
 }
 
 SendNLocktimesTask::SendNLocktimesTask(Session* session)

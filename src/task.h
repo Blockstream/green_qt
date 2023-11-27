@@ -538,11 +538,9 @@ class CreateTransactionTask : public AuthHandlerTask
     QML_UNCREATABLE("")
 public:
     CreateTransactionTask(const QJsonObject& details, Session* session);
+    QJsonObject transaction() const;
 private:
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
-    void handleDone(const QJsonObject& result) override;
-signals:
-    void transaction(const QJsonObject& data);
 private:
     const QJsonObject m_details;
     QJsonObject m_transaction;

@@ -113,9 +113,9 @@ void BumpFeeController::create()
 
     auto session = m_context->getOrCreateSession(network);
     m_create_task = new CreateTransactionTask(details, session);
-    connect(m_create_task, &CreateTransactionTask::transaction, this, [=](const QJsonObject& transaction) {
+    connect(m_create_task, &CreateTransactionTask::finished, this, [=]() {
         if (m_req == req) {
-            m_tx = transaction;
+            m_tx = m_create_task->transaction();
             emit txChanged(m_tx);
             m_req = 0;
             m_create_task = nullptr;

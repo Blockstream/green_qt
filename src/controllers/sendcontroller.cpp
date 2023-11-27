@@ -254,7 +254,8 @@ void SendController::create()
     }
 
     m_create_task = new CreateTransactionTask(m_transaction, session);
-    connect(m_create_task, &CreateTransactionTask::transaction, this, [=](const QJsonObject& transaction) {
+    connect(m_create_task, &CreateTransactionTask::finished, this, [=]() {
+        const auto transaction = m_create_task->transaction();
         if (m_count == count) {
             m_transaction = transaction;
 
