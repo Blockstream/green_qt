@@ -5,6 +5,7 @@ import QtQuick.Layouts
 import Qt5Compat.GraphicalEffects
 
 GPane {
+    signal transactionClicked(Transaction transaction)
     required property Account account
     readonly property real contentY: list_view.contentY
     readonly property bool empty: list_view.count === 0
@@ -60,6 +61,7 @@ GPane {
             width: ListView.view.width
             account: self.account
             context: self.account.context
+            onTransactionClicked: (transaction) => self.transactionClicked(transaction)
         }
     }
 

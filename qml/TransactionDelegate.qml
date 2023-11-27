@@ -9,6 +9,7 @@ import "analytics.js" as AnalyticsJS
 import "util.js" as UtilJS
 
 ItemDelegate {
+    signal transactionClicked(Transaction transaction)
     required property Transaction transaction
     required property Account account
     required property Context context
@@ -33,7 +34,7 @@ ItemDelegate {
         }
     }
 
-    onClicked: transaction_dialog.createObject(window, { context: self.context, transaction }).open()
+    onClicked: self.transactionClicked(transaction)
 
     id: self
     focusPolicy: Qt.ClickFocus

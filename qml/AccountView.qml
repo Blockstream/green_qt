@@ -79,8 +79,8 @@ Page {
     }
 
     Component {
-        id: transaction_dialog
         TransactionView {
+        id: transaction_drawer
         }
     }
 
@@ -101,6 +101,7 @@ Page {
             sourceComponent: TransactionListView {
                 account: self.account
                 leftPadding: 0
+                onTransactionClicked: (transaction) => transaction_drawer.createObject(window, { context: self.context, transaction }).open()
             }
         }
 
