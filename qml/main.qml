@@ -132,6 +132,9 @@ ApplicationWindow {
 
     PreferencesView {
         id: preferences_dialog
+        onClosed: {
+            side_bar.currentView = SideBar.View.Wallets
+        }
     }
 
     SideBar {
