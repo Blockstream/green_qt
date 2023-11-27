@@ -9,12 +9,24 @@ ItemDelegate {
 
     id: self
     hoverEnabled: hasDetails
-    padding: constants.p2
-    background: Rectangle {
-        color: self.hovered ? constants.c700 : self.highlighted ? constants.c600 : constants.c800
-        radius: 4
-        border.width: self.highlighted ? 1 : 0
-        border.color: constants.g500
+    topPadding: 16
+    leftPadding: 16
+    rightPadding: 16
+    bottomPadding: 16
+    background: Item {
+        Rectangle {
+            anchors.fill: parent
+            visible: self.hovered
+            color: '#00B45A'
+            opacity: 0.08
+        }
+        Rectangle {
+            color: '#FFFFFF'
+            opacity: 0.1
+            width: parent.width
+            height: 1
+            y: parent.height - 1
+        }
     }
     contentItem: BalanceItem {
         balance: self.balance

@@ -69,7 +69,7 @@ MainPage {
         delegate: AbstractButton {
             id: news_card
             height: 220
-            implicitWidth: ListView.view.contentWidth
+            implicitWidth: ListView.view.width
             padding: constants.p3
             background: Rectangle {
                 radius: 16

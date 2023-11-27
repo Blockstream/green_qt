@@ -38,16 +38,25 @@ ItemDelegate {
     id: self
     focusPolicy: Qt.ClickFocus
     hoverEnabled: true
-    padding: constants.p3
-    verticalPadding: constants.p1
-    bottomPadding: constants.p1
-    bottomInset: 0
+    topPadding: 16
+    leftPadding: 16
+    rightPadding: 16
+    bottomPadding: 16
 
-    background: Rectangle {
-        color: self.hovered ? constants.c700 : constants.c800
-        radius: 4
-        border.width: self.highlighted ? 1 : 0
-        border.color: constants.g500
+    background: Item {
+        Rectangle {
+            anchors.fill: parent
+            visible: self.hovered
+            color: '#00B45A'
+            opacity: 0.08
+        }
+        Rectangle {
+            color: '#FFFFFF'
+            opacity: 0.1
+            width: parent.width
+            height: 1
+            y: parent.height - 1
+        }
     }
     spacing: 8
 

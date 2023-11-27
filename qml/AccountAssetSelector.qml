@@ -41,7 +41,7 @@ StackViewPage {
                 required property Asset asset
                 required property int index
                 id: delegate
-                width: ListView.view.contentWidth
+                width: ListView.view.width
                 padding: 0
                 topPadding: 0
                 bottomPadding: 0

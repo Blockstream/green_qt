@@ -104,7 +104,7 @@ MainPage {
                 delegate: Button {
                     id: self
                     required property LedgerDevice device
-                    width: ListView.view.contentWidth
+                    width: ListView.view.width
                     onClicked: navigation.set({ device: device.uuid })
                     padding: 16
                     highlighted: ListView.isCurrentItem

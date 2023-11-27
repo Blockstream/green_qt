@@ -25,7 +25,7 @@ GPane {
             model: address_model
         }
         delegate: AddressDelegate {
-            width: ListView.view.contentWidth
+            width: ListView.view.width
             onClicked: self.clicked(address)
         }
         BusyIndicator {

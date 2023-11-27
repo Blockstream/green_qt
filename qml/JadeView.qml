@@ -126,7 +126,7 @@ MainPage {
                 delegate: Button {
                     id: self
                     required property JadeDevice device
-                    width: ListView.view.contentWidth
+                    width: ListView.view.width
                     onClicked: navigation.set({ device: device.versionInfo.EFUSEMAC.slice(-6) })
                     padding: 16
                     highlighted: ListView.isCurrentItem

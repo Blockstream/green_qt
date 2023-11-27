@@ -26,7 +26,10 @@ ItemDelegate {
 
     id: self
     hoverEnabled: true
-    padding: constants.p3
+    topPadding: 16
+    leftPadding: 16
+    rightPadding: 16
+    bottomPadding: 16
     background: Rectangle {
         color: self.hovered ? constants.c700 : self.highlighted ? constants.c600 : constants.c800
         radius: 4

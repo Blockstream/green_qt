@@ -57,7 +57,7 @@ GPane {
         }
 
         delegate: TransactionDelegate {
-            width: ListView.view.contentWidth
+            width: ListView.view.width
             account: self.account
             context: self.account.context
         }

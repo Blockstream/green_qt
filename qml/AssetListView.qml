@@ -20,7 +20,7 @@ GPane {
         spacing: 8
         delegate: AssetDelegate {
             balance: modelData
-            width: ListView.view.contentWidth
+            width: ListView.view.width
             onClicked: if (hasDetails) balance_dialog.createObject(window, { balance }).open()
         }
     }

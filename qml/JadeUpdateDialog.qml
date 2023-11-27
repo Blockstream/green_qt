@@ -287,7 +287,7 @@ AbstractDialog {
                     }
                     checked: false
                     enabled: !firmware.installed
-                    width: ListView.view.contentWidth
+                    width: ListView.view.width
                     ButtonGroup.group: button_group
                 }
             }
