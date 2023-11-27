@@ -27,7 +27,7 @@ void SignupController::signup(const QString& deployment)
     auto group = new TaskGroup(this);
 
     if (!m_context) {
-        setContext(new Context(this));
+        setContext(new Context(deployment, this));
     }
 
     auto network = NetworkManager::instance()->networkForDeployment(deployment);
