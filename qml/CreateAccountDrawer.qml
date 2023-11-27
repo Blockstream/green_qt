@@ -14,6 +14,7 @@ WalletDrawer {
     preferredContentWidth: stack_view.currentItem.implicitWidth
 
     closePolicy: self.dismissable ? Popup.CloseOnEscape | Popup.CloseOnPressOutside : Popup.NoAutoClose
+    interactive: self.dismissable
     contentItem: GStackView {
         id: stack_view
         focus: true
