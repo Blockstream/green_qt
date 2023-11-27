@@ -41,7 +41,10 @@ JadeSetupController::JadeSetupController(QObject* parent)
 
 void JadeSetupController::setup(const QString& deployment)
 {
-    Q_ASSERT(!m_context);
+    if (m_context) {
+        m_context->deleteLater();
+        setContext(nullptr);
+    }
     setContext(new Context(deployment, this));
 
     m_network = NetworkManager::instance()->networkForDeployment(deployment);
