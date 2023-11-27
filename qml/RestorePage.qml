@@ -5,8 +5,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 StackViewPage {
-    signal mnemonicEntered(string deployment, var mnemonic, string password)
-    required property string deployment
+    signal mnemonicEntered(var mnemonic, string password)
     id: self
     padding: 60
     MnemonicEditorController {
@@ -98,7 +97,7 @@ StackViewPage {
             Layout.topMargin: 20
             enabled: controller.valid
             text: qsTrId('id_restore')
-            onClicked: self.mnemonicEntered(self.deployment, controller.mnemonic, controller.passphrase)
+            onClicked: self.mnemonicEntered(controller.mnemonic, controller.passphrase)
         }
         VSpacer {
         }

@@ -26,7 +26,13 @@ StackViewPage {
         onRestoreFinished: (context) => self.restoreFinished(context)
         onAlreadyRestored: (wallet) => self.alreadyRestored(wallet)
     }
-    StackView.onActivated: controller.restore(self.deployment)
+    StackView.onActivated: {
+        if (Settings.enableTestnet) {
+            deployment_dialog.createObject(self).open()
+        } else {
+            controller.restore('mainnet')
+        }
+    }
     id: self
     leftItem: Item {
     }
@@ -50,6 +56,14 @@ StackViewPage {
             wrapMode: Label.WordWrap
         }
         VSpacer {
+        }
+    }
+
+    Component {
+        id: deployment_dialog
+        DeploymentDialog {
+            onCancel: self.StackView.view.pop()
+            onDeploymentSelected: (deployment) => controller.restore(deployment)
         }
     }
 }
