@@ -61,7 +61,7 @@ ApplicationWindow {
             }
         }
 
-        if (WalletManager.wallets.length > 1) {
+        if (WalletManager.wallets.length > 1 && current_index < 0) {
             stack_layout.currentIndex = 0
             return
         }
