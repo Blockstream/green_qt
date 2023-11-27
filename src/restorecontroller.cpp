@@ -29,7 +29,10 @@ void RestoreController::setPassword(const QString& password)
 
 void RestoreController::restore(const QString& deployment)
 {
-    Q_ASSERT(!m_context);
+    if (m_context) {
+        m_context->deleteLater();
+        setContext(nullptr);
+    }
     setContext(new Context(deployment, this));
 
     auto monitor = new TaskGroupMonitor(this);
