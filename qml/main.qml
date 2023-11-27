@@ -61,8 +61,8 @@ ApplicationWindow {
             }
         }
 
-        if (WalletManager.wallets.length > 1 && current_index < 0) {
-            stack_layout.currentIndex = 3
+        if (WalletManager.wallets.length > 1) {
+            stack_layout.currentIndex = 0
             return
         }
 
@@ -208,8 +208,8 @@ ApplicationWindow {
         id: stack_layout
         anchors.fill: parent
         anchors.leftMargin: side_bar.width
+        currentIndex: 0
         WalletsView {
-            title: qsTrId('id_wallets')
             focus: StackLayout.isCurrentItem
             onOpenWallet: (wallet) => window.openWallet(wallet)
             onOpenDevice: (device) => window.openDevice(device)

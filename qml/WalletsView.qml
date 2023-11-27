@@ -13,11 +13,9 @@ MainPage {
     signal openDevice(Device device)
     signal createWallet
 
-    readonly property WalletView currentWalletView: null
-
     id: self
     padding: 60
-    title: null
+    title: qsTrId('id_wallets')
     contentItem: Flickable {
         ScrollIndicator.vertical: ScrollIndicator {
         }
