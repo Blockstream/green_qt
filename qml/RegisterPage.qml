@@ -1,4 +1,5 @@
 import Blockstream.Green
+import Blockstream.Green.Core
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -6,7 +7,13 @@ import QtQuick.Layouts
 StackViewPage {
     signal registerFinished(Context context)
     required property var mnemonic
-    StackView.onActivated: controller.signup("mainnet")
+    StackView.onActivated: {
+        if (Settings.enableTestnet) {
+            deployment_dialog.createObject(self).open()
+        } else {
+            controller.signup('mainnet')
+        }
+    }
     id: self
     padding: 0
     leftItem: Item {
@@ -35,6 +42,14 @@ StackViewPage {
             wrapMode: Label.WordWrap
         }
         VSpacer {
+        }
+    }
+
+    Component {
+        id: deployment_dialog
+        DeploymentDialog {
+            onCancel: self.StackView.view.pop()
+            onDeploymentSelected: (deployment) => controller.signup(deployment)
         }
     }
 }
