@@ -51,12 +51,11 @@ GPane {
 
     contentItem: TListView {
         id: list_view
-        spacing: 8
+        spacing: 0
         model: TransactionFilterProxyModel {
             filter: search_field.text
             model: transaction_list_model
         }
-
         delegate: TransactionDelegate {
             width: ListView.view.width
             account: self.account
