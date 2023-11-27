@@ -189,6 +189,7 @@ int main(int argc, char *argv[])
     g_args.addOption(QCommandLineOption("tempdatadir"));
     g_args.addOption(QCommandLineOption("printtoconsole"));
     g_args.addOption(QCommandLineOption("debug"));
+    g_args.addOption(QCommandLineOption("testnet"));
     g_args.addOption(QCommandLineOption("debugfocus"));
     g_args.addOption(QCommandLineOption("debugjade"));
     g_args.addOption(QCommandLineOption("channel", "", "name", "latest"));
@@ -295,6 +296,10 @@ int main(int argc, char *argv[])
     qmlRegisterSingletonInstance<Analytics>("Blockstream.Green.Core", 0, 1, "Analytics", Analytics::instance());
     qmlRegisterSingletonInstance<AssetManager>("Blockstream.Green.Core", 0, 1, "AssetManager", AssetManager::instance());
 
+    if (g_args.isSet("testnet")) {
+        const auto value = g_args.value("testnet");
+        Settings::instance()->setEnableTestnet(value.isEmpty() || value == "true" || value == "1");
+    }
     QQmlApplicationEngine engine;
     engine.setBaseUrl(QUrl("qrc:/Blockstream/Green/qml/"));
 
