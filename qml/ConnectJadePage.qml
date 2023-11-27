@@ -193,6 +193,6 @@ StackViewPage {
                 source: 'qrc:/svg2/next_arrow.svg'
             }
         }
-        onClicked: self.deviceSelected(self.deployment, legate.device)
+        onClicked: self.deviceSelected(self.deployment, delegate.device)
     }
 }

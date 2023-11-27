@@ -148,7 +148,7 @@ StackViewPage {
             Layout.minimumWidth: 325
             Layout.topMargin: 20
             text: qsTrId('id_connect_jade')
-            onClicked: self.connectJadeClicked()
+            onClicked: self.connectJadeClicked("mainnet")
         }
         RegularButton {
             Layout.alignment: Qt.AlignCenter
