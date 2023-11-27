@@ -6,20 +6,10 @@ import QtQuick.Layouts
 import "util.js" as UtilJS
 
 StackViewPage {
-    signal addWallet(string deployment)
-    signal useDevice(string deployment)
+    signal addWallet()
+    signal useDevice()
 
     id: self
-    footer: Pane {
-        background: null
-        padding: 60
-        contentItem: ColumnLayout {
-            DeploymentSelector {
-                id: deployment_selector
-                visible: Settings.enableTestnet
-            }
-        }
-    }
     contentItem: ColumnLayout {
         spacing: 0
         VSpacer {
@@ -58,7 +48,7 @@ StackViewPage {
             Layout.topMargin: 50
             enabled: tos_check_box.checked
             text: qsTrId('id_add_wallet')
-            onClicked: self.addWallet(deployment_selector.deployment)
+            onClicked: self.addWallet()
         }
         RegularButton {
             Layout.alignment: Qt.AlignCenter
@@ -68,7 +58,7 @@ StackViewPage {
             Layout.bottomMargin: 10
             enabled: tos_check_box.checked
             text: qsTrId('id_use_hardware_device')
-            onClicked: self.useDevice(deployment_selector.deployment)
+            onClicked: self.useDevice()
         }
         RowLayout {
             Layout.alignment: Qt.AlignCenter

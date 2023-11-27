@@ -6,8 +6,7 @@ import QtQuick.Layouts
 import "util.js" as UtilJS
 
 StackViewPage {
-    signal connectJadeClicked(string deployment)
-    required property string deployment
+    signal connectJadeClicked()
     id: self
     padding: 60
     footer: Pane {
@@ -148,7 +147,7 @@ StackViewPage {
             Layout.minimumWidth: 325
             Layout.topMargin: 20
             text: qsTrId('id_connect_jade')
-            onClicked: self.connectJadeClicked("mainnet")
+            onClicked: self.connectJadeClicked()
         }
         RegularButton {
             Layout.alignment: Qt.AlignCenter

@@ -6,10 +6,9 @@ import QtQuick.Layouts
 import "util.js" as UtilJS
 
 StackViewPage {
-    signal newWallet(string deployment)
-    signal restoreWallet(string deployment)
-    signal watchOnlyWallet(string deployment)
-    required property string deployment
+    signal newWallet()
+    signal restoreWallet()
+    signal watchOnlyWallet()
     id: self
     padding: 60
     contentItem: ColumnLayout {
@@ -49,21 +48,21 @@ StackViewPage {
             Layout.minimumWidth: 325
             Layout.topMargin: 80
             text: qsTrId('id_new_wallet')
-            onClicked: self.newWallet(self.deployment)
+            onClicked: self.newWallet()
         }
         PrimaryButton {
             Layout.alignment: Qt.AlignCenter
             Layout.minimumWidth: 325
             Layout.topMargin: 10
             text: qsTrId('id_restore_wallet')
-            onClicked: self.restoreWallet(self.deployment)
+            onClicked: self.restoreWallet()
         }
         RegularButton {
             Layout.alignment: Qt.AlignCenter
             Layout.minimumWidth: 325
             Layout.topMargin: 10
             text: qsTrId('id_watchonly')
-            onClicked: self.watchOnlyWallet(self.deployment)
+            onClicked: self.watchOnlyWallet()
         }
         VSpacer {
         }

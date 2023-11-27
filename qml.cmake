@@ -172,7 +172,6 @@ SET(QML_FILES
     qml/AssetField.qml
     qml/AssetSelector.qml
     qml/SearchField.qml
-    qml/SendDrawer.qml
     qml/AssetsDrawer.qml
     qml/DrawerTitle.qml
     qml/FieldTitle.qml
@@ -217,7 +216,6 @@ SET(QML_FILES
     qml/ConnectJadePage.qml
     qml/JadePage.qml
     qml/JadeFirmwareConfigSelector.qml
-    qml/DeploymentSelector.qml
     qml/ArchivedAccountsDialog.qml
     qml/JadeNotificationDialog.qml
     qml/PinPadButton.qml

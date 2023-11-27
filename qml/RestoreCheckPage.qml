@@ -7,7 +7,6 @@ import QtQuick.Layouts
 StackViewPage {
     signal restoreFinished(Context context)
     signal alreadyRestored(Wallet wallet)
-    required property string deployment
     required property var mnemonic
     required property string password
     RestoreController {

@@ -43,33 +43,33 @@ MainPage {
     Component {
         id: terms_of_service_page
         TermOfServicePage {
-            onAddWallet: (deployment) => stack_view.push(add_wallet_page, { deployment })
-            onUseDevice: (deployment) => stack_view.push(use_device_page, { deployment })
+            onAddWallet: stack_view.push(add_wallet_page)
+            onUseDevice: stack_view.push(use_device_page)
         }
     }
 
     Component {
         id: add_wallet_page
         AddWalletPage {
-            onNewWallet: (deployment) => stack_view.push(mnemonic_warnings_page, { deployment })
-            onRestoreWallet: (deployment) => stack_view.push(restore_wallet_page, { deployment })
+            onNewWallet: stack_view.push(mnemonic_warnings_page)
+            onRestoreWallet: stack_view.push(restore_wallet_page)
             // TODO present singlesig or multisig options once singlesig watchonly login is implemented
             // onWatchOnlyWallet: stack_view.push(watch_only_wallet_page)
-            onWatchOnlyWallet: (deployment) => stack_view.push(multisig_watch_only_network_page, { deployment })
+            onWatchOnlyWallet: stack_view.push(multisig_watch_only_network_page)
         }
     }
 
     Component {
         id: use_device_page
         UseDevicePage {
-            onConnectJadeClicked: (deployment) => stack_view.push(connect_jade_page, { deployment })
+            onConnectJadeClicked: stack_view.push(connect_jade_page)
         }
     }
 
     Component {
         id: connect_jade_page
         ConnectJadePage {
-            onDeviceSelected: (deployment, device) => stack_view.push(jade_page, { deployment, device })
+            onDeviceSelected: (device) => stack_view.push(jade_page, { device })
         }
     }
 
@@ -117,7 +117,7 @@ MainPage {
     Component {
         id: restore_wallet_page
         RestorePage {
-            onMnemonicEntered: (deployment, mnemonic, password) => stack_view.push(restore_check_page, { deployment, mnemonic, password })
+            onMnemonicEntered: (mnemonic, password) => stack_view.push(restore_check_page, { mnemonic, password })
         }
     }
 
@@ -125,8 +125,8 @@ MainPage {
         id: restore_check_page
         RestoreCheckPage {
             onRestoreFinished: (context) => {
-               self.wallet = context.wallet
-               stack_view.push(setup_pin_page, { context })
+                self.wallet = context.wallet
+                stack_view.push(setup_pin_page, { context })
             }
             onAlreadyRestored: (wallet) => stack_view.replace(already_restored_page, { wallet })
         }
