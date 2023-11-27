@@ -660,7 +660,9 @@ JadeDevice::State JadeDevice::state() const
     if (state == "UNSAVED") return StateUnsaved;
     if (state == "LOCKED") return StateLocked;
     if (state == "UNINIT") return StateUninitialized;
-    Q_UNREACHABLE();
+    const bool has_pin = m_version_info.value("JADE_HAS_PIN").toBool();
+    if (!has_pin) return StateUninitialized;
+    return StateLocked;
 }
 
 void JadeDevice::setStatus(Status status)
