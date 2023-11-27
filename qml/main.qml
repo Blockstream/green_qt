@@ -142,11 +142,6 @@ ApplicationWindow {
         height: parent.height
         parent: Overlay.overlay
         z: 1
-        onBlockstreamClicked: {
-            stack_layout.currentIndex = 1
-            side_bar.currentView = SideBar.View.Blockstream
-            wallets_drawer.close()
-        }
         onPreferencesClicked: {
             wallets_drawer.close()
             preferences_dialog.open()
