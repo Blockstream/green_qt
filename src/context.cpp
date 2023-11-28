@@ -113,7 +113,6 @@ Session* Context::primarySession()
     if (m_sessions_list.size() > 0) {
         return m_sessions_list.first();
     } else {
-        // TODO: mainnet/testnet/localtest
         auto network = NetworkManager::instance()->networkForDeployment(m_deployment);
         auto session = getOrCreateSession(network);
         return session;

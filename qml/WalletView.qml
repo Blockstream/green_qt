@@ -19,6 +19,8 @@ MainPage {
             }
         } else if (self.wallet.context) {
             stack_view.push(loading_page, { context: self.wallet.context }, StackView.Immediate)
+        } else if (wallet.watchOnly) {
+            stack_view.push(watch_only_login_page, { wallet: self.wallet }, StackView.Immediate)
         } else {
             stack_view.push(pin_login_page, { wallet: self.wallet }, StackView.Immediate)
         }
@@ -153,13 +155,23 @@ MainPage {
     Component {
         id: multisig_watch_only_network_page
         MultisigWatchOnlyNetworkPage {
-            onNetworkSelected: (network) => stack_view.push(multisig_watch_only_login_page, { network })
+            onNetworkSelected: (network) => stack_view.push(multisig_watch_only_add_page, { network })
         }
     }
 
     Component {
-        id: multisig_watch_only_login_page
-        MultisigWatchOnlyLoginPage {
+        id: multisig_watch_only_add_page
+        MultisigWatchOnlyAddPage {
+            onLoginFinished: (context) => {
+                self.wallet = context.wallet
+                stack_view.push(loading_page, { context })
+            }
+        }
+    }
+
+    Component {
+        id: watch_only_login_page
+        WatchOnlyLoginPage {
             onLoginFinished: (context) => {
                 self.wallet = context.wallet
                 stack_view.push(loading_page, { context })
@@ -192,6 +204,10 @@ MainPage {
             onLogout: {
                 if (!self.wallet) {
                     stack_view.replace(null, terms_of_service_page, {}, StackView.PushTransition)
+                    return
+                }
+                if (wallet.watchOnly) {
+                    stack_view.replace(null, watch_only_login_page, { wallet: self.wallet }, StackView.PushTransition)
                     return
                 }
                 if (self.wallet.hasPinData) {

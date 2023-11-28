@@ -204,7 +204,8 @@ SET(QML_FILES
     qml/RestorePage.qml
     qml/RestoreCheckPage.qml
     qml/WatchOnlyWalletPage.qml
-    qml/MultisigWatchOnlyLoginPage.qml
+    qml/MultisigWatchOnlyAddPage.qml
+    qml/WatchOnlyLoginPage.qml
     qml/UsernameField.qml
     qml/PasswordField.qml
     qml/MultisigWatchOnlyNetworkPage.qml

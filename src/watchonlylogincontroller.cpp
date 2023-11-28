@@ -72,23 +72,30 @@ void WatchOnlyLoginController::setSaveWallet(bool save_wallet)
 
 void WatchOnlyLoginController::update()
 {
-    setValid(m_network && !m_username.isEmpty() && !m_password.isEmpty());
+    if (m_wallet) {
+        setValid(m_wallet->isWatchOnly() && !m_password.isEmpty());
+    } else {
+        setValid(m_network && !m_username.isEmpty() && !m_password.isEmpty());
+    }
 }
 
 void WatchOnlyLoginController::login()
 {
     Q_ASSERT(m_valid);
 
-    setContext(new Context(m_network->deployment(), this));
+    const auto network = m_wallet ? m_wallet->network() : m_network;
+    const auto username = m_wallet ? m_wallet->username() : m_username;
+
+    setContext(new Context(network->deployment(), this));
     m_context->setWatchonly(true);
 
-    auto session = m_context->getOrCreateSession(m_network);
+    auto session = m_context->getOrCreateSession(network);
 
     auto connect_session = new ConnectTask(session);
-    auto session_login = new LoginTask(m_username, m_password, session);
+    auto session_login = new LoginTask(username, m_password, session);
     auto create_wallet = new WatchOnlyCreateWalletTask(this);
 
-//    context->setWallet(m_wallet);
+    m_context->setWallet(m_wallet);
 
     connect_session->then(session_login);
     session_login->then(create_wallet);
@@ -140,9 +147,9 @@ void WatchOnlyCreateWalletTask::update()
             wallet->m_is_persisted = m_controller->saveWallet();
         }
         context->setWallet(wallet);
-        wallet->setContext(context);
         wallet->save();
     }
+    wallet->setContext(context);
     m_controller->setWallet(wallet);
 
     setStatus(Status::Finished);
