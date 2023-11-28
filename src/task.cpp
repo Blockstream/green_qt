@@ -1393,6 +1393,11 @@ void ConnectTask::update()
     if (m_status == Status::Ready) {
         setStatus(Status::Active);
 
+        if (m_session->isConnected()) {
+            setStatus(Status::Finished);
+            return;
+        }
+
         m_session->setConnecting(true);
 
         using Watcher = QFutureWatcher<QString>;
