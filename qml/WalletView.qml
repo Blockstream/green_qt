@@ -202,7 +202,7 @@ MainPage {
         OverviewPage {
             Component.onDestruction: self.wallet.disconnect()
             onLogout: {
-                if (!self.wallet) {
+                if (!self.wallet || !self.wallet.persisted) {
                     stack_view.replace(null, terms_of_service_page, {}, StackView.PushTransition)
                     return
                 }
