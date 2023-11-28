@@ -52,16 +52,6 @@ StackViewPage {
                 network: NetworkManager.network('liquid')
                 description: qsTrId('id_the_liquid_network_is_a_bitcoin')
             }
-            Option {
-                Layout.fillWidth: true
-                network: NetworkManager.network('testnet')
-                visible: Settings.enableTestnet
-            }
-            Option {
-                Layout.fillWidth: true
-                network: NetworkManager.network('testnet-liquid')
-                visible: Settings.enableTestnet
-            }
         }
         VSpacer {
         }
@@ -127,6 +117,28 @@ StackViewPage {
                 source: 'qrc:/svg2/next_arrow.svg'
             }
         }
-        onClicked: self.networkSelected(option.network)
+        onClicked: {
+            if (Settings.enableTestnet) {
+                deployment_dialog.createObject(self, { network: option.network }).open()
+            } else {
+                self.networkSelected(option.network)
+            }
+        }
+    }
+
+    Component {
+        id: deployment_dialog
+        DeploymentDialog {
+            required property Network network
+            id: dialog
+            onDeploymentSelected: (deployment) => {
+                if (deployment === 'testnet') {
+                    const network = NetworkManager.network(dialog.network.liquid ? 'testnet-liquid' : 'testnet')
+                    self.networkSelected(network)
+                } else {
+                    self.networkSelected(dialog.network)
+                }
+            }
+        }
     }
 }
