@@ -42,15 +42,12 @@ WalletManager::WalletManager()
         wallet->m_is_persisted = true;
         wallet->m_name = data.value("name").toString();
         wallet->m_id = id;
+        auto network = data.contains("network") ? NetworkManager::instance()->network(data.value("network").toString()) : nullptr;
+        wallet->m_network = network;
         if (data.contains("xpub_hash_id")) {
             wallet->m_xpub_hash_id = data.value("xpub_hash_id").toString();
         }
         if (data.contains("pin_data") && data.contains("network")) {
-            auto network = NetworkManager::instance()->network(data.value("network").toString());
-            if (!network) {
-                delete wallet;
-                continue;
-            }
             wallet->m_network = network;
             wallet->m_pin_data = QByteArray::fromBase64(data.value("pin_data").toString().toLocal8Bit());
             wallet->m_hash_id = data.value("hash_id").toString();
@@ -60,6 +57,7 @@ WalletManager::WalletManager()
         if (data.contains("username")) {
             wallet->m_watch_only = true;
             wallet->m_username = data.value("username").toString();
+            wallet->m_network = network;
         }
         if (data.contains("device_details")) {
             wallet->m_device_details = data.value("device_details").toObject();

@@ -152,7 +152,6 @@ static bool compatibleToNetworks(Network* network, const QList<Network*> network
 void LoadController::load()
 {
     const auto networks = m_context->getActiveNetworks();
-    const auto sessions = m_context->getSessions();
 
     auto group = new TaskGroup(this);
 
@@ -170,10 +169,12 @@ void LoadController::load()
         wallet->setContext(m_context);
     });
 
-    for (auto network : NetworkManager::instance()->networks()) {
-        if (compatibleToNetworks(network, networks)) {
-            qDebug() << Q_FUNC_INFO << "ATTEMPT LOGIN" << network->id() << network->name();
-            loginNetwork(network);
+    if (!m_context->isWatchonly()) {
+        for (auto network : NetworkManager::instance()->networks()) {
+            if (compatibleToNetworks(network, networks)) {
+                qDebug() << Q_FUNC_INFO << "ATTEMPT LOGIN" << network->id() << network->name();
+                loginNetwork(network);
+            }
         }
     }
 }

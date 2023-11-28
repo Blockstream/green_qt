@@ -73,7 +73,7 @@ void WatchOnlyLoginController::setSaveWallet(bool save_wallet)
 void WatchOnlyLoginController::update()
 {
     if (m_wallet) {
-        setValid(m_wallet->isWatchOnly() && !m_password.isEmpty());
+        setValid(m_wallet->isWatchOnly() && m_wallet->network() && !m_password.isEmpty());
     } else {
         setValid(m_network && !m_username.isEmpty() && !m_password.isEmpty());
     }
@@ -110,7 +110,6 @@ void WatchOnlyLoginController::login()
 
     connect(group, &TaskGroup::finished, this, &WatchOnlyLoginController::loginFinished);
     connect(group, &TaskGroup::failed, this, &WatchOnlyLoginController::loginFailed);
-    connect(group, &TaskGroup::failed, m_context, &QObject::deleteLater);
 }
 
 void WatchOnlyLoginController::setValid(bool valid)
@@ -138,12 +137,13 @@ void WatchOnlyCreateWalletTask::update()
 
     auto wallet = m_controller->wallet();
     if (!wallet) {
-        auto wallet = WalletManager::instance()->findWallet(xpub_hash_id, true);
+        wallet = WalletManager::instance()->findWallet(xpub_hash_id, true);
         if (!wallet) {
             wallet = WalletManager::instance()->createWallet();
             wallet->setName(QString("%1 watch-only wallet").arg(m_controller->username()));
             wallet->m_username = m_controller->username();
             wallet->m_watch_only = true;
+            wallet->m_network = m_controller->network();
             wallet->m_is_persisted = m_controller->saveWallet();
         }
         context->setWallet(wallet);
