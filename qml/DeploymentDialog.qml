@@ -25,7 +25,7 @@ Dialog {
             anchors.fill: parent
             cached: true
             opacity: 0.5
-            radius: 16
+            radius: 32
             source: ShaderEffectSource {
                 sourceItem: ApplicationWindow.contentItem
                 sourceRect {
@@ -35,6 +35,24 @@ Dialog {
                     height: modal.height
                 }
             }
+        }
+    }
+    background: Item {
+        DropShadow {
+            opacity: 0.5
+            verticalOffset: 8
+            radius: 32
+            samples: 16
+            source: r
+            anchors.fill: r
+        }
+        Rectangle {
+            id: r
+            anchors.fill: parent
+            radius: 10
+            color: '#13161D'
+            border.width: 0.5
+            border.color: Qt.lighter('#13161D')
         }
     }
     contentItem: ColumnLayout {
