@@ -56,7 +56,7 @@ Dialog {
             font.pixelSize: 14
             font.weight: 600
             opacity: 0.4
-            text: 'We have detected a hardware device that is not yet setup. '
+            text: 'A new device has been detected, please set it up to start using it.'
         }
         Image {
             Layout.alignment: Qt.AlignCenter
