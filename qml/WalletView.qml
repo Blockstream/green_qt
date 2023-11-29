@@ -202,6 +202,10 @@ MainPage {
         OverviewPage {
             Component.onDestruction: self.wallet.disconnect()
             onLogout: {
+                if (self.wallet?.context?.device instanceof JadeDevice) {
+                    stack_view.replace(null, jade_page, { device: self.wallet?.context?.device })
+                    return
+                }
                 if (!self.wallet || !self.wallet.persisted) {
                     stack_view.replace(null, terms_of_service_page, {}, StackView.PushTransition)
                     return
@@ -214,11 +218,6 @@ MainPage {
                     stack_view.replace(null, pin_login_page, { wallet: self.wallet })
                     return
                 }
-                if (self.wallet?.context?.device instanceof JadeDevice) {
-                    stack_view.replace(null, jade_page, { device: self.wallet?.context?.device })
-                    return
-                }
-
                 console.log('missing logout view')
             }
         }
