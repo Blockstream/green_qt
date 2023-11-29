@@ -9,16 +9,12 @@ StackViewPage {
     required property Context context
     StackView.onActivated: controller.load()
     id: self
-    leftItem: Item {
-    }
     padding: 60
     title: self.context.wallet.name
     LoadController {
         id: controller
         context: self.context
-        onLoadFinished: {
-            self.loadFinished(self.context)
-        }
+        onLoadFinished: self.loadFinished(self.context)
     }
     contentItem: ColumnLayout {
         VSpacer {
