@@ -317,8 +317,9 @@ void JadeIdentifyTask::update()
     const auto device = m_controller->device();
     if (!device) return;
 
-    const QString network_id = "electrum-mainnet";
-    const auto network = NetworkManager::instance()->network(network_id); //m_controller->network());
+    const auto nets = device->versionInfo().value("JADE_NETWORKS").toString();
+    const QString deployment = nets == "ALL" || nets == "MAIN" ? "mainnet" : "testnet";
+    const auto network = NetworkManager::instance()->networkForDeployment(deployment);
     if (!network) return;
 
     if (device->state() == JadeDevice::StateLocked) return;
@@ -341,7 +342,7 @@ void JadeIdentifyTask::update()
         const auto master_xpub = activity->publicKey();
         Q_ASSERT(!master_xpub.isEmpty());
 
-        const auto net_params = Json::fromObject({{ "name", network_id }});
+        const auto net_params = Json::fromObject({{ "name", network->id() }});
         const auto params = Json::fromObject({{ "master_xpub", QString::fromLocal8Bit(master_xpub) }});
         GA_json* output;
         int rc = GA_get_wallet_identifier(net_params.get(), params.get(), &output);
