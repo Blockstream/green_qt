@@ -217,6 +217,7 @@ SET(QML_FILES
     qml/ConnectJadePage.qml
     qml/JadePage.qml
     qml/JadeInitializedView.qml
+    qml/JadeLoginView.qml
     qml/JadeUninitializedView.qml
     qml/JadeUnlockView.qml
     qml/JadeFirmwareConfigSelector.qml

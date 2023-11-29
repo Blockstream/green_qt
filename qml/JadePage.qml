@@ -488,33 +488,8 @@ StackViewPage {
 
     Component {
         id: login_view
-        ColumnLayout {
-            required property Context context
-            StackView.onActivated: login_controller.loginWithDevice()
-            id: xxx
-            spacing: 20
-            LoginController {
-                id: login_controller
-                context: xxx.context
-                onLoginFinished: (context) => self.loginFinished(context)
-            }
-            VSpacer {
-            }
-            BusyIndicator {
-                Layout.alignment: Qt.AlignCenter
-            }
-            Label {
-                Layout.fillWidth: true
-                Layout.preferredWidth: 0
-                color: '#FFFFFF'
-                font.pixelSize: 22
-                font.weight: 600
-                horizontalAlignment: Label.AlignHCenter
-                text: qsTrId('id_logging_in')
-                wrapMode: Label.WordWrap
-            }
-            VSpacer {
-            }
+        JadeLoginView {
+            onLoginFinished: (context) => self.loginFinished(context)
         }
     }
 
