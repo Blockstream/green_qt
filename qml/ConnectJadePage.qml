@@ -6,8 +6,7 @@ import QtQuick.Layouts
 import "util.js" as UtilJS
 
 StackViewPage {
-    signal deviceSelected(string deployment, JadeDevice device)
-    required property string deployment
+    signal deviceSelected(JadeDevice device)
     id: self
     padding: 60
     rightItem: LinkButton {
@@ -188,6 +187,6 @@ StackViewPage {
                 source: 'qrc:/svg2/next_arrow.svg'
             }
         }
-        onClicked: self.deviceSelected(self.deployment, delegate.device)
+        onClicked: self.deviceSelected(delegate.device)
     }
 }
