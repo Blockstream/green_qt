@@ -9,6 +9,8 @@
 
 #include "util.h"
 
+#define LATEST_TOS_VERSION 1
+
 Settings::Settings(QObject* parent)
     : QObject(parent)
 {
@@ -149,6 +151,14 @@ void Settings::updateRecentWallet(const QString& id)
     saveLater();
 }
 
+void Settings::acceptTermsOfService()
+{
+    if (m_accepted_tos_version == LATEST_TOS_VERSION) return;
+    m_accepted_tos_version = LATEST_TOS_VERSION;
+    emit acceptedTermsOfServiceChanged();
+    saveLater();
+}
+
 void Settings::setUsePersonalNode(bool use_personal_node)
 {
     if (m_use_personal_node == use_personal_node) return;
@@ -187,6 +197,11 @@ void Settings::setAnalytics(const QString& analytics)
     m_analytics = analytics;
     emit analyticsChanged();
     saveLater();
+}
+
+bool Settings::acceptedTermsOfService() const
+{
+    return m_accepted_tos_version == LATEST_TOS_VERSION;
 }
 
 void Settings::setProxyHost(const QString &proxy_host)
@@ -264,6 +279,7 @@ void Settings::load(const QSettings& settings)
     LOAD(m_liquid_testnet_electrum_url)
     LOAD(m_enable_spv)
     LOAD(m_analytics)
+    LOAD(m_accepted_tos_version)
 #undef LOAD
 }
 
@@ -299,6 +315,7 @@ void Settings::saveNow()
     SAVE(m_liquid_testnet_electrum_url)
     SAVE(m_enable_spv)
     SAVE(m_analytics)
+    SAVE(m_accepted_tos_version)
 #undef SAVE
 }
 

@@ -30,6 +30,7 @@ class Settings : public QObject
     Q_PROPERTY(QString liquidTestnetElectrumUrl READ liquidTestnetElectrumUrl WRITE setLiquidTestnetElectrumUrl NOTIFY liquidTestnetElectrumUrlChanged)
     Q_PROPERTY(bool enableSPV READ enableSPV WRITE setEnableSPV NOTIFY enableSPVChanged)
     Q_PROPERTY(QString analytics READ analytics WRITE setAnalytics NOTIFY analyticsChanged)
+    Q_PROPERTY(int acceptedTermsOfService READ acceptedTermsOfService NOTIFY acceptedTermsOfServiceChanged)
 public:
     Settings(QObject* parent = nullptr);
     virtual ~Settings();
@@ -77,8 +78,10 @@ public:
     bool isAnalyticsEnabled() const { return m_analytics == "enabled"; }
     QString analytics() const { return m_analytics; }
     void setAnalytics(const QString& analytics);
+    bool acceptedTermsOfService() const;
 public slots:
     void updateRecentWallet(const QString& id);
+    void acceptTermsOfService();
 signals:
     void windowXChanged(int window_x);
     void windowYChanged(int window_y);
@@ -101,6 +104,7 @@ signals:
     void liquidTestnetElectrumUrlChanged(const QString& liquid_testnet_electrum_url);
     void enableSPVChanged(bool enable_spv);
     void analyticsChanged();
+    void acceptedTermsOfServiceChanged();
 private:
     void load();
     void load(const QSettings& settings);
@@ -131,6 +135,7 @@ private:
     QString m_liquid_testnet_electrum_url;
     bool m_enable_spv{false};
     QString m_analytics;
+    int m_accepted_tos_version{0};
 };
 
 #endif // GREEN_SETTINGS_H
