@@ -21,7 +21,10 @@ StackViewPage {
     SignupController {
         id: controller
         mnemonic: self.mnemonic
-        onRegisterFinished: (context) => self.registerFinished(context)
+        onRegisterFinished: (context) => {
+            Settings.acceptTermsOfService()
+            self.registerFinished(context)
+        }
     }
     contentItem: ColumnLayout {
         VSpacer {
