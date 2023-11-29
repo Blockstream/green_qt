@@ -42,7 +42,6 @@ Page {
                 background: null
                 padding: 0
                 contentItem: Label {
-                    font.family: 'SF Compact Display'
                     font.pixelSize: 14
                     font.weight: 600
                     text: self.title

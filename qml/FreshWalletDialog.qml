@@ -39,7 +39,6 @@ Dialog {
             Layout.preferredWidth: 0
             Layout.maximumWidth: 250
             color: '#FFF'
-            font.family: 'SF Compact Display'
             font.pixelSize: 18
             font.weight: 500
             horizontalAlignment: Label.AlignHCenter
@@ -50,7 +49,6 @@ Dialog {
             Layout.alignment: Qt.AlignCenter
             Layout.topMargin: 10
             color: '#FFF'
-            font.family: 'SF Compact Display'
             font.pixelSize: 14
             font.weight: 400
             horizontalAlignment: Label.AlignHCenter

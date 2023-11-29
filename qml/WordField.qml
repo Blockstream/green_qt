@@ -49,7 +49,6 @@ TextField {
     rightPadding: 10
     topPadding: 10
     bottomPadding: 10
-    font.family: 'SF Compact Display'
     font.pixelSize: 16
     font.weight: 600
 
@@ -209,7 +208,6 @@ TextField {
 
     Label {
         anchors.baseline: parent.baseline
-        font.family: 'SF Compact Display'
         font.pixelSize: 14
         font.weight: 600
         x: 10

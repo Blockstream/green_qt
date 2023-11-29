@@ -25,7 +25,6 @@ WalletHeaderCard {
             spacing: 10
             Label {
                 font.capitalization: Font.AllUppercase
-                font.family: 'SF Compact Display'
                 font.pixelSize: 12
                 font.weight: 400
                 opacity: 0.6
@@ -42,14 +41,12 @@ WalletHeaderCard {
         }
         Label {
             font.capitalization: Font.AllUppercase
-            font.family: 'SF Compact Display'
             font.pixelSize: 24
             font.weight: 600
             text: formatAmount(self.account, self.balance)
         }
         Label {
             font.capitalization: Font.AllUppercase
-            font.family: 'SF Compact Display'
             font.pixelSize: 16
             font.weight: 400
             opacity: 0.6

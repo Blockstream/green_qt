@@ -22,7 +22,6 @@ StackViewPage {
             Layout.alignment: Qt.AlignCenter
             Layout.topMargin: 20
             color: '#FFF'
-            font.family: 'SF Compact'
             font.pixelSize: 30
             font.weight: 656
             horizontalAlignment: Label.AlignHCenter
@@ -33,7 +32,6 @@ StackViewPage {
             Layout.fillWidth: true
             Layout.maximumWidth: 325
             Layout.topMargin: 10
-            font.family: 'SF Compact Display'
             font.pixelSize: 14
             font.weight: 400
             horizontalAlignment: Label.AlignHCenter
@@ -77,7 +75,6 @@ StackViewPage {
             }
             Label {
                 Layout.alignment: Qt.AlignCenter
-                font.family: 'SF Compact Display'
                 font.pixelSize: 14
                 font.weight: 600
                 textFormat: Text.RichText

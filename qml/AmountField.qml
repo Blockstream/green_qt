@@ -39,7 +39,6 @@ TextField {
         }
     }
     horizontalAlignment: TextInput.AlignRight
-    font.family: 'SF Compact Display'
     font.pixelSize: 30
     font.weight: 500
     Label {
@@ -49,7 +48,6 @@ TextField {
         anchors.baseline: parent.baseline
         text: self.unit
         color: '#00B45A'
-        font.family: 'SF Compact Display'
         font.pixelSize: 18
         font.weight: 500
         TapHandler {
@@ -65,7 +63,6 @@ TextField {
         text: '0 EUR'
         color: '#FFF'
         opacity: 0.4
-        font.family: 'SF Compact Display'
         font.pixelSize: 12
         font.weight: 500
     }

@@ -28,7 +28,6 @@ MainPage {
             x: (flickable.width - 400) / 2
             y: Math.max(0, (flickable.height - layout.height) / 2)
             Label {
-                font.family: 'SF Compact Display'
                 font.pixelSize: 14
                 font.weight: 600
                 opacity: 0.4
@@ -45,7 +44,6 @@ MainPage {
             }
             Label {
                 Layout.topMargin: 20
-                font.family: 'SF Compact Display'
                 font.pixelSize: 14
                 font.weight: 600
                 opacity: 0.4
@@ -89,7 +87,6 @@ MainPage {
                         Layout.alignment: Qt.AlignCenter
                         Layout.fillWidth: true
                         Layout.preferredWidth: 0
-                        font.family: 'SF Compact Display'
                         font.pixelSize: 14
                         font.weight: 500
                         text:  qsTrId('id_setup_a_new_wallet')

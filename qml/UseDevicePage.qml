@@ -50,7 +50,6 @@ StackViewPage {
                     Layout.preferredWidth: 0
                     Layout.topMargin: 20
                     color: '#FFF'
-                    font.family: 'SF Compact Display'
                     font.pixelSize: 26
                     font.weight: 600
                     horizontalAlignment: Label.AlignHCenter
@@ -62,7 +61,6 @@ StackViewPage {
                     Layout.preferredWidth: 0
                     Layout.topMargin: 20
                     color: '#9C9C9C'
-                    font.family: 'SF Compact Display'
                     font.pixelSize: 14
                     font.weight: 400
                     horizontalAlignment: Label.AlignHCenter
@@ -82,7 +80,6 @@ StackViewPage {
                     Layout.preferredWidth: 0
                     Layout.topMargin: 20
                     color: '#FFF'
-                    font.family: 'SF Compact Display'
                     font.pixelSize: 26
                     font.weight: 600
                     horizontalAlignment: Label.AlignHCenter
@@ -94,7 +91,6 @@ StackViewPage {
                     Layout.preferredWidth: 0
                     Layout.topMargin: 20
                     color: '#9C9C9C'
-                    font.family: 'SF Compact Display'
                     font.pixelSize: 14
                     font.weight: 400
                     horizontalAlignment: Label.AlignHCenter
@@ -114,7 +110,6 @@ StackViewPage {
                     Layout.preferredWidth: 0
                     Layout.topMargin: 20
                     color: '#FFF'
-                    font.family: 'SF Compact Display'
                     font.pixelSize: 26
                     font.weight: 600
                     horizontalAlignment: Label.AlignHCenter
@@ -126,7 +121,6 @@ StackViewPage {
                     Layout.preferredWidth: 0
                     Layout.topMargin: 20
                     color: '#9C9C9C'
-                    font.family: 'SF Compact Display'
                     font.pixelSize: 14
                     font.weight: 400
                     horizontalAlignment: Label.AlignHCenter
@@ -144,14 +138,14 @@ StackViewPage {
         }
         PrimaryButton {
             Layout.alignment: Qt.AlignCenter
-            Layout.minimumWidth: 325
+            Layout.minimumWidth: 400
             Layout.topMargin: 20
             text: qsTrId('id_connect_jade')
             onClicked: self.connectJadeClicked()
         }
         RegularButton {
             Layout.alignment: Qt.AlignCenter
-            Layout.minimumWidth: 325
+            Layout.minimumWidth: 400
             Layout.topMargin: 10
             text: qsTrId('id_connect_a_different_hardware')
         }

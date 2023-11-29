@@ -30,7 +30,6 @@ StackViewPage {
             Layout.alignment: Qt.AlignCenter
             Layout.fillWidth: true
             Layout.preferredWidth: 0
-            font.family: 'SF Compact Display'
             font.pixelSize: 22
             font.weight: 600
             horizontalAlignment: Label.AlignHCenter

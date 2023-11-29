@@ -19,7 +19,6 @@ GridLayout {
                 Layout.minimumWidth: 30
                 text: `${index + 1}`
                 textFormat: Text.RichText
-                font.family: 'SF Compact Display'
                 font.pixelSize : 16
                 font.weight: 600
                 color: '#2FD058'
@@ -31,7 +30,6 @@ GridLayout {
                 id: word
                 text: modelData
                 textFormat: Text.RichText
-                font.family: 'SF Compact Display'
                 font.pixelSize : 16
                 font.weight: 600
             }

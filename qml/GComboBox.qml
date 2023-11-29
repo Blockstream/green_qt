@@ -8,7 +8,6 @@ ComboBox {
     topPadding: 10
     leftPadding: 10
     rightPadding: 10 + self.indicator.width + self.spacing
-    font.family: 'SF Compact Display'
     font.pixelSize: 14
     font.weight: 600
     background: Rectangle {

@@ -73,7 +73,6 @@ StackViewPage {
             Label {
                 Layout.alignment: Qt.AlignCenter
                 // text: JSON.stringify(update_controller.firmwareAvailable, null, '  ')
-                font.family: 'SF Compact Display'
                 font.pixelSize: 12
                 font.weight: 600
                 text: !!update_controller.firmwareAvailable ? `Firmware version ${update_controller.firmwareAvailable.version} is available for your Blockstream Jade.` : ''
@@ -187,7 +186,6 @@ StackViewPage {
                         }
                         Label {
                             Layout.alignment: Qt.AlignCenter
-                            font.family: 'SF Compact Display'
                             font.pixelSize: 12
                             font.weight: 600
                             text: qsTrId('id_new_jade_firmware_required')
@@ -223,7 +221,6 @@ StackViewPage {
                 }
                 Label {
                     Layout.alignment: Qt.AlignCenter
-                    font.family: 'SF Compact Display'
                     font.pixelSize: 26
                     font.weight: 600
                     text: qsTrId('id_firmware_update')
@@ -232,7 +229,6 @@ StackViewPage {
                 Label {
                     Layout.topMargin: 10
                     Layout.alignment: Qt.AlignCenter
-                    font.family: 'SF Compact Display'
                     font.pixelSize: 14
                     font.weight: 400
                     text: qsTr('Keep your Jade secure, upgrade now to the <b>%1</b> firmware version!').arg(self.firmwares[0].version)
@@ -286,7 +282,6 @@ StackViewPage {
                         }
                         Label {
                             Layout.alignment: Qt.AlignCenter
-                            font.family: 'SF Compact Display'
                             font.pixelSize: 12
                             font.weight: 600
                             text: qsTrId('id_new_jade_firmware_required')
@@ -315,7 +310,6 @@ StackViewPage {
                 }
                 Label {
                     Layout.alignment: Qt.AlignCenter
-                    font.family: 'SF Compact Display'
                     font.pixelSize: 26
                     font.weight: 600
                     text: qsTrId('id_firmware_update')
@@ -334,7 +328,6 @@ StackViewPage {
                     Layout.minimumHeight: 80
                     Layout.maximumWidth: 300
                     Layout.preferredWidth: 0
-                    font.family: 'SF Compact Display'
                     font.pixelSize: 12
                     font.weight: 500
                     horizontalAlignment: Label.AlignHCenter
@@ -546,7 +539,6 @@ StackViewPage {
                 Layout.fillWidth: true
                 Layout.preferredWidth: 0
                 color: '#FFFFFF'
-                font.family: 'SF Compact Display'
                 font.pixelSize: 22
                 font.weight: 600
                 horizontalAlignment: Label.AlignHCenter
@@ -579,7 +571,6 @@ StackViewPage {
                 Layout.fillWidth: true
                 Layout.preferredWidth: 0
                 color: '#FFFFFF'
-                font.family: 'SF Compact Display'
                 font.pixelSize: 22
                 font.weight: 600
                 horizontalAlignment: Label.AlignHCenter
@@ -697,7 +688,6 @@ StackViewPage {
                     Layout.fillWidth: true
                     Layout.preferredWidth: 0
                     color: '#00B45A'
-                    font.family: 'SF Compact Display'
                     font.pixelSize: 12
                     font.weight: 600
                     font.capitalization: Font.AllUppercase
@@ -709,7 +699,6 @@ StackViewPage {
                     Layout.fillWidth: true
                     Layout.preferredWidth: 0
                     color: '#FFFFFF'
-                    font.family: 'SF Compact Display'
                     font.pixelSize: 14
                     font.weight: 600
                     horizontalAlignment: Label.AlignHCenter
@@ -720,7 +709,6 @@ StackViewPage {
                     Layout.fillWidth: true
                     Layout.preferredWidth: 0
                     color: '#9C9C9C'
-                    font.family: 'SF Compact Display'
                     font.pixelSize: 12
                     font.weight: 400
                     horizontalAlignment: Label.AlignHCenter
@@ -758,7 +746,6 @@ StackViewPage {
             Label {
                 Layout.fillWidth: true
                 text: control.text
-                font.family: 'SF Compact Display'
                 font.pixelSize: 14
                 font.weight: 600
             }
@@ -775,7 +762,6 @@ StackViewPage {
                         radius: height / 2
                     }
                     text: modelData.text
-                    font.family: 'SF Compact Display'
                     font.pixelSize: 10
                     font.weight: 400
                     font.capitalization: Font.AllUppercase

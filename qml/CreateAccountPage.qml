@@ -192,7 +192,6 @@ StackViewPage {
                     spacing: 8
                     Label {
                         color: '#FFF'
-                        font.family: 'SF Compact Display'
                         font.pixelSize: 16
                         font.weight: 600
                         text: qsTrId('id_lightning')
@@ -205,7 +204,6 @@ StackViewPage {
                     Layout.fillWidth: true
                     Layout.preferredWidth: 0
                     color: '#FFF'
-                    font.family: 'SF Compact Display'
                     font.pixelSize: 14
                     font.weight: 400
                     horizontalAlignment: Qt.AlignCenter

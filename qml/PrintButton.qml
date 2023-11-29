@@ -24,7 +24,6 @@ AbstractButton {
         }
         Label {
             color: '#FFF'
-            font.family: 'SF Compact'
             font.pixelSize: 12
             font.weight: 556
             text: self.text

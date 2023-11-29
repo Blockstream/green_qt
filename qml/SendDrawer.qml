@@ -314,7 +314,6 @@ WalletDrawer {
             }
             RowLayout {
                 Label {
-                    font.family: 'SF Compact Display'
                     font.pixelSize: 14
                     font.weight: 500
                     text: qsTrId('id_network_fee')
@@ -322,7 +321,6 @@ WalletDrawer {
                 HSpacer {
                 }
                 Label {
-                    font.family: 'SF Compact Display'
                     font.pixelSize: 14
                     font.weight: 500
                     text: '0,000012 L-BTC'
@@ -332,7 +330,6 @@ WalletDrawer {
                 Layout.bottomMargin: 20
                 Label {
                     color: '#6F6F6F'
-                    font.family: 'SF Compact Display'
                     font.pixelSize: 12
                     font.weight: 400
                     text: '~2 hours'
@@ -344,7 +341,6 @@ WalletDrawer {
                 }
                 Label {
                     color: '#6F6F6F'
-                    font.family: 'SF Compact Display'
                     font.pixelSize: 12
                     font.weight: 400
                     text: '~2,23 USD'

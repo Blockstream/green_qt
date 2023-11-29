@@ -16,14 +16,12 @@ ProgressIndicator {
             Label {
                 text: Math.min(self.current, self.max)
                 font.pixelSize: 16
-                font.family: 'Roboto'
                 font.styleName: 'Light'
             }
             Label {
                 Layout.alignment: Qt.AlignBottom
                 text: '/' + self.max
                 font.pixelSize: 12
-                font.family: 'Roboto'
                 font.styleName: 'Light'
             }
         }

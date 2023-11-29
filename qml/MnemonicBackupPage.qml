@@ -21,7 +21,6 @@ StackViewPage {
             Layout.fillWidth: true
             Layout.preferredWidth: 0
             horizontalAlignment: Label.AlignHCenter
-            font.family: 'SF Compact Display'
             font.pixelSize: 24
             font.weight: 600
             text: qsTrId('id_write_down_your_recovery_phrase')
@@ -31,7 +30,6 @@ StackViewPage {
             Layout.fillWidth: true
             Layout.topMargin: 20
             horizontalAlignment: Label.AlignHCenter
-            font.family: 'SF Compact Display'
             font.pixelSize: 14
             font.weight: 600
             opacity: 0.4
@@ -73,7 +71,6 @@ StackViewPage {
             }
             Label {
                 Layout.alignment: Qt.AlignCenter
-                font.family: 'SF Compact Display'
                 font.pixelSize: 12
                 font.weight: 600
                 text: qsTrId('id_make_sure_to_be_in_a_private')

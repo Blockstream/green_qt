@@ -175,7 +175,6 @@ StackViewPage {
             ColumnLayout {
                 spacing: 8
                 Label {
-                    font.family: 'SF Compact Display'
                     font.pixelSize: 16
                     font.weight: 600
                     text: button.text
@@ -183,7 +182,6 @@ StackViewPage {
                 Label {
                     Layout.fillWidth: true
                     Layout.preferredWidth: 0
-                    font.family: 'SF Compact Display'
                     font.pixelSize: 12
                     font.weight: 400
                     opacity: 0.6

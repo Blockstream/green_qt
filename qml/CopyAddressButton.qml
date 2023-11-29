@@ -32,7 +32,6 @@ AbstractButton {
             }
         }
         Label {
-            font.family: 'SF Compact Display'
             font.pixelSize: 12
             font.weight: 600
             text: 'Copy Address'

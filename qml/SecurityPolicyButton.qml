@@ -46,7 +46,6 @@ AbstractButton {
                 Label {
                     Layout.alignment: Qt.AlignCenter
                     color: '#FFF'
-                    font.family: 'SF Compact Display'
                     font.pixelSize: 10
                     font.capitalization: Font.AllUppercase
                     font.weight: 400
@@ -64,7 +63,6 @@ AbstractButton {
                 Label {
                     Layout.alignment: Qt.AlignCenter
                     color: '#FFF'
-                    font.family: 'SF Compact Display'
                     font.pixelSize: 10
                     font.capitalization: Font.AllUppercase
                     font.weight: 400
@@ -85,7 +83,6 @@ AbstractButton {
                 spacing: 8
                 Label {
                     color: '#FFF'
-                    font.family: 'SF Compact Display'
                     font.pixelSize: 16
                     font.weight: 600
                     text: self.title
@@ -100,7 +97,6 @@ AbstractButton {
             Label {
                 Layout.fillWidth: true
                 color: '#FFF'
-                font.family: 'SF Compact Display'
                 font.pixelSize: 12
                 font.weight: 400
                 opacity: 0.6

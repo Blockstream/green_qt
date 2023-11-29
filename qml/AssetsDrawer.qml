@@ -63,7 +63,6 @@ WalletDrawer {
                             asset: modelData.asset
                         }
                         Label {
-                            font.family: 'SF Compact Display'
                             font.pixelSize: 13
                             font.weight: 500
                             text: modelData.asset.name
@@ -78,14 +77,12 @@ WalletDrawer {
                             Label {
                                 Layout.alignment: Qt.AlignRight
                                 font.capitalization: Font.AllUppercase
-                                font.family: 'SF Compact Display'
                                 font.pixelSize: 13
                                 font.weight: 500
                                 text: modelData.asset.formatAmount(modelData.amount, true)
                             }
                             Label {
                                 Layout.alignment: Qt.AlignRight
-                                font.family: 'SF Compact Display'
                                 font.pixelSize: 12
                                 font.weight: 400
                                 opacity: 0.6

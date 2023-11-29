@@ -27,7 +27,6 @@ StackViewPage {
                 Layout.alignment: Qt.AlignCenter
                 Layout.topMargin: 20
                 color: '#FFF'
-                font.family: 'SF Compact Display'
                 font.pixelSize: 12
                 font.weight: 600
                 text: qsTrId('id_looking_for_device')
@@ -127,7 +126,6 @@ StackViewPage {
                     Layout.fillWidth: true
                     Layout.preferredWidth: 0
                     color: '#00B45A'
-                    font.family: 'SF Compact Display'
                     font.pixelSize: 12
                     font.weight: 700
                     horizontalAlignment: Label.AlignHCenter
@@ -138,7 +136,6 @@ StackViewPage {
                     Layout.fillWidth: true
                     Layout.preferredWidth: 0
                     color: '#FFFFFF'
-                    font.family: 'SF Compact Display'
                     font.pixelSize: 14
                     font.weight: 600
                     horizontalAlignment: Label.AlignHCenter
@@ -149,7 +146,6 @@ StackViewPage {
                     Layout.fillWidth: true
                     Layout.preferredWidth: 0
                     color: '#9C9C9C'
-                    font.family: 'SF Compact Display'
                     font.pixelSize: 12
                     font.weight: 400
                     horizontalAlignment: Label.AlignHCenter
@@ -183,7 +179,6 @@ StackViewPage {
             spacing: 8
             Label {
                 Layout.fillWidth: true
-                font.family: 'SF Compact Display'
                 font.pixelSize: 16
                 font.weight: 700
                 text: delegate.device.name

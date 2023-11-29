@@ -31,7 +31,6 @@ TextField {
             }
         }
     }
-    font.family: 'SF Compact Display'
     font.pixelSize: 14
     font.weight: 500
 

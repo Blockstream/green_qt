@@ -39,7 +39,6 @@ AbstractButton {
             Layout.fillHeight: false
             spacing: 0
             Label {
-                font.family: 'SF Compact Display'
                 font.pixelSize: 16
                 font.weight: 600
                 text: self.asset?.name ?? self.account?.network?.displayName ?? '-'
@@ -49,7 +48,6 @@ AbstractButton {
                 Layout.preferredWidth: 0
                 Layout.topMargin: 4
                 font.capitalization: Font.AllUppercase
-                font.family: 'SF Compact Display'
                 font.pixelSize: 12
                 font.weight: 500
                 opacity: 0.4
@@ -58,7 +56,6 @@ AbstractButton {
             }
             Label {
                 font.capitalization: Font.AllUppercase
-                font.family: 'SF Compact Display'
                 font.pixelSize: 11
                 font.weight: 400
                 opacity: 0.4

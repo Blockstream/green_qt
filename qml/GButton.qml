@@ -22,7 +22,6 @@ Button {
     icon.width: self.large ? 16 : 12
     icon.height: self.large ? 16 : 12
     font.bold: true
-    font.family: 'SF Compact Display'
     font.weight: 600
     topPadding: self.large ? 10 : 6
     bottomPadding: self.large ? 10 : 6

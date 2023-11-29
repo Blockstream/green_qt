@@ -41,7 +41,6 @@ GPane {
             }
             Label {
                 Layout.alignment: Qt.AlignCenter
-                font.family: 'SF Compact Display'
                 font.pixelSize: 14
                 font.weight: 600
                 text: 'You don’t have any transactions in this wallet yet'

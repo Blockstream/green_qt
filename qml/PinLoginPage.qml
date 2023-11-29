@@ -37,7 +37,6 @@ StackViewPage {
             Layout.alignment: Qt.AlignCenter
             Layout.fillWidth: true
             Layout.preferredWidth: 0
-            font.family: 'SF Compact Display'
             font.pixelSize: 26
             font.weight: 600
             horizontalAlignment: Label.AlignHCenter
@@ -48,7 +47,6 @@ StackViewPage {
             Layout.alignment: Qt.AlignCenter
             Layout.fillWidth: true
             Layout.preferredWidth: 0
-            font.family: 'SF Compact Display'
             font.pixelSize: 14
             font.weight: 400
             horizontalAlignment: Label.AlignHCenter
@@ -69,7 +67,6 @@ StackViewPage {
         Label {
             Layout.alignment: Qt.AlignCenter
             Layout.bottomMargin: 45
-            font.family: 'SF Compact Display'
             font.pixelSize: 12
             font.weight: 600
             horizontalAlignment: Qt.AlignHCenter
@@ -101,7 +98,6 @@ StackViewPage {
             }
             Label {
                 Layout.alignment: Qt.AlignCenter
-                font.family: 'SF Compact Display'
                 font.pixelSize: 12
                 font.weight: 600
                 text: qsTrId('id_make_sure_to_be_in_a_private')

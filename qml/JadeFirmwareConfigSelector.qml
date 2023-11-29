@@ -53,7 +53,6 @@ Pane {
             }
         }
         contentItem: Label {
-            font.family: 'SF Compact Display'
             font.pixelSize: 12
             font.weight: 600
             horizontalAlignment: Label.AlignHCenter

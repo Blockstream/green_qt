@@ -25,7 +25,6 @@ Pane {
             Layout.fillWidth: true
             id: title_label
             color: '#FFF'
-            font.family: 'SF Compact Display'
             font.pixelSize: 14
             font.weight: 700
             horizontalAlignment: Qt.AlignHCenter
@@ -37,7 +36,6 @@ Pane {
             id: description_label
             color: '#FFF'
             opacity: 0.6
-            font.family: 'SF Compact Display'
             font.pixelSize: 12
             font.weight: 400
             horizontalAlignment: Qt.AlignHCenter

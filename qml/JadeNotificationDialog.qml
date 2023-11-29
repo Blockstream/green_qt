@@ -45,14 +45,12 @@ Dialog {
         spacing: 20
         Label {
             Layout.alignment: Qt.AlignCenter
-            font.family: 'SF Compact Display'
             font.pixelSize: 26
             font.weight: 600
             text: 'Hardware Wallet Connected'
         }
         Label {
             Layout.alignment: Qt.AlignCenter
-            font.family: 'SF Compact Display'
             font.pixelSize: 14
             font.weight: 600
             opacity: 0.4

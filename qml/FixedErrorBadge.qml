@@ -19,7 +19,6 @@ Label {
         }
     }
     color: 'white'
-    font.family: 'SF Compact Display'
     font.pixelSize: 16
     font.weight: 700
     topPadding: 4

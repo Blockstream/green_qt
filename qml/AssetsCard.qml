@@ -42,7 +42,6 @@ WalletHeaderCard {
             }
             Label {
                 font.capitalization: Font.AllUppercase
-                font.family: 'SF Compact Display'
                 font.pixelSize: 12
                 font.weight: 400
                 opacity: 0.6

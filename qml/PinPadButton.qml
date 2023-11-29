@@ -32,7 +32,6 @@ AbstractButton {
         }
         Label {
             Layout.alignment: Qt.AlignCenter
-            font.family: 'SF Compact Display'
             font.pixelSize: 16
             font.weight: 700
             text: 'Pin Pad'

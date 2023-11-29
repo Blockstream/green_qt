@@ -158,7 +158,6 @@ ItemDelegate {
                         RegularButton {
                             topPadding: 4
                             bottomPadding: 4
-                            font.family: 'SF Compact Display'
                             font.pixelSize: 14
                             font.weight: 400
                             text: qsTrId('id_unarchive')

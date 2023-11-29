@@ -69,7 +69,6 @@ StackViewPage {
                             }
                             Label {
                                 Layout.fillWidth: true
-                                font.family: 'SF Compact Display'
                                 font.pixelSize: 14
                                 font.weight: 500
                                 text: delegate.asset.name
@@ -105,7 +104,6 @@ StackViewPage {
                                         Layout.preferredWidth: 0
                                         Layout.fillWidth: true
                                         color: '#00B45A'
-                                        font.family: 'SF Compact Display'
                                         font.pixelSize: 12
                                         font.weight: 600
                                         text: `${delegate.asset.name} is an AMP asset. You need an AMP account in order to receive it.`
@@ -184,14 +182,12 @@ StackViewPage {
             ColumnLayout {
                 Label {
                     Layout.fillWidth: true
-                    font.family: 'SF Compact Display'
                     font.pixelSize: 14
                     font.weight: 500
                     text: UtilJS.accountName(button.account)
                     wrapMode: Label.Wrap
                 }
                 Label {
-                    font.family: 'SF Compact Display'
                     font.pixelSize: 11
                     font.weight: 400
                     opacity: 0.4
@@ -213,7 +209,6 @@ StackViewPage {
         contentItem: RowLayout {
             Label {
                 Layout.alignment: Qt.AlignCenter
-                font.family: 'SF Compact Display'
                 font.pixelSize: 14
                 font.weight: 500
                 text: qsTrId('id_create_new_account')

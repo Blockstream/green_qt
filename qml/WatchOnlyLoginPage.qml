@@ -49,7 +49,6 @@ StackViewPage {
                 Layout.alignment: Qt.AlignCenter
                 Layout.fillWidth: true
                 Layout.preferredWidth: 0
-                font.family: 'SF Compact Display'
                 font.pixelSize: 26
                 font.weight: 600
                 horizontalAlignment: Label.AlignHCenter
@@ -60,7 +59,6 @@ StackViewPage {
                 Layout.alignment: Qt.AlignCenter
                 Layout.fillWidth: true
                 Layout.preferredWidth: 0
-                font.family: 'SF Compact Display'
                 font.pixelSize: 14
                 font.weight: 400
                 horizontalAlignment: Label.AlignHCenter
@@ -100,7 +98,6 @@ StackViewPage {
                 Layout.alignment: Qt.AlignCenter
                 Layout.fillWidth: true
                 Layout.topMargin: 10
-                font.family: 'SF Compact Display'
                 font.pixelSize: 14
                 font.weight: 600
                 opacity: 0.4

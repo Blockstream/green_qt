@@ -43,7 +43,6 @@ StackViewPage {
         }
         Label {
             Layout.alignment: Qt.AlignCenter
-            font.family: 'SF Compact Display'
             font.pixelSize: 26
             font.weight: 600
             text: qsTrId('id_recovery_phrase_check')
@@ -51,7 +50,6 @@ StackViewPage {
         Label {
             Layout.alignment: Qt.AlignCenter
             Layout.bottomMargin: 80
-            font.family: 'SF Compact Display'
             font.pixelSize: 14
             font.weight: 600
             opacity: 0.4
@@ -100,7 +98,6 @@ StackViewPage {
                     bottomInset: 0
                     leftPadding: 50
                     rightPadding: 40
-                    font.family: 'SF Compact Display'
                     font.pixelSize: 14
                     font.weight: 400
                     focus: !parent.collapsed && !parent.match
@@ -111,7 +108,6 @@ StackViewPage {
                             anchors.verticalCenter: parent.verticalCenter
                             anchors.left: parent.left
                             anchors.margins: 15
-                            font.family: 'SF Compact Display'
                             font.pixelSize: 14
                             font.weight: 700
                             text: checker.word + 1
@@ -143,7 +139,6 @@ StackViewPage {
             }
             Label {
                 Layout.alignment: Qt.AlignCenter
-                font.family: 'SF Compact Display'
                 font.pixelSize: 12
                 font.weight: 600
                 text: qsTrId('id_make_sure_to_be_in_a_private')

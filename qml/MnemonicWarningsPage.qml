@@ -19,7 +19,6 @@ StackViewPage {
                 Label {
                     Layout.alignment: Qt.AlignCenter
                     Layout.bottomMargin: 20
-                    font.family: 'SF Compact'
                     font.pixelSize: 24
                     font.weight: 600
                     horizontalAlignment: Label.AlignHCenter
