@@ -654,14 +654,18 @@ JadeDevice::State JadeDevice::state() const
     //    - LOCKED
     // 5. Uninitialised - has no persisted/encrypted keys and no keys in memory
     //    - UNINT
-    const auto state = m_version_info.value(QStringLiteral("JADE_STATE")).toString();
-    if (state == "READY") return StateReady;
-    if (state == "TEMP") return StateTemporary;
-    if (state == "UNSAVED") return StateUnsaved;
-    if (state == "LOCKED") return StateLocked;
-    if (state == "UNINIT") return StateUninitialized;
-    const bool has_pin = m_version_info.value("JADE_HAS_PIN").toBool();
-    if (!has_pin) return StateUninitialized;
+    if (m_version_info.contains("JADE_STATE")) {
+        const auto state = m_version_info.value(QStringLiteral("JADE_STATE")).toString();
+        if (state == "READY") return StateReady;
+        if (state == "TEMP") return StateTemporary;
+        if (state == "UNSAVED") return StateUnsaved;
+        if (state == "LOCKED") return StateLocked;
+        if (state == "UNINIT") return StateUninitialized;
+    }
+    if (m_version_info.contains("JADE_HAS_PIN")) {
+        const bool has_pin = m_version_info.value("JADE_HAS_PIN").toBool();
+        if (!has_pin) return StateUninitialized;
+    }
     return StateLocked;
 }
 
