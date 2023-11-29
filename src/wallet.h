@@ -75,12 +75,10 @@ signals:
     void contextChanged();
     void isPersistedChanged(bool is_persisted);
     void hasPinDataChanged();
-    void nameChanged(QString name);
+    void nameChanged();
     void loginAttemptsRemainingChanged();
     void pinSet();
-    void emptyChanged(bool empty);
     void blockHeightChanged(int block_height);
-    void deviceChanged(Device* device);
     void deviceDetailsChanged();
     void usernameChanged();
 public:

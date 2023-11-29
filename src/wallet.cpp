@@ -63,8 +63,9 @@ QString Wallet::id() const
 
 void Wallet::setName(const QString& name)
 {
+    if (m_name == name) return;
     m_name = name;
-    emit nameChanged(m_name);
+    emit nameChanged();
 }
 
 QJsonObject Wallet::pinData() const
