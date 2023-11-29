@@ -135,7 +135,7 @@ StackViewPage {
             break
         case JadeDevice.StateUninitialized:
         case JadeDevice.StateUnsaved:
-            stack_view.push(unintialize_view)
+            stack_view.push(unintialized_view)
             break
         }
     }
@@ -583,139 +583,10 @@ StackViewPage {
     }
 
     Component {
-        id: unintialize_view
-        ColumnLayout {
-            spacing: 10
-            JadeSetupController {
-                id: controller
-                device: self.device
-                onSetupFinished: (context) => stack_view.replace(null, login_view, { context }, StackView.PushTransition)
-            }
-            VSpacer {
-            }
-            SwipeView {
-                Layout.alignment: Qt.AlignCenter
-                Layout.preferredWidth: 400
-                Layout.preferredHeight: 500
-                clip: true
-                interactive: false
-                currentIndex: {
-                    const state = self.device.state
-                    const status = self.device.status
-                    if (state === JadeDevice.StateUninitialized) {
-                        return 0
-                    }
-                    if (state === JadeDevice.StateUnsaved) {
-                        return 1
-                    }
-                    return -1
-                }
-                StepPane {
-                    title: 'Create or Restore'
-                    image: 'qrc:/png/connect_jade_2.png'
-                    PrimaryButton {
-                        Layout.alignment: Qt.AlignCenter
-                        Layout.preferredWidth: 325
-                        Layout.topMargin: 10
-                        enabled: self.device.status !== JadeDevice.StatusHandleClientMessage
-                        text: qsTrId('id_setup_jade')
-                        onClicked: controller.setup("mainnet")
-                    }
-                    RegularButton {
-                        Layout.alignment: Qt.AlignCenter
-                        Layout.preferredWidth: 325
-                        enabled: self.device.status !== JadeDevice.StatusHandleClientMessage
-                        text: 'Testnet'
-                        onClicked: controller.setup("testnet")
-                    }
-                }
-                StepPane {
-                    title: qsTrId('id_create_a_pin')
-                    image: 'qrc:/png/connect_jade_3.png'
-                    PrimaryButton {
-                        Layout.alignment: Qt.AlignCenter
-                        Layout.preferredWidth: 325
-                        Layout.topMargin: 20
-                        enabled: self.device.status !== JadeDevice.StatusHandleClientMessage
-                        text: qsTrId('id_setup_jade')
-                        onClicked: controller.setup("mainnet")
-                    }
-                    RegularButton {
-                        Layout.alignment: Qt.AlignCenter
-                        Layout.preferredWidth: 325
-                        Layout.topMargin: 10
-                        enabled: self.device.status !== JadeDevice.StatusHandleClientMessage
-                        text: 'Testnet'
-                        onClicked: controller.setup("testnet")
-                    }
-                }
-            }
-            RegularButton {
-                Layout.alignment: Qt.AlignCenter
-                Layout.minimumWidth: 325
-                enabled: self.device.status === JadeDevice.StatusIdle
-                text: qsTrId('id_firmware_update')
-                onClicked: stack_view.push(basic_update_view)
-            }
-            VSpacer {
-            }
-        }
-    }
-
-    component StepPane: ColumnLayout {
-        required property string title
-        required property string image
-        id: step_pane
-        VSpacer {
-        }
-        Image {
-            Layout.alignment: Qt.AlignCenter
-            source: step_pane.image
-        }
-        Pane {
-            Layout.alignment: Qt.AlignCenter
-            Layout.preferredWidth: 325
-            Layout.topMargin: 20
-            padding: 20
-            background: Rectangle {
-                radius: 4
-                border.width: 2
-                border.color: '#00B45A'
-                color: '#222226'
-            }
-            contentItem: ColumnLayout {
-                Label {
-                    Layout.fillWidth: true
-                    Layout.preferredWidth: 0
-                    color: '#00B45A'
-                    font.pixelSize: 12
-                    font.weight: 600
-                    font.capitalization: Font.AllUppercase
-                    horizontalAlignment: Label.AlignHCenter
-                    text: qsTrId('id_setup_your_jade')
-                    wrapMode: Label.WordWrap
-                }
-                Label {
-                    Layout.fillWidth: true
-                    Layout.preferredWidth: 0
-                    color: '#FFFFFF'
-                    font.pixelSize: 14
-                    font.weight: 600
-                    horizontalAlignment: Label.AlignHCenter
-                    text: step_pane.title
-                    wrapMode: Label.WordWrap
-                }
-                Label {
-                    Layout.fillWidth: true
-                    Layout.preferredWidth: 0
-                    color: '#9C9C9C'
-                    font.pixelSize: 12
-                    font.weight: 400
-                    horizontalAlignment: Label.AlignHCenter
-                    text: qsTrId('id_enter_and_confirm_a_unique_pin')
-                    wrapMode: Label.WordWrap
-                }
-            }
+        id: unintialized_view
+        JadeUninitializedView {
+            device: self.device
+            onSetupFinished: (context) => stack_view.replace(null, login_view, { context }, StackView.PushTransition)
         }
     }
 
