@@ -259,9 +259,4 @@ ApplicationWindow {
         sourceComponent: MediaDevices {
         }
     }
-
-    Shortcut {
-        sequence: StandardKey.New
-        onActivated: onboard_dialog.showNormal()
-    }
 }
