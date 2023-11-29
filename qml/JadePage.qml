@@ -131,7 +131,7 @@ StackViewPage {
         switch (self.device.state) {
         case JadeDevice.StateLocked:
         case JadeDevice.StateReady:
-            stack_view.push(options_view)
+            stack_view.push(intialized_view)
             break
         case JadeDevice.StateUninitialized:
         case JadeDevice.StateUnsaved:
@@ -479,74 +479,10 @@ StackViewPage {
     }
 
     Component {
-        id: options_view
-        ColumnLayout {
-            enabled: self.device.status === JadeDevice.StatusIdle
-            spacing: 10
-            DeviceController {
-                id: bind_controller
-                device: self.device
-                onBinded: (context) => stack_view.push(login_view, { context })
-            }
-            VSpacer {
-            }
-            Image {
-                Layout.alignment: Qt.AlignCenter
-                source: 'qrc:/png/onboard_jade_1.png'
-            }
-            PrimaryButton {
-                Layout.alignment: Qt.AlignCenter
-                Layout.minimumWidth: 325
-                text: qsTrId('id_login')
-                onClicked: {
-                    if (self.device.state === JadeDevice.StateLocked) {
-                        stack_view.push(unlock_view)
-                    } else if (self.device.state === JadeDevice.StateReady) {
-                        bind_controller.bind()
-                    }
-                }
-            }
-            RegularButton {
-                Layout.alignment: Qt.AlignCenter
-                Layout.minimumWidth: 325
-                enabled: self.device.status === JadeDevice.StatusIdle
-                text: qsTrId('id_firmware_update')
-                onClicked: stack_view.push(update_view)
-            }
-            VSpacer {
-            }
-        }
-    }
-
-    Component {
-        id: unlock_view
-        ColumnLayout {
-            Component.onCompleted: unlock_controller.unlock()
-            spacing: 20
-            JadeUnlockController {
-                id: unlock_controller
-                device: self.device
-                onUnlocked: (context) => stack_view.push(login_view, { context })
-                onInvalidPin: stack_view.pop()
-            }
-            VSpacer {
-            }
-            Image {
-                Layout.alignment: Qt.AlignCenter
-                source: 'qrc:/png/connect_jade_2.png'
-            }
-            Label {
-                Layout.fillWidth: true
-                Layout.preferredWidth: 0
-                color: '#FFFFFF'
-                font.pixelSize: 22
-                font.weight: 600
-                horizontalAlignment: Label.AlignHCenter
-                text: qsTrId('id_unlock_your_device_to_continue')
-                wrapMode: Label.WordWrap
-            }
-            VSpacer {
-            }
+        id: intialized_view
+        JadeInitializedView {
+            device: self.device
+            onLoginFinished: (context) => stack_view.push(login_view, { context })
         }
     }
 
@@ -554,7 +490,7 @@ StackViewPage {
         id: login_view
         ColumnLayout {
             required property Context context
-            Component.onCompleted: login_controller.loginWithDevice()
+            StackView.onActivated: login_controller.loginWithDevice()
             id: xxx
             spacing: 20
             LoginController {
