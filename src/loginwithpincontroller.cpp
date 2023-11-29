@@ -70,9 +70,7 @@ static QJsonObject device_details_from_device(JadeDevice* device)
 
 void LoginController::loginWithDevice()
 {
-    if (!m_context) {
-        setContext(new Context(this));
-    }
+    Q_ASSERT(m_context);
 
     auto jade_device = qobject_cast<JadeDevice*>(m_context->device());
     if (jade_device) {

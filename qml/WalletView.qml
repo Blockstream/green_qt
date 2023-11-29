@@ -37,7 +37,7 @@ MainPage {
         JadePage {
             onLoginFinished: (context) => {
                 self.wallet = context.wallet
-                stack_view.push(loading_page, { context })
+                stack_view.replace(null, loading_page, { context }, StackView.PushTransition)
             }
         }
     }
@@ -164,7 +164,7 @@ MainPage {
         MultisigWatchOnlyAddPage {
             onLoginFinished: (context) => {
                 self.wallet = context.wallet
-                stack_view.push(loading_page, { context })
+                stack_view.replace(null, loading_page, { context }, StackView.PushTransition)
             }
         }
     }
@@ -174,7 +174,7 @@ MainPage {
         WatchOnlyLoginPage {
             onLoginFinished: (context) => {
                 self.wallet = context.wallet
-                stack_view.push(loading_page, { context })
+                stack_view.replace(null, loading_page, { context }, StackView.PushTransition)
             }
         }
     }
@@ -183,7 +183,7 @@ MainPage {
         id: pin_login_page
         PinLoginPage {
             onLoginFinished: (context) => {
-                stack_view.push(loading_page, { context })
+                stack_view.push(null, loading_page, { context }, StackView.PushTransition)
             }
         }
     }
