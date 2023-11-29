@@ -46,6 +46,7 @@ void JadeSetupController::setup(const QString& deployment)
         setContext(nullptr);
     }
     setContext(new Context(deployment, this));
+    m_context->setDevice(m_device);
 
     m_network = NetworkManager::instance()->networkForDeployment(deployment);
     auto session = m_context->getOrCreateSession(m_network);
