@@ -71,7 +71,7 @@ StackViewPage {
                 topInset: 0
                 leftInset: 0
                 rightInset: 0
-                checked: false
+                checked: Settings.acceptedTermsOfService
             }
             Label {
                 Layout.alignment: Qt.AlignCenter
