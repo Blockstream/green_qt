@@ -595,7 +595,7 @@ LogoutActivity *JadeDevice::logout()
 
 void JadeDevice::updateVersionInfo()
 {
-    api()->getVersionInfo([this](const QVariantMap& data) {
+    api()->getVersionInfo(true, [this](const QVariantMap& data) {
         if (data.contains("error")) {
             qDebug() << "update version info failed";
             emit error();

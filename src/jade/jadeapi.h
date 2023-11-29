@@ -58,7 +58,7 @@ public:
 
     int ping(const ResponseHandler &cb);
     // Get version information from the Jade
-    int getVersionInfo(const ResponseHandler &cb);
+    int getVersionInfo(bool nonblocking, const ResponseHandler &cb);
 
     // Send additional entropy for the rng to Jade
     int addEntropy(const QByteArray &entropy, const ResponseHandler &cb);

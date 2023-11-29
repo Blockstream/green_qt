@@ -94,7 +94,7 @@ void JadeDeviceSerialPortDiscoveryAgent::probe(JadeAPI* backend)
     if (m_attempts.value(backend) > 10) return;
     m_attempts[backend] ++;
     backend->connectDevice();
-    backend->getVersionInfo([=](const QVariantMap& data) {
+    backend->getVersionInfo(false, [=](const QVariantMap& data) {
         if (data.contains("error")) {
             qDebug() << "VERSION INFO ERROR:" << data.value("error");
             auto error = data.value("error").toMap();
@@ -145,7 +145,7 @@ void JadeDeviceSerialPortDiscoveryAgent::updateLater(JadeAPI* backend)
                 }
             });
         }
-        backend->getVersionInfo([=](const QVariantMap& data) {
+        backend->getVersionInfo(true, [=](const QVariantMap& data) {
             const auto device = deviceFromBackend(backend);
             if (device) {
                 if (data.contains("error")) {
