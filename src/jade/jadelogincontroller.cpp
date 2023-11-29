@@ -20,12 +20,6 @@ JadeController::JadeController(QObject* parent)
 {
 }
 
-Context* JadeController::ensureContext()
-{
-    Q_ASSERT(m_context);
-    return m_context;
-}
-
 void JadeController::setDevice(JadeDevice* device)
 {
     if (m_device == device) return;
@@ -114,7 +108,7 @@ void JadeSetupTask::update()
        }
 
         GA_json* output;
-        const auto context = m_controller->ensureContext();
+        const auto context = m_controller->context();
         const auto session = context->getOrCreateSession(network)->m_session;
         GA_http_request(session, params.get(), &output);
         auto res = Json::toObject(output);
@@ -134,13 +128,10 @@ void JadeUnlockController::unlock()
     const auto nets = m_device->versionInfo().value("JADE_NETWORKS").toString();
     const QString deployment = nets == "ALL" || nets == "MAIN" ? "mainnet" : "testnet";
     m_network = NetworkManager::instance()->networkForDeployment(deployment);
-    if (!m_context) {
-        auto context = new Context(deployment, this);
-        setContext(context);
-    }
+    if (m_context) m_context->deleteLater();
+    setContext(new Context(deployment, this));
 
-    auto context = ensureContext();
-    auto session = context->getOrCreateSession(m_network);
+    auto session = m_context->getOrCreateSession(m_network);
 
     auto connect_session = new ConnectTask(session);
     auto unlock = new JadeUnlockTask(this);
@@ -158,7 +149,7 @@ void JadeUnlockController::unlock()
     dispatcher()->add(group);
 
     connect(group, &TaskGroup::finished, this, [=] {
-        context->setDevice(m_device);
+        m_context->setDevice(m_device);
 
 //        auto activity = m_device->getMasterBlindingKey();
 //        connect(activity, &Activity::finished, [this, activity] {
@@ -171,7 +162,7 @@ void JadeUnlockController::unlock()
 //        });
 //        ActivityManager::instance()->exec(activity);
 
-        emit unlocked(context);
+        emit unlocked(m_context);
     });
 
     connect(group, &TaskGroup::failed, this, [=] {
@@ -295,7 +286,7 @@ void JadeUnlockTask::update()
         }
 
         GA_json* output;
-        const auto context = m_controller->ensureContext();
+        const auto context = m_controller->context();
         const auto session = context->getOrCreateSession(network)->m_session;
         GA_http_request(session, params.get(), &output);
         auto res = Json::toObject(output);
@@ -331,7 +322,7 @@ void JadeIdentifyTask::update()
         return;
     };
 
-    auto context = m_controller->ensureContext();
+    auto context = m_controller->context();
 
     setStatus(Status::Active);
 
@@ -371,7 +362,7 @@ JadeLoginTask::JadeLoginTask(JadeLoginController* controller)
 
 void JadeLoginTask::update()
 {
-    auto context = m_controller->ensureContext();
+    auto context = m_controller->context();
     auto network = NetworkManager::instance()->network(m_controller->network());
     auto device = m_controller->device();
 
