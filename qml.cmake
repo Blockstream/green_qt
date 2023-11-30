@@ -227,6 +227,8 @@ SET(QML_FILES
     qml/GStackLayout.qml
     qml/DeploymentDialog.qml
     qml/TaskPageFactory.qml
+    qml/SignMessageDrawer.qml
+    qml/SignMessagePage.qml
 )
 
 if (GREEN_NO_RESOURCES)

@@ -6,7 +6,8 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 ItemDelegate {
-    required property var address
+    signal signMessage(Address address)
+    required property Address address
 
     id: self
     hoverEnabled: true

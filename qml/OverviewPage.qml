@@ -217,10 +217,15 @@ StackViewPage {
         }
     }
 
-    DrawerLoader {
+    Component {
         id: receive_drawer
         ReceiveDrawer {
-            context: self.context
+        }
+    }
+
+    Component {
+        id: sign_message_drawer
+        SignMessageDrawer {
         }
     }
 
@@ -299,6 +304,7 @@ StackViewPage {
     Component {
         id: account_view_component
         AccountView {
+            onSignMessage: (address) => sign_message_drawer.createObject(self, { context: self.context, address }).open()
         }
     }
 
@@ -382,9 +388,7 @@ StackViewPage {
                 text: qsTrId('id_receive')
                 icon.source: 'qrc:/svg/receive.svg'
                 shortcut: 'Ctrl+R'
-                onTriggered: {
-                    receive_drawer.open({ account: self.currentAccount })
-                }
+                onTriggered: receive_drawer.createObject(self, { context: self.context, account: self.currentAccount }).open()
             }
         }
     }

@@ -6,44 +6,30 @@ import QtQuick.Layouts
 ColumnLayout {
     spacing: constants.s1
     required property SignMessageResolver resolver
-    Label {
-        text: qsTrId('id_verify_on_device')
+    VSpacer {
     }
-    SectionLabel {
-        text: qsTrId('id_device')
-    }
-    RowLayout {
-        Layout.fillHeight: false
-        spacing: constants.s1
-        DeviceImage {
-            device: resolver.device
-            sourceSize.height: 24
-        }
-        Label {
-            Layout.fillWidth: true
-            text: resolver.device.name
-        }
-    }
-    SectionLabel {
-        text: qsTrId('id_message')
-    }
-    Label {
-        text: resolver.message
-        wrapMode: Text.Wrap
-        Layout.maximumWidth: 500
+    Image {
+        Layout.alignment: Qt.AlignHCenter
+        source: 'qrc:/png/connect_jade_2.png'
     }
     SectionLabel {
         text: qsTrId('id_message_hash')
     }
     Label {
+        Layout.fillWidth: true
+        Layout.preferredWidth: 0
         text: String(resolver.hash).match(/.{1,8}/g).join(' ')
         wrapMode: Text.Wrap
-        Layout.maximumWidth: 500
     }
     SectionLabel {
+        Layout.fillWidth: true
+        Layout.preferredWidth: 0
         text: qsTrId('id_path_used_for_signing')
+        wrapMode: Text.Wrap
     }
     Label {
         text: resolver.path
+    }
+    VSpacer {
     }
 }

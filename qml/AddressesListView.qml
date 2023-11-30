@@ -5,9 +5,9 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 GPane {
-    property real contentY: list_view.contentY
-    required property Account account
+    signal signMessage(Address address)
     signal clicked(Address address)
+    required property Account account
 
     id: self
     background: Rectangle {
@@ -27,6 +27,7 @@ GPane {
         delegate: AddressDelegate {
             width: ListView.view.width
             onClicked: self.clicked(address)
+            onSignMessage: (address) => self.signMessage(address)
         }
     }
 

@@ -118,6 +118,7 @@ qt_add_resources(green "images"
         assets/png/liquid_background.png
         assets/png/no_transactions.png
 
+        assets/png/completed.png
         assets/png/connect_jade_1.png
         assets/png/connect_jade_2.png
         assets/png/connect_jade_3.png
@@ -129,6 +130,7 @@ qt_add_resources(green "images"
         assets/hints/cpu.svg
         assets/hints/jade3d.svg
 
+        assets/svg2/arrow_square_down.svg
         assets/svg2/arrow_right.svg
         assets/svg2/back.svg
         assets/svg2/backspace.svg
@@ -148,6 +150,7 @@ qt_add_resources(green "images"
         assets/svg2/house.svg
         assets/svg2/jade-logo.svg
         assets/svg2/lightning.svg
+        assets/svg2/list_bullets.svg
         assets/svg2/ledger-logo.svg
         assets/svg2/multisig.svg
         assets/svg2/next_arrow.svg
@@ -157,6 +160,7 @@ qt_add_resources(green "images"
         assets/svg2/right.svg
         assets/svg2/search.svg
         assets/svg2/singlesig.svg
+        assets/svg2/signature-light.svg
         assets/svg2/shield_check.svg
         assets/svg2/shield_warning.svg
         assets/svg2/star.svg
