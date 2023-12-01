@@ -9,7 +9,7 @@ GridLayout {
     rowSpacing: 20
     columns: 4
     rows: 6
-    flow: GridLayout.TopToBottom
+    flow: GridLayout.LeftToRight
 
     Repeater {
         model: mnemonic

@@ -49,7 +49,7 @@ StackViewPage {
             background: null
             contentItem: MnemonicView {
                 id: mnemonic_view
-                rows: 6
+                columns: self.size / 6
                 mnemonic: WalletManager.generateMnemonic(self.size)
             }
         }
