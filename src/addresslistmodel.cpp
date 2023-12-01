@@ -8,7 +8,6 @@
 
 AddressListModel::AddressListModel(QObject* parent)
     : QAbstractListModel(parent)
-    , m_dispatcher(new TaskDispatcher(this))
     , m_reload_timer(new QTimer(this))
 {
     m_reload_timer->setSingleShot(true);
@@ -39,7 +38,6 @@ void AddressListModel::setAccount(Account* account)
 void AddressListModel::fetch(bool reset)
 {
     if (!m_account) return;
-    if (m_dispatcher->isBusy()) return;
 
     const auto context = m_account->context();
     if (!context) return;
@@ -75,7 +73,8 @@ void AddressListModel::fetch(bool reset)
             endInsertRows();
         }
     });
-    m_dispatcher->add(get_addresses);
+
+    context->dispatcher()->add(get_addresses);
 }
 
 QHash<int, QByteArray> AddressListModel::roleNames() const
@@ -91,8 +90,6 @@ QHash<int, QByteArray> AddressListModel::roleNames() const
 bool AddressListModel::canFetchMore(const QModelIndex& parent) const
 {
     Q_ASSERT(!parent.parent().isValid());
-    // Prevent concurrent fetchMore
-    if (m_dispatcher->isBusy()) return false;
     return m_last_pointer != 1;
 }
 
@@ -100,7 +97,6 @@ void AddressListModel::fetchMore(const QModelIndex& parent)
 {
     Q_ASSERT(!parent.parent().isValid());
     if (!m_account) return;
-    if (m_dispatcher->isBusy()) return;
     fetch(false);
 }
 

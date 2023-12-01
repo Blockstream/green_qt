@@ -28,17 +28,6 @@ GPane {
             width: ListView.view.width
             onClicked: self.clicked(address)
         }
-        BusyIndicator {
-            width: 32
-            height: 32
-            running: address_model.dispatcher.busy
-            anchors.margins: 8
-            Layout.alignment: Qt.AlignHCenter
-            opacity: address_model.dispatcher.busy ? 1 : 0
-            Behavior on opacity { OpacityAnimator {} }
-            anchors.bottom: parent.bottom
-            anchors.horizontalCenter: parent.horizontalCenter
-        }
     }
 
     Component {
@@ -74,7 +63,7 @@ GPane {
         GButton {
             visible: Settings.enableExperimental
             text: qsTrId('Export')
-            enabled: self.account.context && !address_model.dispatcher.busy && list_view.count > 0
+            enabled: self.account.context && list_view.count > 0
             onClicked: export_addresses_popup.createObject(window, { account: self.account }).open()
             ToolTip.text: qsTrId('Export addresses to CSV file')
         }

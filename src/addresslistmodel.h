@@ -10,11 +10,9 @@
 class AddressListModel : public QAbstractListModel
 {
     Q_OBJECT
-    Q_PROPERTY(TaskDispatcher* dispatcher READ dispatcher CONSTANT)
     Q_PROPERTY(Account* account READ account WRITE setAccount NOTIFY accountChanged)
     QML_ELEMENT
-
-        public:
+public:
     enum AddressRoles {
         AddressRole = Qt::UserRole,
         PointerRole = Qt::UserRole + 1,
@@ -23,8 +21,6 @@ class AddressListModel : public QAbstractListModel
     };
 
     AddressListModel(QObject* parent = nullptr);
-
-    TaskDispatcher* dispatcher() const { return m_dispatcher; }
 
     Account* account() const { return m_account; }
     void setAccount(Account* account);
@@ -47,7 +43,6 @@ private:
     void fetch(bool reset);
 
 private:
-    TaskDispatcher* const m_dispatcher;
     Account* m_account{nullptr};
     QVector<Address*> m_addresses;
     bool m_has_unconfirmed{false};
