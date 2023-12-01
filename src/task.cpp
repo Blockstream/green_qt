@@ -1,4 +1,5 @@
 #include "account.h"
+#include "address.h"
 #include "asset.h"
 #include "config.h"
 #include "context.h"
@@ -1443,5 +1444,28 @@ BlindTransactionTask::BlindTransactionTask(const QJsonObject& details, Session* 
 bool BlindTransactionTask::call(GA_session* session, GA_auth_handler** auth_handler)
 {
     const auto rc = GA_blind_transaction(session, Json::fromObject(m_details).get(), auth_handler);
+    return rc == GA_OK;
+}
+
+SignMessageTask::SignMessageTask(const QString &message, Address* address)
+    : AuthHandlerTask(address->account()->session())
+    , m_address(address)
+    , m_message(message)
+{
+}
+
+QString SignMessageTask::signature() const
+{
+    return m_result.value("result").toObject().value("signature").toString();
+}
+
+bool SignMessageTask::call(GA_session* session, GA_auth_handler** call)
+{
+    const auto address = m_address->data().value("address").toString();
+    QJsonObject details{
+        { "address", address },
+        { "message", m_message }
+    };
+    const auto rc = GA_sign_message(session, Json::fromObject(details).get(), call);
     return rc == GA_OK;
 }

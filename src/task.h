@@ -683,4 +683,18 @@ private:
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
 };
 
+class SignMessageTask : public AuthHandlerTask
+{
+    Q_OBJECT
+    QML_ELEMENT
+public:
+    SignMessageTask(const QString& message, Address* address);
+    QString signature() const;
+private:
+    bool call(GA_session* session, GA_auth_handler** auth_handler) override;
+private:
+    Address* const m_address;
+    const QString m_message;
+};
+
 #endif // GREEN_TASK_H
