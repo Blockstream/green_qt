@@ -166,6 +166,8 @@ qt_add_resources(green "images"
         assets/svg2/watermark_bitcoin.svg
         assets/svg2/watermark_liquid.svg
         assets/svg2/x-square.svg
+
+        assets/pdf/recovery-phrase-backup-template-12-words.pdf
 )
 
 qt_add_resources(green "fonts"

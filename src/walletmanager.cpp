@@ -1,11 +1,13 @@
 #include "walletmanager.h"
 
+#include <QDesktopServices>
 #include <QDir>
 #include <QDirIterator>
 #include <QJsonDocument>
 #include <QSet>
 #include <QSettings>
 #include <QStandardPaths>
+#include <QTemporaryFile>
 #include <QUuid>
 
 #include "ga.h"
@@ -153,6 +155,23 @@ QString WalletManager::uniqueWalletName(const QString& base) const
 QStringList WalletManager::generateMnemonic(int size)
 {
     return gdk::generate_mnemonic(size);
+}
+
+void WalletManager::printBackupTemplate()
+{
+    QFile src(":/pdf/recovery-phrase-backup-template-12-words.pdf");
+    src.open(QFile::ReadOnly);
+    auto data = src.readAll();
+
+    QTemporaryFile file;
+    file.setAutoRemove(false);
+    file.setFileTemplate("backup-template");
+    file.open();
+    file.write(data);
+    file.close();
+    file.rename(file.fileName() + ".pdf");
+
+    QDesktopServices::openUrl(QUrl::fromLocalFile(file.fileName()));
 }
 
 Wallet* WalletManager::wallet(const QString& id) const

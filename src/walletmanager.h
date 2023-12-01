@@ -42,6 +42,7 @@ signals:
 
 public slots:
     QStringList generateMnemonic(int size);
+    void printBackupTemplate();
 public:
     QVector<Wallet*> m_wallets;
 };
