@@ -4,7 +4,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 AbstractButton {
-    required property string address
+    required property string content
     id: self
     padding: 10
     background: Rectangle {
@@ -34,11 +34,11 @@ AbstractButton {
         Label {
             font.pixelSize: 12
             font.weight: 600
-            text: 'Copy Address'
+            text: self.text
         }
     }
     onClicked: {
-        Clipboard.copy(self.address)
+        Clipboard.copy(self.content)
         timer.restart()
     }
     Timer {
