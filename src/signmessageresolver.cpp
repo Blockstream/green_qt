@@ -24,10 +24,37 @@ QByteArray HashMessage(const QString& message)
 
 }
 
+static inline bool ishardened(const uint32_t n) { return n & 0x80000000; }
+static inline uint32_t harden(const uint32_t n) { return n | 0x80000000; }
+static inline uint32_t unharden(const uint32_t n) { return n & ~0x80000000; }
+
+static bool wallet_bip32_path_as_str(const uint32_t* parts, const size_t num_parts, char* output, const size_t output_len)
+{
+    output[0] = 'm';
+    output[1] = '\0';
+
+    for (size_t pos = 1, i = 0; i < num_parts; ++i) {
+        uint32_t val = parts[i];
+        const char* fmt = "/%u";
+
+        if (ishardened(val)) {
+            val = unharden(val);
+            fmt = "/%u'"; // hardened
+        }
+
+        const size_t freespace = output_len - pos;
+        const int nchars = snprintf(output + pos, freespace, fmt, val);
+        if (nchars < 0 || nchars > freespace) {
+            return false;
+        }
+        pos += nchars;
+    }
+    return true;
+}
+
 SignMessageResolver::SignMessageResolver(Device *device, const QJsonObject& result, Session* session)
     : DeviceResolver(device, result, session)
     , m_message(m_required_data.value("message").toString())
-    , m_hash(HashMessage(m_message))
     , m_path(ParsePath(m_required_data.value("path").toArray()))
     , m_use_ae_protocol(m_required_data.value("use_ae_protocol").toBool())
     , m_ae_host_commitment(ParseByteArray(m_required_data.value("ae_host_commitment")))
@@ -35,14 +62,16 @@ SignMessageResolver::SignMessageResolver(Device *device, const QJsonObject& resu
 {
 }
 
+QString SignMessageResolver::hash() const
+{
+    return HashMessage(m_message);
+}
+
 QString SignMessageResolver::path() const
 {
-    QStringList path;
-    path.append("m");
-    for (auto x : m_path) {
-        path.append(QString::number(x));
-    }
-    return path.join("/");
+    char output[1024];
+    wallet_bip32_path_as_str(m_path.constData(), m_path.size(), output, sizeof(output));
+    return QString::fromUtf8(output);
 }
 
 void SignMessageResolver::resolve()
