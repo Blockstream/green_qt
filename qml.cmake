@@ -226,6 +226,7 @@ SET(QML_FILES
     qml/PinPadButton.qml
     qml/GStackLayout.qml
     qml/DeploymentDialog.qml
+    qml/TaskPageFactory.qml
 )
 
 if (GREEN_NO_RESOURCES)
