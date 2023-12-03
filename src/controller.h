@@ -38,6 +38,7 @@ class Controller : public AbstractController
 {
     Q_OBJECT
     Q_PROPERTY(Context* context READ context WRITE setContext NOTIFY contextChanged)
+    Q_PROPERTY(TaskGroupMonitor* monitor READ monitor NOTIFY monitorChanged)
     QML_ELEMENT
 
 public:
@@ -47,6 +48,8 @@ public:
     void setContext(Context* context);
 
     TaskDispatcher* dispatcher() const;
+    TaskGroupMonitor* monitor() const { return m_monitor; }
+    void setMonitor(TaskGroupMonitor* monitor);
 
 public slots:
     void changeSettings(const QJsonObject& data);
@@ -70,6 +73,7 @@ public slots:
 
 signals:
     void contextChanged();
+    void monitorChanged();
     void resolver(Resolver* resolver);
     void finished();
 
@@ -79,6 +83,7 @@ signals:
 
 protected:
     Context* m_context{nullptr};
+    TaskGroupMonitor* m_monitor{nullptr};
     QVariantMap m_errors;
 };
 

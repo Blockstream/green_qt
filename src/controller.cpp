@@ -71,6 +71,13 @@ TaskDispatcher *Controller::dispatcher() const
     return m_context->dispatcher();
 }
 
+void Controller::setMonitor(TaskGroupMonitor* monitor)
+{
+    if (m_monitor == monitor) return;
+    m_monitor = monitor;
+    emit monitorChanged();
+}
+
 static bool DeepContains(const QJsonObject& a, const QJsonObject& b)
 {
     for (auto i = b.begin(); i != b.end(); ++i) {
