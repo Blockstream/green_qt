@@ -153,6 +153,7 @@ class TaskGroupMonitor : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QQmlListProperty<TaskGroup> groups READ groups NOTIFY groupsChanged)
+    QML_ELEMENT
 public:
     TaskGroupMonitor(QObject* parent = nullptr);
     QQmlListProperty<TaskGroup> groups();
