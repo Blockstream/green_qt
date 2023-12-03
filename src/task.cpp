@@ -251,6 +251,16 @@ TaskGroupMonitor::TaskGroupMonitor(QObject* parent)
 {
 }
 
+bool TaskGroupMonitor::idle() const
+{
+    for (auto group : m_groups) {
+        if (group->status() == TaskGroup::Status::Active) {
+            return false;
+        }
+    }
+    return true;
+}
+
 QQmlListProperty<TaskGroup> TaskGroupMonitor::groups()
 {
     return { this, &m_groups };
@@ -261,6 +271,7 @@ void TaskGroupMonitor::add(TaskGroup* group)
     Q_ASSERT(!m_groups.contains(group));
     m_groups.append(group);
     emit groupsChanged();
+    connect(group, &TaskGroup::statusChanged, this, &TaskGroupMonitor::idleChanged);
     connect(group, &TaskGroup::finished, this, [=] { remove(group); });
     connect(group, &TaskGroup::failed, this, [=] { remove(group); });
 }

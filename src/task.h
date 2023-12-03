@@ -152,14 +152,17 @@ protected:
 class TaskGroupMonitor : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(bool idle READ idle NOTIFY idleChanged)
     Q_PROPERTY(QQmlListProperty<TaskGroup> groups READ groups NOTIFY groupsChanged)
     QML_ELEMENT
 public:
     TaskGroupMonitor(QObject* parent = nullptr);
+    bool idle() const;
     QQmlListProperty<TaskGroup> groups();
     void add(TaskGroup* group);
     void remove(TaskGroup* group);
 signals:
+    void idleChanged();
     void groupsChanged();
     void allFinishedOrFailed();
 private:
