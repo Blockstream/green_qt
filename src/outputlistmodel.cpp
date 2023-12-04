@@ -1,7 +1,5 @@
 #include "outputlistmodel.h"
 
-#include <QDebug>
-
 #include "account.h"
 #include "output.h"
 #include "resolver.h"
