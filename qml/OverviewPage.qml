@@ -224,8 +224,8 @@ StackViewPage {
     }
 
     Component {
-        id: sign_message_drawer
-        SignMessageDrawer {
+        id: address_details_drawer
+        AddressDetailsDrawer {
         }
     }
 
@@ -304,7 +304,7 @@ StackViewPage {
     Component {
         id: account_view_component
         AccountView {
-            onSignMessage: (address) => sign_message_drawer.createObject(self, { context: self.context, address }).open()
+            onAddressClicked: (address) => address_details_drawer.createObject(self, { context: self.context, address }).open()
         }
     }
 

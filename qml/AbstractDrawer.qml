@@ -3,27 +3,10 @@ import QtQuick.Controls
 import Qt5Compat.GraphicalEffects
 
 Drawer {
-    signal aboutToDestroy
     property real minimumContentWidth: 350
     property real preferredContentWidth: 0
-    property bool deleteOnClose: false
 
-    function accept() {
-        self.deleteOnClose = true
-        self.close()
-    }
-
-    function reject() {
-        self.deleteOnClose = true
-        self.close()
-    }
-
-    onClosed: {
-        if (self.deleteOnClose) {
-            self.aboutToDestroy()
-            self.destroy()
-        }
-    }
+    onClosed: self.destroy()
 
     id: self
     clip: true

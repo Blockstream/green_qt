@@ -8,7 +8,7 @@ import QtQuick.Layouts
 import "util.js" as UtilJS
 
 Page {
-    signal signMessage(Address address)
+    signal addressClicked(Address address)
     required property Context context
     required property Account account
 
@@ -111,7 +111,7 @@ Page {
             sourceComponent: AddressesListView {
                 account: self.account
                 leftPadding: 0
-                onSignMessage: (address) => self.signMessage(address)
+                onAddressClicked: (address) => self.addressClicked(address)
             }
         }
 

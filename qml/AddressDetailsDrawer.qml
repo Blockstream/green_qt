@@ -1,18 +1,20 @@
 import Blockstream.Green
+import Blockstream.Green.Core
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Layouts
 
 WalletDrawer {
     required property Address address
-    onClosed: destroy()
     id: self
     contentItem: GStackView {
-        initialItem: SignMessagePage {
-            rightItem: CloseButton {
-                onClicked: self.close()
-            }
+        id: stack_view
+        initialItem: AddressDetailsPage {
             context: self.context
             address: self.address
+            closeAction: Action {
+                onTriggered: self.close()
+            }
         }
     }
 }

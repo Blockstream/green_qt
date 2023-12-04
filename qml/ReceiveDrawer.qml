@@ -29,7 +29,7 @@ WalletDrawer {
             id: receive_view
             title: qsTrId('id_receive')
             rightItem: CloseButton {
-                onClicked: self.reject()
+                onClicked: self.close()
             }
             footer: ColumnLayout {
                 PrimaryButton {
@@ -293,35 +293,13 @@ WalletDrawer {
                 font.weight: 400
                 text: delegate.address.data.tx_count
             }
-            IconButton {
-                icon.source: 'qrc:/svg2/copy.svg'
-                onClicked: Clipboard.copy(delegate.address.data.address)
-            }
-            IconButton {
-                icon.source: 'qrc:/svg2/signature-light.svg'
-                onClicked: stack_view.push(sign_message_page, { context: self.context, address: delegate.address })
-            }
         }
-    }
-
-    component IconButton: AbstractButton {
-        id: button
-        leftPadding: 8
-        rightPadding: 8
-        bottomPadding: 8
-        topPadding: 8
-        background: Rectangle {
-            color: '#4B4B4B'
-            radius: 4
-        }
-        contentItem: Image {
-            source: button.icon.source
-        }
+        onClicked: stack_view.push(address_details_page, { context: self.context, address: delegate.address })
     }
 
     Component {
-        id: sign_message_page
-        SignMessagePage {
+        id: address_details_page
+        AddressDetailsPage {
         }
     }
 }

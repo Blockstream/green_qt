@@ -3,7 +3,7 @@ import QtQuick.Controls
 
 Rectangle {
     property string text
-    readonly property int size: Math.min(self.width, self.height) - 64
+    readonly property int size: Math.min(self.width, self.height) - 16
 
     id: self
     implicitHeight: 160

@@ -56,7 +56,7 @@ WalletDrawer {
     component Form: StackViewPage {
         title: qsTrId('id_send')
         rightItem: CloseButton {
-            onClicked: self.reject()
+            onClicked: self.close()
         }
         contentItem: ColumnLayout {
             AlertView {

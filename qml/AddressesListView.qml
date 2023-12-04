@@ -6,7 +6,7 @@ import QtQuick.Layouts
 
 GPane {
     signal signMessage(Address address)
-    signal clicked(Address address)
+    signal addressClicked(Address address)
     required property Account account
 
     id: self
@@ -18,16 +18,14 @@ GPane {
     }
     contentItem: TListView {
         id: list_view
-        spacing: 8
-
+        spacing: 0
         model: AddressListModelFilter {
             filter: search_field.text
             model: address_model
         }
         delegate: AddressDelegate {
             width: ListView.view.width
-            onClicked: self.clicked(address)
-            onSignMessage: (address) => self.signMessage(address)
+            onAddressClicked: (address) => self.addressClicked(address)
         }
     }
 

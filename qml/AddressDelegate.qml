@@ -6,9 +6,10 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 ItemDelegate {
-    signal signMessage(Address address)
+    signal addressClicked(Address address)
     required property Address address
 
+    onClicked: self.addressClicked(self.address)
     id: self
     hoverEnabled: true
     padding: constants.p3
@@ -77,20 +78,5 @@ ItemDelegate {
                 }
             }
         }
-
-        Image {
-            Layout.preferredWidth: 22
-            Layout.preferredHeight: 22
-            source: 'qrc:/svg/copy.svg'
-            opacity: self.hovered ? 1 : 0
-            Behavior on opacity {
-                OpacityAnimator {
-                }
-            }
-        }
-    }
-    onClicked: {
-        Clipboard.copy(address.data["address"]);
-        ToolTip.show(qsTrId('id_copied_to_clipboard'), 1000);
     }
 }

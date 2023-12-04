@@ -227,8 +227,11 @@ SET(QML_FILES
     qml/GStackLayout.qml
     qml/DeploymentDialog.qml
     qml/TaskPageFactory.qml
-    qml/SignMessageDrawer.qml
     qml/SignMessagePage.qml
+    qml/AddressDetailsDrawer.qml
+    qml/CircleButton.qml
+    qml/ShareButton.qml
+    qml/AddressDetailsPage.qml
 )
 
 if (GREEN_NO_RESOURCES)
