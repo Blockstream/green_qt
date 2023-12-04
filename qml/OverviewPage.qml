@@ -33,7 +33,7 @@ StackViewPage {
         const network = self.currentAccount?.network ?? NetworkManager.networkForDeployment(self.context.deployment)
         const id = network.liquid ? network.policyAsset : network.key
         const asset = self.context.getOrCreateAsset(id)
-        create_account_drawer.open({ asset, dismissable })
+        create_account_drawer.createObject(self, { context: self.context, asset, dismissable }).open()
     }
 
     function parseAmount(account, amount, unit) {
@@ -193,26 +193,9 @@ StackViewPage {
         implicitHeight: 16
     }
 
-    component DrawerLoader: QtObject {
-        default property Component sourceComponent
-        property WalletDrawer drawer
-        id: loader
-        function createObject(properties) {
-            if (!loader.drawer) {
-                loader.drawer = loader.sourceComponent.createObject(self, properties)
-                loader.drawer.aboutToDestroy.connect(() => { loader.drawer = null })
-            }
-            return loader.drawer
-        }
-        function open(properties) {
-            loader.createObject(properties).open()
-        }
-    }
-
-    DrawerLoader {
+    Component {
         id: create_account_drawer
         CreateAccountDrawer {
-            context: self.context
             onCreated: (account) => switchToAccount(account)
         }
     }
@@ -229,10 +212,9 @@ StackViewPage {
         }
     }
 
-    DrawerLoader {
+    Component {
         id: send_drawer
         SendDrawer {
-            context: self.context
         }
     }
 
@@ -368,7 +350,7 @@ StackViewPage {
                 text: qsTrId('id_send')
                 icon.source: 'qrc:/svg/send.svg'
                 shortcut: 'Ctrl+S'
-                onTriggered: send_drawer.open({ account: self.currentAccount })
+                onTriggered: send_drawer.createObject(self, { context: self.context, account: self.currentAccount }).open()
             }
             ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
             ToolTip.text: qsTrId('id_insufficient_lbtc_to_send_a')
