@@ -343,39 +343,22 @@ StackViewPage {
         anchors.rightMargin: constants.p3
         anchors.bottomMargin: constants.p3 * 2
         spacing: 5
-        GButton {
+        PrimaryButton {
             Layout.minimumWidth: 120
-            highlighted: true
-            visible: !self.context.watchonly
-            font.bold: false
-            font.weight: 600
-            font.pixelSize: 14
-            icon.width: 24
-            icon.height: 24
+            icon.source: 'qrc:/svg/send.svg'
+            text: qsTrId('id_send')
             action: Action {
                 enabled: UtilJS.effectiveVisible(self) && !self.archived && !self.context.watchonly && !self.wallet.locked && self.currentAccount
-                text: qsTrId('id_send')
-                icon.source: 'qrc:/svg/send.svg'
                 shortcut: 'Ctrl+S'
                 onTriggered: send_drawer.createObject(self, { context: self.context, account: self.currentAccount }).open()
             }
-            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-            ToolTip.text: qsTrId('id_insufficient_lbtc_to_send_a')
-            ToolTip.visible: hovered && !enabled
         }
-        GButton {
+        PrimaryButton {
             Layout.minimumWidth: 120
-            highlighted: true
-            enabled: !self.archived && !wallet.locked && self.currentAccount
-            font.bold: false
-            font.weight: 600
-            font.pixelSize: 14
-            icon.width: 24
-            icon.height: 24
+            icon.source: 'qrc:/svg/receive.svg'
+            text: qsTrId('id_receive')
             action: Action {
-                enabled: UtilJS.effectiveVisible(self)
-                text: qsTrId('id_receive')
-                icon.source: 'qrc:/svg/receive.svg'
+                enabled: UtilJS.effectiveVisible(self) && !self.archived && !wallet.locked && self.currentAccount
                 shortcut: 'Ctrl+R'
                 onTriggered: receive_drawer.createObject(self, { context: self.context, account: self.currentAccount }).open()
             }
