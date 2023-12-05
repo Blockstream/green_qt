@@ -6,8 +6,6 @@ Drawer {
     property real minimumContentWidth: 350
     property real preferredContentWidth: 0
 
-    onClosed: self.destroy()
-
     id: self
     clip: true
     height: parent.height
