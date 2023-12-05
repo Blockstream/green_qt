@@ -8,13 +8,15 @@ import QtQuick.Layouts
 import "analytics.js" as AnalyticsJS
 import "util.js" as UtilJS
 
-WalletDialog {
+StackViewPage {
     required property Transaction transaction
-    readonly property Network network: transaction.account.network
-    property int confirmations: transactionConfirmations(transaction)
-    readonly property bool completed: confirmations >= (network.liquid ? 2 : 6)
+    property Action closeAction
+
+    readonly property Network network: self.transaction.account.network
+    readonly property int confirmations: transactionConfirmations(self.transaction)
+    readonly property bool completed: self.confirmations >= (self.network.liquid ? 2 : 6)
     readonly property var spv: {
-        const value = transaction.spv
+        const value = self.transaction. spv
         if (value === Transaction.Disabled) return null
         if (!completed) return null
         switch (value) {
@@ -31,33 +33,48 @@ WalletDialog {
         }
     }
 
+    AnalyticsView {
+        name: 'TransactionDetails'
+        active: self.opened
+        segmentation: AnalyticsJS.segmentationSubAccount(self.transaction.account)
+    }
+
     id: self
     title: {
-        switch (transaction.type) {
+        switch (self.transaction.type) {
             case Transaction.Incoming: return qsTrId('id_incoming')
             case Transaction.Outgoing: return qsTrId('id_outgoing')
             case Transaction.Redeposit: return qsTrId('id_redeposited')
             case Transaction.Mixed: return qsTrId('id_swap')
         }
     }
-    contentItem: GFlickable {
-        id: flickable
-        clip: true
-        implicitHeight: layout.implicitHeight
-        implicitWidth: layout.implicitWidth
-        contentHeight: layout.height
-        MouseArea {
-            anchors.fill: layout
-            onClicked: flickable.forceActiveFocus()
+    rightItem: RowLayout {
+        spacing: 20
+        CircleButton {
+            icon.source: 'qrc:/svg2/qrcode.svg'
         }
+        ShareButton {
+            onClicked: Qt.openUrlExternally(self.transaction.account.network.data.tx_explorer_url + self.transaction.data.txhash)
+        }
+        CloseButton {
+            action: self.closeAction
+            visible: self.closeAction
+        }
+    }
+    contentItem: Flickable {
+        ScrollIndicator.vertical: ScrollIndicator {
+        }
+        id: flickable
+        contentWidth: flickable.width
+        contentHeight: layout.height
         ColumnLayout {
             id: layout
-            width: flickable.availableWidth
-            spacing: constants.s1
+            spacing: 10
+            width: flickable.width
             Repeater {
                 visible: count > 0
-                model: transaction.amounts
-                delegate: network.liquid ? liquid_amount_delegate : bitcoin_amount_delegate
+                model: self.transaction.amounts
+                delegate: self.network.liquid ? liquid_amount_delegate : bitcoin_amount_delegate
             }
             ColumnLayout {
                 Layout.leftMargin: constants.s1
@@ -74,13 +91,13 @@ WalletDialog {
                     RowLayout {
                         Layout.fillWidth: false
                         CopyableLabel {
-                            text: formatAmount(self.transaction.account, transaction.data.fee)
+                            text: UtilJS.formatAmount(self.transaction.account, transaction.data.fee)
                         }
                         Label {
                             text: '≈'
                         }
                         CopyableLabel {
-                            text: formatFiat(transaction.data.fee)
+                            text: UtilJS.formatFiat(self.transaction.account, transaction.data.fee)
                         }
                     }
                 }
@@ -120,13 +137,13 @@ WalletDialog {
                     RowLayout {
                         Layout.fillWidth: false
                         CopyableLabel {
-                            text: formatAmount(transaction.account, transaction.data.satoshi[network.liquid ? network.policyAsset : 'btc'])
+                            text: UtilJS.formatAmount(transaction.account, transaction.data.satoshi[network.liquid ? network.policyAsset : 'btc'])
                         }
                         Label {
                             text: '≈'
                         }
                         CopyableLabel {
-                            text: formatFiat(transaction.data.satoshi[network.liquid ? network.policyAsset : 'btc'])
+                            text: UtilJS.formatFiat(transaction.account, transaction.data.satoshi[network.liquid ? network.policyAsset : 'btc'])
                         }
                     }
                 }
@@ -140,7 +157,7 @@ WalletDialog {
                     text: qsTrId('id_increase_fee')
                     enabled: transaction.data.can_rbf
                     onClicked: {
-                        self.accept()
+                        self.close()
                         bump_fee_dialog.createObject(window, { transaction }).open()
                     }
                 }
@@ -246,40 +263,32 @@ WalletDialog {
             }
         }
     }
-    footer: DialogFooter {
+    footer: RowLayout {
         GToolButton {
             icon.source: 'qrc:/svg/qr.svg'
             onClicked: qrcode_popup.open()
             QRCodePopup {
                 id: qrcode_popup
-                text: network.liquid ? transaction.unblindedLink() : transaction.link()
+                text: self.network.liquid ? self.transaction.unblindedLink() : self.transaction.link()
             }
-        }
-        HSpacer {
         }
         GButton {
             text: qsTrId('id_view_in_explorer')
-            onClicked: transaction.openInExplorer()
+            onClicked: self.transaction.openInExplorer()
         }
         GButton {
             text: qsTrId('id_copy_unblinded_link')
-            visible: network.liquid
+            visible: self.network.liquid
             onClicked: {
-                Clipboard.copy(transaction.unblindedLink())
+                Clipboard.copy(self.transaction.unblindedLink())
                 ToolTip.show(qsTrId('id_copied_to_clipboard'), 1000)
             }
         }
         GButton {
             text: qsTrId('id_copy_unblinding_data')
-            visible: network.liquid
+            visible: self.network.liquid
             onClicked: copyUnblindingData(this, transaction.data)
         }
-    }
-
-    AnalyticsView {
-        name: 'TransactionDetails'
-        active: self.opened
-        segmentation: AnalyticsJS.segmentationSubAccount(self.transaction.account)
     }
 
     Component {
