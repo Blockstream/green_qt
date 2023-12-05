@@ -8,6 +8,7 @@ import QtQuick.Layouts
 import "util.js" as UtilJS
 
 Page {
+    signal transactionClicked(Transaction transaction)
     signal addressClicked(Address address)
     required property Context context
     required property Account account
@@ -80,12 +81,6 @@ Page {
     }
 
     Component {
-        TransactionView {
-        id: transaction_drawer
-        }
-    }
-
-    Component {
         id: balance_dialog
         AssetView {
         }
@@ -102,7 +97,7 @@ Page {
             sourceComponent: TransactionListView {
                 account: self.account
                 leftPadding: 0
-                onTransactionClicked: (transaction) => transaction_drawer.createObject(window, { context: self.context, transaction }).open()
+                onTransactionClicked: (transaction) => self.transactionClicked(transaction)
             }
         }
 

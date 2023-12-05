@@ -224,6 +224,7 @@ SET(QML_FILES
     qml/ArchivedAccountsDialog.qml
     qml/JadeNotificationDialog.qml
     qml/PinPadButton.qml
+    qml/TransactionDetailsDrawer.qml
     qml/GStackLayout.qml
     qml/DeploymentDialog.qml
     qml/TaskPageFactory.qml

@@ -207,6 +207,12 @@ StackViewPage {
     }
 
     Component {
+        id: transaction_details_drawer
+        TransactionDetailsDrawer {
+        }
+    }
+
+    Component {
         id: address_details_drawer
         AddressDetailsDrawer {
         }
@@ -286,6 +292,7 @@ StackViewPage {
     Component {
         id: account_view_component
         AccountView {
+            onTransactionClicked: (transaction) => transaction_details_drawer.createObject(self, { context: self.context, transaction }).open()
             onAddressClicked: (address) => address_details_drawer.createObject(self, { context: self.context, address }).open()
         }
     }
