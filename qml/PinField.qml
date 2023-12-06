@@ -110,25 +110,25 @@ AbstractButton {
             Repeater {
                 model: 9
                 RegularButton {
-                    implicitWidth: 56
+                    Layout.preferredWidth: 56
                     text: index + 1
                     onClicked: self.append(index + 1)
                 }
             }
             PadButton {
                 Layout.fillHeight: true
-                implicitWidth: 56
+                Layout.preferredWidth: 56
                 icon.source: 'qrc:/svg2/x-square.svg'
                 onClicked: self.clear()
             }
             RegularButton {
-                implicitWidth: 56
+                Layout.preferredWidth: 56
                 text: '0'
                 onClicked: self.append(0)
             }
             PadButton {
                 Layout.fillHeight: true
-                implicitWidth: 56
+                Layout.preferredWidth: 56
                 icon.source: 'qrc:/svg2/backspace.svg'
                 onClicked: self.remove()
             }
