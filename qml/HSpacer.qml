@@ -3,5 +3,5 @@ import QtQuick.Layouts
 
 Item {
     Layout.fillWidth: true
-    height: 1
+    implicitHeight: 10
 }
