@@ -27,6 +27,7 @@ AbstractButton {
         }
     }
     contentItem: RowLayout {
+        spacing: image.visible ? 10 : 0
         HSpacer {
         }
         Image {
