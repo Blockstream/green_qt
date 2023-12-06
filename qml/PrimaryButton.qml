@@ -30,7 +30,7 @@ AbstractButton {
         Image {
             id: image
             source: self.icon.source
-            visible: !!image.source
+            visible: image.status === Image.Ready
         }
         Label {
             font.pixelSize: 16
