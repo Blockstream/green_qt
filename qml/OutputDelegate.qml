@@ -31,10 +31,23 @@ ItemDelegate {
     rightPadding: 16
     bottomPadding: 16
     background: Rectangle {
-        color: self.hovered ? constants.c700 : self.highlighted ? constants.c600 : constants.c800
+        color: 'transparent'
         radius: 4
         border.width: self.highlighted ? 1 : 0
         border.color: constants.g500
+        Rectangle {
+            anchors.fill: parent
+            visible: self.hovered
+            color: '#00B45A'
+            opacity: 0.08
+        }
+        Rectangle {
+            color: '#FFFFFF'
+            opacity: 0.1
+            width: parent.width
+            height: 1
+            y: parent.height - 1
+        }
     }
     onClicked: self.toggleSelection()
     spacing: constants.p2

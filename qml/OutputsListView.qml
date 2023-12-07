@@ -28,7 +28,7 @@ Page {
     }
     contentItem: TListView {
         id: list_view
-        spacing: 8
+        spacing: 0
 
         model: output_model_filter
 
