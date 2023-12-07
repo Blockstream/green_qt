@@ -6,6 +6,7 @@ import QtQuick.Layouts
 
 ColumnLayout {
     signal loginFinished(Context context)
+    signal updateClicked()
     required property JadeDevice device
     id: self
     enabled: self.device.status === JadeDevice.StatusIdle
@@ -38,7 +39,7 @@ ColumnLayout {
         Layout.minimumWidth: 325
         enabled: self.device.status === JadeDevice.StatusIdle
         text: qsTrId('id_firmware_update')
-        onClicked: stack_view.push(update_view)
+        onClicked: self.updateClicked()
     }
     CheckBox {
         Layout.alignment: Qt.AlignCenter

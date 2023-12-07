@@ -13,7 +13,7 @@ MainPage {
     Component.onCompleted: {
         if (!self.wallet) {
             if (self.device instanceof JadeDevice) {
-                stack_view.push(jade_page, { device: self.device }, StackView.Immediate)
+                stack_view.push(jade_page, { device: self.device, login: true }, StackView.Immediate)
             } else {
                 stack_view.push(terms_of_service_page, {}, StackView.Immediate)
             }
@@ -203,7 +203,7 @@ MainPage {
             Component.onDestruction: self.wallet.disconnect()
             onLogout: {
                 if (self.wallet?.context?.device instanceof JadeDevice) {
-                    stack_view.replace(null, jade_page, { device: self.wallet?.context?.device })
+                    stack_view.replace(null, jade_page, { device: self.wallet?.context?.device, login: false })
                     return
                 }
                 if (!self.wallet || !self.wallet.persisted) {

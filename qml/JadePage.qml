@@ -9,17 +9,18 @@ StackViewPage {
     signal loginFinished(Context context)
     signal skip(Device device)
     required property JadeDevice device
+    required property bool login
     property bool debug_jade: false
     leftItem: BackButton {
         onClicked: {
-            if (stack_view.currentItem.StackView.index > 0) {
+            if (stack_view.currentItem && stack_view.currentItem.StackView.index > 0) {
                 stack_view.pop()
             } else {
                 self.StackView.view.pop()
             }
         }
-        visible: stack_view.currentItem.StackView.index > 0 || self.StackView.index > 0
-        enabled: stack_view.currentItem.StackView.status === StackView.Active && self.StackView.status === StackView.Active
+        visible: stack_view.currentItem && stack_view.currentItem.StackView.index > 0 || self.StackView.index > 0
+        enabled: stack_view.currentItem && stack_view.currentItem.StackView.status === StackView.Active && self.StackView.status === StackView.Active
     }
     JadeUpdateController {
         id: update_controller
@@ -131,7 +132,11 @@ StackViewPage {
         switch (self.device.state) {
         case JadeDevice.StateLocked:
         case JadeDevice.StateReady:
-            stack_view.push(intialized_view)
+            if (self.login) {
+                stack_view.push(unlock_view, { device: self.device })
+            } else {
+                stack_view.push(intialized_view)
+            }
             break
         case JadeDevice.StateUninitialized:
         case JadeDevice.StateUnsaved:
@@ -479,10 +484,19 @@ StackViewPage {
     }
 
     Component {
+        id: unlock_view
+        JadeUnlockView {
+            onUnlockFinished: (context) => stack_view.push(login_view, { context })
+            onUnlockFailed: stack_view.replace(null, intialized_view, { device: self.device })
+        }
+    }
+
+    Component {
         id: intialized_view
         JadeInitializedView {
             device: self.device
             onLoginFinished: (context) => stack_view.push(login_view, { context })
+            onUpdateClicked: stack_view.push(basic_update_view)
         }
     }
 
