@@ -223,7 +223,10 @@ SET(QML_FILES
     qml/JadeFirmwareConfigSelector.qml
     qml/ArchivedAccountsDialog.qml
     qml/JadeNotificationDialog.qml
+    qml/SendPage.qml
+    qml/SendConfirmPage.qml
     qml/PinPadButton.qml
+    qml/TransactionCompletedPage.qml
     qml/TransactionDetailsDrawer.qml
     qml/GStackLayout.qml
     qml/DeploymentDialog.qml
