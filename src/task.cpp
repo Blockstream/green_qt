@@ -1220,6 +1220,15 @@ void SendTransactionTask::setDetails(const QJsonObject &details)
     m_details = details;
 }
 
+QJsonObject SendTransactionTask::transaction() const
+{
+    Q_ASSERT(m_result.value("status") == "done");
+    auto txhash = m_result.value("result").toObject().value("txhash").toString();
+    QJsonObject transaction;
+    transaction.insert("txhash", txhash);
+    return transaction;
+}
+
 bool SendTransactionTask::active() const
 {
     if (m_details.isEmpty()) return false;

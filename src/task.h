@@ -585,6 +585,7 @@ class SendTransactionTask : public AuthHandlerTask
 public:
     SendTransactionTask(Session* session);
     void setDetails(const QJsonObject& details);
+    QJsonObject transaction() const;
 private:
     bool active() const override;
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;

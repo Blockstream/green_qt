@@ -84,6 +84,8 @@ SET(TARGET_SOURCES
   sa/kdsingleapplication.cpp
   sa/kdsingleapplication_localsocket.cpp
 	src/task.h src/task.cpp
+	src/createtransactioncontroller.h src/createtransactioncontroller.cpp
+	src/signtransactioncontroller.h src/signtransactioncontroller.cpp
 )
 
 if (WIN32)
