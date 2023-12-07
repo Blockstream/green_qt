@@ -12,7 +12,7 @@ MainPage {
     signal openWallet(Wallet wallet)
     signal openDevice(Device device)
     signal createWallet
-
+    property alias count: wallets_repeater.count
     id: self
     padding: 60
     title: qsTrId('id_wallets')
@@ -34,6 +34,7 @@ MainPage {
                 text: qsTrId('id_digital_wallets')
             }
             Repeater {
+                id: wallets_repeater
                 model: WalletListModel {
                 }
                 WalletsDrawer.WalletButton {

@@ -103,6 +103,9 @@ ApplicationWindow {
             if (device instanceof JadeDevice && device.state === JadeDevice.StateUninitialized) {
                 jade_notification_dialog.createObject(window, { device }).open()
             }
+            if (device instanceof JadeDevice && wallets_view.count === 0) {
+                window.openDevice(device)
+            }
         }
     }
 
@@ -208,6 +211,7 @@ ApplicationWindow {
         anchors.leftMargin: side_bar.width
         currentIndex: 0
         WalletsView {
+            id: wallets_view
             focus: StackLayout.isCurrentItem
             onOpenWallet: (wallet) => window.openWallet(wallet)
             onOpenDevice: (device) => window.openDevice(device)
