@@ -384,6 +384,11 @@ void AuthHandlerTask::requestCode(const QString &method)
 
 void AuthHandlerTask::resolveCode(const QByteArray& code)
 {
+    if (m_prompt) {
+        m_prompt->deleteLater();
+        m_prompt = nullptr;
+        emit promptChanged();
+    }
     QtConcurrent::run([=] {
         const auto rc = GA_auth_handler_resolve_code(m_auth_handler, code.constData());
         return rc == GA_OK;
@@ -429,9 +434,10 @@ void AuthHandlerTask::handleRequestCode(const QJsonObject& result)
         requestCode(method);
     } else {
         setResult(result);
+        m_prompt = new CodePrompt(this);
+        emit promptChanged();
     }
 }
-
 
 static Device* GetDeviceFromRequiredData(const QJsonObject& required_data)
 {
@@ -446,6 +452,10 @@ void AuthHandlerTask::handleResolveCode(const QJsonObject& result)
 {
     if (result.contains("method")) {
         setResult(result);
+        if (!m_prompt) {
+            m_prompt = new CodePrompt(this);
+            emit promptChanged();
+        }
         return;
     }
 
@@ -1488,4 +1498,34 @@ bool SignMessageTask::call(GA_session* session, GA_auth_handler** call)
     };
     const auto rc = GA_sign_message(session, Json::fromObject(details).get(), call);
     return rc == GA_OK;
+}
+
+Prompt::Prompt(Task* task)
+    : QObject(task)
+{
+}
+
+CodePrompt::CodePrompt(AuthHandlerTask* task)
+    : Prompt(task)
+    , m_task(task)
+{
+}
+
+QStringList CodePrompt::methods() const
+{
+    QStringList methods;
+    for (const auto method : m_task->result().value("methods").toArray()) {
+        methods.append(method.toString());
+    }
+    return methods;
+}
+
+void CodePrompt::select(const QString& method)
+{
+    m_task->requestCode(method);
+}
+
+void CodePrompt::resolve(const QString& code)
+{
+    m_task->resolveCode(code.toUtf8());
 }

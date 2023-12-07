@@ -210,10 +210,20 @@ public:
     void update() override;
 };
 
+class Prompt : public QObject
+{
+    Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("")
+public:
+    Prompt(Task* task);
+};
+
 class AuthHandlerTask : public SessionTask
 {
     Q_OBJECT
     Q_PROPERTY(QJsonObject result READ result NOTIFY resultChanged)
+    Q_PROPERTY(Prompt* prompt READ prompt NOTIFY promptChanged)
     Q_PROPERTY(Resolver* resolver READ resolver NOTIFY resolverChanged)
     QML_ELEMENT
     QML_UNCREATABLE("")
@@ -222,6 +232,7 @@ public:
     ~AuthHandlerTask();
     QJsonObject result() const { return m_result; }
     void setResult(const QJsonObject& result);
+    Prompt* prompt() const { return m_prompt; }
     Resolver* resolver() const { return m_resolver; }
     void setResolver(Resolver* resolver);
     void update() override;
@@ -231,6 +242,7 @@ public slots:
 signals:
     void updated();
     void resultChanged();
+    void promptChanged();
     void resolverChanged();
 protected:
     virtual bool active() const;
@@ -245,7 +257,26 @@ private:
 protected:
     GA_auth_handler* m_auth_handler{nullptr};
     QJsonObject m_result;
+    Prompt* m_prompt{nullptr};
     Resolver* m_resolver{nullptr};
+};
+
+class CodePrompt : public Prompt
+{
+    Q_OBJECT
+    Q_PROPERTY(AuthHandlerTask* task READ task CONSTANT)
+    Q_PROPERTY(QStringList methods READ methods CONSTANT)
+    QML_ELEMENT
+        QML_UNCREATABLE("")
+        public:
+                 CodePrompt(AuthHandlerTask* task);
+    QStringList methods() const;
+    AuthHandlerTask* task() const { return m_task; }
+public slots:
+    void select(const QString& method);
+    void resolve(const QString& code);
+private:
+    AuthHandlerTask* const m_task;
 };
 
 class RegisterUserTask : public AuthHandlerTask
