@@ -25,33 +25,7 @@ Page {
         border.width: 1
         border.color: '#1F222A'
         radius: 4
-    }
-    contentItem: TListView {
-        id: list_view
-        spacing: 0
-
-        model: output_model_filter
-
-        delegate: OutputDelegate {
-            highlighted: selection_model.selectedIndexes.indexOf(output_model.index(output_model.indexOf(output), 0))>-1
-            width: ListView.view.width
-        }
-
-        BusyIndicator {
-            width: 32
-            height: 32
-            // TODO
-            running: output_model.fetching
-            anchors.margins: 8
-            Layout.alignment: Qt.AlignHCenter
-            opacity: output_model.fetching ? 1 : 0
-            Behavior on opacity { OpacityAnimator {} }
-            anchors.bottom: parent.bottom
-            anchors.horizontalCenter: parent.horizontalCenter
-        }
-
         Label {
-            id: label
             visible: list_view.count === 0
             anchors.centerIn: parent
             color: 'white'
@@ -64,81 +38,98 @@ Page {
             }
         }
     }
-
-    RowLayout {
-        parent: toolbarItem
-        visible: self.visible
-        spacing: 8
-        Repeater {
-            model: {
-                const filters = ['', 'csv', 'p2wsh']
-                if (account.network.liquid) {
-                    filters.push('not_confidential')
-                } else {
-                    filters.push('p2sh')
-                    filters.push('dust')
-                    filters.push('locked')
+    contentItem: TListView {
+        id: list_view
+        spacing: 0
+        model: output_model_filter
+        delegate: OutputDelegate {
+            highlighted: selection_model.selectedIndexes.indexOf(output_model.index(output_model.indexOf(output), 0))>-1
+            width: ListView.view.width
+        }
+        BusyIndicator {
+            width: 32
+            height: 32
+            // TODO
+            running: output_model.fetching
+            anchors.margins: 8
+            Layout.alignment: Qt.AlignHCenter
+            opacity: output_model.fetching ? 1 : 0
+            Behavior on opacity { OpacityAnimator {} }
+            anchors.bottom: parent.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+        }
+    }
+    header: GPane {
+        padding: 10
+        contentItem: RowLayout {
+            spacing: 8
+            Repeater {
+                model: {
+                    const filters = ['', 'csv', 'p2wsh']
+                    if (account.network.liquid) {
+                        filters.push('not_confidential')
+                    } else {
+                        filters.push('p2sh')
+                        filters.push('dust')
+                        filters.push('locked')
+                    }
+                    if (account.type !== '2of3' && account.type !== '2of2_no_recovery') {
+                        filters.push('expired')
+                    }
+                    return filters
                 }
-                if (account.type !== '2of3' && account.type !== '2of2_no_recovery') {
-                    filters.push('expired')
+                delegate: ItemDelegate {
+                    id: self
+                    ButtonGroup.group: button_group
+                    checked: index === 0
+                    checkable: true
+                    padding: 18
+                    topInset: 0
+                    bottomInset: 0
+                    topPadding: 4
+                    bottomPadding: 4
+                    background: Rectangle {
+                        id: rectangle
+                        radius: 4
+                        color: self.checked ? constants.c300 : constants.c500
+                    }
+                    contentItem: Label {
+                        text: self.text
+                        font.pixelSize: 10
+                        font.weight: 400
+                        font.styleName: 'Regular'
+                    }
+                    text: localizedLabel(modelData)
+                    property string buttonTag: modelData
+                    font.capitalization: Font.AllUppercase
                 }
-                return filters
             }
-            delegate: ItemDelegate {
-                id: self
-                ButtonGroup.group: button_group
-                checked: index === 0
-                checkable: true
-                padding: 18
+            HSpacer {
+            }
+            ToolButton {
+                visible: false
+                topPadding: 0
+                bottomPadding: 0
                 topInset: 0
                 bottomInset: 0
-                topPadding: 4
-                bottomPadding: 4
-                background: Rectangle {
-                    id: rectangle
-                    radius: 4
-                    color: self.checked ? constants.c300 : constants.c500
-                }
-                contentItem: Label {
-                    text: self.text
-                    font.pixelSize: 10
-                    font.weight: 400
-                    font.styleName: 'Regular'
-                }
-                text: localizedLabel(modelData)
-                property string buttonTag: modelData
-                font.capitalization: Font.AllUppercase
+                icon.source: "qrc:/svg/info.svg"
+                icon.color: "white"
+                onClicked: info_dialog.createObject(self).open();
             }
-        }
-        ToolButton {
-            visible: false
-            topPadding: 0
-            bottomPadding: 0
-            topInset: 0
-            bottomInset: 0
-            icon.source: "qrc:/svg/info.svg"
-            icon.color: "white"
-            onClicked: info_dialog.createObject(self).open();
         }
     }
 
     footer: GPane {
+        padding: 10
         visible: selection_model.hasSelection && !account.network.liquid
-        background: Rectangle {
-            color: 'black'
-            opacity: 0.5
-        }
         contentItem: RowLayout {
             spacing: constants.p1
-
             Label {
                 text: selection_model.selectedIndexes.length + ' selected'
                 padding: 4
             }
-
             HSpacer {
             }
-
             GButton {
                 text: qsTrId('id_lock')
                 enabled: {
@@ -149,7 +140,6 @@ Page {
                 }
                 onClicked: set_unspent_outputs_status_dialog.createObject(self, { outputs: selectedOutputs, status: "frozen" }).open();
             }
-
             GButton {
                 text: qsTrId('id_unlock')
                 enabled: {
@@ -160,7 +150,6 @@ Page {
                 }
                 onClicked: set_unspent_outputs_status_dialog.createObject(self, { outputs: selectedOutputs, status: "default" }).open();
             }
-
             GButton {
                 text: qsTrId('id_clear')
                 onClicked: selection_model.clear();
