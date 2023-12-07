@@ -225,8 +225,11 @@ StackViewPage {
                     text: qsTrId('id_transaction_id')
                 }
                 CopyableLabel {
+                    Layout.fillWidth: true
+                    Layout.preferredWidth: 0
                     text: transaction.data.txhash
                     onCopy: Analytics.recordEvent('share_transaction', AnalyticsJS.segmentationShareTransaction(self.transaction.account))
+                    wrapMode: Label.Wrap
                 }
             }
             ColumnLayout {

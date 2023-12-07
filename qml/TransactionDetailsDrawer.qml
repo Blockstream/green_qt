@@ -6,7 +6,6 @@ import QtQuick.Controls
 WalletDrawer {
     required property Transaction transaction
     id: self
-    minimumContentWidth: 550
     contentItem: GStackView {
         initialItem: TransactionView { // DetailsPage {
             // context: self.context
