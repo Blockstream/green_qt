@@ -7,8 +7,6 @@ Dialog {
     property string icon
     property bool showRejectButton: true
     property bool enableRejectButton: true
-    readonly property bool hovered: background_hover_handler.hovered
-    property Item toolbar: toolbar_item
     id: self
     focus: true
     modal: true
@@ -37,16 +35,6 @@ Dialog {
             text: title
             font.pixelSize: 20
             font.styleName: 'Medium'
-            elide: Label.ElideRight
-            ToolTip.text: title
-            ToolTip.visible: truncated && title_hover_handler.hovered
-            HoverHandler {
-                id: title_hover_handler
-            }
-        }
-        RowLayout {
-            spacing: 4
-            id: toolbar_item
         }
         CloseButton {
             visible: self.showRejectButton
@@ -76,9 +64,6 @@ Dialog {
     }
 
     background: Item {
-        HoverHandler {
-            id: background_hover_handler
-        }
         DropShadow {
             opacity: 0.5
             verticalOffset: 8
