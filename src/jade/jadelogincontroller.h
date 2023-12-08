@@ -63,16 +63,21 @@ private:
 class JadeUnlockController : public JadeController
 {
     Q_OBJECT
+    Q_PROPERTY(bool remember READ remember WRITE setRemember NOTIFY rememberChanged)
     QML_ELEMENT
 public:
     JadeUnlockController(QObject* parent = nullptr);
+    bool remember() const { return m_remember; }
+    void setRemember(bool remember);
     Network* network() const { return m_network; }
 public slots:
     void unlock();
 signals:
+    void rememberChanged();
     void unlocked(Context* context);
     void invalidPin();
 private:
+    bool m_remember{false};
     Network* m_network{nullptr};
 };
 

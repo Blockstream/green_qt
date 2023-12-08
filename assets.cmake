@@ -142,6 +142,7 @@ qt_add_resources(green "images"
         assets/svg2/close.svg
         assets/svg2/copy.svg
         assets/svg2/edit.svg
+        assets/svg2/eject-simple-thin.svg
         assets/svg2/eye.svg
         assets/svg2/flask.svg
         assets/svg2/fresh_wallet.svg
@@ -152,6 +153,7 @@ qt_add_resources(green "images"
         assets/svg2/lightning.svg
         assets/svg2/list_bullets.svg
         assets/svg2/ledger-logo.svg
+        assets/svg2/lock-simple-thin.svg
         assets/svg2/multisig.svg
         assets/svg2/next_arrow.svg
         assets/svg2/onboard_background.svg

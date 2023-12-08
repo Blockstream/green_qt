@@ -229,6 +229,9 @@ SET(QML_FILES
     qml/CircleButton.qml
     qml/ShareButton.qml
     qml/AddressDetailsPage.qml
+    qml/DevicePage.qml
+    qml/JadeDeviceDelegate.qml
+    qml/JadeInstructionsView.qml
 )
 
 if (GREEN_NO_RESOURCES)

@@ -25,12 +25,11 @@ StackViewPage {
             Layout.topMargin: 25
             text: search_field.text.trim().length > 0 ? 'Search result' : 'Other Assets'
         }
-        GListView {
+        TListView {
             id: list_view
             Layout.fillWidth: true
             Layout.fillHeight: true
             currentIndex: -1
-            clip: true
             model: AssetsModel {
                 filter: search_field.text.trim()
                 deployment: context.deployment

@@ -18,6 +18,7 @@ class Context : public QObject
     Q_PROPERTY(QString deployment READ deployment CONSTANT)
     Q_PROPERTY(Wallet* wallet READ wallet NOTIFY walletChanged)
     Q_PROPERTY(Device* device READ device NOTIFY deviceChanged)
+    Q_PROPERTY(bool remember READ remember NOTIFY rememberChanged)
     Q_PROPERTY(bool locked READ isLocked NOTIFY lockedChanged)
     Q_PROPERTY(QString username READ username NOTIFY usernameChanged)
     Q_PROPERTY(bool watchonly READ isWatchonly NOTIFY watchonlyChanged)
@@ -44,6 +45,9 @@ public:
 
     Device* device() const { return m_device; }
     void setDevice(Device* device);
+
+    bool remember() const { return m_remember; }
+    void setRemember(bool remember);
 
     QJsonObject credentials() const { return m_credentials; }
     void setCredentials(const QJsonObject& credentials);
@@ -80,12 +84,15 @@ public:
     QString xpubHashId() const { return m_xpub_hash_id; }
     void setXPubHashId(const QString& xpub_hash_id);
 
+    Q_INVOKABLE bool attachToWallet(Wallet* wallet);
+
 public slots:
     void refreshAccounts();
 
 signals:
     void walletChanged();
     void deviceChanged();
+    void rememberChanged();
     void credentialsChanged();
     void mnemonicChanged();
     void lockedChanged();
@@ -100,6 +107,7 @@ private:
     const QString m_deployment;
     Wallet* m_wallet{nullptr};
     Device* m_device{nullptr};
+    bool m_remember{true};
     QString m_xpub_hash_id;
     QJsonObject m_credentials;
     QStringList m_mnemonic;

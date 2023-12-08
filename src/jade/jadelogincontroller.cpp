@@ -122,6 +122,14 @@ JadeUnlockController::JadeUnlockController(QObject* parent)
 {
 }
 
+void JadeUnlockController::setRemember(bool remember)
+{
+    if (m_remember == remember) return;
+    m_remember = remember;
+    emit rememberChanged();
+    if (m_context) m_context->setRemember(remember);
+}
+
 void JadeUnlockController::unlock()
 {
     if (!m_device) return;
@@ -130,6 +138,8 @@ void JadeUnlockController::unlock()
     m_network = NetworkManager::instance()->networkForDeployment(deployment);
     if (m_context) m_context->deleteLater();
     setContext(new Context(deployment, this));
+
+    m_context->setRemember(m_remember);
 
     auto session = m_context->getOrCreateSession(m_network);
 

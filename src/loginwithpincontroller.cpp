@@ -81,10 +81,17 @@ void LoginController::loginWithDevice()
         connect(login_task, &Task::finished, this, [=] {
             m_context->m_hw_device = hw_device;
 
-            m_wallet = WalletManager::instance()->createWallet();
-            m_wallet->setName(jade_device->name());
-            m_wallet->updateDeviceDetails(jade_device->details());
-            WalletManager::instance()->insertWallet(m_wallet);
+            m_wallet = m_context->wallet();
+            if (!m_wallet) {
+                m_wallet = WalletManager::instance()->findWallet(m_context->xpubHashId(), false);
+            }
+            if (!m_wallet) {
+                m_wallet = WalletManager::instance()->createWallet();
+                m_wallet->setName(jade_device->name());
+                m_wallet->updateDeviceDetails(jade_device->details());
+                m_wallet->m_is_persisted = m_context->remember();
+                WalletManager::instance()->insertWallet(m_wallet);
+            }
         });
 
         login(login_task);

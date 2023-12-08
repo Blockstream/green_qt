@@ -53,6 +53,15 @@ void Context::setWallet(Wallet* wallet)
     if (m_wallet == wallet) return;
     m_wallet = wallet;
     emit walletChanged();
+    if (m_wallet) {
+        setParent(m_wallet);
+        if (!m_xpub_hash_id.isEmpty()) {
+            m_wallet->setXPubHashId(m_xpub_hash_id);
+        }
+        if (m_device) {
+            m_wallet->updateDeviceDetails(m_device->details());
+        }
+    }
 }
 
 Session* Context::getOrCreateSession(Network* network)
@@ -143,6 +152,13 @@ void Context::setDevice(Device* device)
     emit deviceChanged();
 }
 
+void Context::setRemember(bool remember)
+{
+    if (m_remember == remember) return;
+    m_remember = remember;
+    emit rememberChanged();
+}
+
 void Context::setCredentials(const QJsonObject &credentials)
 {
     if (m_credentials == credentials) return;
@@ -228,6 +244,19 @@ void Context::setXPubHashId(const QString& xpub_hash_id)
     if (m_wallet) {
         m_wallet->setXPubHashId(xpub_hash_id);
     }
+}
+
+bool Context::attachToWallet(Wallet* wallet)
+{
+    Q_ASSERT(!m_xpub_hash_id.isEmpty());
+    Q_ASSERT(wallet);
+    Q_ASSERT(!wallet->m_xpub_hash_id.isEmpty());
+
+    if (m_xpub_hash_id != wallet->m_xpub_hash_id) {
+        return false;
+    }
+    setWallet(wallet);
+    return true;
 }
 
 void Context::refreshAccounts()

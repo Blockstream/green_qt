@@ -21,6 +21,8 @@ MainPage {
             stack_view.push(loading_page, { context: self.wallet.context }, StackView.Immediate)
         } else if (wallet.watchOnly) {
             stack_view.push(watch_only_login_page, { wallet: self.wallet }, StackView.Immediate)
+        } else if (wallet.deviceDetails) {
+            stack_view.push(device_page, { wallet: self.wallet }, StackView.Immediate)
         } else {
             stack_view.push(pin_login_page, { wallet: self.wallet }, StackView.Immediate)
         }
@@ -30,6 +32,17 @@ MainPage {
     contentItem: GStackView {
         id: stack_view
         focus: true
+    }
+
+    Component {
+        id: device_page
+        DevicePage {
+            padding: 60
+            onLoginFinished: (context) => {
+                self.device = context.device
+                stack_view.replace(null, loading_page, { context }, StackView.PushTransition)
+            }
+        }
     }
 
     Component {
@@ -202,7 +215,10 @@ MainPage {
         OverviewPage {
             Component.onDestruction: self.wallet.disconnect()
             onLogout: {
-                if (self.wallet?.context?.device instanceof JadeDevice) {
+                if (wallet.deviceDetails) {
+                    stack_view.replace(null, device_page, { wallet: self.wallet }, StackView.Immediate)
+                    return
+                } else if (self.wallet?.context?.device instanceof JadeDevice) {
                     stack_view.replace(null, jade_page, { device: self.wallet?.context?.device, login: false })
                     return
                 }
