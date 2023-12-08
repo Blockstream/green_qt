@@ -42,7 +42,6 @@ SET(QML_FILES
     qml/GTextField.qml
     qml/NLockTimeDialog.qml
     qml/MessageDialog.qml
-    qml/SignupDialog.qml
     qml/SelectNetworkViewCard.qml
     qml/GSwitch.qml
     qml/SetUnspentOutputsStatusDialog.qml
@@ -52,7 +51,6 @@ SET(QML_FILES
     qml/SelectServerTypeViewCard.qml
     qml/AbstractDialog.qml
     qml/ControllerDialog.qml
-    qml/CreateAccountDialog.qml
     qml/WizardPage.qml
     qml/Spacer.qml
     qml/WalletListDelegate.qml
@@ -64,7 +62,6 @@ SET(QML_FILES
     qml/PersistentLoader.qml
     qml/AnimLoader.qml
     qml/GToolButton.qml
-    qml/DiscoverServerTypeView.qml
     qml/LoginWithPasswordView.qml
     qml/PreferencesView.qml
     qml/AssetView.qml
@@ -86,7 +83,6 @@ SET(QML_FILES
     qml/AmountValidator.qml
     qml/DisableAllPinsDialog.qml
     qml/JadeViewDevice.qml
-    qml/MnemonicQuizPage.qml
     qml/OutputsListView.qml
     qml/LeftArrowToolTip.qml
     qml/GPane.qml
@@ -98,7 +94,6 @@ SET(QML_FILES
     qml/GTextArea.qml
     qml/Collapsible.qml
     qml/ScannerPopup.qml
-    qml/DiscoverServerTypeViewCard.qml
     qml/DeviceImage.qml
     qml/LoginDialog.qml
     qml/DeviceBadge.qml
@@ -143,11 +138,9 @@ SET(QML_FILES
     qml/MainPageHeader.qml
     qml/MnemonicEditor.qml
     qml/LedgerSignTransactionView.qml
-    qml/RestoreDialog.qml
     qml/AssetIcon.qml
     qml/SelectNetworkView.qml
     qml/WelcomePage.qml
-    qml/WatchOnlyLoginDialog.qml
     qml/HomeView.qml
     qml/AuthHandlerTaskView.qml
     qml/GetCredentialsView.qml
