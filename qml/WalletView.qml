@@ -71,7 +71,7 @@ MainPage {
     Component {
         id: connect_jade_page
         ConnectJadePage {
-            onDeviceSelected: (device) => stack_view.push(jade_page, { device })
+            onDeviceSelected: (device) => stack_view.push(jade_page, { device, login: true })
         }
     }
 
