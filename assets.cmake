@@ -123,6 +123,7 @@ qt_add_resources(green "images"
         assets/png/connect_jade_2.png
         assets/png/connect_jade_3.png
         assets/png/connect_jade_4.png
+        assets/png/jade_card.png
         assets/png/onboard_jade_1.png
         assets/png/onboard_jade_3.png
         assets/png/onboard_jade_2.png

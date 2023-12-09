@@ -232,6 +232,7 @@ SET(QML_FILES
     qml/DevicePage.qml
     qml/JadeDeviceDelegate.qml
     qml/JadeInstructionsView.qml
+    qml/JadeCard.qml
 )
 
 if (GREEN_NO_RESOURCES)

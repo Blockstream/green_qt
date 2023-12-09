@@ -13,7 +13,7 @@ Pane {
     background: Rectangle {
         border.width: 1
         border.color: Qt.rgba(1, 1, 1, 0.04)
-        color: Qt.alpha('#161921', 0.2)
+        color: '#161921'
         radius: 8
     }
     contentItem: Flickable {
@@ -41,6 +41,11 @@ Pane {
             Separator {
             }
             FeeRateCard {
+                context: self.context
+            }
+            Separator {
+            }
+            JadeCard {
                 context: self.context
             }
         }

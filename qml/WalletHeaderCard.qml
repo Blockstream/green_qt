@@ -5,19 +5,21 @@ import QtQuick.Layouts
 
 AbstractButton {
     required property Context context
-
-    Layout.fillHeight: true
-    Layout.minimumWidth: 200
-    id: self
-    padding: 0
-    opacity: {
+    readonly property Flickable flickable: {
         let flickable = parent
         while (flickable && !(flickable instanceof Flickable)) {
             flickable = flickable.parent
         }
-        if (!flickable) return 1
-        if ((self.x - flickable.contentX) < 0) return 0.2
-        if ((self.x - flickable.contentX + self.width + 16) > flickable.width) return 0.1
+        return flickable
+    }
+    Layout.fillHeight: true
+    Layout.minimumWidth: 180
+    id: self
+    padding: 0
+    opacity: {
+        if (!self.flickable) return 1
+        if ((self.x - self.flickable.contentX) < 0) return 0.2
+        if ((self.x - self.flickable.contentX + self.width) > self.flickable.width) return 0.2
         return 1
     }
     layer.enabled: true
