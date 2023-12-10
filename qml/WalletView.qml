@@ -21,7 +21,7 @@ MainPage {
             stack_view.push(loading_page, { context: self.wallet.context }, StackView.Immediate)
         } else if (wallet.watchOnly) {
             stack_view.push(watch_only_login_page, { wallet: self.wallet }, StackView.Immediate)
-        } else if (wallet.deviceDetails) {
+        } else if (wallet.deviceDetails?.type) {
             stack_view.push(device_page, { wallet: self.wallet }, StackView.Immediate)
         } else {
             stack_view.push(pin_login_page, { wallet: self.wallet }, StackView.Immediate)
@@ -215,7 +215,7 @@ MainPage {
         OverviewPage {
             Component.onDestruction: self.wallet.disconnect()
             onLogout: {
-                if (wallet.deviceDetails) {
+                if (wallet.deviceDetails?.type) {
                     stack_view.replace(null, device_page, { wallet: self.wallet }, StackView.Immediate)
                     return
                 } else if (self.wallet?.context?.device instanceof JadeDevice) {
