@@ -30,6 +30,6 @@ GComboBox {
 
     FeeEstimates {
         id: fee_estimates
-        account: self.account
+        session: self.account.session
     }
 }

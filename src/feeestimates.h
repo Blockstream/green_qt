@@ -11,21 +11,21 @@
 class FeeEstimates : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(Account* account READ account WRITE setAccount NOTIFY accountChanged)
+    Q_PROPERTY(Session* session READ session WRITE setSession NOTIFY sessionChanged)
     Q_PROPERTY(QJsonArray fees READ fees NOTIFY feesChanged)
     QML_ELEMENT
 public:
     FeeEstimates(QObject* parent = nullptr);
-    Account* account() const { return m_account; }
-    void setAccount(Account* account);
+    Session* session() const { return m_session; }
+    void setSession(Session* session);
     QJsonArray fees() const { return m_fees; }
 signals:
-    void accountChanged();
+    void sessionChanged();
     void feesChanged();
 private slots:
     void update();
 private:
-    Account* m_account{nullptr};
+    Session* m_session{nullptr};
     QJsonArray m_fees;
     QTimer m_update_timer;
 };
