@@ -12,6 +12,7 @@ import "analytics.js" as AnalyticsJS
 import "util.js" as UtilJS
 
 MainPageHeader {
+    signal assetsClicked()
     signal archivedAccountsClicked()
     signal logoutClicked()
 
@@ -246,6 +247,7 @@ MainPageHeader {
             contentItem: CardBar {
                 context: self.context
                 currentAccount: self.currentAccount
+                onAssetsClicked: self.assetsClicked()
             }
         }
         HPane {

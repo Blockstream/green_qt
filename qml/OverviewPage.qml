@@ -180,6 +180,7 @@ StackViewPage {
     property alias toolbarItem: wallet_header.toolbarItem
 
     header: WalletViewHeader {
+        onAssetsClicked: assets_drawer.createObject(self, { context: self.context }).open()
         onLogoutClicked: self.logout()
         onArchivedAccountsClicked: archived_accounts_dialog.open()
 
@@ -224,9 +225,10 @@ StackViewPage {
         }
     }
 
-    AssetsDrawer {
+    Component {
         id: assets_drawer
-        context: self.context
+        AssetsDrawer {
+        }
     }
 
     ArchivedAccountsDialog {

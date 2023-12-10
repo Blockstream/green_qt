@@ -4,6 +4,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 Pane {
+    signal assetsClicked()
     required property Context context
     required property Account currentAccount
 
@@ -30,7 +31,7 @@ Pane {
             }
             AssetsCard {
                 context: self.context
-                onClicked: assets_drawer.open()
+                onClicked: self.assetsClicked()
             }
             Separator {
             }
