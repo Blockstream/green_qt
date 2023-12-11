@@ -167,12 +167,27 @@ StackViewPage {
                 onCreated: (account) => self.created(account)
             }
 
+            TaskPageFactory {
+                monitor: controller.monitor
+                target: stack_view
+            }
+
             id: page
             background: null
             header: null
-            contentItem: ColumnLayout {
-                BusyIndicator {
-                    Layout.alignment: Qt.AlignCenter
+            contentItem: GStackView {
+                id: stack_view
+                initialItem: ColumnLayout {
+                    VSpacer {
+                    }
+                    BusyIndicator {
+                        Layout.alignment: Qt.AlignCenter
+                    }
+                    Label {
+                        text: 'Creating Account'
+                    }
+                    VSpacer {
+                    }
                 }
             }
         }
