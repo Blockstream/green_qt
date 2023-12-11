@@ -56,6 +56,7 @@ StackViewPage {
     Component {
         id: devices_view
         ColumnLayout {
+            id: view
             spacing: 10
             VSpacer {
             }
@@ -79,7 +80,7 @@ StackViewPage {
             Loader {
                 Layout.alignment: Qt.AlignCenter
                 id: auto_login_loader
-                active: device_repeater.count === 1 && device_repeater.itemAt(0)._device.connected
+                active: stack_view.currentItem == view && self.login && device_repeater.count === 1 && device_repeater.itemAt(0)._device.connected
                 sourceComponent: ColumnLayout {
                     LinkButton {
                         Layout.alignment: Qt.AlignCenter
@@ -101,7 +102,10 @@ StackViewPage {
                                 from: 400
                                 to: 0
                                 duration: 3000
-                                onFinished: device_repeater.itemAt(0).item.trigger()
+                                onFinished: {
+                                    device_repeater.itemAt(0).item.trigger()
+                                    auto_login_loader.active = false
+                                }
                             }
                             opacity: Math.min(1, implicitWidth / 20)
                         }
