@@ -134,9 +134,10 @@ StackViewPage {
     Component {
         id: jade_unlock_view
         JadeUnlockView {
+            context: wallet.context
             onUnlockFinished: (context) => {
                 if (context.attachToWallet(self.wallet)) {
-                    stack_view.push(jade_login_view, { context }, StackView.PushTransition)
+                    stack_view.push(jade_login_view, { context, device: context.device }, StackView.PushTransition)
                 } else {
                     // TODO: show device mismatch view
                 }

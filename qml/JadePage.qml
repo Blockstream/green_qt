@@ -486,7 +486,8 @@ StackViewPage {
     Component {
         id: unlock_view
         JadeUnlockView {
-            onUnlockFinished: (context) => stack_view.push(login_view, { context })
+            context: null
+            onUnlockFinished: (context) => stack_view.push(login_view, { context, device: self.device })
             onUnlockFailed: stack_view.replace(null, intialized_view, { device: self.device })
         }
     }
@@ -495,7 +496,7 @@ StackViewPage {
         id: intialized_view
         JadeInitializedView {
             device: self.device
-            onLoginFinished: (context) => stack_view.push(login_view, { context })
+            onLoginFinished: (context) => stack_view.push(login_view, { context, device: self.device })
             onUpdateClicked: stack_view.push(basic_update_view)
         }
     }
@@ -511,7 +512,7 @@ StackViewPage {
         id: unintialized_view
         JadeUninitializedView {
             device: self.device
-            onSetupFinished: (context) => stack_view.replace(null, login_view, { context }, StackView.PushTransition)
+            onSetupFinished: (context) => stack_view.replace(null, login_view, { context, device: self.device }, StackView.PushTransition)
         }
     }
 

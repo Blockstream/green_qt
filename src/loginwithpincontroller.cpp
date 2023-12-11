@@ -68,9 +68,16 @@ static QJsonObject device_details_from_device(JadeDevice* device)
     }};
 }
 
-void LoginController::loginWithDevice()
+void LoginController::loginWithDevice(Device* device)
 {
-    Q_ASSERT(m_context);
+    if (!m_context) {
+        auto jade_device = qobject_cast<JadeDevice*>(device);
+        if (jade_device) {
+            const auto networks = jade_device->versionInfo().value("JADE_NETWORKS").toString();
+            setContext(new Context(networks == "TEST" ? "testnet" : "mainnet", this));
+        }
+        m_context->setDevice(device);
+    }
 
     auto jade_device = qobject_cast<JadeDevice*>(m_context->device());
     if (jade_device) {

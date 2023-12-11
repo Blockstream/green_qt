@@ -7,7 +7,8 @@ import QtQuick.Layouts
 ColumnLayout {
     signal loginFinished(Context context)
     required property Context context
-    StackView.onActivated: controller.loginWithDevice()
+    required property Device device
+    StackView.onActivated: controller.loginWithDevice(self.device)
     id: self
     spacing: 20
     LoginController {
