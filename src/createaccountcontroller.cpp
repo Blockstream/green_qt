@@ -106,16 +106,22 @@ void CreateAccountController::create()
 
     auto session = m_context->getOrCreateSession(m_network);
 
-    session->registerUser();
-    session->login();
+    auto session_connect = new ConnectTask(session);
+    auto session_register = session->registerUser();
+    auto session_login = session->login();
 
     auto create_account = new CreateAccountTask(details, session);
     auto load_accounts = new LoadAccountsTask(false, session);
 
+    session_register->then(session_login);
+    session_login->then(create_account);
     create_account->then(load_accounts);
 
     auto group = new TaskGroup(this);
 
+    group->add(session_connect);
+    group->add(session_register);
+    group->add(session_login);
     group->add(create_account);
     group->add(load_accounts);
 
