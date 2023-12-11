@@ -39,7 +39,7 @@ StackViewPage {
         }
     }
     contentItem: ColumnLayout {
-        spacing: 0
+        spacing: 10
         VSpacer {
         }
         Repeater {
