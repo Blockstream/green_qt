@@ -48,7 +48,7 @@ StackViewPage {
                 color: '#FFF'
                 font.pixelSize: 12
                 font.weight: 600
-                text: qsTrId('id_looking_for_device') + '  (' + self.wallet.deviceDetails.name + ')'
+                text: qsTrId('id_looking_for_device')
             }
         }
     }
@@ -123,8 +123,11 @@ StackViewPage {
             function trigger() {
                 const device = delegate.device
                 switch (device.state) {
-                case JadeDevice.StateLocked:
                 case JadeDevice.StateReady:
+                    stack_view.push(jade_login_view, { context: self.wallet.context, device })
+                    break;
+                case JadeDevice.StateTemporary:
+                case JadeDevice.StateLocked:
                     stack_view.push(jade_unlock_view, { device, showRemember: false })
                     break
                 case JadeDevice.StateUninitialized:
