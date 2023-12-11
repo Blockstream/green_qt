@@ -216,7 +216,7 @@ MainPage {
             Component.onDestruction: self.wallet.disconnect()
             onLogout: {
                 if (wallet.deviceDetails?.type) {
-                    stack_view.replace(null, device_page, { wallet: self.wallet }, StackView.Immediate)
+                    stack_view.replace(null, device_page, { wallet: self.wallet, login: false }, StackView.Immediate)
                     return
                 } else if (self.wallet?.context?.device instanceof JadeDevice) {
                     stack_view.replace(null, jade_page, { device: self.wallet?.context?.device, login: false })

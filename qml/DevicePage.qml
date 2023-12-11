@@ -7,6 +7,7 @@ import QtQuick.Layouts
 StackViewPage {
     signal loginFinished(Context context)
     required property Wallet wallet
+    property bool login: true
     function update() {
         if (stack_view.depth === 1 && devices_model.rowCount > 0) {
             stack_view.push(devices_view)
