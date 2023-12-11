@@ -106,6 +106,9 @@ void CreateAccountController::create()
 
     auto session = m_context->getOrCreateSession(m_network);
 
+    auto monitor = new TaskGroupMonitor(this);
+    setMonitor(monitor);
+
     auto session_connect = new ConnectTask(session);
     auto session_register = session->registerUser();
     auto session_login = session->login();
@@ -125,6 +128,7 @@ void CreateAccountController::create()
     group->add(create_account);
     group->add(load_accounts);
 
+    monitor->add(group);
     dispatcher()->add(group);
 
     connect(create_account, &Task::failed, this, [=](const QString& error) {
