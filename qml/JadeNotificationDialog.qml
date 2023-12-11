@@ -35,6 +35,7 @@ Dialog {
     bottomPadding: 60
     leftPadding: 60
     rightPadding: 60
+    visible: self.device.connected
     background: Rectangle {
         color: '#13161D'
         radius: 10
