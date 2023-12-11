@@ -23,6 +23,7 @@ Pane {
         contentWidth: layout.implicitWidth
         RowLayout {
             id: layout
+            spacing: 0
             TotalBalanceCard {
                 context: self.context
                 account: self.currentAccount
@@ -34,6 +35,13 @@ Pane {
                 onClicked: self.assetsClicked()
             }
             Separator {
+                visible: jade_card.visible
+            }
+            JadeCard {
+                id: jade_card
+                context: self.context
+            }
+            Separator {
             }
             PriceCard {
                 context: self.context
@@ -42,11 +50,6 @@ Pane {
             Separator {
             }
             FeeRateCard {
-                context: self.context
-            }
-            Separator {
-            }
-            JadeCard {
                 context: self.context
             }
         }
