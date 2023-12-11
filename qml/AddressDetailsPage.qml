@@ -27,6 +27,7 @@ StackViewPage {
             onClicked: self.StackView.view.push(sign_message_drawer, { context: self.context, address: self.address })
             icon.source: 'qrc:/svg2/signature-light.svg'
             text: 'Authenticate Address'
+            visible: self.address.account.network.electrum && self.address.account.network.mainnet
         }
     }
     contentItem: Flickable {
