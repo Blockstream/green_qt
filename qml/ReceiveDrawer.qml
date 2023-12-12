@@ -143,6 +143,11 @@ WalletDrawer {
                 interval: 1000
                 onTriggered: stack_view.pop()
             }
+            Timer {
+                running: controller.addressVerification === ReceiveAddressController.VerificationRejected
+                interval: 1000
+                onTriggered: stack_view.pop()
+            }
             title: qsTrId('id_verify_on_device')
             footer: BusyIndicator {
                 Layout.alignment: Qt.AlignCenter
