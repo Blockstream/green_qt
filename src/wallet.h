@@ -26,6 +26,7 @@ class Wallet : public QObject
     Q_PROPERTY(Network* network READ network CONSTANT)
     Q_PROPERTY(Context* context READ context NOTIFY contextChanged)
     Q_PROPERTY(QJsonObject deviceDetails READ deviceDetails NOTIFY deviceDetailsChanged)
+    Q_PROPERTY(QString xpubHashId READ xpubHashId NOTIFY xpubHashIdChanged)
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
@@ -65,7 +66,9 @@ public:
     void updateDisplayUnit();
     QString username() const { return m_username; }
 
+    QString xpubHashId() const { return m_xpub_hash_id; }
     void setXPubHashId(const QString& xpub_hash_id);
+
 public slots:
     void disconnect();
     void reload(bool refresh_accounts = false);
@@ -81,6 +84,7 @@ signals:
     void blockHeightChanged(int block_height);
     void deviceDetailsChanged();
     void usernameChanged();
+    void xpubHashIdChanged();
 public:
     bool m_is_persisted{false};
     QString m_deployment;

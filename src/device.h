@@ -97,6 +97,7 @@ class Device : public QObject
     Q_PROPERTY(QString name READ name NOTIFY nameChanged)
     Q_PROPERTY(QJsonObject details READ details NOTIFY detailsChanged)
     Q_PROPERTY(bool connected READ isConnected NOTIFY connectedChanged)
+    Q_PROPERTY(QString xpubHashId READ xpubHashId NOTIFY xpubHashIdChanged)
     QML_ELEMENT
     QML_UNCREATABLE("Devices are instanced by DeviceDiscoveryAgent.")
 public:
@@ -138,14 +139,18 @@ public:
     void setMasterPublicKey(Network* network, const QByteArray& master_public_key);
     bool isConnected() const { return m_connected; }
     void setConnected(bool connected);
+    QString xpubHashId() const { return m_xpub_hash_id; }
+    void setXPubHashId(const QString& xpub_hash_id);
 signals:
     void nameChanged();
     void detailsChanged();
     void connectedChanged();
+    void xpubHashIdChanged();
 private:
     const QString m_uuid;
     bool m_connected{false};
     QMap<Network*, QByteArray> m_master_public_key;
+    QString m_xpub_hash_id;
 };
 
 class LedgerDevice;
