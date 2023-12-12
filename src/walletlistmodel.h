@@ -16,6 +16,8 @@ class WalletListModel : public QSortFilterProxyModel
     Q_PROPERTY(bool justAuthenticated READ justAuthenticated WRITE setJustAuthenticated NOTIFY justAuthenticatedChanged)
     Q_PROPERTY(bool justReady READ justReady WRITE setJustReady NOTIFY justReadyChanged)
     Q_PROPERTY(Filter watchOnly READ watchOnly WRITE setWatchOnly NOTIFY watchOnlyChanged)
+    Q_PROPERTY(Filter pinData READ filterPinData WRITE setFilterPinData NOTIFY filterPinDataChanged)
+    Q_PROPERTY(Filter deviceDetails READ filterDeviceDetails WRITE setFilterDeviceDetails NOTIFY filterDeviceDetailsChanged)
     QML_ELEMENT
 public:
     enum class Filter {
@@ -35,11 +37,17 @@ public:
     void setJustReady(bool just_ready);
     Filter watchOnly() const { return m_watch_only; }
     void setWatchOnly(Filter watch_only);
+    Filter filterPinData() const { return m_filter_pin_data; }
+    void setFilterPinData(Filter filter_pin_data);
+    Filter filterDeviceDetails() const { return m_filter_device_details; }
+    void setFilterDeviceDetails(Filter filter_device_details);
 signals:
     void networkChanged(const QString& network);
     void justAuthenticatedChanged(bool just_authenticated);
     void justReadyChanged(bool just_ready);
     void watchOnlyChanged(Filter watch_only);
+    void filterPinDataChanged();
+    void filterDeviceDetailsChanged();
 private slots:
     void update();
 protected:
@@ -52,6 +60,8 @@ private:
     bool m_just_authenticated{false};
     bool m_just_ready{false};
     Filter m_watch_only{Filter::Any};
+    Filter m_filter_pin_data{Filter::Any};
+    Filter m_filter_device_details{Filter::Any};
 };
 
 #endif // GREEN_WALLETLISTMODEL_H

@@ -61,6 +61,10 @@ bool WalletListModel::filterAcceptsRow(int source_row, const QModelIndex &source
     if ((m_just_ready || m_just_authenticated) && !wallet->context()) return false;
     if (m_watch_only == Filter::Yes && !wallet->m_watch_only) return false;
     if (m_watch_only == Filter::No && wallet->m_watch_only) return false;
+    if (m_filter_pin_data == Filter::Yes && !wallet->hasPinData()) return false;
+    if (m_filter_pin_data == Filter::No && wallet->hasPinData()) return false;
+    if (m_filter_device_details == Filter::Yes && !wallet->deviceDetails().contains("type")) return false;
+    if (m_filter_device_details == Filter::No && wallet->deviceDetails().contains("type")) return false;
     return filterRegularExpression().match(wallet->name()).hasMatch();
 }
 
@@ -92,5 +96,21 @@ void WalletListModel::setWatchOnly(WalletListModel::Filter watch_only)
     if (m_watch_only == watch_only) return;
     m_watch_only = watch_only;
     emit watchOnlyChanged(m_watch_only);
+    invalidateFilter();
+}
+
+void WalletListModel::setFilterPinData(Filter filter_pin_data)
+{
+    if (m_filter_pin_data == filter_pin_data) return;
+    m_filter_pin_data = filter_pin_data;
+    emit filterPinDataChanged();
+    invalidateFilter();
+}
+
+void WalletListModel::setFilterDeviceDetails(Filter filter_device_details)
+{
+    if (m_filter_device_details == filter_device_details) return;
+    m_filter_device_details = filter_device_details;
+    emit filterDeviceDetailsChanged();
     invalidateFilter();
 }
