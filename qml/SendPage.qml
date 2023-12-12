@@ -48,7 +48,7 @@ StackViewPage {
                 Layout.bottomMargin: 15
                 Layout.fillWidth: true
                 account: controller.account
-                asset: self.asset
+                asset: controller.asset
                 onClicked: {
                     self.StackView.view.push(account_asset_selector, {
                         context: controller.context,
