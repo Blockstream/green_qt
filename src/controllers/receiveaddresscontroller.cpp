@@ -211,9 +211,11 @@ void ReceiveAddressController::verifySinglesig()
     if (type == "p2wpkh") variant = "wpkh(k)";
     if (type == "p2sh-p2wpkh") variant = "sh(wpkh(k))";
 
-    device->api()->getReceiveAddress(network->canonicalId(), variant, path, [this](const QVariantMap& msg) {
-        setAddressVerification(msg.contains("error") ? VerificationRejected : VerificationAccepted);
-    });
+    if (device->api()) {
+        device->api()->getReceiveAddress(network->canonicalId(), variant, path, [this](const QVariantMap& msg) {
+            setAddressVerification(msg.contains("error") ? VerificationRejected : VerificationAccepted);
+        });
+    }
 }
 
 bool GetReceiveAddressTask::call(GA_session *session, GA_auth_handler **auth_handler)

@@ -34,7 +34,7 @@ WalletDrawer {
             footer: ColumnLayout {
                 PrimaryButton {
                     Layout.fillWidth: true
-                    enabled: !controller.generating && controller.addressVerification !== ReceiveAddressController.VerificationPending
+                    enabled: controller.context.device?.connected && !controller.generating && controller.addressVerification !== ReceiveAddressController.VerificationPending
                     text: qsTrId('id_verify_on_device')
                     visible: controller.context.device instanceof JadeDevice
                     onClicked: {
