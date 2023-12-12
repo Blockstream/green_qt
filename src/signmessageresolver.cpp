@@ -76,6 +76,10 @@ QString SignMessageResolver::path() const
 
 void SignMessageResolver::resolve()
 {
+    if (!m_device->isConnected()) {
+        return;
+    }
+
     auto activity = m_use_ae_protocol ? m_device->signMessage(m_message, m_path, m_ae_host_commitment, m_ae_host_entropy) : m_device->signMessage(m_message, m_path);
     connect(activity, &Activity::finished, this, [this, activity] {
         activity->deleteLater();
