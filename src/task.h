@@ -244,7 +244,7 @@ signals:
     void resultChanged();
     void promptChanged();
     void resolverChanged();
-protected:
+public:
     virtual bool active() const;
     virtual void handleDone(const QJsonObject& result);
     virtual void handleError(const QJsonObject& result);
@@ -267,9 +267,9 @@ class CodePrompt : public Prompt
     Q_PROPERTY(AuthHandlerTask* task READ task CONSTANT)
     Q_PROPERTY(QStringList methods READ methods CONSTANT)
     QML_ELEMENT
-        QML_UNCREATABLE("")
-        public:
-                 CodePrompt(AuthHandlerTask* task);
+    QML_UNCREATABLE("")
+public:
+    CodePrompt(AuthHandlerTask* task);
     QStringList methods() const;
     AuthHandlerTask* task() const { return m_task; }
 public slots:
@@ -277,6 +277,24 @@ public slots:
     void resolve(const QString& code);
 private:
     AuthHandlerTask* const m_task;
+};
+
+class DevicePrompt : public Prompt
+{
+    Q_OBJECT
+    Q_PROPERTY(AuthHandlerTask* task READ task CONSTANT)
+    Q_PROPERTY(QJsonObject result READ result CONSTANT)
+    QML_ELEMENT
+    QML_UNCREATABLE("")
+public:
+    DevicePrompt(const QJsonObject& required_data, AuthHandlerTask* task);
+    AuthHandlerTask* task() const { return m_task; }
+    QJsonObject result() const { return m_result; }
+public slots:
+    void select(Device* device);
+private:
+    AuthHandlerTask* const m_task;
+    QJsonObject m_result;
 };
 
 class RegisterUserTask : public AuthHandlerTask

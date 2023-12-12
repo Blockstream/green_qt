@@ -3,6 +3,7 @@
 #include "asset.h"
 #include "config.h"
 #include "context.h"
+#include "device.h"
 #include "devicemanager.h"
 #include "ga.h"
 #include "json.h"
@@ -439,15 +440,6 @@ void AuthHandlerTask::handleRequestCode(const QJsonObject& result)
     }
 }
 
-static Device* GetDeviceFromRequiredData(const QJsonObject& required_data)
-{
-    const auto device = required_data.value("device").toObject();
-    const auto device_type = device.value("device_type").toString();
-    Q_ASSERT(device_type == "hardware");
-    const auto id = device.value("name").toString();
-    return DeviceManager::instance()->deviceWithId(id);
-}
-
 void AuthHandlerTask::handleResolveCode(const QJsonObject& result)
 {
     if (result.contains("method")) {
@@ -461,15 +453,14 @@ void AuthHandlerTask::handleResolveCode(const QJsonObject& result)
 
     if (result.contains("required_data")) {
         Resolver* resolver{nullptr};
-        const auto required_data = result.value("required_data").toObject();
-        const auto device = GetDeviceFromRequiredData(required_data);
-        Q_ASSERT(device);
-// TODO request device
-//            if (!device) {
-//                emit deviceRequested();
-//                return;
-//            }
+        const auto device = m_session->context()->device();
+        if (!device || !device->isConnected()) {
+            m_prompt = new DevicePrompt(result, this);
+            emit promptChanged();
+            return;
+        }
         auto network = m_session->network();
+        const auto required_data = result.value("required_data").toObject();
         const auto action = required_data.value("action").toString();
         if (action == "get_xpubs") {
             resolver = new GetXPubsResolver(device, result, m_session);
@@ -1528,4 +1519,19 @@ void CodePrompt::select(const QString& method)
 void CodePrompt::resolve(const QString& code)
 {
     m_task->resolveCode(code.toUtf8());
+}
+
+DevicePrompt::DevicePrompt(const QJsonObject& result, AuthHandlerTask* task)
+    : Prompt(task)
+    , m_task(task)
+    , m_result(result)
+{
+}
+
+void DevicePrompt::select(Device* device)
+{
+    if (device->xpubHashId() == m_task->session()->context()->xpubHashId()) {
+        m_task->session()->context()->setDevice(device);
+        m_task->handleResolveCode(m_result);
+    }
 }
