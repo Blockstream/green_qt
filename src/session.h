@@ -15,6 +15,8 @@ Q_MOC_INCLUDE("network.h")
 
 QT_FORWARD_DECLARE_STRUCT(GA_session)
 
+class AuthHandlerTask;
+
 class Session : public Entity
 {
     Q_OBJECT
@@ -77,8 +79,8 @@ public:
     QString displayUnit() const { return m_display_unit; }
     void setAltimeout(int altimeout);
 
-    void registerUser();
-    void login();
+    AuthHandlerTask* registerUser();
+    AuthHandlerTask* login();
 
 signals:
     void notificationHandled(const QJsonObject& notification);

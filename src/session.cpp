@@ -202,25 +202,25 @@ void Session::setAltimeout(int altimeout)
     }
 }
 
-void Session::registerUser()
+AuthHandlerTask* Session::registerUser()
 {
     Q_ASSERT(m_context);
     if (m_context->device()) {
-        m_context->dispatcher()->add(new RegisterUserTask(m_context->m_hw_device, this));
+        return new RegisterUserTask(m_context->m_hw_device, this);
     } else {
         const auto mnemonic = m_context->credentials().value("mnemonic").toString().split(' ');
-        m_context->dispatcher()->add(new RegisterUserTask(mnemonic, this));
+        return new RegisterUserTask(mnemonic, this);
     }
 }
 
-void Session::login()
+AuthHandlerTask* Session::login()
 {
     Q_ASSERT(m_context);
     if (m_context->device()) {
-        m_context->dispatcher()->add(new LoginTask(m_context->m_hw_device, this));
+        return new LoginTask(m_context->m_hw_device, this);
     } else {
         const auto mnemonic = m_context->credentials().value("mnemonic").toString().split(' ');
-        m_context->dispatcher()->add(new LoginTask(mnemonic, QString(), this));
+        return new LoginTask(mnemonic, QString(), this);
     }
 }
 
@@ -288,6 +288,7 @@ void Session::update()
             m_id = 0;
         }
 
+        GA_reconnect_hint(m_session, Json::fromObject({{ "hint", "disconnect" }, { "tor_hint", "disconnect" }}).get());
         int rc = GA_destroy_session(m_session);
 #else
         m_self->clear();
