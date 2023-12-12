@@ -140,12 +140,15 @@ void JadeUnlockController::unlock()
     if (!m_device) return;
     const auto nets = m_device->versionInfo().value("JADE_NETWORKS").toString();
     const QString deployment = nets == "ALL" || nets == "MAIN" ? "mainnet" : "testnet";
-    m_network = NetworkManager::instance()->networkForDeployment(deployment);
-    if (m_context) m_context->deleteLater();
-    setContext(new Context(deployment, this));
+    if (m_context) {
+        Q_ASSERT(m_context->deployment() == deployment);
+    } else {
+        setContext(new Context(deployment, this));
+    }
 
     m_context->setRemember(m_remember);
 
+    m_network = NetworkManager::instance()->networkForDeployment(deployment);
     auto session = m_context->getOrCreateSession(m_network);
 
     auto connect_session = new ConnectTask(session);
@@ -358,6 +361,7 @@ void JadeIdentifyTask::update()
 
         const auto xpub_hash_id = identifier.value("xpub_hash_id").toString();
         context->setXPubHashId(xpub_hash_id);
+        device->setXPubHashId(xpub_hash_id);
 
         setStatus(Status::Finished);
     });
