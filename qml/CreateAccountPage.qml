@@ -148,7 +148,7 @@ StackViewPage {
 
     Component {
         id: controller_page
-        Page {
+        StackViewPage {
             required property Network network
             required property string type
             property var mnemonic: []
@@ -173,8 +173,7 @@ StackViewPage {
             }
 
             id: page
-            background: null
-            header: null
+            title: qsTrId('id_create_new_account')
             contentItem: GStackView {
                 id: stack_view
                 initialItem: ColumnLayout {
@@ -182,9 +181,6 @@ StackViewPage {
                     }
                     BusyIndicator {
                         Layout.alignment: Qt.AlignCenter
-                    }
-                    Label {
-                        text: 'Creating Account'
                     }
                     VSpacer {
                     }
