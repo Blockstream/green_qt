@@ -128,6 +128,9 @@ qt_add_resources(green "images"
         assets/png/onboard_jade_3.png
         assets/png/onboard_jade_2.png
 
+        assets/png/2fa.png
+        assets/png/2fa_email.png
+
         assets/hints/cpu.svg
         assets/hints/jade3d.svg
 
@@ -142,6 +145,7 @@ qt_add_resources(green "images"
         assets/svg2/check-green.svg
         assets/svg2/close.svg
         assets/svg2/copy.svg
+        assets/svg2/copy2.svg
         assets/svg2/edit.svg
         assets/svg2/eject-simple-thin.svg
         assets/svg2/eye.svg
@@ -150,6 +154,7 @@ qt_add_resources(green "images"
         assets/svg2/gear.svg
         assets/svg2/hand.svg
         assets/svg2/house.svg
+        assets/svg2/incoming.svg
         assets/svg2/jade-logo.svg
         assets/svg2/lightning.svg
         assets/svg2/list_bullets.svg
