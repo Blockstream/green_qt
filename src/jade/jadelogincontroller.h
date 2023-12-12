@@ -24,6 +24,7 @@ public:
     void setDevice(JadeDevice* device);
 
 signals:
+    void disconnected();
     void deviceChanged();
     void setPin(QVariantMap info);
 

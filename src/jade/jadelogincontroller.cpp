@@ -25,6 +25,11 @@ void JadeController::setDevice(JadeDevice* device)
     if (m_device == device) return;
     m_device = device;
     emit deviceChanged();
+    connect(m_device, &Device::connectedChanged, this, [&] {
+        if (m_device && !m_device->isConnected()) {
+            emit disconnected();
+        }
+    });
 }
 
 
