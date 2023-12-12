@@ -40,8 +40,9 @@ AbstractDrawer {
                 }
                 Repeater {
                     model: WalletListModel {
+                        deviceDetails: WalletListModel.No
                     }
-                    WalletButton {
+                    delegate: WalletButton {
                         id: wallet_button
                         onClicked: self.walletClicked(wallet_button.wallet)
                     }
@@ -54,13 +55,22 @@ AbstractDrawer {
                     text: qsTrId('id_hardware_devices')
                 }
                 Repeater {
-                    model: DeviceListModel {
+                    model: WalletListModel {
+                        deviceDetails: WalletListModel.Yes
                     }
-                    DeviceButton {
-                        id: device_button
-                        onClicked: self.deviceClicked(device_button.device)
+                    delegate: WalletButton {
+                        id: wallet_button
+                        onClicked: self.walletClicked(wallet_button.wallet)
                     }
                 }
+//                Repeater {
+//                    model: DeviceListModel {
+//                    }
+//                    DeviceButton {
+//                        id: device_button
+//                        onClicked: self.deviceClicked(device_button.device)
+//                    }
+//                }
             }
         }
         footer: RowLayout {
@@ -126,6 +136,31 @@ AbstractDrawer {
                 color: '#42FF00'
                 radius: 5
                 visible: !!button.wallet.context
+            }
+//            Rectangle {
+//                Layout.alignment: Qt.AlignCenter
+//                Layout.leftMargin: 20
+//                Layout.rightMargin: 20
+//                implicitHeight: 10
+//                implicitWidth: 10
+//                visible: button.wallet.context?.device ?? false
+//                color: button.wallet.context?.device?.connected ? '#42FF00' : 'red'
+//                radius: 5
+//            }
+            Image {
+                Layout.alignment: Qt.AlignCenter
+                visible: button.wallet.deviceDetails?.type ?? false
+                source: {
+                    switch (button.wallet.deviceDetails?.type) {
+                    case 'jade':
+                        return 'qrc:/svg2/jade-logo.svg'
+                    case 'nanos':
+                    case 'nanos':
+                        return 'qrc:/svg2/ledger-logo.svg'
+                    default:
+                        return ''
+                    }
+                }
             }
             Image {
                 Layout.alignment: Qt.AlignCenter

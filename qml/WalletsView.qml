@@ -36,6 +36,7 @@ MainPage {
             Repeater {
                 id: wallets_repeater
                 model: WalletListModel {
+                    deviceDetails: WalletListModel.No
                 }
                 WalletsDrawer.WalletButton {
                     Layout.fillWidth: true
@@ -49,18 +50,29 @@ MainPage {
                 font.weight: 600
                 opacity: 0.4
                 text: qsTrId('id_hardware_devices')
-                visible: devices_repeater.count > 0
+                visible: hww_repeater.count > 0 // || devices_repeater.count > 0
             }
             Repeater {
-                id: devices_repeater
-                model: DeviceListModel {
+                id: hww_repeater
+                model: WalletListModel {
+                    deviceDetails: WalletListModel.Yes
                 }
-                WalletsDrawer.DeviceButton {
+                WalletsDrawer.WalletButton {
                     Layout.fillWidth: true
-                    id: device_button
-                    onClicked: self.openDevice(device_button.device)
+                    id: wallet_button
+                    onClicked: self.openWallet(wallet_button.wallet)
                 }
             }
+//            Repeater {
+//                id: devices_repeater
+//                model: DeviceListModel {
+//                }
+//                WalletsDrawer.DeviceButton {
+//                    Layout.fillWidth: true
+//                    id: device_button
+//                    onClicked: self.openDevice(device_button.device)
+//                }
+//            }
         }
     }
     header: Pane {

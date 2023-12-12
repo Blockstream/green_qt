@@ -16,7 +16,7 @@ ApplicationWindow {
     function openWallet(wallet) {
         for (let i = 0; i < stack_layout.children.length; ++i) {
             const child = stack_layout.children[i]
-            if (child instanceof WalletView && child.wallet === wallet && !child.device) {
+            if (child instanceof WalletView && child.wallet === wallet) { // && !child.device) {
                 stack_layout.currentIndex = i;
                 return
             }
@@ -103,9 +103,9 @@ ApplicationWindow {
             if (device instanceof JadeDevice && device.state === JadeDevice.StateUninitialized) {
                 jade_notification_dialog.createObject(window, { device }).open()
             }
-            if (device instanceof JadeDevice && wallets_view.count === 0) {
-                window.openDevice(device)
-            }
+//            if (device instanceof JadeDevice && wallets_view.count === 0) {
+//                window.openDevice(device)
+//            }
         }
     }
 
