@@ -130,8 +130,11 @@ StackViewPage {
 
     function skipFirmwareUpdate() {
         switch (self.device.state) {
-        case JadeDevice.StateLocked:
         case JadeDevice.StateReady:
+            stack_view.push(login_view, { context: null, device: self.device })
+            break;
+        case JadeDevice.StateTemporary:
+        case JadeDevice.StateLocked:
             if (self.login) {
                 stack_view.push(unlock_view, { device: self.device })
             } else {

@@ -64,6 +64,7 @@ ColumnLayout {
     Component {
         id: unlock_view
         JadeUnlockView {
+            context: null
             device: self.device
             onUnlockFinished: (context) => self.loginFinished(context)
             onUnlockFailed: self.StackView.view.pop()

@@ -11,7 +11,7 @@ AbstractButton {
     Layout.minimumWidth: 350
     onClicked: if (self.device.connected) self.selected(self.device)
     id: self
-    enabled: self.device.status === JadeDevice.StatusIdle
+    enabled: !self.device.connected || self.device.status === JadeDevice.StatusIdle
     padding: 20
     opacity: self.enabled ? 1 : 0.4
     background: Rectangle {

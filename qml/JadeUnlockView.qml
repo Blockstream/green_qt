@@ -7,6 +7,7 @@ import QtQuick.Layouts
 ColumnLayout {
     signal unlockFinished(Context context)
     signal unlockFailed()
+    required property Context context
     required property JadeDevice device
     property bool showRemember: true
     StackView.onActivated: controller.unlock()
@@ -14,10 +15,12 @@ ColumnLayout {
     spacing: 20
     JadeUnlockController {
         id: controller
+        context: self.context
         device: self.device
         remember: remember_checkbox.checked
         onUnlocked: (context) => self.unlockFinished(context)
         onInvalidPin: self.unlockFailed()
+        onDisconnected: self.unlockFailed()
     }
     VSpacer {
     }

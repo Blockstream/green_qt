@@ -9,17 +9,24 @@ StackViewPage {
     required property Wallet wallet
     property bool login: true
     function update() {
+        if (timer.running) return
         if (stack_view.depth === 1 && devices_model.rowCount > 0) {
             stack_view.push(devices_view)
         } else if (stack_view.depth > 1 && devices_model.rowCount === 0) {
             stack_view.pop()
         }
     }
-    Component.onCompleted: self.update()
     DeviceListModel {
         id: devices_model
         onRowCountChanged: self.update()
     }
+    Timer {
+        id: timer
+        interval: 2000
+        running: true
+        onTriggered: self.update()
+    }
+
     id: self
     title: self.wallet.name
     contentItem: GStackView {

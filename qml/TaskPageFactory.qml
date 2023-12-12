@@ -38,6 +38,13 @@ QtObject {
         }
     }
 
-    // factory components
     property Component jade_sign_message_view: JadeSignMessageView {}
+
+    property Component jade_connect_view: ConnectJadePage {
+        required property DeviceResolver resolver
+        onDeviceSelected: (device) => stack_view.push(jade_page, { device })
+        padding: 0
+        rightItem: Item {}
+        footer: Item {}
+    }
 }
