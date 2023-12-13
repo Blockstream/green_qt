@@ -62,7 +62,6 @@ void JadeDeviceSerialPortDiscoveryAgent::scan()
 #else
                 const bool relax_write = false;
 #endif
-                // qDebug() << "CREATE BACKEND FOR " << system_location;
                 backend = new JadeAPI(info, relax_write, this);
                 connect(backend, &JadeAPI::onConnected, this, [=] {
                     // qDebug() << "OPEN OK" << system_location;
@@ -74,6 +73,8 @@ void JadeDeviceSerialPortDiscoveryAgent::scan()
                 connect(backend, &JadeAPI::onDisconnected, this, [=] {
                     // qDebug() << "DISCONNECT" << system_location;
                 });
+                probe(backend);
+            } else if (!backend->isConnected()) {
                 probe(backend);
             }
             m_backends.insert(system_location, backend);
@@ -133,6 +134,13 @@ void JadeDeviceSerialPortDiscoveryAgent::probe(JadeAPI* backend)
 
 void JadeDeviceSerialPortDiscoveryAgent::updateLater(JadeAPI* backend)
 {
+    if (backend->isBusy()) {
+        QTimer::singleShot(500, backend, [=] {
+            updateLater(backend);
+        });
+        return;
+    }
+
     QTimer::singleShot(500, backend, [=] {
         const auto device = deviceFromBackend(backend);
         if (!device) return;
@@ -142,8 +150,12 @@ void JadeDeviceSerialPortDiscoveryAgent::updateLater(JadeAPI* backend)
                     int status = data.value("result").toInt();
                     const auto device = deviceFromBackend(backend);
                     device->setStatus((JadeDevice::Status) status);
+                } else {
+                    device->setStatus(JadeDevice::StatusIdle);
                 }
             });
+        } else {
+            device->setStatus(JadeDevice::StatusIdle);
         }
         backend->getVersionInfo(true, [=](const QVariantMap& data) {
             const auto device = deviceFromBackend(backend);
@@ -151,6 +163,7 @@ void JadeDeviceSerialPortDiscoveryAgent::updateLater(JadeAPI* backend)
                 if (data.contains("error")) {
                     qDebug() << "VERSION INFO ERROR:" << data.value("error");
                     device->setConnected(false);
+                    device->setStatus(JadeDevice::StatusIdle);
                 } else {
                     const auto version_info = data.value("result").toMap();
                     device->setConnected(true);
@@ -181,6 +194,7 @@ void JadeDeviceSerialPortDiscoveryAgent::remove(JadeAPI* backend)
     if (device) {
         device->setBackend(nullptr);
         device->setConnected(false);
+        device->setStatus(JadeDevice::StatusIdle);
     }
 
     m_attempts.remove(backend);

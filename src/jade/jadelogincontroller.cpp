@@ -282,6 +282,11 @@ void JadeUnlockTask::update()
     setStatus(Status::Active);
     device->setUnlocking(true);
 
+    if (!device->api()) {
+        setStatus(Status::Failed);
+        return;
+    }
+
     device->api()->authUser(network->canonicalId(), [=](const QVariantMap& msg) {
         device->setUnlocking(false);
         if (msg.contains("result") && msg["result"] == true) {

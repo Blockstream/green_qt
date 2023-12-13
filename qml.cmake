@@ -234,6 +234,10 @@ SET(QML_FILES
     qml/JadeInstructionsView.qml
     qml/JadeCard.qml
     qml/DevicePromptView.qml
+    qml/JadeBasicUpdateView.qml
+    qml/JadeAdvancedUpdateView.qml
+    qml/JadeConfirmUpdatePage.qml
+    qml/JadeUpdateDialog2.qml
 )
 
 if (GREEN_NO_RESOURCES)

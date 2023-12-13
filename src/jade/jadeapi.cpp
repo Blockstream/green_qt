@@ -311,7 +311,7 @@ int JadeAPI::setMnemonic(const QString& mnemonic, const ResponseHandler &cb)
 
 int JadeAPI::ping(const ResponseHandler &cb)
 {
-    const int id = registerResponseHandler(cb, 0);
+    const int id = registerResponseHandler(cb, 1000);
     const QCborMap request = getRequest(id, "ping");
     send(request);
     return id;

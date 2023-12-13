@@ -6,6 +6,24 @@ import QtQuick.Layouts
 WalletHeaderCard {
     id: self
     visible: self.context.wallet.deviceDetails?.type === 'jade'
+    readonly property var latestFirmware: {
+        for (const firmware of update_controller.firmwares) {
+            if (firmware.latest) {
+                return firmware
+            }
+        }
+        return null
+    }
+    readonly property bool runningLatest: {
+        return self.context.device?.version === self.latestFirmware?.version
+    }
+
+    JadeFirmwareCheckController {
+        id: update_controller
+        index: firmware_controller.index
+        device: self.context?.device
+    }
+
     contentItem: RowLayout {
         ColumnLayout {
             Label {
@@ -67,9 +85,24 @@ WalletHeaderCard {
             }
             PrimaryButton {
                 text: qsTrId('id_firmware_update')
+                visible: !self.runningLatest
+                onClicked: update_firmware_dialog.createObject(self).open()
+            }
+            LinkButton {
+                visible: self.runningLatest
+                text: 'Up to date'
+                onClicked: update_firmware_dialog.createObject(self).open()
             }
             VSpacer {
             }
+        }
+    }
+
+    Component {
+        id: update_firmware_dialog
+        JadeUpdateDialog2 {
+            context: self.context
+            device: self.context.device
         }
     }
 }

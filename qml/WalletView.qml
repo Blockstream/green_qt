@@ -38,9 +38,10 @@ MainPage {
         id: device_page
         DevicePage {
             padding: 60
-            onLoginFinished: (context) => {
-                self.device = context.device
-                stack_view.replace(null, loading_page, { context }, StackView.PushTransition)
+            onDeviceSelected: (device) => {
+                if (device instanceof JadeDevice) {
+                    stack_view.push(jade_page, { device, login: true })
+                }
             }
         }
     }
@@ -52,6 +53,7 @@ MainPage {
                 self.wallet = context.wallet
                 stack_view.replace(null, loading_page, { context }, StackView.PushTransition)
             }
+            onFirmwareUpdated: stack_view.pop()
         }
     }
 

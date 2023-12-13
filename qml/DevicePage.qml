@@ -5,7 +5,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 StackViewPage {
-    signal loginFinished(Context context)
+    signal deviceSelected(Device device)
     required property Wallet wallet
     property bool login: true
     function update() {
@@ -22,7 +22,7 @@ StackViewPage {
     }
     Timer {
         id: timer
-        interval: 2000
+        interval: 500
         running: true
         onTriggered: self.update()
     }
@@ -87,12 +87,12 @@ StackViewPage {
             Loader {
                 Layout.alignment: Qt.AlignCenter
                 id: auto_login_loader
-                active: stack_view.currentItem == view && self.login && device_repeater.count === 1 && device_repeater.itemAt(0)._device.connected
+                active: stack_view.currentItem === view && self.login && device_repeater.count === 1 && device_repeater.itemAt(0)._device.connected
                 sourceComponent: ColumnLayout {
                     LinkButton {
                         Layout.alignment: Qt.AlignCenter
                         text: 'Cancel Automatic Login'
-                        onClicked: auto_login_loader.active = false
+                        onClicked: self.login = false
                     }
                     Item {
                         Layout.alignment: Qt.AlignCenter
@@ -111,7 +111,7 @@ StackViewPage {
                                 duration: 3000
                                 onFinished: {
                                     device_repeater.itemAt(0).item.trigger()
-                                    auto_login_loader.active = false
+                                    self.login = false
                                 }
                             }
                             opacity: Math.min(1, implicitWidth / 20)
@@ -128,43 +128,10 @@ StackViewPage {
             id: delegate
             device: _device
             function trigger() {
-                const device = delegate.device
-                switch (device.state) {
-                case JadeDevice.StateReady:
-                    stack_view.push(jade_login_view, { context: self.wallet.context, device })
-                    break;
-                case JadeDevice.StateTemporary:
-                case JadeDevice.StateLocked:
-                    stack_view.push(jade_unlock_view, { device, showRemember: false })
-                    break
-                case JadeDevice.StateUninitialized:
-                case JadeDevice.StateUnsaved:
-                    // TODO: show view to jump to onboarding
-                    break
-                }
+                self.login = false
+                self.deviceSelected(delegate.device)
             }
             onSelected: delegate.trigger()
-        }
-    }
-    Component {
-        id: jade_unlock_view
-        JadeUnlockView {
-            context: wallet.context
-            onUnlockFinished: (context) => {
-                if (context.attachToWallet(self.wallet)) {
-                    stack_view.push(jade_login_view, { context, device: context.device }, StackView.PushTransition)
-                } else {
-                    // TODO: show device mismatch view
-                }
-            }
-            onUnlockFailed: stack_view.pop()
-        }
-    }
-
-    Component {
-        id: jade_login_view
-        JadeLoginView {
-            onLoginFinished: (context) => self.loginFinished(context)
         }
     }
 

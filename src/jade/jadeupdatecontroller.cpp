@@ -94,17 +94,17 @@ void JadeUpdateActivity::exec()
             const auto code = error.value("code").toLongLong();
             const auto message = error.value("message").toString();
 
-//#define CBOR_RPC_PROTOCOL_ERROR -32001
-//#define CBOR_RPC_HW_LOCKED -32002
-//            // message `OTA is only allowed on new or logged-in device.` code is as follow:
-//            // in 0.1.21 code is CBOR_RPC_PROTOCOL_ERROR
-//            // in 0.1.23 and later is CBOR_RPC_HW_LOCKED
-//            if (code == CBOR_RPC_HW_LOCKED || message == "OTA is only allowed on new or logged-in device.") {
-//                emit locked();
-//            } else {
+#define CBOR_RPC_PROTOCOL_ERROR -32001
+#define CBOR_RPC_HW_LOCKED -32002
+            // message `OTA is only allowed on new or logged-in device.` code is as follow:
+            // in 0.1.21 code is CBOR_RPC_PROTOCOL_ERROR
+            // in 0.1.23 and later is CBOR_RPC_HW_LOCKED
+            if (code == CBOR_RPC_HW_LOCKED || message == "OTA is only allowed on new or logged-in device.") {
+                emit locked();
+            } else {
                 qDebug() << Q_FUNC_INFO << this << "Unexpected error" << code << message;
                 fail();
-//            }
+            }
         }
     };
 
@@ -118,25 +118,30 @@ void JadeUpdateActivity::exec()
     }
 }
 
-JadeUpdateController::JadeUpdateController(QObject *parent)
+JadeFirmwareCheckController::JadeFirmwareCheckController(QObject *parent)
     : QObject(parent)
 {
 }
 
-void JadeUpdateController::disconnectDevice()
-{
-    m_device->api()->disconnectDevice();
-}
-
-void JadeUpdateController::setDevice(JadeDevice *device)
+void JadeFirmwareCheckController::setDevice(JadeDevice *device)
 {
     if (m_device == device) return;
     m_device = device;
-    emit deviceChanged(m_device);
+    emit deviceChanged();
+    if (m_device) {
+        connect(m_device, &JadeDevice::versionInfoChanged, this, [&] {
+            check();
+        });
+        connect(m_device, &Device::connectedChanged, this, [&] {
+            if (m_device && !m_device->isConnected()) {
+                emit deviceDisconnected();
+            }
+        });
+    }
     check();
 }
 
-void JadeUpdateController::setIndex(const QJsonObject& index)
+void JadeFirmwareCheckController::setIndex(const QJsonObject& index)
 {
     if (m_index == index) return;
     m_index = index;
@@ -144,7 +149,7 @@ void JadeUpdateController::setIndex(const QJsonObject& index)
     check();
 }
 
-void JadeUpdateController::check()
+void JadeFirmwareCheckController::check()
 {
     qDebug() << Q_FUNC_INFO;
     m_firmwares.clear();
@@ -159,6 +164,7 @@ void JadeUpdateController::check()
         const auto features = version_info.value("JADE_FEATURES").toStringList();
         const bool secure_boot = features.contains(JADE_FEATURE_SECURE_BOOT);
 
+        QString type;
         if (board_type == JADE_BOARD_TYPE_JADE) {
             type = secure_boot ? "jade" : "jadedev";
         } else if (board_type == JADE_BOARD_TYPE_JADE_V1_1) {
@@ -202,6 +208,7 @@ void JadeUpdateController::check()
                     const bool compatible = m_device->minimumRequiredVersion() <= firmware_version;
                     const bool latest = firmware_version == latest_version;
                     if (delta && installed) return;
+                    firmware.insert("type", type);
                     firmware.insert("channel", channel);
                     firmware.insert("newer_version", newer_version);
                     firmware.insert("same_config", same_config);
@@ -247,78 +254,6 @@ void JadeUpdateController::check()
     emit firmwareAvailableChanged();
 }
 
-void JadeUpdateController::update(const QVariantMap& firmware)
-{
-    m_firmware_selected = firmware;
-    emit firmwareSelectedChanged();
-
-    m_updating = true;
-    emit updatingChanged();
-
-    const auto path = firmware.value("filename").toString();
-
-    m_fetching = true;
-    emit fetchingChanged();
-
-    auto activity = new JadeBinaryRequestActivity("/bin/" + type + "/" + path, this);
-    connect(activity, &Activity::failed, this, [=] {
-        activity->deleteLater();
-        m_fetching = false;
-        emit fetchingChanged();
-        m_updating = false;
-        emit updatingChanged();
-    });
-    connect(activity, &Activity::finished, this, [=] {
-        activity->deleteLater();
-        m_fetching = false;
-        emit fetchingChanged();
-        m_updating = false;
-        emit updatingChanged();
-        if (activity->hasError()) {
-            qDebug() << activity->response();
-        } else {
-            const auto data = QByteArray::fromBase64(activity->body().toByteArray());
-            install(firmware, data);
-        }
-    });
-    emit activityCreated(activity);
-    HttpManager::instance()->exec(activity);
-}
-
-void JadeUpdateController::install(const QVariantMap& firmware, const QByteArray& data)
-{
-    auto activity = new JadeUpdateActivity(firmware, data, m_device);
-//    connect(activity, &JadeUpdateActivity::locked, this, [this, activity] {
-//        auto unlock_activity = unlock();
-//        connect(unlock_activity, &Activity::finished, this, [activity, unlock_activity] {
-//            unlock_activity->deleteLater();
-//            activity->exec();
-//        });
-//        connect(unlock_activity, &Activity::failed, this, [activity, unlock_activity] {
-//            unlock_activity->deleteLater();
-//            activity->fail();
-//        });
-//    });
-    connect(activity, &Activity::failed, this, [=] {
-        activity->deleteLater();
-        m_updating = false;
-        emit updatingChanged();
-    });
-    connect(activity, &Activity::finished, this, [=] {
-        emit updateCompleted();
-    });
-    emit updateStarted();
-    emit activityCreated(activity);
-    ActivityManager::instance()->exec(activity);
-}
-
-JadeUnlockActivity* JadeUpdateController::unlock()
-{
-    auto activity = new JadeUnlockActivity(m_device, this);
-    HttpManager::instance()->exec(activity);
-    emit activityCreated(activity);
-    return activity;
-}
 
 JadeFirmwareController::JadeFirmwareController(QObject* parent)
     : QObject(parent)
@@ -369,3 +304,97 @@ void JadeFirmwareController::fetch(const QString& type)
 
     HttpManager::instance()->exec(req);
 }
+
+JadeFirmwareUpdateController::JadeFirmwareUpdateController(QObject* parent)
+    : QObject(parent)
+{
+}
+
+void JadeFirmwareUpdateController::setDevice(JadeDevice* device)
+{
+    if (m_device == device) return;
+    m_device = device;
+    emit deviceChanged();
+    connect(m_device, &Device::connectedChanged, this, [&] {
+        if (m_device && !m_device->isConnected()) {
+            emit deviceDisconnected();
+        }
+    });
+}
+
+void JadeFirmwareUpdateController::setFirmware(const QVariantMap& firmware)
+{
+    if (m_firmware == firmware) return;
+    m_firmware = firmware;
+    emit firmwareChanged();
+}
+
+void JadeFirmwareUpdateController::update()
+{
+    m_updating = true;
+    emit updatingChanged();
+
+    const auto type = m_firmware.value("type").toString();
+    const auto path = m_firmware.value("filename").toString();
+
+    m_fetching = true;
+    emit fetchingChanged();
+
+    auto activity = new JadeBinaryRequestActivity("/bin/" + type + "/" + path, this);
+    connect(activity, &Activity::failed, this, [=] {
+        activity->deleteLater();
+        m_fetching = false;
+        emit fetchingChanged();
+        m_updating = false;
+        emit updatingChanged();
+    });
+    connect(activity, &Activity::finished, this, [=] {
+        activity->deleteLater();
+        m_fetching = false;
+        emit fetchingChanged();
+        m_updating = false;
+        emit updatingChanged();
+        if (activity->hasError()) {
+            qDebug() << activity->response();
+        } else {
+            const auto data = QByteArray::fromBase64(activity->body().toByteArray());
+            install(data);
+        }
+    });
+    emit activityCreated(activity);
+    HttpManager::instance()->exec(activity);
+}
+
+void JadeFirmwareUpdateController::install(const QByteArray& data)
+{
+    m_started = false;
+    auto activity = new JadeUpdateActivity(m_firmware, data, m_device);
+    connect(activity->progress(), &Progress::valueChanged, this, [=] {
+        m_progress = float(activity->progress()->value() - activity->progress()->from()) /
+                     float(activity->progress()->to() - activity->progress()->from());
+        emit progressChanged();
+        if (m_progress > 0 && !m_started) {
+            m_started = true;
+            emit updateStarted();
+        }
+    });
+    connect(activity, &JadeUpdateActivity::locked, this, [=] {
+        activity->deleteLater();
+        m_updating = false;
+        emit updatingChanged();
+        emit unlockRequired();
+    });
+    connect(activity, &Activity::failed, this, [=] {
+        activity->deleteLater();
+        m_updating = false;
+        emit updatingChanged();
+        emit updateFailed();
+    });
+    connect(activity, &Activity::finished, this, [=] {
+        emit updateFinished();
+        m_device->api()->disconnectDevice();
+    });
+    emit activityCreated(activity);
+    ActivityManager::instance()->exec(activity);
+}
+
