@@ -16,7 +16,7 @@ Canvas {
     property int radius: Math.min(centerX, centerY) - 1
 
     property real startAngle: 0
-    property real sweepAngle: Math.PI * 2 * (indeterminate ? 0.1 : progress)
+    property real sweepAngle: Math.PI * 2 * (indeterminate ? 0.9 : progress)
     Behavior on sweepAngle {
         SmoothedAnimation {
             velocity: 3
@@ -39,11 +39,7 @@ Canvas {
         var ctx = getContext("2d");
         ctx.clearRect(0, 0, width, height)
         ctx.lineWidth = 1
-        ctx.strokeStyle = constants.c500
-        ctx.beginPath()
-        ctx.arc(centerX, centerY, radius, 0, Math.PI * 2)
-        ctx.stroke()
-        ctx.strokeStyle = constants.g500
+        ctx.strokeStyle = '#FFF'
         ctx.beginPath()
         ctx.arc(centerX, centerY, radius, startAngle - Math.PI / 2, startAngle +  sweepAngle - Math.PI / 2)
         ctx.stroke()

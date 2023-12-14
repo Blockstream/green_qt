@@ -129,11 +129,6 @@ AbstractDialog {
                     checked: Settings.analytics === 'enabled'
                     onToggled: Settings.analytics = checked ? 'enabled' : 'disabled'
                 }
-                BusyIndicator {
-                    Layout.preferredHeight: 32
-                    running: Analytics.busy
-                    visible: Analytics.busy
-                }
                 HSpacer {
                 }
             }

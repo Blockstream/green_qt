@@ -26,14 +26,6 @@ ItemDelegate {
             anchors.right: parent.right
             anchors.top: parent.top
         }
-        ProgressBar {
-            width: parent.width - 10
-            x: 5
-            height: 1
-            anchors.bottom: parent.bottom
-            visible: !delegate.account.synced
-            indeterminate: !delegate.account.synced
-        }
     }
     highlighted: delegate.ListView.view.currentIndex === delegate.index
     leftPadding: constants.p2
@@ -154,6 +146,13 @@ ItemDelegate {
                             }
                         }
                         HSpacer {
+                        }
+                        ProgressIndicator {
+                            Layout.alignment: Qt.AlignBottom
+                            Layout.bottomMargin: 2
+                            indeterminate: delegate.account.synced
+                            width: 20
+                            height: 20
                         }
                         RegularButton {
                             topPadding: 4
