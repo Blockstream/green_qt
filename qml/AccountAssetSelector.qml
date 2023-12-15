@@ -126,9 +126,9 @@ StackViewPage {
                                     const accounts = []
                                     for (let i = 0; i < self.context.accounts.length; i++) {
                                         const account = self.context.accounts[i]
-                                        if (account.network.key === delegate.asset.networkKey) {
-                                            accounts.push(account)
-                                        }
+                                        if (account.hidden) continue
+                                        if (account.network.key !== delegate.asset.networkKey) continue
+                                        accounts.push(account)
                                     }
                                     return accounts
                                 }
