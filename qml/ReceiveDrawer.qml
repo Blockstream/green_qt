@@ -36,9 +36,19 @@ WalletDrawer {
                     Layout.fillWidth: true
                     enabled: controller.context.device?.connected && !controller.generating && controller.addressVerification !== ReceiveAddressController.VerificationPending
                     text: qsTrId('id_verify_on_device')
-                    visible: controller.context.device instanceof JadeDevice
+                    visible: {
+                        if (controller.context.device instanceof JadeDevice) {
+                            switch (self.device.state) {
+                            case JadeDevice.StateReady:
+                            case JadeDevice.StateTemporary:
+                            case JadeDevice.StateLocked:
+                                return true
+                            }
+                        }
+                        return false
+                    }
                     onClicked: {
-                        stack_view.push(jade_verify_page)
+                        stack_view.push(jade_verify_page, { device: controller.context.device, controller })
                         Analytics.recordEvent('verify_address', AnalyticsJS.segmentationSubAccount(controller.account))
                     }
                 }
@@ -136,51 +146,7 @@ WalletDrawer {
 
     Component {
         id: jade_verify_page
-        StackViewPage {
-            StackView.onActivated: controller.verify()
-            Timer {
-                running: controller.addressVerification === ReceiveAddressController.VerificationAccepted
-                interval: 1000
-                onTriggered: stack_view.pop()
-            }
-            Timer {
-                running: controller.addressVerification === ReceiveAddressController.VerificationRejected
-                interval: 1000
-                onTriggered: stack_view.pop()
-            }
-            title: qsTrId('id_verify_on_device')
-            footer: BusyIndicator {
-                Layout.alignment: Qt.AlignCenter
-                running: controller.addressVerification !== ReceiveAddressController.VerificationPending
-            }
-            contentItem: ColumnLayout {
-                VSpacer {
-                }
-                Label {
-                    Layout.fillWidth: true
-                    Layout.preferredWidth: 0
-                    font.pixelSize: 14
-                    font.weight: 500
-                    horizontalAlignment: Label.AlignHCenter
-                    text: controller.address
-                    wrapMode: Label.Wrap
-                }
-                Image {
-                    Layout.alignment: Qt.AlignCenter
-                    source: 'qrc:/png/connect_jade_2.png'
-                }
-                Label {
-                    Layout.fillWidth: true
-                    Layout.preferredWidth: 0
-                    font.pixelSize: 12
-                    font.weight: 500
-                    horizontalAlignment: Label.AlignHCenter
-                    text: qsTrId('id_please_verify_that_the_address')
-                    wrapMode: Label.WordWrap
-                }
-                VSpacer {
-                }
-            }
+        JadeVerifyAddressPage {
         }
     }
 

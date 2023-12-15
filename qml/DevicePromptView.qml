@@ -6,6 +6,7 @@ import QtQuick.Layouts
 
 GStackView {
     required property DevicePrompt prompt
+    required property Context context
     function update() {
         if (self.depth === 1 && devices_model.rowCount > 0) {
             self.push(devices_view)
@@ -25,7 +26,7 @@ GStackView {
         Loader {
             Layout.alignment: Qt.AlignCenter
             sourceComponent: {
-                switch (self.prompt.task.session.context.wallet.deviceDetails.type) {
+                switch (self.context.wallet.deviceDetails.type) {
                 case 'jade': return jade_view
                 default: return null
                 }
@@ -78,7 +79,7 @@ GStackView {
         JadeDeviceDelegate {
             function trigger() {
                 const device = delegate.device
-                const context = self.prompt.task.session.context
+                const context = self.context
                 switch (device.state) {
                 case JadeDevice.StateReady:
                     self.prompt.select(delegate.device)
@@ -99,7 +100,7 @@ GStackView {
                 const device = delegate.device
                 if (!device.connected) return true
                 if (self.device.status === JadeDevice.StatusIdle) return false
-                const context = self.prompt.task.session.context
+                const context = self.context
                 switch (device.state) {
                 case JadeDevice.StateReady:
                     return true

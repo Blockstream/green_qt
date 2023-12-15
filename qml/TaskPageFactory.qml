@@ -32,7 +32,7 @@ QtObject {
             return
         }
         if (prompt instanceof DevicePrompt) {
-            self.target.push(device_prompt_view, { prompt })
+            self.target.push(device_prompt_view, { context: self.task.session.context, prompt })
             return
         }
     }
