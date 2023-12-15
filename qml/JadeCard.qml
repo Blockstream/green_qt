@@ -4,10 +4,8 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 WalletHeaderCard {
-    id: self
-    visible: self.context.wallet.deviceDetails?.type === 'jade'
     readonly property var latestFirmware: {
-        for (const firmware of update_controller.firmwares) {
+        for (const firmware of controller.firmwares) {
             if (firmware.latest) {
                 return firmware
             }
@@ -17,13 +15,18 @@ WalletHeaderCard {
     readonly property bool runningLatest: {
         return self.context.device?.version === self.latestFirmware?.version
     }
-
     JadeFirmwareCheckController {
-        id: update_controller
+        id: controller
         index: firmware_controller.index
         device: self.context?.device
     }
-
+    id: self
+    visible: self.context.wallet.deviceDetails?.type === 'jade'
+    onClicked: {
+        if (self.context.device?.connected) {
+            update_firmware_dialog.createObject(self).open()
+        }
+    }
     contentItem: RowLayout {
         ColumnLayout {
             Label {
@@ -39,7 +42,7 @@ WalletHeaderCard {
                 font.capitalization: Font.AllUppercase
                 font.pixelSize: 20
                 font.weight: 600
-                text: self.context.wallet.deviceDetails.name
+                text: self.context.wallet.deviceDetails?.name ?? ''
             }
             RowLayout {
                 Layout.fillHeight: false
@@ -67,7 +70,7 @@ WalletHeaderCard {
             source: 'qrc:/png/jade_card.png'
         }
         ColumnLayout {
-            visible: self.context?.device?.connected ?? false
+            visible: !self.runningLatest
             Label {
                 font.capitalization: Font.AllUppercase
                 font.pixelSize: 12
@@ -81,16 +84,10 @@ WalletHeaderCard {
                 font.capitalization: Font.AllUppercase
                 font.pixelSize: 20
                 font.weight: 600
-                text: self.context?.device?.version
+                text: self.context?.device?.version ?? ''
             }
             PrimaryButton {
                 text: qsTrId('id_firmware_update')
-                visible: !self.runningLatest
-                onClicked: update_firmware_dialog.createObject(self).open()
-            }
-            LinkButton {
-                visible: self.runningLatest
-                text: 'Up to date'
                 onClicked: update_firmware_dialog.createObject(self).open()
             }
             VSpacer {
