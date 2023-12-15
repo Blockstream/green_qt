@@ -119,7 +119,7 @@ private:
     int m_window_width;
     int m_window_height;
     QStringList m_history;
-    bool m_collapse_side_bar{false};
+    bool m_collapse_side_bar{true};
     bool m_enable_testnet{false};
     bool m_use_proxy{false};
     QString m_proxy_host{};
