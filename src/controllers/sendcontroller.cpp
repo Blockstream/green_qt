@@ -293,7 +293,9 @@ void SendController::signAndSend()
         // TODO context()->updateConfig();
         emit finished();
     });
-
+    connect(send, &Task::failed, this, [=](const QString& error) {
+        emit failed(error);
+    });
     auto group = new TaskGroup(this);
     group->add(sign);
     group->add(send);

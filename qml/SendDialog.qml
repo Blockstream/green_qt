@@ -12,6 +12,7 @@ ControllerDialog {
     readonly property Session session: account.session
     property string address_input
     property bool review: false
+    property string error
 
     function parsePayment(url) {
         const payment = WalletManager.parseUrl(url.trim())
@@ -56,10 +57,10 @@ ControllerDialog {
                 with_memo: controller.memo !== '',
             }))
         }
-// TODO send controller should emit error signal if sign or send tasks fails
-//        onError: {
-//            Analytics.recordEvent('failed_transaction', AnalyticsJS.segmentationSession(self.account.context.wallet))
-//        }
+        onFailed: (error) => {
+            self.error = error
+            Analytics.recordEvent('failed_transaction', AnalyticsJS.segmentationSession(self.account.context.wallet))
+        }
     }
 
     ColumnLayout {
@@ -127,7 +128,7 @@ ControllerDialog {
             Layout.fillWidth: true
             active: {
                 const device = account.context.device
-                const asset = asset_field_loader.item?.balance?.asset
+                const asset = controller.balance?.asset
                 if (device?.type === Device.LedgerNanoS && device.appVersion === '1.4.8' && asset) {
                     switch (asset.id) {
                     case '6f0279e9ed041c3d710a9f57d0c02928416460c4b722ae3457a11eec381c526d':
@@ -233,7 +234,7 @@ ControllerDialog {
                     }
                     Label {
                         text: {
-                            const balance = asset_field_loader.item?.balance
+                            const balance = controller.balance
                             const asset = balance?.asset
 
                             if (coins_combo_box.currentIndex === 0) {
@@ -296,6 +297,7 @@ ControllerDialog {
                     anchors.baseline: parent.baseline
                     text: {
                         const network = account.network
+                        const balance = controller.balance
                         if (network.liquid && balance && balance.asset.id !== network.policyAsset) {
                             return balance.asset.data.ticker || ''
                         }
@@ -444,7 +446,19 @@ ControllerDialog {
             }
         }
     }
-
+    AnimLoader {
+        animated: true
+        active: self.error
+        sourceComponent: ColumnLayout {
+            Label {
+                Layout.alignment: Qt.AlignCenter
+                Layout.fillWidth: true
+                horizontalAlignment: Label.AlignHCenter
+                text: self.error
+                wrapMode: Label.Wrap
+            }
+        }
+    }
     AnimLoader {
         animated: true
         active: self.review

@@ -24,7 +24,7 @@ RowLayout {
             visible: active
             sourceComponent: Label {
                 opacity: 0.5
-                text: balance.asset.data.entity.domain
+                text: balance?.asset.data.entity.domain ?? ''
                 elide: Label.ElideRight
             }
             Layout.fillWidth: true

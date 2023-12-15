@@ -77,8 +77,8 @@ signals:
     void changed();
     void transactionChanged();
     void signedTransactionChanged();
-
     void utxosChanged(QJsonObject utxos);
+    void failed(const QString& error);
 
 private:
     void update();

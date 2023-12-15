@@ -35,16 +35,6 @@ WalletDialog {
         visible: !!self.controller?.context
         session: self.controller?.context?.session ?? null
     }
-    GToolButton {
-        id: info_button
-        parent: toolbar
-        visible: env !== 'Production'
-        enabled: visible
-        flat: true
-        icon.source: 'qrc:/svg/info.svg'
-        checkable: true
-        checked: false
-    }
 /*
     footer: Label {
         visible: false
@@ -292,12 +282,6 @@ WalletDialog {
                     resolver: jade_sign_message_loader.task.resolver
                 }
             }
-        }
-        TaskDispatcherInspector {
-            Layout.fillHeight: true
-            Layout.minimumWidth: 200
-            dispatcher: controller.dispatcher
-            visible: info_button.checked
         }
     }
 }
