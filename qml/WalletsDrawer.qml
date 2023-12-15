@@ -38,7 +38,17 @@ AbstractDrawer {
                     opacity: 0.4
                     text: qsTrId('id_digital_wallets')
                 }
+                Label {
+                    Layout.fillWidth: true
+                    Layout.preferredWidth: 0
+                    font.pixelSize: 14
+                    font.weight: 500
+                    text: 'Your wallets with keys persisted on the Green app will appear here.'
+                    visible: sww_repeater.count === 0
+                    wrapMode: Label.Wrap
+                }
                 Repeater {
+                    id: sww_repeater
                     model: WalletListModel {
                         deviceDetails: WalletListModel.No
                     }
@@ -54,7 +64,17 @@ AbstractDrawer {
                     opacity: 0.4
                     text: qsTrId('id_hardware_devices')
                 }
+                Label {
+                    Layout.fillWidth: true
+                    Layout.preferredWidth: 0
+                    font.pixelSize: 14
+                    font.weight: 500
+                    text: 'Your wallets with keys persisted on a hardware device will appear here.'
+                    visible: hww_repeater.count === 0
+                    wrapMode: Label.Wrap
+                }
                 Repeater {
+                    id: hww_repeater
                     model: WalletListModel {
                         deviceDetails: WalletListModel.Yes
                     }
