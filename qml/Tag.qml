@@ -3,7 +3,7 @@ import QtQuick.Controls
 
 Label {
     id: self
-    property color color: constants.c300
+    color: constants.c300
     property bool large: false
     property bool showTooltip: true
     text: self.text
