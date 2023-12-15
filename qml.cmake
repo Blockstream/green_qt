@@ -239,6 +239,7 @@ SET(QML_FILES
     qml/JadeConfirmUpdatePage.qml
     qml/JadeUpdateDialog2.qml
     qml/JadeVerifyAddressPage.qml
+    qml/Hint.qml
 )
 
 if (GREEN_NO_RESOURCES)

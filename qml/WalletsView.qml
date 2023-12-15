@@ -12,7 +12,7 @@ MainPage {
     signal openWallet(Wallet wallet)
     signal openDevice(Device device)
     signal createWallet
-    property alias count: wallets_repeater.count
+    readonly property int count: sww_repeater.count + hww_repeater.count
     id: self
     padding: 60
     title: qsTrId('id_wallets')
@@ -33,8 +33,12 @@ MainPage {
                 opacity: 0.4
                 text: qsTrId('id_digital_wallets')
             }
+            Hint {
+                text: 'Your wallets with keys persisted on the Green app will appear here.'
+                visible: sww_repeater.count === 0
+            }
             Repeater {
-                id: wallets_repeater
+                id: sww_repeater
                 model: WalletListModel {
                     deviceDetails: WalletListModel.No
                 }
@@ -50,7 +54,10 @@ MainPage {
                 font.weight: 600
                 opacity: 0.4
                 text: qsTrId('id_hardware_devices')
-                visible: hww_repeater.count > 0 // || devices_repeater.count > 0
+            }
+            Hint {
+                text: 'Your wallets with keys persisted on a hardware device will appear here.'
+                visible: hww_repeater.count === 0
             }
             Repeater {
                 id: hww_repeater
@@ -63,16 +70,6 @@ MainPage {
                     onClicked: self.openWallet(wallet_button.wallet)
                 }
             }
-//            Repeater {
-//                id: devices_repeater
-//                model: DeviceListModel {
-//                }
-//                WalletsDrawer.DeviceButton {
-//                    Layout.fillWidth: true
-//                    id: device_button
-//                    onClicked: self.openDevice(device_button.device)
-//                }
-//            }
         }
     }
     header: Pane {
