@@ -17,7 +17,7 @@ TListView {
             // automatically select the last account since it is the newly created account
             // if account ordering is added then if should determine the correct index
             // TODO:
-            account_list_view.currentIndex = account_list_view.count - 1;
+            self.currentIndex = account_list_view.count - 1;
         }
     }
 
