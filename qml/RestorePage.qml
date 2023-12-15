@@ -5,8 +5,10 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 StackViewPage {
-    signal mnemonicEntered(var mnemonic, string password)
+    signal mnemonicEntered(Wallet wallet, var mnemonic, string password)
+    property Wallet wallet
     id: self
+    title: self.wallet?.name ?? ''
     padding: 60
     MnemonicEditorController {
         id: controller
@@ -34,7 +36,19 @@ StackViewPage {
             font.weight: 600
             horizontalAlignment: Label.AlignHCenter
             text: qsTrId('id_restore_green_wallet')
+            visible: !self.wallet
             wrapMode: Label.WordWrap
+        }
+        Image {
+            Layout.alignment: Qt.AlignCenter
+            source: 'qrc:/svg2/warning.svg'
+        }
+        Label {
+            Layout.alignment: Qt.AlignCenter
+            font.pixelSize: 14
+            font.weight: 500
+            horizontalAlignment: Qt.AlignHCenter
+            text: qsTrId('id_youve_entered_an_invalid_pin')
         }
         Label {
             Layout.alignment: Qt.AlignCenter
@@ -44,7 +58,7 @@ StackViewPage {
             font.weight: 400
             horizontalAlignment: Label.AlignHCenter
             opacity: 0.4
-            text: 'Make sure you got everything right'
+            text: self.wallet ? qsTrId('id_youll_need_your_recovery_phrase') : 'Make sure you got everything right'
             wrapMode: Label.Wrap
         }
         MnemonicSizeSelector {
@@ -95,7 +109,7 @@ StackViewPage {
             Layout.topMargin: 20
             enabled: controller.valid
             text: qsTrId('id_restore')
-            onClicked: self.mnemonicEntered(controller.mnemonic, controller.passphrase)
+            onClicked: self.mnemonicEntered(self.wallet, controller.mnemonic, controller.passphrase)
         }
         VSpacer {
         }

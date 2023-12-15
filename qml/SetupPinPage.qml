@@ -4,6 +4,8 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
+import "util.js" as UtilJS
+
 StackViewPage {
     signal finished(Context context)
     required property Context context
@@ -14,9 +16,10 @@ StackViewPage {
         context: self.context
         onFinished: self.finished(self.context)
     }
-
+    StackView.onActivated: pin_field.forceActiveFocus()
     id: self
     padding: 60
+    title: self.context?.wallet?.name ?? ''
     leftItem: Item {
     }
     contentItem: ColumnLayout {
@@ -84,16 +87,40 @@ StackViewPage {
         }
     }
     footer: StackViewPage.Footer {
-        contentItem: ColumnLayout {
-            Image {
+        contentItem: RowLayout {
+            spacing: 0
+            Item {
                 Layout.alignment: Qt.AlignCenter
-                source: 'qrc:/svg2/house.svg'
+                id: left_item
             }
-            Label {
-                Layout.alignment: Qt.AlignCenter
-                font.pixelSize: 12
-                font.weight: 600
-                text: qsTrId('id_make_sure_to_be_in_a_private')
+            Item {
+                Layout.preferredWidth: Math.max(UtilJS.effectiveWidth(right_item) - UtilJS.effectiveWidth(left_item), 0)
+            }
+            HSpacer {
+            }
+            ColumnLayout {
+                Image {
+                    Layout.alignment: Qt.AlignCenter
+                    source: 'qrc:/svg2/house.svg'
+                }
+                Label {
+                    Layout.alignment: Qt.AlignCenter
+                    font.pixelSize: 12
+                    font.weight: 600
+                    text: qsTrId('id_make_sure_to_be_in_a_private')
+                }
+            }
+            HSpacer {
+            }
+            Item {
+                Layout.preferredWidth: Math.max(UtilJS.effectiveWidth(left_item) - UtilJS.effectiveWidth(right_item), 0)
+            }
+            LinkButton {
+                Layout.alignment: Qt.AlignBottom
+                id: right_item
+                text: qsTrId('id_skip')
+                visible: !self.pin
+                onClicked: self.finished(self.context)
             }
         }
     }

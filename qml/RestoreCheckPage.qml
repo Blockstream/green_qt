@@ -7,33 +7,30 @@ import QtQuick.Layouts
 StackViewPage {
     signal restoreFinished(Context context)
     signal alreadyRestored(Wallet wallet)
+    signal mismatch()
+    property Wallet wallet
     required property var mnemonic
     required property string password
     RestoreController {
         id: controller
+        wallet: self.wallet
         mnemonic: self.mnemonic
         password: self.password
-//        onErrorsChanged: {
-//            if (errors.mnemonic === 'invalid') {
-//                self.failedRecoveryPhraseCheck()
-//            }
-//        }
-        // onFailedRecoveryPhraseCheck: {
-        //     Analytics.recordEvent('failed_recovery_phrase_check', {
-        //         network: navigation.param.network === 'bitcoin' ? 'mainnet' : navigation.param.network
-        //     })
-        // }
         onRestoreFinished: (context) => self.restoreFinished(context)
         onAlreadyRestored: (wallet) => self.alreadyRestored(wallet)
+        onMismatch: self.mismatch()
     }
     StackView.onActivated: {
-        if (Settings.enableTestnet) {
+        if (self.wallet) {
+            controller.restore(self.wallet.deployment)
+        } else if (Settings.enableTestnet) {
             deployment_dialog.createObject(self).open()
         } else {
             controller.restore('mainnet')
         }
     }
     id: self
+    title: self.wallet?.name ?? ''
     leftItem: Item {
     }
     padding: 60

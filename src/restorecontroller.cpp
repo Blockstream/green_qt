@@ -13,6 +13,13 @@ RestoreController::RestoreController(QObject *parent)
 {
 }
 
+void RestoreController::setWallet(Wallet* wallet)
+{
+    if (m_wallet == wallet) return;
+    m_wallet = wallet;
+    emit walletChanged();
+}
+
 void RestoreController::setMnemonic(const QStringList& mnemonic)
 {
     if (m_mnemonic == mnemonic) return;
@@ -33,10 +40,26 @@ void RestoreController::restore(const QString& deployment)
         m_context->deleteLater();
         setContext(nullptr);
     }
+    Q_ASSERT(!m_wallet || m_wallet->deployment() == deployment);
     setContext(new Context(deployment, this));
 
     auto monitor = new TaskGroupMonitor(this);
     connect(monitor, &TaskGroupMonitor::allFinishedOrFailed, this, [=] {
+        if (m_wallet) {
+            if (m_wallet->xpubHashId() == m_context->xpubHashId()) {
+                m_context->setWallet(m_wallet);
+                m_wallet->setContext(m_context);
+                setContext(nullptr);
+                emit restoreFinished(m_wallet->context());
+                return;
+            } else {
+                m_context->deleteLater();
+                setContext(nullptr);
+                emit mismatch();
+                return;
+            }
+        }
+
         auto wallet = WalletManager::instance()->findWallet(m_context->xpubHashId());
 
         if (!wallet) {

@@ -23,6 +23,8 @@ MainPage {
             stack_view.push(watch_only_login_page, { wallet: self.wallet }, StackView.Immediate)
         } else if (wallet.deviceDetails?.type) {
             stack_view.push(device_page, { wallet: self.wallet }, StackView.Immediate)
+        } else if (self.wallet.loginAttemptsRemaining === 0) {
+            stack_view.push(restore_wallet_page, { wallet: self.wallet }, StackView.Immediate)
         } else {
             stack_view.push(pin_login_page, { wallet: self.wallet }, StackView.Immediate)
         }
@@ -134,7 +136,7 @@ MainPage {
     Component {
         id: restore_wallet_page
         RestorePage {
-            onMnemonicEntered: (mnemonic, password) => stack_view.push(restore_check_page, { mnemonic, password })
+            onMnemonicEntered: (wallet, mnemonic, password) => stack_view.push(restore_check_page, { wallet, mnemonic, password })
         }
     }
 
@@ -146,6 +148,7 @@ MainPage {
                 stack_view.push(setup_pin_page, { context })
             }
             onAlreadyRestored: (wallet) => stack_view.replace(already_restored_page, { wallet })
+            onMismatch: stack_view.pop()
         }
     }
 
@@ -200,6 +203,7 @@ MainPage {
             onLoginFinished: (context) => {
                 stack_view.push(null, loading_page, { context }, StackView.PushTransition)
             }
+            onRestoreClicked: stack_view.replace(restore_wallet_page, { wallet: self.wallet })
         }
     }
 
@@ -233,7 +237,11 @@ MainPage {
                     return
                 }
                 if (self.wallet.hasPinData) {
-                    stack_view.replace(null, pin_login_page, { wallet: self.wallet })
+                    stack_view.replace(null, pin_login_page, { wallet: self.wallet }, StackView.PushTransition)
+                    return
+                }
+                if (self.wallet.loginAttemptsRemaining === 0) {
+                    stack_view.replace(null, restore_wallet_page, { wallet: self.wallet }, StackView.PushTransition)
                     return
                 }
                 console.log('missing logout view')

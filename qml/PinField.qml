@@ -28,6 +28,7 @@ AbstractButton {
         }
     }
     id: self
+    opacity: self.enabled ? 1 : 0.4
     activeFocusOnTab: true
     onClicked: self.forceActiveFocus()
     Keys.onPressed: (event) => {
