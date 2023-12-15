@@ -8,7 +8,6 @@ GTextField {
     radius: height / 2
     leftPadding: height / 2 + contentHeight + 4
     rightPadding: self.empty ? height / 2 : clear_button.height + self.height - self.font.pixelSize
-    placeholderText: qsTrId('id_search')
     Keys.onEscapePressed: self.clear()
     Image {
         source: 'qrc:/svg/search.svg'

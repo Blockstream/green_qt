@@ -252,7 +252,7 @@ StackViewPage {
                     leftPadding: constants.p0
                     rightPadding: constants.p0
                     Layout.fillWidth: true
-                    placeholderText: qsTrId('id_add_a_note_only_you_can_see_it')
+                    // placeholderText: qsTrId('id_add_a_note_only_you_can_see_it')
                     text: transaction.memo
                     selectByMouse: true
                     wrapMode: TextEdit.Wrap
