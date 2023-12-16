@@ -30,7 +30,7 @@ class Settings : public QObject
     Q_PROPERTY(QString liquidTestnetElectrumUrl READ liquidTestnetElectrumUrl WRITE setLiquidTestnetElectrumUrl NOTIFY liquidTestnetElectrumUrlChanged)
     Q_PROPERTY(bool enableSPV READ enableSPV WRITE setEnableSPV NOTIFY enableSPVChanged)
     Q_PROPERTY(QString analytics READ analytics WRITE setAnalytics NOTIFY analyticsChanged)
-    Q_PROPERTY(int acceptedTermsOfService READ acceptedTermsOfService NOTIFY acceptedTermsOfServiceChanged)
+    Q_PROPERTY(bool acceptedTermsOfService READ acceptedTermsOfService NOTIFY acceptedTermsOfServiceChanged)
 public:
     Settings(QObject* parent = nullptr);
     virtual ~Settings();
