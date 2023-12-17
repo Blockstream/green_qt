@@ -94,16 +94,16 @@ MainPage {
         WalletsView {
             id: wallets_view
             focus: StackLayout.isCurrentItem
-            onOpenWallet: (wallet) => window.openWallet(wallet)
-            onOpenDevice: (device) => window.openDevice(device)
-            onCreateWallet: window.openWallet(null)
+            onOpenWallet: (wallet) => self.openWallet(wallet)
+            onOpenDevice: (device) => self.openDevice(device)
+            onCreateWallet: self.openWallet(null)
         }
     }
 
     Component {
         id: wallet_view
         WalletView {
-            onOpenWallet: (wallet) => window.openWallet(wallet)
+            onOpenWallet: (wallet) => self.openWallet(wallet)
         }
     }
 
@@ -142,7 +142,7 @@ MainPage {
                 jade_notification_dialog.createObject(window, { device }).open()
             }
 //            if (device instanceof JadeDevice && wallets_view.count === 0) {
-//                window.openDevice(device)
+//                self.openDevice(device)
 //            }
         }
     }
@@ -151,7 +151,7 @@ MainPage {
         id: jade_notification_dialog
         JadeNotificationDialog {
             onSetupClicked: (device) => {
-                window.openDevice(device)
+                self.openDevice(device)
                 close()
             }
             onClosed: destroy()
@@ -163,11 +163,11 @@ MainPage {
         leftMargin: side_bar.width
         onWalletClicked: (wallet) => {
             wallets_drawer.close()
-            window.openWallet(wallet)
+            self.openWallet(wallet)
         }
         onDeviceClicked: (device) => {
             wallets_drawer.close()
-            window.openDevice(device)
+            selfopenDevice(device)
         }
     }
 
