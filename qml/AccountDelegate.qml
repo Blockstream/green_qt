@@ -118,6 +118,7 @@ ItemDelegate {
         }
         Collapsible {
             Layout.fillWidth: true
+            Layout.minimumHeight: 1
             collapsed: !delegate.highlighted
             contentWidth: width
             contentHeight: details.height
@@ -186,7 +187,6 @@ ItemDelegate {
                                 pointerY: 0.5
                                 enabled: !delegate.account.context.watchonly
                                 GMenu.Item {
-                                    visible: !delegate.account.hidden
                                     text: qsTrId('id_rename')
                                     icon.source: 'qrc:/svg/wallet-rename.svg'
                                     onClicked: {
@@ -202,8 +202,6 @@ ItemDelegate {
                                         account_delegate_menu.close()
                                         controller.setAccountHidden(delegate.account, true)
                                     }
-                                    visible: !delegate.account.hidden
-                                    height: visible ? implicitHeight : 0
                                 }
                             }
                         }
