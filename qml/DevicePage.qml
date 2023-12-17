@@ -6,6 +6,8 @@ import QtQuick.Layouts
 
 StackViewPage {
     signal deviceSelected(Device device)
+    signal removeClicked()
+    signal closeClicked()
     required property Wallet wallet
     property bool login: true
     function update() {
@@ -29,6 +31,11 @@ StackViewPage {
 
     id: self
     title: self.wallet.name
+    rightItem: WalletOptionsButton {
+        wallet: self.wallet
+        onRemoveClicked: self.removeClicked()
+        onCloseClicked: self.closeClicked()
+    }
     contentItem: GStackView {
         id: stack_view
         initialItem: ColumnLayout {

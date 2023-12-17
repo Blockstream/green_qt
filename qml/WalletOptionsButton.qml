@@ -6,6 +6,7 @@ import QtQuick.Layouts
 
 CircleButton {
     signal removeClicked()
+    signal closeClicked()
     required property Wallet wallet
     id: self
     icon.source: 'qrc:/svg/3-dots.svg'
@@ -19,9 +20,19 @@ CircleButton {
         pointerY: 0
         GMenu.Item {
             text: qsTrId('id_remove_wallet')
+            icon.source: 'qrc:/svg2/trash.svg'
+            enabled: !!self.wallet
             onClicked: {
                 menu.close()
                 self.removeClicked()
+            }
+        }
+        GMenu.Item {
+            text: 'Close'
+            icon.source: 'qrc:/svg2/close.svg'
+            onClicked: {
+                menu.close()
+                self.closeClicked()
             }
         }
     }

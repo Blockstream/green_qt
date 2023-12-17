@@ -7,6 +7,8 @@ import QtQuick.Layouts
 StackViewPage {
     signal loginFinished(Context context)
     signal restoreClicked()
+    signal removeClicked()
+    signal closeClicked()
     required property Wallet wallet
     StackView.onDeactivated: {
         pin_field.clear()
@@ -30,6 +32,8 @@ StackViewPage {
     }
     rightItem: WalletOptionsButton {
         wallet: self.wallet
+        onRemoveClicked: self.removeClicked()
+        onCloseClicked: self.closeClicked()
     }
     contentItem: GStackView {
         id: stack_view

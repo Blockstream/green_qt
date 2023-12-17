@@ -80,6 +80,21 @@ MainPage {
         stack_layout.currentIndex = stack_layout.children.length - 1
         side_bar.currentView = SideBar.View.Wallets
     }
+    function closeWallet(wallet) {
+        for (let i = 0; i < stack_layout.children.length; ++i) {
+            const child = stack_layout.children[i]
+            if (child instanceof WalletView && child.wallet === wallet) {
+                stack_layout.currentIndex = i - 1
+                child.destroy()
+                break
+            }
+        }
+    }
+    function removeWallet(wallet) {
+        self.closeWallet(wallet)
+        WalletManager.removeWallet(wallet)
+        Analytics.recordEvent('wallet_delete')
+    }
 
     StackView.onActivating: self.openWallets()
     StackView.onActivated: side_bar.x = 0
@@ -104,6 +119,17 @@ MainPage {
         id: wallet_view
         WalletView {
             onOpenWallet: (wallet) => self.openWallet(wallet)
+            onCloseWallet: (wallet) => self.closeWallet(wallet)
+            onRemoveWallet: (wallet) => remove_wallet_dialog.createObject(self, { wallet }).open()
+        }
+    }
+
+    Component {
+        id: remove_wallet_dialog
+        RemoveWalletDialog {
+            onRemoveWallet: (wallet) => {
+                self.removeWallet(wallet)
+            }
         }
     }
 
@@ -178,17 +204,13 @@ MainPage {
         }
     }
 
-    Component {
-        id: remove_wallet_dialog
-        RemoveWalletDialog {}
-    }
-
-    readonly property bool scannerAvailable: (media_devices.item?.videoInputs?.length > 0) ?? false
-    Loader {
+    readonly property bool scannerAvailable: (media_devices.object?.videoInputs?.length ?? 0) > 0
+    Instantiator {
         id: media_devices
         asynchronous: true
         active: true
-        sourceComponent: MediaDevices {
+        model: 1
+        delegate: MediaDevices {
         }
     }
 }

@@ -8,6 +8,8 @@ import "analytics.js" as AnalyticsJS
 
 StackViewPage {
     signal loginFinished(Context context)
+    signal removeClicked()
+    signal closeClicked()
     required property Wallet wallet
     StackView.onActivating: {
         password_field.clear()
@@ -39,6 +41,8 @@ StackViewPage {
     padding: 60
     rightItem: WalletOptionsButton {
         wallet: self.wallet
+        onRemoveClicked: self.removeClicked()
+        onCloseClicked: self.closeClicked()
     }
     contentItem: ColumnLayout {
         VSpacer {

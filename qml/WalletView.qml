@@ -8,25 +8,28 @@ import "util.js" as UtilJS
 
 MainPage {
     signal openWallet(Wallet wallet)
+    signal removeWallet(Wallet wallet)
+    signal closeWallet(Wallet wallet)
     property Wallet wallet
     property Device device
     Component.onCompleted: {
-        if (!self.wallet) {
+        const wallet = self.wallet
+        if (!wallet) {
             if (self.device instanceof JadeDevice) {
                 stack_view.push(jade_page, { device: self.device, login: true }, StackView.Immediate)
             } else {
                 stack_view.push(terms_of_service_page, {}, StackView.Immediate)
             }
-        } else if (self.wallet.context) {
-            stack_view.push(loading_page, { context: self.wallet.context }, StackView.Immediate)
+        } else if (wallet.context) {
+            stack_view.push(loading_page, { context: wallet.context }, StackView.Immediate)
         } else if (wallet.watchOnly) {
-            stack_view.push(watch_only_login_page, { wallet: self.wallet }, StackView.Immediate)
+            stack_view.push(watch_only_login_page, { wallet }, StackView.Immediate)
         } else if (wallet.deviceDetails?.type) {
-            stack_view.push(device_page, { wallet: self.wallet }, StackView.Immediate)
-        } else if (self.wallet.loginAttemptsRemaining === 0) {
-            stack_view.push(restore_wallet_page, { wallet: self.wallet }, StackView.Immediate)
+            stack_view.push(device_page, { wallet }, StackView.Immediate)
+        } else if (wallet.loginAttemptsRemaining === 0) {
+            stack_view.push(restore_wallet_page, { wallet }, StackView.Immediate)
         } else {
-            stack_view.push(pin_login_page, { wallet: self.wallet }, StackView.Immediate)
+            stack_view.push(pin_login_page, { wallet }, StackView.Immediate)
         }
     }
     id: self
@@ -45,6 +48,8 @@ MainPage {
                     stack_view.push(jade_page, { device, login: true })
                 }
             }
+            onRemoveClicked: self.removeWallet(self.wallet)
+            onCloseClicked: self.closeWallet(self.wallet)
         }
     }
 
@@ -194,6 +199,8 @@ MainPage {
                 self.wallet = context.wallet
                 stack_view.replace(null, loading_page, { context }, StackView.PushTransition)
             }
+            onRemoveClicked: self.removeWallet(self.wallet)
+            onCloseClicked: self.closeWallet(self.wallet)
         }
     }
 
@@ -204,6 +211,8 @@ MainPage {
                 stack_view.push(null, loading_page, { context }, StackView.PushTransition)
             }
             onRestoreClicked: stack_view.replace(restore_wallet_page, { wallet: self.wallet })
+            onRemoveClicked: self.removeWallet(self.wallet)
+            onCloseClicked: self.closeWallet(self.wallet)
         }
     }
 
