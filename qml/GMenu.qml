@@ -71,7 +71,6 @@ Popup {
         rightPadding: 24
         topPadding: 8
         bottomPadding: 8
-
         background: Rectangle {
             color: 'white'
             opacity: 0.05

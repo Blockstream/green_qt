@@ -176,6 +176,7 @@ qt_add_resources(green "images"
         assets/svg2/shield_warning.svg
         assets/svg2/star.svg
         assets/svg2/take_control.svg
+        assets/svg2/trash.svg
         assets/svg2/wallet.svg
         assets/svg2/warning.svg
         assets/svg2/watermark_bitcoin.svg

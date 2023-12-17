@@ -37,6 +37,9 @@ StackViewPage {
     }
     id: self
     padding: 60
+    rightItem: WalletOptionsButton {
+        wallet: self.wallet
+    }
     contentItem: ColumnLayout {
         VSpacer {
         }

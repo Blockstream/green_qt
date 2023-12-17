@@ -28,6 +28,9 @@ StackViewPage {
         }
         onLoginFinished: (context) => self.loginFinished(context)
     }
+    rightItem: WalletOptionsButton {
+        wallet: self.wallet
+    }
     contentItem: GStackView {
         id: stack_view
         initialItem: ColumnLayout {
@@ -52,6 +55,7 @@ StackViewPage {
                 Layout.alignment: Qt.AlignCenter
                 Layout.fillWidth: true
                 Layout.preferredWidth: 0
+                Layout.maximumWidth: 450
                 font.pixelSize: 14
                 font.weight: 400
                 horizontalAlignment: Label.AlignHCenter
