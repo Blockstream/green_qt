@@ -1,6 +1,5 @@
 import Blockstream.Green
 import Blockstream.Green.Core
-import QtMultimedia
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -12,146 +11,6 @@ import "util.js" as UtilJS
 ApplicationWindow {
     property Navigation navigation: Navigation {}
     property Constants constants: Constants {}
-
-    function openWallet(wallet) {
-        for (let i = 0; i < stack_layout.children.length; ++i) {
-            const child = stack_layout.children[i]
-            if (child instanceof WalletView && child.wallet === wallet) { // && !child.device) {
-                stack_layout.currentIndex = i;
-                return
-            }
-        }
-        wallet_view.createObject(stack_layout, { wallet })
-        stack_layout.currentIndex = stack_layout.children.length - 1
-        side_bar.currentView = SideBar.View.Wallets
-    }
-
-    function openDevice(device) {
-        for (let i = 0; i < stack_layout.children.length; ++i) {
-            const child = stack_layout.children[i]
-            if (child instanceof WalletView && child.device === device) {
-                stack_layout.currentIndex = i;
-                return
-            }
-        }
-        wallet_view.createObject(stack_layout, { device })
-        stack_layout.currentIndex = stack_layout.children.length - 1
-        side_bar.currentView = SideBar.View.Wallets
-    }
-
-    function openWallets() {
-        if (wallets_drawer.visible) {
-            wallets_drawer.close()
-            return
-        }
-
-        if (DeviceManager.count > 0) {
-            wallets_drawer.open()
-            return;
-        }
-
-        let current_index = -1
-        let current_wallet
-        for (let i = 0; i < stack_layout.children.length; ++i) {
-            const child = stack_layout.children[i]
-            if (child instanceof WalletView) {
-                current_index = i
-                current_wallet = child.wallet
-                break
-            }
-        }
-
-        if (WalletManager.wallets.length > 1 && current_index < 0) {
-            stack_layout.currentIndex = 0
-            return
-        }
-
-        if (current_index >= 0) {
-            if (current_wallet || WalletManager.wallets.length > 0) {
-                wallets_drawer.open()
-            } else {
-                stack_layout.currentIndex = current_index
-                side_bar.currentView = SideBar.View.Wallets
-            }
-            return
-        }
-
-        if (WalletManager.wallets.length === 1 && current_index >= 0) {
-            stack_layout.currentIndex = current_index
-            side_bar.currentView = SideBar.View.Wallets
-            return
-        }
-
-        const wallet = WalletManager.wallets[0] ?? null
-        wallet_view.createObject(stack_layout, { wallet })
-        stack_layout.currentIndex = stack_layout.children.length - 1
-        side_bar.currentView = SideBar.View.Wallets
-    }
-
-
-    JadeFirmwareController {
-        id: firmware_controller
-        enabled: true
-    }
-
-    JadeDeviceSerialPortDiscoveryAgent {
-    }
-
-    Connections {
-        target: DeviceManager
-        function onDeviceAdded(device) {
-            if (device instanceof JadeDevice && device.state === JadeDevice.StateUninitialized) {
-                jade_notification_dialog.createObject(window, { device }).open()
-            }
-//            if (device instanceof JadeDevice && wallets_view.count === 0) {
-//                window.openDevice(device)
-//            }
-        }
-    }
-
-    Component {
-        id: jade_notification_dialog
-        JadeNotificationDialog {
-            onSetupClicked: (device) => {
-                window.openDevice(device)
-                close()
-            }
-            onClosed: destroy()
-        }
-    }
-
-    WalletsDrawer {
-        id: wallets_drawer
-        leftMargin: side_bar.width
-        onWalletClicked: (wallet) => {
-            wallets_drawer.close()
-            window.openWallet(wallet)
-        }
-        onDeviceClicked: (device) => {
-            wallets_drawer.close()
-            window.openDevice(device)
-        }
-    }
-
-    PreferencesView {
-        id: preferences_dialog
-        onClosed: {
-            side_bar.currentView = SideBar.View.Wallets
-        }
-    }
-
-    SideBar {
-        id: side_bar
-        height: parent.height
-        parent: Overlay.overlay
-        z: 1
-        onPreferencesClicked: {
-            wallets_drawer.close()
-            preferences_dialog.open()
-            side_bar.currentView = SideBar.View.Preferences
-        }
-        onWalletsClicked: openWallets()
-    }
 
     id: window
     x: Settings.windowX
@@ -165,15 +24,16 @@ ApplicationWindow {
     minimumWidth: 1024
     minimumHeight: 768
     visible: true
-    color: constants.c800
+    color: '#121416'
     title: {
-        const title = stack_layout.currentItem?.title
+        const title = stack_view.currentItem?.title
         const parts = []
         if (title) parts.push(title)
         parts.push('Blockstream Green');
         if (env !== 'Production') parts.push(`[${env}]`)
         return parts.join(' - ');
     }
+
     Label {
         parent: Overlay.overlay
         visible: false
@@ -202,29 +62,22 @@ ApplicationWindow {
             return parts.join(' > ')
         }
     }
-    FontMetrics {
-        id: font_metrics
-    }
-    GStackLayout {
-        id: stack_layout
+
+    GStackView {
+        id: stack_view
         anchors.fill: parent
-        anchors.leftMargin: side_bar.width
-        currentIndex: 0
-        WalletsView {
-            id: wallets_view
-            focus: StackLayout.isCurrentItem
-            onOpenWallet: (wallet) => window.openWallet(wallet)
-            onOpenDevice: (device) => window.openDevice(device)
-            onCreateWallet: window.openWallet(null)
+        initialItem: SplashPage {
+            onTimeout: app_page.active = true
         }
     }
 
-    Component.onCompleted: openWallets()
-
-    Component {
-        id: wallet_view
-        WalletView {
-            onOpenWallet: (wallet) => window.openWallet(wallet)
+    Loader {
+        id: app_page
+        active: false
+        visible: false
+        asynchronous: true
+        onLoaded: stack_view.replace(null, app_page.item, StackView.PushTransition)
+        sourceComponent: AppPage {
         }
     }
 
@@ -247,20 +100,6 @@ ApplicationWindow {
                     NumberAnimation { property: 'offset_y'; to: 0; easing.type: Easing.OutCubic; duration: 1000 }
                 }
             }
-        }
-    }
-
-    Component {
-        id: remove_wallet_dialog
-        RemoveWalletDialog {}
-    }
-
-    readonly property bool scannerAvailable: (media_devices.item?.videoInputs?.length > 0) ?? false
-    Loader {
-        id: media_devices
-        asynchronous: true
-        active: true
-        sourceComponent: MediaDevices {
         }
     }
 }

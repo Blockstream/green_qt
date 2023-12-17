@@ -84,7 +84,6 @@ SET(QML_FILES
     qml/DisableAllPinsDialog.qml
     qml/JadeViewDevice.qml
     qml/OutputsListView.qml
-    qml/LeftArrowToolTip.qml
     qml/GPane.qml
     qml/main.qml
     qml/DialogHeader.qml
@@ -141,7 +140,6 @@ SET(QML_FILES
     qml/AssetIcon.qml
     qml/SelectNetworkView.qml
     qml/WelcomePage.qml
-    qml/HomeView.qml
     qml/AuthHandlerTaskView.qml
     qml/GetCredentialsView.qml
     qml/TaskDispatcherInspector.qml
@@ -240,6 +238,8 @@ SET(QML_FILES
     qml/JadeUpdateDialog2.qml
     qml/JadeVerifyAddressPage.qml
     qml/Hint.qml
+    qml/SplashPage.qml
+    qml/AppPage.qml
 )
 
 if (GREEN_NO_RESOURCES)

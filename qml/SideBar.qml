@@ -19,8 +19,8 @@ Pane {
 
     id: self
     focusPolicy: Qt.ClickFocus
-    topPadding: 0
-    bottomPadding: 0
+    topPadding: 30
+    bottomPadding: 30
     leftPadding: 0
     rightPadding: 0
     background: Rectangle {
@@ -33,18 +33,8 @@ Pane {
         }
     }
     implicitWidth: 72
-    Behavior on implicitWidth {
-        NumberAnimation {
-            duration: 300
-            easing.type: Easing.InOutCubic
-        }
-    }
 
     contentItem: ColumnLayout {
-        spacing: 10
-        Item {
-            Layout.minimumHeight: 20
-        }
         Image {
             Layout.alignment: Qt.AlignCenter
             Layout.topMargin: 20
