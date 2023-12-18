@@ -64,6 +64,14 @@ void CreateTransactionController::setAsset(Asset* asset)
     m_recipient->setAsset(asset);
 }
 
+void CreateTransactionController::setCoins(const QVariantList& coins)
+{
+    if (m_coins == coins) return;
+    m_coins = coins;
+    emit coinsChanged();
+    invalidate();
+}
+
 void CreateTransactionController::invalidate()
 {
     if (m_update_timer != -1) killTimer(m_update_timer);
