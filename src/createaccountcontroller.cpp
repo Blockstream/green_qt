@@ -83,8 +83,23 @@ void CreateAccountController::create()
     Q_ASSERT(noErrors());
 
     if (m_name.isEmpty()) {
-        // TODO: better default name
-        setName(QString("Account %1").arg(QDateTime::currentSecsSinceEpoch()));
+        QString name;
+        if (m_type == "2of2" || m_type == "2of3") {
+            name = "2FA Protected";
+        }
+        if (m_type == "2of2_no_recovery") {
+            name = "AMP Account";
+        }
+        if (m_type == "p2wpkh") {
+            name = "Standard";
+        }
+        if (m_type == "p2sh-p2wpkh") {
+            name = "Legacy SegWit";
+        }
+        if (m_type == "p2pkh") {
+            name = "Legacy";
+        }
+        setName(m_network->isLiquid() ? name + " Liquid" : name);
     }
 
     auto details = QJsonObject{

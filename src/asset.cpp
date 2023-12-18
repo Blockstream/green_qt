@@ -140,7 +140,11 @@ AssetManager::AssetManager()
         auto asset = assetWithId(network->deployment(), id);
         asset->setNetworkKey(network_key);
         asset->setWeight(INT_MAX);
-        asset->setName(network->displayName());
+        if (network->isLiquid() && network->isMainnet()) {
+            asset->setName(network->displayName() + " Bitcoin");
+        } else {
+            asset->setName(network->displayName());
+        }
     }
 }
 

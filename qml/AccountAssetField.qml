@@ -35,7 +35,6 @@ AbstractButton {
         }
         ColumnLayout {
             Layout.alignment: Qt.AlignCenter
-            Layout.fillWidth: false
             Layout.fillHeight: false
             spacing: 0
             Label {
@@ -61,8 +60,6 @@ AbstractButton {
                 opacity: 0.4
                 text: UtilJS.networkLabel(self.account?.network) + ' / ' + UtilJS.accountLabel(self.account)
             }
-        }
-        HSpacer {
         }
         Image {
             Layout.alignment: Qt.AlignCenter
