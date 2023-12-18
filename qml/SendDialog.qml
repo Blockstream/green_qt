@@ -16,11 +16,33 @@ ControllerDialog {
 
     function parsePayment(url) {
         const payment = WalletManager.parseUrl(url.trim())
-        address_field.text = payment.address;
+        let asset
+        if (account.network.liquid && payment.assetid) {
+            for (let i = 0; i < self.account.balances.length; i++) {
+                const balance = self.account.balances[i]
+                if (balance.asset.id === payment.assetid) {
+                    asset = balance.asset
+                    asset_field_loader.item.currentIndex = i
+                    break
+                }
+            }
+            if (!asset) {
+                address_field.text = ''
+                controller.amount = ''
+                return
+            }
+        }
+        address_field.text = payment.address
         if (payment.amount) {
-            const cvt = self.wallet.convert({ btc: payment.amount })
-            let unit = self.session.unit
-            controller.amount = cvt[unit === "\u00B5BTC" ? 'ubtc' : unit.toLowerCase()]
+            if (asset && !asset.isLBTC) {
+                controller.amount = payment.amount
+            } else {
+                const cvt = self.wallet.convert({ btc: payment.amount })
+                let unit = self.session.unit
+                if (account.network.liquid) asset_field_loader.item.currentIndex = 0
+                address_field.text = payment.address
+                controller.amount = cvt[unit === "\u00B5BTC" ? 'ubtc' : unit.toLowerCase()]
+            }
         }
         if (payment.message) {
             controller.memo = payment.message
