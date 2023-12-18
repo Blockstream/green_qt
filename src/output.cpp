@@ -18,6 +18,13 @@ Output::Output(const QJsonObject& data, Account* account)
     connect(m_account->session(), &Session::blockChanged, this, &Output::updateExpired);
 }
 
+void Output::setAddress(const QString& address)
+{
+    Q_ASSERT(m_address.isEmpty());
+    m_address = address;
+    emit addressChanged();
+}
+
 void Output::updateFromData(const QJsonObject& data)
 {
     if (m_data == data) return;

@@ -16,6 +16,7 @@ class Output : public QObject
     Q_PROPERTY(Account* account READ account CONSTANT)
     Q_PROPERTY(QJsonObject data READ data NOTIFY dataChanged)
     Q_PROPERTY(Asset* asset READ asset NOTIFY assetChanged)
+    Q_PROPERTY(QString address READ address NOTIFY addressChanged)
     Q_PROPERTY(bool dust READ dust NOTIFY dustChanged)
     Q_PROPERTY(bool locked READ locked NOTIFY lockedChanged)
     Q_PROPERTY(bool confidential READ confidential NOTIFY confidentialChanged)
@@ -30,6 +31,8 @@ public:
     Account* account() const { return m_account; }
     Session* session() const;
     Asset* asset() const { return m_asset; }
+    QString address() const { return m_address; }
+    void setAddress(const QString& address);
     QJsonObject data() const { return m_data; }
     void updateFromData(const QJsonObject& data);
     void update();
@@ -44,6 +47,7 @@ public:
 signals:
     void dataChanged();
     void assetChanged();
+    void addressChanged();
     void dustChanged();
     void lockedChanged();
     void confidentialChanged();
@@ -64,6 +68,7 @@ private:
 public:
     Account* const m_account;
     Asset* m_asset{nullptr};
+    QString m_address;
     QJsonObject m_data;
     bool m_dust{false};
     bool m_locked{false};
