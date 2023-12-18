@@ -11,6 +11,7 @@ WalletHeaderCard {
                 const account = context.accounts[i]
                 for (let j = 0; j < account.balances.length; j++) {
                     const balance = account.balances[j]
+                    if (balance.amount === 0) continue
                     if (balance.asset.icon) {
                         assets.add(balance.asset)
                     }
@@ -26,6 +27,7 @@ WalletHeaderCard {
                 const account = context.accounts[i]
                 for (let j = 0; j < account.balances.length; j++) {
                     const balance = account.balances[j]
+                    if (balance.amount === 0) continue
                     if (!balance.asset.icon) return true
                 }
             }
