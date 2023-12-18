@@ -144,6 +144,7 @@ qt_add_resources(green "images"
         assets/svg2/check.svg
         assets/svg2/check-green.svg
         assets/svg2/close.svg
+        assets/svg2/coin_selection.svg
         assets/svg2/copy.svg
         assets/svg2/copy2.svg
         assets/svg2/edit.svg
