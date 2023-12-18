@@ -18,29 +18,49 @@ MainPage {
         stack_layout.currentIndex = stack_layout.children.length - 1
         side_bar.currentView = SideBar.View.Wallets
     }
-
     function openDevice(device) {
-        for (let i = 0; i < stack_layout.children.length; ++i) {
-            const child = stack_layout.children[i]
-            if (child instanceof WalletView && child.device === device) {
-                stack_layout.currentIndex = i;
+        if (stack_layout.currentItem?.device) {
+            console.log('current view has device assigned')
+            return
+        }
+
+        if (stack_layout.currentItem?.wallet) {
+            console.log('current view has wallet')
+            if (stack_layout.currentItem.wallet.context) {
+                console.log('    but wallet has context')
                 return
             }
         }
+
+        for (let i = 0; i < stack_layout.children.length; ++i) {
+            const child = stack_layout.children[i]
+            if (!(child instanceof WalletView)) continue
+            if (child.device === device) {
+                stack_layout.currentIndex = i;
+                console.log('switch to existing device view', i)
+                return
+            }
+            if (child.wallet?.xpubHashId === device.xpubHashId) {
+                stack_layout.currentIndex = i;
+                console.log('switch to existing wallet view with same xpubhashid', i)
+                return
+            }
+        }
+
+        if (device instanceof JadeDevice && device.state === JadeDevice.StateUninitialized) {
+            jade_notification_dialog.createObject(window, { device }).open()
+            return
+        }
+
+        console.log('create view for device', device)
         wallet_view.createObject(stack_layout, { device })
         stack_layout.currentIndex = stack_layout.children.length - 1
         side_bar.currentView = SideBar.View.Wallets
     }
-
     function openWallets() {
         if (wallets_drawer.visible) {
             wallets_drawer.close()
             return
-        }
-
-        if (DeviceManager.count > 0) {
-            wallets_drawer.open()
-            return;
         }
 
         let current_index = -1
@@ -99,7 +119,14 @@ MainPage {
     property Navigation navigation: Navigation {}
     property Constants constants: Constants {}
 
-    StackView.onActivating: self.openWallets()
+    StackView.onActivating: {
+        const device = DeviceManager.defaultDevice()
+        if (device) {
+            self.openDevice(device)
+        } else {
+            self.openWallets()
+        }
+    }
     StackView.onActivated: side_bar.x = 0
 
     id: self
@@ -167,12 +194,7 @@ MainPage {
     Connections {
         target: DeviceManager
         function onDeviceAdded(device) {
-            if (device instanceof JadeDevice && device.state === JadeDevice.StateUninitialized) {
-                jade_notification_dialog.createObject(window, { device }).open()
-            }
-//            if (device instanceof JadeDevice && wallets_view.count === 0) {
-//                self.openDevice(device)
-//            }
+            self.openDevice(device)
         }
     }
 

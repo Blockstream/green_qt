@@ -18,6 +18,7 @@ public:
     int count() const;
     QSet<Device*> devices() const;
     Device* deviceWithId(const QString& id);
+    Q_INVOKABLE Device* defaultDevice() const;
 public slots:
     void addDevice(Device* device);
     void removeDevice(Device* device);

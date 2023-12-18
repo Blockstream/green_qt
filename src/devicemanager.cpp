@@ -53,6 +53,15 @@ Device *DeviceManager::deviceWithId(const QString& id)
     return nullptr;
 }
 
+Device* DeviceManager::defaultDevice() const
+{
+    if (m_devices.size() == 1) {
+        return m_devices.values().first();
+    } else {
+        return nullptr;
+    }
+}
+
 void DeviceManager::addDevice(Device* device)
 {
     if (m_devices.contains(device)) return;
