@@ -81,4 +81,8 @@ TextField {
             ToolTip.visible: hovered
         }
     }
+    ScannerPopup {
+        id: scanner_popup
+        onCodeScanned: (code) => self.text = code //controller.parseAndUpdate(code)
+    }
 }

@@ -11,9 +11,17 @@ StackViewPage {
     required property Context context
     required property Account account
     property Asset asset
+    function pushSelectCoinsPage() {
+        self.StackView.view.push(select_coins_page, {
+            account: controller.account,
+            asset: controller.asset,
+            coins: controller.coins,
+        })
+    }
+
     AnalyticsView {
         name: 'Send'
-        active: self.opened
+        active: true
         segmentation: AnalyticsJS.segmentationSubAccount(self.account)
     }
     CreateTransactionController {
@@ -58,12 +66,50 @@ StackViewPage {
                 }
             }
             FieldTitle {
-                text: 'Enter Address'
+                text: qsTrId('id_manual_coin_selection')
+                visible: controller.coins.length > 0
             }
-            ScannerPopup {
-                id: scanner_popup
-                parent: address_field
-                onCodeScanned: (code) => controller.parseAndUpdate(code)
+            AbstractButton {
+                Layout.bottomMargin: 15
+                Layout.fillWidth: true
+                padding: 20
+                visible: controller.coins.length > 0
+                background: Rectangle {
+                    radius: 5
+                    color: '#222226'
+                }
+                contentItem: RowLayout {
+                    spacing: 20
+                    Image {
+                        Layout.alignment: Qt.AlignCenter
+                        source: 'qrc:/svg2/coin_selection.svg'
+                    }
+                    Label {
+                        Layout.alignment: Qt.AlignCenter
+                        Layout.fillWidth: true
+                        text: {
+                            let satoshi = 0
+                            for (const output of controller.coins) {
+                                satoshi += output.data.satoshi
+                            }
+                            return controller.asset.formatAmount(satoshi, true) + ' (' + controller.coins.length + ' coins)'
+                        }
+                    }
+                    CircleButton {
+                        Layout.alignment: Qt.AlignCenter
+                        icon.source: 'qrc:/svg2/close.svg'
+                        onClicked: controller.coins = []
+                    }
+                    CircleButton {
+                        Layout.alignment: Qt.AlignCenter
+                        icon.source: 'qrc:/svg2/edit.svg'
+                        onClicked: self.pushSelectCoinsPage()
+                    }
+                }
+                onClicked: self.pushSelectCoinsPage()
+            }
+            FieldTitle {
+                text: 'Enter Address'
             }
             AddressField {
                 Layout.bottomMargin: 15
@@ -145,8 +191,26 @@ StackViewPage {
             spacing: 20
             RegularButton {
                 Layout.fillWidth: true
+                id: options_button
                 implicitWidth: 0
                 text: 'Advanced Options'
+                onClicked: options_menu.open()
+                GMenu {
+                    id: options_menu
+                    x: (options_button.width - options_menu.width) * 0.5
+                    y: -options_menu.height - 8
+                    pointerX: 0.5
+                    pointerY: 1
+                    GMenu.Item {
+                        enabled: !controller.account.network.liquid
+                        text: qsTrId('id_manual_coin_selection')
+                        icon.source: 'qrc:/svg2/coin_selection.svg'
+                        onClicked: {
+                            options_menu.close()
+                            self.pushSelectCoinsPage()
+                        }
+                    }
+                }
             }
             PrimaryButton {
                 Layout.fillWidth: true
@@ -173,6 +237,7 @@ StackViewPage {
                 self.StackView.view.pop()
                 controller.account = account
                 controller.asset = asset
+                controller.coins = []
                 controller.invalidate()
             }
         }
@@ -181,6 +246,16 @@ StackViewPage {
     Component {
         id: send_confirm_page
         SendConfirmPage {
+        }
+    }
+
+    Component {
+        id: select_coins_page
+        SelectCoinsView {
+            onCoinsSelected: (coins) => {
+                self.StackView.view.pop()
+                controller.coins = coins
+            }
         }
     }
 }

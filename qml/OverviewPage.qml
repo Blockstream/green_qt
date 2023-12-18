@@ -370,7 +370,14 @@ StackViewPage {
             action: Action {
                 enabled: UtilJS.effectiveVisible(self) && !self.archived && !self.context.watchonly && !self.wallet.locked && self.currentAccount
                 shortcut: 'Ctrl+S'
-                onTriggered: send_drawer.createObject(self, { context: self.context, account: self.currentAccount }).open()
+                onTriggered: {
+                    const context = self.context
+                    const account = self.currentAccount
+                    const network = account.network
+                    const asset = self.context.getOrCreateAsset(network.liquid ? network.policyAsset : network.key)
+                    const drawer = send_drawer.createObject(self, { context, account, asset })
+                    drawer.open()
+                }
             }
         }
         PrimaryButton {

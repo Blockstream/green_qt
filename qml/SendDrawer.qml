@@ -16,6 +16,9 @@ WalletDrawer {
     contentItem: GStackView {
         id: stack_view
         initialItem: SendPage {
+            rightItem: CloseButton {
+                onClicked: self.close()
+            }
             context: self.context
             account: self.account
             asset: self.asset

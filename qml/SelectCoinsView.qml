@@ -6,35 +6,28 @@ import QtQml.Models
 
 import "analytics.js" as AnalyticsJS
 
-Page {
+StackViewPage {
+    signal coinsSelected(var coins)
     required property Account account
+    required property Asset asset
+    required property var coins
 
-    readonly property var selectedOutputs: {
-        const outputs = []
-        for (var i=0; i<selection_model.selectedIndexes.length; ++i) {
-            var index = selection_model.selectedIndexes[i]
-            var o = output_model.data(index, Qt.UserRole)
-            outputs.push(o)
+    property var selection: {
+        const selection = new Set()
+        for (let i = 0; i < self.coins.length; i++) {
+            selection.add(self.coins[i])
         }
-        return outputs;
+        return selection
     }
 
-    property list<Action> options: [
-        Action {
-            enabled: selection_model.hasSelection
-            text: qsTrId('id_clear')
-            onTriggered: selection_model.clear()
-        }
-    ]
-
     id: self
-    spacing: constants.p1
-    background: null
+    title: 'Select Your Coins'
     contentItem: ColumnLayout {
         RowLayout {
-            id: tags_layout
-            Layout.fillWidth: true
-            spacing: 6
+            Layout.alignment: Qt.AlignCenter
+            Layout.bottomMargin: 20
+            Layout.fillWidth: false
+            spacing: 10
 
             ButtonGroup {
                 id: button_group
@@ -54,22 +47,16 @@ Page {
                     }
                     return filters
                 }
-                delegate: Button {
+                delegate: AbstractButton {
                     id: self
                     ButtonGroup.group: button_group
                     checked: index === 0
                     checkable: true
-                    padding: 18
-                    topPadding: 10
-                    bottomPadding: 10
-                    background: Rectangle {
-                        id: rectangle
-                        radius: 4
-                        color: self.checked ? constants.c300 : constants.c500
-                    }
+                    background: null
+                    opacity: self.checked ? 1 : 0.4
                     contentItem: Label {
                         text: self.text
-                        font.pixelSize: 10
+                        font.pixelSize: 12
                         font.weight: 400
                         font.styleName: 'Regular'
                     }
@@ -78,44 +65,37 @@ Page {
                     font.capitalization: Font.AllUppercase
                 }
             }
-
-            HSpacer {
-            }
         }
 
-        GListView {
+        TListView {
             id: list_view
             Layout.fillWidth: true
             Layout.fillHeight: true
             clip: true
-            spacing: 0
+            spacing: 5
             model: OutputListModelFilter {
                 id: output_model_filter
+                asset: self.asset
                 filter: [button_group.checkedButton?.buttonTag ?? '', '!locked'].join(' ')
                 model: OutputListModel {
                     id: output_model
                     account: self.account
-                    onModelAboutToBeReset: selection_model.clear()
                 }
             }
             delegate: CoinDelegate {
-                highlighted: selection_model.selectedIndexes.indexOf(output_model.index(output_model.indexOf(output), 0))>-1
+                id: delegate
+                checked: self.selection.has(delegate.output)
                 width: ListView.view.width
-            }
-
-            BusyIndicator {
-                width: 32
-                height: 32
-                running: output_model.fetching
-                anchors.margins: 8
-                Layout.alignment: Qt.AlignHCenter
-                opacity: output_model.fetching ? 1 : 0
-                Behavior on opacity {
-                    SmoothedAnimation {
+                onClicked: {
+                    const output = delegate.output
+                    const selection = new Set(self.selection)
+                    if (self.selection.has(output)) {
+                        selection.delete(output)
+                    } else {
+                        selection.add(output)
                     }
+                    self.selection = selection
                 }
-                anchors.bottom: parent.bottom
-                anchors.horizontalCenter: parent.horizontalCenter
             }
 
             Label {
@@ -131,13 +111,40 @@ Page {
                     }
                 }
             }
-
-            ItemSelectionModel {
-                id: selection_model
-                model: output_model
-            }
         }
     }
+    footer: ColumnLayout {
+        spacing: 10
+        PrimaryButton {
+            Layout.fillWidth: true
+            enabled: self.selection.size > 0
+            text: 'Confirm Coin Selection'
+            onClicked: {
+                const coins = []
+                for (const output of self.selection) {
+                    coins.push(output)
+                }
+                self.coinsSelected(coins)
+            }
+        }
+        Label {
+            Layout.alignment: Qt.AlignCenter
+            text: 'You can send up to:'
+            visible: self.selection.size > 0
+        }
+        Label {
+            Layout.alignment: Qt.AlignCenter
+            text: {
+                let satoshi = 0
+                for (const output of self.selection) {
+                    satoshi += output.data.satoshi
+                }
+                return self.asset.formatAmount(satoshi, true)
+            }
+            visible: self.selection.size > 0
+        }
+    }
+
     AnalyticsView {
         active: self.visible
         name: 'SelectUTXO'
