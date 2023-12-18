@@ -67,30 +67,31 @@ QString ReceiveAddressController::address() const
 
 QString ReceiveAddressController::uri() const
 {
-    if (!m_account || m_generating) return {};
+    if (!m_account || !m_asset || m_generating) return {};
     const auto context = m_account->context();
     const auto network = m_account->network();
     const auto session = m_account->session();
     const auto wallet = context->wallet();
+    const auto bip21_prefix = network->data().value("bip21_prefix").toString();
     auto unit = session->unit();
     unit = unit == "\u00B5BTC" ? "ubtc" : unit.toLower();
     auto amount = m_amount;
     amount.replace(',', '.');
     amount = wallet->convert({{ unit, amount }}).value("btc").toString();
+
     if (amount.toDouble() > 0) {
         if (network->isLiquid()) {
             const auto asset_id = m_asset ? m_asset->id() : network->policyAsset();
             return QString("%1:%2?assetid=%3&amount=%4")
-                    .arg(network->data().value("bip21_prefix").toString())
-                    .arg(m_address)
-                    .arg(asset_id)
-                    .arg(amount);
+                    .arg(bip21_prefix, m_address, asset_id, amount);
         } else {
             return QString("%1:%2?amount=%3")
-                    .arg(network->data().value("bip21_prefix").toString())
-                    .arg(m_address)
-                    .arg(amount);
+                    .arg(bip21_prefix, m_address, amount);
         }
+    } else if (network->isLiquid() && m_asset->id() != network->policyAsset()) {
+        const auto asset_id = m_asset->id();
+        return QString("%1:%2?assetid=%3")
+            .arg(bip21_prefix, m_address, asset_id);
     } else {
         return m_address;
     }

@@ -149,6 +149,7 @@ qt_add_resources(green "images"
         assets/svg2/copy2.svg
         assets/svg2/edit.svg
         assets/svg2/eject-simple-thin.svg
+        assets/svg2/expand.svg
         assets/svg2/eye.svg
         assets/svg2/eye_closed.svg
         assets/svg2/flask.svg
@@ -177,6 +178,8 @@ qt_add_resources(green "images"
         assets/svg2/shield_check.svg
         assets/svg2/shield_warning.svg
         assets/svg2/star.svg
+        assets/svg2/sun.svg
+        assets/svg2/sun-dim.svg
         assets/svg2/take_control.svg
         assets/svg2/trash.svg
         assets/svg2/wallet.svg

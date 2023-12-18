@@ -17,6 +17,7 @@ WalletDrawer {
         id: controller
         context: self.context
         account: self.account
+        asset: self.asset
         amount: '0'
     }
 
@@ -31,27 +32,8 @@ WalletDrawer {
             rightItem: CloseButton {
                 onClicked: self.close()
             }
-            footer: ColumnLayout {
-                PrimaryButton {
-                    Layout.fillWidth: true
-                    enabled: controller.context.device?.connected && !controller.generating && controller.addressVerification !== ReceiveAddressController.VerificationPending
-                    text: qsTrId('id_verify_on_device')
-                    visible: {
-                        if (controller.context.device instanceof JadeDevice) {
-                            switch (self.device.state) {
-                            case JadeDevice.StateReady:
-                            case JadeDevice.StateTemporary:
-                            case JadeDevice.StateLocked:
-                                return true
-                            }
-                        }
-                        return false
-                    }
-                    onClicked: {
-                        stack_view.push(jade_verify_page, { device: controller.context.device, controller })
-                        Analytics.recordEvent('verify_address', AnalyticsJS.segmentationSubAccount(controller.account))
-                    }
-                }
+            footer: RowLayout {
+                spacing: 20
                 RegularButton {
                     id: more_options_button
                     Layout.fillWidth: true
@@ -63,6 +45,26 @@ WalletDrawer {
                         y: -more_options_menu.height - 6
                         pointerX: 0.5
                         pointerY: 1
+                    }
+                }
+                PrimaryButton {
+                    Layout.fillWidth: true
+                    enabled: (controller.context.device?.connected ?? false) && !controller.generating && controller.addressVerification !== ReceiveAddressController.VerificationPending
+                    text: qsTrId('id_verify_on_device')
+                    visible: {
+                        if (controller.context.device instanceof JadeDevice) {
+                            switch (controller.context.device.state) {
+                            case JadeDevice.StateReady:
+                            case JadeDevice.StateTemporary:
+                            case JadeDevice.StateLocked:
+                                return true
+                            }
+                        }
+                        return false
+                    }
+                    onClicked: {
+                        stack_view.push(jade_verify_page, { device: controller.context.device, controller })
+                        Analytics.recordEvent('verify_address', AnalyticsJS.segmentationSubAccount(controller.account))
                     }
                 }
             }
@@ -99,17 +101,29 @@ WalletDrawer {
                         }
                         contentItem: ColumnLayout {
                             spacing: 10
-                            RefreshButton {
-                                Layout.alignment: Qt.AlignRight
-                                onClicked: controller.generate()
-                            }
-                            QRCode {
-                                Layout.alignment: Qt.AlignHCenter
-                                id: qrcode
-                                text: controller.uri
-                                implicitHeight: 200
-                                implicitWidth: 200
-                                radius: 4
+                            RowLayout {
+                                CircleButton {
+                                    Layout.alignment: Qt.AlignTop
+                                    icon.source: 'qrc:/svg2/expand.svg'
+                                    onClicked: stack_view.push(qrcode_page)
+                                }
+                                HSpacer {
+                                }
+                                QRCode {
+                                    Layout.alignment: Qt.AlignHCenter
+                                    id: qrcode
+                                    text: controller.uri
+                                    implicitHeight: 150
+                                    implicitWidth: 150
+                                    radius: 4
+                                }
+                                HSpacer {
+                                }
+                                CircleButton {
+                                    Layout.alignment: Qt.AlignTop
+                                    icon.source: 'qrc:/svg2/refresh.svg'
+                                    onClicked: controller.generate()
+                                }
                             }
                             Label {
                                 Layout.fillWidth: true
@@ -129,7 +143,7 @@ WalletDrawer {
                     }
                     FieldTitle {
                         Layout.topMargin: 15
-                        text: 'Account Address'
+                        text: qsTrId('id_request_amount')
                         visible: amount_field.visible
                     }
                     AmountField {
@@ -147,6 +161,48 @@ WalletDrawer {
     Component {
         id: jade_verify_page
         JadeVerifyAddressPage {
+        }
+    }
+
+    Component {
+        id: qrcode_page
+        StackViewPage {
+            title: qsTrId('id_receive')
+            contentItem: ColumnLayout {
+                spacing: 20
+                id: layout
+                VSpacer {
+                }
+                QRCode {
+                    Layout.alignment: Qt.AlignHCenter
+                    id: qrcode
+                    border: 16
+                    layer.enabled: true
+                    text: controller.uri
+                    Layout.fillWidth: true
+                    Layout.minimumHeight: layout.width
+                    radius: 4
+                    opacity: slider.value
+                }
+                RowLayout {
+                    Layout.alignment: Qt.AlignCenter
+                    Image {
+                        source: 'qrc:/svg2/sun-dim.svg'
+                    }
+                    Slider {
+                        Layout.maximumWidth: 120
+                        id: slider
+                        from: 0.4
+                        to: 1
+                        value: 1
+                    }
+                    Image {
+                        source: 'qrc:/svg2/sun.svg'
+                    }
+                }
+                VSpacer {
+                }
+            }
         }
     }
 

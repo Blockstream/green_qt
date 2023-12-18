@@ -166,7 +166,6 @@ SET(QML_FILES
     qml/AssetsDrawer.qml
     qml/DrawerTitle.qml
     qml/FieldTitle.qml
-    qml/RefreshButton.qml
     qml/CreateAccountPage.qml
     qml/SecurityPolicyButton.qml
     qml/WalletHeaderCard.qml

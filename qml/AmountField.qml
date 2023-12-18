@@ -39,7 +39,7 @@ TextField {
         }
     }
     horizontalAlignment: TextInput.AlignRight
-    font.pixelSize: 30
+    font.pixelSize: 24
     font.weight: 500
     Label {
         id: unit_label

@@ -374,7 +374,7 @@ StackViewPage {
                     const context = self.context
                     const account = self.currentAccount
                     const network = account.network
-                    const asset = self.context.getOrCreateAsset(network.liquid ? network.policyAsset : network.key)
+                    const asset = context.getOrCreateAsset(network.liquid ? network.policyAsset : network.key)
                     const drawer = send_drawer.createObject(self, { context, account, asset })
                     drawer.open()
                 }
@@ -387,7 +387,14 @@ StackViewPage {
             action: Action {
                 enabled: UtilJS.effectiveVisible(self) && !self.archived && !wallet.locked && self.currentAccount
                 shortcut: 'Ctrl+R'
-                onTriggered: receive_drawer.createObject(self, { context: self.context, account: self.currentAccount }).open()
+                onTriggered: {
+                    const context = self.context
+                    const account = self.currentAccount
+                    const network = account.network
+                    const asset = context.getOrCreateAsset(network.liquid ? network.policyAsset : network.key)
+                    const drawer = receive_drawer.createObject(self, { context, account, asset })
+                    drawer.open()
+                }
             }
         }
     }

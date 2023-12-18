@@ -10,19 +10,21 @@ Drawer {
     clip: true
     height: parent.height
     interactive: self.visible
-    topPadding: 60
-    bottomPadding: 60
-    leftPadding: 48 + self.leftMargin
-    rightPadding: 48
+    topPadding: 30
+    bottomPadding: 30
+    leftPadding: 32 + self.leftMargin
+    rightPadding: 32
 
     contentWidth: Math.max(self.minimumContentWidth, self.preferredContentWidth)
     Behavior on contentWidth {
-        SmoothedAnimation { velocity: 500 }
+        SmoothedAnimation {
+            velocity: 500
+        }
     }
 
     Overlay.modal: Rectangle {
         id: modal
-        color: constants.c900
+        color: '#080B0E'
         FastBlur {
             anchors.fill: parent
             cached: true
@@ -42,7 +44,7 @@ Drawer {
 
     Overlay.modeless: Rectangle {
         id: modeless
-        color: constants.c900
+        color: '#080B0E'
         FastBlur {
             anchors.fill: parent
             cached: true
