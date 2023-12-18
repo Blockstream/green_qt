@@ -964,6 +964,18 @@ bool UpdateAccountTask::call(GA_session* session, GA_auth_handler** auth_handler
     return rc == GA_OK;
 }
 
+ValidateTask::ValidateTask(const QJsonObject &details, Session* session)
+    : AuthHandlerTask(session)
+    , m_details(details)
+{
+}
+
+bool ValidateTask::call(GA_session *session, GA_auth_handler **auth_handler)
+{
+    const auto rc = GA_validate(session, Json::fromObject(m_details).get(), auth_handler);
+    return rc == GA_OK;
+}
+
 ChangeTwoFactorTask::ChangeTwoFactorTask(const QString& method, const QJsonObject& details, Session* session)
     : AuthHandlerTask(session)
     , m_method(method)

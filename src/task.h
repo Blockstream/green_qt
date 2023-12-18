@@ -489,6 +489,19 @@ private:
     const QJsonObject m_details;
 };
 
+class ValidateTask : public AuthHandlerTask
+{
+    Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("")
+public:
+     ValidateTask(const QJsonObject& details, Session* session);
+private:
+    bool call(GA_session* session, GA_auth_handler** auth_handler) override;
+private:
+    const QJsonObject m_details;
+};
+
 class SetWatchOnlyTask : public SessionTask
 {
     Q_OBJECT
