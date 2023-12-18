@@ -36,8 +36,8 @@ void Output::updateFromData(const QJsonObject& data)
 void Output::update()
 {
     const auto network = m_account->network();
-    if (!m_asset && network->isLiquid()) {
-        auto asset_id = m_data["asset_id"].toString();
+    if (!m_asset) {
+        auto asset_id = network->isLiquid() ? m_data["asset_id"].toString() : m_account->network()->key();
         m_asset = m_account->context()->getOrCreateAsset(asset_id);
         emit assetChanged();
     }
