@@ -18,7 +18,9 @@ ControllerDialog {
         const payment = WalletManager.parseUrl(url.trim())
         address_field.text = payment.address;
         if (payment.amount) {
-            controller.amount = formatAmount(self.account, payment.amount * 100000000, false)
+            const cvt = self.wallet.convert({ btc: payment.amount })
+            let unit = self.session.unit
+            controller.amount = cvt[unit === "\u00B5BTC" ? 'ubtc' : unit.toLowerCase()]
         }
         if (payment.message) {
             controller.memo = payment.message
