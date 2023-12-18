@@ -4,17 +4,33 @@
 #include "output.h"
 #include "outputlistmodel.h"
 
-OutputListModelFilter::OutputListModelFilter(QObject *parent)
+OutputListModelFilter::OutputListModelFilter(QObject* parent)
     : QSortFilterProxyModel(parent)
 {
     this->sort(0, Qt::DescendingOrder);
 }
 
-void OutputListModelFilter::setModel(OutputListModel *model)
+void OutputListModelFilter::setModel(OutputListModel* model)
 {
     m_model = model;
     setSourceModel(model);
-    emit modelChanged(model);
+    emit modelChanged();
+}
+
+void OutputListModelFilter::setAsset(Asset* asset)
+{
+    if (m_asset == asset) return;
+    m_asset = asset;
+    emit assetChanged();
+    invalidate();
+}
+
+void OutputListModelFilter::setFilter(const QString& filter)
+{
+    if (m_filter == filter) return;
+    m_filter = filter;
+    emit filterChanged();
+    invalidate();
 }
 
 bool OutputListModelFilter::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
@@ -22,6 +38,7 @@ bool OutputListModelFilter::filterAcceptsRow(int source_row, const QModelIndex &
     auto output = m_model->index(source_row, 0, source_parent).data(Qt::UserRole).value<Output*>();
 
     for (auto filter : m_filter.split(' ', Qt::SkipEmptyParts)) {
+        if (m_asset && m_asset != output->asset()) return false;
         bool invert = filter.startsWith('!');
         if (invert) filter = filter.mid(1);
         bool result = true;
@@ -51,16 +68,4 @@ bool OutputListModelFilter::lessThan(const QModelIndex &left, const QModelIndex 
     if (output_l_height>output_r_height) return false;
 
     return QSortFilterProxyModel::lessThan(left, right);
-}
-
-QString OutputListModelFilter::filter()
-{
-    return m_filter;
-}
-
-void OutputListModelFilter::setFilter(const QString &filter)
-{
-    m_filter = filter;
-    invalidate();
-    emit filterChanged(filter);
 }
