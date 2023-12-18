@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.9] - 2023-12-18
+### Added
+- Support BIP21 payment with assetid
+
+### Fixed
+- Parse amount after pasting BIP21 payment
+- Create AMP wallet from the home screen
+
+### Changed
+- Collapse sidebar by default
+
 ## [1.2.8] - 2023-09-27
 ### Fixed
 - Regression on balance update
