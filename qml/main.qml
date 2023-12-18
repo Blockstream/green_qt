@@ -9,9 +9,9 @@ import "analytics.js" as AnalyticsJS
 import "util.js" as UtilJS
 
 ApplicationWindow {
-    property Navigation navigation: Navigation {}
-    property Constants constants: Constants {}
-
+    Constants {
+        id: constants
+    }
     id: window
     x: Settings.windowX
     y: Settings.windowY

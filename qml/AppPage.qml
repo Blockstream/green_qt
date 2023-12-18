@@ -96,6 +96,9 @@ MainPage {
         Analytics.recordEvent('wallet_delete')
     }
 
+    property Navigation navigation: Navigation {}
+    property Constants constants: Constants {}
+
     StackView.onActivating: self.openWallets()
     StackView.onActivated: side_bar.x = 0
 
@@ -143,7 +146,7 @@ MainPage {
 
     SideBar {
         id: side_bar
-        height: parent.height
+        height: parent?.height ?? 0
         parent: Overlay.overlay
         z: 1
         x: -side_bar.width

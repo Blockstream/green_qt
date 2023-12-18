@@ -15,6 +15,9 @@ Button {
             return constants[prefix + index]
         }
     }
+    Constants {
+        id: constants
+    }
     id: self
     topInset: 0
     bottomInset: 0

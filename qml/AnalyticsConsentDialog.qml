@@ -7,6 +7,10 @@ import QtQuick.Layouts
 import "util.js" as UtilJS
 
 AbstractDialog {
+    Constants {
+        id: constants
+    }
+
     id: self
     title: qsTrId('id_help_green_improve')
     modal: false

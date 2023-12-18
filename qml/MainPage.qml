@@ -3,6 +3,9 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 Page {
+    Constants {
+        id: constants
+    }
     focus: StackLayout.isCurrentItem
     focusPolicy: Qt.ClickFocus
     background: Rectangle {
