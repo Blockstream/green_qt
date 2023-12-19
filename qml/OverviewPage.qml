@@ -153,8 +153,7 @@ StackViewPage {
     header: WalletViewHeader {
         onAssetsClicked: assets_drawer.createObject(self, { context: self.context }).open()
         onLogoutClicked: self.logout()
-        onArchivedAccountsClicked: archived_accounts_dialog.open()
-
+        onArchivedAccountsClicked: archived_accounts_dialog.createObject(self, { context: self.context }).open()
         id: wallet_header
         context: self.context
         wallet: self.wallet
@@ -202,9 +201,10 @@ StackViewPage {
         }
     }
 
-    ArchivedAccountsDialog {
+    Component {
         id: archived_accounts_dialog
-        context: self.context
+        ArchivedAccountsDialog {
+        }
     }
 
     Drawer {

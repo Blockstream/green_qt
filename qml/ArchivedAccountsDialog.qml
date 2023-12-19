@@ -9,6 +9,7 @@ WalletDialog {
     header: null
     width: 450
     height: 600
+    onClosed: self.destroy()
     contentItem: GStackView {
         initialItem: StackViewPage {
             title: qsTrId('id_archived_accounts')
