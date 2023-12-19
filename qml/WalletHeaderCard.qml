@@ -15,6 +15,7 @@ AbstractButton {
     Layout.fillHeight: true
     Layout.minimumWidth: 180
     id: self
+    background: null
     padding: 0
     opacity: {
         if (!self.flickable) return 1
