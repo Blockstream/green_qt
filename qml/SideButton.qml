@@ -10,8 +10,8 @@ AbstractButton {
     background: Item {
         Rectangle {
             anchors.fill: parent
-            visible: self.enabled && (self.isCurrent || self.hovered)
-            color: Qt.rgba(1, 1, 1, self.hovered ? 0.05 : 0)
+            visible: self.isCurrent
+            color: Qt.rgba(1, 1, 1, 0.05)
             Rectangle {
                 visible: self.isCurrent
                 width: 1
@@ -32,10 +32,8 @@ AbstractButton {
         }
     }
     contentItem: RowLayout {
-        spacing: 0
         Image {
             Layout.alignment: Qt.AlignCenter
-            opacity: self.enabled ? 1 : 0.4
             source: self.icon.source
             sourceSize.width: self.icon.width
             sourceSize.height: self.icon.height

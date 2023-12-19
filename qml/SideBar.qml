@@ -15,7 +15,7 @@ Pane {
     signal preferencesClicked
     signal walletsClicked
 
-    property int currentView: -1
+    property int currentView: SideBar.Wallets
 
     id: self
     focusPolicy: Qt.ClickFocus
