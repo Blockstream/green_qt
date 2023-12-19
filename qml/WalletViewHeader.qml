@@ -314,7 +314,7 @@ MainPageHeader {
         }
         contentItem: Label {
             text: tab_button.text
-            opacity: tab_button.checked ? 1 : 0.5
+            opacity: tab_button.checked ? 1 : tab_button.hovered ? 0.8 : 0.5
             font.pixelSize: 16
             font.bold: true
             horizontalAlignment: Label.AlignHCenter
