@@ -12,8 +12,8 @@ ItemDelegate {
     onClicked: self.addressClicked(self.address)
     id: self
     hoverEnabled: true
-    padding: constants.p3
-    verticalPadding: constants.p1
+    padding: 20
+    verticalPadding: 12
 
     background: Item {
         Rectangle {
@@ -31,50 +31,60 @@ ItemDelegate {
         }
     }
     contentItem: RowLayout {
+        spacing: 20
         ColumnLayout {
+            Layout.alignment: Qt.AlignCenter
             Layout.fillWidth: false
-            Layout.rightMargin: constants.p2
-            spacing: 8
+            Layout.fillHeight: false
+            spacing: 5
             Label {
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 padding: 8
                 topPadding: 2
                 bottomPadding: 2
-                background: Rectangle {
-                    color: "white"
-                    radius: 4
-                }
-                text: address.data["tx_count"]
-                color: "black"
-                horizontalAlignment: Label.AlignHCenter
-                font.pixelSize: 12
-                font.capitalization: Font.AllUppercase
-                font.styleName: 'Medium'
+                text: self.address.data.tx_count
+                font.pixelSize: 16
+                font.weight: 600
             }
             Label {
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                text: "TX COUNT"
-                color: "white"
-                font.pixelSize: 10
+                text: 'TX'
+                color: '#929292'
+                font.pixelSize: 12
                 font.weight: 400
-                font.styleName: 'Regular'
             }
         }
-        ColumnLayout {
+        Label {
+            Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
             Layout.fillWidth: true
-            spacing: constants.p1
+            Layout.preferredWidth: 0
+            color: '#929292'
+            elide: Text.ElideRight
+            text: self.address.data.address
+            font.pixelSize: 12
+            font.weight: 400
+        }
+        CircleButton {
+            Layout.alignment: Qt.AlignCenter
+            icon.source: 'qrc:/svg2/copy.svg'
+            onClicked: Clipboard.copy(self.address.data.address)
+        }
+        ColumnLayout {
+            Layout.alignment: Qt.AlignCenter
+            Layout.fillWidth: false
+            Layout.fillHeight: false
+            Layout.minimumWidth: 100
             Label {
-                Layout.fillWidth: true
-                elide: Text.ElideRight
-                text: address.data["address"]
-                font.pixelSize: 12
-                font.styleName: 'Regular'
-            }
-            RowLayout {
-                Tag {
-                    color: constants.c500
-                    text: localizedLabel(address.data["address_type"])
-                    font.capitalization: Font.AllUppercase
+                Layout.alignment: Qt.AlignRight
+                font.pixelSize: 10
+                font.weight: 700
+                topPadding: 2
+                bottomPadding: 2
+                leftPadding: 6
+                rightPadding: 6
+                text: localizedLabel(self.address.data.address_type)
+                background: Rectangle {
+                    color: '#68727D'
                 }
             }
         }
