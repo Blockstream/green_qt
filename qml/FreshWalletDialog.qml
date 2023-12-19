@@ -42,7 +42,7 @@ Dialog {
             font.pixelSize: 18
             font.weight: 500
             horizontalAlignment: Label.AlignHCenter
-            text: 'Congratulations and Welcome to your new Wallet'
+            text: 'Congratulations and welcome to your new wallet'
             wrapMode: Label.WordWrap
         }
         Label {
