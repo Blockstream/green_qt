@@ -8,27 +8,26 @@ WalletHeaderCard {
     required property Account account
 
     id: self
+    headerItem: RowLayout {
+        Image {
+            Layout.alignment: Qt.AlignCenter
+            opacity: 0.6
+            source: 'qrc:/svg2/bolt.svg'
+        }
+        Label {
+            Layout.alignment: Qt.AlignCenter
+            font.capitalization: Font.AllUppercase
+            font.pixelSize: 12
+            font.weight: 400
+            opacity: 0.6
+            text: 'Price Feed'
+        }
+        HSpacer {
+            Layout.minimumHeight: 28
+        }
+    }
     contentItem: ColumnLayout {
         spacing: 10
-        RowLayout {
-            Layout.minimumHeight: 28
-            spacing: 10
-            Image {
-                Layout.alignment: Qt.AlignCenter
-                opacity: 0.6
-                source: 'qrc:/svg2/bolt.svg'
-            }
-            Label {
-                Layout.alignment: Qt.AlignCenter
-                font.capitalization: Font.AllUppercase
-                font.pixelSize: 12
-                font.weight: 400
-                opacity: 0.6
-                text: 'Price Feed'
-            }
-            HSpacer {
-            }
-        }
         Label {
             font.capitalization: Font.AllUppercase
             font.pixelSize: 24

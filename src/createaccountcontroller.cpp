@@ -102,6 +102,33 @@ void CreateAccountController::create()
         setName(m_network->isLiquid() ? name + " Liquid" : name);
     }
 
+    auto monitor = new TaskGroupMonitor(this);
+    setMonitor(monitor);
+
+    if (m_network->isElectrum()) {
+        for (auto account : m_context->getAccounts()) {
+            if (account->network() != m_network) continue;
+            if (account->type() != m_type) continue;
+            if (account->pointer() > 0) continue;
+            if (account->json().value("bip44_discovered").toBool()) continue;
+            if (!account->name().isEmpty()) continue;
+            if (!account->synced()) continue;
+
+            m_account = account;
+            m_account->setName(m_name);
+            emit accountChanged();
+            auto update_task = new UpdateAccountTask({{ "name", m_name }}, m_account->session());
+            auto group = new TaskGroup(this);
+            group->add(update_task);
+            monitor->add(group);
+            dispatcher()->add(group);
+            connect(group, &TaskGroup::finished, this, [=] {
+                emit created(m_account);
+            });
+            return;
+        }
+    }
+
     auto details = QJsonObject{
         { "name", m_name },
         { "type", m_type },
@@ -118,11 +145,7 @@ void CreateAccountController::create()
         }
     }
 
-
     auto session = m_context->getOrCreateSession(m_network);
-
-    auto monitor = new TaskGroupMonitor(this);
-    setMonitor(monitor);
 
     auto session_connect = new ConnectTask(session);
     auto session_register = session->registerUser();

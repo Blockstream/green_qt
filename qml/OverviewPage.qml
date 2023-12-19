@@ -14,7 +14,7 @@ StackViewPage {
 
     required property Context context
     readonly property Wallet wallet: self.context.wallet
-    readonly property Account currentAccount: accounts_list.currentAccount
+    property Account currentAccount: null
     readonly property bool fiatRateAvailable: formatFiat(0, false) !== 'n/a'
 
     Connections {
@@ -33,7 +33,8 @@ StackViewPage {
         const network = self.currentAccount?.network ?? NetworkManager.networkForDeployment(self.context.deployment)
         const id = network.liquid ? network.policyAsset : network.key
         const asset = self.context.getOrCreateAsset(id)
-        create_account_drawer.createObject(self, { context: self.context, asset, dismissable }).open()
+        const drawer = create_account_drawer.createObject(self, { context: self.context, asset, dismissable })
+        drawer.open()
     }
 
     function parseAmount(account, amount, unit) {
@@ -104,29 +105,6 @@ StackViewPage {
         }
     }
 
-    readonly property bool ready: true
-
-    /* TODO: handle ready and wallet_active events
-        const accounts = self.wallet?.context.accounts ?? null
-        if (!accounts || accounts.length === 0) return false
-        for (let i = 0; i < accounts.length; i++) {
-            if (!accounts[i].ready) return false
-        }
-        return true
-    }
-
-    // TODO
-    onReadyChanged: if (ready) Analytics.recordEvent('wallet_active', AnalyticsJS.segmentationWalletActive(self.wallet))
-
-    LoginDialog {
-        wallet: self.wallet
-        visible: self.visible && !self.wallet.context
-        //onRejected: navigation.pop()
-        //onAccepted: navigation.push({ wallet: wallet.id })
-        //onClosed: destroy()
-    }
-    */
-
     AnalyticsAlert {
         id: overview_alert
         screen: 'Overview'
@@ -151,18 +129,11 @@ StackViewPage {
     }
 
     Component.onCompleted: {
-        let relevant = 0
-        for (let i = 0; i < self.context.accounts.length; i++) {
-            const account = self.context.accounts[i]
-            if (account.network.electrum) {
-                if (account.pointer > 0 || account.json.bip44_discovered) {
-                    relevant ++
-                }
-            } else {
-                relevant ++
-            }
-        }
-        if (relevant === 0) {
+        // TODO Analytics.recordEvent('wallet_active', AnalyticsJS.segmentationWalletActive(self.wallet))
+        const account = account_list_model.first()
+        if (account) {
+            self.currentAccount = account
+        } else {
             fresh_wallet_dialog.createObject(Overlay.overlay).open()
         }
     }
@@ -176,7 +147,7 @@ StackViewPage {
 
     id: self
     title: self.wallet.name
-    spacing: 16
+    spacing: 0
     property alias toolbarItem: wallet_header.toolbarItem
 
     header: WalletViewHeader {
@@ -197,7 +168,7 @@ StackViewPage {
     Component {
         id: create_account_drawer
         CreateAccountDrawer {
-            onCreated: (account) => switchToAccount(account)
+            onCreated: (account) => self.currentAccount = account
         }
     }
 
@@ -261,12 +232,13 @@ StackViewPage {
                 }
             }
             Label {
-                visible: self.currentAccount.session.events?.twofactor_reset?.is_active ?? false
+                visible: self.currentAccount?.session?.events?.twofactor_reset?.is_active ?? false
                 padding: 8
                 leftPadding: 40
                 wrapMode: Text.WordWrap
                 Layout.fillWidth: true
                 text: {
+                    if (!self.currentAccount) return ''
                     const data = self.currentAccount.session.events.twofactor_reset
                     if (!data) return ''
                     if (data.is_disputed) {
@@ -310,8 +282,15 @@ StackViewPage {
             }
             if (stack_view.currentItem === account_view) return;
             stack_view.replace(account_view, StackView.Immediate)
+            accounts_list.currentIndex = account_list_model.indexOf(account)
         } else {
             stack_view.replace(stack_view.initialItem, StackView.Immediate)
+        }
+    }
+
+    onCurrentAccountChanged: {
+        if (self.currentAccount) {
+            switchToAccount(self.currentAccount)
         }
     }
 
@@ -330,10 +309,15 @@ StackViewPage {
             id: side_view
             padding: 0
             background: null
-            contentItem: AccountListView {
+            contentItem: TListView {
                 id: accounts_list
-                context: self.wallet.context
-                onCurrentAccountChanged: switchToAccount(currentAccount)
+                model: account_list_model
+                currentIndex: 0
+                spacing: 5
+                delegate: AccountDelegate {
+                    id: delegate
+                    onClicked: self.currentAccount = delegate.account
+                }
             }
             footer: ColumnLayout {
                 spacing: 0

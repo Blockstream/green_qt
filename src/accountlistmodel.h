@@ -26,6 +26,10 @@ public:
     int count() const { return rowCount(); }
     bool lessThan(const QModelIndex& source_left, const QModelIndex& source_right) const override;
 
+    Q_INVOKABLE Account* first() const;
+    Q_INVOKABLE Account* accountAt(int index) const;
+    Q_INVOKABLE int indexOf(Account* account) const;
+
 private:
     void update();
 signals:

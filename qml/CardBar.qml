@@ -10,7 +10,10 @@ Pane {
 
     id: self
     clip: true
-    padding: 16
+    leftPadding: 16
+    rightPadding: 16
+    topPadding: 0
+    bottomPadding: 0
     background: Rectangle {
         border.width: 1
         border.color: Qt.rgba(1, 1, 1, 0.04)
@@ -34,7 +37,9 @@ Pane {
             AssetsCard {
                 id: assets_card
                 context: self.context
-                onClicked: self.assetsClicked()
+                TapHandler {
+                    onTapped: self.assetsClicked()
+                }
             }
             Separator {
                 visible: jade_card.visible

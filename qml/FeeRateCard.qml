@@ -19,20 +19,22 @@ WalletHeaderCard {
     }
     id: self
     visible: self.session
+    headerItem: RowLayout {
+        Label {
+            Layout.alignment: Qt.AlignCenter
+            font.capitalization: Font.AllUppercase
+            font.pixelSize: 12
+            font.weight: 400
+            opacity: 0.6
+            text: qsTrId('id_network_fee')
+        }
+        HSpacer {
+            Layout.minimumHeight: 28
+        }
+    }
     contentItem: RowLayout {
         spacing: 10
         ColumnLayout {
-            RowLayout {
-                Layout.minimumHeight: 28
-                Label {
-                    Layout.alignment: Qt.AlignCenter
-                    font.capitalization: Font.AllUppercase
-                    font.pixelSize: 12
-                    font.weight: 400
-                    opacity: 0.6
-                    text: qsTrId('id_network_fee')
-                }
-            }
             Rate {
                 color: '#128E2D'
                 name: qsTrId('id_slow')
@@ -55,13 +57,14 @@ WalletHeaderCard {
             }
         }
         Canvas {
-            Layout.preferredHeight: 80
-            Layout.preferredWidth: 120
+            Layout.alignment: Qt.AlignTop
+            Layout.preferredHeight: 60
+            Layout.preferredWidth: 100
             id: canvas
             contextType: "2d"
             onPaint: {
                 if (estimates.fees.length === 0) return
-                let max = 100;
+                let max = 0;
                 let i
                 for (i = 1; i < estimates.fees.length; i++) {
                     const fee = estimates.fees[i]
@@ -119,6 +122,7 @@ WalletHeaderCard {
         required property string name
         required property real rate
         required property string time
+        Layout.fillHeight: false
         id: rate
         spacing: 0
         Rectangle {

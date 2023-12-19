@@ -16,13 +16,14 @@ WalletDialog {
                 onClicked: self.close()
             }
             contentItem: TListView {
+                id: list_view
                 onCountChanged: if (count === 0) self.close()
                 currentIndex: 0
-                spacing: 3
+                spacing: 5
                 model: archive_list_model
-                delegate: Component {
-                    AccountDelegate {
-                    }
+                delegate: AccountDelegate {
+                    id: delegate
+                    onClicked: list_view.currentIndex = delegate.index
                 }
             }
         }

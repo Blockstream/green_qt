@@ -68,7 +68,8 @@ public:
 
     QList<Network*> getActiveNetworks() const { return m_sessions.keys(); }
     QList<Session*> getSessions() const { return m_sessions.values(); }
-    // TODO remove and rename previous method
+    QList<Account*> getAccounts() const { return m_accounts; }
+
     QQmlListProperty<Session> sessions();
     QQmlListProperty<Account> accounts();
 

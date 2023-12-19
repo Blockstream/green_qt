@@ -46,6 +46,7 @@ void AccountListModel::update()
         m_items.insert(account, item);
         item->setData(QVariant::fromValue(account), Qt::UserRole);
         m_model->appendRow(item);
+        connect(account, &Account::nameChanged, this, &AccountListModel::invalidateFilterAndCount);
         connect(account, &Account::hiddenChanged, this, &AccountListModel::invalidateFilterAndCount);
         connect(account, &Account::balanceChanged, this, &AccountListModel::invalidateFilterAndCount);
         connect(account, &Account::balancesChanged, this, &AccountListModel::invalidateFilterAndCount);
@@ -64,8 +65,10 @@ bool AccountListModel::filterAcceptsRow(int source_row, const QModelIndex &sourc
     Q_ASSERT(m_model);
     auto account = m_model->index(source_row, 0, source_parent).data(Qt::UserRole).value<Account*>();
 
-    if (account->isSinglesig() && account->pointer() ==0 && !account->json().value("bip44_discovered").toBool()) {
-        return false;
+    if (account->isSinglesig() && account->pointer() == 0) {
+        if (!account->json().value("bip44_discovered").toBool() && account->name().isEmpty()) {
+            return false;
+        }
     }
 
     for (QString filter : m_filter.split(' ', Qt::SkipEmptyParts)) {
@@ -118,4 +121,24 @@ bool AccountListModel::lessThan(const QModelIndex &source_left, const QModelInde
     }
 
     return weight_left < weight_right;
+}
+
+Account *AccountListModel::first() const
+{
+    return accountAt(0);
+}
+
+Account* AccountListModel::accountAt(int row) const
+{
+    return data(index(row, 0), Qt::UserRole).value<Account*>();
+}
+
+int AccountListModel::indexOf(Account* account) const
+{
+    for (int i = 0; i < rowCount(); i++) {
+        if (accountAt(i) == account) {
+            return i;
+        }
+    }
+    return -1;
 }

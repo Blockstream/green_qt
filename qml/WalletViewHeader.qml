@@ -234,7 +234,7 @@ MainPageHeader {
                     }
                 }
                 ToolButton {
-                    visible: (self.currentAccount.session.events.twofactor_reset?.is_active ?? false) || !fiatRateAvailable
+                    visible: (self.currentAccount?.session?.events?.twofactor_reset?.is_active ?? false) || !fiatRateAvailable
                     icon.source: 'qrc:/svg/notifications_2.svg'
                     icon.color: 'transparent'
                     icon.width: 16

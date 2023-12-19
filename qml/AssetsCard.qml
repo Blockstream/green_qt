@@ -36,27 +36,27 @@ WalletHeaderCard {
     }
     id: self
     visible: self.assets.length > 0
+    headerItem: RowLayout {
+        Image {
+            Layout.alignment: Qt.AlignCenter
+            opacity: 0.6
+            source: 'qrc:/svg2/star.svg'
+        }
+        Label {
+            Layout.alignment: Qt.AlignCenter
+            font.capitalization: Font.AllUppercase
+            font.pixelSize: 12
+            font.weight: 400
+            opacity: 0.6
+            text: qsTrId('id_assets')
+        }
+        HSpacer {
+            Layout.minimumHeight: 28
+        }
+    }
     contentItem: ColumnLayout {
         RowLayout {
-            Layout.minimumHeight: 28
-            spacing: 10
-            Image {
-                Layout.alignment: Qt.AlignCenter
-                opacity: 0.6
-                source: 'qrc:/svg2/star.svg'
-            }
-            Label {
-                Layout.alignment: Qt.AlignCenter
-                font.capitalization: Font.AllUppercase
-                font.pixelSize: 12
-                font.weight: 400
-                opacity: 0.6
-                text: 'Assets'
-            }
-            HSpacer {
-            }
-        }
-        RowLayout {
+            Layout.fillHeight: false
             spacing: -12
             AssetIcon {
                 visible: self.withoutIcon

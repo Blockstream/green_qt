@@ -22,24 +22,45 @@ WalletHeaderCard {
     }
     id: self
     visible: self.context.wallet.deviceDetails?.type === 'jade'
-    onClicked: {
-        if (self.context.device?.connected) {
-            update_firmware_dialog.createObject(self).open()
+    TapHandler {
+        enabled: self.context.device?.connected ?? false
+        onTapped: update_firmware_dialog.createObject(self).open()
+    }
+    background: Item {
+        Image {
+            id: image
+            x: details_column.width
+            anchors.verticalCenter: parent.verticalCenter
+            source: 'qrc:/png/jade_card.png'
+        }
+    }
+    headerItem: RowLayout {
+        Label {
+            Layout.alignment: Qt.AlignCenter
+            font.capitalization: Font.AllUppercase
+            font.pixelSize: 12
+            font.weight: 400
+            opacity: 0.6
+            text: qsTrId('id_hardware_wallet')
+        }
+        HSpacer {
+            Layout.minimumHeight: 28
+        }
+        Label {
+            Layout.alignment: Qt.AlignCenter
+            Layout.minimumWidth: fw_column.width
+            font.capitalization: Font.AllUppercase
+            font.pixelSize: 12
+            font.weight: 400
+            opacity: 0.6
+            text: qsTrId('id_firmware')
+            visible: !self.runningLatest
         }
     }
     contentItem: RowLayout {
         ColumnLayout {
-            RowLayout {
-                Layout.minimumHeight: 28
-                Label {
-                    Layout.alignment: Qt.AlignCenter
-                    font.capitalization: Font.AllUppercase
-                    font.pixelSize: 12
-                    font.weight: 400
-                    opacity: 0.6
-                    text: qsTrId('id_hardware_wallet')
-                }
-            }
+            Layout.rightMargin: image.width
+            id: details_column
             Label {
                 font.capitalization: Font.AllUppercase
                 font.pixelSize: 20
@@ -67,19 +88,9 @@ WalletHeaderCard {
             VSpacer {
             }
         }
-        Image {
-            Layout.alignment: Qt.AlignCenter
-            source: 'qrc:/png/jade_card.png'
-        }
         ColumnLayout {
+            id: fw_column
             visible: !self.runningLatest
-            Label {
-                font.capitalization: Font.AllUppercase
-                font.pixelSize: 12
-                font.weight: 400
-                opacity: 0.6
-                text: qsTrId('id_firmware')
-            }
             Label {
                 font.capitalization: Font.AllUppercase
                 font.pixelSize: 20

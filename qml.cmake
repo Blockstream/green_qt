@@ -45,7 +45,6 @@ SET(QML_FILES
     qml/SelectNetworkViewCard.qml
     qml/GSwitch.qml
     qml/SetUnspentOutputsStatusDialog.qml
-    qml/AccountListView.qml
     qml/VSpacer.qml
     qml/WizardButtonBox.qml
     qml/SelectServerTypeViewCard.qml

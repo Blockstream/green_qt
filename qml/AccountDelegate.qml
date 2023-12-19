@@ -13,9 +13,6 @@ ItemDelegate {
 
     id: delegate
     focusPolicy: Qt.ClickFocus
-    onClicked: {
-        delegate.ListView.view.currentIndex = index
-    }
     background: Rectangle {
         color: UtilJS.networkColor(delegate.account.network)
         clip: true
@@ -198,6 +195,7 @@ ItemDelegate {
                                 GMenu.Item {
                                     text: qsTrId('id_archive')
                                     icon.source: 'qrc:/svg/archived.svg'
+                                    enabled: account_list_model.count > 1
                                     onClicked: {
                                         account_delegate_menu.close()
                                         controller.setAccountHidden(delegate.account, true)
