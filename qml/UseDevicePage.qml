@@ -14,6 +14,7 @@ StackViewPage {
             Layout.alignment: Qt.AlignCenter
             Layout.topMargin: 20
             text: 'Don’t have a Jade? Check our store'
+            onClicked: Qt.openUrlExternally('https://store.blockstream.com/')
         }
     }
     contentItem: ColumnLayout {
