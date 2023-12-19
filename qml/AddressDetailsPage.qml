@@ -49,10 +49,12 @@ StackViewPage {
                     color: '#222226'
                 }
                 contentItem: ColumnLayout {
+                    id: qrcode_layout
                     spacing: 10
                     QRCode {
                         Layout.alignment: Qt.AlignHCenter
-                        Layout.preferredHeight: 200
+                        Layout.fillWidth: true
+                        Layout.minimumHeight: qrcode_layout.width
                         Layout.preferredWidth: 200
                         id: qrcode
                         text: self.address.data.address
@@ -81,10 +83,19 @@ StackViewPage {
                     Layout.fillWidth: true
                     text: qsTrId('id_address_type')
                 }
-                Tag {
-                    color: constants.c500
+                Label {
+                    Layout.alignment: Qt.AlignRight
+                    font.pixelSize: 10
+                    font.weight: 700
+                    topPadding: 2
+                    bottomPadding: 2
+                    leftPadding: 6
+                    rightPadding: 6
                     text: localizedLabel(self.address.data.address_type)
-                    font.capitalization: Font.AllUppercase
+                    background: Rectangle {
+                        radius:  2
+                        color: '#68727D'
+                    }
                 }
             }
             RowLayout {

@@ -84,6 +84,7 @@ ItemDelegate {
                 rightPadding: 6
                 text: localizedLabel(self.address.data.address_type)
                 background: Rectangle {
+                    radius:  2
                     color: '#68727D'
                 }
             }
