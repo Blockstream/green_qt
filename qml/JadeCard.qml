@@ -40,8 +40,6 @@ WalletHeaderCard {
                     text: qsTrId('id_hardware_wallet')
                 }
             }
-            VSpacer {
-            }
             Label {
                 font.capitalization: Font.AllUppercase
                 font.pixelSize: 20
@@ -81,8 +79,6 @@ WalletHeaderCard {
                 font.weight: 400
                 opacity: 0.6
                 text: qsTrId('id_firmware')
-            }
-            VSpacer {
             }
             Label {
                 font.capitalization: Font.AllUppercase

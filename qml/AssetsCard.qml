@@ -56,8 +56,6 @@ WalletHeaderCard {
             HSpacer {
             }
         }
-        VSpacer {
-        }
         RowLayout {
             spacing: -12
             AssetIcon {

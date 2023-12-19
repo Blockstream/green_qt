@@ -33,8 +33,6 @@ WalletHeaderCard {
                     text: qsTrId('id_network_fee')
                 }
             }
-            VSpacer {
-            }
             Rate {
                 color: '#128E2D'
                 name: qsTrId('id_slow')

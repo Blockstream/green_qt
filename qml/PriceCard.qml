@@ -29,8 +29,6 @@ WalletHeaderCard {
             HSpacer {
             }
         }
-        VSpacer {
-        }
         Label {
             font.capitalization: Font.AllUppercase
             font.pixelSize: 24
