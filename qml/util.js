@@ -110,7 +110,8 @@ function networkColor (network) {
     }
 }
 
-function incognito(enabled, value, size) {
+function incognito(account, value, size) {
+    const enabled = account?.context?.wallet?.incognito ?? false
     if (enabled) {
         return value.replace(/\d\s\d/g, '0').replace(/[,.]/, '').replace(/\d+/g, '*'.repeat(size))
     } else {
@@ -119,9 +120,9 @@ function incognito(enabled, value, size) {
 }
 
 function incognitoFiat(account, value) {
-    return incognito(account.context.wallet.incognito, value, 5)
+    return incognito(account, value, 5)
 }
 
 function incognitoAmount(account, value) {
-    return incognito(account.context.wallet.incognito, value, 11)
+    return incognito(account, value, 5)
 }
