@@ -35,6 +35,7 @@ WalletHeaderCard {
         return false
     }
     id: self
+    visible: self.assets.length > 0
     contentItem: ColumnLayout {
         RowLayout {
             Layout.minimumHeight: 28

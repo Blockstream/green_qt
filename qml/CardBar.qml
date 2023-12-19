@@ -29,8 +29,10 @@ Pane {
                 account: self.currentAccount
             }
             Separator {
+                visible: assets_card.visible
             }
             AssetsCard {
+                id: assets_card
                 context: self.context
                 onClicked: self.assetsClicked()
             }
