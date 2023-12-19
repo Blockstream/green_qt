@@ -11,7 +11,7 @@ AbstractButton {
     bottomPadding: 12
     opacity: self.enabled ? 1 : 0.4
     background: Rectangle {
-        color: '#00B45A'
+        color: self.enabled && self.hovered ? '#00DD6E' : '#00B45A'
         radius: 8
         Rectangle {
             border.width: 2
@@ -34,8 +34,8 @@ AbstractButton {
             visible: image.status === Image.Ready
         }
         Label {
-            font.pixelSize: 16
-            font.weight: 700
+            font.pixelSize: 14
+            font.weight: 600
             horizontalAlignment: Text.AlignHCenter
             text: self.text
             verticalAlignment: Text.AlignVCenter

@@ -11,7 +11,7 @@ AbstractButton {
     bottomPadding: 12
     opacity: self.enabled ? 1 : 0.4
     background: Rectangle {
-        color: 'transparent'
+        color: Qt.alpha('#FFF', self.enabled && self.hovered ? 0.2 : 0)
         border.width: 1
         border.color: '#FFF'
         radius: 8
