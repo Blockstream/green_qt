@@ -56,8 +56,9 @@ Dialog {
             text: qsTrId('id_create_your_first_account_to')
         }
         PrimaryButton {
-            Layout.topMargin: 10
+            Layout.topMargin: 25
             Layout.alignment: Qt.AlignCenter
+            Layout.minimumWidth: 200
             text: qsTrId('id_create_account')
             onClicked: self.accept()
         }
