@@ -67,6 +67,9 @@ WalletManager::WalletManager()
         if (wallet->m_login_attempts_remaining == 0) {
             wallet->m_pin_data.clear();
         }
+        if (data.contains("incognito")) {
+            wallet->m_incognito = data.value("incognito").toBool(false);
+        }
         addWallet(wallet);
     }
 }

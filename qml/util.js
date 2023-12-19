@@ -109,3 +109,19 @@ function networkColor (network) {
         }
     }
 }
+
+function incognito(enabled, value, size) {
+    if (enabled) {
+        return value.replace(/\d\s\d/g, '0').replace(/[,.]/, '').replace(/\d+/g, '*'.repeat(size))
+    } else {
+        return value
+    }
+}
+
+function incognitoFiat(account, value) {
+    return incognito(account.context.wallet.incognito, value, 5)
+}
+
+function incognitoAmount(account, value) {
+    return incognito(account.context.wallet.incognito, value, 11)
+}

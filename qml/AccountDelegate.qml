@@ -133,14 +133,14 @@ ItemDelegate {
                         id: card_footer
                         width: parent.width
                         ColumnLayout {
-                            CopyableLabel {
-                                text: formatFiat(account.balance)
+                            Label {
+                                text: UtilJS.incognitoFiat(delegate.account, formatFiat(account.balance))
                                 font.pixelSize: 10
                                 font.weight: 400
                                 font.styleName: 'Regular'
                             }
-                            CopyableLabel {
-                                text: formatAmount(account, account.balance)
+                            Label {
+                                text: UtilJS.incognitoAmount(delegate.account, formatAmount(account, account.balance))
                                 font.pixelSize: 14
                                 font.weight: 600
                                 font.styleName: 'Medium'

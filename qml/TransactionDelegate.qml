@@ -148,74 +148,13 @@ ItemDelegate {
                         const network = account.network
                         const [id, amount] = modelData
                         if (network.liquid) {
-                            return self.context.getOrCreateAsset(id).formatAmount(amount, true)
+                            return UtilJS.incognitoAmount(self.account, self.context.getOrCreateAsset(id).formatAmount(amount, true))
                         } else {
-                            return formatAmount(account, amount)
+                            return UtilJS.incognitoAmount(self.account, formatAmount(account, amount))
                         }
                     }
                 }
             }
         }
-        /*
-        Item {
-            implicitWidth: self.hovered || menu.visible ? actions_layout.width : 0
-            Behavior on implicitWidth {
-                SmoothedAnimation {
-                    velocity: 400
-                }
-            }
-            implicitHeight: actions_layout.height
-            clip: true
-            RowLayout {
-                id: actions_layout
-                spacing: constants.s0
-                GToolButton {
-                    icon.source: 'qrc:/svg/external_link.svg'
-                    onClicked: transaction.openInExplorer()
-                }
-                GToolButton {
-                    id: tool_button
-                    icon.source: 'qrc:/svg/kebab.svg'
-                    onClicked: menu.open()
-
-                    Menu {
-                        id: menu
-                        MenuItem {
-                            text: qsTrId('id_view_in_explorer')
-                            onTriggered: transaction.openInExplorer()
-                        }
-                        MenuItem {
-                            enabled: transaction.account.network.liquid
-                            text: qsTrId('id_copy_unblinded_link')
-                            onTriggered: {
-                                Clipboard.copy(transaction.unblindedLink())
-                                ToolTip.show(qsTrId('id_copied_to_clipboard'), 1000)
-                            }
-                        }
-                        Repeater {
-                            model: transaction.account.network.liquid ? [copy_unblinding_data_action] : []
-                            MenuItem {
-                                action: modelData
-                            }
-                        }
-                        MenuItem {
-                            enabled: transaction.data.can_rbf && !self.context.watchonly
-                            text: qsTrId('id_increase_fee')
-                            onTriggered: bump_fee_dialog.createObject(window, { transaction }).open()
-                        }
-                        MenuSeparator {
-                        }
-                        MenuItem {
-                            text: qsTrId('id_copy_transaction_id')
-                            onTriggered: {
-                                Clipboard.copy(transaction.data.txhash)
-                                Analytics.recordEvent('share_transaction', AnalyticsJS.segmentationShareTransaction(transaction.account))
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        */
     }
 }

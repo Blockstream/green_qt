@@ -130,7 +130,8 @@ void Wallet::save()
     if (!m_is_persisted) return;
     QJsonObject data({
         { "version", 1 },
-        { "name", m_name }
+        { "name", m_name },
+        { "incognito", m_incognito }
     });
     if (m_watch_only) {
         data.insert("username", m_username);
@@ -286,4 +287,17 @@ void Wallet::setXPubHashId(const QString &xpub_hash_id)
     m_xpub_hash_id = xpub_hash_id;
     emit xpubHashIdChanged();
     save();
+}
+
+void Wallet::setIncognito(bool incognito)
+{
+    if (m_incognito == incognito) return;
+    m_incognito = incognito;
+    emit incognitoChanged();
+    save();
+}
+
+void Wallet::toggleIncognito()
+{
+    setIncognito(!m_incognito);
 }
