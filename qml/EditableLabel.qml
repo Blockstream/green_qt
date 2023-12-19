@@ -31,6 +31,7 @@ TextField {
     bottomPadding: topPadding
     cursorPosition: 0
     selectByMouse: activeFocus
+    maximumLength: 50
     onTextChanged: {
         self.edited(text, self.activeFocus)
         if (!self.activeFocus) self.ensureVisible(0)
