@@ -34,7 +34,7 @@ ItemDelegate {
     bottomPadding: constants.p1
     hoverEnabled: true
     layer.enabled: true
-    opacity: delegate.highlighted ? 1 : 0.5
+    opacity: delegate.highlighted ? 1 : delegate.hovered ? 0.9 : 0.5
     width: ListView.view.width
     contentItem: ColumnLayout {
         spacing: 0
