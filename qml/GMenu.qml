@@ -24,8 +24,8 @@ Popup {
             x: menu.pointerX * parent.width - pointer.width * 0.5
             y: menu.pointerY * parent.height - pointer.height * 0.5
             color: '#343842'
-            width: 7
-            height: 7
+            width: 9
+            height: 9
         }
         Rectangle {
             id: r
@@ -39,8 +39,8 @@ Popup {
             rotation: 45
             anchors.centerIn: pointer
             color: '#222226'
-            width: 5.5
-            height: 5.5
+            width: 7.5
+            height: 7.5
         }
     }
     contentItem: ColumnLayout {
