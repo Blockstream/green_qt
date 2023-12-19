@@ -114,18 +114,16 @@ StackViewPage {
         VSpacer {
         }
     }
-    footer: StackViewPage.Footer {
-        contentItem: ColumnLayout {
-            Image {
-                Layout.alignment: Qt.AlignCenter
-                source: 'qrc:/svg2/house.svg'
-            }
-            Label {
-                Layout.alignment: Qt.AlignCenter
-                font.pixelSize: 12
-                font.weight: 600
-                text: qsTrId('id_make_sure_to_be_in_a_private')
-            }
+    footerItem: ColumnLayout {
+        Image {
+            Layout.alignment: Qt.AlignCenter
+            source: 'qrc:/svg2/house.svg'
+        }
+        Label {
+            Layout.alignment: Qt.AlignCenter
+            font.pixelSize: 12
+            font.weight: 600
+            text: qsTrId('id_make_sure_to_be_in_a_private')
         }
     }
 }

@@ -15,27 +15,23 @@ StackViewPage {
         text: qsTrId('id_setup_guide')
         onClicked: Qt.openUrlExternally('https://help.blockstream.com/hc/en-us/articles/19629901272345-Set-up-Jade')
     }
-    footer: Pane {
-        background: null
-        padding: self.padding
-        contentItem: ColumnLayout {
-            BusyIndicator {
-                Layout.alignment: Qt.AlignCenter
-            }
-            Label {
-                Layout.alignment: Qt.AlignCenter
-                Layout.topMargin: 20
-                color: '#FFF'
-                font.pixelSize: 12
-                font.weight: 600
-                text: qsTrId('id_looking_for_device')
-            }
-            LinkButton {
-                Layout.alignment: Qt.AlignCenter
-                Layout.topMargin: 20
-                text: qsTrId('id_troubleshoot')
-                onClicked: Qt.openUrlExternally('https://help.blockstream.com/hc/en-us/articles/900005443223-Fix-issues-connecting-Jade-via-USB')
-            }
+    footerItem: ColumnLayout {
+        BusyIndicator {
+            Layout.alignment: Qt.AlignCenter
+        }
+        Label {
+            Layout.alignment: Qt.AlignCenter
+            Layout.topMargin: 20
+            color: '#FFF'
+            font.pixelSize: 12
+            font.weight: 600
+            text: qsTrId('id_looking_for_device')
+        }
+        LinkButton {
+            Layout.alignment: Qt.AlignCenter
+            Layout.topMargin: 20
+            text: qsTrId('id_troubleshoot')
+            onClicked: Qt.openUrlExternally('https://help.blockstream.com/hc/en-us/articles/900005443223-Fix-issues-connecting-Jade-via-USB')
         }
     }
     contentItem: ColumnLayout {

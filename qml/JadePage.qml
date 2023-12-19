@@ -30,6 +30,7 @@ StackViewPage {
     }
     id: self
     padding: 60
+    footer: null
     title: self.device.name
     rightItem: LinkButton {
         Layout.alignment: Qt.AlignCenter

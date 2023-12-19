@@ -8,6 +8,7 @@ Page {
     property alias leftItem: left_pane.contentItem
     property alias centerItem: center_pane.contentItem
     property alias rightItem: right_pane.contentItem
+    property alias footerItem: footer_pane.contentItem
     StackView.onActivated: self.forceActiveFocus()
     id: self
     background: null
@@ -15,6 +16,11 @@ Page {
     rightPadding: 0
     topPadding: 0
     bottomPadding: 0
+    footer: Pane {
+        id: footer_pane
+        background: null
+        padding: self.padding
+    }
     header: Pane {
         background: null
         padding: self.padding
@@ -58,10 +64,5 @@ Page {
                 padding: 0
             }
         }
-    }
-
-    component Footer: Pane {
-        background: null
-        padding: self.padding
     }
 }

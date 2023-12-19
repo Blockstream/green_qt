@@ -86,42 +86,40 @@ StackViewPage {
         VSpacer {
         }
     }
-    footer: StackViewPage.Footer {
-        contentItem: RowLayout {
-            spacing: 0
-            Item {
+    footerItem: RowLayout {
+        spacing: 0
+        Item {
+            Layout.alignment: Qt.AlignCenter
+            id: left_item
+        }
+        Item {
+            Layout.preferredWidth: Math.max(UtilJS.effectiveWidth(right_item) - UtilJS.effectiveWidth(left_item), 0)
+        }
+        HSpacer {
+        }
+        ColumnLayout {
+            Image {
                 Layout.alignment: Qt.AlignCenter
-                id: left_item
+                source: 'qrc:/svg2/house.svg'
             }
-            Item {
-                Layout.preferredWidth: Math.max(UtilJS.effectiveWidth(right_item) - UtilJS.effectiveWidth(left_item), 0)
+            Label {
+                Layout.alignment: Qt.AlignCenter
+                font.pixelSize: 12
+                font.weight: 600
+                text: qsTrId('id_make_sure_to_be_in_a_private')
             }
-            HSpacer {
-            }
-            ColumnLayout {
-                Image {
-                    Layout.alignment: Qt.AlignCenter
-                    source: 'qrc:/svg2/house.svg'
-                }
-                Label {
-                    Layout.alignment: Qt.AlignCenter
-                    font.pixelSize: 12
-                    font.weight: 600
-                    text: qsTrId('id_make_sure_to_be_in_a_private')
-                }
-            }
-            HSpacer {
-            }
-            Item {
-                Layout.preferredWidth: Math.max(UtilJS.effectiveWidth(left_item) - UtilJS.effectiveWidth(right_item), 0)
-            }
-            LinkButton {
-                Layout.alignment: Qt.AlignBottom
-                id: right_item
-                text: qsTrId('id_skip')
-                visible: !self.pin
-                onClicked: self.finished(self.context)
-            }
+        }
+        HSpacer {
+        }
+        Item {
+            Layout.preferredWidth: Math.max(UtilJS.effectiveWidth(left_item) - UtilJS.effectiveWidth(right_item), 0)
+        }
+        LinkButton {
+            Layout.alignment: Qt.AlignBottom
+            id: right_item
+            text: qsTrId('id_skip')
+            visible: !self.pin
+            onClicked: self.finished(self.context)
         }
     }
 }

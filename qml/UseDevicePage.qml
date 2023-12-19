@@ -9,15 +9,11 @@ StackViewPage {
     signal connectJadeClicked()
     id: self
     padding: 60
-    footer: Pane {
-        background: null
-        padding: self.padding
-        contentItem: ColumnLayout {
-            LinkButton {
-                Layout.alignment: Qt.AlignCenter
-                Layout.topMargin: 20
-                text: 'Don’t have a Jade? Check our store'
-            }
+    footerItem: ColumnLayout {
+        LinkButton {
+            Layout.alignment: Qt.AlignCenter
+            Layout.topMargin: 20
+            text: 'Don’t have a Jade? Check our store'
         }
     }
     contentItem: ColumnLayout {
