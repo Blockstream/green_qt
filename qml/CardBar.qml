@@ -62,12 +62,20 @@ Pane {
         anchors.left: parent.left
         visible: flickable.contentX > 0
         rotation: 180
+        opacity: 0.5
+        TapHandler {
+            onTapped: flickable.flick(2000, 0)
+        }
     }
     Image {
         source: 'qrc:/svg2/arrow_right.svg'
         anchors.verticalCenter: parent.verticalCenter
         anchors.right: parent.right
         visible: flickable.contentWidth - flickable.contentX > flickable.width
+        opacity: 0.5
+        TapHandler {
+            onTapped: flickable.flick(-2000, 0)
+        }
     }
 
     component Separator: Item {
