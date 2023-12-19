@@ -37,12 +37,15 @@ WalletHeaderCard {
     id: self
     contentItem: ColumnLayout {
         RowLayout {
+            Layout.minimumHeight: 28
             spacing: 10
             Image {
+                Layout.alignment: Qt.AlignCenter
                 opacity: 0.6
                 source: 'qrc:/svg2/star.svg'
             }
             Label {
+                Layout.alignment: Qt.AlignCenter
                 font.capitalization: Font.AllUppercase
                 font.pixelSize: 12
                 font.weight: 400

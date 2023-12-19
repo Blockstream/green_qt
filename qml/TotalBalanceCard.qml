@@ -22,8 +22,10 @@ WalletHeaderCard {
     contentItem: ColumnLayout {
         spacing: 10
         RowLayout {
+            Layout.minimumHeight: 28
             spacing: 10
             Label {
+                Layout.alignment: Qt.AlignCenter
                 font.capitalization: Font.AllUppercase
                 font.pixelSize: 12
                 font.weight: 400
@@ -31,6 +33,7 @@ WalletHeaderCard {
                 text: qsTrId('id_total_balance')
             }
             Image {
+                Layout.alignment: Qt.AlignCenter
                 opacity: 0.6
                 source: 'qrc:/svg2/eye.svg'
             }

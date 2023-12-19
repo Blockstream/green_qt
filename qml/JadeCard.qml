@@ -29,12 +29,16 @@ WalletHeaderCard {
     }
     contentItem: RowLayout {
         ColumnLayout {
-            Label {
-                font.capitalization: Font.AllUppercase
-                font.pixelSize: 12
-                font.weight: 400
-                opacity: 0.6
-                text: qsTrId('id_hardware_wallet')
+            RowLayout {
+                Layout.minimumHeight: 28
+                Label {
+                    Layout.alignment: Qt.AlignCenter
+                    font.capitalization: Font.AllUppercase
+                    font.pixelSize: 12
+                    font.weight: 400
+                    opacity: 0.6
+                    text: qsTrId('id_hardware_wallet')
+                }
             }
             VSpacer {
             }
