@@ -154,7 +154,7 @@ MainPageHeader {
                         }
                         Loader {
                             id: name_field_loader
-                            active: wallet.persisted
+                            active: self.wallet.persisted
                             visible: active
                             Layout.fillWidth: true
                             sourceComponent: EditableLabel {
@@ -163,15 +163,15 @@ MainPageHeader {
                                 rightPadding: 8
                                 font.pixelSize: 24
                                 font.weight: 700
-                                text: wallet.name
+                                text: self.wallet.name
                                 onAccepted: () => {
-                                    if (wallet.rename(editable_label.text, false)) {
+                                    if (self.wallet.rename(editable_label.text, false)) {
                                         Analytics.recordEvent('wallet_rename')
                                     }
                                     tool_button.forceActiveFocus()
                                 }
                                 onEdited: (text, activeFocus) => {
-                                    if (wallet.rename(text, activeFocus)) {
+                                    if (self.wallet.rename(text, activeFocus)) {
                                         Analytics.recordEvent('wallet_rename')
                                     }
                                 }
@@ -179,11 +179,11 @@ MainPageHeader {
                         }
                         Loader {
                             Layout.minimumHeight: 42
-                            active: !wallet.persisted
+                            active: !self.wallet.persisted
                             visible: active
                             sourceComponent: Label {
                                 verticalAlignment: Qt.AlignVCenter
-                                text: wallet.name
+                                text: self.wallet.name
                                 font.pixelSize: 24
                                 font.weight: 700
                             }
