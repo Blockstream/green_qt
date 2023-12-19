@@ -136,20 +136,21 @@ MainPageHeader {
                     leftPadding: 0
                     background: null
                     contentItem: RowLayout {
-                        spacing: 8
+                        spacing: 0
                         Label {
                             verticalAlignment: Qt.AlignVCenter
-                            text: 'Overview'
-                            font.pixelSize: 18
-                            font.styleName: 'Medium'
+                            text: qsTrId('id_overview')
+                            font.pixelSize: 24
+                            font.weight: 700
                         }
                         Label {
                             verticalAlignment: Qt.AlignVCenter
                             leftPadding: 8
+                            color: '#FFF'
                             text: '/'
-                            opacity: 0.5
-                            font.pixelSize: 18
-                            font.styleName: 'Medium'
+                            opacity: 0.2
+                            font.pixelSize: 24
+                            font.weight: 700
                         }
                         Loader {
                             id: name_field_loader
@@ -160,8 +161,8 @@ MainPageHeader {
                                 id: editable_label
                                 leftPadding: 8
                                 rightPadding: 8
-                                font.pixelSize: 18
-                                font.styleName: 'Medium'
+                                font.pixelSize: 24
+                                font.weight: 700
                                 text: wallet.name
                                 onAccepted: () => {
                                     if (wallet.rename(editable_label.text, false)) {
@@ -183,20 +184,20 @@ MainPageHeader {
                             sourceComponent: Label {
                                 verticalAlignment: Qt.AlignVCenter
                                 text: wallet.name
-                                font.pixelSize: 18
-                                font.styleName: 'Medium'
+                                font.pixelSize: 24
+                                font.weight: 700
                             }
                         }
                     }
                 }
-                ToolButton {
+                CircleButton {
                     id: tool_button
                     icon.source: 'qrc:/svg/3-h-dots.svg'
                     onClicked: if (!wallet_menu.visible) wallet_menu.open()
                     WalletMenu {
                         id: wallet_menu
                         x: (tool_button.width - wallet_menu.width) / 2
-                        y: tool_button.height
+                        y: tool_button.height + 8
                     }
                 }
                 HSpacer {
