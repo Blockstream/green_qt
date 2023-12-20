@@ -122,6 +122,38 @@ StackViewPage {
                     controller.invalidate()
                 }
                 focus: true
+                error: {
+                    if (controller.recipient.address !== '') {
+                        const error = controller.transaction?.error
+                        if (error === 'id_invalid_address') return error
+                    }
+                }
+            }
+            Pane {
+                Layout.fillWidth: true
+                Layout.topMargin: -20
+                Layout.bottomMargin: 15
+                padding: 20
+                background: Rectangle {
+                    color: '#3B080F'
+                }
+                contentItem: RowLayout {
+                    spacing: 20
+                    Image {
+                        source: 'qrc:/svg2/info_red.svg'
+                    }
+                    Label {
+                        Layout.fillWidth: true
+                        Layout.preferredWidth: 0
+                        font.pixelSize: 12
+                        font.weight: 600
+                        color: '#C91D36'
+                        text: qsTrId(address_field.error ?? '')
+                        wrapMode: Label.Wrap
+                    }
+                }
+                visible: !!address_field.error
+                z: -1
             }
             FieldTitle {
                 text: qsTrId('Amount')

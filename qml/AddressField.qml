@@ -4,16 +4,18 @@ import QtQuick.Layouts
 
 TextField {
     property string address_input
-
+    property var error
     Layout.fillWidth: true
     id: self
-    topPadding: 14
-    bottomPadding: 13
-    leftPadding: 15
-    rightPadding: 84
+    topPadding: 18
+    bottomPadding: 18
+    leftPadding: 18
+    rightPadding: 90
     background: Rectangle {
         color: '#222226'
         radius: 5
+        border.width: !!self.error ? 2 : 0
+        border.color: '#C91D36'
         Rectangle {
             border.width: 2
             border.color: '#00B45A'
