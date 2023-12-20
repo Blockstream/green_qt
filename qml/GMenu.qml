@@ -59,6 +59,7 @@ Popup {
     component Item: AbstractButton {
         id: self
 
+        property bool hideIcon: false
         readonly property var details: {
             const re = /^([^\(\)]+)(?: \((\d+)\))?$/
             const result = re.exec(self.text || '') || []
@@ -78,13 +79,15 @@ Popup {
         }
 
         contentItem: RowLayout {
-            spacing: 12
+            spacing: 0
             Image {
                 Layout.preferredHeight: 24
                 Layout.preferredWidth: 24
+                Layout.rightMargin: 12
                 fillMode: Image.PreserveAspectFit
                 source: self.icon.source
                 opacity: self.enabled ? 1 : 0.25
+                visible: !self.hideIcon
             }
             Label {
                 Layout.fillWidth: true
@@ -93,6 +96,7 @@ Popup {
                 font.weight: 400
             }
             Label {
+                Layout.leftMargin: 12
                 background: Rectangle {
                     color: 'black'
                     radius: height / 2
