@@ -3,29 +3,25 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
+import "util.js" as UtilJS
+
 TextField {
     required property Account account
     required property Asset asset
     id: self
     readonly property var satoshi: convert.result?.satoshi ?? ''
     readonly property var result: convert.result
-
+    property var error
     property bool fiat: false
     property string unit: self.account.session.unit
 
     readonly property var units: ['BTC', 'sats', 'mBTC', '\u00B5BTC']
 
-    function norm_unit(unit) {
-        return unit === '\u00B5BTC' ? 'ubtc' : unit.toLowerCase()
-    }
-
-    property string xunit: norm_unit(self.account.session.unit)
-
     Convert {
         id: convert
         account: self.account
         asset: self.asset
-        unit: self.fiat ? 'fiat' : norm_unit(self.unit)
+        unit: self.fiat ? 'fiat' : UtilJS.normalizeUnit(self.unit)
         onValueChanged: self.text = convert.value
     }
 
@@ -41,6 +37,8 @@ TextField {
     background: Rectangle {
         color: '#222226'
         radius: 5
+        border.width: !!self.error ? 2 : 0
+        border.color: '#C91D36'
         Rectangle {
             border.width: 2
             border.color: '#00B45A'
@@ -93,7 +91,11 @@ TextField {
                 font.weight: 500
                 text: {
                     if (convert.fiat) {
-                        return self.fiat ? self.account.session.settings.pricing.currency : self.unit
+                        if (self.fiat) {
+                            return self.account.session.settings.pricing.currency
+                        } else {
+                            return (self.account.network.liquid ? 'L-' : '') + self.unit
+                        }
                     } else {
                         return convert.asset?.data?.ticker ?? ''
                     }
@@ -126,7 +128,7 @@ TextField {
                 model: self.units
                 delegate: GMenu.Item {
                     hideIcon: true
-                    text: modelData
+                    text: (self.account.network.liquid ? 'L-' : '') + modelData
                     onClicked: {
                         unit_menu.close()
                         self.fiat = false
@@ -143,8 +145,8 @@ TextField {
         anchors.topMargin: 8
         text: {
             if (self.fiat) {
-                const amount = convert.result[norm_unit(self.unit)]
-                return amount ? [amount, self.unit].join(' ') : ''
+                const amount = convert.result[UtilJS.normalizeUnit(self.unit)]
+                return amount ? [amount, (self.account.network.liquid ? 'L-' : '') + self.unit].join(' ') : ''
             } else {
                 return convert.result.fiat ? [convert.result.fiat ?? '', convert.result.fiat_currency ?? ''].join(' ') : ''
             }

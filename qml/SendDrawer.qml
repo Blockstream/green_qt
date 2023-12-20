@@ -12,7 +12,7 @@ WalletDrawer {
     property Asset asset
 
     id: self
-    minimumContentWidth: 400
+    minimumContentWidth: 450
     contentItem: GStackView {
         id: stack_view
         initialItem: SendPage {

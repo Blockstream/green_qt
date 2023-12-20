@@ -124,10 +124,7 @@ StackViewPage {
                 id: address_field
                 text: controller.recipient.address
                 // onTextEdited: controller.parseAndUpdate(address_field.text)
-                onTextEdited: {
-                    controller.recipient.address = address_field.text
-                    controller.invalidate()
-                }
+                onTextEdited: controller.recipient.address = address_field.text
                 focus: true
                 error: {
                     if (controller.recipient.address !== '') {
@@ -136,31 +133,8 @@ StackViewPage {
                     }
                 }
             }
-            Pane {
-                Layout.fillWidth: true
-                Layout.topMargin: -20
-                Layout.bottomMargin: 15
-                padding: 20
-                background: Rectangle {
-                    color: '#3B080F'
-                }
-                contentItem: RowLayout {
-                    spacing: 20
-                    Image {
-                        source: 'qrc:/svg2/info_red.svg'
-                    }
-                    Label {
-                        Layout.fillWidth: true
-                        Layout.preferredWidth: 0
-                        font.pixelSize: 12
-                        font.weight: 600
-                        color: '#C91D36'
-                        text: qsTrId(address_field.error ?? '')
-                        wrapMode: Label.Wrap
-                    }
-                }
-                visible: !!address_field.error
-                z: -1
+            ErrorPane {
+                error: address_field.error
             }
             FieldTitle {
                 text: qsTrId('Amount')
@@ -171,27 +145,28 @@ StackViewPage {
                 id: amount_field
                 account: controller.account
                 asset: controller.asset
-                text: controller.recipient.amount
-//                onTextEdited: {
-//                    controller.recipient.greedy = false
-//                    controller.recipient.amount = amount_field.text
-//                    controller.invalidate()
-//                }
+                onResultChanged: controller.recipient.amount = '' + (amount_field.result.satoshi ?? '')
+                error: {
+                    const error = controller.transaction?.error
+                    if (error === 'id_insufficient_funds') return error
+                    if (error === 'id_invalid_amount') return error
+                }
             }
-            Binding {
-                when: !controller.recipient.greedy
-                target: amount_field
-                property: 'text'
-                value: controller.recipient.amount
+            ErrorPane {
+                error: amount_field.error
             }
             LinkButton {
                 Layout.alignment: Qt.AlignRight
+                Layout.bottomMargin: 15
                 text: qsTrId('id_send_all')
                 enabled: !controller.recipient.greedy
-                onClicked: {
-                    controller.recipient.greedy = true
-                    controller.invalidate()
-                }
+                onClicked: controller.recipient.greedy = true
+            }
+            Convert {
+                id: fee_convert
+                account: self.account
+                value: controller.transaction.fee ?? 0
+                unit: UtilJS.normalizeUnit(amount_field.unit)
             }
             RowLayout {
                 Label {
@@ -204,19 +179,20 @@ StackViewPage {
                 Label {
                     font.pixelSize: 14
                     font.weight: 500
-                    text: '0,000012 L-BTC'
+                    text: [fee_convert.result[UtilJS.normalizeUnit(amount_field.unit)], (self.account.network.liquid ? 'L-' : '') + amount_field.unit].join(' ')
                 }
             }
             RowLayout {
                 Layout.bottomMargin: 20
-                Label {
-                    color: '#6F6F6F'
-                    font.pixelSize: 12
-                    font.weight: 400
-                    text: '~2 hours'
-                }
+//                Label {
+//                    color: '#6F6F6F'
+//                    font.pixelSize: 12
+//                    font.weight: 400
+//                    text: '~2 hours'
+//                }
                 LinkButton {
                     text: 'Change speed'
+                    onClicked: self.pushSelectFeePage()
                 }
                 HSpacer {
                 }
@@ -224,54 +200,58 @@ StackViewPage {
                     color: '#6F6F6F'
                     font.pixelSize: 12
                     font.weight: 400
-                    text: '~2,23 USD'
+                    text: ['~', fee_convert.result.fiat, fee_convert.result.fiat_currency].join(' ')
                 }
             }
+//            Label {
+//                Layout.fillWidth: true
+//                Layout.preferredWidth: 0
+//                font.pixelSize: 10
+//                text: JSON.stringify(controller.transaction, null, '  ')
+//                wrapMode: Label.Wrap
+//                TapHandler {
+//                    onTapped: Clipboard.copy(JSON.stringify(controller.transaction, null, '  '))
+//                }
+//            }
         }
     }
-    footer: Pane {
-        background: null
-        padding: self.padding
-        bottomPadding: 20
-        contentItem: RowLayout {
-            Layout.bottomMargin: 65
-            spacing: 20
-            RegularButton {
-                Layout.fillWidth: true
-                id: options_button
-                implicitWidth: 0
-                text: 'Advanced Options'
-                onClicked: options_menu.open()
-                GMenu {
-                    id: options_menu
-                    x: (options_button.width - options_menu.width) * 0.5
-                    y: -options_menu.height - 8
-                    pointerX: 0.5
-                    pointerY: 1
-                    GMenu.Item {
-                        enabled: !controller.account.network.liquid
-                        text: qsTrId('id_manual_coin_selection')
-                        icon.source: 'qrc:/svg2/coin_selection.svg'
-                        onClicked: {
-                            options_menu.close()
-                            self.pushSelectCoinsPage()
-                        }
+    footerItem: RowLayout {
+        spacing: 20
+        RegularButton {
+            Layout.fillWidth: true
+            id: options_button
+            implicitWidth: 0
+            text: 'Advanced Options'
+            onClicked: options_menu.open()
+            GMenu {
+                id: options_menu
+                x: (options_button.width - options_menu.width) * 0.5
+                y: -options_menu.height - 8
+                pointerX: 0.5
+                pointerY: 1
+                GMenu.Item {
+                    enabled: !controller.account.network.liquid
+                    text: qsTrId('id_manual_coin_selection')
+                    icon.source: 'qrc:/svg2/coin_selection.svg'
+                    onClicked: {
+                        options_menu.close()
+                        self.pushSelectCoinsPage()
                     }
                 }
             }
-            PrimaryButton {
-                Layout.fillWidth: true
-                implicitWidth: 0
-                text: qsTrId('id_next')
-                onClicked: {
-                    self.StackView.view.push(send_confirm_page, {
-                        context: self.context,
-                        account: controller.account,
-                        asset: controller.asset,
-                        recipient: controller.recipient,
-                        transaction: controller.transaction,
-                    })
-                }
+        }
+        PrimaryButton {
+            Layout.fillWidth: true
+            implicitWidth: 0
+            text: qsTrId('id_next')
+            onClicked: {
+                self.StackView.view.push(send_confirm_page, {
+                    context: self.context,
+                    account: controller.account,
+                    asset: controller.asset,
+                    recipient: controller.recipient,
+                    transaction: controller.transaction,
+                })
             }
         }
     }
@@ -285,7 +265,6 @@ StackViewPage {
                 controller.account = account
                 controller.asset = asset
                 controller.coins = []
-                controller.invalidate()
             }
         }
     }
@@ -314,5 +293,37 @@ StackViewPage {
                 self.StackView.view.pop()
             }
         }
+    }
+
+    component ErrorPane: Pane {
+        required property var error
+        id: error_pane
+        Layout.fillWidth: true
+        Layout.topMargin: -20
+        Layout.bottomMargin: 15
+        leftPadding: 20
+        rightPadding: 20
+        bottomPadding: 15
+        topPadding: 15
+        background: Rectangle {
+            color: '#3B080F'
+        }
+        contentItem: RowLayout {
+            spacing: 20
+            Image {
+                source: 'qrc:/svg2/info_red.svg'
+            }
+            Label {
+                Layout.fillWidth: true
+                Layout.preferredWidth: 0
+                font.pixelSize: 12
+                font.weight: 600
+                color: '#C91D36'
+                text: qsTrId(error_pane.error ?? '')
+                wrapMode: Label.Wrap
+            }
+        }
+        visible: !!error_pane.error
+        z: -1
     }
 }
