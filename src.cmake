@@ -18,6 +18,8 @@ SET(TARGET_SOURCES
         src/context.h
 	src/controller.cpp
 	src/controller.h
+	src/convert.cpp
+	src/convert.h
 	src/createaccountcontroller.cpp
 	src/device.cpp
 	src/devicediscoveryagent.cpp
