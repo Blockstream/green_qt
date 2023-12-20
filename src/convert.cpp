@@ -82,14 +82,14 @@ void Convert::update()
 {
     qDebug() << Q_FUNC_INFO;
 
-    if (!m_account || !m_asset) {
+    if (!m_account) {
         setFiat(false);
         setResult({});
         return;
     }
 
     const auto network = m_account->network();
-    const bool is_liquid_asset = network->isLiquid() && network->policyAsset() != m_asset->id();
+    const bool is_liquid_asset = m_asset && network->isLiquid() && network->policyAsset() != m_asset->id();
     setFiat(!is_liquid_asset);
 
     const auto value = m_value.isEmpty() ? "0" : m_value;
