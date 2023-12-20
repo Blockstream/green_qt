@@ -97,6 +97,8 @@ StackViewPage {
         AmountField {
             Layout.bottomMargin: 15
             Layout.fillWidth: true
+            account: self.account
+            asset: self.asset
             readOnly: true
             text: self.recipient.amount
         }

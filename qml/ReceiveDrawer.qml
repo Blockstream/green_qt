@@ -18,7 +18,7 @@ WalletDrawer {
         context: self.context
         account: self.account
         asset: self.asset
-        amount: '0'
+        amount: amount_field.satoshi
     }
 
     id: self
@@ -149,9 +149,9 @@ WalletDrawer {
                     AmountField {
                         Layout.fillWidth: true
                         id: amount_field
-                        text: controller.amount
+                        account: controller.account
+                        asset: controller.asset
                         visible: false
-                        onTextEdited: controller.amount = amount_field.text
                     }
                 }
             }

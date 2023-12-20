@@ -130,12 +130,20 @@ StackViewPage {
                 Layout.bottomMargin: 15
                 Layout.fillWidth: true
                 id: amount_field
+                account: controller.account
+                asset: controller.asset
                 text: controller.recipient.amount
-                onTextEdited: {
-                    controller.recipient.greedy = false
-                    controller.recipient.amount = amount_field.text
-                    controller.invalidate()
-                }
+//                onTextEdited: {
+//                    controller.recipient.greedy = false
+//                    controller.recipient.amount = amount_field.text
+//                    controller.invalidate()
+//                }
+            }
+            Binding {
+                when: !controller.recipient.greedy
+                target: amount_field
+                property: 'text'
+                value: controller.recipient.amount
             }
             LinkButton {
                 Layout.alignment: Qt.AlignRight
