@@ -141,6 +141,7 @@ qt_add_resources(green "images"
         assets/svg2/beta.svg
         assets/svg2/blockstream_green.svg
         assets/svg2/bolt.svg
+        assets/svg2/caret-down.svg
         assets/svg2/check.svg
         assets/svg2/check-green.svg
         assets/svg2/close.svg
