@@ -8,6 +8,7 @@ TextField {
     required property Asset asset
     id: self
     readonly property var satoshi: convert.result?.satoshi ?? ''
+    readonly property var result: convert.result
 
     property bool fiat: false
     property string unit: self.account.session.unit
@@ -33,8 +34,10 @@ TextField {
     Layout.fillWidth: true
     topPadding: 22
     bottomPadding: convert.fiat ? 32 : 22
-    leftPadding: 15
-    rightPadding: self.leftPadding + 7 + unit_label.width
+    leftPadding: 50
+    rightPadding: 15 + 7 + unit_label.width
+    validator: AmountValidator {
+    }
     background: Rectangle {
         color: '#222226'
         radius: 5
@@ -62,27 +65,76 @@ TextField {
     horizontalAlignment: TextInput.AlignRight
     font.pixelSize: 24
     font.weight: 500
-    Label {
+    CircleButton {
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.left: parent.left
+        anchors.leftMargin: 24
+        visible: self.text !== ''
+        icon.source: 'qrc:/svg/erase.svg'
+        onClicked: convert.value = ''
+    }
+
+    AbstractButton {
         id: unit_label
+        leftPadding: 4
+        rightPadding: 4
+        bottomPadding: 2
+        topPadding: 2
         anchors.right: parent.right
-        anchors.rightMargin: self.leftPadding
-        anchors.baseline: parent.baseline
-        text: {
-            if (convert.fiat) {
-                return self.fiat ? self.account.session.settings.pricing.currency : self.unit
-            } else {
-                return convert.asset?.data?.ticker ?? ''
+        anchors.rightMargin: 15
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.verticalCenterOffset: convert.fiat ? -2 : 3
+        enabled: convert.fiat
+        contentItem: RowLayout {
+            spacing: 4
+            Label {
+                color: unit_label.enabled && unit_label.hovered ? '#00DD6E' : '#00B45A'
+                font.pixelSize: 16
+                font.weight: 500
+                text: {
+                    if (convert.fiat) {
+                        return self.fiat ? self.account.session.settings.pricing.currency : self.unit
+                    } else {
+                        return convert.asset?.data?.ticker ?? ''
+                    }
+                }
+            }
+            Image {
+                Layout.alignment: Qt.AlignCenter
+                source: 'qrc:/svg2/caret-down.svg'
+                visible: unit_label.enabled
             }
         }
-        color: '#00B45A'
-        font.pixelSize: 18
-        font.weight: 500
-        TapHandler {
-            cursorShape: Qt.ArrowCursor
-            enabled: !self.fiat
-            onTapped: self.unit = self.units[(self.units.indexOf(self.unit) + 1) % units.length]
-        }
-    }
+        onClicked: unit_menu.open()
+        background: null
+        GMenu {
+            id: unit_menu
+            x: unit_label.width * 0.5 - unit_menu.width * 0.8
+            y: unit_label.height + 8
+            pointerX: 0.8
+            pointerY: 0
+            GMenu.Item {
+                enabled: convert.fiat
+                hideIcon: true
+                text: self.account.session.settings.pricing.currency
+                onClicked: {
+                    unit_menu.close()
+                    self.fiat = true
+                }
+            }
+            Repeater {
+                model: self.units
+                delegate: GMenu.Item {
+                    hideIcon: true
+                    text: modelData
+                    onClicked: {
+                        unit_menu.close()
+                        self.fiat = false
+                        self.unit = modelData
+                    }
+                }
+            }
+        }    }
     Label {
         id: second_label
         anchors.right: parent.right
@@ -91,8 +143,8 @@ TextField {
         anchors.topMargin: 8
         text: {
             if (self.fiat) {
-                const amount = convert.result[self.xunit]
-                return amount ? [amount, self.account.session.unit].join(' ') : ''
+                const amount = convert.result[norm_unit(self.unit)]
+                return amount ? [amount, self.unit].join(' ') : ''
             } else {
                 return convert.result.fiat ? [convert.result.fiat ?? '', convert.result.fiat_currency ?? ''].join(' ') : ''
             }
@@ -103,6 +155,7 @@ TextField {
         font.weight: 500
         visible: convert.fiat
         TapHandler {
+            cursorShape: Qt.ArrowCursor
             onTapped: self.fiat = !self.fiat
         }
     }
