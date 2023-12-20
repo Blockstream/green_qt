@@ -58,7 +58,7 @@ TextField {
         spacing: 0
         ToolButton {
             activeFocusOnTab: false
-            enabled: window.scannerAvailable && !scanner_popup.visible
+            enabled: scanner_popup.available && !scanner_popup.visible
             icon.source: 'qrc:/svg/qr.svg'
             icon.width: 16
             icon.height: 16

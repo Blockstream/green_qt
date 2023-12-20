@@ -7,6 +7,7 @@ import QtQuick.Shapes
 
 Popup {
     signal codeScanned(string code)
+    readonly property bool available: window.hasVideoInput
 
     id: self
     background: null

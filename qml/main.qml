@@ -4,6 +4,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Window
+import QtMultimedia
 
 import "analytics.js" as AnalyticsJS
 import "util.js" as UtilJS
@@ -102,4 +103,9 @@ ApplicationWindow {
             }
         }
     }
+
+    MediaDevices {
+        id: media_devices
+    }
+    readonly property bool hasVideoInput: media_devices.videoInputs?.length > 0
 }

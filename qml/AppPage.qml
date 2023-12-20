@@ -3,7 +3,6 @@ import Blockstream.Green.Core
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import QtMultimedia
 
 MainPage {
     function openWallet(wallet) {
@@ -226,16 +225,6 @@ MainPage {
         id: preferences_dialog
         onClosed: {
             side_bar.currentView = SideBar.View.Wallets
-        }
-    }
-
-    readonly property bool scannerAvailable: (media_devices.object?.videoInputs?.length ?? 0) > 0
-    Instantiator {
-        id: media_devices
-        asynchronous: true
-        active: true
-        model: 1
-        delegate: MediaDevices {
         }
     }
 }
