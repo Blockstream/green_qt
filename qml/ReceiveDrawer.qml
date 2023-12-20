@@ -221,22 +221,6 @@ WalletDrawer {
         }
     }
 
-    Component {
-        id: request_amount_dialog
-        Popup {
-            modal: true
-            contentItem: ColumnLayout {
-                AmountField {
-                    Layout.fillWidth: true
-                    Layout.minimumWidth: 350
-                    id: amount_field
-                    text: controller.amount
-                    onTextEdited: controller.amount = amount_field.text
-                }
-            }
-        }
-    }
-
     component MoreOptionsMenu: GMenu {
         id: menu
         GMenu.Item {
@@ -247,7 +231,6 @@ WalletDrawer {
                 menu.close()
                 amount_field.visible = true
                 amount_field.forceActiveFocus()
-                // request_amount_dialog.createObject(self.contentItem).open()
             }
         }
         GMenu.Item {
