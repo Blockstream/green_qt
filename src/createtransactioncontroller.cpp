@@ -19,6 +19,7 @@ void Recipient::setAsset(Asset* asset)
     if (m_asset == asset) return;
     m_asset = asset;
     emit assetChanged();
+    emit changed();
 }
 
 void Recipient::setAddress(const QString& address)
@@ -26,6 +27,7 @@ void Recipient::setAddress(const QString& address)
     if (m_address == address) return;
     m_address = address;
     emit addressChanged();
+    emit changed();
 }
 
 void Recipient::setAmount(const QString& amount)
@@ -33,6 +35,7 @@ void Recipient::setAmount(const QString& amount)
     if (m_amount == amount) return;
     m_amount = amount;
     emit amountChanged();
+    emit changed();
 }
 
 void Recipient::setGreedy(bool greedy)
@@ -40,12 +43,14 @@ void Recipient::setGreedy(bool greedy)
     if (m_greedy == greedy) return;
     m_greedy = greedy;
     emit greedyChanged();
+    emit changed();
 }
 
 CreateTransactionController::CreateTransactionController(QObject* parent)
     : Controller(parent)
     , m_recipient(new Recipient(this))
 {
+    connect(m_recipient, &Recipient::changed, this, &CreateTransactionController::invalidate);
 }
 
 void CreateTransactionController::setAccount(Account* account)

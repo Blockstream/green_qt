@@ -27,6 +27,7 @@ signals:
     void addressChanged();
     void amountChanged();
     void greedyChanged();
+    void changed();
 private:
     Asset* m_asset{nullptr};
     QString m_address;
