@@ -126,3 +126,8 @@ function incognitoFiat(account, value) {
 function incognitoAmount(account, value) {
     return incognito(account, value, 5)
 }
+
+function normalizeUnit(unit) {
+    return unit === '\u00B5BTC' ? 'ubtc' : unit.toLowerCase()
+}
+
