@@ -92,18 +92,20 @@ void Convert::update()
     const bool is_liquid_asset = network->isLiquid() && network->policyAsset() != m_asset->id();
     setFiat(!is_liquid_asset);
 
-    if (m_unit.isEmpty() || m_value.isEmpty()) {
+    const auto value = m_value.isEmpty() ? "0" : m_value;
+
+    if (is_liquid_asset) {
+        setResult({{ "satoshi", m_asset->parseAmount(value) }});
+        return;
+    }
+
+    if (m_unit.isEmpty()) {
         setResult({});
         return;
     }
 
-    if (is_liquid_asset) {
-        setResult({{ "satoshi", m_asset->parseAmount(m_value) }});
-        return;
-    }
-
     QJsonObject details;
-    details[m_unit] = m_value;
+    details[m_unit] = value;
 
     using Watcher = QFutureWatcher<QJsonObject>;
     const auto watcher = new Watcher(this);
