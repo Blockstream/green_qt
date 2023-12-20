@@ -18,6 +18,13 @@ StackViewPage {
             coins: controller.coins,
         })
     }
+    function pushSelectFeePage() {
+        self.StackView.view.push(select_fee_page, {
+            account: controller.account,
+            unit: amount_field.unit,
+            size: controller.transaction.transaction ? controller.transaction.transaction.length / 2 : 0,
+        })
+    }
 
     AnalyticsView {
         name: 'Send'
@@ -295,6 +302,16 @@ StackViewPage {
             onCoinsSelected: (coins) => {
                 self.StackView.view.pop()
                 controller.coins = coins
+            }
+        }
+    }
+
+    Component {
+        id: select_fee_page
+        SelectFeePage {
+            onFeeRateSelected: (fee_rate) => {
+                controller.feeRate = fee_rate
+                self.StackView.view.pop()
             }
         }
     }

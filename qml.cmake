@@ -239,6 +239,7 @@ SET(QML_FILES
     qml/SplashPage.qml
     qml/AppPage.qml
     qml/WalletOptionsButton.qml
+    qml/SelectFeePage.qml
 )
 
 if (GREEN_NO_RESOURCES)
