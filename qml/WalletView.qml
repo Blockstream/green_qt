@@ -142,6 +142,8 @@ MainPage {
         id: restore_wallet_page
         RestorePage {
             onMnemonicEntered: (wallet, mnemonic, password) => stack_view.push(restore_check_page, { wallet, mnemonic, password })
+            onRemoveClicked: self.removeWallet(self.wallet)
+            onCloseClicked: self.closeWallet(self.wallet)
         }
     }
 

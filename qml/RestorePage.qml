@@ -6,6 +6,8 @@ import QtQuick.Layouts
 
 StackViewPage {
     signal mnemonicEntered(Wallet wallet, var mnemonic, string password)
+    signal removeClicked()
+    signal closeClicked()
     property Wallet wallet
     id: self
     title: self.wallet?.name ?? ''
@@ -24,6 +26,11 @@ StackViewPage {
         //         network: navigation.param.network === 'bitcoin' ? 'mainnet' : navigation.param.network
         //     })
         // }
+    }
+    rightItem: WalletOptionsButton {
+        wallet: self.wallet
+        onRemoveClicked: self.removeClicked()
+        onCloseClicked: self.closeClicked()
     }
     contentItem: ColumnLayout {
         VSpacer {
