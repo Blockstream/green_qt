@@ -55,8 +55,10 @@ Pane {
                 account: self.currentAccount
             }
             Separator {
+                visible: fee_rate_card.visible
             }
             FeeRateCard {
+                id: fee_rate_card
                 context: self.context
             }
         }

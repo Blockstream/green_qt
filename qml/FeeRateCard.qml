@@ -26,7 +26,7 @@ WalletHeaderCard {
             font.pixelSize: 12
             font.weight: 400
             opacity: 0.6
-            text: qsTrId('id_network_fee')
+            text: (session?.network?.name ?? '') + ' ' + qsTrId('id_network_fee')
         }
         HSpacer {
             Layout.minimumHeight: 28
@@ -36,10 +36,10 @@ WalletHeaderCard {
         spacing: 10
         ColumnLayout {
             Rate {
-                color: '#128E2D'
-                name: qsTrId('id_slow')
-                rate: estimates.fees[24]
-                time: qsTrId('id_4_hours')
+                color: '#FF0000'
+                name: qsTrId('id_fast')
+                rate: estimates.fees[3]
+                time: qsTrId('id_1030_minutes')
             }
             Rate {
                 color: '#E99A00'
@@ -48,18 +48,18 @@ WalletHeaderCard {
                 time: qsTrId('id_2_hours')
             }
             Rate {
-                color: '#FF0000'
-                name: qsTrId('id_fast')
-                rate: estimates.fees[3]
-                time: qsTrId('id_1030_minutes')
+                color: '#128E2D'
+                name: qsTrId('id_slow')
+                rate: estimates.fees[24]
+                time: qsTrId('id_4_hours')
             }
             VSpacer {
             }
         }
         Canvas {
             Layout.alignment: Qt.AlignTop
-            Layout.preferredHeight: 60
-            Layout.preferredWidth: 100
+            Layout.preferredHeight: 50
+            Layout.preferredWidth: 120
             id: canvas
             contextType: "2d"
             onPaint: {
@@ -70,11 +70,11 @@ WalletHeaderCard {
                     const fee = estimates.fees[i]
                     if (fee > max) max = fee
                 }
-                const sx = canvas.width / Math.max(1, estimates.fees.length)
-                const sy = canvas.height / max
+                const sx = (canvas.width - 4) / Math.max(1, estimates.fees.length)
+                const sy = (canvas.height - 4) / max
                 const ps = []
                 for (i = 1; i < estimates.fees.length; i++) {
-                    ps.push({ x: sx * i, y: canvas.height - sy * estimates.fees[i] })
+                    ps.push({ x: 2 + sx * i, y: canvas.height - sy * estimates.fees[i] + 2 })
                 }
 
                 const ctx = canvas.context
@@ -138,7 +138,7 @@ WalletHeaderCard {
             Layout.rightMargin: 7
             font.pixelSize: 12
             font.weight: 400
-            text: rate.name + ' (' + Math.round(rate.rate / 10 + 0.5) / 100 + ' sats/btc)'
+            text: rate.name + ' (' + Math.round(rate.rate / 10 + 0.5) / 100 + ' sat/vbyte)'
         }
         Label {
             Layout.alignment: Qt.AlignCenter
