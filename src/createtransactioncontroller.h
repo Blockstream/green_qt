@@ -41,6 +41,7 @@ class CreateTransactionController : public Controller
     Q_PROPERTY(Asset* asset READ asset WRITE setAsset NOTIFY assetChanged)
     Q_PROPERTY(Recipient* recipient READ recipient CONSTANT)
     Q_PROPERTY(QVariantList coins READ coins WRITE setCoins NOTIFY coinsChanged)
+    Q_PROPERTY(int feeRate READ feeRate WRITE setFeeRate NOTIFY feeRateChanged)
     Q_PROPERTY(QJsonObject transaction READ transaction NOTIFY transactionChanged)
     QML_ELEMENT
 public:
@@ -52,6 +53,8 @@ public:
     Recipient* recipient() const { return m_recipient; }
     QVariantList coins() const { return m_coins; }
     void setCoins(const QVariantList& coins);
+    int feeRate() const { return m_fee_rate; }
+    void setFeeRate(int fee_rate);
     QJsonObject transaction() const { return m_transaction; }
     void setTransaction(const QJsonObject& transaction);
 public slots:
@@ -60,6 +63,7 @@ signals:
     void accountChanged();
     void assetChanged();
     void coinsChanged();
+    void feeRateChanged();
     void transactionChanged();
 protected:
     void update();
@@ -70,6 +74,7 @@ private:
     Asset* m_asset{nullptr};
     Recipient* const m_recipient;
     QVariantList m_coins;
+    int m_fee_rate{0};
     QJsonValue m_utxos;
     QJsonObject m_transaction;
 };

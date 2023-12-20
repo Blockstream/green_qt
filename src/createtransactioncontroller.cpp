@@ -72,6 +72,14 @@ void CreateTransactionController::setCoins(const QVariantList& coins)
     invalidate();
 }
 
+void CreateTransactionController::setFeeRate(int fee_rate)
+{
+    if (m_fee_rate == fee_rate) return;
+    m_fee_rate = fee_rate;
+    emit feeRateChanged();
+    invalidate();
+}
+
 void CreateTransactionController::invalidate()
 {
     if (m_update_timer != -1) killTimer(m_update_timer);
@@ -107,6 +115,7 @@ void CreateTransactionController::update()
             addressees.append(addressee);
 
             QJsonObject details = {{"utxos", m_utxos}, {"addressees", addressees}};
+            if (m_fee_rate > 0) details["fee_rate"] = m_fee_rate;
             auto task = new CreateTransactionTask(details, session);
             connect(task, &CreateTransactionTask::finished, this, [=] {
                 setTransaction(task->transaction());
