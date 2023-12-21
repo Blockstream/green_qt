@@ -38,7 +38,7 @@ WalletDialog {
             }
             AnimLoader {
                 readonly property AuthHandlerTask task: {
-                    const groups = self.controller?.dispatcher?.groups
+                    const groups = self.controller?.dispatcher?.groups ?? []
                     for (let j = 0; j < groups.length; j++) {
                         const group = groups[j]
                         for (let i = 0; i < group.tasks.length; i++) {
@@ -60,7 +60,7 @@ WalletDialog {
             }
             AnimLoader {
                 readonly property SignTransactionTask task: {
-                    const groups = self.controller?.dispatcher?.groups
+                    const groups = self.controller?.dispatcher?.groups ?? []
                     for (let j = 0; j < groups.length; j++) {
                         const group = groups[j]
                         for (let i = 0; i < group.tasks.length; i++) {
@@ -84,7 +84,7 @@ WalletDialog {
             }
             AnimLoader {
                 readonly property SignTransactionTask task: {
-                    const groups = self.controller?.dispatcher?.groups
+                    const groups = self.controller?.dispatcher?.groups ?? []
                     for (let j = 0; j < groups.length; j++) {
                         const group = groups[j]
                         for (let i = 0; i < group.tasks.length; i++) {
@@ -108,7 +108,7 @@ WalletDialog {
             }
             AnimLoader {
                 readonly property SignTransactionTask task: {
-                    const groups = self.controller?.dispatcher?.groups
+                    const groups = self.controller?.dispatcher?.groups ?? []
                     for (let j = 0; j < groups.length; j++) {
                         const group = groups[j]
                         for (let i = 0; i < group.tasks.length; i++) {
@@ -132,7 +132,7 @@ WalletDialog {
             }
             AnimLoader {
                 readonly property SignTransactionTask task: {
-                    const groups = self.controller?.dispatcher?.groups
+                    const groups = self.controller?.dispatcher?.groups ?? []
                     for (let j = 0; j < groups.length; j++) {
                         const group = groups[j]
                         for (let i = 0; i < group.tasks.length; i++) {
@@ -156,7 +156,7 @@ WalletDialog {
             }
             AnimLoader {
                 readonly property CreateAccountTask task: {
-                    const groups = self.controller?.dispatcher?.groups
+                    const groups = self.controller?.dispatcher?.groups ?? []
                     for (let j = 0; j < groups.length; j++) {
                         const group = groups[j]
                         for (let i = 0; i < group.tasks.length; i++) {

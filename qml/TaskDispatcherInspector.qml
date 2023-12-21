@@ -15,7 +15,7 @@ Page {
         radius: 4
     }
     contentItem: ListView {
-        model: self.dispatcher.groups
+        model: self.dispatcher?.groups ?? []
         spacing: 4
         ScrollIndicator.vertical: ScrollIndicator {
         }
