@@ -180,7 +180,7 @@ StackViewPage {
                 Label {
                     font.pixelSize: 14
                     font.weight: 500
-                    text: [fee_convert.result[UtilJS.normalizeUnit(amount_field.unit)], (self.account.network.liquid ? 'L-' : '') + amount_field.unit].join(' ')
+                    text: fee_convert.unitLabel
                 }
             }
             RowLayout {
@@ -201,7 +201,7 @@ StackViewPage {
                     color: '#6F6F6F'
                     font.pixelSize: 12
                     font.weight: 400
-                    text: ['~', fee_convert.result.fiat, fee_convert.result.fiat_currency].join(' ')
+                    text: '~ ' + fee_convert.fiatLabel
                 }
             }
 //            Label {
