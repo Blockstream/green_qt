@@ -96,7 +96,7 @@ QString Convert::fiatLabel() const
 static QString testnetUnit(const QString& unit)
 {
     if (unit == "BTC") return "TEST";
-    if (unit == "BTC") return "mTEST";
+    if (unit == "mBTC") return "mTEST";
     if (unit == "\u00B5BTC") return "\u00B5TEST";
     if (unit == "bits") return "bTEST";
     if (unit == "sats") return "sTEST";
