@@ -103,24 +103,12 @@ void Controller::changeSettings(const QJsonObject& data)
         return;
     }
 
-    const auto network = m_context->wallet()->network();
-    const auto session = m_context->getOrCreateSession(network);
-    // Avoid unnecessary calls to GA_change_settings
-    if (DeepContains(session->settings(), data)) return;
-
-//    bool updated = true;
-//    auto settings = m_context->settings();
-//    for (auto i = data.begin(); i != data.end(); ++i) {
-//        if (settings.value(i.key()) != i.value()) {
-//            updated = false;
-//            settings[i.key()] = i.value();
-//        }
-//    }
-//    if (updated) return;
-
-    auto change_settings = new ChangeSettingsTask(data, session);
-
-    dispatcher()->add(change_settings);
+    for (auto session : m_context->getSessions()) {
+        if (!DeepContains(session->settings(), data)) {
+            auto change_settings = new ChangeSettingsTask(data, session);
+            dispatcher()->add(change_settings);
+        }
+    }
 }
 
 void Controller::sendRecoveryTransactions()
