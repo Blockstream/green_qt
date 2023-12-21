@@ -14,7 +14,7 @@ StackViewPage {
         self.contentItem.enabled = true
     }
     AnalyticsView {
-        active: self.opened
+        active: true
         name: 'OnBoardWatchOnlyCredentials'
         segmentation: AnalyticsJS.segmentationSession(controller.wallet)
     }
