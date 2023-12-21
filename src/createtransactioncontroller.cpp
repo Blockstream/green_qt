@@ -59,6 +59,7 @@ void CreateTransactionController::setAccount(Account* account)
     m_account = account;
     emit accountChanged();
     m_utxos = QJsonValue::Null;
+    invalidate();
 }
 
 void CreateTransactionController::setAsset(Asset* asset)
