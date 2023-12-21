@@ -36,6 +36,8 @@ GPane {
             spacing: 20
             visible: self.empty
             Image {
+                Layout.preferredWidth: 350
+                Layout.preferredHeight: 200
                 Layout.alignment: Qt.AlignCenter
                 source: 'qrc:/png/no_transactions.png'
             }
