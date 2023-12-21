@@ -12,6 +12,7 @@ import "util.js" as UtilJS
 
 MainPageHeader {
     signal assetsClicked()
+    signal settingsClicked()
     signal archivedAccountsClicked()
     signal logoutClicked()
 
@@ -57,23 +58,12 @@ MainPageHeader {
         }
         GMenu.Separator {
         }
-        Repeater {
-            model: self.context.sessions
-            GMenu.Item {
-                property Session session: modelData
-                text: qsTrId('id_settings') // TODO: include session name
-                icon.source: 'qrc:/svg/wallet-settings.svg'
-                enabled: {
-                    if (self.context.watchonly) return false
-                    // TODO
-                    if (session.network.electrum) return true
-                    // TODO since settings is per session, handle the following in the settings view
-                    return !!session.settings.pricing
-                }
-                onClicked: {
-                    menu.close()
-                    navigation.set({ settings: true, network: session.network.id, session })
-                }
+        GMenu.Item {
+            text: qsTrId('id_settings')
+            icon.source: 'qrc:/svg/wallet-settings.svg'
+            onClicked: {
+                menu.close()
+                self.settingsClicked()
             }
         }
         GMenu.Separator {

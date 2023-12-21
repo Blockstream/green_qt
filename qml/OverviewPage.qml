@@ -163,6 +163,7 @@ StackViewPage {
 
     header: WalletViewHeader {
         onAssetsClicked: open_assets_drawer_action.trigger()
+        onSettingsClicked: settings_dialog.createObject(self, { context: self.context }).open()
         onLogoutClicked: self.logout()
         onArchivedAccountsClicked: archived_accounts_dialog.createObject(self, { context: self.context }).open()
         id: wallet_header
@@ -175,6 +176,11 @@ StackViewPage {
         implicitHeight: 16
     }
 
+    Component {
+        id: settings_dialog
+        WalletSettingsDialog {
+        }
+    }
     Component {
         id: create_account_drawer
         CreateAccountDrawer {
