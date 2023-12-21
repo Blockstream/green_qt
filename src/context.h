@@ -36,6 +36,8 @@ public:
 
     QString deployment() const { return m_deployment; }
 
+    void cleanSessions();
+
     Wallet* wallet() const { return m_wallet; }
     void setWallet(Wallet* wallet);
 
