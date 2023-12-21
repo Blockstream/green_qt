@@ -9,15 +9,20 @@
 class Convert : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(Context* context READ context WRITE setContext NOTIFY contextChanged)
     Q_PROPERTY(Account* account READ account WRITE setAccount NOTIFY accountChanged)
     Q_PROPERTY(Asset* asset READ asset WRITE setAsset NOTIFY assetChanged)
     Q_PROPERTY(bool fiat READ fiat NOTIFY fiatChanged)
     Q_PROPERTY(QString unit READ unit WRITE setUnit NOTIFY unitChanged)
     Q_PROPERTY(QString value READ value WRITE setValue NOTIFY valueChanged)
     Q_PROPERTY(QJsonObject result READ result NOTIFY resultChanged)
+    Q_PROPERTY(QString fiatLabel READ fiatLabel NOTIFY resultChanged)
+    Q_PROPERTY(QString unitLabel READ unitLabel NOTIFY resultChanged)
     QML_ELEMENT
 public:
     Convert(QObject* parent = nullptr);
+    Context* context() const { return m_context; }
+    void setContext(Context* context);
     Account* account() const { return m_account; }
     void setAccount(Account* account);
     Asset* asset() const { return m_asset; }
@@ -31,7 +36,10 @@ public:
     void clearValue();
     QJsonObject result() const { return m_result; }
     void setResult(const QJsonObject& result);
+    QString fiatLabel() const;
+    QString unitLabel() const;
 signals:
+    void contextChanged();
     void accountChanged();
     void assetChanged();
     void fiatChanged();
@@ -41,9 +49,11 @@ signals:
 private:
     void invalidate();
     void update();
+    bool mainnet() const;
 protected:
     void timerEvent(QTimerEvent* event) override;
 private:
+    Context* m_context{nullptr};
     Account* m_account{nullptr};
     Asset* m_asset{nullptr};
     bool m_fiat{false};

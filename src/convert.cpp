@@ -1,5 +1,6 @@
 #include "account.h"
 #include "asset.h"
+#include "context.h"
 #include "convert.h"
 #include "json.h"
 #include "network.h"
@@ -15,21 +16,32 @@ Convert::Convert(QObject* parent)
 {
 }
 
+void Convert::setContext(Context* context)
+{
+    if (m_context == context) return;
+    m_context = context;
+    emit contextChanged();
+}
+
 void Convert::setAccount(Account* account)
 {
     if (m_account == account) return;
+    if (m_account) clearValue();
     m_account = account;
     emit accountChanged();
-    clearValue();
     invalidate();
+    if (m_account) {
+        connect(m_account->context()->primarySession(), &Session::unitChanged, this, &Convert::invalidate);
+        connect(m_account->session(), &Session::tickerEvent, this, &Convert::invalidate);
+    }
 }
 
 void Convert::setAsset(Asset* asset)
 {
     if (m_asset == asset) return;
+    if (m_asset) clearValue();
     m_asset = asset;
     emit assetChanged();
-    clearValue();
     invalidate();
 }
 
@@ -71,11 +83,43 @@ void Convert::setResult(const QJsonObject& result)
     emit resultChanged();
 }
 
+QString Convert::fiatLabel() const
+{
+    if (m_result.contains("fiat") && m_result.contains("fiat_currency")) {
+        const auto currency = mainnet() ? m_result.value("fiat_currency").toString() : "FIAT";
+        const auto amount = m_result.value("fiat").toString();
+        return amount + " " + currency;
+    }
+    return {};
+}
+
+static QString testnetUnit(const QString& unit)
+{
+    if (unit == "BTC") return "TEST";
+    if (unit == "BTC") return "mTEST";
+    if (unit == "\u00B5BTC") return "\u00B5TEST";
+    if (unit == "bits") return "bTEST";
+    if (unit == "sats") return "sTEST";
+    Q_UNREACHABLE();
+}
+
+QString Convert::unitLabel() const
+{
+    if (!m_account) return {};
+    const auto session = m_account->context()->primarySession();
+    if (!session) return {};
+    const auto unit = session->unit();
+    const auto unit_key = unit == "\u00B5BTC" ? "ubtc" : unit.toLower();
+
+    if (!m_result.contains(unit_key)) return {};
+    const auto amount = m_result.value(unit_key).toString();
+    return amount + " " + (mainnet() ? unit : testnetUnit(unit));
+}
+
 void Convert::invalidate()
 {
-    if (m_timer_id < 0) {
-        m_timer_id = startTimer(1);
-    }
+    if (m_timer_id >= 0) killTimer(m_timer_id);
+    m_timer_id = startTimer(0);
 }
 
 void Convert::update()
@@ -126,6 +170,11 @@ void Convert::update()
         watcher->deleteLater();
         setResult(watcher->result());
     });
+}
+
+bool Convert::mainnet() const
+{
+    return m_account && m_account->context()->deployment() == "mainnet";
 }
 
 void Convert::timerEvent(QTimerEvent *event)

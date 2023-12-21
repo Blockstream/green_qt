@@ -161,20 +161,11 @@ ItemDelegate {
                             visible: delegate.highlighted && delegate.account.hidden
                             onClicked: controller.setAccountHidden(delegate.account, false)
                         }
-                        ToolButton {
+                        CircleButton {
                             id: tool_button
                             Layout.alignment: Qt.AlignBottom
                             visible: delegate.highlighted && !delegate.account.hidden
                             icon.source: 'qrc:/svg/3-dots.svg'
-                            leftPadding: 0
-                            rightPadding: 0
-                            bottomPadding: 0
-                            topPadding: 0
-                            leftInset: 0
-                            rightInset: 0
-                            topInset: 0
-                            bottomInset: 0
-                            background: null
                             onClicked: account_delegate_menu.open()
                             GMenu {
                                 id: account_delegate_menu
