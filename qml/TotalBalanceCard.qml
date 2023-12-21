@@ -6,20 +6,35 @@ import QtQuick.Layouts
 import "util.js" as UtilJS
 
 WalletHeaderCard {
-    // TODO: remove this property, only required for formatAmount which should be refactored
-    required property Account account
-
-    readonly property var balance: {
-        const context = self.context
-        let r = 0
-        if (context) {
-            for (let i = 0; i < context.accounts.length; i++) {
-                const account = context.accounts[i]
-                r += account.balance
+    Convert {
+        id: convert
+        unit: 'sats'
+        value: {
+            const context = self.context
+            let r = 0
+            if (context) {
+                for (let i = 0; i < context.accounts.length; i++) {
+                    const account = context.accounts[i]
+                    r += account.balance
+                }
             }
+            return r
         }
-        return r
+        account: {
+            const context = self.context
+            if (context) {
+                const session = context.sessions[0]
+                for (let i = 0; i < context.accounts.length; i++) {
+                    const account = context.accounts[i]
+                    if (account.session === session) {
+                        return account
+                    }
+                }
+            }
+            return null
+        }
     }
+
     id: self
     headerItem: RowLayout {
         Label {
@@ -48,14 +63,14 @@ WalletHeaderCard {
             font.capitalization: Font.AllUppercase
             font.pixelSize: 24
             font.weight: 600
-            text: UtilJS.incognitoAmount(self.account, formatAmount(self.account, self.balance))
+            text: UtilJS.incognitoAmount(convert.account, convert.unitLabel)
         }
         Label {
             font.capitalization: Font.AllUppercase
             font.pixelSize: 16
             font.weight: 400
             opacity: 0.6
-            text: UtilJS.incognitoFiat(self.account, formatFiat(self.balance))
+            text: UtilJS.incognitoFiat(convert.account, convert.fiatLabel)
         }
         VSpacer {
         }

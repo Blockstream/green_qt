@@ -29,7 +29,6 @@ Pane {
             spacing: 0
             TotalBalanceCard {
                 context: self.context
-                account: self.currentAccount
             }
             Separator {
                 visible: assets_card.visible
