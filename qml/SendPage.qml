@@ -160,6 +160,7 @@ StackViewPage {
                 Layout.bottomMargin: 15
                 text: qsTrId('id_send_all')
                 enabled: !controller.recipient.greedy
+                visible: false
                 onClicked: controller.recipient.greedy = true
             }
             Convert {
