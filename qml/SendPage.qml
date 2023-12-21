@@ -243,6 +243,7 @@ StackViewPage {
         }
         PrimaryButton {
             Layout.fillWidth: true
+            enabled: (controller.transaction?.transaction?.length ?? 0) > 0
             implicitWidth: 0
             text: qsTrId('id_next')
             onClicked: {
