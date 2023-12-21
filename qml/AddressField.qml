@@ -10,7 +10,7 @@ TextField {
     topPadding: 18
     bottomPadding: 18
     leftPadding: 18
-    rightPadding: 90
+    rightPadding: options_layout.width + 18 + 10
     background: Rectangle {
         color: '#222226'
         radius: 5
@@ -54,26 +54,24 @@ TextField {
     }
     */
 
-    Row {
+    RowLayout {
+        id: options_layout
         anchors.verticalCenter: parent.verticalCenter
         anchors.right: parent.right
-        spacing: 0
-        ToolButton {
+        anchors.rightMargin: 18
+        spacing: 10
+        CircleButton {
             activeFocusOnTab: false
             enabled: scanner_popup.available && !scanner_popup.visible
-            icon.source: 'qrc:/svg/qr.svg'
-            icon.width: 16
-            icon.height: 16
+            icon.source: 'qrc:/svg2/qrcode.svg'
             onClicked: scanner_popup.open()
             ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
             ToolTip.text: qsTrId('id_scan_qr_code')
             ToolTip.visible: hovered
         }
-        ToolButton {
+        CircleButton {
             activeFocusOnTab: false
-            icon.source: 'qrc:/svg/paste.svg'
-            icon.width: 24
-            icon.height: 24
+            icon.source: 'qrc:/svg2/paste.svg'
             onClicked: {
                 self.paste();
                 self.address_input = 'paste'
