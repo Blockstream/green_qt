@@ -15,7 +15,7 @@ StackViewPage {
         }
         Image {
             Layout.alignment: Qt.AlignCenter
-            source: 'qrc:/png/transaction_completed.png'
+            source: 'qrc:/png/completed.png'
         }
         Label {
             Layout.alignment: Qt.AlignCenter
