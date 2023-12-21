@@ -34,7 +34,7 @@ AbstractButton {
             visible: image.status === Image.Ready
         }
         Label {
-            font.pixelSize: 14
+            font.pixelSize: 16
             font.weight: 600
             horizontalAlignment: Text.AlignHCenter
             text: self.text
