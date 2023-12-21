@@ -101,6 +101,7 @@ void CreateTransactionController::update()
             auto task = new GetUnspentOutputsTask(0, false, m_account);
             connect(task, &Task::finished, this, [=] {
                 m_utxos = task->unspentOutputs();
+                emit utxosChanged();
                 task->deleteLater();
                 update();
             });

@@ -40,6 +40,7 @@ class CreateTransactionController : public Controller
     Q_OBJECT
     Q_PROPERTY(Account* account READ account WRITE setAccount NOTIFY accountChanged)
     Q_PROPERTY(Asset* asset READ asset WRITE setAsset NOTIFY assetChanged)
+    Q_PROPERTY(QJsonValue utxos READ utxos NOTIFY utxosChanged)
     Q_PROPERTY(Recipient* recipient READ recipient CONSTANT)
     Q_PROPERTY(QVariantList coins READ coins WRITE setCoins NOTIFY coinsChanged)
     Q_PROPERTY(int feeRate READ feeRate WRITE setFeeRate NOTIFY feeRateChanged)
@@ -51,6 +52,7 @@ public:
     void setAccount(Account* account);
     Asset* asset() const { return m_asset; }
     void setAsset(Asset* asset);
+    QJsonValue utxos() const { return m_utxos; }
     Recipient* recipient() const { return m_recipient; }
     QVariantList coins() const { return m_coins; }
     void setCoins(const QVariantList& coins);
@@ -63,6 +65,7 @@ public slots:
 signals:
     void accountChanged();
     void assetChanged();
+    void utxosChanged();
     void coinsChanged();
     void feeRateChanged();
     void transactionChanged();
