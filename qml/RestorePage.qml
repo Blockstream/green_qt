@@ -49,6 +49,7 @@ StackViewPage {
         Image {
             Layout.alignment: Qt.AlignCenter
             source: 'qrc:/svg2/warning.svg'
+            visible: !!self.wallet
         }
         Label {
             Layout.alignment: Qt.AlignCenter
@@ -56,6 +57,7 @@ StackViewPage {
             font.weight: 500
             horizontalAlignment: Qt.AlignHCenter
             text: qsTrId('id_youve_entered_an_invalid_pin')
+            visible: !!self.wallet
         }
         Label {
             Layout.alignment: Qt.AlignCenter
