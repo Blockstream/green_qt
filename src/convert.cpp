@@ -21,6 +21,11 @@ void Convert::setContext(Context* context)
     if (m_context == context) return;
     m_context = context;
     emit contextChanged();
+    invalidate();
+    if (m_context) {
+        connect(m_context->primarySession(), &Session::unitChanged, this, &Convert::invalidate);
+        connect(m_context->primarySession(), &Session::tickerEvent, this, &Convert::invalidate);
+    }
 }
 
 void Convert::setAccount(Account* account)
@@ -31,7 +36,7 @@ void Convert::setAccount(Account* account)
     emit accountChanged();
     invalidate();
     if (m_account) {
-        connect(m_account->context()->primarySession(), &Session::unitChanged, this, &Convert::invalidate);
+        connect(m_account->session(), &Session::unitChanged, this, &Convert::invalidate);
         connect(m_account->session(), &Session::tickerEvent, this, &Convert::invalidate);
     }
 }
@@ -105,15 +110,17 @@ static QString testnetUnit(const QString& unit)
 
 QString Convert::unitLabel() const
 {
-    if (!m_account) return {};
-    const auto session = m_account->context()->primarySession();
+    if (!m_context && !m_account) return {};
+    const auto session = m_account ? m_account->session() : m_context->primarySession();
     if (!session) return {};
     const auto unit = session->unit();
     const auto unit_key = unit == "\u00B5BTC" ? "ubtc" : unit.toLower();
 
+    const QString prefix{m_account && m_account->isLiquid() ? "L-" : ""};
+
     if (!m_result.contains(unit_key)) return {};
     const auto amount = m_result.value(unit_key).toString();
-    return amount + " " + (mainnet() ? unit : testnetUnit(unit));
+    return amount + " " + prefix + (mainnet() ? unit : testnetUnit(unit));
 }
 
 void Convert::invalidate()
@@ -126,7 +133,7 @@ void Convert::update()
 {
     qDebug() << Q_FUNC_INFO;
 
-    if (!m_account) {
+    if (!m_context && !m_account) {
         setFiat(false);
         setResult({});
         return;
@@ -153,10 +160,10 @@ void Convert::update()
 
     using Watcher = QFutureWatcher<QJsonObject>;
     const auto watcher = new Watcher(this);
-    const auto session = m_account->session()->m_session;
+    const auto session = m_account ? m_account->session() : m_context->primarySession();
     watcher->setFuture(QtConcurrent::run([=] {
         GA_json* output;
-        const int rc = GA_convert_amount(session, Json::fromObject(details).get(), &output);
+        const int rc = GA_convert_amount(session->m_session, Json::fromObject(details).get(), &output);
         if (rc == GA_OK) {
             const auto result = Json::toObject(output);
             GA_destroy_json(output);
@@ -174,7 +181,9 @@ void Convert::update()
 
 bool Convert::mainnet() const
 {
-    return m_account && m_account->context()->deployment() == "mainnet";
+    if (!m_context && !m_account) return false;
+    const auto context = m_context ? m_context : m_account->context();
+    return context->deployment() == "mainnet";
 }
 
 void Convert::timerEvent(QTimerEvent *event)

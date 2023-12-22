@@ -5,6 +5,7 @@ import QtQuick.Window
 import QtQuick.Controls
 import QtQuick.Layouts
 import QtQml
+import Qt5Compat.GraphicalEffects
 
 import "analytics.js" as AnalyticsJS
 import "util.js" as UtilJS
@@ -341,7 +342,15 @@ StackViewPage {
             initialItem: Item {}
         }
     }
+    DropShadow {
+        opacity: 1
+        radius: 32
+        samples: 16
+        source: btns
+        anchors.fill: btns
+    }
     RowLayout {
+        id: btns
         anchors.bottom: parent.bottom
         anchors.right: parent.right
         anchors.rightMargin: constants.p3

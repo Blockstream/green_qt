@@ -38,12 +38,10 @@ ItemDelegate {
 
     id: self
     focusPolicy: Qt.ClickFocus
-    hoverEnabled: true
-    topPadding: 16
-    leftPadding: 16
-    rightPadding: 16
-    bottomPadding: 16
-
+    leftPadding: 20
+    rightPadding: 20
+    topPadding: 20
+    bottomPadding: 20
     background: Item {
         Rectangle {
             anchors.fill: parent
@@ -52,37 +50,36 @@ ItemDelegate {
             opacity: 0.08
         }
         Rectangle {
-            color: '#FFFFFF'
-            opacity: 0.1
+            color: '#1F222A'
             width: parent.width
             height: 1
             y: parent.height - 1
         }
     }
-    spacing: 8
+    spacing: 0
 
     function txType(tx) {
-        const memo = transaction.memo.trim().replace(/\n/g, ' ')
-        const separator = memo === '' ? '' : ' - '
+        // const memo = transaction.memo.trim().replace(/\n/g, ' ')
+        // const separator = memo === '' ? '' : ' - '
         if (transaction.type === Transaction.Incoming) {
             if (tx.outputs.length > 0) {
                 for (const o of tx.outputs) {
                     if (o.is_relevant) {
-                        return qsTrId('id_received') + separator + memo
+                        return qsTrId('id_received')// + separator + memo
                     }
                 }
             } else {
-                return qsTrId('id_received') + separator + memo
+                return qsTrId('id_received')// + separator + memo
             }
         }
         if (transaction.type === Transaction.Outgoing) {
-            return qsTrId('id_sent') + separator + memo
+            return qsTrId('id_sent')// + separator + memo
         }
         if (transaction.type === Transaction.Redeposit) {
-            return qsTrId('id_redeposited') + separator + memo
+            return qsTrId('id_redeposited')// + separator + memo
         }
         if (transaction.type === Transaction.Mixed) {
-            return qsTrId('id_swap') + separator + memo
+            return qsTrId('id_swap')// + separator + memo
         }
         return JSON.stringify(tx, null, '\t')
     }
@@ -92,23 +89,40 @@ ItemDelegate {
         onTriggered: copyUnblindingData(tool_button, tx)
     }
     contentItem: RowLayout {
-        spacing: constants.s1
-        Label {
-            text: UtilJS.formatTransactionTimestamp(tx)
-            font.pixelSize: 12
-            font.capitalization: Font.AllUppercase
-            font.styleName: 'Regular'
-            opacity: 0.6
+        spacing: 20
+        Image {
+            Layout.alignment: Qt.AlignCenter
+            source: `qrc:/svg2/tx-${transaction.data.type}.svg`
+        }
+        ColumnLayout {
+            Layout.fillWidth: false
+            Layout.fillHeight: false
+            Layout.alignment: Qt.AlignCenter
+            spacing: 1
+            Label {
+                color: '#FFF'
+                font.pixelSize: 14
+                font.weight: 600
+                text: txType(tx)
+            }
+            Label {
+                color: '#929292'
+                text: UtilJS.formatTransactionTimestamp(tx)
+                font.pixelSize: 12
+                font.weight: 400
+                font.capitalization: Font.AllUppercase
+                opacity: 0.6
+            }
         }
         Label {
+            Layout.alignment: Qt.AlignCenter
+            Layout.preferredWidth: 0
             Layout.fillWidth: true
-            Layout.maximumWidth: self.width * 0.3
-            font.pixelSize: 14
-            font.styleName: 'Medium'
-            text: txType(tx)
-            elide: Label.ElideRight
-        }
-        HSpacer {
+            color: '#929292'
+            font.pixelSize: 12
+            font.weight: 400
+            text: transaction.memo
+            wrapMode: Label.Wrap
         }
         TransactionStatusBadge {
             transaction: self.transaction
@@ -127,34 +141,101 @@ ItemDelegate {
                 sourceSize.height: 24
             }
         }
-        ColumnLayout {
-            spacing: constants.s1
-            Layout.fillWidth: false
-            Repeater {
-                model: Object.entries(transaction.data.satoshi)
-                Label {
-                    visible: {
-                        const network = transaction.account.network
-                        const [id, amount] = modelData
-                        if (network.liquid && transaction.type === Transaction.Outgoing && id === network.policyAsset && amount === -transaction.data.fee) return false
-                        return true
-                    }
-                    Layout.alignment: Qt.AlignRight
-                    color: modelData[1] > 0 ? '#00b45a' : 'white'
-                    font.pixelSize: 14
-                    font.styleName: 'Medium'
-                    text: {
-                        const account = self.transaction.account
-                        const network = account.network
-                        const [id, amount] = modelData
-                        if (network.liquid) {
-                            return UtilJS.incognitoAmount(self.account, self.context.getOrCreateAsset(id).formatAmount(amount, true))
-                        } else {
-                            return UtilJS.incognitoAmount(self.account, formatAmount(account, amount))
-                        }
+        Repeater {
+            model: {
+                const assets = []
+                if (self.account.network.liquid) {
+                    for (const [id, satoshi] of Object.entries(transaction.data.satoshi)) {
+                        if (self.account.network.policyAsset === id) continue
+                        const asset = AssetManager.assetWithId(self.account.context.deployment, id)
+                        if (asset && asset.icon) assets.push(asset)
                     }
                 }
+                return assets
             }
+            delegate: AssetIcon {
+                asset: modelData
+            }
+        }
+
+        ColumnLayout {
+            Layout.fillWidth: false
+            Layout.minimumWidth: 150
+            spacing: 1
+            Repeater {
+                model: {
+                    const assets = []
+                    if (self.account.network.liquid) {
+                        for (const [id, satoshi] of Object.entries(transaction.data.satoshi)) {
+                            if (self.account.network.policyAsset === id) continue
+                            const asset = AssetManager.assetWithId(self.account.context.deployment, id)
+                            const ticker = asset.data.ticker
+                            if (ticker) {
+                                assets.push('' + satoshi + ' ' + ticker)
+                            } else {
+                                assets.push('' + satoshi)
+                            }
+                        }
+                    }
+                    return assets
+                }
+                delegate: Label {
+                    Layout.alignment: Qt.AlignRight
+                    color: transaction.data.type === 'incoming' ? '#00B670' : '#FFF'
+                    font.pixelSize: 14
+                    font.weight: 600
+                    text: modelData
+                }
+            }
+            Convert {
+                id: convert
+                account: self.account
+                unit: 'sats'
+                value: transaction.account.network.liquid ? transaction.data.satoshi[transaction.account.network.policyAsset] : transaction.data.satoshi.btc
+            }
+            Label {
+                Layout.alignment: Qt.AlignRight
+                color: transaction.data.type === 'incoming' ? '#00B670' : '#FFF'
+                font.pixelSize: 14
+                font.weight: 600
+                text: convert.unitLabel
+                visible: convert.value < 0 || convert.value > 0
+            }
+            Label {
+                Layout.alignment: Qt.AlignRight
+                color: '#929292'
+                font.pixelSize: 12
+                font.weight: 400
+                text: convert.fiatLabel
+                visible: convert.value < 0 || convert.value > 0
+            }
+
+//            Repeater {
+//                model: Object.entries(transaction.data.satoshi)
+//                delegate: Label {
+//                    text: JSON.stringify(modelData, null, '  ')
+//                    visible: {
+//                        const network = transaction.account.network
+//                        const [id, amount] = modelData
+//                        if (network.liquid && transaction.type === Transaction.Outgoing && id === network.policyAsset && amount === -transaction.data.fee) return false
+//                        return true
+//                    }
+//                    Layout.alignment: Qt.AlignRight
+//                    color: modelData[1] > 0 ? '#00b45a' : 'white'
+//                    font.pixelSize: 14
+//                    font.styleName: 'Medium'
+//                    text: {
+//                        const account = self.transaction.account
+//                        const network = account.network
+//                        const [id, amount] = modelData
+//                        if (network.liquid) {
+//                            return UtilJS.incognitoAmount(self.account, self.context.getOrCreateAsset(id).formatAmount(amount, true))
+//                        } else {
+//                            return UtilJS.incognitoAmount(self.account, formatAmount(account, amount))
+//                        }
+//                    }
+//                }
+//            }
         }
     }
 }

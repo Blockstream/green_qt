@@ -20,19 +20,7 @@ WalletHeaderCard {
             }
             return r
         }
-        account: {
-            const context = self.context
-            if (context) {
-                const session = context.sessions[0]
-                for (let i = 0; i < context.accounts.length; i++) {
-                    const account = context.accounts[i]
-                    if (account.session === session) {
-                        return account
-                    }
-                }
-            }
-            return null
-        }
+        context: self.context
     }
 
     id: self
@@ -60,17 +48,15 @@ WalletHeaderCard {
     contentItem: ColumnLayout {
         spacing: 10
         Label {
-            font.capitalization: Font.AllUppercase
             font.pixelSize: 24
             font.weight: 600
-            text: UtilJS.incognitoAmount(convert.account, convert.unitLabel)
+            text: UtilJS.incognitoAmount(self.context, convert.unitLabel)
         }
         Label {
-            font.capitalization: Font.AllUppercase
             font.pixelSize: 16
             font.weight: 400
             opacity: 0.6
-            text: UtilJS.incognitoFiat(convert.account, convert.fiatLabel)
+            text: UtilJS.incognitoFiat(self.context, convert.fiatLabel)
         }
         VSpacer {
         }
