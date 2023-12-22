@@ -9,7 +9,7 @@ import QtQml.Models
 import "util.js" as UtilJS
 
 ItemDelegate {
-    required property var output
+    required property Output output
 
     function toggleSelection() {
         if (!output.account.network.liquid) selection_model.select(output_model.index(output_model.indexOf(output), 0), ItemSelectionModel.Toggle)
@@ -42,88 +42,84 @@ ItemDelegate {
             opacity: 0.08
         }
         Rectangle {
-            color: '#FFFFFF'
-            opacity: 0.1
+            color: '#1F222A'
             width: parent.width
             height: 1
             y: parent.height - 1
         }
     }
-    onClicked: self.toggleSelection()
-    spacing: constants.p2
+    // onClicked: self.toggleSelection()
     contentItem: RowLayout {
-        spacing: constants.p2
-        ColumnLayout {
-            Layout.fillWidth: false
-            Layout.fillHeight: false
-            Layout.alignment: Qt.AlignTop
-            Image {
-                visible: !output.account.network.liquid
-                sourceSize.height: 36
-                sourceSize.width: 36
-                source: UtilJS.iconFor(wallet)
-            }
-            Loader {
-                Layout.alignment: Qt.AlignTop
-                active: output.asset
-                visible: active
-                sourceComponent: AssetIcon {
-                    asset: output.asset
-                    Layout.preferredWidth: 36
-                    Layout.preferredHeight: 36
-                }
-            }
+        spacing: 20
+        AssetIcon {
+            Layout.alignment: Qt.AlignCenter
+            asset: output.asset
         }
         ColumnLayout {
-            Layout.fillWidth: true
-            spacing: constants.p1
-            Label {
-                Layout.fillWidth: true
-                elide: Text.ElideRight
-                text: formatAmount(output.data['satoshi'], true)
-                font.pixelSize: 14
-                font.styleName: 'Medium'
-            }
-            Label {
-                Layout.fillWidth: true
-                elide: Text.ElideRight
-                text: output.data['txhash'] + ':' + output.data['pt_idx']
-                font.pixelSize: 12
-                font.styleName: 'Regular'
-            }
             RowLayout {
-                Tag {
-                    color: constants.r500
-                    visible: output.expired
-                    text: qsTrId('id_2fa_expired')
-                    font.capitalization: Font.AllUppercase
-                }
-                Tag {
-                    visible: output.locked
-                    text: qsTrId('id_locked')
-                    font.capitalization: Font.AllUppercase
-                }
-                Tag {
-                    text: qsTrId('id_dust')
-                    visible: output.dust
-                    font.capitalization: Font.AllUppercase
-                }
-                Tag {
-                    text: qsTrId('id_not_confidential')
-                    visible: output.account.network.liquid && !output.confidential
-                    font.capitalization: Font.AllUppercase
-                }
-                Tag {
-                    text: localizedLabel(output.addressType)
-                    font.capitalization: Font.AllUppercase
-                }
-                Tag {
-                    visible: output.unconfirmed
-                    text: qsTrId('id_unconfirmed')
-                    color: '#d2934a'
-                    font.capitalization: Font.AllUppercase
+                spacing: 10
+                Repeater {
+                    model: self.tags
+                    delegate: Tag2 {
+                        text: modelData.name
+                        color: modelData.color ?? 'white'
+                    }
                 }
             }
+            Label {
+                Layout.fillWidth: true
+                Layout.preferredWidth: 0
+                font.pixelSize: 12
+                font.weight: 400
+                color: '#929292'
+                text: self.output.data.txhash + ':' + self.output.data.pt_idx
+                wrapMode: Label.Wrap
+            }
         }
+        ColumnLayout {
+            Convert {
+                id: convert
+                account: self.output.account
+                asset: self.output.asset
+                unit: 'sats'
+                value: String(self.output.data.satoshi)
+            }
+            Label {
+                Layout.alignment: Qt.AlignRight
+                font.pixelSize: 14
+                font.weight: 600
+                text: convert.unitLabel
+            }
+            Label {
+                Layout.alignment: Qt.AlignRight
+                color: '#929292'
+                font.pixelSize: 14
+                font.weight: 600
+                text: convert.fiatLabel
+                visible: convert.result.fiat_currency ?? false
+            }
+        }
+    }
+    readonly property var tags: {
+        const output = self.output
+        const tags = []
+        if (output.expired) tags.push({ name: qsTrId('id_2fa_expired'), color: '#69302E' })
+        if (output.locked) tags.push({ name: qsTrId('id_locked') })
+        if (output.dust) tags.push({ name: qsTrId('id_dust') })
+        if (output.account.network.liquid && !output.confidential) tags.push({ name: qsTrId('id_not_confidential') })
+        tags.push({ name: localizedLabel(output.addressType) })
+        if (output.unconfirmed) tags.push({ name: qsTrId('id_unconfirmed'), color: '#d2934a' })
+        return tags
+    }
+
+    component Tag2: Tag {
+        background: Rectangle {
+            color: Qt.alpha('#FFF', 0.4)
+            border.width: 1
+            border.color: Qt.alpha('#FFF', 0.6)
+            radius: height / 2
+        }
+        color: 'white'
+        font.capitalization: Font.AllUppercase
     }
 }

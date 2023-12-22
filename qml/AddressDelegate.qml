@@ -24,8 +24,7 @@ ItemDelegate {
             opacity: 0.08
         }
         Rectangle {
-            color: '#FFFFFF'
-            opacity: 0.1
+            color: '#1F222A'
             width: parent.width
             height: 1
             y: parent.height - 1
