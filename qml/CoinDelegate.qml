@@ -9,17 +9,7 @@ import QtQml.Models
 import "util.js" as UtilJS
 
 ItemDelegate {
-    required property var output
-
-    function formatAmount(amount, include_ticker = true) {
-        if (output.account.network.liquid) {
-            return output.asset.formatAmount(amount, true)
-        } else {
-            output.account.session.displayUnit
-            return wallet.formatAmount(amount || 0, include_ticker, output.account.session.unit)
-        }
-    }
-
+    required property Output output
     id: self
     hoverEnabled: false
     leftPadding: 20
@@ -38,7 +28,6 @@ ItemDelegate {
             enabled: false
             checked: self.checked
         }
-
         ColumnLayout {
             Layout.fillWidth: true
             spacing: constants.p1
@@ -78,27 +67,40 @@ ItemDelegate {
             }
             RowLayout {
                 spacing: 10
+                Convert {
+                    id: convert
+                    account: self.output.account
+                    asset: self.output.asset
+                    unit: 'sats'
+                    value: String(output.data.satoshi)
+                }
                 Label {
                     Layout.alignment: Qt.AlignCenter
-                    text: formatAmount(output.data['satoshi'], true)
+                    text: convert.unitLabel
                     font.pixelSize: 16
                     font.weight: 600
                 }
-                Image {
+                AssetIcon {
                     Layout.alignment: Qt.AlignCenter
-                    Layout.maximumWidth: 20
-                    Layout.maximumHeight: 20
-                    source: UtilJS.iconFor(output.asset)
+                    asset: output.asset
+                    size: 20
                 }
                 HSpacer {
                 }
+            }
+            Label {
+                text: convert.fiatLabel
+                font.pixelSize: 14
+                font.weight: 400
+                opacity: 0.6
+                visible: convert.result?.fiat_currency ?? false
             }
             Label {
                 Layout.fillWidth: true
                 Layout.preferredWidth: 0
                 font.pixelSize: 12
                 font.weight: 400
-                text: self.output.data['txhash'] + ':' + self.output.data['pt_idx']
+                text: self.output.data.txhash + ':' + self.output.data.pt_idx
                 wrapMode: Label.Wrap
             }
             Label {
@@ -121,6 +123,7 @@ ItemDelegate {
             radius: height / 2
         }
         color: 'white'
-        opacity: 0.4
+        font.capitalization: Font.AllUppercase
+        opacity: 0.6
     }
 }
