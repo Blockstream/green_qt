@@ -12,9 +12,10 @@ ItemDelegate {
     onClicked: self.addressClicked(self.address)
     id: self
     hoverEnabled: true
-    padding: 20
-    verticalPadding: 12
-
+    leftPadding: 20
+    rightPadding: 20
+    topPadding: 20
+    bottomPadding: 20
     background: Item {
         Rectangle {
             anchors.fill: parent
@@ -73,7 +74,7 @@ ItemDelegate {
             Layout.alignment: Qt.AlignCenter
             Layout.fillWidth: false
             Layout.fillHeight: false
-            Layout.minimumWidth: 100
+            Layout.minimumWidth: 150
             Label {
                 Layout.alignment: Qt.AlignRight
                 font.pixelSize: 10
