@@ -121,6 +121,7 @@ Page {
     PersistentLoader {
         load: navigation.param.view === 'assets'
         sourceComponent: AssetListView {
+            context: self.context
             account: self.account
         }
     }

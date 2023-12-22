@@ -111,6 +111,9 @@ static QString testnetUnit(const QString& unit)
 QString Convert::unitLabel() const
 {
     if (!m_context && !m_account) return {};
+    if (m_liquid_asset) {
+        return m_result.value("satoshi").toString() + " " + m_asset->data().value("ticker").toString();
+    }
     const auto session = m_account ? m_account->session() : m_context->primarySession();
     if (!session) return {};
     const auto unit = session->unit();
@@ -131,8 +134,6 @@ void Convert::invalidate()
 
 void Convert::update()
 {
-    qDebug() << Q_FUNC_INFO;
-
     if (!m_context && !m_account) {
         setFiat(false);
         setResult({});
@@ -140,13 +141,13 @@ void Convert::update()
     }
 
     const auto network = m_account->network();
-    const bool is_liquid_asset = m_asset && network->isLiquid() && network->policyAsset() != m_asset->id();
-    setFiat(!is_liquid_asset);
+    m_liquid_asset = m_asset && network->isLiquid() && network->policyAsset() != m_asset->id();
+    setFiat(!m_liquid_asset);
 
     const auto value = m_value.isEmpty() ? "0" : m_value;
 
-    if (is_liquid_asset) {
-        setResult({{ "satoshi", m_asset->parseAmount(value) }});
+    if (m_liquid_asset) {
+        setResult({{ "satoshi", value }});
         return;
     }
 

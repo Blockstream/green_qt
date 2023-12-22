@@ -1,12 +1,13 @@
 import Blockstream.Green
+import Blockstream.Green.Core
 import QtQuick
 import QtQuick.Window
 import QtQuick.Controls
 import QtQuick.Layouts
 
 GPane {
+    required property Context context
     required property Account account
-
     id: self
     background: Rectangle {
         color: '#161921'
@@ -16,12 +17,24 @@ GPane {
     }
     contentItem: TListView {
         id: list_view
-        model: self.account.balances
-        spacing: 8
+        model: {
+            const deployment = self.context.deployment
+            const entries = Object.entries(self.account.json.satoshi)
+            const assets = entries.map(([id, satoshi]) => ({ asset: AssetManager.assetWithId(deployment, id), satoshi }))
+            return assets.sort((a, b) => {
+                if (a.asset.data.name === 'btc') return -1
+                if (b.asset.data.name === 'btc') return 1
+                if (a.asset.icon && !b.asset.icon) return -1
+                if (!a.asset.icon && b.asset.icon) return 1
+                return a.asset.id.localeCompare(b.asset.id)
+            })
+        }
+        spacing: 0
         delegate: AssetDelegate {
-            balance: modelData
-            width: ListView.view.width
-            onClicked: if (hasDetails) balance_dialog.createObject(window, { balance }).open()
+            account: self.account
+            asset: modelData.asset
+            satoshi: modelData.satoshi
+            // onClicked: if (delegate.hasDetails) balance_dialog.createObject(window, { balance }).open()
         }
     }
 }

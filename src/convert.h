@@ -56,6 +56,7 @@ private:
     Context* m_context{nullptr};
     Account* m_account{nullptr};
     Asset* m_asset{nullptr};
+    bool m_liquid_asset{false};
     bool m_fiat{false};
     QString m_unit;
     QString m_value;
