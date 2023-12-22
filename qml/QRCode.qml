@@ -28,7 +28,7 @@ Item {
             cache: false
             sourceSize.width: img.width
             sourceSize.height: img.height
-            source: `image://QZXing/encode/${escape(self.text || '')}?format=qrcode&border=false&transparent=false`
+            source: `image://QZXing/encode/${escape(self.text || '')}?format=qrcode&border=false&transparent=false&correctionLevel=H`
         }
     }
 }
