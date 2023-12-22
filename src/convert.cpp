@@ -140,8 +140,12 @@ void Convert::update()
         return;
     }
 
-    const auto network = m_account->network();
-    m_liquid_asset = m_asset && network->isLiquid() && network->policyAsset() != m_asset->id();
+    if (m_account) {
+        const auto network = m_account->network();
+        m_liquid_asset = m_asset && network->isLiquid() && network->policyAsset() != m_asset->id();
+    } else {
+        m_liquid_asset = false;
+    }
     setFiat(!m_liquid_asset);
 
     const auto value = m_value.isEmpty() ? "0" : m_value;
