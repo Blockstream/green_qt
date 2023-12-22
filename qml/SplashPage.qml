@@ -8,7 +8,7 @@ MainPage {
     signal timeout()
     Timer {
         running: true
-        interval: 300
+        interval: 400
         onTriggered: self.timeout()
     }
     id: self
@@ -19,7 +19,11 @@ MainPage {
         }
         Image {
             Layout.alignment: Qt.AlignCenter
+            Layout.minimumHeight: 183
+            Layout.minimumWidth: 558
             Layout.bottomMargin: 60
+            sourceSize.height: 183
+            sourceSize.width: 558
             source: 'qrc:/svg/green_logo.svg'
             NumberAnimation on scale {
                 easing.type: Easing.OutCubic
