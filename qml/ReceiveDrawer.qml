@@ -102,27 +102,38 @@ WalletDrawer {
                         contentItem: ColumnLayout {
                             spacing: 10
                             RowLayout {
-                                CircleButton {
-                                    Layout.alignment: Qt.AlignTop
-                                    icon.source: 'qrc:/svg2/expand.svg'
-                                    onClicked: stack_view.push(qrcode_page)
-                                }
-                                HSpacer {
+                                Item {
+                                    Layout.minimumWidth: rhs.width
                                 }
                                 QRCode {
                                     Layout.alignment: Qt.AlignHCenter
+                                    Layout.fillWidth: true
                                     id: qrcode
                                     text: controller.uri
                                     implicitHeight: 150
                                     implicitWidth: 150
-                                    radius: 4
+                                    radius: 8
+                                    AssetIcon {
+                                        anchors.centerIn: parent
+                                        asset: controller.asset
+                                        size: 32
+                                        border: 4
+                                    }
                                 }
-                                HSpacer {
-                                }
-                                CircleButton {
+                                ColumnLayout {
                                     Layout.alignment: Qt.AlignTop
-                                    icon.source: 'qrc:/svg2/refresh.svg'
-                                    onClicked: controller.generate()
+                                    id: rhs
+                                    spacing: 10
+                                    CircleButton {
+                                        Layout.alignment: Qt.AlignTop
+                                        icon.source: 'qrc:/svg2/refresh.svg'
+                                        onClicked: controller.generate()
+                                    }
+                                    CircleButton {
+                                        Layout.alignment: Qt.AlignTop
+                                        icon.source: 'qrc:/svg2/zoom.svg'
+                                        onClicked: stack_view.push(qrcode_page)
+                                    }
                                 }
                             }
                             Label {
