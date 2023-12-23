@@ -151,8 +151,17 @@ StackViewPage {
     spacing: 0
     property alias toolbarItem: wallet_header.toolbarItem
 
+    Action {
+        id: open_assets_drawer_action
+        onTriggered: {
+            const drawer = assets_drawer.createObject(self, { context: self.context })
+            drawer.open()
+        }
+        shortcut: 'Ctrl+A'
+    }
+
     header: WalletViewHeader {
-        onAssetsClicked: assets_drawer.createObject(self, { context: self.context }).open()
+        onAssetsClicked: open_assets_drawer_action.trigger()
         onLogoutClicked: self.logout()
         onArchivedAccountsClicked: archived_accounts_dialog.createObject(self, { context: self.context }).open()
         id: wallet_header
@@ -199,6 +208,7 @@ StackViewPage {
     Component {
         id: assets_drawer
         AssetsDrawer {
+            onAccountClicked: (account) => self.switchToAccount(account)
         }
     }
 
