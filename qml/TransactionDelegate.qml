@@ -191,7 +191,11 @@ ItemDelegate {
                 id: convert
                 account: self.account
                 unit: 'sats'
-                value: transaction.account.network.liquid ? transaction.data.satoshi[transaction.account.network.policyAsset] : transaction.data.satoshi.btc
+                value: {
+                    const network = transaction.account.network
+                    const satoshi = transaction.data.satoshi
+                    return network.liquid ? satoshi[network.policyAsset] ?? 0 : satoshi.btc
+                }
             }
             Label {
                 Layout.alignment: Qt.AlignRight
