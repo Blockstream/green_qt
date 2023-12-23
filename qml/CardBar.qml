@@ -84,15 +84,11 @@ Pane {
         }
     }
 
-    component Separator: Item {
-        Layout.minimumWidth: 41
-        Layout.maximumWidth: 41
+    component Separator: Rectangle {
+        Layout.minimumWidth: 1
+        Layout.maximumWidth: 1
         Layout.fillHeight: true
-        Rectangle {
-            opacity: 0.04
-            width: 1
-            height: parent.height
-            anchors.centerIn: parent
-        }
+        color: '#FFF'
+        opacity: 0.04
     }
 }
