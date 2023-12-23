@@ -6,6 +6,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 GPane {
+    signal assetClicked(Asset asset)
     required property Context context
     required property Account account
     id: self
@@ -34,7 +35,7 @@ GPane {
             account: self.account
             asset: modelData.asset
             satoshi: modelData.satoshi
-            // onClicked: if (delegate.hasDetails) balance_dialog.createObject(window, { balance }).open()
+            onAssetClicked: (asset) => self.assetClicked(asset)
         }
     }
 }

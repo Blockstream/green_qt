@@ -213,6 +213,13 @@ StackViewPage {
     }
 
     Component {
+        id: asset_drawer
+        AssetDrawer {
+            onAccountClicked: (account) => self.switchToAccount(account)
+        }
+    }
+
+    Component {
         id: archived_accounts_dialog
         ArchivedAccountsDialog {
         }
@@ -279,6 +286,7 @@ StackViewPage {
         AccountView {
             onTransactionClicked: (transaction) => transaction_details_drawer.createObject(self, { context: self.context, transaction }).open()
             onAddressClicked: (address) => address_details_drawer.createObject(self, { context: self.context, address }).open()
+            onAssetClicked: (account, asset) => asset_drawer.createObject(self, { context: self.context, account, asset }).open()
         }
     }
 

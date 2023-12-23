@@ -4,11 +4,13 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 ItemDelegate {
+    signal assetClicked(Asset asset)
     property Account account
     property Asset asset
     property var satoshi
     readonly property var name: self.asset.data.name === 'btc' ? 'L-BTC' : self.asset.data?.name
-    readonly property bool hasDetails: self.asset.hasData && self.asset.data.name !== 'btc'
+    readonly property bool hasDetails: self.asset.hasData
+    onClicked: if (self.hasDetails) self.assetClicked(self.asset)
     id: self
     hoverEnabled: self.hasDetails
     topPadding: 20

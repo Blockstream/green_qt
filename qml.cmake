@@ -63,7 +63,7 @@ SET(QML_FILES
     qml/GToolButton.qml
     qml/LoginWithPasswordView.qml
     qml/PreferencesView.qml
-    qml/AssetView.qml
+    qml/AssetDrawer.qml
     qml/AddressesListView.qml
     qml/LoginWithPinView.qml
     qml/AssetListView.qml

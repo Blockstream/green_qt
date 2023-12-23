@@ -10,6 +10,7 @@ import "util.js" as UtilJS
 Page {
     signal transactionClicked(Transaction transaction)
     signal addressClicked(Address address)
+    signal assetClicked(Account account, Asset asset)
     required property Context context
     required property Account account
 
@@ -80,12 +81,6 @@ Page {
         model: output_model
     }
 
-    Component {
-        id: balance_dialog
-        AssetView {
-        }
-    }
-
     contentItem: StackLayout {
         id: stack_layout
 
@@ -123,6 +118,7 @@ Page {
         sourceComponent: AssetListView {
             context: self.context
             account: self.account
+            onAssetClicked: (asset) => self.assetClicked(self.account, asset)
         }
     }
 }
