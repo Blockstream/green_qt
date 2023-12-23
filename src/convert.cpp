@@ -4,6 +4,7 @@
 #include "convert.h"
 #include "json.h"
 #include "network.h"
+#include "networkmanager.h"
 #include "session.h"
 
 #include <gdk.h>
@@ -143,6 +144,16 @@ void Convert::update()
     if (m_account) {
         const auto network = m_account->network();
         m_liquid_asset = m_asset && network->isLiquid() && network->policyAsset() != m_asset->id();
+    } else if (m_asset) {
+        m_liquid_asset = true;
+        for (const auto network : NetworkManager::instance()->networks()) {
+            if (network->deployment() == m_context->deployment()) {
+                if (network->policyAsset() == m_asset->id()) {
+                    m_liquid_asset = false;
+                    break;
+                }
+            }
+        }
     } else {
         m_liquid_asset = false;
     }
