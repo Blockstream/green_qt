@@ -3,7 +3,7 @@ import QtQuick.Controls
 import Qt5Compat.GraphicalEffects
 
 Drawer {
-    property real minimumContentWidth: 350
+    property real minimumContentWidth: 400
     property real preferredContentWidth: 0
 
     id: self
