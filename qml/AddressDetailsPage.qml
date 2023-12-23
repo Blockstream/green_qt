@@ -17,7 +17,7 @@ StackViewPage {
         }
         CloseButton {
             action: self.closeAction
-            visible: self.closeAction
+            visible: self.closeAction || false
         }
     }
     footer: ColumnLayout {
