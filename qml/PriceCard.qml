@@ -4,9 +4,12 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 WalletHeaderCard {
-    // TODO: remove this property, only required for formatAmount which should be refactored
-    required property Account account
-
+    Convert {
+        id: convert
+        context: self.context
+        unit: 'btc'
+        value: '1'
+    }
     id: self
     headerItem: RowLayout {
         Image {
@@ -32,20 +35,14 @@ WalletHeaderCard {
             font.capitalization: Font.AllUppercase
             font.pixelSize: 24
             font.weight: 600
-            text: {
-                if (!self.account) return '-'
-                const ticker = self.account.session.events.ticker
-                const pricing = self.account.session.settings.pricing;
-                const { fiat, fiat_currency } = self.context.wallet.convert({ btc: '1' })
-                return fiat + ' ' + fiat_currency
-            }
+            text: convert.fiatLabel
         }
         Label {
             font.capitalization: Font.AllUppercase
             font.pixelSize: 16
             font.weight: 400
             opacity: 0.6
-            text: 'Bitcoin (BTC)' // formatFiat(card.balance)
+            text: convert.unitLabel
         }
         VSpacer {
         }

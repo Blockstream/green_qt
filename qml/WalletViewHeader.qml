@@ -247,7 +247,6 @@ MainPageHeader {
             Layout.bottomMargin: 20
             contentItem: CardBar {
                 context: self.context
-                currentAccount: self.currentAccount
                 onAssetsClicked: self.assetsClicked()
             }
         }

@@ -6,8 +6,6 @@ import QtQuick.Layouts
 Pane {
     signal assetsClicked()
     required property Context context
-    required property Account currentAccount
-
     id: self
     clip: true
     leftPadding: 16
@@ -60,7 +58,6 @@ Pane {
             }
             PriceCard {
                 context: self.context
-                account: self.currentAccount
             }
             Separator {
                 visible: fee_rate_card.visible
