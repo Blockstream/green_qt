@@ -123,7 +123,9 @@ QString Convert::unitLabel() const
     const QString prefix{m_account && m_account->isLiquid() ? "L-" : ""};
 
     if (!m_result.contains(unit_key)) return {};
-    const auto amount = m_result.value(unit_key).toString();
+    auto amount = m_result.value(unit_key).toString();
+    amount.replace(QRegularExpression("0+$"), {});
+    amount.replace(QRegularExpression("\\.$"), {});
     return amount + " " + prefix + (mainnet() ? unit : testnetUnit(unit));
 }
 
