@@ -4,8 +4,6 @@
 #include <QObject>
 #include <QtQml>
 
-#include "httprequestactivity.h"
-
 class AppUpdateController : public QObject
 {
     Q_OBJECT
@@ -19,21 +17,11 @@ public:
 public slots:
     void checkForUpdates();
 signals:
-    void latestVersionChanged(const QString& latest_version);
-    void updateAvailableChanged(bool updateAvailable);
+    void latestVersionChanged();
+    void updateAvailableChanged();
 private:
     QString m_latest_version;
     bool m_update_available{false};
-};
-
-class CheckForUpdatesActivity : public HttpRequestActivity
-{
-    Q_OBJECT
-    QML_ELEMENT
-    QML_UNCREATABLE("")
-public:
-    CheckForUpdatesActivity(QObject* parent);
-    QString latestVersion() const;
 };
 
 #endif // GREEN_APPUPDATECONTROLLER_H
