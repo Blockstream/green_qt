@@ -458,19 +458,21 @@ StackViewPage {
     }
 
 
-    component HintPane: Pane {
+    component HintPane: AbstractButton {
         Layout.fillWidth: true
         Layout.topMargin: 10
+        id: hint
         padding: 20
         background: Rectangle {
             border.width: 1
             border.color: '#1F222A'
-            color: '#161921'
+            color: Qt.lighter('#161921', hint.hovered ? 1.2 : 1)
             radius: 4
         }
     }
 
     component Hint1Pane: HintPane {
+        onClicked: Qt.openUrlExternally('https://store.blockstream.com/products/blockstream-jade-hardware-wallet')
         contentItem: RowLayout {
             ColumnLayout {
                 Layout.fillWidth: true
@@ -502,6 +504,7 @@ StackViewPage {
     }
 
     component Hint2Pane: HintPane {
+        onClicked: Qt.openUrlExternally('https://help.blockstream.com/hc/en-us/articles/900001391763-How-does-Blockstream-Green-s-2FA-multisig-protection-work-')
         contentItem: RowLayout {
             ColumnLayout {
                 Layout.fillWidth: true
