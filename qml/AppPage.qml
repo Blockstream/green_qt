@@ -132,15 +132,18 @@ MainPage {
     leftPadding: side_bar.width
     rightPadding: 0
     title: stack_layout.currentItem?.title ?? ''
-    contentItem: GStackLayout {
-        id: stack_layout
-        currentIndex: 0
-        WalletsView {
-            id: wallets_view
-            focus: StackLayout.isCurrentItem
-            onOpenWallet: (wallet) => self.openWallet(wallet)
-            onOpenDevice: (device) => self.openDevice(device)
-            onCreateWallet: self.openWallet(null)
+    contentItem: Page {
+        background: null
+        contentItem: GStackLayout {
+            id: stack_layout
+            currentIndex: 0
+            WalletsView {
+                id: wallets_view
+                focus: StackLayout.isCurrentItem
+                onOpenWallet: (wallet) => self.openWallet(wallet)
+                onOpenDevice: (device) => self.openDevice(device)
+                onCreateWallet: self.openWallet(null)
+            }
         }
     }
 
