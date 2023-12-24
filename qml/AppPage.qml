@@ -134,6 +134,8 @@ MainPage {
     title: stack_layout.currentItem?.title ?? ''
     contentItem: Page {
         background: null
+        header: AppUpdateBanner {
+        }
         contentItem: GStackLayout {
             id: stack_layout
             currentIndex: 0
