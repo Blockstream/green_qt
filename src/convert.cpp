@@ -124,8 +124,10 @@ QString Convert::unitLabel() const
 
     if (!m_result.contains(unit_key)) return {};
     auto amount = m_result.value(unit_key).toString();
-    amount.replace(QRegularExpression("0+$"), {});
-    amount.replace(QRegularExpression("\\.$"), {});
+    if (amount.contains('.')) {
+        amount.replace(QRegularExpression("0+$"), {});
+        amount.replace(QRegularExpression("\\.$"), {});
+    }
     return amount + " " + prefix + (mainnet() ? unit : testnetUnit(unit));
 }
 
