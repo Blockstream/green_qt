@@ -301,17 +301,18 @@ StackViewPage {
         required property var error
         id: error_pane
         Layout.fillWidth: true
-        Layout.topMargin: -20
+        Layout.topMargin: -30
         Layout.bottomMargin: 15
-        leftPadding: 20
-        rightPadding: 20
+        leftPadding: 10
+        rightPadding: 10
         bottomPadding: 15
-        topPadding: 15
+        topPadding: 25
         background: Rectangle {
             color: '#3B080F'
+            radius: 5
         }
         contentItem: RowLayout {
-            spacing: 20
+            spacing: 10
             Image {
                 source: 'qrc:/svg2/info_red.svg'
             }
