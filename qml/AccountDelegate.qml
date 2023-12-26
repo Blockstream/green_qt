@@ -133,7 +133,7 @@ ItemDelegate {
                             id: convert
                             unit: 'sats'
                             account: delegate.account
-                            value: delegate.account.json.satoshi[delegate.account.network.liquid ? delegate.account.network.policyAsset : 'btc']
+                            value: delegate.account.json.satoshi[delegate.account.network.policyAsset]
                         }
                         ColumnLayout {
                             Label {

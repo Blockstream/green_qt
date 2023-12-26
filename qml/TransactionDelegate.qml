@@ -192,7 +192,7 @@ ItemDelegate {
                 value: {
                     const network = transaction.account.network
                     const satoshi = transaction.data.satoshi
-                    return network.liquid ? satoshi[network.policyAsset] ?? 0 : satoshi.btc
+                    return String(satoshi[network.policyAsset] ?? 0)
                 }
             }
             Label {

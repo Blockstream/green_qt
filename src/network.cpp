@@ -52,13 +52,12 @@ Network::Network(const QJsonObject& data, QObject *parent)
     , m_liquid(data.value("liquid").toBool())
     , m_electrum(data.value("server_type").toString() == "electrum")
     , m_development(data.value("development").toBool())
-    , m_policy_asset(data.value("policy_asset").toString())
+    , m_policy_asset(data.value("policy_asset").toString("btc"))
 {
 }
 
 QString Network::policyAsset() const
 {
-    Q_ASSERT(m_liquid);
     return m_policy_asset;
 }
 
