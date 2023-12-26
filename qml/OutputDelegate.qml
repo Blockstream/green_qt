@@ -15,15 +15,6 @@ ItemDelegate {
         if (!output.account.network.liquid) selection_model.select(output_model.index(output_model.indexOf(output), 0), ItemSelectionModel.Toggle)
     }
 
-    function formatAmount(amount, include_ticker = true) {
-        if (output.account.network.liquid) {
-            return output.asset.formatAmount(amount, true)
-        } else {
-            output.account.session.displayUnit
-            return wallet.formatAmount(amount || 0, include_ticker, output.account.session.unit)
-        }
-    }
-
     id: self
     hoverEnabled: true
     topPadding: 16
