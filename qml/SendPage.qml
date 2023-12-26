@@ -190,7 +190,7 @@ StackViewPage {
                 id: fee_convert
                 account: self.account
                 value: controller.transaction.fee ?? 0
-                unit: UtilJS.normalizeUnit(amount_field.unit)
+                unit: 'sats'
             }
             RowLayout {
                 Label {
