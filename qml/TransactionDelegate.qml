@@ -59,27 +59,25 @@ ItemDelegate {
     spacing: 0
 
     function txType(tx) {
-        // const memo = transaction.memo.trim().replace(/\n/g, ' ')
-        // const separator = memo === '' ? '' : ' - '
         if (transaction.type === Transaction.Incoming) {
             if (tx.outputs.length > 0) {
                 for (const o of tx.outputs) {
                     if (o.is_relevant) {
-                        return qsTrId('id_received')// + separator + memo
+                        return qsTrId('id_received')
                     }
                 }
             } else {
-                return qsTrId('id_received')// + separator + memo
+                return qsTrId('id_received')
             }
         }
         if (transaction.type === Transaction.Outgoing) {
-            return qsTrId('id_sent')// + separator + memo
+            return qsTrId('id_sent')
         }
         if (transaction.type === Transaction.Redeposit) {
-            return qsTrId('id_redeposited')// + separator + memo
+            return qsTrId('id_redeposited')
         }
         if (transaction.type === Transaction.Mixed) {
-            return qsTrId('id_swap')// + separator + memo
+            return qsTrId('id_swap')
         }
         return JSON.stringify(tx, null, '\t')
     }
@@ -213,33 +211,6 @@ ItemDelegate {
                 text: convert.fiatLabel
                 visible: convert.value < 0 || convert.value > 0
             }
-
-//            Repeater {
-//                model: Object.entries(transaction.data.satoshi)
-//                delegate: Label {
-//                    text: JSON.stringify(modelData, null, '  ')
-//                    visible: {
-//                        const network = transaction.account.network
-//                        const [id, amount] = modelData
-//                        if (network.liquid && transaction.type === Transaction.Outgoing && id === network.policyAsset && amount === -transaction.data.fee) return false
-//                        return true
-//                    }
-//                    Layout.alignment: Qt.AlignRight
-//                    color: modelData[1] > 0 ? '#00b45a' : 'white'
-//                    font.pixelSize: 14
-//                    font.styleName: 'Medium'
-//                    text: {
-//                        const account = self.transaction.account
-//                        const network = account.network
-//                        const [id, amount] = modelData
-//                        if (network.liquid) {
-//                            return UtilJS.incognitoAmount(self.account, self.context.getOrCreateAsset(id).formatAmount(amount, true))
-//                        } else {
-//                            return UtilJS.incognitoAmount(self.account, formatAmount(account, amount))
-//                        }
-//                    }
-//                }
-//            }
         }
     }
 }
