@@ -14,6 +14,7 @@ TextField {
     property var error
     property bool fiat: false
     property string unit: self.account.session.unit
+    property string value
 
     readonly property var units: ['BTC', 'sats', 'mBTC', '\u00B5BTC']
 
@@ -22,7 +23,8 @@ TextField {
         account: self.account
         asset: self.asset
         unit: self.fiat ? 'fiat' : UtilJS.normalizeUnit(self.unit)
-        onValueChanged: self.text = convert.value
+        value: self.value
+        onValueChanged: if (!self.readOnly) self.text = convert.value
     }
 
     onTextEdited: convert.value = self.text
@@ -67,7 +69,7 @@ TextField {
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: parent.left
         anchors.leftMargin: 24
-        visible: self.text !== ''
+        visible: !self.readOnly && self.text !== ''
         icon.source: 'qrc:/svg/erase.svg'
         onClicked: convert.value = ''
     }
@@ -82,7 +84,7 @@ TextField {
         anchors.rightMargin: 15
         anchors.verticalCenter: parent.verticalCenter
         anchors.verticalCenterOffset: convert.fiat ? -2 : 3
-        enabled: convert.fiat
+        enabled: !self.readOnly && convert.fiat
         contentItem: RowLayout {
             spacing: 4
             Label {
@@ -104,7 +106,7 @@ TextField {
             Image {
                 Layout.alignment: Qt.AlignCenter
                 source: 'qrc:/svg2/caret-down.svg'
-                visible: unit_label.enabled
+                visible: !self.readOnly && unit_label.enabled
             }
         }
         onClicked: unit_menu.open()
@@ -143,20 +145,14 @@ TextField {
         anchors.rightMargin: self.rightPadding
         anchors.top: parent.baseline
         anchors.topMargin: 8
-        text: {
-            if (self.fiat) {
-                const amount = convert.result[UtilJS.normalizeUnit(self.unit)]
-                return amount ? [amount, (self.account.network.liquid ? 'L-' : '') + self.unit].join(' ') : ''
-            } else {
-                return convert.result.fiat ? [convert.result.fiat ?? '', convert.result.fiat_currency ?? ''].join(' ') : ''
-            }
-        }
+        text: !self.fiat ? convert.fiatLabel : convert.unitLabel
         color: '#FFF'
         opacity: 0.4
         font.pixelSize: 12
         font.weight: 500
         visible: convert.fiat
         TapHandler {
+            enabled: !self.readOnly
             cursorShape: Qt.ArrowCursor
             onTapped: self.fiat = !self.fiat
         }

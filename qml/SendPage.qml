@@ -276,6 +276,8 @@ StackViewPage {
                     asset: controller.asset,
                     recipient: controller.recipient,
                     transaction: controller.transaction,
+                    fiat: amount_field.fiat,
+                    unit: amount_field.unit,
                 })
             }
         }

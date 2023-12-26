@@ -5,13 +5,24 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import Qt5Compat.GraphicalEffects
 
+import "util.js" as UtilJS
+
 StackViewPage {
     required property Context context
     required property Account account
     required property Asset asset
     required property Recipient recipient
+    required property bool fiat
+    required property string unit
     required property var transaction
-
+    readonly property string value: recipient_convert.result[self.fiat ? 'fiat' : UtilJS.normalizeUnit(self.unit)] ?? ''
+    Convert {
+        id: recipient_convert
+        account: self.account
+        asset: self.asset
+        unit: 'sats'
+        value: self.recipient.amount
+    }
     /*
     readonly property AuthHandlerTask task: {
         const groups = controller.monitor.groups
@@ -65,7 +76,6 @@ StackViewPage {
     id: self
     title: qsTrId('id_confirm_transaction')
     contentItem: ColumnLayout {
-        // enabled: !self.busy
         FieldTitle {
             text: 'Asset & Account'
         }
@@ -80,6 +90,7 @@ StackViewPage {
             text: qsTrId('id_address')
         }
         Label {
+            Layout.bottomMargin: 15
             Layout.fillWidth: true
             background: Rectangle {
                 color: '#222226'
@@ -100,7 +111,10 @@ StackViewPage {
             account: self.account
             asset: self.asset
             readOnly: true
-            text: self.recipient.amount
+            fiat: self.fiat
+            unit: self.unit
+            value: self.value
+            text: self.value
         }
         VSpacer {
         }
