@@ -81,6 +81,7 @@ WalletDrawer {
     component AssetButton: AbstractButton {
         required property Asset asset
         required property string satoshi
+        readonly property var name: button.asset.data.name === 'btc' ? 'L-BTC' : button.asset.data?.name
         Convert {
             id: convert
             context: self.context
@@ -92,24 +93,28 @@ WalletDrawer {
         onClicked: stack_view.push(asset_details_page, { context: self.context, asset: button.asset })
         id: button
         enabled: button.asset.hasData
-        padding: 20
+        leftPadding: 20
+        rightPadding: 20
+        topPadding: 15
+        bottomPadding: 15
         background: Rectangle {
             color: Qt.lighter('#222226', button.enabled && button.hovered ? 1.2 : 1)
             radius: 5
         }
         contentItem: RowLayout {
-            spacing: 20
+            spacing: 10
             AssetIcon {
                 asset: button.asset
             }
             Label {
                 Layout.alignment: Qt.AlignCenter
                 Layout.fillWidth: true
-                color: '#FFF'
+                Layout.preferredWidth: 0
+                color: button.name ? '#FFF' : '#929292'
                 font.pixelSize: 14
-                font.weight: 400
-                text: asset.name
-                wrapMode: Label.Wrap
+                font.weight: 600
+                text: button.name ?? button.asset.id
+                elide: Label.ElideRight
             }
             ColumnLayout {
                 Label {
@@ -130,8 +135,9 @@ WalletDrawer {
             }
             Image {
                 Layout.alignment: Qt.AlignCenter
+                Layout.leftMargin: 10
                 source: 'qrc:/svg2/right.svg'
-                opacity: button.enabled ? 1 : 0
+                visible: button.enabled ? 1 : 0
             }
         }
     }
