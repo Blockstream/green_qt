@@ -86,20 +86,18 @@ StackViewPage {
                     color: '#222226'
                 }
                 contentItem: RowLayout {
-                    spacing: 20
-                    Image {
-                        Layout.alignment: Qt.AlignCenter
-                        source: 'qrc:/svg2/coin_selection.svg'
-                    }
-                    Label {
-                        Layout.alignment: Qt.AlignCenter
-                        Layout.fillWidth: true
-                        text: {
+                    spacing: 10
+                    Convert {
+                        id: convert
+                        unit: 'sats'
+                        account: controller.account
+                        asset: controller.asset
+                        value: {
                             let satoshi = 0
                             for (const output of controller.coins) {
                                 satoshi += output.data.satoshi
                             }
-                            return controller.asset.formatAmount(satoshi, true) + ' (' + controller.coins.length + ' coins)'
+                            return satoshi
                         }
                     }
                     CircleButton {
@@ -107,6 +105,31 @@ StackViewPage {
                         icon.source: 'qrc:/svg2/close.svg'
                         onClicked: controller.coins = []
                     }
+                    Label {
+                        Layout.alignment: Qt.AlignCenter
+                        Layout.fillWidth: true
+                        color: '#FFF'
+                        font.pixelSize: 16
+                        font.weight: 400
+                        text: controller.coins.length + ' coins'
+                    }
+                    ColumnLayout {
+                        Label {
+                            Layout.alignment: Qt.AlignRight
+                            color: '#FFF'
+                            font.pixelSize: 12
+                            font.weight: 400
+                            text: convert.unitLabel
+                        }
+                        Label {
+                            Layout.alignment: Qt.AlignRight
+                            color: '#6F6F6F'
+                            font.pixelSize: 12
+                            font.weight: 400
+                            text: convert.fiatLabel
+                        }
+                    }
+
                     CircleButton {
                         Layout.alignment: Qt.AlignCenter
                         icon.source: 'qrc:/svg2/edit.svg'
