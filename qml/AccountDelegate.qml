@@ -129,15 +129,21 @@ ItemDelegate {
                     RowLayout {
                         id: card_footer
                         width: parent.width
+                        Convert {
+                            id: convert
+                            unit: 'sats'
+                            account: delegate.account
+                            value: delegate.account.json.satoshi[delegate.account.network.liquid ? delegate.account.network.policyAsset : 'btc']
+                        }
                         ColumnLayout {
                             Label {
-                                text: UtilJS.incognitoFiat(delegate.account, formatFiat(account.balance))
+                                text: UtilJS.incognitoFiat(delegate.account, convert.fiatLabel)
                                 font.pixelSize: 10
                                 font.weight: 400
                                 font.styleName: 'Regular'
                             }
                             Label {
-                                text: UtilJS.incognitoAmount(delegate.account, formatAmount(account, account.balance))
+                                text: UtilJS.incognitoAmount(delegate.account, convert.unitLabel)
                                 font.pixelSize: 14
                                 font.weight: 600
                                 font.styleName: 'Medium'
