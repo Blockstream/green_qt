@@ -129,19 +129,39 @@ StackViewPage {
         }
         Label {
             Layout.alignment: Qt.AlignCenter
+            font.pixelSize: 14
+            font.weight: 400
             text: 'You can send up to:'
             visible: self.selection.size > 0
         }
         Label {
             Layout.alignment: Qt.AlignCenter
-            text: {
+            font.pixelSize: 16
+            font.weight: 400
+            text: convert.unitLabel
+            visible: self.selection.size > 0
+        }
+        Label {
+            Layout.alignment: Qt.AlignCenter
+            font.pixelSize: 16
+            font.weight: 400
+            opacity: 0.6
+            text: convert.fiatLabel
+            visible: self.selection.size > 0
+        }
+
+        Convert {
+            id: convert
+            account: self.account
+            asset: self.asset
+            unit: 'sats'
+            value: {
                 let satoshi = 0
                 for (const output of self.selection) {
                     satoshi += output.data.satoshi
                 }
-                return self.asset.formatAmount(satoshi, true)
+                return satoshi
             }
-            visible: self.selection.size > 0
         }
     }
 
