@@ -32,6 +32,11 @@ ItemDelegate {
     hoverEnabled: true
     layer.enabled: true
     opacity: delegate.highlighted ? 1 : delegate.hovered ? 0.9 : 0.5
+    Behavior on opacity {
+        SmoothedAnimation {
+            velocity: 1
+        }
+    }
     width: ListView.view.width
     contentItem: ColumnLayout {
         spacing: 0
