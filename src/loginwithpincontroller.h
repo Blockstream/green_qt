@@ -37,24 +37,6 @@ private:
     Wallet* m_wallet{nullptr};
 };
 
-class DeviceController : public Controller
-{
-    Q_OBJECT
-    Q_PROPERTY(Device* device READ device WRITE setDevice NOTIFY deviceChanged)
-    QML_ELEMENT
-public:
-    DeviceController(QObject* parent = nullptr);
-    Device* device() const { return m_device; }
-    void setDevice(Device* device);
-public slots:
-    void bind();
-signals:
-    void deviceChanged();
-    void binded(Context* context);
-private:
-    Device* m_device{nullptr};
-};
-
 class LoadController : public Controller
 {
     Q_OBJECT

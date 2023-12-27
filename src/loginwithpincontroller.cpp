@@ -300,28 +300,3 @@ void PinDataController::update(const QString& pin)
     dispatcher()->add(task);
 }
 
-DeviceController::DeviceController(QObject* parent)
-    : Controller(parent)
-{
-}
-
-void DeviceController::setDevice(Device* device)
-{
-    if (m_device == device) return;
-    m_device = device;
-    void deviceChanged();
-}
-
-void DeviceController::bind()
-{
-    if (!m_context) {
-        auto jade_device = qobject_cast<JadeDevice*>(m_device);
-        if (jade_device) {
-            const auto networks = jade_device->versionInfo().value("JADE_NETWORKS").toString();
-            setContext(new Context(networks == "TEST" ? "testnet" : "mainnet", this));
-        }
-    }
-    m_context->setDevice(m_device);
-    Q_ASSERT(m_context && m_context->device());
-    emit binded(m_context);
-}
