@@ -38,7 +38,7 @@ void Wallet::disconnect()
     if (m_context) {
         if (m_context->device()) {
             auto activity = m_context->device()->logout();
-            ActivityManager::instance()->exec(activity);
+            if (activity) ActivityManager::instance()->exec(activity);
         }
         m_context->deleteLater();
         setContext(nullptr);

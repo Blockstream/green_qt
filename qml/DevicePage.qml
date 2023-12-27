@@ -85,6 +85,8 @@ StackViewPage {
                     sourceComponent: {
                         switch (loader._device.type) {
                         case Device.BlockstreamJade: return jade_device
+                        case Device.LedgerNanoS: return ledger_device
+                        case Device.LedgerNanoX: return ledger_device
                         }
                     }
                 }
@@ -132,6 +134,18 @@ StackViewPage {
     Component {
         id: jade_device
         JadeDeviceDelegate {
+            id: delegate
+            device: _device
+            function trigger() {
+                self.login = false
+                self.deviceSelected(delegate.device)
+            }
+            onSelected: delegate.trigger()
+        }
+    }
+    Component {
+        id: ledger_device
+        LedgerDeviceDelegate {
             id: delegate
             device: _device
             function trigger() {

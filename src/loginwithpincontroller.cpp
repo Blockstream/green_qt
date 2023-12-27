@@ -2,6 +2,7 @@
 
 #include "context.h"
 #include "jadedevice.h"
+#include "ledgerdevice.h"
 #include "network.h"
 #include "networkmanager.h"
 #include "session.h"
@@ -53,56 +54,83 @@ void LoginController::loginWithPin(const QString& pin)
     login(login_task);
 }
 
-static QJsonObject device_details_from_device(JadeDevice* device)
+static QJsonObject device_details_from_device(Device* device)
 {
-    const bool supports_host_unblinding = QVersionNumber::fromString(device->version()) >= QVersionNumber(0, 1, 27);
-    return {{
-        "device", QJsonObject({
-            { "name", device->uuid() },
-            { "supports_arbitrary_scripts", true },
-            { "supports_low_r", true },
-            { "supports_liquid", 1 },
-            { "supports_ae_protocol", 1 },
-            { "supports_host_unblinding", supports_host_unblinding }
-        })
-    }};
+    auto jade_device = qobject_cast<JadeDevice*>(device);
+    if (jade_device) {
+        const bool supports_host_unblinding = QVersionNumber::fromString(jade_device->version()) >= QVersionNumber(0, 1, 27);
+        return {{
+            "device", QJsonObject({
+                { "name", device->uuid() },
+                { "supports_arbitrary_scripts", true },
+                { "supports_low_r", true },
+                { "supports_liquid", 1 },
+                { "supports_ae_protocol", 1 },
+                { "supports_host_unblinding", supports_host_unblinding }
+            })
+        }};
+    }
+    auto ledger_device = qobject_cast<LedgerDevice*>(device);
+    if (ledger_device) {
+        return {{
+            "device", QJsonObject({
+                { "name", device->uuid() },
+                { "supports_arbitrary_scripts", true },
+                { "supports_low_r", false },
+                { "supports_liquid", device->type() == Device::LedgerNanoS ? 1 : 0 }
+            })
+        }};
+    }
+    Q_UNREACHABLE();
 }
 
-void LoginController::loginWithDevice(Device* device)
+static QString device_deployment(Device* device)
+{
+    auto jade_device = qobject_cast<JadeDevice*>(device);
+    if (jade_device) {
+        const auto networks = jade_device->versionInfo().value("JADE_NETWORKS").toString();
+        if (networks == "TEST") return "testnet";
+        return "mainnet";
+    }
+    auto ledger_device = qobject_cast<LedgerDevice*>(device);
+    if (ledger_device) {
+        const auto app = ledger_device->appName();
+        if (app == "Bitcoin") return "mainnet";
+        if (app == "Bitcoin Test") return "testnet";
+        Q_UNREACHABLE();
+    }
+    Q_UNREACHABLE();
+}
+
+void LoginController::loginWithDevice(Device* device, bool remember)
 {
     if (!m_context) {
-        auto jade_device = qobject_cast<JadeDevice*>(device);
-        if (jade_device) {
-            const auto networks = jade_device->versionInfo().value("JADE_NETWORKS").toString();
-            setContext(new Context(networks == "TEST" ? "testnet" : "mainnet", this));
-        }
+        setContext(new Context(device_deployment(device), this));
         m_context->setDevice(device);
+        m_context->setRemember(remember);
     }
 
-    auto jade_device = qobject_cast<JadeDevice*>(m_context->device());
-    if (jade_device) {
-        const auto hw_device = device_details_from_device(jade_device);
-        auto session = m_context->primarySession();
-        auto login_task = new LoginTask(hw_device, session);
+    const auto hw_device = device_details_from_device(device);
+    auto session = m_context->primarySession();
+    auto login_task = new LoginTask(hw_device, session);
 
-        connect(login_task, &Task::finished, this, [=] {
-            m_context->m_hw_device = hw_device;
+    connect(login_task, &Task::finished, this, [=] {
+        m_context->m_hw_device = hw_device;
 
-            m_wallet = m_context->wallet();
-            if (!m_wallet) {
-                m_wallet = WalletManager::instance()->findWallet(m_context->xpubHashId(), false);
-            }
-            if (!m_wallet) {
-                m_wallet = WalletManager::instance()->createWallet();
-                m_wallet->setName(jade_device->name());
-                m_wallet->updateDeviceDetails(jade_device->details());
-                m_wallet->m_is_persisted = m_context->remember();
-                WalletManager::instance()->insertWallet(m_wallet);
-            }
-        });
+        m_wallet = m_context->wallet();
+        if (!m_wallet) {
+            m_wallet = WalletManager::instance()->findWallet(m_context->xpubHashId(), false);
+        }
+        if (!m_wallet) {
+            m_wallet = WalletManager::instance()->createWallet();
+            m_wallet->setName(device->name());
+            m_wallet->updateDeviceDetails(device->details());
+            m_wallet->m_is_persisted = m_context->remember();
+            WalletManager::instance()->insertWallet(m_wallet);
+        }
+    });
 
-        login(login_task);
-    }
+    login(login_task);
 }
 
 void LoginController::login(LoginTask* login_task)
@@ -213,11 +241,10 @@ void LoadController::loginNetwork(Network* network)
 
     auto session = m_context->getOrCreateSession(network);
     auto connect_session = new ConnectTask(session);
-    LoginTask* login;
+    LoginTask* login{nullptr};
 
-    auto jade_device = qobject_cast<JadeDevice*>(m_context->device());
-    if (jade_device) {
-        login = new LoginTask(device_details_from_device(jade_device), session);
+    if (m_context->device()) {
+        login = new LoginTask(device_details_from_device(m_context->device()), session);
     } else if (m_context->credentials().contains("mnemonic")) {
         const auto mnemonic = m_context->credentials().value("mnemonic").toString().split(' ');
         login = new LoginTask(mnemonic, {}, session);

@@ -18,6 +18,7 @@ StackViewPage {
     footerItem: ColumnLayout {
         BusyIndicator {
             Layout.alignment: Qt.AlignCenter
+            running: device_repeater.count === 0
         }
         Label {
             Layout.alignment: Qt.AlignCenter

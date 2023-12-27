@@ -15,6 +15,7 @@ LedgerDevice::LedgerDevice(DevicePrivate* d, QObject* parent)
     : Device(parent)
     , d(d)
 {
+    setConnected(true);
     d->q = this;
 
     QTimer::singleShot(1000, this, [=] {
@@ -109,7 +110,6 @@ GetMasterBlindingKeyActivity *LedgerDevice::getMasterBlindingKey()
 
 LogoutActivity* LedgerDevice::logout()
 {
-    Q_UNIMPLEMENTED();
     return nullptr;
 }
 

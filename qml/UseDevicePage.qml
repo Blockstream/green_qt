@@ -7,6 +7,7 @@ import "util.js" as UtilJS
 
 StackViewPage {
     signal connectJadeClicked()
+    signal connectLedgerClicked()
     id: self
     padding: 60
     footerItem: ColumnLayout {
@@ -145,6 +146,7 @@ StackViewPage {
             Layout.minimumWidth: 400
             Layout.topMargin: 10
             text: qsTrId('id_connect_a_different_hardware')
+            onClicked: self.connectLedgerClicked()
         }
         VSpacer {
         }

@@ -51,6 +51,11 @@ MainPage {
             return
         }
 
+        if (device instanceof LedgerDevice) {
+            // TODO ignore connected ledger device for now
+            return
+        }
+
         console.log('create view for device', device)
         wallet_view.createObject(stack_layout, { device })
         stack_layout.currentIndex = stack_layout.children.length - 1
@@ -120,7 +125,7 @@ MainPage {
 
     StackView.onActivating: {
         const device = DeviceManager.defaultDevice()
-        if (device) {
+        if (device instanceof JadeDevice) {
             self.openDevice(device)
         } else {
             self.openWallets()
@@ -173,6 +178,8 @@ MainPage {
     }
 
     JadeDeviceSerialPortDiscoveryAgent {
+    }
+    DeviceDiscoveryAgent {
     }
 
     SideBar {

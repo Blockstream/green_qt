@@ -47,6 +47,9 @@ MainPage {
                 if (device instanceof JadeDevice) {
                     stack_view.push(jade_page, { device, login: true })
                 }
+                if (device instanceof LedgerDevice) {
+                    stack_view.push(ledger_page, { device, remember: true })
+                }
             }
             onRemoveClicked: self.removeWallet(self.wallet)
             onCloseClicked: self.closeWallet(self.wallet)
@@ -61,6 +64,17 @@ MainPage {
                 stack_view.replace(null, loading_page, { context }, StackView.PushTransition)
             }
             onFirmwareUpdated: stack_view.pop()
+        }
+    }
+
+    Component {
+        id: ledger_page
+        LedgerPage {
+            onLoginFinished: (context) => {
+                self.wallet = context.wallet
+                stack_view.replace(null, loading_page, { context }, StackView.PushTransition)
+            }
+            onLoginFailed: stack_view.pop()
         }
     }
 
@@ -87,6 +101,7 @@ MainPage {
         id: use_device_page
         UseDevicePage {
             onConnectJadeClicked: stack_view.push(connect_jade_page)
+            onConnectLedgerClicked: stack_view.push(connect_ledger_page)
         }
     }
 
@@ -94,6 +109,13 @@ MainPage {
         id: connect_jade_page
         ConnectJadePage {
             onDeviceSelected: (device) => stack_view.push(jade_page, { device, login: true })
+        }
+    }
+
+    Component {
+        id: connect_ledger_page
+        ConnectLedgerPage {
+            onDeviceSelected: (device, remember) => stack_view.push(ledger_page, { device, remember })
         }
     }
 

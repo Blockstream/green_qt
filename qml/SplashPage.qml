@@ -27,15 +27,15 @@ MainPage {
             source: 'qrc:/svg/green_logo.svg'
             NumberAnimation on scale {
                 easing.type: Easing.OutCubic
-                from: 1.1
-                to: 1.0
+                from: 1
+                to: 0.8
                 duration: 300
             }
             NumberAnimation on opacity {
                 easing.type: Easing.OutCubic
                 from: 0
-                to: 1.0
-                duration: 200
+                to: 1
+                duration: 300
             }
         }
         VSpacer {

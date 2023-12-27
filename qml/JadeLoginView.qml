@@ -6,15 +6,18 @@ import QtQuick.Layouts
 
 ColumnLayout {
     signal loginFinished(Context context)
+    signal loginFailed()
     required property Context context
     required property Device device
-    StackView.onActivated: controller.loginWithDevice(self.device)
+    property bool remember: false
+    StackView.onActivated: controller.loginWithDevice(self.device, self.remember)
     id: self
     spacing: 20
     LoginController {
         id: controller
         context: self.context
         onLoginFinished: (context) => self.loginFinished(context)
+        onLoginFailed: self.loginFailed()
     }
     VSpacer {
     }

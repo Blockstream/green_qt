@@ -165,7 +165,7 @@ AbstractDrawer {
                     case 'jade':
                         return 'qrc:/svg2/jade-logo.svg'
                     case 'nanos':
-                    case 'nanos':
+                    case 'nanox':
                         return 'qrc:/svg2/ledger-logo.svg'
                     default:
                         return ''

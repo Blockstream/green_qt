@@ -25,7 +25,7 @@ public:
     void loginNetwork(Network* network);
 public slots:
     void loginWithPin(const QString& pin);
-    void loginWithDevice(Device* device);
+    void loginWithDevice(Device* device, bool remember = false);
 signals:
     void walletChanged();
     void invalidPin();

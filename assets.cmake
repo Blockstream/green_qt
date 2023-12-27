@@ -119,6 +119,9 @@ qt_add_resources(green "images"
         assets/png/no_transactions.png
 
         assets/png/completed.png
+
+        assets/png/background.png
+        assets/png/ledger_3d.png
         assets/png/connect_jade_1.png
         assets/png/connect_jade_2.png
         assets/png/connect_jade_3.png

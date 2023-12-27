@@ -242,6 +242,9 @@ SET(QML_FILES
     qml/SelectFeePage.qml
     qml/AssetDetailsPage.qml
     qml/AppUpdateBanner.qml
+    qml/ConnectLedgerPage.qml
+    qml/LedgerPage.qml
+    qml/LedgerDeviceDelegate.qml
 )
 
 if (GREEN_NO_RESOURCES)
