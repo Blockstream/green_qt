@@ -21,11 +21,19 @@ void SignTransactionController::setTransaction(const QJsonObject& transaction)
     emit transactionChanged();
 }
 
+void SignTransactionController::setMemo(const QString& memo)
+{
+    if (m_memo == memo) return;
+    m_memo = memo;
+    emit memoChanged();
+}
+
 void SignTransactionController::sign()
 {
     setMonitor(new TaskGroupMonitor(this));
 
     auto transaction = m_transaction;
+    transaction.insert("memo", m_memo);
 
     TaskGroup* group = new TaskGroup(this);
 
