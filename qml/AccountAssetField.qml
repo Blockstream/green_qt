@@ -22,7 +22,7 @@ AbstractButton {
             radius: 9
             anchors.fill: parent
             anchors.margins: -4
-            opacity: self.visualFocus ? 1 : 0
+            opacity: self.readonly && self.visualFocus ? 1 : 0
         }
     }
     contentItem: RowLayout {

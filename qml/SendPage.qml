@@ -160,7 +160,7 @@ StackViewPage {
                 error: address_field.error
             }
             FieldTitle {
-                text: qsTrId('Amount')
+                text: qsTrId('id_amount')
             }
             AmountField {
                 Layout.bottomMargin: 15

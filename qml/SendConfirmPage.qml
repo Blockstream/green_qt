@@ -16,6 +16,7 @@ StackViewPage {
     required property string unit
     required property var transaction
     readonly property string value: recipient_convert.result[self.fiat ? 'fiat' : UtilJS.normalizeUnit(self.unit)] ?? ''
+    property bool note: false
     Convert {
         id: recipient_convert
         account: self.account
@@ -75,55 +76,99 @@ StackViewPage {
     }
     id: self
     title: qsTrId('id_confirm_transaction')
-    contentItem: ColumnLayout {
-        FieldTitle {
-            text: 'Asset & Account'
+    contentItem: Flickable {
+        ScrollIndicator.vertical: ScrollIndicator {
         }
-        AccountAssetField {
-            Layout.bottomMargin: 15
-            Layout.fillWidth: true
-            account: self.account
-            asset: self.asset
-            readonly: true
-        }
-        FieldTitle {
-            text: qsTrId('id_address')
-        }
-        Label {
-            Layout.bottomMargin: 15
-            Layout.fillWidth: true
-            background: Rectangle {
-                color: '#222226'
-                radius: 5
+        id: flickable
+        clip: true
+        contentWidth: flickable.width
+        contentHeight: layout.height
+        ColumnLayout {
+            id: layout
+            width: flickable.width
+            FieldTitle {
+                text: 'Asset & Account'
             }
-            padding: 20
-            font.pixelSize: 14
-            font.weight: 500
-            elide: Label.ElideMiddle
-            text: self.recipient.address
+            AccountAssetField {
+                Layout.bottomMargin: 15
+                Layout.fillWidth: true
+                account: self.account
+                asset: self.asset
+                readonly: true
+            }
+            FieldTitle {
+                text: qsTrId('id_address')
+            }
+            Label {
+                Layout.bottomMargin: 15
+                Layout.fillWidth: true
+                background: Rectangle {
+                    color: '#222226'
+                    radius: 5
+                }
+                padding: 20
+                font.pixelSize: 14
+                font.weight: 500
+                elide: Label.ElideMiddle
+                text: self.recipient.address
+            }
+            FieldTitle {
+                text: qsTrId('id_amount')
+            }
+            AmountField {
+                Layout.bottomMargin: 15
+                Layout.fillWidth: true
+                account: self.account
+                asset: self.asset
+                readOnly: true
+                fiat: self.fiat
+                unit: self.unit
+                value: self.value
+                text: self.value
+            }
+            LinkButton {
+                Layout.alignment: Qt.AlignCenter
+                text: qsTrId('id_add_note')
+                visible: !self.note
+                onClicked: {
+                    self.note = true
+                    note_text_area.forceActiveFocus()
+                }
+            }
+            FieldTitle {
+                text: qsTrId('id_note')
+                visible: self.note
+            }
+            TextArea {
+                Layout.fillWidth: true
+                id: note_text_area
+                topPadding: 20
+                bottomPadding: 20
+                leftPadding: 20
+                rightPadding: 20
+                visible: self.note
+                background: Rectangle {
+                    color: '#222226'
+                    radius: 5
+                }
+            }
+            Label {
+                Layout.fillWidth: true
+                Layout.preferredWidth: 0
+                text: JSON.stringify(self.transaction, null, '  ')
+                font.pixelSize: 8
+                wrapMode: Label.Wrap
+            }
         }
-        FieldTitle {
-            text: qsTrId('Amount')
-        }
-        AmountField {
-            Layout.bottomMargin: 15
-            Layout.fillWidth: true
-            account: self.account
-            asset: self.asset
-            readOnly: true
-            fiat: self.fiat
-            unit: self.unit
-            value: self.value
-            text: self.value
-        }
-        VSpacer {
-        }
+    }
+    footer: ColumnLayout {
         PrimaryButton {
             Layout.alignment: Qt.AlignCenter
             text: qsTrId('id_confirm_transaction')
             onClicked: controller.sign()
         }
     }
+
     Component {
         id: transaction_completed_page
         TransactionCompletedPage {

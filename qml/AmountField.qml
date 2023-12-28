@@ -50,7 +50,7 @@ TextField {
             anchors.margins: -4
             z: -1
             visible: {
-                if (self.activeFocus) {
+                if (self.readOnly && self.activeFocus) {
                     switch (self.focusReason) {
                     case Qt.TabFocusReason:
                     case Qt.BacktabFocusReason:
