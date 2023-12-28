@@ -71,6 +71,7 @@ StackViewPage {
         context: self.context
         account: self.account
         transaction: self.transaction
+        memo: note_text_area.text
         onTransactionCompleted: transaction => self.StackView.view.push(transaction_completed_page, { transaction })
         // onTransactionCompleted: transaction => self.StackView.view.replace(null, transaction_completed_page, { transaction }, StackView.PushTransition)
     }
@@ -152,20 +153,100 @@ StackViewPage {
                     radius: 5
                 }
             }
-            Label {
-                Layout.fillWidth: true
-                Layout.preferredWidth: 0
-                text: JSON.stringify(self.transaction, null, '  ')
-                font.pixelSize: 8
-                wrapMode: Label.Wrap
-            }
         }
     }
     footer: ColumnLayout {
+        spacing: 10
+        Convert {
+            id: fee_convert
+            account: self.account
+            unit: 'sats'
+            value: String(self.transaction.fee)
+        }
+        Convert {
+            id: total_convert
+            account: self.account
+            unit: 'sats'
+            value: String(self.transaction.fee - self.transaction.satoshi.btc)
+        }
+        RowLayout {
+            Layout.fillWidth: true
+            Label {
+                Layout.alignment: Qt.AlignTop
+                Layout.fillWidth: true
+                font.pixelSize: 14
+                font.weight: 500
+                opacity: 0.5
+                text: qsTrId('id_network_fee')
+            }
+            ColumnLayout {
+                Label {
+                    Layout.alignment: Qt.AlignRight
+                    opacity: 0.5
+                    font.pixelSize: 14
+                    font.weight: 500
+                    text: fee_convert.unitLabel
+                }
+                Label {
+                    Layout.alignment: Qt.AlignRight
+                    opacity: 0.5
+                    font.pixelSize: 12
+                    font.weight: 400
+                    text: '~ ' + fee_convert.fiatLabel
+                }
+            }
+        }
+        Rectangle {
+            Layout.preferredHeight: 1
+            Layout.fillWidth: true
+            opacity: 0.4
+            color: '#FFF'
+        }
+        RowLayout {
+            Layout.fillWidth: true
+            Label {
+                Layout.alignment: Qt.AlignTop
+                Layout.fillWidth: true
+                font.pixelSize: 14
+                font.weight: 500
+                opacity: 0.5
+                text: qsTrId('id_total')
+            }
+            ColumnLayout {
+                Label {
+                    Layout.alignment: Qt.AlignRight
+                    font.pixelSize: 14
+                    font.weight: 500
+                    text: total_convert.unitLabel
+                }
+                Label {
+                    Layout.alignment: Qt.AlignRight
+                    font.pixelSize: 14
+                    font.weight: 500
+                    opacity: 0.5
+                    text: '~ ' + total_convert.fiatLabel
+                }
+            }
+        }
         PrimaryButton {
             Layout.alignment: Qt.AlignCenter
+            Layout.minimumWidth: 200
+            Layout.topMargin: 20
             text: qsTrId('id_confirm_transaction')
             onClicked: controller.sign()
+        }
+        RowLayout {
+            Layout.fillWidth: false
+            Layout.alignment: Qt.AlignCenter
+            opacity: 0.6
+            Image {
+                source: 'qrc:/svg2/info.svg'
+            }
+            Label {
+                font.pixelSize: 12
+                font.weight: 400
+                text: qsTrId('id_fees_are_collected_by_bitcoin')
+            }
         }
     }
 
