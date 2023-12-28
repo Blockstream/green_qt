@@ -271,11 +271,9 @@ WalletDrawer {
                     Layout.fillHeight: true
                     id: list_view
                     spacing: 5
-                    model: AddressListModelFilter {
+                    model: AddressListModel {
                         filter: search_field.text
-                        model: AddressListModel {
-                            account: page.account
-                        }
+                        account: page.account
                     }
                     delegate: AddressDelegate2 {
                         width: list_view.width

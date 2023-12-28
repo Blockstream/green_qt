@@ -4,137 +4,85 @@
 #include "address.h"
 #include "context.h"
 #include "task.h"
-#include "wallet.h"
 
 AddressListModel::AddressListModel(QObject* parent)
-    : QAbstractListModel(parent)
-    , m_reload_timer(new QTimer(this))
+    : QSortFilterProxyModel(parent)
 {
-    m_reload_timer->setSingleShot(true);
-    m_reload_timer->setInterval(200);
-    connect(m_reload_timer, &QTimer::timeout, this, [&] {
-        fetch(true);
-    });
 }
 
 void AddressListModel::setAccount(Account* account)
 {
+    if (m_account == account) return;
     if (m_account) {
-        disconnect(m_account, &Account::addressGenerated, this, &AddressListModel::reload);
-        beginResetModel();
-        m_addresses.clear();
-        m_account = nullptr;
-        emit accountChanged();
-        endResetModel();
+        setSourceModel(nullptr);
+        delete m_model;
+        m_items.clear();
+        disconnect(m_account, &Account::addressGenerated, this, &AddressListModel::update);
     }
     m_account = account;
-    emit accountChanged();
     if (m_account) {
-        connect(m_account, &Account::addressGenerated, this, &AddressListModel::reload);
-        fetchMore(QModelIndex());
+        m_model = new QStandardItemModel(this);
+        m_model->setItemRoleNames({{ Qt::UserRole, "address" }});
+        setSourceModel(m_model);
+        setDynamicSortFilter(true);
+        sort(0); // NOLINT(build/include_what_you_use)
+        connect(m_account, &Account::addressGenerated, this, &AddressListModel::update);
+        update();
     }
+    emit accountChanged();
 }
 
-void AddressListModel::fetch(bool reset)
+void AddressListModel::update()
 {
-    if (!m_account) return;
+    load(0);
+}
 
-    const auto context = m_account->context();
-    if (!context) return;
-    const auto wallet = context->wallet();
-    if (!wallet) return;
-
-    // TODO: autologout unsets context on the wallet
-    // TODO: and this controller should detect that
-    // TODO: for now, check wallet's context before continuing
-    if (!wallet->context()) return;
-
-    auto get_addresses = new GetAddressesTask(m_last_pointer, m_account);
-
-    connect(get_addresses, &Task::finished, this, [=] {
-        m_last_pointer = get_addresses->lastPointer();
-        emit fetchingChanged();
-        // instantiate missing addresses
-        QVector<Address*> addresses;
-        for (QJsonValue data : get_addresses->addresses()) {
+void AddressListModel::load(int last_pointer)
+{
+    qDebug() << Q_FUNC_INFO << last_pointer;
+    auto task = new GetAddressesTask(last_pointer, m_account);
+    connect(task, &Task::finished, this, [=] {
+        for (QJsonValue data : task->addresses()) {
             auto address = m_account->getOrCreateAddress(data.toObject());
-            addresses.append(address);
+            if (m_items.contains(address)) return;
+            auto item = new QStandardItem;
+            m_items.insert(address, item);
+            item->setData(QVariant::fromValue(address), Qt::UserRole);
+            m_model->appendRow(item);
         }
-        if (reset) {
-            // just swap rows instead of incremental update
-            // this happens after a bump fee for instance
-            beginResetModel();
-            m_addresses = addresses;
-            endResetModel();
-        } else if (addresses.size() > 0) {
-            // new page of addresses, just append
-            beginInsertRows(QModelIndex(), m_addresses.size(), m_addresses.size() + addresses.size() - 1);
-            m_addresses.append(addresses);
-            endInsertRows();
-        }
+
+        int last_pointer = task->lastPointer();
+        if (last_pointer < 0) return;
+
+        load(last_pointer);
     });
-
-    context->dispatcher()->add(get_addresses);
+    m_account->context()->dispatcher()->add(task);
 }
 
-QHash<int, QByteArray> AddressListModel::roleNames() const
+bool AddressListModel::lessThan(const QModelIndex& source_left, const QModelIndex& source_right) const
 {
-    return {
-        { AddressRole, "address" },
-        { PointerRole, "last_pointer" },
-        { AddressStringRole, "address_string" },
-        { CountRole, "tx_count" }
-    };
+    auto address_left = source_left.data(Qt::UserRole).value<Address*>();
+    auto address_right = source_right.data(Qt::UserRole).value<Address*>();
+    auto pointer_left = address_left->data().value("pointer").toInt();
+    auto pointer_right = address_right->data().value("pointer").toInt();
+    return pointer_left > pointer_right;
 }
 
-bool AddressListModel::canFetchMore(const QModelIndex& parent) const
+bool AddressListModel::filterAcceptsRow(int source_row, const QModelIndex& source_parent) const
 {
-    Q_ASSERT(!parent.parent().isValid());
-    return m_last_pointer != 1;
-}
-
-void AddressListModel::fetchMore(const QModelIndex& parent)
-{
-    Q_ASSERT(!parent.parent().isValid());
-    if (!m_account) return;
-    fetch(false);
-}
-
-int AddressListModel::rowCount(const QModelIndex& parent) const
-{
-    Q_UNUSED(parent);
-    return m_addresses.size();
-}
-
-int AddressListModel::columnCount(const QModelIndex& parent) const
-{
-    Q_UNUSED(parent);
-    return 1;
-}
-
-QVariant AddressListModel::data(const QModelIndex& index, int role) const
-{
-    switch (role)
-    {
-        case AddressRole:
-            return QVariant::fromValue(m_addresses.at(index.row()));
-        case PointerRole:
-            return QVariant::fromValue(m_addresses.at(index.row())->data()["last_pointer"].toVariant());
-        case AddressStringRole:
-            return QVariant::fromValue(m_addresses.at(index.row())->data()["address"].toVariant());
-        case CountRole:
-            return QVariant::fromValue(m_addresses.at(index.row())->data()["tx_count"].toVariant());
+    if (!m_filter.isEmpty()) {
+        auto address = m_model->index(source_row, 0, source_parent).data(Qt::UserRole).value<Address*>();
+        if (!address->data().value("address").toString().contains(m_filter, Qt::CaseInsensitive)) return false;
+        return true;
     }
+    return QSortFilterProxyModel::filterAcceptsRow(source_row, source_parent);
 
-    return QVariant();
 }
 
-void AddressListModel::reload()
+void AddressListModel::setFilter(const QString& filter)
 {
-    if (!m_account) return;
-
-    m_has_unconfirmed = false;
-    m_last_pointer = 0;
-
-    m_reload_timer->start();
+    if (m_filter == filter) return;
+    m_filter = filter;
+    emit filterChanged();
+    invalidateFilter();
 }

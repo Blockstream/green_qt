@@ -19,9 +19,9 @@ GPane {
     contentItem: TListView {
         id: list_view
         spacing: 0
-        model: AddressListModelFilter {
+        model: AddressListModel {
+            account: self.account
             filter: search_field.text
-            model: address_model
         }
         delegate: AddressDelegate {
             width: ListView.view.width

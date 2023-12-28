@@ -1329,7 +1329,7 @@ QJsonArray GetAddressesTask::addresses() const
 
 int GetAddressesTask::lastPointer() const
 {
-    return result().value("result").toObject().value("last_pointer").toInt(1);
+    return result().value("result").toObject().value("last_pointer").toInt(-1);
 }
 
 

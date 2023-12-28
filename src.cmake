@@ -6,7 +6,6 @@ SET(TARGET_SOURCES
 	src/activitymanager.cpp
 	src/address.cpp
 	src/addresslistmodel.cpp
-	src/addresslistmodelfilter.cpp
 	src/analytics.cpp
 	src/appupdatecontroller.cpp
 	src/asset.cpp

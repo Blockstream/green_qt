@@ -32,9 +32,6 @@ Account *ReceiveAddressController::account() const
 void ReceiveAddressController::setAccount(Account *account)
 {
     if (m_account == account) return;
-    if (m_account) {
-        emit m_account->addressGenerated();
-    }
     m_account = account;
     emit accountChanged();
     generate();
@@ -130,6 +127,7 @@ void ReceiveAddressController::generate()
         setGenerating(false);
         setAddressVerification(VerificationNone);
         emit changed();
+        emit m_account->addressGenerated();
     });
 
     dispatcher()->add(get_receive_address);

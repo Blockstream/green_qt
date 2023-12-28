@@ -54,11 +54,6 @@ Page {
         account: self.account
     }
 
-    AddressListModel {
-        id: address_model
-        account: self.account
-    }
-
     OutputListModel {
         id: output_model
         account: self.account
