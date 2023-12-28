@@ -13,7 +13,7 @@ StackViewPage {
     rightItem: RowLayout {
         spacing: 20
         ShareButton {
-            onClicked: Qt.openUrlExternally(self.address.account.network.data.address_explorer_url + self.address.data.address)
+            onClicked: Qt.openUrlExternally(self.address.account.network.data.address_explorer_url + self.address.address)
         }
         CloseButton {
             action: self.closeAction
@@ -57,7 +57,7 @@ StackViewPage {
                         Layout.minimumHeight: qrcode_layout.width
                         Layout.preferredWidth: 200
                         id: qrcode
-                        text: self.address.data.address
+                        text: self.address.address
                         implicitHeight: 200
                         implicitWidth: 200
                         radius: 4
@@ -68,12 +68,12 @@ StackViewPage {
                         font.pixelSize: 12
                         font.weight: 500
                         horizontalAlignment: Label.AlignHCenter
-                        text: self.address.data.address
+                        text: self.address.address
                         wrapMode: Label.WrapAnywhere
                     }
                     CopyAddressButton {
                         Layout.alignment: Qt.AlignCenter
-                        content: self.address.data.address
+                        content: self.address.address
                         text: qsTrId('id_copy_address')
                     }
                 }
@@ -91,7 +91,7 @@ StackViewPage {
                     bottomPadding: 2
                     leftPadding: 6
                     rightPadding: 6
-                    text: localizedLabel(self.address.data.address_type)
+                    text: localizedLabel(self.address.type)
                     background: Rectangle {
                         radius:  2
                         color: '#68727D'

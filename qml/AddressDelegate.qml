@@ -60,14 +60,14 @@ ItemDelegate {
             Layout.preferredWidth: 0
             color: '#929292'
             elide: Text.ElideRight
-            text: self.address.data.address
+            text: self.address.address
             font.pixelSize: 12
             font.weight: 400
         }
         CircleButton {
             Layout.alignment: Qt.AlignCenter
             icon.source: 'qrc:/svg2/copy.svg'
-            onClicked: Clipboard.copy(self.address.data.address)
+            onClicked: Clipboard.copy(self.address.address)
         }
         ColumnLayout {
             Layout.alignment: Qt.AlignCenter
@@ -82,7 +82,7 @@ ItemDelegate {
                 bottomPadding: 2
                 leftPadding: 6
                 rightPadding: 6
-                text: localizedLabel(self.address.data.address_type)
+                text: localizedLabel(self.address.type)
                 background: Rectangle {
                     radius:  2
                     color: '#68727D'

@@ -1,13 +1,7 @@
+#include "account.h"
 #include "address.h"
 
 #include <gdk.h>
-
-#include "account.h"
-#include "json.h"
-#include "network.h"
-#include "session.h"
-#include "util.h"
-#include "wallet.h"
 
 Address::Address(Account* account)
     : QObject(account)
@@ -15,13 +9,12 @@ Address::Address(Account* account)
 {
 }
 
-Address::~Address()
-{
-}
-
 void Address::updateFromData(const QJsonObject& data)
 {
     if (m_data == data) return;
     m_data = data;
-    emit dataChanged(m_data);
+    m_pointer = m_data.value("pointer").toInt();
+    m_type = m_data.value("address_type").toString();
+    m_address = m_data.value("address").toString();
+    emit dataChanged();
 }

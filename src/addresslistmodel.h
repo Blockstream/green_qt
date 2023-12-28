@@ -19,12 +19,14 @@ public:
     void setAccount(Account* account);
     QString filter() const { return m_filter; }
     void setFilter(const QString& filter);
+    void fetchMore(const QModelIndex &parent) override;
+    bool canFetchMore(const QModelIndex &parent) const override;
 public slots:
     void update();
 protected:
-    void load(int last_pointer);
-    bool lessThan(const QModelIndex& source_left, const QModelIndex& source_right) const;
-    bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const;
+    void load(int last_pointer, bool head);
+    bool lessThan(const QModelIndex& source_left, const QModelIndex& source_right) const override;
+    bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const override;
 signals:
     void accountChanged();
     void filterChanged();
@@ -33,6 +35,8 @@ private:
     QStandardItemModel* m_model{nullptr};
     QMap<Address*, QStandardItem*> m_items;
     QString m_filter;
+    int m_last_pointer{0};
+    QSet<int> m_loaded;
 };
 
 #endif // GREEN_ADDRESSLISTMODEL_H
