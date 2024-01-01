@@ -73,7 +73,7 @@ protected:
     void update();
     void timerEvent(QTimerEvent* event) override;
 private:
-    int m_update_timer;
+    int m_update_timer{-1};
     Account* m_account{nullptr};
     Asset* m_asset{nullptr};
     Recipient* const m_recipient;
