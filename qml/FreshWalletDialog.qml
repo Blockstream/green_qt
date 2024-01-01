@@ -1,27 +1,17 @@
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Effects
 import QtQuick.Layouts
-import Qt5Compat.GraphicalEffects
 
 Dialog {
-    Overlay.modal: Rectangle {
-        id: modal
-        color: constants.c900
-        FastBlur {
-            anchors.fill: parent
-            cached: true
-            opacity: 0.5
-            radius: 64 * self.opacity
-            source: ShaderEffectSource {
-                sourceItem: ApplicationWindow.contentItem
-                sourceRect {
-                    x: 0
-                    y: 0
-                    width: modal.width
-                    height: modal.height
-                }
-            }
-        }
+    Overlay.modal: MultiEffect {
+        anchors.fill: parent
+        autoPaddingEnabled: false
+        brightness: self.visible ? -0.05 : 0
+        blurEnabled: true
+        blurMax: 64
+        blur: self.visible ? 1 : 0
+        source: ApplicationWindow.contentItem
     }
     id: self
     anchors.centerIn: parent

@@ -2,7 +2,6 @@ import Blockstream.Green
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import Qt5Compat.GraphicalEffects
 
 GPane {
     signal transactionClicked(Transaction transaction)

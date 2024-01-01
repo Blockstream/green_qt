@@ -2,7 +2,6 @@ import Blockstream.Green
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import Qt5Compat.GraphicalEffects
 
 ColumnLayout {
     property alias mnemonic: view.mnemonic
@@ -14,15 +13,6 @@ ColumnLayout {
         Layout.alignment: Qt.AlignHCenter
         text: qsTrId('id_write_down_your_recovery_phrase')
         font.pixelSize: 20
-    }
-    GPane {
-        id: view_pane
-        visible: false
-        padding: 16
-        contentItem: MnemonicView {
-            Layout.alignment: Qt.AlignHCenter
-            id: view
-        }
     }
     RowLayout {
         Layout.alignment: Qt.AlignHCenter
@@ -42,17 +32,12 @@ ColumnLayout {
             valueRole: 'value'
         }
     }
-    GaussianBlur {
+    GPane {
         Layout.alignment: Qt.AlignHCenter
-        implicitWidth: view_pane.implicitWidth
-        implicitHeight: view_pane.implicitHeight
-        source: view_pane
-        samples: 16
-        radius: window.active ? 0 : 8
-        Behavior on radius {
-            SmoothedAnimation {
-                velocity: 20
-            }
+        padding: 16
+        contentItem: MnemonicView {
+            Layout.alignment: Qt.AlignHCenter
+            id: view
         }
     }
     VSpacer {

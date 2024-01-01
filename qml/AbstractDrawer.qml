@@ -1,6 +1,6 @@
 import QtQuick
 import QtQuick.Controls
-import Qt5Compat.GraphicalEffects
+import QtQuick.Effects
 
 Drawer {
     property real minimumContentWidth: 400
@@ -22,44 +22,24 @@ Drawer {
         }
     }
 
-    Overlay.modal: Rectangle {
-        id: modal
-        color: '#080B0E'
-        FastBlur {
-            anchors.fill: parent
-            cached: true
-            opacity: self.position
-            radius: 64 * self.position
-            source: ShaderEffectSource {
-                sourceItem: ApplicationWindow.contentItem
-                sourceRect {
-                    x: 0
-                    y: 0
-                    width: modal.width
-                    height: modal.height
-                }
-            }
-        }
+    Overlay.modal: MultiEffect {
+        anchors.fill: parent
+        autoPaddingEnabled: false
+        brightness: self.position * -0.05
+        blurEnabled: true
+        blurMax: 64
+        blur: self.position
+        source: ApplicationWindow.contentItem
     }
 
-    Overlay.modeless: Rectangle {
-        id: modeless
-        color: '#080B0E'
-        FastBlur {
-            anchors.fill: parent
-            cached: true
-            opacity: self.position
-            radius: 32 * self.position
-            source: ShaderEffectSource {
-                sourceItem: ApplicationWindow.contentItem
-                sourceRect {
-                    x: 0
-                    y: 0
-                    width: modeless.width
-                    height: modeless.height
-                }
-            }
-        }
+    Overlay.modeless: MultiEffect {
+        anchors.fill: parent
+        autoPaddingEnabled: false
+        brightness: self.position * -0.05
+        blurEnabled: true
+        blurMax: 32
+        blur: self.position
+        source: ApplicationWindow.contentItem
     }
 
     background: Rectangle {

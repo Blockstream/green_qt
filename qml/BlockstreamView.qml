@@ -3,7 +3,6 @@ import Blockstream.Green.Core
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import Qt5Compat.GraphicalEffects
 
 MainPage {
     id: self
@@ -28,21 +27,6 @@ MainPage {
             Behavior on opacity {
                 SmoothedAnimation {
                     velocity: 4
-                }
-            }
-            FastBlur {
-                anchors.fill: parent
-                cached: true
-                opacity: 0.5
-                radius: 64
-                source: ShaderEffectSource {
-                    sourceItem: self.contentItem
-                    sourceRect {
-                        x: -self.contentItem.x
-                        y: -self.contentItem.y
-                        width: self.header.width
-                        height: self.header.height
-                    }
                 }
             }
             Rectangle {

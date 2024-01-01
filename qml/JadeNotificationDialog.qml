@@ -2,31 +2,27 @@ import Blockstream.Green
 import Blockstream.Green.Core
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Effects
 import QtQuick.Layouts
 import QtQuick.Window
-import Qt5Compat.GraphicalEffects
 
 Dialog {
     signal setupClicked(JadeDevice device)
     required property JadeDevice device
-    Overlay.modal: Rectangle {
-        id: modal
-        color: constants.c900
-        FastBlur {
-            anchors.fill: parent
-            cached: true
-            opacity: 0.5
-            radius: 64
-            source: ShaderEffectSource {
-                sourceItem: ApplicationWindow.contentItem
-                sourceRect {
-                    x: 0
-                    y: 0
-                    width: modal.width
-                    height: modal.height
-                }
-            }
+    Overlay.modal: MultiEffect {
+        anchors.fill: parent
+        autoPaddingEnabled: false
+        brightness: self.visible ? -0.05 : 0
+        Behavior on brightness {
+            NumberAnimation { duration: 200 }
         }
+        blurEnabled: true
+        blurMax: 64
+        blur: self.visible ? 1 : 0
+        Behavior on blur {
+            NumberAnimation { duration: 200 }
+        }
+        source: ApplicationWindow.contentItem
     }
     id: self
     anchors.centerIn: parent

@@ -6,7 +6,6 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Shapes
 import QtQml
-import Qt5Compat.GraphicalEffects
 
 import "analytics.js" as AnalyticsJS
 import "util.js" as UtilJS

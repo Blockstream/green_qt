@@ -1,11 +1,11 @@
 import Blockstream.Green
 import Blockstream.Green.Core
 import QtQuick
-import QtQuick.Window
 import QtQuick.Controls
+import QtQuick.Effects
 import QtQuick.Layouts
+import QtQuick.Window
 import QtQml
-import Qt5Compat.GraphicalEffects
 
 import "analytics.js" as AnalyticsJS
 import "util.js" as UtilJS
@@ -360,12 +360,23 @@ StackViewPage {
             initialItem: Item {}
         }
     }
-    DropShadow {
-        opacity: 1
-        radius: 32
-        samples: 16
-        source: btns
+    MultiEffect {
         anchors.fill: btns
+        shadowBlur: 1.0
+        shadowColor: 'black'
+        shadowEnabled: true
+        shadowVerticalOffset: 10
+        source: btns
+        blurMax: 64
+    }
+    MultiEffect {
+        anchors.fill: btns
+        shadowBlur: 1.0
+        shadowColor: 'black'
+        shadowEnabled: true
+        shadowVerticalOffset: -5
+        source: btns
+        blurMax: 64
     }
     RowLayout {
         id: btns
@@ -375,7 +386,7 @@ StackViewPage {
         anchors.bottomMargin: constants.p3 * 2
         spacing: 5
         PrimaryButton {
-            Layout.minimumWidth: 120
+            Layout.minimumWidth: 150
             icon.source: 'qrc:/svg/send.svg'
             text: qsTrId('id_send')
             action: Action {
@@ -392,7 +403,7 @@ StackViewPage {
             }
         }
         PrimaryButton {
-            Layout.minimumWidth: 120
+            Layout.minimumWidth: 150
             icon.source: 'qrc:/svg/receive.svg'
             text: qsTrId('id_receive')
             action: Action {

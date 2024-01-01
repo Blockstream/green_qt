@@ -1,7 +1,7 @@
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Effects
 import QtQuick.Layouts
-import Qt5Compat.GraphicalEffects
 
 Popup {
     property real pointerX: 0.5
@@ -10,13 +10,14 @@ Popup {
     id: menu
     padding: 0
     background: Item {
-        DropShadow {
-            opacity: 0.5
-            verticalOffset: 8
-            radius: 32
-            samples: 16
-            source: r
+        MultiEffect {
             anchors.fill: r
+            shadowBlur: 1.0
+            shadowColor: 'black'
+            shadowEnabled: true
+            shadowVerticalOffset: 0
+            source: r
+            blurMax: 64
         }
         Rectangle {
             id: pointer
@@ -45,14 +46,6 @@ Popup {
     }
     contentItem: ColumnLayout {
         id: content_item
-        layer.enabled: true
-        layer.effect: OpacityMask {
-            maskSource: Rectangle {
-                width: content_item.width
-                height: content_item.height
-                radius: 9
-            }
-        }
         spacing: 0
     }
 
