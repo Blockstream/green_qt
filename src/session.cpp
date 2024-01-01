@@ -142,10 +142,9 @@ void Session::setSettings(const QJsonObject& settings)
 {
     if (m_settings == settings) return;
     m_settings = settings;
-    emit settingsChanged();
-
     setUnit(m_settings.value("unit").toString());
     setAltimeout(m_settings.value("altimeout").toInt());
+    emit settingsChanged();
 }
 
 void Session::setCurrencies(const QJsonObject& currencies)
@@ -183,6 +182,7 @@ void Session::setUnit(const QString &unit)
     if (m_unit == unit) return;
     m_unit = unit;
     m_display_unit = ComputeDisplayUnit(m_network, m_unit);
+    qDebug() << Q_FUNC_INFO << m_network->id() << m_unit;
     emit unitChanged();
 }
 
