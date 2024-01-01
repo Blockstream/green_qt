@@ -16,8 +16,8 @@ class Convert : public QObject
     Q_PROPERTY(QString unit READ unit WRITE setUnit NOTIFY unitChanged)
     Q_PROPERTY(QString value READ value WRITE setValue NOTIFY valueChanged)
     Q_PROPERTY(QJsonObject result READ result NOTIFY resultChanged)
-    Q_PROPERTY(QString fiatLabel READ fiatLabel NOTIFY resultChanged)
-    Q_PROPERTY(QString unitLabel READ unitLabel NOTIFY resultChanged)
+    Q_PROPERTY(QString fiatLabel READ fiatLabel NOTIFY fiatLabelChanged)
+    Q_PROPERTY(QString unitLabel READ unitLabel NOTIFY unitLabelChanged)
     QML_ELEMENT
 public:
     Convert(QObject* parent = nullptr);
@@ -46,7 +46,10 @@ signals:
     void unitChanged();
     void valueChanged();
     void resultChanged();
+    void fiatLabelChanged();
+    void unitLabelChanged();
 private:
+    void setSession(Session* session);
     void invalidate();
     void update();
     bool mainnet() const;

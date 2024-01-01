@@ -23,10 +23,7 @@ void Convert::setContext(Context* context)
     m_context = context;
     emit contextChanged();
     invalidate();
-    if (m_context) {
-        connect(m_context->primarySession(), &Session::unitChanged, this, &Convert::invalidate);
-        connect(m_context->primarySession(), &Session::tickerEvent, this, &Convert::invalidate);
-    }
+    if (m_context) setSession(m_context->primarySession());
 }
 
 void Convert::setAccount(Account* account)
@@ -36,10 +33,20 @@ void Convert::setAccount(Account* account)
     m_account = account;
     emit accountChanged();
     invalidate();
-    if (m_account) {
-        connect(m_account->session(), &Session::unitChanged, this, &Convert::invalidate);
-        connect(m_account->session(), &Session::tickerEvent, this, &Convert::invalidate);
-    }
+    if (m_account) setSession(m_account->session());
+}
+
+void Convert::setSession(Session* session)
+{
+    connect(session, &Session::settingsChanged, this, [=] {
+        emit fiatLabelChanged();
+        emit unitLabelChanged();
+        invalidate();
+    });
+    connect(session, &Session::tickerEvent, this, [=] {
+        emit fiatLabelChanged();
+        invalidate();
+    });
 }
 
 void Convert::setAsset(Asset* asset)
@@ -87,6 +94,8 @@ void Convert::setResult(const QJsonObject& result)
     if (m_result == result) return;
     m_result = result;
     emit resultChanged();
+    emit fiatLabelChanged();
+    emit unitLabelChanged();
 }
 
 QString Convert::fiatLabel() const
@@ -133,7 +142,7 @@ QString Convert::unitLabel() const
 
 void Convert::invalidate()
 {
-    if (m_timer_id >= 0) killTimer(m_timer_id);
+    if (m_timer_id != -1) killTimer(m_timer_id);
     m_timer_id = startTimer(0);
 }
 
