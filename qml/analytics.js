@@ -22,6 +22,8 @@ function segmentationSession(wallet) {
     if (!wallet) return {}
     const segmentation = segmentationNetwork(wallet.network)
     const app_settings = []
+    // TODO: Settings singleton is not available in this file
+    const Settings = {}
     if (Settings.useTor) app_settings.push('tor')
     if (Settings.useProxy) app_settings.push('proxy')
     if (Settings.enableTestnet) app_settings.push('testnet')
