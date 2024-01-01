@@ -23,6 +23,7 @@ class Context : public QObject
     Q_PROPERTY(QString username READ username NOTIFY usernameChanged)
     Q_PROPERTY(bool watchonly READ isWatchonly NOTIFY watchonlyChanged)
     Q_PROPERTY(QQmlListProperty<Session> sessions READ sessions NOTIFY sessionsChanged)
+    Q_PROPERTY(Session* primarySession READ primarySession NOTIFY sessionsChanged)
     Q_PROPERTY(QQmlListProperty<Account> accounts READ accounts NOTIFY accountsChanged)
     Q_PROPERTY(QStringList mnemonic READ mnemonic NOTIFY mnemonicChanged)
     Q_PROPERTY(bool hasBalance READ hasBalance NOTIFY hasBalanceChanged)
