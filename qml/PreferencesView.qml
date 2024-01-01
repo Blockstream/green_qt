@@ -6,296 +6,362 @@ import QtQuick.Layouts
 
 AbstractDialog {
     id: self
-    title: qsTrId('id_app_settings')
-
-    readonly property int labelWidth: Math.max(300, Math.floor(layout.width / 3))
 
     AnalyticsView {
         name: 'AppSettings'
-        active: navigation.param.view === 'preferences'
+        active: true
     }
     clip: true
-    width: 600
-    height: 700
+    width: 500
+    height: 650
     header: null
+    topPadding: 20
+    bottomPadding: 40
+    leftPadding: 40
+    rightPadding: 40
 
-    component Field: Pane {
-        default property alias contentItemData: layout.data
-        property alias icon: image.source
-        property alias name: label.text
-        Layout.fillWidth: true
-        background: null
-        padding: 0
-        contentItem: RowLayout {
-            spacing: 12
-            Image {
-                Layout.alignment: Qt.AlignTop
-                Layout.minimumWidth: 16
-                Layout.minimumHeight: 36
-                id: image
-                smooth: true
-                mipmap: true
-                fillMode: Image.Pad
-                horizontalAlignment: Image.AlignHCenter
-                verticalAlignment: Image.AlignVCenter
-                sourceSize.height: 16
-                sourceSize.width: 16
-            }
-            Label {
-                id: label
-                Layout.minimumWidth: self.labelWidth
-                Layout.maximumWidth: self.labelWidth
-                Layout.minimumHeight: 36
-                Layout.alignment: Qt.AlignTop
-                verticalAlignment: Text.AlignVCenter
-            }
-            Pane {
-                Layout.fillWidth: true
-                padding: 0
-                background: null
-                contentItem: RowLayout {
-                    id: layout
-                    spacing: 8
-                }
-            }
-        }
-    }
     component Separator: Item {
         implicitHeight: 24
         Layout.fillWidth: true
     }
 
-    contentItem: GFlickable {
-        id: flickable
-        clip: true
-        contentHeight: layout.height
-
-        ColumnLayout {
-            id: layout
-            width: Math.min(flickable.availableWidth, 1024) - 16
-            x: 8
-            spacing: 4
-            SectionLabel {
-                text: qsTrId('id_general')
+    contentItem: GStackView {
+        id: stack_view
+        initialItem: StackViewPage {
+            title: qsTrId('id_app_settings')
+            rightItem: CloseButton {
+                onClicked: self.close()
             }
-            Field {
-                name: qsTrId('id_language')
-                GComboBox {
-                    id: control
-                    Layout.fillWidth: true
-                    model: languages
-                    textRole: 'name'
-                    valueRole: 'language'
-                    currentIndex: {
-                        for (let i = 0; i < languages.length; ++i) {
-                            if (languages[i].language === Settings.language) return i;
-                        }
-                        return -1
-                    }
-                    onCurrentValueChanged: Settings.language = currentValue
-                    font.capitalization: Font.Capitalize
-                    delegate: ItemDelegate {
-                        width: control.width
-                        contentItem: Text {
-                            text: modelData.name
-                            color: 'white'
-                            font: control.font
-                            elide: Text.ElideRight
-                            verticalAlignment: Text.AlignVCenter
-                        }
-                        highlighted: control.highlightedIndex === index
-                    }
-                    popup.contentItem.implicitHeight: 300
+            contentItem: ColumnLayout {
+                spacing: 10
+                SelectLanguageButton {
+                    onClicked: stack_view.push(language_page)
                 }
-            }
-            Field {
-                name: qsTrId('Show Blockstream News')
-                GSwitch {
-                    checked: Settings.showNews
-                    onToggled: Settings.showNews = checked
-                }
-            }
-            Field {
-                name: qsTrId('id_enable_testnet')
-                GSwitch {
+                SwitchButton {
+                    text: qsTrId('id_enable_testnet')
                     checked: Settings.enableTestnet
-                    onToggled: Settings.enableTestnet = checked
+                    onClicked: Settings.enableTestnet = !Settings.enableTestnet
                 }
-            }
-            Field {
-                name: qsTrId('id_help_green_improve')
-                GSwitch {
+                SwitchButton {
+                    text: qsTrId('id_enable_experimental_features')
+                    checked: Settings.enableExperimental
+                    onClicked: Settings.enableExperimental = !Settings.enableExperimental
+                }
+                SwitchButton {
+                    text: qsTrId('id_help_green_improve')
                     enabled: !Analytics.busy
                     checked: Settings.analytics === 'enabled'
-                    onToggled: Settings.analytics = checked ? 'enabled' : 'disabled'
+                    onClicked: Settings.analytics = Settings.analytics === 'enabled' ? 'disabled' : 'enabled'
                 }
-                HSpacer {
+                SubButton {
+                    text: qsTrId('id_network')
+                    onClicked: stack_view.push(network_page)
+                }
+                SubButton {
+                    text: qsTrId('id_custom_servers_and_validation')
+                    onClicked: stack_view.push(servers_validation_page)
+                }
+                VSpacer {
+                }
+                SubButton {
+                    text: qsTrId('id_support')
+                    onClicked: stack_view.push(support_page)
                 }
             }
-            Separator {
+        }
+    }
+
+    component BaseButton: AbstractButton {
+        Layout.fillWidth: true
+        id: button
+        font.pixelSize: 14
+        font.weight: 500
+        leftPadding: 20
+        rightPadding: 20
+        topPadding: 20
+        bottomPadding: 20
+        opacity: button.enabled ? 1 : 0.6
+        background: Rectangle {
+            color: Qt.lighter( '#222226', button.enabled && button.hovered ? 1.2 : 1)
+            radius: 5
+        }
+    }
+
+    component FileButton: BaseButton {
+        required property url url
+        id: button
+        onClicked: Qt.openUrlExternally(button.url)
+        contentItem: RowLayout {
+            spacing: 20
+            Label {
+                Layout.fillWidth: true
+                Layout.preferredWidth: 0
+                text: button.text
+                elide: Label.ElideMiddle
             }
-            SectionLabel {
-                text: qsTrId('id_network')
+            CircleButton {
+                icon.source: 'qrc:/svg2/copy.svg'
+                onClicked: Clipboard.copy(button.text)
             }
-            Field {
-                name: qsTrId('id_connect_through_a_proxy')
-                icon: 'qrc:/svg/proxyV2.svg'
-                GSwitch {
-                    checked: Settings.useProxy
-                    onToggled: Settings.useProxy = checked
-                }
+            ShareButton {
+                onClicked: Qt.openUrlExternally(button.url)
             }
-            Field {
-                name: qsTrId('id_proxy_host')
-                enabled: Settings.useProxy
-                visible: Settings.useProxy
-                GTextField {
-                    Layout.fillWidth: true
-                    enabled: Settings.useProxy
-                    text: Settings.proxyHost
-                    onEditingFinished: {
-                        console.log('update proxy host', text)
-                        Settings.proxyHost = text
+        }
+    }
+
+    component SubButton: BaseButton {
+        id: button
+        contentItem: RowLayout {
+            Label {
+                Layout.fillWidth: true
+                text: button.text
+            }
+            Image {
+                Layout.alignment: Qt.AlignCenter
+                Layout.leftMargin: 10
+                source: 'qrc:/svg2/right.svg'
+            }
+        }
+    }
+
+    component SelectLanguageButton: BaseButton {
+        contentItem: RowLayout {
+            Label {
+                Layout.fillWidth: true
+                text: qsTrId('id_language')
+            }
+            Label {
+                opacity: 0.6
+                text: {
+                    for (const { name, language } of languages) {
+                        if (Settings.language === language) {
+                            return name
+                        }
                     }
                 }
             }
-            Field {
-                name: qsTrId('id_proxy_port')
-                enabled: Settings.useProxy
-                visible: Settings.useProxy
-                GTextField {
-                    enabled: Settings.useProxy
-                    text: Settings.proxyPort
-                    onEditingFinished: {
-                        console.log('update proxy port', text)
-                        Settings.proxyPort = text
+            Image {
+                Layout.alignment: Qt.AlignCenter
+                Layout.leftMargin: 10
+                source: 'qrc:/svg2/right.svg'
+            }
+        }
+    }
+
+    component SwitchButton: BaseButton {
+        id: button
+        topPadding: 15
+        bottomPadding: 15
+        contentItem: RowLayout {
+            spacing: 0
+            Image {
+                id: image
+                Layout.preferredHeight: 24
+                Layout.preferredWidth: 24
+                Layout.rightMargin: 10
+                source: button.icon.source
+                visible: image.status === Image.Ready
+            }
+            Label {
+                Layout.fillWidth: true
+                Layout.preferredWidth: 0
+                Layout.rightMargin: 10
+                font.pixelSize: 14
+                font.weight: 500
+                text: button.text
+                wrapMode: Label.Wrap
+            }
+            GSwitch {
+                enabled: false
+                opacity: 1
+                checked: button.checked
+            }
+        }
+    }
+
+    Component {
+        id: language_page
+        StackViewPage {
+            title: qsTrId('id_language')
+            contentItem: TListView {
+                model: languages
+                spacing: 5
+                delegate: BaseButton {
+                    width: ListView.view.width
+                    contentItem: RowLayout {
+                        Label {
+                            text: modelData.name
+                        }
+                        Image {
+                            source: 'qrc:/svg2/check.svg'
+                            visible: modelData.language === Settings.language
+                        }
+                    }
+                    onClicked: {
+                        Settings.language = modelData.language
+                        stack_view.pop()
                     }
                 }
             }
-            Field {
-                name: qsTrId('id_connect_with_tor')
-                icon: 'qrc:/svg/torV2.svg'
-                GSwitch {
+        }
+    }
+
+    Component {
+        id: network_page
+        StackViewPage {
+            title: qsTrId('id_network')
+            contentItem: ColumnLayout {
+                spacing: 10
+                SectionLabel {
+                    text: qsTrId('id_tor')
+                }
+                SwitchButton {
+                    Layout.bottomMargin: 25
+                    icon.source: 'qrc:/svg/torV2.svg'
+                    text: qsTrId('id_connect_with_tor')
                     checked: Settings.useTor
-                    onToggled: Settings.useTor = checked
+                    onClicked: Settings.useTor = !Settings.useTor
                 }
-            }
-            Separator {
-            }
-            SectionLabel {
-                text: qsTrId('id_custom_servers_and_validation')
-            }
-            Field {
-                name: qsTrId('id_personal_electrum_server')
-                icon: 'qrc:/svg/electrum.svg'
-                ColumnLayout {
-                    spacing: 8
-                    GSwitch {
+                SectionLabel {
+                    text: qsTrId('Proxy')
+                }
+                SwitchButton {
+                    icon.source: 'qrc:/svg/proxyV2.svg'
+                    text: qsTrId('id_connect_through_a_proxy')
+                    checked: Settings.useProxy
+                    onClicked: Settings.useProxy = !Settings.useProxy
+                }
+                GridLayout {
+                    columns: 2
+                    rowSpacing: 10
+                    columnSpacing: 25
+                    SectionLabel {
+                        text: qsTrId('id_proxy_host')
+                    }
+                    SectionLabel {
+                        text: qsTrId('id_proxy_port')
+                    }
+                    TTextField {
                         Layout.fillWidth: true
-                        text: qsTrId('id_choose_the_electrum_servers_you')
-                        checked: Settings.usePersonalNode
-                        onToggled: Settings.usePersonalNode = checked
+                        enabled: Settings.useProxy
+                        text: Settings.proxyHost
+                        onEditingFinished: {
+                            console.log('update proxy host', text)
+                            Settings.proxyHost = text
+                        }
                     }
-                    GridLayout {
-                        visible: Settings.usePersonalNode
-                        columns: 2
-                        columnSpacing: 16
-                        rowSpacing: 8
-                        Label {
-                            Layout.minimumWidth: parent.width * 0.4
-                            text: qsTrId('id_bitcoin_electrum_server')
-                        }
-                        GTextField {
-                            Layout.fillWidth: true
-                            text: Settings.bitcoinElectrumUrl
-                            onTextChanged: Settings.bitcoinElectrumUrl = text
-                            placeholderText: NetworkManager.network("electrum-mainnet").data.electrum_url
-                        }
-                        Label {
-                            visible: Settings.enableTestnet
-                            text: qsTrId('id_testnet_electrum_server')
-                        }
-                        GTextField {
-                            Layout.fillWidth: true
-                            visible: Settings.enableTestnet
-                            text: Settings.testnetElectrumUrl
-                            onTextChanged: Settings.testnetElectrumUrl = text
-                            placeholderText: NetworkManager.network("electrum-testnet").data.electrum_url
-                        }
-                        Label {
-                            text: qsTrId('id_liquid_electrum_server')
-                        }
-                        GTextField {
-                            Layout.fillWidth: true
-                            text: Settings.liquidElectrumUrl
-                            onTextChanged: Settings.liquidElectrumUrl = text
-                            placeholderText: NetworkManager.network("electrum-liquid").data.electrum_url
-                        }
-                        Label {
-                            visible: Settings.enableTestnet
-                            text: qsTrId('id_liquid_testnet_electrum_server')
-                        }
-                        GTextField {
-                            Layout.fillWidth: true
-                            visible: Settings.enableTestnet
-                            text: Settings.liquidTestnetElectrumUrl
-                            onTextChanged: Settings.liquidTestnetElectrumUrl = text
-                            placeholderText: NetworkManager.network("electrum-testnet-liquid").data.electrum_url
+                    TTextField {
+                        enabled: Settings.useProxy
+                        text: Settings.proxyPort
+                        onEditingFinished: {
+                            console.log('update proxy port', text)
+                            Settings.proxyPort = text
                         }
                     }
                 }
+                VSpacer {
+                }
             }
-            Field {
-                name: qsTrId('id_spv_verification')
-                icon: 'qrc:/svg/tx-check.svg'
-                GSwitch {
+        }
+    }
+
+    Component {
+        id: servers_validation_page
+        StackViewPage {
+            title: qsTrId('id_custom_servers_and_validation')
+            contentItem: ColumnLayout {
+                spacing: 10
+                SectionLabel {
+                    text: qsTrId('id_personal_electrum_server')
+                }
+                SwitchButton {
+                    icon.source: 'qrc:/svg/electrum.svg'
+                    text: qsTrId('id_choose_the_electrum_servers_you')
+                    checked: Settings.usePersonalNode
+                    onClicked: Settings.usePersonalNode = !Settings.usePersonalNode
+                }
+                SectionLabel {
+                    text: qsTrId('id_bitcoin_electrum_server')
+                }
+                TTextField {
                     Layout.fillWidth: true
+                    enabled: Settings.usePersonalNode
+                    text: Settings.bitcoinElectrumUrl
+                    onTextChanged: Settings.bitcoinElectrumUrl = text
+                    // placeholderText: NetworkManager.network("electrum-mainnet").data.electrum_url
+                }
+                SectionLabel {
+                    visible: Settings.enableTestnet
+                    text: qsTrId('id_testnet_electrum_server')
+                }
+                TTextField {
+                    Layout.fillWidth: true
+                    enabled: Settings.usePersonalNode
+                    visible: Settings.enableTestnet
+                    text: Settings.testnetElectrumUrl
+                    onTextChanged: Settings.testnetElectrumUrl = text
+                    // placeholderText: NetworkManager.network("electrum-testnet").data.electrum_url
+                }
+                SectionLabel {
+                    text: qsTrId('id_liquid_electrum_server')
+                }
+                TTextField {
+                    Layout.fillWidth: true
+                    enabled: Settings.usePersonalNode
+                    text: Settings.liquidElectrumUrl
+                    onTextChanged: Settings.liquidElectrumUrl = text
+                    // placeholderText: NetworkManager.network("electrum-liquid").data.electrum_url
+                }
+                SectionLabel {
+                    visible: Settings.enableTestnet
+                    text: qsTrId('id_liquid_testnet_electrum_server')
+                }
+                TTextField {
+                    Layout.fillWidth: true
+                    enabled: Settings.usePersonalNode
+                    visible: Settings.enableTestnet
+                    text: Settings.liquidTestnetElectrumUrl
+                    onTextChanged: Settings.liquidTestnetElectrumUrl = text
+                    // placeholderText: NetworkManager.network("electrum-testnet-liquid").data.electrum_url
+                }
+                SectionLabel {
+                    Layout.topMargin: 25
+                    text: qsTrId('id_spv_verification')
+                }
+                SwitchButton {
+                    icon.source: 'qrc:/svg/tx-check.svg'
                     text: qsTrId('id_verify_your_bitcoin')
                     checked: Settings.enableSPV
-                    onToggled: Settings.enableSPV = checked
+                    onClicked: Settings.enableSPV = !Settings.enableSPV
+                }
+                VSpacer {
                 }
             }
-            Separator {
-            }
-            SectionLabel {
-                text: qsTrId('id_advanced')
-            }
-            Field {
-                name: qsTrId('id_enable_experimental_features')
-                GSwitch {
-                    checked: Settings.enableExperimental
-                    onToggled: Settings.enableExperimental = checked
+        }
+    }
+
+    Component {
+        id: support_page
+        StackViewPage {
+            title: qsTrId('id_support')
+            contentItem: ColumnLayout {
+                spacing: 10
+                SectionLabel {
+                    text: qsTrId('id_data_directory')
                 }
-            }
-            Separator {
-            }
-            SectionLabel {
-                text: qsTrId('id_support')
-            }
-            Field {
-                name: qsTrId('id_data_directory')
-                CopyableLabel {
-                    Layout.fillWidth: true
+                FileButton {
                     text: data_location_path
-                    copyText: data_location_path.replace(' ', '\\ ')
-                    elide: Text.ElideRight
+                    url: data_location_url
                 }
-                GButton {
-                    text: qsTrId('id_open')
-                    onClicked: Qt.openUrlExternally(data_location_url)
+                SectionLabel {
+                    Layout.topMargin: 25
+                    text: qsTrId('id_log_file')
                 }
-            }
-            Field {
-                name: qsTrId('id_log_file')
-                CopyableLabel {
-                    Layout.fillWidth: true
+                FileButton {
                     text: log_file_path
-                    copyText: log_file_path.replace(' ', '\\ ')
-                    elide: Text.ElideRight
+                    url: log_file_url
                 }
-                GButton {
-                    text: qsTrId('id_open')
-                    onClicked: Qt.openUrlExternally(log_file_url)
+                VSpacer {
                 }
             }
         }

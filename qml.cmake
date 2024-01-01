@@ -245,6 +245,7 @@ SET(QML_FILES
     qml/ConnectLedgerPage.qml
     qml/LedgerPage.qml
     qml/LedgerDeviceDelegate.qml
+    qml/TTextField.qml
 )
 
 if (GREEN_NO_RESOURCES)

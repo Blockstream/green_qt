@@ -123,6 +123,16 @@ MainPage {
     property Navigation navigation: Navigation {}
     property Constants constants: Constants {}
 
+    Action {
+        id: preferences_action
+        onTriggered: {
+            preferences_dialog.createObject(self).open()
+            wallets_drawer.close()
+            side_bar.currentView = SideBar.View.Preferences
+        }
+        shortcut: 'Ctrl+,'
+    }
+
     StackView.onActivating: {
         const device = DeviceManager.defaultDevice()
         if (device instanceof JadeDevice) {
@@ -195,11 +205,7 @@ MainPage {
                 velocity: 200
             }
         }
-        onPreferencesClicked: {
-            wallets_drawer.close()
-            preferences_dialog.open()
-            side_bar.currentView = SideBar.View.Preferences
-        }
+        onPreferencesClicked: preferences_action.trigger()
         onWalletsClicked: openWallets()
     }
 
@@ -235,10 +241,13 @@ MainPage {
         }
     }
 
-    PreferencesView {
+    Component {
         id: preferences_dialog
-        onClosed: {
-            side_bar.currentView = SideBar.View.Wallets
+        PreferencesView {
+            onClosed: {
+                side_bar.currentView = SideBar.View.Wallets
+                destroy()
+            }
         }
     }
 }
