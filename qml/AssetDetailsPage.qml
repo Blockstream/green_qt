@@ -119,12 +119,14 @@ StackViewPage {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 1
                 color: '#313131'
+                visible: false
             }
             Label {
                 color: '#929292'
                 font.pixelSize: 12
                 font.weight: 400
                 text: qsTrId('id_accounts')
+                visible: false
             }
             Repeater {
                 model: {
@@ -149,6 +151,7 @@ StackViewPage {
                     id: button
                     account: button.modelData.account
                     satoshi: button.modelData.satoshi
+                    visible: false
                 }
             }
         }
