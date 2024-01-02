@@ -146,6 +146,7 @@ MainPage {
             currentIndex: 0
             WalletsView {
                 id: wallets_view
+                enabled: StackLayout.isCurrentItem
                 focus: StackLayout.isCurrentItem
                 onOpenWallet: (wallet) => self.openWallet(wallet)
                 onOpenDevice: (device) => self.openDevice(device)
@@ -157,6 +158,7 @@ MainPage {
     Component {
         id: wallet_view
         WalletView {
+            enabled: StackLayout.isCurrentItem
             onOpenWallet: (wallet) => self.openWallet(wallet)
             onCloseWallet: (wallet) => self.closeWallet(wallet)
             onRemoveWallet: (wallet) => remove_wallet_dialog.createObject(self, { wallet }).open()
