@@ -78,7 +78,7 @@ MainPage {
         contentItem: ColumnLayout {
             Image {
                 Layout.alignment: Qt.AlignCenter
-                source: 'qrc:/svg/green_logo.svg'
+                source: 'qrc:/svg2/blockstream_green.svg'
             }
         }
     }
