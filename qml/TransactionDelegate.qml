@@ -167,22 +167,24 @@ ItemDelegate {
                         for (const [id, satoshi] of Object.entries(transaction.data.satoshi)) {
                             if (self.account.network.policyAsset === id) continue
                             const asset = AssetManager.assetWithId(self.account.context.deployment, id)
-                            const ticker = asset.data.ticker
-                            if (ticker) {
-                                assets.push('' + satoshi + ' ' + ticker)
-                            } else {
-                                assets.push('' + satoshi)
-                            }
+                            assets.push({ asset, satoshi })
                         }
                     }
                     return assets
                 }
                 delegate: Label {
+                    Convert {
+                        id: convert
+                        account: self.account
+                        asset: modelData.asset
+                        value: modelData.satoshi
+                        unit: 'sats'
+                    }
                     Layout.alignment: Qt.AlignRight
                     color: transaction.data.type === 'incoming' ? '#00B670' : '#FFF'
                     font.pixelSize: 14
                     font.weight: 600
-                    text: modelData
+                    text: convert.unitLabel
                 }
             }
             Convert {
