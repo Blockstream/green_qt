@@ -23,7 +23,11 @@ StackViewPage {
         }
         FieldTitle {
             Layout.topMargin: 25
-            text: search_field.text.trim().length > 0 ? 'Search result' : 'Other Assets'
+            text: {
+                if (search_field.text.trim().length === 0) return 'Other Assets'
+                if (list_view.count === 0) return 'No search results'
+                return 'Search results'
+            }
         }
         TListView {
             id: list_view
