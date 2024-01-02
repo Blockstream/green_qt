@@ -15,7 +15,11 @@ AbstractButton {
         if (!self.device.compatible) return false
         switch (self.device.appName) {
         case 'Bitcoin':
+        case 'Bitcoin Legacy':
         case 'Bitcoin Test':
+        case 'Bitcoin Test Legacy':
+        case 'Liquid':
+        case 'Liquid Test':
             return true
         default:
             return false

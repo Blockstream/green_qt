@@ -96,7 +96,12 @@ static QString device_deployment(Device* device)
     if (ledger_device) {
         const auto app = ledger_device->appName();
         if (app == "Bitcoin") return "mainnet";
+        if (app == "Bitcoin Legacy") return "mainnet";
+        if (app == "Liquid") return "mainnet";
+
         if (app == "Bitcoin Test") return "testnet";
+        if (app == "Bitcoin Test Legacy") return "testnet";
+        if (app == "Liquid Test") return "testnet";
         Q_UNREACHABLE();
     }
     Q_UNREACHABLE();
@@ -299,4 +304,3 @@ void PinDataController::update(const QString& pin)
     });
     dispatcher()->add(task);
 }
-
