@@ -4,8 +4,8 @@ import QtQuick.Layouts
 
 AbstractButton {
     id: self
-    leftPadding: 8
-    rightPadding: 8
+    leftPadding: 0
+    rightPadding: 0
     topPadding: 8
     bottomPadding: 8
     background: Item {
