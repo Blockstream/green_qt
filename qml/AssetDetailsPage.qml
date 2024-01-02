@@ -25,6 +25,8 @@ StackViewPage {
         }
     }
     contentItem: Flickable {
+        ScrollIndicator.vertical: ScrollIndicator {
+        }
         id: flickable
         clip: true
         contentWidth: flickable.width
@@ -54,34 +56,74 @@ StackViewPage {
                 opacity: 0.6
                 visible: self.asset.data.entity ?? false
             }
-            SectionLabel {
-                Layout.topMargin: 30
-                text: qsTrId('id_ticker')
-                visible: self.asset.data.ticker ?? false
+            Rectangle {
+                Layout.bottomMargin: 20
+                Layout.topMargin: 20
+                Layout.fillWidth: true
+                Layout.preferredHeight: 1
+                color: '#313131'
+            }
+            GridLayout {
+                columns: 2
+                Label {
+                    Layout.minimumWidth: 100
+                    color: '#929292'
+                    font.pixelSize: 12
+                    font.weight: 400
+                    text: qsTrId('id_ticker')
+                    visible: self.asset.data.ticker ?? false
+                }
+                Label {
+                    Layout.fillWidth: true
+                    color: '#FFF'
+                    font.pixelSize: 12
+                    font.weight: 400
+                    text: self.asset.data.ticker ?? ''
+                    visible: self.asset.data.ticker ?? false
+                }
+                Label {
+                    color: '#929292'
+                    font.pixelSize: 12
+                    font.weight: 400
+                    text: qsTrId('id_precision')
+                    visible: self.asset.data.precision >= 0 ?? false
+                }
+                Label {
+                    Layout.fillWidth: true
+                    color: '#FFF'
+                    font.pixelSize: 12
+                    font.weight: 400
+                    text: self.asset.data.precision ?? ''
+                    visible: self.asset.data.precision >= 0 ?? false
+                }
+                Label {
+                    Layout.alignment: Qt.AlignTop
+                    color: '#929292'
+                    font.pixelSize: 12
+                    font.weight: 400
+                    text: qsTrId('id_asset_id')
+                }
+                Label {
+                    Layout.fillWidth: true
+                    Layout.preferredWidth: 0
+                    color: '#FFF'
+                    font.pixelSize: 12
+                    font.weight: 400
+                    text: self.asset.id
+                    wrapMode: Label.Wrap
+                }
+            }
+            Rectangle {
+                Layout.bottomMargin: 20
+                Layout.topMargin: 20
+                Layout.fillWidth: true
+                Layout.preferredHeight: 1
+                color: '#313131'
             }
             Label {
-                Layout.fillWidth: true
-                text: self.asset.data.ticker ?? ''
-                visible: self.asset.data.ticker ?? false
-            }
-//            SectionLabel {
-//                text: qsTrId('id_total_balance')
-//            }
-//            CopyableLabel {
-//                text: self.displayAmount
-//            }
-            SectionLabel {
-                Layout.topMargin: 10
-                text: qsTrId('id_asset_id')
-            }
-            Label {
-                Layout.fillWidth: true
-                Layout.preferredWidth: 0
-                text: self.asset.id
-                wrapMode: Label.Wrap
-            }
-            SectionLabel {
-                Layout.topMargin: 30
+                color: '#929292'
+                font.pixelSize: 12
+                font.weight: 400
                 text: qsTrId('id_accounts')
             }
             Repeater {
