@@ -53,12 +53,25 @@ Dialog {
             opacity: 0.4
             text: 'A new device has been detected, please set it up to start using it.'
         }
-        Image {
+        Item {
             Layout.alignment: Qt.AlignCenter
-            source: 'qrc:/png/onboard_jade_1.png'
+            Layout.preferredWidth: 352
+            Layout.preferredHeight: 240
+            clip: true
+            Image {
+                anchors.centerIn: parent
+                scale: 0.2
+                source: 'qrc:/png/background.png'
+            }
+            Image {
+                anchors.centerIn: parent
+                scale: 0.2
+                source: 'qrc:/png/jade_0.png'
+            }
         }
         PrimaryButton {
             Layout.alignment: Qt.AlignCenter
+            Layout.minimumWidth: 325
             text: 'Setup Jade'
             onClicked: self.setupClicked(self.device)
         }

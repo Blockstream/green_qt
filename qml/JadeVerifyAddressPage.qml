@@ -48,9 +48,11 @@ StackViewPage {
             text: controller.address.address
             wrapMode: Label.Wrap
         }
-        Image {
+        MultiImage {
             Layout.alignment: Qt.AlignCenter
-            source: 'qrc:/png/connect_jade_2.png'
+            foreground: 'qrc:/png/connect_jade_2.png'
+            width: 352
+            height: 240
         }
         Label {
             Layout.fillWidth: true

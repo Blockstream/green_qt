@@ -253,6 +253,7 @@ SET(QML_FILES
     qml/AddressVerifiedBadge.qml
     qml/NotificationsDrawer.qml
     qml/ErrorPage.qml
+    qml/MultiImage.qml
 )
 
 if (GREEN_NO_RESOURCES)

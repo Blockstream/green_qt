@@ -8,9 +8,11 @@ ColumnLayout {
     required property SignMessageResolver resolver
     VSpacer {
     }
-    Image {
+    MultiImage {
         Layout.alignment: Qt.AlignHCenter
-        source: 'qrc:/png/connect_jade_2.png'
+        foreground: 'qrc:/png/jade_7.png'
+        width: 352
+        height: 240
     }
     SectionLabel {
         text: qsTrId('id_message_hash')

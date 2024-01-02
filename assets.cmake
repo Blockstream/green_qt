@@ -120,17 +120,20 @@ qt_add_resources(green "images"
 
         assets/png/canceled.png
         assets/png/completed.png
+        assets/png/jade_0.png
+        assets/png/jade_1.png
+        assets/png/jade_2.png
+        assets/png/jade_3.png
+        assets/png/jade_4.png
+        assets/png/jade_5.png
+        assets/png/jade_6.png
+        assets/png/jade_7.png
 
         assets/png/background.png
         assets/png/ledger_3d.png
-        assets/png/connect_jade_1.png
-        assets/png/connect_jade_2.png
-        assets/png/connect_jade_3.png
-        assets/png/connect_jade_4.png
         assets/png/jade_card.png
-        assets/png/onboard_jade_1.png
-        assets/png/onboard_jade_3.png
-        assets/png/onboard_jade_2.png
+        assets/png/onboarding_globe.png
+        assets/png/onboarding_cpu.png
 
         assets/png/2fa.png
         assets/png/2fa_email.png

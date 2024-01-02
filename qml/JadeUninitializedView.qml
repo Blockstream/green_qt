@@ -42,7 +42,7 @@ ColumnLayout {
         }
         StepPane {
             title: 'Create or Restore'
-            image: 'qrc:/png/connect_jade_2.png'
+            image: 'qrc:/png/jade_7.png'
             PrimaryButton {
                 Layout.alignment: Qt.AlignCenter
                 Layout.preferredWidth: 325
@@ -54,7 +54,7 @@ ColumnLayout {
         }
         StepPane {
             title: qsTrId('id_create_a_pin')
-            image: 'qrc:/png/connect_jade_3.png'
+            image: 'qrc:/png/jade_6.png'
             PrimaryButton {
                 Layout.alignment: Qt.AlignCenter
                 Layout.preferredWidth: 325
@@ -88,9 +88,11 @@ ColumnLayout {
         id: step_pane
         VSpacer {
         }
-        Image {
+        MultiImage {
             Layout.alignment: Qt.AlignCenter
-            source: step_pane.image
+            foreground: step_pane.image
+            width: 352
+            height: 240
         }
         Pane {
             Layout.alignment: Qt.AlignCenter

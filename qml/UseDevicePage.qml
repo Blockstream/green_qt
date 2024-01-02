@@ -39,9 +39,11 @@ StackViewPage {
             ColumnLayout {
                 VSpacer {
                 }
-                Image {
+                MultiImage {
                     Layout.alignment: Qt.AlignCenter
-                    source: 'qrc:/png/onboard_jade_1.png'
+                    foreground: 'qrc:/png/jade_0.png'
+                    width: 352
+                    height: 240
                 }
                 Label {
                     Layout.fillWidth: true
@@ -69,9 +71,11 @@ StackViewPage {
             ColumnLayout {
                 VSpacer {
                 }
-                Image {
+                MultiImage {
                     Layout.alignment: Qt.AlignCenter
-                    source: 'qrc:/png/onboard_jade_2.png'
+                    foreground: 'qrc:/png/onboarding_cpu.png'
+                    width: 352
+                    height: 240
                 }
                 Label {
                     Layout.fillWidth: true
@@ -99,9 +103,11 @@ StackViewPage {
             ColumnLayout {
                 VSpacer {
                 }
-                Image {
+                MultiImage {
                     Layout.alignment: Qt.AlignCenter
-                    source: 'qrc:/png/onboard_jade_3.png'
+                    foreground: 'qrc:/png/onboarding_globe.png'
+                    width: 352
+                    height: 240
                 }
                 Label {
                     Layout.fillWidth: true

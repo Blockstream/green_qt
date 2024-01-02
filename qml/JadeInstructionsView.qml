@@ -27,19 +27,19 @@ Pane {
             onCurrentIndexChanged: change_timer.restart()
             StepPane {
                 step: 1
-                image: 'qrc:/png/connect_jade_1.png'
+                image: 'qrc:/png/jade_2.png'
                 title: qsTrId('id_power_on_jade')
                 text: qsTrId('id_hold_the_green_button_on_the')
             }
             StepPane {
                 step: 2
-                image: 'qrc:/png/connect_jade_2.png'
+                image: 'qrc:/png/jade_7.png'
                 title: qsTrId('id_follow_the_instructions_on_jade')
                 text: qsTrId('id_select_initalize_to_create_a')
             }
             StepPane {
                 step: 3
-                image: 'qrc:/png/connect_jade_3.png'
+                image: 'qrc:/png/jade_6.png'
                 title: qsTrId('id_connect_using_usb_or_bluetooth')
                 text: qsTrId('id_choose_a_usb_or_bluetooth')
             }
@@ -62,9 +62,11 @@ Pane {
         focus: false
         VSpacer {
         }
-        Image {
+        MultiImage {
             Layout.alignment: Qt.AlignCenter
-            source: step_pane.image
+            foreground: step_pane.image
+            width: 352
+            height: 240
         }
         Pane {
             Layout.alignment: Qt.AlignCenter

@@ -31,9 +31,11 @@ StackViewPage {
             spacing: 15
             width: flickable.width
             y: Math.max(0, (flickable.height - layout.height) / 2)
-            Image {
+            MultiImage {
                 Layout.alignment: Qt.AlignCenter
-                source: 'qrc:/png/connect_jade_1.png'
+                foreground: 'qrc:/png/jade_2.png'
+                width: 352
+                height: 240
             }
             Label {
                 Layout.alignment: Qt.AlignCenter

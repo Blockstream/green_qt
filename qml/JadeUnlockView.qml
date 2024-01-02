@@ -24,9 +24,11 @@ ColumnLayout {
     }
     VSpacer {
     }
-    Image {
+    MultiImage {
         Layout.alignment: Qt.AlignCenter
-        source: 'qrc:/png/connect_jade_2.png'
+        width: 352
+        height: 240
+        foreground: 'qrc:/png/jade_7.png'
     }
     Label {
         Layout.fillWidth: true

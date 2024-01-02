@@ -75,9 +75,11 @@ Page {
         }
         VSpacer {
         }
-        Image {
+        MultiImage {
             Layout.alignment: Qt.AlignCenter
-            source: 'qrc:/png/onboard_jade_1.png'
+            foreground: 'qrc:/png/jade_0.png'
+            width: 352
+            height: 240
         }
         Label {
             Layout.alignment: Qt.AlignCenter
