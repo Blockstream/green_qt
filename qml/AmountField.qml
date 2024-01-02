@@ -23,6 +23,7 @@ TextField {
         account: self.account
         asset: self.asset
         unit: self.fiat ? 'fiat' : UtilJS.normalizeUnit(self.unit)
+        user: true
         value: self.value
         onValueChanged: if (!self.readOnly) self.text = convert.value
     }

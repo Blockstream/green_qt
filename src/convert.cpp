@@ -76,6 +76,14 @@ void Convert::setUnit(const QString& unit)
     invalidate();
 }
 
+void Convert::setUser(bool user)
+{
+    if (m_user == user) return;
+    m_user = user;
+    emit userChanged();
+    invalidate();
+}
+
 void Convert::setValue(const QString& value)
 {
     if (m_value == value) return;
@@ -122,7 +130,15 @@ QString Convert::unitLabel() const
 {
     if (!m_context && !m_account) return {};
     if (m_liquid_asset) {
-        return m_result.value("satoshi").toString() + " " + m_asset->data().value("ticker").toString();
+        const auto precision = m_asset->data().value("precision").toInt(0);
+        const auto satoshi = m_result.value("satoshi").toString();
+        const auto amount = QLocale::c().toString(satoshi.toDouble() / qPow(10, precision), 'f', precision);
+        if (m_asset->data().contains("ticker")) {
+            const auto ticker = m_asset->data().value("ticker").toString();
+            return amount + " " + ticker;
+        } else {
+            return amount;
+        }
     }
     const auto session = m_account ? m_account->session() : m_context->primarySession();
     if (!session) return {};
@@ -175,7 +191,13 @@ void Convert::update()
     const auto value = m_value.isEmpty() ? "0" : m_value;
 
     if (m_liquid_asset) {
-        setResult({{ "satoshi", value }});
+        if (m_user) {
+            const auto precision = m_asset->data().value("precision").toInt(0);
+            const auto satoshi = QLocale::c().toString(static_cast<qint64>(value.toDouble() * qPow(10, precision)));
+            setResult({{ "satoshi", satoshi }});
+        } else {
+            setResult({{ "satoshi", value }});
+        }
         return;
     }
 
