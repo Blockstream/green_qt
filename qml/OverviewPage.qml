@@ -109,7 +109,8 @@ StackViewPage {
     AnalyticsAlert {
         id: overview_alert
         screen: 'Overview'
-        network: self.wallet.network.id
+        // TODO: which network to pass on the alert?
+        // network: self.wallet.network.id
     }
 
     AccountListModel {
