@@ -135,7 +135,7 @@ StackViewPage {
         if (account) {
             self.currentAccount = account
         } else {
-            fresh_wallet_dialog.createObject(Overlay.overlay).open()
+            fresh_wallet_dialog.createObject(self).open()
         }
     }
 

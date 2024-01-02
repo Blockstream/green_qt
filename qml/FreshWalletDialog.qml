@@ -1,22 +1,11 @@
 import QtQuick
 import QtQuick.Controls
-import QtQuick.Effects
 import QtQuick.Layouts
 
-Dialog {
-    Overlay.modal: MultiEffect {
-        anchors.fill: parent
-        autoPaddingEnabled: false
-        brightness: self.visible ? -0.05 : 0
-        blurEnabled: true
-        blurMax: 64
-        blur: self.visible ? 1 : 0
-        source: ApplicationWindow.contentItem
-    }
+AbstractDialog {
     id: self
-    anchors.centerIn: parent
     background: null
-    modal: true
+    header: null
     closePolicy: Popup.NoAutoClose
     contentItem: ColumnLayout {
         Image {
