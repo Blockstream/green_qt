@@ -270,7 +270,7 @@ AbstractDialog {
         StackViewPage {
             title: qsTrId('id_custom_servers_and_validation')
             contentItem: ColumnLayout {
-                spacing: 10
+                spacing: 2
                 SectionLabel {
                     text: qsTrId('id_personal_electrum_server')
                 }
@@ -281,6 +281,7 @@ AbstractDialog {
                     onClicked: Settings.usePersonalNode = !Settings.usePersonalNode
                 }
                 SectionLabel {
+                    Layout.topMargin: 10
                     text: qsTrId('id_bitcoin_electrum_server')
                 }
                 TTextField {
@@ -291,6 +292,7 @@ AbstractDialog {
                     // placeholderText: NetworkManager.network("electrum-mainnet").data.electrum_url
                 }
                 SectionLabel {
+                    Layout.topMargin: 10
                     visible: Settings.enableTestnet
                     text: qsTrId('id_testnet_electrum_server')
                 }
@@ -303,6 +305,7 @@ AbstractDialog {
                     // placeholderText: NetworkManager.network("electrum-testnet").data.electrum_url
                 }
                 SectionLabel {
+                    Layout.topMargin: 10
                     text: qsTrId('id_liquid_electrum_server')
                 }
                 TTextField {
@@ -313,6 +316,7 @@ AbstractDialog {
                     // placeholderText: NetworkManager.network("electrum-liquid").data.electrum_url
                 }
                 SectionLabel {
+                    Layout.topMargin: 10
                     visible: Settings.enableTestnet
                     text: qsTrId('id_liquid_testnet_electrum_server')
                 }
@@ -325,7 +329,7 @@ AbstractDialog {
                     // placeholderText: NetworkManager.network("electrum-testnet-liquid").data.electrum_url
                 }
                 SectionLabel {
-                    Layout.topMargin: 25
+                    Layout.topMargin: 30
                     text: qsTrId('id_spv_verification')
                 }
                 SwitchButton {
