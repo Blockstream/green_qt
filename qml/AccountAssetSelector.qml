@@ -11,6 +11,7 @@ StackViewPage {
     required property Account account
     required property Asset asset
     property bool showCreateAccount: false
+    property bool filterEmpty: false
 
     signal selected(account: Account, asset: Asset)
     id: self
@@ -45,6 +46,7 @@ StackViewPage {
                 required property int index
                 id: delegate
                 width: ListView.view.width
+                enabled: accounts_repeater.count > 0 || self.showCreateAccount
                 padding: 0
                 topPadding: 0
                 bottomPadding: 0
@@ -126,20 +128,27 @@ StackViewPage {
                                 text: JSON.stringify(delegate.asset.data, null, '  ')
                             }
                             Repeater {
+                                id: accounts_repeater
                                 model: {
                                     const accounts = []
                                     for (let i = 0; i < self.context.accounts.length; i++) {
                                         const account = self.context.accounts[i]
                                         if (account.hidden) continue
                                         if (account.network.key !== delegate.asset.networkKey) continue
-                                        accounts.push(account)
+                                        const key = account.network.liquid ? delegate.asset.id : 'btc'
+                                        const satoshi = account.json.satoshi[key]
+                                        if (!self.filterEmpty || satoshi > 0) accounts.push({ account, satoshi })
                                     }
                                     return accounts
                                 }
                                 delegate: SelectAccountButton {
+                                    required property var modelData
                                     Layout.fillWidth: true
                                     id: button
-                                    onClicked: self.selected(button.account, delegate.asset)
+                                    asset: delegate.asset
+                                    account: button.modelData.account
+                                    satoshi: button.modelData.satoshi
+                                    onSelected: (account, asset) => self.selected(account, asset)
                                 }
                             }
                             CreateAccountButton {
@@ -159,7 +168,11 @@ StackViewPage {
     }
 
     component SelectAccountButton: AbstractButton {
-        readonly property Account account: modelData
+        signal selected(Account account, Asset asset)
+        required property Account account
+        required property Asset asset
+        required property var satoshi
+        onClicked: button.selected(button.account, button.asset)
         id: button
         background: Item {
             Rectangle {
@@ -195,6 +208,30 @@ StackViewPage {
                     font.weight: 400
                     opacity: 0.4
                     text: UtilJS.networkLabel(button.account.network) + ' / ' + UtilJS.accountLabel(button.account)
+                }
+            }
+            Convert {
+                id: convert
+                account: button.account
+                asset: button.asset
+                value: button.satoshi ?? '0'
+                unit: 'sats'
+            }
+            ColumnLayout {
+                Label {
+                    Layout.alignment: Qt.AlignRight
+                    font.pixelSize: 14
+                    font.weight: 500
+                    text: convert.unitLabel
+                    wrapMode: Label.Wrap
+                }
+                Label {
+                    Layout.alignment: Qt.AlignRight
+                    font.pixelSize: 11
+                    font.weight: 400
+                    opacity: 0.4
+                    text: convert.fiatLabel
+                    visible: convert.fiat
                 }
             }
             HSpacer {

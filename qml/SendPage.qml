@@ -287,6 +287,7 @@ StackViewPage {
         id: account_asset_selector
         AccountAssetSelector {
             showCreateAccount: false
+            filterEmpty: true
             onSelected: (account, asset) => {
                 self.StackView.view.pop()
                 controller.account = account
