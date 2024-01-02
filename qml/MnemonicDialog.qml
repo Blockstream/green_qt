@@ -11,6 +11,7 @@ ControllerDialog {
     }
     title: qsTrId('id_recovery_phrase')
     RowLayout {
+        spacing: 20
         MnemonicView {
             columns: controller.context.mnemonic.length > 12 ? 4 : 2
             mnemonic: controller.context.mnemonic
