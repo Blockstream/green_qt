@@ -35,7 +35,6 @@ WalletHeaderCard {
         }
         Image {
             Layout.alignment: Qt.AlignCenter
-            opacity: 0.6
             source: self.context.wallet.incognito ? 'qrc:/svg2/eye_closed.svg' : 'qrc:/svg2/eye.svg'
             TapHandler {
                 onTapped: self.context.wallet.toggleIncognito()
