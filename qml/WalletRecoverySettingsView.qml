@@ -8,8 +8,7 @@ import QtQuick.Layouts
 import "analytics.js" as AnalyticsJS
 
 ColumnLayout {
-    required property Wallet wallet
-    required property Session session
+    required property Context context
 
     id: self
     spacing: 16
@@ -17,12 +16,12 @@ ColumnLayout {
     AnalyticsView {
         active: true
         name: 'WalletSettingsRecovery'
-        segmentation: AnalyticsJS.segmentationSession(self.wallet)
+        segmentation: AnalyticsJS.segmentationSession(self.context.wallet)
     }
 
     SettingsBox {
         title: qsTrId('id_recovery_phrase')
-        visible: !wallet.context.device
+        visible: !(self.context.wallet.deviceDetails?.type ?? false)
         contentItem: ColumnLayout {
             spacing: constants.s1
             Label {
@@ -34,32 +33,42 @@ ColumnLayout {
                 Layout.alignment: Qt.AlignRight
                 large: false
                 text: qsTrId('id_show')
-                onClicked: mnemonic_dialog.createObject(stack_view).open()
+                onClicked: mnemonic_dialog.createObject(stack_view, { context: self.context }).open()
             }
         }
     }
 
-    Loader {
-        Layout.fillWidth: true
-        active: !self.wallet.network.electrum
-        visible: active
-        sourceComponent: SettingsBox {
-            title: qsTrId('id_accounts_summary')
-            contentItem: ColumnLayout {
-                spacing: constants.s1
-                Label {
-                    Layout.fillWidth: true
-                    text: qsTrId('id_save_a_summary_of_your_accounts')
-                    wrapMode: Text.WordWrap
+    SettingsBox {
+        title: qsTrId('id_accounts_summary')
+        contentItem: ColumnLayout {
+            spacing: constants.s1
+            Label {
+                Layout.fillWidth: true
+                text: qsTrId('id_save_a_summary_of_your_accounts')
+                wrapMode: Text.WordWrap
+            }
+            Repeater {
+                model: {
+                    const networks = new Set()
+                    for (let i = 0; i < self.context.accounts.length; i++) {
+                        const account = self.context.accounts[i]
+                        if (!account.network.electrum) continue
+                        networks.add(account.network)
+                    }
+                    return [...networks]
                 }
-                GButton {
+                delegate: GButton {
+                    property Network network: modelData
                     Layout.alignment: Qt.AlignRight
-                    text: qsTrId('id_copy')
+                    id: button
+                    text: qsTrId('id_copy') + ' ' + button.network.displayName
                     large: false
                     onClicked: {
-                        const subaccounts = [];
-                        for (let i = 0; i < wallet.context.accounts.length; i++) {
-                            const data = wallet.context.accounts[i].json;
+                        const subaccounts = []
+                        for (let i = 0; i < self.context.accounts.length; i++) {
+                            const account = self.context.accounts[i]
+                            if (account.network !== button.network) continue
+                            const data = account.json;
                             const subaccount = { type: data.type, pointer: data.pointer };
                             if (data.type === '2of3') subaccount.recovery_pub_key = data.recovery_pub_key;
                             subaccounts.push(subaccount)
@@ -72,6 +81,7 @@ ColumnLayout {
         }
     }
 
+    /*
     Loader {
         Layout.fillWidth: true
         active: !self.wallet.network.electrum && !wallet.network.liquid
@@ -176,15 +186,16 @@ ColumnLayout {
             }
         }
     }
+    */
 
     Component {
         id: mnemonic_dialog
         MnemonicDialog {
             anchors.centerIn: parent
-            wallet: self.wallet
         }
     }
 
+    /*
     Component {
         id: nlocktime_dialog
         NLockTimeDialog {
@@ -199,4 +210,5 @@ ColumnLayout {
             wallet: self.wallet
         }
     }
+    */
 }

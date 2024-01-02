@@ -13,8 +13,6 @@ WalletDialog {
     icon: 'qrc:/svg/gearFill.svg'
     title: qsTrId('id_settings')
 
-    required property Session session
-
     AnalyticsView {
         id: analytics_view
         active: self.opened
@@ -119,9 +117,8 @@ WalletDialog {
                 interactive: false
                 WalletGeneralSettingsView {
                     id: general_view
+                    context: self.context
                     width: general_settings_flickable.availableWidth
-                    wallet: self.wallet
-                    session: self.session
                 }
             }
 
@@ -129,11 +126,9 @@ WalletDialog {
                 id: security_settings_flickable
                 contentHeight: security_view.height
                 interactive: false
-                WalletSecuritySettingsView {
+                Item { //WalletSecuritySettingsView {
                     id: security_view
                     width: security_settings_flickable.availableWidth
-                    wallet: self.wallet
-                    session: self.session
                 }
             }
 
@@ -142,12 +137,9 @@ WalletDialog {
                 sourceComponent: GFlickable {
                     id: two_factor_settings_flickable
                     contentHeight: two_factor_auth_view.height
-                    Wallet2faSettingsView {
+                    Item { //Wallet2faSettingsView {
                         id: two_factor_auth_view
                         width: two_factor_settings_flickable.availableWidth
-                        context: self.wallet.context
-                        wallet: self.wallet
-                        session: self.session
                     }
                 }
             }
@@ -160,8 +152,7 @@ WalletDialog {
                     WalletRecoverySettingsView {
                         id: recovery_view
                         width: recovery_settings_flickable.availableWidth
-                        wallet: self.wallet
-                        session: self.session
+                        context: self.context
                     }
                 }
             }

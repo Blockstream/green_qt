@@ -4,8 +4,9 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 ColumnLayout {
-    required property Wallet wallet
-    required property Session session
+    required property Context context
+    readonly property Wallet wallet: self.context.wallet
+    readonly property Session session: self.context.primarySession
     readonly property Network network: self.session.network
 
     readonly property var per_currency: {
@@ -30,7 +31,7 @@ ColumnLayout {
 
     Controller {
         id: controller
-        context: self.wallet.context
+        context: self.context
     }
 
     SettingsBox {
@@ -135,7 +136,6 @@ ColumnLayout {
                     Layout.fillWidth: true
                     padding: 0
                     background: null
-                    enabled: !controller.dispatcher.busy
                     contentItem: RowLayout {
                         Layout.fillHeight: false
                         spacing: constants.p0
@@ -198,6 +198,7 @@ ColumnLayout {
                 const dialog = message_dialog.createObject(window, {
                     title: qsTrId('id_warning'),
                     message: qsTrId('Failed to set new watch-only credentials.'),
+                    wallet: self.context.wallet,
                 })
                 dialog.open()
             }
@@ -207,7 +208,6 @@ ColumnLayout {
             id: message_dialog
             MessageDialog {
                 id: dialog
-                wallet: self.wallet
                 width: 350
                 actions: [
                     Action {
