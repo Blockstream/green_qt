@@ -50,6 +50,7 @@ Context::Context(const QString& deployment, QObject* parent)
 
 void Context::cleanSessions()
 {
+    QList<Session*> to_release;
     for (auto session : m_sessions_list) {
         const auto network = session->network();
         if (!network->isElectrum()) continue;
@@ -60,16 +61,19 @@ void Context::cleanSessions()
             empty = false;
             break;
         }
-        if (empty) {
-            for (auto account : m_accounts) {
-                if (account->session() != session) continue;
-                m_accounts.removeOne(account);
-                m_accounts_by_pointer.remove(qMakePair(session->network(), account->pointer()));
-            }
-            m_sessions_list.removeOne(session);
-            m_sessions.remove(session->network());
-            session->deleteLater();
+        if (empty) to_release.append(session);
+    }
+
+    while (!to_release.isEmpty() && m_sessions.size() > 1) {
+        auto session = to_release.takeLast();
+        for (auto account : m_accounts) {
+            if (account->session() != session) continue;
+            m_accounts.removeOne(account);
+            m_accounts_by_pointer.remove(qMakePair(session->network(), account->pointer()));
         }
+        m_sessions_list.removeOne(session);
+        m_sessions.remove(session->network());
+        session->deleteLater();
     }
     emit sessionsChanged();
     emit accountsChanged();
