@@ -326,9 +326,9 @@ int main(int argc, char *argv[])
         app.installTranslator(&preferred_translator);
     }
 
-    QObject::connect(Settings::instance(), &Settings::languageChanged, [&](const QString& language) {
+    QObject::connect(Settings::instance(), &Settings::languageChanged, [&] {
         app.removeTranslator(&preferred_translator);
-        const auto filename = QString(":/i18n/green_%1.qm").arg(language);
+        const auto filename = QString(":/i18n/green_%1.qm").arg(Settings::instance()->language());
         if (preferred_translator.load(filename)) {
             app.installTranslator(&preferred_translator);
             engine.retranslate();

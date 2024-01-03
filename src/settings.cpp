@@ -37,7 +37,7 @@ void Settings::setWindowX(int window_x)
 {
     if (m_window_x == window_x) return;
     m_window_x = window_x;
-    emit windowXChanged(m_window_x);
+    emit windowXChanged();
     saveLater();
 }
 
@@ -45,7 +45,7 @@ void Settings::setWindowY(int window_y)
 {
     if (m_window_y == window_y) return;
     m_window_y = window_y;
-    emit windowYChanged(m_window_y);
+    emit windowYChanged();
     saveLater();
 }
 
@@ -53,7 +53,7 @@ void Settings::setWindowWidth(int window_width)
 {
     if (m_window_width == window_width) return;
     m_window_width = window_width;
-    emit windowWidthChanged(m_window_width);
+    emit windowWidthChanged();
     saveLater();
 }
 
@@ -61,7 +61,7 @@ void Settings::setWindowHeight(int window_height)
 {
     if (m_window_height == window_height) return;
     m_window_height = window_height;
-    emit windowHeightChanged(m_window_height);
+    emit windowHeightChanged();
     saveLater();
 }
 
@@ -69,15 +69,15 @@ void Settings::setHistory(const QStringList &history)
 {
     if (m_history == history) return;
     m_history = history;
-    emit historyChanged(m_history);
+    emit historyChanged();
     saveLater();
 }
 
-void Settings::setEnableTestnet(bool enableTestnet)
+void Settings::setEnableTestnet(bool enable_testnet)
 {
-    if (m_enable_testnet == enableTestnet) return;
-    m_enable_testnet = enableTestnet;
-    emit enableTestnetChanged(m_enable_testnet);
+    if (m_enable_testnet == enable_testnet) return;
+    m_enable_testnet = enable_testnet;
+    emit enableTestnetChanged();
     saveLater();
 }
 
@@ -85,7 +85,7 @@ void Settings::setUseProxy(bool use_proxy)
 {
     if (m_use_proxy == use_proxy) return;
     m_use_proxy = use_proxy;
-    emit useProxyChanged(m_use_proxy);
+    emit useProxyChanged();
     saveLater();
 }
 
@@ -93,7 +93,7 @@ void Settings::setUseTor(bool use_tor)
 {
     if (m_use_tor == use_tor) return;
     m_use_tor = use_tor;
-    emit useTorChanged(m_use_tor);
+    emit useTorChanged();
     saveLater();
 }
 
@@ -106,7 +106,7 @@ void Settings::setLanguage(const QString& language)
 {
     if (m_language == language) return;
     m_language = language;
-    emit languageChanged(m_language);
+    emit languageChanged();
     saveLater();
 }
 
@@ -114,7 +114,7 @@ void Settings::setShowNews(bool show_news)
 {
     if (m_show_news == show_news) return;
     m_show_news = show_news;
-    emit showNewsChanged(m_show_news);
+    emit showNewsChanged();
     saveLater();
 }
 
@@ -122,7 +122,7 @@ void Settings::setEnableExperimental(bool enable_experimental)
 {
     if (m_enable_experimental == enable_experimental) return;
     m_enable_experimental = enable_experimental;
-    emit enableExperimentalChanged(m_enable_experimental);
+    emit enableExperimentalChanged();
     saveLater();
 }
 
@@ -130,7 +130,7 @@ void Settings::setLiquidElectrumUrl(const QString &liquid_electrum_url)
 {
     if (m_liquid_electrum_url == liquid_electrum_url) return;
     m_liquid_electrum_url = liquid_electrum_url;
-    emit liquidElectrumUrlChanged(m_liquid_electrum_url);
+    emit liquidElectrumUrlChanged();
     saveLater();
 }
 
@@ -138,7 +138,7 @@ void Settings::setLiquidTestnetElectrumUrl(const QString &liquid_testnet_electru
 {
     if (m_liquid_testnet_electrum_url == liquid_testnet_electrum_url) return;
     m_liquid_testnet_electrum_url = liquid_testnet_electrum_url;
-    emit liquidTestnetElectrumUrlChanged(m_liquid_testnet_electrum_url);
+    emit liquidTestnetElectrumUrlChanged();
     saveLater();
 }
 
@@ -147,7 +147,7 @@ void Settings::updateRecentWallet(const QString& id)
     m_recent_wallets.removeOne(id);
     m_recent_wallets.prepend(id);
     if (m_recent_wallets.size() > 10) m_recent_wallets.removeLast();
-    emit recentWalletsChanged(m_recent_wallets);
+    emit recentWalletsChanged();
     saveLater();
 }
 
@@ -163,7 +163,7 @@ void Settings::setUsePersonalNode(bool use_personal_node)
 {
     if (m_use_personal_node == use_personal_node) return;
     m_use_personal_node = use_personal_node;
-    emit usePersonalNodeChanged(m_use_personal_node);
+    emit usePersonalNodeChanged();
     saveLater();
 }
 
@@ -171,7 +171,7 @@ void Settings::setBitcoinElectrumUrl(const QString& bitcoin_electrum_url)
 {
     if (m_bitcoin_electrum_url == bitcoin_electrum_url) return;
     m_bitcoin_electrum_url = bitcoin_electrum_url;
-    emit bitcoinElectrumUrlChanged(m_bitcoin_electrum_url);
+    emit bitcoinElectrumUrlChanged();
     saveLater();
 }
 
@@ -179,7 +179,7 @@ void Settings::setTestnetElectrumUrl(const QString& testnet_electrum_url)
 {
     if (m_testnet_electrum_url == testnet_electrum_url) return;
     m_testnet_electrum_url = testnet_electrum_url;
-    emit testnetElectrumUrlChanged(m_testnet_electrum_url);
+    emit testnetElectrumUrlChanged();
     saveLater();
 }
 
@@ -187,7 +187,7 @@ void Settings::setEnableSPV(bool enable_spv)
 {
     if (m_enable_spv == enable_spv) return;
     m_enable_spv = enable_spv;
-    emit enableSPVChanged(m_enable_spv);
+    emit enableSPVChanged();
     saveLater();
 }
 
@@ -208,7 +208,7 @@ void Settings::setProxyHost(const QString &proxy_host)
 {
     if (m_proxy_host == proxy_host) return;
     m_proxy_host = proxy_host;
-    emit proxyHostChanged(m_proxy_host);
+    emit proxyHostChanged();
     saveLater();
 }
 
@@ -216,7 +216,7 @@ void Settings::setProxyPort(int proxy_port)
 {
     if (m_proxy_port == proxy_port) return;
     m_proxy_port = proxy_port;
-    emit proxyPortChanged(m_proxy_port);
+    emit proxyPortChanged();
     saveLater();
 }
 
