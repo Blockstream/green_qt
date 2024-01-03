@@ -138,7 +138,11 @@ ItemDelegate {
                             id: convert
                             unit: 'sats'
                             account: delegate.account
-                            value: delegate.account.json.satoshi[delegate.account.network.policyAsset]
+                            value: {
+                                const account = delegate.account
+                                const satoshi = account.json.satoshi
+                                return satoshi ? satoshi[account.network.policyAsset] : '0'
+                            }
                         }
                         ColumnLayout {
                             Label {

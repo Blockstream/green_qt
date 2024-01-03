@@ -118,6 +118,7 @@ WalletDrawer {
                                         asset: controller.asset
                                         size: 32
                                         border: 4
+                                        visible: !!controller.asset
                                     }
                                 }
                                 ColumnLayout {

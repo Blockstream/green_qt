@@ -11,6 +11,8 @@ StackViewPage {
     required property Context context
     required property Account account
     required property Asset asset
+    property bool anyLiquid: false
+    property bool anyAMP: false
     id: self
     title: qsTrId('Choose Asset')
     contentItem: ColumnLayout {
@@ -18,6 +20,7 @@ StackViewPage {
         SearchField {
             Layout.fillWidth: true
             id: search_field
+            visible: false
         }
         FieldTitle {
             Layout.topMargin: 25
@@ -26,6 +29,7 @@ StackViewPage {
                 if (list_view.count === 0) return 'No search results'
                 return 'Search results'
             }
+            visible: false
         }
         TListView {
             id: list_view
@@ -35,121 +39,239 @@ StackViewPage {
             model: AssetsModel {
                 filter: search_field.text.trim()
                 deployment: self.context.deployment
-                minWeight: 0
+                minWeight: 1
             }
             spacing: 4
-            delegate: ItemDelegate {
-                required property int index
-                required property Asset asset
+            footer: ColumnLayout {
+                width: list_view.width
+                spacing: 0
+                SelectorDelegate {
+                    Layout.fillWidth: true
+                    Layout.topMargin: 4
+                    amp: false
+                    index: -1
+                    icon.source: 'qrc:/svg2/liquid_icon.svg'
+                    text: 'Receive any Liquid Asset'
+                    highlighted: self.anyLiquid
+                    onClicked: {
+                        self.anyLiquid = !self.anyLiquid
+                        self.anyAMP = false
+                        list_view.currentIndex = -1
+                    }
+                }
+                SelectorDelegate {
+                    Layout.fillWidth: true
+                    Layout.topMargin: 4
+                    amp: true
+                    index: -1
+                    icon.source: 'qrc:/svg2/amp_icon.svg'
+                    text: 'Receive any AMP Asset'
+                    highlighted: self.anyAMP
+                    onClicked: {
+                        self.anyLiquid = false
+                        self.anyAMP = !self.anyAMP
+                        list_view.currentIndex = -1
+                    }
+                }
+            }
+            delegate: SelectorDelegate {
                 id: delegate
                 width: ListView.view.width
-                padding: 0
-                topPadding: 0
-                bottomPadding: 0
-                topInset: 0
-                bottomInset: 0
-                background: Rectangle {
-                    radius: 4
-                    color: '#2F2F35'
-                    border.width: delegate.ListView.isCurrentItem ? 2 : 0
-                    border.color: '#00B45A'
+                onClicked: {
+                    self.anyLiquid = false
+                    self.anyAMP = false
+                    list_view.currentIndex = delegate.ListView.isCurrentItem ? -1 : delegate.index
                 }
-                contentItem: ColumnLayout {
-                    spacing: 0
-                    AbstractButton {
+            }
+        }
+    }
+
+    component SelectorDelegate: ItemDelegate {
+        required property int index
+        required property Asset asset
+        property bool amp: delegate.asset.amp
+        id: delegate
+        icon.source: UtilJS.iconFor(delegate.asset)
+        text: delegate.asset.name || delegate.asset.id
+        padding: 0
+        topPadding: 0
+        bottomPadding: 0
+        topInset: 0
+        bottomInset: 0
+        highlighted: delegate.ListView.isCurrentItem
+        background: Rectangle {
+            radius: 4
+            color: '#2F2F35'
+            border.width: delegate.highlighted ? 2 : 0
+            border.color: '#00B45A'
+        }
+        contentItem: ColumnLayout {
+            spacing: 0
+            AbstractButton {
+                Layout.fillWidth: true
+                background: null
+                padding: 10
+                contentItem: RowLayout {
+                    spacing: 10
+                    Image {
+                        Layout.alignment: Qt.AlignCenter
+                        Layout.maximumWidth: 32
+                        Layout.maximumHeight: 32
+                        source: delegate.icon.source
+                    }
+                    Label {
                         Layout.fillWidth: true
-                        background: null
+                        font.pixelSize: 14
+                        font.weight: 500
+                        text: delegate.text
+                        elide: Label.ElideMiddle
+                    }
+                }
+                onClicked: delegate.clicked()
+            }
+            Collapsible {
+                Layout.fillWidth: true
+                collapsed: !delegate.highlighted
+                contentWidth: width
+                contentHeight: collapsible_layout.height
+                ColumnLayout {
+                    id: collapsible_layout
+                    width: parent.width
+                    spacing: 0
+                    Pane {
+                        Layout.fillWidth: true
                         padding: 10
+                        visible: delegate.amp
+                        background: Rectangle {
+                            color: '#00B45A'
+                            opacity: 0.2
+                        }
                         contentItem: RowLayout {
                             spacing: 10
                             Image {
                                 Layout.alignment: Qt.AlignCenter
-                                Layout.maximumWidth: 32
-                                Layout.maximumHeight: 32
-                                source: UtilJS.iconFor(delegate.asset)
+                                source: 'qrc:/svg2/shield_warning.svg'
                             }
                             Label {
+                                Layout.preferredWidth: 0
                                 Layout.fillWidth: true
-                                font.pixelSize: 14
-                                font.weight: 500
-                                text: delegate.asset.name || delegate.asset.id
-                                elide: Label.ElideMiddle
+                                color: '#00B45A'
+                                font.pixelSize: 12
+                                font.weight: 600
+                                text: {
+                                    if (delegate.asset) {
+                                        return `${delegate.asset.name} is an AMP asset. You need an AMP account in order to receive it.`
+                                    } else {
+                                        return 'You need an AMP account in order to receive AMP assets.'
+                                    }
+                                }
+                                wrapMode: Label.WordWrap
                             }
                         }
-                        onClicked: list_view.currentIndex = delegate.ListView.isCurrentItem ? -1 : delegate.index
                     }
-                    Collapsible {
+                    Rectangle {
+                        width: parent.width
+                        height: 2
+                        color: delegate.highlighted ? '#00B45A' : 'transparent'
+                    }
+                    Repeater {
+                        id: accounts_repeater
+                        model: {
+                            const accounts = []
+                            for (let i = 0; i < self.context.accounts.length; i++) {
+                                const account = self.context.accounts[i]
+                                if (account.hidden) continue
+                                if (delegate.asset) {
+                                    if (delegate.asset.networkKey === account.network.key) {
+                                        if (!account.network.electrum || account.json.bip44_discovered || account.name.length > 0) {
+                                            accounts.push(account)
+                                        }
+                                    }
+                                } else if (self.anyLiquid) {
+                                    if (account.network.liquid) {
+                                        accounts.push(account)
+                                    }
+                                } else if (self.anyAMP) {
+                                    if (account.type === '2of2_no_recovery') {
+                                        accounts.push(account)
+                                    }
+                                }
+                            }
+                            return accounts
+                        }
+                        delegate: SelectAccountButton {
+                            required property var modelData
+                            Layout.fillWidth: true
+                            id: button
+                            asset: delegate.asset
+                            account: button.modelData
+                            onSelected: (account, asset) => self.selected(button.account, button.asset)
+                        }
+                    }
+                    CreateAccountButton {
                         Layout.fillWidth: true
-                        collapsed: !delegate.ListView.isCurrentItem
-                        contentWidth: width
-                        contentHeight: collapsible_layout.height
-                        ColumnLayout {
-                            id: collapsible_layout
-                            width: parent.width
-                            spacing: 0
-                            Pane {
-                                Layout.fillWidth: true
-                                padding: 10
-                                visible: delegate.asset.amp
-                                background: Rectangle {
-                                    color: '#00B45A'
-                                    opacity: 0.2
-                                }
-                                contentItem: RowLayout {
-                                    spacing: 10
-                                    Image {
-                                        Layout.alignment: Qt.AlignCenter
-                                        source: 'qrc:/svg2/shield_warning.svg'
-                                    }
-                                    Label {
-                                        Layout.preferredWidth: 0
-                                        Layout.fillWidth: true
-                                        color: '#00B45A'
-                                        font.pixelSize: 12
-                                        font.weight: 600
-                                        text: `${delegate.asset.name} is an AMP asset. You need an AMP account in order to receive it.`
-                                        wrapMode: Label.WordWrap
-                                    }
-                                }
-                            }
-                            Rectangle {
-                                width: parent.width
-                                height: 2
-                                color: delegate.ListView.isCurrentItem ? '#00B45A' : 'transparent'
-                            }
-                            Repeater {
-                                id: accounts_repeater
-                                model: {
-                                    const accounts = []
-                                    for (let i = 0; i < self.context.accounts.length; i++) {
-                                        const account = self.context.accounts[i]
-                                        if (account.hidden) continue
-                                        const satoshi = account.json.satoshi[delegate.asset.id]
-                                        accounts.push({ account, satoshi })
-                                    }
-                                    return accounts
-                                }
-                                delegate: SelectAccountButton {
-                                    required property var modelData
-                                    Layout.fillWidth: true
-                                    id: button
-                                    asset: delegate.asset
-                                    account: button.modelData.account
-                                    satoshi: button.modelData.satoshi
-                                    onSelected: (account, asset) => self.selected(account, asset)
-                                }
-                            }
-                            CreateAccountButton {
-                                Layout.fillWidth: true
-                                onClicked: {
-                                    self.StackView.view.push(create_account_page, {
-                                        asset: delegate.asset,
-                                    })
-                                }
-                            }
+                        onClicked: {
+                            self.StackView.view.push(create_account_page, {
+                                asset: delegate.asset,
+                                anyLiquid: self.anyLiquid,
+                                anyAMP: self.anyAMP,
+                            })
                         }
                     }
                 }
+            }
+        }
+    }
+
+    component OptionButton: AbstractButton {
+        Layout.fillWidth: true
+        id: button
+        leftPadding: 20
+        rightPadding: 20
+        topPadding: 10
+        bottomPadding: 10
+        background: Rectangle {
+            color: Qt.lighter('#222226', button.hovered ? 1.2 : 1)
+            radius: 5
+            Rectangle {
+                anchors.fill: parent
+                anchors.margins: -4
+                border.width: 2
+                border.color: '#00B45A'
+                color: 'transparent'
+                radius: 9
+                visible: {
+                    if (button.activeFocus) {
+                        switch (button.focusReason) {
+                        case Qt.TabFocusReason:
+                        case Qt.BacktabFocusReason:
+                        case Qt.ShortcutFocusReason:
+                            return true
+                        }
+                    }
+                    return false
+                }
+                z: -1
+            }
+        }
+        contentItem: RowLayout {
+            spacing: 10
+            Image {
+                property real size: 32
+                source: button.icon.source
+                Layout.preferredHeight: size
+                Layout.preferredWidth: size
+                height: size
+                width: size
+                fillMode: Image.PreserveAspectFit
+                mipmap: true
+            }
+            Label {
+                Layout.fillWidth: true
+                font.pixelSize: 14
+                font.weight: 500
+                text: button.text
+                wrapMode: Label.WrapAtWordBoundaryOrAnywhere
             }
         }
     }
@@ -158,7 +280,6 @@ StackViewPage {
         signal selected(Account account, Asset asset)
         required property Account account
         required property Asset asset
-        required property var satoshi
         onClicked: button.selected(button.account, button.asset)
         id: button
         background: Item {
@@ -195,30 +316,6 @@ StackViewPage {
                     font.weight: 400
                     opacity: 0.4
                     text: UtilJS.networkLabel(button.account.network) + ' / ' + UtilJS.accountLabel(button.account)
-                }
-            }
-            Convert {
-                id: convert
-                account: button.account
-                asset: button.asset
-                value: button.satoshi ?? '0'
-                unit: 'sats'
-            }
-            ColumnLayout {
-                Label {
-                    Layout.alignment: Qt.AlignRight
-                    font.pixelSize: 14
-                    font.weight: 500
-                    text: convert.unitLabel
-                    wrapMode: Label.Wrap
-                }
-                Label {
-                    Layout.alignment: Qt.AlignRight
-                    font.pixelSize: 11
-                    font.weight: 400
-                    opacity: 0.4
-                    text: convert.fiatLabel
-                    visible: convert.fiat
                 }
             }
             HSpacer {

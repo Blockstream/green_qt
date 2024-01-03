@@ -64,7 +64,7 @@ QString ReceiveAddressController::address() const
 
 QString ReceiveAddressController::uri() const
 {
-    if (!m_account || !m_asset || m_generating) return {};
+    if (!m_account || m_generating) return {};
     const auto context = m_account->context();
     const auto network = m_account->network();
     const auto session = m_account->session();
@@ -85,7 +85,7 @@ QString ReceiveAddressController::uri() const
             return QString("%1:%2?amount=%3")
                     .arg(bip21_prefix, m_address, amount);
         }
-    } else if (network->isLiquid() && m_asset->id() != network->policyAsset()) {
+    } else if (network->isLiquid() && m_asset && m_asset->id() != network->policyAsset()) {
         const auto asset_id = m_asset->id();
         return QString("%1:%2?assetid=%3")
             .arg(bip21_prefix, m_address, asset_id);
