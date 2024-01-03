@@ -151,6 +151,7 @@ StackViewPage {
                                     for (let i = 0; i < self.context.accounts.length; i++) {
                                         const account = self.context.accounts[i]
                                         if (account.hidden) continue
+                                        if (account.network.electrum && !account.json.bip44_discovered && account.name.length === 0) continue
                                         const satoshi = account.json.satoshi[delegate.asset.key]
                                         if (satoshi > 0) accounts.push({ account, satoshi })
                                     }
