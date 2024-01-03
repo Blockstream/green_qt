@@ -236,11 +236,6 @@ void Settings::load()
     if (QFileInfo::exists(path)) {
         QSettings settings(path, QSettings::IniFormat);
         load(settings);
-    } else {
-        // Load settings from old location and save on new location
-        QSettings settings;
-        load(settings);
-        saveNow();
     }
 
     // verify if window position is contained in any of the available screens and reposition in primary screen if necessary
