@@ -42,7 +42,6 @@ class CreateAccountController : public Controller
     Q_PROPERTY(QString type READ type WRITE setType NOTIFY typeChanged)
     Q_PROPERTY(QStringList recoveryMnemonic READ recoveryMnemonic WRITE setRecoveryMnemonic NOTIFY recoveryMnemonicChanged)
     Q_PROPERTY(QString recoveryXpub READ recoveryXpub WRITE setRecoveryXpub NOTIFY recoveryXpubChanged)
-    Q_PROPERTY(Account* account READ account NOTIFY accountChanged)
     QML_ELEMENT
 
 public:
@@ -60,7 +59,6 @@ public:
     QString recoveryXpub() const { return m_recovery_xpub; }
     void setRecoveryXpub(const QString& recovery_xpub);
 
-    Account* account() const { return m_account; }
     Q_INVOKABLE QStringList generateMnemonic(int size) const;
 
 signals:
@@ -71,7 +69,6 @@ signals:
     void created(Account* account);
     void recoveryMnemonicChanged();
     void recoveryXpubChanged();
-    void accountChanged();
 
 public slots:
     void create();

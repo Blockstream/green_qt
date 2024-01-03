@@ -116,7 +116,6 @@ void CreateAccountController::create()
 
             m_account = account;
             m_account->setName(m_name);
-            emit accountChanged();
             auto update_task = new UpdateAccountTask({{ "name", m_name }}, m_account->session());
             auto group = new TaskGroup(this);
             group->add(update_task);
@@ -176,7 +175,6 @@ void CreateAccountController::create()
     connect(group, &TaskGroup::finished, this, [=] {
         m_account = m_context->getAccountByPointer(m_network, create_account->pointer());
         if (!m_account) return;
-        emit accountChanged();
         emit created(m_account);
     });
 }
