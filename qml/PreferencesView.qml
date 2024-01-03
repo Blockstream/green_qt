@@ -90,7 +90,7 @@ AbstractDialog {
     component FileButton: BaseButton {
         required property url url
         id: button
-        onClicked: Qt.openUrlExternally(button.url)
+        hoverEnabled: false
         contentItem: RowLayout {
             spacing: 20
             Label {
@@ -100,10 +100,12 @@ AbstractDialog {
                 elide: Label.ElideMiddle
             }
             CircleButton {
+                hoverEnabled: true
                 icon.source: 'qrc:/svg2/copy.svg'
                 onClicked: Clipboard.copy(button.text)
             }
             ShareButton {
+                hoverEnabled: true
                 onClicked: Qt.openUrlExternally(button.url)
             }
         }
