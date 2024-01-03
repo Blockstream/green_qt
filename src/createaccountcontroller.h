@@ -72,7 +72,9 @@ signals:
 
 public slots:
     void create();
-
+private slots:
+    void ensureSession();
+    void ensureAccount();
 private:
     Asset* m_asset{nullptr};
     Network* m_network{nullptr};

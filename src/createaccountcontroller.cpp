@@ -82,26 +82,6 @@ void CreateAccountController::create()
 {
     Q_ASSERT(noErrors());
 
-    if (m_name.isEmpty()) {
-        QString name;
-        if (m_type == "2of2" || m_type == "2of3") {
-            name = "2FA Protected";
-        }
-        if (m_type == "2of2_no_recovery") {
-            name = "AMP Account";
-        }
-        if (m_type == "p2wpkh") {
-            name = "Standard";
-        }
-        if (m_type == "p2sh-p2wpkh") {
-            name = "Legacy SegWit";
-        }
-        if (m_type == "p2pkh") {
-            name = "Legacy";
-        }
-        setName(m_network->isLiquid() ? name + " Liquid" : name);
-    }
-
     auto monitor = new TaskGroupMonitor(this);
     setMonitor(monitor);
 
@@ -128,54 +108,129 @@ void CreateAccountController::create()
         }
     }
 
-    auto details = QJsonObject{
-        { "name", m_name },
-        { "type", m_type },
-    };
+    ensureSession();
+}
 
-    if (m_type == "2of3") {
-        if (!m_recovery_mnemonic.isEmpty()) {
-            Q_ASSERT(m_recovery_xpub.isEmpty());
-            details["recovery_mnemonic"] = m_recovery_mnemonic.join(" ");
-        } else if (!m_recovery_xpub.isEmpty()) {
-            details["recovery_xpub"] = m_recovery_xpub;
-        } else {
-            Q_UNREACHABLE();
-        }
-    }
-
+void CreateAccountController::ensureSession()
+{
     auto session = m_context->getOrCreateSession(m_network);
-
     auto session_connect = new ConnectTask(session);
     auto session_register = session->registerUser();
     auto session_login = session->login();
-
-    auto create_account = new CreateAccountTask(details, session);
     auto load_accounts = new LoadAccountsTask(false, session);
 
+    session_connect->then(session_register);
     session_register->then(session_login);
-    session_login->then(create_account);
-    create_account->then(load_accounts);
+    session_login->then(load_accounts);
 
     auto group = new TaskGroup(this);
-
     group->add(session_connect);
     group->add(session_register);
     group->add(session_login);
-    group->add(create_account);
     group->add(load_accounts);
 
-    monitor->add(group);
+    monitor()->add(group);
     dispatcher()->add(group);
 
-    connect(create_account, &Task::failed, this, [=](const QString& error) {
-        setError("create", error);
+    connect(group, &TaskGroup::finished, this, [=] {
+        ensureAccount();
     });
+}
+
+void CreateAccountController::ensureAccount()
+{
+    if (m_name.isEmpty()) {
+        QString name;
+        if (m_type == "2of2" || m_type == "2of3") {
+            name = "2FA Protected";
+        }
+        if (m_type == "2of2_no_recovery") {
+            name = "AMP Account";
+        }
+        if (m_type == "p2wpkh") {
+            name = "Standard";
+        }
+        if (m_type == "p2sh-p2wpkh") {
+            name = "Legacy SegWit";
+        }
+        if (m_type == "p2pkh") {
+            name = "Legacy";
+        }
+        setName(m_network->isLiquid() ? name + " Liquid" : name);
+    }
+
+    auto session = m_context->getOrCreateSession(m_network);
+    auto group = new TaskGroup(this);
+    Task* task = nullptr;
+    for (auto account : m_context->getAccounts()) {
+        if (account->session() == session && account->pointer() == 0 && account->name().isEmpty()) {
+            if (account->type() == m_type) {
+                task = new UpdateAccountTask({
+                    { "subaccount", static_cast<qint64>(account->pointer()) },
+                    { "name", m_name }
+                }, session);
+                m_account = account;
+            } else {
+                task = new UpdateAccountTask({
+                    { "subaccount", static_cast<qint64>(account->pointer()) },
+                    { "hidden", true }
+                }, session);
+            }
+            group->add(task);
+            break;
+        }
+    }
+    if (!m_account) {
+        auto details = QJsonObject{
+            { "name", m_name },
+            { "type", m_type },
+        };
+
+        if (m_type == "2of3") {
+            if (!m_recovery_mnemonic.isEmpty()) {
+                Q_ASSERT(m_recovery_xpub.isEmpty());
+                details["recovery_mnemonic"] = m_recovery_mnemonic.join(" ");
+            } else if (!m_recovery_xpub.isEmpty()) {
+                details["recovery_xpub"] = m_recovery_xpub;
+            } else {
+                Q_UNREACHABLE();
+            }
+        }
+
+        auto create_account = new CreateAccountTask(details, session);
+        auto load_accounts = new LoadAccountsTask(false, session);
+
+        group->add(create_account);
+        group->add(load_accounts);
+
+        if (task) task->then(create_account);
+        create_account->then(load_accounts);
+        task = load_accounts;
+
+        connect(create_account, &Task::failed, this, [=](const QString& error) {
+            setError("create", error);
+        });
+        connect(create_account, &Task::finished, this, [=] {
+            m_account = m_context->getAccountByPointer(m_network, create_account->pointer());
+        });
+    }
+
+    auto load_config = new LoadTwoFactorConfigTask(session);
+    auto load_currencies = new LoadCurrenciesTask(session);
+
+    group->add(load_config);
+    group->add(load_currencies);
+
+    if (task) task->then(load_config);
+    task->then(load_currencies);
+
+    monitor()->add(group);
+    dispatcher()->add(group);
 
     connect(group, &TaskGroup::finished, this, [=] {
-        m_account = m_context->getAccountByPointer(m_network, create_account->pointer());
-        if (!m_account) return;
-        emit created(m_account);
+        if (m_account) {
+            emit created(m_account);
+        }
     });
 }
 
