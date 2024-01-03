@@ -7,13 +7,10 @@ import QtQuick.Layouts
 import "util.js" as UtilJS
 
 StackViewPage {
+    signal selected(account: Account, asset: Asset)
     required property Context context
     required property Account account
     required property Asset asset
-    property bool showCreateAccount: false
-    property bool filterEmpty: false
-
-    signal selected(account: Account, asset: Asset)
     id: self
     title: qsTrId('Choose Asset')
     contentItem: ColumnLayout {
@@ -35,18 +32,43 @@ StackViewPage {
             Layout.fillWidth: true
             Layout.fillHeight: true
             currentIndex: -1
-            model: AssetsModel {
-                filter: search_field.text.trim()
-                deployment: context.deployment
-                minWeight: 1
+            model: {
+                const deployment = self.context.deployment
+                const assets = new Set()
+                const search = search_field.text.trim().toLowerCase()
+                for (let i = 0; i < self.context.accounts.length; i++) {
+                    const account = self.context.accounts[i]
+                    for (const [id, satoshi] of Object.entries(account.json.satoshi)) {
+                        if (satoshi === 0) continue
+                        const asset = AssetManager.assetWithId(deployment, id === 'btc' ? account.network.key : id)
+                        if (search) {
+                            const term = asset.name ? asset.name.toLowerCase() : asset.id
+                            if (term.indexOf(search) < 0) continue
+                        }
+                        assets.add(asset)
+                    }
+                }
+                return [...assets].sort((a, b) => {
+                    if (a.weight > b.weight) return -1
+                    if (b.weight > a.weight) return 1
+                    if (b.weight === 0) {
+                        if (a.icon && !b.icon) return -1
+                        if (!a.icon && b.icon) return 1
+                        if (Object.keys(a.data).length > 0 && Object.keys(b.data).length === 0) return -1
+                        if (Object.keys(a.data).length === 0 && Object.keys(b.data).length > 0) return 1
+                    }
+                    return a.name.localeCompare(b.name)
+                })
             }
+
             spacing: 4
             delegate: ItemDelegate {
-                required property Asset asset
+                required property var modelData
                 required property int index
+                property Asset asset: modelData
                 id: delegate
                 width: ListView.view.width
-                enabled: accounts_repeater.count > 0 || self.showCreateAccount
+                enabled: accounts_repeater.count > 0
                 padding: 0
                 topPadding: 0
                 bottomPadding: 0
@@ -76,7 +98,8 @@ StackViewPage {
                                 Layout.fillWidth: true
                                 font.pixelSize: 14
                                 font.weight: 500
-                                text: delegate.asset.name
+                                opacity: delegate.asset.name ? 1 : 0.6
+                                text: delegate.asset.name || delegate.asset.id
                                 elide: Label.ElideMiddle
                             }
                         }
@@ -121,12 +144,6 @@ StackViewPage {
                                 height: 2
                                 color: delegate.ListView.isCurrentItem ? '#00B45A' : 'transparent'
                             }
-                            Label {
-                                visible: false
-                                Layout.fillWidth: true
-                                wrapMode: Label.WordWrap
-                                text: JSON.stringify(delegate.asset.data, null, '  ')
-                            }
                             Repeater {
                                 id: accounts_repeater
                                 model: {
@@ -134,10 +151,8 @@ StackViewPage {
                                     for (let i = 0; i < self.context.accounts.length; i++) {
                                         const account = self.context.accounts[i]
                                         if (account.hidden) continue
-                                        if (account.network.key !== delegate.asset.networkKey) continue
-                                        const key = account.network.liquid ? delegate.asset.id : 'btc'
-                                        const satoshi = account.json.satoshi[key]
-                                        if (!self.filterEmpty || satoshi > 0) accounts.push({ account, satoshi })
+                                        const satoshi = account.json.satoshi[delegate.asset.key]
+                                        if (satoshi > 0) accounts.push({ account, satoshi })
                                     }
                                     return accounts
                                 }
@@ -149,15 +164,6 @@ StackViewPage {
                                     account: button.modelData.account
                                     satoshi: button.modelData.satoshi
                                     onSelected: (account, asset) => self.selected(account, asset)
-                                }
-                            }
-                            CreateAccountButton {
-                                Layout.fillWidth: true
-                                visible: self.showCreateAccount
-                                onClicked: {
-                                    self.StackView.view.push(create_account_page, {
-                                        asset: delegate.asset,
-                                    })
                                 }
                             }
                         }
@@ -240,35 +246,6 @@ StackViewPage {
                 Layout.alignment: Qt.AlignCenter
                 source: 'qrc:/svg2/next_arrow.svg'
             }
-        }
-    }
-
-    component CreateAccountButton: AbstractButton {
-        background: null
-        padding: 10
-        contentItem: RowLayout {
-            Label {
-                Layout.alignment: Qt.AlignCenter
-                font.pixelSize: 14
-                font.weight: 500
-                text: qsTrId('id_create_new_account')
-            }
-            HSpacer {
-            }
-            Image {
-                Layout.alignment: Qt.AlignCenter
-                source: 'qrc:/svg2/next_arrow.svg'
-            }
-        }
-    }
-
-    Component {
-        id: create_account_page
-        CreateAccountPage {
-            id: page
-            context: self.context
-            editableAsset: false
-            onCreated: (account) => self.selected(account, page.asset)
         }
     }
 }

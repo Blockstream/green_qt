@@ -22,6 +22,7 @@ class Asset : public QObject
     Q_PROPERTY(bool amp READ isAmp NOTIFY isAmpChanged)
     Q_PROPERTY(int weight READ weight NOTIFY weightChanged)
     Q_PROPERTY(QJsonObject data READ data NOTIFY dataChanged)
+    Q_PROPERTY(QString key READ key CONSTANT)
     QML_ELEMENT
     QML_UNCREATABLE("Asset is instanced by AssetManager")
 public:
@@ -51,6 +52,9 @@ public:
     QJsonObject data() const { return m_data; }
     void setData(const QJsonObject& data);
 
+    QString key() const { return m_key; }
+    void setKey(const QString& key);
+
     Q_INVOKABLE qint64 parseAmount(const QString& amount) const;
     Q_INVOKABLE QString formatAmount(qint64 amount, bool include_ticker, const QString& unit = {}) const;
 
@@ -75,6 +79,7 @@ private:
     QJsonObject m_data;
     bool m_is_amp{false};
     int m_weight{0};
+    QString m_key;
 };
 
 class AssetManager : public QObject
@@ -118,6 +123,7 @@ signals:
     void minWeightChanged();
 protected:
     bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const override;
+    bool lessThan(const QModelIndex &left, const QModelIndex &right) const override;
 private:
     QString m_filter;
     QString m_deployment;

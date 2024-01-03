@@ -12,6 +12,7 @@ Asset::Asset(const QString& deployment, const QString& id, QObject* parent)
     : QObject(parent)
     , m_deployment(deployment)
     , m_id(id)
+    , m_key(id)
     , m_item(new QStandardItem)
 {
     m_item->setData(QVariant::fromValue(this));
@@ -60,11 +61,14 @@ void Asset::setData(const QJsonObject &data)
     if (m_data == data) return;
     m_data = data;
     emit dataChanged();
+    if (m_data.value("name") != "btc") {
+        setName(m_data.value("name").toString());
+    }
+}
 
-    auto name = m_data.value("name").toString();
-    if (name != "btc") setName(name.isEmpty() ? m_id : name);
-//    if (name == "btc") return "Liquid Bitcoin";
-//    return name;
+void Asset::setKey(const QString &key)
+{
+    m_key = key;
 }
 
 qint64 Asset::parseAmount(const QString& amount) const
@@ -137,9 +141,11 @@ AssetManager::AssetManager()
     for (const auto network : NetworkManager::instance()->networks()) {
         const auto network_key = network->key();
         const auto id = network->data().value("policy_asset").toString(network_key);
+        const auto key = network->data().value("policy_asset").toString("btc");
         auto asset = assetWithId(network->deployment(), id);
         asset->setNetworkKey(network_key);
         asset->setWeight(INT_MAX);
+        asset->setKey(key);
         if (network->isLiquid() && network->isMainnet()) {
             asset->setName(network->displayName() + " Bitcoin");
         } else {
@@ -181,8 +187,8 @@ AssetsModel::AssetsModel(QObject* parent)
 {
     setSourceModel(AssetManager::instance()->model());
     setDynamicSortFilter(true);
-    setSortRole(Qt::UserRole + 2);
-    sort(0, Qt::DescendingOrder); // NOLINT(build/include_what_you_use)
+    setDynamicSortFilter(true);
+    sort(0); // NOLINT(build/include_what_you_use)
 }
 
 void AssetsModel::setFilter(const QString& filter)
@@ -214,11 +220,11 @@ bool AssetsModel::filterAcceptsRow(int source_row, const QModelIndex &source_par
     const auto index = sourceModel()->index(source_row, 0, source_parent);
     const auto asset = index.data(Qt::UserRole + 1).value<Asset*>();
 
-//    if (!asset->hasIcon()) return false;
-
     if (asset->weight() < m_min_weight) return false;
 
-    if (!m_filter.isEmpty()) {
+    if (m_filter.isEmpty()) {
+        if (!asset->hasData() || !asset->hasIcon()) return false;
+    } else {
         if (!asset->name().contains(m_filter, Qt::CaseInsensitive)) return false;
     }
 
@@ -229,17 +235,20 @@ bool AssetsModel::filterAcceptsRow(int source_row, const QModelIndex &source_par
     return true;
 }
 
-//bool AssetsModel::lessThan(const QModelIndex &left, const QModelIndex &right) const
-//{
-//    const auto asset_left = left.data(Qt::UserRole + 1).value<Asset*>();
-//    const auto asset_right = right.data(Qt::UserRole + 1).value<Asset*>();
+bool AssetsModel::lessThan(const QModelIndex &left, const QModelIndex &right) const
+{
+    const auto asset_left = left.data(Qt::UserRole + 1).value<Asset*>();
+    const auto asset_right = right.data(Qt::UserRole + 1).value<Asset*>();
 
-//    if (asset_left->weight() < asset_right->weight()) return true;
-//    if (asset_left->weight() > asset_right->weight()) return false;
+    if (asset_left->weight() > asset_right->weight()) return true;
+    if (asset_left->weight() < asset_right->weight()) return false;
 
-////    if (asset_left->hasData()) {
+    if (asset_left->weight() == 0) {
+        if (asset_left->hasIcon() && !asset_right->hasIcon()) return true;
+        if (!asset_left->hasIcon() && asset_right->hasIcon()) return false;
 
-////    }
-
-//    return QSortFilterProxyModel::lessThan(left, right);
-//}
+        if (asset_left->hasData() && !asset_right->hasData()) return true;
+        if (!asset_left->hasData() && asset_right->hasData()) return false;
+    }
+    return QString::localeAwareCompare(asset_left->name(), asset_right->name()) < 0;
+}

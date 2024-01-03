@@ -8,7 +8,6 @@ ItemDelegate {
     property Account account
     property Asset asset
     property var satoshi
-    readonly property var name: self.asset.data.name === 'btc' ? 'L-BTC' : self.asset.data?.name
     readonly property bool hasDetails: self.asset.hasData
     onClicked: if (self.hasDetails) self.assetClicked(self.asset)
     id: self
@@ -45,10 +44,10 @@ ItemDelegate {
             Label {
                 Layout.fillWidth: true
                 Layout.preferredWidth: 0
-                color: self.name ? '#FFF' : '#929292'
+                color: self.asset.name ? '#FFF' : '#929292'
                 font.pixelSize: 14
                 font.weight: 600
-                text: self.name ?? self.asset.id
+                text: self.asset.name || self.asset.id
                 wrapMode: Label.Wrap
             }
             Label {

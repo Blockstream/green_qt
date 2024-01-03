@@ -219,11 +219,11 @@ WalletDrawer {
 
     Component {
         id: account_asset_selector
-        AccountAssetSelector {
+        ReceiveAccountAssetSelector {
+            id: selector
             context: controller.context
             account: controller.account
             asset: controller.asset
-            showCreateAccount: true
             onSelected: (account, asset) => {
                 stack_view.pop(receive_view)
                 controller.account = account

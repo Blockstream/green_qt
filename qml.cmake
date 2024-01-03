@@ -150,7 +150,7 @@ SET(QML_FILES
     qml/ReceiveDrawer.qml
     qml/SendDrawer.qml
     qml/BackButton.qml
-    qml/AccountAssetSelector.qml
+    qml/SendAccountAssetSelector.qml
     qml/AccountAssetField.qml
     qml/AddressField.qml
     qml/AmountField.qml
@@ -246,6 +246,7 @@ SET(QML_FILES
     qml/LedgerPage.qml
     qml/LedgerDeviceDelegate.qml
     qml/TTextField.qml
+    qml/ReceiveAccountAssetSelector.qml
 )
 
 if (GREEN_NO_RESOURCES)

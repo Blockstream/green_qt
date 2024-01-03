@@ -132,7 +132,11 @@ QString Convert::unitLabel() const
     if (m_liquid_asset) {
         const auto precision = m_asset->data().value("precision").toInt(0);
         const auto satoshi = m_result.value("satoshi").toString();
-        const auto amount = QLocale::c().toString(satoshi.toDouble() / qPow(10, precision), 'f', precision);
+        auto amount = QLocale::c().toString(satoshi.toDouble() / qPow(10, precision), 'f', precision);
+        if (amount.contains('.')) {
+            amount.replace(QRegularExpression("0+$"), {});
+            amount.replace(QRegularExpression("\\.$"), {});
+        }
         if (m_asset->data().contains("ticker")) {
             const auto ticker = m_asset->data().value("ticker").toString();
             return amount + " " + ticker;

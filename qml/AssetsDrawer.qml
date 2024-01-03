@@ -28,13 +28,15 @@ WalletDrawer {
             }
         }
         return [...assets.values()].sort((a, b) => {
-            if (a.asset.data.name === 'btc') return -1
-            if (b.asset.data.name === 'btc') return 1
-            if (a.asset.icon && !b.asset.icon) return -1
-            if (!a.asset.icon && b.asset.icon) return 1
-            if (a.asset.name && !b.asset.name) return -1
-            if (!a.asset.name && b.asset.name) return 1
-            return a.asset.id.localeCompare(b.asset.id)
+            if (a.asset.weight > b.asset.weight) return -1
+            if (b.asset.weight > a.asset.weight) return 1
+            if (b.asset.weight === 0) {
+                if (a.asset.icon && !b.asset.icon) return -1
+                if (!a.asset.icon && b.asset.icon) return 1
+                if (Object.keys(a.asset.data).length > 0 && Object.keys(b.asset.data).length === 0) return -1
+                if (Object.keys(a.asset.data).length === 0 && Object.keys(b.asset.data).length > 0) return 1
+            }
+            return a.asset.name.localeCompare(b.asset.name)
         })
     }
     id: self
@@ -81,7 +83,6 @@ WalletDrawer {
     component AssetButton: AbstractButton {
         required property Asset asset
         required property string satoshi
-        readonly property var name: button.asset.data.name === 'btc' ? 'L-BTC' : button.asset.data?.name
         Convert {
             id: convert
             context: self.context
@@ -110,10 +111,10 @@ WalletDrawer {
                 Layout.alignment: Qt.AlignCenter
                 Layout.fillWidth: true
                 Layout.preferredWidth: 0
-                color: button.name ? '#FFF' : '#929292'
+                color: button.asset.name ? '#FFF' : '#929292'
                 font.pixelSize: 14
                 font.weight: 600
-                text: button.name ?? button.asset.id
+                text: button.asset.name || button.asset.id
                 elide: Label.ElideRight
             }
             ColumnLayout {
