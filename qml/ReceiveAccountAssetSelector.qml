@@ -34,7 +34,7 @@ StackViewPage {
             currentIndex: -1
             model: AssetsModel {
                 filter: search_field.text.trim()
-                deployment: selector.context.deployment
+                deployment: self.context.deployment
                 minWeight: 0
             }
             spacing: 4

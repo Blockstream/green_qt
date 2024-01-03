@@ -12,6 +12,8 @@ StackViewPage {
     required property Asset asset
     required property bool editableAsset
     property bool advanced: false
+    property bool anyLiquid: false
+    property bool anyAMP: false
 
     signal created(account: Account)
 
@@ -21,8 +23,9 @@ StackViewPage {
     component SecurityPolicyButton2: SecurityPolicyButton {
         required property string serverType
         required property string type
+        property string networkKey: self.asset?.networkKey ?? 'liquid'
         id: btn
-        network: NetworkManager.networkWithServerType(self.context.deployment, self.asset.networkKey, btn.serverType)
+        network: NetworkManager.networkWithServerType(self.context.deployment, btn.networkKey, btn.serverType)
         action: Action {
             onTriggered: {
                 self.StackView.view.push(controller_page, {
@@ -35,21 +38,23 @@ StackViewPage {
 
     component SinglesigButton: SecurityPolicyButton2 {
         serverType: 'electrum'
+        visible: self.asset || self.anyLiquid
     }
     component MultisigButton: SecurityPolicyButton2 {
         serverType: 'green'
+        visible: self.asset || self.anyLiquid
     }
 
     component LightningButton: SecurityPolicyButton {
         beta: true
         description: 'Fast transactions on the Lightning Network, powered by Greenlight.'
         icon.source: 'qrc:/svg2/lightning.svg'
-        network: null
+        network: NetworkManager.networkWithServerType(self.context.deployment, 'bitcoin', 'electrum')
         tag: 'fastest'
         tagColor: '#D8A800'
         text: 'lightning'
         title: qsTrId('id_lightning')
-        visible: context.deployment === 'mainnet' && self.asset.networkKey === 'bitcoin' && Settings.enableExperimental
+        visible: context.deployment === 'mainnet' && self.asset?.networkKey === 'bitcoin' && Settings.enableExperimental
         action: Action {
             onTriggered: {
                 self.StackView.view.push(lightning_page);
@@ -72,10 +77,15 @@ StackViewPage {
                 Layout.fillWidth: true
                 id: asset_field
                 asset: self.asset
+                anyLiquid: self.anyLiquid
+                anyAMP: self.anyAMP
                 editable: self.editableAsset
                 onClicked: {
                     if (self.editableAsset) {
-                        self.StackView.view.push(asset_selector, { asset: asset_field.asset })
+                        self.StackView.view.push(asset_selector, {
+                            context: self.context,
+                            asset: asset_field.asset,
+                        })
                     }
                 }
             }
@@ -96,7 +106,7 @@ StackViewPage {
                 tag: qsTrId('id_legacy_segwit')
                 title: qsTrId('id_legacy_segwit')
                 description: qsTrId('id_simple_portable_standard')
-                visible: self.advanced
+                visible: !self.anyAMP && self.advanced
             }
             MultisigButton {
                 type: '2of2'
@@ -110,7 +120,7 @@ StackViewPage {
                 tag: qsTrId('id_2of3')
                 title: qsTrId('id_2of3_with_2fa')
                 description: qsTrId('id_permanent_2fa_account_ideal_for')
-                visible: self.advanced && self.asset.networkKey !== 'liquid'
+                visible: !self.anyAMP && (self.anyLiquid || self.advanced && self.asset?.networkKey !== 'liquid')
                 action: Action {
                     onTriggered: {
                         self.StackView.view.push(select_recovery_key_page, {
@@ -125,7 +135,7 @@ StackViewPage {
                 tag: qsTrId('id_amp')
                 title: qsTrId('id_amp')
                 description: qsTrId('id_account_for_special_assets')
-                visible: self.advanced && self.asset.networkKey === 'liquid'
+                visible: self.anyLiquid || self.anyAMP || self.advanced && self.asset?.networkKey === 'liquid'
             }
         }
     }
@@ -140,6 +150,7 @@ StackViewPage {
             LinkButton {
                 text: self.advanced ? qsTrId('id_hide_advanced_options') : qsTrId('id_show_advanced_options')
                 onClicked: self.advanced = !self.advanced
+                visible: !self.anyAMP
             }
             HSpacer {
             }
@@ -258,8 +269,22 @@ StackViewPage {
     Component {
         id: asset_selector
         AssetSelector {
-            onSelected: (asset) => {
+            onAssetClicked: (asset) => {
                 self.asset = asset
+                self.anyLiquid = false
+                self.anyAMP = false
+                self.StackView.view.pop()
+            }
+            onAnyLiquidClicked: {
+                self.asset = null
+                self.anyLiquid = true
+                self.anyAMP = false
+                self.StackView.view.pop()
+            }
+            onAnyAMPClicked: {
+                self.asset = null
+                self.anyLiquid = false
+                self.anyAMP = true
                 self.StackView.view.pop()
             }
         }

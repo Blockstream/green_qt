@@ -39,6 +39,7 @@ public:
     QString name() const { return m_name; }
     void setName(const QString& name);
 
+    QString ticker() const;
     bool hasIcon() const { return !m_icon.isEmpty(); }
     QString icon() const { return m_icon; }
     void setIcon(const QString& icon);

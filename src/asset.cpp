@@ -41,6 +41,11 @@ void Asset::setName(const QString& name)
     emit nameChanged();
 }
 
+QString Asset::ticker() const
+{
+    return m_data.value("ticker").toString();
+}
+
 void Asset::setIsAmp(bool is_amp)
 {
     if (m_is_amp == is_amp) return;
@@ -223,9 +228,10 @@ bool AssetsModel::filterAcceptsRow(int source_row, const QModelIndex &source_par
     if (asset->weight() < m_min_weight) return false;
 
     if (m_filter.isEmpty()) {
-        if (!asset->hasData() || !asset->hasIcon()) return false;
+        if (asset->weight() == 0 && (!asset->hasData() || !asset->hasIcon())) return false;
     } else {
-        if (!asset->name().contains(m_filter, Qt::CaseInsensitive)) return false;
+        if (!asset->name().contains(m_filter, Qt::CaseInsensitive) &&
+            !asset->ticker().contains(m_filter, Qt::CaseInsensitive)) return false;
     }
 
     if (!m_deployment.isEmpty()) {

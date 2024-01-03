@@ -199,6 +199,9 @@ qt_add_resources(green "images"
         assets/svg2/zoom.svg
 
         assets/pdf/recovery-phrase-backup-template-12-words.pdf
+
+        assets/svg2/amp_icon.svg
+        assets/svg2/liquid_icon.svg
 )
 
 qt_add_resources(green "fonts"

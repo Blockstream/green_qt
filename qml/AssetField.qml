@@ -7,6 +7,8 @@ import "util.js" as UtilJS
 
 AbstractButton {
     required property Asset asset
+    property bool anyLiquid: false
+    property bool anyAMP: false
     property bool editable: true
 
     id: self
@@ -16,7 +18,7 @@ AbstractButton {
     bottomPadding: 10
     activeFocusOnTab: self.editable
     background: Rectangle {
-        color: '#222226'
+        color: Qt.lighter('#222226', self.enabled && self.editable && self.hovered ? 1.2 : 1)
         radius: 5
         Rectangle {
             border.width: 2
@@ -33,13 +35,21 @@ AbstractButton {
         Image {
             Layout.maximumHeight: 32
             Layout.maximumWidth: 32
-            source: UtilJS.iconFor(self.asset)
+            source: {
+                if (self.anyLiquid) return 'qrc:/svg2/liquid_icon.svg'
+                if (self.anyAMP) return 'qrc:/svg2/amp_icon.svg'
+                return UtilJS.iconFor(self.asset)
+            }
         }
         Label {
             Layout.fillWidth: true
             font.pixelSize: 14
             font.weight: 500
-            text: self.asset?.name ?? ''
+            text: {
+                if (self.anyLiquid) return 'Receive any Liquid Asset'
+                if (self.anyAMP) return 'Receive any AMP Asset'
+                return self.asset?.name ?? ''
+            }
             wrapMode: Label.WrapAtWordBoundaryOrAnywhere
         }
         Image {
