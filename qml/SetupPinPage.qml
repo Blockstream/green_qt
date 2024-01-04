@@ -118,7 +118,9 @@ StackViewPage {
             Layout.alignment: Qt.AlignBottom
             id: right_item
             text: qsTrId('id_skip')
-            visible: !self.pin
+            visible: false
+            // TODO: this button allows temporary login
+            // visible: !self.pin
             onClicked: self.finished(self.context)
         }
     }
