@@ -136,7 +136,9 @@ StackViewPage {
         if (account) {
             self.currentAccount = account
         } else {
-            fresh_wallet_dialog.createObject(self).open()
+            Qt.callLater(() => {
+                fresh_wallet_dialog.createObject(self).open()
+            })
         }
     }
 
