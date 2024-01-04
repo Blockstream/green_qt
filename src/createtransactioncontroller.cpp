@@ -108,6 +108,11 @@ void CreateTransactionController::update()
             });
             dispatcher->add(task);
         } else {
+            if (m_recipient->address().isEmpty()) {
+                setTransaction({});
+                return;
+            }
+
             auto session = m_account->session();
 
             QJsonObject addressee;
@@ -151,6 +156,10 @@ void CreateTransactionController::setTransaction(const QJsonObject& transaction)
 {
     m_transaction = transaction;
     emit transactionChanged();
+    const auto error = m_transaction.value("error").toString();
+    if (!error.isEmpty()) {
+        qDebug() << Q_FUNC_INFO << error;
+    }
     const auto addressees = m_transaction.value("addressees").toArray();
     if (addressees.size() > 0) {
         const auto addressee = addressees.at(0).toObject();

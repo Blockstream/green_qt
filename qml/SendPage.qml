@@ -153,6 +153,7 @@ StackViewPage {
                     if (controller.recipient.address !== '') {
                         const error = controller.transaction?.error
                         if (error === 'id_invalid_address') return error
+                        if (error === 'id_nonconfidential_addresses_not') return error
                     }
                 }
             }
@@ -168,27 +169,102 @@ StackViewPage {
                 id: amount_field
                 account: controller.account
                 asset: controller.asset
-                onResultChanged: controller.recipient.amount = '' + (amount_field.result.satoshi ?? '')
+                enabled: !controller.recipient.greedy
+                onTextEdited: controller.recipient.greedy = false
+                onUnitChanged: controller.recipient.greedy = false
+                onFiatChanged: controller.recipient.greedy = false
+                onResultChanged: {
+                    if (!controller.recipient.greedy) {
+                        controller.recipient.amount = String(amount_field.result.satoshi ?? '')
+                    }
+                }
                 error: {
                     const error = controller.transaction?.error
                     if (error === 'id_insufficient_funds') return error
                     if (error === 'id_invalid_amount') return error
                 }
             }
+            Connections {
+                target: controller.recipient
+                function onAmountChanged() {
+                    if (controller.recipient.greedy) {
+                        amount_field.user = false
+                        amount_field.setValue(controller.recipient.amount)
+                    }
+                }
+            }
+            Binding {
+                value: controller.recipient.amount
+                target: amount_field
+                property: 'text'
+                when: controller.recipient.greedy
+            }
             ErrorPane {
                 error: amount_field.error
             }
-            LinkButton {
-                Layout.alignment: Qt.AlignRight
-                Layout.bottomMargin: 15
-                text: qsTrId('id_send_all')
-                enabled: !controller.recipient.greedy
-                visible: false
-                onClicked: controller.recipient.greedy = true
+            Convert {
+                id: available_convert
+                unit: 'sats'
+                outputUnit: amount_field.unit
+                asset: controller.asset
+                account: controller.account
+                value: String(controller.account.json.satoshi[controller.asset.key])
             }
+
+            RowLayout {
+                Layout.bottomMargin: 15
+                spacing: 10
+                ColumnLayout {
+                    Label {
+                        Layout.fillWidth: true
+                        text: qsTrId('id_available') + ' ' + available_convert.outputUnitLabel
+                        font.pixelSize: 14
+                        font.weight: 500
+                    }
+                    Label {
+                        color: '#6F6F6F'
+                        font.pixelSize: 14
+                        font.weight: 500
+                        text: '~ ' + available_convert.fiatLabel
+                        visible: available_convert.fiat
+                    }
+                }
+//                LinkButton {
+//                    Layout.alignment: Qt.AlignRight
+//                    text: qsTrId('id_send_all')
+//                    enabled: !controller.recipient.greedy
+//                    onClicked: {
+//                        amount_field.unit = 'sats'
+//                        amount_field.fiat = false
+//                        amount_field.user = false
+//                        controller.recipient.greedy = true
+//                    }
+//                }
+                Label {
+                    text: qsTrId('id_send_all')
+                    font.pixelSize: 14
+                    font.weight: 500
+                }
+                GSwitch {
+                    checked: controller.recipient.greedy
+                    onClicked: {
+                        if (controller.recipient.greedy) {
+                            controller.recipient.greedy = false
+                            amount_field.user = true
+                            amount_field.setValue(0)
+                        } else {
+                            amount_field.unit = 'sats'
+                            amount_field.fiat = false
+                            amount_field.user = false
+                            controller.recipient.greedy = true
+                        }
+                    }
+                }
+            }
+
             Convert {
                 id: fee_convert
-                account: self.account
+                account: controller.account
                 value: controller.transaction.fee ?? 0
                 unit: 'sats'
             }
@@ -321,36 +397,43 @@ StackViewPage {
         }
     }
 
-    component ErrorPane: Pane {
+    component ErrorPane: Collapsible {
         required property var error
-        id: error_pane
         Layout.fillWidth: true
         Layout.topMargin: -30
         Layout.bottomMargin: 15
-        leftPadding: 10
-        rightPadding: 10
-        bottomPadding: 15
-        topPadding: 25
-        background: Rectangle {
-            color: '#3B080F'
-            radius: 5
-        }
-        contentItem: RowLayout {
-            spacing: 10
-            Image {
-                source: 'qrc:/svg2/info_red.svg'
-            }
-            Label {
-                Layout.fillWidth: true
-                Layout.preferredWidth: 0
-                font.pixelSize: 12
-                font.weight: 600
-                color: '#C91D36'
-                text: qsTrId(error_pane.error ?? '')
-                wrapMode: Label.Wrap
-            }
-        }
-        visible: !!error_pane.error
+        id: error_pane
+        animationVelocity: 300
+        contentWidth: error_pane.width
+        contentHeight: pane.height
+        collapsed: !error_pane.error
         z: -1
+        Pane {
+            id: pane
+            leftPadding: 10
+            rightPadding: 10
+            bottomPadding: 15
+            topPadding: 25
+            width: error_pane.width
+            background: Rectangle {
+                color: '#3B080F'
+                radius: 5
+            }
+            contentItem: RowLayout {
+                spacing: 10
+                Image {
+                    source: 'qrc:/svg2/info_red.svg'
+                }
+                Label {
+                    Layout.fillWidth: true
+                    Layout.preferredWidth: 0
+                    font.pixelSize: 12
+                    font.weight: 600
+                    color: '#C91D36'
+                    text: qsTrId(error_pane.error ?? '')
+                    wrapMode: Label.Wrap
+                }
+            }
+        }
     }
 }

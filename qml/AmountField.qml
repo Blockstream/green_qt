@@ -17,7 +17,7 @@ TextField {
     property string value
 
     readonly property var units: ['BTC', 'sats', 'mBTC', '\u00B5BTC']
-
+    property alias user: convert.user
     Convert {
         id: convert
         account: self.account
@@ -25,10 +25,24 @@ TextField {
         unit: self.fiat ? 'fiat' : UtilJS.normalizeUnit(self.unit)
         user: true
         value: self.value
-        onValueChanged: if (!self.readOnly) self.text = convert.value
+        onValueChanged: if (!self.readOnly && convert.user) self.text = convert.value
+        onUnitLabelChanged: {
+            if (!self.readOnly && !convert.user) {
+                self.text = convert.unitLabel.split(' ')[0]
+            }
+        }
     }
 
-    onTextEdited: convert.value = self.text
+    function setValue(value) {
+        convert.value = value
+    }
+
+    onUnitChanged: convert.user = true
+    onFiatChanged: convert.user = true
+    onTextEdited: {
+        convert.user = true
+        self.setValue(self.text)
+    }
 
     Layout.fillWidth: true
     topPadding: 22
@@ -70,7 +84,7 @@ TextField {
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: parent.left
         anchors.leftMargin: 24
-        visible: !self.readOnly && self.text !== ''
+        visible: self.enabled && !self.readOnly && self.text !== ''
         icon.source: 'qrc:/svg/erase.svg'
         onClicked: convert.value = ''
     }
