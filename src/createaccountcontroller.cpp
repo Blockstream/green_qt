@@ -85,29 +85,6 @@ void CreateAccountController::create()
     auto monitor = new TaskGroupMonitor(this);
     setMonitor(monitor);
 
-    if (m_network->isElectrum()) {
-        for (auto account : m_context->getAccounts()) {
-            if (account->network() != m_network) continue;
-            if (account->type() != m_type) continue;
-            if (account->pointer() > 0) continue;
-            if (account->json().value("bip44_discovered").toBool()) continue;
-            if (!account->name().isEmpty()) continue;
-            if (!account->synced()) continue;
-
-            m_account = account;
-            m_account->setName(m_name);
-            auto update_task = new UpdateAccountTask({{ "name", m_name }}, m_account->session());
-            auto group = new TaskGroup(this);
-            group->add(update_task);
-            monitor->add(group);
-            dispatcher()->add(group);
-            connect(group, &TaskGroup::finished, this, [=] {
-                emit created(m_account);
-            });
-            return;
-        }
-    }
-
     ensureSession();
 }
 
@@ -167,14 +144,18 @@ void CreateAccountController::ensureAccount()
             if (account->type() == m_type) {
                 task = new UpdateAccountTask({
                     { "subaccount", static_cast<qint64>(account->pointer()) },
-                    { "name", m_name }
+                    { "name", m_name },
+                    { "hidden", false }
                 }, session);
+                account->setName(m_name);
+                account->setHidden(false);
                 m_account = account;
             } else {
                 task = new UpdateAccountTask({
                     { "subaccount", static_cast<qint64>(account->pointer()) },
                     { "hidden", true }
                 }, session);
+                account->setHidden(true);
             }
             group->add(task);
             break;

@@ -48,35 +48,35 @@ Context::Context(const QString& deployment, QObject* parent)
     Q_ASSERT(deployment == "mainnet" || deployment == "testnet" || deployment == "development");
 }
 
-void Context::cleanSessions()
+TaskGroup* Context::cleanAccounts()
 {
-    QList<Session*> to_release;
-    for (auto session : m_sessions_list) {
-        const auto network = session->network();
-        if (!network->isElectrum()) continue;
-        bool empty = true;
-        for (auto account : m_accounts) {
-            if (account->session() != session) continue;
-            if (!account->json().value("bip44_discovered").toBool()) continue;
-            empty = false;
-            break;
+    auto group = new TaskGroup(this);
+    for (auto account : m_accounts) {
+        if (account->pointer() == 0 && account->name().isEmpty()) {
+            bool hide = true;
+            if (account->isSinglesig()) {
+                if (account->json().value("bip44_discovered").toBool()) {
+                    hide = false;
+                }
+            }
+            const auto satoshi = account->json().value("satoshi").toObject();
+            for (auto key : satoshi.keys()) {
+                if (satoshi.value(key).toInteger() > 0) {
+                    hide = false;
+                    break;
+                }
+            }
+            if (hide) {
+                auto task = new UpdateAccountTask({
+                    { "subaccount", static_cast<qint64>(account->pointer()) },
+                    { "hidden", true },
+                }, account->session());
+                account->setHidden(true);
+                group->add(task);
+            }
         }
-        if (empty) to_release.append(session);
     }
-
-    while (!to_release.isEmpty() && m_sessions.size() > 1) {
-        auto session = to_release.takeLast();
-        for (auto account : m_accounts) {
-            if (account->session() != session) continue;
-            m_accounts.removeOne(account);
-            m_accounts_by_pointer.remove(qMakePair(session->network(), account->pointer()));
-        }
-        m_sessions_list.removeOne(session);
-        m_sessions.remove(session->network());
-        session->deleteLater();
-    }
-    emit sessionsChanged();
-    emit accountsChanged();
+    return group;
 }
 
 void Context::setWallet(Wallet* wallet)
@@ -161,6 +161,10 @@ Session* Context::primarySession()
 
 void Context::releaseSession(Session* session)
 {
+    qDebug() << Q_FUNC_INFO << session->network()->id();
+    for (auto account : m_accounts) {
+        Q_ASSERT(account->session() != session);
+    }
     m_sessions.take(session->network());
     m_sessions_list.removeOne(session);
     emit sessionsChanged();

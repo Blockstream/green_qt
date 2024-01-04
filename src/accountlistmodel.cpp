@@ -65,12 +65,6 @@ bool AccountListModel::filterAcceptsRow(int source_row, const QModelIndex &sourc
     Q_ASSERT(m_model);
     auto account = m_model->index(source_row, 0, source_parent).data(Qt::UserRole).value<Account*>();
 
-    if (account->isSinglesig() && account->pointer() == 0) {
-        if (!account->json().value("bip44_discovered").toBool() && account->name().isEmpty()) {
-            return false;
-        }
-    }
-
     for (QString filter : m_filter.split(' ', Qt::SkipEmptyParts)) {
         bool invert = filter.startsWith('!');
         if (invert) filter = filter.mid(1);

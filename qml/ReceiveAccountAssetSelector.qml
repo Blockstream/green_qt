@@ -183,9 +183,7 @@ StackViewPage {
                                 if (account.hidden) continue
                                 if (delegate.asset) {
                                     if (delegate.asset.networkKey === account.network.key) {
-                                        if (!account.network.electrum || account.json.bip44_discovered || account.name.length > 0) {
-                                            accounts.push(account)
-                                        }
+                                        accounts.push(account)
                                     }
                                 } else if (self.anyLiquid) {
                                     if (account.network.liquid) {

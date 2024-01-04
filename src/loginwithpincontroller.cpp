@@ -181,7 +181,17 @@ LoadController::LoadController(QObject* parent)
     : Controller(parent)
     , m_monitor(new TaskGroupMonitor(this))
 {
-    connect(m_monitor, &TaskGroupMonitor::allFinishedOrFailed, this, &LoadController::loadFinished);
+    connect(m_monitor, &TaskGroupMonitor::allFinishedOrFailed, this, [=] {
+        auto group = m_context->cleanAccounts();
+        dispatcher()->add(group);
+        connect(group, &TaskGroup::finished, this, [=] {
+            auto wallet = m_context->wallet();
+            Q_ASSERT(wallet);
+            WalletManager::instance()->addWallet(wallet);
+            wallet->setContext(m_context);
+            emit loadFinished();
+        });
+    });
 }
 
 static bool compatibleToNetworks(Network* network, const QList<Network*> networks)
@@ -206,13 +216,6 @@ void LoadController::load()
 
     m_monitor->add(group);
     dispatcher()->add(group);
-
-    connect(group, &TaskGroup::finished, this, [=] {
-        auto wallet = m_context->wallet();
-        Q_ASSERT(wallet);
-        WalletManager::instance()->addWallet(wallet);
-        wallet->setContext(m_context);
-    });
 
     if (!m_context->isWatchonly()) {
         for (auto network : NetworkManager::instance()->networks()) {
@@ -264,13 +267,12 @@ void LoadController::loginNetwork(Network* network)
     });
 
     connect(login, &Task::finished, this, [=] {
-        qDebug() << "FINISHED LOGIN" << network->id();
         loadNetwork(group, network);
     });
 
     connect(login, &Task::failed, this, [=](const QString& error) {
         qDebug() << "ignoring login failed for network" << network->id() << "errr:" << error;
-//        emit loginFailed();
+        m_context->releaseSession(session);
     });
 
     group->add(connect_session);
