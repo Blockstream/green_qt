@@ -69,7 +69,7 @@ signals:
     void created(Account* account);
     void recoveryMnemonicChanged();
     void recoveryXpubChanged();
-
+    void failed();
 public slots:
     void create();
 private slots:

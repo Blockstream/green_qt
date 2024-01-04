@@ -138,29 +138,39 @@ void CreateAccountController::ensureAccount()
 
     auto session = m_context->getOrCreateSession(m_network);
     auto group = new TaskGroup(this);
-    Task* task = nullptr;
+    Task* last = nullptr;
     for (auto account : m_context->getAccounts()) {
-        if (account->session() == session && account->pointer() == 0 && account->name().isEmpty()) {
-            if (account->type() == m_type) {
-                task = new UpdateAccountTask({
-                    { "subaccount", static_cast<qint64>(account->pointer()) },
-                    { "name", m_name },
-                    { "hidden", false }
-                }, session);
-                account->setName(m_name);
-                account->setHidden(false);
-                m_account = account;
-            } else {
-                task = new UpdateAccountTask({
-                    { "subaccount", static_cast<qint64>(account->pointer()) },
-                    { "hidden", true }
-                }, session);
-                account->setHidden(true);
-            }
+        if (account->session() != session) continue;
+        if (account->pointer() == 0 && account->type() != m_type && account->name().isEmpty()) {
+            auto task = new UpdateAccountTask({
+                { "subaccount", static_cast<qint64>(account->pointer()) },
+                { "hidden", true }
+            }, session);
+            account->setHidden(true);
             group->add(task);
-            break;
+            if (last) last->then(task);
+            last = task;
+            continue;
         }
+        if (account->type() != m_type) continue;
+        if (account->isMultisig() && account->pointer() > 0) continue;
+        if (account->isMultisig() && !account->name().isEmpty()) continue;
+        if (account->isSinglesig() && account->json().value("bip44_discovered").toBool()) continue;
+
+        auto task = new UpdateAccountTask({
+            { "subaccount", static_cast<qint64>(account->pointer()) },
+            { "name", account->name().isEmpty() ? m_name : account->name() },
+            { "hidden", false }
+        }, session);
+        account->setName(m_name);
+        account->setHidden(false);
+        m_account = account;
+        group->add(task);
+        if (last) last->then(task);
+        last = task;
+        break;
     }
+
     if (!m_account) {
         auto details = QJsonObject{
             { "name", m_name },
@@ -184,9 +194,9 @@ void CreateAccountController::ensureAccount()
         group->add(create_account);
         group->add(load_accounts);
 
-        if (task) task->then(create_account);
+        if (last) last->then(create_account);
         create_account->then(load_accounts);
-        task = load_accounts;
+        last = load_accounts;
 
         connect(create_account, &Task::failed, this, [=](const QString& error) {
             setError("create", error);
@@ -202,16 +212,20 @@ void CreateAccountController::ensureAccount()
     group->add(load_config);
     group->add(load_currencies);
 
-    if (task) task->then(load_config);
-    task->then(load_currencies);
+    if (last) {
+        last->then(load_config);
+        last->then(load_currencies);
+    }
 
     monitor()->add(group);
     dispatcher()->add(group);
 
     connect(group, &TaskGroup::finished, this, [=] {
-        if (m_account) {
-            emit created(m_account);
-        }
+        Q_ASSERT(m_account);
+        emit created(m_account);
+    });
+    connect(group, &TaskGroup::failed, this, [=] {
+        emit failed();
     });
 }
 

@@ -176,6 +176,7 @@ StackViewPage {
                 recoveryMnemonic: page.mnemonic
                 recoveryXpub: page.xpub
                 onCreated: (account) => self.created(account)
+                onFailed: self.StackView.view.pop()
             }
 
             TaskPageFactory {
