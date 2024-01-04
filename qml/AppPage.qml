@@ -180,6 +180,7 @@ MainPage {
         RemoveWalletDialog {
             onRemoveWallet: (wallet) => {
                 self.removeWallet(wallet)
+                stack_layout.currentIndex = 0
             }
         }
     }
