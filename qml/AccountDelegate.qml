@@ -8,9 +8,11 @@ import "analytics.js" as AnalyticsJS
 import "util.js" as UtilJS
 
 ItemDelegate {
+    signal accountClicked(Account account)
+    signal accountArchived(Account account)
     required property Account account
     required property int index
-
+    onClicked: delegate.accountClicked(delegate.account)
     id: delegate
     focusPolicy: Qt.ClickFocus
     background: Rectangle {
@@ -205,6 +207,7 @@ ItemDelegate {
                                     onClicked: {
                                         account_delegate_menu.close()
                                         controller.setAccountHidden(delegate.account, true)
+                                        delegate.accountArchived(delegate.account)
                                     }
                                 }
                             }

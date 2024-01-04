@@ -346,8 +346,12 @@ StackViewPage {
                 currentIndex: 0
                 spacing: 5
                 delegate: AccountDelegate {
-                    id: delegate
-                    onClicked: self.currentAccount = delegate.account
+                    onAccountClicked: account => self.currentAccount = account
+                    onAccountArchived: account => {
+                        let i = Math.max(0, account_list_model.indexOf(account) - 1)
+                        if (account_list_model.accountAt(i) === account) i++
+                        self.currentAccount = account_list_model.accountAt(i)
+                    }
                 }
             }
             footer: ColumnLayout {
