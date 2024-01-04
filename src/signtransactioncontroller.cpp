@@ -1,4 +1,5 @@
 #include "account.h"
+#include "network.h"
 #include "signtransactioncontroller.h"
 #include "task.h"
 
@@ -35,12 +36,28 @@ void SignTransactionController::sign()
     auto transaction = m_transaction;
     transaction.insert("memo", m_memo);
 
+    const auto session = m_account->session();
+    const auto network = m_account->network();
+
     TaskGroup* group = new TaskGroup(this);
 
-    auto sign = new SignTransactionTask(m_account->session());
-    auto send = new SendTransactionTask(m_account->session());
+    auto sign = new SignTransactionTask(session);
+    auto send = new SendTransactionTask(session);
 
-    sign->setDetails(transaction);
+    if (network->isLiquid()) {
+        auto blind = new BlindTransactionTask(transaction, session);
+        blind->then(sign);
+
+        connect(blind, &Task::finished, this, [=] {
+            auto details = blind->result().value("result").toObject();
+            sign->setDetails(details);
+        });
+
+        group->add(blind);
+    } else {
+        sign->setDetails(transaction);
+    }
+
     sign->then(send);
 
     group->add(sign);
