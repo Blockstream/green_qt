@@ -139,26 +139,8 @@ ItemDelegate {
                 sourceSize.height: 24
             }
         }
-        Repeater {
-            model: {
-                const assets = []
-                if (self.account.network.liquid) {
-                    for (const [id, satoshi] of Object.entries(transaction.data.satoshi)) {
-                        if (self.account.network.policyAsset === id) continue
-                        const asset = AssetManager.assetWithId(self.account.context.deployment, id)
-                        if (asset && asset.icon) assets.push(asset)
-                    }
-                }
-                return assets
-            }
-            delegate: AssetIcon {
-                asset: modelData
-            }
-        }
-
         ColumnLayout {
             Layout.fillWidth: false
-            Layout.minimumWidth: 150
             spacing: 1
             Repeater {
                 model: {
@@ -214,5 +196,22 @@ ItemDelegate {
                 visible: convert.value < 0 || convert.value > 0
             }
         }
+        Repeater {
+            model: {
+                const assets = []
+                if (self.account.network.liquid) {
+                    for (const [id, satoshi] of Object.entries(transaction.data.satoshi)) {
+                        if (self.account.network.policyAsset === id) continue
+                        const asset = AssetManager.assetWithId(self.account.context.deployment, id)
+                        if (asset && asset.icon) assets.push(asset)
+                    }
+                }
+                return assets
+            }
+            delegate: AssetIcon {
+                asset: modelData
+            }
+        }
+
     }
 }
