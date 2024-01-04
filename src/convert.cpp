@@ -41,6 +41,7 @@ void Convert::setSession(Session* session)
     connect(session, &Session::settingsChanged, this, [=] {
         emit fiatLabelChanged();
         emit unitLabelChanged();
+        emit outputUnitLabelChanged();
         invalidate();
     });
     connect(session, &Session::tickerEvent, this, [=] {
@@ -76,6 +77,14 @@ void Convert::setUnit(const QString& unit)
     invalidate();
 }
 
+void Convert::setOutputUnit(const QString &output_unit)
+{
+    if (m_output_unit == output_unit) return;
+    m_output_unit = output_unit;
+    emit outputUnitChanged();
+    emit outputUnitLabelChanged();
+}
+
 void Convert::setUser(bool user)
 {
     if (m_user == user) return;
@@ -104,6 +113,7 @@ void Convert::setResult(const QJsonObject& result)
     emit resultChanged();
     emit fiatLabelChanged();
     emit unitLabelChanged();
+    emit outputUnitLabelChanged();
 }
 
 QString Convert::fiatLabel() const
@@ -129,6 +139,21 @@ static QString testnetUnit(const QString& unit)
 QString Convert::unitLabel() const
 {
     if (!m_context && !m_account) return {};
+    const auto session = m_account ? m_account->session() : m_context->primarySession();
+    if (!session) return {};
+    return label(session->unit());
+}
+
+QString Convert::outputUnitLabel() const
+{
+    if (!m_context && !m_account) return {};
+    if (m_output_unit.isEmpty()) return {};
+    return label(m_output_unit);
+}
+
+QString Convert::label(const QString& unit) const
+{
+    if (!m_context && !m_account) return {};
     if (m_liquid_asset) {
         const auto precision = m_asset->data().value("precision").toInt(0);
         const auto satoshi = m_result.value("satoshi").toString();
@@ -144,9 +169,6 @@ QString Convert::unitLabel() const
             return amount;
         }
     }
-    const auto session = m_account ? m_account->session() : m_context->primarySession();
-    if (!session) return {};
-    const auto unit = session->unit();
     const auto unit_key = unit == "\u00B5BTC" ? "ubtc" : unit.toLower();
 
     const QString prefix{m_account && m_account->isLiquid() ? "L-" : ""};

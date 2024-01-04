@@ -14,11 +14,13 @@ class Convert : public QObject
     Q_PROPERTY(Asset* asset READ asset WRITE setAsset NOTIFY assetChanged)
     Q_PROPERTY(bool fiat READ fiat NOTIFY fiatChanged)
     Q_PROPERTY(QString unit READ unit WRITE setUnit NOTIFY unitChanged)
+    Q_PROPERTY(QString outputUnit READ outputUnit WRITE setOutputUnit NOTIFY outputUnitChanged)
     Q_PROPERTY(bool user READ user WRITE setUser NOTIFY userChanged)
     Q_PROPERTY(QString value READ value WRITE setValue NOTIFY valueChanged)
     Q_PROPERTY(QJsonObject result READ result NOTIFY resultChanged)
     Q_PROPERTY(QString fiatLabel READ fiatLabel NOTIFY fiatLabelChanged)
     Q_PROPERTY(QString unitLabel READ unitLabel NOTIFY unitLabelChanged)
+    Q_PROPERTY(QString outputUnitLabel READ outputUnitLabel NOTIFY outputUnitLabelChanged)
     QML_ELEMENT
 public:
     Convert(QObject* parent = nullptr);
@@ -32,6 +34,8 @@ public:
     void setFiat(bool fiat);
     QString unit() const { return m_unit; }
     void setUnit(const QString& unit);
+    QString outputUnit() const { return m_output_unit; }
+    void setOutputUnit(const QString& output_unit);
     bool user() const { return m_user; }
     void setUser(bool user);
     QString value() const { return m_value; }
@@ -41,22 +45,26 @@ public:
     void setResult(const QJsonObject& result);
     QString fiatLabel() const;
     QString unitLabel() const;
+    QString outputUnitLabel() const;
 signals:
     void contextChanged();
     void accountChanged();
     void assetChanged();
     void fiatChanged();
     void unitChanged();
+    void outputUnitChanged();
     void userChanged();
     void valueChanged();
     void resultChanged();
     void fiatLabelChanged();
     void unitLabelChanged();
+    void outputUnitLabelChanged();
 private:
     void setSession(Session* session);
     void invalidate();
     void update();
     bool mainnet() const;
+    QString label(const QString& unit) const;
 protected:
     void timerEvent(QTimerEvent* event) override;
 private:
@@ -66,6 +74,7 @@ private:
     bool m_liquid_asset{false};
     bool m_fiat{false};
     QString m_unit;
+    QString m_output_unit;
     bool m_user{false};
     QString m_value;
     QJsonObject m_result;
