@@ -168,11 +168,10 @@ void WalletManager::printBackupTemplate()
 
     QTemporaryFile file;
     file.setAutoRemove(false);
-    file.setFileTemplate("backup-template");
+    file.setFileTemplate(QDir::tempPath() + "/recovery-phrase-backup-template-12-words-XXXXXX.pdf");
     file.open();
     file.write(data);
     file.close();
-    file.rename(file.fileName() + ".pdf");
 
     QDesktopServices::openUrl(QUrl::fromLocalFile(file.fileName()));
 }
