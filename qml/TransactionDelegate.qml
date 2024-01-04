@@ -196,7 +196,12 @@ ItemDelegate {
                 visible: convert.value < 0 || convert.value > 0
             }
         }
+        Item {
+            Layout.minimumWidth: 32
+            visible: self.account.network.liquid && assets_repeater.count === 0
+        }
         Repeater {
+            id: assets_repeater
             model: {
                 const assets = []
                 if (self.account.network.liquid) {
