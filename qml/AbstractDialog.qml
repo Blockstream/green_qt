@@ -10,11 +10,11 @@ Dialog {
     id: self
     focus: true
     modal: true
-    padding: constants.p3
-    topPadding: constants.p1
-    bottomPadding: constants.p3
-    leftPadding: constants.p3
-    rightPadding: constants.p3
+    padding: 24
+    topPadding: 12
+    bottomPadding: 24
+    leftPadding: 24
+    rightPadding: 24
     horizontalPadding: 0
     verticalPadding: 64
     anchors.centerIn: parent

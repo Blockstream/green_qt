@@ -11,11 +11,13 @@
 #include "transaction.h"
 #include "wallet.h"
 
+#include <QDesktopServices>
 #include <QFile>
 #include <QFileDialog>
 #include <QStandardPaths>
 #include <QTextStream>
 #include <QTimer>
+#include <QUrl>
 
 ExportTransactionsController::ExportTransactionsController(QObject* parent)
     : Controller(parent)
@@ -50,12 +52,12 @@ void ExportTransactionsController::save()
             wallet->name() + " - " + account_name + " - " +
             m_datetime.toString("yyyyMMddhhmmss") + ".csv";
 
-    auto dialog = new QFileDialog(nullptr, "Export to CSV", suggestion);
+    auto dialog = new QFileDialog(nullptr, "Save As", suggestion);
     dialog->setAcceptMode(QFileDialog::AcceptSave);
     dialog->setFileMode(QFileDialog::AnyFile);
     dialog->selectFile(suggestion);
     connect(dialog, &QFileDialog::fileSelected, this, &ExportTransactionsController::saveToFile);
-    connect(dialog, &QFileDialog::rejected, this, &ExportTransactionsController::finished);
+    connect(dialog, &QFileDialog::rejected, this, &ExportTransactionsController::rejected);
     connect(this, &QObject::destroyed, dialog, &QFileDialog::deleteLater);
     dialog->open();
 }
@@ -85,7 +87,7 @@ void ExportTransactionsController::saveToFile(const QString& file)
         m_lines.append(m_fields.join(m_separator));
     }
 
-    QTimer::singleShot(1000, this, [=] { nextPage(); });
+    QTimer::singleShot(100, this, [=] { nextPage(); });
 }
 
 void ExportTransactionsController::nextPage()
@@ -163,10 +165,12 @@ void ExportTransactionsController::nextPage()
 
             QTextStream stream(&file);
             stream << m_lines.join("\n");
-            emit finished();
+
+            QFileInfo info(file);
+            emit saved(info.baseName(), QUrl::fromLocalFile(info.absoluteFilePath()));
         } else {
             m_offset += m_count;
-            QTimer::singleShot(100, this, [=] { nextPage(); });
+            QTimer::singleShot(10, this, [=] { nextPage(); });
         }
     });
 

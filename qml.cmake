@@ -247,6 +247,8 @@ SET(QML_FILES
     qml/LedgerDeviceDelegate.qml
     qml/TTextField.qml
     qml/ReceiveAccountAssetSelector.qml
+    qml/ExportTransactionsDialog.qml
+    qml/CompletedImage.qml
 )
 
 if (GREEN_NO_RESOURCES)

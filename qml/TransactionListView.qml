@@ -74,8 +74,12 @@ GPane {
         GButton {
             text: qsTrId('Export')
             enabled: self.account?.context && list_view.count > 0
-            onClicked: export_transactions_popup.createObject(window, { account: self.account }).open()
-            ToolTip.text: qsTrId('id_export_transactions_to_csv_file')
+            onClicked: export_transactions_dialog.createObject(self, { account: self.account }).open()
+    }
+
+    Component {
+        id: export_transactions_dialog
+        ExportTransactionsDialog {
         }
     }
 }
