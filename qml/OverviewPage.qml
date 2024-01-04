@@ -300,15 +300,18 @@ StackViewPage {
     property var account_views: ({})
     function switchToAccount(account) {
         if (account) {
-            const context = self.context
-            let account_view = account_views[account]
-            if (!account_view) {
-                account_view = account_view_component.createObject(null, { context, account })
-                account_views[account] = account_view
-            }
-            if (stack_view.currentItem === account_view) return;
-            stack_view.replace(account_view, StackView.Immediate)
-            accounts_list.currentIndex = account_list_model.indexOf(account)
+            // call later to ensure account list is updated after add/hide/show account
+            Qt.callLater(() => {
+                const context = self.context
+                let account_view = account_views[account]
+                if (!account_view) {
+                    account_view = account_view_component.createObject(null, { context, account })
+                    account_views[account] = account_view
+                }
+                if (stack_view.currentItem === account_view) return;
+                stack_view.replace(account_view, StackView.Immediate)
+                accounts_list.currentIndex = account_list_model.indexOf(account)
+            })
         } else {
             stack_view.replace(stack_view.initialItem, StackView.Immediate)
         }
