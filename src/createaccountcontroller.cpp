@@ -84,6 +84,7 @@ void CreateAccountController::create()
 
     auto monitor = new TaskGroupMonitor(this);
     setMonitor(monitor);
+    m_error = {};
 
     ensureSession();
 }
@@ -153,6 +154,7 @@ void CreateAccountController::ensureAccount()
             continue;
         }
         if (account->type() != m_type) continue;
+        if (!account->isHidden()) continue;
         if (account->isMultisig() && account->pointer() > 0) continue;
         if (account->isMultisig() && !account->name().isEmpty()) continue;
         if (account->isSinglesig() && account->json().value("bip44_discovered").toBool()) continue;
@@ -199,7 +201,7 @@ void CreateAccountController::ensureAccount()
         last = load_accounts;
 
         connect(create_account, &Task::failed, this, [=](const QString& error) {
-            setError("create", error);
+            m_error = error;
         });
         connect(create_account, &Task::finished, this, [=] {
             m_account = m_context->getAccountByPointer(m_network, create_account->pointer());
@@ -225,7 +227,7 @@ void CreateAccountController::ensureAccount()
         emit created(m_account);
     });
     connect(group, &TaskGroup::failed, this, [=] {
-        emit failed();
+        emit failed(m_error);
     });
 }
 

@@ -69,7 +69,7 @@ signals:
     void created(Account* account);
     void recoveryMnemonicChanged();
     void recoveryXpubChanged();
-    void failed();
+    void failed(const QString& error);
 public slots:
     void create();
 private slots:
@@ -80,6 +80,7 @@ private:
     Network* m_network{nullptr};
     QString m_name;
     QString m_type;
+    QString m_error;
     QStringList m_recovery_mnemonic;
     QString m_recovery_xpub;
     Account* m_account{nullptr};

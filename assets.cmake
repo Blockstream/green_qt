@@ -118,6 +118,7 @@ qt_add_resources(green "images"
         assets/png/liquid_background.png
         assets/png/no_transactions.png
 
+        assets/png/canceled.png
         assets/png/completed.png
 
         assets/png/background.png

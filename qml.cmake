@@ -249,6 +249,7 @@ SET(QML_FILES
     qml/ReceiveAccountAssetSelector.qml
     qml/ExportTransactionsDialog.qml
     qml/CompletedImage.qml
+    qml/CanceledImage.qml
 )
 
 if (GREEN_NO_RESOURCES)
