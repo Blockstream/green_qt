@@ -57,12 +57,10 @@ TextField {
         when: !activeFocus
         value: word.text
     }
-    onTextChanged: {
-        if (activeFocus) {
-            text = word.update(text.trim());
-            if (word.suggestions.length === 1 && text === word.suggestions[0] && suggestionIndex < 0) {
-                nextItemInFocusChain().forceActiveFocus()
-            }
+    onTextEdited: {
+        text = word.update(text.trim());
+        if (word.suggestions.length === 1 && text === word.suggestions[0] && suggestionIndex < 0) {
+            nextItemInFocusChain().forceActiveFocus()
         }
     }
     Keys.onPressed: (event) => {

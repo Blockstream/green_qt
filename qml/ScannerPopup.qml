@@ -7,8 +7,10 @@ import QtQuick.Shapes
 
 Popup {
     signal codeScanned(string code)
+    property bool scanned: false
     readonly property bool available: window.hasVideoInput
 
+    onOpened: self.scanned = false
     id: self
     background: null
     x: parent.width / 2 - width / 2
@@ -51,8 +53,11 @@ Popup {
                     }
                 }
                 onCodeScanned: (code) => {
-                    self.codeScanned(code)
-                    self.close()
+                    if (!self.scanned) {
+                        self.scanned = true
+                        self.codeScanned(code)
+                        self.close()
+                    }
                 }
             }
             Shape {

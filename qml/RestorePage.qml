@@ -21,6 +21,9 @@ StackViewPage {
                 self.failedRecoveryPhraseCheck()
             }
         }
+        onValidChanged: {
+            if (controller.valid) restore_button.forceActiveFocus()
+        }
         // onFailedRecoveryPhraseCheck: {
         //     Analytics.recordEvent('failed_recovery_phrase_check', {
         //         network: navigation.param.network === 'bitcoin' ? 'mainnet' : navigation.param.network
@@ -84,6 +87,7 @@ StackViewPage {
             columnSpacing: 20
             rowSpacing: 10
             Repeater {
+                id: word_field_repeater
                 model: controller.mnemonicSize
                 WordField {
                     Layout.minimumWidth: 140
@@ -112,10 +116,59 @@ StackViewPage {
                 case 'invalid': return qsTrId('id_invalid_recovery_phrase')
             }
         }
+        Pane {
+            id: tools_pane
+            Layout.topMargin: 10
+            Layout.bottomMargin: 20
+            Layout.alignment: Qt.AlignCenter
+            padding: 12
+            background: Rectangle {
+                border.width: 1
+                border.color: '#FFF'
+                color: 'transparent'
+                radius: height / 2
+                opacity: tools_pane.hovered ? 0.4 : 0
+                Behavior on opacity {
+                    SmoothedAnimation {
+                        velocity: 2
+                    }
+                }
+            }
+            contentItem: RowLayout {
+                spacing: 20
+                CircleButton {
+                    icon.source: 'qrc:/svg2/x-circle.svg'
+                    onClicked: controller.clear()
+                }
+                CircleButton {
+                    Layout.alignment: Qt.AlignCenter
+                    id: scanner_button
+                    visible: scanner_popup.available
+                    enabled: !scanner_popup.visible
+                    icon.source: 'qrc:/svg2/qrcode.svg'
+                    onClicked: {
+                        scanner_button.forceActiveFocus()
+                        scanner_popup.open()
+                    }
+                    ScannerPopup {
+                        id: scanner_popup
+                        onCodeScanned: (code) => {
+                            controller.update(code)
+                        }
+                    }
+                }
+                CircleButton {
+                    Layout.alignment: Qt.AlignCenter
+                    icon.source: 'qrc:/svg2/paste.svg'
+                    onClicked: word_field_repeater.itemAt(0).paste()
+                }
+            }
+        }
+
         PrimaryButton {
             Layout.alignment: Qt.AlignCenter
             Layout.minimumWidth: 325
-            Layout.topMargin: 20
+            id: restore_button
             enabled: controller.valid
             text: qsTrId('id_restore')
             onClicked: self.mnemonicEntered(self.wallet, controller.mnemonic, controller.passphrase)

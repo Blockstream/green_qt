@@ -3,6 +3,7 @@ import QtQuick.Controls
 
 AbstractButton {
     id: self
+    focusPolicy: Qt.StrongFocus
     font.pixelSize: 14
     font.weight: 400
     background: Item {

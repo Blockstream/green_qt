@@ -4,6 +4,7 @@ import QtQuick.Layouts
 
 AbstractButton {
     id: self
+    focusPolicy: Qt.StrongFocus
     padding: 16
     leftPadding: 16
     rightPadding: 16

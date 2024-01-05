@@ -39,6 +39,14 @@ QQmlListProperty<Word> MnemonicEditorController::words() {
     return { this, &m_words };
 }
 
+void MnemonicEditorController::update(const QString& mnemonic)
+{
+    auto words = mnemonic.trimmed().split(QRegularExpression("\\s+"));
+    if (words.length() == 12 || words.length() == 24 || words.length() == 27) {
+        update(0, mnemonic);
+    }
+}
+
 QString MnemonicEditorController::update(int index, const QString& text)
 {
     QString out = updateWord(index, text);

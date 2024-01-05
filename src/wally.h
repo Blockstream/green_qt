@@ -69,6 +69,7 @@ public:
     QString passphrase() const { return m_passphrase; }
     void setPassphrase(const QString& passphrase);
 public slots:
+    void update(const QString& mnemonic);
     void clear();
 signals:
     void validChanged(bool valid);
