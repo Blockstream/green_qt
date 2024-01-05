@@ -232,7 +232,7 @@ MainPage {
         id: pin_login_page
         PinLoginPage {
             onLoginFinished: (context) => {
-                stack_view.push(null, loading_page, { context }, StackView.PushTransition)
+                stack_view.replace(null, loading_page, { context }, StackView.PushTransition)
             }
             onRestoreClicked: stack_view.replace(restore_wallet_page, { wallet: self.wallet })
             onRemoveClicked: self.removeWallet(self.wallet)
