@@ -130,7 +130,11 @@ StackViewPage {
             id: total_convert
             account: self.account
             unit: 'sats'
-            value: String(self.transaction.fee - (self.transaction.satoshi.btc ?? 0))
+            value: {
+                const network = self.account.network
+                const total = self.transaction.fee - (self.transaction.satoshi[network.liquid ? network.policyAsset : 'btc'] ?? 0)
+                return String(total)
+            }
         }
         RowLayout {
             Layout.fillWidth: true
