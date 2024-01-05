@@ -1,11 +1,1 @@
-<svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g id="Duplicate 1 by Streamlinehq" clip-path="url(#clip0_42_72036)">
-<path id="Vector" d="M13.2587 4.92953H15.1285C15.5041 4.92953 15.8085 5.23395 15.8085 5.60947V15.1285C15.8085 15.5041 15.5041 15.8085 15.1285 15.8085H5.60947C5.23395 15.8085 4.92953 15.5041 4.92953 15.1285V13.2587" stroke="white" stroke-width="1.0199" stroke-linecap="round" stroke-linejoin="round"/>
-<path id="Vector_2" d="M0.509949 1.18991C0.509949 0.814392 0.814369 0.509979 1.18988 0.509979H10.709C11.0845 0.509979 11.3889 0.814399 11.3889 1.18991V10.709C11.3889 11.0845 11.0845 11.3889 10.709 11.3889H1.18988C0.814362 11.3889 0.509949 11.0845 0.509949 10.709V1.18991Z" stroke="white" stroke-width="1.0199" stroke-linejoin="round"/>
-</g>
-<defs>
-<clipPath id="clip0_42_72036">
-<rect width="16.3184" height="16.3184" fill="white"/>
-</clipPath>
-</defs>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#ffffff" viewBox="0 0 256 256"><path d="M216,32H88a8,8,0,0,0-8,8V80H40a8,8,0,0,0-8,8V216a8,8,0,0,0,8,8H168a8,8,0,0,0,8-8V176h40a8,8,0,0,0,8-8V40A8,8,0,0,0,216,32ZM160,208H48V96H160Zm48-48H176V88a8,8,0,0,0-8-8H96V48H208Z"></path></svg>
