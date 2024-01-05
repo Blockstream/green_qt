@@ -75,6 +75,7 @@ GPane {
             text: qsTrId('Export')
             enabled: self.account?.context && list_view.count > 0
             onClicked: export_transactions_dialog.createObject(self, { account: self.account }).open()
+        }
     }
 
     Component {
