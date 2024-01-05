@@ -81,7 +81,7 @@ StackViewPage {
         PinPadButton {
             Layout.alignment: Qt.AlignCenter
             enabled: pin_field.enabled
-            onClicked: pin_field.openPad()
+            target: pin_field
         }
         VSpacer {
         }

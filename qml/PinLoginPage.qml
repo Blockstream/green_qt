@@ -79,7 +79,7 @@ StackViewPage {
             }
             Label {
                 Layout.alignment: Qt.AlignCenter
-                Layout.bottomMargin: 45
+                Layout.bottomMargin: 30
                 font.pixelSize: 12
                 font.weight: 600
                 horizontalAlignment: Qt.AlignHCenter
@@ -96,7 +96,7 @@ StackViewPage {
             PinPadButton {
                 Layout.alignment: Qt.AlignCenter
                 enabled: pin_field.enabled
-                onClicked: pin_field.openPad()
+                target: pin_field
             }
             VSpacer {
             }

@@ -7,9 +7,6 @@ import QtQuick.Layouts
 AbstractButton {
     signal pinEntered(string pin)
     property string pin: ''
-    function openPad() {
-        pad_popup.open()
-    }
     function clear() {
         self.pin = ''
     }
@@ -18,7 +15,6 @@ AbstractButton {
             self.pin = self.pin + digit
             if (self.pin.length === 6) {
                 self.pinEntered(self.pin)
-                pad_popup.close()
             }
         }
     }
@@ -89,82 +85,6 @@ AbstractButton {
             width: 14
             height: 14
             color: digit.fill ? '#212121' : '#D3D3D3'
-        }
-    }
-
-    Popup {
-        id: pad_popup
-        x: parent.width / 2 - width / 2
-        y: parent.height + 10
-        focus: visible
-        background: Rectangle {
-            color: '#13161D'
-            border.width: 1
-            border.color: '#FFF'
-            radius: 8
-        }
-        contentItem: GridLayout {
-            id: pad
-            columns: 3
-            columnSpacing: 10
-            rowSpacing: 10
-            Repeater {
-                model: 9
-                RegularButton {
-                    Layout.preferredWidth: 56
-                    text: index + 1
-                    onClicked: self.append(index + 1)
-                }
-            }
-            PadButton {
-                Layout.fillHeight: true
-                Layout.preferredWidth: 56
-                icon.source: 'qrc:/svg2/x-square.svg'
-                onClicked: self.clear()
-            }
-            RegularButton {
-                Layout.preferredWidth: 56
-                text: '0'
-                onClicked: self.append(0)
-            }
-            PadButton {
-                Layout.fillHeight: true
-                Layout.preferredWidth: 56
-                icon.source: 'qrc:/svg2/backspace.svg'
-                onClicked: self.remove()
-            }
-        }
-    }
-
-    component PadButton: AbstractButton {
-        id: self
-        padding: 16
-        leftPadding: 0
-        rightPadding: 0
-        topPadding: 0
-        bottomPadding: 0
-        opacity: self.enabled ? 1 : 0.4
-        background: Rectangle {
-            color: Qt.alpha('#FFF', self.enabled && self.hovered ? 0.2 : 0)
-            border.width: 1
-            border.color: '#FFF'
-            radius: 8
-            Rectangle {
-                border.width: 2
-                border.color: '#00B45A'
-                color: 'transparent'
-                radius: 12
-                anchors.fill: parent
-                anchors.margins: -4
-                z: -1
-                opacity: self.visualFocus ? 1 : 0
-            }
-        }
-        contentItem: RowLayout {
-            Image {
-                Layout.alignment: Qt.AlignCenter
-                source: self.icon.source
-            }
         }
     }
 }
