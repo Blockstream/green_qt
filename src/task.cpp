@@ -385,11 +385,6 @@ void AuthHandlerTask::requestCode(const QString &method)
 
 void AuthHandlerTask::resolveCode(const QByteArray& code)
 {
-    if (m_prompt) {
-        m_prompt->deleteLater();
-        m_prompt = nullptr;
-        emit promptChanged();
-    }
     QtConcurrent::run([=] {
         const auto rc = GA_auth_handler_resolve_code(m_auth_handler, code.constData());
         return rc == GA_OK;
@@ -444,7 +439,7 @@ void AuthHandlerTask::handleResolveCode(const QJsonObject& result)
 {
     if (result.contains("method")) {
         setResult(result);
-        if (!m_prompt) {
+        if (!m_prompt || result.value("attempts").toInt() == 3) {
             m_prompt = new CodePrompt(this);
             emit promptChanged();
         }

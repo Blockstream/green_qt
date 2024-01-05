@@ -56,25 +56,28 @@ QtObject {
 
     property Component code_prompt_view: StackViewPage {
         required property CodePrompt prompt
-        id: view
-        title: view.prompt.task.type
-        StackView.onActivating: {
+        function handleResult() {
             const prompt = view.prompt
             const task = prompt.task
             const status = task.result.status
             if (status === 'request_code') {
-                stack_view.push(method_view, { prompt })
+                stack_view.replace(method_view, { prompt })
             } else if (status === 'resolve_code') {
-                stack_view.push(code_view)
+                stack_view.replace(code_view, { prompt })
             }
         }
+
+        id: view
+        title: view.prompt.task.type
+        StackView.onActivating: view.handleResult()
         Connections {
             target: view.prompt.task
             function onResultChanged() {
-                console.log(view.prompt.task.result)
+                view.handleResult()
             }
         }
         contentItem: GStackView {
+            focus: true
             id: stack_view
         }
     }
@@ -82,159 +85,173 @@ QtObject {
     property Component device_prompt_view: DevicePromptView {
     }
 
-    property Component method_view: ColumnLayout {
+    property Component method_view: StackViewPage {
         required property CodePrompt prompt
         id: view
-        spacing: 10
-        VSpacer {
-        }
-        Image {
-            Layout.alignment: Qt.AlignCenter
-            source: 'qrc:/png/2fa.png'
-        }
-        Label {
-            Layout.alignment: Qt.AlignCenter
-            Layout.fillWidth: true
-            Layout.preferredWidth: 0
-            horizontalAlignment: Qt.AlignHCenter
-            font.pixelSize: 14
-            font.weight: 600
-            text: qsTrId('id_choose_method_to_authorize_the')
-        }
-        Repeater {
-            model: view.prompt.methods
-            delegate: AbstractButton {
-                property string method: modelData
+        contentItem: ColumnLayout {
+            spacing: 10
+            VSpacer {
+            }
+            Image {
+                Layout.alignment: Qt.AlignCenter
+                source: 'qrc:/png/2fa.png'
+            }
+            Label {
+                Layout.alignment: Qt.AlignCenter
                 Layout.fillWidth: true
-                id: delegate
-                padding: 20
-                background: Rectangle {
-                    color: '#222226'
-                    radius: 5
-                }
-                contentItem: RowLayout {
-                    Label {
-                        Layout.fillWidth: true
-                        color: '#FFF'
-                        font.pixelSize: 14
-                        font.weight: 500
-                        text: {
-                            const label = {
-                                email: 'id_email',
-                                gauth: 'id_authenticator_app',
-                                phone: 'id_phone_call',
-                                sms: 'id_sms',
-                                telegram: 'id_telegram'
+                Layout.preferredWidth: 0
+                Layout.bottomMargin: 36
+                    horizontalAlignment: Qt.AlignHCenter
+                font.pixelSize: 20
+                font.weight: 800
+                text: qsTrId('id_choose_method_to_authorize_the')
+            }
+            Repeater {
+                model: view.prompt.methods
+                delegate: AbstractButton {
+                    property string method: modelData
+                    Layout.alignment: Qt.AlignCenter
+                    Layout.minimumWidth: 325
+                    id: delegate
+                    padding: 20
+                    background: Rectangle {
+                        color: Qt.lighter('#222226', delegate.hovered ? 1.2 : 1)
+                        radius: 5
+                    }
+                    contentItem: RowLayout {
+                        ColumnLayout {
+                            Label {
+                                Layout.fillWidth: true
+                                color: '#FFF'
+                                font.pixelSize: 14
+                                font.weight: 500
+                                text: {
+                                    const label = {
+                                        email: 'id_email',
+                                        gauth: 'id_authenticator_app',
+                                        phone: 'id_phone_call',
+                                        sms: 'id_sms',
+                                        telegram: 'id_telegram'
+                                    }
+                                    return qsTrId(label[method])
+                                }
                             }
-                            return qsTrId(label[method])
+                            Label {
+                                text: view.prompt.task.session.config[delegate.method].data
+                                opacity: 0.6
+                            }
+                        }
+                        Image {
+                            Layout.alignment: Qt.AlignCenter
+                            source: 'qrc:/svg2/next_arrow.svg'
                         }
                     }
-                    Image {
-                        Layout.alignment: Qt.AlignCenter
-                        source: 'qrc:/svg2/right.svg'
-                    }
+                    onClicked: view.prompt.select(delegate.method)
                 }
-                onClicked: view.prompt.select(delegate.method)
             }
-        }
-        VSpacer {
+            VSpacer {
+            }
         }
     }
 
-    property Component code_view: ColumnLayout {
-        Image {
-            Layout.alignment: Qt.AlignCenter
-            source: `qrc:/png/2fa_${view.prompt.task.result.method}.png`
-        }
-        Label {
-            Layout.alignment: Qt.AlignCenter
-            text: qsTrId('id_please_provide_your_1s_code').arg(view.prompt.task.result.method)
-            font.family: 'SF Compact Display'
-            font.pixelSize: 20
-            font.weight: 800
-        }
-        Label {
-            Layout.alignment: Qt.AlignCenter
-            Layout.maximumWidth: 250
-            color: '#9A9A9A'
-            font.family: 'SF Compact Display'
-            font.pixelSize: 12
-            font.weight: 600
-            horizontalAlignment: Label.AlignHCenter
-            text: 'To authorize the transaction you need to enter your 2FA code.'
-            wrapMode: Label.WordWrap
-        }
-        PinField {
-            Layout.alignment: Qt.AlignCenter
-            Layout.topMargin: 36
-            Layout.bottomMargin: 20
-            id: pin_field
-            focus: true
-            onPinEntered: pin => view.prompt.task.resolve(pin)
-        }
-        PinPadButton {
-            Layout.alignment: Qt.AlignCenter
-            enabled: pin_field.enabled
-            onClicked: pin_field.openPad()
-        }
-        Loader {
-            Layout.alignment: Qt.AlignCenter
-            active: view.prompt.task instanceof TwoFactorResetTask
-            visible: active
-            sourceComponent: Label {
-                text: view.prompt.task.email
-                color: constants.c100
-                font.pixelSize: 14
+    property Component code_view: StackViewPage {
+        required property CodePrompt prompt
+        id: view
+        contentItem: ColumnLayout {
+            VSpacer {
             }
-        }
-        Loader {
-            Layout.alignment: Qt.AlignCenter
-            active: view.prompt.task.session.config[view.prompt.task.result.method].enabled && !(view.prompt.task instanceof TwoFactorResetTask)
-            visible: active
-            sourceComponent: Label {
-                text: {
-                    if (view.prompt.task.result.method === 'gauth') return qsTrId('id_authenticator_app')
-                    return view.prompt.task.session.config[view.prompt.task.result.method].data
+            Image {
+                Layout.alignment: Qt.AlignCenter
+                source: `qrc:/png/2fa_${view.prompt.task.result.method}.png`
+            }
+            Label {
+                Layout.alignment: Qt.AlignCenter
+                text: qsTrId('id_please_provide_your_1s_code').arg(view.prompt.task.result.method)
+                font.pixelSize: 20
+                font.weight: 800
+            }
+            Label {
+                Layout.alignment: Qt.AlignCenter
+                Layout.maximumWidth: 250
+                color: '#9A9A9A'
+                font.pixelSize: 12
+                font.weight: 600
+                horizontalAlignment: Label.AlignHCenter
+                text: 'To authorize the transaction you need to enter your 2FA code.'
+                wrapMode: Label.WordWrap
+            }
+            Loader {
+                Layout.alignment: Qt.AlignCenter
+                active: view.prompt.task instanceof TwoFactorResetTask
+                visible: active
+                sourceComponent: Label {
+                    text: view.prompt.task.email
+                    color: constants.c100
+                    font.pixelSize: 14
                 }
-                color: constants.c100
-                font.pixelSize: 14
             }
-        }
-        Loader {
-            Layout.alignment: Qt.AlignCenter
-            active: view.prompt.task.result.method === 'telegram'
-            visible: active
-            sourceComponent: RowLayout {
-                readonly property url browser: view.prompt.task.result.auth_data.telegram_url
-                readonly property url app: view.prompt.task.result.auth_data.telegram_url.replace('https://t.me/', 'tg://resolve?domain=').replace('?start=', '&start=')
-                spacing: constants.s1
-                ColumnLayout {
-                    GButton {
-                        Layout.fillWidth: true
-                        text: 'Open in Browser'
-                        onClicked: Qt.openUrlExternally(browser)
+            Loader {
+                Layout.alignment: Qt.AlignCenter
+                active: view.prompt.task.session.config[view.prompt.task.result.method].enabled && !(view.prompt.task instanceof TwoFactorResetTask)
+                visible: active
+                sourceComponent: Label {
+                    text: {
+                        if (view.prompt.task.result.method === 'gauth') return qsTrId('id_authenticator_app')
+                        return view.prompt.task.session.config[view.prompt.task.result.method].data
                     }
-                    GButton {
-                        Layout.fillWidth: true
-                        text: 'Open Telegram'
-                        onClicked: Qt.openUrlExternally(app)
+                    color: constants.c100
+                    font.pixelSize: 14
+                }
+            }
+            PinField {
+                Layout.alignment: Qt.AlignCenter
+                Layout.topMargin: 36
+                Layout.bottomMargin: 20
+                id: pin_field
+                focus: true
+                onPinEntered: pin => view.prompt.resolve(pin)
+            }
+            PinPadButton {
+                Layout.alignment: Qt.AlignCenter
+                enabled: pin_field.enabled
+                onClicked: pin_field.openPad()
+            }
+            Loader {
+                Layout.alignment: Qt.AlignCenter
+                active: view.prompt.task.result.method === 'telegram'
+                visible: active
+                sourceComponent: RowLayout {
+                    readonly property url browser: view.prompt.task.result.auth_data.telegram_url
+                    readonly property url app: view.prompt.task.result.auth_data.telegram_url.replace('https://t.me/', 'tg://resolve?domain=').replace('?start=', '&start=')
+                    spacing: constants.s1
+                    ColumnLayout {
+                        GButton {
+                            Layout.fillWidth: true
+                            text: 'Open in Browser'
+                            onClicked: Qt.openUrlExternally(browser)
+                        }
+                        GButton {
+                            Layout.fillWidth: true
+                            text: 'Open Telegram'
+                            onClicked: Qt.openUrlExternally(app)
+                        }
+                    }
+                    QRCode {
+                        text: app
                     }
                 }
-                QRCode {
-                    text: app
+            }
+            Loader {
+                Layout.alignment: Qt.AlignCenter
+                active: view.prompt.task.result.method !== 'gauth' && view.prompt.task.result.method !== 'telegram'
+                visible: active
+                opacity: view.prompt.task.result.attempts_remaining < 3 ? 1 : 0
+                sourceComponent: Label {
+                    text: qsTrId('id_attempts_remaining_d').arg(view.prompt.task.result.attempts_remaining)
                 }
             }
-        }
-        Loader {
-            Layout.alignment: Qt.AlignCenter
-            active: view.prompt.task.result.method !== 'gauth' && view.prompt.task.result.method !== 'telegram'
-            visible: active
-            opacity: view.prompt.task.result.attempts_remaining < 3 ? 1 : 0
-            sourceComponent: Label {
-                text: qsTrId('id_attempts_remaining_d').arg(view.prompt.task.result.attempts_remaining)
+            VSpacer {
             }
-        }
-        VSpacer {
         }
     }
 
