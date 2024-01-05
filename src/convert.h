@@ -20,7 +20,7 @@ class Convert : public QObject
     Q_PROPERTY(QJsonObject result READ result NOTIFY resultChanged)
     Q_PROPERTY(QString fiatLabel READ fiatLabel NOTIFY fiatLabelChanged)
     Q_PROPERTY(QString unitLabel READ unitLabel NOTIFY unitLabelChanged)
-    Q_PROPERTY(QString outputUnitLabel READ outputUnitLabel NOTIFY outputUnitLabelChanged)
+    Q_PROPERTY(QVariantMap output READ output NOTIFY outputChanged)
     QML_ELEMENT
 public:
     Convert(QObject* parent = nullptr);
@@ -45,7 +45,7 @@ public:
     void setResult(const QJsonObject& result);
     QString fiatLabel() const;
     QString unitLabel() const;
-    QString outputUnitLabel() const;
+    QVariantMap output() const;
 signals:
     void contextChanged();
     void accountChanged();
@@ -58,13 +58,13 @@ signals:
     void resultChanged();
     void fiatLabelChanged();
     void unitLabelChanged();
-    void outputUnitLabelChanged();
+    void outputChanged();
 private:
     void setSession(Session* session);
     void invalidate();
     void update();
     bool mainnet() const;
-    QString label(const QString& unit) const;
+    QVariantMap format(const QString& unit) const;
 protected:
     void timerEvent(QTimerEvent* event) override;
 private:

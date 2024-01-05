@@ -7,6 +7,7 @@ import QtQuick.Layouts
 import "util.js" as UtilJS
 
 StackViewPage {
+    signal closed()
     required property Context context
     required property Account account
     required property Asset asset
@@ -14,7 +15,7 @@ StackViewPage {
     required property bool fiat
     required property string unit
     required property var transaction
-    readonly property string value: recipient_convert.result[self.fiat ? 'fiat' : UtilJS.normalizeUnit(self.unit)] ?? ''
+    readonly property string value: self.fiat ? recipient_convert.result['fiat'] : recipient_convert.output.amount ?? ''
     property bool note: false
     Convert {
         id: recipient_convert
@@ -22,57 +23,20 @@ StackViewPage {
         asset: self.asset
         unit: 'sats'
         value: self.recipient.amount
+        outputUnit: self.unit
     }
-    /*
-    readonly property AuthHandlerTask task: {
-        const groups = controller.monitor.groups
-        for (let i = 0; i < groups.length; i++) {
-            const group = groups[i]
-            const tasks = group.tasks
-            for (let j = 0; j < tasks.length; j++) {
-                const task = tasks[j]
-                if (task instanceof AuthHandlerTask) {
-                    switch (task.result.status) {
-                    case 'request_code':
-                    case 'resolve_code':
-                        return task
-                    default:
-                    }
-                }
-            }
-        }
-        return null
-    }
-    onTaskChanged: (task) => {
-        if (self.task) {
-            self.StackView.view.push(task_page, { task: self.task })
-        }
-    }
-    */
     TaskPageFactory {
         monitor: controller.monitor
         target: self.StackView.view
     }
-
-//    Component {
-//        id: task_page
-//        StackViewPage {
-//            required property Task task
-//            id: xxx
-//            contentItem: AuthHandlerTaskView {
-//                task: xxx.task
-//            }
-//        }
-//    }
-
     SignTransactionController {
         id: controller
         context: self.context
         account: self.account
         transaction: self.transaction
         memo: note_text_area.text
+        // TODO: should replace but we must cut dependency to the current view
         onTransactionCompleted: transaction => self.StackView.view.push(transaction_completed_page, { transaction })
-        // onTransactionCompleted: transaction => self.StackView.view.replace(null, transaction_completed_page, { transaction }, StackView.PushTransition)
     }
     id: self
     title: qsTrId('id_confirm_transaction')
@@ -166,7 +130,7 @@ StackViewPage {
             id: total_convert
             account: self.account
             unit: 'sats'
-            value: String(self.transaction.fee - self.transaction.satoshi.btc)
+            value: String(self.transaction.fee - (self.transaction.satoshi.btc ?? 0))
         }
         RowLayout {
             Layout.fillWidth: true
@@ -252,6 +216,9 @@ StackViewPage {
     Component {
         id: transaction_completed_page
         TransactionCompletedPage {
+            leftItem: Item {
+            }
+            onClosed: self.closed()
         }
     }
 }

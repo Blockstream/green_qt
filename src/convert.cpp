@@ -41,7 +41,7 @@ void Convert::setSession(Session* session)
     connect(session, &Session::settingsChanged, this, [=] {
         emit fiatLabelChanged();
         emit unitLabelChanged();
-        emit outputUnitLabelChanged();
+        emit outputChanged();
         invalidate();
     });
     connect(session, &Session::tickerEvent, this, [=] {
@@ -82,7 +82,7 @@ void Convert::setOutputUnit(const QString &output_unit)
     if (m_output_unit == output_unit) return;
     m_output_unit = output_unit;
     emit outputUnitChanged();
-    emit outputUnitLabelChanged();
+    emit outputChanged();
 }
 
 void Convert::setUser(bool user)
@@ -113,7 +113,7 @@ void Convert::setResult(const QJsonObject& result)
     emit resultChanged();
     emit fiatLabelChanged();
     emit unitLabelChanged();
-    emit outputUnitLabelChanged();
+    emit outputChanged();
 }
 
 QString Convert::fiatLabel() const
@@ -141,19 +141,20 @@ QString Convert::unitLabel() const
     if (!m_context && !m_account) return {};
     const auto session = m_account ? m_account->session() : m_context->primarySession();
     if (!session) return {};
-    return label(session->unit());
+    return format(session->unit()).value("label").toString();
 }
 
-QString Convert::outputUnitLabel() const
+QVariantMap Convert::output() const
 {
     if (!m_context && !m_account) return {};
     if (m_output_unit.isEmpty()) return {};
-    return label(m_output_unit);
+    return format(m_output_unit);
 }
 
-QString Convert::label(const QString& unit) const
+QVariantMap Convert::format(const QString& unit) const
 {
     if (!m_context && !m_account) return {};
+    QVariantMap result;
     if (m_liquid_asset) {
         const auto precision = m_asset->data().value("precision").toInt(0);
         const auto satoshi = m_result.value("satoshi").toString();
@@ -162,24 +163,27 @@ QString Convert::label(const QString& unit) const
             amount.replace(QRegularExpression("0+$"), {});
             amount.replace(QRegularExpression("\\.$"), {});
         }
+        result["amount"] = amount;
         if (m_asset->data().contains("ticker")) {
             const auto ticker = m_asset->data().value("ticker").toString();
-            return amount + " " + ticker;
+            result["label"] = amount + " " + ticker;
         } else {
-            return amount;
+            result["label"] = amount;
         }
-    }
-    const auto unit_key = unit == "\u00B5BTC" ? "ubtc" : unit.toLower();
+    } else {
+        const auto unit_key = unit == "\u00B5BTC" ? "ubtc" : unit.toLower();
+        const QString prefix{m_account && m_account->isLiquid() ? "L-" : ""};
 
-    const QString prefix{m_account && m_account->isLiquid() ? "L-" : ""};
-
-    if (!m_result.contains(unit_key)) return {};
-    auto amount = m_result.value(unit_key).toString();
-    if (amount.contains('.')) {
-        amount.replace(QRegularExpression("0+$"), {});
-        amount.replace(QRegularExpression("\\.$"), {});
+        if (!m_result.contains(unit_key)) return {};
+        auto amount = m_result.value(unit_key).toString();
+        if (amount.contains('.')) {
+            amount.replace(QRegularExpression("0+$"), {});
+            amount.replace(QRegularExpression("\\.$"), {});
+        }
+        result["amount"] = amount;
+        result["label"] = amount + " " + prefix + (mainnet() ? unit : testnetUnit(unit));
     }
-    return amount + " " + prefix + (mainnet() ? unit : testnetUnit(unit));
+    return result;
 }
 
 void Convert::invalidate()

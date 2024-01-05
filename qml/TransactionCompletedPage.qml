@@ -5,50 +5,64 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 StackViewPage {
+    signal closed()
     required property Transaction transaction
     id: self
     rightItem: CloseButton {
+        onClicked: self.closed()
     }
     contentItem: ColumnLayout {
         spacing: 10
         VSpacer {
         }
-        Image {
+        CompletedImage {
             Layout.alignment: Qt.AlignCenter
-            source: 'qrc:/png/completed.png'
         }
         Label {
             Layout.alignment: Qt.AlignCenter
             Layout.bottomMargin: 20
             font.pixelSize: 20
             font.weight: 700
-            text: 'Transaction completed'
+            text: qsTrId('id_transaction_sent')
         }
-        Repeater {
-            model: self.transaction.data.addressees
-            Label {
-                Layout.fillWidth: true
-                Layout.preferredWidth: 0
-                font.pixelSize: 14
-                font.weight: 400
-                horizontalAlignment: Label.AlignHCenter
-                text: `You have just transfered ${modelData?.satoshi ?? '??'} to ${modelData?.address ?? '??'}`
-                wrapMode: Label.Wrap
+        Label {
+            Layout.fillWidth: true
+            Layout.preferredWidth: 0
+            font.pixelSize: 14
+            font.weight: 400
+            text: self.transaction.data.txhash
+            horizontalAlignment: Label.AlignHCenter
+            wrapMode: Label.Wrap
+        }
+        Pane {
+            id: tools_pane
+            Layout.topMargin: 10
+            Layout.alignment: Qt.AlignCenter
+            padding: 12
+            background: Rectangle {
+                border.width: 1
+                border.color: '#FFF'
+                color: 'transparent'
+                radius: height / 2
+                opacity: tools_pane.hovered ? 0.4 : 0
+                Behavior on opacity {
+                    SmoothedAnimation {
+                        velocity: 2
+                    }
+                }
+            }
+            contentItem: RowLayout {
+                spacing: 20
+                ShareButton {
+                    onClicked: Qt.openUrlExternally(self.transaction.account.network.data.tx_explorer_url + self.transaction.data.txhash)
+                }
+                CircleButton {
+                    icon.source: 'qrc:/svg2/copy.svg'
+                    onClicked: Clipboard.copy(self.transaction.data.txhash)
+                }
             }
         }
-        PrimaryButton {
-            Layout.alignment: Qt.AlignCenter
-            Layout.topMargin: 20
-            text: 'View Transaction'
-            onClicked: self.StackView.view.replace(null, transaction_details_page, { transaction: self.transaction }, StackView.PushTransition)
-        }
         VSpacer {
-        }
-    }
-
-    Component {
-        id: transaction_details_page
-        TransactionView {
         }
     }
 }

@@ -8,6 +8,7 @@ import "analytics.js" as AnalyticsJS
 import "util.js" as UtilJS
 
 StackViewPage {
+    signal closed()
     required property Context context
     required property Account account
     property Asset asset
@@ -39,6 +40,9 @@ StackViewPage {
     }
     id: self
     title: qsTrId('id_send')
+    rightItem: CloseButton {
+        onClicked: self.closed()
+    }
     contentItem: Flickable {
         ScrollIndicator.vertical: ScrollIndicator {
         }
@@ -217,7 +221,7 @@ StackViewPage {
                 ColumnLayout {
                     Label {
                         Layout.fillWidth: true
-                        text: qsTrId('id_available') + ' ' + available_convert.outputUnitLabel
+                        text: qsTrId('id_available') + ' ' + available_convert.output.label
                         font.pixelSize: 14
                         font.weight: 500
                     }
@@ -374,6 +378,7 @@ StackViewPage {
     Component {
         id: send_confirm_page
         SendConfirmPage {
+            onClosed: self.closed()
         }
     }
 
