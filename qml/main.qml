@@ -67,7 +67,12 @@ ApplicationWindow {
     GStackView {
         id: stack_view
         anchors.fill: parent
-        initialItem: SplashPage {
+        initialItem: splash_page
+    }
+
+    Component {
+        id: splash_page
+        SplashPage {
             onTimeout: app_page.active = true
         }
     }
