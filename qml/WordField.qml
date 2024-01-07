@@ -75,10 +75,10 @@ TextField {
         }
         if (event.key === Qt.Key_Tab || event.key === Qt.Key_Enter || event.key === Qt.Key_Return) {
             if (word.suggestions.length === 1) {
-                text = word.suggestions[0]
+                word.update(word.suggestions[0])
             }
             if (suggestionIndex >= 0) {
-                text = word.suggestions[suggestionIndex]
+                word.update(word.suggestions[suggestionIndex])
             }
             nextItemInFocusChain().forceActiveFocus()
         }
