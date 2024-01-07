@@ -46,13 +46,12 @@ void ExportAddressesController::save()
 
     m_lines.append("address,tx_count");
 
-    QTimer::singleShot(1000, this, [=] {
-        nextPage();
-    });
+    nextPage();
 }
 
 void ExportAddressesController::nextPage()
 {
+    qDebug() << Q_FUNC_INFO << m_last_pointer;
     auto task = new GetAddressesTask(m_last_pointer, m_account);
     connect(task, &Task::finished, this, [=] {
         m_last_pointer = task->lastPointer();
@@ -67,7 +66,7 @@ void ExportAddressesController::nextPage()
             m_lines.append(values.join(","));
         }
 
-        if (m_last_pointer == 1) {
+        if (m_last_pointer < 0) {
             QFile file(m_file_name);
             bool result = file.open(QFile::WriteOnly);
             Q_ASSERT(result);
@@ -76,9 +75,7 @@ void ExportAddressesController::nextPage()
             stream << m_lines.join("\n");
             emit saved();
         } else {
-            QTimer::singleShot(100, this, [=] {
-                nextPage();
-            });
+            nextPage();
         }
     });
     dispatcher()->add(task);
