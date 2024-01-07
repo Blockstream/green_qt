@@ -38,19 +38,19 @@ WalletHeaderCard {
             Rate {
                 color: '#FF0000'
                 name: qsTrId('id_fast')
-                rate: estimates.fees[3]
+                rate: estimates.fees[3] ?? 0
                 time: qsTrId('id_1030_minutes')
             }
             Rate {
                 color: '#E99A00'
                 name: qsTrId('id_medium')
-                rate: estimates.fees[12]
+                rate: estimates.fees[12] ?? 0
                 time: qsTrId('id_2_hours')
             }
             Rate {
                 color: '#128E2D'
                 name: qsTrId('id_slow')
-                rate: estimates.fees[24]
+                rate: estimates.fees[24] ?? 0
                 time: qsTrId('id_4_hours')
             }
             VSpacer {
