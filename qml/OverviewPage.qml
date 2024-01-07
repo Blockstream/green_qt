@@ -476,7 +476,6 @@ StackViewPage {
                 Label {
                     Layout.preferredWidth: 0
                     Layout.fillWidth: true
-                    font.family: 'SF Compact Display'
                     font.pixelSize: 12
                     font.weight: 600
                     text: 'A powerful hardware wallet for securing your Bitcoin.'
@@ -485,7 +484,6 @@ StackViewPage {
                 Label {
                     Layout.preferredWidth: 0
                     Layout.fillWidth: true
-                    font.family: 'SF Compact Display'
                     font.pixelSize: 11
                     font.weight: 400
                     opacity: 0.3
@@ -508,7 +506,6 @@ StackViewPage {
                 Label {
                     Layout.preferredWidth: 0
                     Layout.fillWidth: true
-                    font.family: 'SF Compact Display'
                     font.pixelSize: 12
                     font.weight: 600
                     text: 'The Importance of Two-Factor Authentication'
@@ -517,7 +514,6 @@ StackViewPage {
                 Label {
                     Layout.preferredWidth: 0
                     Layout.fillWidth: true
-                    font.family: 'SF Compact Display'
                     font.pixelSize: 11
                     font.weight: 400
                     opacity: 0.3
