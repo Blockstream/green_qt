@@ -151,7 +151,7 @@ StackViewPage {
                                     for (let i = 0; i < self.context.accounts.length; i++) {
                                         const account = self.context.accounts[i]
                                         if (account.hidden) continue
-                                        const satoshi = account.json.satoshi[delegate.asset.key]
+                                        const satoshi = String(account.json.satoshi[delegate.asset.key])
                                         if (satoshi > 0) accounts.push({ account, satoshi })
                                     }
                                     return accounts
@@ -177,7 +177,7 @@ StackViewPage {
         signal selected(Account account, Asset asset)
         required property Account account
         required property Asset asset
-        required property var satoshi
+        required property string satoshi
         onClicked: button.selected(button.account, button.asset)
         id: button
         background: Item {
@@ -220,15 +220,15 @@ StackViewPage {
                 id: convert
                 account: button.account
                 asset: button.asset
-                value: button.satoshi ?? '0'
-                unit: 'sats'
+                input: ({ satoshi: button.satoshi })
+                unit: button.account.session.unit
             }
             ColumnLayout {
                 Label {
                     Layout.alignment: Qt.AlignRight
                     font.pixelSize: 14
                     font.weight: 500
-                    text: convert.unitLabel
+                    text: convert.output.label
                     wrapMode: Label.Wrap
                 }
                 Label {
@@ -236,8 +236,8 @@ StackViewPage {
                     font.pixelSize: 11
                     font.weight: 400
                     opacity: 0.4
-                    text: convert.fiatLabel
-                    visible: convert.fiat
+                    text: convert.fiat.label
+                    visible: convert.fiat.available
                 }
             }
             HSpacer {

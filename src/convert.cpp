@@ -12,6 +12,36 @@
 #include <QDebug>
 #include <QtConcurrentRun>
 
+
+static QString to_c(const QLocale& locale, QString number)
+{
+    bool ok = false;
+    auto n = locale.toDouble(number, &ok);
+    if (!ok) n = QLocale::c().toDouble(number);
+    number = QLocale::c().toString(n, 'f', 10);
+    const auto decimal_point = QLocale::c().decimalPoint();
+    if (number.contains(decimal_point)) {
+        number.replace(QRegularExpression("0+$"), {});
+        if (number.endsWith(decimal_point)) {
+            number = number.mid(0, number.length() - decimal_point.length());
+        }
+    }
+    return number;
+}
+
+static QString number_to_string(const QLocale& locale, QString number, int precision)
+{
+    number = locale.toString(locale.QLocale::c().toDouble(number), 'f', precision);
+    const auto decimal_point = locale.decimalPoint();
+    if (number.contains(decimal_point)) {
+        number.replace(QRegularExpression("0+$"), {});
+        if (number.endsWith(decimal_point)) {
+            number = number.mid(0, number.length() - decimal_point.length());
+        }
+    }
+    return number;
+}
+
 Convert::Convert(QObject* parent)
     : QObject(parent)
 {
@@ -29,23 +59,35 @@ void Convert::setContext(Context* context)
 void Convert::setAccount(Account* account)
 {
     if (m_account == account) return;
-    if (m_account) clearValue();
+    if (m_account) clearInput();
     m_account = account;
     emit accountChanged();
     invalidate();
     if (m_account) setSession(m_account->session());
 }
 
+void Convert::setInput(const QVariantMap& input)
+{
+    if (m_input == input) return;
+    m_input = input;
+    emit inputChanged();
+    invalidate();
+}
+
+void Convert::clearInput()
+{
+    setInput({});
+    emit inputCleared();
+}
+
 void Convert::setSession(Session* session)
 {
     connect(session, &Session::settingsChanged, this, [=] {
-        emit fiatLabelChanged();
-        emit unitLabelChanged();
-        emit outputChanged();
+        emit fiatChanged();
         invalidate();
     });
     connect(session, &Session::tickerEvent, this, [=] {
-        emit fiatLabelChanged();
+        emit fiatChanged();
         invalidate();
     });
 }
@@ -53,17 +95,10 @@ void Convert::setSession(Session* session)
 void Convert::setAsset(Asset* asset)
 {
     if (m_asset == asset) return;
-    if (m_asset) clearValue();
+    if (m_asset) clearInput();
     m_asset = asset;
     emit assetChanged();
     invalidate();
-}
-
-void Convert::setFiat(bool fiat)
-{
-    if (m_fiat == fiat) return;
-    m_fiat = fiat;
-    emit fiatChanged();
 }
 
 void Convert::setUnit(const QString& unit)
@@ -71,59 +106,37 @@ void Convert::setUnit(const QString& unit)
     if (m_unit == unit) return;
     m_unit = unit;
     emit unitChanged();
-    if (m_result.contains(m_unit)) {
-        setValue(m_result.value(m_unit).toString());
-    }
-    invalidate();
-}
-
-void Convert::setOutputUnit(const QString &output_unit)
-{
-    if (m_output_unit == output_unit) return;
-    m_output_unit = output_unit;
-    emit outputUnitChanged();
     emit outputChanged();
-}
-
-void Convert::setUser(bool user)
-{
-    if (m_user == user) return;
-    m_user = user;
-    emit userChanged();
-    invalidate();
-}
-
-void Convert::setValue(const QString& value)
-{
-    if (m_value == value) return;
-    m_value = value;
-    emit valueChanged();
-    invalidate();
-}
-
-void Convert::clearValue()
-{
-    setValue({});
 }
 
 void Convert::setResult(const QJsonObject& result)
 {
+    Q_ASSERT(!result.contains("satoshi") || result.value("satoshi").type() == QJsonValue::String);
     if (m_result == result) return;
     m_result = result;
     emit resultChanged();
-    emit fiatLabelChanged();
-    emit unitLabelChanged();
+    emit fiatChanged();
     emit outputChanged();
 }
 
-QString Convert::fiatLabel() const
+QVariantMap Convert::fiat() const
 {
     if (m_result.contains("fiat") && m_result.contains("fiat_currency")) {
         const auto currency = mainnet() ? m_result.value("fiat_currency").toString() : "FIAT";
-        const auto amount = m_result.value("fiat").toString();
-        return amount + " " + currency;
+        const auto amount = number_to_string(QLocale::system(), m_result.value("fiat").toString(), 2);
+        return {
+            { "label", amount + " " + currency },
+            { "amount", amount },
+            { "currency", currency },
+            { "available", true }
+        };
+    } else {
+        return {
+            { "label", "" },
+            { "amount", "" },
+            { "available", false }
+        };
     }
-    return {};
 }
 
 static QString testnetUnit(const QString& unit)
@@ -136,33 +149,26 @@ static QString testnetUnit(const QString& unit)
     Q_UNREACHABLE();
 }
 
-QString Convert::unitLabel() const
-{
-    if (!m_context && !m_account) return {};
-    const auto session = m_account ? m_account->session() : m_context->primarySession();
-    if (!session) return {};
-    return format(session->unit()).value("label").toString();
-}
-
 QVariantMap Convert::output() const
 {
-    if (!m_context && !m_account) return {};
-    if (m_output_unit.isEmpty()) return {};
-    return format(m_output_unit);
+    return format(m_unit);
+}
+
+QString Convert::satoshi() const
+{
+    return m_result.value("satoshi").toString("0");
 }
 
 QVariantMap Convert::format(const QString& unit) const
 {
-    if (!m_context && !m_account) return {};
-    QVariantMap result;
+    QVariantMap result{{ "label", "" }, { "amount", "" }};
+    if (!m_context && !m_account) return result;
     if (m_liquid_asset) {
         const auto precision = m_asset->data().value("precision").toInt(0);
         const auto satoshi = m_result.value("satoshi").toString();
         auto amount = QLocale::c().toString(satoshi.toDouble() / qPow(10, precision), 'f', precision);
-        if (amount.contains('.')) {
-            amount.replace(QRegularExpression("0+$"), {});
-            amount.replace(QRegularExpression("\\.$"), {});
-        }
+        result["bip21_amount"] = amount;
+        amount = number_to_string(QLocale::system(), amount, precision);
         result["amount"] = amount;
         if (m_asset->data().contains("ticker")) {
             const auto ticker = m_asset->data().value("ticker").toString();
@@ -170,18 +176,16 @@ QVariantMap Convert::format(const QString& unit) const
         } else {
             result["label"] = amount;
         }
-    } else {
+    } else if (!unit.isEmpty()) {
         const auto unit_key = unit == "\u00B5BTC" ? "ubtc" : unit.toLower();
         const QString prefix{m_account && m_account->isLiquid() ? "L-" : ""};
-
-        if (!m_result.contains(unit_key)) return {};
+        result["label"] = prefix + (mainnet() ? unit : testnetUnit(unit));
+        result["bip21_amount"] = m_result["btc"];
+        if (!m_result.contains(unit_key)) return result;
         auto amount = m_result.value(unit_key).toString();
-        if (amount.contains('.')) {
-            amount.replace(QRegularExpression("0+$"), {});
-            amount.replace(QRegularExpression("\\.$"), {});
-        }
+        amount = number_to_string(QLocale::system(), amount, 8);
         result["amount"] = amount;
-        result["label"] = amount + " " + prefix + (mainnet() ? unit : testnetUnit(unit));
+        result["label"] = amount + " " + result["label"].toString();
     }
     return result;
 }
@@ -195,7 +199,7 @@ void Convert::invalidate()
 void Convert::update()
 {
     if (!m_context && !m_account) {
-        setFiat(false);
+        setInput({});
         setResult({});
         return;
     }
@@ -216,28 +220,58 @@ void Convert::update()
     } else {
         m_liquid_asset = false;
     }
-    setFiat(!m_liquid_asset);
 
-    const auto value = m_value.isEmpty() ? "0" : m_value;
+    auto input = m_input;
+
+    for (auto key : input.keys()) {
+        const auto value = input[key];
+        if (value.isNull()) {
+            input.remove(key);
+        } else if (value.typeId() == QMetaType::QString) {
+            int precision = key == "satoshi" || key == "sats" ? 0 : 8;
+            const auto string = value.toString();
+            if (string.isEmpty()) {
+                input.remove(key);
+            } else {
+                input[key] = to_c(QLocale::system(), string);
+            }
+        } else {
+            Q_ASSERT(key == "satoshi");
+            input[key] = QLocale::c().toString(value.toLongLong());
+        }
+    }
 
     if (m_liquid_asset) {
-        if (m_user) {
+        if (input.contains("text")) {
+            Q_ASSERT(input.value("text").typeId() == QMetaType::QString);
+            const auto text = input.value("text").toString();
             const auto precision = m_asset->data().value("precision").toInt(0);
-            const auto satoshi = QLocale::c().toString(static_cast<qint64>(value.toDouble() * qPow(10, precision)));
+            const auto satoshi = static_cast<qint64>(text.toDouble() * qPow(10, precision));
+            setResult({{ "satoshi", QLocale::c().toString(satoshi) }});
+        } else if (input.contains("satoshi")) {
+            Q_ASSERT(input.value("satoshi").typeId() == QMetaType::QString);
+            const auto satoshi = input.value("satoshi").toString();
             setResult({{ "satoshi", satoshi }});
         } else {
-            setResult({{ "satoshi", value }});
+            setResult({{ "satoshi", "0" }});
         }
         return;
     }
 
-    if (m_unit.isEmpty()) {
-        setResult({});
-        return;
+    auto details = QJsonObject::fromVariantMap(input);
+    if (details.contains("text")) {
+        const auto text = details.take("text").toString();
+        const auto unit_key = m_unit == "\u00B5BTC" ? "ubtc" : m_unit.toLower();
+        if (!text.isEmpty()) details.insert(unit_key, text);
     }
 
-    QJsonObject details;
-    details[m_unit] = value;
+    auto satoshi = details.value("satoshi");
+    if (satoshi.isString()) {
+        details["satoshi"] = satoshi.toString().toLongLong();
+    }
+    if (details.isEmpty()) {
+        details["satoshi"] = 0;
+    }
 
     using Watcher = QFutureWatcher<QJsonObject>;
     const auto watcher = new Watcher(this);
@@ -256,7 +290,12 @@ void Convert::update()
 
     connect(watcher, &Watcher::finished, this, [=] {
         watcher->deleteLater();
-        setResult(watcher->result());
+        QJsonObject result = watcher->result();
+        auto satoshi = result.value("satoshi");
+        if (!satoshi.isNull()) {
+            result["satoshi"] = QLocale::c().toString(satoshi.toInteger());
+        }
+        setResult(result);
     });
 }
 

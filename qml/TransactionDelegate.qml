@@ -149,7 +149,7 @@ ItemDelegate {
                         for (const [id, satoshi] of Object.entries(transaction.data.satoshi)) {
                             if (self.account.network.policyAsset === id) continue
                             const asset = AssetManager.assetWithId(self.account.context.deployment, id)
-                            assets.push({ asset, satoshi })
+                            assets.push({ asset, satoshi: String(satoshi) })
                         }
                     }
                     return assets
@@ -159,41 +159,40 @@ ItemDelegate {
                         id: convert
                         account: self.account
                         asset: modelData.asset
-                        value: modelData.satoshi
-                        unit: 'sats'
+                        input: ({ satoshi: modelData.satoshi })
                     }
                     Layout.alignment: Qt.AlignRight
                     color: transaction.data.type === 'incoming' ? '#00B670' : '#FFF'
                     font.pixelSize: 14
                     font.weight: 600
-                    text: convert.unitLabel
+                    text: convert.output.label
                 }
             }
             Convert {
                 id: convert
                 account: self.account
-                unit: 'sats'
-                value: {
+                input: {
                     const network = transaction.account.network
                     const satoshi = transaction.data.satoshi
-                    return String(satoshi[network.policyAsset] ?? 0)
+                    return { satoshi: String(satoshi[network.policyAsset] ?? 0) }
                 }
+                unit: self.account.session.unit
             }
             Label {
                 Layout.alignment: Qt.AlignRight
                 color: transaction.data.type === 'incoming' ? '#00B670' : '#FFF'
                 font.pixelSize: 14
                 font.weight: 600
-                text: convert.unitLabel
-                visible: convert.value < 0 || convert.value > 0
+                text: convert.output.label
+                visible: Number(convert.result.satoshi ?? '0') !== 0
             }
             Label {
                 Layout.alignment: Qt.AlignRight
                 color: '#929292'
                 font.pixelSize: 12
                 font.weight: 400
-                text: convert.fiatLabel
-                visible: convert.value < 0 || convert.value > 0
+                text: convert.fiat.label
+                visible: Number(convert.result.satoshi ?? '0') !== 0
             }
         }
         Item {

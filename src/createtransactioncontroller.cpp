@@ -1,6 +1,7 @@
 #include "account.h"
 #include "asset.h"
 #include "context.h"
+#include "convert.h"
 #include "createtransactioncontroller.h"
 #include "session.h"
 #include "network.h"
@@ -11,15 +12,9 @@
 
 Recipient::Recipient(QObject* parent)
     : QObject(parent)
+    , m_convert(new Convert(this))
 {
-}
-
-void Recipient::setAsset(Asset* asset)
-{
-    if (m_asset == asset) return;
-    m_asset = asset;
-    emit assetChanged();
-    emit changed();
+    connect(m_convert, &Convert::resultChanged, this, &Recipient::changed);
 }
 
 void Recipient::setAddress(const QString& address)
@@ -27,14 +22,6 @@ void Recipient::setAddress(const QString& address)
     if (m_address == address) return;
     m_address = address;
     emit addressChanged();
-    emit changed();
-}
-
-void Recipient::setAmount(const QString& amount)
-{
-    if (m_amount == amount) return;
-    m_amount = amount;
-    emit amountChanged();
     emit changed();
 }
 
@@ -58,6 +45,7 @@ void CreateTransactionController::setAccount(Account* account)
     if (m_account == account) return;
     m_account = account;
     emit accountChanged();
+    m_recipient->convert()->setAccount(account);
     m_utxos = QJsonValue::Null;
     invalidate();
 }
@@ -67,7 +55,8 @@ void CreateTransactionController::setAsset(Asset* asset)
     if (m_asset == asset) return;
     m_asset = asset;
     emit assetChanged();
-    m_recipient->setAsset(asset);
+    m_recipient->convert()->setAsset(asset);
+    invalidate();
 }
 
 void CreateTransactionController::setCoins(const QVariantList& coins)
@@ -117,10 +106,10 @@ void CreateTransactionController::update()
 
             QJsonObject addressee;
             addressee.insert("address", m_recipient->address());
-            addressee.insert("satoshi", m_recipient->amount().toLongLong());
+            addressee.insert("satoshi", m_recipient->convert()->satoshi().toLongLong());
             addressee.insert("is_greedy", m_recipient->isGreedy());
-            if (session->network()->isLiquid() && m_recipient->asset()) {
-                addressee.insert("asset_id", m_recipient->asset()->id());
+            if (session->network()->isLiquid() && m_recipient->convert()->asset()) {
+                addressee.insert("asset_id", m_recipient->convert()->asset()->id());
             }
 
             QJsonArray addressees;
@@ -163,10 +152,10 @@ void CreateTransactionController::setTransaction(const QJsonObject& transaction)
     const auto addressees = m_transaction.value("addressees").toArray();
     if (addressees.size() > 0) {
         const auto addressee = addressees.at(0).toObject();
-        bool is_greedy = addressee.value("is_greedy").toBool();
-        qint64 satoshi = addressee.value("satoshi").toInteger();
+        const auto is_greedy = addressee.value("is_greedy").toBool();
+        const auto satoshi = addressee.value("satoshi").toInteger();
         if (is_greedy) {
-            m_recipient->setAmount(QString::number(satoshi));
+            m_recipient->convert()->setInput({{ "satoshi", satoshi }});
         }
     }
 }

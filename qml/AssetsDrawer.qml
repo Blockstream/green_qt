@@ -64,7 +64,7 @@ WalletDrawer {
                             required property var modelData
                             id: delegate
                             asset: delegate.modelData.asset
-                            satoshi: String(delegate.modelData.satoshi)
+                            satoshi: delegate.modelData.satoshi
                         }
                     }
                 }
@@ -82,13 +82,13 @@ WalletDrawer {
     }
     component AssetButton: AbstractButton {
         required property Asset asset
-        required property string satoshi
+        required property int satoshi
         Convert {
             id: convert
             context: self.context
             asset: button.asset
-            value: button.satoshi
-            unit: 'sats'
+            input: ({ satoshi: button.satoshi })
+            unit: self.context.primarySession.unit
         }
         Layout.fillWidth: true
         onClicked: stack_view.push(asset_details_page, { context: self.context, asset: button.asset })
@@ -123,15 +123,15 @@ WalletDrawer {
                     color: '#FFF'
                     font.pixelSize: 14
                     font.weight: 600
-                    text: convert.unitLabel
+                    text: convert.output.label
                 }
                 Label {
                     Layout.alignment: Qt.AlignRight
                     color: '#929292'
                     font.pixelSize: 12
                     font.weight: 400
-                    text: convert.fiatLabel
-                    visible: convert.result.fiat_currency ?? false
+                    text: convert.fiat.label
+                    visible: convert.fiat.available
                 }
             }
             Image {

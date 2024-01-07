@@ -1,13 +1,13 @@
 #include "account.h"
 #include "asset.h"
 #include "context.h"
+#include "convert.h"
 #include "jadeapi.h"
 #include "jadedevice.h"
 #include "json.h"
 #include "network.h"
 #include "receiveaddresscontroller.h"
 #include "resolver.h"
-#include "session.h"
 #include "util.h"
 #include "wallet.h"
 
@@ -16,7 +16,9 @@
 
 ReceiveAddressController::ReceiveAddressController(QObject *parent)
     : Controller(parent)
+    , m_convert(new Convert(this))
 {
+    connect(m_convert, &Convert::outputChanged, this, &ReceiveAddressController::changed);
 }
 
 ReceiveAddressController::~ReceiveAddressController()
@@ -34,6 +36,7 @@ void ReceiveAddressController::setAccount(Account *account)
     if (m_account == account) return;
     m_account = account;
     emit accountChanged();
+    m_convert->setAccount(m_account);
     generate();
 }
 
@@ -43,18 +46,7 @@ void ReceiveAddressController::setAsset(Asset* asset)
     m_asset = asset;
     emit assetChanged();
     emit changed();
-}
-
-QString ReceiveAddressController::amount() const
-{
-    return m_amount;
-}
-
-void ReceiveAddressController::setAmount(const QString& amount)
-{
-    if (m_amount == amount) return;
-    m_amount = amount;
-    emit changed();
+    m_convert->setAsset(m_asset);
 }
 
 QString ReceiveAddressController::address() const
@@ -67,23 +59,17 @@ QString ReceiveAddressController::uri() const
     if (!m_account || m_generating) return {};
     const auto context = m_account->context();
     const auto network = m_account->network();
-    const auto session = m_account->session();
     const auto wallet = context->wallet();
     const auto bip21_prefix = network->data().value("bip21_prefix").toString();
-    auto unit = session->unit();
-    unit = unit == "\u00B5BTC" ? "ubtc" : unit.toLower();
-    auto amount = m_amount;
-    amount.replace(',', '.');
-    amount = wallet->convert({{ unit, amount }}).value("btc").toString();
-
-    if (amount.toDouble() > 0) {
+    const auto amount = m_convert->output().value("bip21_amount").toString();
+    if (QLocale::c().toDouble(amount) > 0) {
         if (network->isLiquid()) {
             const auto asset_id = m_asset ? m_asset->id() : network->policyAsset();
             return QString("%1:%2?assetid=%3&amount=%4")
-                    .arg(bip21_prefix, m_address, asset_id, amount);
+                .arg(bip21_prefix, m_address, asset_id, amount);
         } else {
             return QString("%1:%2?amount=%3")
-                    .arg(bip21_prefix, m_address, amount);
+                .arg(bip21_prefix, m_address, amount);
         }
     } else if (network->isLiquid() && m_asset && m_asset->id() != network->policyAsset()) {
         const auto asset_id = m_asset->id();

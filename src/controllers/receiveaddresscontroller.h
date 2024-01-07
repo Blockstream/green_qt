@@ -7,12 +7,15 @@
 #include <QObject>
 #include <QtQml>
 
+Q_MOC_INCLUDE("convert.h")
+
+class Convert;
 class ReceiveAddressController : public Controller
 {
     Q_OBJECT
     Q_PROPERTY(Account* account READ account WRITE setAccount NOTIFY accountChanged)
     Q_PROPERTY(Asset* asset READ asset WRITE setAsset NOTIFY assetChanged)
-    Q_PROPERTY(QString amount READ amount WRITE setAmount NOTIFY changed)
+    Q_PROPERTY(Convert* convert READ convert CONSTANT)
     Q_PROPERTY(QString address READ address NOTIFY changed)
     Q_PROPERTY(QJsonObject result READ result NOTIFY changed)
     Q_PROPERTY(QString uri READ uri NOTIFY changed)
@@ -34,8 +37,7 @@ public:
     void setAccount(Account* account);
     Asset* asset() const { return m_asset; }
     void setAsset(Asset* asset);
-    QString amount() const;
-    void setAmount(const QString& amount);
+    Convert* convert() const { return m_convert; }
     QString address() const;
     QJsonObject result() const { return m_result; }
     QString uri() const;
@@ -58,7 +60,7 @@ private:
 public:
     Account* m_account{nullptr};
     Asset* m_asset{nullptr};
-    QString m_amount;
+    Convert* const m_convert;
     QString m_address;
     QJsonObject m_result;
     bool m_generating{false};

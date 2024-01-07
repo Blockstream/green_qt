@@ -37,6 +37,7 @@ StackViewPage {
         context: self.context
         account: self.account
         asset: self.asset
+        recipient.convert.unit: self.account.session.unit
     }
     id: self
     title: qsTrId('id_send')
@@ -72,7 +73,7 @@ StackViewPage {
                     self.StackView.view.push(account_asset_selector, {
                         context: controller.context,
                         account: controller.account,
-                        asset: controller.asset,
+                        asset: controller.recipient.convert.asset,
                     })
                 }
             }
@@ -93,16 +94,16 @@ StackViewPage {
                     spacing: 10
                     Convert {
                         id: convert
-                        unit: 'sats'
                         account: controller.account
                         asset: controller.asset
-                        value: {
+                        input: {
                             let satoshi = 0
                             for (const output of controller.coins) {
                                 satoshi += output.data.satoshi
                             }
-                            return satoshi
+                            return { satoshi: String(satoshi) }
                         }
+                        unit: controller.account.session.unit
                     }
                     CircleButton {
                         Layout.alignment: Qt.AlignCenter
@@ -123,14 +124,14 @@ StackViewPage {
                             color: '#FFF'
                             font.pixelSize: 12
                             font.weight: 400
-                            text: convert.unitLabel
+                            text: convert.output.label
                         }
                         Label {
                             Layout.alignment: Qt.AlignRight
                             color: '#6F6F6F'
                             font.pixelSize: 12
                             font.weight: 400
-                            text: convert.fiatLabel
+                            text: convert.fiat.label
                         }
                     }
 
@@ -154,11 +155,10 @@ StackViewPage {
                 onTextEdited: controller.recipient.address = address_field.text
                 focus: true
                 error: {
-                    if (controller.recipient.address !== '') {
-                        const error = controller.transaction?.error
-                        if (error === 'id_invalid_address') return error
-                        if (error === 'id_nonconfidential_addresses_not') return error
-                    }
+                    if (controller.recipient.address === '') return
+                    const error = controller.transaction?.error
+                    if (error === 'id_invalid_address') return error
+                    if (error === 'id_nonconfidential_addresses_not') return error
                 }
             }
             ErrorPane {
@@ -171,50 +171,31 @@ StackViewPage {
                 Layout.bottomMargin: 15
                 Layout.fillWidth: true
                 id: amount_field
-                account: controller.account
-                asset: controller.asset
-                enabled: !controller.recipient.greedy
-                onTextEdited: controller.recipient.greedy = false
-                onUnitChanged: controller.recipient.greedy = false
-                onFiatChanged: controller.recipient.greedy = false
-                onResultChanged: {
-                    if (!controller.recipient.greedy) {
-                        controller.recipient.amount = String(amount_field.result.satoshi ?? '')
-                    }
-                }
+                readOnly: controller.recipient.greedy
+                convert: controller.recipient.convert
+                unit: self.account.session.unit
                 error: {
                     const error = controller.transaction?.error
                     if (error === 'id_insufficient_funds') return error
-                    if (error === 'id_invalid_amount') return error
-                }
-            }
-            Connections {
-                target: controller.recipient
-                function onAmountChanged() {
-                    if (controller.recipient.greedy) {
-                        amount_field.user = false
-                        amount_field.setValue(controller.recipient.amount)
+                    if (error === 'id_invalid_amount') {
+                        const satoshi = controller.transaction?.addressee?.[0]?.satoshi ?? 0
+                        if (satoshi > 0) return error
                     }
                 }
-            }
-            Binding {
-                value: controller.recipient.amount
-                target: amount_field
-                property: 'text'
-                when: controller.recipient.greedy
             }
             ErrorPane {
                 error: amount_field.error
             }
+//            Label {
+//                text: JSON.stringify(amount_field.convert.output, null, '  ')
+//            }
             Convert {
                 id: available_convert
-                unit: 'sats'
-                outputUnit: amount_field.unit
-                asset: controller.asset
                 account: controller.account
-                value: String(controller.account.json.satoshi[controller.asset.key])
+                asset: controller.asset
+                input: ({ satoshi: String(controller.account.json.satoshi[controller.asset.key]) })
+                unit: controller.recipient.convert.unit
             }
-
             RowLayout {
                 Layout.bottomMargin: 15
                 spacing: 10
@@ -229,21 +210,10 @@ StackViewPage {
                         color: '#6F6F6F'
                         font.pixelSize: 14
                         font.weight: 500
-                        text: '~ ' + available_convert.fiatLabel
-                        visible: available_convert.fiat
+                        text: '~ ' + available_convert.fiat.label
+                        visible: available_convert.fiat.available
                     }
                 }
-//                LinkButton {
-//                    Layout.alignment: Qt.AlignRight
-//                    text: qsTrId('id_send_all')
-//                    enabled: !controller.recipient.greedy
-//                    onClicked: {
-//                        amount_field.unit = 'sats'
-//                        amount_field.fiat = false
-//                        amount_field.user = false
-//                        controller.recipient.greedy = true
-//                    }
-//                }
                 Label {
                     text: qsTrId('id_send_all')
                     font.pixelSize: 14
@@ -251,26 +221,14 @@ StackViewPage {
                 }
                 GSwitch {
                     checked: controller.recipient.greedy
-                    onClicked: {
-                        if (controller.recipient.greedy) {
-                            controller.recipient.greedy = false
-                            amount_field.user = true
-                            amount_field.setValue(0)
-                        } else {
-                            amount_field.unit = 'sats'
-                            amount_field.fiat = false
-                            amount_field.user = false
-                            controller.recipient.greedy = true
-                        }
-                    }
+                    onClicked: controller.recipient.greedy = !controller.recipient.greedy
                 }
             }
-
             Convert {
                 id: fee_convert
                 account: controller.account
-                value: controller.transaction.fee ?? 0
-                unit: 'sats'
+                input: ({ satoshi: String(controller.transaction.fee ?? 0) })
+                unit: controller.account.session.unit
             }
             RowLayout {
                 Label {
@@ -283,7 +241,7 @@ StackViewPage {
                 Label {
                     font.pixelSize: 14
                     font.weight: 500
-                    text: fee_convert.unitLabel
+                    text: fee_convert.output.label
                 }
             }
             RowLayout {
@@ -304,19 +262,9 @@ StackViewPage {
                     color: '#6F6F6F'
                     font.pixelSize: 12
                     font.weight: 400
-                    text: '~ ' + fee_convert.fiatLabel
+                    text: '~ ' + fee_convert.fiat.label
                 }
             }
-//            Label {
-//                Layout.fillWidth: true
-//                Layout.preferredWidth: 0
-//                font.pixelSize: 10
-//                text: JSON.stringify(controller.transaction, null, '  ')
-//                wrapMode: Label.Wrap
-//                TapHandler {
-//                    onTapped: Clipboard.copy(JSON.stringify(controller.transaction, null, '  '))
-//                }
-//            }
         }
     }
     footerItem: RowLayout {

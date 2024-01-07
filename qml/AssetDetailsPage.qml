@@ -164,8 +164,8 @@ StackViewPage {
             id: convert
             account: button.account
             asset: self.asset
-            unit: 'sats'
-            value: button.satoshi
+            input: ({ satoshi: button.satoshi })
+            unit: button.account.session.unit
         }
         Layout.fillWidth: true
         onClicked: self.accountClicked(button.account)
@@ -213,15 +213,15 @@ StackViewPage {
                     color: '#FFF'
                     font.pixelSize: 14
                     font.weight: 600
-                    text: convert.unitLabel
+                    text: convert.output.label
                 }
                 Label {
                     Layout.alignment: Qt.AlignRight
                     color: '#929292'
                     font.pixelSize: 12
                     font.weight: 400
-                    text: convert.fiatLabel
-                    visible: convert.result.fiat_currency ?? false
+                    text: convert.fiat.label
+                    visible: convert.fiat.available
                 }
             }
             Image {

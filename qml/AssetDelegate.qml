@@ -7,7 +7,7 @@ ItemDelegate {
     signal assetClicked(Asset asset)
     property Account account
     property Asset asset
-    property var satoshi
+    property int satoshi
     readonly property bool hasDetails: self.asset.hasData
     onClicked: if (self.hasDetails) self.assetClicked(self.asset)
     id: self
@@ -65,23 +65,23 @@ ItemDelegate {
                 id: convert
                 account: self.account
                 asset: self.asset
-                unit: 'sats'
-                value: String(self.satoshi)
+                input: ({ satoshi: String(self.satoshi) })
+                unit: self.account.session.unit
             }
             Label {
                 Layout.alignment: Qt.AlignRight
                 color: '#FFF'
                 font.pixelSize: 14
                 font.weight: 600
-                text: convert.unitLabel
+                text: convert.output.label
             }
             Label {
                 Layout.alignment: Qt.AlignRight
                 color: '#929292'
                 font.pixelSize: 12
                 font.weight: 400
-                text: convert.fiatLabel
-                visible: convert.result.fiat_currency ?? false
+                text: convert.fiat.label
+                visible: convert.fiat.available
             }
         }
     }

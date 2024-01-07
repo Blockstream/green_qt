@@ -4,34 +4,28 @@
 #include "green.h"
 #include "controller.h"
 
+class Convert;
 class Recipient : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(Asset* asset READ asset WRITE setAsset NOTIFY assetChanged)
+    Q_PROPERTY(Convert* convert READ convert CONSTANT)
     Q_PROPERTY(QString address READ address WRITE setAddress NOTIFY addressChanged)
-    Q_PROPERTY(QString amount READ amount WRITE setAmount NOTIFY amountChanged)
     Q_PROPERTY(bool greedy READ isGreedy WRITE setGreedy NOTIFY greedyChanged)
     QML_ELEMENT
 public:
     Recipient(QObject* parent = nullptr);
-    Asset* asset() const { return m_asset; }
-    void setAsset(Asset* asset);
+    Convert* convert() const { return m_convert; }
     QString address() const { return m_address; }
     void setAddress(const QString& address);
-    QString amount() const { return m_amount; }
-    void setAmount(const QString& amount);
     bool isGreedy() const { return m_greedy; }
     void setGreedy(bool greedy);
 signals:
-    void assetChanged();
     void addressChanged();
-    void amountChanged();
     void greedyChanged();
     void changed();
 private:
-    Asset* m_asset{nullptr};
+    Convert* const m_convert;
     QString m_address;
-    QString m_amount;
     bool m_greedy{false};
 };
 

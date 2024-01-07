@@ -138,7 +138,7 @@ StackViewPage {
             Layout.alignment: Qt.AlignCenter
             font.pixelSize: 16
             font.weight: 400
-            text: convert.unitLabel
+            text: convert.output.label
             visible: self.selection.size > 0
         }
         Label {
@@ -146,7 +146,7 @@ StackViewPage {
             font.pixelSize: 16
             font.weight: 400
             opacity: 0.6
-            text: convert.fiatLabel
+            text: convert.fiat.label
             visible: self.selection.size > 0
         }
 
@@ -154,14 +154,14 @@ StackViewPage {
             id: convert
             account: self.account
             asset: self.asset
-            unit: 'sats'
-            value: {
+            input: {
                 let satoshi = 0
                 for (const output of self.selection) {
                     satoshi += output.data.satoshi
                 }
-                return satoshi
+                return { satoshi }
             }
+            unit: self.account.session.unit
         }
     }
 

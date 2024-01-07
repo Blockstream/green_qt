@@ -18,7 +18,7 @@ WalletDrawer {
         context: self.context
         account: self.account
         asset: self.asset
-        amount: amount_field.satoshi
+        convert.unit: self.account.session.unit
     }
 
     id: self
@@ -161,8 +161,8 @@ WalletDrawer {
                     AmountField {
                         Layout.fillWidth: true
                         id: amount_field
-                        account: controller.account
-                        asset: controller.asset
+                        convert: controller.convert
+                        unit: self.account.session.unit
                         visible: false
                     }
                 }

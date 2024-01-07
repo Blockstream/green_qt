@@ -8,19 +8,19 @@ import "util.js" as UtilJS
 WalletHeaderCard {
     Convert {
         id: convert
-        unit: 'sats'
-        value: {
+        context: self.context
+        input: {
             const context = self.context
-            let r = 0
+            let balance = 0
             if (context) {
                 for (let i = 0; i < context.accounts.length; i++) {
                     const account = context.accounts[i]
-                    r += account.balance
+                    balance += account.balance
                 }
             }
-            return r
+            return { satoshi: String(balance) }
         }
-        context: self.context
+        unit: self.context.primarySession.unit
     }
 
     id: self
@@ -49,13 +49,13 @@ WalletHeaderCard {
         Label {
             font.pixelSize: 24
             font.weight: 600
-            text: UtilJS.incognitoAmount(self.context, convert.unitLabel)
+            text: UtilJS.incognito(self.context, convert.output.label)
         }
         Label {
             font.pixelSize: 16
             font.weight: 400
             opacity: 0.6
-            text: UtilJS.incognitoFiat(self.context, convert.fiatLabel)
+            text: UtilJS.incognito(self.context, convert.fiat.label)
         }
         VSpacer {
         }

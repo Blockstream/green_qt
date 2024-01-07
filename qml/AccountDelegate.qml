@@ -138,23 +138,23 @@ ItemDelegate {
                         width: parent.width
                         Convert {
                             id: convert
-                            unit: 'sats'
                             account: delegate.account
-                            value: {
+                            unit: delegate.account.session.unit
+                            input: {
                                 const account = delegate.account
                                 const satoshi = account.json.satoshi
-                                return satoshi ? satoshi[account.network.policyAsset] : '0'
+                                return { satoshi: satoshi ? String(satoshi[account.network.policyAsset]) : '0' }
                             }
                         }
                         ColumnLayout {
                             Label {
-                                text: UtilJS.incognitoFiat(delegate.account, convert.fiatLabel)
+                                text: UtilJS.incognito(delegate.account, convert.fiat.label)
                                 font.pixelSize: 10
                                 font.weight: 400
                                 font.styleName: 'Regular'
                             }
                             Label {
-                                text: UtilJS.incognitoAmount(delegate.account, convert.unitLabel)
+                                text: UtilJS.incognito(delegate.account, convert.output.label)
                                 font.pixelSize: 14
                                 font.weight: 600
                                 font.styleName: 'Medium'

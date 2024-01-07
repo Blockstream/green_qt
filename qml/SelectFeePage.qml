@@ -91,21 +91,20 @@ StackViewPage {
                         visible: self.size > 0
                         Label {
                             Layout.alignment: Qt.AlignRight
-                            text: ['~', convert.result[UtilJS.normalizeUnit(self.unit)], (self.account.network.liquid ? 'L-' : '') + self.unit].join(' ')
+                            text: '~ ' + convert.output.label
                             font.pixelSize: 16
                             font.weight: 600
                         }
                         Convert {
                             id: convert
                             account: self.account
-                            unit: 'sats'
-                            value: Math.round(slider.value * self.size / 1000)
+                            input: ({ satoshi: String(Math.round(slider.value * self.size / 1000)) })
                         }
                         Label {
                             Layout.alignment: Qt.AlignRight
                             font.pixelSize: 12
                             font.weight: 400
-                            text: ['~', convert.result.fiat, convert.result.fiat_currency].join(' ')
+                            text: '~ ' + convert.fiat.label
                             opacity: 0.6
                         }
                     }
@@ -178,21 +177,21 @@ StackViewPage {
                 visible: self.size > 0
                 Label {
                     Layout.alignment: Qt.AlignRight
-                    text: ['~', convert.result[UtilJS.normalizeUnit(self.unit)], (self.account.network.liquid ? 'L-' : '') + self.unit].join(' ')
+                    text: '~ ' + convert.output.label
                     font.pixelSize: 16
                     font.weight: 600
                 }
                 Convert {
                     id: convert
                     account: self.account
-                    unit: 'sats'
-                    value: Math.round(button.rate * self.size / 1000)
+                    input: ({ satoshi: String(Math.round(button.rate * self.size / 1000)) })
+                    unit: self.account.session.unit
                 }
                 Label {
                     Layout.alignment: Qt.AlignRight
                     font.pixelSize: 12
                     font.weight: 400
-                    text: ['~', convert.result.fiat, convert.result.fiat_currency].join(' ')
+                    text: '~ ' + convert.fiat.label
                     opacity: 0.6
                 }
             }

@@ -7,8 +7,8 @@ WalletHeaderCard {
     Convert {
         id: convert
         context: self.context
-        unit: 'btc'
-        value: '1'
+        input: ({ btc: '1' })
+        unit: self.context.primarySession.unit
     }
     id: self
     headerItem: RowLayout {
@@ -35,14 +35,14 @@ WalletHeaderCard {
             font.capitalization: Font.AllUppercase
             font.pixelSize: 24
             font.weight: 600
-            text: convert.fiatLabel
+            text: convert.fiat.label
         }
         Label {
             font.capitalization: Font.AllUppercase
             font.pixelSize: 16
             font.weight: 400
             opacity: 0.6
-            text: convert.unitLabel
+            text: convert.output.label
         }
         VSpacer {
         }

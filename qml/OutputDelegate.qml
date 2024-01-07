@@ -72,22 +72,22 @@ ItemDelegate {
                 id: convert
                 account: self.output.account
                 asset: self.output.asset
-                unit: 'sats'
-                value: String(self.output.data.satoshi)
+                input: ({ satoshi: String(self.output.data.satoshi) })
+                unit: self.output.account.session.unit
             }
             Label {
                 Layout.alignment: Qt.AlignRight
                 font.pixelSize: 14
                 font.weight: 600
-                text: convert.unitLabel
+                text: convert.output.label
             }
             Label {
                 Layout.alignment: Qt.AlignRight
                 color: '#929292'
                 font.pixelSize: 14
                 font.weight: 600
-                text: convert.fiatLabel
-                visible: convert.result.fiat_currency ?? false
+                text: convert.fiat.label
+                visible: convert.fiat.available
             }
         }
     }

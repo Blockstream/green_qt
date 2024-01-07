@@ -15,16 +15,7 @@ StackViewPage {
     required property bool fiat
     required property string unit
     required property var transaction
-    readonly property string value: self.fiat ? recipient_convert.result['fiat'] : recipient_convert.output.amount ?? ''
     property bool note: false
-    Convert {
-        id: recipient_convert
-        account: self.account
-        asset: self.asset
-        unit: 'sats'
-        value: self.recipient.amount
-        outputUnit: self.unit
-    }
     TaskPageFactory {
         monitor: controller.monitor
         target: self.StackView.view
@@ -82,13 +73,10 @@ StackViewPage {
             AmountField {
                 Layout.bottomMargin: 15
                 Layout.fillWidth: true
-                account: self.account
-                asset: self.asset
-                readOnly: true
-                fiat: self.fiat
                 unit: self.unit
-                value: self.value
-                text: self.value
+                fiat: self.fiat
+                convert: self.recipient.convert
+                readOnly: true
             }
             LinkButton {
                 Layout.alignment: Qt.AlignCenter
@@ -123,18 +111,18 @@ StackViewPage {
         Convert {
             id: fee_convert
             account: self.account
-            unit: 'sats'
-            value: String(self.transaction.fee)
+            input: ({ satoshi: String(self.transaction.fee) })
+            unit: self.account.session.unit
         }
         Convert {
             id: total_convert
             account: self.account
-            unit: 'sats'
-            value: {
+            input: {
                 const network = self.account.network
                 const total = self.transaction.fee - (self.transaction.satoshi[network.liquid ? network.policyAsset : 'btc'] ?? 0)
-                return String(total)
+                return { satoshi: String(total) }
             }
+            unit: self.account.session.unit
         }
         RowLayout {
             Layout.fillWidth: true
@@ -152,14 +140,14 @@ StackViewPage {
                     opacity: 0.5
                     font.pixelSize: 14
                     font.weight: 500
-                    text: fee_convert.unitLabel
+                    text: fee_convert.output.label
                 }
                 Label {
                     Layout.alignment: Qt.AlignRight
                     opacity: 0.5
                     font.pixelSize: 12
                     font.weight: 400
-                    text: '~ ' + fee_convert.fiatLabel
+                    text: '~ ' + fee_convert.fiat.label
                 }
             }
         }
@@ -184,14 +172,14 @@ StackViewPage {
                     Layout.alignment: Qt.AlignRight
                     font.pixelSize: 14
                     font.weight: 500
-                    text: total_convert.unitLabel
+                    text: total_convert.output.label
                 }
                 Label {
                     Layout.alignment: Qt.AlignRight
                     font.pixelSize: 14
                     font.weight: 500
                     opacity: 0.5
-                    text: '~ ' + total_convert.fiatLabel
+                    text: '~ ' + total_convert.fiat.label
                 }
             }
         }

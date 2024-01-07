@@ -110,7 +110,7 @@ function networkColor (network) {
     }
 }
 
-function incognito(target, value, size) {
+function incognito(target, value, size = 5) {
     let enabled = false
     if (target instanceof Account) enabled = target.context.wallet.incognito
     if (target instanceof Context) enabled = target.wallet.incognito
@@ -119,14 +119,6 @@ function incognito(target, value, size) {
     } else {
         return value
     }
-}
-
-function incognitoFiat(target, value) {
-    return incognito(target, value, 5)
-}
-
-function incognitoAmount(target, value) {
-    return incognito(target, value, 5)
 }
 
 function normalizeUnit(unit) {
