@@ -40,7 +40,7 @@ void ExportAddressesController::save()
             now.toString("yyyyMMddhhmmss") + ".csv";
     m_file_name = QFileDialog::getSaveFileName(nullptr, "Export to CSV", suggestion);
     if (m_file_name.isEmpty()) {
-        emit saved();
+        emit rejected();
         return;
     }
 
@@ -73,7 +73,9 @@ void ExportAddressesController::nextPage()
 
             QTextStream stream(&file);
             stream << m_lines.join("\n");
-            emit saved();
+
+            QFileInfo info(file);
+            emit saved(info.baseName(), QUrl::fromLocalFile(info.absoluteFilePath()));
         } else {
             nextPage();
         }

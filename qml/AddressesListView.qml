@@ -30,38 +30,8 @@ GPane {
     }
 
     Component {
-        id: export_addresses_popup
-        WalletDialog {
-            required property Account account
-            id: dialog
-            context: self.account.context
-            header: null
-            closePolicy: Popup.NoAutoClose
-            topPadding: 20
-            bottomPadding: 20
-            leftPadding: 20
-            rightPadding: 20
-            width: 400
-            height: 400
-            onClosed: self.destroy()
-            onOpened: controller.save()
-            ExportAddressesController {
-                id: controller
-                context: dialog.account.context
-                account: dialog.account
-                onSaved: console.log('done') //dialog.close()
-            }
-            contentItem: GStackView {
-                id: stack_view
-                initialItem: StackViewPage {
-                    title: qsTrId('Export Addresses to CSV File')
-                    contentItem: ColumnLayout {
-                        BusyIndicator {
-                            Layout.alignment: Qt.AlignCenter
-                        }
-                    }
-                }
-            }
+        id: export_addresses_dialog
+        ExportAddressesDialog {
         }
     }
 
@@ -73,9 +43,17 @@ GPane {
             id: search_field
         }
         LinkButton {
+            font.pixelSize: 16
+            font.weight: 600
             text: qsTrId('Export')
             enabled: self.account.context && list_view.count > 0
-            onClicked: export_addresses_popup.createObject(self, { account: self.account }).open()
+            onClicked: {
+                const dialog = export_addresses_dialog.createObject(self, {
+                    context: self.account.context,
+                    account: self.account,
+                })
+                dialog.open()
+            }
         }
     }
 }

@@ -24,7 +24,8 @@ public slots:
 
 signals:
     void accountChanged();
-    void saved();
+    void rejected();
+    void saved(const QString& name, const QUrl& url);
 
 private:
     void nextPage();

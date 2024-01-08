@@ -6,7 +6,7 @@ import QtQuick.Layouts
 WalletDialog {
     required property Account account
     id: self
-    context: self.account.context
+    title: 'Export Addresses to CSV File'
     header: null
     closePolicy: WalletDialog.NoAutoClose
     topPadding: 20
@@ -17,9 +17,9 @@ WalletDialog {
     height: 400
     onClosed: self.destroy()
     onOpened: controller.save()
-    ExportTransactionsController {
+    ExportAddressesController {
         id: controller
-        context: self.account.context
+        context: self.context
         account: self.account
         onRejected: self.reject()
         onSaved: (name, url) => {
@@ -30,7 +30,7 @@ WalletDialog {
     contentItem: GStackView {
         id: stack_view
         initialItem: StackViewPage {
-            title: qsTrId('id_export_transactions_to_csv_file')
+            title: self.title
             contentItem: ColumnLayout {
                 BusyIndicator {
                     Layout.alignment: Qt.AlignCenter
@@ -45,7 +45,7 @@ WalletDialog {
             required property string name
             required property url url
             id: page
-            title: qsTrId('id_export_transactions_to_csv_file')
+            title: self.title
             rightItem: CloseButton {
                 onClicked: self.accept()
             }

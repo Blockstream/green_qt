@@ -250,6 +250,7 @@ SET(QML_FILES
     qml/ExportTransactionsDialog.qml
     qml/CompletedImage.qml
     qml/CanceledImage.qml
+    qml/ExportAddressesDialog.qml
 )
 
 if (GREEN_NO_RESOURCES)
