@@ -73,7 +73,6 @@ GPane {
             id: search_field
         }
         LinkButton {
-            visible: Settings.enableExperimental
             text: qsTrId('Export')
             enabled: self.account.context && list_view.count > 0
             onClicked: export_addresses_popup.createObject(self, { account: self.account }).open()
