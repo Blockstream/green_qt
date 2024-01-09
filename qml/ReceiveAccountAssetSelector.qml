@@ -101,7 +101,7 @@ StackViewPage {
         highlighted: delegate.ListView.isCurrentItem
         background: Rectangle {
             radius: 4
-            color: '#2F2F35'
+            color: Qt.lighter('#2F2F35', !delegate.highlighted && delegate.hovered ? 1.2 : 1)
             border.width: delegate.highlighted ? 2 : 0
             border.color: '#00B45A'
         }

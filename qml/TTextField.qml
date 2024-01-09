@@ -7,7 +7,7 @@ TextField {
     bottomPadding: 13
     leftPadding: 15
     background: Rectangle {
-        color: '#222226'
+        color: Qt.lighter('#222226', !self.readonly && self.hovered ? 1.2 : 1)
         radius: 5
         Rectangle {
             border.width: 2

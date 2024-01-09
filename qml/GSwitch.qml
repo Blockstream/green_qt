@@ -3,6 +3,12 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 Switch {
+    property color baseColor: self.checked ? '#00DD6E' : '#222226'
+    Behavior on baseColor {
+        ColorAnimation {
+            duration: 200
+        }
+    }
     id: self
     opacity: self.enabled ? 1 : 0.5
     indicator: Rectangle {
@@ -11,14 +17,7 @@ Switch {
         x: self.width - self.indicator.width
         y: parent.height / 2 - height / 2
         radius: 14
-        color: self.checked ? '#34C759' : constants.c500
-        border.color: Qt.lighter(color)
-        border.width: self.activeFocus ? 1 : 0
-        Behavior on color {
-            ColorAnimation {
-                duration: 200
-            }
-        }
+        color: Qt.lighter(self.baseColor, self.enabled && self.hovered ? 1.2 : 1)
         Rectangle {
             id: circle
             x: self.checked ? parent.width - width - 3 : 3

@@ -100,7 +100,7 @@ StackViewPage {
                 rightPadding: 20
                 visible: self.note
                 background: Rectangle {
-                    color: '#222226'
+                    color: Qt.lighter('#222226', note_text_area.hovered ? 1.2 : 1)
                     radius: 5
                 }
             }

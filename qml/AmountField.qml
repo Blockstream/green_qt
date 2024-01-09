@@ -82,7 +82,7 @@ TextField {
     validator: AmountValidator {
     }
     background: Rectangle {
-        color: '#222226'
+        color: Qt.lighter('#222226', !self.readOnly && self.hovered ? 1.2 : 1)
         radius: 5
         border.width: !!self.error ? 2 : 0
         border.color: '#C91D36'
