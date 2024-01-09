@@ -119,7 +119,10 @@ ItemDelegate {
             color: '#929292'
             font.pixelSize: 12
             font.weight: 400
-            text: transaction.memo
+            text: {
+                const lines = transaction.memo.trim().split('\n')
+                return lines[0] + (lines.length > 1 ? '...' : '')
+            }
             wrapMode: Label.Wrap
         }
         TransactionStatusBadge {
