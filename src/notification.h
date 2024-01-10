@@ -2,8 +2,10 @@
 #define GREEN_NOTIFICATION_H
 
 #include "green.h"
+#include "controller.h"
 
 #include <QObject>
+#include <QStandardItemModel>
 #include <QQmlEngine>
 
 class Notification : public QObject
@@ -48,4 +50,19 @@ protected:
     bool m_dismissable{false};
 };
 
+class NotificationsController : public Controller
+{
+    Q_OBJECT
+    Q_PROPERTY(QStandardItemModel* model READ model CONSTANT)
+    QML_ELEMENT
+public:
+    NotificationsController(QObject* parent = nullptr);
+    QStandardItemModel* model() const { return m_model; }
+    void reset();
+public slots:
+    void updateSeen();
+private:
+    QStandardItemModel* const m_model;
+    QMap<Notification*, QStandardItem*> m_items;
+};
 #endif // GREEN_NOTIFICATION_H
