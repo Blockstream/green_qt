@@ -9,6 +9,7 @@
 
 Q_MOC_INCLUDE("network.h")
 Q_MOC_INCLUDE("device.h")
+Q_MOC_INCLUDE("notification.h")
 Q_MOC_INCLUDE("session.h")
 Q_MOC_INCLUDE("wallet.h")
 
@@ -28,7 +29,7 @@ class Context : public QObject
     Q_PROPERTY(QStringList mnemonic READ mnemonic NOTIFY mnemonicChanged)
     Q_PROPERTY(bool hasBalance READ hasBalance NOTIFY hasBalanceChanged)
     Q_PROPERTY(TaskDispatcher* dispatcher READ dispatcher CONSTANT)
-
+    Q_PROPERTY(QQmlListProperty<Notification> notifications READ notifications NOTIFY notificationsChanged)
     QML_ELEMENT
 
 public:
@@ -90,6 +91,11 @@ public:
 
     Q_INVOKABLE bool attachToWallet(Wallet* wallet);
 
+    QList<Notification*> getNotifications() const { return m_notifications; }
+    QQmlListProperty<Notification> notifications();
+    void addNotification(Notification* notification);
+    void removeNotification(Notification* notification);
+
 public slots:
     void refreshAccounts();
 
@@ -106,6 +112,9 @@ signals:
     void hasBalanceChanged();
     void sessionsChanged();
     void autoLogout();
+    void notificationAdded(Notification* notification);
+    void notificationRemoved(Notification* notification);
+    void notificationsChanged();
 
 private:
     const QString m_deployment;
@@ -120,6 +129,8 @@ private:
     bool m_locked{false};
     QString m_username;
     bool m_watchonly{false};
+
+    QList<Notification*> m_notifications;
 
 public:
     QMap<QString, Asset*> m_assets;

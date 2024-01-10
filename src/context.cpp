@@ -5,6 +5,7 @@
 #include "json.h"
 #include "network.h"
 #include "networkmanager.h"
+#include "notification.h"
 #include "session.h"
 #include "task.h"
 #include "wallet.h"
@@ -292,6 +293,27 @@ bool Context::attachToWallet(Wallet* wallet)
     }
     setWallet(wallet);
     return true;
+}
+
+QQmlListProperty<Notification> Context::notifications()
+{
+    return { this, &m_notifications };
+}
+
+void Context::addNotification(Notification* notification)
+{
+    qDebug() << Q_FUNC_INFO << notification;
+    m_notifications.append(notification);
+    emit notificationsChanged();
+    emit notificationAdded(notification);
+}
+
+void Context::removeNotification(Notification* notification)
+{
+    qDebug() << Q_FUNC_INFO << notification;
+    emit notificationRemoved(notification);
+    m_notifications.removeOne(notification);
+    emit notificationsChanged();
 }
 
 void Context::refreshAccounts()
