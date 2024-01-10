@@ -1546,3 +1546,53 @@ void DevicePrompt::select(Device* device)
         m_task->handleResolveCode(m_result);
     }
 }
+
+
+GetSystemMessageTask::GetSystemMessageTask(Session* session)
+    : SessionTask(session)
+{
+}
+
+void GetSystemMessageTask::update()
+{
+    if (status() != Status::Ready) return;
+
+    if (!m_session->m_ready) return;
+
+    setStatus(Status::Active);
+
+    QtConcurrent::run([=] {
+        char* message_text;
+        const auto rc = GA_get_system_message(m_session->m_session, &message_text);
+        if (rc != GA_OK) {
+            const auto error = gdk::get_thread_error_details();
+            qDebug() << Q_FUNC_INFO << error;
+            return qMakePair(false, QString());
+        }
+
+        const auto message = QString::fromUtf8(message_text);
+        GA_destroy_string(message_text);
+
+        qDebug() << Q_FUNC_INFO << message;
+        return qMakePair(true, message);
+    }).then(this, [=](QPair<bool, QString> result) {
+        if (result.first) {
+            m_message = result.second;
+            setStatus(Status::Finished);
+        } else {
+            setStatus(Status::Failed);
+        }
+    });
+}
+
+AckSystemMessageTask::AckSystemMessageTask(const QString& message, Session* session)
+    : AuthHandlerTask(session)
+    , m_message(message)
+{
+}
+
+bool AckSystemMessageTask::call(GA_session* session, GA_auth_handler** auth_handler)
+{
+    const auto rc = GA_ack_system_message(session, m_message.toUtf8().constData(), auth_handler);
+    return rc == GA_OK;
+}

@@ -68,7 +68,6 @@ SET(TARGET_SOURCES
 	src/controllers/receiveaddresscontroller.cpp
 	src/controllers/ledgerdevicecontroller.cpp
 	src/controllers/sendcontroller.cpp
-	src/controllers/systemmessagecontroller.cpp
 	src/controllers/bumpfeecontroller.cpp
 	src/controllers/exporttransactionscontroller.cpp
 	src/controllers/exportaddressescontroller.cpp

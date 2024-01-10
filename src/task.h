@@ -768,4 +768,31 @@ private:
     const QString m_message;
 };
 
+class GetSystemMessageTask : public SessionTask
+{
+    Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("")
+public:
+    GetSystemMessageTask(Session* session);
+    QString message() const { return m_message; }
+private:
+    void update() override;
+private:
+    QString m_message;
+};
+
+class AckSystemMessageTask : public AuthHandlerTask
+{
+    Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("")
+public:
+    AckSystemMessageTask(const QString& message, Session* session);
+private:
+    bool call(GA_session* session, GA_auth_handler** auth_handler) override;
+private:
+    const QString m_message;
+};
+
 #endif // GREEN_TASK_H
