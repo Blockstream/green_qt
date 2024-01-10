@@ -10,6 +10,7 @@ class Context;
 class Controller;
 class Device;
 class Network;
+class Notification;
 class Output;
 class Resolver;
 class Session;

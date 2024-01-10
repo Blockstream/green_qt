@@ -87,6 +87,7 @@ SET(TARGET_SOURCES
 	src/task.h src/task.cpp
 	src/createtransactioncontroller.h src/createtransactioncontroller.cpp
 	src/signtransactioncontroller.h src/signtransactioncontroller.cpp
+        src/notification.h src/notification.cpp
 )
 
 if (WIN32)
