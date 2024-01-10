@@ -78,7 +78,6 @@ SET(QML_FILES
     qml/WordField.qml
     qml/WalletViewHeader.qml
     qml/GSearchField.qml
-    qml/SystemMessageDialog.qml
     qml/AmountValidator.qml
     qml/DisableAllPinsDialog.qml
     qml/JadeViewDevice.qml

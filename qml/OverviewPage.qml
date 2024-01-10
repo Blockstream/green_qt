@@ -450,18 +450,6 @@ StackViewPage {
         }
     }
 
-    SystemMessageDialog {
-        id: system_message_dialog
-        property bool alreadyOpened: false
-        context: self.context
-        visible: shouldOpen && !alreadyOpened
-        onVisibleChanged: {
-            if (!visible) {
-                Qt.callLater(function () { system_message_dialog.alreadyOpened = true })
-            }
-        }
-    }
-
     component HintPane: AbstractButton {
         Layout.fillWidth: true
         Layout.topMargin: 10
