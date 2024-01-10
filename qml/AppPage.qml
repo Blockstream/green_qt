@@ -155,7 +155,6 @@ MainPage {
             id: stack_layout
             currentIndex: 0
             WalletsView {
-                id: wallets_view
                 enabled: StackLayout.isCurrentItem
                 focus: StackLayout.isCurrentItem
                 onOpenWallet: (wallet) => self.openWallet(wallet)
