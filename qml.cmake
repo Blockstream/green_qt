@@ -252,6 +252,7 @@ SET(QML_FILES
     qml/CanceledImage.qml
     qml/ExportAddressesDialog.qml
     qml/AddressVerifiedBadge.qml
+    qml/NotificationsDrawer.qml
 )
 
 if (GREEN_NO_RESOURCES)

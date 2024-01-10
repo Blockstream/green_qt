@@ -168,6 +168,7 @@ StackViewPage {
         onSettingsClicked: settings_dialog.createObject(self, { context: self.context }).open()
         onLogoutClicked: self.logout()
         onArchivedAccountsClicked: archived_accounts_dialog.createObject(self, { context: self.context }).open()
+        onNotificationsClicked: notifications_drawer.open()
         id: wallet_header
         context: self.context
         wallet: self.wallet
@@ -178,6 +179,10 @@ StackViewPage {
         implicitHeight: 16
     }
 
+    NotificationsDrawer {
+        id: notifications_drawer
+        context: self.context
+    }
     Component {
         id: settings_dialog
         WalletSettingsDialog {
@@ -234,6 +239,7 @@ StackViewPage {
         }
     }
 
+    /*
     Drawer {
         id: notifications_drawer
         interactive: position > 0
@@ -289,6 +295,7 @@ StackViewPage {
             }
         }
     }
+    */
 
     Component {
         id: account_view_component
