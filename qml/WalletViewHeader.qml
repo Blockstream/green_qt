@@ -14,6 +14,7 @@ MainPageHeader {
     signal assetsClicked()
     signal settingsClicked()
     signal archivedAccountsClicked()
+    signal notificationsClicked()
     signal logoutClicked()
 
     required property Context context
@@ -224,13 +225,7 @@ MainPageHeader {
                         max: 1
                     }
                 }
-                ToolButton {
-                    visible: (self.currentAccount?.session?.events?.twofactor_reset?.is_active ?? false) || !fiatRateAvailable
-                    icon.source: 'qrc:/svg/notifications_2.svg'
-                    icon.color: 'transparent'
-                    icon.width: 16
-                    icon.height: 16
-                    onClicked: notifications_drawer.open()
+                NotificationsButton {
                 }
             }
         }
@@ -308,6 +303,42 @@ MainPageHeader {
             font.pixelSize: 16
             font.bold: true
             horizontalAlignment: Label.AlignHCenter
+        }
+    }
+
+    component NotificationsButton: CircleButton {
+        readonly property int count: self.context.notifications.length
+        readonly property int unseen: {
+            let count = 0
+            const notifications = self.context.notifications
+            for (let i = 0; i < notifications.length; i++) {
+                if (!notifications[i].seen) count ++
+            }
+            return count
+        }
+        id: button
+        icon.source: 'qrc:/svg2/bell.svg'
+        onClicked: self.notificationsClicked()
+        Label {
+            id: unseen_label
+            anchors.top: parent.top
+            anchors.right: parent.right
+            z: 1
+            text: button.unseen
+            visible: button.unseen > 0
+            color: 'white'
+            font.pixelSize: 10
+            font.weight: 600
+            padding: 0
+            background: Item {
+                Rectangle {
+                    anchors.centerIn: parent
+                    width: 14
+                    height: 14
+                    color: 'red'
+                    radius: 7
+                }
+            }
         }
     }
 }
