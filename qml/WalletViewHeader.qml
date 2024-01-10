@@ -193,9 +193,11 @@ MainPageHeader {
                 }
                 RowLayout {
                     Layout.fillWidth: false
+                    Layout.leftMargin: 20
+                    Layout.rightMargin: 20
                     spacing: constants.s1
                     visible: opacity > 0
-                    opacity: self.context?.dispatcher.busy ?? false ? 1 : 0
+                    opacity: self.context?.dispatcher.busy ?? false ? 0.8 : 0
                     Behavior on opacity {
                         SmoothedAnimation {
                             velocity: 2
