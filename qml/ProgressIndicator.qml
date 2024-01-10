@@ -3,11 +3,11 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 Canvas {
-    property int current
-    property int max
+    property int current: 0
+    property int max: 0
     property real progress: 0
 
-    Component.onCompleted: progress = Qt.binding(() => Math.min(1, self.current / self.max))
+    Component.onCompleted: progress = Qt.binding(() => self.max > 0 ? Math.min(1, self.current / self.max) : 0)
 
     property bool indeterminate: false
 
