@@ -81,4 +81,39 @@ signals:
 private:
     QStandardItemModel* m_source{nullptr};
 };
+
+class NetworkNotification : public Notification
+{
+    Q_OBJECT
+    Q_PROPERTY(Network* network READ network CONSTANT)
+    QML_ELEMENT
+    QML_UNCREATABLE("")
+public:
+    explicit NetworkNotification(Network* network, Context* context);
+    Network* network() const { return m_network; }
+protected:
+    Network* const m_network;
+};
+
+class SystemNotification : public NetworkNotification
+{
+    Q_OBJECT
+    Q_PROPERTY(QString message READ message CONSTANT)
+    Q_PROPERTY(bool accepted READ accepted NOTIFY acceptedChanged)
+    QML_ELEMENT
+    QML_UNCREATABLE("")
+public:
+    explicit SystemNotification(const QString& message, Network* network, Context* context);
+    QString message() const { return m_message; }
+    bool accepted() const { return m_accepted; }
+    void setAccepted(bool accepted);
+public slots:
+    void accept();
+signals:
+    void acceptedChanged();
+protected:
+    QString const m_message;
+    bool m_accepted{false};
+};
+
 #endif // GREEN_NOTIFICATION_H

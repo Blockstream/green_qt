@@ -1,5 +1,6 @@
 #include "context.h"
 #include "notification.h"
+#include "task.h"
 
 Notification::Notification(Context* context)
     : QObject{context}
@@ -98,3 +99,56 @@ void NotificationsModel::setSource(QStandardItemModel* source)
     setSourceModel(source);
 }
 
+NetworkNotification::NetworkNotification(Network* network, Context* context)
+    : Notification{context}
+    , m_network{network}
+{
+}
+
+SystemNotification::SystemNotification(const QString& message, Network* network, Context* context)
+    : NetworkNotification{network, context}
+    , m_message{message}
+{
+    setDismissable(false);
+}
+
+void SystemNotification::setAccepted(bool accepted)
+{
+    if (m_accepted == accepted) return;
+    m_accepted = accepted;
+    emit acceptedChanged();
+}
+
+void SystemNotification::accept()
+{
+    if (m_accepted || m_busy) return;
+    setBusy(true);
+    auto session = m_context->getOrCreateSession(m_network);
+    auto ack = new AckSystemMessageTask(m_message, session);
+    connect(ack, &Task::finished, this, [=] {
+        ack->deleteLater();
+        setAccepted(true);
+        auto get = new GetSystemMessageTask(session);
+        connect(get, &Task::failed, this, [=] {
+            get->deleteLater();
+            setBusy(false);
+            setDismissable(true);
+        });
+        connect(get, &Task::finished, this, [=] {
+            get->deleteLater();
+            const auto message = get->message();
+            if (!message.isEmpty()) {
+                auto notification = new SystemNotification(message, m_network, m_context);
+                m_context->addNotification(notification);
+            }
+            setBusy(false);
+            setDismissable(true);
+        });
+        context()->dispatcher()->add(get);
+    });
+    connect(ack, &Task::failed, this, [=] {
+        ack->deleteLater();
+        setBusy(false);
+    });
+    context()->dispatcher()->add(ack);
+}
