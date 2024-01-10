@@ -84,3 +84,17 @@ void NotificationsController::updateSeen()
         notification->setSeen(true);
     }
 }
+
+NotificationsModel::NotificationsModel(QObject* parent)
+    : QSortFilterProxyModel{parent}
+{
+}
+
+void NotificationsModel::setSource(QStandardItemModel* source)
+{
+    if (m_source == source) return;
+    m_source = source;
+    emit sourceChanged();
+    setSourceModel(source);
+}
+

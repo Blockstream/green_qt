@@ -5,6 +5,7 @@
 #include "controller.h"
 
 #include <QObject>
+#include <QSortFilterProxyModel>
 #include <QStandardItemModel>
 #include <QQmlEngine>
 
@@ -64,5 +65,20 @@ public slots:
 private:
     QStandardItemModel* const m_model;
     QMap<Notification*, QStandardItem*> m_items;
+};
+
+class NotificationsModel : public QSortFilterProxyModel
+{
+    Q_OBJECT
+    Q_PROPERTY(QStandardItemModel* source READ source WRITE setSource NOTIFY sourceChanged)
+    QML_ELEMENT
+public:
+    NotificationsModel(QObject* parent = nullptr);
+    QStandardItemModel* source() const { return m_source; }
+    void setSource(QStandardItemModel* source);
+signals:
+    void sourceChanged();
+private:
+    QStandardItemModel* m_source{nullptr};
 };
 #endif // GREEN_NOTIFICATION_H
