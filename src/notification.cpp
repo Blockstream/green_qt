@@ -49,6 +49,7 @@ NotificationsController::NotificationsController(QObject* parent)
 {
     connect(this, &Controller::contextChanged, this, &NotificationsController::reset);
     m_model->setItemRoleNames({{ Qt::UserRole + 1, "notification" }});
+    setMonitor(new TaskGroupMonitor(this));
 }
 
 void NotificationsController::reset()
@@ -119,7 +120,7 @@ void SystemNotification::setAccepted(bool accepted)
     emit acceptedChanged();
 }
 
-void SystemNotification::accept()
+void SystemNotification::accept(TaskGroupMonitor* monitor)
 {
     if (m_accepted || m_busy) return;
     setBusy(true);
@@ -144,11 +145,17 @@ void SystemNotification::accept()
             setBusy(false);
             setDismissable(true);
         });
-        context()->dispatcher()->add(get);
+        auto group = new TaskGroup(this);
+        group->add(get);
+        context()->dispatcher()->add(group);
+        monitor->add(group);
     });
     connect(ack, &Task::failed, this, [=] {
         ack->deleteLater();
         setBusy(false);
     });
-    context()->dispatcher()->add(ack);
+    auto group = new TaskGroup(this);
+    group->add(ack);
+    context()->dispatcher()->add(group);
+    monitor->add(group);
 }

@@ -108,7 +108,7 @@ public:
     bool accepted() const { return m_accepted; }
     void setAccepted(bool accepted);
 public slots:
-    void accept();
+    void accept(TaskGroupMonitor* monitor);
 signals:
     void acceptedChanged();
 protected:

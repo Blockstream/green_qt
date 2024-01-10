@@ -16,11 +16,17 @@ AbstractDrawer {
         context: self.context
     }
 
+    TaskPageFactory {
+        monitor: controller.monitor
+        target: stack_view
+    }
+
     id: self
     edge: Qt.RightEdge
     minimumContentWidth: 450
     contentItem: GStackView {
         initialItem: StackViewPage {
+            id: stack_view
             title: qsTrId('id_notifications')
             rightItem: CloseButton {
                 onClicked: self.close()
@@ -138,7 +144,7 @@ AbstractDrawer {
                         enabled: confirm_checkbox.checked
                         font.capitalization: Font.Capitalize
                         text: qsTrId('id_accept').toLowerCase()
-                        onClicked: notification.accept()
+                        onClicked: notification.accept(controller.monitor)
                     }
                 }
             }
