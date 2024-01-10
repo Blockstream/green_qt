@@ -21,6 +21,7 @@ MainPage {
         id: flickable
         clip: true
         contentHeight: layout.height
+        contentWidth: flickable.width
         ColumnLayout {
             id: layout
             width: 400
