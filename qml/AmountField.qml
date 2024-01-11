@@ -48,9 +48,9 @@ TextField {
         if (!self.readOnly) {
             self.text = self.text.replace(/\s+/g, '')
         } else if (self.fiat) {
-            self.text = self.convert.fiat.amount
+            self.text = self.convert?.fiat.amount ?? ''
         } else {
-            self.text = self.convert.output.amount
+            self.text = self.convert?.output.amount ?? ''
         }
     }
 
