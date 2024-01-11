@@ -45,7 +45,7 @@ AbstractDrawer {
                 Repeater {
                     id: sww_repeater
                     model: WalletListModel {
-                        deviceDetails: WalletListModel.No
+                        pinData: WalletListModel.Yes
                     }
                     delegate: WalletButton {
                         id: wallet_button

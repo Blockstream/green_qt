@@ -39,7 +39,7 @@ MainPage {
             Repeater {
                 id: sww_repeater
                 model: WalletListModel {
-                    deviceDetails: WalletListModel.No
+                    pinData: WalletListModel.Yes
                 }
                 WalletsDrawer.WalletButton {
                     Layout.fillWidth: true
