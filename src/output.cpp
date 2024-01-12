@@ -42,8 +42,8 @@ void Output::update()
         emit assetChanged();
     }
 
-    setDust(m_data["satoshi"].toDouble() < 1092 && !network->isLiquid());
-    setCanBeLocked(m_data["satoshi"].toDouble() < 2184);
+    setDust(m_data["satoshi"].toInteger() < 1092 && !network->isLiquid());
+    setCanBeLocked(m_data["satoshi"].toInteger() < 2184);
     setLocked(m_data["user_status"].toInt() == 1);
     setConfidential(m_data["is_confidential"].toBool());
     setUnconfirmed(m_data["block_height"].toDouble() == 0);

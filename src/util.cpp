@@ -32,7 +32,7 @@ QString GetDataFile(const QString& context, const QString& name)
 
 quint64 ParseSatoshi(const QJsonValue &value)
 {
-    return value.toDouble();
+    return value.toInteger();
 }
 
 QVector<uint32_t> ParsePath(const QJsonValue &value)
@@ -44,19 +44,19 @@ QVector<uint32_t> ParsePath(const QJsonArray &array)
 {
     QVector<uint32_t> path;
     for (const auto value : array) {
-        path.append(value.toDouble());
+        path.append(value.toInteger());
     }
     return path;
 }
 
 quint32 ParseLocktime(const QJsonValue &value)
 {
-    return value.toDouble();
+    return value.toInteger();
 }
 
 quint32 ParseSequence(const QJsonValue &value)
 {
-    return value.toDouble();
+    return value.toInteger(0);
 }
 
 QByteArray ParseByteArray(const QJsonValue &value)

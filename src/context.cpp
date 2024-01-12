@@ -109,7 +109,7 @@ Session* Context::getOrCreateSession(Network* network)
                     // FIXME: Until gdk notifies of chain reorgs, resync balance every
                     // 10 blocks in case a reorged tx is somehow evicted from the mempool
                     const auto block = event.value("block").toObject();
-                    uint32_t block_height = block.value("block_height").toDouble();
+                    uint32_t block_height = block.value("block_height").toInteger();
                     if (!network->isLiquid() || (block_height % 10) == 0) {
                         account->loadBalance();
                     }
