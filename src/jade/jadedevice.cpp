@@ -263,19 +263,13 @@ class JadeSignLiquidTransactionActivity : public SignLiquidTransactionActivity
 {
     Network* const m_network;
     JadeDevice* const m_device;
-    const QJsonObject m_transaction;
+    const QByteArray m_transaction;
     const QJsonArray m_signing_inputs;
     const QJsonArray m_outputs;
 
     QVariantList m_inputs;
-    QVector<uint64_t> m_values;
-    QList<QByteArray> m_abfs;
-    QList<QByteArray> m_vbfs;
-    QByteArray m_hash_prev_outs;
-    int m_last_blinded_index;
     QVariantList m_change;
     QVariantList m_trusted_commitments;
-    QByteArray m_last_vbf;
 
     QList<QByteArray> m_signatures;
     QList<QByteArray> m_signer_commitments;
@@ -291,7 +285,7 @@ private:
         return path;
     }
 public:
-    JadeSignLiquidTransactionActivity(Network* network, const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs, JadeDevice* device)
+    JadeSignLiquidTransactionActivity(Network* network, const QByteArray& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs, JadeDevice* device)
         : SignLiquidTransactionActivity(device)
         , m_network(network)
         , m_device(device)
@@ -299,20 +293,11 @@ public:
         , m_signing_inputs(signing_inputs)
         , m_outputs(outputs)
     {
-        m_last_blinded_index = m_outputs.size() - 2;
     }
     QList<QByteArray> signatures() const override { return m_signatures; };
     QList<QByteArray> signerCommitments() const override { return m_signer_commitments; }
-    QList<QByteArray> assetCommitments() const override { return m_asset_commitments; }
-    QList<QByteArray> valueCommitments() const override { return m_value_commitments; }
-    QList<QByteArray> assetBlinders() const override { return m_asset_blinders; }
-    QList<QByteArray> amountBlinders() const override { return m_amount_blinders; }
     void exec() override
     {
-        QByteArray prevouts;
-        QDataStream stream_prevouts(&prevouts, QIODevice::WriteOnly);
-        stream_prevouts.setByteOrder(QDataStream::LittleEndian);
-
         for (const auto value : m_signing_inputs) {
             const auto input = value.toObject();
             const auto address_type = input.value("address_type").toString();
@@ -322,125 +307,57 @@ public:
             const auto path = ParsePath(input.value("user_path"));
             const auto ae_host_commitment = ParseByteArray(input.value("ae_host_commitment"));
             const auto ae_host_entropy = ParseByteArray(input.value("ae_host_entropy"));
-            m_inputs.append(QVariantMap({
+            m_inputs.append(QVariantMap{
                 { "is_witness", is_witness },
                 { "script", script },
                 { "value_commitment", value_commitment },
                 { "path", path },
                 { "ae_host_commitment", ae_host_commitment },
                 { "ae_host_entropy", ae_host_entropy }
-            }));
-
-            m_values.append(ParseSatoshi(input.value("satoshi")));
-            m_abfs.append(ReverseByteArray(ParseByteArray(input.value("assetblinder"))));
-            m_vbfs.append(ReverseByteArray(ParseByteArray(input.value("amountblinder"))));
-
-            const auto txid = ReverseByteArray(ParseByteArray(input.value("txhash")));
-            stream_prevouts.writeRawData(txid.constData(), txid.size());
-            stream_prevouts << input.value("pt_idx").toInt();
+            });
         }
 
-        QByteArray out(SHA256_LEN, 0);
-        wally_sha256d((const unsigned char*) prevouts.constData(), prevouts.size(), (unsigned char*) out.data(), out.size());
-        m_hash_prev_outs = out;
-
-        for (const auto value : m_outputs) {
-            const auto output = value.toObject();
-            const auto satoshi = ParseSatoshi(output.value("satoshi"));
-            if (!output.value("is_fee").toBool()) {
-                m_values.append(satoshi);
+        for (int i = 0; i < m_outputs.size(); i++) {
+            const auto output = m_outputs.at(i).toObject();
+            if (output.contains("blinding_key")) {
+                m_trusted_commitments.append(QVariantMap{
+                    { "asset_id", ParseByteArray(output.value("asset_id")) },
+                    { "value", ParseSatoshi(output.value("satoshi")) },
+                    { "blinding_key", ParseByteArray(output.value("blinding_key")) },
+                    { "abf", ReverseByteArray(ParseByteArray(output.value("assetblinder"))) },
+                    { "vbf", ReverseByteArray(ParseByteArray(output.value("amountblinder"))) },
+                });
+            } else {
+                m_trusted_commitments.append(QVariant::fromValue(nullptr));
             }
+
             if (output.value("is_change").toBool()) {
                 const auto path = ParsePath(output.value("user_path"));
                 const auto recovery_xpub = output.value("recovery_xpub").toString();
-                const auto csv_blocks = output.value("address_type").toString() == "csv" ? output.value("subtype").toInt() : 0;
                 const auto type = output.value("address_type").toString();
+                const auto csv_blocks = type == "csv" ? output.value("subtype").toInt() : 0;
 
                 QString variant;
                 if (type == "p2pkh") variant = "pkh(k)";
                 if (type == "p2wpkh") variant = "wpkh(k)";
                 if (type == "p2sh-p2wpkh") variant = "sh(wpkh(k))";
 
-                const QVariantMap data = {
+                m_change.append(QVariantMap{
                     { "path", path },
                     { "recovery_xpub", recovery_xpub },
                     { "csv_blocks", csv_blocks },
                     { "variant", variant },
-                };
-                m_change.append(data);
+                });
             } else {
-                m_change.append(QVariant());
+                m_change.append(QVariant::fromValue(nullptr));
             }
         }
 
         progress()->setIndeterminate(false);
         progress()->setTo(m_outputs.size() + 1 + 1 + m_inputs.size());
 
-        nextTrustedCommitment(0);
-    }
-    void nextTrustedCommitment(int index) {
-        const auto output = m_outputs.at(index).toObject();
-
-        if (output.value("is_fee").toBool()) {
-            return nextTrustedCommitment(index + 1);
-        }
-
-        if (index == m_last_blinded_index && m_last_vbf.isEmpty()) {
-            m_device->api()->getBlindingFactor(m_hash_prev_outs, index, "ASSET", [this, index](const QVariantMap& msg) {
-                if (handleError(msg)) return;
-                progress()->incrementValue();
-
-                Q_ASSERT(msg.contains("result") && msg["result"].typeId() == QMetaType::QByteArray);
-                m_abfs.append(msg["result"].toByteArray());
-                const auto abf = m_abfs.join();
-                const auto vbf = m_vbfs.join();
-
-                QByteArray out(BLINDING_FACTOR_LEN, 0);
-                int res = wally_asset_final_vbf(
-                            m_values.constData(), m_values.size(),
-                            m_inputs.size(),
-                            (const unsigned char*) abf.constData(), abf.size(),
-                            (const unsigned char*) vbf.constData(), vbf.size(),
-                            (unsigned char*) out.data(), out.size());
-                Q_ASSERT(res == WALLY_OK);
-
-                m_last_vbf = out;
-                m_vbfs.append(m_last_vbf);
-
-                nextTrustedCommitment(index);
-            });
-            return;
-        }
-
-        const auto asset_id = ParseByteArray(output.value("asset_id"));
-        const auto blinding_key = ParseByteArray(output.value("blinding_key"));
-        const auto satoshi = ParseSatoshi(output.value("satoshi"));
-
-        m_device->api()->getCommitments(asset_id, satoshi, m_hash_prev_outs, index, m_last_vbf, [this, index, blinding_key](const QVariantMap& msg) {
-            if (handleError(msg)) return;
-            progress()->incrementValue();
-
-            Q_ASSERT(msg.contains("result") && msg["result"].typeId() == QMetaType::QVariantMap);
-            auto commitment = msg["result"].toMap();
-
-            m_abfs.append(commitment.value("abf").toByteArray());
-            m_vbfs.append(commitment.value("vbf").toByteArray());
-
-            commitment["blinding_key"] = blinding_key;
-            m_trusted_commitments.append(commitment);
-
-            if (index == m_last_blinded_index) {
-                m_trusted_commitments.append(QVariantMap());
-                sign();
-            } else {
-                nextTrustedCommitment(index + 1);
-            }
-        });
-    }
-    void sign()
-    {
-        const auto tx = ParseByteArray(m_transaction.value("transaction"));
-        m_device->api()->signLiquidTx(m_network->canonicalId(), tx, m_inputs, m_trusted_commitments, m_change, [this](const QVariantMap& msg) {
+        m_device->api()->signLiquidTx(m_network->canonicalId(), m_transaction, m_inputs, m_trusted_commitments, m_change, [this](const QVariantMap& msg) {
+            qDebug() << msg;
             if (handleError(msg)) return;
             progress()->incrementValue();
             Q_ASSERT(msg.contains("result"));
@@ -508,6 +425,83 @@ public:
         });
     }
 };
+
+class JadeGetBlindingFactorsActivity : public GetBlindingFactorsActivity
+{
+    JadeDevice* const m_device;
+    QJsonArray m_inputs;
+    QJsonArray m_outputs;
+    QByteArray m_hash_prevouts;
+    QList<QByteArray> m_asset_blinders;
+    QList<QByteArray> m_amount_blinders;
+public:
+    JadeGetBlindingFactorsActivity(const QJsonArray& inputs, const QJsonArray& outputs, JadeDevice* device)
+        : GetBlindingFactorsActivity(device)
+        , m_device(device)
+        , m_inputs(inputs)
+        , m_outputs(outputs)
+    {
+    }
+    void exec() override
+    {
+        QByteArray txhashes;
+        QList<uint32_t> utxo_indices;
+        for (auto value : m_inputs) {
+            const auto input = value.toObject();
+            const auto txhash = ParseByteArray(input.value("txhash"));
+            const auto pt_idx = input.value("pt_idx").toInt();
+
+            txhashes.append(txhash);
+            utxo_indices.append(pt_idx);
+        }
+
+        unsigned char hash_prevouts_bytes[SHA256_LEN];
+        auto rc = wally_get_hash_prevouts(
+            (const unsigned char *) txhashes.constData(), txhashes.size(),
+            utxo_indices.constData(), m_inputs.size(),
+            hash_prevouts_bytes, SHA256_LEN);
+        Q_ASSERT(rc == WALLY_OK);
+        m_hash_prevouts = QByteArray((const char*) hash_prevouts_bytes, SHA256_LEN);
+
+        processOutput(0);
+    }
+    void processOutput(qsizetype index)
+    {
+        if (index == m_outputs.size()) {
+            finish();
+            return;
+        }
+
+        const auto output = m_outputs.at(index).toObject();
+        if (!output.contains("blinding_key")) {
+            m_asset_blinders.append(QByteArray());
+            m_amount_blinders.append(QByteArray());
+            processOutput(index + 1);
+            return;
+        }
+
+        m_device->api()->getBlindingFactor(m_hash_prevouts, index, "ASSET", [=](const QVariantMap& msg) {
+            m_asset_blinders.append(msg.value("result").toByteArray());
+            QMetaObject::invokeMethod(this, [=] {
+                m_device->api()->getBlindingFactor(m_hash_prevouts, index, "VALUE", [=](const QVariantMap& msg) {
+                    m_amount_blinders.append(msg.value("result").toByteArray());
+                    QMetaObject::invokeMethod(this, [=] {
+                        processOutput(index + 1);
+                    }, Qt::QueuedConnection);
+                });
+            }, Qt::QueuedConnection);
+        });
+    }
+    QList<QByteArray> assetBlinders() const override
+    {
+        return m_asset_blinders;
+    }
+    QList<QByteArray> amountBlinders() const override
+    {
+        return m_amount_blinders;
+    }
+};
+
 
 class JadeLogoutActivity : public LogoutActivity
 {
@@ -578,7 +572,7 @@ GetBlindingNonceActivity *JadeDevice::getBlindingNonce(const QByteArray& pubkey,
     return new JadeGetBlindingNonceActivity(pubkey, script, this);
 }
 
-SignLiquidTransactionActivity *JadeDevice::signLiquidTransaction(Network* network, const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs)
+SignLiquidTransactionActivity *JadeDevice::signLiquidTransaction(Network* network, const QByteArray& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs)
 {
     return new JadeSignLiquidTransactionActivity(network, transaction, signing_inputs, outputs, this);
 }
@@ -588,10 +582,9 @@ GetMasterBlindingKeyActivity *JadeDevice::getMasterBlindingKey()
     return new JadeGetMasterBlindingKeyActivity(this);
 }
 
-GetBlindingFactorsActivity *JadeDevice::getBlindingFactors(const QJsonArray&, const QJsonArray&)
+GetBlindingFactorsActivity* JadeDevice::getBlindingFactors(const QJsonArray& inputs, const QJsonArray& outputs)
 {
-    Q_UNIMPLEMENTED();
-    return nullptr;
+    return new JadeGetBlindingFactorsActivity(inputs, outputs, this);
 }
 
 LogoutActivity *JadeDevice::logout()

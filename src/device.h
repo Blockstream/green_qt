@@ -68,10 +68,6 @@ public:
     SignLiquidTransactionActivity(QObject* parent) : Activity(parent) {}
     virtual QList<QByteArray> signatures() const = 0;
     virtual QList<QByteArray> signerCommitments() const = 0;
-    virtual QList<QByteArray> assetCommitments() const = 0;
-    virtual QList<QByteArray> valueCommitments() const = 0;
-    virtual QList<QByteArray> assetBlinders() const = 0;
-    virtual QList<QByteArray> amountBlinders() const = 0;
 };
 
 class GetMasterBlindingKeyActivity : public Activity
@@ -85,8 +81,8 @@ class GetBlindingFactorsActivity : public Activity
 {
 public:
     GetBlindingFactorsActivity(QObject* parent) : Activity(parent) {}
-    virtual QByteArray assetBlinders() const = 0;
-    virtual QByteArray amountBlinders() const = 0;
+    virtual QList<QByteArray> assetBlinders() const = 0;
+    virtual QList<QByteArray> amountBlinders() const = 0;
 };
 
 class LogoutActivity : public Activity
@@ -139,7 +135,7 @@ public:
     virtual SignTransactionActivity* signTransaction(Network* network, const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& transaction_outputs, const QJsonObject& signing_transactions) = 0;
     virtual GetBlindingKeyActivity* getBlindingKey(const QString& script) = 0;
     virtual GetBlindingNonceActivity* getBlindingNonce(const QByteArray& pubkey, const QByteArray& script) = 0;
-    virtual SignLiquidTransactionActivity* signLiquidTransaction(Network* network, const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs) = 0;
+    virtual SignLiquidTransactionActivity* signLiquidTransaction(Network* network, const QByteArray& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs) = 0;
     virtual GetMasterBlindingKeyActivity* getMasterBlindingKey() = 0;
     virtual GetBlindingFactorsActivity* getBlindingFactors(const QJsonArray& inputs, const QJsonArray& outputs) = 0;
     virtual LogoutActivity* logout() = 0;

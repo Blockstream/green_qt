@@ -24,6 +24,9 @@ class LedgerDevice;
 #define BTCHIP_INS_GET_FIRMWARE_VERSION             0xc4
 #define BTCHIP_INS_SIGN_MESSAGE                     0x4e
 
+#define BTCHIP_BLINDING_FACTOR_ASSET    0x01
+#define BTCHIP_BLINDING_FACTOR_AMOUNT   0x02
+
 QByteArray apdu(uint8_t cla, uint8_t ins, uint8_t p1, uint8_t p2, const QByteArray& data = QByteArray());
 QByteArray compressPublicKey(const QByteArray& pubkey);
 QByteArray pathToData(const QVector<uint32_t>& path);
@@ -108,7 +111,7 @@ public:
     SignTransactionActivity* signTransaction(Network* network, const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& transaction_outputs, const QJsonObject& signing_transactions) override;
     GetBlindingKeyActivity* getBlindingKey(const QString& script) override;
     GetBlindingNonceActivity* getBlindingNonce(const QByteArray& pubkey, const QByteArray& script) override;
-    SignLiquidTransactionActivity* signLiquidTransaction(Network* network, const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs) override;
+    SignLiquidTransactionActivity* signLiquidTransaction(Network* network, const QByteArray& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs) override;
     GetMasterBlindingKeyActivity* getMasterBlindingKey() override;
     GetBlindingFactorsActivity* getBlindingFactors(const QJsonArray& inputs, const QJsonArray& outputs) override;
     LogoutActivity* logout() override;
@@ -136,14 +139,5 @@ private:
     QString m_app_name;
     QVersionNumber m_app_version;
 };
-
-class LedgerGetBlindingFactorsActivity : public GetBlindingFactorsActivity
-{
-public:
-    LedgerGetBlindingFactorsActivity(QObject* parent) : GetBlindingFactorsActivity(parent) {}
-    virtual QByteArray assetBlinders() const = 0;
-    virtual QByteArray amountBlinders() const = 0;
-};
-
 
 #endif // GREEN_LEDGERDEVICE_H

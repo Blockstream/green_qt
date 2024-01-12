@@ -29,7 +29,10 @@ namespace {
                 { "name", device->uuid() },
                 { "supports_arbitrary_scripts", true },
                 { "supports_low_r", false },
-                { "supports_liquid", device->type() == Device::LedgerNanoS ? 1 : 0 }
+                { "supports_liquid", device->type() == Device::LedgerNanoS ? 1 : 0 },
+                { "supports_ae_protocol", 0 },
+                { "supports_host_unblinding", false },
+                { "supports_external_blinding", false },
             })
         }};
     }

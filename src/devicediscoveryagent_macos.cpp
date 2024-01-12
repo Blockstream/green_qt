@@ -221,7 +221,7 @@ void DevicePrivateImpl::inputReport(const QByteArray& data)
         const auto payload = command->payload();
         //qDebug() << "send " << payload.toHex();
         for (const auto& packet : transport(payload)) {
-            //qDebug() << "send packet " << packet.toHex();
+            qDebug() << "send packet " << packet.toHex();
             auto res = IOHIDDeviceSetReport(handle, kIOHIDReportTypeOutput, 0, (const uint8_t*) packet.constData(), packet.size());
             if (res != kIOReturnSuccess) {
                 emit command->error();

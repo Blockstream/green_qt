@@ -71,7 +71,7 @@ QByteArray LedgerSignTransactionActivity::outputBytes()
     for (auto& out : m_transaction_outputs) {
         // TODO ensure "satoshi" is double, not an object
         const quint64 satoshi = ParseSatoshi(out[QString("satoshi")]);
-        const QByteArray script = ParseByteArray(out[QString("script")]);
+        const QByteArray script = ParseByteArray(out[QString("scriptpubkey")]);
         stream << satoshi;
         varInt(stream, script.size());
         stream.writeRawData(script.data(), script.size());

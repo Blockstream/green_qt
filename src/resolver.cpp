@@ -232,8 +232,8 @@ SignLiquidTransactionResolver::SignLiquidTransactionResolver(Device* device, con
 
 void SignLiquidTransactionResolver::resolve()
 {
-    const auto transaction = m_required_data.value("transaction").toObject();
-    const auto signing_inputs = m_required_data.value("signing_inputs").toArray();
+    const auto transaction = ParseByteArray(m_required_data.value("transaction"));
+    const auto signing_inputs = m_required_data.value("transaction_inputs").toArray();
     const auto outputs = m_required_data.value("transaction_outputs").toArray();
 
     auto activity = device()->signLiquidTransaction(m_session->network(), transaction, signing_inputs, outputs);
@@ -257,40 +257,8 @@ void SignLiquidTransactionResolver::resolve()
         for (const auto& signature : activity->signatures()) {
             signatures.append(QString::fromLocal8Bit(signature.toHex()));
         }
-        for (const auto& commitment : activity->assetCommitments()) {
-            if (commitment.isEmpty()) {
-                asset_commitments.append(QJsonValue::Null);
-            } else {
-                asset_commitments.append(QString::fromLocal8Bit(commitment.toHex()));
-            }
-        }
-        for (const auto& commitment : activity->valueCommitments()) {
-            if (commitment.isEmpty()) {
-                value_commitments.append(QJsonValue::Null);
-            } else {
-                value_commitments.append(QString::fromLocal8Bit(commitment.toHex()));
-            }
-        }
-        for (const auto& abf : activity->assetBlinders()) {
-            if (abf.isEmpty()) {
-                abfs.append(QJsonValue::Null);
-            } else {
-                abfs.append(QString::fromLocal8Bit(ReverseByteArray(abf).toHex()));
-            }
-        }
-        for (const auto& vbf : activity->amountBlinders()) {
-            if (vbf.isEmpty()) {
-                vbfs.append(QJsonValue::Null);
-            } else {
-                vbfs.append(QString::fromLocal8Bit(ReverseByteArray(vbf).toHex()));
-            }
-        }
         QJsonObject data{
             { "signatures", signatures },
-            { "asset_commitments", asset_commitments },
-            { "value_commitments", value_commitments },
-            { "assetblinders", abfs },
-            { "amountblinders", vbfs }
         };
 
         if (m_required_data.value("use_ae_protocol").toBool()) {

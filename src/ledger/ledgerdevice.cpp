@@ -97,7 +97,7 @@ SignTransactionActivity* LedgerDevice::signTransaction(Network* network, const Q
     return new LedgerSignTransactionActivity(transaction, signing_inputs, transaction_outputs, signing_transactions, this);
 }
 
-SignLiquidTransactionActivity *LedgerDevice::signLiquidTransaction(Network* network, const QJsonObject &transaction, const QJsonArray &signing_inputs, const QJsonArray &outputs)
+SignLiquidTransactionActivity *LedgerDevice::signLiquidTransaction(Network* network, const QByteArray& transaction, const QJsonArray& signing_inputs, const QJsonArray& outputs)
 {
     Q_ASSERT(network->isLiquid() && network->isMainnet());
     return new LedgerSignLiquidTransactionActivity(transaction, signing_inputs, outputs, this);
@@ -110,7 +110,7 @@ GetMasterBlindingKeyActivity *LedgerDevice::getMasterBlindingKey()
 
 GetBlindingFactorsActivity *LedgerDevice::getBlindingFactors(const QJsonArray& inputs, const QJsonArray& outputs)
 {
-    return nullptr;
+    return new LedgerGetBlindingFactorsActivity(inputs, outputs, this);
 }
 
 LogoutActivity* LedgerDevice::logout()
