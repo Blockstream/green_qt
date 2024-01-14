@@ -44,7 +44,7 @@ StackViewPage {
             Loader {
                 Layout.alignment: Qt.AlignCenter
                 sourceComponent: {
-                    switch (self.wallet.deviceDetails.type) {
+                    switch (self.wallet?.deviceDetails?.type) {
                     case 'jade': return jade_view
                     default: return null
                     }
