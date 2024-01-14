@@ -39,14 +39,6 @@ QtObject {
     onResolverChanged: {
         const resolver = self.resolver
 
-        // TODO: remove since this is not handled by device prompt
-        if (resolver instanceof DeviceResolver) {
-            const device = resolver.device
-            if (!device.connected && device instanceof JadeDevice) {
-                self.target.push(jade_connect_view, { resolver })
-                return
-            }
-        }
 
         if (resolver instanceof SignMessageResolver && resolver.device instanceof JadeDevice) {
             self.target.push(jade_sign_message_view, { resolver })
