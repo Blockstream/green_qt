@@ -63,7 +63,7 @@ AbstractButton {
                     case LedgerDevice.StateDashboard:
                         return qsTrId('id_firmware') + ' ' + self.device.appVersion
                     case LedgerDevice.StateLocked:
-                        return qstrId('id_locked')
+                        return qsTrId('id_locked')
                     case LedgerDevice.StateUnknown:
                     default:
                         return qsTrId('id_loading')
