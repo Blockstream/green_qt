@@ -5,7 +5,7 @@
 
 #include <wally_wrapper.h>
 
-LedgerSignTransactionActivity::LedgerSignTransactionActivity(const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& transaction_outputs, const QJsonObject& signing_transactions, LedgerDevice* device)
+LedgerSignTransactionActivity::LedgerSignTransactionActivity(const QByteArray& transaction, const QJsonArray& signing_inputs, const QJsonArray& transaction_outputs, const QJsonObject& signing_transactions, LedgerDevice* device)
     : SignTransactionActivity(device)
     , m_device(device)
     , m_transaction(transaction)
@@ -131,8 +131,8 @@ Command* LedgerSignTransactionActivity::signSW()
     connect(cmd, &Command::finished, [this, batch] {
         // Prepare the pseudo transaction
         // Provide the first script instead of a null script to initialize the P2SH confirmation logic
-        const uint32_t version = m_transaction.value("transaction_version").toDouble();
-        const uint32_t locktime = m_transaction.value("transaction_locktime").toDouble();
+        const uint32_t version = 0; // m_transaction.value("transaction_version").toDouble();
+        const uint32_t locktime = 0; // m_transaction.value("transaction_locktime").toDouble();
         const auto script0 = ParseByteArray(m_signing_inputs[0].toObject().value("prevout_script"));
         batch->add(startUntrustedTransaction(version, true, 0, m_hw_inputs, script0, true));
         batch->add(finalizeInputFull(outputBytes()));
@@ -159,8 +159,8 @@ Command* LedgerSignTransactionActivity::signNonSW()
     auto batch = new CommandBatch;
     auto cmd = getHwInputs(false);
     connect(cmd, &Command::finished, [this, batch] {
-        const uint32_t version = m_transaction.value("transaction_version").toDouble();
-        const uint32_t locktime = m_transaction.value("transaction_locktime").toDouble();
+        const uint32_t version = 0; // m_transaction.value("transaction_version").toDouble();
+        const uint32_t locktime = 0; // m_transaction.value("transaction_locktime").toDouble();
         const auto data = outputBytes();
 
         for (int i = 0; i < m_hw_inputs.size(); i++) {

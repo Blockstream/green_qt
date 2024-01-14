@@ -94,14 +94,14 @@ class JadeSignTransactionActivity : public SignTransactionActivity
 {
     JadeDevice* const m_device;
     Network* const m_network;
-    const QJsonObject m_transaction;
+    const QByteArray m_transaction;
     const QJsonArray m_signing_inputs;
     const QJsonArray m_transaction_outputs;
     const QJsonObject m_signing_transactions;
     QList<QByteArray> m_signatures;
     QList<QByteArray> m_signer_commitments;
 public:
-    JadeSignTransactionActivity(Network* network, const QJsonObject& transaction, const QJsonArray& signing_inputs, const QJsonArray& transaction_outputs, const QJsonObject& signing_transactions, JadeDevice* device)
+    JadeSignTransactionActivity(Network* network, const QByteArray& transaction, const QJsonArray& signing_inputs, const QJsonArray& transaction_outputs, const QJsonObject& signing_transactions, JadeDevice* device)
         : SignTransactionActivity(device)
         , m_device(device)
         , m_network(network)
@@ -125,7 +125,6 @@ public:
 
     void exec() override
     {
-        const auto txn = ParseByteArray(m_transaction.value("transaction"));
         QVariantList inputs;
         QVariantList change;
 
@@ -187,7 +186,7 @@ public:
             }
         }
 
-        m_device->api()->signTx(m_network->canonicalId(), txn, inputs, change, [this](const QVariantMap& result) {
+        m_device->api()->signTx(m_network->canonicalId(), m_transaction, inputs, change, [this](const QVariantMap& result) {
             if (result.contains("result")) {
                 for (const auto& s : result["result"].toMap()["signatures"].toList()) {
                     m_signatures.append(s.toByteArray());
@@ -557,7 +556,7 @@ SignMessageActivity *JadeDevice::signMessage(const QString &message, const QVect
     return new JadeSignMessageActivity(message, path, ae_host_commitment, ae_host_entropy, this);
 }
 
-SignTransactionActivity *JadeDevice::signTransaction(Network* network, const QJsonObject &transaction, const QJsonArray &signing_inputs, const QJsonArray &transaction_outputs, const QJsonObject &signing_transactions)
+SignTransactionActivity *JadeDevice::signTransaction(Network* network, const QByteArray &transaction, const QJsonArray &signing_inputs, const QJsonArray &transaction_outputs, const QJsonObject &signing_transactions)
 {
     return new JadeSignTransactionActivity(network, transaction, signing_inputs, transaction_outputs, signing_transactions, this);
 }
