@@ -139,6 +139,17 @@ QVariantMap Convert::fiat() const
     }
 }
 
+static QString mainnetUnit(const QString& unit)
+{
+    if (unit == "BTC" || unit == "btc") return "BTC";
+    if (unit == "mBTC" || unit == "mbtc") return "mBTC";
+    if (unit == "\u00B5BTC" || unit == "\u00B5btc" || unit == "ubtc") return "\u00B5BTC";
+    if (unit == "bits") return "bits";
+    if (unit == "sats") return "sats";
+    if (unit == "sats") return "sats";
+    Q_UNREACHABLE();
+}
+
 static QString testnetUnit(const QString& unit)
 {
     if (unit == "BTC" || unit == "btc") return "TEST";
@@ -179,8 +190,9 @@ QVariantMap Convert::format(const QString& unit) const
         }
     } else if (!unit.isEmpty()) {
         const auto unit_key = unit == "\u00B5BTC" ? "ubtc" : unit.toLower();
-        const QString prefix{m_account && m_account->isLiquid() ? "L-" : ""};
-        result["label"] = prefix + (mainnet() ? unit : testnetUnit(unit));
+        const bool is_liquid = (m_account && m_account->isLiquid()) || (m_asset && m_asset->networkKey().contains("liquid"));
+        const QString prefix{is_liquid ? "L-" : ""};
+        result["label"] = prefix + (mainnet() ? mainnetUnit(unit) : testnetUnit(unit));
         result["bip21_amount"] = m_result["btc"];
         if (!m_result.contains(unit_key)) return result;
         auto amount = m_result.value(unit_key).toString();
