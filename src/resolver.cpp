@@ -3,11 +3,13 @@
 #include "network.h"
 #include "resolver.h"
 #include "session.h"
+#include "task.h"
 #include "util.h"
 
-Resolver::Resolver(const QJsonObject& result, Session* session)
-    : QObject(session)
-    , m_session(session)
+Resolver::Resolver(const QJsonObject& result, AuthHandlerTask* task)
+    : QObject(task)
+    , m_task(task)
+    , m_session(task->session())
     , m_result(result)
 {
 }
@@ -23,8 +25,8 @@ void Resolver::pushActivity(Activity* activity)
     emit activityChanged(m_activity);
 }
 
-TwoFactorResolver::TwoFactorResolver(const QJsonObject& result, Session* session)
-    : Resolver(result, session)
+TwoFactorResolver::TwoFactorResolver(const QJsonObject& result, AuthHandlerTask* task)
+    : Resolver(result, task)
     , m_method(result.value("method").toString())
     , m_attempts_remaining(result.value("attempts_remaining").toInt())
 {
@@ -63,16 +65,16 @@ void TwoFactorResolver::setCode(const QString &code)
     emit codeChanged(m_code);
 }
 
-DeviceResolver::DeviceResolver(Device* device, const QJsonObject& result, Session* session)
-    : Resolver(result, session)
+DeviceResolver::DeviceResolver(Device* device, const QJsonObject& result, AuthHandlerTask* task)
+    : Resolver(result, task)
     , m_device(device)
     , m_required_data(result.value("required_data").toObject())
 {
     Q_ASSERT(m_required_data.contains("device"));
 }
 
-GetXPubsResolver::GetXPubsResolver(Device* device, const QJsonObject& result, Session* session)
-    : DeviceResolver(device, result, session)
+GetXPubsResolver::GetXPubsResolver(Device* device, const QJsonObject& result, AuthHandlerTask* task)
+    : DeviceResolver(device, result, task)
 {
     for (auto path : m_required_data.value("paths").toArray()) {
         QVector<uint32_t> p;
@@ -105,10 +107,10 @@ void GetXPubsResolver::resolve()
     ActivityManager::instance()->exec(activity);
 }
 
-SignTransactionResolver::SignTransactionResolver(Device* device, const QJsonObject& result, Session* session)
-    : DeviceResolver(device, result, session)
     , m_transaction(m_required_data.value("transaction").toObject())
     , m_outputs(m_required_data.value("transaction_outputs").toArray())
+SignTransactionResolver::SignTransactionResolver(Device* device, const QJsonObject& result, AuthHandlerTask* task)
+    : DeviceResolver(device, result, task)
 {
 }
 
@@ -116,8 +118,8 @@ void SignTransactionResolver::resolve()
 {
     Q_ASSERT(m_required_data.value("action").toString() == "sign_tx");
 
-    const auto transaction = m_required_data.value("transaction").toObject();
-    const auto signing_inputs = m_required_data.value("signing_inputs").toArray();
+    const auto transaction = ParseByteArray(m_required_data.value("transaction"));
+    const auto signing_inputs = m_required_data.value("transaction_inputs").toArray();
     const auto transaction_outputs = m_required_data.value("transaction_outputs").toArray();
     const auto signing_transactions = m_required_data.value("signing_transactions").toObject();
 
@@ -147,8 +149,8 @@ void SignTransactionResolver::resolve()
     ActivityManager::instance()->exec(activity);
 }
 
-BlindingKeysResolver::BlindingKeysResolver(Device* device, const QJsonObject& result, Session* session)
-    : DeviceResolver(device, result, session)
+BlindingKeysResolver::BlindingKeysResolver(Device* device, const QJsonObject& result, AuthHandlerTask* task)
+    : DeviceResolver(device, result, task)
 {
     m_scripts = m_required_data.value("scripts").toArray();
 }
@@ -174,8 +176,8 @@ void BlindingKeysResolver::resolve()
     ActivityManager::instance()->exec(activity);
 }
 
-BlindingNoncesResolver::BlindingNoncesResolver(Device* device, const QJsonObject& result, Session* session)
-    : DeviceResolver(device, result, session)
+BlindingNoncesResolver::BlindingNoncesResolver(Device* device, const QJsonObject& result, AuthHandlerTask* task)
+    : DeviceResolver(device, result, task)
 {
     m_blinding_keys_required = m_required_data.value("blinding_keys_required").toBool();
     m_scripts = m_required_data.value("scripts").toArray();
@@ -221,8 +223,8 @@ void BlindingNoncesResolver::resolve()
     ActivityManager::instance()->exec(activity);
 }
 
-SignLiquidTransactionResolver::SignLiquidTransactionResolver(Device* device, const QJsonObject& result, Session* session)
-    : DeviceResolver(device, result, session)
+SignLiquidTransactionResolver::SignLiquidTransactionResolver(Device* device, const QJsonObject& result, AuthHandlerTask* task)
+    : DeviceResolver(device, result, task)
     , m_transaction(m_required_data.value("transaction").toObject())
     , m_outputs(m_required_data.value("transaction_outputs").toArray())
 {
@@ -276,8 +278,8 @@ void SignLiquidTransactionResolver::resolve()
     pushActivity(activity);
 }
 
-GetMasterBlindingKeyResolver::GetMasterBlindingKeyResolver(Device* device, const QJsonObject& result, Session* session)
-    : DeviceResolver(device, result, session)
+GetMasterBlindingKeyResolver::GetMasterBlindingKeyResolver(Device* device, const QJsonObject& result, AuthHandlerTask* task)
+    : DeviceResolver(device, result, task)
 {
 }
 
@@ -295,8 +297,8 @@ void GetMasterBlindingKeyResolver::resolve()
     pushActivity(activity);
 }
 
-GetBlindingFactorsResolver::GetBlindingFactorsResolver(Device *device, const QJsonObject &result, Session *session)
-    : DeviceResolver(device, result, session)
+GetBlindingFactorsResolver::GetBlindingFactorsResolver(Device *device, const QJsonObject &result, AuthHandlerTask* task)
+    : DeviceResolver(device, result, task)
 {
 }
 

@@ -9,6 +9,7 @@
 #include <QQmlEngine>
 
 class Activity;
+class AuthHandlerTask;
 
 Q_MOC_INCLUDE("activity.h")
 Q_MOC_INCLUDE("device.h")
@@ -17,12 +18,14 @@ class Resolver : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(Session* session READ session CONSTANT)
+    Q_PROPERTY(AuthHandlerTask* task READ task CONSTANT)
     Q_PROPERTY(QJsonObject result READ result CONSTANT)
     Q_PROPERTY(Activity* activity READ activity NOTIFY activityChanged)
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
-    Resolver(const QJsonObject& result, Session* session);
+    Resolver(const QJsonObject& result, AuthHandlerTask* task);
+    AuthHandlerTask* task() const { return m_task; }
     Session* session() const { return m_session; };
     QJsonObject result() const { return m_result; }
     Activity* activity() const { return m_activity; }
@@ -39,6 +42,7 @@ protected:
 private:
     Activity* m_activity{nullptr};
 protected:
+    AuthHandlerTask* const m_task;
     Session* const m_session;
 };
 
@@ -53,7 +57,7 @@ class TwoFactorResolver : public Resolver
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
-    TwoFactorResolver(const QJsonObject& result, Session* session);
+    TwoFactorResolver(const QJsonObject& result, AuthHandlerTask* task);
     QString method() const { return m_method; }
     int attemptsRemaining() const { return m_attempts_remaining; }
     QString code() const { return m_code; }
@@ -80,7 +84,7 @@ class DeviceResolver : public Resolver
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
-    DeviceResolver(Device* device, const QJsonObject& result, Session* session);
+    DeviceResolver(Device* device, const QJsonObject& result, AuthHandlerTask* task);
     Device* device() const { return m_device; }
     QJsonObject requiredData() const { return m_required_data; }
 protected:
@@ -94,7 +98,7 @@ class GetXPubsResolver : public DeviceResolver
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
-    GetXPubsResolver(Device* device, const QJsonObject& result, Session* session);
+    GetXPubsResolver(Device* device, const QJsonObject& result, AuthHandlerTask* task);
     void resolve() override;
 protected:
     QList<QVector<uint32_t>> m_paths;
@@ -110,7 +114,7 @@ class SignMessageResolver : public DeviceResolver
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
-    SignMessageResolver(Device* device, const QJsonObject& result, Session* session);
+    SignMessageResolver(Device* device, const QJsonObject& result, AuthHandlerTask* task);
     QString message() const { return m_message; }
     QString hash() const;
     QString path() const;
@@ -131,9 +135,9 @@ class SignTransactionResolver : public DeviceResolver
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
-    SignTransactionResolver(Device* device, const QJsonObject& result, Session* session);
     QJsonObject transaction() const { return m_transaction; }
     QJsonArray outputs() const { return m_outputs; }
+    SignTransactionResolver(Device* device, const QJsonObject& result, AuthHandlerTask* task);
     void resolve() override;
 private:
     QJsonObject const m_transaction;
@@ -146,7 +150,7 @@ class BlindingKeysResolver : public DeviceResolver
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
-    BlindingKeysResolver(Device* device, const QJsonObject& result, Session* session);
+    BlindingKeysResolver(Device* device, const QJsonObject& result, AuthHandlerTask* task);
     void resolve() override;
 protected:
     QJsonArray m_scripts;
@@ -159,7 +163,7 @@ class BlindingNoncesResolver : public DeviceResolver
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
-    BlindingNoncesResolver(Device* device, const QJsonObject& result, Session* session);
+    BlindingNoncesResolver(Device* device, const QJsonObject& result, AuthHandlerTask* task);
     void resolve() override;
 protected:
     bool m_blinding_keys_required;
@@ -179,7 +183,7 @@ class SignLiquidTransactionResolver : public DeviceResolver
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
-    SignLiquidTransactionResolver(Device* device, const QJsonObject& result, Session* session);
+    SignLiquidTransactionResolver(Device* device, const QJsonObject& result, AuthHandlerTask* task);
     QJsonObject transaction() const { return m_transaction; }
     QJsonArray outputs() const { return m_outputs; }
     qreal progress() const { return m_progress; };
@@ -201,7 +205,7 @@ class GetMasterBlindingKeyResolver : public DeviceResolver
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
-    GetMasterBlindingKeyResolver(Device* device, const QJsonObject& result, Session* session);
+    GetMasterBlindingKeyResolver(Device* device, const QJsonObject& result, AuthHandlerTask* task);
     void resolve() override;
 };
 
@@ -210,7 +214,7 @@ class GetBlindingFactorsResolver : public DeviceResolver
     Q_OBJECT
     QML_ELEMENT
 public:
-    GetBlindingFactorsResolver(Device* device, const QJsonObject& result, Session* session);
+    GetBlindingFactorsResolver(Device* device, const QJsonObject& result, AuthHandlerTask* task);
     void resolve() override;
 };
 

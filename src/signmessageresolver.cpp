@@ -52,8 +52,8 @@ static bool wallet_bip32_path_as_str(const uint32_t* parts, const size_t num_par
     return true;
 }
 
-SignMessageResolver::SignMessageResolver(Device *device, const QJsonObject& result, Session* session)
-    : DeviceResolver(device, result, session)
+SignMessageResolver::SignMessageResolver(Device *device, const QJsonObject& result, AuthHandlerTask* task)
+    : DeviceResolver(device, result, task)
     , m_message(m_required_data.value("message").toString())
     , m_path(ParsePath(m_required_data.value("path").toArray()))
     , m_use_ae_protocol(m_required_data.value("use_ae_protocol").toBool())

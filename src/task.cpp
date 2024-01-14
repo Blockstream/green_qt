@@ -458,23 +458,23 @@ void AuthHandlerTask::handleResolveCode(const QJsonObject& result)
         const auto required_data = result.value("required_data").toObject();
         const auto action = required_data.value("action").toString();
         if (action == "get_xpubs") {
-            resolver = new GetXPubsResolver(device, result, m_session);
+            resolver = new GetXPubsResolver(device, result, this);
         } else if (action == "sign_message") {
-            resolver = new SignMessageResolver(device, result, m_session);
+            resolver = new SignMessageResolver(device, result, this);
         } else if (action == "get_blinding_public_keys") {
-            resolver = new BlindingKeysResolver(device, result, m_session);
+            resolver = new BlindingKeysResolver(device, result, this);
         } else if (action == "get_blinding_nonces") {
-            resolver = new BlindingNoncesResolver(device, result, m_session);
+            resolver = new BlindingNoncesResolver(device, result, this);
         } else if (action =="sign_tx") {
             if (network->isLiquid()) {
-                resolver = new SignLiquidTransactionResolver(device, result, m_session);
+                resolver = new SignLiquidTransactionResolver(device, result, this);
             } else {
-                resolver = new SignTransactionResolver(device, result, m_session);
+                resolver = new SignTransactionResolver(device, result, this);
             }
         } else if (action == "get_master_blinding_key") {
-            resolver = new GetMasterBlindingKeyResolver(device, result, m_session);
+            resolver = new GetMasterBlindingKeyResolver(device, result, this);
         } else if (action == "get_blinding_factors") {
-            resolver = new GetBlindingFactorsResolver(device, result, m_session);
+            resolver = new GetBlindingFactorsResolver(device, result, this);
         } else {
             Q_UNREACHABLE();
         }
