@@ -50,6 +50,11 @@ QtObject {
             self.target.push(jade_sign_transaction_view, { resolver })
             return
         }
+
+        if (resolver instanceof SignLiquidTransactionResolver && resolver.device instanceof JadeDevice) {
+            self.target.push(jade_sign_liquid_transaction_view, { resolver })
+            return
+        }
     }
 
     property Component code_prompt_view: StackViewPage {
@@ -255,6 +260,7 @@ QtObject {
 
     property Component jade_sign_message_view: JadeSignMessageView {}
     property Component jade_sign_transaction_view: JadeSignTransactionView {}
+    property Component jade_sign_liquid_transaction_view: JadeSignLiquidTransactionView {}
 
     property Component jade_connect_view: ConnectJadePage {
         required property DeviceResolver resolver
