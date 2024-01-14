@@ -44,6 +44,12 @@ QtObject {
             self.target.push(jade_sign_message_view, { resolver })
             return
         }
+
+        if (resolver instanceof SignTransactionResolver && resolver.device instanceof JadeDevice) {
+            if (!self.item) self.item = self.target.currentItem
+            self.target.push(jade_sign_transaction_view, { resolver })
+            return
+        }
     }
 
     property Component code_prompt_view: StackViewPage {
@@ -248,6 +254,7 @@ QtObject {
     }
 
     property Component jade_sign_message_view: JadeSignMessageView {}
+    property Component jade_sign_transaction_view: JadeSignTransactionView {}
 
     property Component jade_connect_view: ConnectJadePage {
         required property DeviceResolver resolver

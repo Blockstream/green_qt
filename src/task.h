@@ -615,11 +615,15 @@ private:
 class SignTransactionTask : public AuthHandlerTask
 {
     Q_OBJECT
+    Q_PROPERTY(QJsonObject details READ details NOTIFY detailsChanged)
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
     SignTransactionTask(Session* session);
+    QJsonObject details() const { return m_details; }
     void setDetails(const QJsonObject& details);
+signals:
+    void detailsChanged();
 private:
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
 private:

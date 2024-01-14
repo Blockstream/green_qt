@@ -5,86 +5,160 @@ import QtQuick.Layouts
 
 import "analytics.js" as AnalyticsJS
 
-GFlickable {
-    required property Wallet wallet
+StackViewPage {
     required property SignTransactionResolver resolver
-    readonly property var outputs: resolver.outputs.filter(({ is_change, is_fee }) => !is_change && !is_fee)
-
+    readonly property Wallet wallet: self.resolver.session.context.wallet
+    Connections {
+        target: self.resolver
+        function onFailed() {
+            self.StackView.view.pop()
+        }
+    }
     id: self
-    clip: true
-    contentHeight: layout.height
-    implicitWidth: layout.implicitWidth
-    implicitHeight: repeater.count > 1 ? Math.min(500, layout.height) : layout.height
-
+    contentItem: Flickable {
+        ScrollIndicator.vertical: ScrollIndicator {
+        }
+        id: flickable
+        clip: true
+        contentWidth: flickable.width
+        contentHeight: layout.height
+        ColumnLayout {
+            id: layout
+            spacing: 15
+            width: flickable.width
+            y: Math.max(0, (flickable.height - layout.height) / 2)
+            Image {
+                Layout.alignment: Qt.AlignCenter
+                source: 'qrc:/png/connect_jade_1.png'
+            }
+            Label {
+                Layout.alignment: Qt.AlignCenter
+                Layout.maximumWidth: 300
+                Layout.fillWidth: true
+                Layout.preferredWidth: 0
+                font.pixelSize: 20
+                font.weight: 700
+                horizontalAlignment: Label.AlignHCenter
+                text: qsTrId('id_confirm_transaction_details_on')
+                wrapMode: Label.Wrap
+            }
+            Label {
+                Layout.alignment: Qt.AlignCenter
+                Layout.maximumWidth: 250
+                Layout.fillWidth: true
+                Layout.preferredWidth: 0
+                Layout.bottomMargin: 15
+                font.pixelSize: 12
+                font.weight: 600
+                horizontalAlignment: Label.AlignHCenter
+                opacity: 0.6
+                text: qsTrId('id_please_follow_the_instructions')
+                wrapMode: Label.Wrap
+            }
+            Repeater {
+                model: self.resolver.task.details.transaction_outputs.filter(({ is_change, is_fee }) => !is_change && !is_fee)
+                delegate: ColumnLayout {
+                    spacing: 15
+                    Convert {
+                        id: convert
+                        context: self.resolver.session.context
+                        input: ({ satoshi: String(modelData.satoshi) })
+                        unit: 'btc'
+                    }
+                    RowLayout {
+                        spacing: 30
+                        Label {
+                            Layout.alignment: Qt.AlignVCenter
+                            font.pixelSize: 14
+                            font.weight: 500
+                            opacity: 0.6
+                            text: qsTrId('id_address')
+                        }
+                        Label {
+                            Layout.fillWidth: true
+                            Layout.preferredWidth: 0
+                            font.pixelSize: 14
+                            font.weight: 500
+                            horizontalAlignment: Label.AlignRight
+                            text: modelData.address
+                            wrapMode: Label.Wrap
+                        }
+                    }
+                    RowLayout {
+                        spacing: 20
+                        Label {
+                            Layout.alignment: Qt.AlignVCenter
+                            font.pixelSize: 14
+                            font.weight: 500
+                            opacity: 0.6
+                            text: qsTrId('id_amount')
+                        }
+                        ColumnLayout {
+                            Label {
+                                Layout.fillWidth: true
+                                Layout.preferredWidth: 0
+                                font.pixelSize: 14
+                                font.weight: 500
+                                horizontalAlignment: Label.AlignRight
+                                text: convert.output.label
+                            }
+                            Label {
+                                Layout.fillWidth: true
+                                Layout.preferredWidth: 0
+                                font.pixelSize: 14
+                                font.weight: 500
+                                horizontalAlignment: Label.AlignRight
+                                opacity: 0.6
+                                text: '~ ' + convert.fiat.label
+                                visible: convert.fiat.available
+                            }
+                        }
+                    }
+                }
+            }
+            ColumnLayout {
+                spacing: 15
+                Convert {
+                    id: fee_convert
+                    context: self.resolver.session.context
+                    input: ({ satoshi: String(self.resolver.task.details.fee) })
+                    unit: 'btc'
+                }
+                RowLayout {
+                    spacing: 20
+                    Label {
+                        Layout.alignment: Qt.AlignVCenter
+                        font.pixelSize: 14
+                        font.weight: 500
+                        opacity: 0.6
+                        text: qsTrId('id_network_fee')
+                    }
+                    ColumnLayout {
+                        Label {
+                            Layout.fillWidth: true
+                            Layout.preferredWidth: 0
+                            font.pixelSize: 14
+                            font.weight: 500
+                            horizontalAlignment: Label.AlignRight
+                            text: fee_convert.output.label
+                        }
+                        Label {
+                            Layout.fillWidth: true
+                            Layout.preferredWidth: 0
+                            font.pixelSize: 14
+                            font.weight: 500
+                            horizontalAlignment: Label.AlignRight
+                            opacity: 0.6
+                            text: '~ ' + fee_convert.fiat.label
+                        }
+                    }
+                }
+            }
+        }
+    }
     AnalyticsView {
         active: true
         name: 'VerifyTransaction'
         segmentation: AnalyticsJS.segmentationSession(self.wallet)
-    }
-
-    ColumnLayout {
-        id: layout
-        spacing: constants.s2
-        width: availableWidth
-        DeviceImage {
-            Layout.maximumHeight: 32
-            Layout.alignment: Qt.AlignCenter
-            device: resolver.device
-        }
-        Label {
-            Layout.alignment: Qt.AlignCenter
-            text: qsTrId('id_confirm_transaction_details_on')
-        }
-        Repeater {
-            id: repeater
-            model: outputs
-            delegate: Page {
-                Layout.fillWidth: true
-                background: null
-                header: SectionLabel {
-                    bottomPadding: constants.s1
-                    text: 'Output ' + (index + 1) + '/' + outputs.length
-                }
-                contentItem: GridLayout {
-                    columnSpacing: constants.s1
-                    rowSpacing: constants.s1
-                    columns: 2
-                    Label {
-                        text: qsTrId('id_to')
-                    }
-                    Label {
-                        Layout.fillWidth: true
-                        text: modelData.address
-                    }
-                    Label {
-                        text: qsTrId('id_amount')
-                    }
-                    Label {
-                        Layout.fillWidth: true
-                        text: wallet.formatAmount(modelData.satoshi, true, 'btc')
-                    }
-                }
-            }
-        }
-        Page {
-            Layout.fillWidth: true
-            background: null
-            header: SectionLabel {
-                bottomPadding: constants.s1
-                text: 'Summary'
-            }
-            contentItem: GridLayout {
-                columnSpacing: constants.s1
-                rowSpacing: constants.s1
-                columns: 2
-                Label {
-                    text: 'Fee'
-                }
-                Label {
-                    Layout.fillWidth: true
-                    text: wallet.formatAmount(resolver.transaction.fee, true, 'btc')
-                }
-            }
-        }
     }
 }

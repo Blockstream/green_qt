@@ -130,18 +130,11 @@ private:
 class SignTransactionResolver : public DeviceResolver
 {
     Q_OBJECT
-    Q_PROPERTY(QJsonObject transaction READ transaction CONSTANT)
-    Q_PROPERTY(QJsonArray outputs READ outputs CONSTANT)
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
-    QJsonObject transaction() const { return m_transaction; }
-    QJsonArray outputs() const { return m_outputs; }
     SignTransactionResolver(Device* device, const QJsonObject& result, AuthHandlerTask* task);
     void resolve() override;
-private:
-    QJsonObject const m_transaction;
-    QJsonArray const m_outputs;
 };
 
 class BlindingKeysResolver : public DeviceResolver

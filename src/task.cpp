@@ -1210,7 +1210,9 @@ SignTransactionTask::SignTransactionTask(Session* session)
 
 void SignTransactionTask::setDetails(const QJsonObject& details)
 {
+    if (m_details == details) return;
     m_details = details;
+    emit detailsChanged();
 }
 
 bool SignTransactionTask::call(GA_session* session, GA_auth_handler** auth_handler)

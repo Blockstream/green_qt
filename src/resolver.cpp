@@ -107,8 +107,6 @@ void GetXPubsResolver::resolve()
     ActivityManager::instance()->exec(activity);
 }
 
-    , m_transaction(m_required_data.value("transaction").toObject())
-    , m_outputs(m_required_data.value("transaction_outputs").toArray())
 SignTransactionResolver::SignTransactionResolver(Device* device, const QJsonObject& result, AuthHandlerTask* task)
     : DeviceResolver(device, result, task)
 {
