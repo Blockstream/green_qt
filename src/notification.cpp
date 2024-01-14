@@ -1,5 +1,6 @@
 #include "context.h"
 #include "notification.h"
+#include "session.h"
 #include "task.h"
 
 Notification::Notification(Context* context)
@@ -58,25 +59,40 @@ void NotificationsController::reset()
     while (!m_items.isEmpty()) {
         delete m_items.take(m_items.firstKey());
     }
-    if (m_context) {
-        connect(m_context, &Context::notificationAdded, this, [=](Notification* notification) {
-            auto item = new QStandardItem();
-            item->setData(QVariant::fromValue(notification));
-            m_items.insert(notification, item);
-            m_model->insertRow(0, item);
+    if (!m_context) return;
+
+    connect(m_context, &Context::notificationAdded, this, [=](Notification* notification) {
+        auto item = new QStandardItem();
+        item->setData(QVariant::fromValue(notification));
+        m_items.insert(notification, item);
+        m_model->insertRow(0, item);
+    });
+    connect(m_context, &Context::notificationRemoved, this, [=](Notification* notification) {
+        auto item = m_items.take(notification);
+        if (!item) return;
+        m_model->takeRow(item->row());
+        delete item;
+    });
+    for (auto notification : m_context->getNotifications()) {
+        auto item = new QStandardItem();
+        item->setData(QVariant::fromValue(notification));
+        m_items.insert(notification, item);
+        m_model->insertRow(0, item);
+    }
+
+    for (auto session : m_context->getSessions()) {
+        auto task = new GetSystemMessageTask(session);
+        connect(task, &Task::finished, [=] {
+            task->deleteLater();
+            if (!task->message().isEmpty()) {
+                auto notification = new SystemNotification(task->message(), session->network(), m_context);
+                m_context->addNotification(notification);
+            }
         });
-        connect(m_context, &Context::notificationRemoved, this, [=](Notification* notification) {
-            auto item = m_items.take(notification);
-            if (!item) return;
-            m_model->takeRow(item->row());
-            delete item;
+        connect(task, &Task::failed, [=] {
+            task->deleteLater();
         });
-        for (auto notification : m_context->getNotifications()) {
-            auto item = new QStandardItem();
-            item->setData(QVariant::fromValue(notification));
-            m_items.insert(notification, item);
-            m_model->insertRow(0, item);
-        }
+        dispatcher()->add(task);
     }
 }
 

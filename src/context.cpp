@@ -145,19 +145,6 @@ Session* Context::getOrCreateSession(Network* network)
         m_sessions.insert(network, session);
         m_sessions_list.append(session);
         emit sessionsChanged();
-
-        auto task = new GetSystemMessageTask(session);
-        connect(task, &Task::finished, [=] {
-            task->deleteLater();
-            if (!task->message().isEmpty()) {
-                auto notification = new SystemNotification(task->message(), session->network(), this);
-                addNotification(notification);
-            }
-        });
-        connect(task, &Task::failed, [=] {
-            task->deleteLater();
-        });
-        dispatcher()->add(task);
     }
     return session;
 }
