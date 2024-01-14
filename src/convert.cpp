@@ -141,10 +141,11 @@ QVariantMap Convert::fiat() const
 
 static QString testnetUnit(const QString& unit)
 {
-    if (unit == "BTC") return "TEST";
-    if (unit == "mBTC") return "mTEST";
-    if (unit == "\u00B5BTC") return "\u00B5TEST";
+    if (unit == "BTC" || unit == "btc") return "TEST";
+    if (unit == "mBTC" || unit == "mbtc") return "mTEST";
+    if (unit == "\u00B5BTC" || unit == "\u00B5btc" || unit == "ubtc") return "\u00B5TEST";
     if (unit == "bits") return "bTEST";
+    if (unit == "sats") return "sTEST";
     if (unit == "sats") return "sTEST";
     Q_UNREACHABLE();
 }
