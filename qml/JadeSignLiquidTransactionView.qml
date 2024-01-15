@@ -6,6 +6,7 @@ import QtQuick.Layouts
 import "analytics.js" as AnalyticsJS
 
 StackViewPage {
+    signal closed()
     required property SignLiquidTransactionResolver resolver
     readonly property Wallet wallet: self.resolver.session.context.wallet
     Connections {
@@ -15,6 +16,9 @@ StackViewPage {
         }
     }
     id: self
+    rightItem: CloseButton {
+        onClicked: self.closed()
+    }
     contentItem: Flickable {
         ScrollIndicator.vertical: ScrollIndicator {
         }
@@ -113,6 +117,32 @@ StackViewPage {
                                 text: '~ ' + convert.fiat.label
                                 visible: convert.fiat.available
                             }
+                        }
+                    }
+                    RowLayout {
+                        spacing: 30
+                        Label {
+                            Layout.alignment: Qt.AlignVCenter
+                            font.pixelSize: 14
+                            font.weight: 500
+                            opacity: 0.6
+                            text: qsTrId('id_asset')
+                        }
+                        Label {
+                            Layout.fillWidth: true
+                            Layout.preferredWidth: 0
+                            font.pixelSize: 14
+                            font.weight: 500
+                            horizontalAlignment: Label.AlignRight
+                            text: {
+                                const asset = convert.asset
+                                const domain = asset.data?.entity?.domain
+                                const parts = [asset.name]
+                                if (domain) parts.push(domain)
+                                parts.push(asset.id.match(/.{1,8}/g).join(' '))
+                                return parts.join('\n')
+                            }
+                            wrapMode: Label.Wrap
                         }
                     }
                 }

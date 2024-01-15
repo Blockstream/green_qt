@@ -5,6 +5,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 QtObject {
+    signal closed()
     required property TaskGroupMonitor monitor
     required property StackView target
     readonly property Task task: {
@@ -38,22 +39,20 @@ QtObject {
     }
     onResolverChanged: {
         const resolver = self.resolver
-
-
-        if (resolver instanceof SignMessageResolver && resolver.device instanceof JadeDevice) {
-            self.target.push(jade_sign_message_view, { resolver })
-            return
-        }
-
-        if (resolver instanceof SignTransactionResolver && resolver.device instanceof JadeDevice) {
-            if (!self.item) self.item = self.target.currentItem
-            self.target.push(jade_sign_transaction_view, { resolver })
-            return
-        }
-
-        if (resolver instanceof SignLiquidTransactionResolver && resolver.device instanceof JadeDevice) {
-            self.target.push(jade_sign_liquid_transaction_view, { resolver })
-            return
+        if (!resolver) return
+        if (resolver.device instanceof JadeDevice) {
+            if (resolver instanceof SignMessageResolver) {
+                self.target.push(jade_sign_message_view, { resolver })
+                return
+            }
+            if (resolver instanceof SignTransactionResolver) {
+                self.target.push(jade_sign_transaction_view, { resolver })
+                return
+            }
+            if (resolver instanceof SignLiquidTransactionResolver) {
+                self.target.push(jade_sign_liquid_transaction_view, { resolver })
+                return
+            }
         }
     }
 
@@ -259,8 +258,12 @@ QtObject {
     }
 
     property Component jade_sign_message_view: JadeSignMessageView {}
-    property Component jade_sign_transaction_view: JadeSignTransactionView {}
-    property Component jade_sign_liquid_transaction_view: JadeSignLiquidTransactionView {}
+    property Component jade_sign_transaction_view: JadeSignTransactionView {
+        onClosed: self.closed()
+    }
+    property Component jade_sign_liquid_transaction_view: JadeSignLiquidTransactionView {
+        onClosed: self.closed()
+    }
 
     property Component jade_connect_view: ConnectJadePage {
         required property DeviceResolver resolver

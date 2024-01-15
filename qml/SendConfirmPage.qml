@@ -19,6 +19,7 @@ StackViewPage {
     TaskPageFactory {
         monitor: controller.monitor
         target: self.StackView.view
+        onClosed: self.closed()
     }
     SignTransactionController {
         id: controller
@@ -31,6 +32,9 @@ StackViewPage {
     }
     id: self
     title: qsTrId('id_confirm_transaction')
+    rightItem: CloseButton {
+        onClicked: self.closed()
+    }
     contentItem: Flickable {
         ScrollIndicator.vertical: ScrollIndicator {
         }

@@ -6,6 +6,7 @@ import QtQuick.Layouts
 import "analytics.js" as AnalyticsJS
 
 StackViewPage {
+    signal closed()
     required property SignTransactionResolver resolver
     readonly property Wallet wallet: self.resolver.session.context.wallet
     Connections {
@@ -15,6 +16,9 @@ StackViewPage {
         }
     }
     id: self
+    rightItem: CloseButton {
+        onClicked: self.closed()
+    }
     contentItem: Flickable {
         ScrollIndicator.vertical: ScrollIndicator {
         }

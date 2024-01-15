@@ -71,7 +71,7 @@ StackViewPage {
             id: layout
             width: self.contentItem.width
             FieldTitle {
-                text: 'Asset'
+                text: qsTrId('id_asset')
             }
             AssetField {
                 Layout.fillWidth: true
