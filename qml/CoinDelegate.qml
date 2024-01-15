@@ -71,7 +71,7 @@ ItemDelegate {
                     id: convert
                     account: self.output.account
                     asset: self.output.asset
-                    input: ({ satoshi: output.data.satoshi })
+                    input: ({ satoshi: self.output.data.satoshi })
                     unit: self.output.account.session.unit
                 }
                 Label {
