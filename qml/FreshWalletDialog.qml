@@ -2,7 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-AbstractDialog {
+WalletDialog {
     id: self
     background: null
     header: null
