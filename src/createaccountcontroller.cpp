@@ -95,6 +95,9 @@ void CreateAccountController::ensureSession()
     auto session_connect = new ConnectTask(session);
     auto session_register = session->registerUser();
     auto session_login = session->login();
+    connect(session_login, &Task::failed, this, [=](const QString& error) {
+        m_error = error;
+    });
     auto load_accounts = new LoadAccountsTask(false, session);
 
     session_connect->then(session_register);
@@ -110,6 +113,9 @@ void CreateAccountController::ensureSession()
     monitor()->add(group);
     dispatcher()->add(group);
 
+    connect(group, &TaskGroup::failed, this, [=] {
+        emit failed(m_error);
+    });
     connect(group, &TaskGroup::finished, this, [=] {
         ensureAccount();
     });
