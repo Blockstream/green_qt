@@ -1,4 +1,5 @@
 #include "account.h"
+#include "address.h"
 #include "asset.h"
 #include "context.h"
 #include "convert.h"
@@ -49,9 +50,9 @@ void ReceiveAddressController::setAsset(Asset* asset)
     m_convert->setAsset(m_asset);
 }
 
-QString ReceiveAddressController::address() const
+Address* ReceiveAddressController::address() const
 {
-    return m_address;
+    return m_account->getOrCreateAddress({{ "address", m_address }});
 }
 
 QString ReceiveAddressController::uri() const
@@ -97,6 +98,10 @@ void ReceiveAddressController::setAddressVerification(ReceiveAddressController::
     if (m_address_verification == address_verification) return;
     m_address_verification = address_verification;
     emit addressVerificationChanged(m_address_verification);
+
+    if (m_address_verification == ReceiveAddressController::VerificationAccepted) {
+        address()->setVerified(true);
+    }
 }
 
 void ReceiveAddressController::generate()

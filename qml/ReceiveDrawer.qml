@@ -137,6 +137,9 @@ WalletDrawer {
                                     }
                                 }
                             }
+                            AddressVerifiedBadge {
+                                address: controller.address
+                            }
                             Label {
                                 Layout.fillWidth: true
                                 Layout.preferredWidth: 0

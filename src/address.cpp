@@ -18,3 +18,10 @@ void Address::updateFromData(const QJsonObject& data)
     m_address = m_data.value("address").toString();
     emit dataChanged();
 }
+
+void Address::setVerified(bool verified)
+{
+    if (m_verified == verified) return;
+    m_verified = verified;
+    emit verifiedChanged();
+}

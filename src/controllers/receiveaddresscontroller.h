@@ -7,6 +7,7 @@
 #include <QObject>
 #include <QtQml>
 
+Q_MOC_INCLUDE("address.h")
 Q_MOC_INCLUDE("convert.h")
 
 class Convert;
@@ -16,7 +17,7 @@ class ReceiveAddressController : public Controller
     Q_PROPERTY(Account* account READ account WRITE setAccount NOTIFY accountChanged)
     Q_PROPERTY(Asset* asset READ asset WRITE setAsset NOTIFY assetChanged)
     Q_PROPERTY(Convert* convert READ convert CONSTANT)
-    Q_PROPERTY(QString address READ address NOTIFY changed)
+    Q_PROPERTY(Address* address READ address NOTIFY changed)
     Q_PROPERTY(QJsonObject result READ result NOTIFY changed)
     Q_PROPERTY(QString uri READ uri NOTIFY changed)
     Q_PROPERTY(bool generating READ generating NOTIFY generatingChanged)
@@ -38,7 +39,7 @@ public:
     Asset* asset() const { return m_asset; }
     void setAsset(Asset* asset);
     Convert* convert() const { return m_convert; }
-    QString address() const;
+    Address* address() const;
     QJsonObject result() const { return m_result; }
     QString uri() const;
     bool generating() const;
