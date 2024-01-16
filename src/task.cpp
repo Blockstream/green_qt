@@ -851,8 +851,6 @@ void LoadAssetsTask::update()
         return;
     }
 
-    if (!m_session->m_ready) return;
-
     setStatus(Status::Active);
 
     QtConcurrent::run([=] {
@@ -885,7 +883,7 @@ void LoadAssetsTask::update()
             }
             GA_destroy_json((GA_json*) output);
         }
-        setStatus(ok ? Status::Finished : Status::Failed);
+        setStatus(Status::Finished);
     });
 }
 

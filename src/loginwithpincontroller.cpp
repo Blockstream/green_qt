@@ -233,7 +233,6 @@ void LoadController::loadNetwork(TaskGroup* group, Network* network)
     group->add(new GetWatchOnlyDetailsTask(session));
     group->add(new LoadTwoFactorConfigTask(session));
     group->add(new LoadCurrenciesTask(session));
-    if (network->isLiquid()) group->add(new LoadAssetsTask(session));
     auto load_accounts = new LoadAccountsTask(false, session);
     connect(load_accounts, &Task::finished, this, [=] {
         for (auto account : load_accounts->accounts()) {
@@ -258,7 +257,9 @@ void LoadController::loginNetwork(Network* network)
         login = new LoginTask(mnemonic, {}, session);
     }
 
-    connect_session->then(login);
+    auto load_assets = new LoadAssetsTask(session);
+    connect_session->then(load_assets);
+    load_assets->then(login);
 
     connect(connect_session, &Task::failed, this, [=](const QString& error) {
         if (error == "timeout error") {
@@ -276,6 +277,7 @@ void LoadController::loginNetwork(Network* network)
     });
 
     group->add(connect_session);
+    group->add(load_assets);
     group->add(login);
 
     m_monitor->add(group);
