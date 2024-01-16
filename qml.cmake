@@ -252,6 +252,7 @@ SET(QML_FILES
     qml/ExportAddressesDialog.qml
     qml/AddressVerifiedBadge.qml
     qml/NotificationsDrawer.qml
+    qml/ErrorPage.qml
 )
 
 if (GREEN_NO_RESOURCES)
