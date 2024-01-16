@@ -1564,14 +1564,12 @@ void GetSystemMessageTask::update()
         const auto rc = GA_get_system_message(m_session->m_session, &message_text);
         if (rc != GA_OK) {
             const auto error = gdk::get_thread_error_details();
-            qDebug() << Q_FUNC_INFO << error;
             return qMakePair(false, QString());
         }
 
         const auto message = QString::fromUtf8(message_text);
         GA_destroy_string(message_text);
 
-        qDebug() << Q_FUNC_INFO << message;
         return qMakePair(true, message);
     }).then(this, [=](QPair<bool, QString> result) {
         if (result.first) {
