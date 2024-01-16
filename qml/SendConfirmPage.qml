@@ -29,6 +29,7 @@ StackViewPage {
         memo: note_text_area.text
         // TODO: should replace but we must cut dependency to the current view
         onTransactionCompleted: transaction => self.StackView.view.push(transaction_completed_page, { transaction })
+        onFailed: (error) => self.StackView.view.push(error_page, { error })
     }
     id: self
     title: qsTrId('id_confirm_transaction')
@@ -206,6 +207,13 @@ StackViewPage {
                 font.weight: 400
                 text: qsTrId('id_fees_are_collected_by_bitcoin')
             }
+        }
+    }
+
+    Component {
+        id: error_page
+        ErrorPage {
+            title: self.title
         }
     }
 
