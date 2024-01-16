@@ -90,7 +90,10 @@ void Account::updateBalance()
 
 void Account::loadBalance()
 {
-    m_context->dispatcher()->add(new LoadBalanceTask(this));
+    if (m_load_balance_timer_id != -1) {
+        killTimer(m_load_balance_timer_id);
+    }
+    m_load_balance_timer_id = startTimer(500);
 }
 
 qint64 Account::balance() const
@@ -165,6 +168,17 @@ Balance *Account::getBalanceByAssetId(const QString &id) const
 Transaction *Account::getTransactionByTxHash(const QString &id) const
 {
     return m_transactions_by_hash.value(id);
+}
+
+void Account::timerEvent(QTimerEvent* event)
+{
+    if (event->timerId() == m_load_balance_timer_id) {
+        killTimer(m_load_balance_timer_id);
+        m_load_balance_timer_id = -1;
+
+        qDebug() << Q_FUNC_INFO << m_name << m_pointer << m_network->id();
+        m_context->dispatcher()->add(new LoadBalanceTask(this));
+    }
 }
 
 bool Account::isMainAccount() const

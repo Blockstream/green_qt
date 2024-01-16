@@ -139,6 +139,7 @@ Session* Context::getOrCreateSession(Network* network)
                 auto account = getOrCreateAccount(network, quint32(pointer.toInteger()));
                 account->getOrCreateTransaction(transaction);
                 emit account->transactionEvent(transaction);
+                account->loadBalance();
             }
         });
         m_sessions.insert(network, session);

@@ -72,6 +72,8 @@ public:
     Address *getOrCreateAddress(const QJsonObject &data);
     Q_INVOKABLE Balance* getBalanceByAssetId(const QString &id) const;
     Q_INVOKABLE Transaction* getTransactionByTxHash(const QString &id) const;
+protected:
+    void timerEvent(QTimerEvent* event) override;
 signals:
     void typeChanged();
     void syncedChanged();
@@ -98,6 +100,7 @@ private:
     QMap<QString, Address*> m_address_by_hash;
     QList<Balance*> m_balances;
     QMap<QString, Balance*> m_balance_by_id;
+    int m_load_balance_timer_id{-1};
     friend class Wallet;
 };
 
