@@ -206,6 +206,7 @@ class GetBlindingFactorsResolver : public DeviceResolver
 {
     Q_OBJECT
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     GetBlindingFactorsResolver(Device* device, const QJsonObject& result, AuthHandlerTask* task);
     void resolve() override;

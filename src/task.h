@@ -758,6 +758,7 @@ class SignMessageTask : public AuthHandlerTask
 {
     Q_OBJECT
     QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     SignMessageTask(const QString& message, Address* address);
     QString signature() const;
