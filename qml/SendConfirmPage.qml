@@ -192,6 +192,8 @@ StackViewPage {
             Layout.alignment: Qt.AlignCenter
             Layout.minimumWidth: 200
             Layout.topMargin: 20
+            enabled: controller.monitor?.idle ?? true
+            busy: !(controller.monitor?.idle ?? true)
             text: qsTrId('id_confirm_transaction')
             onClicked: controller.sign()
         }
