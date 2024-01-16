@@ -152,7 +152,6 @@ void CreateAccountController::ensureAccount()
             continue;
         }
         if (account->type() != m_type) continue;
-        if (!account->isHidden()) continue;
         if (account->isMultisig() && account->pointer() > 0) continue;
         if (account->isMultisig() && !account->name().isEmpty()) continue;
         if (account->isSinglesig() && account->json().value("bip44_discovered").toBool()) continue;
