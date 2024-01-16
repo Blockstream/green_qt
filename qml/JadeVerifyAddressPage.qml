@@ -45,7 +45,7 @@ StackViewPage {
             font.pixelSize: 14
             font.weight: 500
             horizontalAlignment: Label.AlignHCenter
-            text: controller.address
+            text: controller.address.address
             wrapMode: Label.Wrap
         }
         Image {
