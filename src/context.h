@@ -27,7 +27,6 @@ class Context : public QObject
     Q_PROPERTY(Session* primarySession READ primarySession NOTIFY sessionsChanged)
     Q_PROPERTY(QQmlListProperty<Account> accounts READ accounts NOTIFY accountsChanged)
     Q_PROPERTY(QStringList mnemonic READ mnemonic NOTIFY mnemonicChanged)
-    Q_PROPERTY(bool hasBalance READ hasBalance NOTIFY hasBalanceChanged)
     Q_PROPERTY(TaskDispatcher* dispatcher READ dispatcher CONSTANT)
     Q_PROPERTY(QQmlListProperty<Notification> notifications READ notifications NOTIFY notificationsChanged)
     QML_ELEMENT
@@ -68,8 +67,6 @@ public:
     bool isWatchonly() const { return m_watchonly; }
     void setWatchonly(bool watchonly);
 
-    bool hasBalance() const;
-
     QList<Network*> getActiveNetworks() const { return m_sessions.keys(); }
     QList<Session*> getSessions() const { return m_sessions.values(); }
     QList<Account*> getAccounts() const { return m_accounts; }
@@ -109,7 +106,6 @@ signals:
     void accountsChanged();
     void usernameChanged();
     void watchonlyChanged();
-    void hasBalanceChanged();
     void sessionsChanged();
     void autoLogout();
     void notificationAdded(Notification* notification);

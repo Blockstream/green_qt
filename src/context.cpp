@@ -140,7 +140,6 @@ Session* Context::getOrCreateSession(Network* network)
                 account->getOrCreateTransaction(transaction);
                 emit account->transactionEvent(transaction);
             }
-            emit hasBalanceChanged();
         });
         m_sessions.insert(network, session);
         m_sessions_list.append(session);
@@ -230,14 +229,6 @@ void Context::setWatchonly(bool watchonly)
     if (m_watchonly == watchonly) return;
     m_watchonly = watchonly;
     emit watchonlyChanged();
-}
-
-bool Context::hasBalance() const
-{
-    for (const auto& account : m_accounts) {
-        if (account->hasBalance()) return true;
-    }
-    return false;
 }
 
 Asset* Context::getOrCreateAsset(const QString& id)

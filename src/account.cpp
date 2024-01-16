@@ -104,18 +104,6 @@ QQmlListProperty<Balance> Account::balances()
     return { this, &m_balances };
 }
 
-bool Account::hasBalance() const
-{
-    if (m_network->isLiquid()) {
-        for (auto balance : m_balances) {
-            if (balance->amount() > 0) return true;
-        }
-        return false;
-    } else {
-        return balance() > 0;
-    }
-}
-
 void Account::setBalanceData(const QJsonObject &data)
 {
     m_json.insert("satoshi", data);

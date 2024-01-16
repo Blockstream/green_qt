@@ -65,7 +65,6 @@ public:
 
     QQmlListProperty<Balance> balances();
 
-    bool hasBalance() const;
     void setBalanceData(const QJsonObject& data);
     void updateBalance();
     Transaction *getOrCreateTransaction(const QJsonObject &data);
