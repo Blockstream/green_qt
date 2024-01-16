@@ -10,11 +10,6 @@ StackViewPage {
     id: self
     padding: 60
     footerItem: ColumnLayout {
-        BusyIndicator {
-            Layout.alignment: Qt.AlignCenter
-            running: device_repeater.count === 0
-            visible: running
-        }
         Label {
             Layout.alignment: Qt.AlignCenter
             Layout.topMargin: 20

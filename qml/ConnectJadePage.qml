@@ -16,10 +16,6 @@ StackViewPage {
         onClicked: Qt.openUrlExternally('https://help.blockstream.com/hc/en-us/articles/19629901272345-Set-up-Jade')
     }
     footerItem: ColumnLayout {
-        BusyIndicator {
-            Layout.alignment: Qt.AlignCenter
-            running: device_repeater.count === 0
-        }
         Label {
             Layout.alignment: Qt.AlignCenter
             Layout.topMargin: 20
