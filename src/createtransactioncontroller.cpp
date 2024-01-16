@@ -125,6 +125,7 @@ void CreateTransactionController::update()
             connect(task, &CreateTransactionTask::failed, this, [=](const QString& error) {
                 qDebug() << error;
                 task->deleteLater();
+                setTransaction({});
             });
             dispatcher->add(task);
         }
