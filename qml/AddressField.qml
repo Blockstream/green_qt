@@ -65,9 +65,6 @@ TextField {
             enabled: scanner_popup.available && !scanner_popup.visible
             icon.source: 'qrc:/svg2/qrcode.svg'
             onClicked: scanner_popup.open()
-            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-            ToolTip.text: qsTrId('id_scan_qr_code')
-            ToolTip.visible: hovered
         }
         CircleButton {
             activeFocusOnTab: false
@@ -76,9 +73,6 @@ TextField {
                 self.paste();
                 self.address_input = 'paste'
             }
-            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-            ToolTip.text: qsTrId('id_paste')
-            ToolTip.visible: hovered
         }
     }
     ScannerPopup {

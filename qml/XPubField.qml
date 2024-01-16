@@ -2,13 +2,15 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-TextField {
+TextArea {
+    Layout.fillWidth: true
     id: self
     topPadding: 14
     bottomPadding: 13
     leftPadding: 15
+    rightPadding: 15 + options_layout.width + 10
     background: Rectangle {
-        color: '#222226'
+        color: Qt.lighter('#222226', self.hovered ? 1.2 : 1)
         radius: 5
         Rectangle {
             border.width: 2
@@ -33,31 +35,19 @@ TextField {
     }
     font.pixelSize: 14
     font.weight: 500
-
+    wrapMode: TextEdit.Wrap
     Row {
+        id: options_layout
         anchors.verticalCenter: parent.verticalCenter
         anchors.right: parent.right
+        anchors.rightMargin: 15
         spacing: 0
-        ToolButton {
+        CircleButton {
             activeFocusOnTab: false
-            enabled: window.scannerAvailable && !scanner_popup.visible
-            icon.source: 'qrc:/svg/qr.svg'
-            icon.width: 16
-            icon.height: 16
-            onClicked: scanner_popup.open()
-            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-            ToolTip.text: qsTrId('id_scan_qr_code')
-            ToolTip.visible: hovered
-        }
-        ToolButton {
-            activeFocusOnTab: false
-            icon.source: 'qrc:/svg/paste.svg'
-            icon.width: 24
-            icon.height: 24
-            onClicked: self.paste()
-            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
-            ToolTip.text: qsTrId('id_paste')
-            ToolTip.visible: hovered
+            icon.source: 'qrc:/svg2/paste.svg'
+            onClicked: {
+                self.paste();
+            }
         }
     }
 }
