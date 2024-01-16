@@ -25,8 +25,8 @@ AbstractDrawer {
     edge: Qt.RightEdge
     minimumContentWidth: 450
     contentItem: GStackView {
+        id: stack_view
         initialItem: StackViewPage {
-            id: stack_view
             title: qsTrId('id_notifications')
             rightItem: CloseButton {
                 onClicked: self.close()
