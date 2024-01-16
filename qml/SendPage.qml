@@ -263,9 +263,11 @@ StackViewPage {
                         }
                         return qsTrId('id_custom')
                     }
+                    visible: !controller.account.network.liquid
                 }
                 LinkButton {
                     text: 'Change speed'
+                    visible: !controller.account.network.liquid
                     onClicked: self.pushSelectFeePage()
                 }
                 HSpacer {
