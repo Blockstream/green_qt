@@ -26,7 +26,10 @@ StackViewPage {
             size: controller.transaction.transaction ? controller.transaction.transaction.length / 2 : 0,
         })
     }
-
+    FeeEstimates {
+        id: estimates
+        session: self.account.session
+    }
     AnalyticsView {
         name: 'Send'
         active: true
@@ -38,6 +41,7 @@ StackViewPage {
         account: self.account
         asset: self.asset
         recipient.convert.unit: self.account.session.unit
+        feeRate: estimates.fees[24] ?? 0
     }
     id: self
     title: qsTrId('id_send')
@@ -186,9 +190,6 @@ StackViewPage {
             ErrorPane {
                 error: amount_field.error
             }
-//            Label {
-//                text: JSON.stringify(amount_field.convert.output, null, '  ')
-//            }
             Convert {
                 id: available_convert
                 account: controller.account
@@ -246,12 +247,23 @@ StackViewPage {
             }
             RowLayout {
                 Layout.bottomMargin: 20
-//                Label {
-//                    color: '#6F6F6F'
-//                    font.pixelSize: 12
-//                    font.weight: 400
-//                    text: '~2 hours'
-//                }
+                Label {
+                    color: '#6F6F6F'
+                    font.pixelSize: 14
+                    font.weight: 400
+                    text: {
+                        if (controller.feeRate <= estimates.fees[24]) {
+                            return qsTrId('id_4_hours')
+                        }
+                        if (controller.feeRate <= estimates.fees[12]) {
+                            return qsTrId('id_2_hours')
+                        }
+                        if (controller.feeRate <= estimates.fees[3]) {
+                            return qsTrId('id_1030_minutes')
+                        }
+                        return qsTrId('id_custom')
+                    }
+                }
                 LinkButton {
                     text: 'Change speed'
                     onClicked: self.pushSelectFeePage()
