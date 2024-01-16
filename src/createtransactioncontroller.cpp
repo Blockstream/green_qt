@@ -107,7 +107,7 @@ void CreateTransactionController::update()
             QJsonObject addressee;
             addressee.insert("address", m_recipient->address());
             addressee.insert("satoshi", m_recipient->convert()->satoshi().toLongLong());
-            addressee.insert("is_greedy", m_recipient->isGreedy());
+            addressee.insert("is_greedy", !m_recipient->address().contains("amount") && m_recipient->isGreedy());
             if (session->network()->isLiquid() && m_recipient->convert()->asset()) {
                 addressee.insert("asset_id", m_recipient->convert()->asset()->id());
             }
@@ -153,10 +153,26 @@ void CreateTransactionController::setTransaction(const QJsonObject& transaction)
     const auto addressees = m_transaction.value("addressees").toArray();
     if (addressees.size() > 0) {
         const auto addressee = addressees.at(0).toObject();
-        const auto is_greedy = addressee.value("is_greedy").toBool();
-        const auto satoshi = addressee.value("satoshi").toInteger();
-        if (is_greedy) {
+        const auto bip21_params = addressee.value("bip21-params").toObject();
+        if (addressee.contains("bip21-params")) {
+        if (bip21_params.contains("assetid")) {
+            const auto asset_id = bip21_params.value("assetid").toString();
+            const auto asset = m_context->getOrCreateAsset(asset_id);
+            setAsset(asset);
+        }
+        const auto address = addressee.value("address").toString();
+        if (!address.isEmpty()) {
+            m_recipient->setAddress(address);
+        }
+        if (bip21_params.contains("amount")) {
+            m_recipient->setGreedy(false);
+            const auto satoshi = addressee.value("satoshi").toInteger();
             m_recipient->convert()->setInput({{ "satoshi", satoshi }});
         }
+        } else if (addressee.value("is_greedy").toBool()) {
+            const auto satoshi = addressee.value("satoshi").toInteger();
+            m_recipient->convert()->setInput({{ "satoshi", satoshi }});
+        }
+
     }
 }

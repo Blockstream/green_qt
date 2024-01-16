@@ -3,6 +3,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 TextField {
+    signal codeScanned(string code)
     property string address_input
     property var error
     Layout.fillWidth: true
@@ -77,6 +78,6 @@ TextField {
     }
     ScannerPopup {
         id: scanner_popup
-        onCodeScanned: (code) => self.text = code //controller.parseAndUpdate(code)
+        onCodeScanned: (code) => self.codeScanned(code)
     }
 }

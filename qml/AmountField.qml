@@ -60,12 +60,12 @@ TextField {
             self.clear()
         }
         function onOutputChanged() {
-            if (self.readOnly && !self.fiat) {
+            if ((self.readOnly || !self.activeFocus) && (!self.fiat || !self.convert.fiat.available) && Object.keys(self.convert.input).length > 0) {
                 self.text = self.convert.output.amount
             }
         }
         function onFiatChanged() {
-            if (self.readOnly && self.fiat && self.convert.fiat.available) {
+            if ((self.readOnly || !self.activeFocus) && self.fiat && self.convert.fiat.available) {
                 self.text = self.convert.fiat.amount
             }
         }
