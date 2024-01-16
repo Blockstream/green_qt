@@ -25,11 +25,13 @@ signals:
     void accountChanged();
     void transactionChanged();
     void memoChanged();
+    void failed(const QString& error);
     void transactionCompleted(Transaction* transaction);
 private:
     Account* m_account{nullptr};
     QJsonObject m_transaction;
     QString m_memo;
+    QString m_error;
 };
 
 #endif // GREEN_SIGNTRANSACTIONCONTROLLER_H

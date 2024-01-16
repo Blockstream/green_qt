@@ -65,6 +65,17 @@ void SignTransactionController::sign()
     dispatcher()->add(group);
     monitor()->add(group);
 
+    m_error.clear();
+
+    connect(sign, &Task::failed, this, [=](const QString& error) {
+        m_error.append(error);
+    });
+    connect(send, &Task::failed, this, [=](const QString& error) {
+        m_error.append(error);
+    });
+    connect(group, &TaskGroup::failed, this, [=] {
+        emit failed(m_error);
+    });
     connect(sign, &Task::finished, this, [=] {
         auto details = sign->result().value("result").toObject();
         send->setDetails(details);
