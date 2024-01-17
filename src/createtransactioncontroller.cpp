@@ -173,6 +173,5 @@ void CreateTransactionController::setTransaction(const QJsonObject& transaction)
             const auto satoshi = addressee.value("satoshi").toInteger();
             m_recipient->convert()->setInput({{ "satoshi", satoshi }});
         }
-
     }
 }
