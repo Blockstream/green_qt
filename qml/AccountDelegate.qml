@@ -123,15 +123,19 @@ ItemDelegate {
         Collapsible {
             Layout.fillWidth: true
             Layout.minimumHeight: 1
+            id: collapsible
             collapsed: !delegate.highlighted
-            contentWidth: width
-            contentHeight: details.height
+            contentWidth: collapsible.width
+            contentHeight: details.y + details.height
             ColumnLayout {
                 id: details
-                width: parent.width
+                y: 64
+                width: collapsible.width
+                AmpIdButton {
+                    Layout.alignment: Qt.AlignRight
+                }
                 Item {
                     Layout.fillWidth: true
-                    Layout.topMargin: 64
                     implicitHeight: card_footer.height
                     RowLayout {
                         id: card_footer
@@ -215,6 +219,55 @@ ItemDelegate {
                     }
                 }
             }
+        }
+    }
+    component AmpIdButton: AbstractButton {
+        Timer {
+            id: timer
+            repeat: false
+            interval: 1000
+        }
+        id: amp_id_button
+        topPadding: 2
+        bottomPadding: 2
+        leftPadding: 10
+        rightPadding: 10
+        visible: delegate.account.type === '2of2_no_recovery'
+        background: Rectangle {
+            radius: height / 2
+            color: 'transparent'
+            border.width: 1
+            border.color: '#FFF'
+        }
+        contentItem: RowLayout {
+            spacing: 0
+            Label {
+                Layout.rightMargin: 10
+                font.pixelSize: 10
+                font.weight: 600
+                color: Qt.alpha('#FFF', 0.8)
+                text: qsTrId('id_amp_id')
+            }
+            Label {
+                font.pixelSize: 10
+                font.weight: 600
+                color: Qt.alpha('#FFF', 1)
+                text: delegate.account.json.receiving_id
+                elide: Label.ElideMiddle
+            }
+            Collapsible {
+                horizontalCollapse: true
+                verticalCollapse: false
+                collapsed: !amp_id_button.hovered
+                Image {
+                    x: 10
+                    source: timer.running ? 'qrc:/svg2/check.svg' : 'qrc:/svg2/copy.svg'
+                }
+            }
+        }
+        onClicked: {
+            Clipboard.copy(delegate.account.json.receiving_id)
+            timer.restart()
         }
     }
 }
