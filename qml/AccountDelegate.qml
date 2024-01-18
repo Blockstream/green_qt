@@ -126,16 +126,24 @@ ItemDelegate {
             id: collapsible
             collapsed: !delegate.highlighted
             contentWidth: collapsible.width
-            contentHeight: details.y + details.height
+            contentHeight: details.height
             ColumnLayout {
                 id: details
-                y: 64
                 width: collapsible.width
-                AmpIdButton {
-                    Layout.alignment: Qt.AlignRight
+                Label {
+                    Layout.fillWidth: true
+                    Layout.preferredWidth: 0
+                    Layout.topMargin: 4
+                    elide: Label.ElideMiddle
+                    font.pixelSize: 14
+                    font.weight: 400
+                    opacity: 0.4
+                    text: delegate.account.json.receiving_id
+                    visible: delegate.account.type === '2of2_no_recovery'
                 }
                 Item {
                     Layout.fillWidth: true
+                    Layout.topMargin: 64
                     implicitHeight: card_footer.height
                     RowLayout {
                         id: card_footer
@@ -205,6 +213,15 @@ ItemDelegate {
                                     }
                                 }
                                 GMenu.Item {
+                                    text: qsTrId('id_copy') + ' ' + qsTrId('id_amp_id')
+                                    icon.source: 'qrc:/svg2/copy.svg'
+                                    visible: delegate.account.type === '2of2_no_recovery'
+                                    onClicked: {
+                                        account_delegate_menu.close()
+                                        Clipboard.copy(delegate.account.json.receiving_id)
+                                    }
+                                }
+                                GMenu.Item {
                                     text: qsTrId('id_archive')
                                     icon.source: 'qrc:/svg/archived.svg'
                                     enabled: account_list_model.count > 1
@@ -219,55 +236,6 @@ ItemDelegate {
                     }
                 }
             }
-        }
-    }
-    component AmpIdButton: AbstractButton {
-        Timer {
-            id: timer
-            repeat: false
-            interval: 1000
-        }
-        id: amp_id_button
-        topPadding: 2
-        bottomPadding: 2
-        leftPadding: 10
-        rightPadding: 10
-        visible: delegate.account.type === '2of2_no_recovery'
-        background: Rectangle {
-            radius: height / 2
-            color: 'transparent'
-            border.width: 1
-            border.color: '#FFF'
-        }
-        contentItem: RowLayout {
-            spacing: 0
-            Label {
-                Layout.rightMargin: 10
-                font.pixelSize: 10
-                font.weight: 600
-                color: Qt.alpha('#FFF', 0.8)
-                text: qsTrId('id_amp_id')
-            }
-            Label {
-                font.pixelSize: 10
-                font.weight: 600
-                color: Qt.alpha('#FFF', 1)
-                text: delegate.account.json.receiving_id
-                elide: Label.ElideMiddle
-            }
-            Collapsible {
-                horizontalCollapse: true
-                verticalCollapse: false
-                collapsed: !amp_id_button.hovered
-                Image {
-                    x: 10
-                    source: timer.running ? 'qrc:/svg2/check.svg' : 'qrc:/svg2/copy.svg'
-                }
-            }
-        }
-        onClicked: {
-            Clipboard.copy(delegate.account.json.receiving_id)
-            timer.restart()
         }
     }
 }
