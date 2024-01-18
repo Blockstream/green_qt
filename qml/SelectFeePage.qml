@@ -82,7 +82,7 @@ StackViewPage {
                         Label {
                             font.pixelSize: 12
                             font.weight: 400
-                            text: Math.round(slider.value / 10 + 0.5) / 100 + ' sat/vbyte'
+                            text: Math.ceil(slider.value / 1000) + ' sat/vbyte'
                             opacity: 0.6
                         }
                     }
@@ -99,6 +99,7 @@ StackViewPage {
                             id: convert
                             account: self.account
                             input: ({ satoshi: String(Math.round(slider.value * self.size / 1000)) })
+                            unit: self.account.session.unit
                         }
                         Label {
                             Layout.alignment: Qt.AlignRight
@@ -168,7 +169,7 @@ StackViewPage {
                 Label {
                     font.pixelSize: 12
                     font.weight: 400
-                    text: Math.round(button.rate / 10 + 0.5) / 100 + ' sat/vbyte'
+                    text: Math.ceil(button.rate / 1000) + ' sat/vbyte'
                     opacity: 0.6
                 }
             }

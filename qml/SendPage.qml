@@ -23,7 +23,7 @@ StackViewPage {
         self.StackView.view.push(select_fee_page, {
             account: controller.account,
             unit: amount_field.unit,
-            size: controller.transaction.transaction ? controller.transaction.transaction.length / 2 : 0,
+            size: controller.transaction?.transaction_vsize ?? 0,
         })
     }
     FeeEstimates {
