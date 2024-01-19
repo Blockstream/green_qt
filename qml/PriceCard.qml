@@ -32,13 +32,11 @@ WalletHeaderCard {
     contentItem: ColumnLayout {
         spacing: 10
         Label {
-            font.capitalization: Font.AllUppercase
             font.pixelSize: 24
             font.weight: 600
             text: convert.fiat.label
         }
         Label {
-            font.capitalization: Font.AllUppercase
             font.pixelSize: 16
             font.weight: 400
             opacity: 0.6
