@@ -6,6 +6,7 @@
 #include "session.h"
 #include "network.h"
 #include "task.h"
+#include "transaction.h"
 
 #include <gdk.h>
 #include <ga.h>
@@ -59,6 +60,23 @@ void CreateTransactionController::setAsset(Asset* asset)
     invalidate();
 }
 
+void CreateTransactionController::setPreviousTransaction(Transaction* previous_transaction)
+{
+    if (m_previous_transaction == previous_transaction) return;
+    m_previous_transaction = previous_transaction;
+    emit previousTransactionChanged();
+    if (m_previous_transaction) {
+        setContext(m_previous_transaction->context());
+        setAccount(m_previous_transaction->account());
+        const auto output = m_previous_transaction->destination();
+        const auto address = output.value("address").toString();
+        const auto satoshi = output.value("satoshi").toInteger();
+        m_recipient->setAddress(address);
+        m_recipient->convert()->setInput({{ "satoshi", QString::number(satoshi) }});
+    }
+    invalidate();
+}
+
 void CreateTransactionController::setCoins(const QVariantList& coins)
 {
     if (m_coins == coins) return;
@@ -103,19 +121,21 @@ void CreateTransactionController::update()
             }
 
             auto session = m_account->session();
-
-            QJsonObject addressee;
-            addressee.insert("address", m_recipient->address());
-            addressee.insert("satoshi", m_recipient->convert()->satoshi().toLongLong());
-            addressee.insert("is_greedy", !m_recipient->address().contains("amount") && m_recipient->isGreedy());
-            if (session->network()->isLiquid() && m_recipient->convert()->asset()) {
-                addressee.insert("asset_id", m_recipient->convert()->asset()->id());
+            QJsonObject details = {{"utxos", m_utxos}};
+            if (m_previous_transaction) {
+                details["previous_transaction"] = m_previous_transaction->data();
+            } else {
+                QJsonObject addressee;
+                addressee.insert("address", m_recipient->address());
+                addressee.insert("satoshi", m_recipient->convert()->satoshi().toLongLong());
+                addressee.insert("is_greedy", !m_recipient->address().contains("amount") && m_recipient->isGreedy());
+                if (session->network()->isLiquid() && m_recipient->convert()->asset()) {
+                    addressee.insert("asset_id", m_recipient->convert()->asset()->id());
+                }
+                QJsonArray addressees;
+                addressees.append(addressee);
+                details["addressees"] = addressees;
             }
-
-            QJsonArray addressees;
-            addressees.append(addressee);
-
-            QJsonObject details = {{"utxos", m_utxos}, {"addressees", addressees}};
             if (m_fee_rate > 0) details["fee_rate"] = m_fee_rate;
             auto task = new CreateTransactionTask(details, session);
             connect(task, &CreateTransactionTask::finished, this, [=] {

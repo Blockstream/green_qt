@@ -12,6 +12,7 @@ StackViewPage {
     required property Context context
     required property Account account
     property Asset asset
+    property Transaction transaction
     function pushSelectCoinsPage() {
         self.StackView.view.push(select_coins_page, {
             account: controller.account,
@@ -30,16 +31,12 @@ StackViewPage {
         id: estimates
         session: self.account.session
     }
-    AnalyticsView {
-        name: 'Send'
-        active: true
-        segmentation: AnalyticsJS.segmentationSubAccount(self.account)
-    }
     CreateTransactionController {
         id: controller
         context: self.context
         account: self.account
         asset: self.asset
+        previousTransaction: self.transaction
         recipient.convert.unit: self.account.session.unit
         feeRate: estimates.fees[24] ?? 0
     }
@@ -71,14 +68,18 @@ StackViewPage {
             AccountAssetField {
                 Layout.bottomMargin: 15
                 Layout.fillWidth: true
+                id: account_asset_field
                 account: controller.account
                 asset: controller.asset
+                readonly: !!self.transaction
                 onClicked: {
-                    self.StackView.view.push(account_asset_selector, {
-                        context: controller.context,
-                        account: controller.account,
-                        asset: controller.recipient.convert.asset,
-                    })
+                    if (!account_asset_field.readonly) {
+                        self.StackView.view.push(account_asset_selector, {
+                            context: controller.context,
+                            account: controller.account,
+                            asset: controller.recipient.convert.asset,
+                        })
+                    }
                 }
             }
             FieldTitle {
@@ -111,7 +112,7 @@ StackViewPage {
                     }
                     CircleButton {
                         Layout.alignment: Qt.AlignCenter
-                        icon.source: 'qrc:/svg2/close.svg'
+                        icon.source: 'qrc:/svg2/x-circle.svg'
                         onClicked: controller.coins = []
                     }
                     Label {
@@ -138,7 +139,6 @@ StackViewPage {
                             text: convert.fiat.label
                         }
                     }
-
                     CircleButton {
                         Layout.alignment: Qt.AlignCenter
                         icon.source: 'qrc:/svg2/edit.svg'
@@ -148,7 +148,7 @@ StackViewPage {
                 onClicked: self.pushSelectCoinsPage()
             }
             FieldTitle {
-                text: 'Enter Address'
+                text: qsTrId('id_address')
             }
             AddressField {
                 Layout.bottomMargin: 15
@@ -165,8 +165,11 @@ StackViewPage {
                     if (error === 'id_nonconfidential_addresses_not') return error
                     if (error === 'id_assets_cannot_be_used_on_bitcoin') return error
                 }
+                readOnly: !!self.transaction
             }
             ErrorPane {
+                Layout.topMargin: -30
+                Layout.bottomMargin: 15
                 error: address_field.error
             }
             FieldTitle {
@@ -176,7 +179,7 @@ StackViewPage {
                 Layout.bottomMargin: 15
                 Layout.fillWidth: true
                 id: amount_field
-                readOnly: controller.recipient.greedy
+                readOnly: !!controller.previousTransaction || controller.recipient.greedy
                 convert: controller.recipient.convert
                 unit: self.account.session.unit
                 error: {
@@ -189,18 +192,21 @@ StackViewPage {
                 }
             }
             ErrorPane {
+                Layout.topMargin: -30
+                Layout.bottomMargin: 15
                 error: amount_field.error
             }
             Convert {
                 id: available_convert
                 account: controller.account
                 asset: controller.asset
-                input: ({ satoshi: String(controller.account.json.satoshi[controller.asset.key]) })
+                input: ({ satoshi: String(controller.account.json.satoshi[controller.asset?.key ?? 'btc']) })
                 unit: controller.recipient.convert.unit
             }
             RowLayout {
                 Layout.bottomMargin: 15
                 spacing: 10
+                visible: !self.transaction
                 ColumnLayout {
                     Label {
                         Layout.fillWidth: true
@@ -278,6 +284,12 @@ StackViewPage {
                     font.pixelSize: 12
                     font.weight: 400
                     text: '~ ' + fee_convert.fiat.label
+                }
+            }
+            ErrorPane {
+                error: {
+                    const error = controller.transaction?.error
+                    if (error === 'id_invalid_replacement_fee_rate') return error
                 }
             }
         }
@@ -368,8 +380,6 @@ StackViewPage {
     component ErrorPane: Collapsible {
         required property var error
         Layout.fillWidth: true
-        Layout.topMargin: -30
-        Layout.bottomMargin: 15
         id: error_pane
         animationVelocity: 300
         contentWidth: error_pane.width
@@ -381,7 +391,7 @@ StackViewPage {
             leftPadding: 10
             rightPadding: 10
             bottomPadding: 15
-            topPadding: 25
+            topPadding: error_pane.Layout.topMargin !== 0 ? 25 : 15
             width: error_pane.width
             background: Rectangle {
                 color: '#3B080F'

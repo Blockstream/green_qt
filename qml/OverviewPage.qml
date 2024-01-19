@@ -419,7 +419,7 @@ StackViewPage {
                     const context = self.context
                     const account = self.currentAccount
                     const network = account.network
-                    const asset = context.getOrCreateAsset(network.liquid ? network.policyAsset : network.key)
+                    const asset = context.getOrCreateAsset(network.liquid ? network.policyAsset : 'btc')
                     const drawer = send_drawer.createObject(self, { context, account, asset })
                     drawer.open()
                 }
@@ -436,7 +436,7 @@ StackViewPage {
                     const context = self.context
                     const account = self.currentAccount
                     const network = account.network
-                    const asset = context.getOrCreateAsset(network.liquid ? network.policyAsset : network.key)
+                    const asset = context.getOrCreateAsset(network.liquid ? network.policyAsset : 'btc')
                     const drawer = receive_drawer.createObject(self, { context, account, asset })
                     drawer.open()
                 }

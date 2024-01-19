@@ -6,6 +6,8 @@ function iconFor(target) {
     if (target instanceof Account) return iconFor(target.network)
     if (target instanceof Asset) {
         if (target.icon) return target.icon
+        if (target.id === 'btc' && target.deployment === 'mainnet') return iconFor('bitcoin')
+        if (target.id === 'btc' && target.deployment === 'testnet') return iconFor('testnet')
         return iconFor(target.id)
     }
     if (target instanceof Wallet) return iconFor(target.network)
@@ -125,3 +127,28 @@ function normalizeUnit(unit) {
     return unit === '\u00B5BTC' ? 'ubtc' : unit.toLowerCase()
 }
 
+function getUnblindingData(tx) {
+    return {
+        version: 0,
+        txid: tx.txhash,
+        type: tx.type,
+        inputs: tx.inputs
+            .filter(i => i.asset_id && i.satoshi && i.assetblinder && i.amountblinder)
+            .map(i => ({
+               vin: i.pt_idx,
+               asset_id: i.asset_id,
+               assetblinder: i.assetblinder,
+               satoshi: i.satoshi,
+               amountblinder: i.amountblinder,
+            })),
+        outputs: tx.outputs
+            .filter(o => o.asset_id && o.satoshi && o.assetblinder && o.amountblinder)
+            .map(o => ({
+               vout: o.pt_idx,
+               asset_id: o.asset_id,
+               assetblinder: o.assetblinder,
+               satoshi: o.satoshi,
+               amountblinder: o.amountblinder,
+            })),
+    }
+}

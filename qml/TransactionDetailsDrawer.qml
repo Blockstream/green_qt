@@ -7,12 +7,9 @@ WalletDrawer {
     required property Transaction transaction
     id: self
     contentItem: GStackView {
-        initialItem: TransactionView { // DetailsPage {
-            // context: self.context
+        initialItem: TransactionView {
             transaction: self.transaction
-            closeAction: Action {
-                onTriggered: self.close()
-            }
+            onClosed: self.close()
         }
     }
 }

@@ -99,7 +99,7 @@ public:
     Q_INVOKABLE Asset* assetWithId(const QString& deployment, const QString& id);
 
 private:
-    QMap<QString, Asset*> m_assets;
+    QMap<QPair<QString, QString>, Asset*> m_assets;
     QStandardItemModel* const m_model;
 };
 

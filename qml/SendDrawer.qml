@@ -10,7 +10,6 @@ import "util.js" as UtilJS
 WalletDrawer {
     required property Account account
     property Asset asset
-
     id: self
     minimumContentWidth: 450
     contentItem: GStackView {
@@ -21,5 +20,10 @@ WalletDrawer {
             asset: self.asset
             onClosed: self.close()
         }
+    }
+    AnalyticsView {
+        name: 'Send'
+        active: true
+        segmentation: AnalyticsJS.segmentationSubAccount(self.account)
     }
 }

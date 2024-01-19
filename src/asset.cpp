@@ -178,10 +178,10 @@ AssetManager* AssetManager::create(QQmlEngine*, QJSEngine* engine)
 
 Asset *AssetManager::assetWithId(const QString& deployment, const QString& id)
 {
-    Asset* asset = m_assets.value(id);
+    Asset* asset = m_assets.value({ deployment, id });
     if (!asset) {
         asset = new Asset(deployment, id, this);
-        m_assets.insert(id, asset);
+        m_assets.insert({ deployment, id }, asset);
         m_model->appendRow(asset->item());
     }
     Q_ASSERT(deployment == asset->deployment());

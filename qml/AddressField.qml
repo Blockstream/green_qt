@@ -11,9 +11,9 @@ TextField {
     topPadding: 18
     bottomPadding: 18
     leftPadding: 18
-    rightPadding: options_layout.width + 18 + 10
+    rightPadding: (options_layout.visible ? options_layout.width + 10 : 0) + 18
     background: Rectangle {
-        color: Qt.lighter('#222226', !self.readonly && self.hovered ? 1.2 : 1)
+        color: Qt.lighter('#222226', !self.readOnly && self.hovered ? 1.2 : 1)
         radius: 5
         border.width: !!self.error ? 2 : 0
         border.color: '#C91D36'
@@ -47,6 +47,7 @@ TextField {
         anchors.right: parent.right
         anchors.rightMargin: 18
         spacing: 10
+        visible: !self.readOnly
         CircleButton {
             activeFocusOnTab: false
             enabled: scanner_popup.available && !scanner_popup.visible

@@ -152,7 +152,9 @@ qt_add_resources(green "images"
         assets/svg2/close.svg
         assets/svg2/coin_selection.svg
         assets/svg2/copy.svg
+        assets/svg2/copy-green.svg
         assets/svg2/copy2.svg
+        assets/svg2/dots-three-green.svg
         assets/svg2/edit.svg
         assets/svg2/eject-simple-thin.svg
         assets/svg2/expand.svg
@@ -160,6 +162,7 @@ qt_add_resources(green "images"
         assets/svg2/eye_closed.svg
         assets/svg2/flask.svg
         assets/svg2/fresh_wallet.svg
+        assets/svg2/gauge-green.svg
         assets/svg2/gear.svg
         assets/svg2/hand.svg
         assets/svg2/house.svg
@@ -171,10 +174,12 @@ qt_add_resources(green "images"
         assets/svg2/list_bullets.svg
         assets/svg2/ledger-logo.svg
         assets/svg2/lock-simple-thin.svg
+        assets/svg2/tx-mixed.svg
         assets/svg2/multisig.svg
         assets/svg2/next_arrow.svg
         assets/svg2/onboard_background.svg
         assets/svg2/paste.svg
+        assets/svg2/pencil-simple-line-green.svg
         assets/svg2/printer.svg
         assets/svg2/qrcode.svg
         assets/svg2/refresh.svg
@@ -183,6 +188,7 @@ qt_add_resources(green "images"
         assets/svg2/singlesig.svg
         assets/svg2/signature-light.svg
         assets/svg2/share.svg
+        assets/svg2/share-green.svg
         assets/svg2/shield_check.svg
         assets/svg2/shield_warning.svg
         assets/svg2/star.svg

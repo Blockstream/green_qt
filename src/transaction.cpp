@@ -103,6 +103,23 @@ QUrl Transaction::url() const
     return { tx_explorer_url + txhash };
 }
 
+QJsonObject Transaction::destination() const
+{
+    const auto outputs = m_data.value("outputs").toArray();
+    for (int i = 0; i < outputs.size(); i++) {
+        const auto output = outputs.at(i).toObject();
+        if (!output.contains("satoshi")) continue;
+        if (m_account->network()->isLiquid()) {
+            if (output.value("script").toString().isEmpty()) continue;
+            if (output.value("is_internal").toBool()) continue;
+        } else {
+            if (output.value("is_relevant").toBool()) continue;
+        }
+        return output;
+    }
+    return {};
+}
+
 void Transaction::updateFromData(const QJsonObject& data)
 {
     if (m_data == data) return;

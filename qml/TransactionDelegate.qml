@@ -81,11 +81,6 @@ ItemDelegate {
         }
         return JSON.stringify(tx, null, '\t')
     }
-    Action {
-        id: copy_unblinding_data_action
-        text: qsTrId('id_copy_unblinding_data')
-        onTriggered: copyUnblindingData(tool_button, tx)
-    }
     contentItem: RowLayout {
         spacing: 20
         Image {
