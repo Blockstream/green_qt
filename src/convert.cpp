@@ -173,7 +173,7 @@ QString Convert::satoshi() const
 
 QVariantMap Convert::format(const QString& unit) const
 {
-    QVariantMap result{{ "label", "" }, { "amount", "" }};
+    QVariantMap result{{ "label", "" }, { "amount", "" }, { unit, "" }};
     if (!m_context && !m_account) return result;
     if (m_liquid_asset) {
         const auto precision = m_asset->data().value("precision").toInt(0);
@@ -184,21 +184,24 @@ QVariantMap Convert::format(const QString& unit) const
         result["amount"] = amount;
         if (m_asset->data().contains("ticker")) {
             const auto ticker = m_asset->data().value("ticker").toString();
+            result["unit"] = ticker;
             result["label"] = amount + " " + ticker;
         } else {
+            result["unit"] = QString();
             result["label"] = amount;
         }
     } else if (!unit.isEmpty()) {
         const auto unit_key = unit == "\u00B5BTC" ? "ubtc" : unit.toLower();
         const bool is_liquid = (m_account && m_account->isLiquid()) || (m_asset && m_asset->networkKey().contains("liquid"));
         const QString prefix{is_liquid ? "L-" : ""};
-        result["label"] = prefix + (mainnet() ? mainnetUnit(unit) : testnetUnit(unit));
+        const QString display_unit = prefix + (mainnet() ? mainnetUnit(unit) : testnetUnit(unit));
+        result["unit"] = display_unit;
         result["bip21_amount"] = m_result["btc"];
         if (!m_result.contains(unit_key)) return result;
         auto amount = m_result.value(unit_key).toString();
         amount = number_to_string(QLocale::system(), amount, 8);
         result["amount"] = amount;
-        result["label"] = amount + " " + result["label"].toString();
+        result["label"] = amount + " " + display_unit;
     }
     return result;
 }
