@@ -138,7 +138,7 @@ WalletHeaderCard {
             Layout.rightMargin: 7
             font.pixelSize: 12
             font.weight: 400
-            text: rate.name + ' (' + Math.round(rate.rate / 10 + 0.5) / 100 + ' sat/vbyte)'
+            text: rate.name + ' (' + Math.round(rate.rate / 1000) + ' sat/vbyte)'
         }
         Label {
             Layout.alignment: Qt.AlignCenter
