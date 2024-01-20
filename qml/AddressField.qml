@@ -41,20 +41,6 @@ TextField {
     font.pixelSize: 14
     font.weight: 500
 
-    // TODO move to call site, abstract in controllers
-    /* onTextChanged: (text) => {
-        const payment = WalletManager.parseUrl(text.trim())
-        address_field.text = payment.address;
-        if (payment.amount) {
-            controller.amount = formatAmount(self.account, payment.amount * 100000000, false)
-        }
-        if (payment.message) {
-            controller.memo = payment.message
-        }
-        self.address_input = 'paste'
-    }
-    */
-
     RowLayout {
         id: options_layout
         anchors.verticalCenter: parent.verticalCenter
