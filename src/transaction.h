@@ -48,6 +48,7 @@ class Transaction : public QObject
     Q_PROPERTY(QJsonObject data READ data NOTIFY dataChanged)
     Q_PROPERTY(QString memo READ memo NOTIFY memoChanged)
     Q_PROPERTY(SPVStatus spv READ spvStatus NOTIFY spvStatusChanged)
+    Q_PROPERTY(QUrl url READ url NOTIFY dataChanged)
     QML_ELEMENT
     QML_UNCREATABLE("Transaction is instanced by Wallet.")
 public:
@@ -87,6 +88,8 @@ public:
     QJsonObject data() const;
 
     void updateFromData(const QJsonObject& data);
+
+    QUrl url() const;
 
 public slots:
     void openInExplorer() const;

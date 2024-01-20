@@ -96,6 +96,13 @@ QJsonObject Transaction::data() const
     return m_data;
 }
 
+QUrl Transaction::url() const
+{
+    const auto tx_explorer_url = m_account->network()->data().value("tx_explorer_url").toString();
+    const auto txhash = m_data.value("txhash").toString();
+    return { tx_explorer_url + txhash };
+}
+
 void Transaction::updateFromData(const QJsonObject& data)
 {
     if (m_data == data) return;
