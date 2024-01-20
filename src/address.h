@@ -16,6 +16,7 @@ class Address : public QObject
     Q_PROPERTY(QString address READ address NOTIFY dataChanged)
     Q_PROPERTY(int pointer READ pointer NOTIFY dataChanged)
     Q_PROPERTY(bool verified READ verified NOTIFY verifiedChanged)
+    Q_PROPERTY(QUrl url READ url NOTIFY dataChanged)
     QML_ELEMENT
     QML_UNCREATABLE("Address is instanced by Account.")
 public:
@@ -28,6 +29,7 @@ public:
     void updateFromData(const QJsonObject& data);
     bool verified() const { return m_verified; }
     void setVerified(bool verified);
+    QUrl url() const;
 signals:
     void dataChanged();
     void verifiedChanged();

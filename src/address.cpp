@@ -1,5 +1,6 @@
 #include "account.h"
 #include "address.h"
+#include "network.h"
 
 #include <gdk.h>
 
@@ -24,4 +25,10 @@ void Address::setVerified(bool verified)
     if (m_verified == verified) return;
     m_verified = verified;
     emit verifiedChanged();
+}
+
+QUrl Address::url() const
+{
+    const auto address_explorer_url = m_account->network()->data().value("address_explorer_url").toString();
+    return { address_explorer_url + m_address };
 }
