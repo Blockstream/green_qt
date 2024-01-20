@@ -106,7 +106,7 @@ AbstractDialog {
             }
             ShareButton {
                 hoverEnabled: true
-                onClicked: Qt.openUrlExternally(button.url)
+                url: button.url
             }
         }
     }

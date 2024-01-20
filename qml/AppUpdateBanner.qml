@@ -5,11 +5,9 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 Collapsible {
+    readonly property url url: 'https://blockstream.com/green/'
     function dismiss() {
         self.collapsed = true
-    }
-    function trigger() {
-         Qt.openUrlExternally('https://blockstream.com/green/')
     }
     AppUpdateController {
         id: controller
@@ -57,9 +55,9 @@ Collapsible {
             }
             ShareButton {
                 Layout.alignment: Qt.AlignCenter
-                onClicked: self.trigger()
+                url: self.url
             }
         }
-        onClicked: self.trigger()
+        onClicked: Qt.openUrlExternally(self.url)
     }
 }

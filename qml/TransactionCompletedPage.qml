@@ -54,7 +54,7 @@ StackViewPage {
             contentItem: RowLayout {
                 spacing: 20
                 ShareButton {
-                    onClicked: Qt.openUrlExternally(self.transaction.account.network.data.tx_explorer_url + self.transaction.data.txhash)
+                    url: self.transaction.url
                 }
                 CircleButton {
                     icon.source: 'qrc:/svg2/copy.svg'

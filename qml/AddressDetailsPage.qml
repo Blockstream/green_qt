@@ -13,7 +13,7 @@ StackViewPage {
     rightItem: RowLayout {
         spacing: 20
         ShareButton {
-            onClicked: Qt.openUrlExternally(self.address.account.network.data.address_explorer_url + self.address.address)
+            url: self.address.url
         }
         CloseButton {
             action: self.closeAction

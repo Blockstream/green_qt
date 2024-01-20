@@ -17,7 +17,7 @@ StackViewPage {
     rightItem: RowLayout {
         spacing: 20
         ShareButton {
-            onClicked: self.asset.openInExplorer()
+            url: self.asset.url
         }
         CloseButton {
             action: self.closeAction
