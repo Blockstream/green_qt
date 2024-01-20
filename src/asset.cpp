@@ -3,10 +3,8 @@
 #include "network.h"
 #include "networkmanager.h"
 
-#include <QDesktopServices>
 #include <QLocale>
 #include <QtMath>
-#include <QUrl>
 
 Asset::Asset(const QString& deployment, const QString& id, QObject* parent)
     : QObject(parent)
@@ -117,11 +115,6 @@ QString Asset::formatAmount(qint64 amount, bool include_ticker, const QString& u
     }
 
     return str;
-}
-
-void Asset::openInExplorer() const
-{
-    QDesktopServices::openUrl({ "https://blockstream.info/liquid/asset/" + m_id });
 }
 
 static AssetManager* g_asset_manager{nullptr};
