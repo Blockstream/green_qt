@@ -875,6 +875,7 @@ void LoadAssetsTask::update()
                 const auto id = item.key();
                 const auto data = item.value();
                 auto asset = context->getOrCreateAsset(QString::fromStdString(id));
+                asset->setNetworkKey(m_session->network()->key());
                 asset->setData(Json::toObject((GA_json*) &data));
                 if (output->at("icons").contains(id)) {
                     const auto icon = output->at("icons").at(id).get<std::string>();

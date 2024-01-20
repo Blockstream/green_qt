@@ -23,6 +23,7 @@ class Asset : public QObject
     Q_PROPERTY(int weight READ weight NOTIFY weightChanged)
     Q_PROPERTY(QJsonObject data READ data NOTIFY dataChanged)
     Q_PROPERTY(QString key READ key CONSTANT)
+    Q_PROPERTY(QUrl url READ url CONSTANT)
     QML_ELEMENT
     QML_UNCREATABLE("Asset is instanced by AssetManager")
 public:
@@ -55,6 +56,8 @@ public:
 
     QString key() const { return m_key; }
     void setKey(const QString& key);
+
+    QUrl url() const;
 
     Q_INVOKABLE qint64 parseAmount(const QString& amount) const;
     Q_INVOKABLE QString formatAmount(qint64 amount, bool include_ticker, const QString& unit = {}) const;

@@ -76,6 +76,14 @@ void Asset::setKey(const QString &key)
     m_key = key;
 }
 
+QUrl Asset::url() const
+{
+    const auto network = NetworkManager::instance()->networkWithServerType(m_deployment, m_network_key, "green");
+    const auto tx_explorer_url = network->data().value("tx_explorer_url").toString();
+    const auto asset_explorer_url = tx_explorer_url.sliced(0, tx_explorer_url.size() - 3) + "asset/";
+    return { asset_explorer_url + m_id };
+}
+
 qint64 Asset::parseAmount(const QString& amount) const
 {
 //    TODO parsing should be done from the account since the account holds the network
