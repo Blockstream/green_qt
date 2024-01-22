@@ -146,7 +146,7 @@ AssetManager::AssetManager()
 
     for (const auto network : NetworkManager::instance()->networks()) {
         const auto network_key = network->key();
-        const auto id = network->data().value("policy_asset").toString(network_key);
+        const auto id = network->data().value("policy_asset").toString("btc");
         const auto key = network->data().value("policy_asset").toString("btc");
         auto asset = assetWithId(network->deployment(), id);
         asset->setNetworkKey(network_key);

@@ -9,26 +9,35 @@ WalletHeaderCard {
         if (context) {
             for (let i = 0; i < context.accounts.length; i++) {
                 const account = context.accounts[i]
-                for (let j = 0; j < account.balances.length; j++) {
-                    const balance = account.balances[j]
-                    if (balance.amount === 0) continue
-                    if (balance.asset.icon) {
-                        assets.add(balance.asset)
-                    }
+                for (const [asset_id, satoshi] of Object.entries(account.json.satoshi)) {
+                    if (satoshi === 0) continue
+                    const asset = context.getOrCreateAsset(asset_id)
+                    if (!asset.icon && asset.weight === 0) continue
+                    assets.add(asset)
                 }
             }
         }
-        return [...assets]
+        return [...assets].sort((a, b) => {
+            if (a.weight > b.weight) return -1
+            if (b.weight > a.weight) return 1
+            if (b.weight === 0) {
+                if (a.icon && !b.icon) return -1
+                if (!a.icon && b.icon) return 1
+                if (Object.keys(a.data).length > 0 && Object.keys(b.data).length === 0) return -1
+                if (Object.keys(a.data).length === 0 && Object.keys(b.data).length > 0) return 1
+            }
+            return a.name.localeCompare(b.name)
+        }).reverse()
     }
     readonly property bool withoutIcon: {
         const context = self.context
         if (context) {
             for (let i = 0; i < context.accounts.length; i++) {
                 const account = context.accounts[i]
-                for (let j = 0; j < account.balances.length; j++) {
-                    const balance = account.balances[j]
-                    if (balance.amount === 0) continue
-                    if (!balance.asset.icon) return true
+                for (const [asset_id, satoshi] of Object.entries(account.json.satoshi)) {
+                    if (satoshi === 0) continue
+                    const asset = context.getOrCreateAsset(asset_id)
+                    if (!asset.icon && asset.weight === 0) return true
                 }
             }
         }

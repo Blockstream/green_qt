@@ -9,21 +9,19 @@ WalletDrawer {
     readonly property var assets: {
         const context = self.context
         if (!context) return []
-        const deployment = context.deployment
         const assets = new Map
         for (let i = 0; i < context.accounts.length; i++) {
             const account = context.accounts[i]
-            if (account.network.liquid) {
-                for (let asset_id in account.json.satoshi) {
-                    const satoshi = account.json.satoshi[asset_id]
-                    const asset = AssetManager.assetWithId(deployment, asset_id)
-                    let sum = assets.get(asset)
-                    if (sum) {
-                        sum.satoshi += satoshi
-                    } else {
-                        sum = { satoshi, asset }
-                        assets.set(asset, sum)
-                    }
+            for (let asset_id in account.json.satoshi) {
+                const satoshi = account.json.satoshi[asset_id]
+                if (satoshi === 0) continue
+                const asset = context.getOrCreateAsset(asset_id)
+                let sum = assets.get(asset)
+                if (sum) {
+                    sum.satoshi += satoshi
+                } else {
+                    sum = { satoshi, asset }
+                    assets.set(asset, sum)
                 }
             }
         }
@@ -74,6 +72,9 @@ WalletDrawer {
     Component {
         id: asset_details_page
         AssetDetailsPage {
+            closeAction: Action {
+                onTriggered: self.close()
+            }
             onAccountClicked: (account) => {
                 self.close()
                 self.accountClicked(account)

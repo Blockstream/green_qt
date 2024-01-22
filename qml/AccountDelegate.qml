@@ -69,13 +69,13 @@ ItemDelegate {
                 Repeater {
                     id: asset_icon_repeater
                     model: {
+                        const context = delegate.account.context
                         const assets = []
                         let without_icon = false
-                        for (let i = 0; i < delegate.account.balances.length; i++) {
-                            const balance = delegate.account.balances[i]
-                            if (balance.amount === 0) continue;
-                            const asset = balance.asset
-                            if (asset.icon) {
+                        for (const [asset_id, satoshi] of Object.entries(delegate.account.json.satoshi)) {
+                            if (satoshi === 0) continue;
+                            const asset = context.getOrCreateAsset(asset_id)
+                            if (asset.icon || asset.weight > 0) {
                                 assets.push(asset)
                             } else if (!without_icon) {
                                 assets.unshift(asset)
