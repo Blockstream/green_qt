@@ -15,13 +15,14 @@ package:build:
     - rm -fr green_qt_dist
     - mkdir green_qt_dist
     - zip -j green_qt_dist/BlockstreamGreen_Windows_x86_64.zip "BlockstreamGreenSetup.exe"
-    - zip -r green_qt_dist/BlockstreamGreen_MacOS_x86_64.zip "Blockstream Green.dmg"
+    - mv "macos-universal/Blockstream Green.dmg" green_qt_dist/BlockstreamGreen-universal.dmg
     - chmod +x green
     - tar czf green_qt_dist/BlockstreamGreen_Linux_x86_64.tar.gz -C . green
     - cp BlockstreamGreen-x86_64.AppImage green_qt_dist
     - chmod +x green_qt_dist/BlockstreamGreen-x86_64.AppImage
     - cd green_qt_dist
     - /opt/process_release
+    - cat SHA256SUMS.asc
   needs:
     - linux-x86_64:build-appimage
     - linux-x86_64:build-binary
