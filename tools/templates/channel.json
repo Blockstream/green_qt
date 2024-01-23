@@ -1,17 +1,12 @@
 {
     "version" : "VERSION_STRING",
-    "files" : {
-        "windows" : {
-            "filename" : "VERSION_STRING/BlockstreamGreen_Windows_x86_64.zip",
-            "hash" : "HASH_WINDOWS"
-        },
-        "mac" : {
-            "filename" : "VERSION_STRING/BlockstreamGreen_MacOS_x86_64.zip",
-            "hash" : "HASH_MAC"
-        },
-        "linux" : {
-            "filename" : "VERSION_STRING/BlockstreamGreen-x86_64.AppImage",
-            "hash" : "HASH_LINUX"
-        }
-    }
+    "shasums": "CHANNEL_STRING/VERSION_STRING/SHA256SUMS.asc",
+    "files" : [
+      { "arch":"x86_64", "sys":"linux", "filename":"CHANNEL_STRING/VERSION_STRING/BlockstreamGreen-x86_64.AppImage" },
+      { "arch":"x86_64", "sys":"linux", "filename":"CHANNEL_STRING/VERSION_STRING/BlockstreamGreen-linux-x86_64.tar.gz" },
+      { "arch":"universal", "sys":"macos", "filename":"CHANNEL_STRING/VERSION_STRING/BlockstreamGreen-universal.dmg" },
+      { "arch":"arm64", "sys":"macos", "filename":"CHANNEL_STRING/VERSION_STRING/BlockstreamGreen-arm64.dmg" },
+      { "arch":"x86_64", "sys":"macos", "filename":"CHANNEL_STRING/VERSION_STRING/BlockstreamGreen-x86_64.dmg" },
+      { "arch":"x86_64", "sys":"windows", "filename":"CHANNEL_STRING/VERSION_STRING/BlockstreamGreenSetup-x86_64.exe" }
+    ]
 }

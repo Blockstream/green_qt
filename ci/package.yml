@@ -14,10 +14,12 @@ package:build:
     - cd $CI_PROJECT_DIR
     - rm -fr green_qt_dist
     - mkdir green_qt_dist
-    - zip -j green_qt_dist/BlockstreamGreen_Windows_x86_64.zip "BlockstreamGreenSetup.exe"
+    - mv BlockstreamGreenSetup.exe green_qt_dist/BlockstreamGreenSetup-x86_64.exe
+    - mv "macos-arm64/Blockstream Green.dmg" green_qt_dist/BlockstreamGreen-arm64.dmg
+    - mv "macos-x86_64/Blockstream Green.dmg" green_qt_dist/BlockstreamGreen-x86_64.dmg
     - mv "macos-universal/Blockstream Green.dmg" green_qt_dist/BlockstreamGreen-universal.dmg
     - chmod +x green
-    - tar czf green_qt_dist/BlockstreamGreen_Linux_x86_64.tar.gz -C . green
+    - tar czf green_qt_dist/BlockstreamGreen-linux-x86_64.tar.gz -C . green
     - cp BlockstreamGreen-x86_64.AppImage green_qt_dist
     - chmod +x green_qt_dist/BlockstreamGreen-x86_64.AppImage
     - cd green_qt_dist
@@ -26,10 +28,12 @@ package:build:
   needs:
     - linux-x86_64:build-appimage
     - linux-x86_64:build-binary
+    - macos-arm64:staple
+    - macos-x86_64:staple
     - macos-universal:staple
     - windows-x86_64:sign-installer
 
-package:publish:
+.publish:
   tags:
     - ga
   stage: package
@@ -39,3 +43,15 @@ package:publish:
   script:
     - cd green_qt_dist
     - ../tools/publish.sh
+
+package:publish-rc:
+  extends:
+    - .publish
+  variables:
+    CHANNEL: rc
+
+package:publish-latest:
+  extends:
+    - .publish
+  variables:
+    CHANNEL: latest
