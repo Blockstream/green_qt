@@ -69,8 +69,9 @@ ItemDelegate {
                 Repeater {
                     id: asset_icon_repeater
                     model: {
-                        const context = delegate.account.context
                         const assets = []
+                        if (!delegate.account.json.satoshi) return assets
+                        const context = delegate.account.context
                         let without_icon = false
                         for (const [asset_id, satoshi] of Object.entries(delegate.account.json.satoshi)) {
                             if (satoshi === 0) continue;
@@ -138,7 +139,7 @@ ItemDelegate {
                     font.pixelSize: 14
                     font.weight: 400
                     opacity: 0.4
-                    text: delegate.account.json.receiving_id
+                    text: delegate.account.json?.receiving_id ?? ''
                     visible: delegate.account.type === '2of2_no_recovery'
                 }
                 Item {
