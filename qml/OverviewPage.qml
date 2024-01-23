@@ -32,7 +32,7 @@ StackViewPage {
 
     function openCreateAccountDrawer({ dismissable = true } = {}) {
         const network = self.currentAccount?.network ?? NetworkManager.networkForDeployment(self.context.deployment)
-        const id = network.liquid ? network.policyAsset : network.key
+        const id = network.liquid ? network.policyAsset : 'btc'
         const asset = self.context.getOrCreateAsset(id)
         const drawer = create_account_drawer.createObject(self, { context: self.context, asset, dismissable })
         drawer.open()
