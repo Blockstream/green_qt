@@ -2,6 +2,7 @@
 #define GREEN_CREATEACCOUNTCONTROLLER_H
 
 #include <QQmlEngine>
+#include <QValidator>
 
 #include "controller.h"
 
@@ -84,6 +85,16 @@ private:
     QStringList m_recovery_mnemonic;
     QString m_recovery_xpub;
     Account* m_account{nullptr};
+};
+
+
+class XPubValidator : public QValidator
+{
+    Q_OBJECT
+    QML_ELEMENT
+public:
+    XPubValidator(QObject* parent = nullptr);
+    QValidator::State validate(QString& input, int& pos) const override;
 };
 
 #endif // GREEN_CREATEACCOUNTCONTROLLER_H

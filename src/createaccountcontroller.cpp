@@ -266,3 +266,13 @@ void MnemonicGenerator::generate()
     m_mnemonic = gdk::generate_mnemonic(m_size);
     emit mnemonicChanged();
 }
+
+XPubValidator::XPubValidator(QObject* parent)
+    : QValidator(parent)
+{
+}
+
+QValidator::State XPubValidator::validate(QString &input, int &pos) const
+{
+    return IsValidXpub(input) ? QValidator::Acceptable : QValidator::Intermediate;
+}

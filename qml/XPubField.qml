@@ -1,14 +1,18 @@
+import Blockstream.Green
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-TextArea {
+TextField {
     Layout.fillWidth: true
     id: self
     topPadding: 14
     bottomPadding: 13
     leftPadding: 15
-    rightPadding: 15 + options_layout.width + 10
+    rightPadding: 15 + options_layout.width + 10    
+    font.pixelSize: 14
+    font.weight: 500
+    wrapMode: TextEdit.Wrap
     background: Rectangle {
         color: Qt.lighter('#222226', self.hovered ? 1.2 : 1)
         radius: 5
@@ -33,9 +37,8 @@ TextArea {
             }
         }
     }
-    font.pixelSize: 14
-    font.weight: 500
-    wrapMode: TextEdit.Wrap
+    validator: XPubValidator {
+    }
     Row {
         id: options_layout
         anchors.verticalCenter: parent.verticalCenter

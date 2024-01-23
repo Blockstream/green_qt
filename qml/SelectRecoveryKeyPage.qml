@@ -143,7 +143,7 @@ StackViewPage {
                 contentItem: RowLayout {
                     PrimaryButton {
                         Layout.fillWidth: true
-                        enabled: xpub_field.text !== ''
+                        enabled: xpub_field.acceptableInput
                         text: qsTrId('id_next')
                         onClicked: self.xpub(xpub_field.text)
                     }
