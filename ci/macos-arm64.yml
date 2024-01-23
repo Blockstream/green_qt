@@ -40,6 +40,11 @@ macos-arm64:staple:
     when: always
     paths:
       - "macos-arm64/Blockstream Green.app"
+      - "macos-arm64/Blockstream Green.dmg"
   needs: ["macos-arm64:build"]
   script:
-    - tools/macos-staple.sh "macos-arm64/Blockstream green.app"
+    - mv "macos-arm64/Blockstream green.app" "Blockstream green.app"
+    - tools/macos-staple.sh "Blockstream green.app"
+    - tools/packdmg.sh "Blockstream Green.app"
+    - tools/macos-staple.sh "Blockstream Green.dmg"
+    - mv "Blockstream Green.app" "Blockstream Green.dmg" macos-arm64/
