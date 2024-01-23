@@ -21,7 +21,7 @@ StackViewPage {
             horizontalAlignment: Label.AlignHCenter
             font.pixelSize: 14
             font.weight: 400
-            text: self.error
+            text: qsTrId(self.error)
             wrapMode: Label.Wrap
         }
         PrimaryButton {
