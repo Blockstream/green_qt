@@ -55,3 +55,7 @@ package:publish-latest:
     - .publish
   variables:
     CHANNEL: latest
+  only:
+    - tags
+  except:
+    - branches
