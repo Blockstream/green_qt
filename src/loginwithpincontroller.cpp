@@ -256,9 +256,13 @@ void LoadController::loginNetwork(Network* network)
         login = new LoginTask(mnemonic, {}, session);
     }
 
-    auto load_assets = new LoadAssetsTask(session);
-    connect_session->then(load_assets);
-    load_assets->then(login);
+    if (network->isLiquid() && !m_assets_loaded) {
+        m_assets_loaded = false;
+        auto load_assets = new LoadAssetsTask(session);
+        connect_session->then(load_assets);
+        load_assets->then(login);
+        group->add(load_assets);
+    }
 
     connect(connect_session, &Task::failed, this, [=](const QString& error) {
         if (error == "timeout error") {
@@ -276,7 +280,6 @@ void LoadController::loginNetwork(Network* network)
     });
 
     group->add(connect_session);
-    group->add(load_assets);
     group->add(login);
 
     m_monitor->add(group);

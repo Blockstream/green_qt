@@ -52,6 +52,7 @@ private:
     void loginNetwork(Network* network);
 private:
     TaskGroupMonitor* const m_monitor;
+    bool m_assets_loaded{false};
 };
 
 class PinDataController : public Controller
