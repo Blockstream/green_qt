@@ -197,7 +197,6 @@ LoadController::LoadController(QObject* parent)
 static bool compatibleToNetworks(Network* network, const QList<Network*> networks)
 {
     for (auto net : networks) {
-        if (net == network) return false;
         if (net->isMainnet() != network->isMainnet()) return false;
         if (net->isDevelopment() != network->isDevelopment()) return false;
     }
