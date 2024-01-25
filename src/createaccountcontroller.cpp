@@ -43,16 +43,6 @@ void CreateAccountController::setNetwork(Network* network)
     emit networkChanged();
 }
 
-void CreateAccountController::setName(const QString& name)
-{
-    if (m_name == name) return;
-    m_name = name;
-    emit nameChanged();
-
-    clearError("create");
-    updateError("name", QString{"empty"}, m_name.isEmpty());
-}
-
 void CreateAccountController::setType(const QString& type)
 {
     if (m_type == type) return;
@@ -123,16 +113,27 @@ void CreateAccountController::ensureSession()
 
 void CreateAccountController::ensureAccount()
 {
-    if (m_name.isEmpty()) {
-        QString name;
-        if (m_type == "2of2") name = "2FA Protected";
-        if (m_type == "2of3") name = "2of3 with 2FA";
-        if (m_type == "2of2_no_recovery") name = "AMP Account";
-        if (m_type == "p2wpkh") name = "Standard";
-        if (m_type == "p2sh-p2wpkh") name = "Legacy SegWit";
-        if (m_type == "p2pkh") name = "Legacy";
-        if (m_network->isLiquid()) name.append(" Liquid");
-        setName(name);
+    QString name;
+    if (m_type == "2of2") name = "2FA Protected";
+    if (m_type == "2of3") name = "2of3 with 2FA";
+    if (m_type == "2of2_no_recovery") name = "AMP Account";
+    if (m_type == "p2wpkh") name = "Standard";
+    if (m_type == "p2sh-p2wpkh") name = "Legacy SegWit";
+    if (m_type == "p2pkh") name = "Legacy";
+    if (m_network->isLiquid()) name.append(" Liquid");
+    int n = 1;
+    bool retry = true;
+    QString suffix;
+    while (retry) {
+        retry = false;
+        if (n > 1) suffix = " " + QString::number(n);
+        for (auto account : m_context->getAccounts()) {
+            if (account->name() == name + suffix) {
+                n ++;
+                retry = true;
+                break;
+            }
+        }
     }
 
     auto session = m_context->getOrCreateSession(m_network);
@@ -158,10 +159,10 @@ void CreateAccountController::ensureAccount()
 
         auto task = new UpdateAccountTask({
             { "subaccount", static_cast<qint64>(account->pointer()) },
-            { "name", account->name().isEmpty() ? m_name : account->name() },
+            { "name", account->name().isEmpty() ? name : account->name() },
             { "hidden", false }
         }, session);
-        account->setName(m_name);
+        account->setName(name);
         account->setHidden(false);
         m_account = account;
         group->add(task);
@@ -172,7 +173,7 @@ void CreateAccountController::ensureAccount()
 
     if (!m_account) {
         auto details = QJsonObject{
-            { "name", m_name },
+            { "name", name + suffix },
             { "type", m_type },
         };
 
