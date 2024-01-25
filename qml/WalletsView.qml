@@ -40,7 +40,7 @@ MainPage {
             Repeater {
                 id: sww_repeater
                 model: WalletListModel {
-                    pinData: WalletListModel.Yes
+                    deviceDetails: WalletListModel.No
                 }
                 WalletsDrawer.WalletButton {
                     Layout.fillWidth: true
@@ -63,6 +63,8 @@ MainPage {
                 id: hww_repeater
                 model: WalletListModel {
                     deviceDetails: WalletListModel.Yes
+                    watchOnly: WalletListModel.No
+                    pinData: WalletListModel.No
                 }
                 WalletsDrawer.WalletButton {
                     Layout.fillWidth: true
