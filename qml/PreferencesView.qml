@@ -111,6 +111,24 @@ AbstractDialog {
         }
     }
 
+    component VersionButton: BaseButton {
+        hoverEnabled: false
+        contentItem: RowLayout {
+            spacing: 20
+            Label {
+                Layout.fillWidth: true
+                Layout.preferredWidth: 0
+                text: Qt.application.version
+                elide: Label.ElideMiddle
+            }
+            CircleButton {
+                hoverEnabled: true
+                icon.source: 'qrc:/svg2/copy.svg'
+                onClicked: Clipboard.copy(Qt.application.version)
+            }
+        }
+    }
+
     component SubButton: BaseButton {
         id: button
         contentItem: RowLayout {
@@ -366,6 +384,12 @@ AbstractDialog {
                 FileButton {
                     text: log_file_path
                     url: log_file_url
+                }
+                SectionLabel {
+                    Layout.topMargin: 25
+                    text: qsTrId('id_version')
+                }
+                VersionButton {
                 }
                 VSpacer {
                 }
