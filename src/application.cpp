@@ -1,5 +1,7 @@
 #include "application.h"
+#include "walletmanager.h"
 
+#include <QFileOpenEvent>
 #include <QWindow>
 
 Application::Application(int& argc, char** argv)
@@ -19,4 +21,14 @@ void Application::raise()
         window->requestActivate();
         window->raise();
     }
+}
+
+bool Application::event(QEvent* event)
+{
+    if (event->type() == QEvent::FileOpen) {
+        auto open_event = static_cast<QFileOpenEvent*>(event);
+        WalletManager::instance()->setOpenUrl(open_event->url());
+        raise();
+    }
+    return QApplication::event(event);
 }

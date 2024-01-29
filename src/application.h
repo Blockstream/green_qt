@@ -10,6 +10,8 @@ class Application : public QApplication
 public:
     Application(int &argc, char **argv);
     void raise();
+protected:
+    bool event(QEvent *event) override;
 };
 
 #endif // GREEN_APPLICATION_H
