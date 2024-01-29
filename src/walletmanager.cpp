@@ -39,6 +39,18 @@ WalletManager::WalletManager()
     g_wallet_manager = this;
 }
 
+void WalletManager::clearOpenUrl()
+{
+    setOpenUrl({});
+}
+
+void WalletManager::setOpenUrl(const QUrl& open_url)
+{
+    if (m_open_url == open_url) return;
+    m_open_url = open_url;
+    emit openUrlChanged();
+}
+
 void WalletManager::loadWallets()
 {
     if (!ExistsDataDir("wallets2")) {
