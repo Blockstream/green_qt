@@ -163,7 +163,7 @@ ItemDelegate {
                     color: transaction.data.type === 'incoming' ? '#00B670' : '#FFF'
                     font.pixelSize: 14
                     font.weight: 600
-                    text: convert.output.label
+                    text: UtilJS.incognito(self.context, convert.output.label)
                 }
             }
             Convert {
@@ -181,7 +181,7 @@ ItemDelegate {
                 color: transaction.data.type === 'incoming' ? '#00B670' : '#FFF'
                 font.pixelSize: 14
                 font.weight: 600
-                text: convert.output.label
+                text: UtilJS.incognito(self.context, convert.output.label)
                 visible: Number(convert.result.satoshi ?? '0') !== 0
             }
             Label {
@@ -189,7 +189,7 @@ ItemDelegate {
                 color: '#929292'
                 font.pixelSize: 12
                 font.weight: 400
-                text: convert.fiat.label
+                text: UtilJS.incognito(self.context, convert.fiat.label)
                 visible: Number(convert.result.satoshi ?? '0') !== 0
             }
         }
