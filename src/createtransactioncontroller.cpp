@@ -3,8 +3,9 @@
 #include "context.h"
 #include "convert.h"
 #include "createtransactioncontroller.h"
-#include "session.h"
 #include "network.h"
+#include "output.h"
+#include "session.h"
 #include "task.h"
 #include "transaction.h"
 
@@ -121,7 +122,21 @@ void CreateTransactionController::update()
             }
 
             auto session = m_account->session();
-            QJsonObject details = {{"utxos", m_utxos}};
+
+            QJsonObject details;
+            if (m_coins.isEmpty()) {
+                details["utxos"] = m_utxos;
+            } else {
+                qDebug() << "use coins";
+                QJsonArray utxos;
+                for (auto coin : m_coins) {
+                    auto output = coin.value<Output*>();
+                    utxos.append(output->data());
+                }
+                qDebug() << utxos;
+                details["utxos"] = QJsonObject{{ "btc", utxos }};
+            }
+
             if (m_previous_transaction) {
                 details["previous_transaction"] = m_previous_transaction->data();
             } else {

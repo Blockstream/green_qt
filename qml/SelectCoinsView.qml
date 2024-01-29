@@ -75,7 +75,6 @@ StackViewPage {
             spacing: 5
             model: OutputListModelFilter {
                 id: output_model_filter
-                asset: self.asset
                 filter: [button_group.checkedButton?.buttonTag ?? '', '!locked'].join(' ')
                 model: OutputListModel {
                     id: output_model
