@@ -8,6 +8,7 @@ linux-x86_64:build-appimage:
     - tools/appimage.sh $CI_PROJECT_DIR
   artifacts:
     name: "$CI_PROJECT_NAME-$CI_JOB_NAME-$CI_COMMIT_SHORT_SHA"
+    expire_in: 1 week
     paths:
       - BlockstreamGreen-x86_64.AppImage
 
@@ -21,5 +22,6 @@ linux-x86_64:build-binary:
     - cloud
   artifacts:
     name: "$CI_PROJECT_NAME-$CI_JOB_NAME-$CI_COMMIT_SHORT_SHA"
+    expire_in: 1 week
     paths:
       - green

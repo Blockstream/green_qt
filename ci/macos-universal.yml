@@ -4,6 +4,7 @@ macos-universal:build:
   stage: build
   artifacts:
     name: "$CI_PROJECT_NAME-$CI_JOB_NAME-$CI_COMMIT_SHORT_SHA"
+    expire_in: 1 week
     paths:
       - "macos-universal/Blockstream Green.app"
   needs: ["macos-arm64:build", "macos-x86_64:build"]

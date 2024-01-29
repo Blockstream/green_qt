@@ -6,7 +6,7 @@ package:build:
     GIT_STRATEGY: none
   artifacts:
     name: "$CI_PROJECT_NAME-$CI_JOB_NAME-$CI_COMMIT_SHORT_SHA"
-    expire_in: 14 days
+    expire_in: 1 week
     paths:
     - $CI_PROJECT_DIR/green_qt_dist
     when: on_success

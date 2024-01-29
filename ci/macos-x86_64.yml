@@ -27,6 +27,7 @@ macos-x86_64:build:
     - mv "Blockstream Green.app" macos-x86_64
   artifacts:
     name: "$CI_PROJECT_NAME-$CI_JOB_NAME-$CI_COMMIT_SHORT_SHA"
+    expire_in: 1 week
     paths:
       - "macos-x86_64/Blockstream Green.app"
 
