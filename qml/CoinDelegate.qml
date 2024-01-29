@@ -76,7 +76,7 @@ ItemDelegate {
                 }
                 Label {
                     Layout.alignment: Qt.AlignCenter
-                    text: convert.output.label
+                    text: UtilJS.incognito(self.context, convert.output.label)
                     font.pixelSize: 16
                     font.weight: 600
                 }
@@ -92,7 +92,7 @@ ItemDelegate {
                 font.pixelSize: 14
                 font.weight: 400
                 opacity: 0.6
-                text: convert.fiat.label
+                text: UtilJS.incognito(self.context, convert.fiat.label)
                 visible: convert.fiat.available
             }
             Label {
