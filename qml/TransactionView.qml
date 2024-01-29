@@ -207,7 +207,7 @@ StackViewPage {
                                     Layout.alignment: Qt.AlignBaseline
                                     font.pixelSize: 24
                                     font.weight: 500
-                                    text: convert.output.amount
+                                    text: UtilJS.incognito(self.context, convert.output.amount)
                                 }
                                 Label {
                                     Layout.alignment: Qt.AlignBaseline
@@ -222,7 +222,7 @@ StackViewPage {
                                 font.pixelSize: 14
                                 font.weight: 400
                                 opacity: 0.6
-                                text: convert.fiat.label
+                                text:  UtilJS.incognito(self.context, convert.fiat.label)
                                 visible: convert.fiat.available
                             }
                         }
@@ -257,7 +257,7 @@ StackViewPage {
                         color: '#FFF'
                         font.pixelSize: 12
                         font.weight: 400
-                        text: fee_convert.output.label
+                        text: UtilJS.incognito(self.context, fee_convert.output.label)
                     }
                     Label {
                         Layout.fillWidth: true
@@ -267,7 +267,7 @@ StackViewPage {
                         font.pixelSize: 12
                         font.weight: 400
                         opacity: 0.6
-                        text: '~ ' + fee_convert.fiat.label
+                        text: UtilJS.incognito(self.context, '~ ' + fee_convert.fiat.label)
                     }
                 }
                 Label {
