@@ -24,7 +24,10 @@ WalletManager::WalletManager()
 {
     Q_ASSERT(!g_wallet_manager);
     g_wallet_manager = this;
+}
 
+void WalletManager::loadWallets()
+{
     QDirIterator it(GetDataDir("wallets"));
     while (it.hasNext()) {
         QJsonObject data;

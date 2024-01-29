@@ -159,6 +159,8 @@ int main(int argc, char *argv[])
     QCoreApplication::setOrganizationDomain("blockstream.com");
     QCoreApplication::setApplicationVersion(GREEN_VERSION);
 
+    WalletManager wallet_manager;
+
     Application app(argc, argv);
     KDSingleApplication kdsa;
 
@@ -270,7 +272,6 @@ int main(int argc, char *argv[])
     QQuickStyle::setStyle("Material");
 
     HttpManager http_manager;
-    WalletManager wallet_manager;
     Analytics analytics;
     AssetManager asset_manager;
 
@@ -290,6 +291,8 @@ int main(int argc, char *argv[])
     if (g_args.isSet("analytics")) {
         Settings::instance()->setAnalytics(g_args.value("analytics"));
     }
+
+    wallet_manager.loadWallets();
 
     QQmlApplicationEngine engine;
     engine.setBaseUrl(QUrl("qrc:/Blockstream/Green/qml/"));
