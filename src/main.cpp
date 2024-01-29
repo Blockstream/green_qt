@@ -15,6 +15,7 @@
 #include <QWindow>
 
 #include "config.h"
+#include "application.h"
 #include "analytics.h"
 #include "asset.h"
 #include "clipboard.h"
@@ -158,7 +159,7 @@ int main(int argc, char *argv[])
     QCoreApplication::setOrganizationDomain("blockstream.com");
     QCoreApplication::setApplicationVersion(GREEN_VERSION);
 
-    QApplication app(argc, argv);
+    Application app(argc, argv);
     KDSingleApplication kdsa;
 
     if (!kdsa.isPrimaryInstance()) {
@@ -169,16 +170,7 @@ int main(int argc, char *argv[])
     #ifndef Q_OS_LINUX
     app.connect(&kdsa, &KDSingleApplication::messageReceived, &app, [&app](const QByteArray &message ) {
         if (message == "raise") {
-            for (QWindow* w : app.allWindows()) {
-                // windows: does not allow a window to be brought to front while the user has focus on another window
-                // instead, Windows flashes the taskbar button of the window to notify the user
-
-                // mac: if the primary window is minimized, it is restored. It is background, it is brough to foreground
-
-                w->showNormal();
-                w->requestActivate();
-                w->raise();
-            }
+            app.raise();
         }
     });
     #endif
