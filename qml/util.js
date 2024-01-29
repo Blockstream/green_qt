@@ -117,7 +117,12 @@ function incognito(target, value, size = 5) {
     if (target instanceof Account) enabled = target.context.wallet.incognito
     if (target instanceof Context) enabled = target.wallet.incognito
     if (enabled) {
-        return value.replace(/\d\s\d/g, '0').replace(/[,.]/, '').replace(/\d+/g, '*'.repeat(size))
+        return value
+            .replace('~ ', '')
+            .replace('-', '')
+            .replace(/\d\s\d/g, '0')
+            .replace(/[,.]/, '')
+            .replace(/\d+/g, '*'.repeat(size))
     } else {
         return value
     }
