@@ -10,6 +10,7 @@ import "util.js" as UtilJS
 WalletDrawer {
     required property Account account
     property Asset asset
+    property url url
     id: self
     closePolicy: AbstractDrawer.CloseOnEscape
     minimumContentWidth: 450
@@ -19,6 +20,7 @@ WalletDrawer {
             context: self.context
             account: self.account
             asset: self.asset
+            url: self.url
             onClosed: self.close()
         }
     }

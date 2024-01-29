@@ -12,6 +12,7 @@ StackViewPage {
     required property Context context
     required property Account account
     property Asset asset
+    property url url
     property Transaction transaction
     function pushSelectCoinsPage() {
         self.StackView.view.push(select_coins_page, {
@@ -28,6 +29,12 @@ StackViewPage {
             previousTransaction: controller.previousTransaction
         })
     }
+    Component.onCompleted: {
+        if (self.url) {
+            controller.recipient.address = self.url
+        }
+    }
+
     FeeEstimates {
         id: estimates
         session: self.account.session

@@ -13,6 +13,11 @@ MainPage {
     signal closeDevice(Device device)
     property Wallet wallet
     property Device device
+    function send(url) {
+        if (stack_view.currentItem instanceof OverviewPage) {
+            stack_view.currentItem.openSendDrawer(url)
+        }
+    }
     Component.onCompleted: {
         const wallet = self.wallet
         if (!wallet) {

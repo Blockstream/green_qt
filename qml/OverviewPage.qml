@@ -48,6 +48,15 @@ StackViewPage {
         drawer.open()
     }
 
+    function openSendDrawer(url) {
+        const context = self.context
+        const account = self.currentAccount
+        const network = account.network
+        const asset = context.getOrCreateAsset(network.liquid ? network.policyAsset : 'btc')
+        const drawer = send_drawer.createObject(self, { context, account, asset, url })
+        drawer.open()
+    }
+
     function parseAmount(account, amount, unit) {
         account.session.displayUnit;
         return wallet.parseAmount(amount, unit || account.session.unit);
@@ -430,14 +439,7 @@ StackViewPage {
             action: Action {
                 enabled: UtilJS.effectiveVisible(self) && self.checkDeviceMatches() && !self.context.watchonly && self.currentAccount && !(self.currentAccount.session.config?.twofactor_reset?.is_active ?? false)
                 shortcut: 'Ctrl+S'
-                onTriggered: {
-                    const context = self.context
-                    const account = self.currentAccount
-                    const network = account.network
-                    const asset = context.getOrCreateAsset(network.liquid ? network.policyAsset : 'btc')
-                    const drawer = send_drawer.createObject(self, { context, account, asset })
-                    drawer.open()
-                }
+                onTriggered: openSendDrawer()
             }
         }
         PrimaryButton {
