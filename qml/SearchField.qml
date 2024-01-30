@@ -1,42 +1,22 @@
 import QtQuick
 import QtQuick.Controls
 
-TextField {
+TTextField {
     id: self
-    leftPadding: 20
-    rightPadding: 40 + search_image.width
-    topPadding: 20
-    bottomPadding: 20
-    background: Rectangle {
-        radius: 4
-        color: '#2F2F35'
-        Rectangle {
-            border.width: 2
-            border.color: '#00B45A'
-            color: 'transparent'
-            radius: 9
-            anchors.fill: parent
-            anchors.margins: -4
-            z: -1
-            visible: {
-                if (self.activeFocus) {
-                    switch (self.focusReason) {
-                    case Qt.TabFocusReason:
-                    case Qt.BacktabFocusReason:
-                    case Qt.ShortcutFocusReason:
-                        return true
-                    }
-                }
-                return false
-            }
-        }
-        Image {
-            id: search_image
-            source: 'qrc:/svg2/search.svg'
-            anchors.margins: 20
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.right: parent.right
-        }
+    leftPadding: 15 + search_image.width + 15
+    Image {
+        id: search_image
+        source: 'qrc:/svg2/search.svg'
+        anchors.leftMargin: 15
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.left: parent.left
     }
-
+    Label {
+        text: qsTrId('id_search')
+        opacity: 0.6
+        visible: self.text === ''
+        anchors.left: parent.left
+        anchors.leftMargin: self.leftPadding
+        anchors.baseline: parent.baseline
+    }
 }
