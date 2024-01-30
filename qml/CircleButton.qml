@@ -4,6 +4,7 @@ import QtQuick.Controls
 AbstractButton {
     id: self
     focusPolicy: Qt.StrongFocus
+    opacity: self.enabled ? 1 : 0.6
     background: Item {
         Rectangle {
             border.width: 2

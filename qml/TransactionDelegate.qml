@@ -53,6 +53,11 @@ ItemDelegate {
             color: '#1F222A'
             width: parent.width
             height: 1
+        }
+        Rectangle {
+            color: '#1F222A'
+            width: parent.width
+            height: 1
             y: parent.height - 1
         }
     }

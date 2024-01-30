@@ -188,6 +188,7 @@ qt_add_resources(green "images"
         assets/svg2/refresh.svg
         assets/svg2/right.svg
         assets/svg2/search.svg
+        assets/svg2/search_green.svg
         assets/svg2/singlesig.svg
         assets/svg2/signature-light.svg
         assets/svg2/share.svg
