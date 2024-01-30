@@ -107,6 +107,17 @@ QQmlListProperty<Balance> Account::balances()
     return { this, &m_balances };
 }
 
+bool Account::isEmpty() const
+{
+    if (!m_name.isEmpty()) return false;
+    if (!m_transactions_by_hash.isEmpty()) return false;
+    const auto satoshi = m_json.value("satoshi").toObject();
+    for (auto i = satoshi.begin(); i != satoshi.end(); i++) {
+        if (i.value().toInteger() > 0) return false;
+    }
+    return true;
+}
+
 void Account::setBalanceData(const QJsonObject &data)
 {
     m_json.insert("satoshi", data);

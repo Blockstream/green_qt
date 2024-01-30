@@ -141,7 +141,7 @@ void CreateAccountController::ensureAccount()
     Task* last = nullptr;
     for (auto account : m_context->getAccounts()) {
         if (account->session() != session) continue;
-        if (account->pointer() == 0 && account->type() != m_type && account->name().isEmpty()) {
+        if (account->pointer() == 0 && account->type() != m_type && account->isEmpty()) {
             auto task = new UpdateAccountTask({
                 { "subaccount", static_cast<qint64>(account->pointer()) },
                 { "hidden", true }
