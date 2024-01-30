@@ -40,27 +40,15 @@ Page {
     }
     contentItem: TListView {
         id: list_view
-        spacing: 0
+        spacing: -1
         model: output_model_filter
         delegate: OutputDelegate {
             highlighted: selection_model.selectedIndexes.indexOf(output_model.index(output_model.indexOf(output), 0))>-1
             width: ListView.view.width
         }
-        BusyIndicator {
-            width: 32
-            height: 32
-            // TODO
-            running: output_model.fetching
-            anchors.margins: 8
-            Layout.alignment: Qt.AlignHCenter
-            opacity: output_model.fetching ? 1 : 0
-            Behavior on opacity { OpacityAnimator {} }
-            anchors.bottom: parent.bottom
-            anchors.horizontalCenter: parent.horizontalCenter
-        }
     }
     header: GPane {
-        padding: 10
+        padding: 20
         contentItem: RowLayout {
             spacing: 8
             Repeater {
