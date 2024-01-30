@@ -17,10 +17,10 @@ ItemDelegate {
 
     id: self
     hoverEnabled: true
-    topPadding: 16
-    leftPadding: 16
-    rightPadding: 16
-    bottomPadding: 16
+    leftPadding: 20
+    rightPadding: 20
+    topPadding: 20
+    bottomPadding: 20
     background: Rectangle {
         color: 'transparent'
         radius: 4
@@ -31,6 +31,11 @@ ItemDelegate {
             visible: self.hovered
             color: '#00B45A'
             opacity: 0.08
+        }
+        Rectangle {
+            color: '#1F222A'
+            width: parent.width
+            height: 1
         }
         Rectangle {
             color: '#1F222A'
