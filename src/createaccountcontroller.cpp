@@ -156,6 +156,7 @@ void CreateAccountController::ensureAccount()
         if (account->isMultisig() && account->pointer() > 0) continue;
         if (account->isMultisig() && !account->name().isEmpty()) continue;
         if (account->isSinglesig() && account->json().value("bip44_discovered").toBool()) continue;
+        if (account->isSinglesig() && !account->isHidden()) continue;
 
         auto task = new UpdateAccountTask({
             { "subaccount", static_cast<qint64>(account->pointer()) },
