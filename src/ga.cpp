@@ -67,7 +67,7 @@ QJsonObject get_available_currencies(GA_session* session)
 {
     GA_json* currencies;
     int err = GA_get_available_currencies(session, &currencies);
-    Q_ASSERT(err == GA_OK);
+    if (err != GA_OK) return {};
     auto result = Json::toObject(currencies);
     GA_destroy_json(currencies);
     return result;
