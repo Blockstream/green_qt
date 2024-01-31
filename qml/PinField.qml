@@ -7,6 +7,12 @@ import QtQuick.Layouts
 AbstractButton {
     signal pinEntered(string pin)
     property string pin: ''
+    function enable() {
+        self.enabled = true
+    }
+    function disable() {
+        self.enabled = false
+    }
     function clear() {
         self.pin = ''
     }
