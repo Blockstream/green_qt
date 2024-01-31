@@ -217,6 +217,7 @@ class Prompt : public QObject
     QML_UNCREATABLE("")
 public:
     Prompt(Task* task);
+    virtual void restart() = 0;
 };
 
 class AuthHandlerTask : public SessionTask
@@ -272,11 +273,15 @@ public:
     CodePrompt(AuthHandlerTask* task);
     QStringList methods() const;
     AuthHandlerTask* task() const { return m_task; }
+    void restart() override;
+signals:
+    void invalidCode();
 public slots:
     void select(const QString& method);
     void resolve(const QString& code);
 private:
     AuthHandlerTask* const m_task;
+    int m_attempts{0};
 };
 
 class DevicePrompt : public Prompt
@@ -290,6 +295,7 @@ public:
     DevicePrompt(const QJsonObject& required_data, AuthHandlerTask* task);
     AuthHandlerTask* task() const { return m_task; }
     QJsonObject result() const { return m_result; }
+    void restart() override;
 public slots:
     void select(Device* device);
 private:

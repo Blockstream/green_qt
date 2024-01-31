@@ -158,7 +158,6 @@ void TaskDispatcher::add(TaskGroup* group)
     if (m_groups.contains(group)) return;
     m_groups.prepend(group);
     group->m_dispatcher = this;
-    group->setParent(this);
     emit groupsChanged();
     dispatch();
 }
@@ -440,8 +439,11 @@ void AuthHandlerTask::handleResolveCode(const QJsonObject& result)
     if (result.contains("method")) {
         setResult(result);
         if (!m_prompt || result.value("attempts").toInt() == 3) {
+            if (m_prompt) m_prompt->deleteLater();
             m_prompt = new CodePrompt(this);
             emit promptChanged();
+        } else {
+            emit m_prompt->restart();
         }
         return;
     }
@@ -1521,6 +1523,13 @@ QStringList CodePrompt::methods() const
     return methods;
 }
 
+void CodePrompt::restart()
+{
+    if (m_attempts > 0) {
+        emit invalidCode();
+    }
+}
+
 void CodePrompt::select(const QString& method)
 {
     m_task->requestCode(method);
@@ -1528,6 +1537,7 @@ void CodePrompt::select(const QString& method)
 
 void CodePrompt::resolve(const QString& code)
 {
+    m_attempts ++;
     m_task->resolveCode(code.toUtf8());
 }
 
@@ -1535,6 +1545,10 @@ DevicePrompt::DevicePrompt(const QJsonObject& result, AuthHandlerTask* task)
     : Prompt(task)
     , m_task(task)
     , m_result(result)
+{
+}
+
+void DevicePrompt::restart()
 {
 }
 
