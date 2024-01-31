@@ -137,6 +137,11 @@ qt_add_resources(green "images"
 
         assets/png/2fa.png
         assets/png/2fa_email.png
+        assets/png/2fa_gauth.png
+        assets/png/2fa_phone.png
+        assets/png/2fa_sms.png
+        assets/png/2fa_u2f.png
+        assets/png/2fa_telegram.png
 
         assets/hints/cpu.svg
         assets/hints/jade3d.svg
