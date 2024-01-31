@@ -43,6 +43,7 @@ AbstractButton {
             verticalAlignment: Text.AlignVCenter
         }
         Collapsible {
+            animationVelocity: 200
             collapsed: !self.busy
             horizontalCollapse: true
             verticalCollapse: false
