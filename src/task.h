@@ -217,7 +217,6 @@ class Prompt : public QObject
     QML_UNCREATABLE("")
 public:
     Prompt(Task* task);
-    virtual void restart() = 0;
 };
 
 class AuthHandlerTask : public SessionTask
@@ -234,6 +233,7 @@ public:
     QJsonObject result() const { return m_result; }
     void setResult(const QJsonObject& result);
     Prompt* prompt() const { return m_prompt; }
+    void setPrompt(Prompt* prompt);
     Resolver* resolver() const { return m_resolver; }
     void setResolver(Resolver* resolver);
     void update() override;
@@ -266,21 +266,24 @@ class CodePrompt : public Prompt
 {
     Q_OBJECT
     Q_PROPERTY(AuthHandlerTask* task READ task CONSTANT)
-    Q_PROPERTY(QStringList methods READ methods CONSTANT)
+    Q_PROPERTY(QJsonObject result READ result NOTIFY resultChanged)
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
-    CodePrompt(AuthHandlerTask* task);
-    QStringList methods() const;
+    CodePrompt(const QJsonObject& result, AuthHandlerTask* task);
+    QJsonObject result() const { return m_result; }
+    void setResult(const QJsonObject& result);
+    QString method() const { return m_result.value("method").toString(); }
     AuthHandlerTask* task() const { return m_task; }
-    void restart() override;
 signals:
+    void resultChanged();
     void invalidCode();
 public slots:
     void select(const QString& method);
     void resolve(const QString& code);
 private:
     AuthHandlerTask* const m_task;
+    QJsonObject m_result;
     int m_attempts{0};
 };
 
@@ -295,7 +298,6 @@ public:
     DevicePrompt(const QJsonObject& required_data, AuthHandlerTask* task);
     AuthHandlerTask* task() const { return m_task; }
     QJsonObject result() const { return m_result; }
-    void restart() override;
 public slots:
     void select(Device* device);
 private:
@@ -402,7 +404,6 @@ public:
     void handleDone(const QJsonObject& result) override;
 private:
     const QJsonObject m_data;
-    QJsonObject m_settings;
 };
 
 class LoadAccountTask : public AuthHandlerTask

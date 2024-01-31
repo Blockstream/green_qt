@@ -180,6 +180,7 @@ StackViewPage {
             }
 
             TaskPageFactory {
+                title: self.title
                 monitor: controller.monitor
                 target: stack_view
             }

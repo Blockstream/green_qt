@@ -18,6 +18,7 @@ StackViewPage {
     property bool note: false
     StackView.onActivated: controller.cancel()
     TaskPageFactory {
+        title: self.title
         monitor: controller.monitor
         target: self.StackView.view
         onClosed: self.closed()

@@ -4,6 +4,8 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
+import "util.js" as UtilJS
+
 QtObject {
     signal closed()
     required property TaskGroupMonitor monitor
@@ -30,8 +32,7 @@ QtObject {
     onPromptChanged: {
         const prompt = self.prompt
         if (prompt instanceof CodePrompt) {
-            const task = prompt.task
-            const status = task.result.status
+            const status = prompt.result.status
             if (status === 'request_code') {
                 self.target.push(method_view, { prompt })
             } else if (status === 'resolve_code') {
@@ -69,11 +70,10 @@ QtObject {
     property Component method_view: StackViewPage {
         required property CodePrompt prompt
         Connections {
-            target: view.prompt.task
+            target: view.prompt
             function onResultChanged() {
                 const prompt = view.prompt
-                const task = prompt.task
-                const status = task.result.status
+                const status = prompt.result.status
                 if (status === 'resolve_code') {
                     self.target.replace(code_view, { prompt }, StackView.PushTransition)
                 }
@@ -102,7 +102,7 @@ QtObject {
                 text: qsTrId('id_choose_method_to_authorize_the')
             }
             Repeater {
-                model: view.prompt.methods
+                model: view.prompt.result.methods
                 delegate: AbstractButton {
                     property string method: modelData
                     Layout.alignment: Qt.AlignCenter
@@ -120,16 +120,7 @@ QtObject {
                                 color: '#FFF'
                                 font.pixelSize: 14
                                 font.weight: 500
-                                text: {
-                                    const label = {
-                                        email: 'id_email',
-                                        gauth: 'id_authenticator_app',
-                                        phone: 'id_phone_call',
-                                        sms: 'id_sms',
-                                        telegram: 'id_telegram'
-                                    }
-                                    return qsTrId(label[method])
-                                }
+                                text: UtilJS.twoFactorMethodLabel(method)
                             }
                             Label {
                                 text: view.prompt.task.session.config[delegate.method].data
@@ -167,7 +158,7 @@ QtObject {
             }
             MultiImage {
                 Layout.alignment: Qt.AlignCenter
-                foreground: `qrc:/png/2fa_${view.prompt.task.result.method}.png`
+                foreground: `qrc:/png/2fa_${view.prompt.result.method}.png`
                 width: 280
                 height: 160
                 visible: !(view.prompt.task instanceof ChangeTwoFactorTask)
@@ -175,14 +166,7 @@ QtObject {
             Label {
                 Layout.alignment: Qt.AlignCenter
                 text: {
-                    const labels = {
-                        gauth: 'id_authenticator_app',
-                        email: 'id_email',
-                        sms: 'id_sms',
-                        phone: 'id_phone_call',
-                        telegram: 'id_telegram',
-                    }
-                    const label = qsTrId(labels[view.prompt.task.result.method])
+                    const label = UtilJS.twoFactorMethodLabel(view.prompt.result.method)
                     return qsTrId('id_please_provide_your_1s_code').arg(label)
                 }
                 font.pixelSize: 20
@@ -214,15 +198,16 @@ QtObject {
                 active: {
                     const task = view.prompt.task
                     if (task instanceof TwoFactorResetTask) return false
-                    const method = task.result.method
+                    const method = view.prompt.result.method
                     if (method === 'gauth') return false
                     return task.session.config[method].enabled
                 }
                 visible: active
                 sourceComponent: Label {
                     text: {
-                        if (view.prompt.task.result.method === 'gauth') return qsTrId('id_authenticator_app')
-                        return view.prompt.task.session.config[view.prompt.task.result.method].data
+                        const method = view.prompt.result.method
+                        if (method === 'gauth') return qsTrId('id_authenticator_app')
+                        return view.prompt.task.session.config[method].data
                     }
                     color: constants.c100
                     font.pixelSize: 14
@@ -252,11 +237,11 @@ QtObject {
             }
             Loader {
                 Layout.alignment: Qt.AlignCenter
-                active: view.prompt.task.result.method === 'telegram'
+                active: view.prompt.result.method === 'telegram'
                 visible: active
                 sourceComponent: RowLayout {
-                    readonly property url browser: view.prompt.task.result.auth_data.telegram_url
-                    readonly property url app: view.prompt.task.result.auth_data.telegram_url.replace('https://t.me/', 'tg://resolve?domain=').replace('?start=', '&start=')
+                    readonly property url browser: view.prompt.result.auth_data.telegram_url
+                    readonly property url app: view.prompt.result.auth_data.telegram_url.replace('https://t.me/', 'tg://resolve?domain=').replace('?start=', '&start=')
                     spacing: constants.s1
                     ColumnLayout {
                         GButton {
@@ -277,11 +262,11 @@ QtObject {
             }
             Loader {
                 Layout.alignment: Qt.AlignCenter
-                active: view.prompt.task.result.method !== 'gauth' && view.prompt.task.result.method !== 'telegram'
+                active: view.prompt.result.method !== 'gauth' && view.prompt.result.method !== 'telegram'
                 visible: active
-                opacity: view.prompt.task.result.attempts_remaining < 3 ? 1 : 0
+                opacity: view.prompt.result.attempts_remaining < 3 ? 1 : 0
                 sourceComponent: Label {
-                    text: qsTrId('id_attempts_remaining_d').arg(view.prompt.task.result.attempts_remaining)
+                    text: qsTrId('id_attempts_remaining_d').arg(view.prompt.result.attempts_remaining)
                 }
             }
             VSpacer {

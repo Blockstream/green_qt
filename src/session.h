@@ -39,6 +39,7 @@ class Session : public Entity
     Q_PROPERTY(QJsonObject currencies READ currencies NOTIFY currenciesChanged)
     Q_PROPERTY(QString unit READ unit NOTIFY unitChanged)
     Q_PROPERTY(QString displayUnit READ displayUnit NOTIFY unitChanged)
+    Q_PROPERTY(QString username READ username NOTIFY usernameChanged)
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
@@ -79,6 +80,9 @@ public:
     QString displayUnit() const { return m_display_unit; }
     void setAltimeout(int altimeout);
 
+    QString username() const { return m_username; }
+    void setUsername(const QString& username);
+
     AuthHandlerTask* registerUser();
     AuthHandlerTask* login();
 
@@ -102,6 +106,7 @@ signals:
     void settingsChanged();
     void currenciesChanged();
     void unitChanged();
+    void usernameChanged();
 
 protected:
     bool eventFilter(QObject *object, QEvent *event) override;
@@ -139,6 +144,7 @@ public:
     QJsonObject m_block;
     int64_t m_id{0};
     QString m_wallet_hash_id;
+    QString m_username;
 };
 
 class SessionActivity : public Activity

@@ -62,14 +62,6 @@ StackLayout {
         }
     }
 
-    property var method_label: ({
-        email: 'id_email',
-        gauth: 'id_authenticator_app',
-        phone: 'id_phone_call',
-        sms: 'id_sms',
-        telegram: 'id_telegram'
-    })
-
     component RequestCodeView: ColumnLayout {
         id: request_code_view
         VSpacer {
@@ -87,7 +79,7 @@ StackLayout {
                 flat: true
                 Layout.alignment: Qt.AlignCenter
                 Layout.fillWidth: true
-                text: qsTrId(method_label[method])
+                text: UtilJS.twoFactorMethodLabel(method)
                 focus: true
                 onClicked: {
                     request_code_view.enabled = false

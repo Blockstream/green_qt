@@ -157,3 +157,15 @@ function getUnblindingData(tx) {
             })),
     }
 }
+
+function twoFactorMethodLabel(method)
+{
+    const labels = {
+        email: 'id_email',
+        gauth: 'id_authenticator_app',
+        phone: 'id_phone_call',
+        sms: 'id_sms',
+        telegram: 'id_telegram',
+    }
+    return qsTrId(labels[method])
+}

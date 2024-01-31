@@ -218,13 +218,6 @@ void Context::setLocked(bool locked)
     emit lockedChanged();
 }
 
-void Context::setUsername(const QString& username)
-{
-    if (m_username == username) return;
-    m_username = username;
-    emit usernameChanged();
-}
-
 void Context::setWatchonly(bool watchonly)
 {
     if (m_watchonly == watchonly) return;

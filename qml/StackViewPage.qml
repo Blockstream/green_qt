@@ -48,6 +48,7 @@ Page {
                 background: null
                 padding: 0
                 contentItem: Label {
+                    color: '#FFF'
                     font.pixelSize: 14
                     font.weight: 600
                     text: self.title

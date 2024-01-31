@@ -4,6 +4,7 @@ import QtQuick.Layouts
 
 Label {
     id: self
+    property color backgroundColor: '#69302E'
     property bool pointer: true
     property var error
     function clear() {
@@ -18,7 +19,7 @@ Label {
             velocity: 4
         }
     }
-    color: 'white'
+    color: '#FFF'
     font.pixelSize: 16
     font.weight: 700
     topPadding: 4
@@ -27,7 +28,7 @@ Label {
     rightPadding: 16
     background: Rectangle {
         radius: 4
-        color: constants.r500
+        color: self.backgroundColor
         Item {
             visible: pointer
             x: parent.width / 2

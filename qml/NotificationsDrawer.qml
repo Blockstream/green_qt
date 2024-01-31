@@ -17,6 +17,7 @@ AbstractDrawer {
     }
 
     TaskPageFactory {
+        title: qsTrId('id_notifications')
         monitor: controller.monitor
         target: stack_view
     }

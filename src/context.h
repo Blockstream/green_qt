@@ -21,7 +21,6 @@ class Context : public QObject
     Q_PROPERTY(Device* device READ device NOTIFY deviceChanged)
     Q_PROPERTY(bool remember READ remember NOTIFY rememberChanged)
     Q_PROPERTY(bool locked READ isLocked NOTIFY lockedChanged)
-    Q_PROPERTY(QString username READ username NOTIFY usernameChanged)
     Q_PROPERTY(bool watchonly READ isWatchonly NOTIFY watchonlyChanged)
     Q_PROPERTY(QQmlListProperty<Session> sessions READ sessions NOTIFY sessionsChanged)
     Q_PROPERTY(Session* primarySession READ primarySession NOTIFY sessionsChanged)
@@ -60,9 +59,6 @@ public:
 
     bool isLocked() const { return m_locked; }
     void setLocked(bool locked);
-
-    QString username() const { return m_username; }
-    void setUsername(const QString& username);
 
     bool isWatchonly() const { return m_watchonly; }
     void setWatchonly(bool watchonly);
@@ -104,7 +100,6 @@ signals:
     void mnemonicChanged();
     void lockedChanged();
     void accountsChanged();
-    void usernameChanged();
     void watchonlyChanged();
     void sessionsChanged();
     void autoLogout();
@@ -123,7 +118,6 @@ private:
     QMap<Network*, Session*> m_sessions;
     QList<Session*> m_sessions_list;
     bool m_locked{false};
-    QString m_username;
     bool m_watchonly{false};
 
     QList<Notification*> m_notifications;

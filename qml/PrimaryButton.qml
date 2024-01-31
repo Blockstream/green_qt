@@ -43,15 +43,22 @@ AbstractButton {
             verticalAlignment: Text.AlignVCenter
         }
         Collapsible {
+            property real _busy: self.busy ? 1 : 0
+            Behavior on _busy {
+                SmoothedAnimation {
+                    velocity: 0.5
+                }
+            }
+            id: collapsible
             animationVelocity: 200
-            collapsed: !self.busy
+            collapsed: collapsible._busy === 0
             horizontalCollapse: true
             verticalCollapse: false
             ProgressIndicator {
                 x: 10
                 width: 24
                 height: 24
-                indeterminate: self.busy
+                indeterminate: true
             }
         }
         HSpacer {

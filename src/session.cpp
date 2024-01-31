@@ -202,6 +202,13 @@ void Session::setAltimeout(int altimeout)
     }
 }
 
+void Session::setUsername(const QString& username)
+{
+    if (m_username == username) return;
+    m_username = username;
+    emit usernameChanged();
+}
+
 AuthHandlerTask* Session::registerUser()
 {
     Q_ASSERT(m_context);

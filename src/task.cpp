@@ -333,6 +333,13 @@ void AuthHandlerTask::setResult(const QJsonObject& result)
     emit resultChanged();
 }
 
+void AuthHandlerTask::setPrompt(Prompt *prompt)
+{
+    if (m_prompt == prompt) return;
+    m_prompt = prompt;
+    emit promptChanged();
+}
+
 void AuthHandlerTask::setResolver(Resolver* resolver)
 {
     if (m_resolver == resolver) return;
@@ -428,22 +435,23 @@ void AuthHandlerTask::handleRequestCode(const QJsonObject& result)
         const auto method = methods.first().toString();
         requestCode(method);
     } else {
-        setResult(result);
-        m_prompt = new CodePrompt(this);
-        emit promptChanged();
+        setPrompt(new CodePrompt(result, this));
     }
 }
 
 void AuthHandlerTask::handleResolveCode(const QJsonObject& result)
 {
     if (result.contains("method")) {
-        setResult(result);
-        if (!m_prompt || result.value("attempts").toInt() == 3) {
-            if (m_prompt) m_prompt->deleteLater();
-            m_prompt = new CodePrompt(this);
-            emit promptChanged();
+        const auto method = result.value("method").toString();
+        auto prompt = qobject_cast<CodePrompt*>(m_prompt);
+        if (prompt) {
+            if (prompt->method().isEmpty() || prompt->method() == method) {
+                prompt->setResult(result);
+            } else {
+                setPrompt(new CodePrompt(result, this));
+            }
         } else {
-            emit m_prompt->restart();
+            setPrompt(new CodePrompt(result, this));
         }
         return;
     }
@@ -833,7 +841,7 @@ void GetWatchOnlyDetailsTask::update()
         if (username.isNull()) {
             setStatus(Status::Failed);
         } else {
-            m_session->context()->setUsername(username);
+            m_session->setUsername(username);
             setStatus(Status::Finished);
         }
     });
@@ -1061,17 +1069,13 @@ ChangeSettingsTask::ChangeSettingsTask(const QJsonObject& data, Session* session
 bool ChangeSettingsTask::call(GA_session* session, GA_auth_handler** auth_handler)
 {
     const auto rc = GA_change_settings(session, Json::fromObject(m_data).get(), auth_handler);
-    if (rc != GA_OK) return false;
-    m_settings = gdk::get_settings(session);
-    return true;
+    return rc == GA_OK;
 }
 
 void ChangeSettingsTask::handleDone(const QJsonObject& result)
 {
-    if (!m_settings.isEmpty()) {
-        m_session->setSettings(m_settings);
-    }
-
+    auto settings = gdk::get_settings(m_session->m_session);
+    if (!settings.isEmpty()) m_session->setSettings(settings);
     AuthHandlerTask::handleDone(result);
 }
 
@@ -1508,23 +1512,17 @@ Prompt::Prompt(Task* task)
 {
 }
 
-CodePrompt::CodePrompt(AuthHandlerTask* task)
+CodePrompt::CodePrompt(const QJsonObject& result, AuthHandlerTask* task)
     : Prompt(task)
     , m_task(task)
+    , m_result(result)
 {
 }
 
-QStringList CodePrompt::methods() const
+void CodePrompt::setResult(const QJsonObject& result)
 {
-    QStringList methods;
-    for (const auto method : m_task->result().value("methods").toArray()) {
-        methods.append(method.toString());
-    }
-    return methods;
-}
-
-void CodePrompt::restart()
-{
+    m_result = result;
+    emit resultChanged();
     if (m_attempts > 0) {
         emit invalidCode();
     }
@@ -1545,10 +1543,6 @@ DevicePrompt::DevicePrompt(const QJsonObject& result, AuthHandlerTask* task)
     : Prompt(task)
     , m_task(task)
     , m_result(result)
-{
-}
-
-void DevicePrompt::restart()
 {
 }
 

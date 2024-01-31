@@ -35,7 +35,7 @@ WalletHeaderCard {
         if (context) {
             for (let i = 0; i < context.accounts.length; i++) {
                 const account = context.accounts[i]
-                for (const [asset_id, satoshi] of Object.entries(account.json.satoshi)) {
+                for (const [asset_id, satoshi] of Object.entries(account.json?.satoshi ?? [])) {
                     if (satoshi === 0) continue
                     const asset = context.getOrCreateAsset(asset_id)
                     if (!asset.icon && asset.weight === 0) return true

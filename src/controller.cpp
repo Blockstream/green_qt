@@ -1,10 +1,10 @@
 #include "controller.h"
-
 #include <gdk.h>
 
 #include "account.h"
 #include "address.h"
 #include "context.h"
+#include "network.h"
 #include "task.h"
 #include "session.h"
 #include "wallet.h"
@@ -105,10 +105,15 @@ void Controller::changeSettings(const QJsonObject& data)
     }
 
     for (auto session : m_context->getSessions()) {
-        if (!DeepContains(session->settings(), data)) {
-            auto change_settings = new ChangeSettingsTask(data, session);
-            dispatcher()->add(change_settings);
-        }
+        changeSessionSettings(session, data);
+    }
+}
+
+void Controller::changeSessionSettings(Session* session, const QJsonObject& data)
+{
+    if (!DeepContains(session->settings(), data)) {
+        auto change_settings = new ChangeSettingsTask(data, session);
+        dispatcher()->add(change_settings);
     }
 }
 
@@ -299,32 +304,6 @@ void Controller::changePin(const QString& pin)
     });
 }
 
-void Controller::setWatchOnly(const QString& username, const QString& password)
-{
-    if (!m_context) return;
-    if (m_context->wallet()->isWatchOnly()) return;
-
-    auto network = m_context->wallet()->network();
-    auto session = m_context->getOrCreateSession(network);
-    auto task = new SetWatchOnlyTask(username, password, session);
-
-    connect(task, &Task::finished, this, [=] {
-        m_context->setUsername(username);
-        emit watchOnlyUpdateSuccess();
-    });
-
-    connect(task, &Task::failed, this, [=] {
-        emit watchOnlyUpdateFailure();
-    });
-
-    dispatcher()->add(task);
-}
-
-void Controller::clearWatchOnly()
-{
-    setWatchOnly("", "");
-}
-
 bool Controller::setAccountName(Account* account, QString name, bool active_focus)
 {
     if (!m_context) return false;
@@ -369,41 +348,62 @@ void Controller::setAccountHidden(Account* account, bool hidden)
     dispatcher()->add(task);
 }
 
-TwoFactorController::TwoFactorController(QObject* parent)
+SessionController::SessionController(QObject* parent)
     : Controller(parent)
 {
+    setMonitor(new TaskGroupMonitor(this));
 }
 
-void TwoFactorController::enable(const QString &method, const QString &data)
+void SessionController::setSession(Session* session)
 {
-    change(method, { { "enabled", true }, { "data", data } });
+    if (m_session == session) return;
+    m_session = session;
+    emit sessionChanged();
+    if (m_session) setContext(m_session->context());
 }
 
-void TwoFactorController::disable(const QString &method)
+TwoFactorController::TwoFactorController(QObject* parent)
+    : SessionController(parent)
 {
-    change(method, { { "enabled", false } });
 }
 
-void TwoFactorController::change(const QString& method, const QJsonObject& details)
+void TwoFactorController::setMethod(const QString& method)
+{
+    if (m_method == method) return;
+    m_method = method;
+    emit methodChanged();
+}
+
+void TwoFactorController::enable(const QString &data)
+{
+    change({ { "enabled", true }, { "data", data } });
+}
+
+void TwoFactorController::disable()
+{
+    change({ { "enabled", false } });
+}
+
+void TwoFactorController::change(const QJsonObject& details)
 {
     if (!m_context) return;
-    if (m_done) return;
-    if (dispatcher()->isBusy()) return;
+    if (!m_session) return;
+    if (m_method.isEmpty()) return;
 
     clearErrors();
 
     auto network = m_context->wallet()->network();
-    auto session = m_context->getOrCreateSession(network);
 
-    auto change_twofactor = new ChangeTwoFactorTask(method, details, session);
-    auto update_config = new LoadTwoFactorConfigTask(session);
+    auto change_twofactor = new ChangeTwoFactorTask(m_method, details, m_session);
+    auto update_config = new LoadTwoFactorConfigTask(m_session);
 
     connect(change_twofactor, &Task::failed, this, [=](const QString& error) {
         if (error.contains("invalid phone number", Qt::CaseInsensitive)) {
-            setError("data", "id_invalid_phone_number_format");
+            emit failed("id_invalid_phone_number_format");
         } else {
-            setError("code", "id_invalid_twofactor_code");
+            emit failed(error);
         }
+        emit failed(error);
     });
 
     update_config->needs(change_twofactor);
@@ -414,11 +414,10 @@ void TwoFactorController::change(const QString& method, const QJsonObject& detai
     group->add(update_config);
 
     dispatcher()->add(group);
+    m_monitor->add(group);
 
     connect(group, &TaskGroup::finished, this, [=] {
         emit finished();
-        m_done = true;
-        emit doneChanged();
     });
 }
 
@@ -488,4 +487,37 @@ void SignMessageController::sign()
     group->add(task);
     monitor->add(group);
     dispatcher()->add(group);
+}
+
+WatchOnlyController::WatchOnlyController(QObject* parent)
+    : SessionController(parent)
+{
+    setMonitor(new TaskGroupMonitor(this));
+}
+
+void WatchOnlyController::update(const QString& username, const QString& password)
+{
+    if (!m_session) return;
+    if (m_context->wallet()->isWatchOnly()) return;
+
+    auto task = new SetWatchOnlyTask(username, password, m_session);
+
+    connect(task, &Task::finished, this, [=] {
+        m_session->setUsername(username);
+        emit finished();
+    });
+
+    connect(task, &Task::failed, this, [=] {
+        emit failed(task->error());
+    });
+
+    auto group = new TaskGroup(this);
+    group->add(task);
+    dispatcher()->add(group);
+    monitor()->add(group);
+}
+
+void WatchOnlyController::clear()
+{
+    update("", "");
 }

@@ -6,8 +6,8 @@ ComboBox {
     id: self
     bottomPadding: 10
     topPadding: 10
-    leftPadding: 10
-    rightPadding: 10 + self.indicator.width + self.spacing
+    leftPadding: 20
+    rightPadding: 20 + self.indicator.width + self.spacing
     font.pixelSize: 14
     font.weight: 600
     background: Rectangle {
@@ -15,8 +15,6 @@ ComboBox {
         implicitHeight: 40
         radius: 4
         opacity: self.activeFocus ? 1 : (self.enabled ? 0.8 : 0.5)
-        color: constants.c500
-        border.color: Qt.lighter(color)
-        border.width: self.activeFocus ? 1 : 0
+        color: Qt.lighter('#222226', self.hovered ? 1.2 : 1)
     }
 }

@@ -94,7 +94,6 @@ SET(QML_FILES
     qml/LoginDialog.qml
     qml/DeviceBadge.qml
     qml/SelectCoinsView.qml
-    qml/AccountIdBadge.qml
     qml/AccountView.qml
     qml/TwoFactorDisableDialog.qml
     qml/TransactionDelegate.qml
@@ -253,6 +252,8 @@ SET(QML_FILES
     qml/NotificationsDrawer.qml
     qml/ErrorPage.qml
     qml/MultiImage.qml
+    qml/TwoFactorEnableGenericView.qml
+    qml/TwoFactorEnableGAuthPage.qml
 )
 
 if (GREEN_NO_RESOURCES)

@@ -8,10 +8,24 @@ import "analytics.js" as AnalyticsJS
 
 WalletDialog {
     id: self
-    width: 900
-    height: 600
+    width: 800
+    height: 650
     icon: 'qrc:/svg/gearFill.svg'
     title: qsTrId('id_settings')
+
+    readonly property list<Session> sessions: {
+        const sessions = []
+        for (let i = 0; i < self.context.sessions.length; i++) {
+            const session = self.context.sessions[i]
+            if (session.network.electrum) continue
+            sessions.push(session)
+        }
+        return sessions.sort((a, b) => {
+            if (!a.network.liquid && b.network.liquid) return -1
+            if (a.network.liquid && !b.network.liquid) return 1
+            return 0
+        })
+    }
 
     AnalyticsView {
         id: analytics_view
@@ -89,14 +103,13 @@ WalletDialog {
                 index: 1
                 text: qsTrId('id_security')
                 icon.source: 'qrc:/svg/security.svg'
-                enabled: !self.wallet.context.device
+                enabled: !self.context.device
             }
             B {
                 name: 'WalletSettings2FA'
                 index: 2
                 text: qsTrId('id_twofactor_authentication')
                 icon.source: 'qrc:/svg/2fa_general.svg'
-                enabled: !self.wallet.network.electrum
             }
             B {
                 name: 'WalletSettingsRecovery'
@@ -111,38 +124,24 @@ WalletDialog {
             Layout.fillWidth: true
             Layout.fillHeight: true
             clip: true
-            GFlickable {
-                id: general_settings_flickable
-                contentHeight: general_view.height
-                interactive: false
-                WalletGeneralSettingsView {
-                    id: general_view
-                    context: self.context
-                    width: general_settings_flickable.availableWidth
-                }
+            WalletGeneralSettingsView {
+                context: self.context
             }
 
             GFlickable {
                 id: security_settings_flickable
                 contentHeight: security_view.height
-                interactive: false
                 Item { //WalletSecuritySettingsView {
                     id: security_view
                     width: security_settings_flickable.availableWidth
                 }
             }
 
-            Loader {
-                active: !self.wallet.network.electrum
-                sourceComponent: GFlickable {
-                    id: two_factor_settings_flickable
-                    contentHeight: two_factor_auth_view.height
-                    Item { //Wallet2faSettingsView {
-                        id: two_factor_auth_view
-                        width: two_factor_settings_flickable.availableWidth
-                    }
-                }
+            Wallet2faSettingsView {
+                context: self.context
+                sessions: self.sessions
             }
+
 
             Loader {
                 active: stack_layout.currentIndex === 3

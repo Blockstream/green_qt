@@ -27,7 +27,7 @@ MainPageHeader {
 
     readonly property bool busy: {
         if (self.context?.dispatcher.busy ?? false) return true
-        const accounts = self.context?.dispatcher.busy ?? false
+        const accounts = self.context?.accounts ?? []
         for (let i = 0; i < accounts.length; i++) {
             if (!accounts[i].synced) return true
         }
@@ -210,11 +210,20 @@ MainPageHeader {
                             const groups = self.context?.dispatcher?.groups ?? []
                             for (let i = 0; i < groups.length; i++) {
                                 const group = groups[i]
-                                if (group.status === TaskGroup.Active && group.name) {
-                                    name = qsTrId(group.name)
+                                if (!group) continue
+                                for (let j = 0; j < group.tasks.length; j++) {
+                                    const task  = group.tasks[j]
+                                    if (task.status === Task.Active) {
+                                        return task.type
+                                    }
                                 }
+
+                                // if (group.status === TaskGroup.Active && group.name) {
+                                //     name = qsTrId(group.name)
+                                // }
                             }
-                            return name
+                            // return name
+                            return '--'
                         }
                     }
                     ProgressIndicator {

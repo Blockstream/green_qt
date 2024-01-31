@@ -53,6 +53,7 @@ public:
 
 public slots:
     void changeSettings(const QJsonObject& data);
+    void changeSessionSettings(Session* session, const QJsonObject& data);
     void sendRecoveryTransactions();
     void changeTwoFactorLimit(bool is_fiat, const QString &limit);
     void requestTwoFactorReset(const QString& email);
@@ -64,10 +65,6 @@ public slots:
     void setUnspentOutputsStatus(Account* account, const QVariantList &outputs, const QString &status);
     void changePin(const QString& pin);
 
-    // TODO move to SetWatchOnlyController
-    void setWatchOnly(const QString& username, const QString& password);
-    void clearWatchOnly();
-
     bool setAccountName(Account* account, QString name, bool active_focus);
     void setAccountHidden(Account *account, bool hidden);
 
@@ -77,34 +74,58 @@ signals:
     void resolver(Resolver* resolver);
     void finished();
 
-    // TODO move to SetWatchOnlyController
-    void watchOnlyUpdateSuccess();
-    void watchOnlyUpdateFailure();
-
 protected:
     Context* m_context{nullptr};
     TaskGroupMonitor* m_monitor{nullptr};
     QVariantMap m_errors;
 };
 
-
-class TwoFactorController : public Controller
+class SessionController : public Controller
 {
     Q_OBJECT
-    Q_PROPERTY(bool done READ done NOTIFY doneChanged)
+    Q_PROPERTY(Session* session READ session WRITE setSession NOTIFY sessionChanged)
+    QML_ELEMENT
+public:
+    SessionController(QObject* parent = nullptr);
+    Session* session() const { return m_session; }
+    void setSession(Session* session);
+signals:
+    void sessionChanged();
+protected:
+    Session* m_session{nullptr};
+};
+
+class WatchOnlyController : public SessionController
+{
+    Q_OBJECT
+    QML_ELEMENT
+public:
+    WatchOnlyController(QObject* parent = nullptr);
+public slots:
+    void update(const QString& username, const QString& password);
+    void clear();
+signals:
+    void failed(const QString& error);
+};
+
+class TwoFactorController : public SessionController
+{
+    Q_OBJECT
+    Q_PROPERTY(QString method READ method WRITE setMethod NOTIFY methodChanged)
     QML_ELEMENT
 public:
     explicit TwoFactorController(QObject* parent = nullptr);
-    bool done() const { return m_done; }
+    QString method() const { return m_method; }
+    void setMethod(const QString& method);
 public slots:
-    void enable(const QString& method, const QString& data);
-    void disable(const QString& method);
+    void enable(const QString& data);
+    void disable();
 signals:
-    void doneChanged();
+    void methodChanged();
+    void failed(const QString& error);
 private:
-    void change(const QString& method, const QJsonObject& details);
-private:
-    bool m_done{false};
+    void change(const QJsonObject& details);
+    QString m_method;
 };
 
 class SignMessageController : public Controller
