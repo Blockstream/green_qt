@@ -24,12 +24,19 @@ QtObject {
     }
     readonly property Resolver resolver: self.task?.resolver ?? null
     readonly property Prompt prompt: self.task?.prompt ?? null
+    property string title: ''
 
     id: self
     onPromptChanged: {
         const prompt = self.prompt
         if (prompt instanceof CodePrompt) {
-            self.target.push(code_prompt_view, { prompt })
+            const task = prompt.task
+            const status = task.result.status
+            if (status === 'request_code') {
+                self.target.push(method_view, { prompt })
+            } else if (status === 'resolve_code') {
+                self.target.push(code_view, { prompt })
+            }
             return
         }
         if (prompt instanceof DevicePrompt) {
@@ -56,47 +63,33 @@ QtObject {
         }
     }
 
-    property Component code_prompt_view: StackViewPage {
-        required property CodePrompt prompt
-        function handleResult() {
-            const prompt = view.prompt
-            const task = prompt.task
-            const status = task.result.status
-            if (status === 'request_code') {
-                stack_view.replace(method_view, { prompt })
-            } else if (status === 'resolve_code') {
-                stack_view.replace(code_view, { prompt })
-            }
-        }
-
-        id: view
-        title: view.prompt.task.type
-        StackView.onActivating: view.handleResult()
-        Connections {
-            target: view.prompt.task
-            function onResultChanged() {
-                view.handleResult()
-            }
-        }
-        contentItem: GStackView {
-            focus: true
-            id: stack_view
-        }
-    }
-
     property Component device_prompt_view: DevicePromptView {
     }
 
     property Component method_view: StackViewPage {
         required property CodePrompt prompt
+        Connections {
+            target: view.prompt.task
+            function onResultChanged() {
+                const prompt = view.prompt
+                const task = prompt.task
+                const status = task.result.status
+                if (status === 'resolve_code') {
+                    self.target.replace(code_view, { prompt }, StackView.PushTransition)
+                }
+            }
+        }
         id: view
+        title: self.title
         contentItem: ColumnLayout {
             spacing: 10
             VSpacer {
             }
-            Image {
+            MultiImage {
                 Layout.alignment: Qt.AlignCenter
-                source: 'qrc:/png/2fa.png'
+                foreground: 'qrc:/png/2fa.png'
+                width: 280
+                height: 160
             }
             Label {
                 Layout.alignment: Qt.AlignCenter
@@ -158,17 +151,34 @@ QtObject {
 
     property Component code_view: StackViewPage {
         required property CodePrompt prompt
+        Connections {
+            target: view.prompt
+            function onInvalidCode() {
+                pin_field.enable()
+                pin_field.clear()
+                pin_field.forceActiveFocus()
+                error_badge.error = 'id_invalid_twofactor_code'
+            }
+        }
         id: view
+        title: self.title
         contentItem: ColumnLayout {
             VSpacer {
             }
-            Image {
+            MultiImage {
                 Layout.alignment: Qt.AlignCenter
-                source: `qrc:/png/2fa_${view.prompt.task.result.method}.png`
+                foreground: `qrc:/png/2fa_${view.prompt.task.result.method}.png`
+                width: 280
+                height: 160
+                visible: !(view.prompt.task instanceof ChangeTwoFactorTask)
             }
             Label {
                 Layout.alignment: Qt.AlignCenter
-                text: qsTrId('id_please_provide_your_1s_code').arg(view.prompt.task.result.method)
+                text: {
+                    const method = view.prompt.task.result.method
+                    const name = method === 'gauth' ? qsTrId('id_authenticator_app') : method.toUpperCase()
+                    qsTrId('id_please_provide_your_1s_code').arg(name)
+                }
                 font.pixelSize: 20
                 font.weight: 800
             }
@@ -180,6 +190,7 @@ QtObject {
                 font.weight: 600
                 horizontalAlignment: Label.AlignHCenter
                 text: 'To authorize the transaction you need to enter your 2FA code.'
+                visible: !(view.prompt.task instanceof ChangeTwoFactorTask)
                 wrapMode: Label.WordWrap
             }
             Loader {
@@ -194,7 +205,13 @@ QtObject {
             }
             Loader {
                 Layout.alignment: Qt.AlignCenter
-                active: view.prompt.task.session.config[view.prompt.task.result.method].enabled && !(view.prompt.task instanceof TwoFactorResetTask)
+                active: {
+                    const task = view.prompt.task
+                    if (task instanceof TwoFactorResetTask) return false
+                    const method = task.result.method
+                    if (method === 'gauth') return false
+                    return task.session.config[method].enabled
+                }
                 visible: active
                 sourceComponent: Label {
                     text: {
@@ -211,7 +228,16 @@ QtObject {
                 Layout.bottomMargin: 20
                 id: pin_field
                 focus: true
-                onPinEntered: pin => view.prompt.resolve(pin)
+                onPinChanged: error_badge.error = undefined
+                onPinEntered: pin => {
+                    view.prompt.resolve(pin)
+                    pin_field.disable()
+                }
+            }
+            FixedErrorBadge {
+                Layout.alignment: Qt.AlignCenter
+                Layout.bottomMargin: 20
+                id: error_badge
             }
             PinPadButton {
                 Layout.alignment: Qt.AlignCenter
