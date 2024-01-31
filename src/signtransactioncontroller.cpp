@@ -86,4 +86,9 @@ void SignTransactionController::sign()
     });
 }
 
+void SignTransactionController::cancel()
+{
+    setMonitor(nullptr);
+}
+
 

@@ -16,6 +16,7 @@ StackViewPage {
     required property string unit
     required property var transaction
     property bool note: false
+    StackView.onActivated: controller.cancel()
     TaskPageFactory {
         monitor: controller.monitor
         target: self.StackView.view

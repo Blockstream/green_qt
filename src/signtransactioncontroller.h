@@ -21,6 +21,7 @@ public:
     void setMemo(const QString& memo);
 public slots:
     void sign();
+    void cancel();
 signals:
     void accountChanged();
     void transactionChanged();

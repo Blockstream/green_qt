@@ -75,6 +75,7 @@ TaskDispatcher *Controller::dispatcher() const
 void Controller::setMonitor(TaskGroupMonitor* monitor)
 {
     if (m_monitor == monitor) return;
+    if (m_monitor) m_monitor->deleteLater();
     m_monitor = monitor;
     emit monitorChanged();
 }
