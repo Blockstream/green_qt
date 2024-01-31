@@ -175,9 +175,15 @@ QtObject {
             Label {
                 Layout.alignment: Qt.AlignCenter
                 text: {
-                    const method = view.prompt.task.result.method
-                    const name = method === 'gauth' ? qsTrId('id_authenticator_app') : method.toUpperCase()
-                    qsTrId('id_please_provide_your_1s_code').arg(name)
+                    const labels = {
+                        gauth: 'id_authenticator_app',
+                        email: 'id_email',
+                        sms: 'id_sms',
+                        phone: 'id_phone_call',
+                        telegram: 'id_telegram',
+                    }
+                    const label = qsTrId(labels[view.prompt.task.result.method])
+                    return qsTrId('id_please_provide_your_1s_code').arg(label)
                 }
                 font.pixelSize: 20
                 font.weight: 800
