@@ -33,7 +33,7 @@ StackViewPage {
             y: Math.max(0, (flickable.height - layout.height) / 2)
             MultiImage {
                 Layout.alignment: Qt.AlignCenter
-                foreground: 'qrc:/png/jade_2.png'
+                foreground: 'qrc:/png/jade_7.png'
                 width: 352
                 height: 240
             }
