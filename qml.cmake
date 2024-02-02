@@ -71,7 +71,6 @@ SET(QML_FILES
     qml/SettingsPage.qml
     qml/CopyableLabel.qml
     qml/TransactionProgress.qml
-    qml/BumpFeeDialog.qml
     qml/QRCode.qml
     qml/JadeSignLiquidTransactionView.qml
     qml/GButton.qml
@@ -91,7 +90,6 @@ SET(QML_FILES
     qml/Collapsible.qml
     qml/ScannerPopup.qml
     qml/DeviceImage.qml
-    qml/LoginDialog.qml
     qml/DeviceBadge.qml
     qml/SelectCoinsView.qml
     qml/AccountView.qml
@@ -105,8 +103,6 @@ SET(QML_FILES
     qml/WalletAdvancedSettingsView.qml
     qml/RequestTwoFactorResetDialog.qml
     qml/BlinkAnimation.qml
-    qml/SendDialog.qml
-    qml/FeeComboBox.qml
     qml/EditableLabel.qml
     qml/FixedErrorBadge.qml
     qml/QRCodePopup.qml

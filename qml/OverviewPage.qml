@@ -444,12 +444,6 @@ StackViewPage {
         }
     }
 
-    Component {
-        id: bump_fee_dialog
-        BumpFeeDialog {
-        }
-    }
-
     component HintPane: AbstractButton {
         Layout.fillWidth: true
         Layout.topMargin: 10
