@@ -8,6 +8,7 @@ import "util.js" as UtilJS
 TextField {
     property var error
     property bool fiat: false
+    property bool dynamic: true
     required property string unit
     readonly property var units: ['BTC', 'sats', 'mBTC', '\u00B5BTC']
     required property Convert convert
@@ -129,7 +130,7 @@ TextField {
         anchors.rightMargin: 15
         anchors.verticalCenter: parent.verticalCenter
         anchors.verticalCenterOffset: self.convert.fiat.available ? -2 : 3
-        enabled: self.convert.fiat.available ?? false
+        enabled: self.dynamic && (self.convert.fiat.available ?? false)
         contentItem: RowLayout {
             spacing: 4
             Label {
@@ -151,7 +152,7 @@ TextField {
             Image {
                 Layout.alignment: Qt.AlignCenter
                 source: 'qrc:/svg2/caret-down.svg'
-                visible: self.convert.fiat.available
+                visible: unit_label.enabled
             }
         }
         onClicked: unit_menu.open()
@@ -197,6 +198,7 @@ TextField {
         font.weight: 500
         visible: self.convert.fiat.available
         TapHandler {
+            enabled: self.dynamic
             cursorShape: Qt.ArrowCursor
             onTapped: self.toggleFiat()
         }

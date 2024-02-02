@@ -132,28 +132,76 @@ Page {
             }
 
             SettingsBox {
-                title: qsTrId('id_set_twofactor_threshold')
+                title: qsTrId('id_2fa_threshold')
                 // enabled: !self.context.locked
                 visible: !view.network.liquid && !!view.session.config.limits
-                contentItem: RowLayout {
-                    Label {
-                        Layout.fillWidth: true
-                        Layout.minimumWidth: 0
-                        text: qsTrId('id_set_a_limit_to_spend_without')
-                        wrapMode: Text.WordWrap
+                contentItem: AbstractButton {
+                    id: button
+                    leftPadding: 20
+                    rightPadding: 20
+                    topPadding: 15
+                    bottomPadding: 15
+                    background: Rectangle {
+                        radius: 5
+                        color: Qt.lighter('#222226', button.hovered ? 1.2 : 1)
                     }
-                    GButton {
-                        large: false
-                        text: qsTrId('id_change')
-                        onClicked: set_twofactor_threshold_dialog.createObject(stack_view).open()
-                        Layout.alignment: Qt.AlignRight
+                    contentItem: RowLayout {
+                        ColumnLayout {
+                            spacing: 10
+                            Label {
+                                Layout.fillWidth: true
+                                Layout.minimumWidth: 0
+                                font.pixelSize: 14
+                                font.weight: 600
+                                text: qsTrId('id_set_twofactor_threshold')
+                                wrapMode: Text.WordWrap
+                            }
+                            Convert {
+                                id: limit_convert
+                                context: self.context
+                                account: view.session.context.getOrCreateAccount(view.session.network, 0)
+                                input: {
+                                    if (view.session.config.limits.is_fiat) {
+                                        return { fiat: view.session.config.limits.fiat }
+                                    } else {
+                                        return { satoshi: view.session.config.limits.satoshi }
+                                    }
+                                }
+                                unit: view.session.unit
+                            }
+                            RowLayout {
+                                Label {
+                                    text: limit_convert.output.label
+                                    font.pixelSize: 14
+                                    font.weight: 500
+                                }
+                                Label {
+                                    color: '#6F6F6F'
+                                    font.pixelSize: 14
+                                    font.weight: 500
+                                    text: '~ ' + limit_convert.fiat.label
+                                    visible: limit_convert.fiat.available
+                                }
+                            }
+                        }
+                        Image {
+                            Layout.alignment: Qt.AlignCenter
+                            source: 'qrc:/svg2/edit.svg'
+                        }
+                    }
+                    onClicked: {
+                        const dialog = set_twofactor_threshold_dialog.createObject(view, {
+                            context: self.context,
+                            session: view.session,
+                        })
+                        dialog.open()
                     }
                 }
             }
 
             SettingsBox {
                 title: qsTrId('id_twofactor_authentication_expiry')
-                visible: !wallet.network.liquid
+                visible: false // !view.session.network.liquid
                 contentItem: RowLayout {
                     Label {
                         Layout.fillWidth: true
@@ -171,6 +219,7 @@ Page {
 
             SettingsBox {
                 title: qsTrId('id_request_twofactor_reset')
+                visible: false
                 contentItem: RowLayout {
                     Label {
                         Layout.fillWidth: true
@@ -194,29 +243,10 @@ Page {
                             RequestTwoFactorResetDialog {
                             }
                         }
-    //                    onClicked: {
-    //                        if (self.context.locked) {
-    //                            cancel_dialog.createObject(stack_view, { wallet }).open()
-    //                        } else {
-    //                            request_dialog.createObject(stack_view, { wallet }).open()
-    //                        }
-    //                    }
                     }
                 }
             }
             VSpacer {
-            }
-        }
-    }
-
-    Component {
-        id: enable_view
-        StackViewPage {
-            required property Session session
-            required property string method
-            id: xxx
-            title: session.network.displayName + ' ' + xxx.method
-            contentItem: Item {
             }
         }
     }
@@ -236,8 +266,6 @@ Page {
     Component {
         id: set_twofactor_threshold_dialog
         TwoFactorLimitDialog {
-//            wallet: self.wallet
-//            session: self.session
         }
     }
 

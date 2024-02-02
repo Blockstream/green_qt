@@ -278,11 +278,21 @@ void TaskGroupMonitor::add(TaskGroup* group)
 
 void TaskGroupMonitor::remove(TaskGroup* group)
 {
-    m_groups.removeOne(group);
-    emit groupsChanged();
-    if (m_groups.isEmpty()) {
-        emit allFinishedOrFailed();
+    if (m_groups.removeOne(group)) {
+        emit groupsChanged();
+        emit idleChanged();
+        if (m_groups.isEmpty()) {
+            emit allFinishedOrFailed();
+        }
     }
+}
+
+void TaskGroupMonitor::clear()
+{
+    m_groups.clear();
+    emit groupsChanged();
+    emit idleChanged();
+    emit allFinishedOrFailed();
 }
 
 SessionTask::SessionTask(Session* session)

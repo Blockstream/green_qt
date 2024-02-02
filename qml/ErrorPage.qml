@@ -30,6 +30,7 @@ StackViewPage {
             focus: true
             text: qsTrId('id_ok')
             onClicked: self.StackView.view.pop()
+            visible: self.StackView.view.depth > 1
         }
         VSpacer {
         }

@@ -55,7 +55,6 @@ public slots:
     void changeSettings(const QJsonObject& data);
     void changeSessionSettings(Session* session, const QJsonObject& data);
     void sendRecoveryTransactions();
-    void changeTwoFactorLimit(bool is_fiat, const QString &limit);
     void requestTwoFactorReset(const QString& email);
     void cancelTwoFactorReset();
     void setRecoveryEmail(const QString& email);
@@ -120,6 +119,7 @@ public:
 public slots:
     void enable(const QString& data);
     void disable();
+    void changeLimits(const QString& satoshi);
 signals:
     void methodChanged();
     void failed(const QString& error);
@@ -127,6 +127,8 @@ private:
     void change(const QJsonObject& details);
     QString m_method;
 };
+
+
 
 class SignMessageController : public Controller
 {

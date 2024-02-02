@@ -96,7 +96,7 @@ QtObject {
                 Layout.fillWidth: true
                 Layout.preferredWidth: 0
                 Layout.bottomMargin: 36
-                    horizontalAlignment: Qt.AlignHCenter
+                horizontalAlignment: Qt.AlignHCenter
                 font.pixelSize: 20
                 font.weight: 800
                 text: qsTrId('id_choose_method_to_authorize_the')
@@ -108,7 +108,10 @@ QtObject {
                     Layout.alignment: Qt.AlignCenter
                     Layout.minimumWidth: 325
                     id: delegate
-                    padding: 20
+                    leftPadding: 20
+                    rightPadding: 20
+                    topPadding: 15
+                    bottomPadding: 15
                     background: Rectangle {
                         color: Qt.lighter('#222226', delegate.hovered ? 1.2 : 1)
                         radius: 5

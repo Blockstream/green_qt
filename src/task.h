@@ -161,6 +161,8 @@ public:
     QQmlListProperty<TaskGroup> groups();
     void add(TaskGroup* group);
     void remove(TaskGroup* group);
+public slots:
+    void clear();
 signals:
     void idleChanged();
     void groupsChanged();

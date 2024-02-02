@@ -129,31 +129,6 @@ void Controller::sendRecoveryTransactions()
     dispatcher()->add(send_nlocktimes);
 }
 
-void Controller::changeTwoFactorLimit(bool is_fiat, const QString& limit)
-{
-    if (!m_context) return;
-    const auto network = m_context->wallet()->network();
-    const auto session = m_context->getOrCreateSession(network);
-    auto unit = is_fiat ? "fiat" : session->unit().toLower();
-    if (!is_fiat && unit == "\u00B5btc") unit = "ubtc";
-    auto details = QJsonObject{
-        { "is_fiat", is_fiat },
-        { unit, limit }
-    };
-
-    auto group = new TaskGroup(this);
-
-    auto change_twofactor_limits = new TwoFactorChangeLimitsTask(details, session);
-    auto load_twofactor_config = new LoadTwoFactorConfigTask(session);
-
-    change_twofactor_limits->then(load_twofactor_config);
-
-    group->add(change_twofactor_limits);
-    group->add(load_twofactor_config);
-
-    dispatcher()->add(group);
-}
-
 void Controller::requestTwoFactorReset(const QString& email)
 {
     if (!m_context) return;
@@ -392,8 +367,6 @@ void TwoFactorController::change(const QJsonObject& details)
 
     clearErrors();
 
-    auto network = m_context->wallet()->network();
-
     auto change_twofactor = new ChangeTwoFactorTask(m_method, details, m_session);
     auto update_config = new LoadTwoFactorConfigTask(m_session);
 
@@ -416,6 +389,37 @@ void TwoFactorController::change(const QJsonObject& details)
     dispatcher()->add(group);
     m_monitor->add(group);
 
+    connect(group, &TaskGroup::finished, this, [=] {
+        emit finished();
+    });
+}
+
+void TwoFactorController::changeLimits(const QString& satoshi)
+{
+    if (!m_context) return;
+    if (!m_session) return;
+
+    auto details = QJsonObject{
+        { "is_fiat", false },
+        { "satoshi", satoshi.toLongLong() }
+    };
+
+    auto group = new TaskGroup(this);
+
+    auto change_twofactor_limits = new TwoFactorChangeLimitsTask(details, m_session);
+    auto load_twofactor_config = new LoadTwoFactorConfigTask(m_session);
+
+    change_twofactor_limits->then(load_twofactor_config);
+
+    group->add(change_twofactor_limits);
+    group->add(load_twofactor_config);
+
+    dispatcher()->add(group);
+    m_monitor->add(group);
+
+    connect(change_twofactor_limits, &Task::failed, this, [=](const QString& error) {
+        emit failed(error);
+    });
     connect(group, &TaskGroup::finished, this, [=] {
         emit finished();
     });

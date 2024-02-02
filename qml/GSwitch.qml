@@ -3,7 +3,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 Switch {
-    property color baseColor: self.checked ? '#00DD6E' : '#222226'
+    property color baseColor: self.checked ? '#00DD6E' : Qt.alpha('#000', 0.4)
     Behavior on baseColor {
         ColorAnimation {
             duration: 200
@@ -18,13 +18,6 @@ Switch {
         y: parent.height / 2 - height / 2
         radius: 14
         color: Qt.lighter(self.baseColor, self.enabled && self.hovered ? 1.2 : 1)
-        border.color: Qt.alpha('#000', self.checked ? 0 : 0.4)
-        border.width: self.checked ? 0 : 1
-        Behavior on border.color {
-            ColorAnimation {
-                duration: 200
-            }
-        }
         Rectangle {
             id: circle
             x: self.checked ? parent.width - width - 3 : 3

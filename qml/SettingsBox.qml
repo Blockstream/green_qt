@@ -9,12 +9,12 @@ Page {
     bottomPadding: 0
     leftPadding: 0
     rightPadding: 0
-    header: SectionLabel {
+    background: null
+    header: FieldTitle {
         text: title
         topPadding: 0
-        bottomPadding: constants.p0
+        bottomPadding: 10
         leftPadding: 0
         rightPadding: 0
     }
-    background: null
 }

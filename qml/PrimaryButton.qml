@@ -46,7 +46,7 @@ AbstractButton {
             property real _busy: self.busy ? 1 : 0
             Behavior on _busy {
                 SmoothedAnimation {
-                    velocity: 0.5
+                    velocity: 1
                 }
             }
             id: collapsible
