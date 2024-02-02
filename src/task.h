@@ -590,7 +590,6 @@ public:
     DisableAllPinLoginsTask(Session* session);
 private:
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
-    void handleDone(const QJsonObject &result) override;
 };
 
 class TwoFactorChangeLimitsTask : public AuthHandlerTask

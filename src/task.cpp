@@ -531,6 +531,11 @@ void AuthHandlerTask::handleCall(const QJsonObject& result)
 
 void AuthHandlerTask::next()
 {
+    if (!m_auth_handler) {
+        setStatus(Status::Finished);
+        return;
+    }
+
     GA_json* output;
     const auto rc = GA_auth_handler_get_status(m_auth_handler, &output);
     if (rc != GA_OK) {
@@ -1098,13 +1103,6 @@ bool DisableAllPinLoginsTask::call(GA_session* session, GA_auth_handler** auth_h
 {
     const auto rc = GA_disable_all_pin_logins(session);
     return rc == GA_OK;
-}
-
-void DisableAllPinLoginsTask::handleDone(const QJsonObject& result)
-{
-    const auto wallet = m_session->context()->wallet();
-    if (wallet) wallet->clearPinData();
-    return AuthHandlerTask::handleDone(result);
 }
 
 TwoFactorChangeLimitsTask::TwoFactorChangeLimitsTask(const QJsonObject& details, Session* session)

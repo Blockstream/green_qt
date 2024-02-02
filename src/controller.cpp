@@ -233,12 +233,16 @@ void Controller::deleteWallet()
 
 void Controller::disableAllPins()
 {
-    auto network = m_context->wallet()->network();
-    auto session = m_context->getOrCreateSession(network);
-
-    auto disable_all_pins = new DisableAllPinLoginsTask(session);
-
-    dispatcher()->add(disable_all_pins);
+    auto group = new TaskGroup(this);
+    for (auto session : m_context->getSessions()) {
+        auto task = new DisableAllPinLoginsTask(session);
+        group->add(task);
+    }
+    dispatcher()->add(group);
+    connect(group, &TaskGroup::finished, this, [=] {
+        m_context->wallet()->clearPinData();
+        emit finished();
+    });
 }
 
 void Controller::setUnspentOutputsStatus(Account* account, const QVariantList& outputs, const QString& status)

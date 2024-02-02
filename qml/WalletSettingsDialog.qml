@@ -127,22 +127,13 @@ WalletDialog {
             WalletGeneralSettingsView {
                 context: self.context
             }
-
-            GFlickable {
-                id: security_settings_flickable
-                contentHeight: security_view.height
-                Item { //WalletSecuritySettingsView {
-                    id: security_view
-                    width: security_settings_flickable.availableWidth
-                }
+            WalletSecuritySettingsView {
+                context: self.context
             }
-
             Wallet2faSettingsView {
                 context: self.context
                 sessions: self.sessions
             }
-
-
             Loader {
                 active: stack_layout.currentIndex === 3
                 sourceComponent: GFlickable {

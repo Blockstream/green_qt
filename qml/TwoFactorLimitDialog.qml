@@ -29,8 +29,6 @@ WalletDialog {
     title: qsTrId('id_set_twofactor_threshold')
     clip: true
     header: null
-    width: 500
-    height: 600
     Overlay.modal: Rectangle {
         anchors.fill: parent
         color: 'black'
@@ -108,6 +106,8 @@ WalletDialog {
 
     contentItem: GStackView {
         id: stack_view
+        implicitWidth: Math.max(500, stack_view.currentItem.implicitWidth)
+        implicitHeight: Math.max(0, stack_view.currentItem.implicitHeight)
         initialItem: StackViewPage {
             StackView.onActivated: controller.monitor.clear()
             title: self.title

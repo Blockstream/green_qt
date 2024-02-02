@@ -75,8 +75,6 @@ public:
     Account* getOrCreateAccount(Network* network, const QJsonObject& data);
     Account* getAccountByPointer(Network* network, int pointer) const;
 
-    QJsonObject m_pin_data;
-
     TaskDispatcher* dispatcher() const { return m_dispatcher; }
 
     QString xpubHashId() const { return m_xpub_hash_id; }

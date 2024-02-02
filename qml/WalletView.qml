@@ -26,7 +26,7 @@ MainPage {
             stack_view.push(watch_only_login_page, { wallet }, StackView.Immediate)
         } else if (wallet.deviceDetails?.type) {
             stack_view.push(device_page, { wallet }, StackView.Immediate)
-        } else if (wallet.loginAttemptsRemaining === 0) {
+        } else if (!wallet.hasPinData || wallet.loginAttemptsRemaining === 0) {
             stack_view.push(restore_wallet_page, { wallet }, StackView.Immediate)
         } else {
             stack_view.push(pin_login_page, { wallet }, StackView.Immediate)
@@ -273,7 +273,7 @@ MainPage {
                     stack_view.replace(null, pin_login_page, { wallet: self.wallet }, StackView.PushTransition)
                     return
                 }
-                if (self.wallet.loginAttemptsRemaining === 0) {
+                if (!self.wallet.hasPinData || self.wallet.loginAttemptsRemaining === 0) {
                     stack_view.replace(null, restore_wallet_page, { wallet: self.wallet }, StackView.PushTransition)
                     return
                 }
