@@ -6,7 +6,7 @@ mkdir -p build
 cd build
 
 if [ ! -d gdk ]; then
-    git clone --quiet --depth 1 --branch release_0.69.0 --single-branch https://github.com/Blockstream/gdk.git gdk
+    git clone --quiet --depth 1 --branch release_0.70.0 --single-branch https://github.com/Blockstream/gdk.git gdk
 fi
 
 cd gdk
@@ -31,5 +31,5 @@ else
     exit 1
 fi
 
-cp -R */external_deps_build/boost/build/include/boost $PREFIX/include
-cp -R */external_deps_build/nlohmann_json/include/nlohmann $PREFIX/include
+cp -R build-*/external_deps_build/include/boost $PREFIX/include
+cp -R build-*/external_deps_build/include/nlohmann $PREFIX/include

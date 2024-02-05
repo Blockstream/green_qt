@@ -15,6 +15,7 @@ void init(const QCommandLineParser& args)
 
     auto config = Json::fromObject({
         { "datadir", GetDataDir("gdk") },
+        { "optimize_expired_csv", true },
         { "log_level", log_level },
     });
     GA_init(config.get());
