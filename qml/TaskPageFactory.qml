@@ -28,15 +28,26 @@ QtObject {
     readonly property Prompt prompt: self.task?.prompt ?? null
     property string title: ''
 
+    function push(page, props) {
+        // TODO: pushed pages should have an attribute to better check
+        // if replace should be called instead of push
+        if (self.target.currentItem?.prompt) {
+            self.target.replace(page, props, StackView.PushTransition)
+        } else {
+            self.target.push(page, props)
+        }
+    }
+
     id: self
     onPromptChanged: {
         const prompt = self.prompt
         if (prompt instanceof CodePrompt) {
             const status = prompt.result.status
             if (status === 'request_code') {
-                self.target.push(method_view, { prompt })
+                const methods = prompt.result.methods
+                self.push(method_view, { prompt, methods })
             } else if (status === 'resolve_code') {
-                self.target.push(code_view, { prompt })
+                self.push(code_view, { prompt })
             }
             return
         }
@@ -69,6 +80,7 @@ QtObject {
 
     property Component method_view: StackViewPage {
         required property CodePrompt prompt
+        required property var methods
         Connections {
             target: view.prompt
             function onResultChanged() {
@@ -102,7 +114,7 @@ QtObject {
                 text: qsTrId('id_choose_method_to_authorize_the')
             }
             Repeater {
-                model: view.prompt.result.methods
+                model: view.methods
                 delegate: AbstractButton {
                     property string method: modelData
                     Layout.alignment: Qt.AlignCenter
@@ -145,6 +157,11 @@ QtObject {
 
     property Component code_view: StackViewPage {
         required property CodePrompt prompt
+        StackView.onActivated: {
+            pin_field.enable()
+            pin_field.clear()
+            pin_field.forceActiveFocus()
+        }
         Connections {
             target: view.prompt
             function onInvalidCode() {

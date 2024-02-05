@@ -14,6 +14,8 @@ WalletDialog {
     clip: true
     header: null
     title: qsTrId('id_disable') + ' ' + UtilJS.twoFactorMethodLabel(self.method)
+    onClosed: self.destroy()
+
     Overlay.modal: Rectangle {
         anchors.fill: parent
         color: 'black'
@@ -44,6 +46,7 @@ WalletDialog {
         implicitWidth: Math.max(500, stack_view.currentItem.implicitWidth)
         implicitHeight: Math.max(450, stack_view.currentItem.implicitHeight)
         initialItem: StackViewPage {
+            StackView.onActivated: controller.monitor.clear()
             title: self.title
             rightItem: CloseButton {
                 onClicked: self.close()
@@ -60,7 +63,7 @@ WalletDialog {
                 }
                 Label {
                     Layout.alignment: Qt.AlignCenter
-                    text: qsTrId('id_disable_s_twofactor').arg(method.toUpperCase())
+                    text: qsTrId('id_disable_s_twofactor').arg(UtilJS.twoFactorMethodLabel(self.method))
                 }
                 PrimaryButton {
                     Layout.alignment: Qt.AlignHCenter

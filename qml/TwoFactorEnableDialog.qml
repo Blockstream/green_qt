@@ -15,6 +15,8 @@ WalletDialog {
     title: qsTrId('id_enable') + ' ' + UtilJS.twoFactorMethodLabel(self.method)
     clip: true
     header: null
+    onClosed: self.destroy()
+
     Overlay.modal: Rectangle {
         anchors.fill: parent
         color: 'black'
@@ -52,6 +54,7 @@ WalletDialog {
     Component {
         id: generic_page
         TwoFactorEnableGenericView {
+            StackView.onActivated: controller.monitor.clear()
             title: self.title
             session: self.session
             method: self.method
@@ -63,6 +66,7 @@ WalletDialog {
     Component {
         id: gauth_page
         TwoFactorEnableGAuthPage {
+            StackView.onActivated: controller.monitor.clear()
             title: self.title
             session: self.session
             onNext: data => controller.enable(data)
