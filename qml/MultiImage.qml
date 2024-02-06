@@ -12,7 +12,7 @@ Item {
     }
     Image {
         anchors.fill: parent
-        fillMode: Image.PreserveAspectCrop
+        fillMode: Image.PreserveAspectFit
         mipmap: true
         source: self.foreground
     }

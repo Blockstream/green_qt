@@ -47,8 +47,10 @@ JadeUnlockActivity::JadeUnlockActivity(JadeDevice* device, QObject* parent)
 
 void JadeUnlockActivity::exec()
 {
+    auto backend = m_device->api();
+    if (!backend) return;
     const auto nets = m_device->versionInfo().value("JADE_NETWORKS").toString();
-    m_device->api()->authUser(nets == "TEST" ? "testnet" : "mainnet", [this](const QVariantMap& msg) {
+    backend->authUser(nets == "TEST" ? "testnet" : "mainnet", [this](const QVariantMap& msg) {
         if (msg.contains("result") && msg["result"] == true) {
             finish();
         } else {
@@ -77,8 +79,13 @@ JadeUpdateActivity::JadeUpdateActivity(const QVariantMap& firmware, const QByteA
 
 void JadeUpdateActivity::exec()
 {
+    auto backend = m_device->api();
+    if (!backend) {
+        fail();
+        return;
+    }
     const auto size = m_firmware.value("fwsize").toLongLong();
-    const auto chunk_size = m_device->api()->relaxWrite() ? 256 : m_device->versionInfo().value("JADE_OTA_MAX_CHUNK").toInt();
+    const auto chunk_size = backend->relaxWrite() ? 256 : m_device->versionInfo().value("JADE_OTA_MAX_CHUNK").toInt();
 
     auto progress_cb = [this](const QVariantMap& result) {
         Q_ASSERT(result.contains("uploaded"));
@@ -112,9 +119,9 @@ void JadeUpdateActivity::exec()
 
     if (m_firmware.value("delta").toBool()) {
         const auto patch_size = m_firmware.value("patch_size").toInt();
-        m_device->api()->otaDeltaUpdate(m_data, size, fwhash, patch_size, chunk_size, progress_cb, done_cb);
+        backend->otaDeltaUpdate(m_data, size, fwhash, patch_size, chunk_size, progress_cb, done_cb);
     } else {
-        m_device->api()->otaUpdate(m_data, size, fwhash, chunk_size, progress_cb, done_cb);
+        backend->otaUpdate(m_data, size, fwhash, chunk_size, progress_cb, done_cb);
     }
 }
 
@@ -151,7 +158,6 @@ void JadeFirmwareCheckController::setIndex(const QJsonObject& index)
 
 void JadeFirmwareCheckController::check()
 {
-    qDebug() << Q_FUNC_INFO;
     m_firmwares.clear();
     m_firmware_available.clear();
 

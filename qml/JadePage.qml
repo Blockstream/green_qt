@@ -133,7 +133,10 @@ StackViewPage {
         JadeConfirmUpdatePage {
             device: self.device
             onUpdateFailed: stack_view.pop()
-            onUpdateFinished: self.firmwareUpdated()
+            onUpdateFinished: {
+                stack_view.replace(null, waiting_page, StackView.PushTransition)
+                self.firmwareUpdated()
+            }
         }
     }
 
@@ -168,6 +171,27 @@ StackViewPage {
         JadeUninitializedView {
             device: self.device
             onSetupFinished: (context) => stack_view.replace(null, login_view, { context, device: self.device }, StackView.PushTransition)
+        }
+    }
+
+    Component {
+        id: waiting_page
+        ColumnLayout {
+            readonly property bool ready: self.device.connected
+            id: view
+            onReadyChanged: {
+                if (view.ready) {
+                    stack_view.clear(StackView.PushTransition)
+                    self.pushView()
+                }
+            }
+            VSpacer {
+            }
+            BusyIndicator {
+                Layout.alignment: Qt.AlignCenter
+            }
+            VSpacer {
+            }
         }
     }
 }

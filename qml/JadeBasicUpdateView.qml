@@ -101,7 +101,7 @@ Page {
             Layout.minimumWidth: 325
             Layout.topMargin: 20
             text: qsTrId('id_continue')
-            enabled: self.device.status === JadeDevice.StatusIdle
+            enabled: self.device.connected && self.device.status === JadeDevice.StatusIdle
             onClicked: self.firmwareSelected(self.firmware)
         }
         VSpacer {

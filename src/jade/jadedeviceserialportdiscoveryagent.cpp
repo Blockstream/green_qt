@@ -166,8 +166,8 @@ void JadeDeviceSerialPortDiscoveryAgent::updateLater(JadeAPI* backend)
                     device->setStatus(JadeDevice::StatusIdle);
                 } else {
                     const auto version_info = data.value("result").toMap();
-                    device->setConnected(true);
                     device->setVersionInfo(version_info);
+                    device->setConnected(true);
                 }
             }
             updateLater(backend);
