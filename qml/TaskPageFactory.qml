@@ -61,6 +61,15 @@ QtObject {
         if (!resolver) return
         if (resolver.device instanceof JadeDevice) {
             if (resolver instanceof SignMessageResolver) {
+                const { message, path } = resolver.result.required_data
+                if (message.length === 32 &&
+                    message.startsWith('greenaddress.it      login ') &&
+                    path.length === 1 &&
+                    path[0] === 0x4741b11e) {
+                    console.log('ignore sign message for login challenge')
+                    return
+                }
+
                 self.target.push(jade_sign_message_view, { resolver })
                 return
             }
