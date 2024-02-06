@@ -29,7 +29,7 @@ StackViewPage {
             text: 'Authenticate Address'
             visible: {
                 const network = self.address.account.network
-                return network.electrum && network.mainnet && !network.liquid
+                return network.electrum && !network.liquid
             }
         }
     }
