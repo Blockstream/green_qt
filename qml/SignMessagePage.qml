@@ -68,6 +68,17 @@ StackViewPage {
             }
             font.pixelSize: 14
             font.weight: 500
+            wrapMode: TextArea.Wrap
+            CircleButton {
+                anchors.right: parent.right
+                anchors.bottom: parent.bottom
+                anchors.margins: 20
+                activeFocusOnTab: false
+                icon.source: 'qrc:/svg2/paste.svg'
+                onClicked: {
+                    text_area.paste();
+                }
+            }
         }
         GStackView {
             Layout.fillWidth: true
