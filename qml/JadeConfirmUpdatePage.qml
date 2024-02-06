@@ -96,8 +96,10 @@ Page {
                         const hash = String(ge_0_1_46 && fwhash ? fwhash : cmphash)
                         return ge_0_1_46 ? hash.match(/.{1,8}/g).join(' ') : hash
                     }
+                    Layout.fillWidth: true
+                    Layout.preferredWidth: 0
                     Layout.maximumWidth: 200
-                    wrapMode: Label.WordWrap
+                    wrapMode: Label.Wrap
                 }
             }
             ProgressBar {

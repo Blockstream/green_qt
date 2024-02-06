@@ -17,7 +17,8 @@ MainPage {
         stack_layout.currentIndex = stack_layout.children.length - 1
         side_bar.currentView = SideBar.View.Wallets
     }
-    function openDevice(device) {
+    function openDevice(device, options) {
+        console.trace()
         if (stack_layout.currentItem?.device) {
             console.log('current view has device assigned')
             return
@@ -46,14 +47,16 @@ MainPage {
             }
         }
 
-        if (device instanceof JadeDevice && device.state === JadeDevice.StateUninitialized) {
-            jade_notification_dialog.createObject(window, { device }).open()
-            return
-        }
+        if (options?.prompt ?? true) {
+            if (device instanceof JadeDevice && device.state === JadeDevice.StateUninitialized) {
+                jade_notification_dialog.createObject(window, { device }).open()
+                return
+            }
 
-        if (device instanceof LedgerDevice) {
-            // TODO ignore connected ledger device for now
-            return
+            if (device instanceof LedgerDevice) {
+                // TODO ignore connected ledger device for now
+                return
+            }
         }
 
         console.log('create view for device', device)
@@ -221,7 +224,7 @@ MainPage {
         id: jade_notification_dialog
         JadeNotificationDialog {
             onSetupClicked: (device) => {
-                self.openDevice(device)
+                self.openDevice(device, { prompt: false })
                 close()
             }
             onClosed: destroy()
