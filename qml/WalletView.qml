@@ -10,6 +10,7 @@ MainPage {
     signal openWallet(Wallet wallet)
     signal removeWallet(Wallet wallet)
     signal closeWallet(Wallet wallet)
+    signal closeDevice(Device device)
     property Wallet wallet
     property Device device
     Component.onCompleted: {
@@ -64,6 +65,7 @@ MainPage {
                 stack_view.replace(null, loading_page, { context }, StackView.PushTransition)
             }
             onFirmwareUpdated: stack_view.pop()
+            onCloseClicked: self.closeDevice(self.device)
         }
     }
 

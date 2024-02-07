@@ -117,6 +117,16 @@ MainPage {
             }
         }
     }
+    function closeDevice(device) {
+        for (let i = 0; i < stack_layout.children.length; ++i) {
+            const child = stack_layout.children[i]
+            if (child instanceof WalletView && child.device === device) {
+                stack_layout.currentIndex = i - 1
+                child.destroy()
+                break
+            }
+        }
+    }
     function removeWallet(wallet) {
         self.closeWallet(wallet)
         WalletManager.removeWallet(wallet)
@@ -173,6 +183,7 @@ MainPage {
             enabled: StackLayout.isCurrentItem
             onOpenWallet: (wallet) => self.openWallet(wallet)
             onCloseWallet: (wallet) => self.closeWallet(wallet)
+            onCloseDevice: (device) => self.closeDevice(device)
             onRemoveWallet: (wallet) => remove_wallet_dialog.createObject(self, { wallet }).open()
         }
     }

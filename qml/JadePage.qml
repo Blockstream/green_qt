@@ -9,6 +9,7 @@ StackViewPage {
     signal loginFinished(Context context)
     signal firmwareUpdated()
     signal skip(Device device)
+    signal closeClicked()
     required property JadeDevice device
     required property bool login
     readonly property bool debug: Qt.application.arguments.indexOf('--debugjade') > 0
@@ -32,12 +33,19 @@ StackViewPage {
     padding: 60
     footer: null
     title: self.device.name
-    rightItem: LinkButton {
-        Layout.alignment: Qt.AlignCenter
+    rightItem: RowLayout {
         Layout.topMargin: 20
-        text: qsTrId('id_setup_guide')
-        visible: self.device.state === JadeDevice.StateUninitialized
-        onClicked: Qt.openUrlExternally('https://help.blockstream.com/hc/en-us/articles/19629901272345-Set-up-Jade')
+        spacing: 20
+        LinkButton {
+            Layout.alignment: Qt.AlignCenter
+            text: qsTrId('id_setup_guide')
+            visible: self.device.state === JadeDevice.StateUninitialized
+            onClicked: Qt.openUrlExternally('https://help.blockstream.com/hc/en-us/articles/19629901272345-Set-up-Jade')
+        }
+        WalletOptionsButton {
+            wallet: null
+            onCloseClicked: self.closeClicked()
+        }
     }
     readonly property var firmwares: {
         const fws = []
