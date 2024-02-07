@@ -13,7 +13,6 @@ SET(QML_FILES
     qml/WalletSecuritySettingsView.qml
     qml/GCard.qml
     qml/TwoFactorEnableDialog.qml
-    qml/MnemonicDialog.qml
     qml/LedgerDevicesView.qml
     qml/DebugRectangle.qml
     qml/WalletGeneralSettingsView.qml

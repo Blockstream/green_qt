@@ -5,7 +5,7 @@ import QtQuick.Layouts
 GridLayout {
     property var mnemonic
 
-    columnSpacing: 40
+    columnSpacing: 20
     rowSpacing: 20
     columns: 4
     rows: 6

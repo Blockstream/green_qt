@@ -8,8 +8,8 @@ import "analytics.js" as AnalyticsJS
 
 WalletDialog {
     id: self
-    width: 800
     height: 650
+    width: 900
     icon: 'qrc:/svg/gearFill.svg'
     title: qsTrId('id_settings')
 
@@ -65,7 +65,7 @@ WalletDialog {
             }
             Rectangle {
                 anchors.fill: parent
-                visible: b.hovered
+                visible: b.enabled && b.hovered
                 color: constants.c300
                 radius: 4
             }
@@ -116,6 +116,7 @@ WalletDialog {
                 index: 3
                 text: qsTrId('id_recovery')
                 icon.source: 'qrc:/svg/recovery.svg'
+                enabled: !self.context.device
             }
             VSpacer { }
         }

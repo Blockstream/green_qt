@@ -1,6 +1,7 @@
 import Blockstream.Green
 import Blockstream.Green.Core
 import QtQuick
+import QtQuick.Effects
 import QtQuick.Window
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -9,6 +10,7 @@ import "analytics.js" as AnalyticsJS
 
 ColumnLayout {
     required property Context context
+    property bool showMnemonic: false
 
     id: self
     spacing: 16
@@ -23,17 +25,73 @@ ColumnLayout {
         title: qsTrId('id_recovery_phrase')
         visible: !(self.context.wallet.deviceDetails?.type ?? false)
         contentItem: ColumnLayout {
-            spacing: constants.s1
+            spacing: 20
             Label {
                 Layout.fillWidth: true
                 text: qsTrId('id_the_recovery_phrase_can_be_used') + ' ' + qsTrId('id_blockstream_does_not_have')
                 wrapMode: Text.WordWrap
             }
-            GButton {
-                Layout.alignment: Qt.AlignRight
-                large: false
-                text: qsTrId('id_show')
-                onClicked: mnemonic_dialog.createObject(stack_view, { context: self.context }).open()
+            MnemonicView {
+                Layout.alignment: Qt.AlignCenter
+                Layout.fillWidth: false
+                columns: self.context.mnemonic.length > 12 ? 4 : 2
+                mnemonic: self.context.mnemonic
+                layer.enabled: true
+                layer.effect: MultiEffect {
+                    autoPaddingEnabled: true
+                    blurEnabled: true
+                    blurMax: 64
+                    blur: self.showMnemonic ? 0 : 1
+                    Behavior on blur {
+                        NumberAnimation {
+                            easing.type: Easing.OutCubic
+                            duration: 300
+                        }
+                    }
+                }
+            }
+            Pane {
+                id: tools_pane
+                Layout.topMargin: 10
+                Layout.alignment: Qt.AlignCenter
+                padding: 12
+                background: Rectangle {
+                    border.width: 1
+                    border.color: '#FFF'
+                    color: 'transparent'
+                    radius: height / 2
+                    opacity: tools_pane.hovered ? 0.4 : 0
+                    Behavior on opacity {
+                        SmoothedAnimation {
+                            velocity: 2
+                        }
+                    }
+                }
+                contentItem: RowLayout {
+                    spacing: 20
+                    CircleButton {
+                        icon.source: self.showMnemonic ? 'qrc:/svg2/eye_closed.svg' : 'qrc:/svg2/eye.svg'
+                        onClicked: self.showMnemonic = !self.showMnemonic
+                    }
+                    CircleButton {
+                        icon.source: 'qrc:/svg2/qrcode.svg'
+                        onClicked: qrcode_popup.open()
+                        QRCodePopup {
+                            id: qrcode_popup
+                            text: self.context.mnemonic.join(' ')
+                        }
+                    }
+                }
+            }
+            Image {
+                Layout.alignment: Qt.AlignCenter
+                source: 'qrc:/svg2/house.svg'
+            }
+            Label {
+                Layout.alignment: Qt.AlignCenter
+                font.pixelSize: 12
+                font.weight: 600
+                text: qsTrId('id_make_sure_to_be_in_a_private')
             }
         }
     }
@@ -143,16 +201,7 @@ ColumnLayout {
             }
         }
     }
-    */
 
-    Component {
-        id: mnemonic_dialog
-        MnemonicDialog {
-            anchors.centerIn: parent
-        }
-    }
-
-    /*
     Component {
         id: nlocktime_dialog
         NLockTimeDialog {
