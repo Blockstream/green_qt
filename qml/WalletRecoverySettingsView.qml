@@ -38,49 +38,6 @@ ColumnLayout {
         }
     }
 
-    SettingsBox {
-        title: qsTrId('id_accounts_summary')
-        contentItem: ColumnLayout {
-            spacing: constants.s1
-            Label {
-                Layout.fillWidth: true
-                text: qsTrId('id_save_a_summary_of_your_accounts')
-                wrapMode: Text.WordWrap
-            }
-            Repeater {
-                model: {
-                    const networks = new Set()
-                    for (let i = 0; i < self.context.accounts.length; i++) {
-                        const account = self.context.accounts[i]
-                        if (!account.network.electrum) continue
-                        networks.add(account.network)
-                    }
-                    return [...networks]
-                }
-                delegate: GButton {
-                    property Network network: modelData
-                    Layout.alignment: Qt.AlignRight
-                    id: button
-                    text: qsTrId('id_copy') + ' ' + button.network.displayName
-                    large: false
-                    onClicked: {
-                        const subaccounts = []
-                        for (let i = 0; i < self.context.accounts.length; i++) {
-                            const account = self.context.accounts[i]
-                            if (account.network !== button.network) continue
-                            const data = account.json;
-                            const subaccount = { type: data.type, pointer: data.pointer };
-                            if (data.type === '2of3') subaccount.recovery_pub_key = data.recovery_pub_key;
-                            subaccounts.push(subaccount)
-                        }
-                        Clipboard.copy(JSON.stringify({ subaccounts }, null, '  '))
-                        ToolTip.show(qsTrId('id_copied_to_clipboard'), 1000);
-                    }
-                }
-            }
-        }
-    }
-
     /*
     Loader {
         Layout.fillWidth: true
