@@ -28,8 +28,7 @@ void ExportAddressesController::save()
     Q_ASSERT(m_account);
     const auto context = m_account->context();
     const auto wallet = context->wallet();
-    const auto network = wallet->network();
-    const auto session = context->getOrCreateSession(network);
+    const auto session = m_account->session();
     const auto settings = session->settings();
 
     const auto now = QDateTime::currentDateTime();

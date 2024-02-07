@@ -71,7 +71,7 @@ void ExportTransactionsController::saveToFile(const QString& file)
     }
     const auto context = m_account->context();
     const auto network = m_account->network();
-    const auto session = context->getOrCreateSession(network);
+    const auto session = m_account->session();
     const auto settings = session->settings();
 
     const auto display_unit = session->displayUnit();
