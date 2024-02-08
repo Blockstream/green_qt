@@ -340,6 +340,7 @@ StackViewPage {
                     font.pixelSize: 12
                     font.weight: 400
                     text: self.transaction.data.txhash
+                    onCopyClicked: Analytics.recordEvent('share_transaction', AnalyticsJS.segmentationShareTransaction(self.transaction.account))
                 }
             }
             Collapsible {
@@ -401,6 +402,7 @@ StackViewPage {
                     visible: self.network.liquid
                     onClicked: {
                         Clipboard.copy(self.transaction.unblindedLink())
+                        Analytics.recordEvent('share_transaction', AnalyticsJS.segmentationShareTransaction(self.transaction.account))
                     }
 
                 }
@@ -688,6 +690,7 @@ StackViewPage {
     }
 
     component TLabel: Label {
+        signal copyClicked()
         id: label
         topPadding: 4
         bottomPadding: 4
@@ -704,6 +707,7 @@ StackViewPage {
         TapHandler {
             onTapped: {
                 Clipboard.copy(label.text)
+                label.copyClicked()
                 timer.restart()
             }
         }
