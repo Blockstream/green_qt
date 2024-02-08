@@ -17,19 +17,19 @@ ColumnLayout {
         wallet: self.wallet
 //        pin: pin_view.pin.value
         onLoginFinished: (wallet) => {
-            Analytics.recordEvent('wallet_login', AnalyticsJS.segmentationWalletLogin(wallet, {
+            Analytics.recordEvent('wallet_login', AnalyticsJS.segmentationWalletLogin(Settings, wallet, {
                 method: 'pin'
             }))
         }
         onLoginFailed: {
             pin_view.clear()
-            Analytics.recordEvent('failed_wallet_login', AnalyticsJS.segmentationSession(self.wallet))
+            Analytics.recordEvent('failed_wallet_login', AnalyticsJS.segmentationSession(Settings, self.wallet))
         }
     }
     Connections {
         target: self.wallet
         function onLoginAttemptsRemainingChanged(loginAttemptsRemaining) {
-            Analytics.recordEvent('failed_wallet_login', AnalyticsJS.segmentationWalletLogin(self.wallet, { method: 'pin' }))
+            Analytics.recordEvent('failed_wallet_login', AnalyticsJS.segmentationWalletLogin(Settings, self.wallet, { method: 'pin' }))
             pin_view.clear()
         }
     }

@@ -23,11 +23,11 @@ Page {
         onUnlockRequired: stack_view.replace(null, unlock_view, StackView.PushTransition)
         onUpdateStarted: {
             stack_view.replace(null, updating_view, StackView.PushTransition)
-            Analytics.recordEvent('ota_start', AnalyticsJS.segmentationFirmwareUpdate(self.device, controller.firmware))
+            Analytics.recordEvent('ota_start', AnalyticsJS.segmentationFirmwareUpdate(Settings, self.device, controller.firmware))
         }
         onUpdateFinished: {
             self.updateFinished()
-            Analytics.recordEvent('ota_complete', AnalyticsJS.segmentationFirmwareUpdate(self.device, controller.firmware))
+            Analytics.recordEvent('ota_complete', AnalyticsJS.segmentationFirmwareUpdate(Settings, self.device, controller.firmware))
         }
         onUpdateFailed: self.updateFailed()
     }

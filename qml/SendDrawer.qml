@@ -24,6 +24,6 @@ WalletDrawer {
     AnalyticsView {
         name: 'Send'
         active: true
-        segmentation: AnalyticsJS.segmentationSubAccount(self.account)
+        segmentation: AnalyticsJS.segmentationSubAccount(Settings, self.account)
     }
 }

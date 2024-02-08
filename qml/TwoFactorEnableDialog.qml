@@ -26,7 +26,7 @@ WalletDialog {
     AnalyticsView {
         active: true
         name: 'WalletSettings2FASetup'
-        segmentation: AnalyticsJS.segmentationSession(self.wallet)
+        segmentation: AnalyticsJS.segmentationSession(Settings, self.wallet)
     }
 
     TwoFactorController {

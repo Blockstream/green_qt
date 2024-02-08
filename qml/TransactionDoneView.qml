@@ -36,7 +36,7 @@ WizardPage {
             font.pixelSize: 12
             delay: 50
             text: self.transaction.data.txhash
-            onCopy: Analytics.recordEvent('share_transaction', AnalyticsJS.segmentationShareTransaction(self.transaction.account))
+            onCopy: Analytics.recordEvent('share_transaction', AnalyticsJS.segmentationShareTransaction(Settings, self.transaction.account))
         }
         VSpacer {
         }

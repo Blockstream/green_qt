@@ -1,4 +1,5 @@
 import Blockstream.Green
+import Blockstream.Green.Core
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -167,6 +168,6 @@ StackViewPage {
     AnalyticsView {
         active: self.visible
         name: 'SelectUTXO'
-        segmentation: AnalyticsJS.segmentationSubAccount(self.account)
+        segmentation: AnalyticsJS.segmentationSubAccount(Settings, self.account)
     }
 }

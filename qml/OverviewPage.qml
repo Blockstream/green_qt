@@ -131,7 +131,7 @@ StackViewPage {
     }
 
     Component.onCompleted: {
-        // TODO Analytics.recordEvent('wallet_active', AnalyticsJS.segmentationWalletActive(self.wallet))
+        Analytics.recordEvent('wallet_active', AnalyticsJS.segmentationWalletActive(Settings, self.wallet))
         const account = account_list_model.first()
         if (account) {
             self.currentAccount = account

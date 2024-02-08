@@ -1,4 +1,5 @@
 import Blockstream.Green
+import Blockstream.Green.Core
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -29,7 +30,7 @@ WalletDialog {
     AnalyticsView {
         active: self.opened
         name: 'WalletSettingsChangePIN'
-        segmentation: AnalyticsJS.segmentationSession(self.wallet)
+        segmentation: AnalyticsJS.segmentationSession(Settings, self.wallet)
     }
 
     TaskPageFactory {

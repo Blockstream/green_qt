@@ -1,4 +1,5 @@
 import Blockstream.Green
+import Blockstream.Green.Core
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -165,6 +166,6 @@ StackViewPage {
     AnalyticsView {
         active: true
         name: 'VerifyTransaction'
-        segmentation: AnalyticsJS.segmentationSession(self.wallet)
+        segmentation: AnalyticsJS.segmentationSession(Settings, self.wallet)
     }
 }

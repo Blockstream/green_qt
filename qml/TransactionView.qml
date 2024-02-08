@@ -60,7 +60,7 @@ StackViewPage {
     AnalyticsView {
         name: 'TransactionDetails'
         active: true
-        segmentation: AnalyticsJS.segmentationSubAccount(self.transaction.account)
+        segmentation: AnalyticsJS.segmentationSubAccount(Settings, self.transaction.account)
     }
 
     id: self
@@ -340,7 +340,7 @@ StackViewPage {
                     font.pixelSize: 12
                     font.weight: 400
                     text: self.transaction.data.txhash
-                    onCopyClicked: Analytics.recordEvent('share_transaction', AnalyticsJS.segmentationShareTransaction(self.transaction.account))
+                    onCopyClicked: Analytics.recordEvent('share_transaction', AnalyticsJS.segmentationShareTransaction(Settings, self.transaction.account))
                 }
             }
             Collapsible {
@@ -402,7 +402,7 @@ StackViewPage {
                     visible: self.network.liquid
                     onClicked: {
                         Clipboard.copy(self.transaction.unblindedLink())
-                        Analytics.recordEvent('share_transaction', AnalyticsJS.segmentationShareTransaction(self.transaction.account))
+                        Analytics.recordEvent('share_transaction', AnalyticsJS.segmentationShareTransaction(Settings, self.transaction.account))
                     }
 
                 }
@@ -422,7 +422,7 @@ StackViewPage {
                 }
             }
 /*
-            // TODO Analytics.recordEvent('share_transaction', AnalyticsJS.segmentationShareTransaction(self.transaction.account))
+            // TODO Analytics.recordEvent('share_transaction', AnalyticsJS.segmentationShareTransaction(Settings, self.transaction.account))
             ColumnLayout {
                 spacing: constants.p0
                 visible: !wallet.watchOnly

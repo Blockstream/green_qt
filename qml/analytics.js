@@ -18,12 +18,10 @@ function segmentationOnBoard({ flow, network, security }) {
     return segmentation
 }
 
-function segmentationSession(wallet) {
+function segmentationSession(Settings, wallet) {
     if (!wallet) return {}
     const segmentation = segmentationNetwork(wallet.network)
     const app_settings = []
-    // TODO: Settings singleton is not available in this file
-    const Settings = {}
     if (Settings.useTor) app_settings.push('tor')
     if (Settings.useProxy) app_settings.push('proxy')
     if (Settings.enableTestnet) app_settings.push('testnet')
@@ -49,7 +47,7 @@ function segmentationSession(wallet) {
     return segmentation
 }
 
-function segmentationFirmwareUpdate(device, firmware) {
+function segmentationFirmwareUpdate(Settings, device, firmware) {
     const segmentation = {
         selected_config: firmware.config,
         selected_delta: firmware.delta,
@@ -72,42 +70,42 @@ function segmentationFirmwareUpdate(device, firmware) {
     return segmentation
 }
 
-function segmentationShareTransaction(account, { method = 'copy' } = {}) {
-    const segmentation = segmentationSession(account.context.wallet)
+function segmentationShareTransaction(Settings, account, { method = 'copy' } = {}) {
+    const segmentation = segmentationSession(Settings, account.context.wallet)
     segmentation.method = method
     return segmentation;
 }
 
-function segmentationWalletLogin(wallet, { method }) {
-    const segmentation = segmentationSession(wallet)
+function segmentationWalletLogin(Settings, wallet, { method }) {
+    const segmentation = segmentationSession(Settings, wallet)
     segmentation.method = method
     return segmentation
 }
 
-function segmentationSubAccount(account) {
-    const segmentation = segmentationSession(account.context.wallet)
+function segmentationSubAccount(Settings, account) {
+    const segmentation = segmentationSession(Settings, account.context.wallet)
     segmentation.account_type = account.type
     return segmentation
 }
 
-function segmentationReceiveAddress(account, type) {
-    const segmentation = segmentationSubAccount(account)
+function segmentationReceiveAddress(Settings, account, type) {
+    const segmentation = segmentationSubAccount(Settings, account)
     segmentation.type = type
     segmentation.media = 'text'
     segmentation.method = 'copy'
     return segmentation
 }
 
-function segmentationTransaction(account, { address_input, transaction_type, with_memo }) {
-    const segmentation = segmentationSubAccount(account)
+function segmentationTransaction(Settings, account, { address_input, transaction_type, with_memo }) {
+    const segmentation = segmentationSubAccount(Settings, account)
     segmentation.address_input = address_input // [paste, scan, bip21]
     segmentation.transaction_type = transaction_type // [send, sweep, bump]
     segmentation.with_memo = with_memo
     return segmentation
 }
 
-function segmentationWalletActive(wallet) {
-    const segmentation = segmentationSession(wallet)
+function segmentationWalletActive(Settings, wallet) {
+    const segmentation = segmentationSession(Settings, wallet)
     let accounts_funded = 0
     const accounts_types = new Set
     const key = wallet.network.liquid ? wallet.network.policyAsset : 'btc'

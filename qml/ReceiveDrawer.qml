@@ -64,7 +64,7 @@ WalletDrawer {
                     }
                     onClicked: {
                         stack_view.push(jade_verify_page, { device: controller.context.device, controller })
-                        Analytics.recordEvent('verify_address', AnalyticsJS.segmentationSubAccount(controller.account))
+                        Analytics.recordEvent('verify_address', AnalyticsJS.segmentationSubAccount(Settings, controller.account))
                     }
                 }
             }

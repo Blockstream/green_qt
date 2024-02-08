@@ -31,7 +31,7 @@ WalletDialog {
         id: analytics_view
         active: self.opened
         name: 'WalletSettingsGeneral'
-        segmentation: AnalyticsJS.segmentationSession(self.wallet)
+        segmentation: AnalyticsJS.segmentationSession(Settings, self.wallet)
     }
 
     component B: Button {

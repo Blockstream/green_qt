@@ -29,11 +29,11 @@ Pane {
         network: self.network.id
         onInvalidPin: self.ToolTip.show(qsTrId('id_invalid_pin'), 2000);
         onLoginDone: () => {
-            Analytics.recordEvent('wallet_login', AnalyticsJS.segmentationWalletLogin(controller.wallet, { method: 'hardware' }))
+            Analytics.recordEvent('wallet_login', AnalyticsJS.segmentationWalletLogin(Settings, controller.wallet, { method: 'hardware' }))
             navigation.push({ view: self.network.key, wallet: controller.wallet.id })
         }
         onSetPin: (info) => {
-            Analytics.recordEvent('jade_initialize', AnalyticsJS.segmentationSession(controller.wallet))
+            Analytics.recordEvent('jade_initialize', AnalyticsJS.segmentationSession(Settings, controller.wallet))
         }
     }
     contentItem: RowLayout {

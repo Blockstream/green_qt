@@ -18,7 +18,7 @@ ColumnLayout {
     AnalyticsView {
         active: true
         name: 'WalletSettingsRecovery'
-        segmentation: AnalyticsJS.segmentationSession(self.context.wallet)
+        segmentation: AnalyticsJS.segmentationSession(Settings, self.context.wallet)
     }
 
     SettingsBox {

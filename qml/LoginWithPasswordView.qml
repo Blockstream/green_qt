@@ -18,13 +18,13 @@ GridLayout {
         username: self.wallet.username
         password: password_field.text
         onLoginFailed: {
-            Analytics.recordEvent('failed_wallet_login', AnalyticsJS.segmentationWalletLogin(self.wallet, { method: 'watch_only' }))
+            Analytics.recordEvent('failed_wallet_login', AnalyticsJS.segmentationWalletLogin(Settings, self.wallet, { method: 'watch_only' }))
             password_error.error = qsTrId('id_user_not_found_or_invalid')
             password_field.clear()
             password_field.forceActiveFocus()
         }
         onLoginFinished: {
-            Analytics.recordEvent('wallet_login', AnalyticsJS.segmentationWalletLogin(self.wallet, { method: 'watch_only' }))
+            Analytics.recordEvent('wallet_login', AnalyticsJS.segmentationWalletLogin(Settings, self.wallet, { method: 'watch_only' }))
         }
     }
 
