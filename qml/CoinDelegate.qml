@@ -47,11 +47,12 @@ ItemDelegate {
                     visible: output.dust
                     font.capitalization: Font.AllUppercase
                 }
-                Tag2 {
-                    text: qsTrId('id_not_confidential')
-                    visible: output.account.network.liquid && !output.confidential
-                    font.capitalization: Font.AllUppercase
-                }
+                // TODO is_confidential is broken
+                // Tag2 {
+                //     text: qsTrId('id_not_confidential')
+                //     visible: output.account.network.liquid && !output.confidential
+                //     font.capitalization: Font.AllUppercase
+                // }
                 Tag2 {
                     text: localizedLabel(output.addressType)
                     font.capitalization: Font.AllUppercase

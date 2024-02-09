@@ -55,7 +55,8 @@ Page {
                 model: {
                     const filters = ['', 'csv', 'p2wsh']
                     if (account.network.liquid) {
-                        filters.push('not_confidential')
+                        // TODO is_confidential is broken
+                        // filters.push('not_confidential')
                     } else {
                         filters.push('p2sh')
                         filters.push('dust')
