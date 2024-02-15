@@ -11,6 +11,7 @@ WalletDrawer {
     required property Account account
     property Asset asset
     id: self
+    closePolicy: AbstractDrawer.CloseOnEscape
     minimumContentWidth: 450
     contentItem: GStackView {
         id: stack_view

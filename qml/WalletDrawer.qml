@@ -4,7 +4,6 @@ import QtQuick
 AbstractDrawer {
     required property Context context
 
-    closePolicy: AbstractDrawer.CloseOnEscape
     onClosed: self.destroy()
 
     Connections {
