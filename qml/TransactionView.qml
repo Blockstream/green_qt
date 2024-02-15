@@ -145,7 +145,7 @@ StackViewPage {
                 }
             }
 
-            Label {
+            TLabel {
                 Layout.alignment: Qt.AlignCenter
                 font.pixelSize: 12
                 font.weight: 400
@@ -200,24 +200,15 @@ StackViewPage {
                         }
                         ColumnLayout {
                             spacing: 4
-                            RowLayout {
+                            TLabel {
                                 Layout.alignment: self.transaction.type === Transaction.Mixed ? Qt.AlignRight : Qt.AlignCenter
                                 Layout.fillWidth: false
-                                Label {
-                                    Layout.alignment: Qt.AlignBaseline
-                                    font.pixelSize: 24
-                                    font.weight: 500
-                                    text: UtilJS.incognito(self.context, convert.output.amount)
-                                }
-                                Label {
-                                    Layout.alignment: Qt.AlignBaseline
-                                    color: '#4EC08A'
-                                    font.pixelSize: 12
-                                    font.weight: 400
-                                    text: convert.output.unit
-                                }
+                                copyText: convert.output.label
+                                font.pixelSize: 24
+                                font.weight: 500
+                                text: UtilJS.incognito(self.context, convert.output.label)
                             }
-                            Label {
+                            TLabel {
                                 Layout.alignment: self.transaction.type === Transaction.Mixed ? Qt.AlignRight : Qt.AlignCenter
                                 font.pixelSize: 14
                                 font.weight: 400
@@ -251,7 +242,7 @@ StackViewPage {
                     unit: self.transaction.account.session.unit
                 }
                 RowLayout {
-                    Label {
+                    TLabel {
                         topPadding: 4
                         bottomPadding: 4
                         color: '#FFF'
@@ -259,8 +250,7 @@ StackViewPage {
                         font.weight: 400
                         text: UtilJS.incognito(self.context, fee_convert.output.label)
                     }
-                    Label {
-                        Layout.fillWidth: true
+                    TLabel {
                         topPadding: 4
                         bottomPadding: 4
                         color: '#FFF'
@@ -269,6 +259,8 @@ StackViewPage {
                         opacity: 0.6
                         text: UtilJS.incognito(self.context, '~ ' + fee_convert.fiat.label)
                     }
+                    HSpacer {
+                    }
                 }
                 Label {
                     color: '#929292'
@@ -276,14 +268,17 @@ StackViewPage {
                     font.weight: 400
                     text: qsTrId('id_fee_rate')
                 }
-                Label {
-                    Layout.fillWidth: true
-                    topPadding: 4
-                    bottomPadding: 4
-                    color: '#FFF'
-                    font.pixelSize: 12
-                    font.weight: 400
-                    text: `${Math.ceil(self.transaction.data.fee_rate / 1000)} sat/vbyte`
+                RowLayout {
+                    TLabel {
+                        topPadding: 4
+                        bottomPadding: 4
+                        color: '#FFF'
+                        font.pixelSize: 12
+                        font.weight: 400
+                        text: `${Math.ceil(self.transaction.data.fee_rate / 1000)} sat/vbyte`
+                    }
+                    HSpacer {
+                    }
                 }
                 Label {
                     id: address_left_label
@@ -552,22 +547,30 @@ StackViewPage {
 
     component TLabel: Label {
         signal copyClicked()
+        property string copyText: label.text
         id: label
         topPadding: 4
         bottomPadding: 4
-        rightPadding: hover_handler.hovered ? 32 : 0
-        Image {
-            source: timer.running ? 'qrc:/svg2/check.svg' : 'qrc:/svg2/copy.svg'
-            visible: hover_handler.hovered
+        rightPadding: collapsible.width
+        Collapsible {
+            id: collapsible
             anchors.verticalCenter: parent.verticalCenter
             anchors.right: parent.right
+            animationVelocity: 500
+            collapsed: !hover_handler.hovered
+            horizontalCollapse: true
+            verticalCollapse: false
+            Image {
+                x: 8
+                source: timer.running ? 'qrc:/svg2/check.svg' : 'qrc:/svg2/copy.svg'
+            }
         }
         HoverHandler {
             id: hover_handler
         }
         TapHandler {
             onTapped: {
-                Clipboard.copy(label.text)
+                Clipboard.copy(label.copyText)
                 label.copyClicked()
                 timer.restart()
             }
@@ -577,7 +580,6 @@ StackViewPage {
             repeat: false
             interval: 1000
         }
-
     }
 
     Component {
