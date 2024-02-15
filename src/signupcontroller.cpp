@@ -78,6 +78,7 @@ void SignupCreateWalletTask::update()
 
     const auto wallet = WalletManager::instance()->createWallet();
     wallet->setName(WalletManager::instance()->newWalletName());
+    wallet->m_deployment = context->deployment();
     wallet->m_is_persisted = true;
     wallet->save();
 

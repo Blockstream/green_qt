@@ -79,6 +79,7 @@ void RestoreController::restore(const QString& deployment)
         wallet = WalletManager::instance()->createWallet();
         wallet->setName(WalletManager::instance()->newWalletName());
         wallet->setXPubHashId(m_context->xpubHashId());
+        wallet->m_deployment = m_context->deployment();
         wallet->m_is_persisted = true;
 
         m_context->setWallet(wallet);
