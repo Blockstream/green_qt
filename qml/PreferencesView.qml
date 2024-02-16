@@ -300,53 +300,63 @@ AbstractDialog {
                     checked: Settings.usePersonalNode
                     onClicked: Settings.usePersonalNode = !Settings.usePersonalNode
                 }
-                SectionLabel {
-                    Layout.topMargin: 10
-                    text: qsTrId('id_bitcoin_electrum_server')
-                }
-                TTextField {
+                Collapsible {
                     Layout.fillWidth: true
-                    enabled: Settings.usePersonalNode
-                    text: Settings.bitcoinElectrumUrl
-                    onTextChanged: Settings.bitcoinElectrumUrl = text
-                    // placeholderText: NetworkManager.network("electrum-mainnet").data.electrum_url
-                }
-                SectionLabel {
-                    Layout.topMargin: 10
-                    visible: Settings.enableTestnet
-                    text: qsTrId('id_testnet_electrum_server')
-                }
-                TTextField {
-                    Layout.fillWidth: true
-                    enabled: Settings.usePersonalNode
-                    visible: Settings.enableTestnet
-                    text: Settings.testnetElectrumUrl
-                    onTextChanged: Settings.testnetElectrumUrl = text
-                    // placeholderText: NetworkManager.network("electrum-testnet").data.electrum_url
-                }
-                SectionLabel {
-                    Layout.topMargin: 10
-                    text: qsTrId('id_liquid_electrum_server')
-                }
-                TTextField {
-                    Layout.fillWidth: true
-                    enabled: Settings.usePersonalNode
-                    text: Settings.liquidElectrumUrl
-                    onTextChanged: Settings.liquidElectrumUrl = text
-                    // placeholderText: NetworkManager.network("electrum-liquid").data.electrum_url
-                }
-                SectionLabel {
-                    Layout.topMargin: 10
-                    visible: Settings.enableTestnet
-                    text: qsTrId('id_liquid_testnet_electrum_server')
-                }
-                TTextField {
-                    Layout.fillWidth: true
-                    enabled: Settings.usePersonalNode
-                    visible: Settings.enableTestnet
-                    text: Settings.liquidTestnetElectrumUrl
-                    onTextChanged: Settings.liquidTestnetElectrumUrl = text
-                    // placeholderText: NetworkManager.network("electrum-testnet-liquid").data.electrum_url
+                    id: collapsible
+                    animationVelocity: 600
+                    collapsed: !Settings.usePersonalNode
+                    ColumnLayout {
+                        width: collapsible.width
+                        spacing: 2
+                        SectionLabel {
+                            Layout.topMargin: 10
+                            text: qsTrId('id_bitcoin_electrum_server')
+                        }
+                        TTextField {
+                            Layout.fillWidth: true
+                            enabled: Settings.usePersonalNode
+                            text: Settings.bitcoinElectrumUrl
+                            onTextChanged: Settings.bitcoinElectrumUrl = text
+                            // placeholderText: NetworkManager.network("electrum-mainnet").data.electrum_url
+                        }
+                        SectionLabel {
+                            Layout.topMargin: 10
+                            visible: Settings.enableTestnet
+                            text: qsTrId('id_testnet_electrum_server')
+                        }
+                        TTextField {
+                            Layout.fillWidth: true
+                            enabled: Settings.usePersonalNode
+                            visible: Settings.enableTestnet
+                            text: Settings.testnetElectrumUrl
+                            onTextChanged: Settings.testnetElectrumUrl = text
+                            // placeholderText: NetworkManager.network("electrum-testnet").data.electrum_url
+                        }
+                        SectionLabel {
+                            Layout.topMargin: 10
+                            text: qsTrId('id_liquid_electrum_server')
+                        }
+                        TTextField {
+                            Layout.fillWidth: true
+                            enabled: Settings.usePersonalNode
+                            text: Settings.liquidElectrumUrl
+                            onTextChanged: Settings.liquidElectrumUrl = text
+                            // placeholderText: NetworkManager.network("electrum-liquid").data.electrum_url
+                        }
+                        SectionLabel {
+                            Layout.topMargin: 10
+                            visible: Settings.enableTestnet
+                            text: qsTrId('id_liquid_testnet_electrum_server')
+                        }
+                        TTextField {
+                            Layout.fillWidth: true
+                            enabled: Settings.usePersonalNode
+                            visible: Settings.enableTestnet
+                            text: Settings.liquidTestnetElectrumUrl
+                            onTextChanged: Settings.liquidTestnetElectrumUrl = text
+                            // placeholderText: NetworkManager.network("electrum-testnet-liquid").data.electrum_url
+                        }
+                    }
                 }
                 SectionLabel {
                     Layout.topMargin: 30
