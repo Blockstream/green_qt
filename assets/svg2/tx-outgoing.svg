@@ -1,1 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#ffffff" viewBox="0 0 256 256"><path d="M205.66,138.34a8,8,0,0,1-11.32,11.32L136,91.31V224a8,8,0,0,1-16,0V91.31L61.66,149.66a8,8,0,0,1-11.32-11.32l72-72a8,8,0,0,1,11.32,0ZM216,32H40a8,8,0,0,0,0,16H216a8,8,0,0,0,0-16Z"></path></svg>
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Icon/upload">
+<path id="Path 2" d="M12 17V4" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+<path id="Path 3" d="M7 8L12 3L17 8" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+<path id="Path 2_2" d="M20 21H4" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+</g>
+</svg>
