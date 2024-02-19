@@ -26,7 +26,7 @@ WalletHeaderCard {
             font.pixelSize: 12
             font.weight: 400
             opacity: 0.6
-            text: (session?.network?.name ?? '') + ' ' + qsTrId('id_network_fee')
+            text: 'Bitcoin ' + qsTrId('id_network_fee')
         }
         HSpacer {
             Layout.minimumHeight: 28
