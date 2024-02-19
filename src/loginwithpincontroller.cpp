@@ -229,6 +229,7 @@ void LoadController::load()
 void LoadController::loadNetwork(TaskGroup* group, Network* network)
 {
     auto session = m_context->getOrCreateSession(network);
+    if (!session->m_ready) return;
     group->add(new GetWatchOnlyDetailsTask(session));
     group->add(new LoadTwoFactorConfigTask(session));
     group->add(new LoadCurrenciesTask(session));
@@ -244,7 +245,7 @@ void LoadController::loadNetwork(TaskGroup* group, Network* network)
 void LoadController::loginNetwork(Network* network)
 {
     auto group = new TaskGroup(this);
-
+    group->setName(QString("load network %1").arg(network->id()));
     auto session = m_context->getOrCreateSession(network);
     auto connect_session = new ConnectTask(session);
     LoginTask* login{nullptr};
