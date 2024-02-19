@@ -26,7 +26,7 @@ StackViewPage {
             Layout.fillWidth: true
             onClicked: self.StackView.view.push(sign_message_drawer, { context: self.context, address: self.address })
             icon.source: 'qrc:/svg2/signature-light.svg'
-            text: 'Authenticate Address'
+            text: qsTrId('id_authenticate_address')
             visible: {
                 const network = self.address.account.network
                 return network.electrum && !network.liquid

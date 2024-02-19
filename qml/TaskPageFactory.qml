@@ -208,7 +208,7 @@ QtObject {
                 font.pixelSize: 12
                 font.weight: 600
                 horizontalAlignment: Label.AlignHCenter
-                text: 'To authorize the transaction you need to enter your 2FA code.'
+                text: qsTrId('id_to_authorize_the_transaction')
                 visible: !(view.prompt.task instanceof ChangeTwoFactorTask)
                 wrapMode: Label.WordWrap
             }

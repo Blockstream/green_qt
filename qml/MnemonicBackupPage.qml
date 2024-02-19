@@ -10,7 +10,7 @@ StackViewPage {
 
     id: self
     rightItem: PrintButton {
-        text: 'Print Backup Template'
+        text: qsTrId('id_print_backup_template')
     }
     contentItem: ColumnLayout {
         spacing: 0

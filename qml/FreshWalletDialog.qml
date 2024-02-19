@@ -21,7 +21,7 @@ WalletDialog {
             font.pixelSize: 18
             font.weight: 500
             horizontalAlignment: Label.AlignHCenter
-            text: 'Congratulations and welcome to your new wallet'
+            text: qsTrId('id_welcome_to_your_wallet')
             wrapMode: Label.WordWrap
         }
         Label {

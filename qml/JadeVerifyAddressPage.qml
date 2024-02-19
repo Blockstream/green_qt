@@ -60,7 +60,7 @@ StackViewPage {
             font.pixelSize: 12
             font.weight: 500
             horizontalAlignment: Label.AlignHCenter
-            text: qsTrId('id_please_verify_that_the_address')
+            text: qsTrId('id_please_verify_that_this_address')
             wrapMode: Label.WordWrap
         }
         VSpacer {

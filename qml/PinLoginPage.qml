@@ -64,7 +64,7 @@ StackViewPage {
                 font.weight: 400
                 horizontalAlignment: Label.AlignHCenter
                 opacity: 0.4
-                text: `You'll need your PIN to log in to your wallet. This PIN secures the wallet on this device only.`
+                text: qsTrId('id_youll_need_your_pin_to_log_in')
                 wrapMode: Label.Wrap
             }
             PinField {

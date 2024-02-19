@@ -8,7 +8,7 @@ StackViewPage {
     required property Context context
     required property Address address
     id: self
-    title: 'Authenticate Address'
+    title: qsTrId('id_authenticate_address')
     SignMessageController {
         id: controller
         context: self.context
@@ -90,7 +90,7 @@ StackViewPage {
                 PrimaryButton {
                     Layout.fillWidth: true
                     enabled: controller.valid && (controller.monitor?.idle ?? true)
-                    text: 'Sign message'
+                    text: qsTrId('id_sign_message')
                     onClicked: controller.sign()
                 }
             }
@@ -113,7 +113,7 @@ StackViewPage {
                 Layout.preferredWidth: 0
                 font.pixelSize: 14
                 font.weight: 600
-                text: 'This is the signature for the message signed by the address for proof of ownership.'
+                text: qsTrId('id_this_signature_is_a_proof_of')
                 horizontalAlignment: Label.AlignHCenter
                 wrapMode: Label.WordWrap
             }

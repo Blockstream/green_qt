@@ -53,7 +53,7 @@ StackViewPage {
             font.pixelSize: 14
             font.weight: 600
             opacity: 0.4
-            text: 'Make sure you got everything right'
+            text: qsTrId('id_make_sure_you_got_everything')
         }
         Repeater {
             id: repeater

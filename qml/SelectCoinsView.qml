@@ -22,7 +22,7 @@ StackViewPage {
     }
 
     id: self
-    title: 'Select Your Coins'
+    title: qsTrId('id_select_your_coins')
     contentItem: ColumnLayout {
         RowLayout {
             Layout.alignment: Qt.AlignCenter
@@ -118,7 +118,7 @@ StackViewPage {
         PrimaryButton {
             Layout.fillWidth: true
             enabled: self.selection.size > 0
-            text: 'Confirm Coin Selection'
+            text: qsTrId('id_confirm_coin_selection')
             onClicked: {
                 const coins = []
                 for (const output of self.selection) {
@@ -131,7 +131,7 @@ StackViewPage {
             Layout.alignment: Qt.AlignCenter
             font.pixelSize: 14
             font.weight: 400
-            text: 'You can send up to:'
+            text: qsTrId('id_you_can_send_up_to')
             visible: self.selection.size > 0
         }
         Label {

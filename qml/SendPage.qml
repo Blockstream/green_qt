@@ -273,7 +273,7 @@ StackViewPage {
                     visible: !controller.account.network.liquid
                 }
                 LinkButton {
-                    text: 'Change speed'
+                    text: qsTrId('id_change_speed')
                     visible: !controller.account.network.liquid
                     onClicked: self.pushSelectFeePage()
                 }
@@ -300,7 +300,7 @@ StackViewPage {
             Layout.fillWidth: true
             id: options_button
             implicitWidth: 0
-            text: 'Advanced Options'
+            text: qsTrId('id_advanced_options')
             onClicked: options_menu.open()
             GMenu {
                 id: options_menu

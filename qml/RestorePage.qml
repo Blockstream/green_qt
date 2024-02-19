@@ -70,7 +70,7 @@ StackViewPage {
             font.weight: 400
             horizontalAlignment: Label.AlignHCenter
             opacity: 0.4
-            text: self.wallet ? qsTrId('id_youll_need_your_recovery_phrase') : 'Make sure you got everything right'
+            text: self.wallet ? qsTrId('id_youll_need_your_recovery_phrase') : qsTrId('id_make_sure_you_got_everything')
             wrapMode: Label.Wrap
         }
         MnemonicSizeSelector {

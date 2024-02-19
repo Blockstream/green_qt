@@ -28,7 +28,7 @@ CircleButton {
             }
         }
         GMenu.Item {
-            text: 'Close'
+            text: qsTrId('id_close')
             icon.source: 'qrc:/svg2/close.svg'
             onClicked: {
                 menu.close()

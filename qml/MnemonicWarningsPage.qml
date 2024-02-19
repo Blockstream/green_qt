@@ -49,7 +49,7 @@ StackViewPage {
                 PrintButton {
                     Layout.alignment: Qt.AlignCenter
                     Layout.topMargin: 40
-                    text: 'Print Backup Template'
+                    text: qsTrId('id_print_backup_template')
                 }
             }
         }

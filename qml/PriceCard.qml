@@ -23,7 +23,7 @@ WalletHeaderCard {
             font.pixelSize: 12
             font.weight: 400
             opacity: 0.6
-            text: 'Price Feed'
+            text: qsTrId('id_price_feed')
         }
         HSpacer {
             Layout.minimumHeight: 28

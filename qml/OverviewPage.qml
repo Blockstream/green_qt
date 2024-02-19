@@ -467,7 +467,7 @@ StackViewPage {
                     Layout.fillWidth: true
                     font.pixelSize: 12
                     font.weight: 600
-                    text: 'A powerful hardware wallet for securing your Bitcoin.'
+                    text: qsTrId('id_a_powerful_hardware_wallet_for')
                     wrapMode: Label.WordWrap
                 }
                 Label {
@@ -476,7 +476,7 @@ StackViewPage {
                     font.pixelSize: 11
                     font.weight: 400
                     opacity: 0.3
-                    text: 'Jade is an open-source hardware wallet for Bitcoin and Liquid assets.'
+                    text: qsTrId('id_jade_is_an_opensource_hardware')
                     wrapMode: Label.WordWrap
                 }
             }
@@ -497,7 +497,7 @@ StackViewPage {
                     Layout.fillWidth: true
                     font.pixelSize: 12
                     font.weight: 600
-                    text: 'The Importance of Two-Factor Authentication'
+                    text: qsTrId('id_the_importance_of_twofactor')
                     wrapMode: Label.WordWrap
                 }
                 Label {
@@ -506,7 +506,7 @@ StackViewPage {
                     font.pixelSize: 11
                     font.weight: 400
                     opacity: 0.3
-                    text: 'Protect your bitcoin with a second form of verification.'
+                    text: qsTrId('id_protect_your_bitcoin_with_a')
                     wrapMode: Label.WordWrap
                 }
             }

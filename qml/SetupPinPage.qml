@@ -32,7 +32,7 @@ StackViewPage {
             font.pixelSize: 26
             font.weight: 600
             horizontalAlignment: Label.AlignHCenter
-            text: self.pin && pin_field.enabled ? 'Confirm your 6-digit PIN' : 'Set up your 6-digit PIN'
+            text: self.pin && pin_field.enabled ? qsTrId('id_confirm_your_new_pin') : qsTrId('id_set_a_new_pin')
             wrapMode: Label.WordWrap
         }
         Label {
@@ -43,7 +43,7 @@ StackViewPage {
             font.weight: 400
             horizontalAlignment: Label.AlignHCenter
             opacity: 0.4
-            text: `You'll need your PIN to log in to your wallet. This PIN secures the wallet on this device only.`
+            text: qsTrId('id_youll_need_your_pin_to_log_in')
             wrapMode: Label.Wrap
         }
         PinField {
