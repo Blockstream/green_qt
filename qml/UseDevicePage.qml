@@ -31,8 +31,8 @@ StackViewPage {
         }
         SwipeView {
             Layout.alignment: Qt.AlignCenter
-            Layout.preferredWidth: 400
-            Layout.preferredHeight: 400
+            Layout.preferredWidth: 500
+            Layout.preferredHeight: 350
             id: swipe_view
             clip: true
             onCurrentIndexChanged: change_timer.restart()
@@ -48,7 +48,6 @@ StackViewPage {
                 Label {
                     Layout.fillWidth: true
                     Layout.preferredWidth: 0
-                    Layout.topMargin: 20
                     color: '#FFF'
                     font.pixelSize: 26
                     font.weight: 600
@@ -59,7 +58,7 @@ StackViewPage {
                 Label {
                     Layout.fillWidth: true
                     Layout.preferredWidth: 0
-                    Layout.topMargin: 20
+                    Layout.topMargin: 10
                     color: '#9C9C9C'
                     font.pixelSize: 14
                     font.weight: 400
@@ -80,7 +79,6 @@ StackViewPage {
                 Label {
                     Layout.fillWidth: true
                     Layout.preferredWidth: 0
-                    Layout.topMargin: 20
                     color: '#FFF'
                     font.pixelSize: 26
                     font.weight: 600
@@ -91,7 +89,7 @@ StackViewPage {
                 Label {
                     Layout.fillWidth: true
                     Layout.preferredWidth: 0
-                    Layout.topMargin: 20
+                    Layout.topMargin: 10
                     color: '#9C9C9C'
                     font.pixelSize: 14
                     font.weight: 400
@@ -112,7 +110,6 @@ StackViewPage {
                 Label {
                     Layout.fillWidth: true
                     Layout.preferredWidth: 0
-                    Layout.topMargin: 20
                     color: '#FFF'
                     font.pixelSize: 26
                     font.weight: 600
@@ -123,7 +120,7 @@ StackViewPage {
                 Label {
                     Layout.fillWidth: true
                     Layout.preferredWidth: 0
-                    Layout.topMargin: 20
+                    Layout.topMargin: 10
                     color: '#9C9C9C'
                     font.pixelSize: 14
                     font.weight: 400

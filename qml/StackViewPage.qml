@@ -20,10 +20,16 @@ Page {
         id: footer_pane
         background: null
         padding: self.padding
+        leftPadding: self.padding
+        rightPadding: self.padding
+        bottomPadding: self.padding
+        topPadding: 20
     }
     header: Pane {
         background: null
-        padding: self.padding
+        leftPadding: self.padding
+        rightPadding: self.padding
+        topPadding: self.padding
         bottomPadding: 20
         contentItem: RowLayout {
             spacing: 0
