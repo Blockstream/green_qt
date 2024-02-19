@@ -163,6 +163,11 @@ Session* Context::primarySession()
 void Context::releaseSession(Session* session)
 {
     qDebug() << Q_FUNC_INFO << session->network()->id();
+
+    // TODO: the session is not needed but some tasks can be ongoing
+    // TODO: keep the session for now
+    return;
+
     for (auto account : m_accounts) {
         Q_ASSERT(account->session() != session);
     }
