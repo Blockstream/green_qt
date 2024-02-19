@@ -64,7 +64,7 @@ StackViewPage {
                     id: slider
                     from: estimates.fees[0]
                     to: estimates.fees[1] * 2
-                    stepSize: 1
+                    stepSize: 100
                 }
                 RowLayout {
                     ColumnLayout {
@@ -82,7 +82,7 @@ StackViewPage {
                         Label {
                             font.pixelSize: 12
                             font.weight: 400
-                            text: Math.ceil(slider.value / 1000) + ' sat/vbyte'
+                            text: Math.ceil(slider.value / 100) / 10 + ' sat/vbyte'
                             opacity: 0.6
                         }
                     }
