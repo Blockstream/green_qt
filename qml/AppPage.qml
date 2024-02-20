@@ -251,7 +251,7 @@ MainPage {
         }
         onDeviceClicked: (device) => {
             wallets_drawer.close()
-            selfopenDevice(device)
+            self.openDevice(device)
         }
     }
 
