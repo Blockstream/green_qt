@@ -9,6 +9,12 @@ import QtQuick.Window
 Dialog {
     signal setupClicked(JadeDevice device)
     required property JadeDevice device
+    Connections {
+        target: self.device
+        function onConnectedChanged() {
+            self.close()
+        }
+    }
     Overlay.modal: MultiEffect {
         anchors.fill: parent
         autoPaddingEnabled: false
