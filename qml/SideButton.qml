@@ -35,8 +35,6 @@ AbstractButton {
         Image {
             Layout.alignment: Qt.AlignCenter
             source: self.icon.source
-            sourceSize.width: self.icon.width
-            sourceSize.height: self.icon.height
         }
     }
 }

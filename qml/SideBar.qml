@@ -56,16 +56,6 @@ Pane {
             onClicked: self.walletsClicked()
             text: qsTrId('id_wallets')
         }
-        SideButton {
-            icon.source: 'qrc:/svg/jade_emblem_on_transparent_rgb.svg'
-            text: 'Blockstream Jade'
-            visible: false
-        }
-        SideButton {
-            icon.source: 'qrc:/svg/ledger-logo.svg'
-            text: 'Ledger Nano'
-            visible: false
-        }
         VSpacer {
         }
         SideButton {
@@ -73,8 +63,6 @@ Pane {
             isCurrent: self.currentView === SideBar.View.Preferences
             onClicked: self.preferencesClicked()
             text: qsTrId('id_app_settings')
-            icon.width: 24
-            icon.height: 24
         }
     }
 }
