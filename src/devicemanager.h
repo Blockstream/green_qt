@@ -26,6 +26,7 @@ signals:
     void countChanged();
     void deviceAdded(Device* device);
     void deviceRemoved(Device* device);
+    void deviceConnected(Device* device);
 private:
     explicit DeviceManager(QObject* parent = nullptr);
     QSet<Device*> m_devices;

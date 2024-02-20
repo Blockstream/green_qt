@@ -229,6 +229,9 @@ MainPage {
         function onDeviceAdded(device) {
             self.openDevice(device)
         }
+        function onDeviceConnected(device) {
+            self.openDevice(device)
+        }
     }
 
     Component {

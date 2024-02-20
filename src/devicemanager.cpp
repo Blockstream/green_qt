@@ -68,6 +68,12 @@ void DeviceManager::addDevice(Device* device)
     m_devices.insert(device);
     emit deviceAdded(device);
     emit countChanged();
+
+    connect(device, &Device::connectedChanged, this, [=] {
+        if (device->isConnected()) {
+            emit deviceConnected(device);
+        }
+    });
 }
 
 void DeviceManager::removeDevice(Device* device)
