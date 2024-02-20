@@ -1,12 +1,14 @@
 function segmentationNetwork(network) {
     const segmentation = {}
-    segmentation.network
-        = network.liquid ? 'liquid'
-        : network.mainnet ? 'mainnet'
-        : 'testnet'
-    segmentation.security
-        = network.electrum ? 'singlesig'
-        : 'multisig'
+    if (network) {
+        segmentation.network
+            = network.liquid ? 'liquid'
+            : network.mainnet ? 'mainnet'
+            : 'testnet'
+        segmentation.security
+            = network.electrum ? 'singlesig'
+            : 'multisig'
+    }
     return segmentation
 }
 
@@ -108,9 +110,9 @@ function segmentationWalletActive(Settings, wallet) {
     const segmentation = segmentationSession(Settings, wallet)
     let accounts_funded = 0
     const accounts_types = new Set
-    const key = wallet.network.liquid ? wallet.network.policyAsset : 'btc'
     for (let i = 0; i < wallet.context.accounts.length; ++i) {
         const account = wallet.context.accounts[i]
+        const key = account.network.liquid ? account.network.policyAsset : 'btc'
         accounts_types.add(account.type)
         if (account.json.satoshi[key] > 0 || Object.keys(account.json.satoshi).length > 1) {
             accounts_funded ++
