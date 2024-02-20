@@ -1,16 +1,20 @@
-<TS version="2.1" language="ko">
+<TS version="2.1" language="en">
 <context>
     <message>
         <source>id_1030_minutes</source>
-        <translation>약 10-30 분</translation>
+        <translation>~ 10-30 Minutes</translation>
     </message>
     <message>
         <source>id_12_confirmations</source>
-        <translation>1/2 컨펌</translation>
+        <translation>1/2 confirmations</translation>
     </message>
     <message>
         <source>id_12_months_51840_blocks</source>
         <translation>12 months (51840 blocks)</translation>
+    </message>
+    <message>
+        <source>id_12_words</source>
+        <translation>12 words</translation>
     </message>
     <message>
         <source>id_15_months_65535_blocks</source>
@@ -25,23 +29,27 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_1d_2s_ago</source>
-        <translation>1%12%2전</translation>
+        <translation>%1 %2 ago</translation>
     </message>
     <message>
         <source>id_1d_minutes</source>
-        <translation>%1분</translation>
+        <translation>%1 minutes</translation>
     </message>
     <message>
         <source>id_1s_blocks_left_2d</source>
-        <translation>%1블록 남음%2</translation>
+        <translation>%1 blocks left %2</translation>
     </message>
     <message>
         <source>id_1s_twofactor_setup</source>
         <translation>%1 Two-Factor setup</translation>
     </message>
     <message>
+        <source>id_24_words</source>
+        <translation>24 words</translation>
+    </message>
+    <message>
         <source>id_2_hours</source>
-        <translation>약 2 시간</translation>
+        <translation>~ 2 Hours</translation>
     </message>
     <message>
         <source>id_2fa_dispute_in_progress</source>
@@ -56,28 +64,62 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
         <translation>2FA Expiry</translation>
     </message>
     <message>
+        <source>id_2fa_isnt_set_up_yetnnyou_can</source>
+        <translation>2FA isn’t set up yet.
+
+You can choose your favourite 2FA method among an authenticator app, email, SMS or a call.</translation>
+    </message>
+    <message>
         <source>id_2fa_methods</source>
         <translation>2FA Methods</translation>
+    </message>
+    <message>
+        <source>id_2fa_protected</source>
+        <translation>2FA Protected</translation>
     </message>
     <message>
         <source>id_2fa_reset_in_progress</source>
         <translation>2FA Reset in Progress</translation>
     </message>
     <message>
+        <source>id_2fa_shield</source>
+        <translation>2FA Shield</translation>
+    </message>
+    <message>
+        <source>id_2fa_shield_account</source>
+        <translation>2FA Shield Account</translation>
+    </message>
+    <message>
         <source>id_2fa_threshold</source>
         <translation>2FA Threshold</translation>
+    </message>
+    <message>
+        <source>id_2of2</source>
+        <translation>2of2</translation>
+    </message>
+    <message>
+        <source>id_2of3</source>
+        <translation>2of3</translation>
     </message>
     <message>
         <source>id_2of3_account</source>
         <translation>2of3 Account</translation>
     </message>
     <message>
+        <source>id_2of3_with_2fa</source>
+        <translation>2of3 with 2FA</translation>
+    </message>
+    <message>
+        <source>id_2of3_with_2fa_shield</source>
+        <translation>2of3 with 2FA Shield</translation>
+    </message>
+    <message>
         <source>id_4_hours</source>
-        <translation>약 4시간</translation>
+        <translation>~ 4 Hours</translation>
     </message>
     <message>
         <source>id_5_seconds_minimum</source>
-        <translation>최소 5초</translation>
+        <translation>5 seconds minimum</translation>
     </message>
     <message>
         <source>id_6_months_25920_blocks</source>
@@ -88,20 +130,32 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
         <translation>A 2of3 account requires two out of three signatures to spend coins. The third signature is from a backup key known only to you. This gives you the security benefits of a standard account, while still allowing you to move your coins independently at any point in time.</translation>
     </message>
     <message>
+        <source>id_a_funding_fee_of_s_minimum_s_is</source>
+        <translation>A funding fee of %1 (minimum %2) is applied when receiving amounts above your current receive capacity of %3</translation>
+    </message>
+    <message>
         <source>id_a_new_transaction_has_just</source>
-        <translation>방금 지갑에 새로운 거래가 인식되었습니다.</translation>
+        <translation>A new transaction has just arrived in your wallet.</translation>
     </message>
     <message>
         <source>id_a_newer_version_of_blockstream</source>
         <translation>A newer version of Blockstream Green is now available</translation>
     </message>
     <message>
+        <source>id_a_powerful_hardware_wallet_for</source>
+        <translation>A powerful hardware wallet for securing your Bitcoin.</translation>
+    </message>
+    <message>
         <source>id_a_screen_lock_must_be_enabled</source>
         <translation>A screen lock must be enabled from Android settings</translation>
     </message>
     <message>
+        <source>id_a_set_up_funding_fee_of_s_s</source>
+        <translation>A set up funding fee of %1 (%2) will be applied to the received amount.</translation>
+    </message>
+    <message>
         <source>id_a_wallet_is_detected_on_this</source>
-        <translation>지갑이 인식되었습니다:</translation>
+        <translation>A wallet is detected on this device:</translation>
     </message>
     <message>
         <source>id_about</source>
@@ -109,7 +163,7 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_accept</source>
-        <translation>수락</translation>
+        <translation>ACCEPT</translation>
     </message>
     <message>
         <source>id_access</source>
@@ -117,7 +171,39 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_account</source>
-        <translation>계좌</translation>
+        <translation>Account</translation>
+    </message>
+    <message>
+        <source>id_account__asset</source>
+        <translation>Account &amp; Asset</translation>
+    </message>
+    <message>
+        <source>id_account_address</source>
+        <translation>Account Address</translation>
+    </message>
+    <message>
+        <source>id_account_archived</source>
+        <translation>Account archived</translation>
+    </message>
+    <message>
+        <source>id_account_balance</source>
+        <translation>Account Balance</translation>
+    </message>
+    <message>
+        <source>id_account_extended_public_keys</source>
+        <translation>Account Extended Public Keys</translation>
+    </message>
+    <message>
+        <source>id_account_for_special_assets</source>
+        <translation>Account for special assets, monitored or authorized by the asset issuer.</translation>
+    </message>
+    <message>
+        <source>id_account_has_been_archived</source>
+        <translation>Account has been archived</translation>
+    </message>
+    <message>
+        <source>id_account_has_been_removed</source>
+        <translation>Account has been removed</translation>
     </message>
     <message>
         <source>id_account_id</source>
@@ -141,11 +227,15 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_action_canceled</source>
-        <translation>취소됨</translation>
+        <translation>Action canceled</translation>
     </message>
     <message>
         <source>id_actions</source>
         <translation>Actions</translation>
+    </message>
+    <message>
+        <source>id_add_2fa_account</source>
+        <translation>Add 2FA Account</translation>
     </message>
     <message>
         <source>id_add_a_note_only_you_can_see_it</source>
@@ -157,7 +247,7 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_add_amount</source>
-        <translation>금액 추가</translation>
+        <translation>Add Amount</translation>
     </message>
     <message>
         <source>id_add_amount_optional</source>
@@ -173,19 +263,31 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_add_custom_network_by_qr_code</source>
-        <translation>QR 코드로 사용자 지정 네트워크 추가</translation>
+        <translation>Add custom network by QR Code</translation>
     </message>
     <message>
         <source>id_add_custom_network_by_url</source>
-        <translation>URL로 개인 네트워크 연결</translation>
+        <translation>Add custom network by URL</translation>
     </message>
     <message>
         <source>id_add_new_account</source>
-        <translation>새로운 계좌 만들기</translation>
+        <translation>Add New Account</translation>
+    </message>
+    <message>
+        <source>id_add_note</source>
+        <translation>Add Note</translation>
+    </message>
+    <message>
+        <source>id_add_recipient</source>
+        <translation>Add Recipient</translation>
     </message>
     <message>
         <source>id_add_wallet</source>
-        <translation>지갑 추가</translation>
+        <translation>Add Wallet</translation>
+    </message>
+    <message>
+        <source>id_adding_a_2fa</source>
+        <translation>adding a 2FA</translation>
     </message>
     <message>
         <source>id_additional_networks</source>
@@ -193,19 +295,27 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_additional_security</source>
-        <translation>추가 보안기능</translation>
+        <translation>Additional Security</translation>
     </message>
     <message>
         <source>id_address</source>
-        <translation>주소</translation>
+        <translation>Address</translation>
     </message>
     <message>
         <source>id_address_1s</source>
-        <translation>주소:%1</translation>
+        <translation>Address: %1</translation>
     </message>
     <message>
         <source>id_address_copied_to_clipboard</source>
-        <translation>클립보드로 주소 복사됨</translation>
+        <translation>Address copied to clipboard</translation>
+    </message>
+    <message>
+        <source>id_address_to_receive</source>
+        <translation>Address to Receive</translation>
+    </message>
+    <message>
+        <source>id_address_type</source>
+        <translation>Address Type</translation>
     </message>
     <message>
         <source>id_address_verified</source>
@@ -225,7 +335,11 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_advanced_network_settings</source>
-        <translation>네트워크 상세설정</translation>
+        <translation>Advanced network settings</translation>
+    </message>
+    <message>
+        <source>id_advanced_options</source>
+        <translation>Advanced options</translation>
     </message>
     <message>
         <source>id_advanced_options_for_your_third</source>
@@ -233,7 +347,7 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_all</source>
-        <translation>전부</translation>
+        <translation>All</translation>
     </message>
     <message>
         <source>id_all_assets</source>
@@ -260,20 +374,48 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
         <translation>All wallets</translation>
     </message>
     <message>
+        <source>id_allow_collection</source>
+        <translation>Allow collection</translation>
+    </message>
+    <message>
+        <source>id_allow_data_collection</source>
+        <translation>Allow data collection</translation>
+    </message>
+    <message>
         <source>id_allows_you_to_quickly_check</source>
-        <translation>잔액을 확인, 또는 돈을 받거나 종이 지갑을 sweep 할 수 있습니다. 감시모드에서는 송금은 할 수 없습니다.</translation>
+        <translation>Allows you to quickly check your balance, receive funds or sweep a paper wallet. You can&apos;t send funds in watch-only mode.</translation>
     </message>
     <message>
         <source>id_always</source>
-        <translation>항상</translation>
+        <translation>Always</translation>
+    </message>
+    <message>
+        <source>id_always_ask</source>
+        <translation>Always ask</translation>
     </message>
     <message>
         <source>id_amount</source>
-        <translation>금액</translation>
+        <translation>Amount</translation>
     </message>
     <message>
         <source>id_amount_in_s</source>
         <translation>Amount in %1</translation>
+    </message>
+    <message>
+        <source>id_amount_must_be_at_least_s</source>
+        <translation>Amount must be at least %1</translation>
+    </message>
+    <message>
+        <source>id_amount_must_be_at_most_s</source>
+        <translation>Amount must be at most %1</translation>
+    </message>
+    <message>
+        <source>id_amount_to_receive</source>
+        <translation>Amount to Receive</translation>
+    </message>
+    <message>
+        <source>id_amp</source>
+        <translation>AMP</translation>
     </message>
     <message>
         <source>id_amp_account</source>
@@ -292,8 +434,18 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
         <translation>AMP Wallet</translation>
     </message>
     <message>
+        <source>id_an_unidentified_error_occurred</source>
+        <translation>An unidentified error occurred. The following error log can help you identify the issue:
+
+%1</translation>
+    </message>
+    <message>
         <source>id_another_2fa_method_is_already</source>
         <translation>Another 2FA method is already active. Confirm via 2FA that you authorize this change.</translation>
+    </message>
+    <message>
+        <source>id_any_wallet_found_will_be</source>
+        <translation>Any wallet found will be displayed here.</translation>
     </message>
     <message>
         <source>id_app_settings</source>
@@ -304,16 +456,32 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
         <translation>Archive</translation>
     </message>
     <message>
+        <source>id_archive_account</source>
+        <translation>Archive account</translation>
+    </message>
+    <message>
         <source>id_archived</source>
         <translation>Archived</translation>
+    </message>
+    <message>
+        <source>id_archived_account</source>
+        <translation>Archived Account</translation>
     </message>
     <message>
         <source>id_archived_accounts</source>
         <translation>Archived Accounts</translation>
     </message>
     <message>
+        <source>id_are_you_sure_you_want_to_delete</source>
+        <translation>Are you sure you want to delete the recipient?</translation>
+    </message>
+    <message>
+        <source>id_are_you_sure_you_want_to_remove</source>
+        <translation>Are you sure you want to remove your Lightning account?</translation>
+    </message>
+    <message>
         <source>id_are_you_sure_you_want_to_view</source>
-        <translation>정말로 %1를 사용하여 거래를 확인하시겠습니까?</translation>
+        <translation>Are you sure you want to view the transaction using %1?</translation>
     </message>
     <message>
         <source>id_as_easy_as_snapping_a_photo</source>
@@ -321,11 +489,11 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_asset</source>
-        <translation>자산</translation>
+        <translation>Asset</translation>
     </message>
     <message>
         <source>id_asset_details</source>
-        <translation>자산 세부 정보</translation>
+        <translation>Asset Details</translation>
     </message>
     <message>
         <source>id_asset_icons_are_missing_try</source>
@@ -333,11 +501,11 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_asset_id</source>
-        <translation>자산 ID</translation>
+        <translation>Asset ID</translation>
     </message>
     <message>
         <source>id_asset_name</source>
-        <translation>자산 이름</translation>
+        <translation>Asset Name</translation>
     </message>
     <message>
         <source>id_assets</source>
@@ -348,8 +516,20 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
         <translation>Assets cannot be used on Bitcoin</translation>
     </message>
     <message>
+        <source>id_at_least_8_characters_required</source>
+        <translation>At least 8 characters required</translation>
+    </message>
+    <message>
         <source>id_attempts_remaining_d</source>
-        <translation>남은 시도: %1</translation>
+        <translation>Attempts remaining: %1</translation>
+    </message>
+    <message>
+        <source>id_authenticate</source>
+        <translation>Authenticate</translation>
+    </message>
+    <message>
+        <source>id_authenticate_address</source>
+        <translation>Authenticate address</translation>
     </message>
     <message>
         <source>id_authenticate_to_view_the</source>
@@ -362,6 +542,10 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     <message>
         <source>id_authentication_failed</source>
         <translation>Authentication failed</translation>
+    </message>
+    <message>
+        <source>id_authentication_successful</source>
+        <translation>Authentication Successful</translation>
     </message>
     <message>
         <source>id_authenticator_app</source>
@@ -377,7 +561,7 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_auto_logout_timeout</source>
-        <translation>자동 로그아웃 시간</translation>
+        <translation>Auto logout timeout</translation>
     </message>
     <message>
         <source>id_auto_logout_timeout_expired</source>
@@ -385,11 +569,15 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_autolock_after</source>
-        <translation>자동 잠금 시간</translation>
+        <translation>Autolock After</translation>
     </message>
     <message>
         <source>id_available</source>
         <translation>Available</translation>
+    </message>
+    <message>
+        <source>id_available_funds_s</source>
+        <translation>Available funds %1</translation>
     </message>
     <message>
         <source>id_back</source>
@@ -398,6 +586,10 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     <message>
         <source>id_back_up_recovery_phrase</source>
         <translation>Back Up Recovery Phrase</translation>
+    </message>
+    <message>
+        <source>id_backup_recovery_phrase</source>
+        <translation>Backup Recovery Phrase</translation>
     </message>
     <message>
         <source>id_backup_the_recovery_mnemonic</source>
@@ -409,11 +601,15 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_be_aware_other_apps_can_read_or</source>
-        <translation>클립보드로 복사하면 다른 앱들이 읽거나 바꿀 수 있음으로 주의하세요</translation>
+        <translation>Be aware, other apps can read or change the clipboard</translation>
     </message>
     <message>
         <source>id_be_sure_your_recovery_phrase_is</source>
         <translation>Be sure your recovery phrase is backed up before removing this wallet.</translation>
+    </message>
+    <message>
+        <source>id_before_you_backup</source>
+        <translation>Before You Backup</translation>
     </message>
     <message>
         <source>id_biometric_login_is_disabled</source>
@@ -426,6 +622,14 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     <message>
         <source>id_biometrics_authentication</source>
         <translation>Biometrics Authentication</translation>
+    </message>
+    <message>
+        <source>id_bip39_passphrase</source>
+        <translation>BIP39 Passphrase</translation>
+    </message>
+    <message>
+        <source>id_bip39_passphrase_login</source>
+        <translation>BIP39 Passphrase login</translation>
     </message>
     <message>
         <source>id_bip49_accounts_allow_you_to</source>
@@ -441,7 +645,7 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_bitcoin_denomination</source>
-        <translation>비트코인 단위명</translation>
+        <translation>Bitcoin denomination</translation>
     </message>
     <message>
         <source>id_bitcoin_electrum_server</source>
@@ -457,7 +661,7 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_bitcoin_wallet</source>
-        <translation>비트코인 지갑.</translation>
+        <translation>Bitcoin wallet.</translation>
     </message>
     <message>
         <source>id_bitcoin_wallets</source>
@@ -465,23 +669,27 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_block</source>
-        <translation>블록</translation>
+        <translation>block</translation>
     </message>
     <message>
         <source>id_block_d</source>
         <translation>Block %1</translation>
     </message>
     <message>
+        <source>id_block_height</source>
+        <translation>Block Height</translation>
+    </message>
+    <message>
         <source>id_block_height_1d</source>
-        <translation>블록 높이: %1</translation>
+        <translation>Block height: %1</translation>
     </message>
     <message>
         <source>id_blocks</source>
-        <translation>블록</translation>
+        <translation>blocks</translation>
     </message>
     <message>
         <source>id_blocks_confirmed</source>
-        <translation>컨펌된 블록</translation>
+        <translation>blocks confirmed</translation>
     </message>
     <message>
         <source>id_blockstream_devices</source>
@@ -497,7 +705,7 @@ If neither of these tips have helped you, or if you don&apos;t have a 12, 24 or 
     </message>
     <message>
         <source>id_blockstream_green_supports_both</source>
-        <translation>Blockstream Green supports both Bitcoin and the Liquid Network. Don&apos;t worry, you can create another wallet for a different network at any time.</translation>
+        <translation>Blockstream Green supports both Bitcoin and the Liquid Network.</translation>
     </message>
     <message>
         <source>id_blockstream_greennsimple_and</source>
@@ -514,7 +722,7 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_btchip_is_not_set_up_please_set</source>
-        <translation>BTChip이 설치되지 않았습니다. 데스크톱 프로그램을 사용하여 설치하시기 바랍니다.</translation>
+        <translation>BTChip is not set up. Please set it up using a desktop client to be able to use it.</translation>
     </message>
     <message>
         <source>id_by_proceeding_to_the_next_steps</source>
@@ -526,15 +734,15 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_call</source>
-        <translation>전화</translation>
+        <translation>Call</translation>
     </message>
     <message>
         <source>id_camera_problem</source>
-        <translation>카메라 문제</translation>
+        <translation>Camera problem</translation>
     </message>
     <message>
         <source>id_cancel</source>
-        <translation>취소</translation>
+        <translation>Cancel</translation>
     </message>
     <message>
         <source>id_cancel_2fa_reset</source>
@@ -546,15 +754,15 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_cancel_twofactor_reset</source>
-        <translation>2FA 재설정 취소</translation>
+        <translation>Cancel Two-Factor reset</translation>
     </message>
     <message>
         <source>id_cannot_remove_enabled_network</source>
-        <translation>활성화 된 네트워크는 제거할 수 없으므로 먼저 비활성화 하세요.</translation>
+        <translation>Cannot remove enabled network, please disable it first</translation>
     </message>
     <message>
         <source>id_cant_connect_to_this_url</source>
-        <translation>URL 연결 불가</translation>
+        <translation>Can&apos;t connect to this URL</translation>
     </message>
     <message>
         <source>id_change</source>
@@ -569,8 +777,28 @@ Simple and Secure</translation>
         <translation>Change PIN</translation>
     </message>
     <message>
+        <source>id_change_speed</source>
+        <translation>Change speed</translation>
+    </message>
+    <message>
         <source>id_changing_reference_exchange</source>
         <translation>Changing reference exchange rate will reset your 2FA threshold to 0. Remember to adjust the 2FA threshold after spending.</translation>
+    </message>
+    <message>
+        <source>id_channel_closure_initiated_you</source>
+        <translation>Channel closure initiated. You can sweep your funds after the transaction is confirmed</translation>
+    </message>
+    <message>
+        <source>id_cheaper_and_more_private</source>
+        <translation>Cheaper and more private singlesig option. Addresses are Bech32m.</translation>
+    </message>
+    <message>
+        <source>id_cheaper_singlesig_option</source>
+        <translation>Cheaper singlesig option. Addresses are Native SegWit Bech32.</translation>
+    </message>
+    <message>
+        <source>id_check_device</source>
+        <translation>Check Device</translation>
     </message>
     <message>
         <source>id_check_for_updates</source>
@@ -581,12 +809,20 @@ Simple and Secure</translation>
         <translation>Check for updates on startup</translation>
     </message>
     <message>
+        <source>id_check_our_6_easy_steps_to_be</source>
+        <translation>Check our 6 easy steps to be able to send and receive AMP assets.</translation>
+    </message>
+    <message>
         <source>id_check_your_backup</source>
         <translation>Check your backup</translation>
     </message>
     <message>
+        <source>id_check_your_device</source>
+        <translation>Check your device</translation>
+    </message>
+    <message>
         <source>id_choose</source>
-        <translation>선택</translation>
+        <translation>Choose</translation>
     </message>
     <message>
         <source>id_choose_a_name_for_your_new</source>
@@ -597,8 +833,20 @@ Simple and Secure</translation>
         <translation>Choose a name for your wallet</translation>
     </message>
     <message>
+        <source>id_choose_a_swap_option</source>
+        <translation>Choose a Swap Option</translation>
+    </message>
+    <message>
+        <source>id_choose_a_usb_or_bluetooth</source>
+        <translation>Choose a USB or Bluetooth connection on Jade after verifying your recovery phrase</translation>
+    </message>
+    <message>
+        <source>id_choose_bluetooth_connection_on</source>
+        <translation>Choose Bluetooth connection on Jade after verifying your recovery phrase</translation>
+    </message>
+    <message>
         <source>id_choose_method_to_authorize_the</source>
-        <translation>권한부여 방식 선택</translation>
+        <translation>Choose method to authorize the action</translation>
     </message>
     <message>
         <source>id_choose_recovery_phrase_length</source>
@@ -613,6 +861,14 @@ Simple and Secure</translation>
         <translation>Choose the Electrum servers you trust</translation>
     </message>
     <message>
+        <source>id_choose_the_security_policy_that</source>
+        <translation>Choose the security policy that matches your wallet.</translation>
+    </message>
+    <message>
+        <source>id_choose_the_security_policy_you</source>
+        <translation>Choose the security policy you want to restore this wallet on.</translation>
+    </message>
+    <message>
         <source>id_choose_this_version_to_connect</source>
         <translation>Choose this version to connect to your Blockstream Jade with both a usb cable and wireless</translation>
     </message>
@@ -622,7 +878,7 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_choose_twofactor_authentication</source>
-        <translation>2FA 방식 선택</translation>
+        <translation>Choose Two-Factor authentication method</translation>
     </message>
     <message>
         <source>id_choose_watchonly</source>
@@ -630,11 +886,15 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_choose_your_network</source>
-        <translation>사용자 지정 네트워크 선택</translation>
+        <translation>Choose Your Network</translation>
     </message>
     <message>
         <source>id_clear</source>
         <translation>Clear</translation>
+    </message>
+    <message>
+        <source>id_clear_cache</source>
+        <translation>Clear cache</translation>
     </message>
     <message>
         <source>id_click_to_copy</source>
@@ -645,8 +905,20 @@ Simple and Secure</translation>
         <translation>Click to receive an email with your encrypted recovery data.</translation>
     </message>
     <message>
+        <source>id_close</source>
+        <translation>Close</translation>
+    </message>
+    <message>
+        <source>id_close_channel</source>
+        <translation>Close Channel</translation>
+    </message>
+    <message>
         <source>id_code</source>
         <translation>Code</translation>
+    </message>
+    <message>
+        <source>id_coin</source>
+        <translation>Coin</translation>
     </message>
     <message>
         <source>id_coins</source>
@@ -698,15 +970,19 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_completed</source>
-        <translation>완료</translation>
+        <translation>Completed</translation>
     </message>
     <message>
         <source>id_confidential</source>
-        <translation>기밀</translation>
+        <translation>Confidential</translation>
     </message>
     <message>
         <source>id_confidential_transaction</source>
         <translation>Confidential Transaction</translation>
+    </message>
+    <message>
+        <source>id_confirm</source>
+        <translation>Confirm</translation>
     </message>
     <message>
         <source>id_confirm_action</source>
@@ -718,11 +994,23 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_confirm_code</source>
-        <translation>코드 컨펌</translation>
+        <translation>Confirm Code</translation>
+    </message>
+    <message>
+        <source>id_confirm_on_your_device</source>
+        <translation>Confirm on your device</translation>
     </message>
     <message>
         <source>id_confirm_passphrase</source>
-        <translation>비밀번호 확인</translation>
+        <translation>Confirm passphrase</translation>
+    </message>
+    <message>
+        <source>id_confirm_refund</source>
+        <translation>Confirm Refund</translation>
+    </message>
+    <message>
+        <source>id_confirm_swap</source>
+        <translation>Confirm swap</translation>
     </message>
     <message>
         <source>id_confirm_transaction</source>
@@ -737,24 +1025,48 @@ Simple and Secure</translation>
         <translation>Confirm update on your Jade</translation>
     </message>
     <message>
+        <source>id_confirm_version_on_jade</source>
+        <translation>Confirm version on Jade</translation>
+    </message>
+    <message>
         <source>id_confirm_via_2fa_that_you</source>
         <translation>Confirm via 2FA that you authorize this change.</translation>
     </message>
     <message>
+        <source>id_confirm_your_new_pin</source>
+        <translation>Confirm your new PIN</translation>
+    </message>
+    <message>
         <source>id_confirmation_in_d_blocks</source>
-        <translation>%1 블록 내에 컨펌</translation>
+        <translation>Confirmation in %1 blocks</translation>
+    </message>
+    <message>
+        <source>id_confirmation_time</source>
+        <translation>Confirmation Time</translation>
     </message>
     <message>
         <source>id_confirmations</source>
         <translation>Confirmations</translation>
     </message>
     <message>
+        <source>id_confirming_your_transaction</source>
+        <translation>Confirming your transaction</translation>
+    </message>
+    <message>
         <source>id_congratulations</source>
-        <translation>축하합니다!</translation>
+        <translation>Congratulations!</translation>
+    </message>
+    <message>
+        <source>id_connect_a_different_hardware</source>
+        <translation>Connect a different Hardware Device</translation>
     </message>
     <message>
         <source>id_connect_hardware_wallet</source>
         <translation>Connect hardware wallet</translation>
+    </message>
+    <message>
+        <source>id_connect_jade</source>
+        <translation>Connect Jade</translation>
     </message>
     <message>
         <source>id_connect_jade_with_a_usb_cable</source>
@@ -762,11 +1074,23 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_connect_through_a_proxy</source>
-        <translation>프록시를 사용하여 연결하기</translation>
+        <translation>Connect through a proxy</translation>
+    </message>
+    <message>
+        <source>id_connect_usb_cable_or_enable</source>
+        <translation>Connect USB cable or enable Bluetooth</translation>
+    </message>
+    <message>
+        <source>id_connect_using_usb_or_bluetooth</source>
+        <translation>Connect using USB or Bluetooth</translation>
+    </message>
+    <message>
+        <source>id_connect_with_bluetooth</source>
+        <translation>Connect with Bluetooth</translation>
     </message>
     <message>
         <source>id_connect_with_tor</source>
-        <translation>Tor를 사용하여 연결하기</translation>
+        <translation>Connect with Tor</translation>
     </message>
     <message>
         <source>id_connect_your_jade_to_use_it</source>
@@ -781,6 +1105,10 @@ Simple and Secure</translation>
         <translation>Connected to Jade</translation>
     </message>
     <message>
+        <source>id_connected_wallets</source>
+        <translation>Connected wallets</translation>
+    </message>
+    <message>
         <source>id_connecting</source>
         <translation>Connecting…</translation>
     </message>
@@ -790,7 +1118,7 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_connecting_to_a_trusted_node</source>
-        <translation>Tor를 통해 신뢰하는 노드에 연결하려면 로그인 전, 설정에서 프록시를 활성화 하여야 하고 Socks5 프록시(안드로이드용 Orbot 앱)도 있어야 합니다.</translation>
+        <translation>Connecting to a trusted node through Tor requires enabling proxy settings in the app before logging in and a Socks5 proxy (Orbot app for Android)</translation>
     </message>
     <message>
         <source>id_connecting_to_peers</source>
@@ -798,7 +1126,7 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_connecting_to_tor_onion_nodes</source>
-        <translation>Tor (.onion)에 연결하면 최고의 보안과 프라이버시를 가능케 합니다. 계속하시려면 &quot;확인&quot;을 눌러주세요.</translation>
+        <translation>Connecting to Tor (.onion) nodes allows maximum privacy and security. Press &quot;OK&quot; to continue.</translation>
     </message>
     <message>
         <source>id_connecting_to_your_device</source>
@@ -807,10 +1135,6 @@ Simple and Secure</translation>
     <message>
         <source>id_connection</source>
         <translation>Connection</translation>
-    </message>
-    <message>
-        <source>id_connection_amp_validation</source>
-        <translation>Connection &amp;amp; Validation Settings</translation>
     </message>
     <message>
         <source>id_connection_failed</source>
@@ -826,7 +1150,7 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_continue</source>
-        <translation>계속</translation>
+        <translation>Continue</translation>
     </message>
     <message>
         <source>id_continue_with_1s</source>
@@ -849,12 +1173,28 @@ Simple and Secure</translation>
         <translation>Copy details</translation>
     </message>
     <message>
+        <source>id_copy_device_id</source>
+        <translation>Copy Device ID</translation>
+    </message>
+    <message>
+        <source>id_copy_id</source>
+        <translation>Copy ID</translation>
+    </message>
+    <message>
         <source>id_copy_raw_transaction</source>
         <translation>Copy raw transaction</translation>
     </message>
     <message>
+        <source>id_copy_support_id</source>
+        <translation>Copy support ID</translation>
+    </message>
+    <message>
+        <source>id_copy_swap_proposal</source>
+        <translation>Copy Swap Proposal</translation>
+    </message>
+    <message>
         <source>id_copy_to_clipboard</source>
-        <translation>클립보드에 복사</translation>
+        <translation>Copy To Clipboard</translation>
     </message>
     <message>
         <source>id_copy_transaction_id</source>
@@ -877,24 +1217,56 @@ Simple and Secure</translation>
         <translation>Copy xpub</translation>
     </message>
     <message>
+        <source>id_correct_order</source>
+        <translation>correct order</translation>
+    </message>
+    <message>
+        <source>id_could_not_recognized_qr_code</source>
+        <translation>Could not recognized QR code</translation>
+    </message>
+    <message>
         <source>id_country</source>
         <translation>Country</translation>
     </message>
     <message>
         <source>id_create</source>
-        <translation>생성</translation>
+        <translation>Create</translation>
+    </message>
+    <message>
+        <source>id_create_a_new_proposal</source>
+        <translation>Create a New Proposal</translation>
+    </message>
+    <message>
+        <source>id_create_a_new_swap</source>
+        <translation>Create a New Swap</translation>
+    </message>
+    <message>
+        <source>id_create_a_pin</source>
+        <translation>Create a PIN</translation>
     </message>
     <message>
         <source>id_create_a_pin_to_access_your</source>
-        <translation>지갑을 사용하기 전 비밀번호를 설정하세요</translation>
+        <translation>Create a PIN to access your wallet</translation>
     </message>
     <message>
         <source>id_create_a_wallet_for_bitcoin</source>
         <translation>Create a wallet for Bitcoin, Liquid or Testnet</translation>
     </message>
     <message>
+        <source>id_create_account</source>
+        <translation>Create Account</translation>
+    </message>
+    <message>
+        <source>id_create_invoice</source>
+        <translation>Create Invoice</translation>
+    </message>
+    <message>
+        <source>id_create_new_account</source>
+        <translation>Create New Account</translation>
+    </message>
+    <message>
         <source>id_create_new_wallet</source>
-        <translation>새로운 지갑 생성</translation>
+        <translation>Create New Wallet</translation>
     </message>
     <message>
         <source>id_create_temporary_wallet</source>
@@ -905,8 +1277,16 @@ Simple and Secure</translation>
         <translation>Create Wallet</translation>
     </message>
     <message>
+        <source>id_create_your_first_account_to</source>
+        <translation>Create your first account to receive funds.</translation>
+    </message>
+    <message>
         <source>id_creating_wallet</source>
         <translation>Creating wallet…</translation>
+    </message>
+    <message>
+        <source>id_creating_your_s_account</source>
+        <translation>Creating your %1 account...</translation>
     </message>
     <message>
         <source>id_csv</source>
@@ -914,7 +1294,7 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_currency</source>
-        <translation>통화</translation>
+        <translation>Currency</translation>
     </message>
     <message>
         <source>id_current_version</source>
@@ -922,19 +1302,19 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_custom</source>
-        <translation>사용자 지정</translation>
+        <translation>Custom</translation>
     </message>
     <message>
         <source>id_custom_network_added_enable_it</source>
-        <translation>사용자 지정 네트워크 추가됨. 네트워크 설정에서 활성화하세요.</translation>
+        <translation>Custom network added, enable it in the network settings</translation>
     </message>
     <message>
         <source>id_custom_network_not_found</source>
-        <translation>사용자 지정 네트워크 찾지 못함</translation>
+        <translation>Custom network not found</translation>
     </message>
     <message>
         <source>id_custom_network_with_this_name</source>
-        <translation>이 이름을 가진 사용자 지정 네트워크는 이미 존재합니다</translation>
+        <translation>Custom network with this name already present</translation>
     </message>
     <message>
         <source>id_custom_servers_and_validation</source>
@@ -946,11 +1326,11 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_d6_confirmations</source>
-        <translation>%1/6 컨펌</translation>
+        <translation>%1/6 confirmations</translation>
     </message>
     <message>
         <source>id_d_asset_in_this_account</source>
-        <translation>이 계정에는 %1 자산이 있습니다</translation>
+        <translation>%1 asset in this account</translation>
     </message>
     <message>
         <source>id_d_assets</source>
@@ -958,7 +1338,11 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_d_assets_in_this_account</source>
-        <translation>이 계정에는 %1 자산들이 있습니다</translation>
+        <translation>%1 assets in this account</translation>
+    </message>
+    <message>
+        <source>id_d_assets_in_total</source>
+        <translation>%1 assets in total</translation>
     </message>
     <message>
         <source>id_d_coins_selected</source>
@@ -974,31 +1358,35 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_date</source>
-        <translation>날짜</translation>
+        <translation>Date</translation>
     </message>
     <message>
         <source>id_day</source>
-        <translation>일</translation>
+        <translation>day</translation>
     </message>
     <message>
         <source>id_days</source>
-        <translation>일</translation>
+        <translation>days</translation>
     </message>
     <message>
         <source>id_days_remaining_s</source>
-        <translation>%1일 남음</translation>
+        <translation>Days remaining: %1</translation>
     </message>
     <message>
         <source>id_default_custom_fee_rate</source>
-        <translation>사용자 지정 수수료 기본값</translation>
+        <translation>Default custom fee rate</translation>
     </message>
     <message>
         <source>id_default_transaction_priority</source>
-        <translation>기본 거래 우선 순위</translation>
+        <translation>Default transaction priority</translation>
     </message>
     <message>
         <source>id_delete</source>
         <translation>Delete</translation>
+    </message>
+    <message>
+        <source>id_delete_credentials</source>
+        <translation>Delete credentials</translation>
     </message>
     <message>
         <source>id_delete_permanently_your_wallet</source>
@@ -1006,7 +1394,7 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_delete_s_twofactor</source>
-        <translation>%1 2FA 삭제</translation>
+        <translation>Delete %1 Two-Factor</translation>
     </message>
     <message>
         <source>id_delete_wallet</source>
@@ -1014,15 +1402,27 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_deleting_your_pin_will_remove</source>
-        <translation>비밀번호를 삭제할 경우 니모닉(복원 코드)이 없으면 영원히 지갑을 사용하실 수 없게 됩니다. 진행하시려면 &quot;확인&quot;을 누르세요.</translation>
+        <translation>Deleting your PIN will remove wallet access permanently unless you have your mnemonic available. Press &quot;OK&quot; to continue.</translation>
     </message>
     <message>
         <source>id_denomination</source>
-        <translation>단위</translation>
+        <translation>Denomination</translation>
+    </message>
+    <message>
+        <source>id_denomination__exchange_rate</source>
+        <translation>Denomination &amp; Exchange Rate</translation>
     </message>
     <message>
         <source>id_deposit</source>
-        <translation>입금</translation>
+        <translation>Deposit</translation>
+    </message>
+    <message>
+        <source>id_description</source>
+        <translation>Description</translation>
+    </message>
+    <message>
+        <source>id_descriptor</source>
+        <translation>Descriptor</translation>
     </message>
     <message>
         <source>id_details</source>
@@ -1037,8 +1437,22 @@ Simple and Secure</translation>
         <translation>Devices</translation>
     </message>
     <message>
+        <source>id_different_passphrases_generate</source>
+        <translation>Different passphrases generate new wallets!
+
+Remember you can only restore this wallet with both your recovery phrase and the passphrase.</translation>
+    </message>
+    <message>
+        <source>id_digital_wallets</source>
+        <translation>Digital Wallets</translation>
+    </message>
+    <message>
         <source>id_disable</source>
-        <translation>비활성화</translation>
+        <translation>Disable</translation>
+    </message>
+    <message>
+        <source>id_disable_authenticator</source>
+        <translation>Disable Authenticator</translation>
     </message>
     <message>
         <source>id_disable_pin_access</source>
@@ -1054,19 +1468,27 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_disabled</source>
-        <translation>비활성화됨</translation>
+        <translation>Disabled</translation>
+    </message>
+    <message>
+        <source>id_disconnect</source>
+        <translation>Disconnect</translation>
+    </message>
+    <message>
+        <source>id_display_values_in_s_and</source>
+        <translation>Display values in %1 and exchange rate in %2 using %3</translation>
     </message>
     <message>
         <source>id_displays_the_progress_of_spv</source>
-        <translation>SPV 동기화 진행을 표시합니다</translation>
+        <translation>Displays the progress of SPV synchronization</translation>
     </message>
     <message>
         <source>id_dispute_twofactor_reset</source>
-        <translation>2FA 재설정 분쟁</translation>
+        <translation>Dispute Two-Factor reset</translation>
     </message>
     <message>
         <source>id_disputed</source>
-        <translation>분쟁중</translation>
+        <translation>Disputed</translation>
     </message>
     <message>
         <source>id_distributed_under_the_s_see</source>
@@ -1078,15 +1500,23 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_domain</source>
-        <translation>도메인</translation>
+        <translation>Domain</translation>
     </message>
     <message>
         <source>id_done</source>
-        <translation>완료</translation>
+        <translation>Done</translation>
     </message>
     <message>
         <source>id_dont_ask_me_again</source>
-        <translation>다시 묻지 않기</translation>
+        <translation>Don&apos;t ask me again</translation>
+    </message>
+    <message>
+        <source>id_dont_collect_data</source>
+        <translation>Don&apos;t collect data</translation>
+    </message>
+    <message>
+        <source>id_dont_have_a_jade_check_our_store</source>
+        <translation>Don’t have a Jade? Check our store</translation>
     </message>
     <message>
         <source>id_dont_show_this_again</source>
@@ -1106,15 +1536,15 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_double_spend</source>
-        <translation>이중지불</translation>
+        <translation>double spend</translation>
     </message>
     <message>
         <source>id_double_spend_by</source>
-        <translation>이중지불 방법</translation>
+        <translation>Double spend by</translation>
     </message>
     <message>
         <source>id_download_finished</source>
-        <translation>다운로드 완료</translation>
+        <translation>Download finished</translation>
     </message>
     <message>
         <source>id_dust</source>
@@ -1125,12 +1555,20 @@ Simple and Secure</translation>
         <translation>Edit</translation>
     </message>
     <message>
+        <source>id_edit_fee</source>
+        <translation>Edit Fee</translation>
+    </message>
+    <message>
         <source>id_email</source>
-        <translation>이메일</translation>
+        <translation>Email</translation>
     </message>
     <message>
         <source>id_email_address</source>
-        <translation>이메일 주소</translation>
+        <translation>email address</translation>
+    </message>
+    <message>
+        <source>id_emergency_recovery_phrase</source>
+        <translation>Emergency Recovery Phrase Restore</translation>
     </message>
     <message>
         <source>id_empty</source>
@@ -1138,15 +1576,23 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_enable</source>
-        <translation>활성화</translation>
+        <translation>Enable</translation>
+    </message>
+    <message>
+        <source>id_enable_2fa</source>
+        <translation>Enable 2FA</translation>
     </message>
     <message>
         <source>id_enable_bluetooth</source>
         <translation>Enable Bluetooth</translation>
     </message>
     <message>
+        <source>id_enable_bluetooth_from_system</source>
+        <translation>Enable bluetooth from system settings</translation>
+    </message>
+    <message>
         <source>id_enable_custom_networks_debug</source>
-        <translation>사용자 지정 네트워크 디버그 옵션들 활성화하기</translation>
+        <translation>Enable custom networks debug options</translation>
     </message>
     <message>
         <source>id_enable_email_notifications_to</source>
@@ -1158,7 +1604,11 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_enable_face_id</source>
-        <translation>Face ID 활성화</translation>
+        <translation>Enable Face ID</translation>
+    </message>
+    <message>
+        <source>id_enable_limited_usage_data</source>
+        <translation>Enable limited usage data collection</translation>
     </message>
     <message>
         <source>id_enable_location_services</source>
@@ -1170,11 +1620,11 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_enable_spv</source>
-        <translation>SPV 활성화</translation>
+        <translation>Enable SPV</translation>
     </message>
     <message>
         <source>id_enable_spv_and_modify_spv</source>
-        <translation>SPV 활성화 및 SPV 설정 변경</translation>
+        <translation>Enable SPV and modify SPV settings</translation>
     </message>
     <message>
         <source>id_enable_testnet</source>
@@ -1186,7 +1636,7 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_enable_touch_id</source>
-        <translation>Touch ID 활성화</translation>
+        <translation>Enable Touch ID</translation>
     </message>
     <message>
         <source>id_enable_twofactor_authentication</source>
@@ -1194,55 +1644,71 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_enabled</source>
-        <translation>활성화됨</translation>
+        <translation>Enabled</translation>
     </message>
     <message>
         <source>id_enabled_1s</source>
-        <translation>활성화됨:%1</translation>
+        <translation>Enabled: %1</translation>
     </message>
     <message>
         <source>id_encryption_passphrase</source>
-        <translation>암호화 비밀번호</translation>
+        <translation>Encryption passphrase</translation>
+    </message>
+    <message>
+        <source>id_enhance_security</source>
+        <translation>Enhance Security</translation>
+    </message>
+    <message>
+        <source>id_enhanced_privacy</source>
+        <translation>Enhanced Privacy</translation>
     </message>
     <message>
         <source>id_enter</source>
-        <translation>입력</translation>
+        <translation>Enter</translation>
     </message>
     <message>
         <source>id_enter_a_pgp_public_key_to_have</source>
-        <translation>더 나은 보안을 위하여 PGP public 키를 입력한뒤 암호화된 이메일을 받아보세요.</translation>
+        <translation>Enter a PGP public key to have emails encrypted for better privacy.</translation>
     </message>
     <message>
         <source>id_enter_a_private_key_to_sweep</source>
-        <translation>지갑에 sweep 하기 위해서 비밀키를 입력하여 주세요.</translation>
+        <translation>Enter a private key to sweep into this wallet</translation>
     </message>
     <message>
         <source>id_enter_a_valid_onion_or_ip</source>
-        <translation>유효한 .onion 또는 IP 주소 입력 (.onion 추천)</translation>
+        <translation>Enter a valid .onion or IP address (.onion preferred)</translation>
     </message>
     <message>
         <source>id_enter_a_valid_username</source>
-        <translation>유효한 사용자 명 입력</translation>
+        <translation>Enter a valid username</translation>
+    </message>
+    <message>
+        <source>id_enter_amount_in</source>
+        <translation>Enter amount in</translation>
     </message>
     <message>
         <source>id_enter_an_address</source>
-        <translation>주소 입력</translation>
+        <translation>Enter an address</translation>
     </message>
     <message>
         <source>id_enter_an_address_or_sweep_paper</source>
-        <translation>주소를 입력하거나 종이지갑을 sweep 하기</translation>
+        <translation>Enter an address or sweep paper wallet</translation>
+    </message>
+    <message>
+        <source>id_enter_and_confirm_a_unique_pin</source>
+        <translation>Enter and confirm a unique PIN that will be entered to unlock Jade.</translation>
     </message>
     <message>
         <source>id_enter_new_email</source>
-        <translation>새로운 이메일 입력</translation>
+        <translation>Enter new email</translation>
     </message>
     <message>
         <source>id_enter_phone_number</source>
-        <translation>전화번호 입력</translation>
+        <translation>Enter phone number</translation>
     </message>
     <message>
         <source>id_enter_pin</source>
-        <translation>비밀번호 입력</translation>
+        <translation>Enter PIN</translation>
     </message>
     <message>
         <source>id_enter_pin_on_jade</source>
@@ -1254,11 +1720,11 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_enter_the_matching_words</source>
-        <translation>일치하는 단어를 입력하세요</translation>
+        <translation>Enter The Matching Words</translation>
     </message>
     <message>
         <source>id_enter_the_pin_for_your_hardware</source>
-        <translation>하드웨어 지갑의 비밀번호를 입력하세요.</translation>
+        <translation>Enter the PIN for your hardware wallet</translation>
     </message>
     <message>
         <source>id_enter_your_12_24_or_27_words</source>
@@ -1273,8 +1739,12 @@ Simple and Secure</translation>
         <translation>Enter your 27 words recovery phrase</translation>
     </message>
     <message>
+        <source>id_enter_your_6digit_pin_to_access</source>
+        <translation>Enter your 6-digit PIN to Access your Wallet</translation>
+    </message>
+    <message>
         <source>id_enter_your_email_address</source>
-        <translation>이메일 주소를 입력하세요</translation>
+        <translation>Enter your email address</translation>
     </message>
     <message>
         <source>id_enter_your_pin</source>
@@ -1286,11 +1756,11 @@ Simple and Secure</translation>
     </message>
     <message>
         <source>id_enter_your_s_wallet_mnemonic</source>
-        <translation>지갑 %1 니모닉(복원 코드)을 입력하세요</translation>
+        <translation>Enter your %1 wallet mnemonic</translation>
     </message>
     <message>
         <source>id_enter_your_wallet_mnemonic</source>
-        <translation>지갑 니모닉(복원 코드)을 입력하세요</translation>
+        <translation>Enter your wallet mnemonic</translation>
     </message>
     <message>
         <source>id_enter_your_xpub</source>
@@ -1307,27 +1777,31 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_entity</source>
-        <translation>기관</translation>
+        <translation>Entity</translation>
+    </message>
+    <message>
+        <source>id_ephemeral_wallets</source>
+        <translation>Ephemeral wallets</translation>
     </message>
     <message>
         <source>id_error</source>
-        <translation>오류</translation>
+        <translation>Error</translation>
     </message>
     <message>
         <source>id_error_logging_in_with_hardware</source>
-        <translation>하드웨어 지갑으로 로그인 시 오류 발생</translation>
+        <translation>Error logging in with Hardware Wallet</translation>
     </message>
     <message>
         <source>id_error_nfc_tag_not_writable</source>
-        <translation>오류: NFC 태그에 쓰기 불가능</translation>
+        <translation>Error: NFC tag not writable</translation>
     </message>
     <message>
         <source>id_error_nfc_tag_too_small</source>
-        <translation>오류: NFC 태그 너무 작음</translation>
+        <translation>Error: NFC tag too small</translation>
     </message>
     <message>
         <source>id_error_passphrases_do_not_match</source>
-        <translation>오류: 비밀번호가 일치하지 않습니다</translation>
+        <translation>Error: passphrases do not match</translation>
     </message>
     <message>
         <source>id_error_setting_fee_rate</source>
@@ -1339,27 +1813,75 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_estimated_blocks_until</source>
-        <translation>컨펌되기까지 예상 블록:%1</translation>
+        <translation>Estimated blocks until confirmation: %1</translation>
+    </message>
+    <message>
+        <source>id_everything_you_need_to_take</source>
+        <translation>Everything you need to take control of your bitcoin.</translation>
     </message>
     <message>
         <source>id_example_89014283334011612858333</source>
-        <translation>예: 8.90.14.2:8333,40.116.12.85:8333</translation>
+        <translation>Example: 8.90.14.2:8333,40.116.12.85:8333</translation>
+    </message>
+    <message>
+        <source>id_exchange_rate</source>
+        <translation>Exchange Rate</translation>
     </message>
     <message>
         <source>id_existing_recovery_phrase</source>
         <translation>Existing recovery phrase</translation>
     </message>
     <message>
+        <source>id_existing_wallets</source>
+        <translation>Existing Wallets</translation>
+    </message>
+    <message>
+        <source>id_exit_guide</source>
+        <translation>Exit Guide</translation>
+    </message>
+    <message>
         <source>id_expand_sidebar</source>
         <translation>Expand sidebar</translation>
+    </message>
+    <message>
+        <source>id_experimental</source>
+        <translation>Experimental</translation>
+    </message>
+    <message>
+        <source>id_experimental_feature</source>
+        <translation>Experimental Feature</translation>
+    </message>
+    <message>
+        <source>id_experimental_features_might</source>
+        <translation>Experimental features might change, break, or be discontinued at any time, so you agree to use them at your own risk.</translation>
+    </message>
+    <message>
+        <source>id_expiration</source>
+        <translation>Expiration</translation>
     </message>
     <message>
         <source>id_explore_your_wallet</source>
         <translation>Explore Your Wallet</translation>
     </message>
     <message>
+        <source>id_export</source>
+        <translation>Export</translation>
+    </message>
+    <message>
         <source>id_export_transactions_to_csv_file</source>
         <translation>Export transactions to CSV file</translation>
+    </message>
+    <message>
+        <source>id_exports_an_accounts_extended</source>
+        <translation>Exports an account&apos;s extended public key (xPub/yPub/zPub) to view as a watch-only</translation>
+    </message>
+    <message>
+        <source>id_extended_public_key</source>
+        <translation>Extended Public Key</translation>
+    </message>
+    <message>
+        <source>id_extended_public_keys</source>
+        <translation>Extended Public Keys</translation>
     </message>
     <message>
         <source>id_face_id</source>
@@ -1375,23 +1897,31 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_fast</source>
-        <translation>빠르게</translation>
+        <translation>Fast</translation>
+    </message>
+    <message>
+        <source>id_fast_transactions_on_the</source>
+        <translation>Fast transactions on the Lightning Network, powered by Greenlight.</translation>
     </message>
     <message>
         <source>id_faster_more_confidential</source>
         <translation>Faster, more confidential Bitcoin transactions</translation>
     </message>
     <message>
+        <source>id_fastest</source>
+        <translation>Fastest</translation>
+    </message>
+    <message>
         <source>id_fee</source>
-        <translation>수수료</translation>
+        <translation>Fee</translation>
     </message>
     <message>
         <source>id_fee_amount_size_fee_rate</source>
-        <translation>수수료, 사이즈, 수수료율</translation>
+        <translation>Fee Amount, Size, Fee Rate</translation>
     </message>
     <message>
         <source>id_fee_rate</source>
-        <translation>수수료율</translation>
+        <translation>Fee rate</translation>
     </message>
     <message>
         <source>id_fee_rate_is_above_maximum</source>
@@ -1399,19 +1929,27 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_fee_rate_is_below_minimum</source>
-        <translation>수수료율이 최소 허용 수수료율보다 적습니다</translation>
+        <translation>Fee rate is below minimum accepted fee rate</translation>
     </message>
     <message>
         <source>id_fee_rate_must_be_at_least_s</source>
-        <translation>수수료율은 최소 %1 satoshi/vbyte 이상이어야 합니다.</translation>
+        <translation>Fee rate must be at least %1 satoshi/vbyte.</translation>
     </message>
     <message>
         <source>id_fee_rate_s</source>
-        <translation>수수료율: %1</translation>
+        <translation>Fee rate: %1</translation>
     </message>
     <message>
         <source>id_fee_s__s</source>
-        <translation>수수료: %1 / %2 </translation>
+        <translation>Fee: %1 / %2</translation>
+    </message>
+    <message>
+        <source>id_feedback</source>
+        <translation>Feedback</translation>
+    </message>
+    <message>
+        <source>id_fees_are_collected_by_bitcoin</source>
+        <translation>Fees are collected by bitcoin miners, not Blockstream.</translation>
     </message>
     <message>
         <source>id_fees_are_too_low</source>
@@ -1442,6 +1980,22 @@ Recovery Phrase</translation>
         <translation>Firmware update completed</translation>
     </message>
     <message>
+        <source>id_firmware_upgrade</source>
+        <translation>Firmware Upgrade</translation>
+    </message>
+    <message>
+        <source>id_firmware_version_s</source>
+        <translation>Firmware Version: %1</translation>
+    </message>
+    <message>
+        <source>id_follow_the_instructions_of_your</source>
+        <translation>Follow the instructions of your hardware wallet before continuing.</translation>
+    </message>
+    <message>
+        <source>id_follow_the_instructions_on_jade</source>
+        <translation>Follow the instructions on Jade</translation>
+    </message>
+    <message>
         <source>id_follow_the_instructions_on_your</source>
         <translation>Follow the instructions on your device.</translation>
     </message>
@@ -1454,12 +2008,20 @@ Recovery Phrase</translation>
         <translation>For long term storage</translation>
     </message>
     <message>
+        <source>id_for_more_information_read_more</source>
+        <translation>For more information, Read More</translation>
+    </message>
+    <message>
         <source>id_for_most_users</source>
         <translation>For most users</translation>
     </message>
     <message>
         <source>id_from</source>
-        <translation>보낸이</translation>
+        <translation>FROM</translation>
+    </message>
+    <message>
+        <source>id_funds_received</source>
+        <translation>Funds Received!</translation>
     </message>
     <message>
         <source>id_funds_received_in_this</source>
@@ -1479,11 +2041,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_generate_new_address</source>
-        <translation>새로운 주소 생성하기</translation>
+        <translation>Generate New Address</translation>
     </message>
     <message>
         <source>id_get_code</source>
-        <translation>코드 받기</translation>
+        <translation>Get Code</translation>
     </message>
     <message>
         <source>id_get_id</source>
@@ -1498,6 +2060,10 @@ Recovery Phrase</translation>
         <translation>Give Bluetooth Permissions</translation>
     </message>
     <message>
+        <source>id_give_us_your_feedback</source>
+        <translation>Give us your feedback</translation>
+    </message>
+    <message>
         <source>id_go_to_account</source>
         <translation>Go to Account</translation>
     </message>
@@ -1507,7 +2073,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_go_to_wallet</source>
-        <translation>지갑으로 가기</translation>
+        <translation>Go to Wallet</translation>
     </message>
     <message>
         <source>id_got_it_written_down_great_you</source>
@@ -1515,27 +2081,27 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_green_is_a_noncustodial_wallet</source>
-        <translation>Green은 자산을 맡기지 않는 지갑입니다</translation>
+        <translation>Green is a non-custodial wallet</translation>
     </message>
     <message>
         <source>id_green_logo</source>
-        <translation>Green 로고</translation>
+        <translation>Green Logo</translation>
     </message>
     <message>
         <source>id_green_mnemonic_qr_code</source>
-        <translation>Green 니모닉(복원 코드) QR 코드</translation>
+        <translation>Green Mnemonic QR Code</translation>
     </message>
     <message>
         <source>id_green_only_supports_one_pin_for</source>
-        <translation>Green 은 각 네트워크 별로 한 개의 PIN을 지원합니다. 새로운 지갑은 로그인 시 니모닉(복원 코드)이 필요합니다.</translation>
+        <translation>Green only supports one PIN for each network. New wallets will require a mnemonic every time you log in.</translation>
     </message>
     <message>
         <source>id_green_only_supports_one_pin_per</source>
-        <translation>Green은 네트워크당 하나의 비밀번호만 지원합니다. 이 지갑에 비밀번호를 설정하시려면 원래 지갑의 비밀번호를 설정에서 비활성화 하세요.</translation>
+        <translation>Green only supports one PIN per network. To set a PIN for this wallet, disable the PIN on your original wallet first.</translation>
     </message>
     <message>
         <source>id_green_uses_biometric</source>
-        <translation>Green 은 지갑에 쉽게 접근하기 위하여 생체인증 기술을 사용합니다.</translation>
+        <translation>Green uses biometric authentication to allow easy access to the wallet</translation>
     </message>
     <message>
         <source>id_green_uses_bluetooth_for</source>
@@ -1547,7 +2113,15 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_green_uses_multisig_with_one</source>
-        <translation>Green 은 Blockstream 서버의 서명과 사용자의 매체에서 생성되는 서명으로 멀티서명 기술을 사용합니다. 2FA를 설정할 경우, 서버측 서명을 더욱 안전하게 만듭니다.</translation>
+        <translation>Green uses multisig with one signature generated by your device, and one by Blockstream’s servers. Setting up your Two-Factor Authentication enables an extra layer of security for the server-side signature.</translation>
+    </message>
+    <message>
+        <source>id_hardware_devices</source>
+        <translation>Hardware Devices</translation>
+    </message>
+    <message>
+        <source>id_hardware_security</source>
+        <translation>Hardware Security</translation>
     </message>
     <message>
         <source>id_hardware_wallet</source>
@@ -1555,15 +2129,27 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_hardware_wallet_support_for</source>
-        <translation>기밀 자산의 하드웨어 지갑 지원이 곧 출시 될 예정입니다.</translation>
+        <translation>Hardware wallet support for Confidential Transactions coming soon.</translation>
+    </message>
+    <message>
+        <source>id_hardware_wallets</source>
+        <translation>Hardware wallets</translation>
     </message>
     <message>
         <source>id_hash</source>
-        <translation>해시</translation>
+        <translation>Hash</translation>
+    </message>
+    <message>
+        <source>id_hash_s</source>
+        <translation>Hash: %1</translation>
     </message>
     <message>
         <source>id_help</source>
         <translation>Help</translation>
+    </message>
+    <message>
+        <source>id_help_green_improve</source>
+        <translation>Help Green Improve</translation>
     </message>
     <message>
         <source>id_here</source>
@@ -1574,16 +2160,36 @@ Recovery Phrase</translation>
         <translation>HEX</translation>
     </message>
     <message>
+        <source>id_hide_advanced_options</source>
+        <translation>Hide advanced options</translation>
+    </message>
+    <message>
+        <source>id_hide_amounts</source>
+        <translation>Hide amounts</translation>
+    </message>
+    <message>
         <source>id_hide_assets</source>
         <translation>Hide assets</translation>
     </message>
     <message>
+        <source>id_hide_details</source>
+        <translation>Hide details</translation>
+    </message>
+    <message>
         <source>id_high</source>
-        <translation>높음</translation>
+        <translation>High</translation>
+    </message>
+    <message>
+        <source>id_hold_button_to_send</source>
+        <translation>Hold button to Send</translation>
+    </message>
+    <message>
+        <source>id_hold_the_green_button_on_the</source>
+        <translation>Hold the green button on the bottom of Jade until it boots up</translation>
     </message>
     <message>
         <source>id_hold_your_nfc_tag_close_to_the</source>
-        <translation>NFC 태그를 기기에 가까이 대세요</translation>
+        <translation>Hold your NFC tag close to the device</translation>
     </message>
     <message>
         <source>id_home</source>
@@ -1591,11 +2197,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_hour</source>
-        <translation>한 시간</translation>
+        <translation>hour</translation>
     </message>
     <message>
         <source>id_hours</source>
-        <translation>몇 시간</translation>
+        <translation>hours</translation>
     </message>
     <message>
         <source>id_how_to_stop_this_reset</source>
@@ -1603,11 +2209,15 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_i_agree_to_the</source>
-        <translation>에 동의합니다</translation>
+        <translation>I agree to the</translation>
+    </message>
+    <message>
+        <source>id_i_agree_to_the_terms_of_service</source>
+        <translation>I agree to the Terms of Service and Privacy Policy</translation>
     </message>
     <message>
         <source>id_i_confirm_i_have_read_and</source>
-        <translation>위 글을 읽고 이해 했습니다.</translation>
+        <translation>I confirm I have read and understood the above message</translation>
     </message>
     <message>
         <source>id_i_confirm_i_want_to_delete_this</source>
@@ -1619,7 +2229,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_i_forgot_my_password</source>
-        <translation>비밀번호 찾기</translation>
+        <translation>I forgot my password</translation>
+    </message>
+    <message>
+        <source>id_i_fund_via_an_onchain_bitcoin</source>
+        <translation>(i) Fund via an onchain bitcoin transaction</translation>
     </message>
     <message>
         <source>id_i_lost_my_2fa</source>
@@ -1627,7 +2241,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_i_secured_the_mnemonic_and_i</source>
-        <translation>니모닉(복원 코드)을 안전하게 보관하였고 이용약관을 읽었습니다.</translation>
+        <translation>I secured the mnemonic and I have read the ToS</translation>
     </message>
     <message>
         <source>id_i_typed_all_my_recovery_phrase</source>
@@ -1642,12 +2256,24 @@ Recovery Phrase</translation>
         <translation>ID</translation>
     </message>
     <message>
+        <source>id_if_for_any_reason_you_cant</source>
+        <translation>If for any reason you can&apos;t login into your wallet, you can recover your recovery phrase using your PIN/Biometrics.</translation>
+    </message>
+    <message>
+        <source>id_if_you_agree_green_will_collect</source>
+        <translation>If you agree, Green will collect limited usage data to optimize the user experience. No sensitive user or wallet info is collected.</translation>
+    </message>
+    <message>
         <source>id_if_you_are_the_rightful_owner</source>
         <translation>If you are the rightful owner of this wallet, and you still possess one of its active 2FA methods, cancel the reset to be able to spend and empty this wallet.</translation>
     </message>
     <message>
         <source>id_if_you_did_not_request_the</source>
         <translation>If you did not request the reset, but you cannot cancel the reset process because you can&apos;t access any existing Two-Factor Authorization methods, dispute this 2FA reset. This will permanently block your wallet, but you can undo this action.</translation>
+    </message>
+    <message>
+        <source>id_if_you_forget_it_or_lose_it</source>
+        <translation>If you forget it or lose it, your funds are going to be lost as well.</translation>
     </message>
     <message>
         <source>id_if_you_have_access_to_a</source>
@@ -1662,6 +2288,10 @@ Recovery Phrase</translation>
         <translation>If you initiated the 2FA reset dispute by mistake, you can undo it and set the wallet back to 2FA reset state.</translation>
     </message>
     <message>
+        <source>id_import</source>
+        <translation>Import</translation>
+    </message>
+    <message>
         <source>id_import_a_multisig_shield_wallet</source>
         <translation>Import a Multisig Shield wallet created on Blockstream Green.</translation>
     </message>
@@ -1674,8 +2304,20 @@ Recovery Phrase</translation>
         <translation>Import a wallet created with other apps. This option only works with singlesig wallets using BIP39 mnemonics, and following the BIP44, BIP49, or BIP84 derivations.</translation>
     </message>
     <message>
+        <source>id_import_from_file</source>
+        <translation>Import from file</translation>
+    </message>
+    <message>
+        <source>id_in_progress</source>
+        <translation>In Progress</translation>
+    </message>
+    <message>
+        <source>id_inbound_liquidity</source>
+        <translation>Inbound Liquidity</translation>
+    </message>
+    <message>
         <source>id_incoming</source>
-        <translation>들어오는 중</translation>
+        <translation>Incoming</translation>
     </message>
     <message>
         <source>id_inconsistent_data_provided_for</source>
@@ -1683,11 +2325,31 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_increase_fee</source>
-        <translation>수수료 늘리기</translation>
+        <translation>Increase fee</translation>
+    </message>
+    <message>
+        <source>id_increase_inbound_capacity_now</source>
+        <translation>Increase inbound capacity now</translation>
+    </message>
+    <message>
+        <source>id_increase_security</source>
+        <translation>Increase Security</translation>
+    </message>
+    <message>
+        <source>id_increase_the_security_of_your</source>
+        <translation>Increase the security of your funds by adding a 2FA</translation>
     </message>
     <message>
         <source>id_information_not_available</source>
-        <translation>해당 정보가 없습니다.</translation>
+        <translation>Information not available.</translation>
+    </message>
+    <message>
+        <source>id_initialize_and_create_wallet</source>
+        <translation>Initialize and Create wallet</translation>
+    </message>
+    <message>
+        <source>id_initialize_jade_for_testnet</source>
+        <translation>Initialize Jade for testnet</translation>
     </message>
     <message>
         <source>id_initialized</source>
@@ -1702,28 +2364,36 @@ Recovery Phrase</translation>
         <translation>Insert your email to receive 2FA codes to authorize transfers and other operations.</translation>
     </message>
     <message>
+        <source>id_insert_your_phone_number_to</source>
+        <translation>Insert your phone number to receive 2FA codes to authorize transfers and other operations.</translation>
+    </message>
+    <message>
         <source>id_install_version_s</source>
         <translation>Install version: %1?</translation>
     </message>
     <message>
+        <source>id_instant</source>
+        <translation>Instant</translation>
+    </message>
+    <message>
         <source>id_insufficient_funds</source>
-        <translation>자산 부족</translation>
+        <translation>Insufficient funds</translation>
     </message>
     <message>
         <source>id_insufficient_lbtc_for_fees</source>
-        <translation>수수료로 사용할 L-BTC 부족</translation>
+        <translation>Insufficient L-BTC for fees</translation>
     </message>
     <message>
         <source>id_insufficient_lbtc_to_send_a</source>
-        <translation>L-BTC가 부족하여 거래를 전송할 수 없습니다. Liquid에서는 L-BTC를 사용하여 거래 수수료를 지불합니다. L-BTC를 받을 주소를 생성해 보세요.</translation>
+        <translation>Insufficient L-BTC to send a transaction. In Liquid, L-BTC are needed to pay transaction fees. Generate an address to receive L-BTC</translation>
     </message>
     <message>
         <source>id_invalid_address</source>
-        <translation>유효하지 않은 주소</translation>
+        <translation>Invalid address</translation>
     </message>
     <message>
         <source>id_invalid_amount</source>
-        <translation>유효하지 않은 액수</translation>
+        <translation>Invalid amount</translation>
     </message>
     <message>
         <source>id_invalid_asset_id</source>
@@ -1739,7 +2409,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_invalid_mnemonic</source>
-        <translation>유효하지 않은 니모닉(복원 코드)</translation>
+        <translation>Invalid mnemonic</translation>
     </message>
     <message>
         <source>id_invalid_mnemonic_continue</source>
@@ -1747,11 +2417,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_invalid_mnemonic_must_be_24_or</source>
-        <translation>유효하지 않은 니모닉(복원 코드) (24개 또는 27 단어여야 합니다)</translation>
+        <translation>Invalid mnemonic (must be 24 or 27 words)</translation>
     </message>
     <message>
         <source>id_invalid_network_configuration</source>
-        <translation>유효하지 않은 네트워크 설정</translation>
+        <translation>Invalid network configuration</translation>
     </message>
     <message>
         <source>id_invalid_payment_request_assetid</source>
@@ -1759,11 +2429,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_invalid_pgp_key</source>
-        <translation>유효하지 않은 PGP 키</translation>
+        <translation>Invalid PGP key</translation>
     </message>
     <message>
         <source>id_invalid_phone_number_format</source>
-        <translation>유효하지 않은 휴대폰 번호 형식</translation>
+        <translation>Invalid phone number format</translation>
     </message>
     <message>
         <source>id_invalid_pin</source>
@@ -1771,19 +2441,19 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_invalid_pin_remaining_attempts</source>
-        <translation>잘못된 비밀번호입니다. 남은 시도: %1.</translation>
+        <translation>Invalid PIN. Remaining attempts: %1.</translation>
     </message>
     <message>
         <source>id_invalid_pin_you_dont_have_any</source>
-        <translation>잘못된 비밀번호이고 더 시도할 수 없습니다. 니모닉(복원 코드)을 사용하여 로그인하세요.</translation>
+        <translation>Invalid PIN, you don&apos;t have any attempts left. Please log in using your mnemonic.</translation>
     </message>
     <message>
         <source>id_invalid_pin_you_have_1d</source>
-        <translation>잘못된 비밀번호입니다. %1의 시도 남음</translation>
+        <translation>Invalid PIN, you have %1 attempts left</translation>
     </message>
     <message>
         <source>id_invalid_private_key</source>
-        <translation>유효하지 않은 private 키</translation>
+        <translation>Invalid private key</translation>
     </message>
     <message>
         <source>id_invalid_recovery_phrase</source>
@@ -1791,31 +2461,43 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_invalid_replacement_fee_rate</source>
-        <translation>유효하지 않은 대체 수수료율</translation>
+        <translation>Invalid replacement fee rate</translation>
     </message>
     <message>
         <source>id_invalid_status_check_that_your</source>
         <translation>Invalid status. Check that your device is unlocked and try again.</translation>
     </message>
     <message>
+        <source>id_invalid_swap_proposal</source>
+        <translation>Invalid swap proposal</translation>
+    </message>
+    <message>
         <source>id_invalid_twofactor_code</source>
-        <translation>유효하지 않은 2FA 코드</translation>
+        <translation>Invalid Two-Factor code</translation>
     </message>
     <message>
         <source>id_invalid_url</source>
-        <translation>유효하지 않은 URL</translation>
+        <translation>Invalid URL</translation>
     </message>
     <message>
         <source>id_invalid_xpub</source>
         <translation>Invalid xpub</translation>
     </message>
     <message>
+        <source>id_invoice_expired</source>
+        <translation>Invoice expired</translation>
+    </message>
+    <message>
+        <source>id_invoices</source>
+        <translation>Invoices</translation>
+    </message>
+    <message>
         <source>id_is_a_noncustodial</source>
-        <translation>자산을 맡겨 신뢰를 요구하지 않는 지갑입니다.</translation>
+        <translation>is a non-custodial</translation>
     </message>
     <message>
         <source>id_issuer</source>
-        <translation>발행자</translation>
+        <translation>Issuer</translation>
     </message>
     <message>
         <source>id_issuer_domain_s</source>
@@ -1824,6 +2506,18 @@ Recovery Phrase</translation>
     <message>
         <source>id_it_looks_like_you_have_no</source>
         <translation>It looks like you have no wallets. Click below to add one.</translation>
+    </message>
+    <message>
+        <source>id_jade_is_a_specialized_device</source>
+        <translation>Jade is a specialized device designed to securely store the keys needed to spend your bitcoin.</translation>
+    </message>
+    <message>
+        <source>id_jade_is_an_isolated_device_not</source>
+        <translation>Jade is an isolated device not connected to the internet, which means your funds are protected from a hacked or compromised phone.</translation>
+    </message>
+    <message>
+        <source>id_jade_is_an_opensource_hardware</source>
+        <translation>Jade is an open-source hardware wallet for Bitcoin and Liquid assets.</translation>
     </message>
     <message>
         <source>id_jade_unlocked</source>
@@ -1851,11 +2545,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_last_ping_1d_ms</source>
-        <translation>마지막 핑: %1 ms</translation>
+        <translation>Last ping: %1 ms</translation>
     </message>
     <message>
         <source>id_later</source>
-        <translation>이후</translation>
+        <translation>LATER</translation>
     </message>
     <message>
         <source>id_latest_transactions</source>
@@ -1870,12 +2564,16 @@ Recovery Phrase</translation>
         <translation>Learn more</translation>
     </message>
     <message>
+        <source>id_learn_more_about_amp_the_assets</source>
+        <translation>Learn more about AMP, the assets and your eligibility</translation>
+    </message>
+    <message>
         <source>id_learn_more_about_s</source>
         <translation>Learn more about %1.</translation>
     </message>
     <message>
         <source>id_ledger_dashboard_detected</source>
-        <translation>Ledger 대시 보드가 감지되었습니다. 올바른 앱을 열어 사용하세요.</translation>
+        <translation>Ledger Dashboard detected, please open the correct app to access.</translation>
     </message>
     <message>
         <source>id_ledger_devices</source>
@@ -1886,16 +2584,60 @@ Recovery Phrase</translation>
         <translation>Ledger supports a limited set of assets: tap here to check the list.</translation>
     </message>
     <message>
+        <source>id_legacy</source>
+        <translation>Legacy</translation>
+    </message>
+    <message>
         <source>id_legacy_account</source>
         <translation>Legacy Account</translation>
+    </message>
+    <message>
+        <source>id_legacy_bip44</source>
+        <translation>Legacy (BIP44)</translation>
     </message>
     <message>
         <source>id_legacy_script_coins</source>
         <translation>Legacy script coins</translation>
     </message>
     <message>
+        <source>id_legacy_segwit</source>
+        <translation>Legacy SegWit</translation>
+    </message>
+    <message>
+        <source>id_legacy_segwit_account</source>
+        <translation>Legacy SegWit Account</translation>
+    </message>
+    <message>
+        <source>id_legacy_segwit_bip49</source>
+        <translation>Legacy SegWit (BIP49)</translation>
+    </message>
+    <message>
         <source>id_lets_get_you_set_up</source>
-        <translation>새로운 지갑을 만들어 볼까요?</translation>
+        <translation>Let&apos;s get you set up.</translation>
+    </message>
+    <message>
+        <source>id_lightning</source>
+        <translation>Lightning</translation>
+    </message>
+    <message>
+        <source>id_lightning_invoice</source>
+        <translation>Lightning Invoice</translation>
+    </message>
+    <message>
+        <source>id_lightning_invoice__lnurl</source>
+        <translation>Lightning Invoice / LNURL</translation>
+    </message>
+    <message>
+        <source>id_lightning_invoice_is_expired</source>
+        <translation>Lightning invoice is expired</translation>
+    </message>
+    <message>
+        <source>id_lightning_network_account</source>
+        <translation>Lightning Network account powered by Greenlight. Portable onto your own CLN node.</translation>
+    </message>
+    <message>
+        <source>id_limits_s__s</source>
+        <translation>Limits: %1 - %2</translation>
     </message>
     <message>
         <source>id_liquid_electrum_server</source>
@@ -1939,7 +2681,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_loading_transactions</source>
-        <translation>거래 로딩중...</translation>
+        <translation>Loading transactions…</translation>
     </message>
     <message>
         <source>id_loading_wallet</source>
@@ -1952,6 +2694,14 @@ Recovery Phrase</translation>
     <message>
         <source>id_lock</source>
         <translation>Lock</translation>
+    </message>
+    <message>
+        <source>id_lock_after_1_minute</source>
+        <translation>Lock after 1 minute</translation>
+    </message>
+    <message>
+        <source>id_lock_immediately</source>
+        <translation>Lock immediately</translation>
     </message>
     <message>
         <source>id_locked</source>
@@ -1975,7 +2725,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_log_in</source>
-        <translation>로그인</translation>
+        <translation>Log In</translation>
     </message>
     <message>
         <source>id_log_in_into_your_s_wallet</source>
@@ -1987,15 +2737,15 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_log_in_using_mnemonic</source>
-        <translation>니모닉(복원 코드)을 사용하여 로그인하기</translation>
+        <translation>Log in using mnemonic</translation>
     </message>
     <message>
         <source>id_log_in_via_watchonly_to_receive</source>
-        <translation>보기전용으로 로그인하여 자산을 수령하고 잔액을 조회하세요.</translation>
+        <translation>Log in via Watch-only to receive funds and check balance.</translation>
     </message>
     <message>
         <source>id_log_out</source>
-        <translation>로그아웃</translation>
+        <translation>Log out</translation>
     </message>
     <message>
         <source>id_logged_in_wallets</source>
@@ -2003,7 +2753,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_logging_in</source>
-        <translation>로그인 중...</translation>
+        <translation>Logging in…</translation>
     </message>
     <message>
         <source>id_login</source>
@@ -2011,15 +2761,19 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_login_failed</source>
-        <translation>로그인 실패</translation>
+        <translation>Login Failed</translation>
     </message>
     <message>
         <source>id_login_options</source>
-        <translation>로그인 설정</translation>
+        <translation>Login options</translation>
     </message>
     <message>
         <source>id_login_with_biometrics</source>
         <translation>Login with Biometrics</translation>
+    </message>
+    <message>
+        <source>id_login_with_bip39_passphrase</source>
+        <translation>Login with BIP39 Passphrase</translation>
     </message>
     <message>
         <source>id_logout</source>
@@ -2027,11 +2781,15 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_logout_and_switch</source>
-        <translation>로그아웃 후 전환하기</translation>
+        <translation>Logout and Switch</translation>
     </message>
     <message>
         <source>id_look_at_the_device_for_the</source>
-        <translation>번호 배열은 기기에 나와 있습니다</translation>
+        <translation>Look at the device for the number positions</translation>
+    </message>
+    <message>
+        <source>id_looking_for_device</source>
+        <translation>Looking for device...</translation>
     </message>
     <message>
         <source>id_looking_for_wallets</source>
@@ -2043,11 +2801,23 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_low</source>
-        <translation>낮음</translation>
+        <translation>Low</translation>
     </message>
     <message>
         <source>id_main_account</source>
-        <translation>주 계정</translation>
+        <translation>Main Account</translation>
+    </message>
+    <message>
+        <source>id_make_sure_to_be_in_a_private</source>
+        <translation>Make sure to be in a private and safe space</translation>
+    </message>
+    <message>
+        <source>id_make_sure_you_are_alone_and_no</source>
+        <translation>Make sure you are alone and no camera is recording you or the screen.</translation>
+    </message>
+    <message>
+        <source>id_make_sure_you_got_everything</source>
+        <translation>Make sure you got everything right.</translation>
     </message>
     <message>
         <source>id_make_sure_you_have_enabled_otg</source>
@@ -2059,7 +2829,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_malleated</source>
-        <translation>바뀜</translation>
+        <translation>malleated</translation>
     </message>
     <message>
         <source>id_managed_assets</source>
@@ -2078,12 +2848,32 @@ Recovery Phrase</translation>
         <translation>Manual coin selection</translation>
     </message>
     <message>
+        <source>id_manual_restore</source>
+        <translation>Manual Restore</translation>
+    </message>
+    <message>
+        <source>id_max_limit_s</source>
+        <translation>Max Limit: %1</translation>
+    </message>
+    <message>
+        <source>id_max_payable_amount</source>
+        <translation>Max Payable Amount</translation>
+    </message>
+    <message>
+        <source>id_max_receivable_amount</source>
+        <translation>Max Receivable Amount</translation>
+    </message>
+    <message>
+        <source>id_max_single_payment_amount</source>
+        <translation>Max Single Payment Amount</translation>
+    </message>
+    <message>
         <source>id_medium</source>
-        <translation>중간</translation>
+        <translation>Medium</translation>
     </message>
     <message>
         <source>id_memo</source>
-        <translation>메모</translation>
+        <translation>Memo</translation>
     </message>
     <message>
         <source>id_message</source>
@@ -2102,20 +2892,24 @@ Recovery Phrase</translation>
         <translation>Migrating to Blockstream Green? Have an existing Blockstream Green wallet you’d like to import? Let&apos;s go!</translation>
     </message>
     <message>
+        <source>id_minimum</source>
+        <translation>Minimum</translation>
+    </message>
+    <message>
         <source>id_minute</source>
-        <translation>분</translation>
+        <translation>minute</translation>
     </message>
     <message>
         <source>id_minutes</source>
-        <translation>분</translation>
+        <translation>minutes</translation>
     </message>
     <message>
         <source>id_mnemonic</source>
-        <translation>니모닉(복원 코드)</translation>
+        <translation>Mnemonic</translation>
     </message>
     <message>
         <source>id_mnemonic_not_available</source>
-        <translation>니모닉(복원 코드) 없음</translation>
+        <translation>Mnemonic not available</translation>
     </message>
     <message>
         <source>id_model</source>
@@ -2123,11 +2917,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_month</source>
-        <translation>달</translation>
+        <translation>month</translation>
     </message>
     <message>
         <source>id_months</source>
-        <translation>달</translation>
+        <translation>months</translation>
     </message>
     <message>
         <source>id_more_info</source>
@@ -2138,24 +2932,40 @@ Recovery Phrase</translation>
         <translation>More Options</translation>
     </message>
     <message>
+        <source>id_move_to_2fa_protected</source>
+        <translation>Move to 2FA Protected</translation>
+    </message>
+    <message>
         <source>id_multi_server_validation</source>
         <translation>Multi Server Validation</translation>
     </message>
     <message>
         <source>id_multiple_assets</source>
-        <translation>여러 자산들</translation>
+        <translation>Multiple Assets</translation>
+    </message>
+    <message>
+        <source>id_multisig</source>
+        <translation>Multisig</translation>
     </message>
     <message>
         <source>id_multisig_shield</source>
         <translation>Multisig Shield</translation>
     </message>
     <message>
+        <source>id_my_assets</source>
+        <translation>My Assets</translation>
+    </message>
+    <message>
         <source>id_my_notes</source>
-        <translation>내 메모</translation>
+        <translation>MY NOTES</translation>
     </message>
     <message>
         <source>id_name</source>
-        <translation>이름</translation>
+        <translation>Name</translation>
+    </message>
+    <message>
+        <source>id_native_segwit</source>
+        <translation>Native SegWit</translation>
     </message>
     <message>
         <source>id_need_help</source>
@@ -2167,15 +2977,15 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_network_configuration</source>
-        <translation>네트워크 설정</translation>
+        <translation>Network Configuration</translation>
     </message>
     <message>
         <source>id_network_fee</source>
-        <translation>네트워크 수수료</translation>
+        <translation>Network Fee</translation>
     </message>
     <message>
         <source>id_network_monitor</source>
-        <translation>네트워크 모니터</translation>
+        <translation>Network Monitor</translation>
     </message>
     <message>
         <source>id_networks</source>
@@ -2187,7 +2997,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_new_accounts_functionality</source>
-        <translation>새 계정 추가 기능이 곧 추가될 예정입니다.</translation>
+        <translation>New accounts functionality coming soon!</translation>
     </message>
     <message>
         <source>id_new_fee</source>
@@ -2195,7 +3005,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_new_incoming_transaction_in</source>
-        <translation>%1 계정에 새로운 거래(%2)가 들어옵니다.</translation>
+        <translation>New incoming transaction in account %1 (%2).</translation>
     </message>
     <message>
         <source>id_new_jade_firmware_available</source>
@@ -2207,7 +3017,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_new_outgoing_transaction_from</source>
-        <translation>%1 계정에서 새로운 거래(%2)가 나갑니다.</translation>
+        <translation>New outgoing transaction from account %1 (%2).</translation>
     </message>
     <message>
         <source>id_new_recovery_phrase</source>
@@ -2215,15 +3025,15 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_new_s_transaction_of_s_in</source>
-        <translation>계좌 %1에서 %2의 새로운 %3거래</translation>
+        <translation>New %1 transaction of %2 in account %3.</translation>
     </message>
     <message>
         <source>id_new_transaction</source>
-        <translation>새로운 거래</translation>
+        <translation>New transaction</translation>
     </message>
     <message>
         <source>id_new_transaction_involving</source>
-        <translation>%1 에 새로운 거래.</translation>
+        <translation>New transaction involving accounts %1.</translation>
     </message>
     <message>
         <source>id_new_version</source>
@@ -2235,19 +3045,27 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_next</source>
-        <translation>다음</translation>
+        <translation>Next</translation>
     </message>
     <message>
         <source>id_nfc_logo</source>
-        <translation>NFC 로고</translation>
+        <translation>NFC Logo</translation>
     </message>
     <message>
         <source>id_nfc_tags_written</source>
-        <translation>쓰여진 NFC 태그들:</translation>
+        <translation>NFC TAGs Written:</translation>
+    </message>
+    <message>
+        <source>id_no_addresses</source>
+        <translation>No addresses</translation>
     </message>
     <message>
         <source>id_no_amount_specified</source>
-        <translation>금액을 지정하지 않았습니다</translation>
+        <translation>No amount specified</translation>
+    </message>
+    <message>
+        <source>id_no_archived_accounts</source>
+        <translation>No archived accounts</translation>
     </message>
     <message>
         <source>id_no_asset_in_this_account</source>
@@ -2255,7 +3073,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_no_attempts_remaining</source>
-        <translation>시도 남지 않음</translation>
+        <translation>No attempts remaining</translation>
     </message>
     <message>
         <source>id_no_coins_selected</source>
@@ -2266,32 +3084,49 @@ Recovery Phrase</translation>
         <translation>No device connected</translation>
     </message>
     <message>
+        <source>id_no_existing_wallet_could_be</source>
+        <translation>No existing wallet could be found.
+Try manually restoring your wallet.</translation>
+    </message>
+    <message>
         <source>id_no_more_assets</source>
         <translation>No more assets.</translation>
     </message>
     <message>
+        <source>id_no_multisig_shield_wallet</source>
+        <translation>No multisig shield wallet exists for this recovery phrase.</translation>
+    </message>
+    <message>
         <source>id_no_peers_connected</source>
-        <translation>연결된 노드 없음</translation>
+        <translation>No Peers Connected</translation>
+    </message>
+    <message>
+        <source>id_no_personal_data_will_be_shared</source>
+        <translation>No personal data will be shared with this service.</translation>
     </message>
     <message>
         <source>id_no_pin_provided_exiting</source>
-        <translation>비밀번호 입력하지 않음. 앱을 종료하는 중...</translation>
+        <translation>No PIN provided, exiting.</translation>
     </message>
     <message>
         <source>id_no_recipients</source>
-        <translation>수령인 없음</translation>
+        <translation>No recipients</translation>
     </message>
     <message>
         <source>id_no_registered_name_for_this</source>
-        <translation>이 자산에 등록된 이름이 없습니다.</translation>
+        <translation>No registered name for this asset.</translation>
     </message>
     <message>
         <source>id_no_registered_ticker_for_this</source>
-        <translation>이 자산에 등록된 종목 코드가 없습니다.</translation>
+        <translation>No registered ticker for this asset.</translation>
     </message>
     <message>
         <source>id_no_utxos_found</source>
-        <translation>UTXO 찾지 못함</translation>
+        <translation>No UTXOs found</translation>
+    </message>
+    <message>
+        <source>id_node_info</source>
+        <translation>Node Info</translation>
     </message>
     <message>
         <source>id_non_confidential</source>
@@ -2311,7 +3146,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_normal</source>
-        <translation>보통</translation>
+        <translation>Normal</translation>
     </message>
     <message>
         <source>id_not_a_valid_email_address</source>
@@ -2335,23 +3170,35 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_not_connected_connecting_in_ds_</source>
-        <translation>접속되지 않았습니다. 접속 시도 중 %1 초...</translation>
+        <translation>Not connected. Connecting in %1s …</translation>
     </message>
     <message>
         <source>id_not_initialized</source>
         <translation>Not initialized</translation>
     </message>
     <message>
+        <source>id_not_now</source>
+        <translation>Not now</translation>
+    </message>
+    <message>
         <source>id_not_on_longest_chain</source>
         <translation>Not on longest chain</translation>
     </message>
     <message>
+        <source>id_note</source>
+        <translation>Note</translation>
+    </message>
+    <message>
+        <source>id_note_down_your_recovery_phrase</source>
+        <translation>Note down your recovery phrase. Keep it somewhere safe!</translation>
+    </message>
+    <message>
         <source>id_notifications</source>
-        <translation>알람</translation>
+        <translation>Notifications</translation>
     </message>
     <message>
         <source>id_now</source>
-        <translation>지금</translation>
+        <translation>Now</translation>
     </message>
     <message>
         <source>id_of_24</source>
@@ -2362,24 +3209,36 @@ Recovery Phrase</translation>
         <translation>of %1</translation>
     </message>
     <message>
+        <source>id_offline_key_storage</source>
+        <translation>Offline Key Storage</translation>
+    </message>
+    <message>
         <source>id_ok</source>
         <translation>Ok</translation>
     </message>
     <message>
         <source>id_on_average</source>
-        <translation>평균적</translation>
+        <translation>on average</translation>
     </message>
     <message>
         <source>id_once_selected_this_spending</source>
         <translation>Once selected, this spending policy cannot be changed. For tips on what type of security is best for you, visit our Help Center.</translation>
     </message>
     <message>
+        <source>id_onchain_address</source>
+        <translation>Onchain Address</translation>
+    </message>
+    <message>
+        <source>id_onchain_swaps</source>
+        <translation>Onchain Swaps</translation>
+    </message>
+    <message>
         <source>id_one_attempt_remaining</source>
-        <translation>시도 한번 남음</translation>
+        <translation>One attempt remaining</translation>
     </message>
     <message>
         <source>id_one_network_must_be_selected</source>
-        <translation>하나의 네트워크만 선택해야 합니다. 기존값대로 비트코인을 선택합니다.</translation>
+        <translation>One network must be selected. Selecting Bitcoin by default</translation>
     </message>
     <message>
         <source>id_onion_addresses_require_tor</source>
@@ -2387,11 +3246,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_only_connect_to_trusted_nodes</source>
-        <translation>SPV를 사용할때는 신뢰하는 노드[들]에게만 연결하세요.</translation>
+        <translation>Only connect to trusted node(s) for SPV</translation>
     </message>
     <message>
         <source>id_only_this_time</source>
-        <translation>이번 만</translation>
+        <translation>Only this time</translation>
     </message>
     <message>
         <source>id_open</source>
@@ -2399,7 +3258,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_operation_failure</source>
-        <translation>작동 실패</translation>
+        <translation>Operation failure</translation>
     </message>
     <message>
         <source>id_optimal_if_you_rarely_spend</source>
@@ -2411,19 +3270,27 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_optional</source>
-        <translation>선택</translation>
+        <translation>Optional</translation>
     </message>
     <message>
         <source>id_optional_memo</source>
-        <translation>선택 메모</translation>
+        <translation>Optional memo</translation>
     </message>
     <message>
         <source>id_optional_password</source>
-        <translation>선택적 비밀번호</translation>
+        <translation>Optional password</translation>
     </message>
     <message>
         <source>id_or</source>
-        <translation>또는</translation>
+        <translation>OR</translation>
+    </message>
+    <message>
+        <source>id_original_swap_address</source>
+        <translation>Original swap address</translation>
+    </message>
+    <message>
+        <source>id_os__app_version_loading_times</source>
+        <translation>OS &amp; app version, loading times</translation>
     </message>
     <message>
         <source>id_our_support_page</source>
@@ -2431,11 +3298,15 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_outdated_hardware_wallet</source>
-        <translation>오래된 하드웨어 지갑 펌웨어를 감지하였습니다. 데스크톱에서 최신 버전으로 업그레이드하세요.</translation>
+        <translation>Outdated hardware wallet firmware. Please upgrade to the latest firmware from your desktop.</translation>
     </message>
     <message>
         <source>id_outgoing</source>
-        <translation>내보내는 중</translation>
+        <translation>Outgoing</translation>
+    </message>
+    <message>
+        <source>id_output_descriptors</source>
+        <translation>Output Descriptors</translation>
     </message>
     <message>
         <source>id_overview</source>
@@ -2450,24 +3321,52 @@ Recovery Phrase</translation>
         <translation>P2wsh</translation>
     </message>
     <message>
+        <source>id_page_visits_button_presses</source>
+        <translation>Page visits, button presses, general app configuration</translation>
+    </message>
+    <message>
+        <source>id_passphrase</source>
+        <translation>Passphrase</translation>
+    </message>
+    <message>
+        <source>id_passphrase_protected</source>
+        <translation>Passphrase protected</translation>
+    </message>
+    <message>
         <source>id_password</source>
-        <translation>비밀번호</translation>
+        <translation>Password</translation>
     </message>
     <message>
         <source>id_password_protected</source>
-        <translation>비밀번호로 보안됨</translation>
+        <translation>Password protected</translation>
     </message>
     <message>
         <source>id_paste</source>
-        <translation>붙여넣기</translation>
+        <translation>Paste</translation>
+    </message>
+    <message>
+        <source>id_paste_an_existing_proposal</source>
+        <translation>Paste an Existing Proposal</translation>
     </message>
     <message>
         <source>id_path_used_for_signing</source>
         <translation>Path used for signing</translation>
     </message>
     <message>
+        <source>id_payment_requested_by_s</source>
+        <translation>Payment requested by %1</translation>
+    </message>
+    <message>
+        <source>id_payments_to_self_are_not</source>
+        <translation>Payments to self are not supported in your lightning account.</translation>
+    </message>
+    <message>
         <source>id_pending_confirmation</source>
         <translation>Pending confirmation</translation>
+    </message>
+    <message>
+        <source>id_permanent_2fa_account_ideal_for</source>
+        <translation>Permanent 2FA account, ideal for long term hodling, optionally with 3rd emergency key on hardware wallet.</translation>
     </message>
     <message>
         <source>id_permanently_block_this_wallet</source>
@@ -2479,19 +3378,19 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_pgp_key</source>
-        <translation>PGP 키</translation>
+        <translation>PGP key</translation>
     </message>
     <message>
         <source>id_phone_call</source>
-        <translation>전화</translation>
+        <translation>Phone call</translation>
     </message>
     <message>
         <source>id_phone_number</source>
-        <translation>전화번호</translation>
+        <translation>phone number</translation>
     </message>
     <message>
         <source>id_pin</source>
-        <translation>비밀번호</translation>
+        <translation>PIN</translation>
     </message>
     <message>
         <source>id_pin_access_disabled</source>
@@ -2499,11 +3398,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_pin_has_to_be_between_4_and_15</source>
-        <translation>비밀번호는 4 에서 15자리 사이 여야 합니다.</translation>
+        <translation>PIN has to be between 4 and 15 digits</translation>
     </message>
     <message>
         <source>id_pins_do_not_match_please_try</source>
-        <translation>비밀번호가 일치하지 않습니다.</translation>
+        <translation>PINs do not match, please try again.</translation>
     </message>
     <message>
         <source>id_please_activate_at_least_one</source>
@@ -2515,31 +3414,31 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_please_disable_biometric</source>
-        <translation>비밀번호를 지우기 전에 생체인증을 먼저 비활성화하세요.</translation>
+        <translation>Please disable biometric authentication before deleting PIN</translation>
     </message>
     <message>
         <source>id_please_disconnect_your_ledger</source>
-        <translation>Ledger Nano X를 휴대폰에서 분리하신 다음, 양쪽 버튼은 둘 다 길게 눌러 종료하세요. 종료 후 다시 연결한 다음 비밀번호를 입력하세요.</translation>
+        <translation>Please disconnect your Ledger Nano X, power it off by long-pressing both buttons, then reconnect it and enter its PIN</translation>
     </message>
     <message>
         <source>id_please_enable_another</source>
-        <translation>자산에 대한 접근권한을 잃지 않도록 다른 방법도 활성화하세요.</translation>
+        <translation>Please enable another authentication method to avoid losing access to your funds.</translation>
     </message>
     <message>
         <source>id_please_enable_camera</source>
-        <translation>카메라를 사용하기 위해 카메라에 대한 접근 권한을 활성화하세요.</translation>
+        <translation>Please enable camera permissions to use the camera.</translation>
     </message>
     <message>
         <source>id_please_enable_pin</source>
-        <translation>생체인증을 더하기 전에 비밀번호를 활성화하세요.</translation>
+        <translation>Please enable PIN authentication before adding or removing biometric authentication</translation>
     </message>
     <message>
         <source>id_please_enter_the_passphrase_for</source>
-        <translation>하드웨어 지갑을 위한 비밀번호를 입력하세요.</translation>
+        <translation>Please enter the passphrase for your hardware wallet.</translation>
     </message>
     <message>
         <source>id_please_follow_the_instructions</source>
-        <translation>하드웨어 지갑에 나온 설명을 따라주세요.</translation>
+        <translation>Please follow the instructions on your hardware wallet</translation>
     </message>
     <message>
         <source>id_please_hold_on_while_your</source>
@@ -2547,55 +3446,71 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_please_provide_your_1s</source>
-        <translation>%1를 입력하세요.</translation>
+        <translation>Please provide your %1.</translation>
     </message>
     <message>
         <source>id_please_provide_your_1s_code</source>
-        <translation>%1 코드를 입력하세요.</translation>
+        <translation>Please provide your %1 code.</translation>
     </message>
     <message>
         <source>id_please_provide_your_passphrase</source>
-        <translation>암호를 입력하세요:</translation>
+        <translation>Please provide your passphrase:</translation>
     </message>
     <message>
         <source>id_please_reconnect_your_hardware</source>
-        <translation>다시 시도하기 전에 하드웨어 지갑을 다시 연결하세요.</translation>
+        <translation>Please re-connect your hardware wallet before trying again.</translation>
     </message>
     <message>
         <source>id_please_secure_your_mnemonic_and</source>
-        <translation>니모닉(복원 코드)을 안전하게 보관하시고 이용약관에 동의해주세요</translation>
+        <translation>Please secure your mnemonic and confirm you agree to the Terms of Service</translation>
     </message>
     <message>
         <source>id_please_select_the_checkbox</source>
-        <translation>확인란을 선택해주세요</translation>
+        <translation>Please select the checkbox</translation>
     </message>
     <message>
         <source>id_please_set_and_enable_socks5</source>
-        <translation>Tor를 사용하기 위해서 SOCKS5 프록시와 포트를 활성화/설정해 주세요</translation>
+        <translation>Please set and enable SOCKS5 proxy and port to use Tor</translation>
     </message>
     <message>
         <source>id_please_tap_card</source>
-        <translation>카드를 터치해 주세요</translation>
+        <translation>Please tap card</translation>
     </message>
     <message>
         <source>id_please_verify_that_the_address</source>
         <translation>Please verify that the address shown on your hardware wallet matches the one on your phone.</translation>
     </message>
     <message>
+        <source>id_please_verify_that_this_address</source>
+        <translation>Please verify that this address matches the one displayed on your hardware device.&quot;</translation>
+    </message>
+    <message>
         <source>id_please_wait_until_your_ledger</source>
         <translation>Please wait until your Ledger displays the address to validate it. This could take up to 20 seconds.</translation>
     </message>
     <message>
+        <source>id_power_on_jade</source>
+        <translation>Power on Jade</translation>
+    </message>
+    <message>
         <source>id_precision</source>
-        <translation>정확도</translation>
+        <translation>Precision</translation>
     </message>
     <message>
         <source>id_previous_fee</source>
         <translation>Previous fee</translation>
     </message>
     <message>
+        <source>id_price_feed</source>
+        <translation>Price Feed</translation>
+    </message>
+    <message>
+        <source>id_print_backup_template</source>
+        <translation>Print Backup Template</translation>
+    </message>
+    <message>
         <source>id_privacy_policy</source>
-        <translation>개인정보처리방침</translation>
+        <translation>Privacy Policy</translation>
     </message>
     <message>
         <source>id_private_but_less_stable</source>
@@ -2607,7 +3522,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_problem_with_key_1s</source>
-        <translation>키 %1에 문제있음</translation>
+        <translation>Problem with key %1</translation>
+    </message>
+    <message>
+        <source>id_protect_your_bitcoin_with_a</source>
+        <translation>Protect your bitcoin with a second form of verification</translation>
     </message>
     <message>
         <source>id_provide_this_id_to_the_asset</source>
@@ -2627,7 +3546,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_proxy_settings</source>
-        <translation>프록시 설정</translation>
+        <translation>PROXY SETTINGS</translation>
+    </message>
+    <message>
+        <source>id_pseudonymous_identifier_country</source>
+        <translation>Pseudonymous identifier, country</translation>
     </message>
     <message>
         <source>id_qr_code</source>
@@ -2635,11 +3558,27 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_qr_scanner</source>
-        <translation>QR 스캐너</translation>
+        <translation>QR Scanner</translation>
+    </message>
+    <message>
+        <source>id_quick_setup_2fa_account_ideal</source>
+        <translation>Quick setup 2FA account, ideal for active spenders (2FA expires if you don&apos;t move funds for 1 year).</translation>
     </message>
     <message>
         <source>id_radio_firmware</source>
         <translation>Radio firmware</translation>
+    </message>
+    <message>
+        <source>id_rate</source>
+        <translation>Rate</translation>
+    </message>
+    <message>
+        <source>id_rate_us</source>
+        <translation>Rate us</translation>
+    </message>
+    <message>
+        <source>id_rate_your_experience</source>
+        <translation>Rate your experience</translation>
     </message>
     <message>
         <source>id_read_more</source>
@@ -2659,7 +3598,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_receive</source>
-        <translation>받기</translation>
+        <translation>Receive</translation>
+    </message>
+    <message>
+        <source>id_receive_any_liquid_asset</source>
+        <translation>Receive any Liquid Asset</translation>
     </message>
     <message>
         <source>id_receive_email_notifications_for</source>
@@ -2667,11 +3610,15 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_received</source>
-        <translation>받음</translation>
+        <translation>Received</translation>
     </message>
     <message>
         <source>id_received_on</source>
-        <translation>받은 시간</translation>
+        <translation>Received on</translation>
+    </message>
+    <message>
+        <source>id_receiving</source>
+        <translation>Receiving</translation>
     </message>
     <message>
         <source>id_recently_used_wallets</source>
@@ -2679,7 +3626,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_recipient</source>
-        <translation>수령인</translation>
+        <translation>Recipient</translation>
     </message>
     <message>
         <source>id_recipient_address</source>
@@ -2691,7 +3638,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_recovery_and_notifications</source>
-        <translation>복구와 알람</translation>
+        <translation>Recovery and Notifications</translation>
+    </message>
+    <message>
+        <source>id_recovery_key_type</source>
+        <translation>Recovery Key Type</translation>
     </message>
     <message>
         <source>id_recovery_mnemonic</source>
@@ -2706,28 +3657,40 @@ Recovery Phrase</translation>
         <translation>Recovery Phrase Check</translation>
     </message>
     <message>
+        <source>id_recovery_phrase_length</source>
+        <translation>Recovery phrase length</translation>
+    </message>
+    <message>
+        <source>id_recovery_phrases_key_material</source>
+        <translation>Recovery phrases, key material, addresses, balances</translation>
+    </message>
+    <message>
         <source>id_recovery_tool</source>
         <translation>Recovery Tool</translation>
     </message>
     <message>
         <source>id_recovery_transaction_emails</source>
-        <translation>복구 거래 이메일</translation>
+        <translation>Recovery transaction emails</translation>
     </message>
     <message>
         <source>id_recovery_transaction_request</source>
-        <translation>복구 거래 요청 보냄</translation>
+        <translation>Recovery transaction request sent</translation>
     </message>
     <message>
         <source>id_recovery_transactions</source>
-        <translation>복구 거래</translation>
+        <translation>Recovery transactions</translation>
     </message>
     <message>
         <source>id_recovery_words</source>
-        <translation>복구 단어들</translation>
+        <translation>Recovery words</translation>
     </message>
     <message>
         <source>id_recovery_xpub</source>
         <translation>Recovery xpub</translation>
+    </message>
+    <message>
+        <source>id_redeem</source>
+        <translation>Redeem</translation>
     </message>
     <message>
         <source>id_redeem_your_deposited_funds</source>
@@ -2735,23 +3698,51 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_redeposited</source>
-        <translation>재예치됨</translation>
+        <translation>Redeposited</translation>
     </message>
     <message>
         <source>id_reference_exchange_rate</source>
-        <translation>기준 환율</translation>
+        <translation>Reference exchange rate</translation>
     </message>
     <message>
         <source>id_refresh</source>
-        <translation>새로고침</translation>
+        <translation>Refresh</translation>
+    </message>
+    <message>
+        <source>id_refund</source>
+        <translation>Refund</translation>
+    </message>
+    <message>
+        <source>id_refund_in_progress</source>
+        <translation>Refund in progress</translation>
+    </message>
+    <message>
+        <source>id_refund_initiated</source>
+        <translation>Refund initiated</translation>
+    </message>
+    <message>
+        <source>id_refundable</source>
+        <translation>Refundable</translation>
     </message>
     <message>
         <source>id_reload</source>
         <translation>Reload</translation>
     </message>
     <message>
+        <source>id_remember_device</source>
+        <translation>Remember device</translation>
+    </message>
+    <message>
+        <source>id_remember_device_connection</source>
+        <translation>Remember device connection</translation>
+    </message>
+    <message>
         <source>id_remember_me</source>
         <translation>Remember me</translation>
+    </message>
+    <message>
+        <source>id_remember_my_device</source>
+        <translation>Remember my Device</translation>
     </message>
     <message>
         <source>id_remove</source>
@@ -2759,7 +3750,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_remove_custom_network</source>
-        <translation>사용자 지정 네트워크 제거</translation>
+        <translation>Remove custom network</translation>
     </message>
     <message>
         <source>id_remove_wallet</source>
@@ -2775,11 +3766,15 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_rename_wallet</source>
-        <translation>Rename Wallet</translation>
+        <translation>Rename wallet</translation>
     </message>
     <message>
         <source>id_replaceable</source>
-        <translation>대체가능</translation>
+        <translation>replaceable</translation>
+    </message>
+    <message>
+        <source>id_report</source>
+        <translation>Report</translation>
     </message>
     <message>
         <source>id_request_amount</source>
@@ -2787,23 +3782,23 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_request_failed</source>
-        <translation>요청 실패</translation>
+        <translation>Request Failed</translation>
     </message>
     <message>
         <source>id_request_recovery_transactions</source>
-        <translation>복구 거래 요청</translation>
+        <translation>Request recovery transactions</translation>
     </message>
     <message>
         <source>id_request_sent</source>
-        <translation>요청 보냄</translation>
+        <translation>Request Sent</translation>
     </message>
     <message>
         <source>id_request_twofactor_reset</source>
-        <translation>2FA 새로고침 요청하기</translation>
+        <translation>Request Two-Factor reset</translation>
     </message>
     <message>
         <source>id_requested_fee_rate_too_low</source>
-        <translation>요청한 수수료는 너무 낮습니다</translation>
+        <translation>Requested fee rate too low</translation>
     </message>
     <message>
         <source>id_reset</source>
@@ -2811,15 +3806,15 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_reset_spv</source>
-        <translation>SPV 새로고침</translation>
+        <translation>Reset SPV</translation>
     </message>
     <message>
         <source>id_resetting_your_twofactor_takes</source>
-        <translation>2FA 재설정에는 최소 12개월이 걸립니다. 2FA 인증방법을 잃어버린 것이 확실한 경우, 재설정을 하기 위해 새로운 이메일 주소를 보내주세요.</translation>
+        <translation>Resetting your Two-Factor takes 12 months minimum. If you are sure you have lost your Two-Factor, please provide a new email address below to receive the reset.</translation>
     </message>
     <message>
         <source>id_restore</source>
-        <translation>복구</translation>
+        <translation>Restore</translation>
     </message>
     <message>
         <source>id_restore_a_blockstream_green</source>
@@ -2835,7 +3830,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_restore_green_wallet</source>
-        <translation>Green Wallet 복원</translation>
+        <translation>Restore Green Wallet</translation>
     </message>
     <message>
         <source>id_restore_temporary_wallet</source>
@@ -2855,7 +3850,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_review</source>
-        <translation>검토</translation>
+        <translation>Review</translation>
     </message>
     <message>
         <source>id_review_account_information</source>
@@ -2867,19 +3862,49 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_s_blocks_left</source>
-        <translation>%1 블록 남음</translation>
+        <translation>%1 blocks left</translation>
     </message>
     <message>
         <source>id_s_from_s</source>
-        <translation>%1 데이터 %2에서 가져옴</translation>
+        <translation>%1 from %2</translation>
+    </message>
+    <message>
+        <source>id_s_is_a_liquid_asset_you_can</source>
+        <translation>%1 is a Liquid asset. You can receive it directly on any Liquid account.</translation>
+    </message>
+    <message>
+        <source>id_s_is_a_liquid_asset_you_need_a</source>
+        <translation>%1 is a Liquid asset. You need a Liquid account in order to receive it.</translation>
+    </message>
+    <message>
+        <source>id_s_is_an_amp_asset_you_can</source>
+        <translation>%1 is an AMP asset. You can receive it directly on any AMP account.</translation>
+    </message>
+    <message>
+        <source>id_s_is_an_amp_asset_you_need_an</source>
+        <translation>%1 is an AMP asset. You need an AMP account in order to receive it.</translation>
     </message>
     <message>
         <source>id_s_network</source>
-        <translation>%1 네트워크</translation>
+        <translation>%1 network</translation>
+    </message>
+    <message>
+        <source>id_s_will_send_you_the_funds_it</source>
+        <translation>%1 will send you the funds, it can take some time.
+
+Keep the app online.</translation>
+    </message>
+    <message>
+        <source>id_safe_environment</source>
+        <translation>Safe Environment</translation>
+    </message>
+    <message>
+        <source>id_safely_stored</source>
+        <translation>Safely stored</translation>
     </message>
     <message>
         <source>id_save</source>
-        <translation>저장</translation>
+        <translation>Save</translation>
     </message>
     <message>
         <source>id_save_a_summary_of_your_accounts</source>
@@ -2887,11 +3912,27 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_save_your_mnemonic</source>
-        <translation>니모닉(복원 코드)을 기록해 두세요</translation>
+        <translation>Save your mnemonic</translation>
+    </message>
+    <message>
+        <source>id_scan_a_proposal</source>
+        <translation>Scan a Proposal</translation>
     </message>
     <message>
         <source>id_scan_a_qr_code_for_spv_pairing</source>
-        <translation>SPV연결을 위해 QR 코드를 스캔하세요</translation>
+        <translation>Scan a QR code for SPV pairing</translation>
+    </message>
+    <message>
+        <source>id_scan_from_image</source>
+        <translation>Scan from Image</translation>
+    </message>
+    <message>
+        <source>id_scan_or_paste_your_extended</source>
+        <translation>Scan or paste your extended public key (xPub/yPub/zPub) to log in to your watch-only-wallet.</translation>
+    </message>
+    <message>
+        <source>id_scan_or_paste_your_public</source>
+        <translation>Scan or paste your public descriptor to log in to your watch-only account.</translation>
     </message>
     <message>
         <source>id_scan_qr_code</source>
@@ -2907,11 +3948,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_screen_lock</source>
-        <translation>화면 잠금</translation>
+        <translation>Screen Lock</translation>
     </message>
     <message>
         <source>id_search</source>
-        <translation>검색</translation>
+        <translation>Search</translation>
     </message>
     <message>
         <source>id_search_address</source>
@@ -2919,11 +3960,11 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_second</source>
-        <translation>초</translation>
+        <translation>second</translation>
     </message>
     <message>
         <source>id_seconds</source>
-        <translation>초</translation>
+        <translation>seconds</translation>
     </message>
     <message>
         <source>id_security</source>
@@ -2934,6 +3975,10 @@ Recovery Phrase</translation>
         <translation>Security Change</translation>
     </message>
     <message>
+        <source>id_see_archived_accounts_s</source>
+        <translation>See Archived Accounts (%1)</translation>
+    </message>
+    <message>
         <source>id_see_our_privacy_policy_s</source>
         <translation>See our privacy policy %1</translation>
     </message>
@@ -2942,8 +3987,16 @@ Recovery Phrase</translation>
         <translation>See our Terms of Service %1</translation>
     </message>
     <message>
+        <source>id_segwit</source>
+        <translation>SegWit</translation>
+    </message>
+    <message>
         <source>id_segwit_account</source>
         <translation>SegWit Account</translation>
+    </message>
+    <message>
+        <source>id_segwit_bip84</source>
+        <translation>SegWit (BIP84)</translation>
     </message>
     <message>
         <source>id_select_a_fiat_currency_and</source>
@@ -2951,7 +4004,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_select_account</source>
-        <translation>계정 선택</translation>
+        <translation>Select Account</translation>
     </message>
     <message>
         <source>id_select_an_app_on_s</source>
@@ -2959,15 +4012,23 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_select_asset</source>
-        <translation>자산 선택</translation>
+        <translation>Select asset</translation>
     </message>
     <message>
         <source>id_select_duration_of_twofactor</source>
         <translation>Select duration of Two-Factor Authentication protection for your coins. The new option applies to newly received coins.</translation>
     </message>
     <message>
+        <source>id_select_initalize_to_create_a</source>
+        <translation>Select Initalize to create a New Wallet then backup and verify your recovery phrase</translation>
+    </message>
+    <message>
+        <source>id_select_initialize_and_choose_to</source>
+        <translation>Select Initialize and choose to create a New wallet</translation>
+    </message>
+    <message>
         <source>id_select_network</source>
-        <translation>네트워크 선택</translation>
+        <translation>Select network</translation>
     </message>
     <message>
         <source>id_select_the_s_app_on_your_ledger</source>
@@ -2978,16 +4039,24 @@ Recovery Phrase</translation>
         <translation>Select Wallet</translation>
     </message>
     <message>
+        <source>id_select_watchonly_type</source>
+        <translation>Select Watch-only type</translation>
+    </message>
+    <message>
         <source>id_select_word_number_d</source>
-        <translation>단어 %1번째 단어를 선택하십시오</translation>
+        <translation>Select word number %1</translation>
     </message>
     <message>
         <source>id_select_your_jade_to_login</source>
         <translation>Select your Jade to login</translation>
     </message>
     <message>
+        <source>id_select_your_recovery_key</source>
+        <translation>Select your recovery key</translation>
+    </message>
+    <message>
         <source>id_send</source>
-        <translation>보내기</translation>
+        <translation>Send</translation>
     </message>
     <message>
         <source>id_send_all</source>
@@ -2995,35 +4064,49 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_send_all_funds</source>
-        <translation>모든 자산 보내기</translation>
+        <translation>Send All Funds</translation>
     </message>
     <message>
         <source>id_send_all_requires_a_single</source>
-        <translation>모든 자산 보내기는 한명의 수령인만 있어야 합니다</translation>
+        <translation>Send All requires a single recipient</translation>
     </message>
     <message>
         <source>id_send_and_receive_liquidbased</source>
         <translation>Send and receive Liquid-based Managed Assets</translation>
     </message>
     <message>
+        <source>id_send_error_report</source>
+        <translation>Send error report</translation>
+    </message>
+    <message>
+        <source>id_send_more_than_s_and_up_to_s_to</source>
+        <translation>Send more than %1 and up to %2 to this address. A setup fee of %3 with a minimum of %4 will be applied on the received amount.
+
+This address can be used only once.</translation>
+    </message>
+    <message>
         <source>id_send_to</source>
-        <translation>수령인</translation>
+        <translation>Send To</translation>
     </message>
     <message>
         <source>id_sending</source>
-        <translation>보내는 중</translation>
+        <translation>Sending</translation>
     </message>
     <message>
         <source>id_sending_request</source>
-        <translation>요청 보내는 중...</translation>
+        <translation>Sending Request…</translation>
+    </message>
+    <message>
+        <source>id_sensitive_information</source>
+        <translation>Sensitive Information</translation>
     </message>
     <message>
         <source>id_sent</source>
-        <translation>전송 완료</translation>
+        <translation>Sent</translation>
     </message>
     <message>
         <source>id_sent_to</source>
-        <translation>수령인</translation>
+        <translation>Sent to</translation>
     </message>
     <message>
         <source>id_server_ip_and_port_ipport</source>
@@ -3039,7 +4122,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_set_a_new_pin</source>
-        <translation>새로운 비밀번호 설정</translation>
+        <translation>Set a new PIN</translation>
     </message>
     <message>
         <source>id_set_a_pin</source>
@@ -3059,7 +4142,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_set_custom_fee_rate</source>
-        <translation>사용자 지정 수수료 설정</translation>
+        <translation>Set custom fee rate</translation>
     </message>
     <message>
         <source>id_set_locktime</source>
@@ -3071,7 +4154,7 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_set_twofactor_threshold</source>
-        <translation>2FA 한도 정하기</translation>
+        <translation>Set Two-Factor threshold</translation>
     </message>
     <message>
         <source>id_set_up_a_passcode_for_your_ios</source>
@@ -3091,19 +4174,19 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_set_up_pgp_key_for</source>
-        <translation>커뮤니케이션을 위해 PGP 키 설정하기</translation>
+        <translation>Set up PGP key for communications</translation>
     </message>
     <message>
         <source>id_set_up_twofactor_authentication</source>
-        <translation>2FA 설정하기</translation>
+        <translation>Set up Two-Factor authentication</translation>
     </message>
     <message>
         <source>id_set_up_watchonly</source>
-        <translation>조회전용 모드 설정</translation>
+        <translation>Set up watch-only</translation>
     </message>
     <message>
         <source>id_set_up_watchonly_credentials</source>
-        <translation>지갑의 조회전용 증명서 설정</translation>
+        <translation>Set up watch-only credentials for this wallet</translation>
     </message>
     <message>
         <source>id_set_wallet_name</source>
@@ -3115,11 +4198,23 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_setting_updated</source>
-        <translation>설정 업데이트됨</translation>
+        <translation>Setting updated</translation>
     </message>
     <message>
         <source>id_settings</source>
-        <translation>설정</translation>
+        <translation>Settings</translation>
+    </message>
+    <message>
+        <source>id_setup_2fa_now</source>
+        <translation>Setup 2FA Now</translation>
+    </message>
+    <message>
+        <source>id_setup_a_new_wallet</source>
+        <translation>Setup a New Wallet</translation>
+    </message>
+    <message>
+        <source>id_setup_guide</source>
+        <translation>Setup Guide</translation>
     </message>
     <message>
         <source>id_setup_jade</source>
@@ -3127,19 +4222,23 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_setup_pin</source>
-        <translation>비밀번호 설정하기</translation>
+        <translation>Setup PIN</translation>
     </message>
     <message>
         <source>id_setup_pin_and_s</source>
-        <translation>비밀번호 설정 및 %1</translation>
+        <translation>Setup PIN and %1</translation>
+    </message>
+    <message>
+        <source>id_setup_your_jade</source>
+        <translation>Setup your Jade</translation>
     </message>
     <message>
         <source>id_share</source>
-        <translation>공유하기</translation>
+        <translation>Share</translation>
     </message>
     <message>
         <source>id_share_address</source>
-        <translation>주소 내보내기</translation>
+        <translation>Share Address</translation>
     </message>
     <message>
         <source>id_share_nonconfidential</source>
@@ -3152,6 +4251,10 @@ Recovery Phrase</translation>
     <message>
         <source>id_show</source>
         <translation>Show</translation>
+    </message>
+    <message>
+        <source>id_show_address</source>
+        <translation>Show Address</translation>
     </message>
     <message>
         <source>id_show_advanced_options</source>
@@ -3174,16 +4277,40 @@ Recovery Phrase</translation>
         <translation>Show coins with expiring Two-Factor authentication protection.</translation>
     </message>
     <message>
+        <source>id_show_details</source>
+        <translation>Show details</translation>
+    </message>
+    <message>
         <source>id_show_fiat</source>
-        <translation>명목화폐 보기</translation>
+        <translation>Show fiat</translation>
+    </message>
+    <message>
+        <source>id_show_lightning_invoice</source>
+        <translation>Show Lightning Invoice</translation>
     </message>
     <message>
         <source>id_show_my_wallet_backup</source>
         <translation>Show my wallet backup</translation>
     </message>
     <message>
+        <source>id_show_onchain_address</source>
+        <translation>Show Onchain Address</translation>
+    </message>
+    <message>
         <source>id_show_qr_code</source>
         <translation>Show QR code</translation>
+    </message>
+    <message>
+        <source>id_show_recovery_phrase</source>
+        <translation>Show Recovery Phrase</translation>
+    </message>
+    <message>
+        <source>id_sign_message</source>
+        <translation>Sign message</translation>
+    </message>
+    <message>
+        <source>id_sign_transaction</source>
+        <translation>Sign Transaction</translation>
     </message>
     <message>
         <source>id_signature_validation_failed_if</source>
@@ -3191,11 +4318,23 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_signup_in_progress</source>
-        <translation>회원가입 진행 중</translation>
+        <translation>Signup in progress</translation>
+    </message>
+    <message>
+        <source>id_simple</source>
+        <translation>Simple</translation>
+    </message>
+    <message>
+        <source>id_simple__secure_selfcustody</source>
+        <translation>Simple &amp; Secure Self-Custody</translation>
+    </message>
+    <message>
+        <source>id_simple_portable_standard</source>
+        <translation>Simple, portable, standard singlesig account, secured by your key, the recovery phrase.</translation>
     </message>
     <message>
         <source>id_simplified_payment_verification</source>
-        <translation>Simplified Payment Verification 은 Green 서버 대신 비트코인 네트워크를 활용하여 거래 및 잔액을 검증합니다. SPV 모드를 활성화 하면 더 많은 대역폭 및 프로세싱 파워가 요구됩니다.</translation>
+        <translation>Simplified Payment Verification verifies your transactions and balance using the Bitcoin network, outside of Green&apos;s servers. Enabling adds bandwidth and processing requirements</translation>
     </message>
     <message>
         <source>id_singlesig</source>
@@ -3207,23 +4346,23 @@ Recovery Phrase</translation>
     </message>
     <message>
         <source>id_skip</source>
-        <translation>넘기기</translation>
+        <translation>Skip</translation>
     </message>
     <message>
         <source>id_skip_not_recommended</source>
-        <translation>넘기기 (권장하지 않음)</translation>
+        <translation>Skip (Not Recommended)</translation>
     </message>
     <message>
         <source>id_slide_to_send</source>
-        <translation>밀어서 보내기</translation>
+        <translation>Slide to Send</translation>
     </message>
     <message>
         <source>id_slow</source>
-        <translation>느리게</translation>
+        <translation>Slow</translation>
     </message>
     <message>
         <source>id_sms</source>
-        <translation>문자</translation>
+        <translation>SMS</translation>
     </message>
     <message>
         <source>id_snnreset_this_setting_and_then</source>
@@ -3233,19 +4372,19 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_socks5_hostname</source>
-        <translation>Socks5 호스트 명</translation>
+        <translation>Socks5 Hostname</translation>
     </message>
     <message>
         <source>id_socks5_port</source>
-        <translation>Socks5 포트</translation>
+        <translation>Socks5 Port</translation>
     </message>
     <message>
         <source>id_socks5_proxy_and_port_must_be</source>
-        <translation>SOCKS5 프록시와 포트를 설정하여야 합니다</translation>
+        <translation>SOCKS5 proxy and port must be set</translation>
     </message>
     <message>
         <source>id_something_went_wrong</source>
-        <translation>문제가 발생하였습니다.</translation>
+        <translation>Something went wrong</translation>
     </message>
     <message>
         <source>id_spend_your_bitcoin_without_2fa</source>
@@ -3253,7 +4392,7 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_spv_is_always_synchronized_on</source>
-        <translation>SPV는 데이터를 사용하지 않고 항상 Wifi나 Ethernet을 사용하여 동기화됩니다. 이 설정을 키면 모바일 데이터를 사용할 때도 동기화됩니다. 이는 요금제에 따라 매우 비쌀 수 있어 활성화 하실 때 유의해 주세요.</translation>
+        <translation>SPV is always synchronized on non-mobile networks like WiFi or Ethernet. This setting also synchronizes when using mobile data. This can be expensive depending on your data plan so take care when enabling.</translation>
     </message>
     <message>
         <source>id_spv_mode_is_currently_available</source>
@@ -3261,19 +4400,19 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_spv_not_fully_synced</source>
-        <translation>SPV가 완전히 동기화되지 않음</translation>
+        <translation>SPV not fully synced</translation>
     </message>
     <message>
         <source>id_spv_notifications</source>
-        <translation>SPV 알람</translation>
+        <translation>SPV notifications</translation>
     </message>
     <message>
         <source>id_spv_reset_and_restarted</source>
-        <translation>SPV가 초기화되고 재시작 되었습니다.</translation>
+        <translation>SPV reset and restarted</translation>
     </message>
     <message>
         <source>id_spv_synchronization</source>
-        <translation>SPV 동기화</translation>
+        <translation>SPV synchronization</translation>
     </message>
     <message>
         <source>id_spv_synchronization_using_tor</source>
@@ -3281,11 +4420,15 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_spv_unverified</source>
-        <translation>SPV 검증되지 않음</translation>
+        <translation>SPV unverified</translation>
     </message>
     <message>
         <source>id_spv_verification</source>
         <translation>SPV verification</translation>
+    </message>
+    <message>
+        <source>id_standard</source>
+        <translation>Standard</translation>
     </message>
     <message>
         <source>id_standard_account</source>
@@ -3312,8 +4455,24 @@ Reset this setting and then re-activate it.</translation>
         <translation>Status</translation>
     </message>
     <message>
+        <source>id_step</source>
+        <translation>Step</translation>
+    </message>
+    <message>
+        <source>id_store_it_somewhere_safe</source>
+        <translation>Store it somewhere safe.</translation>
+    </message>
+    <message>
+        <source>id_submit</source>
+        <translation>Submit</translation>
+    </message>
+    <message>
         <source>id_success</source>
         <translation>Success</translation>
+    </message>
+    <message>
+        <source>id_successfully_sent_your_funds</source>
+        <translation>Successfully sent your funds</translation>
     </message>
     <message>
         <source>id_support</source>
@@ -3324,24 +4483,40 @@ Reset this setting and then re-activate it.</translation>
         <translation>Support Page</translation>
     </message>
     <message>
+        <source>id_swap</source>
+        <translation>Swap</translation>
+    </message>
+    <message>
+        <source>id_swap_is_in_progress</source>
+        <translation>Swap is in progress</translation>
+    </message>
+    <message>
+        <source>id_swap_proposal</source>
+        <translation>Swap Proposal</translation>
+    </message>
+    <message>
+        <source>id_swapped</source>
+        <translation>Swapped</translation>
+    </message>
+    <message>
         <source>id_sweep</source>
         <translation>Sweep</translation>
     </message>
     <message>
         <source>id_sweep_from_paper_wallet</source>
-        <translation>종이 지갑에서 자산 Sweep 하기</translation>
+        <translation>Sweep From Paper Wallet</translation>
     </message>
     <message>
         <source>id_sweep_into_s</source>
-        <translation>%1로 자산 sweep 하기</translation>
+        <translation>Sweep into %1</translation>
     </message>
     <message>
         <source>id_switch_network</source>
-        <translation>네트워크 전환</translation>
+        <translation>Switch Network</translation>
     </message>
     <message>
         <source>id_synchronize_spv_on_mobile</source>
-        <translation>모바일 기기에서 SPV 연동하기</translation>
+        <translation>Synchronize SPV on mobile</translation>
     </message>
     <message>
         <source>id_syou_need_ton1_reset_greens</source>
@@ -3356,19 +4531,35 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_system_message</source>
-        <translation>시스템 메시지</translation>
+        <translation>System Message</translation>
+    </message>
+    <message>
+        <source>id_take_control_your_keys_your</source>
+        <translation>Take Control: Your Keys, Your Bitcoin</translation>
     </message>
     <message>
         <source>id_tap_on_the_card_to_view</source>
-        <translation>카드를 터치하여 거래를 확인하세요</translation>
+        <translation>Tap on the card to view transactions.</translation>
     </message>
     <message>
         <source>id_tap_to_restart_the_simplified</source>
-        <translation>터치하여 Simplified Payment Verification을 다시 시작하세요</translation>
+        <translation>Tap to restart the Simplified Payment Verification</translation>
     </message>
     <message>
         <source>id_tap_to_scan_a_qr_code_and</source>
-        <translation>터치해서 QR코드를 스캔해보세요. 노드에 연결시켜 SPV노드를 실행할 수 있습니다</translation>
+        <translation>Tap to scan a QR code and connect to a node for SPV</translation>
+    </message>
+    <message>
+        <source>id_taproot</source>
+        <translation>Taproot</translation>
+    </message>
+    <message>
+        <source>id_taproot_account</source>
+        <translation>Taproot account</translation>
+    </message>
+    <message>
+        <source>id_taproot_bip86</source>
+        <translation>Taproot (BIP86)</translation>
     </message>
     <message>
         <source>id_telegram</source>
@@ -3380,7 +4571,7 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_terms_of_use</source>
-        <translation>이용약관</translation>
+        <translation>Terms of Use</translation>
     </message>
     <message>
         <source>id_testnet_and_liquid_testnet</source>
@@ -3396,7 +4587,11 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_thank_you_for_downloading_green</source>
-        <translation>Green을 다운로드 해주셔서 감사합니다! 시간 되시면 리뷰를 남겨주세요.</translation>
+        <translation>Thank you for downloading Green! Please leave us a review when you get a chance</translation>
+    </message>
+    <message>
+        <source>id_thank_you_for_your_feedback</source>
+        <translation>Thank you for your feedback</translation>
     </message>
     <message>
         <source>id_the_1_year_2fa_reset_process</source>
@@ -3416,7 +4611,7 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_the_camera_has_a_problem_you</source>
-        <translation>카메라에 문제가 있습니다. 기기를 다시 시작하셔야 될 것 같습니다.</translation>
+        <translation>The camera has a problem. You probably need to restart the device.</translation>
     </message>
     <message>
         <source>id_the_default_value_is_90_days_if</source>
@@ -3424,7 +4619,7 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_the_easier_safer_and_faster</source>
-        <translation>더 쉽고, 더 안전하고, 더 빠른 지갑</translation>
+        <translation>the easier, safer and faster wallet</translation>
     </message>
     <message>
         <source>id_the_email_will_also_be_used_to</source>
@@ -3432,27 +4627,39 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_the_hardware_wallet_you_are</source>
-        <translation>지금 사용하시는 하드웨어 지갑은 아직 지원되지 않습니다.</translation>
+        <translation>The hardware wallet you are using is not yet supported</translation>
+    </message>
+    <message>
+        <source>id_the_importance_of_twofactor</source>
+        <translation>The Importance of Two-Factor Authentication</translation>
     </message>
     <message>
         <source>id_the_liquid_network_is_a_bitcoin</source>
-        <translation>The Liquid Network is a Bitcoin sidechain. Select to send and receive Liquid Bitcoin (L-BTC), Tether (USDt), and other Liquid assets.</translation>
+        <translation>The Liquid Network is a Bitcoin layer-2 solution enabling the fast, confidential settlement and issuance of digital assets, such as stablecoins, security tokens, and other financial instruments, on top of the Bitcoin timechain.</translation>
     </message>
     <message>
         <source>id_the_network_selected_on_the</source>
-        <translation>Green 앱에서 선택한 네트워크는 하드웨어 지갑에서 선택한 네트워크랑 일치하지 않습니다. 두 기기에서 동일한 네트워크를 선택해 주세요.</translation>
+        <translation>The network selected on the Green app is different from the one selected on the hardware wallet. Select the same network on both devices.</translation>
     </message>
     <message>
         <source>id_the_new_email_will_be_used_for</source>
         <translation>The new email will be used for Two-Factor Authentication when the reset is complete. The reset takes 12 months plus any remaining timelock.</translation>
     </message>
     <message>
+        <source>id_the_new_firmware_requires_you</source>
+        <translation>The new firmware requires you to unpair your Jade from the Bluetooth settings.</translation>
+    </message>
+    <message>
         <source>id_the_password_cant_be_empty</source>
-        <translation>비밀번호는 비워 둘 수 없습니다</translation>
+        <translation>The password can&apos;t be empty</translation>
+    </message>
+    <message>
+        <source>id_the_qr_code_does_not_include</source>
+        <translation>The QR code does not include the BIP39 Passphrase</translation>
     </message>
     <message>
         <source>id_the_recovery_key_below_will_not</source>
-        <translation>밑의 복원 키는 다시 표시되지 않습니다. 자산을 잃어버리지 않도록 안전하게 보관해두세요.</translation>
+        <translation>The recovery key below will not be shown again. Please make a safe backup of it now to ensure you can always access your funds.</translation>
     </message>
     <message>
         <source>id_the_recovery_phrase_can_be_used</source>
@@ -3471,6 +4678,10 @@ Reset this setting and then re-activate it.</translation>
         <translation>The transaction contains non-confidential funds.</translation>
     </message>
     <message>
+        <source>id_the_username_cant_be_empty</source>
+        <translation>The username can&apos;t be empty</translation>
+    </message>
+    <message>
         <source>id_the_waiting_period_is_necessary</source>
         <translation>The waiting period is necessary to ensure the security of your wallet, to prevent thieves from getting around your Two-Factor protection.</translation>
     </message>
@@ -3480,7 +4691,17 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_there_is_already_a_pin_set_for</source>
-        <translation>%1 지갑에는 비밀번호가 이미 설정되어 있습니다. 이대로 진행할 경우 비밀번호는 설정할 수 없으며 로그인을 위해서는 24개의 니모닉(복원 코드)이 필요합니다. 3번 로그인 실패를 하거나 설정에서 비밀번호를 해제하실 수 있습니다. </translation>
+        <translation>There is already a PIN set for a %1 wallet. Proceeding will not allow setting a PIN and login will require the 24 words mnemonic. You can disable PIN from settings or with 3 failed attempts.</translation>
+    </message>
+    <message>
+        <source>id_there_is_already_a_swap_in</source>
+        <translation>There is already a swap in progress. Only one at a time is allowed</translation>
+    </message>
+    <message>
+        <source>id_there_is_already_an_archived</source>
+        <translation>There is already an archived account.
+
+Do you want to create a new one?</translation>
     </message>
     <message>
         <source>id_these_are_some_compatible</source>
@@ -3491,12 +4712,29 @@ Reset this setting and then re-activate it.</translation>
         <translation>These settings apply for every wallet you use on Blockstream Green.</translation>
     </message>
     <message>
+        <source>id_this_amount_is_below_the</source>
+        <translation>This amount is below the minimum fee %1 (%2).</translation>
+    </message>
+    <message>
         <source>id_this_feature_is_coming_soon</source>
         <translation>This feature is coming soon, stay tuned!</translation>
     </message>
     <message>
+        <source>id_this_might_take_up_to_a</source>
+        <translation>This might take up to a minute.
+Thanks for your patience!</translation>
+    </message>
+    <message>
+        <source>id_this_signature_is_a_proof_of</source>
+        <translation>This signature is a proof of ownership of the address</translation>
+    </message>
+    <message>
         <source>id_this_transaction_spent</source>
         <translation>This transaction spent non-confidential funds.</translation>
+    </message>
+    <message>
+        <source>id_this_wallet_is_based_on_your</source>
+        <translation>This wallet is based on your recovery phrase and a BIP39 Passphrase</translation>
     </message>
     <message>
         <source>id_this_wallet_operates_on_a_test</source>
@@ -3512,19 +4750,23 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_ticker</source>
-        <translation>종목 코드</translation>
+        <translation>Ticker</translation>
     </message>
     <message>
         <source>id_time_s</source>
-        <translation>시간: %1</translation>
+        <translation>Time: %1</translation>
     </message>
     <message>
         <source>id_tip_we_recommend_you_enable</source>
         <translation>Tip: We recommend you enable more than one 2FA method. If you only set up one 2FA method and then lose it, you&apos;ll have to wait at least one year until the 2FA expires.</translation>
     </message>
     <message>
+        <source>id_tip_you_can_use_the</source>
+        <translation>Tip: You can use the xPub/yPub/zPub to view your watch-only wallet in Green, or you may import it to another platform. Each account in your wallet has a separate xPub/yPub/zPub.</translation>
+    </message>
+    <message>
         <source>id_to</source>
-        <translation>받는 분</translation>
+        <translation>TO</translation>
     </message>
     <message>
         <source>id_to_keep_you_in_control_of_your</source>
@@ -3540,7 +4782,7 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_tor_connectivity_disabled</source>
-        <translation>Tor 연결이 비활성화됐습니다!</translation>
+        <translation>Tor Connectivity Disabled!</translation>
     </message>
     <message>
         <source>id_tor_is_connected</source>
@@ -3556,19 +4798,23 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_tor_will_use_1s_and_only_work</source>
-        <translation>Tor는 %1를(을) 사용하고 있고 프록시가 Orbot이거나 Tor이 활성화되어있어야 작동합니다.</translation>
+        <translation>Tor will use %1 and only work if your proxy is Orbot or Tor enabled</translation>
+    </message>
+    <message>
+        <source>id_total</source>
+        <translation>Total</translation>
     </message>
     <message>
         <source>id_total_assets</source>
-        <translation>총자산</translation>
+        <translation>Total Assets</translation>
     </message>
     <message>
         <source>id_total_balance</source>
-        <translation>총잔액</translation>
+        <translation>Total Balance</translation>
     </message>
     <message>
         <source>id_total_with_fee</source>
-        <translation>총액(수수료 포함)</translation>
+        <translation>Total with Fee</translation>
     </message>
     <message>
         <source>id_touch_id</source>
@@ -3576,15 +4822,15 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_touch_to_display</source>
-        <translation>터치하여 보기</translation>
+        <translation>Touch to display</translation>
     </message>
     <message>
         <source>id_touchface_id_not_available</source>
-        <translation>Touch/Face ID 사용 불가</translation>
+        <translation>Touch/Face ID not available</translation>
     </message>
     <message>
         <source>id_transaction_already_confirmed</source>
-        <translation>거래 이미 컨펌됨</translation>
+        <translation>Transaction already confirmed</translation>
     </message>
     <message>
         <source>id_transaction_copied_to_clipboard</source>
@@ -3592,15 +4838,15 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_transaction_details</source>
-        <translation>상세 거래 내역</translation>
+        <translation>Transaction details</translation>
     </message>
     <message>
         <source>id_transaction_id</source>
-        <translation>거래 ID</translation>
+        <translation>Transaction ID</translation>
     </message>
     <message>
         <source>id_transaction_sent</source>
-        <translation>거래 보냄</translation>
+        <translation>Transaction Sent</translation>
     </message>
     <message>
         <source>id_transaction_status</source>
@@ -3611,12 +4857,16 @@ Reset this setting and then re-activate it.</translation>
         <translation>Transactions</translation>
     </message>
     <message>
+        <source>id_troubleshoot</source>
+        <translation>Troubleshoot</translation>
+    </message>
+    <message>
         <source>id_try_again</source>
         <translation>Try Again</translation>
     </message>
     <message>
         <source>id_try_now</source>
-        <translation>지금 시도하기</translation>
+        <translation>Try now</translation>
     </message>
     <message>
         <source>id_turn_on_bluetooth_to_connect</source>
@@ -3624,7 +4874,7 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_two_factor_authentication</source>
-        <translation>2FA </translation>
+        <translation>TWO FACTOR AUTHENTICATION</translation>
     </message>
     <message>
         <source>id_twofactor</source>
@@ -3632,7 +4882,7 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_twofactor_authentication</source>
-        <translation>2FA</translation>
+        <translation>Two-Factor authentication</translation>
     </message>
     <message>
         <source>id_twofactor_authentication_expiry</source>
@@ -3648,27 +4898,39 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_twofactor_reset_in_progress</source>
-        <translation>2FA를 재설정하고 있어 지갑이 현재 잠겨있습니다.</translation>
+        <translation>Two-Factor reset in progress, your wallet is currently locked.</translation>
     </message>
     <message>
         <source>id_twofactor_settings</source>
-        <translation>2FA 설정</translation>
+        <translation>Two-Factor Settings</translation>
     </message>
     <message>
         <source>id_twofactor_threshold</source>
-        <translation>2FA 최소한도</translation>
+        <translation>Two-Factor threshold</translation>
+    </message>
+    <message>
+        <source>id_tx_count</source>
+        <translation>TX Count</translation>
     </message>
     <message>
         <source>id_txid</source>
         <translation>TXID</translation>
     </message>
     <message>
+        <source>id_type_the_next_word</source>
+        <translation>Type the next word</translation>
+    </message>
+    <message>
         <source>id_unable_to_contact_the_green</source>
-        <translation>Green 서비스 연락 실패. 네트워크 연결을 다시 확인하시고 재연결 될 때까지 기다리세요.</translation>
+        <translation>Unable to contact the Green service. Please check your network connection and wait to be reconnected.</translation>
     </message>
     <message>
         <source>id_unarchive</source>
         <translation>Unarchive</translation>
+    </message>
+    <message>
+        <source>id_unarchive_account</source>
+        <translation>Unarchive account</translation>
     </message>
     <message>
         <source>id_unblinding_data</source>
@@ -3676,7 +4938,7 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_unconfirmed</source>
-        <translation>컨펌되지 않음</translation>
+        <translation>Unconfirmed</translation>
     </message>
     <message>
         <source>id_undo_2fa_dispute</source>
@@ -3684,15 +4946,15 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_unknown</source>
-        <translation>알 수 없음</translation>
+        <translation>Unknown</translation>
     </message>
     <message>
         <source>id_unknown_bip21_parameter</source>
-        <translation>알 수 없는 bip21 매개 변수</translation>
+        <translation>Unknown bip21 parameter</translation>
     </message>
     <message>
         <source>id_unknown_custom</source>
-        <translation>알려지지 않음 (사용자 지정)</translation>
+        <translation>Unknown (Custom)</translation>
     </message>
     <message>
         <source>id_unknown_firmware</source>
@@ -3703,8 +4965,16 @@ Reset this setting and then re-activate it.</translation>
         <translation>Unlock</translation>
     </message>
     <message>
+        <source>id_unlock_green</source>
+        <translation>Unlock Green</translation>
+    </message>
+    <message>
         <source>id_unlock_jade_to_continue</source>
         <translation>Unlock Jade to continue</translation>
+    </message>
+    <message>
+        <source>id_unlock_your_device_to_continue</source>
+        <translation>Unlock your Device to continue</translation>
     </message>
     <message>
         <source>id_unlocked_coins_can_be_spent_and</source>
@@ -3724,7 +4994,7 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_updated</source>
-        <translation>업데이트됨</translation>
+        <translation>updated</translation>
     </message>
     <message>
         <source>id_updating_firmware</source>
@@ -3759,20 +5029,46 @@ Reset this setting and then re-activate it.</translation>
         <translation>Use Android screen lock to log in</translation>
     </message>
     <message>
+        <source>id_use_comma_separated_values_or</source>
+        <translation>Use comma separated values or keep scanning</translation>
+    </message>
+    <message>
+        <source>id_use_hardware_device</source>
+        <translation>Use Hardware Device</translation>
+    </message>
+    <message>
+        <source>id_use_secure_display_and_screen</source>
+        <translation>Use Secure Display and Screen Lock</translation>
+    </message>
+    <message>
+        <source>id_use_the_jogwheel_to_select_the</source>
+        <translation>Use the jog-wheel to select the word that matches your recovery phrase.</translation>
+    </message>
+    <message>
+        <source>id_use_this_recovery_phrase_to</source>
+        <translation>Use this recovery phrase to restore your lightning account.
+
+WARNING: This recovery phrase does not restore all your other bitcoin or liquid accounts.</translation>
+    </message>
+    <message>
         <source>id_use_your_email_to_receive</source>
         <translation>Use your email to receive recovery transactions and transactions notifications</translation>
     </message>
     <message>
+        <source>id_user_contact_info_ip_address</source>
+        <translation>User contact info, IP address, detailed location</translation>
+    </message>
+    <message>
         <source>id_user_not_found_or_invalid</source>
-        <translation>잘못된 비밀번호 또는 사용자 찾지 못함</translation>
+        <translation>User not found or invalid password</translation>
     </message>
     <message>
         <source>id_username</source>
-        <translation>사용자 명</translation>
+        <translation>Username</translation>
     </message>
     <message>
         <source>id_username_not_available</source>
-        <translation>사용자 명 사용 불가능</translation>
+        <translation>Username not available</translation>
     </message>
     <message>
         <source>id_value_must_be_between_144_and</source>
@@ -3791,12 +5087,16 @@ Reset this setting and then re-activate it.</translation>
         <translation>Verify on Device</translation>
     </message>
     <message>
+        <source>id_verify_recovery_phrase</source>
+        <translation>Verify Recovery Phrase</translation>
+    </message>
+    <message>
         <source>id_verify_your_bitcoin</source>
         <translation>Verify your bitcoin transactions are included on the blockchain</translation>
     </message>
     <message>
         <source>id_verify_your_pin</source>
-        <translation>비밀번호를 확인하세요</translation>
+        <translation>Verify Your PIN</translation>
     </message>
     <message>
         <source>id_verifying_transactions</source>
@@ -3804,15 +5104,23 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_version</source>
-        <translation>버전</translation>
+        <translation>Version</translation>
     </message>
     <message>
         <source>id_version_1s</source>
-        <translation>버전: %1</translation>
+        <translation>Version: %1</translation>
     </message>
     <message>
         <source>id_version_1s_2s</source>
-        <translation>버전 %1%2</translation>
+        <translation>Version %1 %2</translation>
+    </message>
+    <message>
+        <source>id_view_account</source>
+        <translation>View account</translation>
+    </message>
+    <message>
+        <source>id_view_archived_accounts</source>
+        <translation>View Archived Accounts</translation>
     </message>
     <message>
         <source>id_view_archived_accounts_d</source>
@@ -3820,7 +5128,7 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_view_in_explorer</source>
-        <translation>탐색기에서 보기</translation>
+        <translation>View in Explorer</translation>
     </message>
     <message>
         <source>id_view_more</source>
@@ -3836,7 +5144,7 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_waiting_for_transaction</source>
-        <translation>거래 기다리는중...</translation>
+        <translation>Waiting for transaction…</translation>
     </message>
     <message>
         <source>id_wallet</source>
@@ -3845,6 +5153,10 @@ Reset this setting and then re-activate it.</translation>
     <message>
         <source>id_wallet_already_restored</source>
         <translation>Wallet already restored</translation>
+    </message>
+    <message>
+        <source>id_wallet_assets</source>
+        <translation>Wallet Assets</translation>
     </message>
     <message>
         <source>id_wallet_backup</source>
@@ -3856,7 +5168,7 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_wallet_creation_failed</source>
-        <translation>지갑 생성 실패</translation>
+        <translation>Wallet creation failed</translation>
     </message>
     <message>
         <source>id_wallet_found</source>
@@ -3871,12 +5183,20 @@ Reset this setting and then re-activate it.</translation>
         <translation>Wallet not found</translation>
     </message>
     <message>
+        <source>id_wallet_pockets</source>
+        <translation>Wallet Pockets</translation>
+    </message>
+    <message>
+        <source>id_wallet_transactions</source>
+        <translation>Wallet Transactions</translation>
+    </message>
+    <message>
         <source>id_wallets</source>
-        <translation>지갑</translation>
+        <translation>Wallets</translation>
     </message>
     <message>
         <source>id_warning</source>
-        <translation>경고!</translation>
+        <translation>Warning!</translation>
     </message>
     <message>
         <source>id_warning_no_trusted_node_set</source>
@@ -3884,19 +5204,19 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_warning_nononion_address</source>
-        <translation>경고: .onion이 아닌 주소 탐지</translation>
+        <translation>Warning: Non-.onion address detected!</translation>
     </message>
     <message>
         <source>id_warning_resetting_twofactor</source>
-        <translation>경고: 2FA 재설정은 지갑을 잠금 시킵니다.</translation>
+        <translation>WARNING: Resetting Two-Factor authentication will lock your wallet</translation>
     </message>
     <message>
         <source>id_warning_there_is_already_a</source>
-        <translation>경고: 2FA 재설정 요청이 이미 되어 있습니다. 만약 새로운 이메일 주소로 요청하시면 지갑은 분쟁 상태로 전환되며 영원히 이용하실 수 없게 될 가능성이 높습니다.</translation>
+        <translation>WARNING: There is already a request to reset Two-Factor authentication for your wallet. If you now request with a new email address, your wallet will become disputed and likely permanently unavailable to you.</translation>
     </message>
     <message>
         <source>id_warning_wallet_locked_by</source>
-        <translation>경고: 지갑은 2FA 분쟁으로 잠금 상태입니다. 자세한 내용은 고객센터에 문의해주시길 바랍니다.</translation>
+        <translation>WARNING: Wallet locked by Two-Factor dispute. Contact support for more information.</translation>
     </message>
     <message>
         <source>id_warning_watchonly_credentials</source>
@@ -3904,23 +5224,31 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_warning_you_need_a_positive</source>
-        <translation>경고! L-BTC 잔액이 남아있어야 거래를 보낼 수 있습니다.</translation>
+        <translation>Warning! You need a positive L-BTC balance to be able to send transactions.</translation>
     </message>
     <message>
         <source>id_watchonly</source>
-        <translation>조회전용</translation>
+        <translation>Watch-only</translation>
+    </message>
+    <message>
+        <source>id_watchonly_credentials</source>
+        <translation>Watch-only credentials</translation>
+    </message>
+    <message>
+        <source>id_watchonly_details</source>
+        <translation>Watch-only details</translation>
     </message>
     <message>
         <source>id_watchonly_disabled</source>
-        <translation>조회전용 모드 비활성화</translation>
+        <translation>Watch-only disabled</translation>
     </message>
     <message>
         <source>id_watchonly_login</source>
-        <translation>조회전용 모드로 로그인하기</translation>
+        <translation>Watch-only login</translation>
     </message>
     <message>
         <source>id_watchonly_mode_can_be_activated</source>
-        <translation>조회전용모드는 비밀번호, 니모닉(복원 코드) 또는 하드웨어 지갑을 통해 로그인한 후 활성화시킬 수 있습니다.</translation>
+        <translation>Watch-only mode can be activated from settings after logging in with your PIN, mnemonic, or hardware wallet.</translation>
     </message>
     <message>
         <source>id_watchonly_mode_cannot_be</source>
@@ -3932,15 +5260,27 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_we_use_the_camera_to_scan_qr</source>
-        <translation>Green은 카메라를 사용하여 QR 코드를 스캔합니다.</translation>
+        <translation>We use the camera to scan QR codes</translation>
+    </message>
+    <message>
+        <source>id_we_will_do_our_best_to_find_a</source>
+        <translation>We will do our best to find a wallet corresponding to this recovery phrase</translation>
     </message>
     <message>
         <source>id_welcome</source>
-        <translation>안녕하세요</translation>
+        <translation>Welcome</translation>
     </message>
     <message>
         <source>id_welcome_to</source>
-        <translation>환영합니다</translation>
+        <translation>Welcome to</translation>
+    </message>
+    <message>
+        <source>id_welcome_to_blockstream_jade</source>
+        <translation>Welcome to Blockstream Jade</translation>
+    </message>
+    <message>
+        <source>id_welcome_to_your_wallet</source>
+        <translation>Welcome to your Wallet!</translation>
     </message>
     <message>
         <source>id_well_done_you_can_continue</source>
@@ -3959,20 +5299,44 @@ Reset this setting and then re-activate it.</translation>
         <translation>We&apos;ll get you set up with an AMP wallet in no time. Note that you can alternatively create AMP accounts in any existing Liquid wallet.</translation>
     </message>
     <message>
+        <source>id_what_is_word_number_s</source>
+        <translation>What is word number %1?</translation>
+    </message>
+    <message>
         <source>id_what_type_of_account_would_you</source>
         <translation>What type of account would you like to add?</translation>
+    </message>
+    <message>
+        <source>id_whats_collected</source>
+        <translation>What&apos;s collected</translation>
     </message>
     <message>
         <source>id_whats_new</source>
         <translation>What&apos;s new?</translation>
     </message>
     <message>
+        <source>id_whats_not_collected</source>
+        <translation>What&apos;s NOT collected</translation>
+    </message>
+    <message>
         <source>id_where_would_you_like_to</source>
         <translation>Where would you like to transfer the funds?</translation>
     </message>
     <message>
+        <source>id_whomever_can_access_your</source>
+        <translation>Whomever can access your recovery phrase, can steal your funds.</translation>
+    </message>
+    <message>
         <source>id_wireless</source>
         <translation>Wireless</translation>
+    </message>
+    <message>
+        <source>id_withdraw</source>
+        <translation>Withdraw</translation>
+    </message>
+    <message>
+        <source>id_withdraw_limits_s__s</source>
+        <translation>Withdraw limits: %1 - %2</translation>
     </message>
     <message>
         <source>id_word</source>
@@ -3980,55 +5344,91 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_word_d_of_d</source>
-        <translation>단어 %1 중 %2</translation>
+        <translation>Word %1 of %2</translation>
     </message>
     <message>
         <source>id_write_down_the_words</source>
-        <translation>단어를 받아 쓰시기 바랍니다</translation>
+        <translation>Write down the words</translation>
     </message>
     <message>
         <source>id_write_down_your_recovery_phrase</source>
-        <translation>Write down your recovery phrase on paper and store it somewhere safe.</translation>
+        <translation>Write down your recovery phrase in the correct order</translation>
     </message>
     <message>
         <source>id_wrong_choice_check_your</source>
-        <translation>단어가 일치하지 않습니다. 니모닉(복원 코드)을 확인하시고 다시 시도하시길 바랍니다.</translation>
+        <translation>Wrong choice. Check your mnemonic and try again.</translation>
+    </message>
+    <message>
+        <source>id_xpub</source>
+        <translation>xPub</translation>
     </message>
     <message>
         <source>id_year</source>
-        <translation>년</translation>
+        <translation>year</translation>
     </message>
     <message>
         <source>id_years</source>
-        <translation>년</translation>
+        <translation>years</translation>
     </message>
     <message>
         <source>id_you_are_not_connected</source>
-        <translation>연결되지 않았습니다.</translation>
+        <translation>You are not connected</translation>
     </message>
     <message>
         <source>id_you_are_not_connected_please</source>
-        <translation>아직 연결 되지 않았습니다. 잠시만 기다려 주세요.</translation>
+        <translation>You are not connected, please wait</translation>
     </message>
     <message>
         <source>id_you_are_now_connected</source>
-        <translation>연결되었습니다.</translation>
+        <translation>You are now connected</translation>
+    </message>
+    <message>
+        <source>id_you_are_redeeming_funds_from_s</source>
+        <translation>You are redeeming funds from %1</translation>
     </message>
     <message>
         <source>id_you_can_change_these_later_on</source>
         <translation>You can change these later on.</translation>
     </message>
     <message>
+        <source>id_you_can_still_receive_funds_but</source>
+        <translation>You can still receive funds, but they won’t be shown on your total balance.</translation>
+    </message>
+    <message>
+        <source>id_you_can_sweep_s_of_your_funds</source>
+        <translation>You can sweep %1 of your funds to your onchain account.</translation>
+    </message>
+    <message>
+        <source>id_you_can_use_your_wallet_to</source>
+        <translation>You can use your wallet to anonymously sign and authorize an action on:</translation>
+    </message>
+    <message>
         <source>id_you_cannot_create_or_restore_a</source>
         <translation>You cannot create or restore a wallet on %1 as you already have a PIN protected wallet.</translation>
+    </message>
+    <message>
+        <source>id_you_cannot_receive_more_than_s</source>
+        <translation>You cannot receive more than %1 (%2) on this account. Reduce the amount and try again.</translation>
+    </message>
+    <message>
+        <source>id_you_have_a_significant_amount</source>
+        <translation>You have a significant amount of funds here, consider protecting them with 2FA.</translation>
     </message>
     <message>
         <source>id_you_have_clicked_a_payment_uri</source>
         <translation>You have clicked a Payment URI, select a wallet to handle it</translation>
     </message>
     <message>
+        <source>id_you_have_clicked_a_uri_select_a</source>
+        <translation>You have clicked a URI, select a wallet to handle it</translation>
+    </message>
+    <message>
         <source>id_you_have_control_on_your_funds</source>
-        <translation>자산의 모든 권한을 가지고 계십니다. </translation>
+        <translation>You have control on your funds</translation>
+    </message>
+    <message>
+        <source>id_you_have_just_received_s</source>
+        <translation>You have just received %1.</translation>
     </message>
     <message>
         <source>id_you_have_no_coins_to_send</source>
@@ -4036,11 +5436,15 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_you_have_received_s</source>
-        <translation>%1를 받았습니다</translation>
+        <translation>You have received %1</translation>
     </message>
     <message>
         <source>id_you_have_successfully_changed</source>
         <translation>You have successfully changed your PIN</translation>
+    </message>
+    <message>
+        <source>id_you_have_successfully_sent_a</source>
+        <translation>You have successfully sent a transaction. Please give us your feedback to improve Green.</translation>
     </message>
     <message>
         <source>id_you_have_to_authenticate_using</source>
@@ -4052,19 +5456,27 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_you_must_first_log_out_before</source>
-        <translation>로그인하기 전에 로그아웃을 먼저 해야 합니다.</translation>
+        <translation>You must first log out before logging in.</translation>
     </message>
     <message>
         <source>id_you_must_save_this_mnemonic_now</source>
-        <translation>지금 당장 이 니모닉(복원 코드)을 꼭 저장하여야 합니다.</translation>
+        <translation>You MUST save this mnemonic NOW</translation>
+    </message>
+    <message>
+        <source>id_you_need_a_liquid_account_in</source>
+        <translation>You need a Liquid account in order to receive it.</translation>
     </message>
     <message>
         <source>id_you_only_have_one_twofactor</source>
-        <translation>2FA 설정을 한 가지만 하였습니다.</translation>
+        <translation>You only have one Two-Factor authentication method enabled</translation>
+    </message>
+    <message>
+        <source>id_you_will_be_asked_to_enter_your</source>
+        <translation>You will be asked to enter your passphrase at every login.</translation>
     </message>
     <message>
         <source>id_you_will_need_to_reenter_your</source>
-        <translation>비밀번호를 설정하지 않으시면 니모닉(복원 코드)을 사용하여 로그인 하여야 합니다. 계속하시려면 &quot;확인&quot;을 눌러주세요.</translation>
+        <translation>You will need to re-enter your mnemonic to login again if you do not set up a PIN. Press &quot;OK&quot; to continue.</translation>
     </message>
     <message>
         <source>id_you_will_see_your_coins_here</source>
@@ -4091,6 +5503,18 @@ Reset this setting and then re-activate it.</translation>
         <translation>Your 2FA expires, so that if you lose access to your 2FA method, or the Blockstream Green service becomes unavailable, you can always recover your bitcoin using this open source tool</translation>
     </message>
     <message>
+        <source>id_your_bitcoin_and_liquid_assets</source>
+        <translation>Your bitcoin and Liquid assets are stored on the blockchain, and can only be spent using the keys stored on Jade.</translation>
+    </message>
+    <message>
+        <source>id_your_bluetooth_adapter_is</source>
+        <translation>Your Bluetooth adapter is disabled</translation>
+    </message>
+    <message>
+        <source>id_your_current_receive_capacity</source>
+        <translation>Your current receive capacity is %1.</translation>
+    </message>
+    <message>
         <source>id_your_device_was_disconnected</source>
         <translation>Your device was disconnected</translation>
     </message>
@@ -4107,32 +5531,62 @@ Reset this setting and then re-activate it.</translation>
         <translation>Your funds are secured by a single key held on your device. Simpler to set up and operate than multisig. If in doubt, select this option.</translation>
     </message>
     <message>
+        <source>id_your_funds_are_secured_by_your</source>
+        <translation>Your funds are secured by your PIN. Easy to use, standard and portable on most bitcoin wallets.</translation>
+    </message>
+    <message>
+        <source>id_your_funds_have_grown</source>
+        <translation>Your funds have grown recently.
+
+Consider using a 2FA protected account, so all your outgoing transactions will have an extra layer of protection.
+For that you will need to:
+
+1. Create a 2FA protected account;
+2. Setup your 2FA method;
+3. Move funds to the new account;
+4. Archive the old account;</translation>
+    </message>
+    <message>
         <source>id_your_green_wallet_is_now_ready</source>
-        <translation>이제 Green 지갑을 사용하실 수 있습니다</translation>
+        <translation>Your Green wallet is now ready to use.</translation>
     </message>
     <message>
         <source>id_your_ios_device_might_not_be</source>
         <translation>Your iOS device might not be supported</translation>
     </message>
     <message>
+        <source>id_your_keys_secure_your_coins_on</source>
+        <translation>Your keys secure your coins on the blockchain</translation>
+    </message>
+    <message>
         <source>id_your_notifications_will_be</source>
-        <translation>알람은 여기에 표시됩니다.</translation>
+        <translation>Your notifications will be shown here.</translation>
     </message>
     <message>
         <source>id_your_pin_or_your_mnemonic_will</source>
-        <translation>지갑을 사용하기 위해서는 비밀번호 또는 니모닉(복원 코드)이 필요합니다.</translation>
+        <translation>Your PIN or your mnemonic will be required to access the wallet.</translation>
     </message>
     <message>
         <source>id_your_s_sent_to_s_has_been</source>
-        <translation>%1으로 보낸 거래 %2가 컨펌되었습니다.</translation>
+        <translation>Your %1 sent to %2 has been confirmed</translation>
+    </message>
+    <message>
+        <source>id_your_settings_are_unsavednndo</source>
+        <translation>Your settings are unsaved.
+
+Do you want to continue?</translation>
+    </message>
+    <message>
+        <source>id_your_swap_proposal_is_generated</source>
+        <translation>Your Swap Proposal is generated!</translation>
     </message>
     <message>
         <source>id_your_transactions_will_be_shown</source>
-        <translation>거래 내역은 여기에 표시됩니다.</translation>
+        <translation>Your transactions will be shown here.</translation>
     </message>
     <message>
         <source>id_your_twofactor_threshold_is_s</source>
-        <translation>지갑의 2FA 한도는 %1입니다.</translation>
+        <translation>Your Two-Factor threshold is %1.</translation>
     </message>
     <message>
         <source>id_your_wallet_backup_is_made_of</source>
@@ -4148,8 +5602,8 @@ Reset this setting and then re-activate it.</translation>
     </message>
     <message>
         <source>id_your_wallet_is_not_yet_fully</source>
-        <translation>지갑의 보안이 낮습니다.
-2FA를 설정해주세요.</translation>
+        <translation>Your wallet is not yet fully secured.
+Please enable Two-Factor authentication.</translation>
     </message>
     <message>
         <source>id_your_watchonly_username_and</source>

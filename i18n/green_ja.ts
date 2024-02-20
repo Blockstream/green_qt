@@ -130,6 +130,10 @@
         <translation>2of3アカウントからの送金には3つの鍵のうち2つによる署名が必要です。3つ目の鍵は貴方のみが知るバックアップ用の秘密鍵となります。この選択肢はスタンダードアカウントと同じセキュリティ水準で、いつでもご自身の鍵のみで自由に送金することができます。</translation>
     </message>
     <message>
+        <source>id_a_funding_fee_of_s_minimum_s_is</source>
+        <translation>A funding fee of %1 (minimum %2) is applied when receiving amounts above your current receive capacity of %3</translation>
+    </message>
+    <message>
         <source>id_a_new_transaction_has_just</source>
         <translation>貴方のウォレットに新しいトランザクションが届きました。</translation>
     </message>
@@ -138,8 +142,16 @@
         <translation>新しいバージョンのBlockstream Greenがご利用いただけます</translation>
     </message>
     <message>
+        <source>id_a_powerful_hardware_wallet_for</source>
+        <translation>A powerful hardware wallet for securing your Bitcoin.</translation>
+    </message>
+    <message>
         <source>id_a_screen_lock_must_be_enabled</source>
         <translation>アンドロイドの設定から画面ロックを有効化してください。</translation>
+    </message>
+    <message>
+        <source>id_a_set_up_funding_fee_of_s_s</source>
+        <translation>A set up funding fee of %1 (%2) will be applied to the received amount.</translation>
     </message>
     <message>
         <source>id_a_wallet_is_detected_on_this</source>
@@ -188,6 +200,10 @@
     <message>
         <source>id_account_has_been_archived</source>
         <translation>アーカイブ済みのアカウント</translation>
+    </message>
+    <message>
+        <source>id_account_has_been_removed</source>
+        <translation>Account has been removed</translation>
     </message>
     <message>
         <source>id_account_id</source>
@@ -294,6 +310,10 @@
         <translation>クリップボードにアドレスがコピーされました</translation>
     </message>
     <message>
+        <source>id_address_to_receive</source>
+        <translation>Address to Receive</translation>
+    </message>
+    <message>
         <source>id_address_type</source>
         <translation>アドレス種別</translation>
     </message>
@@ -316,6 +336,10 @@
     <message>
         <source>id_advanced_network_settings</source>
         <translation>ネットワーク詳細設定</translation>
+    </message>
+    <message>
+        <source>id_advanced_options</source>
+        <translation>Advanced options</translation>
     </message>
     <message>
         <source>id_advanced_options_for_your_third</source>
@@ -378,6 +402,18 @@
         <translation>%1の金額</translation>
     </message>
     <message>
+        <source>id_amount_must_be_at_least_s</source>
+        <translation>Amount must be at least %1</translation>
+    </message>
+    <message>
+        <source>id_amount_must_be_at_most_s</source>
+        <translation>Amount must be at most %1</translation>
+    </message>
+    <message>
+        <source>id_amount_to_receive</source>
+        <translation>Amount to Receive</translation>
+    </message>
+    <message>
         <source>id_amp</source>
         <translation>AMP</translation>
     </message>
@@ -396,6 +432,12 @@
     <message>
         <source>id_amp_wallet</source>
         <translation>AMPウォレット</translation>
+    </message>
+    <message>
+        <source>id_an_unidentified_error_occurred</source>
+        <translation>An unidentified error occurred. The following error log can help you identify the issue:
+
+%1</translation>
     </message>
     <message>
         <source>id_another_2fa_method_is_already</source>
@@ -430,8 +472,12 @@
         <translation>アーカイブ済みのアカウント</translation>
     </message>
     <message>
+        <source>id_are_you_sure_you_want_to_delete</source>
+        <translation>Are you sure you want to delete the recipient?</translation>
+    </message>
+    <message>
         <source>id_are_you_sure_you_want_to_remove</source>
-        <translation>本当に宛先を削除しますか？</translation>
+        <translation>Are you sure you want to remove your Lightning account?</translation>
     </message>
     <message>
         <source>id_are_you_sure_you_want_to_view</source>
@@ -478,6 +524,14 @@
         <translation>残り: %1 回</translation>
     </message>
     <message>
+        <source>id_authenticate</source>
+        <translation>Authenticate</translation>
+    </message>
+    <message>
+        <source>id_authenticate_address</source>
+        <translation>Authenticate address</translation>
+    </message>
+    <message>
         <source>id_authenticate_to_view_the</source>
         <translation>リカバリーフレーズを確認するには認証してください</translation>
     </message>
@@ -488,6 +542,10 @@
     <message>
         <source>id_authentication_failed</source>
         <translation>認証に失敗しました</translation>
+    </message>
+    <message>
+        <source>id_authentication_successful</source>
+        <translation>Authentication Successful</translation>
     </message>
     <message>
         <source>id_authenticator_app</source>
@@ -719,8 +777,16 @@
         <translation>PINコードを変更する</translation>
     </message>
     <message>
+        <source>id_change_speed</source>
+        <translation>Change speed</translation>
+    </message>
+    <message>
         <source>id_changing_reference_exchange</source>
         <translation>交換レートの提供元を変更すると2段階認証の閾値が0にリセットされます。送金後に2段階認証の閾値を調整することをお忘れなく。</translation>
+    </message>
+    <message>
+        <source>id_channel_closure_initiated_you</source>
+        <translation>Channel closure initiated. You can sweep your funds after the transaction is confirmed</translation>
     </message>
     <message>
         <source>id_cheaper_and_more_private</source>
@@ -749,6 +815,10 @@
     <message>
         <source>id_check_your_backup</source>
         <translation>バックアップを確認する</translation>
+    </message>
+    <message>
+        <source>id_check_your_device</source>
+        <translation>Check your device</translation>
     </message>
     <message>
         <source>id_choose</source>
@@ -835,6 +905,14 @@
         <translation>クリックして暗号化されたリカバリーデータをメールで受け取る。</translation>
     </message>
     <message>
+        <source>id_close</source>
+        <translation>Close</translation>
+    </message>
+    <message>
+        <source>id_close_channel</source>
+        <translation>Close Channel</translation>
+    </message>
+    <message>
         <source>id_code</source>
         <translation>コード</translation>
     </message>
@@ -903,6 +981,10 @@
         <translation>秘匿トランザクション</translation>
     </message>
     <message>
+        <source>id_confirm</source>
+        <translation>Confirm</translation>
+    </message>
+    <message>
         <source>id_confirm_action</source>
         <translation>許可する</translation>
     </message>
@@ -915,12 +997,20 @@
         <translation>コードを確認</translation>
     </message>
     <message>
+        <source>id_confirm_coin_selection</source>
+        <translation>Confirm Coin Selection</translation>
+    </message>
+    <message>
         <source>id_confirm_on_your_device</source>
         <translation>デバイスで承認してください</translation>
     </message>
     <message>
         <source>id_confirm_passphrase</source>
         <translation>パスフレーズを確認</translation>
+    </message>
+    <message>
+        <source>id_confirm_refund</source>
+        <translation>Confirm Refund</translation>
     </message>
     <message>
         <source>id_confirm_swap</source>
@@ -947,6 +1037,10 @@
         <translation>2段階認証でこの変更を承認する。</translation>
     </message>
     <message>
+        <source>id_confirm_your_new_pin</source>
+        <translation>Confirm your new PIN</translation>
+    </message>
+    <message>
         <source>id_confirmation_in_d_blocks</source>
         <translation>%1 ブロックで承認</translation>
     </message>
@@ -957,6 +1051,10 @@
     <message>
         <source>id_confirmations</source>
         <translation>承認</translation>
+    </message>
+    <message>
+        <source>id_confirming_your_transaction</source>
+        <translation>Confirming your transaction</translation>
     </message>
     <message>
         <source>id_congratulations</source>
@@ -1127,6 +1225,10 @@
         <translation>正しい順番</translation>
     </message>
     <message>
+        <source>id_could_not_recognized_qr_code</source>
+        <translation>Could not recognized QR code</translation>
+    </message>
+    <message>
         <source>id_country</source>
         <translation>国</translation>
     </message>
@@ -1159,6 +1261,10 @@
         <translation>アカウントを作成する</translation>
     </message>
     <message>
+        <source>id_create_invoice</source>
+        <translation>Create Invoice</translation>
+    </message>
+    <message>
         <source>id_create_new_account</source>
         <translation>アカウントを新規作成する</translation>
     </message>
@@ -1181,6 +1287,10 @@
     <message>
         <source>id_creating_wallet</source>
         <translation>ウォレットを作成中…</translation>
+    </message>
+    <message>
+        <source>id_creating_your_s_account</source>
+        <translation>Creating your %1 account...</translation>
     </message>
     <message>
         <source>id_csv</source>
@@ -1303,8 +1413,16 @@
         <translation>単位</translation>
     </message>
     <message>
+        <source>id_denomination__exchange_rate</source>
+        <translation>Denomination &amp; Exchange Rate</translation>
+    </message>
+    <message>
         <source>id_deposit</source>
         <translation>入金</translation>
+    </message>
+    <message>
+        <source>id_description</source>
+        <translation>Description</translation>
     </message>
     <message>
         <source>id_descriptor</source>
@@ -1337,6 +1455,10 @@
         <translation>無効化する</translation>
     </message>
     <message>
+        <source>id_disable_authenticator</source>
+        <translation>Disable Authenticator</translation>
+    </message>
+    <message>
         <source>id_disable_pin_access</source>
         <translation>PINを無効化する</translation>
     </message>
@@ -1351,6 +1473,14 @@
     <message>
         <source>id_disabled</source>
         <translation>無効</translation>
+    </message>
+    <message>
+        <source>id_disconnect</source>
+        <translation>Disconnect</translation>
+    </message>
+    <message>
+        <source>id_display_values_in_s_and</source>
+        <translation>Display values in %1 and exchange rate in %2 using %3</translation>
     </message>
     <message>
         <source>id_displays_the_progress_of_spv</source>
@@ -1557,6 +1687,10 @@
         <translation>有効なユーザーネームを入力</translation>
     </message>
     <message>
+        <source>id_enter_amount_in</source>
+        <translation>Enter amount in</translation>
+    </message>
+    <message>
         <source>id_enter_an_address</source>
         <translation>アドレスを入力</translation>
     </message>
@@ -1607,6 +1741,10 @@
     <message>
         <source>id_enter_your_27_words_recovery</source>
         <translation>27単語のリカバリーフレーズを入力</translation>
+    </message>
+    <message>
+        <source>id_enter_your_6digit_pin_to_access</source>
+        <translation>Enter your 6-digit PIN to Access your Wallet</translation>
     </message>
     <message>
         <source>id_enter_your_email_address</source>
@@ -1710,8 +1848,28 @@
         <translation>サイドバーを開く</translation>
     </message>
     <message>
+        <source>id_experimental</source>
+        <translation>Experimental</translation>
+    </message>
+    <message>
+        <source>id_experimental_feature</source>
+        <translation>Experimental Feature</translation>
+    </message>
+    <message>
+        <source>id_experimental_features_might</source>
+        <translation>Experimental features might change, break, or be discontinued at any time, so you agree to use them at your own risk.</translation>
+    </message>
+    <message>
+        <source>id_expiration</source>
+        <translation>Expiration</translation>
+    </message>
+    <message>
         <source>id_explore_your_wallet</source>
         <translation>ウォレットを探検する</translation>
+    </message>
+    <message>
+        <source>id_export</source>
+        <translation>Export</translation>
     </message>
     <message>
         <source>id_export_transactions_to_csv_file</source>
@@ -1746,8 +1904,16 @@
         <translation>速い</translation>
     </message>
     <message>
+        <source>id_fast_transactions_on_the</source>
+        <translation>Fast transactions on the Lightning Network, powered by Greenlight.</translation>
+    </message>
+    <message>
         <source>id_faster_more_confidential</source>
         <translation>より早く、よりプライベートなビットコイン送金</translation>
+    </message>
+    <message>
+        <source>id_fastest</source>
+        <translation>Fastest</translation>
     </message>
     <message>
         <source>id_fee</source>
@@ -1846,12 +2012,20 @@
         <translation>長期保管向け</translation>
     </message>
     <message>
+        <source>id_for_more_information_read_more</source>
+        <translation>For more information, Read More</translation>
+    </message>
+    <message>
         <source>id_for_most_users</source>
         <translation>大半のユーザー向け</translation>
     </message>
     <message>
         <source>id_from</source>
         <translation>送信者</translation>
+    </message>
+    <message>
+        <source>id_funds_received</source>
+        <translation>Funds Received!</translation>
     </message>
     <message>
         <source>id_funds_received_in_this</source>
@@ -2062,6 +2236,10 @@
         <translation>パスワードを忘れました</translation>
     </message>
     <message>
+        <source>id_i_fund_via_an_onchain_bitcoin</source>
+        <translation>(i) Fund via an onchain bitcoin transaction</translation>
+    </message>
+    <message>
         <source>id_i_lost_my_2fa</source>
         <translation>2段階認証手段を失った</translation>
     </message>
@@ -2134,6 +2312,14 @@
         <translation>Import from file</translation>
     </message>
     <message>
+        <source>id_in_progress</source>
+        <translation>In Progress</translation>
+    </message>
+    <message>
+        <source>id_inbound_liquidity</source>
+        <translation>Inbound Liquidity</translation>
+    </message>
+    <message>
         <source>id_incoming</source>
         <translation>受信中</translation>
     </message>
@@ -2144,6 +2330,10 @@
     <message>
         <source>id_increase_fee</source>
         <translation>手数料を追加する</translation>
+    </message>
+    <message>
+        <source>id_increase_inbound_capacity_now</source>
+        <translation>Increase inbound capacity now</translation>
     </message>
     <message>
         <source>id_increase_security</source>
@@ -2160,6 +2350,10 @@
     <message>
         <source>id_initialize_and_create_wallet</source>
         <translation>初期化してウォレットを新規作成する</translation>
+    </message>
+    <message>
+        <source>id_initialize_jade_for_testnet</source>
+        <translation>Initialize Jade for testnet</translation>
     </message>
     <message>
         <source>id_initialized</source>
@@ -2295,6 +2489,14 @@
 </translation>
     </message>
     <message>
+        <source>id_invoice_expired</source>
+        <translation>Invoice expired</translation>
+    </message>
+    <message>
+        <source>id_invoices</source>
+        <translation>Invoices</translation>
+    </message>
+    <message>
         <source>id_is_a_noncustodial</source>
         <translation>保管されない</translation>
     </message>
@@ -2317,6 +2519,10 @@
     <message>
         <source>id_jade_is_an_isolated_device_not</source>
         <translation>Jadeはインターネットから隔離されたデバイスのため、ハッキングやスマホのウィルス感染に対して堅牢です。</translation>
+    </message>
+    <message>
+        <source>id_jade_is_an_opensource_hardware</source>
+        <translation>Jade is an open-source hardware wallet for Bitcoin and Liquid assets.</translation>
     </message>
     <message>
         <source>id_jade_unlocked</source>
@@ -2419,8 +2625,24 @@
         <translation>Lightning</translation>
     </message>
     <message>
+        <source>id_lightning_invoice</source>
+        <translation>Lightning Invoice</translation>
+    </message>
+    <message>
+        <source>id_lightning_invoice__lnurl</source>
+        <translation>Lightning Invoice / LNURL</translation>
+    </message>
+    <message>
+        <source>id_lightning_invoice_is_expired</source>
+        <translation>Lightning invoice is expired</translation>
+    </message>
+    <message>
         <source>id_lightning_network_account</source>
         <translation>Greenlightを利用したLightning Networkアカウント。ご自身のCLNノードに乗り換えることもできます。</translation>
+    </message>
+    <message>
+        <source>id_limits_s__s</source>
+        <translation>Limits: %1 - %2</translation>
     </message>
     <message>
         <source>id_liquid_electrum_server</source>
@@ -2599,6 +2821,10 @@
         <translation>ここからの作業は必ず一人で、あなたや画面がカメラに映らない場所で行ってください。</translation>
     </message>
     <message>
+        <source>id_make_sure_you_got_everything</source>
+        <translation>Make sure you got everything right.</translation>
+    </message>
+    <message>
         <source>id_make_sure_you_have_enabled_otg</source>
         <translation>Androidの設定からOTGが有効化されていることを確認してください。</translation>
     </message>
@@ -2631,6 +2857,22 @@
         <translation>手動で復元する</translation>
     </message>
     <message>
+        <source>id_max_limit_s</source>
+        <translation>Max Limit: %1</translation>
+    </message>
+    <message>
+        <source>id_max_payable_amount</source>
+        <translation>Max Payable Amount</translation>
+    </message>
+    <message>
+        <source>id_max_receivable_amount</source>
+        <translation>Max Receivable Amount</translation>
+    </message>
+    <message>
+        <source>id_max_single_payment_amount</source>
+        <translation>Max Single Payment Amount</translation>
+    </message>
+    <message>
         <source>id_medium</source>
         <translation>中</translation>
     </message>
@@ -2653,6 +2895,10 @@
     <message>
         <source>id_migrating_to_blockstream_green</source>
         <translation>Blockstream Greenへの移行か、既存のBlockstream Greenウォレットの読み込みをお考えでしょうか？こちらへお進みください。</translation>
+    </message>
+    <message>
+        <source>id_minimum</source>
+        <translation>Minimum</translation>
     </message>
     <message>
         <source>id_minute</source>
@@ -2860,6 +3106,10 @@
         <translation>ピアが接続されていません</translation>
     </message>
     <message>
+        <source>id_no_personal_data_will_be_shared</source>
+        <translation>No personal data will be shared with this service.</translation>
+    </message>
+    <message>
         <source>id_no_pin_provided_exiting</source>
         <translation>PINが有りません、終了します。</translation>
     </message>
@@ -2878,6 +3128,10 @@
     <message>
         <source>id_no_utxos_found</source>
         <translation>UTXOが見つかりません</translation>
+    </message>
+    <message>
+        <source>id_node_info</source>
+        <translation>Node Info</translation>
     </message>
     <message>
         <source>id_non_confidential</source>
@@ -2976,6 +3230,14 @@
         <translation>このポリシーを一度選択すると以後変更できません。あなたに最適なセキュリティポリシーの選び方はヘルプセンターより確認できます。</translation>
     </message>
     <message>
+        <source>id_onchain_address</source>
+        <translation>Onchain Address</translation>
+    </message>
+    <message>
+        <source>id_onchain_swaps</source>
+        <translation>Onchain Swaps</translation>
+    </message>
+    <message>
         <source>id_one_attempt_remaining</source>
         <translation>残り一回</translation>
     </message>
@@ -3026,6 +3288,10 @@
     <message>
         <source>id_or</source>
         <translation>または</translation>
+    </message>
+    <message>
+        <source>id_original_swap_address</source>
+        <translation>Original swap address</translation>
     </message>
     <message>
         <source>id_os__app_version_loading_times</source>
@@ -3090,6 +3356,14 @@
     <message>
         <source>id_path_used_for_signing</source>
         <translation>署名に使用されるパス</translation>
+    </message>
+    <message>
+        <source>id_payment_requested_by_s</source>
+        <translation>Payment requested by %1</translation>
+    </message>
+    <message>
+        <source>id_payments_to_self_are_not</source>
+        <translation>Payments to self are not supported in your lightning account.</translation>
     </message>
     <message>
         <source>id_pending_confirmation</source>
@@ -3212,6 +3486,10 @@
         <translation>ハードウェアウォレットに表示されているアドレスが本画面に表示されているものと一致するかご確認ください。</translation>
     </message>
     <message>
+        <source>id_please_verify_that_this_address</source>
+        <translation>Please verify that this address matches the one displayed on your hardware device.</translation>
+    </message>
+    <message>
         <source>id_please_wait_until_your_ledger</source>
         <translation>Ledgerがアドレスを表示してから確認ボタンを押してください。最大20秒程度かかります。</translation>
     </message>
@@ -3228,6 +3506,14 @@
         <translation>前回の手数料</translation>
     </message>
     <message>
+        <source>id_price_feed</source>
+        <translation>Price Feed</translation>
+    </message>
+    <message>
+        <source>id_print_backup_template</source>
+        <translation>Print Backup Template</translation>
+    </message>
+    <message>
         <source>id_privacy_policy</source>
         <translation>プライバシーポリシー</translation>
     </message>
@@ -3242,6 +3528,10 @@
     <message>
         <source>id_problem_with_key_1s</source>
         <translation>キー%1 に問題が発生</translation>
+    </message>
+    <message>
+        <source>id_protect_your_bitcoin_with_a</source>
+        <translation>Protect your bitcoin with a second form of verification</translation>
     </message>
     <message>
         <source>id_provide_this_id_to_the_asset</source>
@@ -3404,6 +3694,10 @@
         <translation>リカバリーxpub</translation>
     </message>
     <message>
+        <source>id_redeem</source>
+        <translation>Redeem</translation>
+    </message>
+    <message>
         <source>id_redeem_your_deposited_funds</source>
         <translation>Blockstream Greenによる署名なしでも事前に指定した時間経過後に資金を引き出せるようにする。</translation>
     </message>
@@ -3418,6 +3712,22 @@
     <message>
         <source>id_refresh</source>
         <translation>リフレッシュ</translation>
+    </message>
+    <message>
+        <source>id_refund</source>
+        <translation>Refund</translation>
+    </message>
+    <message>
+        <source>id_refund_in_progress</source>
+        <translation>Refund in progress</translation>
+    </message>
+    <message>
+        <source>id_refund_initiated</source>
+        <translation>Refund initiated</translation>
+    </message>
+    <message>
+        <source>id_refundable</source>
+        <translation>Refundable</translation>
     </message>
     <message>
         <source>id_reload</source>
@@ -3466,6 +3776,10 @@
     <message>
         <source>id_replaceable</source>
         <translation>代替可能</translation>
+    </message>
+    <message>
+        <source>id_report</source>
+        <translation>Report</translation>
     </message>
     <message>
         <source>id_request_amount</source>
@@ -3580,6 +3894,12 @@
         <translation>%1 ネットワーク</translation>
     </message>
     <message>
+        <source>id_s_will_send_you_the_funds_it</source>
+        <translation>%1 will send you the funds, it can take some time.
+
+Keep the app online.</translation>
+    </message>
+    <message>
         <source>id_safe_environment</source>
         <translation>安全な環境</translation>
     </message>
@@ -3608,8 +3928,16 @@
         <translation>QRコードをスキャンしてSPVペアリングを開始する</translation>
     </message>
     <message>
+        <source>id_scan_from_image</source>
+        <translation>Scan from Image</translation>
+    </message>
+    <message>
         <source>id_scan_or_paste_your_extended</source>
         <translation>読み取りモードのウォレットにログインするには拡張公開鍵(xPub/yPub/zPub)をスキャンするか貼り付けてください。</translation>
+    </message>
+    <message>
+        <source>id_scan_or_paste_your_public</source>
+        <translation>Scan or paste your public descriptor to log in to your watch-only account.</translation>
     </message>
     <message>
         <source>id_scan_qr_code</source>
@@ -3724,6 +4052,10 @@
         <translation>文字数の選択%1</translation>
     </message>
     <message>
+        <source>id_select_your_coins</source>
+        <translation>Select Your Coins</translation>
+    </message>
+    <message>
         <source>id_select_your_jade_to_login</source>
         <translation>ログインするにはJadeを選択してください</translation>
     </message>
@@ -3750,6 +4082,16 @@
     <message>
         <source>id_send_and_receive_liquidbased</source>
         <translation>Liquid上のマネージド・アセットを送受信する</translation>
+    </message>
+    <message>
+        <source>id_send_error_report</source>
+        <translation>Send error report</translation>
+    </message>
+    <message>
+        <source>id_send_more_than_s_and_up_to_s_to</source>
+        <translation>Send more than %1 and up to %2 to this address. A setup fee of %3 with a minimum of %4 will be applied on the received amount.
+
+This address can be used only once.</translation>
     </message>
     <message>
         <source>id_send_to</source>
@@ -3920,6 +4262,10 @@
         <translation>表示する</translation>
     </message>
     <message>
+        <source>id_show_address</source>
+        <translation>Show Address</translation>
+    </message>
+    <message>
         <source>id_show_advanced_options</source>
         <translation>詳細オプションを表示する</translation>
     </message>
@@ -3948,8 +4294,16 @@
         <translation>法定通貨で金額を表示</translation>
     </message>
     <message>
+        <source>id_show_lightning_invoice</source>
+        <translation>Show Lightning Invoice</translation>
+    </message>
+    <message>
         <source>id_show_my_wallet_backup</source>
         <translation>ウォレットのバックアップ情報を確認する</translation>
+    </message>
+    <message>
+        <source>id_show_onchain_address</source>
+        <translation>Show Onchain Address</translation>
     </message>
     <message>
         <source>id_show_qr_code</source>
@@ -3958,6 +4312,10 @@
     <message>
         <source>id_show_recovery_phrase</source>
         <translation>リカバリーフレーズを表示する</translation>
+    </message>
+    <message>
+        <source>id_sign_message</source>
+        <translation>Sign message</translation>
     </message>
     <message>
         <source>id_sign_transaction</source>
@@ -4122,6 +4480,10 @@
         <translation>成功</translation>
     </message>
     <message>
+        <source>id_successfully_sent_your_funds</source>
+        <translation>Successfully sent your funds</translation>
+    </message>
+    <message>
         <source>id_support</source>
         <translation>サポート</translation>
     </message>
@@ -4132,6 +4494,10 @@
     <message>
         <source>id_swap</source>
         <translation>Swap</translation>
+    </message>
+    <message>
+        <source>id_swap_is_in_progress</source>
+        <translation>Swap is in progress</translation>
     </message>
     <message>
         <source>id_swap_proposal</source>
@@ -4273,6 +4639,10 @@
         <translation>ご使用中のハードウェア・ウォレットには現在対応しておりません</translation>
     </message>
     <message>
+        <source>id_the_importance_of_twofactor</source>
+        <translation>The Importance of Two-Factor Authentication</translation>
+    </message>
+    <message>
         <source>id_the_liquid_network_is_a_bitcoin</source>
         <translation>Liquid Networkはステーブルコインや証券トークンを始めとする金融商品をビットコイン・タイムチェーン上で高速でプライベートに取引・発行するためのビットコイン・レイヤー２ソリューションです。</translation>
     </message>
@@ -4333,6 +4703,10 @@
         <translation>%1のウォレットには既にPINが設定されているものがあります。続行する場合、PINの設定はできずログイン時には毎回24個単語のニモニックが必要です。PINの無効化は設定から、もしくはログインを3回失敗することでできます。</translation>
     </message>
     <message>
+        <source>id_there_is_already_a_swap_in</source>
+        <translation>There is already a swap in progress. Only one at a time is allowed</translation>
+    </message>
+    <message>
         <source>id_there_is_already_an_archived</source>
         <translation>既にアーカイブ済みのアカウントが存在します。
 
@@ -4347,8 +4721,21 @@
         <translation>これらの設定はBlockstream Green上のすべてのウォレットに適用されます。</translation>
     </message>
     <message>
+        <source>id_this_amount_is_below_the</source>
+        <translation>This amount is below the minimum fee %1 (%2).</translation>
+    </message>
+    <message>
         <source>id_this_feature_is_coming_soon</source>
         <translation>この機能はまもなく追加予定です！</translation>
+    </message>
+    <message>
+        <source>id_this_might_take_up_to_a</source>
+        <translation>This might take up to a minute.
+Thanks for your patience!</translation>
+    </message>
+    <message>
+        <source>id_this_signature_is_a_proof_of</source>
+        <translation>This signature is a proof of ownership of the address</translation>
     </message>
     <message>
         <source>id_this_transaction_spent</source>
@@ -4389,6 +4776,10 @@
     <message>
         <source>id_to</source>
         <translation>送り先</translation>
+    </message>
+    <message>
+        <source>id_to_authorize_the_transaction</source>
+        <translation>To authorize the transaction you need to enter your 2FA code.</translation>
     </message>
     <message>
         <source>id_to_keep_you_in_control_of_your</source>
@@ -4539,6 +4930,10 @@
         <translation>TXID</translation>
     </message>
     <message>
+        <source>id_type_the_next_word</source>
+        <translation>Type the next word</translation>
+    </message>
+    <message>
         <source>id_unable_to_contact_the_green</source>
         <translation>Greenサービスに接続できません。ネットワーク状態を確認してからもう一度お試しください。</translation>
     </message>
@@ -4661,6 +5056,12 @@
     <message>
         <source>id_use_the_jogwheel_to_select_the</source>
         <translation>ダイヤルを使ってあなたのリカバリーフレーズと同じ単語を選択してください。</translation>
+    </message>
+    <message>
+        <source>id_use_this_recovery_phrase_to</source>
+        <translation>Use this recovery phrase to restore your lightning account.
+
+WARNING: This recovery phrase does not restore all your other bitcoin or liquid accounts.</translation>
     </message>
     <message>
         <source>id_use_your_email_to_receive</source>
@@ -4943,6 +5344,14 @@
         <translation>無線</translation>
     </message>
     <message>
+        <source>id_withdraw</source>
+        <translation>Withdraw</translation>
+    </message>
+    <message>
+        <source>id_withdraw_limits_s__s</source>
+        <translation>Withdraw limits: %1 - %2</translation>
+    </message>
+    <message>
         <source>id_word</source>
         <translation>単語</translation>
     </message>
@@ -4987,16 +5396,36 @@
         <translation>接続しました。</translation>
     </message>
     <message>
+        <source>id_you_are_redeeming_funds_from_s</source>
+        <translation>You are redeeming funds from %1</translation>
+    </message>
+    <message>
         <source>id_you_can_change_these_later_on</source>
         <translation>これらは後からも変更できます。</translation>
+    </message>
+    <message>
+        <source>id_you_can_send_up_to</source>
+        <translation>You can send up to:</translation>
     </message>
     <message>
         <source>id_you_can_still_receive_funds_but</source>
         <translation>You can still receive funds, but they won’t be shown on your total balance.</translation>
     </message>
     <message>
+        <source>id_you_can_sweep_s_of_your_funds</source>
+        <translation>You can sweep %1 of your funds to your onchain account.</translation>
+    </message>
+    <message>
+        <source>id_you_can_use_your_wallet_to</source>
+        <translation>You can use your wallet to anonymously sign and authorize an action on:</translation>
+    </message>
+    <message>
         <source>id_you_cannot_create_or_restore_a</source>
         <translation>すでにPINで保護されている%1ウォレットが存在するため、ウォレットの作成や復元ができません。</translation>
+    </message>
+    <message>
+        <source>id_you_cannot_receive_more_than_s</source>
+        <translation>You cannot receive more than %1 (%2) on this account. Reduce the amount and try again.</translation>
     </message>
     <message>
         <source>id_you_have_a_significant_amount</source>
@@ -5007,8 +5436,16 @@
         <translation>Payment URIをクリックしました。使用するウォレットを選択してください</translation>
     </message>
     <message>
+        <source>id_you_have_clicked_a_uri_select_a</source>
+        <translation>You have clicked a URI, select a wallet to handle it</translation>
+    </message>
+    <message>
         <source>id_you_have_control_on_your_funds</source>
         <translation>資金は貴方によって完全に管理されます。</translation>
+    </message>
+    <message>
+        <source>id_you_have_just_received_s</source>
+        <translation>You have just received %1.</translation>
     </message>
     <message>
         <source>id_you_have_no_coins_to_send</source>
@@ -5091,6 +5528,10 @@
         <translation>Bluetoothアダプターを有効にしてください</translation>
     </message>
     <message>
+        <source>id_your_current_receive_capacity</source>
+        <translation>Your current receive capacity is %1.</translation>
+    </message>
+    <message>
         <source>id_your_device_was_disconnected</source>
         <translation>デバイスの接続が解除されました</translation>
     </message>
@@ -5145,6 +5586,12 @@
     <message>
         <source>id_your_s_sent_to_s_has_been</source>
         <translation>%1に送金した%2 が検証されました。</translation>
+    </message>
+    <message>
+        <source>id_your_settings_are_unsavednndo</source>
+        <translation>Your settings are unsaved.
+
+Do you want to continue?</translation>
     </message>
     <message>
         <source>id_your_swap_proposal_is_generated</source>

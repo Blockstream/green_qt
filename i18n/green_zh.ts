@@ -130,6 +130,10 @@
         <translation>一个2of3账户需要三个签名中的两个来花费代币。第三个签名来自只有你知道的备用秘钥。这保证了标准账户的安全性，同时又能允许你独自使用这些代币。</translation>
     </message>
     <message>
+        <source>id_a_funding_fee_of_s_minimum_s_is</source>
+        <translation>A funding fee of %1 (minimum %2) is applied when receiving amounts above your current receive capacity of %3</translation>
+    </message>
+    <message>
         <source>id_a_new_transaction_has_just</source>
         <translation>收到一笔新的转账。</translation>
     </message>
@@ -138,8 +142,16 @@
         <translation>Blockstream Green的新版本已经可以使用</translation>
     </message>
     <message>
+        <source>id_a_powerful_hardware_wallet_for</source>
+        <translation>A powerful hardware wallet for securing your Bitcoin.</translation>
+    </message>
+    <message>
         <source>id_a_screen_lock_must_be_enabled</source>
         <translation>需要在安卓系统设置中打开屏幕锁</translation>
+    </message>
+    <message>
+        <source>id_a_set_up_funding_fee_of_s_s</source>
+        <translation>A set up funding fee of %1 (%2) will be applied to the received amount.</translation>
     </message>
     <message>
         <source>id_a_wallet_is_detected_on_this</source>
@@ -188,6 +200,10 @@
     <message>
         <source>id_account_has_been_archived</source>
         <translation>账户已归档</translation>
+    </message>
+    <message>
+        <source>id_account_has_been_removed</source>
+        <translation>Account has been removed</translation>
     </message>
     <message>
         <source>id_account_id</source>
@@ -294,6 +310,10 @@
         <translation>地址已复制至剪贴板</translation>
     </message>
     <message>
+        <source>id_address_to_receive</source>
+        <translation>Address to Receive</translation>
+    </message>
+    <message>
         <source>id_address_type</source>
         <translation>地址类型</translation>
     </message>
@@ -316,6 +336,10 @@
     <message>
         <source>id_advanced_network_settings</source>
         <translation>高级网络设置</translation>
+    </message>
+    <message>
+        <source>id_advanced_options</source>
+        <translation>Advanced options</translation>
     </message>
     <message>
         <source>id_advanced_options_for_your_third</source>
@@ -378,6 +402,18 @@
         <translation>%1中的数量</translation>
     </message>
     <message>
+        <source>id_amount_must_be_at_least_s</source>
+        <translation>Amount must be at least %1</translation>
+    </message>
+    <message>
+        <source>id_amount_must_be_at_most_s</source>
+        <translation>Amount must be at most %1</translation>
+    </message>
+    <message>
+        <source>id_amount_to_receive</source>
+        <translation>Amount to Receive</translation>
+    </message>
+    <message>
         <source>id_amp</source>
         <translation>AMP</translation>
     </message>
@@ -396,6 +432,12 @@
     <message>
         <source>id_amp_wallet</source>
         <translation>AMP钱包</translation>
+    </message>
+    <message>
+        <source>id_an_unidentified_error_occurred</source>
+        <translation>An unidentified error occurred. The following error log can help you identify the issue:
+
+%1</translation>
     </message>
     <message>
         <source>id_another_2fa_method_is_already</source>
@@ -430,8 +472,12 @@
         <translation>已归档账户</translation>
     </message>
     <message>
+        <source>id_are_you_sure_you_want_to_delete</source>
+        <translation>Are you sure you want to delete the recipient?</translation>
+    </message>
+    <message>
         <source>id_are_you_sure_you_want_to_remove</source>
-        <translation>您确定要移除收款人吗？</translation>
+        <translation>Are you sure you want to remove your Lightning account?</translation>
     </message>
     <message>
         <source>id_are_you_sure_you_want_to_view</source>
@@ -478,6 +524,14 @@
         <translation>剩余尝试机会：%1</translation>
     </message>
     <message>
+        <source>id_authenticate</source>
+        <translation>Authenticate</translation>
+    </message>
+    <message>
+        <source>id_authenticate_address</source>
+        <translation>Authenticate address</translation>
+    </message>
+    <message>
         <source>id_authenticate_to_view_the</source>
         <translation>验证以查看助记词</translation>
     </message>
@@ -488,6 +542,10 @@
     <message>
         <source>id_authentication_failed</source>
         <translation>验证失败</translation>
+    </message>
+    <message>
+        <source>id_authentication_successful</source>
+        <translation>Authentication Successful</translation>
     </message>
     <message>
         <source>id_authenticator_app</source>
@@ -719,8 +777,16 @@
         <translation>修改PIN</translation>
     </message>
     <message>
+        <source>id_change_speed</source>
+        <translation>Change speed</translation>
+    </message>
+    <message>
         <source>id_changing_reference_exchange</source>
         <translation>更改参考汇率会将您的2FA阈值重置为 0。请记住在转账后调整2FA阈值。</translation>
+    </message>
+    <message>
+        <source>id_channel_closure_initiated_you</source>
+        <translation>Channel closure initiated. You can sweep your funds after the transaction is confirmed</translation>
     </message>
     <message>
         <source>id_cheaper_and_more_private</source>
@@ -749,6 +815,10 @@
     <message>
         <source>id_check_your_backup</source>
         <translation>检查备份</translation>
+    </message>
+    <message>
+        <source>id_check_your_device</source>
+        <translation>Check your device</translation>
     </message>
     <message>
         <source>id_choose</source>
@@ -835,6 +905,14 @@
         <translation>点击接收包含加密恢复数据的邮件。</translation>
     </message>
     <message>
+        <source>id_close</source>
+        <translation>Close</translation>
+    </message>
+    <message>
+        <source>id_close_channel</source>
+        <translation>Close Channel</translation>
+    </message>
+    <message>
         <source>id_code</source>
         <translation>代码</translation>
     </message>
@@ -903,6 +981,10 @@
         <translation>隐私转账</translation>
     </message>
     <message>
+        <source>id_confirm</source>
+        <translation>Confirm</translation>
+    </message>
+    <message>
         <source>id_confirm_action</source>
         <translation>确认操作</translation>
     </message>
@@ -915,12 +997,20 @@
         <translation>确认码</translation>
     </message>
     <message>
+        <source>id_confirm_coin_selection</source>
+        <translation>Confirm Coin Selection</translation>
+    </message>
+    <message>
         <source>id_confirm_on_your_device</source>
         <translation>在您的设备上确认</translation>
     </message>
     <message>
         <source>id_confirm_passphrase</source>
         <translation>确认密语</translation>
+    </message>
+    <message>
+        <source>id_confirm_refund</source>
+        <translation>Confirm Refund</translation>
     </message>
     <message>
         <source>id_confirm_swap</source>
@@ -947,6 +1037,10 @@
         <translation>通过2FA确认您授权此更改。</translation>
     </message>
     <message>
+        <source>id_confirm_your_new_pin</source>
+        <translation>Confirm your new PIN</translation>
+    </message>
+    <message>
         <source>id_confirmation_in_d_blocks</source>
         <translation>大约需要%1个区块确认</translation>
     </message>
@@ -957,6 +1051,10 @@
     <message>
         <source>id_confirmations</source>
         <translation>确认</translation>
+    </message>
+    <message>
+        <source>id_confirming_your_transaction</source>
+        <translation>Confirming your transaction</translation>
     </message>
     <message>
         <source>id_congratulations</source>
@@ -1127,6 +1225,10 @@
         <translation>正确的顺序</translation>
     </message>
     <message>
+        <source>id_could_not_recognized_qr_code</source>
+        <translation>Could not recognized QR code</translation>
+    </message>
+    <message>
         <source>id_country</source>
         <translation>国家</translation>
     </message>
@@ -1159,6 +1261,10 @@
         <translation>创建账户</translation>
     </message>
     <message>
+        <source>id_create_invoice</source>
+        <translation>Create Invoice</translation>
+    </message>
+    <message>
         <source>id_create_new_account</source>
         <translation>创建新账户</translation>
     </message>
@@ -1181,6 +1287,10 @@
     <message>
         <source>id_creating_wallet</source>
         <translation>创建钱包中。。。</translation>
+    </message>
+    <message>
+        <source>id_creating_your_s_account</source>
+        <translation>Creating your %1 account...</translation>
     </message>
     <message>
         <source>id_csv</source>
@@ -1303,8 +1413,16 @@
         <translation>面值</translation>
     </message>
     <message>
+        <source>id_denomination__exchange_rate</source>
+        <translation>Denomination &amp; Exchange Rate</translation>
+    </message>
+    <message>
         <source>id_deposit</source>
         <translation>充值</translation>
+    </message>
+    <message>
+        <source>id_description</source>
+        <translation>Description</translation>
     </message>
     <message>
         <source>id_descriptor</source>
@@ -1337,6 +1455,10 @@
         <translation>关闭</translation>
     </message>
     <message>
+        <source>id_disable_authenticator</source>
+        <translation>Disable Authenticator</translation>
+    </message>
+    <message>
         <source>id_disable_pin_access</source>
         <translation>禁用PIN</translation>
     </message>
@@ -1351,6 +1473,14 @@
     <message>
         <source>id_disabled</source>
         <translation>已关闭</translation>
+    </message>
+    <message>
+        <source>id_disconnect</source>
+        <translation>Disconnect</translation>
+    </message>
+    <message>
+        <source>id_display_values_in_s_and</source>
+        <translation>Display values in %1 and exchange rate in %2 using %3</translation>
     </message>
     <message>
         <source>id_displays_the_progress_of_spv</source>
@@ -1557,6 +1687,10 @@
         <translation>请输入一个有效的用户名</translation>
     </message>
     <message>
+        <source>id_enter_amount_in</source>
+        <translation>Enter amount in</translation>
+    </message>
+    <message>
         <source>id_enter_an_address</source>
         <translation>请输入地址</translation>
     </message>
@@ -1607,6 +1741,10 @@
     <message>
         <source>id_enter_your_27_words_recovery</source>
         <translation>输入27位助记词</translation>
+    </message>
+    <message>
+        <source>id_enter_your_6digit_pin_to_access</source>
+        <translation>Enter your 6-digit PIN to Access your Wallet</translation>
     </message>
     <message>
         <source>id_enter_your_email_address</source>
@@ -1710,8 +1848,28 @@
         <translation>展开侧边栏</translation>
     </message>
     <message>
+        <source>id_experimental</source>
+        <translation>Experimental</translation>
+    </message>
+    <message>
+        <source>id_experimental_feature</source>
+        <translation>Experimental Feature</translation>
+    </message>
+    <message>
+        <source>id_experimental_features_might</source>
+        <translation>Experimental features might change, break, or be discontinued at any time, so you agree to use them at your own risk.</translation>
+    </message>
+    <message>
+        <source>id_expiration</source>
+        <translation>Expiration</translation>
+    </message>
+    <message>
         <source>id_explore_your_wallet</source>
         <translation>探索您的钱包</translation>
+    </message>
+    <message>
+        <source>id_export</source>
+        <translation>Export</translation>
     </message>
     <message>
         <source>id_export_transactions_to_csv_file</source>
@@ -1746,8 +1904,16 @@
         <translation>快速</translation>
     </message>
     <message>
+        <source>id_fast_transactions_on_the</source>
+        <translation>Fast transactions on the Lightning Network, powered by Greenlight.</translation>
+    </message>
+    <message>
         <source>id_faster_more_confidential</source>
         <translation>更快，更隐私的比特币转账</translation>
+    </message>
+    <message>
+        <source>id_fastest</source>
+        <translation>Fastest</translation>
     </message>
     <message>
         <source>id_fee</source>
@@ -1846,12 +2012,20 @@
         <translation>用于长期存储</translation>
     </message>
     <message>
+        <source>id_for_more_information_read_more</source>
+        <translation>For more information, Read More</translation>
+    </message>
+    <message>
         <source>id_for_most_users</source>
         <translation>对于大部分用户</translation>
     </message>
     <message>
         <source>id_from</source>
         <translation>来自</translation>
+    </message>
+    <message>
+        <source>id_funds_received</source>
+        <translation>Funds Received!</translation>
     </message>
     <message>
         <source>id_funds_received_in_this</source>
@@ -2062,6 +2236,10 @@
         <translation>忘记密码</translation>
     </message>
     <message>
+        <source>id_i_fund_via_an_onchain_bitcoin</source>
+        <translation>(i) Fund via an onchain bitcoin transaction</translation>
+    </message>
+    <message>
         <source>id_i_lost_my_2fa</source>
         <translation>我丢失了2FA</translation>
     </message>
@@ -2134,6 +2312,14 @@
         <translation>Import from file</translation>
     </message>
     <message>
+        <source>id_in_progress</source>
+        <translation>In Progress</translation>
+    </message>
+    <message>
+        <source>id_inbound_liquidity</source>
+        <translation>Inbound Liquidity</translation>
+    </message>
+    <message>
         <source>id_incoming</source>
         <translation>输入</translation>
     </message>
@@ -2144,6 +2330,10 @@
     <message>
         <source>id_increase_fee</source>
         <translation>提高费用</translation>
+    </message>
+    <message>
+        <source>id_increase_inbound_capacity_now</source>
+        <translation>Increase inbound capacity now</translation>
     </message>
     <message>
         <source>id_increase_security</source>
@@ -2160,6 +2350,10 @@
     <message>
         <source>id_initialize_and_create_wallet</source>
         <translation>初始化并创建钱包</translation>
+    </message>
+    <message>
+        <source>id_initialize_jade_for_testnet</source>
+        <translation>Initialize Jade for testnet</translation>
     </message>
     <message>
         <source>id_initialized</source>
@@ -2294,6 +2488,14 @@
         <translation>无效的xpub</translation>
     </message>
     <message>
+        <source>id_invoice_expired</source>
+        <translation>Invoice expired</translation>
+    </message>
+    <message>
+        <source>id_invoices</source>
+        <translation>Invoices</translation>
+    </message>
+    <message>
         <source>id_is_a_noncustodial</source>
         <translation>是一个非第三方托管的</translation>
     </message>
@@ -2316,6 +2518,10 @@
     <message>
         <source>id_jade_is_an_isolated_device_not</source>
         <translation>Jade是一个独立的且不联网的设备，这意味着您的资金不会受到黑客攻击或手机漏洞的影响。</translation>
+    </message>
+    <message>
+        <source>id_jade_is_an_opensource_hardware</source>
+        <translation>Jade is an open-source hardware wallet for Bitcoin and Liquid assets.</translation>
     </message>
     <message>
         <source>id_jade_unlocked</source>
@@ -2418,8 +2624,24 @@
         <translation>闪电网络</translation>
     </message>
     <message>
+        <source>id_lightning_invoice</source>
+        <translation>Lightning Invoice</translation>
+    </message>
+    <message>
+        <source>id_lightning_invoice__lnurl</source>
+        <translation>Lightning Invoice / LNURL</translation>
+    </message>
+    <message>
+        <source>id_lightning_invoice_is_expired</source>
+        <translation>Lightning invoice is expired</translation>
+    </message>
+    <message>
         <source>id_lightning_network_account</source>
         <translation>由Greenlight提供支持的闪电网络帐户。可移植到您自己的CLN节点上。</translation>
+    </message>
+    <message>
+        <source>id_limits_s__s</source>
+        <translation>Limits: %1 - %2</translation>
     </message>
     <message>
         <source>id_liquid_electrum_server</source>
@@ -2598,6 +2820,10 @@
         <translation>确保您周围没有人，也没有摄像头在记录您或您的屏幕。</translation>
     </message>
     <message>
+        <source>id_make_sure_you_got_everything</source>
+        <translation>Make sure you got everything right.</translation>
+    </message>
+    <message>
         <source>id_make_sure_you_have_enabled_otg</source>
         <translation>请确保您已在Android设置中启用OTG选项</translation>
     </message>
@@ -2630,6 +2856,22 @@
         <translation>手动恢复</translation>
     </message>
     <message>
+        <source>id_max_limit_s</source>
+        <translation>Max Limit: %1</translation>
+    </message>
+    <message>
+        <source>id_max_payable_amount</source>
+        <translation>Max Payable Amount</translation>
+    </message>
+    <message>
+        <source>id_max_receivable_amount</source>
+        <translation>Max Receivable Amount</translation>
+    </message>
+    <message>
+        <source>id_max_single_payment_amount</source>
+        <translation>Max Single Payment Amount</translation>
+    </message>
+    <message>
         <source>id_medium</source>
         <translation>中</translation>
     </message>
@@ -2652,6 +2894,10 @@
     <message>
         <source>id_migrating_to_blockstream_green</source>
         <translation>迁移到Blockstream Green？并且有想要导入的现有Blockstream Green钱包？现在就开始吧！</translation>
+    </message>
+    <message>
+        <source>id_minimum</source>
+        <translation>Minimum</translation>
     </message>
     <message>
         <source>id_minute</source>
@@ -2859,6 +3105,10 @@
         <translation>无终端连接</translation>
     </message>
     <message>
+        <source>id_no_personal_data_will_be_shared</source>
+        <translation>No personal data will be shared with this service.</translation>
+    </message>
+    <message>
         <source>id_no_pin_provided_exiting</source>
         <translation>未提供PIN，正在退出。</translation>
     </message>
@@ -2877,6 +3127,10 @@
     <message>
         <source>id_no_utxos_found</source>
         <translation>未找到UTXO</translation>
+    </message>
+    <message>
+        <source>id_node_info</source>
+        <translation>Node Info</translation>
     </message>
     <message>
         <source>id_non_confidential</source>
@@ -2975,6 +3229,14 @@
         <translation>一旦选择，支出政策将无法更改。想了解最适合您的安全类型，请访问我们的帮助中心。</translation>
     </message>
     <message>
+        <source>id_onchain_address</source>
+        <translation>Onchain Address</translation>
+    </message>
+    <message>
+        <source>id_onchain_swaps</source>
+        <translation>Onchain Swaps</translation>
+    </message>
+    <message>
         <source>id_one_attempt_remaining</source>
         <translation>还剩一次尝试机会</translation>
     </message>
@@ -3025,6 +3287,10 @@
     <message>
         <source>id_or</source>
         <translation>或者</translation>
+    </message>
+    <message>
+        <source>id_original_swap_address</source>
+        <translation>Original swap address</translation>
     </message>
     <message>
         <source>id_os__app_version_loading_times</source>
@@ -3089,6 +3355,14 @@
     <message>
         <source>id_path_used_for_signing</source>
         <translation>用于签名的路径</translation>
+    </message>
+    <message>
+        <source>id_payment_requested_by_s</source>
+        <translation>Payment requested by %1</translation>
+    </message>
+    <message>
+        <source>id_payments_to_self_are_not</source>
+        <translation>Payments to self are not supported in your lightning account.</translation>
     </message>
     <message>
         <source>id_pending_confirmation</source>
@@ -3211,6 +3485,10 @@
         <translation>请确认硬件钱包上的地址和你手机上的地址是一致的。</translation>
     </message>
     <message>
+        <source>id_please_verify_that_this_address</source>
+        <translation>Please verify that this address matches the one displayed on your hardware device.</translation>
+    </message>
+    <message>
         <source>id_please_wait_until_your_ledger</source>
         <translation>请等待Ledger显示并验证地址。可能需要20秒钟的时间。</translation>
     </message>
@@ -3227,6 +3505,14 @@
         <translation>之前的手续费</translation>
     </message>
     <message>
+        <source>id_price_feed</source>
+        <translation>Price Feed</translation>
+    </message>
+    <message>
+        <source>id_print_backup_template</source>
+        <translation>Print Backup Template</translation>
+    </message>
+    <message>
         <source>id_privacy_policy</source>
         <translation>隐私政策</translation>
     </message>
@@ -3241,6 +3527,10 @@
     <message>
         <source>id_problem_with_key_1s</source>
         <translation>密钥%1出现了问题</translation>
+    </message>
+    <message>
+        <source>id_protect_your_bitcoin_with_a</source>
+        <translation>Protect your bitcoin with a second form of verification</translation>
     </message>
     <message>
         <source>id_provide_this_id_to_the_asset</source>
@@ -3403,6 +3693,10 @@
         <translation>xpub格式公钥</translation>
     </message>
     <message>
+        <source>id_redeem</source>
+        <translation>Redeem</translation>
+    </message>
+    <message>
         <source>id_redeem_your_deposited_funds</source>
         <translation>预先设定的时间之后，在不用Blockstream Green的签名的情况下赎回你的资金。</translation>
     </message>
@@ -3417,6 +3711,22 @@
     <message>
         <source>id_refresh</source>
         <translation>刷新</translation>
+    </message>
+    <message>
+        <source>id_refund</source>
+        <translation>Refund</translation>
+    </message>
+    <message>
+        <source>id_refund_in_progress</source>
+        <translation>Refund in progress</translation>
+    </message>
+    <message>
+        <source>id_refund_initiated</source>
+        <translation>Refund initiated</translation>
+    </message>
+    <message>
+        <source>id_refundable</source>
+        <translation>Refundable</translation>
     </message>
     <message>
         <source>id_reload</source>
@@ -3465,6 +3775,10 @@
     <message>
         <source>id_replaceable</source>
         <translation>可替换</translation>
+    </message>
+    <message>
+        <source>id_report</source>
+        <translation>Report</translation>
     </message>
     <message>
         <source>id_request_amount</source>
@@ -3579,6 +3893,12 @@
         <translation>%1网络</translation>
     </message>
     <message>
+        <source>id_s_will_send_you_the_funds_it</source>
+        <translation>%1 will send you the funds, it can take some time.
+
+Keep the app online.</translation>
+    </message>
+    <message>
         <source>id_safe_environment</source>
         <translation>安全环境</translation>
     </message>
@@ -3607,8 +3927,16 @@
         <translation>扫描二维码进行SPV配对</translation>
     </message>
     <message>
+        <source>id_scan_from_image</source>
+        <translation>Scan from Image</translation>
+    </message>
+    <message>
         <source>id_scan_or_paste_your_extended</source>
         <translation>扫描或粘贴您的扩展公钥 (xPub/yPub/zPub) 以登录您的仅查看钱包。</translation>
+    </message>
+    <message>
+        <source>id_scan_or_paste_your_public</source>
+        <translation>Scan or paste your public descriptor to log in to your watch-only account.</translation>
     </message>
     <message>
         <source>id_scan_qr_code</source>
@@ -3723,6 +4051,10 @@
         <translation>选择第%1的单词</translation>
     </message>
     <message>
+        <source>id_select_your_coins</source>
+        <translation>Select Your Coins</translation>
+    </message>
+    <message>
         <source>id_select_your_jade_to_login</source>
         <translation>选择您的Jade登录</translation>
     </message>
@@ -3749,6 +4081,16 @@
     <message>
         <source>id_send_and_receive_liquidbased</source>
         <translation>发送和接收基于液态网络的托管资产</translation>
+    </message>
+    <message>
+        <source>id_send_error_report</source>
+        <translation>Send error report</translation>
+    </message>
+    <message>
+        <source>id_send_more_than_s_and_up_to_s_to</source>
+        <translation>Send more than %1 and up to %2 to this address. A setup fee of %3 with a minimum of %4 will be applied on the received amount.
+
+This address can be used only once.</translation>
     </message>
     <message>
         <source>id_send_to</source>
@@ -3919,6 +4261,10 @@
         <translation>展示</translation>
     </message>
     <message>
+        <source>id_show_address</source>
+        <translation>Show Address</translation>
+    </message>
+    <message>
         <source>id_show_advanced_options</source>
         <translation>显示高级选项</translation>
     </message>
@@ -3947,8 +4293,16 @@
         <translation>显示法币</translation>
     </message>
     <message>
+        <source>id_show_lightning_invoice</source>
+        <translation>Show Lightning Invoice</translation>
+    </message>
+    <message>
         <source>id_show_my_wallet_backup</source>
         <translation>显示我的钱包备份</translation>
+    </message>
+    <message>
+        <source>id_show_onchain_address</source>
+        <translation>Show Onchain Address</translation>
     </message>
     <message>
         <source>id_show_qr_code</source>
@@ -3957,6 +4311,10 @@
     <message>
         <source>id_show_recovery_phrase</source>
         <translation>显示助记词</translation>
+    </message>
+    <message>
+        <source>id_sign_message</source>
+        <translation>Sign message</translation>
     </message>
     <message>
         <source>id_sign_transaction</source>
@@ -4121,6 +4479,10 @@
         <translation>成功</translation>
     </message>
     <message>
+        <source>id_successfully_sent_your_funds</source>
+        <translation>Successfully sent your funds</translation>
+    </message>
+    <message>
         <source>id_support</source>
         <translation>客服</translation>
     </message>
@@ -4131,6 +4493,10 @@
     <message>
         <source>id_swap</source>
         <translation>互换</translation>
+    </message>
+    <message>
+        <source>id_swap_is_in_progress</source>
+        <translation>Swap is in progress</translation>
     </message>
     <message>
         <source>id_swap_proposal</source>
@@ -4272,6 +4638,10 @@
         <translation>目前还不支持您所使用的的硬件钱包</translation>
     </message>
     <message>
+        <source>id_the_importance_of_twofactor</source>
+        <translation>The Importance of Two-Factor Authentication</translation>
+    </message>
+    <message>
         <source>id_the_liquid_network_is_a_bitcoin</source>
         <translation>液态网络（Liquid Network）是一种比特币二层解决方案，可在比特币时间链之上实现数字资产（如稳定币、证券化代币和其他金融工具）的快速、隐私结算和发行。</translation>
     </message>
@@ -4332,6 +4702,10 @@
         <translation>钱包%1已设置PIN。继续进行登录将无法设置PIN，而需要24个单词的助记词。可在设置中关闭PIN，或输入错误的PIN3次也可关闭PIN。</translation>
     </message>
     <message>
+        <source>id_there_is_already_a_swap_in</source>
+        <translation>There is already a swap in progress. Only one at a time is allowed</translation>
+    </message>
+    <message>
         <source>id_there_is_already_an_archived</source>
         <translation>已经有了一个已归档账户。
 
@@ -4346,8 +4720,21 @@
         <translation>这些设置适用于您在Blockstream Green上使用的每个钱包。</translation>
     </message>
     <message>
+        <source>id_this_amount_is_below_the</source>
+        <translation>This amount is below the minimum fee %1 (%2).</translation>
+    </message>
+    <message>
         <source>id_this_feature_is_coming_soon</source>
         <translation>此功能即将推出，敬请期待！</translation>
+    </message>
+    <message>
+        <source>id_this_might_take_up_to_a</source>
+        <translation>This might take up to a minute.
+Thanks for your patience!</translation>
+    </message>
+    <message>
+        <source>id_this_signature_is_a_proof_of</source>
+        <translation>This signature is a proof of ownership of the address</translation>
     </message>
     <message>
         <source>id_this_transaction_spent</source>
@@ -4388,6 +4775,10 @@
     <message>
         <source>id_to</source>
         <translation>发送至</translation>
+    </message>
+    <message>
+        <source>id_to_authorize_the_transaction</source>
+        <translation>To authorize the transaction you need to enter your 2FA code.</translation>
     </message>
     <message>
         <source>id_to_keep_you_in_control_of_your</source>
@@ -4538,6 +4929,10 @@
         <translation>TXID</translation>
     </message>
     <message>
+        <source>id_type_the_next_word</source>
+        <translation>Type the next word</translation>
+    </message>
+    <message>
         <source>id_unable_to_contact_the_green</source>
         <translation>无法连接Green服务器。请检查网络，并耐心等待重新连接。</translation>
     </message>
@@ -4660,6 +5055,12 @@
     <message>
         <source>id_use_the_jogwheel_to_select_the</source>
         <translation>使用滚轮选择与您的助记词相匹配的单词。</translation>
+    </message>
+    <message>
+        <source>id_use_this_recovery_phrase_to</source>
+        <translation>Use this recovery phrase to restore your lightning account.
+
+WARNING: This recovery phrase does not restore all your other bitcoin or liquid accounts.</translation>
     </message>
     <message>
         <source>id_use_your_email_to_receive</source>
@@ -4942,6 +5343,14 @@
         <translation>无线</translation>
     </message>
     <message>
+        <source>id_withdraw</source>
+        <translation>Withdraw</translation>
+    </message>
+    <message>
+        <source>id_withdraw_limits_s__s</source>
+        <translation>Withdraw limits: %1 - %2</translation>
+    </message>
+    <message>
         <source>id_word</source>
         <translation>词</translation>
     </message>
@@ -4986,16 +5395,36 @@
         <translation>现已连接</translation>
     </message>
     <message>
+        <source>id_you_are_redeeming_funds_from_s</source>
+        <translation>You are redeeming funds from %1</translation>
+    </message>
+    <message>
         <source>id_you_can_change_these_later_on</source>
         <translation>您之后可以做出修改</translation>
+    </message>
+    <message>
+        <source>id_you_can_send_up_to</source>
+        <translation>You can send up to:</translation>
     </message>
     <message>
         <source>id_you_can_still_receive_funds_but</source>
         <translation>You can still receive funds, but they won’t be shown on your total balance.</translation>
     </message>
     <message>
+        <source>id_you_can_sweep_s_of_your_funds</source>
+        <translation>You can sweep %1 of your funds to your onchain account.</translation>
+    </message>
+    <message>
+        <source>id_you_can_use_your_wallet_to</source>
+        <translation>You can use your wallet to anonymously sign and authorize an action on:</translation>
+    </message>
+    <message>
         <source>id_you_cannot_create_or_restore_a</source>
         <translation>你不能在%1上创建或恢复钱包，因为你已经有一个设置过PIN的钱包了。</translation>
+    </message>
+    <message>
+        <source>id_you_cannot_receive_more_than_s</source>
+        <translation>You cannot receive more than %1 (%2) on this account. Reduce the amount and try again.</translation>
     </message>
     <message>
         <source>id_you_have_a_significant_amount</source>
@@ -5006,8 +5435,16 @@
         <translation>你点击了一个付款URI，请选择一个钱包来处理它</translation>
     </message>
     <message>
+        <source>id_you_have_clicked_a_uri_select_a</source>
+        <translation>You have clicked a URI, select a wallet to handle it</translation>
+    </message>
+    <message>
         <source>id_you_have_control_on_your_funds</source>
         <translation>你对自己的资金拥有完全的掌控权</translation>
+    </message>
+    <message>
+        <source>id_you_have_just_received_s</source>
+        <translation>You have just received %1.</translation>
     </message>
     <message>
         <source>id_you_have_no_coins_to_send</source>
@@ -5090,6 +5527,10 @@
         <translation>您的蓝牙适配器已禁用</translation>
     </message>
     <message>
+        <source>id_your_current_receive_capacity</source>
+        <translation>Your current receive capacity is %1.</translation>
+    </message>
+    <message>
         <source>id_your_device_was_disconnected</source>
         <translation>您的设备已断开连接</translation>
     </message>
@@ -5144,6 +5585,12 @@
     <message>
         <source>id_your_s_sent_to_s_has_been</source>
         <translation>你的%1发送至%2已被确认</translation>
+    </message>
+    <message>
+        <source>id_your_settings_are_unsavednndo</source>
+        <translation>Your settings are unsaved.
+
+Do you want to continue?</translation>
     </message>
     <message>
         <source>id_your_swap_proposal_is_generated</source>
