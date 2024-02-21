@@ -26,6 +26,8 @@ void LoginController::setWallet(Wallet* wallet)
 
 void LoginController::loginWithPin(const QString& pin)
 {
+    m_error.clear();
+
     if (!m_wallet) return;
     if (pin.isEmpty()) return;
 
@@ -41,10 +43,9 @@ void LoginController::loginWithPin(const QString& pin)
         if (error == "id_invalid_pin") {
             m_wallet->decrementLoginAttempts();
             emit invalidPin();
-        } else if (error == "id_connection_failed") {
-            emit sessionError(error);
+        } else {
+            m_error = error;
         }
-        emit loginFailed();
     });
 
     connect(login_task, &Task::finished, this, [=] {
@@ -109,6 +110,8 @@ static QString device_deployment(Device* device)
 
 void LoginController::loginWithDevice(Device* device, bool remember)
 {
+    m_error.clear();
+
     if (!m_context) {
         setContext(new Context(device_deployment(device), this));
         m_context->setDevice(device);
@@ -149,7 +152,11 @@ void LoginController::login(LoginTask* login_task)
 
     dispatcher()->add(group);
 
-    connect(group, &TaskGroup::failed, this, &LoginController::loginFailed);
+    connect(group, &TaskGroup::failed, this, [=] {
+        if (!m_error.isEmpty()) {
+            emit loginFailed(m_error);
+        }
+    });
     connect(group, &TaskGroup::finished, this, [=] {
         m_context->setWallet(m_wallet);
         emit loginFinished(m_context);
@@ -168,7 +175,7 @@ void LoginController::login(TaskGroup* group, LoginTask* login_task)
 
     connect(connect_session, &Task::failed, this, [=](const QString& error) {
         if (error == "timeout error") {
-            emit sessionError("id_connection_failed");
+            m_error = "id_connection_failed";
         }
     });
 

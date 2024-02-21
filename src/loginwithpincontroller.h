@@ -29,12 +29,12 @@ public slots:
 signals:
     void walletChanged();
     void invalidPin();
-    void sessionError(const QString& error);
     void loginFinished(Context* context);
-    void loginFailed();
+    void loginFailed(const QString& error);
 
 private:
     Wallet* m_wallet{nullptr};
+    QString m_error;
 };
 
 class LoadController : public Controller

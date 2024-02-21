@@ -28,7 +28,12 @@ StackViewPage {
             pin_field.clear()
             pin_field.enabled = self.wallet.loginAttemptsRemaining > 0
         }
-        onLoginFinished: (context) => self.loginFinished(context)
+        onLoginFinished: context => self.loginFinished(context)
+        onLoginFailed: error => {
+            error_badge.error = error
+            pin_field.clear()
+            pin_field.enabled = true
+        }
     }
     rightItem: WalletOptionsButton {
         wallet: self.wallet
@@ -73,9 +78,16 @@ StackViewPage {
                 id: pin_field
                 focus: true
                 onPinEntered: (pin) => {
+                    error_badge.clear()
                     pin_field.enabled = false
                     controller.loginWithPin(pin)
                 }
+            }
+            FixedErrorBadge {
+                Layout.alignment: Qt.AlignHCenter
+                Layout.topMargin: 20
+                id: error_badge
+                pointer: false
             }
             Label {
                 Layout.alignment: Qt.AlignCenter
