@@ -55,6 +55,14 @@ Session::Session(Network* network, Context* context)
     , m_enable_spv(!network->isLiquid() ? Settings::instance()->enableSPV() : false)
     , m_electrum_url(ElectrumUrlForNetwork(network))
 {
+    if (m_network->isElectrum()) {
+        // emit ticker event each minute on singlesig session
+        auto timer = new QTimer(this);
+        connect(timer, &QTimer::timeout, this, [=] {
+            emit tickerEvent();
+        });
+        timer->start(60 * 1000);
+    }
 }
 
 Session::~Session()
@@ -92,7 +100,7 @@ void Session::handleNotification(const QJsonObject& notification)
     } else if (event == "transaction") {
         emit transactionEvent(value.toObject());
     } else if (event == "ticker") {
-        emit tickerEvent(value.toObject());
+        emit tickerEvent();
     } else if (event == "subaccount") {
         emit subaccountEvent(value.toObject());
     } else {

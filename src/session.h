@@ -98,7 +98,7 @@ signals:
     void torEvent(const QJsonObject& event);
     void blockEvent(const QJsonObject& event);
     void transactionEvent(const QJsonObject& event);
-    void tickerEvent(const QJsonObject& event);
+    void tickerEvent();
     void subaccountEvent(const QJsonObject& event);
     void activityCreated(Activity* activity);
     void eventsChanged();
