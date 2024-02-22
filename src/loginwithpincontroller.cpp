@@ -237,6 +237,9 @@ void LoadController::loadNetwork(TaskGroup* group, Network* network)
 {
     auto session = m_context->getOrCreateSession(network);
     if (!session->m_ready) return;
+    if (m_context->isWatchonly() && session->network()->isLiquid()) {
+        group->add(new LoadAssetsTask(session));
+    }
     group->add(new GetWatchOnlyDetailsTask(session));
     group->add(new LoadTwoFactorConfigTask(session));
     group->add(new LoadCurrenciesTask(session));
@@ -265,7 +268,7 @@ void LoadController::loginNetwork(Network* network)
     }
 
     if (network->isLiquid() && !m_assets_loaded) {
-        m_assets_loaded = false;
+        m_assets_loaded = true;
         auto load_assets = new LoadAssetsTask(session);
         connect_session->then(load_assets);
         load_assets->then(login);
