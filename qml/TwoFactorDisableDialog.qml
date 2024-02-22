@@ -44,8 +44,22 @@ WalletDialog {
 
     contentItem: GStackView {
         id: stack_view
-        implicitWidth: Math.max(500, stack_view.currentItem.implicitWidth)
-        implicitHeight: Math.max(450, stack_view.currentItem.implicitHeight)
+        implicitWidth: {
+            let w = 500
+            for (let i = 0; i < stack_view.depth; i++) {
+                const item = stack_view.get(i, StackView.DontLoad)
+                if (item) w = Math.max(w, item.implicitWidth)
+            }
+            return w
+        }
+        implicitHeight: {
+            let h = 450
+            for (let i = 0; i < stack_view.depth; i++) {
+                const item = stack_view.get(i, StackView.DontLoad)
+                if (item) h = Math.max(h, item.implicitHeight)
+            }
+            return h
+        }
         initialItem: StackViewPage {
             StackView.onActivated: controller.monitor.clear()
             title: self.title

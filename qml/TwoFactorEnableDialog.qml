@@ -47,8 +47,22 @@ WalletDialog {
     contentItem: GStackView {
         id: stack_view
         initialItem: self.method === 'gauth' ? gauth_page : generic_page
-        implicitWidth: Math.max(400, stack_view.currentItem.implicitWidth)
-        implicitHeight: Math.max(400, stack_view.currentItem.implicitHeight)
+        implicitWidth: {
+            let w = 400
+            for (let i = 0; i < stack_view.depth; i++) {
+                const item = stack_view.get(i, StackView.DontLoad)
+                if (item) w = Math.max(w, item.implicitWidth)
+            }
+            return w
+        }
+        implicitHeight: {
+            let h = 400
+            for (let i = 0; i < stack_view.depth; i++) {
+                const item = stack_view.get(i, StackView.DontLoad)
+                if (item) h = Math.max(h, item.implicitHeight)
+            }
+            return h
+        }
     }
 
     Component {
