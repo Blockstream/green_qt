@@ -4,11 +4,11 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 AbstractButton {
-    required property string content
+    property string content: self.text
     id: self
     padding: 10
     background: Rectangle {
-        color: '#13161D'
+        color: Qt.alpha(Qt.darker('#13161D'), 0.6)
         radius: 4
         Rectangle {
             border.width: 2
