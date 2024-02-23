@@ -51,6 +51,8 @@ void JadeUnlockActivity::exec()
     if (!backend) return;
     const auto nets = m_device->versionInfo().value("JADE_NETWORKS").toString();
     backend->authUser(nets == "TEST" ? "testnet" : "mainnet", [this](const QVariantMap& msg) {
+            qDebug() << Q_FUNC_INFO << msg;
+
         if (msg.contains("result") && msg["result"] == true) {
             finish();
         } else {

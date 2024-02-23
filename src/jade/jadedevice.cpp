@@ -606,6 +606,7 @@ void JadeDevice::updateVersionInfo()
 void JadeDevice::setVersionInfo(const QVariantMap& version_info)
 {
     if (m_version_info == version_info) return;
+    qDebug() << Q_FUNC_INFO << version_info;
     m_version_info = version_info;
     emit versionInfoChanged();
     m_name = QString("Jade %1").arg(version_info.value("EFUSEMAC").toString().mid(6));

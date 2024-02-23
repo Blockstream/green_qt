@@ -91,6 +91,7 @@ void JadeSetupTask::update()
     device->setUnlocking(true);
 
     device->api()->authUser(network->canonicalId(), [=](const QVariantMap& msg) {
+            qDebug() << Q_FUNC_INFO << msg;
         device->setUnlocking(false);
         if (msg.contains("result") && msg["result"] == true) {
             device->updateVersionInfo();
@@ -140,6 +141,7 @@ void JadeUnlockController::unlock()
     if (!m_device) return;
     const auto nets = m_device->versionInfo().value("JADE_NETWORKS").toString();
     const QString deployment = nets == "ALL" || nets == "MAIN" ? "mainnet" : "testnet";
+    qDebug() << Q_FUNC_INFO << nets << deployment;
     if (m_context) {
         Q_ASSERT(m_context->deployment() == deployment);
     } else {
@@ -262,16 +264,20 @@ JadeUnlockTask::JadeUnlockTask(JadeUnlockController* controller)
 
 void JadeUnlockTask::update()
 {
+    qDebug() << Q_FUNC_INFO << __LINE__;
     if (m_status != Status::Ready) return;
 
     const auto device = m_controller->device();
     if (!device) return;
+
+    qDebug() << Q_FUNC_INFO << __LINE__;
 
     if (device->state() == JadeDevice::StateReady) {
         setStatus(Status::Finished);
         return;
     }
 
+    qDebug() << Q_FUNC_INFO << __LINE__;
 //    if (device->state() != JadeDevice::StateUnsaved && device->state() == JadeDevice::StateUnsaved) {
 //        setStatus(Status::Finished);
 //        return;
@@ -280,15 +286,22 @@ void JadeUnlockTask::update()
     const auto network = m_controller->network();
     if (!network) return;
 
+    qDebug() << Q_FUNC_INFO << __LINE__;
+
     setStatus(Status::Active);
     device->setUnlocking(true);
+
+    qDebug() << Q_FUNC_INFO << __LINE__;
 
     if (!device->api()) {
         setStatus(Status::Failed);
         return;
     }
 
+    qDebug() << Q_FUNC_INFO << __LINE__;
+
     device->api()->authUser(network->canonicalId(), [=](const QVariantMap& msg) {
+            qDebug() << Q_FUNC_INFO << msg;
         device->setUnlocking(false);
         if (msg.contains("result") && msg["result"] == true) {
             setStatus(Status::Finished);
@@ -300,6 +313,8 @@ void JadeUnlockTask::update()
             // update();
         }
     }, [=](JadeAPI& jade, int id, const QJsonObject& req) {
+            qDebug() << Q_FUNC_INFO << id << req;
+
         const auto params = Json::fromObject(req.value("params").toObject());
 
         const auto url = QUrl(req.value("params").toObject().value("urls").toArray().first().toString());
@@ -340,6 +355,7 @@ void JadeIdentifyTask::update()
     if (device->state() == JadeDevice::StateLocked) return;
     if (device->state() == JadeDevice::StateTemporary) {
         device->api()->authUser(network->canonicalId(), [=](const QVariantMap& msg) {
+                qDebug() << Q_FUNC_INFO << msg;
             device->updateVersionInfo();
         }, [=](JadeAPI& jade, int id, const QJsonObject& req) {
         });
@@ -397,6 +413,7 @@ void JadeLoginTask::update()
         if (device->state() == JadeDevice::StateLocked) return;
         if (device->state() == JadeDevice::StateTemporary) {
             device->api()->authUser(network->canonicalId(), [=](const QVariantMap& msg) {
+                    qDebug() << Q_FUNC_INFO << msg;
                 device->updateVersionInfo();
             }, [=](JadeAPI& jade, int id, const QJsonObject& req) {
             });
