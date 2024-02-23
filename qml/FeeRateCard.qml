@@ -15,7 +15,7 @@ WalletHeaderCard {
     FeeEstimates {
         id: estimates
         session: self.session
-        onFeesChanged: canvas.requestPaint()
+        // onFeesChanged: canvas.requestPaint()
     }
     id: self
     visible: self.session
@@ -56,65 +56,6 @@ WalletHeaderCard {
             VSpacer {
             }
         }
-        Canvas {
-            Layout.alignment: Qt.AlignTop
-            Layout.preferredHeight: 50
-            Layout.preferredWidth: 120
-            id: canvas
-            contextType: "2d"
-            onPaint: {
-                if (estimates.fees.length === 0) return
-                let max = 0;
-                let i
-                for (i = 1; i < estimates.fees.length; i++) {
-                    const fee = estimates.fees[i]
-                    if (fee > max) max = fee
-                }
-                const sx = (canvas.width - 4) / Math.max(1, estimates.fees.length)
-                const sy = (canvas.height - 4) / max
-                const ps = []
-                for (i = 1; i < estimates.fees.length; i++) {
-                    ps.push({ x: 2 + sx * i, y: canvas.height - sy * estimates.fees[i] + 2 })
-                }
-
-                const ctx = canvas.context
-                ctx.clearRect(0, 0, canvas.width, canvas.height)
-                ctx.moveTo(ps[0].x, ps[0].y)
-                ctx.beginPath()
-                for (i = 1; i < ps.length; i++) {
-                    ctx.lineTo(ps[i].x, ps[i].y)
-                }
-                ctx.strokeStyle = Qt.alpha('#FFF', 0.4)
-                ctx.lineWidth = 1
-                ctx.stroke()
-
-                ctx.beginPath()
-                ctx.moveTo(0, canvas.height)
-                ctx.lineTo(canvas.width, canvas.height)
-                ctx.stroke()
-
-                ctx.beginPath()
-                ctx.fillStyle = '#FF0000'
-                ctx.moveTo(ps[2].x, ps[2].y)
-                ctx.arc(ps[2].x, ps[2].y, 3, 0, Math.PI * 2, false)
-                ctx.closePath()
-                ctx.fill()
-
-                ctx.beginPath()
-                ctx.fillStyle = '#E99A00'
-                ctx.moveTo(ps[11].x, ps[11].y)
-                ctx.arc(ps[11].x, ps[11].y, 3, 0, Math.PI * 2, false)
-                ctx.closePath()
-                ctx.fill()
-
-                ctx.beginPath()
-                ctx.fillStyle = '#128E2D'
-                ctx.moveTo(ps[23].x, ps[23].y)
-                ctx.arc(ps[23].x, ps[23].y, 3, 0, Math.PI * 2, false)
-                ctx.closePath()
-                ctx.fill()
-            }
-        }
     }
 
     component Rate: RowLayout {
@@ -148,6 +89,66 @@ WalletHeaderCard {
             text: rate.time
         }
         HSpacer {
+        }
+    }
+
+    component Chart: Canvas {
+        Layout.alignment: Qt.AlignTop
+        Layout.preferredHeight: 50
+        Layout.preferredWidth: 120
+        id: canvas
+        contextType: "2d"
+        onPaint: {
+            if (estimates.fees.length === 0) return
+            let max = 0;
+            let i
+            for (i = 1; i < estimates.fees.length; i++) {
+                const fee = estimates.fees[i]
+                if (fee > max) max = fee
+            }
+            const sx = (canvas.width - 4) / Math.max(1, estimates.fees.length)
+            const sy = (canvas.height - 4) / max
+            const ps = []
+            for (i = 1; i < estimates.fees.length; i++) {
+                ps.push({ x: 2 + sx * i, y: canvas.height - sy * estimates.fees[i] + 2 })
+            }
+
+            const ctx = canvas.context
+            ctx.clearRect(0, 0, canvas.width, canvas.height)
+            ctx.moveTo(ps[0].x, ps[0].y)
+            ctx.beginPath()
+            for (i = 1; i < ps.length; i++) {
+                ctx.lineTo(ps[i].x, ps[i].y)
+            }
+            ctx.strokeStyle = Qt.alpha('#FFF', 0.4)
+            ctx.lineWidth = 1
+            ctx.stroke()
+
+            ctx.beginPath()
+            ctx.moveTo(0, canvas.height)
+            ctx.lineTo(canvas.width, canvas.height)
+            ctx.stroke()
+
+            ctx.beginPath()
+            ctx.fillStyle = '#FF0000'
+            ctx.moveTo(ps[2].x, ps[2].y)
+            ctx.arc(ps[2].x, ps[2].y, 3, 0, Math.PI * 2, false)
+            ctx.closePath()
+            ctx.fill()
+
+            ctx.beginPath()
+            ctx.fillStyle = '#E99A00'
+            ctx.moveTo(ps[11].x, ps[11].y)
+            ctx.arc(ps[11].x, ps[11].y, 3, 0, Math.PI * 2, false)
+            ctx.closePath()
+            ctx.fill()
+
+            ctx.beginPath()
+            ctx.fillStyle = '#128E2D'
+            ctx.moveTo(ps[23].x, ps[23].y)
+            ctx.arc(ps[23].x, ps[23].y, 3, 0, Math.PI * 2, false)
+            ctx.closePath()
+            ctx.fill()
         }
     }
 }
