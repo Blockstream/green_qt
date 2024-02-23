@@ -116,7 +116,7 @@ void CreateTransactionController::update()
             });
             dispatcher->add(task);
         } else {
-            if (m_recipient->address().isEmpty()) {
+            if (m_recipient->address().trimmed().isEmpty()) {
                 setTransaction({});
                 return;
             }
@@ -141,7 +141,7 @@ void CreateTransactionController::update()
                 details["previous_transaction"] = m_previous_transaction->data();
             } else {
                 QJsonObject addressee;
-                addressee.insert("address", m_recipient->address());
+                addressee.insert("address", m_recipient->address().trimmed());
                 addressee.insert("satoshi", m_recipient->convert()->satoshi().toLongLong());
                 addressee.insert("is_greedy", !m_recipient->address().contains("amount") && m_recipient->isGreedy());
                 if (session->network()->isLiquid() && m_recipient->convert()->asset()) {
