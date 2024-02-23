@@ -83,7 +83,7 @@ StackViewPage {
             Layout.alignment: Qt.AlignCenter
             Layout.topMargin: 20
             Layout.fillWidth: false
-            columns: ({ 12: 3, 24: 4, 27: 6 })[controller.mnemonicSize]
+            columns: ({ 12: 3, 24: 6, 27: 6 })[controller.mnemonicSize]
             columnSpacing: 20
             rowSpacing: 10
             Repeater {
