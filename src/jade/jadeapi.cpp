@@ -311,6 +311,7 @@ int JadeAPI::setMnemonic(const QString& mnemonic, const ResponseHandler &cb)
 
 int JadeAPI::ping(const ResponseHandler &cb)
 {
+    Q_ASSERT(!m_locked);
     const int id = registerResponseHandler(cb, 1000);
     const QCborMap request = getRequest(id, "ping");
     send(request);
@@ -320,6 +321,7 @@ int JadeAPI::ping(const ResponseHandler &cb)
 // Get version information from the jade
 int JadeAPI::getVersionInfo(bool nonblocking, const ResponseHandler &cb)
 {
+    Q_ASSERT(!m_locked);
     const int id = registerResponseHandler(cb, 6000);
     const QCborMap params = { {"nonblocking", nonblocking} };
     const QCborMap request = getRequest(id, "get_version_info", params);

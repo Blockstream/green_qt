@@ -181,6 +181,9 @@ private:
     const bool m_relax_write;
     QQueue<QCborMap> m_msg_queue;
     QSet<int> m_msg_inflight;
+
+public:
+    bool m_locked{false};
 };
 
 #endif // JADEAPI_H

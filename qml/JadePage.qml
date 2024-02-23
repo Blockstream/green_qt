@@ -70,17 +70,25 @@ StackViewPage {
 
     onLatestFirmwareChanged: self.pushView()
 
-    function pushView() {
-        if (stack_view.depth > 0) return
+    function pushView(replace = false) {
+        if (!replace && stack_view.depth > 0) return
         if (self.debug) {
-            stack_view.push(advanced_update_view)
+            if (replace) {
+                stack_view.replace(advanced_update_view, StackView.PushTransition)
+            } else {
+                stack_view.push(advanced_update_view)
+            }
             return
         }
         if (!self.device.connected) return
         if (!self.device.updateRequired) {
             skipFirmwareUpdate()
         } else if (self.latestFirmware) {
-            stack_view.push(basic_update_view, { firmware: self.latestFirmware })
+            if (replace) {
+                stack_view.replace(basic_update_view, { firmware: self.latestFirmware }, StackView.PushTransition)
+            } else {
+                stack_view.push(basic_update_view, { firmware: self.latestFirmware })
+            }
         }
     }
 
@@ -185,18 +193,27 @@ StackViewPage {
     Component {
         id: waiting_page
         ColumnLayout {
-            readonly property bool ready: self.device.connected
+            readonly property bool ready: !stack_view.busy && self.device.connected
             id: view
             onReadyChanged: {
                 if (view.ready) {
-                    stack_view.clear(StackView.PushTransition)
-                    self.pushView()
+                    self.pushView(true)
                 }
             }
             VSpacer {
             }
             BusyIndicator {
                 Layout.alignment: Qt.AlignCenter
+            }
+            Label {
+                Layout.alignment: Qt.AlignCenter
+                Layout.fillWidth: true
+                Layout.preferredWidth: 0
+                font.pixelSize: 22
+                font.weight: 600
+                horizontalAlignment: Label.AlignHCenter
+                text: qsTrId('id_connecting_to_your_device')
+                wrapMode: Label.WordWrap
             }
             VSpacer {
             }

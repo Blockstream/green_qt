@@ -93,7 +93,9 @@ void JadeUpdateActivity::exec()
         progress()->setIndeterminate(uploaded <= 12288);
         progress()->setValue(double(uploaded) / double(m_data.size()));
     };
-    auto done_cb = [this](const QVariantMap& result) {
+    auto done_cb = [=](const QVariantMap& result) {
+        backend->m_locked = false;
+
         if (result["result"] == true) {
             finish();
         } else {
@@ -116,6 +118,8 @@ void JadeUpdateActivity::exec()
     };
 
     const auto fwhash = m_firmware.value("fwhash").toString();
+
+    backend->m_locked = true;
 
     if (m_firmware.value("delta").toBool()) {
         const auto patch_size = m_firmware.value("patch_size").toInt();

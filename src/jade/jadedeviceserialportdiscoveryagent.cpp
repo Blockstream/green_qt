@@ -26,6 +26,8 @@ bool FilterSerialPort(const QSerialPortInfo& info)
     if (info.vendorIdentifier() == 0 && info.productIdentifier() == 0) return false;
 #endif
 
+    if (info.systemLocation().contains("tty")) return false;
+
     return true;
 }
 
@@ -92,12 +94,13 @@ void JadeDeviceSerialPortDiscoveryAgent::scan()
 
 void JadeDeviceSerialPortDiscoveryAgent::probe(JadeAPI* backend)
 {
+    if (backend->m_locked) return;
     if (m_attempts.value(backend) > 10) return;
     m_attempts[backend] ++;
     backend->connectDevice();
     backend->getVersionInfo(false, [=](const QVariantMap& data) {
         if (data.contains("error")) {
-            qDebug() << "VERSION INFO ERROR:" << data.value("error");
+            qDebug() << Q_FUNC_INFO << "VERSION INFO ERROR:" << data.value("error");
             auto error = data.value("error").toMap();
             if (error.value("message").toString() == "timeout") {
                 qDebug() << "RETRY";
@@ -134,14 +137,11 @@ void JadeDeviceSerialPortDiscoveryAgent::probe(JadeAPI* backend)
 
 void JadeDeviceSerialPortDiscoveryAgent::updateLater(JadeAPI* backend)
 {
-    if (backend->isBusy()) {
-        QTimer::singleShot(500, backend, [=] {
-            updateLater(backend);
-        });
-        return;
-    }
-
     QTimer::singleShot(500, backend, [=] {
+        if (backend->isBusy() || backend->m_locked) {
+            updateLater(backend);
+            return;
+        }
         const auto device = deviceFromBackend(backend);
         if (!device) return;
         if (QVersionNumber(1, 0, 21) <= QVersionNumber::fromString(device->version())) {
@@ -161,7 +161,7 @@ void JadeDeviceSerialPortDiscoveryAgent::updateLater(JadeAPI* backend)
             const auto device = deviceFromBackend(backend);
             if (device) {
                 if (data.contains("error")) {
-                    qDebug() << "VERSION INFO ERROR:" << data.value("error");
+                    qDebug() << Q_FUNC_INFO << "VERSION INFO ERROR:" << data.value("error");
                     device->setConnected(false);
                     device->setStatus(JadeDevice::StatusIdle);
                 } else {
