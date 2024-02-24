@@ -1,28 +1,67 @@
-function segmentationNetwork(network) {
-    const segmentation = {}
-    if (network) {
-        segmentation.network
-            = network.liquid ? 'liquid'
-            : network.mainnet ? 'mainnet'
-            : 'testnet'
-        segmentation.security
-            = network.electrum ? 'singlesig'
-            : 'multisig'
+function segmentationNetwork(context) {
+    const segmentation = {
+        segment: 'Desktop',
     }
+    if (!context) return segmentation
+
+    let mainnet = false
+    let liquid = false
+    let testnet = false
+    let testnet_liquid = false
+    let singlesig = false
+    let multisig = false
+
+    for (let i = 0; i < context.accounts.length; ++i) {
+        const account = context.accounts[i]
+        if (account.hidden) continue
+        const network = account.network
+        mainnet = mainnet || (network.mainnet && !network.liquid)
+        liquid = liquid || (network.mainnet && network.liquid)
+        testnet = testnet || (!network.mainnet && !network.liquid)
+        testnet_liquid = testnet_liquid || (!network.mainnet && network.liquid)
+        singlesig = singlesig || network.electrum
+        multisig = multisig || !network.electrum
+    }
+
+    if (mainnet && liquid) {
+        segmentation.wallet_networks = 'mainnet-mixed'
+    } else if (mainnet && !liquid) {
+        segmentation.wallet_networks = 'mainnet'
+    } else if (!mainnet && liquid) {
+        segmentation.wallet_networks = 'liquid'
+    }
+    if (testnet && testnet_liquid) {
+        segmentation.wallet_networks = 'testnet-mixed'
+    } else if (testnet && !liquid) {
+        segmentation.wallet_networks = 'testnet'
+    } else if (!testnet && liquid) {
+        segmentation.wallet_networks = 'testnet-liquid'
+    }
+
+    if (singlesig && multisig) {
+        segmentation.security = 'single-multi'
+    } else if (singlesig) {
+        segmentation.security = 'singlesig'
+    } else if (multisig) {
+        segmentation.security = 'multisig'
+    }
+
     return segmentation
 }
 
 function segmentationOnBoard({ flow, network, security }) {
-    const segmentation = {}
+    const segmentation = {
+        segment: 'Desktop',
+    }
     if (flow) segmentation.flow = flow
     if (network) segmentation.network = network
     if (security) segmentation.security = security
     return segmentation
 }
 
-function segmentationSession(Settings, wallet) {
+function segmentationSession(Settings, context) {
     if (!wallet) return {}
-    const segmentation = segmentationNetwork(wallet.network)
+    const segmentation = segmentationNetwork(context)
     const app_settings = []
     if (Settings.useTor) app_settings.push('tor')
     if (Settings.useProxy) app_settings.push('proxy')
@@ -51,6 +90,7 @@ function segmentationSession(Settings, wallet) {
 
 function segmentationFirmwareUpdate(Settings, device, firmware) {
     const segmentation = {
+        segment: 'Desktop',
         selected_config: firmware.config,
         selected_delta: firmware.delta,
         selected_same_config: firmware.same_config,
@@ -73,20 +113,19 @@ function segmentationFirmwareUpdate(Settings, device, firmware) {
 }
 
 function segmentationShareTransaction(Settings, account, { method = 'copy' } = {}) {
-    const segmentation = segmentationSession(Settings, account.context.wallet)
+    const segmentation = segmentationSession(Settings, account.context)
     segmentation.method = method
     return segmentation;
 }
 
-function segmentationWalletLogin(Settings, wallet, { method }) {
-    const segmentation = segmentationSession(Settings, wallet)
+function segmentationWalletLogin(Settings, context, { method }) {
+    const segmentation = segmentationSession(Settings, context)
     segmentation.method = method
     return segmentation
 }
 
 function segmentationSubAccount(Settings, account) {
-    const segmentation = segmentationSession(Settings, account.context.wallet)
-    segmentation.account_type = account.type
+    const segmentation = segmentationSession(Settings, account.context)
     return segmentation
 }
 
@@ -106,21 +145,21 @@ function segmentationTransaction(Settings, account, { address_input, transaction
     return segmentation
 }
 
-function segmentationWalletActive(Settings, wallet) {
-    const segmentation = segmentationSession(Settings, wallet)
+function segmentationWalletActive(Settings, context) {
+    const segmentation = segmentationSession(Settings, context)
     let accounts_funded = 0
     const accounts_types = new Set
-    for (let i = 0; i < wallet.context.accounts.length; ++i) {
-        const account = wallet.context.accounts[i]
+    for (let i = 0; i < context.accounts.length; ++i) {
+        const account = context.accounts[i]
         const key = account.network.liquid ? account.network.policyAsset : 'btc'
         accounts_types.add(account.type)
-        if (account.json.satoshi[key] > 0 || Object.keys(account.json.satoshi).length > 1) {
+        if (Object.values(account.json.satoshi).filter(satoshi => satoshi > 0).length > 0) {
             accounts_funded ++
         }
     }
     segmentation.wallet_funded = accounts_funded > 0
     segmentation.accounts_funded = accounts_funded
-    segmentation.accounts = wallet.context.accounts.length
+    segmentation.accounts = context.accounts.length
     segmentation.accounts_types = Array.from(accounts_types).join(',')
     return segmentation
 }

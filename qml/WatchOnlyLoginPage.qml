@@ -5,6 +5,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 import "analytics.js" as AnalyticsJS
+import "util.js" as UtilJS
 
 StackViewPage {
     signal loginFinished(Context context)
@@ -14,6 +15,11 @@ StackViewPage {
     StackView.onActivating: {
         password_field.clear()
         self.contentItem.enabled = true
+    }
+    AnalyticsView {
+        name: 'Login'
+        active: UtilJS.effectiveVisible(self)
+        segmentation: AnalyticsJS.segmentationSession(Settings, null)
     }
     WatchOnlyLoginController {
         id: controller

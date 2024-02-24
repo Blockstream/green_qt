@@ -193,6 +193,6 @@ StackViewPage {
     AnalyticsView {
         active: true
         name: 'VerifyTransaction'
-        segmentation: AnalyticsJS.segmentationSession(Settings, self.wallet)
+        segmentation: AnalyticsJS.segmentationSession(Settings, self.resolver.session.context)
     }
 }

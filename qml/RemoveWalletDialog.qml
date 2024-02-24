@@ -93,8 +93,7 @@ AbstractDialog {
         }
     }
     AnalyticsView {
-        active: self.opened
+        active: true
         name: 'DeleteWallet'
-        segmentation: AnalyticsJS.segmentationSession(Settings, self.wallet)
     }
 }

@@ -48,6 +48,6 @@ ControllerDialog {
     AnalyticsView {
         active: self.opened
         name: 'WalletSettings2FAReset'
-        segmentation: AnalyticsJS.segmentationSession(Settings, self.wallet)
+        segmentation: AnalyticsJS.segmentationSession(Settings, controller.context)
     }
 }

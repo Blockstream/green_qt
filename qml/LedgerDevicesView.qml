@@ -202,7 +202,7 @@ MainPage {
             device: self.device
             network: self.network
             onLoginDone: {
-                Analytics.recordEvent('wallet_login', AnalyticsJS.segmentationWalletLogin(Settings, controller.wallet, { method: 'hardware' }))
+                Analytics.recordEvent('wallet_login', AnalyticsJS.segmentationWalletLogin(Settings, controller.wallet.context, { method: 'hardware' }))
                 navigation.push({ view: self.network.key, wallet: controller.wallet.id })
             }
         }

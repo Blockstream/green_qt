@@ -173,6 +173,10 @@ MainPage {
                 onOpenWallet: (wallet) => self.openWallet(wallet)
                 onOpenDevice: (device) => self.openDevice(device)
                 onCreateWallet: self.openWallet(null)
+                AnalyticsView {
+                    name: 'Home'
+                    active: stack_layout.currentIndex === 0
+                }
             }
         }
     }

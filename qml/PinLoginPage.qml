@@ -4,6 +4,9 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
+import "analytics.js" as AnalyticsJS
+import "util.js" as UtilJS
+
 StackViewPage {
     signal loginFinished(Context context)
     signal restoreClicked()
@@ -21,6 +24,11 @@ StackViewPage {
     id: self
     padding: 60
     title: self.wallet.name
+    AnalyticsView {
+        name: 'Login'
+        active: UtilJS.effectiveVisible(self)
+        segmentation: AnalyticsJS.segmentationSession(Settings, null)
+    }
     LoginController {
         id: controller
         wallet: self.wallet

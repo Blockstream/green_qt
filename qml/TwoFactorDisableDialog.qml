@@ -39,7 +39,7 @@ WalletDialog {
     AnalyticsView {
         active: self.opened
         name: 'WalletSettings2FASetup'
-        segmentation: AnalyticsJS.segmentationSession(Settings, self.wallet)
+        segmentation: AnalyticsJS.segmentationSession(Settings, self.context)
     }
 
     contentItem: GStackView {
