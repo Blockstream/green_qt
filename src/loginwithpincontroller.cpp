@@ -3,6 +3,7 @@
 #include "context.h"
 #include "jadedevice.h"
 #include "ledgerdevice.h"
+#include "json.h"
 #include "network.h"
 #include "networkmanager.h"
 #include "session.h"
@@ -11,6 +12,8 @@
 #include "walletmanager.h"
 
 #include <QJsonDocument>
+
+#include <gdk.h>
 
 LoginController::LoginController(QObject* parent)
     : Controller(parent)
@@ -128,6 +131,26 @@ void LoginController::loginWithDevice(Device* device, bool remember)
         m_wallet = m_context->wallet();
         if (!m_wallet) {
             m_wallet = WalletManager::instance()->findWallet(m_context->xpubHashId(), false);
+        }
+        if (!m_wallet) {
+            auto master_xpub = device->masterPublicKey(NetworkManager::instance()->networkForDeployment(m_context->deployment()));
+            for (auto net : NetworkManager::instance()->networks()) {
+                if (net->deployment() == m_context->deployment()) {
+                    const auto net_params = Json::fromObject({{ "name", net->id() }});
+                    const auto params = Json::fromObject({{ "master_xpub", QString::fromLocal8Bit(master_xpub) }});
+                    GA_json* output;
+                    int rc = GA_get_wallet_identifier(net_params.get(), params.get(), &output);
+                    Q_ASSERT(rc == GA_OK);
+                    const auto identifier = Json::toObject(output);
+                    GA_destroy_json(output);
+
+                    const auto wallet_hash_id = identifier.value("wallet_hash_id").toString();
+                    qDebug() << net->id() << wallet_hash_id;
+
+                    m_wallet = WalletManager::instance()->walletWithHashId(wallet_hash_id, false);
+                    if (m_wallet) break;
+                }
+            }
         }
         if (!m_wallet) {
             m_wallet = WalletManager::instance()->createWallet();
