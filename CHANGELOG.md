@@ -4,13 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased
-### Changed
-- Updates GDK to 0.0.64
-
-### Fixed
-- Correct type label of P2PKH accounts
-- Send transaction with Jade from legacy account
+## [2.0.0] - 2024-02-29
+### Added
+- New UI and UX: the user experience has been simplified and streamlined with a more polished, intuitive interface for easier access to key features
+- All-in-one UX: use your existing wallets for both your Bitcoin and Liquid accounts across singlesig and assisted multisig. You have the flexibility to choose whether to combine Bitcoin and Liquid accounts or not, and thus to organize your mainchain and second-layer stacks as you deem fit.
+- Simpler onboarding for new Jade users, minimizing ambiguity and errors during the initial setup
 
 ## [1.2.5] - 2023-07-19
 ### Changed
