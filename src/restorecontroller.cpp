@@ -60,13 +60,12 @@ void RestoreController::restore(const QString& deployment)
             }
         }
 
-        auto wallet = WalletManager::instance()->findWallet(m_context->xpubHashId());
-
-        if (!wallet) {
-            // TODO search for match in existing wallets
-            // for (auto session : m_context->getSessions()) {
-            // WalletManager::instance()->findWallet(session->nework(), session->m_wallet_hash_id);
-            // }
+        Wallet* wallet = nullptr;
+        for (auto w : WalletManager::instance()->getWallets()) {
+            if (qobject_cast<PinData*>(w->login()) && w->xpubHashId() == m_context->xpubHashId()) {
+                m_wallet = w;
+                break;
+            }
         }
 
         if (wallet) {

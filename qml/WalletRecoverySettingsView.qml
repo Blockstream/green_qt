@@ -23,7 +23,7 @@ ColumnLayout {
 
     SettingsBox {
         title: qsTrId('id_recovery_phrase')
-        visible: !(self.context.wallet.deviceDetails?.type ?? false)
+        visible: self.context.wallet.login instanceof PinData
         contentItem: ColumnLayout {
             spacing: 20
             Label {

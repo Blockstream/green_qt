@@ -82,43 +82,6 @@ private:
     Network* m_network{nullptr};
 };
 
-class JadeLoginController : public JadeController
-{
-    Q_OBJECT
-    Q_PROPERTY(QString network READ network WRITE setNetwork NOTIFY networkChanged)
-    Q_PROPERTY(bool enabled READ isEnabled NOTIFY isEnabledChanged)
-    Q_PROPERTY(Wallet* wallet READ wallet WRITE setWallet NOTIFY walletChanged)
-    QML_ELEMENT
-public:
-    JadeLoginController(QObject* parent = nullptr);
-    QString network() const { return m_network; }
-    void setNetwork(const QString& network);
-    bool isEnabled() const { return m_enabled; }
-    void setEnabled(bool enabled);
-    Wallet* wallet() const { return m_wallet; }
-    void setWallet(Wallet* wallet);
-
-    QString walletHashId() const { return m_wallet_hash_id; }
-    void setWalletHashId(const QString& wallet_hash_id);
-
-public slots:
-    void login();
-
-signals:
-    void deviceChanged();
-    void networkChanged();
-    void isEnabledChanged();
-    void walletChanged();
-    void invalidPin();
-    void loginDone();
-public:
-    QString m_network;
-    bool m_enabled{false};
-    Wallet* m_wallet{nullptr};
-private:
-    QString m_wallet_hash_id;
-};
-
 class JadeUnlockTask : public Task
 {
     Q_OBJECT
@@ -143,19 +106,6 @@ private:
     void update() override;
 private:
     JadeController* const m_controller;
-};
-
-class JadeLoginTask : public Task
-{
-    Q_OBJECT
-    QML_ELEMENT
-    QML_UNCREATABLE("")
-public:
-    JadeLoginTask(JadeLoginController* controller);
-private:
-    void update() override;
-private:
-    JadeLoginController* const m_controller;
 };
 
 #endif // GREEN_JADELOGINCONTROLLER_H

@@ -73,7 +73,8 @@ void WatchOnlyLoginController::setSaveWallet(bool save_wallet)
 void WatchOnlyLoginController::update()
 {
     if (m_wallet) {
-        setValid(m_wallet->isWatchOnly() && m_wallet->network() && !m_password.isEmpty());
+        auto watchonly_data = qobject_cast<WatchonlyData*>(m_wallet->login());
+        setValid(watchonly_data && watchonly_data->network() && !m_password.isEmpty());
     } else {
         setValid(m_network && !m_username.isEmpty() && !m_password.isEmpty());
     }
@@ -83,8 +84,10 @@ void WatchOnlyLoginController::login()
 {
     Q_ASSERT(m_valid);
 
-    const auto network = m_wallet ? m_wallet->network() : m_network;
-    const auto username = m_wallet ? m_wallet->username() : m_username;
+    auto watchonly_data = m_wallet ? qobject_cast<WatchonlyData*>(m_wallet->login()) : nullptr;
+
+    const auto network = watchonly_data ? watchonly_data->network() : m_network;
+    const auto username = watchonly_data ? watchonly_data->username() : m_username;
 
     setContext(new Context(network->deployment(), this));
     m_context->setWatchonly(true);
@@ -137,13 +140,23 @@ void WatchOnlyCreateWalletTask::update()
 
     auto wallet = m_controller->wallet();
     if (!wallet) {
-        wallet = WalletManager::instance()->findWallet(xpub_hash_id, true);
+        for (auto w : WalletManager::instance()->getWallets()) {
+            if (w->xpubHashId() != xpub_hash_id) continue;
+            auto watchonly_data = qobject_cast<WatchonlyData*>(w->login());
+            if (!watchonly_data) continue;
+            if (watchonly_data->network() != m_controller->network()) continue;
+            if (watchonly_data->username() != m_controller->username()) continue;
+            wallet = w;
+            break;
+        }
         if (!wallet) {
             wallet = WalletManager::instance()->createWallet();
+            auto watchonly_data = new WatchonlyData(wallet);
+            watchonly_data->setNetwork(m_controller->network());
+            watchonly_data->setUsername(m_controller->username());
+
             wallet->setName(QString("%1 watch-only wallet").arg(m_controller->username()));
-            wallet->m_username = m_controller->username();
-            wallet->m_watch_only = true;
-            wallet->m_network = m_controller->network();
+            wallet->setLogin(watchonly_data);
             wallet->m_is_persisted = m_controller->saveWallet();
         }
         context->setWallet(wallet);

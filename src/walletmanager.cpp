@@ -20,6 +20,19 @@
 
 static WalletManager* g_wallet_manager{nullptr};
 
+bool ReadWalletRecord(const QString& path, QString& id, QJsonObject& data)
+{
+    QFile file(path);
+    if (!file.open(QFile::ReadOnly)) return false;
+    QJsonParseError parser_error;
+    auto doc = QJsonDocument::fromJson(file.readAll(), &parser_error);
+    if (parser_error.error != QJsonParseError::NoError) return false;
+    if (!doc.isObject()) return false;
+    data = doc.object();
+    id = QFileInfo(file).baseName();
+    return true;
+}
+
 WalletManager::WalletManager()
 {
     Q_ASSERT(!g_wallet_manager);
@@ -28,51 +41,94 @@ WalletManager::WalletManager()
 
 void WalletManager::loadWallets()
 {
-    QDirIterator it(GetDataDir("wallets"));
+    if (!ExistsDataDir("wallets2")) {
+        qDebug() << "migrate wallets";
+        QDirIterator it(GetDataDir("wallets"));
+        while (it.hasNext()) {
+            QString id;
+            QJsonObject data;
+            if (!ReadWalletRecord(it.next(), id, data)) continue;
+
+            auto add = [=](const QString& type, const QJsonObject& login) {
+                auto deployment = data.value("deployment").toString("mainnet");
+                const auto new_id = QUuid::createUuid().toString(QUuid::WithoutBraces);
+                QJsonArray hashes;
+                const auto hash_id = data.value("hash_id").toString();
+                if (!hash_id.isEmpty()) hashes.append(hash_id);
+                const auto content = QJsonObject{
+                    { "id", new_id },
+                    { "name", data.value("name") },
+                    { "xpub_hash_id", data.value("xpub_hash_id").toString() },
+                    { "deployment", deployment },
+                    { "incognito", data.value("incognito").toBool(false) },
+                    { "hashes", hashes },
+                    { type, login },
+                };
+
+                QFile file(GetDataFile("wallets2", new_id));
+                bool result = file.open(QFile::WriteOnly | QFile::Truncate);
+                Q_ASSERT(result);
+                file.write(QJsonDocument(content).toJson());
+                result = file.flush();
+            };
+
+            if (data.contains("pin_data") && data.contains("network")) {
+                const auto pin_data = data.value("pin_data").toString();
+                if (!pin_data.isEmpty()) {
+                    add("pin", QJsonObject{
+                        { "data", QJsonDocument::fromJson(QByteArray::fromBase64(pin_data.toLocal8Bit())).object() },
+                        { "attempts", data.value("login_attempts_remaining").toInt() },
+                        { "network", data.value("network").toString() },
+                    });
+                }
+            }
+
+            if (data.contains("device_details")) {
+                add("device", data.value("device_details").toObject());
+            }
+
+            if (data.contains("username") && data.contains("network")) {
+                add("watchonly", QJsonObject{
+                    { "username", data.value("username").toString() },
+                    { "network", data.value("network").toString() },
+                });
+            }
+        }
+    }
+
+    QDirIterator it(GetDataDir("wallets2"));
     while (it.hasNext()) {
-        QJsonObject data;
         QString id;
-        {
-            QFile file(it.next());
-            if (!file.open(QFile::ReadOnly)) continue;
-            QJsonParseError parser_error;
-            auto doc = QJsonDocument::fromJson(file.readAll(), &parser_error);
-            if (parser_error.error != QJsonParseError::NoError) continue;
-            if (!doc.isObject()) continue;
-            data = doc.object();
-            id = QFileInfo(file).baseName();
-        }
+        QJsonObject data;
+        if (!ReadWalletRecord(it.next(), id, data)) continue;
+
         Wallet* wallet = new Wallet(this);
-        wallet->m_deployment = "mainnet";
         wallet->m_is_persisted = true;
-        wallet->m_name = data.value("name").toString();
         wallet->m_id = id;
-        auto network = data.contains("network") ? NetworkManager::instance()->network(data.value("network").toString()) : nullptr;
-        wallet->m_network = network;
-        if (data.contains("xpub_hash_id")) {
-            wallet->m_xpub_hash_id = data.value("xpub_hash_id").toString();
+        wallet->m_deployment = data.value("deployment").toString("mainnet");
+        wallet->m_name = data.value("name").toString();
+        wallet->m_xpub_hash_id = data.value("xpub_hash_id").toString();
+        wallet->m_incognito = data.value("incognito").toBool(false);
+        for (const auto hash : data.value("hashes").toArray()) {
+            wallet->m_hashes.insert(hash.toString());
         }
-        if (data.contains("pin_data") && data.contains("network")) {
-            wallet->m_network = network;
-            wallet->m_pin_data = QByteArray::fromBase64(data.value("pin_data").toString().toLocal8Bit());
-            wallet->m_hash_id = data.value("hash_id").toString();
-            wallet->m_deployment = network->deployment();
+
+        if (data.contains("pin")) {
+            auto pin = new PinData(wallet);
+            pin->read(data);
+            wallet->setLogin(pin);
+        } else if (data.contains("watchonly")) {
+            auto watchonly = new WatchonlyData(wallet);
+            watchonly->read(data);
+            wallet->setLogin(watchonly);
+        } else if (data.contains("device")) {
+            auto device = new DeviceData(wallet);
+            device->read(data);
+            wallet->setLogin(device);
+        } else {
+            Q_UNREACHABLE();
         }
-        wallet->m_login_attempts_remaining = data.value("login_attempts_remaining").toInt();
-        if (data.contains("username")) {
-            wallet->m_watch_only = true;
-            wallet->m_username = data.value("username").toString();
-            wallet->m_network = network;
-        }
-        if (data.contains("device_details")) {
-            wallet->m_device_details = data.value("device_details").toObject();
-        }
-        if (wallet->m_login_attempts_remaining == 0) {
-            wallet->m_pin_data.clear();
-        }
-        if (data.contains("incognito")) {
-            wallet->m_incognito = data.value("incognito").toBool(false);
-        }
+
         addWallet(wallet);
     }
 }
@@ -113,7 +169,7 @@ Wallet* WalletManager::createWallet()
 void WalletManager::insertWallet(Wallet* wallet)
 {
     Q_ASSERT(!wallet->m_id.isEmpty());
-    QFile file(GetDataFile("wallets", wallet->m_id));
+    QFile file(GetDataFile("wallets2", wallet->m_id));
     addWallet(wallet);
     wallet->save();
 }
@@ -125,7 +181,7 @@ void WalletManager::removeWallet(Wallet* wallet)
     m_wallets.removeOne(wallet);
     emit changed();
     if (wallet->isPersisted()) {
-        bool result = QFile::remove(GetDataFile("wallets", wallet->m_id));
+        bool result = QFile::remove(GetDataFile("wallets2", wallet->m_id));
         Q_ASSERT(result);
     }
     wallet->deleteLater();
@@ -191,20 +247,12 @@ Wallet* WalletManager::wallet(const QString& id) const
 
 Wallet *WalletManager::walletWithHashId(const QString &hash_id, bool watch_only) const
 {
+/*
     for (auto wallet : m_wallets) {
         if (wallet->m_hash_id == hash_id && wallet->m_watch_only == watch_only) {
             return wallet;
         }
     }
-    return nullptr;
-}
-
-Wallet* WalletManager::findWallet(const QString& xpub_hash_id, bool watch_only) const
-{
-    for (auto wallet : m_wallets) {
-        if (wallet->m_xpub_hash_id == xpub_hash_id && wallet->m_watch_only == watch_only) {
-            return wallet;
-        }
-    }
+*/
     return nullptr;
 }

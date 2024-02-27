@@ -282,7 +282,6 @@ void LedgerIdentifyTask::update()
             m_controller->setWallet(wallet);
             const auto context = wallet->context();
             if (context) context->setDevice(device);
-            wallet->updateDeviceDetails(device->details());
         }
 
         setStatus(Status::Finished);
@@ -340,7 +339,6 @@ void LedgerLoginTask::update()
             m_context->setWallet(wallet);
         }
 
-        wallet->updateDeviceDetails(device->details());
         m_context->setDevice(device);
         session->m_ready = true;
         // TODO should propagate to context

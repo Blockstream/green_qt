@@ -21,7 +21,7 @@ WalletHeaderCard {
         device: self.context?.device
     }
     id: self
-    visible: self.context.wallet.deviceDetails?.type === 'jade'
+    visible: self.context.wallet.login?.device?.type === 'jade'
     TapHandler {
         enabled: self.context.device?.connected ?? false
         onTapped: update_firmware_dialog.createObject(self).open()
@@ -65,7 +65,7 @@ WalletHeaderCard {
                 font.capitalization: Font.AllUppercase
                 font.pixelSize: 20
                 font.weight: 600
-                text: self.context.wallet.deviceDetails?.name ?? ''
+                text: self.context.wallet.login?.device?.name ?? ''
             }
             RowLayout {
                 Layout.fillHeight: false

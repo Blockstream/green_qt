@@ -18,6 +18,7 @@
 #include "device.h"
 #include "json.h"
 #include "network.h"
+#include "networkmanager.h"
 #include "session.h"
 #include "util.h"
 #include "walletmanager.h"
@@ -66,12 +67,6 @@ void Wallet::setName(const QString& name)
     if (m_name == name) return;
     m_name = name;
     emit nameChanged();
-}
-
-QJsonObject Wallet::pinData() const
-{
-    if (m_pin_data.isNull()) return {};
-    return QJsonDocument::fromJson(m_pin_data).object();
 }
 
 void Wallet::reload(bool refresh_accounts)
@@ -129,28 +124,16 @@ void Wallet::save()
     Q_ASSERT(!m_id.isEmpty());
     if (!m_is_persisted) return;
     QJsonObject data({
-        { "version", 1 },
         { "name", m_name },
-        { "incognito", m_incognito }
+        { "deployment", m_deployment },
+        { "incognito", m_incognito },
+        { "hashes", QJsonArray::fromStringList(m_hashes.values()) },
     });
-    if (m_watch_only) {
-        data.insert("username", m_username);
-    }
-    if (m_network && (m_login_attempts_remaining > 0 || !m_pin_data.isEmpty())) {
-        data.insert("network", m_network->id());
-        data.insert("login_attempts_remaining", m_login_attempts_remaining);
-        data.insert("pin_data", QString::fromLocal8Bit(m_pin_data.toBase64()));
-    }
-    if (!m_hash_id.isEmpty()) {
-        data.insert("hash_id", m_hash_id);
-    }
     if (!m_xpub_hash_id.isEmpty()) {
         data.insert("xpub_hash_id", m_xpub_hash_id);
     }
-    if (!m_device_details.isEmpty()) {
-        data.insert("device_details", m_device_details);
-    }
-    QFile file(GetDataFile("wallets", m_id));
+    if (m_login) m_login->write(data);
+    QFile file(GetDataFile("wallets2", m_id));
     bool result = file.open(QFile::WriteOnly | QFile::Truncate);
     Q_ASSERT(result);
     file.write(QJsonDocument(data).toJson());
@@ -158,11 +141,15 @@ void Wallet::save()
     Q_ASSERT(result);
 }
 
-void Wallet::clearPinData()
+void Wallet::setLogin(LoginData* login)
 {
-    setPinData(nullptr, {});
+    if (m_login == login) return;
+    if (m_login) m_login->deleteLater();
+    m_login = login;
+    emit loginChanged();
 }
 
+/*
 void Wallet::setPinData(Network* network, const QByteArray& pin_data)
 {
     if (m_network == network && m_pin_data == pin_data) return;
@@ -172,6 +159,7 @@ void Wallet::setPinData(Network* network, const QByteArray& pin_data)
     resetLoginAttempts();
     save();
 }
+*/
 
 QJsonObject Wallet::convert(const QJsonObject& value) const
 {
@@ -213,6 +201,7 @@ QString Wallet::formatAmount(qint64 amount, bool include_ticker, const QString& 
     return str;
 }
 
+/*
 void Wallet::updateDeviceDetails(const QJsonObject& device_details)
 {
     if (m_device_details == device_details) return;
@@ -220,6 +209,7 @@ void Wallet::updateDeviceDetails(const QJsonObject& device_details)
     emit deviceDetailsChanged();
     save();
 }
+*/
 
 qint64 Wallet::amountToSats(const QString& amount) const
 {
@@ -244,40 +234,9 @@ qint64 Wallet::parseAmount(const QString& amount, const QString& unit) const
     return result.value("sats").toString().toLongLong();
 }
 
-void Wallet::updateHashId(const QString& hash_id)
-{
-    if (m_hash_id == hash_id) return;
-    if (!m_hash_id.isEmpty()) {
-        qWarning() << Q_FUNC_INFO << "new:" << hash_id << "current:" << m_hash_id;
-    }
-    m_hash_id = hash_id;
-    save();
-}
-
 QString Wallet::getDisplayUnit(const QString& unit)
 {
     return ComputeDisplayUnit(m_context->primarySession()->network(), unit);
-}
-
-void Wallet::resetLoginAttempts()
-{
-    if (m_login_attempts_remaining < 3) {
-        m_login_attempts_remaining = 3;
-        emit loginAttemptsRemainingChanged();
-        save();
-    }
-}
-
-void Wallet::decrementLoginAttempts()
-{
-    Q_ASSERT(m_login_attempts_remaining > 0);
-    --m_login_attempts_remaining;
-    emit loginAttemptsRemainingChanged();
-    if (m_login_attempts_remaining == 0) {
-        m_pin_data.clear();
-        emit hasPinDataChanged();
-    }
-    save();
 }
 
 void Wallet::setXPubHashId(const QString &xpub_hash_id)
@@ -300,4 +259,113 @@ void Wallet::setIncognito(bool incognito)
 void Wallet::toggleIncognito()
 {
     setIncognito(!m_incognito);
+}
+
+LoginData::LoginData(Wallet* wallet)
+    : QObject(wallet)
+    , m_wallet(wallet)
+{
+}
+
+void PinData::setAttempts(int attempts)
+{
+    if (m_attempts == attempts) return;
+    m_attempts = attempts;
+    emit attemptsChanged();
+    m_wallet->save();
+}
+
+void PinData::resetAttempts()
+{
+    setAttempts(3);
+}
+
+void PinData::decrementAttempts()
+{
+    Q_ASSERT(m_attempts > 0);
+    setAttempts(m_attempts - 1);
+}
+
+void PinData::setNetwork(Network* network)
+{
+    if (m_network == network) return;
+    m_network = network;
+    emit networkChanged();
+}
+
+void PinData::setData(const QJsonObject& data)
+{
+    if (m_data == data) return;
+    m_data = data;
+    m_wallet->save();
+}
+
+bool PinData::write(QJsonObject& data)
+{
+    data.insert("pin", QJsonObject{
+        { "network", m_network->id() },
+        { "data", m_data },
+        { "attempts", m_attempts },
+    });
+    return true;
+}
+
+bool PinData::read(const QJsonObject& data)
+{
+    const auto pin = data.value("pin").toObject();
+    m_network = NetworkManager::instance()->network(pin.value("network").toString());
+    m_data = pin.value("data").toObject();
+    m_attempts = pin.value("attempts").toInt();
+    return true;
+}
+
+void DeviceData::setDevice(const QJsonObject& device)
+{
+    if (m_device == device) return;
+    m_device = device;
+    emit deviceChanged();
+}
+
+bool DeviceData::write(QJsonObject& data)
+{
+    data.insert("device", m_device);
+    return true;
+}
+
+bool DeviceData::read(const QJsonObject& data)
+{
+    m_device = data.value("device").toObject();
+    return true;
+}
+
+void WatchonlyData::setNetwork(Network* network)
+{
+    if (m_network == network) return;
+    m_network = network;
+    emit networkChanged();
+}
+
+void WatchonlyData::setUsername(const QString& username)
+{
+    if (m_username == username) return;
+    m_username = username;
+    emit usernameChanged();
+}
+
+
+bool WatchonlyData::write(QJsonObject& data)
+{
+    data.insert("watchonly", QJsonObject{
+        { "network", m_network->id() },
+        { "username", m_username },
+    });
+    return true;
+}
+
+bool WatchonlyData::read(const QJsonObject& data)
+{
+    auto watchonly = data.value("watchonly").toObject();
+    m_network = NetworkManager::instance()->network(watchonly.value("network").toString());
+    m_username = watchonly.value("username").toString();
+    return true;
 }

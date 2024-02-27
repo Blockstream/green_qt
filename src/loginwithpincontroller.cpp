@@ -34,17 +34,18 @@ void LoginController::loginWithPin(const QString& pin)
     if (!m_wallet) return;
     if (pin.isEmpty()) return;
 
-    if (!m_context) {
-        setContext(new Context(m_wallet->network()->deployment(), this));
-    }
+    auto pin_data = qobject_cast<PinData*>(m_wallet->login());
+    Q_ASSERT(pin_data);
 
-    auto session = m_context->getOrCreateSession(m_wallet->network());
+    auto network = pin_data->network();
+    if (!m_context) setContext(new Context(m_wallet->deployment(), this));
 
-    auto login_task = new LoginTask(pin, m_wallet->pinData(), session);
+    auto session = m_context->getOrCreateSession(network);
+    auto login_task = new LoginTask(pin, pin_data->data(), session);
 
     connect(login_task, &Task::failed, this, [=](const QString& error) {
         if (error == "id_invalid_pin") {
-            m_wallet->decrementLoginAttempts();
+            pin_data->decrementAttempts();
             emit invalidPin();
         } else {
             m_error = error;
@@ -52,7 +53,7 @@ void LoginController::loginWithPin(const QString& pin)
     });
 
     connect(login_task, &Task::finished, this, [=] {
-        m_wallet->resetLoginAttempts();
+        pin_data->resetAttempts();
     });
 
     login(login_task);
@@ -130,7 +131,12 @@ void LoginController::loginWithDevice(Device* device, bool remember)
 
         m_wallet = m_context->wallet();
         if (!m_wallet) {
-            m_wallet = WalletManager::instance()->findWallet(m_context->xpubHashId(), false);
+            for (auto w : WalletManager::instance()->getWallets()) {
+                if (qobject_cast<DeviceData*>(w->login()) && w->xpubHashId() == m_context->xpubHashId()) {
+                    m_wallet = w;
+                    break;
+                }
+            }
         }
         if (!m_wallet) {
             auto master_xpub = device->masterPublicKey(NetworkManager::instance()->networkForDeployment(m_context->deployment()));
@@ -147,15 +153,23 @@ void LoginController::loginWithDevice(Device* device, bool remember)
                     const auto wallet_hash_id = identifier.value("wallet_hash_id").toString();
                     qDebug() << net->id() << wallet_hash_id;
 
-                    m_wallet = WalletManager::instance()->walletWithHashId(wallet_hash_id, false);
+                    for (auto w : WalletManager::instance()->getWallets()) {
+                        if (qobject_cast<DeviceData*>(w->login()) && w->m_hashes.contains(wallet_hash_id)) {
+                            m_wallet = w;
+                            break;
+                        }
+                    }
                     if (m_wallet) break;
                 }
             }
         }
         if (!m_wallet) {
             m_wallet = WalletManager::instance()->createWallet();
+            m_wallet->m_deployment = m_context->deployment();
             m_wallet->setName(device->name());
-            m_wallet->updateDeviceDetails(device->details());
+            auto device_data = new DeviceData(m_wallet);
+            device_data->setDevice(device->details());
+            m_wallet->setLogin(device_data);
             m_wallet->m_is_persisted = m_context->remember();
             WalletManager::instance()->insertWallet(m_wallet);
         }
@@ -219,6 +233,12 @@ LoadController::LoadController(QObject* parent)
             Q_ASSERT(wallet);
             WalletManager::instance()->addWallet(wallet);
             wallet->setContext(m_context);
+            for (auto session : m_context->getSessions()) {
+                if (!session->m_wallet_hash_id.isEmpty()) {
+                    wallet->m_hashes.insert(session->m_wallet_hash_id);
+                }
+            }
+            wallet->save();
             emit loadFinished();
         });
     });
@@ -336,10 +356,12 @@ void PinDataController::update(const QString& pin)
 
     auto task = new EncryptWithPinTask(m_context->credentials(), pin, session);
     connect(task, &Task::finished, this, [=] {
-        const auto pin_data = task->result().value("result").toObject().value("pin_data").toObject();
-
-        m_context->wallet()->setPinData(session->network(), QJsonDocument(pin_data).toJson());
-
+        auto wallet = m_context->wallet();
+        auto pin = new PinData(wallet);
+        pin->setNetwork(session->network());
+        pin->setData(task->result().value("result").toObject().value("pin_data").toObject());
+        wallet->setLogin(pin);
+        wallet->save();
         emit finished();
     });
     dispatcher()->add(task);

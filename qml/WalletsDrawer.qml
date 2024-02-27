@@ -161,9 +161,9 @@ AbstractDrawer {
 //            }
             Image {
                 Layout.alignment: Qt.AlignCenter
-                visible: button.wallet.deviceDetails?.type ?? false
+                visible: button.wallet.login?.device ?? false
                 source: {
-                    switch (button.wallet.deviceDetails?.type) {
+                    switch (button.wallet.login?.device?.type) {
                     case 'jade':
                         return 'qrc:/svg2/jade-logo.svg'
                     case 'nanos':

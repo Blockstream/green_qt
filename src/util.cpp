@@ -15,6 +15,14 @@
 
 QString g_data_location;
 
+bool ExistsDataDir(const QString& context)
+{
+    Q_ASSERT(!g_data_location.isEmpty());
+    const QString path = g_data_location + QDir::separator() + context;
+    const QDir dir(path);
+    return dir.exists();
+}
+
 QString GetDataDir(const QString& context)
 {
     Q_ASSERT(!g_data_location.isEmpty());

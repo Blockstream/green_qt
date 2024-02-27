@@ -23,7 +23,6 @@ public:
     Wallet* createWallet();
     Q_INVOKABLE Wallet* wallet(const QString& id) const;
     Wallet* walletWithHashId(const QString& hash_id, bool watch_only) const;
-    Wallet* findWallet(const QString& xpub_hash_id, bool watch_only = false) const;
 
     void addWallet(Wallet *wallet);
 
@@ -32,6 +31,7 @@ public:
 
     int size() const { return m_wallets.size(); }
 
+    QVector<Wallet*> getWallets() const { return m_wallets; }
     QQmlListProperty<Wallet> wallets();
 
     QString newWalletName() const;

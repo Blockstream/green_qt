@@ -121,8 +121,7 @@ void Controller::sendRecoveryTransactions()
 {
     if (!m_context) return;
 
-    const auto network = m_context->wallet()->network();
-    auto session = m_context->getOrCreateSession(network);
+    auto session = m_context->primarySession();
 
     auto send_nlocktimes = new SendNLocktimesTask(session);
 
@@ -133,8 +132,7 @@ void Controller::requestTwoFactorReset(const QString& email)
 {
     if (!m_context) return;
 
-    auto network = m_context->wallet()->network();
-    auto session = m_context->getOrCreateSession(network);
+    auto session = m_context->primarySession();
 
     auto twofactor_reset = new TwoFactorResetTask(email, session);
     // TODO: update config doesn't update 2f reset data,
@@ -155,8 +153,7 @@ void Controller::requestTwoFactorReset(const QString& email)
 void Controller::cancelTwoFactorReset()
 {
     if (!m_context) return;
-    auto network = m_context->wallet()->network();
-    auto session = m_context->getOrCreateSession(network);
+    auto session = m_context->primarySession();
 
     auto task = new TwoFactorCancelResetTask(session);
     connect(task, &Task::finished, this, [=] {
@@ -189,8 +186,7 @@ void Controller::setRecoveryEmail(const QString& email)
         }
     };
 
-    auto network = m_context->wallet()->network();
-    auto session = m_context->getOrCreateSession(network);
+    auto session = m_context->primarySession();
 
     const auto change_twofactor = new ChangeTwoFactorTask(method, twofactor_details, session);
     const auto update_config = new LoadTwoFactorConfigTask(session);
@@ -211,8 +207,7 @@ void Controller::setRecoveryEmail(const QString& email)
 void Controller::setCsvTime(int value)
 {
     if (!m_context) return;
-    auto network = m_context->wallet()->network();
-    auto session = m_context->getOrCreateSession(network);
+    auto session = m_context->primarySession();
     auto set_csv_time = new SetCsvTimeTask(value, session);
 
     dispatcher()->add(set_csv_time);
@@ -220,8 +215,7 @@ void Controller::setCsvTime(int value)
 
 void Controller::deleteWallet()
 {
-    auto network = m_context->wallet()->network();
-    auto session = m_context->getOrCreateSession(network);
+    auto session = m_context->primarySession();
 
     auto delete_wallet = new DeleteWalletTask(session);
     connect(delete_wallet, &Task::finished, this, [=] {
@@ -240,7 +234,7 @@ void Controller::disableAllPins()
     }
     dispatcher()->add(group);
     connect(group, &TaskGroup::finished, this, [=] {
-        m_context->wallet()->clearPinData();
+        m_context->wallet()->setLogin(nullptr);
         emit finished();
     });
 }
@@ -268,17 +262,18 @@ void Controller::changePin(const QString& pin)
     if (!m_context) return;
 
     auto session = m_context->primarySession();
-
     auto encrypt_with_pin = new EncryptWithPinTask(m_context->credentials(), pin, session);
     auto group = new TaskGroup(this);
     group->add(encrypt_with_pin);
     dispatcher()->add(group);
 
     connect(group, &TaskGroup::finished, this, [=] {
-        const auto pin_data = encrypt_with_pin->result().value("result").toObject().value("pin_data").toObject();
-
-        m_context->wallet()->setPinData(session->network(), QJsonDocument(pin_data).toJson());
-
+        auto wallet = m_context->wallet();
+        auto pin = new PinData(wallet);
+        pin->setNetwork(session->network());
+        pin->setData(encrypt_with_pin->result().value("result").toObject().value("pin_data").toObject());
+        wallet->setLogin(pin);
+        wallet->save();
         emit finished();
     });
 }
@@ -506,7 +501,9 @@ WatchOnlyController::WatchOnlyController(QObject* parent)
 void WatchOnlyController::update(const QString& username, const QString& password)
 {
     if (!m_session) return;
-    if (m_context->wallet()->isWatchOnly()) return;
+
+    auto watchonly_data = qobject_cast<WatchonlyData*>(m_context->wallet()->login());
+    if (watchonly_data) return;
 
     auto task = new SetWatchOnlyTask(username, password, m_session);
 

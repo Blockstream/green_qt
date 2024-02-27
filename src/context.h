@@ -87,6 +87,8 @@ public:
     void addNotification(Notification* notification);
     void removeNotification(Notification* notification);
 
+    void triggerAutoLogout();
+
 public slots:
     void refreshAccounts();
 

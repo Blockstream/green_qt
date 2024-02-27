@@ -29,7 +29,6 @@ SET(QML_FILES
     qml/GComboBox.qml
     qml/TwoFactorAuthExpiryDialog.qml
     qml/Tag.qml
-    qml/JadeViewDeviceNetwork.qml
     qml/AccountDelegate.qml
     qml/DeleteWalletDialog.qml
     qml/ChangePinDialog.qml
@@ -51,7 +50,6 @@ SET(QML_FILES
     qml/ControllerDialog.qml
     qml/WizardPage.qml
     qml/Spacer.qml
-    qml/WalletListDelegate.qml
     qml/AssetDelegate.qml
     qml/RemoveWalletDialog.qml
     qml/DialogFooter.qml
@@ -60,11 +58,9 @@ SET(QML_FILES
     qml/PersistentLoader.qml
     qml/AnimLoader.qml
     qml/GToolButton.qml
-    qml/LoginWithPasswordView.qml
     qml/PreferencesView.qml
     qml/AssetDrawer.qml
     qml/AddressesListView.qml
-    qml/LoginWithPinView.qml
     qml/AssetListView.qml
     qml/DescriptiveRadioButton.qml
     qml/SettingsPage.qml
@@ -77,7 +73,6 @@ SET(QML_FILES
     qml/WalletViewHeader.qml
     qml/AmountValidator.qml
     qml/DisableAllPinsDialog.qml
-    qml/JadeViewDevice.qml
     qml/OutputsListView.qml
     qml/GPane.qml
     qml/main.qml
@@ -117,7 +112,6 @@ SET(QML_FILES
     qml/AddressDelegate.qml
     qml/Constants.qml
     qml/TransactionDoneView.qml
-    qml/JadeView.qml
     qml/SideButton.qml
     qml/SettingsBox.qml
     qml/WalletRecoverySettingsView.qml

@@ -26,7 +26,7 @@ GStackView {
         Loader {
             Layout.alignment: Qt.AlignCenter
             sourceComponent: {
-                switch (self.context.wallet.deviceDetails.type) {
+                switch (self.context.wallet.login.device.type) {
                 case 'jade': return jade_view
                 default: return null
                 }

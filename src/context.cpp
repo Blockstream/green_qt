@@ -91,7 +91,7 @@ void Context::setWallet(Wallet* wallet)
             m_wallet->setXPubHashId(m_xpub_hash_id);
         }
         if (m_device) {
-            m_wallet->updateDeviceDetails(m_device->details());
+            // m_wallet->updateDeviceDetails(m_device->details());
         }
     }
 }
@@ -187,7 +187,7 @@ void Context::setDevice(Device* device)
         });
 
         if (m_wallet) {
-            m_wallet->updateDeviceDetails(m_device->details());
+            // m_wallet->updateDeviceDetails(m_device->details());
         }
     }
     emit deviceChanged();
@@ -304,6 +304,13 @@ void Context::removeNotification(Notification* notification)
     emit notificationRemoved(notification);
     m_notifications.removeOne(notification);
     emit notificationsChanged();
+}
+
+void Context::triggerAutoLogout()
+{
+    if (m_wallet && !qobject_cast<DeviceData*>(m_wallet->login())) {
+        emit autoLogout();
+    }
 }
 
 void Context::refreshAccounts()

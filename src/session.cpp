@@ -244,7 +244,7 @@ void Session::timerEvent(QTimerEvent* event)
     if (event->timerId() == m_logout_timer) {
         killTimer(m_logout_timer);
         m_logout_timer = -1;
-        m_context->autoLogout();
+        m_context->triggerAutoLogout();
     }
 }
 

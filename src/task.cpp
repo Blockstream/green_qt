@@ -688,7 +688,7 @@ void LoadTwoFactorConfigTask::update()
     const auto wallet = context->wallet();
     if (!wallet) return;
 
-    if (wallet->isWatchOnly()) {
+    if (qobject_cast<WatchonlyData*>(wallet->login())) {
         setStatus(Status::Finished);
         return;
     }
@@ -836,7 +836,7 @@ void GetWatchOnlyDetailsTask::update()
 
     const auto wallet = m_session->context()->wallet();
     if (!wallet) return;
-    if (wallet->isWatchOnly()) {
+    if (qobject_cast<WatchonlyData*>(wallet->login())) {
         setStatus(Status::Finished);
         return;
     }

@@ -7,6 +7,7 @@
 #include <QJsonValue>
 #include <QString>
 
+bool ExistsDataDir(const QString& context);
 QString GetDataDir(const QString& context);
 QString GetDataFile(const QString& context, const QString& name);
 

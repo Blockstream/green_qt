@@ -80,7 +80,7 @@ StackViewPage {
             UsernameField {
                 Layout.alignment: Qt.AlignCenter
                 Layout.fillWidth: true
-                text: wallet.username
+                text: self.wallet.login.username
                 readOnly: true
             }
             FieldTitle {

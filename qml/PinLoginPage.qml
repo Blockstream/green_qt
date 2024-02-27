@@ -26,7 +26,7 @@ StackViewPage {
         wallet: self.wallet
         onInvalidPin: {
             pin_field.clear()
-            pin_field.enabled = self.wallet.loginAttemptsRemaining > 0
+            pin_field.enabled = self.wallet.login.attempts > 0
         }
         onLoginFinished: context => self.loginFinished(context)
         onLoginFailed: error => {
@@ -45,7 +45,7 @@ StackViewPage {
         initialItem: ColumnLayout {
             Timer {
                 interval: 2000
-                running: self.wallet.loginAttemptsRemaining === 0
+                running: self.wallet.login.attempts === 0
                 onTriggered: stack_view.push(no_attempts_view)
             }
             VSpacer {
@@ -96,10 +96,10 @@ StackViewPage {
                 font.weight: 600
                 horizontalAlignment: Qt.AlignHCenter
                 text: {
-                    switch (self.wallet.loginAttemptsRemaining) {
+                    switch (self.wallet.login.attempts) {
                     case 0: return qsTrId('id_no_attempts_remaining')
                     case 1: return qsTrId('id_last_attempt_if_failed_you_will')
-                    case 2: return qsTrId('id_attempts_remaining_d').arg(self.wallet.loginAttemptsRemaining)
+                    case 2: return qsTrId('id_attempts_remaining_d').arg(self.wallet.login.attempts)
                     default: return ''
                     }
                 }
