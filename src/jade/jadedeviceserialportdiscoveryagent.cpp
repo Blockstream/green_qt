@@ -1,5 +1,6 @@
 #include "jadedeviceserialportdiscoveryagent.h"
 
+#include <QGuiApplication>
 #include <QSerialPortInfo>
 #include <QTimer>
 #include <QtConcurrentRun>
@@ -88,14 +89,16 @@ void JadeDeviceSerialPortDiscoveryAgent::scan()
             remove(backend);
         }
 
-        QTimer::singleShot(100, this, &JadeDeviceSerialPortDiscoveryAgent::scan);
+        // scan more often when app is active
+        int interval = qGuiApp->applicationState() == Qt::ApplicationActive ? 100 : 10000;
+        QTimer::singleShot(interval, this, &JadeDeviceSerialPortDiscoveryAgent::scan);
     });
 }
 
 void JadeDeviceSerialPortDiscoveryAgent::probe(JadeAPI* backend)
 {
     if (backend->m_locked) return;
-    if (m_attempts.value(backend) > 10) return;
+    if (m_attempts.value(backend) > 3) return;
     m_attempts[backend] ++;
     backend->connectDevice();
     backend->getVersionInfo(false, [=](const QVariantMap& data) {
