@@ -52,6 +52,7 @@ Context::Context(const QString& deployment, QObject* parent)
 TaskGroup* Context::cleanAccounts()
 {
     auto group = new TaskGroup(this);
+    if (m_watchonly) return group;
     for (auto account : m_accounts) {
         if (account->pointer() == 0 && account->name().isEmpty()) {
             bool hide = true;
