@@ -58,7 +58,7 @@ AbstractButton {
                 x: 10
                 width: 24
                 height: 24
-                indeterminate: true
+                indeterminate: self.busy
             }
         }
         HSpacer {
