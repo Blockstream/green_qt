@@ -6,7 +6,7 @@ mkdir -p build
 cd build
 
 if [ ! -d libusb ]; then
-    git clone --quiet --depth 1 --branch v1.0.26 --single-branch https://github.com/libusb/libusb.git libusb
+    git clone --quiet --depth 1 --branch v1.0.27 --single-branch https://github.com/libusb/libusb.git libusb
 fi
 
 cd libusb

@@ -2,7 +2,7 @@
 set -eo pipefail
 
 
-FILENAME=hidapi-0.13.1
+FILENAME=hidapi-0.14.0
 ARCHIVE=$FILENAME.tar.gz
 DIRNAME=hidapi-$FILENAME
 

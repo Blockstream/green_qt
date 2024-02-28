@@ -1,9 +1,9 @@
 #!/bin/bash
 set -eox pipefail
 
-QT_MAJOR=6.5
-QT_VERSION=${QT_MAJOR}.3
-QT_HASH=7cda4d119aad27a3887329cfc285f2aba5da85601212bcb0aea27bd6b7b544cb
+QT_MAJOR=6.6
+QT_VERSION=${QT_MAJOR}.2
+QT_HASH=3c1e42b3073ade1f7adbf06863c01e2c59521b7cc2349df2f74ecd7ebfcb922d
 QT_BASENAME=qt-everywhere-src-${QT_VERSION}
 QT_FILENAME=${QT_BASENAME}.tar.xz
 
@@ -24,7 +24,6 @@ if [ ! -d $QT_BASENAME ]; then
 
     echo "qt: patching"
     cd $QT_BASENAME
-    patch -p1 < ../../tools/patches/fix-wmf.diff
     rm -rf qtwebengine
     cd ..
 fi
@@ -43,7 +42,7 @@ if [[ "$HOST" == "windows" ]]; then
             -release \
             -static -static-runtime \
             -prefix $_QT_HOST_PATH \
-            -skip qt3d,qt5compat,qtactiveqt,qtcharts,qtcoap,qtconnectivity,qtdatavis3d,qtdoc,qthttpserver,qtimageformats,qtlanguageserver,qtlottie,qtmqtt,qtmultimedia,qtnetworkauth,qtopcua,qtpositioning,qtquick3d,qtquick3dphysics,qtquicktimeline,qtremoteobjects,qtscxml,qtsensors,qtserialbus,qtserialport,qtspeech,qtsvg,qttranslations,qtvirtualkeyboard,qtwayland,qtwebchannel,qtwebsockets,qtwebview,qtlocation \
+            -skip qt3d,qt5compat,qtactiveqt,qtcharts,qtcoap,qtconnectivity,qtdatavis3d,qtdoc,qthttpserver,qtimageformats,qtlanguageserver,qtlottie,qtmqtt,qtmultimedia,qtnetworkauth,qtopcua,qtpositioning,qtquick3d,qtquick3dphysics,qtquicktimeline,qtremoteobjects,qtscxml,qtsensors,qtserialbus,qtserialport,qtspeech,qtsvg,qttranslations,qtvirtualkeyboard,qtwayland,qtwebchannel,qtwebsockets,qtwebview,qtlocation,qtgraphs \
             -no-feature-sql -no-feature-sql-sqlite \
             -nomake tests -nomake examples
 
@@ -65,7 +64,7 @@ echo "qt: configuring"
   -release \
   -static -static-runtime \
   -prefix $PREFIX \
-  -skip qt3d,qtactiveqt,qtcharts,qtcoap,qtdatavis3d,qtdoc,qthttpserver,qtlanguageserver,qtlottie,qtmqtt,qtnetworkauth,qtopcua,qtpositioning,qtquick3d,qtquick3dphysics,qtquicktimeline,qtremoteobjects,qtscxml,qtsensors,qtserialbus,qtspeech,qtvirtualkeyboard,qtwebchannel,qtwebsockets,qtwebview,qtlocation \
+  -skip qt3d,qtactiveqt,qtcharts,qtcoap,qtdatavis3d,qtdoc,qthttpserver,qtlanguageserver,qtlottie,qtmqtt,qtnetworkauth,qtopcua,qtpositioning,qtquick3d,qtquick3dphysics,qtquicktimeline,qtremoteobjects,qtscxml,qtsensors,qtserialbus,qtspeech,qtvirtualkeyboard,qtwebchannel,qtwebsockets,qtwebview,qtlocation,qtgraphs \
   -no-feature-sql -no-feature-sql-sqlite \
   -nomake tests -nomake examples
 

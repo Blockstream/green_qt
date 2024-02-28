@@ -22,7 +22,6 @@ RUN . /root/.cargo/env && tools/buildgdk.sh
 
 FROM base AS qt
 COPY tools/buildqt.sh tools/
-COPY tools/patches/ tools/patches/
 RUN tools/buildqt.sh
 
 FROM qt AS kdsa
