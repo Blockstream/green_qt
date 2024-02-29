@@ -160,7 +160,10 @@ StackViewPage {
                 CircleButton {
                     Layout.alignment: Qt.AlignCenter
                     icon.source: 'qrc:/svg2/paste.svg'
-                    onClicked: word_field_repeater.itemAt(0).paste()
+                    onClicked: {
+                        word_field_repeater.itemAt(0).clear()
+                        word_field_repeater.itemAt(0).paste()
+                    }
                 }
             }
         }

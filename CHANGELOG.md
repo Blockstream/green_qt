@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Fixed watch only login on liquid
 - Fix busy indicator of primary buttons
+- Restore with QR Code while some words are filled
 
 ## [2.0.0] - 2024-02-29
 ### Added

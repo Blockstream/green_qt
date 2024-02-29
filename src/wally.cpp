@@ -58,27 +58,18 @@ QString MnemonicEditorController::updateWord(int index, const QString& text)
 {
     if (index >= m_mnemonic_size) return text;
 
-    QString diff;
-    Word* word = m_words.at(index);
-    if (text.startsWith(word->text())) {
-        diff = text.mid(word->text().length());
-    } else {
-        diff = text;
-    }
 
-    if (!diff.isEmpty()) {
-        auto words = diff.trimmed().split(QRegularExpression("\\s+"));
-        if (words.length() == 12 || words.length() == 24 || words.length() == 27) {
-            setMnemonicSize(words.length());
-            bool changed = false;
-            for (int i = 0; i < words.length(); ++i) {
-                changed = m_words.at(i)->setText(words.at(i)) || changed;
-            }
-            if (changed) {
-                emit mnemonicChanged();
-            }
-            return m_words.at(index)->text();
+    auto words = text.trimmed().split(QRegularExpression("\\s+"));
+    if (words.length() == 12 || words.length() == 24 || words.length() == 27) {
+        setMnemonicSize(words.length());
+        bool changed = false;
+        for (int i = 0; i < words.length(); ++i) {
+            changed = m_words.at(i)->setText(words.at(i)) || changed;
         }
+        if (changed) {
+            emit mnemonicChanged();
+        }
+        return m_words.at(index)->text();
     }
 
     if (m_words.at(index)->setText(text)) {
