@@ -5,6 +5,7 @@ import QtQuick.Window
 import QtQuick.Controls
 import QtQuick.Layouts
 
+import "analytics.js" as AnalyticsJS
 import "util.js" as UtilJS
 
 Page {
@@ -17,6 +18,12 @@ Page {
     id: self
     spacing: constants.s1
     background: null
+
+    AnalyticsView {
+        name: 'Overview'
+        active: UtilJS.effectiveVisible(self)
+        segmentation: AnalyticsJS.segmentationSubAccount(Settings, self.account)
+    }
 
     TransactionListModel {
         id: transaction_list_model

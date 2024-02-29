@@ -23,19 +23,22 @@ function segmentationNetwork(context) {
         multisig = multisig || !network.electrum
     }
 
-    if (mainnet && liquid) {
-        segmentation.wallet_networks = 'mainnet-mixed'
-    } else if (mainnet && !liquid) {
-        segmentation.wallet_networks = 'mainnet'
-    } else if (!mainnet && liquid) {
-        segmentation.wallet_networks = 'liquid'
-    }
-    if (testnet && testnet_liquid) {
-        segmentation.wallet_networks = 'testnet-mixed'
-    } else if (testnet && !liquid) {
-        segmentation.wallet_networks = 'testnet'
-    } else if (!testnet && liquid) {
-        segmentation.wallet_networks = 'testnet-liquid'
+    if (context.deployment === 'mainnet') {
+        if (mainnet && liquid) {
+            segmentation.wallet_networks = 'mainnet-mixed'
+        } else if (mainnet && !liquid) {
+            segmentation.wallet_networks = 'mainnet'
+        } else if (!mainnet && liquid) {
+            segmentation.wallet_networks = 'liquid'
+        }
+    } else {
+        if (testnet && testnet_liquid) {
+            segmentation.wallet_networks = 'testnet-mixed'
+        } else if (testnet && !liquid) {
+            segmentation.wallet_networks = 'testnet'
+        } else if (!testnet && liquid) {
+            segmentation.wallet_networks = 'testnet-liquid'
+        }
     }
 
     if (singlesig && multisig) {
@@ -60,7 +63,6 @@ function segmentationOnBoard({ flow, network, security }) {
 }
 
 function segmentationSession(Settings, context) {
-    if (!wallet) return {}
     const segmentation = segmentationNetwork(context)
     const app_settings = []
     if (Settings.useTor) app_settings.push('tor')
@@ -69,21 +71,23 @@ function segmentationSession(Settings, context) {
     if (Settings.usePersonalNode) app_settings.push('electrum_server')
     if (Settings.enableSPV) app_settings.push('spv')
     segmentation.app_settings = app_settings.join(',')
-    const device = wallet.context?.device
-    if (device instanceof JadeDevice) {
-        segmentation.brand = 'Blockstream'
-        segmentation.model = device.versionInfo.BOARD_TYPE
-        segmentation.firmware = device.version
-        segmentation.connection = 'USB'
-    }
-    if (device instanceof LedgerDevice) {
-        segmentation.brand = 'Ledger'
-        segmentation.model
-            = device.type === Device.LedgerNanoS ? 'Ledger Nano S'
-            : device.type === Device.LedgerNanoX ? 'Ledger Nano X'
-            : 'Unknown'
-        segmentation.firmware = device.appVersion
-        segmentation.connection = 'USB'
+    if (context) {
+        const device = context.device
+        if (device instanceof JadeDevice) {
+            segmentation.brand = 'Blockstream'
+            segmentation.model = device.versionInfo.BOARD_TYPE
+            segmentation.firmware = device.version
+            segmentation.connection = 'USB'
+        }
+        if (device instanceof LedgerDevice) {
+            segmentation.brand = 'Ledger'
+            segmentation.model
+                = device.type === Device.LedgerNanoS ? 'Ledger Nano S'
+                : device.type === Device.LedgerNanoX ? 'Ledger Nano X'
+                : 'Unknown'
+            segmentation.firmware = device.appVersion
+            segmentation.connection = 'USB'
+        }
     }
     return segmentation
 }
