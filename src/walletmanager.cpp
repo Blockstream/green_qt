@@ -125,7 +125,9 @@ void WalletManager::loadWallets()
             device->read(data);
             wallet->setLogin(device);
         } else {
-            Q_UNREACHABLE();
+            qDebug() << Q_FUNC_INFO << "skipping" << id;
+            delete wallet;
+            continue;
         }
 
         addWallet(wallet);
