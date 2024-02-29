@@ -238,6 +238,7 @@ int main(int argc, char *argv[])
     qInfo() << "  Product Version:" << qPrintable(QSysInfo::productVersion());
     qInfo() << "Data directory:" << qPrintable(g_data_location);
     qInfo() << "Log file:" << qPrintable(g_log_file.fileName());
+    qInfo() << "Initialize GDK";
     gdk::init(g_args);
 
     // Reset the locale that is used for number formatting, see:
@@ -256,6 +257,7 @@ int main(int argc, char *argv[])
     const QLocale locale = QLocale::system();
     const QString language = locale.name().split('_').first();
 
+    qInfo() << "Load transalations";
     QTranslator english_translator;
     if (!english_translator.load(":/i18n/green_en.qm")) return -1;
 
@@ -275,6 +277,7 @@ int main(int argc, char *argv[])
     Analytics analytics;
     AssetManager asset_manager;
 
+    qInfo() << "Register singletons";
     qmlRegisterSingletonInstance<Clipboard>("Blockstream.Green.Core", 0, 1, "Clipboard", Clipboard::instance());
     qmlRegisterSingletonInstance<DeviceManager>("Blockstream.Green.Core", 0, 1, "DeviceManager", DeviceManager::instance());
     qmlRegisterSingletonInstance<HttpManager>("Blockstream.Green.Core", 0, 1, "HttpManager", HttpManager::instance());
@@ -292,8 +295,10 @@ int main(int argc, char *argv[])
         Settings::instance()->setAnalytics(g_args.value("analytics"));
     }
 
+    qInfo() << "Load wallets";
     wallet_manager.loadWallets();
 
+    qInfo() << "Setup QML root context";
     QQmlApplicationEngine engine;
     engine.setBaseUrl(QUrl("qrc:/Blockstream/Green/qml/"));
 
@@ -333,6 +338,7 @@ int main(int argc, char *argv[])
     QZXing::registerQMLTypes();
     QZXing::registerQMLImageProvider(engine);
 
+    qInfo() << "Load GUI";
     engine.load(QUrl(QStringLiteral("main.qml")));
     if (engine.rootObjects().isEmpty())
         return -1;
@@ -345,6 +351,7 @@ int main(int argc, char *argv[])
 
     int ret = hid_init();
     if (ret != 0) return ret;
+    qInfo() << "Enter event loop";
     ret = app.exec();
     hid_exit();
     return ret;
