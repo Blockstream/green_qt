@@ -20,6 +20,7 @@ unset CMAKE_TOOLCHAIN_FILE
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r tools/requirements.txt
+pip install setuptools
 
 if [ "$HOST" = "linux" ]; then
     tools/build.sh --gcc --buildtype release --install $PREFIX --parallel 8
