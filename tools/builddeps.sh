@@ -11,5 +11,6 @@ fi
 ./tools/buildlibusb.sh
 ./tools/buildhidapi.sh
 ./tools/buildcountly.sh
+./tools/buildkdsingleapplication.sh
 
 rm -rf build

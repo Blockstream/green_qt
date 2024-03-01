@@ -27,8 +27,12 @@ COPY tools/buildqt.sh tools/
 COPY tools/patches/ tools/patches/
 RUN tools/buildqt.sh
 
+FROM qt AS kdsa
+COPY tools/buildkdsingleapplication.sh tools/
+RUN tools/buildkdsingleapplication.sh
+
 FROM base
 COPY --from=hidapi /depends /depends
 COPY --from=countly /depends /depends
 COPY --from=gdk /depends /depends
-COPY --from=qt /depends /depends
+COPY --from=kdsa /depends /depends

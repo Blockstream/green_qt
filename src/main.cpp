@@ -22,12 +22,12 @@
 #include "devicemanager.h"
 #include "ga.h"
 #include "httpmanager.h"
-#include "kdsingleapplication.h"
 #include "networkmanager.h"
 #include "settings.h"
 #include "util.h"
 #include "walletmanager.h"
 
+#include <KDSingleApplication>
 #include <QZXing.h>
 
 #if defined(QT_QPA_PLATFORM_WAYLAND)
@@ -165,6 +165,7 @@ int main(int argc, char *argv[])
     KDSingleApplication kdsa;
 
     if (!kdsa.isPrimaryInstance()) {
+        qInfo() << "Not primary instance";
         kdsa.sendMessage("raise");
         return 0;
     }

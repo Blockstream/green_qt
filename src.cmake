@@ -81,8 +81,6 @@ SET(TARGET_SOURCES
 	src/jade/jadelogincontroller.cpp
 	src/jade/jadeapi.cpp
 	src/jade/deviceinfo.cpp
-  sa/kdsingleapplication.cpp
-  sa/kdsingleapplication_localsocket.cpp
 	src/task.h src/task.cpp
 	src/createtransactioncontroller.h src/createtransactioncontroller.cpp
 	src/signtransactioncontroller.h src/signtransactioncontroller.cpp

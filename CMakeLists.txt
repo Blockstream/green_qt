@@ -19,6 +19,7 @@ configure_file(installer.iss.in installer.iss @ONLY)
 
 find_package(Qt6 6.4 COMPONENTS Concurrent Quick QuickControls2 Widgets QuickWidgets Xml Core5Compat Bluetooth SerialPort LinguistTools Multimedia REQUIRED)
 find_package(hidapi REQUIRED)
+find_package(KDSingleApplication-qt6 CONFIG REQUIRED)
 
 find_package(gdk REQUIRED COMPONENT greenaddress-full)
 
@@ -92,6 +93,7 @@ target_link_libraries(green
     ${SECURITY}
     hidapi::hidapi
     ${HID_LIB}
+    KDAB::kdsingleapplication
 )
 
 if (WIN32)
@@ -115,7 +117,6 @@ get_target_property(GDK_INCLUDE gdk::greenaddress-full INTERFACE_INCLUDE_DIRECTO
 target_include_directories(green PRIVATE
   src src/jade src/resolvers src/controllers src/ledger src/handlers
   ${GDK_INCLUDE}/libwally-core/
-  sa
   "${CMAKE_CURRENT_BINARY_DIR}"
 )
 
