@@ -317,7 +317,7 @@ int main(int argc, char *argv[])
     while (it.hasNext()) {
         const auto language = it.next().mid(13).chopped(3);
         QLocale locale(language);
-        const auto name = locale.nativeCountryName() + " - " + locale.nativeLanguageName();
+        const auto name = locale.nativeTerritoryName() + " - " + locale.nativeLanguageName();
         languages.insert(name, QVariantMap({{ "name", name }, { "language", language }}));
     }
     engine.rootContext()->setContextProperty("env", GREEN_ENV);
