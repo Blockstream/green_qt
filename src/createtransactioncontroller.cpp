@@ -134,7 +134,7 @@ void CreateTransactionController::update()
                     utxos.append(output->data());
                 }
                 qDebug() << utxos;
-                details["utxos"] = QJsonObject{{ "btc", utxos }};
+                details["utxos"] = QJsonObject{{ m_asset->id(), utxos }};
             }
 
             if (m_previous_transaction) {

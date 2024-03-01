@@ -77,6 +77,7 @@ StackViewPage {
             model: OutputListModelFilter {
                 id: output_model_filter
                 filter: [button_group.checkedButton?.buttonTag ?? '', '!locked'].join(' ')
+                asset: self.asset
                 model: OutputListModel {
                     id: output_model
                     account: self.account
