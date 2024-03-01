@@ -22,8 +22,8 @@ ApplicationWindow {
     onYChanged: Settings.windowY = y
     onWidthChanged: Settings.windowWidth = width
     onHeightChanged: Settings.windowHeight = height
-    minimumWidth: 1024
-    minimumHeight: 768
+    minimumWidth: 900
+    minimumHeight: 600
     visible: true
     color: '#121416'
     title: {
