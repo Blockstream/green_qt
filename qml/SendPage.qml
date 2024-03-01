@@ -40,6 +40,11 @@ StackViewPage {
         recipient.convert.unit: self.account.session.unit
         feeRate: estimates.fees[24] ?? 0
     }
+    AnalyticsView {
+        name: 'Send'
+        active: self.StackView.visible
+        segmentation: AnalyticsJS.segmentationSubAccount(Settings, self.account)
+    }
     id: self
     title: qsTrId('id_send')
     rightItem: CloseButton {
@@ -59,7 +64,7 @@ StackViewPage {
                 Layout.bottomMargin: 15
                 alert: AnalyticsAlert {
                     screen: 'Send'
-                    network: account.network.id
+                    network: self.account.network.id
                 }
             }
             FieldTitle {
