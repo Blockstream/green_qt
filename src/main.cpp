@@ -258,18 +258,28 @@ int main(int argc, char *argv[])
     const QString language = locale.name().split('_').first();
 
     qInfo() << "Load transalations";
+    qInfo() << "  Language:" << qPrintable(language);
+    qInfo() << "  Locale:" << qPrintable(locale.name());
     QTranslator english_translator;
-    if (!english_translator.load(":/i18n/green_en.qm")) return -1;
+    if (english_translator.load(":/i18n/green_en.qm")) {
+        app.installTranslator(&english_translator);
+    } else {
+        qInfo() << "Failed to load en translations";
+    }
 
     QTranslator language_translator;
-    if (!language_translator.load(QString(":/i18n/green_%1.qm").arg(language))) return -1;
+    if (language_translator.load(QString(":/i18n/green_%1.qm").arg(language))) {
+        app.installTranslator(&language_translator);
+    } else {
+        qInfo() << "Failed to load language translations";
+    }
 
     QTranslator locale_translator;
-    if (!locale_translator.load(QString(":/i18n/green_%1.qm").arg(locale.name()))) return -1;
-
-    app.installTranslator(&english_translator);
-    app.installTranslator(&language_translator);
-    app.installTranslator(&locale_translator);
+    if (locale_translator.load(QString(":/i18n/green_%1.qm").arg(locale.name()))) {
+        app.installTranslator(&locale_translator);
+    } else {
+        qInfo() << "Failed to load locale translations";
+    }
 
     QQuickStyle::setStyle("Material");
 
@@ -340,11 +350,16 @@ int main(int argc, char *argv[])
 
     qInfo() << "Load GUI";
     engine.load(QUrl(QStringLiteral("main.qml")));
-    if (engine.rootObjects().isEmpty())
+    if (engine.rootObjects().isEmpty()) {
+        qInfo() << "Failed to load GUI";
         return -1;
+    }
 
     auto window = qobject_cast<QQuickWindow*>(engine.rootObjects().first());
-    if (!window) return -1;
+    if (!window) {
+        qDebug() << "Failed to retrieve window";
+        return -1;
+    }
 
     qDebug() << "Window:";
     qDebug() << "  Graphics API: " << qPrintable(GraphicsAPIToString(window->rendererInterface()->graphicsApi()));
