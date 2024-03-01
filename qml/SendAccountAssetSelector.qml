@@ -40,7 +40,7 @@ StackViewPage {
                     const account = self.context.accounts[i]
                     for (const [id, satoshi] of Object.entries(account.json.satoshi)) {
                         if (satoshi === 0) continue
-                        const asset = AssetManager.assetWithId(deployment, id === 'btc' ? account.network.key : id)
+                        const asset = AssetManager.assetWithId(deployment, id)
                         if (search) {
                             const term = asset.name ? asset.name.toLowerCase() : asset.id
                             if (term.indexOf(search) < 0) continue
@@ -151,7 +151,7 @@ StackViewPage {
                                     for (let i = 0; i < self.context.accounts.length; i++) {
                                         const account = self.context.accounts[i]
                                         if (account.hidden) continue
-                                        const satoshi = String(account.json.satoshi[delegate.asset.key])
+                                        const satoshi = String(account.json.satoshi[delegate.asset.id])
                                         if (satoshi > 0) accounts.push({ account, satoshi })
                                     }
                                     return accounts
