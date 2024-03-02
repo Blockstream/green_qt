@@ -4,6 +4,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
+import "analytics.js" as AnalyticsJS
 import "util.js" as UtilJS
 
 StackViewPage {
@@ -16,6 +17,7 @@ StackViewPage {
     required property string unit
     required property var transaction
     property bool note: false
+    property string address_input
     StackView.onActivated: controller.cancel()
     TaskPageFactory {
         title: self.title
@@ -30,7 +32,14 @@ StackViewPage {
         transaction: self.transaction
         memo: note_text_area.text
         // TODO: should replace but we must cut dependency to the current view
-        onTransactionCompleted: transaction => self.StackView.view.push(transaction_completed_page, { transaction })
+        onTransactionCompleted: transaction => {
+            Analytics.recordEvent('send_transaction', AnalyticsJS.segmentationTransaction(Settings, self.account, {
+                address_input: self.address_input,
+                transaction_type: self.transaction.previous_transaction ? 'bump' : 'send',
+                with_memo: self.transaction.memo.length > 0,
+            }))
+            self.StackView.view.push(transaction_completed_page, { transaction })
+        }
         onFailed: (error) => self.StackView.view.push(error_page, { error })
     }
     id: self

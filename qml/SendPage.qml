@@ -338,6 +338,7 @@ StackViewPage {
                     transaction: controller.transaction,
                     fiat: amount_field.fiat,
                     unit: amount_field.unit,
+                    address_input: address_field.address_input,
                 })
             }
         }

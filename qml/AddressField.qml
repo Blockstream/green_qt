@@ -65,6 +65,9 @@ TextField {
     }
     ScannerPopup {
         id: scanner_popup
-        onCodeScanned: (code) => self.codeScanned(code)
+        onCodeScanned: (code) => {
+            self.address_input = 'scan'
+            self.codeScanned(code)
+        }
     }
 }
