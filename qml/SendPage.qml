@@ -25,6 +25,7 @@ StackViewPage {
             account: controller.account,
             unit: amount_field.unit,
             size: controller.transaction?.transaction_vsize ?? 0,
+            previousTransaction: controller.previousTransaction
         })
     }
     FeeEstimates {

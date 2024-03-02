@@ -11,6 +11,7 @@ StackViewPage {
     required property Account account
     required property string unit
     required property int size
+    required property Transaction previousTransaction
     property bool custom: false
     id: self
     title: qsTrId('id_network_fee')
@@ -63,7 +64,7 @@ StackViewPage {
                     Layout.fillWidth: true
                     id: slider
                     from: estimates.fees[0]
-                    to: estimates.fees[1] * 2
+                    to: Math.max(estimates.fees[1], self.previousTransaction?.data?.fee_rate ?? 0) * 2
                     stepSize: 100
                 }
                 RowLayout {
