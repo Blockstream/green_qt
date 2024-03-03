@@ -102,8 +102,7 @@ ItemDelegate {
         if (output.expired) tags.push({ name: qsTrId('id_2fa_expired'), color: '#69302E' })
         if (output.locked) tags.push({ name: qsTrId('id_locked') })
         if (output.dust) tags.push({ name: qsTrId('id_dust') })
-        // TODO is_confidential is broken
-        // if (output.account.network.liquid && !output.confidential) tags.push({ name: qsTrId('id_not_confidential') })
+        if (output.account.network.liquid && !output.confidential) tags.push({ name: qsTrId('id_not_confidential') })
         tags.push({ name: localizedLabel(output.addressType) })
         if (output.unconfirmed) tags.push({ name: qsTrId('id_unconfirmed'), color: '#d2934a' })
         return tags
