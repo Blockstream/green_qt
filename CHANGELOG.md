@@ -5,10 +5,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
+### Added:
+- Filter for non confidential coins
+
 ### Changed:
 - Adjust scanning for Jade device ferquency
 
 ### Fixed
+- Preserve transaction memo on increate transaction speed
 - Fixed watch only login on liquid
 - Fix busy indicator of primary buttons
 - Restore with QR Code while some words are filled
