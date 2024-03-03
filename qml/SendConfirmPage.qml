@@ -65,6 +65,13 @@ StackViewPage {
         ColumnLayout {
             id: layout
             width: flickable.width
+            AlertView {
+                Layout.bottomMargin: 15
+                alert: AnalyticsAlert {
+                    screen: 'SendConfirm'
+                    network: self.account.network.id
+                }
+            }
             FieldTitle {
                 text: 'Asset & Account'
             }
