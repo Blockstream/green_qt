@@ -16,6 +16,7 @@ public:
     explicit Analytics();
     ~Analytics();
     static Analytics* instance();
+    void start();
     bool isActive() const;
     bool isBusy() const;
     QString pushView(const QString &name, const QVariantMap &segmentation);

@@ -307,6 +307,8 @@ int main(int argc, char *argv[])
 
     qInfo() << "Load wallets";
     wallet_manager.loadWallets();
+    qInfo() << "Start analytics";
+    analytics.start();
 
     qInfo() << "Setup QML root context";
     QQmlApplicationEngine engine;

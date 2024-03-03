@@ -75,7 +75,10 @@ Analytics::Analytics()
 {
     Q_ASSERT(!g_analytics_instance);
     g_analytics_instance = this;
+}
 
+void Analytics::start()
+{
     d->moveToThread(&d->thread);
     d->thread.start();
 
@@ -292,11 +295,8 @@ void AnalyticsPrivate::stop(Qt::ConnectionType type)
     QMetaObject::invokeMethod(this, [=] {
         auto& countly = cly::Countly::getInstance();
         countly.stop();
-        {
-            GA_destroy_session(session);
-            session = nullptr;
-        }
-
+        GA_destroy_session(session);
+        session = nullptr;
         QMetaObject::invokeMethod(q, [=] {
             q->decrBusy();
         });
