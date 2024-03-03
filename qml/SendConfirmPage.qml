@@ -16,7 +16,7 @@ StackViewPage {
     required property bool fiat
     required property string unit
     required property var transaction
-    property bool note: false
+    property bool note: controller.memo.length > 0
     property string address_input
     StackView.onActivated: controller.cancel()
     TaskPageFactory {
@@ -36,7 +36,7 @@ StackViewPage {
             Analytics.recordEvent('send_transaction', AnalyticsJS.segmentationTransaction(Settings, self.account, {
                 address_input: self.address_input,
                 transaction_type: self.transaction.previous_transaction ? 'bump' : 'send',
-                with_memo: self.transaction.memo.length > 0,
+                with_memo: controller.memo.length > 0,
             }))
             self.StackView.view.push(transaction_completed_page, { transaction })
         }
@@ -129,6 +129,7 @@ StackViewPage {
                 bottomPadding: 20
                 leftPadding: 20
                 rightPadding: 20
+                text: self.transaction.previous_transaction?.memo ?? ''
                 visible: self.note
                 wrapMode: TextArea.Wrap
                 background: Rectangle {
