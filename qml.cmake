@@ -44,7 +44,6 @@ SET(QML_FILES
     qml/GSwitch.qml
     qml/SetUnspentOutputsStatusDialog.qml
     qml/VSpacer.qml
-    qml/WizardButtonBox.qml
     qml/SelectServerTypeViewCard.qml
     qml/AbstractDialog.qml
     qml/ControllerDialog.qml
@@ -57,7 +56,6 @@ SET(QML_FILES
     qml/MnemonicPage.qml
     qml/PersistentLoader.qml
     qml/AnimLoader.qml
-    qml/GToolButton.qml
     qml/PreferencesView.qml
     qml/AssetDrawer.qml
     qml/AddressesListView.qml
@@ -111,7 +109,6 @@ SET(QML_FILES
     qml/SectionLabel.qml
     qml/AddressDelegate.qml
     qml/Constants.qml
-    qml/TransactionDoneView.qml
     qml/SideButton.qml
     qml/SettingsBox.qml
     qml/WalletRecoverySettingsView.qml
@@ -120,7 +117,6 @@ SET(QML_FILES
     qml/OverviewPage.qml
     qml/SetRecoveryEmailDialog.qml
     qml/MainPageHeader.qml
-    qml/MnemonicEditor.qml
     qml/LedgerSignTransactionView.qml
     qml/AssetIcon.qml
     qml/SelectNetworkView.qml

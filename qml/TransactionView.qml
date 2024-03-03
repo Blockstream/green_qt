@@ -496,17 +496,6 @@ StackViewPage {
         color: '#313131'
     }
 
-        /*
-        GToolButton {
-            icon.source: 'qrc:/svg/qr.svg'
-            onClicked: qrcode_popup.open()
-            QRCodePopup {
-                id: qrcode_popup
-                text: self.network.liquid ? self.transaction.unblindedLink() : self.transaction.link()
-            }
-        }
-        */
-
     Component {
         id: details_page
         StackViewPage {
