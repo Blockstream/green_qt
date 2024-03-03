@@ -45,6 +45,11 @@ StackViewPage {
             self.StackView.view.push(error_page, { error })
         }
     }
+    AnalyticsView {
+        name: 'SendConfirm'
+        active: self.StackView.visible
+        segmentation: AnalyticsJS.segmentationSubAccount(Settings, self.account)
+    }
     id: self
     title: qsTrId('id_confirm_transaction')
     rightItem: CloseButton {
