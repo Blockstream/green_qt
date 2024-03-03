@@ -113,7 +113,7 @@ StackViewPage {
             }
         }
     }
-    footer: ColumnLayout {
+    footerItem: ColumnLayout {
         spacing: 10
         PrimaryButton {
             Layout.fillWidth: true
@@ -126,6 +126,13 @@ StackViewPage {
                 }
                 self.coinsSelected(coins)
             }
+        }
+        Label {
+            Layout.alignment: Qt.AlignCenter
+            font.pixelSize: 12
+            font.weight: 500
+            text: qsTrId('id_d_coins_selected').arg(self.selection.size)
+            visible: self.selection.size > 0
         }
         Label {
             Layout.alignment: Qt.AlignCenter
@@ -149,7 +156,6 @@ StackViewPage {
             text: convert.fiat.label
             visible: self.selection.size > 0
         }
-
         Convert {
             id: convert
             account: self.account

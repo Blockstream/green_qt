@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix busy indicator of primary buttons
 - Restore with QR Code while some words are filled
 - Avoid slow application quit
+- Layout of manual coin selection view
 
 ## [2.0.0] - 2024-02-29
 ### Added
