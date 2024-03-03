@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 ### Added:
+- List relevant accounts in the assets details
 - Filter for non confidential coins
 
 ### Changed:
