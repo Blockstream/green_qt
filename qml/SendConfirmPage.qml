@@ -40,7 +40,10 @@ StackViewPage {
             }))
             self.StackView.view.push(transaction_completed_page, { transaction })
         }
-        onFailed: (error) => self.StackView.view.push(error_page, { error })
+        onFailed: (error) => {
+            Analytics.recordEvent('failed_transaction', AnalyticsJS.segmentationSubAccount(Settings, self.account))
+            self.StackView.view.push(error_page, { error })
+        }
     }
     id: self
     title: qsTrId('id_confirm_transaction')
