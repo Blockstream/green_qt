@@ -83,7 +83,7 @@ WalletDrawer {
     }
     component AssetButton: AbstractButton {
         required property Asset asset
-        required property int satoshi
+        required property var satoshi
         Convert {
             id: convert
             context: self.context
