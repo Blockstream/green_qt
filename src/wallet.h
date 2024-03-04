@@ -103,7 +103,6 @@ class Wallet : public QObject
     Q_PROPERTY(bool persisted READ isPersisted NOTIFY isPersistedChanged)
     Q_PROPERTY(Context* context READ context NOTIFY contextChanged)
     Q_PROPERTY(QString xpubHashId READ xpubHashId NOTIFY xpubHashIdChanged)
-    Q_PROPERTY(bool incognito READ incognito NOTIFY incognitoChanged)
     Q_PROPERTY(LoginData* login READ login NOTIFY loginChanged)
     QML_ELEMENT
     QML_UNCREATABLE("")
@@ -140,10 +139,7 @@ public:
     QString xpubHashId() const { return m_xpub_hash_id; }
     void setXPubHashId(const QString& xpub_hash_id);
 
-    bool incognito() const { return m_incognito; }
-    void setIncognito(bool incognito);
 public slots:
-    void toggleIncognito();
     void disconnect();
     void reload(bool refresh_accounts = false);
 
@@ -164,7 +160,6 @@ public:
 
     QString m_xpub_hash_id;
     QSet<QString> m_hashes;
-    bool m_incognito{false};
     bool m_busy{false};
 
     void save();

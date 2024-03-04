@@ -112,10 +112,7 @@ function networkColor (network) {
     }
 }
 
-function incognito(target, value, size = 5) {
-    let enabled = false
-    if (target instanceof Account) enabled = target.context.wallet.incognito
-    if (target instanceof Context) enabled = target.wallet.incognito
+function incognito(enabled, value, size = 5) {
     if (enabled) {
         return value
             .replace('~ ', '')

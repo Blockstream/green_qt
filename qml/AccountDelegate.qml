@@ -161,13 +161,13 @@ ItemDelegate {
                         }
                         ColumnLayout {
                             Label {
-                                text: UtilJS.incognito(delegate.account, convert.fiat.label)
+                                text: UtilJS.incognito(Settings.incognito, convert.fiat.label)
                                 font.pixelSize: 10
                                 font.weight: 400
                                 font.styleName: 'Regular'
                             }
                             Label {
-                                text: UtilJS.incognito(delegate.account, convert.output.label)
+                                text: UtilJS.incognito(Settings.incognito, convert.output.label)
                                 font.pixelSize: 14
                                 font.weight: 600
                                 font.styleName: 'Medium'

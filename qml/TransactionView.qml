@@ -206,14 +206,14 @@ StackViewPage {
                                 copyText: convert.output.label
                                 font.pixelSize: 24
                                 font.weight: 500
-                                text: UtilJS.incognito(self.context, convert.output.label)
+                                text: UtilJS.incognito(Settings.incognito, convert.output.label)
                             }
                             TLabel {
                                 Layout.alignment: self.transaction.type === Transaction.Mixed ? Qt.AlignRight : Qt.AlignCenter
                                 font.pixelSize: 14
                                 font.weight: 400
                                 opacity: 0.6
-                                text:  UtilJS.incognito(self.context, convert.fiat.label)
+                                text:  UtilJS.incognito(Settings.incognito, convert.fiat.label)
                                 visible: convert.fiat.available
                             }
                         }
@@ -248,7 +248,7 @@ StackViewPage {
                         color: '#FFF'
                         font.pixelSize: 12
                         font.weight: 400
-                        text: UtilJS.incognito(self.context, fee_convert.output.label)
+                        text: UtilJS.incognito(Settings.incognito, fee_convert.output.label)
                     }
                     TLabel {
                         topPadding: 4
@@ -257,7 +257,7 @@ StackViewPage {
                         font.pixelSize: 12
                         font.weight: 400
                         opacity: 0.6
-                        text: UtilJS.incognito(self.context, '~ ' + fee_convert.fiat.label)
+                        text: UtilJS.incognito(Settings.incognito, '~ ' + fee_convert.fiat.label)
                     }
                     HSpacer {
                     }

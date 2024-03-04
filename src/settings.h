@@ -31,6 +31,7 @@ class Settings : public QObject
     Q_PROPERTY(bool enableSPV READ enableSPV WRITE setEnableSPV NOTIFY enableSPVChanged)
     Q_PROPERTY(QString analytics READ analytics WRITE setAnalytics NOTIFY analyticsChanged)
     Q_PROPERTY(bool acceptedTermsOfService READ acceptedTermsOfService NOTIFY acceptedTermsOfServiceChanged)
+    Q_PROPERTY(bool incognito READ incognito NOTIFY incognitoChanged)
 public:
     Settings(QObject* parent = nullptr);
     virtual ~Settings();
@@ -79,9 +80,12 @@ public:
     QString analytics() const { return m_analytics; }
     void setAnalytics(const QString& analytics);
     bool acceptedTermsOfService() const;
+    bool incognito() const { return m_incognito; }
+    void setIncognito(bool incognito);
 public slots:
     void updateRecentWallet(const QString& id);
     void acceptTermsOfService();
+    void toggleIncognito();
 signals:
     void windowXChanged();
     void windowYChanged();
@@ -105,6 +109,7 @@ signals:
     void enableSPVChanged();
     void analyticsChanged();
     void acceptedTermsOfServiceChanged();
+    void incognitoChanged();
 private:
     void load();
     void load(const QSettings& settings);
@@ -136,6 +141,7 @@ private:
     bool m_enable_spv{false};
     QString m_analytics;
     int m_accepted_tos_version{0};
+    bool m_incognito{false};
 };
 
 #endif // GREEN_SETTINGS_H

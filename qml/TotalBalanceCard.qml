@@ -1,4 +1,5 @@
 import Blockstream.Green
+import Blockstream.Green.Core
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -35,9 +36,9 @@ WalletHeaderCard {
         }
         Image {
             Layout.alignment: Qt.AlignCenter
-            source: self.context.wallet.incognito ? 'qrc:/svg2/eye_closed.svg' : 'qrc:/svg2/eye.svg'
+            source: Settings.incognito ? 'qrc:/svg2/eye_closed.svg' : 'qrc:/svg2/eye.svg'
             TapHandler {
-                onTapped: self.context.wallet.toggleIncognito()
+                onTapped: Settings.toggleIncognito()
             }
         }
         HSpacer {
@@ -49,13 +50,13 @@ WalletHeaderCard {
         Label {
             font.pixelSize: 24
             font.weight: 600
-            text: UtilJS.incognito(self.context, convert.output.label)
+            text: UtilJS.incognito(Settings.incognito, convert.output.label)
         }
         Label {
             font.pixelSize: 16
             font.weight: 400
             opacity: 0.6
-            text: UtilJS.incognito(self.context, convert.fiat.label)
+            text: UtilJS.incognito(Settings.incognito, convert.fiat.label)
         }
         VSpacer {
         }

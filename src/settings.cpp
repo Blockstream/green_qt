@@ -159,6 +159,11 @@ void Settings::acceptTermsOfService()
     saveLater();
 }
 
+void Settings::toggleIncognito()
+{
+    setIncognito(!m_incognito);
+}
+
 void Settings::setUsePersonalNode(bool use_personal_node)
 {
     if (m_use_personal_node == use_personal_node) return;
@@ -202,6 +207,14 @@ void Settings::setAnalytics(const QString& analytics)
 bool Settings::acceptedTermsOfService() const
 {
     return m_accepted_tos_version == LATEST_TOS_VERSION;
+}
+
+void Settings::setIncognito(bool incognito)
+{
+    if (m_incognito == incognito) return;
+    m_incognito = incognito;
+    emit incognitoChanged();
+    saveLater();
 }
 
 void Settings::setProxyHost(const QString &proxy_host)
@@ -275,6 +288,7 @@ void Settings::load(const QSettings& settings)
     LOAD(m_enable_spv)
     LOAD(m_analytics)
     LOAD(m_accepted_tos_version)
+    LOAD(m_incognito)
 #undef LOAD
 }
 
@@ -311,6 +325,7 @@ void Settings::saveNow()
     SAVE(m_enable_spv)
     SAVE(m_analytics)
     SAVE(m_accepted_tos_version)
+    SAVE(m_incognito)
 #undef SAVE
 }
 
