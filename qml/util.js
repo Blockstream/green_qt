@@ -121,7 +121,7 @@ function incognito(target, value, size = 5) {
             .replace('~ ', '')
             .replace('-', '')
             .replace(/\d\s\d/g, '0')
-            .replace(/[,.]/, '')
+            .replace(/[,.]/g, '')
             .replace(/\d+/g, '*'.repeat(size))
     } else {
         return value
