@@ -15,13 +15,15 @@ WalletDialog {
     title: qsTrId('id_settings')
 
     readonly property list<Session> sessions: {
-        const sessions = []
-        for (let i = 0; i < self.context.sessions.length; i++) {
-            const session = self.context.sessions[i]
+        const sessions = new Set()
+        for (let i = 0; i < self.context.accounts.length; i++) {
+            const account = self.context.accounts[i]
+            const session = account.session
+            if (sessions.has(session)) continue
             if (session.network.electrum) continue
-            sessions.push(session)
+            sessions.add(session)
         }
-        return sessions.sort((a, b) => {
+        return [...sessions.values()].sort((a, b) => {
             if (!a.network.liquid && b.network.liquid) return -1
             if (a.network.liquid && !b.network.liquid) return 1
             return 0
