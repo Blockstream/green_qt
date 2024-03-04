@@ -234,7 +234,7 @@ Pane {
                                 HSpacer {
                                 }
                                 GSwitch {
-                                    checked: button.session.settings?.notifications?.email_outgoing
+                                    checked: button.session.settings?.notifications?.email_outgoing ?? false
                                     enabled: false
                                     opacity: 1
                                     visible: button.session.config.email?.confirmed ?? false
