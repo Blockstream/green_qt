@@ -48,7 +48,10 @@ QJsonObject get_settings(GA_session* session)
 {
     GA_json* settings;
     int err = GA_get_settings(session, &settings);
-    Q_ASSERT(err == GA_OK);
+    if (err != GA_OK) {
+        qDebug() << Q_FUNC_INFO << "failed" << session << err;
+        return {};
+    }
     auto result = Json::toObject(settings);
     GA_destroy_json(settings);
     return result;
