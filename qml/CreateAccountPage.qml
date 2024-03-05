@@ -23,7 +23,7 @@ StackViewPage {
     component SecurityPolicyButton2: SecurityPolicyButton {
         required property string serverType
         required property string type
-        property string networkKey: self.asset?.networkKey ?? 'liquid'
+        property string networkKey: self.asset?.networkKey ?? (self.context.deployment === 'mainnet' ? 'liquid' : 'testnet-liquid')
         id: btn
         network: NetworkManager.networkWithServerType(self.context.deployment, btn.networkKey, btn.serverType)
         action: Action {
