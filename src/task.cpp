@@ -316,9 +316,11 @@ namespace {
             params.insert("proxy", session->proxy());
         }
         if (session->usePersonalNode()) {
-            const auto url = session->electrumUrl();
-            params.insert("electrum_url", url);
-            params.insert("electrum_onion_url", url);
+            const auto url = session->electrumUrl().trimmed();
+            if (!url.isEmpty()) {
+                params.insert("electrum_url", url);
+                params.insert("electrum_onion_url", url);
+            }
         }
         return params;
     }
