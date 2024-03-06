@@ -179,6 +179,7 @@ StackViewPage {
         id: login_view
         JadeLoginView {
             onLoginFinished: (context) => self.loginFinished(context)
+            onLoginFailed: self.loginFinished(context)
         }
     }
 
