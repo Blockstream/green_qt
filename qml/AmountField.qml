@@ -78,7 +78,7 @@ TextField {
     id: self
     topPadding: 22
     bottomPadding: self.convert.fiat.available ? 32 : 22
-    leftPadding: 50
+    leftPadding: 60
     rightPadding: 15 + 7 + unit_label.width
     validator: AmountValidator {
     }
@@ -115,7 +115,7 @@ TextField {
         focusPolicy: Qt.NoFocus
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: parent.left
-        anchors.leftMargin: 24
+        anchors.leftMargin: 18
         visible: !self.readOnly && self.text !== ''
         icon.source: 'qrc:/svg2/x-circle.svg'
         onClicked: self.clearText()

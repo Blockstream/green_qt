@@ -10,7 +10,7 @@ TextField {
     id: self
     topPadding: 18
     bottomPadding: 18
-    leftPadding: 18
+    leftPadding: 60
     rightPadding: (options_layout.visible ? options_layout.width + 10 : 0) + 18
     background: Rectangle {
         color: Qt.lighter('#222226', !self.readOnly && self.hovered ? 1.2 : 1)
@@ -40,7 +40,15 @@ TextField {
     }
     font.pixelSize: 14
     font.weight: 500
-
+    CircleButton {
+        focusPolicy: Qt.NoFocus
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.left: parent.left
+        anchors.leftMargin: 18
+        visible: !self.readOnly && self.text !== ''
+        icon.source: 'qrc:/svg2/x-circle.svg'
+        onClicked: self.clear()
+    }
     RowLayout {
         id: options_layout
         anchors.verticalCenter: parent.verticalCenter
