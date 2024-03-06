@@ -179,6 +179,11 @@ StackViewPage {
         implicitHeight: 16
     }
 
+    Action {
+        enabled: UtilJS.effectiveVisible(self)
+        shortcut: 'Ctrl+L'
+        onTriggered: self.logout()
+    }
     NotificationsDrawer {
         id: notifications_drawer
         context: self.context
