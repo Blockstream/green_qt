@@ -391,8 +391,7 @@ StackViewPage {
                         note_text_area.forceActiveFocus()
                     }
                 }
-                ActionButton {
-                    icon.source: 'qrc:/svg2/copy-green.svg'
+                CopyActionButton {
                     text: qsTrId('id_copy_unblinded_link')
                     visible: self.network.liquid
                     onClicked: {
@@ -401,8 +400,7 @@ StackViewPage {
                     }
 
                 }
-                ActionButton {
-                    icon.source: 'qrc:/svg2/copy-green.svg'
+                CopyActionButton {
                     text: qsTrId('id_copy_unblinding_data')
                     visible: self.network.liquid
                     onClicked: {
@@ -486,6 +484,16 @@ StackViewPage {
                 text: button.badge ?? ''
                 visible: button.badge
             }
+        }
+    }
+
+    component CopyActionButton: ActionButton {
+        icon.source: timer.running ? 'qrc:/svg2/check-green.svg' : 'qrc:/svg2/copy-green.svg'
+        onClicked: timer.restart()
+        Timer {
+            id: timer
+            repeat: false
+            interval: 1000
         }
     }
 
