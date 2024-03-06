@@ -62,6 +62,7 @@ Page {
 
     contentItem: TListView {
         id: list_view
+        bottomMargin: 120
         spacing: -1
         model: TransactionFilterProxyModel {
             filter: search_field.text

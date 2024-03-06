@@ -18,6 +18,7 @@ GPane {
     }
     contentItem: TListView {
         id: list_view
+        bottomMargin: 120
         model: {
             const deployment = self.context.deployment
             const entries = Object.entries(self.account.json.satoshi)
