@@ -14,12 +14,14 @@ public:
     AppUpdateController(QObject* parent = nullptr);
     QString latestVersion() const { return m_latest_version; }
     bool updateAvailable() const { return m_update_available; }
-public slots:
+private slots:
     void checkForUpdates();
+    void checkNow();
 signals:
     void latestVersionChanged();
     void updateAvailableChanged();
 private:
+    QTimer* const m_timer;
     QString m_latest_version;
     bool m_update_available{false};
 };

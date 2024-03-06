@@ -11,7 +11,6 @@ Collapsible {
     }
     AppUpdateController {
         id: controller
-        Component.onCompleted: checkForUpdates()
     }
     id: self
     collapsed: !controller.updateAvailable
