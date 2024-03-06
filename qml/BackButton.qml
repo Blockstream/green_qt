@@ -8,6 +8,7 @@ AbstractButton {
     rightPadding: 0
     topPadding: 8
     bottomPadding: 8
+    text: qsTrId('id_back')
     background: Item {
         Rectangle {
             border.width: 2
@@ -27,7 +28,7 @@ AbstractButton {
         Label {
             font.pixelSize: 14
             font.weight: 600
-            text: qsTrId('id_back')
+            text: self.text
         }
     }
 }

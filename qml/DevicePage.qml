@@ -31,6 +31,11 @@ StackViewPage {
 
     id: self
     title: self.wallet.name
+    leftItem: BackButton {
+        text: qsTrId('id_wallets')
+        onClicked: self.closeClicked()
+        visible: WalletManager.wallets.length > 1
+    }
     rightItem: WalletOptionsButton {
         wallet: self.wallet
         onRemoveClicked: self.removeClicked()
