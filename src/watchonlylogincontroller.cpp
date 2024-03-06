@@ -84,6 +84,10 @@ void WatchOnlyLoginController::login()
 {
     Q_ASSERT(m_valid);
 
+    if (m_monitor) m_monitor->deleteLater();
+    m_monitor = new TaskGroupMonitor(this);
+    emit monitorChanged();
+
     auto watchonly_data = m_wallet ? qobject_cast<WatchonlyData*>(m_wallet->login()) : nullptr;
 
     const auto network = watchonly_data ? watchonly_data->network() : m_network;
@@ -110,6 +114,7 @@ void WatchOnlyLoginController::login()
     group->add(create_wallet);
 
     dispatcher()->add(group);
+    m_monitor->add(group);
 
     connect(group, &TaskGroup::finished, this, &WatchOnlyLoginController::loginFinished);
     connect(group, &TaskGroup::failed, this, &WatchOnlyLoginController::loginFailed);

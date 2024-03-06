@@ -11,6 +11,7 @@
 class WatchOnlyLoginController : public Controller
 {
     Q_OBJECT
+    Q_PROPERTY(TaskGroupMonitor* monitor READ monitor NOTIFY monitorChanged)
     Q_PROPERTY(Network* network READ network WRITE setNetwork NOTIFY networkChanged)
     Q_PROPERTY(QString username READ username WRITE setUsername NOTIFY usernameChanged)
     Q_PROPERTY(QString password READ password WRITE setPassword NOTIFY passwordChanged)
@@ -20,6 +21,8 @@ class WatchOnlyLoginController : public Controller
     QML_ELEMENT
 public:
     WatchOnlyLoginController(QObject* parent = nullptr);
+
+    TaskGroupMonitor* monitor() const { return m_monitor; }
 
     Network* network() const { return m_network; }
     void setNetwork(Network* network);
@@ -42,6 +45,7 @@ public slots:
     void login();
 
 signals:
+    void monitorChanged();
     void networkChanged();
     void usernameChanged();
     void passwordChanged();
@@ -56,6 +60,7 @@ private:
     void setValid(bool valid);
 
 private:
+    TaskGroupMonitor* m_monitor{nullptr};
     Network* m_network{nullptr};
     QString m_username;
     QString m_password;
