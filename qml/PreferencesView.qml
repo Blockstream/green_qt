@@ -34,24 +34,9 @@ AbstractDialog {
             }
             contentItem: ColumnLayout {
                 spacing: 10
-                SelectLanguageButton {
-                    onClicked: stack_view.push(language_page)
-                }
-                SwitchButton {
-                    text: qsTrId('id_enable_testnet')
-                    checked: Settings.enableTestnet
-                    onClicked: Settings.enableTestnet = !Settings.enableTestnet
-                }
-                SwitchButton {
-                    text: qsTrId('id_enable_experimental_features')
-                    checked: Settings.enableExperimental
-                    onClicked: Settings.enableExperimental = !Settings.enableExperimental
-                }
-                SwitchButton {
-                    text: qsTrId('id_help_green_improve')
-                    enabled: !Analytics.busy
-                    checked: Settings.analytics === 'enabled'
-                    onClicked: Settings.analytics = Settings.analytics === 'enabled' ? 'disabled' : 'enabled'
+                SubButton {
+                    text: qsTrId('id_general')
+                    onClicked: stack_view.push(general_page)
                 }
                 SubButton {
                     text: qsTrId('id_network')
@@ -60,6 +45,12 @@ AbstractDialog {
                 SubButton {
                     text: qsTrId('id_custom_servers_and_validation')
                     onClicked: stack_view.push(servers_validation_page)
+                }
+                SwitchButton {
+                    text: qsTrId('id_help_green_improve')
+                    enabled: !Analytics.busy
+                    checked: Settings.analytics === 'enabled'
+                    onClicked: Settings.analytics = Settings.analytics === 'enabled' ? 'disabled' : 'enabled'
                 }
                 VSpacer {
                 }
@@ -200,9 +191,39 @@ AbstractDialog {
     }
 
     Component {
+        id: general_page
+        StackViewPage {
+            title: qsTrId('id_general')
+            rightItem: CloseButton {
+                onClicked: self.close()
+            }
+            contentItem: ColumnLayout {
+                SelectLanguageButton {
+                    onClicked: stack_view.push(language_page)
+                }
+                SwitchButton {
+                    text: qsTrId('id_enable_testnet')
+                    checked: Settings.enableTestnet
+                    onClicked: Settings.enableTestnet = !Settings.enableTestnet
+                }
+                SwitchButton {
+                    text: qsTrId('id_enable_experimental_features')
+                    checked: Settings.enableExperimental
+                    onClicked: Settings.enableExperimental = !Settings.enableExperimental
+                }
+                VSpacer {
+                }
+            }
+        }
+    }
+
+    Component {
         id: language_page
         StackViewPage {
             title: qsTrId('id_language')
+            rightItem: CloseButton {
+                onClicked: self.close()
+            }
             contentItem: TListView {
                 model: languages
                 spacing: 5
@@ -230,6 +251,9 @@ AbstractDialog {
         id: network_page
         StackViewPage {
             title: qsTrId('id_network')
+            rightItem: CloseButton {
+                onClicked: self.close()
+            }
             contentItem: ColumnLayout {
                 spacing: 10
                 SectionLabel {
@@ -266,7 +290,6 @@ AbstractDialog {
                         enabled: Settings.useProxy
                         text: Settings.proxyHost
                         onEditingFinished: {
-                            console.log('update proxy host', text)
                             Settings.proxyHost = text
                         }
                     }
@@ -274,7 +297,6 @@ AbstractDialog {
                         enabled: Settings.useProxy
                         text: Settings.proxyPort
                         onEditingFinished: {
-                            console.log('update proxy port', text)
                             Settings.proxyPort = text
                         }
                     }
@@ -289,6 +311,9 @@ AbstractDialog {
         id: servers_validation_page
         StackViewPage {
             title: qsTrId('id_custom_servers_and_validation')
+            rightItem: CloseButton {
+                onClicked: self.close()
+            }
             contentItem: ColumnLayout {
                 spacing: 2
                 SectionLabel {
@@ -317,7 +342,6 @@ AbstractDialog {
                             enabled: Settings.usePersonalNode
                             text: Settings.bitcoinElectrumUrl
                             onTextChanged: Settings.bitcoinElectrumUrl = text
-                            // placeholderText: NetworkManager.network("electrum-mainnet").data.electrum_url
                         }
                         SectionLabel {
                             Layout.topMargin: 10
@@ -330,7 +354,6 @@ AbstractDialog {
                             visible: Settings.enableTestnet
                             text: Settings.testnetElectrumUrl
                             onTextChanged: Settings.testnetElectrumUrl = text
-                            // placeholderText: NetworkManager.network("electrum-testnet").data.electrum_url
                         }
                         SectionLabel {
                             Layout.topMargin: 10
@@ -341,7 +364,6 @@ AbstractDialog {
                             enabled: Settings.usePersonalNode
                             text: Settings.liquidElectrumUrl
                             onTextChanged: Settings.liquidElectrumUrl = text
-                            // placeholderText: NetworkManager.network("electrum-liquid").data.electrum_url
                         }
                         SectionLabel {
                             Layout.topMargin: 10
@@ -354,7 +376,6 @@ AbstractDialog {
                             visible: Settings.enableTestnet
                             text: Settings.liquidTestnetElectrumUrl
                             onTextChanged: Settings.liquidTestnetElectrumUrl = text
-                            // placeholderText: NetworkManager.network("electrum-testnet-liquid").data.electrum_url
                         }
                     }
                 }
@@ -378,6 +399,9 @@ AbstractDialog {
         id: support_page
         StackViewPage {
             title: qsTrId('id_support')
+            rightItem: CloseButton {
+                onClicked: self.close()
+            }
             contentItem: ColumnLayout {
                 spacing: 10
                 SectionLabel {

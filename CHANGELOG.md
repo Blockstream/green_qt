@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Button to clear address field
 
 ### Changed:
+- Add general section in app settings
 - Improments in the Watch-Only login view
 
 ## [2.0.1] - 2024-03-05
