@@ -190,9 +190,7 @@ void LoginController::login(LoginTask* login_task)
     dispatcher()->add(group);
 
     connect(group, &TaskGroup::failed, this, [=] {
-        if (!m_error.isEmpty()) {
-            emit loginFailed(m_error);
-        }
+        emit loginFailed(m_error);
     });
     connect(group, &TaskGroup::finished, this, [=] {
         m_context->setWallet(m_wallet);
