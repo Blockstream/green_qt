@@ -121,7 +121,7 @@ MainPageHeader {
             contentItem: RowLayout {
                 spacing: 0
                 Control {
-                    Layout.maximumWidth: self.width / 3
+                    Layout.maximumWidth: self.width / 2
                     padding: 2
                     leftPadding: 0
                     background: null
