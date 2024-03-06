@@ -30,17 +30,18 @@ StackViewPage {
                 Analytics.recordEvent('wallet_restore_watch_only', AnalyticsJS.segmentationSession(Settings, controller.context))
             }
         }
-        onLoginFailed: {
+        onLoginFailed: error => {
             self.contentItem.enabled = true
             password_field.clear()
             password_field.forceActiveFocus()
-            self.contentItem.ToolTip.show(qsTrId('id_user_not_found_or_invalid'), 3000);
+            error_badge.error = error
         }
     }
     Action {
         id: login_action
         enabled: controller.valid
         onTriggered: {
+            error_badge.clear()
             self.contentItem.enabled = false
             controller.login()
         }
@@ -86,6 +87,7 @@ StackViewPage {
                 id: username_field
                 focus: true
                 onAccepted: login_action.trigger()
+                onTextEdited: error_badge.clear()
             }
             FieldTitle {
                 Layout.topMargin: 10
@@ -96,6 +98,7 @@ StackViewPage {
                 Layout.alignment: Qt.AlignCenter
                 id: password_field
                 onAccepted: login_action.trigger()
+                onTextEdited: error_badge.clear()
             }
             CheckBox {
                 Layout.alignment: Qt.AlignCenter
@@ -112,6 +115,13 @@ StackViewPage {
                     border.color: '#FFF'
                     radius: 5
                 }
+                onCheckedChanged: error_badge.clear()
+            }
+            FixedErrorBadge {
+                Layout.alignment: Qt.AlignHCenter
+                Layout.topMargin: 20
+                id: error_badge
+                pointer: false
             }
             PrimaryButton {
                 Layout.alignment: Qt.AlignCenter

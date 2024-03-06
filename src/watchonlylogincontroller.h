@@ -53,7 +53,7 @@ signals:
     void validChanged();
     void walletChanged();
     void loginFinished();
-    void loginFailed();
+    void loginFailed(const QString& error);
 
 private:
     void update();
@@ -67,6 +67,7 @@ private:
     bool m_save_wallet{false};
     bool m_valid{false};
     Wallet* m_wallet{nullptr};
+    QString m_error;
 };
 
 class WatchOnlyCreateWalletTask : public Task

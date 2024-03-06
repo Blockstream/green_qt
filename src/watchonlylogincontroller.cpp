@@ -83,6 +83,7 @@ void WatchOnlyLoginController::update()
 void WatchOnlyLoginController::login()
 {
     Q_ASSERT(m_valid);
+    m_error.clear();
 
     if (m_monitor) m_monitor->deleteLater();
     m_monitor = new TaskGroupMonitor(this);
@@ -102,6 +103,19 @@ void WatchOnlyLoginController::login()
     auto session_login = new LoginTask(username, m_password, session);
     auto create_wallet = new WatchOnlyCreateWalletTask(this);
 
+    connect(connect_session, &Task::failed, this, [=](const QString& error) {
+        if (!m_error.isEmpty()) return;
+        if (error == "timeout error") {
+            m_error = "id_connection_failed";
+        } else {
+            m_error = error;
+        }
+    });
+    connect(session_login, &Task::failed, this, [=](const QString& error) {
+        if (!m_error.isEmpty()) return;
+        m_error = error;
+    });
+
     m_context->setWallet(m_wallet);
 
     connect_session->then(session_login);
@@ -117,7 +131,9 @@ void WatchOnlyLoginController::login()
     m_monitor->add(group);
 
     connect(group, &TaskGroup::finished, this, &WatchOnlyLoginController::loginFinished);
-    connect(group, &TaskGroup::failed, this, &WatchOnlyLoginController::loginFailed);
+    connect(group, &TaskGroup::failed, this, [=] {
+        emit loginFailed(m_error);
+    });
 }
 
 void WatchOnlyLoginController::setValid(bool valid)

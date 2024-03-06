@@ -28,17 +28,18 @@ StackViewPage {
         onLoginFinished: {
             self.loginFinished(controller.context)
         }
-        onLoginFailed: {
+        onLoginFailed: error => {
             self.contentItem.enabled = true
             password_field.clear()
             password_field.forceActiveFocus()
-            self.contentItem.ToolTip.show(qsTrId('id_user_not_found_or_invalid'), 3000);
+            error_badge.error = error
         }
     }
     Action {
         id: login_action
         enabled: controller.valid
         onTriggered: {
+            error_badge.clear()
             self.contentItem.enabled = false
             controller.login()
         }
@@ -99,6 +100,13 @@ StackViewPage {
                 id: password_field
                 focus: true
                 onAccepted: login_action.trigger()
+                onTextEdited: error_badge.clear()
+            }
+            FixedErrorBadge {
+                Layout.alignment: Qt.AlignHCenter
+                Layout.topMargin: 20
+                id: error_badge
+                pointer: false
             }
             PrimaryButton {
                 Layout.alignment: Qt.AlignCenter
