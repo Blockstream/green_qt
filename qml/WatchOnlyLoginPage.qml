@@ -106,6 +106,7 @@ StackViewPage {
                 Layout.topMargin: 40
                 text: qsTrId('id_login')
                 action: login_action
+                busy: !(controller.monitor?.idle ?? true)
             }
             Label {
                 Layout.alignment: Qt.AlignCenter
