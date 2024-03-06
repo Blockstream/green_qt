@@ -255,28 +255,39 @@ MainPage {
         id: overview_page
         OverviewPage {
             Component.onDestruction: self.wallet.disconnect()
-            onLogout: {
-                const wallet = self.wallet
-                if (wallet.login instanceof DeviceData) {
-                    stack_view.replace(null, device_page, { wallet, login: false }, StackView.Immediate)
-                    return
-                } else if (wallet?.context?.device instanceof JadeDevice) {
-                    stack_view.replace(null, jade_page, { device: wallet?.context?.device, login: false })
-                    return
+            onLogout: stack_view.replace(logout_page, StackView.PushTransition)
+        }
+    }
+
+    Component {
+        id: logout_page
+        StackViewPage {
+            Timer {
+                interval: 500
+                running: !self.wallet.context
+                onTriggered: self.closeWallet(self.wallet)
+            }
+            id: page
+            padding: 60
+            title: self.wallet.name
+            contentItem: ColumnLayout {
+                VSpacer {
                 }
-                if (!wallet || !wallet.persisted) {
-                    stack_view.replace(null, terms_of_service_page, {}, StackView.PushTransition)
-                    return
+                BusyIndicator {
+                    Layout.alignment: Qt.AlignCenter
                 }
-                if (wallet.login instanceof WatchonlyData) {
-                    stack_view.replace(null, watch_only_login_page, { wallet }, StackView.PushTransition)
-                    return
+                Label {
+                    Layout.alignment: Qt.AlignCenter
+                    Layout.fillWidth: true
+                    Layout.preferredWidth: 0
+                    font.pixelSize: 22
+                    font.weight: 600
+                    horizontalAlignment: Label.AlignHCenter
+                    text: qsTrId('id_logout')
+                    wrapMode: Label.WordWrap
                 }
-                if (wallet.login instanceof PinData) {
-                    stack_view.replace(null, pin_login_page, { wallet }, StackView.PushTransition)
-                    return
+                VSpacer {
                 }
-                stack_view.replace(null, restore_wallet_page, { wallet }, StackView.PushTransition)
             }
         }
     }

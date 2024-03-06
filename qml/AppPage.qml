@@ -108,20 +108,20 @@ MainPage {
         side_bar.currentView = SideBar.View.Wallets
     }
     function closeWallet(wallet) {
+        stack_layout.currentIndex = 0
         for (let i = 0; i < stack_layout.children.length; ++i) {
             const child = stack_layout.children[i]
             if (child instanceof WalletView && child.wallet === wallet) {
-                stack_layout.currentIndex = i - 1
                 child.destroy()
                 break
             }
         }
     }
     function closeDevice(device) {
+        stack_layout.currentIndex = 0
         for (let i = 0; i < stack_layout.children.length; ++i) {
             const child = stack_layout.children[i]
             if (child instanceof WalletView && child.device === device) {
-                stack_layout.currentIndex = i - 1
                 child.destroy()
                 break
             }
