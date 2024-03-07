@@ -12,6 +12,7 @@ AbstractButton {
     onClicked: self.selected(self.device)
     id: self
     enabled: {
+        if (!self.device.connected) return false
         if (!self.device.compatible) return false
         switch (self.device.appName) {
         case 'Bitcoin':

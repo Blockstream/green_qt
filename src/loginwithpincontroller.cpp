@@ -107,7 +107,7 @@ static QString device_deployment(Device* device)
         if (app == "Bitcoin Test") return "testnet";
         if (app == "Bitcoin Test Legacy") return "testnet";
         if (app == "Liquid Test") return "testnet";
-        Q_UNREACHABLE();
+        return {};
     }
     Q_UNREACHABLE();
 }
@@ -117,7 +117,12 @@ void LoginController::loginWithDevice(Device* device, bool remember)
     m_error.clear();
 
     if (!m_context) {
-        setContext(new Context(device_deployment(device), this));
+        const auto deployment = device_deployment(device);
+        if (deployment.isEmpty()) {
+            emit loginFailed({});
+            return;
+        }
+        setContext(new Context(deployment, this));
         m_context->setDevice(device);
         m_context->setRemember(remember);
     }
