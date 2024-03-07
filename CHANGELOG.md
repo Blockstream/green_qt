@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed:
 - Add general section in app settings
 - Improments in the Watch-Only login view
+- Update GDK to 0.70.3
 
 ## [2.0.1] - 2024-03-05
 ### Added:
