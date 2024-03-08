@@ -18,9 +18,9 @@ AbstractButton {
         }
     }
     contentItem: Label {
-        color: Qt.lighter('#00B45A', self.hovered ? 1.2 : 1)
+        color: Qt.lighter('#00B45A', self.enabled && self.hovered ? 1.2 : 1)
         font: self.font
         text: self.text
-        opacity: self.enabled ? 1 : 0.5
+        opacity: self.enabled ? 1 : 0.6
     }
 }

@@ -79,7 +79,7 @@ Page {
     RowLayout {
         parent: toolbarItem
         visible: self.visible
-        spacing: 20
+        spacing: 10
         LinkButton {
             font.pixelSize: 16
             text: qsTrId('Export')
@@ -100,7 +100,7 @@ Page {
         }
         CircleButton {
             icon.source: 'qrc:/svg2/search_green.svg'
-            enabled: !self.search
+            enabled: !self.search && self.account.context && list_view.count > 0
             onClicked: {
                 self.search = true
                 search_field.forceActiveFocus()

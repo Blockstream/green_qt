@@ -65,7 +65,7 @@ Page {
     RowLayout {
         parent: toolbarItem
         visible: self.visible
-        spacing: 20
+        spacing: 10
         LinkButton {
             font.pixelSize: 16
             text: qsTrId('Export')

@@ -78,6 +78,8 @@ MainPageHeader {
                 openCreateAccountDrawer()
             }
         }
+        GMenu.Separator {
+        }
         GMenu.Item {
             text: qsTrId('id_refresh')
             icon.source: 'qrc:/svg2/refresh.svg'
@@ -181,6 +183,8 @@ MainPageHeader {
                     }
                 }
                 CircleButton {
+                    Layout.leftMargin: 6
+                    Layout.rightMargin: 6
                     id: tool_button
                     icon.source: 'qrc:/svg/3-h-dots.svg'
                     onClicked: if (!wallet_menu.visible) wallet_menu.open()
