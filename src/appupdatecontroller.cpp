@@ -12,16 +12,17 @@ public:
     CheckForUpdatesActivity(QObject* parent)
         : HttpRequestActivity(parent)
     {
-        auto channel = g_args.value("channel");
-
         setMethod("GET");
-        addUrl(QString("https://greenupdate.blockstream.com/desktop/%1.json").arg(channel));
-        addUrl(QString("http://greenupjcyad2xow7xmrunreetczmqje2nz6bdez3a5xhddlockoqryd.onion/desktop/%1.json").arg(channel));
-    }
-    QString latestVersion() const
-    {
-        const QJsonObject latest = body().toJsonObject();
-        return latest["version"].toString();
+        const auto channel = g_args.value("channel");
+        if (channel == "latest") {
+            const auto path = QString("/greenupdate/desktop/latest.json");
+            addUrl(QString("https://blockstream.com") + path);
+            addUrl(QString("http://blkstrmccjufnkm3otpwjso67apg3f4e53dxzz7nbvr5zg6kiicq2jqd.onion") + path);
+        } else {
+            const auto path = QString("/desktop/%1.json").arg(channel);
+            addUrl(QString("https://greenupdate.blockstream.com") + path);
+            addUrl(QString("http://greenupjcyad2xow7xmrunreetczmqje2nz6bdez3a5xhddlockoqryd.onion") + path);
+        }
     }
 };
 
@@ -42,17 +43,25 @@ void AppUpdateController::checkForUpdates()
 
 void AppUpdateController::checkNow()
 {
-    qInfo() << "check for new version";
     auto activity = new CheckForUpdatesActivity(this);
     connect(activity, &CheckForUpdatesActivity::finished, this, [=] {
         activity->deleteLater();
-        const auto app_version = QVersionNumber::fromString(qApp->applicationVersion());
-        m_latest_version = activity->latestVersion();
-        m_update_available = app_version < QVersionNumber::fromString(m_latest_version);
-        if (m_update_available) m_timer->stop();
-        emit latestVersionChanged();
-        emit updateAvailableChanged();
+        const auto version = activity->body().toJsonObject().value("version");
+        if (version.isString()) {
+            const auto app_version = QVersionNumber::fromString(qApp->applicationVersion());
+            m_latest_version = version.toString();
+            m_update_available = app_version < QVersionNumber::fromString(m_latest_version);
+            if (m_update_available) m_timer->stop();
+            emit latestVersionChanged();
+            emit updateAvailableChanged();
+            qInfo() << "new version" << m_latest_version;
+        } else {
+            qInfo() << "failed to check new version";
+        }
     });
-
+    connect(activity, &CheckForUpdatesActivity::failed, this, [=] {
+        activity->deleteLater();
+        qInfo() << "failed to fetch new version";
+    });
     HttpManager::instance()->exec(activity);
 }
