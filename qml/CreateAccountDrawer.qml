@@ -4,6 +4,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
+import "analytics.js" as AnalyticsJS
 import "util.js" as UtilJS
 
 WalletDrawer {
@@ -29,6 +30,9 @@ WalletDrawer {
             onCreated: (account) => {
                 self.created(account)
                 self.close()
+                if (!self.dismissable) {
+                    Analytics.recordEvent('account_first', AnalyticsJS.segmentationSession(Settings, self.context))
+                }
             }
         }
     }
