@@ -28,6 +28,7 @@ WalletHeaderCard {
     headerItem: RowLayout {
         Label {
             Layout.alignment: Qt.AlignCenter
+            color: '#FFF'
             font.capitalization: Font.AllUppercase
             font.pixelSize: 12
             font.weight: 400

@@ -34,6 +34,7 @@ Pane {
             AssetsCard {
                 id: assets_card
                 context: self.context
+                header.enabled: false
                 background: Rectangle {
                     color: '#FFF'
                     opacity: 0.04
@@ -41,9 +42,10 @@ Pane {
                 }
                 HoverHandler {
                     id: hover_handler
-                    margin: 20
+                    parent: assets_card
                 }
                 TapHandler {
+                    parent: assets_card
                     onTapped: self.assetsClicked()
                 }
             }
