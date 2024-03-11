@@ -6,8 +6,7 @@ import QtQuick.Layouts
 import "util.js" as UtilJS
 
 StackViewPage {
-    signal addWallet()
-    signal useDevice()
+    signal start()
 
     id: self
     contentItem: ColumnLayout {
@@ -20,17 +19,19 @@ StackViewPage {
         }
         Label {
             Layout.alignment: Qt.AlignCenter
-            Layout.topMargin: 20
+            Layout.maximumWidth: 300
+            Layout.topMargin: 50
             color: '#FFF'
             font.pixelSize: 30
             font.weight: 656
             horizontalAlignment: Label.AlignHCenter
             text: qsTrId('id_simple__secure_selfcustody')
+            wrapMode: Label.WordWrap
         }
         Label {
             Layout.alignment: Qt.AlignCenter
             Layout.fillWidth: true
-            Layout.maximumWidth: 325
+            Layout.maximumWidth: 300
             Layout.topMargin: 10
             font.pixelSize: 14
             font.weight: 400
@@ -43,27 +44,17 @@ StackViewPage {
             Layout.alignment: Qt.AlignCenter
             Layout.fillWidth: true
             Layout.maximumWidth: 325
-            Layout.topMargin: 50
-            enabled: tos_check_box.checked
-            text: qsTrId('id_add_wallet')
-            onClicked: self.addWallet()
-        }
-        RegularButton {
-            Layout.alignment: Qt.AlignCenter
-            Layout.fillWidth: true
-            Layout.maximumWidth: 325
             Layout.topMargin: 10
-            Layout.bottomMargin: 10
             enabled: tos_check_box.checked
-            text: qsTrId('id_use_hardware_device')
-            onClicked: self.useDevice()
+            text: 'Get Started'
+            onClicked: self.start()
         }
         RowLayout {
             Layout.alignment: Qt.AlignCenter
             Layout.fillWidth: false
             Layout.fillHeight: false
             Layout.topMargin: 20
-            spacing: 10
+            spacing: 0
             CheckBox {
                 id: tos_check_box
                 Layout.alignment: Qt.AlignCenter

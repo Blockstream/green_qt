@@ -13,6 +13,7 @@ StackViewPage {
         password_field.clear()
         self.contentItem.enabled = true
     }
+    StackView.onActivated: Analytics.recordEvent('wallet_wo')
     AnalyticsView {
         active: true
         name: 'OnBoardWatchOnlyCredentials'

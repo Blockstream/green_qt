@@ -239,6 +239,7 @@ SET(QML_FILES
     qml/MultiImage.qml
     qml/TwoFactorEnableGenericView.qml
     qml/TwoFactorEnableGAuthPage.qml
+    qml/SecureFundsPage.qml
 )
 
 if (GREEN_NO_RESOURCES)

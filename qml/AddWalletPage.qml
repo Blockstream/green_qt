@@ -1,4 +1,5 @@
 import Blockstream.Green
+import Blockstream.Green.Core
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -8,7 +9,7 @@ import "util.js" as UtilJS
 StackViewPage {
     signal newWallet()
     signal restoreWallet()
-    signal watchOnlyWallet()
+    StackView.onActivated: Analytics.recordEvent('wallet_add')
     id: self
     padding: 60
     contentItem: ColumnLayout {
@@ -54,13 +55,6 @@ StackViewPage {
             Layout.topMargin: 10
             text: qsTrId('id_restore_wallet')
             onClicked: self.restoreWallet()
-        }
-        RegularButton {
-            Layout.alignment: Qt.AlignCenter
-            Layout.minimumWidth: 325
-            Layout.topMargin: 10
-            text: qsTrId('id_watchonly')
-            onClicked: self.watchOnlyWallet()
         }
         VSpacer {
         }

@@ -1,4 +1,5 @@
 import Blockstream.Green
+import Blockstream.Green.Core
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -8,6 +9,7 @@ import "util.js" as UtilJS
 StackViewPage {
     signal connectJadeClicked()
     signal connectLedgerClicked()
+    StackView.onActivated: Analytics.recordEvent('wallet_hww')
     id: self
     padding: 60
     footerItem: ColumnLayout {

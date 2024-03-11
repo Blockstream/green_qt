@@ -12,6 +12,7 @@ StackViewPage {
     id: self
     title: self.wallet?.name ?? ''
     padding: 60
+    StackView.onActivated: Analytics.recordEvent('wallet_restore')
     MnemonicEditorController {
         id: controller
         mnemonicSize: 12

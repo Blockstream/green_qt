@@ -83,8 +83,18 @@ MainPage {
     Component {
         id: terms_of_service_page
         TermOfServicePage {
+            onStart: stack_view.push(secure_funds_page)
+        }
+    }
+
+    Component {
+        id: secure_funds_page
+        SecureFundsPage {
             onAddWallet: stack_view.push(add_wallet_page)
             onUseDevice: stack_view.push(use_device_page)
+            // TODO present singlesig or multisig options once singlesig watchonly login is implemented
+            // onWatchOnlyWallet: stack_view.push(watch_only_wallet_page)
+            onWatchOnlyWallet: stack_view.push(multisig_watch_only_network_page)
         }
     }
 
@@ -93,9 +103,6 @@ MainPage {
         AddWalletPage {
             onNewWallet: stack_view.push(mnemonic_warnings_page)
             onRestoreWallet: stack_view.push(restore_wallet_page)
-            // TODO present singlesig or multisig options once singlesig watchonly login is implemented
-            // onWatchOnlyWallet: stack_view.push(watch_only_wallet_page)
-            onWatchOnlyWallet: stack_view.push(multisig_watch_only_network_page)
         }
     }
 
