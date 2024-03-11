@@ -4,6 +4,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
+import "analytics.js" as AnalyticsJS
 import "util.js" as UtilJS
 
 WalletHeaderCard {
@@ -39,7 +40,12 @@ WalletHeaderCard {
             Layout.alignment: Qt.AlignCenter
             source: Settings.incognito ? 'qrc:/svg2/eye_closed.svg' : 'qrc:/svg2/eye.svg'
             TapHandler {
-                onTapped: Settings.toggleIncognito()
+                onTapped: {
+                    Settings.toggleIncognito()
+                    if (Settings.incognito) {
+                        Analytics.recordEvent('hide_amount', AnalyticsJS.segmentationSession(Settings, self.context))
+                    }
+                }
             }
         }
         HSpacer {
