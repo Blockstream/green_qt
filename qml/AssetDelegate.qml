@@ -7,7 +7,7 @@ ItemDelegate {
     signal assetClicked(Asset asset)
     property Account account
     property Asset asset
-    property int satoshi
+    property var satoshi
     readonly property bool hasDetails: self.asset.hasData
     onClicked: if (self.hasDetails) self.assetClicked(self.asset)
     id: self
