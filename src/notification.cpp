@@ -175,3 +175,22 @@ void SystemNotification::accept(TaskGroupMonitor* monitor)
     context()->dispatcher()->add(group);
     monitor->add(group);
 }
+
+TwoFactorResetNotification::TwoFactorResetNotification(Network* network, Context* context)
+    : NetworkNotification(network, context)
+{
+    auto remove = [=](bool is_active) {
+        if (is_active) return;
+        m_context->removeNotification(this);
+        deleteLater();
+    };
+    auto session = context->getOrCreateSession(network);
+    connect(session, &Session::configChanged, this, [=] {
+        bool is_active = session->config().value("twofactor_reset").toObject().value("is_active").toBool();
+        remove(is_active);
+    });
+    connect(session, &Session::twoFactorResetEvent, this, [=](const QJsonObject& event) {
+        bool is_active = event.value("is_active").toBool();
+        remove(is_active);
+    });
+}

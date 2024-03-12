@@ -133,7 +133,10 @@ Session* Context::getOrCreateSession(Network* network)
             }
         });
         connect(session, &Session::twoFactorResetEvent, this, [=](const QJsonObject& event) {
-            setLocked(event.value("is_active").toBool());
+            if (event.value("is_active").toBool()) {
+                auto notification = new TwoFactorResetNotification(session->network(), this);
+                addNotification(notification);
+            }
         });
         connect(session, &Session::transactionEvent, this, [=](const QJsonObject& transaction) {
             for (auto pointer : transaction.value("subaccounts").toArray()) {
@@ -215,13 +218,6 @@ void Context::setMnemonic(const QStringList& mnemonic)
     Q_ASSERT(m_mnemonic.isEmpty());
     m_mnemonic = mnemonic;
     emit mnemonicChanged();
-}
-
-void Context::setLocked(bool locked)
-{
-    if (m_locked == locked) return;
-    m_locked = locked;
-    emit lockedChanged();
 }
 
 void Context::setWatchonly(bool watchonly)

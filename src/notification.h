@@ -116,4 +116,13 @@ protected:
     bool m_accepted{false};
 };
 
+class TwoFactorResetNotification : public NetworkNotification
+{
+    Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("")
+public:
+    TwoFactorResetNotification(Network* network, Context* context);
+};
+
 #endif // GREEN_NOTIFICATION_H

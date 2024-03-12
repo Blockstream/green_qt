@@ -112,9 +112,15 @@ ItemDelegate {
             leftPadding: 0
             rightPadding: 0
             text: UtilJS.accountName(account)
-            enabled: !delegate.account.hidden && !account.context.watchonly && delegate.ListView.isCurrentItem && !delegate.account.context.locked
+            enabled: {
+                if (!delegate.ListView.isCurrentItem) return false
+                if (delegate.account.hidden) return false
+                if (delegate.account.context.watchonly) return false
+                if (delegate.account.session.config.twofactor_reset?.is_active ?? false) return false
+                return true
+            }
             onEdited: (text) => {
-                if (enabled) {
+                if (name_field.enabled) {
                     if (controller.setAccountName(delegate.account, text, activeFocus)) {
                         Analytics.recordEvent('account_rename', AnalyticsJS.segmentationSubAccount(Settings, delegate.account))
                     }

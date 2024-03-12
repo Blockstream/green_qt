@@ -20,7 +20,6 @@ class Context : public QObject
     Q_PROPERTY(Wallet* wallet READ wallet NOTIFY walletChanged)
     Q_PROPERTY(Device* device READ device NOTIFY deviceChanged)
     Q_PROPERTY(bool remember READ remember NOTIFY rememberChanged)
-    Q_PROPERTY(bool locked READ isLocked NOTIFY lockedChanged)
     Q_PROPERTY(bool watchonly READ isWatchonly NOTIFY watchonlyChanged)
     Q_PROPERTY(QQmlListProperty<Session> sessions READ sessions NOTIFY sessionsChanged)
     Q_PROPERTY(Session* primarySession READ primarySession NOTIFY sessionsChanged)
@@ -41,7 +40,7 @@ public:
     Wallet* wallet() const { return m_wallet; }
     void setWallet(Wallet* wallet);
 
-    Session* getOrCreateSession(Network* network);
+    Q_INVOKABLE Session* getOrCreateSession(Network* network);
     Session* primarySession();
     void releaseSession(Session *session);
 
@@ -56,9 +55,6 @@ public:
 
     QStringList mnemonic() const { return m_mnemonic; }
     void setMnemonic(const QStringList& mnemonic);
-
-    bool isLocked() const { return m_locked; }
-    void setLocked(bool locked);
 
     bool isWatchonly() const { return m_watchonly; }
     void setWatchonly(bool watchonly);
@@ -98,7 +94,6 @@ signals:
     void rememberChanged();
     void credentialsChanged();
     void mnemonicChanged();
-    void lockedChanged();
     void accountsChanged();
     void watchonlyChanged();
     void sessionsChanged();
@@ -117,7 +112,6 @@ private:
     QStringList m_mnemonic;
     QMap<Network*, Session*> m_sessions;
     QList<Session*> m_sessions_list;
-    bool m_locked{false};
     bool m_watchonly{false};
 
     QList<Notification*> m_notifications;

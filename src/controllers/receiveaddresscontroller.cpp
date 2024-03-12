@@ -106,7 +106,7 @@ void ReceiveAddressController::setAddressVerification(ReceiveAddressController::
 
 void ReceiveAddressController::generate()
 {
-    if (!m_account || m_account->context()->isLocked()) return;
+    if (!m_account) return; // || m_account->context()->isLocked()) return;
 
     if (m_generating) return;
 

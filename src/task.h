@@ -349,11 +349,8 @@ class LoadTwoFactorConfigTask : public SessionTask
     QML_UNCREATABLE("")
 public:
     LoadTwoFactorConfigTask(Session* session);
-    LoadTwoFactorConfigTask(bool lock, Session* session);
 private:
     void update() override;
-private:
-    const bool m_lock{false};
 };
 
 class LoadCurrenciesTask : public SessionTask

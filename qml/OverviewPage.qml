@@ -411,14 +411,14 @@ StackViewPage {
         anchors.bottom: parent.bottom
         anchors.right: parent.right
         anchors.rightMargin: constants.p3
-        anchors.bottomMargin: constants.p3 * 2
+        anchors.bottomMargin: constants.p3 * 2        
         spacing: 5
         PrimaryButton {
             Layout.minimumWidth: 150
             icon.source: 'qrc:/svg/send.svg'
             text: qsTrId('id_send')
             action: Action {
-                enabled: UtilJS.effectiveVisible(self) && !self.archived && !self.context.watchonly && !self.wallet.locked && self.currentAccount
+                enabled: UtilJS.effectiveVisible(self) && self.currentAccount && !(self.currentAccount.session.config.twofactor_reset.is_active ?? false)
                 shortcut: 'Ctrl+S'
                 onTriggered: {
                     const context = self.context
@@ -435,7 +435,7 @@ StackViewPage {
             icon.source: 'qrc:/svg/receive.svg'
             text: qsTrId('id_receive')
             action: Action {
-                enabled: UtilJS.effectiveVisible(self) && !self.archived && !wallet.locked && self.currentAccount
+                enabled: UtilJS.effectiveVisible(self) && self.currentAccount && !(self.currentAccount.session.config.twofactor_reset.is_active ?? false)
                 shortcut: 'Ctrl+R'
                 onTriggered: {
                     const context = self.context

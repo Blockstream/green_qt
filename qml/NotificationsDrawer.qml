@@ -4,6 +4,8 @@ import QtQuick.Controls
 import QtQuick.Effects
 import QtQuick.Layouts
 
+import "util.js" as UtilJS
+
 AbstractDrawer {
     required property Context context
     readonly property int count: self.context.notifications.length
@@ -70,6 +72,8 @@ AbstractDrawer {
                 sourceComponent: {
                     if (delegate.notification instanceof SystemNotification) {
                         return system_notification
+                    } else if (delegate.notification instanceof TwoFactorResetNotification) {
+                        return two_factor_reset_notification
                     }
                     return null
                 }
@@ -103,12 +107,19 @@ AbstractDrawer {
                 name: 'SystemMessage'
             }
             spacing: 0
-            Label {
+            RowLayout {
                 Layout.bottomMargin: 10
-                color: '#FFF'
-                font.pixelSize: 12
-                opacity: 0.6
-                text: notification.network.displayName
+                Image {
+                    Layout.preferredHeight: 24
+                    Layout.preferredWidth: 24
+                    source: UtilJS.iconFor(notification.network)
+                }
+                Label {
+                    color: '#FFF'
+                    font.pixelSize: 16
+                    opacity: 0.6
+                    text: notification.network.displayName
+                }
             }
             Label {
                 Layout.fillWidth: true
@@ -141,7 +152,8 @@ AbstractDrawer {
                             wrapMode: Label.Wrap
                         }
                     }
-                    PrimaryButton {
+                    RegularButton {
+                        Layout.alignment: Qt.AlignRight
                         enabled: confirm_checkbox.checked
                         font.capitalization: Font.Capitalize
                         text: qsTrId('id_accept').toLowerCase()
@@ -149,6 +161,55 @@ AbstractDrawer {
                     }
                 }
             }
+        }
+    }
+    Component {
+        id: two_factor_reset_notification
+        TwoFactorResetNotificationView {
+        }
+    }
+
+    component TwoFactorResetNotificationView: ColumnLayout {
+        readonly property Session session: notification.context.getOrCreateSession(notification.network)
+        id: view
+        spacing: 0
+        RowLayout {
+            Layout.bottomMargin: 10
+            Image {
+                Layout.preferredHeight: 24
+                Layout.preferredWidth: 24
+                source: UtilJS.iconFor(notification.network)
+            }
+            Label {
+                color: '#FFF'
+                font.pixelSize: 16
+                opacity: 0.6
+                text: notification.network.displayName
+            }
+        }
+        Label {
+            Layout.bottomMargin: 10
+            Layout.fillWidth: true
+            Layout.preferredWidth: 0
+            color: '#FFF'
+            font.pixelSize: 14
+            font.weight: 500
+            text: qsTrId('id_twofactor_reset_in_progress')
+            wrapMode: Label.WordWrap
+        }
+        Label {
+            Layout.fillWidth: true
+            Layout.preferredWidth: 0
+            color: '#FFF'
+            opacity: 0.8
+            text: {
+                if (view.session.config.twofactor_reset?.is_active ?? false) {
+                    return qsTrId('id_your_wallet_is_locked_for_a').arg(view.session.config.twofactor_reset.days_remaining)
+                } else {
+                    return ''
+                }
+            }
+            wrapMode: Label.WordWrap
         }
     }
 }

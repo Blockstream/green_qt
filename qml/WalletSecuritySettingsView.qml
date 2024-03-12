@@ -99,7 +99,6 @@ Pane {
 
         SettingsBox {
             title: qsTrId('id_auto_logout_timeout')
-            enabled: !self.context.locked
             visible: !self.context.device
             contentItem: ColumnLayout {
                 Label {

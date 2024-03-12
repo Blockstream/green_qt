@@ -52,7 +52,7 @@ Page {
             width: view.width
             SettingsBox {
                 title: qsTrId('id_twofactor_authentication')
-                // enabled: !self.context.locked
+                enabled: !(view.session.config.twofactor_reset?.is_active ?? false)
                 contentItem: ColumnLayout {
                     Layout.fillWidth: true
                     spacing: 8
@@ -133,7 +133,7 @@ Page {
 
             SettingsBox {
                 title: qsTrId('id_2fa_threshold')
-                // enabled: !self.context.locked
+                enabled: !(view.session.config.twofactor_reset?.is_active ?? false)
                 visible: !view.network.liquid && !!view.session.config.limits
                 contentItem: AbstractButton {
                     id: button
@@ -219,35 +219,81 @@ Page {
 
             SettingsBox {
                 title: qsTrId('id_request_twofactor_reset')
-                visible: false
-                contentItem: RowLayout {
-                    Label {
-                        Layout.fillWidth: true
-                        // text: self.context.locked ? qsTrId('wallet locked for %1 days').arg(view.session.config.twofactor_reset ? view.session.config.twofactor_reset.days_remaining : 0) : qsTrId('id_start_a_2fa_reset_process_if')
-                        text: 'TODO'
-                        wrapMode: Text.WordWrap
-                    }
-                    GButton {
-                        large: false
-                        Layout.alignment: Qt.AlignRight
-                        enabled: view.session.config.any_enabled || false
-                        // text: self.context.locked ? qsTrId('id_cancel_twofactor_reset') : qsTrId('id_reset')
-                        text: 'TODO'
-                        Component {
-                            id: cancel_dialog
-                            CancelTwoFactorResetDialog { }
+                contentItem: AbstractButton {
+                    id: button2
+                    leftPadding: 20
+                    rightPadding: 20
+                    topPadding: 15
+                    bottomPadding: 15
+                    enabled: {
+                        if (view.session.config.twofactor_reset?.is_active ?? false) {
+                            return true
+                        } else {
+                            return view.session.config.any_enabled || false
                         }
-
-                        Component {
-                            id: request_dialog
-                            RequestTwoFactorResetDialog {
+                    }
+                    background: Rectangle {
+                        radius: 5
+                        color: Qt.lighter('#222226', button2.enabled && button2.hovered ? 1.2 : 1)
+                    }
+                    contentItem: RowLayout {
+                        ColumnLayout {
+                            spacing: 20
+                            Label {
+                                Layout.fillWidth: true
+                                Layout.minimumWidth: 0
+                                font.pixelSize: 14
+                                font.weight: 600
+                                text: view.session.config.twofactor_reset?.is_active ?? false ? qsTrId('id_cancel_twofactor_reset') : qsTrId('id_reset')
+                                wrapMode: Text.WordWrap
+                            }
+                            Label {
+                                Layout.fillWidth: true
+                                Layout.preferredWidth: 0
+                                color: '#6F6F6F'
+                                font.pixelSize: 14
+                                font.weight: 500
+                                text: {
+                                    if (view.session.config.twofactor_reset?.is_active ?? false) {
+                                        return qsTrId('id_your_wallet_is_locked_for_a').arg(view.session.config.twofactor_reset.days_remaining)
+                                    } else {
+                                        return qsTrId('id_start_a_2fa_reset_process_if')
+                                    }
+                                }
+                                wrapMode: Label.WordWrap
                             }
                         }
+                        Image {
+                            Layout.alignment: Qt.AlignCenter
+                            source: 'qrc:/svg2/arrow_right.svg'
+                            opacity: button2.enabled ? 1 : 0.6
+                        }
+                    }
+                    onClicked: {
+                        const locked = view.session.config.twofactor_reset?.is_active ?? false
+                        const comp = locked ? cancel_dialog : request_dialog
+                        const dialog = comp.createObject(view, {
+                            context: self.context,
+                            session: view.session,
+                        })
+                        dialog.open()
                     }
                 }
             }
             VSpacer {
             }
+        }
+    }
+
+    Component {
+        id: cancel_dialog
+        CancelTwoFactorResetDialog {
+        }
+    }
+
+    Component {
+        id: request_dialog
+        RequestTwoFactorResetDialog {
         }
     }
 

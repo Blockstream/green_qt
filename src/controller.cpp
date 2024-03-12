@@ -4,7 +4,7 @@
 #include "account.h"
 #include "address.h"
 #include "context.h"
-#include "network.h"
+#include "notification.h"
 #include "task.h"
 #include "session.h"
 #include "wallet.h"
@@ -98,11 +98,11 @@ void Controller::changeSettings(const QJsonObject& data)
 {
     if (!m_context) return;
 
-    // Check if wallet is undergoing reset
-    if (m_context->isLocked()) {
-        qDebug() << Q_FUNC_INFO << "wallet is locked";
-        return;
-    }
+    // // Check if wallet is undergoing reset
+    // if (m_context->isLocked()) {
+    //     qDebug() << Q_FUNC_INFO << "wallet is locked";
+    //     return;
+    // }
 
     for (auto session : m_context->getSessions()) {
         changeSessionSettings(session, data);
@@ -111,6 +111,9 @@ void Controller::changeSettings(const QJsonObject& data)
 
 void Controller::changeSessionSettings(Session* session, const QJsonObject& data)
 {
+    if (session->config().value("twofactor_reset").toObject().value("is_active").toBool()) {
+        return;
+    }
     if (!DeepContains(session->settings(), data)) {
         auto change_settings = new ChangeSettingsTask(data, session);
         dispatcher()->add(change_settings);
@@ -128,45 +131,42 @@ void Controller::sendRecoveryTransactions()
     dispatcher()->add(send_nlocktimes);
 }
 
-void Controller::requestTwoFactorReset(const QString& email)
+void SessionController::requestTwoFactorReset(const QString& email)
 {
-    if (!m_context) return;
-
-    auto session = m_context->primarySession();
-
-    auto twofactor_reset = new TwoFactorResetTask(email, session);
-    // TODO: update config doesn't update 2f reset data,
-    // it's only updated after authentication in GDK,
-    // so force wallet lock for now
-    auto load_config = new LoadTwoFactorConfigTask(true, session);
-
-    twofactor_reset->then(load_config);
-
     auto group = new TaskGroup(this);
-
-    group->add(twofactor_reset);
-    group->add(load_config);
-
+    auto request = new TwoFactorResetTask(email, m_session);
+    auto load = new LoadTwoFactorConfigTask(m_session);
+    connect(group, &TaskGroup::finished, this, [=] {
+        emit finished();
+        auto notification = new TwoFactorResetNotification(m_session->network(), m_context);
+        m_context->addNotification(notification);
+    });
+    connect(request, &Task::failed, this, [=](const QString& error) {
+        emit failed(error);
+    });
+    request->then(load);
+    group->add(request);
+    group->add(load);
+    monitor()->add(group);
     dispatcher()->add(group);
 }
 
-void Controller::cancelTwoFactorReset()
+void SessionController::cancelTwoFactorReset()
 {
-    if (!m_context) return;
-    auto session = m_context->primarySession();
-
-    auto task = new TwoFactorCancelResetTask(session);
-    connect(task, &Task::finished, this, [=] {
-        // TODO
-        // m_context->updateConfig();
-
-        // TODO: updateConfig doesn't update 2f reset data,
-        // it's only updated after authentication in GDK,
-        // so force wallet unlock for now.
-        m_context->setLocked(false);
+    auto group = new TaskGroup(this);
+    auto cancel = new TwoFactorCancelResetTask(m_session);
+    auto load = new LoadTwoFactorConfigTask(m_session);
+    connect(group, &TaskGroup::finished, this, [=] {
         emit finished();
     });
-    dispatcher()->add(task);
+    connect(cancel, &Task::failed, this, [=](const QString& error) {
+        emit failed(error);
+    });
+    cancel->then(load);
+    group->add(cancel);
+    group->add(load);
+    monitor()->add(group);
+    dispatcher()->add(group);
 }
 
 void Controller::setRecoveryEmail(const QString& email)

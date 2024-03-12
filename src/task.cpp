@@ -672,13 +672,6 @@ void LoginTask::handleDone(const QJsonObject& result)
 
 LoadTwoFactorConfigTask::LoadTwoFactorConfigTask(Session* session)
     : SessionTask(session)
-    , m_lock(false)
-{
-}
-
-LoadTwoFactorConfigTask::LoadTwoFactorConfigTask(bool lock, Session* session)
-    : SessionTask(session)
-    , m_lock(lock)
 {
 }
 
@@ -703,7 +696,6 @@ void LoadTwoFactorConfigTask::update()
         return gdk::get_twofactor_config(m_session->m_session);
     }).then(this, [=](const QJsonObject& config) {
         m_session->setConfig(config);
-        if (m_lock) context->setLocked(true);
         setStatus(Status::Finished);
     });
 }

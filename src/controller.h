@@ -55,8 +55,6 @@ public slots:
     void changeSettings(const QJsonObject& data);
     void changeSessionSettings(Session* session, const QJsonObject& data);
     void sendRecoveryTransactions();
-    void requestTwoFactorReset(const QString& email);
-    void cancelTwoFactorReset();
     void setRecoveryEmail(const QString& email);
     void setCsvTime(int value);
     void deleteWallet();
@@ -88,8 +86,12 @@ public:
     SessionController(QObject* parent = nullptr);
     Session* session() const { return m_session; }
     void setSession(Session* session);
+public slots:
+    void requestTwoFactorReset(const QString& email);
+    void cancelTwoFactorReset();
 signals:
     void sessionChanged();
+    void failed(const QString& error);
 protected:
     Session* m_session{nullptr};
 };
@@ -104,7 +106,6 @@ public slots:
     void update(const QString& username, const QString& password);
     void clear();
 signals:
-    void failed(const QString& error);
 };
 
 class TwoFactorController : public SessionController
@@ -122,7 +123,6 @@ public slots:
     void changeLimits(const QString& satoshi);
 signals:
     void methodChanged();
-    void failed(const QString& error);
 private:
     void change(const QJsonObject& details);
     QString m_method;

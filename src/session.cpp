@@ -127,8 +127,6 @@ void Session::setConfig(const QJsonObject& config)
     if (m_config == config) return;
     m_config = config;
     emit configChanged();
-    // TODO
-    // setLocked(m_config.value("twofactor_reset").toObject().value("is_active").toBool());
 }
 
 void Session::setActive(bool active)

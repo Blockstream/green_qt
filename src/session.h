@@ -93,8 +93,8 @@ signals:
     void connectedChanged();
     void connectingChanged();
     void configChanged();
-    void networkEvent(const QJsonObject& settings);
-    void twoFactorResetEvent(const QJsonObject& settings);
+    void networkEvent(const QJsonObject& event);
+    void twoFactorResetEvent(const QJsonObject& event);
     void torEvent(const QJsonObject& event);
     void blockEvent(const QJsonObject& event);
     void transactionEvent(const QJsonObject& event);
