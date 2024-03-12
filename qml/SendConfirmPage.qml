@@ -44,7 +44,9 @@ StackViewPage {
             self.StackView.view.push(transaction_completed_page, { transaction })
         }
         onFailed: (error) => {
-            Analytics.recordEvent('failed_transaction', AnalyticsJS.segmentationSubAccount(Settings, self.account))
+            const segmentation = AnalyticsJS.segmentationSubAccount(Settings, self.account)
+            segmentation.error = error
+            Analytics.recordEvent('failed_transaction', segmentation)
             self.StackView.view.push(error_page, { error })
         }
     }
