@@ -10,7 +10,7 @@ TextField {
     id: self
     topPadding: 18
     bottomPadding: 18
-    leftPadding: 60
+    leftPadding: self.text.length > 0 ? 60 : 18
     rightPadding: (options_layout.visible ? options_layout.width + 10 : 0) + 18
     background: Rectangle {
         color: Qt.lighter('#222226', !self.readOnly && self.hovered ? 1.2 : 1)
