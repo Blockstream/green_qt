@@ -207,6 +207,7 @@ qt_add_resources(green "images"
         assets/svg2/sun.svg
         assets/svg2/sun-dim.svg
         assets/svg2/take_control.svg
+        assets/svg2/take_control2.svg
         assets/svg2/trash.svg
         assets/svg2/tx-incoming.svg
         assets/svg2/tx-outgoing.svg

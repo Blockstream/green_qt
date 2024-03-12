@@ -16,40 +16,42 @@ StackViewPage {
         spacing: 0
         VSpacer {
         }
-        Image {
+        MultiImage {
             Layout.alignment: Qt.AlignCenter
-            Layout.maximumHeight: self.height / 4
-            fillMode: Image.PreserveAspectFit
-            horizontalAlignment: Image.AlignHCenter
-            source: 'qrc:/svg2/take_control.svg'
+            //Layout.bottomMargin: -70
+            foreground: 'qrc:/svg2/take_control2.svg'
+            clip: false
+            width: 300
+            height: 182
         }
         Label {
             Layout.alignment: Qt.AlignCenter
-            Layout.topMargin: 20
             color: '#FFF'
             font.pixelSize: 35
             font.weight: 656
             horizontalAlignment: Label.AlignHCenter
-            text: 'Take Control: Your Keys, Your Bitcoin'
+            text: qsTrId('id_take_control_your_keys_your').replace(':', ':\n')
         }
         Label {
             Layout.alignment: Qt.AlignCenter
+            Layout.maximumWidth: 230
             Layout.topMargin: 10
             color: '#FFF'
-            font.pixelSize: 22
+            font.pixelSize: 14
             font.weight: 400
             horizontalAlignment: Label.AlignHCenter
             opacity: 0.6
-            text: qsTrId('id_everything_you_need_to_take')
+            text: qsTrId('id_your_keys_secure_your_coins_on')
+            wrapMode: Label.WordWrap
         }
         PrimaryButton {
             Layout.alignment: Qt.AlignCenter
             Layout.minimumWidth: 325
-            Layout.topMargin: 80
+            Layout.topMargin: 20
             text: qsTrId('id_new_wallet')
             onClicked: self.newWallet()
         }
-        PrimaryButton {
+        RegularButton {
             Layout.alignment: Qt.AlignCenter
             Layout.minimumWidth: 325
             Layout.topMargin: 10
