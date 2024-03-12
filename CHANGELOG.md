@@ -4,14 +4,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+## [2.0.2] - 2024-03-13
 ### Added:
 - Button to clear address field
 
 ### Changed:
-- Add general section in app settings
+- Improved onboarding flow
 - Improments in the Watch-Only login view
+- Reinstate 2FA reset notification and request/cancel options
+- Add general section in app settings
 - Update GDK to 0.70.3
+
+### Fixed
+- Crash on login when Ledger device is idle
+- Incorrect negative balance
 
 ## [2.0.1] - 2024-03-05
 ### Added:
