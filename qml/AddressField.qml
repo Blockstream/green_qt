@@ -3,6 +3,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 TextField {
+    signal cleared
     signal codeScanned(string code)
     property string address_input
     property var error
@@ -47,7 +48,10 @@ TextField {
         anchors.leftMargin: 18
         visible: !self.readOnly && self.text !== ''
         icon.source: 'qrc:/svg2/x-circle.svg'
-        onClicked: self.clear()
+        onClicked: {
+            self.clear()
+            self.cleared()
+        }
     }
     RowLayout {
         id: options_layout

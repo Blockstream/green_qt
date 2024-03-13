@@ -162,6 +162,7 @@ StackViewPage {
                 id: address_field
                 text: controller.recipient.address
                 onTextEdited: controller.recipient.address = address_field.text
+                onCleared: controller.recipient.address = ''
                 onCodeScanned: (code) => controller.recipient.address = code
                 focus: true
                 error: {
