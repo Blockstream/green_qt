@@ -48,7 +48,6 @@ StackViewPage {
         }
         PinField {
             Layout.alignment: Qt.AlignCenter
-            Layout.bottomMargin: 54
             Layout.topMargin: 36
             id: pin_field
             focus: true
@@ -61,11 +60,17 @@ StackViewPage {
                         pin_field.enabled = false
                         self.pin = null
                         timer.start()
+                        error_badge.error = qsTrId('id_pins_do_not_match_please_try')
                     }
                 } else {
                     pin_field.enabled = false
                     self.pin = pin
                     timer.start()
+                }
+            }
+            onPinChanged: {
+                if (pin_field.pin.length > 0) {
+                    error_badge.clear()
                 }
             }
         }
@@ -78,8 +83,16 @@ StackViewPage {
                 pin_field.enabled = true
             }
         }
+        FixedErrorBadge {
+            Layout.alignment: Qt.AlignHCenter
+            Layout.topMargin: 20
+            id: error_badge
+            pointer: false
+            visible: true
+        }
         PinPadButton {
             Layout.alignment: Qt.AlignCenter
+            Layout.topMargin: 20
             enabled: pin_field.enabled
             target: pin_field
         }
