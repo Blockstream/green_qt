@@ -3,6 +3,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 AbstractButton {
+    property bool busy: false
     id: self
     focusPolicy: Qt.StrongFocus
     padding: 16
@@ -42,6 +43,25 @@ AbstractButton {
             horizontalAlignment: Text.AlignHCenter
             text: self.text
             verticalAlignment: Text.AlignVCenter
+        }
+        Collapsible {
+            property real _busy: self.busy ? 1 : 0
+            Behavior on _busy {
+                SmoothedAnimation {
+                    velocity: 1
+                }
+            }
+            id: collapsible
+            animationVelocity: 200
+            collapsed: collapsible._busy === 0
+            horizontalCollapse: true
+            verticalCollapse: false
+            ProgressIndicator {
+                x: 10
+                width: 24
+                height: 24
+                indeterminate: self.busy
+            }
         }
         HSpacer {
         }
