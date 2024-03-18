@@ -146,6 +146,7 @@ qt_add_resources(green "images"
         assets/hints/cpu.svg
         assets/hints/jade3d.svg
 
+        assets/svg2/alert.svg
         assets/svg2/arrow_square_down.svg
         assets/svg2/arrow_right.svg
         assets/svg2/back.svg
