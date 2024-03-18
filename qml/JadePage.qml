@@ -162,7 +162,7 @@ StackViewPage {
             context: null
             showRemember: true
             onUnlockFinished: (context) => stack_view.push(login_view, { context, device: self.device })
-            onUnlockFailed: stack_view.replace(null, intialized_view, { device: self.device })
+            onUnlockFailed: stack_view.replace(null, intialized_view, { device: self.device }, StackView.PushTransition)
         }
     }
 
