@@ -19,6 +19,10 @@ ColumnLayout {
     JadeSetupController {
         id: controller
         device: self.device
+        onHttpRequest: (request) => {
+            const dialog = http_request_dialog.createObject(self, { request, context: null })
+            dialog.open()
+        }
         onSetupFinished: (context) => self.setupFinished(context)
     }
     VSpacer {
@@ -75,6 +79,12 @@ ColumnLayout {
         onClicked: stack_view.push(basic_update_view)
     }
     VSpacer {
+    }
+
+    Component {
+        id: http_request_dialog
+        JadeHttpRequestDialog {
+        }
     }
 
     Component {

@@ -18,6 +18,10 @@ ColumnLayout {
         context: self.context
         device: self.device
         remember: remember_checkbox.checked
+        onHttpRequest: (request) => {
+            const dialog = http_request_dialog.createObject(self, { request, context: self.context })
+            dialog.open()
+        }
         onUnlocked: (context) => self.unlockFinished(context)
         onInvalidPin: self.unlockFailed()
         onDisconnected: self.unlockFailed()
@@ -49,5 +53,10 @@ ColumnLayout {
         text: qsTrId('id_remember_device_connection')
     }
     VSpacer {
+    }
+    Component {
+        id: http_request_dialog
+        JadeHttpRequestDialog {
+        }
     }
 }
