@@ -3,6 +3,9 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 AbstractButton {
+    property color fillColor: '#00B45A'
+    property color borderColor: '#00B45A'
+    property color textColor: '#FFFFFF'
     property bool busy: false
     id: self
     focusPolicy: Qt.StrongFocus
@@ -13,11 +16,12 @@ AbstractButton {
     bottomPadding: 12
     opacity: self.enabled ? 1 : 0.4
     background: Rectangle {
-        color: self.enabled && self.hovered ? '#00DD6E' : '#00B45A'
+        color: Qt.lighter(self.fillColor, self.enabled && self.hovered ? 1.1 : 1)
+        border.color: Qt.lighter(self.borderColor, self.enabled && self.hovered ? 1.1 : 1)
         radius: 8
         Rectangle {
             border.width: 2
-            border.color: '#00B45A'
+            border.color: self.borderColor
             color: 'transparent'
             radius: 12
             anchors.fill: parent
@@ -38,6 +42,8 @@ AbstractButton {
         Label {
             font.pixelSize: 16
             font.weight: 600
+            color: self.textColor
+            opacity: self.enabled ? 1.0 : 0.6
             horizontalAlignment: Text.AlignHCenter
             text: self.text
             verticalAlignment: Text.AlignVCenter
