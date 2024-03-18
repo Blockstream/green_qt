@@ -19,10 +19,9 @@ class JadeController : public Controller
     QML_UNCREATABLE("")
 public:
     JadeController(QObject* parent = nullptr);
-
     JadeDevice* device() const { return m_device; }
     void setDevice(JadeDevice* device);
-
+    Network* network() const { return m_network; }
 signals:
     void disconnected();
     void deviceChanged();
@@ -30,6 +29,7 @@ signals:
 
 protected:
     JadeDevice* m_device{nullptr};
+    Network* m_network{nullptr};
 };
 
 class JadeSetupController : public JadeController
@@ -38,15 +38,11 @@ class JadeSetupController : public JadeController
     QML_ELEMENT
 public:
     JadeSetupController(QObject* parent = nullptr);
-    Network* network() const { return m_network; }
 public slots:
     void setup(const QString& deployment);
 signals:
     void setupFinished(Context* context);
-private:
-    Network* m_network{nullptr};
 };
-
 
 class JadeSetupTask : public Task
 {
@@ -79,7 +75,6 @@ signals:
     void invalidPin();
 private:
     bool m_remember{false};
-    Network* m_network{nullptr};
 };
 
 class JadeUnlockTask : public Task
