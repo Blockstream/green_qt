@@ -152,6 +152,14 @@ void initLog()
     }
 }
 
+QString GetPlatformName()
+{
+    const auto name = QSysInfo::productType();
+    if (name == "macos") return name;
+    if (name == "windows") return name;
+    return "linux";
+}
+
 int main(int argc, char *argv[])
 {
     QCoreApplication::setApplicationName("Green");
@@ -329,6 +337,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("data_location_url", QUrl::fromLocalFile(g_data_location));
     engine.rootContext()->setContextProperty("log_file_path", g_log_file.fileName());
     engine.rootContext()->setContextProperty("log_file_url", QUrl::fromLocalFile(g_log_file.fileName()));
+    engine.rootContext()->setContextProperty("platform", GetPlatformName());
 
     if (Settings::instance()->language().isEmpty()) {
         Settings::instance()->setLanguage(language);
