@@ -8,12 +8,17 @@
 #include "networkmanager.h"
 #include "resolver.h"
 #include "session.h"
+#include "util.h"
 #include "wallet.h"
 #include "walletmanager.h"
 
 #include <gdk.h>
 
 #include <wally_wrapper.h>
+
+#include <QCryptographicHash>
+#include <QFutureWatcher>
+#include <QtConcurrentRun>
 
 JadeController::JadeController(QObject* parent)
     : Controller(parent)
@@ -32,6 +37,79 @@ void JadeController::setDevice(JadeDevice* device)
     });
 }
 
+QSet<QByteArray> AllowedHosts()
+{
+    QSet<QByteArray> allowed;
+    QSettings jade(GetDataFile("app", "jade.ini"), QSettings::IniFormat);
+    int size = jade.beginReadArray("hosts");
+    for (int i = 0; i < size; ++i) {
+        jade.setArrayIndex(i);
+        const auto hash = jade.value("hash").toString();
+        allowed.insert(QByteArray::fromHex(hash.toUtf8()));
+    }
+    jade.endArray();
+    return allowed;
+}
+
+bool IsHostAllowed(const QSet<QByteArray>& allowed, const QString& host)
+{
+    if (host == "jadepin.blockstream.com") return true;
+    QCryptographicHash hash(QCryptographicHash::Sha256);
+    hash.addData(host.toUtf8());
+    return allowed.contains(hash.result());
+}
+
+bool IsHostAllowed(const QStringList& hosts)
+{
+    const auto allowed = AllowedHosts();
+    for (const auto host : hosts) {
+        if (IsHostAllowed(allowed, host)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+void AllowHost(QSet<QByteArray>& allowed, const QString& host)
+{
+    QCryptographicHash hash(QCryptographicHash::Sha256);
+    hash.addData(host.toUtf8());
+    allowed.insert(hash.result());
+}
+
+void AllowHost(const QStringList& hosts)
+{
+    auto allowed = AllowedHosts();
+    for (const auto host : hosts) {
+        AllowHost(allowed, host);
+    }
+    const auto hashes = allowed.values();
+    QSettings jade(GetDataFile("app", "jade.ini"), QSettings::IniFormat);
+    jade.beginWriteArray("hosts", hashes.size());
+    for (int i = 0; i < hashes.size(); ++i) {
+        jade.setArrayIndex(i);
+        jade.setValue("hash", QString::fromUtf8(hashes.at(i).toHex()));
+    }
+}
+
+JadeHttpRequest *JadeController::handleHttpRequest(const QJsonObject& params)
+{
+    auto session = m_context->getOrCreateSession(m_network);
+    auto request = new JadeHttpRequest(params, session);
+    if (IsHostAllowed(request->hosts())) {
+        QMetaObject::invokeMethod(request, [=] {
+            request->accept(false);
+        }, Qt::QueuedConnection);
+    } else {
+        emit httpRequest(request);
+        connect(request, &JadeHttpRequest::accepted, [=](bool remember) {
+            if (remember) {
+                AllowHost(request->hosts());
+            }
+        });
+    }
+    return request;
+}
 
 JadeSetupController::JadeSetupController(QObject* parent)
     : JadeController(parent)
@@ -102,23 +180,13 @@ void JadeSetupTask::update()
             // emit invalidPin();
             // update();
         }
-    }, [=](JadeAPI& jade, int id, const QJsonObject& req) {
-        const auto params = Json::fromObject(req.value("params").toObject());
-
-       const auto url = QUrl(req.value("params").toObject().value("urls").toArray().first().toString());
-       if (url.path() == "/set_pin") {
-           // copy current jade info since the signal is emitted asynchronously
-           const auto info = device->versionInfo();
-           QMetaObject::invokeMethod(m_controller, [=] { emit m_controller->setPin(info); }, Qt::QueuedConnection);
-       }
-
-        GA_json* output;
-        const auto context = m_controller->context();
-        const auto session = context->getOrCreateSession(network)->m_session;
-        GA_http_request(session, params.get(), &output);
-        auto res = Json::toObject(output);
-        GA_destroy_json(output);
-        jade.handleHttpResponse(id, req, res.value("body"));
+    }, [=](JadeAPI& /*jade*/, int id, const QJsonObject& req) {
+        QMetaObject::invokeMethod(m_controller, [=] {
+            auto request = m_controller->handleHttpRequest(req.value("params").toObject());
+            QObject::connect(request, &JadeHttpRequest::finished, [=](const QJsonObject& res) {
+                m_controller->device()->api()->handleHttpResponse(id, req, res.value("body"));
+            });
+        }, Qt::QueuedConnection);
     });
 }
 
@@ -250,22 +318,12 @@ void JadeUnlockTask::update()
             // update();
         }
     }, [=](JadeAPI& jade, int id, const QJsonObject& req) {
-        const auto params = Json::fromObject(req.value("params").toObject());
-
-        const auto url = QUrl(req.value("params").toObject().value("urls").toArray().first().toString());
-        if (url.path() == "/set_pin") {
-            // copy current jade info since the signal is emitted asynchronously
-            const auto info = device->versionInfo();
-            QMetaObject::invokeMethod(m_controller, [=] { emit m_controller->setPin(info); }, Qt::QueuedConnection);
-        }
-
-        GA_json* output;
-        const auto context = m_controller->context();
-        const auto session = context->getOrCreateSession(network)->m_session;
-        GA_http_request(session, params.get(), &output);
-        auto res = Json::toObject(output);
-        GA_destroy_json(output);
-        jade.handleHttpResponse(id, req, res.value("body"));
+        QMetaObject::invokeMethod(m_controller, [=] {
+            auto request = m_controller->handleHttpRequest(req.value("params").toObject());
+            QObject::connect(request, &JadeHttpRequest::finished, [=](const QJsonObject& res) {
+                m_controller->device()->api()->handleHttpResponse(id, req, res.value("body"));
+            });
+        }, Qt::QueuedConnection);
     });
 }
 
@@ -327,4 +385,56 @@ void JadeIdentifyTask::update()
         setStatus(Status::Failed);
     });
     ActivityManager::instance()->exec(activity);
+}
+
+JadeHttpRequest::JadeHttpRequest(const QJsonObject& params, Session* session)
+    : QObject(session)
+    , m_session(session)
+    , m_params(params)
+{
+}
+
+QStringList JadeHttpRequest::hosts() const
+{
+    QStringList hosts;
+    for (auto url : m_params.value("urls").toArray()) {
+        hosts.append(QUrl(url.toString()).authority());
+    }
+    return hosts;
+}
+
+QString JadeHttpRequest::path() const
+{
+    return m_params.value("urls").toArray().first().toString();
+}
+
+void JadeHttpRequest::accept(bool remember)
+{
+    Q_ASSERT(!m_busy);
+    m_busy = true;
+    emit busyChanged();
+
+    using Watcher = QFutureWatcher<QJsonObject>;
+    const auto watcher = new Watcher(this);
+    watcher->setFuture(QtConcurrent::run([=] {
+        GA_json* output;
+        const auto params = Json::fromObject(m_params);
+        GA_http_request(m_session->m_session, params.get(), &output);
+        auto res = Json::toObject(output);
+        GA_destroy_json(output);
+        return res;
+    }));
+
+    connect(watcher, &Watcher::finished, this, [=] {
+        const auto response = watcher->result();
+        emit finished(response);
+    });
+
+    emit accepted(remember);
+}
+
+void JadeHttpRequest::reject()
+{
+    emit rejected();
+    emit finished({});
 }

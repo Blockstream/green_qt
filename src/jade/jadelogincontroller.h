@@ -11,6 +11,35 @@
 
 class JadeDevice;
 
+class JadeHttpRequest : public QObject
+{
+    Q_OBJECT
+    Q_PROPERTY(QJsonObject params READ params CONSTANT)
+    Q_PROPERTY(QStringList hosts READ hosts CONSTANT)
+    Q_PROPERTY(QString path READ path CONSTANT)
+    Q_PROPERTY(bool busy READ busy NOTIFY busyChanged)
+    QML_ELEMENT
+    QML_UNCREATABLE("")
+public:
+    JadeHttpRequest(const QJsonObject& params, Session* session);
+    QJsonObject params() const { return m_params; }
+    QStringList hosts() const;
+    QString path() const;
+    bool busy() const { return m_busy; }
+public slots:
+    void accept(bool remember);
+    void reject();
+signals:
+    void busyChanged();
+    void accepted(bool remember);
+    void rejected();
+    void finished(const QJsonObject& response);
+private:
+    Session* const m_session;
+    const QJsonObject m_params;
+    bool m_busy{false};
+};
+
 class JadeController : public Controller
 {
     Q_OBJECT
@@ -22,7 +51,9 @@ public:
     JadeDevice* device() const { return m_device; }
     void setDevice(JadeDevice* device);
     Network* network() const { return m_network; }
+    JadeHttpRequest* handleHttpRequest(const QJsonObject& params);
 signals:
+    void httpRequest(JadeHttpRequest* request);
     void disconnected();
     void deviceChanged();
     void setPin(QVariantMap info);
