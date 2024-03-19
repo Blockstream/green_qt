@@ -5,6 +5,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 ColumnLayout {
+    signal updateClicked()
     signal setupFinished(Context context)
     required property JadeDevice device
     function setup() {
@@ -76,7 +77,7 @@ ColumnLayout {
         Layout.minimumWidth: 325
         enabled: self.device.status === JadeDevice.StatusIdle
         text: qsTrId('id_firmware_update')
-        onClicked: stack_view.push(basic_update_view)
+        onClicked: self.updateClicked()
     }
     VSpacer {
     }

@@ -31,7 +31,6 @@ StackViewPage {
     }
     id: self
     padding: 60
-    footer: null
     title: self.device.name
     rightItem: RowLayout {
         Layout.topMargin: 20
@@ -187,6 +186,7 @@ StackViewPage {
         id: unintialized_view
         JadeUninitializedView {
             device: self.device
+            onUpdateClicked: stack_view.push(basic_update_view, { firmware: self.latestFirmware })
             onSetupFinished: (context) => stack_view.replace(null, login_view, { context, device: self.device }, StackView.PushTransition)
         }
     }

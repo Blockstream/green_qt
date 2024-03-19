@@ -6,12 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 ### Added:
+- Notice when Jade is configured with a custom oracle server
 - Show mismatch warning on the setup PIN view
+
+### Fixed
+- Better GUI around login with Jade
 
 ## [2.0.2] - 2024-03-13
 ### Added:
 - Button to clear address field
-- Notice when Jade is configured with a custom oracle server
 
 ### Changed:
 - Improved onboarding flow
