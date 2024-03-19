@@ -4,6 +4,9 @@ import QtQuick.Layouts
 
 AbstractButton {
     property bool busy: false
+    HoverHandler {
+        cursorShape: Qt.PointingHandCursor
+    }
     id: self
     focusPolicy: Qt.StrongFocus
     padding: 16

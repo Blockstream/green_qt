@@ -7,6 +7,9 @@ AbstractButton {
     property color borderColor: '#00B45A'
     property color textColor: '#FFFFFF'
     property bool busy: false
+    HoverHandler {
+        cursorShape: Qt.PointingHandCursor
+    }
     id: self
     focusPolicy: Qt.StrongFocus
     padding: 16

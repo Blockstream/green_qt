@@ -3,6 +3,9 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 AbstractButton {
+    HoverHandler {
+        cursorShape: Qt.PointingHandCursor
+    }
     id: self
     leftPadding: 0
     rightPadding: 0

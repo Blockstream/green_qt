@@ -2,6 +2,9 @@ import QtQuick
 import QtQuick.Controls
 
 AbstractButton {
+    HoverHandler {
+        cursorShape: Qt.PointingHandCursor
+    }
     id: self
     focusPolicy: Qt.StrongFocus
     font.pixelSize: 14
