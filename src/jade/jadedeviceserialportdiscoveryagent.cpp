@@ -140,11 +140,7 @@ void JadeDeviceSerialPortDiscoveryAgent::probe(JadeAPI* backend)
 
 void JadeDeviceSerialPortDiscoveryAgent::updateLater(JadeAPI* backend)
 {
-    QTimer::singleShot(500, backend, [=] {
-        if (backend->isBusy() || backend->m_locked) {
-            updateLater(backend);
-            return;
-        }
+    QTimer::singleShot(1000, backend, [=] {
         const auto device = deviceFromBackend(backend);
         if (!device) return;
         if (QVersionNumber(1, 0, 21) <= QVersionNumber::fromString(device->version())) {
