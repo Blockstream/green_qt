@@ -801,10 +801,11 @@ int JadeAPI::signLiquidTx(const QString &network, const QByteArray &txn, const Q
     return id;
 }
 
-int JadeAPI::getMasterBlindingKey(const ResponseHandler &cb)
+int JadeAPI::getMasterBlindingKey(bool only_if_silent, const ResponseHandler &cb)
 {
     const int id = registerResponseHandler(cb);
-    const QCborMap request = getRequest(id, "get_master_blinding_key");
+    const QCborMap params = { {"only_if_silent", only_if_silent} };
+    const QCborMap request = getRequest(id, "get_master_blinding_key", params);
     enqueue(request);
     return id;
 }

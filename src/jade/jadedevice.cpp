@@ -409,7 +409,7 @@ public:
     }
     void exec() override
     {
-        m_device->api()->getMasterBlindingKey([this](const QVariantMap& msg) {
+        m_device->api()->getMasterBlindingKey(/* only_if_silent = */ false, [this](const QVariantMap& msg) {
             if (msg.contains("result")) {
                 m_master_blinding_key = msg["result"].toByteArray();
                 finish();
