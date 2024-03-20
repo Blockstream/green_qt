@@ -161,7 +161,7 @@ StackViewPage {
             context: null
             showRemember: true
             onUnlockFinished: (context) => stack_view.push(login_view, { context, device: self.device })
-            onUnlockFailed: stack_view.replace(null, intialized_view, { device: self.device }, StackView.PushTransition)
+            onUnlockFailed: stack_view.replace(null, intialized_view, StackView.PushTransition)
         }
     }
 
@@ -169,6 +169,7 @@ StackViewPage {
         id: intialized_view
         JadeInitializedView {
             device: self.device
+            latestFirmware: self.latestFirmware
             onLoginClicked: self.skipFirmwareUpdate()
             onUpdateClicked: stack_view.push(basic_update_view, { firmware: self.latestFirmware })
         }
@@ -186,6 +187,7 @@ StackViewPage {
         id: unintialized_view
         JadeUninitializedView {
             device: self.device
+            latestFirmware: self.latestFirmware
             onUpdateClicked: stack_view.push(basic_update_view, { firmware: self.latestFirmware })
             onSetupFinished: (context) => stack_view.replace(null, login_view, { context, device: self.device }, StackView.PushTransition)
         }

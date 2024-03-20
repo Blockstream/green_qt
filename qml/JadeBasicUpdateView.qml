@@ -108,13 +108,4 @@ Page {
         }
     }
 
-    Component {
-        id: unlock_view
-        JadeUnlockView {
-            context: null
-            device: self.device
-            onUnlockFinished: (context) => self.firmwareSelected(self.firmware)
-            onUnlockFailed: self.StackView.view.pop()
-        }
-    }
 }

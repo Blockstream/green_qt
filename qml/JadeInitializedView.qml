@@ -8,6 +8,8 @@ ColumnLayout {
     signal loginClicked()
     signal updateClicked()
     required property JadeDevice device
+    required property var latestFirmware
+    readonly property bool debug: Qt.application.arguments.indexOf('--debugjade') > 0
     id: self
     enabled: (self.device?.connected ?? false) && self.device.status === JadeDevice.StatusIdle
     spacing: 10
@@ -38,7 +40,7 @@ ColumnLayout {
     RegularButton {
         Layout.alignment: Qt.AlignCenter
         Layout.minimumWidth: 325
-        enabled: self.device.status === JadeDevice.StatusIdle
+        enabled: (self.debug || self.latestFirmware) && self.device.status === JadeDevice.StatusIdle
         text: qsTrId('id_firmware_update')
         onClicked: self.updateClicked()
     }

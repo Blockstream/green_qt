@@ -8,6 +8,8 @@ ColumnLayout {
     signal updateClicked()
     signal setupFinished(Context context)
     required property JadeDevice device
+    required property var latestFirmware
+    readonly property bool debug: Qt.application.arguments.indexOf('--debugjade') > 0
     function setup() {
         if (Settings.enableTestnet) {
             deployment_dialog.createObject(self).open()
@@ -75,7 +77,7 @@ ColumnLayout {
     RegularButton {
         Layout.alignment: Qt.AlignCenter
         Layout.minimumWidth: 325
-        enabled: self.device.status === JadeDevice.StatusIdle
+        enabled: (self.debug || self.latestFirmware) && self.device.status === JadeDevice.StatusIdle
         text: qsTrId('id_firmware_update')
         onClicked: self.updateClicked()
     }
