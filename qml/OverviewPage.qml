@@ -130,7 +130,7 @@ StackViewPage {
         context: self.context
     }
 
-    Component.onCompleted: {
+    StackView.onActivated: {
         Analytics.recordEvent('wallet_active', AnalyticsJS.segmentationWalletActive(Settings, self.context))
         const account = account_list_model.first()
         if (account) {
