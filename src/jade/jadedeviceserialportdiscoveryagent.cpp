@@ -114,25 +114,27 @@ void JadeDeviceSerialPortDiscoveryAgent::probe(JadeAPI* backend)
             return;
         }
 
-        const auto version_info = data.value("result").toMap();
-        const auto efusemac = version_info.value("EFUSEMAC").toString();
+        if (data.contains("result")) {
+            const auto version_info = data.value("result").toMap();
+            const auto efusemac = version_info.value("EFUSEMAC").toString();
 
-        JadeDevice* device = nullptr;
+            JadeDevice* device = nullptr;
 
-        for (auto a_device : DeviceManager::instance()->devices()) {
-            auto jade_device = qobject_cast<JadeDevice*>(a_device);
-            if (!jade_device) continue;
-            if (efusemac != jade_device->versionInfo().value("EFUSEMAC").toString()) continue;
-            device = jade_device;
-            break;
+            for (auto a_device : DeviceManager::instance()->devices()) {
+                auto jade_device = qobject_cast<JadeDevice*>(a_device);
+                if (!jade_device) continue;
+                if (efusemac != jade_device->versionInfo().value("EFUSEMAC").toString()) continue;
+                device = jade_device;
+                break;
+            }
+
+            if (!device) device = new JadeDevice(this);
+            device->setBackend(backend);
+            device->setVersionInfo(version_info);
+            device->setConnected(true);
+
+            DeviceManager::instance()->addDevice(device);
         }
-
-        if (!device) device = new JadeDevice(this);
-        device->setBackend(backend);
-        device->setVersionInfo(version_info);
-        device->setConnected(true);
-
-        DeviceManager::instance()->addDevice(device);
 
         updateLater(backend);
     });
@@ -163,7 +165,7 @@ void JadeDeviceSerialPortDiscoveryAgent::updateLater(JadeAPI* backend)
                     qDebug() << Q_FUNC_INFO << "VERSION INFO ERROR:" << data.value("error");
                     device->setConnected(false);
                     device->setStatus(JadeDevice::StatusIdle);
-                } else {
+                } else if (data.contains("result")) {
                     const auto version_info = data.value("result").toMap();
                     device->setVersionInfo(version_info);
                     device->setConnected(true);

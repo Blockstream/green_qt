@@ -311,22 +311,34 @@ int JadeAPI::setMnemonic(const QString& mnemonic, const ResponseHandler &cb)
 
 int JadeAPI::ping(const ResponseHandler &cb)
 {
-    Q_ASSERT(!m_locked);
-    const int id = registerResponseHandler(cb, 1000);
-    const QCborMap request = getRequest(id, "ping");
-    send(request);
-    return id;
+    if (m_locked) {
+        QMetaObject::invokeMethod(this, [=] {
+            cb({{ "result", 1 }});
+        }, Qt::QueuedConnection);
+        return 0;
+    } else {
+        const int id = registerResponseHandler(cb, 1000);
+        const QCborMap request = getRequest(id, "ping");
+        send(request);
+        return id;
+    }
 }
 
 // Get version information from the jade
 int JadeAPI::getVersionInfo(bool nonblocking, const ResponseHandler &cb)
 {
-    Q_ASSERT(!m_locked);
-    const int id = registerResponseHandler(cb, 6000);
-    const QCborMap params = { {"nonblocking", nonblocking} };
-    const QCborMap request = getRequest(id, "get_version_info", params);
-    enqueue(request);
-    return id;
+    if (m_locked) {
+        QMetaObject::invokeMethod(this, [=] {
+            cb({});
+        }, Qt::QueuedConnection);
+        return 0;
+    } else {
+        const int id = registerResponseHandler(cb, 6000);
+        const QCborMap params = { {"nonblocking", nonblocking} };
+        const QCborMap request = getRequest(id, "get_version_info", params);
+        enqueue(request);
+        return id;
+    }
 }
 
 // Send additional entropy for the rng to jade

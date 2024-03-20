@@ -598,8 +598,9 @@ void JadeDevice::updateVersionInfo()
             qDebug() << "update version info failed";
             emit error();
             return;
+        } else if (data.contains("result")) {
+            setVersionInfo(data.value("result").toMap());
         }
-        setVersionInfo(data.value("result").toMap());
     });
 }
 
