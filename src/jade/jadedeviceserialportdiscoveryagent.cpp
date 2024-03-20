@@ -42,6 +42,14 @@ JadeDeviceSerialPortDiscoveryAgent::JadeDeviceSerialPortDiscoveryAgent(QObject* 
 
 void JadeDeviceSerialPortDiscoveryAgent::scan()
 {
+    for (auto backend : m_backends.values()) {
+        if (backend->m_locked) {
+            qDebug() << Q_FUNC_INFO << "skip 10s due to OTA";
+            QTimer::singleShot(10000, this, &JadeDeviceSerialPortDiscoveryAgent::scan);
+            return;
+        }
+    }
+
     using Watcher = QFutureWatcher<QList<QSerialPortInfo>>;
     const auto watcher = new Watcher(this);
 
