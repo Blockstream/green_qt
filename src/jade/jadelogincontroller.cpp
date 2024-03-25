@@ -54,6 +54,7 @@ QSet<QByteArray> AllowedHosts()
 bool IsHostAllowed(const QSet<QByteArray>& allowed, const QString& host)
 {
     if (host == "jadepin.blockstream.com") return true;
+    if (host == "j8d.io") return true;
     QCryptographicHash hash(QCryptographicHash::Sha256);
     hash.addData(host.toUtf8());
     return allowed.contains(hash.result());
