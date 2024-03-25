@@ -67,14 +67,15 @@ static QFile g_log_file;
 
 static QString GraphicsAPIToString(QSGRendererInterface::GraphicsApi api) {
     switch (api) {
-        case QSGRendererInterface::Unknown: return "Unknown";
         case QSGRendererInterface::Software: return "Software";
         case QSGRendererInterface::OpenVG: return "OpenVG";
         case QSGRendererInterface::OpenGL: return "OpenGL";
         case QSGRendererInterface::Direct3D11: return "Direct3D11";
+        case QSGRendererInterface::Direct3D12: return "Direct3D12";
         case QSGRendererInterface::Vulkan: return "Vulkan";
         case QSGRendererInterface::Metal: return "Metal";
         case QSGRendererInterface::Null: return "Null";
+        default: return "Unknown";
     }
 }
 
