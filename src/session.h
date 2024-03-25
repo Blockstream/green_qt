@@ -24,8 +24,7 @@ class Session : public Entity
     Q_PROPERTY(Network* network READ network CONSTANT)
     Q_PROPERTY(bool useTor READ useTor CONSTANT)
     Q_PROPERTY(bool useProxy READ useProxy CONSTANT)
-    Q_PROPERTY(QString proxyHost READ proxyHost CONSTANT)
-    Q_PROPERTY(int proxyPort READ proxyPort CONSTANT)
+    Q_PROPERTY(QString proxy READ proxy CONSTANT)
     Q_PROPERTY(bool enableSPV READ enableSPV CONSTANT)
     Q_PROPERTY(bool usePersonalNode READ usePersonalNode CONSTANT)
     Q_PROPERTY(QString electrumUrl READ electrumUrl CONSTANT)
@@ -50,9 +49,7 @@ public:
     Network* network() const { return m_network; }
     bool useTor() const { return m_use_tor; }
     bool useProxy() const { return m_use_proxy; }
-    QString proxyHost() const { return m_proxy_host; }
     QString proxy() const { return m_proxy; }
-    int proxyPort() const { return m_proxy_port; }
     bool enableSPV() const { return m_enable_spv; }
     bool usePersonalNode() const { return !m_electrum_url.isEmpty(); }
     QString electrumUrl() const { return m_electrum_url; }
@@ -120,8 +117,6 @@ private:
     Network* const m_network;
     bool const m_use_tor;
     bool const m_use_proxy;
-    QString const m_proxy_host;
-    int const m_proxy_port;
     QString const m_proxy;
     bool const m_enable_spv;
     QString const m_electrum_url;

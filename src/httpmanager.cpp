@@ -72,9 +72,7 @@ void HttpManager::dispatch()
     if (m_session && !m_running && !m_session->isConnecting()) {
         auto settings = Settings::instance();
         if (m_session->useTor() != settings->useTor() ||
-            m_session->useProxy() != settings->useProxy() ||
-            m_session->proxyHost() != settings->proxyHost() ||
-            m_session->proxyPort() != settings->proxyPort()) {
+            m_session->proxy() != settings->proxy()) {
             qDebug() << "http: networking settings changed, destroy session";
             delete m_session;
             m_session = nullptr;
