@@ -236,7 +236,8 @@ void Settings::setProxyPort(int proxy_port)
 QString Settings::proxy() const
 {
     if (!m_use_proxy) return QString();
-    return QString("%1:%2").arg(m_proxy_host).arg(m_proxy_port);
+    const auto host = m_proxy_host == "localhost" ? "127.0.0.1" : m_proxy_host;
+    return QString("%1:%2").arg(host).arg(m_proxy_port);
 }
 
 void Settings::load()
