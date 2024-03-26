@@ -418,7 +418,7 @@ StackViewPage {
             icon.source: 'qrc:/svg/send.svg'
             text: qsTrId('id_send')
             action: Action {
-                enabled: UtilJS.effectiveVisible(self) && self.currentAccount && !(self.currentAccount.session.config.twofactor_reset.is_active ?? false)
+                enabled: UtilJS.effectiveVisible(self) && self.currentAccount && !(self.currentAccount.session.config?.twofactor_reset?.is_active ?? false)
                 shortcut: 'Ctrl+S'
                 onTriggered: {
                     const context = self.context
@@ -435,7 +435,7 @@ StackViewPage {
             icon.source: 'qrc:/svg/receive.svg'
             text: qsTrId('id_receive')
             action: Action {
-                enabled: UtilJS.effectiveVisible(self) && self.currentAccount && !(self.currentAccount.session.config.twofactor_reset.is_active ?? false)
+                enabled: UtilJS.effectiveVisible(self) && self.currentAccount && !(self.currentAccount.session.config?.twofactor_reset?.is_active ?? false)
                 shortcut: 'Ctrl+R'
                 onTriggered: {
                     const context = self.context
