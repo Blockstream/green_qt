@@ -17,6 +17,7 @@ class Context : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QString deployment READ deployment CONSTANT)
+    Q_PROPERTY(QString xpubHashId READ xpubHashId NOTIFY xpubHashIdChanged)
     Q_PROPERTY(Wallet* wallet READ wallet NOTIFY walletChanged)
     Q_PROPERTY(Device* device READ device NOTIFY deviceChanged)
     Q_PROPERTY(bool remember READ remember NOTIFY rememberChanged)
@@ -99,6 +100,7 @@ signals:
     void notificationAdded(Notification* notification);
     void notificationRemoved(Notification* notification);
     void notificationsChanged();
+    void xpubHashIdChanged();
 
 private:
     const QString m_deployment;

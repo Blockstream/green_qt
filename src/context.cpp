@@ -267,6 +267,7 @@ void Context::setXPubHashId(const QString& xpub_hash_id)
     if (m_wallet) {
         m_wallet->setXPubHashId(xpub_hash_id);
     }
+    emit xpubHashIdChanged();
 }
 
 QQmlListProperty<Notification> Context::notifications()
