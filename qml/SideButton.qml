@@ -4,16 +4,20 @@ import QtQuick.Layouts
 
 AbstractButton {
     required property bool isCurrent
+    HoverHandler {
+        id: hover_handler
+        cursorShape: Qt.PointingHandCursor
+    }
+    hoverEnabled: false
     Layout.fillWidth: true
     id: self
     padding: 16
     background: Item {
         Rectangle {
             anchors.fill: parent
-            visible: self.isCurrent
+            visible: hover_handler.hovered || self.isCurrent
             color: Qt.rgba(1, 1, 1, 0.05)
             Rectangle {
-                visible: self.isCurrent
                 width: 1
                 color: 'white'
                 x: parent.width - 2
