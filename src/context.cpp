@@ -189,9 +189,12 @@ void Context::setDevice(Device* device)
         QObject::connect(m_device, &QObject::destroyed, this, [=] {
             setDevice(nullptr);
         });
-
         if (m_wallet) {
-            // m_wallet->updateDeviceDetails(m_device->details());
+            auto device_data = qobject_cast<DeviceData*>(m_wallet->login());
+            if (device_data) {
+                device_data->setDevice(m_device->details());
+                m_wallet->save();
+            }
         }
     }
     emit deviceChanged();
