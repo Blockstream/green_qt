@@ -15,6 +15,8 @@ WalletHeaderCard {
     readonly property bool runningLatest: {
         return self.context.device?.version === self.latestFirmware?.version
     }
+    readonly property bool debug: Qt.application.arguments.indexOf('--debugjade') > 0
+
     JadeFirmwareCheckController {
         id: controller
         index: firmware_controller.index
@@ -86,6 +88,30 @@ WalletHeaderCard {
                     text: self.context.device?.connected ? 'connected' : 'disconnected'
                 }
             }
+            Label {
+                font.pixelSize: 8
+                text: [
+                    'state:' + (self.context?.device?.versionInfo?.JADE_STATE ?? 'n/a'),
+                    'wallet: ' + (self.context?.xpubHashId ?? 'n/a'),
+                    'jade: ' + (self.context?.device?.session?.xpubHashId ?? 'n/a')
+                ].join('\n')
+                visible: self.debug
+            }
+            RegularButton {
+                visible: {
+                    if (!self.debug) return false
+                    switch (self.context.device.state) {
+                    case JadeDevice.StateTemporary:
+                    case JadeDevice.StateLocked:
+                        return true
+                    default:
+                        return false
+                    }
+                }
+                text: qsTrId('id_unlock')
+                onClicked: unlock_controller.unlock()
+                busy: !(unlock_controller.monitor?.idle ?? true)
+            }
             VSpacer {
             }
         }
@@ -112,6 +138,20 @@ WalletHeaderCard {
         JadeUpdateDialog2 {
             context: self.context
             device: self.context.device
+        }
+    }
+    JadeUnlockController {
+        id: unlock_controller
+        context: self.context
+        device: self.context?.device
+        onHttpRequest: (request) => {
+            const dialog = http_request_dialog.createObject(self, { request, context: self.context })
+            dialog.open()
+        }
+    }
+    Component {
+        id: http_request_dialog
+        JadeHttpRequestDialog {
         }
     }
 }
