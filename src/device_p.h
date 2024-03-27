@@ -3,6 +3,8 @@
 
 #include "device.h"
 
+class LedgerDevice;
+
 class DevicePrivate
 {
 public:

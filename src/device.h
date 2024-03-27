@@ -117,9 +117,9 @@ class Device : public QObject
     Q_PROPERTY(QString name READ name NOTIFY nameChanged)
     Q_PROPERTY(QJsonObject details READ details NOTIFY detailsChanged)
     Q_PROPERTY(bool connected READ isConnected NOTIFY connectedChanged)
-    Q_PROPERTY(QString xpubHashId READ xpubHashId NOTIFY xpubHashIdChanged)
+    Q_PROPERTY(DeviceSession* session READ session NOTIFY sessionChanged)
     QML_ELEMENT
-    QML_UNCREATABLE("Devices are instanced by DeviceDiscoveryAgent.")
+    QML_UNCREATABLE("")
 public:
     enum Transport {
         USB,
@@ -156,24 +156,22 @@ public:
     virtual GetBlindingFactorsActivity* getBlindingFactors(const QJsonArray& inputs, const QJsonArray& outputs) = 0;
     virtual LogoutActivity* logout() = 0;
     static Type typefromVendorAndProduct(uint32_t vendor_id, uint32_t product_id);
-    QByteArray masterPublicKey(Network* network) const;
-    void setMasterPublicKey(Network* network, const QByteArray& master_public_key);
     bool isConnected() const { return m_connected; }
     void setConnected(bool connected);
-    QString xpubHashId() const { return m_xpub_hash_id; }
-    void setXPubHashId(const QString& xpub_hash_id);
+    DeviceSession* session() const { return m_session; }
+    void createSession(const QString& xpub_hash_id);
+    void clearSession();
+private:
+    void setSession(DeviceSession* session);
 signals:
     void nameChanged();
     void detailsChanged();
     void connectedChanged();
-    void xpubHashIdChanged();
+    void sessionChanged();
 private:
     const QString m_uuid;
     bool m_connected{false};
-    QMap<Network*, QByteArray> m_master_public_key;
-    QString m_xpub_hash_id;
+    DeviceSession* m_session{nullptr};
 };
-
-class LedgerDevice;
 
 #endif // GREEN_DEVICE_H

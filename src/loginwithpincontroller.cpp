@@ -134,6 +134,8 @@ void LoginController::loginWithDevice(Device* device, bool remember)
     connect(login_task, &Task::finished, this, [=] {
         m_context->m_hw_device = hw_device;
 
+        device->createSession(m_context->xpubHashId());
+
         m_wallet = m_context->wallet();
         if (!m_wallet) {
             for (auto w : WalletManager::instance()->getWallets()) {

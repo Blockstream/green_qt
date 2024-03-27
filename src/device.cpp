@@ -81,31 +81,33 @@ Device::Type Device::typefromVendorAndProduct(uint32_t vendor_id, uint32_t produ
     return Device::NoType;
 }
 
-QByteArray Device::masterPublicKey(Network* network) const
-{
-    return m_master_public_key[network];
-}
-
-void Device::setMasterPublicKey(Network* network, const QByteArray& master_public_key)
-{
-    Q_ASSERT(network);
-    Q_ASSERT(!m_master_public_key.contains(network));
-    m_master_public_key[network] = master_public_key;
-}
-
 void Device::setConnected(bool connected)
 {
     if (m_connected == connected) return;
     m_connected = connected;
     emit connectedChanged();
+    if (!m_connected) clearSession();
 }
 
-void Device::setXPubHashId(const QString& xpub_hash_id)
+void Device::createSession(const QString& xpub_hash_id)
 {
-    if (m_xpub_hash_id == xpub_hash_id) return;
-    Q_ASSERT(m_xpub_hash_id.isEmpty());
-    m_xpub_hash_id = xpub_hash_id;
-    emit xpubHashIdChanged();
+    clearSession();
+    setSession(new DeviceSession(xpub_hash_id, this));
+}
+
+void Device::clearSession()
+{
+    if (m_session) {
+        m_session->deleteLater();
+        setSession(nullptr);
+    }
+}
+
+void Device::setSession(DeviceSession* session)
+{
+    if (m_session == session) return;
+    m_session = session;
+    emit sessionChanged();
 }
 
 bool DeviceCommand::readAPDUResponse(Device*, int length, QDataStream &stream)
@@ -184,4 +186,3 @@ DeviceSession::DeviceSession(const QString& xpub_hash_id, Device* device)
     , m_xpub_hash_id(xpub_hash_id)
 {
 }
-
