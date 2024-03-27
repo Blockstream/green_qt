@@ -26,32 +26,6 @@ QSet<Device*> DeviceManager::devices() const
     return m_devices;
 }
 
-Device *DeviceManager::deviceWithId(const QString& id)
-{
-    // track master xpubs by device id
-    for (auto network : NetworkManager::instance()->networks()) {
-        for (auto device : m_devices) {
-            auto xpub = device->masterPublicKey(network);
-            if (xpub.isEmpty()) continue;
-            m_xpubs[id].insert(xpub);
-        }
-    }
-    // return device if still available
-    for (auto device : m_devices) {
-        if (device->uuid() == id) {
-            return device;
-        }
-    }
-    // search device for tracked xpubs
-    for (auto network : NetworkManager::instance()->networks()) {
-        for (auto device : m_devices) {
-            auto xpub = device->masterPublicKey(network);
-            if (xpub.isEmpty()) continue;
-            if (m_xpubs[id].contains(xpub)) return device;
-        }
-    }
-    return nullptr;
-}
 
 Device* DeviceManager::defaultDevice() const
 {
