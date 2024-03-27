@@ -146,29 +146,30 @@ void LoginController::loginWithDevice(Device* device, bool remember)
             }
         }
         if (!m_wallet) {
-            auto master_xpub = device->masterPublicKey(NetworkManager::instance()->networkForDeployment(m_context->deployment()));
-            for (auto net : NetworkManager::instance()->networks()) {
-                if (net->deployment() == m_context->deployment()) {
-                    const auto net_params = Json::fromObject({{ "name", net->id() }});
-                    const auto params = Json::fromObject({{ "master_xpub", QString::fromLocal8Bit(master_xpub) }});
-                    GA_json* output;
-                    int rc = GA_get_wallet_identifier(net_params.get(), params.get(), &output);
-                    Q_ASSERT(rc == GA_OK);
-                    const auto identifier = Json::toObject(output);
-                    GA_destroy_json(output);
+            // TODO: attempt to match with other wallets
+            // auto master_xpub = device->masterPublicKey(NetworkManager::instance()->networkForDeployment(m_context->deployment()));
+            // for (auto net : NetworkManager::instance()->networks()) {
+            //     if (net->deployment() == m_context->deployment()) {
+            //         const auto net_params = Json::fromObject({{ "name", net->id() }});
+            //         const auto params = Json::fromObject({{ "master_xpub", QString::fromLocal8Bit(master_xpub) }});
+            //         GA_json* output;
+            //         int rc = GA_get_wallet_identifier(net_params.get(), params.get(), &output);
+            //         Q_ASSERT(rc == GA_OK);
+            //         const auto identifier = Json::toObject(output);
+            //         GA_destroy_json(output);
 
-                    const auto wallet_hash_id = identifier.value("wallet_hash_id").toString();
-                    qDebug() << net->id() << wallet_hash_id;
+            //         const auto wallet_hash_id = identifier.value("wallet_hash_id").toString();
+            //         qDebug() << net->id() << wallet_hash_id;
 
-                    for (auto w : WalletManager::instance()->getWallets()) {
-                        if (qobject_cast<DeviceData*>(w->login()) && w->m_hashes.contains(wallet_hash_id)) {
-                            m_wallet = w;
-                            break;
-                        }
-                    }
-                    if (m_wallet) break;
-                }
-            }
+            //         for (auto w : WalletManager::instance()->getWallets()) {
+            //             if (qobject_cast<DeviceData*>(w->login()) && w->m_hashes.contains(wallet_hash_id)) {
+            //                 m_wallet = w;
+            //                 break;
+            //             }
+            //         }
+            //         if (m_wallet) break;
+            //     }
+            // }
         }
         if (!m_wallet) {
             m_wallet = WalletManager::instance()->createWallet();
