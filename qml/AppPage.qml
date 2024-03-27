@@ -40,7 +40,7 @@ MainPage {
                 console.log('switch to existing device view', i)
                 return
             }
-            if (child.wallet?.xpubHashId === device.xpubHashId) {
+            if (child.wallet && device.session && child.wallet.xpubHashId === device.session.xpubHashId) {
                 stack_layout.currentIndex = i;
                 console.log('switch to existing wallet view with same xpubhashid', i)
                 return
