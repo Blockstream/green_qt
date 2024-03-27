@@ -604,11 +604,39 @@ void JadeDevice::updateVersionInfo()
     });
 }
 
+JadeDevice::State JadeDeviceGetState(const QVariantMap& version_info)
+{
+    // 1. Ready - has keys already associated with a message source
+    //    - READY
+    // 2. Temporary keys - has temporary keys in memory, but not yet connected to app
+    //    - TEMP
+    // 3. Unsaved keys - has proper keys in memory, but not yet saved with a PIN
+    //    - UNSAVED
+    // 4. Locked - has persisted/encrypted keys, but no keys in memory
+    //    - LOCKED
+    // 5. Uninitialised - has no persisted/encrypted keys and no keys in memory
+    //    - UNINT
+    if (version_info.contains("JADE_STATE")) {
+        const auto state = version_info.value(QStringLiteral("JADE_STATE")).toString();
+        if (state == "READY") return JadeDevice::StateReady;
+        if (state == "TEMP") return JadeDevice::StateTemporary;
+        if (state == "UNSAVED") return JadeDevice::StateUnsaved;
+        if (state == "LOCKED") return JadeDevice::StateLocked;
+        if (state == "UNINIT") return JadeDevice::StateUninitialized;
+    }
+    if (version_info.contains("JADE_HAS_PIN")) {
+        const bool has_pin = version_info.value("JADE_HAS_PIN").toBool();
+        if (!has_pin) return JadeDevice::StateUninitialized;
+    }
+    return JadeDevice::StateLocked;
+}
+
 void JadeDevice::setVersionInfo(const QVariantMap& version_info)
 {
     if (m_version_info == version_info) return;
     m_version_info = version_info;
     emit versionInfoChanged();
+    updateState();
     m_name = QString("Jade %1").arg(version_info.value("EFUSEMAC").toString().mid(6));
     emit nameChanged();
     emit detailsChanged();
@@ -641,31 +669,20 @@ void JadeDevice::setSystemLocation(const QString& system_location)
     emit systemLocationChanged();
 }
 
-JadeDevice::State JadeDevice::state() const
+void JadeDevice::setState(JadeDevice::State state)
 {
-    // 1. Ready - has keys already associated with a message source
-    //    - READY
-    // 2. Temporary keys - has temporary keys in memory, but not yet connected to app
-    //    - TEMP
-    // 3. Unsaved keys - has proper keys in memory, but not yet saved with a PIN
-    //    - UNSAVED
-    // 4. Locked - has persisted/encrypted keys, but no keys in memory
-    //    - LOCKED
-    // 5. Uninitialised - has no persisted/encrypted keys and no keys in memory
-    //    - UNINT
-    if (m_version_info.contains("JADE_STATE")) {
-        const auto state = m_version_info.value(QStringLiteral("JADE_STATE")).toString();
-        if (state == "READY") return StateReady;
-        if (state == "TEMP") return StateTemporary;
-        if (state == "UNSAVED") return StateUnsaved;
-        if (state == "LOCKED") return StateLocked;
-        if (state == "UNINIT") return StateUninitialized;
+    if (m_state == state) return;
+    m_state = state;
+    emit stateChanged();
+    if (m_state != StateReady) {
+        clearSession();
     }
-    if (m_version_info.contains("JADE_HAS_PIN")) {
-        const bool has_pin = m_version_info.value("JADE_HAS_PIN").toBool();
-        if (!has_pin) return StateUninitialized;
-    }
-    return StateLocked;
+}
+
+void JadeDevice::updateState()
+{
+    const auto state = JadeDeviceGetState(m_version_info);
+    setState(state);
 }
 
 void JadeDevice::setStatus(Status status)

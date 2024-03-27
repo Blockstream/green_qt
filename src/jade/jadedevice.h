@@ -15,7 +15,7 @@ class JadeDevice : public Device
     Q_PROPERTY(QVariantMap versionInfo READ versionInfo NOTIFY versionInfoChanged)
     Q_PROPERTY(QString version READ version NOTIFY versionInfoChanged)
     Q_PROPERTY(bool updateRequired READ updateRequired NOTIFY versionInfoChanged)
-    Q_PROPERTY(State state READ state NOTIFY versionInfoChanged)
+    Q_PROPERTY(State state READ state NOTIFY stateChanged)
     Q_PROPERTY(Status status READ status NOTIFY statusChanged)
     Q_PROPERTY(bool unlocking READ unlocking NOTIFY unlockingChanged)
     QML_ELEMENT
@@ -62,7 +62,9 @@ public:
     QString version() const;
     QString systemLocation() const { return m_system_location; }
     void setSystemLocation(const QString& system_location);
-    State state() const;
+    State state() const { return m_state; }
+    void setState(State state);
+    void updateState();
     Status status() const { return m_status; }
     void setStatus(Status status);
     bool unlocking() const { return m_unlocking; }
@@ -71,6 +73,7 @@ public:
 signals:
     void systemLocationChanged();
     void versionInfoChanged();
+    void stateChanged();
     void statusChanged();
     void error();
     bool unlockingChanged();
@@ -81,6 +84,7 @@ private:
     QVariantMap m_version_info;
     QString m_name;
     bool m_unlocking{false};
+    JadeDevice::State m_state{StateLocked};
 };
 
 #endif // GREEN_JADEDEVICE_H
