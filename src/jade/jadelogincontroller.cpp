@@ -375,8 +375,8 @@ void JadeIdentifyTask::update()
         GA_destroy_json(output);
 
         const auto xpub_hash_id = identifier.value("xpub_hash_id").toString();
-        context->setXPubHashId(xpub_hash_id);
-        device->setXPubHashId(xpub_hash_id);
+
+        device->createSession(xpub_hash_id);
 
         setStatus(Status::Finished);
     });
