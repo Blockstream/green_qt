@@ -82,7 +82,7 @@ GStackView {
                 const context = self.context
                 switch (device.state) {
                 case JadeDevice.StateReady:
-                    self.prompt.select(delegate.device)
+                    self.prompt.select(device)
                     break;
                 case JadeDevice.StateTemporary:
                 case JadeDevice.StateLocked:
@@ -99,7 +99,7 @@ GStackView {
             enabled: {
                 const device = delegate.device
                 if (!device.connected) return true
-                if (self.device.status === JadeDevice.StatusIdle) return false
+                if (device.status !== JadeDevice.StatusIdle) return false
                 const context = self.context
                 switch (device.state) {
                 case JadeDevice.StateReady:
@@ -121,7 +121,7 @@ GStackView {
         JadeUnlockView {
             id: view
             onUnlockFinished: (context) => {
-                self.prompt.select(device)
+                self.prompt.select(view.device)
             }
             onUnlockFailed: self.pop()
         }

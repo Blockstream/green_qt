@@ -30,7 +30,17 @@ StackViewPage {
         Component.onCompleted: set({ view: 'transactions' })
     }
 
+    function checkDeviceMatches() {
+        if (self.context.wallet.login instanceof DeviceData) {
+            if (!self.context.device) return false
+            if (!self.context.device.session) return false
+            if (self.context.device.session.xpubHashId !== self.context.xpubHashId) return false
+        }
+        return true
+    }
+
     function openCreateAccountDrawer({ dismissable = true } = {}) {
+        if (!self.checkDeviceMatches()) return
         const network = self.currentAccount?.network ?? NetworkManager.networkForDeployment(self.context.deployment)
         const id = network.liquid ? network.policyAsset : 'btc'
         const asset = self.context.getOrCreateAsset(id)
@@ -411,14 +421,14 @@ StackViewPage {
         anchors.bottom: parent.bottom
         anchors.right: parent.right
         anchors.rightMargin: constants.p3
-        anchors.bottomMargin: constants.p3 * 2        
+        anchors.bottomMargin: constants.p3 * 2
         spacing: 5
         PrimaryButton {
             Layout.minimumWidth: 150
             icon.source: 'qrc:/svg/send.svg'
             text: qsTrId('id_send')
             action: Action {
-                enabled: UtilJS.effectiveVisible(self) && !self.context.watchonly && self.currentAccount && !(self.currentAccount.session.config?.twofactor_reset?.is_active ?? false)
+                enabled: UtilJS.effectiveVisible(self) && self.checkDeviceMatches() && !self.context.watchonly && self.currentAccount && !(self.currentAccount.session.config?.twofactor_reset?.is_active ?? false)
                 shortcut: 'Ctrl+S'
                 onTriggered: {
                     const context = self.context
@@ -435,7 +445,7 @@ StackViewPage {
             icon.source: 'qrc:/svg/receive.svg'
             text: qsTrId('id_receive')
             action: Action {
-                enabled: UtilJS.effectiveVisible(self) && self.currentAccount && !(self.currentAccount.session.config?.twofactor_reset?.is_active ?? false)
+                enabled: UtilJS.effectiveVisible(self) && self.checkDeviceMatches() && self.currentAccount && !(self.currentAccount.session.config?.twofactor_reset?.is_active ?? false)
                 shortcut: 'Ctrl+R'
                 onTriggered: {
                     const context = self.context

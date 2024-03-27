@@ -49,19 +49,9 @@ WalletDrawer {
                 }
                 PrimaryButton {
                     Layout.fillWidth: true
-                    enabled: (controller.context.device?.connected ?? false) && !controller.generating && controller.addressVerification !== ReceiveAddressController.VerificationPending
+                    enabled: controller.context.device?.session && controller.context.device.session.xpubHashId === controller.context.xpubHashId && !controller.generating && controller.addressVerification !== ReceiveAddressController.VerificationPending
                     text: qsTrId('id_verify_on_device')
-                    visible: {
-                        if (controller.context.device instanceof JadeDevice) {
-                            switch (controller.context.device.state) {
-                            case JadeDevice.StateReady:
-                            case JadeDevice.StateTemporary:
-                            case JadeDevice.StateLocked:
-                                return true
-                            }
-                        }
-                        return false
-                    }
+                    visible: controller.context.wallet.login.device?.type === 'jade'
                     onClicked: {
                         stack_view.push(jade_verify_page, { device: controller.context.device, controller })
                         Analytics.recordEvent('verify_address', AnalyticsJS.segmentationSubAccount(Settings, controller.account))
