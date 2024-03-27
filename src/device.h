@@ -91,6 +91,22 @@ public:
     LogoutActivity(QObject* parent) : Activity(parent) {}
 };
 
+class DeviceSession : public QObject
+{
+    Q_OBJECT
+    Q_PROPERTY(Device* device READ device CONSTANT)
+    Q_PROPERTY(QString xpubHashId READ xpubHashId CONSTANT)
+    QML_ELEMENT
+    QML_UNCREATABLE("")
+public:
+    DeviceSession(const QString& xpub_hash_id, Device* device);
+    Device* device() const { return m_device; }
+    QString xpubHashId() const { return m_xpub_hash_id; }
+private:
+    Device* const m_device;
+    const QString m_xpub_hash_id;
+};
+
 class Device : public QObject
 {
     Q_OBJECT

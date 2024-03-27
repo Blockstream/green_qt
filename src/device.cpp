@@ -177,3 +177,11 @@ int DeviceCommand::readHIDReport(Device* device, QDataStream& stream)
     QDataStream s(buf);
     return readAPDUResponse(device, buf.size(), s) ? 0 : 1;
 }
+
+DeviceSession::DeviceSession(const QString& xpub_hash_id, Device* device)
+    : QObject(device)
+    , m_device(device)
+    , m_xpub_hash_id(xpub_hash_id)
+{
+}
+
