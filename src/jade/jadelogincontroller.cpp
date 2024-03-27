@@ -207,6 +207,7 @@ void JadeUnlockController::setRemember(bool remember)
 void JadeUnlockController::unlock()
 {
     if (!m_device) return;
+    if (!m_monitor) setMonitor(new TaskGroupMonitor(this));
     const auto nets = m_device->versionInfo().value("JADE_NETWORKS").toString();
     const QString deployment = nets == "ALL" || nets == "MAIN" ? "mainnet" : "testnet";
     if (m_context) {
@@ -234,6 +235,7 @@ void JadeUnlockController::unlock()
     group->add(identify);
 
     dispatcher()->add(group);
+    monitor()->add(group);
 
     connect(group, &TaskGroup::finished, this, [=] {
         m_context->setDevice(m_device);
