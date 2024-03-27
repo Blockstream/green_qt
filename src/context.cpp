@@ -269,19 +269,6 @@ void Context::setXPubHashId(const QString& xpub_hash_id)
     }
 }
 
-bool Context::attachToWallet(Wallet* wallet)
-{
-    Q_ASSERT(!m_xpub_hash_id.isEmpty());
-    Q_ASSERT(wallet);
-    Q_ASSERT(!wallet->m_xpub_hash_id.isEmpty());
-
-    if (m_xpub_hash_id != wallet->m_xpub_hash_id) {
-        return false;
-    }
-    setWallet(wallet);
-    return true;
-}
-
 QQmlListProperty<Notification> Context::notifications()
 {
     return { this, &m_notifications };

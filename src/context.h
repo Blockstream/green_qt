@@ -76,8 +76,6 @@ public:
     QString xpubHashId() const { return m_xpub_hash_id; }
     void setXPubHashId(const QString& xpub_hash_id);
 
-    Q_INVOKABLE bool attachToWallet(Wallet* wallet);
-
     QList<Notification*> getNotifications() const { return m_notifications; }
     QQmlListProperty<Notification> notifications();
     void addNotification(Notification* notification);
