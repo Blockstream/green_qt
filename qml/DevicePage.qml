@@ -101,7 +101,7 @@ StackViewPage {
             Loader {
                 Layout.alignment: Qt.AlignCenter
                 id: auto_login_loader
-                active: stack_view.currentItem === view && self.login && device_repeater.count === 1 && device_repeater.itemAt(0).item.enabled
+                active: stack_view.currentItem === view && self.login && device_repeater.count === 1 && device_repeater.itemAt(0).item.device.connected && device_repeater.itemAt(0).item.enabled
                 sourceComponent: ColumnLayout {
                     LinkButton {
                         Layout.alignment: Qt.AlignCenter
