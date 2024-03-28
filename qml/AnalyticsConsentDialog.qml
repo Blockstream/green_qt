@@ -114,16 +114,10 @@ AbstractDialog {
                             text: "• " + qsTrId('id_user_contact_info_ip_address')
                             wrapMode: Label.WordWrap
                         }
-                        Label {
+                        LinkLabel {
                             Layout.fillWidth: true
                             Layout.preferredWidth: 0
-                            textFormat: Text.RichText
-                            onLinkActivated: Qt.openUrlExternally(link)
                             text: UtilJS.link('https://help.blockstream.com/hc/en-us/articles/5988514431897', qsTrId('id_learn_more'))
-                            background: MouseArea {
-                                acceptedButtons: Qt.NoButton
-                                cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor
-                            }
                         }
                     }
                 }

@@ -64,11 +64,10 @@ StackViewPage {
                 rightInset: 0
                 checked: Settings.acceptedTermsOfService
             }
-            Label {
+            LinkLabel {
                 Layout.alignment: Qt.AlignCenter
                 font.pixelSize: 14
                 font.weight: 600
-                textFormat: Text.RichText
                 text: {
                     const terms = new RegExp('(' + qsTrId('id_terms_of_service') + ')', 'gi')
                     const privacy = new RegExp('(' + qsTrId('id_privacy_policy') + ')', 'gi')
@@ -76,7 +75,6 @@ StackViewPage {
                         .replace(terms, UtilJS.link('https://blockstream.com/green/terms/', '$1'))
                         .replace(privacy, UtilJS.link('https://blockstream.com/green/privacy/', '$1'))
                 }
-                onLinkActivated: (link) => { Qt.openUrlExternally(link) }
             }
         }
         VSpacer {

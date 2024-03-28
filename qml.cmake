@@ -240,6 +240,7 @@ SET(QML_FILES
     qml/TwoFactorEnableGAuthPage.qml
     qml/SecureFundsPage.qml
     qml/JadeHttpRequestDialog.qml
+    qml/LinkLabel.qml
 )
 
 if (GREEN_NO_RESOURCES)

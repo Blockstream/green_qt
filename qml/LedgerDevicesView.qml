@@ -341,11 +341,9 @@ MainPage {
                                 horizontalAlignment: Label.AlignHCenter
                                 wrapMode: Label.WrapAnywhere
                             }
-                            Label {
+                            LinkLabel {
                                 Layout.alignment: Qt.AlignCenter
-                                textFormat: Text.RichText
                                 text: UtilJS.link('https://help.blockstream.com/hc/en-us/articles/16789393282201-How-do-I-use-my-Ledger-Nano-S-or-X-with-Green#h_01GW4FRJXCRRRGC4QAX0HC02S2', qsTrId('id_read_more'))
-                                onLinkActivated: Qt.openUrlExternally(link)
                             }
                         }
                     }
