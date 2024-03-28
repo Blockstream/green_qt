@@ -251,6 +251,17 @@ bool LedgerDevice::compatible() const
     return true;
 }
 
+bool LedgerDevice::supportsNetwork(Network* network)
+{
+    if (m_app_name == "Bitcoin") return network->isMainnet() && !network->isLiquid();
+    if (m_app_name == "Bitcoin Legacy") return network->isMainnet() && !network->isLiquid();
+    if (m_app_name == "Liquid") return network->isMainnet() && network->isLiquid() && !network->isElectrum();
+    if (m_app_name == "Bitcoin Test") return !network->isMainnet() && !network->isLiquid();
+    if (m_app_name == "Bitcoin Test Legacy") return !network->isMainnet() && !network->isLiquid();
+    if (m_app_name == "Liquid Test") return !network->isMainnet() && network->isLiquid() && !network->isElectrum();
+    return false;
+}
+
 void LedgerDevice::setState(State state)
 {
     if (m_state == state) return;

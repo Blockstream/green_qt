@@ -60,7 +60,7 @@ StackViewPage {
             focus: true
             spacing: 10
             model: AssetsModel {
-                deployment: self.context.deployment
+                context: self.context
                 filter: search_field.text.trim()
                 minWeight: search_field.text.trim().length === 0 ? 1 : 0
             }

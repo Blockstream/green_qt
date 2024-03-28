@@ -41,7 +41,7 @@ StackViewPage {
 
     function openCreateAccountDrawer({ dismissable = true } = {}) {
         if (!self.checkDeviceMatches()) return
-        const network = self.currentAccount?.network ?? NetworkManager.networkForDeployment(self.context.deployment)
+        const network = self.currentAccount?.network ?? self.context.primaryNetwork()
         const id = network.liquid ? network.policyAsset : 'btc'
         const asset = self.context.getOrCreateAsset(id)
         const drawer = create_account_drawer.createObject(self, { context: self.context, asset, dismissable })

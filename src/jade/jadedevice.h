@@ -70,6 +70,7 @@ public:
     bool unlocking() const { return m_unlocking; }
     void setUnlocking(bool unlocking);
     Q_INVOKABLE bool versionGreaterOrEqualThan(const QString& other);
+    bool supportsNetwork(Network* network) override;
 signals:
     void systemLocationChanged();
     void versionInfoChanged();

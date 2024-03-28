@@ -21,7 +21,7 @@ public:
 
     Q_INVOKABLE Network* network(const QString& id) const;
     Q_INVOKABLE Network* networkWithServerType(const QString& deployment, const QString& key, const QString& server_type) const;
-    Q_INVOKABLE Network* networkForDeployment(const QString& deployment);
+    QList<Network*> networkForDeployment(const QString& deployment);
 
 private:
     explicit NetworkManager();

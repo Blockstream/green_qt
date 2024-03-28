@@ -161,6 +161,8 @@ public:
     DeviceSession* session() const { return m_session; }
     void createSession(const QString& xpub_hash_id);
     void clearSession();
+
+    virtual bool supportsNetwork(Network* network) = 0;
 private:
     void setSession(DeviceSession* session);
 signals:

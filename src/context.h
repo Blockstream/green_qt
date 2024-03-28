@@ -84,6 +84,7 @@ public:
 
     void triggerAutoLogout();
 
+    Q_INVOKABLE Network* primaryNetwork();
 public slots:
     void refreshAccounts();
 

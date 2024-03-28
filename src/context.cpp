@@ -158,7 +158,7 @@ Session* Context::primarySession()
     if (m_sessions_list.size() > 0) {
         return m_sessions_list.first();
     } else {
-        auto network = NetworkManager::instance()->networkForDeployment(m_deployment);
+        auto network = primaryNetwork();
         auto session = getOrCreateSession(network);
         return session;
     }
@@ -299,6 +299,18 @@ void Context::triggerAutoLogout()
     if (m_wallet && !qobject_cast<DeviceData*>(m_wallet->login())) {
         emit autoLogout();
     }
+}
+
+Network *Context::primaryNetwork()
+{
+    for (auto network : NetworkManager::instance()->networkForDeployment(m_deployment)) {
+        if (m_device) {
+            if (m_device->supportsNetwork(network)) return network;
+        } else {
+            return network;
+        }
+    }
+    return nullptr;
 }
 
 void Context::refreshAccounts()

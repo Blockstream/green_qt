@@ -107,27 +107,27 @@ class AssetsModel : public QSortFilterProxyModel
 {
     Q_OBJECT
     Q_PROPERTY(QString filter READ filter WRITE setFilter NOTIFY filterChanged)
-    Q_PROPERTY(QString deployment READ deployment WRITE setDeployment NOTIFY deploymentChanged)
+    Q_PROPERTY(Context* context READ context WRITE setContext NOTIFY contextChanged)
     Q_PROPERTY(int minWeight READ minWeight WRITE setMinWeight NOTIFY minWeightChanged)
     QML_ELEMENT
 public:
     AssetsModel(QObject* parent = nullptr);
     QString filter() const { return m_filter; }
     void setFilter(const QString& filter);
-    QString deployment() const { return m_deployment; }
-    void setDeployment(const QString& deployment);
+    Context* context() const { return m_context; }
+    void setContext(Context* context);
     int minWeight() const { return m_min_weight; }
     void setMinWeight(int min_weight);
 signals:
     void filterChanged();
-    void deploymentChanged();
+    void contextChanged();
     void minWeightChanged();
 protected:
     bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const override;
     bool lessThan(const QModelIndex &left, const QModelIndex &right) const override;
 private:
     QString m_filter;
-    QString m_deployment;
+    Context* m_context{nullptr};
     int m_min_weight{0};
 };
 

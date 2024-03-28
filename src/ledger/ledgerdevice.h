@@ -127,7 +127,7 @@ public:
     void setApp(const QString& name, const QVersionNumber& version);
 
     bool compatible() const;
-
+    bool supportsNetwork(Network* network) override;
 signals:
     void stateChanged();
     void appChanged();

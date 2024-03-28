@@ -1,5 +1,7 @@
 #include "analytics.h"
 #include "asset.h"
+#include "context.h"
+#include "device.h"
 #include "network.h"
 #include "networkmanager.h"
 
@@ -205,11 +207,11 @@ void AssetsModel::setFilter(const QString& filter)
     invalidateRowsFilter();
 }
 
-void AssetsModel::setDeployment(const QString& deployment)
+void AssetsModel::setContext(Context* context)
 {
-    if (m_deployment == deployment) return;
-    m_deployment = deployment;
-    emit deploymentChanged();
+    if (m_context == context) return;
+    m_context = context;
+    emit contextChanged();
     invalidateRowsFilter();
 }
 
@@ -235,8 +237,20 @@ bool AssetsModel::filterAcceptsRow(int source_row, const QModelIndex &source_par
             !asset->ticker().contains(m_filter, Qt::CaseInsensitive)) return false;
     }
 
-    if (!m_deployment.isEmpty()) {
-        if (asset->deployment() != m_deployment) return false;
+    if (m_context) {
+        if (!m_context->deployment().isEmpty()) {
+            if (asset->deployment() != m_context->deployment()) return false;
+        }
+
+        if (const auto device = m_context->device()) {
+            for (auto network : NetworkManager::instance()->networks()) {
+                if (network->key() == asset->networkKey()) {
+                    if (!device->supportsNetwork(network)) {
+                        return false;
+                    }
+                }
+            }
+        }
     }
 
     return true;

@@ -65,9 +65,9 @@ Network *NetworkManager::networkWithServerType(const QString& deployment, const 
     return nullptr;
 }
 
-Network *NetworkManager::networkForDeployment(const QString &deployment)
+QList<Network*> NetworkManager::networkForDeployment(const QString& deployment)
 {
-    if (deployment == "mainnet") return network("electrum-mainnet");
-    if (deployment == "testnet") return network("electrum-testnet");
+    if (deployment == "mainnet") return {network("electrum-mainnet"), network("electrum-liquid"), network("liquid")};
+    if (deployment == "testnet") return {network("electrum-testnet"), network("electrum-liquid-testnet"), network("liquid-testnet")};
     Q_UNREACHABLE();
 }

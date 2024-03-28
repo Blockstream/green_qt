@@ -90,8 +90,7 @@ void RestoreController::restore(const QString& deployment)
         emit restoreFinished(wallet->context());
     });
 
-    auto network = NetworkManager::instance()->networkForDeployment(deployment);
-    m_context->getOrCreateSession(network);
+    m_context->primarySession();
 
     for (auto network : NetworkManager::instance()->networks()) {
         if (network->deployment() == deployment) {

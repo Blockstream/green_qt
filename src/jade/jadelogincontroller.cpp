@@ -126,7 +126,7 @@ void JadeSetupController::setup(const QString& deployment)
     setContext(new Context(deployment, this));
     m_context->setDevice(m_device);
 
-    m_network = NetworkManager::instance()->networkForDeployment(deployment);
+    m_network = m_context->primaryNetwork();
     auto session = m_context->getOrCreateSession(m_network);
     auto connect_session = new ConnectTask(session);
     auto setup = new JadeSetupTask(this);
@@ -216,9 +216,10 @@ void JadeUnlockController::unlock()
         setContext(new Context(deployment, this));
     }
 
+    m_context->setDevice(m_device);
     m_context->setRemember(m_remember);
 
-    m_network = NetworkManager::instance()->networkForDeployment(deployment);
+    m_network = m_context->primaryNetwork();
     auto session = m_context->getOrCreateSession(m_network);
 
     auto connect_session = new ConnectTask(session);
@@ -238,7 +239,6 @@ void JadeUnlockController::unlock()
     monitor()->add(group);
 
     connect(group, &TaskGroup::finished, this, [=] {
-        m_context->setDevice(m_device);
 
 //        auto activity = m_device->getMasterBlindingKey();
 //        connect(activity, &Activity::finished, [this, activity] {
@@ -345,7 +345,7 @@ void JadeIdentifyTask::update()
 
     const auto nets = device->versionInfo().value("JADE_NETWORKS").toString();
     const QString deployment = nets == "ALL" || nets == "MAIN" ? "mainnet" : "testnet";
-    const auto network = NetworkManager::instance()->networkForDeployment(deployment);
+    const auto network = m_controller->context()->primaryNetwork();
     if (!network) return;
 
     if (device->state() == JadeDevice::StateLocked) return;

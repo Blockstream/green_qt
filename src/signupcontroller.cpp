@@ -30,8 +30,7 @@ void SignupController::signup(const QString& deployment)
         setContext(new Context(deployment, this));
     }
 
-    auto network = NetworkManager::instance()->networkForDeployment(deployment);
-    auto session = m_context->getOrCreateSession(network);
+    auto session = m_context->primarySession();
     auto connect_session = new ConnectTask(session);
     auto register_user = new RegisterUserTask(m_mnemonic, session);
     auto mnemonic_login = new LoginTask(m_mnemonic, QString(), session);

@@ -13,22 +13,20 @@ StackViewPage {
     required property Asset asset
     property bool anyLiquid: false
     property bool anyAMP: false
+    readonly property bool supportsLiquid: {
+        const sessions = self.context.sessions
+        for (let i = 0; i < sessions.length; i++) {
+            if (sessions[i].network.liquid) return true
+        }
+        return false
+    }
     id: self
-    title: qsTrId('Choose Asset')
+    title: qsTrId('id_select_asset')
     contentItem: ColumnLayout {
         spacing: 5
         SearchField {
             Layout.fillWidth: true
             id: search_field
-            visible: false
-        }
-        FieldTitle {
-            Layout.topMargin: 25
-            text: {
-                if (search_field.text.trim().length === 0) return 'Other Assets'
-                if (list_view.count === 0) return 'No search results'
-                return 'Search results'
-            }
             visible: false
         }
         TListView {
@@ -38,7 +36,7 @@ StackViewPage {
             currentIndex: -1
             model: AssetsModel {
                 filter: search_field.text.trim()
-                deployment: self.context.deployment
+                context: self.context
                 minWeight: 1
             }
             spacing: 4
@@ -49,6 +47,7 @@ StackViewPage {
                     Layout.fillWidth: true
                     Layout.topMargin: 4
                     amp: false
+                    enabled: self.supportsLiquid
                     index: -1
                     icon.source: 'qrc:/svg2/liquid_icon.svg'
                     text: 'Receive any Liquid Asset'
@@ -63,6 +62,7 @@ StackViewPage {
                     Layout.fillWidth: true
                     Layout.topMargin: 4
                     amp: true
+                    enabled: self.supportsLiquid
                     index: -1
                     icon.source: 'qrc:/svg2/amp_icon.svg'
                     text: 'Receive any AMP Asset'
@@ -101,7 +101,7 @@ StackViewPage {
         highlighted: delegate.ListView.isCurrentItem
         background: Rectangle {
             radius: 4
-            color: Qt.lighter('#2F2F35', !delegate.highlighted && delegate.hovered ? 1.2 : 1)
+            color: Qt.lighter('#2F2F35', !delegate.highlighted && delegate.enabled && delegate.hovered ? 1.2 : 1)
             border.width: delegate.highlighted ? 2 : 0
             border.color: '#00B45A'
         }
@@ -118,6 +118,7 @@ StackViewPage {
                         Layout.maximumWidth: 32
                         Layout.maximumHeight: 32
                         source: delegate.icon.source
+                        opacity: delegate.enabled ? 1 : 0.6
                     }
                     Label {
                         Layout.fillWidth: true
