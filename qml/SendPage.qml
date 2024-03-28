@@ -193,8 +193,9 @@ StackViewPage {
                     const error = controller.transaction?.error
                     if (error === 'id_insufficient_funds') return error
                     if (error === 'id_invalid_amount') {
-                        const satoshi = controller.transaction?.addressee?.[0]?.satoshi ?? 0
-                        if (satoshi > 0) return error
+                        if (controller.recipient.convert.result?.sats !== '0') {
+                            return error
+                        }
                     }
                 }
             }
