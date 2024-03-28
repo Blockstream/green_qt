@@ -120,7 +120,6 @@ SET(QML_FILES
     qml/LedgerSignTransactionView.qml
     qml/AssetIcon.qml
     qml/SelectNetworkView.qml
-    qml/WelcomePage.qml
     qml/AuthHandlerTaskView.qml
     qml/GetCredentialsView.qml
     qml/TaskDispatcherInspector.qml
