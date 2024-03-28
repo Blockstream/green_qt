@@ -275,7 +275,7 @@ StackViewPage {
                         color: '#FFF'
                         font.pixelSize: 12
                         font.weight: 400
-                        text: `${Math.ceil(self.transaction.data.fee_rate / 1000)} sat/vbyte`
+                        text: Math.round(self.transaction.data.fee_rate / 100) / 10 + ' sat/vbyte'
                     }
                     HSpacer {
                     }
