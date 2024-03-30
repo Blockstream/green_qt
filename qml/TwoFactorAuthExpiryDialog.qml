@@ -18,7 +18,7 @@ ControllerDialog {
 
     component Option: DescriptiveRadioButton {
         required property int index
-        readonly property int value: self.wallet.network.data.csv_buckets[index]
+        readonly property int value: self.session.network.data.csv_buckets[index]
         Layout.maximumWidth: 500
         checked: self.session.settings.csvtime === value
         enabled: true

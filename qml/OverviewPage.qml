@@ -89,12 +89,6 @@ StackViewPage {
         return 1 + transaction.account.session.block.block_height - transaction.data.block_height;
     }
 
-    function transactionStatus(confirmations) {
-        if (confirmations === 0) return qsTrId('id_unconfirmed');
-        if (!wallet.network.liquid && confirmations < 6) return qsTrId('id_d6_confirmations').arg(confirmations);
-        return qsTrId('id_completed');
-    }
-
     function localizedLabel(label) {
         switch (label) {
             case '':

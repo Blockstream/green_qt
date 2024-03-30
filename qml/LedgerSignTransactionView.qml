@@ -87,7 +87,7 @@ GFlickable {
             }
         }
         Repeater {
-            model: !wallet.network.mainnet && !wallet.network.electrum ? inputs : []
+            model: !self.resolver.session.network.mainnet && !self.resolver.session.network.electrum ? inputs : []
             delegate: Page {
                 Layout.fillWidth: true
                 background: null

@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed:
 - Updates Qt to 6.6.3
 
+### Fixed:
+- QR Code for Authenticator app in Two-Factor authentication settings
+
 ## [2.0.3] - 2024-03-28
 ### Added:
 - Notice when Jade is configured with a custom oracle server
