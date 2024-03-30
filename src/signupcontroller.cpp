@@ -1,6 +1,6 @@
 #include "context.h"
-#include "signupcontroller.h"
 #include "networkmanager.h"
+#include "signupcontroller.h"
 #include "wallet.h"
 #include "walletmanager.h"
 #include "task.h"

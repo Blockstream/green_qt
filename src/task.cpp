@@ -16,6 +16,7 @@
 #include "wallet.h"
 
 #include <QFileInfo>
+#include <QString>
 #include <QTimer>
 #include <QTimerEvent>
 #include <QtConcurrentRun>

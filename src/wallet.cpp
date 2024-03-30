@@ -14,8 +14,8 @@
 
 #include "activitymanager.h"
 #include "context.h"
-#include "ga.h"
 #include "device.h"
+#include "ga.h"
 #include "json.h"
 #include "network.h"
 #include "networkmanager.h"

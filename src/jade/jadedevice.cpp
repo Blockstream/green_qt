@@ -709,5 +709,4 @@ bool JadeDevice::supportsNetwork(Network *network)
     const auto networks = m_version_info.value("JADE_NETWORKS").toString();
     if (networks == "TEST") return !network->isMainnet();
     return true;
-
 }

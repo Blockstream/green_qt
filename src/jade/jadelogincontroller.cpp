@@ -239,7 +239,6 @@ void JadeUnlockController::unlock()
     monitor()->add(group);
 
     connect(group, &TaskGroup::finished, this, [=] {
-
 //        auto activity = m_device->getMasterBlindingKey();
 //        connect(activity, &Activity::finished, [this, activity] {
 //            activity->deleteLater();
@@ -250,7 +249,6 @@ void JadeUnlockController::unlock()
 //            Q_UNREACHABLE();
 //        });
 //        ActivityManager::instance()->exec(activity);
-
         emit unlocked(m_context);
     });
 
