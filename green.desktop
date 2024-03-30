@@ -6,3 +6,4 @@ Icon=green
 Name=Blockstream Green
 Exec=green
 Categories=Office;Finance;
+MimeType=x-scheme-handler/bitcoin;x-scheme-handler/liquidnetwork;
