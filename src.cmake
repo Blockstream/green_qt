@@ -67,8 +67,6 @@ SET(TARGET_SOURCES
 	src/ledger/ledgersigntransactionactivity.cpp
 	src/controllers/receiveaddresscontroller.cpp
 	src/controllers/ledgerdevicecontroller.cpp
-	src/controllers/sendcontroller.cpp
-	src/controllers/bumpfeecontroller.cpp
 	src/controllers/exporttransactionscontroller.cpp
 	src/controllers/exportaddressescontroller.cpp
 	src/jade/jadeconnection.cpp
