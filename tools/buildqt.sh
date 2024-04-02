@@ -1,9 +1,9 @@
 #!/bin/bash
 set -eox pipefail
 
-QT_MAJOR=6.6
-QT_VERSION=${QT_MAJOR}.3
-QT_HASH=69d0348fef415da98aa890a34651e9cfb232f1bffcee289b7b4e21386bf36104
+QT_MAJOR=6.7
+QT_VERSION=${QT_MAJOR}.0
+QT_HASH=bf5089912364f99cf9baf6c109de76a3172eec6267f148c69800575c47f90087
 QT_BASENAME=qt-everywhere-src-${QT_VERSION}
 QT_FILENAME=${QT_BASENAME}.tar.xz
 
@@ -42,7 +42,7 @@ if [[ "$HOST" == "windows" ]]; then
             -release \
             -static -static-runtime \
             -prefix $_QT_HOST_PATH \
-            -skip qt3d,qt5compat,qtactiveqt,qtcharts,qtcoap,qtconnectivity,qtdatavis3d,qtdoc,qthttpserver,qtimageformats,qtlanguageserver,qtlottie,qtmqtt,qtmultimedia,qtnetworkauth,qtopcua,qtpositioning,qtquick3d,qtquick3dphysics,qtquicktimeline,qtremoteobjects,qtscxml,qtsensors,qtserialbus,qtserialport,qtspeech,qtsvg,qttranslations,qtvirtualkeyboard,qtwayland,qtwebchannel,qtwebsockets,qtwebview,qtlocation,qtgraphs \
+            -skip qt3d,qt5compat,qtactiveqt,qtcharts,qtcoap,qtconnectivity,qtdatavis3d,qtdoc,qthttpserver,qtimageformats,qtlanguageserver,qtlottie,qtmqtt,qtmultimedia,qtnetworkauth,qtopcua,qtpositioning,qtquick3d,qtquick3dphysics,qtquicktimeline,qtremoteobjects,qtscxml,qtsensors,qtserialbus,qtserialport,qtspeech,qttranslations,qtvirtualkeyboard,qtwayland,qtwebchannel,qtwebsockets,qtwebview,qtlocation,qtgraphs \
             -no-feature-sql -no-feature-sql-sqlite \
             -nomake tests -nomake examples
 

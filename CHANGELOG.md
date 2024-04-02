@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Handle external BIP21 payment on macos
 
 ### Changed:
-- Updates Qt to 6.6.3
+- Updates Qt to 6.7.0
 
 ### Fixed:
 - QR Code for Authenticator app in Two-Factor authentication settings
