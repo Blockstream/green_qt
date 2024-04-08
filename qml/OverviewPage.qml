@@ -16,7 +16,6 @@ StackViewPage {
     required property Context context
     readonly property Wallet wallet: self.context.wallet
     property Account currentAccount: null
-    readonly property bool fiatRateAvailable: formatFiat(0, false) !== 'n/a'
 
     Connections {
         target: self.context
@@ -55,33 +54,6 @@ StackViewPage {
         const asset = context.getOrCreateAsset(network.liquid ? network.policyAsset : 'btc')
         const drawer = send_drawer.createObject(self, { context, account, asset, url })
         drawer.open()
-    }
-
-    function parseAmount(account, amount, unit) {
-        account.session.displayUnit;
-        return wallet.parseAmount(amount, unit || account.session.unit);
-    }
-
-    function formatAmount(account, amount, include_ticker = true) {
-        if (!account) return '-'
-        account.session.displayUnit;
-        const unit = account.session.unit;
-        return wallet.formatAmount(amount || 0, include_ticker, unit);
-    }
-
-    function formatFiat(sats, include_ticker = true) {
-        if (!self.currentAccount) return '-'
-        const ticker = self.currentAccount.session.events.ticker
-        const pricing = currentAccount.session.settings.pricing;
-        const { fiat, fiat_currency } = wallet.convert({ satoshi: sats });
-        const currency = self.deployment === 'mainnet' ? fiat_currency : 'FIAT'
-        return (fiat === null ? 'n/a' : Number(fiat).toLocaleString(Qt.locale(), 'f', 2)) + (include_ticker ? ' ' + currency : '');
-    }
-
-    function parseFiat(fiat) {
-        const ticker = self.currentAccount.session.events.ticker
-        fiat = fiat.trim().replace(/,/, '.');
-        return fiat === '' ? 0 : wallet.convert({ fiat }).satoshi;
     }
 
     function transactionConfirmations(transaction) {
@@ -256,64 +228,6 @@ StackViewPage {
         ArchivedAccountsDialog {
         }
     }
-
-    /*
-    Drawer {
-        id: notifications_drawer
-        interactive: position > 0
-        height: parent.height
-        width: 320
-        edge: Qt.RightEdge
-        Overlay.modal: Rectangle {
-            color: "#70000000"
-        }
-        ColumnLayout {
-            width: 320
-            spacing: 8
-            Label {
-                visible: !fiatRateAvailable
-                text: qsTrId('id_your_favourite_exchange_rate_is')
-                padding: 8
-                leftPadding: 40
-                wrapMode: Text.WordWrap
-                Layout.fillWidth: true
-                background: Rectangle {
-                    color: 'white'
-                    opacity: 0.05
-                }
-            }
-            Label {
-                visible: self.currentAccount?.session?.events?.twofactor_reset?.is_active ?? false
-                padding: 8
-                leftPadding: 40
-                wrapMode: Text.WordWrap
-                Layout.fillWidth: true
-                text: {
-                    if (!self.currentAccount) return ''
-                    const data = self.currentAccount.session.events.twofactor_reset
-                    if (!data) return ''
-                    if (data.is_disputed) {
-                        return qsTrId('id_warning_wallet_locked_by')
-                    }
-                    if (data.is_active) {
-                        console.assert(data.days_remaining > 0)
-                        return qsTrId('id_your_wallet_is_locked_for_a').arg(data.days_remaining)
-                    }
-                    return ''
-                }
-                Image {
-                    y: 8
-                    x: 8
-                    source: 'qrc:/svg/twofactor.svg'
-                }
-                background: Rectangle {
-                    color: 'white'
-                    opacity: 0.05
-                }
-            }
-        }
-    }
-    */
 
     Component {
         id: account_view_component

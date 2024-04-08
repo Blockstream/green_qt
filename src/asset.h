@@ -59,7 +59,6 @@ public:
 
     QUrl url() const;
 
-    Q_INVOKABLE qint64 parseAmount(const QString& amount) const;
     Q_INVOKABLE QString formatAmount(qint64 amount, bool include_ticker, const QString& unit = {}) const;
 
 signals:

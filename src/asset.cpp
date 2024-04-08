@@ -84,23 +84,6 @@ QUrl Asset::url() const
     return { asset_explorer_url + m_id };
 }
 
-qint64 Asset::parseAmount(const QString& amount) const
-{
-//    TODO parsing should be done from the account since the account holds the network
-//    if (isLBTC()) {
-//        return m_context->wallet()->amountToSats(amount);
-//    }
-
-    QString sanitized_amount = amount;
-    sanitized_amount.replace(',', '.');
-    auto precision = m_data.value("precision").toInt(0);
-    bool ok;
-    double result = sanitized_amount.toDouble(&ok);
-    if (!ok) return 0;
-    result *= qPow(10, precision);
-    return result;
-}
-
 QString Asset::formatAmount(qint64 amount, bool include_ticker, const QString& unit) const
 {
 //    TODO format should be done from the account since the account holds the network

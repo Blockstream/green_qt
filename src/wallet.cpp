@@ -210,29 +210,6 @@ void Wallet::updateDeviceDetails(const QJsonObject& device_details)
 }
 */
 
-qint64 Wallet::amountToSats(const QString& amount) const
-{
-    const auto session = m_context->primarySession();
-    return parseAmount(amount, session->unit());
-}
-
-qint64 Wallet::parseAmount(const QString& amount, const QString& unit) const
-{
-    if (!m_context) return 0;
-    auto session = m_context->primarySession();
-    if (!session) return 0;
-    if (amount.isEmpty()) return 0;
-    QString sanitized_amount = amount;
-    sanitized_amount.replace(',', '.');
-    auto details = Json::fromObject({{ unit == "\u00B5BTC" ? "ubtc" : unit.toLower(), sanitized_amount }});
-    GA_json* balance;
-    int err = GA_convert_amount(session->m_session, details.get(), &balance);
-    if (err != GA_OK) return 0;
-    QJsonObject result = Json::toObject(balance);
-    GA_destroy_json(balance);
-    return result.value("sats").toString().toLongLong();
-}
-
 QString Wallet::getDisplayUnit(const QString& unit)
 {
     return ComputeDisplayUnit(m_context->primarySession()->network(), unit);
