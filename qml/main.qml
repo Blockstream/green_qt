@@ -10,6 +10,7 @@ import "analytics.js" as AnalyticsJS
 import "util.js" as UtilJS
 
 ApplicationWindow {
+    readonly property bool hasVideoInput: media_devices.videoInputs?.length > 0
     Constants {
         id: constants
     }
@@ -34,7 +35,9 @@ ApplicationWindow {
         if (env !== 'Production') parts.push(`[${env}]`)
         return parts.join(' - ');
     }
-
+    MediaDevices {
+        id: media_devices
+    }
     Label {
         parent: Overlay.overlay
         visible: false
@@ -108,9 +111,4 @@ ApplicationWindow {
             }
         }
     }
-
-    MediaDevices {
-        id: media_devices
-    }
-    readonly property bool hasVideoInput: media_devices.videoInputs?.length > 0
 }
