@@ -5,7 +5,7 @@ import QtQuick.Layouts
 
 import "util.js" as UtilJS
 
-Page {
+StackViewPage {
     signal skipClicked()
     signal firmwareSelected(var firmware)
     required property JadeDevice device
@@ -24,55 +24,51 @@ Page {
         index: firmware_controller.index
         device: self.device
     }
-    footer: Pane {
-        background: null
-        padding: self.padding
-        topPadding: 20
-        contentItem: ColumnLayout {
-            Image {
+    header: null
+    footerItem: ColumnLayout {
+        Image {
+            Layout.alignment: Qt.AlignCenter
+            source: 'qrc:/svg2/warning.svg'
+            visible: self.device.updateRequired
+        }
+        Label {
+            Layout.alignment: Qt.AlignCenter
+            font.pixelSize: 12
+            font.weight: 600
+            text: qsTrId('id_new_jade_firmware_required')
+            visible: self.device.updateRequired
+        }
+        RowLayout {
+            Layout.topMargin: 20
+            CheckBox {
                 Layout.alignment: Qt.AlignCenter
-                source: 'qrc:/svg2/warning.svg'
-                visible: self.device.updateRequired
+                id: left_item
+                text: qsTrId('id_show_all')
+                visible: self.debug
             }
-            Label {
+            Item {
+                Layout.preferredWidth: Math.max(UtilJS.effectiveWidth(right_item) - UtilJS.effectiveWidth(left_item), 0)
+            }
+            HSpacer {
+            }
+            PrimaryButton {
                 Layout.alignment: Qt.AlignCenter
-                font.pixelSize: 12
-                font.weight: 600
-                text: qsTrId('id_new_jade_firmware_required')
-                visible: self.device.updateRequired
+                Layout.preferredWidth: 250
+                enabled: button_group.checkedButton && self.device?.connected && self.device?.status === JadeDevice.StatusIdle
+                text: qsTrId('id_continue')
+                onClicked: self.firmwareSelected(button_group.checkedButton.firmware)
             }
-            RowLayout {
-                Layout.topMargin: 20
-                CheckBox {
-                    Layout.alignment: Qt.AlignCenter
-                    id: left_item
-                    text: qsTrId('id_show_all')
-                    visible: self.debug
-                }
-                Item {
-                    Layout.preferredWidth: Math.max(UtilJS.effectiveWidth(right_item) - UtilJS.effectiveWidth(left_item), 0)
-                }
-                HSpacer {
-                }
-                PrimaryButton {
-                    Layout.alignment: Qt.AlignCenter
-                    Layout.preferredWidth: 250
-                    enabled: button_group.checkedButton && self.device?.connected && self.device?.status === JadeDevice.StatusIdle
-                    text: qsTrId('id_continue')
-                    onClicked: self.firmwareSelected(button_group.checkedButton.firmware)
-                }
-                HSpacer {
-                }
-                Item {
-                    Layout.preferredWidth: Math.max(UtilJS.effectiveWidth(left_item) - UtilJS.effectiveWidth(right_item), 0)
-                }
-                LinkButton {
-                    Layout.alignment: Qt.AlignCenter
-                    id: right_item
-                    text: qsTrId('id_skip')
-                    visible: self.showSkip && !self.device.updateRequired
-                    onClicked: self.skipClicked()
-                }
+            HSpacer {
+            }
+            Item {
+                Layout.preferredWidth: Math.max(UtilJS.effectiveWidth(left_item) - UtilJS.effectiveWidth(right_item), 0)
+            }
+            LinkButton {
+                Layout.alignment: Qt.AlignCenter
+                id: right_item
+                text: qsTrId('id_skip')
+                visible: self.showSkip && !self.device.updateRequired
+                onClicked: self.skipClicked()
             }
         }
     }

@@ -117,8 +117,13 @@ StackViewPage {
 
     Component.onCompleted: pushView()
 
-    contentItem: GStackView {
-        id: stack_view
+    contentItem: Item {
+        GStackView {
+            anchors.fill: parent
+            anchors.leftMargin: self.padding
+            anchors.rightMargin: self.padding
+            id: stack_view
+        }
     }
 
     Component {
@@ -136,7 +141,6 @@ StackViewPage {
         id: advanced_update_view
         JadeAdvancedUpdateView {
             device: self.device
-            padding: 60
             showSkip: true
             onSkipClicked: self.skipFirmwareUpdate()
             onFirmwareSelected: (firmware) => stack_view.push(confirm_update_view, { firmware })
