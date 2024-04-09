@@ -123,6 +123,7 @@ SET(QML_FILES
     qml/AuthHandlerTaskView.qml
     qml/GetCredentialsView.qml
     qml/TaskDispatcherInspector.qml
+    qml/TProgressBar.qml
     qml/TListView.qml
     qml/GMenu.qml
     qml/GStackView.qml

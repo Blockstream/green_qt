@@ -78,10 +78,11 @@ Page {
                 opacity: 0.5
                 text: controller.progress === 0 ? qsTrId('id_please_follow_the_instructions') : qsTrId('id_uploading_firmware')
             }
-            ProgressBar {
+            TProgressBar {
                 Layout.alignment: Qt.AlignCenter
                 Layout.topMargin: 50
                 Layout.bottomMargin: 50
+                Layout.preferredWidth: 180
                 indeterminate: controller.progress === 0
                 from: 0
                 to: 1
