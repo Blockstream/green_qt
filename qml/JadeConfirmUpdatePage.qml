@@ -65,55 +65,100 @@ Page {
             spacing: 20
             VSpacer {
             }
-            GridLayout {
-                Layout.fillWidth: false
-                Layout.fillHeight: false
+            Label {
                 Layout.alignment: Qt.AlignCenter
-                columns: 2
-                columnSpacing: 32
-                rowSpacing: 12
-                // visible: self.activity.status === Activity.Pending
-                Label {
-                    text: qsTrId('id_current_version') + ':'
-                }
-                Label {
-                    text: firmwareVersionAndType(self.device.version, self.device.versionInfo["JADE_CONFIG"])
-                }
-                Label {
-                    text: qsTrId('id_new_version') + ':'
-                }
-                Label {
-                    text: firmwareVersionAndType(self.firmware.version, self.firmware.config)
-                }
-                Label {
-                    text: qsTrId('id_hash')
-                }
-                Label {
-                    text: {
-                        const ge_0_1_46 = self.device.versionGreaterOrEqualThan('0.1.46')
-                        const fwhash = self.firmware?.fwhash
-                        const cmphash = self.firmware?.cmphash
-                        const hash = String(ge_0_1_46 && fwhash ? fwhash : cmphash)
-                        return ge_0_1_46 ? hash.match(/.{1,8}/g).join(' ') : hash
-                    }
-                    Layout.fillWidth: true
-                    Layout.preferredWidth: 0
-                    Layout.maximumWidth: 200
-                    wrapMode: Label.Wrap
-                }
+                font.pixelSize: 26
+                font.weight: 600
+                text: qsTrId('id_firmware_update')
+            }
+            Label {
+                Layout.alignment: Qt.AlignCenter
+                font.pixelSize: 14
+                font.weight: 400
+                opacity: 0.5
+                text: controller.progress === 0 ? qsTrId('id_please_follow_the_instructions') : qsTrId('id_uploading_firmware')
             }
             ProgressBar {
                 Layout.alignment: Qt.AlignCenter
-                indeterminate: controller.progress < 0.05
+                Layout.topMargin: 50
+                Layout.bottomMargin: 50
+                indeterminate: controller.progress === 0
                 from: 0
                 to: 1
                 value: controller.progress
             }
-            Label {
+            Pane {
                 Layout.alignment: Qt.AlignCenter
-                font.pixelSize: 16
-                font.weight: 600
-                text: controller.progress < 0.05 ? qsTrId('id_please_follow_the_instructions') : qsTrId('id_uploading_firmware')
+                Layout.minimumWidth: 400
+                padding: 20
+                background: Rectangle {
+                    color: '#0E0F11'
+                    border.color: '#323232'
+                    border.width: 1
+                    radius: 10
+                }
+                contentItem: ColumnLayout {
+                    spacing: 10
+                    RowLayout {
+                        spacing: 40
+                        Label {
+                            Layout.alignment: Qt.AlignTop
+                            font.pixelSize: 14
+                            font.weight: 400
+                            opacity: 0.6
+                            text: qsTrId('id_current_version') + ':'
+                        }
+                        Label {
+                            Layout.fillWidth: true
+                            font.pixelSize: 14
+                            font.weight: 400
+                            horizontalAlignment: Label.AlignRight
+                            text: firmwareVersionAndType(self.device.version, self.device.versionInfo["JADE_CONFIG"])
+                        }
+                    }
+                    RowLayout {
+                        spacing: 40
+                        Label {
+                            Layout.alignment: Qt.AlignTop
+                            font.pixelSize: 14
+                            font.weight: 400
+                            opacity: 0.6
+                            text: qsTrId('id_new_version') + ':'
+                        }
+                        Label {
+                            Layout.fillWidth: true
+                            font.pixelSize: 14
+                            font.weight: 400
+                            horizontalAlignment: Label.AlignRight
+                            text: firmwareVersionAndType(self.firmware.version, self.firmware.config)
+                        }
+                    }
+                    RowLayout {
+                        spacing: 40
+                        Label {
+                            Layout.alignment: Qt.AlignTop
+                            font.pixelSize: 14
+                            font.weight: 400
+                            opacity: 0.6
+                            text: qsTrId('id_hash') + ':'
+                        }
+                        Label {
+                            Layout.fillWidth: true
+                            Layout.preferredWidth: 0
+                            wrapMode: Label.Wrap
+                            font.pixelSize: 14
+                            font.weight: 400
+                            horizontalAlignment: Label.AlignRight
+                            text: {
+                                const ge_0_1_46 = self.device.versionGreaterOrEqualThan('0.1.46')
+                                const fwhash = self.firmware?.fwhash
+                                const cmphash = self.firmware?.cmphash
+                                const hash = String(ge_0_1_46 && fwhash ? fwhash : cmphash)
+                                return ge_0_1_46 ? hash.match(/.{1,8}/g).join(' ') : hash
+                            }
+                        }
+                    }
+                }
             }
             VSpacer {
             }
