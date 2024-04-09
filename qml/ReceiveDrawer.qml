@@ -49,7 +49,7 @@ WalletDrawer {
                 }
                 PrimaryButton {
                     Layout.fillWidth: true
-                    enabled: controller.context.device?.session && controller.context.device.session.xpubHashId === controller.context.xpubHashId && !controller.generating && controller.addressVerification !== ReceiveAddressController.VerificationPending
+                    enabled: (controller.context.device?.session ?? false) && controller.context.device.session.xpubHashId === controller.context.xpubHashId && !controller.generating && controller.addressVerification !== ReceiveAddressController.VerificationPending
                     text: qsTrId('id_verify_on_device')
                     visible: controller.context.wallet.login.device?.type === 'jade'
                     onClicked: {
