@@ -127,7 +127,7 @@ public:
     void setFirmware(const QVariantMap& firmware);
     bool fetching() const { return m_fetching; }
     bool updating() const { return m_updating; }
-    float progress() const { return m_progress; }
+    float progress() const;
     void install(const QByteArray &data);
 public slots:
     void update();

@@ -339,6 +339,11 @@ void JadeFirmwareUpdateController::setFirmware(const QVariantMap& firmware)
     emit firmwareChanged();
 }
 
+float JadeFirmwareUpdateController::progress() const
+{
+    return qMax(0.0, (m_progress - 0.1) / 0.9);
+}
+
 void JadeFirmwareUpdateController::update()
 {
     m_updating = true;
