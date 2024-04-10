@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed:
 - Updates Qt to 6.7.0
+- Updates GDK to 0.71.0
 
 ### Fixed:
 - QR Code for Authenticator app in Two-Factor authentication settings
