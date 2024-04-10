@@ -226,13 +226,16 @@ bool AssetsModel::filterAcceptsRow(int source_row, const QModelIndex &source_par
         }
 
         if (const auto device = m_context->device()) {
+            bool supports = false;
             for (auto network : NetworkManager::instance()->networks()) {
                 if (network->key() == asset->networkKey()) {
-                    if (!device->supportsNetwork(network)) {
-                        return false;
+                    if (device->supportsNetwork(network)) {
+                        supports = true;
+                        break;
                     }
                 }
             }
+            if (!supports) return false;
         }
     }
 
