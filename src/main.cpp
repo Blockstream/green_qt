@@ -184,7 +184,15 @@ int main(int argc, char *argv[])
     g_args.addOption(QCommandLineOption("debugfocus"));
     g_args.addOption(QCommandLineOption("debugjade"));
     g_args.addOption(QCommandLineOption("channel", "", "name", "latest"));
+    g_args.addPositionalArgument("uri", "BIP21 payment");
     g_args.process(app);
+
+    if (g_args.positionalArguments().size() > 0) {
+        auto uri = QUrl::fromUserInput(g_args.positionalArguments().first());
+        if (uri.scheme() == "bitcoin" || uri.scheme() == "liquidnetwork") {
+            wallet_manager.setOpenUrl(uri);
+        }
+    }
 
     if (!kdsa.isPrimaryInstance()) {
         qInfo() << "Not primary instance";
