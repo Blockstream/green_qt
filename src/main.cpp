@@ -9,6 +9,7 @@
 #include <QStyleHints>
 #include <QtPlugin>
 #include <QSGRendererInterface>
+#include <QSettings>
 #include <QTemporaryDir>
 #include <QTranslator>
 #include <QUrl>
@@ -204,7 +205,24 @@ int main(int argc, char *argv[])
         return 0;
     }
 
-#ifndef Q_OS_LINUX
+#ifdef Q_OS_WIN
+    QString path = QDir::toNativeSeparators(app.applicationFilePath());
+
+    QSettings set("HKEY_CURRENT_USER\\Software\\Classes", QSettings::NativeFormat);
+    set.beginGroup("bitcoin");
+    set.setValue("Default", "URL:bitcoin");
+    set.setValue("DefaultIcon/Default", path);
+    set.setValue("URL Protocol", "");
+    set.setValue("shell/open/command/Default", QString("\"%1\"").arg(path) + " \"%1\"");
+    set.endGroup();
+    set.beginGroup("liquidnetwork");
+    set.setValue("Default", "URL:liquidnetwork");
+    set.setValue("DefaultIcon/Default", path);
+    set.setValue("URL Protocol", "");
+    set.setValue("shell/open/command/Default", QString("\"%1\"").arg(path) + " \"%1\"");
+    set.endGroup();
+#endif
+
     app.connect(&kdsa, &KDSingleApplication::messageReceived, &app, [&app](const QByteArray &message ) {
         if (message == "raise") {
             app.raise();
@@ -214,7 +232,6 @@ int main(int argc, char *argv[])
             app.raise();
         }
     });
-#endif
 
     if (g_args.isSet("tempdatadir")) {
         QTemporaryDir dir;
