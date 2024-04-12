@@ -118,6 +118,11 @@ StackViewPage {
     Component.onCompleted: pushView()
 
     contentItem: Item {
+        BusyIndicator {
+            anchors.centerIn: parent
+            running: stack_view.depth === 0 && firmware_controller.fetching
+            visible: stack_view.depth === 0
+        }
         GStackView {
             anchors.fill: parent
             anchors.leftMargin: self.padding
