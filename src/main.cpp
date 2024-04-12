@@ -173,20 +173,6 @@ int main(int argc, char *argv[])
     Application app(argc, argv);
     KDSingleApplication kdsa;
 
-    if (!kdsa.isPrimaryInstance()) {
-        qInfo() << "Not primary instance";
-        kdsa.sendMessage("raise");
-        return 0;
-    }
-
-    #ifndef Q_OS_LINUX
-    app.connect(&kdsa, &KDSingleApplication::messageReceived, &app, [&app](const QByteArray &message ) {
-        if (message == "raise") {
-            app.raise();
-        }
-    });
-    #endif
-
     g_args.addHelpOption();
     g_args.addVersionOption();
     g_args.addOption(QCommandLineOption("datadir", "", "path"));
@@ -199,6 +185,20 @@ int main(int argc, char *argv[])
     g_args.addOption(QCommandLineOption("debugjade"));
     g_args.addOption(QCommandLineOption("channel", "", "name", "latest"));
     g_args.process(app);
+
+    if (!kdsa.isPrimaryInstance()) {
+        qInfo() << "Not primary instance";
+        kdsa.sendMessage("raise");
+        return 0;
+    }
+
+#ifndef Q_OS_LINUX
+    app.connect(&kdsa, &KDSingleApplication::messageReceived, &app, [&app](const QByteArray &message ) {
+        if (message == "raise") {
+            app.raise();
+        }
+    });
+#endif
 
     if (g_args.isSet("tempdatadir")) {
         QTemporaryDir dir;
