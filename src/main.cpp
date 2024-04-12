@@ -196,13 +196,21 @@ int main(int argc, char *argv[])
 
     if (!kdsa.isPrimaryInstance()) {
         qInfo() << "Not primary instance";
-        kdsa.sendMessage("raise");
+        if (wallet_manager.hasOpenUrl()) {
+            kdsa.sendMessage(QByteArray("open ") + wallet_manager.openUrl().toString().toUtf8());
+        } else {
+            kdsa.sendMessage("raise");
+        }
         return 0;
     }
 
 #ifndef Q_OS_LINUX
     app.connect(&kdsa, &KDSingleApplication::messageReceived, &app, [&app](const QByteArray &message ) {
         if (message == "raise") {
+            app.raise();
+        } else if (message.startsWith("open ")) {
+            const auto uri = QUrl::fromUserInput(QString::fromUtf8(message.mid(5)));
+            WalletManager::instance()->setOpenUrl(uri);
             app.raise();
         }
     });
