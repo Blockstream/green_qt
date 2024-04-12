@@ -54,8 +54,8 @@ ColumnLayout {
                 Layout.alignment: Qt.AlignCenter
                 Layout.preferredWidth: 325
                 Layout.topMargin: 10
-                busy: self.device.status === JadeDevice.StatusHandleClientMessage
-                enabled: self.device.status !== JadeDevice.StatusHandleClientMessage
+                busy: !controller.monitor.idle || self.device.status === JadeDevice.StatusHandleClientMessage
+                enabled: controller.monitor.idle && self.device.status !== JadeDevice.StatusHandleClientMessage
                 text: qsTrId('id_setup_jade')
                 onClicked: self.setup()
             }
@@ -67,8 +67,8 @@ ColumnLayout {
                 Layout.alignment: Qt.AlignCenter
                 Layout.preferredWidth: 325
                 Layout.topMargin: 20
-                busy: self.device.status === JadeDevice.StatusHandleClientMessage
-                enabled: self.device.status !== JadeDevice.StatusHandleClientMessage
+                busy: !controller.monitor.idle || self.device.status === JadeDevice.StatusHandleClientMessage
+                enabled: controller.monitor.idle && self.device.status !== JadeDevice.StatusHandleClientMessage
                 text: qsTrId('id_setup_jade')
                 onClicked: self.setup()
             }

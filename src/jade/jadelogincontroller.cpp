@@ -119,6 +119,8 @@ JadeSetupController::JadeSetupController(QObject* parent)
 
 void JadeSetupController::setup(const QString& deployment)
 {
+    if (!m_monitor) setMonitor(new TaskGroupMonitor(this));
+    if (!m_monitor->idle()) return;
     if (m_context) {
         m_context->deleteLater();
         setContext(nullptr);
@@ -142,6 +144,7 @@ void JadeSetupController::setup(const QString& deployment)
         emit setupFinished(m_context);
     });
 
+    m_monitor->add(group);
     dispatcher()->add(group);
 }
 
