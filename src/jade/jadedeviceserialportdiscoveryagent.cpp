@@ -166,21 +166,25 @@ void JadeDeviceSerialPortDiscoveryAgent::updateLater(JadeAPI* backend)
         } else {
             device->setStatus(JadeDevice::StatusIdle);
         }
-        backend->getVersionInfo(true, [=](const QVariantMap& data) {
-            const auto device = deviceFromBackend(backend);
-            if (device) {
-                if (data.contains("error")) {
-                    qDebug() << Q_FUNC_INFO << "VERSION INFO ERROR:" << data.value("error");
-                    device->setConnected(false);
-                    device->setStatus(JadeDevice::StatusIdle);
-                } else if (data.contains("result")) {
-                    const auto version_info = data.value("result").toMap();
-                    device->setVersionInfo(version_info);
-                    device->setConnected(true);
+        if (QVersionNumber(1, 0, 21) <= QVersionNumber::fromString(device->version()) || !backend->isBusy()) {
+            backend->getVersionInfo(true, [=](const QVariantMap& data) {
+                const auto device = deviceFromBackend(backend);
+                if (device) {
+                    if (data.contains("error")) {
+                        qDebug() << Q_FUNC_INFO << "VERSION INFO ERROR:" << data.value("error");
+                        device->setConnected(false);
+                        device->setStatus(JadeDevice::StatusIdle);
+                    } else if (data.contains("result")) {
+                        const auto version_info = data.value("result").toMap();
+                        device->setVersionInfo(version_info);
+                        device->setConnected(true);
+                    }
                 }
-            }
+                updateLater(backend);
+            });
+        } else {
             updateLater(backend);
-        });
+        }
     });
 }
 
