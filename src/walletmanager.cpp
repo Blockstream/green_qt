@@ -44,7 +44,7 @@ void WalletManager::clearOpenUrl()
     setOpenUrl({});
 }
 
-void WalletManager::setOpenUrl(const QUrl& open_url)
+void WalletManager::setOpenUrl(const QString& open_url)
 {
     if (m_open_url == open_url) return;
     m_open_url = open_url;

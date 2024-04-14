@@ -14,15 +14,15 @@ class WalletManager : public QObject
     Q_OBJECT
     Q_PROPERTY(QQmlListProperty<Wallet> wallets READ wallets NOTIFY changed)
     Q_PROPERTY(bool hasOpenUrl READ hasOpenUrl NOTIFY openUrlChanged FINAL)
-    Q_PROPERTY(QUrl openUrl READ openUrl NOTIFY openUrlChanged FINAL)
+    Q_PROPERTY(QString openUrl READ openUrl NOTIFY openUrlChanged FINAL)
 public:
     explicit WalletManager();
     virtual ~WalletManager();
     static WalletManager* instance();
 
     bool hasOpenUrl() const { return !m_open_url.isEmpty(); }
-    QUrl openUrl() const { return m_open_url; }
-    void setOpenUrl(const QUrl& open_url);
+    QString openUrl() const { return m_open_url; }
+    void setOpenUrl(const QString& open_url);
 
     void loadWallets();
     Wallet* createWallet();
@@ -54,7 +54,7 @@ public slots:
     void clearOpenUrl();
 public:
     QVector<Wallet*> m_wallets;
-    QUrl m_open_url;
+    QString m_open_url;
 };
 
 #endif // GREEN_WALLETMANAGER_H

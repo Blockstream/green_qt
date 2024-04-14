@@ -13,6 +13,7 @@ MainPage {
     signal closeDevice(Device device)
     property Wallet wallet
     property Device device
+    readonly property Account currentAccount: stack_view.currentItem?.currentAccount ?? null
     function send(url) {
         if (stack_view.currentItem instanceof OverviewPage) {
             stack_view.currentItem.openSendDrawer(url)

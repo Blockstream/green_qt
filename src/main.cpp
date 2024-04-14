@@ -189,8 +189,10 @@ int main(int argc, char *argv[])
     g_args.process(app);
 
     if (g_args.positionalArguments().size() > 0) {
-        auto uri = QUrl::fromUserInput(g_args.positionalArguments().first());
-        if (uri.scheme() == "bitcoin" || uri.scheme() == "liquidnetwork") {
+        const auto uri = g_args.positionalArguments().first();
+        const auto url = QUrl::fromUserInput(uri);
+        const auto scheme = url.scheme();
+        if (scheme == "http" || scheme == "bitcoin" || scheme == "liquidnetwork") {
             wallet_manager.setOpenUrl(uri);
         }
     }
@@ -198,7 +200,7 @@ int main(int argc, char *argv[])
     if (!kdsa.isPrimaryInstance()) {
         qInfo() << "Not primary instance";
         if (wallet_manager.hasOpenUrl()) {
-            kdsa.sendMessage(QByteArray("open ") + wallet_manager.openUrl().toString().toUtf8());
+            kdsa.sendMessage(QByteArray("open ") + wallet_manager.openUrl().toUtf8());
         } else {
             kdsa.sendMessage("raise");
         }
@@ -227,8 +229,7 @@ int main(int argc, char *argv[])
         if (message == "raise") {
             app.raise();
         } else if (message.startsWith("open ")) {
-            const auto uri = QUrl::fromUserInput(QString::fromUtf8(message.mid(5)));
-            WalletManager::instance()->setOpenUrl(uri);
+            WalletManager::instance()->setOpenUrl(QString::fromUtf8(message.mid(5)));
             app.raise();
         }
     });

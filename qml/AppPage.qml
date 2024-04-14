@@ -277,6 +277,13 @@ MainPage {
     component Bip21Banner: Collapsible {
         readonly property Wallet wallet: stack_layout.currentItem?.wallet ?? null
         readonly property Context context: self.wallet?.context ?? null
+        readonly property Account account: stack_layout.currentItem?.currentAccount ?? null
+        readonly property bool compatible: {
+            if (!self.account) return false
+            const parts = WalletManager.openUrl.split(':')
+            const bip21_prefix = self.account.network.data.bip21_prefix
+            return bip21_prefix === (parts.length === 1 ? 'bitcoin' : parts[0])
+        }
         id: self
         collapsed: !WalletManager.hasOpenUrl
         contentWidth: self.width
@@ -305,6 +312,7 @@ MainPage {
                         text: {
                             if (!self.wallet) return 'Select wallet to pay'
                             if (!self.context) return 'Login to pay'
+                            if (!self.compatible) return 'Select compatible account to pay'
                             return 'Payment'
                         }
                     }
@@ -321,7 +329,8 @@ MainPage {
                 RegularButton {
                     topPadding: 10
                     bottomPadding: 10
-                    text: 'Pay with wallet'
+                    enabled: self.compatible
+                    text: 'Pay'
                     visible: !!self.context
                     onClicked: {
                         stack_layout.currentItem?.send(WalletManager.openUrl)
