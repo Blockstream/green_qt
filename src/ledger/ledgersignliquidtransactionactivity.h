@@ -13,16 +13,13 @@ public:
 
     virtual QList<QByteArray> signatures() const override { return m_sigs; }
     virtual QList<QByteArray> signerCommitments() const override { Q_UNREACHABLE(); }
-//    virtual QList<QByteArray> assetCommitments() const override { return m_asset_commitments; }
-//    virtual QList<QByteArray> valueCommitments() const override { return m_value_commitments; }
-//    virtual QList<QByteArray> assetBlinders() const override { return m_abfs; }
-//    virtual QList<QByteArray> amountBlinders() const override { return m_vbfs; }
 
     void getLiquidCommitment(int output_index);
 
     DeviceCommand* exchange(const QByteArray& data);
     LedgerDevice* const m_device;
-    QByteArray m_transaction;
+    uint32_t m_version;
+    uint32_t m_locktime;
     QList<quint64> m_values;
     QList<QByteArray> m_abfs;
     QList<QByteArray> m_vbfs;
