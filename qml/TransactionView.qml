@@ -35,13 +35,15 @@ StackViewPage {
     }
     readonly property var amounts: {
         const amounts = []
-        for (let [id, satoshi] of Object.entries(self.transaction.data.satoshi)) {
-            if (self.network.policyAsset === id && satoshi < 0) {
-                satoshi += self.transaction.data.fee
-                if (satoshi === 0) continue
+        if (self.transaction.type !== Transaction.Redeposit) {
+            for (let [id, satoshi] of Object.entries(self.transaction.data.satoshi)) {
+                if (self.network.policyAsset === id && satoshi < 0) {
+                    satoshi += self.transaction.data.fee
+                    if (satoshi === 0) continue
+                }
+                const asset = AssetManager.assetWithId(self.context.deployment, id)
+                amounts.push({ asset, satoshi: String(satoshi) })
             }
-            const asset = AssetManager.assetWithId(self.context.deployment, id)
-            amounts.push({ asset, satoshi: String(satoshi) })
         }
         return amounts
     }

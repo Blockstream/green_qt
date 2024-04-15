@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed:
 - QR Code for Authenticator app in Two-Factor authentication settings
+- Only show fee amount for redeposits
 
 ## [2.0.3] - 2024-03-28
 ### Added:

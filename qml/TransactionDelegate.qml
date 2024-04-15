@@ -148,11 +148,13 @@ ItemDelegate {
             Repeater {
                 model: {
                     const assets = []
-                    if (self.account.network.liquid) {
-                        for (const [id, satoshi] of Object.entries(transaction.data.satoshi)) {
-                            if (self.account.network.policyAsset === id) continue
-                            const asset = AssetManager.assetWithId(self.account.context.deployment, id)
-                            assets.push({ asset, satoshi: String(satoshi) })
+                    if (self.transaction.type !== Transaction.Redeposit) {
+                        if (self.account.network.liquid) {
+                            for (const [id, satoshi] of Object.entries(transaction.data.satoshi)) {
+                                if (self.account.network.policyAsset === id) continue
+                                const asset = AssetManager.assetWithId(self.account.context.deployment, id)
+                                assets.push({ asset, satoshi: String(satoshi) })
+                            }
                         }
                     }
                     return assets
