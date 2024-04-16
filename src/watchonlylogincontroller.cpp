@@ -94,7 +94,7 @@ void WatchOnlyLoginController::login()
     const auto network = watchonly_data ? watchonly_data->network() : m_network;
     const auto username = watchonly_data ? watchonly_data->username() : m_username;
 
-    setContext(new Context(network->deployment(), this));
+    setContext(new Context(network->deployment(), false, this));
     m_context->setWatchonly(true);
 
     auto session = m_context->getOrCreateSession(network);

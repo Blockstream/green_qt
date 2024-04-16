@@ -125,7 +125,7 @@ void JadeSetupController::setup(const QString& deployment)
         m_context->deleteLater();
         setContext(nullptr);
     }
-    setContext(new Context(deployment, this));
+    setContext(new Context(deployment, false, this));
     m_context->setDevice(m_device);
 
     m_network = m_context->primaryNetwork();
@@ -216,7 +216,7 @@ void JadeUnlockController::unlock()
     if (m_context) {
         Q_ASSERT(m_context->deployment() == deployment);
     } else {
-        setContext(new Context(deployment, this));
+        setContext(new Context(deployment, false, this));
     }
 
     m_context->setDevice(m_device);

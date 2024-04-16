@@ -130,7 +130,7 @@ void LedgerDeviceController::login()
 {
     if (m_wallet && m_wallet->context()) return;
 
-    setContext(new Context(this));
+    setContext(new Context({}, false, this));
     m_context->setWallet(m_wallet);
 
     auto group = new TaskGroup(this);

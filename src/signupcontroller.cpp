@@ -27,7 +27,7 @@ void SignupController::signup(const QString& deployment)
     auto group = new TaskGroup(this);
 
     if (!m_context) {
-        setContext(new Context(deployment, this));
+        setContext(new Context(deployment, false, this));
     }
 
     auto session = m_context->primarySession();

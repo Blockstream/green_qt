@@ -36,14 +36,10 @@ void UpdateAsset(GA_session* session, Asset* asset)
 }
 }
 
-Context::Context(QObject* parent)
-    : Context({}, parent)
-{
-}
-
-Context::Context(const QString& deployment, QObject* parent)
+Context::Context(const QString& deployment, bool bip39, QObject* parent)
     : QObject(parent)
     , m_deployment(deployment)
+    , m_bip39(bip39)
     , m_dispatcher(new TaskDispatcher(this))
 {
     Q_ASSERT(deployment == "mainnet" || deployment == "testnet" || deployment == "development");
@@ -88,7 +84,7 @@ void Context::setWallet(Wallet* wallet)
     emit walletChanged();
     if (m_wallet) {
         setParent(m_wallet);
-        if (!m_xpub_hash_id.isEmpty()) {
+        if (!m_bip39 && !m_xpub_hash_id.isEmpty()) {
             m_wallet->setXPubHashId(m_xpub_hash_id);
         }
         if (m_device) {
@@ -267,7 +263,7 @@ void Context::setXPubHashId(const QString& xpub_hash_id)
     if (m_xpub_hash_id == xpub_hash_id) return;
     Q_ASSERT(m_xpub_hash_id.isEmpty());
     m_xpub_hash_id = xpub_hash_id;
-    if (m_wallet) {
+    if (!m_bip39 && m_wallet) {
         m_wallet->setXPubHashId(xpub_hash_id);
     }
     emit xpubHashIdChanged();

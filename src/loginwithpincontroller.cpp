@@ -38,7 +38,7 @@ void LoginController::loginWithPin(const QString& pin)
     Q_ASSERT(pin_data);
 
     auto network = pin_data->network();
-    if (!m_context) setContext(new Context(m_wallet->deployment(), this));
+    if (!m_context) setContext(new Context(m_wallet->deployment(), false, this));
 
     auto session = m_context->getOrCreateSession(network);
     auto login_task = new LoginTask(pin, pin_data->data(), session);
@@ -122,7 +122,7 @@ void LoginController::loginWithDevice(Device* device, bool remember)
             emit loginFailed({});
             return;
         }
-        setContext(new Context(deployment, this));
+        setContext(new Context(deployment, false, this));
         m_context->setDevice(device);
         m_context->setRemember(remember);
     }

@@ -17,6 +17,7 @@ class Context : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QString deployment READ deployment CONSTANT)
+    Q_PROPERTY(bool bip39 READ bip39 CONSTANT)
     Q_PROPERTY(QString xpubHashId READ xpubHashId NOTIFY xpubHashIdChanged)
     Q_PROPERTY(Wallet* wallet READ wallet NOTIFY walletChanged)
     Q_PROPERTY(Device* device READ device NOTIFY deviceChanged)
@@ -29,12 +30,12 @@ class Context : public QObject
     Q_PROPERTY(TaskDispatcher* dispatcher READ dispatcher CONSTANT)
     Q_PROPERTY(QQmlListProperty<Notification> notifications READ notifications NOTIFY notificationsChanged)
     QML_ELEMENT
-
+    QML_UNCREATABLE("")
 public:
-    Context(QObject* parent = nullptr);
-    Context(const QString& deployment, QObject* parent = nullptr);
+    Context(const QString& deployment, bool bip39, QObject* parent);
 
     QString deployment() const { return m_deployment; }
+    bool bip39() const { return m_bip39; }
 
     TaskGroup* cleanAccounts();
 
@@ -105,6 +106,7 @@ signals:
 
 private:
     const QString m_deployment;
+    const bool m_bip39;
     Wallet* m_wallet{nullptr};
     Device* m_device{nullptr};
     bool m_remember{true};
