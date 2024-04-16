@@ -27,6 +27,13 @@ void LoginController::setWallet(Wallet* wallet)
     emit walletChanged();
 }
 
+void LoginController::setPassphrase(const QString& passphrase)
+{
+    if (m_passphrase == passphrase) return;
+    m_passphrase = passphrase;
+    emit passphraseChanged();
+}
+
 void LoginController::loginWithPin(const QString& pin)
 {
     m_error.clear();
@@ -56,7 +63,7 @@ void LoginController::loginWithPin(const QString& pin)
         pin_data->resetAttempts();
     });
 
-    login(login_task);
+    login(login_task, m_passphrase);
 }
 
 static QJsonObject device_details_from_device(Device* device)
@@ -189,7 +196,7 @@ void LoginController::loginWithDevice(Device* device, bool remember)
     login(login_task);
 }
 
-void LoginController::login(LoginTask* login_task)
+void LoginController::login(LoginTask* login_task, const QString& passphrase)
 {
     clearErrors();
 
@@ -204,9 +211,21 @@ void LoginController::login(LoginTask* login_task)
         emit loginFailed(m_error);
     });
     connect(group, &TaskGroup::finished, this, [=] {
-        m_context->setWallet(m_wallet);
-        emit loginFinished(m_context);
-        setContext(nullptr);
+        if (passphrase.isEmpty()) {
+            m_context->setWallet(m_wallet);
+            emit loginFinished(m_context);
+            setContext(nullptr);
+        } else {
+            auto mnemonic = m_context->credentials().value("mnemonic").toString();
+            auto network = m_context->primaryNetwork();
+            m_context->deleteLater();
+            setContext(new Context(m_wallet->deployment(), true, this));
+
+            auto session = m_context->getOrCreateSession(network);
+
+            auto task = new LoginTask({{ "mnemonic", mnemonic }, { "bip39_passphrase", passphrase }}, {}, session);
+            login(task);
+        }
     });
 }
 

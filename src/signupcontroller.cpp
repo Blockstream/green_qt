@@ -32,8 +32,8 @@ void SignupController::signup(const QString& deployment)
 
     auto session = m_context->primarySession();
     auto connect_session = new ConnectTask(session);
-    auto register_user = new RegisterUserTask(m_mnemonic, session);
-    auto mnemonic_login = new LoginTask(m_mnemonic, QString(), session);
+    auto register_user = new RegisterUserTask(credentials, {}, session);
+    auto mnemonic_login = new LoginTask(credentials, {}, session);
     auto create_wallet = new SignupCreateWalletTask(this);
     auto persist_wallet = new SignupPersistWalletTask(this);
     auto get_credentials = new GetCredentialsTask(session);

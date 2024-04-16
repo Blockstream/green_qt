@@ -6,7 +6,7 @@ GridLayout {
     property var mnemonic
 
     columnSpacing: 20
-    rowSpacing: 20
+    rowSpacing: 16
     columns: 4
     rows: 6
     flow: GridLayout.LeftToRight
@@ -19,18 +19,18 @@ GridLayout {
                 Layout.minimumWidth: 30
                 text: `${index + 1}`
                 textFormat: Text.RichText
-                font.pixelSize : 16
+                font.pixelSize : 14
                 font.weight: 600
-                color: '#2FD058'
                 horizontalAlignment: Label.AlignRight
             }
             Label {
                 Layout.fillWidth: true
                 Layout.minimumWidth: 30
                 id: word
+                color: '#2FD058'
                 text: modelData
                 textFormat: Text.RichText
-                font.pixelSize : 16
+                font.pixelSize : 14
                 font.weight: 600
             }
         }

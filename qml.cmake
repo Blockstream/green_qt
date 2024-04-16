@@ -242,6 +242,7 @@ SET(QML_FILES
     qml/SecureFundsPage.qml
     qml/JadeHttpRequestDialog.qml
     qml/LinkLabel.qml
+    qml/PassphraseDialog.qml
 )
 
 if (GREEN_NO_RESOURCES)

@@ -10,7 +10,7 @@ import "analytics.js" as AnalyticsJS
 
 ColumnLayout {
     required property Context context
-    property bool showMnemonic: false
+    property bool showCredentials: false
 
     id: self
     spacing: 16
@@ -25,7 +25,7 @@ ColumnLayout {
         title: qsTrId('id_recovery_phrase')
         visible: self.context.wallet.login instanceof PinData
         contentItem: ColumnLayout {
-            spacing: 20
+            spacing: 10
             Label {
                 Layout.fillWidth: true
                 text: qsTrId('id_the_recovery_phrase_can_be_used') + ' ' + qsTrId('id_blockstream_does_not_have')
@@ -34,6 +34,7 @@ ColumnLayout {
             MnemonicView {
                 Layout.alignment: Qt.AlignCenter
                 Layout.fillWidth: false
+                Layout.topMargin: 10
                 columns: self.context.mnemonic.length > 12 ? 4 : 2
                 mnemonic: self.context.mnemonic
                 layer.enabled: true
@@ -41,11 +42,43 @@ ColumnLayout {
                     autoPaddingEnabled: true
                     blurEnabled: true
                     blurMax: 64
-                    blur: self.showMnemonic ? 0 : 1
+                    blur: self.showCredentials ? 0 : 1
                     Behavior on blur {
                         NumberAnimation {
                             easing.type: Easing.OutCubic
                             duration: 300
+                        }
+                    }
+                }
+            }
+            RowLayout {
+                Layout.alignment: Qt.AlignCenter
+                Layout.fillWidth: false
+                Layout.topMargin: 10
+                spacing: 20
+                visible: self.context.credentials?.bip39_passphrase ?? false
+                Image {
+                    source: 'qrc:/svg2/passphrase.svg'
+                }
+                Label {
+                    text: qsTrId('id_bip39_passphrase')
+                }
+                Label {
+                    color: '#2FD058'
+                    font.pixelSize : 14
+                    font.weight: 600
+                    text: self.context.credentials?.bip39_passphrase ?? ''
+                    layer.enabled: true
+                    layer.effect: MultiEffect {
+                        autoPaddingEnabled: true
+                        blurEnabled: true
+                        blurMax: 64
+                        blur: self.showCredentials ? 0 : 1
+                        Behavior on blur {
+                            NumberAnimation {
+                                easing.type: Easing.OutCubic
+                                duration: 300
+                            }
                         }
                     }
                 }
@@ -70,8 +103,8 @@ ColumnLayout {
                 contentItem: RowLayout {
                     spacing: 20
                     CircleButton {
-                        icon.source: self.showMnemonic ? 'qrc:/svg2/eye_closed.svg' : 'qrc:/svg2/eye.svg'
-                        onClicked: self.showMnemonic = !self.showMnemonic
+                        icon.source: self.showCredentials ? 'qrc:/svg2/eye_closed.svg' : 'qrc:/svg2/eye.svg'
+                        onClicked: self.showCredentials = !self.showCredentials
                     }
                     CircleButton {
                         icon.source: 'qrc:/svg2/qrcode.svg'
@@ -83,8 +116,16 @@ ColumnLayout {
                     }
                 }
             }
+            Label {
+                Layout.alignment: Qt.AlignCenter
+                opacity: 0.6
+                font.pixelSize: 12
+                text: qsTrId('id_the_qr_code_does_not_include')
+                visible: self.context.credentials?.bip39_passphrase ?? false
+            }
             Image {
                 Layout.alignment: Qt.AlignCenter
+                Layout.topMargin: 20
                 source: 'qrc:/svg2/house.svg'
             }
             Label {

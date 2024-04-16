@@ -313,8 +313,7 @@ class RegisterUserTask : public AuthHandlerTask
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
-    RegisterUserTask(const QStringList& mnemonic, Session* session);
-    RegisterUserTask(const QJsonObject &device_details, Session* session);
+    RegisterUserTask(const QJsonObject& details, const QJsonObject& hw_device, Session* session);
 private:
     bool call(GA_session* session, GA_auth_handler** auth_handler) override;
     void handleDone(const QJsonObject& result) override;

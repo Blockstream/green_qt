@@ -26,6 +26,7 @@ class Context : public QObject
     Q_PROPERTY(QQmlListProperty<Session> sessions READ sessions NOTIFY sessionsChanged)
     Q_PROPERTY(Session* primarySession READ primarySession NOTIFY sessionsChanged)
     Q_PROPERTY(QQmlListProperty<Account> accounts READ accounts NOTIFY accountsChanged)
+    Q_PROPERTY(QJsonObject credentials READ credentials NOTIFY credentialsChanged)
     Q_PROPERTY(QStringList mnemonic READ mnemonic NOTIFY mnemonicChanged)
     Q_PROPERTY(TaskDispatcher* dispatcher READ dispatcher CONSTANT)
     Q_PROPERTY(QQmlListProperty<Notification> notifications READ notifications NOTIFY notificationsChanged)

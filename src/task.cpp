@@ -577,16 +577,10 @@ void AuthHandlerTask::next()
     Q_UNREACHABLE();
 }
 
-RegisterUserTask::RegisterUserTask(const QStringList& mnemonic, Session* session)
+RegisterUserTask::RegisterUserTask(const QJsonObject& details, const QJsonObject& hw_device, Session* session)
     : AuthHandlerTask(session)
-    , m_details({{ "mnemonic", mnemonic.join(' ') }})
-{
-}
-
-// TODO: assert device_details or use Device instance to infer them
-RegisterUserTask::RegisterUserTask(const QJsonObject& device_details, Session* session)
-    : AuthHandlerTask(session)
-    , m_device_details(device_details)
+    , m_details(details)
+    , m_device_details(hw_device)
 {
 }
 

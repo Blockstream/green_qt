@@ -189,6 +189,7 @@ qt_add_resources(green "images"
         assets/svg2/multisig.svg
         assets/svg2/next_arrow.svg
         assets/svg2/onboard_background.svg
+        assets/svg2/passphrase.svg
         assets/svg2/paste.svg
         assets/svg2/pencil-simple-line-green.svg
         assets/svg2/printer.svg

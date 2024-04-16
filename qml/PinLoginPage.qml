@@ -24,6 +24,12 @@ StackViewPage {
     id: self
     padding: 60
     title: self.wallet.name
+    StackView.onActivated: {
+        if (self.wallet.login.passphrase) {
+            const dialog = passphrase_dialog.createObject(self)
+            dialog.open()
+        }
+    }
     AnalyticsView {
         name: 'Login'
         active: UtilJS.effectiveVisible(self)
@@ -50,6 +56,10 @@ StackViewPage {
     }
     rightItem: WalletOptionsButton {
         wallet: self.wallet
+        onPassphraseClicked: {
+            const dialog = passphrase_dialog.createObject(self, { passphrase: controller.passphrase })
+            dialog.open()
+        }
         onRemoveClicked: self.removeClicked()
         onCloseClicked: self.closeClicked()
     }
@@ -61,6 +71,30 @@ StackViewPage {
                 running: self.wallet.login.attempts === 0
                 onTriggered: stack_view.push(no_attempts_view)
             }
+            Pane {
+                Layout.alignment: Qt.AlignCenter
+                padding: 20
+                visible: controller.passphrase !== ''
+                background: Rectangle {
+                    color: '#222226'
+                    radius: 5
+                }
+                contentItem: RowLayout {
+                    spacing: 20
+                    Image {
+                        source: 'qrc:/svg2/passphrase.svg'
+                    }
+                    Label {
+                        font.pixelSize: 14
+                        font.weight: 600
+                        text: qsTrId('id_bip39_passphrase_login')
+                    }
+                    CircleButton {
+                        icon.source: 'qrc:/svg2/x-circle.svg'
+                        onClicked: controller.passphrase = ''
+                    }
+                }
+            }
             VSpacer {
             }
             Label {
@@ -70,7 +104,7 @@ StackViewPage {
                 font.pixelSize: 26
                 font.weight: 600
                 horizontalAlignment: Label.AlignHCenter
-                text: 'Enter your 6-digit PIN to Access your Wallet'
+                text: qsTrId('id_enter_your_6digit_pin_to_access')
                 wrapMode: Label.WordWrap
             }
             Label {
@@ -162,6 +196,27 @@ StackViewPage {
                 onClicked: self.restoreClicked()
             }
             VSpacer {
+            }
+        }
+    }
+
+    Component {
+        id: passphrase_dialog
+        PassphraseDialog {
+            id: dialog
+            wallet: self.wallet
+            onClosed: dialog.destroy()
+            onSubmit: (passphrase, always_ask) => {
+                dialog.accept()
+                self.wallet.login.passphrase = always_ask
+                controller.passphrase = passphrase
+                pin_field.forceActiveFocus()
+            }
+            onClear: {
+                dialog.accept()
+                self.wallet.login.passphrase = false
+                controller.passphrase = ''
+                pin_field.forceActiveFocus()
             }
         }
     }

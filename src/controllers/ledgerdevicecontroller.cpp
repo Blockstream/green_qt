@@ -319,7 +319,7 @@ void LedgerLoginTask::update()
 
     const auto device_details = device_details_from_device(device);
 
-    auto session_register = new RegisterUserTask(device_details, session);
+    auto session_register = new RegisterUserTask({}, device_details, session);
     auto session_login = new LoginTask(device_details, session);
 
     session_register->then(session_login);

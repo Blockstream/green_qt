@@ -29,6 +29,7 @@ class PinData : public LoginData
 {
     Q_OBJECT
     Q_PROPERTY(Network* network READ network NOTIFY networkChanged)
+    Q_PROPERTY(bool passphrase READ passphrase WRITE setPassphrase NOTIFY passphraseChanged)
     Q_PROPERTY(int attempts READ attempts NOTIFY attemptsChanged)
     QML_ELEMENT
     QML_UNCREATABLE("")
@@ -36,6 +37,8 @@ public:
     PinData(Wallet* wallet) : LoginData(wallet) {}
     Network* network() const { return m_network; }
     void setNetwork(Network* network);
+    bool passphrase() const { return m_passphrase; }
+    void setPassphrase(bool passphrase);
     QJsonObject data() const { return m_data; }
     void setData(const QJsonObject& data);
     int attempts() const { return m_attempts; }
@@ -46,9 +49,11 @@ public:
     virtual bool read(const QJsonObject& data) override;
 signals:
     void networkChanged();
+    void passphraseChanged();
     void attemptsChanged();
 private:
     Network* m_network{nullptr};
+    bool m_passphrase{false};
     QJsonObject m_data;
     int m_attempts{3};
 };

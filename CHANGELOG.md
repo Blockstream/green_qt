@@ -6,7 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 ### Added:
-- Handle external BIP21 payment on macos
+- BIP39 passphrase login
+- Handle external BIP21 payment on macOS and Windows
 
 ### Changed:
 - Updates Qt to 6.7.0

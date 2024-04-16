@@ -13,14 +13,16 @@ class LoginController : public Controller
 {
     Q_OBJECT
     Q_PROPERTY(Wallet* wallet READ wallet WRITE setWallet NOTIFY walletChanged)
+    Q_PROPERTY(QString passphrase READ passphrase WRITE setPassphrase NOTIFY passphraseChanged)
     QML_ELEMENT
 public:
     LoginController(QObject* parent = nullptr);
 
     Wallet* wallet() const { return m_wallet; }
     void setWallet(Wallet* wallet);
-
-    void login(LoginTask* login_task);
+    QString passphrase() const { return m_passphrase; }
+    void setPassphrase(const QString& passphrase);
+    void login(LoginTask* login_task, const QString& passphrase = {});
     void login(TaskGroup *group, LoginTask* login_task);
     void loginNetwork(Network* network);
 public slots:
@@ -28,12 +30,13 @@ public slots:
     void loginWithDevice(Device* device, bool remember = false);
 signals:
     void walletChanged();
+    void passphraseChanged();
     void invalidPin();
     void loginFinished(Context* context);
     void loginFailed(const QString& error);
-
 private:
     Wallet* m_wallet{nullptr};
+    QString m_passphrase;
     QString m_error;
 };
 

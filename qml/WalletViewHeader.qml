@@ -243,6 +243,36 @@ MainPageHeader {
             }
         }
         HPane {
+            Layout.bottomMargin: 10
+            leftPadding: 84
+            rightPadding: 16
+            padding: 16
+            visible: self.context.bip39
+            background: Rectangle {
+                border.width: 1
+                border.color: Qt.rgba(1, 1, 1, 0.04)
+                color: '#161921'
+                radius: 8
+                Image {
+                    anchors.left: parent.left
+                    anchors.leftMargin: 36
+                    anchors.verticalCenter: parent.verticalCenter
+                    source: 'qrc:/svg2/passphrase.svg'
+                }
+            }
+            contentItem: ColumnLayout {
+                spacing: 10
+                Label {
+                    font.pixelSize: 14
+                    font.weight: 600
+                    text: qsTrId('id_password_protected')
+                }
+                Label {
+                    text: qsTrId('id_this_wallet_is_based_on_your')
+                }
+            }
+        }
+        HPane {
             Layout.bottomMargin: 20
             contentItem: CardBar {
                 context: self.context

@@ -256,6 +256,14 @@ void PinData::setNetwork(Network* network)
     emit networkChanged();
 }
 
+void PinData::setPassphrase(bool passphrase)
+{
+    if (m_passphrase == passphrase) return;
+    m_passphrase = passphrase;
+    emit passphraseChanged();
+    m_wallet->save();
+}
+
 void PinData::setData(const QJsonObject& data)
 {
     if (m_data == data) return;
@@ -269,6 +277,7 @@ bool PinData::write(QJsonObject& data)
         { "network", m_network->id() },
         { "data", m_data },
         { "attempts", m_attempts },
+        { "passphrase", m_passphrase },
     });
     return true;
 }
@@ -279,6 +288,7 @@ bool PinData::read(const QJsonObject& data)
     m_network = NetworkManager::instance()->network(pin.value("network").toString());
     m_data = pin.value("data").toObject();
     m_attempts = pin.value("attempts").toInt();
+    m_passphrase = pin.value("passphrase").toBool();
     return true;
 }
 
