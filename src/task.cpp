@@ -649,6 +649,13 @@ LoginTask::LoginTask(const QString& username, const QString& password, Session* 
 {
 }
 
+LoginTask::LoginTask(const QJsonObject& details, const QJsonObject& hw_device, Session* session)
+    : AuthHandlerTask(session)
+    , m_details(details)
+    , m_hw_device(hw_device)
+{
+}
+
 bool LoginTask::call(GA_session* session, GA_auth_handler** auth_handler)
 {
     auto hw_device = Json::fromObject(m_hw_device);

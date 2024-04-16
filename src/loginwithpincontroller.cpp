@@ -312,8 +312,7 @@ void LoadController::loginNetwork(Network* network)
     if (m_context->device()) {
         login = new LoginTask(device_details_from_device(m_context->device()), session);
     } else if (m_context->credentials().contains("mnemonic")) {
-        const auto mnemonic = m_context->credentials().value("mnemonic").toString().split(' ');
-        login = new LoginTask(mnemonic, {}, session);
+        login = new LoginTask(m_context->credentials(), {}, session);
     }
 
     if (network->isLiquid() && !m_assets_loaded) {
