@@ -40,10 +40,22 @@ Switch {
             color: 'white'
         }
     }
-    leftPadding: 0
+    leftPadding: 8
     rightPadding: 0
     topPadding: 0
     bottomPadding: 0
+    background: Item {
+        Rectangle {
+            border.width: 2
+            border.color: '#00B45A'
+            color: 'transparent'
+            radius: 16
+            anchors.fill: parent
+            anchors.margins: -4
+            z: -1
+            opacity: self.visualFocus ? 1 : 0
+        }
+    }
     contentItem: Label {
         text: self.text
         opacity: enabled ? 1.0 : 0.3
