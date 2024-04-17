@@ -33,7 +33,7 @@ signals:
 private:
     void handleBlockEvent(const QJsonObject& event);
     void handleTransactionEvent(const QJsonObject& event);
-    void fetch(int offset, int count);
+    void fetch(bool reset, int offset, int count);
 private:
     Account* m_account{nullptr};
     GetTransactionsTask* m_get_transactions{nullptr};

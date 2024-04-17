@@ -14,11 +14,8 @@ TransactionListModel::TransactionListModel(QObject* parent)
     m_reload_timer->setSingleShot(true);
     m_reload_timer->setInterval(200);
     connect(m_reload_timer, &QTimer::timeout, this, [=] {
-        beginResetModel();
-        m_transactions.clear();
-        endResetModel();
         m_has_unconfirmed = false;
-        fetch(0, 30);
+        fetch(true, 0, 30);
     });
 }
 
@@ -43,7 +40,7 @@ void TransactionListModel::setAccount(Account *account)
     }
 }
 
-void TransactionListModel::fetch(int offset, int count)
+void TransactionListModel::fetch(bool reset, int offset, int count)
 {
     if (!m_account) return;
 
@@ -52,6 +49,12 @@ void TransactionListModel::fetch(int offset, int count)
     m_get_transactions = new GetTransactionsTask(offset, count, m_account);
 
     connect(m_get_transactions, &Task::finished, this, [=] {
+        if (reset) {
+            beginResetModel();
+            m_transactions.clear();
+            endResetModel();
+        }
+
         QVector<Transaction*> transactions;
         for (const QJsonValue& value : m_get_transactions->transactions()) {
             auto transaction = account()->getOrCreateTransaction(value.toObject());
@@ -74,7 +77,7 @@ void TransactionListModel::fetch(int offset, int count)
         m_get_transactions = nullptr;
 
         if (transactions.size() == count) {
-            fetch(offset + count, count);
+            fetch(false, offset + count, count);
         }
     });
     m_account->context()->dispatcher()->add("transaction list model", m_get_transactions);
