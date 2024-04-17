@@ -7,6 +7,7 @@ TextField {
     topPadding: 14
     bottomPadding: 13
     leftPadding: 15
+    rightPadding: 64
     background: Rectangle {
         color: '#222226'
         radius: 5
@@ -33,4 +34,11 @@ TextField {
     }
     font.pixelSize: 14
     font.weight: 500
+    CircleButton {
+        anchors.right: parent.right
+        anchors.rightMargin: 15
+        anchors.verticalCenter: parent.verticalCenter
+        icon.source: self.echoMode === TextField.Password ? 'qrc:/svg2/eye_closed.svg' : 'qrc:/svg2/eye.svg'
+        onClicked: self.echoMode = self.echoMode === TextField.Password ? TextInput.Normal : TextInput.Password
+    }
 }
