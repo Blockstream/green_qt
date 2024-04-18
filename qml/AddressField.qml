@@ -11,7 +11,7 @@ TextField {
     id: self
     topPadding: 18
     bottomPadding: 18
-    leftPadding: self.text.length > 0 ? 60 : 18
+    leftPadding: !self.readOnly && self.text.length > 0 ? 60 : 18
     rightPadding: (options_layout.visible ? options_layout.width + 10 : 0) + 18
     background: Rectangle {
         color: Qt.lighter('#222226', !self.readOnly && self.hovered ? 1.2 : 1)
@@ -46,7 +46,7 @@ TextField {
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: parent.left
         anchors.leftMargin: 18
-        visible: !self.readOnly && self.text !== ''
+        visible: !self.readOnly && self.text.length > 0
         icon.source: 'qrc:/svg2/x-circle.svg'
         onClicked: {
             self.clear()
