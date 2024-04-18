@@ -27,8 +27,8 @@ StackViewPage {
             onClicked: self.StackView.view.push(sign_message_drawer, { context: self.context, address: self.address })
             icon.source: 'qrc:/svg2/signature-light.svg'
             text: qsTrId('id_authenticate_address')
-            enabled: self.context.device?.session?.xpubHashId === self.context.xpubHashId
             visible: {
+                if (self.context.watchonly) return false
                 const network = self.address.account.network
                 return network.electrum && !network.liquid
             }
