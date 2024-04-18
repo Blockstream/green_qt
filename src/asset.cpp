@@ -61,6 +61,13 @@ void Asset::setWeight(int weight)
     m_item->setData(m_weight, Qt::UserRole + 2);
 }
 
+void Asset::setPolicy(bool policy)
+{
+    if (m_policy == policy) return;
+    m_policy = policy;
+    emit policyChanged();
+}
+
 void Asset::setData(const QJsonObject &data)
 {
     if (m_data == data) return;
@@ -135,6 +142,7 @@ AssetManager::AssetManager()
         const auto key = network->data().value("policy_asset").toString("btc");
         auto asset = assetWithId(network->deployment(), id);
         asset->setNetworkKey(network_key);
+        asset->setPolicy(true);
         asset->setWeight(INT_MAX);
         asset->setKey(key);
         if (network->isLiquid() && network->isMainnet()) {

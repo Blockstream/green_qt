@@ -18,6 +18,7 @@ class Asset : public QObject
     Q_PROPERTY(QString networkKey READ networkKey NOTIFY networkKeyChanged)
     Q_PROPERTY(QString icon READ icon NOTIFY iconChanged)
     Q_PROPERTY(QString name READ name NOTIFY nameChanged)
+    Q_PROPERTY(bool policy READ policy NOTIFY policyChanged)
     Q_PROPERTY(bool hasData READ hasData NOTIFY dataChanged)
     Q_PROPERTY(bool amp READ isAmp NOTIFY isAmpChanged)
     Q_PROPERTY(int weight READ weight NOTIFY weightChanged)
@@ -50,6 +51,9 @@ public:
     int weight() const { return m_weight; }
     void setWeight(int weight);
 
+    bool policy() const { return m_policy; }
+    void setPolicy(bool policy);
+
     bool hasData() const { return !m_data.isEmpty(); }
     QJsonObject data() const { return m_data; }
     void setData(const QJsonObject& data);
@@ -65,6 +69,7 @@ signals:
     void networkKeyChanged();
     void nameChanged();
     void iconChanged();
+    void policyChanged();
     void dataChanged();
     void isAmpChanged();
     void weightChanged();
@@ -76,6 +81,7 @@ private:
     QStandardItem* const m_item;
     QString m_name;
     QString m_icon;
+    bool m_policy{false};
     QJsonObject m_data;
     bool m_is_amp{false};
     int m_weight{0};
