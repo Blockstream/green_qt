@@ -120,7 +120,7 @@ StackViewPage {
                 tag: qsTrId('id_2of3')
                 title: qsTrId('id_2of3_with_2fa')
                 description: qsTrId('id_permanent_2fa_account_ideal_for')
-                visible: !self.anyAMP && (self.anyLiquid || self.advanced && self.asset?.networkKey !== 'liquid')
+                visible: !self.anyAMP && (self.anyLiquid || self.advanced && self.asset?.networkKey !== 'liquid' && self.asset?.networkKey !== 'testnet-liquid')
                 action: Action {
                     onTriggered: {
                         self.StackView.view.push(select_recovery_key_page, {
