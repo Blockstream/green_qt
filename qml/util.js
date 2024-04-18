@@ -6,8 +6,7 @@ function iconFor(target) {
     if (target instanceof Account) return iconFor(target.network)
     if (target instanceof Asset) {
         if (target.icon) return target.icon
-        if (target.id === 'btc' && target.deployment === 'mainnet') return iconFor('bitcoin')
-        if (target.id === 'btc' && target.deployment === 'testnet') return iconFor('testnet')
+        if (target.policy) return iconFor(target.networkKey)
         return iconFor(target.id)
     }
     if (target instanceof Wallet) return iconFor(target.network)
