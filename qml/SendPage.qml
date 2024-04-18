@@ -305,6 +305,7 @@ StackViewPage {
                 error: {
                     const error = controller.transaction?.error
                     if (error === 'id_invalid_replacement_fee_rate') return error
+                    if (error === 'Insufficient funds for fees') return error
                 }
             }
         }
