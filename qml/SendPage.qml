@@ -30,7 +30,7 @@ StackViewPage {
         })
     }
     Component.onCompleted: {
-        if (self.url) {
+        if (self.url.toString().length > 0) {
             controller.recipient.address = self.url
         }
     }
