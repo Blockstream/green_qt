@@ -122,7 +122,7 @@ StackViewPage {
                             }
                             return { satoshi: String(satoshi) }
                         }
-                        unit: controller.account.session.unit
+                        unit: amount_field.unit
                     }
                     CircleButton {
                         Layout.alignment: Qt.AlignCenter

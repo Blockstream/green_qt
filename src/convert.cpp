@@ -63,7 +63,10 @@ void Convert::setAccount(Account* account)
     m_account = account;
     emit accountChanged();
     invalidate();
-    if (m_account) setSession(m_account->session());
+    if (m_account) {
+        setContext(m_account->context());
+        setSession(m_account->session());
+    }
 }
 
 void Convert::setInput(const QVariantMap& input)

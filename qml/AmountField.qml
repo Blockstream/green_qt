@@ -137,17 +137,7 @@ TextField {
                 color: unit_label.enabled && unit_label.hovered ? '#00DD6E' : '#00B45A'
                 font.pixelSize: 16
                 font.weight: 500
-                text: {
-                    if (self.convert.fiat.available) {
-                        if (self.fiat) {
-                            return self.convert.account.session.settings.pricing.currency
-                        } else {
-                            return (self.convert.account.network.liquid ? 'L-' : '') + self.unit
-                        }
-                    } else {
-                        return self.convert.asset?.data?.ticker ?? ''
-                    }
-                }
+                text: self.fiat ? self.convert.fiat.currency : self.convert.output.unit
             }
             Image {
                 Layout.alignment: Qt.AlignCenter
